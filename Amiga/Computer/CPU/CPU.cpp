@@ -316,7 +316,7 @@ CPU::_inspect()
     for (unsigned i = 1; i <= CPUINFO_INSTR_COUNT; i++) {
         unsigned offset = (writePtr + traceBufferCapacity - 1 - i) % traceBufferCapacity;
         RecordedInstruction instr = traceBuffer[offset];
-        info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sp);
+        info.traceInstr[CPUINFO_INSTR_COUNT - i] = disassemble(instr.pc, instr.sr);
     }
 
     pthread_mutex_unlock(&lock);
@@ -585,13 +585,13 @@ CPU::setPC(uint32_t value)
     }
 }
 
-uint32_t
-CPU::getSP()
+uint16_t
+CPU::getSR()
 {
     if (MUSASHI) {
-        return m68k_get_reg(NULL, M68K_REG_SP);
+        return m68k_get_reg(NULL, M68K_REG_SR);
     } else {
-        return moiracpu.getSP();
+        return moiracpu.getSR();
     }
 }
 
@@ -647,9 +647,9 @@ CPU::disassemble(uint32_t addr, uint16_t sp)
 {
     DisassembledInstruction result = disassemble(addr);
     
-    result.flags[0]  = (sp & 0b1000000000000000) ? '1' : '0';
+    result.flags[0]  = (sp & 0b1000000000000000) ? 'T' : 't';
     result.flags[1]  = '-';
-    result.flags[2]  = (sp & 0b0010000000000000) ? '1' : '0';
+    result.flags[2]  = (sp & 0b0010000000000000) ? 'S' : 's';
     result.flags[3]  = '-';
     result.flags[4]  = '-';
     result.flags[5]  = (sp & 0b0000010000000000) ? '1' : '0';
@@ -658,11 +658,11 @@ CPU::disassemble(uint32_t addr, uint16_t sp)
     result.flags[8]  = '-';
     result.flags[9]  = '-';
     result.flags[10] = '-';
-    result.flags[11] = (sp & 0b0000000000010000) ? '1' : '0';
-    result.flags[12] = (sp & 0b0000000000001000) ? '1' : '0';
-    result.flags[13] = (sp & 0b0000000000000100) ? '1' : '0';
-    result.flags[14] = (sp & 0b0000000000000010) ? '1' : '0';
-    result.flags[15] = (sp & 0b0000000000000001) ? '1' : '0';
+    result.flags[11] = (sp & 0b0000000000010000) ? 'X' : 'x';
+    result.flags[12] = (sp & 0b0000000000001000) ? 'N' : 'n';
+    result.flags[13] = (sp & 0b0000000000000100) ? 'Z' : 'z';
+    result.flags[14] = (sp & 0b0000000000000010) ? 'V' : 'v';
+    result.flags[15] = (sp & 0b0000000000000001) ? 'C' : 'c';
     result.flags[16] = 0;
 
     return result;
@@ -682,9 +682,8 @@ CPU::recordInstruction()
     RecordedInstruction instr;
     
     // Setup record
-    instr.cycle = clock;
     instr.pc = getPC();
-    instr.sp = getSP();
+    instr.sr = getSR();
 
     // Store record
     assert(writePtr < traceBufferCapacity);

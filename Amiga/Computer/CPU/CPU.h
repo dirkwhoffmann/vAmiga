@@ -237,7 +237,7 @@ public:
     void setPC(uint32_t value); 
 
     // Returns the current value of the status register.
-    uint32_t getSP();
+    uint16_t getSR();
     
     // Returns the current value of the instruction register.
     uint32_t getIR();
