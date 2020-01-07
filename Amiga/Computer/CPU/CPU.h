@@ -34,9 +34,6 @@ private:
     // The CPU has been emulated up to this cycle
     Cycle clock;
 
-    // The new interrupt level
-    int irqLevel;
-
 
     //
     // CPU state switching
@@ -88,8 +85,7 @@ public:
     {
         worker
 
-        & clock
-        & irqLevel;
+        & clock;
     }
 
 

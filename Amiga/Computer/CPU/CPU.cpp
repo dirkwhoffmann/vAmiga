@@ -423,13 +423,5 @@ CPU::executeInstruction()
 void
 CPU::setIrqLevel(int level)
 {
-    assert(level < 8);
-
-    if (irqLevel != level)
-    {
-        debug(INT_DEBUG, "IRQ level changed from %d to %d\n", irqLevel, level);
-
-        irqLevel = level;
-        moiracpu.setIPL(level);
-    }
+    moiracpu.setIPL(level);
 }
