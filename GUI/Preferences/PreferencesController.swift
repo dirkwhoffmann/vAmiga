@@ -81,10 +81,6 @@ class PreferencesController: DialogController {
     // Compatibility preferences
     //
 
-    // CPU
-    @IBOutlet weak var compCpuEngine: NSPopUpButton!
-    @IBOutlet weak var compCpuSpeed: NSPopUpButton!
-
     // Graphics
     @IBOutlet weak var compClxSprSpr: NSButton!
     @IBOutlet weak var compClxSprPlf: NSButton!

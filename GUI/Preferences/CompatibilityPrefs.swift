@@ -22,10 +22,6 @@ extension PreferencesController {
         compClxSprPlf.state = config.denise.clxSprPlf ? .on : .off
         compClxPlfPlf.state = config.denise.clxPlfPlf ? .on : .off
 
-        // CPU
-        compCpuEngine.selectItem(withTag: config.cpuEngine.rawValue)
-        compCpuSpeed.selectItem(withTag: Int(config.cpuSpeed))
-
         // Blitter
         let a = config.blitter.accuracy
         compBltAccuracy.intValue = a
@@ -46,18 +42,6 @@ extension PreferencesController {
 
         // Lock controls if emulator is powered on
         // Nothing to do here at the moment
-    }
-
-    @IBAction func compCpuEngineAction(_ sender: NSPopUpButton!) {
-
-        amigaProxy?.configure(VA_CPU_ENGINE, value: sender.selectedTag())
-        refresh()
-    }
-
-    @IBAction func compCpuSpeedAction(_ sender: NSPopUpButton!) {
-
-        amigaProxy?.configure(VA_CPU_SPEED, value: sender.selectedTag())
-        refresh()
     }
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {

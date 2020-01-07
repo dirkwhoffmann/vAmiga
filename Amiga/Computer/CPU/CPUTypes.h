@@ -58,13 +58,6 @@ DisInstr;
 
 typedef struct
 {
-    // Number of applied bit shifts to convert CPU cycles into master cycles
-    int shift;
-}
-CPUConfig;
-
-typedef struct
-{
     // Registers
     uint32_t pc;
     uint32_t d[8];

@@ -176,8 +176,6 @@ CPU::CPU(Amiga& ref) : SubComponent(ref)
         
         &bpManager,
     };
-
-    config.shift = 2;
 }
 
 CPU::~CPU()
@@ -326,7 +324,6 @@ CPU::_inspect()
 void
 CPU::_dumpConfig()
 {
-    plainmsg("    shift: %d (%d x)\n", config.shift, getSpeed());
 }
 
 void
@@ -488,31 +485,6 @@ CPU::didSaveToBuffer(uint8_t *buffer)
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
-}
-
-int
-CPU::getSpeed()
-{
-    switch (config.shift) {
-        case 0: return 4;
-        case 1: return 2;
-        case 2: return 1;
-    }
-
-    assert(false);
-    return 1;
-}
-
-void
-CPU::setSpeed(int factor)
-{
-    switch (factor) {
-        case 1: config.shift = 2; return;
-        case 2: config.shift = 1; return;
-        case 4: config.shift = 0; return;
-    }
-
-    assert(false);
 }
 
 void
@@ -720,7 +692,9 @@ CPU::executeInstruction()
             m68k_disassemble(str, pc, M68K_CPU_TYPE_68000);
             printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
         }
-        advance(m68k_execute(1));
+
+        clock += m68k_execute(1) << 2;
+        // advance(m68k_execute(1));
         // if (waitStates) debug(CPU_DEBUG, "Adding %d wait states\n", waitStates);
         // clock += waitStates;
         waitStates = 0;
@@ -732,7 +706,7 @@ CPU::executeInstruction()
             printf("%ld [%lld] %x: %s\n", instrCount, getClock(), pc, str);
         }
         moiracpu.execute();
-        clock = moiracpu.getClock() << config.shift;
+        clock = CPU_CYCLES(moiracpu.getClock());
     }
 
     return clock;

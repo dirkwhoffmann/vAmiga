@@ -1058,8 +1058,6 @@ extension MyController {
 
         amiga.suspend()
 
-        amiga.configure(VA_CPU_ENGINE, value: defaults.integer(forKey: Keys.cpuEngine))
-        amiga.configure(VA_CPU_SPEED, value: defaults.integer(forKey: Keys.cpuSpeed))
         amiga.configure(VA_CLX_SPR_SPR, enable: defaults.bool(forKey: Keys.clxSprSpr))
         amiga.configure(VA_CLX_SPR_PLF, enable: defaults.bool(forKey: Keys.clxSprPlf))
         amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
@@ -1077,8 +1075,6 @@ extension MyController {
         let defaults = UserDefaults.standard
         let config = amiga.config()
 
-        defaults.set(config.cpuEngine.rawValue, forKey: Keys.cpuEngine)
-        defaults.set(config.cpuSpeed, forKey: Keys.cpuSpeed)
         defaults.set(config.denise.clxSprSpr, forKey: Keys.clxSprSpr)
         defaults.set(config.denise.clxSprPlf, forKey: Keys.clxSprPlf)
         defaults.set(config.denise.clxPlfPlf, forKey: Keys.clxPlfPlf)

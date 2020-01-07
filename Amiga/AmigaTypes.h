@@ -43,8 +43,6 @@ typedef enum : long
     VA_CLX_PLF_PLF,
     VA_FILTER_ACTIVATION,
     VA_FILTER_TYPE,
-    VA_CPU_ENGINE,
-    VA_CPU_SPEED,
     VA_BLITTER_ACCURACY,
     VA_FIFO_BUFFERING,
     VA_SERIAL_DEVICE
@@ -75,8 +73,6 @@ RunLoopControlFlag;
 
 typedef struct
 {
-    CPUEngine cpuEngine;
-    CPUConfig cpu;
     int cpuSpeed;
     RTCConfig rtc;
     AudioConfig audio;

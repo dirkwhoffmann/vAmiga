@@ -51,7 +51,6 @@ extern "C" uint32_t read_pc_on_reset(void);
 
 class CPU : public SubComponent {
 
-    CPUConfig config;
     CPUInfo info;
 
     moira::Moira moiracpu;
@@ -135,18 +134,6 @@ public:
 
 
     //
-    // Configuring
-    //
-
-    // Returns the current configuration
-    CPUConfig getConfig() { return config; }
-
-    // Configures the speed acceleration factor (1, 2, or 4)
-    int getSpeed();
-    void setSpeed(int factor);
-
-
-    //
     // Methods from HardwareComponent
     //
     
@@ -215,12 +202,12 @@ public:
     }
 
     // Advances the clock by a certain number of CPU cycles
-    void advance(CPUCycle cycles) { clock += cycles << config.shift; }
+    // void advance(CPUCycle cycles) { clock += cycles << config.shift; }
 
     // Returns the clock in CPU cycles
     CPUCycle cycles() {
         if (MUSASHI) {
-            return clock >> config.shift;
+            return clock >> 2;
         } else {
             return moiracpu.getClock();
         }
