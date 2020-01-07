@@ -14,36 +14,6 @@
 #include "BreakpointManager.h"
 #include "Moira.h"
 
-/* vAmiga utilizes the Musashi CPU core for emulating the Amiga CPU.
- *
- * To be compatible with vAmiga, the core had to be patched as follows:
- *
- * - In function void m68k_pulse_reset(void):
- *
- *       The two assignments
- *            REG_SP = m68ki_read_imm_32();
- *            REG_PC = m68ki_read_imm_32();
- *
- *       have been replaced by:
- *            REG_SP = read_sp_on_reset();
- *            REG_PC = read_pc_on_reset();
- *
- *  The change was necessary, because m68ki_read_imm_32() invokes vAmiga's
- *  standard Memory::peek32() function which requires the emulator to be
- *  running.
- */
-
-extern "C" {
-#include "m68k.h"
-#include "m68kcpu.h"
-#include "m68kops.h"
-}
-
-extern "C" int interrupt_handler(int irqLevel);
-extern "C" uint32_t read_on_reset(uint32_t defaultValue);
-extern "C" uint32_t read_sp_on_reset(void);
-extern "C" uint32_t read_pc_on_reset(void);
-
 
 //
 // CPU wrapper class
@@ -273,17 +243,6 @@ public:
 
     // Adds wait states to the CPU
     void addWaitStates(CPUCycle number);
-
-
-    //
-    // Handling interrupts
-    //
-
-    // Returns the currently installed irq handler (for debugging)
-    void *getIrqHandler() { return (void *)CALLBACK_INT_ACK; }
-
-    // Called by Musashi core when an interrupt occurs
-    unsigned int interruptHandler(unsigned int irqLevel);
 };
 
 #endif

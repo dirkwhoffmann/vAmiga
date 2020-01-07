@@ -22,9 +22,6 @@
 // Assertion checking (uncomment in a release build)
 // #define NDEBUG
 
-// Set to 1 to use Musashi CPU instead of Moira
-#define MUSASHI 0
-
 
 //
 // Debug settings

@@ -110,12 +110,6 @@
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
-		5099104D236F58F000DF7064 /* history.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50991045236F58EF00DF7064 /* history.txt */; };
-		5099104E236F58F000DF7064 /* readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 50991047236F58F000DF7064 /* readme.txt */; };
-		5099104F236F58F000DF7064 /* m68kfpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991048236F58F000DF7064 /* m68kfpu.c */; };
-		50991050236F58F000DF7064 /* m68kops.c in Sources */ = {isa = PBXBuildFile; fileRef = 50991049236F58F000DF7064 /* m68kops.c */; };
-		50991051236F58F000DF7064 /* m68kdasm.c in Sources */ = {isa = PBXBuildFile; fileRef = 5099104A236F58F000DF7064 /* m68kdasm.c */; };
-		50991052236F58F000DF7064 /* m68kcpu.c in Sources */ = {isa = PBXBuildFile; fileRef = 5099104C236F58F000DF7064 /* m68kcpu.c */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
@@ -343,16 +337,6 @@
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
-		50991030236EC94B00DF7064 /* m68kconf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kconf.h; sourceTree = "<group>"; };
-		50991045236F58EF00DF7064 /* history.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = history.txt; sourceTree = "<group>"; };
-		50991046236F58F000DF7064 /* m68kops.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kops.h; sourceTree = "<group>"; };
-		50991047236F58F000DF7064 /* readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
-		50991048236F58F000DF7064 /* m68kfpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kfpu.c; sourceTree = "<group>"; };
-		50991049236F58F000DF7064 /* m68kops.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kops.c; sourceTree = "<group>"; };
-		5099104A236F58F000DF7064 /* m68kdasm.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kdasm.c; sourceTree = "<group>"; };
-		5099104B236F58F000DF7064 /* m68kcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = m68kcpu.h; sourceTree = "<group>"; };
-		5099104C236F58F000DF7064 /* m68kcpu.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = m68kcpu.c; sourceTree = "<group>"; };
-		50991053236F592300DF7064 /* m68k.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = m68k.h; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
@@ -528,7 +512,6 @@
 				50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */,
 				504F9655220ACFE0005F8AB7 /* Breakpoint.h */,
 				504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */,
-				50D2ADBF2207547E00E32AB0 /* Musashi */,
 			);
 			path = CPU;
 			sourceTree = "<group>";
@@ -921,23 +904,6 @@
 			path = Proxy;
 			sourceTree = "<group>";
 		};
-		50D2ADBF2207547E00E32AB0 /* Musashi */ = {
-			isa = PBXGroup;
-			children = (
-				50991030236EC94B00DF7064 /* m68kconf.h */,
-				50991045236F58EF00DF7064 /* history.txt */,
-				50991053236F592300DF7064 /* m68k.h */,
-				5099104C236F58F000DF7064 /* m68kcpu.c */,
-				5099104B236F58F000DF7064 /* m68kcpu.h */,
-				5099104A236F58F000DF7064 /* m68kdasm.c */,
-				50991048236F58F000DF7064 /* m68kfpu.c */,
-				50991049236F58F000DF7064 /* m68kops.c */,
-				50991046236F58F000DF7064 /* m68kops.h */,
-				50991047236F58F000DF7064 /* readme.txt */,
-			);
-			path = Musashi;
-			sourceTree = "<group>";
-		};
 		50EE993D21FF4D42003BD74B /* Paula */ = {
 			isa = PBXGroup;
 			children = (
@@ -1072,7 +1038,6 @@
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
-				5099104E236F58F000DF7064 /* readme.txt in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
@@ -1086,7 +1051,6 @@
 				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
-				5099104D236F58F000DF7064 /* history.txt in Resources */,
 				50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
@@ -1176,7 +1140,6 @@
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
 				507FD926221CBFCD00B34DA7 /* CopperPanel.swift in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
-				5099104F236F58F000DF7064 /* m68kfpu.c in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
@@ -1204,7 +1167,6 @@
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
-				50991051236F58F000DF7064 /* m68kdasm.c in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
@@ -1212,13 +1174,11 @@
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
-				50991050236F58F000DF7064 /* m68kops.c in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
-				50991052236F58F000DF7064 /* m68kcpu.c in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,

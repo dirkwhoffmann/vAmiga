@@ -210,7 +210,8 @@ ASTNode::~ASTNode() {
 
 uint32_t
 ASTNode::eval() {
-    
+
+    /*
     switch (type) {
         case AST_D0:        return m68k_get_reg(NULL, M68K_REG_D0);
         case AST_D1:        return m68k_get_reg(NULL, M68K_REG_D1);
@@ -246,6 +247,8 @@ ASTNode::eval() {
         default:
             assert(false);
     }
+    */
+    return true;
 }
 
 

@@ -8,95 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
-extern "C" {
-#include "m68k.h"
-}
-
-//
-// Interface to Musashi
-//
 
 // Reference to the active Amiga instance
+// DEPRECATED
 Amiga *activeAmiga = NULL;
-
-extern "C" unsigned int m68k_read_memory_8(unsigned int addr)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.peek8(addr);
-}
-
-extern "C" unsigned int m68k_read_memory_16(unsigned int addr)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.peek16<BUS_CPU>(addr);
-}
-
-extern "C" unsigned int m68k_read_memory_32(unsigned int addr)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.peek32(addr);
-}
-
-extern "C" unsigned int m68k_read_disassembler_16 (unsigned int addr)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.spypeek16(addr);
-}
-
-extern "C" unsigned int m68k_read_disassembler_32 (unsigned int addr)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.spypeek32(addr);
-}
-
-extern "C" void m68k_write_memory_8(unsigned int addr, unsigned int value)
-{
-    assert(activeAmiga != NULL);
-    activeAmiga->mem.poke8(addr, value);
-}
-
-extern "C" void m68k_write_memory_16(unsigned int addr, unsigned int value)
-{
-    assert(activeAmiga != NULL);
-    activeAmiga->mem.poke16<BUS_CPU>(addr, value);
-}
-
-extern "C" void m68k_write_memory_32(unsigned int addr, unsigned int value)
-{
-    assert(activeAmiga != NULL);
-    activeAmiga->mem.poke32(addr, value);
-}
-
-extern "C" int interrupt_handler(int irqLevel)
-{
-    assert(activeAmiga != NULL);
-    return activeAmiga->cpu.interruptHandler(irqLevel);
-}
-
-extern "C" uint32_t read_on_reset(uint32_t defaultValue)
-{
-    uint32_t result = defaultValue;
-
-    // Check for attached memory
-    if (activeAmiga && activeAmiga->mem.chip) {
-
-        Memory *mem = &activeAmiga->mem;
-
-        /* When we reach here, we expect memory to be initialised already.
-         * If that's the case, the first memory page is mapped to Rom.
-         */
-        assert(mem->memSrc[0x0] == MEM_ROM ||
-               mem->memSrc[0x0] == MEM_EXT);
-
-        result = activeAmiga->mem.spypeek32(ADDRESS_68K(REG_PC));
-    }
-    REG_PC += 4;
-
-    return result;
-}
-
-extern "C" uint32_t read_sp_on_reset(void) { return read_on_reset(0); }
-extern "C" uint32_t read_pc_on_reset(void) { return read_on_reset(0); }
 
 //
 // Interface to Moira
@@ -138,7 +53,6 @@ Moira::read16OnReset(u32 addr)
 
     if (activeAmiga && activeAmiga->mem.chip) result = read16(addr);
 
-    printf("read16OnReset(%x) = %x\n", addr, result);
     return result;
 }
 
@@ -187,11 +101,6 @@ void
 CPU::_initialize()
 {
     debug(CPU_DEBUG, "CPU::_initialize()\n");
-
-    // Initialize the Musashi CPU core
-    m68k_init();
-    m68k_set_cpu_type(M68K_CPU_TYPE_68000);
-    m68k_set_int_ack_callback(interrupt_handler);
 }
 
 void
@@ -199,7 +108,7 @@ CPU::_powerOn()
 {
     debug(CPU_DEBUG, "CPU::_powerOn()\n");
 
-    // Grab the Musashi core
+    // REMOVE ASAP
     makeActiveInstance();
 }
 
@@ -529,20 +438,4 @@ void
 CPU::addWaitStates(Cycle number)
 {
     waitStates += number;
-    /*
-    if (number) {
-        waitStates += number;
-        actions |= CPU_ADD_WAIT_STATES;
-    }
-    */
-}
-
-unsigned int
-CPU::interruptHandler(unsigned int irqLevel)
-{
-    debug(INT_DEBUG, "interruptHandler(%d)\n", irqLevel);
-
-    // Do nothing here. I.e., don't automatically clear the interrupt
-
-    return M68K_INT_ACK_AUTOVECTOR;
 }
