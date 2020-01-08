@@ -45,15 +45,15 @@ class WatchTableView: NSTableView {
 
         if col == 0 {
 
+            // Toggle enable status
+            cpu.watchpointSetEnable(row, value: cpu.watchpointIsDisabled(row))
+        }
+        
+        if col == 2 {
+
             // Delete watchpoint
-            track("Deleting breakpoint \(row)")
-            amigaProxy?.cpu.removeWatchpoint(row)
+            cpu.removeWatchpoint(row)
             refresh(everything: false)
-
-        } else {
-
-            // Enable or disable
-            // TODO
         }
     }
 }
@@ -62,19 +62,27 @@ extension WatchTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        track("numberOfWatchpoints = \(cpu.numberOfWatchpoints())")
         return cpu.numberOfWatchpoints() + 1
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
+        let disabled = cpu.isDisabled(row)
+        let last = row == numberOfRows(in: tableView) - 1
+
         switch tableColumn?.identifier.rawValue {
 
-        case "break":
-            return "\u{1F5D1}" // "🗑"
+        case "break" where disabled:
+            return last ? "" : "\u{26AA}" // "⚪"
 
-        case "addr":
-            return cpu.watchpointAddr(row)
+        case "break":
+            return last ? "" : "\u{26D4}" // "⛔"
+
+        case "addr": 
+            return last ? "Add address" : cpu.watchpointAddr(row)
+
+        case "delete":
+            return last ? "" : "\u{1F5D1}" // "🗑"
 
         default:
             fatalError()
@@ -89,8 +97,12 @@ extension WatchTableView: NSTableViewDelegate {
         if let cell = cell as? NSTextFieldCell {
 
             let disabled = cpu.isDisabled(row)
+            let last = row == numberOfRows(in: tableView) - 1
 
             switch tableColumn?.identifier.rawValue {
+
+            case "addr" where last:
+                cell.textColor = NSColor.tertiaryLabelColor
 
             case "addr" where disabled:
                 cell.textColor = NSColor.secondaryLabelColor
@@ -102,6 +114,19 @@ extension WatchTableView: NSTableViewDelegate {
                 break
             }
         }
+    }
+
+    func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool {
+
+        switch tableColumn?.identifier.rawValue {
+
+        case "addr":
+            return row == numberOfRows(in: tableView) - 1
+        default:
+            break
+        }
+
+        return false
     }
 
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {

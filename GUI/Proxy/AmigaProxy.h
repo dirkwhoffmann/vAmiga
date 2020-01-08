@@ -222,8 +222,10 @@ struct AmigaFileWrapper;
 - (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond;
 
 - (NSInteger) numberOfWatchpoints;
-- (void) removeWatchpoint:(NSInteger)nr;
 - (uint32_t) watchpointAddr:(NSInteger)nr;
+- (BOOL) watchpointIsDisabled:(NSInteger)nr;
+- (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val;
+- (void) removeWatchpoint:(NSInteger)nr;
 
 @end
 

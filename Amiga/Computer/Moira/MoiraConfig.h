@@ -18,13 +18,4 @@
  */
 #define MIMIC_MUSASHI false
 
-/* Capacity of the breakpoint list
- */
-#define MAX_BREAKPOINTS 32
-
-/* Capacity of the watchpoint list
- */
-#define MAX_WATCHPOINTS 32
-
-
 #endif

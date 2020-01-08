@@ -146,6 +146,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
 }
+- (BOOL) watchpointIsDisabled:(NSInteger)nr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.isDisabled(nr);
+}
+- (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val
+{
+    wrapper->cpu->moiracpu.observer.watchpoints.setEnable(nr, val);
+}
 - (NSInteger) traceBufferCapacity
 {
     return wrapper->cpu->traceBufferCapacity; 

@@ -15,37 +15,33 @@ namespace moira {
 struct Guard {
 
     // Observed memory address
-    u32 addr = UINT32_MAX;
+    u32 addr;
 
     // Indicates if this guard is enabled
-    bool enabled = true;
+    bool enabled;
 
     // Hit counter
-    long hits = 0;
+    long hits;
 
     // Number of skipped hits before a match is being recognized
-    long skip = 0;
+    long skip;
 
 public:
 
-    // Returns true if this is a coditional guard
-    // bool hasCondition() { return false; }
-
-    // Evaluates the guard condition
-    // bool eval() { return true; }
-
-    // Performs a check
-    bool matches(u32 addr); 
+    // Returns true if the guard hits
+    bool eval(u32 addr);
 
 };
 
-template <int Capacity>
 class GuardCollection {
 
-    // Array holding all guards
-    Guard guards[Capacity];
+    // Capacity of the guards array
+    long capacity = 2;
 
-    // The number of currently stored guards
+    // Array holding all guards
+    Guard *guards = new Guard[2];
+
+    // Number of currently stored guards
     long count = 0;
 
 public:
@@ -69,7 +65,7 @@ public:
     //
 
     void remove(long nr);
-    void setAt(uint32_t addr, long skip = 0);
+    void add(uint32_t addr, long skip = 0);
     void removeAt(uint32_t addr);
     void removeAll() { count = 0; }
 
@@ -77,8 +73,12 @@ public:
     // Enabling or disabling guards
     //
 
-    // bool isDisabled(long nr);
-    void setEnableAt(uint32_t addr, bool value);
+    bool isEnabled(long nr);
+    bool isDisabled(long nr) { return !isEnabled(nr); }
+    void setEnable(long nr, bool val);
+    void enable(long nr, bool val) { setEnable(nr, true); }
+    void disable(long nr, bool val) { setEnable(nr, false); }
+    void setEnableAt(uint32_t addr, bool val);
     void enableGuardAt(uint32_t addr);
     void disableGuardAt(uint32_t addr);
 
@@ -86,7 +86,7 @@ public:
     // Checking a guard
     //
 
-    bool matches(u32 addr); 
+    bool eval(u32 addr);
 };
 
 class Observer {
@@ -94,10 +94,10 @@ class Observer {
 public:
 
     // Breakpoint storage
-    GuardCollection<MAX_BREAKPOINTS> breakpoints;
+    GuardCollection breakpoints;
 
     // Watchpoint storage
-    GuardCollection<MAX_WATCHPOINTS> watchpoints;
+    GuardCollection watchpoints;
 
 private:
     
@@ -127,57 +127,6 @@ public:
 
     bool breakpointMatches(u32 pc);
     bool watchpointMatches(u32 addr);
-
-    /*
-    bool hasBreakpointAt(uint32_t addr);
-    bool hasDisabledBreakpointAt(uint32_t addr);
-    bool hasConditionalBreakpointAt(uint32_t addr);
-    */
-
-    // Returns true if the emulator has reached a breakpoint
-    // bool shouldStop();
-
-    //
-    // Setting and deleting breakpoints
-    //
-
-    /*
-    void setBreakpointAt(uint32_t addr);
-    void _setBreakpointAt(uint32_t addr);
-    void setSoftBreakpointAt(uint32_t addr) { softStop = addr; }
-    void deleteBreakpoint(long nr);
-    void deleteBreakpointAt(uint32_t addr);
-    void deleteAllBreakpoints();
-    */
-
-
-    //
-    // Enabling or disabling breakpoints
-    //
-
-    /*
-    bool isDisabled(long nr);
-    void setEnableAt(uint32_t addr, bool value);
-    void enableBreakpointAt(uint32_t addr) { setEnableAt(addr, true); }
-    void disableBreakpointAt(uint32_t addr) { setEnableAt(addr, false); }
-    */
-
-
-    //
-    // Modifying a breakpoint in a certain slot
-    //
-
-    /*
-    uint32_t getAddr(long nr);
-    bool setAddr(long nr, uint32_t addr);
-
-    bool hasCondition(long nr);
-    const char *getCondition(long nr);
-    bool setCondition(long nr, const char *str);
-    bool deleteCondition(long nr);
-
-    bool hasSyntaxError(long nr);
-    */
 };
 
 }

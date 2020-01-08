@@ -14,7 +14,7 @@
 namespace moira {
 
 bool
-Guard::matches(u32 addr)
+Guard::eval(u32 addr)
 {
     if (this->addr == addr && this->enabled) {
         if (++hits > skip) {
@@ -25,14 +25,14 @@ Guard::matches(u32 addr)
     return false;
 }
 
-template <int Capacity> Guard *
-GuardCollection<Capacity>::guardWithNr(long nr)
+Guard *
+GuardCollection::guardWithNr(long nr)
 {
     return nr < count ? &guards[nr] : NULL;
 }
 
-template <int Capacity> Guard *
-GuardCollection<Capacity>::guardAtAddr(u32 addr)
+Guard *
+GuardCollection::guardAtAddr(u32 addr)
 {
     for (int i = 0; i < count; i++) {
         if (guards[i].addr == addr) return &guards[i];
@@ -41,92 +41,107 @@ GuardCollection<Capacity>::guardAtAddr(u32 addr)
     return NULL;
 }
 
-template <int Capacity> bool
-GuardCollection<Capacity>::hasGuardAt(u32 addr)
+bool
+GuardCollection::hasGuardAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
     return guard != NULL;
 }
 
-template <int Capacity> bool
-GuardCollection<Capacity>::hasDisabledGuardAt(u32 addr)
+bool
+GuardCollection::hasDisabledGuardAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
     return guard != NULL && !guard->enabled;
 }
 
-template <int Capacity> bool
-GuardCollection<Capacity>::hasConditionalGuardAt(u32 addr)
+bool
+GuardCollection::hasConditionalGuardAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
     return guard != NULL && guard->skip != 0;
 }
 
-template <int Capacity> void
-GuardCollection<Capacity>::setAt(u32 addr, long skip)
+void
+GuardCollection::add(u32 addr, long skip)
 {
-    if (!hasGuardAt(addr) && count + 1 < Capacity) {
+    if (hasGuardAt(addr)) return;
 
-        guards[count].addr = addr;
-        guards[count].enabled = true;
-        guards[count].hits = 0;
-        guards[count].skip = skip;
-        count++;
+    if (count >= capacity) {
+
+        Guard *newguards = new Guard[2 * capacity];
+        for (long i = 0; i < capacity; i++) newguards[i] = guards[i];
+        delete [] guards;
+        guards = newguards;
+        capacity *= 2;
+        printf("New capacity = %d\n", capacity);
     }
+
+    guards[count].addr = addr;
+    guards[count].enabled = true;
+    guards[count].hits = 0;
+    guards[count].skip = skip;
+    count++;
 }
 
-template <int Capacity> void
-GuardCollection<Capacity>::remove(long nr)
+void
+GuardCollection::remove(long nr)
 {
-    if (nr < Capacity) removeAt(guards[nr].addr);
+    if (nr < count) removeAt(guards[nr].addr);
 }
 
-template <int Capacity> void
-GuardCollection<Capacity>::removeAt(uint32_t addr)
+void
+GuardCollection::removeAt(uint32_t addr)
 {
-    printf("count = %ld removeAt(%x)\n", count, addr);
     for (int i = 0; i < count; i++) {
 
         if (guards[i].addr == addr) {
 
-            printf("Removing \n");
-            for (int j = i; j + 1 < count; j++)
-                guards[j] = guards[j + 1];
+            for (int j = i; j + 1 < count; j++) guards[j] = guards[j + 1];
             count--;
-            printf("count = %ld\n", count);
             break;
         }
     }
 }
 
-template <int Capacity> void
-GuardCollection<Capacity>::setEnableAt(uint32_t addr, bool value)
+bool
+GuardCollection::isEnabled(long nr)
+{
+    return nr < count ? guards[nr].enabled : false;
+}
+
+void
+GuardCollection::setEnable(long nr, bool val)
+{
+    if (nr < count) guards[nr].enabled = val;
+}
+
+void
+GuardCollection::setEnableAt(uint32_t addr, bool value)
 {
     Guard *guard = guardAtAddr(addr);
     if (guard) guard->enabled = value;
 }
 
-template <int Capacity> bool
-GuardCollection<Capacity>::matches(u32 addr)
+bool
+GuardCollection::eval(u32 addr)
 {
-    for (int i = 0; i < count; i++) {
-        if (guards[i].matches(addr)) return true;
-    }
+    for (int i = 0; i < count; i++)
+        if (guards[i].eval(addr)) return true;
+
     return false;
 }
 
 Observer::Observer()
 {
     // REMOVE ASAP
-    watchpoints.setAt(42);
-    watchpoints.setAt(0xFCC8000);
-    watchpoints.remove(0);
-    watchpoints.removeAt(0xFCC8000);
-    watchpoints.setAt(43);
-    watchpoints.setAt(0xFCC8002);
+    watchpoints.add(42);
+    watchpoints.add(0xFCC8000);
+    watchpoints.add(43);
+    watchpoints.add(0xFCC8002);
 }
 
 bool
@@ -140,13 +155,13 @@ Observer::breakpointMatches(u32 addr)
         return true;
     }
 
-    return breakpoints.matches(addr);
+    return breakpoints.eval(addr);
 }
 
 bool
 Observer::watchpointMatches(u32 addr)
 {
-    return watchpoints.matches(addr);
+    return watchpoints.eval(addr);
 }
 
 }

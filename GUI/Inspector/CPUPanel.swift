@@ -67,7 +67,7 @@ extension Inspector {
         cpuA6.integerValue = Int(info.a.6)
         cpuA7.integerValue = Int(info.a.7)
         
-        cpuSSP.integerValue = Int(info.usp)
+        cpuUSP.integerValue = Int(info.usp)
         cpuSSP.integerValue = Int(info.ssp)
 
         let flags = Int(info.flags)
