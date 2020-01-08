@@ -134,28 +134,22 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.setCondition(nr, [cond UTF8String]);
 }
+- (NSInteger) numberOfWatchpoints
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.elements();
+}
+- (void) removeWatchpoint:(NSInteger)nr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.remove(nr);
+}
+- (uint32_t) watchpointAddr:(NSInteger)nr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
+}
 - (NSInteger) traceBufferCapacity
 {
     return wrapper->cpu->traceBufferCapacity; 
 }
-/*
-- (NSInteger) recordedInstructions
-{
-    return wrapper->cpu->recordedInstructions();
-}
-*/
-/*
-- (RecInstr) readRecordedInstruction:(NSInteger)nr
-{
-    return wrapper->cpu->readRecordedInstruction(nr);
-}
-*/
-/*
-- (void) clearTraceBuffer
-{
-    wrapper->cpu->clearTraceBuffer();
-}
-*/
 - (void) truncateTraceBuffer:(NSInteger)count
 {
     wrapper->cpu->truncateTraceBuffer((unsigned)count);

@@ -12,6 +12,7 @@
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
+#include "MoiraGuard.h"
 #include "StrWriter.h"
 
 namespace moira {
@@ -114,7 +115,11 @@ class Moira {
     // Table holding instruction infos
     InstrInfo info[65536];
 
-
+public:
+    
+    // Breakpoint and watchpoint management
+    Observer observer;
+    
     //
     // Constructing and configuring
     //

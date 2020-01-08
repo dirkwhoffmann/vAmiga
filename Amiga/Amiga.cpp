@@ -986,7 +986,7 @@ Amiga::runLoop()
                 }
             }
             
-            // Are we requests to terminate the run loop?
+            // Are we requested to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
                 debug(RUNLOOP_DEBUG, "RL_STOP\n");

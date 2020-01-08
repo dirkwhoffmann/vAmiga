@@ -21,6 +21,7 @@ class Inspector: NSWindowController {
     @IBOutlet weak var instrTableView: InstrTableView!
     @IBOutlet weak var traceTableView: TraceTableView!
     @IBOutlet weak var breakTableView: BreakTableView!
+    @IBOutlet weak var watchTableView: WatchTableView!
     @IBOutlet weak var cpuPC: NSTextField!
     @IBOutlet weak var cpuD0: NSTextField!
     @IBOutlet weak var cpuD1: NSTextField!

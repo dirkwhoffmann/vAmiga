@@ -22,6 +22,8 @@ class CPU : public SubComponent {
 
     CPUInfo info;
 
+public:
+
     moira::Moira moiracpu;
 
 
