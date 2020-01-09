@@ -966,10 +966,6 @@ extension MyController {
 
 extension Keys {
 
-    // CPU
-    static let cpuEngine         = "VAMIGACpuEngine"
-    static let cpuSpeed          = "VAMIGACpuSpeed"
-
     // Graphics
     static let clxSprSpr         = "VAMIGAClxSprSpr"
     static let clxSprPlf         = "VAMIGAClxSprPlf"
@@ -988,10 +984,6 @@ extension Keys {
 }
 
 extension Defaults {
-
-    // CPU
-    static let cpuEngine         = CPU_MUSASHI
-    static let cpuSpeed          = 1
 
     // Graphics
     static let clxSprSpr         = false
@@ -1016,8 +1008,6 @@ extension MyController {
 
         let dictionary: [String: Any] = [
 
-            Keys.cpuEngine: Defaults.cpuEngine.rawValue,
-            Keys.cpuSpeed: Defaults.cpuSpeed,
             Keys.clxSprSpr: Defaults.clxSprSpr,
             Keys.clxSprPlf: Defaults.clxSprPlf,
             Keys.clxPlfPlf: Defaults.clxPlfPlf,
@@ -1036,9 +1026,7 @@ extension MyController {
 
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.cpuEngine,
-                     Keys.cpuSpeed,
-                     Keys.clxSprSpr,
+        let keys = [ Keys.clxSprSpr,
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
                      Keys.filterActivation,

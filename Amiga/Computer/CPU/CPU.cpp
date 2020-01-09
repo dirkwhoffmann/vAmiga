@@ -300,7 +300,8 @@ CPU::disassemble(RecInstr recInstr, DisInstr &result)
     uint16_t sr = recInstr.sr;
 
     disassemble(pc, result);
-    
+    moiracpu.disassembleSR(sr, result.flags);
+    /*
     result.flags[0]  = (sr & 0b1000000000000000) ? 'T' : 't';
     result.flags[1]  = '-';
     result.flags[2]  = (sr & 0b0010000000000000) ? 'S' : 's';
@@ -318,6 +319,7 @@ CPU::disassemble(RecInstr recInstr, DisInstr &result)
     result.flags[14] = (sr & 0b0000000000000010) ? 'V' : 'v';
     result.flags[15] = (sr & 0b0000000000000001) ? 'C' : 'c';
     result.flags[16] = 0;
+    */
 }
 
 void

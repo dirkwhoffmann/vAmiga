@@ -12,18 +12,6 @@
 #ifndef _CPU_T_INC
 #define _CPU_T_INC
 
-// CPU engine
-typedef enum : long
-{
-    CPU_MUSASHI
-}
-CPUEngine;
-
-inline bool isCPUEngine(long value)
-{
-    return value == CPU_MUSASHI;
-}
-
 /* Recorded instruction
  * This data structure is used inside the trace ringbuffer.
  */
