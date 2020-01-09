@@ -12,7 +12,7 @@
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
-#include "MoiraGuard.h"
+#include "MoiraDebug.h"
 #include "StrWriter.h"
 
 namespace moira {

@@ -114,7 +114,7 @@
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
-		50AB982023C5AE0000B17B21 /* MoiraGuard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AB981E23C5AE0000B17B21 /* MoiraGuard.cpp */; };
+		50AB982023C5AE0000B17B21 /* MoiraDebug.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AB981E23C5AE0000B17B21 /* MoiraDebug.cpp */; };
 		50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB982123C6263500B17B21 /* WatchTableView.swift */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
@@ -344,8 +344,8 @@
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
-		50AB981E23C5AE0000B17B21 /* MoiraGuard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraGuard.cpp; sourceTree = "<group>"; };
-		50AB981F23C5AE0000B17B21 /* MoiraGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraGuard.h; sourceTree = "<group>"; };
+		50AB981E23C5AE0000B17B21 /* MoiraDebug.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraDebug.cpp; sourceTree = "<group>"; };
+		50AB981F23C5AE0000B17B21 /* MoiraDebug.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDebug.h; sourceTree = "<group>"; };
 		50AB982123C6263500B17B21 /* WatchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTableView.swift; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
@@ -495,8 +495,8 @@
 				505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */,
 				505A12DE23BF671C000BAC76 /* StrWriter.h */,
 				505A12D323BF671C000BAC76 /* StrWriter_cpp.h */,
-				50AB981F23C5AE0000B17B21 /* MoiraGuard.h */,
-				50AB981E23C5AE0000B17B21 /* MoiraGuard.cpp */,
+				50AB981F23C5AE0000B17B21 /* MoiraDebug.h */,
+				50AB981E23C5AE0000B17B21 /* MoiraDebug.cpp */,
 			);
 			name = Moira;
 			path = Amiga/Computer/Moira;
@@ -1171,7 +1171,7 @@
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
-				50AB982023C5AE0000B17B21 /* MoiraGuard.cpp in Sources */,
+				50AB982023C5AE0000B17B21 /* MoiraDebug.cpp in Sources */,
 				50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
