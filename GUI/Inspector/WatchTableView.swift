@@ -46,7 +46,7 @@ class WatchTableView: NSTableView {
         if col == 0 {
 
             // Toggle enable status
-            cpu.watchpointSetEnable(row, value: cpu.isDisabledWatchpoint(row))
+            cpu.watchpointSetEnable(row, value: cpu.watchpointIsDisabled(row))
             reloadData()
         }
         
@@ -68,7 +68,7 @@ extension WatchTableView: NSTableViewDataSource {
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
-        let disabled = cpu.isDisabledWatchpoint(row)
+        let disabled = cpu.watchpointIsDisabled(row)
         let last = row == numberOfRows(in: tableView) - 1
 
         switch tableColumn?.identifier.rawValue {
@@ -99,7 +99,7 @@ extension WatchTableView: NSTableViewDelegate {
             if let cell = cell as? NSTextFieldCell {
 
                 let last = row == numberOfRows(in: tableView) - 1
-                let disabled = !last && cpu.isDisabledWatchpoint(row)
+                let disabled = !last && cpu.watchpointIsDisabled(row)
                 let selected = tableView.selectedRow == row
                 let edited = tableView.editedRow == row
 
@@ -127,8 +127,8 @@ extension WatchTableView: NSTableViewDelegate {
         track("Adding ")
         if tableColumn?.identifier.rawValue == "addr" {
             if let addr = object as? UInt32 {
-                if !cpu.hasWatchpoint(at: addr) {
-                    cpu.addWatchpoint(addr)
+                if !cpu.watchpointIsSet(at: addr) {
+                    cpu.addWatchpoint(at: addr)
                     reloadData()
                     return
                 }

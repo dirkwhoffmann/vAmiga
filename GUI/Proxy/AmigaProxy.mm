@@ -117,33 +117,45 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.elements();
 }
-- (BOOL) hasWatchpointAt:(uint32_t)addr
+- (uint32_t) watchpointAddr:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAt(addr);
+    return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
 }
-- (BOOL) hasDisabledWatchpointAt:(uint32_t)addr
+- (BOOL) watchpointIsEnabled:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndEnabledAt(addr);
+    return wrapper->cpu->moiracpu.observer.watchpoints.isEnabled(nr);
 }
-- (void) addWatchpoint:(uint32_t)addr
+- (BOOL) watchpointIsDisabled:(NSInteger)nr
 {
-    wrapper->cpu->moiracpu.observer.watchpoints.addAt(addr);
+    return wrapper->cpu->moiracpu.observer.watchpoints.isDisabled(nr);
 }
 - (void) removeWatchpoint:(NSInteger)nr
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.remove(nr);
 }
-- (uint32_t) watchpointAddr:(NSInteger)nr
-{
-    return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
-}
-- (BOOL) isDisabledWatchpoint:(NSInteger)nr
-{
-    return wrapper->cpu->moiracpu.observer.watchpoints.isDisabled(nr);
-}
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val
 {
     wrapper->cpu->moiracpu.observer.watchpoints.setEnable(nr, val);
+}
+- (BOOL) watchpointIsSetAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAt(addr);
+}
+- (BOOL) watchpointIsSetAndEnabledAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndEnabledAt(addr);
+}
+- (BOOL) watchpointIsSetAndDisabledAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndDisabledAt(addr);
+}
+- (void) addWatchpointAt:(uint32_t)addr
+{
+    wrapper->cpu->moiracpu.observer.watchpoints.addAt(addr);
+}
+- (void) removeWatchpointAt:(uint32_t)addr
+{
+    wrapper->cpu->moiracpu.observer.watchpoints.removeAt(addr);
 }
 - (NSInteger) traceBufferCapacity
 {
