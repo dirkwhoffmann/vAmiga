@@ -569,8 +569,9 @@ extension MyController {
              myAppDelegate.inspector?.refresh(everything: true)
 
         case MSG_BREAKPOINT_CONFIG,
-             MSG_BREAKPOINT_REACHED:
-             myAppDelegate.inspector?.refresh(everything: true)
+             MSG_BREAKPOINT_REACHED,
+             MSG_WATCHPOINT_REACHED:
+            myAppDelegate.inspector?.refresh(everything: true)
  
         case MSG_READY_TO_POWER_ON:
     

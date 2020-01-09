@@ -40,7 +40,8 @@ typedef enum
     // CPU
     MSG_BREAKPOINT_CONFIG,
     MSG_BREAKPOINT_REACHED,
-    
+    MSG_WATCHPOINT_REACHED,
+
     // Memory
     MSG_MEM_LAYOUT,
     

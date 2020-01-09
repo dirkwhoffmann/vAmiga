@@ -77,7 +77,6 @@ GuardCollection::add(u32 addr, long skip)
         delete [] guards;
         guards = newguards;
         capacity *= 2;
-        printf("New capacity = %d\n", capacity);
     }
 
     guards[count].addr = addr;

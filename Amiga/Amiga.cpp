@@ -524,6 +524,7 @@ Amiga::_powerOn()
     // cpu.bpManager.setBreakpointAt(0xFC30C2);
     // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
     // cpu.bpManager.setBreakpointAt(0x05002E); // Paccer intro cycle count issue
+    // cpu.bpManager.setBreakpointAt(0xFC0252); 
 
     // Update the recorded debug information
     inspect();
@@ -970,13 +971,32 @@ Amiga::runLoop()
                 inspect();
                 clearControlFlags(RL_INSPECT);
             }
-            
+
+            // Did we reach a breakpoint?
+            if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
+                inspect();
+                putMessage(MSG_BREAKPOINT_REACHED);
+                debug(RUNLOOP_DEBUG, "BREAKPOINT_REACHED\n");
+                clearControlFlags(RL_BREAKPOINT_REACHED);
+                break;
+            }
+
+            // Did we reach a watchpoint?
+            if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
+                inspect();
+                putMessage(MSG_WATCHPOINT_REACHED);
+                debug(RUNLOOP_DEBUG, "WATCHPOINT_REACHED\n");
+                clearControlFlags(RL_WATCHPOINT_REACHED);
+                break;
+            }
+
             // Are we requested to record the execution?
             if (runLoopCtrl & RL_ENABLE_TRACING) {
                 cpu.recordInstruction();
             }
             
             // Are we requested to check for breakpoints?
+            // DEPRECATED
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
                 if (cpu.bpManager.shouldStop()) {
                     inspect();

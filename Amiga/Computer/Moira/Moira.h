@@ -117,9 +117,10 @@ class Moira {
 
 public:
     
-    // Breakpoint and watchpoint management
+    // Address observer managing breakpoints and watchpoints
     Observer observer;
-    
+
+
     //
     // Constructing and configuring
     //
@@ -176,7 +177,13 @@ private:
     // Provides the interrupt level in IRQ_USER mode
     int readIrqUserVector(u8 level) { return 0; }
 
+    // Called when a breakpoint is reached
+    void breakpointReached(u32 addr);
 
+    // Called when a breakpoint is reached
+    void watchpointReached(u32 addr);
+
+    
     //
     // Accessing the clock
     //

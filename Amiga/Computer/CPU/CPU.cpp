@@ -75,6 +75,21 @@ Moira::willPollIrq()
 {
 }
 
+void
+Moira::breakpointReached(u32 addr)
+{
+    printf("breakpointReached(%x)", addr);
+    activeAmiga->setControlFlags(RL_BREAKPOINT_REACHED);
+
+}
+
+void
+Moira::watchpointReached(u32 addr)
+{
+    printf("watchpointReached(%x)", addr);
+    activeAmiga->setControlFlags(RL_WATCHPOINT_REACHED);
+}
+
 }
 
 

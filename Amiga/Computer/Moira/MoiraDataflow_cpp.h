@@ -184,7 +184,7 @@ Moira::readM(u32 addr)
 
     // Check for a watchpoint
     if (observer.watchpoints.elements() && observer.watchpoints.eval(addr)) {
-        printf("Watchpoint hits at %x\n", addr);
+        watchpointReached(addr);
     }
 
     if (S == Byte) {
@@ -222,7 +222,7 @@ Moira::writeM(u32 addr, u32 val)
 
     // Check for a watchpoint
     if (observer.watchpoints.elements() && observer.watchpoints.eval(addr)) {
-        printf("Watchpoint (W) hits at %x\n", addr);
+        watchpointReached(addr);
     }
 
     if (S == Byte) {
