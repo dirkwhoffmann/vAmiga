@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
 #include "Amiga.h"
 
 BreakpointManager::BreakpointManager(Amiga &ref) : AmigaComponent(ref)
@@ -249,3 +250,5 @@ BreakpointManager::shouldStop()
     Breakpoint *bp = breakpointAtAddr(addr);
     return bp ? bp->eval() : false;
 }
+
+#endif

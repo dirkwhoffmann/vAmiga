@@ -92,6 +92,7 @@ GuardCollection::addAt(u32 addr, long skip)
     guards[count].hits = 0;
     guards[count].skip = skip;
     count++;
+    needsCheck = true;
 }
 
 void
@@ -112,6 +113,7 @@ GuardCollection::removeAt(uint32_t addr)
             break;
         }
     }
+    needsCheck = count != 0;
 }
 
 bool
@@ -152,6 +154,7 @@ void
 Observer::stepInto()
 {
     softStop = UINT64_MAX;
+    breakpoints.needsCheck = true;
 }
 
 void
@@ -159,6 +162,7 @@ Observer::stepOver()
 {
     char tmp[64];
     softStop = moira.getPC() + moira.disassemble(moira.getPC(), tmp);
+    breakpoints.needsCheck = true;
 }
 
 bool
@@ -167,8 +171,10 @@ Observer::breakpointMatches(u32 addr)
     // Check if a soft breakpoint has been reached
     if (addr == softStop || softStop == UINT64_MAX) {
 
+        printf("Soft stop reached\n");
         // Soft breakpoints are deleted when reached
         softStop = UINT64_MAX - 1;
+        breakpoints.needsCheck = breakpoints.elements() != 0;
         return true;
     }
 

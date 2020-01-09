@@ -119,12 +119,12 @@ Amiga::setDebugMode(bool enable)
     if ((debugMode = enable)) {
         
         debug("Enabling debug mode\n");
-        setControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
+        setControlFlags(RL_ENABLE_TRACING);
 
     } else {
 
         debug("Disabling debug mode\n");
-        clearControlFlags(RL_ENABLE_TRACING | RL_ENABLE_BREAKPOINTS);
+        clearControlFlags(RL_ENABLE_TRACING);
     }
 }
 
@@ -920,8 +920,8 @@ Amiga::stepInto()
 {
     if (isRunning())
     return;
-    
-    cpu.bpManager.setSoftBreakpointAt(UINT32_MAX);
+
+    cpu.moiracpu.observer.stepInto();
     run();
 }
 
@@ -931,8 +931,9 @@ Amiga::stepOver()
     if (isRunning())
     return;
     
-    debug("Setting bp at %X\n", cpu.getNextPC());
-    cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
+    cpu.moiracpu.observer.stepOver();
+    // debug("Setting bp at %X\n", cpu.getNextPC());
+    // cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
     run();
 }
 
@@ -995,17 +996,6 @@ Amiga::runLoop()
                 break;
             }
 
-            // Are we requested to check for breakpoints?
-            // DEPRECATED
-            if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {
-                if (cpu.bpManager.shouldStop()) {
-                    inspect();
-                    putMessage(MSG_BREAKPOINT_REACHED);
-                    debug(RUNLOOP_DEBUG, "BREAKPOINT_REACHED\n");
-                    break;
-                }
-            }
-            
             // Are we requested to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);

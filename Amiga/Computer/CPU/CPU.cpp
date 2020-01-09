@@ -94,12 +94,6 @@ Moira::watchpointReached(u32 addr)
 CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("CPU");
-    
-    subComponents = vector<HardwareComponent *> {
-        
-        &bpManager,
-    };
-
     activeAmiga = &ref;
 }
 

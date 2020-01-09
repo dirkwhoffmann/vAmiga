@@ -35,16 +35,21 @@ public:
 
 class GuardCollection {
 
+    friend class Observer;
+
     // Capacity of the guards array
-    long capacity = 2;
+    long capacity = 1;
 
     // Array holding all guards
-    Guard *guards = new Guard[2];
+    Guard *guards = new Guard[1];
 
     // Number of currently stored guards
     long count = 0;
 
 public:
+
+    // Flag to quickly determine if there is anything to check
+    bool needsCheck = false;
 
     //
     // Inspecting the guard list
@@ -69,7 +74,7 @@ public:
     void removeAt(uint32_t addr);
 
     void remove(long nr);
-    void removeAll() { count = 0; }
+    void removeAll() { count = 0; needsCheck = false; }
 
     //
     // Enabling or disabling guards
@@ -90,6 +95,8 @@ public:
     // Checking a guard
     //
 
+private:
+    
     bool eval(u32 addr);
 };
 

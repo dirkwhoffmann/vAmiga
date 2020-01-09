@@ -10,6 +10,8 @@
 #ifndef _BREAKPOINT_INC
 #define _BREAKPOINT_INC
 
+#if 0
+
 #include "va_std.h"
 #include <string>
 #include <vector>
@@ -87,3 +89,5 @@ public:
 };
 
 #endif
+#endif
+

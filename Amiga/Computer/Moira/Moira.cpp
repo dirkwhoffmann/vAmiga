@@ -92,7 +92,7 @@ Moira::execute()
     (this->*exec[queue.ird])(queue.ird);
 
     // Check if a breakpoint has been reached
-    if (observer.breakpoints.elements() && observer.breakpoints.eval(reg.pc)) {
+    if (observer.breakpoints.needsCheck && observer.breakpointMatches(reg.pc)) {
          breakpointReached(reg.pc);
      }
 

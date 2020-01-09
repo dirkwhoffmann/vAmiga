@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #include "Amiga.h"
 
 #include <sstream>
@@ -640,3 +642,6 @@ Breakpoint::eval()
     
     return ast->eval();
 }
+
+#endif
+

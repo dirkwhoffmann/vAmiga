@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#if 0
+
 #ifndef _BREAKPOINT_MANAGER_INC
 #define _BREAKPOINT_MANAGER_INC
 
@@ -122,4 +124,5 @@ public:
     bool hasSyntaxError(long nr);
 };
 
+#endif
 #endif
