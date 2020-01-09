@@ -138,10 +138,7 @@ GuardCollection::eval(u32 addr)
 Observer::Observer()
 {
     // REMOVE ASAP
-    watchpoints.add(42);
-    watchpoints.add(0xFCC8000);
-    watchpoints.add(43);
-    watchpoints.add(0xFCC8002);
+    watchpoints.add(0xDFF180);
 }
 
 bool

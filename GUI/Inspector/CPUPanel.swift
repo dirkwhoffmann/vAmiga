@@ -86,6 +86,7 @@ extension Inspector {
         instrTableView.refresh(everything: everything)
         traceTableView.refresh()
         breakTableView.refresh(everything: everything)
+        watchTableView.refresh(everything: everything)
     }
     
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {

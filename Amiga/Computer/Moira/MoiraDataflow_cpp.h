@@ -176,30 +176,31 @@ Moira::readM(u32 addr)
 {
     u32 result;
 
-    switch (S) {
-        case Byte:
-        {
-            sync(2);
-            if (last) pollIrq();
-            result = read8(addr & 0xFFFFFF);
-            sync(2);
-            break;
-        }
-        case Word:
-        {
-            sync(2);
-            if (last) pollIrq();
-            result = read16(addr & 0xFFFFFF);
-            sync(2);
-            break;
-        }
-        case Long:
-        {
-            result = readM<Word>(addr) << 16;
-            result |= readM<Word,last>(addr + 2);
-            break;
-        }
+    if (S == Long) {
+        result = readM<Word>(addr) << 16;
+        result |= readM<Word,last>(addr + 2);
+        return result;
     }
+
+    // Check for a watchpoint
+    if (observer.watchpoints.elements() && observer.watchpoints.eval(addr)) {
+        printf("Watchpoint hits at %x\n", addr);
+    }
+
+    if (S == Byte) {
+        sync(2);
+        if (last) pollIrq();
+        result = read8(addr & 0xFFFFFF);
+        sync(2);
+    }
+
+    if (S == Word) {
+        sync(2);
+        if (last) pollIrq();
+        result = read16(addr & 0xFFFFFF);
+        sync(2);
+    }
+
     return result;
 }
 
@@ -213,30 +214,29 @@ Moira::readM(u32 addr, bool &error)
 template<Size S, bool last> void
 Moira::writeM(u32 addr, u32 val)
 {
-    switch (S) {
+    if (S == Long) {
+        writeM<Word>     (addr,     val >> 16   );
+        writeM<Word,last>(addr + 2, val & 0xFFFF);
+        return;
+    }
 
-        case Byte:
-        {
-            sync(2);
-            if (last) pollIrq();
-            write8(addr & 0xFFFFFF, (u8)val);
-            sync(2);
-            break;
-        }
-        case Word:
-        {
-            sync(2);
-            if (last) pollIrq();
-            write16(addr & 0xFFFFFF, (u16)val);
-            sync(2);
-            break;
-        }
-        case Long:
-        {
-            writeM<Word>     (addr,     val >> 16   );
-            writeM<Word,last>(addr + 2, val & 0xFFFF);
-            break;
-        }
+    // Check for a watchpoint
+    if (observer.watchpoints.elements() && observer.watchpoints.eval(addr)) {
+        printf("Watchpoint (W) hits at %x\n", addr);
+    }
+
+    if (S == Byte) {
+        sync(2);
+        if (last) pollIrq();
+        write8(addr & 0xFFFFFF, (u8)val);
+        sync(2);
+    }
+
+    if (S == Word) {
+        sync(2);
+        if (last) pollIrq();
+        write16(addr & 0xFFFFFF, (u16)val);
+        sync(2);
     }
 }
 

@@ -138,6 +138,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.elements();
 }
+- (BOOL) hasWatchpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.hasGuardAt(addr);
+}
+- (void) addWatchpoint:(uint32_t)addr
+{
+    wrapper->cpu->moiracpu.observer.watchpoints.add(addr);
+}
 - (void) removeWatchpoint:(NSInteger)nr
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.remove(nr);
