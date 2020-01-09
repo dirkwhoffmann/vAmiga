@@ -290,10 +290,6 @@ CPU::disassemble(uint32_t addr, DisInstr &result)
     result.bytes = moiracpu.disassemble(addr, result.instr);
     moiracpu.disassembleWord(addr, result.addr);
     moiracpu.disassembleMemory(addr, result.bytes / 2, result.data);
-
-    // mem.hex(result.data, addr, result.bytes, sizeof(result.data));
-    // sprint24x(result.addr, addr);
-
     result.flags[0] = 0;
 }
 
