@@ -24,10 +24,6 @@ namespace moira {
 Moira::Moira()
 {
     createJumpTables();
-
-    observer.watchpoints.addAt(0xDFF180);
-    observer.breakpoints.addAt(0xFF0000);
-    observer.breakpoints.addAt(0x4000);
 }
 
 void
@@ -73,7 +69,7 @@ Moira::reset()
 void
 Moira::execute()
 {
-    // Check for interrupts
+    // Check for pending interrupts
     if (reg.ipl >= sr.ipl) {
         if (reg.ipl > sr.ipl || reg.ipl == 7) {
 
@@ -94,6 +90,12 @@ Moira::execute()
 
     reg.pc += 2;
     (this->*exec[queue.ird])(queue.ird);
+
+    // Check if a breakpoint has been reached
+    if (observer.breakpoints.elements() && observer.breakpoints.eval(reg.pc)) {
+         breakpointReached(reg.pc);
+     }
+
 }
 
 template<Size S> u32

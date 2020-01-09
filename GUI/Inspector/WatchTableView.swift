@@ -47,14 +47,14 @@ class WatchTableView: NSTableView {
 
             // Toggle enable status
             cpu.watchpointSetEnable(row, value: cpu.watchpointIsDisabled(row))
-            reloadData()
+            inspector.refresh(everything: true)
         }
         
         if col == 2 {
 
             // Delete
             cpu.removeWatchpoint(row)
-            reloadData()
+            inspector.refresh(everything: true)
         }
     }
 }
@@ -129,7 +129,7 @@ extension WatchTableView: NSTableViewDelegate {
             if let addr = object as? UInt32 {
                 if !cpu.watchpointIsSet(at: addr) {
                     cpu.addWatchpoint(at: addr)
-                    reloadData()
+                    inspector.refresh(everything: true)
                     return
                 }
             }
