@@ -771,8 +771,6 @@ Blitter::initSlowBlitter()
 
     assert(sizeof(this->lineBlitInstr) == sizeof(lineBlitInstr));
     memcpy(this->lineBlitInstr, lineBlitInstr, sizeof(lineBlitInstr));
-
-    dump();
 }
 
 void

@@ -922,7 +922,7 @@ uint16_t
 Memory::spypeek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
-        warn("spypeek16(%X): Address violation error (reading odd address)\n", addr);
+        // warn("spypeek16(%X): Address violation error (reading odd address)\n", addr);
     }
 
     addr &= 0xFFFFFF;

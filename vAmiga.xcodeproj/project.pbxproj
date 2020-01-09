@@ -27,7 +27,6 @@
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
-		504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */; };
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		505945F82363008800ACE819 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505945F72363008800ACE819 /* ActivityView.swift */; };
@@ -118,7 +117,6 @@
 		50AB982023C5AE0000B17B21 /* MoiraGuard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AB981E23C5AE0000B17B21 /* MoiraGuard.cpp */; };
 		50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB982123C6263500B17B21 /* WatchTableView.swift */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
-		50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
@@ -211,8 +209,6 @@
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
-		504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Breakpoint.cpp; sourceTree = "<group>"; };
-		504F9655220ACFE0005F8AB7 /* Breakpoint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Breakpoint.h; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
@@ -352,8 +348,6 @@
 		50AB981F23C5AE0000B17B21 /* MoiraGuard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraGuard.h; sourceTree = "<group>"; };
 		50AB982123C6263500B17B21 /* WatchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTableView.swift; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
-		50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BreakpointManager.cpp; sourceTree = "<group>"; };
-		50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BreakpointManager.h; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
 		50B14C0821EB2248002E32A6 /* va_std.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_std.h; sourceTree = "<group>"; };
@@ -515,10 +509,6 @@
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
-				50B0DD1D220B5CEF00D6618A /* BreakpointManager.h */,
-				50B0DD1C220B5CEF00D6618A /* BreakpointManager.cpp */,
-				504F9655220ACFE0005F8AB7 /* Breakpoint.h */,
-				504F9654220ACFE0005F8AB7 /* Breakpoint.cpp */,
 			);
 			path = CPU;
 			sourceTree = "<group>";
@@ -1119,7 +1109,6 @@
 				50D9CD99236AF75800503B4D /* DMADebugController.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				505A12E023BF671D000BAC76 /* Moira.cpp in Sources */,
-				504F9656220ACFE0005F8AB7 /* Breakpoint.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
@@ -1221,7 +1210,6 @@
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
-				50B0DD1E220B5CEF00D6618A /* BreakpointManager.cpp in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountController.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,

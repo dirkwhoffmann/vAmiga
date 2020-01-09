@@ -11,7 +11,6 @@
 #define _CPU_INC
 
 #include "AmigaComponent.h"
-#include "BreakpointManager.h"
 #include "Moira.h"
 
 //

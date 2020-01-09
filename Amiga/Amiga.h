@@ -18,7 +18,6 @@
 // Sub components
 #include "CPU.h"
 #include "Moira.h"
-#include "BreakpointManager.h"
 #include "CIA.h"
 #include "RTC.h"
 #include "Memory.h"
