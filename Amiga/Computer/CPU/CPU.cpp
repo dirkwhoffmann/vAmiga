@@ -71,16 +71,10 @@ Moira::write16 (u32 addr, u16 val)
 }
 
 void
-Moira::willPollIrq()
-{
-}
-
-void
 Moira::breakpointReached(u32 addr)
 {
     printf("breakpointReached(%x)", addr);
     activeAmiga->setControlFlags(RL_BREAKPOINT_REACHED);
-
 }
 
 void
@@ -105,6 +99,8 @@ CPU::CPU(Amiga& ref) : AmigaComponent(ref)
         
         &bpManager,
     };
+
+    activeAmiga = &ref;
 }
 
 CPU::~CPU()
@@ -122,9 +118,6 @@ void
 CPU::_powerOn()
 {
     debug(CPU_DEBUG, "CPU::_powerOn()\n");
-
-    // REMOVE ASAP
-    makeActiveInstance();
 }
 
 void
@@ -140,18 +133,12 @@ void
 CPU::_run()
 {
     debug(CPU_DEBUG, "CPU::_run()\n");
-
-    // Grab the Musashi core
-    makeActiveInstance();
 }
 
 void
 CPU::_reset()
 {
     debug(CPU_DEBUG, "CPU::_reset()\n");
-
-    // REMOVE ASAP
-    makeActiveInstance();
 
     RESET_SNAPSHOT_ITEMS
 
@@ -301,29 +288,6 @@ CPU::didSaveToBuffer(uint8_t *buffer)
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
-}
-
-void
-CPU::makeActiveInstance()
-{
-    // Return immediately if this emulator instance is the active instance
-    if (activeAmiga == &amiga) return;
-
-    /* Pause the currently active emulator instance (if any)
-     * Because we're going to use the CPU core, we need to save the active
-     * instance's CPU context. It will be restored when the other instance
-     * becomes the active again (by calling this function).
-     */
-    if (activeAmiga != NULL) {
-        activeAmiga->pause();
-        // activeAmiga->cpu.recordContext();
-    }
-
-    // Restore the previously recorded CPU state (if any)
-    // restoreContext();
-
-    // Bind the CPU core to this emulator instance
-    activeAmiga = &amiga;
 }
 
 uint32_t

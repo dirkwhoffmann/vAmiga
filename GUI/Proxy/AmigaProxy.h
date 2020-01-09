@@ -200,9 +200,9 @@ struct AmigaFileWrapper;
 - (int64_t) clock;
 - (int64_t) cycles;
 
+- (NSInteger) numberOfBreakpoints;
 - (BOOL) hasBreakpointAt:(uint32_t)addr;
 - (BOOL) hasDisabledBreakpointAt:(uint32_t)addr;
-- (BOOL) hasConditionalBreakpointAt:(uint32_t)addr;
 - (void) setBreakpointAt:(uint32_t)addr;
 - (void) deleteBreakpointAt:(uint32_t)addr;
 - (void) enableBreakpointAt:(uint32_t)addr;
@@ -211,20 +211,18 @@ struct AmigaFileWrapper;
 - (NSInteger) traceBufferCapacity;
 - (void) truncateTraceBuffer:(NSInteger)count;
 
-- (NSInteger) numberOfBreakpoints;
-- (void) deleteBreakpoint:(NSInteger)nr; 
-- (BOOL) isDisabled:(NSInteger)nr;
-- (BOOL) hasCondition:(NSInteger)nr;
-- (BOOL) hasSyntaxError:(NSInteger)nr;
+- (void) removeBreakpoint:(NSInteger)nr;
+
+- (BOOL) isDisabledBreakpoint:(NSInteger)nr;
+
 - (uint32_t) breakpointAddr:(NSInteger)nr;
 - (BOOL) setBreakpointAddr:(NSInteger)nr addr:(uint32_t)addr;
-- (NSString *) breakpointCondition:(NSInteger)nr;
-- (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond;
 
 - (NSInteger) numberOfWatchpoints;
 - (BOOL) hasWatchpointAt:(uint32_t)addr;
+- (BOOL) hasDisabledWatchpointAt:(uint32_t)addr;
 - (uint32_t) watchpointAddr:(NSInteger)nr;
-- (BOOL) watchpointIsDisabled:(NSInteger)nr;
+- (BOOL) isDisabledWatchpoint:(NSInteger)nr;
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) addWatchpoint:(uint32_t)addr;
 - (void) removeWatchpoint:(NSInteger)nr;

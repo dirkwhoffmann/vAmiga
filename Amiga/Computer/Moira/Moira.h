@@ -118,7 +118,7 @@ class Moira {
 public:
     
     // Address observer managing breakpoints and watchpoints
-    Observer observer;
+    Observer observer = Observer(*this);
 
 
     //
@@ -171,9 +171,6 @@ private:
     void write8  (u32 addr, u8  val);
     void write16 (u32 addr, u16 val);
 
-    // Called by Moira before the IPL lines are polled
-    void willPollIrq();
-
     // Provides the interrupt level in IRQ_USER mode
     int readIrqUserVector(u8 level) { return 0; }
 
@@ -190,8 +187,8 @@ private:
 
 public:
 
-    i64 getClock() { return clock; }
-    void setClock(i64 val) { clock = val; }
+    virtual i64 getClock() { return clock; }
+    virtual void setClock(i64 val) { clock = val; }
 
 private:
 
@@ -259,7 +256,7 @@ public:
 private:
 
     // Polls the IPL pins
-    void pollIrq() { willPollIrq(); reg.ipl = ipl; }
+    void pollIrq() { reg.ipl = ipl; }
 
     // Selects the IRQ vector to branch to
     int getIrqVector(int level);

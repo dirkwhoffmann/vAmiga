@@ -93,6 +93,9 @@ class Observer {
 
 public:
 
+    // Reference to the connected CPU
+    class Moira &moira;
+
     // Breakpoint storage
     GuardCollection breakpoints;
 
@@ -118,7 +121,17 @@ private:
 
 public:
 
-    Observer();
+    Observer(Moira& ref);
+
+    //
+    // Adding and removing breakpoints
+    //
+
+    // Sets a soft breakpoint that will trigger immediately
+    void stepInto();
+
+    // Sets a soft breakpoint to the next instru*ction
+    void stepOver();
 
 
     //

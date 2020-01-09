@@ -47,8 +47,7 @@ class BreakTableView: NSTableView {
         if col == 0 {
 
             // Delete breakpoint
-            track("Deleting breakpoint \(row)")
-            amigaProxy?.cpu.deleteBreakpoint(row)
+            amigaProxy?.cpu.removeBreakpoint(row)
 
         } else {
         
@@ -76,19 +75,10 @@ extension BreakTableView: NSTableViewDataSource {
            
         case "addr":
             return cpu.breakpointAddr(row)
-            
-        case "cond":
-            if let cond = cpu.breakpointCondition(row) {
-                return cond == "" ? "e.g.: D0 == $FF && D1 == (A0).w" : cond
-            } else {
-                fatalError()
-            }
-            
+
         default:
-            fatalError()
+            return "???"
         }
-        
-        return "???"
     }
 }
 
@@ -97,11 +87,8 @@ extension BreakTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
-            
-            let active = tableView.editedRow == row
-            let disabled = cpu.isDisabled(row)
-            let conditional = cpu.hasCondition(row)
-            let syntaxError = cpu.hasSyntaxError(row)
+
+            let disabled = cpu.isDisabledBreakpoint(row)
             
             switch tableColumn?.identifier.rawValue {
                 
@@ -111,18 +98,6 @@ extension BreakTableView: NSTableViewDelegate {
             case "addr":
                 cell.textColor = NSColor.labelColor
 
-            case "cond" where syntaxError && !active:
-                cell.textColor = NSColor.systemRed
-
-            case "cond" where !conditional && !active:
-                cell.textColor = NSColor.placeholderTextColor
-
-            case "cond" where disabled && !active:
-                cell.textColor = NSColor.secondaryLabelColor
-
-            case "cond":
-                cell.textColor = NSColor.labelColor
-                
             default:
                 break
             }
@@ -137,10 +112,7 @@ extension BreakTableView: NSTableViewDelegate {
             if let value = object as? UInt32 {
                 if cpu.setBreakpointAddr(row, addr: value) { return }
             }
-        case "cond":
-            if let value = object as? String {
-                if cpu.setBreakpointCondition(row, cond: value) { return }
-            }
+
         default:
             break
         }

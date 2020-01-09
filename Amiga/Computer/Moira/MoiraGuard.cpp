@@ -134,10 +134,23 @@ GuardCollection::eval(u32 addr)
     return false;
 }
 
-Observer::Observer()
+Observer::Observer(Moira& ref) : moira(ref)
 {
     // REMOVE ASAP
-    watchpoints.add(0xDFF180);
+    // watchpoints.add(0xDFF180);
+}
+
+void
+Observer::stepInto()
+{
+    softStop = UINT64_MAX;
+}
+
+void
+Observer::stepOver()
+{
+    char tmp[64];
+    softStop = moira.getPC() + moira.disassemble(moira.getPC(), tmp);
 }
 
 bool

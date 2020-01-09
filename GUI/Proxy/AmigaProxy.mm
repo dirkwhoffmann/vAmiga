@@ -63,7 +63,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (int64_t) clock
 {
-    return wrapper->cpu->getClock(); 
+    return wrapper->cpu->getClockInMasterCycles(); 
 }
 - (int64_t) cycles
 {
@@ -76,10 +76,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) hasDisabledBreakpointAt:(uint32_t)addr
 {
     return wrapper->cpu->bpManager.hasDisabledBreakpointAt(addr);
-}
-- (BOOL) hasConditionalBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.hasConditionalBreakpointAt(addr);
 }
 - (void) setBreakpointAt:(uint32_t)addr
 {
@@ -101,21 +97,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.numberOfBreakpoints();
 }
-- (void) deleteBreakpoint:(NSInteger)nr
+- (void) removeBreakpoint:(NSInteger)nr
 {
     return wrapper->cpu->bpManager.deleteBreakpoint(nr);
 }
-- (BOOL) isDisabled:(NSInteger)nr
+- (BOOL) isDisabledBreakpoint:(NSInteger)nr
 {
     return wrapper->cpu->bpManager.isDisabled(nr);
-}
-- (BOOL) hasCondition:(NSInteger)nr
-{
-    return wrapper->cpu->bpManager.hasCondition(nr);
-}
-- (BOOL) hasSyntaxError:(NSInteger)nr
-{
-    return wrapper->cpu->bpManager.hasSyntaxError(nr);
 }
 - (uint32_t) breakpointAddr:(NSInteger)nr
 {
@@ -125,15 +113,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->bpManager.setAddr(nr, addr);
 }
-- (NSString *) breakpointCondition:(NSInteger)nr
-{
-    const char *str = wrapper->cpu->bpManager.getCondition(nr);
-    return str ? [NSString stringWithUTF8String:str] : NULL;
-}
-- (BOOL) setBreakpointCondition:(NSInteger)nr cond:(NSString *)cond
-{
-    return wrapper->cpu->bpManager.setCondition(nr, [cond UTF8String]);
-}
 - (NSInteger) numberOfWatchpoints
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.elements();
@@ -141,6 +120,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) hasWatchpointAt:(uint32_t)addr
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.hasGuardAt(addr);
+}
+- (BOOL) hasDisabledWatchpointAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.watchpoints.hasDisabledGuardAt(addr);
 }
 - (void) addWatchpoint:(uint32_t)addr
 {
@@ -154,7 +137,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
 }
-- (BOOL) watchpointIsDisabled:(NSInteger)nr
+- (BOOL) isDisabledWatchpoint:(NSInteger)nr
 {
     return wrapper->cpu->moiracpu.observer.watchpoints.isDisabled(nr);
 }

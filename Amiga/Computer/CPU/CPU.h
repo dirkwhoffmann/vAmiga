@@ -103,27 +103,12 @@ public:
     
 public:
 
-    /* Assign the Musashi core to this CPU.
-     * Background: Because we only have one CPU core available, we need to
-     * share this core among all emulator instances. This means that only one
-     * emulator instance can run at a time and the other instances need to
-     * be powered off or paused. When an emulator instance needs to acces the
-     * CPU core, it has to make itself the 'active emulator instance' by
-     * calling this function. It will bind the CPU to this emulator instance
-     * by rerouting all memory accesses to this instance.
-     * If another instance is currently active, it is put into pause mode
-     * automatically.
-     * DEPRECATED
-     */
-    void makeActiveInstance();
-
-
     //
     // Working with the clock
     //
 
     // The CPU has been emulated up to this cycle
-    Cycle getClock() { return CPU_CYCLES(moiracpu.getClock()); }
+    Cycle getClockInMasterCycles() { return CPU_CYCLES(moiracpu.getClock()); }
 
     // Returns the clock in CPU cycles
     CPUCycle cycles() { return moiracpu.getClock(); }

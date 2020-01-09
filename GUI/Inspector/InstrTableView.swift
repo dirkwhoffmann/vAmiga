@@ -190,8 +190,6 @@ extension InstrTableView: NSTableViewDelegate {
 
             if cpu!.hasDisabledBreakpoint(at: addr) {
                 cell?.textColor = NSColor.disabledControlTextColor
-            } else if cpu!.hasConditionalBreakpoint(at: addr) {
-                cell?.textColor = NSColor.systemOrange
             } else if cpu!.hasBreakpoint(at: addr) {
                 cell?.textColor = NSColor.systemRed
             } else {
