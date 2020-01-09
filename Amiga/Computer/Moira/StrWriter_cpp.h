@@ -112,6 +112,16 @@ static void sprintx_signed(char *&s, i64 value, bool upper)
     sprintx(s, value, hexDigits(value), upper);
 }
 
+static void sprintw(char *&s, u64 value)
+{
+    for (int i = 3; i >= 0; i--) {
+        u8 digit = value % 16;
+        s[i] = (digit <= 9) ? ('0' + digit) : ('A' - 10 + digit);
+        value /= 16;
+    }
+    s += 4;
+}
+
 StrWriter&
 StrWriter::operator<<(const char *str)
 {

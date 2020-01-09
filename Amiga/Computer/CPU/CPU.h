@@ -36,8 +36,11 @@ public:
     static const size_t traceBufferCapacity = 256;
     RecInstr traceBuffer[traceBufferCapacity];
     
-    // The trace buffer write pointer
+    // The trace buffer write pointer (DEPRECATED)
     int writePtr = 0;
+
+    // Logging counter
+    // long logCnt = 0;
 
 
     //
@@ -117,29 +120,14 @@ public:
     
     // Getter and setter for the program counter.
     uint32_t getPC() { return moiracpu.getPC(); }
-    void setPC(uint32_t value) { moiracpu.setPC(value); } 
 
     // Returns the current value of the status register.
     uint16_t getSR() { return moiracpu.getSR(); }
     
     // Returns the current value of the instruction register.
     uint32_t getIR() { return moiracpu.getIRD(); }
-    
-    // Returns the start address of the following instruction.
-    // DEPRECATED
-    uint32_t getNextPC() { return getPC() + lengthOInstruction(); }
 
-    /* Returns the length of the instruction at the provided address in bytes.
-     * Note: This function is slow, because it calls the disassembler
-     * internally.
-     */
-    // DEPRECATED
-    uint32_t lengthOfInstruction(uint32_t addr);
-    
-    // Returns the length of the currently executed instruction.
-    // DEPRECATED
-    uint32_t lengthOInstruction() { return lengthOfInstruction(getPC()); }
-
+ 
 
     //
     // Running the disassembler
@@ -170,11 +158,8 @@ public:
     
 public:
 
-    // Executes the next instruction and returns the new CPU clock value
-    Cycle executeInstruction();
-
     // Changes the interrupt level
-    void setIrqLevel(int level) { moiracpu.setIPL(level); }
+    void setIPL(int level) { moiracpu.setIPL(level); }
 };
 
 #endif

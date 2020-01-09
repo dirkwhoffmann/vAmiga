@@ -58,7 +58,11 @@ typedef struct
     uint16_t flags;
 
     // Disassembled instructions starting at pc
-    DisInstr instr[CPUINFO_INSTR_COUNT];
+    char addr[CPUINFO_INSTR_COUNT][9];
+    char data[CPUINFO_INSTR_COUNT][33];
+    char dasm[CPUINFO_INSTR_COUNT][65];
+
+    DisInstr instr[CPUINFO_INSTR_COUNT]; // DEPRECATED
 
     // Disassembled instructions from the trace buffer
     DisInstr traceInstr[CPUINFO_INSTR_COUNT];

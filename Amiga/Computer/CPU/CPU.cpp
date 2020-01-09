@@ -284,20 +284,15 @@ CPU::didSaveToBuffer(uint8_t *buffer)
     return writer.ptr - buffer;
 }
 
-uint32_t
-CPU::lengthOfInstruction(uint32_t addr)
-{
-    char tmp[128];
-    return moiracpu.disassemble(addr, tmp);
-}
-
 void
 CPU::disassemble(uint32_t addr, DisInstr &result)
 {
     result.bytes = moiracpu.disassemble(addr, result.instr);
+    moiracpu.disassembleWord(addr, result.addr);
+    moiracpu.disassembleMemory(addr, result.bytes / 2, result.data);
 
-    mem.hex(result.data, addr, result.bytes, sizeof(result.data));
-    sprint24x(result.addr, addr);
+    // mem.hex(result.data, addr, result.bytes, sizeof(result.data));
+    // sprint24x(result.addr, addr);
 
     result.flags[0] = 0;
 }
@@ -352,11 +347,4 @@ CPU::recordInstruction()
 
     // Advance write pointer
     writePtr = (writePtr + 1) % traceBufferCapacity;
-}
-
-Cycle
-CPU::executeInstruction()
-{
-    moiracpu.execute();
-    return CPU_CYCLES(moiracpu.getClock());
 }

@@ -149,6 +149,15 @@ public:
     // Disassembles a single instruction and returns the instruction size
     int disassemble(u32 addr, char *str);
 
+    // Returns a textual representation for a single word
+    void disassembleWord(u32 value, char *str);
+
+    // Returns a textual representation for one or more words from memory
+    void disassembleMemory(u32 addr, int cnt, char *str);
+
+    // Returns a textual representation for the status register
+    void disassembleSR(u32 sr, char *str);
+
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op) { return info[op]; }
 

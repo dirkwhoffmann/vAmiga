@@ -932,8 +932,6 @@ Amiga::stepOver()
     return;
     
     cpu.moiracpu.observer.stepOver();
-    // debug("Setting bp at %X\n", cpu.getNextPC());
-    // cpu.bpManager.setSoftBreakpointAt(cpu.getNextPC());
     run();
 }
 
@@ -953,7 +951,8 @@ Amiga::runLoop()
     do {
         
         // Emulate the next CPU instruction
-        Cycle newClock = cpu.executeInstruction();
+        cpu.moiracpu.execute();
+        Cycle newClock = CPU_CYCLES(cpu.moiracpu.getClock());
 
         // Emulate Agnus up to the same cycle
         agnus.executeUntil(newClock);
