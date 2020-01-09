@@ -972,6 +972,11 @@ Amiga::runLoop()
                 clearControlFlags(RL_INSPECT);
             }
 
+            // Are we requested to record the execution?
+            if (runLoopCtrl & RL_ENABLE_TRACING) {
+                cpu.recordInstruction();
+            }
+
             // Did we reach a breakpoint?
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
@@ -990,11 +995,6 @@ Amiga::runLoop()
                 break;
             }
 
-            // Are we requested to record the execution?
-            if (runLoopCtrl & RL_ENABLE_TRACING) {
-                cpu.recordInstruction();
-            }
-            
             // Are we requested to check for breakpoints?
             // DEPRECATED
             if (runLoopCtrl & RL_ENABLE_BREAKPOINTS) {

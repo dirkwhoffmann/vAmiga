@@ -98,13 +98,17 @@ extension WatchTableView: NSTableViewDelegate {
         if tableColumn?.identifier.rawValue == "addr" {
             if let cell = cell as? NSTextFieldCell {
 
-                let disabled = cpu.watchpointIsDisabled(row)
                 let last = row == numberOfRows(in: tableView) - 1
+                let disabled = !last && cpu.watchpointIsDisabled(row)
+                let selected = tableView.selectedRow == row
+                let edited = tableView.editedRow == row
 
                 cell.textColor =
-                    last ? NSColor.disabledControlTextColor :
                     disabled ? NSColor.disabledControlTextColor :
-                    NSColor.labelColor
+                    edited ? NSColor.textColor :
+                    selected ? NSColor.white :
+                    last ? NSColor.disabledControlTextColor :
+                    NSColor.textColor
             }
         }
     }
