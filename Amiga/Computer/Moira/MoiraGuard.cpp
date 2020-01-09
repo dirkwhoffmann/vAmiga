@@ -42,7 +42,7 @@ GuardCollection::guardAtAddr(u32 addr)
 }
 
 bool
-GuardCollection::hasGuardAt(u32 addr)
+GuardCollection::isSetAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
@@ -50,7 +50,15 @@ GuardCollection::hasGuardAt(u32 addr)
 }
 
 bool
-GuardCollection::hasDisabledGuardAt(u32 addr)
+GuardCollection::isSetAndEnabledAt(u32 addr)
+{
+    Guard *guard = guardAtAddr(addr);
+
+    return guard != NULL && guard->enabled;
+}
+
+bool
+GuardCollection::isSetAndDisabledAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
@@ -58,7 +66,7 @@ GuardCollection::hasDisabledGuardAt(u32 addr)
 }
 
 bool
-GuardCollection::hasConditionalGuardAt(u32 addr)
+GuardCollection::isSetAndConditionalAt(u32 addr)
 {
     Guard *guard = guardAtAddr(addr);
 
@@ -66,9 +74,9 @@ GuardCollection::hasConditionalGuardAt(u32 addr)
 }
 
 void
-GuardCollection::add(u32 addr, long skip)
+GuardCollection::addAt(u32 addr, long skip)
 {
-    if (hasGuardAt(addr)) return;
+    if (isSetAt(addr)) return;
 
     if (count >= capacity) {
 

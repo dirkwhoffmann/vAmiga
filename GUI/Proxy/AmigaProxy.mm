@@ -119,15 +119,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) hasWatchpointAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.hasGuardAt(addr);
+    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAt(addr);
 }
 - (BOOL) hasDisabledWatchpointAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.hasDisabledGuardAt(addr);
+    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndEnabledAt(addr);
 }
 - (void) addWatchpoint:(uint32_t)addr
 {
-    wrapper->cpu->moiracpu.observer.watchpoints.add(addr);
+    wrapper->cpu->moiracpu.observer.watchpoints.addAt(addr);
 }
 - (void) removeWatchpoint:(NSInteger)nr
 {

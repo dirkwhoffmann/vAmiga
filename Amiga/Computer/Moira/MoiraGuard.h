@@ -56,17 +56,19 @@ public:
 
     u32 guardAddr(long nr) { return nr < count ? guards[nr].addr : 0; }
 
-    bool hasGuardAt(u32 addr);
-    bool hasDisabledGuardAt(u32 addr);
-    bool hasConditionalGuardAt(u32 addr);
+    bool isSetAt(u32 addr);
+    bool isSetAndEnabledAt(u32 addr);
+    bool isSetAndDisabledAt(u32 addr);
+    bool isSetAndConditionalAt(u32 addr);
 
     //
     // Adding or removing guards
     //
 
-    void remove(long nr);
-    void add(uint32_t addr, long skip = 0);
+    void addAt(uint32_t addr, long skip = 0);
     void removeAt(uint32_t addr);
+
+    void remove(long nr);
     void removeAll() { count = 0; }
 
     //
@@ -75,12 +77,14 @@ public:
 
     bool isEnabled(long nr);
     bool isDisabled(long nr) { return !isEnabled(nr); }
+
     void setEnable(long nr, bool val);
     void enable(long nr, bool val) { setEnable(nr, true); }
     void disable(long nr, bool val) { setEnable(nr, false); }
+
     void setEnableAt(uint32_t addr, bool val);
-    void enableGuardAt(uint32_t addr);
-    void disableGuardAt(uint32_t addr);
+    void enableAt(uint32_t addr) { setEnableAt(addr, true); }
+    void disableAt(uint32_t addr) { setEnableAt(addr, false); }
 
     //
     // Checking a guard
