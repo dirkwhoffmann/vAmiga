@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-ZorroManager::ZorroManager(Amiga& ref) : SubComponent(ref)
+ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("ZorroManager");
 }

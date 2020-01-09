@@ -12,7 +12,7 @@
 
 #include "HardwareComponent.h"
 
-class RTC : public SubComponent {
+class RTC : public AmigaComponent {
 
     // The current configuration
     RTCConfig config;

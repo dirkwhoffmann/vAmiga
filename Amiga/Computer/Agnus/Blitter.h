@@ -24,7 +24,7 @@
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public SubComponent {
+class Blitter : public AmigaComponent {
 
     // The current configuration
     BlitterConfig config;

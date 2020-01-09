@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Blitter::Blitter(Amiga& ref) : SubComponent(ref)
+Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Blitter");
     

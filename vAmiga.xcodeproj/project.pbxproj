@@ -148,7 +148,7 @@
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
 		50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
-		50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* SubComponent.cpp */; };
+		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
@@ -399,8 +399,8 @@
 		50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FastBlitter.cpp; sourceTree = "<group>"; };
 		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
 		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
-		50E79BE7232D123000D296FB /* SubComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SubComponent.cpp; sourceTree = "<group>"; };
-		50E79BE8232D123000D296FB /* SubComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SubComponent.h; sourceTree = "<group>"; };
+		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
+		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtFile.h; sourceTree = "<group>"; };
 		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
@@ -880,8 +880,8 @@
 				50B14C0521EB218E002E32A6 /* AmigaObject.cpp */,
 				50B14C0C21EB3708002E32A6 /* HardwareComponent.h */,
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
-				50E79BE8232D123000D296FB /* SubComponent.h */,
-				50E79BE7232D123000D296FB /* SubComponent.cpp */,
+				50E79BE8232D123000D296FB /* AmigaComponent.h */,
+				50E79BE7232D123000D296FB /* AmigaComponent.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1181,7 +1181,7 @@
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
-				50E79BE9232D123000D296FB /* SubComponent.cpp in Sources */,
+				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50AB982023C5AE0000B17B21 /* MoiraGuard.cpp in Sources */,
 				50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,

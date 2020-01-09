@@ -97,7 +97,7 @@ Moira::watchpointReached(u32 addr)
 // CPU class
 //
 
-CPU::CPU(Amiga& ref) : SubComponent(ref)
+CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("CPU");
     

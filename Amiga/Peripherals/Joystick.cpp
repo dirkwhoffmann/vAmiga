@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(int nr, Amiga& ref) : SubComponent(ref)
+Joystick::Joystick(int nr, Amiga& ref) : AmigaComponent(ref)
 {
     assert(nr == 1 || nr == 2);
     

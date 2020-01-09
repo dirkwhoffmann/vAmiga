@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-PixelEngine::PixelEngine(Amiga& ref) : SubComponent(ref)
+PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("PixelEngine");
 

@@ -10,7 +10,7 @@
 #ifndef _AMIGA_MEMORY_INC
 #define _AMIGA_MEMORY_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "RomFile.h"
 #include "ExtFile.h"
 
@@ -96,7 +96,7 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define WRITE_EXT_32(x,y) WRITE_32(ext + ((x) & extMask), (y))
 
 
-class Memory : public SubComponent {
+class Memory : public AmigaComponent {
 
     friend class Copper;
     friend class ZorroManager;

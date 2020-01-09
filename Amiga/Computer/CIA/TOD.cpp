@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-TOD::TOD(CIA *cia, Amiga& ref) : SubComponent(ref)
+TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("TOD");
     debug(3, "    Creating TOD at address %p...\n", this);

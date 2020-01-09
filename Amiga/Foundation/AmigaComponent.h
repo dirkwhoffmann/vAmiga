@@ -49,7 +49,7 @@ using namespace vamiga;
 /* Base class for all sub components.
  * Exhibits references to all Amiga components.
  */
-class SubComponent : public HardwareComponent {
+class AmigaComponent : public HardwareComponent {
 
 protected:
 
@@ -86,7 +86,7 @@ protected:
 
 public:
 
-    SubComponent(Amiga& ref);
+    AmigaComponent(Amiga& ref);
 
 private:
 

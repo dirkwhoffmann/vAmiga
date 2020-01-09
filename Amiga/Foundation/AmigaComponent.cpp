@@ -9,7 +9,7 @@
 
 #include "Amiga.h"  
 
-SubComponent::SubComponent(Amiga& ref) :
+AmigaComponent::AmigaComponent(Amiga& ref) :
 amiga(ref),
 cpu(ref.cpu),
 ciaa(ref.ciaA),
@@ -42,4 +42,4 @@ df3(ref.df3)
 
 };
 
-void SubComponent::prefix() { amiga.prefix(); }
+void AmigaComponent::prefix() { amiga.prefix(); }

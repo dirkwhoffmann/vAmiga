@@ -12,7 +12,7 @@
 
 #include "Beam.h"
 
-class Copper : public SubComponent
+class Copper : public AmigaComponent
 {
     friend class Agnus;
     

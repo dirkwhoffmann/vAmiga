@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 template <int nr>
-StateMachine<nr>::StateMachine(Amiga& ref) : SubComponent(ref)
+StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 {
     // Set description
     switch (nr) {

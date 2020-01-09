@@ -10,7 +10,7 @@
 #ifndef _CPU_INC
 #define _CPU_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "BreakpointManager.h"
 #include "Moira.h"
 
@@ -18,7 +18,7 @@
 // CPU wrapper class
 //
 
-class CPU : public SubComponent {
+class CPU : public AmigaComponent {
 
     CPUInfo info;
 

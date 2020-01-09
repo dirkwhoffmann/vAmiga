@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-CIA::CIA(int n, Amiga& ref) : nr(n), SubComponent(ref)
+CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
 	setDescription("CIA");
 

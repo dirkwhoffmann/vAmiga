@@ -10,11 +10,11 @@
 #ifndef _UART_INC
 #define _UART_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
 namespace vamiga {
 
-class UART : public SubComponent {
+class UART : public AmigaComponent {
 
     friend class Amiga;
     

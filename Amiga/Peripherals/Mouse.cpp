@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Mouse::Mouse(Amiga& ref) : SubComponent(ref)
+Mouse::Mouse(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Mouse");
 }

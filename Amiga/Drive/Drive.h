@@ -10,10 +10,10 @@
 #ifndef _AMIGA_DRIVE_INC
 #define _AMIGA_DRIVE_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "Disk.h"
 
-class Drive : public SubComponent {
+class Drive : public AmigaComponent {
     
     friend class DiskController;
         

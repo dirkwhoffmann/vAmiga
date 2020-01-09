@@ -10,9 +10,9 @@
 #ifndef _DISK_CONTROLLER_INC
 #define _DISK_CONTROLLER_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
-class DiskController : public SubComponent {
+class DiskController : public AmigaComponent {
 
     friend class Amiga;
 

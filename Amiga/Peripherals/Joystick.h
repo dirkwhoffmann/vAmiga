@@ -10,9 +10,9 @@
 #ifndef _JOYSTICK_INC
 #define _JOYSTICK_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
-class Joystick : public SubComponent {
+class Joystick : public AmigaComponent {
 
     // The control port this joystick is connected to (1 or 2)
     int nr;

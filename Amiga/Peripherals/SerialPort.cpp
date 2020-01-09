@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-SerialPort::SerialPort(Amiga& ref) : SubComponent(ref)
+SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("SerialPort");
 

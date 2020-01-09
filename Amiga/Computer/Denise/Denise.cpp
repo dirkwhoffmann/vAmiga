@@ -11,7 +11,7 @@
 
 int dirk = 0;
 
-Denise::Denise(Amiga& ref) : SubComponent(ref)
+Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Denise");
     

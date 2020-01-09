@@ -10,7 +10,7 @@
 #include "Amiga.h"
 #include <new>
 
-Memory::Memory(Amiga& ref) : SubComponent(ref)
+Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Memory");
 

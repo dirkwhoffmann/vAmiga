@@ -10,9 +10,9 @@
 #ifndef _MOUSE_INC
 #define _MOUSE_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
-class Mouse : public SubComponent {
+class Mouse : public AmigaComponent {
     
 public:
     

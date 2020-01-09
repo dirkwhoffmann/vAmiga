@@ -10,10 +10,10 @@
 #ifndef _STATE_MACHINE_INC
 #define _STATE_MACHINE_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
 template <int nr>
-class StateMachine : public SubComponent {
+class StateMachine : public AmigaComponent {
 
     friend class AudioUnit;
 

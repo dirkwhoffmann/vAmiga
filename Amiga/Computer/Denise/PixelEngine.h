@@ -10,10 +10,10 @@
 #ifndef _COLORIZER_INC
 #define _COLORIZER_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "ChangeRecorder.h"
 
-class PixelEngine : public SubComponent {
+class PixelEngine : public AmigaComponent {
 
     friend class DmaDebugger;
     

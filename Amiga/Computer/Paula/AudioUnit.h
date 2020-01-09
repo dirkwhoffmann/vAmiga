@@ -10,11 +10,11 @@
 #ifndef _AUDIO_UNIT_INC
 #define _AUDIO_UNIT_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "StateMachine.h"
 #include "AudioFilter.h"
 
-class AudioUnit : public SubComponent {
+class AudioUnit : public AmigaComponent {
 
     // The current configuration
     AudioConfig config;

@@ -10,11 +10,11 @@
 #ifndef _BREAKPOINT_MANAGER_INC
 #define _BREAKPOINT_MANAGER_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "Breakpoint.h"
 
 // This class manages a container that stores all breakpoints.
-class BreakpointManager : public SubComponent {
+class BreakpointManager : public AmigaComponent {
     
 private:
     

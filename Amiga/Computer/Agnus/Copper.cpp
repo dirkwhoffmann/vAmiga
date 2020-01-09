@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Copper::Copper(Amiga& ref) : SubComponent(ref)
+Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Copper");
 }

@@ -10,11 +10,11 @@
 #ifndef _CONTROL_PORT_INC
 #define _CONTROL_PORT_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
 namespace vamiga {
 
-class ControlPort : public SubComponent {
+class ControlPort : public AmigaComponent {
 
     // Information shown in the GUI inspector panel
     ControlPortInfo info;

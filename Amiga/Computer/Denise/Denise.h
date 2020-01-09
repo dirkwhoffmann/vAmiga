@@ -10,11 +10,11 @@
 #ifndef _DENISE_INC
 #define _DENISE_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "Colors.h"
 #include "PixelEngine.h"
 
-class Denise : public SubComponent {
+class Denise : public AmigaComponent {
 
     // The current configuration
     DeniseConfig config;

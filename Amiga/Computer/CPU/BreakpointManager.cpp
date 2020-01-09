@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-BreakpointManager::BreakpointManager(Amiga &ref) : SubComponent(ref)
+BreakpointManager::BreakpointManager(Amiga &ref) : AmigaComponent(ref)
 {
     setDescription("BreakpointManager");
     

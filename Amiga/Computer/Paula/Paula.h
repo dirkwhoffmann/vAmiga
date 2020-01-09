@@ -14,7 +14,7 @@
 #include "DiskController.h"
 #include "UART.h"
 
-class Paula : public SubComponent {
+class Paula : public AmigaComponent {
     
 private:
 

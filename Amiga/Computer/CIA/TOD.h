@@ -10,13 +10,13 @@
 #ifndef _TOD_INC
 #define _TOD_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
 /* 24-bit counter
  * Each CIA chip contains a 24-bit counter with an alarm. When the alarm value
  * is reached, an interrupt is initiated.
  */
-class TOD : public SubComponent {
+class TOD : public AmigaComponent {
     
     friend CIA;
     

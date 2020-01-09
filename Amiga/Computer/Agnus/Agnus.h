@@ -59,7 +59,7 @@
 #define VPOS(x) ((x) >> 8)
 #define HPOS(x) ((x) & 0xFF)
 
-class Agnus : public SubComponent {
+class Agnus : public AmigaComponent {
     
     // The current configuration
     AgnusConfig config;

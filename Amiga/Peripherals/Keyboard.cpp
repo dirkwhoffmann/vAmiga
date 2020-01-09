@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Keyboard::Keyboard(Amiga& ref) : SubComponent(ref)
+Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Keyboard");
 }

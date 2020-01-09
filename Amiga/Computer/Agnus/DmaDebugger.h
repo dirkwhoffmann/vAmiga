@@ -10,10 +10,10 @@
 #ifndef _DMA_DEBUGGER_INC
 #define _DMA_DEBUGGER_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "Colors.h"
 
-class DmaDebugger : public SubComponent {
+class DmaDebugger : public AmigaComponent {
 
 private:
 

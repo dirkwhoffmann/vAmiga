@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-DmaDebugger::DmaDebugger(Amiga &ref) : SubComponent(ref)
+DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
     setDescription("DmaDebugger");
 

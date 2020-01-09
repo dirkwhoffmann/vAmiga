@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-ControlPort::ControlPort(int nr, Amiga& ref) : SubComponent(ref)
+ControlPort::ControlPort(int nr, Amiga& ref) : AmigaComponent(ref)
 {
     assert(nr == 1 || nr == 2);
     

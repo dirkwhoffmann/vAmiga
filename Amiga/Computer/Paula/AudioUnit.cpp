@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-AudioUnit::AudioUnit(Amiga& ref) : SubComponent(ref)
+AudioUnit::AudioUnit(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("AudioUnit");
     

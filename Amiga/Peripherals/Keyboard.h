@@ -10,9 +10,9 @@
 #ifndef _KEYBOARD_INC
 #define _KEYBOARD_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
-class Keyboard : public SubComponent {
+class Keyboard : public AmigaComponent {
 
     // The current configuration
      KeyboardConfig config;

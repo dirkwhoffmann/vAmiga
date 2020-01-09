@@ -10,7 +10,7 @@
 #ifndef _ZORRO_MANAGER_INC
 #define _ZORRO_MANAGER_INC
 
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 
 namespace vamiga {
 
@@ -21,7 +21,7 @@ namespace vamiga {
  */
 
 // Manager for plugged in Zorro II devices
-class ZorroManager : public SubComponent {
+class ZorroManager : public AmigaComponent {
 
     // The value returned when peeking into the auto-config space.
     uint8_t autoConfData;

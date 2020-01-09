@@ -11,7 +11,7 @@
 
 using namespace vamiga;
 
-UART::UART(Amiga& ref) : SubComponent(ref)
+UART::UART(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("UART");
 }

@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Paula::Paula(Amiga& ref) : SubComponent(ref)
+Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Paula");
 

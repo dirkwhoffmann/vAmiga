@@ -11,7 +11,7 @@
 #define _AMIGA_INC
 
 // General
-#include "SubComponent.h"
+#include "AmigaComponent.h"
 #include "Serialization.h"
 #include "MessageQueue.h"
 

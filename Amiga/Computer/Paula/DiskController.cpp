@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-DiskController::DiskController(Amiga& ref) : SubComponent(ref)
+DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("DiskController");
 

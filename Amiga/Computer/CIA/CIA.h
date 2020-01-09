@@ -74,7 +74,7 @@ class Joystick;
 
 
 // Virtual complex interface adapter (CIA)
-class CIA : public SubComponent {
+class CIA : public AmigaComponent {
 
     friend TOD;
     friend Amiga;
