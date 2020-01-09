@@ -23,7 +23,7 @@ class BreakTableView: NSTableView {
     }
     
     func refresh(everything: Bool) {
-        
+
         if everything {
             cpu = amigaProxy!.cpu
             for (c, f) in ["addr": fmt24] {
@@ -34,89 +34,107 @@ class BreakTableView: NSTableView {
                     }
                 }
             }
-            
             reloadData()
         }
     }
-    
+
     @IBAction func clickAction(_ sender: NSTableView!) {
-        
+
         let row = sender.clickedRow
         let col = sender.clickedColumn
-        
-        if col == 0 {
 
-            // Delete breakpoint
-            amigaProxy?.cpu.removeBreakpoint(row)
+        if col == 0 { // Enable / Disable
+            cpu.breakpointSetEnable(row, value: cpu.breakpointIsDisabled(row))
+            inspector.refresh(everything: true)
+        }
 
-        } else {
-        
-            // Jump to breakpoint address
-            if let addr = amigaProxy?.cpu.breakpointAddr(row), addr <= 0xFFFFFF {
-                inspector.instrTableView.jumpTo(addr: addr)
-            }
+        if col == 0 || col == 1 { // Jump to breakpoint address
+            let addr = cpu.breakpointAddr(row)
+            if addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr) }
+        }
+
+        if col == 2 { // Delete
+            cpu.removeBreakpoint(row)
+            inspector.refresh(everything: true)
         }
     }
 }
 
 extension BreakTableView: NSTableViewDataSource {
-    
+
     func numberOfRows(in tableView: NSTableView) -> Int {
-        
-        return cpu.numberOfBreakpoints()
+
+        return cpu.numberOfBreakpoints() + 1
     }
-    
+
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
+
+        let disabled = cpu.breakpointIsDisabled(row)
+        let last = row == numberOfRows(in: tableView) - 1
+
         switch tableColumn?.identifier.rawValue {
-            
+
+        case "break" where disabled:
+            return last ? "" : "\u{26AA}" // "⚪"
+
         case "break":
-            return "\u{1F5D1}" // "🗑"
-           
+            return last ? "" : "\u{26D4}" // "⛔"
+
         case "addr":
-            return cpu.breakpointAddr(row)
+            return last ? "Add address" : cpu.breakpointAddr(row)
+
+        case "delete":
+            return last ? "" : "\u{1F5D1}" // "🗑"
 
         default:
-            return "???"
+            fatalError()
         }
     }
 }
 
 extension BreakTableView: NSTableViewDelegate {
-    
+
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        
-        if let cell = cell as? NSTextFieldCell {
 
-            let disabled = cpu.isDisabledBreakpoint(row)
-            
-            switch tableColumn?.identifier.rawValue {
-                
-            case "addr" where disabled:
-                cell.textColor = NSColor.secondaryLabelColor
+        if tableColumn?.identifier.rawValue == "addr" {
+            if let cell = cell as? NSTextFieldCell {
 
-            case "addr":
-                cell.textColor = NSColor.labelColor
+                let last = row == numberOfRows(in: tableView) - 1
+                let disabled = !last && cpu.breakpointIsDisabled(row)
+                let selected = tableView.selectedRow == row
+                let edited = tableView.editedRow == row
 
-            default:
-                break
+                cell.textColor =
+                    disabled ? NSColor.disabledControlTextColor :
+                    edited ? NSColor.textColor :
+                    selected ? NSColor.white :
+                    last ? NSColor.disabledControlTextColor :
+                    NSColor.textColor
             }
         }
     }
-    
-    func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
-        
-        switch tableColumn?.identifier.rawValue {
-            
-        case "addr":
-            if let value = object as? UInt32 {
-                if cpu.setBreakpointAddr(row, addr: value) { return }
-            }
 
-        default:
-            break
+    func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool {
+
+        if tableColumn?.identifier.rawValue == "addr" {
+            return row == numberOfRows(in: tableView) - 1
         }
-        
+
+        return false
+    }
+
+    func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
+
+        if tableColumn?.identifier.rawValue == "addr" {
+            if let addr = object as? UInt32 {
+                if !cpu.breakpointIsSet(at: addr) {
+                    cpu.addBreakpoint(at: addr)
+                    inspector.refresh(everything: true)
+                    return
+                }
+            }
+        }
+
         NSSound.beep()
     }
 }

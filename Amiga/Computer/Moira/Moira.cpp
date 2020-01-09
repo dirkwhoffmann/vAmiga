@@ -24,6 +24,10 @@ namespace moira {
 Moira::Moira()
 {
     createJumpTables();
+
+    observer.watchpoints.addAt(0xDFF180);
+    observer.breakpoints.addAt(0xFF0000);
+    observer.breakpoints.addAt(0x4000);
 }
 
 void

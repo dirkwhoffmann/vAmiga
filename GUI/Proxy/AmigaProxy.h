@@ -200,22 +200,19 @@ struct AmigaFileWrapper;
 - (int64_t) clock;
 - (int64_t) cycles;
 
-// DEPRECATED
 - (NSInteger) numberOfBreakpoints;
-- (BOOL) hasBreakpointAt:(uint32_t)addr;
-- (BOOL) hasDisabledBreakpointAt:(uint32_t)addr;
-- (void) setBreakpointAt:(uint32_t)addr;
-- (void) deleteBreakpointAt:(uint32_t)addr;
-- (void) enableBreakpointAt:(uint32_t)addr;
-- (void) disableBreakpointAt:(uint32_t)addr;
-
-
+- (uint32_t) breakpointAddr:(NSInteger)nr;
+- (BOOL) breakpointIsEnabled:(NSInteger)nr;
+- (BOOL) breakpointIsDisabled:(NSInteger)nr;
+- (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) removeBreakpoint:(NSInteger)nr;
 
-- (BOOL) isDisabledBreakpoint:(NSInteger)nr;
-
-- (uint32_t) breakpointAddr:(NSInteger)nr;
-- (BOOL) setBreakpointAddr:(NSInteger)nr addr:(uint32_t)addr;
+- (BOOL) breakpointIsSetAt:(uint32_t)addr;
+- (BOOL) breakpointIsSetAndEnabledAt:(uint32_t)addr;
+- (BOOL) breakpointIsSetAndDisabledAt:(uint32_t)addr;
+- (void) breakpointSetEnableAt:(uint32_t)addr value:(BOOL)val;
+- (void) addBreakpointAt:(uint32_t)addr;
+- (void) removeBreakpointAt:(uint32_t)addr;
 
 - (NSInteger) numberOfWatchpoints;
 - (uint32_t) watchpointAddr:(NSInteger)nr;

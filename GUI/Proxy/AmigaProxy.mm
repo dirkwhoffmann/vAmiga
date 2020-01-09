@@ -69,49 +69,53 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->cycles();
 }
-- (BOOL) hasBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.hasBreakpointAt(addr);
-}
-- (BOOL) hasDisabledBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.hasDisabledBreakpointAt(addr);
-}
-- (void) setBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.setBreakpointAt(addr);
-}
-- (void) deleteBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.deleteBreakpointAt(addr);
-}
-- (void) enableBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.enableBreakpointAt(addr);
-}
-- (void) disableBreakpointAt:(uint32_t)addr
-{
-    return wrapper->cpu->bpManager.disableBreakpointAt(addr);
-}
 - (NSInteger) numberOfBreakpoints
 {
-    return wrapper->cpu->bpManager.numberOfBreakpoints();
-}
-- (void) removeBreakpoint:(NSInteger)nr
-{
-    return wrapper->cpu->bpManager.deleteBreakpoint(nr);
-}
-- (BOOL) isDisabledBreakpoint:(NSInteger)nr
-{
-    return wrapper->cpu->bpManager.isDisabled(nr);
+    return wrapper->cpu->moiracpu.observer.breakpoints.elements();
 }
 - (uint32_t) breakpointAddr:(NSInteger)nr
 {
-    return wrapper->cpu->bpManager.getAddr(nr);
+    return wrapper->cpu->moiracpu.observer.breakpoints.guardAddr(nr);
 }
-- (BOOL) setBreakpointAddr:(NSInteger)nr addr:(uint32_t)addr
+- (BOOL) breakpointIsEnabled:(NSInteger)nr
 {
-    return wrapper->cpu->bpManager.setAddr(nr, addr);
+    return wrapper->cpu->moiracpu.observer.breakpoints.isEnabled(nr);
+}
+- (BOOL) breakpointIsDisabled:(NSInteger)nr
+{
+    return wrapper->cpu->moiracpu.observer.breakpoints.isDisabled(nr);
+}
+- (void) removeBreakpoint:(NSInteger)nr
+{
+    return wrapper->cpu->moiracpu.observer.breakpoints.remove(nr);
+}
+- (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val
+{
+    wrapper->cpu->moiracpu.observer.breakpoints.setEnable(nr, val);
+}
+- (BOOL) breakpointIsSetAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAt(addr);
+}
+- (BOOL) breakpointIsSetAndEnabledAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAndEnabledAt(addr);
+}
+- (BOOL) breakpointIsSetAndDisabledAt:(uint32_t)addr
+{
+    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAndDisabledAt(addr);
+}
+- (void) breakpointSetEnableAt:(uint32_t)addr value:(BOOL)val
+{
+    wrapper->cpu->moiracpu.observer.breakpoints.setEnableAt(addr, val);
+}
+- (void) addBreakpointAt:(uint32_t)addr
+{
+    wrapper->cpu->moiracpu.observer.breakpoints.addAt(addr);
+}
+- (void) removeBreakpointAt:(uint32_t)addr
+{
+    wrapper->cpu->moiracpu.observer.breakpoints.removeAt(addr);
 }
 - (NSInteger) numberOfWatchpoints
 {

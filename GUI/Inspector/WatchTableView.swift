@@ -52,7 +52,7 @@ class WatchTableView: NSTableView {
         
         if col == 2 {
 
-            // Delete watchpoint
+            // Delete
             cpu.removeWatchpoint(row)
             reloadData()
         }

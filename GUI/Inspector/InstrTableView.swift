@@ -10,8 +10,7 @@
 class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
-    
-    // var mem = amigaProxy!.mem!
+
     var cpu = amigaProxy?.cpu
     
     // Display caches
@@ -32,26 +31,20 @@ class InstrTableView: NSTableView {
     }
     
     @IBAction func clickAction(_ sender: NSTableView!) {
-        
+
         let row = sender.clickedRow
         let col = sender.clickedColumn
 
-        track("row = \(row) col = \(col)")
-        
-        if col == 0, let addr = addrInRow[row] {
+        if  col == 0, cpu != nil, let addr = addrInRow[row] {
             
-            if !cpu!.hasBreakpoint(at: addr) {
-                cpu?.setBreakpointAt(addr)
-                return
+            if !cpu!.breakpointIsSet(at: addr) {
+                cpu!.addBreakpoint(at: addr)
+            } else if cpu!.breakpointIsSetAndDisabled(at: addr) {
+                cpu!.breakpointSetEnable(at: addr, value: true)
+            } else if cpu!.breakpointIsSetAndEnabled(at: addr) {
+                cpu!.breakpointSetEnable(at: addr, value: false)
             }
-            if cpu!.hasDisabledBreakpoint(at: addr) {
-                cpu?.enableBreakpoint(at: addr)
-                return
-            }
-            if cpu!.hasBreakpoint(at: addr) {
-                cpu?.disableBreakpoint(at: addr)
-                return
-            }
+            inspector.refresh(everything: true)
         }
     }
     
@@ -60,13 +53,14 @@ class InstrTableView: NSTableView {
         let row = sender.clickedRow
         let col = sender.clickedColumn
 
-        if col > 0, let addr = addrInRow[row] {
+        if col > 0, cpu != nil, let addr = addrInRow[row] {
             
-            if cpu!.hasBreakpoint(at: addr) {
-                cpu!.deleteBreakpoint(at: addr)
+            if cpu!.breakpointIsSet(at: addr) {
+                cpu!.removeBreakpoint(at: addr)
             } else {
-                cpu!.setBreakpointAt(addr)
+                cpu!.addBreakpoint(at: addr)
             }
+            inspector.refresh(everything: true)
         }
     }
     
@@ -162,12 +156,10 @@ extension InstrTableView: NSTableViewDataSource {
         
         switch tableColumn?.identifier.rawValue {
             
-        case "break" where cpu!.hasDisabledBreakpoint(at: addr):
-            return "\u{26AA}" // "⚪"
-            // return "\u{2B55}" // "⭕"
-        case "break" where cpu!.hasBreakpoint(at: addr):
-            // return "\u{1F534}" // "🔴"
-            return "\u{26D4}" // "⛔"
+        case "break" where cpu!.breakpointIsSetAndDisabled(at: addr):
+            return "\u{26AA}" // "⚪" ("\u{2B55}" // "⭕")
+        case "break" where cpu!.breakpointIsSet(at: addr):
+            return "\u{26D4}" // "⛔" ("\u{1F534}" // "🔴")
         case "addr":
             return addrInRow[row]
         case "data":
@@ -188,9 +180,9 @@ extension InstrTableView: NSTableViewDelegate {
         
         if let addr = addrInRow[row] {
 
-            if cpu!.hasDisabledBreakpoint(at: addr) {
+            if cpu!.breakpointIsSetAndDisabled(at: addr) {
                 cell?.textColor = NSColor.disabledControlTextColor
-            } else if cpu!.hasBreakpoint(at: addr) {
+            } else if cpu!.breakpointIsSet(at: addr) {
                 cell?.textColor = NSColor.systemRed
             } else {
                 cell?.textColor = NSColor.labelColor
