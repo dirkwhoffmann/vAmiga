@@ -96,7 +96,7 @@ public:
     //
 
 private:
-    
+
     bool eval(u32 addr);
 };
 
@@ -114,7 +114,7 @@ public:
     Guards watchpoints;
 
 private:
-    
+
     /* Soft breakpoint for implementing single-stepping.
      * In contrast to a standard (hard) breakpoint, a soft breakpoint is
      * deleted when reached. The CPU halts if softStop matches the CPU's

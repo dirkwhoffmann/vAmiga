@@ -175,7 +175,7 @@ Debugger::breakpointMatches(u32 addr)
         // Soft breakpoints are deleted when reached
         softStop = UINT64_MAX - 1;
         breakpoints.needsCheck = breakpoints.elements() != 0;
-        
+
         return true;
     }
 

@@ -206,7 +206,7 @@ protected:
     // Called when a breakpoint is reached
     virtual void watchpointReached(u32 addr) { };
 
-    
+
     //
     // Accessing the clock
     //
@@ -304,5 +304,3 @@ private:
 
 }
 #endif
-
-

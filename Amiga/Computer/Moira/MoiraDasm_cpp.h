@@ -826,5 +826,3 @@ Moira::dasmUnlk(StrWriter &str, u32 &addr, u16 op)
 
     str << Ins<I>{} << tab << reg;
 }
-
-

@@ -37,7 +37,7 @@ Moira::reset()
     reg.usp = 0;
     reg.ipl = 0;
     ipl = 0;
-    
+
     reg.sr.t = 0;
     reg.sr.s = 1;
     reg.sr.x = 0;
@@ -345,5 +345,3 @@ template void Moira::writeD <Long> (int n, u32 v);
 template void Moira::writeA <Long> (int n, u32 v);
 
 }
-
-

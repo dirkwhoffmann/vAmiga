@@ -59,7 +59,7 @@ template<Instr I, Size S> u32
 Moira::shift(int cnt, u64 data) {
 
     switch(I) {
-            
+
         case ASL:
         {
             bool carry = false;
@@ -431,7 +431,7 @@ Moira::logic(u32 op1, u32 op2)
             assert(false);
         }
     }
-    
+
     reg.sr.n = NBIT<S>(result);
     reg.sr.z = ZERO<S>(result);
     reg.sr.v = 0;
