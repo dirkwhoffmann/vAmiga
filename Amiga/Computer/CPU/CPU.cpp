@@ -136,10 +136,11 @@ CPU::_reset()
 
     RESET_SNAPSHOT_ITEMS
 
-    moiracpu.reset();
+    // Reset the Moira core
+    Moira::reset();
 
     // Remove all previously recorded instructions
-    moiracpu.debugger.clearLog();
+    debugger.clearLog();
 }
 
 void
@@ -156,32 +157,32 @@ CPU::_inspect()
     info.pc = pc;
 
     for (int i = 0; i < 8; i++) {
-        info.d[i] = moiracpu.getD(i);
-        info.a[i] = moiracpu.getA(i);
+        info.d[i] = getD(i);
+        info.a[i] = getA(i);
     }
-    info.usp = moiracpu.getUSP();
-    info.ssp = moiracpu.getSSP();
-    info.sr = moiracpu.getSR();
+    info.usp = getUSP();
+    info.ssp = getSSP();
+    info.sr = getSR();
 
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
 
-        int bytes = moiracpu.disassemble(pc, info.instr[i].instr);
-        moiracpu.disassemblePC(pc, info.instr[i].addr);
-        moiracpu.disassembleMemory(pc, bytes / 2, info.instr[i].data);
+        int bytes = disassemble(pc, info.instr[i].instr);
+        disassemblePC(pc, info.instr[i].addr);
+        disassembleMemory(pc, bytes / 2, info.instr[i].data);
         info.instr[i].sr[0] = 0;
         info.instr[i].bytes = bytes;
         pc += bytes;
     }
 
     // Disassemble the most recent entries in the trace buffer
-    long count = moiracpu.debugger.loggedInstructions();
+    long count = debugger.loggedInstructions();
     for (int i = 0; i < count; i++) {
 
-        moira::Registers r = moiracpu.debugger.logEntryAbs(i);
-        moiracpu.disassemble(r.pc, info.loggedInstr[i].instr);
-        moiracpu.disassemblePC(r.pc, info.loggedInstr[i].addr);
-        moiracpu.disassembleSR(r.sr, info.loggedInstr[i].sr);
+        moira::Registers r = debugger.logEntryAbs(i);
+        disassemble(r.pc, info.loggedInstr[i].instr);
+        disassemblePC(r.pc, info.loggedInstr[i].addr);
+        disassembleSR(r.sr, info.loggedInstr[i].sr);
     }
 
     pthread_mutex_unlock(&lock);

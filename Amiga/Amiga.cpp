@@ -119,12 +119,12 @@ Amiga::setDebugMode(bool enable)
     if ((debugMode = enable)) {
         
         debug("Enabling debug mode\n");
-        cpu.moiracpu.debugger.enableLogging();
+        cpu.debugger.enableLogging();
 
     } else {
 
         debug("Disabling debug mode\n");
-        cpu.moiracpu.debugger.disableLogging();
+        cpu.debugger.disableLogging();
     }
 }
 
@@ -921,7 +921,7 @@ Amiga::stepInto()
     if (isRunning())
     return;
 
-    cpu.moiracpu.debugger.stepInto();
+    cpu.debugger.stepInto();
     run();
 }
 
@@ -931,7 +931,7 @@ Amiga::stepOver()
     if (isRunning())
     return;
     
-    cpu.moiracpu.debugger.stepOver();
+    cpu.debugger.stepOver();
     run();
 }
 
@@ -945,9 +945,9 @@ Amiga::runLoop()
     
     // Enable or disable debugging features
     if (debugMode) {
-        cpu.moiracpu.debugger.enableLogging();
+        cpu.debugger.enableLogging();
     } else {
-        cpu.moiracpu.debugger.disableLogging();
+        cpu.debugger.disableLogging();
     }
     agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
     
@@ -955,8 +955,8 @@ Amiga::runLoop()
     do {
         
         // Emulate the next CPU instruction
-        cpu.moiracpu.execute();
-        Cycle newClock = CPU_CYCLES(cpu.moiracpu.getClock());
+        cpu.execute();
+        Cycle newClock = CPU_CYCLES(cpu.getClock());
 
         // Emulate Agnus up to the same cycle
         agnus.executeUntil(newClock);

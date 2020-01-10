@@ -13,13 +13,11 @@
 #include "AmigaComponent.h"
 #include "Moira.h"
 
-class CPU : public AmigaComponent {
+class CPU : public AmigaComponent, public moira::Moira {
 
     CPUInfo info;
 
 public:
-
-    moira::Moira moiracpu;
 
     //
     // Constructing and destructing
@@ -71,42 +69,16 @@ public:
     DisassembledInstr getInstrInfo(long nr);
     DisassembledInstr getLoggedInstrInfo(long nr);
 
-
-    //
-    // Recording and restoring the CPU context
-    //
-    
-public:
-
     //
     // Working with the clock
     //
 
     // The CPU has been emulated up to this cycle
-    Cycle getClockInMasterCycles() { return CPU_CYCLES(moiracpu.getClock()); }
+    Cycle getClockInMasterCycles() { return CPU_CYCLES(getClock()); }
 
     // Returns the clock in CPU cycles
-    CPUCycle getCpuClock() { return moiracpu.getClock(); }
+    CPUCycle getCpuClock() { return getClock(); }
 
-    //
-    // Querying registers and instructions
-    //
-    
-public:
-    
-    // Getter and setter for the program counter.
-    uint32_t getPC() { return moiracpu.getPC(); }
-
-    // Returns the current value of the status register.
-    uint16_t getSR() { return moiracpu.getSR(); }
-    
-    // Returns the current value of the instruction register.
-    uint32_t getIRD() { return moiracpu.getIRD(); }
-
-public:
-
-    // Changes the interrupt level
-    void setIPL(int level) { moiracpu.setIPL(level); }
 };
 
 #endif

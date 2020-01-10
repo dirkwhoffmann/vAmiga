@@ -2077,7 +2077,7 @@ Memory::ascii(uint32_t addr)
 const char *
 Memory::hex(uint32_t addr, size_t bytes)
 {
-    cpu.moiracpu.disassembleMemory(addr, bytes / 2, str);
+    cpu.disassembleMemory(addr, bytes / 2, str);
     return str;
 }
 
