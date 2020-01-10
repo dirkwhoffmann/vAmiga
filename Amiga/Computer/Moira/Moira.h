@@ -198,10 +198,10 @@ public:
     u16 getIRD() { return queue.ird; }
     void setIRD(u16 val) { queue.ird = val; }
 
-    u8 getCCR();
+    u8 getCCR() { return getCCR(reg.sr); }
     void setCCR(u8 val);
 
-    u16 getSR();
+    u16 getSR() { return getSR(reg.sr); }
     void setSR(u16 val);
 
     u32 getSP() { return reg.sp; }
@@ -214,6 +214,9 @@ public:
     void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
 
     void setSupervisorMode(bool enable);
+
+    u8 getCCR(const StatusRegister &sr);
+    u16 getSR(const StatusRegister &sr);
 
 protected:
 

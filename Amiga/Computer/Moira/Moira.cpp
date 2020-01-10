@@ -139,14 +139,14 @@ Moira::writeR(int n, u32 v)
 }
 
 u8
-Moira::getCCR()
+Moira::getCCR(const StatusRegister &sr)
 {
     return
-    reg.sr.c << 0 |
-    reg.sr.v << 1 |
-    reg.sr.z << 2 |
-    reg.sr.n << 3 |
-    reg.sr.x << 4;
+    sr.c << 0 |
+    sr.v << 1 |
+    sr.z << 2 |
+    sr.n << 3 |
+    sr.x << 4;
 }
 
 void
@@ -160,10 +160,10 @@ Moira::setCCR(u8 val)
 }
 
 u16
-Moira::getSR()
+Moira::getSR(const StatusRegister &sr)
 {
     return
-    reg.sr.t << 15 | reg.sr.s << 13 | reg.sr.ipl << 8 | getCCR();
+    sr.t << 15 | sr.s << 13 | sr.ipl << 8 | getCCR();
 }
 
 void

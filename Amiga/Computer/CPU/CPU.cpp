@@ -192,7 +192,7 @@ CPU::_inspect()
     for (int i = 0; i < count; i++) {
         moira::Registers reg = moiracpu.debugger.logEntryAbs(i);
         moiracpu.disassemble(reg.pc, info.traceInstr[i].instr);
-        moiracpu.disassembleSR(0, info.traceInstr[i].flags);
+        moiracpu.disassembleSR(moiracpu.getSR(reg.sr), info.traceInstr[i].flags);
     }
 
     pthread_mutex_unlock(&lock);
