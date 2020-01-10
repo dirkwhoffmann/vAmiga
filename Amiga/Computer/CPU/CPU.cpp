@@ -9,14 +9,6 @@
 
 #include "Amiga.h"
 
-// Reference to the active Amiga instance
-// DEPRECATED
-Amiga *activeAmiga = NULL;
-
-//
-// Interface to Moira
-//
-
 void
 CPU::sync(int cycles)
 {
@@ -26,66 +18,54 @@ CPU::sync(int cycles)
 moira::u8
 CPU::read8(moira::u32 addr)
 {
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.peek8(addr);
+    return mem.peek8(addr);
 }
 
 moira::u16
 CPU::read16(moira::u32 addr)
 {
-     assert(activeAmiga != NULL);
-     return activeAmiga->mem.peek16<BUS_CPU>(addr);
+     return mem.peek16<BUS_CPU>(addr);
 }
 
 moira::u16
 CPU::read16Dasm(moira::u32 addr)
 {
-    assert(activeAmiga != NULL);
-    return activeAmiga->mem.spypeek16(addr);
+    return mem.spypeek16(addr);
 }
 
 moira::u16
 CPU::read16OnReset(moira::u32 addr)
 {
-    moira::u16 result = 0;
-
-    if (activeAmiga && activeAmiga->mem.chip) result = read16(addr);
-
-    return result;
+    return mem.chip ? read16(addr) : 0;
 }
 
 void
 CPU::write8(moira::u32 addr, moira::u8 val)
 {
-    assert(activeAmiga != NULL);
-    activeAmiga->mem.poke8(addr, val);
+    mem.poke8(addr, val);
 }
 
 void
 CPU::write16 (moira::u32 addr, moira::u16 val)
 {
-    assert(activeAmiga != NULL);
-    activeAmiga->mem.poke16<BUS_CPU>(addr, val);
+    mem.poke16<BUS_CPU>(addr, val);
 }
 
 void
 CPU::breakpointReached(moira::u32 addr)
 {
-    printf("breakpointReached(%x)", addr);
-    activeAmiga->setControlFlags(RL_BREAKPOINT_REACHED);
+    amiga.setControlFlags(RL_BREAKPOINT_REACHED);
 }
 
 void
 CPU::watchpointReached(moira::u32 addr)
 {
-    printf("watchpointReached(%x)", addr);
-    activeAmiga->setControlFlags(RL_WATCHPOINT_REACHED);
+    amiga.setControlFlags(RL_WATCHPOINT_REACHED);
 }
 
 CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("CPU");
-    activeAmiga = &ref;
 }
 
 void
@@ -103,10 +83,7 @@ CPU::_powerOn()
 void
 CPU::_powerOff()
 {
-    if (activeAmiga == &amiga) {
-        debug("Stop being the active emulator instance\n");
-        activeAmiga = NULL;
-    }
+
 }
 
 void
