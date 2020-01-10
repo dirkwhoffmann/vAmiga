@@ -191,13 +191,13 @@ Debugger::watchpointMatches(u32 addr)
 void
 Debugger::enableLogging()
 {
-    moira.flags |= Moira::CPU_LOGGING;
+    moira.flags |= Moira::CPU_LOG_INSTRUCTION;
 }
 
 void
 Debugger::disableLogging()
 {
-    moira.flags &= ~Moira::CPU_LOGGING;
+    moira.flags &= ~Moira::CPU_LOG_INSTRUCTION;
 }
 
 int

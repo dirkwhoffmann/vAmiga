@@ -29,7 +29,7 @@ Moira::Moira()
 void
 Moira::reset()
 {
-    flags = 0;
+    flags = CPU_CHECK_IRQ;
 
     clock = -40; // REMOVE ASAP
 
@@ -69,37 +69,90 @@ Moira::reset()
 void
 Moira::execute()
 {
-    // Check for pending interrupts
-    if (reg.ipl >= reg.sr.ipl) {
-        if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
+    // TODO: CLEAN UP ASAP
+    if (debugger.breakpoints.needsCheck) flags |= CPU_CHECK_BP;
+    else flags &= ~CPU_CHECK_BP;
 
-            assert(reg.ipl < 7);
-            execIrqException(reg.ipl);
+    // Check the integrity of the CPU_CHECK_FOR_IRQ flag
+    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
+
+    // Check the integrity of the CPU_CHECK_BREAKPOINTS flag
+
+    // Check the integrity of the CPU_CHECK_BREAKPOINTS flag
+    assert(!!(flags & CPU_CHECK_BP) == debugger.breakpoints.needsCheck);
+
+    // Under normal conditions, we just call the execution handler
+    if (!flags) {
+
+        // Call the execution handler
+        reg.pc += 2;
+        (this->*exec[queue.ird])(queue.ird);
+
+    } else {
+
+        // Process pending trace exception (if any)
+        if (flags & CPU_TRACE_EXCEPTION) {
+            checkForTrace();
         }
-    }
 
-    // Check if the CPU is stopped or halted
-    if (flags) {
-
-        if (flags & CPU_LOGGING) {
-            debugger.logInstruction();
+        // Check if the T flag is set inside the status register
+        if (flags & CPU_TRACE_FLAG) {
+            flags |= CPU_TRACE_EXCEPTION;
         }
 
-        if (flags & CPU_STOPPED) {
+        // Process pending interrupt (if any)
+        if (flags & CPU_CHECK_IRQ) {
+            checkForIrq();
+        }
+
+        // If the CPU is stopped, poll the IPL lines and return
+        if (flags & CPU_IS_STOPPED) {
             pollIrq();
             sync(MIMIC_MUSASHI ? 1 : 2);
             return;
         }
+
+        // If logging is enabled, record the executed instruction
+        if (flags & CPU_LOG_INSTRUCTION) {
+            debugger.logInstruction();
+        }
+
+        // Execute the instruction
+        reg.pc += 2;
+        (this->*exec[queue.ird])(queue.ird);
+
+        // Check if a breakpoint has been reached
+        if (flags & CPU_CHECK_BP) {
+            if (debugger.breakpointMatches(reg.pc))
+                breakpointReached(reg.pc);
+        }
     }
+}
 
-    reg.pc += 2;
-    (this->*exec[queue.ird])(queue.ird);
+void
+Moira::checkForIrq()
+{
+    if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
-    // Check if a breakpoint has been reached
-    if (debugger.breakpoints.needsCheck && debugger.breakpointMatches(reg.pc)) {
-         breakpointReached(reg.pc);
-     }
+        // Trigger interrupt
+        assert(reg.ipl < 7);
+        execIrqException(reg.ipl);
 
+    } else {
+
+        // If the polled IPL is up to date, we disable interrupt checking for
+        // the time being, because no interrupt can occur as long as the
+        // external IPL or the IPL mask inside the status register keep the
+        // same. If one of these variables changes, we reenable interrupt
+        // checking.
+        if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
+    }
+}
+
+void
+Moira::checkForTrace()
+{
+    execTraceException();
 }
 
 template<Size S> u32
@@ -174,7 +227,10 @@ Moira::setSR(u16 val)
     u8 ipl = (val >>  8) & 7;
 
     reg.sr.ipl = ipl;
+    flags |= CPU_CHECK_IRQ;
+
     reg.sr.t = t;
+    t ? flags |= CPU_TRACE_FLAG : flags &= ~CPU_TRACE_FLAG;
 
     setCCR((u8)val);
     setSupervisorMode(s);
@@ -193,6 +249,15 @@ Moira::setSupervisorMode(bool enable)
         reg.sr.s = 0;
         reg.ssp = reg.a[7];
         reg.a[7] = reg.usp;
+    }
+}
+
+void
+Moira::setIPL(u8 val)
+{
+    if (ipl != val) {
+        ipl = val;
+        flags |= CPU_CHECK_IRQ;
     }
 }
 

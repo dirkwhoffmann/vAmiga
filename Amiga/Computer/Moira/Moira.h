@@ -60,11 +60,44 @@ public:
 
 protected:
 
-    // State flags
+    /* State flags
+     *
+     * CPU_IS_HALTED:
+     *     Set when the CPU is in "halted" state (not implemented yet)
+     *
+     * CPU_IS_STOPPED:
+     *     Set when the CPU is in "stopped" state. This state is entered when
+     *     the STOP instruction has been executed. The state is left when the
+     *     next interrupt occurs.
+     *
+     * CPU_LOG_INSTRUCTION:
+     *     This flag is set if instruction logging is enabled. If set, the
+     *     CPU records the current register contents in a log buffer.
+     *
+     * CPU_CHECK_INTERRUPTS:
+     *     The CPU only checks for pending interrupts if this flag is set.
+     *     To accelerate emulation, the CPU deletes this flag if it can assure
+     *     that no interrupt can trigger.
+     *
+     * CPU_TRACE_EXCEPTION:
+     *    If this is flag, the CPU initiates the trace exception.
+     *
+     * CPU_TRACE_FLAG:
+     *    This flag is a copy of the T flag from the status register. The
+     *    copy is held to accelerate emulation.
+     *
+     * CPU_CHECK_BREAKPOINTS:
+     *    This flag indicates whether the CPU should check for breakpoints.
+     *    If no breakpoints are set, this flag is 0 and 1 otherwise.
+     */
     int flags;
-    static const int CPU_HALTED  = 0b001;
-    static const int CPU_STOPPED = 0b010;
-    static const int CPU_LOGGING = 0b100;
+    static const int CPU_IS_HALTED       = 0b0000001;
+    static const int CPU_IS_STOPPED      = 0b0000010;
+    static const int CPU_LOG_INSTRUCTION = 0b0000100;
+    static const int CPU_CHECK_IRQ       = 0b0001000;
+    static const int CPU_TRACE_EXCEPTION = 0b0010000;
+    static const int CPU_TRACE_FLAG      = 0b0100000;
+    static const int CPU_CHECK_BP        = 0b1000000;
 
     // Number of elapsed cycles since powerup
     i64 clock;
@@ -113,10 +146,20 @@ public:
     // Executes the next instruction
     void execute();
 
+private:
+
+    // Invoked inside execute() to check for a pending interrupt
+    void checkForIrq();
+
+    // Invoked inside execute() to check for a pending trace exception
+    void checkForTrace();
+
 
     //
     // Running the disassembler
     //
+
+public:
 
     // Disassembles a single instruction and returns the instruction size
     int disassemble(u32 addr, char *str);
@@ -240,7 +283,7 @@ protected:
 public:
 
     u8 getIPL() { return ipl; }
-    void setIPL(u8 val) { ipl = val; }
+    void setIPL(u8 val);
 
 private:
 

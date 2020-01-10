@@ -127,6 +127,25 @@ Moira::execIllegal(u16 opcode)
 }
 
 void
+Moira::execTraceException()
+{
+    u16 status = getSR();
+
+    // Recover from stop state
+    flags &= ~CPU_IS_STOPPED;
+
+    // Enter supervisor mode and update the status register
+    setSupervisorMode(true);
+    reg.sr.t = 0;
+
+    // Write exception information to stack
+    sync(4);
+    saveToStackBrief(status, reg.pc - 2);
+
+    jumpToVector(9);
+}
+
+void
 Moira::execTrapException(int nr)
 {
     u16 status = getSR();
@@ -168,7 +187,7 @@ Moira::execIrqException(int level)
     u16 status = getSR();
 
     // Recover from stop state
-    flags &= ~CPU_STOPPED;
+    flags &= ~CPU_IS_STOPPED;
 
     // Clear the polled IPL value
     reg.ipl = 0;
@@ -1625,7 +1644,7 @@ Moira::execStop(u16 opcode)
     u16 src = readI<Word>();
 
     setSR(src | (MIMIC_MUSASHI ? 0 : 1 << 13));
-    flags |= CPU_STOPPED;
+    flags |= CPU_IS_STOPPED;
 
     pollIrq();
 }
