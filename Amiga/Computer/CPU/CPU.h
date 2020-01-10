@@ -93,7 +93,7 @@ public:
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo();
     DisInstr getInstrInfo(long nr);
-    DisInstr getTracedInstrInfo(long nr);
+    DisInstr getLoggedInstrInfo(long nr);
 
 
     //

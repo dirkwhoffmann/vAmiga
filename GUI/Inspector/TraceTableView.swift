@@ -33,18 +33,21 @@ class TraceTableView: NSTableView {
 
 extension TraceTableView: NSTableViewDataSource {
     
-    func numberOfRows(in tableView: NSTableView) -> Int { return Int(CPUINFO_INSTR_COUNT); }
+    func numberOfRows(in tableView: NSTableView) -> Int {
+
+        return cpu?.loggedInstructions() ?? 0
+    }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if var info = cpu?.getTracedInstrInfo(row) {
+        if var info = cpu?.getLoggedInstrInfo(row) {
             
             switch tableColumn?.identifier.rawValue {
                 
             case "addr":
                 return String(cString: &info.addr.0)
             case "flags":
-                return String(cString: &info.flags.0)
+                return String(cString: &info.sr.0)
             case "instr":
                 return String(cString: &info.instr.0)
             default:

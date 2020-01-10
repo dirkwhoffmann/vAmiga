@@ -195,7 +195,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (CPUInfo) getInfo;
 - (DisInstr) getInstrInfo:(NSInteger)index;
-- (DisInstr) getTracedInstrInfo:(NSInteger)index;
+- (DisInstr) getLoggedInstrInfo:(NSInteger)index;
 
 - (int64_t) clock;
 - (int64_t) cycles;
@@ -227,8 +227,10 @@ struct AmigaFileWrapper;
 - (void) addWatchpointAt:(uint32_t)addr;
 - (void) removeWatchpointAt:(uint32_t)addr;
 
-- (NSInteger) traceBufferCapacity;
-- (void) truncateTraceBuffer:(NSInteger)count;
+// - (NSInteger) traceBufferCapacity;
+// - (void) truncateTraceBuffer:(NSInteger)count;
+- (NSInteger) loggedInstructions;
+- (void) clearLog;
 
 @end
 

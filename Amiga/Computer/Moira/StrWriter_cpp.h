@@ -88,11 +88,11 @@ static void sprintd_signed(char *&s, i64 value)
     sprintd(s, value, decDigits(value));
 }
 
-static void sprintx(char *&s, u64 value, int digits, bool upper)
+static void sprintx(char *&s, u64 value, bool upper, char prefix, int digits)
 {
     char a = (upper ? 'A' : 'a') - 10;
 
-    *s++ = '$';
+    if (prefix) *s++ = prefix;
     for (int i = digits - 1; i >= 0; i--) {
         u8 digit = value % 16;
         s[i] = (digit <= 9) ? ('0' + digit) : (a + digit);
@@ -101,25 +101,15 @@ static void sprintx(char *&s, u64 value, int digits, bool upper)
     s += digits;
 }
 
-static void sprintx(char *&s, u64 value, bool upper)
+static void sprintx(char *&s, u64 value, bool upper, char prefix)
 {
-    sprintx(s, value, hexDigits(value), upper);
+    sprintx(s, value, upper, prefix, hexDigits(value));
 }
 
-static void sprintx_signed(char *&s, i64 value, bool upper)
+static void sprintx_signed(char *&s, i64 value, bool upper, char prefix)
 {
     if (value < 0) { *s++ = '-'; value *= -1; }
-    sprintx(s, value, hexDigits(value), upper);
-}
-
-static void sprintw(char *&s, u64 value)
-{
-    for (int i = 3; i >= 0; i--) {
-        u8 digit = value % 16;
-        s[i] = (digit <= 9) ? ('0' + digit) : ('A' - 10 + digit);
-        value /= 16;
-    }
-    s += 4;
+    sprintx(s, value, upper, prefix, hexDigits(value));
 }
 
 StrWriter&
@@ -139,35 +129,35 @@ StrWriter::operator<<(int value)
 StrWriter&
 StrWriter::operator<<(Int i)
 {
-    hex ? sprintx_signed(ptr, i.raw, upper) : sprintd_signed(ptr, i.raw);
+    hex ? sprintx_signed(ptr, i.raw, upper, '$') : sprintd_signed(ptr, i.raw);
     return *this;
 }
 
 StrWriter&
 StrWriter::operator<<(UInt u)
 {
-    hex ? sprintx(ptr, u.raw, upper) : sprintd(ptr, u.raw);
+    hex ? sprintx(ptr, u.raw, upper, '$') : sprintd(ptr, u.raw);
     return *this;
 }
 
 StrWriter&
 StrWriter::operator<<(UInt8 u)
 {
-    hex ? sprintx(ptr, u.raw, 2, upper) : sprintd(ptr, u.raw, 3);
+    hex ? sprintx(ptr, u.raw, upper, '$', 2) : sprintd(ptr, u.raw, 3);
     return *this;
 }
 
 StrWriter&
 StrWriter::operator<<(UInt16 u)
 {
-    hex ? sprintx(ptr, u.raw, 4, upper) : sprintd(ptr, u.raw, 5);
+    hex ? sprintx(ptr, u.raw, upper, '$', 4) : sprintd(ptr, u.raw, 5);
     return *this;
 }
 
 StrWriter&
 StrWriter::operator<<(UInt32 u)
 {
-    hex ? sprintx(ptr, u.raw, 8, upper) : sprintd(ptr, u.raw, 10);
+    hex ? sprintx(ptr, u.raw, upper, '$', 8) : sprintd(ptr, u.raw, 10);
     return *this;
 }
 

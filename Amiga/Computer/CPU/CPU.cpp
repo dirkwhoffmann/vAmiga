@@ -139,7 +139,7 @@ CPU::_reset()
     moiracpu.reset();
 
     // Remove all previously recorded instructions
-    clearTraceBuffer();
+    moiracpu.debugger.clearLog();
 }
 
 void
@@ -161,38 +161,27 @@ CPU::_inspect()
     }
     info.usp = moiracpu.getUSP();
     info.ssp = moiracpu.getSSP();
-    info.flags = moiracpu.getSR();
+    info.sr = moiracpu.getSR();
 
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
 
-        // disassemble(pc, info.instr[i]);
         int bytes = moiracpu.disassemble(pc, info.instr[i].instr);
-        info.instr[i].bytes = bytes;
-        moiracpu.disassembleWord(pc, info.instr[i].addr);
+        moiracpu.disassemblePC(pc, info.instr[i].addr);
         moiracpu.disassembleMemory(pc, bytes / 2, info.instr[i].data);
-        info.instr[i].flags[0] = 0;
+        info.instr[i].sr[0] = 0;
+        info.instr[i].bytes = bytes;
         pc += bytes;
     }
 
     // Disassemble the most recent entries in the trace buffer
-
-    /* The last element in the trace buffer is the instruction that will be
-     * be executed next. Because we don't want to show this element yet, we
-     * don't dissassemble it.
-     */
-    /*
-    for (unsigned i = 1; i <= CPUINFO_INSTR_COUNT; i++) {
-        unsigned offset = (writePtr + traceBufferCapacity - 1 - i) % traceBufferCapacity;
-        RecInstr recInstr = traceBuffer[offset];
-        disassemble(recInstr, info.traceInstr[CPUINFO_INSTR_COUNT - i]);
-    }
-    */
     long count = moiracpu.debugger.loggedInstructions();
     for (int i = 0; i < count; i++) {
-        moira::Registers reg = moiracpu.debugger.logEntryAbs(i);
-        moiracpu.disassemble(reg.pc, info.traceInstr[i].instr);
-        moiracpu.disassembleSR(moiracpu.getSR(reg.sr), info.traceInstr[i].flags);
+
+        moira::Registers r = moiracpu.debugger.logEntryAbs(i);
+        moiracpu.disassemble(r.pc, info.loggedInstr[i].instr);
+        moiracpu.disassemblePC(r.pc, info.loggedInstr[i].addr);
+        moiracpu.disassembleSR(r.sr, info.loggedInstr[i].sr);
     }
 
     pthread_mutex_unlock(&lock);
@@ -222,7 +211,7 @@ CPU::_dump()
     for (unsigned i = 4; i < 8; i++) plainmsg("%8X ", info.a[i]);
     plainmsg("\n");
     plainmsg("     SSP: %X\n", info.ssp);
-    plainmsg("   Flags: %X\n", info.flags);
+    plainmsg("   Flags: %X\n", info.sr);
 }
 
 CPUInfo
@@ -252,14 +241,14 @@ CPU::getInstrInfo(long index)
 }
 
 DisInstr
-CPU::getTracedInstrInfo(long index)
+CPU::getLoggedInstrInfo(long index)
 {
     assert(index < CPUINFO_INSTR_COUNT);
     
     DisInstr result;
     
     pthread_mutex_lock(&lock);
-    result = info.traceInstr[index];
+    result = info.loggedInstr[index];
     pthread_mutex_unlock(&lock);
     
     return result;
@@ -304,7 +293,7 @@ CPU::disassemble(uint32_t addr, DisInstr &result)
     result.bytes = moiracpu.disassemble(addr, result.instr);
     moiracpu.disassembleWord(addr, result.addr);
     moiracpu.disassembleMemory(addr, result.bytes / 2, result.data);
-    result.flags[0] = 0;
+    result.sr[0] = 0;
 }
 
 void
@@ -314,7 +303,7 @@ CPU::disassemble(RecInstr recInstr, DisInstr &result)
     uint16_t sr = recInstr.sr;
 
     disassemble(pc, result);
-    moiracpu.disassembleSR(sr, result.flags);
+    moiracpu.disassembleSR(sr, result.sr);
 }
 
 void

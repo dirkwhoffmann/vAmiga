@@ -232,7 +232,7 @@ Moira::disassemble(u32 addr, char *str)
 void
 Moira::disassembleWord(u32 value, char *str)
 {
-    sprintw(str, value);
+    sprintx(str, value, true, 0, 4); // Upper case, no '$' prefix, 4 digits
 }
 
 void
@@ -240,14 +240,41 @@ Moira::disassembleMemory(u32 addr, int cnt, char *str)
 {
     for (int i = 0; i < cnt; i++, addr += 2) {
         u32 value = dasmRead<Word>(addr);
-        sprintw(str, value);
+        sprintx(str, value, true, 0, 4);
         *str++ = (i == cnt - 1) ? 0 : ' ';
     }
-    // printf("cnt = %d %s\n", cnt, str)
 }
 
 void
-Moira::disassembleSR(u32 sr, char *str)
+Moira::disassemblePC(u32 pc, char *str)
+{
+    sprintx(str, pc, true, 0, 6); // Upper case, no '$' prefix, 6 digits
+}
+
+void
+Moira::disassembleSR(const StatusRegister &sr, char *str)
+{
+    str[0]  = sr.t ? 'T' : 't';
+    str[1]  = '-';
+    str[2]  = sr.s ? 'S' : 's';
+    str[3]  = '-';
+    str[4]  = '-';
+    str[5]  = (sr.ipl & 0b100) ? '1' : '0';
+    str[6]  = (sr.ipl & 0b010) ? '1' : '0';
+    str[7]  = (sr.ipl & 0b001) ? '1' : '0';
+    str[8]  = '-';
+    str[9]  = '-';
+    str[10] = '-';
+    str[11] = sr.x ? 'X' : 'x';
+    str[12] = sr.n ? 'N' : 'n';
+    str[13] = sr.z ? 'Z' : 'z';
+    str[14] = sr.v ? 'V' : 'v';
+    str[15] = sr.c ? 'C' : 'c';
+    str[16] = 0;
+}
+
+void
+Moira::disassembleSR(u16 sr, char *str)
 {
     str[0]  = (sr & 0b1000000000000000) ? 'T' : 't';
     str[1]  = '-';

@@ -57,9 +57,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInstrInfo(index);
 }
-- (DisInstr) getTracedInstrInfo:(NSInteger)index
+- (DisInstr) getLoggedInstrInfo:(NSInteger)index
 {
-    return wrapper->cpu->getTracedInstrInfo(index);
+    return wrapper->cpu->getLoggedInstrInfo(index);
 }
 - (int64_t) clock
 {
@@ -161,6 +161,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->cpu->moiracpu.debugger.watchpoints.removeAt(addr);
 }
+/*
 - (NSInteger) traceBufferCapacity
 {
     return wrapper->cpu->traceBufferCapacity; 
@@ -168,6 +169,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) truncateTraceBuffer:(NSInteger)count
 {
     wrapper->cpu->truncateTraceBuffer((unsigned)count);
+}
+*/
+- (NSInteger) loggedInstructions
+{
+    return wrapper->cpu->moiracpu.debugger.loggedInstructions();
+}
+- (void) clearLog
+{
+    return wrapper->cpu->moiracpu.debugger.clearLog();
 }
 
 @end

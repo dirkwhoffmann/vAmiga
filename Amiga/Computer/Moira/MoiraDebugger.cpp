@@ -219,7 +219,7 @@ Debugger::logEntry(int n)
     assert(n < loggedInstructions());
 
     // n == 0 returns the most recently recorded entry
-    int offset = (LOG_BUFFER_CAPACITY - 1 - n) % LOG_BUFFER_CAPACITY;
+    int offset = (logCnt - 1 - n) % LOG_BUFFER_CAPACITY;
 
     return logBuffer[offset];
 }

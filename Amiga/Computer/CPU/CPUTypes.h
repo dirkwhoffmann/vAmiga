@@ -28,7 +28,7 @@ typedef struct
     uint8_t bytes;  // Length of the disassembled command in bytes
     char addr[9];   // Textual representation of the instruction's address
     char data[33];  // Textual representation of the instruction's data bytes
-    char flags[17]; // Textual representation of the status register (optional)
+    char sr[17];    // Textual representation of the status register (optional)
     char instr[65]; // Textual representation of the instruction
 }
 DisInstr;
@@ -43,13 +43,13 @@ typedef struct
     uint32_t a[8];
     uint32_t usp;
     uint32_t ssp;
-    uint16_t flags;
+    uint16_t sr;
 
     // Disassembled instructions starting at pc
     DisInstr instr[CPUINFO_INSTR_COUNT];
 
-    // Disassembled instructions from the trace buffer
-    DisInstr traceInstr[CPUINFO_INSTR_COUNT];
+    // Disassembled instructions from the log buffer
+    DisInstr loggedInstr[CPUINFO_INSTR_COUNT];
 }
 CPUInfo;
 

@@ -70,18 +70,18 @@ extension Inspector {
         cpuUSP.integerValue = Int(info.usp)
         cpuSSP.integerValue = Int(info.ssp)
 
-        let flags = Int(info.flags)
+        let sr = Int(info.sr)
         
-        cpuT.state  = (flags & 0b1000000000000000 != 0) ? .on : .off
-        cpuS.state  = (flags & 0b0010000000000000 != 0) ? .on : .off
-        cpuI2.state = (flags & 0b0000010000000000 != 0) ? .on : .off
-        cpuI1.state = (flags & 0b0000001000000000 != 0) ? .on : .off
-        cpuI0.state = (flags & 0b0000000100000000 != 0) ? .on : .off
-        cpuX.state  = (flags & 0b0000000000010000 != 0) ? .on : .off
-        cpuN.state  = (flags & 0b0000000000001000 != 0) ? .on : .off
-        cpuZ.state  = (flags & 0b0000000000000100 != 0) ? .on : .off
-        cpuV.state  = (flags & 0b0000000000000010 != 0) ? .on : .off
-        cpuC.state  = (flags & 0b0000000000000001 != 0) ? .on : .off
+        cpuT.state  = (sr & 0b1000000000000000 != 0) ? .on : .off
+        cpuS.state  = (sr & 0b0010000000000000 != 0) ? .on : .off
+        cpuI2.state = (sr & 0b0000010000000000 != 0) ? .on : .off
+        cpuI1.state = (sr & 0b0000001000000000 != 0) ? .on : .off
+        cpuI0.state = (sr & 0b0000000100000000 != 0) ? .on : .off
+        cpuX.state  = (sr & 0b0000000000010000 != 0) ? .on : .off
+        cpuN.state  = (sr & 0b0000000000001000 != 0) ? .on : .off
+        cpuZ.state  = (sr & 0b0000000000000100 != 0) ? .on : .off
+        cpuV.state  = (sr & 0b0000000000000010 != 0) ? .on : .off
+        cpuC.state  = (sr & 0b0000000000000001 != 0) ? .on : .off
 
         instrTableView.refresh(everything: everything)
         traceTableView.refresh()
@@ -105,12 +105,8 @@ extension Inspector {
     }
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
-        
-        /* The trace buffer already contains the next instruction to execute.
-         * Hence, we don't the clear the buffer completely. We reduce it's
-         * size to 1 instead.
-         */
-        amigaProxy?.cpu.truncateTraceBuffer(1)
+
+        amigaProxy?.cpu.clearLog()
         traceTableView.refresh()
     }
     
