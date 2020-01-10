@@ -70,9 +70,9 @@ Moira::shift(int cnt, u64 data) {
                 changed |= data ^ shifted;
                 data = shifted;
             }
-            if (cnt) sr.x = carry;
-            sr.c = carry;
-            sr.v = NBIT<S>(changed);
+            if (cnt) reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = NBIT<S>(changed);
             break;
         }
         case ASR:
@@ -85,9 +85,9 @@ Moira::shift(int cnt, u64 data) {
                 changed |= data ^ shifted;
                 data = shifted;
             }
-            if (cnt) sr.x = carry;
-            sr.c = carry;
-            sr.v = NBIT<S>(changed);
+            if (cnt) reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = NBIT<S>(changed);
             break;
         }
         case LSL:
@@ -97,9 +97,9 @@ Moira::shift(int cnt, u64 data) {
                 carry = NBIT<S>(data);
                 data = data << 1;
             }
-            if (cnt) sr.x = carry;
-            sr.c = carry;
-            sr.v = 0;
+            if (cnt) reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         case LSR:
@@ -109,9 +109,9 @@ Moira::shift(int cnt, u64 data) {
                 carry = data & 1;
                 data = data >> 1;
             }
-            if (cnt) sr.x = carry;
-            sr.c = carry;
-            sr.v = 0;
+            if (cnt) reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         case ROL:
@@ -121,8 +121,8 @@ Moira::shift(int cnt, u64 data) {
                 carry = NBIT<S>(data);
                 data = data << 1 | carry;
             }
-            sr.c = carry;
-            sr.v = 0;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         case ROR:
@@ -133,27 +133,27 @@ Moira::shift(int cnt, u64 data) {
                 data >>= 1;
                 if (carry) data |= MSBIT<S>();
             }
-            sr.c = carry;
-            sr.v = 0;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         case ROXL:
         {
-            bool carry = sr.x;
+            bool carry = reg.sr.x;
             for (int i = 0; i < cnt; i++) {
                 bool extend = carry;
                 carry = NBIT<S>(data);
                 data = data << 1 | extend;
             }
 
-            sr.x = carry;
-            sr.c = carry;
-            sr.v = 0;
+            reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         case ROXR:
         {
-            bool carry = sr.x;
+            bool carry = reg.sr.x;
             for (int i = 0; i < cnt; i++) {
                 bool extend = carry;
                 carry = data & 1;
@@ -161,9 +161,9 @@ Moira::shift(int cnt, u64 data) {
                 if (extend) data |= MSBIT<S>();
             }
 
-            sr.x = carry;
-            sr.c = carry;
-            sr.v = 0;
+            reg.sr.x = carry;
+            reg.sr.c = carry;
+            reg.sr.v = 0;
             break;
         }
         default:
@@ -171,8 +171,8 @@ Moira::shift(int cnt, u64 data) {
             assert(false);
         }
     }
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
     return CLIP<S>(data);
 }
 
@@ -189,18 +189,18 @@ Moira::addsub(u32 op1, u32 op2)
         {
             result = (u64)op1 + (u64)op2;
 
-            sr.x = sr.c = CARRY<S>(result);
-            sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
-            sr.z = ZERO<S>(result);
+            reg.sr.x = reg.sr.c = CARRY<S>(result);
+            reg.sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
+            reg.sr.z = ZERO<S>(result);
             break;
         }
         case ADDX:
         {
-            result = (u64)op1 + (u64)op2 + (u64)sr.x;
+            result = (u64)op1 + (u64)op2 + (u64)reg.sr.x;
 
-            sr.x = sr.c = CARRY<S>(result);
-            sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
-            if (CLIP<S>(result)) sr.z = 0;
+            reg.sr.x = reg.sr.c = CARRY<S>(result);
+            reg.sr.v = NBIT<S>((op1 ^ result) & (op2 ^ result));
+            if (CLIP<S>(result)) reg.sr.z = 0;
             break;
         }
         case SUB:
@@ -209,18 +209,18 @@ Moira::addsub(u32 op1, u32 op2)
         {
             result = (u64)op2 - (u64)op1;
 
-            sr.x = sr.c = CARRY<S>(result);
-            sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
-            sr.z = ZERO<S>(result);
+            reg.sr.x = reg.sr.c = CARRY<S>(result);
+            reg.sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
+            reg.sr.z = ZERO<S>(result);
             break;
         }
         case SUBX:
         {
-            result = (u64)op2 - (u64)op1 - (u64)sr.x;
+            result = (u64)op2 - (u64)op1 - (u64)reg.sr.x;
 
-            sr.x = sr.c = CARRY<S>(result);
-            sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
-            if (CLIP<S>(result)) sr.z = 0;
+            reg.sr.x = reg.sr.c = CARRY<S>(result);
+            reg.sr.v = NBIT<S>((op1 ^ op2) & (op2 ^ result));
+            if (CLIP<S>(result)) reg.sr.z = 0;
             break;
         }
         default:
@@ -228,7 +228,7 @@ Moira::addsub(u32 op1, u32 op2)
             assert(false);
         }
     }
-    sr.n = NBIT<S>(result);
+    reg.sr.n = NBIT<S>(result);
     return (u32)result;
 }
 
@@ -252,10 +252,10 @@ Moira::mul(u32 op1, u32 op2)
         default: assert(false);
      }
 
-    sr.n = NBIT<Long>(result);
-    sr.z = ZERO<Long>(result);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Long>(result);
+    reg.sr.z = ZERO<Long>(result);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     sync(cyclesMul<I>(op1));
     return result;
@@ -267,7 +267,7 @@ Moira::div(u32 op1, u32 op2)
     u32 result;
     bool overflow;
 
-    sr.n = sr.z = sr.v = sr.c = 0;
+    reg.sr.n = reg.sr.z = reg.sr.v = reg.sr.c = 0;
 
     switch (I) {
 
@@ -292,9 +292,9 @@ Moira::div(u32 op1, u32 op2)
             break;
         }
     }
-    sr.v   = overflow ? 1    : sr.v;
-    sr.n   = overflow ? 1    : NBIT<Word>(result);
-    sr.z   = overflow ? sr.z : ZERO<Word>(result);
+    reg.sr.v = overflow ? 1        : reg.sr.v;
+    reg.sr.n = overflow ? 1        : NBIT<Word>(result);
+    reg.sr.z = overflow ? reg.sr.z : ZERO<Word>(result);
 
     sync(cyclesDiv<I>(op1, op2) - 4);
     return overflow ? op1 : result;
@@ -314,16 +314,16 @@ Moira::bcd(u32 op1, u32 op2)
             u16 op2_hi = op2 & 0xF0, op2_lo = op2 & 0x0F;
 
             // From portable68000
-            u16 resLo = op1_lo + op2_lo + sr.x;
+            u16 resLo = op1_lo + op2_lo + reg.sr.x;
             u16 resHi = op1_hi + op2_hi;
             u64 tmp_result;
             result = tmp_result = resHi + resLo;
             if (resLo > 9) result += 6;
-            sr.x = sr.c = (result & 0x3F0) > 0x90;
-            if (sr.c) result += 0x60;
-            if (CLIP<Byte>(result)) sr.z = 0;
-            sr.n = NBIT<Byte>(result);
-            sr.v = ((tmp_result & 0x80) == 0) && ((result & 0x80) == 0x80);
+            reg.sr.x = reg.sr.c = (result & 0x3F0) > 0x90;
+            if (reg.sr.c) result += 0x60;
+            if (CLIP<Byte>(result)) reg.sr.z = 0;
+            reg.sr.n = NBIT<Byte>(result);
+            reg.sr.v = ((tmp_result & 0x80) == 0) && ((result & 0x80) == 0x80);
             break;
         }
         case SBCD:
@@ -333,7 +333,7 @@ Moira::bcd(u32 op1, u32 op2)
             u16 op2_hi = op2 & 0xF0, op2_lo = op2 & 0x0F;
 
             // From portable68000
-            u16 resLo = op2_lo - op1_lo - sr.x;
+            u16 resLo = op2_lo - op1_lo - reg.sr.x;
             u16 resHi = op2_hi - op1_hi;
             u64 tmp_result;
             result = tmp_result = resHi + resLo;
@@ -342,12 +342,12 @@ Moira::bcd(u32 op1, u32 op2)
                 bcd = 6;
                 result -= 6;
             }
-            if (((op2 - op1 - sr.x) & 0x100) > 0xff) result -= 0x60;
-            sr.c = sr.x = ((op2 - op1 - bcd - sr.x) & 0x300) > 0xff;
+            if (((op2 - op1 - reg.sr.x) & 0x100) > 0xff) result -= 0x60;
+            reg.sr.c = reg.sr.x = ((op2 - op1 - bcd - reg.sr.x) & 0x300) > 0xff;
 
-            if (CLIP<Byte>(result)) sr.z = 0;
-            sr.n = NBIT<Byte>(result);
-            sr.v = ((tmp_result & 0x80) == 0x80) && ((result & 0x80) == 0);
+            if (CLIP<Byte>(result)) reg.sr.z = 0;
+            reg.sr.n = NBIT<Byte>(result);
+            reg.sr.v = ((tmp_result & 0x80) == 0x80) && ((result & 0x80) == 0);
             break;
         }
         default:
@@ -355,7 +355,7 @@ Moira::bcd(u32 op1, u32 op2)
             assert(false);
         }
     }
-    sr.n = NBIT<S>(result);
+    reg.sr.n = NBIT<S>(result);
     return (u32)result;
 }
 
@@ -364,10 +364,10 @@ Moira::cmp(u32 op1, u32 op2)
 {
     u64 result = (u64)op2 - (u64)op1;
 
-    sr.c = NBIT<S>(result >> 1);
-    sr.v = NBIT<S>((op2 ^ op1) & (op2 ^ result));
-    sr.z = ZERO<S>(result);
-    sr.n = NBIT<S>(result);
+    reg.sr.c = NBIT<S>(result >> 1);
+    reg.sr.v = NBIT<S>((op2 ^ op1) & (op2 ^ result));
+    reg.sr.z = ZERO<S>(result);
+    reg.sr.n = NBIT<S>(result);
 }
 
 template<Instr I, Size S> u32
@@ -380,10 +380,10 @@ Moira::logic(u32 op)
         case NOT:
         {
             result = ~op;
-            sr.n = NBIT<S>(result);
-            sr.z = ZERO<S>(result);
-            sr.v = 0;
-            sr.c = 0;
+            reg.sr.n = NBIT<S>(result);
+            reg.sr.z = ZERO<S>(result);
+            reg.sr.v = 0;
+            reg.sr.c = 0;
             break;
         }
         case NEG:
@@ -432,10 +432,10 @@ Moira::logic(u32 op1, u32 op2)
         }
     }
     
-    sr.n = NBIT<S>(result);
-    sr.z = ZERO<S>(result);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(result);
+    reg.sr.z = ZERO<S>(result);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
     return result;
 }
 
@@ -445,25 +445,25 @@ Moira::bit(u32 op, u8 bit)
     switch (I) {
         case BCHG:
         {
-            sr.z = 1 ^ ((op >> bit) & 1);
+            reg.sr.z = 1 ^ ((op >> bit) & 1);
             op ^= (1 << bit);
             break;
         }
         case BSET:
         {
-            sr.z = 1 ^ ((op >> bit) & 1);
+            reg.sr.z = 1 ^ ((op >> bit) & 1);
             op |= (1 << bit);
             break;
         }
         case BCLR:
         {
-            sr.z = 1 ^ ((op >> bit) & 1);
+            reg.sr.z = 1 ^ ((op >> bit) & 1);
             op &= ~(1 << bit);
             break;
         }
         case BTST:
         {
-            sr.z = 1 ^ ((op >> bit) & 1);
+            reg.sr.z = 1 ^ ((op >> bit) & 1);
             break;
         }
         default:
@@ -481,20 +481,20 @@ Moira::cond() {
 
         case BRA: case DBT:  case ST:  return true;
         case DBF: case SF:             return false;
-        case BHI: case DBHI: case SHI: return !sr.c && !sr.z;
-        case BLS: case DBLS: case SLS: return sr.c || sr.z;
-        case BCC: case DBCC: case SCC: return !sr.c;
-        case BCS: case DBCS: case SCS: return sr.c;
-        case BNE: case DBNE: case SNE: return !sr.z;
-        case BEQ: case DBEQ: case SEQ: return sr.z;
-        case BVC: case DBVC: case SVC: return !sr.v;
-        case BVS: case DBVS: case SVS: return sr.v;
-        case BPL: case DBPL: case SPL: return !sr.n;
-        case BMI: case DBMI: case SMI: return sr.n;
-        case BGE: case DBGE: case SGE: return sr.n == sr.v;
-        case BLT: case DBLT: case SLT: return sr.n != sr.v;
-        case BGT: case DBGT: case SGT: return sr.n == sr.v && !sr.z;
-        case BLE: case DBLE: case SLE: return sr.n != sr.v || sr.z;
+        case BHI: case DBHI: case SHI: return !reg.sr.c && !reg.sr.z;
+        case BLS: case DBLS: case SLS: return reg.sr.c || reg.sr.z;
+        case BCC: case DBCC: case SCC: return !reg.sr.c;
+        case BCS: case DBCS: case SCS: return reg.sr.c;
+        case BNE: case DBNE: case SNE: return !reg.sr.z;
+        case BEQ: case DBEQ: case SEQ: return reg.sr.z;
+        case BVC: case DBVC: case SVC: return !reg.sr.v;
+        case BVS: case DBVS: case SVS: return reg.sr.v;
+        case BPL: case DBPL: case SPL: return !reg.sr.n;
+        case BMI: case DBMI: case SMI: return reg.sr.n;
+        case BGE: case DBGE: case SGE: return reg.sr.n == reg.sr.v;
+        case BLT: case DBLT: case SLT: return reg.sr.n != reg.sr.v;
+        case BGT: case DBGT: case SGT: return reg.sr.n == reg.sr.v && !reg.sr.z;
+        case BLE: case DBLE: case SLE: return reg.sr.n != reg.sr.v || reg.sr.z;
     }
 }
 
@@ -611,10 +611,10 @@ Moira::mulMusashi(u32 op1, u32 op2)
         default: assert(false);
     }
 
-    sr.n = NBIT<Long>(result);
-    sr.z = ZERO<Long>(result);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Long>(result);
+    reg.sr.z = ZERO<Long>(result);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     return result;
 }
@@ -632,10 +632,10 @@ Moira::divMusashi(u32 op1, u32 op2)
 
             if (op1 == 0x80000000 && (i32)op2 == -1) {
 
-                sr.z = 0;
-                sr.n = 0;
-                sr.v = 0;
-                sr.c = 0;
+                reg.sr.z = 0;
+                reg.sr.n = 0;
+                reg.sr.v = 0;
+                reg.sr.c = 0;
                 result = 0;
                 break;
             }
@@ -645,16 +645,16 @@ Moira::divMusashi(u32 op1, u32 op2)
 
             if (quotient == (i16)quotient) {
 
-                sr.z = quotient;
-                sr.n = NBIT<Word>(quotient);
-                sr.v = 0;
-                sr.c = 0;
+                reg.sr.z = quotient;
+                reg.sr.n = NBIT<Word>(quotient);
+                reg.sr.v = 0;
+                reg.sr.c = 0;
                 result = (quotient & 0xffff) | remainder << 16;
 
             } else {
 
                 result = op1;
-                sr.v = 1;
+                reg.sr.v = 1;
             }
             break;
         }
@@ -667,17 +667,17 @@ Moira::divMusashi(u32 op1, u32 op2)
 
             if(quotient < 0x10000) {
 
-                sr.z = quotient;
-                sr.n = NBIT<Word>(quotient);
-                sr.v = 0;
-                sr.c = 0;
+                reg.sr.z = quotient;
+                reg.sr.n = NBIT<Word>(quotient);
+                reg.sr.v = 0;
+                reg.sr.c = 0;
 
                 result = (quotient & 0xffff) | remainder << 16;
 
             } else {
 
                 result = op1;
-                sr.v = 1;
+                reg.sr.v = 1;
             }
             break;
         }

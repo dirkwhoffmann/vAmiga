@@ -72,9 +72,6 @@ protected:
     // The data and address registers
     Registers reg;
 
-    // The status register
-    StatusRegister sr;
-
     // The prefetch queue
     PrefetchQueue queue;
 
@@ -210,11 +207,11 @@ public:
     u32 getSP() { return reg.sp; }
     void setSP(u32 val) { reg.sp = val; }
 
-    u32 getSSP() { return sr.s ? reg.sp : reg.ssp; }
-    void setSSP(u32 val) { if (sr.s) reg.sp = val; else reg.ssp = val; }
+    u32 getSSP() { return reg.sr.s ? reg.sp : reg.ssp; }
+    void setSSP(u32 val) { if (reg.sr.s) reg.sp = val; else reg.ssp = val; }
 
-    u32 getUSP() { return sr.s ? reg.usp : reg.sp; }
-    void setUSP(u32 val) { if (sr.s) reg.usp = val; else reg.sp = val; }
+    u32 getUSP() { return reg.sr.s ? reg.usp : reg.sp; }
+    void setUSP(u32 val) { if (reg.sr.s) reg.usp = val; else reg.sp = val; }
 
     void setSupervisorMode(bool enable);
 

@@ -229,6 +229,7 @@ struct StatusRegister {
 struct Registers {
 
     u32 pc;               // Program counter
+    StatusRegister sr;    // Status register
 
     union {
         struct {

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#define SUPERVISOR_MODE_ONLY if (!sr.s) { execPrivilegeException(); return; }
+#define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
 
 #define REVERSE_8(x) (((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
 #define REVERSE_16(x) ((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
@@ -69,11 +69,11 @@ Moira::execAddressError(u32 addr)
     assert(addr & 1);
 
     // Memory access type and function code (TODO: THIS IS INCOMPLETE)
-    u16 code = 0x11 | (sr.s ? 4 : 0);
+    u16 code = 0x11 | (reg.sr.s ? 4 : 0);
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     // Write exception information to stack
     sync(8);
@@ -90,7 +90,7 @@ Moira::execUnimplemented(int nr)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
@@ -117,7 +117,7 @@ Moira::execIllegal(u16 opcode)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     // Write exception information to stack
     sync(4);
@@ -133,7 +133,7 @@ Moira::execTrapException(int nr)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     // Write exception information to stack
     saveToStackBrief(status);
@@ -148,7 +148,7 @@ Moira::execPrivilegeException()
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     reg.pc -= 2;
 
@@ -174,11 +174,11 @@ Moira::execIrqException(int level)
     reg.ipl = 0;
 
     // Tempararily raise the interrupt threshold
-    sr.ipl = level;
+    reg.sr.ipl = level;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    sr.t = 0;
+    reg.sr.t = 0;
 
     sync(6);
     reg.sp -= 6;
@@ -651,15 +651,15 @@ Moira::execChk(u16 opcode)
     prefetch<LAST_BUS_CYCLE>();
     sync(4);
 
-    sr.z = ZERO<S>(dy);
-    sr.v = 0;
-    sr.c = 0;
-    sr.n = MIMIC_MUSASHI ? sr.n : 0;
+    reg.sr.z = ZERO<S>(dy);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
+    reg.sr.n = MIMIC_MUSASHI ? reg.sr.n : 0;
 
     if ((i16)dy > (i16)data) {
 
         sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
-        sr.n = NBIT<S>(dy);
+        reg.sr.n = NBIT<S>(dy);
         execTrapException(6);
 
         return;
@@ -670,7 +670,7 @@ Moira::execChk(u16 opcode)
     if ((i16)dy < 0) {
 
         sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
-        sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
+        reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execTrapException(6);
     }
 }
@@ -688,10 +688,10 @@ Moira::execClr(u16 opcode)
     if (S == Long && isRegMode(M)) sync(2);
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, 0);
 
-    sr.n = 0;
-    sr.z = 1;
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = 0;
+    reg.sr.z = 1;
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -840,10 +840,10 @@ Moira::execExt(u16 opcode)
     dn = (S == Long) ? SEXT<Word>(dn) : SEXT<Byte>(dn);
 
     writeD<S>(n, dn);
-    sr.n = NBIT<S>(dn);
-    sr.z = ZERO<S>(dn);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(dn);
+    reg.sr.z = ZERO<S>(dn);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     prefetch<LAST_BUS_CYCLE>();
 }
@@ -919,10 +919,10 @@ Moira::execMove0(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_DN,S>(dst, data)) return;
 
@@ -939,10 +939,10 @@ Moira::execMove2(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_AI,S>(dst, data)) return;
     prefetch<LAST_BUS_CYCLE>();
@@ -958,10 +958,10 @@ Moira::execMove3(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_PI,S>(dst, data)) return;
     prefetch<LAST_BUS_CYCLE>();
@@ -986,10 +986,10 @@ Moira::execMove4(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     prefetch();
     sync(-2);
@@ -1012,10 +1012,10 @@ Moira::execMove5(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_DI,S>(dst, data)) return;
     prefetch<LAST_BUS_CYCLE>();
@@ -1031,10 +1031,10 @@ Moira::execMove6(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_IX,S>(dst, data)) return;
     prefetch<LAST_BUS_CYCLE>();
@@ -1050,10 +1050,10 @@ Moira::execMove7(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     if (!writeOp<MODE_AW,S>(dst, data)) return;
     prefetch<LAST_BUS_CYCLE>();
@@ -1083,10 +1083,10 @@ Moira::execMove8(u16 opcode)
 
         if (!readOp<M,S>(src, ea, data)) return;
 
-        sr.n = NBIT<S>(data);
-        sr.z = ZERO<S>(data);
-        sr.v = 0;
-        sr.c = 0;
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
 
         u32 ea2 = queue.irc << 16;
         readExt();
@@ -1098,10 +1098,10 @@ Moira::execMove8(u16 opcode)
 
         if (!readOp<M,S>(src, ea, data)) return;
 
-        sr.n = NBIT<S>(data);
-        sr.z = ZERO<S>(data);
-        sr.v = 0;
-        sr.c = 0;
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
 
         if (!writeOp<MODE_AL,S>(dst, data)) return;
     }
@@ -1268,10 +1268,10 @@ Moira::execMoveq(u16 opcode)
 
     writeD<Long>(dst, (i32)src);
 
-    sr.n = NBIT<Byte>(src);
-    sr.z = ZERO<Byte>(src);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Byte>(src);
+    reg.sr.z = ZERO<Byte>(src);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     prefetch<LAST_BUS_CYCLE>();
 }
@@ -1412,15 +1412,15 @@ Moira::execDiv(u16 opcode)
     if (divisor == 0) {
 
         if (I == DIVU) {
-            sr.n = NBIT<Long>(dividend);
-            sr.z = (dividend & 0xFFFF0000) == 0;
-            sr.v = 0;
-            sr.c = 0;
+            reg.sr.n = NBIT<Long>(dividend);
+            reg.sr.z = (dividend & 0xFFFF0000) == 0;
+            reg.sr.v = 0;
+            reg.sr.c = 0;
         } else {
-            sr.n = 0;
-            sr.z = 1;
-            sr.v = 0;
-            sr.c = 0;
+            reg.sr.n = 0;
+            reg.sr.z = 1;
+            reg.sr.v = 0;
+            reg.sr.c = 0;
         }
 
         sync(8);
@@ -1633,18 +1633,18 @@ Moira::execStop(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execSwap(u16 opcode)
 {
-    int reg = ( _____________xxx(opcode) );
-    u32 dat = readD(reg);
+    int rg  = ( _____________xxx(opcode) );
+    u32 dat = readD(rg);
 
     prefetch<LAST_BUS_CYCLE>();
 
     dat = (dat >> 16) | (dat & 0xFFFF) << 16;
-    writeD(reg,dat);
+    writeD(rg, dat);
 
-    sr.n = NBIT<Long>(dat);
-    sr.z = ZERO<Long>(dat);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Long>(dat);
+    reg.sr.z = ZERO<Long>(dat);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1655,10 +1655,10 @@ Moira::execTasRg(u16 opcode)
     u32 ea, data;
     readOp<M,Byte>(dst, ea, data);
 
-    sr.n = NBIT<Byte>(data);
-    sr.z = ZERO<Byte>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Byte>(data);
+    reg.sr.z = ZERO<Byte>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     data |= 0x80;
     writeD<S>(dst, data);
@@ -1674,10 +1674,10 @@ Moira::execTasEa(u16 opcode)
     u32 ea, data;
     readOp<M,Byte>(dst, ea, data);
 
-    sr.n = NBIT<Byte>(data);
-    sr.z = ZERO<Byte>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<Byte>(data);
+    reg.sr.z = ZERO<Byte>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
     data |= 0x80;
 
     if (!isRegMode(M)) sync(2);
@@ -1699,21 +1699,21 @@ template<Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
     prefetch<LAST_BUS_CYCLE>();
-    if (sr.v) execTrapException(7);
+    if (reg.sr.v) execTrapException(7);
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execTst(u16 opcode)
 {
-    int reg = _____________xxx(opcode);
+    int rg = _____________xxx(opcode);
 
     u32 ea, data;
-    if (!readOp<M,S>(reg, ea, data)) return;
+    if (!readOp<M,S>(rg, ea, data)) return;
 
-    sr.n = NBIT<S>(data);
-    sr.z = ZERO<S>(data);
-    sr.v = 0;
-    sr.c = 0;
+    reg.sr.n = NBIT<S>(data);
+    reg.sr.z = ZERO<S>(data);
+    reg.sr.v = 0;
+    reg.sr.c = 0;
 
     prefetch<LAST_BUS_CYCLE>();
 }

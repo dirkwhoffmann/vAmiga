@@ -38,14 +38,14 @@ Moira::reset()
     reg.ipl = 0;
     ipl = 0;
     
-    sr.t = 0;
-    sr.s = 1;
-    sr.x = 0;
-    sr.n = 0;
-    sr.z = 0;
-    sr.v = 0;
-    sr.c = 0;
-    sr.ipl = 7;
+    reg.sr.t = 0;
+    reg.sr.s = 1;
+    reg.sr.x = 0;
+    reg.sr.n = 0;
+    reg.sr.z = 0;
+    reg.sr.v = 0;
+    reg.sr.c = 0;
+    reg.sr.ipl = 7;
 
     sync(16);
 
@@ -70,8 +70,8 @@ void
 Moira::execute()
 {
     // Check for pending interrupts
-    if (reg.ipl >= sr.ipl) {
-        if (reg.ipl > sr.ipl || reg.ipl == 7) {
+    if (reg.ipl >= reg.sr.ipl) {
+        if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
             assert(reg.ipl < 7);
             execIrqException(reg.ipl);
@@ -141,23 +141,29 @@ Moira::writeR(int n, u32 v)
 u8
 Moira::getCCR()
 {
-    return sr.c << 0 | sr.v << 1 | sr.z << 2 | sr.n << 3 | sr.x << 4;
+    return
+    reg.sr.c << 0 |
+    reg.sr.v << 1 |
+    reg.sr.z << 2 |
+    reg.sr.n << 3 |
+    reg.sr.x << 4;
 }
 
 void
 Moira::setCCR(u8 val)
 {
-    sr.c = (val >> 0) & 1;
-    sr.v = (val >> 1) & 1;
-    sr.z = (val >> 2) & 1;
-    sr.n = (val >> 3) & 1;
-    sr.x = (val >> 4) & 1;
+    reg.sr.c = (val >> 0) & 1;
+    reg.sr.v = (val >> 1) & 1;
+    reg.sr.z = (val >> 2) & 1;
+    reg.sr.n = (val >> 3) & 1;
+    reg.sr.x = (val >> 4) & 1;
 }
 
 u16
 Moira::getSR()
 {
-    return sr.t << 15 | sr.s << 13 | sr.ipl << 8 | getCCR();
+    return
+    reg.sr.t << 15 | reg.sr.s << 13 | reg.sr.ipl << 8 | getCCR();
 }
 
 void
@@ -167,8 +173,8 @@ Moira::setSR(u16 val)
     bool s = (val >> 13) & 1;
     u8 ipl = (val >>  8) & 7;
 
-    sr.ipl = ipl;
-    sr.t = t;
+    reg.sr.ipl = ipl;
+    reg.sr.t = t;
 
     setCCR((u8)val);
     setSupervisorMode(s);
@@ -177,14 +183,14 @@ Moira::setSR(u16 val)
 void
 Moira::setSupervisorMode(bool enable)
 {
-    if (sr.s == enable) return;
+    if (reg.sr.s == enable) return;
 
     if (enable) {
-        sr.s = 1;
+        reg.sr.s = 1;
         reg.usp = reg.a[7];
         reg.a[7] = reg.ssp;
     } else {
-        sr.s = 0;
+        reg.sr.s = 0;
         reg.ssp = reg.a[7];
         reg.a[7] = reg.usp;
     }
