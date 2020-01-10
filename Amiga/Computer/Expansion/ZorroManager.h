@@ -12,8 +12,6 @@
 
 #include "AmigaComponent.h"
 
-namespace vamiga {
-
 /* Additional information:
  *
  *   Fast Ram emulation (Zorro II) is based on:
@@ -92,5 +90,4 @@ public:
     void pokeFastRamDevice(uint32_t addr, uint8_t value);
 };
 
-}
 #endif

@@ -12,8 +12,6 @@
 
 #include "AmigaComponent.h"
 
-namespace vamiga {
-
 class UART : public AmigaComponent {
 
     friend class Amiga;
@@ -172,5 +170,4 @@ public:
 
 };
 
-}
 #endif

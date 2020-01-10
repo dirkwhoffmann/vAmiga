@@ -12,8 +12,6 @@
 
 #include "AmigaComponent.h"
 
-namespace vamiga {
-
 class ControlPort : public AmigaComponent {
 
     // Information shown in the GUI inspector panel
@@ -121,6 +119,5 @@ public:
     void connectDevice(ControlPortDevice device);
 };
 
-}
 #endif
 
