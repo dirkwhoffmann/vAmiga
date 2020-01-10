@@ -69,26 +69,14 @@ Moira::reset()
 void
 Moira::execute()
 {
-    // TODO: CLEAN UP ASAP
-    if (debugger.breakpoints.needsCheck) flags |= CPU_CHECK_BP;
-    else flags &= ~CPU_CHECK_BP;
-
-    // Check the integrity of the CPU_CHECK_FOR_IRQ flag
+    // Check integrity of the CPU_CHECK_IRQ flag
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
 
-    // Check the integrity of the CPU_CHECK_BREAKPOINTS flag
+    // Check integrity of the CPU_TRACE_FLAG flag
+    assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t);
 
-    // Check the integrity of the CPU_CHECK_BREAKPOINTS flag
-    assert(!!(flags & CPU_CHECK_BP) == debugger.breakpoints.needsCheck);
-
-    // Under normal conditions, we just call the execution handler
-    if (!flags) {
-
-        // Call the execution handler
-        reg.pc += 2;
-        (this->*exec[queue.ird])(queue.ird);
-
-    } else {
+    // Process execution flags (if any)
+    if (flags) {
 
         // Process pending trace exception (if any)
         if (flags & CPU_TRACE_EXCEPTION) {
@@ -116,17 +104,15 @@ Moira::execute()
         if (flags & CPU_LOG_INSTRUCTION) {
             debugger.logInstruction();
         }
-
-        // Execute the instruction
-        reg.pc += 2;
-        (this->*exec[queue.ird])(queue.ird);
-
-        // Check if a breakpoint has been reached
-        if (flags & CPU_CHECK_BP) {
-            if (debugger.breakpointMatches(reg.pc))
-                breakpointReached(reg.pc);
-        }
     }
+
+    // Execute the instruction
+    reg.pc += 2;
+    (this->*exec[queue.ird])(queue.ird);
+
+    // Check if a breakpoint has been reached
+    if (debugger.breakpoints.needsCheck)
+        if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
 }
 
 void

@@ -97,7 +97,6 @@ protected:
     static const int CPU_CHECK_IRQ       = 0b0001000;
     static const int CPU_TRACE_EXCEPTION = 0b0010000;
     static const int CPU_TRACE_FLAG      = 0b0100000;
-    static const int CPU_CHECK_BP        = 0b1000000;
 
     // Number of elapsed cycles since powerup
     i64 clock;
