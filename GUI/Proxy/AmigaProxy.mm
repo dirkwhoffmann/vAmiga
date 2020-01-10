@@ -53,11 +53,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInfo();
 }
-- (DisInstr) getInstrInfo:(NSInteger)index
+- (DisassembledInstr) getInstrInfo:(NSInteger)index
 {
     return wrapper->cpu->getInstrInfo(index);
 }
-- (DisInstr) getLoggedInstrInfo:(NSInteger)index
+- (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index
 {
     return wrapper->cpu->getLoggedInstrInfo(index);
 }
@@ -67,7 +67,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (int64_t) cycles
 {
-    return wrapper->cpu->cycles();
+    return wrapper->cpu->getCpuClock();
 }
 - (NSInteger) numberOfBreakpoints
 {

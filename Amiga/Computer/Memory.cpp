@@ -1181,13 +1181,13 @@ Memory::peekCIA8(uint32_t addr)
             return a0 ? ciaa.peek(reg) : ciab.peek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(cpu.getIR()) : ciab.peek(reg);
+            return a0 ? LO_BYTE(cpu.getIRD()) : ciab.peek(reg);
             
         case 0b10:
-            return a0 ? ciaa.peek(reg) : HI_BYTE(cpu.getIR());
+            return a0 ? ciaa.peek(reg) : HI_BYTE(cpu.getIRD());
             
         case 0b11:
-            return a0 ? LO_BYTE(cpu.getIR()) : HI_BYTE(cpu.getIR());
+            return a0 ? LO_BYTE(cpu.getIRD()) : HI_BYTE(cpu.getIRD());
     }
     assert(false);
     return 0;
@@ -1214,7 +1214,7 @@ Memory::peekCIA16(uint32_t addr)
             return HI_LO(0xFF, ciaa.peek(reg));
             
         case 0b11:
-            return cpu.getIR();
+            return cpu.getIRD();
             
     }
     assert(false);
@@ -1243,13 +1243,13 @@ Memory::spypeekCIA8(uint32_t addr)
             return a0 ? ciaa.spypeek(reg) : ciab.spypeek(reg);
             
         case 0b01:
-            return a0 ? LO_BYTE(cpu.getIR()) : ciab.spypeek(reg);
+            return a0 ? LO_BYTE(cpu.getIRD()) : ciab.spypeek(reg);
             
         case 0b10:
-            return a0 ? ciaa.spypeek(reg) : HI_BYTE(cpu.getIR());
+            return a0 ? ciaa.spypeek(reg) : HI_BYTE(cpu.getIRD());
             
         case 0b11:
-            return a0 ? LO_BYTE(cpu.getIR()) : HI_BYTE(cpu.getIR());
+            return a0 ? LO_BYTE(cpu.getIRD()) : HI_BYTE(cpu.getIRD());
     }
     assert(false);
     return 0;
@@ -1273,7 +1273,7 @@ Memory::spypeekCIA16(uint32_t addr)
             return HI_LO(0xFF, ciaa.spypeek(reg));
             
         case 0b11:
-            return cpu.getIR();
+            return cpu.getIRD();
             
     }
     assert(false);

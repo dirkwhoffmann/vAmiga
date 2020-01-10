@@ -12,16 +12,6 @@
 #ifndef _CPU_T_INC
 #define _CPU_T_INC
 
-/* Recorded instruction
- * This data structure is used inside the trace ringbuffer.
- */
-typedef struct
-{
-    uint32_t pc;
-    uint32_t sr;
-}
-RecInstr;
-
 // A disassembled instruction
 typedef struct
 {
@@ -31,7 +21,7 @@ typedef struct
     char sr[17];    // Textual representation of the status register (optional)
     char instr[65]; // Textual representation of the instruction
 }
-DisInstr;
+DisassembledInstr;
 
 #define CPUINFO_INSTR_COUNT 256
 
@@ -46,10 +36,10 @@ typedef struct
     uint16_t sr;
 
     // Disassembled instructions starting at pc
-    DisInstr instr[CPUINFO_INSTR_COUNT];
+    DisassembledInstr instr[CPUINFO_INSTR_COUNT];
 
     // Disassembled instructions from the log buffer
-    DisInstr loggedInstr[CPUINFO_INSTR_COUNT];
+    DisassembledInstr loggedInstr[CPUINFO_INSTR_COUNT];
 }
 CPUInfo;
 

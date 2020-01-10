@@ -226,12 +226,12 @@ CPU::getInfo()
     return result;
 }
 
-DisInstr
+DisassembledInstr
 CPU::getInstrInfo(long index)
 {
     assert(index < CPUINFO_INSTR_COUNT);
     
-    DisInstr result;
+    DisassembledInstr result;
     
     pthread_mutex_lock(&lock);
     result = info.instr[index];
@@ -240,12 +240,12 @@ CPU::getInstrInfo(long index)
     return result;
 }
 
-DisInstr
+DisassembledInstr
 CPU::getLoggedInstrInfo(long index)
 {
     assert(index < CPUINFO_INSTR_COUNT);
     
-    DisInstr result;
+    DisassembledInstr result;
     
     pthread_mutex_lock(&lock);
     result = info.loggedInstr[index];
@@ -285,48 +285,4 @@ CPU::didSaveToBuffer(uint8_t *buffer)
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
-}
-
-void
-CPU::disassemble(uint32_t addr, DisInstr &result)
-{
-    result.bytes = moiracpu.disassemble(addr, result.instr);
-    moiracpu.disassembleWord(addr, result.addr);
-    moiracpu.disassembleMemory(addr, result.bytes / 2, result.data);
-    result.sr[0] = 0;
-}
-
-void
-CPU::disassemble(RecInstr recInstr, DisInstr &result)
-{
-    uint32_t pc = recInstr.pc;
-    uint16_t sr = recInstr.sr;
-
-    disassemble(pc, result);
-    moiracpu.disassembleSR(sr, result.sr);
-}
-
-void
-CPU::truncateTraceBuffer(unsigned count)
-{
-    for (unsigned i = writePtr; i < writePtr + traceBufferCapacity - count; i++) {
-        traceBuffer[i % traceBufferCapacity].pc = UINT32_MAX; // mark element as unsed
-    }
-}
-
-void
-CPU::recordInstruction()
-{
-    RecInstr instr;
-    
-    // Setup record
-    instr.pc = getPC();
-    instr.sr = getSR();
-
-    // Store record
-    assert(writePtr < traceBufferCapacity);
-    traceBuffer[writePtr] = instr;
-
-    // Advance write pointer
-    writePtr = (writePtr + 1) % traceBufferCapacity;
 }

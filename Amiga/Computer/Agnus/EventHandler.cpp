@@ -16,7 +16,7 @@ Agnus::inspectEvents()
     pthread_mutex_lock(&lock);
     
     eventInfo.cpuClock = cpu.getClockInMasterCycles();
-    eventInfo.cpuCycles = cpu.cycles();
+    eventInfo.cpuCycles = cpu.getCpuClock();
     eventInfo.dmaClock = clock;
     eventInfo.ciaAClock = ciaa.clock;
     eventInfo.ciaBClock  = ciab.clock;

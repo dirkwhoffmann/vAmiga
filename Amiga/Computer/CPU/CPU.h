@@ -13,10 +13,6 @@
 #include "AmigaComponent.h"
 #include "Moira.h"
 
-//
-// CPU wrapper class
-//
-
 class CPU : public AmigaComponent {
 
     CPUInfo info;
@@ -25,30 +21,10 @@ public:
 
     moira::Moira moiracpu;
 
-
-    //
-    // Debuging tools
-    //
-
-public:
-    
-    // A buffer recording all recently executed instructions
-    static const size_t traceBufferCapacity = 256;
-    RecInstr traceBuffer[traceBufferCapacity];
-    
-    // The trace buffer write pointer (DEPRECATED)
-    int writePtr = 0;
-
-    // Logging counter
-    // long logCnt = 0;
-
-
     //
     // Constructing and destructing
     //
-    
-public:
-    
+
     CPU(Amiga& ref);
     ~CPU();
 
@@ -92,8 +68,8 @@ public:
 
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo();
-    DisInstr getInstrInfo(long nr);
-    DisInstr getLoggedInstrInfo(long nr);
+    DisassembledInstr getInstrInfo(long nr);
+    DisassembledInstr getLoggedInstrInfo(long nr);
 
 
     //
@@ -110,7 +86,7 @@ public:
     Cycle getClockInMasterCycles() { return CPU_CYCLES(moiracpu.getClock()); }
 
     // Returns the clock in CPU cycles
-    CPUCycle cycles() { return moiracpu.getClock(); }
+    CPUCycle getCpuClock() { return moiracpu.getClock(); }
 
     //
     // Querying registers and instructions
@@ -125,37 +101,8 @@ public:
     uint16_t getSR() { return moiracpu.getSR(); }
     
     // Returns the current value of the instruction register.
-    uint32_t getIR() { return moiracpu.getIRD(); }
+    uint32_t getIRD() { return moiracpu.getIRD(); }
 
- 
-
-    //
-    // Running the disassembler
-    //
-
-    int disassemble(uint32_t addr, char *str);
-    void disassemble(uint32_t addr, DisInstr &result);
-    void disassemble(uint32_t addr, uint16_t sr, DisInstr &result);
-    void disassemble(RecInstr instr, DisInstr &result);
-
-    //
-    // Tracing the program execution
-    //
-    
-    // Removes all elements from the trace buffer except the 'count' most recent ones.
-    void truncateTraceBuffer(unsigned count);
-    
-    // Clears the trace buffer.
-    void clearTraceBuffer() { truncateTraceBuffer(0); }
-
-    // Records an instruction.
-    void recordInstruction();
-    
-
-    //
-    // Running the device
-    //
-    
 public:
 
     // Changes the interrupt level

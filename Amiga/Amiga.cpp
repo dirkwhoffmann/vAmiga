@@ -119,12 +119,12 @@ Amiga::setDebugMode(bool enable)
     if ((debugMode = enable)) {
         
         debug("Enabling debug mode\n");
-        setControlFlags(RL_ENABLE_TRACING);
+        cpu.moiracpu.debugger.enableLogging();
 
     } else {
 
         debug("Disabling debug mode\n");
-        clearControlFlags(RL_ENABLE_TRACING);
+        cpu.moiracpu.debugger.disableLogging();
     }
 }
 
@@ -945,10 +945,8 @@ Amiga::runLoop()
     
     // Enable or disable debugging features
     if (debugMode) {
-        setControlFlags(RL_DEBUG);
         cpu.moiracpu.debugger.enableLogging();
     } else {
-        clearControlFlags(RL_DEBUG);
         cpu.moiracpu.debugger.disableLogging();
     }
     agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
@@ -976,11 +974,6 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_INSPECT) {
                 inspect();
                 clearControlFlags(RL_INSPECT);
-            }
-
-            // Are we requested to record the execution?
-            if (runLoopCtrl & RL_ENABLE_TRACING) {
-                cpu.recordInstruction();
             }
 
             // Did we reach a breakpoint?

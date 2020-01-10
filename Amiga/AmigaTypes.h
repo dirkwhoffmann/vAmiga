@@ -56,14 +56,11 @@ inline bool isConfigOption(long value)
 
 typedef enum
 {
-    RL_SNAPSHOT           = 0b0000001,
-    RL_INSPECT            = 0b0000010,
-    RL_ENABLE_TRACING     = 0b0000100,
-    RL_BREAKPOINT_REACHED = 0b0001000,
-    RL_WATCHPOINT_REACHED = 0b0010000,
-    RL_STOP               = 0b0100000,
-    
-    RL_DEBUG              = 0b0000100
+    RL_SNAPSHOT           = 0b00001,
+    RL_INSPECT            = 0b00010,
+    RL_BREAKPOINT_REACHED = 0b00100,
+    RL_WATCHPOINT_REACHED = 0b01000,
+    RL_STOP               = 0b10000
 }
 RunLoopControlFlag;
 
