@@ -15,7 +15,7 @@ Agnus::inspectEvents()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    eventInfo.cpuClock = cpu.getClockInMasterCycles();
+    eventInfo.cpuClock = cpu.getMasterClock();
     eventInfo.cpuCycles = cpu.getCpuClock();
     eventInfo.dmaClock = clock;
     eventInfo.ciaAClock = ciaa.clock;

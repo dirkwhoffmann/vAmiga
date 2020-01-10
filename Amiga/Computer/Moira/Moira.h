@@ -147,25 +147,25 @@ public:
 protected:
 
     // Reads a byte or a word from memory
-    virtual u8 read8(u32 addr);
-    virtual u16 read16(u32 addr);
+    virtual u8 read8(u32 addr) = 0;
+    virtual u16 read16(u32 addr) = 0;
 
     // Special variants used by the reset routine and the disassembler
-    virtual u16 read16OnReset(u32 addr);
-    virtual u16 read16Dasm(u32 addr);
+    virtual u16 read16OnReset(u32 addr) = 0;
+    virtual u16 read16Dasm(u32 addr) = 0;
 
     // Writes a byte or word into memory
-    virtual void write8  (u32 addr, u8  val);
-    virtual void write16 (u32 addr, u16 val);
+    virtual void write8  (u32 addr, u8  val) = 0;
+    virtual void write16 (u32 addr, u16 val) = 0;
 
     // Provides the interrupt level in IRQ_USER mode
     virtual int readIrqUserVector(u8 level) { return 0; }
 
     // Called when a breakpoint is reached
-    virtual void breakpointReached(u32 addr);
+    virtual void breakpointReached(u32 addr) { };
 
     // Called when a breakpoint is reached
-    virtual void watchpointReached(u32 addr);
+    virtual void watchpointReached(u32 addr) { };
 
     
     //
@@ -180,7 +180,7 @@ public:
 protected:
 
     // Advances the clock (called before each memory access)
-    virtual void sync(int cycles);
+    virtual void sync(int cycles) { clock += cycles; }
 
 
     //

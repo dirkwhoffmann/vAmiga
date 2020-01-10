@@ -69,7 +69,7 @@ class Agnus : public AmigaComponent {
     EventInfo eventInfo;
 
     // Statistics shown in the GUI monitor panel
-     AgnusStats stats;
+    AgnusStats stats;
 
 
     //
@@ -529,6 +529,9 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker
+
+        & config.revision;
     }
 
     template <class T>

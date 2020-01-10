@@ -15,6 +15,7 @@
 
 class CPU : public AmigaComponent, public moira::Moira {
 
+    // Information shown in the GUI inspector panel
     CPUInfo info;
 
 public:
@@ -24,7 +25,6 @@ public:
     //
 
     CPU(Amiga& ref);
-    ~CPU();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -34,13 +34,30 @@ public:
     template <class T>
     void applyToResetItems(T& worker)
     {
-        /*
         worker
 
-        & clock;
-        */
-    }
+        & flags
+        & clock
 
+        & reg.pc
+        & reg.sr.t
+        & reg.sr.s
+        & reg.sr.x
+        & reg.sr.n
+        & reg.sr.z
+        & reg.sr.v
+        & reg.sr.c
+        & reg.sr.ipl
+        & reg.r
+        & reg.usp
+        & reg.ssp
+        & reg.ipl
+
+        & queue.irc
+        & queue.ird
+
+        & ipl;
+    }
 
     //
     // Methods from HardwareComponent
@@ -63,22 +80,40 @@ private:
     size_t didSaveToBuffer(uint8_t *buffer) override;
 
 public:
-
+    
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo();
     DisassembledInstr getInstrInfo(long nr);
     DisassembledInstr getLoggedInstrInfo(long nr);
 
     //
+    // Methods from Moira
+    //
+
+private:
+
+    void sync(int cycles) override;
+    moira::u8 read8(moira::u32 addr) override;
+    moira::u16 read16(moira::u32 addr) override;
+    moira::u16 read16OnReset(moira::u32 addr) override;
+    moira::u16 read16Dasm(moira::u32 addr) override;
+    void write8 (moira::u32 addr, moira::u8  val) override;
+    void write16 (moira::u32 addr, moira::u16 val) override;
+    int readIrqUserVector(moira::u8 level) override { return 0; }
+    void breakpointReached(moira::u32 addr) override;
+    void watchpointReached(moira::u32 addr) override;
+
+    //
     // Working with the clock
     //
 
-    // The CPU has been emulated up to this cycle
-    Cycle getClockInMasterCycles() { return CPU_CYCLES(getClock()); }
+public:
 
     // Returns the clock in CPU cycles
     CPUCycle getCpuClock() { return getClock(); }
 
+    // Returns the CPU clock measured in master cycles
+    Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
 };
 
 #endif

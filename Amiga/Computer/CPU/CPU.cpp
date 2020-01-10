@@ -17,39 +17,37 @@ Amiga *activeAmiga = NULL;
 // Interface to Moira
 //
 
-namespace moira {
-
 void
-Moira::sync(int cycles)
+CPU::sync(int cycles)
 {
     clock += cycles;
 }
 
-u8
-Moira::read8(u32 addr)
+moira::u8
+CPU::read8(moira::u32 addr)
 {
     assert(activeAmiga != NULL);
     return activeAmiga->mem.peek8(addr);
 }
 
-u16
-Moira::read16(u32 addr)
+moira::u16
+CPU::read16(moira::u32 addr)
 {
      assert(activeAmiga != NULL);
      return activeAmiga->mem.peek16<BUS_CPU>(addr);
 }
 
-u16
-Moira::read16Dasm(u32 addr)
+moira::u16
+CPU::read16Dasm(moira::u32 addr)
 {
     assert(activeAmiga != NULL);
     return activeAmiga->mem.spypeek16(addr);
 }
 
-u16
-Moira::read16OnReset(u32 addr)
+moira::u16
+CPU::read16OnReset(moira::u32 addr)
 {
-    u16 result = 0;
+    moira::u16 result = 0;
 
     if (activeAmiga && activeAmiga->mem.chip) result = read16(addr);
 
@@ -57,49 +55,37 @@ Moira::read16OnReset(u32 addr)
 }
 
 void
-Moira::write8(u32 addr, u8 val)
+CPU::write8(moira::u32 addr, moira::u8 val)
 {
     assert(activeAmiga != NULL);
     activeAmiga->mem.poke8(addr, val);
 }
 
 void
-Moira::write16 (u32 addr, u16 val)
+CPU::write16 (moira::u32 addr, moira::u16 val)
 {
     assert(activeAmiga != NULL);
     activeAmiga->mem.poke16<BUS_CPU>(addr, val);
 }
 
 void
-Moira::breakpointReached(u32 addr)
+CPU::breakpointReached(moira::u32 addr)
 {
     printf("breakpointReached(%x)", addr);
     activeAmiga->setControlFlags(RL_BREAKPOINT_REACHED);
 }
 
 void
-Moira::watchpointReached(u32 addr)
+CPU::watchpointReached(moira::u32 addr)
 {
     printf("watchpointReached(%x)", addr);
     activeAmiga->setControlFlags(RL_WATCHPOINT_REACHED);
 }
 
-}
-
-
-//
-// CPU class
-//
-
 CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("CPU");
     activeAmiga = &ref;
-}
-
-CPU::~CPU()
-{
-    
 }
 
 void

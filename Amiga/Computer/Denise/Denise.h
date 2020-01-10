@@ -264,6 +264,7 @@ public:
     {
         worker
 
+        & config.revision
         & config.emulateSprites
         & config.clxSprSpr
         & config.clxSprPlf
