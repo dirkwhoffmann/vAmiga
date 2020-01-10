@@ -150,9 +150,6 @@ private:
     // Invoked inside execute() to check for a pending interrupt
     void checkForIrq();
 
-    // Invoked inside execute() to check for a pending trace exception
-    void checkForTrace();
-
 
     //
     // Running the disassembler
@@ -265,6 +262,11 @@ public:
 
     u8 getCCR(const StatusRegister &sr);
     u16 getSR(const StatusRegister &sr);
+
+private:
+
+    void setTraceFlag() { reg.sr.t = true; flags |= CPU_TRACE_FLAG; }
+    void clearTraceFlag() { reg.sr.t = false; flags &= ~CPU_TRACE_FLAG; }
 
 protected:
 

@@ -73,7 +73,7 @@ Moira::execAddressError(u32 addr)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     // Write exception information to stack
     sync(8);
@@ -90,7 +90,7 @@ Moira::execUnimplemented(int nr)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
@@ -117,7 +117,7 @@ Moira::execIllegal(u16 opcode)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     // Write exception information to stack
     sync(4);
@@ -131,16 +131,19 @@ Moira::execTraceException()
 {
     u16 status = getSR();
 
+    // Acknowledge
+    flags &= ~CPU_TRACE_EXCEPTION;
+
     // Recover from stop state
     flags &= ~CPU_IS_STOPPED;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status, reg.pc - 2);
+    saveToStackBrief(status, reg.pc);
 
     jumpToVector(9);
 }
@@ -152,7 +155,7 @@ Moira::execTrapException(int nr)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     // Write exception information to stack
     saveToStackBrief(status);
@@ -167,7 +170,7 @@ Moira::execPrivilegeException()
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     reg.pc -= 2;
 
@@ -197,7 +200,7 @@ Moira::execIrqException(int level)
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
-    reg.sr.t = 0;
+    clearTraceFlag();
 
     sync(6);
     reg.sp -= 6;

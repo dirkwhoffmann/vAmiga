@@ -80,7 +80,7 @@ Moira::execute()
 
         // Process pending trace exception (if any)
         if (flags & CPU_TRACE_EXCEPTION) {
-            checkForTrace();
+            execTraceException();
         }
 
         // Check if the T flag is set inside the status register
@@ -133,12 +133,6 @@ Moira::checkForIrq()
         // checking.
         if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
     }
-}
-
-void
-Moira::checkForTrace()
-{
-    execTraceException();
 }
 
 template<Size S> u32
@@ -214,9 +208,7 @@ Moira::setSR(u16 val)
 
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
-
-    reg.sr.t = t;
-    t ? flags |= CPU_TRACE_FLAG : flags &= ~CPU_TRACE_FLAG;
+    t ? setTraceFlag() : clearTraceFlag();
 
     setCCR((u8)val);
     setSupervisorMode(s);
