@@ -183,7 +183,7 @@ Moira::readM(u32 addr)
     }
 
     // Check if a watchpoint is being accessed
-    if (observer.watchpoints.needsCheck && observer.watchpointMatches(addr)) {
+    if (debugger.watchpoints.needsCheck && debugger.watchpointMatches(addr)) {
         watchpointReached(addr);
     }
 
@@ -221,7 +221,7 @@ Moira::writeM(u32 addr, u32 val)
     }
 
     // Check if a watchpoint is being accessed
-    if (observer.watchpoints.needsCheck && observer.watchpointMatches(addr)) {
+    if (debugger.watchpoints.needsCheck && debugger.watchpointMatches(addr)) {
         watchpointReached(addr);
     }
 

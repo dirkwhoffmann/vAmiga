@@ -81,7 +81,11 @@ Moira::execute()
     // Check if the CPU is stopped or halted
     if (flags) {
 
-        if (flags & FLAG_STOP) {
+        if (flags & CPU_LOGGING) {
+            debugger.logInstruction();
+        }
+
+        if (flags & CPU_STOPPED) {
             pollIrq();
             sync(MIMIC_MUSASHI ? 1 : 2);
             return;
@@ -92,7 +96,7 @@ Moira::execute()
     (this->*exec[queue.ird])(queue.ird);
 
     // Check if a breakpoint has been reached
-    if (observer.breakpoints.needsCheck && observer.breakpointMatches(reg.pc)) {
+    if (debugger.breakpoints.needsCheck && debugger.breakpointMatches(reg.pc)) {
          breakpointReached(reg.pc);
      }
 

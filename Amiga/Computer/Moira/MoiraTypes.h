@@ -213,5 +213,42 @@ typedef enum
 }
 IrqMode;
 
+struct StatusRegister {
+
+    bool t;               // Trace flag
+    bool s;               // Supervisor flag
+    bool x;               // Extend flag
+    bool n;               // Negative flag
+    bool z;               // Zero flag
+    bool v;               // Overflow flag
+    bool c;               // Carry flag
+
+    u8 ipl;               // Required Interrupt Priority Level
+};
+
+struct Registers {
+
+    u32 pc;               // Program counter
+
+    union {
+        struct {
+            u32 d[8];     // D0, D1 ... D7
+            u32 a[8];     // A0, A1 ... A7
+        };
+        struct {
+            u32 r[16];    // D0, D1 ... D7, A0, A1 ... A7
+        };
+        struct {
+            u32 _pad[15];
+            u32 sp;       // Visible stack pointer (overlays a[7])
+        };
+    };
+
+    u32 usp;              // User Stack Pointer
+    u32 ssp;              // Supervisor Stack Pointer
+
+    u8 ipl;               // Polled Interrupt Priority Level
+};
+
 }
 #endif

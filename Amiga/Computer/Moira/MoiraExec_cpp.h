@@ -168,7 +168,7 @@ Moira::execIrqException(int level)
     u16 status = getSR();
 
     // Recover from stop state
-    flags &= ~FLAG_STOP;
+    flags &= ~CPU_STOPPED;
 
     // Clear the polled IPL value
     reg.ipl = 0;
@@ -1625,7 +1625,7 @@ Moira::execStop(u16 opcode)
     u16 src = readI<Word>();
 
     setSR(src | (MIMIC_MUSASHI ? 0 : 1 << 13));
-    flags |= FLAG_STOP;
+    flags |= CPU_STOPPED;
 
     pollIrq();
 }

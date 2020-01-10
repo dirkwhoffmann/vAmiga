@@ -12,47 +12,10 @@
 
 #include "MoiraConfig.h"
 #include "MoiraTypes.h"
-#include "MoiraDebug.h"
+#include "MoiraDebugger.h"
 #include "StrWriter.h"
 
 namespace moira {
-
-struct Registers {
-
-    u32 pc;               // Program counter
-
-    union {
-        struct {
-            u32 d[8];     // D0, D1 ... D7
-            u32 a[8];     // A0, A1 ... A7
-        };
-        struct {
-            u32 r[16];    // D0, D1 ... D7, A0, A1 ... A7
-        };
-        struct {
-            u32 _pad[15];
-            u32 sp;       // Visible stack pointer (overlays a[7])
-        };
-    };
-
-    u32 usp;              // User Stack Pointer
-    u32 ssp;              // Supervisor Stack Pointer
-
-    u8 ipl;               // Polled Interrupt Priority Level
-};
-
-struct StatusRegister {
-
-    bool t;               // Trace flag
-    bool s;               // Supervisor flag
-    bool x;               // Extend flag
-    bool n;               // Negative flag
-    bool z;               // Zero flag
-    bool v;               // Overflow flag
-    bool c;               // Carry flag
-
-    u8 ipl;               // Required Interrupt Priority Level
-};
 
 struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
 
@@ -62,9 +25,13 @@ struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
 
 class Moira {
 
+    friend class Debugger;
+
     //
     // Configuration
     //
+
+protected:
 
     // Emulated CPU model (68000 is the only supported model yet)
     CPUModel model = M68000;
@@ -86,10 +53,18 @@ class Moira {
     // Internals
     //
 
+public:
+
+    // Breakpoints, watchpoints, instruction tracing
+    Debugger debugger = Debugger(*this);
+
+protected:
+
     // State flags
     int flags;
-    static const int FLAG_HALT = 1;
-    static const int FLAG_STOP = 2;
+    static const int CPU_HALTED  = 0b001;
+    static const int CPU_STOPPED = 0b010;
+    static const int CPU_LOGGING = 0b100;
 
     // Number of elapsed cycles since powerup
     i64 clock;
@@ -115,11 +90,6 @@ class Moira {
     // Table holding instruction infos
     InstrInfo info[65536];
 
-public:
-    
-    // Address observer managing breakpoints and watchpoints
-    Observer observer = Observer(*this);
-
 
     //
     // Constructing and configuring
@@ -135,7 +105,7 @@ public:
 
 
     //
-    // Running the device
+    // Running the CPU
     //
 
 public:
@@ -145,6 +115,11 @@ public:
 
     // Executes the next instruction
     void execute();
+
+
+    //
+    // Running the disassembler
+    //
 
     // Disassembles a single instruction and returns the instruction size
     int disassemble(u32 addr, char *str);
@@ -166,28 +141,28 @@ public:
     // Interfacing with other components
     //
 
-private:
+protected:
 
     // Reads a byte or a word from memory
-    u8 read8(u32 addr);
-    u16 read16(u32 addr);
+    virtual u8 read8(u32 addr);
+    virtual u16 read16(u32 addr);
 
     // Special variants used by the reset routine and the disassembler
-    u16 read16OnReset(u32 addr);
-    u16 read16Dasm(u32 addr);
+    virtual u16 read16OnReset(u32 addr);
+    virtual u16 read16Dasm(u32 addr);
 
     // Writes a byte or word into memory
-    void write8  (u32 addr, u8  val);
-    void write16 (u32 addr, u16 val);
+    virtual void write8  (u32 addr, u8  val);
+    virtual void write16 (u32 addr, u16 val);
 
     // Provides the interrupt level in IRQ_USER mode
-    int readIrqUserVector(u8 level) { return 0; }
+    virtual int readIrqUserVector(u8 level) { return 0; }
 
     // Called when a breakpoint is reached
-    void breakpointReached(u32 addr);
+    virtual void breakpointReached(u32 addr);
 
     // Called when a breakpoint is reached
-    void watchpointReached(u32 addr);
+    virtual void watchpointReached(u32 addr);
 
     
     //
@@ -199,24 +174,15 @@ public:
     virtual i64 getClock() { return clock; }
     virtual void setClock(i64 val) { clock = val; }
 
-private:
+protected:
 
     // Advances the clock (called before each memory access)
-    void sync(int cycles);
+    virtual void sync(int cycles);
 
 
     //
     // Accessing registers
     //
-
-private:
-
-    template<Size S = Long> u32 readD(int n);
-    template<Size S = Long> u32 readA(int n);
-    template<Size S = Long> u32 readR(int n);
-    template<Size S = Long> void writeD(int n, u32 v);
-    template<Size S = Long> void writeA(int n, u32 v);
-    template<Size S = Long> void writeR(int n, u32 v);
 
 public:
 
@@ -252,6 +218,14 @@ public:
 
     void setSupervisorMode(bool enable);
 
+protected:
+
+    template<Size S = Long> u32 readD(int n);
+    template<Size S = Long> u32 readA(int n);
+    template<Size S = Long> u32 readR(int n);
+    template<Size S = Long> void writeD(int n, u32 v);
+    template<Size S = Long> void writeA(int n, u32 v);
+    template<Size S = Long> void writeR(int n, u32 v);
 
     //
     // Handling interrupts
@@ -270,8 +244,6 @@ private:
     // Selects the IRQ vector to branch to
     int getIrqVector(int level);
 
-
-private:
 
     #include "MoiraInit.h"
     #include "MoiraALU.h"

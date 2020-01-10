@@ -165,8 +165,14 @@ CPU::_inspect()
 
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-        disassemble(pc, info.instr[i]);
-        pc += info.instr[i].bytes;
+
+        // disassemble(pc, info.instr[i]);
+        int bytes = moiracpu.disassemble(pc, info.instr[i].instr);
+        info.instr[i].bytes = bytes;
+        moiracpu.disassembleWord(pc, info.instr[i].addr);
+        moiracpu.disassembleMemory(pc, bytes / 2, info.instr[i].data);
+        info.instr[i].flags[0] = 0;
+        pc += bytes;
     }
 
     // Disassemble the most recent entries in the trace buffer
@@ -175,10 +181,18 @@ CPU::_inspect()
      * be executed next. Because we don't want to show this element yet, we
      * don't dissassemble it.
      */
+    /*
     for (unsigned i = 1; i <= CPUINFO_INSTR_COUNT; i++) {
         unsigned offset = (writePtr + traceBufferCapacity - 1 - i) % traceBufferCapacity;
         RecInstr recInstr = traceBuffer[offset];
         disassemble(recInstr, info.traceInstr[CPUINFO_INSTR_COUNT - i]);
+    }
+    */
+    long count = moiracpu.debugger.loggedInstructions();
+    for (int i = 0; i < count; i++) {
+        moira::Registers reg = moiracpu.debugger.logEntryAbs(i);
+        moiracpu.disassemble(reg.pc, info.traceInstr[i].instr);
+        moiracpu.disassembleSR(0, info.traceInstr[i].flags);
     }
 
     pthread_mutex_unlock(&lock);
@@ -301,25 +315,6 @@ CPU::disassemble(RecInstr recInstr, DisInstr &result)
 
     disassemble(pc, result);
     moiracpu.disassembleSR(sr, result.flags);
-    /*
-    result.flags[0]  = (sr & 0b1000000000000000) ? 'T' : 't';
-    result.flags[1]  = '-';
-    result.flags[2]  = (sr & 0b0010000000000000) ? 'S' : 's';
-    result.flags[3]  = '-';
-    result.flags[4]  = '-';
-    result.flags[5]  = (sr & 0b0000010000000000) ? '1' : '0';
-    result.flags[6]  = (sr & 0b0000001000000000) ? '1' : '0';
-    result.flags[7]  = (sr & 0b0000000100000000) ? '1' : '0';
-    result.flags[8]  = '-';
-    result.flags[9]  = '-';
-    result.flags[10] = '-';
-    result.flags[11] = (sr & 0b0000000000010000) ? 'X' : 'x';
-    result.flags[12] = (sr & 0b0000000000001000) ? 'N' : 'n';
-    result.flags[13] = (sr & 0b0000000000000100) ? 'Z' : 'z';
-    result.flags[14] = (sr & 0b0000000000000010) ? 'V' : 'v';
-    result.flags[15] = (sr & 0b0000000000000001) ? 'C' : 'c';
-    result.flags[16] = 0;
-    */
 }
 
 void

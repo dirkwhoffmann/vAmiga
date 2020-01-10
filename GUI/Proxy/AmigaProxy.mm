@@ -71,95 +71,95 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (NSInteger) numberOfBreakpoints
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.elements();
+    return wrapper->cpu->moiracpu.debugger.breakpoints.elements();
 }
 - (uint32_t) breakpointAddr:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.guardAddr(nr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.guardAddr(nr);
 }
 - (BOOL) breakpointIsEnabled:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.isEnabled(nr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.isEnabled(nr);
 }
 - (BOOL) breakpointIsDisabled:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.isDisabled(nr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.isDisabled(nr);
 }
 - (void) removeBreakpoint:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.remove(nr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.remove(nr);
 }
 - (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val
 {
-    wrapper->cpu->moiracpu.observer.breakpoints.setEnable(nr, val);
+    wrapper->cpu->moiracpu.debugger.breakpoints.setEnable(nr, val);
 }
 - (BOOL) breakpointIsSetAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAt(addr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.isSetAt(addr);
 }
 - (BOOL) breakpointIsSetAndEnabledAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAndEnabledAt(addr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.isSetAndEnabledAt(addr);
 }
 - (BOOL) breakpointIsSetAndDisabledAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.breakpoints.isSetAndDisabledAt(addr);
+    return wrapper->cpu->moiracpu.debugger.breakpoints.isSetAndDisabledAt(addr);
 }
 - (void) breakpointSetEnableAt:(uint32_t)addr value:(BOOL)val
 {
-    wrapper->cpu->moiracpu.observer.breakpoints.setEnableAt(addr, val);
+    wrapper->cpu->moiracpu.debugger.breakpoints.setEnableAt(addr, val);
 }
 - (void) addBreakpointAt:(uint32_t)addr
 {
-    wrapper->cpu->moiracpu.observer.breakpoints.addAt(addr);
+    wrapper->cpu->moiracpu.debugger.breakpoints.addAt(addr);
 }
 - (void) removeBreakpointAt:(uint32_t)addr
 {
-    wrapper->cpu->moiracpu.observer.breakpoints.removeAt(addr);
+    wrapper->cpu->moiracpu.debugger.breakpoints.removeAt(addr);
 }
 - (NSInteger) numberOfWatchpoints
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.elements();
+    return wrapper->cpu->moiracpu.debugger.watchpoints.elements();
 }
 - (uint32_t) watchpointAddr:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.guardAddr(nr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.guardAddr(nr);
 }
 - (BOOL) watchpointIsEnabled:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isEnabled(nr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.isEnabled(nr);
 }
 - (BOOL) watchpointIsDisabled:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isDisabled(nr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.isDisabled(nr);
 }
 - (void) removeWatchpoint:(NSInteger)nr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.remove(nr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.remove(nr);
 }
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val
 {
-    wrapper->cpu->moiracpu.observer.watchpoints.setEnable(nr, val);
+    wrapper->cpu->moiracpu.debugger.watchpoints.setEnable(nr, val);
 }
 - (BOOL) watchpointIsSetAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAt(addr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.isSetAt(addr);
 }
 - (BOOL) watchpointIsSetAndEnabledAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndEnabledAt(addr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.isSetAndEnabledAt(addr);
 }
 - (BOOL) watchpointIsSetAndDisabledAt:(uint32_t)addr
 {
-    return wrapper->cpu->moiracpu.observer.watchpoints.isSetAndDisabledAt(addr);
+    return wrapper->cpu->moiracpu.debugger.watchpoints.isSetAndDisabledAt(addr);
 }
 - (void) addWatchpointAt:(uint32_t)addr
 {
-    wrapper->cpu->moiracpu.observer.watchpoints.addAt(addr);
+    wrapper->cpu->moiracpu.debugger.watchpoints.addAt(addr);
 }
 - (void) removeWatchpointAt:(uint32_t)addr
 {
-    wrapper->cpu->moiracpu.observer.watchpoints.removeAt(addr);
+    wrapper->cpu->moiracpu.debugger.watchpoints.removeAt(addr);
 }
 - (NSInteger) traceBufferCapacity
 {

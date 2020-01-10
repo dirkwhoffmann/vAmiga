@@ -520,7 +520,7 @@ Amiga::_powerOn()
     runLoopCtrl = 0;
     
     // For debugging, we start in debug mode and set a breakpoint
-    debugMode = true;
+    // debugMode = true;
     // cpu.bpManager.setBreakpointAt(0xFC30C2);
     // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
     // cpu.bpManager.setBreakpointAt(0x05002E); // Paccer intro cycle count issue
@@ -921,7 +921,7 @@ Amiga::stepInto()
     if (isRunning())
     return;
 
-    cpu.moiracpu.observer.stepInto();
+    cpu.moiracpu.debugger.stepInto();
     run();
 }
 
@@ -931,7 +931,7 @@ Amiga::stepOver()
     if (isRunning())
     return;
     
-    cpu.moiracpu.observer.stepOver();
+    cpu.moiracpu.debugger.stepOver();
     run();
 }
 
@@ -944,7 +944,13 @@ Amiga::runLoop()
     restartTimer();
     
     // Enable or disable debugging features
-    debugMode ? setControlFlags(RL_DEBUG) : clearControlFlags(RL_DEBUG);
+    if (debugMode) {
+        setControlFlags(RL_DEBUG);
+        cpu.moiracpu.debugger.enableLogging();
+    } else {
+        clearControlFlags(RL_DEBUG);
+        cpu.moiracpu.debugger.disableLogging();
+    }
     agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
     
     // Enter the loop

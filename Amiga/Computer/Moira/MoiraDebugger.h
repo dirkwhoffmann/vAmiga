@@ -14,16 +14,16 @@ namespace moira {
 
 struct Guard {
 
-    // Observed memory address
+    // The observed address
     u32 addr;
 
-    // Indicates if this guard is enabled
+    // Disabled guards never trigger
     bool enabled;
 
-    // Hit counter
+    // Counts the number of hits
     long hits;
 
-    // Number of skipped hits before a match is being recognized
+    // Number of skipped hits before a match is signalled
     long skip;
 
 public:
@@ -33,9 +33,9 @@ public:
 
 };
 
-class GuardCollection {
+class Guards {
 
-    friend class Observer;
+    friend class Debugger;
 
     // Capacity of the guards array
     long capacity = 1;
@@ -100,7 +100,7 @@ private:
     bool eval(u32 addr);
 };
 
-class Observer {
+class Debugger {
 
 public:
 
@@ -108,10 +108,10 @@ public:
     class Moira &moira;
 
     // Breakpoint storage
-    GuardCollection breakpoints;
+    Guards breakpoints;
 
     // Watchpoint storage
-    GuardCollection watchpoints;
+    Guards watchpoints;
 
 private:
     
@@ -125,6 +125,12 @@ private:
      */
     u64 softStop = UINT64_MAX - 1;
 
+    // Buffer storing logged instructions
+    Registers logBuffer[LOG_BUFFER_CAPACITY];
+
+    // Logging counter
+    long logCnt = 0;
+
 
     //
     // Constructing and destructing
@@ -132,25 +138,44 @@ private:
 
 public:
 
-    Observer(Moira& ref);
+    Debugger(Moira& ref);
 
     //
-    // Adding and removing breakpoints
+    // Working with breakpoints and watchpoints
     //
 
     // Sets a soft breakpoint that will trigger immediately
     void stepInto();
 
-    // Sets a soft breakpoint to the next instru*ction
+    // Sets a soft breakpoint to the next instruction
     void stepOver();
 
+    // Returns true if a breakpoint hits at the provides address
+    bool breakpointMatches(u32 addr);
 
-    //
-    // Checking breakpoints
-    //
-
-    bool breakpointMatches(u32 pc);
+    // Returns true if a watchpoint hits at the provides address
     bool watchpointMatches(u32 addr);
+
+    //
+    // Working with the log buffer
+    //
+
+    // Turns instruction logging on or off
+    void enableLogging();
+    void disableLogging();
+
+    // Returns the number of logged instructions
+    int loggedInstructions();
+
+    // Logs an instruction
+    void logInstruction();
+
+    // Reads an entry from the log buffer
+    Registers logEntry(int n);
+    Registers logEntryAbs(int n);
+
+    // Clears the log buffer
+    void clearLog() { logCnt = 0; }
 };
 
 }

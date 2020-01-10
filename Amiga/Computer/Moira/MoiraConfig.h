@@ -14,6 +14,10 @@
  */
 #define MOIRA_EMULATE_ADDRESS_ERROR false
 
+/* Capacity of the debug logging buffer
+ */
+#define LOG_BUFFER_CAPACITY 256
+
 /* Set to true to run Moira in a special Musashi compatibility mode
  */
 #define MIMIC_MUSASHI false
