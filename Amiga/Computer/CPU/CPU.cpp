@@ -12,7 +12,11 @@
 void
 CPU::sync(int cycles)
 {
+    // Advance the CPU clock
     clock += cycles;
+
+    // Emulate Agnus up to the same cycle
+    agnus.executeUntil(CPU_CYCLES(clock));
 }
 
 moira::u8

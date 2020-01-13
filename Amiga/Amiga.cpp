@@ -956,12 +956,8 @@ Amiga::runLoop()
         
         // Emulate the next CPU instruction
         cpu.execute();
-        Cycle newClock = CPU_CYCLES(cpu.getClock());
 
-        // Emulate Agnus up to the same cycle
-        agnus.executeUntil(newClock);
-        
-        // Check if special action needs to be taken ...
+        // Check if special action needs to be taken
         if (runLoopCtrl) {
             
             // Are we requested to take a snapshot?
