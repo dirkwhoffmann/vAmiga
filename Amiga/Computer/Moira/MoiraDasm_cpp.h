@@ -418,7 +418,9 @@ template<Instr I, Mode M, Size S> void
 Moira::dasmDbcc(StrWriter &str, u32 &addr, u16 op)
 {
     auto src = Dn ( _____________xxx(op) );
-    auto dst = addr + 2 + (i16)dasmRead<Word>(addr);
+    auto dst = addr + 2;
+
+    dst += (i16)dasmRead<Word>(addr);
 
     str << Ins<I>{} << tab << src << ", " << UInt(dst);
 }

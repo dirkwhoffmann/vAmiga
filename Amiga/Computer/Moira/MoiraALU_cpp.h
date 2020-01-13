@@ -119,7 +119,7 @@ Moira::shift(int cnt, u64 data) {
             bool carry = false;
             for (int i = 0; i < cnt; i++) {
                 carry = NBIT<S>(data);
-                data = data << 1 | carry;
+                data = data << 1 | (carry ? 1 : 0);
             }
             reg.sr.c = carry;
             reg.sr.v = 0;
@@ -143,7 +143,7 @@ Moira::shift(int cnt, u64 data) {
             for (int i = 0; i < cnt; i++) {
                 bool extend = carry;
                 carry = NBIT<S>(data);
-                data = data << 1 | extend;
+                data = data << 1 | (extend ? 1 : 0);
             }
 
             reg.sr.x = carry;
@@ -496,6 +496,9 @@ Moira::cond() {
         case BGT: case DBGT: case SGT: return reg.sr.n == reg.sr.v && !reg.sr.z;
         case BLE: case DBLE: case SLE: return reg.sr.n != reg.sr.v || reg.sr.z;
     }
+
+    assert(false);
+    return 0;
 }
 
 template <Instr I> int
@@ -532,6 +535,9 @@ Moira::cyclesMul(u16 data)
             return 2 * mcycles;
         }
     }
+
+    assert(false);
+    return 0;
 }
 
 template <Instr I> int
@@ -589,6 +595,9 @@ Moira::cyclesDiv(u32 op1, u16 op2)
             return 2 * mcycles;
         }
     }
+
+    assert(false);
+    return 0;
 }
 
 template <Instr I> u32
@@ -649,7 +658,7 @@ Moira::divMusashi(u32 op1, u32 op2)
                 reg.sr.n = NBIT<Word>(quotient);
                 reg.sr.v = 0;
                 reg.sr.c = 0;
-                result = (quotient & 0xffff) | remainder << 16;
+                result = (quotient & 0xffff) | (u16)remainder << 16;
 
             } else {
 

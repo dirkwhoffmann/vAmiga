@@ -923,7 +923,11 @@ Moira::execLink(u16 opcode)
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
 
-    push<Long>(readA(ax));
+    if (MIMIC_MUSASHI) {
+        push<Long>(readA(ax) - (ax == 7 ? 4 : 0));
+    } else {
+        push<Long>(readA(ax));
+    }
 
     writeA(ax, reg.sp);
     reg.sp += (i32)disp;
@@ -1595,7 +1599,7 @@ Moira::execRtr(u16 opcode)
     reg.sp += 4;
 
     setPC(newpc);
-    setCCR(newccr);
+    setCCR((u8)newccr);
 
     fullPrefetch<LAST_BUS_CYCLE>();
 }

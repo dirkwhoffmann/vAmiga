@@ -19,7 +19,6 @@ Guard::eval(u32 addr)
 {
     if (this->addr == addr && this->enabled) {
         if (++hits > skip) {
-            hits = 0;
             return true;
         }
     }

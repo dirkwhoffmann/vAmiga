@@ -84,8 +84,8 @@ public:
     bool isDisabled(long nr) { return !isEnabled(nr); }
 
     void setEnable(long nr, bool val);
-    void enable(long nr, bool val) { setEnable(nr, true); }
-    void disable(long nr, bool val) { setEnable(nr, false); }
+    void enable(long nr) { setEnable(nr, true); }
+    void disable(long nr) { setEnable(nr, false); }
 
     void setEnableAt(uint32_t addr, bool val);
     void enableAt(uint32_t addr) { setEnableAt(addr, true); }

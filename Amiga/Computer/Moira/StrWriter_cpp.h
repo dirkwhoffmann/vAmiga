@@ -63,8 +63,8 @@ static const char *instrUpper[]
     "TAS",   "TRAP",  "TRAPV", "TST",   "UNLK"
 };
 
-static int decDigits(u64 value) { return value ? 1 + log10(value) : 1; }
-static int binDigits(u64 value) { return value ? 1 + log2(value) : 1; }
+static int decDigits(u64 value) { return value ? 1 + (int)log10(value) : 1; }
+static int binDigits(u64 value) { return value ? 1 + (int)log2(value) : 1; }
 static int hexDigits(u64 value) { return (binDigits(value) + 3) / 4; }
 
 static void sprintd(char *&s, u64 value, int digits)
