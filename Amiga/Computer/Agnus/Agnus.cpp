@@ -1799,9 +1799,21 @@ Agnus::executeUntil(Cycle targetClock)
 #endif
 
 void
-Agnus::executeUntilBusIsFree() {
+Agnus::executeUntilBusIsFree()
+{
+    DMACycle delay = 0;
 
-    // TODO
+    // Return immediately if the bus is free
+    if (busOwner[pos.h] == BUS_NONE) return;
+
+    // Execute Agnus until the bus is free
+    do {
+        execute();
+        delay++;
+    } while (busOwner[pos.h] != BUS_NONE);
+
+    // Add wait states to the CPU
+    cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
 }
 
 void

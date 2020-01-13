@@ -114,6 +114,9 @@ public:
 
     // Returns the CPU clock measured in master cycles
     Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
+
+    // Delays the CPU by a certain number of cycles
+    void addWaitStates(moira::i64 cycles) { clock += cycles; }
 };
 
 #endif
