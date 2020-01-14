@@ -18,16 +18,40 @@ struct InputDevice {
 
 extension MyController {
 
+    func connectPort1(device: Int) {
+
+        let cpd: ControlPortDevice =
+            device == InputDevice.none ? CPD_NONE :
+                device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+
+        amiga.controlPort1.connect(cpd)
+        inputDevice1 = device
+        UserDefaults.standard.set(device, forKey: Keys.inputDevice1)
+    }
+
+    func connectPort2(device: Int) {
+
+        let cpd: ControlPortDevice =
+            device == InputDevice.none ? CPD_NONE :
+                device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+
+        amiga.controlPort2.connect(cpd)
+        inputDevice2 = device
+        UserDefaults.standard.set(device, forKey: Keys.inputDevice2)
+    }
+
+    /*
     func connectPort(port: Int, device: Int) {
 
         assert(port == 1 || port == 2)
 
         let cpd: ControlPortDevice =
-        device == InputDevice.none ? CPD_NONE :
-        device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+            device == InputDevice.none ? CPD_NONE :
+                device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
 
         port == 1 ? amiga.controlPort1.connect(cpd) : amiga.controlPort2.connect(cpd)
     }
+    */
 
     @IBAction func port1Action(_ sender: NSPopUpButton) {
         
@@ -35,21 +59,17 @@ extension MyController {
     }
  
     func setPort1(_ value: Int) {
-        
-        // Remember selection
-        inputDevice1 = value
-        
+
+        let newDevice1 = value
+        var newDevice2 = inputDevice2
+
         // Avoid double mappings
-        inputDevice2 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice2
+        if newDevice1 == newDevice2 { newDevice2 = InputDevice.none }
 
-        // Connect devices
-        connectPort(port: 1, device: inputDevice1)
-        connectPort(port: 2, device: inputDevice2)
+        // Update ports
+        if newDevice1 != inputDevice1 { connectPort1(device: newDevice1) }
+        if newDevice2 != inputDevice2 { connectPort2(device: newDevice2) }
 
-        // Save the port settings in the user defaults
-        UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
-        UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
-        
         toolbar.validateVisibleItems()
     }
     
@@ -60,20 +80,16 @@ extension MyController {
     
     func setPort2(_ value: Int) {
         
-        // Remember selection
-        inputDevice2 = value
-        
+        var newDevice1 = inputDevice1
+        let newDevice2 = value
+
         // Avoid double mappings
-        inputDevice1 = (inputDevice1 == inputDevice2) ? InputDevice.none : inputDevice1
+        if newDevice1 == newDevice2 { newDevice1 = InputDevice.none }
 
-        // Connect devices
-        connectPort(port: 1, device: inputDevice1)
-        connectPort(port: 2, device: inputDevice2)
+        // Update ports
+        if newDevice1 != inputDevice1 { connectPort1(device: newDevice1) }
+        if newDevice2 != inputDevice2 { connectPort2(device: newDevice2) }
 
-        // Save the port settings in the user defaults
-        UserDefaults.standard.set(inputDevice1, forKey: Keys.inputDevice1)
-        UserDefaults.standard.set(inputDevice2, forKey: Keys.inputDevice2)
-        
         toolbar.validateVisibleItems()
     }
     
