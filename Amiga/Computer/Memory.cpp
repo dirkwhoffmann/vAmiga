@@ -783,6 +783,7 @@ Memory::peek16(uint32_t addr)
 {
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
+        assert(false);
     }
 
     addr &= 0xFFFFFF;

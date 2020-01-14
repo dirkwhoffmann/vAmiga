@@ -1801,16 +1801,18 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntilBusIsFree()
 {
-    DMACycle delay = 0;
+    int16_t posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
 
     // Return immediately if the bus is free
-    if (busOwner[pos.h] == BUS_NONE) return;
+    if (busOwner[posh] == BUS_NONE) return;
 
     // Execute Agnus until the bus is free
+    DMACycle delay = 0;
     do {
+        posh = pos.h;
         execute();
         delay++;
-    } while (busOwner[pos.h] != BUS_NONE);
+    } while (busOwner[posh] != BUS_NONE);
 
     // Add wait states to the CPU
     cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
