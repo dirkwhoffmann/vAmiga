@@ -488,6 +488,9 @@ public:
     // Copy data from SPRDATA and SPRDATB into the serial shift registers
     void armSprite(int x);
 
+    // Checks the z buffer and returns true if a sprite pixel is visible
+    bool spritePixelIsVisible(int hpos);
+
     // Extracts the sprite priorities from BPLCON2 (DEPRECATED)
     void updateSpritePriorities(uint16_t bplcon2);
 

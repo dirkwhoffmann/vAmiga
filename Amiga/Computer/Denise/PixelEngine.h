@@ -243,43 +243,12 @@ public:
      * pipelile. It translates a line of color register indices into a line
      * of RGBA values in GPU format.
      */
-    void colorize(uint8_t *src, int line);
+    void colorize(uint8_t *src, uint16_t *zbuf, int line);
 
 private:
 
     void colorize(uint8_t *src, int *dst, int from, int to);
-    void colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
-
-
-public:
-
-    // Translates bitplane data to RGBA values DEPRECATED
-    // void translateToRGBA(uint8_t *src, int line);
-
-    /* Draws a chunk of pixels.
-     * There are three variants of this function:
-     *
-     *     drawSP:  Draws in single-playfield mode
-     *     drawDP:  Draws in dual-playfield mode
-     *     drawHAM: Draws in HAM mode
-     *
-     * Parameters:
-     *
-     *     src:     Pointer to a buffer storing color indices
-     *     dst:     Pointer to a buffer storing RGBA values
-     *     from:    First pixel to draw
-     *     to:      Last pixel to draw + 1
-     *
-     * Side effects:
-     *
-     *     The source buffer is cleared (0 is written)
-     */
-    /*
-    void drawSPF(uint8_t *src, int *dst, int from, int to);
-    void drawDPF(uint8_t *src, int *dst, int from, int to);
-    template <bool pf2pri> void drawDPF(uint8_t *src, int *dst, int from, int to);
-    void drawHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham);
-    */
+    void colorizeHAM(uint8_t *src, uint16_t *zbuf, int *dst, int from, int to, uint16_t& ham);
 
 };
 

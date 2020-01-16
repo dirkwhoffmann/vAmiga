@@ -359,7 +359,7 @@ PixelEngine::applyRegisterChange(const Change &change)
 }
 
 void
-PixelEngine::colorize(uint8_t *src, int line)
+PixelEngine::colorize(uint8_t *src, uint16_t *zbuf, int line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
     int32_t *dst = frameBuffer->data + line * HPIXELS;
@@ -381,7 +381,7 @@ PixelEngine::colorize(uint8_t *src, int line)
 
         // Colorize a chunk of pixels
         if (ham) {
-            colorizeHAM(src, dst, pixel, change.trigger, hold);
+            colorizeHAM(src, zbuf, dst, pixel, change.trigger, hold);
         } else {
             colorize(src, dst, pixel, change.trigger);
         }
@@ -409,7 +409,7 @@ PixelEngine::colorize(uint8_t *src, int *dst, int from, int to)
 }
 
 void
-PixelEngine::colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham)
+PixelEngine::colorizeHAM(uint8_t *src, uint16_t *zbuf, int *dst, int from, int to, uint16_t& ham)
 {
     for (int i = from; i < to; i++) {
 
@@ -446,6 +446,10 @@ PixelEngine::colorizeHAM(uint8_t *src, int *dst, int from, int to, uint16_t& ham
         }
 
         // Synthesize pixel
-        dst[i] = rgba[ham];
+        if (denise.spritePixelIsVisible(i)) {
+            dst[i] = rgba[colreg[index]];
+        } else {
+            dst[i] = rgba[ham];
+        }
     }
 }

@@ -413,6 +413,19 @@ Denise::armSprite(int x)
     SET_BIT(armed, x);
 }
 
+bool
+Denise::spritePixelIsVisible(int hpos)
+{
+    uint16_t z = zBuffer[hpos];
+
+    if ((z & Z_SP01234567) == 0) return false;
+
+    if (z & (Z_SP0 | Z_SP1)) return ((z & Z_0) == 0);
+    if (z & (Z_SP2 | Z_SP3)) return ((z & (Z_0 | Z_1)) == 0);
+    if (z & (Z_SP4 | Z_SP5)) return ((z & (Z_0 | Z_1 | Z_2)) == 0);
+    return (z & (Z_0 | Z_1 | Z_2 | Z_3)) == 0;
+}
+
 void
 Denise::updateSpritePriorities(uint16_t bplcon2)
 {
@@ -566,7 +579,6 @@ Denise::translate()
             case REG_BPLCON2:
                 bplcon2 = change.value;
                 pri = PF2PRI(bplcon2);
-                // updateSpritePriorities(bplcon2);
                 prio1 = zPF1(bplcon2);
                 prio2 = zPF2(bplcon2);
                 break;
@@ -703,11 +715,6 @@ Denise::drawSpritePair()
     int sprctl2 = initialSprctl[x];
     int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
     int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-    /*
-    if (x == 7) {
-        debug("initialSprctl = %x pos = %x strt1 = %d\n", initialSprctl[x-1], initialSprpos[x-1], strt1);
-    }
-    */
     uint8_t arm = initialArmed;
     bool armed1 = GET_BIT(arm, x-1);
     bool armed2 = GET_BIT(arm, x);
@@ -1120,7 +1127,7 @@ Denise::endOfLine(int vpos)
         if (config.clxPlfPlf) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
-        pixelEngine.colorize(iBuffer, vpos);
+        pixelEngine.colorize(iBuffer, zBuffer, vpos);
 
     } else {
         pixelEngine.endOfVBlankLine();
