@@ -1128,7 +1128,7 @@ Denise::endOfLine(int vpos)
         if (config.clxPlfPlf) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
-        pixelEngine.colorize(iBuffer, mBuffer, zBuffer, vpos);
+        pixelEngine.colorize(vpos);
 
     } else {
         pixelEngine.endOfVBlankLine();

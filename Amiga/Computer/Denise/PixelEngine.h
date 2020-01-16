@@ -243,12 +243,12 @@ public:
      * pipelile. It translates a line of color register indices into a line
      * of RGBA values in GPU format.
      */
-    void colorize(uint8_t *ibuf, uint8_t *mbuf, uint16_t *zbuf, int line);
+    void colorize(int line);
 
 private:
 
-    void colorize(uint8_t *mbuf, int *dst, int from, int to);
-    void colorizeHAM(uint8_t *ibuf, uint8_t *mbuf, uint16_t *zbuf, int *dst, int from, int to, uint16_t& ham);
+    void colorize(int *dst, int from, int to);
+    void colorizeHAM(int *dst, int from, int to, uint16_t& ham);
 
 };
 

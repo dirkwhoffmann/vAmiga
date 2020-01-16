@@ -16,6 +16,8 @@
 
 class Denise : public AmigaComponent {
 
+    friend class PixelEngine;
+    
     // The current configuration
     DeniseConfig config;
 
@@ -181,7 +183,7 @@ private:
     // Rasterline data
     //
 
-    /* Three important buffers are involved in the generation of pixel data:
+    /* Four important buffers are involved in the generation of pixel data:
      *
      * bBuffer: The bitplane data buffer
      *
@@ -194,8 +196,13 @@ private:
      * At the end of each rasterline, Denise translates the fetched bitplane
      * data to color register indices. In single-playfield mode, this is a
      * one-to-one-mapping. In dual-playfield mode, the bitplane data has to
-     * be split into two color indices and the right one has to be choosen
-     * according to the playfield priority bit.
+     * be split into two color indices. Only one of the is kept depending on
+     * the playfield priority bit.
+     *
+     * mBuffer: The multiplexed color index buffer
+     *
+     * This buffer contains the data from the iBuffer, multiplexed with the
+     * color index data coming from the sprite synthesizer.
      *
      * zBuffer: The pixel depth buffer
      *
@@ -226,7 +233,6 @@ private:
      */
     uint8_t bBuffer[HPIXELS + (4 * 16) + 6];
     uint8_t iBuffer[HPIXELS + (4 * 16) + 6];
-    // EXPERIMENTAL (iBuffer multiplexed with sprite data)
     uint8_t mBuffer[HPIXELS + (4 * 16) + 6];
     uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
 
