@@ -8,8 +8,17 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
-        
+
     func refreshDenise(everything: Bool, inspect: Bool = false) {
+
+        lockParent()
+        if let amiga = parent?.amiga {
+            refreshDenise(amiga, everything, inspect: inspect)
+        }
+        unlockParent()
+    }
+
+    func refreshDenise(_ amiga: AmigaProxy, _ everything: Bool, inspect: Bool = false) {
         
         guard let denise = amigaProxy?.denise else { return }
 

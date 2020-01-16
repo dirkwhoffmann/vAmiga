@@ -37,22 +37,26 @@ struct MemColors {
 }
 
 extension Inspector {
-    
+
     func refreshMemory(everything: Bool) {
-        
-        // track("Refreshing memory inspector tab")
-        
+
+        lockParent()
+        if let amiga = parent?.amiga { refreshMemory(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshMemory(_ amiga: AmigaProxy, _ everything: Bool) {
+
         if everything {
-            refreshMemoryLayout()
+            refreshMemoryLayout(amiga)
             memBankTableView.refresh()
         }
-        
         memTableView.refresh()
     }
     
-    func refreshMemoryLayout() {
+    func refreshMemoryLayout(_ amiga: AmigaProxy) {
 
-        guard let config = amigaProxy?.config() else { return }
+        let config = amiga.config()
 
         let size = NSSize(width: 16, height: 16)
         memLayoutButton.image   = memLayoutImage
@@ -83,9 +87,7 @@ extension Inspector {
     
     var memLayoutImage: NSImage? {
 
-        track("Computing layout image")
-
-        guard let memory = amigaProxy?.mem else { return nil }
+        guard let memory = parent?.amiga.mem else { return nil }
 
         // Create image representation in memory
         let size = CGSize.init(width: 256, height: 16)
@@ -129,8 +131,6 @@ extension Inspector {
         // Create image
         let image = NSImage.make(data: mask, rect: size)
         let resizedImage = image?.resizeSharp(width: 512, height: 16)
-        // resizedImage?.makeGlossy()
-        // return resizedImage?.roundCorners(withRadius: 4)
         return resizedImage
     }
 
@@ -138,7 +138,7 @@ extension Inspector {
 
         for bank in 0...255 {
 
-            if amigaProxy?.mem.memSrc(bank << 16) == src {
+            if parent?.amiga.mem.memSrc(bank << 16) == src {
                 setBank(bank)
                 return
             }
@@ -150,7 +150,7 @@ extension Inspector {
         if value >= 0 && value <= 0xFF {
             
             bank = value
-            memSrc = amigaProxy?.mem.memSrc(bank << 16) ?? MEM_UNMAPPED
+            memSrc = parent?.amiga.mem.memSrc(bank << 16) ?? MEM_UNMAPPED
             track("Switching to bank \(value)")
             memLayoutSlider.integerValue = bank
             memTableView.scrollRowToVisible(0)

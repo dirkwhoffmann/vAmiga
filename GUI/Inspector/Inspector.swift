@@ -408,16 +408,28 @@ class Inspector: NSWindowController {
 
     @IBOutlet weak var evTableView: EventTableView!
 
-    var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
-    
+    // The document this inspector is bound to
+    var parent: MyController?
+
+    // Access lock for variable parent
+    let lock = NSLock()
+    func lockParent() { lock.lock() }
+    func unlockParent() { lock.unlock() }
+
+    // Timer for triggering continous update
     var timer: Timer?
 
+    // Used to determine the items that should be refreshed
     var refreshCounter = 0
 
+    var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
+
     // Factory method
-    static func make() -> Inspector? {
-        
-        return Inspector.init(windowNibName: "Inspector")
+    static func make(parent: MyController) -> Inspector? {
+
+        let inspector = Inspector.init(windowNibName: "Inspector")
+        inspector.parent = parent
+        return inspector
     }
     
     override func awakeFromNib() {
@@ -439,17 +451,20 @@ class Inspector: NSWindowController {
 
         track()
         super.showWindow(self)
-        amigaProxy?.enableDebugging()
+        parent?.amiga.enableDebugging()
         updateInspectionTarget()
         refresh(everything: true)
         
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
-            if amigaProxy?.isRunning() == true {
-                self.refresh(everything: false)
+
+            self.lockParent()
+            if let amiga = self.parent?.amiga {
+                if amiga.isRunning() { self.refresh(amiga, false) }
             }
+            self.unlockParent()
         }
     }
-    
+
     // Assigns a number formatter to a control
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
         
@@ -460,26 +475,35 @@ class Inspector: NSWindowController {
 
     func updateInspectionTarget() {
 
+        lockParent()
+
         if let id = debugPanel.selectedTabViewItem?.label {
 
             switch id {
 
-            case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
-            case "CIA":    amigaProxy?.setInspectionTarget(INS_CIA)
-            case "Memory": amigaProxy?.setInspectionTarget(INS_MEM)
-            case "Agnus":  amigaProxy?.setInspectionTarget(INS_AGNUS)
-            case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
-            case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
-            case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)
-            case "Ports":  amigaProxy?.setInspectionTarget(INS_PORTS)
-            case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
+            case "CPU":    parent?.amiga.setInspectionTarget(INS_CPU)
+            case "CIA":    parent?.amiga.setInspectionTarget(INS_CIA)
+            case "Memory": parent?.amiga.setInspectionTarget(INS_MEM)
+            case "Agnus":  parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Copper": parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Denise": parent?.amiga.setInspectionTarget(INS_DENISE)
+            case "Paula":  parent?.amiga.setInspectionTarget(INS_PAULA)
+            case "Ports":  parent?.amiga.setInspectionTarget(INS_PORTS)
+            case "Events": parent?.amiga.setInspectionTarget(INS_EVENTS)
             default:       break
             }
         }
+        unlockParent()
     }
 
-    // Updates the currently shown panel
     func refresh(everything: Bool) {
+
+        lockParent()
+        if let amiga = parent?.amiga { refresh(amiga, everything) }
+        unlockParent()
+    }
+
+    func refresh(_ amiga: AmigaProxy, _ everything: Bool) {
         
         if window?.isVisible == false { return }
         
@@ -487,15 +511,15 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU": refreshCPU(everything: everything)
-            case "CIA": refreshCIA(everything: everything)
-            case "Memory": refreshMemory(everything: everything)
-            case "Agnus": refreshAgnus(everything: everything)
-            case "Copper": refreshCopper(everything: everything)
-            case "Denise": refreshDenise(everything: everything)
-            case "Paula": refreshPaula(everything: everything)
-            case "Ports": refreshPorts(everything: everything)
-            case "Events": refreshEvents(everything: everything)
+            case "CPU": refreshCPU(amiga, everything)
+            case "CIA": refreshCIA(amiga, everything)
+            case "Memory": refreshMemory(amiga, everything)
+            case "Agnus": refreshAgnus(amiga, everything)
+            case "Copper": refreshCopper(amiga, everything)
+            case "Denise": refreshDenise(amiga, everything)
+            case "Paula": refreshPaula(amiga, everything)
+            case "Ports": refreshPorts(amiga, everything)
+            case "Events": refreshEvents(amiga, everything)
             default: break
             }
 
@@ -507,11 +531,15 @@ class Inspector: NSWindowController {
 extension Inspector: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
-        
+
+        lockParent()
+
         track("Closing inspector")
         timer?.invalidate()
-        amigaProxy?.disableDebugging()
-        amigaProxy?.clearInspectionTarget()
+        parent?.amiga.disableDebugging()
+        parent?.amiga.clearInspectionTarget()
+
+        unlockParent()
     }
 }
 
@@ -521,22 +549,6 @@ extension Inspector: NSTabViewDelegate {
         
         track()
         updateInspectionTarget()
-
-        /*
-        switch tabViewItem?.label {
-            
-        case "CPU":    amigaProxy?.setInspectionTarget(INS_CPU)
-        case "CIA":    amigaProxy?.setInspectionTarget(INS_CIA)
-        case "Memory": amigaProxy?.setInspectionTarget(INS_MEM)
-        case "Agnus":  amigaProxy?.setInspectionTarget(INS_AGNUS)
-        case "Copper": amigaProxy?.setInspectionTarget(INS_AGNUS)
-        case "Denise": amigaProxy?.setInspectionTarget(INS_DENISE)
-        case "Paula":  amigaProxy?.setInspectionTarget(INS_PAULA)
-        case "Ports":  amigaProxy?.setInspectionTarget(INS_PORTS)
-        case "Events": amigaProxy?.setInspectionTarget(INS_EVENTS)
-        default:       break
-        }
-        */
 
         refresh(everything: true)
     }

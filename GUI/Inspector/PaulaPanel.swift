@@ -8,16 +8,21 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
-    
+
     func refreshPaula(everything: Bool) {
         
-        guard let paula = amigaProxy?.paula else { return }
-        let info = paula.getInfo()
+        lockParent()
+        if let amiga = parent?.amiga { refreshPaula(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshPaula(_ amiga: AmigaProxy, _ everything: Bool) {
+        
+        let paula   = amiga.paula!
+        let info    = paula.getInfo()
         let audInfo = paula.getAudioInfo()
         let dskInfo = paula.getDiskControllerInfo()
-        
-        // track("Refreshing Paula inspector tab")
-        
+
         if everything {
 
             let elements = [ paulaIntena: fmt16,

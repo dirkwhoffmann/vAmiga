@@ -8,12 +8,18 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
-    
+
     func refreshCPU(everything: Bool) {
-        
-        guard let amiga = amigaProxy else { return }
+
+        lockParent()
+        if let amiga = parent?.amiga { refreshCPU(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshCPU(_ amiga: AmigaProxy, _ everything: Bool) {
+
         let info = amiga.cpu.getInfo()
-        
+
         if everything {
 
             let elements = [ cpuPC: fmt32,
@@ -28,9 +34,9 @@ extension Inspector {
 
                              cpuUSP: fmt32, cpuSSP: fmt32 ]
 
-             for (c, f) in elements { assignFormatter(f, c!) }
-            
-            if amiga.isRunning() {
+            for (c, f) in elements { assignFormatter(f, c!) }
+
+            if parent!.amiga.isRunning() {
                 cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
                 cpuStepIntoButton.isEnabled = false
                 cpuStepOverButton.isEnabled = false
@@ -66,12 +72,12 @@ extension Inspector {
         cpuA5.integerValue = Int(info.a.5)
         cpuA6.integerValue = Int(info.a.6)
         cpuA7.integerValue = Int(info.a.7)
-        
+
         cpuUSP.integerValue = Int(info.usp)
         cpuSSP.integerValue = Int(info.ssp)
 
         let sr = Int(info.sr)
-        
+
         cpuT.state  = (sr & 0b1000000000000000 != 0) ? .on : .off
         cpuS.state  = (sr & 0b0010000000000000 != 0) ? .on : .off
         cpuI2.state = (sr & 0b0000010000000000 != 0) ? .on : .off
@@ -88,25 +94,25 @@ extension Inspector {
         breakTableView.refresh(everything: everything)
         watchTableView.refresh(everything: everything)
     }
-    
+
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
-        
-        myController?.stopAndGoAction(sender)
+
+        parent?.stopAndGoAction(sender)
     }
     
     @IBAction func cpuStepIntoAction(_ sender: NSButton!) {
         
-         myController?.stepIntoAction(sender)
+        parent?.stepIntoAction(sender)
     }
     
     @IBAction func cpuStepOverAction(_ sender: NSButton!) {
         
-         myController?.stepOverAction(sender)
+        parent?.stepOverAction(sender)
     }
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
 
-        amigaProxy?.cpu.clearLog()
+        parent?.amiga.cpu.clearLog()
         traceTableView.refresh()
     }
     

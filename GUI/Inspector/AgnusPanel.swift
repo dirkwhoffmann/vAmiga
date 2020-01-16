@@ -10,9 +10,15 @@
 extension Inspector {
     
     func refreshAgnus(everything: Bool) {
-        
-        guard let dma = amigaProxy?.agnus else { return }
-        let info = dma.getInfo()
+
+        lockParent()
+        if let amiga = parent?.amiga { refreshAgnus(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshAgnus(_ amiga: AmigaProxy, _ everything: Bool) {
+
+        let info = amiga.agnus.getInfo()
         
         if everything {
 

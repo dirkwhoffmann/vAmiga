@@ -8,11 +8,17 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
-    
+
     func refreshCopper(everything: Bool) {
         
-        guard let dma = amigaProxy?.agnus else { return }
-        let info = dma.getCopperInfo()
+        lockParent()
+        if let amiga = parent?.amiga { refreshCopper(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshCopper(_ amiga: AmigaProxy, _ everything: Bool) {
+        
+        let info = amiga.agnus.getCopperInfo()
         
         if everything {
 

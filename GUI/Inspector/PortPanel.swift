@@ -15,13 +15,17 @@ extension Inspector {
 
     func refreshPorts(everything: Bool) {
 
-        guard
-            let controller = myController,
-            let port1Info = amigaProxy?.controlPort1.getInfo(),
-            let port2Info = amigaProxy?.controlPort2.getInfo(),
-            let serialInfo = amigaProxy?.serialPort.getInfo(),
-            let uartInfo = amigaProxy?.paula.getUARTInfo()
-            else { return }
+          lockParent()
+          if let amiga = parent?.amiga { refreshPorts(amiga, everything) }
+          unlockParent()
+      }
+
+    func refreshPorts(_ amiga: AmigaProxy, _ everything: Bool) {
+
+        let port1Info  = amiga.controlPort1.getInfo()
+        let port2Info  = amiga.controlPort2.getInfo()
+        let serialInfo = amiga.serialPort.getInfo()
+        let uartInfo   = amiga.paula.getUARTInfo()
 
         if everything {
 
@@ -69,30 +73,30 @@ extension Inspector {
         // Logging windows
         if refreshCounter % 2 == 0 {
 
-            let serialInSize = controller.serialIn.count
+            let serialInSize = parent!.serialIn.count
 
             // Truncate logging info if it has become too large
             if serialInSize > 8192 {
-                controller.serialIn = "...\n" + controller.serialIn.dropFirst( serialInSize - 8000)
+                parent!.serialIn = "...\n" + parent!.serialIn.dropFirst( serialInSize - 8000)
             }
 
             // Update text view if necessary
             if poSerialIn.string.count != serialInSize {
-                poSerialIn.string = controller.serialIn
+                poSerialIn.string = parent!.serialIn
                 poSerialIn.scrollToEndOfDocument(nil)
                 poSerialIn.font = serDatFont
             }
 
-            let serialOutSize = controller.serialOut.count
+            let serialOutSize = parent!.serialOut.count
 
             // Truncate logging info if it has become too large
             if serialOutSize > 8192 {
-                controller.serialOut = "...\n" + controller.serialOut.dropFirst( serialOutSize - 8000)
+                parent!.serialOut = "...\n" + parent!.serialOut.dropFirst( serialOutSize - 8000)
             }
 
             // Update text view if necessary
             if poSerialOut.string.count != serialOutSize {
-                poSerialOut.string = controller.serialOut
+                poSerialOut.string = parent!.serialOut
                 poSerialOut.scrollToEndOfDocument(nil)
                 poSerialOut.font = serDatFont
             }

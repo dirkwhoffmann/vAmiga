@@ -11,13 +11,19 @@ class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
 
-    var cpu = amigaProxy?.cpu
-    
+    enum BreakpointType {
+        case none
+        case enabled
+        case disabled
+    }
+
     // Display caches
     var addrInRow: [Int: UInt32] = [:]
     var instrInRow: [Int: String] = [:]
     var dataInRow: [Int: String] = [:]
+    var bpInRow: [Int: BreakpointType] = [:]
     var rowForAddr: [UInt32: Int] = [:]
+
     var hex = true
     
     override func awakeFromNib() {
@@ -35,42 +41,64 @@ class InstrTableView: NSTableView {
         let row = sender.clickedRow
         let col = sender.clickedColumn
 
-        if  col == 0, cpu != nil, let addr = addrInRow[row] {
-            
-            if !cpu!.breakpointIsSet(at: addr) {
-                cpu!.addBreakpoint(at: addr)
-            } else if cpu!.breakpointIsSetAndDisabled(at: addr) {
-                cpu!.breakpointSetEnable(at: addr, value: true)
-            } else if cpu!.breakpointIsSetAndEnabled(at: addr) {
-                cpu!.breakpointSetEnable(at: addr, value: false)
-            }
-            inspector.refresh(everything: true)
+        inspector.lockParent()
+        if let amiga = inspector.parent?.amiga {
+            clickAction(amiga, row: row, col: col)
         }
+        inspector.unlockParent()
     }
-    
-    @IBAction func doubleClickAction(_ sender: NSTableView!) {
-        
-        let row = sender.clickedRow
-        let col = sender.clickedColumn
 
-        if col > 0, cpu != nil, let addr = addrInRow[row] {
+    func clickAction(_ amiga: AmigaProxy, row: Int, col: Int) {
+
+        if col == 0, let addr = addrInRow[row] {
+
+            let cpu = amiga.cpu!
+
+            if !cpu.breakpointIsSet(at: addr) {
+                cpu.addBreakpoint(at: addr)
+            } else if cpu.breakpointIsSetAndDisabled(at: addr) {
+                cpu.breakpointSetEnable(at: addr, value: true)
+            } else if cpu.breakpointIsSetAndEnabled(at: addr) {
+                cpu.breakpointSetEnable(at: addr, value: false)
+            }
+            update()
+            reloadData()
+            inspector.breakTableView.reloadData()
+        }
+    }
+
+    @IBAction func doubleClickAction(_ sender: NSTableView!) {
+
+         let row = sender.clickedRow
+         let col = sender.clickedColumn
+
+         inspector.lockParent()
+         if let amiga = inspector.parent?.amiga {
+             doubleClickAction(amiga, row: row, col: col)
+         }
+         inspector.unlockParent()
+     }
+
+    func doubleClickAction(_ amiga: AmigaProxy, row: Int, col: Int) {
+
+        if col == 0, let addr = addrInRow[row] {
+
+            let cpu = amiga.cpu!
             
-            if cpu!.breakpointIsSet(at: addr) {
-                cpu!.removeBreakpoint(at: addr)
+            if cpu.breakpointIsSet(at: addr) {
+                cpu.removeBreakpoint(at: addr)
             } else {
-                cpu!.addBreakpoint(at: addr)
+                cpu.addBreakpoint(at: addr)
             }
             inspector.refresh(everything: true)
         }
     }
-    
-    // Jumps to the instruction the program counter is currently pointing to
+
     func jumpToPC() {
         
-        if let pc = cpu?.getInfo().pc { jumpTo(addr: pc) }
+        if let pc = inspector.parent?.amiga.cpu.getInfo().pc { jumpTo(addr: pc) }
     }
 
-    // Jumps to the specified address
     func jumpTo(addr: UInt32?) {
     
         guard let addr = addr else { return }
@@ -106,18 +134,27 @@ class InstrTableView: NSTableView {
         instrInRow = [:]
         addrInRow = [:]
         dataInRow = [:]
+        bpInRow = [:]
         rowForAddr = [:]
         
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
 
-            if var info = cpu?.getInstrInfo(i) {
+            if let cpu = inspector.parent?.amiga.cpu {
 
-                let bytes = info.bytes
+                var info = cpu.getInstrInfo(i)
+
                 instrInRow[i] = String(cString: &info.instr.0)
                 addrInRow[i] = addr
                 dataInRow[i] = String(cString: &info.data.0)
+                if cpu.breakpointIsSetAndDisabled(at: addr) {
+                    bpInRow[i] = BreakpointType.disabled
+                } else if cpu.breakpointIsSet(at: addr) {
+                    bpInRow[i] = BreakpointType.enabled
+                } else {
+                    bpInRow[i] = BreakpointType.none
+                }
                 rowForAddr[addr] = i
-                addr += UInt32(bytes)
+                addr += UInt32(info.bytes)
             }
         }
         
@@ -125,11 +162,9 @@ class InstrTableView: NSTableView {
     }
     
     func refresh(everything: Bool) {
-    
+
         if everything {
-        
-            cpu = amigaProxy!.cpu
-            
+
             for (c, f) in ["addr": fmt24] {
                 let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
                 if let column = tableColumn(withIdentifier: columnId) {
@@ -151,15 +186,13 @@ extension InstrTableView: NSTableViewDataSource {
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
-        
-        guard let addr = addrInRow[row] else { return nil }
-        
+
         switch tableColumn?.identifier.rawValue {
             
-        case "break" where cpu!.breakpointIsSetAndDisabled(at: addr):
-            return "\u{26AA}" // "⚪" ("\u{2B55}" // "⭕")
-        case "break" where cpu!.breakpointIsSet(at: addr):
+        case "break" where bpInRow[row] == .enabled:
             return "\u{26D4}" // "⛔" ("\u{1F534}" // "🔴")
+        case "break" where bpInRow[row] == .disabled:
+            return "\u{26AA}" // "⚪" ("\u{2B55}" // "⭕")
         case "addr":
             return addrInRow[row]
         case "data":
@@ -177,16 +210,13 @@ extension InstrTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         let cell = cell as? NSTextFieldCell
-        
-        if let addr = addrInRow[row] {
 
-            if cpu!.breakpointIsSetAndDisabled(at: addr) {
-                cell?.textColor = NSColor.disabledControlTextColor
-            } else if cpu!.breakpointIsSet(at: addr) {
-                cell?.textColor = NSColor.systemRed
-            } else {
-                cell?.textColor = NSColor.labelColor
-            }
+        if bpInRow[row] == .enabled {
+            cell?.textColor = NSColor.systemRed
+        } else if bpInRow[row] == .disabled {
+            cell?.textColor = NSColor.disabledControlTextColor
+        } else {
+            cell?.textColor = NSColor.labelColor
         }
     }
 }

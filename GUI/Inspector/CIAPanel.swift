@@ -10,15 +10,21 @@
 extension Inspector {
     
     private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }
-    
+
     func refreshCIA(everything: Bool) {
-        
-        guard let amiga = amigaProxy else { return }
+
+        lockParent()
+        if let amiga = parent?.amiga { refreshCIA(amiga, everything) }
+        unlockParent()
+    }
+
+    func refreshCIA(_ amiga: AmigaProxy, _ everything: Bool) {
+
         let ciaA = selectedCia == 0
         let info = ciaA ? amiga.ciaA.getInfo() : amiga.ciaB.getInfo()
-        
+
         if everything {
-            
+
             // Update port bit labels
             ciaPA7.title = "PA7: " + (ciaA ? "GAME1" : "/DTR")
             ciaPA6.title = "PA6: " + (ciaA ? "GAME0" : "/RTS")
@@ -58,7 +64,7 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
         }
-        
+
         ciaTA.intValue = Int32(info.timerA.count)
         ciaTAlatch.intValue = Int32(info.timerA.latch)
         ciaTArunning.state = info.timerA.running ? .on : .off
@@ -72,7 +78,7 @@ extension Inspector {
         ciaTBtoggle.state = info.timerB.toggle ? .on : .off
         ciaTBpbout.state = info.timerB.pbout ? .on : .off
         ciaTBoneShot.state = info.timerB.oneShot ? .on : .off
-        
+
         ciaPRA.intValue = Int32(info.portA.reg)
         ciaPRAbinary.intValue = Int32(info.portA.reg)
         ciaDDRA.intValue = Int32(info.portA.dir)
@@ -92,7 +98,7 @@ extension Inspector {
         ciaPRBbinary.intValue = Int32(info.portB.reg)
         ciaPRB.intValue = Int32(info.portB.reg)
         ciaDDRB.intValue = Int32(info.portB.dir)
-        
+
         bits = info.portB.port
         ciaPB7.state = (bits & 0b10000000) != 0 ? .on : .off
         ciaPB6.state = (bits & 0b01000000) != 0 ? .on : .off
@@ -102,13 +108,13 @@ extension Inspector {
         ciaPB2.state = (bits & 0b00000100) != 0 ? .on : .off
         ciaPB1.state = (bits & 0b00000010) != 0 ? .on : .off
         ciaPB0.state = (bits & 0b00000001) != 0 ? .on : .off
-   
+
         ciaICR.intValue = Int32(info.icr)
         ciaICRbinary.intValue = Int32(info.icr)
         ciaIMR.intValue = Int32(info.imr)
         ciaIMRbinary.intValue = Int32(info.imr)
         ciaIntLineLow.state = info.intLine ? .off : .on
-        
+
         ciaCntHi.intValue = Int32(info.cnt.value.hi)
         ciaCntMid.intValue = Int32(info.cnt.value.mid)
         ciaCntLo.intValue = Int32(info.cnt.value.lo)
@@ -116,10 +122,10 @@ extension Inspector {
         ciaAlarmHi.intValue = Int32(info.cnt.alarm.hi)
         ciaAlarmMid.intValue = Int32(info.cnt.alarm.mid)
         ciaAlarmLo.intValue = Int32(info.cnt.alarm.lo)
-        
+
         ciaSDR.intValue = Int32(info.sdr)
         ciaSDRbinary.intValue = Int32(info.sdr)
-        
+
         let idlePercentage = Int(info.idlePercentage * 100)
         ciaIdleCycles.stringValue = "\(info.idleCycles) cycles"
         ciaIdleLevel.integerValue = idlePercentage
