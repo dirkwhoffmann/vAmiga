@@ -18,10 +18,18 @@ extension Inspector {
         unlockParent()
     }
 
+    func cacheCIA() {
+
+        let ciaA = selectedCia == 0
+
+        if amiga != nil {
+            ciaInfo = ciaA ? amiga!.ciaA.getInfo() : amiga!.ciaB.getInfo()
+        }
+    }
+
     func refreshCIA(_ amiga: AmigaProxy, _ everything: Bool) {
 
         let ciaA = selectedCia == 0
-        let info = ciaA ? amiga.ciaA.getInfo() : amiga.ciaB.getInfo()
 
         if everything {
 
@@ -64,6 +72,8 @@ extension Inspector {
 
             for (c, f) in elements { assignFormatter(f, c!) }
         }
+
+        guard let info = ciaInfo else { return }
 
         ciaTA.intValue = Int32(info.timerA.count)
         ciaTAlatch.intValue = Int32(info.timerA.latch)

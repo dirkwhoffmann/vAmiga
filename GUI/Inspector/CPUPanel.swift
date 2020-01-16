@@ -9,16 +9,14 @@
 
 extension Inspector {
 
-    func refreshCPU(everything: Bool) {
+    func cacheCPU() {
 
-        lockParent()
-        if let amiga = parent?.amiga { refreshCPU(amiga, everything) }
-        unlockParent()
+        if amiga != nil {
+            cpuInfo = amiga!.cpu.getInfo()
+        }
     }
 
-    func refreshCPU(_ amiga: AmigaProxy, _ everything: Bool) {
-
-        let info = amiga.cpu.getInfo()
+    func refreshCPU(everything: Bool) {
 
         if everything {
 
@@ -53,6 +51,8 @@ extension Inspector {
             }
         }
 
+        guard let info = cpuInfo else { return }
+        
         cpuPC.integerValue = Int(info.pc)
 
         cpuD0.integerValue = Int(info.d.0)

@@ -408,6 +408,12 @@ class Inspector: NSWindowController {
 
     @IBOutlet weak var evTableView: EventTableView!
 
+    // Cached state of all Amiga components
+    var cpuInfo: CPUInfo?
+    var ciaInfo: CIAInfo?
+    var wasRunning = true
+    var isRunning = true
+
     // The document this inspector is bound to
     var parent: MyController?
 
@@ -457,11 +463,10 @@ class Inspector: NSWindowController {
         
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
-            self.lockParent()
-            if let amiga = self.parent?.amiga {
-                if amiga.isRunning() { self.refresh(amiga, false) }
+            // Refresh display (if needed)
+            if self.isRunning || self.wasRunning {
+                self.refresh(everything: false)
             }
-            self.unlockParent()
         }
     }
 
@@ -496,7 +501,41 @@ class Inspector: NSWindowController {
         unlockParent()
     }
 
+    func cache() {
+
+        lockAmiga()
+
+        if amiga != nil {
+
+            wasRunning = isRunning
+            isRunning = amiga!.isRunning()
+
+            if let id = debugPanel.selectedTabViewItem?.label {
+
+                switch id {
+
+                case "CPU":    cacheCPU()
+                case "CIA":    cacheCIA()
+                         /*
+                     case "Memory": cacheMemory()
+                     case "Agnus":  cacheAgnus()
+                     case "Copper": cacheCopper()
+                     case "Denise": cacheDenise()
+                     case "Paula":  cachePaula()
+                     case "Ports":  cachePorts()
+                     case "Events": cacheEvents()
+                     */
+                default:       break
+                }
+            }
+        }
+
+        unlockAmiga()
+    }
+
     func refresh(everything: Bool) {
+
+        self.cache()
 
         lockParent()
         if let amiga = parent?.amiga { refresh(amiga, everything) }
@@ -511,7 +550,7 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU": refreshCPU(amiga, everything)
+            case "CPU": refreshCPU(everything: everything)
             case "CIA": refreshCIA(amiga, everything)
             case "Memory": refreshMemory(amiga, everything)
             case "Agnus": refreshAgnus(amiga, everything)
