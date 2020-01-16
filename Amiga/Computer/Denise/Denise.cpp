@@ -47,6 +47,7 @@ Denise::_reset()
 
     memset(bBuffer, 0, sizeof(bBuffer));
     memset(iBuffer, 0, sizeof(iBuffer));
+    memset(mBuffer, 0, sizeof(mBuffer));
     memset(zBuffer, 0, sizeof(zBuffer));
 }
 
@@ -603,7 +604,7 @@ Denise::translateSPF(int from, int to)
             uint8_t s = bBuffer[i];
 
             assert(PixelEngine::isRgbaIndex(s));
-            iBuffer[i] = s;
+            iBuffer[i] = mBuffer[i] = s;
             zBuffer[i] = s ? prio2 : 0;
         }
 
@@ -615,7 +616,7 @@ Denise::translateSPF(int from, int to)
              uint8_t s = bBuffer[i];
 
              assert(PixelEngine::isRgbaIndex(s));
-             iBuffer[i] = (s & 16) ? 16 : s;
+             iBuffer[i] = mBuffer[i] = (s & 16) ? 16 : s;
              zBuffer[i] = 0;
          }
     }
@@ -649,17 +650,17 @@ Denise::translateDPF(int from, int to)
 
                 // PF1 is solid, PF2 is solid
                 if (pf2pri) {
-                    iBuffer[i] = (index2 | 0b1000) & mask2;
+                    iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
                     zBuffer[i] = prio2 | Z_DPF | Z_PF1 | Z_PF2;
                 } else {
-                    iBuffer[i] = index1 & mask1;
+                    iBuffer[i] = mBuffer[i] = index1 & mask1;
                     zBuffer[i] = prio1 | Z_DPF | Z_PF1 | Z_PF2;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
-                iBuffer[i] = index1 & mask1;
+                iBuffer[i] = mBuffer[i] = index1 & mask1;
                 zBuffer[i] = prio1 | Z_DPF | Z_PF1;
             }
 
@@ -667,13 +668,13 @@ Denise::translateDPF(int from, int to)
             if (index2) {
 
                 // PF1 is transparent, PF2 is solid
-                iBuffer[i] = (index2 | 0b1000) & mask2;
+                iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
                 zBuffer[i] = prio2 | Z_DPF | Z_PF2;
 
             } else {
 
                 // PF1 is transparent, PF2 is transparent
-                iBuffer[i] = 0;
+                iBuffer[i] = mBuffer[i] = 0;
                 zBuffer[i] = Z_DPF;
             }
         }
@@ -777,7 +778,7 @@ Denise::drawSpritePair()
     }
 
     // Draw until the end of the line
-    drawSpritePair<x>(strt, sizeof(iBuffer) - 1,
+    drawSpritePair<x>(strt, sizeof(mBuffer) - 1,
                       strt1, strt2,
                       data1, data2, datb1, datb2,
                       armed1, armed2, at);
@@ -790,8 +791,8 @@ Denise::drawSpritePair(int hstrt, int hstop,
                        uint16_t datb1, uint16_t datb2,
                        bool armed1, bool armed2, bool at)
 {
-    assert(hstrt >= 0 && hstrt <= sizeof(iBuffer));
-    assert(hstop >= 0 && hstop <= sizeof(iBuffer));
+    assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
+    assert(hstop >= 0 && hstop <= sizeof(mBuffer));
 
     for (int hpos = hstrt; hpos < hstop; hpos += 2) {
 
@@ -840,8 +841,8 @@ Denise::drawSpritePixel(int hpos)
         uint16_t z = Z_SP[x];
         int base = 16 + 2 * (x & 6);
 
-        if (z > zBuffer[hpos]) iBuffer[hpos] = base | col;
-        if (z > zBuffer[hpos + 1]) iBuffer[hpos + 1] = base | col;
+        if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
+        if (z > zBuffer[hpos + 1]) mBuffer[hpos + 1] = base | col;
         zBuffer[hpos] |= z;
         zBuffer[hpos + 1] |= z;
     }
@@ -870,11 +871,11 @@ Denise::drawAttachedSpritePixelPair(int hpos)
         uint16_t z = Z_SP[x];
 
         if (z > zBuffer[hpos]) {
-            iBuffer[hpos] = 0b10000 | col;
+            mBuffer[hpos] = 0b10000 | col;
             zBuffer[hpos] |= z;
         }
         if (z > zBuffer[hpos-1]) {
-            iBuffer[hpos-1] = 0b10000 | col;
+            mBuffer[hpos-1] = 0b10000 | col;
             zBuffer[hpos-1] |= z;
         }
     }
@@ -903,7 +904,7 @@ Denise::drawBorder()
     if (lineIsBlank) {
 
         for (int i = 0; i <= LAST_PIXEL; i++) {
-            iBuffer[i] = borderV;
+            iBuffer[i] = mBuffer[i] = borderV;
         }
 
     } else {
@@ -912,7 +913,7 @@ Denise::drawBorder()
         if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
             for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
                 assert(i < sizeof(iBuffer));
-                iBuffer[i] = borderL;
+                iBuffer[i] = mBuffer[i] = borderL;
             }
         }
 
@@ -920,7 +921,7 @@ Denise::drawBorder()
         if (agnus.diwHFlopOff != -1) {
             for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
                 assert(i < sizeof(iBuffer));
-                iBuffer[i] = borderR;
+                iBuffer[i] = mBuffer[i] = borderR;
             }
         }
     }
@@ -930,7 +931,7 @@ Denise::drawBorder()
     bool lines = vpos == 104; // || vpos == 0x50 || vpos == 276 || vpos == 255;
     if (lines) {
         // printf("Line\n");
-        for (int i = 0; i <= LAST_PIXEL / 2; iBuffer[i++] = 64);
+        for (int i = 0; i <= LAST_PIXEL / 2; iBuffer[i++] = mBuffer[i] = 64);
     }
 #endif
 }
@@ -1127,7 +1128,7 @@ Denise::endOfLine(int vpos)
         if (config.clxPlfPlf) checkP2PCollisions();
 
         // Synthesize RGBA values and write the result into the frame buffer
-        pixelEngine.colorize(iBuffer, zBuffer, vpos);
+        pixelEngine.colorize(iBuffer, mBuffer, zBuffer, vpos);
 
     } else {
         pixelEngine.endOfVBlankLine();

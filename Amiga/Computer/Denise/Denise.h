@@ -226,6 +226,8 @@ private:
      */
     uint8_t bBuffer[HPIXELS + (4 * 16) + 6];
     uint8_t iBuffer[HPIXELS + (4 * 16) + 6];
+    // EXPERIMENTAL (iBuffer multiplexed with sprite data)
+    uint8_t mBuffer[HPIXELS + (4 * 16) + 6];
     uint16_t zBuffer[HPIXELS + (4 * 16) + 6];
 
     static const uint16_t Z_0   = 0b10000000'00000000;
