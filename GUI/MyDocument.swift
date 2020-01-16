@@ -101,7 +101,7 @@ class MyDocument: NSDocument {
         return proxy
     }
     
-    /// Creates an attachment from a URL
+    // Creates an attachment from a URL
     func createAmigaAttachment(from url: URL) throws {
         
         track("Creating attachment from URL \(url.lastPathComponent).")
@@ -114,24 +114,8 @@ class MyDocument: NSDocument {
         // Put URL in recently used URL lists
         myAppDelegate.noteNewRecentlyUsedURL(url)
     }
-    
-    // OLD CODE:
-    /*
-    func createAttachment(from url: URL) throws {
-    
-        track("Creating attachment from URL \(url.lastPathComponent).")
 
-        // Try to create the attachment
-        let fileWrapper = try FileWrapper.init(url: url)
-        let pathExtension = url.pathExtension.uppercased()
-        try createAttachment(from: fileWrapper, ofType: pathExtension)
-
-        // Put URL in recently used URL lists
-        noteNewRecentlyUsedURL(url)
-    }
-    */
-    
-    /// Creates an attachment from a file wrapper
+    // Creates an attachment from a file wrapper
     fileprivate func createAmigaAttachment(from fileWrapper: FileWrapper,
                                            ofType typeName: String) throws {
         

@@ -46,6 +46,37 @@ var myWindow: NSWindow? {
 /* The Amiga proxy of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
+var amiga: AmigaProxy?
+
+/* Lock controlling the access to the
+ */
+var amigaLock = NSLock()
+
+func lockAmiga() { amigaLock.lock() }
+func unlockAmiga() { amigaLock.unlock() }
+
+func bindAmiga(proxy: AmigaProxy) {
+
+    if proxy != amiga {
+        lockAmiga()
+        amiga = proxy
+        unlockAmiga()
+    }
+}
+
+func unbindAmiga(proxy: AmigaProxy) {
+
+    if proxy == amiga {
+        lockAmiga()
+        amiga = nil
+        unlockAmiga()
+    }
+}
+
+/* The Amiga proxy of the currently active emulator instance.
+ * This variable is global and can be accessed from anywhere in the Swift code.
+ * DEPRECATED
+ */
 var amigaProxy: AmigaProxy? {
     return myDocument?.amiga
 }
@@ -296,21 +327,29 @@ extension MyAppDelegate {
                 if window == controller.window {
                     
                     // Turn on audio
-                    // track("Turning on audio for window \(controller.window)")
+                    track("Turning on audio for window \(String(describing: controller.window))")
                     if !audioEngine.isRunning {
                         audioEngine.paula.rampUpFromZero()
                         audioEngine.startPlayback()
                     }
 
+                    // Make this Amiga the active one
+                    bindAmiga(proxy: controller.amiga)
+
                 } else {
                     
                     // Turn off audio
-                    // track("Turning off audio for window \(controller.window)")
+                    track("Turning off audio for window \(String(describing: controller.window))")
                     if audioEngine.isRunning {
                         audioEngine.stopPlayback()
                     }
+
+                    // Clear the proxy reference
+                    unbindAmiga(proxy: controller.amiga)
                 }
             }
         }
+
+        track("Active proxy = \(String(describing: amiga))")
     }
 }
