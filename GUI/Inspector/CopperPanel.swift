@@ -12,7 +12,12 @@ extension Inspector {
     func cacheCopper(count: Int = 0) {
 
         if amiga != nil {
+
             copperInfo = amiga!.agnus.getCopperInfo()
+            if count % 4 == 0 {
+                copList1.cache()
+                copList2.cache()
+            }
         }
     }
 

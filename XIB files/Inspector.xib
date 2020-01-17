@@ -92,10 +92,6 @@
                 <outlet property="copCOPPC" destination="eT8-Ia-yfj" id="yF8-mD-uHx"/>
                 <outlet property="copList1" destination="7Lt-S1-Mt6" id="f4j-dX-vLo"/>
                 <outlet property="copList2" destination="SQq-Tg-gsU" id="5X7-Bi-v5R"/>
-                <outlet property="copMinus1" destination="YYF-JN-VSg" id="iGC-Eu-Wfv"/>
-                <outlet property="copMinus2" destination="tr9-Hb-IMg" id="LIO-Zx-8Dq"/>
-                <outlet property="copPlus1" destination="vFf-4B-MxS" id="frN-Px-3uE"/>
-                <outlet property="copPlus2" destination="m0o-sW-Ges" id="PdD-fk-M9z"/>
                 <outlet property="cpuA0" destination="Dhv-Wt-p3c" id="PdI-hb-gBY"/>
                 <outlet property="cpuA1" destination="nIb-zD-xbT" id="EjQ-b4-xkS"/>
                 <outlet property="cpuA2" destination="I9Z-sE-otl" id="cVQ-DP-2sM"/>
@@ -2907,7 +2903,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Copper" identifier="" id="kKN-wp-NAl">
-                                <view key="view" id="bIE-KC-F6a">
+                                <view key="view" ambiguous="YES" id="bIE-KC-F6a">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -2923,7 +2919,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Y33-of-tc1">
                                                             <rect key="frame" x="1" y="0.0" width="372" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WEI-qE-eO4" id="7Lt-S1-Mt6" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="372" height="213"/>
@@ -3020,28 +3016,6 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YYF-JN-VSg">
-                                                        <rect key="frame" x="360" y="265" width="21" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="EVq-g6-9hE">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="copMinusAction:" target="7Lt-S1-Mt6" id="pHI-kY-GVL"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFf-4B-MxS">
-                                                        <rect key="frame" x="338" y="265" width="21" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="43H-Wp-7gc">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="copPlusAction:" target="7Lt-S1-Mt6" id="Ld8-ut-c80"/>
-                                                        </connections>
-                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -3057,7 +3031,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="BjD-tK-SjJ">
                                                             <rect key="frame" x="1" y="0.0" width="379" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="UBc-A3-sPb" id="SQq-Tg-gsU" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="379" height="213"/>
@@ -3154,28 +3128,6 @@
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tr9-Hb-IMg">
-                                                        <rect key="frame" x="367" y="265" width="21" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IHC-yX-ftc">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="copMinusAction:" target="SQq-Tg-gsU" id="pOF-1E-qE0"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m0o-sW-Ges">
-                                                        <rect key="frame" x="345" y="265" width="21" height="21"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="opp-XH-Fm3">
-                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                            <font key="font" metaFont="system"/>
-                                                        </buttonCell>
-                                                        <connections>
-                                                            <action selector="copPlusAction:" target="SQq-Tg-gsU" id="D6j-qD-gpN"/>
-                                                        </connections>
-                                                    </button>
                                                 </subviews>
                                             </view>
                                         </box>
@@ -3263,7 +3215,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
+                                <view key="view" id="iv0-wC-hpe">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -5733,8 +5685,6 @@
         </window>
     </objects>
     <resources>
-        <image name="NSAddTemplate" width="11" height="11"/>
-        <image name="NSRemoveTemplate" width="11" height="11"/>
         <image name="baustelle" width="274" height="240"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="stepIntoTemplate" width="240" height="241"/>
