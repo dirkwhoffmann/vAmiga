@@ -9,7 +9,7 @@
 
 extension Inspector {
 
-    func cacheCPU() {
+    func cacheCPU(count: Int = 0) {
 
         if amiga != nil {
             cpuInfo = amiga!.cpu.getInfo()
@@ -51,32 +51,32 @@ extension Inspector {
             }
         }
 
-        guard let info = cpuInfo else { return }
+        if cpuInfo == nil { return }
         
-        cpuPC.integerValue = Int(info.pc)
+        cpuPC.integerValue = Int(cpuInfo!.pc)
 
-        cpuD0.integerValue = Int(info.d.0)
-        cpuD1.integerValue = Int(info.d.1)
-        cpuD2.integerValue = Int(info.d.2)
-        cpuD3.integerValue = Int(info.d.3)
-        cpuD4.integerValue = Int(info.d.4)
-        cpuD5.integerValue = Int(info.d.5)
-        cpuD6.integerValue = Int(info.d.6)
-        cpuD7.integerValue = Int(info.d.7)
+        cpuD0.integerValue = Int(cpuInfo!.d.0)
+        cpuD1.integerValue = Int(cpuInfo!.d.1)
+        cpuD2.integerValue = Int(cpuInfo!.d.2)
+        cpuD3.integerValue = Int(cpuInfo!.d.3)
+        cpuD4.integerValue = Int(cpuInfo!.d.4)
+        cpuD5.integerValue = Int(cpuInfo!.d.5)
+        cpuD6.integerValue = Int(cpuInfo!.d.6)
+        cpuD7.integerValue = Int(cpuInfo!.d.7)
 
-        cpuA0.integerValue = Int(info.a.0)
-        cpuA1.integerValue = Int(info.a.1)
-        cpuA2.integerValue = Int(info.a.2)
-        cpuA3.integerValue = Int(info.a.3)
-        cpuA4.integerValue = Int(info.a.4)
-        cpuA5.integerValue = Int(info.a.5)
-        cpuA6.integerValue = Int(info.a.6)
-        cpuA7.integerValue = Int(info.a.7)
+        cpuA0.integerValue = Int(cpuInfo!.a.0)
+        cpuA1.integerValue = Int(cpuInfo!.a.1)
+        cpuA2.integerValue = Int(cpuInfo!.a.2)
+        cpuA3.integerValue = Int(cpuInfo!.a.3)
+        cpuA4.integerValue = Int(cpuInfo!.a.4)
+        cpuA5.integerValue = Int(cpuInfo!.a.5)
+        cpuA6.integerValue = Int(cpuInfo!.a.6)
+        cpuA7.integerValue = Int(cpuInfo!.a.7)
 
-        cpuUSP.integerValue = Int(info.usp)
-        cpuSSP.integerValue = Int(info.ssp)
+        cpuUSP.integerValue = Int(cpuInfo!.usp)
+        cpuSSP.integerValue = Int(cpuInfo!.ssp)
 
-        let sr = Int(info.sr)
+        let sr = Int(cpuInfo!.sr)
 
         cpuT.state  = (sr & 0b1000000000000000 != 0) ? .on : .off
         cpuS.state  = (sr & 0b0010000000000000 != 0) ? .on : .off

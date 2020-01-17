@@ -13,19 +13,17 @@ let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
 
 extension Inspector {
 
+     func cachePorts(count: Int = 0) {
+
+        if amiga != nil {
+            port1Info = amiga!.controlPort1.getInfo()
+            port2Info = amiga!.controlPort2.getInfo()
+            serInfo   = amiga!.serialPort.getInfo()
+            uartInfo  = amiga!.paula.getUARTInfo()
+        }
+    }
+
     func refreshPorts(everything: Bool) {
-
-          lockParent()
-          if let amiga = parent?.amiga { refreshPorts(amiga, everything) }
-          unlockParent()
-      }
-
-    func refreshPorts(_ amiga: AmigaProxy, _ everything: Bool) {
-
-        let port1Info  = amiga.controlPort1.getInfo()
-        let port2Info  = amiga.controlPort2.getInfo()
-        let serialInfo = amiga.serialPort.getInfo()
-        let uartInfo   = amiga.paula.getUARTInfo()
 
         if everything {
 
@@ -42,33 +40,38 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
+        if port1Info == nil { return }
+        if port2Info == nil { return }
+        if serInfo   == nil { return }
+        if uartInfo  == nil { return }
+
         // Control port 1
-        po0M0V.state = port1Info.m0v ? .on : .off
-        po0M0H.state = port1Info.m0h ? .on : .off
-        po0M1V.state = port1Info.m1v ? .on : .off
-        po0M1H.state = port1Info.m1h ? .on : .off
-        po0POY.integerValue = Int(port1Info.poty)
-        po0POX.integerValue = Int(port1Info.potx)
+        po0M0V.state = port1Info!.m0v ? .on : .off
+        po0M0H.state = port1Info!.m0h ? .on : .off
+        po0M1V.state = port1Info!.m1v ? .on : .off
+        po0M1H.state = port1Info!.m1h ? .on : .off
+        po0POY.integerValue = Int(port1Info!.poty)
+        po0POX.integerValue = Int(port1Info!.potx)
 
         // Control port 2
-        po1M0V.state = port2Info.m0v ? .on : .off
-        po1M0H.state = port2Info.m0h ? .on : .off
-        po1M1V.state = port2Info.m1v ? .on : .off
-        po1M1H.state = port2Info.m1h ? .on : .off
-        po1POY.integerValue = Int(port2Info.poty)
-        po1POX.integerValue = Int(port2Info.potx)
+        po1M0V.state = port2Info!.m0v ? .on : .off
+        po1M0H.state = port2Info!.m0h ? .on : .off
+        po1M1V.state = port2Info!.m1v ? .on : .off
+        po1M1H.state = port2Info!.m1h ? .on : .off
+        po1POY.integerValue = Int(port2Info!.poty)
+        po1POX.integerValue = Int(port2Info!.potx)
 
         // Serial port
-        poTXD.state = serialInfo.txd ? .on : .off
-        poRXD.state = serialInfo.rxd ? .on : .off
-        poCTS.state = serialInfo.cts ? .on : .off
-        poDSR.state = serialInfo.dsr ? .on : .off
-        poCD.state = serialInfo.cd ? .on : .off
-        poDTR.state = serialInfo.dtr ? .on : .off
-        poRecShift.integerValue = Int(uartInfo.receiveShiftReg)
-        poRecBuffer.integerValue = Int(uartInfo.receiveBuffer)
-        poTransShift.integerValue = Int(uartInfo.transmitShiftReg)
-        poTransBuffer.integerValue = Int(uartInfo.transmitBuffer)
+        poTXD.state = serInfo!.txd ? .on : .off
+        poRXD.state = serInfo!.rxd ? .on : .off
+        poCTS.state = serInfo!.cts ? .on : .off
+        poDSR.state = serInfo!.dsr ? .on : .off
+        poCD.state = serInfo!.cd ? .on : .off
+        poDTR.state = serInfo!.dtr ? .on : .off
+        poRecShift.integerValue = Int(uartInfo!.receiveShiftReg)
+        poRecBuffer.integerValue = Int(uartInfo!.receiveBuffer)
+        poTransShift.integerValue = Int(uartInfo!.transmitShiftReg)
+        poTransBuffer.integerValue = Int(uartInfo!.transmitBuffer)
 
         // Logging windows
         if refreshCounter % 2 == 0 {

@@ -9,25 +9,25 @@
 
 extension Inspector {
 
-    func refreshEvents(everything: Bool) {
+    func cacheEvents(count: Int = 0) {
 
-        lockParent()
-        if let amiga = parent?.amiga { refreshEvents(amiga, everything) }
-        unlockParent()
+        if amiga != nil {
+            eventInfo = amiga!.agnus.getEventInfo()
+        }
     }
 
-    func refreshEvents(_ amiga: AmigaProxy, _ everything: Bool) {
+    func refreshEvents(everything: Bool) {
 
-        let info = amiga.agnus.getEventInfo()
+        if eventInfo == nil { return }
 
-        evCpuProgress.integerValue = Int(info.cpuClock)
-        evCpuProgress2.integerValue = Int(info.cpuCycles)
-        evDmaProgress.integerValue = Int(info.dmaClock)
-        evDmaProgress2.integerValue = Int(info.dmaClock / 8)
-        evCiaAProgress.integerValue = Int(info.ciaAClock)
-        evCiaAProgress2.integerValue = Int(info.ciaAClock / 40)
-        evCiaBProgress.integerValue = Int(info.ciaBClock)
-        evCiaBProgress2.integerValue = Int(info.ciaBClock / 40)
+        evCpuProgress.integerValue = Int(eventInfo!.cpuClock)
+        evCpuProgress2.integerValue = Int(eventInfo!.cpuCycles)
+        evDmaProgress.integerValue = Int(eventInfo!.dmaClock)
+        evDmaProgress2.integerValue = Int(eventInfo!.dmaClock / 8)
+        evCiaAProgress.integerValue = Int(eventInfo!.ciaAClock)
+        evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
+        evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
+        evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
 
         evTableView.reloadData()
     }

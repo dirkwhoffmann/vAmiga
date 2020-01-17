@@ -37,26 +37,24 @@ struct MemColors {
 }
 
 extension Inspector {
+    
+    func cacheMemory(count: Int = 0) {
+
+        if count % 8 == 0 { memTableView.cache() }
+    }
 
     func refreshMemory(everything: Bool) {
 
-        lockParent()
-        if let amiga = parent?.amiga { refreshMemory(amiga, everything) }
-        unlockParent()
-    }
-
-    func refreshMemory(_ amiga: AmigaProxy, _ everything: Bool) {
-
         if everything {
-            refreshMemoryLayout(amiga)
+            refreshMemoryLayout()
             memBankTableView.refresh()
         }
         memTableView.refresh()
     }
     
-    func refreshMemoryLayout(_ amiga: AmigaProxy) {
+    func refreshMemoryLayout() {
 
-        let config = amiga.config()
+        guard let config = amiga?.config() else { return }
 
         let size = NSSize(width: 16, height: 16)
         memLayoutButton.image   = memLayoutImage
@@ -174,56 +172,87 @@ extension Inspector {
     }
 
     @IBAction func memSliderAction(_ sender: NSSlider!) {
-        
-        let value = sender.integerValue
-        setBank(value)
+
+        lockAmiga()
+        setBank(sender.integerValue)
+        unlockAmiga()
     }
 
     @IBAction func memChipAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_CHIP)
+        unlockAmiga()
     }
 
     @IBAction func memFastRamAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_FAST)
+        unlockAmiga()
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_SLOW)
+        unlockAmiga()
     }
 
     @IBAction func memRomAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_ROM)
+        unlockAmiga()
     }
 
     @IBAction func memWomAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_WOM)
+        unlockAmiga()
     }
 
     @IBAction func memExtAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_EXT)
+        unlockAmiga()
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_CIA)
+        unlockAmiga()
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_RTC)
+        unlockAmiga()
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_OCS)
+        unlockAmiga()
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
+
+        lockAmiga()
         setBank(src: MEM_AUTOCONF)
+        unlockAmiga()
     }
 
     @IBAction func memSearchAction(_ sender: NSTextField!) {
-        
+
+        lockAmiga()
+
         let input = sender.stringValue
-        track("Going to address string \(input)")
-        
         guard let addr = Int(input, radix: 16), input != "" else {
             
             sender.stringValue = ""
@@ -232,8 +261,9 @@ extension Inspector {
             return
         }
         
-        track("Going to address \(addr)")
         sender.stringValue = String(format: "%06X", addr)
         setSelected(addr)
+
+        unlockAmiga()
     }
 }

@@ -17,7 +17,7 @@ class InstrTableView: NSTableView {
         case disabled
     }
 
-    // Display caches
+    // Data caches
     var addrInRow: [Int: UInt32] = [:]
     var instrInRow: [Int: String] = [:]
     var dataInRow: [Int: String] = [:]

@@ -8,18 +8,16 @@
 // -----------------------------------------------------------------------------
 
 extension Inspector {
-    
-    func refreshAgnus(everything: Bool) {
 
-        lockParent()
-        if let amiga = parent?.amiga { refreshAgnus(amiga, everything) }
-        unlockParent()
+    func cacheAgnus(count: Int = 0) {
+        
+        if amiga != nil {
+            agnusInfo = amiga!.agnus.getInfo()
+        }
     }
 
-    func refreshAgnus(_ amiga: AmigaProxy, _ everything: Bool) {
+    func refreshAgnus(everything: Bool) {
 
-        let info = amiga.agnus.getInfo()
-        
         if everything {
 
             let elements = [ dmaDIWSTRT: fmt16,
@@ -36,68 +34,47 @@ extension Inspector {
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }
-        
+
+        if agnusInfo == nil { return }
+
         // DMA control
-        dmaDMACON.intValue = Int32(info.dmacon)
-        dmaBLTPRI.state = (info.dmacon & 0b0000010000000000 != 0) ? .on : .off
-        dmaDMAEN.state  = (info.dmacon & 0b0000001000000000 != 0) ? .on : .off
-        dmaBPLEN.state  = (info.dmacon & 0b0000000100000000 != 0) ? .on : .off
-        dmaCOPEN.state  = (info.dmacon & 0b0000000010000000 != 0) ? .on : .off
-        dmaBLTEN.state  = (info.dmacon & 0b0000000001000000 != 0) ? .on : .off
-        dmaSPREN.state  = (info.dmacon & 0b0000000000100000 != 0) ? .on : .off
-        dmaDSKEN.state  = (info.dmacon & 0b0000000000010000 != 0) ? .on : .off
-        dmaAUD3EN.state  = (info.dmacon & 0b0000000000001000 != 0) ? .on : .off
-        dmaAUD2EN.state  = (info.dmacon & 0b0000000000000100 != 0) ? .on : .off
-        dmaAUD1EN.state  = (info.dmacon & 0b0000000000000010 != 0) ? .on : .off
-        dmaAUD0EN.state  = (info.dmacon & 0b0000000000000001 != 0) ? .on : .off
+        let dmacon = agnusInfo!.dmacon
+
+        dmaDMACON.intValue = Int32(dmacon)
+        dmaBLTPRI.state = (dmacon & 0b0000010000000000 != 0) ? .on : .off
+        dmaDMAEN.state  = (dmacon & 0b0000001000000000 != 0) ? .on : .off
+        dmaBPLEN.state  = (dmacon & 0b0000000100000000 != 0) ? .on : .off
+        dmaCOPEN.state  = (dmacon & 0b0000000010000000 != 0) ? .on : .off
+        dmaBLTEN.state  = (dmacon & 0b0000000001000000 != 0) ? .on : .off
+        dmaSPREN.state  = (dmacon & 0b0000000000100000 != 0) ? .on : .off
+        dmaDSKEN.state  = (dmacon & 0b0000000000010000 != 0) ? .on : .off
+        dmaAUD3EN.state  = (dmacon & 0b0000000000001000 != 0) ? .on : .off
+        dmaAUD2EN.state  = (dmacon & 0b0000000000000100 != 0) ? .on : .off
+        dmaAUD1EN.state  = (dmacon & 0b0000000000000010 != 0) ? .on : .off
+        dmaAUD0EN.state  = (dmacon & 0b0000000000000001 != 0) ? .on : .off
         
         // Display DMA
-        dmaDIWSTRT.integerValue = Int(info.diwstrt)
-        dmaDIWSTOP.integerValue = Int(info.diwstop)
-        dmaDDFSTRT.integerValue = Int(info.ddfstrt)
-        dmaDDFSTOP.integerValue = Int(info.ddfstop)
+        dmaDIWSTRT.integerValue = Int(agnusInfo!.diwstrt)
+        dmaDIWSTOP.integerValue = Int(agnusInfo!.diwstop)
+        dmaDDFSTRT.integerValue = Int(agnusInfo!.ddfstrt)
+        dmaDDFSTOP.integerValue = Int(agnusInfo!.ddfstop)
 
-        dmaBPL1PT.integerValue = Int(info.bplpt.0)
-        dmaBPL2PT.integerValue = Int(info.bplpt.1)
-        dmaBPL3PT.integerValue = Int(info.bplpt.2)
-        dmaBPL4PT.integerValue = Int(info.bplpt.3)
-        dmaBPL5PT.integerValue = Int(info.bplpt.4)
-        dmaBPL6PT.integerValue = Int(info.bplpt.5)
+        dmaBPL1PT.integerValue = Int(agnusInfo!.bplpt.0)
+        dmaBPL2PT.integerValue = Int(agnusInfo!.bplpt.1)
+        dmaBPL3PT.integerValue = Int(agnusInfo!.bplpt.2)
+        dmaBPL4PT.integerValue = Int(agnusInfo!.bplpt.3)
+        dmaBPL5PT.integerValue = Int(agnusInfo!.bplpt.4)
+        dmaBPL6PT.integerValue = Int(agnusInfo!.bplpt.5)
 
-        dmaBPL1MOD.integerValue = Int(info.bpl1mod)
-        dmaBPL2MOD.integerValue = Int(info.bpl2mod)
-        
-        dmaBpl1Enable.state = info.bpu >= 1 ? .on : .off
-        dmaBpl2Enable.state = info.bpu >= 2 ? .on : .off
-        dmaBpl3Enable.state = info.bpu >= 3 ? .on : .off
-        dmaBpl4Enable.state = info.bpu >= 4 ? .on : .off
-        dmaBpl5Enable.state = info.bpu >= 5 ? .on : .off
-        dmaBpl6Enable.state = info.bpu >= 6 ? .on : .off
-    }
+        dmaBPL1MOD.integerValue = Int(agnusInfo!.bpl1mod)
+        dmaBPL2MOD.integerValue = Int(agnusInfo!.bpl2mod)
 
-    @IBAction func dmaVPosAction(_ sender: NSButton!) {
-        
-        let value = sender.integerValue
-        track("New value: \(value)")
-        track("Setter not implemented yet")
-        refresh(everything: false)
-    }
-
-    @IBAction func dmaHPosAction(_ sender: NSButton!) {
-        
-        let value = sender.integerValue
-        track("New value: \(value)")
-        track("Setter not implemented yet")
-        refresh(everything: false)
-    }
-    
-    @IBAction func dmaBitplaneButtonAction(_ sender: NSButton!) {
-        
-        let activePlanes = (sender.state == .on) ? sender.tag : sender.tag - 1
-        
-        assert(activePlanes >= 0 && activePlanes <= 6)
-        track("Active planes = \(activePlanes)")
-        amigaProxy?.denise.setBPU(activePlanes)
-        refresh(everything: false)
+        let bpu = agnusInfo!.bpu
+        dmaBpl1Enable.state = bpu >= 1 ? .on : .off
+        dmaBpl2Enable.state = bpu >= 2 ? .on : .off
+        dmaBpl3Enable.state = bpu >= 3 ? .on : .off
+        dmaBpl4Enable.state = bpu >= 4 ? .on : .off
+        dmaBpl5Enable.state = bpu >= 5 ? .on : .off
+        dmaBpl6Enable.state = bpu >= 6 ? .on : .off
     }
 }

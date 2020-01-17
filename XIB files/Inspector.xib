@@ -137,7 +137,6 @@
                 <outlet property="deniseBPLCON1" destination="hit-9r-Ooj" id="sXH-q3-jID"/>
                 <outlet property="deniseBPLCON2" destination="TfL-ah-KBx" id="HSa-9a-r6A"/>
                 <outlet property="deniseBPU" destination="LG9-77-I31" id="AJt-mv-MBE"/>
-                <outlet property="deniseBPUStepper" destination="rsA-d7-qDR" id="OAK-06-44q"/>
                 <outlet property="deniseCLXDAT" destination="Qmu-32-7FP" id="t2O-62-TEC"/>
                 <outlet property="deniseCol0" destination="qkw-HN-dLL" id="lOT-eO-YOP"/>
                 <outlet property="deniseCol1" destination="hsn-xg-ZHy" id="DkW-IB-7Kg"/>
@@ -182,9 +181,7 @@
                 <outlet property="deniseJOY1DAT" destination="O4L-VB-iSy" id="fts-4Z-ZZA"/>
                 <outlet property="deniseLACE" destination="srT-Rj-zei" id="yhu-th-aNQ"/>
                 <outlet property="deniseP1H" destination="XrG-AZ-LwR" id="6BB-cn-5qg"/>
-                <outlet property="deniseP1HStepper" destination="HK1-Hu-AqC" id="qZF-mV-h98"/>
                 <outlet property="deniseP2H" destination="nvj-wP-2Yt" id="Oxm-f7-J5D"/>
-                <outlet property="deniseP2HStepper" destination="UwH-Mi-c6K" id="Sth-pw-Vdb"/>
                 <outlet property="denisePF1P0" destination="Tio-uO-wJc" id="s2G-NV-jBw"/>
                 <outlet property="denisePF1P1" destination="XFR-Tn-LT0" id="iPa-N4-1h9"/>
                 <outlet property="denisePF1P2" destination="V8M-Zk-QqD" id="36c-iq-SlN"/>
@@ -368,7 +365,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="CPU" identifier="" id="P8s-x5-kgY">
-                                <view key="view" ambiguous="YES" id="o5e-Su-gZM">
+                                <view key="view" id="o5e-Su-gZM">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -1110,7 +1107,7 @@
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="168.5" height="85"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="168" height="85"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
                                                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1142,7 +1139,7 @@
                                                                             </textFieldCell>
                                                                             <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                         </tableColumn>
-                                                                        <tableColumn identifier="delete" width="34.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="cSw-ol-th3">
+                                                                        <tableColumn identifier="delete" width="34" minWidth="10" maxWidth="3.4028234663852886e+38" id="cSw-ol-th3">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
                                                                                 <font key="font" metaFont="smallSystem"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
@@ -1163,8 +1160,8 @@
                                                             </subviews>
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
-                                                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XGB-Mk-YSE">
-                                                            <rect key="frame" x="1" y="94" width="168" height="16"/>
+                                                        <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="XGB-Mk-YSE">
+                                                            <rect key="frame" x="1" y="89" width="158" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="nAp-5Q-Y2R">
@@ -1172,7 +1169,7 @@
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <tableHeaderView key="headerView" id="vNZ-f6-Hoj">
-                                                            <rect key="frame" x="0.0" y="0.0" width="168.5" height="25"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="168" height="25"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </tableHeaderView>
                                                     </scrollView>
@@ -1248,7 +1245,7 @@
                                                             <nil key="backgroundColor"/>
                                                         </clipView>
                                                         <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="bEe-kD-COX">
-                                                            <rect key="frame" x="1" y="90" width="162" height="16"/>
+                                                            <rect key="frame" x="1" y="89" width="158" height="16"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </scroller>
                                                         <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="Wuf-CR-R01">
@@ -2730,9 +2727,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="kcY-qG-490"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QHC-Sk-j0A">
                                                         <rect key="frame" x="114" y="193" width="37" height="23"/>
@@ -2750,9 +2744,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="vLh-nq-VDF"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kRS-PC-CnJ">
                                                         <rect key="frame" x="114" y="167" width="37" height="23"/>
@@ -2770,9 +2761,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="ZI0-Ix-oVf"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hmq-AS-6PL">
                                                         <rect key="frame" x="114" y="141" width="37" height="23"/>
@@ -2790,9 +2778,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="o9B-EN-Pl6"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XAf-er-saV">
                                                         <rect key="frame" x="114" y="115" width="37" height="23"/>
@@ -2810,9 +2795,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="k4V-EK-TjV"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1hS-ws-ZoZ">
                                                         <rect key="frame" x="114" y="89" width="37" height="23"/>
@@ -2830,9 +2812,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="dmaBitplaneButtonAction:" target="-2" id="kK0-0m-uvG"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0dT-N8-EM1">
                                                         <rect key="frame" x="45" y="48" width="63" height="16"/>
@@ -3284,7 +3263,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" id="iv0-wC-hpe">
+                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -3300,7 +3279,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="229" height="187"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="229" height="187"/>
@@ -3651,9 +3630,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="Czo-20-39e"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Zl0-8X-Ozz">
                                                         <rect key="frame" x="417" y="114" width="82" height="20"/>
@@ -3662,9 +3638,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="rvC-1N-gDb"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="pfV-Jg-LYr">
                                                         <rect key="frame" x="417" y="74" width="82" height="20"/>
@@ -3673,9 +3646,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="65s-af-RmC"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="ywA-dO-l7t">
                                                         <rect key="frame" x="417" y="94" width="82" height="20"/>
@@ -3684,9 +3654,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="h8x-ch-XxW"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="V8M-Zk-QqD">
                                                         <rect key="frame" x="417" y="54" width="82" height="20"/>
@@ -3695,9 +3662,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="gDX-x3-pxv"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tio-uO-wJc">
                                                         <rect key="frame" x="417" y="14" width="82" height="20"/>
@@ -3706,9 +3670,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="ivK-H8-hbb"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="XFR-Tn-LT0">
                                                         <rect key="frame" x="417" y="34" width="82" height="20"/>
@@ -3717,9 +3678,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2ButtonAction:" target="-2" id="CYF-3t-cdy"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Iv5-bC-e6K">
                                                         <rect key="frame" x="14" y="167" width="63" height="16"/>
@@ -3738,9 +3696,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON0Action:" target="-2" id="r0v-dP-tmw"/>
-                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hit-9r-Ooj">
                                                         <rect key="frame" x="248" y="164" width="37" height="23"/>
@@ -3750,9 +3705,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON1Action:" target="-2" id="wnN-nE-55j"/>
-                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XrG-AZ-LwR">
                                                         <rect key="frame" x="248" y="131" width="23" height="23"/>
@@ -3762,9 +3714,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2NibbleAction:" target="-2" id="hG7-n1-uK7"/>
-                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LG9-77-I31">
                                                         <rect key="frame" x="78" y="103" width="23" height="23"/>
@@ -3774,9 +3723,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPUAction:" target="-2" id="bPk-Sf-Hfz"/>
-                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2HM-aG-VJJ">
                                                         <rect key="frame" x="184" y="167" width="63" height="16"/>
@@ -3795,18 +3741,7 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2Action:" target="-2" id="9oD-Jn-seL"/>
-                                                        </connections>
                                                     </textField>
-                                                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HK1-Hu-AqC">
-                                                        <rect key="frame" x="229" y="129" width="19" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="OQv-Wd-iFv"/>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON1StepperAction:" target="-2" id="gpl-oN-a8d"/>
-                                                        </connections>
-                                                    </stepper>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="8kP-xR-wIw">
                                                         <rect key="frame" x="59" y="135" width="82" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3814,9 +3749,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="EkB-LU-2mc"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="1Et-eT-Coi">
                                                         <rect key="frame" x="59" y="75" width="141" height="20"/>
@@ -3825,9 +3757,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="zSQ-w7-mei"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="srT-Rj-zei">
                                                         <rect key="frame" x="59" y="35" width="101" height="20"/>
@@ -3836,9 +3765,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="azX-hm-AAf"/>
-                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lfo-2n-rmB">
                                                         <rect key="frame" x="59" y="55" width="126" height="20"/>
@@ -3847,9 +3773,6 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON0ButtonAction:" target="-2" id="0uW-Ow-XHQ"/>
-                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IPo-Nb-9eX">
                                                         <rect key="frame" x="107" y="105" width="101" height="16"/>
@@ -3860,14 +3783,6 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rsA-d7-qDR">
-                                                        <rect key="frame" x="59" y="101" width="19" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="X70-AY-GbB"/>
-                                                        <connections>
-                                                            <action selector="deniseBPUStepperAction:" target="-2" id="8gG-wD-N5P"/>
-                                                        </connections>
-                                                    </stepper>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pLk-HL-7Yt">
                                                         <rect key="frame" x="371" y="165" width="63" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3886,14 +3801,6 @@
                                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>
-                                                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="UwH-Mi-c6K">
-                                                        <rect key="frame" x="229" y="101" width="19" height="27"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="9Jg-i4-m5m"/>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON1StepperAction:" target="-2" id="4tK-LP-Aa7"/>
-                                                        </connections>
-                                                    </stepper>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="nvj-wP-2Yt">
                                                         <rect key="frame" x="248" y="103" width="23" height="23"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -3902,9 +3809,6 @@
                                                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
-                                                        <connections>
-                                                            <action selector="deniseBPLCON2NibbleAction:" target="-2" id="oya-uS-PGu"/>
-                                                        </connections>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F9U-OO-XLh">
                                                         <rect key="frame" x="277" y="106" width="91" height="15"/>

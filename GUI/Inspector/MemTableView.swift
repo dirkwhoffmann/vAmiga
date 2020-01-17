@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 struct MemoryHighlighting {
+
     static let none = 0
     static let paula = 1
     static let denise = 2
@@ -15,12 +16,16 @@ struct MemoryHighlighting {
 }
 
 class MemTableView: NSTableView {
-    
-    var highlighting = MemoryHighlighting.none
-    var memory = amigaProxy?.mem
-    var bank = 0
 
     @IBOutlet weak var inspector: Inspector!
+
+    var highlighting = MemoryHighlighting.none
+    var bank = 0
+
+    // Data caches
+    var addrInRow: [Int: Int] = [:]
+    var asciiInRow: [Int: String] = [:]
+    var dataInAddr: [Int: Int] = [:]
     
     override func awakeFromNib() {
         
@@ -53,10 +58,35 @@ class MemTableView: NSTableView {
         }
         
     }
-    
+
+    func cache() {
+
+        if amiga != nil {
+
+            addrInRow = [:]
+            asciiInRow = [:]
+            dataInAddr = [:]
+
+            var addr = inspector.bank * 65536
+            let rows = numberOfRows(in: self)
+
+            for i in 0 ..< rows {
+
+                addrInRow[i] = addr
+                asciiInRow[i] = amiga!.mem.ascii(addr)
+
+                for _ in 0 ..< 8 {
+
+                    dataInAddr[addr] = amiga!.mem.spypeek16(addr)
+                    addr += 2
+                }
+            }
+        }
+    }
+
     func refresh() {
-        
-        memory = amigaProxy?.mem
+
+        cache()
         reloadData()
     }
     
@@ -93,16 +123,13 @@ extension MemTableView: NSTableViewDataSource {
         var addr = inspector.bank * 65536 + row * 16
      
         switch tableColumn?.identifier.rawValue {
-            
-        case "src":
-            return "??"
-       
+
         case "addr":
-            return addr
+            return addrInRow[row]
             
         case "ascii":
-            return memory?.ascii(addr) ?? ""
-            
+            return asciiInRow[row]
+
         case "E": addr += 2; fallthrough
         case "C": addr += 2; fallthrough
         case "A": addr += 2; fallthrough
@@ -110,7 +137,7 @@ extension MemTableView: NSTableViewDataSource {
         case "6": addr += 2; fallthrough
         case "4": addr += 2; fallthrough
         case "2": addr += 2; fallthrough
-        case "0": return memory?.spypeek16(addr) ?? ""
+        case "0": return dataInAddr[addr]
       
         default:
             fatalError()

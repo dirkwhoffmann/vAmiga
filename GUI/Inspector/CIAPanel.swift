@@ -11,14 +11,7 @@ extension Inspector {
     
     private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }
 
-    func refreshCIA(everything: Bool) {
-
-        lockParent()
-        if let amiga = parent?.amiga { refreshCIA(amiga, everything) }
-        unlockParent()
-    }
-
-    func cacheCIA() {
+    func cacheCIA(count: Int = 0) {
 
         let ciaA = selectedCia == 0
 
@@ -27,7 +20,7 @@ extension Inspector {
         }
     }
 
-    func refreshCIA(_ amiga: AmigaProxy, _ everything: Bool) {
+    func refreshCIA(everything: Bool) {
 
         let ciaA = selectedCia == 0
 
@@ -73,28 +66,28 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
-        guard let info = ciaInfo else { return }
+        if ciaInfo == nil { return }
 
-        ciaTA.intValue = Int32(info.timerA.count)
-        ciaTAlatch.intValue = Int32(info.timerA.latch)
-        ciaTArunning.state = info.timerA.running ? .on : .off
-        ciaTAtoggle.state = info.timerA.toggle ? .on : .off
-        ciaTApbout.state = info.timerA.pbout ? .on : .off
-        ciaTAoneShot.state = info.timerA.oneShot ? .on : .off
+        ciaTA.intValue = Int32(ciaInfo!.timerA.count)
+        ciaTAlatch.intValue = Int32(ciaInfo!.timerA.latch)
+        ciaTArunning.state = ciaInfo!.timerA.running ? .on : .off
+        ciaTAtoggle.state = ciaInfo!.timerA.toggle ? .on : .off
+        ciaTApbout.state = ciaInfo!.timerA.pbout ? .on : .off
+        ciaTAoneShot.state = ciaInfo!.timerA.oneShot ? .on : .off
 
-        ciaTB.intValue = Int32(info.timerB.count)
-        ciaTBlatch.intValue = Int32(info.timerB.latch)
-        ciaTBrunning.state = info.timerB.running ? .on : .off
-        ciaTBtoggle.state = info.timerB.toggle ? .on : .off
-        ciaTBpbout.state = info.timerB.pbout ? .on : .off
-        ciaTBoneShot.state = info.timerB.oneShot ? .on : .off
+        ciaTB.intValue = Int32(ciaInfo!.timerB.count)
+        ciaTBlatch.intValue = Int32(ciaInfo!.timerB.latch)
+        ciaTBrunning.state = ciaInfo!.timerB.running ? .on : .off
+        ciaTBtoggle.state = ciaInfo!.timerB.toggle ? .on : .off
+        ciaTBpbout.state = ciaInfo!.timerB.pbout ? .on : .off
+        ciaTBoneShot.state = ciaInfo!.timerB.oneShot ? .on : .off
 
-        ciaPRA.intValue = Int32(info.portA.reg)
-        ciaPRAbinary.intValue = Int32(info.portA.reg)
-        ciaDDRA.intValue = Int32(info.portA.dir)
-        ciaDDRAbinary.intValue = Int32(info.portA.dir)
+        ciaPRA.intValue = Int32(ciaInfo!.portA.reg)
+        ciaPRAbinary.intValue = Int32(ciaInfo!.portA.reg)
+        ciaDDRA.intValue = Int32(ciaInfo!.portA.dir)
+        ciaDDRAbinary.intValue = Int32(ciaInfo!.portA.dir)
 
-        var bits = info.portA.port
+        var bits = ciaInfo!.portA.port
         ciaPA7.state = (bits & 0b10000000) != 0 ? .on : .off
         ciaPA6.state = (bits & 0b01000000) != 0 ? .on : .off
         ciaPA5.state = (bits & 0b00100000) != 0 ? .on : .off
@@ -104,12 +97,12 @@ extension Inspector {
         ciaPA1.state = (bits & 0b00000010) != 0 ? .on : .off
         ciaPA0.state = (bits & 0b00000001) != 0 ? .on : .off
 
-        ciaPRB.intValue = Int32(info.portB.reg)
-        ciaPRBbinary.intValue = Int32(info.portB.reg)
-        ciaPRB.intValue = Int32(info.portB.reg)
-        ciaDDRB.intValue = Int32(info.portB.dir)
+        ciaPRB.intValue = Int32(ciaInfo!.portB.reg)
+        ciaPRBbinary.intValue = Int32(ciaInfo!.portB.reg)
+        ciaPRB.intValue = Int32(ciaInfo!.portB.reg)
+        ciaDDRB.intValue = Int32(ciaInfo!.portB.dir)
 
-        bits = info.portB.port
+        bits = ciaInfo!.portB.port
         ciaPB7.state = (bits & 0b10000000) != 0 ? .on : .off
         ciaPB6.state = (bits & 0b01000000) != 0 ? .on : .off
         ciaPB5.state = (bits & 0b00100000) != 0 ? .on : .off
@@ -119,25 +112,25 @@ extension Inspector {
         ciaPB1.state = (bits & 0b00000010) != 0 ? .on : .off
         ciaPB0.state = (bits & 0b00000001) != 0 ? .on : .off
 
-        ciaICR.intValue = Int32(info.icr)
-        ciaICRbinary.intValue = Int32(info.icr)
-        ciaIMR.intValue = Int32(info.imr)
-        ciaIMRbinary.intValue = Int32(info.imr)
-        ciaIntLineLow.state = info.intLine ? .off : .on
+        ciaICR.intValue = Int32(ciaInfo!.icr)
+        ciaICRbinary.intValue = Int32(ciaInfo!.icr)
+        ciaIMR.intValue = Int32(ciaInfo!.imr)
+        ciaIMRbinary.intValue = Int32(ciaInfo!.imr)
+        ciaIntLineLow.state = ciaInfo!.intLine ? .off : .on
 
-        ciaCntHi.intValue = Int32(info.cnt.value.hi)
-        ciaCntMid.intValue = Int32(info.cnt.value.mid)
-        ciaCntLo.intValue = Int32(info.cnt.value.lo)
-        ciaCntIntEnable.state = info.cntIntEnable ? .on : .off
-        ciaAlarmHi.intValue = Int32(info.cnt.alarm.hi)
-        ciaAlarmMid.intValue = Int32(info.cnt.alarm.mid)
-        ciaAlarmLo.intValue = Int32(info.cnt.alarm.lo)
+        ciaCntHi.intValue = Int32(ciaInfo!.cnt.value.hi)
+        ciaCntMid.intValue = Int32(ciaInfo!.cnt.value.mid)
+        ciaCntLo.intValue = Int32(ciaInfo!.cnt.value.lo)
+        ciaCntIntEnable.state = ciaInfo!.cntIntEnable ? .on : .off
+        ciaAlarmHi.intValue = Int32(ciaInfo!.cnt.alarm.hi)
+        ciaAlarmMid.intValue = Int32(ciaInfo!.cnt.alarm.mid)
+        ciaAlarmLo.intValue = Int32(ciaInfo!.cnt.alarm.lo)
 
-        ciaSDR.intValue = Int32(info.sdr)
-        ciaSDRbinary.intValue = Int32(info.sdr)
+        ciaSDR.intValue = Int32(ciaInfo!.sdr)
+        ciaSDRbinary.intValue = Int32(ciaInfo!.sdr)
 
-        let idlePercentage = Int(info.idlePercentage * 100)
-        ciaIdleCycles.stringValue = "\(info.idleCycles) cycles"
+        let idlePercentage = Int(ciaInfo!.idlePercentage * 100)
+        ciaIdleCycles.stringValue = "\(ciaInfo!.idleCycles) cycles"
         ciaIdleLevel.integerValue = idlePercentage
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"
     }

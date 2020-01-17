@@ -9,17 +9,15 @@
 
 extension Inspector {
 
-    func refreshCopper(everything: Bool) {
-        
-        lockParent()
-        if let amiga = parent?.amiga { refreshCopper(amiga, everything) }
-        unlockParent()
+    func cacheCopper(count: Int = 0) {
+
+        if amiga != nil {
+            copperInfo = amiga!.agnus.getCopperInfo()
+        }
     }
 
-    func refreshCopper(_ amiga: AmigaProxy, _ everything: Bool) {
-        
-        let info = amiga.agnus.getCopperInfo()
-        
+    func refreshCopper(everything: Bool) {
+
         if everything {
 
             let elements = [ copCOPPC: fmt24,
@@ -30,14 +28,16 @@ extension Inspector {
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }
-        
-        copActive.state = info.active ? .on : .off
-        copCDANG.state = info.cdang ? .on : .off
-        copCOPPC.integerValue = Int(info.coppc)
-        copCOPINS1.integerValue = Int(info.cop1ins)
-        copCOPINS2.integerValue = Int(info.cop2ins)
-        copCOP1LC.integerValue = Int(info.cop1lc)
-        copCOP2LC.integerValue = Int(info.cop2lc)
+
+        if copperInfo == nil { return }
+
+        copActive.state = copperInfo!.active ? .on : .off
+        copCDANG.state = copperInfo!.cdang ? .on : .off
+        copCOPPC.integerValue = Int(copperInfo!.coppc)
+        copCOPINS1.integerValue = Int(copperInfo!.cop1ins)
+        copCOPINS2.integerValue = Int(copperInfo!.cop2ins)
+        copCOP1LC.integerValue = Int(copperInfo!.cop1lc)
+        copCOP2LC.integerValue = Int(copperInfo!.cop2lc)
 
         copList1.refresh(everything: everything)
         copList2.refresh(everything: everything)

@@ -212,16 +212,13 @@ class Inspector: NSWindowController {
     @IBOutlet weak var deniseBPLCON0: NSTextField!
     @IBOutlet weak var deniseHIRES: NSButton!
     @IBOutlet weak var deniseBPU: NSTextField!
-    @IBOutlet weak var deniseBPUStepper: NSStepper!
     @IBOutlet weak var deniseHOMOD: NSButton!
     @IBOutlet weak var deniseDBPLF: NSButton!
     @IBOutlet weak var deniseLACE: NSButton!
 
     @IBOutlet weak var deniseBPLCON1: NSTextField!
     @IBOutlet weak var deniseP1H: NSTextField!
-    @IBOutlet weak var deniseP1HStepper: NSStepper!
     @IBOutlet weak var deniseP2H: NSTextField!
-    @IBOutlet weak var deniseP2HStepper: NSStepper!
 
     @IBOutlet weak var deniseBPLCON2: NSTextField!
     @IBOutlet weak var denisePF2PRI: NSButton!
@@ -411,6 +408,18 @@ class Inspector: NSWindowController {
     // Cached state of all Amiga components
     var cpuInfo: CPUInfo?
     var ciaInfo: CIAInfo?
+    var agnusInfo: AgnusInfo?
+    var copperInfo: CopperInfo?
+    var deniseInfo: DeniseInfo?
+    var spriteInfo: SpriteInfo?
+    var paulaInfo: PaulaInfo?
+    var audioInfo: AudioInfo?
+    var diskInfo: DiskControllerInfo?
+    var port1Info: ControlPortInfo?
+    var port2Info: ControlPortInfo?
+    var serInfo: SerialPortInfo?
+    var uartInfo: UARTInfo?
+    var eventInfo: EventInfo?
     var wasRunning = true
     var isRunning = true
 
@@ -456,18 +465,30 @@ class Inspector: NSWindowController {
     override func showWindow(_ sender: Any?) {
 
         track()
+
+        lockAmiga()
+
         super.showWindow(self)
-        parent?.amiga.enableDebugging()
+        amiga?.enableDebugging()
         updateInspectionTarget()
         refresh(everything: true)
         
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
+            lockAmiga()
+
+            // Update data cached
+            self.cache(count: self.refreshCounter)
+            self.refreshCounter += 1
+
             // Refresh display (if needed)
             if self.isRunning || self.wasRunning {
                 self.refresh(everything: false)
             }
+            unlockAmiga()
         }
+
+        unlockAmiga()
     }
 
     // Assigns a number formatter to a control
@@ -479,8 +500,6 @@ class Inspector: NSWindowController {
     }
 
     func updateInspectionTarget() {
-
-        lockParent()
 
         if let id = debugPanel.selectedTabViewItem?.label {
 
@@ -498,12 +517,9 @@ class Inspector: NSWindowController {
             default:       break
             }
         }
-        unlockParent()
     }
 
-    func cache() {
-
-        lockAmiga()
+    func cache(count: Int = 0) {
 
         if amiga != nil {
 
@@ -514,28 +530,22 @@ class Inspector: NSWindowController {
 
                 switch id {
 
-                case "CPU":    cacheCPU()
-                case "CIA":    cacheCIA()
-                         /*
-                     case "Memory": cacheMemory()
-                     case "Agnus":  cacheAgnus()
-                     case "Copper": cacheCopper()
-                     case "Denise": cacheDenise()
-                     case "Paula":  cachePaula()
-                     case "Ports":  cachePorts()
-                     case "Events": cacheEvents()
-                     */
+                case "CPU":    cacheCPU(count: count)
+                case "CIA":    cacheCIA(count: count)
+                case "Memory": cacheMemory(count: count)
+                case "Agnus":  cacheAgnus(count: count)
+                case "Copper": cacheCopper(count: count)
+                case "Denise": cacheDenise(count: count)
+                case "Paula":  cachePaula(count: count)
+                case "Ports":  cachePorts(count: count)
+                case "Events": cacheEvents(count: count)
                 default:       break
                 }
             }
         }
-
-        unlockAmiga()
     }
 
     func refresh(everything: Bool) {
-
-        self.cache()
 
         lockParent()
         if let amiga = parent?.amiga { refresh(amiga, everything) }
@@ -551,18 +561,16 @@ class Inspector: NSWindowController {
             switch id {
 
             case "CPU": refreshCPU(everything: everything)
-            case "CIA": refreshCIA(amiga, everything)
-            case "Memory": refreshMemory(amiga, everything)
-            case "Agnus": refreshAgnus(amiga, everything)
-            case "Copper": refreshCopper(amiga, everything)
-            case "Denise": refreshDenise(amiga, everything)
-            case "Paula": refreshPaula(amiga, everything)
-            case "Ports": refreshPorts(amiga, everything)
-            case "Events": refreshEvents(amiga, everything)
+            case "CIA": refreshCIA(everything: everything)
+            case "Memory": refreshMemory(everything: everything)
+            case "Agnus": refreshAgnus(everything: everything)
+            case "Copper": refreshCopper(everything: everything)
+            case "Denise": refreshDenise(everything: everything)
+            case "Paula": refreshPaula(everything: everything)
+            case "Ports": refreshPorts(everything: everything)
+            case "Events": refreshEvents(everything: everything)
             default: break
             }
-
-            refreshCounter += 1
         }
     }
 }
@@ -571,24 +579,26 @@ extension Inspector: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
 
-        lockParent()
+        lockAmiga()
 
         track("Closing inspector")
         timer?.invalidate()
-        parent?.amiga.disableDebugging()
-        parent?.amiga.clearInspectionTarget()
+        amiga?.disableDebugging()
+        amiga?.clearInspectionTarget()
 
-        unlockParent()
+        unlockAmiga()
     }
 }
 
 extension Inspector: NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
-        
-        track()
-        updateInspectionTarget()
 
+        lockAmiga()
+
+        updateInspectionTarget()
         refresh(everything: true)
+
+        unlockAmiga()
     }
 }
