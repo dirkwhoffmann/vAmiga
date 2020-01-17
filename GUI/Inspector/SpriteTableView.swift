@@ -125,22 +125,4 @@ extension SpriteTableView: NSTableViewDelegate {
             cell?.backgroundColor = color
         }
     }
-    
-    func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
-        
-        switch tableColumn?.identifier.rawValue {
-            
-        default:
-            NSSound.beep()
-            return
-        }
-
-        /*
-        if let value = object as? UInt16 {
-            amigaProxy?.suspend()
-            amigaProxy?.mem.poke16(addr, value: Int(value))
-            amigaProxy?.resume()
-        }
-        */
-    }
 }

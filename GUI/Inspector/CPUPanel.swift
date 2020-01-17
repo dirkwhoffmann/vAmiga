@@ -13,6 +13,7 @@ extension Inspector {
 
         if amiga != nil {
             cpuInfo = amiga!.cpu.getInfo()
+            traceTableView.cache()
         }
     }
 
@@ -97,17 +98,32 @@ extension Inspector {
 
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
 
-        parent?.stopAndGoAction(sender)
+        lockAmiga()
+        amiga?.stopAndGo()
+        cache()
+        unlockAmiga()
+        
+        refreshCPU(everything: false)
     }
     
     @IBAction func cpuStepIntoAction(_ sender: NSButton!) {
-        
-        parent?.stepIntoAction(sender)
+
+        lockAmiga()
+        amiga?.stepInto()
+        cache()
+        unlockAmiga()
+
+        refreshCPU(everything: false)
     }
     
     @IBAction func cpuStepOverAction(_ sender: NSButton!) {
-        
-        parent?.stepOverAction(sender)
+
+        lockAmiga()
+        amiga?.stepOver()
+        cache()
+        unlockAmiga()
+
+        refreshCPU(everything: false)
     }
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {

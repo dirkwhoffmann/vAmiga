@@ -8,7 +8,11 @@
 // -----------------------------------------------------------------------------
 
 class TraceTableView: NSTableView {
-    
+
+    // Data caches
+    var instrInRow: [Int: DisassembledInstr] = [:]
+    var numRows = 0
+
     @IBOutlet weak var inspector: Inspector!
     
     var cpu = amigaProxy?.cpu
@@ -18,9 +22,18 @@ class TraceTableView: NSTableView {
         dataSource = self
         target = self
     }
-    
+
+    func cache(count: Int = 0) {
+
+        numRows = amiga?.cpu.loggedInstructions() ?? 0
+
+        for i in 0 ..< numRows {
+            instrInRow[i] = amiga?.cpu.getLoggedInstrInfo(i)
+        }
+    }
+
     func refresh() {
-        
+
         reloadData()        
     }
     
@@ -40,7 +53,7 @@ extension TraceTableView: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if var info = cpu?.getLoggedInstrInfo(row) {
+        if var info = instrInRow[row] {
             
             switch tableColumn?.identifier.rawValue {
                 

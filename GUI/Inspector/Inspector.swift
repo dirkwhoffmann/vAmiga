@@ -546,13 +546,6 @@ class Inspector: NSWindowController {
     }
 
     func refresh(everything: Bool) {
-
-        lockParent()
-        if let amiga = parent?.amiga { refresh(amiga, everything) }
-        unlockParent()
-    }
-
-    func refresh(_ amiga: AmigaProxy, _ everything: Bool) {
         
         if window?.isVisible == false { return }
         

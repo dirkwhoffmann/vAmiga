@@ -8,8 +8,6 @@
 // -----------------------------------------------------------------------------
 
 class CopperTableView: NSTableView {
-    
-    // @IBOutlet weak var inspector: Inspector!
 
     // Data caches
     var addrInRow: [Int: Int] = [:]
@@ -81,7 +79,7 @@ extension CopperTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return numRows;
+        return numRows
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
