@@ -37,6 +37,11 @@ class Guards {
 
     friend class Debugger;
 
+protected:
+
+    // Reference to the connected CPU
+    class Moira &moira;
+
     // Capacity of the guards array
     long capacity = 1;
 
@@ -46,10 +51,17 @@ class Guards {
     // Number of currently stored guards
     long count = 0;
 
+    // Indicates if guard checking is necessary
+    virtual void setNeedsCheck(bool value) = 0;
+
+
+    //
+    // Constructing and destructing
+    //
+
 public:
 
-    // Flag to quickly determine if there is anything to check
-    bool needsCheck = false;
+    Guards(Moira& ref) : moira(ref) { }
 
     //
     // Inspecting the guard list
@@ -74,7 +86,7 @@ public:
     void removeAt(uint32_t addr);
 
     void remove(long nr);
-    void removeAll() { count = 0; needsCheck = false; }
+    void removeAll() { count = 0; setNeedsCheck(false); }
 
     //
     // Enabling or disabling guards
@@ -100,6 +112,22 @@ private:
     bool eval(u32 addr);
 };
 
+class Breakpoints : public Guards {
+
+public:
+
+    Breakpoints(Moira& ref) : Guards(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
+class Watchpoints : public Guards {
+
+public:
+
+    Watchpoints(Moira& ref) : Guards(ref) { }
+    void setNeedsCheck(bool value) override;
+};
+
 class Debugger {
 
 public:
@@ -108,10 +136,10 @@ public:
     class Moira &moira;
 
     // Breakpoint storage
-    Guards breakpoints;
+    Breakpoints breakpoints = Breakpoints(moira);
 
     // Watchpoint storage
-    Guards watchpoints;
+    Watchpoints watchpoints = Watchpoints(moira);
 
 private:
 
@@ -138,7 +166,7 @@ private:
 
 public:
 
-    Debugger(Moira& ref);
+    Debugger(Moira& ref) : moira(ref) { }
 
     //
     // Working with breakpoints and watchpoints

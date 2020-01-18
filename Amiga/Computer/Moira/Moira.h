@@ -26,6 +26,8 @@ struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
 class Moira {
 
     friend class Debugger;
+    friend class Breakpoints;
+    friend class Watchpoints;
 
     //
     // Configuration
@@ -80,23 +82,27 @@ protected:
      *     that no interrupt can trigger.
      *
      * CPU_TRACE_EXCEPTION:
-     *    If this is flag, the CPU initiates the trace exception.
+     *    If this flag is set, the CPU initiates the trace exception.
      *
      * CPU_TRACE_FLAG:
      *    This flag is a copy of the T flag from the status register. The
      *    copy is held to accelerate emulation.
      *
-     * CPU_CHECK_BREAKPOINTS:
+     * CPU_CHECK_BP:
      *    This flag indicates whether the CPU should check for breakpoints.
-     *    If no breakpoints are set, this flag is 0 and 1 otherwise.
+     *
+     * CPU_CHECK_WP:
+     *    This flag indicates whether the CPU should check fo watchpoints.
      */
     int flags;
-    static const int CPU_IS_HALTED       = 0b0000001;
-    static const int CPU_IS_STOPPED      = 0b0000010;
-    static const int CPU_LOG_INSTRUCTION = 0b0000100;
-    static const int CPU_CHECK_IRQ       = 0b0001000;
-    static const int CPU_TRACE_EXCEPTION = 0b0010000;
-    static const int CPU_TRACE_FLAG      = 0b0100000;
+    static const int CPU_IS_HALTED         = 0b00000001;
+    static const int CPU_IS_STOPPED        = 0b00000010;
+    static const int CPU_LOG_INSTRUCTION   = 0b00000100;
+    static const int CPU_CHECK_IRQ         = 0b00001000;
+    static const int CPU_TRACE_EXCEPTION   = 0b00010000;
+    static const int CPU_TRACE_FLAG        = 0b00100000;
+    static const int CPU_CHECK_BP          = 0b01000000;
+    static const int CPU_CHECK_WP          = 0b10000000;
 
     // Number of elapsed cycles since powerup
     i64 clock;

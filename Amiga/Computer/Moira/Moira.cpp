@@ -112,7 +112,7 @@ Moira::execute()
     (this->*exec[queue.ird])(queue.ird);
 
     // Check if a breakpoint has been reached
-    if (debugger.breakpoints.needsCheck)
+    if (flags & CPU_CHECK_BP)
         if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
 }
 

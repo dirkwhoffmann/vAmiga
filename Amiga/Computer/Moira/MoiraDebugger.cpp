@@ -92,7 +92,7 @@ Guards::addAt(u32 addr, long skip)
     guards[count].hits = 0;
     guards[count].skip = skip;
     count++;
-    needsCheck = true;
+    setNeedsCheck(true);
 }
 
 void
@@ -113,7 +113,7 @@ Guards::removeAt(uint32_t addr)
             break;
         }
     }
-    needsCheck = count != 0;
+    setNeedsCheck(count != 0);
 }
 
 bool
@@ -144,17 +144,31 @@ Guards::eval(u32 addr)
     return false;
 }
 
-Debugger::Debugger(Moira& ref) : moira(ref)
+void
+Breakpoints::setNeedsCheck(bool value)
 {
-    // REMOVE ASAP
-    // watchpoints.add(0xDFF180);
+    if (value) {
+        moira.flags |= Moira::CPU_CHECK_BP;
+    } else {
+        moira.flags &= ~Moira::CPU_CHECK_BP;
+    }
+}
+
+void
+Watchpoints::setNeedsCheck(bool value)
+{
+    if (value) {
+        moira.flags |= Moira::CPU_CHECK_WP;
+    } else {
+        moira.flags &= ~Moira::CPU_CHECK_WP;
+    }
 }
 
 void
 Debugger::stepInto()
 {
     softStop = UINT64_MAX;
-    breakpoints.needsCheck = true;
+    breakpoints.setNeedsCheck(true);
 }
 
 void
@@ -162,7 +176,7 @@ Debugger::stepOver()
 {
     char tmp[64];
     softStop = moira.getPC() + moira.disassemble(moira.getPC(), tmp);
-    breakpoints.needsCheck = true;
+    breakpoints.setNeedsCheck(true);
 }
 
 bool
@@ -173,7 +187,7 @@ Debugger::breakpointMatches(u32 addr)
 
         // Soft breakpoints are deleted when reached
         softStop = UINT64_MAX - 1;
-        breakpoints.needsCheck = breakpoints.elements() != 0;
+        breakpoints.setNeedsCheck(breakpoints.elements() != 0);
 
         return true;
     }
