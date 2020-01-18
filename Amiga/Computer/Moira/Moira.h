@@ -154,7 +154,7 @@ public:
 private:
 
     // Invoked inside execute() to check for a pending interrupt
-    void checkForIrq();
+    bool checkForIrq();
 
 
     //

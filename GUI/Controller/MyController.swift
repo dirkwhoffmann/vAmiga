@@ -167,20 +167,6 @@ class MyController: NSWindowController, MessageReceiver {
     var eyeZ: Float = 0.0 {
         didSet { renderer.buildMatrices3D() }
     }
-    /*
-    var eyeX: Float {
-        get { return metal.getEyeX() }
-        set { metal.setEyeX(newValue) }
-    }
-    var eyeY: Float {
-        get { return metal.getEyeY() }
-        set { metal.setEyeY(newValue) }
-    }
-    var eyeZ: Float {
-        get { return metal.getEyeZ() }
-        set { metal.setEyeZ(newValue) }
-    }
-    */
     var blur: Int32 {
         get { return renderer.shaderOptions.blur }
         set { renderer.shaderOptions.blur = newValue }

@@ -27,7 +27,7 @@ public class AudioEngine: NSObject {
         track()
     
         self.init()
-        paula = amigaProxy!.paula
+        paula = proxy
         
         // Setup component description for AudioUnit
         let compDesc = AudioComponentDescription(
@@ -123,7 +123,7 @@ public class AudioEngine: NSObject {
         paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
     }
     
-    //! @brief  Start playing sound
+    // Start playing sound
     @discardableResult
     func startPlayback() -> Bool {
 
@@ -140,7 +140,7 @@ public class AudioEngine: NSObject {
     
     //! @brief  Stop playing sound
     func stopPlayback() {
-        
+
         if isRunning {
             audiounit.stopHardware()
             isRunning = false

@@ -76,47 +76,61 @@ Moira::execute()
     // Check integrity of the CPU_TRACE_FLAG flag
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t);
 
-    // Process execution flags (if any)
-    if (flags) {
+    //
+    // The quick execution path: Call the instruction handler and return
+    //
 
-        // Process pending trace exception (if any)
-        if (flags & CPU_TRACE_EXCEPTION) {
-            execTraceException();
-        }
+    if (!flags) {
 
-        // Check if the T flag is set inside the status register
-        if (flags & CPU_TRACE_FLAG) {
-            flags |= CPU_TRACE_EXCEPTION;
-        }
+        reg.pc += 2;
+        (this->*exec[queue.ird])(queue.ird);
+        return;
+    }
 
-        // Process pending interrupt (if any)
-        if (flags & CPU_CHECK_IRQ) {
-            checkForIrq();
-        }
+    //
+    // The slow execution path: Process flags one by one
+    //
 
-        // If the CPU is stopped, poll the IPL lines and return
-        if (flags & CPU_IS_STOPPED) {
-            pollIrq();
-            sync(MIMIC_MUSASHI ? 1 : 2);
-            return;
-        }
+    // Process pending trace exception (if any)
+    if (flags & CPU_TRACE_EXCEPTION) {
+        execTraceException();
+        goto done;
+    }
 
-        // If logging is enabled, record the executed instruction
-        if (flags & CPU_LOG_INSTRUCTION) {
-            debugger.logInstruction();
-        }
+    // Check if the T flag is set inside the status register
+    if (flags & CPU_TRACE_FLAG) {
+        flags |= CPU_TRACE_EXCEPTION;
+    }
+
+    // Process pending interrupt (if any)
+    if (flags & CPU_CHECK_IRQ) {
+        if (checkForIrq()) goto done;
+    }
+
+    // If the CPU is stopped, poll the IPL lines and return
+    if (flags & CPU_IS_STOPPED) {
+        pollIrq();
+        sync(MIMIC_MUSASHI ? 1 : 2);
+        return;
+    }
+
+    // If logging is enabled, record the executed instruction
+    if (flags & CPU_LOG_INSTRUCTION) {
+        debugger.logInstruction();
     }
 
     // Execute the instruction
     reg.pc += 2;
     (this->*exec[queue.ird])(queue.ird);
 
+done:
+
     // Check if a breakpoint has been reached
     if (flags & CPU_CHECK_BP)
         if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
 }
 
-void
+bool
 Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
@@ -124,6 +138,7 @@ Moira::checkForIrq()
         // Trigger interrupt
         assert(reg.ipl < 7);
         execIrqException(reg.ipl);
+        return true;
 
     } else {
 
@@ -133,6 +148,7 @@ Moira::checkForIrq()
         // same. If one of these variables changes, we reenable interrupt
         // checking.
         if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
+        return false;
     }
 }
 

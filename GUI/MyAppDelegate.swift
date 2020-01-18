@@ -318,38 +318,31 @@ func cgEventCallback(proxy: CGEventTapProxy,
 extension MyAppDelegate {
     
     func windowDidBecomeMain(_ window: NSWindow) {
-        
+
         // Iterate through all controllers
         for case let document as MyDocument in NSApplication.shared.orderedDocuments {
-            if let controller = document.windowControllers.first as? MyController {
-                
-                let audioEngine = controller.audioEngine!
-                if window == controller.window {
-                    
-                    // Turn on audio
-                    track("Turning on audio for window \(String(describing: controller.window))")
-                    if !audioEngine.isRunning {
-                        audioEngine.paula.rampUpFromZero()
-                        audioEngine.startPlayback()
-                    }
+
+            if let con = document.windowControllers.first as? MyController {
+
+                if window == con.window {
+
+                    // Start playback
+                    con.audioEngine!.startPlayback()
+                    con.amiga.paula.rampUpFromZero()
 
                     // Make this Amiga the active one
-                    bindAmiga(proxy: controller.amiga)
+                    bindAmiga(proxy: con.amiga)
 
                 } else {
-                    
-                    // Turn off audio
-                    track("Turning off audio for window \(String(describing: controller.window))")
-                    if audioEngine.isRunning {
-                        audioEngine.stopPlayback()
-                    }
 
-                    // Clear the proxy reference
-                    unbindAmiga(proxy: controller.amiga)
+                    // Stop playback
+                    con.audioEngine!.stopPlayback()
+                    con.amiga.paula.rampDown()
+
+                    // Stop being the active instance
+                    unbindAmiga(proxy: con.amiga)
                 }
             }
         }
-
-        track("Active proxy = \(String(describing: amiga))")
     }
 }
