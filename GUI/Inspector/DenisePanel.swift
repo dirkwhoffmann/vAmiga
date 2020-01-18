@@ -9,32 +9,43 @@
 
 extension Inspector {
 
-    func cacheDenise(count: Int = 0) {
+    func cacheDenise() {
 
-        if amiga != nil {
-            deniseInfo = amiga!.denise.getInfo()
-            spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
-        }
+        deniseInfo = amiga!.denise.getInfo()
+        spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
     }
 
-    func refreshDenise(everything: Bool) {
+    func refreshDenise(count: Int) {
 
-        if everything {
+        // Refresh sub views
+        sprTableView.refresh(count: count)
 
-            let elements = [ deniseBPLCON0: fmt16,
-                             deniseBPLCON1: fmt16,
-                             deniseBPLCON2: fmt16,
-                             deniseDIWSTRT: fmt16,
-                             deniseDIWSTOP: fmt16,
-                             deniseJOY0DAT: fmt16,
-                             deniseJOY1DAT: fmt16,
-                             deniseCLXDAT: fmt16,
-                             sprPtr: fmt24
-            ]
-            for (c, f) in elements { assignFormatter(f, c!) }
-        }
+        // Perform a full refresh if needed
+        if count == 0 { refreshDeniseFormatters() }
 
-        if deniseInfo == nil { return }
+        // Update display cache
+        cacheDenise()
+
+        // Refresh display with cached values
+        refreshDeniseValues()
+    }
+
+    func refreshDeniseFormatters() {
+
+        let elements = [ deniseBPLCON0: fmt16,
+                         deniseBPLCON1: fmt16,
+                         deniseBPLCON2: fmt16,
+                         deniseDIWSTRT: fmt16,
+                         deniseDIWSTOP: fmt16,
+                         deniseJOY0DAT: fmt16,
+                         deniseJOY1DAT: fmt16,
+                         deniseCLXDAT: fmt16,
+                         sprPtr: fmt24
+        ]
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func refreshDeniseValues() {
 
         //
         // Bitplane section
@@ -95,7 +106,6 @@ extension Inspector {
         sprVStop.integerValue = Int(spriteInfo!.vstop)
         sprPtr.integerValue = Int(spriteInfo!.ptr)
         sprAttach.state = spriteInfo!.attach ? .on : .off
-        sprTableView.refresh(everything: everything)
 
         //
         // Color section
@@ -137,12 +147,6 @@ extension Inspector {
 
     @IBAction func selectSpriteAction(_ sender: Any!) {
 
-        // Update the data cache
-        lockAmiga()
-        amiga?.denise.inspect()
-        cacheDenise()
-        unlockAmiga()
-
-        refreshDenise(everything: false)
+        needsRefresh()
     }
 }

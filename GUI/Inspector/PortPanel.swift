@@ -23,29 +23,44 @@ extension Inspector {
         }
     }
 
-    func refreshPorts(everything: Bool) {
+    func refreshPorts(count: Int) {
 
-        if everything {
+         // Perform a full refresh if needed
+         if count == 0 { refreshPortFormatters() }
 
-            let elements = [ po0POY: fmt16,
-                             po0POX: fmt16,
-                             po1POY: fmt16,
-                             po1POX: fmt16,
-                             poRecShift: fmt16,
-                             poRecBuffer: fmt16,
-                             poTransShift: fmt16,
-                             poTransBuffer: fmt16
-            ]
+         // Update display cache
+         cachePorts()
 
-            for (c, f) in elements { assignFormatter(f, c!) }
-        }
+         // Refresh display with cached values
+         refreshPortValues()
+     }
+
+    func refreshPortFormatters() {
+
+        let elements = [ po0POY: fmt16,
+                         po0POX: fmt16,
+                         po1POY: fmt16,
+                         po1POX: fmt16,
+                         poRecShift: fmt16,
+                         poRecBuffer: fmt16,
+                         poTransShift: fmt16,
+                         poTransBuffer: fmt16
+        ]
+
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+    
+    func refreshPortValues() {
 
         if port1Info == nil { return }
         if port2Info == nil { return }
         if serInfo   == nil { return }
         if uartInfo  == nil { return }
 
+        //
         // Control port 1
+        //
+
         po0M0V.state = port1Info!.m0v ? .on : .off
         po0M0H.state = port1Info!.m0h ? .on : .off
         po0M1V.state = port1Info!.m1v ? .on : .off
@@ -53,7 +68,10 @@ extension Inspector {
         po0POY.integerValue = Int(port1Info!.poty)
         po0POX.integerValue = Int(port1Info!.potx)
 
+        //
         // Control port 2
+        //
+
         po1M0V.state = port2Info!.m0v ? .on : .off
         po1M0H.state = port2Info!.m0h ? .on : .off
         po1M1V.state = port2Info!.m1v ? .on : .off
@@ -61,7 +79,10 @@ extension Inspector {
         po1POY.integerValue = Int(port2Info!.poty)
         po1POX.integerValue = Int(port2Info!.potx)
 
+        //
         // Serial port
+        //
+
         poTXD.state = serInfo!.txd ? .on : .off
         poRXD.state = serInfo!.rxd ? .on : .off
         poCTS.state = serInfo!.cts ? .on : .off
@@ -73,8 +94,11 @@ extension Inspector {
         poTransShift.integerValue = Int(uartInfo!.transmitShiftReg)
         poTransBuffer.integerValue = Int(uartInfo!.transmitBuffer)
 
+        //
         // Logging windows
-        if refreshCounter % 2 == 0 {
+        //
+
+        if refreshCnt % 2 == 0 {
 
             let serialInSize = parent!.serialIn.count
 

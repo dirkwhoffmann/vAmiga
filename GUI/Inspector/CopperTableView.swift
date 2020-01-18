@@ -24,7 +24,7 @@ class CopperTableView: NSTableView {
         target = self
     }
 
-    func cache(count: Int = 0) {
+    func cache() {
 
         var addr = coplc
 
@@ -51,21 +51,31 @@ class CopperTableView: NSTableView {
         }
     }
 
-    func refresh(everything: Bool) {
-        
-        if everything {
+    func refresh(count: Int) {
 
-            for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-                if let column = tableColumn(withIdentifier: columnId) {
-                    if let cell = column.dataCell as? NSCell {
-                        cell.formatter = f
-                    }
+        // Refresh formatters if needed
+        if count == 0 { refreshFormatters() }
+
+        // Increase the update interval
+        if count % 4 != 0 { return }
+
+        // Update display cache
+        cache()
+
+        // Refresh display with cached values
+        reloadData()
+    }
+
+    func refreshFormatters() {
+
+        for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+            if let column = tableColumn(withIdentifier: columnId) {
+                if let cell = column.dataCell as? NSCell {
+                    cell.formatter = f
                 }
             }
         }
-        
-        reloadData()
     }
 }
 

@@ -19,22 +19,32 @@ class SpriteTableView: NSTableView {
         dataSource = self
         target = self
     }
-    
-    func refresh(everything: Bool) {
 
-        if everything {
-           
-            for (c, f) in ["addr": fmt24] {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-                if let column = tableColumn(withIdentifier: columnId) {
-                    if let cell = column.dataCell as? NSCell {
-                        cell.formatter = f
-                    }
+    func refresh(count: Int) {
+
+        // Refresh formatters if needed
+        if count == 0 { refreshFormatters() }
+
+        // Increase the update interval
+        if count % 4 != 0 { return }
+
+        // Update display cache
+        // cache()
+
+        // Refresh display with cached values
+        reloadData()
+    }
+
+    func refreshFormatters() {
+
+        for (c, f) in ["addr": fmt24] {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+            if let column = tableColumn(withIdentifier: columnId) {
+                if let cell = column.dataCell as? NSCell {
+                    cell.formatter = f
                 }
             }
         }
-        
-        reloadData()
     }
 }
 
@@ -46,10 +56,6 @@ extension SpriteTableView: NSTableViewDataSource {
 
             let sprInfo = amiga!.denise.getSpriteInfo(inspector.selectedSprite)
             let addr = Int(sprInfo.ptr) + 4 * row
-            if (addr & 1) != 0 {
-                track("addr = \(addr)")
-                fatalError()
-            }
             let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
             let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
             
@@ -59,7 +65,7 @@ extension SpriteTableView: NSTableViewDataSource {
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        
+
         if let sprInfo = amiga?.denise.getSpriteInfo(inspector.selectedSprite) {
             
             let sprLines = sprInfo.vstop - sprInfo.vstrt

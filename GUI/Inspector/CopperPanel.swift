@@ -9,32 +9,39 @@
 
 extension Inspector {
 
-    func cacheCopper(count: Int = 0) {
+    func cacheCopper() {
 
-        if amiga != nil {
-
-            copperInfo = amiga!.agnus.getCopperInfo()
-            if count % 4 == 0 {
-                copList1.cache()
-                copList2.cache()
-            }
-        }
+        copperInfo = amiga!.agnus.getCopperInfo()
     }
 
-    func refreshCopper(everything: Bool) {
+    func refreshCopper(count: Int) {
 
-        if everything {
+        // Refresh sub views
+        copList1.refresh(count: count)
+        copList2.refresh(count: count)
+        
+        // Perform a full refresh if needed
+        if count == 0 { refreshCopperFormatters() }
 
-            let elements = [ copCOPPC: fmt24,
-                             copCOPINS1: fmt16,
-                             copCOPINS2: fmt16,
-                             copCOP1LC: fmt24,
-                             copCOP2LC: fmt24
-            ]
-            for (c, f) in elements { assignFormatter(f, c!) }
-        }
+        // Update display cache
+        cacheCopper()
 
-        if copperInfo == nil { return }
+        // Refresh display with cached values
+        refreshCopperValues()
+    }
+
+    func refreshCopperFormatters() {
+
+        let elements = [ copCOPPC: fmt24,
+                         copCOPINS1: fmt16,
+                         copCOPINS2: fmt16,
+                         copCOP1LC: fmt24,
+                         copCOP2LC: fmt24
+        ]
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+    
+    func refreshCopperValues() {
 
         copActive.state = copperInfo!.active ? .on : .off
         copCDANG.state = copperInfo!.cdang ? .on : .off
@@ -43,14 +50,5 @@ extension Inspector {
         copCOPINS2.integerValue = Int(copperInfo!.cop2ins)
         copCOP1LC.integerValue = Int(copperInfo!.cop1lc)
         copCOP2LC.integerValue = Int(copperInfo!.cop2lc)
-
-        copList1.refresh(everything: everything)
-        copList2.refresh(everything: everything)
     }
- 
-    @IBAction func copCOPLCAction(_ sender: NSTextField!) {
-        
-        track()
-    }
-    
 }

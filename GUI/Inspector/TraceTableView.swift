@@ -9,21 +9,19 @@
 
 class TraceTableView: NSTableView {
 
+    @IBOutlet weak var inspector: Inspector!
+
     // Data caches
     var instrInRow: [Int: DisassembledInstr] = [:]
     var numRows = 0
 
-    @IBOutlet weak var inspector: Inspector!
-    
-    var cpu = amigaProxy?.cpu
-    
     override func awakeFromNib() {
         
         dataSource = self
         target = self
     }
 
-    func cache(count: Int = 0) {
+    func cache() {
 
         numRows = amiga?.cpu.loggedInstructions() ?? 0
 
@@ -32,15 +30,13 @@ class TraceTableView: NSTableView {
         }
     }
 
-    func refresh() {
+    func refresh(count: Int) {
 
+        // Update display cache
+        cache()
+
+        // Refresh display with cached values
         reloadData()        
-    }
-    
-    @IBAction func clickAction(_ sender: NSTableView!) {
-        
-        let row = sender.clickedRow
-        track("\(row)")
     }
 }
 
@@ -48,7 +44,7 @@ extension TraceTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return cpu?.loggedInstructions() ?? 0
+        return numRows
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

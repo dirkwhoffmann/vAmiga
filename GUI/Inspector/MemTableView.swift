@@ -7,19 +7,11 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-struct MemoryHighlighting {
-
-    static let none = 0
-    static let paula = 1
-    static let denise = 2
-    static let agnus = 3
-}
-
 class MemTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
 
-    var highlighting = MemoryHighlighting.none
+    // Displayed memory bank
     var bank = 0
 
     // Data caches
@@ -34,29 +26,6 @@ class MemTableView: NSTableView {
         target = self
     
         inspector.setBank(0)
-        
-        // Assign formatters
-        let columnFormatters = [
-            "addr": fmt24,
-            "0": fmt16,
-            "2": fmt16,
-            "4": fmt16,
-            "6": fmt16,
-            "8": fmt16,
-            "A": fmt16,
-            "C": fmt16,
-            "E": fmt16
-        ]
-        
-        for (column, formatter) in columnFormatters {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
-            if let tableColumn = tableColumn(withIdentifier: columnId) {
-                if let cell = tableColumn.dataCell as? NSCell {
-                    cell.formatter = formatter
-                }
-            }
-        }
-        
     }
 
     func cache() {
@@ -84,30 +53,44 @@ class MemTableView: NSTableView {
         }
     }
 
-    func refresh() {
+    func refreshFormatters() {
 
+        // Assign formatters
+        let columnFormatters = [
+            "addr": fmt24,
+            "0": fmt16,
+            "2": fmt16,
+            "4": fmt16,
+            "6": fmt16,
+            "8": fmt16,
+            "A": fmt16,
+            "C": fmt16,
+            "E": fmt16
+        ]
+
+        for (column, formatter) in columnFormatters {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
+            if let tableColumn = tableColumn(withIdentifier: columnId) {
+                if let cell = tableColumn.dataCell as? NSCell {
+                    cell.formatter = formatter
+                }
+            }
+        }
+    }
+
+    func refresh(count: Int) {
+
+        // Refresh formatters if needed
+        if count == 0 { refreshFormatters() }
+
+        // Increase the update interval
+        if count % 8 != 0 { return }
+
+        // Update display cache
         cache()
-        reloadData()
-    }
-    
-    func setHighlighting(_ value: Int) {
-        
-        highlighting = value
-        refresh()
-    }
-    
-    // Returns the memory source for the specified address
 
-    // Return true if the specified memory address should be displayed
-    func shouldDisplay(_ addr: UInt16) -> Bool {
-        
-        return true
-    }
-        
-    // Return true if the specified memory address should be highlighted
-    func shouldHighlight(_ addr: UInt16) -> Bool {
-        
-        return false
+        // Refresh display with cached values
+        reloadData()
     }
 }
 

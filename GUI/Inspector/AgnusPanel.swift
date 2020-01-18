@@ -9,38 +9,45 @@
 
 extension Inspector {
 
-    func cacheAgnus(count: Int = 0) {
-        
-        if amiga != nil {
-            agnusInfo = amiga!.agnus.getInfo()
-        }
+    func cacheAgnus() {
+
+        agnusInfo = amiga!.agnus.getInfo()
     }
 
-    func refreshAgnus(everything: Bool) {
+    func refreshAgnus(count: Int) {
 
-        if everything {
+        // Perform a full refresh if needed
+        if count == 0 { refreshAgnusFormatters() }
 
-            let elements = [ dmaDIWSTRT: fmt16,
-                             dmaDIWSTOP: fmt16,
-                             dmaDDFSTRT: fmt16,
-                             dmaDDFSTOP: fmt16,
+        // Update display cache
+        cacheAgnus()
 
-                             dmaBPL1PT: fmt16,
-                             dmaBPL2PT: fmt16,
-                             dmaBPL3PT: fmt16,
-                             dmaBPL4PT: fmt16,
-                             dmaBPL5PT: fmt16,
-                             dmaBPL6PT: fmt16
-            ]
-            for (c, f) in elements { assignFormatter(f, c!) }
-        }
+        // Refresh display with cached values
+        refreshAgnusValues()
+    }
 
-        if agnusInfo == nil { return }
+    func refreshAgnusFormatters() {
 
-        // DMA control
-        let dmacon = agnusInfo!.dmacon
+        let elements = [ dmaDIWSTRT: fmt16,
+                         dmaDIWSTOP: fmt16,
+                         dmaDDFSTRT: fmt16,
+                         dmaDDFSTOP: fmt16,
 
-        dmaDMACON.intValue = Int32(dmacon)
+                         dmaBPL1PT: fmt16,
+                         dmaBPL2PT: fmt16,
+                         dmaBPL3PT: fmt16,
+                         dmaBPL4PT: fmt16,
+                         dmaBPL5PT: fmt16,
+                         dmaBPL6PT: fmt16
+        ]
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func refreshAgnusValues() {
+
+        let dmacon = Int(agnusInfo!.dmacon)
+
+        dmaDMACON.integerValue = dmacon
         dmaBLTPRI.state = (dmacon & 0b0000010000000000 != 0) ? .on : .off
         dmaDMAEN.state  = (dmacon & 0b0000001000000000 != 0) ? .on : .off
         dmaBPLEN.state  = (dmacon & 0b0000000100000000 != 0) ? .on : .off
@@ -52,8 +59,7 @@ extension Inspector {
         dmaAUD2EN.state  = (dmacon & 0b0000000000000100 != 0) ? .on : .off
         dmaAUD1EN.state  = (dmacon & 0b0000000000000010 != 0) ? .on : .off
         dmaAUD0EN.state  = (dmacon & 0b0000000000000001 != 0) ? .on : .off
-        
-        // Display DMA
+
         dmaDIWSTRT.integerValue = Int(agnusInfo!.diwstrt)
         dmaDIWSTOP.integerValue = Int(agnusInfo!.diwstop)
         dmaDDFSTRT.integerValue = Int(agnusInfo!.ddfstrt)

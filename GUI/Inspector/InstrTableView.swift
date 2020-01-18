@@ -38,21 +38,17 @@ class InstrTableView: NSTableView {
     
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        let row = sender.clickedRow
-        let col = sender.clickedColumn
+        if sender.clickedColumn == 0 {
 
-        inspector.lockParent()
-        if let amiga = inspector.parent?.amiga {
-            clickAction(amiga, row: row, col: col)
+            lockAmiga()
+            clickAction(row: sender.clickedRow)
+            unlockAmiga()
         }
-        inspector.unlockParent()
     }
 
-    func clickAction(_ amiga: AmigaProxy, row: Int, col: Int) {
+    func clickAction(row: Int) {
 
-        if col == 0, let addr = addrInRow[row] {
-
-            let cpu = amiga.cpu!
+        if let addr = addrInRow[row], let cpu = amiga?.cpu {
 
             if !cpu.breakpointIsSet(at: addr) {
                 cpu.addBreakpoint(at: addr)
@@ -61,36 +57,32 @@ class InstrTableView: NSTableView {
             } else if cpu.breakpointIsSetAndEnabled(at: addr) {
                 cpu.breakpointSetEnable(at: addr, value: false)
             }
-            update()
-            reloadData()
-            inspector.breakTableView.reloadData()
+
+            inspector.needsRefresh()
         }
     }
 
     @IBAction func doubleClickAction(_ sender: NSTableView!) {
 
-         let row = sender.clickedRow
-         let col = sender.clickedColumn
+        if sender.clickedColumn == 0 {
 
-         inspector.lockParent()
-         if let amiga = inspector.parent?.amiga {
-             doubleClickAction(amiga, row: row, col: col)
+             lockAmiga()
+             doubleClickAction(row: sender.clickedRow)
+             unlockAmiga()
          }
-         inspector.unlockParent()
-     }
+    }
 
-    func doubleClickAction(_ amiga: AmigaProxy, row: Int, col: Int) {
+    func doubleClickAction(row: Int) {
 
-        if col == 0, let addr = addrInRow[row] {
+        if let addr = addrInRow[row], let cpu = amiga?.cpu {
 
-            let cpu = amiga.cpu!
-            
             if cpu.breakpointIsSet(at: addr) {
                 cpu.removeBreakpoint(at: addr)
             } else {
                 cpu.addBreakpoint(at: addr)
             }
-            inspector.refresh(everything: true)
+
+            inspector.needsRefresh()
         }
     }
 
@@ -136,45 +128,46 @@ class InstrTableView: NSTableView {
         dataInRow = [:]
         bpInRow = [:]
         rowForAddr = [:]
-        
+
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
 
-            if let cpu = inspector.parent?.amiga.cpu {
+            var info = amiga!.cpu.getInstrInfo(i)
 
-                var info = cpu.getInstrInfo(i)
-
-                instrInRow[i] = String(cString: &info.instr.0)
-                addrInRow[i] = addr
-                dataInRow[i] = String(cString: &info.data.0)
-                if cpu.breakpointIsSetAndDisabled(at: addr) {
-                    bpInRow[i] = BreakpointType.disabled
-                } else if cpu.breakpointIsSet(at: addr) {
-                    bpInRow[i] = BreakpointType.enabled
-                } else {
-                    bpInRow[i] = BreakpointType.none
-                }
-                rowForAddr[addr] = i
-                addr += UInt32(info.bytes)
+            instrInRow[i] = String(cString: &info.instr.0)
+            addrInRow[i] = addr
+            dataInRow[i] = String(cString: &info.data.0)
+            if amiga!.cpu.breakpointIsSetAndDisabled(at: addr) {
+                bpInRow[i] = BreakpointType.disabled
+            } else if amiga!.cpu.breakpointIsSet(at: addr) {
+                bpInRow[i] = BreakpointType.enabled
+            } else {
+                bpInRow[i] = BreakpointType.none
             }
+            rowForAddr[addr] = i
+            addr += UInt32(info.bytes)
         }
         
         reloadData()
     }
-    
-    func refresh(everything: Bool) {
 
-        if everything {
+    func refreshFormatters() {
 
-            for (c, f) in ["addr": fmt24] {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-                if let column = tableColumn(withIdentifier: columnId) {
-                    if let cell = column.dataCell as? NSCell {
-                        cell.formatter = f
-                    }
+        for (c, f) in ["addr": fmt24] {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+            if let column = tableColumn(withIdentifier: columnId) {
+                if let cell = column.dataCell as? NSCell {
+                    cell.formatter = f
                 }
             }
         }
+    }
+
+    func refresh(count: Int) {
+
+        // Perform a full refresh if needed
+        if count == 0 { refreshFormatters() }
         
+        // Update display cache and refresh display with cached values
         jumpToPC()
     }
 }

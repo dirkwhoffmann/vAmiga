@@ -8,8 +8,6 @@
 // -----------------------------------------------------------------------------
 
 class EventTableView: NSTableView {
-    
-    var amiga = amigaProxy
 
     override func awakeFromNib() {
         
@@ -18,13 +16,8 @@ class EventTableView: NSTableView {
         target = self
     }
     
-    func refresh(everything: Bool) {
-        
-        if everything {
-            
-            amiga = amigaProxy
-        }
-        
+    func refresh(count: Int) {
+                
         reloadData()
     }
 }

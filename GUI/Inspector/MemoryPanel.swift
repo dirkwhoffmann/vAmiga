@@ -37,52 +37,7 @@ struct MemColors {
 }
 
 extension Inspector {
-    
-    func cacheMemory(count: Int = 0) {
 
-        if count % 8 == 0 { memTableView.cache() }
-    }
-
-    func refreshMemory(everything: Bool) {
-
-        if everything {
-            refreshMemoryLayout()
-            memBankTableView.refresh()
-        }
-        memTableView.refresh()
-    }
-    
-    func refreshMemoryLayout() {
-
-        guard let config = amiga?.config() else { return }
-
-        let size = NSSize(width: 16, height: 16)
-        memLayoutButton.image   = memLayoutImage
-        memChipRamButton.image  = NSImage.init(color: MemColors.chip, size: size)
-        memFastRamButton.image  = NSImage.init(color: MemColors.fast, size: size)
-        memSlowRamButton.image  = NSImage.init(color: MemColors.slow, size: size)
-        memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
-        memWomButton.image      = NSImage.init(color: MemColors.wom, size: size)
-        memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
-        memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
-        memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
-        memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
-        memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
-
-        let chipKB = config.mem.chipSize / 1024
-        let fastKB = config.mem.fastSize / 1024
-        let slowKB = config.mem.slowSize / 1024
-        let romKB = config.mem.romSize / 1024
-        let womKB = config.mem.womSize / 1024
-        let extKB = config.mem.extSize / 1024
-        memChipRamText.stringValue = String.init(format: "%d KB", chipKB)
-        memFastRamText.stringValue = String.init(format: "%d KB", fastKB)
-        memSlowRamText.stringValue = String.init(format: "%d KB", slowKB)
-        memRomText.stringValue = String.init(format: "%d KB", romKB)
-        memWomText.stringValue = String.init(format: "%d KB", womKB)
-        memExtText.stringValue = String.init(format: "%d KB", extKB)
-    }
-    
     var memLayoutImage: NSImage? {
 
         guard let memory = parent?.amiga.mem else { return nil }
@@ -132,6 +87,47 @@ extension Inspector {
         return resizedImage
     }
 
+    func refreshMemoryLayout() {
+
+        guard let config = amiga?.config() else { return }
+
+        let size = NSSize(width: 16, height: 16)
+        memLayoutButton.image   = memLayoutImage
+        memChipRamButton.image  = NSImage.init(color: MemColors.chip, size: size)
+        memFastRamButton.image  = NSImage.init(color: MemColors.fast, size: size)
+        memSlowRamButton.image  = NSImage.init(color: MemColors.slow, size: size)
+        memRomButton.image      = NSImage.init(color: MemColors.rom, size: size)
+        memWomButton.image      = NSImage.init(color: MemColors.wom, size: size)
+        memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
+        memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
+        memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
+        memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
+        memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
+
+        let chipKB = config.mem.chipSize / 1024
+        let fastKB = config.mem.fastSize / 1024
+        let slowKB = config.mem.slowSize / 1024
+        let romKB = config.mem.romSize / 1024
+        let womKB = config.mem.womSize / 1024
+        let extKB = config.mem.extSize / 1024
+        memChipRamText.stringValue = String.init(format: "%d KB", chipKB)
+        memFastRamText.stringValue = String.init(format: "%d KB", fastKB)
+        memSlowRamText.stringValue = String.init(format: "%d KB", slowKB)
+        memRomText.stringValue = String.init(format: "%d KB", romKB)
+        memWomText.stringValue = String.init(format: "%d KB", womKB)
+        memExtText.stringValue = String.init(format: "%d KB", extKB)
+    }
+    
+    func refreshMemory(count: Int) {
+
+        // Refresh sub views
+        memTableView.refresh(count: count)
+        memBankTableView.refresh(count: count)
+
+        // Perform a full refresh if needed
+        if count == 0 { refreshMemoryLayout() }
+    }
+
     func setBank(src: MemorySource) {
 
         for bank in 0...255 {
@@ -154,7 +150,7 @@ extension Inspector {
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(value)
             memBankTableView.selectRowIndexes([value], byExtendingSelection: false)
-            memTableView.refresh()
+            needsRefresh()
         }
     }
     
@@ -253,17 +249,19 @@ extension Inspector {
         lockAmiga()
 
         let input = sender.stringValue
-        guard let addr = Int(input, radix: 16), input != "" else {
-            
+
+        if let addr = Int(input, radix: 16), input != "" {
+
+            sender.stringValue = String(format: "%06X", addr)
+            setSelected(addr)
+
+        } else {
+
             sender.stringValue = ""
             selected = -1
-            memTableView.refresh()
-            return
         }
-        
-        sender.stringValue = String(format: "%06X", addr)
-        setSelected(addr)
 
+        needsRefresh()
         unlockAmiga()
     }
 }

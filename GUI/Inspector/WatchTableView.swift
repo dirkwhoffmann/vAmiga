@@ -11,7 +11,11 @@ class WatchTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
 
-    var cpu = amigaProxy!.cpu!
+    // Data caches
+     var disabledCache: [Int: Bool] = [:]
+     var symbCache: [Int: String] = [:]
+     var addrCache: [Int: UInt32] = [:]
+     var watchCnt = 0
 
     override func awakeFromNib() {
 
@@ -22,20 +26,46 @@ class WatchTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
-    func refresh(everything: Bool) {
+    func cache() {
 
-        if everything {
-            cpu = amigaProxy!.cpu
-            for (c, f) in ["addr": fmt24] {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-                if let column = tableColumn(withIdentifier: columnId) {
-                    if let cell = column.dataCell as? NSCell {
-                        cell.formatter = f
-                    }
+         if amiga == nil { return }
+
+         watchCnt = amiga!.cpu.numberOfBreakpoints()
+
+         for i in 0 ..< watchCnt {
+             if amiga!.cpu.breakpointIsDisabled(i) {
+                 disabledCache[i] = true
+                 symbCache[i] = "\u{26AA}" /* ⚪ */
+             } else {
+                 disabledCache[i] = false
+                 symbCache[i] = "\u{26D4}" /* ⛔ */
+             }
+             addrCache[i] = amiga!.cpu.breakpointAddr(i)
+         }
+     }
+    
+    func refreshFormatters() {
+
+        for (c, f) in ["addr": fmt24] {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+            if let column = tableColumn(withIdentifier: columnId) {
+                if let cell = column.dataCell as? NSCell {
+                    cell.formatter = f
                 }
             }
-            reloadData()
         }
+    }
+
+    func refresh(count: Int) {
+        
+        // Perform a full refresh if needed
+        if count == 0 { refreshFormatters() }
+        
+        // Update display cache
+        cache()
+        
+        // Refresh display with cached values
+        reloadData()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -43,18 +73,21 @@ class WatchTableView: NSTableView {
         let row = sender.clickedRow
         let col = sender.clickedColumn
 
+        lockAmiga()
+
         if col == 0 {
 
             // Toggle enable status
-            cpu.watchpointSetEnable(row, value: cpu.watchpointIsDisabled(row))
-            inspector.refresh(everything: true)
+            let disabled = amiga?.cpu.watchpointIsDisabled(row) ?? false
+            amiga?.cpu.watchpointSetEnable(row, value: disabled)
+            inspector.needsRefresh()
         }
         
         if col == 2 {
 
             // Delete
-            cpu.removeWatchpoint(row)
-            inspector.refresh(everything: true)
+            amiga?.cpu.removeWatchpoint(row)
+            inspector.needsRefresh()
         }
     }
 }
@@ -63,30 +96,19 @@ extension WatchTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return cpu.numberOfWatchpoints() + 1
+        return watchCnt
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
-        let disabled = cpu.watchpointIsDisabled(row)
-        let last = row == numberOfRows(in: tableView) - 1
+        let last = row == watchCnt
 
         switch tableColumn?.identifier.rawValue {
 
-        case "break" where disabled:
-            return last ? "" : "\u{26AA}" // "⚪"
-
-        case "break":
-            return last ? "" : "\u{26D4}" // "⛔"
-
-        case "addr": 
-            return last ? "Add address" : cpu.watchpointAddr(row)
-
-        case "delete":
-            return last ? "" : "\u{1F5D1}" // "🗑"
-
-        default:
-            fatalError()
+        case "break": return last ? "" : (symbCache[row] ?? "?")
+        case "addr": return last ? "Add address" : (addrCache[row] ?? "?")
+        case "delete": return last ? "" : "\u{1F5D1}" // "🗑"
+        default: return ""
         }
     }
 }
@@ -98,8 +120,8 @@ extension WatchTableView: NSTableViewDelegate {
         if tableColumn?.identifier.rawValue == "addr" {
             if let cell = cell as? NSTextFieldCell {
 
-                let last = row == numberOfRows(in: tableView) - 1
-                let disabled = !last && cpu.watchpointIsDisabled(row)
+                let last = row == watchCnt
+                let disabled = !last && disabledCache[row] == true
                 let selected = tableView.selectedRow == row
                 let edited = tableView.editedRow == row
 
@@ -124,17 +146,18 @@ extension WatchTableView: NSTableViewDelegate {
 
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
 
-        track("Adding ")
-        if tableColumn?.identifier.rawValue == "addr" {
-            if let addr = object as? UInt32 {
-                if !cpu.watchpointIsSet(at: addr) {
-                    cpu.addWatchpoint(at: addr)
-                    inspector.refresh(everything: true)
-                    return
-                }
-            }
-        }
+        if tableColumn?.identifier.rawValue != "addr" { NSSound.beep(); return }
+        guard let addr = object as? UInt32 else { NSSound.beep(); return }
 
-        NSSound.beep()
+        lockAmiga()
+
+        if amiga?.cpu.breakpointIsSet(at: addr) == false {
+            amiga?.cpu.addBreakpoint(at: addr)
+        } else {
+            NSSound.beep()
+        }
+        inspector.needsRefresh()
+
+        unlockAmiga()
     }
 }

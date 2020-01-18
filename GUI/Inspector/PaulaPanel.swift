@@ -11,54 +11,63 @@ extension Inspector {
 
     func cachePaula(count: Int = 0) {
 
-        if amiga != nil {
-            paulaInfo = amiga!.paula.getInfo()
-            audioInfo = amiga!.paula.getAudioInfo()
-            diskInfo  = amiga!.paula.getDiskControllerInfo()
-        }
+        paulaInfo = amiga!.paula.getInfo()
+        audioInfo = amiga!.paula.getAudioInfo()
+        diskInfo  = amiga!.paula.getDiskControllerInfo()
     }
 
-    func refreshPaula(everything: Bool) {
+    func refreshPaula(count: Int) {
 
-        if everything {
+         // Perform a full refresh if needed
+         if count == 0 { refreshPaulaFormatters() }
 
-            let elements = [ paulaIntena: fmt16,
-                             paulaIntreq: fmt16,
-                             dskDsklen: fmt16,
-                             dskDskbytr: fmt16,
-                             dskAdkconHi: fmt8,
-                             dskDsksync: fmt16,
+         // Update display cache
+         cachePaula()
 
-                             audioLen0: fmt16,
-                             audioPer0: fmt16,
-                             audioVol0: fmt16,
-                             audioDat0: fmt16,
-                             audioLoc0: fmt16,
-                             audioLen1: fmt16,
-                             audioPer1: fmt16,
-                             audioVol1: fmt16,
-                             audioDat1: fmt16,
-                             audioLoc1: fmt16,
-                             audioLen2: fmt16,
-                             audioPer2: fmt16,
-                             audioVol2: fmt16,
-                             audioDat2: fmt16,
-                             audioLoc2: fmt16,
-                             audioLen3: fmt16,
-                             audioPer3: fmt16,
-                             audioVol3: fmt16,
-                             audioDat3: fmt16,
-                             audioLoc3: fmt16
-                             ]
+         // Refresh display with cached values
+         refreshPaulaValues()
+     }
 
-            for (c, f) in elements { assignFormatter(f, c!) }
-        }
+    func refreshPaulaFormatters() {
 
-        if paulaInfo == nil { return }
-        if audioInfo == nil { return }
-        if diskInfo == nil { return }
+        let elements = [ paulaIntena: fmt16,
+                         paulaIntreq: fmt16,
+                         dskDsklen: fmt16,
+                         dskDskbytr: fmt16,
+                         dskAdkconHi: fmt8,
+                         dskDsksync: fmt16,
 
+                         audioLen0: fmt16,
+                         audioPer0: fmt16,
+                         audioVol0: fmt16,
+                         audioDat0: fmt16,
+                         audioLoc0: fmt16,
+                         audioLen1: fmt16,
+                         audioPer1: fmt16,
+                         audioVol1: fmt16,
+                         audioDat1: fmt16,
+                         audioLoc1: fmt16,
+                         audioLen2: fmt16,
+                         audioPer2: fmt16,
+                         audioVol2: fmt16,
+                         audioDat2: fmt16,
+                         audioLoc2: fmt16,
+                         audioLen3: fmt16,
+                         audioPer3: fmt16,
+                         audioVol3: fmt16,
+                         audioDat3: fmt16,
+                         audioLoc3: fmt16
+        ]
+
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func refreshPaulaValues() {
+
+        //
         // Interrupt controller
+        //
+
         let intena = Int(paulaInfo!.intena)
         let intreq = Int(paulaInfo!.intreq)
 
@@ -95,8 +104,11 @@ extension Inspector {
         paulaReq2.state  = (intreq & 0b0000000000000100 != 0) ? .on : .off
         paulaReq1.state  = (intreq & 0b0000000000000010 != 0) ? .on : .off
         paulaReq0.state  = (intreq & 0b0000000000000001 != 0) ? .on : .off
-        
+
+        //
         // Disk controller
+        //
+
         switch diskInfo!.state {
         case DRIVE_DMA_OFF:
             dskStateText.stringValue = "Idle"
@@ -161,7 +173,10 @@ extension Inspector {
         default: break
         }
 
+        //
         // Audio section
+        //
+        
         audioLen0.intValue = Int32(audioInfo!.channel.0.audlenLatch)
         audioPer0.intValue = Int32(audioInfo!.channel.0.audperLatch)
         audioVol0.intValue = Int32(audioInfo!.channel.0.audvolLatch)

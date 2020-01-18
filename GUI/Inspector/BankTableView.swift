@@ -11,9 +11,12 @@ class BankTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
 
-    var memory = amigaProxy?.mem
+    // Displayed memory bank
     var bank = 0
-    
+
+    // Data caches
+    var bankCache: [Int: MemorySource] = [:]
+
     override func awakeFromNib() {
         
         delegate = self
@@ -21,18 +24,31 @@ class BankTableView: NSTableView {
         target = self
         action = #selector(clickAction(_:))
     }
-    
-    func refresh() {
-        
-        track()
-        memory = amigaProxy?.mem
+
+    func cache() {
+
+        for i in 0 ..< 256 {
+            bankCache[i] = amiga!.mem.memSrc(i << 16)
+        }
+    }
+
+    func refresh(count: Int) {
+
+        // Update display cache
+        cache()
+
+        // Increase the update interval
+        if count % 8 != 0 { return }
+
+        // Refresh display with cached values
         reloadData()
     }
-    
+
     @IBAction func clickAction(_ sender: NSTableView!) {
-        
-        let row = sender.clickedRow
-        inspector.setBank(row)
+
+        lockAmiga()
+        inspector.setBank(sender.clickedRow)
+        unlockAmiga()
     }
 }
 
@@ -43,15 +59,10 @@ extension BankTableView: NSTableViewDataSource {
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
         switch tableColumn?.identifier.rawValue {
-            
-        case "bank":
-            return row
-            
+
         case "source":
-            
-            let src = memory?.memSrc(row << 16).rawValue
-            
-            switch src {
+
+            switch bankCache[row]?.rawValue {
                 
             case MEM_UNMAPPED.rawValue:
                 return "Unmapped"
@@ -78,8 +89,9 @@ extension BankTableView: NSTableViewDataSource {
             default:
                 return "???"
             }
+
         default:
-            return "???"
+            return row
         }
     }
 }
@@ -89,12 +101,10 @@ extension BankTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         if let cell = cell as? NSTextFieldCell {
-            
-            let src = memory?.memSrc(row << 16).rawValue
-            switch src {
-            case MEM_UNMAPPED.rawValue:
+
+            if bankCache[row] == MEM_UNMAPPED {
                 cell.textColor = .gray
-            default:
+            } else {
                 cell.textColor = .textColor
             }
         }

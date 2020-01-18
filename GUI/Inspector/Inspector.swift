@@ -420,23 +420,18 @@ class Inspector: NSWindowController {
     var serInfo: SerialPortInfo?
     var uartInfo: UARTInfo?
     var eventInfo: EventInfo?
-    var wasRunning = true
     var isRunning = true
 
     // The document this inspector is bound to
     var parent: MyController?
 
-    // Access lock for variable parent
-    let lock = NSLock()
-    func lockParent() { lock.lock() }
-    func unlockParent() { lock.unlock() }
-
     // Timer for triggering continous update
     var timer: Timer?
 
     // Used to determine the items that should be refreshed
-    var refreshCounter = 0
+    var refreshCnt = 0
 
+    // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
 
     // Factory method
@@ -471,19 +466,16 @@ class Inspector: NSWindowController {
         super.showWindow(self)
         amiga?.enableDebugging()
         updateInspectionTarget()
-        refresh(everything: true)
         
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
             lockAmiga()
-
-            // Update data cached
-            self.cache(count: self.refreshCounter)
-            self.refreshCounter += 1
-
-            // Refresh display (if needed)
-            if self.isRunning || self.wasRunning {
-                self.refresh(everything: false)
+            if amiga != nil {
+                if self.isRunning || self.refreshCnt == 0 {
+                    self.refresh(count: self.refreshCnt)
+                }
+                self.isRunning = amiga!.isRunning()
+                self.refreshCnt += 1
             }
             unlockAmiga()
         }
@@ -499,69 +491,30 @@ class Inspector: NSWindowController {
         control.needsDisplay = true
     }
 
-    func updateInspectionTarget() {
+    func needsRefresh() {
 
-        if let id = debugPanel.selectedTabViewItem?.label {
-
-            switch id {
-
-            case "CPU":    parent?.amiga.setInspectionTarget(INS_CPU)
-            case "CIA":    parent?.amiga.setInspectionTarget(INS_CIA)
-            case "Memory": parent?.amiga.setInspectionTarget(INS_MEM)
-            case "Agnus":  parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Copper": parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Denise": parent?.amiga.setInspectionTarget(INS_DENISE)
-            case "Paula":  parent?.amiga.setInspectionTarget(INS_PAULA)
-            case "Ports":  parent?.amiga.setInspectionTarget(INS_PORTS)
-            case "Events": parent?.amiga.setInspectionTarget(INS_EVENTS)
-            default:       break
-            }
-        }
+        // We force a refresh by setting the refresh counter to 0. This causes
+        // all refresh methods to be invoked inside the timer handler.
+        refreshCnt = 0
     }
 
-    func cache(count: Int = 0) {
-
-        if amiga != nil {
-
-            wasRunning = isRunning
-            isRunning = amiga!.isRunning()
-
-            if let id = debugPanel.selectedTabViewItem?.label {
-
-                switch id {
-
-                case "CPU":    cacheCPU(count: count)
-                case "CIA":    cacheCIA(count: count)
-                case "Memory": cacheMemory(count: count)
-                case "Agnus":  cacheAgnus(count: count)
-                case "Copper": cacheCopper(count: count)
-                case "Denise": cacheDenise(count: count)
-                case "Paula":  cachePaula(count: count)
-                case "Ports":  cachePorts(count: count)
-                case "Events": cacheEvents(count: count)
-                default:       break
-                }
-            }
-        }
-    }
-
-    func refresh(everything: Bool) {
+    func refresh(count: Int) {
         
         if window?.isVisible == false { return }
-        
+
         if let id = debugPanel.selectedTabViewItem?.label {
 
             switch id {
 
-            case "CPU": refreshCPU(everything: everything)
-            case "CIA": refreshCIA(everything: everything)
-            case "Memory": refreshMemory(everything: everything)
-            case "Agnus": refreshAgnus(everything: everything)
-            case "Copper": refreshCopper(everything: everything)
-            case "Denise": refreshDenise(everything: everything)
-            case "Paula": refreshPaula(everything: everything)
-            case "Ports": refreshPorts(everything: everything)
-            case "Events": refreshEvents(everything: everything)
+            case "CPU": refreshCPU(count: count)
+            case "CIA": refreshCIA(count: count)
+            case "Memory": refreshMemory(count: count)
+            case "Agnus": refreshAgnus(count: count)
+            case "Copper": refreshCopper(count: count)
+            case "Denise": refreshDenise(count: count)
+            case "Paula": refreshPaula(count: count)
+            case "Ports": refreshPorts(count: count)
+            case "Events": refreshEvents(count: count)
             default: break
             }
         }
@@ -584,14 +537,33 @@ extension Inspector: NSWindowDelegate {
 }
 
 extension Inspector: NSTabViewDelegate {
-    
+
+    func updateInspectionTarget() {
+
+        if let id = debugPanel.selectedTabViewItem?.label {
+
+            switch id {
+
+            case "CPU":    parent?.amiga.setInspectionTarget(INS_CPU)
+            case "CIA":    parent?.amiga.setInspectionTarget(INS_CIA)
+            case "Memory": parent?.amiga.setInspectionTarget(INS_MEM)
+            case "Agnus":  parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Copper": parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Denise": parent?.amiga.setInspectionTarget(INS_DENISE)
+            case "Paula":  parent?.amiga.setInspectionTarget(INS_PAULA)
+            case "Ports":  parent?.amiga.setInspectionTarget(INS_PORTS)
+            case "Events": parent?.amiga.setInspectionTarget(INS_EVENTS)
+            default:       break
+            }
+
+            needsRefresh()
+        }
+    }
+
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
         lockAmiga()
-
         updateInspectionTarget()
-        refresh(everything: true)
-
         unlockAmiga()
     }
 }

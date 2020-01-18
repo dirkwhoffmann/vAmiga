@@ -10,9 +10,13 @@
 class BreakTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
-    
-    var cpu = amigaProxy!.cpu!
-    
+
+    // Data caches
+    var disabledCache: [Int: Bool] = [:]
+    var symbCache: [Int: String] = [:]
+    var addrCache: [Int: UInt32] = [:]
+    var breakCnt = 0
+
     override func awakeFromNib() {
         
         delegate = self
@@ -21,21 +25,47 @@ class BreakTableView: NSTableView {
         
         action = #selector(clickAction(_:))
     }
-    
-    func refresh(everything: Bool) {
 
-        if everything {
-            cpu = amigaProxy!.cpu
-            for (c, f) in ["addr": fmt24] {
-                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-                if let column = tableColumn(withIdentifier: columnId) {
-                    if let cell = column.dataCell as? NSCell {
-                        cell.formatter = f
-                    }
+    func cache() {
+
+        if amiga == nil { return }
+
+        breakCnt = amiga!.cpu.numberOfBreakpoints()
+
+        for i in 0 ..< breakCnt {
+            if amiga!.cpu.breakpointIsDisabled(i) {
+                disabledCache[i] = true
+                symbCache[i] = "\u{26AA}" /* ⚪ */
+            } else {
+                disabledCache[i] = false
+                symbCache[i] = "\u{26D4}" /* ⛔ */
+            }
+            addrCache[i] = amiga!.cpu.breakpointAddr(i)
+        }
+    }
+
+    func refreshFormatters() {
+
+        for (c, f) in ["addr": fmt24] {
+            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+            if let column = tableColumn(withIdentifier: columnId) {
+                if let cell = column.dataCell as? NSCell {
+                    cell.formatter = f
                 }
             }
-            reloadData()
         }
+    }
+
+    func refresh(count: Int) {
+
+        // Perform a full refresh if needed
+        if count == 0 { refreshFormatters() }
+
+        // Update display cache
+        cache()
+
+        // Refresh display with cached values
+        reloadData()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -43,20 +73,25 @@ class BreakTableView: NSTableView {
         let row = sender.clickedRow
         let col = sender.clickedColumn
 
+        lockAmiga()
+
         if col == 0 { // Enable / Disable
-            cpu.breakpointSetEnable(row, value: cpu.breakpointIsDisabled(row))
-            inspector.refresh(everything: true)
+            let disabled = amiga?.cpu.breakpointIsDisabled(row) ?? false
+            amiga?.cpu.breakpointSetEnable(row, value: disabled)
+            inspector.needsRefresh()
         }
 
         if col == 0 || col == 1 { // Jump to breakpoint address
-            let addr = cpu.breakpointAddr(row)
-            if addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr) }
+            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr)
+            }
         }
 
         if col == 2 { // Delete
-            cpu.removeBreakpoint(row)
-            inspector.refresh(everything: true)
+            amiga?.cpu.removeBreakpoint(row)
+            inspector.needsRefresh()
         }
+
+        unlockAmiga()
     }
 }
 
@@ -64,30 +99,19 @@ extension BreakTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return cpu.numberOfBreakpoints() + 1
+        return breakCnt + 1
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
-        let disabled = cpu.breakpointIsDisabled(row)
-        let last = row == numberOfRows(in: tableView) - 1
+        let last = row == breakCnt
 
         switch tableColumn?.identifier.rawValue {
 
-        case "break" where disabled:
-            return last ? "" : "\u{26AA}" // "⚪"
-
-        case "break":
-            return last ? "" : "\u{26D4}" // "⛔"
-
-        case "addr":
-            return last ? "Add address" : cpu.breakpointAddr(row)
-
-        case "delete":
-            return last ? "" : "\u{1F5D1}" // "🗑"
-
-        default:
-            fatalError()
+        case "break": return last ? "" : (symbCache[row] ?? "?")
+        case "addr": return last ? "Add address" : (addrCache[row] ?? "?")
+        case "delete": return last ? "" : "\u{1F5D1}" // "🗑"
+        default: return ""
         }
     }
 }
@@ -99,8 +123,8 @@ extension BreakTableView: NSTableViewDelegate {
         if tableColumn?.identifier.rawValue == "addr" {
             if let cell = cell as? NSTextFieldCell {
 
-                let last = row == numberOfRows(in: tableView) - 1
-                let disabled = !last && cpu.breakpointIsDisabled(row)
+                let last = row == breakCnt
+                let disabled = !last && disabledCache[row] == true
                 let selected = tableView.selectedRow == row
                 let edited = tableView.editedRow == row
 
@@ -125,16 +149,18 @@ extension BreakTableView: NSTableViewDelegate {
 
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
 
-        if tableColumn?.identifier.rawValue == "addr" {
-            if let addr = object as? UInt32 {
-                if !cpu.breakpointIsSet(at: addr) {
-                    cpu.addBreakpoint(at: addr)
-                    inspector.refresh(everything: true)
-                    return
-                }
-            }
-        }
+        if tableColumn?.identifier.rawValue != "addr" { NSSound.beep(); return }
+        guard let addr = object as? UInt32 else { NSSound.beep(); return }
 
-        NSSound.beep()
+        lockAmiga()
+
+        if amiga?.cpu.breakpointIsSet(at: addr) == false {
+            amiga?.cpu.addBreakpoint(at: addr)
+        } else {
+            NSSound.beep()
+        }
+        inspector.needsRefresh()
+
+        unlockAmiga()
     }
 }

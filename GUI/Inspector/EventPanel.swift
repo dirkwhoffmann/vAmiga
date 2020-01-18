@@ -9,16 +9,31 @@
 
 extension Inspector {
 
-    func cacheEvents(count: Int = 0) {
+    func cacheEvents() {
 
-        if amiga != nil {
-            eventInfo = amiga!.agnus.getEventInfo()
-        }
+        eventInfo = amiga!.agnus.getEventInfo()
     }
 
-    func refreshEvents(everything: Bool) {
+    func refreshEventFormatters() {
 
-        if eventInfo == nil { return }
+    }
+
+    func refreshEvents(count: Int) {
+
+         // Refresh sub views
+        evTableView.refresh(count: count)
+
+         // Perform a full refresh if needed
+         if count == 0 { refreshEventFormatters() }
+
+         // Update display cache
+         cacheEvents()
+
+         // Refresh display with cached values
+         refreshEventValues()
+     }
+
+    func refreshEventValues() {
 
         evCpuProgress.integerValue = Int(eventInfo!.cpuClock)
         evCpuProgress2.integerValue = Int(eventInfo!.cpuCycles)
@@ -28,7 +43,5 @@ extension Inspector {
         evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
         evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
         evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
-
-        evTableView.reloadData()
     }
 }

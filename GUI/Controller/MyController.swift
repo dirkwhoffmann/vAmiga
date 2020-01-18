@@ -566,12 +566,12 @@ extension MyController {
     
         case MSG_CONFIG,
              MSG_MEM_LAYOUT:
-             myAppDelegate.inspector?.refresh(everything: true)
+             myAppDelegate.inspector?.needsRefresh()
 
         case MSG_BREAKPOINT_CONFIG,
              MSG_BREAKPOINT_REACHED,
              MSG_WATCHPOINT_REACHED:
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
  
         case MSG_READY_TO_POWER_ON:
     
@@ -585,13 +585,13 @@ extension MyController {
 
             needsSaving = true
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
             refreshStatusBar()
     
         case MSG_PAUSE:
             
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
             refreshStatusBar()
     
         case MSG_POWER_ON:
@@ -600,17 +600,17 @@ extension MyController {
             serialOut = ""
             renderer.zoomIn()
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
             
         case MSG_POWER_OFF:
 
             renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
             
         case MSG_RESET:
             
-            myAppDelegate.inspector?.refresh(everything: true)
+            myAppDelegate.inspector?.needsRefresh()
             
         case MSG_WARP_ON,
              MSG_WARP_OFF:
