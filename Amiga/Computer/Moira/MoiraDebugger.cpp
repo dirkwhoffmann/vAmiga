@@ -216,7 +216,7 @@ Debugger::disableLogging()
 int
 Debugger::loggedInstructions()
 {
-    return logCnt < LOG_BUFFER_CAPACITY ? logCnt : LOG_BUFFER_CAPACITY;
+    return logCnt < LOG_BUFFER_CAPACITY ? (int)logCnt : LOG_BUFFER_CAPACITY;
 }
 
 void

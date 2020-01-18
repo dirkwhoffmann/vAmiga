@@ -252,12 +252,6 @@ public:
     // The current beam position
     Beam pos;
 
-    // The current vertical beam position (0 .. VPOS_MAX)
-    // int16_t vpos;
-    
-    // The current horizontal beam position (0 .. HPOS_MAX)
-    // int16_t hpos;
-
     // Information about the currently drawn frame
     struct {
 
@@ -496,6 +490,18 @@ public:
     bool oldBplDmaLine;
 
 
+    //
+    // Bus access control
+    //
+
+private:
+
+    /* Blitter slow down
+     * The BLS signal indicates that the CPU's request to access the bus has
+     * been denied for three or more consecutive cycles.
+     */
+    bool bls;
+
     /*
      * Priority logic (CPU versus Blitter)
      *
@@ -507,10 +513,10 @@ public:
      */
 
 // private:
-public: // REMOVE
+public:
 
-    bool cpuRequestsBus;
-    int cpuDenials;
+    bool cpuRequestsBus; // DEPRECATED
+    int cpuDenials; // DEPRECATED
 
 
     //
@@ -601,6 +607,7 @@ public:
         & busOwner
         & oldBplDmaLine
 
+        & bls
         & cpuRequestsBus
         & cpuDenials;
     }
@@ -771,7 +778,7 @@ public:
     bool copperCanDoDMA();
 
     //Called by the CPU when it wants to use the bus or no longer needs it.
-    void requestBus(bool value);
+    void requestBus(bool value); // DEPRECATED
 
     /* Checks if the bus is currently available for the specified resource.
      */

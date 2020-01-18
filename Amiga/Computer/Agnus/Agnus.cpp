@@ -387,7 +387,7 @@ Agnus::copperCanDoDMA()
 }
 
 void
-Agnus::requestBus(bool value)
+Agnus::requestBus(bool value)  
 {
     cpuRequestsBus = value;
 }
@@ -1817,13 +1817,18 @@ Agnus::executeUntilBusIsFree()
     // Execute Agnus until the bus is free
     DMACycle delay = 0;
     do {
+
         posh = pos.h;
         execute();
-        delay++;
+        if (++delay == 3) bls = true;
+
     } while (busOwner[posh] != BUS_NONE);
 
     // Signal that the CPU does no longer want the bus
-     requestBus(false);
+    requestBus(false);
+
+    // Clear the BLS line (Blitter slow down)
+    bls = false;
 
     // Add wait states to the CPU
     cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
