@@ -115,7 +115,6 @@
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50AB982023C5AE0000B17B21 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */; };
-		50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50AB982123C6263500B17B21 /* WatchTableView.swift */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
@@ -346,7 +345,6 @@
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraDebugger.cpp; sourceTree = "<group>"; };
 		50AB981F23C5AE0000B17B21 /* MoiraDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDebugger.h; sourceTree = "<group>"; };
-		50AB982123C6263500B17B21 /* WatchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchTableView.swift; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
@@ -764,7 +762,6 @@
 				509CF4CE220847C600C500F0 /* InstrTableView.swift */,
 				509CF4D02208487900C500F0 /* TraceTableView.swift */,
 				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
-				50AB982123C6263500B17B21 /* WatchTableView.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
@@ -1172,7 +1169,6 @@
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50AB982023C5AE0000B17B21 /* MoiraDebugger.cpp in Sources */,
-				50AB982223C6263500B17B21 /* WatchTableView.swift in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,

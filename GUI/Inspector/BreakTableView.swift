@@ -7,42 +7,27 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class BreakTableView: NSTableView {
-    
+class PointTableView: NSTableView {
+
     @IBOutlet weak var inspector: Inspector!
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]
-    var symbCache: [Int: String] = [:]
     var addrCache: [Int: UInt32] = [:]
-    var breakCnt = 0
+    var numRows = 0
 
     override func awakeFromNib() {
-        
+
         delegate = self
         dataSource = self
         target = self
-        
+
         action = #selector(clickAction(_:))
     }
 
-    func cache() {
-
-        if amiga == nil { return }
-
-        breakCnt = amiga!.cpu.numberOfBreakpoints()
-
-        for i in 0 ..< breakCnt {
-            if amiga!.cpu.breakpointIsDisabled(i) {
-                disabledCache[i] = true
-                symbCache[i] = "\u{26AA}" /* ⚪ */
-            } else {
-                disabledCache[i] = false
-                symbCache[i] = "\u{26D4}" /* ⛔ */
-            }
-            addrCache[i] = amiga!.cpu.breakpointAddr(i)
-        }
-    }
+    func cache() { }
+    func click(row: Int, col: Int) { }
+    func edit(addr: UInt32) { }
 
     func refreshFormatters() {
 
@@ -58,72 +43,57 @@ class BreakTableView: NSTableView {
 
     func refresh(count: Int) {
 
-        // Perform a full refresh if needed
-        if count == 0 { refreshFormatters() }
+        if count == 0 {
 
-        // Update display cache
-        cache()
-
-        // Refresh display with cached values
-        reloadData()
+            refreshFormatters()
+            cache()
+            reloadData()
+        }
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        let row = sender.clickedRow
-        let col = sender.clickedColumn
-
         lockAmiga()
-
-        if col == 0 { // Enable / Disable
-            let disabled = amiga?.cpu.breakpointIsDisabled(row) ?? false
-            amiga?.cpu.breakpointSetEnable(row, value: disabled)
-            inspector.needsRefresh()
-        }
-
-        if col == 0 || col == 1 { // Jump to breakpoint address
-            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr)
-            }
-        }
-
-        if col == 2 { // Delete
-            amiga?.cpu.removeBreakpoint(row)
-            inspector.needsRefresh()
-        }
-
+        click(row: sender.clickedRow, col: sender.clickedColumn)
         unlockAmiga()
     }
 }
 
-extension BreakTableView: NSTableViewDataSource {
+extension PointTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return breakCnt + 1
+        return numRows + 1
     }
 
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
-        let last = row == breakCnt
+        let last = row == numRows
 
         switch tableColumn?.identifier.rawValue {
 
-        case "break": return last ? "" : (symbCache[row] ?? "?")
-        case "addr": return last ? "Add address" : (addrCache[row] ?? "?")
-        case "delete": return last ? "" : "\u{1F5D1}" // "🗑"
+        case "break" where disabledCache[row] == true:
+            return last ? "" : "\u{26AA}" /* ⚪ */
+        case "break":
+            return last ? "" : "\u{26D4}" /* ⛔ */
+        case "addr":
+            return last ? "Add address" : (addrCache[row] ?? "?")
+        case "delete":
+            return last ? "" : "\u{1F5D1}" // "🗑"
+
         default: return ""
         }
     }
 }
 
-extension BreakTableView: NSTableViewDelegate {
+extension PointTableView: NSTableViewDelegate {
 
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 
         if tableColumn?.identifier.rawValue == "addr" {
             if let cell = cell as? NSTextFieldCell {
 
-                let last = row == breakCnt
+                let last = row == numRows
                 let disabled = !last && disabledCache[row] == true
                 let selected = tableView.selectedRow == row
                 let edited = tableView.editedRow == row
@@ -153,14 +123,95 @@ extension BreakTableView: NSTableViewDelegate {
         guard let addr = object as? UInt32 else { NSSound.beep(); return }
 
         lockAmiga()
+        edit(addr: addr)
+        inspector.needsRefresh()
+        unlockAmiga()
+     }
+}
+
+class BreakTableView: PointTableView {
+
+    override func cache() {
+
+        numRows = amiga!.cpu.numberOfBreakpoints()
+
+        for i in 0 ..< numRows {
+            disabledCache[i] = amiga!.cpu.breakpointIsDisabled(i)
+            addrCache[i] = amiga!.cpu.breakpointAddr(i)
+        }
+    }
+
+    override func click(row: Int, col: Int) {
+
+        if col == 0 {
+
+            // Enable / Disable
+            let disabled = amiga?.cpu.breakpointIsDisabled(row) ?? false
+            amiga?.cpu.breakpointSetEnable(row, value: disabled)
+            inspector.needsRefresh()
+        }
+
+        if col == 0 || col == 1 {
+
+            // Jump to breakpoint address
+            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr)
+            }
+        }
+
+        if col == 2 {
+
+            // Delete
+            amiga?.cpu.removeBreakpoint(row)
+            inspector.needsRefresh()
+        }
+    }
+
+    override func edit(addr: UInt32) {
 
         if amiga?.cpu.breakpointIsSet(at: addr) == false {
             amiga?.cpu.addBreakpoint(at: addr)
         } else {
             NSSound.beep()
         }
-        inspector.needsRefresh()
+    }
+}
 
-        unlockAmiga()
+class WatchTableView: PointTableView {
+
+    override func cache() {
+
+        numRows = amiga!.cpu.numberOfWatchpoints()
+
+        for i in 0 ..< numRows {
+            disabledCache[i] = amiga!.cpu.watchpointIsDisabled(i)
+            addrCache[i] = amiga!.cpu.watchpointAddr(i)
+        }
+    }
+
+    override func click(row: Int, col: Int) {
+
+        if col == 0 {
+
+             // Toggle enable status
+             let disabled = amiga?.cpu.watchpointIsDisabled(row) ?? false
+             amiga?.cpu.watchpointSetEnable(row, value: disabled)
+             inspector.needsRefresh()
+         }
+
+         if col == 2 {
+
+             // Delete
+             amiga?.cpu.removeWatchpoint(row)
+             inspector.needsRefresh()
+         }
+    }
+
+    override func edit(addr: UInt32) {
+
+        if amiga?.cpu.watchpointIsSet(at: addr) == false {
+            amiga?.cpu.addWatchpoint(at: addr)
+        } else {
+            NSSound.beep()
+        }
     }
 }
