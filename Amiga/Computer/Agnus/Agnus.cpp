@@ -418,22 +418,27 @@ Agnus::allocateBus()
         case BUS_BLITTER:
 
             // Check if the CPU has precedence
+
             if (!bltpri() && cpuRequestsBus) {
 
-                if (cpuDenials >= 3) {
+                // "Wenn es [BLTPRI] gelöscht ist, bekommt der Prozessor jeden
+                //  vierten geraden Buszyklus vom Blitter." [Amiga Intern]
+                { // if ((pos.h & 1) == 0) {
+                    if (cpuDenials >= 2) {
 
-                    // debug("Blitter leaves bus to the CPU\n");
+                        // debug("Blitter leaves bus to the CPU\n");
 
-                    // The CPU gets the bus
-                    // cpuDenials = 0;
-                    return false;
+                        // The CPU gets the bus
+                        cpuDenials = 0;
+                        return false;
 
-                } else {
+                    } else {
 
-                    // debug("Blitter ignores the cpu request\n");
+                        // debug("Blitter ignores the cpu request\n");
 
-                    // The Blitter gets the bus
-                    cpuDenials++;
+                        // The Blitter gets the bus
+                        cpuDenials++;
+                    }
                 }
             }
 
@@ -1806,6 +1811,9 @@ Agnus::executeUntilBusIsFree()
     // Return immediately if the bus is free
     if (busOwner[posh] == BUS_NONE) return;
 
+    // Signal that the CPU wants the bus
+    requestBus(true);
+
     // Execute Agnus until the bus is free
     DMACycle delay = 0;
     do {
@@ -1813,6 +1821,9 @@ Agnus::executeUntilBusIsFree()
         execute();
         delay++;
     } while (busOwner[posh] != BUS_NONE);
+
+    // Signal that the CPU does no longer want the bus
+     requestBus(false);
 
     // Add wait states to the CPU
     cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
