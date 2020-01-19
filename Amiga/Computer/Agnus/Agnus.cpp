@@ -1167,10 +1167,14 @@ Agnus::peekVHPOSR()
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
-    uint16_t result = BEAM(pos.v, pos.h) & 0xFFFF;
 
-    // debug(BPL_DEBUG, "peekVHPOSR() = %X\n", result);
-    return result;
+    if (pos.h > 1)
+        return BEAM(pos.v, pos.h) & 0xFFFF;
+
+   if (pos.v == 0)
+       return BEAM(isLongFrame() ? 312 : 313, pos.h) & 0xFFFF;
+
+    return BEAM(pos.v - 1, pos.h) & 0xFFFF;
 }
 
 void
