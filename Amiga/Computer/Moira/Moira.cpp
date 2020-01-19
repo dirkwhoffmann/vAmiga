@@ -91,6 +91,12 @@ Moira::execute()
     // The slow execution path: Process flags one by one
     //
 
+    // Process pending privilege violation (if any)
+    if (flags & CPU_PRIV_VIOLATION) {
+        execPrivilegeException();
+        goto done;
+    }
+
     // Process pending trace exception (if any)
     if (flags & CPU_TRACE_EXCEPTION) {
         execTraceException();

@@ -7,7 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
+// #define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
+#define SUPERVISOR_MODE_ONLY \
+if (!reg.sr.s) { flags |= CPU_PRIV_VIOLATION; return; }
 
 #define REVERSE_8(x) (((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
 #define REVERSE_16(x) ((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
@@ -167,6 +169,10 @@ void
 Moira::execPrivilegeException()
 {
     u16 status = getSR();
+
+    // Acknowledge
+    flags &= ~CPU_PRIV_VIOLATION;
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
