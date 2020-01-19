@@ -502,22 +502,6 @@ private:
      */
     bool bls;
 
-    /*
-     * Priority logic (CPU versus Blitter)
-     *
-     * To block the Blitter, three conditions must hold:
-     *
-     *     - The BLTPRI flag is false
-     *     - The CPU must request the bus
-     *     - The CPU request must have been denied for three consecutive cycles
-     */
-
-// private:
-public:
-
-    bool cpuRequestsBus; // DEPRECATED
-    int cpuDenials; // DEPRECATED
-
 
     //
     // Constructing and destructing
@@ -607,9 +591,7 @@ public:
         & busOwner
         & oldBplDmaLine
 
-        & bls
-        & cpuRequestsBus
-        & cpuDenials;
+        & bls;
     }
 
 
@@ -776,9 +758,6 @@ public:
      */
     bool copperCanRun();
     bool copperCanDoDMA();
-
-    //Called by the CPU when it wants to use the bus or no longer needs it.
-    void requestBus(bool value); // DEPRECATED
 
     /* Checks if the bus is currently available for the specified resource.
      */

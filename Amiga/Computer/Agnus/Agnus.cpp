@@ -386,12 +386,6 @@ Agnus::copperCanDoDMA()
     return copperCanRun();
 }
 
-void
-Agnus::requestBus(bool value)  
-{
-    cpuRequestsBus = value;
-}
-
 template <BusOwner owner> bool
 Agnus::busIsFree()
 {
@@ -410,41 +404,20 @@ Agnus::allocateBus()
     switch (owner) {
 
         case BUS_COPPER:
-
+        {
             // Assign bus to the Copper
             busOwner[pos.h] = BUS_COPPER;
             return true;
-
+        }
         case BUS_BLITTER:
-
+        {
             // Check if the CPU has precedence
-
-            if (!bltpri() && cpuRequestsBus) {
-
-                // "Wenn es [BLTPRI] gelöscht ist, bekommt der Prozessor jeden
-                //  vierten geraden Buszyklus vom Blitter." [Amiga Intern]
-                { // if ((pos.h & 1) == 0) {
-                    if (cpuDenials >= 2) {
-
-                        // debug("Blitter leaves bus to the CPU\n");
-
-                        // The CPU gets the bus
-                        cpuDenials = 0;
-                        return false;
-
-                    } else {
-
-                        // debug("Blitter ignores the cpu request\n");
-
-                        // The Blitter gets the bus
-                        cpuDenials++;
-                    }
-                }
-            }
+            if (bls && !bltpri()) return false;
 
             // Assign the bus to the Blitter
             busOwner[pos.h] = BUS_BLITTER;
             return true;
+        }
     }
 
     assert(false);
@@ -1811,21 +1784,17 @@ Agnus::executeUntilBusIsFree()
     // Return immediately if the bus is free
     if (busOwner[posh] == BUS_NONE) return;
 
-    // Signal that the CPU wants the bus
-    requestBus(true);
+    // This variable counts the number of DMA cycles the CPU will be suspended
+    DMACycle delay = 0;
 
     // Execute Agnus until the bus is free
-    DMACycle delay = 0;
     do {
 
         posh = pos.h;
         execute();
-        if (++delay == 3) bls = true;
+        if (++delay == 2) bls = true;
 
     } while (busOwner[posh] != BUS_NONE);
-
-    // Signal that the CPU does no longer want the bus
-    requestBus(false);
 
     // Clear the BLS line (Blitter slow down)
     bls = false;
