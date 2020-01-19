@@ -7,9 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// #define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
-#define SUPERVISOR_MODE_ONLY \
-if (!reg.sr.s) { flags |= CPU_PRIV_VIOLATION; return; }
+#define SUPERVISOR_MODE_ONLY if (!reg.sr.s) { execPrivilegeException(); return; }
 
 #define REVERSE_8(x) (((x) * 0x0202020202ULL & 0x010884422010ULL) % 1023)
 #define REVERSE_16(x) ((REVERSE_8((x) & 0xFF) << 8) | REVERSE_8(((x) >> 8) & 0xFF))
@@ -117,11 +115,13 @@ Moira::execIllegal(u16 opcode)
 {
     u16 status = getSR();
 
-    // Enter supervisor mode and update the status register
+    // Enter supervisor mode
     setSupervisorMode(true);
+
+    // Disable tracing
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
-    
+
     // Write exception information to stack
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
@@ -134,15 +134,15 @@ Moira::execTraceException()
 {
     u16 status = getSR();
 
-    // Acknowledge
-    flags &= ~CPU_TRACE_EXCEPTION;
-
     // Recover from stop state
     flags &= ~CPU_IS_STOPPED;
 
-    // Enter supervisor mode and update the status register
+    // Enter supervisor mode
     setSupervisorMode(true);
+
+    // Disable tracing
     clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     // Write exception information to stack
     sync(4);
@@ -156,9 +156,12 @@ Moira::execTrapException(int nr)
 {
     u16 status = getSR();
 
-    // Enter supervisor mode and update the status register
+    // Enter supervisor mode
     setSupervisorMode(true);
+
+    // Disable tracing
     clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     // Write exception information to stack
     saveToStackBrief(status);
@@ -171,13 +174,12 @@ Moira::execPrivilegeException()
 {
     u16 status = getSR();
 
-    // Acknowledge
-    flags &= ~CPU_PRIV_VIOLATION;
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Enter supervisor mode and update the status register
+    // Enter supervisor mode
     setSupervisorMode(true);
+
+    // Disable tracing
     clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     reg.pc -= 2;
 
