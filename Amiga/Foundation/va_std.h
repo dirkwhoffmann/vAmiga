@@ -152,35 +152,6 @@
 #define FLOOR4(x) ((x) & ~0b11)
 #define FLOOR8(x) ((x) & ~0b111)
 
-
-//
-// Generating string representations for numbers
-//
-
-// Converts a number into a decimal string representation
-void sprintd(char *s, int digits, uint64_t value);
-
-// Converts a number into a hexadecimal string representation
-void sprintx(char *s, int digits, uint64_t value);
-
-// Converts a number into a binary string representation
-void sprintb(char *s, int digits, uint64_t value);
-
-// Convenience wrappers
-inline void sprint8d(char *s, uint8_t value) { sprintd(s, 3, value); }
-inline void sprint8x(char *s, uint8_t value) { sprintx(s, 2, value); }
-inline void sprint8b(char *s, uint8_t value) { sprintb(s, 8, value); }
-
-inline void sprint16d(char *s, uint16_t value) { sprintd(s, 5, value); }
-inline void sprint16x(char *s, uint16_t value) { sprintx(s, 4, value); }
-inline void sprint16b(char *s, uint16_t value) { sprintb(s, 16, value); }
-
-inline void sprint24d(char *s, uint24_t value) { sprintd(s, 8, value); }
-inline void sprint24x(char *s, uint24_t value) { sprintx(s, 6, value); }
-inline void sprint24b(char *s, uint24_t value) { sprintb(s, 24, value); }
-
-void hexdump(uint8_t *addr, size_t size);
-
 //
 // Handling files
 //

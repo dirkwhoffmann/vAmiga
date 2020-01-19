@@ -9,48 +9,6 @@
 
 #include "va_std.h"
 
-void sprintd(char *s, int digits, uint64_t value)
-{
-    for (int i = digits - 1; i >= 0; i--) {
-        uint8_t digit = value % 10;
-        s[i] = '0' + digit;
-        value /= 10;
-    }
-    s[digits] = 0;
-}
-
-void sprintx(char *s, int digits, uint64_t value)
-{
-    for (int i = digits - 1; i >= 0; i--) {
-        uint8_t digit = value % 16;
-        s[i] = (digit <= 9) ? ('0' + digit) : ('A' + digit - 10);
-        value /= 16;
-    }
-    s[digits] = 0;
-}
-
-void sprintb(char *s, int digits, uint64_t value)
-{
-    for (int i = digits - 1; i >= 0; i--) {
-        s[i] = (value & 0x01) ? '1' : '0';
-        value >>= 1;
-    }
-    s[digits] = 0;
-}
-
-void
-hexdump(uint8_t *addr, size_t size)
-{
-    while (size) {
-
-        size_t num = MIN(size, 16);
-        for (int i = 0; i < num; i++) {
-            printf("%02X ", *(addr++));
-        }
-        size -= num;
-    }
-}
-
 char *
 extractFilename(const char *path)
 {
@@ -263,8 +221,6 @@ fnv_1a_64(const uint8_t *addr, size_t size)
     for (size_t i = 0; i < size; i++) {
         hash = fnv_1a_it64(hash, (uint64_t)addr[i]);
     }
-
-    // printf("crc-32: %x\n", crc32(addr, size));
     
     return hash;
 }
