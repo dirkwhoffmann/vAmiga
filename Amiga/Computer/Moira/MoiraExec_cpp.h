@@ -120,7 +120,8 @@ Moira::execIllegal(u16 opcode)
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
     clearTraceFlag();
-
+    flags &= ~CPU_TRACE_EXCEPTION;
+    
     // Write exception information to stack
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
