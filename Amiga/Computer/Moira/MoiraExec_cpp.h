@@ -679,6 +679,7 @@ Moira::execChk(u16 opcode)
     if (!readOp<M,S>(src, ea, data)) return;
     dy = readD<S>(dst);
 
+    // printf("M: %d S: %d execChk: dst = %d (%x) ea = %x data = %x\n", M, S, dst, dy, ea, data);
     prefetch<LAST_BUS_CYCLE>();
     sync(4);
 
@@ -689,18 +690,15 @@ Moira::execChk(u16 opcode)
 
     if ((i16)dy > (i16)data) {
 
-        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 0);
         reg.sr.n = NBIT<S>(dy);
         execTrapException(6);
-
         return;
     }
 
-    sync(2);
-
     if ((i16)dy < 0) {
 
-        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
+        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 0);
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execTrapException(6);
     }
