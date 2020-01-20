@@ -95,14 +95,14 @@ protected:
      *    This flag indicates whether the CPU should check fo watchpoints.
      */
     int flags;
-    static const int CPU_IS_HALTED         = 0b00000001;
-    static const int CPU_IS_STOPPED        = 0b00000010;
-    static const int CPU_LOG_INSTRUCTION   = 0b00000100;
-    static const int CPU_CHECK_IRQ         = 0b00001000;
-    static const int CPU_TRACE_EXCEPTION   = 0b00010000;
-    static const int CPU_TRACE_FLAG        = 0b00100000;
-    static const int CPU_CHECK_BP          = 0b01000000;
-    static const int CPU_CHECK_WP          = 0b10000000;
+    static const int CPU_IS_HALTED         = (1 << 8);
+    static const int CPU_IS_STOPPED        = (1 << 9);
+    static const int CPU_LOG_INSTRUCTION   = (1 << 10);
+    static const int CPU_CHECK_IRQ         = (1 << 11);
+    static const int CPU_TRACE_EXCEPTION   = (1 << 12);
+    static const int CPU_TRACE_FLAG        = (1 << 13);
+    static const int CPU_CHECK_BP          = (1 << 14);
+    static const int CPU_CHECK_WP          = (1 << 15);
 
     // Number of elapsed cycles since powerup
     i64 clock;
