@@ -1168,13 +1168,25 @@ Agnus::peekVHPOSR()
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
 
-    if (pos.h > 1)
-        return BEAM(pos.v, pos.h) & 0xFFFF;
+    int16_t posh = pos.h;
+    int16_t posv = pos.v;
 
-   if (pos.v == 0)
-       return BEAM(isLongFrame() ? 312 : 313, pos.h) & 0xFFFF;
+    // To get the correct result, we need to advance the horizontal position
+    // by 4 cycles.
+    posh += 4;
+    if (posh > HPOS_MAX) {
+        posh -= HPOS_MAX;
+        posv++;
+        if (posv >= frameInfo.numLines) posv = 0;
+    }
 
-    return BEAM(pos.v - 1, pos.h) & 0xFFFF;
+    if (posh > 1)
+        return BEAM(posv, posh) & 0xFFFF;
+
+   if (posv == 0)
+       return BEAM(isLongFrame() ? 312 : 313, posh) & 0xFFFF;
+
+    return BEAM(posv - 1, posh) & 0xFFFF;
 }
 
 void

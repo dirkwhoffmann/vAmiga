@@ -160,8 +160,8 @@ Moira::execTrapException(int nr)
     setSupervisorMode(true);
 
     // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
+    // clearTraceFlag();
+    // flags &= ~CPU_TRACE_EXCEPTION;
 
     // Write exception information to stack
     saveToStackBrief(status);
