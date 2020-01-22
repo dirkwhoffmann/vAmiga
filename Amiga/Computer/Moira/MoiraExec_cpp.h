@@ -1164,7 +1164,7 @@ Moira::execMovemEaRg(u16 opcode)
     u16 mask = readI<Word>();
 
     u32 ea = computeEA<M,S>(src);
-    if (addressError<S>(ea)) return;
+    if (mask && addressError<S>(ea)) return;
     if (S == Long) (void)readM<Word>(ea);
 
     switch (M) {
@@ -1208,7 +1208,7 @@ Moira::execMovemRgEa(u16 opcode)
         case 4: // -(An)
         {
             u32 ea = readA(dst);
-            if (addressError<S>(ea)) return;
+            if (mask && addressError<S>(ea)) return;
 
             for(int i = 15; i >= 0; i--) {
 
@@ -1223,7 +1223,7 @@ Moira::execMovemRgEa(u16 opcode)
         default:
         {
             u32 ea = computeEA<M,S>(dst);
-            if (addressError<S>(ea)) return;
+            if (mask && addressError<S>(ea)) return;
 
             for(int i = 0; i < 16; i++) {
 
