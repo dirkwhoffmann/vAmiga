@@ -1245,8 +1245,6 @@ Moira::execMovepDxEa(u16 opcode)
     int dst = _____________xxx(opcode);
 
     u32 ea = computeEA<M,S>(dst);
-    if (addressError<S>(ea)) return;
-
     u32 dx = readD(src);
 
     switch (S) {
@@ -1272,8 +1270,6 @@ Moira::execMovepEaDx(u16 opcode)
     int dst = ____xxx_________(opcode);
 
     u32 ea = computeEA<M,S>(src);
-    if (addressError<S>(ea)) return;
-
     u32 dx = 0;
 
     switch (S) {
