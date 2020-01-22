@@ -74,6 +74,7 @@ Moira::execAddressError(u32 addr)
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
     clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     // Write exception information to stack
     sync(8);
@@ -91,6 +92,7 @@ Moira::execUnimplemented(int nr)
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
     clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
 
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
