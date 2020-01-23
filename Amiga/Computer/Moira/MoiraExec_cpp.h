@@ -68,8 +68,12 @@ Moira::execAddressError(u32 addr)
 {
     assert(addr & 1);
 
+    u16 status = getSR();
+
     // Memory access type and function code (TODO: THIS IS INCOMPLETE)
-    u16 code = 0x11 | (reg.sr.s ? 4 : 0);
+    u16 code = queue.ird & 0xFFE0;
+    // u16 code = 0x11 | (reg.sr.s ? 4 : 0);
+    code |= 0x12;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
@@ -78,8 +82,8 @@ Moira::execAddressError(u32 addr)
 
     // Write exception information to stack
     sync(8);
-    saveToStackDetailed(getSR(), addr, code);
-    sync(2);
+    saveToStackDetailed(status, addr, code);
+    sync(4);
 
     jumpToVector(3);
 }

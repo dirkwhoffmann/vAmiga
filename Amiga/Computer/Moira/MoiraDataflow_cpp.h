@@ -330,6 +330,8 @@ Moira::prefetch()
 template<bool last> void
 Moira::fullPrefetch()
 {
+    if (addressError<Word>(reg.pc)) return;
+
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();
 }
