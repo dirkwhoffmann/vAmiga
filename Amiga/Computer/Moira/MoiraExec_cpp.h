@@ -64,15 +64,15 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 }
 
 void
-Moira::execAddressError(u32 addr)
+Moira::execAddressError(u32 addr, bool read)
 {
     assert(addr & 1);
 
     u16 status = getSR();
 
-    // Memory access type and function code (TODO: THIS IS INCOMPLETE)
+    // Memory access type and function code
     u16 code = (queue.ird & 0xFFE0) | getFC();
-    code |= 0x10;
+    if (read) code |= 0x10;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
@@ -911,7 +911,7 @@ Moira::execJsr(u16 opcode)
     u32 oldpc = reg.pc;
     reg.pc = ea;
 
-    if (addressError<Word>(ea)) return;
+    if (addressReadError<Word>(ea)) return;
     queue.irc = readM<Word>(ea);
     push<Long>(oldpc);
     prefetch<LAST_BUS_CYCLE>();
@@ -1167,7 +1167,7 @@ Moira::execMovemEaRg(u16 opcode)
     u16 mask = readI<Word>();
 
     u32 ea = computeEA<M,S>(src);
-    if (mask && addressError<S>(ea)) return;
+    if (mask && addressReadError<S>(ea)) return;
     if (S == Long) (void)readM<Word>(ea);
 
     switch (M) {
@@ -1211,7 +1211,7 @@ Moira::execMovemRgEa(u16 opcode)
         case 4: // -(An)
         {
             u32 ea = readA(dst);
-            if (mask && addressError<S>(ea)) return;
+            if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 15; i >= 0; i--) {
 
@@ -1226,7 +1226,7 @@ Moira::execMovemRgEa(u16 opcode)
         default:
         {
             u32 ea = computeEA<M,S>(dst);
-            if (mask && addressError<S>(ea)) return;
+            if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 0; i < 16; i++) {
 

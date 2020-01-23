@@ -236,7 +236,7 @@ Moira::readM(u32 addr)
 template<Size S, bool last> u32
 Moira::readM(u32 addr, bool &error)
 {
-    if ((error = addressError<S,2>(addr))) { return 0; }
+    if ((error = addressReadError<S,2>(addr))) { return 0; }
     return readM<S,last>(addr);
 }
 
@@ -274,7 +274,7 @@ Moira::writeM(u32 addr, u32 val)
 template<Size S, bool last> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
-    if ((error = addressError<S,2>(addr))) { return; }
+    if ((error = addressWriteError<S,2>(addr))) { return; }
     writeM<S,last>(addr, val);
 }
 
@@ -301,7 +301,7 @@ Moira::writeMrev(u32 addr, u32 val)
 template<Size S, bool last> void
 Moira::writeMrev(u32 addr, u32 val, bool &error)
 {
-    if ((error = addressError<S,2>(addr))) { return; }
+    if ((error = addressWriteError<S,2>(addr))) { return; }
     writeMrev<S,last>(addr, val);
 }
 
@@ -338,13 +338,27 @@ Moira::push(u32 val)
 }
 
 template <Size S, int delay> bool
-Moira::addressError(u32 addr)
+Moira::addressReadError(u32 addr)
 {
     if (MOIRA_EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
-            execAddressError(addr);
+            execAddressError(addr, true);
+            return true;
+        }
+    }
+    return false;
+}
+
+template <Size S, int delay> bool
+Moira::addressWriteError(u32 addr)
+{
+    if (MOIRA_EMULATE_ADDRESS_ERROR) {
+
+        if ((addr & 1) && S != Byte) {
+            sync(delay);
+            execAddressError(addr, false);
             return true;
         }
     }
@@ -363,7 +377,7 @@ template<bool last> void
 Moira::fullPrefetch()
 {
     if (EMULATE_FC) fcl = 2;
-    if (addressError<Word>(reg.pc)) return;
+    if (addressReadError<Word>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();
@@ -375,7 +389,7 @@ Moira::readExt()
     reg.pc += 2;
     if (!skip) {
         if (EMULATE_FC) fcl = 2;
-        if (addressError<Word>(reg.pc)) return;
+        if (addressReadError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
 }
