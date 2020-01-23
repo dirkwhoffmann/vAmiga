@@ -116,6 +116,9 @@ protected:
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
 
+    // Used to generate to address error stack frame
+     bool data;
+    
     // Jump table holding the instruction handlers
     void (Moira::*exec[65536])(u16);
 

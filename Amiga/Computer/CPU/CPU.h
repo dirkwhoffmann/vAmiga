@@ -56,7 +56,8 @@ public:
         & queue.irc
         & queue.ird
 
-        & ipl;
+        & ipl
+        & data;
     }
 
     //

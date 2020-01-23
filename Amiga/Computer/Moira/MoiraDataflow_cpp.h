@@ -21,6 +21,7 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     ea = computeEA<M,S>(n);
 
     // Read from effective address
+    data = !(M == MODE_DIPC || M == MODE_PCIX);
     bool error; result = readM<S>(ea, error);
 
     // Emulate -(An) register modification
@@ -53,6 +54,7 @@ Moira::writeOp(int n, u32 val)
     u32 ea = computeEA<M,S>(n);
 
     // Write to effective address
+    data = !(M == MODE_DIPC || M == MODE_PCIX);
     bool error; writeM<S,last>(ea, val, error);
 
     // Emulate -(An) register modification
@@ -255,6 +257,8 @@ Moira::writeM(u32 addr, u32 val)
         return;
     }
 
+    data = true;
+
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr)) {
         watchpointReached(addr);
@@ -342,13 +346,13 @@ Moira::push(u32 val)
 }
 
 template <Size S, int delay> bool
-Moira::addressError(u32 addr, bool data)
+Moira::addressError(u32 addr)
 {
     if (MOIRA_EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
-            execAddressError(addr, data);
+            execAddressError(addr);
             return true;
         }
     }
@@ -358,6 +362,7 @@ Moira::addressError(u32 addr, bool data)
 template<bool last> void
 Moira::prefetch()
 {
+    data = false;
     queue.ird = queue.irc;
     queue.irc = readM<Word,last>(reg.pc + 2);
 }
@@ -365,7 +370,8 @@ Moira::prefetch()
 template<bool last> void
 Moira::fullPrefetch()
 {
-    if (addressError<Word>(reg.pc, false)) return;
+    data = false;
+    if (addressError<Word>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();
@@ -376,7 +382,8 @@ Moira::readExt()
 {
     reg.pc += 2;
     if (!skip) {
-        if (addressError<Word>(reg.pc, false)) return;
+        data = false;
+        if (addressError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
 }
@@ -384,6 +391,8 @@ Moira::readExt()
 void
 Moira::jumpToVector(int nr)
 {
+    data = true;
+    
     // Update the program counter
     reg.pc = readM<Long>(4 * nr);
 

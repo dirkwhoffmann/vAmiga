@@ -38,7 +38,8 @@ Moira::reset()
     reg.usp = 0;
     reg.ipl = 0;
     ipl = 0;
-
+    data = false;
+    
     reg.sr.t = 0;
     reg.sr.s = 1;
     reg.sr.x = 0;

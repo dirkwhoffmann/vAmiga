@@ -64,7 +64,7 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 }
 
 void
-Moira::execAddressError(u32 addr, bool data)
+Moira::execAddressError(u32 addr)
 {
     assert(addr & 1);
 
@@ -913,7 +913,7 @@ Moira::execJsr(u16 opcode)
     u32 oldpc = reg.pc;
     reg.pc = ea;
 
-    if (addressError<Word>(ea, false)) return;
+    if (addressError<Word>(ea)) return;
     queue.irc = readM<Word>(ea);
     push<Long>(oldpc);
     prefetch<LAST_BUS_CYCLE>();
@@ -1587,6 +1587,8 @@ Moira::execRte(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
 
+    data = true;
+
     u16 newsr = readM<Word>(reg.sp);
     reg.sp += 2;
 
@@ -1602,6 +1604,8 @@ Moira::execRte(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
 {
+    data = true;
+
     u16 newccr = readM<Word>(reg.sp);
     reg.sp += 2;
 
@@ -1617,6 +1621,8 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
+    data = true;
+
     u32 newpc = readM<Long>(reg.sp);
     reg.sp += 4;
 
