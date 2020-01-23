@@ -22,6 +22,8 @@ Moira::readOp(int n, u32 &ea, u32 &result)
 
     // Read from effective address
     data = !(M == MODE_DIPC || M == MODE_PCIX);
+    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+
     bool error; result = readM<S>(ea, error);
 
     // Emulate -(An) register modification
@@ -55,6 +57,8 @@ Moira::writeOp(int n, u32 val)
 
     // Write to effective address
     data = !(M == MODE_DIPC || M == MODE_PCIX);
+    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+
     bool error; writeM<S,last>(ea, val, error);
 
     // Emulate -(An) register modification
@@ -258,6 +262,7 @@ Moira::writeM(u32 addr, u32 val)
     }
 
     data = true;
+    fcl = 1;
 
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr)) {
@@ -363,6 +368,7 @@ template<bool last> void
 Moira::prefetch()
 {
     data = false;
+    fcl = 2;
     queue.ird = queue.irc;
     queue.irc = readM<Word,last>(reg.pc + 2);
 }
@@ -371,6 +377,7 @@ template<bool last> void
 Moira::fullPrefetch()
 {
     data = false;
+    fcl = 2;
     if (addressError<Word>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
@@ -383,6 +390,7 @@ Moira::readExt()
     reg.pc += 2;
     if (!skip) {
         data = false;
+        fcl = 2;
         if (addressError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
@@ -392,6 +400,7 @@ void
 Moira::jumpToVector(int nr)
 {
     data = true;
+    fcl = 1;
     
     // Update the program counter
     reg.pc = readM<Long>(4 * nr);

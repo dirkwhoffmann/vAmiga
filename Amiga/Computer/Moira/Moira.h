@@ -116,8 +116,11 @@ protected:
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
 
-    // Used to generate to address error stack frame
-     bool data;
+    // Value on the lower two function code pins (FC1|FC0)
+    u8 fcl;
+
+    // Used to generate to address error stack frame (DEPRECATED)
+    bool data;
     
     // Jump table holding the instruction handlers
     void (Moira::*exec[65536])(u16);
@@ -285,6 +288,14 @@ protected:
     template<Size S = Long> void writeD(int n, u32 v);
     template<Size S = Long> void writeA(int n, u32 v);
     template<Size S = Long> void writeR(int n, u32 v);
+
+    //
+    // Accessing the function code pins
+    //
+
+    // Returns the current value on the function code pins
+    int getFC() { return (reg.sr.s ? 4 : 0) | fcl; }
+
 
     //
     // Handling interrupts
