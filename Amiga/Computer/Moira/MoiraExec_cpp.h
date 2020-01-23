@@ -64,7 +64,7 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 }
 
 void
-Moira::execAddressError(u32 addr)
+Moira::execAddressError(u32 addr, bool data)
 {
     assert(addr & 1);
 
@@ -72,8 +72,9 @@ Moira::execAddressError(u32 addr)
 
     // Memory access type and function code (TODO: THIS IS INCOMPLETE)
     u16 code = queue.ird & 0xFFE0;
-    // u16 code = 0x11 | (reg.sr.s ? 4 : 0);
-    code |= 0x12;
+    if (reg.sr.s) code |= 0x04;
+    code |= 0x10;
+    code |= data ? 0x01 : 0x02;
 
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
@@ -83,7 +84,7 @@ Moira::execAddressError(u32 addr)
     // Write exception information to stack
     sync(8);
     saveToStackDetailed(status, addr, code);
-    sync(4);
+    sync(2);
 
     jumpToVector(3);
 }
@@ -912,7 +913,7 @@ Moira::execJsr(u16 opcode)
     u32 oldpc = reg.pc;
     reg.pc = ea;
 
-    if (addressError<Word>(ea)) return;
+    if (addressError<Word>(ea, false)) return;
     queue.irc = readM<Word>(ea);
     push<Long>(oldpc);
     prefetch<LAST_BUS_CYCLE>();

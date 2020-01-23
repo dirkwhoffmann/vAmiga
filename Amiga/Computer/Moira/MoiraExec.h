@@ -15,7 +15,7 @@ void saveToStackBrief(u16 sr, u32 pc);
 void saveToStackBrief(u16 sr) { saveToStackBrief(sr, reg.pc); }
 
 // Emulates an address error
-void execAddressError(u32 addr);
+void execAddressError(u32 addr, bool data);
 
 // Emulates the execution of unimplemented and illegal instructions
 void execUnimplemented(int nr);

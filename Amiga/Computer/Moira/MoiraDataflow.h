@@ -75,6 +75,8 @@ template<Mode M, Size S, bool skip = false> u32 computeEA(u32 n);
 
 // Emulates the address register modification for modes (An)+, (An)-
 template<Mode M, Size S> void updateAn(int n);
+template<Mode M, Size S> void updateAnPD(int n);
+template<Mode M, Size S> void updateAnPI(int n);
 
 // Reads an operand from memory (without or with address error checking)
 template<Size S, bool last = false> u32 readM(u32 addr);
@@ -99,7 +101,7 @@ template<Size S, bool last = false> void writeMrev(u32 addr, u32 val, bool &erro
  * that is located at an odd address. If an address error is encountered,
  * the function calls execAddressError to initiate exception processing.
  */
-template<Size S, int delay = 0> bool addressError(u32 addr);
+template<Size S, int delay = 0> bool addressError(u32 addr, bool data = true);
 
 // Prefetches the next instruction
 template<bool last = false> void prefetch();

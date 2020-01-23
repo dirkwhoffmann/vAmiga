@@ -23,11 +23,21 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     // Read from effective address
     bool error; result = readM<S>(ea, error);
 
+    // Emulate -(An) register modification
+    updateAnPD<M,S>(n);
+
     // Exit if an address error has occurred
     if (error) return false;
 
+    // Emulate (An)+ register modification
+     updateAnPI<M,S>(n);
+
+     // Exit if an address error has occurred
+     if (error) return false;
+
     // Emulate (An)+ or -(An) register modification
-    updateAn<M,S>(n);
+    // updateAn<M,S>(n);
+
     return true;
 }
 
@@ -45,11 +55,21 @@ Moira::writeOp(int n, u32 val)
     // Write to effective address
     bool error; writeM<S,last>(ea, val, error);
 
+    // Emulate -(An) register modification
+    updateAnPD<M,S>(n);
+
     // Early exit in case of an address error
     if (error) return false;
 
+    // Emulate (An)+ register modification
+      updateAnPI<M,S>(n);
+
+    // Exit if an address error has occurred
+    if (error) return false;
+
     // Emulate (An)+ or -(An) register modification
-    updateAn<M,S>(n);
+    // updateAn<M,S>(n);
+
     return true;
 }
 
@@ -159,6 +179,21 @@ Moira::computeEA(u32 n) {
         }
     }
     return result;
+}
+
+template<Mode M, Size S> void
+Moira::updateAnPD(int n)
+{
+    // -(An)
+    if (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
+}
+
+template<Mode M, Size S> void
+Moira::updateAnPI(int n)
+{
+    // (An)+
+    if (M == 3) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+
 }
 
 template<Mode M, Size S> void
@@ -307,13 +342,13 @@ Moira::push(u32 val)
 }
 
 template <Size S, int delay> bool
-Moira::addressError(u32 addr)
+Moira::addressError(u32 addr, bool data)
 {
     if (MOIRA_EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
-            execAddressError(addr);
+            execAddressError(addr, data);
             return true;
         }
     }
@@ -330,7 +365,7 @@ Moira::prefetch()
 template<bool last> void
 Moira::fullPrefetch()
 {
-    if (addressError<Word>(reg.pc)) return;
+    if (addressError<Word>(reg.pc, false)) return;
 
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();
@@ -340,7 +375,10 @@ template<bool skip> void
 Moira::readExt()
 {
     reg.pc += 2;
-    if (!skip) queue.irc = readM<Word>(reg.pc);
+    if (!skip) {
+        if (addressError<Word>(reg.pc, false)) return;
+        queue.irc = readM<Word>(reg.pc);
+    }
 }
 
 void
