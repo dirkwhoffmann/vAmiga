@@ -71,7 +71,7 @@ Moira::execAddressError(u32 addr)
     u16 status = getSR();
 
     // Memory access type and function code (TODO: THIS IS INCOMPLETE)
-    u16 code = queue.ird & 0xFFE0 | getFC();
+    u16 code = (queue.ird & 0xFFE0) | getFC();
     code |= 0x10;
 
     // Enter supervisor mode and update the status register
@@ -1585,8 +1585,7 @@ Moira::execRte(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
 
-    data = true;
-    fcl = 1;
+    if (EMULATE_FC) fcl = 1;
 
     u16 newsr = readM<Word>(reg.sp);
     reg.sp += 2;
@@ -1603,8 +1602,7 @@ Moira::execRte(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
 {
-    data = true;
-    fcl = 1;
+    if (EMULATE_FC) fcl = 1;
 
     u16 newccr = readM<Word>(reg.sp);
     reg.sp += 2;
@@ -1621,8 +1619,7 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    data = true;
-    fcl = 1;
+    if (EMULATE_FC) fcl = 1;
     
     u32 newpc = readM<Long>(reg.sp);
     reg.sp += 4;

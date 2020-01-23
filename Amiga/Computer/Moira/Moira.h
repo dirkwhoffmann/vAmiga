@@ -118,9 +118,6 @@ protected:
 
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
-
-    // Used to generate to address error stack frame (DEPRECATED)
-    bool data;
     
     // Jump table holding the instruction handlers
     void (Moira::*exec[65536])(u16);

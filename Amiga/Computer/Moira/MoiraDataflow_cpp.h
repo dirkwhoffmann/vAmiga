@@ -20,10 +20,10 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     // Compute effective address
     ea = computeEA<M,S>(n);
 
-    // Read from effective address
-    data = !(M == MODE_DIPC || M == MODE_PCIX);
-    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+    // Update the function code pins
+    if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
 
+    // Read from effective address
     bool error; result = readM<S>(ea, error);
 
     // Emulate -(An) register modification
@@ -33,15 +33,9 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     if (error) return false;
 
     // Emulate (An)+ register modification
-     updateAnPI<M,S>(n);
+    updateAnPI<M,S>(n);
 
-     // Exit if an address error has occurred
-     if (error) return false;
-
-    // Emulate (An)+ or -(An) register modification
-    // updateAn<M,S>(n);
-
-    return true;
+    return !error;
 }
 
 template<Mode M, Size S, bool last> bool
@@ -55,10 +49,10 @@ Moira::writeOp(int n, u32 val)
     // Compute effective address
     u32 ea = computeEA<M,S>(n);
 
-    // Write to effective address
-    data = !(M == MODE_DIPC || M == MODE_PCIX);
-    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+    // Update the function code pins
+    if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
 
+    // Write to effective address
     bool error; writeM<S,last>(ea, val, error);
 
     // Emulate -(An) register modification
@@ -70,13 +64,7 @@ Moira::writeOp(int n, u32 val)
     // Emulate (An)+ register modification
       updateAnPI<M,S>(n);
 
-    // Exit if an address error has occurred
-    if (error) return false;
-
-    // Emulate (An)+ or -(An) register modification
-    // updateAn<M,S>(n);
-
-    return true;
+     return !error;
 }
 
 template<Mode M, Size S, bool last> void
@@ -261,8 +249,7 @@ Moira::writeM(u32 addr, u32 val)
         return;
     }
 
-    data = true;
-    fcl = 1;
+    if (EMULATE_FC) fcl = 1;
 
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr)) {
@@ -367,8 +354,7 @@ Moira::addressError(u32 addr)
 template<bool last> void
 Moira::prefetch()
 {
-    data = false;
-    fcl = 2;
+    if (EMULATE_FC) fcl = 2;
     queue.ird = queue.irc;
     queue.irc = readM<Word,last>(reg.pc + 2);
 }
@@ -376,8 +362,7 @@ Moira::prefetch()
 template<bool last> void
 Moira::fullPrefetch()
 {
-    data = false;
-    fcl = 2;
+    if (EMULATE_FC) fcl = 2;
     if (addressError<Word>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
@@ -389,8 +374,7 @@ Moira::readExt()
 {
     reg.pc += 2;
     if (!skip) {
-        data = false;
-        fcl = 2;
+        if (EMULATE_FC) fcl = 2;
         if (addressError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
@@ -399,8 +383,7 @@ Moira::readExt()
 void
 Moira::jumpToVector(int nr)
 {
-    data = true;
-    fcl = 1;
+    if (EMULATE_FC) fcl = 1;
     
     // Update the program counter
     reg.pc = readM<Long>(4 * nr);
