@@ -249,13 +249,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
     plaindebug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
-    if (s == POKE_COPPER) {
-        // setBLTSIZE(value);
-        // The Copper delay only applies if the Blitter is running?! False
-        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
-    } else {
-        setBLTSIZE(value);
-    }
+    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
 }
 
 void
