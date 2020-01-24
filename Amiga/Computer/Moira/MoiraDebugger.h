@@ -154,7 +154,8 @@ private:
     u64 softStop = UINT64_MAX - 1;
 
     // Buffer storing logged instructions
-    Registers logBuffer[LOG_BUFFER_CAPACITY];
+    static const int logBufferCapacity = 256;
+    Registers logBuffer[logBufferCapacity];
 
     // Logging counter
     long logCnt = 0;

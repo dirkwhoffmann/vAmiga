@@ -186,6 +186,7 @@ inline bool isRegMode(Mode M) { return M == 0 || M == 1;  }
 inline bool isAbsMode(Mode M) { return M == 7 || M == 8;  }
 inline bool isIdxMode(Mode M) { return M == 6 || M == 10; }
 inline bool isMemMode(Mode M) { return M >= 2 && M <= 10; }
+inline bool isPrgMode(Mode M) { return M == 9 || M == 10; }
 inline bool isImmMode(Mode M) { return M == 11; }
 
 typedef enum
@@ -212,6 +213,15 @@ typedef enum
     IRQ_UNINITIALIZED
 }
 IrqMode;
+
+typedef enum
+{
+    FC_USER_DATA       = 1,
+    FC_USER_PROG       = 2,
+    FC_SUPERVISOR_DATA = 5,
+    FC_SUPERVISOR_PROG = 6
+}
+FunctionCode;
 
 struct StatusRegister {
 

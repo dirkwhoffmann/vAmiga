@@ -71,7 +71,7 @@ Moira::execAddressError(u32 addr, bool read)
     u16 status = getSR();
 
     // Memory access type and function code
-    u16 code = (queue.ird & 0xFFE0) | getFC();
+    u16 code = (queue.ird & 0xFFE0) | readFC();
     if (read) code |= 0x10;
 
     // Enter supervisor mode and update the status register

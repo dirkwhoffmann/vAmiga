@@ -216,13 +216,13 @@ Debugger::disableLogging()
 int
 Debugger::loggedInstructions()
 {
-    return logCnt < LOG_BUFFER_CAPACITY ? (int)logCnt : LOG_BUFFER_CAPACITY;
+    return logCnt < logBufferCapacity ? (int)logCnt : logBufferCapacity;
 }
 
 void
 Debugger::logInstruction()
 {
-    logBuffer[logCnt % LOG_BUFFER_CAPACITY] = moira.reg;
+    logBuffer[logCnt % logBufferCapacity] = moira.reg;
     logCnt++;
 }
 
@@ -232,7 +232,7 @@ Debugger::logEntry(int n)
     assert(n < loggedInstructions());
 
     // n == 0 returns the most recently recorded entry
-    int offset = (logCnt - 1 - n) % LOG_BUFFER_CAPACITY;
+    int offset = (logCnt - 1 - n) % logBufferCapacity;
 
     return logBuffer[offset];
 }

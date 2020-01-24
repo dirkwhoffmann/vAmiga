@@ -22,6 +22,8 @@ Moira::readOp(int n, u32 &ea, u32 &result)
 
     // Update the function code pins
     if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+    assert(isPrgMode(M) == (fcl == 2));
+    assert(!isPrgMode(M) == (fcl == 1));
 
     // Read from effective address
     bool error; result = readM<S>(ea, error);
@@ -51,6 +53,8 @@ Moira::writeOp(int n, u32 val)
 
     // Update the function code pins
     if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
+    assert(isPrgMode(M) == (fcl == 2));
+    assert(!isPrgMode(M) == (fcl == 1));
 
     // Write to effective address
     bool error; writeM<S,last>(ea, val, error);
@@ -340,7 +344,7 @@ Moira::push(u32 val)
 template <Size S, int delay> bool
 Moira::addressReadError(u32 addr)
 {
-    if (MOIRA_EMULATE_ADDRESS_ERROR) {
+    if (EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
@@ -354,7 +358,7 @@ Moira::addressReadError(u32 addr)
 template <Size S, int delay> bool
 Moira::addressWriteError(u32 addr)
 {
-    if (MOIRA_EMULATE_ADDRESS_ERROR) {
+    if (EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
@@ -377,7 +381,7 @@ template<bool last> void
 Moira::fullPrefetch()
 {
     if (EMULATE_FC) fcl = 2;
-    if (addressReadError<Word>(reg.pc)) return;
+    if (addressReadError<Word,2>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();

@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "Moira.h"
+#include "MoiraConfig.h"
 
 namespace moira {
 

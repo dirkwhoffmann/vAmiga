@@ -10,7 +10,6 @@
 #ifndef MOIRA_H
 #define MOIRA_H
 
-#include "MoiraConfig.h"
 #include "MoiraTypes.h"
 #include "MoiraDebugger.h"
 #include "StrWriter.h"
@@ -291,7 +290,7 @@ protected:
     //
 
     // Returns the current value on the function code pins
-    int getFC() { return (reg.sr.s ? 4 : 0) | fcl; }
+    FunctionCode readFC() { return (FunctionCode)((reg.sr.s ? 4 : 0) | fcl); }
 
 
     //
