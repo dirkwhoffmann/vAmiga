@@ -424,7 +424,7 @@ CIA::poke(uint16_t addr, uint8_t value)
                 feed |= CIACountA0;
                 if (!(CRA & 0x01))
                     PB67Toggle |= 0x40;
-                CRB |= 0x01;
+                CRA |= 0x01;
             }
             
 			return;
