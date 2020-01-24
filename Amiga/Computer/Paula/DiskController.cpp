@@ -696,22 +696,57 @@ DiskController::performSimpleDMA()
     stats.wordCount[drive->nr] += count;
 
     // Only proceed if DMA is enabled.
-    if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
+    // if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
     
     // Perform DMA
     switch (state) {
 
+        case DRIVE_DMA_WAIT:
+        {
+            performSimpleDMAWait(drive, count);
+            break;
+        }
         case DRIVE_DMA_READ:
-        performSimpleDMARead(drive, count);
-        break;
-
+        {
+            performSimpleDMARead(drive, count);
+            break;
+        }
         case DRIVE_DMA_WRITE:
-        performSimpleDMAWrite(drive, count);
-        break;
-        
-        default: assert(false);
+        {
+            performSimpleDMAWrite(drive, count);
+            break;
+        }
+        default: return;
     }
 }
+
+void
+DiskController::performSimpleDMAWait(Drive *drive, uint32_t remaining)
+{
+    assert(drive != NULL);
+
+    for (unsigned i = 0; i < remaining; i++) {
+
+        // Read word from disk.
+        uint16_t word = drive->readHead16();
+
+        // Check if we've reached a SYNC mark
+        if ((syncFlag = (word == dsksync))) {
+
+            // Trigger a word SYNC interrupt
+            debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
+            paula.raiseIrq(INT_DSKSYN);
+
+            // Enable DMA if the controller was waiting for it
+            debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
+            state = DRIVE_DMA_READ;
+
+            return;
+        }
+    }
+}
+
+int debugcnt = 0;
 
 void
 DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
@@ -720,16 +755,19 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
 
     for (unsigned i = 0; i < remaining; i++) {
         
-        // Read word from disk.
+        // Read word from disk
         uint16_t word = drive->readHead16();
         
-        // Write word into memory.
+        // Write word into memory
         agnus.doDiskDMA(word);
 
-        // Compute checksum (for debugging).
+        // Compute checksum (for debugging)
         checksum = fnv_1a_it32(checksum, word);
         checkcnt++;
 
+        if (debugcnt++ % 200 == 0) {
+            // printf(" Progress: %d (%d)\n", debugcnt, dsklen & 0x3FFF);
+        }
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);

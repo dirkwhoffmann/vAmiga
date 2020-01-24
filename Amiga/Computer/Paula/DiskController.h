@@ -43,7 +43,6 @@ class DiskController : public AmigaComponent {
     bool useFifo;
 
     // Set to true if the currently read disk word matches the sync word.
-    // NOT USED AT THE MOMENT
     bool syncFlag = false;
     
     
@@ -336,6 +335,7 @@ public:
  
     // 2. Simple DMA mode
     void performSimpleDMA();
+    void performSimpleDMAWait(Drive *drive, uint32_t count);
     void performSimpleDMARead(Drive *drive, uint32_t count);
     void performSimpleDMAWrite(Drive *drive, uint32_t count);
 
