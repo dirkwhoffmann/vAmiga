@@ -746,8 +746,6 @@ DiskController::performSimpleDMAWait(Drive *drive, uint32_t remaining)
     }
 }
 
-int debugcnt = 0;
-
 void
 DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
 {
@@ -765,9 +763,6 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
         checksum = fnv_1a_it32(checksum, word);
         checkcnt++;
 
-        if (debugcnt++ % 200 == 0) {
-            // printf(" Progress: %d (%d)\n", debugcnt, dsklen & 0x3FFF);
-        }
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);

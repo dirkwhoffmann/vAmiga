@@ -521,10 +521,8 @@ Amiga::_powerOn()
     
     // For debugging, we start in debug mode and set a breakpoint
     // debugMode = true;
-    // cpu.bpManager.setBreakpointAt(0xFC30C2);
-    // cpu.bpManager.setBreakpointAt(0x034434); // Shadow of the beast, DSKLEN POKE
-    // cpu.bpManager.setBreakpointAt(0x05002E); // Paccer intro cycle count issue
-    // cpu.bpManager.setBreakpointAt(0xFC0252); 
+    // cpu.debugger.breakpoints.addAt(0x07028C);
+    // cpu.debugger.breakpoints.addAt(0x0701B6);
 
     // Update the recorded debug information
     inspect();

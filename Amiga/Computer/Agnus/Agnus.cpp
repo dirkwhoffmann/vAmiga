@@ -1481,7 +1481,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) {
-        debug("BPLxPTH gets lost\n");
+        // debug("BPLxPTH gets lost\n");
         return;
     }
 

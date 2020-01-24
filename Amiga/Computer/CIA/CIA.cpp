@@ -420,10 +420,11 @@ CIA::poke(uint16_t addr, uint8_t value)
              *  counter and initiate counting regardless of the start bit." [HRM]
              */
             if (CRA & 0x08) {
-                delay |= CIALoadA0 | CIACountA0;
+                delay |= CIACountA1 | CIALoadA0 | CIACountA0;
                 feed |= CIACountA0;
                 if (!(CRA & 0x01))
                     PB67Toggle |= 0x40;
+                CRB |= 0x01;
             }
             
 			return;
@@ -454,10 +455,11 @@ CIA::poke(uint16_t addr, uint8_t value)
              *  counter and initiate counting regardless of the start bit." [HRM]
              */
             if (CRB & 0x08) {
-                delay |= CIALoadB0 | CIACountB0;
+                delay |= CIACountB1 | CIALoadB0 | CIACountB0;
                 feed |= CIACountB0;
                 if (!(CRB & 0x01))
                     PB67Toggle |= 0x80;
+                CRB |= 0x01;
             }
             
 			return;
