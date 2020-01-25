@@ -77,7 +77,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // Additional debugging aids (uncomment to enable)
 
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/OperationGII.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Batman.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/Abnormal-DemoPack04.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/timing1l.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()

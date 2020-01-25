@@ -12,12 +12,7 @@
 
 #include "TOD.h"
 
-class VIC;
-class IEC;
-class Keyboard;
-class Joystick;
-
-// Action flags (adapted from PC64WIN)
+// Action flags
 #define CIACountA0     (1ULL << 0) // Decrements timer A
 #define CIACountA1     (1ULL << 1)
 #define CIACountA2     (1ULL << 2)
@@ -50,8 +45,8 @@ class Joystick;
 #define CIAAckIcr1     (1ULL << 29)
 #define CIASetIcr0     (1ULL << 30) // Sets bit 8 in ICR register
 #define CIASetIcr1     (1ULL << 31)
-#define CIATODInt0     (1ULL << 32) // Triggers an interrupt with TOD as source
-#define CIASerInt0     (1ULL << 33) // Triggers an interrupt with serial register as source
+#define CIATODInt0     (1ULL << 32) // Triggers an IRQ with TOD as source
+#define CIASerInt0     (1ULL << 33) // Triggers an IRQ with serial reg as source
 #define CIASerInt1     (1ULL << 34)
 #define CIASerInt2     (1ULL << 35)
 #define CIASerLoad0    (1ULL << 36) // Loads the serial shift register

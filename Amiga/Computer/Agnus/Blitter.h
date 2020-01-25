@@ -242,7 +242,12 @@ public:
         & bbusy
         & bzero
 
-        & remaining;
+        & remaining
+
+        & copycount
+        & linecount
+        & check1
+        & check2;
     }
 
     

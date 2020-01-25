@@ -50,8 +50,6 @@
 #define INC_CHIP_PTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
 #define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
 
-
-
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
 
@@ -78,10 +76,10 @@ class Agnus : public AmigaComponent {
     
 public:
     
-    // Every Amiga fan knows what the Copper is.
+    // Every Amiga fan knows what the Copper is
     Copper copper = Copper(amiga);
     
-    // Every Amiga fan knows what the Blitter is.
+    // Every Amiga fan knows what the Blitter is
     Blitter blitter = Blitter(amiga);
     
     // A graphics engine for visualizing DMA accesses
@@ -89,35 +87,8 @@ public:
 
 
     //
-    // Lookup tables
+    // Static lookup tables
     //
-
-    // DEPRECATED:
-    /* DAS lookup tables (Disk, Audio, Sprite DMA)
-     *
-     * nextDASEvent[DAS Event ID][DMA enable bits]:
-     * Used to lookup the next EventID to be scheduled in the DAS slot
-     *
-     * nextDASDelay[DAS Event ID][DMA enable bits]:
-     * Used to lookup when the newly scheduled event should trigger
-     *
-     *             DMA enable bits : Lowest 6 bits of DMACON
-     *                DAS Event ID : Any DAS slot EventID, e.g., DMA_A0
-     *
-     * Example: If all DMA channels are enabled, the DMA time slot allocation
-     *          table looks as follows:
-     *
-     * 0000000000000000111111111111111100000000000000001111 ...
-     * 0123456789ABCDEF0123456789ABCDEF0123456789ABCDEF0123 ...
-     *        D D D A A A A S S S S S S S S S S S S S S S S
-     *        0 1 2 0 1 2 3 0 0 1 1 2 2 3 3 4 4 5 5 6 6 7 7
-     *                          1 2 1 2 1 2 1 2 1 2 1 2 1 2
-     *
-     * In this case: nextDASEvent[DMA_A0][0b111111] = DMA_A1
-     *               nextDASDelay[DMA_A0][0b111111] = 2
-     */
-    // EventID nextDASEvent[DAS_EVENT_COUNT][64];
-    // int16_t nextDASDelay[DAS_EVENT_COUNT][64];
 
     /* Bitplane DMA events as they appear in a single rasterline.
      *
