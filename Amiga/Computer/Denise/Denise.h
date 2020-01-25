@@ -482,8 +482,7 @@ public:
     template <int x> void pokeSPRxDATB(uint16_t value);
 
     // COLORxx:  $180, $181 ... $1BC, $1BE (w)
-    template <int xx> void pokeCOLORxx(uint16_t value);
-    // void pokeCOLORxx(uint32_t addr, uint16_t value); // DEPRECATED
+    template <PokeSource s, int xx> void pokeCOLORxx(uint16_t value);
 
     
     //

@@ -1898,69 +1898,69 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
         case 0x17E >> 1: // SPR7DATB
             denise.pokeSPRxDATB<7>(value); return;
         case 0x180 >> 1: // COLOR00
-            denise.pokeCOLORxx<0>(value); return;
+            denise.pokeCOLORxx<s,0>(value); return;
         case 0x182 >> 1: // COLOR01
-            denise.pokeCOLORxx<1>(value); return;
+            denise.pokeCOLORxx<s,1>(value); return;
         case 0x184 >> 1: // COLOR02
-            denise.pokeCOLORxx<2>(value); return;
+            denise.pokeCOLORxx<s,2>(value); return;
         case 0x186 >> 1: // COLOR03
-            denise.pokeCOLORxx<3>(value); return;
+            denise.pokeCOLORxx<s,3>(value); return;
         case 0x188 >> 1: // COLOR04
-            denise.pokeCOLORxx<4>(value); return;
+            denise.pokeCOLORxx<s,4>(value); return;
         case 0x18A >> 1: // COLOR05
-            denise.pokeCOLORxx<5>(value); return;
+            denise.pokeCOLORxx<s,5>(value); return;
         case 0x18C >> 1: // COLOR06
-            denise.pokeCOLORxx<6>(value); return;
+            denise.pokeCOLORxx<s,6>(value); return;
         case 0x18E >> 1: // COLOR07
-            denise.pokeCOLORxx<7>(value); return;
+            denise.pokeCOLORxx<s,7>(value); return;
         case 0x190 >> 1: // COLOR08
-            denise.pokeCOLORxx<8>(value); return;
+            denise.pokeCOLORxx<s,8>(value); return;
         case 0x192 >> 1: // COLOR09
-            denise.pokeCOLORxx<9>(value); return;
+            denise.pokeCOLORxx<s,9>(value); return;
         case 0x194 >> 1: // COLOR10
-            denise.pokeCOLORxx<10>(value); return;
+            denise.pokeCOLORxx<s,10>(value); return;
         case 0x196 >> 1: // COLOR11
-            denise.pokeCOLORxx<11>(value); return;
+            denise.pokeCOLORxx<s,11>(value); return;
         case 0x198 >> 1: // COLOR12
-            denise.pokeCOLORxx<12>(value); return;
+            denise.pokeCOLORxx<s,12>(value); return;
         case 0x19A >> 1: // COLOR13
-            denise.pokeCOLORxx<13>(value); return;
+            denise.pokeCOLORxx<s,13>(value); return;
         case 0x19C >> 1: // COLOR14
-            denise.pokeCOLORxx<14>(value); return;
+            denise.pokeCOLORxx<s,14>(value); return;
         case 0x19E >> 1: // COLOR15
-            denise.pokeCOLORxx<15>(value); return;
+            denise.pokeCOLORxx<s,15>(value); return;
         case 0x1A0 >> 1: // COLOR16
-            denise.pokeCOLORxx<16>(value); return;
+            denise.pokeCOLORxx<s,16>(value); return;
         case 0x1A2 >> 1: // COLOR17
-            denise.pokeCOLORxx<17>(value); return;
+            denise.pokeCOLORxx<s,17>(value); return;
         case 0x1A4 >> 1: // COLOR18
-            denise.pokeCOLORxx<18>(value); return;
+            denise.pokeCOLORxx<s,18>(value); return;
         case 0x1A6 >> 1: // COLOR19
-            denise.pokeCOLORxx<19>(value); return;
+            denise.pokeCOLORxx<s,19>(value); return;
         case 0x1A8 >> 1: // COLOR20
-            denise.pokeCOLORxx<20>(value); return;
+            denise.pokeCOLORxx<s,20>(value); return;
         case 0x1AA >> 1: // COLOR21
-            denise.pokeCOLORxx<21>(value); return;
+            denise.pokeCOLORxx<s,21>(value); return;
         case 0x1AC >> 1: // COLOR22
-            denise.pokeCOLORxx<22>(value); return;
+            denise.pokeCOLORxx<s,22>(value); return;
         case 0x1AE >> 1: // COLOR23
-            denise.pokeCOLORxx<23>(value); return;
+            denise.pokeCOLORxx<s,23>(value); return;
         case 0x1B0 >> 1: // COLOR24
-            denise.pokeCOLORxx<24>(value); return;
+            denise.pokeCOLORxx<s,24>(value); return;
         case 0x1B2 >> 1: // COLOR25
-            denise.pokeCOLORxx<25>(value); return;
+            denise.pokeCOLORxx<s,25>(value); return;
         case 0x1B4 >> 1: // COLOR26
-            denise.pokeCOLORxx<26>(value); return;
+            denise.pokeCOLORxx<s,26>(value); return;
         case 0x1B6 >> 1: // COLOR27
-            denise.pokeCOLORxx<27>(value); return;
+            denise.pokeCOLORxx<s,27>(value); return;
         case 0x1B8 >> 1: // COLOR28
-            denise.pokeCOLORxx<28>(value); return;
+            denise.pokeCOLORxx<s,28>(value); return;
         case 0x1BA >> 1: // COLOR29
-            denise.pokeCOLORxx<29>(value); return;
+            denise.pokeCOLORxx<s,29>(value); return;
         case 0x1BC >> 1: // COLOR30
-            denise.pokeCOLORxx<30>(value); return;
+            denise.pokeCOLORxx<s,30>(value); return;
         case 0x1BE >> 1: // COLOR31
-            denise.pokeCOLORxx<31>(value); return;
+            denise.pokeCOLORxx<s,31>(value); return;
         case 0x1FE >> 1: // NO-OP (NULL)
             copper.pokeNOOP(value); return;
     }

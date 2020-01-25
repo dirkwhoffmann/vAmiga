@@ -380,12 +380,18 @@ Denise::pokeSPRxDATB(uint16_t value)
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATB + x, value);
 }
 
-template <int xx> void
+template <PokeSource s, int xx> void
 Denise::pokeCOLORxx(uint16_t value)
 {
      debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
-     pixelEngine.colRegChanges.add(4 * agnus.pos.h, 0x180 + 2*xx, value);
+    int reg = 0x180 + 2*xx;
+
+    if (s == POKE_COPPER) {
+        pixelEngine.colRegChanges.add(4 * agnus.pos.h, reg, value);
+    } else {
+        pixelEngine.colRegChanges.add(4 * (agnus.pos.h - 1), reg, value);
+    }
 }
 
 /*
@@ -1294,38 +1300,70 @@ template void Denise::pokeSPRxDATB<5>(uint16_t value);
 template void Denise::pokeSPRxDATB<6>(uint16_t value);
 template void Denise::pokeSPRxDATB<7>(uint16_t value);
 
-template void Denise::pokeCOLORxx<0>(uint16_t value);
-template void Denise::pokeCOLORxx<1>(uint16_t value);
-template void Denise::pokeCOLORxx<2>(uint16_t value);
-template void Denise::pokeCOLORxx<3>(uint16_t value);
-template void Denise::pokeCOLORxx<4>(uint16_t value);
-template void Denise::pokeCOLORxx<5>(uint16_t value);
-template void Denise::pokeCOLORxx<6>(uint16_t value);
-template void Denise::pokeCOLORxx<7>(uint16_t value);
-template void Denise::pokeCOLORxx<8>(uint16_t value);
-template void Denise::pokeCOLORxx<9>(uint16_t value);
-template void Denise::pokeCOLORxx<10>(uint16_t value);
-template void Denise::pokeCOLORxx<11>(uint16_t value);
-template void Denise::pokeCOLORxx<12>(uint16_t value);
-template void Denise::pokeCOLORxx<13>(uint16_t value);
-template void Denise::pokeCOLORxx<14>(uint16_t value);
-template void Denise::pokeCOLORxx<15>(uint16_t value);
-template void Denise::pokeCOLORxx<16>(uint16_t value);
-template void Denise::pokeCOLORxx<17>(uint16_t value);
-template void Denise::pokeCOLORxx<18>(uint16_t value);
-template void Denise::pokeCOLORxx<19>(uint16_t value);
-template void Denise::pokeCOLORxx<20>(uint16_t value);
-template void Denise::pokeCOLORxx<21>(uint16_t value);
-template void Denise::pokeCOLORxx<22>(uint16_t value);
-template void Denise::pokeCOLORxx<23>(uint16_t value);
-template void Denise::pokeCOLORxx<24>(uint16_t value);
-template void Denise::pokeCOLORxx<25>(uint16_t value);
-template void Denise::pokeCOLORxx<26>(uint16_t value);
-template void Denise::pokeCOLORxx<27>(uint16_t value);
-template void Denise::pokeCOLORxx<28>(uint16_t value);
-template void Denise::pokeCOLORxx<29>(uint16_t value);
-template void Denise::pokeCOLORxx<30>(uint16_t value);
-template void Denise::pokeCOLORxx<31>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 0>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 0>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 1>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 1>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 2>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 2>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 3>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 3>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 4>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 4>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 5>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 5>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 6>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 6>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 7>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 7>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 8>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 8>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 9>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 9>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 10>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 10>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 11>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 11>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 12>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 12>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 13>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 13>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 14>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 14>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 15>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 15>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 16>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 16>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 17>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 17>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 18>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 18>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 19>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 19>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 20>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 20>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 21>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 21>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 22>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 22>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 23>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 23>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 24>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 24>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 25>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 25>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 26>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 26>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 27>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 27>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 28>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 28>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 29>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 29>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 30>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 30>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 31>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 31>(uint16_t value);
 
 template void Denise::draw<0>(int pixels);
 template void Denise::draw<1>(int pixels);
