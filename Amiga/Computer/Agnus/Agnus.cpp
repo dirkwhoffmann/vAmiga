@@ -1175,7 +1175,7 @@ Agnus::peekVHPOSR()
     // by 4 cycles.
     posh += 4;
     if (posh > HPOS_MAX) {
-        posh -= HPOS_MAX;
+        posh -= HPOS_CNT;
         posv++;
         if (posv >= frameInfo.numLines) posv = 0;
     }
