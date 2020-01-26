@@ -132,8 +132,6 @@ Paula::setINTREQ(bool setclr, uint16_t value)
     debug(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
 
     if (setclr) intreq |= value; else intreq &= ~value;
-    // debug("new intreq : %x\n",intreq);
-
     checkInterrupt();
 }
 
@@ -162,6 +160,8 @@ Paula::scheduleIrq(IrqSource src, Cycle trigger, bool set)
         return;
     }
 
+    assert(false);
+    // THE CODE BELOW IS WRONG (AND FORTUNATELY NOT USED YET)
     if (set) {
 
         // Don't set an interrupt that is already scheduled to be set
@@ -387,6 +387,6 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
-    // agnus.recordRegisterChange(DMA_CYCLES(25), REG_IRQLEVEL, interruptLevel());
-    cpu.setIPL(interruptLevel());
+    agnus.recordRegisterChange(DMA_CYCLES(4), REG_IRQLEVEL, interruptLevel());
+    // cpu.setIPL(interruptLevel());
 }
