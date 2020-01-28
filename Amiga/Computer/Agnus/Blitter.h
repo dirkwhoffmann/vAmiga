@@ -462,6 +462,7 @@ private:
 
     // Emulates a Blitter micro-instruction
     template <uint16_t instr> void exec();
+    template <uint16_t instr> void fakeExec();
 
     // Sets the x or y counter to a new value
     void setXCounter(uint16_t value);
