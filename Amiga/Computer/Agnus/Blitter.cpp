@@ -249,7 +249,11 @@ Blitter::pokeBLTSIZE(uint16_t value)
     plaindebug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+    if (s == POKE_COPPER) {
+        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+    } else {
+        blitter.setBLTSIZE(value);
+    }
 }
 
 void

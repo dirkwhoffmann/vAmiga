@@ -387,7 +387,7 @@ Denise::pokeCOLORxx(uint16_t value)
 
     int reg = 0x180 + 2*xx;
 
-    if (s == POKE_COPPER || agnus.pos.h == 0 /* WRONG */) {
+    if (s == POKE_COPPER || agnus.pos.h == 0) {
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, reg, value);
     } else {
         pixelEngine.colRegChanges.add(4 * (agnus.pos.h - 1), reg, value);

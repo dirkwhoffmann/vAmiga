@@ -49,7 +49,7 @@ static const uint16_t FILL      = 0b0000'0010'0000'0000;
 static const uint16_t BLTDONE   = 0b0000'0100'0000'0000;
 static const uint16_t REPEAT    = 0b0000'1000'0000'0000;
 
-static const uint16_t FAKEWRITE = 0b0001'0000'0000'0000;
+static const uint16_t FAKEWRITE = 0b0010'0000'0000'0000;
 
 void
 Blitter::initSlowBlitter()
@@ -888,8 +888,13 @@ Blitter::beginSlowCopyBlit()
 template <uint16_t instr> void
 Blitter::exec()
 {
+    bool bus = (instr & BUS);
+
+    // Don't allocate the bus on writes with a locked D channel
+    if (instr & WRITE_D) bus = !lockD;
+
     // Check if the Blitter needs to allocate the bus to proceed
-    if ((instr & BUS) && !agnus.allocateBus<BUS_BLITTER>()) {
+    if (bus && !agnus.allocateBus<BUS_BLITTER>()) {
         // debug("BUS cycle blocked in BLT_EXEC by %d\n", agnus.busOwner[agnus.pos.h]);
         return;
     }
