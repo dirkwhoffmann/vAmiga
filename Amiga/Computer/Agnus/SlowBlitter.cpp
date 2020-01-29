@@ -149,11 +149,19 @@ Blitter::initSlowBlitter()
         {
             {
                 {   // Full execution, no fill
-                    &Blitter::exec <WRITE_D | HOLD_A | HOLD_B>,
+                    &Blitter::exec <HOLD_D | BUSIDLE>,
+                    &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | REPEAT>,
+
+                    &Blitter::exec <HOLD_D>,
+                    &Blitter::exec <WRITE_D | BLTDONE>
+
+                    /* PASSING timing1:
+                    &Blitter::exec <WRITE_D | HOLD_A | HOLD_B | BUS>,
                     &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
                     &Blitter::exec <WRITE_D | BLTDONE>
+                    */
                 },
                 {   // Full execution, fill
                     &Blitter::exec <WRITE_D | HOLD_A | HOLD_B>,
@@ -224,7 +232,7 @@ Blitter::initSlowBlitter()
             {
                 {   // Full execution, no fill
                     &Blitter::exec <FETCH_C | HOLD_A | HOLD_B>,
-                    &Blitter::exec <WRITE_D>,
+                    &Blitter::exec <WRITE_D | BUS>,
                     &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
 
                     &Blitter::exec <NOTHING>,
@@ -886,20 +894,29 @@ template <uint16_t instr> void
 Blitter::exec()
 {
     // Determine if we need the bus
-     bool bus = (instr & (FETCH | BUS)) || ((instr & WRITE_D) && !lockD);
+    /*
+    bool bus = (instr & (FETCH | BUS)) || ((instr & WRITE_D) && !lockD);
+    bool busidle = (instr & BUSIDLE);
+    */
+    bool bus = instr & (FETCH | BUS);
+    bool busidle = instr & BUSIDLE;
+    if (instr & WRITE_D) {
+        bus = !lockD;
+        busidle = lockD;
+    }
 
-     // Allocate the bus if needed
-     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
+    // Allocate the bus if needed
+    if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
 
-     // Check if the Blitter needs a free bus to continue
-     if ((instr & BUSIDLE) && !agnus.busIsFree<BUS_BLITTER>()) return;
+    // Check if the Blitter needs a free bus to continue
+    if (busidle && !agnus.busIsFree<BUS_BLITTER>()) return;
 
-     bltpc++;
+    bltpc++;
 
-     if (instr & WRITE_D) {
+    if (instr & WRITE_D) {
 
-         // Only proceed if channel D is unlocked
-         if (!lockD) {
+        // Only proceed if channel D is unlocked
+        if (!lockD) {
 
             agnus.blitterWrite(bltdpt, dhold);
             check1 = fnv_1a_it32(check1, dhold);
