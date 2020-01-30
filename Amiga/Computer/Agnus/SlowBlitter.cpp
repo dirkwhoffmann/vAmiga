@@ -1061,7 +1061,7 @@ Blitter::fakeExec()
 
     bltpc++;
 
-    if (instr & WRITE_D) {
+    if (instr & (FETCH | WRITE_D)) {
 
         // Record some fake data to make the DMA debugger happy
         assert(agnus.pos.h < HPOS_CNT);

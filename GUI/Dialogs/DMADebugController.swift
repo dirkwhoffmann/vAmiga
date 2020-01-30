@@ -75,28 +75,6 @@ class DMADebugController: DialogController {
 
         dmaDebugOpacity.doubleValue = info.opacity * 100.0
         dmaDebugDisplayMode.selectItem(withTag: info.displayMode.rawValue)
-
-        /*
-        dmaDebugCpu.isEnabled = info.enabled
-        dmaDebugRefresh.isEnabled = info.enabled
-        dmaDebugDisk.isEnabled = info.enabled
-        dmaDebugAudio.isEnabled = info.enabled
-        dmaDebugBitplane.isEnabled = info.enabled
-        dmaDebugSprites.isEnabled = info.enabled
-        dmaDebugCopper.isEnabled = info.enabled
-        dmaDebugBlitter.isEnabled = info.enabled
-
-        dmaDebugRefreshCol.isEnabled = info.enabled
-        dmaDebugDiskCol.isEnabled = info.enabled
-        dmaDebugAudioCol.isEnabled = info.enabled
-        dmaDebugBitplaneCol.isEnabled = info.enabled
-        dmaDebugSpritesCol.isEnabled = info.enabled
-        dmaDebugCopperCol.isEnabled = info.enabled
-        dmaDebugBlitterCol.isEnabled = info.enabled
-
-        dmaDebugOpacity.isEnabled = info.enabled
-        dmaDebugDisplayMode.isEnabled = info.enabled
-        */
     }
 
     //

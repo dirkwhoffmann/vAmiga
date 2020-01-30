@@ -1797,26 +1797,30 @@ Agnus::executeUntilBusIsFree()
 {
     int16_t posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
 
-    // Return immediately if the bus is free
-    if (busOwner[posh] == BUS_NONE) return;
+    // Check if the bus is blocked
+    if (busOwner[posh] != BUS_NONE) {
 
-    // This variable counts the number of DMA cycles the CPU will be suspended
-    DMACycle delay = 0;
+        // This variable counts the number of DMA cycles the CPU will be suspended
+        DMACycle delay = 0;
 
-    // Execute Agnus until the bus is free
-    do {
+        // Execute Agnus until the bus is free
+        do {
 
-        posh = pos.h;
-        execute();
-        if (++delay == 2) bls = true;
+            posh = pos.h;
+            execute();
+            if (++delay == 2) bls = true;
 
-    } while (busOwner[posh] != BUS_NONE);
+        } while (busOwner[posh] != BUS_NONE);
 
-    // Clear the BLS line (Blitter slow down)
-    bls = false;
+        // Clear the BLS line (Blitter slow down)
+        bls = false;
 
-    // Add wait states to the CPU
-    cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
+        // Add wait states to the CPU
+        cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
+    }
+
+    // Assign bus to the CPU
+    busOwner[posh] = BUS_CPU;
 }
 
 void

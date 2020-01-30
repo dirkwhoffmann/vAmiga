@@ -13,11 +13,10 @@ DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
 {
     setDescription("DmaDebugger");
 
-    // By default, visualize all DMA channels
+    // By default all DMA channels are visualized, except the CPU channel
     for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
-        visualize[i] = true;
+        visualize[i] = (i != BUS_NONE) && (i != BUS_CPU);
     }
-    visualize[BUS_NONE] = false;
 
     // Assign default colors
     setColor(BUS_CPU,      RgbColor((uint8_t)0xFF, 0xFF, 0xFF));
