@@ -263,37 +263,37 @@ Blitter::initSlowBlitter()
         {
             {
                 {   // Full execution, no fill
-                    &Blitter::exec <FETCH_B>,
-                    &Blitter::exec <HOLD_A | HOLD_B | BUSIDLE>,
-                    &Blitter::exec <HOLD_D | BUSIDLE | REPEAT>,
+                    &Blitter::exec <HOLD_D | BUSIDLE>,
+                    &Blitter::exec <FETCH_B | HOLD_A>,
+                    &Blitter::exec <HOLD_B | BUSIDLE | REPEAT>,
 
-                    &Blitter::exec <NOTHING>,
+                    &Blitter::exec <HOLD_D>,
                     &Blitter::exec <BLTDONE>
                 },
                 {   // Full execution, fill
-                    &Blitter::exec <FETCH_B>,
-                    &Blitter::exec <HOLD_A | HOLD_B | BUSIDLE>,
-                    &Blitter::exec <FILL | HOLD_D | BUSIDLE | REPEAT>,
+                    &Blitter::exec <FILL | HOLD_D | BUSIDLE>,
+                    &Blitter::exec <FETCH_B | HOLD_A>,
+                    &Blitter::exec <HOLD_B | BUSIDLE | REPEAT>,
 
-                    &Blitter::exec <NOTHING>,
+                    &Blitter::exec <FILL | HOLD_D>,
                     &Blitter::exec <BLTDONE>
                 }
             },
             {
                 {   // Fake execution, no fill
-                    &Blitter::fakeExec <FETCH_B>,
-                    &Blitter::fakeExec <HOLD_A | HOLD_B | BUSIDLE>,
-                    &Blitter::fakeExec <HOLD_D | BUSIDLE | REPEAT>,
+                    &Blitter::fakeExec <HOLD_D | BUSIDLE>,
+                    &Blitter::fakeExec <FETCH_B | HOLD_A>,
+                    &Blitter::fakeExec <HOLD_B | BUSIDLE | REPEAT>,
 
-                    &Blitter::fakeExec <NOTHING>,
+                    &Blitter::fakeExec <HOLD_D>,
                     &Blitter::fakeExec <BLTDONE>
                 },
                 {   // Fake execution, fill
-                    &Blitter::fakeExec <FETCH_B>,
-                    &Blitter::fakeExec <HOLD_A | HOLD_B | BUSIDLE>,
-                    &Blitter::fakeExec <FILL | HOLD_D | BUSIDLE | REPEAT>,
+                    &Blitter::fakeExec <FILL | HOLD_D | BUSIDLE>,
+                    &Blitter::fakeExec <FETCH_B | HOLD_A>,
+                    &Blitter::fakeExec <HOLD_B | BUSIDLE | REPEAT>,
 
-                    &Blitter::fakeExec <NOTHING>,
+                    &Blitter::fakeExec <FILL | HOLD_D>,
                     &Blitter::fakeExec <BLTDONE>
                 }
             }
