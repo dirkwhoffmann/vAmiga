@@ -178,7 +178,7 @@ template<EventSlot s> void rescheduleRel(Cycle cycle)
     rescheduleAbs<s>(clock + cycle);
 }
 
-template<EventSlot s> void reschedulePos(int16_t vpos, int16_t hpos)
+template<EventSlot s> void schedulePos(int16_t vpos, int16_t hpos)
 {
     rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
 }

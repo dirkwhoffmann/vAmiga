@@ -106,8 +106,6 @@ Agnus::initDasEventTable()
         EventID *p = dasDMA[dmacon];
 
         p[0x01] = DAS_REFRESH;
-        // p[0x03] = DAS_REFRESH;
-        // p[0x05] = DAS_REFRESH;
 
         if (dmacon) {
             p[0x07] = DAS_D0;
@@ -195,9 +193,9 @@ void Agnus::_reset()
     scheduleAbs<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-    // scheduleAbs<DAS_SLOT>(DMA_CYCLES(1), DAS_REFRESH);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
     scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
+    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 2), VBL_STROBE);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
@@ -2064,10 +2062,7 @@ Agnus::vsyncHandler()
     
     // CIA A counts VSYNCs
     amiga.ciaA.incrementTOD();
-    
-    // Trigger VSYNC interrupt
-    paula.raiseIrq(INT_VERTB);
-    
+        
     // Let other subcomponents do their own VSYNC stuff
     blitter.vsyncHandler();
     copper.vsyncHandler();
@@ -2086,6 +2081,17 @@ Agnus::vsyncHandler()
     if (!amiga.getWarp()) {
         amiga.synchronizeTiming();
     }
+}
+
+void
+Agnus::serviceVblEvent()
+{
+    assert(slot[VBL_SLOT].id == VBL_STROBE);
+    assert(pos.v == 0 || pos.v == 1);
+    assert(pos.h == 2);
+
+    paula.setINTREQ(true, 1 << INT_VERTB);
+    rescheduleRel<VBL_SLOT>(cyclesInFrame());
 }
 
 

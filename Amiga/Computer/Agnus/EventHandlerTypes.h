@@ -36,6 +36,7 @@ typedef enum : long
     // Secondary slots
     DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
+    VBL_SLOT,                       // Vertical blank
     IRQ_SLOT,                       // Interrupts
     KBD_SLOT,                       // Keyboard
     TXD_SLOT,                       // Serial data out (UART)
@@ -65,6 +66,7 @@ inline const char *slotName(EventSlot nr)
 
         case DSK_SLOT:  return "Disk Controller";
         case DCH_SLOT:  return "Disk Change";
+        case VBL_SLOT:  return "Vertical blank";
         case IRQ_SLOT:  return "Interrupts";
         case KBD_SLOT:  return "Keyboard";
         case TXD_SLOT:  return "UART out";
@@ -176,6 +178,9 @@ typedef enum : long
     DCH_INSERT = 1,
     DCH_EJECT,
     DCH_EVENT_COUNT,
+
+    // Strobe slots
+    VBL_STROBE = 1,
 
     // IRQ slots
     IRQ_CHECK = 1,

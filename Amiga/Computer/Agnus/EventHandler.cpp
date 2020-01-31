@@ -208,6 +208,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case VBL_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case VBL_STROBE:    i->eventName = "VBL_STROBE"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case IRQ_SLOT:
 
             switch (slot[nr].id) {
@@ -442,6 +452,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<DCH_SLOT>(cycle)) {
             paula.diskController.serviceDiskChangeEvent(slot[DCH_SLOT].id, (int)slot[DCH_SLOT].data);
+        }
+        if (isDue<VBL_SLOT>(cycle)) {
+            serviceVblEvent();
         }
         if (isDue<IRQ_SLOT>(cycle)) {
             paula.serviceIrqEvent();

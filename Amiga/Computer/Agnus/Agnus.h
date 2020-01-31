@@ -581,7 +581,10 @@ public:
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
 
+    // Returns the line in which the VERTB interrupt gets triggered
+    int vStrobeLine() { return config.revision == AGNUS_8367 ? 1 : 0; }
 
+    
     //
     // Methods from HardwareComponent
     //
@@ -948,6 +951,16 @@ private:
 
     // Finishes up the current frame
     void vsyncHandler();
+
+
+    //
+    // Serving events
+    //
+
+public:
+
+    // Triggers the vertical blank interrupt
+    void serviceVblEvent();
 
 
     //
