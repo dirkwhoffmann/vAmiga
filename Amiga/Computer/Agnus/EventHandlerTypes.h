@@ -152,6 +152,7 @@ typedef enum : long
     COP_SKIP2,
     COP_JMP1,
     COP_JMP2,
+    COP_VBLANK,
     COP_EVENT_COUNT,
     
     // Blitter slot

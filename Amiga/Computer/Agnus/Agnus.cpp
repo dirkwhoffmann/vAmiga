@@ -195,7 +195,7 @@ void Agnus::_reset()
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
     scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
-    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 2), VBL_STROBE);
+    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 1), VBL_STROBE);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
@@ -2088,7 +2088,7 @@ Agnus::serviceVblEvent()
 {
     assert(slot[VBL_SLOT].id == VBL_STROBE);
     assert(pos.v == 0 || pos.v == 1);
-    assert(pos.h == 2);
+    assert(pos.h == 1);
 
     paula.setINTREQ(true, 1 << INT_VERTB);
     rescheduleRel<VBL_SLOT>(cyclesInFrame());

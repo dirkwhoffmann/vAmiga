@@ -826,13 +826,26 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_JMP2\n");
 
             // Wait for the next free DMA cycle
-             if (!agnus.copperCanDoDMA()) {
-                 reschedule();
-                 break;
-             }
+            if (!agnus.copperCanDoDMA()) {
+                reschedule();
+                break;
+            }
 
             switchToCopperList(agnus.slot[COP_SLOT].data);
             schedule(COP_FETCH);
+            break;
+
+        case COP_VBLANK:
+
+            // verbose = true;
+            if (verbose) debug("COP_VBLANK\n");
+
+            // Wait until the bus is free
+            if (!agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
+
+            switchToCopperList(1);
+            schedule(COP_FETCH);
+
             break;
 
         default:
@@ -866,13 +879,20 @@ Copper::vsyncHandler()
      *  in COP1LC." [HRM]
      */
 
-    // TODO: What is the exact timing here?
+    if (agnus.doCopDMA()) {
+        agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
+    } else {
+        agnus.cancel<COP_SLOT>();
+    }
+
+    /*
     switchToCopperList(1);
     if (agnus.doCopDMA()) {
         agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus.cancel<COP_SLOT>();
     }
+    */
 }
 
 void

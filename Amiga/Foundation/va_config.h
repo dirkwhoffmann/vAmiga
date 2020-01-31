@@ -79,7 +79,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Batman.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/Abnormal-DemoPack04.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/timing1l.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/vblank4.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
