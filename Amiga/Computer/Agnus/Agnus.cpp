@@ -1431,7 +1431,7 @@ Agnus::computeDDFStrt()
 {
     int16_t strt = ddfstrtReached;
 
-    // Align ddfstrt to the next possible fetch unit start
+    // Align ddfstrt to the start of the next fetch unit
     dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
     dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
     dmaStrtHires = MAX(strt + dmaStrtHiresShift, 0x18);
@@ -1458,17 +1458,6 @@ Agnus::computeDDFStop()
     dmaStopHires = MIN(dmaStrtHires + 8 * fetchUnits, 0xE0);
 
     debug(DDF_DEBUG, "computeDDFStop: %d %d\n", dmaStopLores, dmaStopHires);
-
-    /*
-    // Compute the number of fetch units
-    int numUnitsLores = (((stop - strt) + 15) >> 3);
-    int numUnitsHires = (((stop - strt) + 15) >> 3) * 2;
-    assert(numUnitsLores == (((stop - strt) +  7) >> 3) + 1);
-
-    // Compute the end of the DMA window
-    dmaStopLores = MIN(dmaStrtLores + 8 * numUnitsLores, 0xE0);
-    dmaStopHires = MIN(dmaStrtHires + 4 * numUnitsHires, 0xE0);
-    */
 }
 
 template <int x> void
