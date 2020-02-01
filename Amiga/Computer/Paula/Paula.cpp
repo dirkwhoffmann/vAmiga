@@ -218,6 +218,15 @@ Paula::serviceIrqEvent()
     agnus.scheduleAbs<IRQ_SLOT>(next, IRQ_CHECK);
 }
 
+void
+Paula::serviceIplEvent()
+{
+    assert(agnus.slot[IPL_SLOT].id == IPL_CHANGE);
+
+    cpu.setIPL(agnus.slot[IPL_SLOT].data);
+    agnus.cancel<IPL_SLOT>();
+}
+
 uint16_t
 Paula::peekPOTxDAT(int x)
 {
@@ -387,9 +396,12 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
+    agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(4), IPL_CHANGE, interruptLevel());
+
+    /*
     int level = interruptLevel();
     if (level != cpu.getIPL()) {
         agnus.recordRegisterChange(DMA_CYCLES(4), REG_IRQLEVEL, level);
     }
-    // cpu.setIPL(interruptLevel());
+    */
 }

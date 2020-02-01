@@ -229,6 +229,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case IPL_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case IPL_CHANGE:    i->eventName = "IPL_CHANGE"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case KBD_SLOT:
 
             switch (slot[nr].id) {
@@ -459,6 +469,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<IRQ_SLOT>(cycle)) {
             paula.serviceIrqEvent();
+        }
+        if (isDue<IPL_SLOT>(cycle)) {
+            paula.serviceIplEvent();
         }
         if (isDue<KBD_SLOT>(cycle)) {
             amiga.keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);

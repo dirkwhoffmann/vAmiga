@@ -1344,10 +1344,11 @@ Agnus::pokeDDFSTRT(uint16_t value)
 {
     debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
-    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
-    value &= 0xFE;
+    //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+    // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
 
+    value &= ddfMask();
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTRT, value);
 }
 
@@ -1356,10 +1357,11 @@ Agnus::pokeDDFSTOP(uint16_t value)
 {
     debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
-    // 15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
-    // -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
-    value &= 0xFE;
+    //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+    // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
+    // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
 
+    value &= ddfMask();
     recordRegisterChange(DMA_CYCLES(2), REG_DDFSTOP, value);
 }
 

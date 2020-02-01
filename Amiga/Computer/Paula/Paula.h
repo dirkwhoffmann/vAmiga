@@ -209,6 +209,9 @@ public:
     // Triggers all pending interrupts
     void serviceIrqEvent();
 
+    // Changes the CPU interrupt priority lines
+    void serviceIplEvent();
+    
 private:
     
     // Computes the interrupt level of a pending interrupt.

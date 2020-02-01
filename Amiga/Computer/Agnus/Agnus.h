@@ -575,16 +575,19 @@ public:
     AgnusRevision getRevision() { return config.revision; }
     void setRevision(AgnusRevision type);
 
-    bool isOCS() { return config.revision = AGNUS_8367; }
+    bool isOCS() { return config.revision == AGNUS_8367; }
     bool isECS() { return config.revision != AGNUS_8367; }
 
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
 
     // Returns the line in which the VERTB interrupt gets triggered
-    int vStrobeLine() { return config.revision == AGNUS_8367 ? 1 : 0; }
+    int vStrobeLine() { return isOCS() ? 1 : 0; }
 
-    
+    // Returns the connected bits in DDFSTRT / DDFSTOP
+    uint16_t ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+
+
     //
     // Methods from HardwareComponent
     //
