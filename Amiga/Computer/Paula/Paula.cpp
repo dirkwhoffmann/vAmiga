@@ -387,6 +387,9 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
-    agnus.recordRegisterChange(DMA_CYCLES(4), REG_IRQLEVEL, interruptLevel());
+    int level = interruptLevel();
+    if (level != cpu.getIPL()) {
+        agnus.recordRegisterChange(DMA_CYCLES(4), REG_IRQLEVEL, level);
+    }
     // cpu.setIPL(interruptLevel());
 }

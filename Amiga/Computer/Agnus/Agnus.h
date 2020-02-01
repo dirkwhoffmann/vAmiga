@@ -400,7 +400,7 @@ public:
     //
 
     // Ringbuffer for managing register change delays
-    ChangeRecorder<12> changeRecorder;
+    ChangeRecorder<8> changeRecorder;
 
     // A copy of BPLCON0 (Denise has another copy)
     uint16_t bplcon0;
