@@ -1004,7 +1004,7 @@ Blitter::exec()
         assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
         // Run the fill logic circuitry
-        if (instr & FILL) doFill(dhold, fillCarry);
+        if ((instr & FILL) && !lockD) doFill(dhold, fillCarry);
 
         // Update the zero flag
         if (dhold) bzero = false;
