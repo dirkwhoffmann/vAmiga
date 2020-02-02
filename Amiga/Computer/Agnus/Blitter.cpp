@@ -260,7 +260,6 @@ void
 Blitter::setBLTSIZE(uint16_t value)
 {
     debug(BLTREG_DEBUG, "setBLTSIZE(%X)\n", value);
-    debug("************************\n");
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
