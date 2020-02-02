@@ -260,6 +260,7 @@ void
 Blitter::setBLTSIZE(uint16_t value)
 {
     debug(BLTREG_DEBUG, "setBLTSIZE(%X)\n", value);
+    debug("************************\n");
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
@@ -276,21 +277,21 @@ Blitter::setBLTSIZE(uint16_t value)
 void
 Blitter::pokeBLTCON0L(uint16_t value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTCON0L(%X)\n", value);
+    debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
 
-    // This is an ECS only register
-    if (agnus.isECS()) return;
+    // ECS only register
+    if (agnus.isOCS()) return;
 
-    REPLACE_LO(bltcon0, LO_BYTE(value));
+    bltcon0 = HI_LO(HI_BYTE(bltcon0), LO_BYTE(value));
 }
 
 void
 Blitter::pokeBLTSIZV(uint16_t value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTSIZV(%X)\n", value);
+    debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTSIZV(%X)\n", value);
 
-    // This is an ECS only register
-    if (agnus.isECS()) return;
+    // ECS only register
+    if (agnus.isOCS()) return;
 
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0 h14 h13 h12 h11 h10 h9 h8 h7 h6 h5 h4 h3 h2 h1 h0
@@ -300,10 +301,10 @@ Blitter::pokeBLTSIZV(uint16_t value)
 void
 Blitter::pokeBLTSIZH(uint16_t value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTSIZH(%X)\n", value);
+    debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTSIZH(%X)\n", value);
 
-    // This is an ECS only register
-    if (agnus.isECS()) return;
+    // ECS only register
+    if (agnus.isOCS()) return;
 
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0   0   0   0   0 w10 w9 w8 w7 w6 w5 w4 w3 w2 w1 w0

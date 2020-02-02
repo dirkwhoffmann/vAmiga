@@ -30,6 +30,7 @@
 // Register debugging (set to 1 to generate debug output)
 
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
+static const int ECSREG_DEBUG  = 1;  // Special ECS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
