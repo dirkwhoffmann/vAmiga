@@ -506,7 +506,8 @@ Copper::scheduleWaitWakeup()
     } else {
 
         if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
-        agnus.cancel<COP_SLOT>();
+        agnus.scheduleAbs<COP_SLOT>(NEVER, COP_REQ_DMA);
+        // agnus.cancel<COP_SLOT>();
     }
 }
 

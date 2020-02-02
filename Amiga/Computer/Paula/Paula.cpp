@@ -397,11 +397,4 @@ void
 Paula::checkInterrupt()
 {
     agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(4), IPL_CHANGE, interruptLevel());
-
-    /*
-    int level = interruptLevel();
-    if (level != cpu.getIPL()) {
-        agnus.recordRegisterChange(DMA_CYCLES(4), REG_IRQLEVEL, level);
-    }
-    */
 }

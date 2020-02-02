@@ -53,7 +53,6 @@ typedef enum : int32_t
     REG_BLTSIZE,
     REG_INTREQ,
     REG_INTENA,
-    REG_IRQLEVEL,
     REG_BPLCON0_AGNUS,
     REG_BPLCON0_DENISE,
     REG_BPLCON1,
