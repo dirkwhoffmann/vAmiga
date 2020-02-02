@@ -16,9 +16,7 @@ import IOKit.hid
 
 class GamePad {
 
-    /* Keymap of the managed device
-     * Only used for keyboard emulated devices
-     */
+    // Keymap of the managed device (only used for keyboard emulated devices)
     var keyMap: [MacKey: UInt32]?
     
     // Indicates if a joystick emulation key is currently pressed
@@ -27,19 +25,13 @@ class GamePad {
     // Name of the connected controller
     var name: String?
 
-    /* Vendor ID of the managed device
-     * Value is only used for HID devices
-     */
+    // Vendor ID of the managed device (only used for HID devices)
     var vendorID: Int
 
-    /* Product ID of the managed device
-     * Value is only used for HID devices
-     */
+    // Product ID of the managed device (only used for HID devices)
     var productID: Int
 
-    /* Location ID of the managed device
-     * Value is only used for HID devices
-     */
+    // Location ID of the managed device (only used for HID devices)
     var locationID: Int
 
     // Minimum value of analog axis event
@@ -77,6 +69,14 @@ class GamePad {
             
             name = "Competition Pro SL-6602"
         
+        } else if vendorID == 0xF0D && productID == 0xC1 {
+
+            name = "iNNEXT Retro (N64)"
+
+        } else if vendorID == 0x79 && productID == 0x11 {
+
+            name = "iNNEXT Retro (SNES)"
+
         } else if vendorID == 0x54C && productID == 0x268 {
 
             name = "Sony DualShock 3"
@@ -279,7 +279,7 @@ extension GamePad {
         
         // Buttons
         if usagePage == kHIDPage_Button {
-            // track("BUTTON")
+            track("BUTTON")
             manager.joystickAction(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
             return
         }
@@ -293,21 +293,21 @@ extension GamePad {
                 
             case lThumbXUsageID, rThumbXUsageID:
                 
-                // track("lThumbXUsageID, rThumbXUsageID: \(usage) \(intValue)")
+                track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events = (v == 2) ? [PULL_RIGHT] : (v == -2) ? [PULL_LEFT] : [RELEASE_X]
                 }
    
             case lThumbYUsageID, rThumbYUsageID:
                 
-                // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
+                track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events = (v == 2) ? [PULL_DOWN] : (v == -2) ? [PULL_UP] : [RELEASE_Y]
                 }
                 
             case kHIDUsage_GD_Hatswitch:
                 
-                // track("kHIDUsage_GD_Hatswitch \(intValue)")
+                track("kHIDUsage_GD_Hatswitch \(intValue)")
                 switch intValue {
                 case 0: events = [PULL_UP, RELEASE_X]
                 case 1: events = [PULL_UP, PULL_RIGHT]
@@ -317,8 +317,8 @@ extension GamePad {
                 case 5: events = [PULL_DOWN, PULL_LEFT]
                 case 6: events = [PULL_LEFT, RELEASE_Y]
                 case 7: events = [PULL_LEFT, PULL_UP]
-                case 8: events = [RELEASE_XY]
-                default: break
+                default: events = [RELEASE_XY]
+                // default: break
                 }
                 
             default:

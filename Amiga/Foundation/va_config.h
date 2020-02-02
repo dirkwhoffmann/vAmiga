@@ -59,7 +59,7 @@ static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
 static const int DSK_DEBUG     = 2;  // Disk controller
 static const int AUD_DEBUG     = 2;  // Audio
 static const int AUDBUF_DEBUG  = 2;  // Audio buffers
-static const int PORT_DEBUG    = 2;  // Control ports and connected devices
+static const int PORT_DEBUG    = 1;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
 
 static const int BLT_DEBUG     = 2;  // Blitter
