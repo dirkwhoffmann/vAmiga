@@ -56,7 +56,10 @@ extension Inspector {
         watchTableView.refresh(count: count)
 
         // Perform a full refresh if needed
-        if count == 0 { refreshCPUFormatters() }
+        if count == 0 {
+            instrTableView.update()
+            refreshCPUFormatters()
+        }
 
         // Update display cache
         cacheCPU()

@@ -30,7 +30,7 @@
 // Register debugging (set to 1 to generate debug output)
 
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
-static const int ECSREG_DEBUG  = 1;  // Special ECS register debugging
+static const int ECSREG_DEBUG  = 2;  // Special ECS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
@@ -59,7 +59,7 @@ static const int CLX_DEBUG     = 2;  // Collision detection (CLXDAT, CLXCON)
 static const int DSK_DEBUG     = 2;  // Disk controller
 static const int AUD_DEBUG     = 2;  // Audio
 static const int AUDBUF_DEBUG  = 2;  // Audio buffers
-static const int PORT_DEBUG    = 1;  // Control ports and connected devices
+static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
 
 static const int BLT_DEBUG     = 2;  // Blitter

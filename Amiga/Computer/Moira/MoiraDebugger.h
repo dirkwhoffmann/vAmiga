@@ -169,6 +169,8 @@ public:
 
     Debugger(Moira& ref) : moira(ref) { }
 
+    void reset();
+
     //
     // Working with breakpoints and watchpoints
     //

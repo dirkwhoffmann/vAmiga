@@ -67,6 +67,8 @@ Moira::reset()
     queue.irc = read16OnReset(reg.pc & 0xFFFFFF);
     sync(2);
     prefetch();
+
+    debugger.reset();
 }
 
 void
@@ -128,8 +130,11 @@ Moira::execute()
 done:
 
     // Check if a breakpoint has been reached
-    if (flags & CPU_CHECK_BP)
-        if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
+    if (flags & CPU_CHECK_BP) {
+        if (debugger.breakpointMatches(reg.pc)) {
+            breakpointReached(reg.pc);
+        } 
+    }
 }
 
 bool
