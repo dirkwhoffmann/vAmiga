@@ -218,13 +218,13 @@ CIA::peek(uint16_t addr)
 			break;
 		
         case 0x09: // EVENT_8_15
-			
+
+            tod.freeze();
 			result = tod.getCounterMid();
 			break;
 			
         case 0x0A: // EVENT_16_23
-			
-            tod.freeze();
+
 			result = tod.getCounterHi();
 			break;
 			

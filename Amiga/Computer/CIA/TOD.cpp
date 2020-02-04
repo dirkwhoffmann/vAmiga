@@ -69,9 +69,8 @@ TOD::getInfo()
 void
 TOD::increment()
 {
-    if (stopped)
-    return;
-    
+    if (stopped) return;
+
     if (++tod.lo == 0) {
         if (++tod.mid == 0) {
             ++tod.hi;
