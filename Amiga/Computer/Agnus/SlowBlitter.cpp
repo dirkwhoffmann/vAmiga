@@ -710,7 +710,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <FETCH_C | HOLD_B>,
                     &Blitter::exec <WRITE_D | REPEAT>,
 
-                    &Blitter::exec <NOTHING>,
+                    &Blitter::exec <HOLD_D>,
                     &Blitter::exec <WRITE_D | BLTDONE>
                 },
                 {   // Full execution, fill
@@ -719,7 +719,7 @@ Blitter::initSlowBlitter()
                     &Blitter::exec <FETCH_C | HOLD_B>,
                     &Blitter::exec <WRITE_D | REPEAT>,
 
-                    &Blitter::exec <NOTHING>,
+                    &Blitter::exec <HOLD_D>,
                     &Blitter::exec <WRITE_D | BLTDONE>
                 }
             },
@@ -730,7 +730,7 @@ Blitter::initSlowBlitter()
                     &Blitter::fakeExec <FETCH_C | HOLD_B>,
                     &Blitter::fakeExec <WRITE_D | REPEAT>,
 
-                    &Blitter::fakeExec <NOTHING>,
+                    &Blitter::fakeExec <HOLD_D>,
                     &Blitter::fakeExec <WRITE_D | BLTDONE>
                 },
                 {   // Fake execution, fill
@@ -739,7 +739,7 @@ Blitter::initSlowBlitter()
                     &Blitter::fakeExec <FETCH_C | HOLD_B>,
                     &Blitter::fakeExec <WRITE_D | REPEAT>,
 
-                    &Blitter::fakeExec <NOTHING>,
+                    &Blitter::fakeExec <HOLD_D>,
                     &Blitter::fakeExec <WRITE_D | BLTDONE>
                 }
             }
@@ -870,14 +870,14 @@ Blitter::beginSlowCopyBlit()
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the fast Blitter.
     
-    BusOwner owner = agnus->busOwner[agnus->pos.h];
+    BusOwner owner = agnus.busOwner[agnus.pos.h];
 
-    while (agnus->hasEvent<BLT_SLOT>()) {
-        agnus->busOwner[agnus->pos.h] = BUS_NONE;
-        serviceEvent(agnus->slot[BLT_SLOT].id);
+    while (agnus.hasEvent<BLT_SLOT>()) {
+        agnus.busOwner[agnus.pos.h] = BUS_NONE;
+        serviceEvent(agnus.slot[BLT_SLOT].id);
     }
 
-    agnus->busOwner[agnus->pos.h] = owner;
+    agnus.busOwner[agnus.pos.h] = owner;
 
 #endif
 }
