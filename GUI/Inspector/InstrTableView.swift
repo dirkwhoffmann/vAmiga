@@ -112,12 +112,7 @@ class InstrTableView: NSTableView {
             update(addr: addr)
         }
     }
-    
-    // Updates the currently displayed instructions
-    func update() {
-        update(addr: addrInRow[0])
-    }
-    
+
     // Updates the displayed instructions, starting at the specified address
     func update(addr: UInt32?) {
         
@@ -144,10 +139,18 @@ class InstrTableView: NSTableView {
                 bpInRow[i] = BreakpointType.none
             }
             rowForAddr[addr] = i
+            // track("rowForAddr \(addr) = \(i)")
             addr += UInt32(info.bytes)
         }
         
         reloadData()
+    }
+
+    // Updates the currently displayed instructions
+    func update() {
+        if let pc = inspector.parent?.amiga.cpu.getInfo().pc {
+            update(addr: pc)
+        }
     }
 
     func refreshFormatters() {
