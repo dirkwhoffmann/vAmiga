@@ -249,9 +249,11 @@ template <int nr> void serviceCIAEvent();
 void serviceREGEvent(Cycle until);
 void serviceBPLEvent();
 void serviceDASEvent();
-void serviceINSEvent();
 void serviceRASEvent();
 
+public:
+
+void serviceINSEvent();
 
 //
 // Debugging

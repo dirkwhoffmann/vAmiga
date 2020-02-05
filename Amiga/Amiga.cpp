@@ -134,6 +134,7 @@ Amiga::setInspectionTarget(EventID id)
     suspend();
     inspectionTarget = id;
     agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.serviceINSEvent();
     resume();
 }
 

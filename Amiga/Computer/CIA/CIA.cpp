@@ -1148,10 +1148,10 @@ CIA::wakeUp(Cycle targetCycle)
     scheduleNextExecution();
 }
 
-Cycle
+CIACycle
 CIA::idle()
 {
-    return isAwake() ? 0 : agnus.clock - sleepCycle;
+    return isAwake() ? 0 : AS_CIA_CYCLES(agnus.clock - sleepCycle);
 }
 
 
