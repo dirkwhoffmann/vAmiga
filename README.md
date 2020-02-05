@@ -8,7 +8,7 @@ vAmiga emulates a Commodore Amiga 500, 1000, or 2000 on your Mac.
 
 ## Status
 
-Development has started in January 2019. By now all basic functionshave been implemented and the focus is shifting towards compatibility improvements. Due to the early development phase	there are no official releases yet. Pre-releases can be downloaded in the Releases section.
+Development has started in January 2019. By now all basic functions have been implemented and the focus is shifting towards compatibility improvements. Due to the early development phase	there are no official releases yet. Pre-releases can be downloaded in the Releases section.
    
 ## Where to go from here?
 
