@@ -9,6 +9,10 @@
 
 #include "Amiga.h"
 
+int CIAREG_DEBUG  = 2;
+int INT_DEBUG     = 2;
+int OCSREG_DEBUG  = 2;
+
 CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
 	setDescription("CIA");
@@ -93,7 +97,7 @@ CIA::_inspect()
     info.intLine = INT;
     
     info.cnt = tod.info;
-    info.cntIntEnable = icr & 0x04;
+    info.cntIntEnable = imr & 0x04;
     
     info.idleCycles = idle();
     info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
@@ -689,7 +693,11 @@ void
 CIA::_dump()
 {
     _inspect();
-    
+
+    CIAREG_DEBUG = 1;
+    INT_DEBUG = 1;
+    OCSREG_DEBUG  = 1;
+
     msg("                   Clock : %lld\n", clock);
     msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
     msg("               Tiredness : %d\n", tiredness);

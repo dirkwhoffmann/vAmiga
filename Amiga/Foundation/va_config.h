@@ -29,12 +29,12 @@
 
 // Register debugging (set to 1 to generate debug output)
 
-static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
+extern int OCSREG_DEBUG;  // General OCS register debugging
 static const int ECSREG_DEBUG  = 2;  // Special ECS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
-static const int CIAREG_DEBUG  = 2;  // CIA registers
+extern int CIAREG_DEBUG;  // CIA registers
 static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int SPRREG_DEBUG  = 2;  // Sprite registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
@@ -46,7 +46,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 static const int RUNLOOP_DEBUG = 2;  // Run loop of the emulator thread
 static const int CPU_DEBUG     = 2;  // CPU
-static const int INT_DEBUG     = 2;  // Interrupts
+extern int INT_DEBUG;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock
