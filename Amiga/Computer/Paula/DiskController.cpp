@@ -835,7 +835,8 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
+    // paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
+    paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(0));
     state = DRIVE_DMA_OFF;
 }
 
