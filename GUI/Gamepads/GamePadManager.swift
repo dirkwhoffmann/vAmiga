@@ -217,7 +217,12 @@ class GamePadManager: NSObject {
                                    vendorID: vendorID,
                                    productID: productID,
                                    locationID: locationID)
-        
+
+        track("    slotNr = \(slotNr)")
+        track("  vendorID = \(vendorID)")
+        track(" productID = \(productID)")
+        track("locationID = \(locationID)")
+
         // Open HID device
         let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
         let status = IOHIDDeviceOpen(device, IOOptionBits(optionBits))

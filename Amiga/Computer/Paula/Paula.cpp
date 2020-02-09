@@ -85,8 +85,8 @@ Paula::peekINTREQR()
 {
     uint16_t result = intreq;
 
-    if (ciaa.irqPin() == 0) SET_BIT(result, 3);
-    if (ciab.irqPin() == 0) SET_BIT(result, 13);
+    // if (ciaa.irqPin() == 0) SET_BIT(result, 3);
+    // if (ciab.irqPin() == 0) SET_BIT(result, 13);
 
     debug(INTREG_DEBUG, "peekINTREQR(): %x\n", result);
 
@@ -131,7 +131,15 @@ Paula::setINTREQ(bool setclr, uint16_t value)
 
     debug(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
 
-    if (setclr) intreq |= value; else intreq &= ~value;
+    if (setclr) {
+        intreq |= value;
+    } else {
+        intreq &= ~value;
+    }
+
+    if (ciaa.irqPin() == 0) SET_BIT(intreq, 3);
+    if (ciab.irqPin() == 0) SET_BIT(intreq, 13);
+
     checkInterrupt();
 }
 
@@ -375,8 +383,8 @@ Paula::interruptLevel()
 
         uint16_t mask = intreq;
 
-        if (ciaa.irqPin() == 0) SET_BIT(mask, 3);
-        if (ciab.irqPin() == 0) SET_BIT(mask, 13);
+        // if (ciaa.irqPin() == 0) SET_BIT(mask, 3);
+        // if (ciab.irqPin() == 0) SET_BIT(mask, 13);
 
         mask &= intena;
 

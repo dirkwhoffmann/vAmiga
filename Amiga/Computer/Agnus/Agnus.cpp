@@ -1020,20 +1020,11 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
             
             // Copper DMA on
             debug(DMA_DEBUG, "Copper DMA switched on\n");
-            
-            if (!hasEvent<COP_SLOT>()) {
 
-                // Determine trigger cycle for the first Copper event
-                // (the next even DMA cycle)
-                Cycle trigger = (clock + 15) & ~15;
-                scheduleAbs<COP_SLOT>(trigger, COP_FETCH);
-            }
-            
         } else {
 
             // Copper DMA off
             debug(DMA_DEBUG, "Copper DMA switched off\n");
-            // cancel<COP_SLOT>();
         }
     }
     

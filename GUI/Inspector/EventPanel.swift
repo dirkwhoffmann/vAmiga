@@ -20,18 +20,18 @@ extension Inspector {
 
     func refreshEvents(count: Int) {
 
-         // Refresh sub views
+        // Update display cache
+        cacheEvents()
+
+        // Perform a full refresh if needed
+        if count == 0 { refreshEventFormatters() }
+
+        // Refresh display with cached values
+        refreshEventValues()
+
+        // Refresh sub views
         evTableView.refresh(count: count)
-
-         // Perform a full refresh if needed
-         if count == 0 { refreshEventFormatters() }
-
-         // Update display cache
-         cacheEvents()
-
-         // Refresh display with cached values
-         refreshEventValues()
-     }
+    }
 
     func refreshEventValues() {
 

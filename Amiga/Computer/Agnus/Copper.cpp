@@ -615,8 +615,11 @@ Copper::getVMHM(uint32_t addr)
 bool
 Copper::isIllegalAddress(uint32_t addr)
 {
-    addr &= 0x1FE;
-    return addr < (cdang ? 0x40 : 0x80);
+    if (cdang) {
+        return agnus.isOCS() ? addr < 0x40 : false;
+    } else {
+        return addr < 0x80;
+    }
 }
 
 bool
@@ -880,16 +883,10 @@ Copper::vsyncHandler()
      *  in COP1LC." [HRM]
      */
 
+    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
+    /*
     if (agnus.doCopDMA()) {
         agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-    } else {
-        agnus.cancel<COP_SLOT>();
-    }
-
-    /*
-    switchToCopperList(1);
-    if (agnus.doCopDMA()) {
-        agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus.cancel<COP_SLOT>();
     }

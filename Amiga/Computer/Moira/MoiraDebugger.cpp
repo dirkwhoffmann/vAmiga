@@ -165,6 +165,13 @@ Watchpoints::setNeedsCheck(bool value)
 }
 
 void
+Debugger::reset()
+{
+    breakpoints.setNeedsCheck(breakpoints.elements() != 0);
+    watchpoints.setNeedsCheck(watchpoints.elements() != 0);
+}
+
+void
 Debugger::stepInto()
 {
     softStop = UINT64_MAX;
