@@ -36,7 +36,6 @@ typedef enum : long
     // Secondary slots
     DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
-    BLK_SLOT,                       // Disk Block Finished interrupt
     VBL_SLOT,                       // Vertical blank
     IRQ_SLOT,                       // Interrupts (DEPRECATED)
     IPL_SLOT,                       // CPU Interrupt Priority Lines
@@ -68,7 +67,6 @@ inline const char *slotName(EventSlot nr)
 
         case DSK_SLOT:  return "Disk Controller";
         case DCH_SLOT:  return "Disk Change";
-        case BLK_SLOT:  return "Disk Block Finished";
         case VBL_SLOT:  return "Vertical blank";
         case IRQ_SLOT:  return "Interrupts";
         case IPL_SLOT:  return "IPL";
