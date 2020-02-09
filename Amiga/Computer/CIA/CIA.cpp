@@ -12,6 +12,7 @@
 int CIAREG_DEBUG  = 2;
 int INT_DEBUG     = 2;
 int OCSREG_DEBUG  = 2;
+int BLT_DEBUG     = 2;
 
 CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {

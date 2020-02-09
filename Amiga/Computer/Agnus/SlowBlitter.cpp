@@ -871,6 +871,7 @@ Blitter::beginSlowCopyBlit()
     // This let's us compare checksums with the fast Blitter.
     
     BusOwner owner = agnus.busOwner[agnus.pos.h];
+    agnus.setBls(false);
 
     while (agnus.hasEvent<BLT_SLOT>()) {
         agnus.busOwner[agnus.pos.h] = BUS_NONE;

@@ -726,6 +726,10 @@ public:
     // Managing DMA access
     //
 
+    // Getter and setter for the BLS signal (Blitter slow down)
+    bool getBLS() { return bls; }
+    void setBLS(bool value) { bls = value; }
+
     // Indicates if bitplane DMA is blocked by a hardware stops
     bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }
 

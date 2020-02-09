@@ -65,7 +65,7 @@ static const int AUDBUF_DEBUG  = 2;  // Audio buffers
 static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
 
-static const int BLT_DEBUG     = 2;  // Blitter
+extern int BLT_DEBUG;  // Blitter
 static const int BLTTIM_DEBUG  = 2;  // Blitter Timing
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
@@ -83,7 +83,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/AlertX.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/timer2.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/VD-AbsoluteInebriation-A.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/tbl_eon_party_ver_disk1.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk

@@ -56,9 +56,8 @@ public:
     // The interrupt enable register
     uint16_t intena;
 
-    // Trigger cycle for setting or clearing a bit in INTREQ
+    // Trigger cycle for setting a bit in INTREQ
     Cycle setIntreq[16];
-    Cycle clrIntreq[16];
 
 
     //
@@ -107,7 +106,6 @@ public:
         & intreq
         & intena
         & setIntreq
-        & clrIntreq
         & potgo
         & potCntX0
         & potCntY0
@@ -202,9 +200,9 @@ public:
     void setINTENA(bool setclr, uint16_t value);
 
     // Schedules an interrupt
-    void scheduleIrq(IrqSource src, Cycle trigger, bool set);
-    void raiseIrq(IrqSource src, Cycle trigger = 0) { scheduleIrq(src, trigger, true); }
-    void clearIrq(IrqSource src, Cycle trigger = 0) { scheduleIrq(src, trigger, false); }
+    void raiseIrq(IrqSource src);
+    void scheduleIrqAbs(IrqSource src, Cycle trigger);
+    void scheduleIrqRel(IrqSource src, Cycle trigger);
 
     // Triggers all pending interrupts
     void serviceIrqEvent();

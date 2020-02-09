@@ -380,11 +380,9 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     
     // Schedule the first rotation event if at least one drive is spinning.
     if (!spinning()) {
-        // debug("Cancelling DSK_SLOT events\n");
         agnus.cancel<DSK_SLOT>();
     }
     else if (!agnus.hasEvent<DSK_SLOT>()) {
-        // debug("Activating DSK_SLOT events\n");
         agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }
@@ -835,8 +833,7 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    // paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(512));
-    paula.raiseIrq(INT_DSKBLK, DMA_CYCLES(0));
+    paula.scheduleIrqRel(INT_DSKBLK, DMA_CYCLES(512));
     state = DRIVE_DMA_OFF;
 }
 
