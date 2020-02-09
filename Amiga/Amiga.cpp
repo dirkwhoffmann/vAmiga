@@ -448,7 +448,8 @@ Amiga::prefix()
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             agnus.frame, agnus.pos.v, agnus.pos.h);
 
-    fprintf(stderr, " %06X ", cpu.getPC());
+    fprintf(stderr, "%06X ", cpu.getPC());
+    fprintf(stderr, "%2X ", cpu.getIPL());
 
     uint16_t dmacon = agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
@@ -518,12 +519,15 @@ Amiga::_powerOn()
 
 #endif
 
+#ifdef INITIAL_BREAKPOINT
+
+    debugMode = true;
+    cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
+
+#endif
+
+    // Clear all runloop flags
     runLoopCtrl = 0;
-    
-    // For debugging, we start in debug mode and set a breakpoint
-    // debugMode = true;
-    // cpu.debugger.breakpoints.addAt(0x07028C);
-    // cpu.debugger.breakpoints.addAt(0xDD8);
 
     // Update the recorded debug information
     inspect();

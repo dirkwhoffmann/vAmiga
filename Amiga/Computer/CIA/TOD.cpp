@@ -52,6 +52,7 @@ TOD::_reset()
 {
     RESET_SNAPSHOT_ITEMS
     stopped = true;
+    matching = true;
 }
 
 CounterInfo

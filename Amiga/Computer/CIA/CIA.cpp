@@ -211,12 +211,12 @@ CIA::peek(uint16_t addr)
 			
         case 0x07: // CIA_TIMER_B_HIGH
 			
-            // debug("tb = %d vpos = %d\n", counterB, amiga->agnus.vpos);
+            // debug("tb = %d\n", counterB);
             result = HI_BYTE(counterB);
 			break;
 			
         case 0x08: // EVENT_0_7
-			
+
 			result = tod.getCounterLo();
             tod.defreeze();
 			break;
@@ -271,12 +271,12 @@ CIA::peek(uint16_t addr)
 
         case 0x0E: // CIA_CONTROL_REG_A
 
-			result = (uint8_t)(CRA & ~0x10); // Bit 4 is always 0 when read
+			result = (uint8_t)(CRA & ~0x90); // Bit 4 and 7 always read as 0
 			break;
 			
         case 0x0F: // CIA_CONTROL_REG_B
 			
-			result = (uint8_t)(CRB & ~0x10); // Bit 4 is always 0 when read
+			result = (uint8_t)(CRB & ~0x10); // Bit 4 always reads as 0
 			break;
 			
 		default:
@@ -424,10 +424,13 @@ CIA::poke(uint16_t addr, uint8_t value)
              *  counter and initiate counting regardless of the start bit." [HRM]
              */
             if (CRA & 0x08) {
-                delay |= CIACountA1 | CIALoadA0 | CIACountA0;
-                feed |= CIACountA0;
-                if (!(CRA & 0x01))
+                if (!(CRA & 0x01)) {
                     PB67Toggle |= 0x40;
+                }
+                if (!(CRA & 0x20)) {
+                    delay |= CIACountA1 | CIALoadA0 | CIACountA0;
+                    feed |= CIACountA0;
+                }
                 CRA |= 0x01;
             }
             
@@ -459,10 +462,13 @@ CIA::poke(uint16_t addr, uint8_t value)
              *  counter and initiate counting regardless of the start bit." [HRM]
              */
             if (CRB & 0x08) {
-                delay |= CIACountB1 | CIALoadB0 | CIACountB0;
-                feed |= CIACountB0;
-                if (!(CRB & 0x01))
+                if (!(CRB & 0x01)) {
                     PB67Toggle |= 0x80;
+                }
+                if (!(CRB & 0x60)) {
+                    delay |= CIACountB1 | CIALoadB0 | CIACountB0;
+                    feed |= CIACountB0;
+                }
                 CRB |= 0x01;
             }
             

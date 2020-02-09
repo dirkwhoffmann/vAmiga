@@ -883,16 +883,10 @@ Copper::vsyncHandler()
      *  in COP1LC." [HRM]
      */
 
+    agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
+    /*
     if (agnus.doCopDMA()) {
         agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-    } else {
-        agnus.cancel<COP_SLOT>();
-    }
-
-    /*
-    switchToCopperList(1);
-    if (agnus.doCopDMA()) {
-        agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_REQ_DMA);
     } else {
         agnus.cancel<COP_SLOT>();
     }

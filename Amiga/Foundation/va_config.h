@@ -27,6 +27,9 @@
 // Debug settings
 //
 
+// Uncomment to set breakpoint on startup
+// #define INITIAL_BREAKPOINT 0x068440
+
 // Register debugging (set to 1 to generate debug output)
 
 extern int OCSREG_DEBUG;  // General OCS register debugging
@@ -79,8 +82,8 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // Additional debugging aids (uncomment to enable)
 
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/AlertX.adf"
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/Abnormal-DemoPack04.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/vblank4.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/timer2.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/VD-AbsoluteInebriation-A.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
