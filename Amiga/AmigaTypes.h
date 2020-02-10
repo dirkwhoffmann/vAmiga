@@ -45,13 +45,14 @@ typedef enum : long
     VA_FILTER_TYPE,
     VA_BLITTER_ACCURACY,
     VA_FIFO_BUFFERING,
-    VA_SERIAL_DEVICE
+    VA_SERIAL_DEVICE,
+    VA_TODBUG
 }
 ConfigOption;
 
 inline bool isConfigOption(long value)
 {
-    return value >= VA_AGNUS_REVISION && value <= VA_SERIAL_DEVICE;
+    return value >= VA_AGNUS_REVISION && value <= VA_TODBUG;
 }
 
 typedef enum

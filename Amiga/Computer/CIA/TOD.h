@@ -151,21 +151,23 @@ public:
     
 private:
     
-    // Freezes the counter.
+    // Freezes the counter
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }
     
-    // Unfreezes the counter.
+    // Unfreezes the counter
     void defreeze() { frozen = false; }
     
-    // Stops the counter.
+    // Stops the counter
     void stop() { stopped = true; }
     
-    // Starts the counter.
+    // Starts the counter
     void cont() { stopped = false; }
 
-    // Increments the counter.
+    // Increments the counter
     void increment();
-    
+    bool incLoNibble(uint8_t &counter);
+    bool incHiNibble(uint8_t &counter);
+
     /* Updates variable 'matching'
      * If a positive edge occurs, the connected CIA is requested to trigger
      * an interrupt.

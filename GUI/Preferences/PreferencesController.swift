@@ -98,6 +98,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
     @IBOutlet weak var compFifoBuffering: NSButton!
 
+    // CIAs
+    @IBOutlet weak var compTodBug: NSButton!
+
     // Lock
     @IBOutlet weak var compLockText: NSTextField!
     @IBOutlet weak var compLockSubText: NSTextField!

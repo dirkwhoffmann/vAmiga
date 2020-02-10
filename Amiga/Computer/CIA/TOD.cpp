@@ -67,6 +67,7 @@ TOD::getInfo()
     return result;
 }
 
+/*
 void
 TOD::increment()
 {
@@ -80,22 +81,52 @@ TOD::increment()
     
     checkForInterrupt();
 }
+*/
+
+void
+TOD::increment()
+{
+    if (stopped) return;
+
+    if (!incLoNibble(tod.lo))  goto check;
+    if (!incHiNibble(tod.lo))  goto check;
+    if (!incLoNibble(tod.mid)) goto check;
+
+    if (cia->config.todBug) checkForInterrupt();
+
+    if (!incHiNibble(tod.mid)) goto check;
+    if (!incLoNibble(tod.hi))  goto check;
+    incHiNibble(tod.hi);
+
+check:
+    checkForInterrupt();
+}
+
+bool
+TOD::incLoNibble(uint8_t &counter)
+{
+    if ((counter & 0x0F) < 0x0F) {
+        counter += 0x01; return false;
+    } else {
+        counter &= 0xF0; return true;
+    }
+}
+
+bool
+TOD::incHiNibble(uint8_t &counter)
+{
+    if ((counter & 0xF0) < 0xF0) {
+        counter += 0x10; return false;
+    } else {
+        counter &= 0x0F; return true;
+    }
+}
 
 void
 TOD::checkForInterrupt()
 {
-    // Quote from SAE: "hack: do not trigger alarm interrupt if KS code and both
-    // tod and alarm == 0. This incorrectly triggers on non-cycle exact
-    // modes. Real hardware value written to ciabtod by KS is always
-    // at least 1 or larger due to bus cycle delays when reading old value."
-    // Needs further investigation.
-    if (cia->nr == 1 /* CIA B */ && alarm.value == 0) {
-        // return;
-    }
-    
     if (!matching && tod.value == alarm.value) {
         cia->todInterrupt();
     }
-    
     matching = (tod.value == alarm.value);
 }

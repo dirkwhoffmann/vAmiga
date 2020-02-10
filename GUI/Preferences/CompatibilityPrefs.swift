@@ -86,6 +86,12 @@ extension PreferencesController {
         refresh()
     }
 
+    @IBAction func compTodBugAction(_ sender: NSButton!) {
+
+        amigaProxy?.configure(VA_TODBUG, enable: sender.state == .on)
+        refresh()
+    }
+
     @IBAction func compFactorySettingsAction(_ sender: Any!) {
 
         myController?.resetCompatibilityUserDefaults()

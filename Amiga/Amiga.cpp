@@ -305,6 +305,16 @@ Amiga::configure(ConfigOption option, long value)
             mem.setExtStart(value);
             break;
 
+        case VA_DRIVE_SPEED:
+
+            if (!isValidDriveSpeed(value)) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+
+            paula.diskController.setSpeed(value);
+            break;
+
         case VA_EMULATE_SPRITES:
 
             if (current.denise.emulateSprites == value) return true;
@@ -376,14 +386,10 @@ Amiga::configure(ConfigOption option, long value)
             serialPort.setDevice((SerialPortDevice)value);
             break;
 
-        case VA_DRIVE_SPEED:
+        case VA_TODBUG:
 
-            if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-
-            paula.diskController.setSpeed(value);
+            ciaA.setTodBug(value);
+            ciaB.setTodBug(value);
             break;
 
         default: assert(false);

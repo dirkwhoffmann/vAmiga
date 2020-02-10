@@ -63,6 +63,7 @@ CounterInfo;
 typedef struct
 {
     CIAType type;
+    bool    todBug;
 }
 CIAConfig;
 

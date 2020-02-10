@@ -82,6 +82,9 @@ protected:
     // The current configuration
     CIAConfig config;
 
+    bool getTodBug() { return config.todBug; }
+    void setTodBug(bool value) { config.todBug = value; }
+
     // The information shown in the GUI inspector panel
     CIAInfo info;
 
@@ -283,6 +286,7 @@ public:
     void applyToPersistentItems(T& worker)
     {
         worker & config.type;
+        worker & config.todBug;
     }
 
     template <class T>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -18,6 +18,7 @@
                 <outlet property="compFifoBuffering" destination="Klz-l3-bRD" id="c7X-nf-1wG"/>
                 <outlet property="compFilterActivation" destination="ZrM-uT-4JR" id="L6k-6C-7Wh"/>
                 <outlet property="compOKButton" destination="o9a-Eq-CnW" id="PtT-hk-GXk"/>
+                <outlet property="compTodBug" destination="xor-BJ-cr4" id="vr2-0Z-nty"/>
                 <outlet property="devAutofire" destination="BRc-s1-1v6" id="rBS-KA-uBE"/>
                 <outlet property="devAutofireBullets" destination="ABB-dw-Ain" id="nNU-wQ-kaw"/>
                 <outlet property="devAutofireCease" destination="mZY-PC-1oR" id="gKU-Sa-Yp9"/>
@@ -1165,7 +1166,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r9w-gg-Jxj">
-                                            <rect key="frame" x="319" y="269" width="145" height="17"/>
+                                            <rect key="frame" x="319" y="283" width="145" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Audio filter" id="uMG-8s-lcT">
                                                 <font key="font" metaFont="systemBold"/>
@@ -1173,8 +1174,17 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JQN-79-UR8">
+                                            <rect key="frame" x="319" y="207" width="145" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="CIAs" id="5Rt-Zd-Azl">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-uT-4JR" userLabel="System">
-                                            <rect key="frame" x="397" y="239" width="174" height="25"/>
+                                            <rect key="frame" x="397" y="253" width="174" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="with Power LED " bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="sFv-1H-kZJ" id="XsW-st-XXj" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1194,7 +1204,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uo-XH-OAm">
-                                            <rect key="frame" x="341" y="244" width="49" height="17"/>
+                                            <rect key="frame" x="341" y="258" width="49" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title="Enable:" id="aLg-he-hN7">
                                                 <font key="font" metaFont="system"/>
@@ -1202,6 +1212,17 @@ DQ
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xor-BJ-cr4">
+                                            <rect key="frame" x="397" y="183" width="129" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Emulate TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="nAQ-9r-IX4">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compTodBugAction:" target="-2" id="6Xg-Os-S2h"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
