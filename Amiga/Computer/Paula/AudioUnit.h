@@ -118,10 +118,12 @@ private:
     // State machine
     //
     
-private:
+public:
 
     // Indicates the enabled sound DMA channels (Bit n = channel n)
     uint8_t dmaEnabled;
+
+private:
 
     // Used in executeUntil() to compute the number of samples to generate.
     double dmaCycleCounter1 = 0;

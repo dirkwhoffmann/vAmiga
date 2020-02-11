@@ -123,6 +123,8 @@ AudioUnit::_reset()
 void
 AudioUnit::enableDMA(int nr)
 {
+    executeUntil(agnus.clock);
+
     switch (nr) {
         case 0: channel0.setState(0b000); break;
         case 1: channel1.setState(0b000); break;
@@ -136,6 +138,8 @@ AudioUnit::enableDMA(int nr)
 void
 AudioUnit::disableDMA(int nr)
 {
+    executeUntil(agnus.clock);
+
     switch (nr) {
         case 0: channel0.setState(0b000); break;
         case 1: channel1.setState(0b000); break;
