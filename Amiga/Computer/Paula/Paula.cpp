@@ -111,7 +111,7 @@ Paula::pokeINTENA(uint16_t value)
 void
 Paula::pokeADKCON(uint16_t value)
 {
-    plaindebug(2, "pokeADKCON(%X)\n", value);
+    plaindebug(AUDREG_DEBUG, "pokeADKCON(%X)\n", value);
 
     // uint16_t oldAdkcon = adkcon;
 
@@ -119,6 +119,8 @@ Paula::pokeADKCON(uint16_t value)
 
     // Take care of a possible change of the UARTBRK bit
     uart.updateTXD();
+
+    if (adkcon & 0b1110111) debug(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
 }
 
 void

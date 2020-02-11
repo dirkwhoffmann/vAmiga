@@ -28,7 +28,7 @@
 //
 
 // Uncomment to set breakpoint on startup
-// #define INITIAL_BREAKPOINT 0x068440
+// #define INITIAL_BREAKPOINT 0x035764
 
 // Register debugging (set to 1 to generate debug output)
 
@@ -82,7 +82,7 @@ static const int BLT_CHECKSUM  = 2;  // Blitter checksums
 // Additional debugging aids (uncomment to enable)
 
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/AlertX.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/timer2.adf"
+// #define BOOT_DISK "/Users/hoff/Downloads/Cabal.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/tbl_eon_party_ver_disk1.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draws the border in debug colors

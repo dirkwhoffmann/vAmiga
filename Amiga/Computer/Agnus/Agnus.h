@@ -758,10 +758,10 @@ public:
     uint16_t doDiskDMA();
 
     template <int channel> uint16_t doSpriteDMA();
+    template <int channel> uint16_t doAudioDMA();
 
     // OLD
     void doDiskDMA(uint16_t value);
-    uint16_t doAudioDMA(int channel);
     uint16_t doSpriteDMA(int channel);
     template <int channel> uint16_t doBitplaneDMA();
 

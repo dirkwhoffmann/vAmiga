@@ -447,8 +447,8 @@ Agnus::doDiskDMA(uint16_t value)
     stats.count[BUS_DISK]++;
 }
 
-uint16_t
-Agnus::doAudioDMA(int channel)
+template <int channel> uint16_t
+Agnus::doAudioDMA()
 {
     uint16_t result = mem.peekChip16(audlc[channel]);
     INC_CHIP_PTR(audlc[channel]);
@@ -2167,6 +2167,11 @@ template uint16_t Agnus::doBitplaneDMA<2>();
 template uint16_t Agnus::doBitplaneDMA<3>();
 template uint16_t Agnus::doBitplaneDMA<4>();
 template uint16_t Agnus::doBitplaneDMA<5>();
+
+template uint16_t Agnus::doAudioDMA<0>();
+template uint16_t Agnus::doAudioDMA<1>();
+template uint16_t Agnus::doAudioDMA<2>();
+template uint16_t Agnus::doAudioDMA<3>();
 
 template void Agnus::pokeDIWSTRT<POKE_CPU>(uint16_t value);
 template void Agnus::pokeDIWSTRT<POKE_COPPER>(uint16_t value);

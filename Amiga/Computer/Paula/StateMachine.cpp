@@ -59,6 +59,7 @@ StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
+    audioUnit.executeUntil(agnus.clock);
     audlenLatch = value;
 }
 
@@ -67,6 +68,7 @@ StateMachine<nr>::pokeAUDxPER(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
+    audioUnit.executeUntil(agnus.clock);
     audperLatch = value;
 }
 
@@ -78,6 +80,7 @@ StateMachine<nr>::pokeAUDxVOL(uint16_t value)
     /* Behaviour: 1. Only the lowest 7 bits are evaluated.
      *            2. All values greater than 64 are treated as 64 (max volume).
      */
+    audioUnit.executeUntil(agnus.clock);
     audvolLatch = MIN(value & 0x7F, 64);
 }
 
@@ -86,6 +89,7 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
+    audioUnit.executeUntil(agnus.clock);
     auddatLatch = value;
 
     /* "In interrupt-driven operation, transfer to the main loop (states 010
@@ -105,6 +109,7 @@ StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
+    audioUnit.executeUntil(agnus.clock);
     audlcLatch = CHIP_PTR(REPLACE_HI_WORD(audlcLatch, value));
 }
 
@@ -113,6 +118,7 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
 
+    audioUnit.executeUntil(agnus.clock);
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
@@ -194,7 +200,7 @@ StateMachine<nr>::execute(DMACycle cycles)
             auddat = LO_BYTE(auddatLatch);
 
             // Read the next two samples from memory
-            auddatLatch = agnus.doAudioDMA(nr);
+            auddatLatch = agnus.doAudioDMA<nr>();
 
             // Switch to next state
             state = 0b010;
@@ -216,11 +222,11 @@ StateMachine<nr>::execute(DMACycle cycles)
             // Perform non-DMA mode specific action
             } else {
 
-                // Trigger Audio interrupt
-                triggerIrq();
-
                 // Go idle if the audio IRQ hasn't been acknowledged
                 if (irqIsPending()) state = 0b000;
+
+                // Trigger Audio interrupt
+                triggerIrq();
             }
 
             break;
@@ -233,7 +239,7 @@ StateMachine<nr>::execute(DMACycle cycles)
             audper = 0; // ???? SHOULD BE: audper += audperLatch;
 
             // Read the next two samples from memory
-            auddatLatch = agnus.doAudioDMA(nr);
+            auddatLatch = agnus.doAudioDMA<nr>();
 
             if (audlen > 1) {
                 audlen--;

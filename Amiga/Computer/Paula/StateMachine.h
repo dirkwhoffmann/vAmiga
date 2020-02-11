@@ -35,7 +35,7 @@ public:
 
     // Audio period (AUDxPER)
     uint16_t audperLatch;
-    int32_t audper;
+    int32_t  audper;
 
     // Audio volume (AUDxVOL)
     uint16_t audvolLatch;
