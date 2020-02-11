@@ -14,6 +14,7 @@
 
 #include "PaulaTypes.h"
 #include "CPUTypes.h"
+#include "CIATypes.h"
 #include "MemoryTypes.h"
 #include "AgnusTypes.h"
 #include "DeniseTypes.h"
@@ -73,6 +74,8 @@ RunLoopControlFlag;
 typedef struct
 {
     int cpuSpeed;
+    CIAConfig ciaA;
+    CIAConfig ciaB;
     RTCConfig rtc;
     AudioConfig audio;
     MemoryConfig mem;

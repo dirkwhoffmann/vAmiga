@@ -37,8 +37,11 @@ extension PreferencesController {
         assert(speed == config.df2.speed)
         assert(speed == config.df3.speed)
         compDriveSpeed.selectItem(withTag: Int(speed))
-        compFifoBuffering.isHidden = speed > 256
+        compFifoBuffering.isHidden = speed == -1
         compFifoBuffering.state = config.diskController.useFifo ? .on : .off
+
+        // CIAs
+        compTodBug.state = config.ciaA.todBug ? .on : .off
 
         // Lock controls if emulator is powered on
         // Nothing to do here at the moment

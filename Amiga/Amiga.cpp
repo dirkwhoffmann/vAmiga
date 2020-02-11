@@ -161,6 +161,8 @@ Amiga::getConfig()
 {
     AmigaConfiguration config;
 
+    config.ciaA = ciaA.getConfig();
+    config.ciaB = ciaB.getConfig();
     config.rtc = rtc.getConfig();
     config.audio = paula.audioUnit.getConfig();
     config.mem = mem.getConfig();
@@ -173,6 +175,10 @@ Amiga::getConfig()
     config.df1 = df1.getConfig();
     config.df2 = df2.getConfig();
     config.df3 = df3.getConfig();
+
+    // Assure both CIAs are configured equally
+    assert(config.ciaA.type == config.ciaB.type);
+    assert(config.ciaA.todBug == config.ciaB.todBug);
 
     return config;
 }

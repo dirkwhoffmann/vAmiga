@@ -981,6 +981,9 @@ extension Keys {
     // Floppy drives
     static let driveSpeed        = "VAMIGADriveSpeedKey"
     static let fifoBuffering     = "VAMIGAFifoBufferingKey"
+
+    // CIAs
+    static let todBug            = "VAMIGATodBugKey"
 }
 
 extension Defaults {
@@ -1000,6 +1003,7 @@ extension Defaults {
     // Floppy drives
     static let driveSpeed        = 1
     static let fifoBuffering     = true
+    static let todBug            = true
 }
 
 extension MyController {
@@ -1015,7 +1019,8 @@ extension MyController {
             Keys.filterType: Defaults.filterType.rawValue,
             Keys.blitterAccuracy: Defaults.blitterAccuracy,
             Keys.driveSpeed: Defaults.driveSpeed,
-            Keys.fifoBuffering: Defaults.fifoBuffering
+            Keys.fifoBuffering: Defaults.fifoBuffering,
+            Keys.todBug: Defaults.todBug
         ]
 
         let defaults = UserDefaults.standard
@@ -1033,7 +1038,8 @@ extension MyController {
                      Keys.filterType,
                      Keys.blitterAccuracy,
                      Keys.driveSpeed,
-                     Keys.fifoBuffering ]
+                     Keys.fifoBuffering,
+                     Keys.todBug]
 
         for key in keys { defaults.removeObject(forKey: key) }
 
@@ -1054,6 +1060,7 @@ extension MyController {
         amiga.configure(VA_BLITTER_ACCURACY, value: defaults.integer(forKey: Keys.blitterAccuracy))
         amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
         amiga.configure(VA_FIFO_BUFFERING, enable: defaults.bool(forKey: Keys.fifoBuffering))
+        amiga.configure(VA_TODBUG, enable: defaults.bool(forKey: Keys.todBug))
 
         amiga.resume()
     }
@@ -1070,5 +1077,6 @@ extension MyController {
         defaults.set(config.audio.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
         defaults.set(config.diskController.useFifo, forKey: Keys.fifoBuffering)
+        defaults.set(config.ciaA.todBug, forKey: Keys.todBug)
     }
 }

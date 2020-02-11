@@ -82,9 +82,6 @@ protected:
     // The current configuration
     CIAConfig config;
 
-    bool getTodBug() { return config.todBug; }
-    void setTodBug(bool value) { config.todBug = value; }
-
     // The information shown in the GUI inspector panel
     CIAInfo info;
 
@@ -333,7 +330,10 @@ public:
 
     CIAConfig getConfig() { return config; }
 
+    bool getTodBug() { return config.todBug; }
+    void setTodBug(bool value) { config.todBug = value; }
 
+    
     //
     // Methods from HardwareComponent
     //
@@ -350,6 +350,12 @@ protected:
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
+
+    //
+    // Configuring
+    //
+
+
 
     // Returns the result of the most recent call to inspect()
     CIAInfo getInfo();
