@@ -125,8 +125,8 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
-    // return agnus.doAudDMA<nr>();
-    return audioUnit.dmaEnabled & (1 << nr);
+    return agnus.doAudDMA<nr>();
+    // return audioUnit.dmaEnabled & (1 << nr);
 }
 
 template <int nr> void
@@ -187,7 +187,6 @@ StateMachine<nr>::outputLo(uint16_t sample)
             if (samplecnt++ & 1) {
                 audioUnit.pokeAUDxPER(nr + 1, auddatLatch);
             } else {
-                debug("Volume = %d\n", auddatLatch);
                 audioUnit.pokeAUDxVOL(nr + 1, auddatLatch);
             }
             break;
@@ -229,8 +228,8 @@ StateMachine<nr>::execute(DMACycle cycles)
                 audvol = audvolLatch;
 
                 // Put out the high byte
-                auddat = HI_BYTE(auddatLatch);
-                // outputHi(auddatLatch);
+                // auddat = HI_BYTE(auddatLatch);
+                outputHi(auddatLatch);
 
                 // Switch forth to state 3
                 state = 0b011;
@@ -252,14 +251,14 @@ StateMachine<nr>::execute(DMACycle cycles)
             audvol = audvolLatch;
 
             // Put out the low byte
-            auddat = LO_BYTE(auddatLatch);
-            // outputLo(auddatLatch);
+            // auddat = LO_BYTE(auddatLatch);
+            outputLo(auddatLatch);
 
             // Switch to next state
             state = 0b010;
 
             // Read the next two samples from memory
-            auddatLatch = agnus.doAudioDMA<nr>();
+            // auddatLatch = agnus.doAudioDMA<nr>();
 
             // Perform DMA mode specific action
             if (dmaMode()) {
@@ -276,7 +275,7 @@ StateMachine<nr>::execute(DMACycle cycles)
                 }
 
                 // Read the next two samples from memory
-                // auddatLatch = agnus.doAudioDMA<nr>();
+                auddatLatch = agnus.doAudioDMA<nr>();
 
             // Perform non-DMA mode specific action
             } else {
