@@ -42,7 +42,7 @@ public:
     // Counters
     //
     
-    // Paula has been executed up to this clock cycle.
+    // Paula has been executed up to this clock cycle
     Cycle clock = 0;
     
     

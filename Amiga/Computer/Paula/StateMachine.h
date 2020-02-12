@@ -26,6 +26,9 @@ class StateMachine : public AmigaComponent {
 
 public:
 
+    // The state machine has been executed up to this clock cycle
+    Cycle clock;
+
     // The current state of this machine
     int8_t state;
 
@@ -48,8 +51,17 @@ public:
     // Audio location (AUDxLC)
     uint32_t audlcLatch;
 
-    // EXPERIMENTAL
+    // EXPERIMENTAL (DEPRECATED)
     int samplecnt = 0;
+
+    /* Sample pipeline
+     * When the state machine outputs a sample, it is stored in this pipeline
+     * together with a time stamp. The pipe is read in the hsync handler of
+     * the audio engine to assemble the 44.1kHz audio stream.
+     */
+    int16_t sampleData[3];
+    Cycle   sampleTime[3];
+
 
     //
     // Constructing and destructing
@@ -74,6 +86,7 @@ public:
     {
         worker
 
+        & clock
         & state
         & audlenLatch
         & audlen
@@ -83,7 +96,9 @@ public:
         & audvol
         & auddatLatch
         & auddat
-        & audlcLatch;
+        & audlcLatch
+        & sampleData
+        & sampleTime;
     }
 
 
@@ -136,6 +151,17 @@ public:
 
 
     //
+    // Working with the sample pipeline
+    //
+
+    // Feeds a new sample into the pipeline
+    void pushSample(int16_t data, Cycle clock);
+
+    // Reads the proper sample for a given time stamp
+    int16_t pickSample(Cycle clock);
+
+
+    //
     // Running the device
     //
 
@@ -161,8 +187,13 @@ public:
 
     /* Executes the state machine for a certain number of DMA cycles.
      * The return value is the current audio sample of this channel.
+     * DEPRECATED
      */
     int16_t execute(DMACycle cycles);
+
+    /* Executes the state machine until a given cycle has been reached.
+     */
+    // int16_t executeUntil(Cycle target); 
 };
 
 #endif

@@ -122,6 +122,39 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
+template <int nr> void
+StateMachine<nr>::pushSample(int16_t data, Cycle clock)
+{
+    if (sampleData[0] != data) {
+
+        sampleData[2] = sampleData[1];
+        sampleData[1] = sampleData[0];
+        sampleData[0] = data;
+
+        sampleTime[2] = sampleTime[1];
+        sampleTime[1] = sampleTime[0];
+        sampleTime[0] = clock;
+
+        // if (nr == 0) debug("Pushing sample %d (%d)\n", data, clock);
+    }
+}
+
+template <int nr> int16_t
+StateMachine<nr>::pickSample(Cycle clock)
+{
+    if (clock > sampleTime[0]) return sampleData[0];
+    if (clock > sampleTime[1]) return sampleData[1];
+    if (clock < sampleTime[2]) {
+        debug("Pipeline: (clock = %d agnusClock = %d)\n", clock, agnus.clock);
+        for (int i = 0; i < 3; i++) {
+            printf("Data: %02X Time: %lld\n", (uint8_t)sampleData[i], sampleTime[i]);
+        }
+        printf("\n");
+    }
+    assert(clock >= sampleTime[2]);
+    return sampleData[2];
+}
+
 template <int nr> bool
 StateMachine<nr>::dmaMode()
 {
@@ -147,11 +180,11 @@ template <int nr> void
 StateMachine<nr>::outputHi(uint16_t sample)
 {
     uint16_t modulate = (paula.adkcon >> nr) & 0x11;
-    // modulate = 0;
 
     // Standard case: Output sound sample
     if (nr == 3 || modulate == 0) {
         auddat = HI_BYTE(sample);
+        pushSample((int16_t)HI_BYTE(sample) * audvolLatch, clock);
         return;
     }
 
@@ -167,6 +200,7 @@ StateMachine<nr>::outputLo(uint16_t sample)
     // Standard case: Output sound sample
     if (nr == 3 || modulate == 0) {
         auddat = LO_BYTE(sample);
+        pushSample((int16_t)LO_BYTE(sample) * audvolLatch, clock);
         return;
     }
 
@@ -198,6 +232,8 @@ StateMachine<nr>::outputLo(uint16_t sample)
 template <int nr> int16_t
 StateMachine<nr>::execute(DMACycle cycles)
 {
+    Cycle endClock = clock + DMA_CYCLES(cycles);
+
     switch(state) {
 
         case 0b000: // State 0 (Idle)
@@ -229,6 +265,7 @@ StateMachine<nr>::execute(DMACycle cycles)
 
                 // Put out the high byte
                 // auddat = HI_BYTE(auddatLatch);
+                // clock = midClock; // FAKE
                 outputHi(auddatLatch);
 
                 // Switch forth to state 3
@@ -252,6 +289,7 @@ StateMachine<nr>::execute(DMACycle cycles)
 
             // Put out the low byte
             // auddat = LO_BYTE(auddatLatch);
+            // clock = endClock; // FAKE
             outputLo(auddatLatch);
 
             // Switch to next state
@@ -319,6 +357,7 @@ StateMachine<nr>::execute(DMACycle cycles)
 
     }
 
+    clock = endClock;
     return (int8_t)auddat * audvolLatch;
 }
 
@@ -366,3 +405,8 @@ template int16_t StateMachine<0>::execute(DMACycle cycles);
 template int16_t StateMachine<1>::execute(DMACycle cycles);
 template int16_t StateMachine<2>::execute(DMACycle cycles);
 template int16_t StateMachine<3>::execute(DMACycle cycles);
+
+template int16_t StateMachine<0>::pickSample(Cycle clock);
+template int16_t StateMachine<1>::pickSample(Cycle clock);
+template int16_t StateMachine<2>::pickSample(Cycle clock);
+template int16_t StateMachine<3>::pickSample(Cycle clock);
