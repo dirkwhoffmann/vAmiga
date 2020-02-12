@@ -200,6 +200,14 @@ public:
 
 
     //
+    // Accessing the state machines
+    //
+    
+    void pokeAUDxPER(int nr, uint16_t value);
+    void pokeAUDxVOL(int nr, uint16_t value);
+
+
+    //
     // Controlling the volume
     //
     

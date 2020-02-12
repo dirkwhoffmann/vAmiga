@@ -48,6 +48,8 @@ public:
     // Audio location (AUDxLC)
     uint32_t audlcLatch;
 
+    // EXPERIMENTAL
+    int samplecnt = 0;
 
     //
     // Constructing and destructing
@@ -147,6 +149,10 @@ private:
 
     // Returns true if the audio interrupt is pending
     bool irqIsPending();
+
+    // Writes a byte of a 16-bit sample to the audio buffer
+    void outputLo(uint16_t sample);
+    void outputHi(uint16_t sample);
 
 public:
 
