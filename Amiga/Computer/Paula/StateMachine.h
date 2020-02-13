@@ -32,6 +32,12 @@ public:
     // The current state of this machine
     int8_t state;
 
+    // The 16 bit output buffer
+    uint16_t buffer;
+
+    // The value that is handed over to the DA converter
+    int16_t bufferOut;
+
     // Audio length (AUDxLEN)
     uint16_t audlenLatch;
     uint16_t audlen;
@@ -50,6 +56,9 @@ public:
 
     // Audio location (AUDxLC)
     uint32_t audlcLatch;
+
+    // Set to true if the next 011->010 transition should trigger an interrupt
+    bool intreq2;
 
     // EXPERIMENTAL (DEPRECATED)
     int samplecnt = 0;
@@ -88,6 +97,8 @@ public:
 
         & clock
         & state
+        & buffer
+        & bufferOut
         & audlenLatch
         & audlen
         & audperLatch
@@ -97,6 +108,7 @@ public:
         & auddatLatch
         & auddat
         & audlcLatch
+        & intreq2
         & sampleData
         & sampleTime;
     }
@@ -165,22 +177,72 @@ public:
     // Performing state machine actions
     //
 
-    void audxDR() { agnus.setAudxDR<nr>(); }
+    // Returns true if the state machine is running in DMA mode
+    bool AUDxON();
+
+    // Returns true if the audio interrupt is pending
+    bool AUDxIP();
+
+    // Asks Paula to trigger the audio interrupt
+    void AUDxIR();
+
+    // Asks Agnus for one word of data
+    void AUDxDR() { agnus.setAudxDR<nr>(); }
+
+    // Asks Agnus to reset the DMA pointer to the block start
+    // TODO: void AUDxDSR();
+
+    // Checks if the period counter is finished
+    // bool perfin() { return audlen == 1; }
+
+    // Loads the output buffer from holding latch written to by AUDxDAT
+    void pbufld1() { buffer = auddatLatch; }
+
+    // Like pbufld1, but only during 010->011 transition with attach period
+    void pbufld2() { /* TODO */ }
+
+    // Returns true in attach volume mode
+    bool AUDxAV();
+
+    // Returns true in attach period mode
+    bool AUDxAP();
+
+    // Condition for normal DMA and interrupt requests
+    bool napnav() { return !AUDxAP() || AUDxAV(); }
+
+    // Enables the high byte of data to go to the digital-analog converter
+    void penhi();
+
+    // Enables the high byte of data to go to the digital-analog converter
+    void penlo();
+
+
+    //
+    // Performing state machine transitions
+    //
+
+    void move_000_010();
+    void move_000_001();
+    void move_001_000();
+    void move_001_101();
+    void move_101_000();
+    void move_101_010();
+    void move_010_011();
+    void move_011_000();
+    void move_011_010();
+
+    //
+    // Servicing events
+    //
+
+    void serviceEvent();
+
 
     //
     // Running the device
     //
 
 private:
-
-    // Returns true if the audio unit is operation in DMA mode
-    bool dmaMode();
-
-    // Returns true if the audio interrupt is pending
-    void triggerIrq();
-
-    // Returns true if the audio interrupt is pending
-    bool irqIsPending();
 
     // Writes a byte of a 16-bit sample to the audio buffer
     void outputLo(uint16_t sample);

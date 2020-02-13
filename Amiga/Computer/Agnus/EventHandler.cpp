@@ -188,6 +188,16 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
 
+        case CH0_SLOT:
+
+            switch (slot[nr].id) {
+
+                case 0:             i->eventName = "none"; break;
+                case CHX_PERFIN:    i->eventName = "CHX_PERFIN"; break;
+                default:            i->eventName = "*** INVALID ***"; break;
+            }
+            break;
+
         case DSK_SLOT:
 
             switch (slot[nr].id) {
@@ -458,6 +468,9 @@ Agnus::executeEventsUntil(Cycle cycle) {
         // Check secondary slots
         //
 
+        if (isDue<CH0_SLOT>(cycle)) {
+            audioUnit.channel0.serviceEvent();
+        }
         if (isDue<DSK_SLOT>(cycle)) {
             paula.diskController.serviceDiskEvent();
         }

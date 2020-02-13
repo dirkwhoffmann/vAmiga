@@ -89,6 +89,51 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
+
+    // IRQ mode
+    if (!AUDxON()) {
+
+        switch(state) {
+
+            case 0b000:
+
+                if (!AUDxIP()) move_000_010();
+                break;
+        }
+    }
+
+    // DMA mode
+    else {
+
+        switch(state) {
+
+            case 0b000:
+
+                move_000_001();
+                break;
+
+            case 0b001:
+
+                move_001_101();
+                break;
+
+            case 0b101:
+
+                move_101_000();
+                break;
+
+            case 0b010:
+            case 0b011:
+
+                // TODO: lenctrld if lenfin
+                // TODO: lencount if !lenfin
+                // TODO: intreq2 if lenfin
+                break;
+        }
+    }
+
+    // OLD CODE (DEPRECATED)
+
     audioUnit.executeUntil(agnus.clock);
     auddatLatch = value;
 
@@ -96,11 +141,11 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
      *  and 011) occurs immediately after data is written by the processor."
      * [HRM]
      */
-    if (!dmaMode() && !irqIsPending()) {
+    if (!AUDxON() && !AUDxIP()) {
 
         audvol = audvolLatch;
         audper += audperLatch;
-        triggerIrq();
+        AUDxIR();
     }
 }
 
@@ -155,15 +200,118 @@ StateMachine<nr>::pickSample(Cycle clock)
     return sampleData[2];
 }
 
-template <int nr> bool
-StateMachine<nr>::dmaMode()
-{
-    return agnus.doAudDMA<nr>();
-    // return audioUnit.dmaEnabled & (1 << nr);
+template <int nr> void
+StateMachine<nr>::move_000_010() {
+
+    /*
+    audvol = audvolLatch; // volcntrld
+
+    // TODO // pbufld1
+    // audxIR();  // AUDxIR
+    // scheduleEvent(...)  // percntrld
+
+    penhi();
+    state = 0b010;
+    */
 }
 
 template <int nr> void
-StateMachine<nr>::triggerIrq()
+StateMachine<nr>::move_000_001() {
+
+    /*
+    state = 0b001;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_001_000() {
+
+    /*
+    state = 0b000;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_001_101() {
+
+    /*
+    state = 0b101;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_101_000() {
+
+    /*
+    state = 0b000;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_101_010() {
+
+    /*
+    penhi();
+    state = 0b010;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_010_011() {
+
+    /*
+    penlo();
+    state = 0b011;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_011_000() {
+
+    /*
+    state = 0b000;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::move_011_010() {
+
+    /*
+    state = 0b010;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::serviceEvent()
+{
+    assert(agnus.slot[CH0_SLOT+nr].id == CHX_PERFIN);
+    debug("serviceEvent");
+
+    switch (state) {
+
+        case 0b010:
+
+            move_010_011();
+            return;
+
+        case 0b011:
+
+            (AUDxON() || !AUDxIP()) ? move_011_010() : move_011_000();
+            return;
+
+        default:
+            assert(false);
+    }
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxON()
+{
+    return agnus.doAudDMA<nr>();
+}
+
+template <int nr> void
+StateMachine<nr>::AUDxIR()
 {
     paula.raiseIrq(nr == 0 ? INT_AUD0 :
                    nr == 1 ? INT_AUD1 :
@@ -171,9 +319,35 @@ StateMachine<nr>::triggerIrq()
 }
 
 template <int nr> bool
-StateMachine<nr>::irqIsPending()
+StateMachine<nr>::AUDxIP()
 {
     return GET_BIT(paula.intreq, 7 + nr);
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxAV()
+{
+    return (paula.adkcon >> nr) & 0x01;
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxAP()
+{
+    return (paula.adkcon >> nr) & 0x10;
+}
+
+template <int nr> void
+StateMachine<nr>::penhi()
+{
+    bufferOut = (int16_t)HI_BYTE(buffer) * audvol;
+    pushSample(bufferOut, agnus.clock);
+}
+
+template <int nr> void
+StateMachine<nr>::penlo()
+{
+    bufferOut = (int16_t)LO_BYTE(buffer) * audvol;
+    pushSample(bufferOut, agnus.clock);
 }
 
 template <int nr> void
@@ -249,7 +423,7 @@ StateMachine<nr>::execute(DMACycle cycles)
             if (audlen > 1) audlen--;
 
             // Trigger Audio interrupt
-            triggerIrq();
+            AUDxIR();
 
             state = 0b101;
             break;
@@ -299,7 +473,7 @@ StateMachine<nr>::execute(DMACycle cycles)
             // auddatLatch = agnus.doAudioDMA<nr>();
 
             // Perform DMA mode specific action
-            if (dmaMode()) {
+            if (AUDxON()) {
 
                 // Decrease the length counter
                 if (audlen > 1) {
@@ -309,7 +483,7 @@ StateMachine<nr>::execute(DMACycle cycles)
                     agnus.audlc[nr] = audlcLatch;
 
                     // Trigger Audio interrupt
-                    triggerIrq();
+                    AUDxIR();
                 }
 
                 // Read the next two samples from memory
@@ -319,10 +493,10 @@ StateMachine<nr>::execute(DMACycle cycles)
             } else {
 
                 // Go idle if the audio IRQ hasn't been acknowledged
-                if (irqIsPending()) state = 0b000;
+                if (AUDxIP()) state = 0b000;
 
                 // Trigger Audio interrupt
-                triggerIrq();
+                AUDxIR();
             }
 
             break;
@@ -344,7 +518,7 @@ StateMachine<nr>::execute(DMACycle cycles)
                 agnus.audlc[nr] = audlcLatch;
 
                 // Trigger Audio interrupt
-                triggerIrq();
+                AUDxIR();
             }
 
             // Transition to state 2
@@ -410,3 +584,8 @@ template int16_t StateMachine<0>::pickSample(Cycle clock);
 template int16_t StateMachine<1>::pickSample(Cycle clock);
 template int16_t StateMachine<2>::pickSample(Cycle clock);
 template int16_t StateMachine<3>::pickSample(Cycle clock);
+
+template void StateMachine<0>::serviceEvent();
+template void StateMachine<1>::serviceEvent();
+template void StateMachine<2>::serviceEvent();
+template void StateMachine<3>::serviceEvent();

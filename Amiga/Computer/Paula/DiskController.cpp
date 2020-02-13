@@ -392,10 +392,10 @@ DiskController::serviceDiskEvent()
 {
     if (useFifo) {
         
-        // Receive next byte from the selected drive.
+        // Receive next byte from the selected drive
         executeFifo();
     
-        // Schedule next event.
+        // Schedule next event
         agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
 }

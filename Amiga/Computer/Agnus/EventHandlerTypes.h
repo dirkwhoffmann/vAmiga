@@ -34,10 +34,11 @@ typedef enum : long
     SEC_SLOT,                       // Enables secondary slots
 
     // Secondary slots
+    CH0_SLOT,                       // Audio channel 0
     DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
     VBL_SLOT,                       // Vertical blank
-    IRQ_SLOT,                       // Interrupts (DEPRECATED)
+    IRQ_SLOT,                       // Interrupts
     IPL_SLOT,                       // CPU Interrupt Priority Lines
     KBD_SLOT,                       // Keyboard
     TXD_SLOT,                       // Serial data out (UART)
@@ -65,6 +66,7 @@ inline const char *slotName(EventSlot nr)
         case BLT_SLOT:  return "Blitter";
         case SEC_SLOT:  return "Secondary";
 
+        case CH0_SLOT:  return "Audio channel 0";
         case DSK_SLOT:  return "Disk Controller";
         case DCH_SLOT:  return "Disk Change";
         case VBL_SLOT:  return "Vertical blank";
@@ -172,7 +174,11 @@ typedef enum : long
     //
     // Events in secondary event table
     //
-    
+
+    // Audio channels
+    CHX_PERFIN = 1,
+    CHX_EVENT_COUNT,
+
     // Disk controller slot
     DSK_ROTATE = 1,
     DSK_EVENT_COUNT,
