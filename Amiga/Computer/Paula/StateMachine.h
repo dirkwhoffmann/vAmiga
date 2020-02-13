@@ -162,6 +162,12 @@ public:
 
 
     //
+    // Performing state machine actions
+    //
+
+    void audxDR() { agnus.setAudxDR<nr>(); }
+
+    //
     // Running the device
     //
 

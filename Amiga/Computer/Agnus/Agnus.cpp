@@ -1079,59 +1079,16 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     
     // Audio DMA
     if (oldAU0EN ^ newAU0EN) {
-        
-        if (newAU0EN) {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 0 DMA switched on\n");
-            paula.audioUnit.enableDMA(0);
-            
-        } else {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 0 DMA switched off\n");
-            paula.audioUnit.disableDMA(0);
-        }
+        newAU0EN ? audioUnit.enableDMA(0) : audioUnit.disableDMA(0);
     }
-    
     if (oldAU1EN ^ newAU1EN) {
-        
-        if (newAU1EN) {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 1 DMA switched on\n");
-            paula.audioUnit.enableDMA(1);
-            
-        } else {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 1 DMA switched off\n");
-            paula.audioUnit.disableDMA(1);
-        }
+        newAU1EN ? audioUnit.enableDMA(1) : audioUnit.disableDMA(1);
     }
-    
     if (oldAU2EN ^ newAU2EN) {
-        
-        if (newAU2EN) {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 2 DMA switched on\n");
-            paula.audioUnit.enableDMA(2);
-            
-        } else {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 2 DMA switched off\n");
-            paula.audioUnit.disableDMA(2);
-        }
+        newAU2EN ? audioUnit.enableDMA(2) : audioUnit.disableDMA(2);
     }
-    
     if (oldAU3EN ^ newAU3EN) {
-        
-        if (newAU3EN) {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 3 DMA switched on\n");
-            paula.audioUnit.enableDMA(3);
-            
-        } else {
-            
-            debug(AUDREG_DEBUG, "DMACON: Audio 3 DMA switched off\n");
-            paula.audioUnit.disableDMA(3);
-        }
+        newAU3EN ? audioUnit.enableDMA(3) : audioUnit.disableDMA(3);
     }
 }
 

@@ -434,6 +434,10 @@ public:
     uint32_t audlc[4];
     uint32_t audlcold[4];
 
+    // Audio DMA request from Paula
+    // This signal is set to true by Paula when a new audio DMA word is needed.
+    bool audxDR[4];
+
     // The bitplane DMA pointers
     uint32_t bplpt[6];
 
@@ -553,6 +557,7 @@ public:
         & dskpt
         & audlc
         & audlcold
+        & audxDR
         & bplpt
         & bpl1mod
         & bpl2mod
@@ -725,6 +730,9 @@ public:
     //
     // Managing DMA access
     //
+
+    // Requests an audio DMA word
+    template <int channel> void setAudxDR() { audxDR[channel] = true; }
 
     // Getter and setter for the BLS signal (Blitter slow down)
     bool getBLS() { return bls; }
