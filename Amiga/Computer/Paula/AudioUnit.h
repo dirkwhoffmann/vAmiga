@@ -112,23 +112,8 @@ private:
      * place whenever an audio sample is generated.
      */
     int32_t volumeDelta = 0;
-    
-    
-    //
-    // State machine
-    //
-    
-public:
 
-    // Indicates the enabled sound DMA channels (Bit n = channel n)
-    uint8_t dmaEnabled;
 
-private:
-
-    // Used in executeUntil() to compute the number of samples to generate.
-    double dmaCycleCounter1 = 0;
-    double dmaCycleCounter2 = 0;
-    
     //
     // Constructing and destructing
     //
@@ -156,8 +141,7 @@ public:
     {
         worker
 
-        & clock
-        & dmaEnabled;
+        & clock;
     }
 
 
@@ -310,7 +294,13 @@ public:
     const uint32_t samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
 
+    //
+    // Accessing the state machines
+    //
 
+    template <int channel> uint8_t getState(); 
+
+    
     //
     // Running the device
     //
@@ -318,8 +308,8 @@ public:
 public:
 
     // Starts or ends DMA for a certain audio channel (called by pokeDMACON)
-    void enableDMA(int nr);
-    void disableDMA(int nr);
+    // void enableDMA(int nr);
+    // void disableDMA(int nr);
     
     // Executes the device until the given master clock cycle has been reached.
     void executeUntil(Cycle targetClock);

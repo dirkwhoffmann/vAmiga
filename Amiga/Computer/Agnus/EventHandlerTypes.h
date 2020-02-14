@@ -35,6 +35,9 @@ typedef enum : long
 
     // Secondary slots
     CH0_SLOT,                       // Audio channel 0
+    CH1_SLOT,                       // Audio channel 1
+    CH2_SLOT,                       // Audio channel 2
+    CH3_SLOT,                       // Audio channel 3
     DSK_SLOT,                       // Disk controller
     DCH_SLOT,                       // Disk changes (insert, eject)
     VBL_SLOT,                       // Vertical blank
@@ -67,6 +70,9 @@ inline const char *slotName(EventSlot nr)
         case SEC_SLOT:  return "Secondary";
 
         case CH0_SLOT:  return "Audio channel 0";
+        case CH1_SLOT:  return "Audio channel 1";
+        case CH2_SLOT:  return "Audio channel 2";
+        case CH3_SLOT:  return "Audio channel 3";
         case DSK_SLOT:  return "Disk Controller";
         case DCH_SLOT:  return "Disk Change";
         case VBL_SLOT:  return "Vertical blank";

@@ -23,6 +23,14 @@ StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 }
 
 template <int nr> void
+StateMachine<nr>::_dump()
+{
+    printf("   State: %d\n", state);
+    printf("  AUDxIP: %d\n", AUDxIP());
+    printf("  AUDxON: %d\n", AUDxON());
+}
+
+template <int nr> void
 StateMachine<nr>::_inspect()
 {
     // Prevent external access to variable 'info'
@@ -59,7 +67,6 @@ StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
-    audioUnit.executeUntil(agnus.clock);
     audlenLatch = value;
 }
 
@@ -68,7 +75,6 @@ StateMachine<nr>::pokeAUDxPER(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
-    audioUnit.executeUntil(agnus.clock);
     audperLatch = value;
 }
 
@@ -77,10 +83,8 @@ StateMachine<nr>::pokeAUDxVOL(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
-    /* Behaviour: 1. Only the lowest 7 bits are evaluated.
-     *            2. All values greater than 64 are treated as 64 (max volume).
-     */
-    audioUnit.executeUntil(agnus.clock);
+    // 1. Only the lowest 7 bits are evaluated.
+    // 2. All values greater than 64 are treated as 64 (max volume).
     audvolLatch = MIN(value & 0x7F, 64);
 }
 
@@ -89,10 +93,11 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
+    auddatLatch = value;
 
-    // IRQ mode
     if (!AUDxON()) {
 
+        // IRQ mode
         switch(state) {
 
             case 0b000:
@@ -100,11 +105,10 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
                 if (!AUDxIP()) move_000_010();
                 break;
         }
-    }
 
-    // DMA mode
-    else {
+    } else {
 
+        // DMA mode
         switch(state) {
 
             case 0b000:
@@ -119,33 +123,21 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 
             case 0b101:
 
-                move_101_000();
+                move_101_010();
                 break;
 
             case 0b010:
             case 0b011:
 
-                // TODO: lenctrld if lenfin
-                // TODO: lencount if !lenfin
-                // TODO: intreq2 if lenfin
+                // if (nr == 0) debug("pokeAUD%dDAT(%X) state = %d audlen = %d\n", nr, value, state, audlen);
+                if (!lenfin()) lencount();
+                else {
+                    lencntrld();
+                    AUDxDSR();
+                    intreq2 = true;
+                }
                 break;
         }
-    }
-
-    // OLD CODE (DEPRECATED)
-
-    audioUnit.executeUntil(agnus.clock);
-    auddatLatch = value;
-
-    /* "In interrupt-driven operation, transfer to the main loop (states 010
-     *  and 011) occurs immediately after data is written by the processor."
-     * [HRM]
-     */
-    if (!AUDxON() && !AUDxIP()) {
-
-        audvol = audvolLatch;
-        audper += audperLatch;
-        AUDxIR();
     }
 }
 
@@ -154,7 +146,6 @@ StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
-    audioUnit.executeUntil(agnus.clock);
     audlcLatch = CHIP_PTR(REPLACE_HI_WORD(audlcLatch, value));
 }
 
@@ -163,13 +154,14 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
 
-    audioUnit.executeUntil(agnus.clock);
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
 template <int nr> void
 StateMachine<nr>::pushSample(int16_t data, Cycle clock)
 {
+    debug(AUD_DEBUG, "Pushing sample %d (%d)\n", data, clock);
+
     if (sampleData[0] != data) {
 
         sampleData[2] = sampleData[1];
@@ -179,8 +171,6 @@ StateMachine<nr>::pushSample(int16_t data, Cycle clock)
         sampleTime[2] = sampleTime[1];
         sampleTime[1] = sampleTime[0];
         sampleTime[0] = clock;
-
-        // if (nr == 0) debug("Pushing sample %d (%d)\n", data, clock);
     }
 }
 
@@ -189,6 +179,8 @@ StateMachine<nr>::pickSample(Cycle clock)
 {
     if (clock > sampleTime[0]) return sampleData[0];
     if (clock > sampleTime[1]) return sampleData[1];
+
+    /*
     if (clock < sampleTime[2]) {
         debug("Pipeline: (clock = %d agnusClock = %d)\n", clock, agnus.clock);
         for (int i = 0; i < 3; i++) {
@@ -197,95 +189,205 @@ StateMachine<nr>::pickSample(Cycle clock)
         printf("\n");
     }
     assert(clock >= sampleTime[2]);
+    */
     return sampleData[2];
+}
+
+template <int nr> void
+StateMachine<nr>::enableDMA()
+{
+    debug(AUD_DEBUG, "Disable DMA\n");
+
+    switch (state) {
+
+         case 0b000:
+
+             move_000_001();
+             break;
+     }
+}
+
+template <int nr> void
+StateMachine<nr>::disableDMA()
+{
+    debug(AUD_DEBUG, "Disable DMA\n");
+
+    switch (state) {
+
+        case 0b001:
+
+            move_001_000();
+            break;
+
+        case 0b101:
+
+            move_101_000();
+            break;
+    }
 }
 
 template <int nr> void
 StateMachine<nr>::move_000_010() {
 
-    /*
-    audvol = audvolLatch; // volcntrld
+    debug(AUD_DEBUG, "move_000_010\n");
 
-    // TODO // pbufld1
-    // audxIR();  // AUDxIR
-    // scheduleEvent(...)  // percntrld
+    // This transition is taken in IRQ mode only
+    assert(!AUDxON());
+    assert(!AUDxIP());
 
-    penhi();
+    volcntrld();
+    percntrld();
+    pbufld1();
+    AUDxIR();
+
     state = 0b010;
-    */
+    penhi();
 }
 
 template <int nr> void
 StateMachine<nr>::move_000_001() {
 
-    /*
+    debug(AUD_DEBUG, "move_000_001\n");
+
+    // This transition is taken in DMA mode only
+    assert(AUDxON());
+
+    lencntrld();
+    AUDxDSR();
+    AUDxDR();
+
     state = 0b001;
-    */
 }
 
 template <int nr> void
 StateMachine<nr>::move_001_000() {
 
-    /*
+    debug(AUD_DEBUG, "move_001_000\n");
+
+    // This transition is taken in IRQ mode only
+    assert(!AUDxON());
+
     state = 0b000;
-    */
 }
 
 template <int nr> void
 StateMachine<nr>::move_001_101() {
 
-    /*
+    debug(AUD_DEBUG, "move_001_101\n");
+
+    // This transition is taken in DMA mode only
+    assert(AUDxON());
+
+    AUDxIR();
+    AUDxDR();
+    if (!lenfin()) lencount();
+
     state = 0b101;
-    */
 }
 
 template <int nr> void
 StateMachine<nr>::move_101_000() {
 
-    /*
+    debug(AUD_DEBUG, "move_101_000\n");
+
+    // This transition is taken in IRQ mode only
+    assert(!AUDxON());
+
     state = 0b000;
-    */
 }
 
 template <int nr> void
 StateMachine<nr>::move_101_010() {
 
-    /*
-    penhi();
+    debug(AUD_DEBUG, "move_101_010\n");
+
+    // This transition is taken in DMA mode only
+    assert(AUDxON());
+
+    percntrld();
+    volcntrld();
+    pbufld1();
+    if (napnav()) AUDxDR();
+
     state = 0b010;
-    */
+    penhi();
 }
 
 template <int nr> void
 StateMachine<nr>::move_010_011() {
 
-    /*
-    penlo();
+    debug(AUD_DEBUG, "move_010_011\n");
+    
+    percntrld();
+    
+    // Check for attach period mode
+    if (AUDxAP()) {
+        
+        pbufld2();
+        
+        if (AUDxON()) {
+            
+            // Additional DMA mode action
+            AUDxDR();
+            if (intreq2) { AUDxIR(); intreq2 = false; }
+            
+        } else {
+            
+            // Additional IRQ mode action
+            AUDxIR();
+        }
+    }
+
     state = 0b011;
-    */
+    penlo();
 }
 
 template <int nr> void
 StateMachine<nr>::move_011_000() {
 
-    /*
+    debug(AUD_DEBUG, "move_011_000\n");
+
+    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+
+    agnus.cancel<slot>();
     state = 0b000;
-    */
 }
 
 template <int nr> void
-StateMachine<nr>::move_011_010() {
+StateMachine<nr>::move_011_010()
+{
+    debug(AUD_DEBUG, "move_011_010\n");
 
-    /*
+    percntrld();
+    pbufld1();
+    volcntrld();
+    
+    if (napnav()) {
+
+        if (AUDxON()) {
+
+            // Additional DMA mode action
+            AUDxDR();
+            if (intreq2) { AUDxIR(); intreq2 = false; }
+
+        } else {
+
+            // Additional IRQ mode action
+            AUDxIR();
+        }
+    }
+
     state = 0b010;
-    */
+    penhi();
 }
 
 template <int nr> void
 StateMachine<nr>::serviceEvent()
 {
-    assert(agnus.slot[CH0_SLOT+nr].id == CHX_PERFIN);
-    debug("serviceEvent");
+    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+
+    debug(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
+    assert(agnus.slot[slot].id == CHX_PERFIN);
 
     switch (state) {
 
@@ -318,10 +420,40 @@ StateMachine<nr>::AUDxIR()
                    nr == 2 ? INT_AUD2 : INT_AUD3);
 }
 
+template <int nr> void
+StateMachine<nr>::percntrld()
+{
+    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+    agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+}
+
 template <int nr> bool
 StateMachine<nr>::AUDxIP()
 {
     return GET_BIT(paula.intreq, 7 + nr);
+}
+
+template <int nr> void
+StateMachine<nr>::pbufld1()
+{
+    if (AUDxAV()) {
+        // debug("Volume modulation %d (%d)\n", auddatLatch & 0x7F, (int16_t)auddatLatch);
+        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddatLatch);
+        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddatLatch);
+        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddatLatch);
+    } else {
+        buffer = auddatLatch;
+    }
+}
+
+template <int nr> void
+StateMachine<nr>::pbufld2()
+{
+    assert(AUDxAP());
+    if (nr < 3) {
+        // debug("Period modulation %d\n", auddatLatch);
+        audioUnit.pokeAUDxPER(nr + 1, auddatLatch);
+    }
 }
 
 template <int nr> bool
@@ -339,17 +471,22 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
-    bufferOut = (int16_t)HI_BYTE(buffer) * audvol;
+    bufferOut = (int8_t)HI_BYTE(buffer) * audvol;
+    debug(AUD_DEBUG, "penhi: %x %x (%d) %d\n", buffer, HI_BYTE(buffer), (int8_t)HI_BYTE(buffer), bufferOut);
+
     pushSample(bufferOut, agnus.clock);
 }
 
 template <int nr> void
 StateMachine<nr>::penlo()
 {
-    bufferOut = (int16_t)LO_BYTE(buffer) * audvol;
+    bufferOut = (int8_t)LO_BYTE(buffer) * audvol;
+    debug(AUD_DEBUG, "penlo: %x %x (%d) %d\n", buffer, LO_BYTE(buffer), (int8_t)LO_BYTE(buffer), bufferOut);
+
     pushSample(bufferOut, agnus.clock);
 }
 
+/*
 template <int nr> void
 StateMachine<nr>::outputHi(uint16_t sample)
 {
@@ -402,7 +539,9 @@ StateMachine<nr>::outputLo(uint16_t sample)
 
     auddat = 0;
 }
+*/
 
+/*
 template <int nr> int16_t
 StateMachine<nr>::execute(DMACycle cycles)
 {
@@ -534,6 +673,7 @@ StateMachine<nr>::execute(DMACycle cycles)
     clock = endClock;
     return (int8_t)auddat * audvolLatch;
 }
+*/
 
 template StateMachine<0>::StateMachine(Amiga &ref);
 template StateMachine<1>::StateMachine(Amiga &ref);
@@ -575,10 +715,15 @@ template void StateMachine<1>::pokeAUDxLCL(uint16_t value);
 template void StateMachine<2>::pokeAUDxLCL(uint16_t value);
 template void StateMachine<3>::pokeAUDxLCL(uint16_t value);
 
-template int16_t StateMachine<0>::execute(DMACycle cycles);
-template int16_t StateMachine<1>::execute(DMACycle cycles);
-template int16_t StateMachine<2>::execute(DMACycle cycles);
-template int16_t StateMachine<3>::execute(DMACycle cycles);
+template void StateMachine<0>::enableDMA();
+template void StateMachine<1>::enableDMA();
+template void StateMachine<2>::enableDMA();
+template void StateMachine<3>::enableDMA();
+
+template void StateMachine<0>::disableDMA();
+template void StateMachine<1>::disableDMA();
+template void StateMachine<2>::disableDMA();
+template void StateMachine<3>::disableDMA();
 
 template int16_t StateMachine<0>::pickSample(Cycle clock);
 template int16_t StateMachine<1>::pickSample(Cycle clock);

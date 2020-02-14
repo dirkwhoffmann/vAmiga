@@ -450,15 +450,18 @@ Agnus::doDiskDMA(uint16_t value)
 template <int channel> uint16_t
 Agnus::doAudioDMA()
 {
-    uint16_t result = mem.peekChip16(audlc[channel]);
-    INC_CHIP_PTR(audlc[channel]);
+    uint16_t result;
 
-    // We have to fake the horizontal position here, because this function
-    // is not executed at the correct DMA cycle yet.
-    int hpos = 0xD + (2 * channel);
+    if (audioUnit.getState<channel>() == 0b001) {
+        // Deliver garbage word
+        result = 0;
+    } else {
+        result = mem.peekChip16(audlc[channel]);
+        INC_CHIP_PTR(audlc[channel]);
+    }
 
-    busOwner[hpos] = BUS_AUDIO;
-    busValue[hpos] = result;
+    busOwner[pos.h] = BUS_AUDIO;
+    busValue[pos.h] = result;
     stats.count[BUS_AUDIO]++;
 
     return result;
@@ -1079,16 +1082,16 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     
     // Audio DMA
     if (oldAU0EN ^ newAU0EN) {
-        newAU0EN ? audioUnit.enableDMA(0) : audioUnit.disableDMA(0);
+        newAU0EN ? audioUnit.channel0.enableDMA() : audioUnit.channel0.disableDMA();
     }
     if (oldAU1EN ^ newAU1EN) {
-        newAU1EN ? audioUnit.enableDMA(1) : audioUnit.disableDMA(1);
+        newAU0EN ? audioUnit.channel1.enableDMA() : audioUnit.channel1.disableDMA();
     }
     if (oldAU2EN ^ newAU2EN) {
-        newAU2EN ? audioUnit.enableDMA(2) : audioUnit.disableDMA(2);
+        newAU0EN ? audioUnit.channel2.enableDMA() : audioUnit.channel2.disableDMA();
     }
     if (oldAU3EN ^ newAU3EN) {
-        newAU3EN ? audioUnit.enableDMA(3) : audioUnit.disableDMA(3);
+        newAU0EN ? audioUnit.channel3.enableDMA() : audioUnit.channel3.disableDMA();
     }
 }
 

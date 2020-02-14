@@ -189,6 +189,9 @@ Agnus::inspectEventSlot(EventSlot nr)
             break;
 
         case CH0_SLOT:
+        case CH1_SLOT:
+        case CH2_SLOT:
+        case CH3_SLOT:
 
             switch (slot[nr].id) {
 
@@ -470,6 +473,15 @@ Agnus::executeEventsUntil(Cycle cycle) {
 
         if (isDue<CH0_SLOT>(cycle)) {
             audioUnit.channel0.serviceEvent();
+        }
+        if (isDue<CH1_SLOT>(cycle)) {
+            audioUnit.channel1.serviceEvent();
+        }
+        if (isDue<CH2_SLOT>(cycle)) {
+            audioUnit.channel2.serviceEvent();
+        }
+        if (isDue<CH3_SLOT>(cycle)) {
+            audioUnit.channel3.serviceEvent();
         }
         if (isDue<DSK_SLOT>(cycle)) {
             paula.diskController.serviceDiskEvent();
@@ -764,32 +776,32 @@ Agnus::serviceDASEvent()
         case DAS_A0:
 
             if (audxDR[0]) {
-                audioUnit.channel0.pokeAUDxDAT(doAudioDMA<0>());
                 audxDR[0] = false;
+                audioUnit.channel0.pokeAUDxDAT(doAudioDMA<0>());
             }
             break;
 
         case DAS_A1:
 
             if (audxDR[1]) {
-                audioUnit.channel1.pokeAUDxDAT(doAudioDMA<1>());
                 audxDR[1] = false;
+                audioUnit.channel1.pokeAUDxDAT(doAudioDMA<1>());
             }
             break;
 
         case DAS_A2:
 
             if (audxDR[2]) {
-                audioUnit.channel2.pokeAUDxDAT(doAudioDMA<2>());
                 audxDR[2] = false;
+                audioUnit.channel2.pokeAUDxDAT(doAudioDMA<2>());
             }
             break;
 
         case DAS_A3:
 
             if (audxDR[3]) {
-                audioUnit.channel3.pokeAUDxDAT(doAudioDMA<3>());
                 audxDR[3] = false;
+                audioUnit.channel3.pokeAUDxDAT(doAudioDMA<3>());
             }
             break;
 

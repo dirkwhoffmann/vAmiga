@@ -434,13 +434,15 @@ public:
     uint32_t audlc[4];
     uint32_t audlcold[4];
 
-    // Audio DMA request from Paula
-    // This signal is set to true by Paula when a new audio DMA word is needed.
-    bool audxDR[4];
 
     // The bitplane DMA pointers
     uint32_t bplpt[6];
 
+    // Audio DMA request from Paula
+    // This signal is set to true by Paula when a new audio DMA word is needed.
+    bool audxDR[4];
+
+    
     // The bitplane modulo registers for odd bitplanes
     int16_t bpl1mod;
 

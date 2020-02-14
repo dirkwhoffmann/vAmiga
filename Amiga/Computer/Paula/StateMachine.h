@@ -120,6 +120,7 @@ public:
 
 private:
 
+    void _dump() override;
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -189,17 +190,29 @@ public:
     // Asks Agnus for one word of data
     void AUDxDR() { agnus.setAudxDR<nr>(); }
 
-    // Asks Agnus to reset the DMA pointer to the block start
-    // TODO: void AUDxDSR();
+    // Tells Agnus to reset the DMA pointer to the block start
+    void AUDxDSR() { agnus.audlc[nr] = audlcLatch; }
 
-    // Checks if the period counter is finished
-    // bool perfin() { return audlen == 1; }
+    // Reloads the period counter from its backup latch
+    void percntrld();
+
+    // Reloads the length counter from its backup latch
+    void lencntrld() { audlen = audlenLatch; }
+
+    // Counts length counter down one notch
+    void lencount() { audlen--; }
+
+    // Checks if the length counter has finished
+    bool lenfin() { return audlen == 1; }
+
+    // Reloads the volume register from its backup latch
+    void volcntrld() { audvol = audvolLatch; }
 
     // Loads the output buffer from holding latch written to by AUDxDAT
-    void pbufld1() { buffer = auddatLatch; }
+    void pbufld1();
 
     // Like pbufld1, but only during 010->011 transition with attach period
-    void pbufld2() { /* TODO */ }
+    void pbufld2();
 
     // Returns true in attach volume mode
     bool AUDxAV();
@@ -220,6 +233,9 @@ public:
     //
     // Performing state machine transitions
     //
+
+    void enableDMA();
+    void disableDMA();
 
     void move_000_010();
     void move_000_001();
@@ -245,8 +261,8 @@ public:
 private:
 
     // Writes a byte of a 16-bit sample to the audio buffer
-    void outputLo(uint16_t sample);
-    void outputHi(uint16_t sample);
+    // void outputLo(uint16_t sample);
+    // void outputHi(uint16_t sample);
 
 public:
 
@@ -257,11 +273,7 @@ public:
      * The return value is the current audio sample of this channel.
      * DEPRECATED
      */
-    int16_t execute(DMACycle cycles);
-
-    /* Executes the state machine until a given cycle has been reached.
-     */
-    // int16_t executeUntil(Cycle target); 
+    // int16_t execute(DMACycle cycles);
 };
 
 #endif

@@ -383,7 +383,7 @@ Denise::pokeSPRxDATB(uint16_t value)
 template <PokeSource s, int xx> void
 Denise::pokeCOLORxx(uint16_t value)
 {
-     debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
+    debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
     int reg = 0x180 + 2*xx;
 

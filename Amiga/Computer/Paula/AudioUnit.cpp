@@ -120,35 +120,19 @@ AudioUnit::_reset()
     targetVolume = 100000;
 }
 
+/*
 void
 AudioUnit::enableDMA(int nr)
 {
-    // executeUntil(agnus.clock);
 
-    switch (nr) {
-        case 0: channel0.setState(0b000); break;
-        case 1: channel1.setState(0b000); break;
-        case 2: channel2.setState(0b000); break;
-        case 3: channel3.setState(0b000); break;
-        default: assert(false);
-    }
-    SET_BIT(dmaEnabled, nr);
 }
 
 void
 AudioUnit::disableDMA(int nr)
 {
-    // executeUntil(agnus.clock);
-
-    switch (nr) {
-        case 0: channel0.setState(0b000); break;
-        case 1: channel1.setState(0b000); break;
-        case 2: channel2.setState(0b000); break;
-        case 3: channel3.setState(0b000); break;
-        default: assert(false);
-    }
-    CLR_BIT(dmaEnabled, nr);
+ 
 }
+*/
 
 /*
 void
@@ -204,15 +188,9 @@ void
 AudioUnit::executeUntil(Cycle targetClock)
 {
     Cycle dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
-
     while (clock + dmaCyclesPerSample < targetClock) {
 
         clock += DMA_CYCLES(dmaCyclesPerSample);
-
-        channel0.execute(dmaCyclesPerSample);
-        channel1.execute(dmaCyclesPerSample);
-        channel2.execute(dmaCyclesPerSample);
-        channel3.execute(dmaCyclesPerSample);
 
         short left1  = channel0.pickSample(clock);
         short right1 = channel1.pickSample(clock);
@@ -456,3 +434,8 @@ AudioUnit::handleBufferOverflow()
     // Reset the write pointer
     alignWritePtr();
 }
+
+template<> uint8_t AudioUnit::getState<0>() { return channel0.state; }
+template<> uint8_t AudioUnit::getState<1>() { return channel1.state; }
+template<> uint8_t AudioUnit::getState<2>() { return channel2.state; }
+template<> uint8_t AudioUnit::getState<3>() { return channel3.state; }
