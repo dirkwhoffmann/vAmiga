@@ -452,13 +452,8 @@ Agnus::doAudioDMA()
 {
     uint16_t result;
 
-    if (audioUnit.getState<channel>() == 0b001) {
-        // Deliver garbage word
-        result = 0;
-    } else {
-        result = mem.peekChip16(audlc[channel]);
-        INC_CHIP_PTR(audlc[channel]);
-    }
+    result = mem.peekChip16(audlc[channel]);
+    INC_CHIP_PTR(audlc[channel]);
 
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;

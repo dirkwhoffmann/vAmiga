@@ -253,7 +253,7 @@ StateMachine<nr>::move_000_001() {
     assert(AUDxON());
 
     lencntrld();
-    AUDxDSR();
+    // AUDxDSR();
     AUDxDR();
 
     state = 0b001;
@@ -280,6 +280,7 @@ StateMachine<nr>::move_001_101() {
 
     AUDxIR();
     AUDxDR();
+    AUDxDSR();
     if (!lenfin()) lencount();
 
     state = 0b101;
