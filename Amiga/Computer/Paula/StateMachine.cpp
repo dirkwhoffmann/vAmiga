@@ -156,27 +156,10 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
-template <int nr> void
-StateMachine<nr>::pushSample(int16_t data, Cycle clock)
-{
-    debug(AUD_DEBUG, "Pushing sample %d (%d)\n", data, clock);
-
-    if (sampleData[0] != data) {
-
-        sampleData[2] = sampleData[1];
-        sampleData[1] = sampleData[0];
-        sampleData[0] = data;
-
-        sampleTime[2] = sampleTime[1];
-        sampleTime[1] = sampleTime[0];
-        sampleTime[0] = clock;
-    }
-}
-
 template <int nr> int16_t
 StateMachine<nr>::pickSample(Cycle clock)
 {
-    int16_t result, result2;
+    int16_t result;
 
     int w  = samples.w;
     int r1 = samples.r;
@@ -185,12 +168,12 @@ StateMachine<nr>::pickSample(Cycle clock)
     if (r1 == w) {
 
         // Buffer is empty
-        result2 = 0;
+        result = 0;
 
     } else if (r2 == w) {
 
         // Buffer contains a single element
-        result2 = samples.elements[r1];
+        result = samples.elements[r1];
 
     } else {
 
@@ -201,23 +184,8 @@ StateMachine<nr>::pickSample(Cycle clock)
             r2 = samples.next(r1);
         }
 
-        result2 = samples.elements[r1];
+        result = samples.elements[r1];
     }
-
-    result =
-    clock >= sampleTime[0] ? sampleData[0] :
-    clock >= sampleTime[1] ? sampleData[1] : sampleData[2];
-
-    if (result != result2) {
-        printf("sample = %d sample2 = %d\n", result, result2);
-        printf("sample %i: %d %lld\n", 0, sampleData[0], sampleTime[0]);
-        printf("sample %i: %d %lld\n", 1, sampleData[1], sampleTime[1]);
-        printf("sample %i: %d %lld\n", 2, sampleData[2], sampleTime[2]);
-
-        samples.dump();
-    }
-
-    assert(result == result2);
 
     return result;
 }
@@ -507,29 +475,23 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
-    int16_t bufferOut = (int8_t)HI_BYTE(buffer) * audvol;
-    debug(AUD_DEBUG, "penhi: %x %x (%d) %d\n", buffer, HI_BYTE(buffer), (int8_t)HI_BYTE(buffer), bufferOut);
+    int8_t sample = (int8_t)HI_BYTE(buffer);
+    int16_t scaled = sample * audvol;
 
-    if (samples.isFull()) {
-        debug("audperLatch = %d\n", audperLatch);
-        samples.dump();
-    }
-    samples.insert(agnus.clock, bufferOut);
-    pushSample(bufferOut, agnus.clock);
+    debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
+
+    samples.insert(agnus.clock, scaled);
 }
 
 template <int nr> void
 StateMachine<nr>::penlo()
 {
-    int16_t bufferOut = (int8_t)LO_BYTE(buffer) * audvol;
-    debug(AUD_DEBUG, "penlo: %x %x (%d) %d\n", buffer, LO_BYTE(buffer), (int8_t)LO_BYTE(buffer), bufferOut);
+    int8_t sample = (int8_t)LO_BYTE(buffer);
+    int16_t scaled = sample * audvol;
 
-    if (samples.isFull()) {
-         debug("audperLatch = %d\n", audperLatch);
-         samples.dump();
-     }
-    samples.insert(agnus.clock, bufferOut);
-    pushSample(bufferOut, agnus.clock);
+    debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
+
+    samples.insert(agnus.clock, scaled);
 }
 
 template StateMachine<0>::StateMachine(Amiga &ref);

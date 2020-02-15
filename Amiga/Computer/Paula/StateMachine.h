@@ -60,15 +60,7 @@ public:
     // Ringbuffer storing the synthesized samples
     SortedRingBuffer<short, 16> samples;
 
-    /* Sample pipeline (DEPRECATED)
-     * When the state machine outputs a sample, it is stored in this pipeline
-     * together with a time stamp. The pipe is read in the hsync handler of
-     * the audio engine to assemble the 44.1kHz audio stream.
-     */
-    int16_t sampleData[3];
-    Cycle   sampleTime[3];
-
-
+    
     //
     // Constructing and destructing
     //
@@ -104,9 +96,7 @@ public:
         & auddatLatch
         & auddat
         & audlcLatch
-        & intreq2
-        & sampleData
-        & sampleTime;
+        & intreq2;
     }
 
 
@@ -160,13 +150,10 @@ public:
 
 
     //
-    // Working with the sample pipeline
+    // Working with the sample buffers
     //
 
-    // Feeds a new sample into the pipeline
-    void pushSample(int16_t data, Cycle clock);
-
-    // Reads the proper sample for a given time stamp
+    // Returns a sample for a given time stamp
     int16_t pickSample(Cycle clock);
 
 
