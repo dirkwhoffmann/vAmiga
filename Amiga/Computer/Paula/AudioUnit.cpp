@@ -35,6 +35,15 @@ AudioUnit::setSampleRate(double hz)
 }
 
 void
+AudioUnit::setSamplingMethod(SamplingMethod  method)
+{
+    debug(AUD_DEBUG, "setSamplingMethod(%d)\n", method);
+    assert(isSamplingMethod(method));
+
+    config.samplingMethod = method;
+}
+
+void
 AudioUnit::setFilterActivation(FilterActivation activation)
 {
     debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);

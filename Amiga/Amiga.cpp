@@ -345,6 +345,17 @@ Amiga::configure(ConfigOption option, long value)
             denise.setClxPlfPlf(value);
             break;
 
+        case VA_SAMPLING_METHOD:
+
+            if (!isSamplingMethod(value)) {
+                warn("Invalid filter activation: %d\n", value);
+                return false;
+            }
+            
+            if (current.audio.samplingMethod == value) return true;
+            paula.audioUnit.setSamplingMethod((SamplingMethod)value);
+            break;
+
         case VA_FILTER_ACTIVATION:
 
             if (!isFilterActivation(value)) {

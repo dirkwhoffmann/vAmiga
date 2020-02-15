@@ -163,31 +163,34 @@ StateMachine<nr>::pickSample(Cycle clock)
 
     int w  = samples.w;
     int r1 = samples.r;
-    int r2 = samples.next(r1);
 
+    // Check for an empty buffer
     if (r1 == w) {
 
-        // Buffer is empty
-        result = 0;
-
-    } else if (r2 == w) {
-
-        // Buffer contains a single element
-        result = samples.elements[r1];
-
-    } else {
-
-        // Remove outdates samples
-        while (r1 != samples.w && r2 != samples.w && samples.keys[r2] <= clock) {
-            (void)samples.read();
-            r1 = r2;
-            r2 = samples.next(r1);
-        }
-
-        result = samples.elements[r1];
+        // debug("SAMPLE BUFFER IS EMPTY\n");
+        return 0;
     }
 
-    return result;
+    // Check for a buffer with a single element (won't allow interpolation)
+    int r2 = samples.next(r1);
+    if (r2 == w) {
+
+        // debug("SAMPLE BUFFER CONTAINS A SINGLE ELEMENT, ONLY\n");
+        return samples.elements[r1];
+    }
+
+    // Remove all outdated entries
+    while (r1 != samples.w && r2 != samples.w && samples.keys[r2] <= clock) {
+        (void)samples.read();
+        r1 = r2;
+        r2 = samples.next(r1);
+    }
+
+    // Interpolate audio sample
+    int16_t s1 = samples.elements[r1];
+    // int16_t s2 = samples.elements[r2];
+
+    return s1;
 }
 
 template <int nr> void

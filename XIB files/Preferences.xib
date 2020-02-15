@@ -18,6 +18,7 @@
                 <outlet property="compFifoBuffering" destination="Klz-l3-bRD" id="c7X-nf-1wG"/>
                 <outlet property="compFilterActivation" destination="ZrM-uT-4JR" id="L6k-6C-7Wh"/>
                 <outlet property="compOKButton" destination="o9a-Eq-CnW" id="PtT-hk-GXk"/>
+                <outlet property="compSamplingMethod" destination="5WL-6h-nER" id="xhK-Tw-p2X"/>
                 <outlet property="compTodBug" destination="xor-BJ-cr4" id="vr2-0Z-nty"/>
                 <outlet property="devAutofire" destination="BRc-s1-1v6" id="rBS-KA-uBE"/>
                 <outlet property="devAutofireBullets" destination="ABB-dw-Ain" id="nNU-wQ-kaw"/>
@@ -1126,7 +1127,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Klz-l3-bRD">
-                                            <rect key="frame" x="398" y="336" width="143" height="18"/>
+                                            <rect key="frame" x="420" y="337" width="143" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate FIFO buffer" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="PZl-DT-hFY">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1137,16 +1138,16 @@ DQ
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7qX-JC-ooD">
-                                            <rect key="frame" x="347" y="363" width="47" height="17"/>
+                                            <rect key="frame" x="369" y="364" width="47" height="17"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Speed:" id="sPB-BH-GC9">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Speed:" id="sPB-BH-GC9">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kfh-Ei-TIb" userLabel="System">
-                                            <rect key="frame" x="397" y="358" width="174" height="25"/>
+                                            <rect key="frame" x="419" y="359" width="174" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Original" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="1" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="wWe-to-Ntc" id="GfH-FJ-cqc" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1165,55 +1166,17 @@ DQ
                                                 <action selector="compDriveSpeedAction:" target="-2" id="81R-E4-Dwu"/>
                                             </connections>
                                         </popUpButton>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r9w-gg-Jxj">
-                                            <rect key="frame" x="319" y="283" width="145" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Audio filter" id="uMG-8s-lcT">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JQN-79-UR8">
-                                            <rect key="frame" x="319" y="207" width="145" height="17"/>
+                                            <rect key="frame" x="319" y="193" width="145" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="CIAs" id="5Rt-Zd-Azl">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Miscellaneous" id="5Rt-Zd-Azl">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-uT-4JR" userLabel="System">
-                                            <rect key="frame" x="397" y="253" width="174" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="with Power LED " bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="sFv-1H-kZJ" id="XsW-st-XXj" userLabel="System">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="rKC-EU-ixL">
-                                                    <items>
-                                                        <menuItem title="with Power LED " state="on" id="sFv-1H-kZJ"/>
-                                                        <menuItem title="never" tag="1" id="V9u-Yg-EE0">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="always" tag="2" id="3My-SC-tXS"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="compFilterActivationAction:" target="-2" id="aAr-U4-y9k"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uo-XH-OAm">
-                                            <rect key="frame" x="341" y="258" width="49" height="17"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Enable:" id="aLg-he-hN7">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xor-BJ-cr4">
-                                            <rect key="frame" x="397" y="183" width="129" height="18"/>
+                                            <rect key="frame" x="419" y="170" width="129" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="nAQ-9r-IX4">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1223,6 +1186,73 @@ DQ
                                                 <action selector="compTodBugAction:" target="-2" id="6Xg-Os-S2h"/>
                                             </connections>
                                         </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r9w-gg-Jxj">
+                                            <rect key="frame" x="318" y="297" width="145" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Audio" id="uMG-8s-lcT">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrM-uT-4JR" userLabel="System">
+                                            <rect key="frame" x="418" y="265" width="174" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Auto enable" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="sFv-1H-kZJ" id="XsW-st-XXj" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="rKC-EU-ixL">
+                                                    <items>
+                                                        <menuItem title="Auto enable" state="on" id="sFv-1H-kZJ"/>
+                                                        <menuItem title="Always off" tag="1" id="V9u-Yg-EE0">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Always on" tag="2" id="3My-SC-tXS"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="compFilterActivationAction:" target="-2" id="aAr-U4-y9k"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5WL-6h-nER" userLabel="System">
+                                            <rect key="frame" x="419" y="236" width="174" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Off" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" enabled="NO" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="DG5-Vb-vy4" id="H50-MB-bLq" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" id="CGk-Cf-Pne">
+                                                    <items>
+                                                        <menuItem title="Off" state="on" id="DG5-Vb-vy4"/>
+                                                        <menuItem title="Nearest Neighbor" tag="1" id="cdo-GZ-N9l">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Linear" tag="2" id="Mqh-dq-14B"/>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="compSamplingMethodAction:" target="-2" id="ajE-gy-9XH"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4uo-XH-OAm">
+                                            <rect key="frame" x="366" y="270" width="49" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Filter:" id="aLg-he-hN7">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nfN-9N-kg2">
+                                            <rect key="frame" x="330" y="241" width="85" height="17"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" enabled="NO" alignment="right" title="Interpolation:" id="cpG-Gl-2aW">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

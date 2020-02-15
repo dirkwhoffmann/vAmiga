@@ -20,6 +20,16 @@
 
 typedef enum : long
 {
+    SMP_NONE,
+    SMP_NEAREST,
+    SMP_LINEAR
+}
+SamplingMethod;
+
+static inline bool isSamplingMethod(long value) { return value >= 0 && value < SMP_LINEAR; }
+
+typedef enum : long
+{
     FILT_NONE,
     FILT_BUTTERWORTH,
     FILT_COUNT
@@ -121,6 +131,9 @@ typedef struct
 {
     // The sample rate in Hz
     double sampleRate;
+
+    // The sample interpolation method
+    SamplingMethod samplingMethod;
 
     // Determines when the audio filter is active
     FilterActivation filterActivation;

@@ -29,6 +29,7 @@ extension PreferencesController {
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
 
         // Audio
+        compSamplingMethod.selectItem(withTag: config.audio.samplingMethod.rawValue)
         compFilterActivation.selectItem(withTag: config.audio.filterActivation.rawValue)
 
         // Floppy drives
@@ -62,6 +63,12 @@ extension PreferencesController {
     @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
 
         amigaProxy?.configure(VA_CLX_PLF_PLF, enable: sender.state == .on)
+        refresh()
+    }
+
+    @IBAction func compSamplingMethodAction(_ sender: NSPopUpButton!) {
+
+        amigaProxy?.configure(VA_SAMPLING_METHOD, value: sender.selectedTag())
         refresh()
     }
 

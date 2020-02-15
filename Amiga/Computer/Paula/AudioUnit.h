@@ -132,6 +132,7 @@ public:
     {
         worker
 
+        & config.samplingMethod
         & config.filterActivation
         & config.filterType;
     }
@@ -154,11 +155,15 @@ public:
     double getSampleRate() { return config.sampleRate; }
     void setSampleRate(double hz);
 
-    FilterActivation getFilterActivation() { return config.filterActivation; }
-    void setFilterActivation(FilterActivation activation);
+    SamplingMethod getSamplingMethod() { return config.samplingMethod; }
+    void setSamplingMethod(SamplingMethod  method);
 
     FilterType getFilterType();
     void setFilterType(FilterType type);
+
+    FilterActivation getFilterActivation() { return config.filterActivation; }
+    void setFilterActivation(FilterActivation activation);
+
 
     //
     // Methods from HardwareComponent

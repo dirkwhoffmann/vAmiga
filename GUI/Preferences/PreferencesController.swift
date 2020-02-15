@@ -92,6 +92,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var compBltLevel1: NSTextField!
 
     // Audio
+    @IBOutlet weak var compSamplingMethod: NSPopUpButton!
     @IBOutlet weak var compFilterActivation: NSPopUpButton!
 
     // Disk controller
