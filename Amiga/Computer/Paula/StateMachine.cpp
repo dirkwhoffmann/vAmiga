@@ -159,6 +159,14 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
 template <int nr> int16_t
 StateMachine<nr>::pickSample(Cycle clock)
 {
+    int16_t sample1, sample2;
+
+    pickSamplePair(clock, sample1, sample2);
+
+    // TODO: INTERPOLATE
+
+    return sample1; 
+    /*
     int16_t result;
 
     int w  = samples.w;
@@ -191,6 +199,41 @@ StateMachine<nr>::pickSample(Cycle clock)
     // int16_t s2 = samples.elements[r2];
 
     return s1;
+    */
+}
+
+template <int nr> void
+StateMachine<nr>::pickSamplePair(Cycle clock, int16_t &sample1, int16_t &sample2)
+{
+    int w  = samples.w;
+    int r1 = samples.r;
+    int r2 = samples.next(r1);
+
+    // Corner case 1: The sample buffer is empty
+    if (r1 == w) {
+        // debug("SAMPLE BUFFER IS EMPTY\n");
+        sample1 = 0;
+        sample2 = 0;
+        return;
+    }
+
+    // Corner case 2: The sample buffer contains a single element
+    if (r2 == w) {
+        // debug("SAMPLE BUFFER CONTAINS A SINGLE ELEMENT, ONLY\n");
+        sample1 = samples.elements[r1];
+        sample2 = samples.elements[r1];
+        return;
+    }
+
+    // Remove all outdated entries
+    while (r2 != w && samples.keys[r2] <= clock) {
+        (void)samples.read();
+        r1 = r2;
+        r2 = samples.next(r1);
+    }
+
+    sample1 = samples.elements[r1];
+    sample2 = samples.elements[r2];
 }
 
 template <int nr> void

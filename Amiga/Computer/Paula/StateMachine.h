@@ -153,13 +153,25 @@ public:
     // Working with the sample buffers
     //
 
+public:
+
     // Returns a sample for a given time stamp
     int16_t pickSample(Cycle clock);
 
+private:
+
+    /* Returns a sample pair from the sample buffer
+     * The first sample has been recorded before and the second
+     * sample after the specified time stamp. As a side effect,
+     * all outdates samples are removed from the sample buffer.
+     */
+    void pickSamplePair(Cycle clock, int16_t &sample1, int16_t &sample2);
 
     //
     // Performing state machine actions
     //
+
+public:
 
     // Returns true if the state machine is running in DMA mode
     bool AUDxON();
@@ -217,8 +229,12 @@ public:
     // Performing state machine transitions
     //
 
+public:
+
     void enableDMA();
     void disableDMA();
+
+private:
 
     void move_000_010();
     void move_000_001();
@@ -234,6 +250,8 @@ public:
     // Servicing events
     //
 
+public:
+
     void serviceEvent();
 
 
@@ -241,22 +259,10 @@ public:
     // Running the device
     //
 
-private:
-
-    // Writes a byte of a 16-bit sample to the audio buffer
-    // void outputLo(uint16_t sample);
-    // void outputHi(uint16_t sample);
-
 public:
 
     // Move the machine to a specific state
-    void setState(uint8_t state) { this->state = state; }
-
-    /* Executes the state machine for a certain number of DMA cycles.
-     * The return value is the current audio sample of this channel.
-     * DEPRECATED
-     */
-    // int16_t execute(DMACycle cycles);
+    // void setState(uint8_t state) { this->state = state; }
 };
 
 #endif
