@@ -72,7 +72,7 @@ template <uint16_t capacity> struct ChangeRecorder
     uint16_t end() { return w; }
 
     // Returns the number of stored elements
-    uint16_t count() { return (capacity + w - r) % capacity; } const
+    uint16_t count() const { return (capacity + w - r) % capacity; }
 
     // Indicates if the buffer is empty or full
     bool isEmpty() { return r == w; }

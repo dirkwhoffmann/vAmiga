@@ -35,9 +35,6 @@ public:
     // The 16 bit output buffer
     uint16_t buffer;
 
-    // The value that is handed over to the DA converter
-    int16_t bufferOut;
-
     // Audio length (AUDxLEN)
     uint16_t audlenLatch;
     uint16_t audlen;
@@ -60,10 +57,10 @@ public:
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
-    // EXPERIMENTAL (DEPRECATED)
-    int samplecnt = 0;
+    // Ringbuffer storing the synthesized samples
+    SortedRingBuffer<short, 16> samples;
 
-    /* Sample pipeline
+    /* Sample pipeline (DEPRECATED)
      * When the state machine outputs a sample, it is stored in this pipeline
      * together with a time stamp. The pipe is read in the hsync handler of
      * the audio engine to assemble the 44.1kHz audio stream.
@@ -98,7 +95,6 @@ public:
         & clock
         & state
         & buffer
-        & bufferOut
         & audlenLatch
         & audlen
         & audperLatch

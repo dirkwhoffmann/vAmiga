@@ -254,6 +254,7 @@
 		5085FE5821FB6856009753EF /* ProxyExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProxyExtensions.swift; sourceTree = "<group>"; };
 		508833EC21F0D21B009890EA /* ADFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ADFFile.cpp; sourceTree = "<group>"; };
 		508833ED21F0D21B009890EA /* ADFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADFFile.h; sourceTree = "<group>"; };
+		508C6BCF23F7E77500D8938F /* Buffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffers.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
 		508E97B922897648008FD8B8 /* VAmigaTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VAmigaTests.swift; sourceTree = "<group>"; };
@@ -861,6 +862,7 @@
 				505A3A3821F4996400132020 /* sse_utils.cpp */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5085830523265B3D004F942F /* Event.h */,
+				508C6BCF23F7E77500D8938F /* Buffers.h */,
 				5085830423262E8B004F942F /* ChangeRecorder.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
 				50B14C0621EB218E002E32A6 /* AmigaObject.h */,

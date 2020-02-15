@@ -13,6 +13,7 @@
 #include "Event.h"
 #include "Beam.h"
 #include "ChangeRecorder.h"
+#include "Buffers.h"
 #include "va_types.h"
 
 

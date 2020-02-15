@@ -129,7 +129,6 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
             case 0b010:
             case 0b011:
 
-                // if (nr == 0) debug("pokeAUD%dDAT(%X) state = %d audlen = %d\n", nr, value, state, audlen);
                 if (!lenfin()) lencount();
                 else {
                     lencntrld();
@@ -177,20 +176,50 @@ StateMachine<nr>::pushSample(int16_t data, Cycle clock)
 template <int nr> int16_t
 StateMachine<nr>::pickSample(Cycle clock)
 {
-    if (clock > sampleTime[0]) return sampleData[0];
-    if (clock > sampleTime[1]) return sampleData[1];
+    int16_t result, result2;
 
-    /*
-    if (clock < sampleTime[2]) {
-        debug("Pipeline: (clock = %d agnusClock = %d)\n", clock, agnus.clock);
-        for (int i = 0; i < 3; i++) {
-            printf("Data: %02X Time: %lld\n", (uint8_t)sampleData[i], sampleTime[i]);
+    int w  = samples.w;
+    int r1 = samples.r;
+    int r2 = samples.next(r1);
+
+    if (r1 == w) {
+
+        // Buffer is empty
+        result2 = 0;
+
+    } else if (r2 == w) {
+
+        // Buffer contains a single element
+        result2 = samples.elements[r1];
+
+    } else {
+
+        // Remove outdates samples
+        while (r1 != samples.w && r2 != samples.w && samples.keys[r2] <= clock) {
+            (void)samples.read();
+            r1 = r2;
+            r2 = samples.next(r1);
         }
-        printf("\n");
+
+        result2 = samples.elements[r1];
     }
-    assert(clock >= sampleTime[2]);
-    */
-    return sampleData[2];
+
+    result =
+    clock >= sampleTime[0] ? sampleData[0] :
+    clock >= sampleTime[1] ? sampleData[1] : sampleData[2];
+
+    if (result != result2) {
+        printf("sample = %d sample2 = %d\n", result, result2);
+        printf("sample %i: %d %lld\n", 0, sampleData[0], sampleTime[0]);
+        printf("sample %i: %d %lld\n", 1, sampleData[1], sampleTime[1]);
+        printf("sample %i: %d %lld\n", 2, sampleData[2], sampleTime[2]);
+
+        samples.dump();
+    }
+
+    assert(result == result2);
+
+    return result;
 }
 
 template <int nr> void
@@ -425,7 +454,13 @@ template <int nr> void
 StateMachine<nr>::percntrld()
 {
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-    agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+
+    if (audperLatch < 64) {
+        // What shall we do with very small audper values?
+        agnus.scheduleRel<slot>(DMA_CYCLES(64), CHX_PERFIN);
+    } else {
+        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+    }
 }
 
 template <int nr> bool
@@ -472,209 +507,30 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
-    bufferOut = (int8_t)HI_BYTE(buffer) * audvol;
+    int16_t bufferOut = (int8_t)HI_BYTE(buffer) * audvol;
     debug(AUD_DEBUG, "penhi: %x %x (%d) %d\n", buffer, HI_BYTE(buffer), (int8_t)HI_BYTE(buffer), bufferOut);
 
+    if (samples.isFull()) {
+        debug("audperLatch = %d\n", audperLatch);
+        samples.dump();
+    }
+    samples.insert(agnus.clock, bufferOut);
     pushSample(bufferOut, agnus.clock);
 }
 
 template <int nr> void
 StateMachine<nr>::penlo()
 {
-    bufferOut = (int8_t)LO_BYTE(buffer) * audvol;
+    int16_t bufferOut = (int8_t)LO_BYTE(buffer) * audvol;
     debug(AUD_DEBUG, "penlo: %x %x (%d) %d\n", buffer, LO_BYTE(buffer), (int8_t)LO_BYTE(buffer), bufferOut);
 
+    if (samples.isFull()) {
+         debug("audperLatch = %d\n", audperLatch);
+         samples.dump();
+     }
+    samples.insert(agnus.clock, bufferOut);
     pushSample(bufferOut, agnus.clock);
 }
-
-/*
-template <int nr> void
-StateMachine<nr>::outputHi(uint16_t sample)
-{
-    uint16_t modulate = (paula.adkcon >> nr) & 0x11;
-
-    // Standard case: Output sound sample
-    if (nr == 3 || modulate == 0) {
-        auddat = HI_BYTE(sample);
-        pushSample((int16_t)HI_BYTE(sample) * audvolLatch, clock);
-        return;
-    }
-
-    auddat = 0;
-}
-
-template <int nr> void
-StateMachine<nr>::outputLo(uint16_t sample)
-{
-    uint16_t modulate = (paula.adkcon >> nr) & 0x11;
-    // modulate = 0;
-
-    // Standard case: Output sound sample
-    if (nr == 3 || modulate == 0) {
-        auddat = LO_BYTE(sample);
-        pushSample((int16_t)LO_BYTE(sample) * audvolLatch, clock);
-        return;
-    }
-
-    // Special case: Use sound sample to modulate another channel
-    switch ((paula.adkcon >> nr) & 0x11) {
-
-        case 0x01: // Volume modulation
-
-            audioUnit.pokeAUDxVOL(nr + 1, auddatLatch);
-            break;
-        case 0x10: // Period modulation
-
-            audioUnit.pokeAUDxPER(nr + 1, auddatLatch);
-            break;
-
-        case 0x11: // Volumne + period modulation
-
-            if (samplecnt++ & 1) {
-                audioUnit.pokeAUDxPER(nr + 1, auddatLatch);
-            } else {
-                audioUnit.pokeAUDxVOL(nr + 1, auddatLatch);
-            }
-            break;
-    }
-
-    auddat = 0;
-}
-*/
-
-/*
-template <int nr> int16_t
-StateMachine<nr>::execute(DMACycle cycles)
-{
-    Cycle endClock = clock + DMA_CYCLES(cycles);
-
-    switch(state) {
-
-        case 0b000: // State 0 (Idle)
-
-            audlen = audlenLatch;
-            agnus.audlc[nr] = audlcLatch;
-            audper = 0;
-            state = 0b001;
-            break;
-
-        case 0b001: // State 1
-
-            if (audlen > 1) audlen--;
-
-            // Trigger Audio interrupt
-            AUDxIR();
-
-            state = 0b101;
-            break;
-
-        case 0b010: // State 2
-
-            audper -= cycles;
-
-            if (audper < 0) {
-
-                audper += audperLatch;
-                audvol = audvolLatch;
-
-                // Put out the high byte
-                // auddat = HI_BYTE(auddatLatch);
-                // clock = midClock; // FAKE
-                outputHi(auddatLatch);
-
-                // Switch forth to state 3
-                state = 0b011;
-            }
-            break;
-
-        case 0b011: // State 3
-
-            // Decrease the period counter
-            audper -= cycles;
-
-            // Only continue if the period counter did underflow
-            if (audper > 1) break;
-
-            // Reload the period counter
-            audper += audperLatch;
-
-            // ??? Can't find this in the state machine (from WinFellow?)
-            audvol = audvolLatch;
-
-            // Put out the low byte
-            // auddat = LO_BYTE(auddatLatch);
-            // clock = endClock; // FAKE
-            outputLo(auddatLatch);
-
-            // Switch to next state
-            state = 0b010;
-
-            // Read the next two samples from memory
-            // auddatLatch = agnus.doAudioDMA<nr>();
-
-            // Perform DMA mode specific action
-            if (AUDxON()) {
-
-                // Decrease the length counter
-                if (audlen > 1) {
-                    audlen--;
-                } else {
-                    audlen = audlenLatch;
-                    agnus.audlc[nr] = audlcLatch;
-
-                    // Trigger Audio interrupt
-                    AUDxIR();
-                }
-
-                // Read the next two samples from memory
-                auddatLatch = agnus.doAudioDMA<nr>();
-
-            // Perform non-DMA mode specific action
-            } else {
-
-                // Go idle if the audio IRQ hasn't been acknowledged
-                if (AUDxIP()) state = 0b000;
-
-                // Trigger Audio interrupt
-                AUDxIR();
-            }
-
-            break;
-
-        case 0b101: // State 5
-
-            audvol = audvolLatch;
-
-            // (2)
-            audper = 0;
-
-            // Read the first two samples from memory
-            auddatLatch = agnus.doAudioDMA<nr>();
-
-            if (audlen > 1) {
-                audlen--;
-            } else {
-                audlen = audlenLatch;
-                agnus.audlc[nr] = audlcLatch;
-
-                // Trigger Audio interrupt
-                AUDxIR();
-            }
-
-            // Transition to state 2
-            state = 0b010;
-            break;
-
-        default:
-            assert(false);
-            break;
-
-    }
-
-    clock = endClock;
-    return (int8_t)auddat * audvolLatch;
-}
-*/
 
 template StateMachine<0>::StateMachine(Amiga &ref);
 template StateMachine<1>::StateMachine(Amiga &ref);
