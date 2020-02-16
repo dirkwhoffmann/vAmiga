@@ -196,15 +196,25 @@ AudioUnit::executeUntil(Cycle targetClock)
 void
 AudioUnit::executeUntil(Cycle targetClock)
 {
+    switch (config.samplingMethod) {
+        case SMP_NONE:    executeUntil<SMP_NONE>   (targetClock); return;
+        case SMP_NEAREST: executeUntil<SMP_NEAREST>(targetClock); return;
+        case SMP_LINEAR:  executeUntil<SMP_LINEAR> (targetClock); return;
+    }
+}
+
+template <SamplingMethod method> void
+AudioUnit::executeUntil(Cycle targetClock)
+{
     Cycle dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
     while (clock + dmaCyclesPerSample < targetClock) {
 
         clock += DMA_CYCLES(dmaCyclesPerSample);
 
-        short left1  = channel0.pickSample(clock);
-        short right1 = channel1.pickSample(clock);
-        short right2 = channel2.pickSample(clock);
-        short left2  = channel3.pickSample(clock);
+        short left1  = channel0.interpolate<method>(clock);
+        short right1 = channel1.interpolate<method>(clock);
+        short right2 = channel2.interpolate<method>(clock);
+        short left2  = channel3.interpolate<method>(clock);
 
         writeData(left1 + left2, right1 + right2);
     }

@@ -972,6 +972,7 @@ extension Keys {
     static let clxPlfPlf         = "VAMIGAClxPlfPlf"
 
     // Audio
+    static let samplingMethod    = "VAMIGASamplingMethod"
     static let filterActivation  = "VAMIGAFilterActivation"
     static let filterType        = "VAMIGAFilterType"
 
@@ -994,6 +995,7 @@ extension Defaults {
     static let clxPlfPlf         = false
 
     // Audio
+    static let samplingMethod    = SMP_NEAREST
     static let filterActivation  = FILTACT_POWER_LED
     static let filterType        = FILT_BUTTERWORTH
 
@@ -1015,6 +1017,7 @@ extension MyController {
             Keys.clxSprSpr: Defaults.clxSprSpr,
             Keys.clxSprPlf: Defaults.clxSprPlf,
             Keys.clxPlfPlf: Defaults.clxPlfPlf,
+            Keys.samplingMethod: Defaults.samplingMethod.rawValue,
             Keys.filterActivation: Defaults.filterActivation.rawValue,
             Keys.filterType: Defaults.filterType.rawValue,
             Keys.blitterAccuracy: Defaults.blitterAccuracy,
@@ -1034,6 +1037,7 @@ extension MyController {
         let keys = [ Keys.clxSprSpr,
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
+                     Keys.samplingMethod,
                      Keys.filterActivation,
                      Keys.filterType,
                      Keys.blitterAccuracy,
@@ -1055,6 +1059,7 @@ extension MyController {
         amiga.configure(VA_CLX_SPR_SPR, enable: defaults.bool(forKey: Keys.clxSprSpr))
         amiga.configure(VA_CLX_SPR_PLF, enable: defaults.bool(forKey: Keys.clxSprPlf))
         amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
+        amiga.configure(VA_SAMPLING_METHOD, value: defaults.integer(forKey: Keys.samplingMethod))
         amiga.configure(VA_FILTER_ACTIVATION, value: defaults.integer(forKey: Keys.filterActivation))
         amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
         amiga.configure(VA_BLITTER_ACCURACY, value: defaults.integer(forKey: Keys.blitterAccuracy))
@@ -1073,6 +1078,7 @@ extension MyController {
         defaults.set(config.denise.clxSprSpr, forKey: Keys.clxSprSpr)
         defaults.set(config.denise.clxSprPlf, forKey: Keys.clxSprPlf)
         defaults.set(config.denise.clxPlfPlf, forKey: Keys.clxPlfPlf)
+        defaults.set(config.audio.samplingMethod.rawValue, forKey: Keys.samplingMethod)
         defaults.set(config.audio.filterActivation.rawValue, forKey: Keys.filterActivation)
         defaults.set(config.audio.filterType.rawValue, forKey: Keys.filterType)
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)

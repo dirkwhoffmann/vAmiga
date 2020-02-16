@@ -318,6 +318,7 @@ public:
     
     // Executes the device until the given master clock cycle has been reached.
     void executeUntil(Cycle targetClock);
+    template <SamplingMethod method> void executeUntil(Cycle targetClock);
 };
 
 #endif

@@ -26,7 +26,7 @@ typedef enum : long
 }
 SamplingMethod;
 
-static inline bool isSamplingMethod(long value) { return value >= 0 && value < SMP_LINEAR; }
+static inline bool isSamplingMethod(long value) { return value >= 0 && value <= SMP_LINEAR; }
 
 typedef enum : long
 {

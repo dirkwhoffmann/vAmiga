@@ -31,6 +31,16 @@ StateMachine<nr>::_dump()
 }
 
 template <int nr> void
+StateMachine<nr>::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
+    // Some methods assume that the sample buffer is never empty. We assure
+    // this by initializing the buffer with a dummy element.
+    samples.insert(0,0);
+}
+
+template <int nr> void
 StateMachine<nr>::_inspect()
 {
     // Prevent external access to variable 'info'
@@ -156,74 +166,16 @@ StateMachine<nr>::pokeAUDxLCL(uint16_t value)
     audlcLatch = REPLACE_LO_WORD(audlcLatch, value);
 }
 
-template <int nr> int16_t
-StateMachine<nr>::pickSample(Cycle clock)
-{
-    int16_t sample1, sample2;
+int debugg = 0;
 
-    pickSamplePair(clock, sample1, sample2);
-
-    // TODO: INTERPOLATE
-
-    return sample1; 
-    /*
-    int16_t result;
-
-    int w  = samples.w;
-    int r1 = samples.r;
-
-    // Check for an empty buffer
-    if (r1 == w) {
-
-        // debug("SAMPLE BUFFER IS EMPTY\n");
-        return 0;
-    }
-
-    // Check for a buffer with a single element (won't allow interpolation)
-    int r2 = samples.next(r1);
-    if (r2 == w) {
-
-        // debug("SAMPLE BUFFER CONTAINS A SINGLE ELEMENT, ONLY\n");
-        return samples.elements[r1];
-    }
-
-    // Remove all outdated entries
-    while (r1 != samples.w && r2 != samples.w && samples.keys[r2] <= clock) {
-        (void)samples.read();
-        r1 = r2;
-        r2 = samples.next(r1);
-    }
-
-    // Interpolate audio sample
-    int16_t s1 = samples.elements[r1];
-    // int16_t s2 = samples.elements[r2];
-
-    return s1;
-    */
-}
-
-template <int nr> void
-StateMachine<nr>::pickSamplePair(Cycle clock, int16_t &sample1, int16_t &sample2)
+template <int nr> template <SamplingMethod method> int16_t
+StateMachine<nr>::interpolate(Cycle clock)
 {
     int w  = samples.w;
     int r1 = samples.r;
     int r2 = samples.next(r1);
 
-    // Corner case 1: The sample buffer is empty
-    if (r1 == w) {
-        // debug("SAMPLE BUFFER IS EMPTY\n");
-        sample1 = 0;
-        sample2 = 0;
-        return;
-    }
-
-    // Corner case 2: The sample buffer contains a single element
-    if (r2 == w) {
-        // debug("SAMPLE BUFFER CONTAINS A SINGLE ELEMENT, ONLY\n");
-        sample1 = samples.elements[r1];
-        sample2 = samples.elements[r1];
-        return;
-    }
+    assert(!samples.isEmpty());
 
     // Remove all outdated entries
     while (r2 != w && samples.keys[r2] <= clock) {
@@ -232,8 +184,41 @@ StateMachine<nr>::pickSamplePair(Cycle clock, int16_t &sample1, int16_t &sample2
         r2 = samples.next(r1);
     }
 
-    sample1 = samples.elements[r1];
-    sample2 = samples.elements[r2];
+    // If the buffer contains a single element only, return that element
+    if (r2 == w) return samples.elements[r1];
+
+    // Interpolate between position r1 and p2
+    Cycle c1 = samples.keys[r1];
+    Cycle c2 = samples.keys[r2];
+    int16_t s1 = samples.elements[r1];
+    int16_t s2 = samples.elements[r2];
+    assert(clock >= c1 && clock < c2);
+
+    switch (method) {
+
+        case SMP_NONE:
+        {
+            return s1;
+        }
+        case SMP_NEAREST:
+        {
+            if (clock - c1 < c2 - clock) {
+                return s1;
+            } else {
+                return s2;
+            }
+        }
+        case SMP_LINEAR:
+        {
+            double dx = (double)(c2 - c1);
+            double dy = (double)(s2 - s1);
+            double weight = (double)(clock - c1) / dx;
+            return (int16_t)(s1 + weight * dy);
+        }
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 template <int nr> void
@@ -590,12 +575,22 @@ template void StateMachine<1>::disableDMA();
 template void StateMachine<2>::disableDMA();
 template void StateMachine<3>::disableDMA();
 
-template int16_t StateMachine<0>::pickSample(Cycle clock);
-template int16_t StateMachine<1>::pickSample(Cycle clock);
-template int16_t StateMachine<2>::pickSample(Cycle clock);
-template int16_t StateMachine<3>::pickSample(Cycle clock);
-
 template void StateMachine<0>::serviceEvent();
 template void StateMachine<1>::serviceEvent();
 template void StateMachine<2>::serviceEvent();
 template void StateMachine<3>::serviceEvent();
+
+template int16_t StateMachine<0>::interpolate<SMP_NONE>(Cycle clock);
+template int16_t StateMachine<1>::interpolate<SMP_NONE>(Cycle clock);
+template int16_t StateMachine<2>::interpolate<SMP_NONE>(Cycle clock);
+template int16_t StateMachine<3>::interpolate<SMP_NONE>(Cycle clock);
+
+template int16_t StateMachine<0>::interpolate<SMP_NEAREST>(Cycle clock);
+template int16_t StateMachine<1>::interpolate<SMP_NEAREST>(Cycle clock);
+template int16_t StateMachine<2>::interpolate<SMP_NEAREST>(Cycle clock);
+template int16_t StateMachine<3>::interpolate<SMP_NEAREST>(Cycle clock);
+
+template int16_t StateMachine<0>::interpolate<SMP_LINEAR>(Cycle clock);
+template int16_t StateMachine<1>::interpolate<SMP_LINEAR>(Cycle clock);
+template int16_t StateMachine<2>::interpolate<SMP_LINEAR>(Cycle clock);
+template int16_t StateMachine<3>::interpolate<SMP_LINEAR>(Cycle clock);

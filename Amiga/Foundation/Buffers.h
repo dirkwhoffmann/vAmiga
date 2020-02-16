@@ -78,7 +78,7 @@ template <class T, int capacity> struct RingBuffer
         return elements[oldr];
     }
 
-    void write(T& element)
+    void write(T element)
     {
         assert(!isFull());
 
@@ -86,6 +86,7 @@ template <class T, int capacity> struct RingBuffer
         w = next(w);
         elements[oldw] = element;
     }
+
 
     //
     // Debugging
@@ -110,7 +111,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
     int64_t keys[capacity];
 
     // Inserts an element at the right position
-    void insert(int64_t key, T& element)
+    void insert(int64_t key, T element)
     {
         assert(!this->isFull());
 

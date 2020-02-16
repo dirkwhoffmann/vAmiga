@@ -58,7 +58,7 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    SortedRingBuffer<short, 16> samples;
+    SortedRingBuffer<short, 1024> samples;
 
     
     //
@@ -107,7 +107,7 @@ public:
 private:
 
     void _dump() override;
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset() override;
     void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
@@ -150,23 +150,12 @@ public:
 
 
     //
-    // Working with the sample buffers
+    // Synthesizing samples
     //
 
-public:
+    template <SamplingMethod method> int16_t interpolate(Cycle clock);
 
-    // Returns a sample for a given time stamp
-    int16_t pickSample(Cycle clock);
-
-private:
-
-    /* Returns a sample pair from the sample buffer
-     * The first sample has been recorded before and the second
-     * sample after the specified time stamp. As a side effect,
-     * all outdates samples are removed from the sample buffer.
-     */
-    void pickSamplePair(Cycle clock, int16_t &sample1, int16_t &sample2);
-
+    
     //
     // Performing state machine actions
     //
