@@ -165,4 +165,11 @@ typedef struct
 }
 AudioInfo;
 
+typedef struct
+{
+    long bufferUnderflows;
+    long bufferOverflows;
+}
+AudioStats;
+
 #endif

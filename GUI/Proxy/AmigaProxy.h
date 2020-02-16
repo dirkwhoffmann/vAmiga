@@ -395,6 +395,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
+- (AudioStats) getAudioStats;
 - (DiskControllerConfig) getDiskControllerConfig;
 - (DiskControllerInfo) getDiskControllerInfo;
 - (UARTInfo) getUARTInfo;
@@ -405,10 +406,7 @@ struct AmigaFileWrapper;
 - (NSInteger) ringbufferSize;
 - (double) ringbufferDataL:(NSInteger)offset;
 - (double) ringbufferDataR:(NSInteger)offset;
-// - (double) ringbufferData:(NSInteger)offset;
 - (double) fillLevel;
-- (NSInteger) bufferUnderflows;
-- (NSInteger) bufferOverflows;
 
 - (void) readMonoSamples:(float *)target size:(NSInteger)n;
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;

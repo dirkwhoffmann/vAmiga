@@ -206,6 +206,7 @@ Amiga::updateStats()
     stats.mem = mem.getStats();
     stats.agnus = agnus.getStats();
     stats.denise = denise.getStats();
+    stats.audio = paula.audioUnit.getStats();
     stats.uart = paula.uart.getStats();
     stats.disk = paula.diskController.getStats();
     stats.frames++;

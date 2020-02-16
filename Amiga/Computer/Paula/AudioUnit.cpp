@@ -124,8 +124,8 @@ AudioUnit::_reset()
 
     clearRingbuffer();
 
-    bufferUnderflows = 0;
-    bufferOverflows = 0;
+    stats.bufferUnderflows = 0;
+    stats.bufferOverflows = 0;
 
     volume = 100000;
     targetVolume = 100000;
@@ -400,8 +400,8 @@ AudioUnit::handleBufferUnderflow()
     
     // Adjust the sample rate, if condition (1) holds.
     if (elapsedTime > 10.0) {
-        
-        bufferUnderflows++;
+
+        stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured.
         int offPerSecond = (int)(samplesAhead / elapsedTime);
@@ -430,7 +430,7 @@ AudioUnit::handleBufferOverflow()
     // Adjust the sample rate, if condition (1) holds.
     if (elapsedTime > 10.0) {
         
-        bufferOverflows++;
+        stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured.
         int offPerSecond = (int)(samplesAhead / elapsedTime);

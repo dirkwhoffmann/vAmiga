@@ -22,6 +22,9 @@ class AudioUnit : public AmigaComponent {
     // Information shown in the GUI inspector panel
     AudioInfo info;
 
+    // Statistics shown in the GUI monitor panel
+    AudioStats stats;
+
 
     // Sub components
     //
@@ -53,15 +56,7 @@ private:
 
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
-    
-public:
-    
-    // Number of buffer underflows since power up (TODO: MOVE TO AudioStats)
-    int64_t bufferUnderflows;
-    
-    // Number of buffer overflows since power up (TODO: MOVE TO AudioStats)
-    int64_t bufferOverflows;
-    
+        
 private:
     
     //
@@ -190,6 +185,9 @@ public:
 
     // Returns the result of the most recent call to inspect()
     AudioInfo getInfo();
+
+    // Returns statistical information about this device
+    AudioStats getStats() { return stats; }
 
 
     //

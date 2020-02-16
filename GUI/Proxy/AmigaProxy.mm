@@ -608,6 +608,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->audioUnit.getInfo();
 }
+- (AudioStats) getAudioStats
+{
+    return wrapper->paula->audioUnit.getStats();
+}
 - (DiskControllerConfig) getDiskControllerConfig
 {
     return wrapper->paula->diskController.getConfig();
@@ -675,14 +679,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (double) fillLevel
 {
     return wrapper->paula->audioUnit.fillLevel();
-}
-- (NSInteger) bufferUnderflows
-{
-    return wrapper->paula->audioUnit.bufferUnderflows;
-}
-- (NSInteger) bufferOverflows
-{
-    return wrapper->paula->audioUnit.bufferOverflows;
 }
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {

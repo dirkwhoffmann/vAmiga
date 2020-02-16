@@ -109,6 +109,7 @@ typedef struct
     MemoryStats mem;
     AgnusStats agnus;
     DeniseStats denise;
+    AudioStats audio;
     UARTStats uart;
     DiskControllerStats disk;
     long frames;

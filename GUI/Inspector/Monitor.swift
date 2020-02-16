@@ -112,12 +112,13 @@ extension Monitor {
     func refreshWaveformView() {
 
         guard let paula = amigaProxy?.paula else { return }
+        let stats = paula.getAudioStats()
         let fillLevel = Int32(paula.fillLevel() * 100)
 
         audioBufferLevel.intValue = fillLevel
         audioBufferLevelText.stringValue = "\(fillLevel) %"
-        audioBufferUnderflows.intValue = Int32(paula.bufferUnderflows())
-        audioBufferOverflows.intValue = Int32(paula.bufferOverflows())
+        audioBufferUnderflows.integerValue = stats.bufferUnderflows
+        audioBufferOverflows.integerValue = stats.bufferOverflows
         audioWaveformView.update()
     }
 }
