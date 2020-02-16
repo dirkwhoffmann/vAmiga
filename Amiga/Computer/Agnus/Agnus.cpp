@@ -1854,7 +1854,7 @@ Agnus::hsyncHandler()
     denise.endOfLine(pos.v);
 
     // Let Paula synthesize new sound samples
-    audioUnit.executeUntil(clock - 20*DMA_CYCLES(HPOS_CNT));
+    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 
     // Let CIA B count the HSYNCs
     amiga.ciaB.incrementTOD();

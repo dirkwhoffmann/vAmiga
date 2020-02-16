@@ -58,7 +58,7 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    SortedRingBuffer<short, 1024> samples;
+    SortedRingBuffer<short, 128> samples;
 
     
     //

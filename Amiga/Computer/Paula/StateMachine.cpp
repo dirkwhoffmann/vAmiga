@@ -85,6 +85,14 @@ StateMachine<nr>::pokeAUDxPER(uint16_t value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
+    /* "The minimum period is 124 color clocks. This means that the smallest
+     *  number that should be placed in this register is 124 decimal. This
+     *  corresponds to a maximum sample frequency of 28.86 khz." [HRM]
+     */
+    if (value < 124) {
+        debug(AUDREG_DEBUG, "pokeAUD%dPER(%X): Very low value\n");
+        value = 124;
+    }
     audperLatch = value;
 }
 
@@ -454,12 +462,15 @@ StateMachine<nr>::percntrld()
 {
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
 
+    agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+    /*
     if (audperLatch < 64) {
         // What shall we do with very small audper values?
         agnus.scheduleRel<slot>(DMA_CYCLES(64), CHX_PERFIN);
     } else {
         agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
     }
+    */
 }
 
 template <int nr> bool
