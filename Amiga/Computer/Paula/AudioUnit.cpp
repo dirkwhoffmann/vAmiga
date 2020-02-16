@@ -30,6 +30,8 @@ AudioUnit::setSampleRate(double hz)
     debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
     config.sampleRate = hz;
+    cyclesPerSample = MHz(masterClockFrequency) / hz;
+
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
 }
@@ -131,20 +133,6 @@ AudioUnit::_reset()
 
 /*
 void
-AudioUnit::enableDMA(int nr)
-{
-
-}
-
-void
-AudioUnit::disableDMA(int nr)
-{
- 
-}
-*/
-
-/*
-void
 AudioUnit::executeUntil(Cycle targetClock)
 {
     double dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
@@ -206,8 +194,6 @@ AudioUnit::executeUntil(Cycle targetClock)
 template <SamplingMethod method> void
 AudioUnit::executeUntil(Cycle targetClock)
 {
-    Cycle cyclesPerSample = MHz(masterClockFrequency) / config.sampleRate;
-
     while (clock < targetClock) {
 
         short left1  = channel0.interpolate<method>(clock);

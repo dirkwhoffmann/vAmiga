@@ -48,6 +48,9 @@ private:
     // The component has been executed up to this clock cycle.
     double clock = 0;
 
+    // Master clock cycles per audio sample, set in setSampleRate()
+    double cyclesPerSample;
+
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
     
@@ -142,7 +145,8 @@ public:
     {
         worker
 
-        & clock;
+        & clock
+        & cyclesPerSample;
     }
 
 
