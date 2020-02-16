@@ -46,7 +46,7 @@ public:
 private:
 
     // The component has been executed up to this clock cycle.
-    Cycle clock = 0;
+    double clock = 0;
 
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;

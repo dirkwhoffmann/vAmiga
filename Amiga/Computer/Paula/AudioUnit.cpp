@@ -206,10 +206,9 @@ AudioUnit::executeUntil(Cycle targetClock)
 template <SamplingMethod method> void
 AudioUnit::executeUntil(Cycle targetClock)
 {
-    Cycle dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
-    while (clock + dmaCyclesPerSample < targetClock) {
+    Cycle cyclesPerSample = MHz(masterClockFrequency) / config.sampleRate;
 
-        clock += DMA_CYCLES(dmaCyclesPerSample);
+    while (clock < targetClock) {
 
         short left1  = channel0.interpolate<method>(clock);
         short right1 = channel1.interpolate<method>(clock);
@@ -217,6 +216,8 @@ AudioUnit::executeUntil(Cycle targetClock)
         short left2  = channel3.interpolate<method>(clock);
 
         writeData(left1 + left2, right1 + right2);
+
+        clock += cyclesPerSample;
     }
 }
 

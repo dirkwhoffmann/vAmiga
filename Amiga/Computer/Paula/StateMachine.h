@@ -242,16 +242,6 @@ private:
 public:
 
     void serviceEvent();
-
-
-    //
-    // Running the device
-    //
-
-public:
-
-    // Move the machine to a specific state
-    // void setState(uint8_t state) { this->state = state; }
 };
 
 #endif
