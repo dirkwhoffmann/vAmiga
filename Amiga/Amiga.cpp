@@ -579,7 +579,7 @@ Amiga::run()
 void
 Amiga::_run()
 {
-    debug(RUNLOOP_DEBUG, "Starting emulation thread (PC = %X)\n", cpu.getPC());
+    debug(RUN_DEBUG, "Starting emulation thread (PC = %X)\n", cpu.getPC());
 
     // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
@@ -670,7 +670,7 @@ Amiga::_warpOff()
 void
 Amiga::suspend()
 {
-    debug(2, "Suspending (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0 && !isRunning())
     return;
@@ -682,7 +682,7 @@ Amiga::suspend()
 void
 Amiga::resume()
 {
-    debug(2, "Resuming (%d)...\n", suspendCounter);
+    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
     
     if (suspendCounter == 0)
     return;
@@ -931,7 +931,7 @@ Amiga::threadWillStart()
 void
 Amiga::threadDidTerminate()
 {
-    debug(2, "Emulator thread terminated\n");
+    debug(RUN_DEBUG, "Emulator thread terminated\n");
     p = NULL;
     
     /* Put emulator into pause mode. If we got here by a call to pause(), the
@@ -965,7 +965,7 @@ Amiga::stepOver()
 void
 Amiga::runLoop()
 {
-    debug(RUNLOOP_DEBUG, "runLoop()\n");
+    debug(RUN_DEBUG, "runLoop()\n");
 
     // Prepare to run
     restartTimer();
@@ -1003,7 +1003,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
                 putMessage(MSG_BREAKPOINT_REACHED);
-                debug(RUNLOOP_DEBUG, "BREAKPOINT_REACHED\n");
+                debug(RUN_DEBUG, "BREAKPOINT_REACHED\n");
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
             }
@@ -1012,7 +1012,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
                 putMessage(MSG_WATCHPOINT_REACHED);
-                debug(RUNLOOP_DEBUG, "WATCHPOINT_REACHED\n");
+                debug(RUN_DEBUG, "WATCHPOINT_REACHED\n");
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;
             }
@@ -1020,7 +1020,7 @@ Amiga::runLoop()
             // Are we requested to terminate the run loop?
             if (runLoopCtrl & RL_STOP) {
                 clearControlFlags(RL_STOP);
-                debug(RUNLOOP_DEBUG, "RL_STOP\n");
+                debug(RUN_DEBUG, "RL_STOP\n");
                 break;
             }
         }

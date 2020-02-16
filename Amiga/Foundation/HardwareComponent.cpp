@@ -48,7 +48,7 @@ HardwareComponent::powerOn()
         _reset();
 
         // Power this component on
-        debug(2, "Powering on\n");
+        debug(RUN_DEBUG, "Powering on\n");
         power = true;
         _powerOn();
     }
@@ -63,7 +63,7 @@ HardwareComponent::powerOff()
         pause();
         
         // Power off this component
-        debug(2, "Powering off\n");
+        debug(RUN_DEBUG, "Powering off\n");
         power = false;
         _powerOff();
 
@@ -88,7 +88,7 @@ HardwareComponent::run()
         }
         
         // Start this component
-        debug(RUNLOOP_DEBUG, "Run\n");
+        debug(RUN_DEBUG, "Run\n");
         running = true;
         _run();
     }
@@ -100,7 +100,7 @@ HardwareComponent::pause()
     if (running) {
         
         // Pause this component
-        debug(RUNLOOP_DEBUG, "Pause\n");
+        debug(RUN_DEBUG, "Pause\n");
         running = false;
         _pause();
 
@@ -120,7 +120,7 @@ HardwareComponent::reset()
     }
     
     // Reset this component
-    debug(2, "Reset [%p]\n", this);
+    debug(RUN_DEBUG, "Reset [%p]\n", this);
     _reset();
 }
 
@@ -133,7 +133,7 @@ HardwareComponent::ping()
     }
     
     // Ping this component
-    debug(2, "Ping [%p]\n", this);
+    debug(RUN_DEBUG, "Ping [%p]\n", this);
     _ping();
 }
 

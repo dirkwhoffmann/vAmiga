@@ -12,7 +12,7 @@
 
 #include "HardwareComponent.h"
 
-class AudioFilter : public HardwareComponent {
+class AudioFilter : public AmigaComponent {
     
     // The currently set filter type
     FilterType type = FILT_BUTTERWORTH;
@@ -30,8 +30,7 @@ class AudioFilter : public HardwareComponent {
     
 public:
     
-    AudioFilter();
-
+    AudioFilter(Amiga& ref);
 
     //
     // Iterating over snapshot items

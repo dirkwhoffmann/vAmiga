@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-AudioFilter::AudioFilter()
+AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("AudioFilter");
 

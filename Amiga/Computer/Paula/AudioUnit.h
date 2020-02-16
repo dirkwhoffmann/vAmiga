@@ -38,8 +38,8 @@ public:
     StateMachine<3> channel3 = StateMachine<3>(amiga);
 
     // Audio filters
-    AudioFilter filterL;
-    AudioFilter filterR;
+    AudioFilter filterL = AudioFilter(amiga);
+    AudioFilter filterR = AudioFilter(amiga);
 
     
     //
@@ -52,11 +52,11 @@ private:
     double clock = 0;
 
     // Master clock cycles per audio sample, set in setSampleRate()
-    double cyclesPerSample;
+    double cyclesPerSample = 0;
 
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
-        
+
 private:
     
     //
@@ -140,8 +140,7 @@ public:
     {
         worker
 
-        & clock
-        & cyclesPerSample;
+        & clock;
     }
 
 
