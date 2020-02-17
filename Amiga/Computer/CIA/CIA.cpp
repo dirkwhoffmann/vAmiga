@@ -1244,30 +1244,19 @@ CIAA::portAexternal()
 void
 CIAA::updatePA()
 {
-    uint8_t oldPA = PA;
     uint8_t internal = portAinternal();
     uint8_t external = portAexternal();
-    uint8_t mask = DDRA;
 
-    /* If a DIP model is emulated, the values of the drive lines are dominant.
-     * This means that they appear in the PRA register regardless of the value
-     * in the data direction register. If a PLCC model is emulated, the data
-     * direction register bits take full effect.
-     */
-    switch (config.type) {
-
-        case CIA_8520_DIP:  mask &= 0b11000011; break;
-        default:            break;
-    }
-
-    PA = (internal & mask) | (external & ~mask);
+    uint8_t oldPA = PA;
+    PA = (internal & DDRA) | (external & ~DDRA);
 
     // A grounded joystick line always forces the corresponding bit to 0
     PA &= external | 0b00111111;
 
-    // plaindebug("CIAA: Peek(0) = %X (PC = %X DDRA = %X)\n", PA, amiga->cpu.getPC(), DDRA);
+    // PLCC CIAs always return the PRA contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
 
-    // if (nr == 0) debug("int / ext = %x %x mask = %x PA = %x\n", internal, external, mask, PA);
     // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
         amiga.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
@@ -1313,8 +1302,10 @@ CIAA::portBexternal()
 void
 CIAA::updatePB()
 {
-    PB = (portBinternal() & DDRB) | (portBexternal() & ~DDRB);
-    // TODO: Special action for CIA_8520_DIP models
+    uint8_t internal = portBinternal();
+    uint8_t external = portBexternal();
+
+    PB = (internal & DDRB) | (external & ~DDRB);
 
     // Check if timer A underflow shows up on PB6
     if (GET_BIT(PB67TimerMode, 6))
@@ -1323,6 +1314,10 @@ CIAA::updatePB()
     // Check if timer B underflow shows up on PB7
     if (GET_BIT(PB67TimerMode, 7))
         COPY_BIT(PB67TimerOut, PB, 7);
+
+    // PLCC CIAs always return the PRB contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) PB = (PB & ~DDRB) | (PRB & DDRB);
 }
 
 void
@@ -1412,13 +1407,14 @@ CIAB::updatePA()
 {
     // debug(CIA_DEBUG, "updatePA()\n");
 
-    uint8_t mask = DDRA;
-    uint8_t internal = portAinternal() & mask;
-    uint8_t external = portAexternal() & ~mask;
+    uint8_t internal = portAinternal();
+    uint8_t external = portAexternal();
 
-    PA = internal | external;
+    PA = (internal & DDRA) | (external & ~DDRA);
 
-    // debug(CIA_DEBUG, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
+    // PLCC CIAs always return the PRA contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
 }
 
 //            -------
@@ -1444,7 +1440,7 @@ CIAB::portBinternal()
     // Check if timer B underflow shows up on PB7
     if (GET_BIT(PB67TimerMode, 7))
         COPY_BIT(PB67TimerOut, result, 7);
-    
+
     return result;
 }
 
@@ -1457,12 +1453,15 @@ CIAB::portBexternal()
 void
 CIAB::updatePB()
 {
-    uint8_t mask = DDRB;
-    uint8_t internal = portBinternal() & mask;
-    uint8_t external = portBexternal() & ~mask;
+    uint8_t internal = portBinternal();
+    uint8_t external = portBexternal();
 
     uint8_t oldPB = PB;
-    PB = internal | external;
+    PB = (internal & DDRB) | (external & ~DDRB);
+
+    // PLCC CIAs always return the PRB contents for output bits
+    // We ignore PLCC emulation until the A600 is supported
+    // if (config.type == CIA_8520_PLCC) PB = (PB & ~DDRB) | (PRB & DDRB);
 
     // Notify the disk controller about the changed bits
     if (oldPB ^ PB) {

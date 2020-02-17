@@ -676,7 +676,7 @@ Memory::updateMemSrcTable()
             memSrc[i] = mem_rom;
     }
 
-    // Overlay Rom with lower memory area if the OVL line is high
+    // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
         for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
             memSrc[i] = memSrc[0xF8 + i];

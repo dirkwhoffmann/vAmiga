@@ -15,7 +15,7 @@
 /* Emulated CIA model
  *
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
- *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600 behaviour)
+ *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
 typedef enum : long
 {
