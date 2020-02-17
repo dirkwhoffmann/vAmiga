@@ -28,7 +28,7 @@ void
 SerialPort::_reset()
 {
    RESET_SNAPSHOT_ITEMS
-   port = 0x1FFFFFE;
+   // port = 0x1FFFFFE;
 }
 
 void
@@ -72,7 +72,7 @@ SerialPort::getPin(int nr)
 {
     assert(nr >= 1 && nr <= 25);
 
-    bool result = !!GET_BIT(port, nr);
+    bool result = GET_BIT(port, nr);
 
     debug(2, "getPin(%d) = %d port = %X\n", nr, result, port);
     return result;

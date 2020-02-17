@@ -1389,7 +1389,7 @@ CIAB::portAinternal()
 uint8_t
 CIAB::portAexternal()
 {
-    uint8_t result = 0b11111100;
+    uint8_t result = 0xFF;
 
     // Parallel port
     // NOT IMPLEMENTED
@@ -1412,16 +1412,11 @@ CIAB::updatePA()
 {
     // debug(CIA_DEBUG, "updatePA()\n");
 
-    uint8_t internal = portAinternal() & DDRA;
+    uint8_t mask = DDRA;
+    uint8_t internal = portAinternal() & mask;
+    uint8_t external = portAexternal() & ~mask;
 
-    // Check drive bits that are configured as output
-    if (GET_BIT(DDRA, 6)) serialPort.setRTS(!GET_BIT(internal, 6));
-    if (GET_BIT(DDRA, 7)) serialPort.setDTR(!GET_BIT(internal, 7));
-
-    uint8_t external = portAexternal() & ~DDRA;
-    
     PA = internal | external;
-    // TODO: Special action for CIA_8520_DIP models
 
     // debug(CIA_DEBUG, "DDRA = %X PA = %X internal = %X\n", DDRA, PA, portAinternal());
 }
@@ -1462,23 +1457,12 @@ CIAB::portBexternal()
 void
 CIAB::updatePB()
 {
-    uint8_t oldPB = PB;
-    uint8_t internal = portBinternal();
-    uint8_t external = portBexternal();
     uint8_t mask = DDRB;
+    uint8_t internal = portBinternal() & mask;
+    uint8_t external = portBexternal() & ~mask;
 
-    /* If a DIP model is emulated, the internal register values are dominant.
-     * This means that they appear in the PRB register regardless of the value
-     * in the data direction register. If a PLCC model is emulated, the data
-     * direction register bits take full effect.
-     */
-    switch (config.type) {
-
-        case CIA_8520_DIP:  mask |= 0b11111111; break;
-        default:            break;
-    }
-
-    PB = (internal & mask) | (external & ~mask);
+    uint8_t oldPB = PB;
+    PB = internal | external;
 
     // Notify the disk controller about the changed bits
     if (oldPB ^ PB) {
