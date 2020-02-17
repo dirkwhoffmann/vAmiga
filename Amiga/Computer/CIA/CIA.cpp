@@ -212,8 +212,7 @@ CIA::peek(uint16_t addr)
 			break;
 			
         case 0x07: // CIA_TIMER_B_HIGH
-			
-            // debug("tb = %d\n", counterB);
+
             result = HI_BYTE(counterB);
 			break;
 			
@@ -225,12 +224,13 @@ CIA::peek(uint16_t addr)
 		
         case 0x09: // EVENT_8_15
 
-            tod.freeze();
 			result = tod.getCounterMid();
+            // if (nr == 1) debug("EVENT_8_15 = %d (frozen = %d)\n", result, tod.frozen);
 			break;
 			
         case 0x0A: // EVENT_16_23
 
+            if (!(CRB & 0x80)) tod.freeze();
 			result = tod.getCounterHi();
 			break;
 			
