@@ -18,6 +18,15 @@ ControlPort::ControlPort(int nr, Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+ControlPort::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+
+    potX = 0x1FF;
+    potY = 0x1FF;
+}
+
+void
 ControlPort::_inspect()
 {
     pthread_mutex_lock(&lock);

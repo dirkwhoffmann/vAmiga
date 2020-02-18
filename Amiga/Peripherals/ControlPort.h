@@ -28,8 +28,8 @@ class ControlPort : public AmigaComponent {
     int64_t mouseCounterY = 0;
 
     // The two potentiometer values
-    uint8_t potX = 128;
-    uint8_t potY = 128; 
+    int16_t potX;
+    int16_t potY;
 
 
     //
@@ -68,7 +68,7 @@ public:
 
 private:
 
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset() override;
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -86,8 +86,8 @@ public:
     ControlPortInfo getInfo();
 
     // Getter for potX and potY
-    uint8_t getPotX() { return potX; }
-    uint8_t getPotY() { return potY; }
+    int16_t getPotX() { return potX; }
+    int16_t getPotY() { return potY; }
     
 
     //

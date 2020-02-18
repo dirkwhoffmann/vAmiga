@@ -163,10 +163,10 @@ public:
 public:
 
     // Processes a bit transmission event
-    void serveTxdEvent(EventID id);
+    void serviceTxdEvent(EventID id);
 
     // Process a bit reception event
-    void serveRxdEvent(EventID id);
+    void serviceRxdEvent(EventID id);
 
 };
 

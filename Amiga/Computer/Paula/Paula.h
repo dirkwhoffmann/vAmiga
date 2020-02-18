@@ -68,12 +68,12 @@ public:
     uint16_t potgo;
 
     // Potentiometer counter for the first control port
-    uint8_t potCntX0;
-    uint8_t potCntY0;
+    int16_t potCntX0;
+    int16_t potCntY0;
 
     // Potentiometer counter for the second control port
-    uint8_t potCntX1;
-    uint8_t potCntY1;
+    int16_t potCntX1;
+    int16_t potCntY1;
 
     // The Audio and Disk Control Register (ADKCON)
     uint16_t adkcon;
@@ -182,7 +182,7 @@ public:
     
 public:
 
-    void servePotEvent(EventID id);
+    void servicePotEvent(EventID id);
 
     
     //

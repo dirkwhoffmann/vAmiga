@@ -502,13 +502,13 @@ Agnus::executeEventsUntil(Cycle cycle) {
             amiga.keyboard.serviceKeyboardEvent(slot[KBD_SLOT].id);
         }
         if (isDue<TXD_SLOT>(cycle)) {
-            uart.serveTxdEvent(slot[TXD_SLOT].id);
+            uart.serviceTxdEvent(slot[TXD_SLOT].id);
         }
         if (isDue<RXD_SLOT>(cycle)) {
-            uart.serveRxdEvent(slot[RXD_SLOT].id);
+            uart.serviceRxdEvent(slot[RXD_SLOT].id);
         }
         if (isDue<POT_SLOT>(cycle)) {
-            paula.servePotEvent(slot[POT_SLOT].id);
+            paula.servicePotEvent(slot[POT_SLOT].id);
         }
         if (isDue<INS_SLOT>(cycle)) {
             serviceINSEvent();

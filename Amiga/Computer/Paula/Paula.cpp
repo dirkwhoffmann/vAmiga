@@ -306,41 +306,40 @@ Paula::pokePOTGO(uint16_t value)
 }
 
 void
-Paula::servePotEvent(EventID id)
+Paula::servicePotEvent(EventID id)
 {
-    bool cont;
-
-    debug(POT_DEBUG, "servePotEvent(%d)\n", id);
+    debug(POT_DEBUG, "servicePotEvent(%d)\n", id);
 
     switch (id) {
 
         case POT_DISCHARGE:
-
+        {
             agnus.slot[POT_SLOT].data--;
             if (agnus.slot[POT_SLOT].data) {
 
-                // Schedule another DISCHARGE event
+                // Schedule another discharge event
                 potCntX0++;
                 potCntY0++;
                 potCntX1++;
                 potCntY1++;
-                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_DISCHARGE);
+                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
 
             } else {
 
-                // Schedule first CHARGE event
+                // Schedule first charge event
                 potCntX0 = 0;
                 potCntY0 = 0;
                 potCntX1 = 0;
                 potCntY1 = 0;
-                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_MAX), POT_CHARGE);
+                agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             }
             break;
-
+        }
         case POT_CHARGE:
-
+        {
             // Increment pot counters if target value hasn't been reached yet
-            cont = false;
+            bool cont = false;
+            debug("POT_CHARGE %d %d\n", controlPort1.getPotX(), controlPort1.getPotY());
             if (potCntX0 < controlPort1.getPotX()) { potCntX0++; cont = true; }
             if (potCntY0 < controlPort1.getPotY()) { potCntY0++; cont = true; }
             if (potCntX1 < controlPort2.getPotX()) { potCntX1++; cont = true; }
@@ -353,7 +352,7 @@ Paula::servePotEvent(EventID id)
                 agnus.cancel<POT_SLOT>();
             }
             break;
-
+        }
         default:
             assert(false);
     }

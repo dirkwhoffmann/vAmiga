@@ -187,7 +187,7 @@ UART::rxdHasChanged(bool value)
 }
 
 void
-UART::serveTxdEvent(EventID id)
+UART::serviceTxdEvent(EventID id)
 {
     debug(2, "serveTxdEvent(%d)\n", id);
 
@@ -234,7 +234,7 @@ UART::serveTxdEvent(EventID id)
 }
 
 void
-UART::serveRxdEvent(EventID id)
+UART::serviceRxdEvent(EventID id)
 {
     debug(2, "serveRxdEvent(%d)\n", id);
 
