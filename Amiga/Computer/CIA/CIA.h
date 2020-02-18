@@ -381,7 +381,13 @@ public:
     
     // Simulates a falling edge on the flag pin
     void emulateFallingEdgeOnFlagPin();
-    
+
+    // Simulates a rising edge on the CNT pin
+    void emulateRisingEdgeOnCntPin();
+
+    // Simulates a falling edge on the CNT pin
+    void emulateFallingEdgeOnCntPin();
+
 private:
     
     //

@@ -123,6 +123,21 @@ CIA::emulateFallingEdgeOnFlagPin()
 }
 
 void
+CIA::emulateRisingEdgeOnCntPin()
+{
+    // Timer A
+    if ((CRA & 0x21) == 0x21) delay |= CIACountA1;
+
+    // Timer B
+    if ((CRB & 0x61) == 0x21) delay |= CIACountB1;
+}
+
+void
+CIA::emulateFallingEdgeOnCntPin()
+{
+}
+
+void
 CIA::triggerTimerIrq()
 {
     debug(CIA_DEBUG, "triggerTimerIrq()\n");
@@ -1410,11 +1425,16 @@ CIAB::updatePA()
     uint8_t internal = portAinternal();
     uint8_t external = portAexternal();
 
+    uint8_t oldPA = PA;
     PA = (internal & DDRA) | (external & ~DDRA);
 
     // PLCC CIAs always return the PRA contents for output bits
     // We ignore PLCC emulation until the A600 is supported
     // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
+
+    // PA1 is connected to the CNT pin
+    if (!(oldPA & 2) &&  (PA & 2)) emulateRisingEdgeOnCntPin();
+    if ( (oldPA & 2) && !(PA & 2)) emulateFallingEdgeOnCntPin();
 }
 
 //            -------
