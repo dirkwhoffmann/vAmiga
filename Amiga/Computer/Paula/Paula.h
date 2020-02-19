@@ -167,7 +167,7 @@ public:
     void pokeADKCON(uint16_t value);
 
     // OCS registers 0x012 and 0x014 (r)
-    uint16_t peekPOTxDAT(int x);
+    template <int x> uint16_t peekPOTxDAT();
 
     // OCS register 0x016 (r) (originally called POTINP)
     uint16_t peekPOTGOR();

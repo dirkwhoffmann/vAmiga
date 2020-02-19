@@ -1405,9 +1405,9 @@ Memory::peekCustom16(uint32_t addr)
         case 0x010 >> 1: // ADKCONR
             result = paula.peekADKCONR(); break;
         case 0x012 >> 1: // POT0DAT
-            result = paula.peekPOTxDAT(0); break;
+            result = paula.peekPOTxDAT<0>(); break;
         case 0x014 >> 1: // POT1DAT
-            result = paula.peekPOTxDAT(1); break;
+            result = paula.peekPOTxDAT<1>(); break;
         case 0x016 >> 1: // POTGOR
             result = paula.peekPOTGOR(); break;
         case 0x018 >> 1: // SERDATR

@@ -218,8 +218,8 @@ Paula::serviceIplEvent()
     agnus.cancel<IPL_SLOT>();
 }
 
-uint16_t
-Paula::peekPOTxDAT(int x)
+template <int x> uint16_t
+Paula::peekPOTxDAT()
 {
     assert(x == 0 || x == 1);
 
@@ -263,10 +263,10 @@ Paula::peekPOTGOR()
     bool outlx = GET_BIT(potgo,  9);
     bool datlx = GET_BIT(potgo,  8);
 
-    bool poty0 = controlPort1.getPotY() & 0x80;
-    bool potx0 = controlPort1.getPotX() & 0x80;
-    bool poty1 = controlPort2.getPotY() & 0x80;
-    bool potx1 = controlPort2.getPotX() & 0x80;
+    bool poty0 = !(controlPort1.getPotY() & 0x80);
+    bool potx0 = !(controlPort1.getPotX() & 0x80);
+    bool poty1 = !(controlPort2.getPotY() & 0x80);
+    bool potx1 = !(controlPort2.getPotX() & 0x80);
 
     WRITE_BIT(result, 14, outry ? datry : poty0);
     WRITE_BIT(result, 12, outrx ? datrx : potx0);
@@ -278,7 +278,7 @@ Paula::peekPOTGOR()
     result &= controlPort1.potgor();
     result &= controlPort2.potgor();
 
-    debug(POT_DEBUG, "peekPOTGOR = %X\n", result);
+    debug(POT_DEBUG, "peekPOTGOR = %X (potgo = %x)\n", result, potgo);
     return result;
 }
 
@@ -339,7 +339,6 @@ Paula::servicePotEvent(EventID id)
         {
             // Increment pot counters if target value hasn't been reached yet
             bool cont = false;
-            debug("POT_CHARGE %d %d\n", controlPort1.getPotX(), controlPort1.getPotY());
             if (potCntX0 < controlPort1.getPotX()) { potCntX0++; cont = true; }
             if (potCntY0 < controlPort1.getPotY()) { potCntY0++; cont = true; }
             if (potCntX1 < controlPort2.getPotX()) { potCntX1++; cont = true; }
@@ -388,3 +387,8 @@ Paula::checkInterrupt()
 {
     agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(4), IPL_CHANGE, interruptLevel());
 }
+
+template uint16_t Paula::peekPOTxDAT<0>();
+template uint16_t Paula::peekPOTxDAT<1>();
+
+
