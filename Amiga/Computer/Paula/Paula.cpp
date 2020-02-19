@@ -223,29 +223,9 @@ Paula::peekPOTxDAT()
 {
     assert(x == 0 || x == 1);
 
-    uint8_t potX, potY;
-    uint16_t result;
-
-    int outy = x ? 15 : 11;
-    int daty = x ? 14 : 10;
-    int outx = x ? 13 : 9;
-    int datx = x ? 12 : 8;
-
-    if GET_BIT(potgo, outy) { // POTY is configured as output?
-        potY = GET_BIT(potgo, daty) ? 0xFF : 0x00;
-    } else {
-        potY = potCntY0;
-    }
-
-    if GET_BIT(potgo, outx) { // POTX is configured as output?
-        potX = GET_BIT(potgo, datx) ? 0xFF : 0x00;
-    } else {
-        potX = potCntX0;
-    }
-
-    result = HI_LO(potY, potX);
-
+    uint16_t result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
     debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
+
     return result;
 }
 
@@ -254,27 +234,12 @@ Paula::peekPOTGOR()
 {
     uint16_t result = 0;
 
-    bool outry = GET_BIT(potgo, 15);
-    bool datry = GET_BIT(potgo, 14);
-    bool outrx = GET_BIT(potgo, 13);
-    bool datrx = GET_BIT(potgo, 12);
-    bool outly = GET_BIT(potgo, 11);
-    bool datly = GET_BIT(potgo, 10);
-    bool outlx = GET_BIT(potgo,  9);
-    bool datlx = GET_BIT(potgo,  8);
+    WRITE_BIT(result, 14, chargeY1 >= 1.0);
+    WRITE_BIT(result, 12, chargeX1 >= 1.0);
+    WRITE_BIT(result, 10, chargeY0 >= 1.0);
+    WRITE_BIT(result,  8, chargeX0 >= 1.0);
 
-    bool poty0 = !(controlPort1.getPotY() & 0x80);
-    bool potx0 = !(controlPort1.getPotX() & 0x80);
-    bool poty1 = !(controlPort2.getPotY() & 0x80);
-    bool potx1 = !(controlPort2.getPotX() & 0x80);
-
-    WRITE_BIT(result, 14, outry ? datry : poty0);
-    WRITE_BIT(result, 12, outrx ? datrx : potx0);
-    WRITE_BIT(result, 10, outly ? datly : poty1);
-    WRITE_BIT(result,  8, outlx ? datlx : potx1);
-
-    // Connected devices can pull down lines even if they are configured
-    // as outputs
+    // Connected devices may also pull the lines down
     result &= controlPort1.potgor();
     result &= controlPort2.potgor();
 
@@ -289,20 +254,45 @@ Paula::pokePOTGO(uint16_t value)
 
     potgo = value;
 
-    // Writing into this register clears the potentiometer counter
-    potCntX0 = 0;
-    potCntY0 = 0;
-    potCntX1 = 0;
-    potCntY1 = 0;
+    // Take care of bits that are configured as outputs
+    if (GET_BIT(value, 9))  chargeX0 = GET_BIT(value, 8)  ? 1.0 : 0.0;
+    if (GET_BIT(value, 11)) chargeY0 = GET_BIT(value, 10) ? 1.0 : 0.0;
+    if (GET_BIT(value, 13)) chargeX1 = GET_BIT(value, 12) ? 1.0 : 0.0;
+    if (GET_BIT(value, 15)) chargeY1 = GET_BIT(value, 14) ? 1.0 : 0.0;
 
     // Check the START bit
     if (GET_BIT(value, 0)) {
+
         debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
+        // Clear potentiometer counters
+        potCntX0 = 0;
+        potCntY0 = 0;
+        potCntX1 = 0;
+        potCntY1 = 0;
+
         // Schedule the first DISCHARGE event
-        agnus.schedulePos<POT_SLOT>(agnus.pos.v, HPOS_MAX, POT_DISCHARGE);
-        agnus.slot[POT_SLOT].data = 8;
+        agnus.schedulePos<POT_SLOT>(agnus.pos.v, HPOS_MAX, POT_DISCHARGE, 8);
     }
+}
+
+void
+Paula::hsyncHandler()
+{
+    // Update potentiometer counters
+    /*
+    if (chargeX0 < 1.0) { debug("chargeX0 %f %d\n", chargeX0, potCntX0); potCntX0++; }
+    if (chargeY0 < 1.0) { debug("chargeY0 %f %d\n", chargeY0, potCntY0); potCntY0++; }
+    if (chargeX1 < 1.0) { debug("chargeX1 %f %d\n", chargeX1, potCntX1); potCntX1++; }
+    if (chargeY1 < 1.0) { debug("chargeY1 %f %d\n", chargeY1, potCntY1); potCntY1++; }
+    */
+    if (chargeX0 < 1.0) potCntX0++;
+    if (chargeY0 < 1.0) potCntY0++;
+    if (chargeX1 < 1.0) potCntX1++;
+    if (chargeY1 < 1.0) potCntY1++;
+
+    // Synthesize sound samples
+    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 }
 
 void
@@ -314,37 +304,47 @@ Paula::servicePotEvent(EventID id)
 
         case POT_DISCHARGE:
         {
-            agnus.slot[POT_SLOT].data--;
-            if (agnus.slot[POT_SLOT].data) {
+            if (--agnus.slot[POT_SLOT].data) {
 
-                // Schedule another discharge event
-                potCntX0++;
-                potCntY0++;
-                potCntX1++;
-                potCntY1++;
+                chargeX0 = chargeY0 = chargeX1 = chargeY1 = 0.0;
                 agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
 
             } else {
 
+                // Reset counters (will wrap over to 0 in the hsync handler)
+                potCntX0 = -1;
+                potCntY0 = -1;
+                potCntX1 = -1;
+                potCntY1 = -1;
+
                 // Schedule first charge event
-                potCntX0 = 0;
-                potCntY0 = 0;
-                potCntX1 = 0;
-                potCntY1 = 0;
                 agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             }
             break;
         }
         case POT_CHARGE:
         {
-            // Increment pot counters if target value hasn't been reached yet
             bool cont = false;
-            if (potCntX0 < controlPort1.getPotX()) { potCntX0++; cont = true; }
-            if (potCntY0 < controlPort1.getPotY()) { potCntY0++; cont = true; }
-            if (potCntX1 < controlPort2.getPotX()) { potCntX1++; cont = true; }
-            if (potCntY1 < controlPort2.getPotY()) { potCntY1++; cont = true; }
 
-            // Schedule next pot event if at least counter is still running
+            // Check which lines are configured as input
+            bool inpX0 = !GET_BIT(potgo,9);
+            bool inpY0 = !GET_BIT(potgo,11);
+            bool inpX1 = !GET_BIT(potgo,13);
+            bool inpY1 = !GET_BIT(potgo,15);
+
+            // Get the delta charges for each line
+            double dx0 = controlPort1.getChargeDX();
+            double dy0 = controlPort1.getChargeDY();
+            double dx1 = controlPort2.getChargeDX();
+            double dy1 = controlPort2.getChargeDY();
+
+            // Charge the capacitors
+            if (dx0 && chargeX0 < 1.0 && inpX0) { chargeX0 += dx0; cont = true; }
+            if (dy0 && chargeY0 < 1.0 && inpY0) { chargeX0 += dy0; cont = true; }
+            if (dx1 && chargeX1 < 1.0 && inpX1) { chargeX0 += dx1; cont = true; }
+            if (dy1 && chargeY1 < 1.0 && inpY1) { chargeX0 += dy1; cont = true; }
+
+            // Schedule next event
             if (cont) {
                 agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
             } else {

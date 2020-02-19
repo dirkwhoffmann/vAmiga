@@ -39,25 +39,6 @@ inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;
 }
 
-// DEPRECATED: Use GamepadAction instead
-/*
-typedef enum
-{
-    JOYSTICK_UP,
-    JOYSTICK_DOWN,
-    JOYSTICK_LEFT,
-    JOYSTICK_RIGHT,
-    JOYSTICK_FIRE,
-    MOUSE_BUTTON_LEFT,
-    MOUSE_BUTTON_RIGHT,
-}
-JoystickState;
-
-inline bool isJoystickState(long value) {
-    return value >= 0 && value <= MOUSE_BUTTON_RIGHT;
-}
-*/
-
 typedef enum
 {
     PULL_UP = 0,   // Pull the joystick up
@@ -90,8 +71,10 @@ typedef struct
     bool m0h;
     bool m1v;
     bool m1h;
-    uint16_t potx;
-    uint16_t poty;
+    uint16_t joydat;
+    uint16_t potgo;
+    uint16_t potgor;
+    uint16_t potdat;
 }
 ControlPortInfo;
 

@@ -67,13 +67,17 @@ public:
     // The pot control register
     uint16_t potgo;
 
-    // Potentiometer counter for the first control port
-    int16_t potCntX0;
-    int16_t potCntY0;
+    // Potentiometer counters for the first and the second control port
+    uint8_t potCntX0;
+    uint8_t potCntY0;
+    uint8_t potCntX1;
+    uint8_t potCntY1;
 
-    // Potentiometer counter for the second control port
-    int16_t potCntX1;
-    int16_t potCntY1;
+    // Current capacitor charge on all four potentiometer lines
+    double chargeX0;
+    double chargeY0;
+    double chargeX1;
+    double chargeY1;
 
     // The Audio and Disk Control Register (ADKCON)
     uint16_t adkcon;
@@ -111,10 +115,13 @@ public:
         & potCntY0
         & potCntX1
         & potCntY1
+        & chargeX0
+        & chargeY0
+        & chargeX1
+        & chargeY1
         & adkcon;
     }
-    
-    
+
     //
     // Methods from HardwareComponent
     //
@@ -182,6 +189,7 @@ public:
     
 public:
 
+    void hsyncHandler();
     void servicePotEvent(EventID id);
 
     

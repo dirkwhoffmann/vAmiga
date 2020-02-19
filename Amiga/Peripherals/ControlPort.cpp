@@ -20,10 +20,7 @@ ControlPort::ControlPort(int nr, Amiga& ref) : AmigaComponent(ref)
 void
 ControlPort::_reset()
 {
-    RESET_SNAPSHOT_ITEMS
-
-    potX = 0x1FF;
-    potY = 0x1FF;
+    RESET_SNAPSHOT_ITEMS  // TODO: MOVE TO .H FILE
 }
 
 void
@@ -31,22 +28,21 @@ ControlPort::_inspect()
 {
     pthread_mutex_lock(&lock);
 
-    /* The port pin values are not stored in plain text. We can easily
-     * reverse-engineer them out of the JOYDAT register value though.
-     */
-    uint16_t dat = joydat();
-    bool x0 = !!GET_BIT(dat, 0);
-    bool x1 = !!GET_BIT(dat, 1);
-    bool y0 = !!GET_BIT(dat, 8);
-    bool y1 = !!GET_BIT(dat, 9);
+    info.joydat = joydat();
 
+    // Extract pin values from joydat value
+    bool x0 = GET_BIT(info.joydat, 0);
+    bool x1 = GET_BIT(info.joydat, 1);
+    bool y0 = GET_BIT(info.joydat, 8);
+    bool y1 = GET_BIT(info.joydat, 9);
     info.m0v = y0 ^ !y1;
     info.m0h = x0 ^ !x1;
     info.m1v = !y1;
     info.m1h = !x1;
 
-    info.potx = 0; // TODO
-    info.poty = 0; // TODO
+    info.potgo = paula.potgo;
+    info.potgor = paula.peekPOTGOR();
+    info.potdat = (nr == 1) ? paula.peekPOTxDAT<0>() : paula.peekPOTxDAT<1>();
 
     pthread_mutex_unlock(&lock);
 }

@@ -27,9 +27,9 @@ class ControlPort : public AmigaComponent {
     int64_t mouseCounterX = 0;
     int64_t mouseCounterY = 0;
 
-    // The two potentiometer values
-    int16_t potX;
-    int16_t potY;
+    // Resistances on the potentiometer lines (specified as a delta charge)
+    double chargeDX;
+    double chargeDY;
 
 
     //
@@ -57,8 +57,8 @@ public:
 
         & mouseCounterX
         & mouseCounterY
-        & potX
-        & potY;
+        & chargeDX
+        & chargeDY;
     }
 
 
@@ -85,9 +85,9 @@ public:
     // Returns the latest internal state recorded by inspect()
     ControlPortInfo getInfo();
 
-    // Getter for potX and potY
-    int16_t getPotX() { return potX; }
-    int16_t getPotY() { return potY; }
+    // Getter for the delta charges
+    int16_t getChargeDX() { return chargeDX; }
+    int16_t getChargeDY() { return chargeDY; }
     
 
     //

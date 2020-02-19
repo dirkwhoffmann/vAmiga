@@ -1850,11 +1850,9 @@ Agnus::hsyncHandler()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
 
-    // Let Denise draw the current line
+    // Call the hsync handlers of Denis and Paula
     denise.endOfLine(pos.v);
-
-    // Let Paula synthesize new sound samples
-    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    paula.hsyncHandler();
 
     // Let CIA B count the HSYNCs
     amiga.ciaB.incrementTOD();

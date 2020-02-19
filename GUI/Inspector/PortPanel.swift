@@ -37,10 +37,12 @@ extension Inspector {
 
     func refreshPortFormatters() {
 
-        let elements = [ po0POY: fmt16,
-                         po0POX: fmt16,
-                         po1POY: fmt16,
-                         po1POX: fmt16,
+        let elements = [ poPOTGO: fmt16,
+                         poPOTGOR: fmt16,
+                         po0JOYDAT: fmt16,
+                         po0POTDAT: fmt16,
+                         po1JOYDAT: fmt16,
+                         po1POTDAT: fmt16,
                          poRecShift: fmt16,
                          poRecBuffer: fmt16,
                          poTransShift: fmt16,
@@ -58,26 +60,49 @@ extension Inspector {
         if uartInfo  == nil { return }
 
         //
+        // Control port commons
+        //
+
+        let potgo = Int(port1Info!.potgo)
+        let potgor = Int(port1Info!.potgor)
+
+        poPOTGO.integerValue = potgo
+        poOUTRY.state = ((potgo & 0x8000) != 0) ? .on : .off
+        poDATRY.state = ((potgo & 0x4000) != 0) ? .on : .off
+        poOUTRX.state = ((potgo & 0x2000) != 0) ? .on : .off
+        poDATRX.state = ((potgo & 0x1000) != 0) ? .on : .off
+        poOUTLY.state = ((potgo & 0x0800) != 0) ? .on : .off
+        poDATLY.state = ((potgo & 0x0400) != 0) ? .on : .off
+        poOUTLX.state = ((potgo & 0x0200) != 0) ? .on : .off
+        poDATLX.state = ((potgo & 0x0100) != 0) ? .on : .off
+
+        poPOTGOR.integerValue = potgor
+        poDATRYR.state = ((potgor & 0x4000) != 0) ? .on : .off
+        poDATRXR.state = ((potgor & 0x1000) != 0) ? .on : .off
+        poDATLYR.state = ((potgor & 0x0400) != 0) ? .on : .off
+        poDATLXR.state = ((potgor & 0x0100) != 0) ? .on : .off
+
+        //
         // Control port 1
         //
 
+        po0JOYDAT.integerValue = Int(port1Info!.joydat)
         po0M0V.state = port1Info!.m0v ? .on : .off
         po0M0H.state = port1Info!.m0h ? .on : .off
         po0M1V.state = port1Info!.m1v ? .on : .off
         po0M1H.state = port1Info!.m1h ? .on : .off
-        po0POY.integerValue = Int(port1Info!.poty)
-        po0POX.integerValue = Int(port1Info!.potx)
+        po0POTDAT.integerValue = Int(port1Info!.potdat)
 
         //
         // Control port 2
         //
 
+        po1JOYDAT.integerValue = Int(port2Info!.joydat)
         po1M0V.state = port2Info!.m0v ? .on : .off
         po1M0H.state = port2Info!.m0h ? .on : .off
         po1M1V.state = port2Info!.m1v ? .on : .off
         po1M1H.state = port2Info!.m1h ? .on : .off
-        po1POY.integerValue = Int(port2Info!.poty)
-        po1POX.integerValue = Int(port2Info!.potx)
+        po1POTDAT.integerValue = Int(port2Info!.potdat)
 
         //
         // Serial port
