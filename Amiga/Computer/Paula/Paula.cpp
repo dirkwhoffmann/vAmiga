@@ -306,16 +306,23 @@ Paula::servicePotEvent(EventID id)
         {
             if (--agnus.slot[POT_SLOT].data) {
 
-                chargeX0 = chargeY0 = chargeX1 = chargeY1 = 0.0;
+                // Discharge capacitors
+                if (!OUTLY()) chargeY0 = 0.0;
+                if (!OUTLX()) chargeX0 = 0.0;
+                if (!OUTRY()) chargeY1 = 0.0;
+                if (!OUTRX()) chargeX1 = 0.0;
+
                 agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_DISCHARGE);
 
             } else {
 
-                // Reset counters (will wrap over to 0 in the hsync handler)
-                potCntX0 = -1;
-                potCntY0 = -1;
-                potCntX1 = -1;
-                potCntY1 = -1;
+                // Reset counters
+                // For input pins, we need to set the couter value to -1. It'll
+                // wrap over to 0 in the hsync handler.
+                potCntY0 = OUTLY() ? 0 : -1;
+                potCntX0 = OUTLX() ? 0 : -1;
+                potCntY1 = OUTRY() ? 0 : -1;
+                potCntX1 = OUTRX() ? 0 : -1;
 
                 // Schedule first charge event
                 agnus.scheduleRel<POT_SLOT>(DMA_CYCLES(HPOS_CNT), POT_CHARGE);
@@ -326,23 +333,17 @@ Paula::servicePotEvent(EventID id)
         {
             bool cont = false;
 
-            // Check which lines are configured as input
-            bool inpX0 = !GET_BIT(potgo,9);
-            bool inpY0 = !GET_BIT(potgo,11);
-            bool inpX1 = !GET_BIT(potgo,13);
-            bool inpY1 = !GET_BIT(potgo,15);
-
-            // Get the delta charges for each line
-            double dx0 = controlPort1.getChargeDX();
+            // Get delta charges for each line
             double dy0 = controlPort1.getChargeDY();
-            double dx1 = controlPort2.getChargeDX();
+            double dx0 = controlPort1.getChargeDX();
             double dy1 = controlPort2.getChargeDY();
+            double dx1 = controlPort2.getChargeDX();
 
-            // Charge the capacitors
-            if (dx0 && chargeX0 < 1.0 && inpX0) { chargeX0 += dx0; cont = true; }
-            if (dy0 && chargeY0 < 1.0 && inpY0) { chargeX0 += dy0; cont = true; }
-            if (dx1 && chargeX1 < 1.0 && inpX1) { chargeX0 += dx1; cont = true; }
-            if (dy1 && chargeY1 < 1.0 && inpY1) { chargeX0 += dy1; cont = true; }
+            // Charge capacitors
+            if (dy0 && chargeY0 < 1.0 && !OUTLY()) { chargeX0 += dy0; cont = true; }
+            if (dx0 && chargeX0 < 1.0 && !OUTLX()) { chargeX0 += dx0; cont = true; }
+            if (dy1 && chargeY1 < 1.0 && !OUTRY()) { chargeX0 += dy1; cont = true; }
+            if (dx1 && chargeX1 < 1.0 && !OUTRX()) { chargeX0 += dx1; cont = true; }
 
             // Schedule next event
             if (cont) {

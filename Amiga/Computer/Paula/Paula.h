@@ -178,7 +178,15 @@ public:
 
     // OCS register 0x016 (r) (originally called POTINP)
     uint16_t peekPOTGOR();
-    
+    bool OUTRY() { return potgo & 0x8000; }
+    bool DATRY() { return potgo & 0x4000; }
+    bool OUTRX() { return potgo & 0x2000; }
+    bool DATRX() { return potgo & 0x1000; }
+    bool OUTLY() { return potgo & 0x0800; }
+    bool DATLY() { return potgo & 0x0400; }
+    bool OUTLX() { return potgo & 0x0200; }
+    bool DATLX() { return potgo & 0x0100; }
+
     // OCS register 0x030 (w)
     void pokePOTGO(uint16_t value);
 
