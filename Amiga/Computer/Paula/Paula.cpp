@@ -277,25 +277,6 @@ Paula::pokePOTGO(uint16_t value)
 }
 
 void
-Paula::hsyncHandler()
-{
-    // Update potentiometer counters
-    /*
-    if (chargeX0 < 1.0) { debug("chargeX0 %f %d\n", chargeX0, potCntX0); potCntX0++; }
-    if (chargeY0 < 1.0) { debug("chargeY0 %f %d\n", chargeY0, potCntY0); potCntY0++; }
-    if (chargeX1 < 1.0) { debug("chargeX1 %f %d\n", chargeX1, potCntX1); potCntX1++; }
-    if (chargeY1 < 1.0) { debug("chargeY1 %f %d\n", chargeY1, potCntY1); potCntY1++; }
-    */
-    if (chargeX0 < 1.0) potCntX0++;
-    if (chargeY0 < 1.0) potCntY0++;
-    if (chargeX1 < 1.0) potCntX1++;
-    if (chargeY1 < 1.0) potCntY1++;
-
-    // Synthesize sound samples
-    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
-}
-
-void
 Paula::servicePotEvent(EventID id)
 {
     debug(POT_DEBUG, "servicePotEvent(%d)\n", id);

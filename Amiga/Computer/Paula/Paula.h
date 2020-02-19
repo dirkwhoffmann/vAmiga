@@ -197,7 +197,6 @@ public:
     
 public:
 
-    void hsyncHandler();
     void servicePotEvent(EventID id);
 
     

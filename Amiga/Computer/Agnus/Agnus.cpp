@@ -1439,7 +1439,7 @@ Agnus::pokeBPLxPTL(uint16_t value)
 
     // Check if the written value gets lost
     if (skipBPLxPT(x)) {
-        debug("BPLxPTL gets lost\n");
+        debug(BPLREG_DEBUG, "BPLxPTL gets lost\n");
         return;
     }
 
@@ -1852,7 +1852,15 @@ Agnus::hsyncHandler()
 
     // Call the hsync handlers of Denis and Paula
     denise.endOfLine(pos.v);
-    paula.hsyncHandler();
+
+    // Synthesize sound samples
+    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+
+    // Update pot counters
+    if (paula.chargeX0 < 1.0) paula.potCntX0++;
+    if (paula.chargeY0 < 1.0) paula.potCntY0++;
+    if (paula.chargeX1 < 1.0) paula.potCntX1++;
+    if (paula.chargeY1 < 1.0) paula.potCntY1++;
 
     // Let CIA B count the HSYNCs
     amiga.ciaB.incrementTOD();
