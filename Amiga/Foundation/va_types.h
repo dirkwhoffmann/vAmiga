@@ -26,12 +26,13 @@
 #include "DiskTypes.h"
 #include "FileTypes.h"
 
-// 2 bit binary value
-typedef uint8_t uint2_t;
-inline bool is_uint2_t(uint2_t value) { return value <= 0x03; }
-
-// 24 bit binary value
-typedef uint32_t uint24_t;
-inline bool is_uint24_t(uint24_t value) { return value <= 0xFFFFFF; }
+typedef int8_t   i8;
+typedef int16_t  i16;
+typedef int32_t  i32;
+typedef int64_t  i64;
+typedef uint8_t  u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
 #endif
