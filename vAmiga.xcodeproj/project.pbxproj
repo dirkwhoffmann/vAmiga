@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5001A66A2289775000E614B8 /* VAmigaUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5001A6692289775000E614B8 /* VAmigaUITests.swift */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
@@ -42,7 +41,6 @@
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
 		508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508E7F932206CDBD00F7D88C /* CPU.cpp */; };
-		508E97BA22897649008FD8B8 /* VAmigaTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508E97B922897648008FD8B8 /* VAmigaTests.swift */; };
 		508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */; };
 		508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */; };
 		508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FDF5921EA1FBC0043D0E9 /* TOD.cpp */; };
@@ -155,25 +153,7 @@
 		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		508FDE7921EA1FA50043D0E9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 508FDE5C21EA1FA40043D0E9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 508FDE6321EA1FA40043D0E9;
-			remoteInfo = vAmiga;
-		};
-		508FDE8421EA1FA50043D0E9 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 508FDE5C21EA1FA40043D0E9 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 508FDE6321EA1FA40043D0E9;
-			remoteInfo = vAmiga;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		5001A6692289775000E614B8 /* VAmigaUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VAmigaUITests.swift; sourceTree = "<group>"; };
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
@@ -236,7 +216,7 @@
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
 		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
-		505A584C23040921002F99D1 /* va_aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_aliases.h; sourceTree = "<group>"; };
+		505A584C23040921002F99D1 /* Aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aliases.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
@@ -257,15 +237,10 @@
 		508C6BCF23F7E77500D8938F /* Buffers.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Buffers.h; sourceTree = "<group>"; };
 		508E7F932206CDBD00F7D88C /* CPU.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CPU.cpp; sourceTree = "<group>"; };
 		508E7F942206CDBD00F7D88C /* CPU.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPU.h; sourceTree = "<group>"; };
-		508E97B922897648008FD8B8 /* VAmigaTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VAmigaTests.swift; sourceTree = "<group>"; };
 		508FDE6421EA1FA40043D0E9 /* vAmiga.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = vAmiga.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		508FDE6D21EA1FA50043D0E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		508FDE7221EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = vAmiga.entitlements; sourceTree = "<group>"; };
-		508FDE7821EA1FA50043D0E9 /* vAmigaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		508FDE7E21EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = vAmigaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		508FDE8921EA1FA50043D0E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MessageQueue.cpp; sourceTree = "<group>"; };
 		508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageQueue.h; sourceTree = "<group>"; };
 		508FDF5721EA1FBC0043D0E9 /* CIA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CIA.h; sourceTree = "<group>"; };
@@ -351,7 +326,6 @@
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
 		50B14C0821EB2248002E32A6 /* va_std.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_std.h; sourceTree = "<group>"; };
 		50B14C0921EB228E002E32A6 /* va_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_config.h; sourceTree = "<group>"; };
-		50B14C0A21EB2379002E32A6 /* va_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_types.h; sourceTree = "<group>"; };
 		50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardwareComponent.cpp; sourceTree = "<group>"; };
 		50B14C0C21EB3708002E32A6 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
@@ -420,20 +394,6 @@
 				508FDFE321EA21550043D0E9 /* Cocoa.framework in Frameworks */,
 				508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */,
 				508FDFE121EA214A0043D0E9 /* Metal.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508FDE7521EA1FA50043D0E9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508FDE8021EA1FA50043D0E9 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,8 +479,6 @@
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
-				508FDE7B21EA1FA50043D0E9 /* vAmigaTests */,
-				508FDE8621EA1FA50043D0E9 /* vAmigaUITests */,
 				508FDE6521EA1FA40043D0E9 /* Products */,
 				508FDFDD21EA214A0043D0E9 /* Frameworks */,
 			);
@@ -530,8 +488,6 @@
 			isa = PBXGroup;
 			children = (
 				508FDE6421EA1FA40043D0E9 /* vAmiga.app */,
-				508FDE7821EA1FA50043D0E9 /* vAmigaTests.xctest */,
-				508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -546,24 +502,6 @@
 				508FDE7321EA1FA50043D0E9 /* vAmiga.entitlements */,
 			);
 			path = Resources;
-			sourceTree = "<group>";
-		};
-		508FDE7B21EA1FA50043D0E9 /* vAmigaTests */ = {
-			isa = PBXGroup;
-			children = (
-				508E97B922897648008FD8B8 /* VAmigaTests.swift */,
-				508FDE7E21EA1FA50043D0E9 /* Info.plist */,
-			);
-			path = vAmigaTests;
-			sourceTree = "<group>";
-		};
-		508FDE8621EA1FA50043D0E9 /* vAmigaUITests */ = {
-			isa = PBXGroup;
-			children = (
-				5001A6692289775000E614B8 /* VAmigaUITests.swift */,
-				508FDE8921EA1FA50043D0E9 /* Info.plist */,
-			);
-			path = vAmigaUITests;
 			sourceTree = "<group>";
 		};
 		508FDF5621EA1FBC0043D0E9 /* CIA */ = {
@@ -854,8 +792,7 @@
 			children = (
 				50B14C0921EB228E002E32A6 /* va_config.h */,
 				5082D83A21EF891200CF7692 /* va_constants.h */,
-				50B14C0A21EB2379002E32A6 /* va_types.h */,
-				505A584C23040921002F99D1 /* va_aliases.h */,
+				505A584C23040921002F99D1 /* Aliases.h */,
 				50B14C0821EB2248002E32A6 /* va_std.h */,
 				50B14C1121EB4314002E32A6 /* va_std.cpp */,
 				505A3A3921F4996400132020 /* sse_utils.h */,
@@ -942,42 +879,6 @@
 			productReference = 508FDE6421EA1FA40043D0E9 /* vAmiga.app */;
 			productType = "com.apple.product-type.application";
 		};
-		508FDE7721EA1FA50043D0E9 /* vAmigaTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 508FDE8F21EA1FA50043D0E9 /* Build configuration list for PBXNativeTarget "vAmigaTests" */;
-			buildPhases = (
-				508FDE7421EA1FA50043D0E9 /* Sources */,
-				508FDE7521EA1FA50043D0E9 /* Frameworks */,
-				508FDE7621EA1FA50043D0E9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				508FDE7A21EA1FA50043D0E9 /* PBXTargetDependency */,
-			);
-			name = vAmigaTests;
-			productName = vAmigaTests;
-			productReference = 508FDE7821EA1FA50043D0E9 /* vAmigaTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		508FDE8221EA1FA50043D0E9 /* vAmigaUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 508FDE9221EA1FA50043D0E9 /* Build configuration list for PBXNativeTarget "vAmigaUITests" */;
-			buildPhases = (
-				508FDE7F21EA1FA50043D0E9 /* Sources */,
-				508FDE8021EA1FA50043D0E9 /* Frameworks */,
-				508FDE8121EA1FA50043D0E9 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				508FDE8521EA1FA50043D0E9 /* PBXTargetDependency */,
-			);
-			name = vAmigaUITests;
-			productName = vAmigaUITests;
-			productReference = 508FDE8321EA1FA50043D0E9 /* vAmigaUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -991,16 +892,6 @@
 					508FDE6321EA1FA40043D0E9 = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1020;
-					};
-					508FDE7721EA1FA50043D0E9 = {
-						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
-						TestTargetID = 508FDE6321EA1FA40043D0E9;
-					};
-					508FDE8221EA1FA50043D0E9 = {
-						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
-						TestTargetID = 508FDE6321EA1FA40043D0E9;
 					};
 				};
 			};
@@ -1018,8 +909,6 @@
 			projectRoot = "";
 			targets = (
 				508FDE6321EA1FA40043D0E9 /* vAmiga */,
-				508FDE7721EA1FA50043D0E9 /* vAmigaTests */,
-				508FDE8221EA1FA50043D0E9 /* vAmigaUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -1054,20 +943,6 @@
 				508FDFC121EA1FF10043D0E9 /* KeyViewItem.xib in Resources */,
 				50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508FDE7621EA1FA50043D0E9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508FDE8121EA1FA50043D0E9 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1215,36 +1090,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		508FDE7421EA1FA50043D0E9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				508E97BA22897649008FD8B8 /* VAmigaTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		508FDE7F21EA1FA50043D0E9 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				5001A66A2289775000E614B8 /* VAmigaUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		508FDE7A21EA1FA50043D0E9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 508FDE6321EA1FA40043D0E9 /* vAmiga */;
-			targetProxy = 508FDE7921EA1FA50043D0E9 /* PBXContainerItemProxy */;
-		};
-		508FDE8521EA1FA50043D0E9 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 508FDE6321EA1FA40043D0E9 /* vAmiga */;
-			targetProxy = 508FDE8421EA1FA50043D0E9 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */ = {
@@ -1424,90 +1270,6 @@
 			};
 			name = Release;
 		};
-		508FDE9021EA1FA50043D0E9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = vAmigaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmigaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vAmiga.app/Contents/MacOS/vAmiga";
-			};
-			name = Debug;
-		};
-		508FDE9121EA1FA50043D0E9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = vAmigaTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmigaTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/vAmiga.app/Contents/MacOS/vAmiga";
-			};
-			name = Release;
-		};
-		508FDE9321EA1FA50043D0E9 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = vAmigaUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmigaUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
-				TEST_TARGET_NAME = vAmiga;
-			};
-			name = Debug;
-		};
-		508FDE9421EA1FA50043D0E9 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
-				INFOPLIST_FILE = vAmigaUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/../Frameworks",
-					"@loader_path/../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = dirkwhoffmann.vAmigaUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 4.2;
-				TEST_TARGET_NAME = vAmiga;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1525,24 +1287,6 @@
 			buildConfigurations = (
 				508FDE8D21EA1FA50043D0E9 /* Debug */,
 				508FDE8E21EA1FA50043D0E9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		508FDE8F21EA1FA50043D0E9 /* Build configuration list for PBXNativeTarget "vAmigaTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				508FDE9021EA1FA50043D0E9 /* Debug */,
-				508FDE9121EA1FA50043D0E9 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		508FDE9221EA1FA50043D0E9 /* Build configuration list for PBXNativeTarget "vAmigaUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				508FDE9321EA1FA50043D0E9 /* Debug */,
-				508FDE9421EA1FA50043D0E9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

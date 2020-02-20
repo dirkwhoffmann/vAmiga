@@ -12,15 +12,22 @@
 #ifndef _AMIGA_T_INC
 #define _AMIGA_T_INC
 
-#include "PaulaTypes.h"
+#include "Aliases.h"
+
+#include "AgnusTypes.h"
 #include "CPUTypes.h"
 #include "CIATypes.h"
-#include "MemoryTypes.h"
-#include "AgnusTypes.h"
 #include "DeniseTypes.h"
-#include "RTCTypes.h"
+#include "DiskTypes.h"
+#include "DriveTypes.h"
+#include "EventHandlerTypes.h"
+#include "FileTypes.h"
 #include "KeyboardTypes.h"
+#include "MemoryTypes.h"
+#include "MessageQueueTypes.h"
+#include "PaulaTypes.h"
 #include "PortTypes.h"
+#include "RTCTypes.h"
 
 //
 // Enumeration types

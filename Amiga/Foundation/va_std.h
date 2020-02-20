@@ -32,7 +32,7 @@
 #include <ctype.h>
 
 #include "va_config.h"
-#include "va_types.h"
+#include "AmigaTypes.h"
 #include "va_constants.h"
 
 
