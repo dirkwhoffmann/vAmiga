@@ -66,6 +66,16 @@ public:
 
 
     //
+    // Debugging
+    //
+
+private:
+
+    uint64_t checkcnt = 0;
+    uint32_t checksum = fnv_1a_init32();
+
+
+    //
     // Constructing and destructing
     //
     

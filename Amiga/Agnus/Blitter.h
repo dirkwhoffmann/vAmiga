@@ -154,8 +154,8 @@ private:
     int remaining;
 
     // Debug counters
-    int copycount = 0;
-    int linecount = 0;
+    int copycount;
+    int linecount;
 
     // Debug checksums
     uint32_t check1;
@@ -242,12 +242,7 @@ public:
         & bbusy
         & bzero
 
-        & remaining
-
-        & copycount
-        & linecount
-        & check1
-        & check2;
+        & remaining;
     }
 
     

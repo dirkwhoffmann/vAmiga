@@ -86,8 +86,8 @@ class DiskController : public AmigaComponent {
     //
     
     // For debugging, an FNV-32 checksum is computed for each DMA operation.
-    uint32_t checksum = fnv_1a_init32();
-    uint64_t checkcnt = 0;
+    uint32_t checksum;
+    uint64_t checkcnt;
 
 
     //

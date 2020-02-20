@@ -249,8 +249,8 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 
     // Initialize checksum (for debugging only)
     if (DSK_CHECKSUM) {
-        checksum = fnv_1a_init32();
         checkcnt = 0;
+        checksum = fnv_1a_init32();
     }
 
     // Determine if a FIFO buffer should be emulated
@@ -599,8 +599,8 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
         agnus.doDiskDMA(word);
 
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
 
         // Finish up if this was the last word to transfer
@@ -609,9 +609,9 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
             paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
 
-            if (DSK_CHECKSUM) {
+            if (DSK_CHECKSUM)
                 plaindebug("performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
-            }
+
             return;
         }
         
@@ -638,8 +638,8 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
         uint16_t word = agnus.doDiskDMA();
 
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
 
         // Write word into FIFO buffer
@@ -669,9 +669,9 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
             }
             state = DRIVE_DMA_OFF;
 
-            if (DSK_CHECKSUM) {
+            if (DSK_CHECKSUM)
                 debug("performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
-            }
+
             return;
         }
         
@@ -767,15 +767,18 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
         agnus.doDiskDMA(word);
 
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
 
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
-            debug(DSK_DEBUG, "doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
+            if (DSK_CHECKSUM)
+                debug("doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
             return;
         }
     }
@@ -793,8 +796,8 @@ DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
         uint16_t word = agnus.doDiskDMA();
 
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
 
         // Write word to disk
@@ -804,7 +807,10 @@ DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
             
             paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
-            debug(DSK_DEBUG, "doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
+            if (DSK_CHECKSUM)
+                debug("doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
             return;
         }
     }
@@ -861,8 +867,8 @@ DiskController::performTurboRead(Drive *drive)
         INC_CHIP_PTR(agnus.dskpt);
 
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
     }
 
@@ -881,8 +887,8 @@ DiskController::performTurboWrite(Drive *drive)
         INC_CHIP_PTR(agnus.dskpt);
         
         if (DSK_CHECKSUM) {
-            checksum = fnv_1a_it32(checksum, word);
             checkcnt++;
+            checksum = fnv_1a_it32(checksum, word);
         }
 
         // Write word to disk

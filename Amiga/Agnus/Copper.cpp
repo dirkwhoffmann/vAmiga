@@ -655,8 +655,12 @@ Copper::serviceEvent(EventID id)
 
             // Load the first instruction word
             cop1ins = agnus.copperRead(coppc);
-            // coppcBase = coppc;
             advancePC();
+
+            if (COP_CHECKSUM) {
+                checkcnt++;
+                checksum = fnv_1a_it32(checksum, cop1ins);
+            }
 
             // Dynamically determine the end of the Copper list
             if (copList == 1) {
@@ -876,15 +880,15 @@ Copper::vsyncHandler()
      *  automatically forced to restart its operations at the address contained
      *  in COP1LC." [HRM]
      */
-
     agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-    /*
-    if (agnus.doCopDMA()) {
-        agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-    } else {
-        agnus.cancel<COP_SLOT>();
+
+    if (COP_CHECKSUM) {
+
+        if (checkcnt) debug("Checksum: %x (%d)\n", checksum, checkcnt);
+
+        checkcnt = 0;
+        checksum = fnv_1a_init32();
     }
-    */
 }
 
 void

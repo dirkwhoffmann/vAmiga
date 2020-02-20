@@ -785,9 +785,8 @@ Blitter::startBlit()
 
     if (bltconLINE()) {
 
-        linecount++;
-
         if (BLT_CHECKSUM) {
+            linecount++;
             check1 = check2 = fnv_1a_init32();
             plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
                        linecount, bltsizeW, bltsizeH,
@@ -800,9 +799,8 @@ Blitter::startBlit()
 
     } else {
 
-        copycount++;
-
         if (BLT_CHECKSUM) { // && (bltsizeW != 1 || bltsizeH != 4)
+            copycount++;
             check1 = check2 = fnv_1a_init32();
             plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount, bltsizeW, bltsizeH,
