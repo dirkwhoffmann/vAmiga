@@ -94,7 +94,7 @@ SerialPort::setPin(int nr, bool value)
 
     /*
     // Set the new pin value
-    WRITE_BIT(port, nr, value);
+    REPLACE_BIT(port, nr, value);
 
     // Perform special actions
     switch (nr) {

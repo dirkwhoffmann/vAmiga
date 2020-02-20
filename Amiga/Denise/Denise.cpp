@@ -336,7 +336,7 @@ Denise::pokeSPRxCTL(uint16_t value)
     sprctl[x] = value;
 
     // Save the attach bit
-    WRITE_BIT(attach, x, GET_BIT(value, 7));
+    REPLACE_BIT(attach, x, GET_BIT(value, 7));
 
     // Disarm the sprite
     CLR_BIT(armed, x);

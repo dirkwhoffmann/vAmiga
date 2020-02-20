@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "sse_utils.h"
+#include "SSEUtils.h"
 
 #include <x86intrin.h>
 

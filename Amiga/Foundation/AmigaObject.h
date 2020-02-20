@@ -10,7 +10,7 @@
 #ifndef _AMIGAOBJECT_INC
 #define _AMIGAOBJECT_INC
 
-#include "va_std.h"
+#include "AmigaUtils.h"
 
 #include <vector>
 #include <map>

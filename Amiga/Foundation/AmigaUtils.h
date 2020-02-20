@@ -31,9 +31,9 @@
 #include <math.h>
 #include <ctype.h>
 
-#include "va_config.h"
+#include "AmigaConfig.h"
 #include "AmigaTypes.h"
-#include "va_constants.h"
+#include "AmigaConstants.h"
 
 
 //
@@ -101,7 +101,7 @@
 #define TOGGLE_BIT(x,nr) ((x) ^= (1 << (nr)))
 
 // Sets a single bit to 0 (value == 0) or 1 (value != 0)
-#define WRITE_BIT(x,nr,value) ((value) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
+#define REPLACE_BIT(x,nr,v) ((v) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
 
 // Copies a single bit from x to y.
 #define COPY_BIT(x,y,nr) ((y) = ((y) & ~(1 << (nr)) | ((x) & (1 << (nr)))))

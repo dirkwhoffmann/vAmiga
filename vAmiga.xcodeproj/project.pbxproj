@@ -31,7 +31,7 @@
 		505945F82363008800ACE819 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505945F72363008800ACE819 /* ActivityView.swift */; };
 		505A12E023BF671D000BAC76 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A12D223BF671C000BAC76 /* Moira.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
-		505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* sse_utils.cpp */; };
+		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
@@ -83,7 +83,7 @@
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
-		508FE02721EA227B0043D0E9 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Utilities.swift */; };
+		508FE02721EA227B0043D0E9 /* SwiftUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* SwiftUtils.swift */; };
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
@@ -117,7 +117,7 @@
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
-		50B14C1221EB4314002E32A6 /* va_std.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* va_std.cpp */; };
+		50B14C1221EB4314002E32A6 /* AmigaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* AmigaUtils.cpp */; };
 		50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */; };
 		50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */; };
 		50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */; };
@@ -214,8 +214,8 @@
 		505A12DF23BF671C000BAC76 /* MoiraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraConfig.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
-		505A3A3821F4996400132020 /* sse_utils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sse_utils.cpp; sourceTree = "<group>"; };
-		505A3A3921F4996400132020 /* sse_utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sse_utils.h; sourceTree = "<group>"; };
+		505A3A3821F4996400132020 /* SSEUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SSEUtils.cpp; sourceTree = "<group>"; };
+		505A3A3921F4996400132020 /* SSEUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SSEUtils.h; sourceTree = "<group>"; };
 		505A584C23040921002F99D1 /* Aliases.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Aliases.h; sourceTree = "<group>"; };
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
@@ -226,7 +226,7 @@
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		507FD925221CBFCD00B34DA7 /* CopperPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperPanel.swift; sourceTree = "<group>"; };
-		5082D83A21EF891200CF7692 /* va_constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_constants.h; sourceTree = "<group>"; };
+		5082D83A21EF891200CF7692 /* AmigaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConstants.h; sourceTree = "<group>"; };
 		5085830423262E8B004F942F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
 		5085830523265B3D004F942F /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
 		5085FE5521FB3BAE009753EF /* EventHandler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EventHandler.cpp; sourceTree = "<group>"; };
@@ -284,7 +284,7 @@
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
-		508FE00521EA227A0043D0E9 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		508FE00521EA227A0043D0E9 /* SwiftUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUtils.swift; sourceTree = "<group>"; };
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
@@ -324,13 +324,13 @@
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
-		50B14C0821EB2248002E32A6 /* va_std.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_std.h; sourceTree = "<group>"; };
-		50B14C0921EB228E002E32A6 /* va_config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = va_config.h; sourceTree = "<group>"; };
+		50B14C0821EB2248002E32A6 /* AmigaUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaUtils.h; sourceTree = "<group>"; };
+		50B14C0921EB228E002E32A6 /* AmigaConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConfig.h; sourceTree = "<group>"; };
 		50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HardwareComponent.cpp; sourceTree = "<group>"; };
 		50B14C0C21EB3708002E32A6 /* HardwareComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HardwareComponent.h; sourceTree = "<group>"; };
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
 		50B14C0F21EB410B002E32A6 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
-		50B14C1121EB4314002E32A6 /* va_std.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = va_std.cpp; sourceTree = "<group>"; };
+		50B14C1121EB4314002E32A6 /* AmigaUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaUtils.cpp; sourceTree = "<group>"; };
 		50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_closed_2.aiff; sourceTree = "<group>"; };
 		50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_power_on_0.aiff; sourceTree = "<group>"; };
 		50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_2.aiff; sourceTree = "<group>"; };
@@ -484,7 +484,7 @@
 		505B801E23FE6582002407FE /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				508FE00521EA227A0043D0E9 /* Utilities.swift */,
+				508FE00521EA227A0043D0E9 /* SwiftUtils.swift */,
 				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
 			);
 			path = Foundation;
@@ -655,6 +655,7 @@
 		508FE06021EA318D0043D0E9 /* Amiga */ = {
 			isa = PBXGroup;
 			children = (
+				50B14C0921EB228E002E32A6 /* AmigaConfig.h */,
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
@@ -803,13 +804,12 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
-				50B14C0921EB228E002E32A6 /* va_config.h */,
-				5082D83A21EF891200CF7692 /* va_constants.h */,
+				5082D83A21EF891200CF7692 /* AmigaConstants.h */,
 				505A584C23040921002F99D1 /* Aliases.h */,
-				50B14C0821EB2248002E32A6 /* va_std.h */,
-				50B14C1121EB4314002E32A6 /* va_std.cpp */,
-				505A3A3921F4996400132020 /* sse_utils.h */,
-				505A3A3821F4996400132020 /* sse_utils.cpp */,
+				50B14C0821EB2248002E32A6 /* AmigaUtils.h */,
+				50B14C1121EB4314002E32A6 /* AmigaUtils.cpp */,
+				505A3A3921F4996400132020 /* SSEUtils.h */,
+				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				503990C522D8CCB600035783 /* Beam.h */,
 				5085830523265B3D004F942F /* Event.h */,
 				508C6BCF23F7E77500D8938F /* Buffers.h */,
@@ -993,7 +993,7 @@
 				508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */,
 				50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */,
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
-				50B14C1221EB4314002E32A6 /* va_std.cpp in Sources */,
+				50B14C1221EB4314002E32A6 /* AmigaUtils.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50D9CD99236AF75800503B4D /* DMADebugController.swift in Sources */,
@@ -1007,8 +1007,8 @@
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
-				508FE02721EA227B0043D0E9 /* Utilities.swift in Sources */,
-				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
+				508FE02721EA227B0043D0E9 /* SwiftUtils.swift in Sources */,
+				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,

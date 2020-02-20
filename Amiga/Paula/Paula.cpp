@@ -234,10 +234,10 @@ Paula::peekPOTGOR()
 {
     uint16_t result = 0;
 
-    WRITE_BIT(result, 14, chargeY1 >= 1.0);
-    WRITE_BIT(result, 12, chargeX1 >= 1.0);
-    WRITE_BIT(result, 10, chargeY0 >= 1.0);
-    WRITE_BIT(result,  8, chargeX0 >= 1.0);
+    REPLACE_BIT(result, 14, chargeY1 >= 1.0);
+    REPLACE_BIT(result, 12, chargeX1 >= 1.0);
+    REPLACE_BIT(result, 10, chargeY0 >= 1.0);
+    REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
     // Connected devices may also pull the lines down
     result &= controlPort1.potgor();

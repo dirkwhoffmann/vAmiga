@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "va_std.h"
+#include "AmigaUtils.h"
 
 char *
 extractFilename(const char *path)

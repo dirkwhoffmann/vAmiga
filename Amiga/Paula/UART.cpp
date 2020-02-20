@@ -72,11 +72,11 @@ UART::peekSERDATR()
      * 07..00  DB7 - DB0  Data bits
      */
     uint16_t result = receiveBuffer & 0x3FF;
-    WRITE_BIT(result, 15, ovrun);
-    WRITE_BIT(result, 14, rbf);
-    WRITE_BIT(result, 13, transmitBuffer == 0);
-    WRITE_BIT(result, 12, transmitShiftReg == 0);
-    WRITE_BIT(result, 11, serialPort.getRXD());
+    REPLACE_BIT(result, 15, ovrun);
+    REPLACE_BIT(result, 14, rbf);
+    REPLACE_BIT(result, 13, transmitBuffer == 0);
+    REPLACE_BIT(result, 12, transmitShiftReg == 0);
+    REPLACE_BIT(result, 11, serialPort.getRXD());
 
     // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
     debug(2, "peekSERDATR() = %X\n", result);
@@ -242,7 +242,7 @@ UART::serviceRxdEvent(EventID id)
     debug(2, "Receiving bit %d: %d\n", recCnt, rxd);
 
     // Shift in bit from RXD line
-    WRITE_BIT(receiveShiftReg, recCnt++, rxd);
+    REPLACE_BIT(receiveShiftReg, recCnt++, rxd);
 
     // Check if this was the last bit to receive
     if (recCnt >= packetLength() + 2) {

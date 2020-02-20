@@ -10,7 +10,7 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-#import "va_std.h"
+#import "AmigaUtils.h"
 
 // Forward declarations
 @class CPUProxy;
