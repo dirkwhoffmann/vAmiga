@@ -18,12 +18,6 @@ ControlPort::ControlPort(int nr, Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-ControlPort::_reset()
-{
-    RESET_SNAPSHOT_ITEMS  // TODO: MOVE TO .H FILE
-}
-
-void
 ControlPort::_inspect()
 {
     pthread_mutex_lock(&lock);
@@ -82,6 +76,7 @@ ControlPort::joydat()
     switch (device) {
 
         case CPD_NONE:
+
             return 0;
 
         case CPD_MOUSE:
@@ -91,6 +86,7 @@ ControlPort::joydat()
             return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
 
         case CPD_JOYSTICK:
+
             return nr == 1 ? joystick1.joydat() : joystick2.joydat();
     }
 }
@@ -131,7 +127,5 @@ ControlPort::pokeJOYTEST(uint16_t value)
 void
 ControlPort::connectDevice(ControlPortDevice device)
 {
-    if (isControlPortDevice(device)) {
-        this->device = device;
-    }
+    if (isControlPortDevice(device)) this->device = device;
 }

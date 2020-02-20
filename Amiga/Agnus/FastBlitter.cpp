@@ -150,10 +150,12 @@ void Blitter::doFastCopyBlit()
             // Write D
             if (useD) {
                 mem.poke16<BUS_BLITTER>(dpt, dhold);
-                check1 = fnv_1a_it32(check1, dhold);
-                check2 = fnv_1a_it32(check2, dpt);
+
+                if (BLT_CHECKSUM) {
+                    check1 = fnv_1a_it32(check1, dhold);
+                    check2 = fnv_1a_it32(check2, dpt);
+                }
                 debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
-                // plainmsg("    check1 = %X check2 = %X\n", check1, check2);
 
                 INC_CHIP_PTR_BY(dpt, incr);
             }
@@ -278,8 +280,11 @@ Blitter::doFastLineBlit()
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
             mem.poke16<BUS_BLITTER>(bltdpt_local, bltddat_local);
-            check1 = fnv_1a_it32(check1, bltddat_local);
-            check2 = fnv_1a_it32(check2, bltdpt_local);
+
+            if (BLT_CHECKSUM) {
+                check1 = fnv_1a_it32(check1, bltddat_local);
+                check2 = fnv_1a_it32(check2, bltdpt_local);
+            }
         }
         
         // Remember zero result status

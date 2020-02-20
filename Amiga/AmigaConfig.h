@@ -75,9 +75,9 @@ static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
 // Custom checksum settings (set to 1 to compute checksums)
 
-static const int DSK_CHECKSUM  = 2;  // Disk checksums
-static const int BLT_CHECKSUM  = 2;  // Blitter checksums
-
+static const int DSK_CHECKSUM  = 0;  // Disk checksums
+static const int BLT_CHECKSUM  = 0;  // Blitter checksums
+static const int COP_CHECKSUM  = 0;  // Copper checksums
 
 // Additional debugging aids (uncomment to enable)
 

@@ -248,8 +248,10 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     dsklen = newDskLen;
 
     // Initialize checksum (for debugging only)
-    checksum = fnv_1a_init32();
-    checkcnt = 0;
+    if (DSK_CHECKSUM) {
+        checksum = fnv_1a_init32();
+        checkcnt = 0;
+    }
 
     // Determine if a FIFO buffer should be emulated
     useFifo = config.useFifo;
@@ -551,13 +553,13 @@ DiskController::performDMA()
 {
     Drive *drive = getSelectedDrive();
     
-    // Only proceed if a drive is selected.
+    // Only proceed if a drive is selected
     if (drive == NULL) return;
     
-    // Only proceed if there are remaining bytes to read.
+    // Only proceed if there are remaining bytes to read
     if (!(dsklen & 0x3FFF)) return;
     
-    // Only proceed if DMA is enabled.
+    // Only proceed if DMA is enabled
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
 
     // How many word shall we read in?
@@ -586,31 +588,34 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
 
-    // Only proceed if the FIFO contains enough data.
+    // Only proceed if the FIFO contains enough data
     if (!fifoHasWord()) { return; }
 
     do {
-        // Read next word from the FIFO buffer.
+        // Read next word from the FIFO buffer
         uint16_t word = readFifo16();
         
-        // Write word into memory.
+        // Write word into memory
         agnus.doDiskDMA(word);
-        // if (dsksync) { plainmsg("word = %x pos = %d dsklen = %d checkcnt = %d checksum = %x\n", word, drive->head.offset, dsklen & 0x3FFF, checkcnt, checksum); }
 
-        // Compute checksum (for debugging).
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
 
-        // Finish up if this was the last word to transfer.
+        // Finish up if this was the last word to transfer
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);
             state = DRIVE_DMA_OFF;
-            plaindebug(DSK_CHECKSUM, "performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
+            if (DSK_CHECKSUM) {
+                plaindebug("performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            }
             return;
         }
         
-        // If the loop repeats, do what the event handler would do in between.
+        // If the loop repeats, do what the event handler would do in between
         if (--remaining) {
             executeFifo();
             executeFifo();
@@ -625,22 +630,24 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
 {
     assert(drive != NULL);
 
-    // Only proceed if the FIFO has enough free space.
+    // Only proceed if the FIFO has enough free space
     if (!fifoCanStoreWord()) return;
 
     do {
-        // Read next word from memory.
-        uint16_t word = agnus.doDiskDMA(); // dmaRead();
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
-        // plaindebug("%d: %X (%X)\n", dsklen & 0x3FFF, word, dcheck);
-        
-        // Write word into FIFO buffer.
+        // Read next word from memory
+        uint16_t word = agnus.doDiskDMA();
+
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
+
+        // Write word into FIFO buffer
         assert(fifoCount <= 4);
         writeFifo(HI_BYTE(word));
         writeFifo(LO_BYTE(word));
 
-        // Finish up if this was the last word to transfer.
+        // Finish up if this was the last word to transfer
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);
@@ -661,8 +668,10 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
                 drive->writeHead(readFifo());
             }
             state = DRIVE_DMA_OFF;
-            
-            debug(DSK_CHECKSUM, "performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+
+            if (DSK_CHECKSUM) {
+                debug("performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+            }
             return;
         }
         
@@ -757,9 +766,10 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
         // Write word into memory
         agnus.doDiskDMA(word);
 
-        // Compute checksum (for debugging)
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
 
         if ((--dsklen & 0x3FFF) == 0) {
 
@@ -781,10 +791,11 @@ DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
         
         // Read word from memory
         uint16_t word = agnus.doDiskDMA();
-        
-        // Compute checksum (for debugging)
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
+
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
 
         // Write word to disk
         drive->writeHead16(word);
@@ -840,44 +851,47 @@ DiskController::performTurboDMA(Drive *drive)
 void
 DiskController::performTurboRead(Drive *drive)
 {
-    // debug(DSK_CHECKSUM, "Turbo-reading %d words from disk (offset = %d).\n", dsklen & 0x3FFF, drive->head.offset);
-
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
-        // Read word from disk.
+        // Read word from disk
         uint16_t word = drive->readHead16();
         
-        // Write word into memory.
+        // Write word into memory
         mem.pokeChip16(agnus.dskpt, word);
         INC_CHIP_PTR(agnus.dskpt);
-        
-        // Compute checksum (for debugging)
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
+
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
     }
-        
-    plaindebug(DSK_CHECKSUM, "Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
+
+    if (DSK_CHECKSUM) {
+        plaindebug("Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d checksum = %X\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, checksum);
+    }
 }
 
 void
 DiskController::performTurboWrite(Drive *drive)
 {
-    plaindebug(DSK_CHECKSUM, "Turbo-writing %d words to disk.\n", dsklen & 0x3FFF);
-    
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
         uint16_t word = mem.peekChip16(agnus.dskpt);
         INC_CHIP_PTR(agnus.dskpt);
         
-        // Compute checksum (for debugging)
-        checksum = fnv_1a_it32(checksum, word);
-        checkcnt++;
+        if (DSK_CHECKSUM) {
+            checksum = fnv_1a_it32(checksum, word);
+            checkcnt++;
+        }
 
         // Write word to disk
         drive->writeHead16(word);
     }
-    
-    plaindebug(DSK_CHECKSUM, "Turbo write %s: checkcnt = %d checksum = %X\n", drive->getDescription(), checkcnt, checksum);
+
+    if (DSK_CHECKSUM) {
+        plaindebug("Turbo write %s: checkcnt = %d checksum = %X\n",
+                   drive->getDescription(), checkcnt, checksum);
+    }
 }
 

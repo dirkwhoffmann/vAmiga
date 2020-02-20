@@ -783,26 +783,28 @@ Blitter::startBlit()
 {
     int level = config.accuracy;
 
-    check1 = fnv_1a_init32();
-    check2 = fnv_1a_init32();
-
     if (bltconLINE()) {
 
         linecount++;
-        plaindebug(BLT_CHECKSUM, "BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
-                   linecount, bltsizeW, bltsizeH,
-                   bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                   bltamod, bltbmod, bltcmod, bltdmod,
-                   bltapt, bltbpt, bltcpt, bltdpt);
+
+        if (BLT_CHECKSUM) {
+            check1 = check2 = fnv_1a_init32();
+            plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
+                       linecount, bltsizeW, bltsizeH,
+                       bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                       bltamod, bltbmod, bltcmod, bltdmod,
+                       bltapt, bltbpt, bltcpt, bltdpt);
+        }
 
         beginLineBlit(level);
 
     } else {
 
         copycount++;
-        // if (bltsizeW != 1 || bltsizeH != 4)
-        {
-            plaindebug(BLT_CHECKSUM, "BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
+
+        if (BLT_CHECKSUM) { // && (bltsizeW != 1 || bltsizeH != 4)
+            check1 = check2 = fnv_1a_init32();
+            plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount, bltsizeW, bltsizeH,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltamod, bltbmod, bltcmod, bltdmod,
@@ -837,9 +839,9 @@ Blitter::endBlit()
     agnus.cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    // if (bltsizeW != 1 || bltsizeH != 4)
-    {
-        plaindebug(BLT_CHECKSUM, "BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n", check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+    if (BLT_CHECKSUM) { // && (bltsizeW != 1 || bltsizeH != 4)
+        plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
+                   check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
     }
 
     // Let the Copper know about the termination

@@ -908,8 +908,11 @@ Blitter::exec()
         if (!lockD) {
 
             agnus.blitterWrite(bltdpt, dhold);
-            check1 = fnv_1a_it32(check1, dhold);
-            check2 = fnv_1a_it32(check2, bltdpt);
+
+            if (BLT_CHECKSUM) {
+                check1 = fnv_1a_it32(check1, dhold);
+                check2 = fnv_1a_it32(check2, bltdpt);
+            }
             debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
 
             INC_CHIP_PTR_BY(bltdpt, incr);
