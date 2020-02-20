@@ -461,6 +461,26 @@
 			path = Amiga/Computer/Moira;
 			sourceTree = SOURCE_ROOT;
 		};
+		505B801C23FE626E002407FE /* Memory */ = {
+			isa = PBXGroup;
+			children = (
+				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
+				5064851021EC7A1700FC4AC3 /* Memory.h */,
+				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
+			);
+			path = Memory;
+			sourceTree = "<group>";
+		};
+		505B801D23FE628F002407FE /* RTC */ = {
+			isa = PBXGroup;
+			children = (
+				50A493832374560D003ECD2C /* RTCTypes.h */,
+				501B821C2262FFB200042871 /* RTC.h */,
+				501B821B2262FFB200042871 /* RTC.cpp */,
+			);
+			path = RTC;
+			sourceTree = "<group>";
+		};
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
@@ -634,16 +654,18 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				505B801D23FE628F002407FE /* RTC */,
+				505B801C23FE626E002407FE /* Memory */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
 				50A2953A21FF11F40046BAA0 /* Computer */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				50A2953B21FF12170046BAA0 /* Drive */,
-				508FE06621EA31E50043D0E9 /* FileTypes */,
+				508FE06621EA31E50043D0E9 /* Files */,
 			);
 			path = Amiga;
 			sourceTree = "<group>";
 		};
-		508FE06621EA31E50043D0E9 /* FileTypes */ = {
+		508FE06621EA31E50043D0E9 /* Files */ = {
 			isa = PBXGroup;
 			children = (
 				5051922722B61C1B0012C4BB /* FileTypes.h */,
@@ -658,7 +680,7 @@
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 			);
-			path = FileTypes;
+			path = Files;
 			sourceTree = "<group>";
 		};
 		50950ED522881B3C0073F755 /* Expansion */ = {
@@ -736,15 +758,6 @@
 		50A2953A21FF11F40046BAA0 /* Computer */ = {
 			isa = PBXGroup;
 			children = (
-				50D5244322787D3C00F8959D /* MessageQueueTypes.h */,
-				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
-				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
-				5051922A22B61DAA0012C4BB /* MemoryTypes.h */,
-				5064851021EC7A1700FC4AC3 /* Memory.h */,
-				5064850F21EC7A1700FC4AC3 /* Memory.cpp */,
-				50A493832374560D003ECD2C /* RTCTypes.h */,
-				501B821C2262FFB200042871 /* RTC.h */,
-				501B821B2262FFB200042871 /* RTC.cpp */,
 				508E7F962206CDC600F7D88C /* CPU */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
@@ -808,6 +821,9 @@
 				50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */,
 				50E79BE8232D123000D296FB /* AmigaComponent.h */,
 				50E79BE7232D123000D296FB /* AmigaComponent.cpp */,
+				50D5244322787D3C00F8959D /* MessageQueueTypes.h */,
+				508FDEF821EA1FBC0043D0E9 /* MessageQueue.h */,
+				508FDEF521EA1FBC0043D0E9 /* MessageQueue.cpp */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
