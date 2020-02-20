@@ -12,6 +12,8 @@
 Mouse::Mouse(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Mouse");
+
+    config.pullUpResistors = true;
 }
 
 void
@@ -48,6 +50,18 @@ Mouse::_dump()
     plainmsg("   dividerY = %d\n", dividerY);
     plainmsg("     shiftX = %d\n", shiftX);
     plainmsg("     shiftY = %d\n", shiftY);
+}
+
+void
+Mouse::changePotgo(int port, uint16_t &potgo)
+{
+    uint16_t mask = (port == 1) ? 0x0400 : 0x4000;
+
+    if (rightButton) {
+        potgo &= ~mask;
+    } else if (config.pullUpResistors) {
+        potgo |= mask;
+    }
 }
 
 int64_t

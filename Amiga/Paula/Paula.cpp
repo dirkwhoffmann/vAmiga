@@ -239,9 +239,9 @@ Paula::peekPOTGOR()
     REPLACE_BIT(result, 10, chargeY0 >= 1.0);
     REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
-    // Connected devices may also pull the lines down
-    result &= controlPort1.potgor();
-    result &= controlPort2.potgor();
+    // Connected devices can affect the lines, too
+    controlPort1.changePotgo(result);
+    controlPort2.changePotgo(result);
 
     debug(POT_DEBUG, "peekPOTGOR = %X (potgo = %x)\n", result, potgo);
     return result;

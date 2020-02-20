@@ -67,14 +67,10 @@ ControlPort::getInfo()
     return result;
 }
 
-uint16_t
-ControlPort::potgor()
+void
+ControlPort::changePotgo(uint16_t &potgo)
 {
-    if (device == CPD_MOUSE)
-        if (mouse.rightButton)
-            return (nr == 1) ? 0xFBFF : 0xBFFF;
-
-    return 0xFFFF;
+    if (device == CPD_MOUSE) mouse.changePotgo(nr, potgo);
 }
 
 uint16_t

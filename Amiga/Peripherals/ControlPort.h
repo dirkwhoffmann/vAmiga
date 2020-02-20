@@ -96,13 +96,13 @@ public:
     
     public:
     
-    // Returns the control port bits showing up in the POTGOR register.
-    uint16_t potgor();
+    // Modifies the POTGOR bits according to the connected device
+    void changePotgo(uint16_t &potgo);
 
-    // Returns the control port bits showing up in the JOYxDAT register.
+    // Returns the control port bits showing up in the JOYxDAT register
     uint16_t joydat();
 
-    // Returns the control port bits showing up in the CIAA PA register.
+    // Returns the control port bits showing up in the CIAA PA register
     uint8_t ciapa();
 
     // Emulates a write access to JOYTEST

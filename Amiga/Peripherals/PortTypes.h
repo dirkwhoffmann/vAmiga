@@ -98,4 +98,10 @@ typedef struct
 }
 SerialPortInfo;
 
+typedef struct
+{
+    bool pullUpResistors;
+}
+MouseConfig;
+
 #endif

@@ -13,7 +13,10 @@
 #include "AmigaComponent.h"
 
 class Mouse : public AmigaComponent {
-    
+
+    // The current configuration
+    MouseConfig config;
+
 public:
     
     // Mouse button states
@@ -64,6 +67,7 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker & config.pullUpResistors;
     }
 
     template <class T>
@@ -85,7 +89,17 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    
+
+
+    //
+    // Managing registers
+    //
+
+public:
+
+    // Modifies the POTGOR bits according to the current button state
+    void changePotgo(int port, uint16_t &potgo);
+
     
     //
     // Operating the mouse
