@@ -83,7 +83,7 @@
 		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
-		508FE02721EA227B0043D0E9 /* Basics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Basics.swift */; };
+		508FE02721EA227B0043D0E9 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* Utilities.swift */; };
 		508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */; };
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
@@ -284,7 +284,7 @@
 		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
-		508FE00521EA227A0043D0E9 /* Basics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Basics.swift; sourceTree = "<group>"; };
+		508FE00521EA227A0043D0E9 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerTouchBar.swift; sourceTree = "<group>"; };
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
@@ -481,6 +481,15 @@
 			path = RTC;
 			sourceTree = "<group>";
 		};
+		505B801E23FE6582002407FE /* Foundation */ = {
+			isa = PBXGroup;
+			children = (
+				508FE00521EA227A0043D0E9 /* Utilities.swift */,
+				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
+			);
+			path = Foundation;
+			sourceTree = "<group>";
+		};
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
@@ -577,22 +586,16 @@
 		508FDFDC21EA20600043D0E9 /* GUI */ = {
 			isa = PBXGroup;
 			children = (
-				508FE00521EA227A0043D0E9 /* Basics.swift */,
+				505B801E23FE6582002407FE /* Foundation */,
 				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
-				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
-				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE03A21EA22CC0043D0E9 /* Preferences */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				508FE03021EA22C30043D0E9 /* Automation */,
 				50B14C2421EB8F25002E32A6 /* Proxy */,
 				509F7F1521ED141F00A530E4 /* Inspector */,
-				509F7F1721ED157C00A530E4 /* Gamepads */,
-				509F7F1621ED156100A530E4 /* Keyboard */,
+				509F7F1621ED156100A530E4 /* Peripherals */,
 				509F7F1421ED13F300A530E4 /* Controller */,
-				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
-				508FE00E21EA227B0043D0E9 /* AudioEngine.swift */,
-				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
 				508FDFCB21EA20510043D0E9 /* Metal */,
 			);
 			path = GUI;
@@ -623,6 +626,7 @@
 		508FE03921EA22CC0043D0E9 /* Dialogs */ = {
 			isa = PBXGroup;
 			children = (
+				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* DiskMountController.swift */,
 				508FE04521EA22CC0043D0E9 /* SnapshotController.swift */,
@@ -654,6 +658,12 @@
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
+				50950ED522881B3C0073F755 /* Expansion */,
+				50EE993D21FF4D42003BD74B /* Paula */,
+				502F7DCF2221709700AEEC65 /* Denise */,
+				502F7DD0222170AE00AEEC65 /* Agnus */,
+				508FDF5621EA1FBC0043D0E9 /* CIA */,
+				508E7F962206CDC600F7D88C /* CPU */,
 				505B801D23FE628F002407FE /* RTC */,
 				505B801C23FE626E002407FE /* Memory */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
@@ -702,6 +712,9 @@
 				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
+				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
+				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
+				508FE00E21EA227B0043D0E9 /* AudioEngine.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -735,35 +748,22 @@
 			path = Inspector;
 			sourceTree = "<group>";
 		};
-		509F7F1621ED156100A530E4 /* Keyboard */ = {
+		509F7F1621ED156100A530E4 /* Peripherals */ = {
 			isa = PBXGroup;
 			children = (
+				508FDFF121EA22780043D0E9 /* GamePad.swift */,
+				508FE00121EA227A0043D0E9 /* GamePadManager.swift */,
 				508FE00021EA227A0043D0E9 /* KeyboardController.swift */,
 				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,
 				50F5F27121F1B6DF000627D1 /* AmigaKey.swift */,
 			);
-			path = Keyboard;
-			sourceTree = "<group>";
-		};
-		509F7F1721ED157C00A530E4 /* Gamepads */ = {
-			isa = PBXGroup;
-			children = (
-				508FDFF121EA22780043D0E9 /* GamePad.swift */,
-				508FE00121EA227A0043D0E9 /* GamePadManager.swift */,
-			);
-			path = Gamepads;
+			path = Peripherals;
 			sourceTree = "<group>";
 		};
 		50A2953A21FF11F40046BAA0 /* Computer */ = {
 			isa = PBXGroup;
 			children = (
-				508E7F962206CDC600F7D88C /* CPU */,
-				508FDF5621EA1FBC0043D0E9 /* CIA */,
-				502F7DD0222170AE00AEEC65 /* Agnus */,
-				502F7DCF2221709700AEEC65 /* Denise */,
-				50EE993D21FF4D42003BD74B /* Paula */,
-				50950ED522881B3C0073F755 /* Expansion */,
 			);
 			path = Computer;
 			sourceTree = "<group>";
@@ -1007,7 +1007,7 @@
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
-				508FE02721EA227B0043D0E9 /* Basics.swift in Sources */,
+				508FE02721EA227B0043D0E9 /* Utilities.swift in Sources */,
 				505A3A3A21F4996400132020 /* sse_utils.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
