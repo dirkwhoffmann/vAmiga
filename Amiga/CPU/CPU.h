@@ -101,6 +101,7 @@ private:
     void write8 (moira::u32 addr, moira::u8  val) override;
     void write16 (moira::u32 addr, moira::u16 val) override;
     int readIrqUserVector(moira::u8 level) override { return 0; }
+    void irqOccurred(moira::u8 level) override;
     void breakpointReached(moira::u32 addr) override;
     void watchpointReached(moira::u32 addr) override;
 

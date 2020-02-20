@@ -142,8 +142,11 @@ Moira::checkForIrq()
 {
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) {
 
-        // Trigger interrupt
+        // Notify delegate
         assert(reg.ipl < 7);
+        irqOccurred(reg.ipl);
+
+        // Trigger interrupt
         execIrqException(reg.ipl);
         return true;
 

@@ -86,13 +86,6 @@ Copper::pokeCOPJMP1()
     if (s == POKE_CPU) {
 
         switchToCopperList(1);
-
-        // Continue Copper execution if it was waiting
-        /*
-         if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
-         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
-         }
-         */
     }
 }
 

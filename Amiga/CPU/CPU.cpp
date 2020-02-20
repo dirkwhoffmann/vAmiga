@@ -56,6 +56,12 @@ CPU::write16 (moira::u32 addr, moira::u16 val)
 }
 
 void
+CPU::irqOccurred(moira::u8 level)
+{
+    // debug("**** INTERRUPT %d (intena = %x intreq = %x\n", level, paula.intena, paula.intreq);
+}
+
+void
 CPU::breakpointReached(moira::u32 addr)
 {
     amiga.setControlFlags(RL_BREAKPOINT_REACHED);
