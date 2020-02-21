@@ -32,7 +32,6 @@ Paula::_reset()
 void
 Paula::_inspect()
 {
-    // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
     info.intreq = intreq;

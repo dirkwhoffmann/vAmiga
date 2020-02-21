@@ -333,6 +333,10 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df1LED: NSButton!
     @IBOutlet weak var df2LED: NSButton!
     @IBOutlet weak var df3LED: NSButton!
+    @IBOutlet weak var df0Cylinder: NSTextField!
+    @IBOutlet weak var df1Cylinder: NSTextField!
+    @IBOutlet weak var df2Cylinder: NSTextField!
+    @IBOutlet weak var df3Cylinder: NSTextField!
     @IBOutlet weak var df0Disk: NSButton!
     @IBOutlet weak var df1Disk: NSButton!
     @IBOutlet weak var df2Disk: NSButton!
@@ -346,7 +350,6 @@ class MyController: NSWindowController, MessageReceiver {
 
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
-    @IBOutlet weak var warpLockIcon: NSButton!
     @IBOutlet weak var warpIcon: NSButton!
     
     // Toolbar
@@ -686,16 +689,18 @@ extension MyController {
             refreshStatusBar()
 
         case MSG_DRIVE_HEAD:
-            
+
             if driveNoise {
                 playSound(name: "drive_click", volume: 1.0)
             }
+            refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
  
             if driveNoise && !driveNoiseNoPoll {
                 playSound(name: "drive_click", volume: 1.0)
             }
+            refreshStatusBar()
 
         case MSG_SER_IN:
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)

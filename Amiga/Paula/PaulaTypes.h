@@ -95,6 +95,13 @@ UARTInfo;
 
 typedef struct
 {
+    long reads;
+    long writes;
+}
+UARTStats;
+
+typedef struct
+{
     bool connected[4];
     bool useFifo;
 }
@@ -119,13 +126,6 @@ typedef struct
     long wordCount[4];
 }
 DiskControllerStats;
-
-typedef struct
-{
-    long reads;
-    long writes;
-}
-UARTStats;
 
 typedef struct
 {

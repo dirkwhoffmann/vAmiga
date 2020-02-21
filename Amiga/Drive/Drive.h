@@ -18,10 +18,13 @@ class Drive : public AmigaComponent {
     friend class DiskController;
         
     // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
-    long nr = 0;
+    const int nr;
 
     // The current configuration
     DriveConfig config;
+
+    // Information collected by 'inspect'
+    DriveInfo info;
 
     // Position of the currently transmitted identification bit
     uint8_t idCount;
@@ -70,27 +73,29 @@ class Drive : public AmigaComponent {
     uint8_t prb;
     
     // The current drive head location
-    struct {
-        uint8_t side;
-        uint8_t cylinder;
-        uint16_t offset;
-    } head;
+    DriveHead head;
     
     /* History buffer storing the most recently visited tracks.
      * The buffer is used to detect the polling head movements that are issued
      * by track disc device to detect a newly inserted disk.
      */
     uint64_t cylinderHistory;
-    
+
 public:
     
     // The currently inserted disk (NULL if the drive is empty)
     Disk *disk = NULL;
-    
+
 
     //
-    // Iterating over snapshot items
+    // Methods
     //
+
+public:
+
+    Drive(unsigned nr, Amiga& ref);
+    DriveConfig getConfig() { return config; }
+    DriveInfo getInfo();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -120,66 +125,41 @@ public:
         & cylinderHistory;
     }
 
-
-    //
-    // Constructing and configuring
-    //
-    
-public:
-    
-    Drive(unsigned nr, Amiga& ref);
-
-    // Returns the current configuration
-    DriveConfig getConfig() { return config; }
-
-    // Configures the drive type
-    DriveType getType() { return config.type; }
-    void setType(DriveType t);
-
-    bool isOriginal() { return config.speed == 1; }
-    bool isTurbo() { return config.speed < 0; }
-
-    // Configures the speed acceleration factor
-    uint16_t getSpeed() { return config.speed; }
-    void setSpeed(int16_t value);
-
-
-    //
-    // Methods from HardwareComponent
-    //
-    
 private:
 
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     void _ping() override;
+    void _inspect() override;
     void _dumpConfig() override;
     void _dump() override;
     size_t _size() override;
     size_t _load(uint8_t *buffer) override;
     size_t _save(uint8_t *buffer) override;
 
-    
+
+    //
+    // Getters and setters
+    //
+
 public:
-    
-    //
-    // Getter and setter
-    //
-    
-    // Returns the device number (0 = df0, 1 = df1, 2 = df2, 3 = df3).
+
     long getNr() { return nr; }
 
-    // Indicates whether identification mode is enabled.
-    bool idMode() { return !motor; }
+    // Drive type
+    DriveType getType() { return config.type; }
+    void setType(DriveType t);
 
-    /* Returns the drive identification code.
-     * Each drive identifies itself by a 32 bit identification code that is
-     * transmitted via the DRVRDY signal in a special identification mode. The
-     * identification mode is activated by switching the drive motor on and
-     * off.
-     */
+    // Drive speed
+    uint16_t getSpeed() { return config.speed; }
+    void setSpeed(int16_t value);
+    bool isOriginal() { return config.speed == 1; }
+    bool isTurbo() { return config.speed < 0; }
+
+    // Identification mode
+    bool idMode() { return !motor; }
     uint32_t getDriveId();
-    
-    
+
+
     //
     // Handling the drive status register flags
     //
@@ -197,7 +177,7 @@ public:
     // Operating the drive
     //
     
-    // Turns the drive motor on or off.
+    // Turns the drive motor on or off
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
@@ -209,21 +189,21 @@ public:
     bool motorSpeedingUp() { return motor && !motorAtFullSpeed(); }
     bool motorSlowingDown() { return !motor && !motorStopped(); }
 
-    // Selects the active drive head (0 = lower, 1 = upper).
+    // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(int side);
 
-    // Reads a value from the drive head and rotates the disk.
+    // Reads a value from the drive head and rotates the disk
     uint8_t readHead();
     uint16_t readHead16();
     
-    // Writes a value to the drive head and rotates the disk.
+    // Writes a value to the drive head and rotates the disk
     void writeHead(uint8_t value);
     void writeHead16(uint16_t value);
 
-    // Emulate a disk rotation (moves head to the next byte).
+    // Emulate a disk rotation (moves head to the next byte)
     void rotate();
 
-    // Rotates the disk to the next sync mark.
+    // Rotates the disk to the next sync mark
     void findSyncMark();
 
     //

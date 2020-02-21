@@ -914,20 +914,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->controller->dump();
 }
-- (BOOL) spinning:(NSInteger)nr
-{
-    return wrapper->controller->spinning(nr);
-}
 - (BOOL) spinning
 {
     return wrapper->controller->spinning();
 }
-/*
-- (BOOL) isConnected:(NSInteger)nr
-{
-    return wrapper->controller->isConnected(nr);
-}
-*/
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 {
     wrapper->controller->setConnected(nr, value);
@@ -965,6 +955,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+- (DriveInfo) getInfo
+{
+    return wrapper->drive->getInfo();
+}
 - (NSInteger) nr
 {
     return wrapper->drive->getNr();
@@ -972,6 +966,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (DriveType) type
 {
     return wrapper->drive->getType();
+}
+- (void) inspect
+{
+    wrapper->drive->inspect();
 }
 - (void) dump
 {
@@ -1350,12 +1348,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
    return wrapper->amiga->getStats();
 }
-/*
-- (BOOL) readyToPowerUp
-{
-    return wrapper->amiga->readyToPowerUp();
-}
-*/
 - (BOOL) isPoweredOn
 {
     return wrapper->amiga->isPoweredOn();

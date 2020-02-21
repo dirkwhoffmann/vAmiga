@@ -521,13 +521,8 @@ struct AmigaFileWrapper;
 }
 
 - (void) dump;
-
-- (BOOL) spinning:(NSInteger)nr;
 - (BOOL) spinning;
-
-// - (BOOL) isConnected:(NSInteger)nr;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
-
 - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
@@ -548,9 +543,11 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 
+- (DriveInfo) getInfo;
 - (NSInteger) nr;
 - (DriveType) type;
 
+- (void) inspect;
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
@@ -558,9 +555,6 @@ struct AmigaFileWrapper;
 
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)value;
-
-// - (void) ejectDisk;
-// - (void) insertDisk:(ADFFileProxy *)file;
 
 - (ADFFileProxy *)convertDisk;
 

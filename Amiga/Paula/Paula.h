@@ -84,17 +84,13 @@ public:
 
     
     //
-    // Constructing and destructing
+    // Methods
     //
     
 public:
     
     Paula(Amiga& ref);
-
-
-    //
-    // Iterating over snapshot items
-    //
+    PaulaInfo getInfo();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -122,10 +118,6 @@ public:
         & adkcon;
     }
 
-    //
-    // Methods from HardwareComponent
-    //
-    
 private:
 
     void _reset() override;
@@ -137,17 +129,7 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Accessing properties
-    //
-    
-public:
-    
-    // Returns the result of the most recent call to inspect()
-    PaulaInfo getInfo();
-    
-    
+
     //
     // Accessing registers
     //

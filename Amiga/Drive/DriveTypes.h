@@ -12,6 +12,10 @@
 #ifndef _DRIVE_T_INC
 #define _DRIVE_T_INC
 
+//
+// Enumerations
+//
+
 typedef enum : long
 {
     DRIVE_35_DD,
@@ -72,6 +76,18 @@ inline const char *driveStateName(DriveState state)
     }
 }
 
+//
+// Structures
+//
+
+typedef struct
+{
+     uint8_t side;
+     uint8_t cylinder;
+     uint16_t offset;
+ }
+DriveHead;
+
 typedef struct
 {
     /* Drive type.
@@ -97,5 +113,12 @@ inline bool isValidDriveSpeed(int16_t speed)
     }
     return false;
 }
+
+typedef struct
+{
+    DriveHead head;
+    bool motor;
+}
+DriveInfo;
 
 #endif

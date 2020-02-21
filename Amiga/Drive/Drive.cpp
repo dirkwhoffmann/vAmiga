@@ -9,17 +9,28 @@
 
 #include "Amiga.h"
 
-Drive::Drive(unsigned nr, Amiga& ref) : AmigaComponent(ref)
+Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
-    assert(nr < 4); // df0 - df3
-    
-    this->nr = nr;
+    assert(nr < 4);
+
     setDescription(nr == 0 ? "Df0" :
                    nr == 1 ? "Df1" :
                    nr == 2 ? "Df2" : "Df3");
 
     config.type = DRIVE_35_DD;
     config.speed = 1; 
+}
+
+DriveInfo
+Drive::getInfo()
+{
+    DriveInfo result;
+
+    pthread_mutex_lock(&lock);
+    result = info;
+    pthread_mutex_unlock(&lock);
+
+    return result;
 }
 
 void
@@ -31,6 +42,17 @@ Drive::_ping()
                      MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
     amiga.putMessage(hasModifiedDisk() ?
                      MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
+}
+
+void
+Drive::_inspect()
+{
+    pthread_mutex_lock(&lock);
+
+    info.head = head;
+    info.motor = motor;
+
+    pthread_mutex_unlock(&lock);
 }
 
 void
