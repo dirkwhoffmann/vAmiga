@@ -9,12 +9,10 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(int nr, Amiga& ref) : AmigaComponent(ref)
+Joystick::Joystick(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
-    assert(nr == 1 || nr == 2);
-    
-    this->nr = nr;
-    setDescription(nr == 1 ? "Joystick1" : "Joystick2");
+    assert(n == 1 || n == 2);
+    setDescription(n == 1 ? "Joystick1" : "Joystick2");
 }
 
 void

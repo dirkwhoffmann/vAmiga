@@ -47,7 +47,7 @@
  * created automatically. The public API gives you control over the emulator's
  * behaviour such as running and pausing the emulation. Please note that most
  * subcomponents have their own public API. E.g., to query information from
- * Paula, you need to invoke a public method on amiga->paula.
+ * Paula, you need to invoke a public method on amiga.paula.
  */
 class Amiga : public HardwareComponent {
 
@@ -84,54 +84,30 @@ private:
     
 public:
     
-    // A Motorola 68000 CPU
+    // Core components
     CPU cpu = CPU(*this);
-    
-    // CIA A (odd CIA)
     CIAA ciaA = CIAA(*this);
-    
-    // CIA B (even CIA)
     CIAB ciaB = CIAB(*this);
-    
-    // Real-time clock
     RTC rtc = RTC(*this);
-    
-    // Memory
     Memory mem = Memory(*this);
-    
-    // The DMA controller (part of Agnus)
     Agnus agnus = Agnus(*this);
-    
-    // Denise (Video)
     Denise denise = Denise(*this);
-    
-    // Paula (Interrupts, Disk Controller, Audio)
     Paula paula = Paula(*this);
-    
-    // Zorro II device manager
     ZorroManager zorro = ZorroManager(*this);
     
-    // Control ports
+    // Ports
     ControlPort controlPort1 = ControlPort(1, *this);
     ControlPort controlPort2 = ControlPort(2, *this);
-
-    // Serial port
     SerialPort serialPort = SerialPort(*this);
 
-    // Mouse
+    // Peripherals
     Mouse mouse = Mouse(*this);
-    
-    // Joysticks
     Joystick joystick1 = Joystick(1, *this);
     Joystick joystick2 = Joystick(2, *this);
-    
-    // Keyboard
     Keyboard keyboard = Keyboard(*this);
     
-    // Internal floppy drive
+    // Floppy drives
     Drive df0 = Drive(0, *this);
-    
-    // External floppy drives
     Drive df1 = Drive(1, *this);
     Drive df2 = Drive(2, *this);
     Drive df3 = Drive(3, *this);

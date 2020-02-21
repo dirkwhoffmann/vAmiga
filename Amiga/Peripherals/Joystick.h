@@ -15,8 +15,8 @@
 class Joystick : public AmigaComponent {
 
     // The control port this joystick is connected to (1 or 2)
-    int nr;
-    
+    const int nr;
+
     // Button state
     bool button = false;
     
@@ -48,7 +48,7 @@ class Joystick : public AmigaComponent {
     
 public:
     
-    Joystick(int nr, Amiga& ref);
+    Joystick(int n, Amiga& ref);
     
 
     //

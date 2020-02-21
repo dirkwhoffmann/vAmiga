@@ -19,7 +19,7 @@
 #define V_MINOR 1
 #define V_SUBMINOR 0
 
-// Assertion checking (uncomment in a release build)
+// Assertion checking (uncomment in release build)
 // #define NDEBUG
 
 
@@ -27,7 +27,7 @@
 // Debug settings
 //
 
-// Uncomment to set breakpoint on startup
+// Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFE4510
 
 // Register debugging (set to 1 to generate debug output)
@@ -73,13 +73,13 @@ static const int KBD_DEBUG     = 2;  // Keyboard
 static const int SNAP_DEBUG    = 2;  // Snapshot debugging (serialization)
 
 
-// Custom checksum settings (set to true to compute checksums)
+// Checksum computation (set to true to compute checksums)
 
 static const int DSK_CHECKSUM  = false;  // Disk checksums
 static const int BLT_CHECKSUM  = false;  // Blitter checksums
 static const int COP_CHECKSUM  = false;  // Copper checksums
 
-// Additional debugging aids (uncomment to enable)
+// Additional debug settings (uncomment to enable)
 
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/AlertX.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Cabal.adf"
