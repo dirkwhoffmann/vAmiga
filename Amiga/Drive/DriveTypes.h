@@ -45,37 +45,6 @@ inline const char *driveTypeName(DriveType type)
     }
 }
 
-typedef enum
-{
-    DRIVE_DMA_OFF,     // Drive is idle
-    
-    DRIVE_DMA_WAIT,    // Drive is waiting for the sync word
-    DRIVE_DMA_READ,    // Drive is reading
-    
-    DRIVE_DMA_WRITE,   // Drive is writing
-    DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
-}
-DriveState;
-
-inline bool isDriveState(long value)
-{
-    return value >= DRIVE_DMA_OFF && value <= DRIVE_DMA_FLUSH;
-}
-
-inline const char *driveStateName(DriveState state)
-{
-    assert(isDriveState(state));
-
-    switch (state) {
-        case DRIVE_DMA_OFF:   return "DRIVE_DMA_OFF";
-        case DRIVE_DMA_WAIT:  return "DRIVE_DMA_WAIT";
-        case DRIVE_DMA_READ:  return "DRIVE_DMA_READ";
-        case DRIVE_DMA_WRITE: return "DRIVE_DMA_WRITE";
-        case DRIVE_DMA_FLUSH: return "DRIVE_DMA_FLUSH";
-        default:              return "???";
-    }
-}
-
 //
 // Structures
 //
@@ -117,6 +86,7 @@ inline bool isValidDriveSpeed(int16_t speed)
 typedef struct
 {
     DriveHead head;
+    bool write;
     bool motor;
 }
 DriveInfo;

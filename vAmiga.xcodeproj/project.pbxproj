@@ -187,6 +187,8 @@
 		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
+		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
+		5042FD7E23FFF0D200B315B2 /* AudioUnitTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnitTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
@@ -852,12 +854,14 @@
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
+				5042FD7E23FFF0D200B315B2 /* AudioUnitTypes.h */,
 				50EE993F21FF4D8E003BD74B /* AudioUnit.h */,
 				50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				505A214F22869FF10016EA21 /* AudioFilter.h */,
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
+				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
 				500C0A552259402D000121CD /* DiskController.h */,
 				500C0A542259402D000121CD /* DiskController.cpp */,
 				50F0BD2522AF883C001F4616 /* UART.h */,

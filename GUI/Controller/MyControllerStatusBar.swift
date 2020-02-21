@@ -14,11 +14,19 @@ extension MyController {
         guard let amiga = amigaProxy else { return }
         let running = amiga.isRunning()
 
-        let dc = amiga.paula.getDiskControllerConfig()
-        let df0Connected = dc.connected.0
-        let df1Connected = dc.connected.1
-        let df2Connected = dc.connected.2
-        let df3Connected = dc.connected.3
+        let config = amiga.diskController.getConfig()
+        let df0Connected = config.connected.0
+        let df1Connected = config.connected.1
+        let df2Connected = config.connected.2
+        let df3Connected = config.connected.3
+
+        amiga.diskController.inspect()
+        let info = amiga.diskController.getInfo()
+        let writing = info.state == DRIVE_DMA_WRITE
+        let df0Sel = info.selectedDrive == 0
+        let df1Sel = info.selectedDrive == 1
+        let df2Sel = info.selectedDrive == 2
+        let df3Sel = info.selectedDrive == 3
 
         amiga.df0.inspect()
         amiga.df1.inspect()
@@ -28,19 +36,6 @@ extension MyController {
         let info1 = amiga.df1.getInfo()
         let info2 = amiga.df2.getInfo()
         let info3 = amiga.df3.getInfo()
-
-        /*
-        assert(info0.motor == amiga.diskController.spinning(0))
-        assert(info1.motor == amiga.diskController.spinning(1))
-        assert(info2.motor == amiga.diskController.spinning(2))
-        assert(info3.motor == amiga.diskController.spinning(3))
-
-
-        let df0spinning = amiga.diskController.spinning(0)
-        let df1spinning = amiga.diskController.spinning(1)
-        let df2spinning = amiga.diskController.spinning(2)
-        let df3spinning = amiga.diskController.spinning(3)
-         */
 
         // Icons
         df0Disk.image = amiga.df0.icon
@@ -54,6 +49,11 @@ extension MyController {
         df1Cylinder.integerValue = Int(info1.head.cylinder)
         df2Cylinder.integerValue = Int(info2.head.cylinder)
         df3Cylinder.integerValue = Int(info3.head.cylinder)
+
+        df0Cylinder.textColor = writing && df0Sel ? .red : .secondaryLabelColor
+        df1Cylinder.textColor = writing && df1Sel ? .red : .secondaryLabelColor
+        df2Cylinder.textColor = writing && df2Sel ? .red : .secondaryLabelColor
+        df3Cylinder.textColor = writing && df3Sel ? .red : .secondaryLabelColor
 
         // Animation
         info0.motor && running ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
@@ -78,7 +78,7 @@ extension MyController {
             df1Cylinder: df1Connected,
             df2Cylinder: df2Connected,
             df3Cylinder: df3Connected,
-            df0DMA: info0.motor,
+            df0DMA: true, // info0.motor,
             df1DMA: info1.motor,
             df2DMA: info2.motor,
             df3DMA: info3.motor,

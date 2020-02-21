@@ -17,13 +17,11 @@ class Drive : public AmigaComponent {
     
     friend class DiskController;
         
-    // Drive number (0 = df0, 1 = df1, 2 = df2, 3 = df3)
+    // Drive df<nr>
     const int nr;
 
-    // The current configuration
+    // Bookkeeping
     DriveConfig config;
-
-    // Information collected by 'inspect'
     DriveInfo info;
 
     // Position of the currently transmitted identification bit
@@ -94,6 +92,7 @@ public:
 public:
 
     Drive(unsigned nr, Amiga& ref);
+
     DriveConfig getConfig() { return config; }
     DriveInfo getInfo();
 

@@ -13,7 +13,7 @@ extension Inspector {
 
         paulaInfo = amiga!.paula.getInfo()
         audioInfo = amiga!.paula.getAudioInfo()
-        diskInfo  = amiga!.paula.getDiskControllerInfo()
+        diskInfo  = amiga!.diskController.getInfo()
     }
 
     func refreshPaula(count: Int) {

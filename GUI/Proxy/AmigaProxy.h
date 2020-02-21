@@ -396,8 +396,6 @@ struct AmigaFileWrapper;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
 - (AudioStats) getAudioStats;
-- (DiskControllerConfig) getDiskControllerConfig;
-- (DiskControllerInfo) getDiskControllerInfo;
 - (UARTInfo) getUARTInfo;
 
 - (uint32_t) sampleRate;
@@ -520,6 +518,9 @@ struct AmigaFileWrapper;
     struct DiskControllerWrapper *wrapper;
 }
 
+- (void) inspect;
+- (DiskControllerConfig) getConfig;
+- (DiskControllerInfo) getInfo;
 - (void) dump;
 - (BOOL) spinning;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;

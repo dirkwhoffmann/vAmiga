@@ -16,22 +16,13 @@ class DiskController : public AmigaComponent {
 
     friend class Amiga;
 
-    // The current configuration
+    // Bookkeeping
     DiskControllerConfig config;
-
-    // Information shown in the GUI inspector panel
     DiskControllerInfo info;
-
-    // Statistics shown in the GUI monitor panel
     DiskControllerStats stats;
 
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
-
-
-    //
-    // Bookkeeping
-    //
 
     // The currently selected drive (-1 if no drive is selected)
     int8_t selected = -1;
@@ -85,66 +76,57 @@ class DiskController : public AmigaComponent {
     // Debugging
     //
     
-    // For debugging, an FNV-32 checksum is computed for each DMA operation.
+    // For debugging, a FNV-32 checksum is computed for each DMA operation
     uint32_t checksum;
     uint64_t checkcnt;
 
 
     //
-    // Iterating over snapshot items
-    //
-
-    template <class T>
-    void applyToPersistentItems(T& worker)
-    {
-        worker
-
-        & config.connected
-        & config.useFifo;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
-        worker
-
-        & selected
-        & state
-        & useFifo
-        & syncFlag
-        & incoming
-        & incomingCycle
-        & fifo
-        & fifoCount
-        & dsklen
-        & dsksync
-        & prb;
-    }
-
-    
-    //
-    // Constructing and configuring
+    // Constructing, configuring, and profiling the object
     //
     
 public:
     
     DiskController(Amiga& ref);
 
-    // Returns the current configuration
     DiskControllerConfig getConfig() { return config; }
+    DiskControllerInfo getInfo();
+    DiskControllerStats getStats() { return stats; }
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
-    // Connects or disconnect an external drive
-    void setConnected(int df, bool value);
-    void connect(int df) { setConnected(df, true); }
-    void disconnect(int df) { setConnected(df, false); }
 
-    // Sets the speed acceleration factor for all connected drives
-    void setSpeed(int32_t value);
+    //
+    // Iterating over snapshot items
+    //
 
-    // Enables or disables the emulation of a FIFO buffer
-    void setUseFifo(bool value);
+     template <class T>
+     void applyToPersistentItems(T& worker)
+     {
+         worker
 
-    
+         & config.connected
+         & config.useFifo;
+     }
+
+     template <class T>
+     void applyToResetItems(T& worker)
+     {
+         worker
+
+         & selected
+         & state
+         & useFifo
+         & syncFlag
+         & incoming
+         & incomingCycle
+         & fifo
+         & fifoCount
+         & dsklen
+         & dsksync
+         & prb;
+     }
+
+
     //
     // Methods from HardwareComponent
     //
@@ -160,22 +142,23 @@ private:
     size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
+
     //
-    // Accesing the internal state
+    // Getters and setters
     //
-    
+
 public:
-    
-    // Returns the latest internal state recorded by inspect()
-    DiskControllerInfo getInfo();
 
-    // Returns statistical information about the current activiy
-    DiskControllerStats getStats() { return stats; }
+    // Connects or disconnect an external drive
+     void setConnected(int df, bool value);
+     void connect(int df) { setConnected(df, true); }
+     void disconnect(int df) { setConnected(df, false); }
 
-    // Resets the collected statistical information
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
+     // Sets the speed acceleration factor for all connected drives
+     void setSpeed(int32_t value);
 
+     // Enables or disables the emulation of a FIFO buffer
+     void setUseFifo(bool value);
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
@@ -183,12 +166,12 @@ public:
     // Indicates if the motor of at least one drive is switched on
     bool spinning();
     
-    // Returns the current drive state
+    // Drive state
     DriveState getState() { return state; }
     
 private:
     
-    void setState(DriveState state);
+    void setState(DriveState s);
     
     
     //

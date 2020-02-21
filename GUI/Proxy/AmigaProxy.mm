@@ -612,14 +612,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->paula->audioUnit.getStats();
 }
-- (DiskControllerConfig) getDiskControllerConfig
-{
-    return wrapper->paula->diskController.getConfig();
-}
-- (DiskControllerInfo) getDiskControllerInfo
-{
-    return wrapper->paula->diskController.getInfo();
-}
 - (UARTInfo) getUARTInfo
 {
     return wrapper->paula->uart.getInfo();
@@ -909,6 +901,18 @@ struct ADFFileWrapper { ADFFile *adf; };
         wrapper->controller = controller;
     }
     return self;
+}
+- (void) inspect
+{
+    wrapper->controller->inspect();
+}
+- (DiskControllerConfig) getConfig
+{
+    return wrapper->controller->getConfig();
+}
+- (DiskControllerInfo) getInfo
+{
+    return wrapper->controller->getInfo();
 }
 - (void) dump
 {

@@ -688,6 +688,11 @@ extension MyController {
             updateWarp()
             refreshStatusBar()
 
+        case MSG_DRIVE_READ,
+             MSG_DRIVE_WRITE,
+             MSG_DRIVE_SELECT:
+            refreshStatusBar()
+
         case MSG_DRIVE_HEAD:
 
             if driveNoise {

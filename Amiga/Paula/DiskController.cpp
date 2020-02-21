@@ -116,9 +116,19 @@ DiskController::getInfo()
 }
 
 void
-DiskController::setState(DriveState state)
+DiskController::setState(DriveState s)
 {
-    this->state = state;
+    if (state == s) return;
+    debug(DSK_DEBUG, "%s -> %s\n", driveStateName(state), driveStateName(s));
+
+    bool wasWriting = (state == DRIVE_DMA_WRITE);
+    bool isWriting = (s == DRIVE_DMA_WRITE);
+
+    state = s;
+
+    if (wasWriting != isWriting) {
+        amiga.putMessage(isWriting ? MSG_DRIVE_WRITE : MSG_DRIVE_READ);
+    }
 }
 
 void
@@ -258,8 +268,8 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
     
     // Disable DMA if the DMAEN bit (15) is zero
     if (!(newDskLen & 0x8000)) {
-        debug(DSK_DEBUG, "dma = DRIVE_DMA_OFF\n");
-        state = DRIVE_DMA_OFF;
+
+        setState(DRIVE_DMA_OFF);
         clearFifo();
     }
     
@@ -273,8 +283,7 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
             
-            debug(DSK_DEBUG, "dma = DRIVE_DMA_WRITE\n");
-            state = DRIVE_DMA_WRITE;
+            setState(DRIVE_DMA_WRITE);
             clearFifo();
             
         } else {
@@ -283,15 +292,13 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
             if (GET_BIT(paula.adkcon, 10)) {
                 
                 // Wait with reading until a sync mark has been found
-                debug(DSK_DEBUG, "dma = DRIVE_DMA_READ_SYNC\n");
-                state = DRIVE_DMA_WAIT;
+                setState(DRIVE_DMA_WAIT);
                 clearFifo();
                 
             } else {
                 
                 // Start reading immediately
-                debug(DSK_DEBUG, "dma = DRIVE_DMA_READ\n");
-                state = DRIVE_DMA_READ;
+                setState(DRIVE_DMA_READ);
                 clearFifo();
             }
         }
@@ -365,10 +372,11 @@ void
 DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
-    
+
     // Store a copy of the new value for reference.
     prb = newValue;
     
+    int8_t oldSelected = selected;
     selected = -1;
     
     // Iterate over all connected drives
@@ -387,6 +395,9 @@ DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     else if (!agnus.hasEvent<DSK_SLOT>()) {
         agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
+
+    // Inform the GUI
+    if (oldSelected != selected) amiga.putMessage(MSG_DRIVE_SELECT, selected);
 }
 
 void
@@ -521,8 +532,8 @@ DiskController::executeFifo()
 
                 // Enable DMA if the controller was waiting for it.
                 if (state == DRIVE_DMA_WAIT) {
-                    debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
-                    state = DRIVE_DMA_READ;
+
+                    setState(DRIVE_DMA_READ);
                     clearFifo();
                 }
             }
@@ -534,7 +545,7 @@ DiskController::executeFifo()
             if (fifoIsEmpty()) {
                 
                 // Switch off DMA is the last byte has been flushed out.
-                if (state == DRIVE_DMA_FLUSH) state = DRIVE_DMA_OFF;
+                if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
                 
             } else {
                 
@@ -607,7 +618,7 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);
-            state = DRIVE_DMA_OFF;
+            setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
                 plaindebug("performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -657,7 +668,7 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
              * DRIVE_DMA_OFF once the FIFO has been emptied.
              */
             
-            // state = DRIVE_DMA_FLUSH;
+            // setState(DRIVE_DMA_FLUSH);
             
             /* I'm unsure of the timing-accurate approach works properly,
              * because the disk IRQ would be triggered before the last byte
@@ -667,7 +678,7 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
             while (!fifoIsEmpty()) {
                 drive->writeHead(readFifo());
             }
-            state = DRIVE_DMA_OFF;
+            setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
                 debug("performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -745,8 +756,7 @@ DiskController::performSimpleDMAWait(Drive *drive, uint32_t remaining)
             paula.raiseIrq(INT_DSKSYN);
 
             // Enable DMA if the controller was waiting for it
-            debug(DSK_DEBUG, "DRIVE_DMA_SYNC_WAIT -> DRIVE_DMA_READ (%d)\n", drive->head.cylinder);
-            state = DRIVE_DMA_READ;
+            setState(DRIVE_DMA_READ);
 
             return;
         }
@@ -774,7 +784,7 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
         if ((--dsklen & 0x3FFF) == 0) {
 
             paula.raiseIrq(INT_DSKBLK);
-            state = DRIVE_DMA_OFF;
+            setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
                 debug("doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -806,7 +816,7 @@ DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
         if ((--dsklen & 0x3FFF) == 0) {
             
             paula.raiseIrq(INT_DSKBLK);
-            state = DRIVE_DMA_OFF;
+            setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
                 debug("doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
@@ -851,7 +861,7 @@ DiskController::performTurboDMA(Drive *drive)
     
     // Trigger disk interrupt with some delay
     paula.scheduleIrqRel(INT_DSKBLK, DMA_CYCLES(512));
-    state = DRIVE_DMA_OFF;
+    setState(DRIVE_DMA_OFF);
 }
 
 void
