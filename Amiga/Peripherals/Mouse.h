@@ -100,6 +100,9 @@ public:
     // Modifies the POTGOR bits according to the current button state
     void changePotgo(int port, uint16_t &potgo);
 
+    // Modifies the PRA bits of CIA A according to the current button state
+    void changePra(int port, uint8_t &pra);
+
     
     //
     // Operating the mouse

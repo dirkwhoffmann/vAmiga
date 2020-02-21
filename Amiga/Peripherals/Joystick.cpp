@@ -70,6 +70,14 @@ Joystick::scheduleNextShot()
     nextAutofireFrame = agnus.frame + (int)(50.0 / (2 * autofireFrequency));
 }
 
+void
+Joystick::changePra(uint8_t &pra)
+{
+    uint16_t mask = (nr == 1) ? 0x40 : 0x80;
+
+    if (button) pra &= ~mask;
+}
+
 uint16_t
 Joystick::joydat()
 {

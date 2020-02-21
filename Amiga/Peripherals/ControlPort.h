@@ -95,18 +95,22 @@ public:
     //
     
     public:
-    
-    // Modifies the POTGOR bits according to the connected device
-    void changePotgo(uint16_t &potgo);
 
     // Returns the control port bits showing up in the JOYxDAT register
     uint16_t joydat();
 
-    // Returns the control port bits showing up in the CIAA PA register
-    uint8_t ciapa();
-
     // Emulates a write access to JOYTEST
     void pokeJOYTEST(uint16_t value);
+
+    // Modifies the POTGOR bits according to the connected device
+    void changePotgo(uint16_t &potgo);
+
+    // Modifies the PRA bits of CIA A according to the connected device
+    void changePra(uint8_t &pra);
+
+    // Returns the control port bits showing up in the CIAA PA register
+    // DEPRECATED
+    // uint8_t ciapa();
 
     
     //

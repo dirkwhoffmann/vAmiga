@@ -61,12 +61,6 @@ ControlPort::getInfo()
     return result;
 }
 
-void
-ControlPort::changePotgo(uint16_t &potgo)
-{
-    if (device == CPD_MOUSE) mouse.changePotgo(nr, potgo);
-}
-
 uint16_t
 ControlPort::joydat()
 {
@@ -91,6 +85,7 @@ ControlPort::joydat()
     }
 }
 
+/*
 uint8_t
 ControlPort::ciapa()
 {
@@ -113,6 +108,7 @@ ControlPort::ciapa()
             return nr == 1 ? joystick1.ciapa() : joystick2.ciapa();
     }
 }
+*/
 
 void
 ControlPort::pokeJOYTEST(uint16_t value)
@@ -122,6 +118,25 @@ ControlPort::pokeJOYTEST(uint16_t value)
 
     mouseCounterX &= ~0b11111100;
     mouseCounterX |= LO_BYTE(value) & 0b11111100;
+}
+
+void
+ControlPort::changePotgo(uint16_t &potgo)
+{
+    if (device == CPD_MOUSE) mouse.changePotgo(nr, potgo);
+}
+
+void
+ControlPort::changePra(uint8_t &pra)
+{
+    if (device == CPD_MOUSE) {
+        mouse.changePra(nr, pra);
+        return;
+    }
+    if (device == CPD_JOYSTICK) {
+        nr == 1 ? joystick1.changePra(pra) : joystick2.changePra(pra);
+        return;
+    }
 }
 
 void

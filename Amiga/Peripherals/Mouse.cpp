@@ -64,6 +64,18 @@ Mouse::changePotgo(int port, uint16_t &potgo)
     }
 }
 
+void
+Mouse::changePra(int port, uint8_t &pra)
+{
+    uint16_t mask = (port == 1) ? 0x40 : 0x80;
+
+    if (leftButton) {
+        pra &= ~mask;
+    } else if (config.pullUpResistors) {
+        pra |= mask;
+    }
+}
+
 int64_t
 Mouse::getDeltaX()
 {

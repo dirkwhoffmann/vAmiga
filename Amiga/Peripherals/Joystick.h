@@ -103,7 +103,17 @@ private:
     // Updates variable nextAutofireFrame
     void scheduleNextShot();
 
-    
+
+    //
+    // Managing registers
+    //
+
+public:
+
+    // Modifies the PRA bits of CIA A according to the current button state
+    void changePra(uint8_t &pra);
+
+
     //
     // Using the device
     //

@@ -239,7 +239,7 @@ Paula::peekPOTGOR()
     REPLACE_BIT(result, 10, chargeY0 >= 1.0);
     REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
-    // Connected devices can affect the lines, too
+    // A connected device may force the output level to a specific value
     controlPort1.changePotgo(result);
     controlPort2.changePotgo(result);
 

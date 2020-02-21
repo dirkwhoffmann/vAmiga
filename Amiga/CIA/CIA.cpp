@@ -1246,10 +1246,6 @@ CIAA::portAexternal()
     // Set drive status bits
     result = diskController.driveStatusFlags();
 
-    // Set control port bits
-    result &= controlPort1.ciapa();
-    result &= controlPort2.ciapa();
-
     // The OVL bit must be 1
     assert(result & 1);
     
@@ -1265,8 +1261,9 @@ CIAA::updatePA()
     uint8_t oldPA = PA;
     PA = (internal & DDRA) | (external & ~DDRA);
 
-    // A grounded joystick line always forces the corresponding bit to 0
-    PA &= external | 0b00111111;
+    // A connected device may force the output level to a specific value
+    controlPort1.changePra(PA);
+    controlPort2.changePra(PA);
 
     // PLCC CIAs always return the PRA contents for output bits
     // We ignore PLCC emulation until the A600 is supported
