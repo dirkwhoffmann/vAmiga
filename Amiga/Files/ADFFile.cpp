@@ -139,7 +139,7 @@ ADFFile::getDiskType()
 }
 
 long
-ADFFile::getNumSectorsPerTrack()
+ADFFile::numSectorsPerTrack()
 {
     switch (getDiskType()) {
         
@@ -184,7 +184,7 @@ ADFFile::formatDisk(FileSystemType fs)
     }
     
     // Format the disk
-    debug("Formatting a %d sector disk...\n", getNumSectors());
+    debug("Formatting a %d sector disk...\n", numSectorsTotal());
     debug("Sector %d is the root block.\n", rootBlockNr());
     
     // Wipe out all existing data
@@ -286,7 +286,7 @@ ADFFile::writeBitmapBlock()
     uint8_t *p = data + bitmapBlockNr() * 512;
     
     // Write allocation table
-    memset(p + 4, 0xFF, getNumSectors() / 8);
+    memset(p + 4, 0xFF, numSectorsTotal() / 8);
     
     // Mark the root block and the bitmap block as used
     p[4 + (rootBlockNr() / 8)] = 0x3F;

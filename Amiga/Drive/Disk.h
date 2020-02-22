@@ -90,7 +90,7 @@ public:
     static long numSides(DiskType type);
     static long numCylinders(DiskType type);
     static long numTracks(DiskType type);
-    static long numSectors(DiskType type);
+    static long numSectorsPerTrack(DiskType type);
     static long numSectorsTotal(DiskType type);
 
     
@@ -145,14 +145,14 @@ public:
     long numSides() { return numSides(type); }
     long numCyclinders() { return numCylinders(type); }
     long numTracks() { return numTracks(type); }
-    long numSectors() { return numSectors(type); }
+    long numSectorsPerTrack() { return numSectorsPerTrack(type); }
     long numSectorsTotal() { return numSectorsTotal(type); }
     
     // Consistency checking
     bool isValidSideNr(Side s) { return s >= 0 && s < numSides(); }
     bool isValidCylinderNr(Cylinder c) { return c >= 0 && c < numCyclinders(); }
     bool isValidTrack(Track t) { return t >= 0 && t < numTracks(); }
-    bool isValidSector(Sector s) { return s >= 0 && s < numSectors(); }
+    bool isValidSector(Sector s) { return s >= 0 && s < numSectorsPerTrack(); }
     
     
     //

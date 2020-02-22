@@ -1188,7 +1188,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (NSInteger)numCylinders
 {
-    return ((ADFFile *)wrapper->file)->getNumCyclinders();
+    return ((ADFFile *)wrapper->file)->numCyclinders();
 }
 - (NSInteger)numHeads
 {
@@ -1196,15 +1196,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (NSInteger)numTracks
 {
-    return ((ADFFile *)wrapper->file)->getNumTracks();
+    return ((ADFFile *)wrapper->file)->numTracks();
 }
 - (NSInteger)numSectors
 {
-    return ((ADFFile *)wrapper->file)->getNumSectors();
+    return ((ADFFile *)wrapper->file)->numSectorsTotal();
 }
 - (NSInteger)numSectorsPerTrack
 {
-    return ((ADFFile *)wrapper->file)->getNumSectorsPerTrack();
+    return ((ADFFile *)wrapper->file)->numSectorsPerTrack();
 }
 - (void)formatDisk:(FileSystemType)fs
 {

@@ -47,7 +47,7 @@ Disk::numTracks(DiskType type)
 }
 
 long
-Disk::numSectors(DiskType type)
+Disk::numSectorsPerTrack(DiskType type)
 {
     assert(isDiskType(type));
     
@@ -64,7 +64,7 @@ Disk::numSectors(DiskType type)
 long
 Disk::numSectorsTotal(DiskType type)
 {
-    return numTracks(type) * numSectors(type);
+    return numTracks(type) * numSectorsPerTrack(type);
 }
 
 Disk *
@@ -154,18 +154,17 @@ Disk::encodeDisk(ADFFile *adf)
 {
     assert(adf != NULL);
     assert(adf->getDiskType() == getType());
-    
-    bool result = true;
-    long tmax = MIN(numTracks(), adf->getNumTracks());
-    long smax = numSectors();
+
+    long tmax = adf->numTracks();
+    long smax = adf->numSectorsPerTrack();
+
+    assert(tmax <= numTracks());
+    assert(smax == numSectorsPerTrack());
 
     debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
 
-    clearDisk();
-
-    for (Track t = 0; t < tmax; t++) {
-        result &= encodeTrack(adf, t, smax);
-    }
+    bool result = true;
+    for (Track t = 0; t < tmax; t++) result &= encodeTrack(adf, t, smax);
 
     return result;
 }
@@ -174,18 +173,12 @@ bool
 Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 {
     assert(isValidTrack(t));
- 
-    bool result = true;
-    
+
     debug(2, "Encoding track %d\n", t);
-    
-    // Remove previously written data
-    clearTrack(t);
-    
+
     // Encode each sector
-    for (Sector s = 0; s < smax; s++) {
-        result &= encodeSector(adf, t, s);
-    }
+    bool result = true;
+    for (Sector s = 0; s < smax; s++) result &= encodeSector(adf, t, s);
     
     // Get the clock bit right at offset position 0
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
@@ -312,7 +305,7 @@ Disk::decodeDisk(uint8_t *dst)
 {
     bool result = true;
     long tmax = numTracks();
-    long smax = numSectors();
+    long smax = numSectorsPerTrack();
     
     debug("Decoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     

@@ -79,19 +79,19 @@ public:
     DiskType getDiskType();
 
     // Cylinder, track, and sector counts
-    long getNumSectorsPerTrack();
-    long getNumSectors() { return size / 512; }
-    long getNumTracks() { return size / (512 * getNumSectorsPerTrack()); }
-    long getNumCyclinders() { return getNumTracks() / 2; }
+    long numSectorsPerTrack();
+    long numSectorsTotal() { return size / 512; }
+    long numTracks() { return size / (512 * numSectorsPerTrack()); }
+    long numCyclinders() { return numTracks() / 2; }
 
     // Returns the location of the root and bitmap block.
     long rootBlockNr();
     long bitmapBlockNr() { return rootBlockNr() + 1; }
 
     // Consistency checking
-    bool isCylinderNr(long nr) { return nr >= 0 && nr < getNumCyclinders(); }
-    bool isTrackNr(long nr)    { return nr >= 0 && nr < getNumTracks(); }
-    bool isSectorNr(long nr)   { return nr >= 0 && nr < getNumSectors(); }
+    bool isCylinderNr(long nr) { return nr >= 0 && nr < numCyclinders(); }
+    bool isTrackNr(long nr)    { return nr >= 0 && nr < numTracks(); }
+    bool isSectorNr(long nr)   { return nr >= 0 && nr < numSectorsTotal(); }
     
     
     //
@@ -132,7 +132,7 @@ public:
      * Use read() to read from the selected track. Returns EOF when the whole
      * track has been read in.
      */
-    void seekTrackAndSector(long t, long s) { seekSector(getNumSectorsPerTrack() * t + s); }
+    void seekTrackAndSector(long t, long s) { seekSector(numSectorsPerTrack() * t + s); }
     
     // Fills a buffer with the data of a single sector
     void readSector(uint8_t *target, long t, long s); 
