@@ -107,16 +107,16 @@ Agnus::initDasEventTable()
 
         p[0x01] = DAS_REFRESH;
 
-        if (dmacon) {
+        if (dmacon & DSKEN) {
             p[0x07] = DAS_D0;
             p[0x09] = DAS_D1;
             p[0x0B] = DAS_D2;
         }
 
-        p[0x0D] = (dmacon & AU0EN) ? DAS_A0 : EVENT_NONE;
-        p[0x0F] = (dmacon & AU1EN) ? DAS_A1 : EVENT_NONE;
-        p[0x11] = (dmacon & AU2EN) ? DAS_A2 : EVENT_NONE;
-        p[0x13] = (dmacon & AU3EN) ? DAS_A3 : EVENT_NONE;
+        if (dmacon & AU0EN) p[0x0D] = DAS_A0;
+        if (dmacon & AU1EN) p[0x0F] = DAS_A1;
+        if (dmacon & AU2EN) p[0x11] = DAS_A2;
+        if (dmacon & AU3EN) p[0x13] = DAS_A3;
 
         if (dmacon & SPREN) {
             p[0x15] = DAS_S0_1;
@@ -944,7 +944,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     bool oldCOPEN = (oldValue & COPEN) && oldDMAEN;
     bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
     bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
-    // bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
+    bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
     bool oldAU0EN = (oldValue & AU0EN) && oldDMAEN;
     bool oldAU1EN = (oldValue & AU1EN) && oldDMAEN;
     bool oldAU2EN = (oldValue & AU2EN) && oldDMAEN;
@@ -955,7 +955,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     bool newCOPEN = (newValue & COPEN) && newDMAEN;
     bool newBLTEN = (newValue & BLTEN) && newDMAEN;
     bool newSPREN = (newValue & SPREN) && newDMAEN;
-    // bool newDSKEN = (newValue & DSKEN) && newDMAEN;
+    bool newDSKEN = (newValue & DSKEN) && newDMAEN;
     bool newAU0EN = (newValue & AU0EN) && newDMAEN;
     bool newAU1EN = (newValue & AU1EN) && newDMAEN;
     bool newAU2EN = (newValue & AU2EN) && newDMAEN;
@@ -1057,8 +1057,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
         }
     }
     
-    // Disk DMA (only the master bit is checked)
-    // if (oldDSKEN ^ newDSKEN) {
+    // Disk DMA
     if (oldDMAEN ^ newDMAEN) {
 
         /*

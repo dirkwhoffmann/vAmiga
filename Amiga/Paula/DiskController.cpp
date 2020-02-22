@@ -562,16 +562,15 @@ DiskController::executeFifo()
 void
 DiskController::performDMA()
 {
-    Drive *drive = getSelectedDrive();
-    
-    // Only proceed if a drive is selected
-    if (drive == NULL) return;
-    
     // Only proceed if there are remaining bytes to read
-    if (!(dsklen & 0x3FFF)) return;
-    
+    if ((dsklen & 0x3FFF) == 0) return;
+
     // Only proceed if DMA is enabled
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
+
+    // Only proceed if a drive is selected
+    Drive *drive = getSelectedDrive();
+    if (drive == NULL) return;
 
     // How many word shall we read in?
     uint32_t count = drive->config.speed;
@@ -600,7 +599,7 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
     assert(drive != NULL);
 
     // Only proceed if the FIFO contains enough data
-    if (!fifoHasWord()) { return; }
+    if (!fifoHasWord()) return;
 
     do {
         // Read next word from the FIFO buffer
