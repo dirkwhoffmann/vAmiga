@@ -31,10 +31,10 @@ Disk::numCylinders(DiskType type)
     assert(isDiskType(type));
     
     switch (type) {
-        case DISK_35_DD:    return 80;
-        case DISK_35_DD_PC: return 80;
-        case DISK_35_HD:    return 80;
-        case DISK_35_HD_PC: return 80;
+        case DISK_35_DD:    return 84;
+        case DISK_35_DD_PC: return 84;
+        case DISK_35_HD:    return 84;
+        case DISK_35_HD_PC: return 84;
         case DISK_525_SD:   return 40;
         default:            return 0;
     }
@@ -131,14 +131,22 @@ void
 Disk::clearDisk()
 {
     assert(sizeof(data) == sizeof(data.raw));
-    memset(data.raw, 0xAA, sizeof(data));
+    // memset(data.raw, 0xAA, sizeof(data));
+
+    srand(0);
+    for (int i = 0; i < sizeof(data); i++)
+        data.raw[i] = rand() & 0xFF;
 }
 
 void
 Disk::clearTrack(Track t)
 {
     assert(isValidTrack(t));
-    memset(data.track[t], 0xAA, trackSize);
+
+    // memset(data.track[t], 0xAA, trackSize);
+    srand(0);
+    for (int i = 0; i < sizeof(data.track[t]); i++)
+        data.track[t][i] = rand() & 0xFF;
 }
 
 bool
@@ -148,11 +156,13 @@ Disk::encodeDisk(ADFFile *adf)
     assert(adf->getDiskType() == getType());
     
     bool result = true;
-    long tmax = numTracks();
+    long tmax = MIN(numTracks(), adf->getNumTracks());
     long smax = numSectors();
-    
+
     debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
-    
+
+    clearDisk();
+
     for (Track t = 0; t < tmax; t++) {
         result &= encodeTrack(adf, t, smax);
     }

@@ -566,7 +566,7 @@ Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
     // Drive head
     //
     
-    // Move head if STEP goes high and drive was already selected
+    // Move head if STEP goes high and drive was selected
     if (RISING_EDGE(oldStep, newStep) && !oldSel) moveHead(newDir);
     
     // Evaluate the side selection bit
