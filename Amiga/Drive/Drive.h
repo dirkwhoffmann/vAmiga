@@ -17,7 +17,7 @@ class Drive : public AmigaComponent {
     
     friend class DiskController;
         
-    // Drive df<nr>
+    // This object emulates drive df<nr>
     const int nr;
 
     // Bookkeeping
@@ -30,15 +30,6 @@ class Drive : public AmigaComponent {
     // Value of the currently transmitted identification bit
     bool idBit;
 
-    
-    /* The latched MTR bit (motor control bit)
-     * Each drive latches the motor signal at the time it is selected (i.e.,
-     * when the SELx line is pulled down to 0). The disk drive motor stays in
-     * this state until the drive is selected again. This bit also controls the
-     * activity light on the front of the disk drive.
-     */
-    // bool mtr;
-    
     /* Indicates if the motor is running at full speed
      * On a real drive, it can take up to one half second (500ms) until the
      * drive runs at full speed. We don't emulate  accurate timing here and

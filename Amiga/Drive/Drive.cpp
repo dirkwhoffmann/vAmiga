@@ -397,7 +397,7 @@ Drive::moveHead(int dir)
     } else {
         
         // Move drive head inwards (towards the upper tracks)
-        if (head.cylinder < 79) {
+        if (head.cylinder < 83) {
             head.cylinder++;
             recordCylinder(head.cylinder);
         }

@@ -32,7 +32,7 @@ private:
     Cycle spLow;
     Cycle spHigh;
 
-    // The keycode type-ahead buffer (10 keycodes on an original Amiga)a
+    // The keycode type-ahead buffer (10 keycodes on an original Amiga)
     static const size_t bufferSize = 10;
     uint8_t typeAheadBuffer[bufferSize];
     
