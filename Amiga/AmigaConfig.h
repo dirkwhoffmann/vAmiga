@@ -70,7 +70,7 @@ static const int BLTTIM_DEBUG  = 2;  // Blitter Timing
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
 static const int KBD_DEBUG     = 2;  // Keyboard
-static const int SNP_DEBUG     = 1;  // Snapshot debugging (Serialization)
+static const int SNP_DEBUG     = 2;  // Snapshot debugging (Serialization)
 
 
 // Checksum computation (set to true to compute checksums)

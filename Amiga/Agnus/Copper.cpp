@@ -908,7 +908,7 @@ Copper::instrCount(int nr)
     int strt = (nr == 1) ? cop1lc  : cop2lc;
     int stop = (nr == 1) ? cop1end : cop2end;
 
-    return 1 + (stop - strt) / 4;
+    return MAX(0, 1 + (stop - strt) / 4);
 }
 
 
