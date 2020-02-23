@@ -7,28 +7,21 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _VASTD_INC
-#define _VASTD_INC
+#ifndef _AMIGAUTILS_INC
+#define _AMIGAUTILS_INC
 
+#include <assert.h>
+#include <limits.h>
+#include <mach/mach_time.h>
+#include <pthread.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdarg.h>
-#include <limits.h>
-#include <sys/time.h>
-#include <sys/stat.h>
 #include <sys/param.h>
-#include <time.h>
-#include <mach/mach.h>
-#include <mach/mach_time.h>
+#include <sys/stat.h>
 #include <unistd.h>
-#include <pthread.h>
-#include <errno.h>
-#include <sched.h>
-#include <assert.h>
-#include <math.h>
-#include <ctype.h>
 
 #include "AmigaConfig.h"
 #include "AmigaTypes.h"
@@ -60,25 +53,25 @@
 // Accessing bits and bytes
 //
 
-// Returns the low byte or the high byte of a uint16_t value
-#define LO_BYTE(x) (uint8_t)((x) & 0xFF)
-#define HI_BYTE(x) (uint8_t)((x) >> 8)
+// Returns the low byte or the high byte of a 16 bit value
+#define LO_BYTE(x) (u8)((x) & 0xFF)
+#define HI_BYTE(x) (u8)((x) >> 8)
 
-// Returns the low word or the high word of a uint32_t value
-#define LO_WORD(x) (uint16_t)((x) & 0xFFFF)
-#define HI_WORD(x) (uint16_t)((x) >> 16)
+// Returns the low word or the high word of a 32 bit value
+#define LO_WORD(x) (u16)((x) & 0xFFFF)
+#define HI_WORD(x) (u16)((x) >> 16)
 
 // Specifies a larger integer in little endian byte format
-#define LO_HI(x,y) (uint16_t)((y) << 8 | (x))
-#define LO_LO_HI(x,y,z) (uint32_t)((z) << 16 | (y) << 8 | (x))
-#define LO_LO_HI_HI(x,y,z,w) (uint32_t)((w) << 24 | (z) << 16 | (y) << 8 | (x))
-#define LO_W_HI_W(x,y) (uint32_t)((y) << 16 | (x))
+#define LO_HI(x,y) (u16)((y) << 8 | (x))
+#define LO_LO_HI(x,y,z) (u32)((z) << 16 | (y) << 8 | (x))
+#define LO_LO_HI_HI(x,y,z,w) (u32)((w) << 24 | (z) << 16 | (y) << 8 | (x))
+#define LO_W_HI_W(x,y) (u32)((y) << 16 | (x))
 
 // Specifies a larger integer in big endian byte format
-#define HI_LO(x,y) (uint16_t)((x) << 8 | (y))
-#define HI_HI_LO(x,y,z) (uint32_t)((x) << 16 | (y) << 8 | (z))
-#define HI_HI_LO_LO(x,y,z,w) (uint32_t)((x) << 24 | (y) << 16 | (z) << 8 | (w))
-#define HI_W_LO_W(x,y) (uint32_t)((x) << 16 | (y))
+#define HI_LO(x,y) (u16)((x) << 8 | (y))
+#define HI_HI_LO(x,y,z) (u32)((x) << 16 | (y) << 8 | (z))
+#define HI_HI_LO_LO(x,y,z,w) (u32)((x) << 24 | (y) << 16 | (z) << 8 | (w))
+#define HI_W_LO_W(x,y) (u32)((x) << 16 | (y))
 
 // Returns a certain byte of a larger integer
 #define BYTE0(x) LO_BYTE(x)
@@ -150,8 +143,8 @@ bool checkFileSize(const char *filename, long size);
 bool checkFileSizeRange(const char *filename, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
-bool matchingFileHeader(const char *path, const uint8_t *header, size_t length);
-bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t length);
+bool matchingFileHeader(const char *path, const u8 *header, size_t length);
+bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
 
 
 //
@@ -170,7 +163,7 @@ void sleepMicrosec(unsigned usec);
  * Returns the overshoot time (jitter), measured in kernel time units. Smaller
  * values are better, 0 is best.
  */
-int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
+int64_t sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
 
 
 //
@@ -178,22 +171,22 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 //
 
 // Returns the FNV-1a seed value
-inline uint32_t fnv_1a_init32() { return 0x811c9dc5; }
-inline uint64_t fnv_1a_init64() { return 0xcbf29ce484222325; }
+inline u32 fnv_1a_init32() { return 0x811c9dc5; }
+inline u64 fnv_1a_init64() { return 0xcbf29ce484222325; }
 
 // Performs a single iteration of the FNV-1a hash algorithm
-inline uint32_t fnv_1a_it32(uint32_t prev, uint32_t value) {
+inline u32 fnv_1a_it32(u32 prev, u32 value) {
     return (prev ^ value) * 0x1000193; }
-inline uint64_t fnv_1a_it64(uint64_t prev, uint64_t value) {
+inline u64 fnv_1a_it64(u64 prev, u64 value) {
     return (prev ^ value) * 0x100000001b3; }
 
 // Computes a FNV-1a checksum for a given buffer
-uint32_t fnv_1a_32(const uint8_t *addr, size_t size);
-uint64_t fnv_1a_64(const uint8_t *addr, size_t size);
+u32 fnv_1a_32(const u8 *addr, size_t size);
+u64 fnv_1a_64(const u8 *addr, size_t size);
 
 // Computes a CRC-32 checksum for a given buffer
-uint32_t crc32(const uint8_t *addr, size_t size);
-uint32_t crc32forByte(uint32_t r); // Helper
+u32 crc32(const u8 *addr, size_t size);
+u32 crc32forByte(u32 r); // Helper
 
 
 //
