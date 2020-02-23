@@ -39,7 +39,7 @@ extension UserDefaults {
         
         if let data = data(forKey: key) {
             if let decoded = try? PropertyListDecoder().decode(T.self, from: data) {
-                track("Decoded \(key) successfully")
+                // track("Decoded \(key) successfully")
                 item = decoded
             } else {
                 track("Failed to decode \(key)")

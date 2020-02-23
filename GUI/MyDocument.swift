@@ -210,7 +210,7 @@ class MyDocument: NSDocument {
     
     override open func data(ofType typeName: String) throws -> Data {
         
-        track("Trying to write \(typeName) file.")
+        track("\(typeName)")
         
         if typeName == "vAmiga" {
             

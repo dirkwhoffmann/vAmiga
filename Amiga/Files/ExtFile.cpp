@@ -21,11 +21,7 @@ ExtFile::ExtFile()
 bool
 ExtFile::isExtBuffer(const uint8_t *buffer, size_t length)
 {
-    printf("length = %zu %d\n", length, KB(512));
-
     if (length != KB(512)) return false;
-
-    printf("length = %zu %d\n", length, KB(512));
 
     return
     matchingBufferHeader(buffer, magicBytes1, sizeof(magicBytes1)) ||

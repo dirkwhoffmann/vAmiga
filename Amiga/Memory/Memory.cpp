@@ -68,8 +68,6 @@ Memory::_reset()
     // In hard-reset mode, we also initialize Ram
     fillRamWithStartupPattern();
 #endif
-
-    dump();
 }
 
 void
@@ -90,15 +88,15 @@ Memory::_dump()
         size_t size = mem[i].size;
         uint8_t *addr = mem[i].addr;
 
-        plainmsg("     %s: ", mem[i].desc);
+        msg("     %s: ", mem[i].desc);
         if (size == 0) {
             assert(addr == 0);
-            plainmsg("not present\n");
+            msg("not present\n");
         } else {
             assert(addr != 0);
             assert(size % KB(1) == 0);
             uint32_t check = fnv_1a_32(addr, size);
-            plainmsg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
+            msg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
 }
@@ -555,8 +553,6 @@ Memory::loadExtFromBuffer(const uint8_t *buffer, size_t length)
 {
     assert(buffer != NULL);
 
-    debug("loadExtFromBuffer\n");
-
     ExtFile *file = ExtFile::makeWithBuffer(buffer, length);
 
     if (!file) {
@@ -571,8 +567,6 @@ bool
 Memory::loadExtFromFile(const char *path)
 {
     assert(path != NULL);
-
-    debug("loadExtFromFile\n");
 
     ExtFile *file = ExtFile::makeWithFile(path);
 

@@ -42,9 +42,9 @@ RTC::_reset()
 void
 RTC::_dump()
 {
-    plainmsg("Model: %s\n", RTCModelName(config.model));
-    for (unsigned i = 0; i < 16; i++) plainmsg("i: %X ", reg[i]);
-    plainmsg("\n");
+    msg("Model: %s\n", RTCModelName(config.model));
+    for (unsigned i = 0; i < 16; i++) msg("i: %X ", reg[i]);
+    msg("\n");
 }
 
 time_t

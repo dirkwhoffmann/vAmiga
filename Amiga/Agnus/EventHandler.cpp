@@ -328,19 +328,19 @@ Agnus::dumpEvents()
     
     amiga.dumpClock();
     
-    plainmsg("Events:\n");
+    msg("Events:\n");
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         
-        plainmsg("Slot: %-17s ", eventInfo.slotInfo[i].slotName);
-        plainmsg("Event: %-15s ", eventInfo.slotInfo[i].eventName);
-        plainmsg("Trigger: ");
+        msg("Slot: %-17s ", eventInfo.slotInfo[i].slotName);
+        msg("Event: %-15s ", eventInfo.slotInfo[i].eventName);
+        msg("Trigger: ");
         
         Cycle trigger = eventInfo.slotInfo[i].trigger;
         if (trigger == NEVER) {
-            plainmsg("never\n");
+            msg("never\n");
         } else {
-            plainmsg("%lld ", trigger);
-            plainmsg("(%lld DMA cycles away)\n", AS_DMA_CYCLES(trigger - eventInfo.dmaClock));
+            msg("%lld ", trigger);
+            msg("(%lld DMA cycles away)\n", AS_DMA_CYCLES(trigger - eventInfo.dmaClock));
         }
     }
 }

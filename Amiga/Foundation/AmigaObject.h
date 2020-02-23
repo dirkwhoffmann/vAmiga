@@ -59,28 +59,27 @@ class AmigaObject {
     
     /* There a four types of messages:
      *
-     *   - msg     Debug message   (Shows up in debug and release build)
-     *   - debug   Debug message   (Shows up in debug build, only)
+     *   - msg     Debug message   (Shows up in debug and release builds)
      *   - warn    Warning message (Does not terminate the program)
      *   - panic   Error message   (Terminates the program)
+     *   - debug   Debug message   (Shows up in debug builds, only)
      *
-     * All messages are prefixed by the string description produced by the
-     * prefix() function. To omit the prefix, use plainmsg(...) or
-     * plaindebug(...) instead. Some Amiga objects overwrite prefix() to
-     * provide addition standard debug information when a message is printed.
+     * Debug messages are prefixed by the string description produced by the
+     * prefix() function. To omit the prefix, use plaindebug(...) instead.
+     * Some Amiga objects overwrite prefix() to provide addition standard debug
+     * information when a message is printed.
      */
     virtual void prefix();
     
     void msg(const char *fmt, ...);
-    void plainmsg(const char *fmt, ...);
-    
+    void warn(const char *fmt, ...);
+    void panic(const char *fmt, ...);
+
     void debug(const char *fmt, ...);
     void debug(int level, const char *fmt, ...);
     void plaindebug(const char *fmt, ...);
     void plaindebug(int level, const char *fmt, ...);
-    
-    void warn(const char *fmt, ...);
-    void panic(const char *fmt, ...);
+
 
     //
     // Convenience wrappers

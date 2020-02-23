@@ -37,16 +37,16 @@ void
 Copper::_dump()
 {
     bool active = agnus.isPending<COP_SLOT>();
-    plainmsg("    cdang: %d\n", cdang);
-    plainmsg("   active: %s\n", active ? "yes" : "no");
-    if (active) plainmsg("    state: %d\n", agnus.slot[COP_SLOT].id);
-    plainmsg("    coppc: %X\n", coppc);
-    plainmsg("  copins1: %X\n", cop1ins);
-    plainmsg("  copins2: %X\n", cop2ins);
-    plainmsg("   cop1lc: %X\n", cop1lc);
-    plainmsg("   cop2lc: %X\n", cop2lc);
-    plainmsg("  cop1end: %X\n", cop1end);
-    plainmsg("  cop2end: %X\n", cop2end);
+    msg("    cdang: %d\n", cdang);
+    msg("   active: %s\n", active ? "yes" : "no");
+    if (active) msg("    state: %d\n", agnus.slot[COP_SLOT].id);
+    msg("    coppc: %X\n", coppc);
+    msg("  copins1: %X\n", cop1ins);
+    msg("  copins2: %X\n", cop2ins);
+    msg("   cop1lc: %X\n", cop1lc);
+    msg("   cop2lc: %X\n", cop2lc);
+    msg("  cop1end: %X\n", cop1end);
+    msg("  cop2end: %X\n", cop2end);
 }
 
 CopperInfo

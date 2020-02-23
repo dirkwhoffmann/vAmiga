@@ -51,8 +51,8 @@ SerialPort::_inspect()
 void
 SerialPort::_dump()
 {
-    plainmsg("    device: %d\n", config.device);
-    plainmsg("      port: %X\n", port);
+    msg("    device: %d\n", config.device);
+    msg("      port: %X\n", port);
 }
 
 SerialPortInfo

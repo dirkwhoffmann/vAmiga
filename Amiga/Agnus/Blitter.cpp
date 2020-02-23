@@ -93,46 +93,46 @@ Blitter::_inspect()
 void
 Blitter::_dump()
 {
-    plainmsg("  Accuracy: %d\n", config.accuracy);
-    plainmsg("\n");
-    plainmsg("   bltcon0: %X\n", bltcon0);
-    plainmsg("\n");
-    plainmsg("            Shift A: %d\n", bltconASH());
-    plainmsg("              Use A: %s\n", bltconUSEA() ? "yes" : "no");
-    plainmsg("              Use B: %s\n", bltconUSEB() ? "yes" : "no");
-    plainmsg("              Use C: %s\n", bltconUSEC() ? "yes" : "no");
-    plainmsg("              Use D: %s\n", bltconUSED() ? "yes" : "no");
-    plainmsg("\n");
-    plainmsg("   bltcon1: %X\n", bltcon1);
-    plainmsg("\n");
-    plainmsg("            Shift B: %d\n", bltconBSH());
-    plainmsg("                EFE: %s\n", bltconEFE() ? "yes" : "no");
-    plainmsg("                IFE: %s\n", bltconIFE() ? "yes" : "no");
-    plainmsg("                FCI: %s\n", bltconFCI() ? "yes" : "no");
-    plainmsg("               DESC: %s\n", bltconDESC() ? "yes" : "no");
-    plainmsg("               LINE: %s\n", bltconLINE() ? "yes" : "no");
-    plainmsg("\n");
-    plainmsg("  bltsizeH: %d\n", bltsizeH);
-    plainmsg("  bltsizeW: %d\n", bltsizeW);
-    plainmsg("\n");
-    plainmsg("    bltapt: %X\n", bltapt);
-    plainmsg("    bltbpt: %X\n", bltbpt);
-    plainmsg("    bltcpt: %X\n", bltcpt);
-    plainmsg("    bltdpt: %X\n", bltdpt);
-    plainmsg("   bltafwm: %X\n", bltafwm);
-    plainmsg("   bltalwm: %X\n", bltalwm);
-    plainmsg("   bltamod: %X\n", bltamod);
-    plainmsg("   bltbmod: %X\n", bltbmod);
-    plainmsg("   bltcmod: %X\n", bltcmod);
-    plainmsg("   bltdmod: %X\n", bltdmod);
-    plainmsg("      anew: %X\n", anew);
-    plainmsg("      bnew: %X\n", bnew);
-    plainmsg("     ahold: %X\n", ahold);
-    plainmsg("     bhold: %X\n", bhold);
-    plainmsg("     chold: %X\n", chold);
-    plainmsg("     dhold: %X\n", dhold);
-    plainmsg("    ashift: %X bshift: %X\n", ashift, bshift);
-    plainmsg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
+    msg("  Accuracy: %d\n", config.accuracy);
+    msg("\n");
+    msg("   bltcon0: %X\n", bltcon0);
+    msg("\n");
+    msg("            Shift A: %d\n", bltconASH());
+    msg("              Use A: %s\n", bltconUSEA() ? "yes" : "no");
+    msg("              Use B: %s\n", bltconUSEB() ? "yes" : "no");
+    msg("              Use C: %s\n", bltconUSEC() ? "yes" : "no");
+    msg("              Use D: %s\n", bltconUSED() ? "yes" : "no");
+    msg("\n");
+    msg("   bltcon1: %X\n", bltcon1);
+    msg("\n");
+    msg("            Shift B: %d\n", bltconBSH());
+    msg("                EFE: %s\n", bltconEFE() ? "yes" : "no");
+    msg("                IFE: %s\n", bltconIFE() ? "yes" : "no");
+    msg("                FCI: %s\n", bltconFCI() ? "yes" : "no");
+    msg("               DESC: %s\n", bltconDESC() ? "yes" : "no");
+    msg("               LINE: %s\n", bltconLINE() ? "yes" : "no");
+    msg("\n");
+    msg("  bltsizeH: %d\n", bltsizeH);
+    msg("  bltsizeW: %d\n", bltsizeW);
+    msg("\n");
+    msg("    bltapt: %X\n", bltapt);
+    msg("    bltbpt: %X\n", bltbpt);
+    msg("    bltcpt: %X\n", bltcpt);
+    msg("    bltdpt: %X\n", bltdpt);
+    msg("   bltafwm: %X\n", bltafwm);
+    msg("   bltalwm: %X\n", bltalwm);
+    msg("   bltamod: %X\n", bltamod);
+    msg("   bltbmod: %X\n", bltbmod);
+    msg("   bltcmod: %X\n", bltcmod);
+    msg("   bltdmod: %X\n", bltdmod);
+    msg("      anew: %X\n", anew);
+    msg("      bnew: %X\n", bnew);
+    msg("     ahold: %X\n", ahold);
+    msg("     bhold: %X\n", bhold);
+    msg("     chold: %X\n", chold);
+    msg("     dhold: %X\n", dhold);
+    msg("    ashift: %X bshift: %X\n", ashift, bshift);
+    msg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
 BlitterInfo
@@ -866,9 +866,9 @@ Blitter::beginLineBlit(int level)
 {
     static bool verbose = true;
 
-    if (verbose) {
+    if (BLT_CHECKSUM && verbose) {
         verbose = false;
-        debug("Performing level %d line blits.\n", level);
+        msg("Performing level %d line blits.\n", level);
     }
 
     switch (level) {
@@ -884,9 +884,9 @@ Blitter::beginCopyBlit(int level)
 {
     static bool verbose = true;
 
-    if (verbose) {
+    if (BLT_CHECKSUM && verbose) {
         verbose = false;
-        debug("Performing level %d copy blits.\n", level);
+        msg("Performing level %d copy blits.\n", level);
     }
 
     switch (level) {

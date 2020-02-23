@@ -37,7 +37,7 @@ UART::_inspect()
 void
 UART::_dump()
 {
-    plainmsg("   serper: %X\n", serper);
+    msg("   serper: %X\n", serper);
 }
 
 UARTInfo
@@ -148,7 +148,7 @@ UART::copyFromReceiveShiftRegister()
     // Inform the GUI about the incoming data
     amiga.putMessage(MSG_SER_IN, receiveBuffer);
 
-    // plainmsg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
+    // msg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
 
     count++;
 

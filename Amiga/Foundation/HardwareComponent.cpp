@@ -230,6 +230,7 @@ HardwareComponent::load(uint8_t *buffer)
     ptr += didLoadFromBuffer(ptr);
 
     // Verify that the number of written bytes matches the snapshot size
+    debug(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
     // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, size());
 
@@ -256,8 +257,9 @@ HardwareComponent::save(uint8_t *buffer)
     ptr += didSaveToBuffer(ptr);
 
     // Verify that the number of written bytes matches the snapshot size
+    debug(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
-    debug(SNAP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
+    debug(SNP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
     // hexdump(buffer, MIN(ptr - buffer, 128));
 
     return ptr - buffer;

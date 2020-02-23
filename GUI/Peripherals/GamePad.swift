@@ -57,7 +57,7 @@ class GamePad {
     init(manager: GamePadManager,
          vendorID: Int, productID: Int, locationID: Int) {
         
-        track()
+        track("\(vendorID) \(productID) \(locationID)")
         
         self.manager = manager
         self.vendorID = vendorID

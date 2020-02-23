@@ -110,10 +110,10 @@ Denise::_inspect()
 void
 Denise::_dumpConfig()
 {
-    plainmsg(" emulateSprites: %d\n", config.emulateSprites);
-    plainmsg("      clxSprSpr: %d\n", config.clxSprSpr);
-    plainmsg("      clxSprPlf: %d\n", config.clxSprPlf);
-    plainmsg("      clxPlfPlf: %d\n", config.clxPlfPlf);
+    msg(" emulateSprites: %d\n", config.emulateSprites);
+    msg("      clxSprSpr: %d\n", config.clxSprSpr);
+    msg("      clxSprPlf: %d\n", config.clxSprPlf);
+    msg("      clxPlfPlf: %d\n", config.clxPlfPlf);
 }
 
 void
@@ -1252,8 +1252,8 @@ Denise::dumpBuffer(uint8_t *buffer, size_t length)
     const size_t cols = 16;
 
     for (int i = 0; i < (length + cols - 1) / cols; i++) {
-        for (int j =0; j < cols; j++) plainmsg("%2d ", buffer[i * cols + j]);
-        plainmsg("\n");
+        for (int j =0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
+        msg("\n");
     }
 }
 

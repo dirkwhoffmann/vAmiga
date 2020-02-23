@@ -229,25 +229,25 @@ Agnus::_inspect()
 void
 Agnus::_dump()
 {
-    plainmsg(" actions : %X\n", actions);
+    msg(" actions : %X\n", actions);
 
-    plainmsg("   dskpt : %X\n", dskpt);
-    for (unsigned i = 0; i < 4; i++) plainmsg("audlc[%d] : %X\n", i, audlc[i]);
-    for (unsigned i = 0; i < 6; i++) plainmsg("bplpt[%d] : %X\n", i, bplpt[i]);
-    for (unsigned i = 0; i < 8; i++) plainmsg("bplpt[%d] : %X\n", i, sprpt[i]);
+    msg("   dskpt : %X\n", dskpt);
+    for (unsigned i = 0; i < 4; i++) msg("audlc[%d] : %X\n", i, audlc[i]);
+    for (unsigned i = 0; i < 6; i++) msg("bplpt[%d] : %X\n", i, bplpt[i]);
+    for (unsigned i = 0; i < 8; i++) msg("bplpt[%d] : %X\n", i, sprpt[i]);
     
-    plainmsg("   hstrt : %d\n", diwHstrt);
-    plainmsg("   hstop : %d\n", diwHstop);
-    plainmsg("   vstrt : %d\n", diwVstrt);
-    plainmsg("   vstop : %d\n", diwVstop);
+    msg("   hstrt : %d\n", diwHstrt);
+    msg("   hstop : %d\n", diwHstop);
+    msg("   vstrt : %d\n", diwVstrt);
+    msg("   vstop : %d\n", diwVstop);
 
-    plainmsg("\nEvents:\n\n");
+    msg("\nEvents:\n\n");
     dumpEvents();
 
-    plainmsg("\nBPL DMA table:\n\n");
+    msg("\nBPL DMA table:\n\n");
     dumpBplEventTable();
 
-    plainmsg("\nDAS DMA table:\n\n");
+    msg("\nDAS DMA table:\n\n");
     dumpDasEventTable();
 }
 
@@ -768,10 +768,10 @@ Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
 
-    plainmsg("%s\n", r1);
-    plainmsg("%s\n", r2);
-    plainmsg("%s\n", r3);
-    plainmsg("%s\n", r4);
+    msg("%s\n", r1);
+    msg("%s\n", r2);
+    msg("%s\n", r3);
+    msg("%s\n", r4);
 }
 
 
@@ -825,10 +825,10 @@ Agnus::dumpBplEventTable(int from, int to)
         }
     }
     r1[i] = r2[i] = r3[i] = r4[i] = 0;
-    plainmsg("%s\n", r1);
-    plainmsg("%s\n", r2);
-    plainmsg("%s\n", r3);
-    plainmsg("%s\n", r4);
+    msg("%s\n", r1);
+    msg("%s\n", r2);
+    msg("%s\n", r3);
+    msg("%s\n", r4);
     */
 }
 
@@ -836,12 +836,12 @@ void
 Agnus::dumpBplEventTable()
 {
     // Dump the event table
-    plainmsg("Event table:\n\n");
-    plainmsg("ddfstrt = %X dffstop = %X\n",
+    msg("Event table:\n\n");
+    msg("ddfstrt = %X dffstop = %X\n",
              ddfstrt, ddfstop);
-    plainmsg("dmaStrtLores = %X dmaStrtHires = %X\n",
+    msg("dmaStrtLores = %X dmaStrtHires = %X\n",
              dmaStrtLores, dmaStrtHires);
-    plainmsg("dmaStopLores = %X dmaStopHires = %X\n",
+    msg("dmaStopLores = %X dmaStopHires = %X\n",
              dmaStopLores, dmaStopHires);
 
     dumpBplEventTable(0x00, 0x4F);
@@ -849,16 +849,16 @@ Agnus::dumpBplEventTable()
     dumpBplEventTable(0xA0, 0xE2);
 
     // Dump the jump table
-    plainmsg("\nJump table:\n\n");
+    msg("\nJump table:\n\n");
     int i = nextBplEvent[0];
-    plainmsg("0 -> %X", i);
+    msg("0 -> %X", i);
     while (i) {
         assert(i < HPOS_CNT);
         assert(nextBplEvent[i] == 0 || nextBplEvent[i] > i);
         i = nextBplEvent[i];
-        plainmsg(" -> %X", i);
+        msg(" -> %X", i);
     }
-    plainmsg("\n");
+    msg("\n");
 }
 
 void

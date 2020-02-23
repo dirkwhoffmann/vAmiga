@@ -58,27 +58,27 @@ Drive::_inspect()
 void
 Drive::_dumpConfig()
 {
-    plainmsg("           Type: %s\n", driveTypeName(config.type));
-    plainmsg("          Speed: %d\n", config.speed);
-    plainmsg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
-    plainmsg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
+    msg("           Type: %s\n", driveTypeName(config.type));
+    msg("          Speed: %d\n", config.speed);
+    msg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
+    msg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
 }
 
 void
 Drive::_dump()
 {
-    plainmsg("             Nr: %d\n", nr);
-    plainmsg("       Id count: %d\n", idCount);
-    plainmsg("         Id bit: %d\n", idBit);
-    plainmsg("          Motor: %s\n", motor ? "on" : "off");
-    plainmsg("      dskchange: %d\n", dskchange);
-    plainmsg("         dsklen: %X\n", dsklen);
-    plainmsg("            prb: %X\n", prb);
-    plainmsg("           Side: %d\n", head.side);
-    plainmsg("      Cyclinder: %d\n", head.cylinder);
-    plainmsg("         Offset: %d\n", head.offset);
-    plainmsg("cylinderHistory: %X\n", cylinderHistory);
-    plainmsg("           Disk: %s\n", disk ? "yes" : "no");
+    msg("             Nr: %d\n", nr);
+    msg("       Id count: %d\n", idCount);
+    msg("         Id bit: %d\n", idBit);
+    msg("          Motor: %s\n", motor ? "on" : "off");
+    msg("      dskchange: %d\n", dskchange);
+    msg("         dsklen: %X\n", dsklen);
+    msg("            prb: %X\n", prb);
+    msg("           Side: %d\n", head.side);
+    msg("      Cyclinder: %d\n", head.cylinder);
+    msg("         Offset: %d\n", head.offset);
+    msg("cylinderHistory: %X\n", cylinderHistory);
+    msg("           Disk: %s\n", disk ? "yes" : "no");
 }
 
 size_t
@@ -107,7 +107,6 @@ Drive::_load(uint8_t *buffer)
 {
     SerReader reader(buffer);
     bool diskInSnapshot;
-    DiskType diskType;
 
     // Read own state
     applyToPersistentItems(reader);
@@ -116,17 +115,22 @@ Drive::_load(uint8_t *buffer)
     // Check if a disk is attached to this snapshot
     reader & diskInSnapshot;
 
-    // Create the disk
+    debug("diskInSnapshot = %d\n", diskInSnapshot);
+
+    // Delete the current disk
+    if (disk) {
+        delete disk;
+        disk = NULL;
+    }
+
+    // Create a new disk from snapshot
     if (diskInSnapshot) {
-
-        // Delete the old disk if present
-        if (disk) delete disk;
-
+        DiskType diskType;
         reader & diskType;
         disk = Disk::makeWithReader(reader, diskType);
     }
 
-    debug(SNAP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
+    debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
     return reader.ptr - buffer;
 }
 
@@ -151,7 +155,7 @@ Drive::_save(uint8_t *buffer)
         disk->applyToPersistentItems(writer);
     }
 
-    debug(SNAP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
     return writer.ptr - buffer;
 }
 
@@ -169,14 +173,11 @@ void
 Drive::setSpeed(int16_t value)
 {
     assert(isValidDriveSpeed(value));
+    debug(DSK_DEBUG, "Setting acceleration factor to %d\n", value);
 
     amiga.suspend();
     config.speed = value;
     amiga.resume();
-
-    debug("Setting acceleration factor to %d\n", config.speed);
-
-    // _dumpConfig();
 }
 
 uint32_t

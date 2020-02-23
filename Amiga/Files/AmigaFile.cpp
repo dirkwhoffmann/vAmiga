@@ -170,7 +170,7 @@ AmigaFile::readFromFile(const char *filename)
     setPath(filename);
     success = true;
     
-    debug(1, "File %s read successfully\n", path);
+    debug(1, "File %s read\n", path);
     
 exit:
     

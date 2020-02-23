@@ -827,7 +827,10 @@ Blitter::beginSlowCopyBlit()
     assert(!bltconLINE());
 
     static bool verbose = true;
-    if (verbose) { verbose = false; debug("Using the slow copy Blitter\n"); }
+    if (BLT_CHECKSUM && verbose) {
+        verbose = false;
+        msg("Using the slow copy Blitter\n");
+    }
 
     // Setup parameters
     if (bltconDESC()) {

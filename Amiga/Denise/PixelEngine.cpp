@@ -139,8 +139,6 @@ PixelEngine::setColor(int reg, uint16_t value)
 void
 PixelEngine::updateRGBA()
 {
-    debug("updateRGBA\n");
-
     // Iterate through all 4096 colors
     for (uint16_t col = 0x000; col <= 0xFFF; col++) {
 

@@ -27,22 +27,28 @@ fprintf(stderr, "%s: %s%s", getDescription(), trailer, buf);
 void
 AmigaObject::prefix()
 {
-    if (description)
-        fprintf(stderr, "%s: ", description);
 }
 
 void
 AmigaObject::msg(const char *fmt, ...)
 {
     VAOBJ_PARSE
-    VAPRINT("")
+    VAPRINTPLAIN("")
 }
 
 void
-AmigaObject::plainmsg(const char *fmt, ...)
+AmigaObject::warn(const char *fmt, ...)
 {
-    VAOBJ_PARSE
-    VAPRINTPLAIN("")
+    VAOBJ_PARSE;
+    VAPRINT("WARNING: ")
+}
+
+void
+AmigaObject::panic(const char *fmt, ...)
+{
+    VAOBJ_PARSE;
+    VAPRINT("PANIC: ")
+    std::abort();
 }
 
 void
@@ -86,28 +92,13 @@ AmigaObject::plaindebug(int level, const char *fmt, ...)
 }
 
 void
-AmigaObject::warn(const char *fmt, ...)
-{
-    VAOBJ_PARSE;
-    VAPRINT("WARNING: ")
-}
-
-void
-AmigaObject::panic(const char *fmt, ...)
-{
-    VAOBJ_PARSE;
-    VAPRINT("PANIC: ")
-    std::abort();
-}
-
-void
 AmigaObject::reportSuspiciousBehavior()
 {
-    plainmsg("\n");
-    plainmsg("Execution has been aborted, because a suspicous program operation has been\n");
-    plainmsg("detected. Manual investigation is needed to determine whether this is an\n");
-    plainmsg("error or not.\n\n");
-    plainmsg("Please file a bug report.\n\n");
+    msg("\n");
+    msg("Execution has been aborted, because a suspicous program operation has been\n");
+    msg("detected. Manual investigation is needed to determine whether this is an\n");
+    msg("error or not.\n\n");
+    msg("Please file a bug report.\n\n");
 
     std::abort();
 }

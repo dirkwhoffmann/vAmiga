@@ -531,7 +531,7 @@ Amiga::powerOn()
 void
 Amiga::_powerOn()
 {
-    debug(1, "Power on\n");
+    debug(RUN_DEBUG, "Power on\n");
 
 #ifdef BOOT_DISK
 
@@ -634,24 +634,24 @@ Amiga::_dump()
     DiskControllerConfig dc = config.diskController;
 
     dumpClock();
-    plainmsg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
-    plainmsg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
-    plainmsg("       paused: %s\n", isPaused() ? "yes" : "no");
-    plainmsg("      running: %s\n", isRunning() ? "yes" : "no");
-    plainmsg("\n");
-    plainmsg("Current configuration:\n\n");
-    plainmsg("          df0: %s %s\n",
+    msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
+    msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
+    msg("       paused: %s\n", isPaused() ? "yes" : "no");
+    msg("      running: %s\n", isRunning() ? "yes" : "no");
+    msg("\n");
+    msg("Current configuration:\n\n");
+    msg("          df0: %s %s\n",
              dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
-    plainmsg("          df1: %s %s\n",
+    msg("          df1: %s %s\n",
              dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
-    plainmsg("          df2: %s %s\n",
+    msg("          df2: %s %s\n",
              dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
-    plainmsg("          df3: %s %s\n",
+    msg("          df3: %s %s\n",
              dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
 
-    plainmsg("\n");
-    plainmsg("         warp: %d", warp);
-    plainmsg("\n");
+    msg("\n");
+    msg("         warp: %d", warp);
+    msg("\n");
 }
 
 void
@@ -826,7 +826,7 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 void
 Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
 {
-    debug(2, "Amiga::loadFromSnapshotSafe\n");
+    debug(SNP_DEBUG, "loadFromSnapshotSafe\n");
     
     suspend();
     loadFromSnapshotUnsafe(snapshot);
@@ -901,7 +901,6 @@ Amiga::takeAutoSnapshot()
 void
 Amiga::takeUserSnapshot()
 {
-    debug("takeUserSnapshot");
     takeSnapshot(userSnapshots);
     putMessage(MSG_USERSNAPSHOT_SAVED);
 }
@@ -925,7 +924,7 @@ Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
 void
 Amiga::threadWillStart()
 {
-    debug(2, "Emulator thread started\n");
+    debug(RUN_DEBUG, "Emulator thread started\n");
 }
 
 void
@@ -1031,28 +1030,28 @@ Amiga::runLoop()
 void
 Amiga::dumpClock()
 {
-    plainmsg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
-    plainmsg("    CPU clock: %13lld  %13lld %13lld %13lld\n",
+    msg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
+    msg("    CPU clock: %13lld  %13lld %13lld %13lld\n",
              cpu.getMasterClock(),
              AS_CPU_CYCLES(cpu.getMasterClock()),
              AS_DMA_CYCLES(cpu.getMasterClock()),
              AS_CIA_CYCLES(cpu.getMasterClock()));
-    plainmsg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
+    msg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
              agnus.clock,
              AS_CPU_CYCLES(agnus.clock),
              AS_DMA_CYCLES(agnus.clock),
              AS_CIA_CYCLES(agnus.clock));
-    plainmsg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
+    msg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
              ciaA.clock,
              AS_CPU_CYCLES(ciaA.clock),
              AS_DMA_CYCLES(ciaA.clock),
              AS_CIA_CYCLES(ciaA.clock));
-    plainmsg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
+    msg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
              ciaB.clock,
              AS_CPU_CYCLES(ciaB.clock),
              AS_DMA_CYCLES(ciaB.clock),
              AS_CIA_CYCLES(ciaB.clock));
-    plainmsg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
+    msg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
              agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frame);
-    plainmsg("\n");
+    msg("\n");
 }

@@ -38,18 +38,18 @@ void Mouse::_reset()
 void
 Mouse::_dump()
 {
-    plainmsg(" leftButton = %d\n", leftButton);
-    plainmsg("rightButton = %d\n", rightButton);
-    plainmsg("     mouseX = %lld\n", mouseX);
-    plainmsg("     mouseY = %lld\n", mouseY);
-    plainmsg("  oldMouseX = %lld\n", oldMouseX);
-    plainmsg("  oldMouseY = %lld\n", oldMouseY);
-    plainmsg("    targetX = %d\n", targetX);
-    plainmsg("    targetY = %d\n", targetY);
-    plainmsg("   dividerX = %d\n", dividerX);
-    plainmsg("   dividerY = %d\n", dividerY);
-    plainmsg("     shiftX = %d\n", shiftX);
-    plainmsg("     shiftY = %d\n", shiftY);
+    msg(" leftButton = %d\n", leftButton);
+    msg("rightButton = %d\n", rightButton);
+    msg("     mouseX = %lld\n", mouseX);
+    msg("     mouseY = %lld\n", mouseY);
+    msg("  oldMouseX = %lld\n", oldMouseX);
+    msg("  oldMouseY = %lld\n", oldMouseY);
+    msg("    targetX = %d\n", targetX);
+    msg("    targetY = %d\n", targetY);
+    msg("   dividerX = %d\n", dividerX);
+    msg("   dividerY = %d\n", dividerY);
+    msg("     shiftX = %d\n", shiftX);
+    msg("     shiftY = %d\n", shiftY);
 }
 
 void

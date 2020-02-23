@@ -479,12 +479,12 @@ extension MyController {
                 myself.processMessage(Message(type: mType, data: data))
             }
         }
-  
-        track("Listener is in place")
     }
     
     func createTimer() {
-    
+
+        track()
+
         // Create speed monitor
         speedometer = Speedometer()
         
@@ -495,8 +495,6 @@ extension MyController {
                                      selector: #selector(timerFunc),
                                      userInfo: nil,
                                      repeats: true)
-        
-        track("GUI timer is up and running")
     }
 
     //

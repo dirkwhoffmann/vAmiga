@@ -44,9 +44,9 @@ ControlPort::_inspect()
 void
 ControlPort::_dump()
 {
-    plainmsg("         device: %d\n", device);
-    plainmsg("  mouseCounterX: %d\n", mouseCounterX);
-    plainmsg("  mouseCounterY: %d\n", mouseCounterY);
+    msg("         device: %d\n", device);
+    msg("  mouseCounterX: %d\n", mouseCounterX);
+    msg("  mouseCounterY: %d\n", mouseCounterY);
 }
 
 ControlPortInfo

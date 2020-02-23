@@ -102,8 +102,6 @@ extension Renderer {
         descriptor.width = EmulatorTexture.width
         descriptor.height = EmulatorTexture.height
 
-        track("Creating emulator texture \(descriptor.width) x \(descriptor.height)")
-
         // Emulator textures (raw data of long and short frames)
         descriptor.usage = [ .shaderRead ]
         longFrameTexture = device.makeTexture(descriptor: descriptor)
@@ -111,9 +109,8 @@ extension Renderer {
         shortFrameTexture = device.makeTexture(descriptor: descriptor)
         assert(shortFrameTexture != nil, "Failed to create short frame texture.")
 
-        let actualWidth = longFrameTexture.width
-        let actualHeight = longFrameTexture.height
-        track("Created \(actualWidth) x \(actualHeight)")
+        // let actualWidth = longFrameTexture.width
+        // let actualHeight = longFrameTexture.height
 
         //
         // Textures that combine a short and a long frame (not yet upscaled)

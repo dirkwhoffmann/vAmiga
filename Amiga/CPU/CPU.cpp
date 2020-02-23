@@ -171,21 +171,21 @@ CPU::_dump()
 {
     _inspect();
     
-    plainmsg("      PC: %8X\n", info.pc);
-    plainmsg(" D0 - D3: ");
-    for (unsigned i = 0; i < 4; i++) plainmsg("%8X ", info.d[i]);
-    plainmsg("\n");
-    plainmsg(" D4 - D7: ");
-    for (unsigned i = 4; i < 8; i++) plainmsg("%8X ", info.d[i]);
-    plainmsg("\n");
-    plainmsg(" A0 - A3: ");
-    for (unsigned i = 0; i < 4; i++) plainmsg("%8X ", info.a[i]);
-    plainmsg("\n");
-    plainmsg(" A4 - A7: ");
-    for (unsigned i = 4; i < 8; i++) plainmsg("%8X ", info.a[i]);
-    plainmsg("\n");
-    plainmsg("     SSP: %X\n", info.ssp);
-    plainmsg("   Flags: %X\n", info.sr);
+    msg("      PC: %8X\n", info.pc);
+    msg(" D0 - D3: ");
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.d[i]);
+    msg("\n");
+    msg(" D4 - D7: ");
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.d[i]);
+    msg("\n");
+    msg(" A0 - A3: ");
+    for (unsigned i = 0; i < 4; i++) msg("%8X ", info.a[i]);
+    msg("\n");
+    msg(" A4 - A7: ");
+    for (unsigned i = 4; i < 8; i++) msg("%8X ", info.a[i]);
+    msg("\n");
+    msg("     SSP: %X\n", info.ssp);
+    msg("   Flags: %X\n", info.sr);
 }
 
 CPUInfo
@@ -244,7 +244,7 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
 {
     SerReader reader(buffer);
 
-    debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
+    debug(SNP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
           fnv_1a_64(buffer, reader.ptr - buffer), reader.ptr - buffer);
 
     return reader.ptr - buffer;
@@ -255,7 +255,7 @@ CPU::didSaveToBuffer(uint8_t *buffer)
 {
     SerWriter writer(buffer);
 
-    debug(SNAP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
+    debug(SNP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;

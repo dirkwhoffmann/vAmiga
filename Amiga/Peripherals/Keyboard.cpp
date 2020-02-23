@@ -25,11 +25,11 @@ Keyboard::_reset()
 void
 Keyboard::_dump()
 {
-    plainmsg("Type ahead buffer: ");
+    msg("Type ahead buffer: ");
     for (unsigned i = 0; i < bufferIndex; i++) {
-        plainmsg("%02X ", typeAheadBuffer[i]);
+        msg("%02X ", typeAheadBuffer[i]);
     }
-    plainmsg("\n");
+    msg("\n");
 }
 
 bool

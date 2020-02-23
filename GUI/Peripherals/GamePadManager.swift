@@ -305,8 +305,6 @@ class GamePadManager: NSObject {
     }
     
     func restoreFactorySettings() {
-
-        track()
     
         gamePads[0]!.keyMap = Defaults.joyKeyMap1
         gamePads[1]!.keyMap = Defaults.joyKeyMap2

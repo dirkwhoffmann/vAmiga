@@ -28,7 +28,7 @@ Joystick::_reset()
 void
 Joystick::_dump()
 {
-    plainmsg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
+    msg("Button:  %s AxisX: %d AxisY: %d\n", button ? "YES" : "NO", axisX, axisY);
 }
 
 size_t

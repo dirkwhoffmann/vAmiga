@@ -144,7 +144,7 @@ private:
 
 
     //
-    // Getters and setters
+    // Getter and setter
     //
 
 public:

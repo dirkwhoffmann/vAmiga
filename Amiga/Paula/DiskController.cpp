@@ -66,27 +66,27 @@ DiskController::_inspect()
 void
 DiskController::_dumpConfig()
 {
-    plainmsg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
-    plainmsg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
-    plainmsg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
-    plainmsg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
-    plainmsg("      useFifo : %s\n", config.useFifo ? "yes" : "no");
+    msg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
+    msg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
+    msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
+    msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
+    msg("      useFifo : %s\n", config.useFifo ? "yes" : "no");
 }
 
 void
 DiskController::_dump()
 {
-    plainmsg("     selected : %d\n", selected);
-    plainmsg("        state : %s\n", driveStateName(state));
-    plainmsg("     syncFlag : %s\n", syncFlag ? "true" : "false");
-    plainmsg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
-    plainmsg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
-    plainmsg("\n");
-    plainmsg("       dsklen : %X\n", dsklen);
-    plainmsg("      dsksync : %X\n", dsksync);
-    plainmsg("          prb : %X\n", prb);
-    plainmsg("\n");
-    plainmsg("   spinning() : %d\n", spinning());
+    msg("     selected : %d\n", selected);
+    msg("        state : %s\n", driveStateName(state));
+    msg("     syncFlag : %s\n", syncFlag ? "true" : "false");
+    msg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
+    msg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
+    msg("\n");
+    msg("       dsklen : %X\n", dsklen);
+    msg("      dsksync : %X\n", dsksync);
+    msg("          prb : %X\n", prb);
+    msg("\n");
+    msg("   spinning() : %d\n", spinning());
 }
 
 bool
