@@ -106,16 +106,10 @@ size_t
 Drive::_load(uint8_t *buffer)
 {
     SerReader reader(buffer);
-    bool diskInSnapshot;
 
     // Read own state
     applyToPersistentItems(reader);
     applyToResetItems(reader);
-
-    // Check if a disk is attached to this snapshot
-    reader & diskInSnapshot;
-
-    debug("diskInSnapshot = %d\n", diskInSnapshot);
 
     // Delete the current disk
     if (disk) {
@@ -123,7 +117,11 @@ Drive::_load(uint8_t *buffer)
         disk = NULL;
     }
 
-    // Create a new disk from snapshot
+    // Check if the snapshot includes a disk
+    bool diskInSnapshot;
+    reader & diskInSnapshot;
+
+    // If yes, create recreate the disk
     if (diskInSnapshot) {
         DiskType diskType;
         reader & diskType;
