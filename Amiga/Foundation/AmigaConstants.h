@@ -19,14 +19,7 @@ static const double cpuClockFrequency = masterClockFrequency / 4.0;
 // Clock rate of the DMA bus (3.546895 MHz)
 static const double dmaClockFrequency = masterClockFrequency / 8.0;
 
-// Frame rate (PAL)
-// IS THIS 100% CORRECT? E.G., THE C64 DIFFERS SLIGHTLHY FROM 50
-static const double frameRate = 50.0;
-
-// Number of master clock cycles per frame
-static const double masterCyclesPerFrame = (masterClockFrequency * 1000000.0) / frameRate;
-
-// Custom register addresses
+// Register addresses
 #define BLTDDAT  0x000L
 #define DMACONR  0x002L
 #define VPOSR    0x004L
@@ -364,8 +357,8 @@ static const char *customReg[256] = {
 
 /* Beam positions
  *
- * The vertical coordinates are measured in "scanlines".
- * The horizontal coordinates are measured in DMA cycles.
+ * Vertical coordinates are measured in scanlines.
+ * Horizontal coordinates are measured in DMA cycles.
  */
 
 #define VPOS_MAX      312
@@ -377,7 +370,7 @@ static inline bool isVPos(int16_t pos) { return pos >= 0 && pos < VPOS_CNT; }
 static inline bool isHPos(int16_t pos) { return pos >= 0 && pos < HPOS_CNT; }
 
 
-/* Screen buffer parameters
+/* Screen buffer dimensions
  *
  * All values are measured in pixels.
  * One DMA cycle corresponds to 4 pixels. Hence, HPIXELS equals 4 * HPOS_CNT.

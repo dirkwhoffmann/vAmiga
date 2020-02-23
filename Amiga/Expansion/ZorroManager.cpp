@@ -191,7 +191,7 @@ ZorroManager::pokeFastRamDevice(uint32_t addr, uint8_t value)
             
         case 0x48: // ec_BaseAddress (A23 - A20, 0x--X-0000)
             fastRamBaseAddr |= (value & 0xF0) << 16;
-            debug("Zorro II card configured (mapped to %X)\n", fastRamBaseAddr);
+            msg("Zorro II card mapped to $%x\n", fastRamBaseAddr);
             
             /* "Note that writing to register 48 actually configures the board for
              *  both Zorro II and Zorro III boards in the Zorro II configuration

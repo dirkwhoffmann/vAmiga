@@ -1319,13 +1319,13 @@ CIAA::updatePB()
 
     PB = (internal & DDRB) | (external & ~DDRB);
 
-    // Check if timer A underflow shows up on PB6
+    // Check if timer A underflows show up on PB6
     if (GET_BIT(PB67TimerMode, 6))
-        COPY_BIT(PB67TimerOut, PB, 6);
+        REPLACE_BIT(PB, 6, PB67TimerOut & (1 << 6));
     
-    // Check if timer B underflow shows up on PB7
+    // Check if timer B underflows show up on PB7
     if (GET_BIT(PB67TimerMode, 7))
-        COPY_BIT(PB67TimerOut, PB, 7);
+        REPLACE_BIT(PB, 7, PB67TimerOut & (1 << 7));
 
     // PLCC CIAs always return the PRB contents for output bits
     // We ignore PLCC emulation until the A600 is supported
@@ -1452,11 +1452,11 @@ CIAB::portBinternal()
     
     // Check if timer A underflow shows up on PB6
     if (GET_BIT(PB67TimerMode, 6))
-        COPY_BIT(PB67TimerOut, result, 6);
-    
-    // Check if timer B underflow shows up on PB7
+        REPLACE_BIT(result, 6, PB67TimerOut & (1 << 6));
+
+    // Check if timer B underflows show up on PB7
     if (GET_BIT(PB67TimerMode, 7))
-        COPY_BIT(PB67TimerOut, result, 7);
+        REPLACE_BIT(result, 7, PB67TimerOut & (1 << 7));
 
     return result;
 }

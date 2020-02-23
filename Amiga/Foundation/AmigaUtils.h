@@ -10,7 +10,6 @@
 #ifndef _VASTD_INC
 #define _VASTD_INC
 
-// General Includes
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +36,7 @@
 
 
 //
-// Compiler optimizations
+// Optimizing code
 //
 
 #define likely(x)      __builtin_expect(!!(x), 1)
@@ -52,7 +51,6 @@
 #define KB(x) ((x) << 10)
 #define MB(x) ((x) << 20)
 
-
 // Macros for converting kilo Hertz and mega Hertz to Hertz
 #define KHz(x) ((x) * 1000)
 #define MHz(x) ((x) * 1000000)
@@ -62,11 +60,11 @@
 // Accessing bits and bytes
 //
 
-// Returns the low byte or the high byte of a uint16_t value.
+// Returns the low byte or the high byte of a uint16_t value
 #define LO_BYTE(x) (uint8_t)((x) & 0xFF)
 #define HI_BYTE(x) (uint8_t)((x) >> 8)
 
-// Returns the low word or the high word of a uint32_t value.
+// Returns the low word or the high word of a uint32_t value
 #define LO_WORD(x) (uint16_t)((x) & 0xFFFF)
 #define HI_WORD(x) (uint16_t)((x) >> 16)
 
@@ -88,53 +86,30 @@
 #define BYTE2(x) LO_BYTE((x) >> 16)
 #define BYTE3(x) LO_BYTE((x) >> 24)
 
-// Returns a non-zero value if the n-th bit is set in x.
+// Returns a non-zero value if the n-th bit is set in x
 #define GET_BIT(x,nr) ((x) & (1 << (nr)))
 
-// Sets a single bit.
+// Sets, clears, or toggles single bits
 #define SET_BIT(x,nr) ((x) |= (1 << (nr)))
-
-// Clears a single bit.
 #define CLR_BIT(x,nr) ((x) &= ~(1 << (nr)))
-
-// Toggles a single bit.
 #define TOGGLE_BIT(x,nr) ((x) ^= (1 << (nr)))
 
-// Sets a single bit to 0 (value == 0) or 1 (value != 0)
+// Replaces bits, bytes, and words
 #define REPLACE_BIT(x,nr,v) ((v) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
-
-// Copies a single bit from x to y.
-#define COPY_BIT(x,y,nr) ((y) = ((y) & ~(1 << (nr)) | ((x) & (1 << (nr)))))
-
-// Replaces the low byte in a 16-bit value
 #define REPLACE_LO(x,y) (((x) & ~0x00FF) | y)
-
-// Replaces the low byte in a 16-bit value
 #define REPLACE_HI(x,y) (((x) & ~0xFF00) | ((y) << 8))
-
-// Replaces the low word in a 32-bit value
 #define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | y)
-
-// Replaces the high word in a 23-bit value
 #define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
 
-// Returns true if value is rising when switching from x to y
+// Checks for a rising or a falling edge
 #define RISING_EDGE(x,y) (!(x) && (y))
-
-// Returns true if bit n is rising when switching from x to y
 #define RISING_EDGE_BIT(x,y,n) (!((x) & (1 << (n))) && ((y) & (1 << (n))))
-
-// Returns true if value is falling when switching from x to y
 #define FALLING_EDGE(x,y) ((x) && !(y))
-
-// Returns true if bit n is falling when switching from x to y
 #define FALLING_EDGE_BIT(x,y,n) (((x) & (1 << (n))) && !((y) & (1 << (n))))
 
-// Returns true if x is an odd number
-#define IS_ODD(x) ((x) & 1)
-
-// Returns true if x is an even number
+// Checks is a number is even or odd
 #define IS_EVEN(x) (!IS_ODD(x))
+#define IS_ODD(x) ((x) & 1)
 
 // Rounds a number up or down to the next even or odd number
 #define UP_TO_NEXT_EVEN(x) ((x) + ((x) & 1))
@@ -142,15 +117,6 @@
 #define UP_TO_NEXT_ODD(x) ((x) | 1)
 #define DOWN_TO_NEXT_ODD(x) ((x) - !((x) & 1))
 
-// Rounds a number up to the next number dividable by 2, 4 or 8
-#define CEIL2(x) (((x) + 0b1) & ~0b1)
-#define CEIL4(x) (((x) + 0b11) & ~0b11)
-#define CEIL8(x) (((x) + 0b111) & ~0b111)
-
-// Rounds a number down to the next number dividable by 2, 4 or 8
-#define FLOOR2(x) ((x) & ~0b1)
-#define FLOOR4(x) ((x) & ~0b11)
-#define FLOOR8(x) ((x) & ~0b111)
 
 //
 // Handling files
@@ -171,7 +137,7 @@ char *extractSuffix(const char *path);
  */
 char *extractFilenameWithoutSuffix(const char *path);
 
-/* Check file suffix
+/* Compares the file suffix with a given string
  * The function is used for determining the type of a file.
  */
 bool checkFileSuffix(const char *filename, const char *suffix);
@@ -183,34 +149,24 @@ long getSizeOfFile(const char *filename);
 bool checkFileSize(const char *filename, long size);
 bool checkFileSizeRange(const char *filename, long min, long max);
 
-/* Checks the header signature (magic bytes) of a file.
- * This function is used for determining the type of a file.
- *   - path      File name, must not be Null
- *   - header    Expected byte sequence
- *   - length    Length of the expected byte sequence in bytes
- */
+// Checks the header signature (magic bytes) of a file or buffer
 bool matchingFileHeader(const char *path, const uint8_t *header, size_t length);
-
-/* Checks the header signature (magic bytes) of a buffer.
- * This function is used for determining the type of a file.
- *   - buffer    Pointer to buffer, must not be NULL
- *   - header    Expected byte sequence
- *   - length    Length of the expected byte sequence in bytes
- */
 bool matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t length);
 
 
 //
-// Managing time
+// Controlling time
 //
 
-// Puts the current thread to sleep for a given amout of micro seconds.
+// Puts the current thread to sleep for a given amout of micro seconds
 void sleepMicrosec(unsigned usec);
 
 /* Sleeps until the kernel timer reaches kernelTargetTime
- * - kernelEarlyWakeup To increase timing precision, the function
- *                     wakes up the thread earlier by this amount and waits
- *                     actively in a delay loop until the deadline is reached.
+ *
+ * kernelEarlyWakeup: To increase timing precision, the function
+ *                    wakes up the thread earlier by this amount and waits
+ *                    actively in a delay loop until the deadline is reached.
+ *
  * Returns the overshoot time (jitter), measured in kernel time units. Smaller
  * values are better, 0 is best.
  */
@@ -221,15 +177,17 @@ int64_t sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup);
 // Computing checksums
 //
 
-// Returns the FNV-1a seed value.
+// Returns the FNV-1a seed value
 inline uint32_t fnv_1a_init32() { return 0x811c9dc5; }
 inline uint64_t fnv_1a_init64() { return 0xcbf29ce484222325; }
 
-// Performs a single iteration of the FNV-1a hash algorithm.
-inline uint32_t fnv_1a_it32(uint32_t prev, uint32_t value) { return (prev ^ value) * 0x1000193; }
-inline uint64_t fnv_1a_it64(uint64_t prev, uint64_t value) { return (prev ^ value) * 0x100000001b3; }
+// Performs a single iteration of the FNV-1a hash algorithm
+inline uint32_t fnv_1a_it32(uint32_t prev, uint32_t value) {
+    return (prev ^ value) * 0x1000193; }
+inline uint64_t fnv_1a_it64(uint64_t prev, uint64_t value) {
+    return (prev ^ value) * 0x100000001b3; }
 
-// Computes a FNV-1a for a given buffer
+// Computes a FNV-1a checksum for a given buffer
 uint32_t fnv_1a_32(const uint8_t *addr, size_t size);
 uint64_t fnv_1a_64(const uint8_t *addr, size_t size);
 
@@ -242,7 +200,7 @@ uint32_t crc32forByte(uint32_t r); // Helper
 // Debugging
 //
 
-// Returns true if we're running a release build.
+// Returns true if this executable is a release build
 bool releaseBuild();
 
 #endif

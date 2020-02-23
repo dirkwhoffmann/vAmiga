@@ -157,10 +157,10 @@ protected:
     // Bit mask for PB outputs: 0 = port register, 1 = timer
     uint8_t PB67TimerMode;
     
-    // PB outputs bits 6 and 7 in timer mode
+    // PB output bits 6 and 7 in timer mode
     uint8_t PB67TimerOut;
     
-    // PB outputs bits 6 and 7 in toggle mode
+    // PB output bits 6 and 7 in toggle mode
     uint8_t PB67Toggle;
     
     
