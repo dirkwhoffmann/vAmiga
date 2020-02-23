@@ -79,13 +79,6 @@ class AmigaObject {
     void debug(int level, const char *fmt, ...);
     void plaindebug(const char *fmt, ...);
     void plaindebug(int level, const char *fmt, ...);
-
-
-    //
-    // Convenience wrappers
-    //
-    
-    void reportSuspiciousBehavior();
 };
 
 #endif

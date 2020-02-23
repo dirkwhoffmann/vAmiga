@@ -90,15 +90,3 @@ AmigaObject::plaindebug(int level, const char *fmt, ...)
     }
 #endif
 }
-
-void
-AmigaObject::reportSuspiciousBehavior()
-{
-    msg("\n");
-    msg("Execution has been aborted, because a suspicous program operation has been\n");
-    msg("detected. Manual investigation is needed to determine whether this is an\n");
-    msg("error or not.\n\n");
-    msg("Please file a bug report.\n\n");
-
-    std::abort();
-}
