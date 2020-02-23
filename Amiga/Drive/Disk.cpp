@@ -143,10 +143,17 @@ Disk::clearTrack(Track t)
 {
     assert(isValidTrack(t));
 
-    // memset(data.track[t], 0xAA, trackSize);
     srand(0);
     for (int i = 0; i < sizeof(data.track[t]); i++)
         data.track[t][i] = rand() & 0xFF;
+}
+
+void
+Disk::clearTrack(Track t, uint8_t value)
+{
+    assert(isValidTrack(t));
+
+    memset(data.track[t], value, trackSize);
 }
 
 bool
@@ -158,11 +165,14 @@ Disk::encodeDisk(ADFFile *adf)
     long tmax = adf->numTracks();
     long smax = adf->numSectorsPerTrack();
 
+    debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
     assert(tmax <= numTracks());
     assert(smax == numSectorsPerTrack());
 
-    debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
+    // Initialize disk with random data
+    clearDisk();
 
+    // Encode all tracks
     bool result = true;
     for (Track t = 0; t < tmax; t++) result &= encodeTrack(adf, t, smax);
 
@@ -176,41 +186,26 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 
     debug(2, "Encoding track %d\n", t);
 
-    // Encode each sector
+    // Format track
+    clearTrack(t, 0xAA);
+
+    // Encode all sectors
     bool result = true;
     for (Sector s = 0; s < smax; s++) result &= encodeSector(adf, t, s);
     
     // Get the clock bit right at offset position 0
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
-    
-    // First five bytes of track gap
-    /*
-    uint8_t *p = data.track[t] + (11 * mfmBytesPerSector);
-    p[0] = addClockBits(0, p[-1]);
-    p[1] = 0xA8;
-    p[2] = 0x55;
-    p[3] = 0x55;
-    p[4] = 0xAA;
-    */
-    
-     if (1) {
- 
-         uint8_t *p = data.track[t] + (0 * sectorSize);
-         
-         uint32_t check = fnv_1a_init32();
-         for (unsigned i = 0; i < 2*6334; i+=2) {
-             check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
-         }
-         /*
-         for (unsigned i = 0, j = 1; i < 2*2048; i += 16, j++) {
-             plaindebug("%2d: %X%X %X%X %X%X %X%X %X%X %X%X %X%X %X%X\n", j,
-                        p[i], p[i+1], p[i+2], p[i+3], p[i+4], p[i+5], p[i+6], p[i+7],
-                        p[i+8], p[i+9], p[i+10], p[i+11], p[i+12], p[i+13], p[i+14], p[i+15]);
-         }
-        */
-         plaindebug(2, "Track %d checksum = %X\n", t, check);
-     }
-    
+
+    // Compute a debugging checksum
+    uint8_t *p = data.track[t] + (0 * sectorSize);
+    if (DSK_CHECKSUM) {
+        uint32_t check = fnv_1a_init32();
+        for (unsigned i = 0; i < trackSize / 2; i+=2) {
+            check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
+        }
+        plaindebug(2, "Track %d checksum = %X\n", t, check);
+    }
+
     return result;
 }
 

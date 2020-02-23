@@ -182,11 +182,12 @@ private:
     
 public:
     
-    // Clears the whole disk
+    // Initializes the disk with random data
     void clearDisk();
 
-    // Clears a single track
+    // Initializes a single track with random data or a specific value
     void clearTrack(Track t);
+    void clearTrack(Track t, uint8_t value);
 
     // Encodes the whole disk
     bool encodeDisk(ADFFile *adf);
