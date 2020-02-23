@@ -522,7 +522,11 @@ StateMachine<nr>::penhi()
 
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
 
-    samples.insert(agnus.clock, scaled);
+    if (samples.isFull()) {
+        warn("penhi: Sample buffer is full\n");
+    } else {
+        samples.insert(agnus.clock, scaled);
+    }
 }
 
 template <int nr> void
@@ -533,7 +537,11 @@ StateMachine<nr>::penlo()
 
     debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    samples.insert(agnus.clock, scaled);
+     if (samples.isFull()) {
+         warn("penlo: Sample buffer is full\n");
+     } else {
+         samples.insert(agnus.clock, scaled);
+     }
 }
 
 template StateMachine<0>::StateMachine(Amiga &ref);
