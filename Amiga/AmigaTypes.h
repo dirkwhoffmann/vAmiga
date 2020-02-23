@@ -30,7 +30,7 @@
 #include "RTCTypes.h"
 
 //
-// Enumeration types
+// Enumerations
 //
 
 typedef enum : long
@@ -76,7 +76,7 @@ RunLoopControlFlag;
 
 
 //
-// Structure types
+// Structures
 //
 
 typedef struct

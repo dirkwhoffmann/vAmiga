@@ -19,56 +19,56 @@ CPU::sync(int cycles)
     agnus.executeUntil(CPU_CYCLES(clock));
 }
 
-moira::u8
-CPU::read8(moira::u32 addr)
+u8
+CPU::read8(u32 addr)
 {
     return mem.peek8(addr);
 }
 
-moira::u16
-CPU::read16(moira::u32 addr)
+u16
+CPU::read16(u32 addr)
 {
      return mem.peek16<BUS_CPU>(addr);
 }
 
-moira::u16
-CPU::read16Dasm(moira::u32 addr)
+u16
+CPU::read16Dasm(u32 addr)
 {
     return mem.spypeek16(addr);
 }
 
-moira::u16
-CPU::read16OnReset(moira::u32 addr)
+u16
+CPU::read16OnReset(u32 addr)
 {
     return mem.chip ? read16(addr) : 0;
 }
 
 void
-CPU::write8(moira::u32 addr, moira::u8 val)
+CPU::write8(u32 addr, u8 val)
 {
     mem.poke8(addr, val);
 }
 
 void
-CPU::write16 (moira::u32 addr, moira::u16 val)
+CPU::write16 (u32 addr, u16 val)
 {
     mem.poke16<BUS_CPU>(addr, val);
 }
 
 void
-CPU::irqOccurred(moira::u8 level)
+CPU::irqOccurred(u8 level)
 {
     // debug("**** INTERRUPT %d (intena = %x intreq = %x\n", level, paula.intena, paula.intreq);
 }
 
 void
-CPU::breakpointReached(moira::u32 addr)
+CPU::breakpointReached(u32 addr)
 {
     amiga.setControlFlags(RL_BREAKPOINT_REACHED);
 }
 
 void
-CPU::watchpointReached(moira::u32 addr)
+CPU::watchpointReached(u32 addr)
 {
     amiga.setControlFlags(RL_WATCHPOINT_REACHED);
 }

@@ -94,16 +94,16 @@ public:
 private:
 
     void sync(int cycles) override;
-    moira::u8 read8(moira::u32 addr) override;
-    moira::u16 read16(moira::u32 addr) override;
-    moira::u16 read16OnReset(moira::u32 addr) override;
-    moira::u16 read16Dasm(moira::u32 addr) override;
-    void write8 (moira::u32 addr, moira::u8  val) override;
-    void write16 (moira::u32 addr, moira::u16 val) override;
-    int readIrqUserVector(moira::u8 level) override { return 0; }
-    void irqOccurred(moira::u8 level) override;
-    void breakpointReached(moira::u32 addr) override;
-    void watchpointReached(moira::u32 addr) override;
+    u8 read8(u32 addr) override;
+    u16 read16(u32 addr) override;
+    u16 read16OnReset(u32 addr) override;
+    u16 read16Dasm(u32 addr) override;
+    void write8 (u32 addr, u8  val) override;
+    void write16 (u32 addr, u16 val) override;
+    int readIrqUserVector(u8 level) override { return 0; }
+    void irqOccurred(u8 level) override;
+    void breakpointReached(u32 addr) override;
+    void watchpointReached(u32 addr) override;
 
     //
     // Working with the clock
@@ -118,7 +118,7 @@ public:
     Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
 
     // Delays the CPU by a certain number of cycles
-    void addWaitStates(moira::i64 cycles) { clock += cycles; }
+    void addWaitStates(i64 cycles) { clock += cycles; }
 };
 
 #endif

@@ -14,7 +14,7 @@
 
 
 //
-// Enumeration types
+// Enumerations
 //
 
 typedef enum : long
