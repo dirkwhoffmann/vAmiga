@@ -390,7 +390,15 @@ Agnus::busIsFree()
     // Deny if the bus has been allocated already
     if (busOwner[pos.h] != BUS_NONE) return false;
 
-    return true;
+    switch (owner) {
+
+        case BUS_BLITTER:
+        {
+            // Deny if Blitter DMA is off
+            if (!doBltDMA()) return false;
+        }
+        default: return true;
+    }
 }
 
 template <BusOwner owner> bool
@@ -409,7 +417,10 @@ Agnus::allocateBus()
         }
         case BUS_BLITTER:
         {
-            // Check if the CPU has precedence
+            // Deny if Blitter DMA is off
+            if (!doBltDMA()) return false;
+
+            // Deny if the CPU has precedence
             if (bls && !bltpri()) return false;
 
             // Assign the bus to the Blitter
@@ -1013,65 +1024,22 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
 
     // Copper DMA
     if (oldCOPEN ^ newCOPEN) {
-        
-        if (newCOPEN) {
-            
-            // Copper DMA on
-            debug(DMA_DEBUG, "Copper DMA switched on\n");
-
-        } else {
-
-            // Copper DMA off
-            debug(DMA_DEBUG, "Copper DMA switched off\n");
-        }
+        debug(DMA_DEBUG, "Copper DMA switched %s\n", newCOPEN ? "on" : "off");
     }
     
     // Blitter DMA
     if (oldBLTEN ^ newBLTEN) {
-        
-        if (newBLTEN) {
-
-            // Blitter DMA on
-            debug(DMA_DEBUG, "Blitter DMA switched on\n");
-    
-        } else {
-            
-            // Blitter DMA off
-            debug(DMA_DEBUG, "Blitter DMA switched off\n");
-            blitter.kill();
-        }
+        debug(DMA_DEBUG, "Blitter DMA switched %s\n", newBLTEN ? "on" : "off");
     }
     
     // Sprite DMA
     if (oldSPREN ^ newSPREN) {
-
-        if (newSPREN) {
-            // Sprite DMA on
-            debug(DMA_DEBUG, "Sprite DMA switched on\n");
-
-        } else {
-            
-            // Sprite DMA off
-            debug(DMA_DEBUG, "Sprite DMA switched off\n");
-            // for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
-        }
+        debug(DMA_DEBUG, "Sprite DMA switched %s\n", newSPREN ? "on" : "off");
     }
     
     // Disk DMA
-    if (oldDMAEN ^ newDMAEN) {
-
-        /*
-        if (newDMAEN) {
-            
-            // Disk DMA on
-            debug(DMA_DEBUG, "Disk DMA switched on\n");
-            
-        } else {
-            
-            // Disk DMA off
-            debug(DMA_DEBUG, "Disk DMA switched off\n");
-        }
-        */
+    if (oldDSKEN ^ newDSKEN) {
+        debug(DMA_DEBUG, "Disk DMA switched %s\n", newDSKEN ? "on" : "off");
     }
     
     // Audio DMA

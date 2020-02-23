@@ -81,15 +81,15 @@ static const int COP_CHECKSUM  = false;  // Copper checksums
 
 // Additional debug settings (uncomment to enable)
 
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/AlertX.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Tools/SynchroExpressII.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Cabal.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/tbl_eon_party_ver_disk1.adf"
 #define HARD_RESET       // Restore the initial power up state in reset()
-// #define BORDER_DEBUG     // Draws the border in debug colors
+// #define BORDER_DEBUG     // Draw the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk
-// #define LINE_DEBUG       // Colorizes certain rasterlines
-// #define ALIGN_DRIVE_HEAD // Makes drive operations deterministic
+// #define LINE_DEBUG       // Colorize certain rasterlines
+// #define ALIGN_DRIVE_HEAD // Make drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
-// #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
+// #define AGNUS_EXEC_DEBUG // Fall back to a simpler Agnus execution function
 
 #endif

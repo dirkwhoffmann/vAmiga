@@ -53,7 +53,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    info.dskbytr = mem.spypeekChip16(DSKBYTR);
+    info.dskbytr =  peekDSKBYTR();
     info.dsksync = dsksync;
     info.prb = prb;
  

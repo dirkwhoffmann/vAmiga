@@ -886,13 +886,26 @@ Blitter::beginSlowCopyBlit()
 template <uint16_t instr> void
 Blitter::exec()
 {
+    bool bus, busidle;
+
     // Determine if we need the bus
-    bool bus = instr & (FETCH | BUS);
-    bool busidle = instr & BUSIDLE;
     if (instr & WRITE_D) {
-        bus = !lockD;
+        bus     = !lockD;
         busidle = lockD;
+    } else {
+        bus     = instr & (FETCH | BUS);
+        busidle = instr & BUSIDLE;
     }
+
+    // Remove ASAP (comparison with old code)
+    bool bus2 = instr & (FETCH | BUS);
+    bool busidle2 = instr & BUSIDLE;
+    if (instr & WRITE_D) {
+        bus2 = !lockD;
+        busidle2 = lockD;
+    }
+    assert(bus == bus2);
+    assert(busidle == busidle2);
 
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
@@ -1049,12 +1062,15 @@ Blitter::exec()
 template <uint16_t instr> void
 Blitter::fakeExec()
 {
+    bool bus, busidle;
+
     // Determine if we need the bus
-    bool bus = instr & (FETCH | BUS);
-    bool busidle = instr & BUSIDLE;
     if (instr & WRITE_D) {
-        bus = !lockD;
+        bus     = !lockD;
         busidle = lockD;
+    } else {
+        bus     = instr & (FETCH | BUS);
+        busidle = instr & BUSIDLE;
     }
 
     // Allocate the bus if needed

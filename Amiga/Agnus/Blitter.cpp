@@ -846,6 +846,7 @@ Blitter::endBlit()
     copper.blitterDidTerminate();
 }
 
+/*
 void
 Blitter::kill()
 {
@@ -855,6 +856,7 @@ Blitter::kill()
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 }
+*/
 
 template void Blitter::pokeBLTSIZE<POKE_CPU>(uint16_t value);
 template void Blitter::pokeBLTSIZE<POKE_COPPER>(uint16_t value);

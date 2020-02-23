@@ -399,7 +399,7 @@ public:
     void doFill(uint16_t &data, bool &carry);
 
     // Clears the busy flag and cancels the Blitter slot
-    void kill();
+    // void kill();
 
 
     //
