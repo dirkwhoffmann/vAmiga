@@ -90,6 +90,9 @@ extension PreferencesController {
         vidEyeXSlider.floatValue = controller.eyeX
         vidEyeYSlider.floatValue = controller.eyeY
         vidEyeZSlider.floatValue = controller.eyeZ
+
+        // OK Button
+        vidOKButton.title = buttonLabel
     }
 
     //

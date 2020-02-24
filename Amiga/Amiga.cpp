@@ -699,9 +699,17 @@ Amiga::readyToPowerOn()
         return ERR_ROM_MISSING;
     }
 
-    if (mem.hasArosRom() && mem.ramSize() < MB(1)) {
-        msg("readyToPowerUp: Aros requires at least 1 MB of memory\n");
-        return ERR_AROS_RAM_LIMIT;
+    if (mem.hasArosRom()) {
+
+        if (!mem.hasExt()) {
+            msg("readyToPowerUp: Aros requires an extension Rom\n");
+            return ERR_AROS_NO_EXTROM;
+        }
+
+        if (mem.ramSize() < MB(1)) {
+            msg("readyToPowerUp: Aros requires at least 1 MB of memory\n");
+            return ERR_AROS_RAM_LIMIT;
+        }
     }
 
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {

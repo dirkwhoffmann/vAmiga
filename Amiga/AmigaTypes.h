@@ -78,8 +78,9 @@ typedef enum
 {
     ERR_OK,
     ERR_ROM_MISSING,
+    ERR_AROS_NO_EXTROM,
+    ERR_AROS_RAM_LIMIT,
     ERR_CHIP_RAM_LIMIT,
-    ERR_AROS_RAM_LIMIT
 }
 ErrorCode;
 

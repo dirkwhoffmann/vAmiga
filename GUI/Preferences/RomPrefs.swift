@@ -85,8 +85,8 @@ extension PreferencesController {
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
 
-        // Button
-        // romOKButton.title = buttonLabel
+        // OK Button
+        romOKButton.title = buttonLabel
     }
 
     //

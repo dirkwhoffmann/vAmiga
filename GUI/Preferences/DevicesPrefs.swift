@@ -95,6 +95,9 @@ extension PreferencesController {
         devReleaseMouseKeyComb.isEnabled = metal.releaseMouseWithKeys
         devReleaseMouseWithKeys.state = metal.releaseMouseWithKeys ? .on : .off
         devReleaseMouseByShaking.state = metal.releaseMouseByShaking ? .on : .off
+
+        // OK Button
+        devOKButton.title = buttonLabel
     }
 
     // Translates a button tag back to the related slot and gamepad action

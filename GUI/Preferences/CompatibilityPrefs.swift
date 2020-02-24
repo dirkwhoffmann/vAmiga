@@ -44,8 +44,8 @@ extension PreferencesController {
         // CIAs
         compTodBug.state = config.ciaA.todBug ? .on : .off
 
-        // Lock controls if emulator is powered on
-        // Nothing to do here at the moment
+        // OK Button
+        compOKButton.title = buttonLabel
     }
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {

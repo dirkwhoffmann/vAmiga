@@ -243,12 +243,11 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devOKButton: NSButton!
 
     // The button label
-    /*
     var buttonLabel: String {
-
-        return amigaProxy!.isPoweredOff() ? "Boot" : "OK"
+        let off   = amigaProxy!.isPoweredOff()
+        let ready = amigaProxy!.readyToPowerOn() == ERR_OK
+        return off && ready ? "Boot" : "OK"
     }
-    */
     
     // The tab to open first
      var firstTab = ""
@@ -320,6 +319,8 @@ class PreferencesController: DialogController {
 
         hideSheet()
         myController?.saveUserDefaults()
+
+        if buttonLabel == "Boot" { amigaProxy?.run() }
     }
 }
 

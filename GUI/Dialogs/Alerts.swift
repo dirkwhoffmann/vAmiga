@@ -118,6 +118,8 @@ extension MyDocument {
             msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
         case ERR_AROS_RAM_LIMIT:
             msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
+        case ERR_AROS_NO_EXTROM:
+            msg = "The Aros Kickstart replacement requires an extension Rom."
         default:
             msg = ""
         }
