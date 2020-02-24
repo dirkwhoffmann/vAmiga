@@ -23,7 +23,7 @@ protected:
     char *path = NULL;
     
     // The raw data of this file
-    uint8_t *data = NULL;
+    u8 *data = NULL;
     
     // The size of this file in bytes
     size_t size = 0;
@@ -72,7 +72,7 @@ public:
     void setPath(const char *path);
     
     // Returns a fingerprint (hash value) for the file's data.
-    uint64_t fingerprint() { return fnv_1a_64(data, size); }
+    u64 fingerprint() { return fnv_1a_64(data, size); }
     
     //
     // Reading data from the file
@@ -95,7 +95,7 @@ public:
     // const char *readHex(size_t num = 1);
     
     //! Copies the whole file data into a buffer.
-    virtual void flash(uint8_t *buffer, size_t offset = 0);
+    virtual void flash(u8 *buffer, size_t offset = 0);
     
     
     //
@@ -108,7 +108,7 @@ public:
     /* Returns true iff this specified buffer is compatible with this object.
      * This function is used in readFromBuffer().
      */
-    virtual bool bufferHasSameType(const uint8_t *buffer, size_t length) { return false; }
+    virtual bool bufferHasSameType(const u8 *buffer, size_t length) { return false; }
 
 
     /* Returns true iff this specified file is compatible with this object.
@@ -122,7 +122,7 @@ public:
      * This function uses bufferHasSameType() to verify that the buffer
      * contains a compatible binary representation.
      */
-    virtual bool readFromBuffer(const uint8_t *buffer, size_t length);
+    virtual bool readFromBuffer(const u8 *buffer, size_t length);
     
     /* Deserializes this object from a file.
      *   - path     The name of the file containing the binary representation.
@@ -137,7 +137,7 @@ public:
      * If a NULL pointer is passed in, a test run is performed. Test runs can
      * be performed to determine the size of the file on disk.
      */
-    virtual size_t writeToBuffer(uint8_t *buffer);
+    virtual size_t writeToBuffer(u8 *buffer);
     
     /* Writes the file contents to a file.
      * This function requires no custom implementation. It invokes writeToBuffer

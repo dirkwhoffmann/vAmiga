@@ -22,13 +22,13 @@
 class ZorroManager : public AmigaComponent {
 
     // The value returned when peeking into the auto-config space.
-    uint8_t autoConfData;
+    u8 autoConfData;
     
     // The current configuration state (0 = unconfigured).
-    uint8_t fastRamConf;
+    u8 fastRamConf;
     
     // Base address of the Fast Ram (value is provided by Kickstart).
-    uint32_t fastRamBaseAddr;
+    u32 fastRamBaseAddr;
     
     
     //
@@ -71,8 +71,8 @@ private:
     void _dump() override;
     void _reset() override { RESET_SNAPSHOT_ITEMS }
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
 public:
@@ -86,8 +86,8 @@ public:
     // Emulating Fast Ram
     //
     
-    uint8_t peekFastRamDevice(uint32_t addr);
-    void pokeFastRamDevice(uint32_t addr, uint8_t value);
+    u8 peekFastRamDevice(u32 addr);
+    void pokeFastRamDevice(u32 addr, u8 value);
 };
 
 #endif
