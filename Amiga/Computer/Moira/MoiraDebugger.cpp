@@ -102,7 +102,7 @@ Guards::remove(long nr)
 }
 
 void
-Guards::removeAt(uint32_t addr)
+Guards::removeAt(u32 addr)
 {
     for (int i = 0; i < count; i++) {
 
@@ -129,7 +129,7 @@ Guards::setEnable(long nr, bool val)
 }
 
 void
-Guards::setEnableAt(uint32_t addr, bool value)
+Guards::setEnableAt(u32 addr, bool value)
 {
     Guard *guard = guardAtAddr(addr);
     if (guard) guard->enabled = value;

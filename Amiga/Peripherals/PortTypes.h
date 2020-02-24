@@ -71,10 +71,10 @@ typedef struct
     bool m0h;
     bool m1v;
     bool m1h;
-    uint16_t joydat;
-    uint16_t potgo;
-    uint16_t potgor;
-    uint16_t potdat;
+    u16 joydat;
+    u16 potgo;
+    u16 potgor;
+    u16 potdat;
 }
 ControlPortInfo;
 

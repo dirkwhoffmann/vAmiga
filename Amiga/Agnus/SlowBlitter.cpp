@@ -33,20 +33,20 @@
  *      REPEAT : Performs a conditional jump back to instruction 0
  */
 
-static const uint16_t NOTHING   = 0b0000'0000'0000'0000;
-static const uint16_t BUSIDLE   = 0b0000'0000'0000'0001;
-static const uint16_t BUS       = 0b0000'0000'0000'0010;
-static const uint16_t WRITE_D   = 0b0000'0000'0000'0100;
-static const uint16_t FETCH_A   = 0b0000'0000'0000'1000;
-static const uint16_t FETCH_B   = 0b0000'0000'0001'0000;
-static const uint16_t FETCH_C   = 0b0000'0000'0010'0000;
-static const uint16_t HOLD_A    = 0b0000'0000'0100'0000;
-static const uint16_t HOLD_B    = 0b0000'0000'1000'0000;
-static const uint16_t HOLD_D    = 0b0000'0001'0000'0000;
-static const uint16_t FILL      = 0b0000'0010'0000'0000;
-static const uint16_t BLTDONE   = 0b0000'0100'0000'0000;
-static const uint16_t REPEAT    = 0b0000'1000'0000'0000;
-static const uint16_t FETCH     = FETCH_A | FETCH_B | FETCH_C;
+static const u16 NOTHING   = 0b0000'0000'0000'0000;
+static const u16 BUSIDLE   = 0b0000'0000'0000'0001;
+static const u16 BUS       = 0b0000'0000'0000'0010;
+static const u16 WRITE_D   = 0b0000'0000'0000'0100;
+static const u16 FETCH_A   = 0b0000'0000'0000'1000;
+static const u16 FETCH_B   = 0b0000'0000'0001'0000;
+static const u16 FETCH_C   = 0b0000'0000'0010'0000;
+static const u16 HOLD_A    = 0b0000'0000'0100'0000;
+static const u16 HOLD_B    = 0b0000'0000'1000'0000;
+static const u16 HOLD_D    = 0b0000'0001'0000'0000;
+static const u16 FILL      = 0b0000'0010'0000'0000;
+static const u16 BLTDONE   = 0b0000'0100'0000'0000;
+static const u16 REPEAT    = 0b0000'1000'0000'0000;
+static const u16 FETCH     = FETCH_A | FETCH_B | FETCH_C;
 
 void
 Blitter::initSlowBlitter()
@@ -886,7 +886,7 @@ Blitter::beginSlowCopyBlit()
 #endif
 }
 
-template <uint16_t instr> void
+template <u16 instr> void
 Blitter::exec()
 {
     bool bus, busidle;
@@ -1032,7 +1032,7 @@ Blitter::exec()
 
     if (instr & REPEAT) {
 
-        uint16_t newpc = 0;
+        u16 newpc = 0;
 
         debug(BLT_DEBUG, "REPEAT\n");
         iteration++;
@@ -1062,7 +1062,7 @@ Blitter::exec()
     }
 }
 
-template <uint16_t instr> void
+template <u16 instr> void
 Blitter::fakeExec()
 {
     bool bus, busidle;
@@ -1102,7 +1102,7 @@ Blitter::fakeExec()
 
     if (instr & REPEAT) {
 
-        uint16_t newpc = 0;
+        u16 newpc = 0;
 
         debug(BLT_DEBUG, "REPEAT\n");
         iteration++;
@@ -1133,7 +1133,7 @@ Blitter::fakeExec()
 }
 
 void
-Blitter::setXCounter(uint16_t value)
+Blitter::setXCounter(u16 value)
 {
     xCounter = value;
 
@@ -1148,7 +1148,7 @@ Blitter::setXCounter(uint16_t value)
 }
 
 void
-Blitter::setYCounter(uint16_t value)
+Blitter::setYCounter(u16 value)
 {
     yCounter = value;
 }
@@ -1156,7 +1156,7 @@ Blitter::setYCounter(uint16_t value)
 void
 Blitter::doBarrelShifterA()
 {
-    uint16_t masked = anew;
+    u16 masked = anew;
 
     if (isFirstWord()) masked &= bltafwm;
     if (isLastWord())  masked &= bltalwm;
