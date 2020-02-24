@@ -203,7 +203,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
     conRegChanges.add(pixel, REG_BPLCON0_DENISE, newValue);
-    
+    conChanges.insert(pixel, RegChange { REG_BPLCON0_DENISE, newValue });
     // Update value
     bplcon0 = newValue;
 }
@@ -264,6 +264,7 @@ Denise::setBPLCON2(u16 value)
 
     // Record the pixel coordinate where the change takes place
     conRegChanges.add(4 * agnus.pos.h + 4, REG_BPLCON2, value);
+    conChanges.insert(4 * agnus.pos.h + 4, RegChange { REG_BPLCON2, value });
 }
 
 u16
@@ -317,6 +318,7 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0POS + x, value);
+    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0POS + x, value } );
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -343,6 +345,7 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0CTL + x, value);
+    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0CTL + x, value } );
 
     // Update debugger info
     if (agnus.pos.v == 26) {
@@ -366,6 +369,7 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATA + x, value);
+    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATA + x, value } );
 }
 
 template <int x> void
@@ -378,6 +382,7 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record the register change
     sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATB + x, value);
+    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATB + x, value });
 }
 
 template <PokeSource s, int xx> void
@@ -393,17 +398,6 @@ Denise::pokeCOLORxx(u16 value)
         pixelEngine.colRegChanges.add(4 * (agnus.pos.h - 1), reg, value);
     }
 }
-
-/*
-void
-Denise::pokeCOLORxx(u32 addr, u16 value)
-{
-    assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
-    debug(COLREG_DEBUG, "pokeCOLORxx(%X, %X)\n", addr, value);
-
-    pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
-}
-*/
 
 bool
 Denise::attached(int x) {
@@ -553,15 +547,25 @@ Denise::translate()
     bool pri = PF2PRI(bplcon2);
     prio1 = zPF1(bplcon2);
     prio2 = zPF2(bplcon2);
-    // updateSpritePriorities(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
     conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
+    conChanges.insert(sizeof(bBuffer), RegChange { REG_NONE, 0 });
+
+    // REMOVE ASAP
+    assert(conRegChanges.count() == conChanges.count());
+    for (int i = conRegChanges.begin(); i != conRegChanges.end(); i = conRegChanges.next(i)) {
+        assert(conRegChanges.change[i].addr == conChanges.elements[i].addr);
+        assert(conRegChanges.change[i].value == conChanges.elements[i].value);
+    }
 
     // Iterate over all recorded register changes
     for (int i = conRegChanges.begin(); i != conRegChanges.end(); i = conRegChanges.next(i)) {
 
         Change &change = conRegChanges.change[i];
+        RegChange &chng = conChanges.elements[i];
+        assert(change.addr == chng.addr);
+        assert(change.value == chng.value);
 
         // Translate a chunk of bitplane data
         if (dual) {
@@ -598,6 +602,7 @@ Denise::translate()
 
     // Clear the history cache
     conRegChanges.clear();
+    conChanges.clear();
 }
 
 void
@@ -701,6 +706,7 @@ Denise::drawSprites()
     }
 
     sprRegChanges.clear();
+    sprChanges.clear();
 }
 
 template <int x> void
@@ -728,14 +734,24 @@ Denise::drawSpritePair()
     bool at = attached(x);
     int strt = 0;
 
+    // REMOVE ASAP
+    assert(sprRegChanges.count() == sprChanges.count());
+
     // Iterate over all recorded register changes
     if (!sprRegChanges.isEmpty()) {
 
-        // sprRegChanges.dump();
+        // REMOVE ASAP
+        for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
+            assert(sprRegChanges.change[i].addr == sprChanges.elements[i].addr);
+            assert(sprRegChanges.change[i].value == sprChanges.elements[i].value);
+        }
 
         for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
 
             Change &change = sprRegChanges.change[i];
+            RegChange &chng = sprChanges.elements[i];
+            assert(change.addr == chng.addr);
+            assert(change.value == chng.value);
 
             // Draw a chunk of pixels
             drawSpritePair<x>(strt, change.trigger,
@@ -1084,6 +1100,7 @@ Denise::beginOfLine(int vpos)
 {
     // Reset the register history buffers
     conRegChanges.clear();
+    conChanges.clear();
     pixelEngine.colRegChanges.clear();
 
     // Save the current values of various Denise register

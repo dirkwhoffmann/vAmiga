@@ -111,17 +111,7 @@ typedef enum : i32
     REG_SPR4CTL,
     REG_SPR5CTL,
     REG_SPR6CTL,
-    REG_SPR7CTL,
-
-    // DEPRECATED
-    SPR_HPOS0,
-    SPR_HPOS1,
-    SPR_HPOS2,
-    SPR_HPOS3,
-    SPR_HPOS4,
-    SPR_HPOS5,
-    SPR_HPOS6,
-    SPR_HPOS7
+    REG_SPR7CTL
 }
 RegChangeID;
 

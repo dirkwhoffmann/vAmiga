@@ -96,7 +96,8 @@ public:
         & auddatLatch
         & auddat
         & audlcLatch
-        & intreq2;
+        & intreq2
+        & samples;
     }
 
 

@@ -91,6 +91,8 @@ v.applyToItems(*this); \
 return *this; \
 }
 
+#define __ ,
+
 class SerCounter
 {
 public:
@@ -134,7 +136,10 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
+    STRUCT(RegChange)
     template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -207,7 +212,10 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
+    STRUCT(RegChange)
     template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -286,7 +294,10 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
+    STRUCT(RegChange)
     template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -354,7 +365,10 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
+    STRUCT(RegChange)
     template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
+    template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])

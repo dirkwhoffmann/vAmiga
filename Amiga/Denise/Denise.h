@@ -103,9 +103,11 @@ public:
 
     // Ringbuffer recording control register changes
     ChangeRecorder<128> conRegChanges;
+    SortedRingBuffer<RegChange, 128> conChanges;
 
     // Ringbuffer recording sprite register changes
     ChangeRecorder<128> sprRegChanges;
+    SortedRingBuffer<RegChange, 128> sprChanges;
 
 
     //
@@ -309,7 +311,9 @@ public:
         & scrollHiresEven
         & scrollHiresMax
         & conRegChanges
+        & conChanges
         & sprRegChanges
+        & sprChanges
 
         & sprpos
         & sprctl
