@@ -619,10 +619,10 @@ Agnus::serviceBPLEvent()
 
         case BPL_H1:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE1] = doBitplaneDMA<0>();
+                denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE1]);
+                INC_CHIP_PTR(bplpt[0]);
             }
 
             if(unlikely(isLastHx(pos.h))) {
@@ -635,10 +635,10 @@ Agnus::serviceBPLEvent()
 
         case BPL_L1:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE1] = doBitplaneDMA<0>();
+                denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE1]);
+                INC_CHIP_PTR(bplpt[0]);
             }
 
             if(unlikely(isLastLx(pos.h))) {
@@ -651,9 +651,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_H2:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE2] = doBitplaneDMA<1>();
+                denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE2]);
+                INC_CHIP_PTR(bplpt[1]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
@@ -661,9 +661,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_L2:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE2] = doBitplaneDMA<1>();
+                denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE2]);
+                INC_CHIP_PTR(bplpt[1]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
@@ -671,9 +671,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_H3:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE3] = doBitplaneDMA<2>();
+                denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE3]);
+                INC_CHIP_PTR(bplpt[2]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
@@ -681,9 +681,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_L3:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE3] = doBitplaneDMA<2>();
+                denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE3]);
+                INC_CHIP_PTR(bplpt[2]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
@@ -691,9 +691,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_H4:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE4] = doBitplaneDMA<3>();
+                denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE4]);
+                INC_CHIP_PTR(bplpt[3]);
             }
 
             if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
@@ -701,9 +701,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_L4:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE4] = doBitplaneDMA<3>();
+                denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE4]);
+                INC_CHIP_PTR(bplpt[3]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
@@ -711,9 +711,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_L5:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE5] = doBitplaneDMA<4>();
+                denise.bpldat[4] = doBitplaneDMA<4>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE5]);
+                INC_CHIP_PTR(bplpt[4]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
@@ -721,9 +721,9 @@ Agnus::serviceBPLEvent()
 
         case BPL_L6:
             if (!bplHwStop()) {
-                denise.bpldat[PLANE6] = doBitplaneDMA<5>();
+                denise.bpldat[5] = doBitplaneDMA<5>();
             } else {
-                INC_CHIP_PTR(bplpt[PLANE6]);
+                INC_CHIP_PTR(bplpt[5]);
             }
 
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();

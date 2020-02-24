@@ -10,20 +10,13 @@
 #ifndef _AGNUS_INC
 #define _AGNUS_INC
 
-#include "HardwareComponent.h"
-#include "Copper.h"
-#include "Blitter.h"
-#include "DmaDebugger.h"
 #include "Beam.h"
+#include "Blitter.h"
+#include "Copper.h"
+#include "DmaDebugger.h"
 #include "Event.h"
-
-// Bit plane indices
-#define PLANE1 0
-#define PLANE2 1
-#define PLANE3 2
-#define PLANE4 3
-#define PLANE5 4
-#define PLANE6 5
+#include "HardwareComponent.h"
+#include "Memory.h"
 
 // Bit masks as they appear in the DMACON register
 #define DMAEN 0b1000000000
