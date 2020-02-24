@@ -312,7 +312,7 @@ extension MyController: NSMenuItemValidation {
             return
         }
 
-        switch (amiga.readyToPowerOn()) {
+        switch amiga.readyToPowerOn() {
 
         case ERR_OK:
             amiga.run()

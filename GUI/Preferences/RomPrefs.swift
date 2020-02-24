@@ -141,7 +141,7 @@ extension PreferencesController {
         if let config = amigaProxy?.mem.getConfig() {
             let mem = config.chipSize + config.slowSize + config.fastSize
             if mem < 1024*1024 {
-                amigaProxy?.configure(VA_SLOW_RAM, value: 512);
+                amigaProxy?.configure(VA_SLOW_RAM, value: 512)
             }
         }
         refresh()

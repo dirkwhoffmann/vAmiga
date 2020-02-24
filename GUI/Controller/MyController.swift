@@ -523,19 +523,6 @@ extension MyController {
  
         animationCounter += 1
 
-        // Do 12 times a second ...
-        if (animationCounter % 1) == 0 {
-            
-            // Refresh debug panel if open
-            /*
-            if amiga.isRunning() {
-                if myAppDelegate.inspector?.window?.isVisible ?? false {
-                    myAppDelegate.inspector?.refresh(everything: false)
-                }
-            }
-            */
-        }
-        
         // Do 6 times a second ...
         if (animationCounter % 2) == 0 {
  
@@ -566,36 +553,9 @@ extension MyController {
 
         switch msg.type {
     
-        case MSG_CONFIG,
-             MSG_MEM_LAYOUT:
-             myAppDelegate.inspector?.needsRefresh()
+        case MSG_CONFIG:
+            myAppDelegate.inspector?.needsRefresh()
 
-        case MSG_BREAKPOINT_CONFIG,
-             MSG_BREAKPOINT_REACHED,
-             MSG_WATCHPOINT_REACHED:
-            myAppDelegate.inspector?.needsRefresh()
- 
-        case MSG_READY_TO_POWER_ON:
-    
-            // Launch the emulator
-            amiga.run()
-     
-            // Process attachment (if any)
-            mydocument?.mountAmigaAttachment()
-        
-        case MSG_RUN:
-
-            needsSaving = true
-            toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.needsRefresh()
-            refreshStatusBar()
-    
-        case MSG_PAUSE:
-            
-            toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.needsRefresh()
-            refreshStatusBar()
-    
         case MSG_POWER_ON:
 
             serialIn = ""
@@ -603,22 +563,35 @@ extension MyController {
             renderer.zoomIn()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.needsRefresh()
-            
+
         case MSG_POWER_OFF:
 
             renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             myAppDelegate.inspector?.needsRefresh()
-            
-        case MSG_RESET:
-            
+
+        case MSG_RUN:
+
+            needsSaving = true
+            toolbar.validateVisibleItems()
             myAppDelegate.inspector?.needsRefresh()
-            
+            refreshStatusBar()
+
+        case MSG_PAUSE:
+
+            toolbar.validateVisibleItems()
+            myAppDelegate.inspector?.needsRefresh()
+            refreshStatusBar()
+
+        case MSG_RESET:
+
+            myAppDelegate.inspector?.needsRefresh()
+
         case MSG_WARP_ON,
              MSG_WARP_OFF:
-            
+
             refreshStatusBar()
-            
+
         case MSG_POWER_LED_ON:
             powerLED.image = NSImage.init(named: "powerLedOn")
 
@@ -633,6 +606,14 @@ extension MyController {
 
         case MSG_DMA_DEBUG_OFF:
             renderer.zoomTextureIn()
+
+        case MSG_BREAKPOINT_CONFIG,
+             MSG_BREAKPOINT_REACHED,
+             MSG_WATCHPOINT_REACHED:
+            myAppDelegate.inspector?.needsRefresh()
+
+        case MSG_MEM_LAYOUT:
+            myAppDelegate.inspector?.needsRefresh()
 
         case MSG_DRIVE_CONNECT:
             
@@ -663,16 +644,12 @@ extension MyController {
             }
             
             refreshStatusBar()
-            
-        case MSG_DRIVE_DISK_INSERT,
-             MSG_DRIVE_DISK_EJECT,
-             MSG_DRIVE_DISK_UNSAVED,
-             MSG_DRIVE_DISK_SAVED,
-             MSG_DRIVE_DISK_PROTECTED,
-             MSG_DRIVE_DISK_UNPROTECTED:
 
+        case MSG_DRIVE_SELECT,
+             MSG_DRIVE_READ,
+             MSG_DRIVE_WRITE:
             refreshStatusBar()
-            
+
         case MSG_DRIVE_LED_ON:
             
             let image = NSImage.init(named: "driveLedOn")
@@ -701,11 +678,6 @@ extension MyController {
             updateWarp()
             refreshStatusBar()
 
-        case MSG_DRIVE_READ,
-             MSG_DRIVE_WRITE,
-             MSG_DRIVE_SELECT:
-            refreshStatusBar()
-
         case MSG_DRIVE_HEAD:
 
             if driveNoise {
@@ -719,6 +691,15 @@ extension MyController {
                 playSound(name: "drive_click", volume: 1.0)
             }
             refreshStatusBar()
+            
+        case MSG_DRIVE_DISK_INSERT,
+             MSG_DRIVE_DISK_EJECT,
+             MSG_DRIVE_DISK_UNSAVED,
+             MSG_DRIVE_DISK_SAVED,
+             MSG_DRIVE_DISK_PROTECTED,
+             MSG_DRIVE_DISK_UNPROTECTED:
+
+            refreshStatusBar()
 
         case MSG_SER_IN:
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
@@ -726,26 +707,13 @@ extension MyController {
         case MSG_SER_OUT:
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
-        case MSG_AUTOSNAPSHOT_LOADED,
-             MSG_USERSNAPSHOT_LOADED,
-             MSG_USERSNAPSHOT_SAVED:
+        case MSG_USERSNAPSHOT_LOADED,
+             MSG_USERSNAPSHOT_SAVED,
+             MSG_AUTOSNAPSHOT_LOADED:
             renderer.blendIn(steps: 20)
 
         case MSG_AUTOSNAPSHOT_SAVED:
             break
-
-/*
-        case MSG_ROM_MISSING:
-            // myDocument?.showConfigurationAltert(msg.type.rawValue)
-            track("MSG_ROM_MISSING")
-            openPreferences(tab: "Roms")
-            renderer.zoomOut()
-
-        case MSG_CHIP_RAM_LIMIT,
-             MSG_AROS_RAM_LIMIT:
-            myDocument?.showConfigurationAltert(msg.type.rawValue)
-            openPreferences(tab: "Hardware")
- */
 
         default:
             
