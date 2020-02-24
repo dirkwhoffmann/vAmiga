@@ -103,7 +103,7 @@ Drive::_size()
 }
 
 size_t
-Drive::_load(uint8_t *buffer)
+Drive::_load(u8 *buffer)
 {
     SerReader reader(buffer);
 
@@ -133,7 +133,7 @@ Drive::_load(uint8_t *buffer)
 }
 
 size_t
-Drive::_save(uint8_t *buffer)
+Drive::_save(u8 *buffer)
 {
     SerWriter writer(buffer);
 
@@ -178,7 +178,7 @@ Drive::setSpeed(int16_t value)
     amiga.resume();
 }
 
-uint32_t
+u32
 Drive::getDriveId()
 {
     /* External floopy drives identify themselve with the following codes:
@@ -211,10 +211,10 @@ Drive::isDataSource()
     return isSelected() && motor; 
 }
 
-uint8_t
+u8
 Drive::driveStatusFlags()
 {
-    uint8_t result = 0xFF;
+    u8 result = 0xFF;
     
     if (isSelected()) {
         
@@ -308,10 +308,10 @@ Drive::selectSide(int side)
     head.side = side;
 }
 
-uint8_t
+u8
 Drive::readHead()
 {
-    uint8_t result = 0xFF;
+    u8 result = 0xFF;
     
     if (disk) {
         result = disk->readByte(head.cylinder, head.side, head.offset);
@@ -321,17 +321,17 @@ Drive::readHead()
     return result;
 }
 
-uint16_t
+u16
 Drive::readHead16()
 {
-    uint8_t byte1 = readHead();
-    uint8_t byte2 = readHead();
+    u8 byte1 = readHead();
+    u8 byte2 = readHead();
     
     return HI_LO(byte1, byte2);
 }
 
 void
-Drive::writeHead(uint8_t value)
+Drive::writeHead(u8 value)
 {
     if (disk) {
         disk->writeByte(value, head.cylinder, head.side, head.offset);
@@ -340,7 +340,7 @@ Drive::writeHead(uint8_t value)
 }
 
 void
-Drive::writeHead16(uint16_t value)
+Drive::writeHead16(u16 value)
 {
     writeHead(HI_BYTE(value));
     writeHead(LO_BYTE(value));
@@ -413,7 +413,7 @@ Drive::moveHead(int dir)
 }
 
 void
-Drive::recordCylinder(uint8_t cylinder)
+Drive::recordCylinder(u8 cylinder)
 {
     cylinderHistory = (cylinderHistory << 8) | cylinder;
 }
@@ -429,7 +429,7 @@ Drive::pollsForDisk()
      * Kickstart 1.2 and 1.3: 0-1-0-1-0-1-...
      * Kickstart 2.0:         0-1-2-3-2-1-...
      */
-    static const uint64_t signature[] = {
+    static const u64 signature[] = {
 
         // Kickstart 1.2 and 1.3
         0x010001000100,
@@ -440,7 +440,7 @@ Drive::pollsForDisk()
         0x030203020302,
     };
 
-    uint64_t mask = 0xFFFFFFFF;
+    u64 mask = 0xFFFFFFFF;
     for (unsigned i = 0; i < sizeof(signature) / 8; i++) {
         if ((cylinderHistory & mask) == (signature[i] & mask)) return true;
     }
@@ -520,7 +520,7 @@ Drive::insertDisk(Disk *disk)
 }
 
 void
-Drive::PRBdidChange(uint8_t oldValue, uint8_t newValue)
+Drive::PRBdidChange(u8 oldValue, u8 newValue)
 {
     // -----------------------------------------------------------------
     // | /MTR  | /SEL3 | /SEL2 | /SEL1 | /SEL0 | /SIDE |  DIR  | STEP  |

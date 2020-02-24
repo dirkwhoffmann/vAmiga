@@ -25,7 +25,7 @@ class Drive : public AmigaComponent {
     DriveInfo info;
 
     // Position of the currently transmitted identification bit
-    uint8_t idCount;
+    u8 idCount;
 
     // Value of the currently transmitted identification bit
     bool idBit;
@@ -56,10 +56,10 @@ class Drive : public AmigaComponent {
     bool dskchange;
     
     // A copy of the DSKLEN register
-    uint8_t dsklen;
+    u8 dsklen;
     
     // A copy of the PRB register of CIA B
-    uint8_t prb;
+    u8 prb;
     
     // The current drive head location
     DriveHead head;
@@ -68,7 +68,7 @@ class Drive : public AmigaComponent {
      * The buffer is used to detect the polling head movements that are issued
      * by track disc device to detect a newly inserted disk.
      */
-    uint64_t cylinderHistory;
+    u64 cylinderHistory;
 
 public:
     
@@ -123,8 +123,8 @@ private:
     void _dumpConfig() override;
     void _dump() override;
     size_t _size() override;
-    size_t _load(uint8_t *buffer) override;
-    size_t _save(uint8_t *buffer) override;
+    size_t _load(u8 *buffer) override;
+    size_t _save(u8 *buffer) override;
 
 
     //
@@ -140,14 +140,14 @@ public:
     void setType(DriveType t);
 
     // Drive speed
-    uint16_t getSpeed() { return config.speed; }
+    u16 getSpeed() { return config.speed; }
     void setSpeed(int16_t value);
     bool isOriginal() { return config.speed == 1; }
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
     bool idMode() { return !motor; }
-    uint32_t getDriveId();
+    u32 getDriveId();
 
 
     //
@@ -160,7 +160,7 @@ public:
     // Returns true if this drive is pushing data onto the data lines
     bool isDataSource();
 
-    uint8_t driveStatusFlags();
+    u8 driveStatusFlags();
     
 
     //
@@ -183,12 +183,12 @@ public:
     void selectSide(int side);
 
     // Reads a value from the drive head and rotates the disk
-    uint8_t readHead();
-    uint16_t readHead16();
+    u8 readHead();
+    u16 readHead16();
     
     // Writes a value to the drive head and rotates the disk
-    void writeHead(uint8_t value);
-    void writeHead16(uint16_t value);
+    void writeHead(u8 value);
+    void writeHead16(u16 value);
 
     // Emulate a disk rotation (moves head to the next byte)
     void rotate();
@@ -204,7 +204,7 @@ public:
     void moveHead(int dir);
 
     // Records a cylinder change (needed for diskPollingMode() to work)
-    void recordCylinder(uint8_t cylinder);
+    void recordCylinder(u8 cylinder);
 
     /* Returns true if the drive is in disk polling mode
      * Disk polling mode is detected by analyzing the movement history that
@@ -235,7 +235,7 @@ public:
     //
     
     // Write handler for the PRB register of CIA B
-    void PRBdidChange(uint8_t oldValue, uint8_t newValue);
+    void PRBdidChange(u8 oldValue, u8 newValue);
 };
 
 #endif
