@@ -49,18 +49,18 @@ static inline bool isIrqSource(long value) { return value >= 0 && value < INT_CO
 
 typedef struct
 {
-    uint16_t intreq;
-    uint16_t intena;
-    uint16_t adkcon;
+    u16 intreq;
+    u16 intena;
+    u16 adkcon;
 }
 PaulaInfo;
 
 typedef struct
 {
-    uint16_t receiveBuffer;
-    uint16_t receiveShiftReg;
-    uint16_t transmitBuffer;
-    uint16_t transmitShiftReg;
+    u16 receiveBuffer;
+    u16 receiveShiftReg;
+    u16 transmitBuffer;
+    u16 transmitShiftReg;
 }
 UARTInfo;
 

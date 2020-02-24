@@ -12,9 +12,9 @@
 
 struct Change
 {
-    int64_t trigger;
-    uint32_t addr;
-    uint16_t value;
+    i64 trigger;
+    u32 addr;
+    u16 value;
 
     template <class T>
     void applyToItems(T& worker)
@@ -28,7 +28,7 @@ struct Change
 
     // Constructors
     Change() : trigger(0), addr(0), value(0) { }
-    Change(int64_t t, uint32_t a, uint16_t v) : trigger(t), addr(a), value(v) { }
+    Change(i64 t, u32 a, u16 v) : trigger(t), addr(a), value(v) { }
 
     void print()
     {
@@ -36,24 +36,24 @@ struct Change
     }
 };
 
-template <uint16_t capacity> struct ChangeRecorder
+template <u16 capacity> struct ChangeRecorder
 {
     // Ringbuffer elements
     Change change[capacity];
 
     // Ringbuffer read pointer
-    uint16_t r;
+    u16 r;
 
     // Ringbuffer write pointer
-    uint16_t w;
+    u16 w;
 
     // Constructor
     ChangeRecorder() : r(0), w(0) { }
 
     // Moves a pointer back or forth
-    static uint16_t advance(uint16_t p, int offset) { return (capacity + p + offset) % capacity; }
-    static uint16_t next(uint16_t p) { return advance(p, 1); }
-    static uint16_t prev(uint16_t p) { return advance(p, -1); }
+    static u16 advance(u16 p, int offset) { return (capacity + p + offset) % capacity; }
+    static u16 next(u16 p) { return advance(p, 1); }
+    static u16 prev(u16 p) { return advance(p, -1); }
 
     template <class T>
     void applyToItems(T& worker)
@@ -66,13 +66,13 @@ template <uint16_t capacity> struct ChangeRecorder
     }
 
     // Returns the index of the first element
-    uint16_t begin() { return r; }
+    u16 begin() { return r; }
 
     // Returns the index of the last element advanced by 1
-    uint16_t end() { return w; }
+    u16 end() { return w; }
 
     // Returns the number of stored elements
-    uint16_t count() const { return (capacity + w - r) % capacity; }
+    u16 count() const { return (capacity + w - r) % capacity; }
 
     // Indicates if the buffer is empty or full
     bool isEmpty() { return r == w; }
@@ -80,17 +80,17 @@ template <uint16_t capacity> struct ChangeRecorder
 
     // Queries the next element to read
     Cycle trigger() { return isEmpty() ? NEVER : change[r].trigger; }
-    uint32_t addr() { assert(!isEmpty()); return change[r].addr; }
-    uint16_t value() { assert(!isEmpty()); return change[r].value; }
+    u32 addr() { assert(!isEmpty()); return change[r].addr; }
+    u16 value() { assert(!isEmpty()); return change[r].value; }
 
     // Adds an element
-    void add(int64_t trigger, uint32_t addr, uint16_t value)
+    void add(i64 trigger, u32 addr, u16 value)
     {
         if (isFull()) { dump(); } // REMOVE ASAP
         assert(!isFull());
 
         // Remember where the new element will be added
-        uint16_t e = w;
+        u16 e = w;
 
         // Add the new element
         change[w] = Change(trigger, addr, value);
@@ -100,7 +100,7 @@ template <uint16_t capacity> struct ChangeRecorder
         while (e != r) {
 
             // Get the index of the preceeding element
-            uint16_t p = prev(e);
+            u16 p = prev(e);
 
             // Exit the loop once we've found the correct position
             if (trigger >= change[p].trigger) break;
@@ -168,15 +168,15 @@ template <uint16_t capacity> struct ChangeRecorder
         dump();
 
         printf("All elements up to 0:\n");
-        for (uint16_t i = begin(); i != end() && change[i].trigger <= 0; i = next(i)) {
+        for (u16 i = begin(); i != end() && change[i].trigger <= 0; i = next(i)) {
             printf("%2i: ", i); change[i].print();
         }
         printf("All elements up to 250:\n");
-        for (uint16_t i = begin(); i != end() && change[i].trigger <= 250; i = next(i)) {
+        for (u16 i = begin(); i != end() && change[i].trigger <= 250; i = next(i)) {
             printf("%2i: ", i); change[i].print();
         }
         printf("All elements up to 400:\n");
-        for (uint16_t i = begin(); i != end() && change[i].trigger <= 400; i = next(i)) {
+        for (u16 i = begin(); i != end() && change[i].trigger <= 400; i = next(i)) {
             printf("%2i: ", i); change[i].print();
         }
     }

@@ -69,17 +69,17 @@ AudioConfig;
 
 typedef struct
 {
-    int8_t state;
+    i8 state;
 
-    uint16_t audlenLatch;
-    uint16_t audlen;
-    uint16_t audperLatch;
-    int32_t audper;
-    uint16_t audvolLatch;
-    uint16_t audvol;
-    uint16_t auddatLatch;
-    uint16_t auddat;
-    uint32_t audlcLatch;
+    u16 audlenLatch;
+    u16 audlen;
+    u16 audperLatch;
+    i32 audper;
+    u16 audvolLatch;
+    u16 audvol;
+    u16 auddatLatch;
+    u16 auddat;
+    u32 audlcLatch;
 }
 AudioChannelInfo;
 
