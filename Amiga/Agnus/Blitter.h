@@ -33,8 +33,8 @@ class Blitter : public AmigaComponent {
     BlitterInfo info;
 
     // The fill pattern lookup tables
-    uint8_t fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
-    uint8_t nextCarryIn[2][256];        // [carry in][data]
+    u8 fillPattern[2][2][256];     // [inclusive/exclusive][carry in][data]
+    u8 nextCarryIn[2][256];        // [carry in][data]
 
 
     //
@@ -42,22 +42,22 @@ class Blitter : public AmigaComponent {
     //
     
     // The Blitter Control Register
-    uint16_t bltcon0;
-    uint16_t bltcon1;
+    u16 bltcon0;
+    u16 bltcon1;
     
     // The Blitter DMA pointers
-    uint32_t bltapt;
-    uint32_t bltbpt;
-    uint32_t bltcpt;
-    uint32_t bltdpt;
+    u32 bltapt;
+    u32 bltbpt;
+    u32 bltcpt;
+    u32 bltdpt;
     
     // Blitter A first and last word masks
-    uint16_t bltafwm;
-    uint16_t bltalwm;
+    u16 bltafwm;
+    u16 bltalwm;
     
     // The Blitter size register
-    uint16_t bltsizeW;
-    uint16_t bltsizeH;
+    u16 bltsizeW;
+    u16 bltsizeH;
 
     // The Blitter modulo registers
     int16_t bltamod;
@@ -66,16 +66,16 @@ class Blitter : public AmigaComponent {
     int16_t bltdmod;
     
     // The Blitter pipeline registers
-    uint16_t anew;
-    uint16_t bnew;
-    uint16_t aold;
-    uint16_t bold;
-    uint16_t ahold;
-    uint16_t bhold;
-    uint16_t chold;
-    uint16_t dhold;
-    uint32_t ashift;
-    uint32_t bshift;
+    u16 anew;
+    u16 bnew;
+    u16 aold;
+    u16 bold;
+    u16 ahold;
+    u16 bhold;
+    u16 chold;
+    u16 dhold;
+    u32 ashift;
+    u32 bshift;
 
     //
     // Fast Blitter
@@ -96,7 +96,7 @@ class Blitter : public AmigaComponent {
     void (Blitter::*lineBlitInstr[6])(void);
 
     // The program counter indexing the micro instruction to execute
-    uint16_t bltpc;
+    u16 bltpc;
 
     int iteration;
     int incr;
@@ -108,8 +108,8 @@ class Blitter : public AmigaComponent {
     int32_t dmod;
 
     // Counters tracking the coordinate of the blit window
-    uint16_t xCounter;
-    uint16_t yCounter;
+    u16 xCounter;
+    u16 yCounter;
 
     // Counters tracking the DMA accesses for each channel
     int16_t cntA;
@@ -118,7 +118,7 @@ class Blitter : public AmigaComponent {
     int16_t cntD;
 
     bool fillCarry;
-    uint16_t mask;
+    u16 mask;
 
     bool lockD;
 
@@ -158,8 +158,8 @@ private:
     int linecount;
 
     // Debug checksums
-    uint32_t check1;
-    uint32_t check2;
+    u32 check1;
+    u32 check2;
 
 
     //
@@ -270,8 +270,8 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
 
@@ -302,65 +302,65 @@ public:
 public:
     
     // OCS register 0x040 (w)
-    void pokeBLTCON0(uint16_t value);
+    void pokeBLTCON0(u16 value);
     
-    uint16_t bltconASH() { return bltcon0 >> 12; }
-    uint16_t bltconUSE() { return (bltcon0 >> 8) & 0xF; }
+    u16 bltconASH() { return bltcon0 >> 12; }
+    u16 bltconUSE() { return (bltcon0 >> 8) & 0xF; }
     bool bltconUSEA()    { return bltcon0 & (1 << 11); }
     bool bltconUSEB()    { return bltcon0 & (1 << 10); }
     bool bltconUSEC()    { return bltcon0 & (1 << 9); }
     bool bltconUSED()    { return bltcon0 & (1 << 8); }
-    void setBltconASH(uint16_t ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
+    void setBltconASH(u16 ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
 
     // OCS register 0x042 (w)
-    void pokeBLTCON1(uint16_t value);
+    void pokeBLTCON1(u16 value);
 
-    uint16_t bltconBSH() { return bltcon1 >> 12; }
+    u16 bltconBSH() { return bltcon1 >> 12; }
     bool bltconEFE()     { return bltcon1 & (1 << 4); }
     bool bltconIFE()     { return bltcon1 & (1 << 3); }
     bool bltconFE()      { return bltconEFE() || bltconIFE(); }
     bool bltconFCI()     { return bltcon1 & (1 << 2); }
     bool bltconDESC()    { return bltcon1 & (1 << 1); }
     bool bltconLINE()    { return bltcon1 & (1 << 0); }
-    void setBltcon1BSH(uint16_t bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
+    void setBltcon1BSH(u16 bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
 
     // OCS registers 0x044 and 0x046 (w)
-    void pokeBLTAFWM(uint16_t value);
-    void pokeBLTALWM(uint16_t value);
+    void pokeBLTAFWM(u16 value);
+    void pokeBLTALWM(u16 value);
     
     // OCS registers 0x048 and 0x056 (w)
-    void pokeBLTAPTH(uint16_t value);
-    void pokeBLTAPTL(uint16_t value);
-    void pokeBLTBPTH(uint16_t value);
-    void pokeBLTBPTL(uint16_t value);
-    void pokeBLTCPTH(uint16_t value);
-    void pokeBLTCPTL(uint16_t value);
-    void pokeBLTDPTH(uint16_t value);
-    void pokeBLTDPTL(uint16_t value);
+    void pokeBLTAPTH(u16 value);
+    void pokeBLTAPTL(u16 value);
+    void pokeBLTBPTH(u16 value);
+    void pokeBLTBPTL(u16 value);
+    void pokeBLTCPTH(u16 value);
+    void pokeBLTCPTL(u16 value);
+    void pokeBLTDPTH(u16 value);
+    void pokeBLTDPTL(u16 value);
     
     // OCS register 0x058 (w)
-    template <PokeSource s> void pokeBLTSIZE(uint16_t value);
-    void setBLTSIZE(uint16_t value);
+    template <PokeSource s> void pokeBLTSIZE(u16 value);
+    void setBLTSIZE(u16 value);
 
     // ECS register 0x05A (w)
-    void pokeBLTCON0L(uint16_t value);
+    void pokeBLTCON0L(u16 value);
 
     // ECS register 0x05C (w)
-    void pokeBLTSIZV(uint16_t value);
+    void pokeBLTSIZV(u16 value);
 
     // ECS register 0x05E (w)
-    void pokeBLTSIZH(uint16_t value);
+    void pokeBLTSIZH(u16 value);
 
     // OCS registers 0x060 and 0x066 (w)
-    void pokeBLTAMOD(uint16_t value);
-    void pokeBLTBMOD(uint16_t value);
-    void pokeBLTCMOD(uint16_t value);
-    void pokeBLTDMOD(uint16_t value);
+    void pokeBLTAMOD(u16 value);
+    void pokeBLTBMOD(u16 value);
+    void pokeBLTCMOD(u16 value);
+    void pokeBLTDMOD(u16 value);
     
     // OCS registers 0x070 and 0x074 (w)
-    void pokeBLTADAT(uint16_t value);
-    void pokeBLTBDAT(uint16_t value);
-    void pokeBLTCDAT(uint16_t value);
+    void pokeBLTADAT(u16 value);
+    void pokeBLTBDAT(u16 value);
+    void pokeBLTCDAT(u16 value);
     
     bool isFirstWord() { return xCounter == bltsizeW; }
     bool isLastWord() { return xCounter == 1; }
@@ -371,7 +371,7 @@ public:
     //
 
     // Called by Agnus when DMACON is written to
-    void pokeDMACON(uint16_t oldValue, uint16_t newValue);
+    void pokeDMACON(u16 oldValue, u16 newValue);
 
 
     //
@@ -392,11 +392,11 @@ public:
     //
 
     // Emulates the minterm logic circuit
-    uint16_t doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
-    uint16_t doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm);
+    u16 doMintermLogic(u16 a, u16 b, u16 c, u8 minterm);
+    u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm);
 
     // Emulates the fill logic circuit
-    void doFill(uint16_t &data, bool &carry);
+    void doFill(u16 &data, bool &carry);
 
     // Clears the busy flag and cancels the Blitter slot
     // void kill();
@@ -456,12 +456,12 @@ private:
     void beginSlowCopyBlit();
 
     // Emulates a Blitter micro-instruction
-    template <uint16_t instr> void exec();
-    template <uint16_t instr> void fakeExec();
+    template <u16 instr> void exec();
+    template <u16 instr> void fakeExec();
 
     // Sets the x or y counter to a new value
-    void setXCounter(uint16_t value);
-    void setYCounter(uint16_t value);
+    void setXCounter(u16 value);
+    void setYCounter(u16 value);
     void resetXCounter() { setXCounter(bltsizeW); }
     void resetYCounter() { setYCounter(bltsizeH); }
     void decXCounter() { setXCounter(xCounter - 1); }

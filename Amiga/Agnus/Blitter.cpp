@@ -20,9 +20,9 @@ Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
         
         for (unsigned byte = 0; byte < 256; byte++) {
             
-            uint8_t carry = carryIn;
-            uint8_t inclPattern = byte;
-            uint8_t exclPattern = byte;
+            u8 carry = carryIn;
+            u8 inclPattern = byte;
+            u8 exclPattern = byte;
             
             for (int bit = 0; bit < 8; bit++) {
                 
@@ -148,7 +148,7 @@ Blitter::getInfo()
 }
 
 void
-Blitter::pokeBLTCON0(uint16_t value)
+Blitter::pokeBLTCON0(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
 
@@ -156,7 +156,7 @@ Blitter::pokeBLTCON0(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCON1(uint16_t value)
+Blitter::pokeBLTCON1(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
 
@@ -164,7 +164,7 @@ Blitter::pokeBLTCON1(uint16_t value)
 }
 
 void
-Blitter::pokeBLTAPTH(uint16_t value)
+Blitter::pokeBLTAPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
 
@@ -172,7 +172,7 @@ Blitter::pokeBLTAPTH(uint16_t value)
 }
 
 void
-Blitter::pokeBLTAPTL(uint16_t value)
+Blitter::pokeBLTAPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
 
@@ -180,7 +180,7 @@ Blitter::pokeBLTAPTL(uint16_t value)
 }
 
 void
-Blitter::pokeBLTBPTH(uint16_t value)
+Blitter::pokeBLTBPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTH(%X)\n", value);
 
@@ -188,7 +188,7 @@ Blitter::pokeBLTBPTH(uint16_t value)
 }
 
 void
-Blitter::pokeBLTBPTL(uint16_t value)
+Blitter::pokeBLTBPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBPTL(%X)\n", value);
 
@@ -196,7 +196,7 @@ Blitter::pokeBLTBPTL(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCPTH(uint16_t value)
+Blitter::pokeBLTCPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTH(%X)\n", value);
 
@@ -204,7 +204,7 @@ Blitter::pokeBLTCPTH(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCPTL(uint16_t value)
+Blitter::pokeBLTCPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCPTL(%X)\n", value);
 
@@ -212,7 +212,7 @@ Blitter::pokeBLTCPTL(uint16_t value)
 }
 
 void
-Blitter::pokeBLTDPTH(uint16_t value)
+Blitter::pokeBLTDPTH(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTH(%X)\n", value);
 
@@ -220,7 +220,7 @@ Blitter::pokeBLTDPTH(uint16_t value)
 }
 
 void
-Blitter::pokeBLTDPTL(uint16_t value)
+Blitter::pokeBLTDPTL(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDPTL(%X)\n", value);
 
@@ -228,7 +228,7 @@ Blitter::pokeBLTDPTL(uint16_t value)
 }
 
 void
-Blitter::pokeBLTAFWM(uint16_t value)
+Blitter::pokeBLTAFWM(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAFWM(%X)\n", value);
 
@@ -236,7 +236,7 @@ Blitter::pokeBLTAFWM(uint16_t value)
 }
 
 void
-Blitter::pokeBLTALWM(uint16_t value)
+Blitter::pokeBLTALWM(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTALWM(%X)\n", value);
 
@@ -244,7 +244,7 @@ Blitter::pokeBLTALWM(uint16_t value)
 }
 
 template <PokeSource s> void
-Blitter::pokeBLTSIZE(uint16_t value)
+Blitter::pokeBLTSIZE(u16 value)
 {
     plaindebug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     debug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
@@ -257,7 +257,7 @@ Blitter::pokeBLTSIZE(uint16_t value)
 }
 
 void
-Blitter::setBLTSIZE(uint16_t value)
+Blitter::setBLTSIZE(u16 value)
 {
     debug(BLTREG_DEBUG, "setBLTSIZE(%X)\n", value);
 
@@ -274,7 +274,7 @@ Blitter::setBLTSIZE(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCON0L(uint16_t value)
+Blitter::pokeBLTCON0L(u16 value)
 {
     debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
 
@@ -285,7 +285,7 @@ Blitter::pokeBLTCON0L(uint16_t value)
 }
 
 void
-Blitter::pokeBLTSIZV(uint16_t value)
+Blitter::pokeBLTSIZV(u16 value)
 {
     debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTSIZV(%X)\n", value);
 
@@ -298,7 +298,7 @@ Blitter::pokeBLTSIZV(uint16_t value)
 }
 
 void
-Blitter::pokeBLTSIZH(uint16_t value)
+Blitter::pokeBLTSIZH(u16 value)
 {
     debug(MIN(BLTREG_DEBUG,ECSREG_DEBUG), "pokeBLTSIZH(%X)\n", value);
 
@@ -317,14 +317,14 @@ Blitter::pokeBLTSIZH(uint16_t value)
 }
 
 void
-Blitter::pokeBLTAMOD(uint16_t value)
+Blitter::pokeBLTAMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTAMOD(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
     bltamod = (int16_t)(value & 0xFFFE);
 }
 void
-Blitter::pokeBLTBMOD(uint16_t value)
+Blitter::pokeBLTBMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBMOD(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -332,7 +332,7 @@ Blitter::pokeBLTBMOD(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCMOD(uint16_t value)
+Blitter::pokeBLTCMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCMOD(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -340,7 +340,7 @@ Blitter::pokeBLTCMOD(uint16_t value)
 }
 
 void
-Blitter::pokeBLTDMOD(uint16_t value)
+Blitter::pokeBLTDMOD(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTDMOD(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -348,7 +348,7 @@ Blitter::pokeBLTDMOD(uint16_t value)
 }
 
 void
-Blitter::pokeBLTADAT(uint16_t value)
+Blitter::pokeBLTADAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -363,7 +363,7 @@ Blitter::pokeBLTADAT(uint16_t value)
 }
 
 void
-Blitter::pokeBLTBDAT(uint16_t value)
+Blitter::pokeBLTBDAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTBDAT(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -374,7 +374,7 @@ Blitter::pokeBLTBDAT(uint16_t value)
 }
 
 void
-Blitter::pokeBLTCDAT(uint16_t value)
+Blitter::pokeBLTCDAT(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCDAT(%X)\n", value);
     if (bbusy) debug(BLTREG_DEBUG, "Blitter is running");
@@ -382,7 +382,7 @@ Blitter::pokeBLTCDAT(uint16_t value)
 }
 
 void
-Blitter::pokeDMACON(uint16_t oldValue, uint16_t newValue)
+Blitter::pokeDMACON(u16 oldValue, u16 newValue)
 {
     bool oldBltDma = (oldValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
     bool newBltDma = (newValue & (DMAEN | BLTEN)) == (DMAEN | BLTEN);
@@ -464,10 +464,10 @@ Blitter::vsyncHandler()
 
 }
 
-uint16_t
-Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
+u16
+Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm)
 {
-    uint16_t result = 0;
+    u16 result = 0;
 
     if (minterm & 0b10000000) result |=  a &  b &  c;
     if (minterm & 0b01000000) result |=  a &  b & ~c;
@@ -481,8 +481,8 @@ Blitter::doMintermLogic(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
     return result;
 }
 
-uint16_t
-Blitter::doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm)
+u16
+Blitter::doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm)
 {
     switch (minterm) {
         case 0: return 0;
@@ -745,20 +745,20 @@ Blitter::doMintermLogicQuick(uint16_t a, uint16_t b, uint16_t c, uint8_t minterm
 }
 
 void
-Blitter::doFill(uint16_t &data, bool &carry)
+Blitter::doFill(u16 &data, bool &carry)
 {
     assert(carry == 0 || carry == 1);
 
     debug(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
     
-    uint8_t dataHi = HI_BYTE(data);
-    uint8_t dataLo = LO_BYTE(data);
-    uint8_t exclusive = !!bltconEFE();
+    u8 dataHi = HI_BYTE(data);
+    u8 dataLo = LO_BYTE(data);
+    u8 exclusive = !!bltconEFE();
     
     // Remember: A fill operation is carried out from right to left
-    uint8_t resultLo = fillPattern[exclusive][carry][dataLo];
+    u8 resultLo = fillPattern[exclusive][carry][dataLo];
     carry = nextCarryIn[carry][dataLo];
-    uint8_t resultHi = fillPattern[exclusive][carry][dataHi];
+    u8 resultHi = fillPattern[exclusive][carry][dataHi];
     carry = nextCarryIn[carry][dataHi];
     
     data = HI_LO(resultHi, resultLo);
@@ -846,20 +846,8 @@ Blitter::endBlit()
     copper.blitterDidTerminate();
 }
 
-/*
-void
-Blitter::kill()
-{
-    // Clear the Blitter busy flag
-    bbusy = false;
-
-    // Clear the Blitter slot
-    agnus.cancel<BLT_SLOT>();
-}
-*/
-
-template void Blitter::pokeBLTSIZE<POKE_CPU>(uint16_t value);
-template void Blitter::pokeBLTSIZE<POKE_COPPER>(uint16_t value);
+template void Blitter::pokeBLTSIZE<POKE_CPU>(u16 value);
+template void Blitter::pokeBLTSIZE<POKE_COPPER>(u16 value);
 
 void
 Blitter::beginLineBlit(int level)

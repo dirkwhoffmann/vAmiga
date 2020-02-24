@@ -376,7 +376,7 @@ Agnus::scheduleNextBplEvent(int16_t hpos)
 {
     assert(isHPos(hpos));
 
-    if (uint8_t next = nextBplEvent[hpos]) {
+    if (u8 next = nextBplEvent[hpos]) {
         scheduleRel<BPL_SLOT>(DMA_CYCLES(next - pos.h), bplEvent[next]);
     }
     assert(hasEvent<BPL_SLOT>());
@@ -402,7 +402,7 @@ Agnus::scheduleNextDasEvent(int16_t hpos)
 {
     assert(isHPos(hpos));
 
-    if (uint8_t next = nextDasEvent[hpos]) {
+    if (u8 next = nextDasEvent[hpos]) {
         scheduleRel<DAS_SLOT>(DMA_CYCLES(next - pos.h), dasEvent[next]);
         assert(hasEvent<DAS_SLOT>());
     } else {
@@ -566,8 +566,8 @@ Agnus::serviceREGEvent(Cycle until)
         if (changeRecorder.trigger() > until) return;
 
         // Apply the register change
-        uint32_t addr = changeRecorder.addr();
-        uint16_t value = changeRecorder.value();
+        u32 addr = changeRecorder.addr();
+        u16 value = changeRecorder.value();
 
         switch (addr) {
 

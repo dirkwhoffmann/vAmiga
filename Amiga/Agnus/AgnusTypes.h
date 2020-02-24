@@ -169,21 +169,21 @@ DMADebuggerInfo;
 
 typedef struct
 {
-    uint16_t bplcon0;
-    uint16_t dmacon;
-    uint16_t diwstrt;
-    uint16_t diwstop;
-    uint16_t ddfstrt;
-    uint16_t ddfstop;
+    u16 bplcon0;
+    u16 dmacon;
+    u16 diwstrt;
+    u16 diwstop;
+    u16 ddfstrt;
+    u16 ddfstop;
 
     int16_t bpl1mod;
     int16_t bpl2mod;
-    uint8_t bpu;
+    u8 bpu;
 
-    uint32_t dskpt;
-    uint32_t audlc[4];
-    uint32_t bplpt[6];
-    uint32_t sprpt[8];
+    u32 dskpt;
+    u32 audlc[4];
+    u32 bplpt[6];
+    u32 sprpt[8];
 }
 AgnusInfo;
 
@@ -197,11 +197,11 @@ typedef struct
 {
     bool active;
     bool cdang;
-    uint32_t coppc;
-    uint32_t cop1lc;
-    uint32_t cop2lc;
-    uint16_t cop1ins;
-    uint16_t cop2ins;
+    u32 coppc;
+    u32 cop1lc;
+    u32 cop2lc;
+    u16 cop1ins;
+    u16 cop2ins;
     int16_t length1;
     int16_t length2;
 }
@@ -216,25 +216,25 @@ BlitterConfig;
 typedef struct
 {
     bool active;
-    uint16_t bltcon0;
-    uint16_t bltcon1;
-    uint16_t bltapt;
-    uint16_t bltbpt;
-    uint16_t bltcpt;
-    uint16_t bltdpt;
-    uint16_t bltafwm;
-    uint16_t bltalwm;
-    // uint16_t bltsize;
+    u16 bltcon0;
+    u16 bltcon1;
+    u16 bltapt;
+    u16 bltbpt;
+    u16 bltcpt;
+    u16 bltdpt;
+    u16 bltafwm;
+    u16 bltalwm;
+    // u16 bltsize;
     int16_t bltamod;
     int16_t bltbmod;
     int16_t bltcmod;
     int16_t bltdmod;
-    uint16_t anew;
-    uint16_t bnew;
-    uint16_t ahold;
-    uint16_t bhold;
-    uint16_t chold;
-    uint16_t dhold;
+    u16 anew;
+    u16 bnew;
+    u16 ahold;
+    u16 bhold;
+    u16 chold;
+    u16 dhold;
     bool bbusy;
     bool bzero;
 }

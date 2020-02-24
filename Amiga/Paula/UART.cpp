@@ -52,7 +52,7 @@ UART::getInfo()
     return result;
 }
 
-uint16_t
+u16
 UART::peekSERDATR()
 {
     // Get the RBF bit from INTREQ
@@ -71,7 +71,7 @@ UART::peekSERDATR()
      * 08      STP / DB8  Stop bit if LONG, data bit if not.
      * 07..00  DB7 - DB0  Data bits
      */
-    uint16_t result = receiveBuffer & 0x3FF;
+    u16 result = receiveBuffer & 0x3FF;
     REPLACE_BIT(result, 15, ovrun);
     REPLACE_BIT(result, 14, rbf);
     REPLACE_BIT(result, 13, transmitBuffer == 0);
@@ -85,7 +85,7 @@ UART::peekSERDATR()
 }
 
 void
-UART::pokeSERDAT(uint16_t value)
+UART::pokeSERDAT(u16 value)
 {
     debug(SER_DEBUG, "pokeSERDAT(%X)\n", value);
 
@@ -97,7 +97,7 @@ UART::pokeSERDAT(uint16_t value)
 }
 
 void
-UART::pokeSERPER(uint16_t value)
+UART::pokeSERPER(u16 value)
 {
     debug(SER_DEBUG, "pokeSERPER(%X)\n", value);
 
