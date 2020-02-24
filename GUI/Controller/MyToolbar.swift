@@ -22,7 +22,6 @@ class MyToolbar: NSToolbar {
     override func validateVisibleItems() {
         
         guard let amiga = amigaProxy else { return }
-        let power = powerButton.view as? NSButton
         let pause = pauseButton.view as? NSButton
         let reset = resetButton.view as? NSButton
 
