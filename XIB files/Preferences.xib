@@ -2904,7 +2904,7 @@ DQ
                                         </textField>
                                         <box verticalHuggingPriority="750" boxType="separator" id="GgD-HM-GCY">
                                             <rect key="frame" x="12" y="51" width="576" height="5"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         </box>
                                     </subviews>
                                     <constraints>

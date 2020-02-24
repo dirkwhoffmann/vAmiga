@@ -100,7 +100,7 @@ checkFileSizeRange(const char *filename, long min, long max)
 }
 
 bool
-checkFileHeader(const char *filename, const uint8_t *header)
+checkFileHeader(const char *filename, const u8 *header)
 {
     int i, c;
     bool result = true;
@@ -125,7 +125,7 @@ checkFileHeader(const char *filename, const uint8_t *header)
 }
 
 bool
-matchingFileHeader(const char *path, const uint8_t *header, size_t length)
+matchingFileHeader(const char *path, const u8 *header, size_t length)
 {
     assert(path != NULL);
     assert(header != NULL);
@@ -150,7 +150,7 @@ matchingFileHeader(const char *path, const uint8_t *header, size_t length)
 
 
 bool
-matchingBufferHeader(const uint8_t *buffer, const uint8_t *header, size_t length)
+matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
 {
     assert(buffer != NULL);
     assert(header != NULL);
@@ -172,9 +172,9 @@ sleepMicrosec(unsigned usec)
 }
 
 int64_t
-sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
+sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup)
 {
-    uint64_t now = mach_absolute_time();
+    u64 now = mach_absolute_time();
     int64_t jitter;
     
     if (now > kernelTargetTime) {
@@ -197,56 +197,56 @@ sleepUntil(uint64_t kernelTargetTime, uint64_t kernelEarlyWakeup)
     return jitter;
 }
 
-uint32_t
-fnv_1a_32(const uint8_t *addr, size_t size)
+u32
+fnv_1a_32(const u8 *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
 
-    uint32_t hash = fnv_1a_init32();
+    u32 hash = fnv_1a_init32();
 
     for (size_t i = 0; i < size; i++) {
-        hash = fnv_1a_it32(hash, (uint32_t)addr[i]);
+        hash = fnv_1a_it32(hash, (u32)addr[i]);
     }
 
     return hash;
 }
 
-uint64_t
-fnv_1a_64(const uint8_t *addr, size_t size)
+u64
+fnv_1a_64(const u8 *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
     
-    uint64_t hash = fnv_1a_init64();
+    u64 hash = fnv_1a_init64();
     
     for (size_t i = 0; i < size; i++) {
-        hash = fnv_1a_it64(hash, (uint64_t)addr[i]);
+        hash = fnv_1a_it64(hash, (u64)addr[i]);
     }
     
     return hash;
 }
 
-uint32_t crc32(const uint8_t *addr, size_t size)
+u32 crc32(const u8 *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
 
-    uint32_t result = 0;
+    u32 result = 0;
 
     // Setup lookup table
-    uint32_t table[256];
+    u32 table[256];
     for(int i = 0; i < 256; i++) table[i] = crc32forByte(i);
 
     // Compute CRC-32 checksum
      for(int i = 0; i < size; i++)
-       result = table[(uint8_t)result ^ addr[i]] ^ result >> 8;
+       result = table[(u8)result ^ addr[i]] ^ result >> 8;
 
     return result;
 }
 
-uint32_t crc32forByte(uint32_t r)
+u32 crc32forByte(u32 r)
 {
     for(int j = 0; j < 8; ++j)
-        r = (r & 1? 0: (uint32_t)0xEDB88320L) ^ r >> 1;
-    return r ^ (uint32_t)0xFF000000L;
+        r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;
+    return r ^ (u32)0xFF000000L;
 }
 
 bool releaseBuild()
