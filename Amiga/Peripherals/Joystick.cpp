@@ -32,7 +32,7 @@ Joystick::_dump()
 }
 
 size_t
-Joystick::didLoadFromBuffer(uint8_t *buffer)
+Joystick::didLoadFromBuffer(u8 *buffer)
 {
     // Discard any active joystick movements
     button = false;
@@ -69,19 +69,19 @@ Joystick::scheduleNextShot()
 }
 
 void
-Joystick::changePra(uint8_t &pra)
+Joystick::changePra(u8 &pra)
 {
-    uint16_t mask = (nr == 1) ? 0x40 : 0x80;
+    u16 mask = (nr == 1) ? 0x40 : 0x80;
 
     if (button) pra &= ~mask;
 }
 
-uint16_t
+u16
 Joystick::joydat()
 {
     // debug("joydat\n");
     
-    uint16_t result = 0;
+    u16 result = 0;
 
     /* 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
      * Y7 Y6 Y5 Y4 Y3 Y2 Y1 Y0 X7 X6 X5 X4 X3 X2 X1 X0
@@ -101,7 +101,7 @@ Joystick::joydat()
     return result;
 }
 
-uint8_t
+u8
 Joystick::ciapa()
 {
     // debug("ciapa\n");

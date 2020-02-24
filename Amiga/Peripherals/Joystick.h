@@ -75,9 +75,9 @@ private:
     void _reset() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(uint8_t *buffer) override;
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t didLoadFromBuffer(u8 *buffer) override;
     
     
     //
@@ -111,7 +111,7 @@ private:
 public:
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(uint8_t &pra);
+    void changePra(u8 &pra);
 
 
     //
@@ -121,10 +121,10 @@ public:
 public:
 
     // Callback handler for function ControlPort::joydat()
-    uint16_t joydat();
+    u16 joydat();
 
     // Callback handler for function ControlPort::ciapa()
-    uint8_t ciapa();
+    u8 ciapa();
     
     // Triggers a gamepad event
     void trigger(GamePadAction event);

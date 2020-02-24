@@ -75,12 +75,12 @@ Keyboard::releaseAllKeys()
     }
 }
 
-uint8_t
+u8
 Keyboard::readFromBuffer()
 {
     assert(!bufferIsEmpty());
 
-    uint8_t result = typeAheadBuffer[0];
+    u8 result = typeAheadBuffer[0];
 
     bufferIndex--;
     for (unsigned i = 0; i < bufferIndex; i++) {
@@ -91,7 +91,7 @@ Keyboard::readFromBuffer()
 }
 
 void
-Keyboard::writeToBuffer(uint8_t keycode)
+Keyboard::writeToBuffer(u8 keycode)
 {
     assert(!bufferIsFull());
 
@@ -228,7 +228,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
 }
 
 void
-Keyboard::sendKeyCode(uint8_t keyCode)
+Keyboard::sendKeyCode(u8 keyCode)
 {
     debug(KBD_DEBUG, "sendKeyCode(%d)\n", keyCode);
 

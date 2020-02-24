@@ -34,10 +34,10 @@ private:
 
     // The keycode type-ahead buffer (10 keycodes on an original Amiga)
     static const size_t bufferSize = 10;
-    uint8_t typeAheadBuffer[bufferSize];
+    u8 typeAheadBuffer[bufferSize];
     
     // Next free position in the type ahead buffer
-    uint8_t bufferIndex;
+    u8 bufferIndex;
     
     // Remebers the keys that are currently held down
     bool keyDown[128];
@@ -92,8 +92,8 @@ private:
     void _reset() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -118,10 +118,10 @@ private:
     bool bufferIsFull() { return bufferIndex == bufferSize; }
 
     // Reads a keycode from the type-ahead buffer.
-    uint8_t readFromBuffer();
+    u8 readFromBuffer();
 
     // Writes a keycode into the type-ahead buffer.
-    void writeToBuffer(uint8_t keycode);
+    void writeToBuffer(u8 keycode);
 
     
     //
@@ -142,7 +142,7 @@ public:
 private:
 
     // Sends a keycode to the Amiga
-    void sendKeyCode(uint8_t keyCode);
+    void sendKeyCode(u8 keyCode);
 };
 
 #endif

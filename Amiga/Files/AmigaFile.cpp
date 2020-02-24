@@ -26,7 +26,7 @@ AmigaFile::alloc(size_t capacity)
 {
     dealloc();
     
-    if ((data = new uint8_t[capacity]) == NULL)
+    if ((data = new u8[capacity]) == NULL)
         return false;
     
     size = eof = capacity;
@@ -89,7 +89,7 @@ AmigaFile::read()
 }
 
 void
-AmigaFile::flash(uint8_t *buffer, size_t offset)
+AmigaFile::flash(u8 *buffer, size_t offset)
 {
     int byte;
     assert(buffer != NULL);
@@ -97,12 +97,12 @@ AmigaFile::flash(uint8_t *buffer, size_t offset)
     seek(0);
     
     while ((byte = read()) != EOF) {
-        buffer[offset++] = (uint8_t)byte;
+        buffer[offset++] = (u8)byte;
     }
 }
 
 bool
-AmigaFile::readFromBuffer(const uint8_t *buffer, size_t length)
+AmigaFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     assert (buffer != NULL);
     
@@ -128,7 +128,7 @@ AmigaFile::readFromFile(const char *filename)
     assert (filename != NULL);
     
     bool success = false;
-    uint8_t *buffer = NULL;
+    u8 *buffer = NULL;
     FILE *file = NULL;
     struct stat fileProperties;
     
@@ -148,7 +148,7 @@ AmigaFile::readFromFile(const char *filename)
     }
     
     // Allocate memory
-    if (!(buffer = new uint8_t[fileProperties.st_size])) {
+    if (!(buffer = new u8[fileProperties.st_size])) {
         goto exit;
     }
     
@@ -158,7 +158,7 @@ AmigaFile::readFromFile(const char *filename)
         c = fgetc(file);
         if (c == EOF)
             break;
-        buffer[i] = (uint8_t)c;
+        buffer[i] = (u8)c;
     }
     
     // Read from buffer
@@ -183,7 +183,7 @@ exit:
 }
 
 size_t
-AmigaFile::writeToBuffer(uint8_t *buffer)
+AmigaFile::writeToBuffer(u8 *buffer)
 {
     assert(data != NULL);
     
@@ -197,7 +197,7 @@ bool
 AmigaFile::writeToFile(const char *filename)
 {
     bool success = false;
-    uint8_t *data = NULL;
+    u8 *data = NULL;
     FILE *file;
     size_t filesize;
     
@@ -213,7 +213,7 @@ AmigaFile::writeToFile(const char *filename)
     }
     
     // Allocate memory
-    if (!(data = new uint8_t[filesize])) {
+    if (!(data = new u8[filesize])) {
         goto exit;
     }
     

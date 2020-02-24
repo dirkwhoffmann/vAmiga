@@ -51,9 +51,9 @@ inline const char *driveTypeName(DriveType type)
 
 typedef struct
 {
-     uint8_t side;
-     uint8_t cylinder;
-     uint16_t offset;
+     u8 side;
+     u8 cylinder;
+     u16 offset;
  }
 DriveHead;
 
