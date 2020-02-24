@@ -122,15 +122,15 @@ PixelEngine::setContrast(double value)
 }
 
 void
-PixelEngine::setColor(int reg, uint16_t value)
+PixelEngine::setColor(int reg, u16 value)
 {
     assert(reg < 32);
 
     colreg[reg] = value & 0xFFF;
 
-    uint8_t r = (value & 0xF00) >> 8;
-    uint8_t g = (value & 0x0F0) >> 4;
-    uint8_t b = (value & 0x00F);
+    u8 r = (value & 0xF00) >> 8;
+    u8 g = (value & 0x0F0) >> 4;
+    u8 b = (value & 0x00F);
 
     indexedRgba[reg] = rgba[value & 0xFFF];
     indexedRgba[reg + 32] = rgba[((r / 2) << 8) | ((g / 2) << 4) | (b / 2)];
@@ -140,12 +140,12 @@ void
 PixelEngine::updateRGBA()
 {
     // Iterate through all 4096 colors
-    for (uint16_t col = 0x000; col <= 0xFFF; col++) {
+    for (u16 col = 0x000; col <= 0xFFF; col++) {
 
         // Convert the Amiga color into an RGBA value
-        uint8_t r = (col >> 4) & 0xF0;
-        uint8_t g = (col >> 0) & 0xF0;
-        uint8_t b = (col << 4) & 0xF0;
+        u8 r = (col >> 4) & 0xF0;
+        u8 g = (col >> 0) & 0xF0;
+        u8 b = (col << 4) & 0xF0;
 
         // Convert the Amiga value to an RGBA value
         adjustRGB(r, g, b);
@@ -159,7 +159,7 @@ PixelEngine::updateRGBA()
 }
 
 void
-PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
+PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
 {
     // Normalize adjustment parameters
     double brightness = this->brightness - 50.0;
@@ -230,9 +230,9 @@ PixelEngine::adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b)
      b = gammaCorrect(b, 2.8, 2.2);
      */
 
-    r = uint8_t(newR);
-    g = uint8_t(newG);
-    b = uint8_t(newB);
+    r = u8(newR);
+    g = u8(newG);
+    b = u8(newB);
 }
 
 bool
@@ -367,7 +367,7 @@ PixelEngine::colorize(int line)
     bool ham = denise.ham();
 
     // Initialize the HAM mode hold register with the current background color
-    uint16_t hold = colreg[0];
+    u16 hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
     colRegChanges.add(HPIXELS, REG_NONE, 0);
@@ -401,7 +401,7 @@ PixelEngine::colorize(int line)
 void
 PixelEngine::colorize(int *dst, int from, int to)
 {
-    uint8_t *mbuf = denise.mBuffer;
+    u8 *mbuf = denise.mBuffer;
 
     for (int i = from; i < to; i++) {
         dst[i] = indexedRgba[mbuf[i]];
@@ -409,14 +409,14 @@ PixelEngine::colorize(int *dst, int from, int to)
 }
 
 void
-PixelEngine::colorizeHAM(int *dst, int from, int to, uint16_t& ham)
+PixelEngine::colorizeHAM(int *dst, int from, int to, u16& ham)
 {
-    uint8_t  *ibuf = denise.iBuffer;
-    uint8_t  *mbuf = denise.mBuffer;
+    u8 *ibuf = denise.iBuffer;
+    u8 *mbuf = denise.mBuffer;
 
     for (int i = from; i < to; i++) {
 
-        uint8_t index = ibuf[i];
+        u8 index = ibuf[i];
         assert(isRgbaIndex(index));
 
         switch ((index >> 4) & 0b11) {

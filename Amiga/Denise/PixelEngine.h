@@ -59,10 +59,10 @@ private:
     //
 
     // The 32 Amiga color registers
-    uint16_t colreg[32];
+    u16 colreg[32];
 
     // RGBA values for all possible 4096 Amiga colors
-    uint32_t rgba[4096];
+    u32 rgba[4096];
 
     /* The color register values translated to RGBA
      * Note that the number of elements exceeds the number of color registers:
@@ -71,7 +71,7 @@ private:
      * 64 .. 71: Additional colors used for debugging
      */
     static const int rgbaIndexCnt = 32 + 32 + 8;
-    uint32_t indexedRgba[rgbaIndexCnt];
+    u32 indexedRgba[rgbaIndexCnt];
 
     // Color adjustment parameters
     Palette palette = COLOR_PALETTE;
@@ -132,8 +132,8 @@ private:
     void _powerOn() override;
     void _reset() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -165,15 +165,15 @@ public:
     static bool isRgbaIndex(int nr) { return nr < rgbaIndexCnt; }
     
     // Changes one of the 32 Amiga color registers.
-    void setColor(int reg, uint16_t value);
+    void setColor(int reg, u16 value);
 
     // Returns a color value in Amiga format or RGBA format
-    uint16_t getColor(int nr) { assert(nr < 32); return colreg[nr]; }
-    uint32_t getRGBA(int nr) { assert(nr < 32); return indexedRgba[nr]; }
+    u16 getColor(int nr) { assert(nr < 32); return colreg[nr]; }
+    u32 getRGBA(int nr) { assert(nr < 32); return indexedRgba[nr]; }
 
     // Returns sprite color in Amiga format or RGBA format
-    uint16_t getSpriteColor(int s, int nr) { assert(s < 8); return getColor(16 + nr + 2 * (s & 6)); }
-    uint32_t getSpriteRGBA(int s, int nr) { return rgba[getSpriteColor(s,nr)]; }
+    u16 getSpriteColor(int s, int nr) { assert(s < 8); return getColor(16 + nr + 2 * (s & 6)); }
+    u32 getSpriteRGBA(int s, int nr) { return rgba[getSpriteColor(s,nr)]; }
 
 
     //
@@ -186,7 +186,7 @@ private:
     void updateRGBA();
 
     // Adjusts the RGBA value according to the selected color parameters
-    void adjustRGB(uint8_t &r, uint8_t &g, uint8_t &b);
+    void adjustRGB(u8 &r, u8 &g, u8 &b);
 
 
     //
@@ -248,7 +248,7 @@ public:
 private:
 
     void colorize(int *dst, int from, int to);
-    void colorizeHAM(int *dst, int from, int to, uint16_t& ham);
+    void colorizeHAM(int *dst, int from, int to, u16& ham);
 
 };
 
