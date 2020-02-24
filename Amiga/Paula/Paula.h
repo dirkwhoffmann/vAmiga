@@ -51,10 +51,10 @@ public:
     //
     
     // The interrupt request register
-    uint16_t intreq;
+    u16 intreq;
     
     // The interrupt enable register
-    uint16_t intena;
+    u16 intena;
 
     // Trigger cycle for setting a bit in INTREQ
     Cycle setIntreq[16];
@@ -65,13 +65,13 @@ public:
     //
     
     // The pot control register
-    uint16_t potgo;
+    u16 potgo;
 
     // Potentiometer counters for the first and the second control port
-    uint8_t potCntX0;
-    uint8_t potCntY0;
-    uint8_t potCntX1;
-    uint8_t potCntY1;
+    u8 potCntX0;
+    u8 potCntY0;
+    u8 potCntX1;
+    u8 potCntY1;
 
     // Current capacitor charge on all four potentiometer lines
     double chargeX0;
@@ -80,7 +80,7 @@ public:
     double chargeY1;
 
     // The Audio and Disk Control Register (ADKCON)
-    uint16_t adkcon;
+    u16 adkcon;
 
     
     //
@@ -126,8 +126,8 @@ private:
     void _warpOn() override;
     void _warpOff() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
@@ -137,29 +137,29 @@ private:
 public:
     
     // OCS register 0x010 (r)
-    uint16_t peekADKCONR() { return adkcon; }
+    u16 peekADKCONR() { return adkcon; }
     bool UARTBRK() { return GET_BIT(adkcon, 11); }
 
     // OCS register 0x01E (r)
-    uint16_t peekINTREQR();
+    u16 peekINTREQR();
 
     // OCS register 0x09C (w)
-    void pokeINTREQ(uint16_t value);
+    void pokeINTREQ(u16 value);
     
     // OCS register 0x01C (r)
-    uint16_t peekINTENAR() { return intena; }
+    u16 peekINTENAR() { return intena; }
     
     // OCS register 0x09A (w)
-    void pokeINTENA(uint16_t value);
+    void pokeINTENA(u16 value);
     
     // OCS register 0x09E (w)
-    void pokeADKCON(uint16_t value);
+    void pokeADKCON(u16 value);
 
     // OCS registers 0x012 and 0x014 (r)
-    template <int x> uint16_t peekPOTxDAT();
+    template <int x> u16 peekPOTxDAT();
 
     // OCS register 0x016 (r) (originally called POTINP)
-    uint16_t peekPOTGOR();
+    u16 peekPOTGOR();
     bool OUTRY() { return potgo & 0x8000; }
     bool DATRY() { return potgo & 0x4000; }
     bool OUTRX() { return potgo & 0x2000; }
@@ -170,7 +170,7 @@ public:
     bool DATLX() { return potgo & 0x0100; }
 
     // OCS register 0x030 (w)
-    void pokePOTGO(uint16_t value);
+    void pokePOTGO(u16 value);
 
 
     //
@@ -189,12 +189,12 @@ public:
 public:
     
     // Changes the value of register INTREQ
-    void setINTREQ(uint16_t value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
-    void setINTREQ(bool setclr, uint16_t value);
+    void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
+    void setINTREQ(bool setclr, u16 value);
 
     // Changes the value of register INTENA
-    void setINTENA(uint16_t value) { setINTENA(value & 0x8000, value & 0x7FFF); }
-    void setINTENA(bool setclr, uint16_t value);
+    void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
+    void setINTENA(bool setclr, u16 value);
 
     // Schedules an interrupt
     void raiseIrq(IrqSource src);

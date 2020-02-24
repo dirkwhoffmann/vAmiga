@@ -76,10 +76,10 @@ Paula::_warpOff()
     audioUnit.alignWritePtr();
 }
 
-uint16_t
+u16
 Paula::peekINTREQR()
 {
-    uint16_t result = intreq;
+    u16 result = intreq;
 
     // if (ciaa.irqPin() == 0) SET_BIT(result, 3);
     // if (ciab.irqPin() == 0) SET_BIT(result, 13);
@@ -90,7 +90,7 @@ Paula::peekINTREQR()
 }
 
 void
-Paula::pokeINTREQ(uint16_t value)
+Paula::pokeINTREQ(u16 value)
 {
     debug(INTREG_DEBUG, "pokeINTREQ(%X)\n", value);
 
@@ -99,7 +99,7 @@ Paula::pokeINTREQ(uint16_t value)
 }
 
 void
-Paula::pokeINTENA(uint16_t value)
+Paula::pokeINTENA(u16 value)
 {
     debug(INTREG_DEBUG, "pokeINTENA(%X)\n", value);
 
@@ -108,11 +108,11 @@ Paula::pokeINTENA(uint16_t value)
 }
 
 void
-Paula::pokeADKCON(uint16_t value)
+Paula::pokeADKCON(u16 value)
 {
     plaindebug(AUDREG_DEBUG, "pokeADKCON(%X)\n", value);
 
-    // uint16_t oldAdkcon = adkcon;
+    // u16 oldAdkcon = adkcon;
 
     if (value & 0x8000) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
 
@@ -123,7 +123,7 @@ Paula::pokeADKCON(uint16_t value)
 }
 
 void
-Paula::setINTREQ(bool setclr, uint16_t value)
+Paula::setINTREQ(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
@@ -142,7 +142,7 @@ Paula::setINTREQ(bool setclr, uint16_t value)
 }
 
 void
-Paula::setINTENA(bool setclr, uint16_t value)
+Paula::setINTENA(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
@@ -217,21 +217,21 @@ Paula::serviceIplEvent()
     agnus.cancel<IPL_SLOT>();
 }
 
-template <int x> uint16_t
+template <int x> u16
 Paula::peekPOTxDAT()
 {
     assert(x == 0 || x == 1);
 
-    uint16_t result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
+    u16 result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
     debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
 
     return result;
 }
 
-uint16_t
+u16
 Paula::peekPOTGOR()
 {
-    uint16_t result = 0;
+    u16 result = 0;
 
     REPLACE_BIT(result, 14, chargeY1 >= 1.0);
     REPLACE_BIT(result, 12, chargeX1 >= 1.0);
@@ -247,7 +247,7 @@ Paula::peekPOTGOR()
 }
 
 void
-Paula::pokePOTGO(uint16_t value)
+Paula::pokePOTGO(u16 value)
 {
     debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
 
@@ -343,7 +343,7 @@ Paula::interruptLevel()
 {
     if (intena & 0x4000) {
 
-        uint16_t mask = intreq;
+        u16 mask = intreq;
 
         // if (ciaa.irqPin() == 0) SET_BIT(mask, 3);
         // if (ciab.irqPin() == 0) SET_BIT(mask, 13);
@@ -369,7 +369,7 @@ Paula::checkInterrupt()
     agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(4), IPL_CHANGE, interruptLevel());
 }
 
-template uint16_t Paula::peekPOTxDAT<0>();
-template uint16_t Paula::peekPOTxDAT<1>();
+template u16 Paula::peekPOTxDAT<0>();
+template u16 Paula::peekPOTxDAT<1>();
 
 

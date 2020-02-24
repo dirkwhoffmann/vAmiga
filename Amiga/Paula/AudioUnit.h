@@ -82,11 +82,11 @@ private:
     
     /* Ring buffer read pointer
      */
-    uint32_t readPtr = 0;
+    u32 readPtr = 0;
     
     /* Ring buffer write pointer
      */
-    uint32_t writePtr = 0;
+    u32 writePtr = 0;
     
     /* Current volume
      * A value of 0 or below silences the audio playback.
@@ -176,9 +176,9 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(uint8_t *buffer) override;
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t didLoadFromBuffer(u8 *buffer) override;
 
 public:
 
@@ -193,8 +193,8 @@ public:
     // Accessing the state machines
     //
     
-    void pokeAUDxPER(int nr, uint16_t value);
-    void pokeAUDxVOL(int nr, uint16_t value);
+    void pokeAUDxPER(int nr, u16 value);
+    void pokeAUDxVOL(int nr, u16 value);
 
 
     //
@@ -225,10 +225,10 @@ public:
     size_t ringbufferSize() { return bufferSize; }
     
     // Returns the position of the read pointer
-    uint32_t getReadPtr() { return readPtr; }
+    u32 getReadPtr() { return readPtr; }
     
     // Returns the position of the write pointer
-    uint32_t getWritePtr() { return writePtr; }
+    u32 getWritePtr() { return writePtr; }
     
     // Clears the ringbuffer and resets the read and write pointer
     void clearRingbuffer();
@@ -297,14 +297,14 @@ public:
      * This function puts the write pointer somewhat ahead of the read pointer.
      * With a standard sample rate of 44100 Hz, 735 samples is 1/60 sec.
      */
-    const uint32_t samplesAhead = 8 * 735;
+    const u32 samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
 
     //
     // Accessing the state machines
     //
 
-    template <int channel> uint8_t getState(); 
+    template <int channel> u8 getState();
 
     
     //
