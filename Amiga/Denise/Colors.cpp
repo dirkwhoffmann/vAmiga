@@ -85,18 +85,18 @@ const YuvColor YuvColor::cyan(RgbColor::cyan);
 
 AmigaColor::AmigaColor(const GpuColor &c)
 {
-    uint8_t r = c.rawValue & 0x0000F0;
-    uint8_t g = c.rawValue & 0x00F000;
-    uint8_t b = c.rawValue & 0xF00000;
+    u8 r = c.rawValue & 0x0000F0;
+    u8 g = c.rawValue & 0x00F000;
+    u8 b = c.rawValue & 0xF00000;
 
     rawValue = (r << 4) | g | (b >> 4);
 }
 
 AmigaColor::AmigaColor(const struct RgbColor &c)
 {
-    uint8_t r = c.r * 0xF;
-    uint8_t g = c.g * 0xF;
-    uint8_t b = c.b * 0xF;
+    u8 r = c.r * 0xF;
+    u8 g = c.g * 0xF;
+    u8 b = c.b * 0xF;
 
     rawValue = (r << 8) | (g << 4) | b;
 }
@@ -116,27 +116,27 @@ const AmigaColor AmigaColor::cyan(RgbColor::cyan);
 
 GpuColor::GpuColor(const AmigaColor &c)
 {
-    uint8_t a = 0xFF;
-    uint8_t r = c.rawValue & 0xF00;
-    uint8_t g = c.rawValue & 0x0F0;
-    uint8_t b = c.rawValue & 0x00F;
+    u8 a = 0xFF;
+    u8 r = c.rawValue & 0xF00;
+    u8 g = c.rawValue & 0x0F0;
+    u8 b = c.rawValue & 0x00F;
 
     rawValue = (a << 24) | (b << 20) | (g << 8) | (r >> 4);
 }
 
 GpuColor::GpuColor(const RgbColor &c)
 {
-    uint8_t a = 255;
-    uint8_t r = c.r * 255;
-    uint8_t g = c.g * 255;
-    uint8_t b = c.b * 255;
+    u8 a = 255;
+    u8 r = c.r * 255;
+    u8 g = c.g * 255;
+    u8 b = c.b * 255;
 
     rawValue = (a << 24) | (b << 16) | (g << 8) | r;
 }
 
-GpuColor::GpuColor(uint8_t r, uint8_t g, uint8_t b)
+GpuColor::GpuColor(u8 r, u8 g, u8 b)
 {
-    uint8_t a = 255;
+    u8 a = 255;
     rawValue = (a << 24) | (b << 16) | (g << 8) | r;
 }
 

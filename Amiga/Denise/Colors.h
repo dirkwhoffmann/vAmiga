@@ -18,7 +18,7 @@ struct RgbColor {
 
     RgbColor() : r(0), g(0), b(0) {}
     RgbColor(double rv, double gv, double bv) : r(rv), g(gv), b(bv) {}
-    RgbColor(uint8_t rv, uint8_t gv, uint8_t bv) : r(rv / 255.0), g(gv / 255.0), b(bv / 255.0) {}
+    RgbColor(u8 rv, u8 gv, u8 bv) : r(rv / 255.0), g(gv / 255.0), b(bv / 255.0) {}
     RgbColor(const struct YuvColor &c);
     RgbColor(const struct AmigaColor &c);
     RgbColor(const struct GpuColor &c);
@@ -45,7 +45,7 @@ struct YuvColor {
 
     YuvColor() : y(0), u(0), v(0) { }
     YuvColor(double yv, double uv, double vv) : y(yv), u(uv), v(vv) { }
-    YuvColor(uint8_t yv, uint8_t uv, uint8_t vv) : y(yv / 255.0), u(uv / 255.0), v(vv / 255.0) { }
+    YuvColor(u8 yv, u8 uv, u8 vv) : y(yv / 255.0), u(uv / 255.0), v(vv / 255.0) { }
     YuvColor(const struct RgbColor &c);
     YuvColor(const struct AmigaColor &c) : YuvColor(RgbColor(c)) { }
     YuvColor(const struct GpuColor &c) : YuvColor(RgbColor(c)) { }
@@ -66,17 +66,17 @@ struct YuvColor {
 
 struct AmigaColor {
 
-    uint16_t rawValue;
+    u16 rawValue;
 
     AmigaColor() : rawValue(0) {}
-    AmigaColor(uint16_t v) : rawValue(v) {}
+    AmigaColor(u16 v) : rawValue(v) {}
     AmigaColor(const struct RgbColor &c);
     AmigaColor(const struct YuvColor &c) : AmigaColor(RgbColor(c)) { }
     AmigaColor(const struct GpuColor &c);
 
-    uint16_t r() const { return (rawValue >> 4) & 0xF0; }
-    uint16_t g() const { return (rawValue >> 0) & 0xF0; }
-    uint16_t b() const { return (rawValue << 4) & 0xF0; }
+    u16 r() const { return (rawValue >> 4) & 0xF0; }
+    u16 g() const { return (rawValue >> 0) & 0xF0; }
+    u16 b() const { return (rawValue << 4) & 0xF0; }
 
     static const AmigaColor black;
     static const AmigaColor white;
@@ -94,13 +94,13 @@ struct AmigaColor {
 
 struct GpuColor {
 
-    uint32_t rawValue;
+    u32 rawValue;
 
     GpuColor() : rawValue(0) {}
-    GpuColor(uint32_t v) : rawValue(v) {}
+    GpuColor(u32 v) : rawValue(v) {}
     GpuColor(const struct RgbColor &c);
     GpuColor(const struct AmigaColor &c);
-    GpuColor(uint8_t r, uint8_t g, uint8_t b);
+    GpuColor(u8 r, u8 g, u8 b);
 
     static const GpuColor black;
     static const GpuColor white;
