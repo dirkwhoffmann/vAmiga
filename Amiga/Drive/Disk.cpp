@@ -89,8 +89,8 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
     return disk;
 }
 
-uint8_t
-Disk::readByte(Cylinder cylinder, Side side, uint16_t offset)
+u8
+Disk::readByte(Cylinder cylinder, Side side, u16 offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));
@@ -100,7 +100,7 @@ Disk::readByte(Cylinder cylinder, Side side, uint16_t offset)
 }
 
 void
-Disk::writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset)
+Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
 {
     assert(isValidCylinderNr(cylinder));
     assert(isValidSideNr(side));
@@ -109,19 +109,19 @@ Disk::writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset)
     data.cyclinder[cylinder][side][offset] = value;
 }
 
-uint8_t
-Disk::addClockBits(uint8_t value, uint8_t previous)
+u8
+Disk::addClockBits(u8 value, u8 previous)
 {
     // Clear all previously set clock bits
     value &= 0x55;
 
     // Compute clock bits (clock bit values are inverted)
-    uint8_t lShifted = (value << 1);
-    uint8_t rShifted = (value >> 1) | (previous << 7);
-    uint8_t cBitsInv = lShifted | rShifted;
+    u8 lShifted = (value << 1);
+    u8 rShifted = (value >> 1) | (previous << 7);
+    u8 cBitsInv = lShifted | rShifted;
 
     // Reverse the computed clock bits
-    uint64_t cBits = cBitsInv ^ 0xAA;
+    u64 cBits = cBitsInv ^ 0xAA;
     
     // Return original value with the clock bits added
     return value | cBits;
@@ -149,7 +149,7 @@ Disk::clearTrack(Track t)
 }
 
 void
-Disk::clearTrack(Track t, uint8_t value)
+Disk::clearTrack(Track t, u8 value)
 {
     assert(isValidTrack(t));
 
@@ -197,9 +197,9 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
 
     // Compute a debugging checksum
-    uint8_t *p = data.track[t] + (0 * sectorSize);
+    u8 *p = data.track[t] + (0 * sectorSize);
     if (DSK_CHECKSUM) {
-        uint32_t check = fnv_1a_init32();
+        u32 check = fnv_1a_init32();
         for (unsigned i = 0; i < trackSize / 2; i+=2) {
             check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
         }
@@ -227,7 +227,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
      * Data checksum       56      8     Odd/Even encoded
      */
     
-    uint8_t *p = data.track[t] + (s * sectorSize) + trackGapSize;
+    u8 *p = data.track[t] + (s * sectorSize) + trackGapSize;
     
     // Bytes before SYNC
     p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
@@ -236,14 +236,14 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     p[3] = 0xAA;
     
     // SYNC mark
-    uint16_t sync = 0x4489;
+    u16 sync = 0x4489;
     p[4] = HI_BYTE(sync);
     p[5] = LO_BYTE(sync);
     p[6] = HI_BYTE(sync);
     p[7] = LO_BYTE(sync);
     
     // Track and sector information
-    uint8_t info[4] = { 0xFF, (uint8_t)t, (uint8_t)s, (uint8_t)(11 - s) };
+    u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
     encodeOddEven(&p[8], info, sizeof(info));
     
     // Unused area
@@ -251,12 +251,12 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     p[i] = 0xAA;
     
     // Data
-    uint8_t bytes[512];
+    u8 bytes[512];
     adf->readSector(bytes, t, s);
     encodeOddEven(&p[64], bytes, sizeof(bytes));
     
     // Block checksum
-    uint8_t bcheck[4] = { 0, 0, 0, 0 };
+    u8 bcheck[4] = { 0, 0, 0, 0 };
     for(unsigned i = 8; i < 48; i += 4) {
         bcheck[0] ^= p[i];
         bcheck[1] ^= p[i+1];
@@ -266,7 +266,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     encodeOddEven(&p[48], bcheck, sizeof(bcheck));
     
     // Data checksum
-    uint8_t dcheck[4] = { 0, 0, 0, 0 };
+    u8 dcheck[4] = { 0, 0, 0, 0 };
     for(unsigned i = 64; i < 1088; i += 4) {
         dcheck[0] ^= p[i];
         dcheck[1] ^= p[i+1];
@@ -284,7 +284,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
 }
 
 void
-Disk::encodeOddEven(uint8_t *target, uint8_t *source, size_t count)
+Disk::encodeOddEven(u8 *target, u8 *source, size_t count)
 {
     // Encode odd bits
     for(size_t i = 0; i < count; i++)
@@ -296,7 +296,7 @@ Disk::encodeOddEven(uint8_t *target, uint8_t *source, size_t count)
 }
 
 bool
-Disk::decodeDisk(uint8_t *dst)
+Disk::decodeDisk(u8 *dst)
 {
     bool result = true;
     long tmax = numTracks();
@@ -313,14 +313,14 @@ Disk::decodeDisk(uint8_t *dst)
 }
 
 size_t
-Disk::decodeTrack(uint8_t *dst, Track t, long smax)
+Disk::decodeTrack(u8 *dst, Track t, long smax)
 {
     assert(isValidTrack(t));
         
     debug(2, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to easy analysis
-    uint8_t local[2 * trackSize];
+    u8 local[2 * trackSize];
     memcpy(local, data.track[t], trackSize);
     memcpy(local + trackSize, data.track[t], trackSize);
     
@@ -352,7 +352,7 @@ Disk::decodeTrack(uint8_t *dst, Track t, long smax)
 }
 
 void
-Disk::decodeSector(uint8_t *dst, uint8_t *src)
+Disk::decodeSector(u8 *dst, u8 *src)
 {
     assert(dst != NULL);
     assert(src != NULL);
@@ -365,7 +365,7 @@ Disk::decodeSector(uint8_t *dst, uint8_t *src)
 }
 
 void
-Disk::decodeOddEven(uint8_t *dst, uint8_t *src, size_t count)
+Disk::decodeOddEven(u8 *dst, u8 *src, size_t count)
 {
     // Decode odd bits
     for(size_t i = 0; i < count; i++)

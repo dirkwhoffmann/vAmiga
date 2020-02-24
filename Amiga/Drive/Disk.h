@@ -75,9 +75,9 @@ public:
     
     // MFM encoded disk data
     union {
-        uint8_t raw[diskSize];
-        uint8_t cyclinder[84][2][trackSize];
-        uint8_t track[168][trackSize];
+        u8 raw[diskSize];
+        u8 cyclinder[84][2][trackSize];
+        u8 track[168][trackSize];
     } data;
     
     bool writeProtected;
@@ -160,10 +160,10 @@ public:
     //
     
     // Reads a byte from disk
-    uint8_t readByte(Cylinder cylinder, Side side, uint16_t offset);
+    u8 readByte(Cylinder cylinder, Side side, u16 offset);
 
     // Writes a byte to disk
-    void writeByte(uint8_t value, Cylinder cylinder, Side side, uint16_t offset);
+    void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
 
     
     //
@@ -173,7 +173,7 @@ public:
 private:
     
     // Adds the clock bits to a byte
-    uint8_t addClockBits(uint8_t value, uint8_t previous);
+    u8 addClockBits(u8 value, u8 previous);
     
     
     //
@@ -187,7 +187,7 @@ public:
 
     // Initializes a single track with random data or a specific value
     void clearTrack(Track t);
-    void clearTrack(Track t, uint8_t value);
+    void clearTrack(Track t, u8 value);
 
     // Encodes the whole disk
     bool encodeDisk(ADFFile *adf);
@@ -197,7 +197,7 @@ private:
     // Work horses
     bool encodeTrack(ADFFile *adf, Track t, long smax);
     bool encodeSector(ADFFile *adf, Track t, Sector s);
-    void encodeOddEven(uint8_t *target, uint8_t *source, size_t count);
+    void encodeOddEven(u8 *target, u8 *source, size_t count);
     
     
     //
@@ -207,14 +207,14 @@ private:
 public:
     
     // Decodes the whole disk
-    bool decodeDisk(uint8_t *dst);
+    bool decodeDisk(u8 *dst);
     
 private:
     
     // Work horses
-    size_t decodeTrack(uint8_t *dst, Track t, long smax);
-    void decodeSector(uint8_t *dst, uint8_t *src);
-    void decodeOddEven(uint8_t *dst, uint8_t *src, size_t count);
+    size_t decodeTrack(u8 *dst, Track t, long smax);
+    void decodeSector(u8 *dst, u8 *src);
+    void decodeOddEven(u8 *dst, u8 *src, size_t count);
 };
 
 #endif
