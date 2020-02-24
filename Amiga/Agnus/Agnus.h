@@ -115,7 +115,7 @@ public:
      * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
      * 0, the second cycle is numbered 1 and so on.
      */
-    uint8_t fetchUnitNr[2][HPOS_CNT];
+    u8 fetchUnitNr[2][HPOS_CNT];
 
     /* Disk, Audio, Sprite DMA events as they appear in a single rasterline.
      *
@@ -192,8 +192,8 @@ public:
      * Whenever one the DMA tables is modified, the corresponding jump table
      * has to be updated.
      */
-    uint8_t nextBplEvent[HPOS_CNT];
-    uint8_t nextDasEvent[HPOS_CNT];
+    u8 nextBplEvent[HPOS_CNT];
+    u8 nextDasEvent[HPOS_CNT];
 
 
     //
@@ -201,10 +201,10 @@ public:
     //
 
     // Action flags checked in every cycle
-    uint64_t actions;
+    u64 actions;
 
     // Action flags checked in the HSYNC handler
-    uint64_t hsyncActions;
+    u64 hsyncActions;
 
 
     //
@@ -283,8 +283,8 @@ public:
      */
 
     // Register values as they have been written by pokeDIWSTRT/STOP()
-    uint16_t diwstrt;
-    uint16_t diwstop;
+    u16 diwstrt;
+    u16 diwstop;
 
     /* Extracted display window coordinates
      *
@@ -365,8 +365,8 @@ public:
      */
 
     // The display data fetch registers
-    uint16_t ddfstrt;
-    uint16_t ddfstop;
+    u16 ddfstrt;
+    u16 ddfstop;
 
     /* At the end of a rasterline, these variables conains the DMA cycles
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
@@ -403,40 +403,40 @@ public:
     ChangeRecorder<8> changeRecorder;
 
     // A copy of BPLCON0 (Denise has another copy)
-    uint16_t bplcon0;
+    u16 bplcon0;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
      * on-the-fly when dmacon changes before the trigger conditions has been
      * reached.
      */
-    uint16_t bplcon0AtDDFStrt;
+    u16 bplcon0AtDDFStrt;
 
     // The DMA control register
-    uint16_t dmacon;
+    u16 dmacon;
 
     /* Value of dmacon at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
      * on-the-fly when dmacon changes before the trigger conditions has been
      * reached.
      */
-    uint16_t dmaconAtDDFStrt;
+    u16 dmaconAtDDFStrt;
 
     // This value is updated in the hsync handler with the lowest 6 bits of
     // dmacon if the master enable bit is 1 or set to 0 if the master enable
     // bit is 0. It is used as an offset into the DAS lookup tables.
-    uint16_t dmaDAS;
+    u16 dmaDAS;
 
     // The disk DMA pointer
-    uint32_t dskpt;
+    u32 dskpt;
 
     // The audio DMA pointers
-    uint32_t audlc[4];
-    uint32_t audlcold[4];
+    u32 audlc[4];
+    u32 audlcold[4];
 
 
     // The bitplane DMA pointers
-    uint32_t bplpt[6];
+    u32 bplpt[6];
 
     // Audio DMA request from Paula
     // This signal is set to true by Paula when a new audio DMA word is needed.
@@ -450,7 +450,7 @@ public:
     int16_t bpl2mod;
 
     // The sprite DMA pointers
-    uint32_t sprpt[8];
+    u32 sprpt[8];
     
     
     //
@@ -458,7 +458,7 @@ public:
     //
 
     // Recorded DMA values for all cycles in the current rasterline
-    uint16_t busValue[HPOS_CNT];
+    u16 busValue[HPOS_CNT];
 
     // Recorded DMA usage for all cycles in the current rasterline
     BusOwner busOwner[HPOS_CNT];
@@ -592,7 +592,7 @@ public:
     int vStrobeLine() { return isOCS() ? 1 : 0; }
 
     // Returns the connected bits in DDFSTRT / DDFSTOP
-    uint16_t ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
 
 
     //
@@ -606,8 +606,8 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     void inspectEvents();
     void inspectEventSlot(EventSlot nr);
@@ -671,7 +671,7 @@ public:
 
     // Indicates if the electron beam is in a line where bitplane DMA is enabled
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
-    bool inBplDmaLine(uint16_t dmacon, uint16_t bplcon0);
+    bool inBplDmaLine(u16 dmacon, u16 bplcon0);
 
 
     //
@@ -717,7 +717,7 @@ public:
 
     // Returns the current beam position as a 17 bit value
     // DEPRECATED
-    uint32_t getBeam() { return BEAM(pos.v, pos.h); }
+    u32 getBeam() { return BEAM(pos.v, pos.h); }
     
     /* Returns the difference of two beam position in master cycles
      * Returns NEVER if the start position is greater than the end position
@@ -765,21 +765,21 @@ public:
     // Performing DMAs
     //
 
-    uint16_t doDiskDMA();
+    u16 doDiskDMA();
 
-    template <int channel> uint16_t doSpriteDMA();
-    template <int channel> uint16_t doAudioDMA();
+    template <int channel> u16 doSpriteDMA();
+    template <int channel> u16 doAudioDMA();
 
     // OLD
-    void doDiskDMA(uint16_t value);
-    uint16_t doSpriteDMA(int channel);
-    template <int channel> uint16_t doBitplaneDMA();
+    void doDiskDMA(u16 value);
+    u16 doSpriteDMA(int channel);
+    template <int channel> u16 doBitplaneDMA();
 
-    uint16_t copperRead(uint32_t addr);
-    void copperWrite(uint32_t addr, uint16_t value);
+    u16 copperRead(u32 addr);
+    void copperWrite(u32 addr, u16 value);
 
-    uint16_t blitterRead(uint32_t addr);
-    void blitterWrite(uint32_t addr, uint16_t value);
+    u16 blitterRead(u32 addr);
+    void blitterWrite(u32 addr, u16 value);
 
     //
     // Managing the DMA allocation table
@@ -794,7 +794,7 @@ public:
     void clearDasEventTable();
 
     // Allocates the bitplane DMA slots
-    void allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last = HPOS_MAX-1);
+    void allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last = HPOS_MAX-1);
     void allocateBplSlots(int first, int last = HPOS_MAX-1);
 
     // Adds or removes bitplane DMA events to the DMA event table
@@ -803,11 +803,11 @@ public:
     void updateBplDma();
 
     // Adds or removes disk, audio, sprites event to the DAS event table
-    void updateDasDma(uint16_t dmacon);
+    void updateDasDma(u16 dmacon);
     void updateDasDma() { updateDasDma(dmacon & 0x3F); }
 
     // Updates the jump table for a given event table
-    void updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end);
+    void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
 
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable(int16_t end = HPOS_MAX);
@@ -841,50 +841,50 @@ public:
 public:
 
     // DMACONR
-    uint16_t peekDMACONR();
+    u16 peekDMACONR();
 
     // DMACON
-    void pokeDMACON(uint16_t value);
-    void setDMACON(uint16_t oldValue, uint16_t newValue);
+    void pokeDMACON(u16 value);
+    void setDMACON(u16 oldValue, u16 newValue);
 
     // Returns true if DMA access of a certain type is enabled
-    static bool bltpri(uint16_t v) { return GET_BIT(v, 10); }
+    static bool bltpri(u16 v) { return GET_BIT(v, 10); }
     inline bool bltpri() { return bltpri(dmacon); }
-    static bool doBplDMA(uint16_t v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
+    static bool doBplDMA(u16 v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
     inline bool doBplDMA() { return doBplDMA(dmacon); }
-    static bool doCopDMA(uint16_t v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
+    static bool doCopDMA(u16 v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
     inline bool doCopDMA() { return doCopDMA(dmacon); }
-    static bool doBltDMA(uint16_t v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
+    static bool doBltDMA(u16 v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
     inline bool doBltDMA() { return doBltDMA(dmacon); }
-    static bool doSprDMA(uint16_t v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
+    static bool doSprDMA(u16 v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
     inline bool doSprDMA() { return doSprDMA(dmacon); }
-    static bool doDskDMA(uint16_t v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
+    static bool doDskDMA(u16 v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
     inline bool doDskDMA() { return doDskDMA(dmacon); }
-    template <int x> static bool doAudDMA(uint16_t v) {
+    template <int x> static bool doAudDMA(u16 v) {
         return (v & (DMAEN | (AU0EN << x))) == (DMAEN | (AU0EN << x)); }
     template <int x> inline bool doAudDMA() { return doAudDMA<x>(dmacon); }
 
     // DSKPTH, DSKPTL
-    void pokeDSKPTH(uint16_t value);
-    void pokeDSKPTL(uint16_t value);
+    void pokeDSKPTH(u16 value);
+    void pokeDSKPTL(u16 value);
     
     // VHPOSR, VHPOS, VPOSR, VPOS
-    uint16_t peekVHPOSR();
-    void pokeVHPOS(uint16_t value);
-    uint16_t peekVPOSR();
-    void pokeVPOS(uint16_t value);
+    u16 peekVHPOSR();
+    void pokeVHPOS(u16 value);
+    u16 peekVPOSR();
+    void pokeVPOS(u16 value);
     
     // DIWSTRT, DIWSTOP
-    template <PokeSource s> void pokeDIWSTRT(uint16_t value);
-    template <PokeSource s> void pokeDIWSTOP(uint16_t value);
-    void setDIWSTRT(uint16_t value);
-    void setDIWSTOP(uint16_t value);
+    template <PokeSource s> void pokeDIWSTRT(u16 value);
+    template <PokeSource s> void pokeDIWSTOP(u16 value);
+    void setDIWSTRT(u16 value);
+    void setDIWSTOP(u16 value);
 
     // DDFSTRT, DDFSTOP
-    void pokeDDFSTRT(uint16_t value);
-    void pokeDDFSTOP(uint16_t value);
-    void setDDFSTRT(uint16_t old, uint16_t value);
-    void setDDFSTOP(uint16_t old, uint16_t value);
+    void pokeDDFSTRT(u16 value);
+    void pokeDDFSTOP(u16 value);
+    void setDDFSTRT(u16 old, u16 value);
+    void setDDFSTOP(u16 old, u16 value);
 
     // Computes the data fetch window's start and stop position
     void computeDDFStrt();
@@ -892,8 +892,8 @@ public:
     void computeDDFWindow() { computeDDFStrt(); computeDDFStop(); }
 
     // BPLCON0
-    void pokeBPLCON0(uint16_t value);
-    void setBPLCON0(uint16_t oldValue, uint16_t newValue);
+    void pokeBPLCON0(u16 value);
+    void setBPLCON0(u16 oldValue, u16 newValue);
 
     /* Returns the Agnus view of the BPU bits.
      * The value determines the number of enabled DMA channels. It is computed
@@ -901,27 +901,27 @@ public:
      * The value differs if the BPU bits reflect an invalid bit pattern.
      * Compare with Denise::bpu() which returns the Denise view of the BPU bits.
      */
-    static int bpu(uint16_t v);
+    static int bpu(u16 v);
     int bpu() { return bpu(bplcon0); }
 
     // BPLxPTL, BPLxPTH
-    template <int x> void pokeBPLxPTH(uint16_t value);
-    template <int x> void pokeBPLxPTL(uint16_t value);
+    template <int x> void pokeBPLxPTH(u16 value);
+    template <int x> void pokeBPLxPTL(u16 value);
     bool skipBPLxPT(int x);
-    template <int x> void setBPLxPTH(uint16_t value);
-    template <int x> void setBPLxPTL(uint16_t value);
+    template <int x> void setBPLxPTH(u16 value);
+    template <int x> void setBPLxPTL(u16 value);
 
     // BPL1MOD, BPL2MOD
-    void pokeBPL1MOD(uint16_t value);
-    void setBPL1MOD(uint16_t value);
-    void pokeBPL2MOD(uint16_t value);
-    void setBPL2MOD(uint16_t value);
+    void pokeBPL1MOD(u16 value);
+    void setBPL1MOD(u16 value);
+    void pokeBPL2MOD(u16 value);
+    void setBPL2MOD(u16 value);
 
     // Sprite registers
-    template <int x> void pokeSPRxPTH(uint16_t value);
-    template <int x> void pokeSPRxPTL(uint16_t value);
-    template <int x> void pokeSPRxPOS(uint16_t value);
-    template <int x> void pokeSPRxCTL(uint16_t value);
+    template <int x> void pokeSPRxPTH(u16 value);
+    template <int x> void pokeSPRxPTL(u16 value);
+    template <int x> void pokeSPRxPOS(u16 value);
+    template <int x> void pokeSPRxCTL(u16 value);
 
     // Adds the modulo register to a bitplane pointer
     template <int x> void addBPLMOD() {
@@ -947,7 +947,7 @@ public:
     void executeUntilBusIsFree();
 
     // Schedules a register to change
-    void recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value);
+    void recordRegisterChange(Cycle delay, u32 addr, u16 value);
 
 private:
 

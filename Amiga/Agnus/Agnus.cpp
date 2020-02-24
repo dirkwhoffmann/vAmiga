@@ -300,7 +300,7 @@ Agnus::belongsToNextFrame(Cycle cycle)
 }
 
 bool
-Agnus::inBplDmaLine(uint16_t dmacon, uint16_t bplcon0) {
+Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
 
     return
     ddfVFlop            // Outside VBLANK, inside DIW
@@ -433,10 +433,10 @@ Agnus::allocateBus()
     return false;
 }
 
-uint16_t
+u16
 Agnus::doDiskDMA()
 {
-    uint16_t result = mem.peekChip16(dskpt);
+    u16 result = mem.peekChip16(dskpt);
     INC_CHIP_PTR(dskpt);
 
     assert(pos.h < HPOS_CNT);
@@ -448,7 +448,7 @@ Agnus::doDiskDMA()
 }
 
 void
-Agnus::doDiskDMA(uint16_t value)
+Agnus::doDiskDMA(u16 value)
 {
     mem.pokeChip16(dskpt, value);
     INC_CHIP_PTR(dskpt);
@@ -458,10 +458,10 @@ Agnus::doDiskDMA(uint16_t value)
     stats.count[BUS_DISK]++;
 }
 
-template <int channel> uint16_t
+template <int channel> u16
 Agnus::doAudioDMA()
 {
-    uint16_t result;
+    u16 result;
 
     result = mem.peekChip16(audlc[channel]);
     INC_CHIP_PTR(audlc[channel]);
@@ -473,10 +473,10 @@ Agnus::doAudioDMA()
     return result;
 }
 
-template <int channel> uint16_t
+template <int channel> u16
 Agnus::doSpriteDMA()
 {
-    uint16_t result = mem.peekChip16(sprpt[channel]);
+    u16 result = mem.peekChip16(sprpt[channel]);
     INC_CHIP_PTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
@@ -487,10 +487,10 @@ Agnus::doSpriteDMA()
     return result;
 }
 
-uint16_t
+u16
 Agnus::doSpriteDMA(int channel)
 {
-    uint16_t result = mem.peekChip16(sprpt[channel]);
+    u16 result = mem.peekChip16(sprpt[channel]);
     INC_CHIP_PTR(sprpt[channel]);
 
     assert(pos.h < HPOS_CNT);
@@ -501,10 +501,10 @@ Agnus::doSpriteDMA(int channel)
     return result;
 }
 
-template <int bitplane> uint16_t
+template <int bitplane> u16
 Agnus::doBitplaneDMA()
 {
-    uint16_t result = mem.peekChip16(bplpt[bitplane]);
+    u16 result = mem.peekChip16(bplpt[bitplane]);
     INC_CHIP_PTR(bplpt[bitplane]);
 
     assert(pos.h < HPOS_CNT);
@@ -515,10 +515,10 @@ Agnus::doBitplaneDMA()
     return result;
 }
 
-uint16_t
-Agnus::copperRead(uint32_t addr)
+u16
+Agnus::copperRead(u32 addr)
 {
-    uint16_t result = mem.peek16<BUS_COPPER>(addr);
+    u16 result = mem.peek16<BUS_COPPER>(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -529,7 +529,7 @@ Agnus::copperRead(uint32_t addr)
 }
 
 void
-Agnus::copperWrite(uint32_t addr, uint16_t value)
+Agnus::copperWrite(u32 addr, u16 value)
 {
     mem.pokeCustom16<POKE_COPPER>(addr, value);
 
@@ -539,14 +539,14 @@ Agnus::copperWrite(uint32_t addr, uint16_t value)
     stats.count[BUS_COPPER]++;
 }
 
-uint16_t
-Agnus::blitterRead(uint32_t addr)
+u16
+Agnus::blitterRead(u32 addr)
 {
     // Assure that the Blitter owns the bus when this function is called
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    uint16_t result = mem.peek16<BUS_BLITTER>(addr);
+    u16 result = mem.peek16<BUS_BLITTER>(addr);
 
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
@@ -556,7 +556,7 @@ Agnus::blitterRead(uint32_t addr)
 }
 
 void
-Agnus::blitterWrite(uint32_t addr, uint16_t value)
+Agnus::blitterWrite(u32 addr, u16 value)
 {
     // Assure that the Blitter owns the bus when this function is called
     assert(pos.h < HPOS_CNT);
@@ -586,7 +586,7 @@ Agnus::clearDasEventTable()
 }
 
 void
-Agnus::allocateBplSlots(uint16_t dmacon, uint16_t bplcon0, int first, int last)
+Agnus::allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
 
@@ -688,7 +688,7 @@ Agnus::updateBplDma()
 }
 
 void
-Agnus::updateDasDma(uint16_t dmacon)
+Agnus::updateDasDma(u16 dmacon)
 {
     assert(dmacon < 64);
 
@@ -703,11 +703,11 @@ Agnus::updateDasDma(uint16_t dmacon)
 }
 
 void
-Agnus::updateJumpTable(EventID *eventTable, uint8_t *jumpTable, int end)
+Agnus::updateJumpTable(EventID *eventTable, u8 *jumpTable, int end)
 {
     assert(end <= HPOS_MAX);
 
-     uint8_t next = jumpTable[end];
+     u8 next = jumpTable[end];
      for (int i = end; i >= 0; i--) {
          jumpTable[i] = next;
          if (eventTable[i]) next = i;
@@ -906,10 +906,10 @@ Agnus::dumpDasEventTable()
     dumpDasEventTable(0xA0, 0xE2);
 }
 
-uint16_t
+u16
 Agnus::peekDMACONR()
 {
-    uint16_t result = dmacon;
+    u16 result = dmacon;
 
     assert((result & ((1 << 14) | (1 << 13))) == 0);
     
@@ -921,7 +921,7 @@ Agnus::peekDMACONR()
 }
 
 void
-Agnus::pokeDMACON(uint16_t value)
+Agnus::pokeDMACON(u16 value)
 {
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
@@ -930,12 +930,12 @@ Agnus::pokeDMACON(uint16_t value)
 }
 
 void
-Agnus::setDMACON(uint16_t oldValue, uint16_t value)
+Agnus::setDMACON(u16 oldValue, u16 value)
 {
     debug(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
 
     // Compute new value
-    uint16_t newValue;
+    u16 newValue;
     if (value & 0x8000) {
         newValue = (dmacon | value) & 0x07FF;
     } else {
@@ -1004,8 +1004,8 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
     }
 
     // Check DAS DMA (Disk, Audio, Sprites)
-    uint16_t oldDAS = oldDMAEN ? (oldValue & 0x3F) : 0;
-    uint16_t newDAS = newDMAEN ? (newValue & 0x3F) : 0;
+    u16 oldDAS = oldDMAEN ? (oldValue & 0x3F) : 0;
+    u16 newDAS = newDMAEN ? (newValue & 0x3F) : 0;
 
     if (oldDAS != newDAS) {
 
@@ -1058,7 +1058,7 @@ Agnus::setDMACON(uint16_t oldValue, uint16_t value)
 }
 
 void
-Agnus::pokeDSKPTH(uint16_t value)
+Agnus::pokeDSKPTH(u16 value)
 {
     dskpt = CHIP_PTR(REPLACE_HI_WORD(dskpt, value));
 
@@ -1066,14 +1066,14 @@ Agnus::pokeDSKPTH(uint16_t value)
 }
 
 void
-Agnus::pokeDSKPTL(uint16_t value)
+Agnus::pokeDSKPTL(u16 value)
 {
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 
     debug(DSKREG_DEBUG, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);
 }
 
-uint16_t
+u16
 Agnus::peekVHPOSR()
 {
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
@@ -1101,20 +1101,20 @@ Agnus::peekVHPOSR()
 }
 
 void
-Agnus::pokeVHPOS(uint16_t value)
+Agnus::pokeVHPOS(u16 value)
 {
     debug(2, "pokeVHPOS(%X)\n", value);
     // Don't know what to do here ...
 }
 
-uint16_t
+u16
 Agnus::peekVPOSR()
 {
-    uint16_t id;
+    u16 id;
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8
-    uint16_t result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
+    u16 result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
     // Add indentification bits
@@ -1132,27 +1132,27 @@ Agnus::peekVPOSR()
 }
 
 void
-Agnus::pokeVPOS(uint16_t value)
+Agnus::pokeVPOS(u16 value)
 {
     // Don't know what to do here ...
 }
 
 template <PokeSource s> void
-Agnus::pokeDIWSTRT(uint16_t value)
+Agnus::pokeDIWSTRT(u16 value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTRT, value);
 }
 
 template <PokeSource s> void
-Agnus::pokeDIWSTOP(uint16_t value)
+Agnus::pokeDIWSTOP(u16 value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTOP, value);
 }
 
 void
-Agnus::setDIWSTRT(uint16_t value)
+Agnus::setDIWSTRT(u16 value)
 {
     debug(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
 
@@ -1210,7 +1210,7 @@ Agnus::setDIWSTRT(uint16_t value)
 }
 
 void
-Agnus::setDIWSTOP(uint16_t value)
+Agnus::setDIWSTOP(u16 value)
 {
     debug(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
@@ -1253,7 +1253,7 @@ Agnus::setDIWSTOP(uint16_t value)
 }
 
 void
-Agnus::pokeDDFSTRT(uint16_t value)
+Agnus::pokeDDFSTRT(u16 value)
 {
     debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
 
@@ -1266,7 +1266,7 @@ Agnus::pokeDDFSTRT(uint16_t value)
 }
 
 void
-Agnus::pokeDDFSTOP(uint16_t value)
+Agnus::pokeDDFSTOP(u16 value)
 {
     debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
 
@@ -1279,7 +1279,7 @@ Agnus::pokeDDFSTOP(uint16_t value)
 }
 
 void
-Agnus::setDDFSTRT(uint16_t old, uint16_t value)
+Agnus::setDDFSTRT(u16 old, u16 value)
 {
     debug(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
 
@@ -1310,7 +1310,7 @@ Agnus::setDDFSTRT(uint16_t old, uint16_t value)
 }
 
 void
-Agnus::setDDFSTOP(uint16_t old, uint16_t value)
+Agnus::setDDFSTOP(u16 old, u16 value)
 {
     debug(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
 
@@ -1376,7 +1376,7 @@ Agnus::computeDDFStop()
 }
 
 template <int x> void
-Agnus::pokeBPLxPTH(uint16_t value)
+Agnus::pokeBPLxPTH(u16 value)
 {
     // debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
     // if (x == 1) plaindebug("pokeBPL%dPTH(%x)\n", x, value);
@@ -1399,7 +1399,7 @@ Agnus::pokeBPLxPTH(uint16_t value)
 }
 
 template <int x> void
-Agnus::pokeBPLxPTL(uint16_t value)
+Agnus::pokeBPLxPTL(u16 value)
 {
     // debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
     // if (x == 1) plaindebug("pokeBPL%dPTL(%x)\n", x, value);
@@ -1456,7 +1456,7 @@ Agnus::skipBPLxPT(int x)
 }
 
 template <int x> void
-Agnus::setBPLxPTH(uint16_t value)
+Agnus::setBPLxPTH(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
@@ -1465,7 +1465,7 @@ Agnus::setBPLxPTH(uint16_t value)
 }
 
 template <int x> void
-Agnus::setBPLxPTL(uint16_t value)
+Agnus::setBPLxPTL(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
     assert(1 <= x && x <= 6);
@@ -1474,35 +1474,35 @@ Agnus::setBPLxPTL(uint16_t value)
 }
 
 void
-Agnus::pokeBPL1MOD(uint16_t value)
+Agnus::pokeBPL1MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), REG_BPL1MOD, value);
 }
 
 void
-Agnus::setBPL1MOD(uint16_t value)
+Agnus::setBPL1MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
     bpl1mod = (int16_t)(value & 0xFFFE);
 }
 
 void
-Agnus::pokeBPL2MOD(uint16_t value)
+Agnus::pokeBPL2MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), REG_BPL2MOD, value);
 }
 
 void
-Agnus::setBPL2MOD(uint16_t value)
+Agnus::setBPL2MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
     bpl2mod = (int16_t)(value & 0xFFFE);
 }
 
 template <int x> void
-Agnus::pokeSPRxPTH(uint16_t value)
+Agnus::pokeSPRxPTH(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
     
@@ -1510,7 +1510,7 @@ Agnus::pokeSPRxPTH(uint16_t value)
 }
 
 template <int x> void
-Agnus::pokeSPRxPTL(uint16_t value)
+Agnus::pokeSPRxPTL(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     
@@ -1518,7 +1518,7 @@ Agnus::pokeSPRxPTL(uint16_t value)
 }
 
 template <int x> void
-Agnus::pokeSPRxPOS(uint16_t value)
+Agnus::pokeSPRxPOS(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
@@ -1534,7 +1534,7 @@ Agnus::pokeSPRxPOS(uint16_t value)
 }
 
 template <int x> void
-Agnus::pokeSPRxCTL(uint16_t value)
+Agnus::pokeSPRxCTL(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
@@ -1563,7 +1563,7 @@ Agnus::pokeSPRxCTL(uint16_t value)
 }
 
 void
-Agnus::pokeBPLCON0(uint16_t value)
+Agnus::pokeBPLCON0(u16 value)
 {
     debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
 
@@ -1573,7 +1573,7 @@ Agnus::pokeBPLCON0(uint16_t value)
 }
 
 void
-Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
+Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
 
@@ -1611,7 +1611,7 @@ Agnus::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 int
-Agnus::bpu(uint16_t v)
+Agnus::bpu(u16 v)
 {
     // Extract the three BPU bits and check for hires mode
     int bpu = (v >> 12) & 0b111;
@@ -1726,7 +1726,7 @@ Agnus::executeUntilBusIsFree()
 }
 
 void
-Agnus::recordRegisterChange(Cycle delay, uint32_t addr, uint16_t value)
+Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value)
 {
     // Record the new register value
     changeRecorder.add(clock + delay, addr, value);
@@ -1750,14 +1750,14 @@ Agnus::executeFirstSpriteCycle()
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         // Read in the next control word (POS part)
-        uint16_t value = doSpriteDMA<nr>();
+        u16 value = doSpriteDMA<nr>();
         agnus.pokeSPRxPOS<nr>(value);
         denise.pokeSPRxPOS<nr>(value);
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
         // Read in the next data word (part A)
-        uint16_t value = doSpriteDMA<nr>();
+        u16 value = doSpriteDMA<nr>();
         denise.pokeSPRxDATA<nr>(value);
     }
 }
@@ -1772,14 +1772,14 @@ Agnus::executeSecondSpriteCycle()
         sprDmaState[nr] = SPR_DMA_IDLE;
 
         // Read in the next control word (CTL part)
-        uint16_t value = doSpriteDMA<nr>();
+        u16 value = doSpriteDMA<nr>();
         agnus.pokeSPRxCTL<nr>(value);
         denise.pokeSPRxCTL<nr>(value);
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
         // Read in the next data word (part B)
-        uint16_t value = doSpriteDMA<nr>();
+        u16 value = doSpriteDMA<nr>();
         denise.pokeSPRxDATB<nr>(value);
     }
 }
@@ -1890,7 +1890,7 @@ Agnus::hsyncHandler()
     // Determine the disk, audio and sprite DMA status for the line to come
     //
 
-    uint16_t newDmaDAS;
+    u16 newDmaDAS;
 
     if (dmacon & DMAEN) {
 
@@ -2027,84 +2027,84 @@ template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
 
-template void Agnus::pokeBPLxPTH<1>(uint16_t value);
-template void Agnus::pokeBPLxPTH<2>(uint16_t value);
-template void Agnus::pokeBPLxPTH<3>(uint16_t value);
-template void Agnus::pokeBPLxPTH<4>(uint16_t value);
-template void Agnus::pokeBPLxPTH<5>(uint16_t value);
-template void Agnus::pokeBPLxPTH<6>(uint16_t value);
-template void Agnus::setBPLxPTH<1>(uint16_t value);
-template void Agnus::setBPLxPTH<2>(uint16_t value);
-template void Agnus::setBPLxPTH<3>(uint16_t value);
-template void Agnus::setBPLxPTH<4>(uint16_t value);
-template void Agnus::setBPLxPTH<5>(uint16_t value);
-template void Agnus::setBPLxPTH<6>(uint16_t value);
+template void Agnus::pokeBPLxPTH<1>(u16 value);
+template void Agnus::pokeBPLxPTH<2>(u16 value);
+template void Agnus::pokeBPLxPTH<3>(u16 value);
+template void Agnus::pokeBPLxPTH<4>(u16 value);
+template void Agnus::pokeBPLxPTH<5>(u16 value);
+template void Agnus::pokeBPLxPTH<6>(u16 value);
+template void Agnus::setBPLxPTH<1>(u16 value);
+template void Agnus::setBPLxPTH<2>(u16 value);
+template void Agnus::setBPLxPTH<3>(u16 value);
+template void Agnus::setBPLxPTH<4>(u16 value);
+template void Agnus::setBPLxPTH<5>(u16 value);
+template void Agnus::setBPLxPTH<6>(u16 value);
 
-template void Agnus::pokeBPLxPTL<1>(uint16_t value);
-template void Agnus::pokeBPLxPTL<2>(uint16_t value);
-template void Agnus::pokeBPLxPTL<3>(uint16_t value);
-template void Agnus::pokeBPLxPTL<4>(uint16_t value);
-template void Agnus::pokeBPLxPTL<5>(uint16_t value);
-template void Agnus::pokeBPLxPTL<6>(uint16_t value);
-template void Agnus::setBPLxPTL<1>(uint16_t value);
-template void Agnus::setBPLxPTL<2>(uint16_t value);
-template void Agnus::setBPLxPTL<3>(uint16_t value);
-template void Agnus::setBPLxPTL<4>(uint16_t value);
-template void Agnus::setBPLxPTL<5>(uint16_t value);
-template void Agnus::setBPLxPTL<6>(uint16_t value);
+template void Agnus::pokeBPLxPTL<1>(u16 value);
+template void Agnus::pokeBPLxPTL<2>(u16 value);
+template void Agnus::pokeBPLxPTL<3>(u16 value);
+template void Agnus::pokeBPLxPTL<4>(u16 value);
+template void Agnus::pokeBPLxPTL<5>(u16 value);
+template void Agnus::pokeBPLxPTL<6>(u16 value);
+template void Agnus::setBPLxPTL<1>(u16 value);
+template void Agnus::setBPLxPTL<2>(u16 value);
+template void Agnus::setBPLxPTL<3>(u16 value);
+template void Agnus::setBPLxPTL<4>(u16 value);
+template void Agnus::setBPLxPTL<5>(u16 value);
+template void Agnus::setBPLxPTL<6>(u16 value);
 
-template void Agnus::pokeSPRxPTH<0>(uint16_t value);
-template void Agnus::pokeSPRxPTH<1>(uint16_t value);
-template void Agnus::pokeSPRxPTH<2>(uint16_t value);
-template void Agnus::pokeSPRxPTH<3>(uint16_t value);
-template void Agnus::pokeSPRxPTH<4>(uint16_t value);
-template void Agnus::pokeSPRxPTH<5>(uint16_t value);
-template void Agnus::pokeSPRxPTH<6>(uint16_t value);
-template void Agnus::pokeSPRxPTH<7>(uint16_t value);
+template void Agnus::pokeSPRxPTH<0>(u16 value);
+template void Agnus::pokeSPRxPTH<1>(u16 value);
+template void Agnus::pokeSPRxPTH<2>(u16 value);
+template void Agnus::pokeSPRxPTH<3>(u16 value);
+template void Agnus::pokeSPRxPTH<4>(u16 value);
+template void Agnus::pokeSPRxPTH<5>(u16 value);
+template void Agnus::pokeSPRxPTH<6>(u16 value);
+template void Agnus::pokeSPRxPTH<7>(u16 value);
 
-template void Agnus::pokeSPRxPTL<0>(uint16_t value);
-template void Agnus::pokeSPRxPTL<1>(uint16_t value);
-template void Agnus::pokeSPRxPTL<2>(uint16_t value);
-template void Agnus::pokeSPRxPTL<3>(uint16_t value);
-template void Agnus::pokeSPRxPTL<4>(uint16_t value);
-template void Agnus::pokeSPRxPTL<5>(uint16_t value);
-template void Agnus::pokeSPRxPTL<6>(uint16_t value);
-template void Agnus::pokeSPRxPTL<7>(uint16_t value);
+template void Agnus::pokeSPRxPTL<0>(u16 value);
+template void Agnus::pokeSPRxPTL<1>(u16 value);
+template void Agnus::pokeSPRxPTL<2>(u16 value);
+template void Agnus::pokeSPRxPTL<3>(u16 value);
+template void Agnus::pokeSPRxPTL<4>(u16 value);
+template void Agnus::pokeSPRxPTL<5>(u16 value);
+template void Agnus::pokeSPRxPTL<6>(u16 value);
+template void Agnus::pokeSPRxPTL<7>(u16 value);
 
-template void Agnus::pokeSPRxPOS<0>(uint16_t value);
-template void Agnus::pokeSPRxPOS<1>(uint16_t value);
-template void Agnus::pokeSPRxPOS<2>(uint16_t value);
-template void Agnus::pokeSPRxPOS<3>(uint16_t value);
-template void Agnus::pokeSPRxPOS<4>(uint16_t value);
-template void Agnus::pokeSPRxPOS<5>(uint16_t value);
-template void Agnus::pokeSPRxPOS<6>(uint16_t value);
-template void Agnus::pokeSPRxPOS<7>(uint16_t value);
+template void Agnus::pokeSPRxPOS<0>(u16 value);
+template void Agnus::pokeSPRxPOS<1>(u16 value);
+template void Agnus::pokeSPRxPOS<2>(u16 value);
+template void Agnus::pokeSPRxPOS<3>(u16 value);
+template void Agnus::pokeSPRxPOS<4>(u16 value);
+template void Agnus::pokeSPRxPOS<5>(u16 value);
+template void Agnus::pokeSPRxPOS<6>(u16 value);
+template void Agnus::pokeSPRxPOS<7>(u16 value);
 
-template void Agnus::pokeSPRxCTL<0>(uint16_t value);
-template void Agnus::pokeSPRxCTL<1>(uint16_t value);
-template void Agnus::pokeSPRxCTL<2>(uint16_t value);
-template void Agnus::pokeSPRxCTL<3>(uint16_t value);
-template void Agnus::pokeSPRxCTL<4>(uint16_t value);
-template void Agnus::pokeSPRxCTL<5>(uint16_t value);
-template void Agnus::pokeSPRxCTL<6>(uint16_t value);
-template void Agnus::pokeSPRxCTL<7>(uint16_t value);
+template void Agnus::pokeSPRxCTL<0>(u16 value);
+template void Agnus::pokeSPRxCTL<1>(u16 value);
+template void Agnus::pokeSPRxCTL<2>(u16 value);
+template void Agnus::pokeSPRxCTL<3>(u16 value);
+template void Agnus::pokeSPRxCTL<4>(u16 value);
+template void Agnus::pokeSPRxCTL<5>(u16 value);
+template void Agnus::pokeSPRxCTL<6>(u16 value);
+template void Agnus::pokeSPRxCTL<7>(u16 value);
 
-template uint16_t Agnus::doBitplaneDMA<0>();
-template uint16_t Agnus::doBitplaneDMA<1>();
-template uint16_t Agnus::doBitplaneDMA<2>();
-template uint16_t Agnus::doBitplaneDMA<3>();
-template uint16_t Agnus::doBitplaneDMA<4>();
-template uint16_t Agnus::doBitplaneDMA<5>();
+template u16 Agnus::doBitplaneDMA<0>();
+template u16 Agnus::doBitplaneDMA<1>();
+template u16 Agnus::doBitplaneDMA<2>();
+template u16 Agnus::doBitplaneDMA<3>();
+template u16 Agnus::doBitplaneDMA<4>();
+template u16 Agnus::doBitplaneDMA<5>();
 
-template uint16_t Agnus::doAudioDMA<0>();
-template uint16_t Agnus::doAudioDMA<1>();
-template uint16_t Agnus::doAudioDMA<2>();
-template uint16_t Agnus::doAudioDMA<3>();
+template u16 Agnus::doAudioDMA<0>();
+template u16 Agnus::doAudioDMA<1>();
+template u16 Agnus::doAudioDMA<2>();
+template u16 Agnus::doAudioDMA<3>();
 
-template void Agnus::pokeDIWSTRT<POKE_CPU>(uint16_t value);
-template void Agnus::pokeDIWSTRT<POKE_COPPER>(uint16_t value);
-template void Agnus::pokeDIWSTOP<POKE_CPU>(uint16_t value);
-template void Agnus::pokeDIWSTOP<POKE_COPPER>(uint16_t value);
+template void Agnus::pokeDIWSTRT<POKE_CPU>(u16 value);
+template void Agnus::pokeDIWSTRT<POKE_COPPER>(u16 value);
+template void Agnus::pokeDIWSTOP<POKE_CPU>(u16 value);
+template void Agnus::pokeDIWSTOP<POKE_COPPER>(u16 value);
 
 template bool Agnus::allocateBus<BUS_COPPER>();
 template bool Agnus::allocateBus<BUS_BLITTER>();
