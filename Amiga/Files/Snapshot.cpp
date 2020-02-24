@@ -10,9 +10,9 @@
 #include "Amiga.h"
 
 bool
-Snapshot::isSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isSnapshot(const u8 *buffer, size_t length)
 {
-    uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
+    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     assert(buffer != NULL);
     
@@ -21,21 +21,21 @@ Snapshot::isSnapshot(const uint8_t *buffer, size_t length)
 }
 
 bool
-Snapshot::isSnapshot(const uint8_t *buffer, size_t length,
-                          uint8_t major, uint8_t minor, uint8_t subminor)
+Snapshot::isSnapshot(const u8 *buffer, size_t length,
+                          u8 major, u8 minor, u8 subminor)
 {
     if (!isSnapshot(buffer, length)) return false;
     return buffer[6] == major && buffer[7] == minor && buffer[8] == subminor;
 }
 
 bool
-Snapshot::isSupportedSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isSupportedSnapshot(const u8 *buffer, size_t length)
 {
     return isSnapshot(buffer, length, V_MAJOR, V_MINOR, V_SUBMINOR);
 }
 
 bool
-Snapshot::isUnsupportedSnapshot(const uint8_t *buffer, size_t length)
+Snapshot::isUnsupportedSnapshot(const u8 *buffer, size_t length)
 {
     return isSnapshot(buffer, length) && !isSupportedSnapshot(buffer, length);
 }
@@ -43,7 +43,7 @@ Snapshot::isUnsupportedSnapshot(const uint8_t *buffer, size_t length)
 bool
 Snapshot::isSnapshotFile(const char *path)
 {
-     uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
+     u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     assert(path != NULL);
     
@@ -51,9 +51,9 @@ Snapshot::isSnapshotFile(const char *path)
 }
 
 bool
-Snapshot::isSnapshotFile(const char *path, uint8_t major, uint8_t minor, uint8_t subminor)
+Snapshot::isSnapshotFile(const char *path, u8 major, u8 minor, u8 subminor)
 {
-    uint8_t signature[] = { 'V', 'C', '6', '4', major, minor, subminor };
+    u8 signature[] = { 'V', 'C', '6', '4', major, minor, subminor };
     
     assert(path != NULL);
     
@@ -79,10 +79,10 @@ Snapshot::Snapshot()
 
 Snapshot::Snapshot(size_t capacity)
 {
-    uint8_t signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
+    u8 signature[] = { 'V', 'A', 'S', 'N', 'A', 'P' };
     
     size = capacity + sizeof(SnapshotHeader);
-    data = new uint8_t[size];
+    data = new u8[size];
     
     SnapshotHeader *header = (SnapshotHeader *)data;
     
@@ -95,7 +95,7 @@ Snapshot::Snapshot(size_t capacity)
 }
 
 Snapshot *
-Snapshot::makeWithBuffer(const uint8_t *buffer, size_t length)
+Snapshot::makeWithBuffer(const u8 *buffer, size_t length)
 {
     Snapshot *snapshot = NULL;
     
@@ -140,7 +140,7 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 }
 
 bool
-Snapshot::bufferHasSameType(const uint8_t* buffer, size_t length)
+Snapshot::bufferHasSameType(const u8* buffer, size_t length)
 {
     return Snapshot::isSnapshot(buffer, length);
 }
@@ -156,8 +156,8 @@ Snapshot::takeScreenshot(Amiga *amiga)
 {
     SnapshotHeader *header = (SnapshotHeader *)data;
     
-    uint32_t *source = (uint32_t *)amiga->denise.pixelEngine.getStableLongFrame().data;
-    uint32_t *target = header->screenshot.screen;
+    u32 *source = (u32 *)amiga->denise.pixelEngine.getStableLongFrame().data;
+    u32 *target = header->screenshot.screen;
 
     // Texture cutout and scaling factors
     unsigned dx = 4;

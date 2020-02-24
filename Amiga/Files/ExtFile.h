@@ -17,8 +17,8 @@ class ExtFile : public AmigaFile {
 private:
 
     // Accepted header signatures
-    static const uint8_t magicBytes1[];
-    static const uint8_t magicBytes2[];
+    static const u8 magicBytes1[];
+    static const u8 magicBytes2[];
 
 public:
 
@@ -27,7 +27,7 @@ public:
     //
 
     // Returns true iff buffer contains an Extended Rom image
-    static bool isExtBuffer(const uint8_t *buffer, size_t length);
+    static bool isExtBuffer(const u8 *buffer, size_t length);
 
     // Returns true iff path points to a Extended Rom file
     static bool isExtFile(const char *path);
@@ -40,7 +40,7 @@ public:
     ExtFile();
 
     // Factory methods
-    static ExtFile *makeWithBuffer(const uint8_t *buffer, size_t length);
+    static ExtFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ExtFile *makeWithFile(const char *path);
 
 
@@ -50,10 +50,10 @@ public:
 
     AmigaFileType fileType() override { return FILETYPE_KICK_ROM; }
     const char *typeAsString() override { return "Extended Rom"; }
-    bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
+    bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isExtBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isExtFile(path); }
-    bool readFromBuffer(const uint8_t *buffer, size_t length) override;
+    bool readFromBuffer(const u8 *buffer, size_t length) override;
 
 };
 

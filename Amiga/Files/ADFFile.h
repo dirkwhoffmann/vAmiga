@@ -29,7 +29,7 @@ public:
     //
     
     // Returns true iff the provided buffer contains an ADF file.
-    static bool isADFBuffer(const uint8_t *buffer, size_t length);
+    static bool isADFBuffer(const u8 *buffer, size_t length);
     
     // Returns true iff if the provided path points to an ADF file.
     static bool isADFFile(const char *path);
@@ -52,7 +52,7 @@ public:
 public:
     
     static ADFFile *makeWithDiskType(DiskType t);
-    static ADFFile *makeWithBuffer(const uint8_t *buffer, size_t length);
+    static ADFFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithDisk(Disk *disk);
   
@@ -65,10 +65,10 @@ public:
     
     AmigaFileType fileType() override { return FILETYPE_ADF; }
     const char *typeAsString() override { return "ADF"; }
-    bool bufferHasSameType(const uint8_t *buffer, size_t length) override {
+    bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isADFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isADFFile(path); }
-    bool readFromBuffer(const uint8_t *buffer, size_t length) override;
+    bool readFromBuffer(const u8 *buffer, size_t length) override;
     
     
     //
@@ -105,9 +105,9 @@ private:
     void writeBootBlock(FileSystemType fs);
     void writeRootBlock(const char *label);
     void writeBitmapBlock();
-    void writeDate(uint8_t *dst, time_t date);
+    void writeDate(u8 *dst, time_t date);
 
-    uint32_t sectorChecksum(int sector);
+    u32 sectorChecksum(int sector);
 
     
     //
@@ -135,7 +135,7 @@ public:
     void seekTrackAndSector(long t, long s) { seekSector(numSectorsPerTrack() * t + s); }
     
     // Fills a buffer with the data of a single sector
-    void readSector(uint8_t *target, long t, long s); 
+    void readSector(u8 *target, long t, long s);
 };
 
 #endif

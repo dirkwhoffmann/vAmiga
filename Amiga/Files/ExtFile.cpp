@@ -10,8 +10,8 @@
 #include "ExtFile.h"
 
 // AROS Extended ROM
-const uint8_t ExtFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
-const uint8_t ExtFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const u8 ExtFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const u8 ExtFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
 ExtFile::ExtFile()
 {
@@ -19,7 +19,7 @@ ExtFile::ExtFile()
 }
 
 bool
-ExtFile::isExtBuffer(const uint8_t *buffer, size_t length)
+ExtFile::isExtBuffer(const u8 *buffer, size_t length)
 {
     if (length != KB(512)) return false;
 
@@ -39,7 +39,7 @@ ExtFile::isExtFile(const char *path)
 }
 
 ExtFile *
-ExtFile::makeWithBuffer(const uint8_t *buffer, size_t length)
+ExtFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
     ExtFile *rom = new ExtFile();
 
@@ -65,7 +65,7 @@ ExtFile::makeWithFile(const char *path)
 }
 
 bool
-ExtFile::readFromBuffer(const uint8_t *buffer, size_t length)
+ExtFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;

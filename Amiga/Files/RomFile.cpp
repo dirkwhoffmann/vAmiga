@@ -13,7 +13,7 @@
 // Boot Roms
 //
 
-const uint8_t RomFile::bootRomHeaders[1][8] = {
+const u8 RomFile::bootRomHeaders[1][8] = {
 
     // Amiga 1000 Bootstrap (1985)
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x8A }
@@ -23,7 +23,7 @@ const uint8_t RomFile::bootRomHeaders[1][8] = {
 // Kickstart Roms
 //
 
-const uint8_t RomFile::kickRomHeaders[6][7] = {
+const u8 RomFile::kickRomHeaders[6][7] = {
 
     // AROS Kickstart replacement
     { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00 },
@@ -49,7 +49,7 @@ RomFile::RomFile()
 }
 
 bool
-RomFile::isRomBuffer(const uint8_t *buffer, size_t length)
+RomFile::isRomBuffer(const u8 *buffer, size_t length)
 {
     // Boot Roms
     if (length == KB(8) || length == KB(16)) {
@@ -109,7 +109,7 @@ RomFile::isRomFile(const char *path)
 }
 
 RomFile *
-RomFile::makeWithBuffer(const uint8_t *buffer, size_t length)
+RomFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
     RomFile *rom = new RomFile();
     
@@ -135,7 +135,7 @@ RomFile::makeWithFile(const char *path)
 }
 
 bool
-RomFile::readFromBuffer(const uint8_t *buffer, size_t length)
+RomFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;

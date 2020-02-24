@@ -21,18 +21,18 @@ typedef struct {
     char magic[6];
     
     // Version number (V major.minor.subminor)
-    uint8_t major;
-    uint8_t minor;
-    uint8_t subminor;
+    u8 major;
+    u8 minor;
+    u8 subminor;
     
     // Screenshot
     struct {
         
         // Image width and height
-        uint16_t width, height;
+        u16 width, height;
         
         // Raw screen buffer data
-        uint32_t screen[(HPIXELS / 4) * (VPIXELS / 2)];
+        u32 screen[(HPIXELS / 4) * (VPIXELS / 2)];
         
     } screenshot;
     
@@ -50,24 +50,24 @@ class Snapshot : public AmigaFile {
 public:
     
     // Returns true iff buffer contains a snapshot.
-    static bool isSnapshot(const uint8_t *buffer, size_t length);
+    static bool isSnapshot(const u8 *buffer, size_t length);
     
     // Returns true iff buffer contains a snapshot of a specific version.
-    static bool isSnapshot(const uint8_t *buffer, size_t length,
-                           uint8_t major, uint8_t minor, uint8_t subminor);
+    static bool isSnapshot(const u8 *buffer, size_t length,
+                           u8 major, u8 minor, u8 subminor);
     
     // Returns true iff buffer contains a snapshot with a supported version number.
-    static bool isSupportedSnapshot(const uint8_t *buffer, size_t length);
+    static bool isSupportedSnapshot(const u8 *buffer, size_t length);
     
     // Returns true iff buffer contains a snapshot with an outdated version number.
-    static bool isUnsupportedSnapshot(const uint8_t *buffer, size_t length);
+    static bool isUnsupportedSnapshot(const u8 *buffer, size_t length);
     
     // Returns true if path points to a snapshot file.
     static bool isSnapshotFile(const char *path);
     
     // Returns true if file points to a snapshot file of a specific version.
     static bool isSnapshotFile(const char *path,
-                               uint8_t major, uint8_t minor, uint8_t subminor);
+                               u8 major, u8 minor, u8 subminor);
     
     // Returns true if file is a snapshot with a supported version number.
     static bool isSupportedSnapshotFile(const char *path);
@@ -88,7 +88,7 @@ public:
     
     // Factory methods
     static Snapshot *makeWithFile(const char *filename);
-    static Snapshot *makeWithBuffer(const uint8_t *buffer, size_t size);
+    static Snapshot *makeWithBuffer(const u8 *buffer, size_t size);
     static Snapshot *makeWithAmiga(Amiga *amiga);
     
     
@@ -98,7 +98,7 @@ public:
     
     AmigaFileType fileType() override { return FILETYPE_SNAPSHOT; }
     const char *typeAsString() override { return "VAMIGA"; }
-    bool bufferHasSameType(const uint8_t *buffer, size_t length) override;
+    bool bufferHasSameType(const u8 *buffer, size_t length) override;
     bool fileHasSameType(const char *filename) override;
     
     
@@ -112,7 +112,7 @@ public:
     SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
     
     // Returns pointer to core data
-    uint8_t *getData() { return data + sizeof(SnapshotHeader); }
+    u8 *getData() { return data + sizeof(SnapshotHeader); }
     
     // Returns the timestamp
     time_t getTimestamp() { return getHeader()->timestamp; }
