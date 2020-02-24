@@ -93,8 +93,8 @@ Denise::_inspect()
          *       E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Ex = VSTART)
          * ctl:  L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
          */
-        uint16_t pos = info.sprite[i].pos;
-        uint16_t ctl = info.sprite[i].ctl;
+        u16 pos = info.sprite[i].pos;
+        u16 ctl = info.sprite[i].ctl;
         info.sprite[i].ptr = agnus.sprpt[i];
         info.sprite[i].hstrt = ((pos & 0x00FF) << 1) | (ctl & 0b001);
         info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
@@ -145,26 +145,26 @@ Denise::getSprInfo(int nr)
     return result;
 }
 
-uint16_t
+u16
 Denise::peekJOY0DATR()
 {
-    uint16_t result = amiga.controlPort1.joydat();
+    u16 result = amiga.controlPort1.joydat();
     debug(2, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
 
-uint16_t
+u16
 Denise::peekJOY1DATR()
 {
-    uint16_t result = amiga.controlPort2.joydat();
+    u16 result = amiga.controlPort2.joydat();
     debug(2, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
 
 void
-Denise::pokeJOYTEST(uint16_t value)
+Denise::pokeJOYTEST(u16 value)
 {
     debug(2, "pokeJOYTEST(%04X)\n", value);
 
@@ -172,10 +172,10 @@ Denise::pokeJOYTEST(uint16_t value)
     amiga.controlPort2.pokeJOYTEST(value);
 }
 
-uint16_t
+u16
 Denise::peekDENISEID()
 {
-    uint16_t result;
+    u16 result;
 
     if (config.revision == DENISE_8373) {
         result = 0xFFFC;                           // ECS
@@ -188,7 +188,7 @@ Denise::peekDENISEID()
 }
 
 void
-Denise::pokeBPLCON0(uint16_t value)
+Denise::pokeBPLCON0(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
@@ -196,7 +196,7 @@ Denise::pokeBPLCON0(uint16_t value)
 }
 
 void
-Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
+Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
     debug(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
@@ -209,7 +209,7 @@ Denise::setBPLCON0(uint16_t oldValue, uint16_t newValue)
 }
 
 int
-Denise::bpu(uint16_t v)
+Denise::bpu(u16 v)
 {
     // Extract the three BPU bits and check for hires mode
     int bpu = (v >> 12) & 0b111;
@@ -223,7 +223,7 @@ Denise::bpu(uint16_t v)
 }
 
 void
-Denise::pokeBPLCON1(uint16_t value)
+Denise::pokeBPLCON1(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
@@ -232,7 +232,7 @@ Denise::pokeBPLCON1(uint16_t value)
 }
 
 void
-Denise::setBPLCON1(uint16_t value)
+Denise::setBPLCON1(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
 
@@ -248,7 +248,7 @@ Denise::setBPLCON1(uint16_t value)
 }
 
 void
-Denise::pokeBPLCON2(uint16_t value)
+Denise::pokeBPLCON2(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
@@ -256,7 +256,7 @@ Denise::pokeBPLCON2(uint16_t value)
 }
 
 void
-Denise::setBPLCON2(uint16_t value)
+Denise::setBPLCON2(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
 
@@ -266,8 +266,8 @@ Denise::setBPLCON2(uint16_t value)
     conRegChanges.add(4 * agnus.pos.h + 4, REG_BPLCON2, value);
 }
 
-uint16_t
-Denise::zPF(uint16_t priorityBits)
+u16
+Denise::zPF(u16 priorityBits)
 {
     switch (priorityBits) {
 
@@ -281,22 +281,22 @@ Denise::zPF(uint16_t priorityBits)
     return 0;
 }
 
-uint16_t
+u16
 Denise::peekCLXDAT()
 {
-    uint16_t result = clxdat | 0x8000;
+    u16 result = clxdat | 0x8000;
     clxdat = 0;
     return result;
 }
 
 void
-Denise::pokeCLXCON(uint16_t value)
+Denise::pokeCLXCON(u16 value)
 {
     clxcon = value;
 }
 
 template <int x> void
-Denise::pokeBPLxDAT(uint16_t value)
+Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
     debug(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
@@ -305,7 +305,7 @@ Denise::pokeBPLxDAT(uint16_t value)
 }
 
 template <int x> void
-Denise::pokeSPRxPOS(uint16_t value)
+Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
@@ -325,7 +325,7 @@ Denise::pokeSPRxPOS(uint16_t value)
 }
 
 template <int x> void
-Denise::pokeSPRxCTL(uint16_t value)
+Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
@@ -353,7 +353,7 @@ Denise::pokeSPRxCTL(uint16_t value)
 }
 
 template <int x> void
-Denise::pokeSPRxDATA(uint16_t value)
+Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
@@ -369,7 +369,7 @@ Denise::pokeSPRxDATA(uint16_t value)
 }
 
 template <int x> void
-Denise::pokeSPRxDATB(uint16_t value)
+Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
@@ -381,7 +381,7 @@ Denise::pokeSPRxDATB(uint16_t value)
 }
 
 template <PokeSource s, int xx> void
-Denise::pokeCOLORxx(uint16_t value)
+Denise::pokeCOLORxx(u16 value)
 {
     debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
@@ -396,7 +396,7 @@ Denise::pokeCOLORxx(uint16_t value)
 
 /*
 void
-Denise::pokeCOLORxx(uint32_t addr, uint16_t value)
+Denise::pokeCOLORxx(u32 addr, u16 value)
 {
     assert(addr >= 0x180 && addr <= 0x1BE && IS_EVEN(addr));
     debug(COLREG_DEBUG, "pokeCOLORxx(%X, %X)\n", addr, value);
@@ -423,7 +423,7 @@ Denise::armSprite(int x)
 bool
 Denise::spritePixelIsVisible(int hpos)
 {
-    uint16_t z = zBuffer[hpos];
+    u16 z = zBuffer[hpos];
 
     if ((z & Z_SP01234567) == 0) return false;
 
@@ -434,7 +434,7 @@ Denise::spritePixelIsVisible(int hpos)
 }
 
 void
-Denise::updateSpritePriorities(uint16_t bplcon2)
+Denise::updateSpritePriorities(u16 bplcon2)
 {
     switch (bplcon2 & 0b111) {
 
@@ -483,7 +483,7 @@ Denise::fillShiftRegisters()
 template <int HIRES> void
 Denise::draw(int pixels)
 {
-    uint8_t index;
+    u8 index;
 
     int16_t currentPixel = ppos(agnus.pos.h);
 
@@ -492,7 +492,7 @@ Denise::draw(int pixels)
         spriteClipBegin = currentPixel - 2;
     }
 
-    uint32_t maskOdd, maskEven;
+    u32 maskOdd, maskEven;
 
     if (HIRES) {
         maskOdd = 0x8000 << scrollHiresOdd;
@@ -546,10 +546,10 @@ Denise::translate()
 {
     int pixel = 0;
 
-    uint16_t bplcon0 = initialBplcon0;
+    u16 bplcon0 = initialBplcon0;
     bool dual = dbplf(bplcon0);
 
-    uint16_t bplcon2 = initialBplcon2;
+    u16 bplcon2 = initialBplcon2;
     bool pri = PF2PRI(bplcon2);
     prio1 = zPF1(bplcon2);
     prio2 = zPF2(bplcon2);
@@ -607,7 +607,7 @@ Denise::translateSPF(int from, int to)
     if (prio2) {
         for (int i = from; i < to; i++) {
 
-            uint8_t s = bBuffer[i];
+            u8 s = bBuffer[i];
 
             assert(PixelEngine::isRgbaIndex(s));
             iBuffer[i] = mBuffer[i] = s;
@@ -619,7 +619,7 @@ Denise::translateSPF(int from, int to)
 
         for (int i = from; i < to; i++) {
 
-             uint8_t s = bBuffer[i];
+             u8 s = bBuffer[i];
 
              assert(PixelEngine::isRgbaIndex(s));
              iBuffer[i] = mBuffer[i] = (s & 16) ? 16 : s;
@@ -640,16 +640,16 @@ Denise::translateDPF(int from, int to)
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
      */
-    uint8_t mask1 = prio1 ? 0b1111 : 0b0000;
-    uint8_t mask2 = prio2 ? 0b1111 : 0b0000;
+    u8 mask1 = prio1 ? 0b1111 : 0b0000;
+    u8 mask2 = prio2 ? 0b1111 : 0b0000;
 
     for (int i = from; i < to; i++) {
 
-        uint8_t s = bBuffer[i];
+        u8 s = bBuffer[i];
 
         // Determine color indices for both playfields
-        uint8_t index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2));
-        uint8_t index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3));
+        u8 index1 = (((s & 1) >> 0) | ((s & 4) >> 1) | ((s & 16) >> 2));
+        u8 index2 = (((s & 2) >> 1) | ((s & 8) >> 2) | ((s & 32) >> 3));
 
         if (index1) {
             if (index2) {
@@ -712,17 +712,17 @@ Denise::drawSpritePair()
     // Check for quick exit
     if (spriteClipBegin == HPIXELS) return;
 
-    uint16_t data1 = initialSprdata[x-1];
-    uint16_t data2 = initialSprdata[x];
-    uint16_t datb1 = initialSprdatb[x-1];
-    uint16_t datb2 = initialSprdatb[x];
+    u16 data1 = initialSprdata[x-1];
+    u16 data2 = initialSprdata[x];
+    u16 datb1 = initialSprdatb[x-1];
+    u16 datb2 = initialSprdatb[x];
     int sprpos1 = initialSprpos[x-1];
     int sprpos2 = initialSprpos[x];
     int sprctl1 = initialSprctl[x-1];
     int sprctl2 = initialSprctl[x];
     int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
     int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-    uint8_t arm = initialArmed;
+    u8 arm = initialArmed;
     bool armed1 = GET_BIT(arm, x-1);
     bool armed2 = GET_BIT(arm, x);
     bool at = attached(x);
@@ -793,8 +793,8 @@ Denise::drawSpritePair()
 template <int x> void
 Denise::drawSpritePair(int hstrt, int hstop,
                        int strt1, int strt2,
-                       uint16_t data1, uint16_t data2,
-                       uint16_t datb1, uint16_t datb2,
+                       u16 data1, u16 data2,
+                       u16 datb1, u16 datb2,
                        bool armed1, bool armed2, bool at)
 {
     assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
@@ -838,13 +838,13 @@ Denise::drawSpritePixel(int hpos)
     assert(hpos >= spriteClipBegin);
     assert(hpos < spriteClipEnd);
 
-    uint8_t a = (ssra[x] >> 15);
-    uint8_t b = (ssrb[x] >> 14) & 2;
-    uint8_t col = a | b;
+    u8 a = (ssra[x] >> 15);
+    u8 b = (ssrb[x] >> 14) & 2;
+    u8 col = a | b;
 
     if (col) {
 
-        uint16_t z = Z_SP[x];
+        u16 z = Z_SP[x];
         int base = 16 + 2 * (x & 6);
 
         if (z > zBuffer[hpos]) mBuffer[hpos] = base | col;
@@ -861,20 +861,20 @@ Denise::drawAttachedSpritePixelPair(int hpos)
     assert(hpos >= spriteClipBegin);
     assert(hpos < spriteClipEnd);
 
-    uint8_t a1 = !!GET_BIT(ssra[x-1], 15);
-    uint8_t b1 = !!GET_BIT(ssrb[x-1], 15) << 1;
-    uint8_t a2 = !!GET_BIT(ssra[x], 15) << 2;
-    uint8_t b2 = !!GET_BIT(ssrb[x], 15) << 3;
+    u8 a1 = !!GET_BIT(ssra[x-1], 15);
+    u8 b1 = !!GET_BIT(ssrb[x-1], 15) << 1;
+    u8 a2 = !!GET_BIT(ssra[x], 15) << 2;
+    u8 b2 = !!GET_BIT(ssrb[x], 15) << 3;
     assert(a1 == ((ssra[x-1] >> 15)));
     assert(b1 == ((ssrb[x-1] >> 14) & 0b0010));
     assert(a2 == ((ssra[x] >> 13) & 0b0100));
     assert(b2 == ((ssrb[x] >> 12) & 0b1000));
 
-    uint8_t col = a1 | b1 | a2 | b2;
+    u8 col = a1 | b1 | a2 | b2;
 
     if (col) {
 
-        uint16_t z = Z_SP[x];
+        u16 z = Z_SP[x];
 
         if (z > zBuffer[hpos]) {
             mBuffer[hpos] = 0b10000 | col;
@@ -949,15 +949,15 @@ Denise::checkS2SCollisions(int start, int end)
     if (IS_ODD(x) && !GET_BIT(clxcon, 12 + (x/2))) return;
 
     // Set up the sprite comparison masks
-    uint16_t comp01 = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0);
-    uint16_t comp23 = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0);
-    uint16_t comp45 = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0);
-    uint16_t comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
+    u16 comp01 = Z_SP0 | (GET_BIT(clxcon, 12) ? Z_SP1 : 0);
+    u16 comp23 = Z_SP2 | (GET_BIT(clxcon, 13) ? Z_SP3 : 0);
+    u16 comp45 = Z_SP4 | (GET_BIT(clxcon, 14) ? Z_SP5 : 0);
+    u16 comp67 = Z_SP6 | (GET_BIT(clxcon, 15) ? Z_SP7 : 0);
 
     // Iterate over all sprite pixels
     for (int pos = end; pos >= start; pos -= 2) {
 
-        uint16_t z = zBuffer[pos];
+        u16 z = zBuffer[pos];
 
         // Skip if there are no other sprites at this pixel coordinate
         if (!(z & (Z_SP01234567 ^ Z_SP[x]))) continue;
@@ -991,7 +991,7 @@ Denise::checkS2PCollisions(int start, int end)
     if (IS_ODD(x) && !getENSP<x>()) return;
 
     // Set up the sprite comparison mask
-    uint16_t sprMask;
+    u16 sprMask;
     switch(x) {
         case 0:
         case 1: sprMask = Z_SP0 | (getENSP<1>() ? Z_SP1 : 0); break;
@@ -1005,15 +1005,15 @@ Denise::checkS2PCollisions(int start, int end)
         default: sprMask = 0; assert(false);
     }
 
-    uint8_t enabled1 = getENBP1();
-    uint8_t enabled2 = getENBP2();
-    uint8_t compare1 = getMVBP1() & enabled1;
-    uint8_t compare2 = getMVBP2() & enabled2;
+    u8 enabled1 = getENBP1();
+    u8 enabled2 = getENBP2();
+    u8 compare1 = getMVBP1() & enabled1;
+    u8 compare2 = getMVBP2() & enabled2;
 
     // Check for sprite-playfield collisions
     for (int pos = end; pos >= start; pos -= 2) {
 
-        uint16_t z = zBuffer[pos];
+        u16 z = zBuffer[pos];
 
         // Skip if the sprite is transparent at this pixel coordinate
         if (!(z & Z_SP[x])) continue;
@@ -1049,15 +1049,15 @@ Denise::checkP2PCollisions()
     if (GET_BIT(clxdat, 0)) return;
 
     // Set up comparison masks
-    uint8_t enabled1 = getENBP1();
-    uint8_t enabled2 = getENBP2();
-    uint8_t compare1 = getMVBP1() & enabled1;
-    uint8_t compare2 = getMVBP2() & enabled2;
+    u8 enabled1 = getENBP1();
+    u8 enabled2 = getENBP2();
+    u8 compare1 = getMVBP1() & enabled1;
+    u8 compare2 = getMVBP2() & enabled2;
 
     // Check all pixels one by one
     for (int pos = 0; pos < HPIXELS; pos++) {
 
-        uint16_t b = bBuffer[pos];
+        u16 b = bBuffer[pos];
         // debug(CLX_DEBUG, "b[%d] = %X e1 = %X e2 = %X c1 = %X c2 = %X\n",
         //       pos, b, enabled1, enabled2, compare1, compare2);
 
@@ -1145,7 +1145,7 @@ Denise::endOfLine(int vpos)
 }
 
 void
-Denise::pokeDMACON(uint16_t oldValue, uint16_t newValue)
+Denise::pokeDMACON(u16 oldValue, u16 newValue)
 {
     if (Agnus::doBplDMA(newValue)) {
 
@@ -1167,14 +1167,14 @@ Denise::debugSetBPU(int count)
 
     amiga.suspend();
     
-    uint16_t value = bplcon0 & 0b1000111111111111;
+    u16 value = bplcon0 & 0b1000111111111111;
     pokeBPLCON0(value | (count << 12));
     
     amiga.resume();
 }
 
 void
-Denise::debugSetBPLCONx(unsigned x, uint16_t value)
+Denise::debugSetBPLCONx(unsigned x, u16 value)
 {
     assert(x <= 2);
 
@@ -1201,7 +1201,7 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
     assert(x <= 2);
     assert(bit <= 15);
 
-    uint16_t mask = 1 << bit;
+    u16 mask = 1 << bit;
 
     amiga.suspend();
 
@@ -1221,13 +1221,13 @@ Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
 }
 
 void
-Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
+Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, u8 value)
 {
     assert(x <= 2);
     assert(nibble <= 4);
 
-    uint16_t mask = 0b1111 << (4 * nibble);
-    uint16_t bits = (value & 0b1111) << (4 * nibble);
+    u16 mask = 0b1111 << (4 * nibble);
+    u16 bits = (value & 0b1111) << (4 * nibble);
 
     amiga.suspend();
 
@@ -1247,7 +1247,7 @@ Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, uint8_t value)
 }
 
 void
-Denise::dumpBuffer(uint8_t *buffer, size_t length)
+Denise::dumpBuffer(u8 *buffer, size_t length)
 {
     const size_t cols = 16;
 
@@ -1257,113 +1257,113 @@ Denise::dumpBuffer(uint8_t *buffer, size_t length)
     }
 }
 
-template void Denise::pokeBPLxDAT<0>(uint16_t value);
-template void Denise::pokeBPLxDAT<1>(uint16_t value);
-template void Denise::pokeBPLxDAT<2>(uint16_t value);
-template void Denise::pokeBPLxDAT<3>(uint16_t value);
-template void Denise::pokeBPLxDAT<4>(uint16_t value);
-template void Denise::pokeBPLxDAT<5>(uint16_t value);
+template void Denise::pokeBPLxDAT<0>(u16 value);
+template void Denise::pokeBPLxDAT<1>(u16 value);
+template void Denise::pokeBPLxDAT<2>(u16 value);
+template void Denise::pokeBPLxDAT<3>(u16 value);
+template void Denise::pokeBPLxDAT<4>(u16 value);
+template void Denise::pokeBPLxDAT<5>(u16 value);
 
-template void Denise::pokeSPRxPOS<0>(uint16_t value);
-template void Denise::pokeSPRxPOS<1>(uint16_t value);
-template void Denise::pokeSPRxPOS<2>(uint16_t value);
-template void Denise::pokeSPRxPOS<3>(uint16_t value);
-template void Denise::pokeSPRxPOS<4>(uint16_t value);
-template void Denise::pokeSPRxPOS<5>(uint16_t value);
-template void Denise::pokeSPRxPOS<6>(uint16_t value);
-template void Denise::pokeSPRxPOS<7>(uint16_t value);
+template void Denise::pokeSPRxPOS<0>(u16 value);
+template void Denise::pokeSPRxPOS<1>(u16 value);
+template void Denise::pokeSPRxPOS<2>(u16 value);
+template void Denise::pokeSPRxPOS<3>(u16 value);
+template void Denise::pokeSPRxPOS<4>(u16 value);
+template void Denise::pokeSPRxPOS<5>(u16 value);
+template void Denise::pokeSPRxPOS<6>(u16 value);
+template void Denise::pokeSPRxPOS<7>(u16 value);
 
-template void Denise::pokeSPRxCTL<0>(uint16_t value);
-template void Denise::pokeSPRxCTL<1>(uint16_t value);
-template void Denise::pokeSPRxCTL<2>(uint16_t value);
-template void Denise::pokeSPRxCTL<3>(uint16_t value);
-template void Denise::pokeSPRxCTL<4>(uint16_t value);
-template void Denise::pokeSPRxCTL<5>(uint16_t value);
-template void Denise::pokeSPRxCTL<6>(uint16_t value);
-template void Denise::pokeSPRxCTL<7>(uint16_t value);
+template void Denise::pokeSPRxCTL<0>(u16 value);
+template void Denise::pokeSPRxCTL<1>(u16 value);
+template void Denise::pokeSPRxCTL<2>(u16 value);
+template void Denise::pokeSPRxCTL<3>(u16 value);
+template void Denise::pokeSPRxCTL<4>(u16 value);
+template void Denise::pokeSPRxCTL<5>(u16 value);
+template void Denise::pokeSPRxCTL<6>(u16 value);
+template void Denise::pokeSPRxCTL<7>(u16 value);
 
-template void Denise::pokeSPRxDATA<0>(uint16_t value);
-template void Denise::pokeSPRxDATA<1>(uint16_t value);
-template void Denise::pokeSPRxDATA<2>(uint16_t value);
-template void Denise::pokeSPRxDATA<3>(uint16_t value);
-template void Denise::pokeSPRxDATA<4>(uint16_t value);
-template void Denise::pokeSPRxDATA<5>(uint16_t value);
-template void Denise::pokeSPRxDATA<6>(uint16_t value);
-template void Denise::pokeSPRxDATA<7>(uint16_t value);
+template void Denise::pokeSPRxDATA<0>(u16 value);
+template void Denise::pokeSPRxDATA<1>(u16 value);
+template void Denise::pokeSPRxDATA<2>(u16 value);
+template void Denise::pokeSPRxDATA<3>(u16 value);
+template void Denise::pokeSPRxDATA<4>(u16 value);
+template void Denise::pokeSPRxDATA<5>(u16 value);
+template void Denise::pokeSPRxDATA<6>(u16 value);
+template void Denise::pokeSPRxDATA<7>(u16 value);
 
-template void Denise::pokeSPRxDATB<0>(uint16_t value);
-template void Denise::pokeSPRxDATB<1>(uint16_t value);
-template void Denise::pokeSPRxDATB<2>(uint16_t value);
-template void Denise::pokeSPRxDATB<3>(uint16_t value);
-template void Denise::pokeSPRxDATB<4>(uint16_t value);
-template void Denise::pokeSPRxDATB<5>(uint16_t value);
-template void Denise::pokeSPRxDATB<6>(uint16_t value);
-template void Denise::pokeSPRxDATB<7>(uint16_t value);
+template void Denise::pokeSPRxDATB<0>(u16 value);
+template void Denise::pokeSPRxDATB<1>(u16 value);
+template void Denise::pokeSPRxDATB<2>(u16 value);
+template void Denise::pokeSPRxDATB<3>(u16 value);
+template void Denise::pokeSPRxDATB<4>(u16 value);
+template void Denise::pokeSPRxDATB<5>(u16 value);
+template void Denise::pokeSPRxDATB<6>(u16 value);
+template void Denise::pokeSPRxDATB<7>(u16 value);
 
-template void Denise::pokeCOLORxx<POKE_CPU, 0>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 0>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 1>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 1>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 2>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 2>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 3>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 3>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 4>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 4>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 5>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 5>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 6>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 6>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 7>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 7>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 8>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 8>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 9>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 9>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 10>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 10>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 11>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 11>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 12>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 12>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 13>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 13>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 14>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 14>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 15>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 15>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 16>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 16>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 17>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 17>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 18>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 18>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 19>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 19>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 20>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 20>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 21>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 21>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 22>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 22>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 23>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 23>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 24>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 24>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 25>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 25>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 26>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 26>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 27>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 27>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 28>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 28>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 29>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 29>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 30>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 30>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_CPU, 31>(uint16_t value);
-template void Denise::pokeCOLORxx<POKE_COPPER, 31>(uint16_t value);
+template void Denise::pokeCOLORxx<POKE_CPU, 0>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 0>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 1>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 1>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 2>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 2>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 3>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 3>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 4>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 4>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 5>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 5>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 6>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 6>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 7>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 7>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 8>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 8>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 9>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 9>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 10>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 10>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 11>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 11>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 12>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 12>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 13>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 13>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 14>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 14>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 15>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 15>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 16>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 16>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 17>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 17>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 18>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 18>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 19>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 19>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 20>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 20>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 21>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 21>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 22>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 22>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 23>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 23>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 24>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 24>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 25>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 25>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 26>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 26>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 27>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 27>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 28>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 28>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 29>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 29>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 30>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 30>(u16 value);
+template void Denise::pokeCOLORxx<POKE_CPU, 31>(u16 value);
+template void Denise::pokeCOLORxx<POKE_COPPER, 31>(u16 value);
 
 template void Denise::draw<0>(int pixels);
 template void Denise::draw<1>(int pixels);
