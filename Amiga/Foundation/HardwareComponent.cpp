@@ -209,9 +209,9 @@ HardwareComponent::size()
 }
 
 size_t
-HardwareComponent::load(uint8_t *buffer)
+HardwareComponent::load(u8 *buffer)
 {
-    uint8_t *ptr = buffer;
+    u8 *ptr = buffer;
 
     // debug("Loading internal state ...\n");
 
@@ -238,9 +238,9 @@ HardwareComponent::load(uint8_t *buffer)
 }
 
 size_t
-HardwareComponent::save(uint8_t *buffer)
+HardwareComponent::save(u8 *buffer)
 {
-    uint8_t *ptr = buffer;
+    u8 *ptr = buffer;
 
     // Call delegation method
     ptr += willSaveToBuffer(ptr);

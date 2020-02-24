@@ -48,7 +48,7 @@ public:
     Message getMessage();
     
     // Writes a message into the queue and propagates it to all listeners.
-    void putMessage(MessageType type, uint64_t data = 0);
+    void putMessage(MessageType type, u64 data = 0);
     
 private:
     

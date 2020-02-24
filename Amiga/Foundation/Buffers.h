@@ -156,8 +156,8 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
 
 struct RegChange
 {
-    uint32_t addr;
-    uint16_t value;
+    u32 addr;
+    u16 value;
 
     template <class T>
     void applyToItems(T& worker)
@@ -167,7 +167,7 @@ struct RegChange
 
     // Constructors
     RegChange() : addr(0), value(0) { }
-    RegChange(uint32_t a, uint16_t v) : addr(a), value(v) { }
+    RegChange(u32 a, u16 v) : addr(a), value(v) { }
 
     void print()
     {

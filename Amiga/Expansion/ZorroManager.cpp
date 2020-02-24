@@ -32,8 +32,8 @@ ZorroManager::_dump()
     
 }
 
-uint8_t
-ZorroManager::peekFastRamDevice(uint32_t addr)
+u8
+ZorroManager::peekFastRamDevice(u32 addr)
 {
     size_t fastRamSize = mem.config.fastSize;
     
@@ -63,8 +63,8 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
      *              110 = 2 megabytes
      *              111 = 4 megabytes
      */
-    uint8_t erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
-    uint8_t erTypeLo;
+    u8 erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
+    u8 erTypeLo;
     
     switch (fastRamSize) {
         case KB(64):  erTypeLo = 0b001; break;
@@ -86,8 +86,8 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
      * Bits 4:    Reserved (1 for Zorro III)
      * Bits 3-0:  Board's sub size (0000 = matches physical size)
      */
-    uint8_t erFlagsHi = 0b0111;
-    uint8_t erFlagsLo = 0b1111; // Logical and size match
+    u8 erFlagsHi = 0b0111;
+    u8 erFlagsLo = 0b1111; // Logical and size match
     
     switch (addr & 0xFFFF) {
             
@@ -175,7 +175,7 @@ ZorroManager::peekFastRamDevice(uint32_t addr)
 }
 
 void
-ZorroManager::pokeFastRamDevice(uint32_t addr, uint8_t value)
+ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
 {
     if (mem.config.fastSize == 0) return;
     
