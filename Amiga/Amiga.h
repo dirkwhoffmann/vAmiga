@@ -129,7 +129,7 @@ public:
      * These flags are flags processed and the loop either repeats or
      * terminates, depending on the set flags.
      */
-    uint32_t runLoopCtrl = 0;
+    u32 runLoopCtrl = 0;
     
 private:
     
@@ -156,7 +156,7 @@ private:
      * to determine how long the thread has to sleep.
      */
     Cycle clockBase = 0;
-    uint64_t timeBase = 0;
+    u64 timeBase = 0;
 
     
     //
@@ -265,8 +265,8 @@ private:
     void _warpOn() override;
     void _warpOff() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
 
@@ -338,8 +338,8 @@ public:
      * The functions are thread-safe and can be called from inside or outside
      * the emulator thread.
      */
-    void setControlFlags(uint32_t flags);
-    void clearControlFlags(uint32_t flags);
+    void setControlFlags(u32 flags);
+    void clearControlFlags(u32 flags);
     
     // Convenience wrappers for controlling the run loop
     void signalSnapshot() { setControlFlags(RL_SNAPSHOT); }
@@ -369,7 +369,7 @@ public:
     Message getMessage() { return queue.getMessage(); }
     
     // Writes a notification message into message queue
-    void putMessage(MessageType msg, uint64_t data = 0) { queue.putMessage(msg, data); }
+    void putMessage(MessageType msg, u64 data = 0) { queue.putMessage(msg, data); }
     
     
     //
@@ -431,19 +431,19 @@ public:
 private:
     
     // Converts kernel time to nanoseconds.
-    uint64_t abs_to_nanos(uint64_t abs) { return abs * tb.numer / tb.denom; }
+    u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
     
     // Converts nanoseconds to kernel time.
-    uint64_t nanos_to_abs(uint64_t nanos) { return nanos * tb.denom / tb.numer; }
+    u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
     
     // Returns the current time in nanoseconds.
-    uint64_t time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
+    u64 time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
     
     /* Returns the delay between two frames in nanoseconds.
      * As long as we only emulate PAL machines, the frame rate is 50 Hz
      * and this function returns a constant.
      */
-    uint64_t frameDelay() { return uint64_t(1000000000) / 50; }
+    u64 frameDelay() { return u64(1000000000) / 50; }
     
 public:
     

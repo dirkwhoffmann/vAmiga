@@ -475,7 +475,7 @@ Amiga::prefix()
     fprintf(stderr, "%06X ", cpu.getPC());
     fprintf(stderr, "%2X ", cpu.getIPL());
 
-    uint16_t dmacon = agnus.dmacon;
+    u16 dmacon = agnus.dmacon;
     bool dmaen = dmacon & DMAEN;
     fprintf(stderr, "%c%c%c%c%c%c ",
             (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
@@ -725,7 +725,7 @@ Amiga::readyToPowerUp()
 }
 
 void
-Amiga::setControlFlags(uint32_t flags)
+Amiga::setControlFlags(u32 flags)
 {
     pthread_mutex_lock(&lock);
     runLoopCtrl |= flags;
@@ -733,7 +733,7 @@ Amiga::setControlFlags(uint32_t flags)
 }
 
 void
-Amiga::clearControlFlags(uint32_t flags)
+Amiga::clearControlFlags(u32 flags)
 {
     pthread_mutex_lock(&lock);
     runLoopCtrl &= ~flags;
@@ -746,17 +746,17 @@ Amiga::restartTimer()
     timeBase = time_in_nanos();
     clockBase = agnus.clock;
     
-    // uint64_t kernelNow = mach_absolute_time();
-    // uint64_t nanoNow = abs_to_nanos(kernelNow);
+    // u64 kernelNow = mach_absolute_time();
+    // u64 nanoNow = abs_to_nanos(kernelNow);
 }
 
 void
 Amiga::synchronizeTiming()
 {
-    uint64_t now        = time_in_nanos();
+    u64 now        = time_in_nanos();
     Cycle clockDelta    = agnus.clock - clockBase;
-    int64_t elapsedTime = (clockDelta * 1000) / masterClockFrequency;
-    int64_t targetTime  = timeBase + elapsedTime;
+    i64 elapsedTime = (clockDelta * 1000) / masterClockFrequency;
+    i64 targetTime  = timeBase + elapsedTime;
     
     /*
      debug("now         = %lld\n", now);
@@ -792,7 +792,7 @@ Amiga::synchronizeTiming()
         // See you soon...
         mach_wait_until(targetTime);
         /*
-         int64_t jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
+         i64 jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
          if (jitter > 1000000000) { // 1 sec
          warn("Jitter is too high (%lld).\n", jitter);
          // restartTimer();
@@ -815,7 +815,7 @@ Amiga::snapshotIsDue()
 void
 Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 {
-    uint8_t *ptr;
+    u8 *ptr;
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
