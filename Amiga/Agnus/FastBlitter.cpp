@@ -67,10 +67,10 @@ Blitter::beginFastCopyBlit()
 template <bool useA, bool useB, bool useC, bool useD, bool desc>
 void Blitter::doFastCopyBlit()
 {
-    uint32_t apt = bltapt;
-    uint32_t bpt = bltbpt;
-    uint32_t cpt = bltcpt;
-    uint32_t dpt = bltdpt;
+    u32 apt = bltapt;
+    u32 bpt = bltbpt;
+    u32 cpt = bltcpt;
+    u32 dpt = bltdpt;
 
     bool fill = bltconFE();
     bool fillCarry;
@@ -92,7 +92,7 @@ void Blitter::doFastCopyBlit()
         fillCarry = !!bltconFCI();
 
         // Apply the "first word mask" in the first iteration
-        uint16_t mask = bltafwm;
+        u16 mask = bltafwm;
 
         for (int x = 0; x < bltsizeW; x++) {
 
@@ -217,38 +217,38 @@ Blitter::doFastLineBlit()
     // Adapted from WinFellow
     //
 
-    uint32_t bltcon = HI_W_LO_W(bltcon0, bltcon1);
+    u32 bltcon = HI_W_LO_W(bltcon0, bltcon1);
     
     int height = bltsizeH;
     
-    uint16_t bltadat_local = 0;
-    uint16_t bltbdat_local = 0;
-    uint16_t bltcdat_local = chold;
-    uint16_t bltddat_local = 0;
+    u16 bltadat_local = 0;
+    u16 bltbdat_local = 0;
+    u16 bltcdat_local = chold;
+    u16 bltddat_local = 0;
     
-    uint16_t mask = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
+    u16 mask = (bnew >> bltconBSH()) | (bnew << (16 - bltconBSH()));
     bool a_enabled = bltcon & 0x08000000;
     bool c_enabled = bltcon & 0x02000000;
     
     bool decision_is_signed = (((bltcon >> 6) & 1) == 1);
-    uint32_t decision_variable = bltapt;
+    u32 decision_variable = bltapt;
     
     // Quirk: Set decision increases to 0 if a is disabled, ensures bltapt remains unchanged
     int16_t decision_inc_signed = a_enabled ? bltbmod : 0;
     int16_t decision_inc_unsigned = a_enabled ? bltamod : 0;
     
-    uint32_t bltcpt_local = bltcpt;
-    uint32_t bltdpt_local = bltdpt;
-    uint32_t blit_a_shift_local = bltconASH();
-    uint32_t bltzero_local = 0;
-    uint32_t i;
+    u32 bltcpt_local = bltcpt;
+    u32 bltdpt_local = bltdpt;
+    u32 blit_a_shift_local = bltconASH();
+    u32 bltzero_local = 0;
+    u32 i;
     
-    uint32_t sulsudaul = (bltcon >> 2) & 0x7;
+    u32 sulsudaul = (bltcon >> 2) & 0x7;
     bool x_independent = (sulsudaul & 4);
     bool x_inc = ((!x_independent) && !(sulsudaul & 2)) || (x_independent && !(sulsudaul & 1));
     bool y_inc = ((!x_independent) && !(sulsudaul & 1)) || (x_independent && !(sulsudaul & 2));
     bool single_dot = false;
-    uint8_t minterm = (uint8_t)(bltcon >> 16);
+    u8 minterm = (u8)(bltcon >> 16);
     
     for (i = 0; i < height; ++i)
     {

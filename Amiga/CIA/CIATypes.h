@@ -44,11 +44,11 @@ typedef union
 {
     struct
     {
-        uint8_t hi;
-        uint8_t mid;
-        uint8_t lo;
+        u8 hi;
+        u8 mid;
+        u8 lo;
     };
-    uint32_t value;
+    u32 value;
 }
 Counter24;
 
@@ -70,20 +70,20 @@ CIAConfig;
 typedef struct
 {
     struct {
-        uint8_t port;
-        uint8_t reg;
-        uint8_t dir;
+        u8 port;
+        u8 reg;
+        u8 dir;
     } portA;
 
     struct {
-        uint8_t port;
-        uint8_t reg;
-        uint8_t dir;
+        u8 port;
+        u8 reg;
+        u8 dir;
     } portB;
 
     struct {
-        uint16_t count;
-        uint16_t latch;
+        u16 count;
+        u16 latch;
         bool running;
         bool toggle;
         bool pbout;
@@ -91,17 +91,17 @@ typedef struct
     } timerA;
 
     struct {
-        uint16_t count;
-        uint16_t latch;
+        u16 count;
+        u16 latch;
         bool running;
         bool toggle;
         bool pbout;
         bool oneShot;
     } timerB;
 
-    uint8_t sdr;
-    uint8_t icr;
-    uint8_t imr;
+    u8 sdr;
+    u8 icr;
+    u8 imr;
     bool intLine;
     CounterInfo cnt;
     bool cntIntEnable;
