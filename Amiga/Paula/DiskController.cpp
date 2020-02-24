@@ -239,7 +239,7 @@ DiskController::setWriteProtection(int nr, bool value)
     df[nr]->setWriteProtection(value);
 }
 
-uint16_t
+u16
 DiskController::peekDSKDATR()
 {
     // DSKDAT is a strobe register that cannot be accessed by the CPU
@@ -247,12 +247,12 @@ DiskController::peekDSKDATR()
 }
 
 void
-DiskController::pokeDSKLEN(uint16_t newDskLen)
+DiskController::pokeDSKLEN(u16 newDskLen)
 {
     debug(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
     
     Drive *drive = getSelectedDrive(); 
-    uint16_t oldDsklen = dsklen;
+    u16 oldDsklen = dsklen;
 
     // Remember the new value
     dsklen = newDskLen;
@@ -309,14 +309,14 @@ DiskController::pokeDSKLEN(uint16_t newDskLen)
 }
 
 void
-DiskController::pokeDSKDAT(uint16_t value)
+DiskController::pokeDSKDAT(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKDAT\n");
 
     // DSKDAT is a strobe register that cannot be accessed by the CPU.
 }
 
-uint16_t
+u16
 DiskController::peekDSKBYTR()
 {
     /* 15      DSKBYT     Indicates whether this register contains valid data.
@@ -328,7 +328,7 @@ DiskController::peekDSKBYTR()
      */
     
     // DATA
-    uint16_t result = incoming;
+    u16 result = incoming;
     
     // DSKBYT
     assert(agnus.clock >= incomingCycle);
@@ -348,17 +348,17 @@ DiskController::peekDSKBYTR()
 }
 
 void
-DiskController::pokeDSKSYNC(uint16_t value)
+DiskController::pokeDSKSYNC(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
     // assert(false);
     dsksync = value;
 }
 
-uint8_t
+u8
 DiskController::driveStatusFlags()
 {
-    uint8_t result = 0xFF;
+    u8 result = 0xFF;
     
     if (config.connected[0]) result &= df[0]->driveStatusFlags();
     if (config.connected[1]) result &= df[1]->driveStatusFlags();
@@ -369,7 +369,7 @@ DiskController::driveStatusFlags()
 }
 
 void
-DiskController::PRBdidChange(uint8_t oldValue, uint8_t newValue)
+DiskController::PRBdidChange(u8 oldValue, u8 newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
 
@@ -456,7 +456,7 @@ DiskController::clearFifo()
     fifoCount = 0;
 }
 
-uint8_t
+u8
 DiskController::readFifo()
 {
     // Don't call this function on an empty buffer.
@@ -468,7 +468,7 @@ DiskController::readFifo()
 }
 
 void
-DiskController::writeFifo(uint8_t byte)
+DiskController::writeFifo(u8 byte)
 {
     assert(fifoCount <= 6);
     
@@ -480,7 +480,7 @@ DiskController::writeFifo(uint8_t byte)
     fifoCount++;
 }
 
-uint16_t
+u16
 DiskController::readFifo16()
 {
     assert(fifoHasWord());
@@ -491,7 +491,7 @@ DiskController::readFifo16()
 }
 
 bool
-DiskController::compareFifo(uint16_t word)
+DiskController::compareFifo(u16 word)
 {
     return fifoHasWord() && (fifo & 0xFFFF) == word;
 }
@@ -550,7 +550,7 @@ DiskController::executeFifo()
             } else {
                 
                 // Read the outgoing byte from the FIFO buffer.
-                uint8_t outgoing = readFifo();
+                u8 outgoing = readFifo();
                 
                 // Write byte to disk.
                 drive->writeHead(outgoing);
@@ -573,7 +573,7 @@ DiskController::performDMA()
     if (drive == NULL) return;
 
     // How many word shall we read in?
-    uint32_t count = drive->config.speed;
+    u32 count = drive->config.speed;
 
     // Gather some statistical information
     stats.wordCount[drive->nr] += count;
@@ -594,7 +594,7 @@ DiskController::performDMA()
 }
 
 void
-DiskController::performDMARead(Drive *drive, uint32_t remaining)
+DiskController::performDMARead(Drive *drive, u32 remaining)
 {
     assert(drive != NULL);
 
@@ -603,7 +603,7 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
 
     do {
         // Read next word from the FIFO buffer
-        uint16_t word = readFifo16();
+        u16 word = readFifo16();
         
         // Write word into memory
         agnus.doDiskDMA(word);
@@ -636,7 +636,7 @@ DiskController::performDMARead(Drive *drive, uint32_t remaining)
 }
 
 void
-DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
+DiskController::performDMAWrite(Drive *drive, u32 remaining)
 {
     assert(drive != NULL);
 
@@ -645,7 +645,7 @@ DiskController::performDMAWrite(Drive *drive, uint32_t remaining)
 
     do {
         // Read next word from memory
-        uint16_t word = agnus.doDiskDMA();
+        u16 word = agnus.doDiskDMA();
 
         if (DSK_CHECKSUM) {
             checkcnt++;
@@ -707,7 +707,7 @@ DiskController::performSimpleDMA()
     if (!(dsklen & 0x3FFF)) return;
 
     // How many word shall we read in?
-    uint32_t count = drive->config.speed;
+    u32 count = drive->config.speed;
 
     // Gather some statistical information
     stats.wordCount[drive->nr] += count;
@@ -738,14 +738,14 @@ DiskController::performSimpleDMA()
 }
 
 void
-DiskController::performSimpleDMAWait(Drive *drive, uint32_t remaining)
+DiskController::performSimpleDMAWait(Drive *drive, u32 remaining)
 {
     assert(drive != NULL);
 
     for (unsigned i = 0; i < remaining; i++) {
 
         // Read word from disk.
-        uint16_t word = drive->readHead16();
+        u16 word = drive->readHead16();
 
         // Check if we've reached a SYNC mark
         if ((syncFlag = (word == dsksync))) {
@@ -763,14 +763,14 @@ DiskController::performSimpleDMAWait(Drive *drive, uint32_t remaining)
 }
 
 void
-DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
+DiskController::performSimpleDMARead(Drive *drive, u32 remaining)
 {
     assert(drive != NULL);
 
     for (unsigned i = 0; i < remaining; i++) {
         
         // Read word from disk
-        uint16_t word = drive->readHead16();
+        u16 word = drive->readHead16();
         
         // Write word into memory
         agnus.doDiskDMA(word);
@@ -794,7 +794,7 @@ DiskController::performSimpleDMARead(Drive *drive, uint32_t remaining)
 }
 
 void
-DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
+DiskController::performSimpleDMAWrite(Drive *drive, u32 remaining)
 {
     assert(drive != NULL);
     // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
@@ -802,7 +802,7 @@ DiskController::performSimpleDMAWrite(Drive *drive, uint32_t remaining)
     for (unsigned i = 0; i < remaining; i++) {
         
         // Read word from memory
-        uint16_t word = agnus.doDiskDMA();
+        u16 word = agnus.doDiskDMA();
 
         if (DSK_CHECKSUM) {
             checkcnt++;
@@ -869,7 +869,7 @@ DiskController::performTurboRead(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk
-        uint16_t word = drive->readHead16();
+        u16 word = drive->readHead16();
         
         // Write word into memory
         mem.pokeChip16(agnus.dskpt, word);
@@ -892,7 +892,7 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        uint16_t word = mem.peekChip16(agnus.dskpt);
+        u16 word = mem.peekChip16(agnus.dskpt);
         INC_CHIP_PTR(agnus.dskpt);
         
         if (DSK_CHECKSUM) {
