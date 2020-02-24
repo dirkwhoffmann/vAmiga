@@ -86,7 +86,7 @@ SerialPortConfig;
 
 typedef struct
 {
-    uint32_t port;
+    u32 port;
 
     bool txd;
     bool rxd;

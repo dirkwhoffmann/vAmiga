@@ -16,7 +16,7 @@ ADFFile::ADFFile()
 }
 
 bool
-ADFFile::isADFBuffer(const uint8_t *buffer, size_t length)
+ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 {
     // There are no magic bytes. We can only check the buffer size.
     return
@@ -72,7 +72,7 @@ ADFFile::makeWithDiskType(DiskType t)
 }
 
 ADFFile *
-ADFFile::makeWithBuffer(const uint8_t *buffer, size_t length)
+ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
     ADFFile *adf = new ADFFile();
     
@@ -115,7 +115,7 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 bool
-ADFFile::readFromBuffer(const uint8_t *buffer, size_t length)
+ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;
@@ -203,7 +203,7 @@ ADFFile::writeBootBlock(FileSystemType fs)
     assert(data != NULL);
     assert(fs != FS_NONE);
     
-    uint8_t ofs[] = {
+    u8 ofs[] = {
         
         0xc0, 0x20, 0x0f, 0x19, 0x00, 0x00, 0x03, 0x70, 0x43, 0xfa, 0x00, 0x18,
         0x4e, 0xae, 0xff, 0xa0, 0x4a, 0x80, 0x67, 0x0a, 0x20, 0x40, 0x20, 0x68,
@@ -211,7 +211,7 @@ ADFFile::writeBootBlock(FileSystemType fs)
         0x73, 0x2e, 0x6c, 0x69, 0x62, 0x72, 0x61, 0x72, 0x79
     };
     
-    uint8_t ffs[] = {
+    u8 ffs[] = {
         
         0xE3, 0x3D, 0x0E, 0x72, 0x00, 0x00, 0x03, 0x70, 0x43, 0xFA, 0x00, 0x3E,
         0x70, 0x25, 0x4E, 0xAE, 0xFD, 0xD8, 0x4A, 0x80, 0x67, 0x0C, 0x22, 0x40,
@@ -224,7 +224,7 @@ ADFFile::writeBootBlock(FileSystemType fs)
     };
     
     // The boot block is located in sector 0 and 1
-    uint8_t *p = data;
+    u8 *p = data;
     
     // Write header
     p[0] = 'D';
@@ -240,7 +240,7 @@ ADFFile::writeBootBlock(FileSystemType fs)
 void
 ADFFile::writeRootBlock(const char *label)
 {
-    uint8_t *p = data + rootBlockNr() * 512;
+    u8 *p = data + rootBlockNr() * 512;
     
     // Type
     p[3] = 0x02;
@@ -273,7 +273,7 @@ ADFFile::writeRootBlock(const char *label)
     p[511] = 0x01;
     
     // Compute checksum
-    uint32_t checksum = sectorChecksum(rootBlockNr());
+    u32 checksum = sectorChecksum(rootBlockNr());
     p[20] = BYTE3(checksum);
     p[21] = BYTE2(checksum);
     p[22] = BYTE1(checksum);
@@ -283,7 +283,7 @@ ADFFile::writeRootBlock(const char *label)
 void
 ADFFile::writeBitmapBlock()
 {
-    uint8_t *p = data + bitmapBlockNr() * 512;
+    u8 *p = data + bitmapBlockNr() * 512;
     
     // Write allocation table
     memset(p + 4, 0xFF, numSectorsTotal() / 8);
@@ -292,7 +292,7 @@ ADFFile::writeBitmapBlock()
     p[4 + (rootBlockNr() / 8)] = 0x3F;
     
     // Compute checksum
-    uint32_t checksum = sectorChecksum(bitmapBlockNr());
+    u32 checksum = sectorChecksum(bitmapBlockNr());
     p[0] = BYTE3(checksum);
     p[1] = BYTE2(checksum);
     p[2] = BYTE1(checksum);
@@ -300,7 +300,7 @@ ADFFile::writeBitmapBlock()
 }
 
 void
-ADFFile::writeDate(uint8_t *dst, time_t date)
+ADFFile::writeDate(u8 *dst, time_t date)
 {
     /* Format used by the Amiga:
      *
@@ -309,15 +309,15 @@ ADFFile::writeDate(uint8_t *dst, time_t date)
      * Ticks : Ticks past minute @ 50Hz
      */
     
-    const uint32_t secPerDay = 24 * 60 * 60;
+    const u32 secPerDay = 24 * 60 * 60;
     
     // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
     date -= (8 * 365 + 2) * secPerDay;
     
     // Extract components
-    uint32_t days  = date / secPerDay;
-    uint32_t mins  = (date % secPerDay) / 60;
-    uint32_t ticks = (date % secPerDay % 60) * 5 / 6;
+    u32 days  = date / secPerDay;
+    u32 mins  = (date % secPerDay) / 60;
+    u32 ticks = (date % secPerDay % 60) * 5 / 6;
     
     // Store value
     dst[0x0] = BYTE3(days);
@@ -336,14 +336,14 @@ ADFFile::writeDate(uint8_t *dst, time_t date)
     dst[0xB] = BYTE0(ticks);
 }
 
-uint32_t
+u32
 ADFFile::sectorChecksum(int sector)
 {
     assert(isSectorNr(sector));
 
-    uint32_t result = 0;
+    u32 result = 0;
 
-    uint8_t *p = data + sector * 512;
+    u8 *p = data + sector * 512;
     for (unsigned i = 0; i < 512; i += 4, p += 4) {
         result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
     }
@@ -370,7 +370,7 @@ ADFFile::seekSector(long nr)
 }
 
 void
-ADFFile::readSector(uint8_t *target, long t, long s)
+ADFFile::readSector(u8 *target, long t, long s)
 {
     assert(target != NULL);
     assert(isTrackNr(t));

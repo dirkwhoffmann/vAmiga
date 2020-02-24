@@ -82,8 +82,8 @@ public:
     // Adding or removing guards
     //
 
-    void addAt(uint32_t addr, long skip = 0);
-    void removeAt(uint32_t addr);
+    void addAt(u32 addr, long skip = 0);
+    void removeAt(u32 addr);
 
     void remove(long nr);
     void removeAll() { count = 0; setNeedsCheck(false); }
@@ -99,9 +99,9 @@ public:
     void enable(long nr) { setEnable(nr, true); }
     void disable(long nr) { setEnable(nr, false); }
 
-    void setEnableAt(uint32_t addr, bool val);
-    void enableAt(uint32_t addr) { setEnableAt(addr, true); }
-    void disableAt(uint32_t addr) { setEnableAt(addr, false); }
+    void setEnableAt(u32 addr, bool val);
+    void enableAt(u32 addr) { setEnableAt(addr, true); }
+    void disableAt(u32 addr) { setEnableAt(addr, false); }
 
     //
     // Checking a guard

@@ -81,9 +81,9 @@ ScreenBuffer;
 
 typedef struct
 {
-    uint16_t pos;
-    uint16_t ctl;
-    uint32_t ptr;
+    u16 pos;
+    u16 ctl;
+    u32 ptr;
     int16_t hstrt;
     int16_t vstrt;
     int16_t vstop;
@@ -112,24 +112,24 @@ DeniseConfig;
 
 typedef struct
 {
-    uint16_t bplcon0;
-    uint16_t bplcon1;
-    uint16_t bplcon2;
+    u16 bplcon0;
+    u16 bplcon1;
+    u16 bplcon2;
     int16_t bpu;
-    uint16_t bpldat[6];
+    u16 bpldat[6];
 
-    uint16_t diwstrt;
-    uint16_t diwstop;
+    u16 diwstrt;
+    u16 diwstop;
     int16_t diwHstrt;
     int16_t diwHstop;
     int16_t diwVstrt;
     int16_t diwVstop;
 
-    uint16_t joydat[2];
-    uint16_t clxdat;
+    u16 joydat[2];
+    u16 clxdat;
 
-    uint16_t colorReg[32];
-    uint32_t color[32];
+    u16 colorReg[32];
+    u32 color[32];
     
     SpriteInfo sprite[8];
 }

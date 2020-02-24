@@ -114,7 +114,7 @@ typedef struct
     size_t extSize;
 
     // First memory page where the extended ROM is blended it
-    uint32_t extStart;
+    u32 extStart;
 }
 MemoryConfig;
 

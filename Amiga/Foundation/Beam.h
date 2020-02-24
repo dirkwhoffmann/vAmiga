@@ -25,7 +25,7 @@ struct Beam
     }
 
     Beam(i16 v, i16 h) : v(v), h(h) { }
-    Beam(uint32_t cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
+    Beam(u32 cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
     Beam& operator=(const Beam& beam)
     {

@@ -119,7 +119,7 @@ CPU::_reset()
 void
 CPU::_inspect()
 {
-    uint32_t pc;
+    u32 pc;
 
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);

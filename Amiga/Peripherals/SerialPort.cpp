@@ -134,9 +134,9 @@ SerialPort::setPin(int nr, bool value)
 }
 
 void
-SerialPort::setPort(uint32_t mask, bool value)
+SerialPort::setPort(u32 mask, bool value)
 {
-    uint32_t oldPort = port;
+    u32 oldPort = port;
 
     /* Emulate the loopback cable (if connected)
      *
@@ -146,9 +146,9 @@ SerialPort::setPort(uint32_t mask, bool value)
      */
     if (config.device == SPD_LOOPBACK) {
 
-        uint32_t maskA = TXD_MASK | RXD_MASK;
-        uint32_t maskB = RTS_MASK | CTS_MASK | DSR_MASK;
-        uint32_t maskC = CD_MASK | DTR_MASK | RI_MASK;
+        u32 maskA = TXD_MASK | RXD_MASK;
+        u32 maskB = RTS_MASK | CTS_MASK | DSR_MASK;
+        u32 maskC = CD_MASK | DTR_MASK | RI_MASK;
 
         if (mask & maskA) mask |= maskA;
         if (mask & maskB) mask |= maskB;
