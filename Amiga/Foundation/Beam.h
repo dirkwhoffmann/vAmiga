@@ -12,8 +12,8 @@
 
 struct Beam
 {
-    int16_t v;
-    int16_t h;
+    i16 v;
+    i16 h;
 
     template <class T>
     void applyToItems(T& worker)
@@ -24,7 +24,7 @@ struct Beam
         & h;
     }
 
-    Beam(int16_t v, int16_t h) : v(v), h(h) { }
+    Beam(i16 v, i16 h) : v(v), h(h) { }
     Beam(uint32_t cycle = 0) : Beam(cycle / HPOS_CNT, cycle % HPOS_CNT) { }
 
     Beam& operator=(const Beam& beam)
@@ -57,8 +57,8 @@ struct Beam
 
     Beam operator+(const Beam& beam) const
     {
-        int16_t newv = v + beam.v;
-        int16_t newh = h + beam.h;
+        i16 newv = v + beam.v;
+        i16 newh = h + beam.h;
 
         if (newh >= HPOS_CNT) { newh -= HPOS_CNT; newv++; }
         else if (newh < 0)    { newh += HPOS_CNT; newv--; }

@@ -21,56 +21,56 @@
 // Basic memory buffer I/O
 //
 
-inline uint8_t read8(uint8_t *& buffer)
+inline u8 read8(u8 *& buffer)
 {
-    uint8_t result = *buffer;
+    u8 result = *buffer;
     buffer += 1;
     return result;
 }
 
-inline uint16_t read16(uint8_t *& buffer)
+inline u16 read16(u8 *& buffer)
 {
-    uint16_t result = ntohs(*((uint16_t *)buffer));
+    u16 result = ntohs(*((u16 *)buffer));
     buffer += 2;
     return result;
 }
 
-inline uint32_t read32(uint8_t *& buffer)
+inline u32 read32(u8 *& buffer)
 {
-    uint32_t result = ntohl(*((uint32_t *)buffer));
+    u32 result = ntohl(*((u32 *)buffer));
     buffer += 4;
     return result;
 }
 
-inline uint64_t read64(uint8_t *& buffer)
+inline u64 read64(u8 *& buffer)
 {
-    uint32_t hi = read32(buffer);
-    uint32_t lo = read32(buffer);
-    return ((uint64_t)hi << 32) | lo;
+    u32 hi = read32(buffer);
+    u32 lo = read32(buffer);
+    return ((u64)hi << 32) | lo;
 }
 
-inline void write8(uint8_t *& buffer, uint8_t value)
+inline void write8(u8 *& buffer, u8 value)
 {
     *buffer = value;
     buffer += 1;
 }
 
-inline void write16(uint8_t *& buffer, uint16_t value)
+inline void write16(u8 *& buffer, u16 value)
 {
-    *((uint16_t *)buffer) = htons(value);
+    *((u16 *)buffer) = htons(value);
     buffer += 2;
 }
 
-inline void write32(uint8_t *& buffer, uint32_t value)
+inline void write32(u8 *& buffer, u32 value)
 {
-    *((uint32_t *)buffer) = htonl(value);
+    *((u32 *)buffer) = htonl(value);
     buffer += 4;
 }
 
-inline void write64(uint8_t *& buffer, uint64_t value)
+inline void write64(u8 *& buffer, u64 value)
 {
-    write32(buffer, (uint32_t)(value >> 32));
-    write32(buffer, (uint32_t)(value));
+    write32(buffer, (u32)(value >> 32));
+    write32(buffer, (u32)(value));
 }
 
 //
@@ -134,7 +134,7 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
-    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -167,9 +167,9 @@ class SerReader
 {
 public:
 
-    uint8_t *ptr;
+    u8 *ptr;
 
-    SerReader(uint8_t *p) : ptr(p)
+    SerReader(u8 *p) : ptr(p)
     {
     }
 
@@ -207,7 +207,7 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
-    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -237,18 +237,18 @@ function(ptr, (cast)v); \
 return *this; \
 }
 
-#define SERIALIZE8(type)  static_assert(sizeof(type) == 1); SERIALIZE(type,write8,uint8_t)
-#define SERIALIZE16(type) static_assert(sizeof(type) == 2); SERIALIZE(type,write16,uint16_t)
-#define SERIALIZE32(type) static_assert(sizeof(type) == 4); SERIALIZE(type,write32,uint32_t)
-#define SERIALIZE64(type) static_assert(sizeof(type) == 8); SERIALIZE(type,write64,uint64_t)
+#define SERIALIZE8(type)  static_assert(sizeof(type) == 1); SERIALIZE(type,write8,u8)
+#define SERIALIZE16(type) static_assert(sizeof(type) == 2); SERIALIZE(type,write16,u16)
+#define SERIALIZE32(type) static_assert(sizeof(type) == 4); SERIALIZE(type,write32,u32)
+#define SERIALIZE64(type) static_assert(sizeof(type) == 8); SERIALIZE(type,write64,u64)
 
 class SerWriter
 {
 public:
 
-    uint8_t *ptr;
+    u8 *ptr;
 
-    SerWriter(uint8_t *p) : ptr(p)
+    SerWriter(u8 *p) : ptr(p)
     {
     }
 
@@ -286,7 +286,7 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
-    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -354,7 +354,7 @@ public:
     STRUCT(Event)
     STRUCT(Beam)
     STRUCT(Change)
-    template <uint16_t capacity> STRUCT(ChangeRecorder<capacity>)
+    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])
