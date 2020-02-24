@@ -28,15 +28,15 @@ class UART : public AmigaComponent {
     //
 
     // Port period and control register
-    uint16_t serper;
+    u16 serper;
 
     // Input registers
-    uint16_t receiveBuffer;
-    uint16_t receiveShiftReg;
+    u16 receiveBuffer;
+    u16 receiveShiftReg;
 
     // Output registers
-    uint16_t transmitBuffer;
-    uint16_t transmitShiftReg;
+    u16 transmitBuffer;
+    u16 transmitShiftReg;
 
     // Bit that is currently outputted on the TXD line
     bool outBit; 
@@ -45,7 +45,7 @@ class UART : public AmigaComponent {
     bool ovrun;
 
     // Bit reception counter
-    uint8_t recCnt;
+    u8 recCnt;
 
     //
     // Constructing and destructing
@@ -90,8 +90,8 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
@@ -117,13 +117,13 @@ public:
 public:
     
     // OCS register $018(r) (Serial port data and status read)
-    uint16_t peekSERDATR();
+    u16 peekSERDATR();
 
     // OCS register $030(w) (Serial port data and stop bits write)
-    void pokeSERDAT(uint16_t value);
+    void pokeSERDAT(u16 value);
 
     // OCS register $032(w) (Serial port period and control)
-    void pokeSERPER(uint16_t value);
+    void pokeSERPER(u16 value);
 
     // Returns the baud rate converted to DMA cycles
     int rate() { return DMA_CYCLES((serper & 0x7FFF) + 1); }

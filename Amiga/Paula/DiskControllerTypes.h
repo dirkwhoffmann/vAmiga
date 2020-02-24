@@ -60,15 +60,15 @@ DiskControllerConfig;
 
 typedef struct
 {
-    int8_t selectedDrive;
+    i8 selectedDrive;
     DriveState state;
-    int32_t fifo[6];
-    uint8_t fifoCount;
+    i32 fifo[6];
+    u8 fifoCount;
 
-    uint16_t dsklen;
-    uint16_t dskbytr;
-    uint16_t dsksync;
-    uint8_t prb;
+    u16 dsklen;
+    u16 dskbytr;
+    u16 dsksync;
+    u8 prb;
 }
 DiskControllerInfo;
 
