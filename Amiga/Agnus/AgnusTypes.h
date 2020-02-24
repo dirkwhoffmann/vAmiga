@@ -47,7 +47,7 @@ typedef struct
 AgnusConfig;
 
 // Register change identifiers
-typedef enum : int32_t
+typedef enum : i32
 {
     REG_NONE = 0,
     REG_BLTSIZE,

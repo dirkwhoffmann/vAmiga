@@ -149,7 +149,7 @@ DiskController::setConnected(int df, bool value)
 }
 
 void
-DiskController::setSpeed(int32_t value)
+DiskController::setSpeed(i32 value)
 {
     amiga.suspend();
 

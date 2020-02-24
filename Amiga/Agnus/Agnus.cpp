@@ -349,8 +349,8 @@ Agnus::beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd)
     if (vEnd > 312) return NEVER;
     
     // Compute vertical and horizontal difference
-    int32_t vDiff  = vEnd - vStart;
-    int32_t hDiff  = hEnd - hStart;
+    i32 vDiff = vEnd - vStart;
+    i32 hDiff = hEnd - hStart;
     debug("vdiff: %d hdiff: %d\n", vDiff, hDiff);
 
     // In PAL mode, all lines have the same length (227 color clocks)

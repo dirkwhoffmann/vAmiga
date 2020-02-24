@@ -726,7 +726,7 @@ public:
      */
     Cycle beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd);
     Cycle beamDiff(i16 vEnd, i16 hEnd) { return beamDiff(pos.v, pos.h, vEnd, hEnd); }
-    Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
+    Cycle beamDiff(i32 end) { return beamDiff(VPOS(end), HPOS(end)); }
     
 
     //

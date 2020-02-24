@@ -73,7 +73,7 @@ inline bool isDrawingMode(long value) {
 
 typedef struct
 {
-    int32_t *data;
+    i32 *data;
     bool longFrame;
     bool interlace;
 }

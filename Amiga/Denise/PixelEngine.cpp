@@ -271,7 +271,7 @@ PixelEngine::getStableShortFrame()
     return result;
 }
 
-int32_t *
+i32 *
 PixelEngine::getNoise()
 {
     int offset = rand() % (512 * 512);
@@ -360,7 +360,7 @@ void
 PixelEngine::colorize(int line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    int32_t *dst = frameBuffer->data + line * HPIXELS;
+    i32 *dst = frameBuffer->data + line * HPIXELS;
     int pixel = 0;
 
     // Check for HAM mode

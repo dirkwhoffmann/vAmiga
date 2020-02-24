@@ -20,8 +20,8 @@ class PixelEngine : public AmigaComponent {
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const int32_t rgbaHBlank = 0x00444444;
-    static const int32_t rgbaVBlank = 0x00444444;
+    static const i32 rgbaHBlank = 0x00444444;
+    static const i32 rgbaVBlank = 0x00444444;
 
 private:
 
@@ -52,7 +52,7 @@ private:
     ScreenBuffer *frameBuffer = &longFrame[0];
 
     // Buffer storing background noise (random black and white pixels)
-    int32_t *noise;
+    i32 *noise;
 
     //
     // Color management
@@ -210,7 +210,7 @@ public:
     ScreenBuffer getStableShortFrame();
 
     // Returns a pointer to randon noise
-    int32_t *getNoise();
+    i32 *getNoise();
 
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);

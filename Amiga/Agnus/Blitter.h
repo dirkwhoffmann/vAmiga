@@ -102,10 +102,10 @@ class Blitter : public AmigaComponent {
     int incr;
     int ash;
     int bsh;
-    int32_t amod;
-    int32_t bmod;
-    int32_t cmod;
-    int32_t dmod;
+    i32 amod;
+    i32 bmod;
+    i32 cmod;
+    i32 dmod;
 
     // Counters tracking the coordinate of the blit window
     u16 xCounter;

@@ -155,7 +155,7 @@ public:
      void disconnect(int df) { setConnected(df, false); }
 
      // Sets the speed acceleration factor for all connected drives
-     void setSpeed(int32_t value);
+     void setSpeed(i32 value);
 
      // Enables or disables the emulation of a FIFO buffer
      void setUseFifo(bool value);
