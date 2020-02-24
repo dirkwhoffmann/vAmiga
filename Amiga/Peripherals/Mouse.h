@@ -87,8 +87,8 @@ private:
     void _reset() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
@@ -98,10 +98,10 @@ private:
 public:
 
     // Modifies the POTGOR bits according to the current button state
-    void changePotgo(int port, uint16_t &potgo);
+    void changePotgo(int port, u16 &potgo);
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(int port, uint8_t &pra);
+    void changePra(int port, u8 &pra);
 
     
     //
@@ -115,7 +115,7 @@ public:
     int64_t getDeltaY();
 
     // Returns the mouse coordinates as they appear in the JOYDAT register
-    uint16_t getXY();
+    u16 getXY();
     
     // Emulates a mouse movement
     void setXY(int64_t x, int64_t y);

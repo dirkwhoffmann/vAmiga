@@ -35,7 +35,7 @@ class SerialPort : public AmigaComponent {
     //
 
     // The current values of the port pins
-    uint32_t port;
+    u32 port;
 
     
     //
@@ -87,8 +87,8 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     
 
     //
@@ -134,7 +134,7 @@ public:
 
 private:
 
-    void setPort(uint32_t mask, bool value);
+    void setPort(u32 mask, bool value);
 };
 
 #endif

@@ -53,9 +53,9 @@ Mouse::_dump()
 }
 
 void
-Mouse::changePotgo(int port, uint16_t &potgo)
+Mouse::changePotgo(int port, u16 &potgo)
 {
-    uint16_t mask = (port == 1) ? 0x0400 : 0x4000;
+    u16 mask = (port == 1) ? 0x0400 : 0x4000;
 
     if (rightButton) {
         potgo &= ~mask;
@@ -65,9 +65,9 @@ Mouse::changePotgo(int port, uint16_t &potgo)
 }
 
 void
-Mouse::changePra(int port, uint8_t &pra)
+Mouse::changePra(int port, u8 &pra)
 {
-    uint16_t mask = (port == 1) ? 0x40 : 0x80;
+    u16 mask = (port == 1) ? 0x40 : 0x80;
 
     if (leftButton) {
         pra &= ~mask;
@@ -98,7 +98,7 @@ Mouse::getDeltaY()
     return result;
 }
 
-uint16_t
+u16
 Mouse::getXY()
 {
     // Update mouseX and mouseY

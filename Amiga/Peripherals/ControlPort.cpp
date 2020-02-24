@@ -61,7 +61,7 @@ ControlPort::getInfo()
     return result;
 }
 
-uint16_t
+u16
 ControlPort::joydat()
 {
     assert(nr == 1 || nr == 2);
@@ -86,7 +86,7 @@ ControlPort::joydat()
 }
 
 /*
-uint8_t
+u8
 ControlPort::ciapa()
 {
     switch (device) {
@@ -111,7 +111,7 @@ ControlPort::ciapa()
 */
 
 void
-ControlPort::pokeJOYTEST(uint16_t value)
+ControlPort::pokeJOYTEST(u16 value)
 {
     mouseCounterY &= ~0b11111100;
     mouseCounterY |= HI_BYTE(value) & 0b11111100;
@@ -121,13 +121,13 @@ ControlPort::pokeJOYTEST(uint16_t value)
 }
 
 void
-ControlPort::changePotgo(uint16_t &potgo)
+ControlPort::changePotgo(u16 &potgo)
 {
     if (device == CPD_MOUSE) mouse.changePotgo(nr, potgo);
 }
 
 void
-ControlPort::changePra(uint8_t &pra)
+ControlPort::changePra(u8 &pra)
 {
     if (device == CPD_MOUSE) {
         mouse.changePra(nr, pra);

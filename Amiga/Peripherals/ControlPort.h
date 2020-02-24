@@ -72,8 +72,8 @@ private:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -97,20 +97,20 @@ public:
     public:
 
     // Returns the control port bits showing up in the JOYxDAT register
-    uint16_t joydat();
+    u16 joydat();
 
     // Emulates a write access to JOYTEST
-    void pokeJOYTEST(uint16_t value);
+    void pokeJOYTEST(u16 value);
 
     // Modifies the POTGOR bits according to the connected device
-    void changePotgo(uint16_t &potgo);
+    void changePotgo(u16 &potgo);
 
     // Modifies the PRA bits of CIA A according to the connected device
-    void changePra(uint8_t &pra);
+    void changePra(u8 &pra);
 
     // Returns the control port bits showing up in the CIAA PA register
     // DEPRECATED
-    // uint8_t ciapa();
+    // u8 ciapa();
 
     
     //
