@@ -73,7 +73,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->debugger.breakpoints.elements();
 }
-- (uint32_t) breakpointAddr:(NSInteger)nr
+- (u32) breakpointAddr:(NSInteger)nr
 {
     return wrapper->cpu->debugger.breakpoints.guardAddr(nr);
 }
@@ -93,27 +93,27 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->cpu->debugger.breakpoints.setEnable(nr, val);
 }
-- (BOOL) breakpointIsSetAt:(uint32_t)addr
+- (BOOL) breakpointIsSetAt:(u32)addr
 {
     return wrapper->cpu->debugger.breakpoints.isSetAt(addr);
 }
-- (BOOL) breakpointIsSetAndEnabledAt:(uint32_t)addr
+- (BOOL) breakpointIsSetAndEnabledAt:(u32)addr
 {
     return wrapper->cpu->debugger.breakpoints.isSetAndEnabledAt(addr);
 }
-- (BOOL) breakpointIsSetAndDisabledAt:(uint32_t)addr
+- (BOOL) breakpointIsSetAndDisabledAt:(u32)addr
 {
     return wrapper->cpu->debugger.breakpoints.isSetAndDisabledAt(addr);
 }
-- (void) breakpointSetEnableAt:(uint32_t)addr value:(BOOL)val
+- (void) breakpointSetEnableAt:(u32)addr value:(BOOL)val
 {
     wrapper->cpu->debugger.breakpoints.setEnableAt(addr, val);
 }
-- (void) addBreakpointAt:(uint32_t)addr
+- (void) addBreakpointAt:(u32)addr
 {
     wrapper->cpu->debugger.breakpoints.addAt(addr);
 }
-- (void) removeBreakpointAt:(uint32_t)addr
+- (void) removeBreakpointAt:(u32)addr
 {
     wrapper->cpu->debugger.breakpoints.removeAt(addr);
 }
@@ -121,7 +121,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->debugger.watchpoints.elements();
 }
-- (uint32_t) watchpointAddr:(NSInteger)nr
+- (u32) watchpointAddr:(NSInteger)nr
 {
     return wrapper->cpu->debugger.watchpoints.guardAddr(nr);
 }
@@ -141,23 +141,23 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->cpu->debugger.watchpoints.setEnable(nr, val);
 }
-- (BOOL) watchpointIsSetAt:(uint32_t)addr
+- (BOOL) watchpointIsSetAt:(u32)addr
 {
     return wrapper->cpu->debugger.watchpoints.isSetAt(addr);
 }
-- (BOOL) watchpointIsSetAndEnabledAt:(uint32_t)addr
+- (BOOL) watchpointIsSetAndEnabledAt:(u32)addr
 {
     return wrapper->cpu->debugger.watchpoints.isSetAndEnabledAt(addr);
 }
-- (BOOL) watchpointIsSetAndDisabledAt:(uint32_t)addr
+- (BOOL) watchpointIsSetAndDisabledAt:(u32)addr
 {
     return wrapper->cpu->debugger.watchpoints.isSetAndDisabledAt(addr);
 }
-- (void) addWatchpointAt:(uint32_t)addr
+- (void) addWatchpointAt:(u32)addr
 {
     wrapper->cpu->debugger.watchpoints.addAt(addr);
 }
-- (void) removeWatchpointAt:(uint32_t)addr
+- (void) removeWatchpointAt:(u32)addr
 {
     wrapper->cpu->debugger.watchpoints.removeAt(addr);
 }
@@ -269,14 +269,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
-    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadRomFromBuffer(bytes, [data length]);
 }
 - (BOOL) loadRomFromFile:(NSURL *)url
 {
     return wrapper->mem->loadRomFromFile([[url path] UTF8String]);
 }
-- (uint64_t) romFingerprint
+- (u64) romFingerprint
 {
     return wrapper->mem->romFingerprint();
 }
@@ -314,14 +314,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
-    const uint8_t *bytes = (const uint8_t *)[data bytes];
+    const u8 *bytes = (const u8 *)[data bytes];
     return wrapper->mem->loadExtFromBuffer(bytes, [data length]);
 }
 - (BOOL) loadExtFromFile:(NSURL *)url
 {
     return wrapper->mem->loadExtFromFile([[url path] UTF8String]);
 }
-- (uint64_t) extFingerprint
+- (u64) extFingerprint
 {
     return wrapper->mem->extFingerprint();
 }
@@ -354,24 +354,24 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (MemorySource) memSrc:(NSInteger)addr
 {
-    return wrapper->mem->getMemSrc((uint32_t)addr);
+    return wrapper->mem->getMemSrc((u32)addr);
 }
 - (NSInteger) spypeek8:(NSInteger)addr
 {
-    return wrapper->mem->spypeek8((uint32_t)addr);
+    return wrapper->mem->spypeek8((u32)addr);
 }
 - (NSInteger) spypeek16:(NSInteger)addr
 {
-    return wrapper->mem->spypeek16((uint32_t)addr);
+    return wrapper->mem->spypeek16((u32)addr);
 }
 - (NSString *) ascii:(NSInteger)addr
 {
-    const char *str = wrapper->mem->ascii((uint32_t)addr);
+    const char *str = wrapper->mem->ascii((u32)addr);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes
 {
-    const char *str = wrapper->mem->hex((uint32_t)addr, bytes);
+    const char *str = wrapper->mem->hex((u32)addr, bytes);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
@@ -564,7 +564,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) setBPLCONx:(NSInteger)x value:(NSInteger)value
 {
-    wrapper->denise->debugSetBPLCONx(x, (uint16_t)value);
+    wrapper->denise->debugSetBPLCONx(x, (u16)value);
 }
 - (void) setBPLCONx:(NSInteger)x bit:(NSInteger)bit value:(BOOL)value
 {
@@ -572,7 +572,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) setBPLCONx:(NSInteger)x nibble:(NSInteger)nibble value:(NSInteger)value
 {
-    wrapper->denise->debugSetBPLCONxNibble(x, nibble, (uint8_t)value);
+    wrapper->denise->debugSetBPLCONxNibble(x, nibble, (u8)value);
 }
 - (ScreenBuffer) stableLongFrame
 {
@@ -630,7 +630,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.dump();
 }
-- (uint32_t) sampleRate
+- (u32) sampleRate
 {
     return wrapper->paula->audioUnit.getSampleRate();
 }
@@ -1078,11 +1078,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) readFromBuffer:(const void *)buffer length:(NSInteger)length
 {
-    wrapper->file->readFromBuffer((const uint8_t *)buffer, length);
+    wrapper->file->readFromBuffer((const u8 *)buffer, length);
 }
 - (NSInteger) writeToBuffer:(void *)buffer
 {
-    return wrapper->file->writeToBuffer((uint8_t *)buffer);
+    return wrapper->file->writeToBuffer((u8 *)buffer);
 }
 
 - (void) dealloc
@@ -1106,11 +1106,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 + (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
-    return Snapshot::isSupportedSnapshot((uint8_t *)buffer, length);
+    return Snapshot::isSupportedSnapshot((u8 *)buffer, length);
 }
 + (BOOL) isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
-    return Snapshot::isUnsupportedSnapshot((uint8_t *)buffer, length);
+    return Snapshot::isUnsupportedSnapshot((u8 *)buffer, length);
 }
 + (BOOL) isSupportedSnapshotFile:(NSString *)path
 {
@@ -1130,7 +1130,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    Snapshot *snapshot = Snapshot::makeWithBuffer((uint8_t *)buffer, length);
+    Snapshot *snapshot = Snapshot::makeWithBuffer((u8 *)buffer, length);
     return [self make:snapshot];
 }
 + (instancetype) makeWithFile:(NSString *)path
@@ -1167,7 +1167,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    ADFFile *archive = ADFFile::makeWithBuffer((const uint8_t *)buffer, length);
+    ADFFile *archive = ADFFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path

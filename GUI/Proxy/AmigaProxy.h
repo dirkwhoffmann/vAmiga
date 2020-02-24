@@ -199,31 +199,31 @@ struct AmigaFileWrapper;
 - (int64_t) cycles;
 
 - (NSInteger) numberOfBreakpoints;
-- (uint32_t) breakpointAddr:(NSInteger)nr;
+- (u32) breakpointAddr:(NSInteger)nr;
 - (BOOL) breakpointIsEnabled:(NSInteger)nr;
 - (BOOL) breakpointIsDisabled:(NSInteger)nr;
 - (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) removeBreakpoint:(NSInteger)nr;
 
-- (BOOL) breakpointIsSetAt:(uint32_t)addr;
-- (BOOL) breakpointIsSetAndEnabledAt:(uint32_t)addr;
-- (BOOL) breakpointIsSetAndDisabledAt:(uint32_t)addr;
-- (void) breakpointSetEnableAt:(uint32_t)addr value:(BOOL)val;
-- (void) addBreakpointAt:(uint32_t)addr;
-- (void) removeBreakpointAt:(uint32_t)addr;
+- (BOOL) breakpointIsSetAt:(u32)addr;
+- (BOOL) breakpointIsSetAndEnabledAt:(u32)addr;
+- (BOOL) breakpointIsSetAndDisabledAt:(u32)addr;
+- (void) breakpointSetEnableAt:(u32)addr value:(BOOL)val;
+- (void) addBreakpointAt:(u32)addr;
+- (void) removeBreakpointAt:(u32)addr;
 
 - (NSInteger) numberOfWatchpoints;
-- (uint32_t) watchpointAddr:(NSInteger)nr;
+- (u32) watchpointAddr:(NSInteger)nr;
 - (BOOL) watchpointIsEnabled:(NSInteger)nr;
 - (BOOL) watchpointIsDisabled:(NSInteger)nr;
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) removeWatchpoint:(NSInteger)nr;
 
-- (BOOL) watchpointIsSetAt:(uint32_t)addr;
-- (BOOL) watchpointIsSetAndEnabledAt:(uint32_t)addr;
-- (BOOL) watchpointIsSetAndDisabledAt:(uint32_t)addr;
-- (void) addWatchpointAt:(uint32_t)addr;
-- (void) removeWatchpointAt:(uint32_t)addr;
+- (BOOL) watchpointIsSetAt:(u32)addr;
+- (BOOL) watchpointIsSetAndEnabledAt:(u32)addr;
+- (BOOL) watchpointIsSetAndDisabledAt:(u32)addr;
+- (void) addWatchpointAt:(u32)addr;
+- (void) removeWatchpointAt:(u32)addr;
 
 // - (NSInteger) traceBufferCapacity;
 // - (void) truncateTraceBuffer:(NSInteger)count;
@@ -274,7 +274,7 @@ struct AmigaFileWrapper;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
-- (uint64_t) romFingerprint;
+- (u64) romFingerprint;
 - (RomRevision) romRevision;
 - (NSString *) romTitle;
 - (NSString *) romVersion;
@@ -285,7 +285,7 @@ struct AmigaFileWrapper;
 - (BOOL) isExt:(NSURL *)url;
 - (BOOL) loadExtFromBuffer:(NSData *)buffer;
 - (BOOL) loadExtFromFile:(NSURL *)url;
-- (uint64_t) extFingerprint;
+- (u64) extFingerprint;
 - (RomRevision) extRevision;
 - (NSString *) extTitle;
 - (NSString *) extVersion;
@@ -397,7 +397,7 @@ struct AmigaFileWrapper;
 - (AudioStats) getAudioStats;
 - (UARTInfo) getUARTInfo;
 
-- (uint32_t) sampleRate;
+- (u32) sampleRate;
 - (void) setSampleRate:(double)rate;
 
 - (NSInteger) ringbufferSize;
