@@ -485,7 +485,7 @@ Denise::draw(int pixels)
 {
     u8 index;
 
-    int16_t currentPixel = ppos(agnus.pos.h);
+    i16 currentPixel = ppos(agnus.pos.h);
 
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;
@@ -933,7 +933,7 @@ Denise::drawBorder()
     }
 
 #ifdef LINE_DEBUG
-    int16_t vpos = agnus.pos.v;
+    i16 vpos = agnus.pos.v;
     bool lines = vpos == 0xAF || vpos == 0xFF; // || vpos == 276 || vpos == 255;
     if (lines) {
         // printf("Line\n");

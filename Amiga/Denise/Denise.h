@@ -383,7 +383,7 @@ public:
     //
 
     // Translates a DMA cycle (hpos) to it's corresponding pixel position (ppos)
-    int16_t ppos(int16_t hpos) { return (hpos * 4) + 6; }
+    i16 ppos(i16 hpos) { return (hpos * 4) + 6; }
 
     
     //
@@ -471,10 +471,10 @@ public:
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 
-    static int16_t sprhpos(u16 sprpos, u16 sprctl) {
+    static i16 sprhpos(u16 sprpos, u16 sprctl) {
         return ((sprpos & 0xFF) << 1) | (sprctl & 0x01);
     }
-    template <int x> int16_t sprhpos() { return sprhpos(sprpos[x], sprctl[x]); }
+    template <int x> i16 sprhpos() { return sprhpos(sprpos[x], sprctl[x]); }
 
     // SPRxDATA: $144, $14C ... $174, $17C (w)
     // SPRxDATB: $146, $14E ... $176, $17E (w)
