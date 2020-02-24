@@ -169,10 +169,10 @@ CIA::triggerSerialIrq()
     delay |= CIASetIcr0;
 }
 
-uint8_t
-CIA::peek(uint16_t addr)
+u8
+CIA::peek(u16 addr)
 {
-	uint8_t result;
+	u8 result;
 
     if (addr == 0 || addr == 1) {
         debug(DSKREG_DEBUG, "Peek($%X) DDRA = $%X DDRB = $%X\n", addr, DDRA, DDRB);
@@ -288,12 +288,12 @@ CIA::peek(uint16_t addr)
 
         case 0x0E: // CIA_CONTROL_REG_A
 
-			result = (uint8_t)(CRA & ~0x90); // Bit 4 and 7 always read as 0
+			result = (u8)(CRA & ~0x90); // Bit 4 and 7 always read as 0
 			break;
 			
         case 0x0F: // CIA_CONTROL_REG_B
 			
-			result = (uint8_t)(CRB & ~0x10); // Bit 4 always reads as 0
+			result = (u8)(CRB & ~0x10); // Bit 4 always reads as 0
 			break;
 			
 		default:
@@ -307,8 +307,8 @@ CIA::peek(uint16_t addr)
 	return result;
 }
 
-uint8_t
-CIA::spypeek(uint16_t addr)
+u8
+CIA::spypeek(u16 addr)
 {
     bool running;
 
@@ -329,19 +329,19 @@ CIA::spypeek(uint16_t addr)
             
         case 0x04: // CIA_TIMER_A_LOW
             running = delay & CIACountA3;
-            return LO_BYTE(counterA - (running ? (uint16_t)idle() : 0));
+            return LO_BYTE(counterA - (running ? (u16)idle() : 0));
             
         case 0x05: // CIA_TIMER_A_HIGH
             running = delay & CIACountA3;
-            return HI_BYTE(counterA - (running ? (uint16_t)idle() : 0));
+            return HI_BYTE(counterA - (running ? (u16)idle() : 0));
             
         case 0x06: // CIA_TIMER_B_LOW
             running = delay & CIACountB3;
-            return LO_BYTE(counterB - (running ? (uint16_t)idle() : 0));
+            return LO_BYTE(counterB - (running ? (u16)idle() : 0));
             
         case 0x07: // CIA_TIMER_B_HIGH
             running = delay & CIACountB3;
-            return HI_BYTE(counterB - (running ? (uint16_t)idle() : 0));
+            return HI_BYTE(counterB - (running ? (u16)idle() : 0));
             
         case 0x08: // CIA_EVENT_0_7
             return tod.getCounterLo();
@@ -374,7 +374,7 @@ CIA::spypeek(uint16_t addr)
 }
 
 void
-CIA::poke(uint16_t addr, uint8_t value)
+CIA::poke(u16 addr, u8 value)
 {
     if (addr == 0 || addr == 1) {
         debug(DSKREG_DEBUG, "Poke($%X,$%X) DDRA = $%X DDRB = $%X\n", addr, value, DDRA, DDRB);
@@ -774,8 +774,8 @@ CIA::executeOneCycle()
     
     // debug("Executing CIA: new clock = %lld\n", clock);
     
-    uint64_t oldDelay = delay;
-    uint64_t oldFeed  = feed;
+    u64 oldDelay = delay;
+    u64 oldFeed  = feed;
     
     //
 	// Layout of timer (A and B)
@@ -1232,16 +1232,16 @@ CIAA::releaseInterruptLine()
 //   /FIR1 ---> | PA7 |  Port 1 fire button
 //              -------
 
-uint8_t
+u8
 CIAA::portAinternal()
 {
     return PRA;
 }
 
-uint8_t
+u8
 CIAA::portAexternal()
 {
-    uint8_t result;
+    u8 result;
     
     // Set drive status bits
     result = diskController.driveStatusFlags();
@@ -1255,10 +1255,10 @@ CIAA::portAexternal()
 void
 CIAA::updatePA()
 {
-    uint8_t internal = portAinternal();
-    uint8_t external = portAexternal();
+    u8 internal = portAinternal();
+    u8 external = portAexternal();
 
-    uint8_t oldPA = PA;
+    u8 oldPA = PA;
     PA = (internal & DDRA) | (external & ~DDRA);
 
     // A connected device may force the output level to a specific value
@@ -1299,13 +1299,13 @@ CIAA::updatePA()
 //  Centronics 7 <--> | PB7 |
 //                    -------
 
-uint8_t
+u8
 CIAA::portBinternal()
 {
     return PRB;
 }
 
-uint8_t
+u8
 CIAA::portBexternal()
 {
     return 0xFF;
@@ -1314,8 +1314,8 @@ CIAA::portBexternal()
 void
 CIAA::updatePB()
 {
-    uint8_t internal = portBinternal();
-    uint8_t external = portBexternal();
+    u8 internal = portBinternal();
+    u8 external = portBexternal();
 
     PB = (internal & DDRB) | (external & ~DDRB);
 
@@ -1333,7 +1333,7 @@ CIAA::updatePB()
 }
 
 void
-CIAA::setKeyCode(uint8_t keyCode)
+CIAA::setKeyCode(u8 keyCode)
 {
     debug(CIA_DEBUG, "setKeyCode: %X\n", keyCode);
     
@@ -1387,16 +1387,16 @@ CIAB::releaseInterruptLine()
 //        Serial port: /DTR   <--- | PA7 |
 //                                 -------
 
-uint8_t
+u8
 CIAB::portAinternal()
 {
     return PRA;
 }
 
-uint8_t
+u8
 CIAB::portAexternal()
 {
-    uint8_t result = 0xFF;
+    u8 result = 0xFF;
 
     // Parallel port
     // NOT IMPLEMENTED
@@ -1419,10 +1419,10 @@ CIAB::updatePA()
 {
     // debug(CIA_DEBUG, "updatePA()\n");
 
-    uint8_t internal = portAinternal();
-    uint8_t external = portAexternal();
+    u8 internal = portAinternal();
+    u8 external = portAexternal();
 
-    uint8_t oldPA = PA;
+    u8 oldPA = PA;
     PA = (internal & DDRA) | (external & ~DDRA);
 
     // PLCC CIAs always return the PRA contents for output bits
@@ -1445,10 +1445,10 @@ CIAB::updatePA()
 //   _MTR <-- | PB7 |   (Floppy drive motor on)
 //            -------
 
-uint8_t
+u8
 CIAB::portBinternal()
 {
-    uint8_t result = PRB;
+    u8 result = PRB;
     
     // Check if timer A underflow shows up on PB6
     if (GET_BIT(PB67TimerMode, 6))
@@ -1461,7 +1461,7 @@ CIAB::portBinternal()
     return result;
 }
 
-uint8_t
+u8
 CIAB::portBexternal()
 {
     return 0xFF;
@@ -1470,10 +1470,10 @@ CIAB::portBexternal()
 void
 CIAB::updatePB()
 {
-    uint8_t internal = portBinternal();
-    uint8_t external = portBexternal();
+    u8 internal = portBinternal();
+    u8 external = portBexternal();
 
-    uint8_t oldPB = PB;
+    u8 oldPB = PB;
     PB = (internal & DDRB) | (external & ~DDRB);
 
     // PLCC CIAs always return the PRB contents for output bits

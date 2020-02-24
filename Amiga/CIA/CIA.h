@@ -109,18 +109,18 @@ protected:
     Cycle idleCycles;
     
     // Timer A counter
-    uint16_t counterA;
+    u16 counterA;
     
     // Timer B counter
-    uint16_t counterB;
+    u16 counterB;
     
 protected:
     
     // Timer A latch
-    uint16_t latchA;
+    u16 latchA;
     
     // Timer B latch
-    uint16_t latchB;
+    u16 latchB;
 
     
     //
@@ -132,36 +132,36 @@ protected:
     //
     
     // Action flags
-    uint64_t delay;
+    u64 delay;
     
     // New bits to feed into delay
-    uint64_t feed;
+    u64 feed;
     
     // Control register A
-    uint8_t CRA;
+    u8 CRA;
     
     // Control register B
-    uint8_t CRB;
+    u8 CRB;
     
     // Interrupt control register
-    uint8_t icr;
+    u8 icr;
     
     // ICR bits that need to deleted when CIAAckIcr1 hits
-    uint8_t icrAck;
+    u8 icrAck;
     
     // Interrupt mask register
-    uint8_t imr;
+    u8 imr;
     
 protected:
     
     // Bit mask for PB outputs: 0 = port register, 1 = timer
-    uint8_t PB67TimerMode;
+    u8 PB67TimerMode;
     
     // PB output bits 6 and 7 in timer mode
-    uint8_t PB67TimerOut;
+    u8 PB67TimerOut;
     
     // PB output bits 6 and 7 in toggle mode
-    uint8_t PB67Toggle;
+    u8 PB67Toggle;
     
     
     //
@@ -171,22 +171,22 @@ protected:
 protected:
     
     // Peripheral data register A
-    uint8_t PRA;
+    u8 PRA;
     
     // Peripheral data register B
-    uint8_t PRB;
+    u8 PRB;
     
     // Data directon register A (0 = input, 1 = output)
-    uint8_t DDRA;
+    u8 DDRA;
     
     // Data directon register B (0 = input, 1 = output)
-    uint8_t DDRB;
+    u8 DDRB;
     
     // Peripheral port A (pins PA0 to PA7)
-    uint8_t PA;
+    u8 PA;
     
     // Peripheral port A (pins PB0 to PB7)
-    uint8_t PB;
+    u8 PB;
     
     
     //
@@ -221,7 +221,7 @@ protected:
      *  shifted out MSB first and serial input data should also appear in this
      *  format.
      */
-    uint8_t SDR;
+    u8 SDR;
     
     // Clock signal for driving the serial register
     bool serClk;
@@ -230,7 +230,7 @@ protected:
      * The counter is set to 8 when the shift register is loaded and decremented
      * when a bit is shifted out.
      */
-    uint8_t serCounter;
+    u8 serCounter;
     
     //
     // Chip interface (port pins)
@@ -250,7 +250,7 @@ protected:
      * increased by one. If it exceeds a certain threshhold, the chip is put
      * into idle state via sleep().
      */
-    uint8_t tiredness;
+    u8 tiredness;
     
 public:
     
@@ -346,8 +346,8 @@ protected:
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
 
@@ -366,12 +366,12 @@ public:
     //
     
     // Getter for peripheral port A
-    uint8_t getPA() { return PA; }
-    uint8_t getDDRA() { return DDRA; }
+    u8 getPA() { return PA; }
+    u8 getDDRA() { return DDRA; }
     
     // Getter for peripheral port B
-    uint8_t getPB() { return PB; }
-    uint8_t getDDRB() { return DDRB; }
+    u8 getPB() { return PB; }
+    u8 getDDRB() { return DDRB; }
 
     // Getter for the interrupt line
     bool irqPin() { return INT; }
@@ -437,10 +437,10 @@ private:
     //
     
     // Values driving port A from inside the chip
-    virtual uint8_t portAinternal() = 0;
+    virtual u8 portAinternal() = 0;
     
     // Values driving port A from outside the chip
-    virtual uint8_t portAexternal() = 0;
+    virtual u8 portAexternal() = 0;
     
 public:
     
@@ -450,10 +450,10 @@ public:
 private:
     
     // Values driving port B from inside the chip
-    virtual uint8_t portBinternal() = 0;
+    virtual u8 portBinternal() = 0;
     
     // Values driving port B from outside the chip
-    virtual uint8_t portBexternal() = 0;
+    virtual u8 portBexternal() = 0;
     
     // Computes the values which we currently see at port B
     virtual void updatePB() = 0;
@@ -461,10 +461,10 @@ private:
 protected:
     
     // Action method for poking the PA register
-    virtual void pokePA(uint8_t value) { PRA = value; updatePA(); }
+    virtual void pokePA(u8 value) { PRA = value; updatePA(); }
     
     // Action method for poking the DDRA register
-    virtual void pokeDDRA(uint8_t value) { DDRA = value; updatePA(); }
+    virtual void pokeDDRA(u8 value) { DDRA = value; updatePA(); }
     
     
     //
@@ -474,13 +474,13 @@ protected:
 public:
     
     // Peeks a value from a CIA register.
-    uint8_t peek(uint16_t addr);
+    u8 peek(u16 addr);
     
     // Peeks a value from a CIA register without causing side effects.
-    uint8_t spypeek(uint16_t addr);
+    u8 spypeek(u16 addr);
     
     // Pokes a value into a CIA register.
-    void poke(uint16_t addr, uint8_t value);
+    void poke(u16 addr, u8 value);
     
     
     //
@@ -559,11 +559,11 @@ private:
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
-    uint8_t portAinternal() override;
-    uint8_t portAexternal() override;
+    u8 portAinternal() override;
+    u8 portAexternal() override;
     void updatePA() override;
-    uint8_t portBinternal() override;
-    uint8_t portBexternal() override;
+    u8 portBinternal() override;
+    u8 portBexternal() override;
     void updatePB() override;
     
 public:
@@ -572,7 +572,7 @@ public:
     bool powerLED() { return (PA & 0x2) == 0; }
 
     // Emulates the receiption of a keycode from the keyboard
-    void setKeyCode(uint8_t keyCode);
+    void setKeyCode(u8 keyCode);
 };
 
 /* The Amiga's first virtual Complex Interface Adapter (CIA B)
@@ -589,11 +589,11 @@ private:
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
-    uint8_t portAinternal() override;
-    uint8_t portAexternal() override;
+    u8 portAinternal() override;
+    u8 portAexternal() override;
     void updatePA() override;
-    uint8_t portBinternal() override;
-    uint8_t portBexternal() override;
+    u8 portBinternal() override;
+    u8 portBexternal() override;
     void updatePB() override;
 };
 
