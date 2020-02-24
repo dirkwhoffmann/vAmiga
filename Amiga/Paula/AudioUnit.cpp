@@ -99,7 +99,7 @@ AudioUnit::_dump()
 }
 
 size_t
-AudioUnit::didLoadFromBuffer(uint8_t *buffer)
+AudioUnit::didLoadFromBuffer(u8 *buffer)
 {
     clearRingbuffer();
     return 0;
@@ -220,7 +220,7 @@ AudioUnit::getInfo()
 }
 
 void
-AudioUnit::pokeAUDxPER(int nr, uint16_t value)
+AudioUnit::pokeAUDxPER(int nr, u16 value)
 {
     switch (nr) {
         case 0: channel0.pokeAUDxPER(value); return;
@@ -232,7 +232,7 @@ AudioUnit::pokeAUDxPER(int nr, uint16_t value)
 }
 
 void
-AudioUnit::pokeAUDxVOL(int nr, uint16_t value)
+AudioUnit::pokeAUDxVOL(int nr, u16 value)
 {
     switch (nr) {
          case 0: channel0.pokeAUDxVOL(value); return;
@@ -394,7 +394,7 @@ AudioUnit::handleBufferUnderflow()
     debug(AUDBUF_DEBUG, "SID RINGBUFFER UNDERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
     
     // Determine the elapsed seconds since the last pointer adjustment.
-    uint64_t now = mach_absolute_time();
+    u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     
@@ -423,7 +423,7 @@ AudioUnit::handleBufferOverflow()
     debug(AUDBUF_DEBUG, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
     
     // Determine the elapsed seconds since the last pointer adjustment.
-    uint64_t now = mach_absolute_time();
+    u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     
@@ -441,7 +441,7 @@ AudioUnit::handleBufferOverflow()
     alignWritePtr();
 }
 
-template<> uint8_t AudioUnit::getState<0>() { return channel0.state; }
-template<> uint8_t AudioUnit::getState<1>() { return channel1.state; }
-template<> uint8_t AudioUnit::getState<2>() { return channel2.state; }
-template<> uint8_t AudioUnit::getState<3>() { return channel3.state; }
+template<> u8 AudioUnit::getState<0>() { return channel0.state; }
+template<> u8 AudioUnit::getState<1>() { return channel1.state; }
+template<> u8 AudioUnit::getState<2>() { return channel2.state; }
+template<> u8 AudioUnit::getState<3>() { return channel3.state; }

@@ -42,7 +42,7 @@ class DiskController : public AmigaComponent {
     //
     
     // The latest incoming byte (value shows up in DSKBYTER)
-    uint8_t incoming;
+    u8 incoming;
     
     // Timestamp of the latest write to variable 'incoming'
     Cycle incomingCycle;
@@ -52,10 +52,10 @@ class DiskController : public AmigaComponent {
      * put into this buffer. Each Disk DMA operation will read two bytes from
      * the buffer and store them at the desired location.
      */
-    uint64_t fifo;
+    u64 fifo;
     
     // Number of bytes stored in the FIFO buffer
-    uint8_t fifoCount;
+    u8 fifoCount;
     
     
     //
@@ -63,13 +63,13 @@ class DiskController : public AmigaComponent {
     //
     
     // Disk DMA block length
-    uint16_t dsklen;
+    u16 dsklen;
     
     // Disk SYNC word
-    uint16_t dsksync;
+    u16 dsksync;
     
     // A copy of the PRB register of CIA B
-    uint8_t prb;
+    u8 prb;
     
     
     //
@@ -77,8 +77,8 @@ class DiskController : public AmigaComponent {
     //
     
     // For debugging, a FNV-32 checksum is computed for each DMA operation
-    uint32_t checksum;
-    uint64_t checkcnt;
+    u32 checksum;
+    u64 checkcnt;
 
 
     //
@@ -139,8 +139,8 @@ private:
     void _dumpConfig() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
@@ -209,25 +209,25 @@ public:
 public:
     
     // OCR register 0x008 (r)
-    uint16_t peekDSKDATR();
+    u16 peekDSKDATR();
     
     // OCR register 0x024 (w)
-    void pokeDSKLEN(uint16_t value);
+    void pokeDSKLEN(u16 value);
     
     // OCR register 0x026 (w)
-    void pokeDSKDAT(uint16_t value);
+    void pokeDSKDAT(u16 value);
     
     // OCR register 0x01A (r)
-    uint16_t peekDSKBYTR();
+    u16 peekDSKBYTR();
     
     // OCR register 0x07E (w)
-    void pokeDSKSYNC(uint16_t value);
+    void pokeDSKSYNC(u16 value);
     
     // Read handler for the PRA register of CIA A
-    uint8_t driveStatusFlags();
+    u8 driveStatusFlags();
     
     // Write handler for the PRB register of CIA B
-    void PRBdidChange(uint8_t oldValue, uint8_t newValue);
+    void PRBdidChange(u8 oldValue, u8 newValue);
     
     
     //
@@ -262,14 +262,14 @@ private:
     void clearFifo();
     
     // Reads or writes a byte from or to the FIFO
-    uint8_t readFifo();
-    void writeFifo(uint8_t byte);
+    u8 readFifo();
+    void writeFifo(u8 byte);
 
     // Reads a word from the FIFO buffer. DEPRECATED
-    uint16_t readFifo16();
+    u16 readFifo16();
     
     // Returns true if the next word to read matches the specified value
-    bool compareFifo(uint16_t word);
+    bool compareFifo(u16 word);
 
     /* Emulates a data transfert between the selected drive and the FIFO buffer.
      * This function is executed periodically in serviceDiskEvent().
@@ -313,14 +313,14 @@ public:
   
     // 1. Standard DMA mode
     void performDMA();
-    void performDMARead(Drive *drive, uint32_t count);
-    void performDMAWrite(Drive *drive, uint32_t count);
+    void performDMARead(Drive *drive, u32 count);
+    void performDMAWrite(Drive *drive, u32 count);
  
     // 2. Simple DMA mode
     void performSimpleDMA();
-    void performSimpleDMAWait(Drive *drive, uint32_t count);
-    void performSimpleDMARead(Drive *drive, uint32_t count);
-    void performSimpleDMAWrite(Drive *drive, uint32_t count);
+    void performSimpleDMAWait(Drive *drive, u32 count);
+    void performSimpleDMARead(Drive *drive, u32 count);
+    void performSimpleDMAWrite(Drive *drive, u32 count);
 
     // 3. Turbo DMA mode
     void performTurboDMA(Drive *d);
