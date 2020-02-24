@@ -312,6 +312,12 @@ public:
     bool hasSlowRam() { return slow != NULL; }
     bool hasFastRam() { return fast != NULL; }
 
+    // Returns the size of a certain Ram in bytes
+    size_t chipRamSize() { return config.chipSize; }
+    size_t slowRamSize() { return config.slowSize; }
+    size_t fastRamSize() { return config.fastSize; }
+    size_t ramSize() { return config.chipSize + config.slowSize + config.fastSize; }
+
     void fillRamWithStartupPattern();
 
     

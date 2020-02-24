@@ -37,7 +37,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var romLockText: NSTextField!
     @IBOutlet weak var romLockSubText: NSTextField!
    
-    @IBOutlet weak var romFactoryButton: NSButton!
+    @IBOutlet weak var romArosButton: NSButton!
 
     // Button
     @IBOutlet weak var romOKButton: NSButton!
@@ -242,6 +242,14 @@ class PreferencesController: DialogController {
     // Button
     @IBOutlet weak var devOKButton: NSButton!
 
+    // The button label
+    /*
+    var buttonLabel: String {
+
+        return amigaProxy!.isPoweredOff() ? "Boot" : "OK"
+    }
+    */
+    
     // The tab to open first
      var firstTab = ""
 

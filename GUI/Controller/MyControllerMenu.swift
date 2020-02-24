@@ -306,8 +306,20 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func powerAction(_ sender: Any!) {
-        
-        amiga.isPoweredOn() ? amiga.powerOff() : amiga.run()
+
+        if amiga.isPoweredOn() {
+            amiga.powerOff()
+            return
+        }
+
+        switch (amiga.readyToPowerOn()) {
+
+        case ERR_OK:
+            amiga.run()
+
+        default:
+            myDocument?.showConfigurationAltert(amiga.readyToPowerOn())
+        }
     }
 
     //

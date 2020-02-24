@@ -525,7 +525,7 @@ Amiga::_initialize()
 void
 Amiga::powerOn()
 {
-    if (readyToPowerOn()) HardwareComponent::powerOn();
+    if (readyToPowerOn() == ERR_OK) HardwareComponent::powerOn();
 }
 
 void
@@ -573,7 +573,7 @@ Amiga::_powerOff()
 void
 Amiga::run()
 {
-    if (readyToPowerOn()) HardwareComponent::run();
+    if (readyToPowerOn() == ERR_OK) HardwareComponent::run();
 }
 
 void
@@ -691,37 +691,25 @@ Amiga::resume()
     run();
 }
 
-bool
+ErrorCode
 Amiga::readyToPowerOn()
 {
-    MemoryConfig memconf = mem.getConfig();
-
-    //
-    // Perform checks that should never fail
-    //
-
-    if (!mem.hasChipRam()) {
-        panic("readyToPowerUp: No Chip RAM found.\n");
-        return false;
-    }
-
-    //
-    // Perform checks that are likely to fail
-    //
-
     if (!mem.hasRom()) {
-        msg("readyToPowerUp: No Boot Rom or Kickstart Rom found.\n");
-        putMessage(MSG_ROM_MISSING);
-        return false;
+        msg("readyToPowerUp: No Boot Rom or Kickstart Rom found\n");
+        return ERR_ROM_MISSING;
     }
 
-    if (mem.hasArosRom() && memconf.chipSize + memconf.slowSize < MB(1)) {
-        msg("readyToPowerUp: Aros requires at least 1 MB of memory.\n");
-        putMessage(MSG_AROS_RAM_LIMIT);
-        return false;
+    if (mem.hasArosRom() && mem.ramSize() < MB(1)) {
+        msg("readyToPowerUp: Aros requires at least 1 MB of memory\n");
+        return ERR_AROS_RAM_LIMIT;
     }
 
-    return true;
+    if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
+        msg("readyToPowerUp: Chip Ram exceeds Agnus limit\n");
+        return ERR_CHIP_RAM_LIMIT;
+    }
+
+    return ERR_OK;
 }
 
 void

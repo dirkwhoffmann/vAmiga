@@ -42,7 +42,7 @@ extension PreferencesController {
         romDeleteButton.isEnabled = poweredOff
         extDropView.isEnabled = poweredOff
         extDeleteButton.isEnabled = poweredOff
-        romFactoryButton.isEnabled = poweredOff
+        romArosButton.isEnabled = poweredOff
         
         // Icons
         romDropView.image =
@@ -73,8 +73,8 @@ extension PreferencesController {
 
         // Hide some controls
         romDeleteButton.isHidden = !hasRom
-        romMapText.isHidden = !hasRom
-        romMapAddr.isHidden = !hasRom
+        romMapText.isHidden = true
+        romMapAddr.isHidden = true
 
         extDeleteButton.isHidden = !hasExt
         extMapText.isHidden = !hasExt
@@ -84,6 +84,9 @@ extension PreferencesController {
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
+
+        // Button
+        // romOKButton.title = buttonLabel
     }
 
     //
@@ -122,14 +125,25 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func romFactorySettingsAction(_ sender: NSButton!) {
+    @IBAction func installArosAction(_ sender: NSButton!) {
 
-        // Revert to the AROS Kickstart replacement
-        amigaProxy?.mem.loadRom(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-rom")?.data)
+        let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")?.data
+        let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")?.data
+
         myController?.romURL = URL(fileURLWithPath: "")
-        amigaProxy?.mem.loadExt(fromBuffer: NSDataAsset(name: "aros-amiga-m68k-ext")?.data)
         myController?.extURL = URL(fileURLWithPath: "")
+
+        amigaProxy?.mem.loadRom(fromBuffer: arosRom)
+        amigaProxy?.mem.loadExt(fromBuffer: arosExt)
         amigaProxy?.configure(VA_EXT_START, value: 0xE0)
+
+        // Make sure the machine has enough Ram to run Aros
+        if let config = amigaProxy?.mem.getConfig() {
+            let mem = config.chipSize + config.slowSize + config.fastSize
+            if mem < 1024*1024 {
+                amigaProxy?.configure(VA_SLOW_RAM, value: 512);
+            }
+        }
         refresh()
     }
 }

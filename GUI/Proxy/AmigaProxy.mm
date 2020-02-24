@@ -218,6 +218,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+- (MemoryConfig) getConfig
+{
+    return wrapper->mem->getConfig();
+}
 - (void) dump
 {
     wrapper->mem->dump();
@@ -1323,6 +1327,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     wrapper->amiga->debugLevel = value;
     wrapper->amiga->agnus.debugLevel = value;
     wrapper->amiga->denise.debugLevel = value;
+}
+- (ErrorCode) readyToPowerOn
+{
+    return wrapper->amiga->readyToPowerOn();
 }
 - (void) powerOn
 {

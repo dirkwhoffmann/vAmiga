@@ -528,6 +528,7 @@
                     <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
                     <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
                     <outlet property="pauseButton" destination="BPW-KG-AkM" id="XDm-2Y-e3O"/>
+                    <outlet property="powerButton" destination="wVB-PW-axj" id="v7U-Mu-EYn"/>
                     <outlet property="resetButton" destination="Yax-iM-1LE" id="ooV-Rk-fGf"/>
                     <outlet property="snapshotSegCtrl" destination="AHD-MB-nXC" id="Gpg-sH-vaL"/>
                 </connections>

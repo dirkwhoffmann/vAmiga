@@ -99,9 +99,9 @@
                 <outlet property="hwSerialDevice" destination="rtO-bR-8WM" id="cgA-jC-NxC"/>
                 <outlet property="hwSlowRamPopup" destination="W0y-DM-pGD" id="bNq-71-Or8"/>
                 <outlet property="prefTabView" destination="baz-eW-A74" id="fgy-dU-alU"/>
+                <outlet property="romArosButton" destination="93j-lC-aCo" id="8zy-g3-id4"/>
                 <outlet property="romDeleteButton" destination="nSa-0I-2sF" id="2t6-ss-Nem"/>
                 <outlet property="romDropView" destination="rV9-BQ-AAx" id="8rI-bh-fAa"/>
-                <outlet property="romFactoryButton" destination="93j-lC-aCo" id="tSq-ZA-PrQ"/>
                 <outlet property="romLockImage" destination="ocy-5V-Vt8" id="4ld-NF-sBM"/>
                 <outlet property="romLockSubText" destination="m4i-nF-H2q" id="Cht-S3-Gdp"/>
                 <outlet property="romLockText" destination="Wuy-cg-IBP" id="KJg-sx-tEJ"/>
@@ -159,7 +159,7 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="VwS-fe-RFZ">
-                                <view key="view" id="4If-78-eR2">
+                                <view key="view" ambiguous="YES" id="4If-78-eR2">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -195,17 +195,6 @@ Gw
                                             <rect key="frame" x="9" y="51" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         </box>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93j-lC-aCo">
-                                            <rect key="frame" x="85" y="5" width="185" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Restore Factory Settings" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UrE-eb-1hZ">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="romFactorySettingsAction:" target="-2" id="0v9-gc-pYe"/>
-                                            </connections>
-                                        </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wuy-cg-IBP">
                                             <rect key="frame" x="63" y="88" width="530" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -348,7 +337,7 @@ Gw
                                                 <action selector="extMapAddrAction:" target="-2" id="IW0-NE-b85"/>
                                             </connections>
                                         </popUpButton>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f00-Ws-vfQ">
+                                        <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f00-Ws-vfQ">
                                             <rect key="frame" x="373" y="272" width="61" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Location:" id="X1w-iz-V6y">
@@ -357,7 +346,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lwX-XA-O8H">
+                                        <popUpButton hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lwX-XA-O8H">
                                             <rect key="frame" x="437" y="272" width="72" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="roundRect" title="$F80000" bezelStyle="roundedRect" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="aBe-t1-03d" id="39E-Kv-Wo5">
@@ -440,6 +429,17 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="93j-lC-aCo">
+                                            <rect key="frame" x="84" y="5" width="248" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Install Aros Kickstart Replacement" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="UrE-eb-1hZ">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="installArosAction:" target="-2" id="zOh-FE-iTW"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                 </view>
                             </tabViewItem>
@@ -928,7 +928,7 @@ DQ
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Compatibility" identifier="Compatibility" id="o4a-8k-sKr">
-                                <view key="view" ambiguous="YES" id="Lyv-D5-lfU">
+                                <view key="view" id="Lyv-D5-lfU">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>

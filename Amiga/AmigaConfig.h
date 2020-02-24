@@ -47,7 +47,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 // Component debugging (set to 1 to generate debug output)
 
-static const int RUN_DEBUG     = 2;  // Run loop, component states
+static const int RUN_DEBUG     = 1;  // Run loop, component states
 static const int CPU_DEBUG     = 2;  // CPU
 extern int INT_DEBUG;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs

@@ -74,6 +74,14 @@ typedef enum
 }
 RunLoopControlFlag;
 
+typedef enum
+{
+    ERR_OK,
+    ERR_ROM_MISSING,
+    ERR_CHIP_RAM_LIMIT,
+    ERR_AROS_RAM_LIMIT
+}
+ErrorCode;
 
 //
 // Structures

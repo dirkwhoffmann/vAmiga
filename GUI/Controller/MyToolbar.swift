@@ -14,6 +14,7 @@ class MyToolbar: NSToolbar {
     // Toolbar items
     @IBOutlet weak var controlPort1: NSPopUpButton!
     @IBOutlet weak var controlPort2: NSPopUpButton!
+    @IBOutlet weak var powerButton: NSToolbarItem!
     @IBOutlet weak var pauseButton: NSToolbarItem!
     @IBOutlet weak var resetButton: NSToolbarItem!
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
@@ -21,6 +22,7 @@ class MyToolbar: NSToolbar {
     override func validateVisibleItems() {
         
         guard let amiga = amigaProxy else { return }
+        let power = powerButton.view as? NSButton
         let pause = pauseButton.view as? NSButton
         let reset = resetButton.view as? NSButton
 

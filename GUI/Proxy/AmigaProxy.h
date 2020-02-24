@@ -97,8 +97,6 @@ struct AmigaFileWrapper;
 @property (readonly) DriveProxy *df2;
 @property (readonly) DriveProxy *df3;
 
-// - (DriveProxy *)df:(NSInteger)n;
-
 - (void) kill;
 
 - (BOOL) releaseBuild;
@@ -110,6 +108,7 @@ struct AmigaFileWrapper;
 - (void) disableDebugging;
 - (void) setDebugLevel:(NSInteger)value;
 
+- (ErrorCode) readyToPowerOn;
 - (void) powerOn;
 - (void) powerOff;
 - (void) reset;
@@ -259,6 +258,7 @@ struct AmigaFileWrapper;
     struct MemWrapper *wrapper;
 }
 
+- (MemoryConfig) getConfig;
 - (void) dump;
 
 - (BOOL) isBootRom:(RomRevision)rev;

@@ -430,15 +430,25 @@ extension MyController {
         // Register listener
         addListener()
 
-        // Power on the Amiga
-        amiga.powerOn()
+        // Check if the Amiga is ready to power on
+        if amiga.readyToPowerOn() == ERR_OK {
 
-        // Process attachment (if any)
-        mydocument?.mountAmigaAttachment()
+            // Power on the Amiga
+            amiga.powerOn()
 
-        // Launch the emulator thread
-        amiga.run()
-        
+            // Process attachment (if any)
+            mydocument?.mountAmigaAttachment()
+
+            // Launch the emulator thread
+            amiga.run()
+
+        } else {
+
+            // Open the Rom dialog
+            openPreferences(tab: "Roms")
+            renderer.zoomOut()
+        }
+
         // Create speed monitor and get the timer tunning
         createTimer()
         
@@ -724,14 +734,18 @@ extension MyController {
         case MSG_AUTOSNAPSHOT_SAVED:
             break
 
+/*
         case MSG_ROM_MISSING:
-            myDocument?.showConfigurationAltert(msg.type.rawValue)
+            // myDocument?.showConfigurationAltert(msg.type.rawValue)
+            track("MSG_ROM_MISSING")
             openPreferences(tab: "Roms")
+            renderer.zoomOut()
 
         case MSG_CHIP_RAM_LIMIT,
              MSG_AROS_RAM_LIMIT:
             myDocument?.showConfigurationAltert(msg.type.rawValue)
             openPreferences(tab: "Hardware")
+ */
 
         default:
             

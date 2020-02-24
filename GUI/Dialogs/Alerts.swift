@@ -107,16 +107,16 @@ extension MyDocument {
         alert.runModal()
     }
 
-    func showConfigurationAltert(_ error: UInt32) {
+    func showConfigurationAltert(_ error: ErrorCode) {
 
         var msg: String
 
         switch error {
-        case MSG_ROM_MISSING.rawValue:
+        case ERR_ROM_MISSING:
             msg = "A Kickstart Rom or Boot Rom is required to power up."
-        case MSG_CHIP_RAM_LIMIT.rawValue:
+        case ERR_CHIP_RAM_LIMIT:
             msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
-        case MSG_AROS_RAM_LIMIT.rawValue:
+        case ERR_AROS_RAM_LIMIT:
             msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
         default:
             msg = ""

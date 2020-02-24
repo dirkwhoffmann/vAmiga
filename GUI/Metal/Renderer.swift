@@ -492,7 +492,8 @@ class Renderer: NSObject, MTKViewDelegate {
     func drawScene3D() {
 
         let paused = controller.amiga.isPaused()
-        let renderBackground = !fullscreen && !paused && (animates != 0 || (alpha.current < 1.0))
+        let poweredOff = controller.amiga.isPoweredOff()
+        let renderBackground = poweredOff && !fullscreen // && (animates != 0 || (alpha.current < 1.0))
         let renderForeground = alpha.current > 0.0
 
         // Perform a single animation step
@@ -503,12 +504,13 @@ class Renderer: NSObject, MTKViewDelegate {
         // Render background
         if renderBackground {
 
+            // track("poweredOff \(poweredOff) \(alpha.current)")
+
             // Update background texture
             let buffer = controller.amiga.denise.noise()
             updateBgTexture(bytes: buffer!)
 
             // Configure vertex shader
-            // commandEncoder.setVertexBuffer(uniformBufferBg, offset: 0, index: 1)
             commandEncoder.setVertexBytes(&vertexUniformsBg,
                                           length: MemoryLayout<VertexUniforms>.stride,
                                           index: 1)
@@ -530,6 +532,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
         // Render emulator texture
         if renderForeground {
+
+            // track("RenderForground")
 
             // Configure vertex shader
             commandEncoder.setVertexBytes(&vertexUniforms3D,

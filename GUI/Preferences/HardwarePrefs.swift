@@ -87,7 +87,7 @@ extension PreferencesController {
         let chipRamLimit = amigaProxy?.agnus.chipRamLimit() ?? 0
 
         if chipRamWanted > chipRamLimit {
-            myDocument?.showConfigurationAltert(MSG_CHIP_RAM_LIMIT.rawValue)
+            myDocument?.showConfigurationAltert(ERR_CHIP_RAM_LIMIT)
         } else {
             amigaProxy?.configure(VA_CHIP_RAM, value: sender.selectedTag())
         }
