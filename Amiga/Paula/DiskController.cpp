@@ -376,7 +376,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     // Store a copy of the new value for reference.
     prb = newValue;
     
-    int8_t oldSelected = selected;
+    i8 oldSelected = selected;
     selected = -1;
     
     // Iterate over all connected drives

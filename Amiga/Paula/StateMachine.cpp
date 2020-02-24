@@ -176,7 +176,7 @@ StateMachine<nr>::pokeAUDxLCL(u16 value)
 
 int debugg = 0;
 
-template <int nr> template <SamplingMethod method> int16_t
+template <int nr> template <SamplingMethod method> i16
 StateMachine<nr>::interpolate(Cycle clock)
 {
     int w  = samples.w;
@@ -198,8 +198,8 @@ StateMachine<nr>::interpolate(Cycle clock)
     // Interpolate between position r1 and p2
     Cycle c1 = samples.keys[r1];
     Cycle c2 = samples.keys[r2];
-    int16_t s1 = samples.elements[r1];
-    int16_t s2 = samples.elements[r2];
+    i16 s1 = samples.elements[r1];
+    i16 s2 = samples.elements[r2];
     assert(clock >= c1 && clock < c2);
 
     switch (method) {
@@ -221,7 +221,7 @@ StateMachine<nr>::interpolate(Cycle clock)
             double dx = (double)(c2 - c1);
             double dy = (double)(s2 - s1);
             double weight = (double)(clock - c1) / dx;
-            return (int16_t)(s1 + weight * dy);
+            return (i16)(s1 + weight * dy);
         }
         default:
             assert(false);
@@ -483,7 +483,7 @@ template <int nr> void
 StateMachine<nr>::pbufld1()
 {
     if (AUDxAV()) {
-        // debug("Volume modulation %d (%d)\n", auddatLatch & 0x7F, (int16_t)auddatLatch);
+        // debug("Volume modulation %d (%d)\n", auddatLatch & 0x7F, (i16)auddatLatch);
         if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddatLatch);
         if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddatLatch);
         if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddatLatch);
@@ -517,8 +517,8 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
-    int8_t sample = (int8_t)HI_BYTE(buffer);
-    int16_t scaled = sample * audvol;
+    i8 sample = (i8)HI_BYTE(buffer);
+    i16 scaled = sample * audvol;
 
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
 
@@ -532,8 +532,8 @@ StateMachine<nr>::penhi()
 template <int nr> void
 StateMachine<nr>::penlo()
 {
-    int8_t sample = (int8_t)LO_BYTE(buffer);
-    int16_t scaled = sample * audvol;
+    i8 sample = (i8)LO_BYTE(buffer);
+    i16 scaled = sample * audvol;
 
     debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
@@ -599,17 +599,17 @@ template void StateMachine<1>::serviceEvent();
 template void StateMachine<2>::serviceEvent();
 template void StateMachine<3>::serviceEvent();
 
-template int16_t StateMachine<0>::interpolate<SMP_NONE>(Cycle clock);
-template int16_t StateMachine<1>::interpolate<SMP_NONE>(Cycle clock);
-template int16_t StateMachine<2>::interpolate<SMP_NONE>(Cycle clock);
-template int16_t StateMachine<3>::interpolate<SMP_NONE>(Cycle clock);
+template i16 StateMachine<0>::interpolate<SMP_NONE>(Cycle clock);
+template i16 StateMachine<1>::interpolate<SMP_NONE>(Cycle clock);
+template i16 StateMachine<2>::interpolate<SMP_NONE>(Cycle clock);
+template i16 StateMachine<3>::interpolate<SMP_NONE>(Cycle clock);
 
-template int16_t StateMachine<0>::interpolate<SMP_NEAREST>(Cycle clock);
-template int16_t StateMachine<1>::interpolate<SMP_NEAREST>(Cycle clock);
-template int16_t StateMachine<2>::interpolate<SMP_NEAREST>(Cycle clock);
-template int16_t StateMachine<3>::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 StateMachine<0>::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 StateMachine<1>::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 StateMachine<2>::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 StateMachine<3>::interpolate<SMP_NEAREST>(Cycle clock);
 
-template int16_t StateMachine<0>::interpolate<SMP_LINEAR>(Cycle clock);
-template int16_t StateMachine<1>::interpolate<SMP_LINEAR>(Cycle clock);
-template int16_t StateMachine<2>::interpolate<SMP_LINEAR>(Cycle clock);
-template int16_t StateMachine<3>::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 StateMachine<0>::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 StateMachine<1>::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 StateMachine<2>::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 StateMachine<3>::interpolate<SMP_LINEAR>(Cycle clock);

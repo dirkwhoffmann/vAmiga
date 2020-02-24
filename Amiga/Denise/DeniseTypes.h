@@ -84,9 +84,9 @@ typedef struct
     u16 pos;
     u16 ctl;
     u32 ptr;
-    int16_t hstrt;
-    int16_t vstrt;
-    int16_t vstop;
+    i16 hstrt;
+    i16 vstrt;
+    i16 vstop;
     bool attach;
 }
 SpriteInfo;
@@ -115,15 +115,15 @@ typedef struct
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
-    int16_t bpu;
+    i16 bpu;
     u16 bpldat[6];
 
     u16 diwstrt;
     u16 diwstop;
-    int16_t diwHstrt;
-    int16_t diwHstop;
-    int16_t diwVstrt;
-    int16_t diwVstop;
+    i16 diwHstrt;
+    i16 diwHstop;
+    i16 diwVstrt;
+    i16 diwVstop;
 
     u16 joydat[2];
     u16 clxdat;

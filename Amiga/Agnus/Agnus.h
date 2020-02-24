@@ -233,7 +233,7 @@ public:
         bool interlaced;
 
         // The number of rasterlines in the current frame
-        int16_t numLines;
+        i16 numLines;
 
     } frameInfo;
 
@@ -244,8 +244,8 @@ public:
      * Note: The horizontal trigger positions are stored inside Denise. Agnus
      * knows nothing about them.
      */
-    int16_t sprVStrt[8];
-    int16_t sprVStop[8];
+    i16 sprVStrt[8];
+    i16 sprVStop[8];
 
     // The current DMA states of all 8 sprites.
     SprDMAState sprDmaState[8];
@@ -297,10 +297,10 @@ public:
      * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
      * result in coordinates outside the valid range.
      */
-    int16_t diwHstrt;
-    int16_t diwHstop;
-    int16_t diwVstrt;
-    int16_t diwVstop;
+    i16 diwHstrt;
+    i16 diwHstop;
+    i16 diwVstrt;
+    i16 diwVstop;
 
     /* Value of the DIW flipflops
      * Variable vFlop stores the value of the vertical DIW flipflop. The value
@@ -317,8 +317,8 @@ public:
      * where the hpos counter matched diwHstrt or diwHstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    int16_t diwHFlopOn;
-    int16_t diwHFlopOff;
+    i16 diwHFlopOn;
+    i16 diwHFlopOff;
 
 
     //
@@ -372,8 +372,8 @@ public:
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    int16_t ddfstrtReached;
-    int16_t ddfstopReached;
+    i16 ddfstrtReached;
+    i16 ddfstopReached;
 
     /* DDF flipflops
      *
@@ -382,17 +382,17 @@ public:
     bool ddfVFlop;
 
     // The actual data fetch window
-    int16_t dmaStrtLores;      // First lores bitplane DMA cycle
-    int16_t dmaStrtHires;      // First hires bitplane DMA cycle
-    int16_t dmaStopLores;      // Last lores bitplane DMA cycle + 1
-    int16_t dmaStopHires;      // Last hires bitplane DMA cycle + 1
+    i16 dmaStrtLores;      // First lores bitplane DMA cycle
+    i16 dmaStrtHires;      // First hires bitplane DMA cycle
+    i16 dmaStopLores;      // Last lores bitplane DMA cycle + 1
+    i16 dmaStopHires;      // Last hires bitplane DMA cycle + 1
 
     // Difference between dmaStrt and the start of the corresponding fetch unit
-    int16_t dmaStrtLoresShift;
-    int16_t dmaStrtHiresShift;
+    i16 dmaStrtLoresShift;
+    i16 dmaStrtHiresShift;
 
-    bool inLoresDmaArea(int16_t pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
-    bool inHiresDmaArea(int16_t pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
+    bool inLoresDmaArea(i16 pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
+    bool inHiresDmaArea(i16 pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
 
 
     //
@@ -444,10 +444,10 @@ public:
 
     
     // The bitplane modulo registers for odd bitplanes
-    int16_t bpl1mod;
+    i16 bpl1mod;
 
     // The bitplane modulo registers for even bitplanes
-    int16_t bpl2mod;
+    i16 bpl2mod;
 
     // The sprite DMA pointers
     u32 sprpt[8];
@@ -682,11 +682,11 @@ public:
 
     // Returns the firsr DMA cycle belonging to the next fetch unit
     // EXPERIMENTAL
-    int16_t nextFetchUnit(int16_t hpos) { return hpos + (4 - (hpos & 3)); }
+    i16 nextFetchUnit(i16 hpos) { return hpos + (4 - (hpos & 3)); }
 
     // Returns the next aligned DMA cycle greater or equal to the provided position
     // EXPERIMENTAL
-    int16_t alignToFetchUnit(int16_t hpos) { return nextFetchUnit(hpos - 1); }
+    i16 alignToFetchUnit(i16 hpos) { return nextFetchUnit(hpos - 1); }
 
 
     //
@@ -724,8 +724,8 @@ public:
      * or if the end position is unreachable.
      * DEPRECATED
      */
-    Cycle beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd);
-    Cycle beamDiff(int16_t vEnd, int16_t hEnd) { return beamDiff(pos.v, pos.h, vEnd, hEnd); }
+    Cycle beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd);
+    Cycle beamDiff(i16 vEnd, i16 hEnd) { return beamDiff(pos.v, pos.h, vEnd, hEnd); }
     Cycle beamDiff(int32_t end) { return beamDiff(VPOS(end), HPOS(end)); }
     
 
@@ -810,19 +810,19 @@ public:
     void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
 
     // Updates the jump table for the bplEvent table
-    void updateBplJumpTable(int16_t end = HPOS_MAX);
+    void updateBplJumpTable(i16 end = HPOS_MAX);
 
     // Updates the jump table for the dasEvent table
-    void updateDasJumpTable(int16_t end = HPOS_MAX);
+    void updateDasJumpTable(i16 end = HPOS_MAX);
 
     // Returns true if the event in the specified slot is the Lx event.
-    bool isLastLx(int16_t dmaCycle);
+    bool isLastLx(i16 dmaCycle);
 
     // Returns true if the event in the specified slot is the Hx event.
-    bool isLastHx(int16_t dmaCycle);
+    bool isLastHx(i16 dmaCycle);
 
     // Returns true if the specified position belongs to the last fetch unit.
-    bool inLastFetchUnit(int16_t dmaCycle);
+    bool inLastFetchUnit(i16 dmaCycle);
 
     // Dumps an event table for debugging
     void dumpEventTable(EventID *table, char str[256][2], int from, int to);

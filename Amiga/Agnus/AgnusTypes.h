@@ -125,7 +125,7 @@ typedef enum : int32_t
 }
 RegChangeID;
 
-typedef enum : int8_t
+typedef enum : i8
 {
     BUS_NONE,
     BUS_CPU,
@@ -176,8 +176,8 @@ typedef struct
     u16 ddfstrt;
     u16 ddfstop;
 
-    int16_t bpl1mod;
-    int16_t bpl2mod;
+    i16 bpl1mod;
+    i16 bpl2mod;
     u8 bpu;
 
     u32 dskpt;
@@ -202,8 +202,8 @@ typedef struct
     u32 cop2lc;
     u16 cop1ins;
     u16 cop2ins;
-    int16_t length1;
-    int16_t length2;
+    i16 length1;
+    i16 length2;
 }
 CopperInfo;
 
@@ -225,10 +225,10 @@ typedef struct
     u16 bltafwm;
     u16 bltalwm;
     // u16 bltsize;
-    int16_t bltamod;
-    int16_t bltbmod;
-    int16_t bltcmod;
-    int16_t bltdmod;
+    i16 bltamod;
+    i16 bltbmod;
+    i16 bltcmod;
+    i16 bltdmod;
     u16 anew;
     u16 bnew;
     u16 ahold;

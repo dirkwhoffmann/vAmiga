@@ -168,7 +168,7 @@ Drive::setType(DriveType t)
 }
 
 void
-Drive::setSpeed(int16_t value)
+Drive::setSpeed(i16 value)
 {
     assert(isValidDriveSpeed(value));
     debug(DSK_DEBUG, "Setting acceleration factor to %d\n", value);

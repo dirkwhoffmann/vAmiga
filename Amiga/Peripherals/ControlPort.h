@@ -86,8 +86,8 @@ public:
     ControlPortInfo getInfo();
 
     // Getter for the delta charges
-    int16_t getChargeDX() { return chargeDX; }
-    int16_t getChargeDY() { return chargeDY; }
+    i16 getChargeDX() { return chargeDX; }
+    i16 getChargeDY() { return chargeDY; }
     
 
     //

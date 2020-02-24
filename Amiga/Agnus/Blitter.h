@@ -60,10 +60,10 @@ class Blitter : public AmigaComponent {
     u16 bltsizeH;
 
     // The Blitter modulo registers
-    int16_t bltamod;
-    int16_t bltbmod;
-    int16_t bltcmod;
-    int16_t bltdmod;
+    i16 bltamod;
+    i16 bltbmod;
+    i16 bltcmod;
+    i16 bltdmod;
     
     // The Blitter pipeline registers
     u16 anew;
@@ -112,10 +112,10 @@ class Blitter : public AmigaComponent {
     u16 yCounter;
 
     // Counters tracking the DMA accesses for each channel
-    int16_t cntA;
-    int16_t cntB;
-    int16_t cntC;
-    int16_t cntD;
+    i16 cntA;
+    i16 cntB;
+    i16 cntC;
+    i16 cntD;
 
     bool fillCarry;
     u16 mask;

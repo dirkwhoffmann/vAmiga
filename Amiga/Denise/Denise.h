@@ -87,12 +87,12 @@ public:
     u32 shiftReg[6];
     
     // Scroll values (set in pokeBPLCON1())
-    int8_t scrollLoresOdd;
-    int8_t scrollLoresEven;
-    int8_t scrollLoresMax;
-    int8_t scrollHiresOdd;
-    int8_t scrollHiresEven;
-    int8_t scrollHiresMax;
+    i8 scrollLoresOdd;
+    i8 scrollLoresEven;
+    i8 scrollLoresMax;
+    i8 scrollHiresOdd;
+    i8 scrollHiresEven;
+    i8 scrollHiresMax;
 
 
     //

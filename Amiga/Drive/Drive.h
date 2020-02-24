@@ -141,7 +141,7 @@ public:
 
     // Drive speed
     u16 getSpeed() { return config.speed; }
-    void setSpeed(int16_t value);
+    void setSpeed(i16 value);
     bool isOriginal() { return config.speed == 1; }
     bool isTurbo() { return config.speed < 0; }
 

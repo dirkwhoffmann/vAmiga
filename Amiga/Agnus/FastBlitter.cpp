@@ -234,8 +234,8 @@ Blitter::doFastLineBlit()
     u32 decision_variable = bltapt;
     
     // Quirk: Set decision increases to 0 if a is disabled, ensures bltapt remains unchanged
-    int16_t decision_inc_signed = a_enabled ? bltbmod : 0;
-    int16_t decision_inc_unsigned = a_enabled ? bltamod : 0;
+    i16 decision_inc_signed = a_enabled ? bltbmod : 0;
+    i16 decision_inc_unsigned = a_enabled ? bltamod : 0;
     
     u32 bltcpt_local = bltcpt;
     u32 bltdpt_local = bltdpt;
@@ -322,7 +322,7 @@ Blitter::doFastLineBlit()
                 single_dot = false;
             }
         }
-        decision_is_signed = ((int16_t)decision_variable < 0);
+        decision_is_signed = ((i16)decision_variable < 0);
         
         if (!x_independent)
         {

@@ -71,11 +71,11 @@ typedef struct
      * A negative value indicates a turbo drive for which the exact value of
      * the acceleration factor has no meaning.
      */
-    int16_t speed;
+    i16 speed;
 }
 DriveConfig;
 
-inline bool isValidDriveSpeed(int16_t speed)
+inline bool isValidDriveSpeed(i16 speed)
 {
     switch (speed) {
         case -1: case 1: case 2: case 4: case 8: return true;

@@ -340,7 +340,7 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
 }
 
 Cycle
-Agnus::beamDiff(int16_t vStart, int16_t hStart, int16_t vEnd, int16_t hEnd)
+Agnus::beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd)
 {
     // We assume that the function is called with a valid horizontal position
     assert(hEnd <= HPOS_MAX);
@@ -620,8 +620,8 @@ Agnus::allocateBplSlots(int first, int last)
 void
 Agnus::switchBplDmaOn()
 {
-    int16_t start;
-    int16_t stop;
+    i16 start;
+    i16 stop;
 
     bool hires = denise.hires();
     int activeBitplanes = bpu();
@@ -715,7 +715,7 @@ Agnus::updateJumpTable(EventID *eventTable, u8 *jumpTable, int end)
 }
 
 void
-Agnus::updateBplJumpTable(int16_t end)
+Agnus::updateBplJumpTable(i16 end)
 {
     // Build the jump table
     updateJumpTable(bplEvent, nextBplEvent, end);
@@ -726,26 +726,26 @@ Agnus::updateBplJumpTable(int16_t end)
 }
 
 void
-Agnus::updateDasJumpTable(int16_t end)
+Agnus::updateDasJumpTable(i16 end)
 {
     // Build the jump table
     updateJumpTable(dasEvent, nextDasEvent, end);
 }
 
 bool
-Agnus::isLastLx(int16_t dmaCycle)
+Agnus::isLastLx(i16 dmaCycle)
 {
     return (pos.h >= dmaStopLores - 8);
 }
 
 bool
-Agnus::isLastHx(int16_t dmaCycle)
+Agnus::isLastHx(i16 dmaCycle)
 {
     return (pos.h >= dmaStopHires - 4);
 }
 
 bool
-Agnus::inLastFetchUnit(int16_t dmaCycle)
+Agnus::inLastFetchUnit(i16 dmaCycle)
 {
     return denise.hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
 }
@@ -1079,8 +1079,8 @@ Agnus::peekVHPOSR()
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
 
-    int16_t posh = pos.h;
-    int16_t posv = pos.v;
+    i16 posh = pos.h;
+    i16 posv = pos.v;
 
     // To get the correct result, we need to advance the horizontal position
     // by 4 cycles.
@@ -1162,8 +1162,8 @@ Agnus::setDIWSTRT(u16 value)
     diwstrt = value;
 
     // Extract the upper left corner of the display window
-    int16_t newDiwVstrt = HI_BYTE(value);
-    int16_t newDiwHstrt = LO_BYTE(value);
+    i16 newDiwVstrt = HI_BYTE(value);
+    i16 newDiwHstrt = LO_BYTE(value);
 
     debug(DIW_DEBUG, "newDiwVstrt = %d newDiwHstrt = %d\n", newDiwVstrt, newDiwHstrt);
 
@@ -1189,7 +1189,7 @@ Agnus::setDIWSTRT(u16 value)
      *    6) old < new < cur : Already triggered. Nothing to do in this line.
      */
 
-    int16_t cur = 2 * pos.h;
+    i16 cur = 2 * pos.h;
 
      // (1) and (2)
     if (cur < diwHstrt && cur < newDiwHstrt) {
@@ -1220,8 +1220,8 @@ Agnus::setDIWSTOP(u16 value)
     diwstop = value;
 
     // Extract the lower right corner of the display window
-    int16_t newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
-    int16_t newDiwHstop = LO_BYTE(value) | 0x100;
+    i16 newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
+    i16 newDiwHstop = LO_BYTE(value) | 0x100;
 
     debug(DIW_DEBUG, "newDiwVstop = %d newDiwHstop = %d\n", newDiwVstop, newDiwHstop);
 
@@ -1232,7 +1232,7 @@ Agnus::setDIWSTOP(u16 value)
     }
 
     // Check if the change already takes effect in the current rasterline.
-    int16_t cur = 2 * pos.h;
+    i16 cur = 2 * pos.h;
 
     // (1) and (2) (see setDIWSTRT)
     if (cur < diwHstop && cur < newDiwHstop) {
@@ -1344,7 +1344,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 void
 Agnus::computeDDFStrt()
 {
-    int16_t strt = ddfstrtReached;
+    i16 strt = ddfstrtReached;
 
     // Align ddfstrt to the start of the next fetch unit
     dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
@@ -1361,9 +1361,9 @@ Agnus::computeDDFStrt()
 void
 Agnus::computeDDFStop()
 {
-    // int16_t strt = dmaStrtLores - dmaStrtLoresShift;
-    int16_t strt = MAX(ddfstrtReached, 0x18);
-    int16_t stop = MIN(ddfstopReached, 0xD8);
+    // i16 strt = dmaStrtLores - dmaStrtLoresShift;
+    i16 strt = MAX(ddfstrtReached, 0x18);
+    i16 stop = MIN(ddfstopReached, 0xD8);
 
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
@@ -1484,7 +1484,7 @@ void
 Agnus::setBPL1MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
-    bpl1mod = (int16_t)(value & 0xFFFE);
+    bpl1mod = (i16)(value & 0xFFFE);
 }
 
 void
@@ -1498,7 +1498,7 @@ void
 Agnus::setBPL2MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
-    bpl2mod = (int16_t)(value & 0xFFFE);
+    bpl2mod = (i16)(value & 0xFFFE);
 }
 
 template <int x> void
@@ -1523,7 +1523,7 @@ Agnus::pokeSPRxPOS(u16 value)
     debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    int16_t v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+    i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
 
     // Compute the new vertical start position
     sprVStrt[x] = ((value & 0xFF00) >> 8) | (sprVStrt[x] & 0x0100);
@@ -1539,7 +1539,7 @@ Agnus::pokeSPRxCTL(u16 value)
     debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
-    int16_t v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
+    i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
 
     // bool match = (sprVStop[x] == v);
     // debug("v = %d match = %d\n", v, match);
@@ -1697,7 +1697,7 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::executeUntilBusIsFree()
 {
-    int16_t posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
+    i16 posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
 
     // Check if the bus is blocked
     if (busOwner[posh] != BUS_NONE) {
@@ -1791,7 +1791,7 @@ Agnus::updateSpriteDMA()
 
     // When this function is called, the sprite logic already sees an inremented
     // vertical position counter.
-    int16_t v = pos.v + 1;
+    i16 v = pos.v + 1;
 
     // Reset the vertical trigger coordinates in line 25
     if (v == 25 && doSprDMA()) {

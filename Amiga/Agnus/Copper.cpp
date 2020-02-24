@@ -197,18 +197,18 @@ Copper::switchToCopperList(int nr)
 bool
 Copper::findMatch(Beam &result)
 {
-    int16_t vMatch, hMatch;
+    i16 vMatch, hMatch;
 
     // Get the current beam position
     Beam b = agnus.pos;
 
     // Set up the comparison positions
-    int16_t vComp = getVP();
-    int16_t hComp = getHP();
+    i16 vComp = getVP();
+    i16 hComp = getHP();
 
     // Set up the comparison masks
-    int16_t vMask = getVM() | 0x80;
-    int16_t hMask = getHM() & 0xFE;
+    i16 vMask = getVM() | 0x80;
+    i16 hMask = getHM() & 0xFE;
 
     // Check if the current line is already below the vertical trigger position
     if ((b.v & vMask) > (vComp & vMask)) {
@@ -244,9 +244,9 @@ Copper::findMatch(Beam &result)
 }
 
 bool
-Copper::findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &result)
+Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result)
 {
-    int16_t vStop = agnus.frameInfo.numLines;
+    i16 vStop = agnus.frameInfo.numLines;
 
     // Iterate through all vertical positions
     for (int v = vStrt; v < vStop; v++) {
@@ -261,9 +261,9 @@ Copper::findVerticalMatch(int16_t vStrt, int16_t vComp, int16_t vMask, int16_t &
 }
 
 bool
-Copper::findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result)
+Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result)
 {
-    int16_t hStop = HPOS_CNT;
+    i16 hStop = HPOS_CNT;
 
     debug("findHorizontalMatch(%X,%X,%X)\n", hStrt, hComp, hMask);
 
@@ -326,7 +326,7 @@ Copper::findMatchNew(Beam &match)
 bool
 Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 {
-    int16_t hStop = HPOS_CNT;
+    i16 hStop = HPOS_CNT;
 
     // Iterate through all horizontal positions
     for (u32 beam = match; (beam & 0xFF) < hStop; beam++) {

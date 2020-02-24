@@ -30,7 +30,7 @@ public:
     Cycle clock;
 
     // The current state of this machine
-    int8_t state;
+    i8 state;
 
     // The 16 bit output buffer
     u16 buffer;
@@ -153,7 +153,7 @@ public:
     // Synthesizing samples
     //
 
-    template <SamplingMethod method> int16_t interpolate(Cycle clock);
+    template <SamplingMethod method> i16 interpolate(Cycle clock);
 
     
     //

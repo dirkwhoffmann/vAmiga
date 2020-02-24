@@ -25,7 +25,7 @@ class DiskController : public AmigaComponent {
     class Disk *diskToInsert = NULL;
 
     // The currently selected drive (-1 if no drive is selected)
-    int8_t selected = -1;
+    i8 selected = -1;
 
     // The current drive state (off, read, or write)
     DriveState state;
