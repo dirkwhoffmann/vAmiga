@@ -62,7 +62,7 @@ Copper::getInfo()
 }
 
 void
-Copper::pokeCOPCON(uint16_t value)
+Copper::pokeCOPCON(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
     
@@ -113,7 +113,7 @@ Copper::pokeCOPJMP2()
 }
 
 void
-Copper::pokeCOPINS(uint16_t value)
+Copper::pokeCOPINS(u16 value)
 {
     debug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
 
@@ -132,7 +132,7 @@ Copper::pokeCOPINS(uint16_t value)
 }
 
 void
-Copper::pokeCOP1LCH(uint16_t value)
+Copper::pokeCOP1LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
@@ -142,7 +142,7 @@ Copper::pokeCOP1LCH(uint16_t value)
 }
 
 void
-Copper::pokeCOP1LCL(uint16_t value)
+Copper::pokeCOP1LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
 
@@ -152,7 +152,7 @@ Copper::pokeCOP1LCL(uint16_t value)
 }
 
 void
-Copper::pokeCOP2LCH(uint16_t value)
+Copper::pokeCOP2LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
@@ -162,7 +162,7 @@ Copper::pokeCOP2LCH(uint16_t value)
 }
 
 void
-Copper::pokeCOP2LCL(uint16_t value)
+Copper::pokeCOP2LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
@@ -172,7 +172,7 @@ Copper::pokeCOP2LCL(uint16_t value)
 }
 
 void
-Copper::pokeNOOP(uint16_t value)
+Copper::pokeNOOP(u16 value)
 {
     debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 }
@@ -283,11 +283,11 @@ bool
 Copper::findMatchNew(Beam &match)
 {
     // Start searching at the current beam position
-    uint32_t beam = (agnus.pos.v << 8) | agnus.pos.h;
+    u32 beam = (agnus.pos.v << 8) | agnus.pos.h;
 
     // Get the comparison position and the comparison mask
-    uint32_t comp = getVPHP();
-    uint32_t mask = getVMHM();
+    u32 comp = getVPHP();
+    u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
     while ((beam >> 8) < agnus.frameInfo.numLines) {
@@ -324,12 +324,12 @@ Copper::findMatchNew(Beam &match)
 }
 
 bool
-Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
+Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 {
     int16_t hStop = HPOS_CNT;
 
     // Iterate through all horizontal positions
-    for (uint32_t beam = match; (beam & 0xFF) < hStop; beam++) {
+    for (u32 beam = match; (beam & 0xFF) < hStop; beam++) {
 
         // Check if the comparator triggers at this position
         if ((beam & mask) >= (comp & mask)) {
@@ -344,7 +344,7 @@ Copper::findHorizontalMatchNew(uint32_t &match, uint32_t comp, uint32_t mask)
 }
 
 void
-Copper::move(int addr, uint16_t value)
+Copper::move(int addr, u16 value)
 {
     debug(COP_DEBUG, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
 
@@ -368,12 +368,12 @@ Copper::move(int addr, uint16_t value)
 
 #if 0
 bool
-Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
+Copper::comparator(u32 beam, u32 waitpos, u32 mask)
 {
     // Get comparison bits for the vertical beam position
-    uint8_t vBeam = (beam >> 8) & 0xFF;
-    uint8_t vWaitpos = (waitpos >> 8) & 0xFF;
-    uint8_t vMask = (mask >> 8) | 0x80;
+    u8 vBeam = (beam >> 8) & 0xFF;
+    u8 vWaitpos = (waitpos >> 8) & 0xFF;
+    u8 vMask = (mask >> 8) | 0x80;
     
     if (verbose) debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
 
@@ -388,9 +388,9 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
     }
 
     // Get comparison bits for horizontal position
-    uint8_t hBeam = beam & 0xFE;
-    uint8_t hWaitpos = waitpos & 0xFE;
-    uint8_t hMask = mask & 0xFE;
+    u8 hBeam = beam & 0xFE;
+    u8 hWaitpos = waitpos & 0xFE;
+    u8 hMask = mask & 0xFE;
 
     if (verbose) debug(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
     /*
@@ -405,12 +405,12 @@ Copper::comparator(uint32_t beam, uint32_t waitpos, uint32_t mask)
 #endif
 
 bool
-Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
+Copper::comparator(Beam beam, u16 waitpos, u16 mask)
 {
     // Get comparison bits for the vertical beam position
-    uint8_t vBeam = beam.v & 0xFF;
-    uint8_t vWaitpos = HI_BYTE(waitpos);
-    uint8_t vMask = HI_BYTE(mask) | 0x80;
+    u8 vBeam = beam.v & 0xFF;
+    u8 vWaitpos = HI_BYTE(waitpos);
+    u8 vMask = HI_BYTE(mask) | 0x80;
 
     if (verbose) debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
 
@@ -425,9 +425,9 @@ Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
     }
 
     // Get comparison bits for horizontal position
-    uint8_t hBeam = beam.h & 0xFE;
-    uint8_t hWaitpos = LO_BYTE(waitpos) & 0xFE;
-    uint8_t hMask = LO_BYTE(mask) & 0xFE;
+    u8 hBeam = beam.h & 0xFE;
+    u8 hWaitpos = LO_BYTE(waitpos) & 0xFE;
+    u8 hMask = LO_BYTE(mask) & 0xFE;
 
     if (verbose) debug(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
     /*
@@ -442,7 +442,7 @@ Copper::comparator(Beam beam, uint16_t waitpos, uint16_t mask)
 
 /*
 bool
-Copper::comparator(uint32_t beam)
+Copper::comparator(u32 beam)
 {
     return comparator(beam, getVPHP(), getVMHM());
 }
@@ -504,9 +504,9 @@ Copper::isMoveCmd()
     return !(cop1ins & 1);
 }
 
-bool Copper::isMoveCmd(uint32_t addr)
+bool Copper::isMoveCmd(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return !(HI_WORD(instr) & 1);
 }
 
@@ -515,9 +515,9 @@ bool Copper::isWaitCmd()
      return (cop1ins & 1) && !(cop2ins & 1);
 }
 
-bool Copper::isWaitCmd(uint32_t addr)
+bool Copper::isWaitCmd(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return (HI_WORD(instr) & 1) && !(LO_WORD(instr) & 1);
 }
 
@@ -528,35 +528,35 @@ Copper::isSkipCmd()
 }
 
 bool
-Copper::isSkipCmd(uint32_t addr)
+Copper::isSkipCmd(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
 }
 
-uint16_t
+u16
 Copper::getRA()
 {
     return cop1ins & 0x1FE;
 }
 
-uint16_t
-Copper::getRA(uint32_t addr)
+u16
+Copper::getRA(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return HI_WORD(instr) & 0x1FE;
 }
 
-uint16_t
+u16
 Copper::getDW()
 {
     return cop1ins;
 }
 
-uint16_t
-Copper::getDW(uint32_t addr)
+u16
+Copper::getDW(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return LO_WORD(instr);
 }
 
@@ -567,40 +567,40 @@ Copper::getBFD()
 }
 
 bool
-Copper::getBFD(uint32_t addr)
+Copper::getBFD(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return (LO_WORD(instr) & 0x8000) != 0;
 }
 
-uint16_t
+u16
 Copper::getVPHP()
 {
     return cop1ins & 0xFFFE;
 }
 
-uint16_t
-Copper::getVPHP(uint32_t addr)
+u16
+Copper::getVPHP(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return HI_WORD(instr) & 0xFFFE;
 }
 
-uint16_t
+u16
 Copper::getVMHM()
 {
     return (cop2ins & 0x7FFE) | 0x8001;
 }
 
-uint16_t
-Copper::getVMHM(uint32_t addr)
+u16
+Copper::getVMHM(u32 addr)
 {
-    uint32_t instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeek32(addr);
     return (LO_WORD(instr) & 0x7FFE) | 0x8001;
 }
 
 bool
-Copper::isIllegalAddress(uint32_t addr)
+Copper::isIllegalAddress(u32 addr)
 {
     if (cdang) {
         return agnus.isOCS() ? addr < 0x40 : false;
@@ -610,7 +610,7 @@ Copper::isIllegalAddress(uint32_t addr)
 }
 
 bool
-Copper::isIllegalInstr(uint32_t addr)
+Copper::isIllegalInstr(u32 addr)
 {
     return isMoveCmd(addr) && isIllegalAddress(getRA(addr));
 }
@@ -618,7 +618,7 @@ Copper::isIllegalInstr(uint32_t addr)
 void
 Copper::serviceEvent(EventID id)
 {
-    uint16_t reg;
+    u16 reg;
     Beam beam;
 
     servicing = true;
@@ -913,14 +913,14 @@ Copper::instrCount(int nr)
 
 
 char *
-Copper::disassemble(uint32_t addr)
+Copper::disassemble(u32 addr)
 {
     char pos[16];
     char mask[16];
     
     if (isMoveCmd(addr)) {
         
-        uint16_t reg = getRA(addr) >> 1;
+        u16 reg = getRA(addr) >> 1;
         assert(reg <= 0xFF);
         sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), customReg[reg]);
         return disassembly;
@@ -942,11 +942,11 @@ Copper::disassemble(uint32_t addr)
 }
 
 char *
-Copper::disassemble(unsigned list, uint32_t offset)
+Copper::disassemble(unsigned list, u32 offset)
 {
     assert(list == 1 || list == 2);
     
-    uint32_t addr = (list == 1) ? cop1lc : cop2lc;
+    u32 addr = (list == 1) ? cop1lc : cop2lc;
     addr = CHIP_PTR(addr + 2 * offset);
 
     return disassemble(addr);

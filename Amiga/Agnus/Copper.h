@@ -20,7 +20,7 @@ class Copper : public AmigaComponent
     CopperInfo info;
 
     // The currently executed Copper list (1 or 2)
-    uint8_t copList = 1;
+    u8 copList = 1;
 
     /* Indicates if the next instruction should be skipped.
      * This flag is usually false. It is set to true by the SKIP instruction
@@ -29,29 +29,29 @@ class Copper : public AmigaComponent
     bool skip = false;
      
     // The Copper list location pointers
-    uint32_t cop1lc;
-    uint32_t cop2lc;
+    u32 cop1lc;
+    u32 cop2lc;
 
     /* Address of the last executed instruction in each Copper list
      * These values are needed by the debugger to determine the end of the
      * Copper lists. Note that these values cannot be computed directly.
      * They are computed by observing the program counter in advancePC()
      */
-    uint32_t cop1end;
-    uint32_t cop2end;
+    u32 cop1end;
+    u32 cop2end;
 
     // The Copper Danger Bit (CDANG)
     bool cdang;
     
     // The Copper instruction registers
-    uint16_t cop1ins = 0;
-    uint16_t cop2ins = 0;
+    u16 cop1ins = 0;
+    u16 cop2ins = 0;
 
     // The Copper program counter
-    uint32_t coppc = 0;
+    u32 coppc = 0;
 
     // The Copper program counter at the time of the COP_FETCH event
-    // uint32_t coppcBase = 0;
+    // u32 coppcBase = 0;
    
     // Storage for disassembled instruction
     char disassembly[128];
@@ -71,8 +71,8 @@ public:
 
 private:
 
-    uint64_t checkcnt = 0;
-    uint32_t checksum = fnv_1a_init32();
+    u64 checkcnt = 0;
+    u32 checksum = fnv_1a_init32();
 
 
     //
@@ -116,8 +116,8 @@ private:
     void _inspect() override; 
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
 
@@ -130,22 +130,22 @@ public:
     //
 
     // Returns the Copper program counter
-    uint32_t getCopPC() const { return coppc; }
+    u32 getCopPC() const { return coppc; }
 
 
     //
     // Accessing registers
     //
 
-    void pokeCOPCON(uint16_t value);
+    void pokeCOPCON(u16 value);
     template <PokeSource s> void pokeCOPJMP1();
     template <PokeSource s> void pokeCOPJMP2();
-    void pokeCOPINS(uint16_t value);
-    void pokeCOP1LCH(uint16_t value);
-    void pokeCOP1LCL(uint16_t value);
-    void pokeCOP2LCH(uint16_t value);
-    void pokeCOP2LCL(uint16_t value);
-    void pokeNOOP(uint16_t value);
+    void pokeCOPINS(u16 value);
+    void pokeCOP1LCH(u16 value);
+    void pokeCOP1LCL(u16 value);
+    void pokeCOP2LCH(u16 value);
+    void pokeCOP2LCL(u16 value);
+    void pokeNOOP(u16 value);
 
     
     //
@@ -179,13 +179,13 @@ private:
 
     // Called by findMatch() to determine the horizontal trigger position
     bool findHorizontalMatch(int16_t hStrt, int16_t hComp, int16_t hMask, int16_t &result);
-    bool findHorizontalMatchNew(uint32_t &beam, uint32_t comp, uint32_t mask);
+    bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask);
 
     // Emulates the Copper writing a value into one of the custom registers
-    void move(int addr, uint16_t value);
+    void move(int addr, u16 value);
 
     // Runs the comparator circuit
-    bool comparator(Beam beam, uint16_t waitpos, uint16_t mask);
+    bool comparator(Beam beam, u16 waitpos, u16 mask);
     bool comparator(Beam beam);
     bool comparator();
 
@@ -224,44 +224,44 @@ private:
      */
  
     bool isMoveCmd();
-    bool isMoveCmd(uint32_t addr);
+    bool isMoveCmd(u32 addr);
     
     bool isWaitCmd();
-    bool isWaitCmd(uint32_t addr);
+    bool isWaitCmd(u32 addr);
 
     bool isSkipCmd();
-    bool isSkipCmd(uint32_t addr);
+    bool isSkipCmd(u32 addr);
     
-    uint16_t getRA();
-    uint16_t getRA(uint32_t addr);
+    u16 getRA();
+    u16 getRA(u32 addr);
 
-    uint16_t getDW();
-    uint16_t getDW(uint32_t addr);
+    u16 getDW();
+    u16 getDW(u32 addr);
 
     bool getBFD();
-    bool getBFD(uint32_t addr);
+    bool getBFD(u32 addr);
 
-    uint16_t getVPHP();
-    uint16_t getVPHP(uint32_t addr);
-    uint16_t getVP() { return HI_BYTE(getVPHP()); }
-    uint16_t getVP(uint32_t addr) { return HI_BYTE(getVPHP(addr)); }
-    uint16_t getHP() { return LO_BYTE(getVPHP()); }
-    uint16_t getHP(uint32_t addr) { return LO_BYTE(getVPHP(addr)); }
+    u16 getVPHP();
+    u16 getVPHP(u32 addr);
+    u16 getVP() { return HI_BYTE(getVPHP()); }
+    u16 getVP(u32 addr) { return HI_BYTE(getVPHP(addr)); }
+    u16 getHP() { return LO_BYTE(getVPHP()); }
+    u16 getHP(u32 addr) { return LO_BYTE(getVPHP(addr)); }
     
-    uint16_t getVMHM();
-    uint16_t getVMHM(uint32_t addr);
-    uint16_t getVM() { return HI_BYTE(getVMHM()); }
-    uint16_t getVM(uint32_t addr) { return HI_BYTE(getVMHM(addr)); }
-    uint16_t getHM() { return LO_BYTE(getVMHM()); }
-    uint16_t getHM(uint32_t addr) { return LO_BYTE(getVMHM(addr)); }
+    u16 getVMHM();
+    u16 getVMHM(u32 addr);
+    u16 getVM() { return HI_BYTE(getVMHM()); }
+    u16 getVM(u32 addr) { return HI_BYTE(getVMHM(addr)); }
+    u16 getHM() { return LO_BYTE(getVMHM()); }
+    u16 getHM(u32 addr) { return LO_BYTE(getVMHM(addr)); }
     
 public:
     
     // Returns true if the Copper has no access to this custom register.
-    bool isIllegalAddress(uint32_t addr);
+    bool isIllegalAddress(u32 addr);
     
     // Returns true if the Copper instruction at addr is illegal.
-    bool isIllegalInstr(uint32_t addr);
+    bool isIllegalInstr(u32 addr);
     
  
     //
@@ -304,8 +304,8 @@ public:
     int instrCount(int nr);
 
     // Disassembles a single Copper command
-    char *disassemble(uint32_t addr);
-    char *disassemble(unsigned list, uint32_t offset);
+    char *disassemble(u32 addr);
+    char *disassemble(unsigned list, u32 offset);
 
     // Dumps a Copper list
     void dumpCopperList(unsigned list, unsigned length); 
