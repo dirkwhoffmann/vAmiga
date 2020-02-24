@@ -1326,23 +1326,23 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) powerOn
 {
-    return wrapper->amiga->powerOn();
+    wrapper->amiga->powerOn();
 }
 - (void) powerOff
 {
-    return wrapper->amiga->powerOff();
+    wrapper->amiga->powerOff();
 }
 - (void) reset
 {
-    return wrapper->amiga->reset();
+    wrapper->amiga->reset();
 }
 - (void) ping
 {
-    return wrapper->amiga->ping();
+    wrapper->amiga->ping();
 }
 - (void) dump
 {
-    return wrapper->amiga->dump();
+    wrapper->amiga->dump();
 }
 - (AmigaInfo) getInfo
 {

@@ -165,14 +165,11 @@ class MyDocument: NSDocument {
     @discardableResult
     func mountAmigaAttachment() -> Bool {
         
-        // guard let controller = myController else { return false }
-        
         switch amigaAttachment {
 
         case _ as SnapshotProxy:
             
             amiga.load(fromSnapshot: amigaAttachment as? SnapshotProxy)
-            return true
        
         case _ as ADFFileProxy:
             

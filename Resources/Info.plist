@@ -12,7 +12,7 @@
 				<string>vAmiga</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string></string>
+			<string>snapshotIcon</string>
 			<key>CFBundleTypeName</key>
 			<string>vAmiga</string>
 			<key>CFBundleTypeOSTypes</key>
@@ -21,6 +21,26 @@
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<integer>0</integer>
+			<key>NSDocumentClass</key>
+			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>ADF</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>ADFIcon</string>
+			<key>CFBundleTypeName</key>
+			<string>ADF</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
 			<key>NSDocumentClass</key>
 			<string>$(PRODUCT_MODULE_NAME).MyDocument</string>
 		</dict>

@@ -525,7 +525,7 @@ Amiga::_initialize()
 void
 Amiga::powerOn()
 {
-    if (readyToPowerUp()) { HardwareComponent::powerOn(); }
+    if (readyToPowerOn()) HardwareComponent::powerOn();
 }
 
 void
@@ -573,7 +573,7 @@ Amiga::_powerOff()
 void
 Amiga::run()
 {
-    if (readyToPowerUp()) { HardwareComponent::run(); }
+    if (readyToPowerOn()) HardwareComponent::run();
 }
 
 void
@@ -692,7 +692,7 @@ Amiga::resume()
 }
 
 bool
-Amiga::readyToPowerUp()
+Amiga::readyToPowerOn()
 {
     MemoryConfig memconf = mem.getConfig();
 

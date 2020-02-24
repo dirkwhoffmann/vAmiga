@@ -313,12 +313,9 @@ public:
 public:
     
     /* Returns true if a call to powerUp() will be successful.
-     * An Amiga 500 or Amiga 2000 can be powered up any time (if no original
-     * Kickstart is present, the emulator falls back to using the free Aros
-     * replacement). An Amiga 1000 requires a Boot Rom which is not part of
-     * the emulator.
+     * It returns false, e.g., if no Kickstart Rom or Boot Rom is installed.
      */
-    bool readyToPowerUp();
+    bool readyToPowerOn();
     
     /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to

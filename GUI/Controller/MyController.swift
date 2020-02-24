@@ -430,8 +430,13 @@ extension MyController {
         // Register listener
         addListener()
 
-        // Power up. If a Rom is in place, the emulator starts running.
-        // Otherwise, it sends a MISSING_ROM message.
+        // Power on the Amiga
+        amiga.powerOn()
+
+        // Process attachment (if any)
+        mydocument?.mountAmigaAttachment()
+
+        // Launch the emulator thread
         amiga.run()
         
         // Create speed monitor and get the timer tunning
