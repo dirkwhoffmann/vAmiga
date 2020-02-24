@@ -33,26 +33,26 @@ public:
     int8_t state;
 
     // The 16 bit output buffer
-    uint16_t buffer;
+    u16 buffer;
 
     // Audio length (AUDxLEN)
-    uint16_t audlenLatch;
-    uint16_t audlen;
+    u16 audlenLatch;
+    u16 audlen;
 
     // Audio period (AUDxPER)
-    uint16_t audperLatch;
+    u16 audperLatch;
     int32_t  audper;
 
     // Audio volume (AUDxVOL)
-    uint16_t audvolLatch;
-    uint16_t audvol;
+    u16 audvolLatch;
+    u16 audvol;
 
     // Audio data (AUDxDAT)
-    uint16_t auddatLatch;
-    uint16_t auddat;
+    u16 auddatLatch;
+    u16 auddat;
 
     // Audio location (AUDxLC)
-    uint32_t audlcLatch;
+    u32 audlcLatch;
 
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
@@ -110,8 +110,8 @@ private:
     void _reset() override;
     void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -131,22 +131,22 @@ public:
 public:
 
     // OCS registers 0xA4, 0xB4, 0xC4, 0xD4 (w)
-    void pokeAUDxLEN(uint16_t value);
+    void pokeAUDxLEN(u16 value);
 
     // OCS registers 0xA6, 0xB6, 0xB6, 0xD6 (w)
-    void pokeAUDxPER(uint16_t value);
+    void pokeAUDxPER(u16 value);
 
     // OCS registers 0xA8, 0xB8, 0xC8, 0xD8 (w)
-    void pokeAUDxVOL(uint16_t value);
+    void pokeAUDxVOL(u16 value);
 
     // OCS registers 0xAA, 0xBA, 0xCA, 0xDA (w)
-    void pokeAUDxDAT(uint16_t value);
+    void pokeAUDxDAT(u16 value);
 
     // OCS registers 0xA0, 0xB0, 0xC0, 0xD0 (w)
-    void pokeAUDxLCH(uint16_t value);
+    void pokeAUDxLCH(u16 value);
 
     // OCS registers 0xA0, 0xB0, 0xC0, 0xD0 (w)
-    void pokeAUDxLCL(uint16_t value);
+    void pokeAUDxLCL(u16 value);
 
 
     //

@@ -73,7 +73,7 @@ StateMachine<nr>::getInfo()
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxLEN(uint16_t value)
+StateMachine<nr>::pokeAUDxLEN(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
@@ -81,7 +81,7 @@ StateMachine<nr>::pokeAUDxLEN(uint16_t value)
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxPER(uint16_t value)
+StateMachine<nr>::pokeAUDxPER(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
 
@@ -97,7 +97,7 @@ StateMachine<nr>::pokeAUDxPER(uint16_t value)
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxVOL(uint16_t value)
+StateMachine<nr>::pokeAUDxVOL(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
@@ -107,7 +107,7 @@ StateMachine<nr>::pokeAUDxVOL(uint16_t value)
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxDAT(uint16_t value)
+StateMachine<nr>::pokeAUDxDAT(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
@@ -159,7 +159,7 @@ StateMachine<nr>::pokeAUDxDAT(uint16_t value)
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxLCH(uint16_t value)
+StateMachine<nr>::pokeAUDxLCH(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
 
@@ -167,7 +167,7 @@ StateMachine<nr>::pokeAUDxLCH(uint16_t value)
 }
 
 template <int nr> void
-StateMachine<nr>::pokeAUDxLCL(uint16_t value)
+StateMachine<nr>::pokeAUDxLCL(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
 
@@ -554,35 +554,35 @@ template AudioChannelInfo StateMachine<1>::getInfo();
 template AudioChannelInfo StateMachine<2>::getInfo();
 template AudioChannelInfo StateMachine<3>::getInfo();
 
-template void StateMachine<0>::pokeAUDxLEN(uint16_t value);
-template void StateMachine<1>::pokeAUDxLEN(uint16_t value);
-template void StateMachine<2>::pokeAUDxLEN(uint16_t value);
-template void StateMachine<3>::pokeAUDxLEN(uint16_t value);
+template void StateMachine<0>::pokeAUDxLEN(u16 value);
+template void StateMachine<1>::pokeAUDxLEN(u16 value);
+template void StateMachine<2>::pokeAUDxLEN(u16 value);
+template void StateMachine<3>::pokeAUDxLEN(u16 value);
 
-template void StateMachine<0>::pokeAUDxPER(uint16_t value);
-template void StateMachine<1>::pokeAUDxPER(uint16_t value);
-template void StateMachine<2>::pokeAUDxPER(uint16_t value);
-template void StateMachine<3>::pokeAUDxPER(uint16_t value);
+template void StateMachine<0>::pokeAUDxPER(u16 value);
+template void StateMachine<1>::pokeAUDxPER(u16 value);
+template void StateMachine<2>::pokeAUDxPER(u16 value);
+template void StateMachine<3>::pokeAUDxPER(u16 value);
 
-template void StateMachine<0>::pokeAUDxVOL(uint16_t value);
-template void StateMachine<1>::pokeAUDxVOL(uint16_t value);
-template void StateMachine<2>::pokeAUDxVOL(uint16_t value);
-template void StateMachine<3>::pokeAUDxVOL(uint16_t value);
+template void StateMachine<0>::pokeAUDxVOL(u16 value);
+template void StateMachine<1>::pokeAUDxVOL(u16 value);
+template void StateMachine<2>::pokeAUDxVOL(u16 value);
+template void StateMachine<3>::pokeAUDxVOL(u16 value);
 
-template void StateMachine<0>::pokeAUDxDAT(uint16_t value);
-template void StateMachine<1>::pokeAUDxDAT(uint16_t value);
-template void StateMachine<2>::pokeAUDxDAT(uint16_t value);
-template void StateMachine<3>::pokeAUDxDAT(uint16_t value);
+template void StateMachine<0>::pokeAUDxDAT(u16 value);
+template void StateMachine<1>::pokeAUDxDAT(u16 value);
+template void StateMachine<2>::pokeAUDxDAT(u16 value);
+template void StateMachine<3>::pokeAUDxDAT(u16 value);
 
-template void StateMachine<0>::pokeAUDxLCH(uint16_t value);
-template void StateMachine<1>::pokeAUDxLCH(uint16_t value);
-template void StateMachine<2>::pokeAUDxLCH(uint16_t value);
-template void StateMachine<3>::pokeAUDxLCH(uint16_t value);
+template void StateMachine<0>::pokeAUDxLCH(u16 value);
+template void StateMachine<1>::pokeAUDxLCH(u16 value);
+template void StateMachine<2>::pokeAUDxLCH(u16 value);
+template void StateMachine<3>::pokeAUDxLCH(u16 value);
 
-template void StateMachine<0>::pokeAUDxLCL(uint16_t value);
-template void StateMachine<1>::pokeAUDxLCL(uint16_t value);
-template void StateMachine<2>::pokeAUDxLCL(uint16_t value);
-template void StateMachine<3>::pokeAUDxLCL(uint16_t value);
+template void StateMachine<0>::pokeAUDxLCL(u16 value);
+template void StateMachine<1>::pokeAUDxLCL(u16 value);
+template void StateMachine<2>::pokeAUDxLCL(u16 value);
+template void StateMachine<3>::pokeAUDxLCL(u16 value);
 
 template void StateMachine<0>::enableDMA();
 template void StateMachine<1>::enableDMA();
