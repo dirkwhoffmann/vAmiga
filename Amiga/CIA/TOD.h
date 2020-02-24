@@ -95,8 +95,8 @@ public:
     void _dump() override;
     void _reset() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
 
@@ -109,40 +109,40 @@ public:
     //
 
     // Returns the counter's high byte (bits 16 - 23).
-    uint8_t getCounterHi() { return frozen ? latch.hi : tod.hi; }
+    u8 getCounterHi() { return frozen ? latch.hi : tod.hi; }
 
     // Returns the counter's intermediate byte (bits 8 - 15).
-    uint8_t getCounterMid() { return frozen ? latch.mid : tod.mid; }
+    u8 getCounterMid() { return frozen ? latch.mid : tod.mid; }
 
     // Returns the counter's low byte (bits 0 - 7).
-    uint8_t getCounterLo() { return frozen ? latch.lo : tod.lo; }
+    u8 getCounterLo() { return frozen ? latch.lo : tod.lo; }
 
     //! Returns the alarm value's high byte (bits 16 - 23).
-    uint8_t getAlarmHi() { return alarm.hi; }
+    u8 getAlarmHi() { return alarm.hi; }
 
     // Returns the alarm value's intermediate byte (bits 8 - 15).
-    uint8_t getAlarmMid() { return alarm.mid; }
+    u8 getAlarmMid() { return alarm.mid; }
 
     // Returns the alarm value's low byte (bits 0 - 7).
-    uint8_t getAlarmLo() { return alarm.lo; }
+    u8 getAlarmLo() { return alarm.lo; }
 
     // Sets the counter's high byte (bits 16 - 23).
-    void setCounterHi(uint8_t value) { tod.hi = value; checkForInterrupt(); }
+    void setCounterHi(u8 value) { tod.hi = value; checkForInterrupt(); }
 
     // Sets the counter's intermediate byte (bits 8 - 15).
-    void setCounterMid(uint8_t value) { tod.mid = value; checkForInterrupt(); }
+    void setCounterMid(u8 value) { tod.mid = value; checkForInterrupt(); }
 
     //! Sets the counter's low byte (bits 0 - 7).
-    void setCounterLo(uint8_t value) { tod.lo = value; checkForInterrupt(); }
+    void setCounterLo(u8 value) { tod.lo = value; checkForInterrupt(); }
 
     // Sets the alarm value's high byte (bits 16 - 23).
-    void setAlarmHi(uint8_t value) { alarm.hi = value; checkForInterrupt(); }
+    void setAlarmHi(u8 value) { alarm.hi = value; checkForInterrupt(); }
 
     // Sets the alarm value's intermediate byte (bits 8 - 15).
-    void setAlarmMid(uint8_t value) { alarm.mid = value; checkForInterrupt(); }
+    void setAlarmMid(u8 value) { alarm.mid = value; checkForInterrupt(); }
 
     // Sets the alarm value's low byte (bits 0 - 7).
-    void setAlarmLo(uint8_t value) { alarm.lo = value; checkForInterrupt(); }
+    void setAlarmLo(u8 value) { alarm.lo = value; checkForInterrupt(); }
 
 
     //
@@ -165,8 +165,8 @@ private:
 
     // Increments the counter
     void increment();
-    bool incLoNibble(uint8_t &counter);
-    bool incHiNibble(uint8_t &counter);
+    bool incLoNibble(u8 &counter);
+    bool incHiNibble(u8 &counter);
 
     /* Updates variable 'matching'
      * If a positive edge occurs, the connected CIA is requested to trigger

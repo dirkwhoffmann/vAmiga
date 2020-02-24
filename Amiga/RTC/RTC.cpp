@@ -90,20 +90,20 @@ RTC::setTime(time_t t)
     timeDiff = t - time(NULL);
 }
 
-uint8_t
+u8
 RTC::peek(unsigned nr)
 {
     assert(nr < 16);
 
     time2registers();
-    uint8_t result = reg[nr];
+    u8 result = reg[nr];
 
     debug(RTC_DEBUG, "peek(%d) = $%X\n", result);
     return result;
 }
 
 void
-RTC::poke(unsigned nr, uint8_t value)
+RTC::poke(unsigned nr, u8 value)
 {
     assert(nr < 16);
     debug(RTC_DEBUG, "poke(%d, $%02X)\n", nr, value);

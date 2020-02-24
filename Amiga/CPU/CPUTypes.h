@@ -15,7 +15,7 @@
 // A disassembled instruction
 typedef struct
 {
-    uint8_t bytes;  // Length of the disassembled command in bytes
+    u8 bytes;       // Length of the disassembled command in bytes
     char addr[9];   // Textual representation of the instruction's address
     char data[33];  // Textual representation of the instruction's data bytes
     char sr[17];    // Textual representation of the status register (optional)
@@ -28,12 +28,12 @@ DisassembledInstr;
 typedef struct
 {
     // Registers
-    uint32_t pc;
-    uint32_t d[8];
-    uint32_t a[8];
-    uint32_t usp;
-    uint32_t ssp;
-    uint16_t sr;
+    u32 pc;
+    u32 d[8];
+    u32 a[8];
+    u32 usp;
+    u32 ssp;
+    u16 sr;
 
     // Disassembled instructions starting at pc
     DisassembledInstr instr[CPUINFO_INSTR_COUNT];

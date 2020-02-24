@@ -29,7 +29,7 @@ class RTC : public AmigaComponent {
     time_t timeDiff;
     
     // The 16 RTC 4-bit registers
-    uint8_t reg[16];
+    u8 reg[16];
     
     // The last call to function getTime()
     Cycle lastCall;
@@ -90,8 +90,8 @@ private:
     void _reset() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -112,10 +112,10 @@ private:
 public:
     
     // Reads one of the 16 RTC registers
-    uint8_t peek(unsigned nr);
+    u8 peek(unsigned nr);
     
     // Writes one of the 16 RTC registers
-    void poke(unsigned nr, uint8_t value);
+    void poke(unsigned nr, u8 value);
     
 private:
     

@@ -87,7 +87,7 @@ check:
 }
 
 bool
-TOD::incLoNibble(uint8_t &counter)
+TOD::incLoNibble(u8 &counter)
 {
     if ((counter & 0x0F) < 0x0F) {
         counter += 0x01; return false;
@@ -97,7 +97,7 @@ TOD::incLoNibble(uint8_t &counter)
 }
 
 bool
-TOD::incHiNibble(uint8_t &counter)
+TOD::incHiNibble(u8 &counter)
 {
     if ((counter & 0xF0) < 0xF0) {
         counter += 0x10; return false;

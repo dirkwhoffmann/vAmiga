@@ -240,7 +240,7 @@ CPU::_size()
 }
 
 size_t
-CPU::didLoadFromBuffer(uint8_t *buffer)
+CPU::didLoadFromBuffer(u8 *buffer)
 {
     SerReader reader(buffer);
 
@@ -251,7 +251,7 @@ CPU::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-CPU::didSaveToBuffer(uint8_t *buffer)
+CPU::didSaveToBuffer(u8 *buffer)
 {
     SerWriter writer(buffer);
 

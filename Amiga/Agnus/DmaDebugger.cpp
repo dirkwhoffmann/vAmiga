@@ -19,14 +19,14 @@ DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
     }
 
     // Assign default colors
-    setColor(BUS_CPU,      RgbColor((uint8_t)0xFF, 0xFF, 0xFF));
-    setColor(BUS_REFRESH,  RgbColor((uint8_t)0xFF, 0x00, 0x00));
-    setColor(BUS_DISK,     RgbColor((uint8_t)0x00, 0xFF, 0x00));
-    setColor(BUS_AUDIO,    RgbColor((uint8_t)0xFF, 0x00, 0xFF));
-    setColor(BUS_BITPLANE, RgbColor((uint8_t)0x00, 0xFF, 0xFF));
-    setColor(BUS_SPRITE,   RgbColor((uint8_t)0x00, 0x80, 0xFF));
-    setColor(BUS_COPPER,   RgbColor((uint8_t)0xFF, 0xFF, 0x00));
-    setColor(BUS_BLITTER,  RgbColor((uint8_t)0xFF, 0x80, 0x00));
+    setColor(BUS_CPU,      RgbColor((u8)0xFF, 0xFF, 0xFF));
+    setColor(BUS_REFRESH,  RgbColor((u8)0xFF, 0x00, 0x00));
+    setColor(BUS_DISK,     RgbColor((u8)0x00, 0xFF, 0x00));
+    setColor(BUS_AUDIO,    RgbColor((u8)0xFF, 0x00, 0xFF));
+    setColor(BUS_BITPLANE, RgbColor((u8)0x00, 0xFF, 0xFF));
+    setColor(BUS_SPRITE,   RgbColor((u8)0x00, 0x80, 0xFF));
+    setColor(BUS_COPPER,   RgbColor((u8)0xFF, 0xFF, 0x00));
+    setColor(BUS_BLITTER,  RgbColor((u8)0xFF, 0x80, 0x00));
 }
 
 DMADebuggerInfo
@@ -40,7 +40,7 @@ DmaDebugger::getInfo()
     result.opacity = opacity;
     result.displayMode = displayMode;
 
-    for (uint8_t i = 0; i < BUS_OWNER_COUNT; i++) {
+    for (u8 i = 0; i < BUS_OWNER_COUNT; i++) {
 
         RgbColor color = getColor((BusOwner)i);
         result.visualize[i] = visualize[i];
@@ -129,7 +129,7 @@ DmaDebugger::computeOverlay()
     if (!enabled) return;
 
     BusOwner *owners = agnus.busOwner;
-    uint16_t *values = agnus.busValue;
+    u16 *values = agnus.busValue;
     int *ptr = denise.pixelEngine.pixelAddr(0);
 
     double bgWeight, fgWeight;
