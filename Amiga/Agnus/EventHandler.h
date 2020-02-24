@@ -113,7 +113,7 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     assert(checkScheduledEvent(s));
 }
 
-template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, int64_t data)
+template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
 {
     scheduleAbs<s>(cycle, id);
     slot[s].data = data;
@@ -124,7 +124,7 @@ template<EventSlot s> void scheduleImm(EventID id)
     scheduleAbs<s>(0, id);
 }
 
-template<EventSlot s> void scheduleImm(EventID id, int64_t data)
+template<EventSlot s> void scheduleImm(EventID id, i64 data)
 {
     scheduleAbs<s>(0, id);
     slot[s].data = data;
@@ -135,7 +135,7 @@ template<EventSlot s> void scheduleRel(Cycle cycle, EventID id)
     scheduleAbs<s>(clock + cycle, id);
 }
 
-template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, int64_t data)
+template<EventSlot s> void scheduleRel(Cycle cycle, EventID id, i64 data)
 {
     scheduleAbs<s>(clock + cycle, id);
     slot[s].data = data;
@@ -146,7 +146,7 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id)
     scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
 }
 
-template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, int64_t data)
+template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
 {
     scheduleAbs<s>(slot[s].triggerCycle + cycle, id);
     slot[s].data = data;
@@ -157,7 +157,7 @@ template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id)
     scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id);
 }
 
-template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id, int64_t data)
+template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id, i64 data)
 {
     scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id, data);
 }

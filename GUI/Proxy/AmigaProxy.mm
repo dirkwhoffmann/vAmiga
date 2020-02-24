@@ -61,11 +61,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getLoggedInstrInfo(index);
 }
-- (int64_t) clock
+- (i64) clock
 {
     return wrapper->cpu->getMasterClock(); 
 }
-- (int64_t) cycles
+- (i64) cycles
 {
     return wrapper->cpu->getCpuClock();
 }
@@ -786,7 +786,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) setXY:(NSPoint)pos
 {
-    wrapper->mouse->setXY((int64_t)pos.x, (int64_t)pos.y);
+    wrapper->mouse->setXY((i64)pos.x, (i64)pos.y);
 }
 - (void) setLeftButton:(BOOL)value
 {

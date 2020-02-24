@@ -201,7 +201,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     debug(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
-    int64_t pixel = MAX(4 * agnus.pos.h - 4, 0);
+    i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
     conRegChanges.add(pixel, REG_BPLCON0_DENISE, newValue);
     
     // Update value

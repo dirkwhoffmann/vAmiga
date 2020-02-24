@@ -195,8 +195,8 @@ struct AmigaFileWrapper;
 - (DisassembledInstr) getInstrInfo:(NSInteger)index;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
-- (int64_t) clock;
-- (int64_t) cycles;
+- (i64) clock;
+- (i64) cycles;
 
 - (NSInteger) numberOfBreakpoints;
 - (u32) breakpointAddr:(NSInteger)nr;

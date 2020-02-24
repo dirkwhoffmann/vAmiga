@@ -19,7 +19,7 @@ struct Event
     EventID id;
 
     // An optional data value (only used occasionally)
-    int64_t data;
+    i64 data;
 
     template <class T>
     void applyToItems(T& worker)

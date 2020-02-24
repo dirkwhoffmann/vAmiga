@@ -26,12 +26,12 @@ public:
 private:
     
     // The current mouse position
-    int64_t mouseX;
-    int64_t mouseY;
+    i64 mouseX;
+    i64 mouseY;
 
     // Recorded mouse position in getDeltaX() and getDeltaY()
-    int64_t oldMouseX;
-    int64_t oldMouseY;
+    i64 oldMouseX;
+    i64 oldMouseY;
 
     /* The target mouse position
      * In order to achieve a smooth mouse movement, a new mouse coordinate is
@@ -39,16 +39,16 @@ private:
      * are set. In execute(), mouseX and mouseY are shifted smoothly towards
      * the target positions.
      */
-    int64_t targetX;
-    int64_t targetY;
+    i64 targetX;
+    i64 targetY;
     
     // Dividers applied to raw coordinates in setXY()
     int dividerX = 128;
     int dividerY = 128;
     
     // Mouse movement in pixels per execution step
-    int64_t shiftX = 31;
-    int64_t shiftY = 31;
+    i64 shiftX = 31;
+    i64 shiftY = 31;
 
 
     //
@@ -111,14 +111,14 @@ public:
 public:
     
     // Returns a horizontal or vertical position change
-    int64_t getDeltaX();
-    int64_t getDeltaY();
+    i64 getDeltaX();
+    i64 getDeltaY();
 
     // Returns the mouse coordinates as they appear in the JOYDAT register
     u16 getXY();
     
     // Emulates a mouse movement
-    void setXY(int64_t x, int64_t y);
+    void setXY(i64 x, i64 y);
     
     // Presses or releases a mouse button
     void setLeftButton(bool value);

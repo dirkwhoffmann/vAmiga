@@ -36,7 +36,7 @@ class Joystick : public AmigaComponent {
     float autofireFrequency = 2.5;
     
     // Bullet counter used in multi-fire mode
-    int64_t bulletCounter = 0;
+    i64 bulletCounter = 0;
     
     // Next frame to auto-press or auto-release the fire button
     Frame nextAutofireFrame = 0;

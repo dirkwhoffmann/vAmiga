@@ -24,8 +24,8 @@ class ControlPort : public AmigaComponent {
     ControlPortDevice device = CPD_NONE;
     
     // The two mouse position counters
-    int64_t mouseCounterX = 0;
-    int64_t mouseCounterY = 0;
+    i64 mouseCounterX = 0;
+    i64 mouseCounterY = 0;
 
     // Resistances on the potentiometer lines (specified as a delta charge)
     double chargeDX;

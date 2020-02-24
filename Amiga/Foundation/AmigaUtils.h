@@ -163,7 +163,7 @@ void sleepMicrosec(unsigned usec);
  * Returns the overshoot time (jitter), measured in kernel time units. Smaller
  * values are better, 0 is best.
  */
-int64_t sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
+i64 sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
 
 
 //

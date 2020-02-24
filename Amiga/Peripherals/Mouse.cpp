@@ -76,23 +76,23 @@ Mouse::changePra(int port, u8 &pra)
     }
 }
 
-int64_t
+i64
 Mouse::getDeltaX()
 {
     execute();
 
-    int64_t result = mouseX - oldMouseX;
+    i64 result = mouseX - oldMouseX;
     oldMouseX = mouseX;
 
     return result;
 }
 
-int64_t
+i64
 Mouse::getDeltaY()
 {
     execute();
 
-    int64_t result = mouseY - oldMouseY;
+    i64 result = mouseY - oldMouseY;
     oldMouseY = mouseY;
 
     return result;
@@ -109,7 +109,7 @@ Mouse::getXY()
 }
 
 void
-Mouse::setXY(int64_t x, int64_t y)
+Mouse::setXY(i64 x, i64 y)
 {
     // debug("setXY(%lld,%lld)\n", x, y);
     

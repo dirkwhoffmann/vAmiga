@@ -108,10 +108,10 @@ template <class T, int capacity>
 struct SortedRingBuffer : public RingBuffer<T, capacity>
 {
     // Key storage
-    int64_t keys[capacity];
+    i64 keys[capacity];
 
     // Inserts an element at the right position
-    void insert(int64_t key, T element)
+    void insert(i64 key, T element)
     {
         assert(!this->isFull());
 
