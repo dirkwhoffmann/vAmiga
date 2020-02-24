@@ -14,9 +14,9 @@
 #include "RomFile.h"
 #include "ExtFile.h"
 
-const uint32_t FAST_RAM_STRT = 0x200000; // DEPRECATED
-const uint32_t SLOW_RAM_MASK = 0x07FFFF; // DEPRECATED
-const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
+const u32 FAST_RAM_STRT = 0x200000; // DEPRECATED
+const u32 SLOW_RAM_MASK = 0x07FFFF; // DEPRECATED
+const u32 EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 
 // Verifies the range of an address
 #define ASSERT_CHIP_ADDR(x) assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
@@ -31,9 +31,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define ASSERT_AUTO_ADDR(x) assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 // Reads a value from memory in big endian format
-#define READ_8(x)  (*(uint8_t *)(x))
-#define READ_16(x) (ntohs(*(uint16_t *)(x)))
-#define READ_32(x) (ntohl(*(uint32_t *)(x)))
+#define READ_8(x)  (*(u8 *)(x))
+#define READ_16(x) (ntohs(*(u16 *)(x)))
+#define READ_32(x) (ntohl(*(u32 *)(x)))
 
 // Reads a value from Chip RAM in big endian format
 #define READ_CHIP_8(x)  READ_8 (chip + ((x) & chipMask))
@@ -66,9 +66,9 @@ const uint32_t EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
 #define READ_EXT_32(x) READ_32(ext + ((x) & extMask))
 
 // Writes a value into memory in big endian format
-#define WRITE_8(x,y)  (*(uint8_t *)(x) = y)
-#define WRITE_16(x,y) (*(uint16_t *)(x) = htons(y))
-#define WRITE_32(x,y) (*(uint32_t *)(x) = htonl(y))
+#define WRITE_8(x,y)  (*(u8 *)(x) = y)
+#define WRITE_16(x,y) (*(u16 *)(x) = htons(y))
+#define WRITE_32(x,y) (*(u32 *)(x) = htonl(y))
 
 // Writes a value into Chip RAM in big endian format
 #define WRITE_CHIP_8(x,y)  WRITE_8 (chip + ((x) & chipMask), (y))
@@ -152,19 +152,19 @@ public:
      *    pointer != NULL <=> mask == config.size - 1
      *
      */
-    uint8_t *rom = NULL;
-    uint8_t *wom = NULL;
-    uint8_t *ext = NULL;
-    uint8_t *chip = NULL;
-    uint8_t *slow = NULL;
-    uint8_t *fast = NULL;
+    u8 *rom = NULL;
+    u8 *wom = NULL;
+    u8 *ext = NULL;
+    u8 *chip = NULL;
+    u8 *slow = NULL;
+    u8 *fast = NULL;
 
-    uint32_t romMask = 0;
-    uint32_t womMask = 0;
-    uint32_t extMask = 0;
-    uint32_t chipMask = 0;
-    uint32_t slowMask = 0;
-    uint32_t fastMask = 0;
+    u32 romMask = 0;
+    u32 womMask = 0;
+    u32 extMask = 0;
+    u32 chipMask = 0;
+    u32 slowMask = 0;
+    u32 fastMask = 0;
 
     /* Indicates if the Kickstart Wom is writable
      * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
@@ -183,7 +183,7 @@ public:
     MemorySource memSrc[256];
 
     // The last value on the data bus
-    uint16_t dataBus;
+    u16 dataBus;
 
     // Buffer for returning string values
     char str[256];
@@ -234,8 +234,8 @@ public:
     // Returns the current configuration
     MemoryConfig getConfig() { return config; }
 
-    uint32_t getExtStart() { return config.extStart; }
-    void setExtStart(uint32_t page);
+    u32 getExtStart() { return config.extStart; }
+    void setExtStart(u32 page);
 
 
     //
@@ -249,10 +249,10 @@ private:
     void _dump() override;
     
     size_t _size() override;
-    size_t _load(uint8_t *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(uint8_t *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(uint8_t *buffer) override;
-    size_t didSaveToBuffer(uint8_t *buffer) override;
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t didLoadFromBuffer(u8 *buffer) override;
+    size_t didSaveToBuffer(u8 *buffer) override;
 
 
     //
@@ -280,7 +280,7 @@ private:
      *    - Updates the memory lookup table
      *    - Sends a memory layout messageto the GUI
      */
-    bool alloc(size_t bytes, uint8_t *&ptr, size_t &size, uint32_t &mask);
+    bool alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask);
 
 public:
 
@@ -328,11 +328,11 @@ public:
 public:
 
     // Computes a CRC-32 checksum
-    uint32_t romFingerprint() { return crc32(rom, config.romSize); }
-    uint32_t extFingerprint() { return crc32(ext, config.extSize); }
+    u32 romFingerprint() { return crc32(rom, config.romSize); }
+    u32 extFingerprint() { return crc32(ext, config.extSize); }
 
     // Translates a CRC-32 checksum into a ROM identifier
-    static RomRevision revision(uint32_t fingerprint);
+    static RomRevision revision(u32 fingerprint);
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
@@ -371,17 +371,17 @@ public:
 
     // Installs a new Boot Rom or Kickstart Rom
     bool loadRom(RomFile *rom);
-    bool loadRomFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadRomFromBuffer(const u8 *buffer, size_t length);
     bool loadRomFromFile(const char *path);
 
     bool loadExt(ExtFile *rom);
-    bool loadExtFromBuffer(const uint8_t *buffer, size_t length);
+    bool loadExtFromBuffer(const u8 *buffer, size_t length);
     bool loadExtFromFile(const char *path);
 
 private:
 
     // Loads Rom data from a file.
-    void loadRom(AmigaFile *rom, uint8_t *target, size_t length);
+    void loadRom(AmigaFile *rom, u8 *target, size_t length);
 
     
     //
@@ -394,7 +394,7 @@ public:
     MemorySource *getMemSrcTable() { return memSrc; }
     
     // Returns the memory source for a given address.
-    MemorySource getMemSrc(uint32_t addr) { return memSrc[(addr >> 16) & 0xFF]; }
+    MemorySource getMemSrc(u32 addr) { return memSrc[(addr >> 16) & 0xFF]; }
     
     // Updates the memory source lookup table.
     void updateMemSrcTable();
@@ -406,50 +406,50 @@ public:
     
 public:
 
-    uint8_t peek8(uint32_t addr);
-    template <BusOwner owner> uint16_t peek16(uint32_t addr);
-    uint32_t peek32(uint32_t addr);
+    u8 peek8(u32 addr);
+    template <BusOwner owner> u16 peek16(u32 addr);
+    u32 peek32(u32 addr);
 
-    uint8_t spypeek8(uint32_t addr);
-    uint16_t spypeek16(uint32_t addr);
-    uint32_t spypeek32(uint32_t addr);
+    u8 spypeek8(u32 addr);
+    u16 spypeek16(u32 addr);
+    u32 spypeek32(u32 addr);
     
-    void poke8(uint32_t addr, uint8_t value);
-    template <BusOwner owner> void poke16(uint32_t addr, uint16_t value);
-    void poke32(uint32_t addr, uint32_t value);
+    void poke8(u32 addr, u8 value);
+    template <BusOwner owner> void poke16(u32 addr, u16 value);
+    void poke32(u32 addr, u32 value);
 
     
     //
     // Chip Ram
     //
     
-    inline uint8_t peekChip8(uint32_t addr) {
+    inline u8 peekChip8(u32 addr) {
         ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
     }
-    inline uint16_t peekChip16(uint32_t addr) {
+    inline u16 peekChip16(u32 addr) {
         ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
     }
-    inline uint32_t peekChip32(uint32_t addr) {
+    inline u32 peekChip32(u32 addr) {
         ASSERT_CHIP_ADDR(addr); return READ_CHIP_32(addr);
     }
     
-    inline uint8_t spypeekChip8(uint32_t addr) {
+    inline u8 spypeekChip8(u32 addr) {
         return peekChip8(addr);
     }
-    inline uint16_t spypeekChip16(uint32_t addr) {
+    inline u16 spypeekChip16(u32 addr) {
         return peekChip16(addr);
     }
-    inline uint32_t spypeekChip32(uint32_t addr) {
+    inline u32 spypeekChip32(u32 addr) {
         return peekChip32(addr);
     }
     
-    inline void pokeChip8(uint32_t addr, uint8_t value) {
+    inline void pokeChip8(u32 addr, u8 value) {
         ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value);
     }
-    inline void pokeChip16(uint32_t addr, uint16_t value) {
+    inline void pokeChip16(u32 addr, u16 value) {
         ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value);
     }
-    inline void pokeChip32(uint32_t addr, uint32_t value) {
+    inline void pokeChip32(u32 addr, u32 value) {
         ASSERT_CHIP_ADDR(addr); WRITE_CHIP_32(addr, value);
     }
     
@@ -457,79 +457,79 @@ public:
     // CIA space
     //
     
-    uint8_t peekCIA8(uint32_t addr);
-    uint16_t peekCIA16(uint32_t addr);
-    uint32_t peekCIA32(uint32_t addr);
+    u8 peekCIA8(u32 addr);
+    u16 peekCIA16(u32 addr);
+    u32 peekCIA32(u32 addr);
     
-    uint8_t spypeekCIA8(uint32_t addr);
-    uint16_t spypeekCIA16(uint32_t addr);
-    uint32_t spypeekCIA32(uint32_t addr);
+    u8 spypeekCIA8(u32 addr);
+    u16 spypeekCIA16(u32 addr);
+    u32 spypeekCIA32(u32 addr);
     
-    void pokeCIA8(uint32_t addr, uint8_t value);
-    void pokeCIA16(uint32_t addr, uint16_t value);
-    void pokeCIA32(uint32_t addr, uint32_t value);
+    void pokeCIA8(u32 addr, u8 value);
+    void pokeCIA16(u32 addr, u16 value);
+    void pokeCIA32(u32 addr, u32 value);
     
     //
     // RTC space
     //
     
-    uint8_t peekRTC8(uint32_t addr);
-    uint16_t peekRTC16(uint32_t addr);
-    uint32_t peekRTC32(uint32_t addr);
+    u8 peekRTC8(u32 addr);
+    u16 peekRTC16(u32 addr);
+    u32 peekRTC32(u32 addr);
     
-    uint8_t spypeekRTC8(uint32_t addr) { return peekRTC8(addr); }
-    uint16_t spypeekRTC16(uint32_t addr) { return peekRTC16(addr); }
-    uint32_t spypeekRTC32(uint32_t addr) { return peekRTC32(addr); }
+    u8 spypeekRTC8(u32 addr) { return peekRTC8(addr); }
+    u16 spypeekRTC16(u32 addr) { return peekRTC16(addr); }
+    u32 spypeekRTC32(u32 addr) { return peekRTC32(addr); }
     
-    void pokeRTC8(uint32_t addr, uint8_t value);
-    void pokeRTC16(uint32_t addr, uint16_t value);
-    void pokeRTC32(uint32_t addr, uint32_t value);
+    void pokeRTC8(u32 addr, u8 value);
+    void pokeRTC16(u32 addr, u16 value);
+    void pokeRTC32(u32 addr, u32 value);
     
     //
     // Custom chips (OCS)
     //
     
-    uint8_t peekCustom8(uint32_t addr);
-    uint16_t peekCustom16(uint32_t addr); 
-    uint16_t peekCustomFaulty16(uint32_t addr);
-    uint32_t peekCustom32(uint32_t addr);
+    u8 peekCustom8(u32 addr);
+    u16 peekCustom16(u32 addr);
+    u16 peekCustomFaulty16(u32 addr);
+    u32 peekCustom32(u32 addr);
 
-    uint8_t spypeekCustom8(uint32_t addr);
-    uint16_t spypeekCustom16(uint32_t addr);
-    uint32_t spypeekCustom32(uint32_t addr);
+    u8 spypeekCustom8(u32 addr);
+    u16 spypeekCustom16(u32 addr);
+    u32 spypeekCustom32(u32 addr);
     
-    void pokeCustom8(uint32_t addr, uint8_t value);
-    template <PokeSource s> void pokeCustom16(uint32_t addr, uint16_t value);
-    void pokeCustom32(uint32_t addr, uint32_t value);
+    void pokeCustom8(u32 addr, u8 value);
+    template <PokeSource s> void pokeCustom16(u32 addr, u16 value);
+    void pokeCustom32(u32 addr, u32 value);
     
     //
     // Auto-config space (Zorro II)
     //
     
-    uint8_t peekAutoConf8(uint32_t addr);
-    uint16_t peekAutoConf16(uint32_t addr);
+    u8 peekAutoConf8(u32 addr);
+    u16 peekAutoConf16(u32 addr);
     
-    uint8_t spypeekAutoConf8(uint32_t addr) { return peekAutoConf8(addr); }
-    uint16_t spypeekAutoConf16(uint32_t addr) { return peekAutoConf16(addr); }
+    u8 spypeekAutoConf8(u32 addr) { return peekAutoConf8(addr); }
+    u16 spypeekAutoConf16(u32 addr) { return peekAutoConf16(addr); }
     
-    void pokeAutoConf8(uint32_t addr, uint8_t value);
-    void pokeAutoConf16(uint32_t addr, uint16_t value);
+    void pokeAutoConf8(u32 addr, u8 value);
+    void pokeAutoConf16(u32 addr, u16 value);
 
 
     //
     // Boot ROM or Kickstart ROM
     //
 
-    void pokeRom8(uint32_t addr, uint8_t value);
-    void pokeRom16(uint32_t addr, uint16_t value);
+    void pokeRom8(u32 addr, u8 value);
+    void pokeRom16(u32 addr, u16 value);
 
 
     //
     // Kickstart WOM (Amiga 1000)
     //
 
-    void pokeWom8(uint32_t addr, uint8_t value);
-    void pokeWom16(uint32_t addr, uint16_t value);
+    void pokeWom8(u32 addr, u8 value);
+    void pokeWom16(u32 addr, u16 value);
 
 
     //
@@ -539,10 +539,10 @@ public:
 public:
     
     // Returns 16 bytes of memory as an ASCII string.
-    const char *ascii(uint32_t addr);
+    const char *ascii(u32 addr);
     
     // Returns a certain amount of bytes as a string containing hex words.
-    const char *hex(uint32_t addr, size_t bytes);
+    const char *hex(u32 addr, size_t bytes);
 
 };
 

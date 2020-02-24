@@ -35,7 +35,7 @@ Memory::dealloc()
 }
 
 void
-Memory::setExtStart(uint32_t page)
+Memory::setExtStart(u32 page)
 {
     assert(page == 0xE0 || page == 0xF0);
 
@@ -73,7 +73,7 @@ Memory::_reset()
 void
 Memory::_dump()
 {
-    struct { uint8_t *addr; size_t size; const char *desc; } mem[7] = {
+    struct { u8 *addr; size_t size; const char *desc; } mem[7] = {
         { rom, config.romSize, "Rom" },
         { wom, config.womSize, "Wom" },
         { ext, config.extSize, "Ext" },
@@ -86,7 +86,7 @@ Memory::_dump()
     for (int i = 0; i < 6; i++) {
 
         size_t size = mem[i].size;
-        uint8_t *addr = mem[i].addr;
+        u8 *addr = mem[i].addr;
 
         msg("     %s: ", mem[i].desc);
         if (size == 0) {
@@ -95,7 +95,7 @@ Memory::_dump()
         } else {
             assert(addr != 0);
             assert(size % KB(1) == 0);
-            uint32_t check = fnv_1a_32(addr, size);
+            u32 check = fnv_1a_32(addr, size);
             msg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
         }
     }
@@ -120,7 +120,7 @@ Memory::_size()
 }
 
 size_t
-Memory::didLoadFromBuffer(uint8_t *buffer)
+Memory::didLoadFromBuffer(u8 *buffer)
 {
     SerReader reader(buffer);
 
@@ -145,12 +145,12 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
     dealloc();
 
     // Allocate new memory
-    if (config.romSize) rom = new (std::nothrow) uint8_t[config.romSize + 3];
-    if (config.womSize) wom = new (std::nothrow) uint8_t[config.womSize + 3];
-    if (config.extSize) ext = new (std::nothrow) uint8_t[config.extSize + 3];
-    if (config.chipSize) chip = new (std::nothrow) uint8_t[config.chipSize + 3];
-    if (config.slowSize) slow = new (std::nothrow) uint8_t[config.slowSize + 3];
-    if (config.fastSize) fast = new (std::nothrow) uint8_t[config.fastSize + 3];
+    if (config.romSize) rom = new (std::nothrow) u8[config.romSize + 3];
+    if (config.womSize) wom = new (std::nothrow) u8[config.womSize + 3];
+    if (config.extSize) ext = new (std::nothrow) u8[config.extSize + 3];
+    if (config.chipSize) chip = new (std::nothrow) u8[config.chipSize + 3];
+    if (config.slowSize) slow = new (std::nothrow) u8[config.slowSize + 3];
+    if (config.fastSize) fast = new (std::nothrow) u8[config.fastSize + 3];
 
     // Load memory contents from buffer
     reader.copy(rom, config.romSize);
@@ -164,7 +164,7 @@ Memory::didLoadFromBuffer(uint8_t *buffer)
 }
 
 size_t
-Memory::didSaveToBuffer(uint8_t *buffer)
+Memory::didSaveToBuffer(u8 *buffer)
 {
     // Save memory size information
     SerWriter writer(buffer);
@@ -188,7 +188,7 @@ Memory::didSaveToBuffer(uint8_t *buffer)
 }
 
 bool
-Memory::alloc(size_t bytes, uint8_t *&ptr, size_t &size, uint32_t &mask)
+Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 {
     // Check the invariants
     assert((ptr == NULL) == (size == 0));
@@ -208,7 +208,7 @@ Memory::alloc(size_t bytes, uint8_t *&ptr, size_t &size, uint32_t &mask)
         // that a long word access is performed on the last memory address.
         size_t allocSize = bytes + 3;
         
-        if (!(ptr = new (std::nothrow) uint8_t[allocSize])) {
+        if (!(ptr = new (std::nothrow) u8[allocSize])) {
             warn("Cannot allocate %d KB of memory\n", bytes);
             return false;
         }
@@ -233,7 +233,7 @@ Memory::fillRamWithStartupPattern()
 }
 
 RomRevision
-Memory::revision(uint32_t fingerprint)
+Memory::revision(u32 fingerprint)
 {
     switch(fingerprint) {
 
@@ -507,7 +507,7 @@ Memory::loadRom(RomFile *file)
 }
 
 bool
-Memory::loadRomFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadRomFromBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != NULL);
     
@@ -549,7 +549,7 @@ Memory::loadExt(ExtFile *file)
 }
 
 bool
-Memory::loadExtFromBuffer(const uint8_t *buffer, size_t length)
+Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != NULL);
 
@@ -579,7 +579,7 @@ Memory::loadExtFromFile(const char *path)
 }
 
 void
-Memory::loadRom(AmigaFile *file, uint8_t *target, size_t length)
+Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
 {
     if (file) {
 
@@ -679,8 +679,8 @@ Memory::updateMemSrcTable()
     amiga.putMessage(MSG_MEM_LAYOUT);
 }
 
-uint8_t
-Memory::peek8(uint32_t addr)
+u8
+Memory::peek8(u32 addr)
 {
     // debug("PC: %X peek8(%X)\n", cpu.getPC(), addr);
     addr &= 0xFFFFFF;
@@ -772,8 +772,8 @@ Memory::peek8(uint32_t addr)
     return 0;
 }
 
-template <BusOwner owner> uint16_t
-Memory::peek16(uint32_t addr)
+template <BusOwner owner> u16
+Memory::peek16(u32 addr)
 {
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
@@ -885,14 +885,14 @@ Memory::peek16(uint32_t addr)
     return 0;
 }
 
-uint32_t
-Memory::peek32(uint32_t addr)
+u32
+Memory::peek32(u32 addr)
 {
     return HI_W_LO_W(peek16<BUS_CPU>(addr), peek16<BUS_CPU>(addr + 2));
 }
 
-uint8_t
-Memory::spypeek8(uint32_t addr)
+u8
+Memory::spypeek8(u32 addr)
 {
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
@@ -913,8 +913,8 @@ Memory::spypeek8(uint32_t addr)
     return 0;
 }
 
-uint16_t
-Memory::spypeek16(uint32_t addr)
+u16
+Memory::spypeek16(u32 addr)
 {
     if (!IS_EVEN(addr)) {
         // warn("spypeek16(%X): Address violation error (reading odd address)\n", addr);
@@ -939,14 +939,14 @@ Memory::spypeek16(uint32_t addr)
     return 0;
 }
 
-uint32_t
-Memory::spypeek32(uint32_t addr)
+u32
+Memory::spypeek32(u32 addr)
 {
     return HI_W_LO_W(spypeek16(addr), spypeek16(addr + 2));
 }
 
 void
-Memory::poke8(uint32_t addr, uint8_t value)
+Memory::poke8(u32 addr, u8 value)
 {
     // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** poke8(%X,%X)\n", addr, value);
 
@@ -1033,7 +1033,7 @@ Memory::poke8(uint32_t addr, uint8_t value)
 }
 
 template <BusOwner owner> void
-Memory::poke16(uint32_t addr, uint16_t value)
+Memory::poke16(u32 addr, u16 value)
 {
     if (!IS_EVEN(addr)) {
         warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);
@@ -1155,19 +1155,19 @@ Memory::poke16(uint32_t addr, uint16_t value)
 }
 
 void
-Memory::poke32(uint32_t addr, uint32_t value)
+Memory::poke32(u32 addr, u32 value)
 {
     poke16<BUS_CPU>(addr,     HI_WORD(value));
     poke16<BUS_CPU>(addr + 2, LO_WORD(value));
 }
 
-uint8_t
-Memory::peekCIA8(uint32_t addr)
+u8
+Memory::peekCIA8(u32 addr)
 {
     // debug("peekCIA8(%6X)\n", addr);
     
-    uint32_t reg = (addr >> 8)  & 0b1111;
-    uint32_t sel = (addr >> 12) & 0b11;
+    u32 reg = (addr >> 8)  & 0b1111;
+    u32 sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
     switch (sel) {
@@ -1188,14 +1188,14 @@ Memory::peekCIA8(uint32_t addr)
     return 0;
 }
 
-uint16_t
-Memory::peekCIA16(uint32_t addr)
+u16
+Memory::peekCIA16(u32 addr)
 {
     debug(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
     // assert(false);
     
-    uint32_t reg = (addr >> 8)  & 0b1111;
-    uint32_t sel = (addr >> 12) & 0b11;
+    u32 reg = (addr >> 8)  & 0b1111;
+    u32 sel = (addr >> 12) & 0b11;
     
     switch (sel) {
             
@@ -1216,8 +1216,8 @@ Memory::peekCIA16(uint32_t addr)
     return 0;
 }
 
-uint32_t
-Memory::peekCIA32(uint32_t addr)
+u32
+Memory::peekCIA32(u32 addr)
 {
     debug(CIA_DEBUG, "peekCIA32(%6X)\n", addr);
     assert(false);
@@ -1225,11 +1225,11 @@ Memory::peekCIA32(uint32_t addr)
     return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
 }
 
-uint8_t
-Memory::spypeekCIA8(uint32_t addr)
+u8
+Memory::spypeekCIA8(u32 addr)
 {
-    uint32_t reg = (addr >> 8)  & 0b1111;
-    uint32_t sel = (addr >> 12) & 0b11;
+    u32 reg = (addr >> 8)  & 0b1111;
+    u32 sel = (addr >> 12) & 0b11;
     bool a0 = addr & 1;
     
     switch (sel) {
@@ -1250,11 +1250,11 @@ Memory::spypeekCIA8(uint32_t addr)
     return 0;
 }
 
-uint16_t
-Memory::spypeekCIA16(uint32_t addr)
+u16
+Memory::spypeekCIA16(u32 addr)
 {
-    uint32_t reg = (addr >> 8) & 0b1111;
-    uint32_t sel = (addr >> 12) & 0b11;
+    u32 reg = (addr >> 8) & 0b1111;
+    u32 sel = (addr >> 12) & 0b11;
     
     switch (sel) {
             
@@ -1275,43 +1275,43 @@ Memory::spypeekCIA16(uint32_t addr)
     return 0;
 }
 
-uint32_t
-Memory::spypeekCIA32(uint32_t addr)
+u32
+Memory::spypeekCIA32(u32 addr)
 {
     return HI_W_LO_W(spypeekCIA16(addr), spypeekCIA16(addr + 2));
 }
 
 void
-Memory::pokeCIA8(uint32_t addr, uint8_t value)
+Memory::pokeCIA8(u32 addr, u8 value)
 {
     // debug(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
     
-    uint32_t reg = (addr >> 8) & 0b1111;
-    uint32_t selA = (addr & 0x1000) == 0;
-    uint32_t selB = (addr & 0x2000) == 0;
+    u32 reg = (addr >> 8) & 0b1111;
+    u32 selA = (addr & 0x1000) == 0;
+    u32 selB = (addr & 0x2000) == 0;
 
     if (selA) ciaa.poke(reg, value);
     if (selB) ciab.poke(reg, value);
 }
 
 void
-Memory::pokeCIA16(uint32_t addr, uint16_t value)
+Memory::pokeCIA16(u32 addr, u16 value)
 {
     debug("pokeCIA16(%6X, %X)\n", addr, value);
     // assert(false);
     
     assert(IS_EVEN(addr));
     
-    uint32_t reg = (addr >> 8) & 0b1111;
-    uint32_t selA = (addr & 0x1000) == 0;
-    uint32_t selB = (addr & 0x2000) == 0;
+    u32 reg = (addr >> 8) & 0b1111;
+    u32 selA = (addr & 0x1000) == 0;
+    u32 selB = (addr & 0x2000) == 0;
     
     if (selA) ciaa.poke(reg, LO_BYTE(value));
     if (selB) ciab.poke(reg, HI_BYTE(value));
 }
 
 void
-Memory::pokeCIA32(uint32_t addr, uint32_t value)
+Memory::pokeCIA32(u32 addr, u32 value)
 {
     debug("pokeCIA32(%6X, %X)\n", addr, value);
     assert(false);
@@ -1320,8 +1320,8 @@ Memory::pokeCIA32(uint32_t addr, uint32_t value)
     pokeCIA16(addr + 2, LO_WORD(value));
 }
 
-uint8_t
-Memory::peekRTC8(uint32_t addr)
+u8
+Memory::peekRTC8(u32 addr)
 {
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
      * Reg:   --   -0   --   -0   --   -1   --   -1   --   -2   --   -2
@@ -1334,14 +1334,14 @@ Memory::peekRTC8(uint32_t addr)
     return rtc.peek((addr >> 2) & 0b1111);
 }
 
-uint16_t
-Memory::peekRTC16(uint32_t addr)
+u16
+Memory::peekRTC16(u32 addr)
 {
     return HI_LO(peekRTC8(addr), peekRTC8(addr + 1));
 }
 
 void
-Memory::pokeRTC8(uint32_t addr, uint8_t value)
+Memory::pokeRTC8(u32 addr, u8 value)
 {
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
      * Reg:   --   -0   --   -0   --   -1   --   -1   --   -2   --   -2
@@ -1355,14 +1355,14 @@ Memory::pokeRTC8(uint32_t addr, uint8_t value)
 }
 
 void
-Memory::pokeRTC16(uint32_t addr, uint16_t value)
+Memory::pokeRTC16(u32 addr, u16 value)
 {
     pokeRTC8(addr, HI_BYTE(value));
     pokeRTC8(addr + 1, LO_BYTE(value));
 }
 
-uint8_t
-Memory::peekCustom8(uint32_t addr)
+u8
+Memory::peekCustom8(u32 addr)
 {
     if (IS_EVEN(addr)) {
         return HI_BYTE(peekCustom16(addr));
@@ -1371,10 +1371,10 @@ Memory::peekCustom8(uint32_t addr)
     }
 }
 
-uint16_t
-Memory::peekCustom16(uint32_t addr)
+u16
+Memory::peekCustom16(u32 addr)
 {
-    uint32_t result;
+    u32 result;
 
     assert(IS_EVEN(addr));
 
@@ -1426,8 +1426,8 @@ Memory::peekCustom16(uint32_t addr)
     return result;
 }
 
-uint16_t
-Memory::peekCustomFaulty16(uint32_t addr)
+u16
+Memory::peekCustomFaulty16(u32 addr)
 {
     /* This functions is called when a write-only register or a
      * non-existing chipset register is read.
@@ -1456,15 +1456,15 @@ Memory::peekCustomFaulty16(uint32_t addr)
      }
 }
 
-uint32_t
-Memory::peekCustom32(uint32_t addr)
+u32
+Memory::peekCustom32(u32 addr)
 {
     assert(false);
     return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
 }
 
-uint8_t
-Memory::spypeekCustom8(uint32_t addr)
+u8
+Memory::spypeekCustom8(u32 addr)
 {
     if (IS_EVEN(addr)) {
         return HI_BYTE(spypeekCustom16(addr));
@@ -1473,8 +1473,8 @@ Memory::spypeekCustom8(uint32_t addr)
     }
 }
 
-uint16_t
-Memory::spypeekCustom16(uint32_t addr)
+u16
+Memory::spypeekCustom16(u32 addr)
 {
     assert(IS_EVEN(addr));
     
@@ -1486,14 +1486,14 @@ Memory::spypeekCustom16(uint32_t addr)
     // return peekCustom16(addr);
 }
 
-uint32_t
-Memory::spypeekCustom32(uint32_t addr)
+u32
+Memory::spypeekCustom32(u32 addr)
 {
     return HI_W_LO_W(spypeekCustom16(addr), spypeekCustom16(addr + 2));
 }
 
 void
-Memory::pokeCustom8(uint32_t addr, uint8_t value)
+Memory::pokeCustom8(u32 addr, u8 value)
 {
     /* "Custom register byte write bug = normally byte write to custom register
      *  writes same value to upper and lower byte."
@@ -1503,7 +1503,7 @@ Memory::pokeCustom8(uint32_t addr, uint8_t value)
 }
 
 template <PokeSource s> void
-Memory::pokeCustom16(uint32_t addr, uint16_t value)
+Memory::pokeCustom16(u32 addr, u16 value)
 {
 
     if ((addr & 0xFFF) == 0x30) {
@@ -1969,40 +1969,40 @@ Memory::pokeCustom16(uint32_t addr, uint16_t value)
 }
 
 void
-Memory::pokeCustom32(uint32_t addr, uint32_t value)
+Memory::pokeCustom32(u32 addr, u32 value)
 {
     assert(false);
     pokeCustom16<POKE_CPU>(addr,     HI_WORD(value));
     pokeCustom16<POKE_CPU>(addr + 2, LO_WORD(value));
 }
 
-uint8_t
-Memory::peekAutoConf8(uint32_t addr)
+u8
+Memory::peekAutoConf8(u32 addr)
 {
-    uint8_t result = zorro.peekFastRamDevice(addr) << 4;
+    u8 result = zorro.peekFastRamDevice(addr) << 4;
     
     // debug("peekAutoConf8(%X) = %X\n", addr, result);
     return result;
 }
 
-uint16_t
-Memory::peekAutoConf16(uint32_t addr)
+u16
+Memory::peekAutoConf16(u32 addr)
 {
-    uint16_t result = HI_LO(peekAutoConf8(addr), peekAutoConf8(addr + 1));
+    u16 result = HI_LO(peekAutoConf8(addr), peekAutoConf8(addr + 1));
     
     // debug("peekAutoConf16(%X) = %d\n", addr, result);
     return result;
 }
 
 void
-Memory::pokeAutoConf8(uint32_t addr, uint8_t value)
+Memory::pokeAutoConf8(u32 addr, u8 value)
 {
     // debug("pokeAutoConf8(%X, %X)\n", addr, value);
     zorro.pokeFastRamDevice(addr, value);
 }
 
 void
-Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
+Memory::pokeAutoConf16(u32 addr, u16 value)
 {
     // debug("pokeAutoConf16(%X, %X)\n", addr, value);
     zorro.pokeFastRamDevice(addr, HI_BYTE(value));
@@ -2010,7 +2010,7 @@ Memory::pokeAutoConf16(uint32_t addr, uint16_t value)
 }
 
 void
-Memory::pokeRom8(uint32_t addr, uint8_t value)
+Memory::pokeRom8(u32 addr, u8 value)
 {
     // debug("pokeRom8(%X, %X)\n", addr, value);
 
@@ -2023,7 +2023,7 @@ Memory::pokeRom8(uint32_t addr, uint8_t value)
 }
 
 void
-Memory::pokeRom16(uint32_t addr, uint16_t value)
+Memory::pokeRom16(u32 addr, u16 value)
 {
     // debug("pokeRom16(%X, %X)\n", addr, value);
 
@@ -2036,7 +2036,7 @@ Memory::pokeRom16(uint32_t addr, uint16_t value)
 }
 
 void
-Memory::pokeWom8(uint32_t addr, uint8_t value)
+Memory::pokeWom8(u32 addr, u8 value)
 {
     // debug("pokeWom8(%X, %X)\n", addr, value);
 
@@ -2047,7 +2047,7 @@ Memory::pokeWom8(uint32_t addr, uint8_t value)
 }
 
 void
-Memory::pokeWom16(uint32_t addr, uint16_t value)
+Memory::pokeWom16(u32 addr, u16 value)
 {
     // debug("pokeWom16(%X, %X)\n", addr, value);
 
@@ -2057,10 +2057,10 @@ Memory::pokeWom16(uint32_t addr, uint16_t value)
 }
 
 const char *
-Memory::ascii(uint32_t addr)
+Memory::ascii(u32 addr)
 {
     for (unsigned i = 0; i < 16; i++) {
-        uint8_t value = spypeek8(addr + i);
+        u8 value = spypeek8(addr + i);
         str[i] = isprint(value) ? value : '.';
     }
     str[16] = 0;
@@ -2068,19 +2068,19 @@ Memory::ascii(uint32_t addr)
 }
 
 const char *
-Memory::hex(uint32_t addr, size_t bytes)
+Memory::hex(u32 addr, size_t bytes)
 {
     cpu.disassembleMemory(addr, bytes / 2, str);
     return str;
 }
 
-template void Memory::pokeCustom16<POKE_CPU>(uint32_t addr, uint16_t value);
-template void Memory::pokeCustom16<POKE_COPPER>(uint32_t addr, uint16_t value);
+template void Memory::pokeCustom16<POKE_CPU>(u32 addr, u16 value);
+template void Memory::pokeCustom16<POKE_COPPER>(u32 addr, u16 value);
 
-template uint16_t Memory::peek16<BUS_CPU>(uint32_t addr);
-template uint16_t Memory::peek16<BUS_COPPER>(uint32_t addr);
-template uint16_t Memory::peek16<BUS_BLITTER>(uint32_t addr);
+template u16 Memory::peek16<BUS_CPU>(u32 addr);
+template u16 Memory::peek16<BUS_COPPER>(u32 addr);
+template u16 Memory::peek16<BUS_BLITTER>(u32 addr);
 
-template void Memory::poke16<BUS_CPU>(uint32_t addr, uint16_t value);
-template void Memory::poke16<BUS_COPPER>(uint32_t addr, uint16_t value);
-template void Memory::poke16<BUS_BLITTER>(uint32_t addr, uint16_t value);
+template void Memory::poke16<BUS_CPU>(u32 addr, u16 value);
+template void Memory::poke16<BUS_COPPER>(u32 addr, u16 value);
+template void Memory::poke16<BUS_BLITTER>(u32 addr, u16 value);
