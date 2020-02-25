@@ -10,6 +10,10 @@
 #ifndef VA_CONSTANTS_H
 #define VA_CONSTANTS_H
 
+//
+// Clock rates
+//
+
 // Clock rate of the master clock in MHz (PAL Amiga)
 static const double masterClockFrequency = 28.37516;
 
@@ -19,7 +23,10 @@ static const double cpuClockFrequency = masterClockFrequency / 4.0;
 // Clock rate of the DMA bus (3.546895 MHz)
 static const double dmaClockFrequency = masterClockFrequency / 8.0;
 
-// Register addresses
+//
+// Registers
+//
+
 #define BLTDDAT  0x000L
 #define DMACONR  0x002L
 #define VPOSR    0x004L
@@ -349,6 +356,23 @@ static const char *customReg[256] = {
     "unused",         "unused",         "FMODE (AGA)",
     "NO-OP"
 };
+
+// DMACON register bits
+#define BBUSY  0x4000
+#define BZERO  0x2000
+#define BLTPRI 0x0400
+#define DMAEN  0x0200
+#define BPLEN  0x0100
+#define COPEN  0x0080
+#define BLTEN  0x0040
+#define SPREN  0x0020
+#define DSKEN  0x0010
+#define AUD3EN 0x0008
+#define AUD2EN 0x0004
+#define AUD1EN 0x0002
+#define AUD0EN 0x0001
+
+#define AUDEN  0x000F
 
 
 //

@@ -10,6 +10,7 @@
 #ifndef _AGNUS_INC
 #define _AGNUS_INC
 
+#include "AmigaConstants.h"
 #include "Beam.h"
 #include "Blitter.h"
 #include "Copper.h"
@@ -17,19 +18,6 @@
 #include "Event.h"
 #include "HardwareComponent.h"
 #include "Memory.h"
-
-// Bit masks as they appear in the DMACON register
-#define DMAEN 0b1000000000
-#define BPLEN 0b0100000000
-#define COPEN 0b0010000000
-#define BLTEN 0b0001000000
-#define SPREN 0b0000100000
-#define DSKEN 0b0000010000
-#define AU3EN 0b0000001000
-#define AU2EN 0b0000000100
-#define AU1EN 0b0000000010
-#define AU0EN 0b0000000001
-#define AUDEN 0b0000001111
 
 // Hsync action bits
 #define HSYNC_COMPUTE_DDF_WINDOW 0b001
@@ -854,7 +842,7 @@ public:
     static bool doDskDMA(u16 v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
     inline bool doDskDMA() { return doDskDMA(dmacon); }
     template <int x> static bool doAudDMA(u16 v) {
-        return (v & (DMAEN | (AU0EN << x))) == (DMAEN | (AU0EN << x)); }
+        return (v & (DMAEN | (AUD0EN << x))) == (DMAEN | (AUD0EN << x)); }
     template <int x> inline bool doAudDMA() { return doAudDMA<x>(dmacon); }
 
     // DSKPTH, DSKPTL

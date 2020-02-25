@@ -113,10 +113,10 @@ Agnus::initDasEventTable()
             p[0x0B] = DAS_D2;
         }
 
-        if (dmacon & AU0EN) p[0x0D] = DAS_A0;
-        if (dmacon & AU1EN) p[0x0F] = DAS_A1;
-        if (dmacon & AU2EN) p[0x11] = DAS_A2;
-        if (dmacon & AU3EN) p[0x13] = DAS_A3;
+        if (dmacon & AUD0EN) p[0x0D] = DAS_A0;
+        if (dmacon & AUD1EN) p[0x0F] = DAS_A1;
+        if (dmacon & AUD2EN) p[0x11] = DAS_A2;
+        if (dmacon & AUD3EN) p[0x13] = DAS_A3;
 
         if (dmacon & SPREN) {
             p[0x15] = DAS_S0_1;
@@ -956,10 +956,10 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     bool oldBLTEN = (oldValue & BLTEN) && oldDMAEN;
     bool oldSPREN = (oldValue & SPREN) && oldDMAEN;
     bool oldDSKEN = (oldValue & DSKEN) && oldDMAEN;
-    bool oldAU0EN = (oldValue & AU0EN) && oldDMAEN;
-    bool oldAU1EN = (oldValue & AU1EN) && oldDMAEN;
-    bool oldAU2EN = (oldValue & AU2EN) && oldDMAEN;
-    bool oldAU3EN = (oldValue & AU3EN) && oldDMAEN;
+    bool oldAUD0EN = (oldValue & AUD0EN) && oldDMAEN;
+    bool oldAUD1EN = (oldValue & AUD1EN) && oldDMAEN;
+    bool oldAUD2EN = (oldValue & AUD2EN) && oldDMAEN;
+    bool oldAUD3EN = (oldValue & AUD3EN) && oldDMAEN;
 
     bool newDMAEN = (newValue & DMAEN);
     bool newBPLEN = (newValue & BPLEN) && newDMAEN;
@@ -967,10 +967,10 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     bool newBLTEN = (newValue & BLTEN) && newDMAEN;
     bool newSPREN = (newValue & SPREN) && newDMAEN;
     bool newDSKEN = (newValue & DSKEN) && newDMAEN;
-    bool newAU0EN = (newValue & AU0EN) && newDMAEN;
-    bool newAU1EN = (newValue & AU1EN) && newDMAEN;
-    bool newAU2EN = (newValue & AU2EN) && newDMAEN;
-    bool newAU3EN = (newValue & AU3EN) && newDMAEN;
+    bool newAUD0EN = (newValue & AUD0EN) && newDMAEN;
+    bool newAUD1EN = (newValue & AUD1EN) && newDMAEN;
+    bool newAUD2EN = (newValue & AUD2EN) && newDMAEN;
+    bool newAUD3EN = (newValue & AUD3EN) && newDMAEN;
 
     // Inform the delegates
     blitter.pokeDMACON(oldValue, newValue);
@@ -1043,17 +1043,17 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     }
     
     // Audio DMA
-    if (oldAU0EN ^ newAU0EN) {
-        newAU0EN ? audioUnit.channel0.enableDMA() : audioUnit.channel0.disableDMA();
+    if (oldAUD0EN ^ newAUD0EN) {
+        newAUD0EN ? audioUnit.channel0.enableDMA() : audioUnit.channel0.disableDMA();
     }
-    if (oldAU1EN ^ newAU1EN) {
-        newAU1EN ? audioUnit.channel1.enableDMA() : audioUnit.channel1.disableDMA();
+    if (oldAUD1EN ^ newAUD1EN) {
+        newAUD1EN ? audioUnit.channel1.enableDMA() : audioUnit.channel1.disableDMA();
     }
-    if (oldAU2EN ^ newAU2EN) {
-        newAU2EN ? audioUnit.channel2.enableDMA() : audioUnit.channel2.disableDMA();
+    if (oldAUD2EN ^ newAUD2EN) {
+        newAUD2EN ? audioUnit.channel2.enableDMA() : audioUnit.channel2.disableDMA();
     }
-    if (oldAU3EN ^ newAU3EN) {
-        newAU3EN ? audioUnit.channel3.enableDMA() : audioUnit.channel3.disableDMA();
+    if (oldAUD3EN ^ newAUD3EN) {
+        newAUD3EN ? audioUnit.channel3.enableDMA() : audioUnit.channel3.disableDMA();
     }
 }
 
