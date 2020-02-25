@@ -695,10 +695,6 @@ public:
     //
     // OLD
     //
-
-    // Returns the current beam position as a 17 bit value
-    // DEPRECATED
-    u32 getBeam() { return BEAM(pos.v, pos.h); }
     
     /* Returns the difference of two beam position in master cycles
      * Returns NEVER if the start position is greater than the end position
