@@ -37,8 +37,6 @@ extension Inspector {
                          deniseBPLCON2: fmt16,
                          deniseDIWSTRT: fmt16,
                          deniseDIWSTOP: fmt16,
-                         deniseJOY0DAT: fmt16,
-                         deniseJOY1DAT: fmt16,
                          deniseCLXDAT: fmt16,
                          sprPtr: fmt24
         ]
@@ -93,8 +91,6 @@ extension Inspector {
         // Auxiliary register section
         //
 
-        deniseJOY0DAT.integerValue = Int(deniseInfo!.joydat.0)
-        deniseJOY1DAT.integerValue = Int(deniseInfo!.joydat.1)
         deniseCLXDAT.integerValue = Int(deniseInfo!.clxdat)
 
         //

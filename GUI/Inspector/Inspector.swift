@@ -269,8 +269,6 @@ class Inspector: NSWindowController {
     @IBOutlet weak var deniseDIWSTOP: NSTextField!
     @IBOutlet weak var deniseDIWSTOPText: NSTextField!
 
-    @IBOutlet weak var deniseJOY0DAT: NSTextField!
-    @IBOutlet weak var deniseJOY1DAT: NSTextField!
     @IBOutlet weak var deniseCLXDAT: NSTextField!
 
     @IBOutlet weak var deniseCol0: NSColorWell!
