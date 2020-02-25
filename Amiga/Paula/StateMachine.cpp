@@ -54,7 +54,6 @@ StateMachine<nr>::_inspect()
     info.audvolLatch = audvolLatch;
     info.audvol = audvol;
     info.auddatLatch = auddatLatch;
-    info.auddat = auddat;
     info.audlcLatch = audlcLatch;
 
     pthread_mutex_unlock(&lock);

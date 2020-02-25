@@ -49,7 +49,7 @@ public:
 
     // Audio data (AUDxDAT)
     u16 auddatLatch;
-    u16 auddat;
+    // u16 auddat;
 
     // Audio location (AUDxLC)
     u32 audlcLatch;
@@ -94,7 +94,6 @@ public:
         & audvolLatch
         & audvol
         & auddatLatch
-        & auddat
         & audlcLatch
         & intreq2
         & samples;
