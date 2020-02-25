@@ -70,7 +70,7 @@ AudioConfig;
 typedef struct
 {
     i8 state;
-
+    bool dma;
     u16 audlenLatch;
     u16 audlen;
     u16 audperLatch;

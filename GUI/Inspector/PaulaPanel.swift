@@ -179,47 +179,63 @@ extension Inspector {
         // Audio section
         //
 
-        func assignImage(_ button: NSButton, state: Int8, counter: inout Int) {
+        func assignImage(_ button: NSButton, info: AudioChannelInfo, displayState: inout Int) {
 
-            switch state {
+            // Determine the state to display
+            switch displayState {
             case 0:
-                button.image = image0
-                counter = 0
+                if (info.state != 0) { displayState = info.dma ? 1 : 2 }
             case 1:
-                button.image = image1
-            case 2, 3:
-                button.image = (counter % 2 == 0) ? image2 : image3
-                counter += 1
+                displayState = 5
             case 5:
-                button.image = image5
+                displayState = 2
+            case 2:
+                displayState = 3
+            case 3:
+                displayState = (info.state == 2 || info.state == 3) ? 2 : 0
             default:
-                button.image = nil
+                fatalError()
+            }
+
+            // Assign the correct image
+            switch displayState {
+            case 0:  button.image = image0
+            case 1:  button.image = image1
+            case 2:  button.image = image2
+            case 3:  button.image = image3
+            case 5:  button.image = image5
+            default: button.image = nil
             }
         }
 
-        audioLen0.intValue = Int32(audioInfo!.channel.0.audlenLatch)
-        audioPer0.intValue = Int32(audioInfo!.channel.0.audperLatch)
-        audioVol0.intValue = Int32(audioInfo!.channel.0.audvolLatch)
-        audioDat0.intValue = Int32(audioInfo!.channel.0.auddat)
+        let info0 = audioInfo!.channel.0
+        let info1 = audioInfo!.channel.1
+        let info2 = audioInfo!.channel.2
+        let info3 = audioInfo!.channel.3
+        
+        audioLen0.intValue = Int32(info0.audlenLatch)
+        audioPer0.intValue = Int32(info0.audperLatch)
+        audioVol0.intValue = Int32(info0.audvolLatch)
+        audioDat0.intValue = Int32(info0.auddat)
 
-        audioLen1.intValue = Int32(audioInfo!.channel.1.audlenLatch)
-        audioPer1.intValue = Int32(audioInfo!.channel.1.audperLatch)
-        audioVol1.intValue = Int32(audioInfo!.channel.1.audvolLatch)
-        audioDat1.intValue = Int32(audioInfo!.channel.1.auddat)
+        audioLen1.intValue = Int32(info1.audlenLatch)
+        audioPer1.intValue = Int32(info1.audperLatch)
+        audioVol1.intValue = Int32(info1.audvolLatch)
+        audioDat1.intValue = Int32(info1.auddat)
 
-        audioLen2.intValue = Int32(audioInfo!.channel.2.audlenLatch)
-        audioPer2.intValue = Int32(audioInfo!.channel.2.audperLatch)
-        audioVol2.intValue = Int32(audioInfo!.channel.2.audvolLatch)
-        audioDat2.intValue = Int32(audioInfo!.channel.2.auddat)
+        audioLen2.intValue = Int32(info2.audlenLatch)
+        audioPer2.intValue = Int32(info2.audperLatch)
+        audioVol2.intValue = Int32(info2.audvolLatch)
+        audioDat2.intValue = Int32(info2.auddat)
 
-        audioLen3.intValue = Int32(audioInfo!.channel.3.audlenLatch)
-        audioPer3.intValue = Int32(audioInfo!.channel.3.audperLatch)
-        audioVol3.intValue = Int32(audioInfo!.channel.3.audvolLatch)
-        audioDat3.intValue = Int32(audioInfo!.channel.3.auddat)
+        audioLen3.intValue = Int32(info3.audlenLatch)
+        audioPer3.intValue = Int32(info3.audperLatch)
+        audioVol3.intValue = Int32(info3.audvolLatch)
+        audioDat3.intValue = Int32(info3.auddat)
 
-        assignImage(audioImg0, state: audioInfo!.channel.0.state, counter: &state0)
-        assignImage(audioImg1, state: audioInfo!.channel.1.state, counter: &state1)
-        assignImage(audioImg2, state: audioInfo!.channel.2.state, counter: &state2)
-        assignImage(audioImg3, state: audioInfo!.channel.3.state, counter: &state3)
+        assignImage(audioImg0, info: info0, displayState: &displayState0)
+        assignImage(audioImg1, info: info1, displayState: &displayState1)
+        assignImage(audioImg2, info: info2, displayState: &displayState2)
+        assignImage(audioImg3, info: info3, displayState: &displayState3)
     }
 }

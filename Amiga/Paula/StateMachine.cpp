@@ -47,6 +47,7 @@ StateMachine<nr>::_inspect()
     pthread_mutex_lock(&lock);
 
     info.state = state;
+    info.dma = AUDxON();
     info.audlenLatch = audlenLatch;
     info.audlen = audlen;
     info.audperLatch = audperLatch;

@@ -88,11 +88,11 @@ class Inspector: NSWindowController {
     var memSrc = MEM_CHIP
     var selected = -1
 
-    // Counter to avoid Moire effects in state machine images
-    var state0 = 0
-    var state1 = 0
-    var state2 = 0
-    var state3 = 0
+    // State to display in the state machine images (Paula panel)
+    var displayState0 = 0
+    var displayState1 = 0
+    var displayState2 = 0
+    var displayState3 = 0
 
     // Debug panel (CIA)
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
