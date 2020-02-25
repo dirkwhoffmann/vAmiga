@@ -25,15 +25,12 @@ template <class T, int capacity> struct RingBuffer
     // Read and write pointers
     int r, w;
 
-
     //
     // Constructing and initializing
     //
 
     RingBuffer() { clear(); }
-
     void clear() { r = w = 0; }
-
 
     //
     // Serializing
@@ -45,7 +42,6 @@ template <class T, int capacity> struct RingBuffer
         worker & elements & r & w;
     }
 
-
     //
     // Querying the fill status
     //
@@ -53,7 +49,6 @@ template <class T, int capacity> struct RingBuffer
     int count() const { return (capacity + w - r) % capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
-
 
     //
     // Working with indices
@@ -68,6 +63,11 @@ template <class T, int capacity> struct RingBuffer
     //
     // Reading and writing elements
     //
+
+    T& current()
+    {
+        return elements[r];
+    }
 
     T& read()
     {
@@ -92,6 +92,7 @@ template <class T, int capacity> struct RingBuffer
     // Debugging
     //
 
+    /*
     void dump()
      {
          printf("%d elements (r = %d w = %d):\n", count(), r, w);
@@ -102,6 +103,7 @@ template <class T, int capacity> struct RingBuffer
          }
          printf("\n");
      }
+     */
 };
 
 template <class T, int capacity>
@@ -143,17 +145,17 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
             assert(i < capacity);
             printf("%2i: [%lld] ", i, this->keys[i]);
             printf("%d\n", this->elements[i]);
-            // this->elements[i].print();
         }
         printf("\n");
     }
 };
 
 
-/*
- *
+/* Register change recorders
+ * For certain registers, Agnus and Denise have to keep track about when a
+ * value changes. This information is stored in sorted ring buffers called
+ * register change recorders.
  */
-
 struct RegChange
 {
     u32 addr;
@@ -172,6 +174,26 @@ struct RegChange
     void print()
     {
         printf("addr: %x value: %x\n", addr, value);
+    }
+};
+
+template <int capacity>
+struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
+{
+    // Returns the closest trigger cycle
+    Cycle trigger() {
+        return this->isEmpty() ? NEVER : this->keys[this->r];
+    }
+
+    void dump()
+    {
+        printf("%d elements (r = %d w = %d):\n", this->count(), this->r, this->w);
+        for (int i = this->r; i != this->w; i = this->next(i)) {
+            assert(i < capacity);
+            printf("%2i: [%lld] ", i, this->keys[i]);
+            this->elements[i].print();
+        }
+        printf("\n");
     }
 };
 

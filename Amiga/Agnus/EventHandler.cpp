@@ -428,6 +428,8 @@ Agnus::scheduleNextREGEvent()
 {
     // Determine when the next register change happens
     Cycle nextTrigger = changeRecorder.trigger();
+    Cycle nextTrig = chngRecorder.trigger();
+    assert(nextTrigger == nextTrig);
 
     // Schedule a register change event for that cycle
     scheduleAbs<REG_SLOT>(nextTrigger, REG_CHANGE);
@@ -568,7 +570,13 @@ Agnus::serviceREGEvent(Cycle until)
         // Apply the register change
         u32 addr = changeRecorder.addr();
         u16 value = changeRecorder.value();
-
+        assert(!chngRecorder.isEmpty());
+        RegChange c = chngRecorder.read();
+        u32 a = c.addr;
+        u32 v = c.value;
+        assert(addr == a);
+        assert(value == v);
+        
         switch (addr) {
 
             case REG_BLTSIZE: blitter.setBLTSIZE(value); break;

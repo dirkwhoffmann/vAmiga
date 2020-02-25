@@ -382,6 +382,7 @@ public:
 
     // Ringbuffer for managing register change delays
     ChangeRecorder<8> changeRecorder;
+    RegChangeRecorder<8> chngRecorder;
 
     // A copy of BPLCON0 (Denise has another copy)
     u16 bplcon0;
@@ -532,6 +533,7 @@ public:
         & dmaStrtHiresShift
 
         & changeRecorder
+        & chngRecorder
         & bplcon0
         & bplcon0AtDDFStrt
         & dmacon
