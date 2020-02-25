@@ -207,20 +207,35 @@ Agnus::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
-    info.bplcon0 = bplcon0;
-    info.dmacon  = dmacon;
-    info.diwstrt = diwstrt;
-    info.diwstop = diwstop;
-    info.ddfstrt = ddfstrt;
-    info.ddfstop = ddfstop;
-    
-    info.bpl1mod = bpl1mod;
-    info.bpl2mod = bpl2mod;
-    info.bpu = bpu();
-    
-    info.dskpt   = dskpt;
-    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
+    info.vpos     = pos.v;
+    info.hpos     = pos.h;
+
+    info.dmacon   = dmacon;
+    info.bplcon0  = bplcon0;
+    info.bpu      = bpu();
+    info.ddfstrt  = ddfstrt;
+    info.ddfstop  = ddfstop;
+    info.diwstrt  = diwstrt;
+    info.diwstop  = diwstop;
+
+    info.bpl1mod  = bpl1mod;
+    info.bpl2mod  = bpl2mod;
+    info.bltamod  = blitter.bltamod;
+    info.bltbmod  = blitter.bltbmod;
+    info.bltcmod  = blitter.bltcmod;
+    info.bltdmod  = blitter.bltdmod;
+
+    info.coppc    = copper.coppc;
+    info.dskpt    = dskpt;
+    info.bltpt[0] = blitter.bltapt;
+    info.bltpt[1] = blitter.bltbpt;
+    info.bltpt[2] = blitter.bltcpt;
+    info.bltpt[3] = blitter.bltdpt;
+
+    info.bls      = bls;
+
     for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
+    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
     for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i];
 
     pthread_mutex_unlock(&lock);

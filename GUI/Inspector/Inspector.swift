@@ -153,33 +153,22 @@ class Inspector: NSWindowController {
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
     
     // Debug panel (Agnus)
-    @IBOutlet weak var dmaDMACON: NSTextField!
-    @IBOutlet weak var dmaBLTPRI: NSButton!
-    @IBOutlet weak var dmaDMAEN: NSButton!
-    @IBOutlet weak var dmaBPLEN: NSButton!
-    @IBOutlet weak var dmaCOPEN: NSButton!
-    @IBOutlet weak var dmaBLTEN: NSButton!
-    @IBOutlet weak var dmaSPREN: NSButton!
-    @IBOutlet weak var dmaDSKEN: NSButton!
-    @IBOutlet weak var dmaAUD3EN: NSButton!
-    @IBOutlet weak var dmaAUD2EN: NSButton!
-    @IBOutlet weak var dmaAUD1EN: NSButton!
-    @IBOutlet weak var dmaAUD0EN: NSButton!
-
     @IBOutlet weak var dmaVPOS: NSTextField!
     @IBOutlet weak var dmaHPOS: NSTextField!
 
-    @IBOutlet weak var dmaDIWSTRT: NSTextField!
-    @IBOutlet weak var dmaDIWSTOP: NSTextField!
+    @IBOutlet weak var dmaDMACON: NSTextField!
+    @IBOutlet weak var dmaBPL0CON: NSTextField!
     @IBOutlet weak var dmaDDFSTRT: NSTextField!
     @IBOutlet weak var dmaDDFSTOP: NSTextField!
+    @IBOutlet weak var dmaDIWSTRT: NSTextField!
+    @IBOutlet weak var dmaDIWSTOP: NSTextField!
 
-    @IBOutlet weak var dmaBpl1Enable: NSButton!
-    @IBOutlet weak var dmaBpl2Enable: NSButton!
-    @IBOutlet weak var dmaBpl3Enable: NSButton!
-    @IBOutlet weak var dmaBpl4Enable: NSButton!
-    @IBOutlet weak var dmaBpl5Enable: NSButton!
-    @IBOutlet weak var dmaBpl6Enable: NSButton!
+    @IBOutlet weak var dmaBLTAMOD: NSTextField!
+    @IBOutlet weak var dmaBLTBMOD: NSTextField!
+    @IBOutlet weak var dmaBLTCMOD: NSTextField!
+    @IBOutlet weak var dmaBLTDMOD: NSTextField!
+    @IBOutlet weak var dmaBPL1MOD: NSTextField!
+    @IBOutlet weak var dmaBPL2MOD: NSTextField!
 
     @IBOutlet weak var dmaBPL1PT: NSTextField!
     @IBOutlet weak var dmaBPL2PT: NSTextField!
@@ -187,10 +176,56 @@ class Inspector: NSWindowController {
     @IBOutlet weak var dmaBPL4PT: NSTextField!
     @IBOutlet weak var dmaBPL5PT: NSTextField!
     @IBOutlet weak var dmaBPL6PT: NSTextField!
+    @IBOutlet weak var dmaBPL1Enable: NSButton!
+    @IBOutlet weak var dmaBPL2Enable: NSButton!
+    @IBOutlet weak var dmaBPL3Enable: NSButton!
+    @IBOutlet weak var dmaBPL4Enable: NSButton!
+    @IBOutlet weak var dmaBPL5Enable: NSButton!
+    @IBOutlet weak var dmaBPL6Enable: NSButton!
 
-    @IBOutlet weak var dmaBPL1MOD: NSTextField!
-    @IBOutlet weak var dmaBPL2MOD: NSTextField!
+    @IBOutlet weak var dmaAUD0PT: NSTextField!
+    @IBOutlet weak var dmaAUD1PT: NSTextField!
+    @IBOutlet weak var dmaAUD2PT: NSTextField!
+    @IBOutlet weak var dmaAUD3PT: NSTextField!
+    @IBOutlet weak var dmaAUD0Enable: NSButton!
+    @IBOutlet weak var dmaAUD1Enable: NSButton!
+    @IBOutlet weak var dmaAUD2Enable: NSButton!
+    @IBOutlet weak var dmaAUD3Enable: NSButton!
 
+    @IBOutlet weak var dmaBLTAPT: NSTextField!
+    @IBOutlet weak var dmaBLTBPT: NSTextField!
+    @IBOutlet weak var dmaBLTCPT: NSTextField!
+    @IBOutlet weak var dmaBLTDPT: NSTextField!
+    @IBOutlet weak var dmaBLTAEnable: NSButton!
+    @IBOutlet weak var dmaBLTBEnable: NSButton!
+    @IBOutlet weak var dmaBLTCEnable: NSButton!
+    @IBOutlet weak var dmaBLTDEnable: NSButton!
+    @IBOutlet weak var dmaBLTPRI: NSButton!
+    @IBOutlet weak var dmaBLS: NSButton!
+
+    @IBOutlet weak var dmaCOPPC: NSTextField!
+    @IBOutlet weak var dmaCOPEnable: NSButton!
+
+    @IBOutlet weak var dmaSPR0PT: NSTextField!
+    @IBOutlet weak var dmaSPR1PT: NSTextField!
+    @IBOutlet weak var dmaSPR2PT: NSTextField!
+    @IBOutlet weak var dmaSPR3PT: NSTextField!
+    @IBOutlet weak var dmaSPR4PT: NSTextField!
+    @IBOutlet weak var dmaSPR5PT: NSTextField!
+    @IBOutlet weak var dmaSPR6PT: NSTextField!
+    @IBOutlet weak var dmaSPR7PT: NSTextField!
+    @IBOutlet weak var dmaSPR0Enable: NSButton!
+    @IBOutlet weak var dmaSPR1Enable: NSButton!
+    @IBOutlet weak var dmaSPR2Enable: NSButton!
+    @IBOutlet weak var dmaSPR3Enable: NSButton!
+    @IBOutlet weak var dmaSPR4Enable: NSButton!
+    @IBOutlet weak var dmaSPR5Enable: NSButton!
+    @IBOutlet weak var dmaSPR6Enable: NSButton!
+    @IBOutlet weak var dmaSPR7Enable: NSButton!
+
+    @IBOutlet weak var dmaDSKPT: NSTextField!
+    @IBOutlet weak var dmaDSKEnable: NSButton!
+    
     // Debug panel (Copper)
     @IBOutlet weak var copActive: NSButton!
     @IBOutlet weak var copCOPPC: NSTextField!

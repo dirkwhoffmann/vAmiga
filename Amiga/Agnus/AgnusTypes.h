@@ -159,21 +159,32 @@ DMADebuggerInfo;
 
 typedef struct
 {
-    u16 bplcon0;
+    i16 vpos;
+    i16 hpos;
+
     u16 dmacon;
-    u16 diwstrt;
-    u16 diwstop;
+    u16 bplcon0;
+    u8  bpu;
     u16 ddfstrt;
     u16 ddfstop;
+    u16 diwstrt;
+    u16 diwstop;
 
-    i16 bpl1mod;
-    i16 bpl2mod;
-    u8 bpu;
+    u16 bpl1mod;
+    u16 bpl2mod;
+    u16 bltamod;
+    u16 bltbmod;
+    u16 bltcmod;
+    u16 bltdmod;
 
+    u32 coppc;
     u32 dskpt;
-    u32 audlc[4];
     u32 bplpt[6];
+    u32 audlc[4];
+    u32 bltpt[4];
     u32 sprpt[8];
+
+    bool bls;
 }
 AgnusInfo;
 

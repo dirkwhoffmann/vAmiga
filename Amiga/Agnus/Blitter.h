@@ -24,7 +24,9 @@
  * Level 0 and 1 invoke the FastBlitter. Level 2 invokes the SlowBlitter.
  */
 
-class Blitter : public AmigaComponent {
+class Blitter : public AmigaComponent
+{
+    friend class Agnus;
 
     // The current configuration
     BlitterConfig config;
@@ -137,10 +139,12 @@ class Blitter : public AmigaComponent {
      * This flag shows up in DMACON and has a similar meaning as variable
      * 'running'. The only difference is that the busy flag is cleared a few
      * cycles before the Blitter actually terminates.
+     * TODO: USE THE CORRESPONDING BIT IN DMACON
      */
     bool bbusy;
 
     // The Blitter zero flag
+    // TODO: USE THE CORRESPONDING BIT IN DMACON
     bool bzero;
 
 
