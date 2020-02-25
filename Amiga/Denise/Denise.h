@@ -424,6 +424,7 @@ public:
      */
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
+    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
 
     static bool hires(u16 v) { return GET_BIT(v, 15); }
     bool hires() { return hires(bplcon0); }

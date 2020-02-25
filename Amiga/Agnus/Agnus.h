@@ -873,6 +873,7 @@ public:
     // BPLCON0
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
+    void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
 
     /* Returns the Agnus view of the BPU bits.
      * The value determines the number of enabled DMA channels. It is computed
