@@ -53,9 +53,8 @@ StateMachine<nr>::_inspect()
     info.audper = audper;
     info.audvolLatch = audvolLatch;
     info.audvol = audvol;
-    info.auddatLatch = auddatLatch;
-    info.audlcLatch = audlcLatch;
-
+    info.auddat = auddat;
+ 
     pthread_mutex_unlock(&lock);
 }
 
@@ -110,7 +109,7 @@ StateMachine<nr>::pokeAUDxDAT(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
 
-    auddatLatch = value;
+    auddat = value;
 
     if (!AUDxON()) {
 
@@ -482,12 +481,12 @@ template <int nr> void
 StateMachine<nr>::pbufld1()
 {
     if (AUDxAV()) {
-        // debug("Volume modulation %d (%d)\n", auddatLatch & 0x7F, (i16)auddatLatch);
-        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddatLatch);
-        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddatLatch);
-        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddatLatch);
+        // debug("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
+        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddat);
+        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddat);
+        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddat);
     } else {
-        buffer = auddatLatch;
+        buffer = auddat;
     }
 }
 
@@ -496,8 +495,8 @@ StateMachine<nr>::pbufld2()
 {
     assert(AUDxAP());
     if (nr < 3) {
-        // debug("Period modulation %d\n", auddatLatch);
-        audioUnit.pokeAUDxPER(nr + 1, auddatLatch);
+        // debug("Period modulation %d\n", auddat);
+        audioUnit.pokeAUDxPER(nr + 1, auddat);
     }
 }
 

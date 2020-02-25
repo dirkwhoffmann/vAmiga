@@ -7,6 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+let image0 = NSImage.init(named: "state0Template")
+let image1 = NSImage.init(named: "state1Template")
+let image2 = NSImage.init(named: "state2Template")
+let image3 = NSImage.init(named: "state3Template")
+let image5 = NSImage.init(named: "state5Template")
+
 extension Inspector {
 
     func cachePaula(count: Int = 0) {
@@ -41,22 +47,18 @@ extension Inspector {
                          audioPer0: fmt16,
                          audioVol0: fmt16,
                          audioDat0: fmt16,
-                         audioLoc0: fmt16,
                          audioLen1: fmt16,
                          audioPer1: fmt16,
                          audioVol1: fmt16,
                          audioDat1: fmt16,
-                         audioLoc1: fmt16,
                          audioLen2: fmt16,
                          audioPer2: fmt16,
                          audioVol2: fmt16,
                          audioDat2: fmt16,
-                         audioLoc2: fmt16,
                          audioLen3: fmt16,
                          audioPer3: fmt16,
                          audioVol3: fmt16,
-                         audioDat3: fmt16,
-                         audioLoc3: fmt16
+                         audioDat3: fmt16
         ]
 
         for (c, f) in elements { assignFormatter(f, c!) }
@@ -176,29 +178,48 @@ extension Inspector {
         //
         // Audio section
         //
-        
+
+        func assignImage(_ button: NSButton, state: Int8, counter: inout Int) {
+
+            switch state {
+            case 0:
+                button.image = image0
+                counter = 0
+            case 1:
+                button.image = image1
+            case 2, 3:
+                button.image = (counter % 2 == 0) ? image2 : image3
+                counter += 1
+            case 5:
+                button.image = image5
+            default:
+                button.image = nil
+            }
+        }
+
         audioLen0.intValue = Int32(audioInfo!.channel.0.audlenLatch)
         audioPer0.intValue = Int32(audioInfo!.channel.0.audperLatch)
         audioVol0.intValue = Int32(audioInfo!.channel.0.audvolLatch)
-        audioDat0.intValue = Int32(audioInfo!.channel.0.auddatLatch)
-        audioLoc0.intValue = Int32(audioInfo!.channel.0.audlcLatch)
+        audioDat0.intValue = Int32(audioInfo!.channel.0.auddat)
 
         audioLen1.intValue = Int32(audioInfo!.channel.1.audlenLatch)
         audioPer1.intValue = Int32(audioInfo!.channel.1.audperLatch)
         audioVol1.intValue = Int32(audioInfo!.channel.1.audvolLatch)
-        audioDat1.intValue = Int32(audioInfo!.channel.1.auddatLatch)
-        audioLoc1.intValue = Int32(audioInfo!.channel.1.audlcLatch)
+        audioDat1.intValue = Int32(audioInfo!.channel.1.auddat)
 
         audioLen2.intValue = Int32(audioInfo!.channel.2.audlenLatch)
         audioPer2.intValue = Int32(audioInfo!.channel.2.audperLatch)
         audioVol2.intValue = Int32(audioInfo!.channel.2.audvolLatch)
-        audioDat2.intValue = Int32(audioInfo!.channel.2.auddatLatch)
-        audioLoc2.intValue = Int32(audioInfo!.channel.2.audlcLatch)
+        audioDat2.intValue = Int32(audioInfo!.channel.2.auddat)
 
         audioLen3.intValue = Int32(audioInfo!.channel.3.audlenLatch)
         audioPer3.intValue = Int32(audioInfo!.channel.3.audperLatch)
         audioVol3.intValue = Int32(audioInfo!.channel.3.audvolLatch)
-        audioDat3.intValue = Int32(audioInfo!.channel.3.auddatLatch)
-        audioLoc3.intValue = Int32(audioInfo!.channel.3.audlcLatch)
+        audioDat3.intValue = Int32(audioInfo!.channel.3.auddat)
+
+        assignImage(audioImg0, state: audioInfo!.channel.0.state, counter: &state0)
+        assignImage(audioImg1, state: audioInfo!.channel.1.state, counter: &state1)
+        assignImage(audioImg2, state: audioInfo!.channel.2.state, counter: &state2)
+        assignImage(audioImg3, state: audioInfo!.channel.3.state, counter: &state3)
     }
 }

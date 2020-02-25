@@ -87,7 +87,13 @@ class Inspector: NSWindowController {
     var bank = 0
     var memSrc = MEM_CHIP
     var selected = -1
-    
+
+    // Counter to avoid Moire effects in state machine images
+    var state0 = 0
+    var state1 = 0
+    var state2 = 0
+    var state3 = 0
+
     // Debug panel (CIA)
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
     
@@ -350,23 +356,23 @@ class Inspector: NSWindowController {
     @IBOutlet weak var audioPer0: NSTextField!
     @IBOutlet weak var audioVol0: NSTextField!
     @IBOutlet weak var audioDat0: NSTextField!
-    @IBOutlet weak var audioLoc0: NSTextField!
+    @IBOutlet weak var audioImg0: NSButton!
     @IBOutlet weak var audioLen1: NSTextField!
     @IBOutlet weak var audioPer1: NSTextField!
     @IBOutlet weak var audioVol1: NSTextField!
     @IBOutlet weak var audioDat1: NSTextField!
-    @IBOutlet weak var audioLoc1: NSTextField!
+    @IBOutlet weak var audioImg1: NSButton!
     @IBOutlet weak var audioLen2: NSTextField!
     @IBOutlet weak var audioPer2: NSTextField!
     @IBOutlet weak var audioVol2: NSTextField!
     @IBOutlet weak var audioDat2: NSTextField!
-    @IBOutlet weak var audioLoc2: NSTextField!
+    @IBOutlet weak var audioImg2: NSButton!
     @IBOutlet weak var audioLen3: NSTextField!
     @IBOutlet weak var audioPer3: NSTextField!
     @IBOutlet weak var audioVol3: NSTextField!
     @IBOutlet weak var audioDat3: NSTextField!
-    @IBOutlet weak var audioLoc3: NSTextField!
-    
+    @IBOutlet weak var audioImg3: NSButton!
+
     @IBOutlet weak var dskStateText: NSTextField!
     @IBOutlet weak var dskSelectDf0: NSButton!
     @IBOutlet weak var dskSelectDf1: NSButton!

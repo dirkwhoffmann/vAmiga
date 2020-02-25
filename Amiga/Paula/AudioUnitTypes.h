@@ -77,8 +77,7 @@ typedef struct
     i32 audper;
     u16 audvolLatch;
     u16 audvol;
-    u16 auddatLatch;
-    u32 audlcLatch;
+    u16 auddat;
 }
 AudioChannelInfo;
 
