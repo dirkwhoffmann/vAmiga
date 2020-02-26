@@ -14,21 +14,30 @@
 #include "RomFile.h"
 #include "ExtFile.h"
 
-const u32 FAST_RAM_STRT = 0x200000; // DEPRECATED
-const u32 SLOW_RAM_MASK = 0x07FFFF; // DEPRECATED
-const u32 EXT_ROM_MASK  = 0x07FFFF; // DEPRECATED
+// DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
+const u32 FAST_RAM_STRT = 0x200000;
 
 // Verifies the range of an address
-#define ASSERT_CHIP_ADDR(x) assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
-#define ASSERT_FAST_ADDR(x) assert(fast != NULL); assert(((x) - FAST_RAM_STRT) < config.fastSize);
-#define ASSERT_SLOW_ADDR(x) assert(slow != NULL); assert(((x) & SLOW_RAM_MASK) < config.slowSize); assert(((x) & SLOW_RAM_MASK) == (x & slowMask));
-#define ASSERT_ROM_ADDR(x) assert(rom != NULL); assert(((x) % config.romSize) == ((x) & romMask));
-#define ASSERT_WOM_ADDR(x) assert(wom != NULL); assert(((x) % config.womSize) == ((x) & womMask));
-#define ASSERT_EXT_ADDR(x)  assert(ext != NULL); assert(((x) & EXT_ROM_MASK) < config.extSize); assert(((x) & 0x7FFFF) == ((x) & extMask));
-#define ASSERT_CIA_ADDR(x)  assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
-#define ASSERT_RTC_ADDR(x)  assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
-#define ASSERT_OCS_ADDR(x)  assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
-#define ASSERT_AUTO_ADDR(x) assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
+#define ASSERT_CHIP_ADDR(x) \
+assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
+#define ASSERT_FAST_ADDR(x) \
+assert(fast != NULL); assert(((x) - FAST_RAM_STRT) < config.fastSize);
+#define ASSERT_SLOW_ADDR(x) \
+assert(slow != NULL); assert(((x) % config.slowSize) == ((x) & slowMask));
+#define ASSERT_ROM_ADDR(x) \
+assert(rom != NULL); assert(((x) % config.romSize) == ((x) & romMask));
+#define ASSERT_WOM_ADDR(x) \
+assert(wom != NULL); assert(((x) % config.womSize) == ((x) & womMask));
+#define ASSERT_EXT_ADDR(x)  \
+assert(ext != NULL); assert(((x) & config.extSize) == ((x) & extMask));
+#define ASSERT_CIA_ADDR(x) \
+assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
+#define ASSERT_RTC_ADDR(x) \
+assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
+#define ASSERT_OCS_ADDR(x) \
+assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
+#define ASSERT_AUTO_ADDR(x) \
+assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 // Reads a value from memory in big endian format
 #define READ_8(x)  (*(u8 *)(x))
