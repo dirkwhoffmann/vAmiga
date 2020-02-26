@@ -158,7 +158,18 @@ Agnus::chipRamLimit()
 
         case AGNUS_8375: return 2048;
         case AGNUS_8372: return 1024;
-        default:    return 512;
+        default:         return 512;
+    }
+}
+
+u32
+Agnus::chipRamMask()
+{
+    switch (config.revision) {
+
+        case AGNUS_8375: return 0x1FFFFF;
+        case AGNUS_8372: return 0x0FFFFF;
+        default:         return 0x07FFFF;
     }
 }
 
@@ -207,6 +218,8 @@ Agnus::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
+    u32 mask      = chipRamMask();
+
     info.vpos     = pos.v;
     info.hpos     = pos.h;
 
@@ -224,19 +237,17 @@ Agnus::_inspect()
     info.bltbmod  = blitter.bltbmod;
     info.bltcmod  = blitter.bltcmod;
     info.bltdmod  = blitter.bltdmod;
-
-    info.coppc    = copper.coppc;
-    info.dskpt    = dskpt;
-    info.bltpt[0] = blitter.bltapt;
-    info.bltpt[1] = blitter.bltbpt;
-    info.bltpt[2] = blitter.bltcpt;
-    info.bltpt[3] = blitter.bltdpt;
-
     info.bls      = bls;
 
-    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i];
-    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i];
-    for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i];
+    info.coppc    = copper.coppc & mask;
+    info.dskpt    = dskpt & mask;
+    info.bltpt[0] = blitter.bltapt & mask;
+    info.bltpt[1] = blitter.bltbpt & mask;
+    info.bltpt[2] = blitter.bltcpt & mask;
+    info.bltpt[3] = blitter.bltdpt & mask;
+    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & mask;
+    for (unsigned i = 0; i < 4; i++) info.audpt[i] = audpt[i] & mask;
+    for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & mask;
 
     pthread_mutex_unlock(&lock);
 }
@@ -247,7 +258,7 @@ Agnus::_dump()
     msg(" actions : %X\n", actions);
 
     msg("   dskpt : %X\n", dskpt);
-    for (unsigned i = 0; i < 4; i++) msg("audlc[%d] : %X\n", i, audlc[i]);
+    for (unsigned i = 0; i < 4; i++) msg("audpt[%d] : %X\n", i, audpt[i]);
     for (unsigned i = 0; i < 6; i++) msg("bplpt[%d] : %X\n", i, bplpt[i]);
     for (unsigned i = 0; i < 8; i++) msg("bplpt[%d] : %X\n", i, sprpt[i]);
     
@@ -478,8 +489,8 @@ Agnus::doAudioDMA()
 {
     u16 result;
 
-    result = mem.peekChip16(audlc[channel]);
-    INC_CHIP_PTR(audlc[channel]);
+    result = mem.peekChip16(audpt[channel]);
+    INC_CHIP_PTR(audpt[channel]);
 
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;

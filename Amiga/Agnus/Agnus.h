@@ -413,9 +413,7 @@ public:
     u32 dskpt;
 
     // The audio DMA pointers
-    u32 audlc[4];
-    u32 audlcold[4];
-
+    u32 audpt[4];
 
     // The bitplane DMA pointers
     u32 bplpt[6];
@@ -540,8 +538,7 @@ public:
         & dmaconAtDDFStrt
         & dmaDAS
         & dskpt
-        & audlc
-        & audlcold
+        & audpt
         & audxDR
         & bplpt
         & bpl1mod
@@ -570,6 +567,9 @@ public:
 
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
+
+    // Returns a big mask for the memory locations this Agnus can address
+    u32 chipRamMask();
 
     // Returns the line in which the VERTB interrupt gets triggered
     int vStrobeLine() { return isOCS() ? 1 : 0; }

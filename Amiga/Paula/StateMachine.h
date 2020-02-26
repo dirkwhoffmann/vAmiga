@@ -175,7 +175,7 @@ public:
     void AUDxDR() { agnus.setAudxDR<nr>(); }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR() { agnus.audlc[nr] = audlcLatch; }
+    void AUDxDSR() { agnus.audpt[nr] = audlcLatch; }
 
     // Reloads the period counter from its backup latch
     void percntrld();

@@ -27,7 +27,7 @@ inline bool isAgnusRevision(long value)
     return value >= 0 && value < AGNUS_CNT;
 }
 
-inline const char *AgnusRevisionName(AgnusRevision type)
+inline const char *agnusRevisionName(AgnusRevision type)
 {
     assert(isAgnusRevision(type));
 
@@ -180,6 +180,7 @@ typedef struct
     u32 coppc;
     u32 dskpt;
     u32 bplpt[6];
+    u32 audpt[4];
     u32 audlc[4];
     u32 bltpt[4];
     u32 sprpt[8];

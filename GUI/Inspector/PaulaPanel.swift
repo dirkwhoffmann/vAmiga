@@ -184,7 +184,7 @@ extension Inspector {
             // Determine the state to display
             switch displayState {
             case 0:
-                if (info.state != 0) { displayState = info.dma ? 1 : 2 }
+                if info.state != 0 { displayState = info.dma ? 1 : 2 }
             case 1:
                 displayState = 5
             case 5:

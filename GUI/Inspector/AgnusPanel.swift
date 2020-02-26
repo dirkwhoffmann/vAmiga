@@ -45,35 +45,35 @@ extension Inspector {
                          dmaBPL1MOD: fmt16,
                          dmaBPL2MOD: fmt16,
 
-                         dmaBPL1PT: fmt32,
-                         dmaBPL2PT: fmt32,
-                         dmaBPL3PT: fmt32,
-                         dmaBPL4PT: fmt32,
-                         dmaBPL5PT: fmt32,
-                         dmaBPL6PT: fmt32,
+                         dmaBPL1PT: fmt24,
+                         dmaBPL2PT: fmt24,
+                         dmaBPL3PT: fmt24,
+                         dmaBPL4PT: fmt24,
+                         dmaBPL5PT: fmt24,
+                         dmaBPL6PT: fmt24,
 
-                         dmaAUD0PT: fmt32,
-                         dmaAUD1PT: fmt32,
-                         dmaAUD2PT: fmt32,
-                         dmaAUD3PT: fmt32,
+                         dmaAUD0PT: fmt24,
+                         dmaAUD1PT: fmt24,
+                         dmaAUD2PT: fmt24,
+                         dmaAUD3PT: fmt24,
 
-                         dmaBLTAPT: fmt32,
-                         dmaBLTBPT: fmt32,
-                         dmaBLTCPT: fmt32,
-                         dmaBLTDPT: fmt32,
+                         dmaBLTAPT: fmt24,
+                         dmaBLTBPT: fmt24,
+                         dmaBLTCPT: fmt24,
+                         dmaBLTDPT: fmt24,
 
-                         dmaCOPPC: fmt32,
+                         dmaCOPPC: fmt24,
 
-                         dmaSPR0PT: fmt32,
-                         dmaSPR1PT: fmt32,
-                         dmaSPR2PT: fmt32,
-                         dmaSPR3PT: fmt32,
-                         dmaSPR4PT: fmt32,
-                         dmaSPR5PT: fmt32,
-                         dmaSPR6PT: fmt32,
-                         dmaSPR7PT: fmt32,
+                         dmaSPR0PT: fmt24,
+                         dmaSPR1PT: fmt24,
+                         dmaSPR2PT: fmt24,
+                         dmaSPR3PT: fmt24,
+                         dmaSPR4PT: fmt24,
+                         dmaSPR5PT: fmt24,
+                         dmaSPR6PT: fmt24,
+                         dmaSPR7PT: fmt24,
 
-                         dmaDSKPT: fmt32
+                         dmaDSKPT: fmt24
         ]
         for (c, f) in elements { assignFormatter(f, c!) }
     }
@@ -127,10 +127,10 @@ extension Inspector {
         dmaBPL5Enable.state = bplen && bpu >= 5 ? .on : .off
         dmaBPL6Enable.state = bplen && bpu >= 6 ? .on : .off
 
-        dmaAUD0PT.integerValue = Int(agnusInfo!.audlc.0)
-        dmaAUD1PT.integerValue = Int(agnusInfo!.audlc.1)
-        dmaAUD2PT.integerValue = Int(agnusInfo!.audlc.2)
-        dmaAUD3PT.integerValue = Int(agnusInfo!.audlc.3)
+        dmaAUD0PT.integerValue = Int(agnusInfo!.audpt.0)
+        dmaAUD1PT.integerValue = Int(agnusInfo!.audpt.1)
+        dmaAUD2PT.integerValue = Int(agnusInfo!.audpt.2)
+        dmaAUD3PT.integerValue = Int(agnusInfo!.audpt.3)
         dmaAUD0Enable.state = aud0en ? .on : .off
         dmaAUD1Enable.state = aud1en ? .on : .off
         dmaAUD2Enable.state = aud2en ? .on : .off
