@@ -860,7 +860,7 @@ Blitter::beginSlowCopyBlit()
     bold = 0;
 
     // Reset the fill carry bit
-    fillCarry = !!bltconFCI();
+    fillCarry = bltconFCI();
 
     // Lock pipeline stage D
     lockD = true;
