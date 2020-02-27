@@ -1216,15 +1216,6 @@ Memory::peekCIA16(u32 addr)
     return 0;
 }
 
-u32
-Memory::peekCIA32(u32 addr)
-{
-    debug(CIA_DEBUG, "peekCIA32(%6X)\n", addr);
-    assert(false);
-    
-    return HI_W_LO_W(peekCIA16(addr), peekCIA16(addr + 2));
-}
-
 u8
 Memory::spypeekCIA8(u32 addr)
 {
@@ -1275,12 +1266,6 @@ Memory::spypeekCIA16(u32 addr)
     return 0;
 }
 
-u32
-Memory::spypeekCIA32(u32 addr)
-{
-    return HI_W_LO_W(spypeekCIA16(addr), spypeekCIA16(addr + 2));
-}
-
 void
 Memory::pokeCIA8(u32 addr, u8 value)
 {
@@ -1308,16 +1293,6 @@ Memory::pokeCIA16(u32 addr, u16 value)
     
     if (selA) ciaa.poke(reg, LO_BYTE(value));
     if (selB) ciab.poke(reg, HI_BYTE(value));
-}
-
-void
-Memory::pokeCIA32(u32 addr, u32 value)
-{
-    debug("pokeCIA32(%6X, %X)\n", addr, value);
-    assert(false);
-    
-    pokeCIA16(addr,     HI_WORD(value));
-    pokeCIA16(addr + 2, LO_WORD(value));
 }
 
 u8
@@ -1456,13 +1431,6 @@ Memory::peekCustomFaulty16(u32 addr)
      }
 }
 
-u32
-Memory::peekCustom32(u32 addr)
-{
-    assert(false);
-    return HI_W_LO_W(peekCustom16(addr), peekCustom16(addr + 2));
-}
-
 u8
 Memory::spypeekCustom8(u32 addr)
 {
@@ -1484,12 +1452,6 @@ Memory::spypeekCustom16(u32 addr)
 
     return 42;
     // return peekCustom16(addr);
-}
-
-u32
-Memory::spypeekCustom32(u32 addr)
-{
-    return HI_W_LO_W(spypeekCustom16(addr), spypeekCustom16(addr + 2));
 }
 
 void
@@ -1966,14 +1928,6 @@ Memory::pokeCustom16(u32 addr, u16 value)
         debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
               addr, customReg[(addr >> 1) & 0xFF]);
     }
-}
-
-void
-Memory::pokeCustom32(u32 addr, u32 value)
-{
-    assert(false);
-    pokeCustom16<POKE_CPU>(addr,     HI_WORD(value));
-    pokeCustom16<POKE_CPU>(addr + 2, LO_WORD(value));
 }
 
 u8
