@@ -465,6 +465,7 @@ class Inspector: NSWindowController {
     var ciaInfo: CIAInfo?
     var agnusInfo: AgnusInfo?
     var copperInfo: CopperInfo?
+    var blitterInfo: BlitterInfo?
     var deniseInfo: DeniseInfo?
     var spriteInfo: SpriteInfo?
     var paulaInfo: PaulaInfo?
@@ -566,6 +567,7 @@ class Inspector: NSWindowController {
             case "Memory": refreshMemory(count: count)
             case "Agnus": refreshAgnus(count: count)
             case "Copper": refreshCopper(count: count)
+            case "Blitter": refreshBlitter(count: count)
             case "Denise": refreshDenise(count: count)
             case "Paula": refreshPaula(count: count)
             case "Ports": refreshPorts(count: count)
@@ -599,16 +601,17 @@ extension Inspector: NSTabViewDelegate {
 
             switch id {
 
-            case "CPU":    parent?.amiga.setInspectionTarget(INS_CPU)
-            case "CIA":    parent?.amiga.setInspectionTarget(INS_CIA)
-            case "Memory": parent?.amiga.setInspectionTarget(INS_MEM)
-            case "Agnus":  parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Copper": parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Denise": parent?.amiga.setInspectionTarget(INS_DENISE)
-            case "Paula":  parent?.amiga.setInspectionTarget(INS_PAULA)
-            case "Ports":  parent?.amiga.setInspectionTarget(INS_PORTS)
-            case "Events": parent?.amiga.setInspectionTarget(INS_EVENTS)
-            default:       break
+            case "CPU":     parent?.amiga.setInspectionTarget(INS_CPU)
+            case "CIA":     parent?.amiga.setInspectionTarget(INS_CIA)
+            case "Memory":  parent?.amiga.setInspectionTarget(INS_MEM)
+            case "Agnus":   parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Copper":  parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Blitter": parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Denise":  parent?.amiga.setInspectionTarget(INS_DENISE)
+            case "Paula":   parent?.amiga.setInspectionTarget(INS_PAULA)
+            case "Ports":   parent?.amiga.setInspectionTarget(INS_PORTS)
+            case "Events":  parent?.amiga.setInspectionTarget(INS_EVENTS)
+            default:        break
             }
 
             needsRefresh()

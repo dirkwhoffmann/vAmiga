@@ -147,6 +147,7 @@
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
+		50F133722408142900A99820 /* BlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F133712408142900A99820 /* BlitterPanel.swift */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
@@ -377,6 +378,7 @@
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
+		50F133712408142900A99820 /* BlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlitterPanel.swift; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* Disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Disk.cpp; sourceTree = "<group>"; };
@@ -731,6 +733,7 @@
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				507653CA2216F91E001D26E9 /* AgnusPanel.swift */,
 				507FD925221CBFCD00B34DA7 /* CopperPanel.swift */,
+				50F133712408142900A99820 /* BlitterPanel.swift */,
 				507653CC2216F938001D26E9 /* DenisePanel.swift */,
 				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 				5010A78122B50B690041388B /* PortPanel.swift */,
@@ -1083,6 +1086,7 @@
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
+				50F133722408142900A99820 /* BlitterPanel.swift in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,

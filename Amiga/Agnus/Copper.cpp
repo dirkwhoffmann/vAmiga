@@ -135,28 +135,48 @@ void
 Copper::pokeCOP1LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
-    cop1lc = REPLACE_HI_WORD(cop1lc, value);
+
+    if (HI_WORD(cop1lc) != value) {
+        cop1lc = REPLACE_HI_WORD(cop1lc, value);
+        cop1end = cop1lc;
+    }
 }
 
 void
 Copper::pokeCOP1LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
-    cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
+
+    value &= 0xFFFE;
+
+    if (LO_WORD(cop1lc) != value) {
+        cop1lc = REPLACE_LO_WORD(cop1lc, value);
+        cop1end = cop1lc;
+    }
 }
 
 void
 Copper::pokeCOP2LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
-    cop2lc = REPLACE_HI_WORD(cop2lc, value);
+
+    if (HI_WORD(cop2lc) != value) {
+        cop2lc = REPLACE_HI_WORD(cop2lc, value);
+        cop2end = cop2lc;
+    }
 }
 
 void
 Copper::pokeCOP2LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
-    cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
+
+    value &= 0xFFFE;
+
+    if (LO_WORD(cop2lc) != value) {
+        cop2lc = REPLACE_LO_WORD(cop2lc, value);
+        cop2end = cop2lc;
+    }
 }
 
 void
