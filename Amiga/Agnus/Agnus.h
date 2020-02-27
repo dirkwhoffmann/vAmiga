@@ -24,12 +24,9 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
-// Casts an address into the Chip Ram range
-// #define CHIP_PTR(x) ((x) & mem.chipMask & ~1)
-
 // Increments a Chip Ram pointer
-#define INC_CHIP_PTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
-#define INC_CHIP_PTR_BY(x,y) ((x) = ((x)+(y)) & mem.chipMask & ~1)
+#define INC_CHIP_PTR(x) x += 2
+#define INC_CHIP_PTR_BY(x,y) x += y
 
 // Assembles a beam position out of two components
 #define BEAM(y,x) (((y) << 8) | (x))
