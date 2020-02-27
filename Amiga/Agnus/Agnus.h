@@ -25,7 +25,7 @@
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
 // Casts an address into the Chip Ram range
-#define CHIP_PTR(x) ((x) & mem.chipMask & ~1)
+// #define CHIP_PTR(x) ((x) & mem.chipMask & ~1)
 
 // Increments a Chip Ram pointer
 #define INC_CHIP_PTR(x) ((x) = ((x) + 2) & mem.chipMask & ~1);
@@ -907,9 +907,7 @@ public:
 
     // Adds the modulo register to a bitplane pointer
     template <int x> void addBPLMOD() {
-        assert(x < 6);
         INC_CHIP_PTR_BY(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
-        // debug("addBPLMOD%d +%d = %d ($%X)\n", x, (x % 2) ? bpl2mod : bpl1mod, bplpt[x], bplpt[x]);
     }
 
 

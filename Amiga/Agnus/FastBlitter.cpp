@@ -348,9 +348,9 @@ Blitter::doFastLineBlit()
     
     setBltconASH(blit_a_shift_local);
     bnew   = bltbdat_local;
-    bltapt = CHIP_PTR(decision_variable);
-    bltcpt = CHIP_PTR(bltcpt_local);
-    bltdpt = CHIP_PTR(bltdpt_local);
+    bltapt = decision_variable;
+    bltcpt = bltcpt_local;
+    bltdpt = bltdpt_local;
     bzero  = bltzero_local;
 }
     /*

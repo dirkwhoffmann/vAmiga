@@ -1086,17 +1086,15 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 void
 Agnus::pokeDSKPTH(u16 value)
 {
-    dskpt = CHIP_PTR(REPLACE_HI_WORD(dskpt, value));
-
-    debug(DSKREG_DEBUG, "pokeDSKPTH(%X): dskpt = %X\n", value, dskpt);
+    debug(DSKREG_DEBUG, "pokeDSKPTH(%X)\n", value);
+    dskpt = REPLACE_HI_WORD(dskpt, value);
 }
 
 void
 Agnus::pokeDSKPTL(u16 value)
 {
+    debug(DSKREG_DEBUG, "pokeDSKPTL(%X)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
-
-    debug(DSKREG_DEBUG, "pokeDSKPTL(%X): dskpt = %X\n", value, dskpt);
 }
 
 u16
@@ -1483,17 +1481,13 @@ template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
-    assert(1 <= x && x <= 6);
-
-    bplpt[x - 1] = CHIP_PTR(REPLACE_HI_WORD(bplpt[x - 1], value));
+    bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
 }
 
 template <int x> void
 Agnus::setBPLxPTL(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
-    assert(1 <= x && x <= 6);
-
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
@@ -1529,15 +1523,13 @@ template <int x> void
 Agnus::pokeSPRxPTH(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
-    
-    sprpt[x] = CHIP_PTR(REPLACE_HI_WORD(sprpt[x], value));
+    sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
 }
 
 template <int x> void
 Agnus::pokeSPRxPTL(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
-    
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
 }
 

@@ -22,7 +22,7 @@ Copper::_inspect()
     
     info.cdang   = cdang;
     info.active  = agnus.isPending<COP_SLOT>();
-    info.coppc   = coppc; // coppcBase;
+    info.coppc   = coppc;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
     info.cop1lc  = cop1lc;
@@ -118,7 +118,7 @@ Copper::pokeCOPINS(u16 value)
     debug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
 
     /* COPINS is a dummy address that can be used to write the first or
-     * the secons instruction register, depending on the current state.
+     * the second instruction register, depending on the current state.
      */
 
     // TODO: The following is certainly wrong...
@@ -135,40 +135,28 @@ void
 Copper::pokeCOP1LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
-
-    if (HI_WORD(cop1lc) != value) {
-        cop1lc = CHIP_PTR(REPLACE_HI_WORD(cop1lc, value));
-    }
+    cop1lc = REPLACE_HI_WORD(cop1lc, value);
 }
 
 void
 Copper::pokeCOP1LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
-
-    if (LO_WORD(cop1lc) != value) {
-        cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
-    }
+    cop1lc = REPLACE_LO_WORD(cop1lc, value & 0xFFFE);
 }
 
 void
 Copper::pokeCOP2LCH(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
-
-    if (HI_WORD(cop2lc) != value) {
-        cop2lc = CHIP_PTR(REPLACE_HI_WORD(cop2lc, value));
-    }
+    cop2lc = REPLACE_HI_WORD(cop2lc, value);
 }
 
 void
 Copper::pokeCOP2LCL(u16 value)
 {
     debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
-
-    if (LO_WORD(cop2lc) != value) {
-        cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
-    }
+    cop2lc = REPLACE_LO_WORD(cop2lc, value & 0xFFFE);
 }
 
 void
@@ -506,7 +494,7 @@ Copper::isMoveCmd()
 
 bool Copper::isMoveCmd(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
+    u32 instr = mem.spypeekChip32(addr);
     return !(HI_WORD(instr) & 1);
 }
 
@@ -946,9 +934,7 @@ Copper::disassemble(unsigned list, u32 offset)
 {
     assert(list == 1 || list == 2);
     
-    u32 addr = (list == 1) ? cop1lc : cop2lc;
-    addr = CHIP_PTR(addr + 2 * offset);
-
+    u32 addr = (list == 1 ? cop1lc : cop2lc) + 2 * offset;
     return disassemble(addr);
 }
 
