@@ -331,7 +331,7 @@ Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
     return
     ddfVFlop            // Outside VBLANK, inside DIW
     && bpu(bplcon0)     // At least one bitplane enabled
-    && doBplDMA(dmacon);  // Bitplane DMA enabled
+    && bpldma(dmacon);  // Bitplane DMA enabled
 }
 
 Cycle
@@ -387,7 +387,7 @@ bool
 Agnus::copperCanRun()
 {
     // Deny access if Copper DMA is disabled
-    if (!doCopDMA()) return false;
+    if (!copdma()) return false;
 
     // Deny access if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) {
@@ -421,7 +421,7 @@ Agnus::busIsFree()
         case BUS_BLITTER:
         {
             // Deny if Blitter DMA is off
-            if (!doBltDMA()) return false;
+            if (!bltdma()) return false;
         }
         default: return true;
     }
@@ -444,7 +444,7 @@ Agnus::allocateBus()
         case BUS_BLITTER:
         {
             // Deny if Blitter DMA is off
-            if (!doBltDMA()) return false;
+            if (!bltdma()) return false;
 
             // Deny if the CPU has precedence
             if (bls && !bltpri()) return false;
@@ -1012,7 +1012,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
             // Bitplane DMA is switched on
 
             // Check if the current line is affected by the change
-            if (pos.h + 2 < ddfstrtReached || doBplDMA(dmaconAtDDFStrt)) {
+            if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
@@ -1819,7 +1819,7 @@ Agnus::updateSpriteDMA()
     i16 v = pos.v + 1;
 
     // Reset the vertical trigger coordinates in line 25
-    if (v == 25 && doSprDMA()) {
+    if (v == 25 && sprdma()) {
         for (int i = 0; i < 8; i++) sprVStop[i] = 25;
         return;
      }

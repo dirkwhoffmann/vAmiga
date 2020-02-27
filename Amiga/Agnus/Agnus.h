@@ -826,22 +826,24 @@ public:
     void pokeDMACON(u16 value);
     void setDMACON(u16 oldValue, u16 newValue);
 
-    // Returns true if DMA access of a certain type is enabled
+    // Returns true if the Blitter has priority over the CPU
     static bool bltpri(u16 v) { return GET_BIT(v, 10); }
     inline bool bltpri() { return bltpri(dmacon); }
-    static bool doBplDMA(u16 v) { return (v & (DMAEN | BPLEN)) == (DMAEN | BPLEN); }
-    inline bool doBplDMA() { return doBplDMA(dmacon); }
-    static bool doCopDMA(u16 v) { return (v & (DMAEN | COPEN)) == (DMAEN | COPEN); }
-    inline bool doCopDMA() { return doCopDMA(dmacon); }
-    static bool doBltDMA(u16 v) { return (v & (DMAEN | BLTEN)) == (DMAEN | BLTEN); }
-    inline bool doBltDMA() { return doBltDMA(dmacon); }
-    static bool doSprDMA(u16 v) { return (v & (DMAEN | SPREN)) == (DMAEN | SPREN); }
-    inline bool doSprDMA() { return doSprDMA(dmacon); }
-    static bool doDskDMA(u16 v) { return (v & (DMAEN | DSKEN)) == (DMAEN | DSKEN); }
-    inline bool doDskDMA() { return doDskDMA(dmacon); }
-    template <int x> static bool doAudDMA(u16 v) {
+
+    // Returns true if a certain DMA channel is enabled
+    static bool bpldma(u16 v) { return (v & (DMAEN|BPLEN)) == (DMAEN|BPLEN); }
+    static bool copdma(u16 v) { return (v & (DMAEN|COPEN)) == (DMAEN|COPEN); }
+    static bool bltdma(u16 v) { return (v & (DMAEN|BLTEN)) == (DMAEN|BLTEN); }
+    static bool sprdma(u16 v) { return (v & (DMAEN|SPREN)) == (DMAEN|SPREN); }
+    static bool dskdma(u16 v) { return (v & (DMAEN|DSKEN)) == (DMAEN|DSKEN); }
+    inline bool bpldma() { return bpldma(dmacon); }
+    inline bool copdma() { return copdma(dmacon); }
+    inline bool bltdma() { return bltdma(dmacon); }
+    inline bool sprdma() { return sprdma(dmacon); }
+    inline bool dskdma() { return dskdma(dmacon); }
+    template <int x> static bool auddma(u16 v) {
         return (v & (DMAEN | (AUD0EN << x))) == (DMAEN | (AUD0EN << x)); }
-    template <int x> inline bool doAudDMA() { return doAudDMA<x>(dmacon); }
+    template <int x> inline bool auddma() { return auddma<x>(dmacon); }
 
     // DSKPTH, DSKPTL
     void pokeDSKPTH(u16 value);

@@ -445,7 +445,7 @@ StateMachine<nr>::serviceEvent()
 template <int nr> bool
 StateMachine<nr>::AUDxON()
 {
-    return agnus.doAudDMA<nr>();
+    return agnus.auddma<nr>();
 }
 
 template <int nr> void

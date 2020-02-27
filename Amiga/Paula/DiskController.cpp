@@ -335,7 +335,7 @@ DiskController::peekDSKBYTR()
     if (agnus.clock - incomingCycle <= 7) SET_BIT(result, 15);
     
     // DMAON
-    if (agnus.doDskDMA() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
+    if (agnus.dskdma() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
 
     // DSKWRITE
     if (dsklen & 0x4000) SET_BIT(result, 13);

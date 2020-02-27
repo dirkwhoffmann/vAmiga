@@ -1164,7 +1164,7 @@ Denise::endOfLine(int vpos)
 void
 Denise::pokeDMACON(u16 oldValue, u16 newValue)
 {
-    if (Agnus::doBplDMA(newValue)) {
+    if (Agnus::bpldma(newValue)) {
 
         // Bitplane DMA on
         debug(DMA_DEBUG, "Bitplane DMA switched on\n");

@@ -405,7 +405,7 @@ Blitter::serviceEvent(EventID id)
         case BLT_STRT1:
 
             // Postpone the operation if the Blitter DMA is disabled
-            if (!agnus.doBltDMA()) {
+            if (!agnus.bltdma()) {
                 agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_STRT1);
                 break;
             }
