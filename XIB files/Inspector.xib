@@ -28,6 +28,27 @@
                 <outlet property="audioVol1" destination="dav-oV-k3r" id="X2z-bB-yjM"/>
                 <outlet property="audioVol2" destination="Lfa-vu-5Ip" id="ToG-o9-1Be"/>
                 <outlet property="audioVol3" destination="tkC-eQ-FZk" id="pMC-WQ-pep"/>
+                <outlet property="bltAFWM" destination="zIA-hi-AQw" id="R5p-SE-sLu"/>
+                <outlet property="bltALWM" destination="0Sn-R4-eAI" id="yu8-5B-yV3"/>
+                <outlet property="bltAShift" destination="kq9-G5-ogg" id="1zH-7w-oIx"/>
+                <outlet property="bltAhold" destination="rZM-8Q-Zat" id="nqa-bE-3NT"/>
+                <outlet property="bltAnew" destination="taw-Pr-Ahp" id="heV-tH-XqF"/>
+                <outlet property="bltAold" destination="koY-GZ-F5k" id="K1S-KW-hNs"/>
+                <outlet property="bltBShift" destination="1yf-NN-alJ" id="5mi-Ra-O6l"/>
+                <outlet property="bltBhold" destination="Led-oR-Sum" id="Eq8-rn-InC"/>
+                <outlet property="bltBnew" destination="kv3-0P-aGJ" id="PEQ-yt-OL9"/>
+                <outlet property="bltBold" destination="PVa-iE-ce5" id="SBv-6M-IKd"/>
+                <outlet property="bltChold" destination="VoD-ug-Mba" id="YEJ-fn-Z3M"/>
+                <outlet property="bltDhold" destination="VJm-mr-7G0" id="WDS-Xt-B5H"/>
+                <outlet property="bltFillCarryIn" destination="lG6-Mj-qoC" id="dET-Ts-g39"/>
+                <outlet property="bltFillCarryOut" destination="rVA-iw-hq1" id="mlU-Ye-Fxe"/>
+                <outlet property="bltFillEnable" destination="hNH-Cj-WvC" id="5s3-Z5-HWg"/>
+                <outlet property="bltFirstWordTime1" destination="Yem-Qj-QPX" id="q1M-Kt-ats"/>
+                <outlet property="bltFirstWordTime2" destination="f8a-ZK-kZc" id="L21-QE-5b6"/>
+                <outlet property="bltLastWordTime" destination="6v9-es-NB6" id="psS-SG-9Vr"/>
+                <outlet property="bltMinterm" destination="iSU-LT-HjR" id="YkL-Tj-GNQ"/>
+                <outlet property="bltSecPlusWordTime" destination="tDq-kM-mDu" id="e9h-Ze-VFu"/>
+                <outlet property="bltStoreToDest" destination="9Wk-rH-uxa" id="3Vk-ba-8Vn"/>
                 <outlet property="breakTableView" destination="pd6-3V-YaN" id="7aD-mh-ZjP"/>
                 <outlet property="ciaAlarmHi" destination="g4a-rb-TAd" id="LsO-a5-zkL"/>
                 <outlet property="ciaAlarmLo" destination="vQp-3y-fNZ" id="lZZ-Yq-ALh"/>
@@ -2025,7 +2046,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="jJo-Pz-BlY">
                                                 <rect key="frame" x="1" y="0.0" width="151" height="246"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="lgi-Sv-OLV" id="RzZ-Zx-t06" customClass="BankTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="151" height="221"/>
@@ -2086,7 +2107,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="858-OJ-L3r">
                                                 <rect key="frame" x="1" y="0.0" width="625" height="246"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WPj-Ua-UtF" id="WbL-UR-zTx" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="625" height="221"/>
@@ -3440,7 +3461,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="Y33-of-tc1">
                                                             <rect key="frame" x="1" y="0.0" width="372" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WEI-qE-eO4" id="7Lt-S1-Mt6" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="372" height="213"/>
@@ -3552,7 +3573,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="BjD-tK-SjJ">
                                                             <rect key="frame" x="1" y="0.0" width="379" height="238"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="UBc-A3-sPb" id="SQq-Tg-gsU" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="379" height="213"/>
@@ -3973,16 +3994,16 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l3E-px-GrY">
                                             <rect key="frame" x="562" y="241" width="13" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="A" id="xgd-Es-Qtx">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="B" id="xgd-Es-Qtx">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e5U-cN-jlb">
-                                            <rect key="frame" x="614" y="241" width="29" height="16"/>
+                                            <rect key="frame" x="614" y="241" width="31" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="new" id="5x6-TY-Tqn">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="hold" id="5x6-TY-Tqn">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -4173,7 +4194,7 @@
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wyc-Vy-ikM">
                                             <rect key="frame" x="418" y="278" width="45" height="16"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="B Shift" id="t4e-b8-ume">
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="Shift B" id="t4e-b8-ume">
                                                 <font key="font" metaFont="system"/>
                                                 <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -4216,7 +4237,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="229" height="221"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="229" height="221"/>
@@ -6384,7 +6405,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="5dn-W1-111">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView ambiguous="YES" editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Uk2-Ez-Oya">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6420,7 +6441,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="QrR-nh-kxQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView ambiguous="YES" importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" spellingCorrection="YES" smartInsertDelete="YES" id="mjy-kd-clj">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6455,7 +6476,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="0.0" width="786" height="280"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="786" height="255"/>

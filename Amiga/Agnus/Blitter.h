@@ -308,24 +308,25 @@ public:
     // OCS register 0x040 (w)
     void pokeBLTCON0(u16 value);
     
-    u16 bltconASH() { return bltcon0 >> 12; }
-    u16 bltconUSE() { return (bltcon0 >> 8) & 0xF; }
-    bool bltconUSEA()    { return bltcon0 & (1 << 11); }
-    bool bltconUSEB()    { return bltcon0 & (1 << 10); }
-    bool bltconUSEC()    { return bltcon0 & (1 << 9); }
-    bool bltconUSED()    { return bltcon0 & (1 << 8); }
+    u16 bltconASH()   { return bltcon0 >> 12; }
+    u16 bltconLF()    { return bltcon0 & 0xF; }
+    u16 bltconUSE()   { return (bltcon0 >> 8) & 0xF; }
+    bool bltconUSEA() { return bltcon0 & (1 << 11); }
+    bool bltconUSEB() { return bltcon0 & (1 << 10); }
+    bool bltconUSEC() { return bltcon0 & (1 << 9); }
+    bool bltconUSED() { return bltcon0 & (1 << 8); }
     void setBltconASH(u16 ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
 
     // OCS register 0x042 (w)
     void pokeBLTCON1(u16 value);
 
-    u16 bltconBSH() { return bltcon1 >> 12; }
-    bool bltconEFE()     { return bltcon1 & (1 << 4); }
-    bool bltconIFE()     { return bltcon1 & (1 << 3); }
-    bool bltconFE()      { return bltconEFE() || bltconIFE(); }
-    bool bltconFCI()     { return bltcon1 & (1 << 2); }
-    bool bltconDESC()    { return bltcon1 & (1 << 1); }
-    bool bltconLINE()    { return bltcon1 & (1 << 0); }
+    u16 bltconBSH()   { return bltcon1 >> 12; }
+    bool bltconEFE()  { return bltcon1 & (1 << 4); }
+    bool bltconIFE()  { return bltcon1 & (1 << 3); }
+    bool bltconFE()   { return bltconEFE() || bltconIFE(); }
+    bool bltconFCI()  { return bltcon1 & (1 << 2); }
+    bool bltconDESC() { return bltcon1 & (1 << 1); }
+    bool bltconLINE() { return bltcon1 & (1 << 0); }
     void setBltcon1BSH(u16 bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
 
     // OCS registers 0x044 and 0x046 (w)
@@ -462,6 +463,10 @@ private:
     // Emulates a Blitter micro-instruction
     template <u16 instr> void exec();
     template <u16 instr> void fakeExec();
+
+    // Check iterations
+    bool isFirstIteration() { return xCounter == bltsizeW; }
+    bool isLastIteration() { return xCounter == 1; }
 
     // Sets the x or y counter to a new value
     void setXCounter(u16 value);

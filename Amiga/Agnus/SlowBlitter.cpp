@@ -900,16 +900,6 @@ Blitter::exec()
         busidle = instr & BUSIDLE;
     }
 
-    // Remove ASAP (comparison with old code)
-    bool bus2 = instr & (FETCH | BUS);
-    bool busidle2 = instr & BUSIDLE;
-    if (instr & WRITE_D) {
-        bus2 = !lockD;
-        busidle2 = lockD;
-    }
-    assert(bus == bus2);
-    assert(busidle == busidle2);
-
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
 
@@ -1141,10 +1131,10 @@ Blitter::setXCounter(u16 value)
     mask = 0xFFFF;
 
     // Apply the "first word mask" in the first iteration
-    if (xCounter == bltsizeW) mask &= bltafwm;
+    if (isFirstIteration()) mask &= bltafwm;
 
     // Apply the "last word mask" in the last iteration
-    if (xCounter == 1) mask &= bltalwm;
+    if (isLastIteration()) mask &= bltalwm;
 }
 
 void

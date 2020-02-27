@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+let fmt4  = MyFormatter.init(radix: 16, min: 0, max: 0xF)
 let fmt8  = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
@@ -248,6 +249,29 @@ class Inspector: NSWindowController {
     @IBOutlet weak var copPlus2: NSButton!
     @IBOutlet weak var copMinus2: NSButton!
     @IBOutlet weak var copList2: CopperTableView!
+
+    // Debug panel (Copper)
+    @IBOutlet weak var bltAFWM: NSTextField!
+    @IBOutlet weak var bltALWM: NSTextField!
+    @IBOutlet weak var bltAold: NSTextField!
+    @IBOutlet weak var bltBold: NSTextField!
+    @IBOutlet weak var bltAnew: NSTextField!
+    @IBOutlet weak var bltBnew: NSTextField!
+    @IBOutlet weak var bltAhold: NSTextField!
+    @IBOutlet weak var bltBhold: NSTextField!
+    @IBOutlet weak var bltChold: NSTextField!
+    @IBOutlet weak var bltDhold: NSTextField!
+    @IBOutlet weak var bltAShift: NSTextField!
+    @IBOutlet weak var bltBShift: NSTextField!
+    @IBOutlet weak var bltMinterm: NSTextField!
+    @IBOutlet weak var bltFirstWordTime1: NSButton!
+    @IBOutlet weak var bltFirstWordTime2: NSButton!
+    @IBOutlet weak var bltLastWordTime: NSButton!
+    @IBOutlet weak var bltSecPlusWordTime: NSButton!
+    @IBOutlet weak var bltFillCarryIn: NSButton!
+    @IBOutlet weak var bltFillCarryOut: NSButton!
+    @IBOutlet weak var bltFillEnable: NSButton!
+    @IBOutlet weak var bltStoreToDest: NSButton!
 
     // Debug panel (Denise)
     @IBOutlet weak var deniseBPLCON0: NSTextField!
