@@ -494,8 +494,11 @@ Copper::isMoveCmd()
 
 bool Copper::isMoveCmd(u32 addr)
 {
-    u32 instr = mem.spypeekChip32(addr);
-    return !(HI_WORD(instr) & 1);
+    assert(IS_EVEN(addr));
+
+    u16 hiword = mem.spypeekChip16(addr);
+
+    return IS_EVEN(hiword);
 }
 
 bool Copper::isWaitCmd()
@@ -505,8 +508,12 @@ bool Copper::isWaitCmd()
 
 bool Copper::isWaitCmd(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return (HI_WORD(instr) & 1) && !(LO_WORD(instr) & 1);
+    assert(IS_EVEN(addr));
+
+    u16 hiword = mem.spypeekChip16(addr);
+    u16 loword = mem.spypeekChip16(addr + 2);
+
+    return IS_ODD(hiword) && IS_EVEN(loword);
 }
 
 bool
@@ -518,8 +525,12 @@ Copper::isSkipCmd()
 bool
 Copper::isSkipCmd(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return (HI_WORD(instr) & 1) && (LO_WORD(instr) & 1);
+    assert(IS_EVEN(addr));
+
+    u16 hiword = mem.spypeekChip16(addr);
+    u16 loword = mem.spypeekChip16(addr + 2);
+
+    return IS_ODD(hiword) && IS_ODD(loword);
 }
 
 u16
