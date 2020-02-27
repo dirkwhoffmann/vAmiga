@@ -630,6 +630,7 @@ Agnus::serviceBPLEvent()
                 denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[0]);
             }
 
@@ -646,6 +647,7 @@ Agnus::serviceBPLEvent()
                 denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[0]);
             }
 
@@ -661,6 +663,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[1]);
             }
 
@@ -671,6 +674,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[1]);
             }
 
@@ -681,6 +685,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[2]);
             }
 
@@ -691,6 +696,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[2]);
             }
 
@@ -701,6 +707,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[3]);
             }
 
@@ -711,6 +718,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[3]);
             }
 
@@ -721,6 +729,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[4] = doBitplaneDMA<4>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[4]);
             }
 
@@ -731,6 +740,7 @@ Agnus::serviceBPLEvent()
             if (!bplHwStop()) {
                 denise.bpldat[5] = doBitplaneDMA<5>();
             } else {
+                assert(false);
                 INC_CHIP_PTR(bplpt[5]);
             }
 
