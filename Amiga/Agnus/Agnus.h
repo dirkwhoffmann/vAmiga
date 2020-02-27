@@ -24,27 +24,20 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
-// Increments a Chip Ram pointer
+// Increments a Chip Ram pointer (TODO: Eliminate these macros)
 #define INC_CHIP_PTR(x) x += 2
 #define INC_CHIP_PTR_BY(x,y) x += y
-
-// Assembles a beam position out of two components
-#define BEAM(y,x) (((y) << 8) | (x))
-
-// Extracts the vertical or the horizontal component out of a beam position
-#define VPOS(x) ((x) >> 8)
-#define HPOS(x) ((x) & 0xFF)
 
 class Agnus : public AmigaComponent {
     
     // The current configuration
     AgnusConfig config;
 
-    // Information shown in the GUI inspector panel
+    // The result of the latest inspection
     AgnusInfo info;
     EventInfo eventInfo;
 
-    // Statistics shown in the GUI monitor panel
+    // The collected statistical information
     AgnusStats stats;
 
 
@@ -54,10 +47,8 @@ class Agnus : public AmigaComponent {
     
 public:
     
-    // Every Amiga fan knows what the Copper is
+    // Every Amiga fan knows what the Copper and the Blitter are
     Copper copper = Copper(amiga);
-    
-    // Every Amiga fan knows what the Blitter is
     Blitter blitter = Blitter(amiga);
     
     // A graphics engine for visualizing DMA accesses
@@ -177,9 +168,6 @@ public:
     //
     // Operation control
     //
-
-    // Action flags checked in every cycle
-    u64 actions;
 
     // Action flags checked in the HSYNC handler
     u64 hsyncActions;
@@ -491,7 +479,6 @@ public:
         & nextBplEvent
         & nextDasEvent
 
-        & actions
         & hsyncActions
         & clock
         & frame
@@ -692,24 +679,10 @@ public:
 
 
     //
-    // OLD
-    //
-    
-    /* Returns the difference of two beam position in master cycles
-     * Returns NEVER if the start position is greater than the end position
-     * or if the end position is unreachable.
-     * DEPRECATED
-     */
-    Cycle beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd);
-    Cycle beamDiff(i16 vEnd, i16 hEnd) { return beamDiff(pos.v, pos.h, vEnd, hEnd); }
-    Cycle beamDiff(i32 end) { return beamDiff(VPOS(end), HPOS(end)); }
-    
-
-    //
     // Managing DMA access
     //
 
-    // Requests an audio DMA word
+    // Called by Paula's audio engine to requests a DMA word
     template <int channel> void setAudxDR() { audxDR[channel] = true; }
 
     // Getter and setter for the BLS signal (Blitter slow down)

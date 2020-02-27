@@ -255,7 +255,7 @@ Agnus::_inspect()
 void
 Agnus::_dump()
 {
-    msg(" actions : %X\n", actions);
+    msg(" actions : %X\n", hsyncActions);
 
     msg("   dskpt : %X\n", dskpt);
     for (unsigned i = 0; i < 4; i++) msg("audpt[%d] : %X\n", i, audpt[i]);
@@ -363,24 +363,6 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
     result.h = cycle % HPOS_CNT;
 
     return result;
-}
-
-Cycle
-Agnus::beamDiff(i16 vStart, i16 hStart, i16 vEnd, i16 hEnd)
-{
-    // We assume that the function is called with a valid horizontal position
-    assert(hEnd <= HPOS_MAX);
-    
-    // Bail out if the end position is unreachable
-    if (vEnd > 312) return NEVER;
-    
-    // Compute vertical and horizontal difference
-    i32 vDiff = vEnd - vStart;
-    i32 hDiff = hEnd - hStart;
-    debug("vdiff: %d hdiff: %d\n", vDiff, hDiff);
-
-    // In PAL mode, all lines have the same length (227 color clocks)
-    return DMA_CYCLES(vDiff * 227 + hDiff);
 }
 
 bool
