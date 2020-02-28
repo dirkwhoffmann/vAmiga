@@ -29,6 +29,12 @@ class PointTableView: NSTableView {
     func click(row: Int, col: Int) { }
     func edit(addr: UInt32) { }
 
+    func refreshValues() {
+
+        cache()
+        reloadData()
+    }
+
     func refreshFormatters() {
 
         for (c, f) in ["addr": fmt24] {
@@ -41,14 +47,15 @@ class PointTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int) {
+    func fullRefresh() {
 
-        if count == 0 {
+        refreshFormatters()
+        refreshValues()
+    }
+    
+    func periodicRefresh(count: Int) {
 
-            refreshFormatters()
-            cache()
-            reloadData()
-        }
+        refreshValues()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -124,7 +131,7 @@ extension PointTableView: NSTableViewDelegate {
 
         lockAmiga()
         edit(addr: addr)
-        inspector.needsRefresh()
+        inspector.fullRefresh()
         unlockAmiga()
      }
 }
@@ -148,7 +155,7 @@ class BreakTableView: PointTableView {
             // Enable / Disable
             let disabled = amiga?.cpu.breakpointIsDisabled(row) ?? false
             amiga?.cpu.breakpointSetEnable(row, value: disabled)
-            inspector.needsRefresh()
+            inspector.fullRefresh()
         }
 
         if col == 0 || col == 1 {
@@ -162,7 +169,7 @@ class BreakTableView: PointTableView {
 
             // Delete
             amiga?.cpu.removeBreakpoint(row)
-            inspector.needsRefresh()
+            inspector.fullRefresh()
         }
     }
 
@@ -195,14 +202,14 @@ class WatchTableView: PointTableView {
              // Toggle enable status
              let disabled = amiga?.cpu.watchpointIsDisabled(row) ?? false
              amiga?.cpu.watchpointSetEnable(row, value: disabled)
-             inspector.needsRefresh()
+             inspector.fullRefresh()
          }
 
          if col == 2 {
 
              // Delete
              amiga?.cpu.removeWatchpoint(row)
-             inspector.needsRefresh()
+             inspector.fullRefresh()
          }
     }
 

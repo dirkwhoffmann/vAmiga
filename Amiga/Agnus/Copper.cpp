@@ -28,8 +28,8 @@ Copper::_inspect()
     info.cop2lc  = cop2lc;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
-    info.length1 = cop1end - cop1lc;
-    info.length2 = cop2end - cop2lc;
+    info.length1 = (cop1end - cop1lc) / 4;
+    info.length2 = (cop2end - cop2lc) / 4;
 
     pthread_mutex_unlock(&lock);
 }

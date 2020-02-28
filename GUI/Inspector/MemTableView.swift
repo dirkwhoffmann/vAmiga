@@ -78,18 +78,19 @@ class MemTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int) {
+    func fullRefresh() {
 
-        // Refresh formatters if needed
-        if count == 0 { refreshFormatters() }
+        cache()
+        refreshFormatters()
+        reloadData()
+    }
 
+    func periodicRefresh(count: Int) {
+        
         // Increase the update interval
         if count % 8 != 0 { return }
 
-        // Update display cache
         cache()
-
-        // Refresh display with cached values
         reloadData()
     }
 }

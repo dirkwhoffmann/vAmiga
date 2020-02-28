@@ -20,18 +20,9 @@ class SpriteTableView: NSTableView {
         target = self
     }
 
-    func refresh(count: Int) {
+    func refreshValues() {
 
-        // Refresh formatters if needed
-        if count == 0 { refreshFormatters() }
-
-        // Increase the update interval
-        if count % 4 != 0 { return }
-
-        // Update display cache
-        // cache()
-
-        // Refresh display with cached values
+        // cache() // TODO
         reloadData()
     }
 
@@ -45,6 +36,20 @@ class SpriteTableView: NSTableView {
                 }
             }
         }
+    }
+
+    func fullRefresh() {
+
+        refreshValues()
+        refreshFormatters()
+    }
+
+    func periodicRefresh(count: Int) {
+
+        // Increase the update interval
+        if count % 4 != 0 { return }
+
+        refreshValues()
     }
 }
 

@@ -35,56 +35,6 @@ class InstrTableView: NSTableView {
         doubleAction = #selector(doubleClickAction(_:))
         action = #selector(clickAction(_:))
     }
-    
-    @IBAction func clickAction(_ sender: NSTableView!) {
-
-        if sender.clickedColumn == 0 {
-
-            lockAmiga()
-            clickAction(row: sender.clickedRow)
-            unlockAmiga()
-        }
-    }
-
-    func clickAction(row: Int) {
-
-        if let addr = addrInRow[row], let cpu = amiga?.cpu {
-
-            if !cpu.breakpointIsSet(at: addr) {
-                cpu.addBreakpoint(at: addr)
-            } else if cpu.breakpointIsSetAndDisabled(at: addr) {
-                cpu.breakpointSetEnable(at: addr, value: true)
-            } else if cpu.breakpointIsSetAndEnabled(at: addr) {
-                cpu.breakpointSetEnable(at: addr, value: false)
-            }
-
-            inspector.needsRefresh()
-        }
-    }
-
-    @IBAction func doubleClickAction(_ sender: NSTableView!) {
-
-        if sender.clickedColumn == 0 {
-
-             lockAmiga()
-             doubleClickAction(row: sender.clickedRow)
-             unlockAmiga()
-         }
-    }
-
-    func doubleClickAction(row: Int) {
-
-        if let addr = addrInRow[row], let cpu = amiga?.cpu {
-
-            if cpu.breakpointIsSet(at: addr) {
-                cpu.removeBreakpoint(at: addr)
-            } else {
-                cpu.addBreakpoint(at: addr)
-            }
-
-            inspector.needsRefresh()
-        }
-    }
 
     func jumpToPC() {
         
@@ -92,7 +42,7 @@ class InstrTableView: NSTableView {
     }
 
     func jumpTo(addr: UInt32?) {
-    
+
         guard let addr = addr else { return }
         
         if let row = rowForAddr[addr] {
@@ -165,13 +115,66 @@ class InstrTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int) {
+    func fullRefresh() {
 
-        // Perform a full refresh if needed
-        if count == 0 { refreshFormatters() }
-        
+        refreshFormatters()
+        reloadData()
+    }
+
+    func periodicRefresh(count: Int) {
+
         // Update display cache and refresh display with cached values
         jumpToPC()
+    }
+
+    @IBAction func clickAction(_ sender: NSTableView!) {
+
+        if sender.clickedColumn == 0 {
+
+            lockAmiga()
+            clickAction(row: sender.clickedRow)
+            unlockAmiga()
+        }
+    }
+
+    func clickAction(row: Int) {
+
+        if let addr = addrInRow[row], let cpu = amiga?.cpu {
+
+            if !cpu.breakpointIsSet(at: addr) {
+                cpu.addBreakpoint(at: addr)
+            } else if cpu.breakpointIsSetAndDisabled(at: addr) {
+                cpu.breakpointSetEnable(at: addr, value: true)
+            } else if cpu.breakpointIsSetAndEnabled(at: addr) {
+                cpu.breakpointSetEnable(at: addr, value: false)
+            }
+
+            inspector.fullRefresh()
+        }
+    }
+
+    @IBAction func doubleClickAction(_ sender: NSTableView!) {
+
+        if sender.clickedColumn == 0 {
+
+            lockAmiga()
+            doubleClickAction(row: sender.clickedRow)
+            unlockAmiga()
+        }
+    }
+
+    func doubleClickAction(row: Int) {
+
+        if let addr = addrInRow[row], let cpu = amiga?.cpu {
+
+            if cpu.breakpointIsSet(at: addr) {
+                cpu.removeBreakpoint(at: addr)
+            } else {
+                cpu.addBreakpoint(at: addr)
+            }
+
+            inspector.fullRefresh()
+        }
     }
 }
 

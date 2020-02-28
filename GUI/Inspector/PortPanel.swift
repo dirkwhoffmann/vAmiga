@@ -13,7 +13,7 @@ let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
 
 extension Inspector {
 
-     func cachePorts(count: Int = 0) {
+    func cachePorts(count: Int = 0) {
 
         if amiga != nil {
             port1Info = amiga!.controlPort1.getInfo()
@@ -23,37 +23,10 @@ extension Inspector {
         }
     }
 
-    func refreshPorts(count: Int) {
-
-         // Perform a full refresh if needed
-         if count == 0 { refreshPortFormatters() }
-
-         // Update display cache
-         cachePorts()
-
-         // Refresh display with cached values
-         refreshPortValues()
-     }
-
-    func refreshPortFormatters() {
-
-        let elements = [ poPOTGO: fmt16,
-                         poPOTGOR: fmt16,
-                         po0JOYDAT: fmt16,
-                         po0POTDAT: fmt16,
-                         po1JOYDAT: fmt16,
-                         po1POTDAT: fmt16,
-                         poRecShift: fmt16,
-                         poRecBuffer: fmt16,
-                         poTransShift: fmt16,
-                         poTransBuffer: fmt16
-        ]
-
-        for (c, f) in elements { assignFormatter(f, c!) }
-    }
-    
     func refreshPortValues() {
 
+        cachePorts()
+        
         if port1Info == nil { return }
         if port2Info == nil { return }
         if serInfo   == nil { return }
@@ -82,10 +55,7 @@ extension Inspector {
         poDATLYR.state = ((potgor & 0x0400) != 0) ? .on : .off
         poDATLXR.state = ((potgor & 0x0100) != 0) ? .on : .off
 
-        //
         // Control port 1
-        //
-
         po0JOYDAT.integerValue = Int(port1Info!.joydat)
         po0M0V.state = port1Info!.m0v ? .on : .off
         po0M0H.state = port1Info!.m0h ? .on : .off
@@ -93,10 +63,7 @@ extension Inspector {
         po0M1H.state = port1Info!.m1h ? .on : .off
         po0POTDAT.integerValue = Int(port1Info!.potdat)
 
-        //
         // Control port 2
-        //
-
         po1JOYDAT.integerValue = Int(port2Info!.joydat)
         po1M0V.state = port2Info!.m0v ? .on : .off
         po1M0H.state = port2Info!.m0h ? .on : .off
@@ -104,10 +71,7 @@ extension Inspector {
         po1M1H.state = port2Info!.m1h ? .on : .off
         po1POTDAT.integerValue = Int(port2Info!.potdat)
 
-        //
         // Serial port
-        //
-
         poTXD.state = serInfo!.txd ? .on : .off
         poRXD.state = serInfo!.rxd ? .on : .off
         poCTS.state = serInfo!.cts ? .on : .off
@@ -119,10 +83,7 @@ extension Inspector {
         poTransShift.integerValue = Int(uartInfo!.transmitShiftReg)
         poTransBuffer.integerValue = Int(uartInfo!.transmitBuffer)
 
-        //
         // Logging windows
-        //
-
         if refreshCnt % 2 == 0 {
 
             let serialInSize = parent!.serialIn.count
@@ -153,5 +114,33 @@ extension Inspector {
                 poSerialOut.font = serDatFont
             }
         }
+    }
+
+    func refreshPortFormatters() {
+
+        let elements = [ poPOTGO: fmt16,
+                         poPOTGOR: fmt16,
+                         po0JOYDAT: fmt16,
+                         po0POTDAT: fmt16,
+                         po1JOYDAT: fmt16,
+                         po1POTDAT: fmt16,
+                         poRecShift: fmt16,
+                         poRecBuffer: fmt16,
+                         poTransShift: fmt16,
+                         poTransBuffer: fmt16
+        ]
+
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func fullRefreshPorts() {
+
+        refreshPortFormatters()
+        refreshPortValues()
+    }
+
+    func periodicRefreshPorts(count: Int) {
+
+        refreshPortValues()
     }
 }

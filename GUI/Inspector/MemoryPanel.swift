@@ -117,15 +117,19 @@ extension Inspector {
         memWomText.stringValue = String.init(format: "%d KB", womKB)
         memExtText.stringValue = String.init(format: "%d KB", extKB)
     }
-    
-    func refreshMemory(count: Int) {
 
-        // Refresh sub views
-        memTableView.refresh(count: count)
-        memBankTableView.refresh(count: count)
+    func fullRefreshMemory() {
 
-        // Perform a full refresh if needed
-        if count == 0 { refreshMemoryLayout() }
+        refreshMemoryLayout()
+
+        memTableView.fullRefresh()
+        memBankTableView.fullRefresh()
+    }
+
+    func periodicRefreshMemory(count: Int) {
+
+        memTableView.periodicRefresh(count: count)
+        memBankTableView.periodicRefresh(count: count)
     }
 
     func setBank(src: MemorySource) {
@@ -150,7 +154,7 @@ extension Inspector {
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(value)
             memBankTableView.selectRowIndexes([value], byExtendingSelection: false)
-            needsRefresh()
+            fullRefresh()
         }
     }
     
@@ -249,19 +253,15 @@ extension Inspector {
         lockAmiga()
 
         let input = sender.stringValue
-
         if let addr = Int(input, radix: 16), input != "" {
-
             sender.stringValue = String(format: "%06X", addr)
             setSelected(addr)
-
         } else {
-
             sender.stringValue = ""
             selected = -1
         }
+        fullRefresh()
 
-        needsRefresh()
         unlockAmiga()
     }
 }

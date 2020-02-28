@@ -9,16 +9,17 @@
 
 class CopperTableView: NSTableView {
 
+    // Copper list (1 or 2)
+    var nr = 1
+
     // Data caches
+    var copperInfo: CopperInfo?
     var addrInRow: [Int: Int] = [:]
     var data1InRow: [Int: Int] = [:]
     var data2InRow: [Int: Int] = [:]
     var instrInRow: [Int: String] = [:]
     var illegalInRow: [Int: Bool] = [:]
 
-    var coplc = 0
-    var numRows = 0
-    
     override func awakeFromNib() {
         
         delegate = self
@@ -26,9 +27,7 @@ class CopperTableView: NSTableView {
         target = self
     }
 
-    func cache(lc: Int, count: Int) {
-
-        var addr = lc
+    func cache() {
 
         addrInRow = [:]
         data1InRow = [:]
@@ -37,6 +36,12 @@ class CopperTableView: NSTableView {
         illegalInRow = [:]
 
         if amiga != nil {
+
+            copperInfo = amiga!.agnus.getCopperInfo()
+
+            assert(nr == 1 || nr == 2)
+            var addr = nr == 1 ? Int(copperInfo!.cop1lc) : Int(copperInfo!.cop2lc)
+            let count = nr == 1 ? Int(copperInfo!.length1) : Int(copperInfo!.length2)
 
             for i in 0 ..< count {
 
@@ -49,50 +54,11 @@ class CopperTableView: NSTableView {
                 addr += 4
             }
         }
-
-        reloadData() // TODO: MOVE TO REFRESH
     }
 
-    // DEPRECATED
-    func cache() {
+    func refreshValues() {
 
-        var addr = coplc
-
-        addrInRow = [:]
-        data1InRow = [:]
-        data2InRow = [:]
-        instrInRow = [:]
-        illegalInRow = [:]
-
-        if amiga != nil {
-
-            numRows = amiga!.agnus.instrCount(tag)
-
-            for i in 0 ..< numRows {
-
-                addrInRow[i] = addr
-                data1InRow[i] = amiga!.mem.spypeek16(addr)
-                data2InRow[i] = amiga!.mem.spypeek16(addr + 2)
-                instrInRow[i] = amiga!.agnus.disassemble(addr)
-                illegalInRow[i] = amiga!.agnus.isIllegalInstr(addr)
-
-                addr += 4
-            }
-        }
-    }
-
-    func refresh(count: Int) {
-
-        // Refresh formatters if needed
-        if count == 0 { refreshFormatters() }
-
-        // Increase the update interval
-        if count % 4 != 0 { return }
-
-        // Update display cache
         cache()
-
-        // Refresh display with cached values
         reloadData()
     }
 
@@ -107,21 +73,30 @@ class CopperTableView: NSTableView {
             }
         }
     }
+
+    func fullRefresh() {
+
+        refreshValues()
+        refreshFormatters()
+    }
+
+    func periodicRefresh(count: Int) {
+
+        // Increase the update interval
+        if count % 4 != 0 { return }
+
+        refreshValues()
+    }
 }
 
 extension CopperTableView: NSTableViewDataSource {
 
-    /*
-    var coplc: Int {
-        assert(tag == 1 || tag == 2)
-        let info = amiga!.agnus.getCopperInfo()
-        return (tag == 1) ? Int(info.cop1lc) : Int(info.cop2lc)
-    }
-    */
-
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return numRows
+        if let info = copperInfo {
+            return  nr == 1 ? Int(info.length1) : Int(info.length2)
+        }
+        return 0
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

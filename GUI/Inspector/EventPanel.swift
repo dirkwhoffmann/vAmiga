@@ -14,26 +14,9 @@ extension Inspector {
         eventInfo = amiga!.agnus.getEventInfo()
     }
 
-    func refreshEventFormatters() {
-
-    }
-
-    func refreshEvents(count: Int) {
-
-        // Update display cache
-        cacheEvents()
-
-        // Perform a full refresh if needed
-        if count == 0 { refreshEventFormatters() }
-
-        // Refresh display with cached values
-        refreshEventValues()
-
-        // Refresh sub views
-        evTableView.refresh(count: count)
-    }
-
     func refreshEventValues() {
+
+        cacheEvents()
 
         evCpuProgress.integerValue = Int(eventInfo!.cpuClock)
         evCpuProgress2.integerValue = Int(eventInfo!.cpuCycles)
@@ -43,5 +26,24 @@ extension Inspector {
         evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
         evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
         evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
+    }
+
+    func refreshEventFormatters() {
+
+    }
+
+    func fullRefreshEvents() {
+
+        evTableView.fullRefresh()
+
+        refreshEventFormatters()
+        refreshEventValues()
+    }
+
+    func periodicRefreshEvents(count: Int) {
+
+        evTableView.periodicRefresh(count: count)
+
+        refreshEventValues()
     }
 }

@@ -15,40 +15,11 @@ extension Inspector {
         spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
     }
 
-    func refreshDenise(count: Int) {
-
-        // Refresh sub views
-        sprTableView.refresh(count: count)
-
-        // Perform a full refresh if needed
-        if count == 0 { refreshDeniseFormatters() }
-
-        // Update display cache
-        cacheDenise()
-
-        // Refresh display with cached values
-        refreshDeniseValues()
-    }
-
-    func refreshDeniseFormatters() {
-
-        let elements = [ deniseBPLCON0: fmt16,
-                         deniseBPLCON1: fmt16,
-                         deniseBPLCON2: fmt16,
-                         deniseDIWSTRT: fmt16,
-                         deniseDIWSTOP: fmt16,
-                         deniseCLXDAT: fmt16,
-                         sprPtr: fmt24
-        ]
-        for (c, f) in elements { assignFormatter(f, c!) }
-    }
-
     func refreshDeniseValues() {
 
-        //
+        cacheDenise()
+        
         // Bitplane section
-        //
-
         let bplcon0 = Int(deniseInfo!.bplcon0)
         let bplcon1 = Int(deniseInfo!.bplcon1)
         let bplcon2 = Int(deniseInfo!.bplcon1)
@@ -74,10 +45,7 @@ extension Inspector {
         denisePF1P1.state  = (bplcon2 & 0b0000010 != 0) ? .on : .off
         denisePF1P0.state  = (bplcon2 & 0b0000001 != 0) ? .on : .off
 
-        //
         // Display window section
-        //
-
         let hstrt = deniseInfo!.diwHstrt
         let vstrt = deniseInfo!.diwVstrt
         let hstop = deniseInfo!.diwHstop
@@ -87,26 +55,17 @@ extension Inspector {
         deniseDIWSTOP.integerValue = Int(deniseInfo!.diwstop)
         deniseDIWSTOPText.stringValue = "(\(hstop),\(vstop))"
 
-        //
         // Auxiliary register section
-        //
-
         deniseCLXDAT.integerValue = Int(deniseInfo!.clxdat)
 
-        //
         // Sprite section
-        //
-
         sprHStart.integerValue = Int(spriteInfo!.hstrt)
         sprVStart.integerValue = Int(spriteInfo!.vstrt)
         sprVStop.integerValue = Int(spriteInfo!.vstop)
         sprPtr.integerValue = Int(spriteInfo!.ptr)
         sprAttach.state = spriteInfo!.attach ? .on : .off
 
-        //
         // Color section
-        //
-
         deniseCol0.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.0)
         deniseCol1.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.1)
         deniseCol2.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.2)
@@ -141,8 +100,36 @@ extension Inspector {
         deniseCol31.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.31)
     }
 
+    func refreshDeniseFormatters() {
+
+        let elements = [ deniseBPLCON0: fmt16,
+                         deniseBPLCON1: fmt16,
+                         deniseBPLCON2: fmt16,
+                         deniseDIWSTRT: fmt16,
+                         deniseDIWSTOP: fmt16,
+                         deniseCLXDAT: fmt16,
+                         sprPtr: fmt24
+        ]
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func fullRefreshDenise() {
+
+        sprTableView.fullRefresh()
+
+        refreshDeniseValues()
+        refreshDeniseFormatters()
+    }
+
+    func periodicRefreshDenise(count: Int) {
+
+        sprTableView.periodicRefresh(count: count)
+
+        refreshDeniseValues()
+    }
+
     @IBAction func selectSpriteAction(_ sender: Any!) {
 
-        needsRefresh()
+        sprTableView.fullRefresh()
     }
 }

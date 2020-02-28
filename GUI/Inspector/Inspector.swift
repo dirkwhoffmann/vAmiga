@@ -583,14 +583,12 @@ class Inspector: NSWindowController {
         super.showWindow(self)
         amiga?.enableDebugging()
         updateInspectionTarget()
-        
+
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
             lockAmiga()
             if amiga != nil {
-                if self.isRunning || self.refreshCnt == 0 {
-                    self.refresh(count: self.refreshCnt)
-                }
+                if self.isRunning { self.periodicRefresh(count: self.refreshCnt) }
                 self.isRunning = amiga!.isRunning()
                 self.refreshCnt += 1
             }
@@ -608,14 +606,30 @@ class Inspector: NSWindowController {
         control.needsDisplay = true
     }
 
-    func needsRefresh() {
+    // Refreshs all items in the currently selected panel
+    func fullRefresh() {
 
-        // We force a refresh by setting the refresh counter to 0. This causes
-        // all refresh methods to be invoked inside the timer handler.
-        refreshCnt = 0
+        if window?.isVisible == false { return }
+
+        if let id = debugPanel.selectedTabViewItem?.label {
+
+              switch id {
+
+              case "CPU": fullRefreshCPU()
+              case "CIA": fullRefreshCIA()
+              case "Memory": fullRefreshMemory()
+              case "Agnus": fullRefreshAgnus()
+              case "Copper and Blitter": fullRefreshCopperAndBlitter()
+              case "Denise": fullRefreshDenise()
+              case "Paula": fullRefreshPaula()
+              case "Ports": fullRefreshPorts()
+              case "Events": fullRefreshEvents()
+              default: break
+              }
+          }
     }
-
-    func refresh(count: Int) {
+    // Performs a periodic refresh (called by the update timer)
+    func periodicRefresh(count: Int) {
         
         if window?.isVisible == false { return }
 
@@ -623,15 +637,15 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU": refreshCPU(count: count)
-            case "CIA": refreshCIA(count: count)
-            case "Memory": refreshMemory(count: count)
-            case "Agnus": refreshAgnus(count: count)
-            case "Copper and Blitter": refreshCopperAndBlitter(count: count)
-            case "Denise": refreshDenise(count: count)
-            case "Paula": refreshPaula(count: count)
-            case "Ports": refreshPorts(count: count)
-            case "Events": refreshEvents(count: count)
+            case "CPU": periodicRefreshCPU(count: count)
+            case "CIA": periodicRefreshCIA(count: count)
+            case "Memory": periodicRefreshMemory(count: count)
+            case "Agnus": periodicRefreshAgnus(count: count)
+            case "Copper and Blitter": periodicRefreshCopperAndBlitter(count: count)
+            case "Denise": periodicRefreshDenise(count: count)
+            case "Paula": periodicRefreshPaula(count: count)
+            case "Ports": periodicRefreshPorts(count: count)
+            case "Events": periodicRefreshEvents(count: count)
             default: break
             }
         }
@@ -673,7 +687,7 @@ extension Inspector: NSTabViewDelegate {
             default:        break
             }
 
-            needsRefresh()
+            fullRefresh()
         }
     }
 

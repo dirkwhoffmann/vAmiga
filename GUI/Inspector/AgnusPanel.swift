@@ -14,70 +14,6 @@ extension Inspector {
         agnusInfo = amiga!.agnus.getInfo()
     }
 
-    func refreshAgnus(count: Int) {
-
-        // Perform a full refresh if needed
-        if count == 0 { refreshAgnusFormatters() }
-
-        // Update display cache
-        cacheAgnus()
-
-        // Refresh display with cached values
-        refreshAgnusValues()
-    }
-
-    func refreshAgnusFormatters() {
-
-        let elements = [ dmaVPOS: fmt16,
-                         dmaHPOS: fmt16,
-
-                         dmaDMACON: fmt16,
-                         dmaBPL0CON: fmt16,
-                         dmaDDFSTRT: fmt16,
-                         dmaDDFSTOP: fmt16,
-                         dmaDIWSTRT: fmt16,
-                         dmaDIWSTOP: fmt16,
-
-                         dmaBLTAMOD: fmt16,
-                         dmaBLTBMOD: fmt16,
-                         dmaBLTCMOD: fmt16,
-                         dmaBLTDMOD: fmt16,
-                         dmaBPL1MOD: fmt16,
-                         dmaBPL2MOD: fmt16,
-
-                         dmaBPL1PT: fmt24,
-                         dmaBPL2PT: fmt24,
-                         dmaBPL3PT: fmt24,
-                         dmaBPL4PT: fmt24,
-                         dmaBPL5PT: fmt24,
-                         dmaBPL6PT: fmt24,
-
-                         dmaAUD0PT: fmt24,
-                         dmaAUD1PT: fmt24,
-                         dmaAUD2PT: fmt24,
-                         dmaAUD3PT: fmt24,
-
-                         dmaBLTAPT: fmt24,
-                         dmaBLTBPT: fmt24,
-                         dmaBLTCPT: fmt24,
-                         dmaBLTDPT: fmt24,
-
-                         dmaCOPPC: fmt24,
-
-                         dmaSPR0PT: fmt24,
-                         dmaSPR1PT: fmt24,
-                         dmaSPR2PT: fmt24,
-                         dmaSPR3PT: fmt24,
-                         dmaSPR4PT: fmt24,
-                         dmaSPR5PT: fmt24,
-                         dmaSPR6PT: fmt24,
-                         dmaSPR7PT: fmt24,
-
-                         dmaDSKPT: fmt24
-        ]
-        for (c, f) in elements { assignFormatter(f, c!) }
-    }
-
     func refreshAgnusValues() {
 
         dmaVPOS.integerValue = Int(agnusInfo!.vpos)
@@ -169,5 +105,68 @@ extension Inspector {
 
         dmaDSKPT.integerValue = Int(agnusInfo!.dskpt)
         dmaDSKEnable.state = dsken ? .on : .off
+    }
+
+    func refreshAgnusFormatters() {
+
+        let elements = [ dmaVPOS: fmt16,
+                         dmaHPOS: fmt16,
+
+                         dmaDMACON: fmt16,
+                         dmaBPL0CON: fmt16,
+                         dmaDDFSTRT: fmt16,
+                         dmaDDFSTOP: fmt16,
+                         dmaDIWSTRT: fmt16,
+                         dmaDIWSTOP: fmt16,
+
+                         dmaBLTAMOD: fmt16,
+                         dmaBLTBMOD: fmt16,
+                         dmaBLTCMOD: fmt16,
+                         dmaBLTDMOD: fmt16,
+                         dmaBPL1MOD: fmt16,
+                         dmaBPL2MOD: fmt16,
+
+                         dmaBPL1PT: fmt24,
+                         dmaBPL2PT: fmt24,
+                         dmaBPL3PT: fmt24,
+                         dmaBPL4PT: fmt24,
+                         dmaBPL5PT: fmt24,
+                         dmaBPL6PT: fmt24,
+
+                         dmaAUD0PT: fmt24,
+                         dmaAUD1PT: fmt24,
+                         dmaAUD2PT: fmt24,
+                         dmaAUD3PT: fmt24,
+
+                         dmaBLTAPT: fmt24,
+                         dmaBLTBPT: fmt24,
+                         dmaBLTCPT: fmt24,
+                         dmaBLTDPT: fmt24,
+
+                         dmaCOPPC: fmt24,
+
+                         dmaSPR0PT: fmt24,
+                         dmaSPR1PT: fmt24,
+                         dmaSPR2PT: fmt24,
+                         dmaSPR3PT: fmt24,
+                         dmaSPR4PT: fmt24,
+                         dmaSPR5PT: fmt24,
+                         dmaSPR6PT: fmt24,
+                         dmaSPR7PT: fmt24,
+
+                         dmaDSKPT: fmt24
+        ]
+        for (c, f) in elements { assignFormatter(f, c!) }
+    }
+
+    func fullRefreshAgnus() {
+
+        refreshAgnusFormatters()
+        refreshAgnusValues()
+    }
+
+    func periodicRefreshAgnus(count: Int) {
+
+        refreshAgnusValues()
     }
 }

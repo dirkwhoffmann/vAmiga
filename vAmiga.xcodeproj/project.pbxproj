@@ -36,7 +36,6 @@
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
-		507FD926221CBFCD00B34DA7 /* CopperPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507FD925221CBFCD00B34DA7 /* CopperPanel.swift */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
 		508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508833EC21F0D21B009890EA /* ADFFile.cpp */; };
@@ -147,8 +146,7 @@
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
-		50F133722408142900A99820 /* BlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F133712408142900A99820 /* BlitterPanel.swift */; };
-		50F31C292409322F008A54D8 /* CopBlitPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopBlitPanel.swift */; };
+		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
@@ -229,7 +227,6 @@
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
-		507FD925221CBFCD00B34DA7 /* CopperPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperPanel.swift; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* AmigaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConstants.h; sourceTree = "<group>"; };
 		5085830423262E8B004F942F /* ChangeRecorder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChangeRecorder.h; sourceTree = "<group>"; };
 		5085830523265B3D004F942F /* Event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Event.h; sourceTree = "<group>"; };
@@ -379,8 +376,7 @@
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
-		50F133712408142900A99820 /* BlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlitterPanel.swift; sourceTree = "<group>"; };
-		50F31C282409322F008A54D8 /* CopBlitPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopBlitPanel.swift; sourceTree = "<group>"; };
+		50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperBlitterPanel.swift; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* Disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Disk.cpp; sourceTree = "<group>"; };
@@ -734,9 +730,7 @@
 				508FDFEE21EA22780043D0E9 /* CIAPanel.swift */,
 				508FE00221EA227A0043D0E9 /* MemoryPanel.swift */,
 				507653CA2216F91E001D26E9 /* AgnusPanel.swift */,
-				50F31C282409322F008A54D8 /* CopBlitPanel.swift */,
-				507FD925221CBFCD00B34DA7 /* CopperPanel.swift */,
-				50F133712408142900A99820 /* BlitterPanel.swift */,
+				50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */,
 				507653CC2216F938001D26E9 /* DenisePanel.swift */,
 				50F5A84D2214112F00AD5611 /* PaulaPanel.swift */,
 				5010A78122B50B690041388B /* PortPanel.swift */,
@@ -746,12 +740,12 @@
 				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
-				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
 				50DF2C9F2269135800795256 /* SpriteTableView.swift */,
 				502EFD0B2248ECAA00F0E118 /* EventTableView.swift */,
 				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				505945F72363008800ACE819 /* ActivityView.swift */,
+				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -1027,13 +1021,12 @@
 				50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */,
 				505945F82363008800ACE819 /* ActivityView.swift in Sources */,
 				50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */,
-				507FD926221CBFCD00B34DA7 /* CopperPanel.swift in Sources */,
 				50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */,
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
-				50F31C292409322F008A54D8 /* CopBlitPanel.swift in Sources */,
+				50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */,
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
@@ -1090,7 +1083,6 @@
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
-				50F133722408142900A99820 /* BlitterPanel.swift in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
