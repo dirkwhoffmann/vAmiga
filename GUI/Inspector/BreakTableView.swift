@@ -161,7 +161,9 @@ class BreakTableView: PointTableView {
         if col == 0 || col == 1 {
 
             // Jump to breakpoint address
-            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF { inspector.instrTableView.jumpTo(addr: addr)
+            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF {
+                inspector.fullRefresh()
+                inspector.instrTableView.jumpTo(addr: addr)
             }
         }
 

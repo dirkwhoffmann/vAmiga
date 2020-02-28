@@ -36,38 +36,10 @@ class InstrTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
-    func jumpToPC() {
-        
-        if let pc = inspector.parent?.amiga.cpu.getInfo().pc { jumpTo(addr: pc) }
-    }
+    func cache(startAddr: UInt32) {
 
-    func jumpTo(addr: UInt32?) {
+        var addr = startAddr
 
-        guard let addr = addr else { return }
-        
-        if let row = rowForAddr[addr] {
-            
-            // If the requested address is already displayed, we simply
-            // select the corresponding row.
-            scrollRowToVisible(row)
-            selectRowIndexes([row], byExtendingSelection: false)
-            reloadData()
-            
-        } else {
-            
-            // If the requested address is not displayed, we update the
-            // whole view and display it in the first row.
-            scrollRowToVisible(0)
-            selectRowIndexes([0], byExtendingSelection: false)
-            update(addr: addr)
-        }
-    }
-
-    // Updates the displayed instructions, starting at the specified address
-    func update(addr: UInt32?) {
-        
-        guard var addr = addr else { return }
-        
         instrInRow = [:]
         addrInRow = [:]
         dataInRow = [:]
@@ -89,18 +61,19 @@ class InstrTableView: NSTableView {
                 bpInRow[i] = BreakpointType.none
             }
             rowForAddr[addr] = i
-            // track("rowForAddr \(addr) = \(i)")
             addr += UInt32(info.bytes)
         }
-        
-        reloadData()
     }
 
-    // Updates the currently displayed instructions
-    func update() {
-        if let pc = inspector.parent?.amiga.cpu.getInfo().pc {
-            update(addr: pc)
-        }
+    func refreshValues() {
+
+         reloadData()
+    }
+
+    func refreshValues(startAddr: UInt32) {
+
+        cache(startAddr: startAddr)
+        reloadData()
     }
 
     func refreshFormatters() {
@@ -118,13 +91,37 @@ class InstrTableView: NSTableView {
     func fullRefresh() {
 
         refreshFormatters()
-        reloadData()
+        if let addr = addrInRow[0] {
+            refreshValues(startAddr: addr)
+        }
     }
 
-    func periodicRefresh(count: Int) {
+    func jumpTo(row: Int) {
 
-        // Update display cache and refresh display with cached values
-        jumpToPC()
+        scrollRowToVisible(row)
+        selectRowIndexes([row], byExtendingSelection: false)
+    }
+
+    func jumpTo(addr: UInt32) {
+
+        if let row = rowForAddr[addr] {
+
+            track("Addr \(addr) found in row \(row)")
+            // If the requested address is already displayed, we simply select
+            // the corresponding row.
+            reloadData()
+            jumpTo(row: row)
+
+        } else {
+
+            // If the requested address is not displayed, we update the data
+            // cache and display the address in row 0.
+
+            track("Addr \(addr) not found")
+
+            refreshValues(startAddr: addr)
+            jumpTo(row: 0)
+        }
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {

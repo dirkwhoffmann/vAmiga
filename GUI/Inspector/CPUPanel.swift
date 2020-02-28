@@ -90,23 +90,23 @@ extension Inspector {
 
     func fullRefreshCPU() {
 
+        refreshCPUFormatters()
+        refreshCPUValues()
+
         instrTableView.fullRefresh()
         traceTableView.fullRefresh()
         breakTableView.fullRefresh()
         watchTableView.fullRefresh()
-
-        refreshCPUFormatters()
-        refreshCPUValues()
     }
 
     func periodicRefreshCPU(count: Int) {
 
-        instrTableView.periodicRefresh(count: count)
+        refreshCPUValues()
+
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
         traceTableView.periodicRefresh(count: count)
         breakTableView.periodicRefresh(count: count)
         watchTableView.periodicRefresh(count: count)
-
-        refreshCPUValues()
     }
 
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
@@ -115,6 +115,7 @@ extension Inspector {
 
         amiga?.stopAndGo()
         fullRefresh()
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
 
         unlockAmiga()
     }
@@ -125,7 +126,7 @@ extension Inspector {
 
         amiga?.stepInto()
         fullRefresh()
-
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
         unlockAmiga()
     }
     
@@ -135,6 +136,7 @@ extension Inspector {
 
         amiga?.stepOver()
         fullRefresh()
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
 
         unlockAmiga()
     }
@@ -154,13 +156,13 @@ extension Inspector {
         lockAmiga()
 
         if sender.stringValue == "" {
-            instrTableView.jumpToPC()
+            instrTableView.jumpTo(addr: cpuInfo!.pc)
         } else if let addr = UInt32(sender.stringValue, radix: 16) {
             instrTableView.jumpTo(addr: addr)
         } else {
             sender.stringValue = ""
         }
-        fullRefresh()
+        // fullRefresh()
 
         unlockAmiga()
     }
