@@ -12,6 +12,7 @@ let fmt8  = MyFormatter.init(radix: 16, min: 0, max: 0xFF)
 let fmt16 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFF)
 let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
 let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
+let fmt8b = MyFormatter.init(radix: 2, min: 0, max: 255)
 
 class Inspector: NSWindowController {
 
@@ -232,13 +233,62 @@ class Inspector: NSWindowController {
 
     @IBOutlet weak var dmaDSKPT: NSTextField!
     @IBOutlet weak var dmaDSKEnable: NSButton!
-    
+
+    // Debug panel (Copper and Blitter)
+
+    @IBOutlet weak var copSelector: NSSegmentedControl!
+    @IBOutlet weak var copList: CopperTableView!
+    @IBOutlet weak var copActive1: NSButton!
+    @IBOutlet weak var copActive2: NSButton!
+    @IBOutlet weak var copPC: NSTextField!
+    @IBOutlet weak var copCDANG: NSButton!
+
+    @IBOutlet weak var bltBLTCON0a: NSTextField!
+    @IBOutlet weak var bltBLTCON0b: NSTextField!
+    @IBOutlet weak var bltBLTCON0c: NSTextField!
+    @IBOutlet weak var bltUseA: NSButton!
+    @IBOutlet weak var bltUseB: NSButton!
+    @IBOutlet weak var bltUseC: NSButton!
+    @IBOutlet weak var bltUseD: NSButton!
+    @IBOutlet weak var bltLF0: NSButton!
+    @IBOutlet weak var bltLF1: NSButton!
+    @IBOutlet weak var bltLF2: NSButton!
+    @IBOutlet weak var bltLF3: NSButton!
+    @IBOutlet weak var bltLF4: NSButton!
+    @IBOutlet weak var bltLF5: NSButton!
+    @IBOutlet weak var bltLF6: NSButton!
+    @IBOutlet weak var bltLF7: NSButton!
+
+    @IBOutlet weak var bltBLTCON1a: NSTextField!
+    @IBOutlet weak var bltBLTCON1b: NSTextField!
+    @IBOutlet weak var bltBLTCON1c: NSTextField!
+    @IBOutlet weak var bltEFE: NSButton!
+    @IBOutlet weak var bltIFE: NSButton!
+    @IBOutlet weak var bltFCI: NSButton!
+    @IBOutlet weak var bltDESC: NSButton!
+    @IBOutlet weak var bltLINE: NSButton!
+
+    @IBOutlet weak var bltActive: NSButton!
+
+    @IBOutlet weak var bltAold: NSTextField!
+    @IBOutlet weak var bltBold: NSTextField!
+    @IBOutlet weak var bltAnew: NSTextField!
+    @IBOutlet weak var bltBnew: NSTextField!
+    @IBOutlet weak var bltAhold: NSTextField!
+    @IBOutlet weak var bltBhold: NSTextField!
+    @IBOutlet weak var bltChold: NSTextField!
+    @IBOutlet weak var bltDhold: NSTextField!
+
+    @IBOutlet weak var bltY: NSTextField!
+    @IBOutlet weak var bltX: NSTextField!
+    @IBOutlet weak var bltFirstWord: NSButton!
+    @IBOutlet weak var bltLastWord: NSButton!
+
     // Debug panel (Copper)
     @IBOutlet weak var copActive: NSButton!
     @IBOutlet weak var copCOPPC: NSTextField!
     @IBOutlet weak var copCOPINS1: NSTextField!
     @IBOutlet weak var copCOPINS2: NSTextField!
-    @IBOutlet weak var copCDANG: NSButton!
 
     @IBOutlet weak var copCOP1LC: NSTextField!
     @IBOutlet weak var copPlus1: NSButton!
@@ -250,17 +300,9 @@ class Inspector: NSWindowController {
     @IBOutlet weak var copMinus2: NSButton!
     @IBOutlet weak var copList2: CopperTableView!
 
-    // Debug panel (Copper)
+    // Debug panel (Blitter)
     @IBOutlet weak var bltAFWM: NSTextField!
     @IBOutlet weak var bltALWM: NSTextField!
-    @IBOutlet weak var bltAold: NSTextField!
-    @IBOutlet weak var bltBold: NSTextField!
-    @IBOutlet weak var bltAnew: NSTextField!
-    @IBOutlet weak var bltBnew: NSTextField!
-    @IBOutlet weak var bltAhold: NSTextField!
-    @IBOutlet weak var bltBhold: NSTextField!
-    @IBOutlet weak var bltChold: NSTextField!
-    @IBOutlet weak var bltDhold: NSTextField!
     @IBOutlet weak var bltAShift: NSTextField!
     @IBOutlet weak var bltBShift: NSTextField!
     @IBOutlet weak var bltMinterm: NSTextField!
@@ -525,16 +567,11 @@ class Inspector: NSWindowController {
     override func awakeFromNib() {
         
         track()
-        
-        // Create and assign binary number formatter
-        let bF = MyFormatter.init(radix: 2, min: 0, max: 255)
-        ciaPRAbinary.formatter = bF
-        ciaDDRAbinary.formatter = bF
-        ciaPRBbinary.formatter = bF
-        ciaDDRBbinary.formatter = bF
-        ciaSDRbinary.formatter = bF
-        ciaICRbinary.formatter = bF
-        ciaIMRbinary.formatter = bF
+
+        // Remove the last two tabs which are experimental
+        let count = debugPanel.numberOfTabViewItems
+        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 1))
+        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 2))
     }
     
     override func showWindow(_ sender: Any?) {
@@ -590,8 +627,7 @@ class Inspector: NSWindowController {
             case "CIA": refreshCIA(count: count)
             case "Memory": refreshMemory(count: count)
             case "Agnus": refreshAgnus(count: count)
-            case "Copper": refreshCopper(count: count)
-            case "Blitter": refreshBlitter(count: count)
+            case "Copper and Blitter": refreshCopperAndBlitter(count: count)
             case "Denise": refreshDenise(count: count)
             case "Paula": refreshPaula(count: count)
             case "Ports": refreshPorts(count: count)
@@ -629,8 +665,7 @@ extension Inspector: NSTabViewDelegate {
             case "CIA":     parent?.amiga.setInspectionTarget(INS_CIA)
             case "Memory":  parent?.amiga.setInspectionTarget(INS_MEM)
             case "Agnus":   parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Copper":  parent?.amiga.setInspectionTarget(INS_AGNUS)
-            case "Blitter": parent?.amiga.setInspectionTarget(INS_AGNUS)
+            case "Copper and Blitter":  parent?.amiga.setInspectionTarget(INS_AGNUS)
             case "Denise":  parent?.amiga.setInspectionTarget(INS_DENISE)
             case "Paula":   parent?.amiga.setInspectionTarget(INS_PAULA)
             case "Ports":   parent?.amiga.setInspectionTarget(INS_PORTS)

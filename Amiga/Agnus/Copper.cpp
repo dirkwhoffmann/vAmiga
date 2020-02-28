@@ -19,14 +19,15 @@ Copper::_inspect()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
-    
-    info.cdang   = cdang;
+
+    info.copList = copList;
     info.active  = agnus.isPending<COP_SLOT>();
+    info.cdang   = cdang;
     info.coppc   = coppc;
-    info.cop1ins = cop1ins;
-    info.cop2ins = cop2ins;
     info.cop1lc  = cop1lc;
     info.cop2lc  = cop2lc;
+    info.cop1ins = cop1ins;
+    info.cop2ins = cop2ins;
     info.length1 = cop1end - cop1lc;
     info.length2 = cop2end - cop2lc;
 

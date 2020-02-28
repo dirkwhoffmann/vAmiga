@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 extension Inspector {
 
     func cacheBlitter() {
@@ -71,3 +72,5 @@ extension Inspector {
         bltStoreToDest.state = blitterInfo!.storeToDest ? .on : .off
     }
 }
+
+ */

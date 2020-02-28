@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 extension Inspector {
 
     func cacheCopper() {
@@ -52,3 +53,5 @@ extension Inspector {
         copCOP2LC.integerValue = Int(copperInfo!.cop2lc)
     }
 }
+
+*/

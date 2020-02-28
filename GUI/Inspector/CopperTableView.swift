@@ -15,6 +15,8 @@ class CopperTableView: NSTableView {
     var data2InRow: [Int: Int] = [:]
     var instrInRow: [Int: String] = [:]
     var illegalInRow: [Int: Bool] = [:]
+
+    var coplc = 0
     var numRows = 0
     
     override func awakeFromNib() {
@@ -24,6 +26,34 @@ class CopperTableView: NSTableView {
         target = self
     }
 
+    func cache(lc: Int, count: Int) {
+
+        var addr = lc
+
+        addrInRow = [:]
+        data1InRow = [:]
+        data2InRow = [:]
+        instrInRow = [:]
+        illegalInRow = [:]
+
+        if amiga != nil {
+
+            for i in 0 ..< count {
+
+                addrInRow[i] = addr
+                data1InRow[i] = amiga!.mem.spypeek16(addr)
+                data2InRow[i] = amiga!.mem.spypeek16(addr + 2)
+                instrInRow[i] = amiga!.agnus.disassemble(addr)
+                illegalInRow[i] = amiga!.agnus.isIllegalInstr(addr)
+
+                addr += 4
+            }
+        }
+
+        reloadData() // TODO: MOVE TO REFRESH
+    }
+
+    // DEPRECATED
     func cache() {
 
         var addr = coplc
@@ -80,13 +110,15 @@ class CopperTableView: NSTableView {
 }
 
 extension CopperTableView: NSTableViewDataSource {
-    
+
+    /*
     var coplc: Int {
         assert(tag == 1 || tag == 2)
         let info = amiga!.agnus.getCopperInfo()
         return (tag == 1) ? Int(info.cop1lc) : Int(info.cop2lc)
     }
-    
+    */
+
     func numberOfRows(in tableView: NSTableView) -> Int {
 
         return numRows

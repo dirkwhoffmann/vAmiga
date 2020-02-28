@@ -39,7 +39,14 @@ extension Inspector {
         ciaPB1.title = "PB1: " + (ciaA ? "DATA1" : "DIR")
         ciaPB0.title = "PB0: " + (ciaA ? "DATA0" : "/STEP")
 
-        let elements = [ ciaPRA: fmt8,
+        let elements = [ ciaPRAbinary: fmt8b,
+                         ciaDDRAbinary: fmt8b,
+                         ciaPRBbinary: fmt8b,
+                         ciaDDRBbinary: fmt8b,
+                         ciaSDRbinary: fmt8b,
+                         ciaICRbinary: fmt8b,
+                         ciaIMRbinary: fmt8b,
+                         ciaPRA: fmt8,
                          ciaDDRA: fmt8,
                          ciaPRB: fmt8,
                          ciaDDRB: fmt8,
