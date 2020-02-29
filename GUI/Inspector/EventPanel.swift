@@ -36,7 +36,6 @@ extension Inspector {
 
         evTableView.fullRefresh()
 
-        refreshEventFormatters()
         refreshEventValues()
     }
 

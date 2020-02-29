@@ -192,6 +192,7 @@ struct AmigaFileWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
+- (u32) getPC;
 - (DisassembledInstr) getInstrInfo:(NSInteger)index;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
@@ -225,10 +226,10 @@ struct AmigaFileWrapper;
 - (void) addWatchpointAt:(u32)addr;
 - (void) removeWatchpointAt:(u32)addr;
 
-// - (NSInteger) traceBufferCapacity;
-// - (void) truncateTraceBuffer:(NSInteger)count;
 - (NSInteger) loggedInstructions;
 - (void) clearLog;
+
+- (DisassembledInstr) disassembleInstr:(u32)addr;
 
 @end
 

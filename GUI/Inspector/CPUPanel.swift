@@ -71,32 +71,44 @@ extension Inspector {
 
         for (c, f) in elements { assignFormatter(f, c!) }
 
-        if parent!.amiga.isRunning() {
-            cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
-            cpuStepIntoButton.isEnabled = false
-            cpuStepOverButton.isEnabled = false
-            cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
-            cpuTraceStepIntoButton.isEnabled = false
-            cpuTraceStepOverButton.isEnabled = false
-        } else {
-            cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
-            cpuStepIntoButton.isEnabled = true
-            cpuStepOverButton.isEnabled = true
-            cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
-            cpuTraceStepIntoButton.isEnabled = true
-            cpuTraceStepOverButton.isEnabled = true
-        }
+        instrTableView.refreshFormatters()
+    }
+
+    func refreshCPU(count: Int = 0, scroll: Bool = false) {
+
+        refreshCPUValues()
+
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
+        traceTableView.periodicRefresh(count: count)
+        breakTableView.periodicRefresh(count: count)
+        watchTableView.periodicRefresh(count: count)
     }
 
     func fullRefreshCPU() {
 
-        refreshCPUFormatters()
+        track("fullRefreshCPU")
         refreshCPUValues()
 
         instrTableView.fullRefresh()
         traceTableView.fullRefresh()
         breakTableView.fullRefresh()
         watchTableView.fullRefresh()
+
+        if parent!.amiga.isRunning() {
+             cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+             cpuStepIntoButton.isEnabled = false
+             cpuStepOverButton.isEnabled = false
+             cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+             cpuTraceStepIntoButton.isEnabled = false
+             cpuTraceStepOverButton.isEnabled = false
+         } else {
+             cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+             cpuStepIntoButton.isEnabled = true
+             cpuStepOverButton.isEnabled = true
+             cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+             cpuTraceStepIntoButton.isEnabled = true
+             cpuTraceStepOverButton.isEnabled = true
+         }
     }
 
     func periodicRefreshCPU(count: Int) {
@@ -112,32 +124,21 @@ extension Inspector {
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
 
         lockAmiga()
-
         amiga?.stopAndGo()
-        fullRefresh()
-        instrTableView.jumpTo(addr: cpuInfo!.pc)
-
         unlockAmiga()
     }
     
     @IBAction func cpuStepIntoAction(_ sender: NSButton!) {
 
         lockAmiga()
-
         amiga?.stepInto()
-        fullRefresh()
-        instrTableView.jumpTo(addr: cpuInfo!.pc)
         unlockAmiga()
     }
     
     @IBAction func cpuStepOverAction(_ sender: NSButton!) {
 
         lockAmiga()
-
         amiga?.stepOver()
-        fullRefresh()
-        instrTableView.jumpTo(addr: cpuInfo!.pc)
-
         unlockAmiga()
     }
 

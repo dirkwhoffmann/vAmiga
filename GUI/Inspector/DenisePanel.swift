@@ -118,7 +118,6 @@ extension Inspector {
         sprTableView.fullRefresh()
 
         refreshDeniseValues()
-        refreshDeniseFormatters()
     }
 
     func periodicRefreshDenise(count: Int) {

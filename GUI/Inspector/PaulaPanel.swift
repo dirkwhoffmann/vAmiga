@@ -222,7 +222,6 @@ extension Inspector {
 
     func fullRefreshPaula() {
 
-        refreshPaulaFormatters()
         refreshPaulaValues()
     }
 

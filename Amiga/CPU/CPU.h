@@ -119,6 +119,13 @@ public:
 
     // Delays the CPU by a certain number of cycles
     void addWaitStates(i64 cycles) { clock += cycles; }
+
+
+    //
+    // Using the disassembler
+    //
+
+    DisassembledInstr disassembleInstr(u32 addr);
 };
 
 #endif

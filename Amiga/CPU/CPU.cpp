@@ -160,7 +160,6 @@ CPU::_inspect()
 
     pthread_mutex_unlock(&lock);
 }
-
 void
 CPU::_dumpConfig()
 {
@@ -259,4 +258,17 @@ CPU::didSaveToBuffer(u8 *buffer)
           fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
 
     return writer.ptr - buffer;
+}
+
+DisassembledInstr
+CPU::disassembleInstr(u32 addr)
+{
+    DisassembledInstr result;
+
+    result.bytes = disassemble(addr, result.instr);
+    disassemblePC(addr, result.addr);
+    disassembleMemory(addr, result.bytes / 2, result.data);
+    result.sr[0] = 0;
+
+    return result;
 }

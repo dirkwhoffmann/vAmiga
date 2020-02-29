@@ -161,7 +161,6 @@ extension Inspector {
 
     func fullRefreshAgnus() {
 
-        refreshAgnusFormatters()
         refreshAgnusValues()
     }
 

@@ -607,6 +607,7 @@ class Inspector: NSWindowController {
     }
 
     // Refreshs all items in the currently selected panel
+     // DEPRECATED
     func fullRefresh() {
 
         if window?.isVisible == false { return }
@@ -628,7 +629,33 @@ class Inspector: NSWindowController {
               }
           }
     }
+
+    // Refreshs all formatters in the currently selected panel
+    func refreshFormatters() {
+
+        if window?.isVisible == false { return }
+
+        if let id = debugPanel.selectedTabViewItem?.label {
+
+            switch id {
+
+            case "CPU":
+                refreshCPUFormatters()
+            case "CIA": refreshCIAFormatters()
+            case "Memory": refreshMemoryFormatters()
+            case "Agnus": refreshAgnusFormatters()
+            case "Copper and Blitter": refreshCopperAndBlitterFormatters()
+            case "Denise": refreshDeniseFormatters()
+            case "Paula": refreshPaulaFormatters()
+            case "Ports": refreshPortFormatters()
+            case "Events": refreshEventFormatters()
+            default: break
+            }
+        }
+    }
+
     // Performs a periodic refresh (called by the update timer)
+    // DEPRECATED
     func periodicRefresh(count: Int) {
         
         if window?.isVisible == false { return }
@@ -649,6 +676,11 @@ class Inspector: NSWindowController {
             default: break
             }
         }
+    }
+
+    func scrollToPC() {
+
+        instrTableView.jumpTo(addr: cpuInfo!.pc)
     }
 }
 
@@ -687,6 +719,7 @@ extension Inspector: NSTabViewDelegate {
             default:        break
             }
 
+            refreshFormatters()
             fullRefresh()
         }
     }

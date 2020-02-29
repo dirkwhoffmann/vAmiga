@@ -118,6 +118,8 @@ extension Inspector {
         memExtText.stringValue = String.init(format: "%d KB", extKB)
     }
 
+    func refreshMemoryFormatters() { }
+    
     func fullRefreshMemory() {
 
         refreshMemoryLayout()

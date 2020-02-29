@@ -88,7 +88,7 @@ extension Inspector {
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"
     }
 
-    private func refreshCIAFormatters() {
+    func refreshCIAFormatters() {
 
         let ciaA = selectedCia == 0
 
@@ -140,7 +140,6 @@ extension Inspector {
 
     func fullRefreshCIA() {
 
-        refreshCIAFormatters()
         refreshCIAValues()
     }
 

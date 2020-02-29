@@ -36,7 +36,17 @@ class InstrTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
+    func cache() {
+
+        track("instr cache()")
+        if let addr = addrInRow[0] {
+            cache(startAddr: addr)
+        }
+    }
+
     func cache(startAddr: UInt32) {
+
+        track("cache: \(startAddr)")
 
         var addr = startAddr
 
@@ -48,7 +58,7 @@ class InstrTableView: NSTableView {
 
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
 
-            var info = amiga!.cpu.getInstrInfo(i)
+            var info = amiga!.cpu.disassembleInstr(addr)
 
             instrInRow[i] = String(cString: &info.instr.0)
             addrInRow[i] = addr
@@ -67,12 +77,9 @@ class InstrTableView: NSTableView {
 
     func refreshValues() {
 
-         reloadData()
-    }
+        track("instrTable refreshValues")
 
-    func refreshValues(startAddr: UInt32) {
-
-        cache(startAddr: startAddr)
+        cache()
         reloadData()
     }
 
@@ -90,13 +97,13 @@ class InstrTableView: NSTableView {
 
     func fullRefresh() {
 
-        refreshFormatters()
-        if let addr = addrInRow[0] {
-            refreshValues(startAddr: addr)
-        }
+        track("instrTable fullRefresh")
+        refreshValues()
     }
 
     func jumpTo(row: Int) {
+
+        track("jumpTo row: \(row)")
 
         scrollRowToVisible(row)
         selectRowIndexes([row], byExtendingSelection: false)
@@ -104,9 +111,10 @@ class InstrTableView: NSTableView {
 
     func jumpTo(addr: UInt32) {
 
+        track("jumpTo: \(addr)")
+
         if let row = rowForAddr[addr] {
 
-            track("Addr \(addr) found in row \(row)")
             // If the requested address is already displayed, we simply select
             // the corresponding row.
             reloadData()
@@ -116,10 +124,8 @@ class InstrTableView: NSTableView {
 
             // If the requested address is not displayed, we update the data
             // cache and display the address in row 0.
-
-            track("Addr \(addr) not found")
-
-            refreshValues(startAddr: addr)
+            cache(startAddr: addr)
+            reloadData()
             jumpTo(row: 0)
         }
     }
@@ -190,6 +196,7 @@ extension InstrTableView: NSTableViewDataSource {
         case "break" where bpInRow[row] == .disabled:
             return "\u{26AA}" // "⚪" ("\u{2B55}" // "⭕")
         case "addr":
+            if row == 0 { track("Row 0 \(addrInRow[0])") }
             return addrInRow[row]
         case "data":
             return dataInRow[row]
@@ -216,3 +223,4 @@ extension InstrTableView: NSTableViewDelegate {
         }
     }
 }
+

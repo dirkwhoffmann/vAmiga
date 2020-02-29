@@ -135,7 +135,6 @@ extension Inspector {
 
     func fullRefreshPorts() {
 
-        refreshPortFormatters()
         refreshPortValues()
     }
 

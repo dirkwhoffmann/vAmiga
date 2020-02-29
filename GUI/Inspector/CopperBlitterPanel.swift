@@ -128,7 +128,6 @@ extension Inspector {
 
     func fullRefreshBlitter() {
 
-        refreshBlitterFormatters()
         refreshBlitterValues()
     }
 
@@ -141,6 +140,11 @@ extension Inspector {
 
         fullRefreshCopper()
         fullRefreshBlitter()
+    }
+
+    func refreshCopperAndBlitterFormatters() {
+        refreshCopperFormatters()
+        refreshBlitterFormatters()
     }
 
     func periodicRefreshCopperAndBlitter(count: Int) {
