@@ -57,34 +57,31 @@ class MemTableView: NSTableView {
 
         if count % 8 != 0 { return }
 
-        cache()
-        reloadData()
-    }
+        if full {
+            let columnFormatters = [
+                "addr": fmt24,
+                "0": fmt16,
+                "2": fmt16,
+                "4": fmt16,
+                "6": fmt16,
+                "8": fmt16,
+                "A": fmt16,
+                "C": fmt16,
+                "E": fmt16
+            ]
 
-    func fullRefresh() {
-
-        let columnFormatters = [
-            "addr": fmt24,
-            "0": fmt16,
-            "2": fmt16,
-            "4": fmt16,
-            "6": fmt16,
-            "8": fmt16,
-            "A": fmt16,
-            "C": fmt16,
-            "E": fmt16
-        ]
-
-        for (column, formatter) in columnFormatters {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
-            if let tableColumn = tableColumn(withIdentifier: columnId) {
-                if let cell = tableColumn.dataCell as? NSCell {
-                    cell.formatter = formatter
+            for (column, formatter) in columnFormatters {
+                let columnId = NSUserInterfaceItemIdentifier(rawValue: column)
+                if let tableColumn = tableColumn(withIdentifier: columnId) {
+                    if let cell = tableColumn.dataCell as? NSCell {
+                        cell.formatter = formatter
+                    }
                 }
             }
         }
 
-        refresh()
+        cache()
+        reloadData()
     }
 }
 

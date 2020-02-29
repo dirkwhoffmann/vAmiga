@@ -1816,7 +1816,7 @@ Agnus::hsyncHandler()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
 
-    // Call the hsync handlers of Denis and Paula
+    // Call the hsync handlers of Denise and Paula
     denise.endOfLine(pos.v);
 
     // Synthesize sound samples

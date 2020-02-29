@@ -8,7 +8,9 @@
 // -----------------------------------------------------------------------------
 
 class SpriteTableView: NSTableView {
-    
+
+    var spriteInfo = [SpriteInfo?](repeating: nil, count: 8)
+
     @IBOutlet weak var inspector: Inspector!
     
     var amiga = amigaProxy
@@ -20,11 +22,17 @@ class SpriteTableView: NSTableView {
         target = self
     }
 
+    private func cache() {
+        for i in 0 ..< 8 {
+            spriteInfo[i] = amiga?.denise.getSpriteInfo(i)
+        }
+    }
+
     func refresh(count: Int = 0, full: Bool = false) {
 
         if count % 4 != 0 { return }
 
-        // cache() // TODO
+        cache()
 
         if full {
             for (c, f) in ["addr": fmt24] {
@@ -47,8 +55,9 @@ extension SpriteTableView: NSTableViewDataSource {
        
         if let id = tableColumn?.identifier.rawValue, let nr = Int(id) {
 
-            let sprInfo = amiga!.denise.getSpriteInfo(inspector.selectedSprite)
-            let addr = Int(sprInfo.ptr) + 4 * row
+            guard let info = spriteInfo[inspector.selectedSprite] else { return nil }
+
+            let addr = Int(info.ptr) + 4 * row
             let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
             let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
             
@@ -59,9 +68,9 @@ extension SpriteTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        if let sprInfo = amiga?.denise.getSpriteInfo(inspector.selectedSprite) {
-            
-            let sprLines = sprInfo.vstop - sprInfo.vstrt
+        if let info = spriteInfo[inspector.selectedSprite] {
+
+            let sprLines = info.vstop - info.vstrt
             if sprLines >= 0 && sprLines < 128 {
                 return Int(sprLines)
             }
@@ -83,7 +92,7 @@ extension SpriteTableView: NSTableViewDelegate {
         let info = amiga!.denise.getInfo()
         
          if let index = colorIndex(tableColumn: tableColumn, row: row) {
-            
+
             var color = NSColor.white
             
             switch inspector.selectedSprite {

@@ -143,7 +143,6 @@ extension Inspector {
             
             bank = value
             memSrc = parent?.amiga.mem.memSrc(bank << 16) ?? MEM_UNMAPPED
-            track("Switching to bank \(value)")
             memLayoutSlider.integerValue = bank
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(value)
@@ -157,7 +156,6 @@ extension Inspector {
         if value >= 0 && value <= 0xFFFFFF {
             
             selected = value
-            track("Moving to memory location \(value)")
             setBank(value >> 16)
             let row = (selected / 16) % 4096
             memTableView.scrollRowToVisible(row)
