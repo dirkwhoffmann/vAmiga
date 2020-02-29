@@ -9,6 +9,8 @@
 
 class EventTableView: NSTableView {
 
+    var slotInfo = [EventSlotInfo?](repeating: nil, count: SLOT_COUNT.rawValue)
+
     override func awakeFromNib() {
         
         delegate = self
@@ -16,9 +18,15 @@ class EventTableView: NSTableView {
         target = self
     }
 
+    private func cache() {
+         for row in 0 ..< SLOT_COUNT.rawValue {
+            slotInfo[row] = amiga?.agnus.getEventSlotInfo(row)
+        }
+    }
+
     func refresh(count: Int = 0, full: Bool = false) {
 
-        // cache() // TODO
+        cache()
         reloadData()
     }
 }
@@ -32,7 +40,8 @@ extension EventTableView: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        guard let info = amiga?.agnus.getEventSlotInfo(row) else { return nil }
+        guard let info = slotInfo[row] else { return nil }
+
         let willTrigger = (info.trigger != INT64_MAX)
         
         switch tableColumn?.identifier.rawValue {

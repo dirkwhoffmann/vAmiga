@@ -26,5 +26,7 @@ extension Inspector {
         evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
         evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
         evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
+
+        evTableView.refresh(count: count, full: full)
     }
 }
