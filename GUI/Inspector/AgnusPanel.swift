@@ -9,12 +9,12 @@
 
 extension Inspector {
 
-    func cacheAgnus() {
+    private func cacheAgnus() {
 
         agnusInfo = amiga!.agnus.getInfo()
     }
 
-    func refreshAgnusValues() {
+    func refreshAgnus(count: Int = 0) {
 
         dmaVPOS.integerValue = Int(agnusInfo!.vpos)
         dmaHPOS.integerValue = Int(agnusInfo!.hpos)
@@ -107,7 +107,7 @@ extension Inspector {
         dmaDSKEnable.state = dsken ? .on : .off
     }
 
-    func refreshAgnusFormatters() {
+    func fullRefreshAgnus() {
 
         let elements = [ dmaVPOS: fmt16,
                          dmaHPOS: fmt16,
@@ -153,19 +153,11 @@ extension Inspector {
                          dmaSPR5PT: fmt24,
                          dmaSPR6PT: fmt24,
                          dmaSPR7PT: fmt24,
-
+                         
                          dmaDSKPT: fmt24
         ]
         for (c, f) in elements { assignFormatter(f, c!) }
-    }
 
-    func fullRefreshAgnus() {
-
-        refreshAgnusValues()
-    }
-
-    func periodicRefreshAgnus(count: Int) {
-
-        refreshAgnusValues()
+        refreshAgnus()
     }
 }

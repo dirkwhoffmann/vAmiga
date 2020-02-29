@@ -9,7 +9,7 @@
 
 extension Inspector {
 
-    func cacheCPU() {
+    private func cacheCPU() {
 
         cpuInfo = amiga!.cpu.getInfo()
     }
@@ -62,8 +62,6 @@ extension Inspector {
 
     func fullRefreshCPU() {
 
-        refreshCPU()
-
         instrTableView.fullRefresh()
         traceTableView.fullRefresh()
         breakTableView.fullRefresh()
@@ -84,33 +82,23 @@ extension Inspector {
         for (c, f) in elements { assignFormatter(f, c!) }
 
         if parent!.amiga.isRunning() {
-             cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
-             cpuStepIntoButton.isEnabled = false
-             cpuStepOverButton.isEnabled = false
-             cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
-             cpuTraceStepIntoButton.isEnabled = false
-             cpuTraceStepOverButton.isEnabled = false
-         } else {
-             cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
-             cpuStepIntoButton.isEnabled = true
-             cpuStepOverButton.isEnabled = true
-             cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
-             cpuTraceStepIntoButton.isEnabled = true
-             cpuTraceStepOverButton.isEnabled = true
-         }
+            cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+            cpuStepIntoButton.isEnabled = false
+            cpuStepOverButton.isEnabled = false
+            cpuTraceStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
+            cpuTraceStepIntoButton.isEnabled = false
+            cpuTraceStepOverButton.isEnabled = false
+        } else {
+            cpuStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+            cpuStepIntoButton.isEnabled = true
+            cpuStepOverButton.isEnabled = true
+            cpuTraceStopAndGoButton.image = NSImage.init(named: "continueTemplate")
+            cpuTraceStepIntoButton.isEnabled = true
+            cpuTraceStepOverButton.isEnabled = true
+        }
+
+        refreshCPU()
     }
-
-    /*
-    func refreshCPU(count: Int) {
-
-        refreshCPUValues()
-
-        instrTableView.jumpTo(addr: cpuInfo!.pc)
-        traceTableView.periodicRefresh(count: count)
-        breakTableView.periodicRefresh(count: count)
-        watchTableView.periodicRefresh(count: count)
-    }
-    */
 
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
 

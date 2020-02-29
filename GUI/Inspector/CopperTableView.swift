@@ -27,7 +27,7 @@ class CopperTableView: NSTableView {
         target = self
     }
 
-    func cache() {
+    private func cache() {
 
         addrInRow = [:]
         data1InRow = [:]

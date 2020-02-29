@@ -65,7 +65,7 @@ class InstrTableView: NSTableView {
         }
     }
 
-    func cache() {
+    private func cache() {
 
         if let addr = addrInRow[0] {
             cache(startAddr: addr)

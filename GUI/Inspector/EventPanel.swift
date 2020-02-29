@@ -9,7 +9,7 @@
 
 extension Inspector {
 
-    func cacheEvents() {
+    private func cacheEvents() {
 
         eventInfo = amiga!.agnus.getEventInfo()
     }

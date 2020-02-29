@@ -15,7 +15,7 @@ let image5 = NSImage.init(named: "state5Template")
 
 extension Inspector {
 
-    func cachePaula() {
+    private func cachePaula() {
 
         paulaInfo = amiga!.paula.getInfo()
         audioInfo = amiga!.paula.getAudioInfo()

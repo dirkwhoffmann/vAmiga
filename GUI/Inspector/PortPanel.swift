@@ -13,7 +13,7 @@ let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
 
 extension Inspector {
 
-    func cachePorts() {
+    private func cachePorts() {
 
         if amiga != nil {
             port1Info = amiga!.controlPort1.getInfo()

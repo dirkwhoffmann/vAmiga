@@ -11,13 +11,13 @@ extension Inspector {
     
     private var selectedCia: Int { return ciaSelector.indexOfSelectedItem }
 
-    private func cacheCIA(count: Int = 0) {
+    private func cacheCIA() {
 
         let ciaA = selectedCia == 0
         ciaInfo = ciaA ? amiga!.ciaA.getInfo() : amiga!.ciaB.getInfo()
     }
 
-    private func refreshCIAValues() {
+    func refreshCIA(count: Int = 0) {
 
         cacheCIA()
 
@@ -88,7 +88,7 @@ extension Inspector {
         ciaIdleLevelText.stringValue = "\(idlePercentage) %"
     }
 
-    func refreshCIAFormatters() {
+    func fullRefreshCIA() {
 
         let ciaA = selectedCia == 0
 
@@ -136,16 +136,8 @@ extension Inspector {
                          ciaTBlatch: fmt16 ]
 
         for (c, f) in elements { assignFormatter(f, c!) }
-    }
 
-    func fullRefreshCIA() {
-
-        refreshCIAValues()
-    }
-
-    func periodicRefreshCIA(count: Int) {
-
-        refreshCIAValues()
+        refreshCIA()
     }
 
     @IBAction func selectCIAAction(_ sender: Any!) {

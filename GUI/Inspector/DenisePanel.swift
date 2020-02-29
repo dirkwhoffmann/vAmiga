@@ -9,7 +9,7 @@
 
 extension Inspector {
 
-    func cacheDenise() {
+    private func cacheDenise() {
 
         deniseInfo = amiga!.denise.getInfo()
         spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)

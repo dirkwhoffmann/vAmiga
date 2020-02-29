@@ -87,7 +87,7 @@ extension Inspector {
         return resizedImage
     }
 
-    func refreshMemoryLayout() {
+    private func refreshMemoryLayout() {
 
         guard let config = amiga?.config() else { return }
 
@@ -118,20 +118,17 @@ extension Inspector {
         memExtText.stringValue = String.init(format: "%d KB", extKB)
     }
 
-    func refreshMemoryFormatters() { }
-    
-    func fullRefreshMemory() {
-
-        refreshMemoryLayout()
-
-        memTableView.fullRefresh()
-        memBankTableView.fullRefresh()
-    }
-
-    func periodicRefreshMemory(count: Int) {
+    func refreshMemory(count: Int = 0) {
 
         memTableView.refresh(count: count)
         memBankTableView.refresh(count: count)
+    }
+
+    func fullRefreshMemory() {
+
+        refreshMemoryLayout()
+        memTableView.fullRefresh()
+        memBankTableView.fullRefresh()
     }
 
     func setBank(src: MemorySource) {

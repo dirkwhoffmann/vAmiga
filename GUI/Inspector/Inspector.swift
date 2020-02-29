@@ -630,26 +630,6 @@ class Inspector: NSWindowController {
           }
     }
 
-    // Refreshs all formatters in the currently selected panel
-    func refreshFormatters() {
-
-        if window?.isVisible == false { return }
-
-        if let id = debugPanel.selectedTabViewItem?.label {
-
-            switch id {
-
-            case "CIA": refreshCIAFormatters()
-            case "Memory": refreshMemoryFormatters()
-            case "Agnus": refreshAgnusFormatters()
-            case "Copper and Blitter": refreshCopperAndBlitterFormatters()
-            default: break
-            }
-        }
-    }
-
-    // Performs a periodic refresh (called by the update timer)
-    // DEPRECATED
     func refresh(count: Int = 0) {
         
         if window?.isVisible == false { return }
@@ -659,10 +639,10 @@ class Inspector: NSWindowController {
             switch id {
 
             case "CPU": refreshCPU(count: count)
-            case "CIA": periodicRefreshCIA(count: count)
-            case "Memory": periodicRefreshMemory(count: count)
-            case "Agnus": periodicRefreshAgnus(count: count)
-            case "Copper and Blitter": periodicRefreshCopperAndBlitter(count: count)
+            case "CIA": refreshCIA(count: count)
+            case "Memory": refreshMemory(count: count)
+            case "Agnus": refreshAgnus(count: count)
+            case "Copper and Blitter": refreshCopperAndBlitter(count: count)
             case "Denise": refreshDenise(count: count)
             case "Paula": refreshPaula(count: count)
             case "Ports": refreshPorts(count: count)
@@ -712,8 +692,7 @@ extension Inspector: NSTabViewDelegate {
             case "Events":  parent?.amiga.setInspectionTarget(INS_EVENTS)
             default:        break
             }
-
-            refreshFormatters()
+            
             fullRefresh()
         }
     }

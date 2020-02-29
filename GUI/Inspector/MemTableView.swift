@@ -28,7 +28,7 @@ class MemTableView: NSTableView {
         inspector.setBank(0)
     }
 
-    func cache() {
+    private func cache() {
 
         if amiga != nil {
 
