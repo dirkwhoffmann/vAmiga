@@ -53,7 +53,7 @@ class MemTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
 
         if count % 8 != 0 { return }
 

@@ -606,31 +606,7 @@ class Inspector: NSWindowController {
         control.needsDisplay = true
     }
 
-    // Refreshs all items in the currently selected panel
-     // DEPRECATED
-    func fullRefresh() {
-
-        if window?.isVisible == false { return }
-
-        if let id = debugPanel.selectedTabViewItem?.label {
-
-              switch id {
-
-              case "CPU": fullRefreshCPU()
-              case "CIA": fullRefreshCIA()
-              case "Memory": fullRefreshMemory()
-              case "Agnus": fullRefreshAgnus()
-              case "Copper and Blitter": fullRefreshCopperAndBlitter()
-              case "Denise": fullRefreshDenise()
-              case "Paula": fullRefreshPaula()
-              case "Ports": fullRefreshPorts()
-              case "Events": fullRefreshEvents()
-              default: break
-              }
-          }
-    }
-
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
         
         if window?.isVisible == false { return }
 
@@ -638,18 +614,23 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU": refreshCPU(count: count)
-            case "CIA": refreshCIA(count: count)
-            case "Memory": refreshMemory(count: count)
-            case "Agnus": refreshAgnus(count: count)
-            case "Copper and Blitter": refreshCopperAndBlitter(count: count)
-            case "Denise": refreshDenise(count: count)
-            case "Paula": refreshPaula(count: count)
-            case "Ports": refreshPorts(count: count)
-            case "Events": refreshEvents(count: count)
+            case "CPU": refreshCPU(count: count, full: full)
+            case "CIA": refreshCIA(count: count, full: full)
+            case "Memory": refreshMemory(count: count, full: full)
+            case "Agnus": refreshAgnus(count: count, full: full)
+            case "Copper and Blitter": refreshCopperBlitter(count: count, full: full)
+            case "Denise": refreshDenise(count: count, full: full)
+            case "Paula": refreshPaula(count: count, full: full)
+            case "Ports": refreshPorts(count: count, full: full)
+            case "Events": refreshEvents(count: count, full: full)
             default: break
             }
         }
+    }
+
+    func fullRefresh() {
+
+        refresh(full: true)
     }
 
     func scrollToPC() {

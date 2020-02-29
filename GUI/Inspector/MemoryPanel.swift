@@ -118,17 +118,12 @@ extension Inspector {
         memExtText.stringValue = String.init(format: "%d KB", extKB)
     }
 
-    func refreshMemory(count: Int = 0) {
+    func refreshMemory(count: Int = 0, full: Bool = false) {
 
-        memTableView.refresh(count: count)
-        memBankTableView.refresh(count: count)
-    }
+        if full { refreshMemoryLayout() }
 
-    func fullRefreshMemory() {
-
-        refreshMemoryLayout()
-        memTableView.fullRefresh()
-        memBankTableView.fullRefresh()
+        memTableView.refresh(count: count, full: full)
+        memBankTableView.refresh(count: count, full: full)
     }
 
     func setBank(src: MemorySource) {

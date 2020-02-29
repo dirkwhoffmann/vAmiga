@@ -19,9 +19,14 @@ extension Inspector {
         copperInfo = amiga!.agnus.getCopperInfo()
     }
 
-    func refreshCopper(count: Int = 0) {
+    func refreshCopper(count: Int = 0, full: Bool = false) {
 
         cacheCopper()
+
+        if full {
+            let elements = [ copPC: fmt24 ]
+            for (c, f) in elements { assignFormatter(f, c!) }
+        }
 
         let nr = Int(copperInfo!.copList)
         let active = copperInfo!.active
@@ -31,17 +36,7 @@ extension Inspector {
         copActive1.state = active && nr == 1 ? .on : .off
         copActive2.state = active && nr == 2 ? .on : .off
 
-        copList.refresh(count: count)
-    }
-
-    func fullRefreshCopper() {
-
-        let elements = [ copPC: fmt24 ]
-
-        for (c, f) in elements { assignFormatter(f, c!) }
-
-        refreshCopper()
-        copList.fullRefresh()
+        copList.refresh(count: count, full: full)
     }
 
     private func cacheBlitter() {
@@ -49,9 +44,30 @@ extension Inspector {
         blitterInfo = amiga!.agnus.getBlitterInfo()
     }
 
-    func refreshBlitter(count: Int = 0) {
+    func refreshBlitter(count: Int = 0, full: Bool = false) {
 
         cacheBlitter()
+
+        if full {
+            let elements = [ bltBLTCON0a: fmt4,
+                             bltBLTCON0b: fmt4,
+                             bltBLTCON0c: fmt8,
+                             bltBLTCON1a: fmt4,
+                             bltBLTCON1b: fmt4,
+                             bltBLTCON1c: fmt8,
+                             bltAhold: fmt16,
+                             bltBhold: fmt16,
+                             bltChold: fmt16,
+                             bltDhold: fmt16,
+                             bltAold: fmt16,
+                             bltBold: fmt16,
+                             bltAnew: fmt16,
+                             bltBnew: fmt16,
+                             bltY: fmt16,
+                             bltX: fmt16
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
+        }
 
         let bltcon0 = Int(blitterInfo!.bltcon0)
         bltBLTCON0a.integerValue = (bltcon0 >> 12) & 0xF
@@ -94,40 +110,10 @@ extension Inspector {
         bltLastWord.state  = blitterInfo!.lastIteration ? .on : .off
     }
 
-    func fullRefreshBlitter() {
+    func refreshCopperBlitter(count: Int, full: Bool) {
 
-        let elements = [ bltBLTCON0a: fmt4,
-                         bltBLTCON0b: fmt4,
-                         bltBLTCON0c: fmt8,
-                         bltBLTCON1a: fmt4,
-                         bltBLTCON1b: fmt4,
-                         bltBLTCON1c: fmt8,
-                         bltAhold: fmt16,
-                         bltBhold: fmt16,
-                         bltChold: fmt16,
-                         bltDhold: fmt16,
-                         bltAold: fmt16,
-                         bltBold: fmt16,
-                         bltAnew: fmt16,
-                         bltBnew: fmt16,
-                         bltY: fmt16,
-                         bltX: fmt16
-        ]
-        for (c, f) in elements { assignFormatter(f, c!) }
-
-        refreshBlitter()
-    }
-
-    func fullRefreshCopperAndBlitter() {
-
-        fullRefreshCopper()
-        fullRefreshBlitter()
-    }
-
-    func refreshCopperAndBlitter(count: Int) {
-
-        refreshCopper(count: count)
-        refreshBlitter(count: count)
+        refreshCopper(count: count, full: full)
+        refreshBlitter(count: count, full: full)
     }
 
     @IBAction func selectCopperListAction(_ sender: Any!) {

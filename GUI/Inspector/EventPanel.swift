@@ -14,7 +14,7 @@ extension Inspector {
         eventInfo = amiga!.agnus.getEventInfo()
     }
 
-    func refreshEvents(count: Int = 0) {
+    func refreshEvents(count: Int = 0, full: Bool = false) {
 
         cacheEvents()
 
@@ -26,10 +26,5 @@ extension Inspector {
         evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
         evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
         evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
-    }
-
-    func fullRefreshEvents() {
-
-        refreshEvents()
     }
 }

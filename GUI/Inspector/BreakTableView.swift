@@ -29,23 +29,20 @@ class PointTableView: NSTableView {
     func click(row: Int, col: Int) { }
     func edit(addr: UInt32) { }
 
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
 
-        cache()
-        reloadData()
-    }
-
-    func fullRefresh() {
-
-        for (c, f) in ["addr": fmt24] {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-            if let column = tableColumn(withIdentifier: columnId) {
-                if let cell = column.dataCell as? NSCell {
-                    cell.formatter = f
+        if full {
+            for (c, f) in ["addr": fmt24] {
+                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+                if let column = tableColumn(withIdentifier: columnId) {
+                    if let cell = column.dataCell as? NSCell {
+                        cell.formatter = f
+                    }
                 }
             }
+            cache()
+            reloadData()
         }
-        refresh()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -169,6 +166,7 @@ class BreakTableView: PointTableView {
 
         if amiga?.cpu.breakpointIsSet(at: addr) == false {
             amiga?.cpu.addBreakpoint(at: addr)
+            inspector.instrTableView.jumpTo(addr: addr)
         } else {
             NSSound.beep()
         }

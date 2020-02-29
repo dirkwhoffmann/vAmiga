@@ -30,15 +30,10 @@ class TraceTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
 
         cache()
         reloadData()
-    }
-
-    func fullRefresh() {
-
-         refresh()
     }
 }
 

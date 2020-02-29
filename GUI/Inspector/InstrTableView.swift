@@ -72,28 +72,25 @@ class InstrTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0, addr: UInt32 = 0) {
+    func refresh(count: Int = 0, full: Bool = false, addr: UInt32 = 0) {
 
-        if count == 0 {
-            cache()
-            reloadData()
-        } else {
-            jumpTo(addr: addr)
-        }
-    }
-
-    func fullRefresh() {
-
-        for (c, f) in ["addr": fmt24] {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-            if let column = tableColumn(withIdentifier: columnId) {
-                if let cell = column.dataCell as? NSCell {
-                    cell.formatter = f
+        if full {
+            for (c, f) in ["addr": fmt24] {
+                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+                if let column = tableColumn(withIdentifier: columnId) {
+                    if let cell = column.dataCell as? NSCell {
+                        cell.formatter = f
+                    }
                 }
             }
+
+            cache()
+            reloadData()
         }
 
-        refresh()
+        if count != 0 {
+            jumpTo(addr: addr)
+        }
     }
 
     func jumpTo(addr: UInt32) {
@@ -149,7 +146,7 @@ class InstrTableView: NSTableView {
 
     @IBAction func doubleClickAction(_ sender: NSTableView!) {
 
-        if sender.clickedColumn == 0 {
+        if sender.clickedColumn != 0 {
 
             lockAmiga()
             doubleClickAction(row: sender.clickedRow)

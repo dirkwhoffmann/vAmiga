@@ -32,17 +32,12 @@ class BankTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
 
         if count % 8 != 0 { return }
 
         cache()
         reloadData()
-    }
-
-    func fullRefresh() {
-
-        refresh()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {

@@ -23,9 +23,25 @@ extension Inspector {
         }
     }
 
-    func refreshPorts(count: Int = 0) {
+    func refreshPorts(count: Int = 0, full: Bool = false) {
 
         cachePorts()
+
+        if full {
+            let elements = [ poPOTGO: fmt16,
+                             poPOTGOR: fmt16,
+                             po0JOYDAT: fmt16,
+                             po0POTDAT: fmt16,
+                             po1JOYDAT: fmt16,
+                             po1POTDAT: fmt16,
+                             poRecShift: fmt16,
+                             poRecBuffer: fmt16,
+                             poTransShift: fmt16,
+                             poTransBuffer: fmt16
+            ]
+
+            for (c, f) in elements { assignFormatter(f, c!) }
+        }
 
         // Control port commons
         let potgo = Int(port1Info!.potgo)
@@ -106,24 +122,5 @@ extension Inspector {
                 poSerialOut.font = serDatFont
             }
         }
-    }
-
-    func fullRefreshPorts() {
-
-        let elements = [ poPOTGO: fmt16,
-                         poPOTGOR: fmt16,
-                         po0JOYDAT: fmt16,
-                         po0POTDAT: fmt16,
-                         po1JOYDAT: fmt16,
-                         po1POTDAT: fmt16,
-                         poRecShift: fmt16,
-                         poRecBuffer: fmt16,
-                         poTransShift: fmt16,
-                         poTransBuffer: fmt16
-        ]
-
-        for (c, f) in elements { assignFormatter(f, c!) }
-
-        refreshPorts()
     }
 }

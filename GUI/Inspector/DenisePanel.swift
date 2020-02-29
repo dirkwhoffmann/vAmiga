@@ -15,10 +15,22 @@ extension Inspector {
         spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
     }
 
-    func refreshDenise(count: Int = 0) {
+    func refreshDenise(count: Int = 0, full: Bool = false) {
 
         cacheDenise()
-        
+
+        if full {
+            let elements = [ deniseBPLCON0: fmt16,
+                             deniseBPLCON1: fmt16,
+                             deniseBPLCON2: fmt16,
+                             deniseDIWSTRT: fmt16,
+                             deniseDIWSTOP: fmt16,
+                             deniseCLXDAT: fmt16,
+                             sprPtr: fmt24
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
+        }
+
         // Bitplane section
         let bplcon0 = Int(deniseInfo!.bplcon0)
         let bplcon1 = Int(deniseInfo!.bplcon1)
@@ -99,27 +111,11 @@ extension Inspector {
         deniseCol30.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.30)
         deniseCol31.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.31)
 
-        sprTableView.refresh(count: count)
-    }
-
-    func fullRefreshDenise() {
-
-        let elements = [ deniseBPLCON0: fmt16,
-                         deniseBPLCON1: fmt16,
-                         deniseBPLCON2: fmt16,
-                         deniseDIWSTRT: fmt16,
-                         deniseDIWSTOP: fmt16,
-                         deniseCLXDAT: fmt16,
-                         sprPtr: fmt24
-        ]
-        for (c, f) in elements { assignFormatter(f, c!) }
-
-        sprTableView.fullRefresh()
-        refreshDenise()
+        sprTableView.refresh(count: count, full: full)
     }
 
     @IBAction func selectSpriteAction(_ sender: Any!) {
 
-        sprTableView.fullRefresh()
+        fullRefresh()
     }
 }

@@ -56,26 +56,23 @@ class CopperTableView: NSTableView {
         }
     }
 
-    func refresh(count: Int = 0) {
+    func refresh(count: Int = 0, full: Bool = false) {
 
         if count % 4 != 0 { return }
 
-        cache()
-        reloadData()
-    }
-
-    func fullRefresh() {
-
-        for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
-            let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
-            if let column = tableColumn(withIdentifier: columnId) {
-                if let cell = column.dataCell as? NSCell {
-                    cell.formatter = f
+        if full {
+            for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
+                let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
+                if let column = tableColumn(withIdentifier: columnId) {
+                    if let cell = column.dataCell as? NSCell {
+                        cell.formatter = f
+                    }
                 }
             }
         }
 
-        refresh()
+        cache()
+        reloadData()
     }
 }
 
