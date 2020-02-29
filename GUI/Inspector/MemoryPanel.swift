@@ -130,8 +130,8 @@ extension Inspector {
 
     func periodicRefreshMemory(count: Int) {
 
-        memTableView.periodicRefresh(count: count)
-        memBankTableView.periodicRefresh(count: count)
+        memTableView.refresh(count: count)
+        memBankTableView.refresh(count: count)
     }
 
     func setBank(src: MemorySource) {

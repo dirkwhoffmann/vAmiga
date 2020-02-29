@@ -30,7 +30,7 @@ class TraceTableView: NSTableView {
         }
     }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
 
         cache()
         reloadData()
@@ -38,12 +38,7 @@ class TraceTableView: NSTableView {
 
     func fullRefresh() {
 
-         refreshValues()
-    }
-
-    func periodicRefresh(count: Int) {
-
-        refreshValues()
+         refresh()
     }
 }
 

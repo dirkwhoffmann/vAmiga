@@ -588,7 +588,7 @@ class Inspector: NSWindowController {
 
             lockAmiga()
             if amiga != nil {
-                if self.isRunning { self.periodicRefresh(count: self.refreshCnt) }
+                if self.isRunning { self.refresh(count: self.refreshCnt) }
                 self.isRunning = amiga!.isRunning()
                 self.refreshCnt += 1
             }
@@ -639,16 +639,10 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU":
-                refreshCPUFormatters()
             case "CIA": refreshCIAFormatters()
             case "Memory": refreshMemoryFormatters()
             case "Agnus": refreshAgnusFormatters()
             case "Copper and Blitter": refreshCopperAndBlitterFormatters()
-            case "Denise": refreshDeniseFormatters()
-            case "Paula": refreshPaulaFormatters()
-            case "Ports": refreshPortFormatters()
-            case "Events": refreshEventFormatters()
             default: break
             }
         }
@@ -656,7 +650,7 @@ class Inspector: NSWindowController {
 
     // Performs a periodic refresh (called by the update timer)
     // DEPRECATED
-    func periodicRefresh(count: Int) {
+    func refresh(count: Int = 0) {
         
         if window?.isVisible == false { return }
 
@@ -664,15 +658,15 @@ class Inspector: NSWindowController {
 
             switch id {
 
-            case "CPU": periodicRefreshCPU(count: count)
+            case "CPU": refreshCPU(count: count)
             case "CIA": periodicRefreshCIA(count: count)
             case "Memory": periodicRefreshMemory(count: count)
             case "Agnus": periodicRefreshAgnus(count: count)
             case "Copper and Blitter": periodicRefreshCopperAndBlitter(count: count)
-            case "Denise": periodicRefreshDenise(count: count)
-            case "Paula": periodicRefreshPaula(count: count)
-            case "Ports": periodicRefreshPorts(count: count)
-            case "Events": periodicRefreshEvents(count: count)
+            case "Denise": refreshDenise(count: count)
+            case "Paula": refreshPaula(count: count)
+            case "Ports": refreshPorts(count: count)
+            case "Events": refreshEvents(count: count)
             default: break
             }
         }

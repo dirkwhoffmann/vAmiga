@@ -53,9 +53,16 @@ class MemTableView: NSTableView {
         }
     }
 
-    func refreshFormatters() {
+    func refresh(count: Int = 0) {
 
-        // Assign formatters
+        if count % 8 != 0 { return }
+
+        cache()
+        reloadData()
+    }
+
+    func fullRefresh() {
+
         let columnFormatters = [
             "addr": fmt24,
             "0": fmt16,
@@ -76,22 +83,8 @@ class MemTableView: NSTableView {
                 }
             }
         }
-    }
 
-    func fullRefresh() {
-
-        cache()
-        refreshFormatters()
-        reloadData()
-    }
-
-    func periodicRefresh(count: Int) {
-        
-        // Increase the update interval
-        if count % 8 != 0 { return }
-
-        cache()
-        reloadData()
+        refresh()
     }
 }
 

@@ -29,13 +29,13 @@ class PointTableView: NSTableView {
     func click(row: Int, col: Int) { }
     func edit(addr: UInt32) { }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
 
         cache()
         reloadData()
     }
 
-    func refreshFormatters() {
+    func fullRefresh() {
 
         for (c, f) in ["addr": fmt24] {
             let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -45,17 +45,7 @@ class PointTableView: NSTableView {
                 }
             }
         }
-    }
-
-    func fullRefresh() {
-
-        refreshFormatters()
-        refreshValues()
-    }
-    
-    func periodicRefresh(count: Int) {
-
-        refreshValues()
+        refresh()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {

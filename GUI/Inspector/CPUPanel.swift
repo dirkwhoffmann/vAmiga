@@ -9,12 +9,12 @@
 
 extension Inspector {
 
-    func cacheCPU(count: Int = 0) {
+    func cacheCPU() {
 
         cpuInfo = amiga!.cpu.getInfo()
     }
 
-    func refreshCPUValues() {
+    func refreshCPU(count: Int = 0) {
 
         cacheCPU()
 
@@ -53,9 +53,21 @@ extension Inspector {
         cpuZ.state  = (sr & 0b0000000000000100 != 0) ? .on : .off
         cpuV.state  = (sr & 0b0000000000000010 != 0) ? .on : .off
         cpuC.state  = (sr & 0b0000000000000001 != 0) ? .on : .off
+
+        instrTableView.refresh(count: count, addr: cpuInfo!.pc)
+        traceTableView.refresh(count: count)
+        breakTableView.refresh(count: count)
+        watchTableView.refresh(count: count)
     }
 
-    func refreshCPUFormatters() {
+    func fullRefreshCPU() {
+
+        refreshCPU()
+
+        instrTableView.fullRefresh()
+        traceTableView.fullRefresh()
+        breakTableView.fullRefresh()
+        watchTableView.fullRefresh()
 
         let elements = [ cpuPC: fmt32,
 
@@ -70,29 +82,6 @@ extension Inspector {
                          cpuUSP: fmt32, cpuSSP: fmt32 ]
 
         for (c, f) in elements { assignFormatter(f, c!) }
-
-        instrTableView.refreshFormatters()
-    }
-
-    func refreshCPU(count: Int = 0, scroll: Bool = false) {
-
-        refreshCPUValues()
-
-        instrTableView.jumpTo(addr: cpuInfo!.pc)
-        traceTableView.periodicRefresh(count: count)
-        breakTableView.periodicRefresh(count: count)
-        watchTableView.periodicRefresh(count: count)
-    }
-
-    func fullRefreshCPU() {
-
-        track("fullRefreshCPU")
-        refreshCPUValues()
-
-        instrTableView.fullRefresh()
-        traceTableView.fullRefresh()
-        breakTableView.fullRefresh()
-        watchTableView.fullRefresh()
 
         if parent!.amiga.isRunning() {
              cpuStopAndGoButton.image = NSImage.init(named: "pauseTemplate")
@@ -111,7 +100,8 @@ extension Inspector {
          }
     }
 
-    func periodicRefreshCPU(count: Int) {
+    /*
+    func refreshCPU(count: Int) {
 
         refreshCPUValues()
 
@@ -120,6 +110,7 @@ extension Inspector {
         breakTableView.periodicRefresh(count: count)
         watchTableView.periodicRefresh(count: count)
     }
+    */
 
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
 

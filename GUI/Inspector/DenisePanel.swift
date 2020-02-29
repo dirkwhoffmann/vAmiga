@@ -15,7 +15,7 @@ extension Inspector {
         spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
     }
 
-    func refreshDeniseValues() {
+    func refreshDenise(count: Int = 0) {
 
         cacheDenise()
         
@@ -98,9 +98,11 @@ extension Inspector {
         deniseCol29.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.29)
         deniseCol30.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.30)
         deniseCol31.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.31)
+
+        sprTableView.refresh(count: count)
     }
 
-    func refreshDeniseFormatters() {
+    func fullRefreshDenise() {
 
         let elements = [ deniseBPLCON0: fmt16,
                          deniseBPLCON1: fmt16,
@@ -111,20 +113,9 @@ extension Inspector {
                          sprPtr: fmt24
         ]
         for (c, f) in elements { assignFormatter(f, c!) }
-    }
-
-    func fullRefreshDenise() {
 
         sprTableView.fullRefresh()
-
-        refreshDeniseValues()
-    }
-
-    func periodicRefreshDenise(count: Int) {
-
-        sprTableView.periodicRefresh(count: count)
-
-        refreshDeniseValues()
+        refreshDenise()
     }
 
     @IBAction func selectSpriteAction(_ sender: Any!) {

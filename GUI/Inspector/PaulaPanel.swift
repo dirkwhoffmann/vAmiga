@@ -15,14 +15,14 @@ let image5 = NSImage.init(named: "state5Template")
 
 extension Inspector {
 
-    func cachePaula(count: Int = 0) {
+    func cachePaula() {
 
         paulaInfo = amiga!.paula.getInfo()
         audioInfo = amiga!.paula.getAudioInfo()
         diskInfo  = amiga!.diskController.getInfo()
     }
 
-    func refreshPaulaValues() {
+    func refreshPaula(count: Int = 0) {
 
         cachePaula()
 
@@ -190,7 +190,7 @@ extension Inspector {
          assignImage(audioImg3, info: info3, displayState: &displayState3)
      }
 
-    func refreshPaulaFormatters() {
+    func fullRefreshPaula() {
 
         let elements = [ paulaIntena: fmt16,
                          paulaIntreq: fmt16,
@@ -218,15 +218,7 @@ extension Inspector {
         ]
 
         for (c, f) in elements { assignFormatter(f, c!) }
-    }
 
-    func fullRefreshPaula() {
-
-        refreshPaulaValues()
-    }
-
-    func periodicRefreshPaula(count: Int) {
-
-        refreshPaulaValues()
+        refreshPaula()
     }
 }

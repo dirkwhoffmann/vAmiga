@@ -16,25 +16,15 @@ class EventTableView: NSTableView {
         target = self
     }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
 
         // cache() // TODO
         reloadData()
     }
 
-    func refreshFormatters() {
-
-    }
-
     func fullRefresh() {
 
-        refreshValues()
-        refreshFormatters()
-    }
-
-    func periodicRefresh(count: Int) {
-                
-        refreshValues()
+        refresh()
     }
 }
 

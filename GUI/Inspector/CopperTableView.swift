@@ -56,13 +56,15 @@ class CopperTableView: NSTableView {
         }
     }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
+
+        if count % 4 != 0 { return }
 
         cache()
         reloadData()
     }
 
-    func refreshFormatters() {
+    func fullRefresh() {
 
         for (c, f) in ["addr": fmt24, "data1": fmt16, "data2": fmt16] {
             let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -72,20 +74,8 @@ class CopperTableView: NSTableView {
                 }
             }
         }
-    }
 
-    func fullRefresh() {
-
-        refreshValues()
-        refreshFormatters()
-    }
-
-    func periodicRefresh(count: Int) {
-
-        // Increase the update interval
-        if count % 4 != 0 { return }
-
-        refreshValues()
+        refresh()
     }
 }
 

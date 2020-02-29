@@ -610,7 +610,6 @@ extension MyController {
         case MSG_BREAKPOINT_CONFIG,
              MSG_BREAKPOINT_REACHED,
              MSG_WATCHPOINT_REACHED:
-            track()
             myAppDelegate.inspector?.fullRefresh()
             myAppDelegate.inspector?.scrollToPC()
 

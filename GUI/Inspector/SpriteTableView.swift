@@ -20,13 +20,15 @@ class SpriteTableView: NSTableView {
         target = self
     }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
+
+        if count % 4 != 0 { return }
 
         // cache() // TODO
         reloadData()
     }
 
-    func refreshFormatters() {
+    func fullRefresh() {
 
         for (c, f) in ["addr": fmt24] {
             let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -36,20 +38,8 @@ class SpriteTableView: NSTableView {
                 }
             }
         }
-    }
 
-    func fullRefresh() {
-
-        refreshValues()
-        refreshFormatters()
-    }
-
-    func periodicRefresh(count: Int) {
-
-        // Increase the update interval
-        if count % 4 != 0 { return }
-
-        refreshValues()
+        refresh()
     }
 }
 

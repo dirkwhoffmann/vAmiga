@@ -49,7 +49,7 @@ extension Inspector {
 
     func periodicRefreshCopper(count: Int) {
 
-        copList.periodicRefresh(count: count)
+        copList.refresh(count: count)
 
         refreshCopperValues()
     }

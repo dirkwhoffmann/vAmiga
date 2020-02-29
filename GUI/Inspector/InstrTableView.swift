@@ -36,17 +36,7 @@ class InstrTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
-    func cache() {
-
-        track("instr cache()")
-        if let addr = addrInRow[0] {
-            cache(startAddr: addr)
-        }
-    }
-
     func cache(startAddr: UInt32) {
-
-        track("cache: \(startAddr)")
 
         var addr = startAddr
 
@@ -75,15 +65,24 @@ class InstrTableView: NSTableView {
         }
     }
 
-    func refreshValues() {
+    func cache() {
 
-        track("instrTable refreshValues")
-
-        cache()
-        reloadData()
+        if let addr = addrInRow[0] {
+            cache(startAddr: addr)
+        }
     }
 
-    func refreshFormatters() {
+    func refresh(count: Int = 0, addr: UInt32 = 0) {
+
+        if count == 0 {
+            cache()
+            reloadData()
+        } else {
+            jumpTo(addr: addr)
+        }
+    }
+
+    func fullRefresh() {
 
         for (c, f) in ["addr": fmt24] {
             let columnId = NSUserInterfaceItemIdentifier(rawValue: c)
@@ -93,25 +92,11 @@ class InstrTableView: NSTableView {
                 }
             }
         }
-    }
 
-    func fullRefresh() {
-
-        track("instrTable fullRefresh")
-        refreshValues()
-    }
-
-    func jumpTo(row: Int) {
-
-        track("jumpTo row: \(row)")
-
-        scrollRowToVisible(row)
-        selectRowIndexes([row], byExtendingSelection: false)
+        refresh()
     }
 
     func jumpTo(addr: UInt32) {
-
-        track("jumpTo: \(addr)")
 
         if let row = rowForAddr[addr] {
 
@@ -128,6 +113,12 @@ class InstrTableView: NSTableView {
             reloadData()
             jumpTo(row: 0)
         }
+    }
+
+    func jumpTo(row: Int) {
+
+        scrollRowToVisible(row)
+        selectRowIndexes([row], byExtendingSelection: false)
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
@@ -196,7 +187,6 @@ extension InstrTableView: NSTableViewDataSource {
         case "break" where bpInRow[row] == .disabled:
             return "\u{26AA}" // "⚪" ("\u{2B55}" // "⭕")
         case "addr":
-            if row == 0 { track("Row 0 \(addrInRow[0])") }
             return addrInRow[row]
         case "data":
             return dataInRow[row]
@@ -223,4 +213,3 @@ extension InstrTableView: NSTableViewDelegate {
         }
     }
 }
-

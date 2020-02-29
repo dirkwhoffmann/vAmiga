@@ -13,7 +13,7 @@ let serDatFont = NSFontManager.shared.font(withFamily: "Courier New",
 
 extension Inspector {
 
-    func cachePorts(count: Int = 0) {
+    func cachePorts() {
 
         if amiga != nil {
             port1Info = amiga!.controlPort1.getInfo()
@@ -23,19 +23,11 @@ extension Inspector {
         }
     }
 
-    func refreshPortValues() {
+    func refreshPorts(count: Int = 0) {
 
         cachePorts()
-        
-        if port1Info == nil { return }
-        if port2Info == nil { return }
-        if serInfo   == nil { return }
-        if uartInfo  == nil { return }
 
-        //
         // Control port commons
-        //
-
         let potgo = Int(port1Info!.potgo)
         let potgor = Int(port1Info!.potgor)
 
@@ -116,7 +108,7 @@ extension Inspector {
         }
     }
 
-    func refreshPortFormatters() {
+    func fullRefreshPorts() {
 
         let elements = [ poPOTGO: fmt16,
                          poPOTGOR: fmt16,
@@ -131,15 +123,7 @@ extension Inspector {
         ]
 
         for (c, f) in elements { assignFormatter(f, c!) }
-    }
 
-    func fullRefreshPorts() {
-
-        refreshPortValues()
-    }
-
-    func periodicRefreshPorts(count: Int) {
-
-        refreshPortValues()
+        refreshPorts()
     }
 }

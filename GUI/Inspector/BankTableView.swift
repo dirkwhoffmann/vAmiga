@@ -32,7 +32,9 @@ class BankTableView: NSTableView {
         }
     }
 
-    func refreshValues() {
+    func refresh(count: Int = 0) {
+
+        if count % 8 != 0 { return }
 
         cache()
         reloadData()
@@ -40,15 +42,7 @@ class BankTableView: NSTableView {
 
     func fullRefresh() {
 
-        refreshValues()
-    }
-
-    func periodicRefresh(count: Int) {
-
-        // Increase the update interval
-        if count % 8 != 0 { return }
-
-        refreshValues()
+        refresh()
     }
 
     @IBAction func clickAction(_ sender: NSTableView!) {
