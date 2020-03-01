@@ -1289,9 +1289,6 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
     ddfstrt = value;
 
-    // Let the hsync handler recompute the data fetch window
-    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
-
     // Take action if we haven't reached the old DDFSTRT cycle yet
     if (pos.h < ddfstrtReached) {
 
@@ -1319,9 +1316,6 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     debug(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
 
     ddfstop = value;
-
-    // Let the hsync handler recompute the data fetch window
-    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
 
     // Take action if we haven't reached the old DDFSTOP cycle yet
      if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
@@ -1865,10 +1859,17 @@ Agnus::hsyncHandler()
     // DDF
     //
 
-    // Update the flipflops
+    // Update the vertical DDF flipflop
     ddfVFlop = !inLastRasterline() && diwVFlop;
-    if (ddfstrtReached != -1) ddfHFlop = true;
-    if (ddfstopReached != -1) ddfHFlop = false;
+
+    // Update the horizontal DDF flipflop
+    if (isECS()) {
+        if (ddfstrtReached != -1) ddfHFlop = true;
+        if (ddfstopReached != -1) ddfHFlop = false;
+    } else {
+        // OCS Agnus always clears the fliflop at the hardware stop. Hence,
+        // variable ddfHFlop equals false any time.
+    }
 
     // Predict the trigger coordinates for the next line
     i16 newStrt = ddfHFlop ? 0x18 : ddfstrt;
