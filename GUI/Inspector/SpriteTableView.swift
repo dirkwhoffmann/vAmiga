@@ -95,8 +95,7 @@ extension SpriteTableView: NSTableViewDelegate {
         let cell = cell as? NSTextFieldCell
         if let index = colorIndex(tableColumn: tableColumn, row: row) {
 
-            var color = NSColor.lightGray
-            
+            var color = NSColor.controlAlternatingRowBackgroundColors[1]            
             switch inspector.selectedSprite {
                 
             case 0, 1:
