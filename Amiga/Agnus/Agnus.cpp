@@ -1290,7 +1290,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
     ddfstrt = value;
 
     // Let the hsync handler recompute the data fetch window
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
+    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
 
     // Take action if we haven't reached the old DDFSTRT cycle yet
     if (pos.h < ddfstrtReached) {
@@ -1321,15 +1321,15 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     ddfstop = value;
 
     // Let the hsync handler recompute the data fetch window
-    hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
+    // hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
 
     // Take action if we haven't reached the old DDFSTOP cycle yet
-     if (pos.h < ddfstopReached || ddfstopReached == -1) {
+     if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
 
          // Check if the new position has already been passed
-         if (ddfstop <= pos.h + 2) {
+         if (ddfstop > HPOS_MAX || ddfstop <= pos.h + 2) {
 
-             // DDFSTOP never matches in the current rasterline
+             // DDFSTOP won't match in the current rasterline
              ddfstopReached = -1;
 
          } else {
@@ -1348,7 +1348,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 void
 Agnus::computeDDFStrt()
 {
-    i16 strt = ddfstrtReached;
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
 
     // Align ddfstrt to the start of the next fetch unit
     dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
@@ -1366,8 +1366,8 @@ void
 Agnus::computeDDFStop()
 {
     // i16 strt = dmaStrtLores - dmaStrtLoresShift;
-    i16 strt = MAX(ddfstrtReached, 0x18);
-    i16 stop = MIN(ddfstopReached, 0xD8);
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+    i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
 
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
@@ -1865,12 +1865,19 @@ Agnus::hsyncHandler()
     // DDF
     //
 
-    // Vertical DDF flipflop
+    // Update the flipflops
     ddfVFlop = !inLastRasterline() && diwVFlop;
+    if (ddfstrtReached != -1) ddfHFlop = true;
+    if (ddfstopReached != -1) ddfHFlop = false;
 
-    ddfstrtReached = ddfstrt;
-    ddfstopReached = ddfstop;
-
+    // Predict the trigger coordinates for the next line
+    i16 newStrt = ddfHFlop ? 0x18 : ddfstrt;
+    i16 newStop = ddfstop > HPOS_MAX ? -1 : ddfstop;
+    if (ddfstrtReached != newStrt || ddfstopReached != newStop) {
+        ddfstrtReached = newStrt;
+        ddfstopReached = newStop;
+        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
+    }
 
     //
     // Determine the bitplane DMA status for the line to come

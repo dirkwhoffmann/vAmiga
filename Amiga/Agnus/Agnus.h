@@ -334,18 +334,16 @@ public:
     u16 ddfstrt;
     u16 ddfstop;
 
-    /* At the end of a rasterline, these variables conains the DMA cycles
+    /* At the end of a rasterline, these variables conain the DMA cycles
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
     i16 ddfstrtReached;
     i16 ddfstopReached;
 
-    /* DDF flipflops
-     *
-     * The vertical DDF flipflop needs to be set to enable bitplane DMA.
-     */
+    // DDF flipflops
     bool ddfVFlop;
+    bool ddfHFlop;
 
     // The actual data fetch window
     i16 dmaStrtLores;      // First lores bitplane DMA cycle
@@ -507,6 +505,7 @@ public:
         & ddfstrtReached
         & ddfstopReached
         & ddfVFlop
+        & ddfHFlop
         & dmaStrtLores
         & dmaStrtHires
         & dmaStopLores
