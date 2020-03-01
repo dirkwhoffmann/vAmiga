@@ -442,11 +442,11 @@ Agnus::executeEventsUntil(Cycle cycle) {
     // Check primary slots
     //
 
-    if (isDue<REG_SLOT>(cycle)) {
-        serviceREGEvent(cycle);
-    }
     if (isDue<RAS_SLOT>(cycle)) {
         serviceRASEvent();
+    }
+    if (isDue<REG_SLOT>(cycle)) {
+        serviceREGEvent(cycle);
     }
     if (isDue<CIAA_SLOT>(cycle)) {
         serviceCIAEvent<0>();

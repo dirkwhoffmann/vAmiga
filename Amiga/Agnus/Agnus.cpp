@@ -1321,7 +1321,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
      if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
 
          // Check if the new position has already been passed
-         if (ddfstop > HPOS_MAX || ddfstop <= pos.h + 2) {
+         if (ddfstop <= pos.h + 2) {
 
              // DDFSTOP won't match in the current rasterline
              ddfstopReached = -1;
@@ -1329,7 +1329,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
          } else {
 
              // Update the matching position and recalculate the DMA table
-             ddfstopReached = ddfstop;
+             ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
              if (ddfstrtReached >= 0) {
                  computeDDFWindow();
                  updateBplDma();
