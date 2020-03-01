@@ -376,13 +376,20 @@ class Inspector: NSWindowController {
     @IBOutlet weak var deniseCol30: NSColorWell!
     @IBOutlet weak var deniseCol31: NSColorWell!
 
+    @IBOutlet weak var sprArmed1: NSButton!
+    @IBOutlet weak var sprArmed2: NSButton!
+    @IBOutlet weak var sprArmed3: NSButton!
+    @IBOutlet weak var sprArmed4: NSButton!
+    @IBOutlet weak var sprArmed5: NSButton!
+    @IBOutlet weak var sprArmed6: NSButton!
+    @IBOutlet weak var sprArmed7: NSButton!
+    @IBOutlet weak var sprArmed8: NSButton!
     @IBOutlet weak var sprSelector: NSSegmentedControl!
     @IBOutlet weak var sprVStart: NSTextField!
     @IBOutlet weak var sprVStop: NSTextField!
     @IBOutlet weak var sprHStart: NSTextField!
-    @IBOutlet weak var sprPtr: NSTextField!
-    @IBOutlet weak var sprTableView: SpriteTableView!
     @IBOutlet weak var sprAttach: NSButton!
+    @IBOutlet weak var sprTableView: SpriteTableView!
 
     // Debug panel (Paula)
     @IBOutlet weak var paulaIntena: NSTextField!

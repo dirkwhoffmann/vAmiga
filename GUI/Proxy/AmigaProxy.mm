@@ -532,9 +532,9 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->selectObservedSprite(nr);
 }
-- (NSInteger) sprDataLines
+- (NSInteger) sprDataLines:(NSInteger)nr
 {
-    return wrapper->denise->spriteDat.lines;
+    return wrapper->denise->spriteDat.lines[nr];
 }
 - (u64) sprData:(NSInteger)line
 {

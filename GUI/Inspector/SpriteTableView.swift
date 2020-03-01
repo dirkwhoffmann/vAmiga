@@ -33,7 +33,7 @@ class SpriteTableView: NSTableView {
         for i in 0 ..< 16 {
             spriteCol[i] = NSColor.init(amigaRGB: amiga!.denise.sprColorReg(i))
         }
-        spriteLines = amiga!.denise.sprDataLines()
+        spriteLines = amiga!.denise.sprDataLines(inspector.selectedSprite)
         for i in 0 ..< spriteLines {
             spriteDat[i] = amiga!.denise.sprData(i)
         }
@@ -95,7 +95,7 @@ extension SpriteTableView: NSTableViewDelegate {
         let cell = cell as? NSTextFieldCell
         if let index = colorIndex(tableColumn: tableColumn, row: row) {
 
-            var color = NSColor.white
+            var color = NSColor.lightGray
             
             switch inspector.selectedSprite {
                 

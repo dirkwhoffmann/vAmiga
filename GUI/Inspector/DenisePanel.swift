@@ -27,8 +27,7 @@ extension Inspector {
                              deniseBPLCON2: fmt16,
                              deniseDIWSTRT: fmt16,
                              deniseDIWSTOP: fmt16,
-                             deniseCLXDAT: fmt16,
-                             sprPtr: fmt24
+                             deniseCLXDAT: fmt16
             ]
             for (c, f) in elements { assignFormatter(f, c!) }
         }
@@ -73,10 +72,18 @@ extension Inspector {
         deniseCLXDAT.integerValue = Int(deniseInfo!.clxdat)
 
         // Sprite section
+        sprArmed1.state = amiga!.denise.sprDataLines(0) != 0 ? .on : .off
+        sprArmed2.state = amiga!.denise.sprDataLines(1) != 0 ? .on : .off
+        sprArmed3.state = amiga!.denise.sprDataLines(2) != 0 ? .on : .off
+        sprArmed4.state = amiga!.denise.sprDataLines(3) != 0 ? .on : .off
+        sprArmed5.state = amiga!.denise.sprDataLines(4) != 0 ? .on : .off
+        sprArmed6.state = amiga!.denise.sprDataLines(5) != 0 ? .on : .off
+        sprArmed7.state = amiga!.denise.sprDataLines(6) != 0 ? .on : .off
+        sprArmed8.state = amiga!.denise.sprDataLines(7) != 0 ? .on : .off
+
         sprHStart.integerValue = Int(spriteInfo!.hstrt)
         sprVStart.integerValue = Int(spriteInfo!.vstrt)
         sprVStop.integerValue = Int(spriteInfo!.vstop)
-        sprPtr.integerValue = Int(spriteInfo!.ptr)
         sprAttach.state = spriteInfo!.attach ? .on : .off
 
         // Color section

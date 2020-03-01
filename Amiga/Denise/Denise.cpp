@@ -705,16 +705,11 @@ Denise::drawSprites()
         if (wasArmed & 0b00000011) drawSpritePair<1>();
 
         if (amiga.getDebugMode()) {
-            switch (spriteDatNew.nr) {
-                case 7: if (wasArmed & 0b10000000) recordSpriteData(7); break;
-                case 6: if (wasArmed & 0b01000000) recordSpriteData(6); break;
-                case 5: if (wasArmed & 0b00100000) recordSpriteData(5); break;
-                case 4: if (wasArmed & 0b00010000) recordSpriteData(4); break;
-                case 3: if (wasArmed & 0b00001000) recordSpriteData(3); break;
-                case 2: if (wasArmed & 0b00000100) recordSpriteData(2); break;
-                case 1: if (wasArmed & 0b00000010) recordSpriteData(1); break;
-                case 0: if (wasArmed & 0b00000001) recordSpriteData(0); break;
-                default: break;
+            for (int i = 0; i < 8; i++) {
+                if (wasArmed & (1 << i)) {
+                    if (spriteDatNew.nr == i) recordSpriteData(i);
+                    spriteDatNew.lines[i]++;
+                }
             }
         }
     }
@@ -1110,7 +1105,8 @@ Denise::beginOfFrame(bool interlace)
 
     if (amiga.getDebugMode()) {
         spriteDat = spriteDatNew;
-        spriteDatNew.lines = 0;
+        for (int i = 0; i < 8; i++)
+            spriteDatNew.lines[i] = 0;
     }
 }
 
@@ -1203,7 +1199,6 @@ Denise::selectObservedSprite(unsigned x)
     // amiga.suspend();
 
     spriteDatNew.nr = x;
-    spriteDatNew.lines = 0;
 
     // amiga.resume();
 }
@@ -1213,10 +1208,9 @@ Denise::recordSpriteData(unsigned x)
 {
     assert(x < 8);
 
-    u16 line = spriteDatNew.lines;
+    u16 line = spriteDatNew.lines[x];
 
     // Record data registers
-    // spriteDatNew.data[line] = HI_W_LO_W(initialSprdatb[x], initialSprdata[x]);
     spriteDatNew.data[line] = HI_W_LO_W(sprdatb[x], sprdata[x]);
 
     // Record colors (when recording line 0)
@@ -1225,8 +1219,6 @@ Denise::recordSpriteData(unsigned x)
             spriteDatNew.colors[i] = pixelEngine.getColor(i + 16);
         }
     }
-
-    spriteDatNew.lines++;
 }
 
 void

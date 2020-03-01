@@ -360,7 +360,7 @@ struct AmigaFileWrapper;
 - (void) inspect;
 
 - (void) selectObservedSprite:(NSInteger)nr;
-- (NSInteger) sprDataLines;
+- (NSInteger) sprDataLines:(NSInteger)nr;
 - (u64) sprData:(NSInteger)line;
 - (u16) sprColorReg:(NSInteger)reg;
 
