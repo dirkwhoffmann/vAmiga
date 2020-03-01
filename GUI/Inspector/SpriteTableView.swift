@@ -72,11 +72,6 @@ extension SpriteTableView: NSTableViewDataSource {
             let datb = (spriteDat[row] >> 16) & 0xFFFF
             let bitb = (datb & (0x8000 >> nr)) != 0
 
-            /*
-            let addr = Int(info.ptr) + 4 * row
-            let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
-            let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
-            */
             return (bita ? 1 : 0) + (bitb ? 2 : 0)
         }
         return nil

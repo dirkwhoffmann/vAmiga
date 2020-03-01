@@ -562,9 +562,6 @@ public:
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);
 
-    // Records sprite data in debug mode
-    void recordSpritePairData(int x);
-
     /* Draws the left and the right border
      * This method is called at the end of each rasterline.
      */
@@ -617,14 +614,12 @@ public:
     //
     // Debugging the component
     //
-    
-    // Called by the GUI to manually change the number of active bitplanes
-    void debugSetBPU(int count);
-    
-    // Called by the GUI to manually change the contents of BPLCONx
-    void debugSetBPLCONx(unsigned x, u16 value);
-    void debugSetBPLCONxBit(unsigned x, unsigned bit, bool value);
-    void debugSetBPLCONxNibble(unsigned x, unsigned nibble, u8 value);
+
+    // Selects the sprite that is displayed in the debug panel
+    void selectObservedSprite(unsigned x);
+
+    // Gathers the sprite data for the displayed sprite
+    void recordSpriteData(unsigned x);
 
     // Dumps the bBuffer or the iBuffer to the console
     void dumpIBuffer() { dumpBuffer(iBuffer, sizeof(iBuffer)); }

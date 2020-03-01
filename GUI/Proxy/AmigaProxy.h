@@ -359,6 +359,7 @@ struct AmigaFileWrapper;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
 - (void) inspect;
 
+- (void) selectObservedSprite:(NSInteger)nr;
 - (NSInteger) sprDataLines;
 - (u64) sprData:(NSInteger)line;
 - (u16) sprColorReg:(NSInteger)reg;
@@ -374,11 +375,6 @@ struct AmigaFileWrapper;
 - (void) setSaturation:(double)value;
 - (double) contrast;
 - (void) setContrast:(double)value;
-
-- (void) setBPU:(NSInteger)count;
-- (void) setBPLCONx:(NSInteger)x value:(NSInteger)value;
-- (void) setBPLCONx:(NSInteger)x bit:(NSInteger)bit value:(BOOL)value;
-- (void) setBPLCONx:(NSInteger)x nibble:(NSInteger)nibble value:(NSInteger)value;
 
 - (ScreenBuffer) stableLongFrame;
 - (ScreenBuffer) stableShortFrame;

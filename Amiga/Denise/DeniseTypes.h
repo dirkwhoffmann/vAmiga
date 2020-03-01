@@ -95,9 +95,17 @@ SpriteInfo;
 
 typedef struct
 {
-    u16 colors[16];
-    u64 data[VPOS_CNT];
+    // Number of the observed sprite
+    u8  nr;
+
+    // Number of recorded sprite lines
     u16 lines;
+
+    // Upper 16 color register (recorded in line 0)
+    u16 colors[16];
+
+    // Recorded data words
+    u64 data[VPOS_CNT];
 }
 SpriteDatInfo;
 

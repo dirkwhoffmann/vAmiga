@@ -705,12 +705,17 @@ Denise::drawSprites()
         if (wasArmed & 0b00000011) drawSpritePair<1>();
 
         if (amiga.getDebugMode()) {
-            /*
-            if (wasArmed & 0b11000000) recordSpritePairData(7);
-            if (wasArmed & 0b00110000) recordSpritePairData(5);
-            if (wasArmed & 0b00001100) recordSpritePairData(3);
-            */
-            if (wasArmed & 0b00000011) recordSpritePairData(1);
+            switch (spriteDatNew.nr) {
+                case 7: if (wasArmed & 0b10000000) recordSpriteData(7); break;
+                case 6: if (wasArmed & 0b01000000) recordSpriteData(6); break;
+                case 5: if (wasArmed & 0b00100000) recordSpriteData(5); break;
+                case 4: if (wasArmed & 0b00010000) recordSpriteData(4); break;
+                case 3: if (wasArmed & 0b00001000) recordSpriteData(3); break;
+                case 2: if (wasArmed & 0b00000100) recordSpriteData(2); break;
+                case 1: if (wasArmed & 0b00000010) recordSpriteData(1); break;
+                case 0: if (wasArmed & 0b00000001) recordSpriteData(0); break;
+                default: break;
+            }
         }
     }
 
@@ -828,12 +833,12 @@ Denise::drawSpritePair(int hstrt, int hstop,
     for (int hpos = hstrt; hpos < hstop; hpos += 2) {
 
         if (hpos == strt1 && armed1) {
-            ssra[x-1] = data1; // sprdata[x-1];
-            ssrb[x-1] = datb1; // sprdatb[x-1];
+            ssra[x-1] = data1;
+            ssrb[x-1] = datb1;
         }
         if (hpos == strt2 && armed2) {
-            ssra[x] = data2; // sprdata[x];
-            ssrb[x] = datb2; // sprdatb[x];
+            ssra[x] = data2;
+            ssrb[x] = datb2;
         }
 
         if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
@@ -910,30 +915,6 @@ Denise::drawAttachedSpritePixelPair(int hpos)
             zBuffer[hpos-1] |= z;
         }
     }
-}
-
-void
-Denise::recordSpritePairData(int x)
-{
-    assert(x >= 0 && x <= 7);
-    assert(IS_ODD(x));
-
-    u16 line = spriteDatNew.lines;
-
-    // Record colors (when recording line 0)
-    if (line == 0) {
-        for (int i = 0; i < 16; i++) {
-            spriteDatNew.colors[i] = pixelEngine.getColor(i + 16);
-        }
-    }
-
-    // Record sprite data
-    spriteDatNew.data[line] = initialSprdata[x-1];
-    spriteDatNew.data[line] = (initialSprdatb[x-1] << 16) | spriteDatNew.data[line];
-    // spriteDat.data[line] = (initialSprdata[x] << 32) | spriteDatNew.data[line];
-    // spriteDat.data[line] = (initialSprdatb[x] << 48) | spriteDatNew.data[line];
-
-    spriteDatNew.lines++;
 }
 
 void
@@ -1141,7 +1122,7 @@ Denise::beginOfLine(int vpos)
     conChanges.clear();
     pixelEngine.colRegChanges.clear();
 
-    // Save the current values of various Denise register
+    // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
@@ -1215,90 +1196,37 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
 }
 
 void
-Denise::debugSetBPU(int count)
+Denise::selectObservedSprite(unsigned x)
 {
-    if (count < 0) count = 0;
-    if (count > 6) count = 6;
+    assert(x < 8);
 
-    amiga.suspend();
-    
-    u16 value = bplcon0 & 0b1000111111111111;
-    pokeBPLCON0(value | (count << 12));
-    
-    amiga.resume();
+    // amiga.suspend();
+
+    spriteDatNew.nr = x;
+    spriteDatNew.lines = 0;
+
+    // amiga.resume();
 }
 
 void
-Denise::debugSetBPLCONx(unsigned x, u16 value)
+Denise::recordSpriteData(unsigned x)
 {
-    assert(x <= 2);
+    assert(x < 8);
 
-    amiga.suspend();
+    u16 line = spriteDatNew.lines;
 
-    switch (x) {
-        case 0:
-            pokeBPLCON0(value);
-            break;
-        case 1:
-            pokeBPLCON1(value);
-            break;
-        case 2:
-            pokeBPLCON2(value);
-            break;
+    // Record data registers
+    // spriteDatNew.data[line] = HI_W_LO_W(initialSprdatb[x], initialSprdata[x]);
+    spriteDatNew.data[line] = HI_W_LO_W(sprdatb[x], sprdata[x]);
+
+    // Record colors (when recording line 0)
+    if (line == 0) {
+        for (int i = 0; i < 16; i++) {
+            spriteDatNew.colors[i] = pixelEngine.getColor(i + 16);
+        }
     }
 
-    amiga.resume();
-}
-
-void
-Denise::debugSetBPLCONxBit(unsigned x, unsigned bit, bool value)
-{
-    assert(x <= 2);
-    assert(bit <= 15);
-
-    u16 mask = 1 << bit;
-
-    amiga.suspend();
-
-    switch (x) {
-        case 0:
-            pokeBPLCON0(value ? (bplcon0 | mask) : (bplcon0 & ~mask));
-            break;
-        case 1:
-            pokeBPLCON1(value ? (bplcon1 | mask) : (bplcon1 & ~mask));
-            break;
-        case 2:
-            pokeBPLCON2(value ? (bplcon2 | mask) : (bplcon2 & ~mask));
-            break;
-    }
-    
-    amiga.resume();
-}
-
-void
-Denise::debugSetBPLCONxNibble(unsigned x, unsigned nibble, u8 value)
-{
-    assert(x <= 2);
-    assert(nibble <= 4);
-
-    u16 mask = 0b1111 << (4 * nibble);
-    u16 bits = (value & 0b1111) << (4 * nibble);
-
-    amiga.suspend();
-
-    switch (x) {
-        case 0:
-            pokeBPLCON0((bplcon0 & ~mask) | bits);
-            break;
-        case 1:
-            pokeBPLCON1((bplcon1 & ~mask) | bits);
-            break;
-        case 2:
-            pokeBPLCON2((bplcon2 & ~mask) | bits);
-            break;
-    }
-
-    amiga.resume();
+    spriteDatNew.lines++;
 }
 
 void

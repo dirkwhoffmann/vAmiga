@@ -528,6 +528,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getSprInfo(nr);
 }
+- (void) selectObservedSprite:(NSInteger)nr
+{
+    return wrapper->denise->selectObservedSprite(nr);
+}
 - (NSInteger) sprDataLines
 {
     return wrapper->denise->spriteDat.lines;
@@ -571,22 +575,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setContrast:(double)value
 {
     wrapper->denise->pixelEngine.setContrast(value);
-}
-- (void) setBPU:(NSInteger)count
-{
-    wrapper->denise->debugSetBPU(count);
-}
-- (void) setBPLCONx:(NSInteger)x value:(NSInteger)value
-{
-    wrapper->denise->debugSetBPLCONx(x, (u16)value);
-}
-- (void) setBPLCONx:(NSInteger)x bit:(NSInteger)bit value:(BOOL)value
-{
-    wrapper->denise->debugSetBPLCONxBit(x, bit, value);
-}
-- (void) setBPLCONx:(NSInteger)x nibble:(NSInteger)nibble value:(NSInteger)value
-{
-    wrapper->denise->debugSetBPLCONxNibble(x, nibble, (u8)value);
 }
 - (ScreenBuffer) stableLongFrame
 {
