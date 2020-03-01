@@ -359,6 +359,10 @@ struct AmigaFileWrapper;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
 - (void) inspect;
 
+- (NSInteger) sprDataLines;
+- (u64) sprData:(NSInteger)line;
+- (u16) sprColorReg:(NSInteger)reg;
+
 /*
 - (void) pokeColorReg:(NSInteger)reg value:(UInt16)value;
 */

@@ -703,6 +703,15 @@ Denise::drawSprites()
         if (wasArmed & 0b00110000) drawSpritePair<5>();
         if (wasArmed & 0b00001100) drawSpritePair<3>();
         if (wasArmed & 0b00000011) drawSpritePair<1>();
+
+        if (amiga.getDebugMode()) {
+            /*
+            if (wasArmed & 0b11000000) recordSpritePairData(7);
+            if (wasArmed & 0b00110000) recordSpritePairData(5);
+            if (wasArmed & 0b00001100) recordSpritePairData(3);
+            */
+            if (wasArmed & 0b00000011) recordSpritePairData(1);
+        }
     }
 
     sprRegChanges.clear();
@@ -904,6 +913,30 @@ Denise::drawAttachedSpritePixelPair(int hpos)
 }
 
 void
+Denise::recordSpritePairData(int x)
+{
+    assert(x >= 0 && x <= 7);
+    assert(IS_ODD(x));
+
+    u16 line = spriteDatNew.lines;
+
+    // Record colors (when recording line 0)
+    if (line == 0) {
+        for (int i = 0; i < 16; i++) {
+            spriteDatNew.colors[i] = pixelEngine.getColor(i + 16);
+        }
+    }
+
+    // Record sprite data
+    spriteDatNew.data[line] = initialSprdata[x-1];
+    spriteDatNew.data[line] = (initialSprdatb[x-1] << 16) | spriteDatNew.data[line];
+    // spriteDat.data[line] = (initialSprdata[x] << 32) | spriteDatNew.data[line];
+    // spriteDat.data[line] = (initialSprdatb[x] << 48) | spriteDatNew.data[line];
+
+    spriteDatNew.lines++;
+}
+
+void
 Denise::drawBorder()
 {
     int borderL = 0;
@@ -1093,6 +1126,11 @@ void
 Denise::beginOfFrame(bool interlace)
 {
     pixelEngine.beginOfFrame(interlace);
+
+    if (amiga.getDebugMode()) {
+        spriteDat = spriteDatNew;
+        spriteDatNew.lines = 0;
+    }
 }
 
 void

@@ -10,6 +10,9 @@
 class SpriteTableView: NSTableView {
 
     var spriteInfo = [SpriteInfo?](repeating: nil, count: 8)
+    var spriteDat = [UInt64](repeating: 0, count: Int(VPOS_CNT))
+    var spriteCol = [NSColor](repeating: NSColor.white, count: 16)
+    var spriteLines = 0
 
     @IBOutlet weak var inspector: Inspector!
     
@@ -23,8 +26,16 @@ class SpriteTableView: NSTableView {
     }
 
     private func cache() {
+
         for i in 0 ..< 8 {
-            spriteInfo[i] = amiga?.denise.getSpriteInfo(i)
+            spriteInfo[i] = amiga!.denise.getSpriteInfo(i)
+        }
+        for i in 0 ..< 16 {
+            spriteCol[i] = NSColor.init(amigaRGB: amiga!.denise.sprColorReg(i))
+        }
+        spriteLines = amiga!.denise.sprDataLines()
+        for i in 0 ..< spriteLines {
+            spriteDat[i] = amiga!.denise.sprData(i)
         }
     }
 
@@ -55,27 +66,25 @@ extension SpriteTableView: NSTableViewDataSource {
        
         if let id = tableColumn?.identifier.rawValue, let nr = Int(id) {
 
-            guard let info = spriteInfo[inspector.selectedSprite] else { return nil }
+            let data = spriteDat[row] & 0xFFFF
+            let bita = (data & (0x8000 >> nr)) != 0
 
+            let datb = (spriteDat[row] >> 16) & 0xFFFF
+            let bitb = (datb & (0x8000 >> nr)) != 0
+
+            /*
             let addr = Int(info.ptr) + 4 * row
             let data = (amiga!.mem.spypeek16(addr) & (0x8000 >> nr)) != 0
             let datb = (amiga!.mem.spypeek16(addr + 2) & (0x8000 >> nr)) != 0
-            
-            return (data ? 1 : 0) + (datb ? 2 : 0)
+            */
+            return (bita ? 1 : 0) + (bitb ? 2 : 0)
         }
         return nil
     }
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        if let info = spriteInfo[inspector.selectedSprite] {
-
-            let sprLines = info.vstop - info.vstrt
-            if sprLines >= 0 && sprLines < 128 {
-                return Int(sprLines)
-            }
-        }
-        return 0
+        return spriteLines
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
@@ -89,9 +98,7 @@ extension SpriteTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
         let cell = cell as? NSTextFieldCell
-        let info = amiga!.denise.getInfo()
-        
-         if let index = colorIndex(tableColumn: tableColumn, row: row) {
+        if let index = colorIndex(tableColumn: tableColumn, row: row) {
 
             var color = NSColor.white
             
@@ -99,33 +106,33 @@ extension SpriteTableView: NSTableViewDelegate {
                 
             case 0, 1:
                 switch index {
-                case 1: color = NSColor.init(rgba: info.color.17)
-                case 2: color = NSColor.init(rgba: info.color.18)
-                case 3: color = NSColor.init(rgba: info.color.19)
+                case 1: color = spriteCol[1]
+                case 2: color = spriteCol[2]
+                case 3: color = spriteCol[3]
                 default: break
                 }
                 
             case 2, 3:
                 switch index {
-                case 1: color = NSColor.init(rgba: info.color.21)
-                case 2: color = NSColor.init(rgba: info.color.22)
-                case 3: color = NSColor.init(rgba: info.color.23)
+                case 1: color = spriteCol[5]
+                case 2: color = spriteCol[6]
+                case 3: color = spriteCol[7]
                 default: break
                 }
                 
             case 4, 5:
                 switch index {
-                case 1: color = NSColor.init(rgba: info.color.25)
-                case 2: color = NSColor.init(rgba: info.color.26)
-                case 3: color = NSColor.init(rgba: info.color.27)
+                case 1: color = spriteCol[9]
+                case 2: color = spriteCol[10]
+                case 3: color = spriteCol[11]
                 default: break
                 }
                 
             default:
                 switch index {
-                case 1: color = NSColor.init(rgba: info.color.29)
-                case 2: color = NSColor.init(rgba: info.color.30)
-                case 3: color = NSColor.init(rgba: info.color.31)
+                case 1: color = spriteCol[13]
+                case 2: color = spriteCol[14]
+                case 3: color = spriteCol[15]
                 default: break
                 }
             }

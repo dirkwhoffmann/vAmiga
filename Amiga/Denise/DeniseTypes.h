@@ -12,6 +12,8 @@
 #ifndef _DENISE_T_INC
 #define _DENISE_T_INC
 
+#include "AmigaConstants.h"
+
 //
 // Enumerations
 //
@@ -90,6 +92,14 @@ typedef struct
     bool attach;
 }
 SpriteInfo;
+
+typedef struct
+{
+    u16 colors[16];
+    u64 data[VPOS_CNT];
+    u16 lines;
+}
+SpriteDatInfo;
 
 typedef struct
 {

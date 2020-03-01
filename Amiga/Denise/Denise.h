@@ -24,6 +24,12 @@ class Denise : public AmigaComponent {
     // Information shown in the GUI inspector panel
     DeniseInfo info;
 
+public:
+    SpriteDatInfo spriteDat;
+
+private:
+    SpriteDatInfo spriteDatNew;
+
     // Statistics shown in the GUI monitor panel
     DeniseStats stats;
 
@@ -556,7 +562,10 @@ public:
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);
 
-    /* Draws the left and the right border.
+    // Records sprite data in debug mode
+    void recordSpritePairData(int x);
+
+    /* Draws the left and the right border
      * This method is called at the end of each rasterline.
      */
     void drawBorder(); 
