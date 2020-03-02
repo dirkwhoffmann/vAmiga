@@ -437,32 +437,6 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
-		505A12CF23BF671C000BAC76 /* Moira */ = {
-			isa = PBXGroup;
-			children = (
-				505A12DF23BF671C000BAC76 /* MoiraConfig.h */,
-				505A12D723BF671C000BAC76 /* MoiraTypes.h */,
-				505A12D823BF671C000BAC76 /* Moira.h */,
-				505A12D223BF671C000BAC76 /* Moira.cpp */,
-				505A12D623BF671C000BAC76 /* MoiraInit.h */,
-				505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */,
-				505A12D023BF671C000BAC76 /* MoiraDataflow.h */,
-				505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */,
-				505A12D523BF671C000BAC76 /* MoiraExec.h */,
-				505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */,
-				505A12D123BF671C000BAC76 /* MoiraALU.h */,
-				505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */,
-				505A12DD23BF671C000BAC76 /* MoiraDasm.h */,
-				505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */,
-				505A12DE23BF671C000BAC76 /* StrWriter.h */,
-				505A12D323BF671C000BAC76 /* StrWriter_cpp.h */,
-				50AB981F23C5AE0000B17B21 /* MoiraDebugger.h */,
-				50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */,
-			);
-			name = Moira;
-			path = Amiga/Moira;
-			sourceTree = SOURCE_ROOT;
-		};
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
@@ -495,7 +469,7 @@
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
-				505A12CF23BF671C000BAC76 /* Moira */,
+				50C1E3BF240D397D005CAC37 /* Moira */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
@@ -847,6 +821,32 @@
 			);
 			path = Proxy;
 			sourceTree = "<group>";
+		};
+		50C1E3BF240D397D005CAC37 /* Moira */ = {
+			isa = PBXGroup;
+			children = (
+				505A12DF23BF671C000BAC76 /* MoiraConfig.h */,
+				505A12D723BF671C000BAC76 /* MoiraTypes.h */,
+				505A12D823BF671C000BAC76 /* Moira.h */,
+				505A12D223BF671C000BAC76 /* Moira.cpp */,
+				505A12D623BF671C000BAC76 /* MoiraInit.h */,
+				505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */,
+				505A12D023BF671C000BAC76 /* MoiraDataflow.h */,
+				505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */,
+				505A12D523BF671C000BAC76 /* MoiraExec.h */,
+				505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */,
+				505A12D123BF671C000BAC76 /* MoiraALU.h */,
+				505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */,
+				505A12DD23BF671C000BAC76 /* MoiraDasm.h */,
+				505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */,
+				505A12DE23BF671C000BAC76 /* StrWriter.h */,
+				505A12D323BF671C000BAC76 /* StrWriter_cpp.h */,
+				50AB981F23C5AE0000B17B21 /* MoiraDebugger.h */,
+				50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */,
+			);
+			name = Moira;
+			path = Amiga/CPU/Moira;
+			sourceTree = SOURCE_ROOT;
 		};
 		50EE993D21FF4D42003BD74B /* Paula */ = {
 			isa = PBXGroup;
