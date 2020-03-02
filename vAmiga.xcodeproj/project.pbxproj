@@ -29,7 +29,6 @@
 		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		505945F82363008800ACE819 /* ActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505945F72363008800ACE819 /* ActivityView.swift */; };
-		505A12E023BF671D000BAC76 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A12D223BF671C000BAC76 /* Moira.cpp */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
@@ -111,7 +110,6 @@
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
-		50AB982023C5AE0000B17B21 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
@@ -142,6 +140,8 @@
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
 		50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */; };
 		50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E204E82295A3F20082B63D /* DmaDebugger.cpp */; };
+		50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */; };
+		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
@@ -198,22 +198,6 @@
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
 		505945F72363008800ACE819 /* ActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityView.swift; sourceTree = "<group>"; };
-		505A12D023BF671C000BAC76 /* MoiraDataflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow.h; sourceTree = "<group>"; };
-		505A12D123BF671C000BAC76 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
-		505A12D223BF671C000BAC76 /* Moira.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Moira.cpp; sourceTree = "<group>"; };
-		505A12D323BF671C000BAC76 /* StrWriter_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter_cpp.h; sourceTree = "<group>"; };
-		505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow_cpp.h; sourceTree = "<group>"; };
-		505A12D523BF671C000BAC76 /* MoiraExec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec.h; sourceTree = "<group>"; };
-		505A12D623BF671C000BAC76 /* MoiraInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit.h; sourceTree = "<group>"; };
-		505A12D723BF671C000BAC76 /* MoiraTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraTypes.h; sourceTree = "<group>"; };
-		505A12D823BF671C000BAC76 /* Moira.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Moira.h; sourceTree = "<group>"; };
-		505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit_cpp.h; sourceTree = "<group>"; };
-		505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm_cpp.h; sourceTree = "<group>"; };
-		505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec_cpp.h; sourceTree = "<group>"; };
-		505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU_cpp.h; sourceTree = "<group>"; };
-		505A12DD23BF671C000BAC76 /* MoiraDasm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm.h; sourceTree = "<group>"; };
-		505A12DE23BF671C000BAC76 /* StrWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter.h; sourceTree = "<group>"; };
-		505A12DF23BF671C000BAC76 /* MoiraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraConfig.h; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
 		505A3A3821F4996400132020 /* SSEUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SSEUtils.cpp; sourceTree = "<group>"; };
@@ -320,8 +304,6 @@
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
-		50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraDebugger.cpp; sourceTree = "<group>"; };
-		50AB981F23C5AE0000B17B21 /* MoiraDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraDebugger.h; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
@@ -367,6 +349,24 @@
 		50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FastBlitter.cpp; sourceTree = "<group>"; };
 		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
 		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
+		50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm_cpp.h; sourceTree = "<group>"; };
+		50E2BE27240D418500155AE4 /* MoiraExec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec.h; sourceTree = "<group>"; };
+		50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit_cpp.h; sourceTree = "<group>"; };
+		50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraDebugger.cpp; sourceTree = "<group>"; };
+		50E2BE2A240D418500155AE4 /* MoiraDataflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow.h; sourceTree = "<group>"; };
+		50E2BE2B240D418500155AE4 /* MoiraDebugger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDebugger.h; sourceTree = "<group>"; };
+		50E2BE2C240D418500155AE4 /* MoiraDataflow_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow_cpp.h; sourceTree = "<group>"; };
+		50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter_cpp.h; sourceTree = "<group>"; };
+		50E2BE2E240D418500155AE4 /* MoiraInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit.h; sourceTree = "<group>"; };
+		50E2BE2F240D418500155AE4 /* MoiraTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraTypes.h; sourceTree = "<group>"; };
+		50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec_cpp.h; sourceTree = "<group>"; };
+		50E2BE31240D418500155AE4 /* MoiraDasm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm.h; sourceTree = "<group>"; };
+		50E2BE32240D418600155AE4 /* StrWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StrWriter.h; sourceTree = "<group>"; };
+		50E2BE34240D41DD00155AE4 /* Moira.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Moira.h; sourceTree = "<group>"; };
+		50E2BE35240D41EE00155AE4 /* MoiraConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraConfig.h; sourceTree = "<group>"; };
+		50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU_cpp.h; sourceTree = "<group>"; };
+		50E2BE37240D41EE00155AE4 /* Moira.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Moira.cpp; sourceTree = "<group>"; };
+		50E2BE38240D41EE00155AE4 /* MoiraALU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraALU.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtFile.cpp; sourceTree = "<group>"; };
@@ -469,7 +469,7 @@
 		508E7F962206CDC600F7D88C /* CPU */ = {
 			isa = PBXGroup;
 			children = (
-				50C1E3BF240D397D005CAC37 /* Moira */,
+				50E2BE25240D417200155AE4 /* Moira */,
 				5051922822B61C8A0012C4BB /* CPUTypes.h */,
 				508E7F942206CDBD00F7D88C /* CPU.h */,
 				508E7F932206CDBD00F7D88C /* CPU.cpp */,
@@ -480,7 +480,7 @@
 		508FDE5B21EA1FA40043D0E9 = {
 			isa = PBXGroup;
 			children = (
-				508FE06021EA318D0043D0E9 /* Amiga */,
+				508FE06021EA318D0043D0E9 /* Emulator */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
@@ -628,7 +628,7 @@
 			path = Preferences;
 			sourceTree = "<group>";
 		};
-		508FE06021EA318D0043D0E9 /* Amiga */ = {
+		508FE06021EA318D0043D0E9 /* Emulator */ = {
 			isa = PBXGroup;
 			children = (
 				50B14C0921EB228E002E32A6 /* AmigaConfig.h */,
@@ -648,7 +648,7 @@
 				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* Files */,
 			);
-			path = Amiga;
+			path = Emulator;
 			sourceTree = "<group>";
 		};
 		508FE06621EA31E50043D0E9 /* Files */ = {
@@ -822,31 +822,30 @@
 			path = Proxy;
 			sourceTree = "<group>";
 		};
-		50C1E3BF240D397D005CAC37 /* Moira */ = {
+		50E2BE25240D417200155AE4 /* Moira */ = {
 			isa = PBXGroup;
 			children = (
-				505A12DF23BF671C000BAC76 /* MoiraConfig.h */,
-				505A12D723BF671C000BAC76 /* MoiraTypes.h */,
-				505A12D823BF671C000BAC76 /* Moira.h */,
-				505A12D223BF671C000BAC76 /* Moira.cpp */,
-				505A12D623BF671C000BAC76 /* MoiraInit.h */,
-				505A12D923BF671C000BAC76 /* MoiraInit_cpp.h */,
-				505A12D023BF671C000BAC76 /* MoiraDataflow.h */,
-				505A12D423BF671C000BAC76 /* MoiraDataflow_cpp.h */,
-				505A12D523BF671C000BAC76 /* MoiraExec.h */,
-				505A12DB23BF671C000BAC76 /* MoiraExec_cpp.h */,
-				505A12D123BF671C000BAC76 /* MoiraALU.h */,
-				505A12DC23BF671C000BAC76 /* MoiraALU_cpp.h */,
-				505A12DD23BF671C000BAC76 /* MoiraDasm.h */,
-				505A12DA23BF671C000BAC76 /* MoiraDasm_cpp.h */,
-				505A12DE23BF671C000BAC76 /* StrWriter.h */,
-				505A12D323BF671C000BAC76 /* StrWriter_cpp.h */,
-				50AB981F23C5AE0000B17B21 /* MoiraDebugger.h */,
-				50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */,
+				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
+				50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */,
+				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
+				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
+				50E2BE34240D41DD00155AE4 /* Moira.h */,
+				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
+				50E2BE31240D418500155AE4 /* MoiraDasm.h */,
+				50E2BE2C240D418500155AE4 /* MoiraDataflow_cpp.h */,
+				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
+				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
+				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
+				50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */,
+				50E2BE27240D418500155AE4 /* MoiraExec.h */,
+				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
+				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
+				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
+				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
+				50E2BE32240D418600155AE4 /* StrWriter.h */,
 			);
-			name = Moira;
-			path = Amiga/CPU/Moira;
-			sourceTree = SOURCE_ROOT;
+			path = Moira;
+			sourceTree = "<group>";
 		};
 		50EE993D21FF4D42003BD74B /* Paula */ = {
 			isa = PBXGroup;
@@ -994,7 +993,6 @@
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				50D9CD99236AF75800503B4D /* DMADebugController.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
-				505A12E023BF671D000BAC76 /* Moira.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
@@ -1045,11 +1043,13 @@
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
+				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,
+				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
@@ -1057,7 +1057,6 @@
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
-				50AB982023C5AE0000B17B21 /* MoiraDebugger.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
