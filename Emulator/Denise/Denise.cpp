@@ -397,12 +397,14 @@ Denise::pokeCOLORxx(u16 value)
 {
     debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
-    int reg = 0x180 + 2*xx;
+    u32 reg = 0x180 + 2*xx;
 
     if (s == POKE_COPPER || agnus.pos.h == 0) {
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, reg, value);
+        pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
     } else {
         pixelEngine.colRegChanges.add(4 * (agnus.pos.h - 1), reg, value);
+        pixelEngine.colChanges.insert(4 * (agnus.pos.h - 1), RegChange { reg, value } );
     }
 }
 
@@ -573,6 +575,7 @@ Denise::translate()
         RegChange &chng = conChanges.elements[i];
         assert(change.addr == chng.addr);
         assert(change.value == chng.value);
+        assert(change.trigger == conChanges.keys[i]);
 
         // Translate a chunk of bitplane data
         if (dual) {
@@ -770,6 +773,7 @@ Denise::drawSpritePair()
             RegChange &chng = sprChanges.elements[i];
             assert(change.addr == chng.addr);
             assert(change.value == chng.value);
+            assert(change.trigger == sprChanges.keys[i]);
 
             // Draw a chunk of pixels
             drawSpritePair<x>(strt, change.trigger,
@@ -1126,7 +1130,8 @@ Denise::beginOfLine(int vpos)
     conRegChanges.clear();
     conChanges.clear();
     pixelEngine.colRegChanges.clear();
-
+    pixelEngine.colChanges.clear();
+    
     // Save the current values of various Denise registers
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;

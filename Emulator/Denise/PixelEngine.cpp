@@ -333,6 +333,8 @@ PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
     for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
+        assert(colRegChanges.change[i].addr == colChanges.elements[i].addr);
+        assert(colRegChanges.change[i].value == colChanges.elements[i].value);
         applyRegisterChange(colRegChanges.change[i]);
     }
 }
@@ -349,8 +351,6 @@ PixelEngine::applyRegisterChange(const Change &change)
 
             // It must be a color register then
             assert(change.addr >= 0x180 && change.addr <= 0x1BE);
-
-            // debug("Changing color reg %d to %X\n", (change.addr - 0x180) >> 1, change.value);
             setColor((change.addr - 0x180) >> 1, change.value);
             break;
     }
@@ -371,11 +371,16 @@ PixelEngine::colorize(int line)
 
     // Add a dummy register change to ensure we draw until the line end
     colRegChanges.add(HPIXELS, REG_NONE, 0);
+    colChanges.insert(HPIXELS, RegChange { REG_NONE, 0 } );
 
     // Iterate over all recorded register changes
     for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
 
         Change &change = colRegChanges.change[i];
+        RegChange &chng = colChanges.elements[i];
+        assert(change.trigger == colChanges.keys[i]);
+        assert(change.addr == chng.addr);
+        assert(change.value == chng.value);
 
         // Colorize a chunk of pixels
         if (ham) {
@@ -395,7 +400,8 @@ PixelEngine::colorize(int line)
     }
 
     // Clear the history cache
-    colRegChanges.clear(); 
+    colRegChanges.clear();
+    colChanges.clear();
 }
 
 void

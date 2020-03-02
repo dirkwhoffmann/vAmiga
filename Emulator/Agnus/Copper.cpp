@@ -353,7 +353,7 @@ Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 }
 
 void
-Copper::move(int addr, u16 value)
+Copper::move(u32 addr, u16 value)
 {
     debug(COP_DEBUG, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
 
@@ -368,6 +368,7 @@ Copper::move(int addr, u16 value)
 
         // Color registers
         pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
+        pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
     }
 

@@ -182,7 +182,7 @@ private:
     bool findHorizontalMatchNew(u32 &beam, u32 comp, u32 mask);
 
     // Emulates the Copper writing a value into one of the custom registers
-    void move(int addr, u16 value);
+    void move(u32 addr, u16 value);
 
     // Runs the comparator circuit
     bool comparator(Beam beam, u16 waitpos, u16 mask);
