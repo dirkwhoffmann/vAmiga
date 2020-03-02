@@ -460,7 +460,7 @@
 				50AB981E23C5AE0000B17B21 /* MoiraDebugger.cpp */,
 			);
 			name = Moira;
-			path = Amiga/Computer/Moira;
+			path = Amiga/Moira;
 			sourceTree = SOURCE_ROOT;
 		};
 		505B801C23FE626E002407FE /* Memory */ = {
