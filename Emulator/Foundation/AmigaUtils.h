@@ -196,4 +196,7 @@ u32 crc32forByte(u32 r); // Helper
 // Returns true if this executable is a release build
 bool releaseBuild();
 
+// Returns a printable name for a custom register
+const char *regName(u32 addr); 
+
 #endif

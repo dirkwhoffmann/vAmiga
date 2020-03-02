@@ -18,7 +18,7 @@ struct Event
     // The event identifier
     EventID id;
 
-    // An optional data value (only used occasionally)
+    // An optional data value
     i64 data;
 
     template <class T>

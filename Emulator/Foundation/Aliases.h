@@ -34,7 +34,7 @@ typedef i64 CPUCycle;         // CPU cycle units
 typedef i64 CIACycle;         // CIA cycle units
 typedef i64 DMACycle;         // DMA cycle units
 
-// Convert to master cycles
+// Converts from a certain cycle unit to master cycles
 #define CPU_CYCLES(cycles)    ((cycles) << 2)
 #define CIA_CYCLES(cycles)    ((cycles) * 40)
 #define DMA_CYCLES(cycles)    ((cycles) << 3)
@@ -43,7 +43,7 @@ typedef i64 DMACycle;         // DMA cycle units
 #define MSEC(delay)           (delay * 28000)
 #define SEC(delay)            (delay * 28000000)
 
-// Convert from master cycles
+// Converts from master cycles to a certain cycle unit
 #define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)

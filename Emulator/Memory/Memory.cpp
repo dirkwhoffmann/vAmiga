@@ -1394,8 +1394,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    debug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n",
-          addr, customReg[(addr >> 1) & 0xFF], result);
+    debug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, regName(addr), result);
 
     dataBus = result;
     return result;
@@ -1471,8 +1470,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
     if ((addr & 0xFFF) == 0x30) {
         debug(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n",
-              addr, customReg[(addr >> 1) & 0xFF], value);
+        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
     }
 
     assert(IS_EVEN(addr));
@@ -1922,11 +1920,11 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
     
     if (addr <= 0x1E) {
-        debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): READ-ONLY-REGISTER\n",
-              addr, customReg[(addr >> 1) & 0xFF]);
+        debug(INVREG_DEBUG,
+              "pokeCustom16(%X [%s]): READ-ONLY\n", addr, regName(addr));
     } else {
-        debug(INVREG_DEBUG, "pokeCustom16(%X [%s]): NO OCS REGISTER\n",
-              addr, customReg[(addr >> 1) & 0xFF]);
+        debug(INVREG_DEBUG,
+              "pokeCustom16(%X [%s]): NON-OCS\n", addr, regName(addr));
     }
 }
 

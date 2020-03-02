@@ -355,7 +355,8 @@ Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 void
 Copper::move(u32 addr, u16 value)
 {
-    debug(COP_DEBUG, "COPPC: %X move(%s, $%X) (%d)\n", coppc, customReg[addr >> 1], value, value);
+    debug(COP_DEBUG,
+          "COPPC: %X move(%s, $%X) (%d)\n", coppc, regName(addr), value, value);
 
     assert(IS_EVEN(addr));
     assert(addr < 0x1FF);
@@ -941,9 +942,7 @@ Copper::disassemble(u32 addr)
     
     if (isMoveCmd(addr)) {
         
-        u16 reg = getRA(addr) >> 1;
-        assert(reg <= 0xFF);
-        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), customReg[reg]);
+        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), regName(addr));
         return disassembly;
     }
     
