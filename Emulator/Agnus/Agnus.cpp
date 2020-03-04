@@ -1361,8 +1361,8 @@ Agnus::computeDDFStrt()
     i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
 
     // Align ddfstrt to the start of the next fetch unit
-    dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
-    dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
+    int dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
+    int dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
     dmaStrtHires = MAX(strt + dmaStrtHiresShift, 0x18);
     dmaStrtLores = MAX(strt + dmaStrtLoresShift, 0x18);
 
@@ -1375,7 +1375,6 @@ Agnus::computeDDFStrt()
 void
 Agnus::computeDDFStop()
 {
-    // i16 strt = dmaStrtLores - dmaStrtLoresShift;
     i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
     i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
 

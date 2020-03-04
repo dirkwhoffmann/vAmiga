@@ -346,14 +346,11 @@ public:
     bool ddfHFlop;
 
     // The actual data fetch window
+    // DEPRECATED. WILL BE REPLACED BY ddfWindow
     i16 dmaStrtLores;      // First lores bitplane DMA cycle
     i16 dmaStrtHires;      // First hires bitplane DMA cycle
     i16 dmaStopLores;      // Last lores bitplane DMA cycle + 1
     i16 dmaStopHires;      // Last hires bitplane DMA cycle + 1
-
-    // Difference between dmaStrt and the start of the corresponding fetch unit
-    i16 dmaStrtLoresShift;
-    i16 dmaStrtHiresShift;
 
     bool inLoresDmaArea(i16 pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
@@ -510,8 +507,6 @@ public:
         & dmaStrtHires
         & dmaStopLores
         & dmaStopHires
-        & dmaStrtLoresShift
-        & dmaStrtHiresShift
 
         & changeRecorder
         & chngRecorder
