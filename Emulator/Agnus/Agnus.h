@@ -20,9 +20,10 @@
 #include "Memory.h"
 
 // Hsync action bits
-#define HSYNC_COMPUTE_DDF_WINDOW 0b001
-#define HSYNC_UPDATE_BPL_TABLE   0b010
-#define HSYNC_UPDATE_DAS_TABLE   0b100
+#define HSYNC_PREDICT_DDF        0b0001
+#define HSYNC_COMPUTE_DDF_WINDOW 0b0010
+#define HSYNC_UPDATE_BPL_TABLE   0b0100
+#define HSYNC_UPDATE_DAS_TABLE   0b1000
 
 // Increments a Chip Ram pointer (TODO: Eliminate these macros)
 #define INC_CHIP_PTR(x) x += 2
@@ -338,23 +339,36 @@ public:
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
+    i16 ddfstrtReachedDeprecated;
+    i16 ddfstopReachedDeprecated;
     i16 ddfstrtReached;
     i16 ddfstopReached;
+
 
     // DDF flipflops
     bool ddfVFlop;
     bool ddfHFlop;
 
     // The actual data fetch window
-    // DEPRECATED. WILL BE REPLACED BY ddfWindow
+    // DEPRECATED. WILL BE REPLACED BY ddfXXX variables
     i16 dmaStrtLores;      // First lores bitplane DMA cycle
     i16 dmaStrtHires;      // First hires bitplane DMA cycle
     i16 dmaStopLores;      // Last lores bitplane DMA cycle + 1
     i16 dmaStopHires;      // Last hires bitplane DMA cycle + 1
 
+    // The actual data fetch window
+    i16 ddfStrtLores;      // First lores bitplane DMA cycle
+    i16 ddfStopLores;      // Last lores bitplane DMA cycle + 1
+    i16 ddfStrtHires;      // First hires bitplane DMA cycle
+    i16 ddfStopHires;      // Last hires bitplane DMA cycle + 1
+    DDFState ddfState;
+
+    /*
     bool inLoresDmaArea(i16 pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
-
+    */
+    bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
+    bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
 
     //
     // Registers
@@ -499,6 +513,8 @@ public:
 
         & ddfstrt
         & ddfstop
+        & ddfstrtReachedDeprecated
+        & ddfstopReachedDeprecated
         & ddfstrtReached
         & ddfstopReached
         & ddfVFlop
@@ -507,6 +523,11 @@ public:
         & dmaStrtHires
         & dmaStopLores
         & dmaStopHires
+        & ddfStrtLores
+        & ddfStrtHires
+        & ddfStopLores
+        & ddfStopHires
+        & ddfState
 
         & changeRecorder
         & chngRecorder
@@ -831,10 +852,17 @@ public:
     void setDDFSTRT(u16 old, u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
-    // Computes the data fetch window's start and stop position
+    // Sets up the likely DDF values for the next rasterline
+    void predictDDF();
+
+    void computeDDFStrtDeprecated(); // DEPRECATED
+    void computeDDFStopDeprecated(); // DEPRECATED
     void computeDDFStrt();
+    void computeDDFStrtOCS();
+    void computeDDFStrtECS();
     void computeDDFStop();
-    void computeDDFWindow() { computeDDFStrt(); computeDDFStop(); }
+    void computeDDFStopOCS();
+    void computeDDFStopECS();
 
     // BPLCON0
     void pokeBPLCON0(u16 value);

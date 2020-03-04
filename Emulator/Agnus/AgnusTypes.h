@@ -134,6 +134,14 @@ static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWN
 
 typedef enum
 {
+    DDF_OFF,
+    DDF_READY,
+    DDF_ON
+}
+DDFState;
+
+typedef enum
+{
     SPR_DMA_IDLE,
     SPR_DMA_ACTIVE
 }

@@ -637,14 +637,14 @@ Agnus::switchBplDmaOn()
     // Determine the range that is covered by fetch units
     if (hires) {
 
-        start = dmaStrtHires;
-        stop = dmaStopHires;
+        start = ddfStrtHires;
+        stop = ddfStopHires;
         assert((stop - start) % 4 == 0);
 
     } else {
 
-        start = dmaStrtLores;
-        stop = dmaStopLores;
+        start = ddfStrtLores;
+        stop = ddfStopLores;
         assert((stop - start) % 8 == 0);
     }
 
@@ -955,7 +955,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     dmacon = newValue;
 
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
+    if (pos.h + 2 < ddfstrtReachedDeprecated) dmaconAtDDFStrt = newValue;
 
     // Check the lowest 5 bits
     bool oldDMAEN = (oldValue & DMAEN);
@@ -994,7 +994,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
             // Bitplane DMA is switched on
 
             // Check if the current line is affected by the change
-            if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+            if (pos.h + 2 < ddfstrtReachedDeprecated || bpldma(dmaconAtDDFStrt)) {
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
@@ -1305,7 +1305,10 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
     ddfstrt = value;
 
-    // Take action if we haven't reached the old DDFSTRT cycle yet
+    // Tell the hsync handler to recompute the DDF window
+    hsyncActions |= HSYNC_PREDICT_DDF;
+
+    // Take immediate action if we haven't reached the old DDFSTRT cycle yet
     if (pos.h < ddfstrtReached) {
 
         // Check if the new position has already been passed
@@ -1319,7 +1322,8 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
             // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt;
-            computeDDFWindow();
+            computeDDFStrt();
+            computeDDFStop();
             updateBplDma();
             scheduleNextBplEvent();
         }
@@ -1332,6 +1336,9 @@ Agnus::setDDFSTOP(u16 old, u16 value)
     debug(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
 
     ddfstop = value;
+
+    // Tell the hsync handler to recompute the DDF window
+    hsyncActions |= HSYNC_PREDICT_DDF;
 
     // Take action if we haven't reached the old DDFSTOP cycle yet
      if (pos.h + 2 < ddfstopReached || ddfstopReached == -1) {
@@ -1347,7 +1354,8 @@ Agnus::setDDFSTOP(u16 old, u16 value)
              // Update the matching position and recalculate the DMA table
              ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
              if (ddfstrtReached >= 0) {
-                 computeDDFWindow();
+                 computeDDFStrt();
+                 computeDDFStop();
                  updateBplDma();
                  scheduleNextBplEvent();
              }
@@ -1356,9 +1364,9 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 }
 
 void
-Agnus::computeDDFStrt()
+Agnus::computeDDFStrtDeprecated()
 {
-    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+    i16 strt = ddfstrtReachedDeprecated < 0 ? 0x18 : MAX(ddfstrtReachedDeprecated, 0x18);
 
     // Align ddfstrt to the start of the next fetch unit
     int dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
@@ -1373,10 +1381,10 @@ Agnus::computeDDFStrt()
 }
 
 void
-Agnus::computeDDFStop()
+Agnus::computeDDFStopDeprecated()
 {
-    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
-    i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
+    i16 strt = ddfstrtReachedDeprecated < 0 ? 0x18 : MAX(ddfstrtReachedDeprecated, 0x18);
+    i16 stop = ddfstopReachedDeprecated < 0 ? 0xD8 : MIN(ddfstopReachedDeprecated, 0xD8);
 
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
@@ -1386,6 +1394,122 @@ Agnus::computeDDFStop()
     dmaStopHires = MIN(dmaStrtHires + 8 * fetchUnits, 0xE0);
 
     debug(DDF_DEBUG, "computeDDFStop: %d %d\n", dmaStopLores, dmaStopHires);
+}
+
+void
+Agnus::computeDDFStrt()
+{
+    isOCS() ? computeDDFStrtOCS() : computeDDFStrtECS();
+}
+
+void
+Agnus::computeDDFStrtOCS()
+{
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+
+    // Align ddfstrt at the start of the next fetch unit
+    int loresShift = (8 - (strt & 0b111)) & 0b111;
+    int hiresShift = (4 - (strt & 0b11)) & 0b11;
+    ddfStrtLores = MAX(strt + loresShift, 0x18);
+    ddfStrtHires = MAX(strt + hiresShift, 0x18);
+
+    assert(loresShift % 2 == 0);
+    assert(hiresShift % 2 == 0);
+
+    debug(DDF_DEBUG, "computeDDFStrtOCS: %d %d\n", ddfStrtLores, ddfStrtHires);
+}
+
+void
+Agnus::computeDDFStrtECS()
+{
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+
+    // Align ddfstrt at the start of the next fetch unit
+    int loresShift = (8 - (strt & 0b111)) & 0b111;
+    int hiresShift = (4 - (strt & 0b11)) & 0b11;
+    ddfStrtLores = MAX(strt + loresShift, 0x18);
+    ddfStrtHires = MAX(strt + hiresShift, 0x18);
+
+    assert(loresShift % 2 == 0);
+    assert(hiresShift % 2 == 0);
+
+    debug(DDF_DEBUG, "computeDDFStrtECS: %d %d\n", ddfStrtLores, ddfStrtHires);
+}
+
+void
+Agnus::computeDDFStop()
+{
+    isOCS() ? computeDDFStopOCS() : computeDDFStopECS();
+}
+
+void
+Agnus::computeDDFStopOCS()
+{
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+    i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
+
+    // Compute the number of fetch units
+    int fetchUnits = ((stop - strt) + 15) >> 3;
+
+    // Compute the end of the DMA window
+    ddfStopLores = MIN(ddfStrtLores + 8 * fetchUnits, 0xE0);
+    ddfStopHires = MIN(ddfStrtHires + 8 * fetchUnits, 0xE0);
+
+    // Determine the DDF state at the line end
+    if (ddfstrtReached >= 0 && ddfstrtReached < 0x18) {
+        ddfState = (ddfState == DDF_OFF) ? DDF_READY : DDF_OFF;
+        debug("Toggle state ddfstrtReached = %d \n", ddfstrtReached);
+    } else {
+        ddfState = DDF_OFF;
+    }
+
+    debug(DDF_DEBUG, "computeDDFStopOCS: %d %d\n", ddfStopLores, ddfStopHires);
+}
+
+void
+Agnus::computeDDFStopECS()
+{
+    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
+    i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
+
+    // Compute the number of fetch units
+    int fetchUnits = ((stop - strt) + 15) >> 3;
+
+    // Compute the end of the DMA window
+    ddfStopLores = MIN(ddfStrtLores + 8 * fetchUnits, 0xE0);
+    ddfStopHires = MIN(ddfStrtHires + 8 * fetchUnits, 0xE0);
+
+    // Determine the DDF state at the line end
+    ddfState = DDF_OFF;
+
+    debug(DDF_DEBUG, "computeDDFStopECS: %d %d\n", ddfStopLores, ddfStopHires);
+}
+
+void
+Agnus::predictDDF()
+{
+    i16 ddfStrtLoresOld = ddfStrtLores;
+    i16 ddfStopLoresOld = ddfStopLores;
+    i16 ddfStrtHiresOld = ddfStrtHires;
+    i16 ddfStopHiresOld = ddfStopHires;
+    DDFState ddfStateOld = ddfState;
+
+    ddfstrtReached = ddfstrt;
+    ddfstopReached = ddfstop;
+
+    computeDDFStrt();
+    computeDDFStop();
+
+    if (ddfStrtLores != ddfStrtLoresOld || ddfStopLores != ddfStopLoresOld ||
+        ddfStrtHires != ddfStrtHiresOld || ddfStopHires != ddfStopHiresOld ||
+        ddfState != ddfStateOld) {
+
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE; // Update the DMA slot
+        hsyncActions |= HSYNC_PREDICT_DDF; // Call this function again
+    }
+
+    debug(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfStrtLores, ddfStopLores);
+    debug(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfStrtHires, ddfStopHires);
 }
 
 template <int x> void
@@ -1587,7 +1711,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
+    if (pos.h < ddfstrtReachedDeprecated) bplcon0AtDDFStrt = newValue;
 
     // Update the bpl event table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -1881,19 +2005,22 @@ Agnus::hsyncHandler()
 
     // Update the horizontal DDF flipflop
     if (isECS()) {
-        if (ddfstrtReached != -1) ddfHFlop = true;
-        if (ddfstopReached != -1) ddfHFlop = false;
+        if (ddfstrtReachedDeprecated != -1) ddfHFlop = true;
+        if (ddfstopReachedDeprecated != -1) ddfHFlop = false;
     } else {
         // OCS Agnus always clears the fliflop at the hardware stop. Hence,
         // variable ddfHFlop equals false any time.
     }
 
-    // Predict the trigger coordinates for the next line
+    // ddfstrtReached = ddfstrt;
+    // ddfstopReached = ddfstop;
+
+    // OLD CODE
     i16 newStrt = ddfHFlop ? 0x18 : ddfstrt;
     i16 newStop = ddfstop > HPOS_MAX ? -1 : ddfstop;
-    if (ddfstrtReached != newStrt || ddfstopReached != newStop) {
-        ddfstrtReached = newStrt;
-        ddfstopReached = newStop;
+    if (ddfstrtReachedDeprecated != newStrt || ddfstopReachedDeprecated != newStop) {
+        ddfstrtReachedDeprecated = newStrt;
+        ddfstopReachedDeprecated = newStop;
         hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
     }
 
@@ -1938,17 +2065,23 @@ Agnus::hsyncHandler()
 
     if (hsyncActions) {
 
+        if (hsyncActions & HSYNC_PREDICT_DDF) {
+            hsyncActions &= ~HSYNC_PREDICT_DDF;
+            predictDDF();
+        }
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
-            computeDDFWindow();
+            hsyncActions &= ~HSYNC_COMPUTE_DDF_WINDOW;
+            computeDDFStrtDeprecated();
+            computeDDFStopDeprecated();
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
+            hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
             updateBplDma();
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
+            hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;
             updateDasDma(dmaDAS);
         }
-
-        hsyncActions = 0;
     }
 
     // Clear the bus usage table
