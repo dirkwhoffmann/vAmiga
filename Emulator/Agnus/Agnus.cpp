@@ -1454,52 +1454,92 @@ Agnus::computeDDFWindowOCS()
     debug(DDF_DEBUG, "DDF Window (OCS) Stop: %d %d\n", ddfStrtLores, ddfStrtHires);
 }
 
+#define DDF_EMPTY     0
+#define DDF_STRT_STOP 1
+#define DDF_STRT_D8   2
+#define DDF_18_STOP   3
+#define DDF_18_D8     4
+
 void
 Agnus::computeDDFWindowECS()
 {
-    if (ddfState == DDF_ON && ddfstrtReached < 0 && ddfstopReached < 0) {
+    /* To determine the correct data fetch window, we need to distinguish
+     * (too) small, medium, and (too) large DIWSTRT / DIWSTOP values.
+     *
+     *   0:   small : Value is smaller than the left hardware stop.
+     *   1:  medium : Value complies to the specs.
+     *   2:   large : Value is larger than HPOS_MAX and thus never reached.
+     */
+    int strt = (ddfstrtReached < 0) ? 2 : (ddfstrtReached < 0x18) ? 0 : 1;
+    int stop = (ddfstopReached < 0) ? 2 : (ddfstopReached < 0x18) ? 0 : 1;
 
-        computeStandardDDFWindow(0x18, 0xD8);
-        ddfState = DDF_ON;
+    /* Nr | DDFSTRT | DDFSTOP | State   || Data Fetch Window   | Next State
+     *  --------------------------------------------------------------------
+     *  0 | small   | small   | DDF_OFF || Empty               | DDF_OFF
+     *  1 | small   | small   | DDF_ON  || Empty               | DDF_OFF
+     *  2 | small   | medium  | DDF_OFF || [0x18 ; DDFSTOP]    | DDF_OFF
+     *  3 | small   | medium  | DDF_ON  || [0x18 ; DDFSTOP]    | DDF_OFF
+     *  4 | small   | large   | DDF_OFF || [0x18 ; 0xD8]       | DDF_ON
+     *  5 | small   | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_ON
+     *  6 | medium  | small   | DDF_OFF || not handled         | -
+     *  7 | medium  | small   | DDF_ON  || not handled         | -
+     *  8 | medium  | medium  | DDF_OFF || [DDFSTRT ; DDFSTOP] | DDF_OFF
+     *  9 | medium  | medium  | DDF_ON  || [0x18 ; DDFSTOP]    | DDF_OFF
+     * 10 | medium  | large   | DDF_OFF || [DDFSTRT ; 0xD8]    | DDF_ON
+     * 11 | medium  | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_ON
+     * 12 | large   | small   | DDF_OFF || not handled         | -
+     * 13 | large   | small   | DDF_ON  || not handled         | -
+     * 14 | large   | medium  | DDF_OFF || not handled         | -
+     * 15 | large   | medium  | DDF_ON  || not handled         | -
+     * 16 | large   | large   | DDF_OFF || Empty               | DDF_OFF
+     * 17 | large   | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_ON
+     */
+    const struct { int interval; DDFState state; } table[18] = {
+        { DDF_EMPTY ,    DDF_OFF }, // 0
+        { DDF_EMPTY ,    DDF_OFF }, // 1
+        { DDF_18_STOP ,  DDF_OFF }, // 2
+        { DDF_18_STOP ,  DDF_OFF }, // 3
+        { DDF_18_D8 ,    DDF_ON  }, // 4
+        { DDF_18_D8 ,    DDF_ON  }, // 5
+        { DDF_EMPTY ,    DDF_OFF }, // 6
+        { DDF_EMPTY ,    DDF_OFF }, // 7
+        { DDF_STRT_STOP, DDF_OFF }, // 8
+        { DDF_18_STOP ,  DDF_OFF }, // 9
+        { DDF_STRT_D8 ,  DDF_ON  }, // 10
+        { DDF_18_D8 ,    DDF_ON  }, // 11
+        { DDF_EMPTY ,    DDF_OFF }, // 12
+        { DDF_EMPTY ,    DDF_OFF }, // 13
+        { DDF_EMPTY ,    DDF_OFF }, // 14
+        { DDF_EMPTY ,    DDF_OFF }, // 15
+        { DDF_EMPTY ,    DDF_OFF }, // 16
+        { DDF_18_D8 ,    DDF_ON  }, // 17
+    };
+
+    int index = 6*strt + 2*stop + (ddfState == DDF_ON);
+    switch (table[index].interval) {
+
+        case DDF_EMPTY:
+            ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
+            break;
+        case DDF_STRT_STOP:
+            computeStandardDDFWindow(ddfstrtReached, ddfstopReached);
+            break;
+        case DDF_STRT_D8:
+            computeStandardDDFWindow(ddfstrtReached, 0xD8);
+            break;
+        case DDF_18_STOP:
+            computeStandardDDFWindow(0x18, ddfstopReached);
+            break;
+        case DDF_18_D8:
+            computeStandardDDFWindow(0x18, 0xD8);
+            break;
     }
-    if (ddfState == DDF_ON && ddfstrtReached < 0 && ddfstopReached >= 0) {
+    ddfState = table[index].state;
 
-        computeStandardDDFWindow(0x18, MAX(ddfstopReached, 0x18));
-        ddfState = DDF_OFF;
-    }
-    if (ddfState == DDF_ON && ddfstrtReached >= 0 && ddfstopReached < 0) {
 
-        computeStandardDDFWindow(0x18, 0xD8);
-        ddfState = DDF_ON;
-    }
-    if (ddfState == DDF_ON && ddfstrtReached >= 0 && ddfstopReached >= 0) {
-
-        computeStandardDDFWindow(MAX(ddfstrtReached, 0x18), MAX(ddfstrtReached, 0x18));
-        ddfState = DDF_OFF;
-    }
-    if (ddfState == DDF_OFF && ddfstrtReached < 0 && ddfstopReached < 0) {
-
-        ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
-        ddfState = DDF_OFF;
-    }
-    if (ddfState == DDF_OFF && ddfstrtReached < 0 && ddfstopReached >= 0) {
-
-        ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
-        ddfState = DDF_OFF;
-    }
-    if (ddfState == DDF_OFF && ddfstrtReached >= 0 && ddfstopReached < 0) {
-
-        computeStandardDDFWindow(MAX(ddfstrtReached, 0x18), 0xD8);
-        ddfState = DDF_ON;
-    }
-    if (ddfState == DDF_OFF && ddfstrtReached >= 0 && ddfstopReached >= 0) {
-
-        computeStandardDDFWindow(MAX(ddfstrtReached, 0x18), MAX(ddfstopReached, 0x18));
-        ddfState = DDF_OFF;
-    }
-
-    debug(DDF_DEBUG, "DDF Window (ECS) Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
-    debug(DDF_DEBUG, "DDF Window (ECS) Stop: %d %d\n", ddfStrtLores, ddfStrtHires);
+    debug(DDF_DEBUG, "DDF Window Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
+    debug(DDF_DEBUG, "   (ECS)   Stop: %d %d\n", ddfStopLores, ddfStopHires);
+    return;
 }
 
 void
