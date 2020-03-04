@@ -345,23 +345,12 @@ public:
     bool ddfVFlop;
 
     // The actual data fetch window
-    // DEPRECATED. WILL BE REPLACED BY ddfXXX variables
-    i16 dmaStrtLores;      // First lores bitplane DMA cycle
-    i16 dmaStrtHires;      // First hires bitplane DMA cycle
-    i16 dmaStopLores;      // Last lores bitplane DMA cycle + 1
-    i16 dmaStopHires;      // Last hires bitplane DMA cycle + 1
-
-    // The actual data fetch window
     i16 ddfStrtLores;      // First lores bitplane DMA cycle
     i16 ddfStopLores;      // Last lores bitplane DMA cycle + 1
     i16 ddfStrtHires;      // First hires bitplane DMA cycle
     i16 ddfStopHires;      // Last hires bitplane DMA cycle + 1
     DDFState ddfState;
 
-    /*
-    bool inLoresDmaArea(i16 pos) { return pos >= dmaStrtLores && pos < dmaStopLores; }
-    bool inHiresDmaArea(i16 pos) { return pos >= dmaStrtHires && pos < dmaStopHires; }
-    */
     bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
 
@@ -511,10 +500,6 @@ public:
         & ddfstrtReached
         & ddfstopReached
         & ddfVFlop
-        & dmaStrtLores
-        & dmaStrtHires
-        & dmaStopLores
-        & dmaStopHires
         & ddfStrtLores
         & ddfStrtHires
         & ddfStopLores
