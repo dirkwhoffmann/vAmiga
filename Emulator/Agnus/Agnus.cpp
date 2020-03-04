@@ -1198,19 +1198,29 @@ Agnus::setDIWSTRT(u16 value)
      // (1) and (2)
     if (cur < diwHstrt && cur < newDiwHstrt) {
 
-        debug(DIW_DEBUG, "Updating hFlopOn immediately at %d\n", cur);
+        debug(DIW_DEBUG, "Updating DIW hflop immediately at %d\n", cur);
         diwHFlopOn = newDiwHstrt;
     }
 
     // (3)
     if (newDiwHstrt < cur && cur < diwHstrt) {
 
-        debug(DIW_DEBUG, "hFlop not switched on in current line\n");
+        debug(DIW_DEBUG, "DIW hflop not switched on in current line\n");
         diwHFlopOn = -1;
     }
 
     diwVstrt = newDiwVstrt;
     diwHstrt = newDiwHstrt;
+
+    /* Update the vertical DIW flipflop
+     * This is not 100% accurate. If the vertical DIW flipflop changes in the
+     * middle of a rasterline, the effect is immediately visible on a real
+     * Amiga. The current emulation code only evaluates the flipflop at the end
+     * of the rasterline in the drawing routine of Denise. Hence, the whole
+     * line will be blacked out, not just the rest of it.
+     */
+    if (pos.v == diwVstrt) diwVFlop = true;
+    if (pos.v == diwVstop) diwVFlop = false;
 }
 
 void
@@ -1254,6 +1264,12 @@ Agnus::setDIWSTOP(u16 value)
 
     diwVstop = newDiwVstop;
     diwHstop = newDiwHstop;
+
+    /* Update the vertical DIW flipflop
+     * This is not 100% accurate. See comment in setDIWSTRT().
+     */
+    if (pos.v == diwVstrt) diwVFlop = true;
+    if (pos.v == diwVstop) diwVFlop = false;
 }
 
 void
@@ -1842,11 +1858,13 @@ Agnus::hsyncHandler()
 
     if (pos.v == diwVstrt && !diwVFlop) {
         diwVFlop = true;
-        updateBplDma();
+        debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
+        // updateBplDma();
     }
     if (pos.v == diwVstop && diwVFlop) {
         diwVFlop = false;
-        updateBplDma();
+        debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
+        // updateBplDma();
     }
 
     // Horizontal DIW flipflop
