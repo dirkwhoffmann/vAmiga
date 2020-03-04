@@ -105,6 +105,12 @@ class DiskMountController: DialogController {
             
             disk = attachment
             super.showSheet(completionHandler: handler)
+
+            if let sha1 = disk.sha1() {
+                track("Checksum: \(sha1)")
+            } else {
+                track("Failed to compute SHA1 checksum")
+            }
         }
     }
     
@@ -114,7 +120,6 @@ class DiskMountController: DialogController {
         sectorData = Array(repeating: "", count: 512 / bytesPerRow)
 
         var rect = window!.frame
-        // f.size.width = 518
         rect.size.height = 176 + 20
         window!.setFrame(rect, display: true)
     }

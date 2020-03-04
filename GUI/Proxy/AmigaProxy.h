@@ -364,9 +364,6 @@ struct AmigaFileWrapper;
 - (u64) sprData:(NSInteger)line;
 - (u16) sprColorReg:(NSInteger)reg;
 
-/*
-- (void) pokeColorReg:(NSInteger)reg value:(UInt16)value;
-*/
 - (double) palette;
 - (void) setPalette:(Palette)p;
 - (double) brightness;
@@ -622,6 +619,7 @@ struct AmigaFileWrapper;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 - (DiskType)diskType;
+- (NSString *)sha1;
 - (NSInteger)numCylinders;
 - (NSInteger)numHeads;
 - (NSInteger)numTracks;

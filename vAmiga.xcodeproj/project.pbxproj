@@ -34,6 +34,7 @@
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
+		5076767424101F8C00CD4CB6 /* teeny-sha1.h in Sources */ = {isa = PBXBuildFile; fileRef = 5076767224101F8C00CD4CB6 /* teeny-sha1.h */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
@@ -209,6 +210,7 @@
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
+		5076767224101F8C00CD4CB6 /* teeny-sha1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "teeny-sha1.h"; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* AmigaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConstants.h; sourceTree = "<group>"; };
@@ -772,6 +774,7 @@
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
 			isa = PBXGroup;
 			children = (
+				5076767224101F8C00CD4CB6 /* teeny-sha1.h */,
 				5082D83A21EF891200CF7692 /* AmigaConstants.h */,
 				505A584C23040921002F99D1 /* Aliases.h */,
 				50B14C0821EB2248002E32A6 /* AmigaUtils.h */,
@@ -1046,6 +1049,7 @@
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
+				5076767424101F8C00CD4CB6 /* teeny-sha1.h in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				508FE03821EA22C30043D0E9 /* Notifications.swift in Sources */,

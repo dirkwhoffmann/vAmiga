@@ -1009,17 +1009,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->drive->setModifiedDisk(value);
 }
-/*
-- (void) ejectDisk
-{
-    wrapper->drive->ejectDisk();
-}
-- (void) insertDisk:(ADFFileProxy *)fileProxy
-{
-    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->drive->insertDisk((ADFFile *)(fileWrapper->file));
-}
-*/
 - (ADFFileProxy *)convertDisk
 {
     return NULL;
@@ -1191,6 +1180,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (DiskType)diskType
 {
     return ((ADFFile *)wrapper->file)->getDiskType();
+}
+- (NSString *) sha1
+{
+    const char *str = ((ADFFile *)wrapper->file)->sha1();
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSInteger)numCylinders
 {

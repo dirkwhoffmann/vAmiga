@@ -78,6 +78,9 @@ public:
     // Returns the disk type (3.5"DD, 3.5"DD (PC), 5.25"SD, etc.)
     DiskType getDiskType();
 
+    // Computes a SHA1 checksum
+    const char *sha1();
+
     // Cylinder, track, and sector counts
     long numSectorsPerTrack();
     long numSectorsTotal() { return size / 512; }
