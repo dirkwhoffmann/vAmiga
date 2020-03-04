@@ -2003,28 +2003,6 @@ Agnus::hsyncHandler()
     // Update the vertical DDF flipflop
     ddfVFlop = !inLastRasterline() && diwVFlop;
 
-    // Update the horizontal DDF flipflop
-    /*
-    if (isECS()) {
-        if (ddfstrtReachedDeprecated != -1) ddfHFlop = true;
-        if (ddfstopReachedDeprecated != -1) ddfHFlop = false;
-    } else {
-        // OCS Agnus always clears the fliflop at the hardware stop. Hence,
-        // variable ddfHFlop equals false any time.
-    }
-    */
-
-    // ddfstrtReached = ddfstrt;
-    // ddfstopReached = ddfstop;
-
-    // OLD CODE
-    i16 newStrt = ddfHFlop ? 0x18 : ddfstrt;
-    i16 newStop = ddfstop > HPOS_MAX ? -1 : ddfstop;
-    if (ddfstrtReachedDeprecated != newStrt || ddfstopReachedDeprecated != newStop) {
-        ddfstrtReachedDeprecated = newStrt;
-        ddfstopReachedDeprecated = newStop;
-        hsyncActions |= HSYNC_COMPUTE_DDF_WINDOW | HSYNC_UPDATE_BPL_TABLE;
-    }
 
     //
     // Determine the bitplane DMA status for the line to come
@@ -2070,11 +2048,6 @@ Agnus::hsyncHandler()
         if (hsyncActions & HSYNC_PREDICT_DDF) {
             hsyncActions &= ~HSYNC_PREDICT_DDF;
             predictDDF();
-        }
-        if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
-            hsyncActions &= ~HSYNC_COMPUTE_DDF_WINDOW;
-            // computeDDFStrtDeprecated();
-            // computeDDFStopDeprecated();
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;

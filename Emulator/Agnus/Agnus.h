@@ -20,10 +20,9 @@
 #include "Memory.h"
 
 // Hsync action bits
-#define HSYNC_PREDICT_DDF        0b0001
-#define HSYNC_COMPUTE_DDF_WINDOW 0b0010
-#define HSYNC_UPDATE_BPL_TABLE   0b0100
-#define HSYNC_UPDATE_DAS_TABLE   0b1000
+#define HSYNC_PREDICT_DDF        0b001
+#define HSYNC_UPDATE_BPL_TABLE   0b010
+#define HSYNC_UPDATE_DAS_TABLE   0b100
 
 // Increments a Chip Ram pointer (TODO: Eliminate these macros)
 #define INC_CHIP_PTR(x) x += 2
