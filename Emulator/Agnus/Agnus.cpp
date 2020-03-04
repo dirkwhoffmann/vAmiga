@@ -1364,39 +1364,6 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 }
 
 void
-Agnus::computeDDFStrtDeprecated()
-{
-    i16 strt = ddfstrtReachedDeprecated < 0 ? 0x18 : MAX(ddfstrtReachedDeprecated, 0x18);
-
-    // Align ddfstrt to the start of the next fetch unit
-    int dmaStrtHiresShift = (4 - (strt & 0b11)) & 0b11;
-    int dmaStrtLoresShift = (8 - (strt & 0b111)) & 0b111;
-    dmaStrtHires = MAX(strt + dmaStrtHiresShift, 0x18);
-    dmaStrtLores = MAX(strt + dmaStrtLoresShift, 0x18);
-
-    assert(dmaStrtHiresShift % 2 == 0);
-    assert(dmaStrtLoresShift % 2 == 0);
-
-    debug(DDF_DEBUG, "computeDDFStrt: %d %d\n", dmaStrtLores, dmaStrtHires);
-}
-
-void
-Agnus::computeDDFStopDeprecated()
-{
-    i16 strt = ddfstrtReachedDeprecated < 0 ? 0x18 : MAX(ddfstrtReachedDeprecated, 0x18);
-    i16 stop = ddfstopReachedDeprecated < 0 ? 0xD8 : MIN(ddfstopReachedDeprecated, 0xD8);
-
-    // Compute the number of fetch units
-    int fetchUnits = ((stop - strt) + 15) >> 3;
-
-    // Compute the end of the DMA window
-    dmaStopLores = MIN(dmaStrtLores + 8 * fetchUnits, 0xE0);
-    dmaStopHires = MIN(dmaStrtHires + 8 * fetchUnits, 0xE0);
-
-    debug(DDF_DEBUG, "computeDDFStop: %d %d\n", dmaStopLores, dmaStopHires);
-}
-
-void
 Agnus::computeDDFStrt()
 {
     isOCS() ? computeDDFStrtOCS() : computeDDFStrtECS();

@@ -338,15 +338,11 @@ public:
      * where the hpos counter matched ddfstrt or ddfstop, respectively. A
      * value of -1 indicates that no matching event took place.
      */
-    i16 ddfstrtReachedDeprecated;
-    i16 ddfstopReachedDeprecated;
     i16 ddfstrtReached;
     i16 ddfstopReached;
 
-
     // DDF flipflops
     bool ddfVFlop;
-    bool ddfHFlop;
 
     // The actual data fetch window
     // DEPRECATED. WILL BE REPLACED BY ddfXXX variables
@@ -512,12 +508,9 @@ public:
 
         & ddfstrt
         & ddfstop
-        & ddfstrtReachedDeprecated
-        & ddfstopReachedDeprecated
         & ddfstrtReached
         & ddfstopReached
         & ddfVFlop
-        & ddfHFlop
         & dmaStrtLores
         & dmaStrtHires
         & dmaStopLores
@@ -854,8 +847,6 @@ public:
     // Sets up the likely DDF values for the next rasterline
     void predictDDF();
 
-    void computeDDFStrtDeprecated(); // DEPRECATED
-    void computeDDFStopDeprecated(); // DEPRECATED
     void computeDDFStrt();
     void computeDDFStrtOCS();
     void computeDDFStrtECS();
