@@ -684,7 +684,7 @@ public:
     bool getBLS() { return bls; }
     void setBLS(bool value) { bls = value; }
 
-    // Indicates if bitplane DMA is blocked by a hardware stops
+    // Indicates if bitplane DMA is blocked by a hardware stop
     bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }
 
     /* Returns true if Copper execution is blocked.
@@ -836,8 +836,13 @@ public:
     void predictDDF();
 
     void computeDDFWindow();
+
+    // Called by computeDDFWindow()
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
+
+    // Called by computeDDFWindowOCS() and computeDDFWindowECS()
+    void computeStandardDDFWindow(i16 strt, i16 stop);
 
     // BPLCON0
     void pokeBPLCON0(u16 value);

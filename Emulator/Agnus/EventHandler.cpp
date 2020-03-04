@@ -626,6 +626,9 @@ Agnus::serviceBPLEvent()
     switch (slot[BPL_SLOT].id) {
 
         case BPL_H1:
+            denise.bpldat[0] = doBitplaneDMA<0>();
+            denise.fillShiftRegisters();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
@@ -633,7 +636,7 @@ Agnus::serviceBPLEvent()
                 assert(false);
                 INC_CHIP_PTR(bplpt[0]);
             }
-
+            */
             if(unlikely(isLastHx(pos.h))) {
                 denise.drawHires(16 + denise.scrollHiresMax);
                 addBPLMOD<0>();
@@ -643,6 +646,9 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_L1:
+            denise.bpldat[0] = doBitplaneDMA<0>();
+            denise.fillShiftRegisters();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[0] = doBitplaneDMA<0>();
                 denise.fillShiftRegisters();
@@ -650,7 +656,7 @@ Agnus::serviceBPLEvent()
                 assert(false);
                 INC_CHIP_PTR(bplpt[0]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) {
                 denise.drawLores(16 + denise.scrollLoresMax);
                 addBPLMOD<0>();
@@ -660,90 +666,106 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_H2:
+            denise.bpldat[1] = doBitplaneDMA<1>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[1]);
             }
-
+            */
             if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_L2:
+            denise.bpldat[1] = doBitplaneDMA<1>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[1] = doBitplaneDMA<1>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[1]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_H3:
+            denise.bpldat[2] = doBitplaneDMA<2>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[2]);
             }
-
+            */
             if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_L3:
+            denise.bpldat[2] = doBitplaneDMA<2>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[2] = doBitplaneDMA<2>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[2]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_H4:
+            denise.bpldat[3] = doBitplaneDMA<3>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[3]);
             }
-
+            */
             if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L4:
+            denise.bpldat[3] = doBitplaneDMA<3>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[3] = doBitplaneDMA<3>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[3]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L5:
+            denise.bpldat[4] = doBitplaneDMA<4>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[4] = doBitplaneDMA<4>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[4]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
             break;
 
         case BPL_L6:
+            denise.bpldat[5] = doBitplaneDMA<5>();
+            /*
             if (!bplHwStop()) {
                 denise.bpldat[5] = doBitplaneDMA<5>();
             } else {
                 assert(false);
                 INC_CHIP_PTR(bplpt[5]);
             }
-
+            */
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
             break;
 
