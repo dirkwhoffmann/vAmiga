@@ -1322,8 +1322,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
             // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt;
-            computeDDFStrt();
-            computeDDFStop();
+            computeDDFWindow();
             updateBplDma();
             scheduleNextBplEvent();
         }
@@ -1354,8 +1353,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
              // Update the matching position and recalculate the DMA table
              ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
              if (ddfstrtReached >= 0) {
-                 computeDDFStrt();
-                 computeDDFStop();
+                 computeDDFWindow();
                  updateBplDma();
                  scheduleNextBplEvent();
              }
@@ -1364,65 +1362,33 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 }
 
 void
-Agnus::computeDDFStrt()
+Agnus::computeDDFWindow()
 {
-    isOCS() ? computeDDFStrtOCS() : computeDDFStrtECS();
+    isOCS() ? computeDDFWindowOCS() : computeDDFWindowECS();
 }
 
 void
-Agnus::computeDDFStrtOCS()
-{
-    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
-
-    // Align ddfstrt at the start of the next fetch unit
-    int loresShift = (8 - (strt & 0b111)) & 0b111;
-    int hiresShift = (4 - (strt & 0b11)) & 0b11;
-    ddfStrtLores = MAX(strt + loresShift, 0x18);
-    ddfStrtHires = MAX(strt + hiresShift, 0x18);
-
-    assert(loresShift % 2 == 0);
-    assert(hiresShift % 2 == 0);
-
-    debug(DDF_DEBUG, "computeDDFStrtOCS: %d %d\n", ddfStrtLores, ddfStrtHires);
-}
-
-void
-Agnus::computeDDFStrtECS()
-{
-    i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
-
-    // Align ddfstrt at the start of the next fetch unit
-    int loresShift = (8 - (strt & 0b111)) & 0b111;
-    int hiresShift = (4 - (strt & 0b11)) & 0b11;
-    ddfStrtLores = MAX(strt + loresShift, 0x18);
-    ddfStrtHires = MAX(strt + hiresShift, 0x18);
-
-    assert(loresShift % 2 == 0);
-    assert(hiresShift % 2 == 0);
-
-    debug(DDF_DEBUG, "computeDDFStrtECS: %d %d\n", ddfStrtLores, ddfStrtHires);
-}
-
-void
-Agnus::computeDDFStop()
-{
-    isOCS() ? computeDDFStopOCS() : computeDDFStopECS();
-}
-
-void
-Agnus::computeDDFStopOCS()
+Agnus::computeDDFWindowOCS()
 {
     i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
     i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
 
+    // Align ddfstrt at the start of the next fetch unit
+    int loresShift = (8 - (strt & 0b111)) & 0b111;
+    int hiresShift = (4 - (strt & 0b11)) & 0b11;
+
+    // Compute the beginning of the DDF window
+    ddfStrtLores = MAX(strt + loresShift, 0x18);
+    ddfStrtHires = MAX(strt + hiresShift, 0x18);
+
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
 
-    // Compute the end of the DMA window
+    // Compute the end of the DDF window
     ddfStopLores = MIN(ddfStrtLores + 8 * fetchUnits, 0xE0);
     ddfStopHires = MIN(ddfStrtHires + 8 * fetchUnits, 0xE0);
 
-    // Determine the DDF state at the line end
+    // Determine the final DDF state
     if (ddfstrtReached >= 0 && ddfstrtReached < 0x18) {
         ddfState = (ddfState == DDF_OFF) ? DDF_READY : DDF_OFF;
         debug("Toggle state ddfstrtReached = %d \n", ddfstrtReached);
@@ -1430,26 +1396,36 @@ Agnus::computeDDFStopOCS()
         ddfState = DDF_OFF;
     }
 
-    debug(DDF_DEBUG, "computeDDFStopOCS: %d %d\n", ddfStopLores, ddfStopHires);
+    debug(DDF_DEBUG, "DDF Window (OCS) Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
+    debug(DDF_DEBUG, "DDF Window (OCS) Stop: %d %d\n", ddfStrtLores, ddfStrtHires);
 }
 
 void
-Agnus::computeDDFStopECS()
+Agnus::computeDDFWindowECS()
 {
     i16 strt = ddfstrtReached < 0 ? 0x18 : MAX(ddfstrtReached, 0x18);
     i16 stop = ddfstopReached < 0 ? 0xD8 : MIN(ddfstopReached, 0xD8);
 
+    // Align ddfstrt at the start of the next fetch unit
+    int loresShift = (8 - (strt & 0b111)) & 0b111;
+    int hiresShift = (4 - (strt & 0b11)) & 0b11;
+
+    // Compute the beginning of the DDF window
+    ddfStrtLores = MAX(strt + loresShift, 0x18);
+    ddfStrtHires = MAX(strt + hiresShift, 0x18);
+
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
 
-    // Compute the end of the DMA window
+    // Compute the end of the DDF window
     ddfStopLores = MIN(ddfStrtLores + 8 * fetchUnits, 0xE0);
     ddfStopHires = MIN(ddfStrtHires + 8 * fetchUnits, 0xE0);
 
-    // Determine the DDF state at the line end
+    // Determine the final DDF state
     ddfState = DDF_OFF;
 
-    debug(DDF_DEBUG, "computeDDFStopECS: %d %d\n", ddfStopLores, ddfStopHires);
+    debug(DDF_DEBUG, "DDF Window (ECS) Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
+    debug(DDF_DEBUG, "DDF Window (ECS) Stop: %d %d\n", ddfStrtLores, ddfStrtHires);
 }
 
 void
@@ -1464,8 +1440,7 @@ Agnus::predictDDF()
     ddfstrtReached = ddfstrt;
     ddfstopReached = ddfstop;
 
-    computeDDFStrt();
-    computeDDFStop();
+    computeDDFWindow();
 
     if (ddfStrtLores != ddfStrtLoresOld || ddfStopLores != ddfStopLoresOld ||
         ddfStrtHires != ddfStrtHiresOld || ddfStopHires != ddfStopHiresOld ||

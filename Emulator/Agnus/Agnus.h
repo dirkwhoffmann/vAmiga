@@ -341,6 +341,10 @@ public:
     i16 ddfstrtReached;
     i16 ddfstopReached;
 
+    /* At the end of a rasterline, this variable contains the DDF state.
+     */
+    DDFState ddfState;
+
     // DDF flipflops
     bool ddfVFlop;
 
@@ -349,7 +353,6 @@ public:
     i16 ddfStopLores;      // Last lores bitplane DMA cycle + 1
     i16 ddfStrtHires;      // First hires bitplane DMA cycle
     i16 ddfStopHires;      // Last hires bitplane DMA cycle + 1
-    DDFState ddfState;
 
     bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
@@ -832,12 +835,9 @@ public:
     // Sets up the likely DDF values for the next rasterline
     void predictDDF();
 
-    void computeDDFStrt();
-    void computeDDFStrtOCS();
-    void computeDDFStrtECS();
-    void computeDDFStop();
-    void computeDDFStopOCS();
-    void computeDDFStopECS();
+    void computeDDFWindow();
+    void computeDDFWindowOCS();
+    void computeDDFWindowECS();
 
     // BPLCON0
     void pokeBPLCON0(u16 value);
