@@ -743,13 +743,13 @@ Agnus::updateDasJumpTable(i16 end)
 bool
 Agnus::isLastLx(i16 dmaCycle)
 {
-    return (pos.h >= dmaStopLores - 8);
+    return (pos.h >= ddfStopLores - 8);
 }
 
 bool
 Agnus::isLastHx(i16 dmaCycle)
 {
-    return (pos.h >= dmaStopHires - 4);
+    return (pos.h >= ddfStopHires - 4);
 }
 
 bool
@@ -847,10 +847,10 @@ Agnus::dumpBplEventTable()
     msg("Event table:\n\n");
     msg("ddfstrt = %X dffstop = %X\n",
              ddfstrt, ddfstop);
-    msg("dmaStrtLores = %X dmaStrtHires = %X\n",
-             dmaStrtLores, dmaStrtHires);
-    msg("dmaStopLores = %X dmaStopHires = %X\n",
-             dmaStopLores, dmaStopHires);
+    msg("ddfStrtLores = %X ddfStrtHires = %X\n",
+             ddfStrtLores, ddfStrtHires);
+    msg("ddfStopLores = %X ddfStopHires = %X\n",
+             ddfStopLores, ddfStopHires);
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);
@@ -955,7 +955,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     dmacon = newValue;
 
     // Update variable dmaconAtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h + 2 < ddfstrtReachedDeprecated) dmaconAtDDFStrt = newValue;
+    if (pos.h + 2 < ddfstrtReached) dmaconAtDDFStrt = newValue;
 
     // Check the lowest 5 bits
     bool oldDMAEN = (oldValue & DMAEN);
@@ -994,7 +994,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
             // Bitplane DMA is switched on
 
             // Check if the current line is affected by the change
-            if (pos.h + 2 < ddfstrtReachedDeprecated || bpldma(dmaconAtDDFStrt)) {
+            if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
 
                 allocateBplSlots(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
@@ -1711,7 +1711,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
-    if (pos.h < ddfstrtReachedDeprecated) bplcon0AtDDFStrt = newValue;
+    if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
 
     // Update the bpl event table in the next rasterline
     hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
@@ -2004,6 +2004,7 @@ Agnus::hsyncHandler()
     ddfVFlop = !inLastRasterline() && diwVFlop;
 
     // Update the horizontal DDF flipflop
+    /*
     if (isECS()) {
         if (ddfstrtReachedDeprecated != -1) ddfHFlop = true;
         if (ddfstopReachedDeprecated != -1) ddfHFlop = false;
@@ -2011,6 +2012,7 @@ Agnus::hsyncHandler()
         // OCS Agnus always clears the fliflop at the hardware stop. Hence,
         // variable ddfHFlop equals false any time.
     }
+    */
 
     // ddfstrtReached = ddfstrt;
     // ddfstopReached = ddfstop;
@@ -2071,8 +2073,8 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_COMPUTE_DDF_WINDOW) {
             hsyncActions &= ~HSYNC_COMPUTE_DDF_WINDOW;
-            computeDDFStrtDeprecated();
-            computeDDFStopDeprecated();
+            // computeDDFStrtDeprecated();
+            // computeDDFStopDeprecated();
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
