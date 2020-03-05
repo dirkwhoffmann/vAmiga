@@ -66,7 +66,6 @@ Agnus::inspectEventSlot(EventSlot nr)
 
                 case 0:             i->eventName = "none"; break;
                 case REG_CHANGE:    i->eventName = "REG_CHANGE"; break;
-                // case REG_HSYNC:     i->eventName = "REG_HSYNC"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -538,8 +537,6 @@ Agnus::serviceCIAEvent()
 {
     EventSlot slotNr = (nr == 0) ? CIAA_SLOT : CIAB_SLOT;
 
-    assert(checkTriggeredEvent(slotNr));
-
     switch(slot[slotNr].id) {
 
         case CIA_EXECUTE:
@@ -558,7 +555,6 @@ Agnus::serviceCIAEvent()
 void
 Agnus::serviceREGEvent(Cycle until)
 {
-    assert(checkTriggeredEvent(REG_SLOT));
     assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
@@ -614,29 +610,19 @@ Agnus::serviceREGEvent(Cycle until)
         changeRecorder.remove();
     }
 
-    // Schedule the next register change event
+    // Schedule next event
     scheduleNextREGEvent();
 }
 
 void
 Agnus::serviceBPLEvent()
 {
-    assert(checkTriggeredEvent(BPL_SLOT));
-
     switch (slot[BPL_SLOT].id) {
 
         case BPL_H1:
             denise.bpldat[0] = doBitplaneDMA<0>();
             denise.fillShiftRegisters();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[0] = doBitplaneDMA<0>();
-                denise.fillShiftRegisters();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[0]);
-            }
-            */
+
             if(unlikely(isLastHx(pos.h))) {
                 denise.drawHires(16 + denise.scrollHiresMax);
                 addBPLMOD<0>();
@@ -648,15 +634,7 @@ Agnus::serviceBPLEvent()
         case BPL_L1:
             denise.bpldat[0] = doBitplaneDMA<0>();
             denise.fillShiftRegisters();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[0] = doBitplaneDMA<0>();
-                denise.fillShiftRegisters();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[0]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) {
                 denise.drawLores(16 + denise.scrollLoresMax);
                 addBPLMOD<0>();
@@ -667,110 +645,54 @@ Agnus::serviceBPLEvent()
 
         case BPL_H2:
             denise.bpldat[1] = doBitplaneDMA<1>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[1] = doBitplaneDMA<1>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[1]);
-            }
-            */
+
             if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_L2:
             denise.bpldat[1] = doBitplaneDMA<1>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[1] = doBitplaneDMA<1>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[1]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
             break;
 
         case BPL_H3:
             denise.bpldat[2] = doBitplaneDMA<2>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[2] = doBitplaneDMA<2>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[2]);
-            }
-            */
+
             if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_L3:
             denise.bpldat[2] = doBitplaneDMA<2>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[2] = doBitplaneDMA<2>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[2]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
             break;
 
         case BPL_H4:
             denise.bpldat[3] = doBitplaneDMA<3>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[3] = doBitplaneDMA<3>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[3]);
-            }
-            */
+
             if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L4:
             denise.bpldat[3] = doBitplaneDMA<3>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[3] = doBitplaneDMA<3>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[3]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
             break;
 
         case BPL_L5:
             denise.bpldat[4] = doBitplaneDMA<4>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[4] = doBitplaneDMA<4>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[4]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
             break;
 
         case BPL_L6:
             denise.bpldat[5] = doBitplaneDMA<5>();
-            /*
-            if (!bplHwStop()) {
-                denise.bpldat[5] = doBitplaneDMA<5>();
-            } else {
-                assert(false);
-                INC_CHIP_PTR(bplpt[5]);
-            }
-            */
+
             if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
             break;
 
         case BPL_EOL:
-            // This is the last event in the current rasterline.
+            // Last event in the current rasterline
             assert(pos.h == 0xE2);
             return;
 
@@ -786,12 +708,9 @@ Agnus::serviceBPLEvent()
 void
 Agnus::serviceDASEvent()
 {
-    EventID id = slot[DAS_SLOT].id;
+    assert(slot[DAS_SLOT].id == dasEvent[pos.h]);
 
-    assert(id == dasEvent[pos.h]);
-    assert(checkTriggeredEvent(DAS_SLOT));
-
-    switch (id) {
+    switch (slot[DAS_SLOT].id) {
 
         case DAS_REFRESH:
 
@@ -924,8 +843,6 @@ Agnus::serviceDASEvent()
 void
 Agnus::serviceINSEvent()
 {
-    assert(checkTriggeredEvent(INS_SLOT));
-
     switch (slot[INS_SLOT].id) {
 
         case INS_NONE:   break;
@@ -966,99 +883,4 @@ Agnus::serviceRASEvent()
 
     // Reschedule event
     rescheduleRel<RAS_SLOT>(DMA_CYCLES(HPOS_CNT));
-}
-
-bool
-Agnus::checkScheduledEvent(EventSlot s)
-{
-    if (slot[s].triggerCycle < 0) {
-        _dump();
-        panic("Scheduled event has a too small trigger cycle.");
-        return false;
-    }
-    
-    EventID id = slot[s].id;
-    
-    if (id == 0) {
-        _dump();
-        panic("Event ID must not be 0.");
-        return false;
-    }
-    
-    switch (s) {
-        case REG_SLOT:
-            if (!isRegEvent(id)) {
-                _dump();
-                panic("Invalid REG event ID.");
-                return false;
-            }
-            break;
-
-        case CIAA_SLOT:
-        case CIAB_SLOT:
-            if (!isCiaEvent(id)) {
-                _dump();
-                panic("Invalid CIA event ID.");
-                return false;
-            }
-            if (slot[s].triggerCycle != INT64_MAX && slot[s].triggerCycle % 40 != 0) {
-                _dump();
-                panic("Scheduled trigger cycle is not a CIA cycle.");
-                return false;
-            }
-            break;
-
-        case BPL_SLOT:
-            if (!isBplEvent(id)) {
-                _dump();
-                panic("Invalid BPL event ID.");
-                return false;
-            }
-            break;
-
-        case DAS_SLOT:
-            if (!isDasEvent(id)) {
-                _dump();
-                panic("Invalid DAS event ID.");
-                return false;
-            }
-            break;
-
-        case COP_SLOT:
-            if (!isCopEvent(id)) {
-                _dump();
-                panic("Invalid COP event ID.");
-                return false;
-            }
-            break;
-
-        case BLT_SLOT:
-            if (!isBltEvent(id)) {
-                _dump();
-                panic("Invalid BLT event ID.");
-                return false;
-            }
-            break;
-
-        default:
-            break;
-    }
-    
-    return true;
-}
-
-bool
-Agnus::checkTriggeredEvent(EventSlot s)
-{
-    switch (s) {
-
-        default:
-            break;
-    }
-
-    if (clock < slot[s].triggerCycle) {
-        assert(false); return false;
-    }
-    
-    return true;
 }

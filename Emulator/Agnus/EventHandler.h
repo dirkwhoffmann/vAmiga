@@ -109,8 +109,6 @@ template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
     // Perform special actions for secondary events
     if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
         slot[SEC_SLOT].triggerCycle = cycle;
-
-    assert(checkScheduledEvent(s));
 }
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id, i64 data)
