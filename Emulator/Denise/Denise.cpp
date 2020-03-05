@@ -202,8 +202,8 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
-    conRegChanges.add(pixel, REG_BPLCON0_DENISE, newValue);
     conChanges.insert(pixel, RegChange { REG_BPLCON0_DENISE, newValue });
+
     // Update value
     bplcon0 = newValue;
 }
@@ -263,7 +263,6 @@ Denise::setBPLCON2(u16 value)
     bplcon2 = value;
 
     // Record the pixel coordinate where the change takes place
-    conRegChanges.add(4 * agnus.pos.h + 4, REG_BPLCON2, value);
     conChanges.insert(4 * agnus.pos.h + 4, RegChange { REG_BPLCON2, value });
 }
 
@@ -554,36 +553,21 @@ Denise::translate()
     prio2 = zPF2(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
-    conRegChanges.add(sizeof(bBuffer), REG_NONE, 0);
     conChanges.insert(sizeof(bBuffer), RegChange { REG_NONE, 0 });
 
-    // REMOVE ASAP
-    assert(conRegChanges.count() == conChanges.count());
-    for (int i = conRegChanges.begin(); i != conRegChanges.end(); i = conRegChanges.next(i)) {
-        assert(conRegChanges.change[i].addr == conChanges.elements[i].addr);
-        assert(conRegChanges.change[i].value == conChanges.elements[i].value);
-    }
-
     // Iterate over all recorded register changes
-    for (int i = conRegChanges.begin(); i != conRegChanges.end(); i = conRegChanges.next(i)) {
+    for (int i = conChanges.begin(); i != conChanges.end(); i = conChanges.next(i)) {
 
-        Change &change = conRegChanges.change[i];
-        RegChange &chng = conChanges.elements[i];
-        assert(change.addr == chng.addr);
-        assert(change.value == chng.value);
-        assert(change.trigger == conChanges.keys[i]);
+        Cycle trigger = conChanges.keys[i];
+        RegChange &change = conChanges.elements[i];
 
         // Translate a chunk of bitplane data
         if (dual) {
-            translateDPF(pri, pixel, change.trigger);
+            translateDPF(pri, pixel, trigger);
         } else {
-            translateSPF(pixel, change.trigger);
+            translateSPF(pixel, trigger);
         }
-        pixel = change.trigger;
-        if (pixel < 0) {
-            conRegChanges.dump();
-            assert(false);
-        }
+        pixel = trigger;
 
         // Apply the register change
         switch (change.addr) {
@@ -607,7 +591,6 @@ Denise::translate()
     }
 
     // Clear the history cache
-    conRegChanges.clear();
     conChanges.clear();
 }
 
@@ -1098,8 +1081,7 @@ Denise::beginOfFrame(bool interlace)
 void
 Denise::beginOfLine(int vpos)
 {
-    // Reset the register history buffers
-    conRegChanges.clear();
+    // Reset the register change recorders
     conChanges.clear();
     pixelEngine.colRegChanges.clear();
     pixelEngine.colChanges.clear();

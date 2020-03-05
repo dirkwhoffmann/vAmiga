@@ -108,7 +108,6 @@ public:
 public:
 
     // Ringbuffer recording control register changes
-    ChangeRecorder<128> conRegChanges;
     RegChangeRecorder<128> conChanges;
 
     // Ringbuffer recording sprite register changes
