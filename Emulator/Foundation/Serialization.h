@@ -12,7 +12,6 @@
 
 #include "Event.h"
 #include "Beam.h"
-#include "ChangeRecorder.h"
 #include "Buffers.h"
 #include "AmigaTypes.h"
 
@@ -136,9 +135,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
-    STRUCT(Change)
     STRUCT(RegChange)
-    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -213,9 +211,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
-    STRUCT(Change)
     STRUCT(RegChange)
-    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -296,9 +293,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
-    STRUCT(Change)
     STRUCT(RegChange)
-    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -368,9 +364,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
-    STRUCT(Change)
     STRUCT(RegChange)
-    template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
+    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 

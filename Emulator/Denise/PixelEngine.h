@@ -11,7 +11,6 @@
 #define _COLORIZER_INC
 
 #include "AmigaComponent.h"
-#include "ChangeRecorder.h"
 
 class PixelEngine : public AmigaComponent {
 

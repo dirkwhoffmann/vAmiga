@@ -426,9 +426,7 @@ void
 Agnus::scheduleNextREGEvent()
 {
     // Determine when the next register change happens
-    Cycle nextTrigger = changeRecorder.trigger();
-    Cycle nextTrig = chngRecorder.trigger();
-    assert(nextTrigger == nextTrig);
+    Cycle nextTrigger = chngRecorder.trigger();
 
     // Schedule a register change event for that cycle
     scheduleAbs<REG_SLOT>(nextTrigger, REG_CHANGE);
@@ -558,56 +556,47 @@ Agnus::serviceREGEvent(Cycle until)
     assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
-    while (!changeRecorder.isEmpty()) {
+    while (!chngRecorder.isEmpty()) {
 
         // We're done once the trigger cycle exceeds the target cycle
-        if (changeRecorder.trigger() > until) return;
+        if (chngRecorder.trigger() > until) return;
 
         // Apply the register change
-        u32 addr = changeRecorder.addr();
-        u16 value = changeRecorder.value();
-        assert(!chngRecorder.isEmpty());
-        RegChange c = chngRecorder.read();
-        u32 a = c.addr;
-        u32 v = c.value;
-        assert(addr == a);
-        assert(value == v);
-        
-        switch (addr) {
+        RegChange &change = chngRecorder.read();
 
-            case REG_BLTSIZE: blitter.setBLTSIZE(value); break;
-            case REG_INTREQ: paula.setINTREQ(value); break;
-            case REG_INTENA: paula.setINTENA(value); break;
-            case REG_BPLCON0_AGNUS: setBPLCON0(value); break;
-            case REG_BPLCON0_DENISE: denise.setBPLCON0(value); break;
-            case REG_BPLCON1: denise.setBPLCON1(value); break;
-            case REG_BPLCON2: denise.setBPLCON2(value); break;
-            case REG_DMACON: setDMACON(dmacon, value); break;
-            case REG_DIWSTRT: setDIWSTRT(value); break;
-            case REG_DIWSTOP: setDIWSTOP(value); break;
-            case REG_DDFSTRT: setDDFSTRT(ddfstrt, value); break;
-            case REG_DDFSTOP: setDDFSTOP(ddfstop, value); break;
-            case REG_BPL1MOD: setBPL1MOD(value); break;
-            case REG_BPL2MOD: setBPL2MOD(value); break;
-            case REG_BPL1PTH: setBPLxPTH<1>(value); break;
-            case REG_BPL1PTL: setBPLxPTL<1>(value); break;
-            case REG_BPL2PTH: setBPLxPTH<2>(value); break;
-            case REG_BPL2PTL: setBPLxPTL<2>(value); break;
-            case REG_BPL3PTH: setBPLxPTH<3>(value); break;
-            case REG_BPL3PTL: setBPLxPTL<3>(value); break;
-            case REG_BPL4PTH: setBPLxPTH<4>(value); break;
-            case REG_BPL4PTL: setBPLxPTL<4>(value); break;
-            case REG_BPL5PTH: setBPLxPTH<5>(value); break;
-            case REG_BPL5PTL: setBPLxPTL<5>(value); break;
-            case REG_BPL6PTH: setBPLxPTH<6>(value); break;
-            case REG_BPL6PTL: setBPLxPTL<6>(value); break;
+        switch (change.addr) {
+
+            case REG_BLTSIZE: blitter.setBLTSIZE(change.value); break;
+            case REG_INTREQ: paula.setINTREQ(change.value); break;
+            case REG_INTENA: paula.setINTENA(change.value); break;
+            case REG_BPLCON0_AGNUS: setBPLCON0(change.value); break;
+            case REG_BPLCON0_DENISE: denise.setBPLCON0(change.value); break;
+            case REG_BPLCON1: denise.setBPLCON1(change.value); break;
+            case REG_BPLCON2: denise.setBPLCON2(change.value); break;
+            case REG_DMACON: setDMACON(dmacon, change.value); break;
+            case REG_DIWSTRT: setDIWSTRT(change.value); break;
+            case REG_DIWSTOP: setDIWSTOP(change.value); break;
+            case REG_DDFSTRT: setDDFSTRT(ddfstrt, change.value); break;
+            case REG_DDFSTOP: setDDFSTOP(ddfstop, change.value); break;
+            case REG_BPL1MOD: setBPL1MOD(change.value); break;
+            case REG_BPL2MOD: setBPL2MOD(change.value); break;
+            case REG_BPL1PTH: setBPLxPTH<1>(change.value); break;
+            case REG_BPL1PTL: setBPLxPTL<1>(change.value); break;
+            case REG_BPL2PTH: setBPLxPTH<2>(change.value); break;
+            case REG_BPL2PTL: setBPLxPTL<2>(change.value); break;
+            case REG_BPL3PTH: setBPLxPTH<3>(change.value); break;
+            case REG_BPL3PTL: setBPLxPTL<3>(change.value); break;
+            case REG_BPL4PTH: setBPLxPTH<4>(change.value); break;
+            case REG_BPL4PTL: setBPLxPTL<4>(change.value); break;
+            case REG_BPL5PTH: setBPLxPTH<5>(change.value); break;
+            case REG_BPL5PTL: setBPLxPTL<5>(change.value); break;
+            case REG_BPL6PTH: setBPLxPTH<6>(change.value); break;
+            case REG_BPL6PTL: setBPLxPTL<6>(change.value); break;
 
             default:
-                warn("Register change ID %d is invalid.\n", addr);
+                warn("Register change ID %d is invalid.\n", change.addr);
                 assert(false);
         }
-
-        changeRecorder.remove();
     }
 
     // Schedule next event

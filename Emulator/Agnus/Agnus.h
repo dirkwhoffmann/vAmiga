@@ -369,7 +369,6 @@ public:
     //
 
     // Ringbuffer for managing register change delays
-    ChangeRecorder<8> changeRecorder;
     RegChangeRecorder<8> chngRecorder;
 
     // A copy of BPLCON0 (Denise has another copy)
@@ -517,7 +516,6 @@ public:
         & ddfState
         & ocsEarlyAccessLine
 
-        & changeRecorder
         & chngRecorder
         & bplcon0
         & bplcon0AtDDFStrt
