@@ -1416,59 +1416,40 @@ Agnus::computeDDFWindowOCS()
      * If DDFSTRT is set to a small value, DMA is enabled every other row.
      */
     if (ddfstrtReached < 0x18) {
-        if (ddfState == DDF_OFF) {
-            ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
-            ddfState = DDF_ON;
-        } else {
+        if (ocsEarlyAccessLine == pos.v) {
             computeStandardDDFWindow(ddfstrtReached, ddfstopReached);
-            ddfState = DDF_OFF;
+        } else {
+            ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
+            ocsEarlyAccessLine = pos.v + 1;
         }
         return;
     }
 
     /* Nr | DDFSTRT | DDFSTOP | State   || Data Fetch Window   | Next State
      *  --------------------------------------------------------------------
-     *  0 | small   | small   | DDF_OFF || Empty               | DDF_OFF
-     *  1 | small   | small   | DDF_ON  || Empty               | DDF_OFF
-     *  2 | small   | medium  | DDF_OFF || [0x18 ; DDFSTOP]    | DDF_OFF
-     *  3 | small   | medium  | DDF_ON  || [0x18 ; DDFSTOP]    | DDF_OFF
-     *  4 | small   | large   | DDF_OFF || [0x18 ; 0xD8]       | DDF_OFF
-     *  5 | small   | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_OFF
-     *  6 | medium  | small   | DDF_OFF || not handled         | DDF_OFF
-     *  7 | medium  | small   | DDF_ON  || not handled         | DDF_OFF
-     *  8 | medium  | medium  | DDF_OFF || [DDFSTRT ; DDFSTOP] | DDF_OFF
-     *  9 | medium  | medium  | DDF_ON  || [0x18 ; DDFSTOP]    | DDF_OFF
-     * 10 | medium  | large   | DDF_OFF || [DDFSTRT ; 0xD8]    | DDF_OFF
-     * 11 | medium  | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_OFF
-     * 12 | large   | small   | DDF_OFF || not handled         | DDF_OFF
-     * 13 | large   | small   | DDF_ON  || not handled         | DDF_OFF
-     * 14 | large   | medium  | DDF_OFF || not handled         | DDF_OFF
-     * 15 | large   | medium  | DDF_ON  || not handled         | DDF_OFF
-     * 16 | large   | large   | DDF_OFF || Empty               | DDF_OFF
-     * 17 | large   | large   | DDF_ON  || [0x18 ; 0xD8]       | DDF_OFF
+     *  0 | small   | small   | -       || Empty               | DDF_OFF
+     *  1 | small   | medium  | -       || [0x18 ; DDFSTOP]    | DDF_OFF
+     *  2 | small   | large   | -       || [0x18 ; 0xD8]       | DDF_OFF
+     *  3 | medium  | small   | -       || not handled         | DDF_OFF
+     *  4 | medium  | medium  | -       || [DDFSTRT ; DDFSTOP] | DDF_OFF
+     *  5 | medium  | large   | -       || [DDFSTRT ; 0xD8]    | DDF_OFF
+     *  6 | large   | small   | -       || not handled         | DDF_OFF
+     *  7 | large   | medium  | -       || not handled         | DDF_OFF
+     *  8 | large   | large   | -       || Empty               | DDF_OFF
      */
-    const struct { int interval; } table[18] = {
+    const struct { int interval; } table[9] = {
         { DDF_EMPTY     }, // 0
-        { DDF_EMPTY     }, // 1
-        { DDF_18_STOP   }, // 2
-        { DDF_18_STOP   }, // 3
-        { DDF_18_D8 ,   }, // 4
-        { DDF_18_D8 ,   }, // 5
-        { DDF_EMPTY ,   }, // 6
-        { DDF_EMPTY ,   }, // 7
-        { DDF_STRT_STOP }, // 8
-        { DDF_18_STOP   }, // 9
-        { DDF_STRT_D8   }, // 10
-        { DDF_18_D8     }, // 11
-        { DDF_EMPTY     }, // 12
-        { DDF_EMPTY     }, // 13
-        { DDF_EMPTY     }, // 14
-        { DDF_EMPTY     }, // 15
-        { DDF_EMPTY     }, // 16
-        { DDF_18_D8     }, // 17
+        { DDF_18_STOP   }, // 1
+        { DDF_18_D8     }, // 2
+        { DDF_EMPTY     }, // 3
+        { DDF_STRT_STOP }, // 4
+        { DDF_STRT_D8   }, // 5
+        { DDF_EMPTY     }, // 6
+        { DDF_EMPTY     }, // 7
+        { DDF_EMPTY     }  // 8
     };
 
-    int index = 6*strt + 2*stop;
+    int index = 3*strt + stop;
     switch (table[index].interval) {
 
         case DDF_EMPTY:
@@ -1487,11 +1468,10 @@ Agnus::computeDDFWindowOCS()
             computeStandardDDFWindow(0x18, 0xD8);
             break;
     }
-    ddfState = DDF_OFF;
 
+    debug(DDF_DEBUG, "DDF Window (OCS): (%d,%d) (%d,%d)\n",
+          ddfStrtLores, ddfStrtHires, ddfStopLores, ddfStopHires);
 
-    debug(DDF_DEBUG, "DDF Window Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
-    debug(DDF_DEBUG, "   (OCS)   Stop: %d %d\n", ddfStopLores, ddfStopHires);
     return;
 }
 
@@ -1571,9 +1551,9 @@ Agnus::computeDDFWindowECS()
     }
     ddfState = table[index].state;
 
+    debug(DDF_DEBUG, "DDF Window (ECS): (%d,%d) (%d,%d)\n",
+          ddfStrtLores, ddfStrtHires, ddfStopLores, ddfStopHires);
 
-    debug(DDF_DEBUG, "DDF Window Strt: %d %d\n", ddfStrtLores, ddfStrtHires);
-    debug(DDF_DEBUG, "   (ECS)   Stop: %d %d\n", ddfStopLores, ddfStopHires);
     return;
 }
 
@@ -1756,21 +1736,9 @@ Agnus::pokeSPRxCTL(u16 value)
     // Compute the value of the vertical counter that is seen here
     i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
 
-    // bool match = (sprVStop[x] == v);
-    // debug("v = %d match = %d\n", v, match);
-
     // Compute the new vertical start and stop position
     sprVStrt[x] = ((value & 0b100) << 6) | (sprVStrt[x] & 0x00FF);
     sprVStop[x] = ((value & 0b010) << 7) | (value >> 8);
-
-    // Check if sprite DMA should be enabled
-    // Check if sprite DMA should be disabled
-    /*
-    if (match || sprVStop[x] == v) {
-        sprDmaState[x] = SPR_DMA_IDLE;
-        // debug("Going IDLE\n");
-    }
-    */
 
     // Update sprite DMA status
     if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
@@ -1792,7 +1760,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
 
-    debug(DMA_DEBUG, "pokeBPLCON0(%X,%X)\n", oldValue, newValue);
+    debug(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;

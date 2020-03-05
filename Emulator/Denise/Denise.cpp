@@ -713,17 +713,6 @@ Denise::drawSprites()
         if (wasArmed & 0b00110000) drawSpritePair<5>();
         if (wasArmed & 0b00001100) drawSpritePair<3>();
         if (wasArmed & 0b00000011) drawSpritePair<1>();
-
-        /*
-        if (amiga.getDebugMode()) {
-            for (int i = 0; i < 8; i++) {
-                if (wasArmed & (1 << i)) {
-                    if (spriteDatNew.nr == i) recordSpriteData(i);
-                    spriteDatNew.lines[i]++;
-                }
-            }
-        }
-        */
     }
 
     sprRegChanges.clear();

@@ -345,6 +345,13 @@ public:
      */
     DDFState ddfState;
 
+    /* This variable is used to emulate the OCS "scanline effect". If DDFSTRT
+     * is set to value smaller than the left hardware stop at 0x18, early DMA
+     * access is enables every other line. In this case, this variable stores
+     * the number of the next line where early DMA is possible.
+     */
+    i16 ocsEarlyAccessLine;
+
     // DDF flipflops
     bool ddfVFlop;
 
@@ -508,6 +515,7 @@ public:
         & ddfStopLores
         & ddfStopHires
         & ddfState
+        & ocsEarlyAccessLine
 
         & changeRecorder
         & chngRecorder
