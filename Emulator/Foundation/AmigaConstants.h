@@ -265,6 +265,9 @@ static const double dmaClockFrequency = masterClockFrequency / 8.0;
 #define FMODE    0x1FCL // AGA
 #define NO_OP    0x1FEL
 
+// Returns a printable name for a custom register
+const char *regName(u32 addr);
+
 // DMACON register bits
 #define BBUSY  0x4000
 #define BZERO  0x2000

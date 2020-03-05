@@ -7,10 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-
 #include "Amiga.h"
-#include "teeny-sha1.h"
-
 
 ADFFile::ADFFile()
 {
@@ -145,8 +142,8 @@ ADFFile::sha1()
 {
     static char result[41];
 
-    int error = sha1digest(NULL, result, data, size);
-    if (error) warn("cal_sha1 returned with error code %d\n", error);
+    int error = sha_1(NULL, result, data, size);
+    if (error) warn("sha_1 returned with error code %d\n", error);
 
     return result;
 }
