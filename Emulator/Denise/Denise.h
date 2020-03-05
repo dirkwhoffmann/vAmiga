@@ -112,7 +112,6 @@ public:
     RegChangeRecorder<128> conChanges;
 
     // Ringbuffer recording sprite register changes
-    ChangeRecorder<128> sprRegChanges;
     RegChangeRecorder<128> sprChanges;
 
 
@@ -316,9 +315,7 @@ public:
         & scrollHiresOdd
         & scrollHiresEven
         & scrollHiresMax
-        & conRegChanges
         & conChanges
-        & sprRegChanges
         & sprChanges
 
         & sprpos

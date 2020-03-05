@@ -317,7 +317,6 @@ Denise::pokeSPRxPOS(u16 value)
     sprpos[x] = value;
 
     // Record the register change
-    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0POS + x, value);
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0POS + x, value } );
 
     // Update debugger info
@@ -344,7 +343,6 @@ Denise::pokeSPRxCTL(u16 value)
     CLR_BIT(armed, x);
 
     // Record the register change
-    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0CTL + x, value);
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0CTL + x, value } );
 
     // Update debugger info
@@ -368,7 +366,6 @@ Denise::pokeSPRxDATA(u16 value)
     SET_BIT(wasArmed, x);
 
     // Record the register change
-    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATA + x, value);
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATA + x, value } );
 }
 
@@ -381,7 +378,6 @@ Denise::pokeSPRxDATB(u16 value)
     sprdatb[x] = value;
 
     // Record the register change
-    sprRegChanges.add(4 * agnus.pos.h, REG_SPR0DATB + x, value);
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATB + x, value });
 
     // Record sprite data in debug mode
@@ -715,7 +711,6 @@ Denise::drawSprites()
         if (wasArmed & 0b00000011) drawSpritePair<1>();
     }
 
-    sprRegChanges.clear();
     sprChanges.clear();
 }
 
@@ -744,32 +739,20 @@ Denise::drawSpritePair()
     bool at = attached(x);
     int strt = 0;
 
-    // REMOVE ASAP
-    assert(sprRegChanges.count() == sprChanges.count());
-
     // Iterate over all recorded register changes
-    if (!sprRegChanges.isEmpty()) {
+    if (!sprChanges.isEmpty()) {
 
-        // REMOVE ASAP
-        for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
-            assert(sprRegChanges.change[i].addr == sprChanges.elements[i].addr);
-            assert(sprRegChanges.change[i].value == sprChanges.elements[i].value);
-        }
+        for (int i = sprChanges.begin(); i != sprChanges.end(); i = sprChanges.next(i)) {
 
-        for (int i = sprRegChanges.begin(); i != sprRegChanges.end(); i = sprRegChanges.next(i)) {
-
-            Change &change = sprRegChanges.change[i];
-            RegChange &chng = sprChanges.elements[i];
-            assert(change.addr == chng.addr);
-            assert(change.value == chng.value);
-            assert(change.trigger == sprChanges.keys[i]);
+            Cycle trigger = sprChanges.keys[i];
+            RegChange &change = sprChanges.elements[i];
 
             // Draw a chunk of pixels
-            drawSpritePair<x>(strt, change.trigger,
+            drawSpritePair<x>(strt, trigger,
                               strt1, strt2,
                               data1, data2, datb1, datb2,
                               armed1,armed2, at);
-            strt = change.trigger;
+            strt = trigger;
 
             // Apply the recorded register change
             switch (change.addr) {
