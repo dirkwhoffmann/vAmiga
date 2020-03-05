@@ -332,15 +332,13 @@ void
 PixelEngine::endOfVBlankLine()
 {
     // Apply all color register changes that happened in this line
-    for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
-        assert(colRegChanges.change[i].addr == colChanges.elements[i].addr);
-        assert(colRegChanges.change[i].value == colChanges.elements[i].value);
-        applyRegisterChange(colRegChanges.change[i]);
+    for (int i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
+        applyRegisterChange(colChanges.elements[i]);
     }
 }
 
 void
-PixelEngine::applyRegisterChange(const Change &change)
+PixelEngine::applyRegisterChange(const RegChange &change)
 {
     switch (change.addr) {
 
@@ -370,25 +368,21 @@ PixelEngine::colorize(int line)
     u16 hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colRegChanges.add(HPIXELS, REG_NONE, 0);
     colChanges.insert(HPIXELS, RegChange { REG_NONE, 0 } );
 
     // Iterate over all recorded register changes
-    for (int i = colRegChanges.begin(); i != colRegChanges.end(); i = colRegChanges.next(i)) {
+    for (int i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {
 
-        Change &change = colRegChanges.change[i];
-        RegChange &chng = colChanges.elements[i];
-        assert(change.trigger == colChanges.keys[i]);
-        assert(change.addr == chng.addr);
-        assert(change.value == chng.value);
+        Cycle trigger = colChanges.keys[i];
+        RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
         if (ham) {
-            colorizeHAM(dst, pixel, change.trigger, hold);
+            colorizeHAM(dst, pixel, trigger, hold);
         } else {
-            colorize(dst, pixel, change.trigger);
+            colorize(dst, pixel, trigger);
         }
-        pixel = change.trigger;
+        pixel = trigger;
 
         // Perform the register change
         applyRegisterChange(change);
@@ -400,7 +394,6 @@ PixelEngine::colorize(int line)
     }
 
     // Clear the history cache
-    colRegChanges.clear();
     colChanges.clear();
 }
 

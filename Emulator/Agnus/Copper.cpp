@@ -368,7 +368,6 @@ Copper::move(u32 addr, u16 value)
         plaindebug(BLTTIM_DEBUG, "(%d,%d) COLOR%02d\n", agnus.pos.v, agnus.pos.h, addr - 0x180);
 
         // Color registers
-        pixelEngine.colRegChanges.add(4 * agnus.pos.h, addr, value);
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
     }

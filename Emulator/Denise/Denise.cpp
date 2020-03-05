@@ -395,10 +395,8 @@ Denise::pokeCOLORxx(u16 value)
     u32 reg = 0x180 + 2*xx;
 
     if (s == POKE_COPPER || agnus.pos.h == 0) {
-        pixelEngine.colRegChanges.add(4 * agnus.pos.h, reg, value);
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
     } else {
-        pixelEngine.colRegChanges.add(4 * (agnus.pos.h - 1), reg, value);
         pixelEngine.colChanges.insert(4 * (agnus.pos.h - 1), RegChange { reg, value } );
     }
 }
@@ -1083,7 +1081,6 @@ Denise::beginOfLine(int vpos)
 {
     // Reset the register change recorders
     conChanges.clear();
-    pixelEngine.colRegChanges.clear();
     pixelEngine.colChanges.clear();
     
     // Save the current values of various Denise registers
