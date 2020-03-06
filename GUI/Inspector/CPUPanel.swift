@@ -114,8 +114,6 @@ extension Inspector {
     }
     
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {
-        
-        lockAmiga()
 
         if sender.stringValue == "" {
             instrTableView.jumpTo(addr: cpuInfo!.pc)
@@ -124,7 +122,5 @@ extension Inspector {
         } else {
             sender.stringValue = ""
         }
-
-        unlockAmiga()
     }
 }

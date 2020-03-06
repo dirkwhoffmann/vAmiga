@@ -49,9 +49,7 @@ class PointTableView: NSTableView {
 
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        lockAmiga()
         click(row: sender.clickedRow, col: sender.clickedColumn)
-        unlockAmiga()
     }
 }
 
@@ -118,10 +116,8 @@ extension PointTableView: NSTableViewDelegate {
         if tableColumn?.identifier.rawValue != "addr" { NSSound.beep(); return }
         guard let addr = object as? UInt32 else { NSSound.beep(); return }
 
-        lockAmiga()
         edit(addr: addr)
         inspector.fullRefresh()
-        unlockAmiga()
      }
 }
 

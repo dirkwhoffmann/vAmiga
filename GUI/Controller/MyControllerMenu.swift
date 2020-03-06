@@ -279,23 +279,17 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stopAndGo()
-        unlockAmiga()
     }
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stepInto()
-        unlockAmiga()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stepOver()
-        unlockAmiga()
     }
 
     @IBAction func resetAction(_ sender: Any!) {

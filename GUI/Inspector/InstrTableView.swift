@@ -124,9 +124,7 @@ class InstrTableView: NSTableView {
 
         if sender.clickedColumn == 0 {
 
-            lockAmiga()
             clickAction(row: sender.clickedRow)
-            unlockAmiga()
         }
     }
 
@@ -150,9 +148,7 @@ class InstrTableView: NSTableView {
 
         if sender.clickedColumn != 0 {
 
-            lockAmiga()
             doubleClickAction(row: sender.clickedRow)
-            unlockAmiga()
         }
     }
 

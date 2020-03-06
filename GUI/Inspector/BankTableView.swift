@@ -44,9 +44,7 @@ class BankTableView: NSTableView {
 
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        lockAmiga()
         inspector.setBank(sender.clickedRow)
-        unlockAmiga()
     }
 }
 

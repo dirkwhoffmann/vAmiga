@@ -45,37 +45,6 @@ var myWindow: NSWindow? {
 
 /* The Amiga proxy of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
- */
-var amiga: AmigaProxy?
-
-/* Lock controlling the access to the Amiga
- * DEPRECATED
- */
-var amigaLock = NSLock()
-
-func lockAmiga() { amigaLock.lock() }
-func unlockAmiga() { amigaLock.unlock() }
-
-func bindAmiga(proxy: AmigaProxy) {
-
-    if proxy != amiga {
-        lockAmiga()
-        amiga = proxy
-        unlockAmiga()
-    }
-}
-
-func unbindAmiga(proxy: AmigaProxy) {
-
-    if proxy == amiga {
-        lockAmiga()
-        amiga = nil
-        unlockAmiga()
-    }
-}
-
-/* The Amiga proxy of the currently active emulator instance.
- * This variable is global and can be accessed from anywhere in the Swift code.
  * DEPRECATED
  */
 var amigaProxy: AmigaProxy? {
@@ -331,17 +300,11 @@ extension MyAppDelegate {
                     con.audioEngine!.startPlayback()
                     con.amiga.paula.rampUpFromZero()
 
-                    // Make this Amiga the active one
-                    bindAmiga(proxy: con.amiga)
-
                 } else {
 
                     // Stop playback
                     con.audioEngine!.stopPlayback()
                     con.amiga.paula.rampDown()
-
-                    // Stop being the active instance
-                    unbindAmiga(proxy: con.amiga)
                 }
             }
         }

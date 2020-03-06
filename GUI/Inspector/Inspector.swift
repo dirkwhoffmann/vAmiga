@@ -589,8 +589,6 @@ class Inspector: NSWindowController {
 
         track()
 
-        lockAmiga()
-
         super.showWindow(self)
         amiga.enableDebugging()
         updateInspectionTarget()
@@ -605,8 +603,6 @@ class Inspector: NSWindowController {
 
             self.timerLock.unlock()
         }
-
-        unlockAmiga()
     }
 
     deinit {
@@ -658,8 +654,6 @@ extension Inspector: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
 
-        lockAmiga()
-
         track("Closing inspector")
 
         // Disconnect the inspector from the parent controller
@@ -674,8 +668,6 @@ extension Inspector: NSWindowDelegate {
         // Leave debugging mode
         amiga.disableDebugging()
         amiga.clearInspectionTarget()
-
-        unlockAmiga()
     }
 }
 
@@ -705,8 +697,6 @@ extension Inspector: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
-        lockAmiga()
         updateInspectionTarget()
-        unlockAmiga()
     }
 }

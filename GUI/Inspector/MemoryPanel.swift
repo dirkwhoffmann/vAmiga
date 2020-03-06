@@ -165,84 +165,60 @@ extension Inspector {
 
     @IBAction func memSliderAction(_ sender: NSSlider!) {
 
-        lockAmiga()
         setBank(sender.integerValue)
-        unlockAmiga()
     }
 
     @IBAction func memChipAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_CHIP)
-        unlockAmiga()
     }
 
     @IBAction func memFastRamAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_FAST)
-        unlockAmiga()
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_SLOW)
-        unlockAmiga()
     }
 
     @IBAction func memRomAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_ROM)
-        unlockAmiga()
     }
 
     @IBAction func memWomAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_WOM)
-        unlockAmiga()
     }
 
     @IBAction func memExtAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_EXT)
-        unlockAmiga()
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_CIA)
-        unlockAmiga()
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_RTC)
-        unlockAmiga()
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_OCS)
-        unlockAmiga()
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
 
-        lockAmiga()
         setBank(src: MEM_AUTOCONF)
-        unlockAmiga()
     }
 
     @IBAction func memSearchAction(_ sender: NSTextField!) {
-
-        lockAmiga()
 
         let input = sender.stringValue
         if let addr = Int(input, radix: 16), input != "" {
@@ -253,7 +229,5 @@ extension Inspector {
             selected = -1
         }
         fullRefresh()
-
-        unlockAmiga()
     }
 }
