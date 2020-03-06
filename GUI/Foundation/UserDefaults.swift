@@ -420,7 +420,7 @@ extension MyController {
         defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         defaults.decode(&gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
-        keyboardcontroller.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
+        kbController.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
         amiga.joystick1.setAutofire(defaults.bool(forKey: Keys.autofire))
@@ -450,7 +450,7 @@ extension MyController {
         defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         defaults.encode(gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
-        defaults.set(keyboardcontroller.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
+        defaults.set(kbController.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
         defaults.set(amiga.joystick1.autofire(), forKey: Keys.autofire)
@@ -722,7 +722,7 @@ extension MyController {
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
         renderer.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        keyboardcontroller.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+        kbController.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
         ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
@@ -747,7 +747,7 @@ extension MyController {
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
         defaults.set(renderer.keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(keyboardcontroller.exitOnEsc, forKey: Keys.exitOnEsc)
+        defaults.set(kbController.exitOnEsc, forKey: Keys.exitOnEsc)
         
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)

@@ -151,9 +151,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df1Menu: NSMenuItem!
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
-
-    // Virtual keyboard (opened as a separate window)
-    var virtualKeyboard: VirtualKeyboardController?
     
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
@@ -197,9 +194,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     public func applicationWillTerminate(_ aNotification: Notification) {
 
-        // Close auxiliary windows
-        virtualKeyboard?.close()
-        
         track()
     }
     

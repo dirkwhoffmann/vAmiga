@@ -28,7 +28,7 @@ extension PreferencesController {
 
         // Fullscreen
         emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
-        emuExitOnEscButton.state = controller.keyboardcontroller.exitOnEsc ? .on : .off
+        emuExitOnEscButton.state = controller.kbController.exitOnEsc ? .on : .off
         
         // Screenshots
         emuScreenshotSourcePopup.selectItem(withTag: controller.screenshotSource)
@@ -92,7 +92,7 @@ extension PreferencesController {
 
     @IBAction func emuExitOnEscAction(_ sender: NSButton!) {
         
-        if let keyboard = myController?.keyboardcontroller {
+        if let keyboard = myController?.kbController {
             keyboard.exitOnEsc = (sender.state == .on)
             refresh()
         }

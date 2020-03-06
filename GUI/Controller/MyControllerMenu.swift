@@ -274,7 +274,7 @@ extension MyController: NSMenuItemValidation {
             return
         }
         
-        keyboardcontroller.autoType(text)
+        kbController.autoType(text)
     }
 
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
@@ -366,7 +366,7 @@ extension MyController: NSMenuItemValidation {
         
         // Open the virtual keyboard as a window
         if virtualKeyboardSheet == nil {
-            virtualKeyboardSheet = VirtualKeyboardController.make(parent: self)
+            virtualKeyboardSheet = VKBController.make(parent: self)
         }
         virtualKeyboardSheet?.showWindow(autoClose: false)
     }

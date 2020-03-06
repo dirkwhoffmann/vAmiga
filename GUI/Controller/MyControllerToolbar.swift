@@ -148,7 +148,7 @@ extension MyController {
         
         // Open the virtual keyboard as a sheet
         if virtualKeyboardSheet == nil {
-            virtualKeyboardSheet = VirtualKeyboardController.make(parent: self)
+            virtualKeyboardSheet = VKBController.make(parent: self)
         }
         virtualKeyboardSheet?.showSheet(autoClose: true)
     }

@@ -42,10 +42,10 @@ class MyController: NSWindowController, MessageReceiver {
     var gamePadManager: GamePadManager!
     
     // Keyboard controller
-    var keyboardcontroller: KeyboardController!
+    var kbController: KBController!
 
-    // Virtual keyboard (opened as a sheet)
-    var virtualKeyboardSheet: VirtualKeyboardController?
+    // Virtual keyboard
+    var virtualKeyboardSheet: VKBController?
     
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be
@@ -103,9 +103,9 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Devices preferences
     var disconnectJoyKeys: Bool {
-        get { return keyboardcontroller.disconnectJoyKeys }
+        get { return kbController.disconnectJoyKeys }
         set {
-            keyboardcontroller.disconnectJoyKeys = newValue
+            kbController.disconnectJoyKeys = newValue
         }
     }
     var autofire: Bool {
@@ -263,8 +263,8 @@ class MyController: NSWindowController, MessageReceiver {
         set { renderer.keepAspectRatio = newValue }
     }
     var exitOnEsc: Bool {
-        get { return keyboardcontroller.exitOnEsc }
-        set { keyboardcontroller.exitOnEsc = newValue }
+        get { return kbController.exitOnEsc }
+        set { kbController.exitOnEsc = newValue }
     }
     var closeWithoutAsking = Defaults.closeWithoutAsking
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
@@ -409,8 +409,8 @@ extension MyController {
         hideMouse = false
         
         // Create keyboard controller
-        keyboardcontroller = KeyboardController()
-        if keyboardcontroller == nil {
+        kbController = KBController()
+        if kbController == nil {
             track("Failed to create keyboard controller")
             return
         }

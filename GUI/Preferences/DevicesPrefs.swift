@@ -70,7 +70,7 @@ extension PreferencesController {
         refreshKey(dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
         refreshKey(dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
 
-        devDisconnectKeys.state = controller.keyboardcontroller.disconnectJoyKeys ? .on : .off
+        devDisconnectKeys.state = controller.kbController.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
         assert(joystick1.autofire() == joystick2.autofire())
@@ -151,7 +151,7 @@ extension PreferencesController {
     
     @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
         
-        myController?.keyboardcontroller.disconnectJoyKeys = (sender.state == .on)
+        myController?.kbController.disconnectJoyKeys = (sender.state == .on)
         
         refresh()
     }

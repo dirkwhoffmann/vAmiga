@@ -34,7 +34,7 @@ func mountScriptCmd(arguments: [AnyHashable: Any]?) -> Bool {
 func typeTextCmd(arguments: [AnyHashable: Any]?) -> Bool {
     
     if let text = arguments?[""] as? String {
-        myController?.keyboardcontroller.autoType(text)
+        myController?.kbController.autoType(text)
         return true
     }
     return false

@@ -17,17 +17,17 @@ public extension MetalView {
     
     override func keyDown(with event: NSEvent) {
 
-        controller.keyboardcontroller.keyDown(with: event)
+        controller.kbController.keyDown(with: event)
     }
     
     override func keyUp(with event: NSEvent) {
 
-        controller.keyboardcontroller.keyUp(with: event)
+        controller.kbController.keyUp(with: event)
     }
     
     override func flagsChanged(with event: NSEvent) {
         
-        controller.keyboardcontroller.flagsChanged(with: event)
+        controller.kbController.flagsChanged(with: event)
     }
     
     //
