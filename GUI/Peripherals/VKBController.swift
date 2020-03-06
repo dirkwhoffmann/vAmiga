@@ -60,12 +60,15 @@ class VKBController: DialogController, NSWindowDelegate {
     // Factory method
     static func make(parent: MyController) -> VKBController? {
 
-        track("Virtual keyboard (style: \(kbStyle) layout: \(kbLayout))")
+        let style = kbStyle(parent)
+        let layout = kbLayout(parent)
+
+        track("Virtual keyboard (style: \(style) layout: \(layout))")
 
         var xibName = ""
-        let ansi = (kbLayout == .us)
+        let ansi = (layout == .us)
 
-        if kbStyle == .narrow {
+        if style == .narrow {
             xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
             xibName = ansi ? "A500ANSI" : "A500ISO"
@@ -116,7 +119,7 @@ class VKBController: DialogController, NSWindowDelegate {
     
     override func refresh() {
                 
-        guard let keyboard = amigaProxy?.keyboard else { return }
+        guard let keyboard = amiga.keyboard else { return }
         
         for keycode in 0 ... 127 {
             
@@ -130,8 +133,8 @@ class VKBController: DialogController, NSWindowDelegate {
     
     func updateImageCache() {
 
-        let style = VKBController.kbStyle
-        let layout = VKBController.kbLayout
+        let style = VKBController.kbStyle(parent)
+        let layout = VKBController.kbLayout(parent)
 
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
@@ -144,16 +147,14 @@ class VKBController: DialogController, NSWindowDelegate {
     }
     
     func pressKey(keyCode: Int) {
-        
-        guard let keyboard = amigaProxy?.keyboard else { return }
 
-        keyboard.pressKey(keyCode)
+        amiga.keyboard.pressKey(keyCode)
         refresh()
         
         DispatchQueue.main.async {
             
             usleep(useconds_t(100000))
-            amigaProxy?.keyboard.releaseAllKeys()
+            self.amiga.keyboard.releaseAllKeys()
             self.refresh()
         }
         
@@ -164,7 +165,7 @@ class VKBController: DialogController, NSWindowDelegate {
     
     func holdKey(keyCode: Int) {
         
-        guard let keyboard = amigaProxy?.keyboard else { return }
+        guard let keyboard = amiga.keyboard else { return }
         
         keyboard.pressKey(keyCode)
         refresh()
@@ -208,16 +209,16 @@ class Keycap: NSButton {
 
 extension VKBController {
 
-    static var kbStyle: KBStyle {
+    static func kbStyle(_ parent: MyController) -> KBStyle {
 
         // Determine if an A1000 is emulated
-        let a1000 = amigaProxy?.mem.hasBootRom() ?? false
+        let a1000 = parent.amiga.mem.hasBootRom()
 
         // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
         return a1000 ? .narrow : .wide
     }
 
-    static var kbLayout: KBLayout {
+    static func kbLayout(_ parent: MyController) -> KBLayout {
 
          // Get the first two characters of the ISO-639-1 language code
          let lang = Locale.preferredLanguages[0].prefix(2)
