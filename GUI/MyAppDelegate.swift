@@ -31,6 +31,7 @@ var myDocument: MyDocument? {
 
 /* The window controller of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
+ * DEPRECATED
  */
 var myController: MyController? {
     return myDocument?.windowControllers.first as? MyController
@@ -38,6 +39,7 @@ var myController: MyController? {
 
 /* The window of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.
+ * DEPRECATED
  */
 var myWindow: NSWindow? {
     return myController?.window
@@ -150,13 +152,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
 
-    // Inspector (opened as a separate window)
-    // DEPRECATED
-    // var inspector: Inspector?
-
-    // Monitor (opened as a separate window)
-    var monitor: Monitor?
-
     // Virtual keyboard (opened as a separate window)
     var virtualKeyboard: VirtualKeyboardController?
     
@@ -203,7 +198,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     public func applicationWillTerminate(_ aNotification: Notification) {
 
         // Close auxiliary windows
-        monitor?.close()
         virtualKeyboard?.close()
         
         track()

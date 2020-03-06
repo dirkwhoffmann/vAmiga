@@ -606,8 +606,8 @@ class Inspector: NSWindowController {
     }
 
     deinit {
-         track()
-     }
+        track()
+    }
 
     // Assigns a number formatter to a control
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
@@ -659,7 +659,7 @@ extension Inspector: NSWindowDelegate {
         // Disconnect the inspector from the parent controller
         parent?.inspector = nil
 
-        // Terminate the refresh timer
+        // Stop the refresh timer
         timerLock.lock()
         timer?.invalidate()
         timer = nil

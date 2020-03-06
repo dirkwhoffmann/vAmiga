@@ -29,6 +29,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Inspector of this emulator instance
     var inspector: Inspector?
 
+    // Monitor of this emulator instance
+    var monitor: Monitor?
+
     // Preferences controller
     var preferencesController: PreferencesController?
 

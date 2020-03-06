@@ -9,10 +9,16 @@
 
 class Monitor: NSWindowController {
 
-    // Preferences controller
+    // The emulator instance this inspector is bound to
+    var parent: MyController?
+
+    // The Amiga proxy of the parent
+    var amiga: AmigaProxy!
+
+    // Debugger preferences
     var dmaDebugController: DMADebugController?
 
-    // DMA Debugger
+    // Enables or disables DMA debugging
     @IBOutlet weak var dmaDebugEnable: NSButton!
 
     // Waveform view
@@ -32,13 +38,23 @@ class Monitor: NSWindowController {
     @IBOutlet weak var diskView: ActivityView!
     @IBOutlet weak var serialView: ActivityView!
 
+    // Timer for triggering continous update
     var timer: Timer?
+
+    // Lock to prevent reentrance to the timer execution code
+     var timerLock = NSLock()
+    
     var refreshCounter = 0
 
     // Factory method
-    static func make() -> Monitor? {
+    static func make(parent: MyController) -> Monitor? {
 
-        return Monitor.init(windowNibName: "Monitor")
+        track()
+
+        let monitor = Monitor.init(windowNibName: "Monitor")
+        monitor.parent = parent
+        monitor.amiga = parent.amiga
+        return monitor
     }
 
     override func awakeFromNib() {
@@ -49,14 +65,24 @@ class Monitor: NSWindowController {
     override func showWindow(_ sender: Any?) {
 
         track()
+        
         super.showWindow(self)
         refresh(everything: true)
 
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+
+            self.timerLock.lock()
+
             if amigaProxy?.isRunning() == true {
                 self.refresh(everything: false)
             }
+
+            self.timerLock.unlock()
         }
+    }
+
+    deinit {
+        track()
     }
 
     func refresh(everything: Bool) {
@@ -99,7 +125,15 @@ extension Monitor: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
 
         track("Closing monitor")
+
+        // Disconnect the inspector from the parent controller
+        parent?.monitor = nil
+
+        // Stop the refresh timer
+        timerLock.lock()
         timer?.invalidate()
+        timer = nil
+        timerLock.unlock()
     }
 }
 

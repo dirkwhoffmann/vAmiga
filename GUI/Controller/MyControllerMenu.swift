@@ -354,10 +354,8 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func monitorAction(_ sender: Any!) {
 
-        if myAppDelegate.monitor == nil {
-            myAppDelegate.monitor = Monitor.make()
-        }
-        myAppDelegate.monitor?.showWindow(self)
+        if monitor == nil { monitor = Monitor.make(parent: self) }
+        monitor?.showWindow(self)
     }
 
     //
