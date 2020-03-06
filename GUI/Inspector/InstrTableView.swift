@@ -10,6 +10,7 @@
 class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
 
     enum BreakpointType {
         case none
@@ -28,10 +29,11 @@ class InstrTableView: NSTableView {
     
     override func awakeFromNib() {
         
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
-        
+
         doubleAction = #selector(doubleClickAction(_:))
         action = #selector(clickAction(_:))
     }
@@ -48,14 +50,14 @@ class InstrTableView: NSTableView {
 
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
 
-            var info = amiga!.cpu.disassembleInstr(addr)
+            var info = amiga.cpu.disassembleInstr(addr)
 
             instrInRow[i] = String(cString: &info.instr.0)
             addrInRow[i] = addr
             dataInRow[i] = String(cString: &info.data.0)
-            if amiga!.cpu.breakpointIsSetAndDisabled(at: addr) {
+            if amiga.cpu.breakpointIsSetAndDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
-            } else if amiga!.cpu.breakpointIsSet(at: addr) {
+            } else if amiga.cpu.breakpointIsSet(at: addr) {
                 bpInRow[i] = BreakpointType.enabled
             } else {
                 bpInRow[i] = BreakpointType.none
@@ -156,12 +158,12 @@ class InstrTableView: NSTableView {
 
     func doubleClickAction(row: Int) {
 
-        if let addr = addrInRow[row], let cpu = amiga?.cpu {
+        if let addr = addrInRow[row] {
 
-            if cpu.breakpointIsSet(at: addr) {
-                cpu.removeBreakpoint(at: addr)
+            if amiga.cpu.breakpointIsSet(at: addr) {
+                amiga.cpu.removeBreakpoint(at: addr)
             } else {
-                cpu.addBreakpoint(at: addr)
+                amiga.cpu.addBreakpoint(at: addr)
             }
 
             inspector.fullRefresh()

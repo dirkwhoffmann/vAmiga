@@ -46,6 +46,9 @@ extension MyController: NSWindowDelegate {
         
         track()
 
+        // Close the inspector (if open)
+        inspector?.close()
+
         // Stop timer
         timerLock.lock()
         timer?.invalidate()
@@ -58,9 +61,6 @@ extension MyController: NSWindowDelegate {
         // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
-
-        // Stop metal view
-        // renderer.cleanup()
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

@@ -10,6 +10,7 @@
 class MemTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
 
     // Displayed memory bank
     var bank = 0
@@ -20,7 +21,8 @@ class MemTableView: NSTableView {
     var dataInAddr: [Int: Int] = [:]
     
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -30,25 +32,22 @@ class MemTableView: NSTableView {
 
     private func cache() {
 
-        if amiga != nil {
+        addrInRow = [:]
+        asciiInRow = [:]
+        dataInAddr = [:]
 
-            addrInRow = [:]
-            asciiInRow = [:]
-            dataInAddr = [:]
+        var addr = inspector.bank * 65536
+        let rows = numberOfRows(in: self)
 
-            var addr = inspector.bank * 65536
-            let rows = numberOfRows(in: self)
+        for i in 0 ..< rows {
 
-            for i in 0 ..< rows {
+            addrInRow[i] = addr
+            asciiInRow[i] = amiga.mem.ascii(addr)
 
-                addrInRow[i] = addr
-                asciiInRow[i] = amiga!.mem.ascii(addr)
+            for _ in 0 ..< 8 {
 
-                for _ in 0 ..< 8 {
-
-                    dataInAddr[addr] = amiga!.mem.spypeek16(addr)
-                    addr += 2
-                }
+                dataInAddr[addr] = amiga.mem.spypeek16(addr)
+                addr += 2
             }
         }
     }

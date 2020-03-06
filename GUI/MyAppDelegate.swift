@@ -48,7 +48,8 @@ var myWindow: NSWindow? {
  */
 var amiga: AmigaProxy?
 
-/* Lock controlling the access to the
+/* Lock controlling the access to the Amiga
+ * DEPRECATED
  */
 var amigaLock = NSLock()
 
@@ -181,7 +182,8 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df3Menu: NSMenuItem!
 
     // Inspector (opened as a separate window)
-    var inspector: Inspector?
+    // DEPRECATED
+    // var inspector: Inspector?
 
     // Monitor (opened as a separate window)
     var monitor: Monitor?
@@ -232,7 +234,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
     public func applicationWillTerminate(_ aNotification: Notification) {
 
         // Close auxiliary windows
-        inspector?.close()
         monitor?.close()
         virtualKeyboard?.close()
         

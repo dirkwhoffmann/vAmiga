@@ -15,11 +15,11 @@ class SpriteTableView: NSTableView {
     var spriteLines = 0
 
     @IBOutlet weak var inspector: Inspector!
-    
-    var amiga = amigaProxy
+    var amiga: AmigaProxy!
     
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -28,14 +28,14 @@ class SpriteTableView: NSTableView {
     private func cache() {
 
         for i in 0 ..< 8 {
-            spriteInfo[i] = amiga!.denise.getSpriteInfo(i)
+            spriteInfo[i] = amiga.denise.getSpriteInfo(i)
         }
         for i in 0 ..< 16 {
-            spriteCol[i] = NSColor.init(amigaRGB: amiga!.denise.sprColorReg(i))
+            spriteCol[i] = NSColor.init(amigaRGB: amiga.denise.sprColorReg(i))
         }
-        spriteLines = amiga!.denise.sprDataLines(inspector.selectedSprite)
+        spriteLines = amiga.denise.sprDataLines(inspector.selectedSprite)
         for i in 0 ..< spriteLines {
-            spriteDat[i] = amiga!.denise.sprData(i)
+            spriteDat[i] = amiga.denise.sprData(i)
         }
     }
 

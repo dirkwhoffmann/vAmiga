@@ -10,6 +10,7 @@
 class PointTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]
@@ -18,6 +19,7 @@ class PointTableView: NSTableView {
 
     override func awakeFromNib() {
 
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -127,11 +129,11 @@ class BreakTableView: PointTableView {
 
     override func cache() {
 
-        numRows = amiga!.cpu.numberOfBreakpoints()
+        numRows = amiga.cpu.numberOfBreakpoints()
 
         for i in 0 ..< numRows {
-            disabledCache[i] = amiga!.cpu.breakpointIsDisabled(i)
-            addrCache[i] = amiga!.cpu.breakpointAddr(i)
+            disabledCache[i] = amiga.cpu.breakpointIsDisabled(i)
+            addrCache[i] = amiga.cpu.breakpointAddr(i)
         }
     }
 
@@ -140,15 +142,16 @@ class BreakTableView: PointTableView {
         if col == 0 {
 
             // Enable / Disable
-            let disabled = amiga?.cpu.breakpointIsDisabled(row) ?? false
-            amiga?.cpu.breakpointSetEnable(row, value: disabled)
+            let disabled = amiga.cpu.breakpointIsDisabled(row)
+            amiga.cpu.breakpointSetEnable(row, value: disabled)
             inspector.fullRefresh()
         }
 
         if col == 0 || col == 1 {
 
             // Jump to breakpoint address
-            if let addr = amiga?.cpu.breakpointAddr(row), addr <= 0xFFFFFF {
+            let addr = amiga.cpu.breakpointAddr(row)
+            if addr <= 0xFFFFFF {
                 inspector.fullRefresh()
                 inspector.instrTableView.jumpTo(addr: addr)
             }
@@ -157,15 +160,15 @@ class BreakTableView: PointTableView {
         if col == 2 {
 
             // Delete
-            amiga?.cpu.removeBreakpoint(row)
+            amiga.cpu.removeBreakpoint(row)
             inspector.fullRefresh()
         }
     }
 
     override func edit(addr: UInt32) {
 
-        if amiga?.cpu.breakpointIsSet(at: addr) == false {
-            amiga?.cpu.addBreakpoint(at: addr)
+        if amiga.cpu.breakpointIsSet(at: addr) == false {
+            amiga.cpu.addBreakpoint(at: addr)
             inspector.instrTableView.jumpTo(addr: addr)
         } else {
             NSSound.beep()
@@ -177,11 +180,11 @@ class WatchTableView: PointTableView {
 
     override func cache() {
 
-        numRows = amiga!.cpu.numberOfWatchpoints()
+        numRows = amiga.cpu.numberOfWatchpoints()
 
         for i in 0 ..< numRows {
-            disabledCache[i] = amiga!.cpu.watchpointIsDisabled(i)
-            addrCache[i] = amiga!.cpu.watchpointAddr(i)
+            disabledCache[i] = amiga.cpu.watchpointIsDisabled(i)
+            addrCache[i] = amiga.cpu.watchpointAddr(i)
         }
     }
 
@@ -190,23 +193,23 @@ class WatchTableView: PointTableView {
         if col == 0 {
 
              // Toggle enable status
-             let disabled = amiga?.cpu.watchpointIsDisabled(row) ?? false
-             amiga?.cpu.watchpointSetEnable(row, value: disabled)
+            let disabled = amiga.cpu.watchpointIsDisabled(row)
+             amiga.cpu.watchpointSetEnable(row, value: disabled)
              inspector.fullRefresh()
          }
 
          if col == 2 {
 
              // Delete
-             amiga?.cpu.removeWatchpoint(row)
+             amiga.cpu.removeWatchpoint(row)
              inspector.fullRefresh()
          }
     }
 
     override func edit(addr: UInt32) {
 
-        if amiga?.cpu.watchpointIsSet(at: addr) == false {
-            amiga?.cpu.addWatchpoint(at: addr)
+        if amiga.cpu.watchpointIsSet(at: addr) == false {
+            amiga.cpu.addWatchpoint(at: addr)
         } else {
             NSSound.beep()
         }

@@ -11,7 +11,7 @@ extension Inspector {
 
     private func cacheCPU() {
 
-        cpuInfo = amiga!.cpu.getInfo()
+        cpuInfo = amiga.cpu.getInfo()
     }
 
     func refreshCPU(count: Int = 0, full: Bool = false) {
@@ -94,33 +94,23 @@ extension Inspector {
 
     @IBAction func cpuStopAndGoAction(_ sender: NSButton!) {
 
-        lockAmiga()
-        amiga?.stopAndGo()
-        unlockAmiga()
+        amiga.stopAndGo()
     }
     
     @IBAction func cpuStepIntoAction(_ sender: NSButton!) {
 
-        lockAmiga()
-        amiga?.stepInto()
-        unlockAmiga()
+        amiga.stepInto()
     }
     
     @IBAction func cpuStepOverAction(_ sender: NSButton!) {
 
-        lockAmiga()
-        amiga?.stepOver()
-        unlockAmiga()
+        amiga.stepOver()
     }
 
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
 
-        lockAmiga()
-
-        amiga?.cpu.clearLog()
+        amiga.cpu.clearLog()
         refresh()
-
-        unlockAmiga()
     }
     
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {

@@ -16,7 +16,7 @@ extension Inspector {
 
     private func cacheCopper() {
 
-        copperInfo = amiga!.agnus.getCopperInfo()
+        copperInfo = amiga.agnus.getCopperInfo()
     }
 
     func refreshCopper(count: Int = 0, full: Bool = false) {
@@ -41,7 +41,7 @@ extension Inspector {
 
     private func cacheBlitter() {
 
-        blitterInfo = amiga!.agnus.getBlitterInfo()
+        blitterInfo = amiga.agnus.getBlitterInfo()
     }
 
     func refreshBlitter(count: Int = 0, full: Bool = false) {

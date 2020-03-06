@@ -9,10 +9,14 @@
 
 class EventTableView: NSTableView {
 
+    @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
+
     var slotInfo = [EventSlotInfo?](repeating: nil, count: SLOT_COUNT.rawValue)
 
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -20,7 +24,7 @@ class EventTableView: NSTableView {
 
     private func cache() {
          for row in 0 ..< SLOT_COUNT.rawValue {
-            slotInfo[row] = amiga?.agnus.getEventSlotInfo(row)
+            slotInfo[row] = amiga.agnus.getEventSlotInfo(row)
         }
     }
 
@@ -95,7 +99,7 @@ extension EventTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
             if tableColumn?.identifier.rawValue != "slot" {
-                if amiga?.agnus.getEventSlotInfo(row).trigger == INT64_MAX {
+                if amiga.agnus.getEventSlotInfo(row).trigger == INT64_MAX {
                     cell.textColor = .secondaryLabelColor
                     return
                 }

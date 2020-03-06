@@ -354,10 +354,8 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func inspectorAction(_ sender: Any!) {
         
-        if myAppDelegate.inspector == nil {
-            myAppDelegate.inspector = Inspector.make(parent: self)
-        }
-        myAppDelegate.inspector?.showWindow(self)
+        if inspector == nil { inspector = Inspector.make(parent: self) }
+        inspector?.showWindow(self)
     }
 
     @IBAction func monitorAction(_ sender: Any!) {

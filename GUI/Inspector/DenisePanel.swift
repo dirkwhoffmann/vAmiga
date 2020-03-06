@@ -11,8 +11,8 @@ extension Inspector {
 
     private func cacheDenise() {
 
-        deniseInfo = amiga!.denise.getInfo()
-        spriteInfo = amiga!.denise.getSpriteInfo(selectedSprite)
+        deniseInfo = amiga.denise.getInfo()
+        spriteInfo = amiga.denise.getSpriteInfo(selectedSprite)
     }
 
     func refreshDenise(count: Int = 0, full: Bool = false) {
@@ -20,7 +20,7 @@ extension Inspector {
         cacheDenise()
 
         if full {
-            amiga!.denise.selectObservedSprite(selectedSprite)
+            amiga.denise.selectObservedSprite(selectedSprite)
 
             let elements = [ deniseBPLCON0: fmt16,
                              deniseBPLCON1: fmt16,
@@ -72,14 +72,14 @@ extension Inspector {
         deniseCLXDAT.integerValue = Int(deniseInfo!.clxdat)
 
         // Sprite section
-        sprArmed1.state = amiga!.denise.sprDataLines(0) != 0 ? .on : .off
-        sprArmed2.state = amiga!.denise.sprDataLines(1) != 0 ? .on : .off
-        sprArmed3.state = amiga!.denise.sprDataLines(2) != 0 ? .on : .off
-        sprArmed4.state = amiga!.denise.sprDataLines(3) != 0 ? .on : .off
-        sprArmed5.state = amiga!.denise.sprDataLines(4) != 0 ? .on : .off
-        sprArmed6.state = amiga!.denise.sprDataLines(5) != 0 ? .on : .off
-        sprArmed7.state = amiga!.denise.sprDataLines(6) != 0 ? .on : .off
-        sprArmed8.state = amiga!.denise.sprDataLines(7) != 0 ? .on : .off
+        sprArmed1.state = amiga.denise.sprDataLines(0) != 0 ? .on : .off
+        sprArmed2.state = amiga.denise.sprDataLines(1) != 0 ? .on : .off
+        sprArmed3.state = amiga.denise.sprDataLines(2) != 0 ? .on : .off
+        sprArmed4.state = amiga.denise.sprDataLines(3) != 0 ? .on : .off
+        sprArmed5.state = amiga.denise.sprDataLines(4) != 0 ? .on : .off
+        sprArmed6.state = amiga.denise.sprDataLines(5) != 0 ? .on : .off
+        sprArmed7.state = amiga.denise.sprDataLines(6) != 0 ? .on : .off
+        sprArmed8.state = amiga.denise.sprDataLines(7) != 0 ? .on : .off
 
         sprHStart.integerValue = Int(spriteInfo!.hstrt)
         sprVStart.integerValue = Int(spriteInfo!.vstrt)

@@ -9,6 +9,9 @@
 
 class CopperTableView: NSTableView {
 
+    @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
+
     // Copper list (1 or 2)
     var nr = 1
 
@@ -21,7 +24,8 @@ class CopperTableView: NSTableView {
     var illegalInRow: [Int: Bool] = [:]
 
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -35,24 +39,21 @@ class CopperTableView: NSTableView {
         instrInRow = [:]
         illegalInRow = [:]
 
-        if amiga != nil {
+        copperInfo = amiga.agnus.getCopperInfo()
 
-            copperInfo = amiga!.agnus.getCopperInfo()
+        assert(nr == 1 || nr == 2)
+        var addr = nr == 1 ? Int(copperInfo!.cop1lc) : Int(copperInfo!.cop2lc)
+        let count = nr == 1 ? Int(copperInfo!.length1) : Int(copperInfo!.length2)
 
-            assert(nr == 1 || nr == 2)
-            var addr = nr == 1 ? Int(copperInfo!.cop1lc) : Int(copperInfo!.cop2lc)
-            let count = nr == 1 ? Int(copperInfo!.length1) : Int(copperInfo!.length2)
+        for i in 0 ..< count {
 
-            for i in 0 ..< count {
+            addrInRow[i] = addr
+            data1InRow[i] = amiga.mem.spypeek16(addr)
+            data2InRow[i] = amiga.mem.spypeek16(addr + 2)
+            instrInRow[i] = amiga.agnus.disassemble(addr)
+            illegalInRow[i] = amiga.agnus.isIllegalInstr(addr)
 
-                addrInRow[i] = addr
-                data1InRow[i] = amiga!.mem.spypeek16(addr)
-                data2InRow[i] = amiga!.mem.spypeek16(addr + 2)
-                instrInRow[i] = amiga!.agnus.disassemble(addr)
-                illegalInRow[i] = amiga!.agnus.isIllegalInstr(addr)
-
-                addr += 4
-            }
+            addr += 4
         }
     }
 

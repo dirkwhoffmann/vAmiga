@@ -10,23 +10,25 @@
 class TraceTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
 
     // Data caches
     var instrInRow: [Int: DisassembledInstr] = [:]
     var numRows = 0
 
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         dataSource = self
         target = self
     }
 
     private func cache() {
 
-        numRows = amiga?.cpu.loggedInstructions() ?? 0
+        numRows = amiga.cpu.loggedInstructions() ?? 0
 
         for i in 0 ..< numRows {
-            instrInRow[i] = amiga?.cpu.getLoggedInstrInfo(i)
+            instrInRow[i] = amiga.cpu.getLoggedInstrInfo(i)
         }
     }
 

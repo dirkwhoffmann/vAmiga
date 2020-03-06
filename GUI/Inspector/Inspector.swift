@@ -551,11 +551,17 @@ class Inspector: NSWindowController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-    // The document this inspector is bound to
+    // The emulator instance this inspector is bound to
     var parent: MyController?
+
+    // The Amiga proxy of the parent
+    var amiga: AmigaProxy!
 
     // Timer for triggering continous update
     var timer: Timer?
+
+    // Lock to prevent reentrance to the timer execution code
+    var timerLock = NSLock()
 
     // Used to determine the items that should be refreshed
     var refreshCnt = 0
@@ -566,19 +572,17 @@ class Inspector: NSWindowController {
     // Factory method
     static func make(parent: MyController) -> Inspector? {
 
+        track()
+
         let inspector = Inspector.init(windowNibName: "Inspector")
         inspector.parent = parent
+        inspector.amiga = parent.amiga
         return inspector
     }
     
     override func awakeFromNib() {
         
         track()
-
-        // Remove the last two tabs which are experimental
-        let count = debugPanel.numberOfTabViewItems
-        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 1))
-        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 2))
     }
     
     override func showWindow(_ sender: Any?) {
@@ -588,22 +592,26 @@ class Inspector: NSWindowController {
         lockAmiga()
 
         super.showWindow(self)
-        amiga?.enableDebugging()
+        amiga.enableDebugging()
         updateInspectionTarget()
 
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
-            lockAmiga()
-            if amiga != nil {
-                if self.isRunning { self.refresh(count: self.refreshCnt) }
-                self.isRunning = amiga!.isRunning()
-                self.refreshCnt += 1
-            }
-            unlockAmiga()
+            self.timerLock.lock()
+
+            if self.isRunning { self.refresh(count: self.refreshCnt) }
+            self.isRunning = self.amiga.isRunning()
+            self.refreshCnt += 1
+
+            self.timerLock.unlock()
         }
 
         unlockAmiga()
     }
+
+    deinit {
+         track()
+     }
 
     // Assigns a number formatter to a control
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
@@ -653,9 +661,19 @@ extension Inspector: NSWindowDelegate {
         lockAmiga()
 
         track("Closing inspector")
+
+        // Disconnect the inspector from the parent controller
+        parent?.inspector = nil
+
+        // Terminate the refresh timer
+        timerLock.lock()
         timer?.invalidate()
-        amiga?.disableDebugging()
-        amiga?.clearInspectionTarget()
+        timer = nil
+        timerLock.unlock()
+
+        // Leave debugging mode
+        amiga.disableDebugging()
+        amiga.clearInspectionTarget()
 
         unlockAmiga()
     }
