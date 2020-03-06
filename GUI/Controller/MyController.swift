@@ -44,7 +44,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Keyboard controller
     var keyboardcontroller: KeyboardController!
 
-    // Virtual keyboard (opened as a sheet) and it's visual appearance
+    // Virtual keyboard (opened as a sheet)
     var virtualKeyboardSheet: VirtualKeyboardController?
     
     // Loop timer

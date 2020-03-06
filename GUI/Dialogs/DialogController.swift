@@ -41,9 +41,7 @@ class DialogController: NSWindowController {
     func sheetDidShow() { }
 
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
-        
-        track()
-        
+
         myWindow?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {
                 
@@ -76,14 +74,12 @@ class DialogController: NSWindowController {
     // Default action method for OK
     @IBAction func okAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
     
     // Default action method for Cancel
     @IBAction func cancelAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
 }

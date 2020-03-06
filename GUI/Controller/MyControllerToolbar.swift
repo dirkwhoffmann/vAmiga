@@ -147,8 +147,10 @@ extension MyController {
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
-        virtualKeyboardSheet = VirtualKeyboardController.make()
-        virtualKeyboardSheet?.showSheet()
+        if virtualKeyboardSheet == nil {
+            virtualKeyboardSheet = VirtualKeyboardController.make(parent: self)
+        }
+        virtualKeyboardSheet?.showSheet(autoClose: true)
     }
 
     @IBAction func snapshotsAction(_ sender: Any!) {

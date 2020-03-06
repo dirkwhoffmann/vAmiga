@@ -36,6 +36,12 @@ class VirtualKeyboardWindow: DialogWindow {
 
 class VirtualKeyboardController: DialogController, NSWindowDelegate {
 
+    // The emulator instance this inspector is bound to
+    var parent: MyController!
+
+    // The Amiga proxy of the parent
+    var amiga: AmigaProxy!
+
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
 
@@ -51,7 +57,8 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
      */
     var autoClose = true
 
-    static func make() -> VirtualKeyboardController? {
+    // Factory method
+    static func make(parent: MyController) -> VirtualKeyboardController? {
 
         track("Virtual keyboard (style: \(kbStyle) layout: \(kbLayout))")
 
@@ -64,12 +71,22 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
 
-        return VirtualKeyboardController.init(windowNibName: xibName)
+        let keyboard = VirtualKeyboardController.init(windowNibName: xibName)
+        keyboard.parent = parent
+        keyboard.amiga = parent.amiga
+
+        return keyboard
     }
-    
-    func showWindow() {
+
+    func showSheet(autoClose: Bool) {
+
+        self.autoClose = autoClose
+        showSheet()
+    }
+
+    func showWindow(autoClose: Bool) {
         
-        autoClose = false
+        self.autoClose = autoClose
         showWindow(self)
     }
     
@@ -87,7 +104,9 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     func windowWillClose(_ notification: Notification) {
-    
+
+        track()
+        // parent?.virtualKeyboardSheet = nil
     }
     
     func windowDidBecomeMain(_ notification: Notification) {
@@ -96,9 +115,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     override func refresh() {
-        
-        track()
-        
+                
         guard let keyboard = amigaProxy?.keyboard else { return }
         
         for keycode in 0 ... 127 {

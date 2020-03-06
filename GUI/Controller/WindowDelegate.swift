@@ -49,6 +49,7 @@ extension MyController: NSWindowDelegate {
         // Close open auxiliary windows
         inspector?.close()
         monitor?.close()
+        virtualKeyboardSheet?.close()
 
         // Stop timer
         timerLock.lock()
