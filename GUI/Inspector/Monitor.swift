@@ -72,11 +72,7 @@ class Monitor: NSWindowController {
         timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
 
             self.timerLock.lock()
-
-            if amigaProxy?.isRunning() == true {
-                self.refresh(everything: false)
-            }
-
+            if self.amiga.isRunning() { self.refresh(everything: false) }
             self.timerLock.unlock()
         }
     }
@@ -97,9 +93,8 @@ class Monitor: NSWindowController {
         refreshActivityViews()
 
         if refreshCounter % 8 == 0 {
-            if let info = amigaProxy?.agnus.getDebuggerInfo() {
-                dmaDebugEnable.state = info.enabled ? .on : .off
-            }
+            let info = amiga.agnus.getDebuggerInfo()
+            dmaDebugEnable.state = info.enabled ? .on : .off
             dmaDebugController?.refresh()
         }
         refreshCounter += 1
@@ -145,9 +140,8 @@ extension Monitor {
 
     func refreshWaveformView() {
 
-        guard let paula = amigaProxy?.paula else { return }
-        let stats = paula.getAudioStats()
-        let fillLevel = Int32(paula.fillLevel() * 100)
+        let stats = amiga.paula.getAudioStats()
+        let fillLevel = Int32(amiga.paula.fillLevel() * 100)
 
         audioBufferLevel.intValue = fillLevel
         audioBufferLevelText.stringValue = "\(fillLevel) %"
@@ -165,37 +159,36 @@ extension Monitor {
 
     func refreshActivityViews() {
 
-        if let stats = amigaProxy?.getStats() {
+        let stats = amiga.getStats()
 
-            let copperActivity = Double(stats.agnus.count.7) / (313*100)
-            let blitterActivity = Double(stats.agnus.count.8) / (313*120)
-            let spriteActivity = Double(stats.denise.spriteLines) / 313
-            let chipReads = Double(stats.mem.chipReads) / (313*226)
-            let chipWrites = Double(stats.mem.chipWrites) / (313*226)
-            let fastReads = Double(stats.mem.fastReads) / (313*226)
-            let fastWrites = Double(stats.mem.fastWrites) / (313*226)
-            let romReads = Double(stats.mem.romReads) / (313*226)
-            let romWrites = Double(stats.mem.romWrites) / (313*226)
+        let copperActivity = Double(stats.agnus.count.7) / (313*100)
+        let blitterActivity = Double(stats.agnus.count.8) / (313*120)
+        let spriteActivity = Double(stats.denise.spriteLines) / 313
+        let chipReads = Double(stats.mem.chipReads) / (313*226)
+        let chipWrites = Double(stats.mem.chipWrites) / (313*226)
+        let fastReads = Double(stats.mem.fastReads) / (313*226)
+        let fastWrites = Double(stats.mem.fastWrites) / (313*226)
+        let romReads = Double(stats.mem.romReads) / (313*226)
+        let romWrites = Double(stats.mem.romWrites) / (313*226)
 
-            let wc0 = stats.disk.wordCount.0
-            let wc1 = stats.disk.wordCount.1
-            let wc2 = stats.disk.wordCount.2
-            let wc3 = stats.disk.wordCount.3
-            let diskActivity = Double(wc0 + wc1 + wc2 + wc3) / (313.0 * 3)
-            let serialReads = Double(stats.uart.reads) / 500
-            let serialWrites = Double(stats.uart.writes) / 500
+        let wc0 = stats.disk.wordCount.0
+        let wc1 = stats.disk.wordCount.1
+        let wc2 = stats.disk.wordCount.2
+        let wc3 = stats.disk.wordCount.3
+        let diskActivity = Double(wc0 + wc1 + wc2 + wc3) / (313.0 * 3)
+        let serialReads = Double(stats.uart.reads) / 500
+        let serialWrites = Double(stats.uart.writes) / 500
 
-            let frames = Double(max(stats.frames, 1))
+        let frames = Double(max(stats.frames, 1))
 
-            copperView.add(val1: copperActivity / frames)
-            blitterView.add(val1: blitterActivity / frames)
-            spriteView.add(val1: spriteActivity / frames)
-            chipView.add(val1: chipReads / frames, val2: chipWrites / frames)
-            fastView.add(val1: fastReads / frames, val2: fastWrites / frames)
-            romView.add(val1: romReads / frames, val2: romWrites / frames)
-            diskView.add(val1: diskActivity / frames)
-            serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
-        }
+        copperView.add(val1: copperActivity / frames)
+        blitterView.add(val1: blitterActivity / frames)
+        spriteView.add(val1: spriteActivity / frames)
+        chipView.add(val1: chipReads / frames, val2: chipWrites / frames)
+        fastView.add(val1: fastReads / frames, val2: fastWrites / frames)
+        romView.add(val1: romReads / frames, val2: romWrites / frames)
+        diskView.add(val1: diskActivity / frames)
+        serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
     }
 }
 
@@ -208,9 +201,9 @@ extension Monitor {
     @IBAction func dmaDebugEnableAction(_ sender: NSButton!) {
 
          if sender.state == .on {
-             amigaProxy?.agnus.dmaDebugSetEnable(true)
+             amiga.agnus.dmaDebugSetEnable(true)
          } else {
-             amigaProxy?.agnus.dmaDebugSetEnable(false)
+             amiga.agnus.dmaDebugSetEnable(false)
          }
 
          refresh(everything: false)

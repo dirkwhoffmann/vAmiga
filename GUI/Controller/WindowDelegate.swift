@@ -46,8 +46,9 @@ extension MyController: NSWindowDelegate {
         
         track()
 
-        // Close the inspector (if open)
+        // Close open auxiliary windows
         inspector?.close()
+        monitor?.close()
 
         // Stop timer
         timerLock.lock()
