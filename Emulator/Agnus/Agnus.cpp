@@ -526,7 +526,7 @@ Agnus::doBitplaneDMA()
 }
 
 u16
-Agnus::copperRead(u32 addr)
+Agnus::doCopperDMA(u32 addr)
 {
     u16 result = mem.peek16<BUS_COPPER>(addr);
 
@@ -539,7 +539,7 @@ Agnus::copperRead(u32 addr)
 }
 
 void
-Agnus::copperWrite(u32 addr, u16 value)
+Agnus::doCopperDMA(u32 addr, u16 value)
 {
     mem.pokeCustom16<POKE_COPPER>(addr, value);
 
@@ -550,7 +550,7 @@ Agnus::copperWrite(u32 addr, u16 value)
 }
 
 u16
-Agnus::blitterRead(u32 addr)
+Agnus::doBlitterDMA(u32 addr)
 {
     // Assure that the Blitter owns the bus when this function is called
     assert(pos.h < HPOS_CNT);
@@ -566,7 +566,7 @@ Agnus::blitterRead(u32 addr)
 }
 
 void
-Agnus::blitterWrite(u32 addr, u16 value)
+Agnus::doBlitterDMA(u32 addr, u16 value)
 {
     // Assure that the Blitter owns the bus when this function is called
     assert(pos.h < HPOS_CNT);

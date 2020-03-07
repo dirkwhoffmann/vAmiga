@@ -373,7 +373,7 @@ Copper::move(u32 addr, u16 value)
     }
 
     // Write the value
-    agnus.copperWrite(addr, value);
+    agnus.doCopperDMA(addr, value);
 }
 
 #if 0
@@ -668,7 +668,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the first instruction word
-            cop1ins = agnus.copperRead(coppc);
+            cop1ins = agnus.doCopperDMA(coppc);
             advancePC();
 
             if (COP_CHECKSUM) {
@@ -695,7 +695,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus.copperRead(coppc);
+            cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
             // Extract register number from the first instruction word
@@ -733,7 +733,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Load the second instruction word
-            cop2ins = agnus.copperRead(coppc);
+            cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
             // Fork execution depending on the instruction type

@@ -913,7 +913,7 @@ Blitter::exec()
         // Only proceed if channel D is unlocked
         if (!lockD) {
 
-            agnus.blitterWrite(bltdpt, dhold);
+            agnus.doBlitterDMA(bltdpt, dhold);
 
             if (BLT_CHECKSUM) {
                 check1 = fnv_1a_it32(check1, dhold);
@@ -934,7 +934,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "FETCH_A\n");
 
-        anew = agnus.blitterRead(bltapt);
+        anew = agnus.doBlitterDMA(bltapt);
         debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         bltapt += incr;
@@ -948,7 +948,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "FETCH_B\n");
 
-        bnew = agnus.blitterRead(bltbpt);
+        bnew = agnus.doBlitterDMA(bltbpt);
         debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         bltbpt += incr;
@@ -962,7 +962,7 @@ Blitter::exec()
 
         debug(BLT_DEBUG, "FETCH_C\n");
 
-        chold = agnus.blitterRead(bltcpt);
+        chold = agnus.doBlitterDMA(bltcpt);
         debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         bltcpt += incr;

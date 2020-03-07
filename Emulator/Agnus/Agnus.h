@@ -747,7 +747,10 @@ public:
      * The first function is called in Copper states that do not perform
      * DMA and the second function in those states that do.
      */
+    // TODO: INTEGRATE INTO busIsFree
     bool copperCanRun();
+
+    // TODO: INTEGRATE INTO allocateBus
     bool copperCanDoDMA();
 
     /* Checks if the bus is currently available for the specified resource.
@@ -760,19 +763,18 @@ public:
      */
     template <BusOwner owner> bool allocateBus();
 
+    // Performs a DMA read
     u16 doDiskDMA();
-
-    template <int channel> u16 doSpriteDMA();
     template <int channel> u16 doAudioDMA();
-
-    void doDiskDMA(u16 value);
     template <int channel> u16 doBitplaneDMA();
+    template <int channel> u16 doSpriteDMA();
+    u16 doCopperDMA(u32 addr);
+    u16 doBlitterDMA(u32 addr);
 
-    u16 copperRead(u32 addr);
-    void copperWrite(u32 addr, u16 value);
-
-    u16 blitterRead(u32 addr);
-    void blitterWrite(u32 addr, u16 value);
+    // Performs a DMA write
+    void doDiskDMA(u16 value);
+    void doCopperDMA(u32 addr, u16 value);
+    void doBlitterDMA(u32 addr, u16 value);
 
 
     //
