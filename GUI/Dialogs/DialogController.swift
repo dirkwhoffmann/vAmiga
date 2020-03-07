@@ -65,7 +65,7 @@ class DialogController: NSWindowController {
 
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
-        myWindow?.beginSheet(window!, completionHandler: { result in
+        parent.window?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {
                 
                 self.cleanup()
@@ -90,7 +90,7 @@ class DialogController: NSWindowController {
     
         if let win = window {
             win.orderOut(self)
-            myWindow?.endSheet(win, returnCode: .cancel)
+            parent.window?.endSheet(win, returnCode: .cancel)
         }
     }
     

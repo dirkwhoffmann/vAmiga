@@ -27,7 +27,7 @@ class ExportDiskDialog: DialogController {
         savePanel.accessoryView = window?.contentView
 
         // Run panel as sheet
-        if let win = myWindow {
+        if let win = parent.window {
             savePanel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
                     myDocument?.export(drive: nr, to: self.savePanel.url)

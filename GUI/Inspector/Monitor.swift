@@ -10,7 +10,7 @@
 class Monitor: DialogController {
 
     // Debugger preferences
-    var dmaDebugDialog: DMADebuggerDialog?
+    var dmaDebugDialog: DmaDebugController?
 
     // Enables or disables DMA debugging
     @IBOutlet weak var dmaDebugEnable: NSButton!
@@ -87,7 +87,7 @@ class Monitor: DialogController {
 
         if dmaDebugDialog == nil {
             let name = NSNib.Name("DMADebugDialog")
-            dmaDebugDialog = DMADebuggerDialog.make(parent: parent, nibName: name)
+            dmaDebugDialog = DmaDebugController.make(parent: parent, nibName: name)
         }
 
         window?.beginSheet(dmaDebugDialog!.window!, completionHandler: nil)

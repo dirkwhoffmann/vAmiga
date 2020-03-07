@@ -41,9 +41,11 @@ var myController: MyController? {
  * This variable is global and can be accessed from anywhere in the Swift code.
  * DEPRECATED
  */
+/*
 var myWindow: NSWindow? {
     return myController?.window
 }
+*/
 
 /* The Amiga proxy of the currently active emulator instance.
  * This variable is global and can be accessed from anywhere in the Swift code.

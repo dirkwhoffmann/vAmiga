@@ -236,7 +236,6 @@ Gw
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="sfp-hH-V8i"/>
                                                         <connections>
-                                                            <outlet property="dialogController" destination="-2" id="33v-8i-e25"/>
                                                             <outlet property="parent" destination="-2" id="70A-f1-axc"/>
                                                         </connections>
                                                     </imageView>
@@ -291,7 +290,6 @@ Gw
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="H3f-2S-u5x"/>
                                                         <connections>
-                                                            <outlet property="dialogController" destination="-2" id="Nb5-NL-v4g"/>
                                                             <outlet property="parent" destination="-2" id="Cu7-Li-bDI"/>
                                                         </connections>
                                                     </imageView>
