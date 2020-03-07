@@ -26,7 +26,6 @@
 
 // Increments a Chip Ram pointer (TODO: Eliminate these macros)
 #define INC_CHIP_PTR(x) x += 2
-#define INC_CHIP_PTR_BY(x,y) x += y
 
 class Agnus : public AmigaComponent {
     
@@ -885,7 +884,7 @@ public:
 
     // Adds the modulo register to a bitplane pointer
     template <int x> void addBPLMOD() {
-        INC_CHIP_PTR_BY(bplpt[x], (x % 2) ? bpl2mod : bpl1mod);
+        bplpt[x] += (x % 2) ? bpl2mod : bpl1mod;
     }
 
 

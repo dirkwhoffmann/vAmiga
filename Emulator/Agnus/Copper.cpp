@@ -189,7 +189,7 @@ Copper::pokeNOOP(u16 value)
 void
 Copper::advancePC()
 {
-    INC_CHIP_PTR_BY(coppc, 2);
+    coppc += 2;
 }
 
 void

@@ -921,9 +921,9 @@ Blitter::exec()
             }
             debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
 
-            INC_CHIP_PTR_BY(bltdpt, incr);
+            bltdpt += incr;
             if (--cntD == 0) {
-                INC_CHIP_PTR_BY(bltdpt, dmod);
+                bltdpt += dmod;
                 cntD = bltsizeW;
                 fillCarry = !!bltconFCI();
             }
@@ -937,9 +937,9 @@ Blitter::exec()
         anew = agnus.blitterRead(bltapt);
         debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
-        INC_CHIP_PTR_BY(bltapt, incr);
+        bltapt += incr;
         if (--cntA == 0) {
-            INC_CHIP_PTR_BY(bltapt, amod);
+            bltapt += amod;
             cntA = bltsizeW;
         }
     }
@@ -951,9 +951,9 @@ Blitter::exec()
         bnew = agnus.blitterRead(bltbpt);
         debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
-        INC_CHIP_PTR_BY(bltbpt, incr);
+        bltbpt += incr;
         if (--cntB == 0) {
-            INC_CHIP_PTR_BY(bltbpt, bmod);
+            bltbpt += bmod;
             cntB = bltsizeW;
         }
     }
@@ -965,9 +965,9 @@ Blitter::exec()
         chold = agnus.blitterRead(bltcpt);
         debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
-        INC_CHIP_PTR_BY(bltcpt, incr);
+        bltcpt += incr;
         if (--cntC == 0) {
-            INC_CHIP_PTR_BY(bltcpt, cmod);
+            bltcpt += cmod;
             cntC = bltsizeW;
         }
     }

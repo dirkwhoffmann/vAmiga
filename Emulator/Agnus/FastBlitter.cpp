@@ -103,21 +103,21 @@ void Blitter::doFastCopyBlit()
             if (useA) {
                 anew = mem.peek16<BUS_BLITTER>(apt);
                 debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
-                INC_CHIP_PTR_BY(apt, incr);
+                apt += incr;
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16<BUS_BLITTER>(bpt);
                 debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
-                INC_CHIP_PTR_BY(bpt, incr);
+                bpt += incr;
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16<BUS_BLITTER>(cpt);
                 debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
-                INC_CHIP_PTR_BY(cpt, incr);
+                cpt += incr;
             }
             debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
 
@@ -157,7 +157,7 @@ void Blitter::doFastCopyBlit()
                 }
                 debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
 
-                INC_CHIP_PTR_BY(dpt, incr);
+                dpt += incr;
             }
 
             // Clear the word mask
@@ -165,10 +165,10 @@ void Blitter::doFastCopyBlit()
         }
 
         // Add modulo values
-        if (useA) INC_CHIP_PTR_BY(apt, amod);
-        if (useB) INC_CHIP_PTR_BY(bpt, bmod);
-        if (useC) INC_CHIP_PTR_BY(cpt, cmod);
-        if (useD) INC_CHIP_PTR_BY(dpt, dmod);
+        if (useA) apt += amod;
+        if (useB) bpt += bmod;
+        if (useC) cpt += cmod;
+        if (useD) dpt += dmod;
     }
 
     // Do some consistency checks
@@ -191,7 +191,7 @@ if (a_shift < 15) a_shift++; \
 else \
 { \
 a_shift = 0; \
-INC_CHIP_PTR_BY(cpt, 2); \
+cpt += 2; \
 }
 
 #define blitterLineDecreaseX(a_shift, cpt) \
@@ -199,16 +199,13 @@ INC_CHIP_PTR_BY(cpt, 2); \
 if (a_shift == 0) \
 { \
 a_shift = 16; \
-INC_CHIP_PTR_BY(cpt, -2); \
+cpt -= 2; \
 } \
 a_shift--; \
 }
 
-#define blitterLineIncreaseY(cpt, cmod) \
-INC_CHIP_PTR_BY(cpt, cmod);
-
-#define blitterLineDecreaseY(cpt, cmod) \
-INC_CHIP_PTR_BY(cpt, -cmod);
+#define blitterLineIncreaseY(cpt, cmod) cpt += cmod;
+#define blitterLineDecreaseY(cpt, cmod) cpt -= cmod;
 
 void
 Blitter::doFastLineBlit()
