@@ -308,7 +308,7 @@ class PreferencesController: DialogController {
         
         track()
 
-        myController?.loadUserDefaults()
+        parent.loadUserDefaults()
         refresh()
         hideSheet()
     }
@@ -318,7 +318,7 @@ class PreferencesController: DialogController {
         track()
 
         hideSheet()
-        myController?.saveUserDefaults()
+        parent.saveUserDefaults()
 
         if buttonLabel == "Boot" { amiga.run() }
     }

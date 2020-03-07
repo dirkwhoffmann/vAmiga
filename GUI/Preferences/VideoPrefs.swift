@@ -12,42 +12,36 @@ extension PreferencesController {
     func awakeVideoPrefsFromNib() {
 
         // Check for available enhancers
-        if let enhancers = myController?.renderer.enhancerGallery {
-            for i in 0 ... enhancers.count - 1 {
-                if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
-                    item.isEnabled = (enhancers[i] != nil)
-                }
+        let enhancers = parent.renderer.enhancerGallery
+        for i in 0 ... enhancers.count - 1 {
+            if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
+                item.isEnabled = (enhancers[i] != nil)
             }
         }
 
         // Check for available upscalers
-        if let upscalers = myController?.renderer.upscalerGallery {
-            for i in 0 ... upscalers.count - 1 {
-                if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
-                    item.isEnabled = (upscalers[i] != nil)
-                }
+        let upscalers = parent.renderer.upscalerGallery
+        for i in 0 ... upscalers.count - 1 {
+            if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
+                item.isEnabled = (upscalers[i] != nil)
             }
         }
         
         // Create dot mask textures
-        myController?.renderer.buildDotMasks()
+        parent.renderer.buildDotMasks()
     }
     
     func refreshVideoTab() {
-        
-        // guard let doc = myDocument else { return }
-        guard
-            let controller = myController,
-            let renderer = controller.renderer
-            else { return }
+
+        let renderer = parent.renderer!
 
         // Video
         vidEnhancerPopUp.selectItem(withTag: renderer.enhancer)
         vidUpscalerPopUp.selectItem(withTag: renderer.upscaler)
-        vidPalettePopUp.selectItem(withTag: controller.palette)
-        vidBrightnessSlider.doubleValue = controller.brightness
-        vidContrastSlider.doubleValue = controller.contrast
-        vidSaturationSlider.doubleValue = controller.saturation
+        vidPalettePopUp.selectItem(withTag: parent.palette)
+        vidBrightnessSlider.doubleValue = parent.brightness
+        vidContrastSlider.doubleValue = parent.contrast
+        vidSaturationSlider.doubleValue = parent.saturation
         
         // Effects
         let shaderOptions = renderer.shaderOptions
@@ -87,9 +81,9 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        vidEyeXSlider.floatValue = controller.eyeX
-        vidEyeYSlider.floatValue = controller.eyeY
-        vidEyeZSlider.floatValue = controller.eyeZ
+        vidEyeXSlider.floatValue = parent.eyeX
+        vidEyeYSlider.floatValue = parent.eyeY
+        vidEyeZSlider.floatValue = parent.eyeZ
 
         // OK Button
         vidOKButton.title = buttonLabel
@@ -101,28 +95,25 @@ extension PreferencesController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        myController?.palette = sender.selectedTag()
+        parent.palette = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
-        track("value = \(sender.doubleValue)")
-        myController?.brightness = sender.doubleValue
+        parent.brightness = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
-        track("value = \(sender.doubleValue)")
-        myController?.contrast = sender.doubleValue
+        parent.contrast = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
-        track("value = \(sender.doubleValue)")
-        myController?.saturation = sender.doubleValue
+        parent.saturation = sender.doubleValue
         refresh()
     }
     
@@ -132,148 +123,112 @@ extension PreferencesController {
     
     @IBAction func vidEnhancerAction(_ sender: NSPopUpButton!) {
         
-        myController?.renderer.enhancer = sender.selectedTag()
+        parent.renderer.enhancer = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidUpscalerAction(_ sender: NSPopUpButton!) {
 
-        myController?.renderer.upscaler = sender.selectedTag()
+        parent.renderer.upscaler = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
         
-        if let renderer = myController?.renderer {
-            track("\(sender.selectedTag())")
-            renderer.shaderOptions.blur = Int32(sender.selectedTag())
-            refresh()
-        }
+        parent.renderer.shaderOptions.blur = Int32(sender.selectedTag())
+        refresh()
     }
     
     @IBAction func vidBlurRadiusAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.blurRadius = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.blurRadius = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidBloomAction(_ sender: NSPopUpButton!) {
         
-        if let renderer = myController?.renderer {
-
-            renderer.shaderOptions.bloom = Int32(sender.selectedTag())
-            vidBloomRadiusAction(vidBloomRadiusSlider)
-        }
+        parent.renderer.shaderOptions.bloom = Int32(sender.selectedTag())
+        vidBloomRadiusAction(vidBloomRadiusSlider)
     }
     
     @IBAction func vidBloomRadiusAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            
-            renderer.shaderOptions.bloomRadius = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.bloomRadius = sender.floatValue
+        refresh()
     }
 
     @IBAction func vidBloomBrightnessAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            track("\(sender.floatValue)")
-            renderer.shaderOptions.bloomBrightness = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.bloomBrightness = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidBloomWeightAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            track("\(sender.floatValue)")
-            renderer.shaderOptions.bloomWeight = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.bloomWeight = sender.floatValue
+        refresh()
     }
 
     @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
 
-        if let renderer = myController?.renderer {
-            track("\(sender.selectedTag())")
-            renderer.shaderOptions.flicker = Int32(sender.selectedTag())
-            refresh()
-        }
+        parent.renderer.shaderOptions.flicker = Int32(sender.selectedTag())
+        refresh()
     }
 
     @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
 
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.flickerWeight = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.flickerWeight = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.dotMask = Int32(sender.selectedTag())
-            renderer.buildDotMasks()
-            refresh()
-        }
+        parent.renderer.shaderOptions.dotMask = Int32(sender.selectedTag())
+        parent.renderer.buildDotMasks()
+        refresh()
     }
     
     @IBAction func vidDotMaskBrightnessAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.dotMaskBrightness = sender.floatValue
-            renderer.buildDotMasks()
-            refresh()
-        }
+        parent.renderer.shaderOptions.dotMaskBrightness = sender.floatValue
+        parent.renderer.buildDotMasks()
+        refresh()
     }
     
     @IBAction func vidScanlinesAction(_ sender: NSPopUpButton!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.scanlines = Int32(sender.selectedTag())
-            refresh()
-        }
+        parent.renderer.shaderOptions.scanlines = Int32(sender.selectedTag())
+        refresh()
     }
+
     @IBAction func vidScanlineBrightnessAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.scanlineBrightness = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.scanlineBrightness = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.scanlineWeight = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.scanlineWeight = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.disalignment = Int32(sender.selectedTag())
-            refresh()
-        }
+        parent.renderer.shaderOptions.disalignment = Int32(sender.selectedTag())
+        refresh()
     }
+
     @IBAction func vidDisalignmentHAction(_ sender: NSSlider!) {
         
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.disalignmentH = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.disalignmentH = sender.floatValue
+        refresh()
     }
     
     @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
 
-        if let renderer = myController?.renderer {
-            renderer.shaderOptions.disalignmentV = sender.floatValue
-            refresh()
-        }
+        parent.renderer.shaderOptions.disalignmentV = sender.floatValue
+        refresh()
     }
     
     //
@@ -282,19 +237,19 @@ extension PreferencesController {
         
     @IBAction func vidEyeXAction(_ sender: NSSlider!) {
 
-        myController?.eyeX = sender.floatValue
+        parent.eyeX = sender.floatValue
         refresh()
     }
     
     @IBAction func vidEyeYAction(_ sender: NSSlider!) {
         
-        myController?.eyeY = sender.floatValue
+        parent.eyeY = sender.floatValue
         refresh()
     }
     
     @IBAction func vidEyeZAction(_ sender: NSSlider!) {
         
-        myController?.eyeZ = sender.floatValue
+        parent.eyeZ = sender.floatValue
         refresh()
     }
     
@@ -304,26 +259,22 @@ extension PreferencesController {
     
     func vidFactorySettingsAction() {
         
-        myController?.resetVideoUserDefaults()
+        parent.resetVideoUserDefaults()
         refresh()
     }
     
     @IBAction func vidFactorySettingsActionTFT(_ sender: Any!) {
 
-        track()
-        
-        myController?.resetVideoUserDefaults()
-        myController?.renderer.shaderOptions = ShaderDefaultsTFT
+        parent.resetVideoUserDefaults()
+        parent.renderer.shaderOptions = ShaderDefaultsTFT
         refresh()
     }
     
     @IBAction func vidFactorySettingsActionCRT(_ sender: Any!) {
 
-        track()
-        
-        myController?.resetVideoUserDefaults()
-        myController?.renderer.shaderOptions = ShaderDefaultsCRT
-        myController?.renderer.buildDotMasks()
+        parent.resetVideoUserDefaults()
+        parent.renderer.shaderOptions = ShaderDefaultsCRT
+        parent.renderer.buildDotMasks()
         refresh()
     }
 }

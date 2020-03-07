@@ -11,7 +11,13 @@ import Carbon.HIToolbox
 
 // Keyboard event handler
 class KBController: NSObject {
-    
+
+    // The window controller of the owning emulator instance
+    var parent: MyController!
+
+    // The Amiga proxy of the owning emulator instance
+     var amiga: AmigaProxy!
+
     // Indicates if the joystick emulation keys should trigger key events.
     var disconnectJoyKeys = Defaults.disconnectJoyKeys
     
@@ -27,11 +33,15 @@ class KBController: NSObject {
     // Mapping from Unicode scalars to keycodes (used for auto-typing)
     var symKeyMap: [UnicodeScalar: UInt16] = [:]
     var symKeyMapShifted: [UnicodeScalar: UInt16] = [:]
-    
-    override init() {
+
+    init(parent: MyController) {
+//     override init() {
         
         track()
-        
+
+        self.parent = parent
+        amiga = parent.amiga
+
         // Setup symbolic key maps
         for keyCode: UInt16 in 0 ... 255 {
             
@@ -50,16 +60,14 @@ class KBController: NSObject {
     
     func keyDown(with event: NSEvent) {
 
-        guard let controller = myController else { return }
-        
         // Ignore repeating keys
         if event.isARepeat {
             return
         }
 
         // Exit fullscreen mode if escape key is pressed
-        if event.keyCode == kVK_Escape && controller.renderer.fullscreen && exitOnEsc {
-            myController?.window!.toggleFullScreen(nil)
+        if event.keyCode == kVK_Escape && parent.renderer.fullscreen && exitOnEsc {
+            parent.window!.toggleFullScreen(nil)
         }
         
         // Ignore keys that are pressed in combination with the Command key
@@ -78,7 +86,7 @@ class KBController: NSObject {
     func flagsChanged(with event: NSEvent) {
         
         // Check for a mouse controlling key combination
-        myController?.metal.checkForMouseKeys(with: event)
+        parent.metal.checkForMouseKeys(with: event)
         
         // Determine the pressed or released key
         switch Int(event.keyCode) {
@@ -122,38 +130,34 @@ class KBController: NSObject {
     
     func keyDown(with macKey: MacKey) {
         
-        guard let controller = myController else { return }
-        
         // Check if this key is used for joystick emulation
-        if controller.gamePadManager.keyDown(with: macKey) && disconnectJoyKeys {
+        if parent.gamePadManager.keyDown(with: macKey) && disconnectJoyKeys {
             return
         }
         
-        myController?.amiga.keyboard.pressKey(macKey.amigaKeyCode)
+        amiga.keyboard.pressKey(macKey.amigaKeyCode)
     }
     
     func keyUp(with macKey: MacKey) {
-        
-        guard let controller = myController else { return }
-        
+
         // Check if this key is used for joystick emulation
-        if controller.gamePadManager.keyUp(with: macKey) && disconnectJoyKeys {
+        if parent.gamePadManager.keyUp(with: macKey) && disconnectJoyKeys {
             return
         }
         
-        myController?.amiga.keyboard.releaseKey(macKey.amigaKeyCode)
+        amiga.keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
     func keyDown(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        myController?.amiga.keyboard.pressKey(macKey.amigaKeyCode)
+        amiga.keyboard.pressKey(macKey.amigaKeyCode)
     }
     
     func keyUp(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        myController?.amiga.keyboard.releaseKey(macKey.amigaKeyCode)
+        amiga.keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
     func autoType(_ string: String) {

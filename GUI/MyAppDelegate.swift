@@ -29,14 +29,6 @@ var myDocument: MyDocument? {
     }
 }
 
-/* The window controller of the currently active emulator instance.
- * This variable is global and can be accessed from anywhere in the Swift code.
- * DEPRECATED
- */
-var myController: MyController? {
-    return myDocument?.windowControllers.first as? MyController
-}
-
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
  * to the Amiga keys. To make such a mapping work, we have to disable all

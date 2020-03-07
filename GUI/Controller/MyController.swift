@@ -409,7 +409,7 @@ extension MyController {
         hideMouse = false
         
         // Create keyboard controller
-        kbController = KBController()
+        kbController = KBController(parent: self)
         if kbController == nil {
             track("Failed to create keyboard controller")
             return
