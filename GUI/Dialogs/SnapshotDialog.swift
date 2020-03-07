@@ -45,7 +45,7 @@ class SnapshotDialog: DialogController {
         if numAutoSnapshots == -1 {
             
             // Disable auto snapshot saving while dialog is open
-            amigaProxy?.suspendAutoSnapshots()
+            amiga.suspendAutoSnapshots()
             
             // Setup snapshot caches
             reloadAutoSnapshotCache()
@@ -82,67 +82,61 @@ class SnapshotDialog: DialogController {
     }
     
     func reloadAutoSnapshotCache() {
-        
-        if let amiga = amigaProxy {
-            
-            track()
-            
-            amiga.suspend()
-            numAutoSnapshots = amiga.numAutoSnapshots()
-            for n in 0..<numAutoSnapshots {
-                let takenAt = TimeInterval(amiga.autoSnapshotTimestamp(n))
-                autoSnapshotImage[n] = amiga.autoSnapshotImage(n)
-                autoTimeStamp[n] = timeInfo(timeStamp: takenAt)
-                autoTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
-            }
-            amiga.resume()
-            autoTableView.reloadData()
+
+        track()
+
+        amiga.suspend()
+        numAutoSnapshots = amiga.numAutoSnapshots()
+        for n in 0..<numAutoSnapshots {
+            let takenAt = TimeInterval(amiga.autoSnapshotTimestamp(n))
+            autoSnapshotImage[n] = amiga.autoSnapshotImage(n)
+            autoTimeStamp[n] = timeInfo(timeStamp: takenAt)
+            autoTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
         }
+        amiga.resume()
+        autoTableView.reloadData()
     }
     
     func reloadUserSnapshotCache() {
-        
-        if let amiga = amigaProxy {
-        
-            track()
-            
-            amiga.suspend()
-            numUserSnapshots = amiga.numUserSnapshots()
-            for n in 0..<numUserSnapshots {
-                let takenAt = TimeInterval(amiga.userSnapshotTimestamp(n))
-                userSnapshotImage[n] = amiga.userSnapshotImage(n)
-                userTimeStamp[n] = timeInfo(timeStamp: takenAt)
-                userTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
-            }
-            amiga.resume()
-            userTableView.reloadData()
+
+        track()
+
+        amiga.suspend()
+        numUserSnapshots = amiga.numUserSnapshots()
+        for n in 0..<numUserSnapshots {
+            let takenAt = TimeInterval(amiga.userSnapshotTimestamp(n))
+            userSnapshotImage[n] = amiga.userSnapshotImage(n)
+            userTimeStamp[n] = timeInfo(timeStamp: takenAt)
+            userTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
         }
+        amiga.resume()
+        userTableView.reloadData()
     }
     
     @IBAction func deleteAction(_ sender: NSButton!) {
         
         track()
 
-        amigaProxy?.deleteUserSnapshot(sender.tag)
+        amiga.deleteUserSnapshot(sender.tag)
         reloadUserSnapshotCache()
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-        amigaProxy?.resumeAutoSnapshots()
+        amiga.resumeAutoSnapshots()
         hideSheet()
     }
     
     @IBAction func autoDoubleClick(_ sender: NSTableView!) {
 
-        amigaProxy?.restoreAutoSnapshot(sender.selectedRow)
+        amiga.restoreAutoSnapshot(sender.selectedRow)
         cancelAction(self)
     }
     
     @IBAction func userDoubleClick(_ sender: NSTableView!) {
 
-        amigaProxy?.restoreUserSnapshot(sender.selectedRow)
+        amiga.restoreUserSnapshot(sender.selectedRow)
         cancelAction(self)
     }
 }
@@ -201,12 +195,7 @@ extension SnapshotDialog {
     func tableView(_ tableView: NSTableView,
                    writeRowsWith rowIndexes: IndexSet,
                    to pboard: NSPasteboard) -> Bool {
-        
-        // Get active emulator instance
-        guard let amiga = amigaProxy else {
-            return false
-        }
-        
+                
         // Get index of dragged item
         guard let index = rowIndexes.first else {
             track("Cannot get table index for drag and drop")

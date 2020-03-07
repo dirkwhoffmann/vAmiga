@@ -265,10 +265,10 @@ class DiskMountDialog: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
         
-        amigaProxy?.diskController.insert(sender.tag, adf: disk)
-        amigaProxy?.diskController.setWriteProtection(sender.tag, value: writeProtect)
+        amiga.diskController.insert(sender.tag, adf: disk)
+        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
 
-        myController?.renderer.rotateDown()
+        parent.renderer.rotateDown()
         hideSheet()
     }
     

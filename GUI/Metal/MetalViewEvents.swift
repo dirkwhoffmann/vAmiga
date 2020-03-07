@@ -88,7 +88,7 @@ public extension MetalView {
     override func mouseDown(with event: NSEvent) {
 
         if gotMouse {
-            amigaProxy?.mouse.setLeftButton(true)
+            parent.amiga.mouse.setLeftButton(true)
             return
         }
         
@@ -101,21 +101,21 @@ public extension MetalView {
     override func mouseUp(with event: NSEvent) {
 
         if gotMouse {
-            amigaProxy?.mouse.setLeftButton(false)
+            parent.amiga.mouse.setLeftButton(false)
         }
     }
     
     override func rightMouseDown(with event: NSEvent) {
 
         if gotMouse {
-            amigaProxy?.mouse.setRightButton(true)
+            parent.amiga.mouse.setRightButton(true)
         }
     }
 
     override func rightMouseUp(with event: NSEvent) {
 
         if gotMouse {
-            amigaProxy?.mouse.setRightButton(false)
+            parent.amiga.mouse.setRightButton(false)
         }
     }
     
@@ -138,7 +138,7 @@ public extension MetalView {
             let newLocation = NSPoint.init(x: newX, y: newY)
             
             // Report the new location to the Amiga mouse
-            amigaProxy?.mouse.setXY(newLocation)
+            parent.amiga.mouse.setXY(newLocation)
             
             // Check for a shaking mouse movement
             if releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
