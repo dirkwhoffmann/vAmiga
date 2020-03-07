@@ -37,26 +37,6 @@ var myController: MyController? {
     return myDocument?.windowControllers.first as? MyController
 }
 
-/* The window of the currently active emulator instance.
- * This variable is global and can be accessed from anywhere in the Swift code.
- * DEPRECATED
- */
-/*
-var myWindow: NSWindow? {
-    return myController?.window
-}
-*/
-
-/* The Amiga proxy of the currently active emulator instance.
- * This variable is global and can be accessed from anywhere in the Swift code.
- * DEPRECATED
- */
-/*
-var amigaProxy: AmigaProxy? {
-    return myDocument?.amiga
-}
-*/
-
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
  * to the Amiga keys. To make such a mapping work, we have to disable all
