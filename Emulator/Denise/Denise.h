@@ -386,14 +386,6 @@ public:
 
 
     //
-    // Translating coordinates
-    //
-
-    // Translates a DMA cycle (hpos) to it's corresponding pixel position (ppos)
-    i16 ppos(i16 hpos) { return (hpos * 4) + 6; }
-
-    
-    //
     // Accessing registers
     //
     

@@ -481,7 +481,7 @@ Denise::draw(int pixels)
 {
     u8 index;
 
-    i16 currentPixel = ppos(agnus.pos.h);
+    i16 currentPixel = agnus.ppos();
 
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;

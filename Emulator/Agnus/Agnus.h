@@ -634,7 +634,10 @@ public:
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
     bool inBplDmaLine(u16 dmacon, u16 bplcon0);
 
+    // Returns the pixel position for the current horizontal position
+    i16 ppos() { return (pos.h * 4) + 6; }
 
+    
     //
     // Working with DMA slots
     //
