@@ -663,13 +663,39 @@ public:
 
 
     //
-    // Accessing DMA registers
+    // Controlling DMA access
     //
 
-    // DMA control
     u16 peekDMACONR();
     void pokeDMACON(u16 value);
     void setDMACON(u16 oldValue, u16 newValue);
+
+    // Returns true if the Blitter has priority over the CPU
+    static bool bltpri(u16 v) { return GET_BIT(v, 10); }
+    bool bltpri() { return bltpri(dmacon); }
+
+    // Returns true if a certain DMA channel is enabled
+    template <int x> static bool auddma(u16 v);
+    template <> bool auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
+    template <> bool auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
+    template <> bool auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
+    template <> bool auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
+    static bool bpldma(u16 v) { return (v & DMAEN) && (v & BPLEN); }
+    static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
+    static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
+    static bool sprdma(u16 v) { return (v & DMAEN) && (v & SPREN); }
+    static bool dskdma(u16 v) { return (v & DMAEN) && (v & DSKEN); }
+    template <int x> bool auddma() { return auddma<x>(dmacon); }
+    bool bpldma() { return bpldma(dmacon); }
+    bool copdma() { return copdma(dmacon); }
+    bool bltdma() { return bltdma(dmacon); }
+    bool sprdma() { return sprdma(dmacon); }
+    bool dskdma() { return dskdma(dmacon); }
+
+
+    //
+    // Managing DMA pointers
+    //
 
     // Disk DMA
     void pokeDSKPTH(u16 value);
@@ -717,9 +743,6 @@ public:
     bool getBLS() { return bls; }
     void setBLS(bool value) { bls = value; }
 
-    // Indicates if bitplane DMA is blocked by a hardware stop
-    bool bplHwStop() { return pos.h < 0x18 || pos.h >= 0xE0; }
-
     /* Returns true if Copper execution is blocked.
      * The first function is called in Copper states that do not perform
      * DMA and the second function in those states that do.
@@ -737,12 +760,6 @@ public:
      */
     template <BusOwner owner> bool allocateBus();
 
-
-    //
-    // Performing DMAs
-    //
-
-
     u16 doDiskDMA();
 
     template <int channel> u16 doSpriteDMA();
@@ -756,6 +773,7 @@ public:
 
     u16 blitterRead(u32 addr);
     void blitterWrite(u32 addr, u16 value);
+
 
     //
     // Managing the DMA time slot tables
@@ -815,25 +833,6 @@ public:
     //
     
 public:
-
-    // Returns true if the Blitter has priority over the CPU
-    static bool bltpri(u16 v) { return GET_BIT(v, 10); }
-    inline bool bltpri() { return bltpri(dmacon); }
-
-    // Returns true if a certain DMA channel is enabled
-    static bool bpldma(u16 v) { return (v & (DMAEN|BPLEN)) == (DMAEN|BPLEN); }
-    static bool copdma(u16 v) { return (v & (DMAEN|COPEN)) == (DMAEN|COPEN); }
-    static bool bltdma(u16 v) { return (v & (DMAEN|BLTEN)) == (DMAEN|BLTEN); }
-    static bool sprdma(u16 v) { return (v & (DMAEN|SPREN)) == (DMAEN|SPREN); }
-    static bool dskdma(u16 v) { return (v & (DMAEN|DSKEN)) == (DMAEN|DSKEN); }
-    inline bool bpldma() { return bpldma(dmacon); }
-    inline bool copdma() { return copdma(dmacon); }
-    inline bool bltdma() { return bltdma(dmacon); }
-    inline bool sprdma() { return sprdma(dmacon); }
-    inline bool dskdma() { return dskdma(dmacon); }
-    template <int x> static bool auddma(u16 v) {
-        return (v & (DMAEN | (AUD0EN << x))) == (DMAEN | (AUD0EN << x)); }
-    template <int x> inline bool auddma() { return auddma<x>(dmacon); }
 
     // VHPOSR, VHPOS, VPOSR, VPOS
     u16 peekVHPOSR();
