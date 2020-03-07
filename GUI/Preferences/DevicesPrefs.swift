@@ -13,14 +13,11 @@ extension PreferencesController {
 
         var map: [MacKey: UInt32]
 
-        guard
-            let controller = myController,
-            let manager    = controller.gamePadManager,
-            let amiga      = amigaProxy,
-            let joystick1  = amiga.joystick1,
-            let joystick2  = amiga.joystick2,
-            let metal      = controller.metal
-            else { return }
+        let manager    = parent.gamePadManager!
+        let keyboard   = parent.kbController!
+        let metal      = parent.metal!
+        let joystick1  = amiga.joystick1!
+        let joystick2  = amiga.joystick2!
 
         func refreshKey(dir: GamePadAction, button: NSButton, txt: NSTextField) {
 
@@ -70,7 +67,7 @@ extension PreferencesController {
         refreshKey(dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
         refreshKey(dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
 
-        devDisconnectKeys.state = controller.kbController.disconnectJoyKeys ? .on : .off
+        devDisconnectKeys.state = keyboard.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
         assert(joystick1.autofire() == joystick2.autofire())
@@ -117,9 +114,8 @@ extension PreferencesController {
     
     func devKeyDown(with macKey: MacKey) {
         
-        guard let manager = myController?.gamePadManager else { return }
-        track()
-        
+        let manager = parent.gamePadManager!
+
         // Check for the ESC key
         if macKey == MacKey.escape {
 
@@ -151,59 +147,45 @@ extension PreferencesController {
     
     @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
         
-        myController?.kbController.disconnectJoyKeys = (sender.state == .on)
+        parent.kbController.disconnectJoyKeys = (sender.state == .on)
         
         refresh()
     }
-
-    /*
-    @IBAction func devDeleteKeyAction(_ sender: NSButton!) {
-        
-        guard let manager = myController?.gamePadManager else { return }
-        track()
-
-        let (slot, action) = gamePadAction(for: sender.tag)
-        manager.gamePads[slot]?.unbind(action: action)
-        devRecordedKey = nil
-    }
-    */
 
     @IBAction func devDeleteKeysetAction(_ sender: NSButton!) {
 
         assert(sender.tag >= 0 && sender.tag <= 2)
 
-        track()
-        guard let manager = myController?.gamePadManager else { return }
+        let manager = parent.gamePadManager!
         manager.gamePads[sender.tag]?.keyMap = [:]
         refresh()
     }
 
     @IBAction func devAutofireAction(_ sender: NSButton!) {
         
-        amigaProxy?.joystick1.setAutofire(sender.state == .on)
-        amigaProxy?.joystick2.setAutofire(sender.state == .on)
+        amiga.joystick1.setAutofire(sender.state == .on)
+        amiga.joystick2.setAutofire(sender.state == .on)
         
         refresh()
     }
     
     @IBAction func devAutofireCeaseAction(_ sender: NSButton!) {
         
-        if let bullets = amigaProxy?.joystick1.autofireBullets().magnitude {
+        let bullets = amiga.joystick1.autofireBullets().magnitude
         
-            let sign = sender.state == .on ? 1 : -1
-            amigaProxy?.joystick1.setAutofireBullets(Int(bullets) * sign)
-            amigaProxy?.joystick2.setAutofireBullets(Int(bullets) * sign)
-            
-            refresh()
-        }
+        let sign = sender.state == .on ? 1 : -1
+        amiga.joystick1.setAutofireBullets(Int(bullets) * sign)
+        amiga.joystick2.setAutofireBullets(Int(bullets) * sign)
+
+        refresh()
     }
     
     @IBAction func devAutofireBulletsAction(_ sender: NSTextField!) {
         
         let value = sender.integerValue
         
-        amigaProxy?.joystick1.setAutofireBullets(value)
-        amigaProxy?.joystick2.setAutofireBullets(value)
+        amiga.joystick1.setAutofireBullets(value)
+        amiga.joystick2.setAutofireBullets(value)
         
         refresh()
     }
@@ -212,21 +194,21 @@ extension PreferencesController {
         
         let value = sender.floatValue
         
-        amigaProxy?.joystick1.setAutofireFrequency(value)
-        amigaProxy?.joystick2.setAutofireFrequency(value)
+        amiga.joystick1.setAutofireFrequency(value)
+        amiga.joystick2.setAutofireFrequency(value)
         
         refresh()
     }
         
     @IBAction func devFactorySettingsAction(_ sender: Any!) {
         
-        myController?.resetDevicesUserDefaults()
+        parent.resetDevicesUserDefaults()
         refresh()
     }
 
     @IBAction func devRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
-        myController?.metal.retainMouseKeyComb = sender.selectedTag()
+        parent.metal.retainMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
@@ -234,9 +216,9 @@ extension PreferencesController {
         
         switch sender.tag {
             
-        case 0: myController?.metal.retainMouseWithKeys   = (sender.state == .on)
-        case 1: myController?.metal.retainMouseByClick    = (sender.state == .on)
-        case 2: myController?.metal.retainMouseByEntering = (sender.state == .on)
+        case 0: parent.metal.retainMouseWithKeys   = (sender.state == .on)
+        case 1: parent.metal.retainMouseByClick    = (sender.state == .on)
+        case 2: parent.metal.retainMouseByEntering = (sender.state == .on)
         default: fatalError()
         }
         
@@ -245,7 +227,7 @@ extension PreferencesController {
     
     @IBAction func devReleaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
-        myController?.metal.releaseMouseKeyComb = sender.selectedTag()
+        parent.metal.releaseMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
@@ -253,8 +235,8 @@ extension PreferencesController {
         
         switch sender.tag {
             
-        case 0: myController?.metal.releaseMouseWithKeys  = (sender.state == .on)
-        case 1: myController?.metal.releaseMouseByShaking = (sender.state == .on)
+        case 0: parent.metal.releaseMouseWithKeys  = (sender.state == .on)
+        case 1: parent.metal.releaseMouseByShaking = (sender.state == .on)
         default: fatalError()
         }
         

@@ -12,8 +12,6 @@
 extension PreferencesController {
     
     func refreshHardwareTab() {
-        
-        guard let amiga = amigaProxy else { return }
 
         track()
         let config = amiga.config()
@@ -68,51 +66,51 @@ extension PreferencesController {
 
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_AGNUS_REVISION, value: sender.selectedTag())
+        amiga.configure(VA_AGNUS_REVISION, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_DENISE_REVISION, value: sender.selectedTag())
+        amiga.configure(VA_DENISE_REVISION, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwRealTimeClockAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configure(VA_RT_CLOCK, value: sender.selectedTag())
+        amiga.configure(VA_RT_CLOCK, value: sender.selectedTag())
         refresh()
     }
     
     @IBAction func hwChipRamAction(_ sender: NSPopUpButton!) {
 
         let chipRamWanted = sender.selectedTag()
-        let chipRamLimit = amigaProxy?.agnus.chipRamLimit() ?? 0
+        let chipRamLimit = amiga.agnus.chipRamLimit()
 
         if chipRamWanted > chipRamLimit {
             myDocument?.showConfigurationAltert(ERR_CHIP_RAM_LIMIT)
         } else {
-            amigaProxy?.configure(VA_CHIP_RAM, value: sender.selectedTag())
+            amiga.configure(VA_CHIP_RAM, value: sender.selectedTag())
         }
         refresh()
     }
 
     @IBAction func hwSlowRamAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configure(VA_SLOW_RAM, value: sender.selectedTag())
+        amiga.configure(VA_SLOW_RAM, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwFastRamAction(_ sender: NSPopUpButton!) {
         
-        amigaProxy?.configure(VA_FAST_RAM, value: sender.selectedTag())
+        amiga.configure(VA_FAST_RAM, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func hwDriveConnectAction(_ sender: NSButton!) {
         
         let driveNr = sender.tag
-        amigaProxy?.configureDrive(driveNr, connected: sender.state == .on)
+        amiga.configureDrive(driveNr, connected: sender.state == .on)
         refresh()
     }
     
@@ -121,13 +119,13 @@ extension PreferencesController {
         track()
         
         let nr = sender.tag
-        amigaProxy?.configureDrive(nr, type: sender.selectedTag())
+        amiga.configureDrive(nr, type: sender.selectedTag())
         refresh()
     }
  
     @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
+        amiga.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
         refresh()
     }
 
@@ -146,19 +144,19 @@ extension PreferencesController {
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
-        amigaProxy?.configure(VA_AGNUS_REVISION, value: defaults.agnusRevision.rawValue)
-        amigaProxy?.configure(VA_DENISE_REVISION, value: defaults.deniseRevision.rawValue)
-        amigaProxy?.configure(VA_RT_CLOCK, value: defaults.realTimeClock.rawValue)
+        amiga.configure(VA_AGNUS_REVISION, value: defaults.agnusRevision.rawValue)
+        amiga.configure(VA_DENISE_REVISION, value: defaults.deniseRevision.rawValue)
+        amiga.configure(VA_RT_CLOCK, value: defaults.realTimeClock.rawValue)
 
-        amigaProxy?.configure(VA_CHIP_RAM, value: defaults.chipRam)
-        amigaProxy?.configure(VA_SLOW_RAM, value: defaults.slowRam)
-        amigaProxy?.configure(VA_FAST_RAM, value: defaults.fastRam)
+        amiga.configure(VA_CHIP_RAM, value: defaults.chipRam)
+        amiga.configure(VA_SLOW_RAM, value: defaults.slowRam)
+        amiga.configure(VA_FAST_RAM, value: defaults.fastRam)
 
-        amigaProxy?.configure(VA_SERIAL_DEVICE, value: defaults.serialDevice.rawValue)
+        amiga.configure(VA_SERIAL_DEVICE, value: defaults.serialDevice.rawValue)
 
         for i in 0...3 {
-            amigaProxy?.configureDrive(i, connected: defaults.driveConnect[i])
-            amigaProxy?.configureDrive(i, type:      defaults.driveType[i].rawValue)
+            amiga.configureDrive(i, connected: defaults.driveConnect[i])
+            amiga.configureDrive(i, type:      defaults.driveType[i].rawValue)
         }
 
         refresh()

@@ -734,11 +734,11 @@ extension MyController {
     func openPreferences(tab: String = "") {
         
         if preferencesController == nil {
-            let nibName = NSNib.Name("Preferences")
-            preferencesController = PreferencesController.init(windowNibName: nibName)
+            let name = NSNib.Name("Preferences")
+            preferencesController = PreferencesController.make(parent: self,
+                                                               nibName: name)
         }
-
-        preferencesController!.showSheet(tab: tab)
+        preferencesController?.showSheet(tab: tab)
     }
     
     //

@@ -10,9 +10,6 @@
 extension PreferencesController {
 
     func refreshRomTab() {
-        
-        // guard let controller = myController else { return }
-        guard let amiga = amigaProxy else { return }
 
         let poweredOff     = amiga.isPoweredOff()
         let romRev         = amiga.mem.romRevision()
@@ -95,8 +92,8 @@ extension PreferencesController {
 
     @IBAction func romDeleteAction(_ sender: NSButton!) {
 
-        myController?.romURL = URL(fileURLWithPath: "/")
-        amigaProxy?.mem.deleteRom()
+        parent.romURL = URL(fileURLWithPath: "/")
+        amiga.mem.deleteRom()
         
         refresh()
     }
@@ -105,8 +102,8 @@ extension PreferencesController {
 
         track()
 
-        myController?.extURL = URL(fileURLWithPath: "/")
-        amigaProxy?.mem.deleteExt()
+        parent.extURL = URL(fileURLWithPath: "/")
+        amiga.mem.deleteExt()
 
         refresh()
     }
@@ -121,7 +118,7 @@ extension PreferencesController {
     @IBAction func extMapAddrAction(_ sender: NSPopUpButton!) {
 
         track()
-        amigaProxy?.configure(VA_EXT_START, value: sender.selectedTag())
+        amiga.configure(VA_EXT_START, value: sender.selectedTag())
         refresh()
     }
 
@@ -130,19 +127,18 @@ extension PreferencesController {
         let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")?.data
         let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")?.data
 
-        myController?.romURL = URL(fileURLWithPath: "")
-        myController?.extURL = URL(fileURLWithPath: "")
+        parent.romURL = URL(fileURLWithPath: "")
+        parent.extURL = URL(fileURLWithPath: "")
 
-        amigaProxy?.mem.loadRom(fromBuffer: arosRom)
-        amigaProxy?.mem.loadExt(fromBuffer: arosExt)
-        amigaProxy?.configure(VA_EXT_START, value: 0xE0)
+        amiga.mem.loadRom(fromBuffer: arosRom)
+        amiga.mem.loadExt(fromBuffer: arosExt)
+        amiga.configure(VA_EXT_START, value: 0xE0)
 
         // Make sure the machine has enough Ram to run Aros
-        if let config = amigaProxy?.mem.getConfig() {
-            let mem = config.chipSize + config.slowSize + config.fastSize
-            if mem < 1024*1024 {
-                amigaProxy?.configure(VA_SLOW_RAM, value: 512)
-            }
+        let config = amiga.mem.getConfig()
+        let mem = config.chipSize + config.slowSize + config.fastSize
+        if mem < 1024*1024 {
+            amiga.configure(VA_SLOW_RAM, value: 512)
         }
         refresh()
     }
