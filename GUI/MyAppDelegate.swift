@@ -49,9 +49,11 @@ var myWindow: NSWindow? {
  * This variable is global and can be accessed from anywhere in the Swift code.
  * DEPRECATED
  */
+/*
 var amigaProxy: AmigaProxy? {
     return myDocument?.amiga
 }
+*/
 
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
