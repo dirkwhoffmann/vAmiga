@@ -135,9 +135,9 @@ extension MyController {
         case 3: // Browse
             
             track("Browse")
-            let nibName = NSNib.Name("SnapshotDialog")
-            let controller = SnapshotDialog.init(windowNibName: nibName)
-            controller.showSheet()
+            let name = NSNib.Name("SnapshotDialog")
+            let controller = SnapshotDialog.make(parent: self, nibName: name)
+            controller?.showSheet()
 
         default:
             assert(false)

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class ExportDiskController: DialogController {
+class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
     var type: AmigaFileType = FILETYPE_ADF

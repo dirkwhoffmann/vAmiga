@@ -50,7 +50,7 @@ class DialogController: NSWindowController {
     var amiga: AmigaProxy!
 
     // Factory method
-    static func make(parent: MyController, nibName: String) -> Self? {
+    static func make(parent: MyController, nibName: NSNib.Name) -> Self? {
 
         track()
 

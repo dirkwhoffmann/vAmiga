@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskMountController: DialogController {
+class DiskMountDialog: DialogController {
     
     var disk: ADFFileProxy!
     var writeProtect = false
@@ -283,7 +283,7 @@ class DiskMountController: DialogController {
 // NSTableView delegate and data source
 //
 
-extension DiskMountController: NSTableViewDelegate {
+extension DiskMountDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView,
                    willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
@@ -293,7 +293,7 @@ extension DiskMountController: NSTableViewDelegate {
         // c.textColor = .red
     }
 }
-extension DiskMountController: NSWindowDelegate {
+extension DiskMountDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -301,7 +301,7 @@ extension DiskMountController: NSWindowDelegate {
     }
 }
 
-extension DiskMountController: NSTableViewDataSource {
+extension DiskMountDialog: NSTableViewDataSource {
     
     func buildHex(count: Int) -> String {
         

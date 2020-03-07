@@ -186,8 +186,8 @@ class MyDocument: NSDocument {
     }
     
     func runDiskMountDialog() {
-        let name = "DiskMountDialog"
-        let controller = DiskMountController.make(parent: parent!, nibName: name)
+        let name = NSNib.Name("DiskMountDialog")
+        let controller = DiskMountDialog.make(parent: parent!, nibName: name)
         controller?.showSheet()
     }
 

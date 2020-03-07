@@ -10,7 +10,7 @@
 class Monitor: DialogController {
 
     // Debugger preferences
-    var dmaDebugController: DMADebugController?
+    var dmaDebugDialog: DMADebuggerDialog?
 
     // Enables or disables DMA debugging
     @IBOutlet weak var dmaDebugEnable: NSButton!
@@ -78,23 +78,19 @@ class Monitor: DialogController {
         if refreshCounter % 8 == 0 {
             let info = amiga.agnus.getDebuggerInfo()
             dmaDebugEnable.state = info.enabled ? .on : .off
-            dmaDebugController?.refresh()
+            dmaDebugDialog?.refresh()
         }
         refreshCounter += 1
     }
 
     @IBAction func dmaConfigAction(_ sender: Any!) {
 
-        if dmaDebugController == nil {
-            let nibName = NSNib.Name("DMADebugDialog")
-            dmaDebugController = DMADebugController.init(windowNibName: nibName)
+        if dmaDebugDialog == nil {
+            let name = NSNib.Name("DMADebugDialog")
+            dmaDebugDialog = DMADebuggerDialog.make(parent: parent, nibName: name)
         }
-        // dmaDebugController!.showSheet()
-        window?.beginSheet(dmaDebugController!.window!, completionHandler: { result in
-             if result == NSApplication.ModalResponse.OK {
-             }
-         })
 
+        window?.beginSheet(dmaDebugDialog!.window!, completionHandler: nil)
     }
 }
 

@@ -9,6 +9,9 @@
 
 class ActivityView: NSView {
 
+    @IBOutlet weak var monitor: Monitor!
+    var amiga: AmigaProxy!
+
     // Values of the upper graph
     var values = [Array(repeating: 0.0, count: 128),
                   Array(repeating: 0.0, count: 128)]
@@ -51,6 +54,11 @@ class ActivityView: NSView {
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
         setupColors()
+    }
+    
+    override func awakeFromNib() {
+
+        amiga = monitor.amiga
     }
 
     func setupColors() {
@@ -110,16 +118,6 @@ class ActivityView: NSView {
 
         needsDisplay = true
     }
-
-    /*
-    func add(val1: Double, val2: Double = 0.0) {
-
-        add(value: 1.0, storage: 0)
-        if splitview { add(value: 1.0, storage: 1) }
-
-        needsDisplay = true
-    }
-    */
 
     func sample(x: Int, storage: Int) -> Double {
 
