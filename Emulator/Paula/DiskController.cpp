@@ -873,7 +873,7 @@ DiskController::performTurboRead(Drive *drive)
         
         // Write word into memory
         mem.pokeChip16(agnus.dskpt, word);
-        INC_CHIP_PTR(agnus.dskpt);
+        agnus.dskpt += 2;
 
         if (DSK_CHECKSUM) {
             checkcnt++;
@@ -893,7 +893,7 @@ DiskController::performTurboWrite(Drive *drive)
         
         // Read word from memory
         u16 word = mem.peekChip16(agnus.dskpt);
-        INC_CHIP_PTR(agnus.dskpt);
+        agnus.dskpt += 2;
         
         if (DSK_CHECKSUM) {
             checkcnt++;

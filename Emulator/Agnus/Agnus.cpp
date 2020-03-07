@@ -445,7 +445,7 @@ u16
 Agnus::doDiskDMA()
 {
     u16 result = mem.peekChip16(dskpt);
-    INC_CHIP_PTR(dskpt);
+    dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
@@ -459,7 +459,7 @@ void
 Agnus::doDiskDMA(u16 value)
 {
     mem.pokeChip16(dskpt, value);
-    INC_CHIP_PTR(dskpt);
+    dskpt += 2;
 
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
@@ -472,7 +472,7 @@ Agnus::doAudioDMA()
     u16 result;
 
     result = mem.peekChip16(audpt[channel]);
-    INC_CHIP_PTR(audpt[channel]);
+    audpt[channel] += 2;
 
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;
@@ -485,7 +485,7 @@ template <int channel> u16
 Agnus::doSpriteDMA()
 {
     u16 result = mem.peekChip16(sprpt[channel]);
-    INC_CHIP_PTR(sprpt[channel]);
+    sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
@@ -499,7 +499,7 @@ u16
 Agnus::doSpriteDMA(int channel)
 {
     u16 result = mem.peekChip16(sprpt[channel]);
-    INC_CHIP_PTR(sprpt[channel]);
+    sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
@@ -513,7 +513,7 @@ template <int bitplane> u16
 Agnus::doBitplaneDMA()
 {
     u16 result = mem.peekChip16(bplpt[bitplane]);
-    INC_CHIP_PTR(bplpt[bitplane]);
+    bplpt[bitplane] += 2;
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;

@@ -24,9 +24,6 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
-// Increments a Chip Ram pointer (TODO: Eliminate these macros)
-#define INC_CHIP_PTR(x) x += 2
-
 class Agnus : public AmigaComponent {
     
     // The current configuration
