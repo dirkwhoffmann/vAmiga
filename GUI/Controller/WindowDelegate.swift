@@ -26,11 +26,10 @@ extension MyController: NSWindowDelegate {
         adjustWindowSize()
 
         // Update the status bar
-        myController?.refreshStatusBar()
+        refreshStatusBar()
 
         // Let the emulator tell us it's current state
-        amigaProxy?.ping()
-
+        amiga.ping()
     }
     
     public func windowDidResignMain(_ notification: Notification) {
@@ -46,6 +45,11 @@ extension MyController: NSWindowDelegate {
         
         track()
 
+        // Close open auxiliary windows
+        inspector?.close()
+        monitor?.close()
+        virtualKeyboardSheet?.close()
+
         // Stop timer
         timerLock.lock()
         timer?.invalidate()
@@ -58,9 +62,6 @@ extension MyController: NSWindowDelegate {
         // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)
-
-        // Stop metal view
-        // renderer.cleanup()
     }
     
     public func windowWillEnterFullScreen(_ notification: Notification) {

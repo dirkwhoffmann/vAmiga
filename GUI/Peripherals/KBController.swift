@@ -10,7 +10,7 @@
 import Carbon.HIToolbox
 
 // Keyboard event handler
-class KeyboardController: NSObject {
+class KBController: NSObject {
     
     // Indicates if the joystick emulation keys should trigger key events.
     var disconnectJoyKeys = Defaults.disconnectJoyKeys

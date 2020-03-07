@@ -116,7 +116,7 @@
                         <rect key="frame" x="0.0" y="24" width="804" height="621"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
-                            <outlet property="controller" destination="-2" id="DoA-Vt-vqv"/>
+                            <outlet property="parent" destination="-2" id="DoA-Vt-vqv"/>
                         </connections>
                     </customView>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
@@ -526,7 +526,8 @@
                 <connections>
                     <outlet property="controlPort1" destination="L2b-nG-yBo" id="LaW-Wo-oKb"/>
                     <outlet property="controlPort2" destination="4MP-rV-xX2" id="SJk-D4-9MF"/>
-                    <outlet property="controller" destination="-2" id="V0k-GF-uXZ"/>
+                    <outlet property="keyboardButton" destination="Ckl-d3-vFW" id="0sK-fd-hJt"/>
+                    <outlet property="parent" destination="-2" id="V0k-GF-uXZ"/>
                     <outlet property="pauseButton" destination="BPW-KG-AkM" id="XDm-2Y-e3O"/>
                     <outlet property="powerButton" destination="wVB-PW-axj" id="v7U-Mu-EYn"/>
                     <outlet property="resetButton" destination="Yax-iM-1LE" id="ooV-Rk-fGf"/>

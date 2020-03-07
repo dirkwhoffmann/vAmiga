@@ -9,7 +9,7 @@
 
 class MyToolbar: NSToolbar {
     
-    @IBOutlet weak var controller: MyController!
+    @IBOutlet weak var parent: MyController!
     
     // Toolbar items
     @IBOutlet weak var controlPort1: NSPopUpButton!
@@ -17,13 +17,22 @@ class MyToolbar: NSToolbar {
     @IBOutlet weak var powerButton: NSToolbarItem!
     @IBOutlet weak var pauseButton: NSToolbarItem!
     @IBOutlet weak var resetButton: NSToolbarItem!
+    @IBOutlet weak var keyboardButton: NSToolbarItem!
     @IBOutlet weak var snapshotSegCtrl: NSSegmentedControl!
     
     override func validateVisibleItems() {
-        
-        guard let amiga = amigaProxy else { return }
+
+        let amiga = parent.amiga!
         let pause = pauseButton.view as? NSButton
         let reset = resetButton.view as? NSButton
+        let kb = keyboardButton.view as? NSButton
+
+        // Disable the keyboard button, if the virtual keyboard is open
+        if let window = parent.virtualKeyboardSheet?.window {
+            kb?.isEnabled = !window.isVisible
+        } else {
+            kb?.isEnabled = true
+        }
 
         // Disable the Pause and Reset button if the emulator if powered off
         let poweredOn = amiga.isPoweredOn()
@@ -49,7 +58,7 @@ class MyToolbar: NSToolbar {
     
     func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: ControlPortProxy!) {
         
-        let gpm = controller.gamePadManager!
+        let gpm = parent.gamePadManager!
         let menu =  popup.menu
         
         let item3 = menu?.item(withTag: InputDevice.joystick1)
@@ -66,10 +75,10 @@ class MyToolbar: NSToolbar {
     }
     
     func validateJoystickToolbarItems() {
-        
-        guard let amiga = amigaProxy else { return }
-        let device1 = controller.inputDevice1
-        let device2 = controller.inputDevice2
+
+        let amiga = parent.amiga!
+        let device1 = parent.inputDevice1
+        let device2 = parent.inputDevice2
         let port1 = amiga.controlPort1
         let port2 = amiga.controlPort2
             

@@ -135,9 +135,9 @@ extension MyController {
         case 3: // Browse
             
             track("Browse")
-            let nibName = NSNib.Name("SnapshotDialog")
-            let controller = SnapshotDialog.init(windowNibName: nibName)
-            controller.showSheet()
+            let name = NSNib.Name("SnapshotDialog")
+            let controller = SnapshotDialog.make(parent: self, nibName: name)
+            controller?.showSheet()
 
         default:
             assert(false)
@@ -147,8 +147,10 @@ extension MyController {
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
-        virtualKeyboardSheet = VirtualKeyboardController.make()
-        virtualKeyboardSheet?.showSheet()
+        if virtualKeyboardSheet == nil {
+            virtualKeyboardSheet = VKBController.make(parent: self)
+        }
+        virtualKeyboardSheet?.showSheet(autoClose: true)
     }
 
     @IBAction func snapshotsAction(_ sender: Any!) {

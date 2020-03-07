@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class ExportDiskController: DialogController {
+class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
     var type: AmigaFileType = FILETYPE_ADF
@@ -27,7 +27,7 @@ class ExportDiskController: DialogController {
         savePanel.accessoryView = window?.contentView
 
         // Run panel as sheet
-        if let win = myWindow {
+        if let win = parent.window {
             savePanel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
                     myDocument?.export(drive: nr, to: self.savePanel.url)

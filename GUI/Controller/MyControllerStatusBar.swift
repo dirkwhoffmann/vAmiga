@@ -11,7 +11,6 @@ extension MyController {
     
     public func refreshStatusBar() {
         
-        guard let amiga = amigaProxy else { return }
         let running = amiga.isRunning()
 
         let config = amiga.diskController.getConfig()

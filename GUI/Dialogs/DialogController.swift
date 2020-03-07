@@ -36,15 +36,36 @@ class DialogWindow: NSWindow {
     }
 }
 
+/* Base class for all auxiliary windows.
+ * The class extends NSWindowController by a reference to the window controller
+ * of the connected emulator window (parent) and a reference to the parents
+ * proxy object (amiga).
+ */
 class DialogController: NSWindowController {
+
+    // The window controller of the owning emulator instance
+    var parent: MyController!
+
+    // The Amiga proxy of the owning emulator instance
+    var amiga: AmigaProxy!
+
+    // Factory method
+    static func make(parent: MyController, nibName: NSNib.Name) -> Self? {
+
+        track()
+
+        let controller = Self.init(windowNibName: nibName)
+        controller.parent = parent
+        controller.amiga = parent.amiga
+
+        return controller
+    }
 
     func sheetDidShow() { }
 
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
-        
-        track()
-        
-        myWindow?.beginSheet(window!, completionHandler: { result in
+
+        parent.window?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {
                 
                 self.cleanup()
@@ -69,21 +90,19 @@ class DialogController: NSWindowController {
     
         if let win = window {
             win.orderOut(self)
-            myWindow?.endSheet(win, returnCode: .cancel)
+            parent.window?.endSheet(win, returnCode: .cancel)
         }
     }
     
     // Default action method for OK
     @IBAction func okAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
     
     // Default action method for Cancel
     @IBAction func cancelAction(_ sender: Any!) {
         
-        track()
         hideSheet()
     }
 }

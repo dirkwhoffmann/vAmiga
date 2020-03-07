@@ -10,6 +10,7 @@
 class BankTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
+    var amiga: AmigaProxy!
 
     // Displayed memory bank
     var bank = 0
@@ -18,7 +19,8 @@ class BankTableView: NSTableView {
     var bankCache: [Int: MemorySource] = [:]
 
     override func awakeFromNib() {
-        
+
+        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -28,7 +30,7 @@ class BankTableView: NSTableView {
     func cache() {
 
         for i in 0 ..< 256 {
-            bankCache[i] = amiga!.mem.memSrc(i << 16)
+            bankCache[i] = amiga.mem.memSrc(i << 16)
         }
     }
 
@@ -42,9 +44,7 @@ class BankTableView: NSTableView {
 
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        lockAmiga()
         inspector.setBank(sender.clickedRow)
-        unlockAmiga()
     }
 }
 

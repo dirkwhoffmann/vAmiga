@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DMADebugController: DialogController {
+class DmaDebugDialog: DialogController {
 
     @IBOutlet weak var dmaDebugCpu: NSButton!
     @IBOutlet weak var dmaDebugRefresh: NSButton!
@@ -51,8 +51,7 @@ class DMADebugController: DialogController {
 
         track()
 
-        guard let dma = amigaProxy?.agnus else { return }
-        let info = dma.getDebuggerInfo()
+        let info = amiga.agnus.getDebuggerInfo()
         let rgb = info.colorRGB
 
         dmaDebugCpu.state = info.visualize.1 ? .on : .off
@@ -84,7 +83,7 @@ class DMADebugController: DialogController {
     @IBAction func dmaDebugVisualizeAction(_ sender: NSButton!) {
 
         let owner = BusOwner(Int8(sender.tag))
-        amigaProxy?.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
+        amiga.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
         refresh()
     }
 
@@ -95,23 +94,19 @@ class DMADebugController: DialogController {
         let r = Double(color.redComponent)
         let g = Double(color.greenComponent)
         let b = Double(color.blueComponent)
-        amigaProxy?.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
         refresh()
     }
 
     @IBAction func dmaDebugDisplayModeAction(_ sender: NSPopUpButton!) {
 
-        track("Value = \(sender.selectedTag())")
-
-        amigaProxy?.agnus.dmaDebugSetDisplayMode(sender.selectedTag())
+        amiga.agnus.dmaDebugSetDisplayMode(sender.selectedTag())
         refresh()
     }
 
     @IBAction func dmaDebugOpacityAction(_ sender: NSSlider!) {
 
-        track("Value = \(sender.doubleValue)")
-
-        amigaProxy?.agnus.dmaDebugSetOpacity(sender.doubleValue / 100.0)
+        amiga.agnus.dmaDebugSetOpacity(sender.doubleValue / 100.0)
         refresh()
     }
 }

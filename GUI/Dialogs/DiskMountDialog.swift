@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class DiskMountController: DialogController {
+class DiskMountDialog: DialogController {
     
     var disk: ADFFileProxy!
     var writeProtect = false
@@ -167,12 +167,12 @@ class DiskMountController: DialogController {
         warningText.isHidden = compatible
         
         // Check for available drives
-        let dc = amigaProxy?.diskController.getConfig()
+        let dc = amiga.diskController.getConfig()
 
-        let connected0 = dc?.connected.0 ?? false
-        let connected1 = dc?.connected.1 ?? false
-        let connected2 = dc?.connected.2 ?? false
-        let connected3 = dc?.connected.3 ?? false
+        let connected0 = dc.connected.0
+        let connected1 = dc.connected.1
+        let connected2 = dc.connected.2
+        let connected3 = dc.connected.3
         df0Button.isEnabled = compatible && connected0
         df1Button.isEnabled = compatible && connected1
         df2Button.isEnabled = compatible && connected2
@@ -265,10 +265,10 @@ class DiskMountController: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
         
-        amigaProxy?.diskController.insert(sender.tag, adf: disk)
-        amigaProxy?.diskController.setWriteProtection(sender.tag, value: writeProtect)
+        amiga.diskController.insert(sender.tag, adf: disk)
+        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
 
-        myController?.renderer.rotateDown()
+        parent.renderer.rotateDown()
         hideSheet()
     }
     
@@ -283,7 +283,7 @@ class DiskMountController: DialogController {
 // NSTableView delegate and data source
 //
 
-extension DiskMountController: NSTableViewDelegate {
+extension DiskMountDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView,
                    willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
@@ -293,7 +293,7 @@ extension DiskMountController: NSTableViewDelegate {
         // c.textColor = .red
     }
 }
-extension DiskMountController: NSWindowDelegate {
+extension DiskMountDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
@@ -301,7 +301,7 @@ extension DiskMountController: NSWindowDelegate {
     }
 }
 
-extension DiskMountController: NSTableViewDataSource {
+extension DiskMountDialog: NSTableViewDataSource {
     
     func buildHex(count: Int) -> String {
         

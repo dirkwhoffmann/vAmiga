@@ -13,8 +13,6 @@ extension PreferencesController {
 
         track()
 
-        guard let amiga = amigaProxy else { return }
-
         let config = amiga.config()
 
         // Graphics
@@ -50,61 +48,61 @@ extension PreferencesController {
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {
 
-        amigaProxy?.configure(VA_CLX_SPR_SPR, enable: sender.state == .on)
+        amiga.configure(VA_CLX_SPR_SPR, enable: sender.state == .on)
         refresh()
     }
 
     @IBAction func compClxSprPlfAction(_ sender: NSButton!) {
 
-        amigaProxy?.configure(VA_CLX_SPR_PLF, enable: sender.state == .on)
+        amiga.configure(VA_CLX_SPR_PLF, enable: sender.state == .on)
         refresh()
     }
 
     @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
 
-        amigaProxy?.configure(VA_CLX_PLF_PLF, enable: sender.state == .on)
+        amiga.configure(VA_CLX_PLF_PLF, enable: sender.state == .on)
         refresh()
     }
 
     @IBAction func compSamplingMethodAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_SAMPLING_METHOD, value: sender.selectedTag())
+        amiga.configure(VA_SAMPLING_METHOD, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_FILTER_ACTIVATION, value: sender.selectedTag())
+        amiga.configure(VA_FILTER_ACTIVATION, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
-        amigaProxy?.configure(VA_BLITTER_ACCURACY, value: sender.integerValue)
+        amiga.configure(VA_BLITTER_ACCURACY, value: sender.integerValue)
         refresh()
     }
 
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
-        amigaProxy?.configure(VA_DRIVE_SPEED, value: sender.selectedTag())
+        amiga.configure(VA_DRIVE_SPEED, value: sender.selectedTag())
         refresh()
     }
 
     @IBAction func compFifoBufferingAction(_ sender: NSButton!) {
 
-        amigaProxy?.configure(VA_FIFO_BUFFERING, enable: sender.state == .on)
+        amiga.configure(VA_FIFO_BUFFERING, enable: sender.state == .on)
         refresh()
     }
 
     @IBAction func compTodBugAction(_ sender: NSButton!) {
 
-        amigaProxy?.configure(VA_TODBUG, enable: sender.state == .on)
+        amiga.configure(VA_TODBUG, enable: sender.state == .on)
         refresh()
     }
 
     @IBAction func compFactorySettingsAction(_ sender: Any!) {
 
-        myController?.resetCompatibilityUserDefaults()
+        parent.resetCompatibilityUserDefaults()
         refresh()
     }
 }

@@ -14,7 +14,7 @@ let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
 let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
 let fmt8b = MyFormatter.init(radix: 2, min: 0, max: 255)
 
-class Inspector: NSWindowController {
+class Inspector: DialogController {
 
     // Debug panel (Commons)
     @IBOutlet weak var debugPanel: NSTabView!
@@ -551,58 +551,45 @@ class Inspector: NSWindowController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-    // The document this inspector is bound to
-    var parent: MyController?
-
     // Timer for triggering continous update
     var timer: Timer?
+
+    // Lock to prevent reentrance to the timer execution code
+    var timerLock = NSLock()
 
     // Used to determine the items that should be refreshed
     var refreshCnt = 0
 
     // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
-
-    // Factory method
-    static func make(parent: MyController) -> Inspector? {
-
-        let inspector = Inspector.init(windowNibName: "Inspector")
-        inspector.parent = parent
-        return inspector
-    }
     
     override func awakeFromNib() {
         
         track()
-
-        // Remove the last two tabs which are experimental
-        let count = debugPanel.numberOfTabViewItems
-        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 1))
-        debugPanel.removeTabViewItem(debugPanel.tabViewItem(at: count - 2))
     }
     
     override func showWindow(_ sender: Any?) {
 
         track()
 
-        lockAmiga()
-
         super.showWindow(self)
-        amiga?.enableDebugging()
+        amiga.enableDebugging()
         updateInspectionTarget()
 
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
-            lockAmiga()
-            if amiga != nil {
-                if self.isRunning { self.refresh(count: self.refreshCnt) }
-                self.isRunning = amiga!.isRunning()
-                self.refreshCnt += 1
-            }
-            unlockAmiga()
-        }
+            self.timerLock.lock()
 
-        unlockAmiga()
+            if self.isRunning { self.refresh(count: self.refreshCnt) }
+            self.isRunning = self.amiga.isRunning()
+            self.refreshCnt += 1
+
+            self.timerLock.unlock()
+        }
+    }
+
+    deinit {
+        track()
     }
 
     // Assigns a number formatter to a control
@@ -650,14 +637,20 @@ extension Inspector: NSWindowDelegate {
     
     func windowWillClose(_ notification: Notification) {
 
-        lockAmiga()
-
         track("Closing inspector")
-        timer?.invalidate()
-        amiga?.disableDebugging()
-        amiga?.clearInspectionTarget()
 
-        unlockAmiga()
+        // Disconnect the inspector from the parent controller
+        parent?.inspector = nil
+
+        // Stop the refresh timer
+        timerLock.lock()
+        timer?.invalidate()
+        timer = nil
+        timerLock.unlock()
+
+        // Leave debugging mode
+        amiga.disableDebugging()
+        amiga.clearInspectionTarget()
     }
 }
 
@@ -687,8 +680,6 @@ extension Inspector: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
-        lockAmiga()
         updateInspectionTarget()
-        unlockAmiga()
     }
 }

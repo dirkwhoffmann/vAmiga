@@ -8,7 +8,10 @@
 // -----------------------------------------------------------------------------
 
 class WaveformView: NSView {
-    
+
+    @IBOutlet weak var monitor: Monitor!
+    var amiga: AmigaProxy!
+
     // Remembers the highest amplitude (used for auto scaling)
     var highestAmplitude = 0.001
     
@@ -22,7 +25,12 @@ class WaveformView: NSView {
     required override init(frame frameRect: NSRect) {
         super.init(frame: frameRect)
     }
-  
+
+    override func awakeFromNib() {
+
+        amiga = monitor.amiga
+    }
+
     // Restarts the auto scaling mechanism
     func initAutoScaler() {
 
@@ -37,8 +45,7 @@ class WaveformView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         
         super.draw(dirtyRect)
-        
-        guard let paula = amigaProxy?.paula else { return }
+
         let context = NSGraphicsContext.current?.cgContext
         
         NSColor.clear.set()
@@ -52,8 +59,8 @@ class WaveformView: NSView {
         for x in 0...w {
 
             // Read samples from ringbuffer
-            let sampleL = abs(paula.ringbufferDataL(40 * x))
-            let sampleR = abs(paula.ringbufferDataR(40 * x))
+            let sampleL = abs(amiga.paula.ringbufferDataL(40 * x))
+            let sampleR = abs(amiga.paula.ringbufferDataR(40 * x))
 
             // Remember the highest amplitude
             highestAmplitude = max(highestAmplitude, max(sampleL, sampleR))

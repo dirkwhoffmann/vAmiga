@@ -34,7 +34,13 @@ class VirtualKeyboardWindow: DialogWindow {
  
 }
 
-class VirtualKeyboardController: DialogController, NSWindowDelegate {
+class VKBController: DialogController, NSWindowDelegate {
+
+    // The emulator instance this inspector is bound to
+    // var parent: MyController!
+
+    // The Amiga proxy of the parent
+    // var amiga: AmigaProxy!
 
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
@@ -51,25 +57,39 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
      */
     var autoClose = true
 
-    static func make() -> VirtualKeyboardController? {
+    // Factory method
+    static func make(parent: MyController) -> VKBController? {
 
-        track("Virtual keyboard (style: \(kbStyle) layout: \(kbLayout))")
+        let style = kbStyle(parent)
+        let layout = kbLayout(parent)
+
+        track("Virtual keyboard (style: \(style) layout: \(layout))")
 
         var xibName = ""
-        let ansi = (kbLayout == .us)
+        let ansi = (layout == .us)
 
-        if kbStyle == .narrow {
+        if style == .narrow {
             xibName = ansi ? "A1000ANSI" : "A1000ISO"
         } else {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
 
-        return VirtualKeyboardController.init(windowNibName: xibName)
+        let keyboard = VKBController.init(windowNibName: xibName)
+        keyboard.parent = parent
+        keyboard.amiga = parent.amiga
+
+        return keyboard
     }
-    
-    func showWindow() {
+
+    func showSheet(autoClose: Bool) {
+
+        self.autoClose = autoClose
+        showSheet()
+    }
+
+    func showWindow(autoClose: Bool) {
         
-        autoClose = false
+        self.autoClose = autoClose
         showWindow(self)
     }
     
@@ -87,7 +107,9 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     func windowWillClose(_ notification: Notification) {
-    
+
+        track()
+        // parent?.virtualKeyboardSheet = nil
     }
     
     func windowDidBecomeMain(_ notification: Notification) {
@@ -96,10 +118,8 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     override func refresh() {
-        
-        track()
-        
-        guard let keyboard = amigaProxy?.keyboard else { return }
+                
+        guard let keyboard = amiga.keyboard else { return }
         
         for keycode in 0 ... 127 {
             
@@ -113,8 +133,8 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     
     func updateImageCache() {
 
-        let style = VirtualKeyboardController.kbStyle
-        let layout = VirtualKeyboardController.kbLayout
+        let style = VKBController.kbStyle(parent)
+        let layout = VKBController.kbLayout(parent)
 
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
@@ -127,16 +147,14 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     }
     
     func pressKey(keyCode: Int) {
-        
-        guard let keyboard = amigaProxy?.keyboard else { return }
 
-        keyboard.pressKey(keyCode)
+        amiga.keyboard.pressKey(keyCode)
         refresh()
         
         DispatchQueue.main.async {
             
             usleep(useconds_t(100000))
-            amigaProxy?.keyboard.releaseAllKeys()
+            self.amiga.keyboard.releaseAllKeys()
             self.refresh()
         }
         
@@ -147,7 +165,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     
     func holdKey(keyCode: Int) {
         
-        guard let keyboard = amigaProxy?.keyboard else { return }
+        guard let keyboard = amiga.keyboard else { return }
         
         keyboard.pressKey(keyCode)
         refresh()
@@ -174,7 +192,7 @@ class Keycap: NSButton {
     
     override func mouseDown(with event: NSEvent) {
         
-        if let controller = window?.delegate as? VirtualKeyboardController {
+        if let controller = window?.delegate as? VKBController {
             
             controller.pressKey(keyCode: self.tag)
         }
@@ -182,25 +200,25 @@ class Keycap: NSButton {
     
     override func rightMouseDown(with event: NSEvent) {
     
-        if let controller = window?.delegate as? VirtualKeyboardController {
+        if let controller = window?.delegate as? VKBController {
             
             controller.holdKey(keyCode: self.tag)
         }
     }
 }
 
-extension VirtualKeyboardController {
+extension VKBController {
 
-    static var kbStyle: KBStyle {
+    static func kbStyle(_ parent: MyController) -> KBStyle {
 
         // Determine if an A1000 is emulated
-        let a1000 = amigaProxy?.mem.hasBootRom() ?? false
+        let a1000 = parent.amiga.mem.hasBootRom()
 
         // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
         return a1000 ? .narrow : .wide
     }
 
-    static var kbLayout: KBLayout {
+    static func kbLayout(_ parent: MyController) -> KBLayout {
 
          // Get the first two characters of the ISO-639-1 language code
          let lang = Locale.preferredLanguages[0].prefix(2)

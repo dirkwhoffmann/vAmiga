@@ -12,34 +12,30 @@ extension PreferencesController {
     func refreshEmulatorTab() {
         
         track()
-        
-        guard
-            let amiga      = amigaProxy,
-            let controller = myController,
-            let renderer   = controller.renderer
-            else { return }
-        
+
+        let renderer = parent.renderer!
+
         // Drive
-        emuWarpLoad.state = controller.warpLoad ? .on : .off
-        emuDriveSounds.state = controller.driveNoise ? .on : .off
-        emuDriveSoundsNoPoll.state = controller.driveNoiseNoPoll ? .on : .off
-        emuDriveSoundsNoPoll.isEnabled = controller.driveNoise
-        emuDriveBlankDiskFormat.selectItem(withTag: controller.driveBlankDiskFormatIntValue)
+        emuWarpLoad.state = parent.warpLoad ? .on : .off
+        emuDriveSounds.state = parent.driveNoise ? .on : .off
+        emuDriveSoundsNoPoll.state = parent.driveNoiseNoPoll ? .on : .off
+        emuDriveSoundsNoPoll.isEnabled = parent.driveNoise
+        emuDriveBlankDiskFormat.selectItem(withTag: parent.driveBlankDiskFormatIntValue)
 
         // Fullscreen
         emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
-        emuExitOnEscButton.state = controller.keyboardcontroller.exitOnEsc ? .on : .off
+        emuExitOnEscButton.state = parent.kbController.exitOnEsc ? .on : .off
         
         // Screenshots
-        emuScreenshotSourcePopup.selectItem(withTag: controller.screenshotSource)
-        emuScreenshotTargetPopup.selectItem(withTag: controller.screenshotTargetIntValue)
+        emuScreenshotSourcePopup.selectItem(withTag: parent.screenshotSource)
+        emuScreenshotTargetPopup.selectItem(withTag: parent.screenshotTargetIntValue)
         
         // Documents
-        emuCloseWithoutAskingButton.state = controller.closeWithoutAsking ? .on : .off
-        emuEjectWithoutAskingButton.state = controller.ejectWithoutAsking ? .on : .off
+        emuCloseWithoutAskingButton.state = parent.closeWithoutAsking ? .on : .off
+        emuEjectWithoutAskingButton.state = parent.ejectWithoutAsking ? .on : .off
         
         // Miscellaneous
-        emuPauseInBackground.state = controller.pauseInBackground ? .on : .off
+        emuPauseInBackground.state = parent.pauseInBackground ? .on : .off
         emuAutoSnapshots.state = amiga.takeAutoSnapshots() ? .on : .off
         emuSnapshotInterval.integerValue = amiga.snapshotInterval()
         emuSnapshotInterval.isEnabled = amiga.takeAutoSnapshots()
@@ -54,27 +50,26 @@ extension PreferencesController {
     
     @IBAction func emuWarpLoadAction(_ sender: NSButton!) {
         
-        myController?.warpLoad = sender.state == .on
+        parent.warpLoad = sender.state == .on
         refresh()
     }
     
     @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
         
-        myController?.driveNoise = sender.state == .on
+        parent.driveNoise = sender.state == .on
         refresh()
     }
 
     @IBAction func emuDriveSoundsNoPollAction(_ sender: NSButton!) {
         
-        myController?.driveNoiseNoPoll = sender.state == .on
+        parent.driveNoiseNoPoll = sender.state == .on
         refresh()
     }
 
     @IBAction func emuBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
-        track("\(sender.selectedTag())")
         let tag = sender.selectedTag()
-        myController?.driveBlankDiskFormat = FileSystemType(rawValue: tag)
+        parent.driveBlankDiskFormat = FileSystemType(rawValue: tag)
         refresh()
     }
 
@@ -84,18 +79,14 @@ extension PreferencesController {
     
     @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
         
-        if let renderer = myController?.renderer {
-            renderer.keepAspectRatio = (sender.state == .on)
-            refresh()
-        }
+        parent.renderer.keepAspectRatio = (sender.state == .on)
+        refresh()
     }
 
     @IBAction func emuExitOnEscAction(_ sender: NSButton!) {
         
-        if let keyboard = myController?.keyboardcontroller {
-            keyboard.exitOnEsc = (sender.state == .on)
-            refresh()
-        }
+        parent.kbController.exitOnEsc = (sender.state == .on)
+        refresh()
     }
 
     //
@@ -104,13 +95,13 @@ extension PreferencesController {
     
     @IBAction func emuScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
-        myController?.screenshotSource = sender.selectedTag()
+        parent.screenshotSource = sender.selectedTag()
         refresh()
     }
     
     @IBAction func emuScreenshotTargetAction(_ sender: NSPopUpButton!) {
         
-        myController?.screenshotTargetIntValue = sender.selectedTag()
+        parent.screenshotTargetIntValue = sender.selectedTag()
         refresh()
     }
 
@@ -120,14 +111,14 @@ extension PreferencesController {
     
     @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
         
-        myController?.closeWithoutAsking = (sender.state == .on)
-        myController?.needsSaving = amigaProxy?.isRunning() ?? false
+        parent.closeWithoutAsking = (sender.state == .on)
+        parent.needsSaving = amiga.isRunning()
         refresh()
     }
     
     @IBAction func emuEjectWithoutAskingAction(_ sender: NSButton!) {
         
-        myController?.ejectWithoutAsking = (sender.state == .on)
+        parent.ejectWithoutAsking = (sender.state == .on)
         refresh()
     }
 
@@ -137,13 +128,13 @@ extension PreferencesController {
     
     @IBAction func emuPauseInBackgroundAction(_ sender: NSButton!) {
         
-        myController?.pauseInBackground = (sender.state == .on)
+        parent.pauseInBackground = (sender.state == .on)
         refresh()
     }
     
     @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
         
-        amigaProxy?.setTakeAutoSnapshots(sender.state == .on)
+        amiga.setTakeAutoSnapshots(sender.state == .on)
         refresh()
     }
     
@@ -151,7 +142,7 @@ extension PreferencesController {
         
         track("\(sender.integerValue)")
         if sender.integerValue > 0 {
-            amigaProxy?.setSnapshotInterval(sender.integerValue)
+            amiga.setSnapshotInterval(sender.integerValue)
         } else {
             track("IGNORING")
         }
@@ -164,7 +155,7 @@ extension PreferencesController {
     
     @IBAction func emuFactorySettingsAction(_ sender: Any!) {
         
-        myController?.resetEmulatorUserDefaults()
+        parent.resetEmulatorUserDefaults()
         refresh()
     }
 }

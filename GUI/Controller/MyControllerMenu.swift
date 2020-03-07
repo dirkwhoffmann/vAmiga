@@ -274,28 +274,22 @@ extension MyController: NSMenuItemValidation {
             return
         }
         
-        keyboardcontroller.autoType(text)
+        kbController.autoType(text)
     }
 
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stopAndGo()
-        unlockAmiga()
     }
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stepInto()
-        unlockAmiga()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
 
-        lockAmiga()
         amiga?.stepOver()
-        unlockAmiga()
     }
 
     @IBAction func resetAction(_ sender: Any!) {
@@ -354,18 +348,18 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func inspectorAction(_ sender: Any!) {
         
-        if myAppDelegate.inspector == nil {
-            myAppDelegate.inspector = Inspector.make(parent: self)
+        if inspector == nil {
+            inspector = Inspector.make(parent: self, nibName: "Inspector")
         }
-        myAppDelegate.inspector?.showWindow(self)
+        inspector?.showWindow(self)
     }
 
     @IBAction func monitorAction(_ sender: Any!) {
 
-        if myAppDelegate.monitor == nil {
-            myAppDelegate.monitor = Monitor.make()
+        if monitor == nil {
+            monitor = Monitor.make(parent: self, nibName: "Monitor")
         }
-        myAppDelegate.monitor?.showWindow(self)
+        monitor?.showWindow(self)
     }
 
     //
@@ -375,9 +369,10 @@ extension MyController: NSMenuItemValidation {
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a window
-        let kb = VirtualKeyboardController.make()
-        myAppDelegate.virtualKeyboard = kb
-        myAppDelegate.virtualKeyboard?.showWindow()
+        if virtualKeyboardSheet == nil {
+            virtualKeyboardSheet = VKBController.make(parent: self)
+        }
+        virtualKeyboardSheet?.showWindow(autoClose: false)
     }
 
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
@@ -534,7 +529,7 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("ExportDiskDialog")
-        let exportPanel = ExportDiskController.init(windowNibName: nibName)
+        let exportPanel = ExportDiskDialog.init(windowNibName: nibName)
         exportPanel.showSheet(forDrive: sender.tag)
     }
     

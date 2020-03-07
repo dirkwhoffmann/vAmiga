@@ -26,6 +26,12 @@ class MyController: NSWindowController, MessageReceiver {
     // the proxy is written in Objective-C.
     var amiga: AmigaProxy!
 
+    // Inspector of this emulator instance
+    var inspector: Inspector?
+
+    // Monitor of this emulator instance
+    var monitor: Monitor?
+
     // Preferences controller
     var preferencesController: PreferencesController?
 
@@ -36,10 +42,10 @@ class MyController: NSWindowController, MessageReceiver {
     var gamePadManager: GamePadManager!
     
     // Keyboard controller
-    var keyboardcontroller: KeyboardController!
+    var kbController: KBController!
 
-    // Virtual keyboard (opened as a sheet) and it's visual appearance
-    var virtualKeyboardSheet: VirtualKeyboardController?
+    // Virtual keyboard
+    var virtualKeyboardSheet: VKBController?
     
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be
@@ -97,9 +103,9 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Devices preferences
     var disconnectJoyKeys: Bool {
-        get { return keyboardcontroller.disconnectJoyKeys }
+        get { return kbController.disconnectJoyKeys }
         set {
-            keyboardcontroller.disconnectJoyKeys = newValue
+            kbController.disconnectJoyKeys = newValue
         }
     }
     var autofire: Bool {
@@ -257,8 +263,8 @@ class MyController: NSWindowController, MessageReceiver {
         set { renderer.keepAspectRatio = newValue }
     }
     var exitOnEsc: Bool {
-        get { return keyboardcontroller.exitOnEsc }
-        set { keyboardcontroller.exitOnEsc = newValue }
+        get { return kbController.exitOnEsc }
+        set { kbController.exitOnEsc = newValue }
     }
     var closeWithoutAsking = Defaults.closeWithoutAsking
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
@@ -403,8 +409,8 @@ extension MyController {
         hideMouse = false
         
         // Create keyboard controller
-        keyboardcontroller = KeyboardController()
-        if keyboardcontroller == nil {
+        kbController = KBController()
+        if kbController == nil {
             track("Failed to create keyboard controller")
             return
         }
@@ -542,8 +548,6 @@ extension MyController {
                                                         eventType: .mouseMoved) > 1.0 {
                 NSCursor.setHiddenUntilMouseMoves(true)
             }
-
-            // metal.dxabssum *= 0.5
         }
         
         timerLock.unlock()
@@ -554,7 +558,7 @@ extension MyController {
         switch msg.type {
     
         case MSG_CONFIG:
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
 
         case MSG_POWER_ON:
 
@@ -562,30 +566,30 @@ extension MyController {
             serialOut = ""
             renderer.zoomIn()
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
 
         case MSG_POWER_OFF:
 
             renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
 
         case MSG_RUN:
 
             needsSaving = true
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
             refreshStatusBar()
 
         case MSG_PAUSE:
 
             toolbar.validateVisibleItems()
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
             refreshStatusBar()
 
         case MSG_RESET:
 
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
 
         case MSG_WARP_ON,
              MSG_WARP_OFF:
@@ -610,11 +614,11 @@ extension MyController {
         case MSG_BREAKPOINT_CONFIG,
              MSG_BREAKPOINT_REACHED,
              MSG_WATCHPOINT_REACHED:
-            myAppDelegate.inspector?.fullRefresh()
-            myAppDelegate.inspector?.scrollToPC()
+            inspector?.fullRefresh()
+            inspector?.scrollToPC()
 
         case MSG_MEM_LAYOUT:
-            myAppDelegate.inspector?.fullRefresh()
+            inspector?.fullRefresh()
 
         case MSG_DRIVE_CONNECT:
             
@@ -730,11 +734,11 @@ extension MyController {
     func openPreferences(tab: String = "") {
         
         if preferencesController == nil {
-            let nibName = NSNib.Name("Preferences")
-            preferencesController = PreferencesController.init(windowNibName: nibName)
+            let name = NSNib.Name("Preferences")
+            preferencesController = PreferencesController.make(parent: self,
+                                                               nibName: name)
         }
-
-        preferencesController!.showSheet(tab: tab)
+        preferencesController?.showSheet(tab: tab)
     }
     
     //
