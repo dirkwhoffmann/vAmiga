@@ -1599,9 +1599,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x09E >> 1: // ADKCON
             paula.pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH
-            audioUnit.channel0.pokeAUDxLCH(value); return;
+            agnus.pokeAUDxLCH<0>(value); return;
         case 0x0A2 >> 1: // AUD0LCL
-            audioUnit.channel0.pokeAUDxLCL(value); return;
+            agnus.pokeAUDxLCL<0>(value); return;
         case 0x0A4 >> 1: // AUD0LEN
             audioUnit.channel0.pokeAUDxLEN(value); return;
         case 0x0A6 >> 1: // AUD0PER
@@ -1614,9 +1614,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0AE >> 1: // Unused
             break;
         case 0x0B0 >> 1: // AUD1LCH
-            audioUnit.channel1.pokeAUDxLCH(value); return;
+            agnus.pokeAUDxLCH<1>(value); return;
         case 0x0B2 >> 1: // AUD1LCL
-            audioUnit.channel1.pokeAUDxLCL(value); return;
+            agnus.pokeAUDxLCL<1>(value); return;
         case 0x0B4 >> 1: // AUD1LEN
             audioUnit.channel1.pokeAUDxLEN(value); return;
         case 0x0B6 >> 1: // AUD1PER
@@ -1629,9 +1629,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0BE >> 1: // Unused
             break;
         case 0x0C0 >> 1: // AUD2LCH
-            audioUnit.channel2.pokeAUDxLCH(value); return;
+            agnus.pokeAUDxLCH<2>(value); return;
         case 0x0C2 >> 1: // AUD2LCL
-            audioUnit.channel2.pokeAUDxLCL(value); return;
+            agnus.pokeAUDxLCL<2>(value); return;
         case 0x0C4 >> 1: // AUD2LEN
             audioUnit.channel2.pokeAUDxLEN(value); return;
         case 0x0C6 >> 1: // AUD2PER
@@ -1644,9 +1644,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0CE >> 1: // Unused
             break;
         case 0x0D0 >> 1: // AUD3LCH
-            audioUnit.channel3.pokeAUDxLCH(value); return;
+            agnus.pokeAUDxLCH<3>(value); return;
         case 0x0D2 >> 1: // AUD3LCL
-            audioUnit.channel3.pokeAUDxLCL(value); return;
+            agnus.pokeAUDxLCL<3>(value); return;
         case 0x0D4 >> 1: // AUD3LEN
             audioUnit.channel3.pokeAUDxLEN(value); return;
         case 0x0D6 >> 1: // AUD3PER

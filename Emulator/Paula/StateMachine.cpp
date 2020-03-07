@@ -157,24 +157,6 @@ StateMachine<nr>::pokeAUDxDAT(u16 value)
     }
 }
 
-template <int nr> void
-StateMachine<nr>::pokeAUDxLCH(u16 value)
-{
-    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", nr, value);
-
-    audlcLatch = REPLACE_HI_WORD(audlcLatch, value);
-}
-
-template <int nr> void
-StateMachine<nr>::pokeAUDxLCL(u16 value)
-{
-    debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", nr, value);
-
-    audlcLatch = REPLACE_LO_WORD(audlcLatch, value & 0xFFFE);
-}
-
-int debugg = 0;
-
 template <int nr> template <SamplingMethod method> i16
 StateMachine<nr>::interpolate(Cycle clock)
 {
@@ -572,16 +554,6 @@ template void StateMachine<0>::pokeAUDxDAT(u16 value);
 template void StateMachine<1>::pokeAUDxDAT(u16 value);
 template void StateMachine<2>::pokeAUDxDAT(u16 value);
 template void StateMachine<3>::pokeAUDxDAT(u16 value);
-
-template void StateMachine<0>::pokeAUDxLCH(u16 value);
-template void StateMachine<1>::pokeAUDxLCH(u16 value);
-template void StateMachine<2>::pokeAUDxLCH(u16 value);
-template void StateMachine<3>::pokeAUDxLCH(u16 value);
-
-template void StateMachine<0>::pokeAUDxLCL(u16 value);
-template void StateMachine<1>::pokeAUDxLCL(u16 value);
-template void StateMachine<2>::pokeAUDxLCL(u16 value);
-template void StateMachine<3>::pokeAUDxLCL(u16 value);
 
 template void StateMachine<0>::enableDMA();
 template void StateMachine<1>::enableDMA();

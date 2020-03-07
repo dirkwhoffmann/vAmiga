@@ -1079,6 +1079,22 @@ Agnus::pokeDSKPTL(u16 value)
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 }
 
+template <int x> void
+Agnus::pokeAUDxLCH(u16 value)
+{
+    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
+
+     audlc[x] = REPLACE_HI_WORD(audlc[x], value);
+}
+
+template <int x> void
+Agnus::pokeAUDxLCL(u16 value)
+{
+    debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
+
+    audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
+}
+
 u16
 Agnus::peekVHPOSR()
 {
@@ -2283,6 +2299,16 @@ template u16 Agnus::doAudioDMA<0>();
 template u16 Agnus::doAudioDMA<1>();
 template u16 Agnus::doAudioDMA<2>();
 template u16 Agnus::doAudioDMA<3>();
+
+template void Agnus::pokeAUDxLCH<0>(u16 value);
+template void Agnus::pokeAUDxLCH<1>(u16 value);
+template void Agnus::pokeAUDxLCH<2>(u16 value);
+template void Agnus::pokeAUDxLCH<3>(u16 value);
+
+template void Agnus::pokeAUDxLCL<0>(u16 value);
+template void Agnus::pokeAUDxLCL<1>(u16 value);
+template void Agnus::pokeAUDxLCL<2>(u16 value);
+template void Agnus::pokeAUDxLCL<3>(u16 value);
 
 template void Agnus::pokeDIWSTRT<POKE_CPU>(u16 value);
 template void Agnus::pokeDIWSTRT<POKE_COPPER>(u16 value);

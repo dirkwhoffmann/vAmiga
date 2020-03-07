@@ -392,8 +392,9 @@ public:
     // The disk DMA pointer
     u32 dskpt;
 
-    // The audio DMA pointers
+    // The audio DMA pointers and pointer latches
     u32 audpt[4];
+    u32 audlc[4];
 
     // The bitplane DMA pointers
     u32 bplpt[6];
@@ -517,6 +518,7 @@ public:
         & dmaDAS
         & dskpt
         & audpt
+        & audlc
         & audxDR
         & bplpt
         & bpl1mod
@@ -815,7 +817,11 @@ public:
     // DSKPTH, DSKPTL
     void pokeDSKPTH(u16 value);
     void pokeDSKPTL(u16 value);
-    
+
+    // Audio DMA pointers
+    template <int x> void pokeAUDxLCH(u16 value);
+    template <int x> void pokeAUDxLCL(u16 value);
+
     // VHPOSR, VHPOS, VPOSR, VPOS
     u16 peekVHPOSR();
     void pokeVHPOS(u16 value);
@@ -884,6 +890,10 @@ public:
         bplpt[x] += (x % 2) ? bpl2mod : bpl1mod;
     }
 
+    // Reloads the latch value into the audio pointer
+    template <int x> void reloadAUDxPT() {
+        audpt[x] = audlc[x];
+    }
 
     //
     // Operating the device

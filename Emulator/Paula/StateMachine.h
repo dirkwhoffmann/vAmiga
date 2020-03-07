@@ -138,12 +138,6 @@ public:
     // OCS registers 0xAA, 0xBA, 0xCA, 0xDA (w)
     void pokeAUDxDAT(u16 value);
 
-    // OCS registers 0xA0, 0xB0, 0xC0, 0xD0 (w)
-    void pokeAUDxLCH(u16 value);
-
-    // OCS registers 0xA0, 0xB0, 0xC0, 0xD0 (w)
-    void pokeAUDxLCL(u16 value);
-
 
     //
     // Synthesizing samples
@@ -171,7 +165,7 @@ public:
     void AUDxDR() { agnus.setAudxDR<nr>(); }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR() { agnus.audpt[nr] = audlcLatch; }
+    void AUDxDSR() { agnus.reloadAUDxPT<nr>(); }
 
     // Reloads the period counter from its backup latch
     void percntrld();
