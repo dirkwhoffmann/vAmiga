@@ -16,16 +16,11 @@ class UART : public AmigaComponent {
 
     friend class Amiga;
     
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     UARTInfo info;
 
-    // Statistics shown in the GUI monitor panel
+    // Collected statistical information
     UARTStats stats;
-
-    
-    //
-    // Variables
-    //
 
     // Port period and control register
     u16 serper;

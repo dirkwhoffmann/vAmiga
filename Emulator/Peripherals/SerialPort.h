@@ -23,16 +23,11 @@
 
 class SerialPort : public AmigaComponent {
 
-    // The current configuration
+    // Current configuration
     SerialPortConfig config;
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     SerialPortInfo info;
-
-
-    //
-    // Variables
-    //
 
     // The current values of the port pins
     u32 port;

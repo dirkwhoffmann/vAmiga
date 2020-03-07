@@ -79,10 +79,10 @@ protected:
     // Identification number (0 = CIA A, 1 = CIA B)
     int nr;
 
-    // The current configuration
+    // Current configuration
     CIAConfig config;
 
-    // The information shown in the GUI inspector panel
+    // Result of the latest inspection
     CIAInfo info;
 
 
@@ -90,7 +90,6 @@ protected:
     // Sub components
     //
 
-    // 24-bit counter
     TOD tod = TOD(this, amiga);
 
 

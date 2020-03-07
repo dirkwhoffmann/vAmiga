@@ -51,10 +51,10 @@
  */
 class Amiga : public HardwareComponent {
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     AmigaInfo info;
 
-    // Information shown in the GUI monitor panel
+    // Collected statistical information
     AmigaStats stats;
 
 public:

@@ -14,7 +14,7 @@
 
 class Keyboard : public AmigaComponent {
 
-    // The current configuration
+    // Current configuration
      KeyboardConfig config;
 
 public:

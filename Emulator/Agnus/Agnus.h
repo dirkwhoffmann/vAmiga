@@ -19,21 +19,21 @@
 #include "HardwareComponent.h"
 #include "Memory.h"
 
-// Hsync action bits
+// Hsync handler action flags
 #define HSYNC_PREDICT_DDF        0b001
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
 class Agnus : public AmigaComponent {
     
-    // The current configuration
+    // Current configuration
     AgnusConfig config;
 
-    // The result of the latest inspection
+    // Result of the latest inspection
     AgnusInfo info;
     EventInfo eventInfo;
 
-    // The collected statistical information
+    // Collected statistical information
     AgnusStats stats;
 
 
@@ -42,12 +42,9 @@ class Agnus : public AmigaComponent {
     //
     
 public:
-    
-    // Every Amiga fan knows what the Copper and the Blitter are
+
     Copper copper = Copper(amiga);
     Blitter blitter = Blitter(amiga);
-    
-    // A graphics engine for visualizing DMA accesses
     DmaDebugger dmaDebugger = DmaDebugger(amiga);
 
 

@@ -14,7 +14,7 @@
 
 class Mouse : public AmigaComponent {
 
-    // The current configuration
+    // Current configuration
     MouseConfig config;
 
 public:

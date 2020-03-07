@@ -97,10 +97,10 @@ class Memory : public AmigaComponent {
     friend class Copper;
     friend class ZorroManager;
 
-    // The current configuration
+    // Current configuration
     MemoryConfig config;
 
-    // Statistics shown in the GUI monitor panel
+    // Collected statistical information
     MemoryStats stats;
 
 public:

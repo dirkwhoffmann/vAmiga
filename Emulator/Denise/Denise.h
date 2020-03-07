@@ -18,19 +18,17 @@ class Denise : public AmigaComponent {
 
     friend class PixelEngine;
     
-    // The current configuration
+    // Current configuration
     DeniseConfig config;
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     DeniseInfo info;
 
-public:
+    // Recorded sprite data information
     SpriteDatInfo spriteDat;
-
-private:
     SpriteDatInfo spriteDatNew;
 
-    // Statistics shown in the GUI monitor panel
+    // Collected statistical information
     DeniseStats stats;
 
     
@@ -376,6 +374,9 @@ public:
     // Returns the result of the most recent call to inspect()
     DeniseInfo getInfo();
     SpriteInfo getSprInfo(int nr);
+    u16 getSpriteDatLines(int nr) { return spriteDat.lines[nr]; }
+    u16 getSpriteDatColor(int reg) { return spriteDat.colors[reg]; }
+    u64 getSpriteData(int line) { return spriteDat.data[line]; }
 
     // Returns statistical information about the current activiy
     DeniseStats getStats() { return stats; }

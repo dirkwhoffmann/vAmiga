@@ -28,10 +28,10 @@ class Blitter : public AmigaComponent
 {
     friend class Agnus;
 
-    // The current configuration
+    // Current configuration
     BlitterConfig config;
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     BlitterInfo info;
 
     // The fill pattern lookup tables

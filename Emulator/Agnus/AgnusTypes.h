@@ -12,7 +12,6 @@
 #ifndef _AGNUS_T_INC
 #define _AGNUS_T_INC
 
-// Emulated model
 typedef enum : long
 {
     AGNUS_8367, // OCS Agnus
@@ -41,7 +40,6 @@ inline const char *agnusRevisionName(AgnusRevision type)
 
 typedef struct
 {
-    // Emulated chip model
     AgnusRevision revision;
 }
 AgnusConfig;
@@ -111,9 +109,15 @@ typedef enum : i32
     REG_SPR4CTL,
     REG_SPR5CTL,
     REG_SPR6CTL,
-    REG_SPR7CTL
+    REG_SPR7CTL,
+    REG_COUNT
 }
 RegChangeID;
+
+static inline bool isRegChangeID(long value)
+{
+    return value >= 0 && value < REG_COUNT;
+}
 
 typedef enum : i8
 {
@@ -130,7 +134,10 @@ typedef enum : i8
 }
 BusOwner;
 
-static inline bool isBusOwner(long value) { return value >= 0 && value < BUS_OWNER_COUNT; }
+static inline bool isBusOwner(long value)
+{
+    return value >= 0 && value < BUS_OWNER_COUNT;
+}
 
 typedef enum
 {

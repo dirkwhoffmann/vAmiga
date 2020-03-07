@@ -18,7 +18,7 @@ class Paula : public AmigaComponent {
     
 private:
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     PaulaInfo info;
     
     

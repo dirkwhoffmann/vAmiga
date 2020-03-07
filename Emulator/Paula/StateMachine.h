@@ -17,11 +17,7 @@ class StateMachine : public AmigaComponent {
 
     friend class AudioUnit;
 
-    //
-    // Bookkeeping
-    //
-
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     AudioChannelInfo info;
 
 public:

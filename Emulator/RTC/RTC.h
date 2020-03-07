@@ -14,7 +14,7 @@
 
 class RTC : public AmigaComponent {
 
-    // The current configuration
+    // Current configuration
     RTCConfig config;
 
     /* The currently stored time

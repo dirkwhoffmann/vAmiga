@@ -14,12 +14,12 @@
 
 class ControlPort : public AmigaComponent {
 
-    // Information shown in the GUI inspector panel
-    ControlPortInfo info;
-
     // Represented control port (1 or 2)
     int nr;
-    
+
+    // Result of the latest inspection
+    ControlPortInfo info;
+
     // Connected device
     ControlPortDevice device = CPD_NONE;
     

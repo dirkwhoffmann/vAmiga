@@ -15,7 +15,7 @@
 
 class CPU : public AmigaComponent, public moira::Moira {
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     CPUInfo info;
 
 public:

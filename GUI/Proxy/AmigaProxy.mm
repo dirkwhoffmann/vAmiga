@@ -534,15 +534,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (NSInteger) sprDataLines:(NSInteger)nr
 {
-    return wrapper->denise->spriteDat.lines[nr];
+    return wrapper->denise->getSpriteDatLines(nr);
 }
 - (u64) sprData:(NSInteger)line
 {
-    return wrapper->denise->spriteDat.data[line];
+    return wrapper->denise->getSpriteData(line);
 }
 - (u16) sprColorReg:(NSInteger)reg
 {
-    return wrapper->denise->spriteDat.colors[reg];
+    return wrapper->denise->getSpriteDatColor(reg);
 }
 - (double) palette
 {

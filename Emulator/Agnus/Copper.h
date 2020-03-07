@@ -16,7 +16,7 @@ class Copper : public AmigaComponent
 {
     friend class Agnus;
     
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     CopperInfo info;
 
     // The currently executed Copper list (1 or 2)

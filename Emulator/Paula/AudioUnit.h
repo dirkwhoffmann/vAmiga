@@ -16,13 +16,13 @@
 
 class AudioUnit : public AmigaComponent {
 
-    // The current configuration
+    // Current configuration
     AudioConfig config;
 
-    // Information shown in the GUI inspector panel
+    // Result of the latest inspection
     AudioInfo info;
 
-    // Statistics shown in the GUI monitor panel
+    // Collected statistical information
     AudioStats stats;
 
 

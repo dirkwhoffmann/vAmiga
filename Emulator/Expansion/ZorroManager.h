@@ -21,13 +21,13 @@
 // Manager for plugged in Zorro II devices
 class ZorroManager : public AmigaComponent {
 
-    // The value returned when peeking into the auto-config space.
+    // Value returned when peeking into the auto-config space
     u8 autoConfData;
     
-    // The current configuration state (0 = unconfigured).
+    // Current configuration state (0 = unconfigured)
     u8 fastRamConf;
     
-    // Base address of the Fast Ram (value is provided by Kickstart).
+    // Base address of the Fast Ram (provided by Kickstart)
     u32 fastRamBaseAddr;
     
     
