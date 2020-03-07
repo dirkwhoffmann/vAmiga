@@ -639,21 +639,6 @@ public:
     // Returns the pixel position for the current horizontal position
     i16 ppos() { return (pos.h * 4) + 6; }
 
-    
-    //
-    // Working with DMA slots
-    //
-
-public:
-
-    // Returns the firsr DMA cycle belonging to the next fetch unit
-    // EXPERIMENTAL
-    i16 nextFetchUnit(i16 hpos) { return hpos + (4 - (hpos & 3)); }
-
-    // Returns the next aligned DMA cycle greater or equal to the provided position
-    // EXPERIMENTAL
-    i16 alignToFetchUnit(i16 hpos) { return nextFetchUnit(hpos - 1); }
-
 
     //
     // Working with beam positions
@@ -678,7 +663,51 @@ public:
 
 
     //
-    // Managing DMA access
+    // Accessing DMA registers
+    //
+
+    // DMA control
+    u16 peekDMACONR();
+    void pokeDMACON(u16 value);
+    void setDMACON(u16 oldValue, u16 newValue);
+
+    // Disk DMA
+    void pokeDSKPTH(u16 value);
+    void pokeDSKPTL(u16 value);
+
+    // Audio DMA
+    template <int x> void pokeAUDxLCH(u16 value);
+    template <int x> void pokeAUDxLCL(u16 value);
+
+    template <int x> void reloadAUDxPT() {
+        audpt[x] = audlc[x];
+    }
+
+    // Bitplane DMA
+    bool skipBPLxPT(int x);
+    template <int x> void pokeBPLxPTH(u16 value);
+    template <int x> void pokeBPLxPTL(u16 value);
+    template <int x> void setBPLxPTH(u16 value);
+    template <int x> void setBPLxPTL(u16 value);
+
+    void pokeBPL1MOD(u16 value);
+    void setBPL1MOD(u16 value);
+    void pokeBPL2MOD(u16 value);
+    void setBPL2MOD(u16 value);
+
+    template <int x> void addBPLMOD() {
+        bplpt[x] += (x % 2) ? bpl2mod : bpl1mod;
+    }
+
+    // Sprite DMA
+    template <int x> void pokeSPRxPTH(u16 value);
+    template <int x> void pokeSPRxPTL(u16 value);
+    template <int x> void pokeSPRxPOS(u16 value);
+    template <int x> void pokeSPRxCTL(u16 value);
+
+
+    //
+    // Performing DMA
     //
 
     // Called by Paula's audio engine to requests a DMA word
@@ -713,14 +742,13 @@ public:
     // Performing DMAs
     //
 
+
     u16 doDiskDMA();
 
     template <int channel> u16 doSpriteDMA();
     template <int channel> u16 doAudioDMA();
 
-    // OLD
     void doDiskDMA(u16 value);
-    u16 doSpriteDMA(int channel);
     template <int channel> u16 doBitplaneDMA();
 
     u16 copperRead(u32 addr);
@@ -730,7 +758,7 @@ public:
     void blitterWrite(u32 addr, u16 value);
 
     //
-    // Managing the DMA allocation table
+    // Managing the DMA time slot tables
     //
     
 public:
@@ -788,13 +816,6 @@ public:
     
 public:
 
-    // DMACONR
-    u16 peekDMACONR();
-
-    // DMACON
-    void pokeDMACON(u16 value);
-    void setDMACON(u16 oldValue, u16 newValue);
-
     // Returns true if the Blitter has priority over the CPU
     static bool bltpri(u16 v) { return GET_BIT(v, 10); }
     inline bool bltpri() { return bltpri(dmacon); }
@@ -813,14 +834,6 @@ public:
     template <int x> static bool auddma(u16 v) {
         return (v & (DMAEN | (AUD0EN << x))) == (DMAEN | (AUD0EN << x)); }
     template <int x> inline bool auddma() { return auddma<x>(dmacon); }
-
-    // DSKPTH, DSKPTL
-    void pokeDSKPTH(u16 value);
-    void pokeDSKPTL(u16 value);
-
-    // Audio DMA pointers
-    template <int x> void pokeAUDxLCH(u16 value);
-    template <int x> void pokeAUDxLCL(u16 value);
 
     // VHPOSR, VHPOS, VPOSR, VPOS
     u16 peekVHPOSR();
@@ -866,34 +879,6 @@ public:
     static int bpu(u16 v);
     int bpu() { return bpu(bplcon0); }
 
-    // BPLxPTL, BPLxPTH
-    template <int x> void pokeBPLxPTH(u16 value);
-    template <int x> void pokeBPLxPTL(u16 value);
-    bool skipBPLxPT(int x);
-    template <int x> void setBPLxPTH(u16 value);
-    template <int x> void setBPLxPTL(u16 value);
-
-    // BPL1MOD, BPL2MOD
-    void pokeBPL1MOD(u16 value);
-    void setBPL1MOD(u16 value);
-    void pokeBPL2MOD(u16 value);
-    void setBPL2MOD(u16 value);
-
-    // Sprite registers
-    template <int x> void pokeSPRxPTH(u16 value);
-    template <int x> void pokeSPRxPTL(u16 value);
-    template <int x> void pokeSPRxPOS(u16 value);
-    template <int x> void pokeSPRxCTL(u16 value);
-
-    // Adds the modulo register to a bitplane pointer
-    template <int x> void addBPLMOD() {
-        bplpt[x] += (x % 2) ? bpl2mod : bpl1mod;
-    }
-
-    // Reloads the latch value into the audio pointer
-    template <int x> void reloadAUDxPT() {
-        audpt[x] = audlc[x];
-    }
 
     //
     // Operating the device
