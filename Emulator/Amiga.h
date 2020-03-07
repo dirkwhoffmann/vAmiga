@@ -96,14 +96,14 @@ public:
     ZorroManager zorro = ZorroManager(*this);
     
     // Ports
-    ControlPort controlPort1 = ControlPort(1, *this);
-    ControlPort controlPort2 = ControlPort(2, *this);
+    ControlPort controlPort1 = ControlPort(PORT_1, *this);
+    ControlPort controlPort2 = ControlPort(PORT_2, *this);
     SerialPort serialPort = SerialPort(*this);
 
     // Peripherals
     Mouse mouse = Mouse(*this);
-    Joystick joystick1 = Joystick(1, *this);
-    Joystick joystick2 = Joystick(2, *this);
+    Joystick joystick1 = Joystick(PORT_1, *this);
+    Joystick joystick2 = Joystick(PORT_2, *this);
     Keyboard keyboard = Keyboard(*this);
     
     // Floppy drives

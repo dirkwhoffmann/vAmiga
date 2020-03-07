@@ -9,10 +9,10 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
+Joystick::Joystick(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
-    assert(n == 1 || n == 2);
-    setDescription(n == 1 ? "Joystick1" : "Joystick2");
+    assert(isPortNr(n));
+    setDescription(n == PORT_1 ? "Joystick1" : "Joystick2");
 }
 
 void

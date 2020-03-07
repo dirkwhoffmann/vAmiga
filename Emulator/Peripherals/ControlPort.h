@@ -14,8 +14,8 @@
 
 class ControlPort : public AmigaComponent {
 
-    // Represented control port (1 or 2)
-    int nr;
+    // Represented control port
+    PortNr nr;
 
     // Result of the latest inspection
     ControlPortInfo info;
@@ -38,7 +38,7 @@ class ControlPort : public AmigaComponent {
     
 public:
     
-    ControlPort(int nr, Amiga& ref);
+    ControlPort(PortNr nr, Amiga& ref);
 
 
     //
@@ -107,10 +107,6 @@ public:
 
     // Modifies the PRA bits of CIA A according to the connected device
     void changePra(u8 &pra);
-
-    // Returns the control port bits showing up in the CIAA PA register
-    // DEPRECATED
-    // u8 ciapa();
 
     
     //

@@ -9,12 +9,12 @@
 
 #include "Amiga.h"
 
-ControlPort::ControlPort(int nr, Amiga& ref) : AmigaComponent(ref)
+ControlPort::ControlPort(PortNr nr, Amiga& ref) : AmigaComponent(ref)
 {
-    assert(nr == 1 || nr == 2);
+    assert(isPortNr(nr));
     
     this->nr = nr;
-    setDescription(nr == 1 ? "ControlPort1" : "ControlPort2");    
+    setDescription(nr == PORT_1 ? "ControlPort1" : "ControlPort2");
 }
 
 void
