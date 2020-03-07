@@ -7,13 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class Monitor: NSWindowController {
-
-    // The emulator instance this inspector is bound to
-    var parent: MyController?
-
-    // The Amiga proxy of the parent
-    var amiga: AmigaProxy!
+class Monitor: DialogController {
 
     // Debugger preferences
     var dmaDebugController: DMADebugController?
@@ -45,17 +39,6 @@ class Monitor: NSWindowController {
      var timerLock = NSLock()
     
     var refreshCounter = 0
-
-    // Factory method
-    static func make(parent: MyController) -> Monitor? {
-
-        track()
-
-        let monitor = Monitor.init(windowNibName: "Monitor")
-        monitor.parent = parent
-        monitor.amiga = parent.amiga
-        return monitor
-    }
 
     override func awakeFromNib() {
 

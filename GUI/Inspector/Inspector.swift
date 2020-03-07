@@ -14,7 +14,7 @@ let fmt24 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFF)
 let fmt32 = MyFormatter.init(radix: 16, min: 0, max: 0xFFFFFFFF)
 let fmt8b = MyFormatter.init(radix: 2, min: 0, max: 255)
 
-class Inspector: NSWindowController {
+class Inspector: DialogController {
 
     // Debug panel (Commons)
     @IBOutlet weak var debugPanel: NSTabView!
@@ -551,12 +551,6 @@ class Inspector: NSWindowController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-    // The emulator instance this inspector is bound to
-    var parent: MyController?
-
-    // The Amiga proxy of the parent
-    var amiga: AmigaProxy!
-
     // Timer for triggering continous update
     var timer: Timer?
 
@@ -568,17 +562,6 @@ class Inspector: NSWindowController {
 
     // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
-
-    // Factory method
-    static func make(parent: MyController) -> Inspector? {
-
-        track()
-
-        let inspector = Inspector.init(windowNibName: "Inspector")
-        inspector.parent = parent
-        inspector.amiga = parent.amiga
-        return inspector
-    }
     
     override func awakeFromNib() {
         

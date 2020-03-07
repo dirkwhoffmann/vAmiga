@@ -167,12 +167,12 @@ class DiskMountController: DialogController {
         warningText.isHidden = compatible
         
         // Check for available drives
-        let dc = amigaProxy?.diskController.getConfig()
+        let dc = amiga.diskController.getConfig()
 
-        let connected0 = dc?.connected.0 ?? false
-        let connected1 = dc?.connected.1 ?? false
-        let connected2 = dc?.connected.2 ?? false
-        let connected3 = dc?.connected.3 ?? false
+        let connected0 = dc.connected.0
+        let connected1 = dc.connected.1
+        let connected2 = dc.connected.2
+        let connected3 = dc.connected.3
         df0Button.isEnabled = compatible && connected0
         df1Button.isEnabled = compatible && connected1
         df2Button.isEnabled = compatible && connected2

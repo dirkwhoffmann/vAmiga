@@ -36,7 +36,30 @@ class DialogWindow: NSWindow {
     }
 }
 
+/* Base class for all auxiliary windows.
+ * The class extends NSWindowController by a reference to the window controller
+ * of the connected emulator window (parent) and a reference to the parents
+ * proxy object (amiga).
+ */
 class DialogController: NSWindowController {
+
+    // The window controller of the owning emulator instance
+    var parent: MyController!
+
+    // The Amiga proxy of the owning emulator instance
+    var amiga: AmigaProxy!
+
+    // Factory method
+    static func make(parent: MyController, nibName: String) -> Self? {
+
+        track()
+
+        let controller = Self.init(windowNibName: nibName)
+        controller.parent = parent
+        controller.amiga = parent.amiga
+
+        return controller
+    }
 
     func sheetDidShow() { }
 

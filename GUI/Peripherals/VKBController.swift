@@ -37,10 +37,10 @@ class VirtualKeyboardWindow: DialogWindow {
 class VKBController: DialogController, NSWindowDelegate {
 
     // The emulator instance this inspector is bound to
-    var parent: MyController!
+    // var parent: MyController!
 
     // The Amiga proxy of the parent
-    var amiga: AmigaProxy!
+    // var amiga: AmigaProxy!
 
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)

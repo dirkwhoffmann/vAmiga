@@ -30,7 +30,12 @@ class MyDocument: NSDocument {
      inserted into the disk drive.
      */
     var amigaAttachment: AmigaFileProxy?
-    
+
+    // The window controller for this document
+    var parent: MyController? {
+        return windowControllers.first as? MyController
+    }
+
     override init() {
         
         track()
@@ -181,9 +186,9 @@ class MyDocument: NSDocument {
     }
     
     func runDiskMountDialog() {
-        let nibName = NSNib.Name("DiskMountDialog")
-        let controller = DiskMountController.init(windowNibName: nibName)
-        controller.showSheet()
+        let name = "DiskMountDialog"
+        let controller = DiskMountController.make(parent: parent!, nibName: name)
+        controller?.showSheet()
     }
 
     //
