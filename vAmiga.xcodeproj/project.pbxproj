@@ -17,7 +17,7 @@
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
 		502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */; };
-		502D04DB2413A32C0063EBF9 /* DmaDebugController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502D04DA2413A32B0063EBF9 /* DmaDebugController.swift */; };
+		502D04DB2413A32C0063EBF9 /* DmaDebugDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502D04DA2413A32B0063EBF9 /* DmaDebugDialog.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
 		502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD0B2248ECAA00F0E118 /* EventTableView.swift */; };
 		502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 502F7DCD2221706000AEEC65 /* Copper.cpp */; };
@@ -173,7 +173,7 @@
 		5027418D2297CACF0038E5AF /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		5027418E2297CACF0038E5AF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityPrefs.swift; sourceTree = "<group>"; };
-		502D04DA2413A32B0063EBF9 /* DmaDebugController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DmaDebugController.swift; sourceTree = "<group>"; };
+		502D04DA2413A32B0063EBF9 /* DmaDebugDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DmaDebugDialog.swift; sourceTree = "<group>"; };
 		502EFD092248EC0200F0E118 /* EventPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventPanel.swift; sourceTree = "<group>"; };
 		502EFD0B2248ECAA00F0E118 /* EventTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableView.swift; sourceTree = "<group>"; };
 		502F7DCD2221706000AEEC65 /* Copper.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Copper.cpp; sourceTree = "<group>"; };
@@ -594,7 +594,7 @@
 				508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */,
 				508FE04521EA22CC0043D0E9 /* SnapshotDialog.swift */,
 				508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */,
-				502D04DA2413A32B0063EBF9 /* DmaDebugController.swift */,
+				502D04DA2413A32B0063EBF9 /* DmaDebugDialog.swift */,
 			);
 			path = Dialogs;
 			sourceTree = "<group>";
@@ -1052,7 +1052,7 @@
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
-				502D04DB2413A32C0063EBF9 /* DmaDebugController.swift in Sources */,
+				502D04DB2413A32C0063EBF9 /* DmaDebugDialog.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
