@@ -15,7 +15,7 @@ import MetalPerformanceShaders
 
 public class MetalView: MTKView {
     
-    @IBOutlet weak var controller: MyController!
+    @IBOutlet weak var parent: MyController!
 
     /* Tracking area for trapping the mouse
      * We use a tracking area to determine when the mouse is moved into or

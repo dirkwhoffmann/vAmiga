@@ -244,8 +244,8 @@ class PreferencesController: DialogController {
 
     // The button label
     var buttonLabel: String {
-        let off   = amigaProxy!.isPoweredOff()
-        let ready = amigaProxy!.readyToPowerOn() == ERR_OK
+        let off   = amiga.isPoweredOff()
+        let ready = amiga.readyToPowerOn() == ERR_OK
         return off && ready ? "Boot" : "OK"
     }
     
@@ -300,7 +300,7 @@ class PreferencesController: DialogController {
 
     @IBAction func unlockAction(_ sender: Any!) {
 
-        amigaProxy?.powerOff()
+        amiga.powerOff()
         refresh()
     }
 
@@ -320,7 +320,7 @@ class PreferencesController: DialogController {
         hideSheet()
         myController?.saveUserDefaults()
 
-        if buttonLabel == "Boot" { amigaProxy?.run() }
+        if buttonLabel == "Boot" { amiga.run() }
     }
 }
 

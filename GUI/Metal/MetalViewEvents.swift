@@ -17,17 +17,17 @@ public extension MetalView {
     
     override func keyDown(with event: NSEvent) {
 
-        controller.kbController.keyDown(with: event)
+        parent.kbController.keyDown(with: event)
     }
     
     override func keyUp(with event: NSEvent) {
 
-        controller.kbController.keyUp(with: event)
+        parent.kbController.keyUp(with: event)
     }
     
     override func flagsChanged(with event: NSEvent) {
         
-        controller.kbController.flagsChanged(with: event)
+        parent.kbController.flagsChanged(with: event)
     }
     
     //
@@ -127,14 +127,14 @@ public extension MetalView {
             let dx = event.deltaX
             let dy = event.deltaY
             
-            controller.mouseXY.x += dx
-            controller.mouseXY.y += dy
+            parent.mouseXY.x += dx
+            parent.mouseXY.y += dy
             
             // Make coordinate independent of the actual window size
             let scaleX = (256.0 * 400.0) / frame.width
             let scaleY = (256.0 * 300.0) / frame.height
-            let newX = controller.mouseXY.x * scaleX
-            let newY = controller.mouseXY.y * scaleY
+            let newX = parent.mouseXY.x * scaleX
+            let newY = parent.mouseXY.y * scaleY
             let newLocation = NSPoint.init(x: newX, y: newY)
             
             // Report the new location to the Amiga mouse

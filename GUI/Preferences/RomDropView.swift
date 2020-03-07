@@ -21,10 +21,12 @@ extension NSDraggingInfo {
 
 class DropView: NSImageView {
     
-    @IBOutlet var dialogController: DialogController!
+    @IBOutlet var parent: DialogController!
+    var amiga: AmigaProxy!
 
     override func awakeFromNib() {
 
+        amiga = parent.amiga
         registerForDraggedTypes([NSPasteboard.PasteboardType.compatibleFileURL])
     }
 
@@ -43,7 +45,7 @@ class DropView: NSImageView {
     
     override func draggingExited(_ sender: NSDraggingInfo?) {
 
-        dialogController.refresh()
+        parent.refresh()
     }
     
     override func prepareForDragOperation(_ sender: NSDraggingInfo) -> Bool {
@@ -54,16 +56,14 @@ class DropView: NSImageView {
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
 
         guard let url = sender.url else { return false }
-        guard let controller = myController else { return false }
-        guard let amiga = amigaProxy else { return false }
-        
-        controller.romURL = url
+
+        parent.parent.romURL = url
         return amiga.mem.loadRom(fromFile: url)
     }
     
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
 
-        dialogController.refresh()
+        parent.refresh()
     }
 }
 
@@ -71,7 +71,6 @@ class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
 
-        guard let amiga = amigaProxy else { return false }
         return amiga.mem.isRom(url) && amiga.isPoweredOff()
     }
 }
@@ -80,7 +79,6 @@ class ExtRomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
 
-        guard let amiga = amigaProxy else { return false }
         return amiga.mem.isExt(url) && amiga.isPoweredOff()
     }
 }
