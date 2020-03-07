@@ -169,27 +169,6 @@ func cgEventCallback(proxy: CGEventTapProxy,
         if #available(OSX 10.12.2, *) {
             NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true
         }
-        
-        //
-        // Add observers (for remote controlling the app)
-        //
-        
-        let dc = DistributedNotificationCenter.default
-        dc.addObserver(self, selector: #selector(vamResetCommand(_:)),
-                       name: Notification.Name("VAMReset"),
-                       object: nil)
-        dc.addObserver(self, selector: #selector(vamMountCommand(_:)),
-                       name: Notification.Name("VAMMount"),
-                       object: nil)
-        dc.addObserver(self, selector: #selector(vamTypeTextCommand(_:)),
-                       name: Notification.Name("VAMTypeText"),
-                       object: nil)
-        dc.addObserver(self, selector: #selector(vamTakeScreenshotCommand(_:)),
-                       name: Notification.Name("VAMTakeScreenshot"),
-                       object: nil)
-        dc.addObserver(self, selector: #selector(vamQuitCommand(_:)),
-                       name: Notification.Name("VAMQuit"),
-                       object: nil)
     }
     
     public func applicationWillTerminate(_ aNotification: Notification) {
