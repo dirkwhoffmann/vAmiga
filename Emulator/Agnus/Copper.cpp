@@ -103,13 +103,6 @@ Copper::pokeCOPJMP2()
     if (s == POKE_CPU) {
 
         switchToCopperList(2);
-
-        // Continue Copper execution if it was waiting
-        /*
-         if (agnus.hasEvent<COP_SLOT>(COP_REQ_DMA)) {
-         agnus.scheduleImm<COP_SLOT>(COP_REQ_DMA);
-         }
-         */
     }
 }
 
@@ -504,7 +497,6 @@ Copper::scheduleWaitWakeup()
 
         if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
         agnus.scheduleAbs<COP_SLOT>(NEVER, COP_REQ_DMA);
-        // agnus.cancel<COP_SLOT>();
     }
 }
 

@@ -747,10 +747,7 @@ public:
      * The first function is called in Copper states that do not perform
      * DMA and the second function in those states that do.
      */
-    // TODO: INTEGRATE INTO busIsFree
     bool copperCanRun();
-
-    // TODO: INTEGRATE INTO allocateBus
     bool copperCanDoDMA();
 
     /* Checks if the bus is currently available for the specified resource.
