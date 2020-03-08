@@ -533,7 +533,7 @@ Denise::draw(int pixels)
     lastDrawnPixel = currentPixel;
 
 #ifdef PIXEL_DEBUG
-    rasterline[currentPixel - 2 * pixels] = 64;
+    bBuffer[currentPixel - 2 * pixels] = 64;
 #endif
 }
 

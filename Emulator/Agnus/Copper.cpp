@@ -556,8 +556,8 @@ Copper::getRA()
 u16
 Copper::getRA(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return HI_WORD(instr) & 0x1FE;
+    u16 hiword = mem.spypeekChip16(addr);
+    return hiword & 0x1FE;
 }
 
 u16
@@ -569,8 +569,8 @@ Copper::getDW()
 u16
 Copper::getDW(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return LO_WORD(instr);
+    u16 loword = mem.spypeekChip16(addr + 2);
+    return loword;
 }
 
 bool
@@ -933,7 +933,7 @@ Copper::disassemble(u32 addr)
     
     if (isMoveCmd(addr)) {
         
-        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), regName(addr));
+        sprintf(disassembly, "MOVE $%04X, %s", getDW(addr), regName(getRA(addr)));
         return disassembly;
     }
     

@@ -637,6 +637,7 @@ public:
     bool inBplDmaLine(u16 dmacon, u16 bplcon0);
 
     // Returns the pixel position for the current horizontal position
+    i16 ppos(i16 posh) { return (posh * 4) + 6; }
     i16 ppos() { return (pos.h * 4) + 6; }
 
 

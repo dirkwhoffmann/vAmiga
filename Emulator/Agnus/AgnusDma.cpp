@@ -278,7 +278,7 @@ Agnus::setBPLxPTH(u16 value)
 template <int x> void
 Agnus::setBPLxPTL(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPLxPTL(%d, %X)\n", x, value);
+    debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
