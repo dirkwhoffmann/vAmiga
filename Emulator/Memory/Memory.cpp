@@ -1692,19 +1692,17 @@ Memory::pokeCustom16(u32 addr, u16 value)
             denise.pokeBPLCON0(value);
             return;
         case 0x102 >> 1: // BPLCON1
-            denise.pokeBPLCON1(value); return;
+            agnus.pokeBPLCON1(value);
+            denise.pokeBPLCON1(value);
             return;
         case 0x104 >> 1: // BPLCON2
             denise.pokeBPLCON2(value); return;
-            return;
         case 0x106 >> 1: // Unused
             break;
         case 0x108 >> 1: // BPL1MOD
             agnus.pokeBPL1MOD(value); return;
-            return;
         case 0x10A >> 1: // BPL2MOD
             agnus.pokeBPL2MOD(value); return;
-            return;
         case 0x10C >> 1: // Unused
         case 0x10E >> 1: // Unused
             break;

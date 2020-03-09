@@ -228,7 +228,7 @@ Denise::pokeBPLCON1(u16 value)
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1_DENISE, value);
 }
 
 void
@@ -871,9 +871,9 @@ Denise::drawAttachedSpritePixelPair(int hpos)
             mBuffer[hpos] = 0b10000 | col;
             zBuffer[hpos] |= z;
         }
-        if (z > zBuffer[hpos-1]) {
-            mBuffer[hpos-1] = 0b10000 | col;
-            zBuffer[hpos-1] |= z;
+        if (z > zBuffer[hpos+1]) {
+            mBuffer[hpos+1] = 0b10000 | col;
+            zBuffer[hpos+1] |= z;
         }
     }
 }

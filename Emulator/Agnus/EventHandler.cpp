@@ -571,7 +571,8 @@ Agnus::serviceREGEvent(Cycle until)
             case REG_INTENA: paula.setINTENA(change.value); break;
             case REG_BPLCON0_AGNUS: setBPLCON0(change.value); break;
             case REG_BPLCON0_DENISE: denise.setBPLCON0(change.value); break;
-            case REG_BPLCON1: denise.setBPLCON1(change.value); break;
+            case REG_BPLCON1_AGNUS: setBPLCON1(change.value); break;
+            case REG_BPLCON1_DENISE: denise.setBPLCON1(change.value); break;
             case REG_BPLCON2: denise.setBPLCON2(change.value); break;
             case REG_DMACON: setDMACON(dmacon, change.value); break;
             case REG_DIWSTRT: setDIWSTRT(change.value); break;

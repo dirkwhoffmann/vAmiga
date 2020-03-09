@@ -1318,6 +1318,11 @@ Agnus::computeDDFWindowOCS()
 void
 Agnus::computeDDFWindowECS()
 {
+    // i16 ddfstrt = ddfstrtReached - ((bplcon1 >> 1) & 0x7);
+    // i16 ddfstop = ddfstopReached - ((bplcon1 >> 1) & 0x7);
+    i16 ddfstrt = ddfstrtReached;
+    i16 ddfstop = ddfstopReached;
+
     /* To determine the correct data fetch window, we need to distinguish
      * (too) small, medium, and (too) large DIWSTRT / DIWSTOP values.
      *
@@ -1325,8 +1330,8 @@ Agnus::computeDDFWindowECS()
      *   1:  medium : Value complies to the specs.
      *   2:   large : Value is larger than HPOS_MAX and thus never reached.
      */
-    int strt = (ddfstrtReached < 0) ? 2 : (ddfstrtReached < 0x18) ? 0 : 1;
-    int stop = (ddfstopReached < 0) ? 2 : (ddfstopReached < 0x18) ? 0 : 1;
+    int strt = (ddfstrt < 0) ? 2 : (ddfstrt < 0x18) ? 0 : 1;
+    int stop = (ddfstop < 0) ? 2 : (ddfstop < 0x18) ? 0 : 1;
 
     /* Nr | DDFSTRT | DDFSTOP | State   || Data Fetch Window   | Next State
      *  --------------------------------------------------------------------
@@ -1377,15 +1382,18 @@ Agnus::computeDDFWindowECS()
             ddfStrtLores = ddfStopLores = ddfStrtHires = ddfStopHires = 0;
             break;
         case DDF_STRT_STOP:
-            computeStandardDDFWindow(ddfstrtReached, ddfstopReached);
+            computeStandardDDFWindow(ddfstrt, ddfstop);
             break;
         case DDF_STRT_D8:
-            computeStandardDDFWindow(ddfstrtReached, 0xD8);
+            debug("DDF_STRT_D8\n");
+            computeStandardDDFWindow(ddfstrt, 0xD8);
             break;
         case DDF_18_STOP:
-            computeStandardDDFWindow(0x18, ddfstopReached);
+            debug("DDF_18_STOP\n");
+            computeStandardDDFWindow(0x18, ddfstop);
             break;
         case DDF_18_D8:
+            debug("DDF_18_D8\n");
             computeStandardDDFWindow(0x18, 0xD8);
             break;
     }
@@ -1400,13 +1408,17 @@ Agnus::computeDDFWindowECS()
 void
 Agnus::computeStandardDDFWindow(i16 strt, i16 stop)
 {
+    // BPLCON1 also affect the DDF window
+    i16 loresStrt = strt - ((bplcon1 & 0xF) >> 1);
+    i16 hiresStrt = strt - ((bplcon1 & 0x7) >> 1);
+
     // Align ddfstrt at the start of the next fetch unit
-    int loresShift = (8 - (strt & 0b111)) & 0b111;
-    int hiresShift = (4 - (strt & 0b11)) & 0b11;
+    int loresShift = (8 - (loresStrt & 0b111)) & 0b111;
+    int hiresShift = (4 - (hiresStrt & 0b11)) & 0b11;
 
     // Compute the beginning of the DDF window
-    ddfStrtLores = strt + loresShift;
-    ddfStrtHires = strt + hiresShift;
+    ddfStrtLores = loresStrt + loresShift;
+    ddfStrtHires = hiresStrt + hiresShift;
 
     // Compute the number of fetch units
     int fetchUnits = ((stop - strt) + 15) >> 3;
@@ -1462,6 +1474,28 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
     }
 
     bplcon0 = newValue;
+}
+
+void
+Agnus::pokeBPLCON1(u16 value)
+{
+    debug(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
+
+    if (bplcon1 != value) {
+        recordRegisterChange(DMA_CYCLES(4), REG_BPLCON1_AGNUS, value);
+    }
+}
+
+void
+Agnus::setBPLCON1(u16 oldValue, u16 newValue)
+{
+    assert(oldValue != newValue);
+    debug(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
+
+    bplcon1 = newValue;
+
+    // Schedule the DDF window to be recomputed
+    hsyncActions |= HSYNC_PREDICT_DDF;
 }
 
 int

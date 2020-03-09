@@ -364,8 +364,9 @@ public:
     // Ringbuffer for managing register change delays
     RegChangeRecorder<8> chngRecorder;
 
-    // A copy of BPLCON0 (Denise has another copy)
+    // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
     u16 bplcon0;
+    u16 bplcon1;
 
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
@@ -512,6 +513,7 @@ public:
 
         & chngRecorder
         & bplcon0
+        & bplcon1
         & bplcon0AtDDFStrt
         & dmacon
         & dmaconAtDDFStrt
@@ -864,10 +866,14 @@ public:
     // Called by computeDDFWindowOCS() and computeDDFWindowECS()
     void computeStandardDDFWindow(i16 strt, i16 stop);
 
-    // BPLCON0
+    // BPLCON0 and BPLCON1
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
     void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
+
+    void pokeBPLCON1(u16 value);
+    void setBPLCON1(u16 oldValue, u16 newValue);
+    void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
 
     /* Returns the Agnus view of the BPU bits.
      * The value determines the number of enabled DMA channels. It is computed
