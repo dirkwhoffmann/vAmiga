@@ -366,18 +366,6 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
 }
 
 bool
-Agnus::copperCanRun()
-{
-    // Deny access if Copper DMA is disabled
-    if (!copdma()) return false;
-
-    // Deny access if the bus is already in use
-    if (busOwner[pos.h] != BUS_NONE) return false;
-
-    return true;
-}
-
-bool
 Agnus::copperCanDoDMA()
 {
     // Deny access if Copper DMA is disabled

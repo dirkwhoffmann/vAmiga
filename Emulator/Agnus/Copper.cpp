@@ -742,7 +742,7 @@ Copper::serviceEvent(EventID id)
             // Clear the skip flag
             skip = false;
 
-            // Check the Blitte Finish Disable bit
+            // Check the Blitter Finish Disable bit
             if (!getBFD()) {
                 if (agnus.blitter.isRunning()) {
                     agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
@@ -780,7 +780,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_SKIP1\n");
 
             // Wait for the next free cycle
-            if (!agnus.copperCanRun()) { reschedule(); break; }
+            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_SKIP2);
@@ -790,11 +790,11 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP2\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus.copperCanRun()) { reschedule(); break; }
+            // Wait for the next free cycle
+            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
-            // vAmigaTS::copskip2 indicates that this state already blocks at 0xE0
-            if (agnus.pos.h == 0xE0) { reschedule(); break; }
+            // Test 'coptim3' suggests that cycle $E1 is blocked in this state
+            if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Compute the beam position that needs to be compared
             beam = agnus.addToBeam(agnus.pos, 2);
