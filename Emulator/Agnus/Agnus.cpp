@@ -365,36 +365,31 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
     return result;
 }
 
-bool
-Agnus::copperCanDoDMA()
-{
-    // Deny access if Copper DMA is disabled
-    if (!copdma()) return false;
-
-    // Deny access if the bus is already in use
-    if (busOwner[pos.h] != BUS_NONE) return false;
-
-    // Deny access in cycle $E0
-    if (unlikely(pos.h == 0xE0)) return false;
-
-    return true;
-}
-
 template <BusOwner owner> bool
 Agnus::busIsFree()
 {
-    // Deny if the bus has been allocated already
+    // Deny if the bus is already in use
     if (busOwner[pos.h] != BUS_NONE) return false;
 
     switch (owner) {
 
+        case BUS_COPPER:
+        {
+            // Deny if Copper DMA is disabled
+            if (!copdma()) return false;
+
+            // Deny in cycle E0
+            if (unlikely(pos.h == 0xE0)) return false;
+            break;
+        }
         case BUS_BLITTER:
         {
-            // Deny if Blitter DMA is off
+            // Deny if Blitter DMA is disabled
             if (!bltdma()) return false;
+            break;
         }
-        default: return true;
     }
+    return true;
 }
 
 template <BusOwner owner> bool
@@ -1373,15 +1368,12 @@ Agnus::computeDDFWindowECS()
             computeStandardDDFWindow(ddfstrt, ddfstop);
             break;
         case DDF_STRT_D8:
-            debug("DDF_STRT_D8\n");
             computeStandardDDFWindow(ddfstrt, 0xD8);
             break;
         case DDF_18_STOP:
-            debug("DDF_18_STOP\n");
             computeStandardDDFWindow(0x18, ddfstop);
             break;
         case DDF_18_D8:
-            debug("DDF_18_D8\n");
             computeStandardDDFWindow(0x18, 0xD8);
             break;
     }

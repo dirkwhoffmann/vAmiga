@@ -634,8 +634,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_REQ_DMA\n");
 
-            // Wait until the bus is ready for Copper DMA
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible DMA cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
             if (agnus.pos.h % 2) { reschedule(); break; }
@@ -648,8 +648,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_FETCH\n");
 
-            // Wait for the next free cycle suitable for DMA
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the first instruction word
             cop1ins = agnus.doCopperDMA(coppc);
@@ -675,8 +675,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_MOVE\n");
 
-            // Wait for the next free cycle suitable for DMA
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus.doCopperDMA(coppc);
@@ -713,8 +713,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
-            // Wait for the next free cycle suitable for DMA
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
             cop2ins = agnus.doCopperDMA(coppc);
@@ -728,8 +728,8 @@ Copper::serviceEvent(EventID id)
             
             if (verbose) debug("COP_WAIT1\n");
 
-            // Wait for the next free cycle
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_WAIT2);
@@ -750,8 +750,8 @@ Copper::serviceEvent(EventID id)
                 }
             }
 
-            // Wait for the next free cycle
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Test 'coptim3' suggests that cycle $E1 is blocked in this state
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
@@ -779,8 +779,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP1\n");
 
-            // Wait for the next free cycle
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_SKIP2);
@@ -790,8 +790,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP2\n");
 
-            // Wait for the next free cycle
-            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Test 'coptim3' suggests that cycle $E1 is blocked in this state
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
@@ -827,11 +827,8 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP2\n");
 
-            // Wait for the next free DMA cycle
-            if (!agnus.copperCanDoDMA()) {
-                reschedule();
-                break;
-            }
+            // Wait for the next possible cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             switchToCopperList(agnus.slot[COP_SLOT].data);
             schedule(COP_FETCH);

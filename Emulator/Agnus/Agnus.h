@@ -746,12 +746,6 @@ public:
     bool getBLS() { return bls; }
     void setBLS(bool value) { bls = value; }
 
-    /* Returns true if Copper execution is blocked.
-     * The first function is called in Copper states that do not perform
-     * DMA and the second function in those states that do.
-     */
-    bool copperCanDoDMA();
-
     /* Checks if the bus is currently available for the specified resource.
      */
     template <BusOwner owner> bool busIsFree();
