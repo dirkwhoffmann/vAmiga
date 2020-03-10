@@ -443,14 +443,6 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask)
     return (hBeam & hMask) >= (hWaitpos & hMask);
 }
 
-/*
-bool
-Copper::comparator(u32 beam)
-{
-    return comparator(beam, getVPHP(), getVMHM());
-}
-*/
-
 bool
 Copper::comparator(Beam beam)
 {
@@ -642,7 +634,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_REQ_DMA\n");
 
-            // Wait for the next free cycle suitable for DMA
+            // Wait until the bus is ready for Copper DMA
             if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
@@ -734,11 +726,10 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT1:
             
-            // verbose = true;
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next free cycle
-            if (!agnus.copperCanRun()) { reschedule(); break; }
+            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
 
             // Schedule next state
             schedule(COP_WAIT2);
@@ -760,7 +751,10 @@ Copper::serviceEvent(EventID id)
             }
 
             // Wait for the next free cycle
-            if (!agnus.copperCanRun()) { reschedule(); break; }
+            if (!agnus.copperCanDoDMA()) { reschedule(); break; }
+
+            // Test 'coptim3' suggests that cycle $E1 is blocked in this state
+            if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Schedule a wakeup event at the target position
             scheduleWaitWakeup();
