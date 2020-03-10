@@ -380,16 +380,18 @@ Agnus::busIsFree()
 
             // Deny in cycle E0
             if (unlikely(pos.h == 0xE0)) return false;
-            break;
+            return true;
         }
         case BUS_BLITTER:
         {
             // Deny if Blitter DMA is disabled
             if (!bltdma()) return false;
-            break;
+            return true;
         }
     }
-    return true;
+
+    assert(false);
+    return false;
 }
 
 template <BusOwner owner> bool
@@ -438,28 +440,30 @@ Agnus::doDiskDMA()
     return result;
 }
 
-void
-Agnus::doDiskDMA(u16 value)
-{
-    mem.pokeChip16(dskpt, value);
-    dskpt += 2;
-
-    busOwner[pos.h] = BUS_DISK;
-    busValue[pos.h] = value;
-    stats.count[BUS_DISK]++;
-}
-
 template <int channel> u16
 Agnus::doAudioDMA()
 {
-    u16 result;
-
-    result = mem.peekChip16(audpt[channel]);
+    u16 result = mem.peekChip16(audpt[channel]);
     audpt[channel] += 2;
 
+    assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;
     stats.count[BUS_AUDIO]++;
+
+    return result;
+}
+
+template <int bitplane> u16
+Agnus::doBitplaneDMA()
+{
+    u16 result = mem.peekChip16(bplpt[bitplane]);
+    bplpt[bitplane] += 2;
+
+    assert(pos.h < HPOS_CNT);
+    busOwner[pos.h] = BUS_BITPLANE;
+    busValue[pos.h] = result;
+    stats.count[BUS_BITPLANE]++;
 
     return result;
 }
@@ -478,36 +482,6 @@ Agnus::doSpriteDMA()
     return result;
 }
 
-/*
-u16
-Agnus::doSpriteDMA(int channel)
-{
-    u16 result = mem.peekChip16(sprpt[channel]);
-    sprpt[channel] += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_SPRITE;
-    busValue[pos.h] = result;
-    stats.count[BUS_SPRITE]++;
-
-    return result;
-}
-*/
-
-template <int bitplane> u16
-Agnus::doBitplaneDMA()
-{
-    u16 result = mem.peekChip16(bplpt[bitplane]);
-    bplpt[bitplane] += 2;
-
-    assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_BITPLANE;
-    busValue[pos.h] = result;
-    stats.count[BUS_BITPLANE]++;
-
-    return result;
-}
-
 u16
 Agnus::doCopperDMA(u32 addr)
 {
@@ -521,6 +495,34 @@ Agnus::doCopperDMA(u32 addr)
     return result;
 }
 
+u16
+Agnus::doBlitterDMA(u32 addr)
+{
+    // Assure that the Blitter owns the bus when this function is called
+    assert(busOwner[pos.h] == BUS_BLITTER);
+
+    u16 result = mem.peek16<BUS_BLITTER>(addr);
+
+    assert(pos.h < HPOS_CNT);
+    busOwner[pos.h] = BUS_BLITTER;
+    busValue[pos.h] = result;
+    stats.count[BUS_BLITTER]++;
+
+    return result;
+}
+
+void
+Agnus::doDiskDMA(u16 value)
+{
+    mem.pokeChip16(dskpt, value);
+    dskpt += 2;
+
+    assert(pos.h < HPOS_CNT);
+    busOwner[pos.h] = BUS_DISK;
+    busValue[pos.h] = value;
+    stats.count[BUS_DISK]++;
+}
+
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
@@ -532,32 +534,13 @@ Agnus::doCopperDMA(u32 addr, u16 value)
     stats.count[BUS_COPPER]++;
 }
 
-u16
-Agnus::doBlitterDMA(u32 addr)
-{
-    // Assure that the Blitter owns the bus when this function is called
-    assert(pos.h < HPOS_CNT);
-    assert(busOwner[pos.h] == BUS_BLITTER);
-
-    u16 result = mem.peek16<BUS_BLITTER>(addr);
-
-    busOwner[pos.h] = BUS_BLITTER;
-    busValue[pos.h] = result;
-    stats.count[BUS_BLITTER]++;
-
-    return result;
-}
-
 void
 Agnus::doBlitterDMA(u32 addr, u16 value)
 {
-    // Assure that the Blitter owns the bus when this function is called
-    assert(pos.h < HPOS_CNT);
-    assert(busOwner[pos.h] == BUS_BLITTER);
-
     mem.poke16<BUS_BLITTER>(addr, value);
 
-    busOwner[pos.h] = BUS_BLITTER;
+    assert(pos.h < HPOS_CNT);
+    assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busValue[pos.h] = value;
     stats.count[BUS_BLITTER]++;
 }

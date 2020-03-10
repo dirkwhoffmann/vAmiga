@@ -739,13 +739,6 @@ public:
     // Performing DMA
     //
 
-    // Called by Paula's audio engine to requests a DMA word
-    template <int channel> void setAudxDR() { audxDR[channel] = true; }
-
-    // Getter and setter for the BLS signal (Blitter slow down)
-    bool getBLS() { return bls; }
-    void setBLS(bool value) { bls = value; }
-
     /* Checks if the bus is currently available for the specified resource.
      */
     template <BusOwner owner> bool busIsFree();
@@ -768,6 +761,13 @@ public:
     void doDiskDMA(u16 value);
     void doCopperDMA(u32 addr, u16 value);
     void doBlitterDMA(u32 addr, u16 value);
+
+    // Called by Paula's audio engine to requests a DMA word
+    template <int channel> void setAudxDR() { audxDR[channel] = true; }
+
+    // Getter and setter for the BLS signal (Blitter slow down)
+    bool getBLS() { return bls; }
+    void setBLS(bool value) { bls = value; }
 
 
     //

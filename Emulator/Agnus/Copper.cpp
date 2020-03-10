@@ -648,7 +648,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_FETCH\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the first instruction word
@@ -675,7 +675,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_MOVE\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
@@ -713,7 +713,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_WAIT_OR_SKIP\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Load the second instruction word
@@ -728,7 +728,7 @@ Copper::serviceEvent(EventID id)
             
             if (verbose) debug("COP_WAIT1\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Schedule next state
@@ -750,7 +750,7 @@ Copper::serviceEvent(EventID id)
                 }
             }
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Test 'coptim3' suggests that cycle $E1 is blocked in this state
@@ -779,7 +779,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP1\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Schedule next state
@@ -790,7 +790,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_SKIP2\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Test 'coptim3' suggests that cycle $E1 is blocked in this state
@@ -827,7 +827,7 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_JMP2\n");
 
-            // Wait for the next possible cycle
+            // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             switchToCopperList(agnus.slot[COP_SLOT].data);
@@ -836,10 +836,10 @@ Copper::serviceEvent(EventID id)
 
         case COP_VBLANK:
 
-            // verbose = true;
             if (verbose) debug("COP_VBLANK\n");
 
-            // Wait until the bus is free
+            // Allocate the bus
+            // TODO: FIND OUT IF THE BUS IS REALLY ALLOCATED IN THIS STATE
             if (!agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
 
             switchToCopperList(1);
