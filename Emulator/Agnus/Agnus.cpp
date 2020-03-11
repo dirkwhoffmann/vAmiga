@@ -37,7 +37,7 @@ void
 Agnus::initBplEventTableLores()
 {
     memset(bplDMA[0], 0, sizeof(bplDMA[0]));
-    memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
+    // memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -60,16 +60,18 @@ Agnus::initBplEventTableLores()
         bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
     }
 
+    /*
     for (int i = 0; i <= 0xD8; i++) {
         fetchUnitNr[0][i] = i % 8;
     }
+    */
 }
 
 void
 Agnus::initBplEventTableHires()
 {
     memset(bplDMA[1], 0, sizeof(bplDMA[1]));
-    memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
+    // memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -91,9 +93,11 @@ Agnus::initBplEventTableHires()
         bplDMA[1][bpu][HPOS_MAX] = BPL_EOL;
     }
 
+    /*
     for (int i = 0; i <= 0xD8; i++) {
         fetchUnitNr[0][i] = i % 4;
     }
+    */
 }
 
 void
@@ -1809,10 +1813,6 @@ Agnus::vsyncHandler()
 
     // Determine if the next frame is a long or a short frame
     frameInfo.numLines = lof ? 313 : 312;
-
-    // Increment frame and reset vpos
-    frame++; // DEPRECATED
-    assert(frame == frameInfo.nr);
 
     // Reset vertical position counter
     pos.v = 0;

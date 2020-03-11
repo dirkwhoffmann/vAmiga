@@ -73,11 +73,11 @@ public:
      *             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
      *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
      *
-     * The lookup table is used to determine the position of a given DMA
+     * This lookup table is used to determine the position of a given DMA
      * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
      * 0, the second cycle is numbered 1 and so on.
      */
-    u8 fetchUnitNr[2][HPOS_CNT];
+    // u8 fetchUnitNr[2][HPOS_CNT]; DEPRECATED
 
     /* Disk, Audio, Sprite DMA events as they appear in a single rasterline.
      *
@@ -85,7 +85,7 @@ public:
      *
      *             dmacon : Bits 0 .. 5 of register DMACON
      *
-     * The lookup table is used to quickly update the dasEvent table.
+     * This lookup table is used to quickly update the dasEvent table.
      * Depending on the current resoution and BPU value, a segment of this
      * lookup table is copied into the event table.
      */
@@ -159,7 +159,7 @@ public:
 
 
     //
-    // Operation control
+    // Execution control
     //
 
     // Action flags checked in the HSYNC handler
@@ -177,7 +177,7 @@ public:
      * The value is increased on every VSYNC action.
      * DEPRECATED: will be replaced by frame.nr
      */
-    Frame frame;
+    // Frame frame;
 
     // The current beam position
     Beam pos;
@@ -478,7 +478,6 @@ public:
 
         & hsyncActions
         & clock
-        & frame
         & pos
         & frameInfo.nr
         & frameInfo.interlaced

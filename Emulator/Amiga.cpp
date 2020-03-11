@@ -470,7 +470,7 @@ void
 Amiga::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            agnus.frame, agnus.pos.v, agnus.pos.h);
+            agnus.frameInfo.nr, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC());
     fprintf(stderr, "%2X ", cpu.getIPL());
@@ -620,7 +620,7 @@ Amiga::_inspect()
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
-    info.frame = agnus.frame;
+    info.frame = agnus.frameInfo.nr;
     info.vpos = agnus.pos.v;
     info.hpos = agnus.pos.h;
     
@@ -805,7 +805,7 @@ Amiga::snapshotIsDue()
     if (!getTakeAutoSnapshots() || getSnapshotInterval() <= 0)
     return false;
     
-    return agnus.frame % (fps * getSnapshotInterval()) == 0;
+    return agnus.frameInfo.nr % (fps * getSnapshotInterval()) == 0;
 }
 
 void
@@ -1048,6 +1048,6 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(ciaB.clock),
              AS_CIA_CYCLES(ciaB.clock));
     msg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frame);
+             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frameInfo.nr);
     msg("\n");
 }
