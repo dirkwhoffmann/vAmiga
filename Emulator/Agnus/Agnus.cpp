@@ -552,9 +552,11 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
 void
 Agnus::clearBplEventTable()
 {
-    memset(bplEvent, 0, sizeof(bplEvent));
+    for (int i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
+    for (int i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
+    
     bplEvent[HPOS_MAX] = BPL_EOL;
-    updateBplJumpTable();
+    nextBplEvent[HPOS_MAX] = 0;
 }
 
 void
@@ -607,7 +609,6 @@ Agnus::switchBplDmaOn()
     updateBplJumpTable();
 }
 
-
 void
 Agnus::switchBplDmaOff()
 {
@@ -627,12 +628,7 @@ void
 Agnus::updateBplDma()
 {
     debug(BPL_DEBUG, "updateBitplaneDma()\n");
-
-    // Determine if bitplane DMA has to be on or off
-    bool bplDma = inBplDmaLine();
-
-    // Update the event table accordingly
-    bplDma ? switchBplDmaOn() : switchBplDmaOff();
+    allocateBplSlots(0);
 }
 
 void
