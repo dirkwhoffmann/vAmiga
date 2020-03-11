@@ -600,38 +600,6 @@ Agnus::allocateBplSlots(int first, int last)
 }
 
 void
-Agnus::switchBplDmaOn()
-{
-    // Setup the event slot table
-    allocateBplSlots(0);
-
-    // Setup the jump table
-    updateBplJumpTable();
-}
-
-void
-Agnus::switchBplDmaOff()
-{
-    debug(BPL_DEBUG, "switchBitplaneDmaOff: \n");
-
-    // Quick-exit if nothing happens at regular DMA cycle positions
-    if (nextBplEvent[0] == HPOS_MAX) {
-        assert(bplEvent[nextBplEvent[0]] == BPL_EOL);
-        return;
-    }
-
-    clearBplEventTable();
-    scheduleNextBplEvent();
-}
-
-void
-Agnus::updateBplDma()
-{
-    debug(BPL_DEBUG, "updateBitplaneDma()\n");
-    allocateBplSlots(0);
-}
-
-void
 Agnus::updateDasDma(u16 dmacon)
 {
     assert(dmacon < 64);
@@ -1090,14 +1058,15 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
             // DDFSTRT never matches in the current rasterline. Disable DMA
             ddfstrtReached = -1;
-            switchBplDmaOff();
+            clearBplEventTable();
+            scheduleNextBplEvent();
 
         } else {
 
             // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
             computeDDFWindow();
-            updateBplDma();
+            allocateBplSlots();
             scheduleNextBplEvent();
         }
     }
@@ -1128,7 +1097,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
              ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
              if (ddfstrtReached >= 0) {
                  computeDDFWindow();
-                 updateBplDma();
+                 allocateBplSlots();
                  scheduleNextBplEvent();
              }
          }
@@ -1669,12 +1638,10 @@ Agnus::hsyncHandler()
     if (pos.v == diwVstrt && !diwVFlop) {
         diwVFlop = true;
         debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
-        // updateBplDma();
     }
     if (pos.v == diwVstop && diwVFlop) {
         diwVFlop = false;
         debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
-        // updateBplDma();
     }
 
     // Horizontal DIW flipflop
@@ -1738,7 +1705,7 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            updateBplDma();
+            allocateBplSlots();
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;

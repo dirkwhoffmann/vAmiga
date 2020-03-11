@@ -278,7 +278,7 @@ private:
     //
 
 public:
-    
+
     /* Register DDFSTRT and DDFSTOP define the area where the system performs
      * bitplane DMA. From a hardware engineer's point of view, these registers
      * are completely independent of DIWSTRT and DIWSTOP. From a software
@@ -780,12 +780,7 @@ public:
 
     // Allocates the bitplane DMA slots
     void allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last = HPOS_MAX-1);
-    void allocateBplSlots(int first, int last = HPOS_MAX-1);
-
-    // Adds or removes bitplane DMA events to the DMA event table
-    void switchBplDmaOn();
-    void switchBplDmaOff();
-    void updateBplDma();
+    void allocateBplSlots(int first = 0, int last = HPOS_MAX-1);
 
     // Adds or removes disk, audio, sprites event to the DAS event table
     void updateDasDma(u16 dmacon);
