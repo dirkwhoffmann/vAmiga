@@ -82,7 +82,7 @@ class DiskController : public AmigaComponent {
 
 
     //
-    // Constructing, configuring, and profiling the object
+    // Constructing and serializing
     //
     
 public:
@@ -94,37 +94,32 @@ public:
     DiskControllerStats getStats() { return stats; }
     void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
+    template <class T>
+    void applyToPersistentItems(T& worker)
+    {
+        worker
 
-    //
-    // Iterating over snapshot items
-    //
+        & config.connected
+        & config.useFifo;
+    }
 
-     template <class T>
-     void applyToPersistentItems(T& worker)
-     {
-         worker
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
 
-         & config.connected
-         & config.useFifo;
-     }
-
-     template <class T>
-     void applyToResetItems(T& worker)
-     {
-         worker
-
-         & selected
-         & state
-         & useFifo
-         & syncFlag
-         & incoming
-         & incomingCycle
-         & fifo
-         & fifoCount
-         & dsklen
-         & dsksync
-         & prb;
-     }
+        & selected
+        & state
+        & useFifo
+        & syncFlag
+        & incoming
+        & incomingCycle
+        & fifo
+        & fifoCount
+        & dsklen
+        & dsksync
+        & prb;
+    }
 
 
     //

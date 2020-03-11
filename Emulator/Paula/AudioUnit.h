@@ -113,18 +113,13 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
     
     AudioUnit(Amiga& ref);
     
-
-    //
-    // Iterating over snapshot items
-    //
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {

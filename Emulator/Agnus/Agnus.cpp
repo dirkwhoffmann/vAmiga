@@ -188,7 +188,7 @@ void Agnus::_reset()
 
     // Start with a long frame
     lof = 1;
-    frameInfo.numLines = 313;
+    frame.numLines = 313;
 
     // Initialize statistical counters
     clearStats();
@@ -296,7 +296,7 @@ Agnus::getInfo()
 Cycle
 Agnus::cyclesInFrame()
 {
-    return DMA_CYCLES(frameInfo.numLines * HPOS_CNT);
+    return DMA_CYCLES(frame.numLines * HPOS_CNT);
 }
 
 Cycle
@@ -901,7 +901,7 @@ Agnus::peekVHPOSR()
     // posh might have wrapped over, because we added 4
     if (posh > HPOS_MAX) {
         posh -= HPOS_CNT;
-        if (++posv >= frameInfo.numLines) posv = 0;
+        if (++posv >= frame.numLines) posv = 0;
     }
 
     // posv wraps over in cycle 2
@@ -1655,7 +1655,7 @@ Agnus::updateSpriteDMA()
      }
 
     // Disable DMA in the last rasterline
-    if (v == frameInfo.numLines - 1) {
+    if (v == frame.numLines - 1) {
         for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
     }
@@ -1691,7 +1691,7 @@ Agnus::hsyncHandler()
     pos.h = 0;
 
     // Advance the vertical counter
-    if (++pos.v >= frameInfo.numLines) vsyncHandler();
+    if (++pos.v >= frame.numLines) vsyncHandler();
 
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
@@ -1731,12 +1731,12 @@ Agnus::hsyncHandler()
     // Determine the bitplane DMA status for the line to come
     //
 
-    bool bplDmaLine = inBplDmaLine();
+    bool newBplDmaLine = inBplDmaLine();
 
     // Update the bpl event table if the value has changed
-    if (bplDmaLine ^ oldBplDmaLine) {
+    if (newBplDmaLine ^ bplDmaLine) {
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-        oldBplDmaLine = bplDmaLine;
+        bplDmaLine = newBplDmaLine;
     }
 
 
@@ -1752,7 +1752,7 @@ Agnus::hsyncHandler()
         newDmaDAS = dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
-        if (pos.v < 25 || pos.v >= frameInfo.numLines - 1) newDmaDAS &= 0b011111;
+        if (pos.v < 25 || pos.v >= frame.numLines - 1) newDmaDAS &= 0b011111;
 
     } else {
 
@@ -1803,16 +1803,16 @@ Agnus::vsyncHandler()
     // debug("diwVstrt = %d diwVstop = %d diwHstrt = %d diwHstop = %d\n", diwVstrt, diwVstop, diwHstrt, hstop);
 
     // Advance to the next frame
-    frameInfo.nr++;
+    frame.nr++;
 
     // Check if we the next frame is drawn in interlace mode
-    frameInfo.interlaced = denise.lace();
+    frame.interlaced = denise.lace();
 
     // If yes, toggle the the long frame flipflop
-    lof = (frameInfo.interlaced) ? !lof : true;
+    lof = (frame.interlaced) ? !lof : true;
 
     // Determine if the next frame is a long or a short frame
-    frameInfo.numLines = lof ? 313 : 312;
+    frame.numLines = lof ? 313 : 312;
 
     // Reset vertical position counter
     pos.v = 0;
@@ -1827,7 +1827,7 @@ Agnus::vsyncHandler()
     // Let other subcomponents do their own VSYNC stuff
     blitter.vsyncHandler();
     copper.vsyncHandler();
-    denise.beginOfFrame(frameInfo.interlaced);
+    denise.beginOfFrame(frame.interlaced);
     diskController.vsyncHandler();
     joystick1.execute();
     joystick2.execute();

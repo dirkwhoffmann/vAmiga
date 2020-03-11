@@ -42,7 +42,7 @@ class RTC : public AmigaComponent {
     
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:

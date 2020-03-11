@@ -264,7 +264,7 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
@@ -332,6 +332,7 @@ public:
         & prio12;
     }
 
+    
     //
     // Configuring
     //

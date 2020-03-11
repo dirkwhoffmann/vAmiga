@@ -186,8 +186,14 @@ public:
     
 
     //
-    // Iterating over snapshot items
+    // Constructing and serializing
     //
+    
+public:
+    
+    Memory(Amiga& ref);
+    ~Memory();
+    void dealloc();
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -216,16 +222,10 @@ public:
 
 
     //
-    // Constructing and configuring
+    // Configuring
     //
-    
+
 public:
-    
-    Memory(Amiga& ref);
-    ~Memory();
-    
-    // Frees the allocated memory
-    void dealloc();
 
     // Returns the current configuration
     MemoryConfig getConfig() { return config; }

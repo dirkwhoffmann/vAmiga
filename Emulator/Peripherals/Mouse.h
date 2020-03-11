@@ -52,17 +52,12 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
     
     Mouse(Amiga& ref);
-
-    
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -74,7 +69,6 @@ public:
     void applyToResetItems(T& worker)
     {
     }
-
 
     
     //

@@ -95,7 +95,7 @@ public:
 
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
@@ -104,11 +104,6 @@ public:
 
     static Disk *makeWithFile(ADFFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)

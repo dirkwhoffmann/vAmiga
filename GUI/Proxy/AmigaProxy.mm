@@ -446,7 +446,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) interlaceMode
 {
-    return wrapper->agnus->frameInfo.interlaced;
+    return wrapper->agnus->frame.interlaced;
 }
 - (BOOL) isLongFrame
 {

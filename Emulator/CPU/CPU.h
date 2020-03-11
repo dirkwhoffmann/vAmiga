@@ -18,11 +18,12 @@ class CPU : public AmigaComponent, public moira::Moira {
     // Result of the latest inspection
     CPUInfo info;
 
-public:
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
+
+public:
 
     CPU(Amiga& ref);
 

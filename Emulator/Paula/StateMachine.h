@@ -58,17 +58,12 @@ public:
 
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
 
 public:
 
     StateMachine(Amiga& ref);
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)

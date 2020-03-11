@@ -42,17 +42,14 @@ class UART : public AmigaComponent {
     // Bit reception counter
     u8 recCnt;
 
+
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
 
 public:
 
     UART(Amiga& ref);
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)

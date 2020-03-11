@@ -167,7 +167,7 @@ private:
 
 
     //
-    // Constructing and destructiong
+    // Constructing and serializing
     //
     
 public:

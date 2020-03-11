@@ -76,7 +76,7 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
@@ -105,7 +105,14 @@ public:
         & coppc;
     }
 
-    
+
+    //
+    // Analyzing and profiling
+    //
+
+    CopperInfo getInfo();
+
+
     //
     // Methods from HardwareComponent
     //
@@ -121,10 +128,7 @@ private:
 
 public:
 
-    // Returns the result of the most recent call to inspect()
-    CopperInfo getInfo();
 
-    
     //
     // Accessing properties
     //

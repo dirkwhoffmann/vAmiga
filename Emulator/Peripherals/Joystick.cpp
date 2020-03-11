@@ -65,7 +65,7 @@ Joystick::setAutofireBullets(int value)
 void
 Joystick::scheduleNextShot()
 {
-    nextAutofireFrame = agnus.frameInfo.nr + (int)(50.0 / (2 * autofireFrequency));
+    nextAutofireFrame = agnus.frame.nr + (int)(50.0 / (2 * autofireFrequency));
 }
 
 void
@@ -163,7 +163,7 @@ Joystick::execute()
         return;
     
     // Wait until it's time to push or release fire
-    if (agnus.frameInfo.nr != nextAutofireFrame)
+    if (agnus.frame.nr != nextAutofireFrame)
         return;
     
     // Are there any bullets left?

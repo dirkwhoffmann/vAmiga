@@ -34,7 +34,7 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing
     //
 
 public:
@@ -99,4 +99,3 @@ public:
 };
 
 #endif
-

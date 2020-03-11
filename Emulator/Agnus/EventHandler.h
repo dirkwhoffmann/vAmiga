@@ -188,16 +188,6 @@ template<EventSlot s> void cancel()
     slot[s].triggerCycle = NEVER;
 }
 
-// DEPRECATED. REMOVE ONCE IRQ SLOTS HAVE BEEN MERGED INTO 1
-/*
-void cancel(EventSlot s)
-{
-    slot[s].id = (EventID)0;
-    slot[s].data = 0;
-    slot[s].triggerCycle = NEVER;
-}
-*/
-
 
 //
 // Scheduling specific events

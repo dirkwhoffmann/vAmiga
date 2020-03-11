@@ -470,7 +470,7 @@ void
 Amiga::prefix()
 {
     fprintf(stderr, "[%lld] (%3d,%3d) ",
-            agnus.frameInfo.nr, agnus.pos.v, agnus.pos.h);
+            agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
     fprintf(stderr, "%06X ", cpu.getPC());
     fprintf(stderr, "%2X ", cpu.getIPL());
@@ -620,7 +620,7 @@ Amiga::_inspect()
     info.dmaClock = agnus.clock;
     info.ciaAClock = ciaA.clock;
     info.ciaBClock = ciaB.clock;
-    info.frame = agnus.frameInfo.nr;
+    info.frame = agnus.frame.nr;
     info.vpos = agnus.pos.v;
     info.hpos = agnus.pos.h;
     
@@ -741,18 +741,15 @@ Amiga::restartTimer()
 {
     timeBase = time_in_nanos();
     clockBase = agnus.clock;
-    
-    // u64 kernelNow = mach_absolute_time();
-    // u64 nanoNow = abs_to_nanos(kernelNow);
 }
 
 void
 Amiga::synchronizeTiming()
 {
-    u64 now        = time_in_nanos();
-    Cycle clockDelta    = agnus.clock - clockBase;
-    i64 elapsedTime = (clockDelta * 1000) / masterClockFrequency;
-    i64 targetTime  = timeBase + elapsedTime;
+    u64 now          = time_in_nanos();
+    Cycle clockDelta = agnus.clock - clockBase;
+    i64 elapsedTime  = (clockDelta * 1000) / masterClockFrequency;
+    i64 targetTime   = timeBase + elapsedTime;
     
     /*
      debug("now         = %lld\n", now);
@@ -805,7 +802,7 @@ Amiga::snapshotIsDue()
     if (!getTakeAutoSnapshots() || getSnapshotInterval() <= 0)
     return false;
     
-    return agnus.frameInfo.nr % (fps * getSnapshotInterval()) == 0;
+    return agnus.frame.nr % (fps * getSnapshotInterval()) == 0;
 }
 
 void
@@ -1048,6 +1045,6 @@ Amiga::dumpClock()
              AS_DMA_CYCLES(ciaB.clock),
              AS_CIA_CYCLES(ciaB.clock));
     msg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frameInfo.nr);
+             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frame.nr);
     msg("\n");
 }

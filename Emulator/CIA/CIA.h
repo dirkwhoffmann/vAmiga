@@ -268,7 +268,7 @@ public:
 
 
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
 
 public:

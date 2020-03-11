@@ -91,20 +91,16 @@ public:
 
     // Color register history
     RegChangeRecorder<128> colChanges;
-    
-    //
-    // Constructing and destructing
+
+
+     //
+    // Constructing and serializing
     //
     
 public:
     
     PixelEngine(Amiga& ref);
     ~PixelEngine();
-
-
-    //
-    // Iterating over snapshot items
-    //
 
     template <class T>
     void applyToPersistentItems(T& worker)

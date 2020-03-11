@@ -20,7 +20,7 @@ Agnus::inspectEvents()
     eventInfo.dmaClock = clock;
     eventInfo.ciaAClock = ciaa.clock;
     eventInfo.ciaBClock  = ciab.clock;
-    eventInfo.frame = frameInfo.nr;
+    eventInfo.frame = frame.nr;
     eventInfo.vpos = pos.v;
     eventInfo.hpos = pos.h;
 

@@ -27,7 +27,7 @@ typedef uint64_t u64;
 // Frame and cycle counts
 //
 
-typedef i64 Frame;
+// typedef i64 Frame;
 
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units

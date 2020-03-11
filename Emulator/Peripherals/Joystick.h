@@ -39,22 +39,17 @@ class Joystick : public AmigaComponent {
     i64 bulletCounter = 0;
     
     // Next frame to auto-press or auto-release the fire button
-    Frame nextAutofireFrame = 0;
+    i64 nextAutofireFrame = 0;
     
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
     
     Joystick(PortNr n, Amiga& ref);
     
-
-    //
-    // Iterating over snapshot items
-    //
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {

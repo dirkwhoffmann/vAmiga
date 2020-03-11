@@ -25,16 +25,12 @@ template <class T, int capacity> struct RingBuffer
     // Read and write pointers
     int r, w;
 
-    //
-    // Constructing and initializing
+     //
+    // Constructing and serializing
     //
 
     RingBuffer() { clear(); }
     void clear() { r = w = 0; }
-
-    //
-    // Serializing
-    //
 
     template <class W>
     void applyToItems(W& worker)

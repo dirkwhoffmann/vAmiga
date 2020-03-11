@@ -52,7 +52,7 @@ protected:
 
 
     //
-    // Constructing and destructing
+    // Constructing and destroying
     //
 
 public:

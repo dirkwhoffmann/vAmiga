@@ -248,7 +248,7 @@ Copper::findMatch(Beam &result)
 bool
 Copper::findVerticalMatch(i16 vStrt, i16 vComp, i16 vMask, i16 &result)
 {
-    i16 vStop = agnus.frameInfo.numLines;
+    i16 vStop = agnus.frame.numLines;
 
     // Iterate through all vertical positions
     for (int v = vStrt; v < vStop; v++) {
@@ -292,7 +292,7 @@ Copper::findMatchNew(Beam &match)
     u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    while ((beam >> 8) < agnus.frameInfo.numLines) {
+    while ((beam >> 8) < agnus.frame.numLines) {
 
         // Check if the vertical components are equal
         if ((beam & mask & ~0xFF) == (comp & mask & ~0xFF)) {

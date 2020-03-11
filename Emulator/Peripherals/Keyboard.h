@@ -44,18 +44,13 @@ private:
 
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
     
     Keyboard(Amiga& ref);
     
-
-    //
-    // Iterating over snapshot items
-    //
-
     template <class T>
     void applyToPersistentItems(T& worker)
     {

@@ -204,7 +204,7 @@ public:
     
     
     //
-    // Constructing and destructing
+    // Constructing and serializing
     //
     
 public:
@@ -282,6 +282,7 @@ public:
     // Clears all previously recorded statistical information
     void clearStats();
 
+    
     //
     // Accessing properties
     //

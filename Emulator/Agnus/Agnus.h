@@ -170,14 +170,8 @@ public:
     // Counters
     //
 
-    // Agnus has been emulated up to this clock cycle.
+    // Agnus has been emulated up to this clock cycle
     Cycle clock;
-    
-    /* The frame counter.
-     * The value is increased on every VSYNC action.
-     * DEPRECATED: will be replaced by frame.nr
-     */
-    // Frame frame;
 
     // The current beam position
     Beam pos;
@@ -186,7 +180,7 @@ public:
     struct {
 
         // Frame count (will eventually replace variable 'frame')
-        Frame nr;
+        i64 nr;
 
         // Indicates if this frame is drawn in interlace mode
         bool interlaced;
@@ -194,96 +188,97 @@ public:
         // The number of rasterlines in the current frame
         i16 numLines;
 
-    } frameInfo;
+    } frame;
 
     // The long frame flipflop
     bool lof;
 
-    /* The vertical trigger positions of all 8 sprites.
-     * Note: The horizontal trigger positions are stored inside Denise. Agnus
-     * knows nothing about them.
-     */
-    i16 sprVStrt[8];
-    i16 sprVStop[8];
 
-    // The current DMA states of all 8 sprites.
-    SprDMAState sprDmaState[8];
+    //
+    // Registers
+    //
+
+    // Ringbuffer for managing register change delays
+    RegChangeRecorder<8> chngRecorder;
+
+    // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
+    u16 bplcon0;
+    u16 bplcon1;
+
+    /* Value of bplcon0 at the DDFSTRT trigger cycle.
+     * This variable is set at the beginning of each rasterline and updated
+     * on-the-fly when dmacon changes before the trigger conditions has been
+     * reached.
+     */
+    u16 bplcon0AtDDFStrt;
+
+    // The DMA control register
+    u16 dmacon;
+
+    /* Value of dmacon at the DDFSTRT trigger cycle.
+     * This variable is set at the beginning of each rasterline and updated
+     * on-the-fly when dmacon changes before the trigger conditions has been
+     * reached.
+     */
+    u16 dmaconAtDDFStrt;
+
+    // This value is updated in the hsync handler with the lowest 6 bits of
+    // dmacon if the master enable bit is 1 or set to 0 if the master enable
+    // bit is 0. It is used as an offset into the DAS lookup tables.
+    u16 dmaDAS;
+
+    // The disk DMA pointer
+    u32 dskpt;
+
+    // The audio DMA pointers and pointer latches
+    u32 audpt[4];
+    u32 audlc[4];
+
+    // The bitplane DMA pointers
+    u32 bplpt[6];
+
+    // Audio DMA request from Paula
+    // This signal is set to true by Paula when a new audio DMA word is needed.
+    bool audxDR[4];
+
+    // The bitplane modulo registers for odd bitplanes
+    i16 bpl1mod;
+
+    // The bitplane modulo registers for even bitplanes
+    i16 bpl2mod;
+
+    // The sprite DMA pointers
+    u32 sprpt[8];
 
 
     //
-    // Display Window (DIW)
+    // Data bus
     //
 
-    /* The Amiga limits the visible screen area by an upper, a lower, a left,
-     * and a right border. The border encloses an area called the Display
-     * Window (DIW). The color of the pixels inside the display window depends
-     * on the bitplane data. The pixels of the border area are always drawn in
-     * the background color (which might change inside the border area).
-     * The size of the display window is controlled by two registers called
-     * DIWSTRT and DIWSTOP. They contain the vertical and horizontal positions
-     * at which the window starts and stops. The resolution of vertical start
-     * and stop is one scan line. The resolution of horizontal start and stop
-     * is one low-resolution pixel.
-     *
-     * I haven't found detailed information about the how the DIW logic is
-     * implemented in hardware inside Agnus. If you have such information,
-     * please let me know. For the time being, I base my implementation on the
-     * following assumptions:
-     *
-     * 1. Denise contains a single flipflop controlling the display window
-     *    horizontally. The flop is cleared inside the border area and set
-     *    inside the display area.
-     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
-     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
-     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
-     *    not recognised.
-     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
-     *    not recognised.
-     */
+    // Recorded DMA values for all cycles in the current rasterline
+    u16 busValue[HPOS_CNT];
 
-    // Register values as they have been written by pokeDIWSTRT/STOP()
-    u16 diwstrt;
-    u16 diwstop;
+    // Recorded DMA usage for all cycles in the current rasterline
+    BusOwner busOwner[HPOS_CNT];
 
-    /* Extracted display window coordinates
-     *
-     * The coordinates are computed out of diwstrt and diwstop and set in
-     * pokeDIWSTRT/STOP(). The following horizontal values are possible:
-     *
-     *    diwHstrt : $02  ... $FF   or -1
-     *    diwHstop : $100 ... $1C7  or -1
-     *
-     * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
-     * result in coordinates outside the valid range.
-     */
-    i16 diwHstrt;
-    i16 diwHstop;
-    i16 diwVstrt;
-    i16 diwVstop;
+    // Set in the hsync handler to remember the returned value of inBplDmaLine()
+    bool bplDmaLine;
 
-    /* Value of the DIW flipflops
-     * Variable vFlop stores the value of the vertical DIW flipflop. The value
-     * is updated at the beginning of each rasterline and cannot change
-     * thereafter. Variable hFlop stores the value of the horizontal DIW
-     * flipflop as it was at the beginning of the rasterline. To find out
-     * the value of the horizontal flipflop inside or at the end of a
-     * rasterline, hFlopOn and hFlopOff need to be evaluated.
-     */
-    bool diwVFlop;
-    bool diwHFlop;
+private:
 
-    /* At the end of a rasterline, these variable conains the pixel coordinates
-     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
-     * value of -1 indicates that no matching event took place.
+    /* Blitter slow down
+     * The BLS signal indicates that the CPU's request to access the bus has
+     * been denied for three or more consecutive cycles.
      */
-    i16 diwHFlopOn;
-    i16 diwHFlopOff;
+    bool bls;
 
 
     //
     // Display Data Fetch (DDF)
     //
 
+public:
+    
     /* Register DDFSTRT and DDFSTOP define the area where the system performs
      * bitplane DMA. From a hardware engineer's point of view, these registers
      * are completely independent of DIWSTRT and DIWSTOP. From a software
@@ -357,93 +352,94 @@ public:
     bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
 
+
     //
-    // Registers
+    // Display Window (DIW)
     //
 
-    // Ringbuffer for managing register change delays
-    RegChangeRecorder<8> chngRecorder;
-
-    // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
-    u16 bplcon0;
-    u16 bplcon1;
-
-    /* Value of bplcon0 at the DDFSTRT trigger cycle.
-     * This variable is set at the beginning of each rasterline and updated
-     * on-the-fly when dmacon changes before the trigger conditions has been
-     * reached.
+    /* The Amiga limits the visible screen area by an upper, a lower, a left,
+     * and a right border. The border encloses an area called the Display
+     * Window (DIW). The color of the pixels inside the display window depends
+     * on the bitplane data. The pixels of the border area are always drawn in
+     * the background color (which might change inside the border area).
+     * The size of the display window is controlled by two registers called
+     * DIWSTRT and DIWSTOP. They contain the vertical and horizontal positions
+     * at which the window starts and stops. The resolution of vertical start
+     * and stop is one scan line. The resolution of horizontal start and stop
+     * is one low-resolution pixel.
+     *
+     * I haven't found detailed information about the how the DIW logic is
+     * implemented in hardware inside Agnus. If you have such information,
+     * please let me know. For the time being, I base my implementation on the
+     * following assumptions:
+     *
+     * 1. Denise contains a single flipflop controlling the display window
+     *    horizontally. The flop is cleared inside the border area and set
+     *    inside the display area.
+     * 2. When hpos matches the position in DIWSTRT, the flipflop is set.
+     * 3. When hpos matches the position in DIWSTOP, the flipflop is reset.
+     * 4. The smallest valid value for DIWSTRT is $02. If it is smaller, it is
+     *    not recognised.
+     * 5. The largest valid value for DIWSTOP is $(1)C7. If it is larger, it is
+     *    not recognised.
      */
-    u16 bplcon0AtDDFStrt;
 
-    // The DMA control register
-    u16 dmacon;
+    // Register values as they have been written by pokeDIWSTRT/STOP()
+    u16 diwstrt;
+    u16 diwstop;
 
-    /* Value of dmacon at the DDFSTRT trigger cycle.
-     * This variable is set at the beginning of each rasterline and updated
-     * on-the-fly when dmacon changes before the trigger conditions has been
-     * reached.
+    /* Extracted display window coordinates
+     *
+     * The coordinates are computed out of diwstrt and diwstop and set in
+     * pokeDIWSTRT/STOP(). The following horizontal values are possible:
+     *
+     *    diwHstrt : $02  ... $FF   or -1
+     *    diwHstop : $100 ... $1C7  or -1
+     *
+     * A -1 is assigned if DIWSTRT or DIWSTOP are written with values that
+     * result in coordinates outside the valid range.
      */
-    u16 dmaconAtDDFStrt;
+    i16 diwHstrt;
+    i16 diwHstop;
+    i16 diwVstrt;
+    i16 diwVstop;
 
-    // This value is updated in the hsync handler with the lowest 6 bits of
-    // dmacon if the master enable bit is 1 or set to 0 if the master enable
-    // bit is 0. It is used as an offset into the DAS lookup tables.
-    u16 dmaDAS;
-
-    // The disk DMA pointer
-    u32 dskpt;
-
-    // The audio DMA pointers and pointer latches
-    u32 audpt[4];
-    u32 audlc[4];
-
-    // The bitplane DMA pointers
-    u32 bplpt[6];
-
-    // Audio DMA request from Paula
-    // This signal is set to true by Paula when a new audio DMA word is needed.
-    bool audxDR[4];
-
-    
-    // The bitplane modulo registers for odd bitplanes
-    i16 bpl1mod;
-
-    // The bitplane modulo registers for even bitplanes
-    i16 bpl2mod;
-
-    // The sprite DMA pointers
-    u32 sprpt[8];
-    
-    
-    //
-    // Bookkeeping
-    //
-
-    // Recorded DMA values for all cycles in the current rasterline
-    u16 busValue[HPOS_CNT];
-
-    // Recorded DMA usage for all cycles in the current rasterline
-    BusOwner busOwner[HPOS_CNT];
-
-    // Unsed in the hsyncHandler to remember the result of inBplDmaLine
-    bool oldBplDmaLine;
-
-
-    //
-    // Bus access control
-    //
-
-private:
-
-    /* Blitter slow down
-     * The BLS signal indicates that the CPU's request to access the bus has
-     * been denied for three or more consecutive cycles.
+    /* Value of the DIW flipflops
+     * Variable vFlop stores the value of the vertical DIW flipflop. The value
+     * is updated at the beginning of each rasterline and cannot change
+     * thereafter. Variable hFlop stores the value of the horizontal DIW
+     * flipflop as it was at the beginning of the rasterline. To find out
+     * the value of the horizontal flipflop inside or at the end of a
+     * rasterline, hFlopOn and hFlopOff need to be evaluated.
      */
-    bool bls;
+    bool diwVFlop;
+    bool diwHFlop;
+
+    /* At the end of a rasterline, these variable conains the pixel coordinates
+     * where the hpos counter matched diwHstrt or diwHstop, respectively. A
+     * value of -1 indicates that no matching event took place.
+     */
+    i16 diwHFlopOn;
+    i16 diwHFlopOff;
 
 
     //
-    // Constructing and destructing
+    // Sprites
+    //
+
+    /* The vertical trigger positions of all 8 sprites
+     * Note: The horizontal trigger positions are stored inside Denise. Agnus
+     * knows nothing about them.
+     */
+    i16 sprVStrt[8];
+    i16 sprVStop[8];
+
+    // The current DMA states of all 8 sprites
+    SprDMAState sprDmaState[8];
+
+
+    //
+    // Constructing and serializing
     //
     
 public:
@@ -479,36 +475,10 @@ public:
         & hsyncActions
         & clock
         & pos
-        & frameInfo.nr
-        & frameInfo.interlaced
-        & frameInfo.numLines
+        & frame.nr
+        & frame.interlaced
+        & frame.numLines
         & lof
-        & sprVStrt
-        & sprVStop
-        & sprDmaState
-
-        & diwstrt
-        & diwstop
-        & diwHstrt
-        & diwHstop
-        & diwVstrt
-        & diwVstop
-        & diwVFlop
-        & diwHFlop
-        & diwHFlopOn
-        & diwHFlopOff
-
-        & ddfstrt
-        & ddfstop
-        & ddfstrtReached
-        & ddfstopReached
-        & ddfVFlop
-        & ddfStrtLores
-        & ddfStrtHires
-        & ddfStopLores
-        & ddfStopHires
-        & ddfState
-        & ocsEarlyAccessLine
 
         & chngRecorder
         & bplcon0
@@ -528,9 +498,35 @@ public:
 
         & busValue
         & busOwner
-        & oldBplDmaLine
+        & bplDmaLine
+        & bls
 
-        & bls;
+        & ddfstrt
+        & ddfstop
+        & ddfstrtReached
+        & ddfstopReached
+        & ddfVFlop
+        & ddfStrtLores
+        & ddfStrtHires
+        & ddfStopLores
+        & ddfStopHires
+        & ddfState
+        & ocsEarlyAccessLine
+
+        & diwstrt
+        & diwstop
+        & diwHstrt
+        & diwHstop
+        & diwVstrt
+        & diwVstop
+        & diwVFlop
+        & diwHFlop
+        & diwHFlopOn
+        & diwHFlopOff
+
+        & sprVStrt
+        & sprVStop
+        & sprDmaState;
     }
 
 
@@ -549,7 +545,7 @@ public:
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
 
-    // Returns a big mask for the memory locations this Agnus can address
+    // Returns a bit mask for the memory locations this Agnus can address
     u32 chipRamMask();
 
     // Returns the line in which the VERTB interrupt gets triggered
@@ -557,6 +553,18 @@ public:
 
     // Returns the connected bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+
+
+    //
+    // Analyzing and profiling
+    //
+
+    AgnusInfo getInfo();
+    EventInfo getEventInfo();
+    EventSlotInfo getEventSlotInfo(int nr);
+
+    AgnusStats getStats() { return stats; }
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //
@@ -580,17 +588,6 @@ public:
 
     void dumpEvents();
 
-    // Returns the result of the most recent call to inspect()
-    AgnusInfo getInfo();
-    EventInfo getEventInfo();
-    EventSlotInfo getEventSlotInfo(int nr);
-
-    // Returns statistical information about the current activiy
-    AgnusStats getStats() { return stats; }
-
-    // Resets the collected statistical information
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
-
 
     //
     // Examining the current frame
@@ -599,8 +596,8 @@ public:
 public:
 
     // Indicates if the current frame is a long or a short frame
-    bool isLongFrame() { return frameInfo.numLines == 313; }
-    bool isShortFrame() { return frameInfo.numLines == 312; }
+    bool isLongFrame() { return frame.numLines == 313; }
+    bool isShortFrame() { return frame.numLines == 312; }
 
     /* Returns the number of master cycles in the current frame.
      * The result depends on the number of lines that are drawn. This values
@@ -631,7 +628,7 @@ public:
     bool inVBlank() { return pos.v < 26; }
 
     // Indicates if the electron beam is in the last rasterline
-    bool inLastRasterline() { return pos.v == frameInfo.numLines - 1; }
+    bool inLastRasterline() { return pos.v == frame.numLines - 1; }
 
     // Indicates if the electron beam is in a line where bitplane DMA is enabled
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
