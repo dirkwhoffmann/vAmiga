@@ -600,40 +600,8 @@ Agnus::allocateBplSlots(int first, int last)
 void
 Agnus::switchBplDmaOn()
 {
-    i16 start;
-    i16 stop;
-
-    bool hires = denise.hires();
-    int activeBitplanes = bpu();
-
-    // Determine the range that is covered by fetch units
-    if (hires) {
-
-        start = ddfStrtHires;
-        stop = ddfStopHires;
-        assert((stop - start) % 4 == 0);
-
-    } else {
-
-        start = ddfStrtLores;
-        stop = ddfStopLores;
-        assert((stop - start) % 8 == 0);
-    }
-
-    debug(BPL_DEBUG, "switchBitplaneDmaOn()\n");
-    debug(BPL_DEBUG, "hires = %d start = %d stop = %d\n", hires, start, stop);
-
-    assert(start >= 0 && start <= HPOS_MAX);
-    assert(stop >= 0 && stop <= HPOS_MAX);
-
-    // Wipe out all events outside the fetch unit window
-    for (int i = 0; i < start; i++) bplEvent[i] = EVENT_NONE;
-    for (int i = stop; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
-
-    // Copy events from the proper lookup table
-    for (int i = start; i < stop; i++) {
-        bplEvent[i] = bplDMA[hires][activeBitplanes][i];
-    }
+    // Setup the event slot table
+    allocateBplSlots(0);
 
     // Setup the jump table
     updateBplJumpTable();
