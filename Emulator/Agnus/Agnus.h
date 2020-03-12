@@ -772,19 +772,26 @@ public:
     
 public:
 
-    // Removes all events from the BPL event table except BPL_EOL
+    // Removes all events from the BPL event table
     void clearBplEventTable();
 
-    // Removes all events from the DAS event table except BUS_REFRESH
-    void clearDasEventTable();
-
-    // Allocates the bitplane DMA slots
-    void allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last = HPOS_MAX-1);
+    // Updates all events in the BPL event table
+    void allocateBplSlots(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
     void allocateBplSlots(int first = 0, int last = HPOS_MAX-1);
 
-    // Adds or removes disk, audio, sprites event to the DAS event table
+    // Checks the integrity of the BPL event table (for debugging)
+    void verifyBplEvents();
+
+    // Removes all events from the DAS event table
+    void clearDasEventTable();
+
+    // Updates all events in the DAS event table
     void updateDasDma(u16 dmacon);
     void updateDasDma() { updateDasDma(dmacon & 0x3F); }
+
+    // Checks the integrity of the DAS event table (for debugging)
+    void verifyDasEvents();
+
 
     // Updates the jump table for a given event table
     void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
@@ -795,13 +802,13 @@ public:
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
-    // Returns true if the event in the specified slot is the Lx event.
+    // Returns true if the event in the specified slot is the Lx event
     bool isLastLx(i16 dmaCycle);
 
-    // Returns true if the event in the specified slot is the Hx event.
+    // Returns true if the event in the specified slot is the Hx event
     bool isLastHx(i16 dmaCycle);
 
-    // Returns true if the specified position belongs to the last fetch unit.
+    // Returns true if the specified position belongs to the last fetch unit
     bool inLastFetchUnit(i16 dmaCycle);
 
     // Dumps an event table for debugging

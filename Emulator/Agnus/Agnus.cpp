@@ -37,7 +37,6 @@ void
 Agnus::initBplEventTableLores()
 {
     memset(bplDMA[0], 0, sizeof(bplDMA[0]));
-    // memset(fetchUnitNr[0], 0, sizeof(fetchUnitNr[0]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -59,19 +58,12 @@ Agnus::initBplEventTableLores()
         assert(bplDMA[0][bpu][HPOS_MAX] == EVENT_NONE);
         bplDMA[0][bpu][HPOS_MAX] = BPL_EOL;
     }
-
-    /*
-    for (int i = 0; i <= 0xD8; i++) {
-        fetchUnitNr[0][i] = i % 8;
-    }
-    */
 }
 
 void
 Agnus::initBplEventTableHires()
 {
     memset(bplDMA[1], 0, sizeof(bplDMA[1]));
-    // memset(fetchUnitNr[1], 0, sizeof(fetchUnitNr[1]));
 
     for (int bpu = 0; bpu < 7; bpu++) {
 
@@ -92,12 +84,6 @@ Agnus::initBplEventTableHires()
         assert(bplDMA[1][bpu][HPOS_MAX] == EVENT_NONE);
         bplDMA[1][bpu][HPOS_MAX] = BPL_EOL;
     }
-
-    /*
-    for (int i = 0; i <= 0xD8; i++) {
-        fetchUnitNr[0][i] = i % 4;
-    }
-    */
 }
 
 void
@@ -142,7 +128,6 @@ Agnus::initDasEventTable()
         }
 
         p[0xDF] = DAS_SDMA;
-        // p[0xE2] = DAS_REFRESH;
     }
 }
 
@@ -194,8 +179,10 @@ void Agnus::_reset()
     clearStats();
 
     // Initialize event tables
-    clearBplEventTable();
-    clearDasEventTable();
+    for (int i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
+    for (int i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+    updateBplJumpTable();
+    updateDasJumpTable();
 
     // Initialize the event slots
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
@@ -557,14 +544,8 @@ Agnus::clearBplEventTable()
     
     bplEvent[HPOS_MAX] = BPL_EOL;
     nextBplEvent[HPOS_MAX] = 0;
-}
 
-void
-Agnus::clearDasEventTable()
-{
-    memset(dasEvent, 0, sizeof(dasEvent));
-    updateDasDma(0);
-    updateDasJumpTable();
+    verifyBplEvents();
 }
 
 void
@@ -591,12 +572,31 @@ Agnus::allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last)
     }
 
     updateBplJumpTable();
+
+    verifyBplEvents();
 }
 
 void
 Agnus::allocateBplSlots(int first, int last)
 {
     allocateBplSlots(dmacon, bplcon0, first, last);
+}
+
+void
+Agnus::verifyBplEvents()
+{
+    assert(bplEvent[HPOS_MAX] == BPL_EOL);
+    assert(nextBplEvent[HPOS_MAX] == 0);
+}
+
+void
+Agnus::clearDasEventTable()
+{
+    memset(dasEvent, 0, sizeof(dasEvent));
+    updateDasDma(0);
+    updateDasJumpTable();
+
+    verifyDasEvents();
 }
 
 void
@@ -612,6 +612,24 @@ Agnus::updateDasDma(u16 dmacon)
 
     // Setup the jump table
     updateDasJumpTable();
+
+    verifyDasEvents();
+}
+
+void
+Agnus::verifyDasEvents()
+{
+    assert(dasEvent[0x01] == DAS_REFRESH);
+    assert(dasEvent[0xDF] == DAS_SDMA);
+
+    for (int i = 0x34; i < 0xDF; i++) {
+        assert(dasEvent[i] == EVENT_NONE);
+        assert(nextDasEvent[i] == 0xDF);
+    }
+    for (int i = 0xE0; i < HPOS_CNT; i++) {
+        assert(dasEvent[i] == EVENT_NONE);
+        assert(nextDasEvent[i] == 0);
+    }
 }
 
 void
