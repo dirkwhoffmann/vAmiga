@@ -389,7 +389,7 @@ PixelEngine::colorize(int line)
     }
 
     // Wipe out the HBLANK area
-    for (int pixel = 4 * 0x0F; pixel <= 4 * 0x35; pixel++) {
+    for (int pixel = 4 * HBLANK_MIN; pixel <= 4 * HBLANK_MAX; pixel++) {
         dst[pixel] = rgbaHBlank;
     }
 

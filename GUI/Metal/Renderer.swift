@@ -283,12 +283,12 @@ class Renderer: NSObject, MTKViewDelegate {
         if longFrame {
             longFrameTexture.replace(region: region,
                                      mipmapLevel: 0,
-                                     withBytes: bytes + (15 * 4),
+                                     withBytes: bytes + (Int(HBLANK_MIN) * 4),
                                      bytesPerRow: 4 * w)
         } else {
             shortFrameTexture.replace(region: region,
                                       mipmapLevel: 0,
-                                      withBytes: bytes + (15 * 4),
+                                      withBytes: bytes + (Int(HBLANK_MIN) * 4),
                                       bytesPerRow: 4 * w)
         }
     }

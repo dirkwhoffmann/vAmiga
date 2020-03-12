@@ -624,7 +624,6 @@ Agnus::updateBplJumpTable(i16 end)
         nextBplEvent[i] = next;
         if (bplEvent[i]) next = i;
     }
-    // updateJumpTable(bplEvent, nextBplEvent, end);
 }
 
 void
@@ -637,22 +636,7 @@ Agnus::updateDasJumpTable(i16 end)
         nextDasEvent[i] = next;
         if (dasEvent[i]) next = i;
     }
-    // updateJumpTable(dasEvent, nextDasEvent, end);
 }
-
-/*
-void
-Agnus::updateJumpTable(EventID *eventTable, u8 *jumpTable, int end)
-{
-    assert(end <= HPOS_MAX);
-
-     u8 next = jumpTable[end];
-     for (int i = end; i >= 0; i--) {
-         jumpTable[i] = next;
-         if (eventTable[i]) next = i;
-     }
-}
-*/
 
 bool
 Agnus::isLastLx(i16 dmaCycle)
@@ -665,14 +649,6 @@ Agnus::isLastHx(i16 dmaCycle)
 {
     return (pos.h >= ddfStopHires - 4);
 }
-
-/*
-bool
-Agnus::inLastFetchUnit(i16 dmaCycle)
-{
-    return denise.hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
-}
-*/
 
 void
 Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
@@ -1587,10 +1563,8 @@ Agnus::executeSecondSpriteCycle()
 void
 Agnus::updateSpriteDMA()
 {
-    // debug("updateSpriteDMA()\n");
-
-    // When this function is called, the sprite logic already sees an inremented
-    // vertical position counter.
+    // When the function is called, the sprite logic already sees an inremented
+    // vertical position counter
     i16 v = pos.v + 1;
 
     // Reset the vertical trigger coordinates in line 25

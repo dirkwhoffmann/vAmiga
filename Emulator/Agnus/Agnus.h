@@ -662,7 +662,7 @@ public:
 
 
     //
-    // Controlling DMA access
+    // Controlling DMA
     //
 
     u16 peekDMACONR();
@@ -843,11 +843,13 @@ public:
     // Sets up the likely DDF values for the next rasterline
     void predictDDF();
 
-    void computeDDFWindow();
+private:
 
-    // Called by computeDDFWindow()
+    void computeDDFWindow();
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
+
+public:
 
     // Called by computeDDFWindowOCS() and computeDDFWindowECS()
     void computeStandardDDFWindow(i16 strt, i16 stop);

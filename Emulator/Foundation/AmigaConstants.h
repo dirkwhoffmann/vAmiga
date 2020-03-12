@@ -313,26 +313,28 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
  * applied to the screen buffer start address (see below).
  */
 
-#define VPIXELS       314                        // VPOS_CNT + 1 line
-#define HPIXELS       908                        // 4 * HPOS_CNT
+#define VPIXELS       314                    // VPOS_CNT + 1 line
+#define HPIXELS       908                    // 4 * HPOS_CNT
 #define PIXELS        (VPIXELS * HPIXELS)
 #define LAST_PIXEL    907
 
 /* Blanking area
  *
- * Note: The first DMA cycle belonging to the HBLANK area is cycle $0F (15) and
- * the last is cycle $35 (53). To mimic a real PAL screen, a misalignment
- * offset is added to the start address of the screen buffer before it is
- * written into the GPU texture. This offset aligns the HBLANK to the left
- * and causes the image data belonging to DMA cycles $00 to $0E to appear in
- * the previous scanline. This is also the reason why VPIXELS needs to be
- * greater than VPOS_CNT. Otherwise, we would access unallocated memory at the
- * end of the last scanline.
+ * "Amiga Intern" states that DMA cycle $0F (15) is the first and $35 (53) the
+ *  last cycles inside the HBLANK area. However, these values seem to be wrong
+ *  (see values below).
+ *  To mimic a real PAL screen, a misalignment offset is added to the start
+ *  address of the screen buffer before it is written into the GPU texture.
+ *  This offset aligns the HBLANK to the left and causes the image data of the
+ *  early DMA cycles to appear in the previous scanline. This is also the
+ *  reason why VPIXELS needs to be greater than VPOS_CNT. Otherwise, we would
+ *  access unallocated memory at the end of the last scanline.
  */
 
-#define HBLANK_MIN    15
-#define HBLANK_MAX    53
-#define HBLANK_CNT    39
+#define HBLANK_MIN    0x0B                   // 11
+#define HBLANK_MAX    0x31                   // 49
+#define HBLANK_CNT    39                     // 49 - 11 + 1
+
 #define VBLANK_MIN    0
 #define VBLANK_MAX    25
 #define VBLANK_CNT    26

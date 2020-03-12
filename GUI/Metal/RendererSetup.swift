@@ -109,9 +109,6 @@ extension Renderer {
         shortFrameTexture = device.makeTexture(descriptor: descriptor)
         assert(shortFrameTexture != nil, "Failed to create short frame texture.")
 
-        // let actualWidth = longFrameTexture.width
-        // let actualHeight = longFrameTexture.height
-
         //
         // Textures that combine a short and a long frame (not yet upscaled)
         //
