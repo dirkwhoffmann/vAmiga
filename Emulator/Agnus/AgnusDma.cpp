@@ -91,14 +91,14 @@ Agnus::setDMACON(u16 oldValue, u16 value)
             // Check if the current line is affected by the change
             if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
 
-                allocateBplSlots(newValue, bplcon0, pos.h + 2);
+                updateBplEvents(newValue, bplcon0, pos.h + 2);
                 updateBplEvent();
             }
 
         } else {
 
             // Bitplane DMA is switched off
-            allocateBplSlots(newValue, bplcon0, pos.h + 2);
+            updateBplEvents(newValue, bplcon0, pos.h + 2);
             updateBplEvent();
         }
 

@@ -546,7 +546,7 @@ Agnus::clearBplEvents()
 }
 
 void
-Agnus::allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last)
+Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 {
     assert(first >= 0 && last < HPOS_MAX);
 
@@ -574,9 +574,9 @@ Agnus::allocateBplSlots(u16 dmacon, u16 bplcon0, int first, int last)
 }
 
 void
-Agnus::allocateBplSlots(int first, int last)
+Agnus::updateBplEvents(int first, int last)
 {
-    allocateBplSlots(dmacon, bplcon0, first, last);
+    updateBplEvents(dmacon, bplcon0, first, last);
 }
 
 void
@@ -589,11 +589,11 @@ Agnus::verifyBplEvents()
 void
 Agnus::clearDasEvents()
 {
-    updateDasDma(0);
+    updateDasEvents(0);
 }
 
 void
-Agnus::updateDasDma(u16 dmacon)
+Agnus::updateDasEvents(u16 dmacon)
 {
     assert(dmacon < 64);
 
@@ -621,6 +621,33 @@ Agnus::verifyDasEvents()
 }
 
 void
+Agnus::updateBplJumpTable(i16 end)
+{
+    assert(end <= HPOS_MAX);
+
+    u8 next = nextBplEvent[end];
+    for (int i = end; i >= 0; i--) {
+        nextBplEvent[i] = next;
+        if (bplEvent[i]) next = i;
+    }
+    // updateJumpTable(bplEvent, nextBplEvent, end);
+}
+
+void
+Agnus::updateDasJumpTable(i16 end)
+{
+    assert(end <= HPOS_MAX);
+
+    u8 next = nextDasEvent[end];
+    for (int i = end; i >= 0; i--) {
+        nextDasEvent[i] = next;
+        if (dasEvent[i]) next = i;
+    }
+    // updateJumpTable(dasEvent, nextDasEvent, end);
+}
+
+/*
+void
 Agnus::updateJumpTable(EventID *eventTable, u8 *jumpTable, int end)
 {
     assert(end <= HPOS_MAX);
@@ -631,24 +658,7 @@ Agnus::updateJumpTable(EventID *eventTable, u8 *jumpTable, int end)
          if (eventTable[i]) next = i;
      }
 }
-
-void
-Agnus::updateBplJumpTable(i16 end)
-{
-    // Build the jump table
-    updateJumpTable(bplEvent, nextBplEvent, end);
-
-    // Make sure the table ends with an BPL_EOL event
-    assert(bplEvent[HPOS_MAX] == BPL_EOL);
-    assert(nextBplEvent[HPOS_MAX - 1] == HPOS_MAX);
-}
-
-void
-Agnus::updateDasJumpTable(i16 end)
-{
-    // Build the jump table
-    updateJumpTable(dasEvent, nextDasEvent, end);
-}
+*/
 
 bool
 Agnus::isLastLx(i16 dmaCycle)
@@ -662,11 +672,13 @@ Agnus::isLastHx(i16 dmaCycle)
     return (pos.h >= ddfStopHires - 4);
 }
 
+/*
 bool
 Agnus::inLastFetchUnit(i16 dmaCycle)
 {
     return denise.hires() ? isLastHx(dmaCycle) : isLastLx(dmaCycle);
 }
+*/
 
 void
 Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
@@ -1072,7 +1084,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
             // Update the matching position and recalculate the DMA table
             ddfstrtReached = ddfstrt > HPOS_MAX ? -1 : ddfstrt;
             computeDDFWindow();
-            allocateBplSlots();
+            updateBplEvents();
             scheduleNextBplEvent();
         }
     }
@@ -1103,7 +1115,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
              ddfstopReached = (ddfstop > HPOS_MAX) ? -1 : ddfstop;
              if (ddfstrtReached >= 0) {
                  computeDDFWindow();
-                 allocateBplSlots();
+                 updateBplEvents();
                  scheduleNextBplEvent();
              }
          }
@@ -1373,7 +1385,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
          */
 
         // Update the DMA allocation table
-        allocateBplSlots(dmacon, newValue, pos.h);
+        updateBplEvents(dmacon, newValue, pos.h);
 
         // Since the table has changed, we also need to update the event slot
         scheduleBplEventForCycle(pos.h);
@@ -1711,11 +1723,11 @@ Agnus::hsyncHandler()
         }
         if (hsyncActions & HSYNC_UPDATE_BPL_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_BPL_TABLE;
-            allocateBplSlots();
+            updateBplEvents();
         }
         if (hsyncActions & HSYNC_UPDATE_DAS_TABLE) {
             hsyncActions &= ~HSYNC_UPDATE_DAS_TABLE;
-            updateDasDma(dmaDAS);
+            updateDasEvents(dmaDAS);
         }
     }
 

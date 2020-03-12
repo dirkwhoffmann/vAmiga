@@ -772,29 +772,32 @@ public:
     
 public:
 
+    // Returns true if the specified cycle contains the last Lx event
+    bool isLastLx(i16 dmaCycle);
+
+    // Returns true if the specified cycle contains the last Hx event
+    bool isLastHx(i16 dmaCycle);
+
     // Removes all events from the BPL event table
     void clearBplEvents();
 
     // Renews all events in the BPL event table
-    void allocateBplSlots(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
-    void allocateBplSlots(int first = 0, int last = HPOS_MAX-1);
+    void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
+    void updateBplEvents(int first = 0, int last = HPOS_MAX-1);
 
-    // Checks the integrity of the BPL event table (for debugging)
+    // Checks the integrity of the BPL event table (for debugging only)
     void verifyBplEvents();
 
     // Removes all events from the DAS event table
     void clearDasEvents();
 
-    // Updates all events in the DAS event table
-    void updateDasDma(u16 dmacon);
-    void updateDasDma() { updateDasDma(dmacon & 0x3F); }
+    // Renews all events in the the DAS event table
+    void updateDasEvents(u16 dmacon);
 
-    // Checks the integrity of the DAS event table (for debugging)
+    // Checks the integrity of the DAS event table (for debugging only)
     void verifyDasEvents();
 
-
-    // Updates the jump table for a given event table
-    void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
+private:
 
     // Updates the jump table for the bplEvent table
     void updateBplJumpTable(i16 end = HPOS_MAX);
@@ -802,14 +805,11 @@ public:
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
-    // Returns true if the event in the specified slot is the Lx event
-    bool isLastLx(i16 dmaCycle);
-
-    // Returns true if the event in the specified slot is the Hx event
-    bool isLastHx(i16 dmaCycle);
+    // Updates the jump table for a given event table
+    // void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
 
     // Returns true if the specified position belongs to the last fetch unit
-    bool inLastFetchUnit(i16 dmaCycle);
+    // bool inLastFetchUnit(i16 dmaCycle);
 
     // Dumps an event table for debugging
     void dumpEventTable(EventID *table, char str[256][2], int from, int to);
