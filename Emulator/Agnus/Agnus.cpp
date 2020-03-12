@@ -574,12 +574,6 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 }
 
 void
-Agnus::updateBplEvents(int first, int last)
-{
-    updateBplEvents(dmacon, bplcon0, first, last);
-}
-
-void
 Agnus::verifyBplEvents()
 {
     assert(bplEvent[HPOS_MAX] == BPL_EOL);
@@ -599,7 +593,7 @@ Agnus::updateDasEvents(u16 dmacon)
 
     // Allocate slots and renew the jump table
     for (int i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
-    updateDasJumpTable();
+    updateDasJumpTable(0x38);
 
     verifyDasEvents();
 }

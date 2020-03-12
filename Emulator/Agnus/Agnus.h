@@ -783,7 +783,8 @@ public:
 
     // Renews all events in the BPL event table
     void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
-    void updateBplEvents(int first = 0, int last = HPOS_MAX-1);
+    void updateBplEvents(int first = 0, int last = HPOS_MAX-1) {
+        updateBplEvents(dmacon, bplcon0, first, last); }
 
     // Checks the integrity of the BPL event table (for debugging only)
     void verifyBplEvents();
@@ -804,12 +805,6 @@ private:
 
     // Updates the jump table for the dasEvent table
     void updateDasJumpTable(i16 end = HPOS_MAX);
-
-    // Updates the jump table for a given event table
-    // void updateJumpTable(EventID *eventTable, u8 *jumpTable, int end);
-
-    // Returns true if the specified position belongs to the last fetch unit
-    // bool inLastFetchUnit(i16 dmaCycle);
 
     // Dumps an event table for debugging
     void dumpEventTable(EventID *table, char str[256][2], int from, int to);
