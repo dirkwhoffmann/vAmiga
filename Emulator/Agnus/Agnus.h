@@ -773,9 +773,9 @@ public:
 public:
 
     // Removes all events from the BPL event table
-    void clearBplEventTable();
+    void clearBplEvents();
 
-    // Updates all events in the BPL event table
+    // Renews all events in the BPL event table
     void allocateBplSlots(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
     void allocateBplSlots(int first = 0, int last = HPOS_MAX-1);
 
@@ -783,7 +783,7 @@ public:
     void verifyBplEvents();
 
     // Removes all events from the DAS event table
-    void clearDasEventTable();
+    void clearDasEvents();
 
     // Updates all events in the DAS event table
     void updateDasDma(u16 dmacon);

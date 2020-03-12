@@ -537,13 +537,10 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
 }
 
 void
-Agnus::clearBplEventTable()
+Agnus::clearBplEvents()
 {
     for (int i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
     for (int i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
-    
-    bplEvent[HPOS_MAX] = BPL_EOL;
-    nextBplEvent[HPOS_MAX] = 0;
 
     verifyBplEvents();
 }
@@ -590,13 +587,9 @@ Agnus::verifyBplEvents()
 }
 
 void
-Agnus::clearDasEventTable()
+Agnus::clearDasEvents()
 {
-    memset(dasEvent, 0, sizeof(dasEvent));
     updateDasDma(0);
-    updateDasJumpTable();
-
-    verifyDasEvents();
 }
 
 void
@@ -604,13 +597,8 @@ Agnus::updateDasDma(u16 dmacon)
 {
     assert(dmacon < 64);
 
-    // Copy events from the proper lookup table
-    for (int i = 0; i < 0x38; i++) {
-        dasEvent[i] = dasDMA[dmacon][i];
-    }
-    dasEvent[0xE2] = dasDMA[dmacon][0xE2];
-
-    // Setup the jump table
+    // Allocate slots and renew the jump table
+    for (int i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
     updateDasJumpTable();
 
     verifyDasEvents();
@@ -1076,7 +1064,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 
             // DDFSTRT never matches in the current rasterline. Disable DMA
             ddfstrtReached = -1;
-            clearBplEventTable();
+            clearBplEvents();
             scheduleNextBplEvent();
 
         } else {
