@@ -460,6 +460,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->copper.instrCount(list);
 }
+- (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset
+{
+    wrapper->agnus->copper.adjustInstrCount(list, offset);
+}
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
     return wrapper->agnus->copper.isIllegalInstr(addr);

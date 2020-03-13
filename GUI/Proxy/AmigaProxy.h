@@ -333,6 +333,7 @@ struct AmigaFileWrapper;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
 - (NSInteger) instrCount:(NSInteger)list;
+- (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset;
 - (NSString *) disassemble:(NSInteger)addr;
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 

@@ -242,6 +242,8 @@ class Inspector: DialogController {
     @IBOutlet weak var copActive2: NSButton!
     @IBOutlet weak var copPC: NSTextField!
     @IBOutlet weak var copCDANG: NSButton!
+    @IBOutlet weak var copPlus: NSButton!
+    @IBOutlet weak var copMinus: NSButton!
 
     @IBOutlet weak var bltBLTCON0a: NSTextField!
     @IBOutlet weak var bltBLTCON0b: NSTextField!
@@ -283,22 +285,6 @@ class Inspector: DialogController {
     @IBOutlet weak var bltX: NSTextField!
     @IBOutlet weak var bltFirstWord: NSButton!
     @IBOutlet weak var bltLastWord: NSButton!
-
-    // Debug panel (Copper)
-    @IBOutlet weak var copActive: NSButton!
-    @IBOutlet weak var copCOPPC: NSTextField!
-    @IBOutlet weak var copCOPINS1: NSTextField!
-    @IBOutlet weak var copCOPINS2: NSTextField!
-
-    @IBOutlet weak var copCOP1LC: NSTextField!
-    @IBOutlet weak var copPlus1: NSButton!
-    @IBOutlet weak var copMinus1: NSButton!
-    @IBOutlet weak var copList1: CopperTableView!
-
-    @IBOutlet weak var copCOP2LC: NSTextField!
-    @IBOutlet weak var copPlus2: NSButton!
-    @IBOutlet weak var copMinus2: NSButton!
-    @IBOutlet weak var copList2: CopperTableView!
 
     // Debug panel (Blitter)
     @IBOutlet weak var bltAFWM: NSTextField!

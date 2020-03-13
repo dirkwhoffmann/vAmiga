@@ -75,6 +75,10 @@ class CopperTableView: NSTableView {
         cache()
         reloadData()
     }
+
+    func scrollToBottom() {
+        scrollRowToVisible(numberOfRows(in: self) - 1)
+    }
 }
 
 extension CopperTableView: NSTableViewDataSource {

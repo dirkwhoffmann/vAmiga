@@ -298,6 +298,7 @@ const char *regName(u32 addr);
 
 #define VPOS_MAX      312
 #define VPOS_CNT      313
+
 #define HPOS_MAX      226
 #define HPOS_CNT      227
 

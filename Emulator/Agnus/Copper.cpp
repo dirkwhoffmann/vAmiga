@@ -915,6 +915,18 @@ Copper::instrCount(int nr)
     return MAX(0, 1 + (stop - strt) / 4);
 }
 
+void
+Copper::adjustInstrCount(int nr, int offset)
+{
+    assert(nr == 1 || nr == 2);
+
+    if (nr == 1) {
+        if (cop1end + offset >= cop1lc) cop1end += offset;
+    } else {
+        if (cop2end + offset >= cop2lc) cop2end += offset;
+    }
+    inspect();
+}
 
 char *
 Copper::disassemble(u32 addr)

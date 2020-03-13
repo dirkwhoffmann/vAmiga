@@ -32,10 +32,10 @@ class Copper : public AmigaComponent
     u32 cop1lc;
     u32 cop2lc;
 
-    /* Address of the last executed instruction in each Copper list
+    /* Address of the first and last executed instruction in each Copper list
      * These values are needed by the debugger to determine the end of the
      * Copper lists. Note that these values cannot be computed directly.
-     * They are computed by observing the program counter in advancePC()
+     * They are computed by observing the program counter.
      */
     u32 cop1end;
     u32 cop2end;
@@ -306,6 +306,9 @@ public:
 
     // Returns the number of instructions in Copper list 1 or 2
     int instrCount(int nr);
+
+    // Manually lengthens or shortens the value returned by instrCount()
+    void adjustInstrCount(int nr, int offset);
 
     // Disassembles a single Copper command
     char *disassemble(u32 addr);

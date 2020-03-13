@@ -86,7 +86,7 @@ class Monitor: DialogController {
     @IBAction func dmaConfigAction(_ sender: Any!) {
 
         if dmaDebugDialog == nil {
-            let name = NSNib.Name("DMADebugDialog")
+            let name = NSNib.Name("DmaDebugDialog")
             dmaDebugDialog = DmaDebugDialog.make(parent: parent, nibName: name)
         }
 

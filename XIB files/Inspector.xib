@@ -123,7 +123,9 @@
                 <outlet property="copActive2" destination="PJe-kl-Y7e" id="Hhb-D8-gDi"/>
                 <outlet property="copCDANG" destination="NgR-ap-gCz" id="GO4-bp-41P"/>
                 <outlet property="copList" destination="rUL-h6-KIi" id="nKY-sb-6eD"/>
+                <outlet property="copMinus" destination="XkT-3j-C2g" id="YR7-14-v7w"/>
                 <outlet property="copPC" destination="K4c-9E-MDe" id="mmR-a0-wWq"/>
+                <outlet property="copPlus" destination="VDi-I8-VU6" id="lxL-MN-3rH"/>
                 <outlet property="copSelector" destination="dEO-ug-ZdL" id="nb0-3G-3Ai"/>
                 <outlet property="cpuA0" destination="Dhv-Wt-p3c" id="PdI-hb-gBY"/>
                 <outlet property="cpuA1" destination="nIb-zD-xbT" id="EjQ-b4-xkS"/>
@@ -3464,7 +3466,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Copper and Blitter" identifier="" id="35y-mE-CB1" userLabel="Copper Blitter">
-                                <view key="view" id="Kgp-lS-Wjg">
+                                <view key="view" ambiguous="YES" id="Kgp-lS-Wjg">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -3617,6 +3619,28 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="smallSystem"/>
                                                         </buttonCell>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VDi-I8-VU6">
+                                                        <rect key="frame" x="13" y="10" width="23" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="dko-7I-eCx">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="expandCopperListAction:" target="-2" id="0Dr-O7-FhT"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XkT-3j-C2g">
+                                                        <rect key="frame" x="44" y="10" width="23" height="25"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSRemoveTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="juw-bh-zh5">
+                                                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                            <font key="font" metaFont="system"/>
+                                                        </buttonCell>
+                                                        <connections>
+                                                            <action selector="shrinkCopperListAction:" target="-2" id="7nV-l2-Ha8"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -4064,7 +4088,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="252" height="256"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="252" height="256"/>
@@ -6340,7 +6364,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Events" identifier="" id="Qy0-9s-yCV">
-                                <view key="view" ambiguous="YES" id="8af-d4-a5d">
+                                <view key="view" id="8af-d4-a5d">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -6349,7 +6373,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="0.0" width="786" height="280"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="786" height="255"/>
@@ -6701,6 +6725,8 @@
         </textField>
     </objects>
     <resources>
+        <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRemoveTemplate" width="11" height="11"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="state0Template" width="228" height="204"/>
         <image name="stepIntoTemplate" width="240" height="241"/>

@@ -30,11 +30,14 @@ extension Inspector {
 
         let nr = Int(copperInfo!.copList)
         let active = copperInfo!.active
+        let paused = amiga.isPaused()
 
         copPC.integerValue = Int(copperInfo!.coppc)
         copCDANG.state = copperInfo!.cdang ? .on : .off
         copActive1.state = active && nr == 1 ? .on : .off
         copActive2.state = active && nr == 2 ? .on : .off
+        copPlus.isEnabled = paused
+        copMinus.isEnabled = paused
 
         copList.refresh(count: count, full: full)
     }
@@ -120,5 +123,19 @@ extension Inspector {
 
         copList.nr = selectedCopperList
         fullRefresh()
+    }
+
+    @IBAction func expandCopperListAction(_ sender: Any!) {
+
+        amiga.agnus.adjustInstrCount(selectedCopperList, offset: 4)
+        fullRefresh()
+        copList.scrollToBottom()
+    }
+
+    @IBAction func shrinkCopperListAction(_ sender: Any!) {
+
+        amiga.agnus.adjustInstrCount(selectedCopperList, offset: -4)
+        fullRefresh()
+        copList.scrollToBottom()
     }
 }
