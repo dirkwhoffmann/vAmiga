@@ -236,6 +236,9 @@ void executeEventsUntil(Cycle cycle);
 template <int nr> void serviceCIAEvent();
 void serviceREGEvent(Cycle until);
 void serviceBPLEvent();
+template <int nr> void serviceBPLEventHires();
+template <int nr> void serviceBPLEventLores();
+void serviceBPLEventLores();
 void serviceDASEvent();
 void serviceRASEvent();
 

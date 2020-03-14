@@ -90,14 +90,23 @@ public:
      */
     u32 shiftReg[6];
     
-    // Scroll values (set in pokeBPLCON1())
-    i8 scrollLoresOdd;
-    i8 scrollLoresEven;
-    i8 scrollLoresMax;
-    i8 scrollHiresOdd;
-    i8 scrollHiresEven;
-    i8 scrollHiresMax;
+    // Flags indicating that the shift registers have been loaded
+    bool armedEven;
+    bool armedOdd;
 
+    // Scroll values (set in pokeBPLCON1())
+    i8 scrollLoresOdd; // DEPRECATED
+    i8 scrollLoresEven; // DEPRECATED
+    i8 scrollLoresMax; // DEPRECATED
+    i8 scrollHiresOdd; // DEPRECATED
+    i8 scrollHiresEven; // DEPRECATED
+    i8 scrollHiresMax; // DEPRECATED
+    i8 shiftLoresOdd;
+    i8 shiftLoresEven;
+    i8 shiftHiresOdd;
+    i8 shiftHiresEven;
+    i8 pixelOffsetOdd;
+    i8 pixelOffsetEven;
 
     //
     // Register change management
@@ -306,12 +315,20 @@ public:
         & clxdat
         & clxcon
         & shiftReg
+        & armedEven
+        & armedOdd
         & scrollLoresOdd
         & scrollLoresEven
         & scrollLoresMax
         & scrollHiresOdd
         & scrollHiresEven
         & scrollHiresMax
+        & shiftLoresOdd
+        & shiftLoresEven
+        & shiftHiresOdd
+        & shiftHiresEven
+        & pixelOffsetOdd
+        & pixelOffsetEven
         & conChanges
         & sprChanges
 
@@ -517,10 +534,19 @@ public:
     
 public:
 
-    // Synthesizes pixels
+    // Synthesizes pixels (DEPRECATED)
+    /*
     template <int HIRES> void draw(int pixels);
     void drawLores(int pixels = 16) { draw<0>(pixels); }
     void drawHires(int pixels = 16) { draw<1>(pixels); }
+    */
+    
+    // Synthesizes pixels
+    template <bool hiresMode, bool evenPlanes> void draw(int offset);
+    void drawHiresEven() { if (armedEven) draw<true,true>(pixelOffsetEven); }
+    void drawLoresEven() { if (armedEven) draw<false,true>(pixelOffsetEven); }
+    void drawHiresOdd() { if (armedOdd) draw<true,false>(pixelOffsetOdd); }
+    void drawLoresOdd() { if (armedOdd) draw<false,false>(pixelOffsetOdd); }
 
 private:
 

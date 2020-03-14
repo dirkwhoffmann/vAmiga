@@ -109,17 +109,29 @@ typedef enum : long
     CIA_EVENT_COUNT,
     
     // BPL slot
-    BPL_L1 = 1,
+    BPL_DRAW = 1,
+    BPL_L1,
+    BPL_L1_DRAW,
     BPL_L2,
+    BPL_L2_DRAW,
     BPL_L3,
+    BPL_L3_DRAW,
     BPL_L4,
+    BPL_L4_DRAW,
     BPL_L5,
+    BPL_L5_DRAW,
     BPL_L6,
+    BPL_L6_DRAW,
     BPL_H1,
+    BPL_H1_DRAW,
     BPL_H2,
+    BPL_H2_DRAW,
     BPL_H3,
+    BPL_H3_DRAW,
     BPL_H4,
+    BPL_H4_DRAW,
     BPL_EOL,
+    BPL_EOL_DRAW,
     BPL_EVENT_COUNT,
 
     // DAS slot
@@ -260,17 +272,19 @@ static inline bool isBplxEvent(EventID id, int x)
 
     switch(id) {
 
-        case BPL_L1:
-        case BPL_H1: return x == 1;
-        case BPL_L2:
-        case BPL_H2: return x == 2;
-        case BPL_L3:
-        case BPL_H3: return x == 3;
-        case BPL_L4:
-        case BPL_H4: return x == 4;
-        case BPL_L5: return x == 5;
-        case BPL_L6: return x == 6;
-
+        case BPL_L1: case BPL_L1_DRAW: case BPL_H1: case BPL_H1_DRAW:
+            return x == 1;
+        case BPL_L2: case BPL_L2_DRAW: case BPL_H2: case BPL_H2_DRAW:
+            return x == 2;
+        case BPL_L3: case BPL_L3_DRAW: case BPL_H3: case BPL_H3_DRAW:
+            return x == 3;
+        case BPL_L4: case BPL_L4_DRAW: case BPL_H4: case BPL_H4_DRAW:
+            return x == 4;
+        case BPL_L5: case BPL_L5_DRAW:
+            return x == 5;
+        case BPL_L6: case BPL_L6_DRAW:
+            return x == 6;
+            
         default:
             return false;
     }

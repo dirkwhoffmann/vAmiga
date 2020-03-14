@@ -568,15 +568,56 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         }
     }
 
-    updateBplJumpTable();
+    // Superimpose drawing flag (bit 0)
+    /*
+    if (hires) {
+        for (int i = denise.scrollHiresEven; i <= HPOS_CNT; i += 4)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+        for (int i = denise.scrollHiresOdd; i <= HPOS_CNT; i += 4)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+     } else {
+         for (int i = denise.scrollLoresEven; i <= HPOS_CNT; i += 8)
+             bplEvent[i] = (EventID)(bplEvent[i] | 1);
+         for (int i = denise.scrollLoresOdd; i <= HPOS_CNT; i += 8)
+             bplEvent[i] = (EventID)(bplEvent[i] | 1);
+     }
+     */
+    
+    // Update the drawing flags and update the jump table
+    updateDrawingFlags(hires);
+    //  updateBplJumpTable();
 
     verifyBplEvents();
 }
 
 void
+Agnus::updateDrawingFlags(bool hires)
+{
+    assert(denise.shiftHiresEven < 8);
+    assert(denise.shiftHiresOdd  < 8);
+    assert(denise.shiftLoresEven < 8);
+    assert(denise.shiftHiresOdd  < 8);
+    
+    // Superimpose drawing flag (Bit 0)
+    if (hires) {
+        for (int i = denise.shiftHiresEven; i < HPOS_CNT; i += 4)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+        for (int i = denise.shiftHiresOdd; i < HPOS_CNT; i += 4)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+    } else {
+        for (int i = denise.shiftLoresEven; i < HPOS_CNT; i += 8)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+        for (int i = denise.shiftLoresOdd; i < HPOS_CNT; i += 8)
+            bplEvent[i] = (EventID)(bplEvent[i] | 1);
+    }
+    
+    updateBplJumpTable();
+}
+
+void
 Agnus::verifyBplEvents()
 {
-    assert(bplEvent[HPOS_MAX] == BPL_EOL);
+    assert(bplEvent[HPOS_MAX] == BPL_EOL || bplEvent[HPOS_MAX] == BPL_EOL_DRAW);
     assert(nextBplEvent[HPOS_MAX] == 0);
 }
 
@@ -680,18 +721,30 @@ Agnus::dumpBplEventTable(int from, int to)
     char str[256][2];
 
     memset(str, '?', sizeof(str));
-    str[(int)EVENT_NONE][0] = '.'; str[(int)EVENT_NONE][1] = '.';
-    str[(int)BPL_L1][0]     = 'L'; str[(int)BPL_L1][1]     = '1';
-    str[(int)BPL_L2][0]     = 'L'; str[(int)BPL_L2][1]     = '2';
-    str[(int)BPL_L3][0]     = 'L'; str[(int)BPL_L3][1]     = '3';
-    str[(int)BPL_L4][0]     = 'L'; str[(int)BPL_L4][1]     = '4';
-    str[(int)BPL_L5][0]     = 'L'; str[(int)BPL_L5][1]     = '5';
-    str[(int)BPL_L6][0]     = 'L'; str[(int)BPL_L6][1]     = '6';
-    str[(int)BPL_H1][0]     = 'H'; str[(int)BPL_H1][1]     = '1';
-    str[(int)BPL_H2][0]     = 'H'; str[(int)BPL_H2][1]     = '2';
-    str[(int)BPL_H3][0]     = 'H'; str[(int)BPL_H3][1]     = '3';
-    str[(int)BPL_H4][0]     = 'H'; str[(int)BPL_H4][1]     = '4';
-    str[(int)BPL_EOL][0]    = 'E'; str[(int)BPL_EOL][1]    = 'O';
+    str[(int)EVENT_NONE][0]   = '.'; str[(int)EVENT_NONE][1]   = '.';
+    str[(int)BPL_DRAW][0]     = 'D'; str[(int)BPL_DRAW][1]     = 'R';
+    str[(int)BPL_L1][0]       = 'L'; str[(int)BPL_L1][1]       = '1';
+    str[(int)BPL_L1_DRAW][0]  = 'L'; str[(int)BPL_L1_DRAW][1]  = '1';
+    str[(int)BPL_L2][0]       = 'L'; str[(int)BPL_L2][1]       = '2';
+    str[(int)BPL_L2_DRAW][0]  = 'L'; str[(int)BPL_L2_DRAW][1]  = '2';
+    str[(int)BPL_L3][0]       = 'L'; str[(int)BPL_L3][1]       = '3';
+    str[(int)BPL_L3_DRAW][0]  = 'L'; str[(int)BPL_L3_DRAW][1]  = '3';
+    str[(int)BPL_L4][0]       = 'L'; str[(int)BPL_L4][1]       = '4';
+    str[(int)BPL_L4_DRAW][0]  = 'L'; str[(int)BPL_L4_DRAW][1]  = '4';
+    str[(int)BPL_L5][0]       = 'L'; str[(int)BPL_L5][1]       = '5';
+    str[(int)BPL_L5_DRAW][0]  = 'L'; str[(int)BPL_L5_DRAW][1]  = '5';
+    str[(int)BPL_L6][0]       = 'L'; str[(int)BPL_L6][1]       = '6';
+    str[(int)BPL_L6_DRAW][0]  = 'L'; str[(int)BPL_L6_DRAW][1]  = '6';
+    str[(int)BPL_H1][0]       = 'H'; str[(int)BPL_H1][1]       = '1';
+    str[(int)BPL_H1_DRAW][0]  = 'H'; str[(int)BPL_H1_DRAW][1]  = '1';
+    str[(int)BPL_H2][0]       = 'H'; str[(int)BPL_H2][1]       = '2';
+    str[(int)BPL_H2_DRAW][0]  = 'H'; str[(int)BPL_H2_DRAW][1]  = '2';
+    str[(int)BPL_H3][0]       = 'H'; str[(int)BPL_H3][1]       = '3';
+    str[(int)BPL_H3_DRAW][0]  = 'H'; str[(int)BPL_H3_DRAW][1]  = '3';
+    str[(int)BPL_H4][0]       = 'H'; str[(int)BPL_H4][1]       = '4';
+    str[(int)BPL_H4_DRAW][0]  = 'H'; str[(int)BPL_H4_DRAW][1]  = '4';
+    str[(int)BPL_EOL][0]      = 'E'; str[(int)BPL_EOL][1]      = 'O';
+    str[(int)BPL_EOL_DRAW][0] = 'E'; str[(int)BPL_EOL_DRAW][1] = 'O';
 
     dumpEventTable(bplEvent, str, from, to);
 }

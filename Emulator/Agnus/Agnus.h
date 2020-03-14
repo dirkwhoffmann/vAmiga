@@ -785,7 +785,8 @@ public:
     void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
     void updateBplEvents(int first = 0, int last = HPOS_MAX-1) {
         updateBplEvents(dmacon, bplcon0, first, last); }
-
+    void updateDrawingFlags(bool hires);
+    
     // Checks the integrity of the BPL event table (for debugging only)
     void verifyBplEvents();
 

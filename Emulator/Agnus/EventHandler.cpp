@@ -95,17 +95,29 @@ Agnus::inspectEventSlot(EventSlot nr)
 
             switch (slot[nr].id) {
                 case 0:             i->eventName = "none"; break;
+                case BPL_DRAW:      i->eventName = "BPL_DRAW"; break;
                 case BPL_L1:        i->eventName = "BPL_L1"; break;
+                case BPL_L1_DRAW:   i->eventName = "BPL_L1_DRAW"; break;
                 case BPL_L2:        i->eventName = "BPL_L2"; break;
+                case BPL_L2_DRAW:   i->eventName = "BPL_L2_DRAW"; break;
                 case BPL_L3:        i->eventName = "BPL_L3"; break;
+                case BPL_L3_DRAW:   i->eventName = "BPL_L3_DRAW"; break;
                 case BPL_L4:        i->eventName = "BPL_L4"; break;
+                case BPL_L4_DRAW:   i->eventName = "BPL_L4_DRAW"; break;
                 case BPL_L5:        i->eventName = "BPL_L5"; break;
+                case BPL_L5_DRAW:   i->eventName = "BPL_L5_DRAW"; break;
                 case BPL_L6:        i->eventName = "BPL_L6"; break;
+                case BPL_L6_DRAW:   i->eventName = "BPL_L6_DRAW"; break;
                 case BPL_H1:        i->eventName = "BPL_H1"; break;
+                case BPL_H1_DRAW:   i->eventName = "BPL_H1_DRAW"; break;
                 case BPL_H2:        i->eventName = "BPL_H2"; break;
+                case BPL_H2_DRAW:   i->eventName = "BPL_H2_DRAW"; break;
                 case BPL_H3:        i->eventName = "BPL_H3"; break;
+                case BPL_H3_DRAW:   i->eventName = "BPL_H3_DRAW"; break;
                 case BPL_H4:        i->eventName = "BPL_H4"; break;
+                case BPL_H4_DRAW:   i->eventName = "BPL_H4_DRAW"; break;
                 case BPL_EOL:       i->eventName = "BPL_EOL"; break;
+                case BPL_EOL_DRAW:  i->eventName = "BPL_EOL_DRAW"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -609,79 +621,118 @@ Agnus::serviceBPLEvent()
 {
     switch (slot[BPL_SLOT].id) {
 
-        case BPL_H1:
-            denise.bpldat[0] = doBitplaneDMA<0>();
-            denise.fillShiftRegisters();
-
-            if(unlikely(isLastHx(pos.h))) {
-                denise.drawHires(16 + denise.scrollHiresMax);
-                addBPLMOD<0>();
+        case BPL_DRAW:
+            if (denise.hires()) {
+                if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
+                if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
             } else {
-                denise.drawHires(16);
+                if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+                if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
             }
+            break;
+            
+        case BPL_H1:
+            serviceBPLEventHires<0>();
+            break;
+
+        case BPL_H1_DRAW:
+            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+            serviceBPLEventHires<0>();
             break;
 
         case BPL_L1:
-            denise.bpldat[0] = doBitplaneDMA<0>();
-            denise.fillShiftRegisters();
-
-            if(unlikely(isLastLx(pos.h))) {
-                denise.drawLores(16 + denise.scrollLoresMax);
-                addBPLMOD<0>();
-            } else {
-                denise.drawLores(16);
-            }
+            serviceBPLEventLores<0>();
+            break;
+            
+        case BPL_L1_DRAW:
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            serviceBPLEventLores<0>();
             break;
 
         case BPL_H2:
-            denise.bpldat[1] = doBitplaneDMA<1>();
+            serviceBPLEventHires<1>();
+            break;
 
-            if(unlikely(isLastHx(pos.h))) addBPLMOD<1>();
+        case BPL_H2_DRAW:
+            serviceBPLEventHires<1>();
+            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L2:
-            denise.bpldat[1] = doBitplaneDMA<1>();
+            serviceBPLEventLores<1>();
+            break;
 
-            if(unlikely(isLastLx(pos.h))) addBPLMOD<1>();
+        case BPL_L2_DRAW:
+            serviceBPLEventLores<1>();
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_H3:
-            denise.bpldat[2] = doBitplaneDMA<2>();
+            serviceBPLEventHires<2>();
+            break;
 
-            if(unlikely(isLastHx(pos.h))) addBPLMOD<2>();
+        case BPL_H3_DRAW:
+            serviceBPLEventHires<2>();
+            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L3:
-            denise.bpldat[2] = doBitplaneDMA<2>();
+            serviceBPLEventLores<2>();
+            break;
 
-            if(unlikely(isLastLx(pos.h))) addBPLMOD<2>();
+        case BPL_L3_DRAW:
+            serviceBPLEventLores<2>();
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_H4:
-            denise.bpldat[3] = doBitplaneDMA<3>();
+            serviceBPLEventHires<3>();
+            break;
 
-            if(unlikely(isLastHx(pos.h))) addBPLMOD<3>();
+        case BPL_H4_DRAW:
+            serviceBPLEventHires<3>();
+            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L4:
-            denise.bpldat[3] = doBitplaneDMA<3>();
+            serviceBPLEventLores<3>();
+            break;
 
-            if(unlikely(isLastLx(pos.h))) addBPLMOD<3>();
+        case BPL_L4_DRAW:
+            serviceBPLEventLores<3>();
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_L5:
-            denise.bpldat[4] = doBitplaneDMA<4>();
-
-            if(unlikely(isLastLx(pos.h))) addBPLMOD<4>();
+            serviceBPLEventLores<4>();
             break;
 
+        case BPL_L5_DRAW:
+            serviceBPLEventLores<4>();
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            break;
+            
         case BPL_L6:
-            denise.bpldat[5] = doBitplaneDMA<5>();
+            serviceBPLEventLores<5>();
+            break;
 
-            if(unlikely(isLastLx(pos.h))) addBPLMOD<5>();
+        case BPL_L6_DRAW:
+            serviceBPLEventLores<5>();
+            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_EOL:
+        case BPL_EOL_DRAW:
             // Last event in the current rasterline
             assert(pos.h == 0xE2);
             return;
@@ -693,6 +744,55 @@ Agnus::serviceBPLEvent()
 
     // Schedule next event
     scheduleNextBplEvent();
+}
+
+template <int nr> void
+Agnus::serviceBPLEventHires()
+{
+    if (nr == 0) {
+        denise.bpldat[0] = doBitplaneDMA<0>();
+        denise.fillShiftRegisters();
+                
+        if(unlikely(isLastHx(pos.h))) {
+            // denise.drawHires(16 + denise.scrollHiresMax);
+            addBPLMOD<0>();
+            // denise.drawHiresOdd();
+            // denise.drawHiresEven();
+        } else {
+            // denise.drawHiresOdd();
+            // denise.drawHiresEven();
+            // denise.drawHires(16);
+        }
+        
+        return;
+    }
+    denise.bpldat[nr] = doBitplaneDMA<nr>();
+    if(unlikely(isLastHx(pos.h))) addBPLMOD<nr>();
+}
+
+template <int nr> void
+Agnus::serviceBPLEventLores()
+{
+    if (nr == 0) {
+        denise.bpldat[0] = doBitplaneDMA<0>();
+        denise.fillShiftRegisters();
+        
+        if(unlikely(isLastLx(pos.h))) {
+            // denise.drawLores(16 + denise.scrollLoresMax);
+            addBPLMOD<0>();
+            // denise.drawLoresOdd();
+            // denise.drawLoresEven();
+
+        } else {
+            // denise.drawLores(16);
+            // denise.drawLoresOdd();
+            // denise.drawLoresEven();
+        }
+        
+        return;
+    }
+    denise.bpldat[nr] = doBitplaneDMA<nr>();
+    if(unlikely(isLastLx(pos.h))) addBPLMOD<nr>();
 }
 
 void
