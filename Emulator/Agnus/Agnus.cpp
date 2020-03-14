@@ -674,7 +674,6 @@ Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
     msg("%s\n", r4);
 }
 
-
 void
 Agnus::dumpBplEventTable(int from, int to)
 {
@@ -695,41 +694,6 @@ Agnus::dumpBplEventTable(int from, int to)
     str[(int)BPL_EOL][0]    = 'E'; str[(int)BPL_EOL][1]    = 'O';
 
     dumpEventTable(bplEvent, str, from, to);
-
-    /*
-    char r1[256], r2[256], r3[256], r4[256];
-    int i;
-
-    for (i = 0; i <= (to - from); i++) {
-        
-        int digit1 = (from + i) / 16;
-        int digit2 = (from + i) % 16;
-        
-        r1[i] = (digit1 < 10) ? digit1 + '0' : (digit1 - 10) + 'A';
-        r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
-        
-        switch(bplEvent[i + from]) {
-            case EVENT_NONE:   r3[i] = '.'; r4[i] = '.'; break;
-            case BPL_L1:       r3[i] = 'L'; r4[i] = '1'; break;
-            case BPL_L2:       r3[i] = 'L'; r4[i] = '2'; break;
-            case BPL_L3:       r3[i] = 'L'; r4[i] = '3'; break;
-            case BPL_L4:       r3[i] = 'L'; r4[i] = '4'; break;
-            case BPL_L5:       r3[i] = 'L'; r4[i] = '5'; break;
-            case BPL_L6:       r3[i] = 'L'; r4[i] = '6'; break;
-            case BPL_H1:       r3[i] = 'H'; r4[i] = '1'; break;
-            case BPL_H2:       r3[i] = 'H'; r4[i] = '2'; break;
-            case BPL_H3:       r3[i] = 'H'; r4[i] = '3'; break;
-            case BPL_H4:       r3[i] = 'H'; r4[i] = '4'; break;
-            case BPL_EOL:      r3[i] = 'E'; r4[i] = 'O'; break;
-            default:           r3[i] = '?'; r4[i] = '?'; break;
-        }
-    }
-    r1[i] = r2[i] = r3[i] = r4[i] = 0;
-    msg("%s\n", r1);
-    msg("%s\n", r2);
-    msg("%s\n", r3);
-    msg("%s\n", r4);
-    */
 }
 
 void
