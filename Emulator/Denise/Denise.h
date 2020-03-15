@@ -88,7 +88,7 @@ public:
      * shift registers after BPLDAT1 is written to. This is emulated in
      * function fillShiftRegister().
      */
-    u32 shiftReg[6];
+    u16 shiftReg[6];
     
     // Flags indicating that the shift registers have been loaded
     bool armedEven;

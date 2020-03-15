@@ -461,15 +461,16 @@ Denise::updateSpritePriorities(u16 bplcon2)
 void
 Denise::fillShiftRegisters()
 {
-    switch (bpu()) {
-        case 6: shiftReg[5] = REPLACE_LO_WORD(shiftReg[5], bpldat[5]);
-        case 5: shiftReg[4] = REPLACE_LO_WORD(shiftReg[4], bpldat[4]);
-        case 4: shiftReg[3] = REPLACE_LO_WORD(shiftReg[3], bpldat[3]);
-        case 3: shiftReg[2] = REPLACE_LO_WORD(shiftReg[2], bpldat[2]);
-        case 2: shiftReg[1] = REPLACE_LO_WORD(shiftReg[1], bpldat[1]);
-        case 1: shiftReg[0] = REPLACE_LO_WORD(shiftReg[0], bpldat[0]);
-    }
     armedEven = armedOdd = true;
+
+    switch (bpu()) {
+        case 6: shiftReg[5] = bpldat[5];
+        case 5: shiftReg[4] = bpldat[4];
+        case 4: shiftReg[3] = bpldat[3];
+        case 3: shiftReg[2] = bpldat[2];
+        case 2: shiftReg[1] = bpldat[1];
+        case 1: shiftReg[0] = bpldat[0];
+    }
 }
 
 template <bool hiresMode> void
@@ -512,7 +513,6 @@ Denise::drawOdd(int offset)
         }
     }
  
-    shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
@@ -556,7 +556,6 @@ Denise::drawEven(int offset)
         }
     }
  
-    shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
@@ -1120,7 +1119,7 @@ Denise::beginOfLine(int vpos)
     wasArmed = armed;
 
     // Prepare the biplane shift registers
-    for (int i = 0; i < 6; i++) shiftReg[i] &= 0xFFFF;
+    for (int i = 0; i < 6; i++) shiftReg[i] = 0;
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
