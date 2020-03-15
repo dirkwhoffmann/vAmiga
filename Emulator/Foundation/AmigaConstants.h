@@ -321,23 +321,28 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
 
 /* Blanking area
  *
- * "Amiga Intern" states that DMA cycle $0F (15) is the first and $35 (53) the
- *  last cycles inside the HBLANK area. However, these values seem to be wrong
- *  (see values below).
- *  To mimic a real PAL screen, a misalignment offset is added to the start
- *  address of the screen buffer before it is written into the GPU texture.
- *  This offset aligns the HBLANK to the left and causes the image data of the
- *  early DMA cycles to appear in the previous scanline. This is also the
- *  reason why VPIXELS needs to be greater than VPOS_CNT. Otherwise, we would
- *  access unallocated memory at the end of the last scanline.
+ * To understand the horizontal position of the Amiga screen, it is important
+ * to note that the HBLANK area does *not* start at DMA cycle 0. According to
+ * "Amiga Intern", DMA cycle $0F (15) is the first and $35 (53) the last cycles
+ * inside the HBLANK area (as you can see below, I am using slightly different
+ * values to mimic what can be seen in UAE).
+ *
+ * As a result, the early DMA cycles do not appear on the left side of the
+ * screen, but on the right side in the previous scanline. To mimic this
+ * behaviour, a misalignment offset is added to the start address of the screen
+ * buffer before it is written into the GPU texture. The offset is chosen such
+ * that the HBLANK area starts at the first pixel of each line in the texture.
+ * As a side effect of adding this offset, constant VPIXELS needs to be greater
+ * than VPOS_CNT. Otherwise, we would access unallocated memory at the end of
+ * the last scanline.
  */
 
-#define HBLANK_MIN    0x0B                   // 11
-#define HBLANK_MAX    0x31                   // 49
-#define HBLANK_CNT    39                     // 49 - 11 + 1
+#define HBLANK_MIN    0x0A
+#define HBLANK_MAX    0x30
+#define HBLANK_CNT    0x27 // HBLANK_MAX - HBLANK_MIN + 1
 
-#define VBLANK_MIN    0
-#define VBLANK_MAX    25
-#define VBLANK_CNT    26
+#define VBLANK_MIN    0x00
+#define VBLANK_MAX    0x19
+#define VBLANK_CNT    0x1A // VBLANK_MAX - VBLANK_MIN + 1
 
 #endif 
