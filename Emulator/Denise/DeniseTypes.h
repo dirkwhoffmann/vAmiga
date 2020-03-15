@@ -83,31 +83,22 @@ ScreenBuffer;
 
 typedef struct
 {
-    u16 pos;
-    u16 ctl;
-    u32 ptr;
+    // Number of lines the sprite was armed
+    u16 height;
+
+    // Extracted information from SPRxPOS and SPRxCTL
     i16 hstrt;
     i16 vstrt;
     i16 vstop;
     bool attach;
-}
-SpriteInfo;
-
-typedef struct
-{
-    // Number of lines a sprite was armed (recorded for each sprite)
-    u16 lines[8];
-
-    // Number of the sprite that is observed in detail
-    u8  nr;
-
+    
     // Upper 16 color register (recorded where the observed sprite starts)
     u16 colors[16];
 
     // Recorded data words of the observed sprite
     u64 data[VPOS_CNT];
 }
-SpriteDatInfo;
+SpriteInfo;
 
 typedef struct
 {
@@ -148,8 +139,6 @@ typedef struct
 
     u16 colorReg[32];
     u32 color[32];
-    
-    SpriteInfo sprite[8];
 }
 DeniseInfo;
 

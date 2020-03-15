@@ -24,9 +24,11 @@ class Denise : public AmigaComponent {
     // Result of the latest inspection
     DeniseInfo info;
 
-    // Recorded sprite data information
-    SpriteDatInfo spriteDat;
-    SpriteDatInfo spriteDatNew;
+    // Sprite information recorded in the previous frame (shown by the GUI)
+    SpriteInfo latchedSpriteInfo[8];
+    
+    // Sprite information recorded in the current frame (constantly changing)
+    SpriteInfo spriteInfo[8];
 
     // Collected statistical information
     DeniseStats stats;
@@ -372,10 +374,11 @@ public:
 
     // Returns the result of the most recent call to inspect()
     DeniseInfo getInfo();
-    SpriteInfo getSprInfo(int nr);
-    u16 getSpriteDatLines(int nr) { return spriteDat.lines[nr]; }
-    u16 getSpriteDatColor(int reg) { return spriteDat.colors[reg]; }
-    u64 getSpriteData(int line) { return spriteDat.data[line]; }
+    SpriteInfo getSpriteInfo(int nr);
+    
+    u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }
+    u16 getSpriteColor(int nr, int reg) { return latchedSpriteInfo[nr].colors[reg]; }
+    u64 getSpriteData(int nr, int line) { return latchedSpriteInfo[nr].data[line]; }
 
     // Returns statistical information about the current activiy
     DeniseStats getStats() { return stats; }
@@ -605,9 +608,6 @@ public:
     //
     // Debugging the component
     //
-
-    // Selects the sprite that is displayed in the debug panel
-    void selectObservedSprite(unsigned x);
 
     // Gathers the sprite data for the displayed sprite
     void recordSpriteData(unsigned x);

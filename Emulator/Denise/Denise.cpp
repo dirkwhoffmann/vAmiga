@@ -82,28 +82,6 @@ Denise::_inspect()
         info.color[i] = pixelEngine.getRGBA(i);
     }
     
-    // Sprite information
-    
-    for (int i = 0; i < 8; i++) {
-
-        /* The sprite info is extracted from the pos and ctl values that are
-         * recorded by the hsync handler at the beginning of rasterline 26.
-         *
-         * pos:  15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Hx = HSTART)
-         *       E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Ex = VSTART)
-         * ctl:  L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
-         */
-        u16 pos = info.sprite[i].pos;
-        u16 ctl = info.sprite[i].ctl;
-        info.sprite[i].ptr = agnus.sprpt[i];
-        info.sprite[i].hstrt = ((pos & 0x00FF) << 1) | (ctl & 0b001);
-        info.sprite[i].vstrt = ((pos & 0xFF00) >> 8) | ((ctl & 0b100) << 6);
-        info.sprite[i].vstop = ((ctl & 0xFF00) >> 8) | ((ctl & 0b010) << 7);
-        info.sprite[i].attach = GET_BIT(ctl, 7);
-
-        // debug("%d: hstrt = %d vstsrt = %d vstop = %d\n", i, info.sprite[i].hstrt, info.sprite[i].vstrt, info.sprite[i].vstop);
-    }
-
     pthread_mutex_unlock(&lock);
 }
 
@@ -134,12 +112,12 @@ Denise::getInfo()
 }
 
 SpriteInfo
-Denise::getSprInfo(int nr)
+Denise::getSpriteInfo(int nr)
 {
     SpriteInfo result;
     
     pthread_mutex_lock(&lock);
-    result = info.sprite[nr];
+    result = latchedSpriteInfo[nr];
     pthread_mutex_unlock(&lock);
     
     return result;
@@ -312,11 +290,6 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0POS + x, value } );
-
-    // Update debugger info
-    if (agnus.pos.v == 26) {
-        info.sprite[x].pos = value;
-    }
 }
 
 template <int x> void
@@ -338,13 +311,6 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0CTL + x, value } );
-
-    // Update debugger info
-    if (agnus.pos.v == 26) {
-        info.sprite[x].ctl = value;
-        info.sprite[x].ptr = agnus.sprpt[x];
-        assert(IS_EVEN(info.sprite[x].ptr));
-    }
 }
 
 template <int x> void
@@ -375,11 +341,9 @@ Denise::pokeSPRxDATB(u16 value)
     sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATB + x, value });
 
     // Record sprite data in debug mode
-    if (amiga.getDebugMode()) {
-        if (spriteDatNew.nr == x) recordSpriteData(x);
-        spriteDatNew.lines[x]++;
-        spriteDatNew.lines[x] %= VPOS_CNT;
-    }
+    if (amiga.getDebugMode()) recordSpriteData(x);
+        // spriteDatNew.lines[x]++;
+        // spriteDatNew.lines[x] %= VPOS_CNT;
 }
 
 template <PokeSource s, int xx> void
@@ -1090,11 +1054,17 @@ void
 Denise::beginOfFrame(bool interlace)
 {
     pixelEngine.beginOfFrame(interlace);
-
+    
     if (amiga.getDebugMode()) {
-        spriteDat = spriteDatNew;
-        for (int i = 0; i < 8; i++)
-            spriteDatNew.lines[i] = 0;
+        
+        for (int i = 0; i < 8; i++) {
+            latchedSpriteInfo[i] = spriteInfo[i];
+            spriteInfo[i].height = 0;
+            spriteInfo[i].vstrt  = 0;
+            spriteInfo[i].vstop  = 0;
+            spriteInfo[i].hstrt  = 0;
+            spriteInfo[i].attach = false;
+        }
     }
 }
 
@@ -1179,33 +1149,29 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
 }
 
 void
-Denise::selectObservedSprite(unsigned x)
+Denise::recordSpriteData(unsigned nr)
 {
-    assert(x < 8);
+    assert(nr < 8);
 
-    // amiga.suspend();
-
-    spriteDatNew.nr = x;
-
-    // amiga.resume();
-}
-
-void
-Denise::recordSpriteData(unsigned x)
-{
-    assert(x < 8);
-
-    u16 line = spriteDatNew.lines[x];
+    u16 line = spriteInfo[nr].height;
 
     // Record data registers
-    spriteDatNew.data[line] = HI_W_LO_W(sprdatb[x], sprdata[x]);
+    spriteInfo[nr].data[line] = HI_W_LO_W(sprdatb[nr], sprdata[nr]);
 
-    // Record colors (when recording line 0)
+    // Record additional information in sprite line 0
     if (line == 0) {
+        
+        spriteInfo[nr].hstrt = sprhpos(sprpos[nr], sprctl[nr]);
+        spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
+        spriteInfo[nr].vstop = agnus.sprVStop[nr];
+        spriteInfo[nr].attach = IS_ODD(nr) ? attached(nr) : 0;
+        
         for (int i = 0; i < 16; i++) {
-            spriteDatNew.colors[i] = pixelEngine.getColor(i + 16);
+            spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
         }
     }
+    
+    spriteInfo[nr].height = (line + 1) % VPOS_CNT;
 }
 
 void

@@ -20,7 +20,6 @@ extension Inspector {
         cacheDenise()
 
         if full {
-            amiga.denise.selectObservedSprite(selectedSprite)
 
             let elements = [ deniseBPLCON0: fmt16,
                              deniseBPLCON1: fmt16,

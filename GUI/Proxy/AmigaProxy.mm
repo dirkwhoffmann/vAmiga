@@ -530,23 +530,19 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr
 {
-    return wrapper->denise->getSprInfo(nr);
-}
-- (void) selectObservedSprite:(NSInteger)nr
-{
-    return wrapper->denise->selectObservedSprite(nr);
+    return wrapper->denise->getSpriteInfo(nr);
 }
 - (NSInteger) sprDataLines:(NSInteger)nr
 {
-    return wrapper->denise->getSpriteDatLines(nr);
+    return wrapper->denise->getSpriteHeight(nr);
 }
-- (u64) sprData:(NSInteger)line
+- (u64) sprData:(NSInteger)nr line:(NSInteger)line
 {
-    return wrapper->denise->getSpriteData(line);
+    return wrapper->denise->getSpriteData(nr, line);
 }
-- (u16) sprColorReg:(NSInteger)reg
+- (u16) sprColor:(NSInteger)nr reg:(NSInteger)reg
 {
-    return wrapper->denise->getSpriteDatColor(reg);
+    return wrapper->denise->getSpriteColor(nr, reg);
 }
 - (double) palette
 {

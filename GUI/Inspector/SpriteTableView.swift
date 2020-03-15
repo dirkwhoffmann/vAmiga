@@ -9,7 +9,7 @@
 
 class SpriteTableView: NSTableView {
 
-    var spriteInfo = [SpriteInfo?](repeating: nil, count: 8)
+    // var spriteInfo = [SpriteInfo?](repeating: nil, count: 8)
     var spriteDat = [UInt64](repeating: 0, count: Int(VPOS_CNT))
     var spriteCol = [NSColor](repeating: NSColor.white, count: 16)
     var spriteLines = 0
@@ -27,15 +27,19 @@ class SpriteTableView: NSTableView {
 
     private func cache() {
 
+        let nr = inspector.selectedSprite
+        
+        /*
         for i in 0 ..< 8 {
             spriteInfo[i] = amiga.denise.getSpriteInfo(i)
         }
+        */
         for i in 0 ..< 16 {
-            spriteCol[i] = NSColor.init(amigaRGB: amiga.denise.sprColorReg(i))
+            spriteCol[i] = NSColor.init(amigaRGB: amiga.denise.sprColor(nr, reg: i))
         }
         spriteLines = amiga.denise.sprDataLines(inspector.selectedSprite)
         for i in 0 ..< spriteLines {
-            spriteDat[i] = amiga.denise.sprData(i)
+            spriteDat[i] = amiga.denise.sprData(nr, line: i)
         }
     }
 
