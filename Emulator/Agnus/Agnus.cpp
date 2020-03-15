@@ -568,25 +568,9 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         }
     }
 
-    // Superimpose drawing flag (bit 0)
-    /*
-    if (hires) {
-        for (int i = denise.scrollHiresEven; i <= HPOS_CNT; i += 4)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
-        for (int i = denise.scrollHiresOdd; i <= HPOS_CNT; i += 4)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
-     } else {
-         for (int i = denise.scrollLoresEven; i <= HPOS_CNT; i += 8)
-             bplEvent[i] = (EventID)(bplEvent[i] | 1);
-         for (int i = denise.scrollLoresOdd; i <= HPOS_CNT; i += 8)
-             bplEvent[i] = (EventID)(bplEvent[i] | 1);
-     }
-     */
-    
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
-    //  updateBplJumpTable();
-
+    
     verifyBplEvents();
 }
 
@@ -1407,6 +1391,9 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     
     // Update drawing flags in the current rasterline
     updateDrawingFlags(denise.hires());
+    
+    // Update the scheduled bitplane event according to the new table
+    scheduleBplEventForCycle(pos.h);
     
     // Schedule the bitplane event table to be recomputed
     agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
