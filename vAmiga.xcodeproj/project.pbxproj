@@ -481,6 +481,7 @@
 			isa = PBXGroup;
 			children = (
 				508FE06021EA318D0043D0E9 /* Emulator */,
+				50B14C2421EB8F25002E32A6 /* Proxy */,
 				508FDFDC21EA20600043D0E9 /* GUI */,
 				508FDFAE21EA1FF10043D0E9 /* XIB files */,
 				508FDE6621EA1FA40043D0E9 /* Resources */,
@@ -567,7 +568,6 @@
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
 				508FE03A21EA22CC0043D0E9 /* Preferences */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
-				50B14C2421EB8F25002E32A6 /* Proxy */,
 				509F7F1521ED141F00A530E4 /* Inspector */,
 				509F7F1621ED156100A530E4 /* Peripherals */,
 				509F7F1421ED13F300A530E4 /* Controller */,
@@ -1172,7 +1172,7 @@
 				SDKROOT = macosx;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_COMPILATION_MODE = singlefile;
-				SWIFT_OBJC_BRIDGING_HEADER = "GUI/Proxy/VirtualC64-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/VirtualC64-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -1228,7 +1228,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OBJC_BRIDGING_HEADER = "GUI/Proxy/VirtualC64-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "Proxy/VirtualC64-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Release;
