@@ -623,11 +623,11 @@ Agnus::serviceBPLEvent()
 
         case BPL_DRAW:
             if (denise.hires()) {
-                if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
-                if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+                if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
+                if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
             } else {
-                if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-                if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+                if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+                if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             }
             break;
             
@@ -636,8 +636,8 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_H1_DRAW:
-            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
             serviceBPLEventHires<0>();
             break;
 
@@ -646,8 +646,8 @@ Agnus::serviceBPLEvent()
             break;
             
         case BPL_L1_DRAW:
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             serviceBPLEventLores<0>();
             break;
 
@@ -657,8 +657,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_H2_DRAW:
             serviceBPLEventHires<1>();
-            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L2:
@@ -667,8 +667,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_L2_DRAW:
             serviceBPLEventLores<1>();
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_H3:
@@ -677,8 +677,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_H3_DRAW:
             serviceBPLEventHires<2>();
-            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L3:
@@ -687,8 +687,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_L3_DRAW:
             serviceBPLEventLores<2>();
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_H4:
@@ -697,8 +697,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_H4_DRAW:
             serviceBPLEventHires<3>();
-            if ((pos.h & 0x3) == denise.shiftHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == denise.shiftHiresOdd) denise.drawHiresOdd();
+            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
+            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
             break;
 
         case BPL_L4:
@@ -707,8 +707,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_L4_DRAW:
             serviceBPLEventLores<3>();
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_L5:
@@ -717,8 +717,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_L5_DRAW:
             serviceBPLEventLores<4>();
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             break;
             
         case BPL_L6:
@@ -727,8 +727,8 @@ Agnus::serviceBPLEvent()
 
         case BPL_L6_DRAW:
             serviceBPLEventLores<5>();
-            if ((pos.h & 0x7) == denise.shiftLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == denise.shiftLoresOdd) denise.drawLoresOdd();
+            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
+            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
             break;
 
         case BPL_EOL:

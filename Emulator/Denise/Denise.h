@@ -94,20 +94,11 @@ public:
     bool armedEven;
     bool armedOdd;
 
-    // Scroll values (set in pokeBPLCON1())
-    i8 scrollLoresOdd; // DEPRECATED
-    i8 scrollLoresEven; // DEPRECATED
-    i8 scrollLoresMax; // DEPRECATED
-    i8 scrollHiresOdd; // DEPRECATED
-    i8 scrollHiresEven; // DEPRECATED
-    i8 scrollHiresMax; // DEPRECATED
-    i8 shiftLoresOdd;
-    i8 shiftLoresEven;
-    i8 shiftHiresOdd;
-    i8 shiftHiresEven;
+    // Extracted from BPLCON1 to emulate horizontal scrolling
     i8 pixelOffsetOdd;
     i8 pixelOffsetEven;
 
+    
     //
     // Register change management
     //
@@ -317,16 +308,6 @@ public:
         & shiftReg
         & armedEven
         & armedOdd
-        & scrollLoresOdd
-        & scrollLoresEven
-        & scrollLoresMax
-        & scrollHiresOdd
-        & scrollHiresEven
-        & scrollHiresMax
-        & shiftLoresOdd
-        & shiftLoresEven
-        & shiftHiresOdd
-        & shiftHiresEven
         & pixelOffsetOdd
         & pixelOffsetEven
         & conChanges

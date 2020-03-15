@@ -12,15 +12,17 @@
 				<string>vAmiga</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>snapshotIcon</string>
+			<string>SnapshotIcon</string>
 			<key>CFBundleTypeName</key>
 			<string>vAmiga</string>
 			<key>CFBundleTypeOSTypes</key>
 			<array>
-				<string>????</string>
+				<string>vAmiga</string>
 			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
 			<key>LSTypeIsPackage</key>
 			<integer>0</integer>
 			<key>NSDocumentClass</key>

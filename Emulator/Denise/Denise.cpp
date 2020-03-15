@@ -238,28 +238,8 @@ Denise::setBPLCON1(u16 value)
 
     bplcon1 = value & 0xFF;
 
-    // Update the scroll values
-    scrollLoresOdd  = bplcon1 & 0b00001111;
-    scrollLoresEven = (bplcon1 & 0b11110000) >> 4;
-    scrollLoresMax = MAX(scrollLoresOdd, scrollLoresEven);
-    scrollHiresOdd = (scrollLoresOdd << 1) & 0xF;
-    scrollHiresEven = (scrollLoresEven << 1) & 0xF;
-    scrollHiresMax = MAX(scrollHiresOdd, scrollHiresEven);
-
-    // TODO: REPLACE BY
-    assert(scrollHiresOdd == ((bplcon1 & 0b00000111) << 1));
-    assert(scrollHiresEven == ((bplcon1 & 0b01110000) >> 3));
-
-    shiftLoresOdd  = (bplcon1 & 0b00001110) >> 1;
-    shiftLoresEven = (bplcon1 & 0b11100000) >> 5;
-    shiftHiresOdd  = (bplcon1 & 0b00000110) >> 1;
-    shiftHiresEven = (bplcon1 & 0b01100000) >> 5;
-    
     pixelOffsetOdd  = (bplcon1 & 0b00000001) << 1;
     pixelOffsetEven = (bplcon1 & 0b00010000) >> 3;
-
-    agnus.updateDrawingFlags(hires());
-    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
 }
 
 void

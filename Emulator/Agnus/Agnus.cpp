@@ -593,21 +593,21 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 void
 Agnus::updateDrawingFlags(bool hires)
 {
-    assert(denise.shiftHiresEven < 8);
-    assert(denise.shiftHiresOdd  < 8);
-    assert(denise.shiftLoresEven < 8);
-    assert(denise.shiftHiresOdd  < 8);
+    assert(scrollHiresEven < 8);
+    assert(scrollHiresOdd  < 8);
+    assert(scrollLoresEven < 8);
+    assert(scrollHiresOdd  < 8);
     
     // Superimpose drawing flag (Bit 0)
     if (hires) {
-        for (int i = denise.shiftHiresEven; i < HPOS_CNT; i += 4)
+        for (int i = scrollHiresEven; i < HPOS_CNT; i += 4)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
-        for (int i = denise.shiftHiresOdd; i < HPOS_CNT; i += 4)
+        for (int i = scrollHiresOdd; i < HPOS_CNT; i += 4)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
     } else {
-        for (int i = denise.shiftLoresEven; i < HPOS_CNT; i += 8)
+        for (int i = scrollLoresEven; i < HPOS_CNT; i += 8)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
-        for (int i = denise.shiftLoresOdd; i < HPOS_CNT; i += 8)
+        for (int i = scrollLoresOdd; i < HPOS_CNT; i += 8)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
     }
     
@@ -1387,7 +1387,7 @@ Agnus::pokeBPLCON1(u16 value)
     debug(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     if (bplcon1 != value) {
-        recordRegisterChange(DMA_CYCLES(4), REG_BPLCON1_AGNUS, value);
+        recordRegisterChange(DMA_CYCLES(1), REG_BPLCON1_AGNUS, value);
     }
 }
 
@@ -1397,8 +1397,20 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     assert(oldValue != newValue);
     debug(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
 
-    bplcon1 = newValue;
+    bplcon1 = newValue & 0xFF;
 
+    // Compute comparision values for the hpos counter
+    scrollLoresOdd  = (bplcon1 & 0b00001110) >> 1;
+    scrollLoresEven = (bplcon1 & 0b11100000) >> 5;
+    scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;
+    scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
+    
+    // Update drawing flags in the current rasterline
+    updateDrawingFlags(denise.hires());
+    
+    // Schedule the bitplane event table to be recomputed
+    agnus.hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
+    
     // Schedule the DDF window to be recomputed
     hsyncActions |= HSYNC_PREDICT_DDF;
 }

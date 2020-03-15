@@ -204,7 +204,17 @@ public:
     // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
     u16 bplcon0;
     u16 bplcon1;
-
+    
+    /* Horizontal shift values
+     * All four values are extracted from bplcon1 in setBPLCON1() and utilized
+     * to emulate horizontal scrolling. They control at which DMA cycles the
+     * BPLDAT registers are transfered into the shift registers.
+     */
+    i8 scrollLoresOdd;
+    i8 scrollLoresEven;
+    i8 scrollHiresOdd;
+    i8 scrollHiresEven;
+    
     /* Value of bplcon0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
      * on-the-fly when dmacon changes before the trigger conditions has been
@@ -483,6 +493,10 @@ public:
         & chngRecorder
         & bplcon0
         & bplcon1
+        & scrollLoresOdd
+        & scrollLoresEven
+        & scrollHiresOdd
+        & scrollHiresEven
         & bplcon0AtDDFStrt
         & dmacon
         & dmaconAtDDFStrt
