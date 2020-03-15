@@ -228,7 +228,7 @@ Denise::pokeBPLCON1(u16 value)
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON1_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON1_DENISE, value);
 }
 
 void
@@ -267,7 +267,7 @@ Denise::pokeBPLCON2(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BPLCON2, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON2, value);
 }
 
 void
@@ -492,76 +492,13 @@ Denise::fillShiftRegisters()
     armedEven = armedOdd = true;
 }
 
-/*
-template <int HIRES> void
-Denise::draw(int pixels)
-{
-    u8 index;
-
-    i16 currentPixel = agnus.ppos();
-
-    if (firstDrawnPixel == 0) {
-        firstDrawnPixel = currentPixel;
-        spriteClipBegin = currentPixel - 2;
-    }
-
-    u32 maskOdd, maskEven;
-
-    if (HIRES) {
-        maskOdd = 0x8000 << scrollHiresOdd;
-        maskEven = 0x8000 << scrollHiresEven;
-    } else {
-        maskOdd = 0x8000 << scrollLoresOdd;
-        maskEven = 0x8000 << scrollLoresEven;
-    }
-
-    for (int i = 0; i < pixels; i++) {
-
-        // Read a bit slice
-        index =
-        (!!(shiftReg[0] & maskOdd)  << 0) |
-        (!!(shiftReg[1] & maskEven) << 1) |
-        (!!(shiftReg[2] & maskOdd)  << 2) |
-        (!!(shiftReg[3] & maskEven) << 3) |
-        (!!(shiftReg[4] & maskOdd)  << 4) |
-        (!!(shiftReg[5] & maskEven) << 5);
-
-        maskOdd >>= 1;
-        maskEven >>= 1;
-
-        if (HIRES) {
-
-            // Synthesize one hires pixel
-            assert(currentPixel < sizeof(bBuffer));
-            bBuffer[currentPixel++] = index;
-
-        } else {
-
-            // Synthesize two lores pixels
-            assert(currentPixel + 1 < sizeof(bBuffer));
-            bBuffer[currentPixel++] = index;
-            bBuffer[currentPixel++] = index;
-        }
-    }
-
-    // Shift out drawn bits
-    for (int i = 0; i < 6; i++) shiftReg[i] <<= pixels;
-
-    lastDrawnPixel = currentPixel;
-
-#ifdef PIXEL_DEBUG
-    bBuffer[currentPixel - 2 * pixels] = 64;
-#endif
-}
-*/
-
-template <bool hiresMode, bool evenPlanes> void
-Denise::draw(int offset)
+template <bool hiresMode> void
+Denise::drawOdd(int offset)
 {
     i16 currentPixel = agnus.ppos() + offset;
 
     // Disarm the shift register
-    if (evenPlanes) armedEven = false; else armedOdd = false;
+    armedOdd = false;
     
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;
@@ -572,43 +509,74 @@ Denise::draw(int offset)
     u32 mask = 0x8000;
     for (int i = 0; i < 16; i++, mask >>= 1) {
         
-        if (evenPlanes) {
-
-            // Extract a bit slice from the even bitplane registers
-            index =
-            (!!(shiftReg[1] & mask) << 1) |  // Bitplane 2
-            (!!(shiftReg[3] & mask) << 3) |  // Bitplane 4
-            (!!(shiftReg[5] & mask) << 5);   // Bitplane 6
-
-        } else {
-
-            // Extract a bit slice from the odd bitplane registers
-            index =
-            (!!(shiftReg[0] & mask) << 0) |  // Bitplane 1
-            (!!(shiftReg[2] & mask) << 2) |  // Bitplane 3
-            (!!(shiftReg[4] & mask) << 4);   // Bitplane 5
-        }
+        index =
+        (!!(shiftReg[0] & mask) << 0) |  // Bitplane 1
+        (!!(shiftReg[2] & mask) << 2) |  // Bitplane 3
+        (!!(shiftReg[4] & mask) << 4);   // Bitplane 5
         
         if (hiresMode) {
             
             // Synthesize one hires pixel
             assert(currentPixel < sizeof(bBuffer));
-            bBuffer[currentPixel++] |= index;
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+            currentPixel++;
             
         } else {
             
             // Synthesize two lores pixels
             assert(currentPixel + 1 < sizeof(bBuffer));
-            bBuffer[currentPixel++] |= index;
-            bBuffer[currentPixel++] |= index;
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+            currentPixel++;
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
+            currentPixel++;
         }
     }
  
-    if (evenPlanes) {
-        shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
-    } else {
-        shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
+    shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
+    lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
+}
+
+template <bool hiresMode> void
+Denise::drawEven(int offset)
+{
+    i16 currentPixel = agnus.ppos() + offset;
+
+    // Disarm the shift register
+    armedEven = false;
+    
+    if (firstDrawnPixel == 0) {
+        firstDrawnPixel = currentPixel;
+        spriteClipBegin = currentPixel - 2;
     }
+    
+    u8 index;
+    u32 mask = 0x8000;
+    for (int i = 0; i < 16; i++, mask >>= 1) {
+        
+        index =
+        (!!(shiftReg[1] & mask) << 1) |  // Bitplane 2
+        (!!(shiftReg[3] & mask) << 3) |  // Bitplane 4
+        (!!(shiftReg[5] & mask) << 5);   // Bitplane 6
+        
+        if (hiresMode) {
+            
+            // Synthesize one hires pixel
+            assert(currentPixel < sizeof(bBuffer));
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+            currentPixel++;
+
+        } else {
+            
+            // Synthesize two lores pixels
+            assert(currentPixel + 1 < sizeof(bBuffer));
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+            currentPixel++;
+            bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
+            currentPixel++;
+        }
+    }
+ 
+    shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
@@ -1380,14 +1348,10 @@ template void Denise::pokeCOLORxx<POKE_COPPER, 30>(u16 value);
 template void Denise::pokeCOLORxx<POKE_CPU, 31>(u16 value);
 template void Denise::pokeCOLORxx<POKE_COPPER, 31>(u16 value);
 
-/*
-template void Denise::draw<0>(int pixels);
-template void Denise::draw<1>(int pixels);
-*/
-template void Denise::draw<false, false>(int offset);
-template void Denise::draw<false, true>(int offset);
-template void Denise::draw<true, false>(int offset);
-template void Denise::draw<true, true>(int offset);
+template void Denise::drawOdd<false>(int offset);
+template void Denise::drawOdd<true>(int offset);
+template void Denise::drawEven<false>(int offset);
+template void Denise::drawEven<true>(int offset);
 
 template void Denise::translateDPF<true>(int from, int to);
 template void Denise::translateDPF<false>(int from, int to);

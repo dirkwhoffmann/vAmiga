@@ -534,19 +534,13 @@ public:
     
 public:
 
-    // Synthesizes pixels (DEPRECATED)
-    /*
-    template <int HIRES> void draw(int pixels);
-    void drawLores(int pixels = 16) { draw<0>(pixels); }
-    void drawHires(int pixels = 16) { draw<1>(pixels); }
-    */
-    
     // Synthesizes pixels
-    template <bool hiresMode, bool evenPlanes> void draw(int offset);
-    void drawHiresEven() { if (armedEven) draw<true,true>(pixelOffsetEven); }
-    void drawLoresEven() { if (armedEven) draw<false,true>(pixelOffsetEven); }
-    void drawHiresOdd() { if (armedOdd) draw<true,false>(pixelOffsetOdd); }
-    void drawLoresOdd() { if (armedOdd) draw<false,false>(pixelOffsetOdd); }
+    template <bool hiresMode> void drawOdd(int offset);
+    template <bool hiresMode> void drawEven(int offset);
+    void drawHiresOdd()  { if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
+    void drawHiresEven() { if (armedEven) drawEven<true>  (pixelOffsetEven); }
+    void drawLoresOdd()  { if (armedOdd)  drawOdd <false> (pixelOffsetOdd);  }
+    void drawLoresEven() { if (armedEven) drawEven<false> (pixelOffsetEven); }
 
 private:
 
