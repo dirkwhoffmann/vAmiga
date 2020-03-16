@@ -437,10 +437,7 @@ Denise::fillShiftRegisters()
         case 1: shiftReg[0] = bpldat[0];
     }
     
-    u8 slice2[16];
-
-    if (USE_SSE)
-    {
+    if (USE_SSE) {
         
         transposeSSE(shiftReg, slice);
         
@@ -451,7 +448,7 @@ Denise::fillShiftRegisters()
         u32 mask = 0x8000;
         for (int i = 0; i < 16; i++, mask >>= 1) {
             
-            slice2[i] =
+            slice[i] =
             (!!(shiftReg[0] & mask) << 0) |
             (!!(shiftReg[1] & mask) << 1) |
             (!!(shiftReg[2] & mask) << 2) |
@@ -465,7 +462,7 @@ Denise::fillShiftRegisters()
 template <bool hiresMode> void
 Denise::drawOdd(int offset)
 {
-    const u16 masks[7] = {
+    static const u16 masks[7] = {
        0b000000,         // 0 bitplanes
        0b000001,         // 1 bitplanes
        0b000001,         // 2 bitplanes
@@ -489,13 +486,6 @@ Denise::drawOdd(int offset)
     for (int i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
-        
-        /*
-        index = 0;
-        if (bitplanes >= 1) index |= (!!(shiftReg[0] & mask) << 0);
-        if (bitplanes >= 3) index |= (!!(shiftReg[2] & mask) << 2);
-        if (bitplanes >= 5) index |= (!!(shiftReg[4] & mask) << 4);
-        */
         
         if (hiresMode) {
             
@@ -522,7 +512,7 @@ Denise::drawOdd(int offset)
 template <bool hiresMode> void
 Denise::drawEven(int offset)
 {
-    const u16 masks[7] = {
+    static const u16 masks[7] = {
        0b000000,         // 0 bitplanes
        0b000000,         // 1 bitplanes
        0b000010,         // 2 bitplanes
@@ -546,13 +536,6 @@ Denise::drawEven(int offset)
     for (int i = 0; i < 16; i++) {
 
         u8 index = slice[i] & mask;
-
-        /*
-        index = 0;
-        if (bitplanes >= 2) index |= (!!(shiftReg[1] & mask) << 1);
-        if (bitplanes >= 4) index |= (!!(shiftReg[3] & mask) << 3);
-        if (bitplanes >= 6) index |= (!!(shiftReg[5] & mask) << 5);
-        */
 
         if (hiresMode) {
             
