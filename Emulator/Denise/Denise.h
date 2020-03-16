@@ -89,8 +89,13 @@ public:
      * Denise transfers the current values of the BPLDAT registers into the
      * shift registers after BPLDAT1 is written to. This is emulated in
      * function fillShiftRegister().
+     * The upper two array elements equal 0. We need these dummy elements in
+     * order to pass the array as parameter to function transposeSSE().
      */
-    u16 shiftReg[6];
+    u16 shiftReg[8];
+    
+    // Bit slices computed out of the shift registers
+    u8 slice[16];
     
     // Flags indicating that the shift registers have been loaded
     bool armedEven;

@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
+#include "SSEUtils.h"
 
 int dirk = 0;
 
@@ -435,11 +436,46 @@ Denise::fillShiftRegisters()
         case 2: shiftReg[1] = bpldat[1];
         case 1: shiftReg[0] = bpldat[0];
     }
+    
+    u8 slice2[16];
+
+    if (USE_SSE)
+    {
+        
+        transposeSSE(shiftReg, slice);
+        
+    } else {
+        
+        assert(false);
+        
+        u32 mask = 0x8000;
+        for (int i = 0; i < 16; i++, mask >>= 1) {
+            
+            slice2[i] =
+            (!!(shiftReg[0] & mask) << 0) |
+            (!!(shiftReg[1] & mask) << 1) |
+            (!!(shiftReg[2] & mask) << 2) |
+            (!!(shiftReg[3] & mask) << 3) |
+            (!!(shiftReg[4] & mask) << 4) |
+            (!!(shiftReg[5] & mask) << 5);
+        }
+    }
 }
 
 template <bool hiresMode> void
 Denise::drawOdd(int offset)
 {
+    const u16 masks[7] = {
+       0b000000,         // 0 bitplanes
+       0b000001,         // 1 bitplanes
+       0b000001,         // 2 bitplanes
+       0b000101,         // 3 bitplanes
+       0b000101,         // 4 bitplanes
+       0b010101,         // 5 bitplanes
+       0b010101          // 6 bitplanes
+    };
+    
+    u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
 
     // Disarm the shift register
@@ -450,16 +486,17 @@ Denise::drawOdd(int offset)
         spriteClipBegin = currentPixel - 2;
     }
     
-    int bitplanes = bpu();
-    u8 index;
-    u32 mask = 0x8000;
-    for (int i = 0; i < 16; i++, mask >>= 1) {
+    for (int i = 0; i < 16; i++) {
         
+        u8 index = slice[i] & mask;
+        
+        /*
         index = 0;
         if (bitplanes >= 1) index |= (!!(shiftReg[0] & mask) << 0);
         if (bitplanes >= 3) index |= (!!(shiftReg[2] & mask) << 2);
         if (bitplanes >= 5) index |= (!!(shiftReg[4] & mask) << 4);
-                
+        */
+        
         if (hiresMode) {
             
             // Synthesize one hires pixel
@@ -485,6 +522,17 @@ Denise::drawOdd(int offset)
 template <bool hiresMode> void
 Denise::drawEven(int offset)
 {
+    const u16 masks[7] = {
+       0b000000,         // 0 bitplanes
+       0b000000,         // 1 bitplanes
+       0b000010,         // 2 bitplanes
+       0b000010,         // 3 bitplanes
+       0b001010,         // 4 bitplanes
+       0b001010,         // 5 bitplanes
+       0b101010          // 6 bitplanes
+    };
+    
+    u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
 
     // Disarm the shift register
@@ -494,16 +542,17 @@ Denise::drawEven(int offset)
         firstDrawnPixel = currentPixel;
         spriteClipBegin = currentPixel - 2;
     }
-    
-    int bitplanes = bpu();
-    u8 index;
-    u32 mask = 0x8000;
-    for (int i = 0; i < 16; i++, mask >>= 1) {
-        
+         
+    for (int i = 0; i < 16; i++) {
+
+        u8 index = slice[i] & mask;
+
+        /*
         index = 0;
         if (bitplanes >= 2) index |= (!!(shiftReg[1] & mask) << 1);
         if (bitplanes >= 4) index |= (!!(shiftReg[3] & mask) << 3);
         if (bitplanes >= 6) index |= (!!(shiftReg[5] & mask) << 5);
+        */
 
         if (hiresMode) {
             

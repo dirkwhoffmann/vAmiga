@@ -30,6 +30,9 @@
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xFE4510
 
+// Set to false to disable SSE optimizations
+static const bool USE_SSE = true;
+
 // Register debugging (set to 1 to generate debug output)
 
 extern int OCSREG_DEBUG;  // General OCS register debugging
