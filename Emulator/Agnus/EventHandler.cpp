@@ -438,7 +438,7 @@ void
 Agnus::scheduleNextREGEvent()
 {
     // Determine when the next register change happens
-    Cycle nextTrigger = chngRecorder.trigger();
+    Cycle nextTrigger = changeRecorder.trigger();
 
     // Schedule a register change event for that cycle
     scheduleAbs<REG_SLOT>(nextTrigger, REG_CHANGE);
@@ -568,13 +568,13 @@ Agnus::serviceREGEvent(Cycle until)
     assert(pos.h <= HPOS_MAX);
 
     // Iterate through all recorded register changes
-    while (!chngRecorder.isEmpty()) {
+    while (!changeRecorder.isEmpty()) {
 
         // We're done once the trigger cycle exceeds the target cycle
-        if (chngRecorder.trigger() > until) return;
+        if (changeRecorder.trigger() > until) return;
 
         // Apply the register change
-        RegChange &change = chngRecorder.read();
+        RegChange &change = changeRecorder.read();
 
         switch (change.addr) {
 

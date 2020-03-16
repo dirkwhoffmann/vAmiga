@@ -450,15 +450,16 @@ Denise::drawOdd(int offset)
         spriteClipBegin = currentPixel - 2;
     }
     
+    int bitplanes = bpu();
     u8 index;
     u32 mask = 0x8000;
     for (int i = 0; i < 16; i++, mask >>= 1) {
         
-        index =
-        (!!(shiftReg[0] & mask) << 0) |  // Bitplane 1
-        (!!(shiftReg[2] & mask) << 2) |  // Bitplane 3
-        (!!(shiftReg[4] & mask) << 4);   // Bitplane 5
-        
+        index = 0;
+        if (bitplanes >= 1) index |= (!!(shiftReg[0] & mask) << 0);
+        if (bitplanes >= 3) index |= (!!(shiftReg[2] & mask) << 2);
+        if (bitplanes >= 5) index |= (!!(shiftReg[4] & mask) << 4);
+                
         if (hiresMode) {
             
             // Synthesize one hires pixel
@@ -477,6 +478,7 @@ Denise::drawOdd(int offset)
         }
     }
  
+    shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
@@ -493,15 +495,16 @@ Denise::drawEven(int offset)
         spriteClipBegin = currentPixel - 2;
     }
     
+    int bitplanes = bpu();
     u8 index;
     u32 mask = 0x8000;
     for (int i = 0; i < 16; i++, mask >>= 1) {
         
-        index =
-        (!!(shiftReg[1] & mask) << 1) |  // Bitplane 2
-        (!!(shiftReg[3] & mask) << 3) |  // Bitplane 4
-        (!!(shiftReg[5] & mask) << 5);   // Bitplane 6
-        
+        index = 0;
+        if (bitplanes >= 2) index |= (!!(shiftReg[1] & mask) << 1);
+        if (bitplanes >= 4) index |= (!!(shiftReg[3] & mask) << 3);
+        if (bitplanes >= 6) index |= (!!(shiftReg[5] & mask) << 5);
+
         if (hiresMode) {
             
             // Synthesize one hires pixel
@@ -520,6 +523,7 @@ Denise::drawEven(int offset)
         }
     }
  
+    shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
@@ -1088,7 +1092,7 @@ Denise::beginOfLine(int vpos)
     initialArmed = armed;
     wasArmed = armed;
 
-    // Prepare the biplane shift registers
+    // Prepare the bitplane shift registers
     for (int i = 0; i < 6; i++) shiftReg[i] = 0;
 
     // Clear the bBuffer
@@ -1097,7 +1101,7 @@ Denise::beginOfLine(int vpos)
     firstDrawnPixel = 0;
     lastDrawnPixel = 0;
 
-    // Reset sprite clipping range
+    // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
     spriteClipEnd = HPIXELS;
 }

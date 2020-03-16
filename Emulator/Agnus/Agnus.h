@@ -47,129 +47,53 @@ public:
     Blitter blitter = Blitter(amiga);
     DmaDebugger dmaDebugger = DmaDebugger(amiga);
 
-
+    
     //
-    // Static lookup tables
+    // Events slots
     //
-
-    /* Bitplane DMA events as they appear in a single rasterline.
-     *
-     * Parameters: bitplaneDMA[Resolution][Bitplanes][Cycle]
-     *
-     *             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
-     *              Bitplanes : 0 .. 6        (Bitplanes in use, BPU)
-     *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
-     *
-     * The lookup table is used to quickly update the bplEvent table.
-     * Depending on the current resoution and BPU value, a segment of this
-     * lookup table is copied into the event table.
-     */
-    EventID bplDMA[2][7][HPOS_CNT];
-
-    /* Fetch unit cycle numbers.
-     *
-     * Parameters: fetchUnitNr[Resolution][Cycle]
-     *
-     *             Resolution : 0 or 1        (0 = LORES / 1 = HIRES)
-     *                  Cycle : 0 .. HPOS_MAX (DMA cycle)
-     *
-     * This lookup table is used to determine the position of a given DMA
-     * cycle inside the fetch unit. The first cycle in a fetch unit in numbered
-     * 0, the second cycle is numbered 1 and so on.
-     */
-    // u8 fetchUnitNr[2][HPOS_CNT]; DEPRECATED
-
-    /* Disk, Audio, Sprite DMA events as they appear in a single rasterline.
-     *
-     * Parameters: dasDMA[dmacon]
-     *
-     *             dmacon : Bits 0 .. 5 of register DMACON
-     *
-     * This lookup table is used to quickly update the dasEvent table.
-     * Depending on the current resoution and BPU value, a segment of this
-     * lookup table is copied into the event table.
-     */
-    EventID dasDMA[64][HPOS_CNT];
-
-
-    //
-    // Events
-    //
-
+    
 public:
-
-    // The event table
+    
+    // Event slots
     Event slot[SLOT_COUNT];
-
-    // Next trigger cycle for an event in the primary event table
+    
+private:
+    
+    // Next trigger cycle
     Cycle nextTrigger = NEVER;
-
+    
 
     //
     // Event tables
     //
+    
+    // Lookup tables
+    EventID bplDMA[2][7][HPOS_CNT];    // [Hires][No of bitplanes][DMA cycle]
+    EventID dasDMA[64][HPOS_CNT];      // [Bits 0 .. 5 of DMACON]
 
-    /* Agnus utilizes two event tables to schedule DMA events in the DAS_SLOT
-     * and BPL_SLOT. Together, both tables resembles Fig. 6-9 im the HRM (3rd
-     * rev.). Assuming that sprite DMA is enabled and Denise draws 6 bitplanes
-     * in lores mode starting at 0x28, the tables would look like this:
-     *
-     *     bplEvent[0x00] = EVENT_NONE   dasEvent[0x00] = EVENT_NONE
-     *     bplEvent[0x01] = EVENT_NONE   dasEvent[0x01] = BUS_REFRESH
-     *         ...                           ...
-     *     bplEvent[0x28] = EVENT_NONE   dasEvent[0x28] = EVENT_NONE
-     *     bplEvent[0x29] = BPL_L4       dasEvent[0x29] = DAS_S5_1
-     *     bplEvent[0x2A] = BPL_L6       dasEvent[0x2A] = EVENT_NONE
-     *     bplEvent[0x2B] = BPL_L2       dasEvent[0x2B] = DAS_S5_2
-     *     bplEvent[0x2C] = EVENT_NONE   dasEvent[0x2C] = EVENT_NONE
-     *     bplEvent[0x2D] = BPL_L3       dasEvent[0x2D] = DAS_S6_1
-     *     bplEvent[0x2E] = BPL_L5       dasEvent[0x2E] = EVENT_NONE
-     *     bplEvent[0x2F] = BPL_L1       dasEvent[0x2F] = DAS_S6_2
-     *         ...                           ...
-     *     bplEvent[0xE2] = BPL_EOL      dasEvent[0xE2] = BUS_REFRESH
-     *
-     * The BPL_EOL event doesn't perform DMA. It concludes the current line.
-     */
+    // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
     EventID dasEvent[HPOS_CNT];
 
-    /* Each event table is accompanied by a jump table that points to the
-     * next event. Given the example tables above, the jump tables would look
-     * like this:
-     *
-     *     nextBplEvent[0x00] = 0x29     nextDasEvent[0x00] = 0x01
-     *     nextBplEvent[0x01] = 0x29     nextDasEvent[0x01] = 0x03
-     *           ...                           ...
-     *     nextBplEvent[0x28] = 0x29     nextDasEvent[0x28] = 0x29
-     *     nextBplEvent[0x29] = 0x2A     nextDasEvent[0x29] = 0x2B
-     *     nextBplEvent[0x2A] = 0x2B     nextDasEvent[0x2A] = 0x2B
-     *     nextBplEvent[0x2B] = 0x2D     nextDasEvent[0x2B] = 0x2D
-     *     nextBplEvent[0x2C] = 0x2D     nextDasEvent[0x2C] = 0x2D
-     *     nextBplEvent[0x2D] = 0x2E     nextDasEvent[0x2D] = 0x2F
-     *     nextBplEvent[0x2E] = 0x2F     nextDasEvent[0x2E] = 0x2F
-     *     nextBplEvent[0x2F] = 0x31     nextDasEvent[0x2F] = 0x31
-     *           ...                           ...
-     *     nextBplEvent[0xE2] = 0x00     nextDasEvent[0xE2] = 0x00
-     *
-     * Whenever one the DMA tables is modified, the corresponding jump table
-     * has to be updated.
-     */
+    // Jump tables connecting the scheduled events
     u8 nextBplEvent[HPOS_CNT];
     u8 nextDasEvent[HPOS_CNT];
-
+    
 
     //
     // Execution control
     //
 
-    // Action flags checked in the HSYNC handler
+public:
+    
+    // Action flags controlling the HSYNC handler
     u64 hsyncActions;
 
 
     //
     // Counters
     //
-
+    
     // Agnus has been emulated up to this clock cycle
     Cycle clock;
 
@@ -179,7 +103,7 @@ public:
     // Information about the currently drawn frame
     struct {
 
-        // Frame count (will eventually replace variable 'frame')
+        // Frame count
         i64 nr;
 
         // Indicates if this frame is drawn in interlace mode
@@ -199,7 +123,7 @@ public:
     //
 
     // Ringbuffer for managing register change delays
-    RegChangeRecorder<8> chngRecorder;
+    RegChangeRecorder<8> changeRecorder;
 
     // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
     u16 bplcon0;
@@ -490,7 +414,7 @@ public:
         & frame.numLines
         & lof
 
-        & chngRecorder
+        & changeRecorder
         & bplcon0
         & bplcon1
         & scrollLoresOdd
@@ -576,7 +500,6 @@ public:
     AgnusInfo getInfo();
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
-
     AgnusStats getStats() { return stats; }
     void clearStats() { memset(&stats, 0, sizeof(stats)); }
 

@@ -1282,8 +1282,7 @@ Memory::pokeCIA8(u32 addr, u8 value)
 void
 Memory::pokeCIA16(u32 addr, u16 value)
 {
-    debug("pokeCIA16(%6X, %X)\n", addr, value);
-    // assert(false);
+    // debug(CIA_DEBUG, "pokeCIA16(%6X, %X)\n", addr, value);
     
     assert(IS_EVEN(addr));
     

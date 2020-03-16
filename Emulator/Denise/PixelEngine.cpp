@@ -39,16 +39,6 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).rawValue;
     indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).rawValue;
     indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).rawValue;
-    /*
-    colors[64] = 0x0F00;
-    colors[65] = 0x0D00;
-    colors[66] = 0x0A00;
-    colors[67] = 0x0900;
-    colors[68] = 0x00FF;
-    colors[69] = 0x00DD;
-    colors[70] = 0x00AA;
-    colors[71] = 0x0099;
-    */
 }
 
 PixelEngine::~PixelEngine()
