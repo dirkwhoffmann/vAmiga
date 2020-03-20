@@ -156,7 +156,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerFlagPinIrq()
 {
-    debug(CIA_DEBUG, "triggerFlagPinIrq()\n");
+    debug("triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -175,7 +175,7 @@ CIA::peek(u16 addr)
 	u8 result;
 
     if (addr == 0 || addr == 1) {
-        debug(DSKREG_DEBUG, "Peek($%X) DDRA = $%X DDRB = $%X\n", addr, DDRA, DDRB);
+        // debug(DSKREG_DEBUG, "Peek($%X) DDRA = $%X DDRB = $%X\n", addr, DDRA, DDRB);
     }
     debug(CIAREG_DEBUG, "Peek($%X)\n", addr);
 
@@ -197,19 +197,19 @@ CIA::peek(u16 addr)
             updatePB();
             // plaindebug("%s Peek %d (hex: %02X) = %d (DDRB = %X)\n",
             //            getDescription(), addr, addr, PB, DDRB);
-            debug(DSKREG_DEBUG, "  PB = %X\n", PB);
+            // debug(DSKREG_DEBUG, "  PB = %X\n", PB);
             return PB;
 
         case 0x02: // CIA_DATA_DIRECTION_A
 
 			result = DDRA;
-            debug(DSKREG_DEBUG, "read DDRA = %X\n", DDRA);
+            // debug(DSKREG_DEBUG, "read DDRA = %X\n", DDRA);
 			break;
 
         case 0x03: // CIA_DATA_DIRECTION_B
 
 			result = DDRB;
-            debug(DSKREG_DEBUG, "read DDRB = %X\n", DDRB);
+            // debug(DSKREG_DEBUG, "read DDRB = %X\n", DDRB);
 			break;
 			
         case 0x04: // CIA_TIMER_A_LOW
@@ -377,7 +377,7 @@ void
 CIA::poke(u16 addr, u8 value)
 {
     if (addr == 0 || addr == 1) {
-        debug(DSKREG_DEBUG, "Poke($%X,$%X) DDRA = $%X DDRB = $%X\n", addr, value, DDRA, DDRB);
+        // debug(DSKREG_DEBUG, "Poke($%X,$%X) DDRA = $%X DDRB = $%X\n", addr, value, DDRA, DDRB);
     }
     debug(CIAREG_DEBUG, "Poke($%X,$%X) (%d,%d)\n", addr, value, addr, value);
     
@@ -401,7 +401,7 @@ CIA::poke(u16 addr, u8 value)
         case 0x02: // CIA_DATA_DIRECTION_A
         
             // plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
-            debug(DSKREG_DEBUG, " DDRA = %X\n", DDRA);
+            // debug(DSKREG_DEBUG, " DDRA = %X\n", DDRA);
             pokeDDRA(value);
             // DDRA = value;
             // updatePA();
@@ -410,7 +410,7 @@ CIA::poke(u16 addr, u8 value)
         case 0x03: // CIA_DATA_DIRECTION_B
         
             // plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
-            debug(DSKREG_DEBUG, " DDRB = %X\n", DDRB);
+            // debug(DSKREG_DEBUG, " DDRB = %X\n", DDRB);
             DDRB = value;
             updatePB();
             return;

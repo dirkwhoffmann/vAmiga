@@ -34,6 +34,14 @@ Drive::getInfo()
 }
 
 void
+Drive::_reset()
+{
+    RESET_SNAPSHOT_ITEMS
+    
+    head.cylinder = 40;
+}
+
+void
 Drive::_ping()
 {
     amiga.putMessage(hasDisk() ?
@@ -262,7 +270,7 @@ Drive::setMotor(bool value)
 
 
         idCount = 0; // Reset identification shift register counter
-        motorOffCycle =  cpu.getMasterClock();
+        motorOffCycle = cpu.getMasterClock();
 
         debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
@@ -546,7 +554,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
     // The motor state can only change on a falling edge on the select line
     if (FALLING_EDGE(oldSel, newSel)) {
         
-        // Emulate the indentification shift register
+        // Emulate the identification shift register
         idCount = (idCount + 1) % 32;
         idBit = !!GET_BIT(getDriveId(), 31 - idCount);
         

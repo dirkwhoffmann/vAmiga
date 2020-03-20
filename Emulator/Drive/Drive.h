@@ -117,7 +117,7 @@ public:
 
 private:
 
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset() override;
     void _ping() override;
     void _inspect() override;
     void _dumpConfig() override;

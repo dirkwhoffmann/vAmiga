@@ -53,7 +53,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    info.dskbytr =  peekDSKBYTR();
+    // info.dskbytr =  peekDSKBYTR();
     info.dsksync = dsksync;
     info.prb = prb;
  
@@ -118,8 +118,8 @@ DiskController::getInfo()
 void
 DiskController::setState(DriveState s)
 {
-    if (state == s) return;
     debug(DSK_DEBUG, "%s -> %s\n", driveStateName(state), driveStateName(s));
+    if (state == s) return;
 
     bool wasWriting = (state == DRIVE_DMA_WRITE);
     bool isWriting = (s == DRIVE_DMA_WRITE);
@@ -266,14 +266,14 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     // Determine if a FIFO buffer should be emulated
     useFifo = config.useFifo;
     
-    // Disable DMA if the DMAEN bit (15) is zero
+    // Disable DMA if bit 15 (DMAEN) is zero
     if (!(newDskLen & 0x8000)) {
 
         setState(DRIVE_DMA_OFF);
         clearFifo();
     }
     
-    // Enable DMA the DMAEN bit (bit 15) has been written twice.
+    // Enable DMA if bit 15 (DMAEN) has been written twice
     else if (oldDsklen & newDskLen & 0x8000) {
 
 #ifdef ALIGN_DRIVE_HEAD
@@ -319,12 +319,12 @@ DiskController::pokeDSKDAT(u16 value)
 u16
 DiskController::peekDSKBYTR()
 {
-    /* 15      DSKBYT     Indicates whether this register contains valid data.
-     * 14      DMAON      Indicates whether disk DMA is actually enabled.
-     * 13      DISKWRITE  Matches the WRITE bit in DSKLEN.
-     * 12      WORDEQUAL  Indicates a match with the contents of DISKSYNC.
-     * 11 - 8             Unused.
-     *  7 - 0  DATA       Disk byte data.
+    /* 15      DSKBYT     Indicates whether this register contains valid data
+     * 14      DMAON      Indicates whether disk DMA is actually enabled
+     * 13      DISKWRITE  Matches the WRITE bit in DSKLEN
+     * 12      WORDEQUAL  Indicates a match with the contents of DISKSYNC
+     * 11 - 8             Unused
+     *  7 - 0  DATA       Disk byte data
      */
     
     // DATA
@@ -523,14 +523,14 @@ DiskController::executeFifo()
             writeFifo(incoming);
             // if (dsksync) { debug("offset = %d incoming = %X\n", drive->head.offset, incoming); }
 
-            // Check if we've reached a SYNC mark.
+            // Check if we've reached a SYNC mark
             if ((syncFlag = compareFifo(dsksync))) {
                 
-                // Trigger a word SYNC interrupt.
+                // Trigger a word SYNC interrupt
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
                 paula.raiseIrq(INT_DSKSYN);
 
-                // Enable DMA if the controller was waiting for it.
+                // Enable DMA if the controller was waiting for it
                 if (state == DRIVE_DMA_WAIT) {
 
                     setState(DRIVE_DMA_READ);
@@ -544,15 +544,15 @@ DiskController::executeFifo()
             
             if (fifoIsEmpty()) {
                 
-                // Switch off DMA is the last byte has been flushed out.
+                // Switch off DMA is the last byte has been flushed out
                 if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
                 
             } else {
                 
-                // Read the outgoing byte from the FIFO buffer.
+                // Read the outgoing byte from the FIFO buffer
                 u8 outgoing = readFifo();
                 
-                // Write byte to disk.
+                // Write byte to disk
                 drive->writeHead(outgoing);
             }
             break;
