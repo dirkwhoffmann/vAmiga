@@ -115,6 +115,8 @@ CIA::emulateRisingEdgeOnFlagPin()
 void
 CIA::emulateFallingEdgeOnFlagPin()
 {
+    wakeUp();
+
     icr |= 0x10; // Note: FLAG pin is inverted
     
     if (imr & 0x10) {
@@ -125,6 +127,8 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::emulateRisingEdgeOnCntPin()
 {
+    wakeUp();
+
     // Timer A
     if ((CRA & 0x21) == 0x21) delay |= CIACountA1;
 
@@ -156,7 +160,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerFlagPinIrq()
 {
-    debug("triggerFlagPinIrq()\n");
+    debug(CIA_DEBUG, "triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }

@@ -509,9 +509,6 @@ DiskController::executeFifo()
     switch (state) {
             
         case DRIVE_DMA_OFF:
-            drive->rotate();
-            break;
-            
         case DRIVE_DMA_WAIT:
         case DRIVE_DMA_READ:
             
