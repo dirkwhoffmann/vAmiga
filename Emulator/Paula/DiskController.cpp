@@ -53,7 +53,7 @@ DiskController::_inspect()
     info.state = state;
     info.fifoCount = fifoCount;
     info.dsklen = dsklen;
-    // info.dskbytr =  peekDSKBYTR();
+    info.dskbytr =  computeDSKBYTR();
     info.dsksync = dsksync;
     info.prb = prb;
  
@@ -319,6 +319,15 @@ DiskController::pokeDSKDAT(u16 value)
 u16
 DiskController::peekDSKBYTR()
 {
+    u16 result = computeDSKBYTR();
+    
+    debug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
+    return result;
+}
+
+u16
+DiskController::computeDSKBYTR()
+{
     /* 15      DSKBYT     Indicates whether this register contains valid data
      * 14      DMAON      Indicates whether disk DMA is actually enabled
      * 13      DISKWRITE  Matches the WRITE bit in DSKLEN
@@ -343,7 +352,6 @@ DiskController::peekDSKBYTR()
     // WORDEQUAL
     if (syncFlag) SET_BIT(result, 12);
 
-    debug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 

@@ -38,7 +38,7 @@ Drive::_reset()
 {
     RESET_SNAPSHOT_ITEMS
     
-    head.cylinder = 40;
+    // head.cylinder = 40;
 }
 
 void

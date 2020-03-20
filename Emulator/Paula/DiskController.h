@@ -214,6 +214,7 @@ public:
     
     // OCR register 0x01A (r)
     u16 peekDSKBYTR();
+    u16 computeDSKBYTR();
     
     // OCR register 0x07E (w)
     void pokeDSKSYNC(u16 value);
