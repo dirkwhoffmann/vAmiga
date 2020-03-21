@@ -94,31 +94,55 @@ Agnus::inspectEventSlot(EventSlot nr)
         case BPL_SLOT:
 
             switch (slot[nr].id) {
-                case 0:             i->eventName = "none"; break;
-                case BPL_DRAW:      i->eventName = "BPL_DRAW"; break;
-                case BPL_L1:        i->eventName = "BPL_L1"; break;
-                case BPL_L1_DRAW:   i->eventName = "BPL_L1_DRAW"; break;
-                case BPL_L2:        i->eventName = "BPL_L2"; break;
-                case BPL_L2_DRAW:   i->eventName = "BPL_L2_DRAW"; break;
-                case BPL_L3:        i->eventName = "BPL_L3"; break;
-                case BPL_L3_DRAW:   i->eventName = "BPL_L3_DRAW"; break;
-                case BPL_L4:        i->eventName = "BPL_L4"; break;
-                case BPL_L4_DRAW:   i->eventName = "BPL_L4_DRAW"; break;
-                case BPL_L5:        i->eventName = "BPL_L5"; break;
-                case BPL_L5_DRAW:   i->eventName = "BPL_L5_DRAW"; break;
-                case BPL_L6:        i->eventName = "BPL_L6"; break;
-                case BPL_L6_DRAW:   i->eventName = "BPL_L6_DRAW"; break;
-                case BPL_H1:        i->eventName = "BPL_H1"; break;
-                case BPL_H1_DRAW:   i->eventName = "BPL_H1_DRAW"; break;
-                case BPL_H2:        i->eventName = "BPL_H2"; break;
-                case BPL_H2_DRAW:   i->eventName = "BPL_H2_DRAW"; break;
-                case BPL_H3:        i->eventName = "BPL_H3"; break;
-                case BPL_H3_DRAW:   i->eventName = "BPL_H3_DRAW"; break;
-                case BPL_H4:        i->eventName = "BPL_H4"; break;
-                case BPL_H4_DRAW:   i->eventName = "BPL_H4_DRAW"; break;
-                case BPL_EOL:       i->eventName = "BPL_EOL"; break;
-                case BPL_EOL_DRAW:  i->eventName = "BPL_EOL_DRAW"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
+                case 0:                 i->eventName = "none"; break;
+                case BPL_DRAW_ODD:      i->eventName = "BPL_DRAW_ODD"; break;
+                case BPL_DRAW_EVEN:     i->eventName = "BPL_DRAW_EVEN"; break;
+                case BPL_DRAW_BOTH:     i->eventName = "BPL_DRAW_BOTH"; break;
+                case BPL_L1:            i->eventName = "BPL_L1_DRAW"; break;
+                case BPL_L1_DRAW_ODD:   i->eventName = "BPL_L1_DRAW_ODD"; break;
+                case BPL_L1_DRAW_EVEN:  i->eventName = "BPL_L1_DRAW_EVEN"; break;
+                case BPL_L1_DRAW_BOTH:  i->eventName = "BPL_L1_DRAW_BOTH"; break;
+                case BPL_L2:            i->eventName = "BPL_L2_DRAW"; break;
+                case BPL_L2_DRAW_ODD:   i->eventName = "BPL_L2_DRAW_ODD"; break;
+                case BPL_L2_DRAW_EVEN:  i->eventName = "BPL_L2_DRAW_EVEN"; break;
+                case BPL_L2_DRAW_BOTH:  i->eventName = "BPL_L2_DRAW_DRAW_BOTH"; break;
+                case BPL_L3:            i->eventName = "BPL_L3_DRAW"; break;
+                case BPL_L3_DRAW_ODD:   i->eventName = "BPL_L3_DRAW_ODD"; break;
+                case BPL_L3_DRAW_EVEN:  i->eventName = "BPL_L3_DRAW_EVEN"; break;
+                case BPL_L3_DRAW_BOTH:  i->eventName = "BPL_L3_DRAW_BOTH"; break;
+                case BPL_L4:            i->eventName = "BPL_L4_DRAW"; break;
+                case BPL_L4_DRAW_ODD:   i->eventName = "BPL_L4_DRAW_ODD"; break;
+                case BPL_L4_DRAW_EVEN:  i->eventName = "BPL_L4_DRAW_EVEN"; break;
+                case BPL_L4_DRAW_BOTH:  i->eventName = "BPL_L4_DRAW_BOTH"; break;
+                case BPL_L5:            i->eventName = "BPL_L5_DRAW"; break;
+                case BPL_L5_DRAW_ODD:   i->eventName = "BPL_L5_DRAW_ODD"; break;
+                case BPL_L5_DRAW_EVEN:  i->eventName = "BPL_L5_EVEN"; break;
+                case BPL_L5_DRAW_BOTH:  i->eventName = "BPL_L5_BOTH"; break;
+                case BPL_L6:            i->eventName = "BPL_L6_DRAW"; break;
+                case BPL_L6_DRAW_ODD:   i->eventName = "BPL_L6_DRAW_ODD"; break;
+                case BPL_L6_DRAW_EVEN:  i->eventName = "BPL_L6_DRAW_EVEN"; break;
+                case BPL_L6_DRAW_BOTH:  i->eventName = "BPL_L6_DRAW_BOTH"; break;
+                case BPL_H1:            i->eventName = "BPL_H1_DRAW"; break;
+                case BPL_H1_DRAW_ODD:   i->eventName = "BPL_H1_DRAW_ODD"; break;
+                case BPL_H1_DRAW_EVEN:  i->eventName = "BPL_H1_DRAW_EVEN"; break;
+                case BPL_H1_DRAW_BOTH:  i->eventName = "BPL_H1_DRAW_BOTH"; break;
+                case BPL_H2:            i->eventName = "BPL_H2_DRAW"; break;
+                case BPL_H2_DRAW_ODD:   i->eventName = "BPL_H2_DRAW_ODD"; break;
+                case BPL_H2_DRAW_EVEN:  i->eventName = "BPL_H2_DRAW_EVEN"; break;
+                case BPL_H2_DRAW_BOTH:  i->eventName = "BPL_H2_DRAW_BOTH"; break;
+                case BPL_H3:            i->eventName = "BPL_H3_DRAW"; break;
+                case BPL_H3_DRAW_ODD:   i->eventName = "BPL_H3_DRAW_ODD"; break;
+                case BPL_H3_DRAW_EVEN:  i->eventName = "BPL_H3_DRAW_EVEN"; break;
+                case BPL_H3_DRAW_BOTH:  i->eventName = "BPL_H3_DRAW_BOTH"; break;
+                case BPL_H4:            i->eventName = "BPL_H4_DRAW"; break;
+                case BPL_H4_DRAW_ODD:   i->eventName = "BPL_H4_DRAW_ODD"; break;
+                case BPL_H4_DRAW_EVEN:  i->eventName = "BPL_H4_DRAW_EVEN"; break;
+                case BPL_H4_DRAW_BOTH:  i->eventName = "BPL_H4_DRAW_BOTH"; break;
+                case BPL_EOL:           i->eventName = "BPL_EOL"; break;
+                case BPL_EOL_DRAW_ODD:  i->eventName = "BPL_EOL_DRAW_ODD"; break;
+                case BPL_EOL_DRAW_EVEN: i->eventName = "BPL_EOL_DRAW_EVEN"; break;
+                case BPL_EOL_DRAW_BOTH: i->eventName = "BPL_EOL_DRAW_BOTH"; break;
+                default:                i->eventName = "*** INVALID ***"; break;
             }
             break;
 
@@ -621,13 +645,21 @@ Agnus::serviceBPLEvent()
 {
     switch (slot[BPL_SLOT].id) {
 
-        case BPL_DRAW:
-            if (denise.hires()) {
-                if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
-                if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
+        case BPL_DRAW_ODD:
+            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
+            break;
+
+        case BPL_DRAW_EVEN:
+            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
+            break;
+
+        case BPL_DRAW_BOTH:
+            if (hires()) {
+                denise.drawHiresEven();
+                denise.drawHiresOdd();
             } else {
-                if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-                if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+                denise.drawLoresEven();
+                denise.drawLoresOdd();
             }
             break;
             
@@ -635,9 +667,19 @@ Agnus::serviceBPLEvent()
             serviceBPLEventHires<0>();
             break;
 
-        case BPL_H1_DRAW:
-            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
+        case BPL_H1_DRAW_ODD:
+            denise.drawHiresOdd();
+            serviceBPLEventHires<0>();
+            break;
+
+        case BPL_H1_DRAW_EVEN:
+            denise.drawHiresEven();
+            serviceBPLEventHires<0>();
+            break;
+
+        case BPL_H1_DRAW_BOTH:
+            denise.drawHiresEven();
+            denise.drawHiresOdd();
             serviceBPLEventHires<0>();
             break;
 
@@ -645,9 +687,19 @@ Agnus::serviceBPLEvent()
             serviceBPLEventLores<0>();
             break;
             
-        case BPL_L1_DRAW:
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+        case BPL_L1_DRAW_ODD:
+            denise.drawLoresOdd();
+            serviceBPLEventLores<0>();
+            break;
+
+        case BPL_L1_DRAW_EVEN:
+            denise.drawLoresEven();
+            serviceBPLEventLores<0>();
+            break;
+
+        case BPL_L1_DRAW_BOTH:
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             serviceBPLEventLores<0>();
             break;
 
@@ -655,84 +707,168 @@ Agnus::serviceBPLEvent()
             serviceBPLEventHires<1>();
             break;
 
-        case BPL_H2_DRAW:
+        case BPL_H2_DRAW_ODD:
             serviceBPLEventHires<1>();
-            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
+            assert((pos.h & 0x3) == scrollHiresOdd);
+            denise.drawHiresOdd();
+            break;
+            
+        case BPL_H2_DRAW_EVEN:
+            serviceBPLEventHires<1>();
+            assert((pos.h & 0x3) == scrollHiresEven);
+            denise.drawHiresEven();
+            break;
+            
+        case BPL_H2_DRAW_BOTH:
+            serviceBPLEventHires<1>();
+            denise.drawHiresEven();
+            denise.drawHiresOdd();
             break;
 
         case BPL_L2:
             serviceBPLEventLores<1>();
             break;
 
-        case BPL_L2_DRAW:
+        case BPL_L2_DRAW_ODD:
             serviceBPLEventLores<1>();
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+            denise.drawLoresOdd();
+            break;
+            
+        case BPL_L2_DRAW_EVEN:
+            serviceBPLEventLores<1>();
+            denise.drawLoresEven();
+            break;
+            
+        case BPL_L2_DRAW_BOTH:
+            serviceBPLEventLores<1>();
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             break;
 
         case BPL_H3:
             serviceBPLEventHires<2>();
             break;
 
-        case BPL_H3_DRAW:
+        case BPL_H3_DRAW_ODD:
             serviceBPLEventHires<2>();
-            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
+            denise.drawHiresOdd();
+            break;
+
+        case BPL_H3_DRAW_EVEN:
+            serviceBPLEventHires<2>();
+            denise.drawHiresEven();
+            break;
+
+        case BPL_H3_DRAW_BOTH:
+            serviceBPLEventHires<2>();
+            denise.drawHiresEven();
+            denise.drawHiresOdd();
             break;
 
         case BPL_L3:
             serviceBPLEventLores<2>();
             break;
 
-        case BPL_L3_DRAW:
+        case BPL_L3_DRAW_ODD:
             serviceBPLEventLores<2>();
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+            denise.drawLoresOdd();
+            break;
+
+        case BPL_L3_DRAW_EVEN:
+            serviceBPLEventLores<2>();
+            denise.drawLoresEven();
+            break;
+
+        case BPL_L3_DRAW_BOTH:
+            serviceBPLEventLores<2>();
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             break;
 
         case BPL_H4:
             serviceBPLEventHires<3>();
             break;
 
-        case BPL_H4_DRAW:
+        case BPL_H4_DRAW_ODD:
             serviceBPLEventHires<3>();
-            if ((pos.h & 0x3) == scrollHiresEven) denise.drawHiresEven();
-            if ((pos.h & 0x3) == scrollHiresOdd) denise.drawHiresOdd();
+            denise.drawHiresOdd();
+            break;
+
+        case BPL_H4_DRAW_EVEN:
+            serviceBPLEventHires<3>();
+            denise.drawHiresEven();
+            break;
+
+        case BPL_H4_DRAW_BOTH:
+            serviceBPLEventHires<3>();
+            denise.drawHiresEven();
+            denise.drawHiresOdd();
             break;
 
         case BPL_L4:
             serviceBPLEventLores<3>();
             break;
 
-        case BPL_L4_DRAW:
+        case BPL_L4_DRAW_ODD:
             serviceBPLEventLores<3>();
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+            denise.drawLoresOdd();
+            break;
+
+        case BPL_L4_DRAW_EVEN:
+            serviceBPLEventLores<3>();
+            denise.drawLoresEven();
+            break;
+
+        case BPL_L4_DRAW_BOTH:
+            serviceBPLEventLores<3>();
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             break;
 
         case BPL_L5:
             serviceBPLEventLores<4>();
             break;
 
-        case BPL_L5_DRAW:
+        case BPL_L5_DRAW_ODD:
             serviceBPLEventLores<4>();
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+            denise.drawLoresOdd();
+            break;
+
+        case BPL_L5_DRAW_EVEN:
+            serviceBPLEventLores<4>();
+            denise.drawLoresEven();
+            break;
+
+        case BPL_L5_DRAW_BOTH:
+            serviceBPLEventLores<4>();
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             break;
             
         case BPL_L6:
             serviceBPLEventLores<5>();
             break;
 
-        case BPL_L6_DRAW:
+        case BPL_L6_DRAW_ODD:
             serviceBPLEventLores<5>();
-            if ((pos.h & 0x7) == scrollLoresEven) denise.drawLoresEven();
-            if ((pos.h & 0x7) == scrollLoresOdd) denise.drawLoresOdd();
+            denise.drawLoresOdd();
+            break;
+
+        case BPL_L6_DRAW_EVEN:
+            serviceBPLEventLores<5>();
+            denise.drawLoresEven();
+            break;
+
+        case BPL_L6_DRAW_BOTH:
+            serviceBPLEventLores<5>();
+            denise.drawLoresEven();
+            denise.drawLoresOdd();
             break;
 
         case BPL_EOL:
-        case BPL_EOL_DRAW:
+        case BPL_EOL_DRAW_ODD:
+        case BPL_EOL_DRAW_EVEN:
+        case BPL_EOL_DRAW_BOTH:
             // Last event in the current rasterline
             assert(pos.h == 0xE2);
             return;
@@ -752,17 +888,8 @@ Agnus::serviceBPLEventHires()
     if (nr == 0) {
         denise.bpldat[0] = doBitplaneDMA<0>();
         denise.fillShiftRegisters();
-                
-        if(unlikely(isLastHx(pos.h))) {
-            // denise.drawHires(16 + denise.scrollHiresMax);
-            addBPLMOD<0>();
-            // denise.drawHiresOdd();
-            // denise.drawHiresEven();
-        } else {
-            // denise.drawHiresOdd();
-            // denise.drawHiresEven();
-            // denise.drawHires(16);
-        }
+        
+        if(unlikely(isLastHx(pos.h))) addBPLMOD<0>();
         
         return;
     }
@@ -777,17 +904,7 @@ Agnus::serviceBPLEventLores()
         denise.bpldat[0] = doBitplaneDMA<0>();
         denise.fillShiftRegisters();
         
-        if(unlikely(isLastLx(pos.h))) {
-            // denise.drawLores(16 + denise.scrollLoresMax);
-            addBPLMOD<0>();
-            // denise.drawLoresOdd();
-            // denise.drawLoresEven();
-
-        } else {
-            // denise.drawLores(16);
-            // denise.drawLoresOdd();
-            // denise.drawLoresEven();
-        }
+        if(unlikely(isLastLx(pos.h))) addBPLMOD<0>();
         
         return;
     }

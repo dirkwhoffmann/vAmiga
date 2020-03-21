@@ -462,6 +462,9 @@ Denise::fillShiftRegisters()
 template <bool hiresMode> void
 Denise::drawOdd(int offset)
 {
+    assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
+    assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
+
     static const u16 masks[7] = {
        0b000000,         // 0 bitplanes
        0b000001,         // 1 bitplanes
@@ -512,6 +515,9 @@ Denise::drawOdd(int offset)
 template <bool hiresMode> void
 Denise::drawEven(int offset)
 {
+    assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresEven);
+    assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresEven);
+
     static const u16 masks[7] = {
        0b000000,         // 0 bitplanes
        0b000000,         // 1 bitplanes
@@ -557,6 +563,85 @@ Denise::drawEven(int offset)
  
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
     lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
+}
+
+template <bool hiresMode> void
+Denise::drawBoth(int offset)
+{
+    static const u16 masks[7] = {
+        0b000000,         // 0 bitplanes
+        0b000001,         // 1 bitplanes
+        0b000011,         // 2 bitplanes
+        0b000111,         // 3 bitplanes
+        0b001111,         // 4 bitplanes
+        0b011111,         // 5 bitplanes
+        0b111111          // 6 bitplanes
+    };
+    
+    u16 mask = masks[bpu()];
+    i16 currentPixel = agnus.ppos() + offset;
+    
+    // Disarm the shift register
+    armedEven = armedOdd = false;
+    
+    if (firstDrawnPixel == 0) {
+        firstDrawnPixel = currentPixel;
+        spriteClipBegin = currentPixel - 2;
+    }
+    
+    for (int i = 0; i < 16; i++) {
+        
+        u8 index = slice[i] & mask;
+        
+        if (hiresMode) {
+            
+            // Synthesize one hires pixel
+            assert(currentPixel < sizeof(bBuffer));
+            bBuffer[currentPixel++] = index;
+            
+        } else {
+            
+            // Synthesize two lores pixels
+            assert(currentPixel + 1 < sizeof(bBuffer));
+            bBuffer[currentPixel++] = index;
+            bBuffer[currentPixel++] = index;
+        }
+    }
+    
+    for (int i = 0; i < 6; i++) shiftReg[i] = 0;
+    lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
+}
+
+void
+Denise::drawHiresBoth()
+{
+    if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
+
+        assert((agnus.pos.h & 0x3) == agnus.scrollHiresOdd);
+        assert((agnus.pos.h & 0x3) == agnus.scrollHiresEven);
+        drawBoth<true>(pixelOffsetOdd);
+
+    } else {
+    
+        drawHiresOdd();
+        drawHiresEven();
+    }
+}
+
+void
+Denise::drawLoresBoth()
+{
+    if (armedOdd && armedEven && pixelOffsetOdd == pixelOffsetEven) {
+
+        assert((agnus.pos.h & 0x7) == agnus.scrollLoresOdd);
+        assert((agnus.pos.h & 0x7) == agnus.scrollLoresEven);
+        drawBoth<false>(pixelOffsetOdd);
+
+    } else {
+    
+        drawLoresOdd();
+        drawLoresEven();
+    }
 }
 
 void

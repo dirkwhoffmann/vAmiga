@@ -526,10 +526,13 @@ public:
     // Synthesizes pixels
     template <bool hiresMode> void drawOdd(int offset);
     template <bool hiresMode> void drawEven(int offset);
+    template <bool hiresMode> void drawBoth(int offset);
     void drawHiresOdd()  { if (armedOdd)  drawOdd <true>  (pixelOffsetOdd);  }
     void drawHiresEven() { if (armedEven) drawEven<true>  (pixelOffsetEven); }
+    void drawHiresBoth();
     void drawLoresOdd()  { if (armedOdd)  drawOdd <false> (pixelOffsetOdd);  }
     void drawLoresEven() { if (armedEven) drawEven<false> (pixelOffsetEven); }
+    void drawLoresBoth();
 
 private:
 

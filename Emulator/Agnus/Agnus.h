@@ -745,7 +745,7 @@ private:
     void updateDasJumpTable(i16 end = HPOS_MAX);
 
     // Dumps an event table for debugging
-    void dumpEventTable(EventID *table, char str[256][2], int from, int to);
+    void dumpEventTable(EventID *table, char str[256][3], int from, int to);
 
     // Dumps the BPL or DAS event table for debugging
     void dumpBplEventTable(int from, int to);
@@ -796,7 +796,9 @@ public:
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
     void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
-
+    bool hires() { return GET_BIT(bplcon0, 15); }
+    bool lores() { return GET_BIT(bplcon0, 10); }
+    
     void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 oldValue, u16 newValue);
     void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }

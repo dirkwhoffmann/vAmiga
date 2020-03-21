@@ -117,7 +117,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 {
     wakeUp();
 
-    icr |= 0x10; // Note: FLAG pin is inverted
+    icr |= 0x10;
     
     if (imr & 0x10) {
         triggerFlagPinIrq();

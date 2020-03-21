@@ -34,10 +34,15 @@
  *
  * The BPL_EOL event doesn't perform DMA. It concludes the current line.
  *
- * All events in the BPL_SLOT can be superimposed by a drawing flag (bit 0)
- * that triggers the transfer of the data registers into the shift registers
- * at the correct DMA cycle. Settings this flag changes an event, e.g., from
- * BPL_L4 to BPL_L4_DRAW.
+ * All events in the BPL_SLOT can be superimposed by two drawing flags (bit 0
+ * and bit 1) that trigger the transfer of the data registers into the shift
+ * registers at the correct DMA cycle. Bit 0 controls the odd bitplanes and
+ * bit 1 controls the even bitplanes. Settings these flags changes the
+ * scheduled event, e.g.:
+ *
+ *     BPL_L4  becomes  BPL_L4_DRAW_ODD   if bit 0 is set
+ *     BPL_L4  becomes  BPL_L4_DRAW_EVEN  if bit 1 is set
+ *     BPL_L4  becomes  BPL_L4_DRAW_BOTH  if both bits are set
  *
  * Each event table is accompanied by a jump table that points to the next
  * event. Given the example tables above, the jump tables would look like this:
@@ -650,17 +655,19 @@ Agnus::updateDrawingFlags(bool hires)
     assert(scrollLoresEven < 8);
     assert(scrollHiresOdd  < 8);
     
-    // Superimpose drawing flag (Bit 0)
+    // Superimpose the drawing flags (bits 0 and 1)
+    // Bit 0 is used to for the odd bitplanes and bit 1 for the even bitplanes
+    
     if (hires) {
-        for (int i = scrollHiresEven; i < HPOS_CNT; i += 4)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
         for (int i = scrollHiresOdd; i < HPOS_CNT; i += 4)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
+        for (int i = scrollHiresEven; i < HPOS_CNT; i += 4)
+            bplEvent[i] = (EventID)(bplEvent[i] | 2);
     } else {
-        for (int i = scrollLoresEven; i < HPOS_CNT; i += 8)
-            bplEvent[i] = (EventID)(bplEvent[i] | 1);
         for (int i = scrollLoresOdd; i < HPOS_CNT; i += 8)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
+        for (int i = scrollLoresEven; i < HPOS_CNT; i += 8)
+            bplEvent[i] = (EventID)(bplEvent[i] | 2);
     }
     
     updateBplJumpTable();
@@ -669,7 +676,7 @@ Agnus::updateDrawingFlags(bool hires)
 void
 Agnus::verifyBplEvents()
 {
-    assert(bplEvent[HPOS_MAX] == BPL_EOL || bplEvent[HPOS_MAX] == BPL_EOL_DRAW);
+    assert((bplEvent[HPOS_MAX] & 0b11111100) == BPL_EOL);
     assert(nextBplEvent[HPOS_MAX] == 0);
 }
 
@@ -744,9 +751,9 @@ Agnus::isLastHx(i16 dmaCycle)
 }
 
 void
-Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
+Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
 {
-    char r1[256], r2[256], r3[256], r4[256];
+    char r1[256], r2[256], r3[256], r4[256], r5[256];
     int i;
 
     for (i = 0; i <= to - from; i++) {
@@ -758,45 +765,44 @@ Agnus::dumpEventTable(EventID *table, char str[256][2], int from, int to)
         r2[i] = (digit2 < 10) ? digit2 + '0' : (digit2 - 10) + 'A';
         r3[i] = str[table[from + i]][0];
         r4[i] = str[table[from + i]][1];
+        r5[i] = str[table[from + i]][2];
     }
-    r1[i] = r2[i] = r3[i] = r4[i] = 0;
+    r1[i] = r2[i] = r3[i] = r4[i] = r5[i] = 0;
 
     msg("%s\n", r1);
     msg("%s\n", r2);
     msg("%s\n", r3);
     msg("%s\n", r4);
+    msg("%s\n", r5);
 }
 
 void
 Agnus::dumpBplEventTable(int from, int to)
 {
-    char str[256][2];
+    char str[256][3];
 
     memset(str, '?', sizeof(str));
-    str[(int)EVENT_NONE][0]   = '.'; str[(int)EVENT_NONE][1]   = '.';
-    str[(int)BPL_DRAW][0]     = 'D'; str[(int)BPL_DRAW][1]     = 'R';
-    str[(int)BPL_L1][0]       = 'L'; str[(int)BPL_L1][1]       = '1';
-    str[(int)BPL_L1_DRAW][0]  = 'L'; str[(int)BPL_L1_DRAW][1]  = '1';
-    str[(int)BPL_L2][0]       = 'L'; str[(int)BPL_L2][1]       = '2';
-    str[(int)BPL_L2_DRAW][0]  = 'L'; str[(int)BPL_L2_DRAW][1]  = '2';
-    str[(int)BPL_L3][0]       = 'L'; str[(int)BPL_L3][1]       = '3';
-    str[(int)BPL_L3_DRAW][0]  = 'L'; str[(int)BPL_L3_DRAW][1]  = '3';
-    str[(int)BPL_L4][0]       = 'L'; str[(int)BPL_L4][1]       = '4';
-    str[(int)BPL_L4_DRAW][0]  = 'L'; str[(int)BPL_L4_DRAW][1]  = '4';
-    str[(int)BPL_L5][0]       = 'L'; str[(int)BPL_L5][1]       = '5';
-    str[(int)BPL_L5_DRAW][0]  = 'L'; str[(int)BPL_L5_DRAW][1]  = '5';
-    str[(int)BPL_L6][0]       = 'L'; str[(int)BPL_L6][1]       = '6';
-    str[(int)BPL_L6_DRAW][0]  = 'L'; str[(int)BPL_L6_DRAW][1]  = '6';
-    str[(int)BPL_H1][0]       = 'H'; str[(int)BPL_H1][1]       = '1';
-    str[(int)BPL_H1_DRAW][0]  = 'H'; str[(int)BPL_H1_DRAW][1]  = '1';
-    str[(int)BPL_H2][0]       = 'H'; str[(int)BPL_H2][1]       = '2';
-    str[(int)BPL_H2_DRAW][0]  = 'H'; str[(int)BPL_H2_DRAW][1]  = '2';
-    str[(int)BPL_H3][0]       = 'H'; str[(int)BPL_H3][1]       = '3';
-    str[(int)BPL_H3_DRAW][0]  = 'H'; str[(int)BPL_H3_DRAW][1]  = '3';
-    str[(int)BPL_H4][0]       = 'H'; str[(int)BPL_H4][1]       = '4';
-    str[(int)BPL_H4_DRAW][0]  = 'H'; str[(int)BPL_H4_DRAW][1]  = '4';
-    str[(int)BPL_EOL][0]      = 'E'; str[(int)BPL_EOL][1]      = 'O';
-    str[(int)BPL_EOL_DRAW][0] = 'E'; str[(int)BPL_EOL_DRAW][1] = 'O';
+    
+    // Events
+    for (int i = 0; i < 4; i++) {
+        str[i][0] = '.';                str[i][1] = '.';
+        str[(int)BPL_L1 + i][0]  = 'L'; str[(int)BPL_L1 + i][1]  = '1';
+        str[(int)BPL_L2 + i][0]  = 'L'; str[(int)BPL_L2 + i][1]  = '2';
+        str[(int)BPL_L3 + i][0]  = 'L'; str[(int)BPL_L3 + i][1]  = '3';
+        str[(int)BPL_L4 + i][0]  = 'L'; str[(int)BPL_L4 + i][1]  = '4';
+        str[(int)BPL_L5 + i][0]  = 'L'; str[(int)BPL_L5 + i][1]  = '5';
+        str[(int)BPL_L6 + i][0]  = 'L'; str[(int)BPL_L6 + i][1]  = '6';
+        str[(int)BPL_H1 + i][0]  = 'H'; str[(int)BPL_H1 + i][1]  = '1';
+        str[(int)BPL_H2 + i][0]  = 'H'; str[(int)BPL_H2 + i][1]  = '2';
+        str[(int)BPL_H3 + i][0]  = 'H'; str[(int)BPL_H3 + i][1]  = '3';
+        str[(int)BPL_H4 + i][0]  = 'H'; str[(int)BPL_H4 + i][1]  = '4';
+        str[(int)BPL_EOL + i][0] = 'E'; str[(int)BPL_EOL + i][1] = 'O';
+    }
+
+    // Drawing flags
+    for (int i = 1; i < 256; i += 4) str[i][2] = 'o';
+    for (int i = 2; i < 256; i += 4) str[i][2] = 'e';
+    for (int i = 3; i < 256; i += 4) str[i][2] = 'b';
 
     dumpEventTable(bplEvent, str, from, to);
 }
@@ -833,7 +839,7 @@ Agnus::dumpBplEventTable()
 void
 Agnus::dumpDasEventTable(int from, int to)
 {
-    char str[256][2];
+    char str[256][3];
 
     memset(str, '?', sizeof(str));
     str[(int)EVENT_NONE][0]  = '.'; str[(int)EVENT_NONE][1]  = '.';
@@ -863,6 +869,8 @@ Agnus::dumpDasEventTable(int from, int to)
     str[(int)DAS_S7_2][0]    = '7'; str[(int)DAS_S7_2][1]    = '2';
     str[(int)DAS_SDMA][0]    = 'S'; str[(int)DAS_SDMA][1]    = 'D';
 
+    for (int i = 1; i < 256; i++) str[i][2] = ' ';
+    
     dumpEventTable(dasEvent, str, from, to);
 }
 
@@ -1457,8 +1465,8 @@ Agnus::setBPLCON1(u16 oldValue, u16 newValue)
     scrollHiresOdd  = (bplcon1 & 0b00000110) >> 1;
     scrollHiresEven = (bplcon1 & 0b01100000) >> 5;
     
-    // Update drawing flags in the current rasterline
-    updateDrawingFlags(denise.hires());
+    // Update the bitplane event table starting at the current hpos
+    updateBplEvents(pos.h);
     
     // Update the scheduled bitplane event according to the new table
     scheduleBplEventForCycle(pos.h);
