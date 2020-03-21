@@ -45,14 +45,11 @@ public:
 
 
     //
-    // Internal state
+    // Counters
     //
     
     // Denise has been executed up to this clock cycle.
     Cycle clock = 0;
-
-    // Remembers the pixel position of the first and the last drawn bitplane pixel
-    PixelPos lastDrawnPixel;
 
 
     //
@@ -296,8 +293,7 @@ public:
         worker
 
         & clock
-        & lastDrawnPixel
-
+        
         & bplcon0
         & bplcon1
         & bplcon2

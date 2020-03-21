@@ -506,7 +506,6 @@ Denise::drawOdd(int offset)
     }
  
     shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
-    lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
 template <bool hiresMode> void
@@ -554,7 +553,6 @@ Denise::drawEven(int offset)
     }
  
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
-    lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
 template <bool hiresMode> void
@@ -596,7 +594,6 @@ Denise::drawBoth(int offset)
     }
     
     for (int i = 0; i < 6; i++) shiftReg[i] = 0;
-    lastDrawnPixel = MAX(lastDrawnPixel, currentPixel);
 }
 
 void
@@ -1201,8 +1198,6 @@ Denise::beginOfLine(int vpos)
 
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
-
-    lastDrawnPixel = 0;
 
     // Reset the sprite clipping range
     spriteClipBegin = HPIXELS;
