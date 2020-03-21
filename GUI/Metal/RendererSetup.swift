@@ -475,9 +475,14 @@ extension Renderer {
                                      nearZ: 0.1,
                                      farZ: 100.0)
 
+        /*
         let transEye = translationMatrix(x: xShift,
                                          y: yShift,
                                          z: zShift + 1.39 - 0.16)
+        */
+        let transEye = translationMatrix(x: xShift,
+                                         y: yShift,
+                                         z: zShift + 1.415 - 0.16)
 
         let transRotX = translationMatrix(x: 0.0,
                                           y: 0.0,

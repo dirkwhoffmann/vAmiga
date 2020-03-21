@@ -184,12 +184,16 @@ class Renderer: NSObject, MTKViewDelegate {
     
     var shiftX = AnimatedFloat(0.0)
     var shiftY = AnimatedFloat(0.0)
-    var shiftZ = AnimatedFloat(Defaults.eyeZ)
+    var shiftZ = AnimatedFloat(0.0)
     
     var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
     
-    // Screen parameters mimicing SAE
+    // Screen parameters
+    var hshift = Float(0.5)
+    var vshift = Float(0.5)
+    var zoom = Float(0.95)
+
     static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
     static let cutoutY1default = Float(VBLANK_CNT + 1) / Float(EmulatorTexture.height)
     static let cutoutX2default = (Float)(LAST_PIXEL - 8 * 4) / Float(EmulatorTexture.width)
@@ -200,7 +204,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var cutoutX2 = AnimatedFloat(cutoutX2default)
     var cutoutY2 = AnimatedFloat(cutoutY2default)
     
-    // Texture cut-out (normalized)
+    // Texture cut-out
     var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
                                   y: CGFloat(cutoutY1default),
                                   width: CGFloat(cutoutX2default - cutoutX1default),
@@ -312,7 +316,59 @@ class Renderer: NSObject, MTKViewDelegate {
             requestLongFrame = true
         }
     }
-
+    
+    func computeTextureRect() -> CGRect {
+        
+        /*
+         *       aw <--------- maxWidth --------> dw
+         *    ah |-----|---------------------|-----|
+         *     ^ |     bw                   cw     |
+         *     | -  bh *<----- width  ------>*     -
+         *     | |     ^                     ^     |
+         *     | |     |                     |     |
+         *     | |   height                height  |
+         *     | |     |                     |     |
+         *     | |     v                     v     |
+         *     | -  ch *<----- width  ------>*     -
+         *     v |                                 |
+         *    dh |-----|---------------------|-----|
+         *
+         *      aw/ah - dw/dh = largest posible texture cutout
+         *      bw/bh - cw/ch = currently used texture cutout
+         */
+        let aw = Float(HBLANK_CNT) * 4
+        let dw = Float(HPOS_CNT) * 4
+        let ah = Float(VBLANK_CNT)
+        let dh = Float(VPOS_CNT)
+        
+        let maxWidth = dw - aw
+        let maxHeight = dh - ah
+        
+        let width = zoom * maxWidth
+        let bw = aw + hshift * (maxWidth - width)
+        let height = zoom * maxHeight
+        let bh = ah + vshift * (maxHeight - height)
+        
+        track("aw \(aw) ah \(ah) dw \(dw) dh \(dh)")
+        track("maxWidth \(maxWidth) maxHeight \(maxHeight)")
+        track("width \(width) height \(height)")
+        
+        let texW = CGFloat(EmulatorTexture.width)
+        let texH = CGFloat(EmulatorTexture.height)
+        
+        return CGRect.init(x: CGFloat(bw) / texW,
+                           y: CGFloat(bh) / texH,
+                           width: CGFloat(width) / texW,
+                           height: CGFloat(height) / texH)
+    }
+    
+    // DEPRECATED
+    func updateTextureRect() {
+        
+        textureRect = computeTextureRect()
+        buildVertexBuffer()
+    }
+    
     //
     // Managing kernels
     //

@@ -324,8 +324,7 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
  * To understand the horizontal position of the Amiga screen, it is important
  * to note that the HBLANK area does *not* start at DMA cycle 0. According to
  * "Amiga Intern", DMA cycle $0F (15) is the first and $35 (53) the last cycles
- * inside the HBLANK area (as you can see below, I am using slightly different
- * values to mimic what can be seen in UAE).
+ * inside the HBLANK area.
  *
  * As a result, the early DMA cycles do not appear on the left side of the
  * screen, but on the right side in the previous scanline. To mimic this
@@ -337,8 +336,8 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
  * the last scanline.
  */
 
-#define HBLANK_MIN    0x0A
-#define HBLANK_MAX    0x30
+#define HBLANK_MIN    0x0F // was 0x0A before
+#define HBLANK_MAX    0x35 // was 0x30 before 
 #define HBLANK_CNT    0x27 // HBLANK_MAX - HBLANK_MIN + 1
 
 #define VBLANK_MIN    0x00

@@ -482,10 +482,10 @@ extension Keys {
     static let upscaler        = "VAMIGAUpscalerKey"
 
     // Geometry
-    static let eyeX            = "VAMIGAEyeX"
-    static let eyeY            = "VAMIGAEyeY"
-    static let eyeZ            = "VAMIGAEyeZ"
-    
+    static let hShift          = "VAMIGAHShift"
+    static let vShift          = "VAMIGAVShift"
+    static let zoom            = "VAMIGAZoom"
+
     // GPU options
     static let shaderOptions   = "VAMIGAShaderOptionsKey"
 }
@@ -500,9 +500,9 @@ extension Defaults {
     static let upscaler = 0
     
     // Geometry
-    static let eyeX = Float(0.0)
-    static let eyeY = Float(0.0)
-    static let eyeZ = Float(0.0)
+    static let hShift = Float(0.5)
+    static let vShift = Float(0.5)
+    static let zoom   = Float(0.9)
     
     // GPU options
     static let shaderOptions = ShaderDefaultsTFT
@@ -521,10 +521,10 @@ extension MyController {
             Keys.enhancer: Defaults.enhancer,
             Keys.upscaler: Defaults.upscaler,
 
-            Keys.eyeX: Defaults.eyeX,
-            Keys.eyeY: Defaults.eyeY,
-            Keys.eyeZ: Defaults.eyeZ
-            ]
+            Keys.hShift: Defaults.hShift,
+            Keys.vShift: Defaults.vShift,
+            Keys.zoom: Defaults.zoom
+        ]
         
         let defaults = UserDefaults.standard
         defaults.register(defaults: dictionary)
@@ -541,10 +541,10 @@ extension MyController {
                      Keys.saturation,
                      Keys.enhancer,
                      Keys.upscaler,
-
-                     Keys.eyeX,
-                     Keys.eyeY,
-                     Keys.eyeZ,
+                     
+                     Keys.hShift,
+                     Keys.vShift,
+                     Keys.zoom,
                      
                      Keys.shaderOptions ]
 
@@ -565,10 +565,10 @@ extension MyController {
         brightness = defaults.double(forKey: Keys.brightness)
         contrast = defaults.double(forKey: Keys.contrast)
         saturation = defaults.double(forKey: Keys.saturation)
-        eyeX = defaults.float(forKey: Keys.eyeX)
-        eyeY = defaults.float(forKey: Keys.eyeY)
-        eyeZ = defaults.float(forKey: Keys.eyeZ)
-        
+        renderer.hshift = defaults.float(forKey: Keys.hShift)
+        renderer.vshift = defaults.float(forKey: Keys.vShift)
+        renderer.zoom   = defaults.float(forKey: Keys.zoom)
+
         defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
         renderer.buildDotMasks()
  
@@ -585,11 +585,10 @@ extension MyController {
         defaults.set(brightness, forKey: Keys.brightness)
         defaults.set(contrast, forKey: Keys.contrast)
         defaults.set(saturation, forKey: Keys.saturation)
+        defaults.set(renderer.hshift, forKey: Keys.hShift)
+        defaults.set(renderer.vshift, forKey: Keys.vShift)
+        defaults.set(renderer.zoom, forKey: Keys.zoom)
         
-        defaults.set(eyeX, forKey: Keys.eyeX)
-        defaults.set(eyeY, forKey: Keys.eyeY)
-        defaults.set(eyeZ, forKey: Keys.eyeZ)
-  
         defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }

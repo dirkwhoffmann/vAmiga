@@ -81,9 +81,14 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
+        /*
         vidEyeXSlider.floatValue = parent.eyeX
         vidEyeYSlider.floatValue = parent.eyeY
         vidEyeZSlider.floatValue = parent.eyeZ
+        */
+        vidEyeXSlider.floatValue = parent.renderer.hshift * 1000
+        vidEyeYSlider.floatValue = parent.renderer.vshift * 1000
+        vidEyeZSlider.floatValue = parent.renderer.zoom * 1000
 
         // OK Button
         vidOKButton.title = buttonLabel
@@ -237,19 +242,34 @@ extension PreferencesController {
         
     @IBAction func vidEyeXAction(_ sender: NSSlider!) {
 
-        parent.eyeX = sender.floatValue
+        // parent.eyeX = sender.floatValue
+
+        parent.renderer.hshift = sender.floatValue / 1000
+        parent.renderer.updateTextureRect()
+        track("vidEyeXAction: \(parent.renderer.hshift)")
+        
         refresh()
     }
     
     @IBAction func vidEyeYAction(_ sender: NSSlider!) {
         
-        parent.eyeY = sender.floatValue
+        // parent.eyeY = sender.floatValue
+        
+        parent.renderer.vshift = sender.floatValue / 1000
+        parent.renderer.updateTextureRect()
+        track("vidEyeYAction: \(parent.renderer.vshift)")
+        
         refresh()
     }
     
     @IBAction func vidEyeZAction(_ sender: NSSlider!) {
         
-        parent.eyeZ = sender.floatValue
+        // parent.eyeZ = sender.floatValue
+
+        parent.renderer.zoom = sender.floatValue / 1000
+        parent.renderer.updateTextureRect()
+        track("vidEyeZAction: \(parent.renderer.zoom)")
+
         refresh()
     }
     
