@@ -654,13 +654,7 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_DRAW_BOTH:
-            if (hires()) {
-                denise.drawHiresEven();
-                denise.drawHiresOdd();
-            } else {
-                denise.drawLoresEven();
-                denise.drawLoresOdd();
-            }
+            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
             break;
             
         case BPL_H1:
@@ -678,8 +672,7 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_H1_DRAW_BOTH:
-            denise.drawHiresEven();
-            denise.drawHiresOdd();
+            denise.drawHiresBoth();
             serviceBPLEventHires<0>();
             break;
 
@@ -698,8 +691,7 @@ Agnus::serviceBPLEvent()
             break;
 
         case BPL_L1_DRAW_BOTH:
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             serviceBPLEventLores<0>();
             break;
 
@@ -709,20 +701,17 @@ Agnus::serviceBPLEvent()
 
         case BPL_H2_DRAW_ODD:
             serviceBPLEventHires<1>();
-            assert((pos.h & 0x3) == scrollHiresOdd);
             denise.drawHiresOdd();
             break;
             
         case BPL_H2_DRAW_EVEN:
             serviceBPLEventHires<1>();
-            assert((pos.h & 0x3) == scrollHiresEven);
             denise.drawHiresEven();
             break;
             
         case BPL_H2_DRAW_BOTH:
             serviceBPLEventHires<1>();
-            denise.drawHiresEven();
-            denise.drawHiresOdd();
+            denise.drawHiresBoth();
             break;
 
         case BPL_L2:
@@ -741,8 +730,7 @@ Agnus::serviceBPLEvent()
             
         case BPL_L2_DRAW_BOTH:
             serviceBPLEventLores<1>();
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             break;
 
         case BPL_H3:
@@ -761,8 +749,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_H3_DRAW_BOTH:
             serviceBPLEventHires<2>();
-            denise.drawHiresEven();
-            denise.drawHiresOdd();
+            denise.drawHiresBoth();
             break;
 
         case BPL_L3:
@@ -781,8 +768,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L3_DRAW_BOTH:
             serviceBPLEventLores<2>();
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             break;
 
         case BPL_H4:
@@ -801,8 +787,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_H4_DRAW_BOTH:
             serviceBPLEventHires<3>();
-            denise.drawHiresEven();
-            denise.drawHiresOdd();
+            denise.drawHiresBoth();
             break;
 
         case BPL_L4:
@@ -821,8 +806,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L4_DRAW_BOTH:
             serviceBPLEventLores<3>();
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             break;
 
         case BPL_L5:
@@ -841,8 +825,7 @@ Agnus::serviceBPLEvent()
 
         case BPL_L5_DRAW_BOTH:
             serviceBPLEventLores<4>();
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             break;
             
         case BPL_L6:
@@ -861,15 +844,13 @@ Agnus::serviceBPLEvent()
 
         case BPL_L6_DRAW_BOTH:
             serviceBPLEventLores<5>();
-            denise.drawLoresEven();
-            denise.drawLoresOdd();
+            denise.drawLoresBoth();
             break;
 
         case BPL_EOL:
         case BPL_EOL_DRAW_ODD:
         case BPL_EOL_DRAW_EVEN:
         case BPL_EOL_DRAW_BOTH:
-            // Last event in the current rasterline
             assert(pos.h == 0xE2);
             return;
 
