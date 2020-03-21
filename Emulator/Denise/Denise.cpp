@@ -427,7 +427,9 @@ void
 Denise::fillShiftRegisters()
 {
     armedEven = armedOdd = true;
-
+    
+    spriteClipBegin = MIN(spriteClipBegin, agnus.ppos() + 2);
+    
     switch (bpu()) {
         case 6: shiftReg[5] = bpldat[5];
         case 5: shiftReg[4] = bpldat[4];
@@ -483,7 +485,7 @@ Denise::drawOdd(int offset)
     
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;
-        spriteClipBegin = currentPixel - 2;
+        // spriteClipBegin = currentPixel - 2;
     }
     
     for (int i = 0; i < 16; i++) {
@@ -536,7 +538,7 @@ Denise::drawEven(int offset)
     
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;
-        spriteClipBegin = currentPixel - 2;
+        // spriteClipBegin = currentPixel - 2;
     }
          
     for (int i = 0; i < 16; i++) {
@@ -586,7 +588,7 @@ Denise::drawBoth(int offset)
     
     if (firstDrawnPixel == 0) {
         firstDrawnPixel = currentPixel;
-        spriteClipBegin = currentPixel - 2;
+        // spriteClipBegin = currentPixel - 2;
     }
     
     for (int i = 0; i < 16; i++) {
