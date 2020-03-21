@@ -479,9 +479,6 @@ Denise::drawOdd(int offset)
     
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
-
-    // Disarm the shift register
-    armedOdd = false;
     
     for (int i = 0; i < 16; i++) {
         
@@ -505,6 +502,8 @@ Denise::drawOdd(int offset)
         }
     }
  
+    // Disarm and clear the shift registers
+    armedOdd = false;
     shiftReg[0] = shiftReg[2] = shiftReg[4] = 0;
 }
 
@@ -526,9 +525,6 @@ Denise::drawEven(int offset)
     
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
-
-    // Disarm the shift register
-    armedEven = false;
     
     for (int i = 0; i < 16; i++) {
 
@@ -552,6 +548,8 @@ Denise::drawEven(int offset)
         }
     }
  
+    // Disarm and clear the shift registers
+    armedEven = false;
     shiftReg[1] = shiftReg[3] = shiftReg[5] = 0;
 }
 
@@ -570,9 +568,6 @@ Denise::drawBoth(int offset)
     
     u16 mask = masks[bpu()];
     i16 currentPixel = agnus.ppos() + offset;
-    
-    // Disarm the shift register
-    armedEven = armedOdd = false;
     
     for (int i = 0; i < 16; i++) {
         
@@ -593,6 +588,8 @@ Denise::drawBoth(int offset)
         }
     }
     
+    // Disarm and clear the shift registers
+    armedEven = armedOdd = false;
     for (int i = 0; i < 6; i++) shiftReg[i] = 0;
 }
 
