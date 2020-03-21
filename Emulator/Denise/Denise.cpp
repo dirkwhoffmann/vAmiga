@@ -483,11 +483,6 @@ Denise::drawOdd(int offset)
     // Disarm the shift register
     armedOdd = false;
     
-    if (firstDrawnPixel == 0) {
-        firstDrawnPixel = currentPixel;
-        // spriteClipBegin = currentPixel - 2;
-    }
-    
     for (int i = 0; i < 16; i++) {
         
         u8 index = slice[i] & mask;
@@ -536,11 +531,6 @@ Denise::drawEven(int offset)
     // Disarm the shift register
     armedEven = false;
     
-    if (firstDrawnPixel == 0) {
-        firstDrawnPixel = currentPixel;
-        // spriteClipBegin = currentPixel - 2;
-    }
-         
     for (int i = 0; i < 16; i++) {
 
         u8 index = slice[i] & mask;
@@ -585,11 +575,6 @@ Denise::drawBoth(int offset)
     
     // Disarm the shift register
     armedEven = armedOdd = false;
-    
-    if (firstDrawnPixel == 0) {
-        firstDrawnPixel = currentPixel;
-        // spriteClipBegin = currentPixel - 2;
-    }
     
     for (int i = 0; i < 16; i++) {
         
@@ -1217,7 +1202,6 @@ Denise::beginOfLine(int vpos)
     // Clear the bBuffer
     memset(bBuffer, 0, sizeof(bBuffer));
 
-    firstDrawnPixel = 0;
     lastDrawnPixel = 0;
 
     // Reset the sprite clipping range

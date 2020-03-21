@@ -52,7 +52,6 @@ public:
     Cycle clock = 0;
 
     // Remembers the pixel position of the first and the last drawn bitplane pixel
-    PixelPos firstDrawnPixel;
     PixelPos lastDrawnPixel;
 
 
@@ -89,13 +88,14 @@ public:
      * Denise transfers the current values of the BPLDAT registers into the
      * shift registers after BPLDAT1 is written to. This is emulated in
      * function fillShiftRegister().
+     *
      * The upper two array elements equal 0. We need these dummy elements in
      * order to pass the array as parameter to function transposeSSE().
      */
-    u16 shiftReg[8];
-    
+    u16 __attribute__ ((aligned (64))) shiftReg[8];
+
     // Bit slices computed out of the shift registers
-    u8 slice[16];
+    u8 __attribute__ ((aligned (64))) slice[16];
     
     // Flags indicating that the shift registers have been loaded
     bool armedEven;
@@ -296,7 +296,6 @@ public:
         worker
 
         & clock
-        & firstDrawnPixel
         & lastDrawnPixel
 
         & bplcon0
