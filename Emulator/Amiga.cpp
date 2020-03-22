@@ -657,7 +657,7 @@ Amiga::_dump()
 void
 Amiga::_warpOn()
 {
-putMessage(MSG_WARP_ON);
+    putMessage(MSG_WARP_ON);
 }
 
 void

@@ -244,6 +244,38 @@ AudioUnit::pokeAUDxVOL(int nr, u16 value)
 }
 
 void
+AudioUnit::rampUp()
+{
+    debug("rampUp\n");
+    
+    // Only proceed if the emulator is not running in warp mode
+    if (warp) return;
+    
+    targetVolume = maxVolume;
+    volumeDelta = 3;
+    ignoreNextUnderOrOverflow();
+}
+
+void
+AudioUnit::rampUpFromZero()
+{
+    debug("rampUpFromZero\n");
+    
+    volume = 0;
+    rampUp();
+}
+ 
+void
+AudioUnit::rampDown()
+{
+    debug("rampDown\n");
+    
+    targetVolume = 0;
+    volumeDelta = 50;
+    ignoreNextUnderOrOverflow();
+}
+
+void
 AudioUnit::clearRingbuffer()
 {
     debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");

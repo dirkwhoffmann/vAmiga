@@ -203,13 +203,13 @@ public:
     /* Triggers volume ramp up phase
      * Configures volume and targetVolume to simulate a smooth audio fade in
      */
-    void rampUp() { targetVolume = maxVolume; volumeDelta = 3; ignoreNextUnderOrOverflow(); }
-    void rampUpFromZero() { volume = 0; rampUp(); }
+    void rampUp();
+    void rampUpFromZero();
     
     /* Triggers volume ramp down phase
      * Configures volume and targetVolume to simulate a quick audio fade out
      */
-    void rampDown() { targetVolume = 0; volumeDelta = 50; ignoreNextUnderOrOverflow(); }
+    void rampDown();
     
     
     //
