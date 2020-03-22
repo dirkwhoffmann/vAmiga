@@ -142,10 +142,12 @@ extension Renderer {
 
         track("Zooming texture in...")
 
-        cutoutX1.target = Renderer.cutoutX1default
-        cutoutY1.target = Renderer.cutoutY1default
-        cutoutX2.target = Renderer.cutoutX2default
-        cutoutY2.target = Renderer.cutoutY2default
+        let targetRect = computeTextureRect()
+        
+        cutoutX1.target = Float(targetRect.minX)
+        cutoutY1.target = Float(targetRect.minY)
+        cutoutX2.target = Float(targetRect.maxX)
+        cutoutY2.target = Float(targetRect.maxY)
 
         cutoutX1.steps = steps
         cutoutY1.steps = steps
@@ -158,6 +160,11 @@ extension Renderer {
     func zoomTextureOut(steps: Int = 30) {
 
         track("Zooming texture out...")
+        
+        cutoutX1.current = Float(textureRect.minX)
+        cutoutY1.current = Float(textureRect.minY)
+        cutoutX2.current = Float(textureRect.maxX)
+        cutoutY2.current = Float(textureRect.maxY)
 
         cutoutX1.target = 0.0
         cutoutY1.target = 0.0

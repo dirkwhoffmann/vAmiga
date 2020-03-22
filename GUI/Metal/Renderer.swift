@@ -195,23 +195,13 @@ class Renderer: NSObject, MTKViewDelegate {
     var hZoom = Defaults.hZoom
     var vZoom = Defaults.vZoom
 
-    static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
-    static let cutoutY1default = Float(VBLANK_CNT + 1) / Float(EmulatorTexture.height)
-    static let cutoutX2default = (Float)(LAST_PIXEL - 8 * 4) / Float(EmulatorTexture.width)
-    static let cutoutY2default = (Float)(VPOS_CNT - 3) / Float(EmulatorTexture.height)
-    
-    var cutoutX1 = AnimatedFloat(cutoutX1default)
-    var cutoutY1 = AnimatedFloat(cutoutY1default)
-    var cutoutX2 = AnimatedFloat(cutoutX2default)
-    var cutoutY2 = AnimatedFloat(cutoutY2default)
-    
-    // Texture cut-out
-    /*
-    var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
-                                  y: CGFloat(cutoutY1default),
-                                  width: CGFloat(cutoutX2default - cutoutX1default),
-                                  height: CGFloat(cutoutY2default - cutoutY1default))
-    */
+    // Animation variables for smooth texture zooming
+    var cutoutX1 = AnimatedFloat.init()
+    var cutoutY1 = AnimatedFloat.init()
+    var cutoutX2 = AnimatedFloat.init()
+    var cutoutY2 = AnimatedFloat.init()
+
+    // Part of the texture that is currently visible
     var textureRect = CGRect.init()
     
     // Use this for  debugging (displays the whole texture):
