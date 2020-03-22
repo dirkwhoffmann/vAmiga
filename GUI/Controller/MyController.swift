@@ -164,15 +164,6 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
     }
-    var eyeX: Float = 0.0 {
-        didSet { renderer.buildMatrices3D() }
-    }
-    var eyeY: Float = 0.0 {
-        didSet { renderer.buildMatrices3D() }
-    }
-    var eyeZ: Float = 0.0 {
-        didSet { renderer.buildMatrices3D() }
-    }
     var blur: Int32 {
         get { return renderer.shaderOptions.blur }
         set { renderer.shaderOptions.blur = newValue }
@@ -270,8 +261,8 @@ class MyController: NSWindowController, MessageReceiver {
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
     var pauseInBackground = Defaults.pauseInBackground
     
-    /// Remembers if the emulator was running or paused when it lost focus.
-    /// Needed to implement the pauseInBackground feature.
+    // Remembers if the emulator was running or paused when it lost focus.
+    // Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
     var takeAutoSnapshots: Bool {

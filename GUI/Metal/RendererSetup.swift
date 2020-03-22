@@ -463,9 +463,9 @@ extension Renderer {
         let yAngle = angleY.current / 180.0 * .pi
         let zAngle = angleZ.current / 180.0 * .pi
 
-        let xShift = -shiftX.current - controller.eyeX
-        let yShift = -shiftY.current - controller.eyeY
-        let zShift = shiftZ.current + controller.eyeZ
+        let xShift = -shiftX.current
+        let yShift = -shiftY.current
+        let zShift = shiftZ.current
 
         let aspect = Float(size.width) / Float(size.height)
 
@@ -475,14 +475,9 @@ extension Renderer {
                                      nearZ: 0.1,
                                      farZ: 100.0)
 
-        /*
         let transEye = translationMatrix(x: xShift,
                                          y: yShift,
-                                         z: zShift + 1.39 - 0.16)
-        */
-        let transEye = translationMatrix(x: xShift,
-                                         y: yShift,
-                                         z: zShift + 1.415 - 0.16)
+                                         z: zShift + 1.393 - 0.16)
 
         let transRotX = translationMatrix(x: 0.0,
                                           y: 0.0,

@@ -1825,7 +1825,7 @@ DQ
                                         <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5n-rO-Hlw">
                                             <rect key="frame" x="286" y="377" width="28" height="30"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="300" doubleValue="150" sliderType="circular" id="YV0-Z7-cli"/>
+                                            <sliderCell key="cell" continuous="YES" refusesFirstResponder="YES" alignment="left" maxValue="200" doubleValue="100" sliderType="circular" id="YV0-Z7-cli"/>
                                             <connections>
                                                 <action selector="vidVZoomAction:" target="-2" id="ZXp-7m-OTB"/>
                                             </connections>
