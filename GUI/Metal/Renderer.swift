@@ -190,10 +190,10 @@ class Renderer: NSObject, MTKViewDelegate {
     var noise = AnimatedFloat(0.0)
     
     // Screen parameters
-    var hCenter = Float(0.5)
-    var vCenter = Float(0.5)
-    var hZoom = Float(0.95)
-    var vZoom = Float(0.95)
+    var hCenter = Defaults.hCenter
+    var vCenter = Defaults.vCenter
+    var hZoom = Defaults.hZoom
+    var vZoom = Defaults.vZoom
 
     static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
     static let cutoutY1default = Float(VBLANK_CNT + 1) / Float(EmulatorTexture.height)
@@ -206,10 +206,13 @@ class Renderer: NSObject, MTKViewDelegate {
     var cutoutY2 = AnimatedFloat(cutoutY2default)
     
     // Texture cut-out
+    /*
     var textureRect = CGRect.init(x: CGFloat(cutoutX1default),
                                   y: CGFloat(cutoutY1default),
                                   width: CGFloat(cutoutX2default - cutoutX1default),
                                   height: CGFloat(cutoutY2default - cutoutY1default))
+    */
+    var textureRect = CGRect.init()
     
     // Use this for  debugging (displays the whole texture):
     // var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
@@ -257,6 +260,7 @@ class Renderer: NSObject, MTKViewDelegate {
         self.controller = controller
         super.init()
 
+        textureRect = computeTextureRect()
         setupMetal()
 
         mtkView.delegate = self

@@ -501,10 +501,10 @@ extension Defaults {
     static let upscaler = 0
     
     // Geometry
-    static let hCenter = Float(0.5)
-    static let vCenter = Float(0.5)
-    static let hZoom   = Float(0.05)
-    static let vZoom   = Float(0.15)
+    static let hCenter = Float(0.1169)
+    static let vCenter = Float(0.1683)
+    static let hZoom   = Float(0.0454)
+    static let vZoom   = Float(0.0349)
 
     // GPU options
     static let shaderOptions = ShaderDefaultsTFT
@@ -575,8 +575,10 @@ extension MyController {
         renderer.vZoom = defaults.float(forKey: Keys.vZoom)
 
         defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
+
+        renderer.updateTextureRect()
         renderer.buildDotMasks()
- 
+        
         amiga.resume()
     }
     
