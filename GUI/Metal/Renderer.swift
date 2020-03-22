@@ -189,7 +189,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
     
-    // Screen parameters
+    // Parameters determining the visible part of the texture
     var hCenter = Defaults.hCenter
     var vCenter = Defaults.vCenter
     var hZoom = Defaults.hZoom
@@ -203,10 +203,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     // Part of the texture that is currently visible
     var textureRect = CGRect.init()
-    
-    // Use this for  debugging (displays the whole texture):
-    // var textureRect = CGRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0)
-    
+        
     // Currently selected texture enhancer
     var enhancer = Defaults.enhancer {
         didSet {
