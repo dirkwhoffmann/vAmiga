@@ -190,9 +190,10 @@ class Renderer: NSObject, MTKViewDelegate {
     var noise = AnimatedFloat(0.0)
     
     // Screen parameters
-    var hshift = Float(0.5)
-    var vshift = Float(0.5)
-    var zoom = Float(0.95)
+    var hCenter = Float(0.5)
+    var vCenter = Float(0.5)
+    var hZoom = Float(0.95)
+    var vZoom = Float(0.95)
 
     static let cutoutX1default = Float(4 * HBLANK_CNT) / Float(EmulatorTexture.width)
     static let cutoutY1default = Float(VBLANK_CNT + 1) / Float(EmulatorTexture.height)
@@ -344,10 +345,10 @@ class Renderer: NSObject, MTKViewDelegate {
         let maxWidth = dw - aw
         let maxHeight = dh - ah
         
-        let width = zoom * maxWidth
-        let bw = aw + hshift * (maxWidth - width)
-        let height = zoom * maxHeight
-        let bh = ah + vshift * (maxHeight - height)
+        let width = (1 - hZoom) * maxWidth
+        let bw = aw + hCenter * (maxWidth - width)
+        let height = (1 - vZoom) * maxHeight
+        let bh = ah + vCenter * (maxHeight - height)
         
         track("aw \(aw) ah \(ah) dw \(dw) dh \(dh)")
         track("maxWidth \(maxWidth) maxHeight \(maxHeight)")

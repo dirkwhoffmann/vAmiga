@@ -482,9 +482,10 @@ extension Keys {
     static let upscaler        = "VAMIGAUpscalerKey"
 
     // Geometry
-    static let hShift          = "VAMIGAHShift"
-    static let vShift          = "VAMIGAVShift"
-    static let zoom            = "VAMIGAZoom"
+    static let hCenter         = "VAMIGAHCenter"
+    static let vCenter         = "VAMIGAVCenter"
+    static let hZoom           = "VAMIGAHZoom"
+    static let vZoom           = "VAMIGAVZoom"
 
     // GPU options
     static let shaderOptions   = "VAMIGAShaderOptionsKey"
@@ -500,10 +501,11 @@ extension Defaults {
     static let upscaler = 0
     
     // Geometry
-    static let hShift = Float(0.5)
-    static let vShift = Float(0.5)
-    static let zoom   = Float(0.9)
-    
+    static let hCenter = Float(0.5)
+    static let vCenter = Float(0.5)
+    static let hZoom   = Float(0.05)
+    static let vZoom   = Float(0.15)
+
     // GPU options
     static let shaderOptions = ShaderDefaultsTFT
 }
@@ -521,9 +523,10 @@ extension MyController {
             Keys.enhancer: Defaults.enhancer,
             Keys.upscaler: Defaults.upscaler,
 
-            Keys.hShift: Defaults.hShift,
-            Keys.vShift: Defaults.vShift,
-            Keys.zoom: Defaults.zoom
+            Keys.hCenter: Defaults.hCenter,
+            Keys.vCenter: Defaults.vCenter,
+            Keys.hZoom: Defaults.hZoom,
+            Keys.vZoom: Defaults.vZoom
         ]
         
         let defaults = UserDefaults.standard
@@ -542,10 +545,11 @@ extension MyController {
                      Keys.enhancer,
                      Keys.upscaler,
                      
-                     Keys.hShift,
-                     Keys.vShift,
-                     Keys.zoom,
-                     
+                     Keys.hCenter,
+                     Keys.vCenter,
+                     Keys.hZoom,
+                     Keys.vZoom,
+
                      Keys.shaderOptions ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -565,9 +569,10 @@ extension MyController {
         brightness = defaults.double(forKey: Keys.brightness)
         contrast = defaults.double(forKey: Keys.contrast)
         saturation = defaults.double(forKey: Keys.saturation)
-        renderer.hshift = defaults.float(forKey: Keys.hShift)
-        renderer.vshift = defaults.float(forKey: Keys.vShift)
-        renderer.zoom   = defaults.float(forKey: Keys.zoom)
+        renderer.hCenter = defaults.float(forKey: Keys.hCenter)
+        renderer.vCenter = defaults.float(forKey: Keys.vCenter)
+        renderer.hZoom = defaults.float(forKey: Keys.hZoom)
+        renderer.vZoom = defaults.float(forKey: Keys.vZoom)
 
         defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
         renderer.buildDotMasks()
@@ -585,10 +590,11 @@ extension MyController {
         defaults.set(brightness, forKey: Keys.brightness)
         defaults.set(contrast, forKey: Keys.contrast)
         defaults.set(saturation, forKey: Keys.saturation)
-        defaults.set(renderer.hshift, forKey: Keys.hShift)
-        defaults.set(renderer.vshift, forKey: Keys.vShift)
-        defaults.set(renderer.zoom, forKey: Keys.zoom)
-        
+        defaults.set(renderer.hCenter, forKey: Keys.hCenter)
+        defaults.set(renderer.vCenter, forKey: Keys.vCenter)
+        defaults.set(renderer.hZoom, forKey: Keys.hZoom)
+        defaults.set(renderer.vZoom, forKey: Keys.vZoom)
+
         defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }

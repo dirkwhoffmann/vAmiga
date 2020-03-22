@@ -81,15 +81,11 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        /*
-        vidEyeXSlider.floatValue = parent.eyeX
-        vidEyeYSlider.floatValue = parent.eyeY
-        vidEyeZSlider.floatValue = parent.eyeZ
-        */
-        vidEyeXSlider.floatValue = parent.renderer.hshift * 1000
-        vidEyeYSlider.floatValue = parent.renderer.vshift * 1000
-        vidEyeZSlider.floatValue = parent.renderer.zoom * 1000
-
+        vidHCenter.floatValue = parent.renderer.hCenter * 1000
+        vidVCenter.floatValue = parent.renderer.vCenter * 1000
+        vidHZoom.floatValue = parent.renderer.hZoom * 1000
+        vidVZoom.floatValue = parent.renderer.vZoom * 1000
+  
         // OK Button
         vidOKButton.title = buttonLabel
     }
@@ -240,36 +236,39 @@ extension PreferencesController {
     // Action methods (Geometry)
     //
         
-    @IBAction func vidEyeXAction(_ sender: NSSlider!) {
+    @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
-        // parent.eyeX = sender.floatValue
-
-        parent.renderer.hshift = sender.floatValue / 1000
+        parent.renderer.hCenter = sender.floatValue / 1000
         parent.renderer.updateTextureRect()
-        track("vidEyeXAction: \(parent.renderer.hshift)")
+        track("vidHCenterAction: \(parent.renderer.hCenter)")
         
         refresh()
     }
     
-    @IBAction func vidEyeYAction(_ sender: NSSlider!) {
+    @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
-        // parent.eyeY = sender.floatValue
-        
-        parent.renderer.vshift = sender.floatValue / 1000
+        parent.renderer.vCenter = sender.floatValue / 1000
         parent.renderer.updateTextureRect()
-        track("vidEyeYAction: \(parent.renderer.vshift)")
+        track("vidVCenterAction: \(parent.renderer.vCenter)")
         
         refresh()
     }
     
-    @IBAction func vidEyeZAction(_ sender: NSSlider!) {
+    @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
-        // parent.eyeZ = sender.floatValue
-
-        parent.renderer.zoom = sender.floatValue / 1000
+        parent.renderer.hZoom = sender.floatValue / 1000
         parent.renderer.updateTextureRect()
-        track("vidEyeZAction: \(parent.renderer.zoom)")
+        track("vidHZoomAction: \(parent.renderer.hZoom)")
+        
+        refresh()
+    }
 
+    @IBAction func vidVZoomAction(_ sender: NSSlider!) {
+        
+        parent.renderer.vZoom = sender.floatValue / 1000
+        parent.renderer.updateTextureRect()
+        track("vidVZoomAction: \(parent.renderer.vZoom)")
+        
         refresh()
     }
     

@@ -145,9 +145,10 @@ class PreferencesController: DialogController {
     @IBOutlet weak var vidMisalignmentYSlider: NSSlider!
     
     // Geometry
-    @IBOutlet weak var vidEyeXSlider: NSSlider!
-    @IBOutlet weak var vidEyeYSlider: NSSlider!
-    @IBOutlet weak var vidEyeZSlider: NSSlider!
+    @IBOutlet weak var vidHCenter: NSSlider!
+    @IBOutlet weak var vidVCenter: NSSlider!
+    @IBOutlet weak var vidHZoom: NSSlider!
+    @IBOutlet weak var vidVZoom: NSSlider!
 
     // Button
     @IBOutlet weak var vidOKButton: NSButton!
