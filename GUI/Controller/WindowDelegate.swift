@@ -117,8 +117,8 @@ extension MyController: NSWindowDelegate {
         let metalX = metalFrame.size.width + deltaX
         let metalY = metalFrame.size.height + deltaY
         
-        // We want to achieve an aspect ratio of 804:621
-        let newMetalX  = metalY * (804.0 / 621.0)
+        // We want to achieve an aspect ratio of 4:3
+        let newMetalX  = metalY * (800.0 / 600.0)
         let dx = newMetalX - metalX
         
         return NSSize.init(width: size.width + dx, height: size.height)
