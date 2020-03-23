@@ -866,17 +866,12 @@ Agnus::serviceBPLEvent()
 template <int nr> void
 Agnus::serviceBPLEventHires()
 {
-    if (nr == 0) {
-        denise.bpldat[0] = doBitplaneDMA<0>();
-        denise.fillShiftRegisters();
-        
-        // Add modulo if this is the last fetch unit
-        if (pos.h >= ddfHires.stopOdd - 4) addBPLMOD<0>();
-        
-        return;
-    }
+     // Perform bitplane DMA
     denise.bpldat[nr] = doBitplaneDMA<nr>();
 
+    // Fill shift registers is bpldat[0] has been written
+    if (nr == 0) denise.fillShiftRegisters();
+            
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfHires.stopOdd - 4) addBPLMOD<nr>();
 }
@@ -884,17 +879,12 @@ Agnus::serviceBPLEventHires()
 template <int nr> void
 Agnus::serviceBPLEventLores()
 {
-    if (nr == 0) {
-        denise.bpldat[0] = doBitplaneDMA<0>();
-        denise.fillShiftRegisters();
-        
-        // Add modulo if this is the last fetch unit
-        if (pos.h >= ddfLores.stopOdd - 8) addBPLMOD<0>();
-        
-        return;
-    }
+    // Perform bitplane DMA
     denise.bpldat[nr] = doBitplaneDMA<nr>();
-    
+
+    // Fill shift registers is bpldat[0] has been written
+    if (nr == 0) denise.fillShiftRegisters();
+            
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfLores.stopOdd - 8) addBPLMOD<nr>();
 }
