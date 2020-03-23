@@ -1236,8 +1236,8 @@ Agnus::computeDDFWindowOCS()
             ddfLores.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
             ddfHires.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
         } else {
-            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
-            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
+            ddfLores.clear();
+            ddfHires.clear();
             ocsEarlyAccessLine = pos.v + 1;
         }
         return;
@@ -1271,8 +1271,8 @@ Agnus::computeDDFWindowOCS()
     switch (table[index].interval) {
 
         case DDF_EMPTY:
-            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
-            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
+            ddfLores.clear();
+            ddfHires.clear();
             break;
         case DDF_STRT_STOP:
             ddfLores.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
@@ -1364,8 +1364,8 @@ Agnus::computeDDFWindowECS()
     switch (table[index].interval) {
 
         case DDF_EMPTY:
-            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
-            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
+            ddfLores.clear();
+            ddfHires.clear();
             break;
         case DDF_STRT_STOP:
             ddfLores.compute(ddfstrt, ddfstop, bplcon1 & 0xF);
