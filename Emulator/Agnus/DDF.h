@@ -16,24 +16,29 @@
 template <bool hires>
 struct DDF
 {
-    // First bitplane DMA cycle
-    i16 strt;
+    // First bitplane DMA cycle of even and odd bitplanes
+    i16 strtEven;
+    i16 strtOdd;
     
-    // Last bitplane DMA cycle + 1
-    i16 stop;
-
-    DDF() : strt(0), stop(0) { }
-    DDF(u16 strt, i16 stop) : strt(strt), stop(stop) { }
-
-    template <class T> void applyToItems(T& worker) { worker & strt & stop; }
+    // Last bitplane DMA cycle + 1 of even and odd bitplanes
+    i16 stopEven;
+    i16 stopOdd;
     
-    DDF& operator=(const DDF& ddf)
-    {
-        strt = ddf.strt;
-        stop = ddf.stop;
-        return *this;
+    DDF() : strtEven(0), strtOdd(0), stopEven(0), stopOdd(0) { }
+
+    template <class T> void applyToItems(T& worker) {
+        
+        worker
+        
+        & strtEven
+        & strtOdd
+        & stopEven
+        & stopOdd;
     }
-
+    
+    void clear() { strtEven = strtOdd = stopEven = stopOdd = 0; }
+    
+    /*
     bool operator==(const DDF& ddf) const
     {
         return strt == ddf.strt && stop == ddf.stop;
@@ -43,7 +48,8 @@ struct DDF
     {
         return strt != ddf.strt || stop != ddf.stop;
     }
-
+    */
+    
     /* Computes a DDF window
      *
      *       strt : Cycle number from DDFSTRT
@@ -53,7 +59,8 @@ struct DDF
      * The function assumes that stop is greater than strt. Other combinations
      * are not yet supported by the emulator.
      */
-    void compute(i16 ddfstrt, i16 ddfstop, u8 scroll);
+    void compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
+    void compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll);
 };
 
 #endif

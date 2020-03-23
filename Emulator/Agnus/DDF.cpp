@@ -11,7 +11,14 @@
 #include "DDF.h"
 
 template <bool hires> void
-DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u8 scroll)
+DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
+{
+    compute(strtEven, stopEven, ddfstrt, ddfstop, bplcon1 >> 0);
+    compute(strtOdd,  stopOdd,  ddfstrt, ddfstop, bplcon1 >> 8);
+}
+
+template <bool hires> void
+DDF<hires>::compute(i16 &strt, i16 &stop, i16 ddfstrt, i16 ddfstop, int scroll)
 {
     if (hires) {
                 
@@ -49,5 +56,5 @@ DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u8 scroll)
     }
 }
 
-template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop, u8 scroll);
-template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop, u8 scroll);
+template void DDF<true>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);
+template void DDF<false>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1);

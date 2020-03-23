@@ -870,12 +870,12 @@ Agnus::serviceBPLEventHires()
         denise.bpldat[0] = doBitplaneDMA<0>();
         denise.fillShiftRegisters();
         
-        if(unlikely(isLastHx(pos.h))) addBPLMOD<0>();
+        if(unlikely(isLastHxOdd(pos.h))) addBPLMOD<0>();
         
         return;
     }
     denise.bpldat[nr] = doBitplaneDMA<nr>();
-    if(unlikely(isLastHx(pos.h))) addBPLMOD<nr>();
+    if(unlikely(isLastHxOdd(pos.h))) addBPLMOD<nr>();
 }
 
 template <int nr> void
@@ -885,12 +885,12 @@ Agnus::serviceBPLEventLores()
         denise.bpldat[0] = doBitplaneDMA<0>();
         denise.fillShiftRegisters();
         
-        if(unlikely(isLastLx(pos.h))) addBPLMOD<0>();
+        if(unlikely(isLastLxOdd(pos.h))) addBPLMOD<0>();
         
         return;
     }
     denise.bpldat[nr] = doBitplaneDMA<nr>();
-    if(unlikely(isLastLx(pos.h))) addBPLMOD<nr>();
+    if(unlikely(isLastLxOdd(pos.h))) addBPLMOD<nr>();
 }
 
 void

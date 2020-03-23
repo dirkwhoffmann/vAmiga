@@ -282,17 +282,19 @@ public:
     DDF<false> ddfLores;
     DDF<true> ddfHires;
     
+    /*
     bool inLoresDmaArea(i16 pos) { return pos >= ddfLores.strt && pos < ddfLores.stop; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfHires.strt && pos < ddfHires.stop; }
+    */
     
     bool inLoresDmaAreaEven(i16 pos) {
-        return !(pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
+        return !(pos & 4) && pos >= ddfLores.strtEven && pos < ddfLores.stopEven; }
     bool inLoresDmaAreaOdd(i16 pos) {
-        return (pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
+        return (pos & 4) && pos >= ddfLores.strtOdd && pos < ddfLores.stopOdd; }
     bool inHiresDmaAreaEven(i16 pos) {
-        return !(pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
+        return !(pos & 2) && pos >= ddfHires.strtEven && pos < ddfHires.stopEven; }
     bool inHiresDmaAreaOdd(i16 pos) {
-        return (pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
+        return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
 
     
     //
@@ -716,10 +718,10 @@ public:
 public:
 
     // Returns true if the specified cycle contains the last Lx event
-    bool isLastLx(i16 dmaCycle);
+    bool isLastLxOdd(i16 dmaCycle);
 
     // Returns true if the specified cycle contains the last Hx event
-    bool isLastHx(i16 dmaCycle);
+    bool isLastHxOdd(i16 dmaCycle);
 
     // Removes all events from the BPL event table
     void clearBplEvents();

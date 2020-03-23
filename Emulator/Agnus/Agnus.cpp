@@ -744,15 +744,15 @@ Agnus::updateDasJumpTable(i16 end)
 }
 
 bool
-Agnus::isLastLx(i16 dmaCycle)
+Agnus::isLastLxOdd(i16 dmaCycle)
 {
-    return (pos.h >= ddfLores.stop - 8);
+    return (pos.h >= ddfLores.stopOdd - 8);
 }
 
 bool
-Agnus::isLastHx(i16 dmaCycle)
+Agnus::isLastHxOdd(i16 dmaCycle)
 {
-    return (pos.h >= ddfHires.stop - 4);
+    return (pos.h >= ddfHires.stopOdd - 4);
 }
 
 void
@@ -818,8 +818,10 @@ Agnus::dumpBplEventTable()
     // Dump the event table
     msg("Event table:\n\n");
     msg("ddfstrt = %X dffstop = %X\n", ddfstrt, ddfstop);
-    msg("ddfLores: (%X - %X)", ddfLores.strt, ddfLores.stop);
-    msg("ddfHires: (%X - %X)", ddfHires.strt, ddfHires.stop);
+    msg("ddfLoresOdd:  (%X - %X)", ddfLores.strtOdd, ddfLores.stopOdd);
+    msg("ddfLoresEven: (%X - %X)", ddfLores.strtEven, ddfLores.stopEven);
+    msg("ddfHiresOdd:  (%X - %X)", ddfHires.strtOdd, ddfHires.stopOdd);
+    msg("ddfHiresEven: (%X - %X)", ddfHires.strtEven, ddfHires.stopEven);
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);
@@ -1174,10 +1176,10 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 void
 Agnus::predictDDF()
 {
-    i16 ddfStrtLoresOld = ddfLores.strt;
-    i16 ddfStopLoresOld = ddfLores.stop;
-    i16 ddfStrtHiresOld = ddfHires.strt;
-    i16 ddfStopHiresOld = ddfHires.stop;
+    i16 ddfStrtLoresOld = ddfLores.strtOdd;
+    i16 ddfStopLoresOld = ddfLores.stopOdd;
+    i16 ddfStrtHiresOld = ddfHires.strtOdd;
+    i16 ddfStopHiresOld = ddfHires.stopOdd;
     DDFState ddfStateOld = ddfState;
 
     ddfstrtReached = ddfstrt < HPOS_CNT ? ddfstrt : -1;
@@ -1185,20 +1187,20 @@ Agnus::predictDDF()
 
     computeDDFWindow();
 
-    assert(ddfLores.strt == ddfLores.strt);
-    assert(ddfHires.strt == ddfHires.strt);
-    assert(ddfLores.stop == ddfLores.stop);
-    assert(ddfHires.stop == ddfHires.stop);
-    if (ddfLores.strt != ddfStrtLoresOld || ddfLores.stop != ddfStopLoresOld ||
-        ddfHires.strt != ddfStrtHiresOld || ddfHires.stop != ddfStopHiresOld ||
+    assert(ddfLores.strtOdd == ddfLores.strtOdd);
+    assert(ddfHires.strtOdd == ddfHires.strtOdd);
+    assert(ddfLores.stopOdd == ddfLores.stopOdd);
+    assert(ddfHires.stopOdd == ddfHires.stopOdd);
+    if (ddfLores.strtOdd != ddfStrtLoresOld || ddfLores.stopOdd != ddfStopLoresOld ||
+        ddfHires.strtOdd != ddfStrtHiresOld || ddfHires.stopOdd != ddfStopHiresOld ||
         ddfState != ddfStateOld) {
 
         hsyncActions |= HSYNC_UPDATE_BPL_TABLE; // Update the DMA slot
         hsyncActions |= HSYNC_PREDICT_DDF; // Call this function again
     }
 
-    debug(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfLores.strt, ddfLores.stop);
-    debug(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfHires.strt, ddfHires.stop);
+    debug(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfLores.strtOdd, ddfLores.stopOdd);
+    debug(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfHires.strtOdd, ddfHires.stopOdd);
 }
 
 void
@@ -1234,7 +1236,8 @@ Agnus::computeDDFWindowOCS()
             ddfLores.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
             ddfHires.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
         } else {
-            ddfLores.strt = ddfLores.stop = ddfHires.strt = ddfHires.stop = 0;
+            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
+            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
             ocsEarlyAccessLine = pos.v + 1;
         }
         return;
@@ -1268,7 +1271,8 @@ Agnus::computeDDFWindowOCS()
     switch (table[index].interval) {
 
         case DDF_EMPTY:
-            ddfLores.strt = ddfLores.stop = ddfHires.strt = ddfHires.stop = 0;
+            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
+            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
             break;
         case DDF_STRT_STOP:
             ddfLores.compute(ddfstrtReached, ddfstopReached, bplcon1 & 0xF);
@@ -1288,8 +1292,10 @@ Agnus::computeDDFWindowOCS()
             break;
     }
 
-    debug(DDF_DEBUG, "DDF Window (OCS): (%d,%d) (%d,%d)\n",
-          ddfLores.strt, ddfHires.strt, ddfLores.stop, ddfHires.stop);
+    debug(DDF_DEBUG, "DDF Window Odd (OCS):  (%d,%d) (%d,%d)\n",
+          ddfLores.strtOdd, ddfHires.strtOdd, ddfLores.stopOdd, ddfHires.stopOdd);
+    debug(DDF_DEBUG, "DDF Window Even (OCS): (%d,%d) (%d,%d)\n",
+          ddfLores.strtEven, ddfHires.strtEven, ddfLores.stopEven, ddfHires.stopEven);
 
     return;
 }
@@ -1358,7 +1364,8 @@ Agnus::computeDDFWindowECS()
     switch (table[index].interval) {
 
         case DDF_EMPTY:
-            ddfLores.strt = ddfLores.stop = ddfHires.strt = ddfHires.stop = 0;
+            ddfLores.strtOdd = ddfLores.stopOdd = ddfHires.strtOdd = ddfHires.stopOdd = 0;
+            ddfLores.strtEven = ddfLores.stopEven = ddfHires.strtEven = ddfHires.stopEven = 0;
             break;
         case DDF_STRT_STOP:
             ddfLores.compute(ddfstrt, ddfstop, bplcon1 & 0xF);
@@ -1379,8 +1386,10 @@ Agnus::computeDDFWindowECS()
     }
     ddfState = table[index].state;
 
-    debug(DDF_DEBUG, "DDF Window (ECS): (%d,%d) (%d,%d)\n",
-          ddfLores.strt, ddfHires.strt, ddfLores.stop, ddfHires.stop);
+    debug(DDF_DEBUG, "DDF Window Odd (ECS):  (%d,%d) (%d,%d)\n",
+          ddfLores.strtOdd, ddfHires.strtOdd, ddfLores.stopOdd, ddfHires.stopOdd);
+    debug(DDF_DEBUG, "DDF Window Even (ECS): (%d,%d) (%d,%d)\n",
+          ddfLores.strtEven, ddfHires.strtEven, ddfLores.stopEven, ddfHires.stopEven);
 
     return;
 }
