@@ -94,7 +94,7 @@ public:
     // Counters
     //
     
-    // Agnus has been emulated up to this clock cycle
+    // Agnus has been emulated up to this master clock cycle
     Cycle clock;
 
     // The current beam position
@@ -125,12 +125,12 @@ public:
     // Ringbuffer for managing register change delays
     RegChangeRecorder<8> changeRecorder;
 
-    // A copy of BPLCON0 and bplcon1 (Denise has its own copies)
+    // A copy of BPLCON0 and BPLCON1 (Denise has its own copies)
     u16 bplcon0;
     u16 bplcon1;
     
     /* Horizontal shift values
-     * All four values are extracted from bplcon1 in setBPLCON1() and utilized
+     * All four values are extracted from BPLCON1 in setBPLCON1() and utilized
      * to emulate horizontal scrolling. They control at which DMA cycles the
      * BPLDAT registers are transfered into the shift registers.
      */
@@ -139,7 +139,7 @@ public:
     i8 scrollHiresOdd;
     i8 scrollHiresEven;
     
-    /* Value of bplcon0 at the DDFSTRT trigger cycle.
+    /* Value of BPLCON0 at the DDFSTRT trigger cycle.
      * This variable is set at the beginning of each rasterline and updated
      * on-the-fly when dmacon changes before the trigger conditions has been
      * reached.
@@ -285,8 +285,17 @@ public:
 
     bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
+    
+    bool inLoresDmaAreaEven(i16 pos) {
+        return !(pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
+    bool inLoresDmaAreaOdd(i16 pos) {
+        return (pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
+    bool inHiresDmaAreaEven(i16 pos) {
+        return !(pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
+    bool inHiresDmaAreaOdd(i16 pos) {
+        return (pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
 
-
+    
     //
     // Display Window (DIW)
     //
@@ -583,7 +592,7 @@ public:
 public:
 
     /* Translates a beam position to a master cycle.
-     * 'beam' is a position inside the current frame.
+     * 'beam' must be a position inside the current frame.
      */
     Cycle beamToCycle(Beam beam);
 
@@ -786,11 +795,9 @@ private:
     void computeDDFWindow();
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
+    void computeStandardDDFWindow(i16 strt, i16 stop);
 
 public:
-
-    // Called by computeDDFWindowOCS() and computeDDFWindowECS()
-    void computeStandardDDFWindow(i16 strt, i16 stop);
 
     // BPLCON0 and BPLCON1
     void pokeBPLCON0(u16 value);
@@ -828,7 +835,7 @@ public:
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
 
-    // Schedules a register to change
+    // Schedules a register to change its value
     void recordRegisterChange(Cycle delay, u32 addr, u16 value);
 
 private:

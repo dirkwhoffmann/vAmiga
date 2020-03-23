@@ -632,15 +632,20 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 
     // Allocate slots
     if (hires) {
-        for (int i = first; i <= last; i++) {
-            bplEvent[i] = inHiresDmaArea(i) ? bplDMA[1][channels][i] : EVENT_NONE;
-        }
+        
+        for (int i = first; i <= last; i++)
+            bplEvent[i] =
+            inHiresDmaAreaOdd(i) ? bplDMA[1][channels][i] :
+            inHiresDmaAreaEven(i) ? bplDMA[1][channels][i] : EVENT_NONE;
+        
     } else {
-        for (int i = first; i <= last; i++) {
-            bplEvent[i] = inLoresDmaArea(i) ? bplDMA[0][channels][i] : EVENT_NONE;
-        }
+        
+        for (int i = first; i <= last; i++)
+            bplEvent[i] =
+            inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
+            inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
     }
-
+    
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
     
