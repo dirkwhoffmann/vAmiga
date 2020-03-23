@@ -38,17 +38,19 @@ struct DDF
     
     void clear() { strtEven = strtOdd = stopEven = stopOdd = 0; }
     
-    /*
     bool operator==(const DDF& ddf) const
     {
-        return strt == ddf.strt && stop == ddf.stop;
+        return
+        strtEven == ddf.strtEven &&
+        stopEven == ddf.stopEven &&
+        strtOdd == ddf.strtOdd &&
+        stopOdd == ddf.stopOdd;
     }
 
     bool operator!=(const DDF& ddf) const
     {
-        return strt != ddf.strt || stop != ddf.stop;
+        return !(*this == ddf);
     }
-    */
     
     /* Computes a DDF window
      *

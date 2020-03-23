@@ -13,7 +13,7 @@
 template <bool hires> void
 DDF<hires>::compute(i16 ddfstrt, i16 ddfstop, u16 bplcon1)
 {
-    compute(strtEven, stopEven, ddfstrt, ddfstop, bplcon1 >> 0);
+    compute(strtEven, stopEven, ddfstrt, ddfstop, bplcon1);
     compute(strtOdd,  stopOdd,  ddfstrt, ddfstop, bplcon1 >> 8);
 }
 

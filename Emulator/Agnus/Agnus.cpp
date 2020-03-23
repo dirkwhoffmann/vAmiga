@@ -1164,29 +1164,21 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 void
 Agnus::predictDDF()
 {
-    i16 ddfStrtLoresOld = ddfLores.strtOdd;
-    i16 ddfStopLoresOld = ddfLores.stopOdd;
-    i16 ddfStrtHiresOld = ddfHires.strtOdd;
-    i16 ddfStopHiresOld = ddfHires.stopOdd;
-    DDFState ddfStateOld = ddfState;
-
+    DDF oldLores = ddfLores;
+    DDF oldHires = ddfHires;
+    DDFState oldState = ddfState;
+    
     ddfstrtReached = ddfstrt < HPOS_CNT ? ddfstrt : -1;
     ddfstopReached = ddfstop < HPOS_CNT ? ddfstop : -1;
-
+    
     computeDDFWindow();
-
-    assert(ddfLores.strtOdd == ddfLores.strtOdd);
-    assert(ddfHires.strtOdd == ddfHires.strtOdd);
-    assert(ddfLores.stopOdd == ddfLores.stopOdd);
-    assert(ddfHires.stopOdd == ddfHires.stopOdd);
-    if (ddfLores.strtOdd != ddfStrtLoresOld || ddfLores.stopOdd != ddfStopLoresOld ||
-        ddfHires.strtOdd != ddfStrtHiresOld || ddfHires.stopOdd != ddfStopHiresOld ||
-        ddfState != ddfStateOld) {
-
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE; // Update the DMA slot
-        hsyncActions |= HSYNC_PREDICT_DDF; // Call this function again
+    
+    if (ddfLores != oldLores || ddfHires != oldHires || ddfState != oldState) {
+        
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE; // Update bitplane events
+        hsyncActions |= HSYNC_PREDICT_DDF;      // Call this function again
     }
-
+    
     debug(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfLores.strtOdd, ddfLores.stopOdd);
     debug(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfHires.strtOdd, ddfHires.stopOdd);
 }
@@ -1291,11 +1283,6 @@ Agnus::computeDDFWindowOCS()
 void
 Agnus::computeDDFWindowECS()
 {
-    // i16 ddfstrt = ddfstrtReached - ((bplcon1 >> 1) & 0x7);
-    // i16 ddfstop = ddfstopReached - ((bplcon1 >> 1) & 0x7);
-    i16 ddfstrt = ddfstrtReached;
-    i16 ddfstop = ddfstopReached;
-
     /* To determine the correct data fetch window, we need to distinguish
      * (too) small, medium, and (too) large DIWSTRT / DIWSTOP values.
      *
@@ -1303,8 +1290,8 @@ Agnus::computeDDFWindowECS()
      *   1:  medium : Value complies to the specs.
      *   2:   large : Value is larger than HPOS_MAX and thus never reached.
      */
-    int strt = (ddfstrt < 0) ? 2 : (ddfstrt < 0x18) ? 0 : 1;
-    int stop = (ddfstop < 0) ? 2 : (ddfstop < 0x18) ? 0 : 1;
+    int strt = (ddfstrtReached < 0) ? 2 : (ddfstrtReached < 0x18) ? 0 : 1;
+    int stop = (ddfstopReached < 0) ? 2 : (ddfstopReached < 0x18) ? 0 : 1;
 
     /* Nr | DDFSTRT | DDFSTOP | State   || Data Fetch Window   | Next State
      *  --------------------------------------------------------------------
@@ -1356,20 +1343,20 @@ Agnus::computeDDFWindowECS()
             ddfHires.clear();
             break;
         case DDF_STRT_STOP:
-            ddfLores.compute(ddfstrt, ddfstop, bplcon1 & 0xF);
-            ddfHires.compute(ddfstrt, ddfstop, bplcon1 & 0xF);
+            ddfLores.compute(ddfstrtReached, ddfstopReached, bplcon1);
+            ddfHires.compute(ddfstrtReached, ddfstopReached, bplcon1);
             break;
         case DDF_STRT_D8:
-            ddfLores.compute(ddfstrt, 0xD8, bplcon1 & 0xF);
-            ddfHires.compute(ddfstrt, 0xD8, bplcon1 & 0xF);
+            ddfLores.compute(ddfstrtReached, 0xD8, bplcon1);
+            ddfHires.compute(ddfstrtReached, 0xD8, bplcon1);
             break;
         case DDF_18_STOP:
-            ddfLores.compute(0x18, ddfstop, bplcon1 & 0xF);
-            ddfHires.compute(0x18, ddfstop, bplcon1 & 0xF);
+            ddfLores.compute(0x18, ddfstopReached, bplcon1);
+            ddfHires.compute(0x18, ddfstopReached, bplcon1);
             break;
         case DDF_18_D8:
-            ddfLores.compute(0x18, 0xD8, bplcon1 & 0xF);
-            ddfHires.compute(0x18, 0xD8, bplcon1 & 0xF);
+            ddfLores.compute(0x18, 0xD8, bplcon1);
+            ddfHires.compute(0x18, 0xD8, bplcon1);
             break;
     }
     ddfState = table[index].state;
