@@ -743,18 +743,6 @@ Agnus::updateDasJumpTable(i16 end)
     }
 }
 
-bool
-Agnus::isLastLxOdd(i16 dmaCycle)
-{
-    return (pos.h >= ddfLores.stopOdd - 8);
-}
-
-bool
-Agnus::isLastHxOdd(i16 dmaCycle)
-{
-    return (pos.h >= ddfHires.stopOdd - 4);
-}
-
 void
 Agnus::dumpEventTable(EventID *table, char str[256][3], int from, int to)
 {

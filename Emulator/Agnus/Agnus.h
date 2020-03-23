@@ -717,12 +717,6 @@ public:
     
 public:
 
-    // Returns true if the specified cycle contains the last Lx event
-    bool isLastLxOdd(i16 dmaCycle);
-
-    // Returns true if the specified cycle contains the last Hx event
-    bool isLastHxOdd(i16 dmaCycle);
-
     // Removes all events from the BPL event table
     void clearBplEvents();
 
