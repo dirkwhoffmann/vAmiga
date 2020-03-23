@@ -10,6 +10,8 @@
 #ifndef _VA_ALIASES_INC
 #define _VA_ALIASES_INC
 
+#include <stdint.h>
+
 //
 // Basic types
 //

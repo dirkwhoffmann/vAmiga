@@ -14,6 +14,7 @@
 #include "Beam.h"
 #include "Blitter.h"
 #include "Copper.h"
+#include "DDF.h"
 #include "DmaDebugger.h"
 #include "Event.h"
 #include "HardwareComponent.h"
@@ -277,22 +278,33 @@ public:
     // DDF flipflops
     bool ddfVFlop;
 
-    // The actual data fetch window
+    // The actual data fetch window (DEPRECATED)
     i16 ddfStrtLores;      // First lores bitplane DMA cycle
     i16 ddfStopLores;      // Last lores bitplane DMA cycle + 1
     i16 ddfStrtHires;      // First hires bitplane DMA cycle
     i16 ddfStopHires;      // Last hires bitplane DMA cycle + 1
 
+    DDF<true> ddfHires;
+    DDF<false> ddfLores;
+    
     bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
     
     bool inLoresDmaAreaEven(i16 pos) {
+        assert(ddfLores.strt == ddfStrtLores);
+        assert(ddfLores.stop == ddfStopLores);
         return !(pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inLoresDmaAreaOdd(i16 pos) {
+        assert(ddfLores.strt == ddfStrtLores);
+        assert(ddfLores.stop == ddfStopLores);
         return (pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
     bool inHiresDmaAreaEven(i16 pos) {
+        assert(ddfHires.strt == ddfStrtHires);
+        assert(ddfHires.stop == ddfStopHires);
         return !(pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
     bool inHiresDmaAreaOdd(i16 pos) {
+        assert(ddfHires.strt == ddfStrtHires);
+        assert(ddfHires.stop == ddfStopHires);
         return (pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
 
     
@@ -457,6 +469,8 @@ public:
         & ddfStrtHires
         & ddfStopLores
         & ddfStopHires
+        & ddfLores
+        & ddfHires
         & ddfState
         & ocsEarlyAccessLine
 

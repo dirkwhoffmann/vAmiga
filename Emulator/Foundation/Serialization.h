@@ -10,10 +10,11 @@
 #ifndef _SERIALIZATION_INC
 #define _SERIALIZATION_INC
 
-#include "Event.h"
+#include "AmigaTypes.h"
 #include "Beam.h"
 #include "Buffers.h"
-#include "AmigaTypes.h"
+#include "DDF.h"
+#include "Event.h"
 
 
 //
@@ -135,6 +136,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
+    STRUCT(DDF<true>)
+    STRUCT(DDF<false>)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -211,6 +214,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
+    STRUCT(DDF<true>)
+    STRUCT(DDF<false>)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -293,6 +298,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
+    STRUCT(DDF<true>)
+    STRUCT(DDF<false>)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -364,6 +371,8 @@ public:
 
     STRUCT(Event)
     STRUCT(Beam)
+    STRUCT(DDF<true>)
+    STRUCT(DDF<false>)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)

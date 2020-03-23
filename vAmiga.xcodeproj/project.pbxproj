@@ -151,6 +151,7 @@
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
 		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
+		50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F924FB2428B8CD00DD91AB /* DDF.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -382,6 +383,8 @@
 		50F6EEB721F4F5C60091155D /* Disk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Disk.h; sourceTree = "<group>"; };
 		50F6EEBC21F4F61F0091155D /* Drive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Drive.cpp; sourceTree = "<group>"; };
 		50F6EEBD21F4F61F0091155D /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
+		50F924FB2428B8CD00DD91AB /* DDF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DDF.cpp; sourceTree = "<group>"; };
+		50F924FC2428B8CD00DD91AB /* DDF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDF.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,6 +421,8 @@
 		502F7DD0222170AE00AEEC65 /* Agnus */ = {
 			isa = PBXGroup;
 			children = (
+				50F924FC2428B8CD00DD91AB /* DDF.h */,
+				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
@@ -1077,6 +1082,7 @@
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,
+				50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
