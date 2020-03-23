@@ -278,34 +278,21 @@ public:
     // DDF flipflops
     bool ddfVFlop;
 
-    // The actual data fetch window (DEPRECATED)
-    i16 ddfStrtLores;      // First lores bitplane DMA cycle
-    i16 ddfStopLores;      // Last lores bitplane DMA cycle + 1
-    i16 ddfStrtHires;      // First hires bitplane DMA cycle
-    i16 ddfStopHires;      // Last hires bitplane DMA cycle + 1
-
-    DDF<true> ddfHires;
+    // Display data fetch window in lores and hires mode
     DDF<false> ddfLores;
+    DDF<true> ddfHires;
     
-    bool inLoresDmaArea(i16 pos) { return pos >= ddfStrtLores && pos < ddfStopLores; }
-    bool inHiresDmaArea(i16 pos) { return pos >= ddfStrtHires && pos < ddfStopHires; }
+    bool inLoresDmaArea(i16 pos) { return pos >= ddfLores.strt && pos < ddfLores.stop; }
+    bool inHiresDmaArea(i16 pos) { return pos >= ddfHires.strt && pos < ddfHires.stop; }
     
     bool inLoresDmaAreaEven(i16 pos) {
-        assert(ddfLores.strt == ddfStrtLores);
-        assert(ddfLores.stop == ddfStopLores);
-        return !(pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
+        return !(pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
     bool inLoresDmaAreaOdd(i16 pos) {
-        assert(ddfLores.strt == ddfStrtLores);
-        assert(ddfLores.stop == ddfStopLores);
-        return (pos & 4) && pos >= ddfStrtLores && pos < ddfStopLores; }
+        return (pos & 4) && pos >= ddfLores.strt && pos < ddfLores.stop; }
     bool inHiresDmaAreaEven(i16 pos) {
-        assert(ddfHires.strt == ddfStrtHires);
-        assert(ddfHires.stop == ddfStopHires);
-        return !(pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
+        return !(pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
     bool inHiresDmaAreaOdd(i16 pos) {
-        assert(ddfHires.strt == ddfStrtHires);
-        assert(ddfHires.stop == ddfStopHires);
-        return (pos & 2) && pos >= ddfStrtHires && pos < ddfStopHires; }
+        return (pos & 2) && pos >= ddfHires.strt && pos < ddfHires.stop; }
 
     
     //
@@ -465,10 +452,6 @@ public:
         & ddfstrtReached
         & ddfstopReached
         & ddfVFlop
-        & ddfStrtLores
-        & ddfStrtHires
-        & ddfStopLores
-        & ddfStopHires
         & ddfLores
         & ddfHires
         & ddfState
@@ -809,7 +792,7 @@ private:
     void computeDDFWindow();
     void computeDDFWindowOCS();
     void computeDDFWindowECS();
-    void computeStandardDDFWindow(i16 strt, i16 stop);
+    // void computeStandardDDFWindow(i16 strt, i16 stop);
 
 public:
 

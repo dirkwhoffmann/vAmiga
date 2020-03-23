@@ -16,7 +16,10 @@
 template <bool hires>
 struct DDF
 {
+    // First bitplane DMA cycle
     i16 strt;
+    
+    // Last bitplane DMA cycle + 1
     i16 stop;
 
     DDF() : strt(0), stop(0) { }
