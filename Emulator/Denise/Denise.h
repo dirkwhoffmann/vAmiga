@@ -509,7 +509,7 @@ public:
     //
 
     // Transfers the bitplane registers to the shift registers
-    void fillShiftRegisters();
+    void fillShiftRegisters(bool odd = true, bool even = true);
 
     
     //

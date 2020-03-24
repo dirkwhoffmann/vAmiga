@@ -854,6 +854,13 @@ Agnus::serviceBPLEvent()
             assert(pos.h == 0xE2);
             return;
 
+        case BPL_SHIFTREG:
+        case BPL_SHIFTREG_ODD:
+        case BPL_SHIFTREG_EVEN:
+        case BPL_SHIFTREG_BOTH:
+            denise.fillShiftRegisters(false, true);
+            break;
+            
         default:
             dumpEvents();
             assert(false);
@@ -870,8 +877,9 @@ Agnus::serviceBPLEventHires()
     denise.bpldat[nr] = doBitplaneDMA<nr>();
 
     // Fill shift registers is bpldat[0] has been written
-    if (nr == 0) denise.fillShiftRegisters();
-            
+    if (nr == 0) denise.fillShiftRegisters(ddfHires.inRangeOdd(pos.h),
+                                           ddfHires.inRangeEven(pos.h));
+    
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfHires.stopOdd - 4) addBPLMOD<nr>();
 }
@@ -881,10 +889,11 @@ Agnus::serviceBPLEventLores()
 {
     // Perform bitplane DMA
     denise.bpldat[nr] = doBitplaneDMA<nr>();
-
-    // Fill shift registers is bpldat[0] has been written
-    if (nr == 0) denise.fillShiftRegisters();
-            
+    
+    // Fill shift registers if bpldat[0] has been written
+    if (nr == 0) denise.fillShiftRegisters(ddfLores.inRangeOdd(pos.h),
+                                           ddfLores.inRangeEven(pos.h));
+    
     // Add modulo if this is the last fetch unit
     if (pos.h >= ddfLores.stopOdd - 8) addBPLMOD<nr>();
 }

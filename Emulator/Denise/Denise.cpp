@@ -424,9 +424,10 @@ Denise::updateSpritePriorities(u16 bplcon2)
 }
 
 void
-Denise::fillShiftRegisters()
+Denise::fillShiftRegisters(bool odd, bool even)
 {
-    armedEven = armedOdd = true;
+    if (odd) armedOdd = true;
+    if (even) armedEven = true;
     
     spriteClipBegin = MIN(spriteClipBegin, agnus.ppos() + 2);
     

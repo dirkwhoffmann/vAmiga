@@ -16,14 +16,14 @@
 template <bool hires>
 struct DDF
 {
-    // First bitplane DMA cycle of even and odd bitplanes
-    i16 strtEven;
+    // First bitplane DMA cycle of odd and even bitplanes
     i16 strtOdd;
+    i16 strtEven;
     
-    // Last bitplane DMA cycle + 1 of even and odd bitplanes
-    i16 stopEven;
+    // Last bitplane DMA cycle + 1 of odd and even bitplanes
     i16 stopOdd;
-    
+    i16 stopEven;
+
     DDF() : strtEven(0), strtOdd(0), stopEven(0), stopOdd(0) { }
 
     template <class T> void applyToItems(T& worker) {
@@ -51,6 +51,10 @@ struct DDF
     {
         return !(*this == ddf);
     }
+    
+    bool inRangeOdd(i16 pos) { return pos > strtOdd && pos < stopOdd; }
+    bool inRangeEven(i16 pos) { return pos > strtEven && pos < stopEven; }
+    bool oddAndEvenDiffer() { return strtOdd != strtEven || stopOdd != stopEven; }
     
     /* Computes a DDF window
      *

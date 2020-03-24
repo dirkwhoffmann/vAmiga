@@ -638,13 +638,30 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
             inHiresDmaAreaOdd(i) ? bplDMA[1][channels][i] :
             inHiresDmaAreaEven(i) ? bplDMA[1][channels][i] : EVENT_NONE;
         
+        // Take care of the unlikely case that the even and odd DDF window differ
+        for (int i = ddfHires.strtEven; i < ddfHires.strtOdd; i++) {
+             if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
+        }
+            
     } else {
         
         for (int i = first; i <= last; i++)
             bplEvent[i] =
             inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
             inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
+        
+        // Take care of the unlikely case that the even and odd DDF window differ
+        for (int i = ddfLores.strtEven; i < ddfLores.strtOdd; i++) {
+             if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
+        }
+
     }
+
+    // Treat the special case that the even and odd DDF windows differ
+    /*
+    for (int i = 7; i < HPOS_CNT; i += 8)
+        if (i >= ddfLores.strtEven && i < ddfLores.stopEven && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
+    */
     
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
