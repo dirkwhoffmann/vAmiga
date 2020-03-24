@@ -40,9 +40,9 @@
  * bit 1 controls the even bitplanes. Settings these flags changes the
  * scheduled event, e.g.:
  *
- *     BPL_L4  becomes  BPL_L4_DRAW_ODD   if bit 0 is set
- *     BPL_L4  becomes  BPL_L4_DRAW_EVEN  if bit 1 is set
- *     BPL_L4  becomes  BPL_L4_DRAW_BOTH  if both bits are set
+ *     BPL_L4  becomes  BPL_L4_ODD   if bit 0 is set
+ *     BPL_L4  becomes  BPL_L4_EVEN  if bit 1 is set
+ *     BPL_L4  becomes  BPL_L4_ODD_EVEN  if both bits are set
  *
  * Each event table is accompanied by a jump table that points to the next
  * event. Given the example tables above, the jump tables would look like this:
@@ -638,11 +638,13 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
             inHiresDmaAreaOdd(i) ? bplDMA[1][channels][i] :
             inHiresDmaAreaEven(i) ? bplDMA[1][channels][i] : EVENT_NONE;
         
-        // Take care of the unlikely case that the even and odd DDF window differ
-        for (int i = ddfHires.strtEven; i < ddfHires.strtOdd; i++) {
-             if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
-        }
-            
+        // Add extra shift register events if the even/odd DDF windows differ
+        // These events are like BPL_H0 events without performing DMA.
+        for (int i = ddfHires.strtEven; i < ddfHires.strtOdd; i++)
+            if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
+        for (int i = ddfHires.stopOdd; i < ddfHires.stopEven; i++)
+            if ((i & 3) == 3 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
+
     } else {
         
         for (int i = first; i <= last; i++)
@@ -650,18 +652,13 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
             inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
             inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
         
-        // Take care of the unlikely case that the even and odd DDF window differ
-        for (int i = ddfLores.strtEven; i < ddfLores.strtOdd; i++) {
-             if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
-        }
-
+        // Add extra shift register events if the even/odd DDF windows differ
+        // These events are like BPL_L0 events without performing DMA.
+        for (int i = ddfLores.strtEven; i < ddfLores.strtOdd; i++)
+             if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
+        for (int i = ddfLores.stopOdd; i < ddfLores.stopEven; i++)
+             if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
     }
-
-    // Treat the special case that the even and odd DDF windows differ
-    /*
-    for (int i = 7; i < HPOS_CNT; i += 8)
-        if (i >= ddfLores.strtEven && i < ddfLores.stopEven && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SHIFTREG;
-    */
     
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);

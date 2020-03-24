@@ -25,6 +25,10 @@
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
+// Bitplane event modifiers
+#define DRAW_ODD  0b001
+#define DRAW_EVEN 0b010
+
 class Agnus : public AmigaComponent {
     
     // Current configuration

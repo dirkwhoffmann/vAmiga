@@ -148,7 +148,7 @@ DmaDebugger::computeOverlay()
             fgWeight = 0.0;
             break;
 
-        case MODULATE_BOTH_LAYERS:
+        case MODULATE_ODD_EVEN_LAYERS:
 
             bgWeight = opacity;
             fgWeight = 1.0 - opacity;

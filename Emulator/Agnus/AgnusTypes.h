@@ -159,7 +159,7 @@ typedef enum : long
 {
     MODULATE_FG_LAYER,
     MODULATE_BG_LAYER,
-    MODULATE_BOTH_LAYERS
+    MODULATE_ODD_EVEN_LAYERS
 }
 DmaDebuggerDisplayMode;
 
