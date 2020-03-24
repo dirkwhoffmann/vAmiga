@@ -661,7 +661,7 @@ Agnus::updateDrawingFlags(bool hires)
     assert(scrollHiresOdd  < 8);
     
     // Superimpose the drawing flags (bits 0 and 1)
-    // Bit 0 is used to for the odd bitplanes and bit 1 for the even bitplanes
+    // Bit 0 is used to for odd bitplanes and bit 1 for even bitplanes
     
     if (hires) {
         for (int i = scrollHiresOdd; i < HPOS_CNT; i += 4)
@@ -1199,7 +1199,7 @@ void
 Agnus::computeDDFWindowOCS()
 {
     /* To determine the correct data fetch window, we need to distinguish
-     * (too) small, medium, and (too) large DIWSTRT / DIWSTOP values.
+     * three kinds of DDFSTRT / DDFSTOP values.
      *
      *   0:   small : Value is smaller than the left hardware stop.
      *   1:  medium : Value complies to the specs.
@@ -1284,7 +1284,7 @@ void
 Agnus::computeDDFWindowECS()
 {
     /* To determine the correct data fetch window, we need to distinguish
-     * (too) small, medium, and (too) large DIWSTRT / DIWSTOP values.
+     * three kinds of DDFSTRT / DDFSTOP values.
      *
      *   0:   small : Value is smaller than the left hardware stop.
      *   1:  medium : Value complies to the specs.

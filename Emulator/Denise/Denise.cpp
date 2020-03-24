@@ -512,7 +512,7 @@ Denise::drawEven(int offset)
 {
     assert(!hiresMode || (agnus.pos.h & 0x3) == agnus.scrollHiresEven);
     assert( hiresMode || (agnus.pos.h & 0x7) == agnus.scrollLoresEven);
-
+    
     static const u16 masks[7] = {
        0b000000,         // 0 bitplanes
        0b000000,         // 1 bitplanes
