@@ -17,15 +17,30 @@
 #include "DDF.h"
 #include "DmaDebugger.h"
 #include "Event.h"
+#include "Frame.h"
 #include "HardwareComponent.h"
 #include "Memory.h"
 
-// Hsync handler action flags
+/* Hsync handler action flags
+ *
+ *        HSYNC_PREDICT_DDF : Forces the hsync handler to recompute the
+ *                            display data fetch window.
+ *   HSYNC_UPDATE_BPL_TABLE : Forces the hsync handler to update the bitplane
+ *                            DMA event table.
+ *   HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
+ *                            audio, sprite DMA event table.
+ */
 #define HSYNC_PREDICT_DDF        0b001
 #define HSYNC_UPDATE_BPL_TABLE   0b010
 #define HSYNC_UPDATE_DAS_TABLE   0b100
 
-// Bitplane event modifiers
+/* Bitplane event modifiers
+ *
+ *    DRAW_ODD : Starts the shift registers of the odd bitplanes
+ *               to generate pixels.
+ *   DRAW_EVEN : Starts the shift registers of the even bitplanes
+ *               to generate pixels.
+ */
 #define DRAW_ODD  0b001
 #define DRAW_EVEN 0b010
 
@@ -105,7 +120,10 @@ public:
     // The current beam position
     Beam pos;
 
-    // Information about the currently drawn frame
+    // Information about the current frame
+    Frame frame;
+    
+    /*
     struct {
 
         // Frame count
@@ -118,7 +136,8 @@ public:
         i16 numLines;
 
     } frame;
-
+    */
+     
     // The long frame flipflop
     bool lof;
 
@@ -423,9 +442,7 @@ public:
         & hsyncActions
         & clock
         & pos
-        & frame.nr
-        & frame.interlaced
-        & frame.numLines
+        & frame
         & lof
 
         & changeRecorder

@@ -15,7 +15,7 @@
 #include "Buffers.h"
 #include "DDF.h"
 #include "Event.h"
-
+#include "Frame.h"
 
 //
 // Basic memory buffer I/O
@@ -134,10 +134,11 @@ public:
     COUNT(const AgnusRevision)
     COUNT(const DeniseRevision)
 
-    STRUCT(Event)
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
+    STRUCT(Event)
+    STRUCT(Frame)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -212,10 +213,11 @@ public:
     DESERIALIZE64(AgnusRevision)
     DESERIALIZE64(DeniseRevision)
 
-    STRUCT(Event)
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
+    STRUCT(Event)
+    STRUCT(Frame)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -296,10 +298,11 @@ public:
     SERIALIZE64(const AgnusRevision)
     SERIALIZE64(const DeniseRevision)
 
-    STRUCT(Event)
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
+    STRUCT(Event)
+    STRUCT(Frame)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
@@ -369,10 +372,11 @@ public:
     RESET(DrawingMode)
     RESET(RTCModel)
 
-    STRUCT(Event)
     STRUCT(Beam)
     STRUCT(DDF<true>)
     STRUCT(DDF<false>)
+    STRUCT(Event)
+    STRUCT(Frame)
     STRUCT(RegChange)
     // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)

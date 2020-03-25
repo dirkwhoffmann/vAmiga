@@ -162,6 +162,7 @@
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
+		5015FF3E242BA00F005175D9 /* Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
 		5019605A231257270051B669 /* Monitor.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Monitor.xib; sourceTree = "<group>"; };
 		5019605C23125E680051B669 /* Monitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monitor.swift; sourceTree = "<group>"; };
 		501B821B2262FFB200042871 /* RTC.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RTC.cpp; sourceTree = "<group>"; };
@@ -775,6 +776,7 @@
 				505A3A3921F4996400132020 /* SSEUtils.h */,
 				505A3A3821F4996400132020 /* SSEUtils.cpp */,
 				503990C522D8CCB600035783 /* Beam.h */,
+				5015FF3E242BA00F005175D9 /* Frame.h */,
 				5085830523265B3D004F942F /* Event.h */,
 				508C6BCF23F7E77500D8938F /* Buffers.h */,
 				50EFC7DF22E840870036A3DF /* Serialization.h */,
