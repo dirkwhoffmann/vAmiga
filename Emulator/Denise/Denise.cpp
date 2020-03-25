@@ -1231,6 +1231,9 @@ Denise::endOfLine(int vpos)
 
     // Invoke the DMA debugger
     dmaDebugger.computeOverlay();
+    
+    // Encode a HIRES / LORES marker in the first HBLANK pixel
+    *denise.pixelEngine.pixelAddr(HBLANK_MIN * 4) = hires() ? 0 : -1;
 }
 
 void

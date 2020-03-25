@@ -253,12 +253,21 @@ void doEPX(texture2d<half, access::write> out, uint2 gid,
     half4 r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
     half4 r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
     
+    // DEBUGGING
+    /*
+    r1 = half4(1.0,0.0,0.0,1.0);
+    r2 = half4(1.0,0.0,0.0,1.0);
+    r3 = half4(1.0,0.0,0.0,1.0);
+    r4 = half4(1.0,0.0,0.0,1.0);
+    */
+    
     out.write(r1, gid + uint2(0,0));
     out.write(r2, gid + uint2(1,0));
     out.write(r3, gid + uint2(0,1));
     out.write(r4, gid + uint2(1,1));
 }
 
+#if 0
 kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
                        texture2d<half, access::write> out  [[ texture(1) ]],
                        uint2                          gid  [[ thread_position_in_grid ]])
@@ -292,10 +301,12 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
     } else {
         
         // DEBUGGING
+        /*
         a = half4(1.0,0.0,0.0,1.0);
         b = half4(1.0,0.0,0.0,1.0);
         c = half4(1.0,0.0,0.0,1.0);
         d = half4(1.0,0.0,0.0,1.0);
+        */
         
         out.write(a, gid + uint2(0,0));
         out.write(b, gid + uint2(1,0));
@@ -303,63 +314,62 @@ kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
         out.write(d, gid + uint2(1,1));
     }
 }
+#endif
 
-#if 0
-kernel void inPlaceEpx(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
-                       texture2d<half, access::write> outTexture  [[ texture(1) ]],
-                       uint2                          gid         [[ thread_position_in_grid ]])
+kernel void inPlaceEpx(texture2d<half, access::read>  in   [[ texture(0) ]],
+                       texture2d<half, access::write> out  [[ texture(1) ]],
+                       uint2                          gid  [[ thread_position_in_grid ]])
 {
-    if((gid.x % SCALE_FACTOR != 0) || (gid.y % SCALE_FACTOR != 0))
+    // We only apply in-texture upscaling for lores lines. The emulator encodes
+    // this information in a certain texture pixel.
+    if (in.read(uint2(0, gid.y)).g == 0) {
+        
+        // This line has been marked as a hires line by the emulator
+        out.write(in.read(gid), gid);
         return;
+    }
+
+    if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
     
-    // E A    --\ 1 2
-    // C P B  --/ 3 4
-    //   D
-    // 1=P; 2=P; 3=P; 4=P;
-    // IF C==A AND C!=D AND A!=B => 1=A
-    // IF A==B AND A!=C AND B!=D => 2=B
-    // IF D==C AND D!=B AND C!=A => 3=C
-    // IF B==D AND B!=A AND D!=C => 4=D
+    // Check for lores fragment (a == b == c == d)
+    // a b
+    // c d
     
-    half xx = gid.x;
-    half yy = gid.y;
-    half4 E = inTexture.read(uint2(xx - 2, yy + 2)); // WRONG: must be yy - 2
-    half4 A = inTexture.read(uint2(xx,     yy - 2));
-    half4 C = inTexture.read(uint2(xx - 2, yy    ));
-    half4 P = inTexture.read(uint2(xx,     yy    ));
-    
-    half4 r1, r2, r3, r4;
-    
-    if (!all(E == A && A == C && C == P)) {
+    half4 a = in.read(gid + uint2(0,0));
+    half4 b = in.read(gid + uint2(1,0));
+    half4 c = in.read(gid + uint2(0,1));
+    half4 d = in.read(gid + uint2(1,1));
+
+    if (all(a == b && b == c && c == d)) {
         
-        half4 B = inTexture.read(uint2(xx + 2, yy    ));
-        half4 D = inTexture.read(uint2(xx,     yy + 2));
+        //   A
+        // C P B
+        //   D
         
-        r1 = (all(C == A) && any(C != D) && any(A != B)) ? A : P;
-        r2 = (all(A == B) && any(A != C) && any(B != D)) ? B : P;
-        r3 = (all(A == B) && any(A != C) && any(B != D)) ? C : P;
-        r4 = (all(B == D) && any(B != A) && any(D != C)) ? D : P;
+        half4 A = in.read(gid + uint2( 0,-2));
+        half4 C = in.read(gid + uint2(-2, 0));
+        half4 P = in.read(gid + uint2( 0, 0));
+        half4 B = in.read(gid + uint2( 2, 0));
+        half4 D = in.read(gid + uint2( 0, 2));
+        
+        doEPX(out, gid, A, C, P, B, D);
         
     } else {
-    
-        r1 = E;
-        r2 = A;
-        r3 = C;
-        r4 = P;
         
         // DEBUGGING
-        r1 = half4(1.0,0.0,0.0,1.0);
-        r2 = half4(1.0,0.0,0.0,1.0);
-        r3 = half4(1.0,0.0,0.0,1.0);
-        r3 = half4(1.0,0.0,0.0,1.0);
+        /*
+        a = half4(1.0,0.0,0.0,1.0);
+        b = half4(1.0,0.0,0.0,1.0);
+        c = half4(1.0,0.0,0.0,1.0);
+        d = half4(1.0,0.0,0.0,1.0);
+        */
+        
+        out.write(a, gid + uint2(0,0));
+        out.write(b, gid + uint2(1,0));
+        out.write(c, gid + uint2(0,1));
+        out.write(d, gid + uint2(1,1));
     }
-    
-    outTexture.write(r1, gid + uint2(0,0));
-    outTexture.write(r2, gid + uint2(1,0));
-    outTexture.write(r3, gid + uint2(0,1));
-    outTexture.write(r4, gid + uint2(1,1));
 }
-#endif
 
 kernel void epxupscaler(texture2d<half, access::read>  in   [[ texture(0) ]],
                         texture2d<half, access::write> out  [[ texture(1) ]],
@@ -562,17 +572,16 @@ kernel void inPlaceXbr(texture2d<half, access::read>  in   [[ texture(0) ]],
                        uint2                          gid  [[ thread_position_in_grid ]])
 {
     // We only apply in-texture upscaling for lores lines. The emulator encodes
-    // this information in the last pixel.
-    if (in.read(uint2(767, gid.y)).g == 0) {
+    // this information in a certain texture pixel.
+    if (in.read(uint2(0, gid.y)).g == 0) {
         
-        // Lines has been marked as a hires line by the emulator.
+        // This line has been marked as a hires line by the emulator
         out.write(in.read(gid), gid);
         return;
     }
-    
+        
     if (gid.x % SCALE_FACTOR != 0 || gid.y % 2 != 0) return;
-    
-    
+
     //         -2   -1   +0   +1   +2
     //
     //            ----------------
