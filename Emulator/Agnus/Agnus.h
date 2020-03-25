@@ -109,7 +109,10 @@ public:
     // Action flags controlling the HSYNC handler
     u64 hsyncActions;
 
+    // Pending register changes (used for emulating change delays)
+    RegChangeRecorder<8> changeRecorder;
 
+    
     //
     // Counters
     //
@@ -128,44 +131,12 @@ public:
     // Registers
     //
 
-    // Ringbuffer for managing register change delays
-    RegChangeRecorder<8> changeRecorder;
-
     // A copy of BPLCON0 and BPLCON1 (Denise has its own copies)
     u16 bplcon0;
     u16 bplcon1;
     
-    /* Horizontal shift values
-     * All four values are extracted from BPLCON1 in setBPLCON1() and utilized
-     * to emulate horizontal scrolling. They control at which DMA cycles the
-     * BPLDAT registers are transfered into the shift registers.
-     */
-    i8 scrollLoresOdd;
-    i8 scrollLoresEven;
-    i8 scrollHiresOdd;
-    i8 scrollHiresEven;
-    
-    /* Value of BPLCON0 at the DDFSTRT trigger cycle.
-     * This variable is set at the beginning of each rasterline and updated
-     * on-the-fly when dmacon changes before the trigger conditions has been
-     * reached.
-     */
-    u16 bplcon0AtDDFStrt;
-
     // The DMA control register
     u16 dmacon;
-
-    /* Value of dmacon at the DDFSTRT trigger cycle.
-     * This variable is set at the beginning of each rasterline and updated
-     * on-the-fly when dmacon changes before the trigger conditions has been
-     * reached.
-     */
-    u16 dmaconAtDDFStrt;
-
-    // This value is updated in the hsync handler with the lowest 6 bits of
-    // dmacon if the master enable bit is 1 or set to 0 if the master enable
-    // bit is 0. It is used as an offset into the DAS lookup tables.
-    u16 dmaDAS;
 
     // The disk DMA pointer
     u32 dskpt;
@@ -176,10 +147,6 @@ public:
 
     // The bitplane DMA pointers
     u32 bplpt[6];
-
-    // Audio DMA request from Paula
-    // This signal is set to true by Paula when a new audio DMA word is needed.
-    bool audxDR[4];
 
     // The bitplane modulo registers for odd bitplanes
     i16 bpl1mod;
@@ -192,19 +159,58 @@ public:
 
 
     //
+    // Derived values
+    //
+    
+    /* Values of BPLCON0 and DMACON at the DDFSTRT trigger cycle.
+     * Both variables are set at the beginning of each rasterline and updated
+     * on-the-fly if BPLCON0 or DMACON changes before the trigger conditions
+     * has been reached.
+     */
+    u16 bplcon0AtDDFStrt;
+    u16 dmaconAtDDFStrt;
+    
+    // This value is updated in the hsync handler with the lowest 6 bits of
+    // dmacon if the master enable bit is 1 or set to 0 if the master enable
+    // bit is 0. It is used as an offset into the DAS lookup tables.
+    u16 dmaDAS;
+
+    /* Horizontal shift values derived from BPLCON1
+     * All four values are extracted in setBPLCON1() and utilized to emulate
+     * horizontal scrolling. They control at which DMA cycles the BPLDAT
+     * registers are transfered into the shift registers.
+     */
+    i8 scrollLoresOdd;
+    i8 scrollLoresEven;
+    i8 scrollHiresOdd;
+    i8 scrollHiresEven;
+
+    // Set in the hsync handler to remember the returned value of inBplDmaLine()
+    bool bplDmaLine;
+
+    
+    //
     // Data bus
     //
 
+public:
+    
     // Recorded DMA values for all cycles in the current rasterline
     u16 busValue[HPOS_CNT];
 
     // Recorded DMA usage for all cycles in the current rasterline
     BusOwner busOwner[HPOS_CNT];
 
-    // Set in the hsync handler to remember the returned value of inBplDmaLine()
-    bool bplDmaLine;
-
+    
+    //
+    // Signals from other components
+    //
+    
 private:
+
+    // Audio DMA request from Paula
+    // This signal is set to true by Paula when a new audio DMA word is needed.
+    bool audxDR[4];
 
     /* Blitter slow down
      * The BLS signal indicates that the CPU's request to access the bus has
@@ -287,20 +293,6 @@ public:
     DDF<false> ddfLores;
     DDF<true> ddfHires;
     
-    /*
-    bool inLoresDmaArea(i16 pos) { return pos >= ddfLores.strt && pos < ddfLores.stop; }
-    bool inHiresDmaArea(i16 pos) { return pos >= ddfHires.strt && pos < ddfHires.stop; }
-    */
-    
-    bool inLoresDmaAreaEven(i16 pos) {
-        return !(pos & 4) && pos >= ddfLores.strtEven && pos < ddfLores.stopEven; }
-    bool inLoresDmaAreaOdd(i16 pos) {
-        return (pos & 4) && pos >= ddfLores.strtOdd && pos < ddfLores.stopOdd; }
-    bool inHiresDmaAreaEven(i16 pos) {
-        return !(pos & 2) && pos >= ddfHires.strtEven && pos < ddfHires.stopEven; }
-    bool inHiresDmaAreaOdd(i16 pos) {
-        return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
-
     
     //
     // Display Window (DIW)
@@ -422,44 +414,47 @@ public:
         & nextDasEvent
 
         & hsyncActions
+        & changeRecorder
+
         & clock
         & pos
         & frame
 
-        & changeRecorder
         & bplcon0
         & bplcon1
-        & scrollLoresOdd
-        & scrollLoresEven
-        & scrollHiresOdd
-        & scrollHiresEven
-        & bplcon0AtDDFStrt
         & dmacon
-        & dmaconAtDDFStrt
-        & dmaDAS
         & dskpt
         & audpt
         & audlc
-        & audxDR
         & bplpt
         & bpl1mod
         & bpl2mod
         & sprpt
 
+        & bplcon0AtDDFStrt
+        & dmaconAtDDFStrt
+        & dmaDAS
+        & scrollLoresOdd
+        & scrollLoresEven
+        & scrollHiresOdd
+        & scrollHiresEven
+        & bplDmaLine
+        
         & busValue
         & busOwner
-        & bplDmaLine
+
+        & audxDR
         & bls
 
         & ddfstrt
         & ddfstop
         & ddfstrtReached
         & ddfstopReached
+        & ddfState
+        & ocsEarlyAccessLine
         & ddfVFlop
         & ddfLores
         & ddfHires
-        & ddfState
-        & ocsEarlyAccessLine
 
         & diwstrt
         & diwstop
@@ -577,6 +572,16 @@ public:
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
     bool inBplDmaLine(u16 dmacon, u16 bplcon0);
 
+    // Indicates if the electron beam is inside a certain DMA area
+    bool inLoresDmaAreaEven(i16 pos) {
+        return !(pos & 4) && pos >= ddfLores.strtEven && pos < ddfLores.stopEven; }
+    bool inLoresDmaAreaOdd(i16 pos) {
+        return (pos & 4) && pos >= ddfLores.strtOdd && pos < ddfLores.stopOdd; }
+    bool inHiresDmaAreaEven(i16 pos) {
+        return !(pos & 2) && pos >= ddfHires.strtEven && pos < ddfHires.stopEven; }
+    bool inHiresDmaAreaOdd(i16 pos) {
+        return (pos & 2) && pos >= ddfHires.strtOdd && pos < ddfHires.stopOdd; }
+    
     // Returns the pixel position for the current horizontal position
     i16 ppos(i16 posh) { return (posh * 4) + 2; }
     i16 ppos() { return ppos(pos.h); }
