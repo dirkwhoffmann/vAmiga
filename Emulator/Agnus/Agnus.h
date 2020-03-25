@@ -725,8 +725,8 @@ public:
     void clearBplEvents();
 
     // Renews all events in the BPL event table
-    void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX-1);
-    void updateBplEvents(int first = 0, int last = HPOS_MAX-1) {
+    void updateBplEvents(u16 dmacon, u16 bplcon0, int first = 0, int last = HPOS_MAX);
+    void updateBplEvents(int first = 0, int last = HPOS_MAX) {
         updateBplEvents(dmacon, bplcon0, first, last); }
     void updateDrawingFlags(bool hires);
     

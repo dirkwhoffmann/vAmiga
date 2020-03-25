@@ -847,19 +847,43 @@ Agnus::serviceBPLEvent()
             denise.drawLoresBoth();
             break;
 
+        case BPL_SR:
+            denise.fillShiftRegisters(false, true);
+            break;
+            
+        case BPL_SR | DRAW_ODD:
+            denise.fillShiftRegisters(false, true);
+            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
+            break;
+            
+        case BPL_SR | DRAW_EVEN:
+            denise.fillShiftRegisters(false, true);
+            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
+            break;
+            
+        case BPL_SR | DRAW_ODD | DRAW_EVEN:
+            denise.fillShiftRegisters(false, true);
+            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
+            break;
+            
         case BPL_EOL:
-        case BPL_EOL | DRAW_ODD:
-        case BPL_EOL | DRAW_EVEN:
-        case BPL_EOL | DRAW_ODD | DRAW_EVEN:
             assert(pos.h == 0xE2);
             return;
 
-        case BPL_SR:
-        case BPL_SR | DRAW_ODD:
-        case BPL_SR | DRAW_EVEN:
-        case BPL_SR | DRAW_ODD | DRAW_EVEN:
-            denise.fillShiftRegisters(false, true);
-            break;
+        case BPL_EOL | DRAW_ODD:
+            assert(pos.h == 0xE2);
+            hires() ? denise.drawHiresOdd() : denise.drawLoresOdd();
+            return;
+
+        case BPL_EOL | DRAW_EVEN:
+            assert(pos.h == 0xE2);
+            hires() ? denise.drawHiresEven() : denise.drawLoresEven();
+            return;
+
+        case BPL_EOL | DRAW_ODD | DRAW_EVEN:
+            assert(pos.h == 0xE2);
+            hires() ? denise.drawHiresBoth() : denise.drawLoresBoth();
+            return;
             
         default:
             dumpEvents();

@@ -621,7 +621,7 @@ Agnus::clearBplEvents()
 void
 Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 {
-    assert(first >= 0 && last < HPOS_MAX);
+    assert(first >= 0 && last < HPOS_CNT);
 
     int channels = bpu(bplcon0);
     bool hires = Denise::hires(bplcon0);
@@ -651,7 +651,7 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
             bplEvent[i] =
             inLoresDmaAreaOdd(i) ? bplDMA[0][channels][i] :
             inLoresDmaAreaEven(i) ? bplDMA[0][channels][i] : EVENT_NONE;
-        
+    
         // Add extra shift register events if the even/odd DDF windows differ
         // These events are like BPL_L0 events without performing DMA.
         for (int i = ddfLores.strtEven; i < ddfLores.strtOdd; i++)
@@ -659,7 +659,10 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
         for (int i = ddfLores.stopOdd; i < ddfLores.stopEven; i++)
              if ((i & 7) == 7 && bplEvent[i] == EVENT_NONE) bplEvent[i] = BPL_SR;
     }
-    
+        
+    // Make sure the table ends with a BPL_EOL event
+    bplEvent[HPOS_MAX] = BPL_EOL;
+
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
     
@@ -676,7 +679,6 @@ Agnus::updateDrawingFlags(bool hires)
     
     // Superimpose the drawing flags (bits 0 and 1)
     // Bit 0 is used to for odd bitplanes and bit 1 for even bitplanes
-    
     if (hires) {
         for (int i = scrollHiresOdd; i < HPOS_CNT; i += 4)
             bplEvent[i] = (EventID)(bplEvent[i] | 1);
@@ -688,7 +690,6 @@ Agnus::updateDrawingFlags(bool hires)
         for (int i = scrollLoresEven; i < HPOS_CNT; i += 8)
             bplEvent[i] = (EventID)(bplEvent[i] | 2);
     }
-    
     updateBplJumpTable();
 }
 
@@ -820,10 +821,10 @@ Agnus::dumpBplEventTable()
     // Dump the event table
     msg("Event table:\n\n");
     msg("ddfstrt = %X dffstop = %X\n", ddfstrt, ddfstop);
-    msg("ddfLoresOdd:  (%X - %X)", ddfLores.strtOdd, ddfLores.stopOdd);
-    msg("ddfLoresEven: (%X - %X)", ddfLores.strtEven, ddfLores.stopEven);
-    msg("ddfHiresOdd:  (%X - %X)", ddfHires.strtOdd, ddfHires.stopOdd);
-    msg("ddfHiresEven: (%X - %X)", ddfHires.strtEven, ddfHires.stopEven);
+    msg("ddfLoresOdd:  (%X - %X)\n", ddfLores.strtOdd, ddfLores.stopOdd);
+    msg("ddfLoresEven: (%X - %X)\n", ddfLores.strtEven, ddfLores.stopEven);
+    msg("ddfHiresOdd:  (%X - %X)\n", ddfHires.strtOdd, ddfHires.stopOdd);
+    msg("ddfHiresEven: (%X - %X)\n", ddfHires.strtEven, ddfHires.stopEven);
 
     dumpBplEventTable(0x00, 0x4F);
     dumpBplEventTable(0x50, 0x9F);
