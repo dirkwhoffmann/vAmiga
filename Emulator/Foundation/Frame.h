@@ -21,11 +21,6 @@ struct Frame
     // The long frame flipflop
     bool lof;
     
-    // The number of rasterlines in the current frame
-    // TODO: MAKE IT A COMPUTED VALUE ONCE THE LACE FLIP FLOP IS HERE
-    i16 numLines;
-
-
     template <class T>
     void applyToItems(T& worker)
     {
@@ -33,21 +28,23 @@ struct Frame
 
         & nr
         & interlaced
-        & lof
-        & numLines;
+        & lof;
     }
 
+    Frame() : nr(0), interlaced(false), lof(true) { }
+    
+    bool isLongFrame() { return lof; }
+    bool isShortFrame() { return !lof; }
+    int numLines() { return lof ? 313 : 312; }
+    int lastLine() { return lof ? 312 : 311; }
+    
     // Advances one frame
-    void next(bool lace)
+    void next(bool laceBit)
     {
         nr++;
         
         // Update the long frame flipflop
-        if ((interlaced = lace)) { lof = !lof; } else { lof = true; }
-        
-        // Determine if the next frame is a long or a short frame
-        numLines = lof ? 313 : 312;
-        
+        if ((interlaced = laceBit)) { lof = !lof; } else { lof = true; }
      }
     
 };

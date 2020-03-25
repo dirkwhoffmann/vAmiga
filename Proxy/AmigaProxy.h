@@ -328,8 +328,6 @@ struct AmigaFileWrapper;
 - (BlitterInfo) getBlitterInfo;
 
 - (BOOL) interlaceMode;
-- (BOOL) isLongFrame;
-- (BOOL) isShortFrame;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
 - (NSInteger) instrCount:(NSInteger)list;

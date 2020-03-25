@@ -448,14 +448,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->frame.interlaced;
 }
-- (BOOL) isLongFrame
-{
-    return wrapper->agnus->isLongFrame();
-}
-- (BOOL) isShortFrame
-{
-    return wrapper->agnus->isShortFrame();
-}
 - (NSInteger) instrCount:(NSInteger)list
 {
     return wrapper->agnus->copper.instrCount(list);

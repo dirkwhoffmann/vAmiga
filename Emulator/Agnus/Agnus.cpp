@@ -245,8 +245,7 @@ void Agnus::_reset()
     RESET_SNAPSHOT_ITEMS
 
     // Start with a long frame
-    frame.lof = 1;
-    frame.numLines = 313;
+    frame = Frame();
 
     // Initialize statistical counters
     clearStats();
@@ -356,7 +355,7 @@ Agnus::getInfo()
 Cycle
 Agnus::cyclesInFrame()
 {
-    return DMA_CYCLES(frame.numLines * HPOS_CNT);
+    return DMA_CYCLES(frame.numLines() * HPOS_CNT);
 }
 
 Cycle
@@ -905,7 +904,7 @@ Agnus::peekVHPOSR()
     // posh might have wrapped over, because we added 4
     if (posh > HPOS_MAX) {
         posh -= HPOS_CNT;
-        if (++posv >= frame.numLines) posv = 0;
+        if (++posv >= frame.numLines()) posv = 0;
     }
 
     // posv wraps over in cycle 2
@@ -913,7 +912,7 @@ Agnus::peekVHPOSR()
         return HI_LO(posv & 0xFF, posh);
 
     if (posv == 0)
-       return HI_LO(isLongFrame() ? (312 & 0xFF) : (313 & 0xFF), posh);
+       return HI_LO(frame.isLongFrame() ? (312 & 0xFF) : (313 & 0xFF), posh);
 
     return HI_LO((posv - 1) & 0xFF, posh);
 }
@@ -932,7 +931,7 @@ Agnus::peekVPOSR()
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8
-    u16 result = (pos.v >> 8) | (isLongFrame() ? 0x8000 : 0);
+    u16 result = (pos.v >> 8) | (frame.isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
     // Add indentification bits
@@ -1682,7 +1681,7 @@ Agnus::updateSpriteDMA()
      }
 
     // Disable DMA in the last rasterline
-    if (v == frame.numLines - 1) {
+    if (v == frame.lastLine()) {
         for (int i = 0; i < 8; i++) sprDmaState[i] = SPR_DMA_IDLE;
         return;
     }
@@ -1718,7 +1717,7 @@ Agnus::hsyncHandler()
     pos.h = 0;
 
     // Advance the vertical counter
-    if (++pos.v >= frame.numLines) vsyncHandler();
+    if (++pos.v >= frame.numLines()) vsyncHandler();
 
     // Initialize variables which keep values for certain trigger positions
     dmaconAtDDFStrt = dmacon;
@@ -1777,7 +1776,7 @@ Agnus::hsyncHandler()
         newDmaDAS = dmacon & 0b111111;
 
         // Disable sprites outside the sprite DMA area
-        if (pos.v < 25 || pos.v >= frame.numLines - 1) newDmaDAS &= 0b011111;
+        if (pos.v < 25 || pos.v >= frame.lastLine()) newDmaDAS &= 0b011111;
 
     } else {
 

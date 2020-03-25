@@ -542,10 +542,6 @@ public:
 
 public:
 
-    // Indicates if the current frame is a long or a short frame
-    bool isLongFrame() { return frame.numLines == 313; }
-    bool isShortFrame() { return frame.numLines == 312; }
-
     /* Returns the number of master cycles in the current frame.
      * The result depends on the number of lines that are drawn. This values
      * varies between long and short frames.
@@ -575,7 +571,7 @@ public:
     bool inVBlank() { return pos.v < 26; }
 
     // Indicates if the electron beam is in the last rasterline
-    bool inLastRasterline() { return pos.v == frame.numLines - 1; }
+    bool inLastRasterline() { return pos.v == frame.lastLine(); }
 
     // Indicates if the electron beam is in a line where bitplane DMA is enabled
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
