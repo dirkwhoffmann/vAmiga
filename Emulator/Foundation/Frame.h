@@ -17,6 +17,9 @@ struct Frame
     
     // Indicates if this frame is drawn in interlace mode
     bool interlaced;
+
+    // The long frame flipflop
+    bool lof;
     
     // The number of rasterlines in the current frame
     // TODO: MAKE IT A COMPUTED VALUE ONCE THE LACE FLIP FLOP IS HERE
@@ -30,10 +33,23 @@ struct Frame
 
         & nr
         & interlaced
+        & lof
         & numLines;
     }
 
-    Frame() : nr(0), interlaced(false), numLines(0) { }
+    // Advances one frame
+    void next(bool lace)
+    {
+        nr++;
+        
+        // Update the long frame flipflop
+        if ((interlaced = lace)) { lof = !lof; } else { lof = true; }
+        
+        // Determine if the next frame is a long or a short frame
+        numLines = lof ? 313 : 312;
+        
+     }
+    
 };
 
 #endif

@@ -122,26 +122,8 @@ public:
 
     // Information about the current frame
     Frame frame;
+
     
-    /*
-    struct {
-
-        // Frame count
-        i64 nr;
-
-        // Indicates if this frame is drawn in interlace mode
-        bool interlaced;
-
-        // The number of rasterlines in the current frame
-        i16 numLines;
-
-    } frame;
-    */
-     
-    // The long frame flipflop
-    bool lof;
-
-
     //
     // Registers
     //
@@ -443,7 +425,6 @@ public:
         & clock
         & pos
         & frame
-        & lof
 
         & changeRecorder
         & bplcon0

@@ -245,7 +245,7 @@ void Agnus::_reset()
     RESET_SNAPSHOT_ITEMS
 
     // Start with a long frame
-    lof = 1;
+    frame.lof = 1;
     frame.numLines = 313;
 
     // Initialize statistical counters
@@ -1825,19 +1825,8 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
-    // debug("diwVstrt = %d diwVstop = %d diwHstrt = %d diwHstop = %d\n", diwVstrt, diwVstop, diwHstrt, hstop);
-
     // Advance to the next frame
-    frame.nr++;
-
-    // Check if we the next frame is drawn in interlace mode
-    frame.interlaced = denise.lace();
-
-    // If yes, toggle the the long frame flipflop
-    lof = (frame.interlaced) ? !lof : true;
-
-    // Determine if the next frame is a long or a short frame
-    frame.numLines = lof ? 313 : 312;
+    frame.next(denise.lace());
 
     // Reset vertical position counter
     pos.v = 0;
