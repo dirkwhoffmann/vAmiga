@@ -10,8 +10,6 @@
 #include "Amiga.h"
 #include "SSEUtils.h"
 
-int dirk = 0;
-
 Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Denise");
