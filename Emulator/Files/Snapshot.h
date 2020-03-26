@@ -11,11 +11,11 @@
 #define _AMIGA_SNAPSHOT_INC
 
 #include "AmigaFile.h"
+#include "Screenshot.h"
 
 class Amiga;
 
-// Snapshot header
-typedef struct {
+struct SnapshotHeader {
     
     // Magic bytes ('V','A','S','N','A','P')
     char magic[6];
@@ -26,20 +26,8 @@ typedef struct {
     u8 subminor;
     
     // Screenshot
-    struct {
-        
-        // Image width and height
-        u16 width, height;
-        
-        // Raw screen buffer data
-        u32 screen[(HPIXELS / 4) * (VPIXELS / 2)];
-        
-    } screenshot;
-    
-    // Date and time of snapshot creation
-    time_t timestamp;
-    
-} SnapshotHeader;
+    Screenshot screenshot;
+};
 
 class Snapshot : public AmigaFile {
  
@@ -115,20 +103,24 @@ public:
     u8 *getData() { return data + sizeof(SnapshotHeader); }
     
     // Returns the timestamp
-    time_t getTimestamp() { return getHeader()->timestamp; }
+    // GET DIRECTLY FROM SCREENSHOT
+    time_t getTimestamp() { return getHeader()->screenshot.timestamp; }
     
-    // Returns a pointer to the screenshot data.
+    // Returns a pointer to the screenshot data
+    // DEPRECATED
     unsigned char *getImageData() { return (unsigned char *)(getHeader()->screenshot.screen); }
     
     // Returns the screenshot image width
+    // DEPRECATED
     unsigned getImageWidth() { return getHeader()->screenshot.width; }
     
     // Returns the screenshot image height
+    // DEPRECATED
     unsigned getImageHeight() { return getHeader()->screenshot.height; }
     
     // Stores a screenshot inside this snapshot
-    void takeScreenshot(Amiga *amiga);
-    
+    // DEPRECATED
+    // void takeScreenshot(Amiga *amiga);
 };
 
 #endif

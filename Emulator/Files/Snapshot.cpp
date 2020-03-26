@@ -91,7 +91,6 @@ Snapshot::Snapshot(size_t capacity)
     header->major = V_MAJOR;
     header->minor = V_MINOR;
     header->subminor = V_SUBMINOR;
-    header->timestamp = time(NULL);
 }
 
 Snapshot *
@@ -133,7 +132,7 @@ Snapshot::makeWithAmiga(Amiga *amiga)
 {
     Snapshot *snapshot = new Snapshot(amiga->size());
 
-    snapshot->takeScreenshot(amiga);
+    snapshot->getHeader()->screenshot.take(amiga);
     amiga->save(snapshot->getData());
 
     return snapshot;
@@ -149,34 +148,4 @@ bool
 Snapshot::fileHasSameType(const char *path)
 {
     return Snapshot::isSnapshotFile(path, V_MAJOR, V_MINOR, V_SUBMINOR);
-}
-
-void
-Snapshot::takeScreenshot(Amiga *amiga)
-{
-    SnapshotHeader *header = (SnapshotHeader *)data;
-    
-    u32 *source = (u32 *)amiga->denise.pixelEngine.getStableLongFrame().data;
-    u32 *target = header->screenshot.screen;
-
-    // Texture cutout and scaling factors
-    unsigned dx = 4;
-    unsigned dy = 2;
-    unsigned xStart = 4 * HBLANK_MAX, xEnd = HPIXELS + 4 * HBLANK_MIN;
-    unsigned yStart = VBLANK_CNT, yEnd = VPIXELS;
-    unsigned width  = (xEnd - xStart) / dx;
-    unsigned height = (yEnd - yStart) / dy;
-
-    source += xStart + yStart * HPIXELS;
-
-    header->screenshot.width  = width;
-    header->screenshot.height = height;
-    
-    for (unsigned y = 0; y < height; y++) {
-        for (unsigned x = 0; x < width; x++) {
-            target[x] = source[x * dx];
-        }
-        source += dy * HPIXELS;
-        target += width;
-    }
 }
