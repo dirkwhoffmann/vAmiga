@@ -21,13 +21,16 @@ struct Screenshot {
     u16 width, height;
     
     // Raw texture data
-    u32 screen[(HPIXELS / 4) * (VPIXELS / 2)];
+    u32 screen[(HPIXELS / 2) * (VPIXELS / 1)];
     
     // Date and time of screenshot creation
     time_t timestamp;
     
+    // Factory methods
+    static Screenshot *makeWithAmiga(Amiga *amiga, int dx = 4, int dy = 2);
+    
     // Takes a screenshot from a given Amiga
-    void take(Amiga *amiga);
+    void take(Amiga *amiga, int dx = 4, int dy = 2);
 };
 
 #endif

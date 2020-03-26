@@ -178,6 +178,10 @@ struct AmigaFileWrapper;
 - (void) deleteAutoSnapshot:(NSInteger)nr;
 - (void) deleteUserSnapshot:(NSInteger)nr;
 
+// Handling screenshots
+- (unsigned char *) autoScreenshotImageData:(NSInteger)nr;
+- (NSSize) autoScreenshotImageSize:(NSInteger)nr;
+
 @end
 
 

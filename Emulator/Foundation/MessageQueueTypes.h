@@ -67,11 +67,14 @@ typedef enum
     MSG_SER_IN,
     MSG_SER_OUT,
 
-    // Snapshot handling
+    // Snapshots
     MSG_USERSNAPSHOT_LOADED,
     MSG_USERSNAPSHOT_SAVED,
     MSG_AUTOSNAPSHOT_LOADED,
     MSG_AUTOSNAPSHOT_SAVED,
+    
+    // Screenshots
+    MSG_AUTOSCREENSHOT
 }
 MessageType;
 

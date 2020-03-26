@@ -176,7 +176,7 @@ private:
     
 private:
     
-    // Indicates if snapshots should be taken automatically.
+    // Indicates if snapshots should be taken automatically
     bool takeAutoSnapshots = true;
     
     /* Time in seconds between two auto-saved snapshots.
@@ -192,7 +192,10 @@ private:
     
     // Storage for user-taken snapshots
     vector<Snapshot *> userSnapshots;
-    
+
+    // Storage for auto-taken screenshots
+    vector<Screenshot *> autoScreenshots;
+
     
     //
     // Debugging
@@ -522,6 +525,25 @@ public:
     void deleteSnapshot(vector<Snapshot *> &storage, unsigned nr);
     void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
     void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
+    
+    //
+    // Handling screenshots
+    //
+    
+    // Returns the number of stored screenshots
+    size_t numScreenshots(vector<Screenshot *> &storage);
+    size_t numAutoScreenshots() { return numScreenshots(autoScreenshots); }
+
+    // Returns an screenshot from the screenshot storage
+    Screenshot *getScreenshot(vector<Screenshot *> &storage, unsigned nr);
+    Screenshot *autoScreenshot(unsigned nr) { return getScreenshot(autoScreenshots, nr); }
+
+    // Takes a screenshot and inserts it into the screenshot storage
+    void takeScreenshot(vector<Screenshot *> &storage);
+    void takeAutoScreenshot();
+    
+    // Takes a screenshot that was scheduled in the SRC_SLOT
+    void serviceScrEvent();
     
     
     //

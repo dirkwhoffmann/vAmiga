@@ -271,6 +271,7 @@ void Agnus::_reset()
     scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
     scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 1), VBL_STROBE);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
+    scheduleAbs<SCR_SLOT>(SEC(1), SCR_TAKE);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
 }

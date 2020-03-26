@@ -1538,6 +1538,16 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->deleteUserSnapshot((unsigned)nr);
 }
+- (unsigned char *) autoScreenshotImageData:(NSInteger)nr
+{
+    Screenshot *s = wrapper->amiga->autoScreenshot((int)nr);
+    return s ? (unsigned char *)s->screen : NULL;
+}
+- (NSSize) autoScreenshotImageSize:(NSInteger)nr
+{
+    Screenshot *s = wrapper->amiga->autoScreenshot((int)nr);
+    return s ? NSMakeSize(s->width, s->height) : NSMakeSize(0,0);
+}
 
 @end
 

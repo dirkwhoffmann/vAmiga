@@ -9,14 +9,21 @@
 
 #include "Amiga.h"
 
+Screenshot *
+Screenshot::makeWithAmiga(Amiga *amiga, int dx, int dy)
+{
+    Screenshot *screenshot = new Screenshot();
+    screenshot->take(amiga, dx, dy);
+    
+    return screenshot;
+}
+
 void
-Screenshot::take(Amiga *amiga)
+Screenshot::take(Amiga *amiga, int dx, int dy)
 {
     u32 *source = (u32 *)amiga->denise.pixelEngine.getStableLongFrame().data;
     u32 *target = screen;
     
-    int dx = 4;
-    int dy = 2;
     int xStart = 4 * HBLANK_MAX, xEnd = HPIXELS + 4 * HBLANK_MIN;
     int yStart = VBLANK_CNT, yEnd = VPIXELS;
     

@@ -37,6 +37,9 @@ public extension AmigaProxy {
         var bitmap = data
         let width = Int(size.width)
         let height = Int(size.height)
+        
+        track("width = \(width) height = \(height)")
+        
         let imageRep = NSBitmapImageRep(bitmapDataPlanes: &bitmap,
                                         pixelsWide: width,
                                         pixelsHigh: height,
@@ -47,6 +50,7 @@ public extension AmigaProxy {
                                         colorSpaceName: NSColorSpaceName.calibratedRGB,
                                         bytesPerRow: 4*width,
                                         bitsPerPixel: 32)
+        
         let image = NSImage(size: (imageRep?.size)!)
         image.addRepresentation(imageRep!)
         image.makeGlossy()
@@ -64,6 +68,12 @@ public extension AmigaProxy {
         
         let data = userSnapshotImageData(item)
         return image(data: data, size: userSnapshotImageSize(item))
+    }
+    
+    func autoScreenshotImage(_ item: Int) -> NSImage {
+        
+        let data = autoScreenshotImageData(item)
+        return image(data: data, size: autoScreenshotImageSize(item))
     }
 }
 

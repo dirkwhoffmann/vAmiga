@@ -710,7 +710,10 @@ extension MyController {
 
         case MSG_AUTOSNAPSHOT_SAVED:
             break
-
+            
+        case MSG_AUTOSCREENSHOT:
+            saveAutoScreenshot(msg.data, fingerprint: "ABCDEFG")
+            
         default:
             
             track("Unknown message: \(msg)")
@@ -784,6 +787,55 @@ extension MyController {
         refreshStatusBar()
     }
 
+    //
+    // Screenshots
+    //
+    
+    private func screenshotFolder() -> URL? {
+        
+        let fm = FileManager.default
+        
+        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
+        let mask = FileManager.SearchPathDomainMask.userDomainMask
+        guard let base = fm.urls(for: path, in: mask).first else { return nil }
+        let folder = base.appendingPathComponent("vAmiga/Screenshots")
+        
+        var isDirectory: ObjCBool = false
+        let folderExists = fm.fileExists(atPath: folder.path,
+                                         isDirectory: &isDirectory)
+        
+        if !folderExists || !isDirectory.boolValue {
+            do {
+                try fm.createDirectory(at: folder,
+                                       withIntermediateDirectories: true,
+                                       attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+
+        return folder
+    }
+    
+    private func saveAutoScreenshot(_ nr: Int, fingerprint: String) {
+        
+        track("saveAutoScreenshot: \(nr) \(fingerprint)")
+
+        let image = amiga.autoScreenshotImage(nr - 1)
+        
+        if let path = screenshotFolder() {
+     
+            let filename = fingerprint + "\(nr)" + ".jpeg"
+            let url = path.appendingPathComponent(filename)
+            
+            track("\(url)")
+            
+            let type = NSBitmapImageRep.FileType.jpeg
+            let data = image.representation(using: type)
+            try? data?.write(to: url, options: .atomic)
+        }
+    }
+    
     //
     // Misc
     //

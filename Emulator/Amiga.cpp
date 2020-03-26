@@ -909,6 +909,49 @@ Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
     }
 }
 
+size_t
+Amiga::numScreenshots(vector<Screenshot *> &storage)
+{
+    return storage.size();
+}
+
+Screenshot *
+Amiga::getScreenshot(vector<Screenshot *> &storage, unsigned nr)
+{
+    return nr < storage.size() ? storage.at(nr) : NULL;
+}
+
+void
+Amiga::takeScreenshot(vector<Screenshot *> &storage)
+{
+    Screenshot *screenshot = Screenshot::makeWithAmiga(this, 2, 1);
+    storage.push_back(screenshot);
+}
+
+void
+Amiga::takeAutoScreenshot()
+{
+    takeScreenshot(autoScreenshots);
+    putMessage(MSG_AUTOSCREENSHOT, numAutoScreenshots());
+}
+
+void
+Amiga::serviceScrEvent()
+{
+    static int delay[] = { 1, 2, 3, 0 };
+    
+    int num = numAutoScreenshots();
+    debug("serviceScrEvent [%d]\n", num);
+    
+    takeAutoScreenshot();
+    
+    if (delay[num]) {
+        agnus.scheduleRel<SCR_SLOT>(SEC(delay[num]), SCR_TAKE);
+    } else {
+        agnus.cancel<SCR_SLOT>();
+    }
+}
+
 
 //
 // The run loop

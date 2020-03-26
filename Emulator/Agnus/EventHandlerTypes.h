@@ -47,6 +47,7 @@ typedef enum : long
     TXD_SLOT,                       // Serial data out (UART)
     RXD_SLOT,                       // Serial data in (UART)
     POT_SLOT,                       // Potentiometer
+    SCR_SLOT,                       // Screen shots
     INS_SLOT,                       // Handles periodic calls to inspect()
     SLOT_COUNT
 
@@ -82,6 +83,7 @@ inline const char *slotName(EventSlot nr)
         case TXD_SLOT:  return "UART out";
         case RXD_SLOT:  return "UART in";
         case POT_SLOT:  return "Potentiometer";
+        case SCR_SLOT:  return "Screenshots";
         case INS_SLOT:  return "Inspector";
 
         default:
@@ -228,6 +230,10 @@ typedef enum : long
     POT_DISCHARGE = 1,
     POT_CHARGE,
     POT_EVENT_COUNT,
+    
+    // Screenshots
+    SCR_TAKE = 1,
+    SCR_EVENT_COUNT,
     
     // Inspector slot
     INS_NONE = 1,
