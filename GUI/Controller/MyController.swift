@@ -830,7 +830,7 @@ extension MyController {
         if fingerprint != 0 && num != 0 {
             
             let image = amiga.autoScreenshotImage(num - 1)
-            let name = String(format:"%02X", fingerprint)
+            let name = String(format: "%02X", fingerprint)
             
             if let path = screenshotFolder(name) {
                 

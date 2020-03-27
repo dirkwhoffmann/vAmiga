@@ -37,9 +37,7 @@ public extension AmigaProxy {
         var bitmap = data
         let width = Int(size.width)
         let height = Int(size.height)
-        
-        track("width = \(width) height = \(height)")
-        
+                
         let imageRep = NSBitmapImageRep(bitmapDataPlanes: &bitmap,
                                         pixelsWide: width,
                                         pixelsHigh: height,
