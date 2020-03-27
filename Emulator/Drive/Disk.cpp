@@ -77,6 +77,8 @@ Disk::makeWithFile(ADFFile *file)
         return NULL;
     }
     
+    disk->fnv = file->fnv();
+    
     return disk;
 }
 
@@ -131,11 +133,12 @@ void
 Disk::clearDisk()
 {
     assert(sizeof(data) == sizeof(data.raw));
-    // memset(data.raw, 0xAA, sizeof(data));
 
     srand(0);
     for (int i = 0; i < sizeof(data); i++)
         data.raw[i] = rand() & 0xFF;
+    
+    fnv = 0;
 }
 
 void

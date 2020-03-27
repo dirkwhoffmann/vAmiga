@@ -1173,11 +1173,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return ((ADFFile *)wrapper->file)->getDiskType();
 }
-- (NSString *) sha1
-{
-    const char *str = ((ADFFile *)wrapper->file)->sha1();
-    return str ? [NSString stringWithUTF8String:str] : NULL;
-}
 - (NSInteger)numCylinders
 {
     return ((ADFFile *)wrapper->file)->numCyclinders();
@@ -1537,6 +1532,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void)deleteUserSnapshot:(NSInteger)nr
 {
     wrapper->amiga->deleteUserSnapshot((unsigned)nr);
+}
+- (NSInteger) numAutoScreenshots
+{
+    return wrapper->amiga->numAutoScreenshots();
 }
 - (unsigned char *) autoScreenshotImageData:(NSInteger)nr
 {

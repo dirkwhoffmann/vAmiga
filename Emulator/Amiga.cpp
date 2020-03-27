@@ -932,21 +932,23 @@ void
 Amiga::takeAutoScreenshot()
 {
     takeScreenshot(autoScreenshots);
-    putMessage(MSG_AUTOSCREENSHOT, numAutoScreenshots());
 }
 
 void
 Amiga::serviceScrEvent()
 {
-    static int delay[] = { 1, 2, 3, 0 };
+    debug("serviceScrEvent\n");
+
+    static int delay[] = { 10, 20, 30, 0 };
     
     int num = numAutoScreenshots();
-    debug("serviceScrEvent [%d]\n", num);
-    
     takeAutoScreenshot();
     
+    putMessage(MSG_AUTOSCREENSHOT, agnus.slot[SCR_SLOT].data);
+    
     if (delay[num]) {
-        agnus.scheduleRel<SCR_SLOT>(SEC(delay[num]), SCR_TAKE);
+        debug("Next screenshot in %d seconds\n", delay[num]);
+        agnus.rescheduleRel<SCR_SLOT>(SEC(delay[num]));
     } else {
         agnus.cancel<SCR_SLOT>();
     }

@@ -138,14 +138,24 @@ ADFFile::getDiskType()
 }
 
 const char *
-ADFFile::sha1()
+ADFFile::sha()
 {
     static char result[41];
 
     int error = sha_1(NULL, result, data, size);
-    if (error) warn("sha_1 returned with error code %d\n", error);
+    
+    if (error) {
+        warn("sha_1 returned with error code %d\n", error);
+        result[0] = 0;
+    }
 
     return result;
+}
+
+u64
+ADFFile::fnv()
+{
+    return fnv_1a_64(data, size);
 }
 
 long

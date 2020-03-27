@@ -13,7 +13,6 @@
 #include "HardwareComponent.h"
 #include "ADFFile.h"
 
-
 class Disk : public AmigaObject {
     
 public:
@@ -83,6 +82,9 @@ public:
     bool writeProtected;
     bool modified;
     
+    // Checksum of this disk if it was created from an ADF file, 0 otherwise
+    u64 fnv;
+    
     //
     // Class functions
     //
@@ -113,7 +115,8 @@ public:
         & type
         & data.raw
         & writeProtected
-        & modified;
+        & modified
+        & fnv;
     }
 
 
@@ -131,6 +134,7 @@ public:
     bool isModified() { return modified; }
     void setModified(bool value) { modified = value; }
     
+    u64 getFnv() { return fnv; }
     
     //
     // Computed properties

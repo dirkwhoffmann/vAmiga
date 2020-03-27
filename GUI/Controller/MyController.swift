@@ -712,7 +712,7 @@ extension MyController {
             break
             
         case MSG_AUTOSCREENSHOT:
-            saveAutoScreenshot(msg.data, fingerprint: "ABCDEFG")
+            saveAutoScreenshot(fingerprint: msg.data)
             
         default:
             
@@ -791,20 +791,24 @@ extension MyController {
     // Screenshots
     //
     
-    private func screenshotFolder() -> URL? {
+    private func screenshotFolder(_ name: String?) -> URL? {
+        
+        if name == nil { return nil }
         
         let fm = FileManager.default
-        
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
         guard let base = fm.urls(for: path, in: mask).first else { return nil }
-        let folder = base.appendingPathComponent("vAmiga/Screenshots")
+        let folder = base.appendingPathComponent("vAmiga/\(name!)")
+        
+        // track("folder = \(folder)")
         
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
                                          isDirectory: &isDirectory)
         
         if !folderExists || !isDirectory.boolValue {
+                        
             do {
                 try fm.createDirectory(at: folder,
                                        withIntermediateDirectories: true,
@@ -817,22 +821,28 @@ extension MyController {
         return folder
     }
     
-    private func saveAutoScreenshot(_ nr: Int, fingerprint: String) {
+    private func saveAutoScreenshot(fingerprint: Int) {
         
-        track("saveAutoScreenshot: \(nr) \(fingerprint)")
+        track("saveAutoScreenshot: \(fingerprint)")
 
-        let image = amiga.autoScreenshotImage(nr - 1)
-        
-        if let path = screenshotFolder() {
-     
-            let filename = fingerprint + "\(nr)" + ".jpeg"
-            let url = path.appendingPathComponent(filename)
+        let num = amiga.numAutoScreenshots()
+
+        if fingerprint != 0 && num != 0 {
             
-            track("\(url)")
+            let image = amiga.autoScreenshotImage(num - 1)
+            let name = String(format:"%02X", fingerprint)
             
-            let type = NSBitmapImageRep.FileType.jpeg
-            let data = image.representation(using: type)
-            try? data?.write(to: url, options: .atomic)
+            if let path = screenshotFolder(name) {
+                
+                let filename = "\(num)" + ".jpeg"
+                let url = path.appendingPathComponent(filename)
+                
+                track("\(url)")
+                
+                let type = NSBitmapImageRep.FileType.jpeg
+                let data = image.representation(using: type)
+                try? data?.write(to: url, options: .atomic)
+            }
         }
     }
     

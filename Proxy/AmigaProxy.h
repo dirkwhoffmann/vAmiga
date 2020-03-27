@@ -179,6 +179,7 @@ struct AmigaFileWrapper;
 - (void) deleteUserSnapshot:(NSInteger)nr;
 
 // Handling screenshots
+- (NSInteger) numAutoScreenshots;
 - (unsigned char *) autoScreenshotImageData:(NSInteger)nr;
 - (NSSize) autoScreenshotImageSize:(NSInteger)nr;
 
@@ -621,7 +622,6 @@ struct AmigaFileWrapper;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 - (DiskType)diskType;
-- (NSString *)sha1;
 - (NSInteger)numCylinders;
 - (NSInteger)numHeads;
 - (NSInteger)numTracks;

@@ -105,12 +105,6 @@ class DiskMountDialog: DialogController {
             
             disk = attachment
             super.showSheet(completionHandler: handler)
-
-            if let sha1 = disk.sha1() {
-                track("Checksum: \(sha1)")
-            } else {
-                track("Failed to compute SHA1 checksum")
-            }
         }
     }
     

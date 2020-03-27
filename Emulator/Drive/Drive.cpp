@@ -522,9 +522,19 @@ Drive::insertDisk(Disk *disk)
         // Don't insert a disk if there is already one
         assert(!hasDisk());
 
+        // Insert the disk and inform the GUI
         this->disk = disk;
         amiga.putMessage(MSG_DRIVE_DISK_INSERT, nr);
+
+        // Schedule the first screenshot to be taken
+        agnus.scheduleRel<SCR_SLOT>(SEC(1), SCR_TAKE, disk->getFnv());
     }
+}
+
+u64
+Drive::fnv()
+{
+    return disk ? disk->getFnv() : 0;
 }
 
 void

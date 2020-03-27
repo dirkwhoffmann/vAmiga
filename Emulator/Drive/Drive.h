@@ -75,7 +75,7 @@ public:
     // The currently inserted disk (NULL if the drive is empty)
     Disk *disk = NULL;
 
-
+    
     //
     // Methods
     //
@@ -229,6 +229,7 @@ public:
     void ejectDisk();
     void insertDisk(Disk *disk);
     
+    u64 fnv();
     
     //
     // Delegation methods
