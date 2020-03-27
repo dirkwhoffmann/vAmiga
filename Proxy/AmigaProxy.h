@@ -557,6 +557,8 @@ struct AmigaFileWrapper;
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)value;
 
+- (u64)  fnv;
+
 - (ADFFileProxy *)convertDisk;
 
 @end
@@ -627,6 +629,8 @@ struct AmigaFileWrapper;
 - (NSInteger)numTracks;
 - (NSInteger)numSectors;
 - (NSInteger)numSectorsPerTrack;
+- (u64) fnv;
+
 - (void)formatDisk:(FileSystemType)fs;
 - (void)seekTrack:(NSInteger)nr;
 - (void)seekSector:(NSInteger)nr;

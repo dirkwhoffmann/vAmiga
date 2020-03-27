@@ -821,6 +821,28 @@ extension MyController {
         return folder
     }
     
+    func screenshotFolderContents(_ name: String?) -> [URL] {
+        
+        if name == nil { return [] }
+        
+        let fm = FileManager.default
+        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
+        let mask = FileManager.SearchPathDomainMask.userDomainMask
+        guard let base = fm.urls(for: path, in: mask).first else { return [] }
+        let folder = base.appendingPathComponent("vAmiga/\(name!)")
+        
+        var result = [URL]()
+        do {
+            result = try FileManager.default.contentsOfDirectory(at: folder, includingPropertiesForKeys: nil)
+            track("Got files")
+        } catch let error as NSError {
+            track(error.localizedDescription)
+            track("Sorry, no files")
+        }
+
+        return result
+    }
+    
     private func saveAutoScreenshot(fingerprint: Int) {
         
         track("saveAutoScreenshot: \(fingerprint)")

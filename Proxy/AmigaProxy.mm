@@ -1001,6 +1001,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->drive->setModifiedDisk(value);
 }
+- (u64) fnv
+{
+    return wrapper->drive->fnv();
+}
 - (ADFFileProxy *)convertDisk
 {
     return NULL;
@@ -1192,6 +1196,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (NSInteger)numSectorsPerTrack
 {
     return ((ADFFile *)wrapper->file)->numSectorsPerTrack();
+}
+- (u64) fnv
+{
+    return ((ADFFile *)wrapper->file)->fnv();
 }
 - (void)formatDisk:(FileSystemType)fs
 {
