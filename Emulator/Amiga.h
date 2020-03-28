@@ -547,7 +547,7 @@ public:
     
     // Takes a screenshot that was scheduled in the SRC_SLOT
     void serviceScrEvent();
-    
+
     
     //
     // Debugging the emulator

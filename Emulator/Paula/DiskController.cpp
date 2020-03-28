@@ -34,6 +34,11 @@ DiskController::_reset()
         free(diskToInsert);
         diskToInsert = NULL;
     }
+    
+    // Start taking screenshots if a disk is present in the boot drive
+    if (df0.hasDisk()) {
+        agnus.scheduleRel<SCR_SLOT>(SEC(10), SCR_TAKE, df0.disk->getFnv());
+    }    
 }
 
 void

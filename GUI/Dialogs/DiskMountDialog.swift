@@ -7,15 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class KeyViewItem: NSCollectionViewItem {
-    
-    override func viewDidLoad() {
-        
-        super.viewDidLoad()
-        view.wantsLayer = true
-    }
-}
-
 class DiskMountDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
@@ -27,7 +18,10 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
     @IBOutlet weak var recordButton: NSButton!
+    @IBOutlet weak var recordButtonText: NSTextField!
 
+    let carouselType = iCarouselType.coverFlow2
+    
     var disk: ADFFileProxy!
     var writeProtect = false
     var shrinked: Bool { return window!.frame.size.height < 300 }
@@ -55,10 +49,8 @@ class DiskMountDialog: DialogController {
     override public func awakeFromNib() {
 
         track()
-        carousel.type = .coverFlow2
         window?.makeFirstResponder(carousel)
         carousel.scrollToItem(at: screenshots.count / 2, animated: false)
-        carousel.layOutItemViews()
         
         UserDefaults.standard.register(defaults: ["VAmigaPreviewImages": true])
 
@@ -68,11 +60,12 @@ class DiskMountDialog: DialogController {
     override func windowDidLoad() {
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.carousel.type = self.carouselType
             self.carousel.isHidden = false
         }
         track()
     }
- 
+         
     func updateScreenshots() {
         
         let fingerprint = disk.fnv()
@@ -118,6 +111,7 @@ class DiskMountDialog: DialogController {
         
         // Buttons
         recordButton.state = recordPreviewImages ? .on : .off
+        recordButtonText.isHidden = !recordPreviewImages
         
         // Check for available drives
         let dc = amiga.diskController.getConfig()
@@ -157,6 +151,9 @@ class DiskMountDialog: DialogController {
         
         recordPreviewImages = !recordPreviewImages
         updateScreenshots()
+        carousel.reloadData()
+        carousel.layOutItemViews()
+        // carousel.type = carouselType
         update()
     }
 }
@@ -165,8 +162,18 @@ extension DiskMountDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
         
-        update()
+        track()
     }
+    
+    func windowWillStartLiveResize(_ notification: Notification) {
+         
+         track()
+     }
+     
+     func windowDidEndLiveResize(_ notification: Notification) {
+        
+        track()
+     }
 }
 
 //
@@ -192,7 +199,13 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
             
         } else {
             
-            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 266, height: 200))
+            let height = carousel.frame.height
+            let width = carousel.frame.width
+            track("h w : \(height) \(width)")
+            
+            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: height * 4 / 3, height: height))
+            
+            // itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 266, height: 200))
             itemView.image = screenshots[index % screenshots.count]
         }
         

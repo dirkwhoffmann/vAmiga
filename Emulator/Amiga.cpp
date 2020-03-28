@@ -945,7 +945,7 @@ Amiga::serviceScrEvent()
 {
     debug("serviceScrEvent\n");
 
-    static int delay[] = { 10, 20, 30, 0 };
+    static int delay[] = { 20, 30, 30, 30, 30, 30, 0 };
     
     int num = numAutoScreenshots();
     takeAutoScreenshot();
