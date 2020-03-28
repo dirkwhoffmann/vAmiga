@@ -921,11 +921,17 @@ Amiga::getScreenshot(vector<Screenshot *> &storage, unsigned nr)
     return nr < storage.size() ? storage.at(nr) : NULL;
 }
 
+Screenshot *
+Amiga::takeScreenshot()
+{
+    return Screenshot::makeWithAmiga(this, 2, 1);
+}
+
 void
 Amiga::takeScreenshot(vector<Screenshot *> &storage)
 {
-    Screenshot *screenshot = Screenshot::makeWithAmiga(this, 2, 1);
-    storage.push_back(screenshot);
+    // Screenshot *screenshot = Screenshot::makeWithAmiga(this, 2, 1);
+    storage.push_back(takeScreenshot());
 }
 
 void

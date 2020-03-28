@@ -26,14 +26,24 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
-    
+    @IBOutlet weak var recordButton: NSButton!
+
     var disk: ADFFileProxy!
     var writeProtect = false
     var shrinked: Bool { return window!.frame.size.height < 300 }
     var screenshots: [NSImage] = []
-    
+    var recordPreviewImages: Bool {
+        get {
+            return UserDefaults.standard.bool(forKey: "VAmigaPreviewImages")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "VAmigaPreviewImages")
+        }
+    }
+
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
+        track()
         if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
@@ -45,15 +55,22 @@ class DiskMountDialog: DialogController {
     override public func awakeFromNib() {
 
         track()
-                
         carousel.type = .coverFlow2
         window?.makeFirstResponder(carousel)
+        carousel.scrollToItem(at: screenshots.count / 2, animated: false)
+        carousel.layOutItemViews()
         
+        UserDefaults.standard.register(defaults: ["VAmigaPreviewImages": true])
+
         update()
     }
     
     override func windowDidLoad() {
-     
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            self.carousel.isHidden = false
+        }
+        track()
     }
  
     func updateScreenshots() {
@@ -62,26 +79,25 @@ class DiskMountDialog: DialogController {
         let folder = String(format: "%02X", fingerprint)
         let urls = parent.screenshotFolderContents(folder)
         
-        for url in urls {
-            if let image = NSImage.init(contentsOf: url) {
-                screenshots.append(image)
+        screenshots = []
+        if recordPreviewImages {
+            for url in urls {
+                if let image = NSImage.init(contentsOf: url) {
+                    screenshots.append(image.roundCorners(withRadius: 10.0))
+                }
             }
         }
-
-        track("Found \(screenshots.count) screenshots for this disk")
-    }
-    
-    func setHeight(_ newHeight: CGFloat) {
-
-        var rect = window!.frame
-        rect.origin.y += rect.size.height - newHeight
-        rect.size.height = newHeight
         
-        track("\(rect)")
-        window?.setFrame(rect, display: true)
-        update()
+        track("Found \(screenshots.count) screenshots for this disk")
+
+        if screenshots.count == 0 {
+            
+            // Add a default image
+            let name = recordPreviewImages ? "noise_camera" : "noise"
+            screenshots.append(NSImage.init(named: name)!)
+        }
     }
-    
+        
     func update() {
         
         // Update disk icon
@@ -99,6 +115,9 @@ class DiskMountDialog: DialogController {
         infoText.stringValue = "A byte-accurate image of \(str) diskette."
         let compatible = disk.diskType() == DISK_35_DD
         warningText.isHidden = compatible
+        
+        // Buttons
+        recordButton.state = recordPreviewImages ? .on : .off
         
         // Check for available drives
         let dc = amiga.diskController.getConfig()
@@ -133,6 +152,13 @@ class DiskMountDialog: DialogController {
         writeProtect = sender.state == .on
         update()
     }
+
+    @IBAction func recordPreviewImagesAction(_ sender: NSButton!) {
+        
+        recordPreviewImages = !recordPreviewImages
+        updateScreenshots()
+        update()
+    }
 }
 
 extension DiskMountDialog: NSWindowDelegate {
@@ -144,34 +170,6 @@ extension DiskMountDialog: NSWindowDelegate {
 }
 
 //
-// NSCollectionView data source and delegate
-//
-
-/*
-extension DiskMountDialog: NSCollectionViewDataSource {
-    
-    func numberOfSections(in collectionView: NSCollectionView) -> Int {
-        
-        return 1
-    }
-    
-    func collectionView(_ collectionView: NSCollectionView,
-                        numberOfItemsInSection section: Int) -> Int {
-        
-        return screenshots.count
-    }
-}
-
-extension DiskMountDialog: NSCollectionViewDelegate {
-    
-    func collectionView(_ collectionView: NSCollectionView,
-                        didSelectItemsAt indexPaths: Set<IndexPath>) {
-        
-    }
-}
-*/
-
-//
 // iCarousel data source and delegate
 //
 
@@ -179,8 +177,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         
-        track()
-        return 8
+        return screenshots.count
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -191,16 +188,15 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         // Reuse view if available, otherwise create a new view
         if let view = view as? NSImageView {
             
-            track("Reusing")
             itemView = view
             
         } else {
             
-            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
-            itemView.image = NSImage(named: "adf")
+            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 266, height: 200))
+            itemView.image = screenshots[index % screenshots.count]
         }
         
-        track("Returning \(itemView)")
+        track("iCarousel: \(itemView)")
         return itemView
     }
 }

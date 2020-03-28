@@ -139,6 +139,8 @@ NSComparisonResult compareViewDepth(UIView *view1, UIView *view2, iCarousel *sel
 
 - (void)setUp
 {
+    NSLog(@"setup");
+    
     _decelerationRate = 0.95;
     _scrollEnabled = YES;
     _bounces = YES;

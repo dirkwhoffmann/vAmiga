@@ -538,6 +538,9 @@ public:
     Screenshot *getScreenshot(vector<Screenshot *> &storage, unsigned nr);
     Screenshot *autoScreenshot(unsigned nr) { return getScreenshot(autoScreenshots, nr); }
 
+    // Takes a screenshot
+    Screenshot *takeScreenshot();
+    
     // Takes a screenshot and inserts it into the screenshot storage
     void takeScreenshot(vector<Screenshot *> &storage);
     void takeAutoScreenshot();

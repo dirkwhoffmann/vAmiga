@@ -1557,4 +1557,3 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 
 @end
-
