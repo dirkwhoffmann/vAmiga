@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="DiskMountDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="carousel" destination="RBx-ga-ubq" id="DRT-Xb-reu"/>
                 <outlet property="df0Button" destination="f8k-FI-c5U" id="Ia7-cB-vyd"/>
                 <outlet property="df1Button" destination="lq1-wH-n8V" id="dsL-Pl-gq7"/>
                 <outlet property="df2Button" destination="rcN-WL-VLh" id="6YD-Xv-5Wt"/>
@@ -15,8 +16,6 @@
                 <outlet property="disclosureButton" destination="hfO-E7-owZ" id="Zix-Oj-iK5"/>
                 <outlet property="diskIcon" destination="Yxi-Ar-LgQ" id="wZB-Vy-nnw"/>
                 <outlet property="infoText" destination="JMf-QF-9dD" id="uaR-lO-RE7"/>
-                <outlet property="keyMatrixCollectionView" destination="4ke-XZ-4eF" id="gBE-am-thO"/>
-                <outlet property="keyMatrixScrollView" destination="Xrx-tH-w4n" id="wWZ-fi-uSw"/>
                 <outlet property="warningText" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
                 <outlet property="window" destination="WVX-DH-I0u" id="CxT-wS-1TR"/>
             </connections>
@@ -63,7 +62,7 @@
                         <rect key="frame" x="127" y="291" width="403" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="A byte-accurate image of a 3,5&quot; Amiga diskette." id="CrX-XA-ycH">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="label" size="11"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -155,50 +154,27 @@ Gw
                         <rect key="frame" x="127" y="275" width="403" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This disk format is not yet supported by the emulator." id="0rY-31-tK2">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="label" size="11"/>
                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <scrollView wantsLayer="YES" fixedFrame="YES" borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasVerticalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xrx-tH-w4n">
-                        <rect key="frame" x="20" y="61" width="513" height="157"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <clipView key="contentView" copiesOnScroll="NO" id="7dI-h0-Pwd">
-                            <rect key="frame" x="0.0" y="0.0" width="513" height="157"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <subviews>
-                                <collectionView allowsEmptySelection="NO" id="4ke-XZ-4eF">
-                                    <rect key="frame" x="0.0" y="0.0" width="513" height="157"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                                    <collectionViewFlowLayout key="collectionViewLayout" minimumInteritemSpacing="4" minimumLineSpacing="4" scrollDirection="horizontal" id="X5A-c5-EK3">
-                                        <size key="itemSize" width="160" height="120"/>
-                                        <edgeInsets key="sectionInset" left="12" right="12" top="12" bottom="12"/>
-                                    </collectionViewFlowLayout>
-                                    <color key="primaryBackgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    <connections>
-                                        <outlet property="dataSource" destination="-2" id="e9t-EE-HNt"/>
-                                        <outlet property="delegate" destination="-2" id="lcu-5h-Ak9"/>
-                                    </connections>
-                                </collectionView>
-                            </subviews>
-                            <edgeInsets key="contentInsets" left="0.0" right="0.0" top="0.0" bottom="0.0"/>
-                        </clipView>
-                        <scroller key="horizontalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="2Vp-Kl-04f">
-                            <rect key="frame" x="0.0" y="141" width="513" height="16"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                        <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="lma-fe-tvh">
-                            <rect key="frame" x="-100" y="-100" width="16" height="157"/>
-                            <autoresizingMask key="autoresizingMask"/>
-                        </scroller>
-                    </scrollView>
+                    <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBx-ga-ubq" customClass="iCarousel">
+                        <rect key="frame" x="21" y="61" width="512" height="157"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <outlet property="dataSource" destination="-2" id="akM-rF-hxq"/>
+                            <outlet property="delegate" destination="-2" id="1QM-8r-SC8"/>
+                        </connections>
+                    </customView>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="SXg-kY-CmG"/>
             </connections>
-            <point key="canvasLocation" x="-317" y="672.5"/>
+            <point key="canvasLocation" x="-317" y="672"/>
         </window>
+        <collectionViewItem id="8t6-fj-1UB" customClass="KeyViewItem" customModule="vAmiga" customModuleProvider="target"/>
     </objects>
     <resources>
         <image name="adf" width="258" height="257"/>

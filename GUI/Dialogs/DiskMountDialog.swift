@@ -19,15 +19,13 @@ class KeyViewItem: NSCollectionViewItem {
 class DiskMountDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
-    @IBOutlet weak var disclosureButton: NSButton!
     @IBOutlet weak var infoText: NSTextField!
     @IBOutlet weak var warningText: NSTextField!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
-    @IBOutlet weak var keyMatrixCollectionView: NSCollectionView!
-    @IBOutlet weak var keyMatrixScrollView: NSScrollView!
+    @IBOutlet weak var carousel: iCarousel!
     
     var disk: ADFFileProxy!
     var writeProtect = false
@@ -47,25 +45,15 @@ class DiskMountDialog: DialogController {
     override public func awakeFromNib() {
 
         track()
-
-        // var rect = window!.frame
-        // rect.size.height = 176 + 20
-        // window!.setFrame(rect, display: true)
-        
-        keyMatrixScrollView.drawsBackground = false
-        keyMatrixScrollView.contentView.drawsBackground = false
-        
-        // keyMatrixScrollView.backgroundColor = .clear
-        keyMatrixCollectionView.backgroundColors = [.clear]
+                
+        carousel.type = .coverFlow2
+        window?.makeFirstResponder(carousel)
         
         update()
-        keyMatrixCollectionView.reloadData()
     }
     
     override func windowDidLoad() {
      
-        if screenshots.count == 0 { shrink() }
-        track()
     }
  
     func updateScreenshots() {
@@ -94,13 +82,7 @@ class DiskMountDialog: DialogController {
         update()
     }
     
-    func shrink() { setHeight(176) }
-    func expand() { setHeight(358) }
-    
     func update() {
-        
-        let size = window!.frame.size
-        let hide = size.height < 300
         
         // Update disk icon
         diskIcon.image = NSImage.init(named: writeProtect ? "adf_protected" : "adf")
@@ -116,9 +98,6 @@ class DiskMountDialog: DialogController {
         let str = typeName[disk.diskType().rawValue]!
         infoText.stringValue = "A byte-accurate image of \(str) diskette."
         let compatible = disk.diskType() == DISK_35_DD
-            
-        // Update the disclosure button state
-        disclosureButton.state = shrinked ? .off : .on
         warningText.isHidden = compatible
         
         // Check for available drives
@@ -132,26 +111,11 @@ class DiskMountDialog: DialogController {
         df1Button.isEnabled = compatible && connected1
         df2Button.isEnabled = compatible && connected2
         df3Button.isEnabled = compatible && connected3
-
-        // Hide some elements if window is shrinked
-        let items: [NSView] = [
-            
-            keyMatrixScrollView
-        ]
-        for item in items { item.isHidden = hide }
-        
-        // Only proceed if window is expanded
-        if hide { return }
     }
     
     //
     // Action methods
     //
-
-    @IBAction func disclosureAction(_ sender: NSButton!) {
-        
-        shrinked ? expand() : shrink()
-    }
 
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
@@ -171,20 +135,6 @@ class DiskMountDialog: DialogController {
     }
 }
 
-//
-// NSTableView delegate and data source
-//
-
-extension DiskMountDialog: NSTableViewDelegate {
-    
-    func tableView(_ tableView: NSTableView,
-                   willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        
-        // let c = cell as! NSTextFieldCell
-        // c.font = cbmfont
-        // c.textColor = .red
-    }
-}
 extension DiskMountDialog: NSWindowDelegate {
     
     func windowDidResize(_ notification: Notification) {
@@ -197,6 +147,7 @@ extension DiskMountDialog: NSWindowDelegate {
 // NSCollectionView data source and delegate
 //
 
+/*
 extension DiskMountDialog: NSCollectionViewDataSource {
     
     func numberOfSections(in collectionView: NSCollectionView) -> Int {
@@ -209,21 +160,6 @@ extension DiskMountDialog: NSCollectionViewDataSource {
         
         return screenshots.count
     }
-    
-    func collectionView(_ itemForRepresentedObjectAtcollectionView: NSCollectionView,
-                        itemForRepresentedObjectAt indexPath: IndexPath) -> NSCollectionViewItem {
-        
-        let id = NSUserInterfaceItemIdentifier(rawValue: "KeyViewItem")
-        let item = keyMatrixCollectionView.makeItem(withIdentifier: id, for: indexPath)
-        guard let keyViewItem = item as? KeyViewItem else {
-            return item
-        }
-        
-        // let row = indexPath.section
-        // let col = indexPath.item
-        keyViewItem.imageView?.image = screenshots[indexPath.item]
-        return keyViewItem
-    }
 }
 
 extension DiskMountDialog: NSCollectionViewDelegate {
@@ -231,5 +167,40 @@ extension DiskMountDialog: NSCollectionViewDelegate {
     func collectionView(_ collectionView: NSCollectionView,
                         didSelectItemsAt indexPaths: Set<IndexPath>) {
         
+    }
+}
+*/
+
+//
+// iCarousel data source and delegate
+//
+
+extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
+    
+    func numberOfItems(in carousel: iCarousel) -> Int {
+        
+        track()
+        return 8
+    }
+    
+    func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
+        
+        track()
+        var itemView: NSImageView
+        
+        // Reuse view if available, otherwise create a new view
+        if let view = view as? NSImageView {
+            
+            track("Reusing")
+            itemView = view
+            
+        } else {
+            
+            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 200, height: 200))
+            itemView.image = NSImage(named: "adf")
+        }
+        
+        track("Returning \(itemView)")
+        return itemView
     }
 }
