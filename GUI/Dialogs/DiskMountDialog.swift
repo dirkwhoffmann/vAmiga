@@ -20,7 +20,7 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var recordButton: NSButton!
     @IBOutlet weak var recordButtonText: NSTextField!
 
-    let carouselType = iCarouselType.coverFlow2
+    let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
     var writeProtect = false
@@ -50,7 +50,6 @@ class DiskMountDialog: DialogController {
 
         track()
         window?.makeFirstResponder(carousel)
-        carousel.scrollToItem(at: screenshots.count / 2, animated: false)
         
         UserDefaults.standard.register(defaults: ["VAmigaPreviewImages": true])
 
@@ -62,6 +61,7 @@ class DiskMountDialog: DialogController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.carousel.type = self.carouselType
             self.carousel.isHidden = false
+            self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: true)
         }
         track()
     }
@@ -153,7 +153,6 @@ class DiskMountDialog: DialogController {
         updateScreenshots()
         carousel.reloadData()
         carousel.layOutItemViews()
-        // carousel.type = carouselType
         update()
     }
 }

@@ -175,7 +175,6 @@ Gw
             </connections>
             <point key="canvasLocation" x="-308.5" y="716"/>
         </window>
-        <collectionViewItem id="8t6-fj-1UB" customClass="KeyViewItem" customModule="vAmiga" customModuleProvider="target"/>
     </objects>
     <resources>
         <image name="adf" width="258" height="257"/>
