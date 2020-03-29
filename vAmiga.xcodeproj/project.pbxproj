@@ -148,6 +148,7 @@
 		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
+		50F58064243093B700E7D84D /* MyControllerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F58063243093B700E7D84D /* MyControllerStorage.swift */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
@@ -382,6 +383,7 @@
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperBlitterPanel.swift; sourceTree = "<group>"; };
+		50F58063243093B700E7D84D /* MyControllerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStorage.swift; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
 		50F6EEB621F4F5C60091155D /* Disk.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Disk.cpp; sourceTree = "<group>"; };
@@ -688,8 +690,9 @@
 				508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */,
 				508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */,
 				508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */,
-				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
+				50F58063243093B700E7D84D /* MyControllerStorage.swift */,
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
+				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
@@ -994,6 +997,7 @@
 				50B14C1221EB4314002E32A6 /* AmigaUtils.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
+				50F58064243093B700E7D84D /* MyControllerStorage.swift in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VKBController.swift in Sources */,

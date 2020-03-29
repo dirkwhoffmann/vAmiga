@@ -15,8 +15,12 @@
                 <outlet property="df3Button" destination="ERu-ly-O7X" id="yXR-yR-hc0"/>
                 <outlet property="diskIcon" destination="Yxi-Ar-LgQ" id="wZB-Vy-nnw"/>
                 <outlet property="infoText" destination="JMf-QF-9dD" id="uaR-lO-RE7"/>
+                <outlet property="leftButton" destination="llt-cT-qGq" id="oPA-fE-yI8"/>
+                <outlet property="listSelector" destination="g1t-QD-ywc" id="k8f-ez-RP8"/>
+                <outlet property="middleButton" destination="a2U-w0-gYy" id="aU6-rc-oAh"/>
                 <outlet property="recordButton" destination="jTQ-CB-I0K" id="p13-Rd-kip"/>
                 <outlet property="recordButtonText" destination="Mpp-wm-2vu" id="Cp4-v9-j35"/>
+                <outlet property="rightButton" destination="sOn-fg-xfl" id="Pgb-4e-VvH"/>
                 <outlet property="warningText" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
                 <outlet property="window" destination="WVX-DH-I0u" id="CxT-wS-1TR"/>
             </connections>
@@ -26,19 +30,19 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="WVX-DH-I0u">
             <windowStyleMask key="styleMask" titled="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="131" y="158" width="569" height="446"/>
+            <rect key="contentRect" x="131" y="158" width="569" height="487"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1536" height="937"/>
             <view key="contentView" id="fO9-7B-YPy">
-                <rect key="frame" x="0.0" y="0.0" width="569" height="446"/>
+                <rect key="frame" x="0.0" y="0.0" width="569" height="487"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yxi-Ar-LgQ" userLabel="Icon">
-                        <rect key="frame" x="21" y="326" width="100" height="100"/>
+                        <rect key="frame" x="21" y="367" width="100" height="100"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="adf" id="bqS-ql-Ov6"/>
                     </imageView>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l19-lb-oYh">
-                        <rect key="frame" x="127" y="404" width="267" height="19"/>
+                        <rect key="frame" x="127" y="445" width="267" height="19"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Amiga Disk File (ADF)" id="gHB-Zc-Fgf">
                             <font key="font" metaFont="system"/>
@@ -47,11 +51,11 @@
                         </textFieldCell>
                     </textField>
                     <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="iAg-Xw-L2a">
-                        <rect key="frame" x="129" y="400" width="420" height="5"/>
+                        <rect key="frame" x="129" y="441" width="420" height="5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     </box>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JMf-QF-9dD">
-                        <rect key="frame" x="127" y="379" width="418" height="14"/>
+                        <rect key="frame" x="127" y="420" width="418" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="A byte-accurate image of a 3,5&quot; Amiga diskette." id="CrX-XA-ycH">
                             <font key="font" metaFont="controlContent" size="11"/>
@@ -121,7 +125,7 @@ Gw
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="T2c-1K-zxI">
-                        <rect key="frame" x="127" y="331" width="102" height="18"/>
+                        <rect key="frame" x="127" y="372" width="102" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <buttonCell key="cell" type="check" title="Write protect" bezelStyle="regularSquare" imagePosition="left" inset="2" id="MEb-f8-pJW">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -132,9 +136,9 @@ Gw
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jTQ-CB-I0K">
-                        <rect key="frame" x="164" y="81" width="238" height="18"/>
+                        <rect key="frame" x="119" y="22" width="163" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="check" title="Record preview images for this disk" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7yM-I1-zka">
+                        <buttonCell key="cell" type="check" title="Record preview images" bezelStyle="regularSquare" imagePosition="left" inset="2" id="7yM-I1-zka">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
@@ -143,7 +147,7 @@ Gw
                         </connections>
                     </button>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nyT-rh-hux">
-                        <rect key="frame" x="127" y="363" width="418" height="14"/>
+                        <rect key="frame" x="127" y="404" width="418" height="14"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="This disk format is not yet supported by the emulator." id="0rY-31-tK2">
                             <font key="font" metaFont="controlContent" size="11"/>
@@ -152,7 +156,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mpp-wm-2vu">
-                        <rect key="frame" x="127" y="61" width="312" height="14"/>
+                        <rect key="frame" x="128" y="68" width="312" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Images are stored locally in ~/Application Support/vAmiga" id="K2D-xf-b3f">
                             <font key="font" metaFont="controlContent" size="11"/>
@@ -161,22 +165,72 @@ Gw
                         </textFieldCell>
                     </textField>
                     <customView hidden="YES" canDrawConcurrently="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RBx-ga-ubq" customClass="iCarousel">
-                        <rect key="frame" x="21" y="116" width="528" height="185"/>
+                        <rect key="frame" x="20" y="120" width="528" height="201"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="dataSource" destination="-2" id="akM-rF-hxq"/>
                             <outlet property="delegate" destination="-2" id="1QM-8r-SC8"/>
                         </connections>
                     </customView>
+                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g1t-QD-ywc">
+                        <rect key="frame" x="215" y="327" width="130" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="gys-nA-rNR">
+                            <font key="font" metaFont="system"/>
+                            <segments>
+                                <segment label="Starred"/>
+                                <segment label="Latest" selected="YES" tag="1"/>
+                            </segments>
+                        </segmentedCell>
+                        <connections>
+                            <action selector="listAction:" target="-2" id="GZ7-gr-3nL"/>
+                        </connections>
+                    </segmentedControl>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="llt-cT-qGq">
+                        <rect key="frame" x="240" y="89" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSGoLeftTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ArB-UT-FPI">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="leftAction:" target="-2" id="siZ-PI-dhs"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="a2U-w0-gYy">
+                        <rect key="frame" x="272" y="89" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarAddTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="AsQ-rY-N2A">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="middleAction:" target="-2" id="6FZ-dM-YaK"/>
+                        </connections>
+                    </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sOn-fg-xfl">
+                        <rect key="frame" x="304" y="89" width="24" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSGoRightTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ydr-S4-mvL">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="rightAction:" target="-2" id="oWd-PD-QaG"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="SXg-kY-CmG"/>
             </connections>
-            <point key="canvasLocation" x="-308.5" y="716"/>
+            <point key="canvasLocation" x="-308.5" y="736.5"/>
         </window>
     </objects>
     <resources>
+        <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="NSGoRightTemplate" width="9" height="12"/>
+        <image name="NSTouchBarAddTemplate" width="14" height="30"/>
         <image name="adf" width="258" height="257"/>
     </resources>
 </document>

@@ -19,7 +19,13 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var carousel: iCarousel!
     @IBOutlet weak var recordButton: NSButton!
     @IBOutlet weak var recordButtonText: NSTextField!
+    @IBOutlet weak var listSelector: NSSegmentedControl!
+    @IBOutlet weak var leftButton: NSButton!
+    @IBOutlet weak var middleButton: NSButton!
+    @IBOutlet weak var rightButton: NSButton!
 
+    private var userList: Bool { return listSelector.indexOfSelectedItem == 0 }
+    
     let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
@@ -68,16 +74,13 @@ class DiskMountDialog: DialogController {
          
     func updateScreenshots() {
         
-        let fingerprint = disk.fnv()
-        let folder = String(format: "%02X", fingerprint)
-        let urls = parent.screenshotFolderContents(folder)
+        let urls = parent.autoScreenshotFolderContents(disk: disk.fnv())
         
         screenshots = []
-        if recordPreviewImages {
-            for url in urls {
-                if let image = NSImage.init(contentsOf: url) {
-                    screenshots.append(image.roundCorners(withRadius: 10.0))
-                }
+        for url in urls {
+            track("Creating image for URL \(url)")
+            if let image = NSImage.init(contentsOf: url) {
+                screenshots.append(image.roundCorners(withRadius: 10.0))
             }
         }
         
@@ -155,6 +158,46 @@ class DiskMountDialog: DialogController {
         carousel.layOutItemViews()
         update()
     }
+    
+    @IBAction func listAction(_ sender: NSSegmentedControl!) {
+
+        track("\(userList)")
+    }
+    
+    @IBAction func leftAction(_ sender: NSButton!) {
+
+        track("leftAction")
+        
+        let max = carousel.numberOfItems
+        let index = carousel.currentItemIndex
+        
+        track("max = \(max) index = \(index)")
+        
+        if index > 0 {
+            
+            let fingerprint = disk.fnv()
+            let disk = String(format: "%X", fingerprint)
+            
+            parent.swapAutoScreenshots(disk: disk, nr1: index, nr2: index - 1)
+            
+            updateScreenshots()
+            carousel.reloadData()
+            carousel.layOutItemViews()
+        }
+    }
+    
+    @IBAction func rightAction(_ sender: NSButton!) {
+
+        track("rightAction")
+    }
+
+    @IBAction func middleAction(_ sender: NSButton!) {
+
+        track("middleAction")
+        
+        let index = carousel.currentItemIndex
+        track("currentItemIndex = \(index)")
+    }
 }
 
 extension DiskMountDialog: NSWindowDelegate {
@@ -188,26 +231,13 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
         
-        track()
-        var itemView: NSImageView
+        let h = carousel.frame.height
+        let w = h * 4 / 3
+        let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        // Reuse view if available, otherwise create a new view
-        if let view = view as? NSImageView {
-            
-            itemView = view
-            
-        } else {
-            
-            let height = carousel.frame.height
-            let width = carousel.frame.width
-            track("h w : \(height) \(width)")
-            
-            itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: height * 4 / 3, height: height))
-            
-            // itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: 266, height: 200))
-            itemView.image = screenshots[index % screenshots.count]
-        }
-        
+        assert(index < screenshots.count)
+        itemView.image = screenshots[index % screenshots.count]
+
         track("iCarousel: \(itemView)")
         return itemView
     }
