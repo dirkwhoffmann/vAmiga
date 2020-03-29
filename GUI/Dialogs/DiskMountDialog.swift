@@ -47,7 +47,6 @@ class DiskMountDialog: DialogController {
         if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
-            updateScreenshots()
             super.showSheet(completionHandler: handler)
         }
     }
@@ -60,6 +59,7 @@ class DiskMountDialog: DialogController {
         UserDefaults.standard.register(defaults: ["VAmigaPreviewImages": true])
 
         update()
+        updateCarousel()
     }
     
     override func windowDidLoad() {
@@ -73,12 +73,18 @@ class DiskMountDialog: DialogController {
     }
          
     func updateScreenshots() {
+                
+        // Scan for filenames
+        var urls: [URL]
+        if userList {
+            urls = parent.userScreenshotFolderContents(disk: disk.fnv())
+        } else {
+            urls = parent.autoScreenshotFolderContents(disk: disk.fnv())
+        }
         
-        let urls = parent.autoScreenshotFolderContents(disk: disk.fnv())
-        
+        // Create images
         screenshots = []
         for url in urls {
-            track("Creating image for URL \(url)")
             if let image = NSImage.init(contentsOf: url) {
                 screenshots.append(image.roundCorners(withRadius: 10.0))
             }
@@ -86,14 +92,13 @@ class DiskMountDialog: DialogController {
         
         track("Found \(screenshots.count) screenshots for this disk")
 
+        // Add a default image if the list is empty
         if screenshots.count == 0 {
-            
-            // Add a default image
             let name = recordPreviewImages ? "noise_camera" : "noise"
             screenshots.append(NSImage.init(named: name)!)
         }
     }
-        
+     
     func update() {
         
         // Update disk icon
@@ -129,6 +134,13 @@ class DiskMountDialog: DialogController {
         df3Button.isEnabled = compatible && connected3
     }
     
+    func updateCarousel() {
+        
+        updateScreenshots()
+        carousel.reloadData()
+        carousel.layOutItemViews()
+    }
+
     //
     // Action methods
     //
@@ -162,41 +174,42 @@ class DiskMountDialog: DialogController {
     @IBAction func listAction(_ sender: NSSegmentedControl!) {
 
         track("\(userList)")
+        updateCarousel()
+        self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: false)
+        carousel.layOutItemViews()
     }
     
     @IBAction func leftAction(_ sender: NSButton!) {
 
-        track("leftAction")
-        
-        let max = carousel.numberOfItems
         let index = carousel.currentItemIndex
-        
-        track("max = \(max) index = \(index)")
-        
+        track("leftAction: \(index)")
+                
         if index > 0 {
-            
-            let fingerprint = disk.fnv()
-            let disk = String(format: "%X", fingerprint)
-            
-            parent.swapAutoScreenshots(disk: disk, nr1: index, nr2: index - 1)
-            
-            updateScreenshots()
-            carousel.reloadData()
-            carousel.layOutItemViews()
+            parent.swapAutoScreenshots(disk: disk.fnv(), nr1: index, nr2: index - 1)
+            updateCarousel()
+            carousel.scrollToItem(at: index - 1, animated: true)
         }
     }
     
     @IBAction func rightAction(_ sender: NSButton!) {
-
-        track("rightAction")
+        
+        let index = carousel.currentItemIndex
+        track("rightAction: \(index)")
+        
+        if index < carousel.numberOfItems - 1 {
+            parent.swapAutoScreenshots(disk: disk.fnv(), nr1: index, nr2: index + 1)
+            updateCarousel()
+            carousel.scrollToItem(at: index + 1, animated: true)
+        }
     }
 
     @IBAction func middleAction(_ sender: NSButton!) {
 
-        track("middleAction")
-        
         let index = carousel.currentItemIndex
-        track("currentItemIndex = \(index)")
+        track("middleAction: \(index)")
+        
+        parent.moveToUserScreenshots(disk: disk.fnv(), nr: index)
+        updateCarousel()
     }
 }
 
@@ -238,7 +251,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         assert(index < screenshots.count)
         itemView.image = screenshots[index % screenshots.count]
 
-        track("iCarousel: \(itemView)")
+        // track("iCarousel: \(itemView)")
         return itemView
     }
 }

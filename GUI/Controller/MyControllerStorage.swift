@@ -26,7 +26,7 @@ extension MyController {
         guard let support = fm.urls(for: path, in: mask).first else { return nil }
         let folder = support.appendingPathComponent("vAmiga/\(base)/\(disk)")
         
-        track("folder = \(folder)")
+        // track("folder = \(folder)")
         
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
@@ -106,6 +106,12 @@ extension MyController {
         
         return nil
     }
+    func autoScreenshotURL(disk: String?, nr: Int) -> URL? {
+        return disk != nil ? screenshotURL(base: "auto", disk: disk!, nr: nr) : nil
+    }
+    func userScreenshotURL(disk: String?, nr: Int) -> URL? {
+        return disk != nil ? screenshotURL(base: "user", disk: disk!, nr: nr) : nil
+    }
 
     func newScreenshotURL(base: String, disk: String) -> URL? {
         
@@ -134,19 +140,23 @@ extension MyController {
     
     func deleteScreenshot(base: String, disk: String, nr: Int) {
         
+        track()
         let fm = FileManager.default
-        
-        for i in nr ... 998 {
+                
+        if var url = screenshotURL(base: base, disk: disk, nr: nr) {
             
-            let oldUrl = screenshotURL(base: base, disk: disk, nr: i + 1)
-            let newUrl = screenshotURL(base: base, disk: disk, nr: i)
+            try? FileManager.default.removeItem(at: url)
             
-            if oldUrl != nil && newUrl != nil {
-                do {
-                    try fm.moveItem(at: oldUrl!, to: newUrl!)
-                } catch let error as NSError {
-                    print(error)
-                }
+            // Rename all items above the deleted one
+            for i in nr ... 998 {
+                
+                if let above = screenshotURL(base: base, disk: disk, nr: i + 1) {
+                    
+                    track("Renaming \(above) to \(above)")
+                    try? fm.moveItem(at: above, to: url)
+                    url = above
+                    
+                } else { break }
             }
         }
     }
@@ -173,15 +183,42 @@ extension MyController {
     }
     
     func swapUserScreenshots(disk: String?, nr1: Int, nr2: Int) {
-        
         if disk != nil { swapScreenshots(base: "user", disk: disk!, nr1: nr1, nr2: nr2) }
-     }
-
+    }
+    func swapUserScreenshots(disk: UInt64, nr1: Int, nr2: Int) {
+        swapUserScreenshots(disk: String(format: "%X", disk), nr1: nr1, nr2: nr2)
+    }
     func swapAutoScreenshots(disk: String?, nr1: Int, nr2: Int) {
-        
         if disk != nil { swapScreenshots(base: "auto", disk: disk!, nr1: nr1, nr2: nr2) }
-     }
+    }
+    func swapAutoScreenshots(disk: UInt64, nr1: Int, nr2: Int) {
+        swapAutoScreenshots(disk: String(format: "%X", disk), nr1: nr1, nr2: nr2)
+    }
 
+    func moveToUserScreenshots(disk: String, nr: Int) {
+        
+        let fm = FileManager.default
+                    
+        let oldUrl = autoScreenshotURL(disk: disk, nr: nr)
+        let newUrl = newUserScreenshotURL(disk: disk)
+            
+        track("moveToUserScreenshots")
+        track("\(oldUrl)")
+        track("\(newUrl)")
+
+        if oldUrl != nil && newUrl != nil {
+            do {
+                try fm.copyItem(at: oldUrl!, to: newUrl!)
+                deleteScreenshot(base: "auto", disk: disk, nr: nr)
+            } catch let error as NSError {
+                print(error)
+            }
+        }
+    }
+    func moveToUserScreenshots(disk: UInt64, nr: Int) {
+        moveToUserScreenshots(disk: String(format: "%X", disk), nr: nr)
+    }
+    
     func saveAutoScreenshot(fingerprint: Int) {
         
         track("saveAutoScreenshot: \(fingerprint)")
