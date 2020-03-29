@@ -20,8 +20,10 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var leftButton: NSButton!
     @IBOutlet weak var middleButton: NSButton!
     @IBOutlet weak var rightButton: NSButton!
-    @IBOutlet weak var folderPopup: NSPopUpButton!
-        
+
+    @IBOutlet weak var folderName: NSButton!
+    @IBOutlet weak var folderSelector: NSSegmentedControl!
+ 
     let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
@@ -45,12 +47,12 @@ class DiskMountDialog: DialogController {
         window?.makeFirstResponder(carousel)
         
         if let userPath = userScreenshotFolder {
-            folderPopup.item(at: 0)?.title = userPath.path
+            folderName.title = userPath.path
         }
         if let autoPath = autoScreenshotFolder {
-            folderPopup.item(at: 1)?.title = autoPath.path
+            folderName.title = autoPath.path
         }
-        
+        // folderSelector.
         update()
         updateCarousel()
     }
@@ -113,10 +115,10 @@ class DiskMountDialog: DialogController {
         // Preview images
         if favorites {
             middleButton.image = NSImage.init(named: "trashTemplate")
-            middleButton.toolTip = "Delete permanently"
+            middleButton.toolTip = "Delete image permanently"
         } else {
-            middleButton.image = NSImage.init(named: "star")
-            middleButton.toolTip = "Move to favorites"
+            middleButton.image = NSImage.init(named: "starTemplate")
+            middleButton.toolTip = "Move image to favorites"
         }
         
         // Check for available drives
@@ -150,6 +152,8 @@ class DiskMountDialog: DialogController {
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
+
+        deleteAutoScreenshots()
         
         amiga.diskController.insert(sender.tag, adf: disk)
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
@@ -168,6 +172,20 @@ class DiskMountDialog: DialogController {
 
         update()
         updateCarousel(scrollToCenter: true)
+    }
+    
+    @IBAction func folderSelectorAction(_ sender: NSSegmentedControl!) {
+
+        update()
+        updateCarousel(scrollToCenter: true)
+    }
+
+    @IBAction func folderNameAction(_ sender: NSButton!) {
+
+        track()
+        if let folder = screenshotFolder {
+            NSWorkspace.shared.open(folder)
+        }
     }
 
     @IBAction func leftAction(_ sender: NSButton!) {
@@ -235,7 +253,7 @@ extension DiskMountDialog: NSWindowDelegate {
 
 extension DiskMountDialog {
     
-    var favorites: Bool { return folderPopup.selectedTag() == 0 }
+    var favorites: Bool { return folderSelector.selectedSegment == 0 }
     
     func filename(forItem nr: Int) -> String {
         
@@ -269,19 +287,38 @@ extension DiskMountDialog {
         return folder
     }
     
+    var screenshotFolder: URL? {
+        return DiskMountDialog.folderURL(favorites: favorites, checksum: disk.fnv())
+    }
     var userScreenshotFolder: URL? {
         return DiskMountDialog.folderURL(favorites: true, checksum: disk.fnv())
     }
     var autoScreenshotFolder: URL? {
         return DiskMountDialog.folderURL(favorites: false, checksum: disk.fnv())
     }
-    var screenshotFolder: URL? {
-        return DiskMountDialog.folderURL(favorites: favorites, checksum: disk.fnv())
+    
+    func screenshotFiles(in folder: URL?) -> [URL] {
+        
+        var result = [URL]()
+        
+        for i in 0...999 {
+            
+            if let url = screenshotURL(forItem: i, inFolder: folder) {
+                result.append(url)
+            } else {
+                break
+            }
+        }
+        return result
     }
+
+    var screenshotFiles: [URL] { return screenshotFiles(in: screenshotFolder) }
+    var userScreenshotFiles: [URL] { return screenshotFiles(in: userScreenshotFolder) }
+    var autoScreenshotFiles: [URL] { return screenshotFiles(in: autoScreenshotFolder) }
 
     func screenshotURL(forItem nr: Int, inFolder folder: URL?) -> URL? {
         
-        if (folder == nil) { return nil }
+        if folder == nil { return nil }
         
         let file = folder!.appendingPathComponent(filename(forItem: nr))
         return FileManager.default.fileExists(atPath: file.path) ? file : nil
@@ -301,7 +338,7 @@ extension DiskMountDialog {
 
     func newScreenshotURL(inFolder folder: URL?) -> URL? {
         
-        if (folder == nil) { return nil }
+        if folder == nil { return nil }
         
         for i in 0...999 {
             
@@ -359,7 +396,7 @@ extension DiskMountDialog {
     
     func deleteScreenshot(at pos: Int, in folder: URL?) {
         
-        if (folder == nil) { return }
+        if folder == nil { return }
         let fm = FileManager.default
         
         if var url = screenshotURL(forItem: pos, inFolder: folder) {
@@ -371,7 +408,7 @@ extension DiskMountDialog {
                 
                 if let above = screenshotURL(forItem: i + 1, inFolder: folder) {
                     
-                    track("Renaming \(above) to \(above)")
+                    track("Renaming \(above) to \(url)")
                     try? fm.moveItem(at: above, to: url)
                     url = above
                     
@@ -390,6 +427,22 @@ extension DiskMountDialog {
 
     func deleteUserScreenshot(at pos: Int) {
         deleteScreenshot(at: pos, in: userScreenshotFolder)
+    }
+    
+    func deleteScreenshots(in folder: URL?) {
+        
+        let files = screenshotFiles(in: folder)
+        for file in files {
+            try? FileManager.default.removeItem(at: file)
+        }
+    }
+    
+    func deleteAutoScreenshots() {
+        deleteScreenshots(in: autoScreenshotFolder)
+    }
+
+    func deleteUserScreenshots() {
+        deleteScreenshots(in: userScreenshotFolder)
     }
 
     func moveToFavorites(nr: Int) {
