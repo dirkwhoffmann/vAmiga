@@ -18,16 +18,14 @@ extension MyController {
         return String(format: "%03d.jpeg", nr)
     }
     
-    private func screenshotFolder(base: String, disk: String) -> URL? {
+    private func getFolderURL(base: String, disk: String) -> URL? {
                 
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
         guard let support = fm.urls(for: path, in: mask).first else { return nil }
         let folder = support.appendingPathComponent("vAmiga/\(base)/\(disk)")
-        
-        // track("folder = \(folder)")
-        
+                
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
                                          isDirectory: &isDirectory)
@@ -47,11 +45,11 @@ extension MyController {
     }
     
     func userScreenshotFolder(_ disk: String?) -> URL? {
-        return disk != nil ? screenshotFolder(base: "user", disk: disk!) : nil
+        return disk != nil ? getFolderURL(base: "user", disk: disk!) : nil
     }
 
     func autoScreenshotFolder(_ disk: String?) -> URL? {
-        return disk != nil ? screenshotFolder(base: "auto", disk: disk!) : nil
+        return disk != nil ? getFolderURL(base: "auto", disk: disk!) : nil
     }
 
     func screenshotFolderContents(base: String, disk: String) -> [URL] {
@@ -65,18 +63,6 @@ extension MyController {
             } else {
                 break
             }
-            
-            /*
-             do {
-             result = try FileManager.default.contentsOfDirectory(at: url, includingPropertiesForKeys: nil)
-             } catch let error as NSError {
-             track(error.localizedDescription)
-             }
-             
-             let result2 = result.sorted()
-             track("\(result2)")
-             // TODO: Sort entries
-             */
         }
 
         track("screenshotFolderContents: \(result)")
@@ -98,7 +84,7 @@ extension MyController {
 
     func screenshotURL(base: String, disk: String, nr: Int) -> URL? {
         
-        if let url = screenshotFolder(base: base, disk: disk) {
+        if let url = getFolderURL(base: base, disk: disk) {
             
             let fileurl = url.appendingPathComponent(filename(nr: nr))
             if FileManager.default.fileExists(atPath: fileurl.path) { return fileurl }
@@ -115,7 +101,7 @@ extension MyController {
 
     func newScreenshotURL(base: String, disk: String) -> URL? {
         
-        if let url = screenshotFolder(base: base, disk: disk) {
+        if let url = getFolderURL(base: base, disk: disk) {
             
             for i in 0...999 {
                 
@@ -169,11 +155,13 @@ extension MyController {
         let newUrl = screenshotURL(base: base, disk: disk, nr: nr2)
         let tmpUrl = newScreenshotURL(base: base, disk: disk)
 
+        /*
         track("swap:")
         track("\(oldUrl)")
         track("\(newUrl)")
         track("\(tmpUrl)")
-
+        */
+        
         if oldUrl != nil && newUrl != nil && tmpUrl != nil {
             
             try? fm.moveItem(at: oldUrl!, to: tmpUrl!)
@@ -202,10 +190,12 @@ extension MyController {
         let oldUrl = autoScreenshotURL(disk: disk, nr: nr)
         let newUrl = newUserScreenshotURL(disk: disk)
             
+        /*
         track("moveToUserScreenshots")
         track("\(oldUrl)")
         track("\(newUrl)")
-
+        */
+        
         if oldUrl != nil && newUrl != nil {
             do {
                 try fm.copyItem(at: oldUrl!, to: newUrl!)
