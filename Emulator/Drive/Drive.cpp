@@ -43,7 +43,7 @@ void
 Drive::_ping()
 {
     amiga.putMessage(hasDisk() ?
-                     MSG_DISK_INSERT : MSG_DISK_EJECT, nr);
+                     MSG_DISK_INSERTED : MSG_DISK_EJECTED, nr);
     amiga.putMessage(hasWriteProtectedDisk() ?
                      MSG_DISK_PROTECTED : MSG_DISK_UNPROTECTED, nr);
     amiga.putMessage(hasModifiedDisk() ?

@@ -67,7 +67,7 @@ class DiskMountDialog: DialogController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             self.carousel.type = self.carouselType
             self.carousel.isHidden = false
-            self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: true)
+            self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: false)
         }
         track()
     }

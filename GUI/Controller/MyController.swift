@@ -725,7 +725,9 @@ extension MyController {
             }
             refreshStatusBar()
             
-        case MSG_DISK_EJECT,
+        case MSG_DISK_INSERTED,
+             MSG_DISK_EJECT,
+             MSG_DISK_EJECTED,
              MSG_DISK_UNSAVED,
              MSG_DISK_SAVED,
              MSG_DISK_PROTECTED,

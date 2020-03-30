@@ -247,6 +247,7 @@ class Screenshot {
     
     static func deleteAutoFolder(checksum: UInt64) {
         
+        track()
         Screenshot.delete(folder: Screenshot.autoFolder(checksum: checksum))
     }
 
