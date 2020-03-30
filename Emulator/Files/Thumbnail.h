@@ -15,7 +15,7 @@
 
 class Amiga;
 
-struct Screenshot {
+struct Thumbnail {
     
     // Image size
     u16 width, height;
@@ -27,7 +27,7 @@ struct Screenshot {
     time_t timestamp;
     
     // Factory methods
-    static Screenshot *makeWithAmiga(Amiga *amiga, int dx = 4, int dy = 2);
+    static Thumbnail *makeWithAmiga(Amiga *amiga, int dx = 4, int dy = 2);
     
     // Takes a screenshot from a given Amiga
     void take(Amiga *amiga, int dx = 4, int dy = 2);

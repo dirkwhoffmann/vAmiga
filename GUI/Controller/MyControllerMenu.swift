@@ -215,7 +215,7 @@ extension MyController: NSMenuItemValidation {
             self.amiga.run()
         })
     }
-    
+
     @IBAction func quicksaveScreenshot(_ sender: Any!) {
         
         // Determine file suffix

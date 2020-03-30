@@ -54,6 +54,14 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Timer lock
     var timerLock: NSLock!
+
+    // Screenshot timer
+    // The timer is started when a new disk is inserted. It periodically
+    // captures screenshots and stores them in the Application Support folder.
+    var screenshotTimer: Timer?
+    
+    // Counts the number of screenshots taken
+    var screenshotCounter = 0
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
@@ -82,7 +90,7 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Warp mode
     var warpMode = WarpMode.auto { didSet { updateWarp() } }
-
+    
     //
     // Preferences items
     //
@@ -356,14 +364,10 @@ class MyController: NSWindowController, MessageReceiver {
 extension MyController {
 
     // Provides the undo manager
-    override open var undoManager: UndoManager? {
-        return metal.undoManager
-    }
+    override open var undoManager: UndoManager? { return metal.undoManager }
  
     // Provides the document casted to the correct type
-    var mydocument: MyDocument? {
-        return document as? MyDocument
-    }
+    var mydocument: MyDocument? { return document as? MyDocument }
     
     /// Indicates if the emulator needs saving
     var needsSaving: Bool {
@@ -544,6 +548,22 @@ extension MyController {
         timerLock.unlock()
     }
  
+    @objc func screenshotTimerFunc() {
+        
+        takeScreenshot(auto: true)
+        screenshotCounter += 1
+        
+        // Schedule the next screenshot
+        let delay = TimeInterval(4 * screenshotCounter)
+        track("Taking next screenshot in \(delay) seconds")
+        
+        screenshotTimer = Timer.scheduledTimer(timeInterval: delay,
+                                               target: self,
+                                               selector: #selector(screenshotTimerFunc),
+                                               userInfo: nil,
+                                               repeats: false)
+    }
+        
     func processMessage(_ msg: Message) {
 
         switch msg.type {
@@ -688,8 +708,23 @@ extension MyController {
             }
             refreshStatusBar()
             
-        case MSG_DRIVE_DISK_INSERT,
-             MSG_DRIVE_DISK_EJECT,
+        case MSG_DRIVE_DISK_INSERT:
+
+            track()
+
+            if msg.data == 0 { // Df0
+                screenshotCounter = 0
+                screenshotTimer?.invalidate()
+                let initial = TimeInterval(Int.random(in: 4..<8))
+                screenshotTimer = Timer.scheduledTimer(timeInterval: initial,
+                                                       target: self,
+                                                       selector: #selector(screenshotTimerFunc),
+                                                       userInfo: nil,
+                                                       repeats: false)
+            }
+            refreshStatusBar()
+            
+        case MSG_DRIVE_DISK_EJECT,
              MSG_DRIVE_DISK_UNSAVED,
              MSG_DRIVE_DISK_SAVED,
              MSG_DRIVE_DISK_PROTECTED,
@@ -785,6 +820,39 @@ extension MyController {
         }
 
         refreshStatusBar()
+    }
+
+    //
+    // Screenshots
+    //
+    
+    func takeScreenshot(auto: Bool) {
+        
+        let upscaled = screenshotSource > 0
+        let checksum = amiga.df0.fnv()
+        
+        if checksum == 0 { return }
+        
+        guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
+            track("Failed to create screenshot")
+            return
+        }
+        let screenshot = Screenshot.init(screen: screen, upscaled: upscaled)
+        
+        var url: URL?
+        if auto {
+            url = Screenshot.newAutoUrl(checksum: checksum)
+        } else {
+            url = Screenshot.newUserUrl(checksum: checksum)
+        }
+        
+        if url == nil {
+            track("Failed to create URL")
+            return
+        }
+        
+        track("Saving screenshot to \(url!.path)")
+        try? screenshot.save(url: url!, format: .jpeg)
     }
 
     //

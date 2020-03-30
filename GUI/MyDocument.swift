@@ -9,6 +9,9 @@
 
 class MyDocument: NSDocument {
 
+    // The window controller for this document
+    var parent: MyController? { return windowControllers.first as? MyController }
+
     /*
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
@@ -30,12 +33,7 @@ class MyDocument: NSDocument {
      inserted into the disk drive.
      */
     var amigaAttachment: AmigaFileProxy?
-
-    // The window controller for this document
-    var parent: MyController? {
-        return windowControllers.first as? MyController
-    }
-
+    
     override init() {
         
         track()

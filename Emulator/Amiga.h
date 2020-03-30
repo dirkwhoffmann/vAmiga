@@ -194,7 +194,7 @@ private:
     vector<Snapshot *> userSnapshots;
 
     // Storage for auto-taken screenshots
-    vector<Screenshot *> autoScreenshots;
+    vector<Thumbnail *> autoScreenshots;
 
     
     //
@@ -531,18 +531,18 @@ public:
     //
     
     // Returns the number of stored screenshots
-    size_t numScreenshots(vector<Screenshot *> &storage);
+    size_t numScreenshots(vector<Thumbnail *> &storage);
     size_t numAutoScreenshots() { return numScreenshots(autoScreenshots); }
 
     // Returns an screenshot from the screenshot storage
-    Screenshot *getScreenshot(vector<Screenshot *> &storage, unsigned nr);
-    Screenshot *autoScreenshot(unsigned nr) { return getScreenshot(autoScreenshots, nr); }
+    Thumbnail *getScreenshot(vector<Thumbnail *> &storage, unsigned nr);
+    Thumbnail *autoScreenshot(unsigned nr) { return getScreenshot(autoScreenshots, nr); }
 
     // Takes a screenshot
-    Screenshot *takeScreenshot();
+    Thumbnail *takeScreenshot();
     
     // Takes a screenshot and inserts it into the screenshot storage
-    void takeScreenshot(vector<Screenshot *> &storage);
+    void takeScreenshot(vector<Thumbnail *> &storage);
     void takeAutoScreenshot();
     
     // Takes a screenshot that was scheduled in the SRC_SLOT

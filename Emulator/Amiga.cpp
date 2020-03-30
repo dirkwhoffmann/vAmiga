@@ -910,25 +910,25 @@ Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
 }
 
 size_t
-Amiga::numScreenshots(vector<Screenshot *> &storage)
+Amiga::numScreenshots(vector<Thumbnail *> &storage)
 {
     return storage.size();
 }
 
-Screenshot *
-Amiga::getScreenshot(vector<Screenshot *> &storage, unsigned nr)
+Thumbnail *
+Amiga::getScreenshot(vector<Thumbnail *> &storage, unsigned nr)
 {
     return nr < storage.size() ? storage.at(nr) : NULL;
 }
 
-Screenshot *
+Thumbnail *
 Amiga::takeScreenshot()
 {
-    return Screenshot::makeWithAmiga(this, 2, 1);
+    return Thumbnail::makeWithAmiga(this, 2, 1);
 }
 
 void
-Amiga::takeScreenshot(vector<Screenshot *> &storage)
+Amiga::takeScreenshot(vector<Thumbnail *> &storage)
 {
     // Screenshot *screenshot = Screenshot::makeWithAmiga(this, 2, 1);
     storage.push_back(takeScreenshot());
@@ -945,16 +945,14 @@ Amiga::serviceScrEvent()
 {
     debug("serviceScrEvent\n");
 
-    static int delay[] = { 2, 3, 3, 3, 3, 3, 0 };
-    
-    int num = numAutoScreenshots();
     takeAutoScreenshot();
-    
     putMessage(MSG_AUTOSCREENSHOT, agnus.slot[SCR_SLOT].data);
     
-    if (delay[num]) {
-        debug("Next screenshot in %d seconds\n", delay[num]);
-        agnus.rescheduleRel<SCR_SLOT>(SEC(delay[num]));
+    // Schedule the next screenshot
+    int delay = numAutoScreenshots() * 10;
+    if (delay) {
+        debug("Next screenshot in %d seconds\n", delay);
+        agnus.rescheduleRel<SCR_SLOT>(SEC(delay));
     } else {
         agnus.cancel<SCR_SLOT>();
     }

@@ -9,17 +9,17 @@
 
 #include "Amiga.h"
 
-Screenshot *
-Screenshot::makeWithAmiga(Amiga *amiga, int dx, int dy)
+Thumbnail *
+Thumbnail::makeWithAmiga(Amiga *amiga, int dx, int dy)
 {
-    Screenshot *screenshot = new Screenshot();
+    Thumbnail *screenshot = new Thumbnail();
     screenshot->take(amiga, dx, dy);
     
     return screenshot;
 }
 
 void
-Screenshot::take(Amiga *amiga, int dx, int dy)
+Thumbnail::take(Amiga *amiga, int dx, int dy)
 {
     u32 *source = (u32 *)amiga->denise.pixelEngine.getStableLongFrame().data;
     u32 *target = screen;

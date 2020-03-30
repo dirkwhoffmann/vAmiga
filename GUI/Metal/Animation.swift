@@ -10,6 +10,7 @@
 import simd
 
 struct AnimationType {
+    
     static let geometry = 1
     static let alpha = 2
     static let texture = 4

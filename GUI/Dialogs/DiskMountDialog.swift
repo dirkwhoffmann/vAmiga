@@ -31,6 +31,11 @@ class DiskMountDialog: DialogController {
     var shrinked: Bool { return window!.frame.size.height < 300 }
     var screenshots: [NSImage] = []
  
+    var user: Bool { return folderSelector.selectedSegment == 0 }
+    var userFolder: URL? { return Screenshot.userFolder(checksum: disk.fnv()) }
+    var autoFolder: URL? { return Screenshot.autoFolder(checksum: disk.fnv()) }
+    var screenshotFolder: URL? { return user ? userFolder : autoFolder }
+        
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
@@ -45,14 +50,7 @@ class DiskMountDialog: DialogController {
 
         track()
         window?.makeFirstResponder(carousel)
-        
-        if let userPath = userScreenshotFolder {
-            folderName.title = userPath.path
-        }
-        if let autoPath = autoScreenshotFolder {
-            folderName.title = autoPath.path
-        }
-        // folderSelector.
+                
         update()
         updateCarousel()
     }
@@ -68,14 +66,9 @@ class DiskMountDialog: DialogController {
     }
          
     func updateScreenshots() {
-                
-        // Scan for filenames
-        var urls: [URL]
-        if favorites {
-            urls = parent.userScreenshotFolderContents(disk: disk.fnv())
-        } else {
-            urls = parent.autoScreenshotFolderContents(disk: disk.fnv())
-        }
+
+        // Get a list of filenames
+        let urls = Screenshot.collectFiles(in: screenshotFolder)
         
         // Create images
         screenshots = []
@@ -113,10 +106,16 @@ class DiskMountDialog: DialogController {
         warningText.isHidden = compatible
                 
         // Preview images
-        if favorites {
+        if user {
+            if let path = Screenshot.userFolder(checksum: disk.fnv())?.path {
+                folderName.title = path
+            }
             middleButton.image = NSImage.init(named: "trashTemplate")
             middleButton.toolTip = "Delete image permanently"
         } else {
+            if let path = Screenshot.autoFolder(checksum: disk.fnv())?.path {
+                folderName.title = path
+            }
             middleButton.image = NSImage.init(named: "starTemplate")
             middleButton.toolTip = "Move image to favorites"
         }
@@ -153,7 +152,7 @@ class DiskMountDialog: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
 
-        deleteAutoScreenshots()
+        Screenshot.deleteAutoFolder(checksum: disk.fnv())
         
         amiga.diskController.insert(sender.tag, adf: disk)
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
@@ -194,7 +193,7 @@ class DiskMountDialog: DialogController {
         track("leftAction: \(index)")
                 
         if index > 0 {
-            swapScreenshot(at: index, with: index - 1)
+            Screenshot.swap(item: index, with: index - 1, in: screenshotFolder)
             updateCarousel()
             carousel.scrollToItem(at: index - 1, animated: true)
         }
@@ -206,7 +205,7 @@ class DiskMountDialog: DialogController {
         track("rightAction: \(index)")
         
         if index < carousel.numberOfItems - 1 {
-            swapScreenshot(at: index, with: index + 1)
+            Screenshot.swap(item: index, with: index + 1, in: screenshotFolder)
             updateCarousel()
             carousel.scrollToItem(at: index + 1, animated: true)
         }
@@ -217,12 +216,12 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("middleAction: \(index)")
 
-        if favorites {
+        if user {
             track("Deleting screenshot")
-            deleteUserScreenshot(at: index)
+            Screenshot.deleteUser(item: index, checksum: disk.fnv())
         } else {
             track("Moving screenshot to favorites")
-            moveToFavorites(nr: index)
+            Screenshot.moveToUser(item: index, checksum: disk.fnv())
         }
  
         updateCarousel()
@@ -251,9 +250,10 @@ extension DiskMountDialog: NSWindowDelegate {
 // Screenshot storage handling
 //
 
+/*
 extension DiskMountDialog {
     
-    var favorites: Bool { return folderSelector.selectedSegment == 0 }
+    
     
     func filename(forItem nr: Int) -> String {
         
@@ -371,13 +371,6 @@ extension DiskMountDialog {
         let oldUrl = screenshotURL(forItem: pos1, inFolder: folder)
         let newUrl = screenshotURL(forItem: pos2, inFolder: folder)
         let tmpUrl = newScreenshotURL(inFolder: folder)
-
-        /*
-        track("swap:")
-        track("\(oldUrl)")
-        track("\(newUrl)")
-        track("\(tmpUrl)")
-        */
         
         if oldUrl != nil && newUrl != nil && tmpUrl != nil {
             
@@ -451,13 +444,7 @@ extension DiskMountDialog {
         
         let oldUrl = autoScreenshotURL(forItem: nr)
         let newUrl = newUserScreenshotURL()
-        
-        /*
-         track("moveToUserScreenshots")
-         track("\(oldUrl)")
-         track("\(newUrl)")
-         */
-        
+                
         if oldUrl != nil && newUrl != nil {
             do {
                 try fm.copyItem(at: oldUrl!, to: newUrl!)
@@ -468,6 +455,7 @@ extension DiskMountDialog {
         }
     }
 }
+*/
 
 //
 // iCarousel data source and delegate

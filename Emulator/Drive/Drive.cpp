@@ -37,8 +37,6 @@ void
 Drive::_reset()
 {
     RESET_SNAPSHOT_ITEMS
-    
-    // head.cylinder = 40;
 }
 
 void
@@ -527,7 +525,7 @@ Drive::insertDisk(Disk *disk)
         amiga.putMessage(MSG_DRIVE_DISK_INSERT, nr);
 
         // Schedule the first screenshot to be taken
-        agnus.scheduleRel<SCR_SLOT>(SEC(10), SCR_TAKE, disk->getFnv());
+        // agnus.scheduleRel<SCR_SLOT>(SEC(10), SCR_TAKE, disk->getFnv());
     }
 }
 

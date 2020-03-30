@@ -102,6 +102,19 @@ extension URL {
         }
         return self
     }
+    
+    func addExtension(for format: NSBitmapImageRep.FileType) -> URL {
+    
+        let extensions: [NSBitmapImageRep.FileType: String] =
+        [ .tiff: "tiff", .bmp: "bmp", .gif: "gif", .jpeg: "jpeg", .png: "png" ]
+  
+        guard let ext = extensions[format] else {
+            track("Unsupported image format: \(format)")
+            return self
+        }
+            
+        return self.appendingPathExtension(ext)
+    }
 }
 
 //

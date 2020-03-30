@@ -11,7 +11,7 @@
 #define _AMIGA_SNAPSHOT_INC
 
 #include "AmigaFile.h"
-#include "Screenshot.h"
+#include "Thumbnail.h"
 
 class Amiga;
 
@@ -26,7 +26,7 @@ struct SnapshotHeader {
     u8 subminor;
     
     // Screenshot
-    Screenshot screenshot;
+    Thumbnail screenshot;
 };
 
 class Snapshot : public AmigaFile {
