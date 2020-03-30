@@ -33,7 +33,7 @@ class Screenshot {
                                                         true)
         let desktop = NSURL.init(fileURLWithPath: paths[0])
         
-        // Assmemble filename
+        // Assemble filename
         if var url = desktop.appendingPathComponent("Screenshot.") {
             
             url = url.addExtension(for: format)
@@ -58,6 +58,8 @@ class Screenshot {
     }
 
     static func folder(auto: Bool, checksum: UInt64) -> URL? {
+        
+        if checksum == 0 { return nil }
         
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
@@ -92,13 +94,24 @@ class Screenshot {
         return Screenshot.folder(auto: true, checksum: checksum)
     }
     
+    static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {
+        
+        let url = name.addExtension(for: type)
+        return FileManager.default.fileExists(atPath: url.path) ? url : nil
+    }
+    
     static func url(for item: Int, in folder: URL?) -> URL? {
-         
-         if folder == nil { return nil }
-         
-         let filename = String(format: "%03d.jpeg", item)
-         let url = folder!.appendingPathComponent(filename)
-         return FileManager.default.fileExists(atPath: url.path) ? url : nil
+        
+        if folder == nil { return nil }
+
+        let types: [NSBitmapImageRep.FileType] = [ .tiff, .bmp, .gif, .jpeg, .png ]
+        let url = folder!.appendingPathComponent(String(format: "%03d", item))
+        
+        for type in types {
+            if let url = fileExists(name: url, type: type) { return url }
+        }
+        
+        return nil
     }
     
     static func userUrl(for item: Int, checksum: UInt64) -> URL? {

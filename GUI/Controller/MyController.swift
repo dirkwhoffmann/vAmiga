@@ -708,11 +708,12 @@ extension MyController {
             }
             refreshStatusBar()
             
-        case MSG_DRIVE_DISK_INSERT:
+        case MSG_DISK_INSERT:
 
             track()
 
             if msg.data == 0 { // Df0
+                Screenshot.deleteAutoFolder(checksum: amiga.df0.fnv())
                 screenshotCounter = 0
                 screenshotTimer?.invalidate()
                 let initial = TimeInterval(Int.random(in: 4..<8))
@@ -724,11 +725,11 @@ extension MyController {
             }
             refreshStatusBar()
             
-        case MSG_DRIVE_DISK_EJECT,
-             MSG_DRIVE_DISK_UNSAVED,
-             MSG_DRIVE_DISK_SAVED,
-             MSG_DRIVE_DISK_PROTECTED,
-             MSG_DRIVE_DISK_UNPROTECTED:
+        case MSG_DISK_EJECT,
+             MSG_DISK_UNSAVED,
+             MSG_DISK_SAVED,
+             MSG_DISK_PROTECTED,
+             MSG_DISK_UNPROTECTED:
 
             refreshStatusBar()
 
@@ -746,11 +747,7 @@ extension MyController {
         case MSG_AUTOSNAPSHOT_SAVED:
             break
             
-        case MSG_AUTOSCREENSHOT:
-            saveAutoScreenshot(fingerprint: msg.data)
-            
         default:
-            
             track("Unknown message: \(msg)")
             assert(false)
         }

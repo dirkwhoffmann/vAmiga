@@ -51,6 +51,13 @@ class DiskMountDialog: DialogController {
         track()
         window?.makeFirstResponder(carousel)
                 
+        // Determine the screenshot set to display on startup
+        if Screenshot.collectUserFiles(checksum: disk.fnv()).count > 0 {
+            folderSelector.selectedSegment = 0
+        } else {
+            folderSelector.selectedSegment = 1
+        }
+        
         update()
         updateCarousel()
     }
@@ -74,7 +81,7 @@ class DiskMountDialog: DialogController {
         screenshots = []
         for url in urls {
             if let image = NSImage.init(contentsOf: url) {
-                screenshots.append(image.roundCorners(withRadius: 10.0))
+                screenshots.append(image.roundCorners(withRadius: 20.0))
             }
         }
         
@@ -247,217 +254,6 @@ extension DiskMountDialog: NSWindowDelegate {
 }
 
 //
-// Screenshot storage handling
-//
-
-/*
-extension DiskMountDialog {
-    
-    
-    
-    func filename(forItem nr: Int) -> String {
-        
-        return String(format: "%03d.jpeg", nr)
-    }
-    
-    static func folderURL(favorites: Bool, checksum: UInt64) -> URL? {
-        
-        let fm = FileManager.default
-        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
-        let mask = FileManager.SearchPathDomainMask.userDomainMask
-        guard let support = fm.urls(for: path, in: mask).first else { return nil }
-        let dir = favorites ? "user/" : "auto/"
-        let subdir = String(format: "%X", checksum)
-        let folder = support.appendingPathComponent("vAmiga/\(dir)/\(subdir)")
-        var isDirectory: ObjCBool = false
-        let folderExists = fm.fileExists(atPath: folder.path,
-                                         isDirectory: &isDirectory)
-        
-        if !folderExists || !isDirectory.boolValue {
-            
-            do {
-                try fm.createDirectory(at: folder,
-                                       withIntermediateDirectories: true,
-                                       attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        
-        return folder
-    }
-    
-    var screenshotFolder: URL? {
-        return DiskMountDialog.folderURL(favorites: favorites, checksum: disk.fnv())
-    }
-    var userScreenshotFolder: URL? {
-        return DiskMountDialog.folderURL(favorites: true, checksum: disk.fnv())
-    }
-    var autoScreenshotFolder: URL? {
-        return DiskMountDialog.folderURL(favorites: false, checksum: disk.fnv())
-    }
-    
-    func screenshotFiles(in folder: URL?) -> [URL] {
-        
-        var result = [URL]()
-        
-        for i in 0...999 {
-            
-            if let url = screenshotURL(forItem: i, inFolder: folder) {
-                result.append(url)
-            } else {
-                break
-            }
-        }
-        return result
-    }
-
-    var screenshotFiles: [URL] { return screenshotFiles(in: screenshotFolder) }
-    var userScreenshotFiles: [URL] { return screenshotFiles(in: userScreenshotFolder) }
-    var autoScreenshotFiles: [URL] { return screenshotFiles(in: autoScreenshotFolder) }
-
-    func screenshotURL(forItem nr: Int, inFolder folder: URL?) -> URL? {
-        
-        if folder == nil { return nil }
-        
-        let file = folder!.appendingPathComponent(filename(forItem: nr))
-        return FileManager.default.fileExists(atPath: file.path) ? file : nil
-    }
-
-    func screenshotURL(forItem nr: Int) -> URL? {
-        return screenshotURL(forItem: nr, inFolder: screenshotFolder)
-    }
-
-    func userScreenshotURL(forItem nr: Int) -> URL? {
-        return screenshotURL(forItem: nr, inFolder: userScreenshotFolder)
-    }
-
-    func autoScreenshotURL(forItem nr: Int) -> URL? {
-        return screenshotURL(forItem: nr, inFolder: autoScreenshotFolder)
-    }
-
-    func newScreenshotURL(inFolder folder: URL?) -> URL? {
-        
-        if folder == nil { return nil }
-        
-        for i in 0...999 {
-            
-            let file = folder!.appendingPathComponent(filename(forItem: i))
-            
-            if !FileManager.default.fileExists(atPath: file.path) {
-                return file
-            }
-        }
-        
-        return nil
-    }
-
-    func newScreenshotURL() -> URL? {
-        return newScreenshotURL(inFolder: screenshotFolder)
-    }
-
-    func newUserScreenshotURL() -> URL? {
-        return newScreenshotURL(inFolder: userScreenshotFolder)
-    }
-
-    func newAutoScreenshotURL() -> URL? {
-         return newScreenshotURL(inFolder: autoScreenshotFolder)
-    }
-
-    func swapScreenshot(at pos1: Int, with pos2: Int, in folder: URL) {
-        
-        let fm = FileManager.default
-        
-        let oldUrl = screenshotURL(forItem: pos1, inFolder: folder)
-        let newUrl = screenshotURL(forItem: pos2, inFolder: folder)
-        let tmpUrl = newScreenshotURL(inFolder: folder)
-        
-        if oldUrl != nil && newUrl != nil && tmpUrl != nil {
-            
-            try? fm.moveItem(at: oldUrl!, to: tmpUrl!)
-            try? fm.moveItem(at: newUrl!, to: oldUrl!)
-            try? fm.moveItem(at: tmpUrl!, to: newUrl!)
-        }
-    }
-    
-    func swapScreenshot(at pos1: Int, with pos2: Int) {
-        
-        if let folder = screenshotFolder {
-            swapScreenshot(at: pos1, with: pos2, in: folder)
-        }
-    }
-    
-    func deleteScreenshot(at pos: Int, in folder: URL?) {
-        
-        if folder == nil { return }
-        let fm = FileManager.default
-        
-        if var url = screenshotURL(forItem: pos, inFolder: folder) {
-            
-            try? FileManager.default.removeItem(at: url)
-            
-            // Rename all items above the deleted one
-            for i in pos ... 998 {
-                
-                if let above = screenshotURL(forItem: i + 1, inFolder: folder) {
-                    
-                    track("Renaming \(above) to \(url)")
-                    try? fm.moveItem(at: above, to: url)
-                    url = above
-                    
-                } else { break }
-            }
-        }
-    }
-    
-    func deleteScreenshot(at pos: Int) {
-        deleteScreenshot(at: pos, in: screenshotFolder)
-    }
-
-    func deleteAutoScreenshot(at pos: Int) {
-        deleteScreenshot(at: pos, in: autoScreenshotFolder)
-    }
-
-    func deleteUserScreenshot(at pos: Int) {
-        deleteScreenshot(at: pos, in: userScreenshotFolder)
-    }
-    
-    func deleteScreenshots(in folder: URL?) {
-        
-        let files = screenshotFiles(in: folder)
-        for file in files {
-            try? FileManager.default.removeItem(at: file)
-        }
-    }
-    
-    func deleteAutoScreenshots() {
-        deleteScreenshots(in: autoScreenshotFolder)
-    }
-
-    func deleteUserScreenshots() {
-        deleteScreenshots(in: userScreenshotFolder)
-    }
-
-    func moveToFavorites(nr: Int) {
-        
-        let fm = FileManager.default
-        
-        let oldUrl = autoScreenshotURL(forItem: nr)
-        let newUrl = newUserScreenshotURL()
-                
-        if oldUrl != nil && newUrl != nil {
-            do {
-                try fm.copyItem(at: oldUrl!, to: newUrl!)
-                deleteAutoScreenshot(at: nr)
-            } catch let error as NSError {
-                print(error)
-            }
-        }
-    }
-}
-*/
-
-//
 // iCarousel data source and delegate
 //
 
@@ -470,7 +266,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
         
-        let h = carousel.frame.height
+        let h = carousel.frame.height - 10
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         

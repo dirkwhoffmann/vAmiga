@@ -940,25 +940,6 @@ Amiga::takeAutoScreenshot()
     takeScreenshot(autoScreenshots);
 }
 
-void
-Amiga::serviceScrEvent()
-{
-    debug("serviceScrEvent\n");
-
-    takeAutoScreenshot();
-    putMessage(MSG_AUTOSCREENSHOT, agnus.slot[SCR_SLOT].data);
-    
-    // Schedule the next screenshot
-    int delay = numAutoScreenshots() * 10;
-    if (delay) {
-        debug("Next screenshot in %d seconds\n", delay);
-        agnus.rescheduleRel<SCR_SLOT>(SEC(delay));
-    } else {
-        agnus.cancel<SCR_SLOT>();
-    }
-}
-
-
 //
 // The run loop
 //

@@ -34,17 +34,6 @@ DiskController::_reset()
         free(diskToInsert);
         diskToInsert = NULL;
     }
-    
-    /* Start taking screenshots if a disk is present in the boot drive.
-     * To get a greater variety of different snapshots, we start the first
-     * screenshot with a random delay.
-     */
-    /*
-    if (df0.hasDisk()) {
-        int delay = rand() % 10;
-        agnus.scheduleRel<SCR_SLOT>(SEC(delay), SCR_TAKE, df0.disk->getFnv());
-    }
-    */
 }
 
 void

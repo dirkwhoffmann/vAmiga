@@ -43,11 +43,11 @@ void
 Drive::_ping()
 {
     amiga.putMessage(hasDisk() ?
-                     MSG_DRIVE_DISK_INSERT : MSG_DRIVE_DISK_EJECT, nr);
+                     MSG_DISK_INSERT : MSG_DISK_EJECT, nr);
     amiga.putMessage(hasWriteProtectedDisk() ?
-                     MSG_DRIVE_DISK_PROTECTED : MSG_DRIVE_DISK_UNPROTECTED, nr);
+                     MSG_DISK_PROTECTED : MSG_DISK_UNPROTECTED, nr);
     amiga.putMessage(hasModifiedDisk() ?
-                     MSG_DRIVE_DISK_UNSAVED : MSG_DRIVE_DISK_SAVED, nr);
+                     MSG_DISK_UNSAVED : MSG_DISK_SAVED, nr);
 }
 
 void
@@ -474,12 +474,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            amiga.putMessage(MSG_DRIVE_DISK_PROTECTED);
+            amiga.putMessage(MSG_DISK_PROTECTED);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            amiga.putMessage(MSG_DRIVE_DISK_UNPROTECTED);
+            amiga.putMessage(MSG_DISK_UNPROTECTED);
         }
     }
 }
@@ -506,7 +506,7 @@ Drive::ejectDisk()
         disk = NULL;
         
         // Notify the GUI
-        amiga.putMessage(MSG_DRIVE_DISK_EJECT, nr);
+        amiga.putMessage(MSG_DISK_EJECT, nr);
     }
 }
 
@@ -522,10 +522,7 @@ Drive::insertDisk(Disk *disk)
 
         // Insert the disk and inform the GUI
         this->disk = disk;
-        amiga.putMessage(MSG_DRIVE_DISK_INSERT, nr);
-
-        // Schedule the first screenshot to be taken
-        // agnus.scheduleRel<SCR_SLOT>(SEC(10), SCR_TAKE, disk->getFnv());
+        amiga.putMessage(MSG_DISK_INSERT, nr);
     }
 }
 

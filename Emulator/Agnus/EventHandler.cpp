@@ -333,16 +333,6 @@ Agnus::inspectEventSlot(EventSlot nr)
             }
             break;
             
-        case SCR_SLOT:
-            
-            switch (slot[nr].id) {
-                    
-                case 0:             i->eventName = "none"; break;
-                case SCR_TAKE:      i->eventName = "SCR_TAKE"; break;
-                default:            i->eventName = "*** INVALID ***"; break;
-            }
-            break;
-            
         case INS_SLOT:
 
             switch (slot[nr].id) {
@@ -554,9 +544,6 @@ Agnus::executeEventsUntil(Cycle cycle) {
         }
         if (isDue<POT_SLOT>(cycle)) {
             paula.servicePotEvent(slot[POT_SLOT].id);
-        }
-        if (isDue<SCR_SLOT>(cycle)) {
-            amiga.serviceScrEvent();
         }
         if (isDue<INS_SLOT>(cycle)) {
             serviceINSEvent();
