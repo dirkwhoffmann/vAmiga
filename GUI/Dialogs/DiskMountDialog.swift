@@ -21,9 +21,9 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var middleButton: NSButton!
     @IBOutlet weak var rightButton: NSButton!
 
-    @IBOutlet weak var folderName: NSButton!
+    @IBOutlet weak var showInFinder: NSButton!
     @IBOutlet weak var folderSelector: NSSegmentedControl!
- 
+
     let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
@@ -114,15 +114,9 @@ class DiskMountDialog: DialogController {
                 
         // Preview images
         if user {
-            if let path = Screenshot.userFolder(checksum: disk.fnv())?.path {
-                folderName.title = path
-            }
             middleButton.image = NSImage.init(named: "trashTemplate")
             middleButton.toolTip = "Delete image permanently"
         } else {
-            if let path = Screenshot.autoFolder(checksum: disk.fnv())?.path {
-                folderName.title = path
-            }
             middleButton.image = NSImage.init(named: "starTemplate")
             middleButton.toolTip = "Move image to favorites"
         }
@@ -186,7 +180,7 @@ class DiskMountDialog: DialogController {
         updateCarousel(scrollToCenter: true)
     }
 
-    @IBAction func folderNameAction(_ sender: NSButton!) {
+    @IBAction func showInFinderAction(_ sender: NSButton!) {
 
         track()
         if let folder = screenshotFolder {
