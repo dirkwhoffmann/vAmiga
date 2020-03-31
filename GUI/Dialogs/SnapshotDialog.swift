@@ -23,6 +23,8 @@ class SnapshotDialog: DialogController {
     var now: Date = Date()
 
     // Outlets
+    @IBOutlet weak var autoTableHeadline: NSTextField!
+    @IBOutlet weak var userTableHeadline: NSTextField!
     @IBOutlet weak var autoTableView: NSTableView!
     @IBOutlet weak var userTableView: NSTableView!
     @IBOutlet weak var selector: NSSegmentedControl!
@@ -30,28 +32,34 @@ class SnapshotDialog: DialogController {
     // Auto snapshot cache
     var numAutoSnapshots = -1
     var autoSnapshotImage: [Int: NSImage] = [:]
-    var autoSnapshotTimeStamp: [Int: String] = [:]
-    var autoSnapshotTimeDiff: [Int: String] = [:]
+    var autoSnapshotText1: [Int: String] = [:]
+    var autoSnapshotText2: [Int: String] = [:]
+    var autoSnapshotText3: [Int: String] = [:]
     var autoSnapshotSlotForRow: [Int: Int] = [:]
     
     // User snapshot cache
     var numUserSnapshots = -1
     var userSnapshotImage: [Int: NSImage] = [:]
-    var userSnapshotTimeStamp: [Int: String] = [:]
-    var userSnapshotTimeDiff: [Int: String] = [:]
+    var userSnapshotText1: [Int: String] = [:]
+    var userSnapshotText2: [Int: String] = [:]
+    var userSnapshotText3: [Int: String] = [:]
     var userSnapshotSlotForRow: [Int: Int] = [:]
     
     // Auto screenshot cache
     var numAutoScreenshots = -1
+    var autoScreenshotUrls: [URL] = []
     var autoScreenshotImage: [Int: NSImage] = [:]
-    var autoScreenshotTimeStamp: [Int: String] = [:]
-    var autoScreenshotTimeDiff: [Int: String] = [:]
+    var autoScreenshotText1: [Int: String] = [:]
+    var autoScreenshotText2: [Int: String] = [:]
+    var autoScreenshotText3: [Int: String] = [:]
 
     // User screenshot cache
     var numUserScreenshots = -1
+    var userScreenshotUrls: [URL] = []
     var userScreenshotImage: [Int: NSImage] = [:]
-    var userScreenshotTimeStamp: [Int: String] = [:]
-    var userScreenshotTimeDiff: [Int: String] = [:]
+    var userScreenshotText1: [Int: String] = [:]
+    var userScreenshotText2: [Int: String] = [:]
+    var userScreenshotText3: [Int: String] = [:]
 
     // Fingerprint of disk in df0
     var checksum = UInt64(0)
@@ -62,29 +70,53 @@ class SnapshotDialog: DialogController {
         
         track("awakeFromNib")
         
-        if numAutoSnapshots == -1 {
-            
-            // Disable auto snapshot saving while dialog is open
-            amiga.suspendAutoSnapshots()
-            
-            // Fill caches
-            reloadSnapshotCache()
-            reloadScreenshotCache()
-        }
+        // Disable auto snapshot saving while dialog is open (DEPRECATED)
+        amiga.suspendAutoSnapshots()
         
-        track("awakeFromNib (exit)")
+        if numAutoSnapshots != -1 { return }
+        
+        // Start with the snapshot view
+        selector.selectedSegment = 0
+        
+        // Fill caches
+        reloadSnapshotCache()
+        reloadScreenshotCache()
+        
+        // Update table views
+        userTableView.reloadData()
+        autoTableView.reloadData()
+        
+        update()
     }
     
-    func timeInfo(timeStamp: TimeInterval) -> String {
+    func update() {
+    
+        if snapshots {
+            autoTableHeadline.stringValue = "Auto-taken snapshots"
+            userTableHeadline.stringValue = "User-taken snapshots"
+        } else {
+            autoTableHeadline.stringValue = "Auto-taken screenshots"
+            userTableHeadline.stringValue = "User-taken screenshots"
+        }
+    }
+
+    func timeInfo(date: Date?) -> String {
+        
+        if date == nil { return "" }
         
         let formatter = DateFormatter()
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "HH:mm:ss" // "yyyy-MM-dd HH:mm"
         
-        return formatter.string(from: Date(timeIntervalSince1970: timeStamp))
+        return formatter.string(from: date!)
+    }
+
+    func timeInfo(time: time_t) -> String {
+        
+        return timeInfo(date: Date(timeIntervalSince1970: TimeInterval(time)))
     }
     
-    func timeDiffInfo(timeStamp: TimeInterval) -> String {
+    func timeDiffInfo(seconds: Int) -> String {
         
         let secPerMin = 60
         let secPerHour = secPerMin * 60
@@ -92,56 +124,95 @@ class SnapshotDialog: DialogController {
         let secPerWeek = secPerDay * 7
         let secPerMonth = secPerWeek * 4
         let secPerYear = secPerWeek * 52
-
-        let diff = Int(round(now.timeIntervalSince1970 - Double(timeStamp)))
                 
-        if diff < secPerMin {
-            return "\(diff) second" + (diff == 1 ? "" : "s") + " ago"
+        if seconds < secPerMin {
+            return "\(seconds) second" + (seconds == 1 ? "" : "s") + " ago"
         }
-        if diff < secPerHour {
-            return "\(diff / 60):\(diff % 60) minutes ago"
+        if seconds < secPerHour {
+            return "\(seconds / 60):\(seconds % 60) minutes ago"
         }
-        if diff < secPerDay {
-            let h = diff / secPerHour
+        if seconds < secPerDay {
+            let h = seconds / secPerHour
             return "\(h) hour" + (h == 1 ? "" : "s") + " ago"
         }
-        if diff < secPerWeek {
-            let d = diff / secPerDay
+        if seconds < secPerWeek {
+            let d = seconds / secPerDay
             return "\(d) day" + (d == 1 ? "" : "s") + " ago"
         }
-        if diff < secPerMonth {
-            let w = diff / secPerWeek
+        if seconds < secPerMonth {
+            let w = seconds / secPerWeek
             return "\(w) week" + (w == 1 ? "" : "s") + " ago"
         }
-        if diff < secPerYear {
-            let m = diff / secPerMonth
+        if seconds < secPerYear {
+            let m = seconds / secPerMonth
             return "\(m) month" + (m == 1 ? "" : "s") + " ago"
         } else {
-            let y = diff / secPerYear
+            let y = seconds / secPerYear
             return "\(y) year" + (y == 1 ? "" : "s") + " ago"
         }
+    }
+    
+    func timeDiffInfo(interval: TimeInterval?) -> String {
+            
+        return interval == nil ? "" : timeDiffInfo(seconds: Int(interval!))
+    }
+    
+    func timeDiffInfo(date: Date?) -> String {
+        
+        return date == nil ? "" : timeDiffInfo(interval: date!.diff(now))
+    }
+
+    func timeDiffInfo(time: time_t) -> String {
+        
+        let date = Date(timeIntervalSince1970: TimeInterval(time))
+        return timeDiffInfo(date: date)
+    }
+    
+    func imageInfo(nr: Int, auto: Bool) -> String {
+        
+        var image: NSImage
+        var type: String
+        
+        if auto {
+            image = autoScreenshotImage[nr]!
+            type = autoScreenshotUrls[nr].pathExtension
+        } else {
+            image = userScreenshotImage[nr]!
+            type = userScreenshotUrls[nr].pathExtension
+        }
+
+        track("\(type)")
+        let w = Int(image.size.width)
+        let h = Int(image.size.height)
+        
+        return "\(type.uppercased()) (\(w) x \(h))"
     }
     
     func reloadSnapshotCache() {
 
         track()
+        now = Date()
 
         amiga.suspend()
-        
+
         numAutoSnapshots = amiga.numAutoSnapshots()
         for n in 0..<numAutoSnapshots {
-            let takenAt = TimeInterval(amiga.autoSnapshotTimestamp(n))
-            autoSnapshotImage[n] = amiga.autoSnapshotImage(n)
-            autoSnapshotTimeStamp[n] = timeInfo(timeStamp: takenAt)
-            autoSnapshotTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
+            let takenAt = amiga.autoSnapshotTimestamp(n)
+            let image = amiga.autoSnapshotImage(n)
+            autoSnapshotImage[n] = image.roundCorners()
+            autoSnapshotText1[n] = timeDiffInfo(time: takenAt)
+            autoSnapshotText2[n] = timeInfo(time: takenAt)
+            autoSnapshotText3[n] = ""
         }
 
         numUserSnapshots = amiga.numUserSnapshots()
         for n in 0..<numUserSnapshots {
-            let takenAt = TimeInterval(amiga.userSnapshotTimestamp(n))
-            userSnapshotImage[n] = amiga.userSnapshotImage(n)
-            userSnapshotTimeStamp[n] = timeInfo(timeStamp: takenAt)
-            userSnapshotTimeDiff[n] = timeDiffInfo(timeStamp: takenAt)
+            let takenAt = amiga.userSnapshotTimestamp(n)
+            let image = amiga.userSnapshotImage(n)
+            userSnapshotImage[n] = image.roundCorners()
+            userSnapshotText1[n] = timeDiffInfo(time: takenAt)
+            userSnapshotText2[n] = timeInfo(time: takenAt)
+            userSnapshotText3[n] = ""
         }
         amiga.resume()
         
@@ -151,64 +222,115 @@ class SnapshotDialog: DialogController {
 
     func reloadScreenshotCache() {
 
-        track("checksum = \(checksum)")
-        
-        let autoUrls = Screenshot.collectAutoFiles(checksum: checksum)
-        let userUrls = Screenshot.collectUserFiles(checksum: checksum)
+        track()
+        now = Date()
 
-        track("Found urls \(userUrls)")
+        autoScreenshotUrls = Screenshot.collectAutoFiles(checksum: checksum)
+        userScreenshotUrls = Screenshot.collectUserFiles(checksum: checksum)
         
-        numAutoScreenshots = autoUrls.count
+        track("URLS")
+        track("\(autoScreenshotUrls)")
+        track("\(userScreenshotUrls)")
+
+        numAutoScreenshots = autoScreenshotUrls.count
         for n in 0..<numAutoScreenshots {
+ 
+            let url = autoScreenshotUrls[n]
+            let takenAt = url.modificationDate()
             
-            if let image = NSImage.init(contentsOf: autoUrls[n]) {
-                autoScreenshotImage[n] = image.roundCorners(withRadius: 20.0)
-                autoScreenshotTimeStamp[n] = "TODO"
-                autoScreenshotTimeDiff[n] = "todo"
+            if let image = NSImage.init(contentsOf: url) {
+                autoScreenshotImage[n] = image.roundCorners()
+                autoScreenshotText1[n] = timeDiffInfo(date: takenAt)
+                autoScreenshotText2[n] = timeInfo(date: takenAt)
+                autoScreenshotText3[n] = imageInfo(nr: n, auto: true)
             }
         }
         
-        numUserScreenshots = userUrls.count
+        numUserScreenshots = userScreenshotUrls.count
         for n in 0..<numUserScreenshots {
             
-            if let image = NSImage.init(contentsOf: userUrls[n]) {
-                userScreenshotImage[n] = image.roundCorners(withRadius: 20.0)
-                userScreenshotTimeStamp[n] = "TODO"
-                userScreenshotTimeDiff[n] = "todo"
+            let url = userScreenshotUrls[n]
+            let takenAt = url.modificationDate()
+
+            if let image = NSImage.init(contentsOf: url) {
+                userScreenshotImage[n] = image.roundCorners()
+                userScreenshotText1[n] = timeDiffInfo(date: takenAt)
+                userScreenshotText2[n] = timeInfo(date: takenAt)
+                userScreenshotText3[n] = imageInfo(nr: n, auto: false)
+
             }
         }
     }
 
     @IBAction func selectAction(_ sender: NSSegmentedControl!) {
         
-        track("Snapshots: \(snapshots)")
-        
         snapshots ? reloadSnapshotCache() : reloadScreenshotCache()
         autoTableView.reloadData()
         userTableView.reloadData()
+        update()
     }
 
-    @IBAction func button1Action(_ sender: NSButton!) {
+    @IBAction func autoButton1Action(_ sender: NSButton!) {
         
         if snapshots {
             
             track("\(sender.tag)")
-            amiga.deleteUserSnapshot(sender.tag)
             reloadSnapshotCache()
+            
+        } else {
+            
+            track("\(sender.tag)")
+            reloadScreenshotCache()
         }
     }
 
-    @IBAction func button2Action(_ sender: NSButton!) {
+    @IBAction func userButton1Action(_ sender: NSButton!) {
+        
+        if snapshots {
+            
+            track("\(sender.tag)")
+            reloadSnapshotCache()
+            
+        } else {
+            
+            track("\(sender.tag)")
+            reloadScreenshotCache()
+        }
+    }
+
+    @IBAction func autoButton2Action(_ sender: NSButton!) {
+        
+        if snapshots {
+            saveSnapshotAs(item: sender.tag, auto: true)
+        } else {
+            if let url = Screenshot.autoFolder(checksum: checksum) {
+                NSWorkspace.shared.open(url)
+            }
+        }
+    }
+    
+    @IBAction func userButton2Action(_ sender: NSButton!) {
+        
+        if snapshots {
+            saveSnapshotAs(item: sender.tag, auto: false)
+        } else {
+            if let url = Screenshot.userFolder(checksum: checksum) {
+                NSWorkspace.shared.open(url)
+            }
+        }
+    }
+
+    @IBAction func autoButton3Action(_ sender: NSButton!) {
         
         if snapshots {
 
-            track("\(sender.tag)")
-            amiga.deleteUserSnapshot(sender.tag)
-            reloadSnapshotCache()
-        }
+             track("\(sender.tag)")
+             amiga.deleteAutoSnapshot(sender.tag)
+             reloadSnapshotCache()
+         }
     }
 
-    @IBAction func button3Action(_ sender: NSButton!) {
+    @IBAction func userButton3Action(_ sender: NSButton!) {
         
         if snapshots {
 
@@ -236,6 +358,27 @@ class SnapshotDialog: DialogController {
         amiga.restoreUserSnapshot(sender.selectedRow)
         cancelAction(self)
     }
+    
+    func saveSnapshotAs(item: Int, auto: Bool) {
+        
+        track()
+        
+        let panel = NSSavePanel()
+        panel.prompt = "Save As"
+        panel.allowedFileTypes = ["vAmiga"]
+        
+        panel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = panel.url {
+                    
+                    let data = auto ?
+                        self.amiga.autoSnapshotData(item) :
+                        self.amiga.userSnapshotData(item)
+                    try? data?.write(to: url)
+                }
+            }
+        })
+    }
 }
 
 //
@@ -260,8 +403,10 @@ extension SnapshotDialog: NSTableViewDataSource, NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, viewFor tableColumn: NSTableColumn?, row: Int) -> NSView? {
         
         if snapshots {
+            track("snapshots: \(numAutoSnapshots) \(numUserSnapshots)")
             return snapshotTableView(tableView, row: row)
         } else {
+            track("screenshots: \(numAutoScreenshots) \(numUserScreenshots)")
             return screenshotTableView(tableView, row: row)
         }
     }
@@ -279,9 +424,10 @@ extension SnapshotDialog: NSTableViewDataSource, NSTableViewDelegate {
         
         guard let view = createView(tableView) else { return nil }
         
-        view.button1.image = NSImage.init(named: "saveTemplate")
-        view.button2.image = NSImage.init(named: "folderTemplate")
-        view.button2.image = NSImage.init(named: "trashTemplate")
+        view.button2.image = NSImage.init(named: "saveTemplate")
+        view.button1.toolTip = "Restore snapshot"
+        view.button2.toolTip = "Save snapshot to disk"
+        view.button3.toolTip = "Discard snapshot"
         view.button1.tag = row
         view.button2.tag = row
         view.button3.tag = row
@@ -289,49 +435,51 @@ extension SnapshotDialog: NSTableViewDataSource, NSTableViewDelegate {
         if tableView == autoTableView {
             
             view.preview.image = autoSnapshotImage[row]
-            view.text1.stringValue = autoSnapshotTimeStamp[row]!
-            view.text2.stringValue = autoSnapshotTimeDiff[row]!
-            view.text3.stringValue = "200 x 400 pixels" // placeholder
+            view.text1.stringValue = autoSnapshotText1[row]!
+            view.text2.stringValue = autoSnapshotText2[row]!
+            view.text3.stringValue = autoSnapshotText3[row]!
             
         } else {
             
             view.preview.image = userSnapshotImage[row]
-            view.text1.stringValue = userSnapshotTimeStamp[row]!
-            view.text2.stringValue = userSnapshotTimeDiff[row]!
-            view.text3.stringValue = "100 x 200 pixels" // placeholder
+            view.text1.stringValue = userSnapshotText1[row]!
+            view.text2.stringValue = userSnapshotText2[row]!
+            view.text3.stringValue = userSnapshotText3[row]!
         }
         
         return view
     }
     
     func screenshotTableView(_ tableView: NSTableView, row: Int) -> NSView? {
-         
-         guard let view = createView(tableView) else { return nil }
-         
-         view.button1.image = NSImage.init(named: "saveTemplate")
-         view.button2.image = NSImage.init(named: "folderTemplate")
-         view.button2.image = NSImage.init(named: "trashTemplate")
-         view.button1.tag = row
-         view.button2.tag = row
-         view.button3.tag = row
-         
-         if tableView == autoTableView {
-             
-             view.preview.image = autoScreenshotImage[row]
-             view.text1.stringValue = autoScreenshotTimeStamp[row]!
-             view.text2.stringValue = autoScreenshotTimeDiff[row]!
-             view.text3.stringValue = "200 x 400 pixels" // placeholder
-             
-         } else {
-             
-             view.preview.image = userScreenshotImage[row]
-             view.text1.stringValue = userScreenshotTimeStamp[row]!
-             view.text2.stringValue = userScreenshotTimeDiff[row]!
-             view.text3.stringValue = "100 x 200 pixels" // placeholder
-         }
-         
-         return view
-     }
+        
+        guard let view = createView(tableView) else { return nil }
+        
+        view.button1.isHidden = true
+        view.button2.image = NSImage.init(named: "folderTemplate")
+        view.button2.toolTip = nil
+        view.button2.toolTip = "Open in Finder"
+        view.button3.toolTip = "Discard screenshot"
+        view.button1.tag = row
+        view.button2.tag = row
+        view.button3.tag = row
+
+        if tableView == autoTableView {
+            
+            view.preview.image = autoScreenshotImage[row]
+            view.text1.stringValue = autoScreenshotText1[row]!
+            view.text2.stringValue = autoScreenshotText2[row]!
+            view.text3.stringValue = autoScreenshotText3[row]!
+            
+        } else {
+            track("screenshotTableView \(row)")
+            view.preview.image = userScreenshotImage[row]
+            view.text1.stringValue = userScreenshotText1[row]!
+            view.text2.stringValue = userScreenshotText2[row]!
+            view.text3.stringValue = userScreenshotText3[row]!
+        }
+        
+        return view
+    }
 }
 
 //

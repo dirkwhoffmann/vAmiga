@@ -69,6 +69,17 @@ extension String {
 
 extension URL {
     
+    func modificationDate() -> Date? {
+        
+        let attr = try? FileManager.default.attributesOfItem(atPath: self.path)
+        
+        if attr != nil {
+            return attr![.creationDate] as? Date
+        } else {
+            return nil
+        }
+    }
+        
     func addTimeStamp() -> URL {
         
         let path = self.deletingPathExtension().path
@@ -233,6 +244,11 @@ extension NSImage {
         return self
     }
     
+    func roundCorners() -> NSImage {
+        
+        return self.roundCorners(withRadius: size.height / 15)
+    }
+        
     func makeGlossy() {
         
         let width  = size.width
@@ -275,7 +291,7 @@ extension NSImage {
 }
 
 //
-// Managing time
+// Managing time and date
 //
 
 extension DispatchTime {
@@ -287,4 +303,15 @@ extension DispatchTime {
     static func diffMicroSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000 }
     static func diffMilliSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000 }
     static func diffSec(_ t: DispatchTime) -> UInt64 { return diffNano(t) / 1_000_000_000 }
+}
+
+extension Date {
+
+    func diff(_ date: Date) -> TimeInterval {
+        
+        let interval1 = self.timeIntervalSinceReferenceDate
+        let interval2 = date.timeIntervalSinceReferenceDate
+
+        return interval2 - interval1
+    }
 }
