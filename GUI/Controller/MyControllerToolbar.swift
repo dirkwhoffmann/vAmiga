@@ -135,8 +135,8 @@ extension MyController {
         case 3: // Browse
             
             track("Browse")
-            let name = NSNib.Name("SnapshotDialog")
-            let controller = SnapshotDialog.make(parent: self, nibName: name)
+            let name = NSNib.Name("StorageDialog")
+            let controller = StorageDialog.make(parent: self, nibName: name)
             controller?.checksum = amiga.df0.fnv()
             controller?.showSheet()
 

@@ -64,7 +64,7 @@ class SnapshotDialog: DialogController {
     // Fingerprint of disk in df0
     var checksum = UInt64(0)
     
-    var snapshots: Bool { return selector.selectedSegment == 0}
+    var snapshots: Bool { return selector.selectedSegment == 0 }
     
     override public func awakeFromNib() {
         

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="StorageDialog" customModule="vAmiga" customModuleProvider="target">
+            <connections>
+                <outlet property="autoButton1" destination="gfI-KT-Hhs" id="JQ1-I0-LMB"/>
+                <outlet property="autoButton2" destination="Pxk-RD-SXO" id="Dbi-ci-vRM"/>
+                <outlet property="autoButton3" destination="trT-Ov-4ax" id="odL-n8-tVe"/>
+                <outlet property="autoCarousel" destination="F4H-Tp-vBI" id="7de-lf-J8F"/>
+                <outlet property="autoFinderButton" destination="gej-Cy-tqt" id="r5u-aV-0Gh"/>
+                <outlet property="autoFinderText" destination="PM2-RJ-Vrd" id="rO5-Vz-0ZF"/>
+                <outlet property="autoText1" destination="LXG-uF-J1S" id="dwl-3T-4im"/>
+                <outlet property="autoText2" destination="VcG-9q-mu5" id="s3h-0f-xKJ"/>
+                <outlet property="selector" destination="UQI-MZ-FnG" id="wBw-jY-KXz"/>
+                <outlet property="userButton1" destination="ixz-eU-teA" id="K8i-Rg-zUd"/>
+                <outlet property="userButton2" destination="2WG-3G-hkd" id="Nzx-Cu-I7A"/>
+                <outlet property="userButton3" destination="xWi-bG-qJy" id="0Xz-gZ-p94"/>
+                <outlet property="userCarousel" destination="CLX-PL-6pz" id="3JM-vU-8Yk"/>
+                <outlet property="userFinderButton" destination="v2v-bt-OhQ" id="lF1-hT-4at"/>
+                <outlet property="userFinderText" destination="wTn-p4-dr1" id="X19-DW-IyC"/>
+                <outlet property="userText1" destination="jVG-Pj-BnL" id="QcA-VX-rMs"/>
+                <outlet property="userText2" destination="l4R-0Z-38h" id="DcC-Df-kgj"/>
+                <outlet property="window" destination="QvC-M9-y7g" id="DgT-zf-wA0"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="QvC-M9-y7g">
+            <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
+            <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
+            <rect key="contentRect" x="196" y="240" width="693" height="662"/>
+            <rect key="screenRect" x="0.0" y="0.0" width="1536" height="937"/>
+            <view key="contentView" wantsLayer="YES" id="EiT-Mj-1SZ">
+                <rect key="frame" x="0.0" y="0.0" width="693" height="662"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <customView hidden="YES" canDrawConcurrently="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="F4H-Tp-vBI" customClass="iCarousel">
+                        <rect key="frame" x="19" y="380" width="653" height="178"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <outlet property="dataSource" destination="-2" id="qgo-8i-3Ds"/>
+                            <outlet property="delegate" destination="-2" id="K60-Jf-Kc4"/>
+                        </connections>
+                    </customView>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pxk-RD-SXO">
+                        <rect key="frame" x="335" y="344" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="starTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="npV-6n-9xL">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoButton2Action:" target="-2" id="vKE-0f-eOQ"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="trT-Ov-4ax">
+                        <rect key="frame" x="372" y="347" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoRightTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="rjP-4z-e4g">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoButton3Action:" target="-2" id="Wh9-ch-pvD"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gfI-KT-Hhs">
+                        <rect key="frame" x="304" y="347" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoLeftTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Ycy-78-gjm">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoButton1Action:" target="-2" id="HNb-1C-m8u"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gej-Cy-tqt">
+                        <rect key="frame" x="657" y="347" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="swm-AL-TFS">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="autoFinderAction:" target="-2" id="yb4-GU-WNw"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PM2-RJ-Vrd">
+                        <rect key="frame" x="519" y="348" width="135" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Open images in Finder" id="FMB-44-QoT">
+                            <font key="font" metaFont="label" size="11"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <customView hidden="YES" canDrawConcurrently="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CLX-PL-6pz" customClass="iCarousel">
+                        <rect key="frame" x="18" y="97" width="653" height="178"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                        <connections>
+                            <outlet property="dataSource" destination="-2" id="eBm-BE-5KU"/>
+                            <outlet property="delegate" destination="-2" id="tcL-N9-GqG"/>
+                        </connections>
+                    </customView>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2WG-3G-hkd">
+                        <rect key="frame" x="334" y="61" width="20" height="20"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="starTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="E4Y-bG-d2K">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="userButton2Action:" target="-2" id="kHW-Qu-R0M"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWi-bG-qJy">
+                        <rect key="frame" x="371" y="64" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoRightTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="V4J-9U-3Un">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="userButton3Action:" target="-2" id="lGy-T6-0rP"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ixz-eU-teA">
+                        <rect key="frame" x="303" y="64" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoLeftTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="WhY-3G-0T9">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="userButton1Action:" target="-2" id="FHW-uh-Jte"/>
+                        </connections>
+                    </button>
+                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v2v-bt-OhQ">
+                        <rect key="frame" x="656" y="64" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSFollowLinkFreestandingTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="81N-dm-CPE">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="userFinderAction:" target="-2" id="LxS-Ri-VZd"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wTn-p4-dr1">
+                        <rect key="frame" x="518" y="65" width="135" height="14"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="Open images in Finder" id="e5S-F8-1vQ">
+                            <font key="font" metaFont="label" size="11"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LXG-uF-J1S">
+                        <rect key="frame" x="194" y="588" width="304" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="center" title="Auto-saved screenshots" id="4VV-ic-QXb">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VcG-9q-mu5">
+                        <rect key="frame" x="18" y="566" width="657" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="center" title="Images are deleted automatically when reinserting the current disk in df0:" id="G3M-pr-eTh">
+                            <font key="font" metaFont="label" size="11"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-MZ-FnG">
+                        <rect key="frame" x="243" y="619" width="207" height="24"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="dHf-wb-GUN">
+                            <font key="font" metaFont="system"/>
+                            <segments>
+                                <segment label="Snapshots" width="100"/>
+                                <segment label="Screenshots" width="100" selected="YES" tag="1"/>
+                            </segments>
+                        </segmentedCell>
+                        <connections>
+                            <action selector="selectorAction:" target="-2" id="9bc-6N-T8c"/>
+                        </connections>
+                    </segmentedControl>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xHQ-aw-ow8">
+                        <rect key="frame" x="565" y="13" width="113" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="push" title="Close" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" inset="2" id="eTX-NP-cFe">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                            <string key="keyEquivalent" base64-UTF8="YES">
+Gw
+</string>
+                        </buttonCell>
+                        <connections>
+                            <action selector="cancelAction:" target="-1" id="eep-2O-Kfl"/>
+                        </connections>
+                    </button>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jVG-Pj-BnL">
+                        <rect key="frame" x="193" y="311" width="304" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="center" title="User-saved snapshots and favorites" id="dPH-hT-KoQ">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l4R-0Z-38h">
+                        <rect key="frame" x="17" y="289" width="657" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" alignment="center" title="Images are stored persistently in the Application Defaults" id="geZ-In-v3s">
+                            <font key="font" metaFont="label" size="11"/>
+                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                </subviews>
+            </view>
+            <point key="canvasLocation" x="245.5" y="343"/>
+        </window>
+    </objects>
+    <resources>
+        <image name="NSFollowLinkFreestandingTemplate" width="14" height="14"/>
+        <image name="NSGoLeftTemplate" width="9" height="12"/>
+        <image name="NSGoRightTemplate" width="9" height="12"/>
+        <image name="starTemplate" width="154" height="155"/>
+    </resources>
+</document>
