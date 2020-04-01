@@ -194,7 +194,7 @@ private:
     vector<Snapshot *> userSnapshots;
 
     // Storage for auto-taken screenshots
-    vector<Thumbnail *> autoScreenshots;
+    // vector<Thumbnail *> autoScreenshots;
 
     
     //
@@ -530,6 +530,7 @@ public:
     // Handling screenshots
     //
     
+    /*
     // Returns the number of stored screenshots
     size_t numScreenshots(vector<Thumbnail *> &storage);
     size_t numAutoScreenshots() { return numScreenshots(autoScreenshots); }
@@ -543,11 +544,8 @@ public:
     
     // Takes a screenshot and inserts it into the screenshot storage
     void takeScreenshot(vector<Thumbnail *> &storage);
-    void takeAutoScreenshot();
-    
-    // Takes a screenshot that was scheduled in the SRC_SLOT
-    void serviceScrEvent();
-
+    void takeAutoScreenshot();    
+    */
     
     //
     // Debugging the emulator

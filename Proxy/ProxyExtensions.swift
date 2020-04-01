@@ -68,6 +68,7 @@ public extension AmigaProxy {
         return image(data: data, size: userSnapshotImageSize(item))
     }
     
+    /*
     func autoScreenshotImage(_ item: Int) -> NSImage {
         
         let data = autoScreenshotImageData(item)
@@ -82,6 +83,7 @@ public extension AmigaProxy {
         let data = autoScreenshotImageData(nr - 1)
         return image(data: data, size: autoScreenshotImageSize(nr - 1))
     }
+    */
 }
 
 public extension DriveProxy {

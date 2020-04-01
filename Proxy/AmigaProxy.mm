@@ -1541,6 +1541,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->deleteUserSnapshot((unsigned)nr);
 }
+/*
 - (NSInteger) numAutoScreenshots
 {
     return wrapper->amiga->numAutoScreenshots();
@@ -1555,5 +1556,6 @@ struct ADFFileWrapper { ADFFile *adf; };
     Thumbnail *s = wrapper->amiga->autoScreenshot((int)nr);
     return s ? NSMakeSize(s->width, s->height) : NSMakeSize(0,0);
 }
+*/
 
 @end

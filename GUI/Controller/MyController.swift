@@ -251,12 +251,6 @@ class MyController: NSWindowController, MessageReceiver {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
-    var screenshotSource = Defaults.screenshotSource
-    var screenshotTarget = Defaults.screenshotTarget
-    var screenshotTargetIntValue: Int {
-        get { return Int(screenshotTarget.rawValue) }
-        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
-    }
     var keepAspectRatio: Bool {
         get { return renderer.keepAspectRatio }
         set { renderer.keepAspectRatio = newValue }
@@ -282,6 +276,30 @@ class MyController: NSWindowController, MessageReceiver {
         set { amiga.setSnapshotInterval(newValue) }
     }
   
+    var autoScreenshots = Defaults.autoScreenshots
+    var screenshotInterval = 0 {
+        didSet {
+            screenshotTimer?.invalidate()
+            let interval = TimeInterval(screenshotInterval)
+            if interval > 0 {
+                track("Restarting screenshot timer")
+                screenshotTimer =
+                    Timer.scheduledTimer(timeInterval: interval,
+                                         target: self,
+                                         selector: #selector(screenshotTimerFunc),
+                                         userInfo: nil,
+                                         repeats: true)
+            }
+        }
+    }
+
+    var screenshotSource = Defaults.screenshotSource
+    var screenshotTarget = Defaults.screenshotTarget
+    var screenshotTargetIntValue: Int {
+        get { return Int(screenshotTarget.rawValue) }
+        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
+    }
+    
     // Updates the warp status
     func updateWarp() {
 
@@ -551,17 +569,6 @@ extension MyController {
     @objc func screenshotTimerFunc() {
         
         takeScreenshot(auto: true)
-        screenshotCounter += 1
-        
-        // Schedule the next screenshot
-        let delay = TimeInterval(4 * screenshotCounter)
-        track("Taking next screenshot in \(delay) seconds")
-        
-        screenshotTimer = Timer.scheduledTimer(timeInterval: delay,
-                                               target: self,
-                                               selector: #selector(screenshotTimerFunc),
-                                               userInfo: nil,
-                                               repeats: false)
     }
         
     func processMessage(_ msg: Message) {
@@ -721,7 +728,7 @@ extension MyController {
                                                        target: self,
                                                        selector: #selector(screenshotTimerFunc),
                                                        userInfo: nil,
-                                                       repeats: false)
+                                                       repeats: true)
             }
             refreshStatusBar()
             
@@ -830,28 +837,26 @@ extension MyController {
         let upscaled = screenshotSource > 0
         let checksum = amiga.df0.fnv()
         
-        if checksum == 0 { return }
-        
+        // Take screenshot
         guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
             track("Failed to create screenshot")
             return
         }
         let screenshot = Screenshot.init(screen: screen, upscaled: upscaled)
         
-        var url: URL?
-        if auto {
-            url = Screenshot.newAutoUrl(checksum: checksum)
-        } else {
-            url = Screenshot.newUserUrl(checksum: checksum)
-        }
-        
-        if url == nil {
+        // Compute URL
+        guard let url = Screenshot.newUrl(checksum: checksum, auto: auto) else {
             track("Failed to create URL")
             return
         }
         
-        track("Saving screenshot to \(url!.path)")
-        try? screenshot.save(url: url!, format: .jpeg)
+        // Save screenshot
+        track("Saving screenshot to \(url.path)")
+        try? screenshot.save(url: url, format: screenshotTarget)
+        
+        // Thin out screenshot directory to reduce the amout of stored data
+        Screenshot.thinOutAuto(checksum: checksum, counter: screenshotCounter)
+        screenshotCounter += 1
     }
 
     //

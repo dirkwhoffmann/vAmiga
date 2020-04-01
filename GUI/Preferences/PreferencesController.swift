@@ -167,19 +167,18 @@ class PreferencesController: DialogController {
     @IBOutlet weak var emuAspectRatioButton: NSButton!
     @IBOutlet weak var emuExitOnEscButton: NSButton!
 
-    // Screenshots
-    @IBOutlet weak var emuScreenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var emuScreenshotTargetPopup: NSPopUpButton!
-    
-    // User Dialogs
-    @IBOutlet weak var emuAutoMountButton: NSButton!
-    @IBOutlet weak var emuCloseWithoutAskingButton: NSButton!
-    @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
-    
-    // Misc
-    @IBOutlet weak var emuPauseInBackground: NSButton!
+    // Snapshots and Screenshots
     @IBOutlet weak var emuAutoSnapshots: NSButton!
     @IBOutlet weak var emuSnapshotInterval: NSTextField!
+    @IBOutlet weak var emuAutoScreenshots: NSButton!
+    @IBOutlet weak var emuScreenshotInterval: NSTextField!
+    @IBOutlet weak var emuScreenshotSourcePopup: NSPopUpButton!
+    @IBOutlet weak var emuScreenshotTargetPopup: NSPopUpButton!
+        
+    // Misc
+    @IBOutlet weak var emuPauseInBackground: NSButton!
+    @IBOutlet weak var emuCloseWithoutAskingButton: NSButton!
+    @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
 
     // Button
     @IBOutlet weak var emuOKButton: NSButton!

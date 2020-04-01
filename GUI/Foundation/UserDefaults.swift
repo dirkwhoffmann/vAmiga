@@ -608,53 +608,57 @@ extension MyController {
 extension Keys {
     
     // Drives
-    static let warpLoad             = "VAMIGAWarpLoadKey"
-    static let driveNoise           = "VAMIGADriveNoiseKey"
-    static let driveNoiseNoPoll     = "VAMIGADriveNoiseNoPollKey"
-    static let driveBlankDiskFormat = "VAMIGADriveBlankDiskFormatKey"
+    static let warpLoad               = "VAMIGAWarpLoadKey"
+    static let driveNoise             = "VAMIGADriveNoiseKey"
+    static let driveNoiseNoPoll       = "VAMIGADriveNoiseNoPollKey"
+    static let driveBlankDiskFormat   = "VAMIGADriveBlankDiskFormatKey"
 
-    // Screenshots
-    static let screenshotSource     = "VAMIGAScreenshotSourceKey"
-    static let screenshotTarget     = "VAMIGAScreenshotTargetKey"
+    // Snapshots and screenshots
+    static let autoSnapshots          = "VAMIGAAutoSnapshots"
+    static let autoSnapshotInterval   = "VAMIGAScreenshotInterval"
+    static let autoScreenshots        = "VAMIGAAutoScreenshots"
+    static let autoScreenshotInterval = "VAMIGASnapshotInterval"
+    static let screenshotSource       = "VAMIGAScreenshotSourceKey"
+    static let screenshotTarget       = "VAMIGAScreenshotTargetKey"
     
     // Fullscreen
-    static let keepAspectRatio      = "VAMIGAFullscreenKeepAspectRatioKey"
-    static let exitOnEsc            = "VAMIGAFullscreenExitOnEscKey"
+    static let keepAspectRatio        = "VAMIGAFullscreenKeepAspectRatioKey"
+    static let exitOnEsc              = "VAMIGAFullscreenExitOnEscKey"
 
     // User dialogs
-    static let closeWithoutAsking   = "VAMIGACloseWithoutAsking"
-    static let ejectWithoutAsking   = "VAMIGAEjectWithoutAsking"
+    static let closeWithoutAsking     = "VAMIGACloseWithoutAsking"
+    static let ejectWithoutAsking     = "VAMIGAEjectWithoutAsking"
     
     // Miscellaneous
-    static let pauseInBackground    = "VAMIGAPauseInBackground"
-    static let autoSnapshots        = "VAMIGAAutoSnapshots"
-    static let autoSnapshotInterval = "VAMIGASnapshotInterval"
+    static let pauseInBackground      = "VAMIGAPauseInBackground"
 }
 
 extension Defaults {
    
     // Drives
-    static let warpLoad             = true
-    static let driveNoise           = true
-    static let driveNoiseNoPoll     = true
-    static let driveBlankDiskFormat = FS_OFS
+    static let warpLoad               = true
+    static let driveNoise             = true
+    static let driveNoiseNoPoll       = true
+    static let driveBlankDiskFormat   = FS_OFS
     
-    // Screenshots
-    static let screenshotSource     = 0
-    static let screenshotTarget     = NSBitmapImageRep.FileType.png
-    
+    // Snapshots and Screenshots
+    static let autoSnapshots          = true
+    static let autoSnapshotInterval   = 3
+    static let autoScreenshots        = true
+    static let autoScreenshotInterval = 3
+    static let screenshotSource       = 0
+    static let screenshotTarget       = NSBitmapImageRep.FileType.png
+
     // Fullscreen
-    static let keepAspectRatio      = false
-    static let exitOnEsc            = false
+    static let keepAspectRatio        = false
+    static let exitOnEsc              = false
 
     // User dialogs
-    static let closeWithoutAsking   = false
-    static let ejectWithoutAsking   = false
     
     // Miscellaneous
-    static let pauseInBackground    = false
-    static let autoSnapshots        = true
-    static let autoSnapshotInterval = 3
+    static let pauseInBackground      = false
+    static let closeWithoutAsking     = false
+    static let ejectWithoutAsking     = false
 }
 
 extension MyController {
@@ -668,18 +672,19 @@ extension MyController {
             Keys.driveNoiseNoPoll: Defaults.driveNoiseNoPoll,
             Keys.driveBlankDiskFormat: Int(Defaults.driveBlankDiskFormat.rawValue),
 
+            Keys.autoSnapshots: Defaults.autoSnapshots,
+            Keys.autoSnapshotInterval: Defaults.autoSnapshotInterval,
+            Keys.autoScreenshots: Defaults.autoScreenshots,
+            Keys.autoScreenshotInterval: Defaults.autoScreenshotInterval,
             Keys.screenshotSource: Defaults.screenshotSource,
             Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
 
             Keys.keepAspectRatio: Defaults.keepAspectRatio,
             Keys.exitOnEsc: Defaults.exitOnEsc,
             
-            Keys.closeWithoutAsking: Defaults.closeWithoutAsking,
-            Keys.ejectWithoutAsking: Defaults.ejectWithoutAsking,
-
             Keys.pauseInBackground: Defaults.pauseInBackground,
-            Keys.autoSnapshots: Defaults.autoSnapshots,
-            Keys.autoSnapshotInterval: Defaults.autoSnapshotInterval
+            Keys.closeWithoutAsking: Defaults.closeWithoutAsking,
+            Keys.ejectWithoutAsking: Defaults.ejectWithoutAsking
         ]
         
         let defaults = UserDefaults.standard
@@ -696,18 +701,20 @@ extension MyController {
                     Keys.driveNoiseNoPoll,
                     Keys.driveBlankDiskFormat,
                     
+                    Keys.autoSnapshots,
+                    Keys.autoSnapshotInterval,
+                    Keys.autoScreenshots,
+                    Keys.autoScreenshotInterval,
                     Keys.screenshotSource,
                     Keys.screenshotTarget,
                     
                     Keys.keepAspectRatio,
                     Keys.exitOnEsc,
                     
-                    Keys.closeWithoutAsking,
-                    Keys.ejectWithoutAsking,
-                    
                     Keys.pauseInBackground,
-                    Keys.autoSnapshots,
-                    Keys.autoSnapshotInterval ]
+                    Keys.closeWithoutAsking,
+                    Keys.ejectWithoutAsking
+        ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -725,18 +732,19 @@ extension MyController {
         driveNoiseNoPoll = defaults.bool(forKey: Keys.driveNoiseNoPoll)
         driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
+        amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
+        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
+        autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
+        screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
         renderer.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         kbController.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
+        pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
         ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
-
-        pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
-        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
         
         amiga.resume()
     }
@@ -750,18 +758,19 @@ extension MyController {
         defaults.set(driveNoiseNoPoll, forKey: Keys.driveNoiseNoPoll)
         defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
         
+        defaults.set(amiga.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
+        defaults.set(amiga.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
+        defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
+        defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
         defaults.set(renderer.keepAspectRatio, forKey: Keys.keepAspectRatio)
         defaults.set(kbController.exitOnEsc, forKey: Keys.exitOnEsc)
-        
+                
+        defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
-        
-        defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(amiga.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
-        defaults.set(amiga.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
     }
 }
 

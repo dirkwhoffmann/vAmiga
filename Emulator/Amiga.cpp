@@ -909,6 +909,7 @@ Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
     }
 }
 
+/*
 size_t
 Amiga::numScreenshots(vector<Thumbnail *> &storage)
 {
@@ -939,6 +940,7 @@ Amiga::takeAutoScreenshot()
 {
     takeScreenshot(autoScreenshots);
 }
+*/
 
 //
 // The run loop

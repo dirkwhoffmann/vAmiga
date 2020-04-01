@@ -59,8 +59,6 @@ class Screenshot {
 
     static func folder(auto: Bool, checksum: UInt64) -> URL? {
         
-        if checksum == 0 { return nil }
-        
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
@@ -145,6 +143,10 @@ class Screenshot {
     
     static func newAutoUrl(checksum: UInt64) -> URL? {
         return Screenshot.newUrl(in: Screenshot.autoFolder(checksum: checksum))
+    }
+    
+    static func newUrl(checksum: UInt64, auto: Bool) -> URL? {
+        return auto ? newAutoUrl(checksum: checksum) : newUserUrl(checksum: checksum)
     }
     
     static func collectFiles(in folder: URL?) -> [URL] {
@@ -249,6 +251,40 @@ class Screenshot {
         
         track()
         Screenshot.delete(folder: Screenshot.autoFolder(checksum: checksum))
+    }
+
+    static func thinOut(folder: URL?, counter: Int) {
+        
+        if folder == nil { return }
+
+        let count = collectFiles(in: folder!).count
+        let max = 32
+
+        if count > max {
+            
+            var itemToDelete = 0
+
+            if counter % 2 == 0 {
+                itemToDelete = 24
+            } else if (counter >> 1) % 2 == 0 {
+                itemToDelete = 16
+            } else if (counter >> 2) % 2 == 0 {
+                itemToDelete = 8
+            }
+
+            track("Thinning out item \(itemToDelete)")
+            delete(item: itemToDelete, in: folder)
+        }
+    }
+    
+    static func thinOutAuto(checksum: UInt64, counter: Int) {
+        let folder = Screenshot.autoFolder(checksum: checksum)
+        Screenshot.thinOut(folder: folder, counter: counter)
+    }
+
+    static func thinOutUser(checksum: UInt64, counter: Int) {
+        let folder = Screenshot.userFolder(checksum: checksum)
+        Screenshot.thinOut(folder: folder, counter: counter)
     }
 
     static func moveToUser(item: Int, checksum: UInt64) {

@@ -26,19 +26,20 @@ extension PreferencesController {
         emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
         emuExitOnEscButton.state = parent.kbController.exitOnEsc ? .on : .off
         
-        // Screenshots
-        emuScreenshotSourcePopup.selectItem(withTag: parent.screenshotSource)
-        emuScreenshotTargetPopup.selectItem(withTag: parent.screenshotTargetIntValue)
-        
-        // Documents
-        emuCloseWithoutAskingButton.state = parent.closeWithoutAsking ? .on : .off
-        emuEjectWithoutAskingButton.state = parent.ejectWithoutAsking ? .on : .off
-        
-        // Miscellaneous
-        emuPauseInBackground.state = parent.pauseInBackground ? .on : .off
+        // Snapshots and Screenshots
         emuAutoSnapshots.state = amiga.takeAutoSnapshots() ? .on : .off
         emuSnapshotInterval.integerValue = amiga.snapshotInterval()
         emuSnapshotInterval.isEnabled = amiga.takeAutoSnapshots()
+        emuAutoScreenshots.state = parent.autoScreenshots ? .on : .off
+        emuScreenshotInterval.integerValue = parent.screenshotInterval
+        emuScreenshotInterval.isEnabled = parent.autoScreenshots
+        emuScreenshotSourcePopup.selectItem(withTag: parent.screenshotSource)
+        emuScreenshotTargetPopup.selectItem(withTag: parent.screenshotTargetIntValue)
+        
+        // Miscellaneous
+        emuPauseInBackground.state = parent.pauseInBackground ? .on : .off
+        emuCloseWithoutAskingButton.state = parent.closeWithoutAsking ? .on : .off
+        emuEjectWithoutAskingButton.state = parent.ejectWithoutAsking ? .on : .off
 
         // OK Button
         emuOKButton.title = buttonLabel
@@ -90,8 +91,36 @@ extension PreferencesController {
     }
 
     //
-    // Action methods (Screenshots)
+    // Action methods (Snapshots and screenshots)
     //
+    
+    @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
+        
+        amiga.setTakeAutoSnapshots(sender.state == .on)
+        refresh()
+    }
+    
+    @IBAction func emuSnapshotIntervalAction(_ sender: NSTextField!) {
+        
+        if sender.integerValue > 0 {
+            amiga.setSnapshotInterval(sender.integerValue)
+        }
+        refresh()
+    }
+    
+    @IBAction func emuAutoScreenshotAction(_ sender: NSButton!) {
+        
+        parent.autoScreenshots = sender.state == .on
+        refresh()
+    }
+    
+    @IBAction func emuScreenshotIntervalAction(_ sender: NSTextField!) {
+        
+        if sender.integerValue > 0 {
+            parent.screenshotInterval = sender.integerValue
+        }
+        refresh()
+    }
     
     @IBAction func emuScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
@@ -106,8 +135,14 @@ extension PreferencesController {
     }
 
     //
-    // Action methods (User Dialogs)
+    // Action methods (Miscellaneous)
     //
+    
+    @IBAction func emuPauseInBackgroundAction(_ sender: NSButton!) {
+        
+        parent.pauseInBackground = (sender.state == .on)
+        refresh()
+    }
     
     @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
         
@@ -119,33 +154,6 @@ extension PreferencesController {
     @IBAction func emuEjectWithoutAskingAction(_ sender: NSButton!) {
         
         parent.ejectWithoutAsking = (sender.state == .on)
-        refresh()
-    }
-
-    //
-    // Action methods (Miscellaneous)
-    //
-    
-    @IBAction func emuPauseInBackgroundAction(_ sender: NSButton!) {
-        
-        parent.pauseInBackground = (sender.state == .on)
-        refresh()
-    }
-    
-    @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
-        
-        amiga.setTakeAutoSnapshots(sender.state == .on)
-        refresh()
-    }
-    
-    @IBAction func emuSnapshotIntervalAction(_ sender: NSTextField!) {
-        
-        track("\(sender.integerValue)")
-        if sender.integerValue > 0 {
-            amiga.setSnapshotInterval(sender.integerValue)
-        } else {
-            track("IGNORING")
-        }
         refresh()
     }
     
