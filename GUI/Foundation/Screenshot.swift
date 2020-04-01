@@ -215,7 +215,7 @@ class Screenshot {
                 
                 if let above = Screenshot.url(for: i + 1, in: folder) {
                     
-                    track("Renaming \(above) to \(url)")
+                    // track("Renaming \(above) to \(url)")
                     try? fm.moveItem(at: above, to: url)
                     url = above
                     
@@ -272,7 +272,6 @@ class Screenshot {
                 itemToDelete = 8
             }
 
-            track("Thinning out item \(itemToDelete)")
             delete(item: itemToDelete, in: folder)
         }
     }

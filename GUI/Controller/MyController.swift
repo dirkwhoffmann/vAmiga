@@ -280,16 +280,7 @@ class MyController: NSWindowController, MessageReceiver {
     var screenshotInterval = 0 {
         didSet {
             screenshotTimer?.invalidate()
-            let interval = TimeInterval(screenshotInterval)
-            if interval > 0 {
-                track("Restarting screenshot timer")
-                screenshotTimer =
-                    Timer.scheduledTimer(timeInterval: interval,
-                                         target: self,
-                                         selector: #selector(screenshotTimerFunc),
-                                         userInfo: nil,
-                                         repeats: true)
-            }
+            startScreenshotTimer()
         }
     }
 
@@ -298,6 +289,29 @@ class MyController: NSWindowController, MessageReceiver {
     var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
+    }
+    
+    func startSnapshotTimer() {
+        amiga.resumeAutoSnapshots()
+    }
+    
+    func stopSnapshotTimer() {
+       amiga.suspendAutoSnapshots()
+    }
+    
+    func startScreenshotTimer() {
+        if autoScreenshots && screenshotInterval > 0 {
+            screenshotTimer =
+                Timer.scheduledTimer(timeInterval: TimeInterval(screenshotInterval),
+                                     target: self,
+                                     selector: #selector(screenshotTimerFunc),
+                                     userInfo: nil,
+                                     repeats: true)
+        }
+    }
+    
+    func stopScreenshotTimer() {
+        screenshotTimer?.invalidate()
     }
     
     // Updates the warp status
@@ -722,13 +736,6 @@ extension MyController {
             if msg.data == 0 { // Df0
                 Screenshot.deleteAutoFolder(checksum: amiga.df0.fnv())
                 screenshotCounter = 0
-                screenshotTimer?.invalidate()
-                let initial = TimeInterval(Int.random(in: 4..<8))
-                screenshotTimer = Timer.scheduledTimer(timeInterval: initial,
-                                                       target: self,
-                                                       selector: #selector(screenshotTimerFunc),
-                                                       userInfo: nil,
-                                                       repeats: true)
             }
             refreshStatusBar()
             
