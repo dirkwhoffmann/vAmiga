@@ -315,3 +315,16 @@ extension Date {
         return interval2 - interval1
     }
 }
+
+//
+// Controls
+//
+
+extension NSTabView {
+    
+    func selectedIndex() -> Int {
+        
+        let selected = self.selectedTabViewItem
+        return selected != nil ? self.indexOfTabViewItem(selected!) : -1
+    }
+}

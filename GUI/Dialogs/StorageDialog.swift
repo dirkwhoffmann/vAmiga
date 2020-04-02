@@ -11,53 +11,61 @@ class StorageDialog: DialogController {
     
     var now: Date = Date()
 
-    @IBOutlet weak var tabView: NSTabView!
+    @IBOutlet weak var selector: NSSegmentedControl!
+
+    @IBOutlet weak var autoLabel: NSTextField!
+    @IBOutlet weak var autoCarousel: iCarousel!
+    @IBOutlet weak var autoPrev: NSButton!
+    @IBOutlet weak var autoNext: NSButton!
+    @IBOutlet weak var autoTrash: NSButton!
+    @IBOutlet weak var autoAction1: NSButton!
+    @IBOutlet weak var autoAction2: NSButton!
+    @IBOutlet weak var autoNr: NSTextField!
+    @IBOutlet weak var autoText1: NSTextField!
+    @IBOutlet weak var autoText2: NSTextField!
+    @IBOutlet weak var autoFinderLabel: NSTextField!
+    @IBOutlet weak var autoFinderButton: NSButton!
     
-    @IBOutlet weak var snapshotSelector: NSSegmentedControl!
-    @IBOutlet weak var snapshotCarousel: iCarousel!
-    @IBOutlet weak var snapshotRestore: NSButton!
-    @IBOutlet weak var snapshotSave: NSButton!
-    @IBOutlet weak var snapshotDelete: NSButton!
-    @IBOutlet weak var snapshotDescription1: NSTextField!
-    @IBOutlet weak var snapshotDescription2: NSTextField!
-    
-    @IBOutlet weak var screenshotSelector: NSSegmentedControl!
-    @IBOutlet weak var screenshotCarousel: iCarousel!
-    @IBOutlet weak var screenshotLeft: NSButton!
-    @IBOutlet weak var screenshotMiddle: NSButton!
-    @IBOutlet weak var screenshotRight: NSButton!
-    @IBOutlet weak var screenshotDescription1: NSTextField!
-    @IBOutlet weak var screenshotDescription2: NSTextField!
-    
+    @IBOutlet weak var userLabel: NSTextField!
+    @IBOutlet weak var userCarousel: iCarousel!
+    @IBOutlet weak var userPrev: NSButton!
+    @IBOutlet weak var userNext: NSButton!
+    @IBOutlet weak var userTrash: NSButton!
+    @IBOutlet weak var userAction1: NSButton!
+    @IBOutlet weak var userAction2: NSButton!
+    @IBOutlet weak var userNr: NSTextField!
+    @IBOutlet weak var userText1: NSTextField!
+    @IBOutlet weak var userText2: NSTextField!
+    @IBOutlet weak var userFinderLabel: NSTextField!
+    @IBOutlet weak var userFinderButton: NSButton!
+ 
     let carouselType = iCarouselType.timeMachine //   coverFlow
     
     // Fingerprint of disk in df0
     var checksum = UInt64(0)
     
-    var snapshots: Bool {
-        if let id = tabView.selectedTabViewItem?.identifier as? String {
-            return id == "Snapshots"
-        } else {
-            return true
-        }
-    }
-    var autoSnapshots: Bool { return snapshotSelector.selectedSegment == 0 }
-    var autoScreenshots: Bool { return screenshotSelector.selectedSegment == 0 }
-    var carousel: iCarousel { return autoSnapshots ? snapshotCarousel : screenshotCarousel }
+    // Computed variables
+    var snapshotView: Bool { return selector.selectedSegment == 0 }
+    var screenshotView: Bool { return selector.selectedSegment == 1 }
     var autoFolder: URL? { return Screenshot.autoFolder(checksum: checksum) }
     var userFolder: URL? { return Screenshot.userFolder(checksum: checksum) }
-    var screenshotFolder: URL? { return autoScreenshots ? autoFolder : userFolder }
+    var autoSelection: Int { return autoCarousel.currentItemIndex }
+    var userSelection: Int { return userCarousel.currentItemIndex }
+    var numAutoItems: Int { return autoCarousel.numberOfItems }
+    var numUserItems: Int { return userCarousel.numberOfItems }
+    var lastAutoItem: Int { return numAutoItems - 1 }
+    var lastUserItem: Int { return numUserItems - 1 }
 
     // Auto snapshot cache
     var autoSnapshotImage: [Int: NSImage] = [:]
-    var autoSnapshotDescription1: [Int: String] = [:]
-    var autoSnapshotDescription2: [Int: String] = [:]
+    var autoSnapshotDesc1: [Int: String] = [:]
+    var autoSnapshotDesc2: [Int: String] = [:]
     var autoSnapshotSlotForRow: [Int: Int] = [:]
     
     // User snapshot cache
     var userSnapshotImage: [Int: NSImage] = [:]
-    var userSnapshotDescription1: [Int: String] = [:]
-    var userSnapshotDescription2: [Int: String] = [:]
+    var userSnapshotDesc1: [Int: String] = [:]
+    var userSnapshotDesc2: [Int: String] = [:]
     var userSnapshotSlotForRow: [Int: Int] = [:]
     
     // Auto screenshot cache
@@ -72,107 +80,119 @@ class StorageDialog: DialogController {
     var userScreenshotDesc1: [Int: String] = [:]
     var userScreenshotDesc2: [Int: String] = [:]
     
-    var reenter = false // Remove ASAP
-    
     override func windowDidLoad() {
         
         track()
 
-        assert(reenter == false)
-        reenter = true
-
         parent.stopSnapshotTimer()
         parent.stopScreenshotTimer()
-        reloadSnapshotCache()
-        reloadScreenshotCache()
+        updateCaches()
+        updateLabels()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             
-            self.snapshotCarousel.type = self.carouselType
-            self.snapshotCarousel.isHidden = false
-            self.snapshotCarousel.scrollToItem(at: 0, animated: false)
-            
-            self.screenshotCarousel.type = self.carouselType
-            self.screenshotCarousel.isHidden = false
-            self.screenshotCarousel.scrollToItem(at: 0, animated: false)
+            track("lastAutoItem = \(self.lastAutoItem)")
+            self.autoCarousel.type = self.carouselType
+            self.autoCarousel.isHidden = false
+            self.updateAutoCarousel(goto: self.lastAutoItem, animated: false)
+
+            track("lastUserItem = \(self.lastUserItem)")
+            self.userCarousel.type = self.carouselType
+            self.userCarousel.isHidden = false
+            self.updateUserCarousel(goto: self.lastUserItem, animated: false)
         }
     }
     
-    func updateSnapshotView() {
+    func updateLabels() {
         
-        let index = snapshotCarousel.currentItemIndex
+        let autoIndex = autoCarousel.currentItemIndex
+        let userIndex = userCarousel.currentItemIndex
+        
+        if snapshotView {
+            
+            autoLabel.stringValue = "Auto-saved snapshots"
+            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
+            autoText1.stringValue = autoSnapshotDesc1[autoIndex] ?? ""
+            autoText2.stringValue = autoSnapshotDesc2[autoIndex] ?? ""
 
-        if autoSnapshots {
-            snapshotDescription1.stringValue = autoSnapshotDescription1[index] ?? ""
-            snapshotDescription2.stringValue = autoSnapshotDescription2[index] ?? ""
+            autoTrash.image = NSImage.init(named: "trashTemplate")
+            autoTrash.toolTip = "Delete snapshot"
+            autoAction1.image = NSImage.init(named: "restoreTemplate")
+            autoAction1.toolTip = "Restore snapshot"
+            autoAction2.image = NSImage.init(named: "saveTemplate")
+            autoAction2.toolTip = "Save snapshot to disk"
+
+            userLabel.stringValue = "User-saved snapshots"
+            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
+            userText1.stringValue = userSnapshotDesc1[userIndex] ?? ""
+            userText2.stringValue = userSnapshotDesc2[userIndex] ?? ""
+        
+            userTrash.image = NSImage.init(named: "trashTemplate")
+            userTrash.toolTip = "Delete snapshot"
+            userAction1.image = NSImage.init(named: "restoreTemplate")
+            userAction1.toolTip = "Restore snapshot"
+            userAction2.image = NSImage.init(named: "saveTemplate")
+            userAction2.toolTip = "Save snapshot to disk"
+
+            autoFinderButton.isHidden = true
+            // autoFinderLabel.isHidden = true
+            userFinderButton.isHidden = true
+            // userFinderLabel.isHidden = true
 
         } else {
-            snapshotDescription1.stringValue = userSnapshotDescription1[index] ?? ""
-            snapshotDescription2.stringValue = userSnapshotDescription2[index] ?? ""
-        }
-    }
-    
-    func updateScreenshotView() {
-        
-        let index = screenshotCarousel.currentItemIndex
-        
-        if autoScreenshots {
-            screenshotMiddle.image = NSImage.init(named: "starTemplate")
-            screenshotMiddle.toolTip = "Move to favorites"
-            screenshotDescription1.stringValue = autoScreenshotDesc1[index] ?? ""
-            screenshotDescription2.stringValue = autoScreenshotDesc2[index] ?? ""
             
-        } else {
+            autoLabel.stringValue = "Auto-saved screenshots"
+            autoNr.stringValue = "\(autoIndex + 1) / \(autoScreenshotImage.count)"
+            autoText1.stringValue = autoScreenshotDesc1[autoIndex] ?? ""
+            autoText2.stringValue = autoScreenshotDesc2[autoIndex] ?? ""
             
-            screenshotMiddle.image = NSImage.init(named: "trashTemplate")
-            screenshotMiddle.toolTip = "Delete screenshot"
-            screenshotDescription1.stringValue = userScreenshotDesc1[index] ?? ""
-            screenshotDescription2.stringValue = userScreenshotDesc2[index] ?? ""
-        }
-    }
-    
-    func updateView() {
-        
-        snapshots ? updateSnapshotView() : updateScreenshotView()
-    }
-    
-    func updateSnapshotCarousel(reload: Bool, moveTo item: Int = -1, animated: Bool = false) {
-        
-        // Update cache if requested
-        if reload { reloadSnapshotCache() }
-        
-        // Force the carousel view to reload all items
-        snapshotCarousel.reloadData()
-        
-        // Scroll to destination item if requested
-        if item != -1 { snapshotCarousel.scrollToItem(at: item, animated: animated) }
+            autoTrash.image = NSImage.init(named: "starTemplate")
+            autoTrash.toolTip = "Move to user-saved screenshots"
+            autoAction1.image = NSImage.init(named: "backTemplate")
+            autoAction1.toolTip = "Change order"
+            autoAction2.image = NSImage.init(named: "frontTemplate")
+            autoAction2.toolTip = "Change order"
 
-        // Fix layout issues
-        snapshotCarousel.layOutItemViews()
+            userLabel.stringValue = "User-saved screenshots"
+            userNr.stringValue = "\(userIndex + 1) / \(userScreenshotImage.count)"
+            userText1.stringValue = userScreenshotDesc1[userIndex] ?? ""
+            userText2.stringValue = userScreenshotDesc2[userIndex] ?? ""
+
+            userTrash.image = NSImage.init(named: "trashTemplate")
+            userTrash.toolTip = "Delete screenshot"
+            userAction1.image = NSImage.init(named: "backTemplate")
+            userAction1.toolTip = "Move screenshot inwards"
+            userAction2.image = NSImage.init(named: "frontTemplate")
+            userAction2.toolTip = "Move screenshot outwards"
+
+            autoFinderButton.isHidden = false
+            // autoFinderLabel.isHidden = false
+            userFinderButton.isHidden = false
+            // userFinderLabel.isHidden = false
+        }
     }
-    
-    func updateScreenshotCarousel(reload: Bool, moveTo item: Int = -1, animated: Bool = false) {
+
+    func updateCarousel(carousel: iCarousel, goto item: Int, animated: Bool) {
         
-        // Update cache if requested
-        if reload { reloadScreenshotCache() }
+        carousel.reloadData()
         
-        // Force the carousel view to reload all items
-        screenshotCarousel.reloadData()
+        let index = min(item, carousel.numberOfItems - 1)
+        if index >= 0 { carousel.scrollToItem(at: index, animated: animated) }
         
-        // Scroll to destination item if requested
-        if item != -1 { screenshotCarousel.scrollToItem(at: item, animated: animated) }
-        
-        // Fix layout issues
-        screenshotCarousel.layOutItemViews()
+        carousel.layOutItemViews()
+        updateLabels()
     }
-    
-    func updateCarousel(reload: Bool, moveTo item: Int = -1, animated: Bool = false) {
+
+    func updateAutoCarousel(goto item: Int = -1, animated: Bool = false) {
         
-        snapshots ?
-            updateSnapshotCarousel(reload: reload, moveTo: item, animated: animated) :
-            updateScreenshotCarousel(reload: reload, moveTo: item, animated: animated)
+        updateCarousel(carousel: autoCarousel, goto: item, animated: animated)
     }
-    
+
+    func updateUserCarousel(goto item: Int = -1, animated: Bool = false) {
+        
+        updateCarousel(carousel: userCarousel, goto: item, animated: animated)
+    }
+
     func timeInfo(date: Date?) -> String {
          
          if date == nil { return "" }
@@ -241,209 +261,329 @@ class StorageDialog: DialogController {
         let date = Date(timeIntervalSince1970: TimeInterval(time))
         return timeDiffInfo(date: date)
     }
-    
-    func imageInfo(nr: Int, auto: Bool) -> String {
+
+    func timeDiffInfo(url: URL) -> String {
         
-        var image: NSImage?
-        var result: String
-        
-        if auto {
-            image = autoScreenshotImage[nr]
-            result = autoScreenshotUrls[nr].pathExtension.uppercased() + " image"
-        } else {
-            image = userScreenshotImage[nr]
-            result = userScreenshotUrls[nr].pathExtension.uppercased() + " image"
-        }
-        
-        if image != nil {
-            result += " (\(Int(image!.size.width)) x \(Int(image!.size.height)))"
-        }
-        
-        return result
+        return timeDiffInfo(date: url.modificationDate())
     }
-    
-    func reloadSnapshotCache() {
+
+    func imageSizeInfo(image: NSImage?) -> String {
+
+        let w = image?.size.width ?? 0
+        let h = image?.size.height ?? 0
+        return w != 0 && h != 0 ? " (\(w) x \(h))" : ""
+    }
+
+    func imageInfo(image: NSImage?, url: URL?) -> String {
+
+        if image == nil || url == nil { return "" }
+        
+        let suffix = url!.pathExtension.uppercased()
+        let width  = Int(image!.size.width)
+        let height = Int(image!.size.height)
+           
+        return "\(suffix) image (\(width) x \(height))"
+    }
+
+    func autoImageInfo(_ nr: Int) -> String {
+
+        return imageInfo(image: autoScreenshotImage[nr], url: autoScreenshotUrls[nr])
+    }
+
+    func userImageInfo(_ nr: Int) -> String {
+
+        return imageInfo(image: userScreenshotImage[nr], url: userScreenshotUrls[nr])
+    }
+
+    func updateAutoSnapshotCache() {
         
         track()
         now = Date()
-        
-        amiga.suspend()
-        
         autoSnapshotImage = [:]
+        autoSnapshotDesc1 = [:]
+        autoSnapshotDesc2 = [:]
+
+        amiga.suspend()
         let numAutoSnapshots = amiga.numAutoSnapshots()
         for n in 0..<numAutoSnapshots {
             let takenAt = amiga.autoSnapshotTimestamp(n)
             let image = amiga.autoSnapshotImage(n)
             autoSnapshotImage[n] = image.roundCorners()
-            autoSnapshotDescription1[n] = timeDiffInfo(time: takenAt) + " (" + timeInfo(time: takenAt) + ")"
-            autoSnapshotDescription2[n] = ""
+            autoSnapshotDesc1[n] = timeDiffInfo(time: takenAt)
+            autoSnapshotDesc2[n] = ""
         }
+        amiga.resume()
         
+        if autoSnapshotImage.count == 0 {
+            autoSnapshotImage[0] = NSImage.init(named: "noise_camera")!
+        }
+        track("\(autoSnapshotImage)")
+    }
+    
+    func updateUserSnapshotCache() {
+        
+        track()
+        now = Date()
         userSnapshotImage = [:]
+        userSnapshotDesc1 = [:]
+        userSnapshotDesc2 = [:]
+
+        amiga.suspend()
         let numUserSnapshots = amiga.numUserSnapshots()
         for n in 0..<numUserSnapshots {
             let takenAt = amiga.userSnapshotTimestamp(n)
             let image = amiga.userSnapshotImage(n)
             userSnapshotImage[n] = image.roundCorners()
-            userSnapshotDescription1[n] = timeDiffInfo(time: takenAt) + " (" + timeInfo(time: takenAt) + ")"
-            userSnapshotDescription2[n] = ""
+            userSnapshotDesc1[n] = timeDiffInfo(time: takenAt)
+            userSnapshotDesc2[n] = ""
         }
         amiga.resume()
         
-        // Add default images if the list is empty
-        if autoSnapshotImage.count == 0 {
-            autoSnapshotImage[0] = NSImage.init(named: "noise_camera")!
-            autoSnapshotDescription1[0] = ""
-            autoSnapshotDescription2[0] = ""
-        }
         if userSnapshotImage.count == 0 {
             userSnapshotImage[0] = NSImage.init(named: "noise_camera")!
-            userSnapshotDescription1[0] = ""
-            userSnapshotDescription2[0] = ""
         }
+        
+        track("User snapshot cache contains \(userSnapshotImage.count) items")
     }
     
-    func reloadScreenshotCache() {
+    func updateSnapshotCaches() {
+        
+        updateAutoSnapshotCache()
+        updateUserSnapshotCache()
+    }
+            
+    func updateAutoScreenshotCache() {
         
         track()
         now = Date()
         
-        autoScreenshotUrls = Screenshot.collectAutoFiles(checksum: checksum)
-        userScreenshotUrls = Screenshot.collectUserFiles(checksum: checksum)
-        
-        track("URLS")
-        track("\(autoScreenshotUrls)")
-        track("\(userScreenshotUrls)")
-        
         autoScreenshotImage = [:]
+        autoScreenshotDesc1 = [:]
+        autoScreenshotDesc2 = [:]
+        autoScreenshotUrls = Screenshot.collectAutoFiles(checksum: checksum)
+        
         for n in 0 ..< autoScreenshotUrls.count {
             
             let url = autoScreenshotUrls[n]
-            let takenAt = url.modificationDate()
             
             if let image = NSImage.init(contentsOf: url) {
                 autoScreenshotImage[n] = image.roundCorners()
-                autoScreenshotDesc1[n] = timeDiffInfo(date: takenAt) + " (" + timeInfo(date: takenAt) + ")"
-                autoScreenshotDesc2[n] = imageInfo(nr: n, auto: true)
+                autoScreenshotDesc1[n] = timeDiffInfo(url: url)
+                autoScreenshotDesc2[n] = autoImageInfo(n)
             }
         }
         
+        if autoScreenshotUrls.count == 0 {
+            autoScreenshotImage[0] = NSImage.init(named: "noise_camera")!
+        }
+    }
+    
+    func updateUserScreenshotCache() {
+        
+        track()
+        now = Date()
+        
         userScreenshotImage = [:]
+        userScreenshotDesc1 = [:]
+        userScreenshotDesc2 = [:]
+        userScreenshotUrls = Screenshot.collectUserFiles(checksum: checksum)
+        
         for n in 0 ..< userScreenshotUrls.count {
             
             let url = userScreenshotUrls[n]
-            let takenAt = url.modificationDate()
             
             if let image = NSImage.init(contentsOf: url) {
                 userScreenshotImage[n] = image.roundCorners()
-                userScreenshotDesc1[n] = timeDiffInfo(date: takenAt) + " (" + timeInfo(date: takenAt) + ")"
-                userScreenshotDesc2[n] = imageInfo(nr: n, auto: false)
-                
+                userScreenshotDesc1[n] = timeDiffInfo(url: url)
+                userScreenshotDesc2[n] = userImageInfo(n)
             }
         }
-        
-        // Add default images if the list is empty
-        if autoScreenshotImage.count == 0 {
-            autoScreenshotImage[0] = NSImage.init(named: "noise_camera")!
-            autoScreenshotDesc1[0] = ""
-            autoScreenshotDesc2[0] = ""
-        }
-        if userScreenshotImage.count == 0 {
+    
+        if userScreenshotUrls.count == 0 {
             userScreenshotImage[0] = NSImage.init(named: "noise_camera")!
-            userScreenshotDesc1[0] = ""
-            userScreenshotDesc2[0] = ""
         }
     }
+    
+    func updateScreenshotCaches() {
         
-    @IBAction func snapshotSelectorAction(_ sender: NSSegmentedControl!) {
+        updateAutoScreenshotCache()
+        updateUserScreenshotCache()
+    }
         
-        track()
-        updateCarousel(reload: false)
-        updateView()
+    func updateCaches() {
+        
+        updateSnapshotCaches()
+        updateScreenshotCaches()
     }
     
-    @IBAction func screenshotSelectorAction(_ sender: NSSegmentedControl!) {
-        
-        track()
-        updateCarousel(reload: false)
-        updateView()
+    @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
+                
+        updateAutoCarousel(goto: Int.max, animated: false)
+        updateUserCarousel(goto: Int.max, animated: false)
     }
     
-    @IBAction func restoreButtonAction(_ sender: NSButton!) {
+    func nextAction(carousel: iCarousel) {
+        
+        track("numberOfItems = \(carousel.numberOfItems)")
+        
+        let index = carousel.currentItemIndex
+        
+        if index < carousel.numberOfItems - 1 {
+            carousel.scrollToItem(at: index + 1, animated: true)
+        }
+    }
+
+    func prevAction(carousel: iCarousel) {
+        
+        track("numberOfItems = \(carousel.numberOfItems)")
+        
+        let index = carousel.currentItemIndex
+        
+        if index > 0 {
+            carousel.scrollToItem(at: index - 1, animated: true)
+        }
+    }
+
+    @IBAction func autoNextAction(_ sender: NSButton!) {
         
         track()
+        nextAction(carousel: autoCarousel)
+    }
+    
+    @IBAction func autoPrevAction(_ sender: NSButton!) {
         
-        if autoSnapshots {
-            track("Restore auto snapshot")
+        track()
+        prevAction(carousel: autoCarousel)
+    }
+
+    @IBAction func userNextAction(_ sender: NSButton!) {
+        
+        track()
+        nextAction(carousel: userCarousel)
+    }
+
+    @IBAction func userPrevAction(_ sender: NSButton!) {
+        
+        track()
+        prevAction(carousel: userCarousel)
+    }
+
+    @IBAction func autoTrashAction(_ sender: NSButton!) {
+        
+        let index = autoCarousel.currentItemIndex
+        track("index = \(index)")
+
+        if snapshotView {
+            amiga.deleteAutoSnapshot(index)
+            updateAutoSnapshotCache()
+            updateAutoCarousel()
         } else {
-            track("Restore user snapshot")
+            Screenshot.moveToUser(item: index, checksum: checksum)
+            updateAutoScreenshotCache()
+            updateUserScreenshotCache()
+            updateAutoCarousel(goto: index - 1, animated: true)
+            updateUserCarousel(goto: Int.max, animated: true)
         }
     }
     
-    @IBAction func saveButtonAction(_ sender: NSButton!) {
+    @IBAction func userTrashAction(_ sender: NSButton!) {
         
-        track()
+        let index = userCarousel.currentItemIndex
+        track("index = \(index)")
         
-        if autoSnapshots {
-            track("Save auto snapshot")
+        if snapshotView {
+            amiga.deleteUserSnapshot(index)
+            updateUserSnapshotCache()
         } else {
-            track("Save user snapshot")
+            Screenshot.deleteUser(item: index, checksum: checksum)
+            updateUserScreenshotCache()
+        }
+        updateUserCarousel()
+    }
+    
+    @IBAction func auto1Action(_ sender: NSButton!) {
+        
+        track()
+        let index = autoCarousel.currentItemIndex
+        
+        if snapshotView {
+            
+            amiga.restoreAutoSnapshot(index)
+            
+        } else if index > 0 {
+            
+            Screenshot.swap(item: index, with: index - 1, in: autoFolder)
+            updateAutoScreenshotCache()
+            updateAutoCarousel(goto: index - 1, animated: true)
         }
     }
     
-    @IBAction func deleteButtonAction(_ sender: NSButton!) {
+    @IBAction func user1Action(_ sender: NSButton!) {
         
         track()
+        let index = userCarousel.currentItemIndex
         
-        if autoSnapshots {
-            track("Delete auto snapshot")
-        } else {
-            track("Delete user snapshot")
+        if snapshotView {
+            
+            amiga.restoreUserSnapshot(index)
+            
+        } else if index > 0 {
+            
+            Screenshot.swap(item: index, with: index - 1, in: userFolder)
+            updateUserScreenshotCache()
+            updateUserCarousel(goto: index - 1, animated: true)
         }
-        updateCarousel(reload: true)
     }
     
-    @IBAction func finderAction(_ sender: NSButton!) {
+    @IBAction func auto2Action(_ sender: NSButton!) {
         
         track()
-        if let url = screenshotFolder {
+        let index = autoCarousel.currentItemIndex
+        
+        if snapshotView {
+            
+            saveSnapshotAs(item: index, auto: true)
+
+        } else if index < autoCarousel.numberOfItems - 1 {
+            
+            Screenshot.swap(item: index, with: index + 1, in: autoFolder)
+            updateAutoScreenshotCache()
+            updateAutoCarousel(goto: index + 1, animated: true)
+        }
+    }
+    
+    @IBAction func user2Action(_ sender: NSButton!) {
+        
+        track()
+        let index = userCarousel.currentItemIndex
+        
+        if snapshotView {
+            
+            saveSnapshotAs(item: index, auto: false)
+            
+        } else if index < userCarousel.numberOfItems - 1 {
+            
+            Screenshot.swap(item: index, with: index + 1, in: userFolder)
+            updateUserScreenshotCache()
+            updateUserCarousel(goto: index + 1, animated: true)
+        }
+    }
+    
+    @IBAction func autoFinderAction(_ sender: NSButton!) {
+        
+        track()
+        assert(screenshotView)
+        if let url = autoFolder {
             NSWorkspace.shared.open(url)
         }
     }
     
-    @IBAction func leftButtonAction(_ sender: NSButton!) {
+    @IBAction func userFinderAction(_ sender: NSButton!) {
         
-        let index = carousel.currentItemIndex
-        track("\(index)")
-        
-        if index > 0 {
-            Screenshot.swap(item: index, with: index - 1, in: screenshotFolder)
-            updateCarousel(reload: true, moveTo: index - 1, animated: true)
-        }
-    }
-    
-    @IBAction func middleButtonAction(_ sender: NSButton!) {
-        
-        let index = screenshotCarousel.currentItemIndex
-        track("\(index)")
-        
-        if autoScreenshots {
-            track("Moving \(index) to user")
-            Screenshot.moveToUser(item: index, checksum: checksum)
-        } else {
-            Screenshot.deleteUser(item: index, checksum: checksum)
-        }
-        updateCarousel(reload: true)
-    }
-    
-    @IBAction func rightButtonAction(_ sender: NSButton!) {
-        
-        let index = carousel.currentItemIndex
-        track("\(index)")
-        
-        if index < carousel.numberOfItems - 1 {
-            Screenshot.swap(item: index, with: index + 1, in: screenshotFolder)
-            updateCarousel(reload: true, moveTo: index + 1, animated: true)
+        track()
+        assert(screenshotView)
+        if let url = userFolder {
+            NSWorkspace.shared.open(url)
         }
     }
     
@@ -454,21 +594,27 @@ class StorageDialog: DialogController {
         parent.startSnapshotTimer()
         hideSheet()
     }
-}
-
-//
-// NTabView delegate
-//
-
-extension StorageDialog: NSTabViewDelegate {
     
-    func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
-        
-        track()
-        let center = carousel.numberOfItems / 2
-        updateCarousel(reload: false, moveTo: center, animated: false)
-        updateView()
-    }
+    func saveSnapshotAs(item: Int, auto: Bool) {
+         
+         track()
+         
+         let panel = NSSavePanel()
+         panel.prompt = "Save As"
+         panel.allowedFileTypes = ["vAmiga"]
+         
+         panel.beginSheetModal(for: window!, completionHandler: { result in
+             if result == .OK {
+                 if let url = panel.url {
+                     
+                     let data = auto ?
+                         self.amiga.autoSnapshotData(item) :
+                         self.amiga.userSnapshotData(item)
+                     try? data?.write(to: url)
+                 }
+             }
+         })
+     }
 }
 
 //
@@ -479,26 +625,24 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         
-        assert(carousel == snapshotCarousel || carousel == screenshotCarousel)
-        
-        if carousel == snapshotCarousel {
-            return autoSnapshots ? autoSnapshotImage.count : userSnapshotImage.count
+        if carousel == autoCarousel {
+            return snapshotView ?
+                autoSnapshotImage.count : autoScreenshotImage.count
         } else {
-            return autoScreenshots ? autoScreenshotImage.count : userScreenshotImage.count
+            return snapshotView ?
+                userSnapshotImage.count : userScreenshotImage.count
         }
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
         
-        assert(carousel == snapshotCarousel || carousel == screenshotCarousel)
-        
         let h = carousel.frame.height - 10
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        if carousel == snapshotCarousel {
+        if snapshotView {
             
-            if autoSnapshots {
+            if carousel == autoCarousel {
                 itemView.image = autoSnapshotImage[index]
             } else {
                 itemView.image = userSnapshotImage[index]
@@ -506,7 +650,7 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
             
         } else {
             
-            if autoScreenshots {
+            if carousel == autoCarousel {
                 itemView.image = autoScreenshotImage[index]
             } else {
                 itemView.image = userScreenshotImage[index]
@@ -518,7 +662,7 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         
-        track()
-        updateView()
+        track("\(carousel.currentItemIndex)")
+        updateLabels()
     }
 }

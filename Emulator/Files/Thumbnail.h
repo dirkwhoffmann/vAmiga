@@ -27,10 +27,10 @@ struct Thumbnail {
     time_t timestamp;
     
     // Factory methods
-    static Thumbnail *makeWithAmiga(Amiga *amiga, int dx = 4, int dy = 2);
+    static Thumbnail *makeWithAmiga(Amiga *amiga, int dx = 2, int dy = 1);
     
     // Takes a screenshot from a given Amiga
-    void take(Amiga *amiga, int dx = 4, int dy = 2);
+    void take(Amiga *amiga, int dx = 2, int dy = 1);
 };
 
 #endif
