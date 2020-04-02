@@ -21,9 +21,6 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var middleButton: NSButton!
     @IBOutlet weak var rightButton: NSButton!
 
-    @IBOutlet weak var showInFinder: NSButton!
-    @IBOutlet weak var folderSelector: NSSegmentedControl!
-
     let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
@@ -31,10 +28,7 @@ class DiskMountDialog: DialogController {
     var shrinked: Bool { return window!.frame.size.height < 300 }
     var screenshots: [NSImage] = []
  
-    var user: Bool { return folderSelector.selectedSegment == 0 }
-    var userFolder: URL? { return Screenshot.userFolder(checksum: disk.fnv()) }
-    var autoFolder: URL? { return Screenshot.autoFolder(checksum: disk.fnv()) }
-    var screenshotFolder: URL? { return user ? userFolder : autoFolder }
+    var screenshotFolder: URL?
         
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
@@ -48,30 +42,55 @@ class DiskMountDialog: DialogController {
     
     override public func awakeFromNib() {
 
-        track()
-        window?.makeFirstResponder(carousel)
-                
-        // Determine the screenshot set to display on startup
-        if Screenshot.collectUserFiles(checksum: disk.fnv()).count > 0 {
-            folderSelector.selectedSegment = 0
-        } else {
-            folderSelector.selectedSegment = 1
-        }
-        
-        update()
-        updateCarousel()
+      track()
+            window?.makeFirstResponder(carousel)
+                    
+            // Check for screenshots
+            var userFolder: URL? { return Screenshot.userFolder(checksum: disk.fnv()) }
+            var autoFolder: URL? { return Screenshot.autoFolder(checksum: disk.fnv()) }
+            
+            if Screenshot.collectUserFiles(checksum: disk.fnv()).count > 0 {
+                track("Found images in user screenshot folder")
+                screenshotFolder = userFolder
+            } else if Screenshot.collectAutoFiles(checksum: disk.fnv()).count > 0 {
+                track("Found images in auto screenshot folder")
+                screenshotFolder = autoFolder
+            }
+            
+            update()
+            updateCarousel()
     }
     
     override func windowDidLoad() {
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            self.carousel.type = self.carouselType
-            self.carousel.isHidden = false
-            self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: false)
+        if screenshotFolder == nil {
+
+            setHeight(196)
+            
+        } else {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                self.carousel.type = self.carouselType
+                self.carousel.isHidden = false
+                self.leftButton.isHidden = false
+                self.middleButton.isHidden = false
+                self.rightButton.isHidden = false
+                self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: false)
+            }
         }
         track()
     }
-         
+    
+    func setHeight(_ newHeight: CGFloat) {
+        
+        var rect = window!.frame
+        rect.origin.y += rect.size.height - newHeight
+        rect.size.height = newHeight
+        
+        window?.setFrame(rect, display: true)
+        update()
+    }
+
     func updateScreenshots() {
 
         // Get a list of filenames
@@ -112,15 +131,6 @@ class DiskMountDialog: DialogController {
         let compatible = disk.diskType() == DISK_35_DD
         warningText.isHidden = compatible
                 
-        // Preview images
-        if user {
-            middleButton.image = NSImage.init(named: "trashTemplate")
-            middleButton.toolTip = "Delete image permanently"
-        } else {
-            middleButton.image = NSImage.init(named: "starTemplate")
-            middleButton.toolTip = "Move image to favorites"
-        }
-        
         // Check for available drives
         let dc = amiga.diskController.getConfig()
 
@@ -217,14 +227,9 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("middleAction: \(index)")
 
-        if user {
-            track("Deleting screenshot")
-            Screenshot.deleteUser(item: index, checksum: disk.fnv())
-        } else {
-            track("Moving screenshot to favorites")
-            Screenshot.moveToUser(item: index, checksum: disk.fnv())
-        }
- 
+        track("Deleting screenshot")
+        Screenshot.deleteUser(item: index, checksum: disk.fnv())
+        
         updateCarousel()
     }
 }
