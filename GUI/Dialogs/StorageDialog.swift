@@ -110,8 +110,8 @@ class StorageDialog: DialogController {
         
         if snapshotView {
             
-            autoLabel.stringValue = "Auto-saved snapshots"
-            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
+            autoLabel.stringValue = "Automatically saved snapshots"
+            autoNr.stringValue = "Snapshot \(autoIndex + 1) out of \(numAutoItems)"
             autoText1.stringValue = autoSnapshotDesc1[autoIndex] ?? ""
             autoText2.stringValue = autoSnapshotDesc2[autoIndex] ?? ""
 
@@ -122,7 +122,7 @@ class StorageDialog: DialogController {
             autoAction2.image = NSImage.init(named: "saveTemplate")
             autoAction2.toolTip = "Save snapshot to disk"
 
-            userLabel.stringValue = "User-saved snapshots"
+            userLabel.stringValue = "Manually saved snapshots"
             userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
             userText1.stringValue = userSnapshotDesc1[userIndex] ?? ""
             userText2.stringValue = userSnapshotDesc2[userIndex] ?? ""
@@ -141,20 +141,20 @@ class StorageDialog: DialogController {
 
         } else {
             
-            autoLabel.stringValue = "Auto-saved screenshots"
-            autoNr.stringValue = "\(autoIndex + 1) / \(autoScreenshotImage.count)"
+            autoLabel.stringValue = "Automatically saved screenshots"
+            autoNr.stringValue = "Screenshot \(autoIndex + 1) out of \(numAutoItems)"
             autoText1.stringValue = autoScreenshotDesc1[autoIndex] ?? ""
             autoText2.stringValue = autoScreenshotDesc2[autoIndex] ?? ""
             
             autoTrash.image = NSImage.init(named: "starTemplate")
-            autoTrash.toolTip = "Move to user-saved screenshots"
+            autoTrash.toolTip = "Move to manually saved screenshots"
             autoAction1.image = NSImage.init(named: "backTemplate")
             autoAction1.toolTip = "Change order"
             autoAction2.image = NSImage.init(named: "frontTemplate")
             autoAction2.toolTip = "Change order"
 
-            userLabel.stringValue = "User-saved screenshots"
-            userNr.stringValue = "\(userIndex + 1) / \(userScreenshotImage.count)"
+            userLabel.stringValue = "Manually saved screenshots"
+            userNr.stringValue = "Screenshot \(userIndex + 1) out of \(numUserItems)"
             userText1.stringValue = userScreenshotDesc1[userIndex] ?? ""
             userText2.stringValue = userScreenshotDesc2[userIndex] ?? ""
 
@@ -309,7 +309,7 @@ class StorageDialog: DialogController {
             let takenAt = amiga.autoSnapshotTimestamp(n)
             let image = amiga.autoSnapshotImage(n)
             autoSnapshotImage[n] = image.roundCorners()
-            autoSnapshotDesc1[n] = timeDiffInfo(time: takenAt)
+            autoSnapshotDesc1[n] = "Taken " + timeDiffInfo(time: takenAt)
             autoSnapshotDesc2[n] = ""
         }
         amiga.resume()
@@ -334,7 +334,7 @@ class StorageDialog: DialogController {
             let takenAt = amiga.userSnapshotTimestamp(n)
             let image = amiga.userSnapshotImage(n)
             userSnapshotImage[n] = image.roundCorners()
-            userSnapshotDesc1[n] = timeDiffInfo(time: takenAt)
+            userSnapshotDesc1[n] = "Taken " + timeDiffInfo(time: takenAt)
             userSnapshotDesc2[n] = ""
         }
         amiga.resume()
@@ -368,7 +368,7 @@ class StorageDialog: DialogController {
             
             if let image = NSImage.init(contentsOf: url) {
                 autoScreenshotImage[n] = image.roundCorners()
-                autoScreenshotDesc1[n] = timeDiffInfo(url: url)
+                autoScreenshotDesc1[n] = "Taken " + timeDiffInfo(url: url)
                 autoScreenshotDesc2[n] = autoImageInfo(n)
             }
         }
@@ -394,7 +394,7 @@ class StorageDialog: DialogController {
             
             if let image = NSImage.init(contentsOf: url) {
                 userScreenshotImage[n] = image.roundCorners()
-                userScreenshotDesc1[n] = timeDiffInfo(url: url)
+                userScreenshotDesc1[n] = "Taken " + timeDiffInfo(url: url)
                 userScreenshotDesc2[n] = userImageInfo(n)
             }
         }
