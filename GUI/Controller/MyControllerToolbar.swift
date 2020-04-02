@@ -114,27 +114,23 @@ extension MyController {
         switch sender.selectedSegment {
         
         case 0: // Rewind
-
-            track("Rewind")
             if !amiga.restoreLatestAutoSnapshot() {
                 NSSound.beep()
             }
         
-        case 1: // Take
-
-            track("Snap")
+        case 1: // Take snapshot
             amiga.takeUserSnapshot()
             
-        case 2: // Restore
-            
-            track("Restore")
+        case 2: // Restore snapshot
             if !amiga.restoreLatestUserSnapshot() {
                 NSSound.beep()
             }
-
-        case 3: // Browse
             
-            track("Browse")
+        case 3: // Take screenshot
+            takeScreenshot(auto: false)
+            renderer.blendIn(steps: 20)
+
+        case 4: // Browse
             let name = NSNib.Name("StorageDialog")
             let controller = StorageDialog.make(parent: self, nibName: name)
             controller?.checksum = amiga.df0.fnv()
