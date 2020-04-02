@@ -231,7 +231,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="IhF-AY-mVz"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="caT-w9-zJ9">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -242,7 +242,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="nXc-Zj-MRR"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="smR-ZO-LAl">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -253,7 +253,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="tt4-Cp-9yw"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="ShU-59-vsV">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -264,7 +264,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="8qi-yX-Fbb"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="5Zl-Dc-eev">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -333,7 +333,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -473,18 +473,15 @@
                     <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Storage" paletteLabel="Storage" sizingBehavior="auto" id="nxb-IG-KLe">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
-                            <rect key="frame" x="0.0" y="14" width="211" height="24"/>
+                            <rect key="frame" x="0.0" y="14" width="170" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
                                 <font key="font" metaFont="system"/>
                                 <segments>
-                                    <segment toolTip="Rewind" image="ttRewindTemplate" width="40"/>
-                                    <segment toolTip="Take Snapshot" image="ttStoreTemplate" width="40" tag="1"/>
-                                    <segment toolTip="Revert To Most Recent Snapshot" image="ttRestoreTemplate" width="40"/>
+                                    <segment toolTip="Take Snapshot" image="ttStoreTemplate" width="40"/>
+                                    <segment toolTip="Revert To Most Recent Snapshot" image="ttRestoreTemplate" width="40" tag="1"/>
                                     <segment toolTip="Take screenshot" image="ttCameraTemplate" width="40"/>
-                                    <segment toolTip="Browse Snapshot Storage" image="ttFolderTemplate" width="40">
-                                        <nil key="label"/>
-                                    </segment>
+                                    <segment toolTip="Open storage browser" image="ttFolderTemplate" width="40"/>
                                 </segments>
                             </segmentedCell>
                             <connections>
@@ -566,7 +563,6 @@
         <image name="ttCameraTemplate" width="241" height="241"/>
         <image name="ttFolderTemplate" width="241" height="241"/>
         <image name="ttRestoreTemplate" width="241" height="240"/>
-        <image name="ttRewindTemplate" width="241" height="240"/>
         <image name="ttStoreTemplate" width="241" height="240"/>
     </resources>
 </document>

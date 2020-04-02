@@ -51,7 +51,7 @@ public extension AmigaProxy {
         
         let image = NSImage(size: (imageRep?.size)!)
         image.addRepresentation(imageRep!)
-        image.makeGlossy()
+        // image.makeGlossy()
         
         return image
     }
