@@ -135,9 +135,9 @@ class StorageDialog: DialogController {
             userAction2.toolTip = "Save snapshot to disk"
 
             autoFinderButton.isHidden = true
-            // autoFinderLabel.isHidden = true
+            autoFinderLabel.isHidden = true
             userFinderButton.isHidden = true
-            // userFinderLabel.isHidden = true
+            userFinderLabel.isHidden = true
 
         } else {
             
@@ -166,9 +166,9 @@ class StorageDialog: DialogController {
             userAction2.toolTip = "Move screenshot outwards"
 
             autoFinderButton.isHidden = false
-            // autoFinderLabel.isHidden = false
+            autoFinderLabel.isHidden = false
             userFinderButton.isHidden = false
-            // userFinderLabel.isHidden = false
+            userFinderLabel.isHidden = false
         }
     }
 
