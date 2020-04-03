@@ -98,6 +98,11 @@ class StorageDialog: DialogController {
         let autoIndex = autoCarousel.currentItemIndex
         let userIndex = userCarousel.currentItemIndex
         
+        autoNext.isEnabled = autoIndex >= 0 && autoIndex < autoCarousel.numberOfItems - 1
+        autoPrev.isEnabled = autoIndex > 0
+        userNext.isEnabled = userIndex >= 0 && userIndex < userCarousel.numberOfItems - 1
+        userPrev.isEnabled = userIndex > 0
+
         if snapshotView {
             
             moveToUser.isHidden = true
@@ -105,25 +110,28 @@ class StorageDialog: DialogController {
             autoLabel.stringValue = "Automatically saved snapshots"
             autoTrash.image = NSImage.init(named: "trashTemplate")
             autoTrash.toolTip = "Delete snapshot"
+            autoTrash.isEnabled = autoIndex >= 0
             autoAction1.image = NSImage.init(named: "restoreTemplate")
             autoAction1.toolTip = "Restore snapshot"
+            autoAction1.isEnabled = autoIndex >= 0
             autoAction2.image = NSImage.init(named: "saveTemplate")
             autoAction2.toolTip = "Save snapshot to disk"
+            autoAction2.isEnabled = autoIndex >= 0
             autoFinderButton.isHidden = true
             autoFinderLabel.isHidden = true
 
-            let autoCount = parent.mydocument!.autoSnapshots.count
-            if autoIndex < autoCount {
+            if autoIndex >= 0 {
                 
                 let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
-                let time = snapshot.timeStamp()
                 autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-                autoText1.stringValue = timeDiffInfo(time: time)
+                autoNr.textColor = .labelColor
+                autoText1.stringValue = timeDiffInfo(time: snapshot.timeStamp())
                 autoText2.stringValue = ""
 
             } else {
 
-                autoNr.stringValue = "No snapshots"
+                autoNr.stringValue = "No snapshots available"
+                autoNr.textColor = .secondaryLabelColor
                 autoText1.stringValue = ""
                 autoText2.stringValue = ""
             }
@@ -131,25 +139,28 @@ class StorageDialog: DialogController {
             userLabel.stringValue = "Manually saved snapshots"
             userTrash.image = NSImage.init(named: "trashTemplate")
             userTrash.toolTip = "Delete snapshot"
+            userTrash.isEnabled = userIndex >= 0
             userAction1.image = NSImage.init(named: "restoreTemplate")
             userAction1.toolTip = "Restore snapshot"
+            userAction1.isEnabled = userIndex >= 0
             userAction2.image = NSImage.init(named: "saveTemplate")
             userAction2.toolTip = "Save snapshot to disk"
+            userAction2.isEnabled = userIndex >= 0
             userFinderButton.isHidden = true
             userFinderLabel.isHidden = true
             
-            let userCount = parent.mydocument!.userSnapshots.count
-            if userIndex < userCount {
+            if userIndex >= 0 {
                 
                 let snapshot = parent.mydocument!.userSnapshots[userIndex]
-                let time = snapshot.timeStamp()
                 userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-                userText1.stringValue = timeDiffInfo(time: time)
+                userNr.textColor = .labelColor
+                userText1.stringValue = timeDiffInfo(time: snapshot.timeStamp())
                 userText2.stringValue = ""
                 
             } else {
                 
-                userNr.stringValue = "No snapshots"
+                userNr.stringValue = "No snapshots available"
+                userNr.textColor = .secondaryLabelColor
                 userText1.stringValue = ""
                 userText2.stringValue = ""
             }
@@ -598,7 +609,6 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
             numItems = snapshotView ?
                 (parent.mydocument?.autoSnapshots.count ?? 0) :
                 autoScreenshotImage.count
-            numItems = max(numItems, 1)
         } else {
             numItems = snapshotView ?
                 (parent.mydocument?.userSnapshots.count ?? 0) :
@@ -616,15 +626,9 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         
         if snapshotView {
             
-            let snapshots = carousel == autoCarousel ?
-            parent.mydocument!.autoSnapshots :
-            parent.mydocument!.userSnapshots
-            
-            if index < snapshots.count {
-                itemView.image = snapshots[index].previewImage()
-            } else {
-                itemView.image = NSImage.init(named: "noise_camera")!
-            }
+            itemView.image = (carousel == autoCarousel) ?
+                parent.mydocument!.autoSnapshots[index].previewImage() :
+                parent.mydocument!.userSnapshots[index].previewImage()
 
             itemView.wantsLayer = true
             itemView.layer?.cornerRadius = 10.0

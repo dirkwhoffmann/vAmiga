@@ -102,7 +102,7 @@ Gw
                             <rect key="frame" x="3" y="3" width="343" height="335"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button toolTip="One item left" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3bw-7I-GfT">
+                                <button toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3bw-7I-GfT">
                                     <rect key="frame" x="62" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Zlg-mU-p8R">
@@ -113,7 +113,7 @@ Gw
                                         <action selector="autoPrevAction:" target="-2" id="EeU-lD-DDs"/>
                                     </connections>
                                 </button>
-                                <button toolTip="One item right" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJH-uM-MUc">
+                                <button toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJH-uM-MUc">
                                     <rect key="frame" x="36" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="mWg-4a-kJj">
@@ -166,7 +166,7 @@ Gw
                                     </textFieldCell>
                                 </textField>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2D7-XS-vht">
-                                    <rect key="frame" x="138" y="274" width="69" height="16"/>
+                                    <rect key="frame" x="19" y="274" width="307" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="999 / 999" id="jX5-r8-8zk">
                                         <font key="font" metaFont="system"/>
@@ -234,7 +234,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button toolTip="One item right" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eRJ-zI-zwL">
+                                <button toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eRJ-zI-zwL">
                                     <rect key="frame" x="35" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hu8-kF-umC">
@@ -245,7 +245,7 @@ Gw
                                         <action selector="userNextAction:" target="-2" id="HCt-Rz-x0F"/>
                                     </connections>
                                 </button>
-                                <button toolTip="One item left" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zaV-nr-IDU">
+                                <button toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zaV-nr-IDU">
                                     <rect key="frame" x="61" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hbl-KD-lO4">
@@ -281,7 +281,7 @@ Gw
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </box>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BpQ-cz-rtX">
-                                    <rect key="frame" x="138" y="274" width="69" height="16"/>
+                                    <rect key="frame" x="18" y="274" width="308" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="999 / 999" id="VL6-Zi-ADd">
                                         <font key="font" metaFont="system"/>
