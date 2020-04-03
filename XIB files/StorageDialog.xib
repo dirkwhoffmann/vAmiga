@@ -189,7 +189,7 @@ Gw
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2D7-XS-vht">
                                     <rect key="frame" x="18" y="43" width="306" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="7 / 42" id="jX5-r8-8zk">
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="42 / 42" id="jX5-r8-8zk">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -217,7 +217,7 @@ Gw
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <customView hidden="YES" canDrawConcurrently="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hHm-XN-YUe" customClass="iCarousel">
-                                    <rect key="frame" x="20" y="64" width="303" height="224"/>
+                                    <rect key="frame" x="20" y="45" width="303" height="224"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <connections>
                                         <outlet property="dataSource" destination="-2" id="p8h-9u-PYL"/>
@@ -234,7 +234,7 @@ Gw
                                     </textFieldCell>
                                 </textField>
                                 <button toolTip="One item right" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eRJ-zI-zwL">
-                                    <rect key="frame" x="36" y="305" width="16" height="16"/>
+                                    <rect key="frame" x="35" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hu8-kF-umC">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -245,7 +245,7 @@ Gw
                                     </connections>
                                 </button>
                                 <button toolTip="One item left" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zaV-nr-IDU">
-                                    <rect key="frame" x="62" y="305" width="16" height="16"/>
+                                    <rect key="frame" x="61" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hbl-KD-lO4">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -286,15 +286,6 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BpQ-cz-rtX">
-                                    <rect key="frame" x="19" y="43" width="306" height="16"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="7 / 42" id="VL6-Zi-ADd">
-                                        <font key="font" metaFont="system"/>
-                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                    </textFieldCell>
-                                </textField>
                                 <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0q-ff-7S7">
                                     <rect key="frame" x="162" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -310,6 +301,15 @@ Gw
                                     <rect key="frame" x="21" y="294" width="302" height="5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </box>
+                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BpQ-cz-rtX">
+                                    <rect key="frame" x="138" y="274" width="69" height="16"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                    <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="999 / 999" id="VL6-Zi-ADd">
+                                        <font key="font" metaFont="system"/>
+                                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                </textField>
                             </subviews>
                         </view>
                     </box>

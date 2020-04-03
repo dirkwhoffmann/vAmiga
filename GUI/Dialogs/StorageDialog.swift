@@ -111,33 +111,56 @@ class StorageDialog: DialogController {
         if snapshotView {
             
             autoLabel.stringValue = "Automatically saved snapshots"
-            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-            autoText1.stringValue = autoSnapshotDesc1[autoIndex] ?? ""
-            autoText2.stringValue = autoSnapshotDesc2[autoIndex] ?? ""
-
             autoTrash.image = NSImage.init(named: "trashTemplate")
             autoTrash.toolTip = "Delete snapshot"
             autoAction1.image = NSImage.init(named: "restoreTemplate")
             autoAction1.toolTip = "Restore snapshot"
             autoAction2.image = NSImage.init(named: "saveTemplate")
             autoAction2.toolTip = "Save snapshot to disk"
+            autoFinderButton.isHidden = true
+            autoFinderLabel.isHidden = true
 
+            let autoCount = parent.mydocument!.autoSnapshots.count
+            if autoIndex < autoCount {
+                
+                let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
+                let time = snapshot.timeStamp()
+                autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
+                autoText1.stringValue = timeDiffInfo(time: time)
+                autoText2.stringValue = ""
+
+            } else {
+
+                autoNr.stringValue = "No snapshots"
+                autoText1.stringValue = ""
+                autoText2.stringValue = ""
+            }
+            
             userLabel.stringValue = "Manually saved snapshots"
-            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-            userText1.stringValue = userSnapshotDesc1[userIndex] ?? ""
-            userText2.stringValue = userSnapshotDesc2[userIndex] ?? ""
-        
             userTrash.image = NSImage.init(named: "trashTemplate")
             userTrash.toolTip = "Delete snapshot"
             userAction1.image = NSImage.init(named: "restoreTemplate")
             userAction1.toolTip = "Restore snapshot"
             userAction2.image = NSImage.init(named: "saveTemplate")
             userAction2.toolTip = "Save snapshot to disk"
-
-            autoFinderButton.isHidden = true
-            autoFinderLabel.isHidden = true
             userFinderButton.isHidden = true
             userFinderLabel.isHidden = true
+            
+            let userCount = parent.mydocument!.userSnapshots.count
+            if userIndex < userCount {
+                
+                let snapshot = parent.mydocument!.userSnapshots[userIndex]
+                let time = snapshot.timeStamp()
+                userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
+                userText1.stringValue = timeDiffInfo(time: time)
+                userText2.stringValue = ""
+                
+            } else {
+                
+                userNr.stringValue = "No snapshots"
+                userText1.stringValue = ""
+                userText2.stringValue = ""
+            }
 
         } else {
             

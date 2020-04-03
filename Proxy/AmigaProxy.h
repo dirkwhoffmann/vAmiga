@@ -615,6 +615,7 @@ struct AmigaFileWrapper;
 + (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
 
 - (NSImage *)previewImage;
+- (time_t)timeStamp;
 
 @end
 

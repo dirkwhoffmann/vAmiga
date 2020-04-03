@@ -1172,6 +1172,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 
     return preview;
 }
+- (time_t)timeStamp
+{
+    return ((Snapshot *)wrapper->file)->getTimestamp();
+}
 
 /*
  - (void) dealloc {
