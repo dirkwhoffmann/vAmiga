@@ -1176,7 +1176,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return ((Snapshot *)wrapper->file)->getTimestamp();
 }
-
+- (NSData *)data
+{
+    Snapshot *snapshot = (Snapshot *)wrapper->file;
+    return [NSData dataWithBytes: (void *)snapshot->getHeader()
+                          length: snapshot->sizeOnDisk()];
+}
+    
 /*
  - (void) dealloc {
  
@@ -1519,6 +1525,7 @@ struct ADFFileWrapper { ADFFile *adf; };
     Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
     wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
+/*
 - (void) setSnapshotInterval:(NSInteger)value
 {
     wrapper->amiga->setSnapshotInterval(value);
@@ -1595,6 +1602,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->deleteUserSnapshot((unsigned)nr);
 }
+*/
 /*
 - (NSInteger) numAutoScreenshots
 {

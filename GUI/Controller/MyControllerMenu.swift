@@ -254,12 +254,7 @@ extension MyController: NSMenuItemValidation {
         // Save to file
         try data?.write(to: url, options: .atomic)
     }
-    
-    @IBAction func takeSnapshot(_ sender: Any!) {
         
-        amiga.takeUserSnapshot()
-    }
-    
     //
     // Action methods (Edit menu)
     //

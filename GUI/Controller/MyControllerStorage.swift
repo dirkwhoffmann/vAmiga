@@ -32,6 +32,40 @@ extension MyController {
     func takeAutoSnapshot() { takeSnapshot(auto: true) }
     func takeUserSnapshot() { takeSnapshot(auto: false) }
 
+    func restoreSnapshot(item: Int, auto: Bool) -> Bool {
+        
+        track("auto = \(auto)")
+        
+        if auto && item < mydocument!.autoSnapshots.count {
+            amiga.load(fromSnapshot: mydocument!.autoSnapshots[item])
+            return true
+        }
+        if !auto && item < mydocument!.userSnapshots.count {
+            amiga.load(fromSnapshot: mydocument!.userSnapshots[item])
+            return true
+        }
+        return false
+    }
+    
+    func restoreAutoSnapshot(item: Int) -> Bool {
+        return restoreSnapshot(item: item, auto: true)
+    }
+    func restoreUserSnapshot(item: Int) -> Bool {
+        return restoreSnapshot(item: item, auto: false)
+    }
+    func restoreLatestAutoSnapshot() -> Bool {
+        if mydocument!.autoSnapshots.count > 0 {
+            return restoreAutoSnapshot(item: mydocument!.autoSnapshots.count - 1)
+        }
+        return false
+    }
+    func restoreLatestUserSnapshot() -> Bool {
+        if mydocument!.userSnapshots.count > 0 {
+            return restoreUserSnapshot(item: mydocument!.userSnapshots.count - 1)
+        }
+        return false
+    }
+
     //
     // Screenshots
     //

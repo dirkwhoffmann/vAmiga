@@ -38,7 +38,9 @@ class StorageDialog: DialogController {
     @IBOutlet weak var userText2: NSTextField!
     @IBOutlet weak var userFinderLabel: NSTextField!
     @IBOutlet weak var userFinderButton: NSButton!
- 
+
+    @IBOutlet weak var moveToUser: NSButton!
+
     let carouselType = iCarouselType.timeMachine //   coverFlow
     
     // Fingerprint of disk in df0
@@ -56,18 +58,6 @@ class StorageDialog: DialogController {
     var lastAutoItem: Int { return numAutoItems - 1 }
     var lastUserItem: Int { return numUserItems - 1 }
 
-    // Auto snapshot cache
-    var autoSnapshotImage: [Int: NSImage] = [:]
-    var autoSnapshotDesc1: [Int: String] = [:]
-    var autoSnapshotDesc2: [Int: String] = [:]
-    var autoSnapshotSlotForRow: [Int: Int] = [:]
-    
-    // User snapshot cache
-    var userSnapshotImage: [Int: NSImage] = [:]
-    var userSnapshotDesc1: [Int: String] = [:]
-    var userSnapshotDesc2: [Int: String] = [:]
-    var userSnapshotSlotForRow: [Int: Int] = [:]
-    
     // Auto screenshot cache
     var autoScreenshotUrls: [URL] = []
     var autoScreenshotImage: [Int: NSImage] = [:]
@@ -109,6 +99,8 @@ class StorageDialog: DialogController {
         let userIndex = userCarousel.currentItemIndex
         
         if snapshotView {
+            
+            moveToUser.isHidden = true
             
             autoLabel.stringValue = "Automatically saved snapshots"
             autoTrash.image = NSImage.init(named: "trashTemplate")
@@ -164,13 +156,14 @@ class StorageDialog: DialogController {
 
         } else {
             
+            moveToUser.isHidden = false
+
             autoLabel.stringValue = "Automatically saved screenshots"
             autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
             autoText1.stringValue = autoScreenshotDesc1[autoIndex] ?? ""
             autoText2.stringValue = autoScreenshotDesc2[autoIndex] ?? ""
             
-            autoTrash.image = NSImage.init(named: "starTemplate")
-            autoTrash.toolTip = "Move to manually saved screenshots"
+            autoTrash.toolTip = "Delete screenshot"
             autoAction1.image = NSImage.init(named: "backTemplate")
             autoAction1.toolTip = "Change order"
             autoAction2.image = NSImage.init(named: "frontTemplate")
@@ -318,63 +311,6 @@ class StorageDialog: DialogController {
         return imageInfo(image: userScreenshotImage[nr], url: userScreenshotUrls[nr])
     }
 
-    func updateAutoSnapshotCache() {
-        
-        track()
-        now = Date()
-        autoSnapshotImage = [:]
-        autoSnapshotDesc1 = [:]
-        autoSnapshotDesc2 = [:]
-
-        amiga.suspend()
-        let numAutoSnapshots = amiga.numAutoSnapshots()
-        for n in 0..<numAutoSnapshots {
-            let takenAt = amiga.autoSnapshotTimestamp(n)
-            let image = amiga.autoSnapshotImage(n)
-            autoSnapshotImage[n] = image.roundCorners()
-            autoSnapshotDesc1[n] = "Taken " + timeDiffInfo(time: takenAt)
-            autoSnapshotDesc2[n] = ""
-        }
-        amiga.resume()
-        
-        if autoSnapshotImage.count == 0 {
-            autoSnapshotImage[0] = NSImage.init(named: "noise_camera")!
-        }
-        track("\(autoSnapshotImage)")
-    }
-    
-    func updateUserSnapshotCache() {
-        
-        track()
-        now = Date()
-        userSnapshotImage = [:]
-        userSnapshotDesc1 = [:]
-        userSnapshotDesc2 = [:]
-
-        amiga.suspend()
-        let numUserSnapshots = amiga.numUserSnapshots()
-        for n in 0..<numUserSnapshots {
-            let takenAt = amiga.userSnapshotTimestamp(n)
-            let image = amiga.userSnapshotImage(n)
-            userSnapshotImage[n] = image.roundCorners()
-            userSnapshotDesc1[n] = "Taken " + timeDiffInfo(time: takenAt)
-            userSnapshotDesc2[n] = ""
-        }
-        amiga.resume()
-        
-        if userSnapshotImage.count == 0 {
-            userSnapshotImage[0] = NSImage.init(named: "noise_camera")!
-        }
-        
-        track("User snapshot cache contains \(userSnapshotImage.count) items")
-    }
-    
-    func updateSnapshotCaches() {
-        
-        updateAutoSnapshotCache()
-        updateUserSnapshotCache()
-    }
-            
     func updateAutoScreenshotCache() {
         
         track()
@@ -435,7 +371,6 @@ class StorageDialog: DialogController {
         
     func updateCaches() {
         
-        updateSnapshotCaches()
         updateScreenshotCaches()
     }
     
@@ -497,15 +432,11 @@ class StorageDialog: DialogController {
         track("index = \(index)")
 
         if snapshotView {
-            amiga.deleteAutoSnapshot(index)
-            updateAutoSnapshotCache()
+            parent.mydocument!.autoSnapshots.remove(at: index)
             updateAutoCarousel()
         } else {
-            Screenshot.moveToUser(item: index, checksum: checksum)
+            Screenshot.deleteAuto(item: index, checksum: checksum)
             updateAutoScreenshotCache()
-            updateUserScreenshotCache()
-            updateAutoCarousel(goto: index - 1, animated: true)
-            updateUserCarousel(goto: Int.max, animated: true)
         }
     }
     
@@ -515,8 +446,7 @@ class StorageDialog: DialogController {
         track("index = \(index)")
         
         if snapshotView {
-            amiga.deleteUserSnapshot(index)
-            updateUserSnapshotCache()
+            parent.mydocument!.userSnapshots.remove(at: index)
         } else {
             Screenshot.deleteUser(item: index, checksum: checksum)
             updateUserScreenshotCache()
@@ -531,7 +461,7 @@ class StorageDialog: DialogController {
         
         if snapshotView {
             
-            amiga.restoreAutoSnapshot(index)
+            if !parent.restoreAutoSnapshot(item: index) { NSSound.beep() }
             
         } else if index > 0 {
             
@@ -548,7 +478,7 @@ class StorageDialog: DialogController {
         
         if snapshotView {
             
-            amiga.restoreUserSnapshot(index)
+            if !parent.restoreUserSnapshot(item: index) { NSSound.beep() }
             
         } else if index > 0 {
             
@@ -591,7 +521,21 @@ class StorageDialog: DialogController {
             updateUserCarousel(goto: index + 1, animated: true)
         }
     }
-    
+
+    @IBAction func moveToUserAction(_ sender: NSButton!) {
+        
+        track()
+        assert(screenshotView)
+        
+        let index = autoCarousel.currentItemIndex
+        Screenshot.moveToUser(item: index, checksum: checksum)
+        
+        updateAutoScreenshotCache()
+        updateUserScreenshotCache()
+        updateAutoCarousel(goto: index - 1, animated: true)
+        updateUserCarousel(goto: Int.max, animated: true)
+    }
+
     @IBAction func autoFinderAction(_ sender: NSButton!) {
         
         track()
@@ -631,9 +575,9 @@ class StorageDialog: DialogController {
                  if let url = panel.url {
                      
                      let data = auto ?
-                         self.amiga.autoSnapshotData(item) :
-                         self.amiga.userSnapshotData(item)
-                     try? data?.write(to: url)
+                        self.parent.mydocument!.autoSnapshots[item].data() :
+                        self.parent.mydocument!.userSnapshots[item].data()
+                    try? data?.write(to: url)
                  }
              }
          })

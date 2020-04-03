@@ -109,33 +109,50 @@ extension MyController {
         }
     }
     
+    @IBAction func takeUserSnapshotAction(_ sender: Any!) {
+        
+        takeUserSnapshot()
+        renderer.blendIn(steps: 20)
+    }
+    
+    @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
+        
+        if !restoreLatestAutoSnapshot() { NSSound.beep() }
+    }
+    
+    @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
+        
+        if !restoreLatestUserSnapshot() { NSSound.beep() }
+    }
+        
+    @IBAction func takeUserScreenshotAction(_ sender: Any!) {
+        
+        takeScreenshot(auto: false)
+        renderer.blendIn(steps: 20)
+    }
+
+    @IBAction func browseStorageAction(_ sender: Any!) {
+        
+        let name = NSNib.Name("StorageDialog")
+        let controller = StorageDialog.make(parent: self, nibName: name)
+        controller?.checksum = amiga.df0.fnv()
+        controller?.showSheet()
+    }
+
     @IBAction func snapshotAction(_ sender: NSSegmentedControl) {
         
         switch sender.selectedSegment {
-                
-        case 0: // Snap
-            takeUserSnapshot()
             
-        case 1: // Restore
-            if !amiga.restoreLatestUserSnapshot() {
-                NSSound.beep()
-            }
+        case 0: takeUserSnapshotAction(self)
+        case 1: restoreLatestUserSnapshotAction(self)
+        case 2: takeUserScreenshotAction(self)
+        case 3: browseStorageAction(self)
             
-        case 2: // Click
-            takeScreenshot(auto: false)
-            renderer.blendIn(steps: 20)
-
-        case 3: // Browse
-            let name = NSNib.Name("StorageDialog")
-            let controller = StorageDialog.make(parent: self, nibName: name)
-            controller?.checksum = amiga.df0.fnv()
-            controller?.showSheet()
-
         default:
             assert(false)
         }
     }
-    
+        
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
@@ -143,21 +160,6 @@ extension MyController {
             virtualKeyboardSheet = VKBController.make(parent: self)
         }
         virtualKeyboardSheet?.showSheet(autoClose: true)
-    }
-
-    @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
-        
-        if amiga.restoreLatestAutoSnapshot() {
-            amiga.deleteAutoSnapshot(0)
-            renderer.snapToFront()
-        }
-    }
-
-    @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
-        
-        if amiga.restoreLatestUserSnapshot() {
-            renderer.snapToFront()
-        }
     }
     
     @IBAction func printDocument(_ sender: Any!) {

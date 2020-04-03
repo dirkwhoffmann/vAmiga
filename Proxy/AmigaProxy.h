@@ -159,6 +159,7 @@ struct AmigaFileWrapper;
 
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
+/*
 - (BOOL) restoreAutoSnapshot:(NSInteger)nr;
 - (BOOL) restoreUserSnapshot:(NSInteger)nr;
 - (BOOL) restoreLatestAutoSnapshot;
@@ -179,6 +180,7 @@ struct AmigaFileWrapper;
 
 - (void) deleteAutoSnapshot:(NSInteger)nr;
 - (void) deleteUserSnapshot:(NSInteger)nr;
+*/
 
 // Handling screenshots
 /*
@@ -616,6 +618,7 @@ struct AmigaFileWrapper;
 
 - (NSImage *)previewImage;
 - (time_t)timeStamp;
+- (NSData *)data;
 
 @end
 
