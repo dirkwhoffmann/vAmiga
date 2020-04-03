@@ -794,17 +794,6 @@ Amiga::synchronizeTiming()
     }
 }
 
-bool
-Amiga::snapshotIsDue()
-{
-    unsigned fps = 50; // PAL frames per second
-    
-    if (!getTakeAutoSnapshots() || getSnapshotInterval() <= 0)
-    return false;
-    
-    return agnus.frame.nr % (fps * getSnapshotInterval()) == 0;
-}
-
 void
 Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 {
@@ -826,121 +815,6 @@ Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
     resume();
 }
 
-bool
-Amiga::restoreSnapshot(vector<Snapshot *> &storage, unsigned nr)
-{
-    Snapshot *snapshot = getSnapshot(storage, nr);
-    
-    if (snapshot) {
-        loadFromSnapshotSafe(snapshot);
-        return true;
-    }
-    
-    return false;
-}
-
-bool
-Amiga::restoreAutoSnapshot(unsigned nr)
-{
-    if (restoreSnapshot(autoSnapshots, nr)) {
-        putMessage(MSG_AUTOSNAPSHOT_LOADED);
-        return true;
-    }
-    return false;
-}
-
-bool
-Amiga::restoreUserSnapshot(unsigned nr)
-{
-    if (restoreSnapshot(userSnapshots, nr)) {
-        putMessage(MSG_USERSNAPSHOT_LOADED);
-        return true;
-    }
-    return false;
-}
-
-size_t
-Amiga::numSnapshots(vector<Snapshot *> &storage)
-{
-    return storage.size();
-}
-
-Snapshot *
-Amiga::getSnapshot(vector<Snapshot *> &storage, unsigned nr)
-{
-    return nr < storage.size() ? storage.at(nr) : NULL;
-    
-}
-
-void
-Amiga::takeSnapshot(vector<Snapshot *> &storage)
-{
-    // Delete oldest snapshot if capacity limit has been reached
-    if (storage.size() >= MAX_SNAPSHOTS) {
-        deleteSnapshot(storage, MAX_SNAPSHOTS - 1);
-    }
-    
-    Snapshot *snapshot = Snapshot::makeWithAmiga(this);
-    storage.insert(storage.begin(), snapshot);
-}
-
-void
-Amiga::takeAutoSnapshot()
-{
-    takeSnapshot(autoSnapshots);
-    putMessage(MSG_AUTOSNAPSHOT_SAVED);
-}
-
-void
-Amiga::takeUserSnapshot()
-{
-    takeSnapshot(userSnapshots);
-    putMessage(MSG_USERSNAPSHOT_SAVED);
-}
-
-void
-Amiga::deleteSnapshot(vector<Snapshot *> &storage, unsigned index)
-{
-    Snapshot *snapshot = getSnapshot(storage, index);
-    
-    if (snapshot) {
-        delete snapshot;
-        storage.erase(storage.begin() + index);
-    }
-}
-
-/*
-size_t
-Amiga::numScreenshots(vector<Thumbnail *> &storage)
-{
-    return storage.size();
-}
-
-Thumbnail *
-Amiga::getScreenshot(vector<Thumbnail *> &storage, unsigned nr)
-{
-    return nr < storage.size() ? storage.at(nr) : NULL;
-}
-
-Thumbnail *
-Amiga::takeScreenshot()
-{
-    return Thumbnail::makeWithAmiga(this, 2, 1);
-}
-
-void
-Amiga::takeScreenshot(vector<Thumbnail *> &storage)
-{
-    // Screenshot *screenshot = Screenshot::makeWithAmiga(this, 2, 1);
-    storage.push_back(takeScreenshot());
-}
-
-void
-Amiga::takeAutoScreenshot()
-{
-    takeScreenshot(autoScreenshots);
-}
-*/
 
 //
 // The run loop
@@ -1013,7 +887,13 @@ Amiga::runLoop()
             
             // Are we requested to take a snapshot?
             if (runLoopCtrl & RL_SNAPSHOT) {
-                // takeAutoSnapshot();
+                // TODO:
+                // In the current implementation, the GUI takes a snapshot
+                // by suspending and resuming the emulator. This might cause
+                // a noticable delay, because the emulator thread get halted
+                // and restarted. As an alternative, the GUI could request
+                // a snapshot via signalSnapshot(). The screenshot will be
+                // taken here and the GUI be notified via the message queue
                 clearControlFlags(RL_SNAPSHOT);
             }
             

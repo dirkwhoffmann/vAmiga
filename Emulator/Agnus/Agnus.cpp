@@ -1848,9 +1848,6 @@ Agnus::vsyncHandler()
     // Update statistics
     amiga.updateStats();
 
-    // Prepare to take a snapshot once in a while
-    if (amiga.snapshotIsDue()) amiga.signalSnapshot();
-
     // Count some sheep (zzzzzz) ...
     if (!amiga.getWarp()) {
         amiga.synchronizeTiming();

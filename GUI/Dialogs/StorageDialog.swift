@@ -125,8 +125,9 @@ class StorageDialog: DialogController {
                 let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
                 autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
                 autoNr.textColor = .labelColor
-                autoText1.stringValue = timeDiffInfo(time: snapshot.timeStamp())
-                autoText2.stringValue = ""
+                let takenAt = snapshot.timeStamp()
+                autoText1.stringValue = timeDiffInfo(time: takenAt)
+                autoText2.stringValue = timeInfo(time: takenAt)
 
             } else {
 
@@ -154,8 +155,9 @@ class StorageDialog: DialogController {
                 let snapshot = parent.mydocument!.userSnapshots[userIndex]
                 userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
                 userNr.textColor = .labelColor
-                userText1.stringValue = timeDiffInfo(time: snapshot.timeStamp())
-                userText2.stringValue = ""
+                let takenAt = snapshot.timeStamp()
+                userText1.stringValue = timeDiffInfo(time: takenAt)
+                userText2.stringValue = timeInfo(time: takenAt)
                 
             } else {
                 
@@ -245,6 +247,9 @@ class StorageDialog: DialogController {
         let secPerMonth = secPerWeek * 4
         let secPerYear = secPerWeek * 52
         
+        if seconds == 0 {
+            return "Now"
+        }
         if seconds < secPerMin {
             return "\(seconds) second" + (seconds == 1 ? "" : "s") + " ago"
         }

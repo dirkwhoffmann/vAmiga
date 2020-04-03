@@ -147,47 +147,8 @@ struct AmigaFileWrapper;
 - (void) warpOn;
 - (void) warpOff;
 
-// Handling snapshots
-/*
-- (BOOL) takeAutoSnapshots;
-- (void) setTakeAutoSnapshots:(BOOL)b;
-- (void) suspendAutoSnapshots;
-- (void) resumeAutoSnapshots;
-- (NSInteger) snapshotInterval;
-- (void) setSnapshotInterval:(NSInteger)value;
-*/
-
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
-/*
-- (BOOL) restoreAutoSnapshot:(NSInteger)nr;
-- (BOOL) restoreUserSnapshot:(NSInteger)nr;
-- (BOOL) restoreLatestAutoSnapshot;
-- (BOOL) restoreLatestUserSnapshot;
-- (NSInteger) numAutoSnapshots;
-- (NSInteger) numUserSnapshots;
-
-- (NSData *) autoSnapshotData:(NSInteger)nr;
-- (NSData *) userSnapshotData:(NSInteger)nr;
-- (unsigned char *) autoSnapshotImageData:(NSInteger)nr;
-- (unsigned char *) userSnapshotImageData:(NSInteger)nr;
-- (NSSize) autoSnapshotImageSize:(NSInteger)nr;
-- (NSSize) userSnapshotImageSize:(NSInteger)nr;
-- (time_t) autoSnapshotTimestamp:(NSInteger)nr;
-- (time_t) userSnapshotTimestamp:(NSInteger)nr;
-
-- (void) takeUserSnapshot;
-
-- (void) deleteAutoSnapshot:(NSInteger)nr;
-- (void) deleteUserSnapshot:(NSInteger)nr;
-*/
-
-// Handling screenshots
-/*
-- (NSInteger) numAutoScreenshots;
-- (unsigned char *) autoScreenshotImageData:(NSInteger)nr;
-- (NSSize) autoScreenshotImageSize:(NSInteger)nr;
-*/
 @end
 
 

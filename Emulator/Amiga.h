@@ -188,13 +188,10 @@ private:
     static const size_t MAX_SNAPSHOTS = 32;
     
     // Storage for auto-taken snapshots
-    vector<Snapshot *> autoSnapshots;
+    // vector<Snapshot *> autoSnapshots;
     
     // Storage for user-taken snapshots
-    vector<Snapshot *> userSnapshots;
-
-    // Storage for auto-taken screenshots
-    // vector<Thumbnail *> autoScreenshots;
+    // vector<Snapshot *> userSnapshots;
 
     
     //
@@ -458,31 +455,6 @@ public:
     
 public:
     
-    // Returns true if an auto-snapshot should be taken in the current frame.
-    bool snapshotIsDue();
-    
-    // Indicates if the auto-snapshot feature is enabled.
-    bool getTakeAutoSnapshots() { return takeAutoSnapshots; }
-    
-    // Enables or disabled the auto-snapshot feature.
-    void setTakeAutoSnapshots(bool enable) { takeAutoSnapshots = enable; }
-    
-    /* Disables the auto-snapshot feature temporarily.
-     * This method is called when the snaphshot browser opens.
-     */
-    void suspendAutoSnapshots() { autoSnapshotInterval -= (LONG_MAX / 2); }
-    
-    /* Heal a call to suspendAutoSnapshots()
-     * This method is called when the snaphshot browser closes.
-     */
-    void resumeAutoSnapshots() { autoSnapshotInterval += (LONG_MAX / 2); }
-    
-    // Returns the time between two auto-snapshots in seconds.
-    long getSnapshotInterval() { return autoSnapshotInterval; }
-    
-    // Sets the time between two auto-snapshots in seconds.
-    void setSnapshotInterval(long value) { autoSnapshotInterval = value; }
-    
     /* Loads the current state from a snapshot file
      * There is an thread-unsafe and thread-safe version of this function. The
      * first one can be unsed inside the emulator thread or from outside if the
@@ -491,61 +463,6 @@ public:
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);
     
-    // Restores a certain snapshot from the snapshot storage
-    bool restoreSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    bool restoreAutoSnapshot(unsigned nr);
-    bool restoreUserSnapshot(unsigned nr);
-    
-    // Restores the latest snapshot from the snapshot storage
-    bool restoreLatestAutoSnapshot() { return restoreAutoSnapshot(0); }
-    bool restoreLatestUserSnapshot() { return restoreUserSnapshot(0); }
-    
-    // Returns the number of stored snapshots
-    size_t numSnapshots(vector<Snapshot *> &storage);
-    size_t numAutoSnapshots() { return numSnapshots(autoSnapshots); }
-    size_t numUserSnapshots() { return numSnapshots(userSnapshots); }
-    
-    // Returns an snapshot from the snapshot storage
-    Snapshot *getSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    Snapshot *autoSnapshot(unsigned nr) { return getSnapshot(autoSnapshots, nr); }
-    Snapshot *userSnapshot(unsigned nr) { return getSnapshot(userSnapshots, nr); }
-    
-    /* Takes a snapshot and inserts it into the snapshot storage
-     * The new snapshot is inserted at position 0 and all others are moved one
-     * position up. If the buffer is full, the oldest snapshot is deleted. Make
-     * sure to call the 'Safe' version outside the emulator thread.
-     */
-    void takeSnapshot(vector<Snapshot *> &storage);
-    void takeAutoSnapshot();
-    void takeUserSnapshot();
-    void takeAutoSnapshotSafe() { suspend(); takeAutoSnapshot(); resume(); }
-    void takeUserSnapshotSafe() { suspend(); takeUserSnapshot(); resume(); }
-    
-    // Deletes a snapshot from the snapshot storage
-    void deleteSnapshot(vector<Snapshot *> &storage, unsigned nr);
-    void deleteAutoSnapshot(unsigned nr) { deleteSnapshot(autoSnapshots, nr); }
-    void deleteUserSnapshot(unsigned nr) { deleteSnapshot(userSnapshots, nr); }
-    
-    //
-    // Handling screenshots
-    //
-    
-    /*
-    // Returns the number of stored screenshots
-    size_t numScreenshots(vector<Thumbnail *> &storage);
-    size_t numAutoScreenshots() { return numScreenshots(autoScreenshots); }
-
-    // Returns an screenshot from the screenshot storage
-    Thumbnail *getScreenshot(vector<Thumbnail *> &storage, unsigned nr);
-    Thumbnail *autoScreenshot(unsigned nr) { return getScreenshot(autoScreenshots, nr); }
-
-    // Takes a screenshot
-    Thumbnail *takeScreenshot();
-    
-    // Takes a screenshot and inserts it into the screenshot storage
-    void takeScreenshot(vector<Thumbnail *> &storage);
-    void takeAutoScreenshot();    
-    */
     
     //
     // Debugging the emulator

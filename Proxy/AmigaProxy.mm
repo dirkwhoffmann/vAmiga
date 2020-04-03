@@ -1183,15 +1183,6 @@ struct ADFFileWrapper { ADFFile *adf; };
                           length: snapshot->sizeOnDisk()];
 }
     
-/*
- - (void) dealloc {
- 
- NSLog(@"SnapshotProxy: dealloc");
- Snapshot *snapshot = (Snapshot *)wrapper->file;
- delete snapshot;
- }
- */
-
 @end
 
 
@@ -1498,126 +1489,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->warpOff();
 }
-/*
-- (BOOL) takeAutoSnapshots
-{
-    return wrapper->amiga->getTakeAutoSnapshots();
-}
-- (void) setTakeAutoSnapshots:(BOOL)b
-{
-    wrapper->amiga->setTakeAutoSnapshots(b);
-}
-- (void) suspendAutoSnapshots
-{
-    wrapper->amiga->suspendAutoSnapshots();
-}
-- (void) resumeAutoSnapshots
-{
-    wrapper->amiga->resumeAutoSnapshots();
-}
-- (NSInteger) snapshotInterval
-{
-    return wrapper->amiga->getSnapshotInterval();
-}
-*/
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
     Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
     wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
-/*
-- (void) setSnapshotInterval:(NSInteger)value
-{
-    wrapper->amiga->setSnapshotInterval(value);
-}
-- (BOOL)restoreAutoSnapshot:(NSInteger)nr
-{
-    return wrapper->amiga->restoreAutoSnapshot((unsigned)nr);
-}
-- (BOOL)restoreUserSnapshot:(NSInteger)nr
-{
-    return wrapper->amiga->restoreUserSnapshot((unsigned)nr);
-}
-- (BOOL)restoreLatestUserSnapshot
-{
-    return wrapper->amiga->restoreLatestUserSnapshot();
-}
-- (BOOL)restoreLatestAutoSnapshot
-{
-    return wrapper->amiga->restoreLatestAutoSnapshot();
-}
-- (NSInteger) numAutoSnapshots
-{
-    return wrapper->amiga->numAutoSnapshots();
-}
-- (NSInteger) numUserSnapshots
-{
-    return wrapper->amiga->numUserSnapshots();
-}
-- (NSData *)autoSnapshotData:(NSInteger)nr {
-    Snapshot *snapshot = wrapper->amiga->autoSnapshot((unsigned)nr);
-    return [NSData dataWithBytes: (void *)snapshot->getHeader()
-                          length: snapshot->sizeOnDisk()];
-}
-- (NSData *)userSnapshotData:(NSInteger)nr {
-    Snapshot *snapshot = wrapper->amiga->userSnapshot((unsigned)nr);
-    return [NSData dataWithBytes: (void *)snapshot->getHeader()
-                          length: snapshot->sizeOnDisk()];
-}
-- (unsigned char *)autoSnapshotImageData:(NSInteger)nr
-{
-    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
-    return s ? s->getImageData() : NULL;
-}
-- (unsigned char *)userSnapshotImageData:(NSInteger)nr
-{
-    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
-    return s ? s->getImageData() : NULL;
-}
-- (NSSize) autoSnapshotImageSize:(NSInteger)nr {
-    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
-    return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
-}
-- (NSSize) userSnapshotImageSize:(NSInteger)nr {
-    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
-    return s ? NSMakeSize(s->getImageWidth(), s->getImageHeight()) : NSMakeSize(0,0);
-}
-- (time_t)autoSnapshotTimestamp:(NSInteger)nr {
-    Snapshot *s = wrapper->amiga->autoSnapshot((int)nr);
-    return s ? s->getTimestamp() : 0;
-}
-- (time_t)userSnapshotTimestamp:(NSInteger)nr {
-    Snapshot *s = wrapper->amiga->userSnapshot((int)nr);
-    return s ? s->getTimestamp() : 0;
-}
-- (void)takeUserSnapshot
-{
-    wrapper->amiga->takeUserSnapshotSafe();
-}
-- (void)deleteAutoSnapshot:(NSInteger)nr
-{
-    wrapper->amiga->deleteAutoSnapshot((unsigned)nr);
-}
-- (void)deleteUserSnapshot:(NSInteger)nr
-{
-    wrapper->amiga->deleteUserSnapshot((unsigned)nr);
-}
-*/
-/*
-- (NSInteger) numAutoScreenshots
-{
-    return wrapper->amiga->numAutoScreenshots();
-}
-- (unsigned char *) autoScreenshotImageData:(NSInteger)nr
-{
-    Thumbnail *s = wrapper->amiga->autoScreenshot((int)nr);
-    return s ? (unsigned char *)s->screen : NULL;
-}
-- (NSSize) autoScreenshotImageSize:(NSInteger)nr
-{
-    Thumbnail *s = wrapper->amiga->autoScreenshot((int)nr);
-    return s ? NSMakeSize(s->width, s->height) : NSMakeSize(0,0);
-}
-*/
 
 @end
