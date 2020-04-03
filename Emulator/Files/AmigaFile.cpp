@@ -15,6 +15,7 @@ AmigaFile::AmigaFile()
 
 AmigaFile::~AmigaFile()
 {
+    printf("AmigaFile::~AmigaFile");
     dealloc();
     
     if (path)

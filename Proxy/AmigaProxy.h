@@ -148,13 +148,15 @@ struct AmigaFileWrapper;
 - (void) warpOff;
 
 // Handling snapshots
+/*
 - (BOOL) takeAutoSnapshots;
 - (void) setTakeAutoSnapshots:(BOOL)b;
 - (void) suspendAutoSnapshots;
 - (void) resumeAutoSnapshots;
 - (NSInteger) snapshotInterval;
 - (void) setSnapshotInterval:(NSInteger)value;
- 
+*/
+
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
 - (BOOL) restoreAutoSnapshot:(NSInteger)nr;
@@ -598,7 +600,11 @@ struct AmigaFileWrapper;
 //
 
 @interface SnapshotProxy : AmigaFileProxy {
+    
+    NSImage *preview;
 }
+
+// @property NSImage *preview;
 
 + (BOOL)isSupportedSnapshot:(const void *)buffer length:(NSInteger)length;
 + (BOOL)isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length;
@@ -607,6 +613,8 @@ struct AmigaFileWrapper;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
 + (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
+
+- (NSImage *)previewImage;
 
 @end
 

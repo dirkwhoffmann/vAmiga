@@ -1091,6 +1091,8 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 @implementation SnapshotProxy
 
+// @synthesize preview;
+
 + (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
     return Snapshot::isSupportedSnapshot((u8 *)buffer, length);
@@ -1107,13 +1109,15 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return Snapshot::isUnsupportedSnapshotFile([path UTF8String]);
 }
-
 + (instancetype) make:(Snapshot *)snapshot
 {
-    if (snapshot == NULL) {
-        return nil;
-    }
-    return [[self alloc] initWithFile:snapshot];
+    if (snapshot == NULL) { return nil; }
+    
+    SnapshotProxy *proxy = [[self alloc] initWithFile:snapshot];
+    proxy->preview = NULL;
+    
+    return proxy;
+    // return [[self alloc] initWithFile:snapshot];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
@@ -1128,11 +1132,55 @@ struct ADFFileWrapper { ADFFile *adf; };
 + (instancetype) makeWithAmiga:(AmigaProxy *)proxy
 {
     Amiga *amiga = [proxy wrapper]->amiga;
+    
     amiga->suspend();
     Snapshot *snapshot = Snapshot::makeWithAmiga(amiga);
     amiga->resume();
+    
     return [self make:snapshot];
 }
+- (NSImage *)previewImage
+{
+    if (preview != NULL) { return preview; }
+    
+    // Create preview image
+    
+    // var bitmap = data
+    Snapshot *snapshot = (Snapshot *)wrapper->file;
+    
+    NSInteger width = snapshot->getImageWidth();
+    NSInteger height = snapshot->getImageHeight();
+    unsigned char *data = snapshot->getImageData();
+    
+    
+    NSBitmapImageRep *rep = [[NSBitmapImageRep alloc]
+                             initWithBitmapDataPlanes:&data
+                             pixelsWide:width
+                             pixelsHigh:height
+                             bitsPerSample:8
+                             samplesPerPixel:4
+                             hasAlpha:true
+                             isPlanar:false
+                             colorSpaceName:NSCalibratedRGBColorSpace
+                             bytesPerRow:4*width
+                             bitsPerPixel:32];
+    
+    preview = [[NSImage alloc] initWithSize:[rep size]];
+    [preview addRepresentation:rep];
+    
+    // image.makeGlossy()
+
+    return preview;
+}
+
+/*
+ - (void) dealloc {
+ 
+ NSLog(@"SnapshotProxy: dealloc");
+ Snapshot *snapshot = (Snapshot *)wrapper->file;
+ delete snapshot;
+ }
+ */
 
 @end
 
@@ -1440,6 +1488,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->warpOff();
 }
+/*
 - (BOOL) takeAutoSnapshots
 {
     return wrapper->amiga->getTakeAutoSnapshots();
@@ -1460,6 +1509,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getSnapshotInterval();
 }
+*/
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {
     Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);

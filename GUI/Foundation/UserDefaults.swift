@@ -732,8 +732,8 @@ extension MyController {
         driveNoiseNoPoll = defaults.bool(forKey: Keys.driveNoiseNoPoll)
         driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
-        amiga.setTakeAutoSnapshots(defaults.bool(forKey: Keys.autoSnapshots))
-        amiga.setSnapshotInterval(defaults.integer(forKey: Keys.autoSnapshotInterval))
+        autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
+        snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
         autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
         screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
@@ -758,8 +758,8 @@ extension MyController {
         defaults.set(driveNoiseNoPoll, forKey: Keys.driveNoiseNoPoll)
         defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
         
-        defaults.set(amiga.takeAutoSnapshots(), forKey: Keys.autoSnapshots)
-        defaults.set(amiga.snapshotInterval(), forKey: Keys.autoSnapshotInterval)
+        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
         defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
         defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)

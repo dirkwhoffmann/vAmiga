@@ -111,7 +111,7 @@ class StorageDialog: DialogController {
         if snapshotView {
             
             autoLabel.stringValue = "Automatically saved snapshots"
-            autoNr.stringValue = "Snapshot \(autoIndex + 1) out of \(numAutoItems)"
+            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
             autoText1.stringValue = autoSnapshotDesc1[autoIndex] ?? ""
             autoText2.stringValue = autoSnapshotDesc2[autoIndex] ?? ""
 
@@ -142,7 +142,7 @@ class StorageDialog: DialogController {
         } else {
             
             autoLabel.stringValue = "Automatically saved screenshots"
-            autoNr.stringValue = "Screenshot \(autoIndex + 1) out of \(numAutoItems)"
+            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
             autoText1.stringValue = autoScreenshotDesc1[autoIndex] ?? ""
             autoText2.stringValue = autoScreenshotDesc2[autoIndex] ?? ""
             
@@ -154,7 +154,7 @@ class StorageDialog: DialogController {
             autoAction2.toolTip = "Change order"
 
             userLabel.stringValue = "Manually saved screenshots"
-            userNr.stringValue = "Screenshot \(userIndex + 1) out of \(numUserItems)"
+            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
             userText1.stringValue = userScreenshotDesc1[userIndex] ?? ""
             userText2.stringValue = userScreenshotDesc2[userIndex] ?? ""
 
@@ -590,8 +590,8 @@ class StorageDialog: DialogController {
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-        parent.startScreenshotTimer()
         parent.startSnapshotTimer()
+        parent.startScreenshotTimer()
         hideSheet()
     }
     
@@ -625,13 +625,20 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         
+        var numItems: Int
+        
         if carousel == autoCarousel {
-            return snapshotView ?
-                autoSnapshotImage.count : autoScreenshotImage.count
+            numItems = snapshotView ?
+                (parent.mydocument?.autoSnapshots.count ?? 0) :
+                autoScreenshotImage.count
+            numItems = max(numItems, 1)
         } else {
-            return snapshotView ?
-                userSnapshotImage.count : userScreenshotImage.count
+            numItems = snapshotView ?
+                (parent.mydocument?.userSnapshots.count ?? 0) :
+                userScreenshotImage.count
         }
+        
+        return numItems
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -642,11 +649,19 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         
         if snapshotView {
             
-            if carousel == autoCarousel {
-                itemView.image = autoSnapshotImage[index]
+            let snapshots = carousel == autoCarousel ?
+            parent.mydocument!.autoSnapshots :
+            parent.mydocument!.userSnapshots
+            
+            if index < snapshots.count {
+                itemView.image = snapshots[index].previewImage()
             } else {
-                itemView.image = userSnapshotImage[index]
+                itemView.image = NSImage.init(named: "noise_camera")!
             }
+
+            itemView.wantsLayer = true
+            itemView.layer?.cornerRadius = 10.0
+            itemView.layer?.masksToBounds = true
             
         } else {
             
@@ -662,7 +677,6 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         
-        track("\(carousel.currentItemIndex)")
         updateLabels()
     }
 }

@@ -1013,7 +1013,7 @@ Amiga::runLoop()
             
             // Are we requested to take a snapshot?
             if (runLoopCtrl & RL_SNAPSHOT) {
-                takeAutoSnapshot();
+                // takeAutoSnapshot();
                 clearControlFlags(RL_SNAPSHOT);
             }
             

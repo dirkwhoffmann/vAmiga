@@ -55,12 +55,11 @@ class MyController: NSWindowController, MessageReceiver {
     // Timer lock
     var timerLock: NSLock!
 
-    // Screenshot timer
-    // The timer is started when a new disk is inserted. It periodically
-    // captures screenshots and stores them in the Application Support folder.
+    // Screenshot and snapshot timers
+    var snapshotTimer: Timer?
     var screenshotTimer: Timer?
-    
-    // Counts the number of screenshots taken
+
+    // Counts the number of screenshots taken (DEPRECATED)
     var screenshotCounter = 0
     
     // Speedometer to measure clock frequence and frames per second
@@ -267,6 +266,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
+    /*
     var takeAutoSnapshots: Bool {
         get { return amiga.takeAutoSnapshots() }
         set { amiga.setTakeAutoSnapshots(newValue) }
@@ -275,7 +275,16 @@ class MyController: NSWindowController, MessageReceiver {
         get { return amiga.snapshotInterval() }
         set { amiga.setSnapshotInterval(newValue) }
     }
-  
+    */
+
+    var autoSnapshots = Defaults.autoSnapshots
+    var snapshotInterval = 0 {
+        didSet {
+            snapshotTimer?.invalidate()
+            startSnapshotTimer()
+        }
+    }
+
     var autoScreenshots = Defaults.autoScreenshots
     var screenshotInterval = 0 {
         didSet {
@@ -290,13 +299,36 @@ class MyController: NSWindowController, MessageReceiver {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
-    
+    /*
     func startSnapshotTimer() {
         amiga.resumeAutoSnapshots()
     }
     
     func stopSnapshotTimer() {
        amiga.suspendAutoSnapshots()
+    }
+    */
+    func startSnapshotTimer() {
+        /*
+        if autoSnapshots && snapshotInterval > 0 {
+            snapshotTimer =
+                Timer.scheduledTimer(timeInterval: TimeInterval(snapshotInterval),
+                                     target: self,
+                                     selector: #selector(snapshotTimerFunc),
+                                     userInfo: nil,
+                                     repeats: true)
+        }
+        */
+        snapshotTimer =
+            Timer.scheduledTimer(timeInterval: TimeInterval(3),
+                                 target: self,
+                                 selector: #selector(snapshotTimerFunc),
+                                 userInfo: nil,
+                                 repeats: true)
+    }
+
+    func stopSnapshotTimer() {
+        snapshotTimer?.invalidate()
     }
     
     func startScreenshotTimer() {
@@ -579,11 +611,9 @@ extension MyController {
         
         timerLock.unlock()
     }
- 
-    @objc func screenshotTimerFunc() {
-        
-        takeScreenshot(auto: true)
-    }
+
+    @objc func snapshotTimerFunc() { takeAutoSnapshot() }
+    @objc func screenshotTimerFunc() { takeAutoScreenshot() }
         
     func processMessage(_ msg: Message) {
 
@@ -833,37 +863,6 @@ extension MyController {
         }
 
         refreshStatusBar()
-    }
-
-    //
-    // Screenshots
-    //
-    
-    func takeScreenshot(auto: Bool) {
-        
-        let upscaled = screenshotSource > 0
-        let checksum = amiga.df0.fnv()
-        
-        // Take screenshot
-        guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
-            track("Failed to create screenshot")
-            return
-        }
-        let screenshot = Screenshot.init(screen: screen, upscaled: upscaled)
-        
-        // Compute URL
-        guard let url = Screenshot.newUrl(checksum: checksum, auto: auto) else {
-            track("Failed to create URL")
-            return
-        }
-        
-        // Save screenshot
-        track("Saving screenshot to \(url.path)")
-        try? screenshot.save(url: url, format: screenshotTarget)
-        
-        // Thin out screenshot directory to reduce the amout of stored data
-        Screenshot.thinOutAuto(checksum: checksum, counter: screenshotCounter)
-        screenshotCounter += 1
     }
 
     //

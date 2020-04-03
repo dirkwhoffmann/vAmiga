@@ -34,6 +34,15 @@ class MyDocument: NSDocument {
      */
     var amigaAttachment: AmigaFileProxy?
     
+    /* Snapshots and screenshots
+     */
+    
+    var autoSnapshots: [SnapshotProxy] = []
+    var userSnapshots: [SnapshotProxy] = []
+
+    // Counter needed for thinning out the snapshot storage list
+    var autoSnapshotCnt = 0
+    
     override init() {
         
         track()
@@ -256,7 +265,7 @@ class MyDocument: NSDocument {
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
         return true
     }
-        
+    
     @discardableResult
     func export(drive nr: Int, to url: URL?) -> Bool {
         
@@ -264,6 +273,49 @@ class MyDocument: NSDocument {
             return export(drive: nr, to: url!, ofType: suffix.uppercased())
         } else {
             return false
+        }
+    }
+    
+    //
+    // Snapshots
+    //
+        
+    private func thinOut(numItems: Int, counter: inout Int) -> Int? {
+        
+        if numItems < 32 { return nil }
+              
+        var itemToDelete = 0
+        
+        if counter % 2 == 0 {
+            itemToDelete = 24
+        } else if (counter >> 1) % 2 == 0 {
+            itemToDelete = 16
+        } else if (counter >> 2) % 2 == 0 {
+            itemToDelete = 8
+        }
+        counter += 1
+        
+        return itemToDelete
+    }
+    
+    private func thinOutAutoSnapshots() {
+        if let index = thinOut(numItems: autoSnapshots.count, counter: &autoSnapshotCnt) {
+            autoSnapshots.remove(at: index)
+        }
+    }
+    
+    func appendSnapshot(snapshot: SnapshotProxy, auto: Bool) {
+        
+        if auto {
+            
+            autoSnapshots.append(snapshot)
+            
+            // Delete an older snapshot if the list has grown too large
+            thinOutAutoSnapshots()
+            
+        } else {
+            
+            userSnapshots.append(snapshot)
         }
     }
 }

@@ -27,9 +27,9 @@ extension PreferencesController {
         emuExitOnEscButton.state = parent.kbController.exitOnEsc ? .on : .off
         
         // Snapshots and Screenshots
-        emuAutoSnapshots.state = amiga.takeAutoSnapshots() ? .on : .off
-        emuSnapshotInterval.integerValue = amiga.snapshotInterval()
-        emuSnapshotInterval.isEnabled = amiga.takeAutoSnapshots()
+        emuAutoSnapshots.state = parent.autoSnapshots ? .on : .off
+        emuSnapshotInterval.integerValue = parent.snapshotInterval
+        emuSnapshotInterval.isEnabled = parent.autoSnapshots
         emuAutoScreenshots.state = parent.autoScreenshots ? .on : .off
         emuScreenshotInterval.integerValue = parent.screenshotInterval
         emuScreenshotInterval.isEnabled = parent.autoScreenshots
@@ -96,14 +96,14 @@ extension PreferencesController {
     
     @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
         
-        amiga.setTakeAutoSnapshots(sender.state == .on)
+        parent.autoSnapshots = sender.state == .on
         refresh()
     }
     
     @IBAction func emuSnapshotIntervalAction(_ sender: NSTextField!) {
         
         if sender.integerValue > 0 {
-            amiga.setSnapshotInterval(sender.integerValue)
+            parent.snapshotInterval = sender.integerValue
         }
         refresh()
     }

@@ -246,7 +246,7 @@ extension NSImage {
     
     func roundCorners() -> NSImage {
         
-        return self.roundCorners(withRadius: size.height / 15)
+        return self.roundCorners(withRadius: size.height / 30)
     }
         
     func makeGlossy() {

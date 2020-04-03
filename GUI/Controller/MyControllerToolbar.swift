@@ -114,7 +114,7 @@ extension MyController {
         switch sender.selectedSegment {
                 
         case 0: // Snap
-            amiga.takeUserSnapshot()
+            takeUserSnapshot()
             
         case 1: // Restore
             if !amiga.restoreLatestUserSnapshot() {
@@ -143,13 +143,6 @@ extension MyController {
             virtualKeyboardSheet = VKBController.make(parent: self)
         }
         virtualKeyboardSheet?.showSheet(autoClose: true)
-    }
-
-    @IBAction func snapshotsAction(_ sender: Any!) {
-        
-        let nibName = NSNib.Name("SnapshotDialog")
-        let controller = SnapshotDialog.init(windowNibName: nibName)
-        controller.showSheet()
     }
 
     @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
