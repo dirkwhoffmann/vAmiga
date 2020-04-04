@@ -49,6 +49,8 @@ class StorageDialog: DialogController {
     // Computed variables
     var snapshotView: Bool { return selector.selectedSegment == 0 }
     var screenshotView: Bool { return selector.selectedSegment == 1 }
+    var autoIndex: Int { return autoCarousel.currentItemIndex }
+    var userIndex: Int { return userCarousel.currentItemIndex }
     var autoFolder: URL? { return Screenshot.autoFolder(checksum: checksum) }
     var userFolder: URL? { return Screenshot.userFolder(checksum: checksum) }
     var autoSelection: Int { return autoCarousel.currentItemIndex }
@@ -57,27 +59,17 @@ class StorageDialog: DialogController {
     var numUserItems: Int { return userCarousel.numberOfItems }
     var lastAutoItem: Int { return numAutoItems - 1 }
     var lastUserItem: Int { return numUserItems - 1 }
+    
+    var screenshotsModified = false
 
-    // Auto screenshot cache
-    var autoScreenshotUrls: [URL] = []
-    var autoScreenshotImage: [Int: NSImage] = [:]
-    var autoScreenshotDesc1: [Int: String] = [:]
-    var autoScreenshotDesc2: [Int: String] = [:]
-    
-    // User screenshot cache
-    var userScreenshotUrls: [URL] = []
-    var userScreenshotImage: [Int: NSImage] = [:]
-    var userScreenshotDesc1: [Int: String] = [:]
-    var userScreenshotDesc2: [Int: String] = [:]
-    
     override func windowDidLoad() {
         
         track()
 
         parent.stopSnapshotTimer()
         parent.stopScreenshotTimer()
-        updateCaches()
-        updateLabels()
+        updateAutoLabels()
+        updateUserLabels()
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             
@@ -93,111 +85,149 @@ class StorageDialog: DialogController {
         }
     }
     
-    func updateLabels() {
-        
-        let autoIndex = autoCarousel.currentItemIndex
-        let userIndex = userCarousel.currentItemIndex
-        
+    func updateAutoLabels() {
+                
         autoNext.isEnabled = autoIndex >= 0 && autoIndex < autoCarousel.numberOfItems - 1
         autoPrev.isEnabled = autoIndex > 0
+
+        snapshotView ? updateAutoSnapshotLabels() : updateAutoScreenshotLabels()
+    }
+    
+    func updateUserLabels() {
+        
         userNext.isEnabled = userIndex >= 0 && userIndex < userCarousel.numberOfItems - 1
         userPrev.isEnabled = userIndex > 0
-
-        if snapshotView {
+        
+        snapshotView ? updateUserSnapshotLabels() : updateUserScreenshotLabels()
+    }
+    
+    func updateAutoSnapshotLabels() {
+        
+        moveToUser.isHidden = true
+        
+        autoLabel.stringValue = "Automatically saved snapshots"
+        autoTrash.toolTip = "Delete snapshot"
+        autoTrash.isEnabled = autoIndex >= 0
+        autoAction1.image = NSImage.init(named: "restoreTemplate")
+        autoAction1.toolTip = "Restore snapshot"
+        autoAction1.isEnabled = autoIndex >= 0
+        autoAction2.image = NSImage.init(named: "saveTemplate")
+        autoAction2.toolTip = "Save snapshot to disk"
+        autoAction2.isEnabled = autoIndex >= 0
+        autoFinderButton.isHidden = true
+        autoFinderLabel.isHidden = true
+        
+        if autoIndex >= 0 {
             
-            moveToUser.isHidden = true
+            let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
+            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
+            autoNr.textColor = .labelColor
+            let takenAt = snapshot.timeStamp()
+            autoText1.stringValue = timeDiffInfo(time: takenAt)
+            autoText2.stringValue = timeInfo(time: takenAt)
             
-            autoLabel.stringValue = "Automatically saved snapshots"
-            autoTrash.image = NSImage.init(named: "trashTemplate")
-            autoTrash.toolTip = "Delete snapshot"
-            autoTrash.isEnabled = autoIndex >= 0
-            autoAction1.image = NSImage.init(named: "restoreTemplate")
-            autoAction1.toolTip = "Restore snapshot"
-            autoAction1.isEnabled = autoIndex >= 0
-            autoAction2.image = NSImage.init(named: "saveTemplate")
-            autoAction2.toolTip = "Save snapshot to disk"
-            autoAction2.isEnabled = autoIndex >= 0
-            autoFinderButton.isHidden = true
-            autoFinderLabel.isHidden = true
-
-            if autoIndex >= 0 {
-                
-                let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
-                autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-                autoNr.textColor = .labelColor
-                let takenAt = snapshot.timeStamp()
-                autoText1.stringValue = timeDiffInfo(time: takenAt)
-                autoText2.stringValue = timeInfo(time: takenAt)
-
-            } else {
-
-                autoNr.stringValue = "No snapshots available"
-                autoNr.textColor = .secondaryLabelColor
-                autoText1.stringValue = ""
-                autoText2.stringValue = ""
-            }
-            
-            userLabel.stringValue = "Manually saved snapshots"
-            userTrash.image = NSImage.init(named: "trashTemplate")
-            userTrash.toolTip = "Delete snapshot"
-            userTrash.isEnabled = userIndex >= 0
-            userAction1.image = NSImage.init(named: "restoreTemplate")
-            userAction1.toolTip = "Restore snapshot"
-            userAction1.isEnabled = userIndex >= 0
-            userAction2.image = NSImage.init(named: "saveTemplate")
-            userAction2.toolTip = "Save snapshot to disk"
-            userAction2.isEnabled = userIndex >= 0
-            userFinderButton.isHidden = true
-            userFinderLabel.isHidden = true
-            
-            if userIndex >= 0 {
-                
-                let snapshot = parent.mydocument!.userSnapshots[userIndex]
-                userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-                userNr.textColor = .labelColor
-                let takenAt = snapshot.timeStamp()
-                userText1.stringValue = timeDiffInfo(time: takenAt)
-                userText2.stringValue = timeInfo(time: takenAt)
-                
-            } else {
-                
-                userNr.stringValue = "No snapshots available"
-                userNr.textColor = .secondaryLabelColor
-                userText1.stringValue = ""
-                userText2.stringValue = ""
-            }
-
         } else {
             
-            moveToUser.isHidden = false
-
-            autoLabel.stringValue = "Automatically saved screenshots"
-            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-            autoText1.stringValue = autoScreenshotDesc1[autoIndex] ?? ""
-            autoText2.stringValue = autoScreenshotDesc2[autoIndex] ?? ""
+            autoNr.stringValue = ""
+            autoNr.textColor = .secondaryLabelColor
+            autoText1.stringValue = "No snapshots available"
+            autoText2.stringValue = ""
+        }
+    }
+    
+    func updateUserSnapshotLabels() {
+        
+        userLabel.stringValue = "Manually saved snapshots"
+        userTrash.toolTip = "Delete snapshot"
+        userTrash.isEnabled = userIndex >= 0
+        userAction1.image = NSImage.init(named: "restoreTemplate")
+        userAction1.toolTip = "Restore snapshot"
+        userAction1.isEnabled = userIndex >= 0
+        userAction2.image = NSImage.init(named: "saveTemplate")
+        userAction2.toolTip = "Save snapshot to disk"
+        userAction2.isEnabled = userIndex >= 0
+        userFinderButton.isHidden = true
+        userFinderLabel.isHidden = true
+        
+        if userIndex >= 0 {
             
-            autoTrash.toolTip = "Delete screenshot"
-            autoAction1.image = NSImage.init(named: "backTemplate")
-            autoAction1.toolTip = "Change order"
-            autoAction2.image = NSImage.init(named: "frontTemplate")
-            autoAction2.toolTip = "Change order"
-
-            userLabel.stringValue = "Manually saved screenshots"
+            let snapshot = parent.mydocument!.userSnapshots[userIndex]
             userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-            userText1.stringValue = userScreenshotDesc1[userIndex] ?? ""
-            userText2.stringValue = userScreenshotDesc2[userIndex] ?? ""
+            userNr.textColor = .labelColor
+            let takenAt = snapshot.timeStamp()
+            userText1.stringValue = timeDiffInfo(time: takenAt)
+            userText2.stringValue = timeInfo(time: takenAt)
+            
+        } else {
+            
+            userNr.stringValue = ""
+            userNr.textColor = .secondaryLabelColor
+            userText1.stringValue = "No snapshots available"
+            userText2.stringValue = ""
+        }
+    }
+    
+    func updateAutoScreenshotLabels() {
+        
+        moveToUser.isHidden = false
+        
+        autoLabel.stringValue = "Automatically saved screenshots"
+        autoTrash.toolTip = "Delete screenshot"
+        autoTrash.isEnabled = autoIndex >= 0
+        autoAction1.image = NSImage.init(named: "backTemplate")
+        autoAction1.toolTip = "Move screenshot down"
+        autoAction1.isEnabled = autoIndex > 0
+        autoAction2.image = NSImage.init(named: "frontTemplate")
+        autoAction2.toolTip = "Move screenshot up"
+        autoAction2.isEnabled = autoIndex < numAutoItems - 1
+        autoFinderButton.isHidden = false
+        autoFinderLabel.isHidden = false
 
-            userTrash.image = NSImage.init(named: "trashTemplate")
-            userTrash.toolTip = "Delete screenshot"
-            userAction1.image = NSImage.init(named: "backTemplate")
-            userAction1.toolTip = "Move screenshot inwards"
-            userAction2.image = NSImage.init(named: "frontTemplate")
-            userAction2.toolTip = "Move screenshot outwards"
-
-            autoFinderButton.isHidden = false
-            autoFinderLabel.isHidden = false
-            userFinderButton.isHidden = false
-            userFinderLabel.isHidden = false
+        if autoIndex >= 0 {
+            
+            let screenshot = parent.mydocument!.autoScreenshots[autoIndex]
+            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
+            autoNr.textColor = .labelColor
+            autoText1.stringValue = screenshot.sizeString
+            autoText2.stringValue = screenshot.description
+            
+        } else {
+            
+            autoNr.stringValue = ""
+            autoNr.textColor = .secondaryLabelColor
+            autoText1.stringValue = "No screenshots available"
+            autoText2.stringValue = ""
+        }
+    }
+    
+    func updateUserScreenshotLabels() {
+        
+        userLabel.stringValue = "Manually saved screenshots"
+        userTrash.toolTip = "Delete screenshot"
+        userTrash.isEnabled = userIndex >= 0
+        userAction1.image = NSImage.init(named: "backTemplate")
+        userAction1.toolTip = "Move screenshot down"
+        userAction1.isEnabled = userIndex > 0
+        userAction2.image = NSImage.init(named: "frontTemplate")
+        userAction2.toolTip = "Move screenshot up"
+        userAction2.isEnabled = userIndex < numUserItems - 1
+        userFinderButton.isHidden = false
+        userFinderLabel.isHidden = false
+        
+        if userIndex >= 0 {
+            
+            let screenshot = parent.mydocument!.userScreenshots[userIndex]
+            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
+            userNr.textColor = .labelColor
+            userText1.stringValue = screenshot.sizeString
+            userText2.stringValue = screenshot.description
+            
+        } else {
+            
+            userNr.stringValue = ""
+            userNr.textColor = .secondaryLabelColor
+            userText1.stringValue = "No screenshots available"
+            userText2.stringValue = ""
         }
     }
 
@@ -208,18 +238,20 @@ class StorageDialog: DialogController {
         let index = min(item, carousel.numberOfItems - 1)
         if index >= 0 { carousel.scrollToItem(at: index, animated: animated) }
         
+        track("index = \(index) num = \(carousel.numberOfItems)")
         carousel.layOutItemViews()
-        updateLabels()
     }
 
     func updateAutoCarousel(goto item: Int = -1, animated: Bool = false) {
         
         updateCarousel(carousel: autoCarousel, goto: item, animated: animated)
+        updateAutoLabels()
     }
 
     func updateUserCarousel(goto item: Int = -1, animated: Bool = false) {
         
         updateCarousel(carousel: userCarousel, goto: item, animated: animated)
+        updateUserLabels()
     }
 
     func timeInfo(date: Date?) -> String {
@@ -299,6 +331,7 @@ class StorageDialog: DialogController {
         return timeDiffInfo(date: url.modificationDate())
     }
 
+    /*
     func imageSizeInfo(image: NSImage?) -> String {
 
         let w = image?.size.width ?? 0
@@ -306,7 +339,7 @@ class StorageDialog: DialogController {
         return w != 0 && h != 0 ? " (\(w) x \(h))" : ""
     }
 
-    func imageInfo(image: NSImage?, url: URL?) -> String {
+    func imageFormatInfo(image: NSImage?, url: URL?) -> String {
 
         if image == nil || url == nil { return "" }
         
@@ -316,7 +349,7 @@ class StorageDialog: DialogController {
            
         return "\(suffix) image (\(width) x \(height))"
     }
-
+    
     func autoImageInfo(_ nr: Int) -> String {
 
         return imageInfo(image: autoScreenshotImage[nr], url: autoScreenshotUrls[nr])
@@ -326,69 +359,7 @@ class StorageDialog: DialogController {
 
         return imageInfo(image: userScreenshotImage[nr], url: userScreenshotUrls[nr])
     }
-
-    func updateAutoScreenshotCache() {
-        
-        track()
-        now = Date()
-        
-        autoScreenshotImage = [:]
-        autoScreenshotDesc1 = [:]
-        autoScreenshotDesc2 = [:]
-        autoScreenshotUrls = Screenshot.collectAutoFiles(checksum: checksum)
-        
-        for n in 0 ..< autoScreenshotUrls.count {
-            
-            let url = autoScreenshotUrls[n]
-            
-            if let image = NSImage.init(contentsOf: url) {
-                autoScreenshotImage[n] = image.roundCorners()
-                autoScreenshotDesc1[n] = "Taken " + timeDiffInfo(url: url)
-                autoScreenshotDesc2[n] = autoImageInfo(n)
-            }
-        }
-        
-        if autoScreenshotUrls.count == 0 {
-            autoScreenshotImage[0] = NSImage.init(named: "noise_camera")!
-        }
-    }
-    
-    func updateUserScreenshotCache() {
-        
-        track()
-        now = Date()
-        
-        userScreenshotImage = [:]
-        userScreenshotDesc1 = [:]
-        userScreenshotDesc2 = [:]
-        userScreenshotUrls = Screenshot.collectUserFiles(checksum: checksum)
-        
-        for n in 0 ..< userScreenshotUrls.count {
-            
-            let url = userScreenshotUrls[n]
-            
-            if let image = NSImage.init(contentsOf: url) {
-                userScreenshotImage[n] = image.roundCorners()
-                userScreenshotDesc1[n] = "Taken " + timeDiffInfo(url: url)
-                userScreenshotDesc2[n] = userImageInfo(n)
-            }
-        }
-    
-        if userScreenshotUrls.count == 0 {
-            userScreenshotImage[0] = NSImage.init(named: "noise_camera")!
-        }
-    }
-    
-    func updateScreenshotCaches() {
-        
-        updateAutoScreenshotCache()
-        updateUserScreenshotCache()
-    }
-        
-    func updateCaches() {
-        
-        updateScreenshotCaches()
-    }
+    */
     
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
                 
@@ -449,11 +420,11 @@ class StorageDialog: DialogController {
 
         if snapshotView {
             parent.mydocument!.autoSnapshots.remove(at: index)
-            updateAutoCarousel()
         } else {
-            Screenshot.deleteAuto(item: index, checksum: checksum)
-            updateAutoScreenshotCache()
+            parent.mydocument!.autoScreenshots.remove(at: index)
+            screenshotsModified = true
         }
+        updateAutoCarousel()
     }
     
     @IBAction func userTrashAction(_ sender: NSButton!) {
@@ -464,8 +435,8 @@ class StorageDialog: DialogController {
         if snapshotView {
             parent.mydocument!.userSnapshots.remove(at: index)
         } else {
-            Screenshot.deleteUser(item: index, checksum: checksum)
-            updateUserScreenshotCache()
+            parent.mydocument!.userScreenshots.remove(at: index)
+            screenshotsModified = true
         }
         updateUserCarousel()
     }
@@ -476,14 +447,11 @@ class StorageDialog: DialogController {
         let index = autoCarousel.currentItemIndex
         
         if snapshotView {
-            
             if !parent.restoreAutoSnapshot(item: index) { NSSound.beep() }
-            
         } else if index > 0 {
-            
-            Screenshot.swap(item: index, with: index - 1, in: autoFolder)
-            updateAutoScreenshotCache()
+            parent.mydocument!.autoScreenshots.swapAt(index, index - 1)
             updateAutoCarousel(goto: index - 1, animated: true)
+            screenshotsModified = true
         }
     }
     
@@ -493,14 +461,11 @@ class StorageDialog: DialogController {
         let index = userCarousel.currentItemIndex
         
         if snapshotView {
-            
             if !parent.restoreUserSnapshot(item: index) { NSSound.beep() }
-            
         } else if index > 0 {
-            
-            Screenshot.swap(item: index, with: index - 1, in: userFolder)
-            updateUserScreenshotCache()
+            parent.mydocument!.userScreenshots.swapAt(index, index - 1)
             updateUserCarousel(goto: index - 1, animated: true)
+            screenshotsModified = true
         }
     }
     
@@ -510,14 +475,11 @@ class StorageDialog: DialogController {
         let index = autoCarousel.currentItemIndex
         
         if snapshotView {
-            
             saveSnapshotAs(item: index, auto: true)
-
         } else if index < autoCarousel.numberOfItems - 1 {
-            
-            Screenshot.swap(item: index, with: index + 1, in: autoFolder)
-            updateAutoScreenshotCache()
+            parent.mydocument!.autoScreenshots.swapAt(index, index + 1)
             updateAutoCarousel(goto: index + 1, animated: true)
+            screenshotsModified = true
         }
     }
     
@@ -527,14 +489,11 @@ class StorageDialog: DialogController {
         let index = userCarousel.currentItemIndex
         
         if snapshotView {
-            
             saveSnapshotAs(item: index, auto: false)
-            
         } else if index < userCarousel.numberOfItems - 1 {
-            
-            Screenshot.swap(item: index, with: index + 1, in: userFolder)
-            updateUserScreenshotCache()
+            parent.mydocument!.userScreenshots.swapAt(index, index + 1)
             updateUserCarousel(goto: index + 1, animated: true)
+            screenshotsModified = true
         }
     }
 
@@ -544,10 +503,11 @@ class StorageDialog: DialogController {
         assert(screenshotView)
         
         let index = autoCarousel.currentItemIndex
-        Screenshot.moveToUser(item: index, checksum: checksum)
-        
-        updateAutoScreenshotCache()
-        updateUserScreenshotCache()
+        let screenshot = parent.mydocument!.autoScreenshots[index]
+        parent.mydocument!.userScreenshots.append(screenshot)
+        parent.mydocument!.autoScreenshots.remove(at: index)
+        screenshotsModified = true
+
         updateAutoCarousel(goto: index - 1, animated: true)
         updateUserCarousel(goto: Int.max, animated: true)
     }
@@ -556,6 +516,11 @@ class StorageDialog: DialogController {
         
         track()
         assert(screenshotView)
+        
+        if screenshotsModified {
+            try? parent.mydocument?.saveScreenshots()
+            screenshotsModified = false
+        }
         if let url = autoFolder {
             NSWorkspace.shared.open(url)
         }
@@ -573,6 +538,12 @@ class StorageDialog: DialogController {
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
+        
+        if screenshotsModified {
+            try? parent.mydocument?.saveScreenshots()
+            screenshotsModified = false
+        }
+        
         parent.startSnapshotTimer()
         parent.startScreenshotTimer()
         hideSheet()
@@ -613,11 +584,11 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         if carousel == autoCarousel {
             numItems = snapshotView ?
                 (parent.mydocument?.autoSnapshots.count ?? 0) :
-                autoScreenshotImage.count
+                (parent.mydocument?.autoScreenshots.count ?? 0)
         } else {
             numItems = snapshotView ?
                 (parent.mydocument?.userSnapshots.count ?? 0) :
-                userScreenshotImage.count
+                (parent.mydocument?.userScreenshots.count ?? 0)
         }
         
         return numItems
@@ -632,27 +603,27 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         if snapshotView {
             
             itemView.image = (carousel == autoCarousel) ?
-                parent.mydocument!.autoSnapshots[index].previewImage() :
-                parent.mydocument!.userSnapshots[index].previewImage()
-
-            itemView.wantsLayer = true
-            itemView.layer?.cornerRadius = 10.0
-            itemView.layer?.masksToBounds = true
+                parent.mydocument!.autoSnapshots[index].previewImage()?.roundCorners() :
+                parent.mydocument!.userSnapshots[index].previewImage()?.roundCorners()
             
         } else {
             
-            if carousel == autoCarousel {
-                itemView.image = autoScreenshotImage[index]
-            } else {
-                itemView.image = userScreenshotImage[index]
-            }
+            itemView.image = (carousel == autoCarousel) ?
+                parent.mydocument!.autoScreenshots[index].screen?.roundCorners() :
+                parent.mydocument!.userScreenshots[index].screen?.roundCorners()
         }
+        
+        /*
+        itemView.wantsLayer = true
+        itemView.layer?.cornerRadius = 10.0
+        itemView.layer?.masksToBounds = true
+        */
         
         return itemView
     }
     
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         
-        updateLabels()
+        carousel == autoCarousel ? updateAutoLabels() : updateUserLabels()
     }
 }

@@ -25,45 +25,52 @@ class DiskMountDialog: DialogController {
     
     var disk: ADFFileProxy!
     var writeProtect = false
-    var shrinked: Bool { return window!.frame.size.height < 300 }
-    var screenshots: [NSImage] = []
- 
-    var screenshotFolder: URL?
-        
+    
+    var numAutoScreenshots: Int {
+        return parent.mydocument!.autoScreenshots.count
+    }
+    var numUserScreenshots: Int {
+        return parent.mydocument!.userScreenshots.count
+    }
+    var numScreenshots: Int {
+        if numUserScreenshots > 0 { return numUserScreenshots }
+        if numAutoScreenshots > 0 { return numAutoScreenshots }
+        return 0
+    }
+    var displaysUserScreenshots: Bool {
+        return numUserScreenshots > 0
+    }
+    var displaysAutoScreenshots: Bool {
+        return numUserScreenshots == 0 && numAutoScreenshots > 0
+    }
+    var screenshotsModified = false
+
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
         if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
+
+            // Force the screenshot cache to update
+            parent.mydocument!.adfChecksum = disk.fnv()
+            
             super.showSheet(completionHandler: handler)
         }
     }
     
     override public func awakeFromNib() {
-
-      track()
-            window?.makeFirstResponder(carousel)
-                    
-            // Check for screenshots
-            var userFolder: URL? { return Screenshot.userFolder(checksum: disk.fnv()) }
-            var autoFolder: URL? { return Screenshot.autoFolder(checksum: disk.fnv()) }
-            
-            if Screenshot.collectUserFiles(checksum: disk.fnv()).count > 0 {
-                track("Found images in user screenshot folder")
-                screenshotFolder = userFolder
-            } else if Screenshot.collectAutoFiles(checksum: disk.fnv()).count > 0 {
-                track("Found images in auto screenshot folder")
-                screenshotFolder = autoFolder
-            }
-            
-            update()
-            updateCarousel()
+        
+        track()
+        window?.makeFirstResponder(carousel)
+        
+        update()
+        updateCarousel(goto: numScreenshots / 2, animated: false)
     }
     
     override func windowDidLoad() {
 
-        if screenshotFolder == nil {
+        if numScreenshots == 0 {
 
             setHeight(196)
             
@@ -75,7 +82,7 @@ class DiskMountDialog: DialogController {
                 self.leftButton.isHidden = false
                 self.middleButton.isHidden = false
                 self.rightButton.isHidden = false
-                self.carousel.scrollToItem(at: self.screenshots.count / 2, animated: false)
+                self.carousel.scrollToItem(at: self.numScreenshots / 2, animated: false)
             }
         }
         track()
@@ -91,28 +98,6 @@ class DiskMountDialog: DialogController {
         update()
     }
 
-    func updateScreenshots() {
-
-        // Get a list of filenames
-        let urls = Screenshot.collectFiles(in: screenshotFolder)
-        
-        // Create images
-        screenshots = []
-        for url in urls {
-            if let image = NSImage.init(contentsOf: url) {
-                screenshots.append(image.roundCorners(withRadius: 20.0))
-            }
-        }
-        
-        track("Found \(screenshots.count) screenshots for this disk")
-
-        // Add a default image if the list is empty
-        if screenshots.count == 0 {
-            let name = "noise_camera"
-            screenshots.append(NSImage.init(named: name)!)
-        }
-    }
-     
     func update() {
         
         // Update disk icon
@@ -144,13 +129,11 @@ class DiskMountDialog: DialogController {
         df3Button.isEnabled = compatible && connected3
     }
     
-    func updateCarousel(scrollToCenter: Bool = false) {
+    func updateCarousel(goto item: Int = -1, animated: Bool = false) {
         
-        updateScreenshots()
         carousel.reloadData()
-        if scrollToCenter {
-            let center = screenshots.count / 2
-            self.carousel.scrollToItem(at: center, animated: false)
+        if item != -1 {
+            self.carousel.scrollToItem(at: item, animated: animated)
         }
         carousel.layOutItemViews()
     }
@@ -163,8 +146,13 @@ class DiskMountDialog: DialogController {
         
         track("insertDiskAction df\(sender.tag)")
 
-        Screenshot.deleteAutoFolder(checksum: disk.fnv())
-        
+        if displaysUserScreenshots && screenshotsModified {
+            try? parent.mydocument!.saveUserScreenshots()
+        }
+        if displaysAutoScreenshots && screenshotsModified {
+            try? parent.mydocument!.saveAutoScreenshots()
+        }
+
         amiga.diskController.insert(sender.tag, adf: disk)
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
 
@@ -178,36 +166,19 @@ class DiskMountDialog: DialogController {
         update()
     }
 
-    @IBAction func folderAction(_ sender: NSPopUpButton!) {
-
-        update()
-        updateCarousel(scrollToCenter: true)
-    }
-    
-    @IBAction func folderSelectorAction(_ sender: NSSegmentedControl!) {
-
-        update()
-        updateCarousel(scrollToCenter: true)
-    }
-
-    @IBAction func showInFinderAction(_ sender: NSButton!) {
-
-        track()
-        if let folder = screenshotFolder {
-            NSWorkspace.shared.open(folder)
-        }
-    }
-
     @IBAction func leftAction(_ sender: NSButton!) {
 
         let index = carousel.currentItemIndex
         track("leftAction: \(index)")
-                
-        if index > 0 {
-            Screenshot.swap(item: index, with: index - 1, in: screenshotFolder)
-            updateCarousel()
-            carousel.scrollToItem(at: index - 1, animated: true)
+        
+        if displaysUserScreenshots, index > 0 {
+            parent.mydocument!.userScreenshots.swapAt(index, index - 1)
         }
+        if displaysAutoScreenshots, index > 0 {
+            parent.mydocument!.autoScreenshots.swapAt(index, index - 1)
+        }
+        screenshotsModified = true
+        updateCarousel(goto: index - 1, animated: true)
     }
     
     @IBAction func rightAction(_ sender: NSButton!) {
@@ -215,21 +186,28 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("rightAction: \(index)")
         
-        if index < carousel.numberOfItems - 1 {
-            Screenshot.swap(item: index, with: index + 1, in: screenshotFolder)
-            updateCarousel()
-            carousel.scrollToItem(at: index + 1, animated: true)
+        if displaysUserScreenshots, index < numUserScreenshots - 1 {
+            parent.mydocument!.userScreenshots.swapAt(index, index + 1)
         }
+        if displaysAutoScreenshots, index < numAutoScreenshots - 1 {
+            parent.mydocument!.autoScreenshots.swapAt(index, index + 1)
+        }
+        screenshotsModified = true
+        updateCarousel(goto: index + 1, animated: true)
     }
 
     @IBAction func middleAction(_ sender: NSButton!) {
-
+        
         let index = carousel.currentItemIndex
         track("middleAction: \(index)")
-
-        track("Deleting screenshot")
-        Screenshot.deleteUser(item: index, checksum: disk.fnv())
         
+        if displaysUserScreenshots {
+            parent.mydocument!.userScreenshots.remove(at: index)
+        }
+        if displaysAutoScreenshots {
+            parent.mydocument!.autoScreenshots.remove(at: index)
+        }
+        screenshotsModified = true
         updateCarousel()
     }
 }
@@ -260,7 +238,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         
-        return screenshots.count
+        return numScreenshots
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -269,10 +247,16 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        assert(index < screenshots.count)
-        itemView.image = screenshots[index % screenshots.count]
-
-        // track("iCarousel: \(itemView)")
+        if numUserScreenshots > 0 {
+            assert(index < numUserScreenshots)
+            itemView.image =
+                parent.mydocument?.userScreenshots[index].screen?.roundCorners()
+        } else {
+            assert(index < numAutoScreenshots)
+            itemView.image =
+                parent.mydocument?.autoScreenshots[index].screen?.roundCorners()
+        }
+        
         return itemView
     }
 }

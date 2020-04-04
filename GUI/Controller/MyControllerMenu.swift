@@ -180,6 +180,7 @@ extension MyController: NSMenuItemValidation {
     // Action methods (File menu)
     //
     
+    // DEPRECATED
     @IBAction func saveScreenshotDialog(_ sender: Any!) {
         
         // Halt emulation to freeze the current texture
@@ -216,6 +217,7 @@ extension MyController: NSMenuItemValidation {
         })
     }
 
+    // DEPRECATED
     @IBAction func quicksaveScreenshot(_ sender: Any!) {
         
         // Determine file suffix
@@ -243,6 +245,7 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
+    // DEPRECATED
     func saveScreenshot(url: URL) throws {
         
         // Take screenshot

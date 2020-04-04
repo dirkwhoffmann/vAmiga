@@ -127,7 +127,7 @@ extension MyController {
         
     @IBAction func takeUserScreenshotAction(_ sender: Any!) {
         
-        takeScreenshot(auto: false)
+        takeUserScreenshot()
         renderer.blendIn(steps: 20)
     }
 

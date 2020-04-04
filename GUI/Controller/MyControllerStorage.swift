@@ -73,28 +73,14 @@ extension MyController {
     func takeScreenshot(auto: Bool) {
         
         let upscaled = screenshotSource > 0
-        let checksum = amiga.df0.fnv()
         
         // Take screenshot
         guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
             track("Failed to create screenshot")
             return
         }
-        let screenshot = Screenshot.init(screen: screen, upscaled: upscaled)
-        
-        // Compute URL
-        guard let url = Screenshot.newUrl(checksum: checksum, auto: auto) else {
-            track("Failed to create URL")
-            return
-        }
-        
-        // Save screenshot
-        // track("Saving screenshot to \(url.path)")
-        try? screenshot.save(url: url, format: screenshotTarget)
-        
-        // Thin out screenshot directory to reduce the amout of stored data
-        Screenshot.thinOutAuto(checksum: checksum, counter: screenshotCounter)
-        screenshotCounter += 1
+        let screenshot = Screenshot.init(screen: screen, format: screenshotTarget)
+        mydocument!.appendScreenshot(screenshot, auto: auto)
     }
     
     func takeAutoScreenshot() { takeScreenshot(auto: true) }

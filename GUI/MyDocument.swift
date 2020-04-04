@@ -34,15 +34,26 @@ class MyDocument: NSDocument {
      */
     var amigaAttachment: AmigaFileProxy?
     
-    /* Snapshots and screenshots
-     */
-    
+    // Snapshots
     var autoSnapshots: [SnapshotProxy] = []
     var userSnapshots: [SnapshotProxy] = []
-
-    // Counter needed for thinning out the snapshot storage list
-    var autoSnapshotCnt = 0
+    var autoSnapshotCounter = 0
     
+    // Screenshots
+    var autoScreenshots: [Screenshot] = []
+    var userScreenshots: [Screenshot] = []
+    var autoScreenshotCounter = 0
+
+    // Screenshots are associated the ADF file with this fingerprint
+    var adfChecksum = UInt64(0) {
+        willSet {
+            if newValue != adfChecksum { try? saveScreenshots() }
+        }
+        didSet {
+            if oldValue != adfChecksum { try? loadScreenshots() }
+        }
+    }
+        
     override init() {
         
         track()
@@ -299,23 +310,112 @@ class MyDocument: NSDocument {
     }
     
     private func thinOutAutoSnapshots() {
-        if let index = thinOut(numItems: autoSnapshots.count, counter: &autoSnapshotCnt) {
+        
+        if let index = thinOut(numItems: autoSnapshots.count,
+                               counter: &autoSnapshotCounter) {
             autoSnapshots.remove(at: index)
         }
     }
     
-    func appendSnapshot(snapshot: SnapshotProxy, auto: Bool) {
+    func appendSnapshot(_ snapshot: SnapshotProxy, auto: Bool) {
         
         if auto {
-            
             autoSnapshots.append(snapshot)
-            
-            // Delete an older snapshot if the list has grown too large
             thinOutAutoSnapshots()
-            
         } else {
-            
             userSnapshots.append(snapshot)
         }
+    }
+    
+    //
+    // Screenshots
+    //
+    
+    private func thinOutAutoScreenshots() {
+        
+        if let index = thinOut(numItems: autoScreenshots.count,
+                                counter: &autoScreenshotCounter) {
+             autoScreenshots.remove(at: index)
+         }
+     }
+     
+    func appendScreenshot(_ screenshot: Screenshot, auto: Bool) {
+        
+        if auto {
+            autoScreenshots.append(screenshot)
+            thinOutAutoScreenshots()
+        } else {
+            userScreenshots.append(screenshot)
+        }
+    }
+    
+    func saveAutoScreenshots() throws {
+        
+        track("Saving auto screenshots to disk (\(adfChecksum))")
+
+        let format = parent!.screenshotTarget
+        
+        Screenshot.deleteAutoFolder(checksum: adfChecksum)
+        for n in 0 ..< autoScreenshots.count {
+            let data = autoScreenshots[n].screen?.representation(using: format)
+            if let url = Screenshot.newAutoUrl(checksum: adfChecksum, using: format) {
+                try data?.write(to: url, options: .atomic)
+            }
+        }
+    }
+    
+    func saveUserScreenshots() throws {
+        
+        track("Saving user screenshots to disk (\(adfChecksum))")
+        
+        let format = parent!.screenshotTarget
+        
+        Screenshot.deleteUserFolder(checksum: adfChecksum)
+        for n in 0 ..< userScreenshots.count {
+            let data = userScreenshots[n].screen?.representation(using: format)
+            if let url = Screenshot.newUserUrl(checksum: adfChecksum, using: format) {
+                try data?.write(to: url, options: .atomic)
+            }
+        }
+    }
+    
+    func saveScreenshots() throws {
+
+        try saveAutoScreenshots()
+        try saveUserScreenshots()
+    }
+    
+    func loadAutoScreenshots() throws {
+        
+        track("Loading auto screenshots from disk (\(adfChecksum))")
+        
+        autoScreenshots = []
+        for url in Screenshot.collectAutoFiles(checksum: adfChecksum) {
+            if let screenshot = Screenshot.init(fromUrl: url) {
+                autoScreenshots.append(screenshot)
+            }
+        }
+        
+        track("\(autoScreenshots.count) auto screenshots loaded")
+    }
+    
+    func loadUserScreenshots() throws {
+        
+        track("Loading user screenshots from disk (\(adfChecksum))")
+        
+        userScreenshots = []
+        for url in Screenshot.collectUserFiles(checksum: adfChecksum) {
+            if let screenshot = Screenshot.init(fromUrl: url) {
+                userScreenshots.append(screenshot)
+            }
+        }
+        
+        track("\(userScreenshots.count) user screenshots loaded")
+    }
+    
+    func loadScreenshots() throws {
+
+        try loadAutoScreenshots()
+        try loadUserScreenshots()
     }
 }

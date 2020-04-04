@@ -126,6 +126,18 @@ extension URL {
             
         return self.appendingPathExtension(ext)
     }
+    
+    var imageFormat: NSBitmapImageRep.FileType? {
+        
+        switch pathExtension {
+        case "tiff": return .tiff
+        case "bmp": return .bmp
+        case "gif": return .gif
+        case "jpg", "jpeg": return .jpeg
+        case "png": return .png
+        default: return nil
+        }
+    }
 }
 
 //

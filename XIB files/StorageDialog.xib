@@ -22,7 +22,6 @@
                 <outlet property="autoTrash" destination="RuY-8N-VlA" id="qQg-bL-XPa"/>
                 <outlet property="moveToUser" destination="9LS-xJ-Hcw" id="RnU-Rc-SwO"/>
                 <outlet property="selector" destination="UQI-MZ-FnG" id="gji-KA-o0l"/>
-                <outlet property="snapshotCarousel" destination="Hdf-K3-cDR" id="bpr-JZ-1No"/>
                 <outlet property="userAction1" destination="RrW-RG-49a" id="yUq-e8-Pg4"/>
                 <outlet property="userAction2" destination="bQQ-Sb-ZMw" id="P9f-Pr-zvC"/>
                 <outlet property="userCarousel" destination="hHm-XN-YUe" id="KHj-j4-3nU"/>
@@ -350,6 +349,9 @@ Gw
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="moveToUserAction:" target="-2" id="rP0-4u-R4r"/>
+                        </connections>
                     </button>
                 </subviews>
             </view>

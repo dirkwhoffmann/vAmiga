@@ -12,19 +12,61 @@ class Screenshot {
     // The actual screenshot
     var screen: NSImage?
     
+    // Proposed file format for this screenshot
+    var format = NSBitmapImageRep.FileType.jpeg
+    
     // Creation date
     var data = Date()
     
+    // Image width and heigt
+    var width: Int { return Int(screen?.size.width ?? 0) }
+    var height: Int { return Int(screen?.size.height ?? 0) }
+
     // Indicates if the upspaced texture has been recorded
-    var upscaled = false
+    var upscaled: Bool { return height > 1000 }
+
+    // Textual description of the image source
+    var sourceString: String {
+        return upscaled ? "upscaled texture" : "emulator texture"
+    }
     
-    init(screen: NSImage, upscaled: Bool) {
+    // Textual description of the image format
+    var formatString: String {
+        switch format {
+        case .tiff: return "TIFF image"
+        case .bmp:  return "BMP image"
+        case .gif:  return "GIF image"
+        case .jpeg: return "JPEG image"
+        case .png:  return "PNG image"
+        default:    return "Image"
+        }
+    }
+    
+    // Combined textual description
+    var description: String {
+        return formatString + " from " + sourceString
+    }
+    
+    // Textual representation of the image size
+    var sizeString: String {
+        return screen != nil ? "\(width) x \(height)" : ""
+    }
+    
+    init(screen: NSImage, format: NSBitmapImageRep.FileType) {
         
         self.screen = screen
-        self.upscaled = upscaled
+        self.format = format
         data = Date()
     }
+    
+    convenience init?(fromUrl url: URL) {
+        
+        guard let format = url.imageFormat else { return nil }
+        guard let image = NSImage.init(contentsOf: url) else { return nil }
 
+        self.init(screen: image, format: format)
+    }
+    
     func quicksave(format: NSBitmapImageRep.FileType) {
         
         // Get URL to desktop directory
@@ -56,7 +98,7 @@ class Screenshot {
         // Save to file
         try data?.write(to: url, options: .atomic)
     }
-
+    
     static func folder(auto: Bool, checksum: UInt64) -> URL? {
         
         let fm = FileManager.default
@@ -98,7 +140,7 @@ class Screenshot {
         return FileManager.default.fileExists(atPath: url.path) ? url : nil
     }
     
-    static func url(for item: Int, in folder: URL?) -> URL? {
+    static func url(forItem item: Int, in folder: URL?) -> URL? {
         
         if folder == nil { return nil }
 
@@ -112,22 +154,23 @@ class Screenshot {
         return nil
     }
     
-    static func userUrl(for item: Int, checksum: UInt64) -> URL? {
-        return Screenshot.url(for: item, in: Screenshot.userFolder(checksum: checksum))
+    static func userUrl(forItem item: Int, checksum: UInt64) -> URL? {
+        return Screenshot.url(forItem: item, in: Screenshot.userFolder(checksum: checksum))
     }
     
-    static func autoUrl(for item: Int, checksum: UInt64) -> URL? {
-        return Screenshot.url(for: item, in: Screenshot.autoFolder(checksum: checksum))
+    static func autoUrl(forItem item: Int, checksum: UInt64) -> URL? {
+        return Screenshot.url(forItem: item, in: Screenshot.autoFolder(checksum: checksum))
     }
     
-    static func newUrl(in folder: URL?) -> URL? {
+    static func newUrl(in folder: URL?,
+                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
         
         if folder == nil { return nil }
         
         for i in 0...999 {
             
-            let filename = String(format: "%03d.jpeg", i)
-            let url = folder!.appendingPathComponent(filename)
+            let filename = String(format: "%03d", i)
+            let url = folder!.appendingPathComponent(filename).addExtension(for: format)
             
             if !FileManager.default.fileExists(atPath: url.path) {
                 return url
@@ -137,12 +180,18 @@ class Screenshot {
         return nil
     }
     
-    static func newUserUrl(checksum: UInt64) -> URL? {
-        return Screenshot.newUrl(in: Screenshot.userFolder(checksum: checksum))
+    static func newUserUrl(checksum: UInt64,
+                           using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
+
+        let folder = Screenshot.userFolder(checksum: checksum)
+        return Screenshot.newUrl(in: folder, using: format)
     }
     
-    static func newAutoUrl(checksum: UInt64) -> URL? {
-        return Screenshot.newUrl(in: Screenshot.autoFolder(checksum: checksum))
+    static func newAutoUrl(checksum: UInt64,
+                           using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
+        
+        let folder = Screenshot.autoFolder(checksum: checksum)
+        return Screenshot.newUrl(in: folder, using: format)
     }
     
     static func newUrl(checksum: UInt64, auto: Bool) -> URL? {
@@ -155,7 +204,7 @@ class Screenshot {
         
         for i in 0...999 {
             
-            if let url = Screenshot.url(for: i, in: folder) {
+            if let url = Screenshot.url(forItem: i, in: folder) {
                 result.append(url)
             } else {
                 break
@@ -174,66 +223,6 @@ class Screenshot {
         return Screenshot.collectFiles(in: Screenshot.autoFolder(checksum: checksum))
     }
 
-    static func swap(item: Int, with item2: Int, in folder: URL?) {
-        
-        if folder == nil { return }
-                
-        let oldUrl = Screenshot.url(for: item, in: folder)
-        let newUrl = Screenshot.url(for: item2, in: folder)
-        let tmpUrl = Screenshot.newUrl(in: folder)
-        
-        if oldUrl != nil && newUrl != nil && tmpUrl != nil {
-            
-            let fm = FileManager.default
-            try? fm.moveItem(at: oldUrl!, to: tmpUrl!)
-            try? fm.moveItem(at: newUrl!, to: oldUrl!)
-            try? fm.moveItem(at: tmpUrl!, to: newUrl!)
-        }
-    }
-
-    static func swapUser(item: Int, with item2: Int, checksum: UInt64) {
-        
-        Screenshot.swap(item: item, with: item2, in: Screenshot.userFolder(checksum: checksum))
-    }
-
-    static func swapAuto(item: Int, with item2: Int, checksum: UInt64) {
-        
-        Screenshot.swap(item: item, with: item2, in: Screenshot.autoFolder(checksum: checksum))
-    }
-    
-    static func delete(item: Int, in folder: URL?) {
-        
-        if folder == nil { return }
-                
-        if var url = Screenshot.url(for: item, in: folder) {
-        
-            let fm = FileManager.default
-            try? fm.removeItem(at: url)
-            
-            // Rename all items above the deleted one
-            for i in item ... 998 {
-                
-                if let above = Screenshot.url(for: i + 1, in: folder) {
-                    
-                    // track("Renaming \(above) to \(url)")
-                    try? fm.moveItem(at: above, to: url)
-                    url = above
-                    
-                } else { break }
-            }
-        }
-    }
-    
-    static func deleteUser(item: Int, checksum: UInt64) {
-        
-        Screenshot.delete(item: item, in: userFolder(checksum: checksum))
-    }
-
-    static func deleteAuto(item: Int, checksum: UInt64) {
-
-        Screenshot.delete(item: item, in: autoFolder(checksum: checksum))
-    }
-    
     static func delete(folder: URL?) {
         
         let files = Screenshot.collectFiles(in: folder)
@@ -251,53 +240,5 @@ class Screenshot {
         
         track()
         Screenshot.delete(folder: Screenshot.autoFolder(checksum: checksum))
-    }
-
-    static func thinOut(folder: URL?, counter: Int) {
-        
-        if folder == nil { return }
-
-        let count = collectFiles(in: folder!).count
-        let max = 32
-
-        if count > max {
-            
-            var itemToDelete = 0
-
-            if counter % 2 == 0 {
-                itemToDelete = 24
-            } else if (counter >> 1) % 2 == 0 {
-                itemToDelete = 16
-            } else if (counter >> 2) % 2 == 0 {
-                itemToDelete = 8
-            }
-
-            delete(item: itemToDelete, in: folder)
-        }
-    }
-    
-    static func thinOutAuto(checksum: UInt64, counter: Int) {
-        let folder = Screenshot.autoFolder(checksum: checksum)
-        Screenshot.thinOut(folder: folder, counter: counter)
-    }
-
-    static func thinOutUser(checksum: UInt64, counter: Int) {
-        let folder = Screenshot.userFolder(checksum: checksum)
-        Screenshot.thinOut(folder: folder, counter: counter)
-    }
-
-    static func moveToUser(item: Int, checksum: UInt64) {
-                
-        let oldUrl = Screenshot.autoUrl(for: item, checksum: checksum)
-        let newUrl = Screenshot.newUserUrl(checksum: checksum)
-                
-        if oldUrl != nil && newUrl != nil {
-            do {
-                try FileManager.default.copyItem(at: oldUrl!, to: newUrl!)
-                Screenshot.deleteAuto(item: item, checksum: checksum)
-            } catch let error as NSError {
-                print(error)
-            }
-        }
     }
 }
