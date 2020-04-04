@@ -47,6 +47,7 @@ class StorageDialog: DialogController {
     var checksum = UInt64(0)
     
     // Computed variables
+    var myDocument: MyDocument { return parent.mydocument! }
     var snapshotView: Bool { return selector.selectedSegment == 0 }
     var screenshotView: Bool { return selector.selectedSegment == 1 }
     var autoIndex: Int { return autoCarousel.currentItemIndex }
@@ -60,8 +61,6 @@ class StorageDialog: DialogController {
     var lastAutoItem: Int { return numAutoItems - 1 }
     var lastUserItem: Int { return numUserItems - 1 }
     
-    var screenshotsModified = false
-
     override func windowDidLoad() {
         
         track()
@@ -119,7 +118,7 @@ class StorageDialog: DialogController {
         
         if autoIndex >= 0 {
             
-            let snapshot = parent.mydocument!.autoSnapshots[autoIndex]
+            let snapshot = myDocument.autoSnapshots[autoIndex]
             autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
             autoNr.textColor = .labelColor
             let takenAt = snapshot.timeStamp()
@@ -151,7 +150,7 @@ class StorageDialog: DialogController {
         
         if userIndex >= 0 {
             
-            let snapshot = parent.mydocument!.userSnapshots[userIndex]
+            let snapshot = myDocument.userSnapshots[userIndex]
             userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
             userNr.textColor = .labelColor
             let takenAt = snapshot.timeStamp()
@@ -185,7 +184,7 @@ class StorageDialog: DialogController {
 
         if autoIndex >= 0 {
             
-            let screenshot = parent.mydocument!.autoScreenshots[autoIndex]
+            let screenshot = myDocument.autoScreenshots[autoIndex]
             autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
             autoNr.textColor = .labelColor
             autoText1.stringValue = screenshot.sizeString
@@ -216,7 +215,7 @@ class StorageDialog: DialogController {
         
         if userIndex >= 0 {
             
-            let screenshot = parent.mydocument!.userScreenshots[userIndex]
+            let screenshot = myDocument.userScreenshots[userIndex]
             userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
             userNr.textColor = .labelColor
             userText1.stringValue = screenshot.sizeString
@@ -419,10 +418,9 @@ class StorageDialog: DialogController {
         track("index = \(index)")
 
         if snapshotView {
-            parent.mydocument!.autoSnapshots.remove(at: index)
+            myDocument.autoSnapshots.remove(at: index)
         } else {
-            parent.mydocument!.autoScreenshots.remove(at: index)
-            screenshotsModified = true
+            myDocument.removeAutoScreenshot(at: index)
         }
         updateAutoCarousel()
     }
@@ -433,10 +431,9 @@ class StorageDialog: DialogController {
         track("index = \(index)")
         
         if snapshotView {
-            parent.mydocument!.userSnapshots.remove(at: index)
+            myDocument.userSnapshots.remove(at: index)
         } else {
-            parent.mydocument!.userScreenshots.remove(at: index)
-            screenshotsModified = true
+            myDocument.removeUserScreenshot(at: index)
         }
         updateUserCarousel()
     }
@@ -449,9 +446,8 @@ class StorageDialog: DialogController {
         if snapshotView {
             if !parent.restoreAutoSnapshot(item: index) { NSSound.beep() }
         } else if index > 0 {
-            parent.mydocument!.autoScreenshots.swapAt(index, index - 1)
+            myDocument.swapAutoScreenshots(index, index - 1)
             updateAutoCarousel(goto: index - 1, animated: true)
-            screenshotsModified = true
         }
     }
     
@@ -463,9 +459,8 @@ class StorageDialog: DialogController {
         if snapshotView {
             if !parent.restoreUserSnapshot(item: index) { NSSound.beep() }
         } else if index > 0 {
-            parent.mydocument!.userScreenshots.swapAt(index, index - 1)
+            myDocument.swapUserScreenshots(index, index - 1)
             updateUserCarousel(goto: index - 1, animated: true)
-            screenshotsModified = true
         }
     }
     
@@ -477,9 +472,8 @@ class StorageDialog: DialogController {
         if snapshotView {
             saveSnapshotAs(item: index, auto: true)
         } else if index < autoCarousel.numberOfItems - 1 {
-            parent.mydocument!.autoScreenshots.swapAt(index, index + 1)
+            myDocument.swapAutoScreenshots(index, index + 1)
             updateAutoCarousel(goto: index + 1, animated: true)
-            screenshotsModified = true
         }
     }
     
@@ -491,9 +485,8 @@ class StorageDialog: DialogController {
         if snapshotView {
             saveSnapshotAs(item: index, auto: false)
         } else if index < userCarousel.numberOfItems - 1 {
-            parent.mydocument!.userScreenshots.swapAt(index, index + 1)
+            myDocument.swapUserScreenshots(index, index + 1)
             updateUserCarousel(goto: index + 1, animated: true)
-            screenshotsModified = true
         }
     }
 
@@ -503,10 +496,9 @@ class StorageDialog: DialogController {
         assert(screenshotView)
         
         let index = autoCarousel.currentItemIndex
-        let screenshot = parent.mydocument!.autoScreenshots[index]
-        parent.mydocument!.userScreenshots.append(screenshot)
-        parent.mydocument!.autoScreenshots.remove(at: index)
-        screenshotsModified = true
+        let screenshot = myDocument.autoScreenshots[index]
+        myDocument.appendUserScreenshot(screenshot)
+        myDocument.removeAutoScreenshot(at: index)
 
         updateAutoCarousel(goto: index - 1, animated: true)
         updateUserCarousel(goto: Int.max, animated: true)
@@ -516,12 +508,10 @@ class StorageDialog: DialogController {
         
         track()
         assert(screenshotView)
-        
-        if screenshotsModified {
-            try? parent.mydocument?.saveScreenshots()
-            screenshotsModified = false
-        }
+
         if let url = autoFolder {
+            
+            try? myDocument.persistScreenshots()
             NSWorkspace.shared.open(url)
         }
     }
@@ -530,7 +520,10 @@ class StorageDialog: DialogController {
         
         track()
         assert(screenshotView)
+        
         if let url = userFolder {
+            
+            try? myDocument.persistScreenshots()
             NSWorkspace.shared.open(url)
         }
     }
@@ -539,10 +532,8 @@ class StorageDialog: DialogController {
         
         track()
         
-        if screenshotsModified {
-            try? parent.mydocument?.saveScreenshots()
-            screenshotsModified = false
-        }
+        // Write screenshots back to disk if needed
+        try? myDocument.persistScreenshots()
         
         parent.startSnapshotTimer()
         parent.startScreenshotTimer()
@@ -562,8 +553,8 @@ class StorageDialog: DialogController {
                  if let url = panel.url {
                      
                      let data = auto ?
-                        self.parent.mydocument!.autoSnapshots[item].data() :
-                        self.parent.mydocument!.userSnapshots[item].data()
+                        self.myDocument.autoSnapshots[item].data() :
+                        self.myDocument.userSnapshots[item].data()
                     try? data?.write(to: url)
                  }
              }
@@ -583,12 +574,10 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         
         if carousel == autoCarousel {
             numItems = snapshotView ?
-                (parent.mydocument?.autoSnapshots.count ?? 0) :
-                (parent.mydocument?.autoScreenshots.count ?? 0)
+                myDocument.autoSnapshots.count : myDocument.autoScreenshots.count
         } else {
             numItems = snapshotView ?
-                (parent.mydocument?.userSnapshots.count ?? 0) :
-                (parent.mydocument?.userScreenshots.count ?? 0)
+                myDocument.userSnapshots.count : myDocument.userScreenshots.count
         }
         
         return numItems
@@ -603,14 +592,14 @@ extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
         if snapshotView {
             
             itemView.image = (carousel == autoCarousel) ?
-                parent.mydocument!.autoSnapshots[index].previewImage()?.roundCorners() :
-                parent.mydocument!.userSnapshots[index].previewImage()?.roundCorners()
+                myDocument.autoSnapshots[index].previewImage()?.roundCorners() :
+                myDocument.userSnapshots[index].previewImage()?.roundCorners()
             
         } else {
             
             itemView.image = (carousel == autoCarousel) ?
-                parent.mydocument!.autoScreenshots[index].screen?.roundCorners() :
-                parent.mydocument!.userScreenshots[index].screen?.roundCorners()
+                myDocument.autoScreenshots[index].screen?.roundCorners() :
+                myDocument.userScreenshots[index].screen?.roundCorners()
         }
         
         /*

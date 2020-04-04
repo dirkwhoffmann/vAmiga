@@ -763,10 +763,8 @@ extension MyController {
 
             track()
 
-            if msg.data == 0 { // Df0
-                Screenshot.deleteAutoFolder(checksum: amiga.df0.fnv())
-                screenshotCounter = 0
-            }
+            // Store checksum for disk in df0 (needed for screenshot management)
+            if msg.data == 0 { mydocument?.adfChecksum = amiga.df0.fnv() }
             refreshStatusBar()
             
         case MSG_DISK_INSERTED,

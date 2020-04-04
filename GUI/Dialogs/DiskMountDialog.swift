@@ -26,11 +26,13 @@ class DiskMountDialog: DialogController {
     var disk: ADFFileProxy!
     var writeProtect = false
     
+    var myDocument: MyDocument { return parent.mydocument! }
+    
     var numAutoScreenshots: Int {
-        return parent.mydocument!.autoScreenshots.count
+        return myDocument.autoScreenshots.count
     }
     var numUserScreenshots: Int {
-        return parent.mydocument!.userScreenshots.count
+        return myDocument.userScreenshots.count
     }
     var numScreenshots: Int {
         if numUserScreenshots > 0 { return numUserScreenshots }
@@ -48,12 +50,12 @@ class DiskMountDialog: DialogController {
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
-        if let attachment = myDocument?.amigaAttachment as? ADFFileProxy {
+        if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
 
             // Force the screenshot cache to update
-            parent.mydocument!.adfChecksum = disk.fnv()
+            myDocument.adfChecksum = disk.fnv()
             
             super.showSheet(completionHandler: handler)
         }
@@ -147,10 +149,10 @@ class DiskMountDialog: DialogController {
         track("insertDiskAction df\(sender.tag)")
 
         if displaysUserScreenshots && screenshotsModified {
-            try? parent.mydocument!.saveUserScreenshots()
+            try? myDocument.saveUserScreenshots()
         }
         if displaysAutoScreenshots && screenshotsModified {
-            try? parent.mydocument!.saveAutoScreenshots()
+            try? myDocument.saveAutoScreenshots()
         }
 
         amiga.diskController.insert(sender.tag, adf: disk)
@@ -172,10 +174,10 @@ class DiskMountDialog: DialogController {
         track("leftAction: \(index)")
         
         if displaysUserScreenshots, index > 0 {
-            parent.mydocument!.userScreenshots.swapAt(index, index - 1)
+            myDocument.swapUserScreenshots(index, index - 1)
         }
         if displaysAutoScreenshots, index > 0 {
-            parent.mydocument!.autoScreenshots.swapAt(index, index - 1)
+            myDocument.swapAutoScreenshots(index, index - 1)
         }
         screenshotsModified = true
         updateCarousel(goto: index - 1, animated: true)
@@ -187,10 +189,10 @@ class DiskMountDialog: DialogController {
         track("rightAction: \(index)")
         
         if displaysUserScreenshots, index < numUserScreenshots - 1 {
-            parent.mydocument!.userScreenshots.swapAt(index, index + 1)
+            myDocument.swapUserScreenshots(index, index + 1)
         }
         if displaysAutoScreenshots, index < numAutoScreenshots - 1 {
-            parent.mydocument!.autoScreenshots.swapAt(index, index + 1)
+            myDocument.swapAutoScreenshots(index, index + 1)
         }
         screenshotsModified = true
         updateCarousel(goto: index + 1, animated: true)
@@ -202,10 +204,10 @@ class DiskMountDialog: DialogController {
         track("middleAction: \(index)")
         
         if displaysUserScreenshots {
-            parent.mydocument!.userScreenshots.remove(at: index)
+            myDocument.removeUserScreenshot(at: index)
         }
         if displaysAutoScreenshots {
-            parent.mydocument!.autoScreenshots.remove(at: index)
+            myDocument.removeAutoScreenshot(at: index)
         }
         screenshotsModified = true
         updateCarousel()
@@ -250,11 +252,11 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         if numUserScreenshots > 0 {
             assert(index < numUserScreenshots)
             itemView.image =
-                parent.mydocument?.userScreenshots[index].screen?.roundCorners()
+                myDocument.userScreenshots[index].screen?.roundCorners()
         } else {
             assert(index < numAutoScreenshots)
             itemView.image =
-                parent.mydocument?.autoScreenshots[index].screen?.roundCorners()
+                myDocument.autoScreenshots[index].screen?.roundCorners()
         }
         
         return itemView

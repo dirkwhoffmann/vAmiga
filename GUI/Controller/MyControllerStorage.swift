@@ -80,7 +80,10 @@ extension MyController {
             return
         }
         let screenshot = Screenshot.init(screen: screen, format: screenshotTarget)
-        mydocument!.appendScreenshot(screenshot, auto: auto)
+        
+        auto ?
+            mydocument!.appendAutoScreenshot(screenshot) :
+            mydocument!.appendUserScreenshot(screenshot)
     }
     
     func takeAutoScreenshot() { takeScreenshot(auto: true) }

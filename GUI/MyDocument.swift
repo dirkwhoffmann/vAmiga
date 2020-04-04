@@ -40,14 +40,16 @@ class MyDocument: NSDocument {
     var autoSnapshotCounter = 0
     
     // Screenshots
-    var autoScreenshots: [Screenshot] = []
-    var userScreenshots: [Screenshot] = []
-    var autoScreenshotCounter = 0
-
+    private(set) var autoScreenshots: [Screenshot] = []
+    private(set) var userScreenshots: [Screenshot] = []
+    private var autoScreenshotCounter = 0
+    private var autoScreenshotsModified = false
+    private var userScreenshotsModified = false
+    
     // Screenshots are associated the ADF file with this fingerprint
     var adfChecksum = UInt64(0) {
         willSet {
-            if newValue != adfChecksum { try? saveScreenshots() }
+            if newValue != adfChecksum { try? persistScreenshots() }
         }
         didSet {
             if oldValue != adfChecksum { try? loadScreenshots() }
@@ -331,24 +333,55 @@ class MyDocument: NSDocument {
     // Screenshots
     //
     
-    private func thinOutAutoScreenshots() {
+    func removeAutoScreenshot(at index: Int) {
         
-        if let index = thinOut(numItems: autoScreenshots.count,
-                                counter: &autoScreenshotCounter) {
-             autoScreenshots.remove(at: index)
-         }
-     }
-     
-    func appendScreenshot(_ screenshot: Screenshot, auto: Bool) {
-        
-        if auto {
-            autoScreenshots.append(screenshot)
-            thinOutAutoScreenshots()
-        } else {
-            userScreenshots.append(screenshot)
-        }
+        autoScreenshots.remove(at: index)
+        autoScreenshotsModified = true
     }
     
+    func removeUserScreenshot(at index: Int) {
+        
+        userScreenshots.remove(at: index)
+        userScreenshotsModified = true
+    }
+    
+    func swapAutoScreenshots(_ i: Int, _ j: Int) {
+        
+        autoScreenshots.swapAt(i, i)
+        autoScreenshotsModified = true
+    }
+
+    func swapUserScreenshots(_ i: Int, _ j: Int) {
+        
+        userScreenshots.swapAt(i, i)
+        userScreenshotsModified = true
+    }
+
+    func appendAutoScreenshot(_ newElement: Screenshot) {
+        
+        autoScreenshots.append(newElement)
+        autoScreenshotsModified = true
+        
+        // Thin out screenshots to limit growth
+        if let index = thinOut(numItems: autoScreenshots.count,
+                               counter: &autoScreenshotCounter) {
+            autoScreenshots.remove(at: index)
+        }
+    }
+
+    func appendUserScreenshot(_ newElement: Screenshot) {
+        
+        userScreenshots.append(newElement)
+        userScreenshotsModified = true
+    }
+             
+    // Writes screenshots back to disk if needed
+    func persistScreenshots() throws {
+
+        if autoScreenshotsModified { try saveAutoScreenshots() }
+        if userScreenshotsModified { try saveUserScreenshots() }
+    }
+
     func saveAutoScreenshots() throws {
         
         track("Saving auto screenshots to disk (\(adfChecksum))")
