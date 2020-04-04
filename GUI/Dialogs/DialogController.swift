@@ -61,10 +61,19 @@ class DialogController: NSWindowController {
         return controller
     }
 
+    func sheetWillShow() { }
     func sheetDidShow() { }
 
+    override func windowWillLoad() {
+        track()
+    }
+    override func windowDidLoad() {
+        track()
+    }
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
+        sheetWillShow()
+        
         parent.window?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {
                 

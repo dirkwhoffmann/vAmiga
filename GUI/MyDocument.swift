@@ -347,13 +347,13 @@ class MyDocument: NSDocument {
     
     func swapAutoScreenshots(_ i: Int, _ j: Int) {
         
-        autoScreenshots.swapAt(i, i)
+        autoScreenshots.swapAt(i, j)
         autoScreenshotsModified = true
     }
 
     func swapUserScreenshots(_ i: Int, _ j: Int) {
         
-        userScreenshots.swapAt(i, i)
+        userScreenshots.swapAt(i, j)
         userScreenshotsModified = true
     }
 

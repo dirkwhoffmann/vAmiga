@@ -61,27 +61,27 @@ class StorageDialog: DialogController {
     var lastAutoItem: Int { return numAutoItems - 1 }
     var lastUserItem: Int { return numUserItems - 1 }
     
-    override func windowDidLoad() {
-        
+    override func windowWillLoad() {
+   
         track()
-
+    }
+    
+    override func sheetDidShow() {
+  
+        track()
+        
         parent.stopSnapshotTimer()
         parent.stopScreenshotTimer()
         updateAutoLabels()
         updateUserLabels()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            
-            track("lastAutoItem = \(self.lastAutoItem)")
-            self.autoCarousel.type = self.carouselType
-            self.autoCarousel.isHidden = false
-            self.updateAutoCarousel(goto: self.lastAutoItem, animated: false)
-
-            track("lastUserItem = \(self.lastUserItem)")
-            self.userCarousel.type = self.carouselType
-            self.userCarousel.isHidden = false
-            self.updateUserCarousel(goto: self.lastUserItem, animated: false)
-        }
+        self.autoCarousel.type = self.carouselType
+        self.autoCarousel.isHidden = false
+        self.updateAutoCarousel(goto: self.lastAutoItem, animated: false)
+        
+        self.userCarousel.type = self.carouselType
+        self.userCarousel.isHidden = false
+        self.updateUserCarousel(goto: self.lastUserItem, animated: false)
     }
     
     func updateAutoLabels() {
@@ -531,13 +531,16 @@ class StorageDialog: DialogController {
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-        
-        // Write screenshots back to disk if needed
-        try? myDocument.persistScreenshots()
-        
+                        
+        hideSheet()
+
         parent.startSnapshotTimer()
         parent.startScreenshotTimer()
-        hideSheet()
+
+        self.autoCarousel.isHidden = true
+        self.userCarousel.isHidden = true
+
+        try? myDocument.persistScreenshots()
     }
     
     func saveSnapshotAs(item: Int, auto: Bool) {

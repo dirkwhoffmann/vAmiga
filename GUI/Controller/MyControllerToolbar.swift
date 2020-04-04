@@ -133,10 +133,19 @@ extension MyController {
 
     @IBAction func browseStorageAction(_ sender: Any!) {
         
+        if browser == nil {
+            let name = NSNib.Name("StorageDialog")
+            browser = StorageDialog.make(parent: self, nibName: name)
+        }
+        browser?.checksum = amiga.df0.fnv()
+        browser?.showSheet()
+
+        /*
         let name = NSNib.Name("StorageDialog")
         let controller = StorageDialog.make(parent: self, nibName: name)
         controller?.checksum = amiga.df0.fnv()
         controller?.showSheet()
+        */
     }
 
     @IBAction func snapshotAction(_ sender: NSSegmentedControl) {

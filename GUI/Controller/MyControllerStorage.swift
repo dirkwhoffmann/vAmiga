@@ -17,8 +17,6 @@ extension MyController {
     
     func takeSnapshot(auto: Bool) {
         
-        track("auto = \(auto)")
-        
         if let s = SnapshotProxy.make(withAmiga: amiga) {
         
             if auto {
