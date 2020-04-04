@@ -17,6 +17,7 @@
                 <outlet property="autoNext" destination="pJH-uM-MUc" id="raO-D4-Myb"/>
                 <outlet property="autoNr" destination="2D7-XS-vht" id="zms-CR-e2R"/>
                 <outlet property="autoPrev" destination="3bw-7I-GfT" id="TcZ-qV-XWX"/>
+                <outlet property="autoSeperator" destination="DeJ-Cz-qL9" id="St6-OV-Lgn"/>
                 <outlet property="autoText1" destination="Rq8-Y3-VHm" id="UBB-EG-tve"/>
                 <outlet property="autoText2" destination="fHH-O7-CYc" id="ah6-L3-EA0"/>
                 <outlet property="autoTrash" destination="RuY-8N-VlA" id="qQg-bL-XPa"/>
@@ -31,6 +32,7 @@
                 <outlet property="userNext" destination="eRJ-zI-zwL" id="39L-Mw-Sfq"/>
                 <outlet property="userNr" destination="BpQ-cz-rtX" id="0WU-Si-paR"/>
                 <outlet property="userPrev" destination="zaV-nr-IDU" id="Osl-IO-vDh"/>
+                <outlet property="userSeperator" destination="miH-ao-gnz" id="4vL-SZ-U01"/>
                 <outlet property="userText1" destination="SvT-gb-mud" id="2z6-T4-Q6E"/>
                 <outlet property="userText2" destination="hb6-2S-UhJ" id="TqO-iL-6GL"/>
                 <outlet property="userTrash" destination="U0q-ff-7S7" id="LAc-TM-ce9"/>
@@ -101,7 +103,7 @@ Gw
                             <rect key="frame" x="3" y="3" width="343" height="335"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3bw-7I-GfT">
+                                <button hidden="YES" toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3bw-7I-GfT">
                                     <rect key="frame" x="62" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Zlg-mU-p8R">
@@ -112,7 +114,7 @@ Gw
                                         <action selector="autoPrevAction:" target="-2" id="EeU-lD-DDs"/>
                                     </connections>
                                 </button>
-                                <button toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJH-uM-MUc">
+                                <button hidden="YES" toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pJH-uM-MUc">
                                     <rect key="frame" x="36" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="mWg-4a-kJj">
@@ -131,7 +133,7 @@ Gw
                                         <outlet property="delegate" destination="-2" id="UeK-16-AzC"/>
                                     </connections>
                                 </customView>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RuY-8N-VlA">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RuY-8N-VlA">
                                     <rect key="frame" x="293" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9Et-2J-1vf">
@@ -142,7 +144,7 @@ Gw
                                         <action selector="autoTrashAction:" target="-2" id="3an-no-34I"/>
                                     </connections>
                                 </button>
-                                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DeJ-Cz-qL9">
+                                <box hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="DeJ-Cz-qL9">
                                     <rect key="frame" x="20" y="294" width="302" height="5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </box>
@@ -164,7 +166,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2D7-XS-vht">
+                                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2D7-XS-vht">
                                     <rect key="frame" x="19" y="274" width="307" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="999 / 999" id="jX5-r8-8zk">
@@ -173,7 +175,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCr-UE-dHB">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCr-UE-dHB">
                                     <rect key="frame" x="177" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="saveTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="B64-cu-InJ">
@@ -184,7 +186,7 @@ Gw
                                         <action selector="auto2Action:" target="-2" id="4qK-jV-F2t"/>
                                     </connections>
                                 </button>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2W-nw-hCn">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2W-nw-hCn">
                                     <rect key="frame" x="149" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="restoreTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="DC8-W3-uaR">
@@ -233,7 +235,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eRJ-zI-zwL">
+                                <button hidden="YES" toolTip="Move one item up" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eRJ-zI-zwL">
                                     <rect key="frame" x="35" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="upTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hu8-kF-umC">
@@ -244,7 +246,7 @@ Gw
                                         <action selector="userNextAction:" target="-2" id="HCt-Rz-x0F"/>
                                     </connections>
                                 </button>
-                                <button toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zaV-nr-IDU">
+                                <button hidden="YES" toolTip="Move one item down" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zaV-nr-IDU">
                                     <rect key="frame" x="61" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="downTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="hbl-KD-lO4">
@@ -264,7 +266,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0q-ff-7S7">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0q-ff-7S7">
                                     <rect key="frame" x="293" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="eeH-Gb-YPQ">
@@ -275,11 +277,11 @@ Gw
                                         <action selector="userTrashAction:" target="-2" id="xDe-Ep-9K0"/>
                                     </connections>
                                 </button>
-                                <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="miH-ao-gnz">
+                                <box hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="miH-ao-gnz">
                                     <rect key="frame" x="21" y="294" width="302" height="5"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 </box>
-                                <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BpQ-cz-rtX">
+                                <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BpQ-cz-rtX">
                                     <rect key="frame" x="18" y="274" width="308" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="999 / 999" id="VL6-Zi-ADd">
@@ -288,7 +290,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQQ-Sb-ZMw">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQQ-Sb-ZMw">
                                     <rect key="frame" x="177" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="saveTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bzW-En-QMc">
@@ -299,7 +301,7 @@ Gw
                                         <action selector="user2Action:" target="-2" id="70o-qo-ASE"/>
                                     </connections>
                                 </button>
-                                <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RrW-RG-49a">
+                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RrW-RG-49a">
                                     <rect key="frame" x="149" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="restoreTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JBK-m8-fMN">

@@ -14,6 +14,7 @@ class StorageDialog: DialogController {
     @IBOutlet weak var selector: NSSegmentedControl!
 
     @IBOutlet weak var autoLabel: NSTextField!
+    @IBOutlet weak var autoSeperator: NSBox!
     @IBOutlet weak var autoCarousel: iCarousel!
     @IBOutlet weak var autoPrev: NSButton!
     @IBOutlet weak var autoNext: NSButton!
@@ -27,6 +28,7 @@ class StorageDialog: DialogController {
     @IBOutlet weak var autoFinderButton: NSButton!
     
     @IBOutlet weak var userLabel: NSTextField!
+    @IBOutlet weak var userSeperator: NSBox!
     @IBOutlet weak var userCarousel: iCarousel!
     @IBOutlet weak var userPrev: NSButton!
     @IBOutlet weak var userNext: NSButton!
@@ -86,18 +88,44 @@ class StorageDialog: DialogController {
     
     func updateAutoLabels() {
                 
-        autoNext.isEnabled = autoIndex >= 0 && autoIndex < autoCarousel.numberOfItems - 1
+        autoNext.isEnabled = autoIndex >= 0 && autoIndex < lastAutoItem
         autoPrev.isEnabled = autoIndex > 0
 
         snapshotView ? updateAutoSnapshotLabels() : updateAutoScreenshotLabels()
+        
+        let autoItems: [NSView] = [
+            autoSeperator,
+            autoNext,
+            autoPrev,
+            autoAction1,
+            autoAction2,
+            autoTrash,
+            autoText1,
+            autoText2
+        ]
+        for item in autoItems { item.isHidden = (numAutoItems == 0) }
+        autoNr.isHidden = false
     }
     
     func updateUserLabels() {
         
-        userNext.isEnabled = userIndex >= 0 && userIndex < userCarousel.numberOfItems - 1
+        userNext.isEnabled = userIndex >= 0 && userIndex < lastUserItem
         userPrev.isEnabled = userIndex > 0
         
         snapshotView ? updateUserSnapshotLabels() : updateUserScreenshotLabels()
+
+        let userItems: [NSView] = [
+            userSeperator,
+            userNext,
+            userPrev,
+            userAction1,
+            userAction2,
+            userTrash,
+            userText1,
+            userText2
+        ]
+        for item in userItems { item.isHidden = (numUserItems == 0) }
+        userNr.isHidden = false
     }
     
     func updateAutoSnapshotLabels() {
@@ -127,9 +155,9 @@ class StorageDialog: DialogController {
             
         } else {
             
-            autoNr.stringValue = ""
+            autoNr.stringValue = "No snapshots available"
             autoNr.textColor = .secondaryLabelColor
-            autoText1.stringValue = "No snapshots available"
+            autoText1.stringValue = ""
             autoText2.stringValue = ""
         }
     }
@@ -159,9 +187,9 @@ class StorageDialog: DialogController {
             
         } else {
             
-            userNr.stringValue = ""
+            userNr.stringValue = "No snapshots available"
             userNr.textColor = .secondaryLabelColor
-            userText1.stringValue = "No snapshots available"
+            userText1.stringValue = ""
             userText2.stringValue = ""
         }
     }
@@ -192,9 +220,9 @@ class StorageDialog: DialogController {
             
         } else {
             
-            autoNr.stringValue = ""
+            autoNr.stringValue = "No screenshots available"
             autoNr.textColor = .secondaryLabelColor
-            autoText1.stringValue = "No screenshots available"
+            autoText1.stringValue = ""
             autoText2.stringValue = ""
         }
     }
@@ -223,9 +251,9 @@ class StorageDialog: DialogController {
             
         } else {
             
-            userNr.stringValue = ""
+            userNr.stringValue = "No screenshots available"
             userNr.textColor = .secondaryLabelColor
-            userText1.stringValue = "No screenshots available"
+            userText1.stringValue = ""
             userText2.stringValue = ""
         }
     }
@@ -536,9 +564,32 @@ class StorageDialog: DialogController {
 
         parent.startSnapshotTimer()
         parent.startScreenshotTimer()
-
-        self.autoCarousel.isHidden = true
-        self.userCarousel.isHidden = true
+        
+        // Hide some controls
+        let items: [NSView] = [
+            
+            autoSeperator,
+            autoNr,
+            autoNext,
+            autoPrev,
+            autoAction1,
+            autoAction2,
+            autoTrash,
+            autoText1,
+            autoText2,
+            
+            userSeperator,
+            userNr,
+            userNext,
+            userPrev,
+            userAction1,
+            userAction2,
+            userTrash,
+            userText1,
+            userText2
+        ]
+        
+        for item in items { item.isHidden = true }
 
         try? myDocument.persistScreenshots()
     }

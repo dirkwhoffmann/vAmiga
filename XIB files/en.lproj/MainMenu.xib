@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14868" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14868"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
     </dependencies>
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="NSApplication"/>
@@ -145,25 +145,22 @@
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
                             <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI">
                                 <connections>
-                                    <action selector="takeSnapshot:" target="-1" id="BVn-tv-ofw"/>
+                                    <action selector="takeUserSnapshotAction:" target="-1" id="eOH-IU-76n"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Take Screenshot" id="LS1-f4-bNu">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="takeUserScreenshotAction:" target="-1" id="7lf-XJ-INp"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse..." id="NXb-gr-Vem">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="browseStorageAction:" target="-1" id="TR2-ka-yJq"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="74">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
-                            <menuItem title="Save Screenshot..." id="2aL-ZH-0LC">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="saveScreenshotDialog:" target="-1" id="wgq-rs-LCi"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Quick Save Screenshot" keyEquivalent="s" id="7oe-oV-MnG">
-                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
-                                <connections>
-                                    <action selector="quicksaveScreenshot:" target="-1" id="3hD-6J-vdQ"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem isSeparatorItem="YES" id="542">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
                             <menuItem title="Page Setup…" keyEquivalent="P" id="77">
