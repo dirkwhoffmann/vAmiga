@@ -445,11 +445,10 @@ class StorageDialog: DialogController {
         let index = autoCarousel.currentItemIndex
         track("index = \(index)")
 
-        if snapshotView {
-            myDocument.autoSnapshots.remove(at: index)
-        } else {
+        snapshotView ?
+            myDocument.removeAutoSnapshot(at: index) :
             myDocument.removeAutoScreenshot(at: index)
-        }
+
         updateAutoCarousel()
     }
     
@@ -458,11 +457,10 @@ class StorageDialog: DialogController {
         let index = userCarousel.currentItemIndex
         track("index = \(index)")
         
-        if snapshotView {
-            myDocument.userSnapshots.remove(at: index)
-        } else {
+        snapshotView ?
+            myDocument.removeUserSnapshot(at: index) :
             myDocument.removeUserScreenshot(at: index)
-        }
+
         updateUserCarousel()
     }
     

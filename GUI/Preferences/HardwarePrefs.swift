@@ -88,7 +88,7 @@ extension PreferencesController {
         let chipRamLimit = amiga.agnus.chipRamLimit()
 
         if chipRamWanted > chipRamLimit {
-            myDocument?.showConfigurationAltert(ERR_CHIP_RAM_LIMIT)
+            parent.mydocument?.showConfigurationAltert(ERR_CHIP_RAM_LIMIT)
         } else {
             amiga.configure(VA_CHIP_RAM, value: sender.selectedTag())
         }

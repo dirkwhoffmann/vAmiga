@@ -143,24 +143,6 @@ class DiskMountDialog: DialogController {
     //
     // Action methods
     //
-
-    @IBAction func insertDiskAction(_ sender: NSButton!) {
-        
-        track("insertDiskAction df\(sender.tag)")
-
-        if displaysUserScreenshots && screenshotsModified {
-            try? myDocument.saveUserScreenshots()
-        }
-        if displaysAutoScreenshots && screenshotsModified {
-            try? myDocument.saveAutoScreenshots()
-        }
-
-        amiga.diskController.insert(sender.tag, adf: disk)
-        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
-
-        parent.renderer.rotateDown()
-        hideSheet()
-    }
     
     @IBAction func writeProtectAction(_ sender: NSButton!) {
         
@@ -212,6 +194,26 @@ class DiskMountDialog: DialogController {
         screenshotsModified = true
         updateCarousel()
     }
+    
+    @IBAction func insertDiskAction(_ sender: NSButton!) {
+        
+        track("insertDiskAction df\(sender.tag)")
+                
+        amiga.diskController.insert(sender.tag, adf: disk)
+        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
+        parent.renderer.rotateDown()
+     
+        hideSheet()
+        try? myDocument.persistScreenshots()
+    }
+    
+    @IBAction override func cancelAction(_ sender: Any!) {
+         
+         track()
+                         
+         hideSheet()
+         try? myDocument.persistScreenshots()
+     }
 }
 
 extension DiskMountDialog: NSWindowDelegate {

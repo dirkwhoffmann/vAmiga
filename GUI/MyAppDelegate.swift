@@ -17,18 +17,6 @@ var myAppDelegate: MyAppDelegate {
     return delegate!
 }
 
-/* The document of the currently active emulator instance.
- * This variable is global and can be accessed from anywhere in the Swift code.
- */
-var myDocument: MyDocument? {
-    if let doc = NSApplication.shared.orderedDocuments.first as? MyDocument {
-        return doc
-    } else {
-        track("No document object found. Returning nil.")
-        return nil
-    }
-}
-
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
  * to the Amiga keys. To make such a mapping work, we have to disable all

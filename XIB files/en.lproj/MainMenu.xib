@@ -160,19 +160,6 @@
                                     <action selector="browseStorageAction:" target="-1" id="TR2-ka-yJq"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="74">
-                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
-                            </menuItem>
-                            <menuItem title="Page Setup…" keyEquivalent="P" id="77">
-                                <connections>
-                                    <action selector="runPageLayout:" target="-1" id="87"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Print…" keyEquivalent="p" id="78">
-                                <connections>
-                                    <action selector="printDocument:" target="-1" id="200"/>
-                                </connections>
-                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

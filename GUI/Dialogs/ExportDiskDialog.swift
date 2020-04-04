@@ -30,7 +30,7 @@ class ExportDiskDialog: DialogController {
         if let win = parent.window {
             savePanel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
-                    myDocument?.export(drive: nr, to: self.savePanel.url)
+                    self.parent.mydocument?.export(drive: nr, to: self.savePanel.url)
                 }
             })
         }

@@ -310,7 +310,7 @@ extension MyController: NSMenuItemValidation {
             amiga.run()
 
         default:
-            myDocument?.showConfigurationAltert(amiga.readyToPowerOn())
+            mydocument?.showConfigurationAltert(amiga.readyToPowerOn())
         }
     }
 

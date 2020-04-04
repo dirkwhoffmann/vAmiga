@@ -35,9 +35,9 @@ class MyDocument: NSDocument {
     var amigaAttachment: AmigaFileProxy?
     
     // Snapshots
-    var autoSnapshots: [SnapshotProxy] = []
-    var userSnapshots: [SnapshotProxy] = []
-    var autoSnapshotCounter = 0
+    private(set) var autoSnapshots: [SnapshotProxy] = []
+    private(set) var userSnapshots: [SnapshotProxy] = []
+    private var autoSnapshotCounter = 0
     
     // Screenshots
     private(set) var autoScreenshots: [Screenshot] = []
@@ -311,22 +311,30 @@ class MyDocument: NSDocument {
         return itemToDelete
     }
     
-    private func thinOutAutoSnapshots() {
+    func removeAutoSnapshot(at index: Int) {
         
+        autoSnapshots.remove(at: index)
+    }
+    
+    func removeUserSnapshot(at index: Int) {
+        
+        userSnapshots.remove(at: index)
+    }
+    
+    func appendAutoSnapshot(_ newElement: SnapshotProxy) {
+        
+        autoSnapshots.append(newElement)
+        
+        // Thin out screenshots to limit growth
         if let index = thinOut(numItems: autoSnapshots.count,
                                counter: &autoSnapshotCounter) {
             autoSnapshots.remove(at: index)
         }
     }
     
-    func appendSnapshot(_ snapshot: SnapshotProxy, auto: Bool) {
+    func appendUserSnapshot(_ newElement: SnapshotProxy) {
         
-        if auto {
-            autoSnapshots.append(snapshot)
-            thinOutAutoSnapshots()
-        } else {
-            userSnapshots.append(snapshot)
-        }
+        userSnapshots.append(newElement)        
     }
     
     //

@@ -171,6 +171,7 @@ extension MyController {
         virtualKeyboardSheet?.showSheet(autoClose: true)
     }
     
+    /*
     @IBAction func printDocument(_ sender: Any!) {
     
         guard let window = mydocument?.windowForSheet else { return }
@@ -202,5 +203,5 @@ extension MyController {
                                 didRun: nil,
                                 contextInfo: nil)
     }
-    
+    */
 }
