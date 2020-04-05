@@ -593,6 +593,7 @@ extension MyController {
     
     @objc func screenshotTimerFunc() {
         
+        track()
         if autoScreenshots { takeAutoScreenshot() }
     }
         
@@ -769,11 +770,11 @@ extension MyController {
 
         case MSG_AUTO_SNAPSHOT_TAKEN:
             track("MSG_AUTO_SNAPSHOT_TAKEN")
-            mydocument!.appendAutoSnapshot(amiga.latestAutoSnapshot())
+            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot())
 
         case MSG_USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
-            mydocument!.appendUserSnapshot(amiga.latestUserSnapshot())
+            mydocument!.userSnapshots.append(amiga.latestUserSnapshot())
             renderer.blendIn(steps: 20)
             
         default:

@@ -35,17 +35,13 @@ class MyDocument: NSDocument {
     var amigaAttachment: AmigaFileProxy?
     
     // Snapshots
-    private(set) var autoSnapshots: [SnapshotProxy] = []
-    private(set) var userSnapshots: [SnapshotProxy] = []
-    private var autoSnapshotCounter = 0
-    
+    private(set) var autoSnapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
+    private(set) var userSnapshots = ManagedArray<SnapshotProxy>.init(capacity: Int.max)
+
     // Screenshots
-    private(set) var autoScreenshots: [Screenshot] = []
-    private(set) var userScreenshots: [Screenshot] = []
-    private var autoScreenshotCounter = 0
-    private var autoScreenshotsModified = false
-    private var userScreenshotsModified = false
-    
+    private(set) var autoScreenshots = ManagedArray<Screenshot>.init(capacity: 32)
+    private(set) var userScreenshots = ManagedArray<Screenshot>.init(capacity: Int.max)
+
     // Screenshots are associated the ADF file with this fingerprint
     var adfChecksum = UInt64(0) {
         willSet {
@@ -315,83 +311,15 @@ class MyDocument: NSDocument {
         return itemToDelete
     }
     
-    func removeAutoSnapshot(at index: Int) {
-        
-        autoSnapshots.remove(at: index)
-    }
-    
-    func removeUserSnapshot(at index: Int) {
-        
-        userSnapshots.remove(at: index)
-    }
-    
-    func appendAutoSnapshot(_ newElement: SnapshotProxy) {
-        
-        autoSnapshots.append(newElement)
-        
-        // Thin out screenshots to limit growth
-        if let index = thinOut(numItems: autoSnapshots.count,
-                               counter: &autoSnapshotCounter) {
-            autoSnapshots.remove(at: index)
-        }
-    }
-    
-    func appendUserSnapshot(_ newElement: SnapshotProxy) {
-        
-        userSnapshots.append(newElement)        
-    }
-    
     //
     // Screenshots
     //
     
-    func removeAutoScreenshot(at index: Int) {
-        
-        autoScreenshots.remove(at: index)
-        autoScreenshotsModified = true
-    }
-    
-    func removeUserScreenshot(at index: Int) {
-        
-        userScreenshots.remove(at: index)
-        userScreenshotsModified = true
-    }
-    
-    func swapAutoScreenshots(_ i: Int, _ j: Int) {
-        
-        autoScreenshots.swapAt(i, j)
-        autoScreenshotsModified = true
-    }
-
-    func swapUserScreenshots(_ i: Int, _ j: Int) {
-        
-        userScreenshots.swapAt(i, j)
-        userScreenshotsModified = true
-    }
-
-    func appendAutoScreenshot(_ newElement: Screenshot) {
-        
-        autoScreenshots.append(newElement)
-        autoScreenshotsModified = true
-        
-        // Thin out screenshots to limit growth
-        if let index = thinOut(numItems: autoScreenshots.count,
-                               counter: &autoScreenshotCounter) {
-            autoScreenshots.remove(at: index)
-        }
-    }
-
-    func appendUserScreenshot(_ newElement: Screenshot) {
-        
-        userScreenshots.append(newElement)
-        userScreenshotsModified = true
-    }
-             
     // Writes screenshots back to disk if needed
     func persistScreenshots() throws {
 
-        if autoScreenshotsModified { try saveAutoScreenshots() }
-        if userScreenshotsModified { try saveUserScreenshots() }
+        if autoScreenshots.modified { try saveAutoScreenshots() }
+        if userScreenshots.modified { try saveUserScreenshots() }
     }
 
     func saveAutoScreenshots() throws {
@@ -401,8 +329,9 @@ class MyDocument: NSDocument {
         let format = parent!.screenshotTarget
         
         Screenshot.deleteAutoFolder(checksum: adfChecksum)
+
         for n in 0 ..< autoScreenshots.count {
-            let data = autoScreenshots[n].screen?.representation(using: format)
+            let data = autoScreenshots.element(at: n)?.screen?.representation(using: format)
             if let url = Screenshot.newAutoUrl(checksum: adfChecksum, using: format) {
                 try data?.write(to: url, options: .atomic)
             }
@@ -417,7 +346,7 @@ class MyDocument: NSDocument {
         
         Screenshot.deleteUserFolder(checksum: adfChecksum)
         for n in 0 ..< userScreenshots.count {
-            let data = userScreenshots[n].screen?.representation(using: format)
+            let data = userScreenshots.element(at: n)?.screen?.representation(using: format)
             if let url = Screenshot.newUserUrl(checksum: adfChecksum, using: format) {
                 try data?.write(to: url, options: .atomic)
             }
@@ -434,7 +363,7 @@ class MyDocument: NSDocument {
         
         track("Loading auto screenshots from disk (\(adfChecksum))")
         
-        autoScreenshots = []
+        autoScreenshots.clear()
         for url in Screenshot.collectAutoFiles(checksum: adfChecksum) {
             if let screenshot = Screenshot.init(fromUrl: url) {
                 autoScreenshots.append(screenshot)
@@ -448,7 +377,7 @@ class MyDocument: NSDocument {
         
         track("Loading user screenshots from disk (\(adfChecksum))")
         
-        userScreenshots = []
+        userScreenshots.clear()
         for url in Screenshot.collectUserFiles(checksum: adfChecksum) {
             if let screenshot = Screenshot.init(fromUrl: url) {
                 userScreenshots.append(screenshot)

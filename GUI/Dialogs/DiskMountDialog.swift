@@ -156,10 +156,10 @@ class DiskMountDialog: DialogController {
         track("leftAction: \(index)")
         
         if displaysUserScreenshots, index > 0 {
-            myDocument.swapUserScreenshots(index, index - 1)
+            myDocument.userScreenshots.swapAt(index, index - 1)
         }
         if displaysAutoScreenshots, index > 0 {
-            myDocument.swapAutoScreenshots(index, index - 1)
+            myDocument.autoScreenshots.swapAt(index, index - 1)
         }
         screenshotsModified = true
         updateCarousel(goto: index - 1, animated: true)
@@ -171,10 +171,10 @@ class DiskMountDialog: DialogController {
         track("rightAction: \(index)")
         
         if displaysUserScreenshots, index < numUserScreenshots - 1 {
-            myDocument.swapUserScreenshots(index, index + 1)
+            myDocument.userScreenshots.swapAt(index, index + 1)
         }
         if displaysAutoScreenshots, index < numAutoScreenshots - 1 {
-            myDocument.swapAutoScreenshots(index, index + 1)
+            myDocument.autoScreenshots.swapAt(index, index + 1)
         }
         screenshotsModified = true
         updateCarousel(goto: index + 1, animated: true)
@@ -186,10 +186,10 @@ class DiskMountDialog: DialogController {
         track("middleAction: \(index)")
         
         if displaysUserScreenshots {
-            myDocument.removeUserScreenshot(at: index)
+            myDocument.userScreenshots.remove(at: index)
         }
         if displaysAutoScreenshots {
-            myDocument.removeAutoScreenshot(at: index)
+            myDocument.autoScreenshots.remove(at: index)
         }
         screenshotsModified = true
         updateCarousel()
@@ -253,11 +253,11 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         if numUserScreenshots > 0 {
             assert(index < numUserScreenshots)
             itemView.image =
-                myDocument.userScreenshots[index].screen?.roundCorners()
+                myDocument.userScreenshots.element(at: index)?.screen?.roundCorners()
         } else {
             assert(index < numAutoScreenshots)
             itemView.image =
-                myDocument.autoScreenshots[index].screen?.roundCorners()
+                myDocument.autoScreenshots.element(at: index)?.screen?.roundCorners()
         }
         
         return itemView

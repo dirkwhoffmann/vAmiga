@@ -32,14 +32,18 @@ extension MyController {
     
     func restoreSnapshot(item: Int, auto: Bool) -> Bool {
         
-        if auto && item < mydocument!.autoSnapshots.count {
-            amiga.load(fromSnapshot: mydocument!.autoSnapshots[item])
-            return true
+        if auto {
+            if let snapshot = mydocument!.autoSnapshots.element(at: item) {
+                amiga.load(fromSnapshot: snapshot)
+                return true
+            }
+        } else {
+            if let snapshot = mydocument!.userSnapshots.element(at: item) {
+                amiga.load(fromSnapshot: snapshot)
+                return true
+            }
         }
-        if !auto && item < mydocument!.userSnapshots.count {
-            amiga.load(fromSnapshot: mydocument!.userSnapshots[item])
-            return true
-        }
+
         return false
     }
     
@@ -54,18 +58,14 @@ extension MyController {
     
     func restoreLatestAutoSnapshot() -> Bool {
         
-        if mydocument!.autoSnapshots.count > 0 {
-            return restoreAutoSnapshot(item: mydocument!.autoSnapshots.count - 1)
-        }
-        return false
+        let count = mydocument!.autoSnapshots.count
+        return count > 0 ? restoreAutoSnapshot(item: count - 1) : false
     }
     
     func restoreLatestUserSnapshot() -> Bool {
         
-        if mydocument!.userSnapshots.count > 0 {
-            return restoreUserSnapshot(item: mydocument!.userSnapshots.count - 1)
-        }
-        return false
+        let count = mydocument!.userSnapshots.count
+        return count > 0 ? restoreUserSnapshot(item: count - 1) : false
     }
 
     //
@@ -74,6 +74,7 @@ extension MyController {
     
     func takeScreenshot(auto: Bool) {
         
+        track()
         let upscaled = screenshotSource > 0
         
         // Take screenshot
@@ -84,8 +85,8 @@ extension MyController {
         let screenshot = Screenshot.init(screen: screen, format: screenshotTarget)
         
         auto ?
-            mydocument!.appendAutoScreenshot(screenshot) :
-            mydocument!.appendUserScreenshot(screenshot)
+            mydocument!.autoScreenshots.append(screenshot) :
+            mydocument!.userScreenshots.append(screenshot)
     }
     
     func takeAutoScreenshot() { takeScreenshot(auto: true) }
