@@ -117,12 +117,22 @@ extension MyController {
     
     @IBAction func restoreLatestAutoSnapshotAction(_ sender: Any!) {
         
-        if !restoreLatestAutoSnapshot() { NSSound.beep() }
+        if !restoreLatestAutoSnapshot() {
+            NSSound.beep()
+            return
+        }
+        
+        renderer.blendIn(steps: 20)
     }
     
     @IBAction func restoreLatestUserSnapshotAction(_ sender: Any!) {
         
-        if !restoreLatestUserSnapshot() { NSSound.beep() }
+        if !restoreLatestUserSnapshot() {
+            NSSound.beep()
+            return
+        }
+        
+        renderer.blendIn(steps: 20)
     }
         
     @IBAction func takeUserScreenshotAction(_ sender: Any!) {

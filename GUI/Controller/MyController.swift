@@ -269,32 +269,11 @@ class MyController: NSWindowController, MessageReceiver {
     // Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
-    /*
-    var takeAutoSnapshots: Bool {
-        get { return amiga.takeAutoSnapshots() }
-        set { amiga.setTakeAutoSnapshots(newValue) }
-    }
-    var snapshotInterval: Int {
-        get { return amiga.snapshotInterval() }
-        set { amiga.setSnapshotInterval(newValue) }
-    }
-    */
-
     var autoSnapshots = Defaults.autoSnapshots
-    var snapshotInterval = 0 {
-        didSet {
-            snapshotTimer?.invalidate()
-            startSnapshotTimer()
-        }
-    }
+    var snapshotInterval = 0 { didSet { startSnapshotTimer() } }
 
     var autoScreenshots = Defaults.autoScreenshots
-    var screenshotInterval = 0 {
-        didSet {
-            screenshotTimer?.invalidate()
-            startScreenshotTimer()
-        }
-    }
+    var screenshotInterval = 0 { didSet { startScreenshotTimer() } }
 
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
@@ -302,18 +281,12 @@ class MyController: NSWindowController, MessageReceiver {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
-    /*
-    func startSnapshotTimer() {
-        amiga.resumeAutoSnapshots()
-    }
     
-    func stopSnapshotTimer() {
-       amiga.suspendAutoSnapshots()
-    }
-    */
     func startSnapshotTimer() {
-        /*
-        if autoSnapshots && snapshotInterval > 0 {
+        
+        if snapshotInterval > 0 {
+            
+            snapshotTimer?.invalidate()
             snapshotTimer =
                 Timer.scheduledTimer(timeInterval: TimeInterval(snapshotInterval),
                                      target: self,
@@ -321,21 +294,18 @@ class MyController: NSWindowController, MessageReceiver {
                                      userInfo: nil,
                                      repeats: true)
         }
-        */
-        snapshotTimer =
-            Timer.scheduledTimer(timeInterval: TimeInterval(3),
-                                 target: self,
-                                 selector: #selector(snapshotTimerFunc),
-                                 userInfo: nil,
-                                 repeats: true)
-    }
-
-    func stopSnapshotTimer() {
-        snapshotTimer?.invalidate()
     }
     
+    func stopSnapshotTimer() {
+        
+        snapshotTimer?.invalidate()
+    }
+            
     func startScreenshotTimer() {
-        if autoScreenshots && screenshotInterval > 0 {
+        
+        if snapshotInterval > 0 {
+            
+            screenshotTimer?.invalidate()
             screenshotTimer =
                 Timer.scheduledTimer(timeInterval: TimeInterval(screenshotInterval),
                                      target: self,
@@ -346,6 +316,7 @@ class MyController: NSWindowController, MessageReceiver {
     }
     
     func stopScreenshotTimer() {
+        
         screenshotTimer?.invalidate()
     }
     
@@ -615,8 +586,15 @@ extension MyController {
         timerLock.unlock()
     }
 
-    @objc func snapshotTimerFunc() { takeAutoSnapshot() }
-    @objc func screenshotTimerFunc() { takeAutoScreenshot() }
+    @objc func snapshotTimerFunc() {
+
+        if autoSnapshots { takeAutoSnapshot() }
+    }
+    
+    @objc func screenshotTimerFunc() {
+        
+        if autoScreenshots { takeAutoScreenshot() }
+    }
         
     func processMessage(_ msg: Message) {
 
@@ -763,15 +741,18 @@ extension MyController {
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
-
-            track()
-
-            // Store checksum for disk in df0 (needed for screenshot management)
+            
+            track("MSG_DISK_INSERT")
+            if msg.data == 0 { mydocument?.adfChecksum = amiga.df0.fnv() }
+            refreshStatusBar()
+            
+        case MSG_DISK_EJECT:
+            
+            track("MSG_DISK_EJECT")
             if msg.data == 0 { mydocument?.adfChecksum = amiga.df0.fnv() }
             refreshStatusBar()
             
         case MSG_DISK_INSERTED,
-             MSG_DISK_EJECT,
              MSG_DISK_EJECTED,
              MSG_DISK_UNSAVED,
              MSG_DISK_SAVED,
@@ -786,13 +767,14 @@ extension MyController {
         case MSG_SER_OUT:
             serialOut += String(UnicodeScalar.init(msg.data & 0xFF)!)
 
-        case MSG_USERSNAPSHOT_LOADED,
-             MSG_USERSNAPSHOT_SAVED,
-             MSG_AUTOSNAPSHOT_LOADED:
-            renderer.blendIn(steps: 20)
+        case MSG_AUTO_SNAPSHOT_TAKEN:
+            track("MSG_AUTO_SNAPSHOT_TAKEN")
+            mydocument!.appendAutoSnapshot(amiga.latestAutoSnapshot())
 
-        case MSG_AUTOSNAPSHOT_SAVED:
-            break
+        case MSG_USER_SNAPSHOT_TAKEN:
+            track("MSG_USER_SNAPSHOT_TAKEN")
+            mydocument!.appendUserSnapshot(amiga.latestUserSnapshot())
+            renderer.blendIn(steps: 20)
             
         default:
             track("Unknown message: \(msg)")

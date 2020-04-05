@@ -1117,7 +1117,6 @@ struct ADFFileWrapper { ADFFile *adf; };
     proxy->preview = NULL;
     
     return proxy;
-    // return [[self alloc] initWithFile:snapshot];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
@@ -1432,7 +1431,24 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->resume();
 }
-
+- (void) requestAutoSnapshot
+{
+    wrapper->amiga->requestAutoSnapshot();
+}
+- (void) requestUserSnapshot
+{
+    wrapper->amiga->requestUserSnapshot();
+}
+- (SnapshotProxy *) latestAutoSnapshot
+{
+    Snapshot *snapshot = wrapper->amiga->latestAutoSnapshot();
+    return [SnapshotProxy make:snapshot];
+}
+- (SnapshotProxy *) latestUserSnapshot
+{
+    Snapshot *snapshot = wrapper->amiga->latestUserSnapshot();
+    return [SnapshotProxy make:snapshot];
+}
 - (AmigaConfiguration) config
 {
     return wrapper->amiga->getConfig();

@@ -176,32 +176,9 @@ private:
     
 private:
     
-    // Indicates if snapshots should be taken automatically
-    bool takeAutoSnapshots = true;
-    
-    /* Time in seconds between two auto-saved snapshots.
-     * This value only takes effect if takeAutoSnapshots equals true.
-     */
-    long autoSnapshotInterval = 3;
-    
-    // Maximum number of stored snapshots
-    static const size_t MAX_SNAPSHOTS = 32;
-    
-    // Storage for auto-taken snapshots
-    // vector<Snapshot *> autoSnapshots;
-    
-    // Storage for user-taken snapshots
-    // vector<Snapshot *> userSnapshots;
+    Snapshot *autoSnapshot = NULL;
+    Snapshot *userSnapshot = NULL;
 
-    
-    //
-    // Debugging
-    //
-    
-public:
-    
-    bool debugDMA = false; // REMOVE AFTER DEBUGGING
-    
     
     //
     // Constructing and serializing
@@ -306,7 +283,6 @@ public:
     // Removed the currently set inspection target
     void clearInspectionTarget();
     
-
     //
     // Controlling the emulation thread
     //
@@ -340,7 +316,8 @@ public:
     void clearControlFlags(u32 flags);
     
     // Convenience wrappers for controlling the run loop
-    void signalSnapshot() { setControlFlags(RL_SNAPSHOT); }
+    void signalAutoSnapshot() { setControlFlags(RL_AUTO_SNAPSHOT); }
+    void signalUserSnapshot() { setControlFlags(RL_USER_SNAPSHOT); }
     void signalInspect() { setControlFlags(RL_INSPECT); }
     void signalStop() { setControlFlags(RL_STOP); }
 
@@ -455,6 +432,18 @@ public:
     
 public:
     
+    /* Requests a snapshot to be taken
+     * Once the snapshot is ready, a message is written into the message queue.
+     * The snapshot can then be picked up by calling latestAutoSnapshot() or
+     * latestUserSnapshot(), depending on the requested snapshot type.
+     */
+    void requestAutoSnapshot();
+    void requestUserSnapshot();
+     
+    // Returns the most recent snapshot or NULL if none was taken
+    Snapshot *latestAutoSnapshot();
+    Snapshot *latestUserSnapshot();
+
     /* Loads the current state from a snapshot file
      * There is an thread-unsafe and thread-safe version of this function. The
      * first one can be unsed inside the emulator thread or from outside if the

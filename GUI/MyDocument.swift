@@ -49,7 +49,11 @@ class MyDocument: NSDocument {
     // Screenshots are associated the ADF file with this fingerprint
     var adfChecksum = UInt64(0) {
         willSet {
-            if newValue != adfChecksum { try? persistScreenshots() }
+            track("Will set: \(adfChecksum) \(newValue)")
+            if newValue != adfChecksum {
+                track("New ADF checksum: \(newValue)")
+                try? persistScreenshots()
+            }
         }
         didSet {
             if oldValue != adfChecksum { try? loadScreenshots() }

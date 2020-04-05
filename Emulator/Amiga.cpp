@@ -795,6 +795,54 @@ Amiga::synchronizeTiming()
 }
 
 void
+Amiga::requestAutoSnapshot()
+{
+    if (!isRunning()) {
+
+        // Take snapshot immediately
+        autoSnapshot = Snapshot::makeWithAmiga(this);
+        putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+        
+    } else {
+
+        // Schedule the snapshot to be taken
+        signalAutoSnapshot();
+    }
+}
+
+void
+Amiga::requestUserSnapshot()
+{
+    if (!isRunning()) {
+        
+        // Take snapshot immediately
+        userSnapshot = Snapshot::makeWithAmiga(this);
+        putMessage(MSG_USER_SNAPSHOT_TAKEN);
+        
+    } else {
+        
+        // Schedule the snapshot to be taken
+        signalUserSnapshot();
+    }
+}
+
+Snapshot *
+Amiga::latestAutoSnapshot()
+{
+    Snapshot *result = autoSnapshot;
+    autoSnapshot = NULL;
+    return result;
+}
+
+Snapshot *
+Amiga::latestUserSnapshot()
+{
+    Snapshot *result = userSnapshot;
+    userSnapshot = NULL;
+    return result;
+}
+
+void
 Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
 {
     u8 *ptr;
@@ -886,17 +934,17 @@ Amiga::runLoop()
         if (runLoopCtrl) {
             
             // Are we requested to take a snapshot?
-            if (runLoopCtrl & RL_SNAPSHOT) {
-                // TODO:
-                // In the current implementation, the GUI takes a snapshot
-                // by suspending and resuming the emulator. This might cause
-                // a noticable delay, because the emulator thread get halted
-                // and restarted. As an alternative, the GUI could request
-                // a snapshot via signalSnapshot(). The screenshot will be
-                // taken here and the GUI be notified via the message queue
-                clearControlFlags(RL_SNAPSHOT);
+            if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
+                autoSnapshot = Snapshot::makeWithAmiga(this);
+                putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+                clearControlFlags(RL_AUTO_SNAPSHOT);
             }
-            
+            if (runLoopCtrl & RL_USER_SNAPSHOT) {
+                userSnapshot = Snapshot::makeWithAmiga(this);
+                putMessage(MSG_USER_SNAPSHOT_TAKEN);
+                clearControlFlags(RL_USER_SNAPSHOT);
+            }
+
             // Are we requested to update the debugger info structs?
             if (runLoopCtrl & RL_INSPECT) {
                 inspect();

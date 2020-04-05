@@ -128,6 +128,11 @@ struct AmigaFileWrapper;
 - (void) suspend;
 - (void) resume;
 
+- (void) requestAutoSnapshot;
+- (void) requestUserSnapshot;
+- (SnapshotProxy *) latestAutoSnapshot;
+- (SnapshotProxy *) latestUserSnapshot;
+
 - (AmigaConfiguration) config;
 - (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
 - (BOOL) configure:(ConfigOption)option enable:(BOOL)value;

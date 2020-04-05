@@ -9,7 +9,7 @@
 
 class StorageDialog: DialogController {
     
-    var now: Date = Date()
+    var now: Date!
 
     @IBOutlet weak var selector: NSSegmentedControl!
 
@@ -71,6 +71,8 @@ class StorageDialog: DialogController {
     override func sheetDidShow() {
   
         track()
+        
+        now = Date()
         
         parent.stopSnapshotTimer()
         parent.stopScreenshotTimer()

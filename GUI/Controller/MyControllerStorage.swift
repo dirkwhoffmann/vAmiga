@@ -15,6 +15,7 @@ extension MyController {
     // Snapshots
     //
     
+    /*
     func takeSnapshot(auto: Bool) {
         
         if let s = SnapshotProxy.make(withAmiga: amiga) {
@@ -24,10 +25,11 @@ extension MyController {
                 mydocument?.appendUserSnapshot(s)
         }
     }
+    */
     
-    func takeAutoSnapshot() { takeSnapshot(auto: true) }
-    func takeUserSnapshot() { takeSnapshot(auto: false) }
-
+    func takeAutoSnapshot() { amiga.requestAutoSnapshot() }
+    func takeUserSnapshot() { amiga.requestUserSnapshot() }
+    
     func restoreSnapshot(item: Int, auto: Bool) -> Bool {
         
         if auto && item < mydocument!.autoSnapshots.count {

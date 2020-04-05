@@ -36,7 +36,7 @@ class DiskMountDialog: DialogController {
     }
     var numScreenshots: Int {
         if numUserScreenshots > 0 { return numUserScreenshots }
-        if numAutoScreenshots > 0 { return numAutoScreenshots }
+        // if numAutoScreenshots > 0 { return numAutoScreenshots }
         return 0
     }
     var displaysUserScreenshots: Bool {
@@ -204,7 +204,6 @@ class DiskMountDialog: DialogController {
         parent.renderer.rotateDown()
      
         hideSheet()
-        try? myDocument.persistScreenshots()
     }
     
     @IBAction override func cancelAction(_ sender: Any!) {

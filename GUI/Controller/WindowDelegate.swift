@@ -45,17 +45,24 @@ extension MyController: NSWindowDelegate {
         
         track()
 
-        // Close open auxiliary windows
+        // Write back screenshot cache
+        try? mydocument!.persistScreenshots()
+        
+        // Close auxiliary windows
         inspector?.close()
         monitor?.close()
         virtualKeyboardSheet?.close()
 
-        // Stop timer
+        // Stop timers
         timerLock.lock()
         timer?.invalidate()
         timer = nil
         timerLock.unlock()
-
+        snapshotTimer?.invalidate()
+        snapshotTimer = nil
+        screenshotTimer?.invalidate()
+        screenshotTimer = nil
+        
         // Disconnect the audio engine
         audioEngine.shutDown()
 

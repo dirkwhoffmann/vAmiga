@@ -643,9 +643,9 @@ extension Defaults {
     
     // Snapshots and Screenshots
     static let autoSnapshots          = true
-    static let autoSnapshotInterval   = 3
+    static let autoSnapshotInterval   = 20
     static let autoScreenshots        = true
-    static let autoScreenshotInterval = 3
+    static let autoScreenshotInterval = 10
     static let screenshotSource       = 0
     static let screenshotTarget       = NSBitmapImageRep.FileType.png
 
