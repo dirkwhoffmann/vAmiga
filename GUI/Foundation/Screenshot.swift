@@ -99,15 +99,14 @@ class Screenshot {
         try data?.write(to: url, options: .atomic)
     }
     
-    static func folder(auto: Bool, checksum: UInt64) -> URL? {
+    static func folder(forDisk diskID: UInt64) -> URL? {
         
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
         guard let support = fm.urls(for: path, in: mask).first else { return nil }
-        let dir = auto ? "auto" : "user"
-        let subdir = String(format: "%X", checksum)
-        let folder = support.appendingPathComponent("vAmiga/\(dir)/\(subdir)")
+        let subdir = String(format: "%8X", diskID)
+        let folder = support.appendingPathComponent("vAmiga/Screenshots/\(subdir)")
         var isDirectory: ObjCBool = false
         let folderExists = fm.fileExists(atPath: folder.path,
                                          isDirectory: &isDirectory)
@@ -125,15 +124,7 @@ class Screenshot {
         
         return folder
     }
-    
-    static func userFolder(checksum: UInt64) -> URL? {
-        return Screenshot.folder(auto: false, checksum: checksum)
-    }
-    
-    static func autoFolder(checksum: UInt64) -> URL? {
-        return Screenshot.folder(auto: true, checksum: checksum)
-    }
-    
+        
     static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {
         
         let url = name.addExtension(for: type)
@@ -153,15 +144,7 @@ class Screenshot {
         
         return nil
     }
-    
-    static func userUrl(forItem item: Int, checksum: UInt64) -> URL? {
-        return Screenshot.url(forItem: item, in: Screenshot.userFolder(checksum: checksum))
-    }
-    
-    static func autoUrl(forItem item: Int, checksum: UInt64) -> URL? {
-        return Screenshot.url(forItem: item, in: Screenshot.autoFolder(checksum: checksum))
-    }
-    
+        
     static func newUrl(in folder: URL?,
                        using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
         
@@ -180,22 +163,11 @@ class Screenshot {
         return nil
     }
     
-    static func newUserUrl(checksum: UInt64,
+    static func newUrl(diskID: UInt64,
                            using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
 
-        let folder = Screenshot.userFolder(checksum: checksum)
+        let folder = Screenshot.folder(forDisk: diskID)
         return Screenshot.newUrl(in: folder, using: format)
-    }
-    
-    static func newAutoUrl(checksum: UInt64,
-                           using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
-        
-        let folder = Screenshot.autoFolder(checksum: checksum)
-        return Screenshot.newUrl(in: folder, using: format)
-    }
-    
-    static func newUrl(checksum: UInt64, auto: Bool) -> URL? {
-        return auto ? newAutoUrl(checksum: checksum) : newUserUrl(checksum: checksum)
     }
     
     static func collectFiles(in folder: URL?) -> [URL] {
@@ -212,33 +184,23 @@ class Screenshot {
         }
         return result
     }
-    
-    static func collectUserFiles(checksum: UInt64) -> [URL] {
-        
-        return Screenshot.collectFiles(in: Screenshot.userFolder(checksum: checksum))
-    }
-    
-    static func collectAutoFiles(checksum: UInt64) -> [URL] {
-        
-        return Screenshot.collectFiles(in: Screenshot.autoFolder(checksum: checksum))
-    }
 
-    static func delete(folder: URL?) {
+    static func collectFiles(forDisk diskID: UInt64) -> [URL] {
         
-        let files = Screenshot.collectFiles(in: folder)
+        return collectFiles(in: folder(forDisk: diskID))
+    }
+    
+    static func deleteFolder(withUrl url: URL?) {
+        
+        let files = Screenshot.collectFiles(in: url)
         for file in files {
             try? FileManager.default.removeItem(at: file)
         }
     }
-    
-    static func deleteUserFolder(checksum: UInt64) {
+
+    static func deleteFolder(forDisk diskID: UInt64) {
         
-        Screenshot.delete(folder: Screenshot.userFolder(checksum: checksum))
+        deleteFolder(withUrl: folder(forDisk: diskID))
     }
-    
-    static func deleteAutoFolder(checksum: UInt64) {
-        
-        track()
-        Screenshot.delete(folder: Screenshot.autoFolder(checksum: checksum))
-    }
+
 }

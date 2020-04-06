@@ -318,78 +318,35 @@ class MyDocument: NSDocument {
     // Writes screenshots back to disk if needed
     func persistScreenshots() throws {
 
-        if autoScreenshots.modified { try saveAutoScreenshots() }
-        if userScreenshots.modified { try saveUserScreenshots() }
+        if userScreenshots.modified { try saveScreenshots() }
     }
 
-    func saveAutoScreenshots() throws {
-        
-        track("Saving auto screenshots to disk (\(adfChecksum))")
-
-        let format = parent!.screenshotTarget
-        
-        Screenshot.deleteAutoFolder(checksum: adfChecksum)
-
-        for n in 0 ..< autoScreenshots.count {
-            let data = autoScreenshots.element(at: n)?.screen?.representation(using: format)
-            if let url = Screenshot.newAutoUrl(checksum: adfChecksum, using: format) {
-                try data?.write(to: url, options: .atomic)
-            }
-        }
-    }
-    
-    func saveUserScreenshots() throws {
+    func saveScreenshots() throws {
         
         track("Saving user screenshots to disk (\(adfChecksum))")
         
         let format = parent!.screenshotTarget
         
-        Screenshot.deleteUserFolder(checksum: adfChecksum)
+        Screenshot.deleteFolder(forDisk: adfChecksum)
         for n in 0 ..< userScreenshots.count {
             let data = userScreenshots.element(at: n)?.screen?.representation(using: format)
-            if let url = Screenshot.newUserUrl(checksum: adfChecksum, using: format) {
+            if let url = Screenshot.newUrl(diskID: adfChecksum, using: format) {
                 try data?.write(to: url, options: .atomic)
             }
         }
     }
-    
-    func saveScreenshots() throws {
-
-        try saveAutoScreenshots()
-        try saveUserScreenshots()
-    }
-    
-    func loadAutoScreenshots() throws {
         
-        track("Loading auto screenshots from disk (\(adfChecksum))")
+    func loadScreenshots() throws {
         
-        autoScreenshots.clear()
-        for url in Screenshot.collectAutoFiles(checksum: adfChecksum) {
-            if let screenshot = Screenshot.init(fromUrl: url) {
-                autoScreenshots.append(screenshot)
-            }
-        }
-        
-        track("\(autoScreenshots.count) auto screenshots loaded")
-    }
-    
-    func loadUserScreenshots() throws {
-        
-        track("Loading user screenshots from disk (\(adfChecksum))")
+        track("Loading screenshots for disk (\(adfChecksum))")
         
         userScreenshots.clear()
-        for url in Screenshot.collectUserFiles(checksum: adfChecksum) {
+        for url in Screenshot.collectFiles(forDisk: adfChecksum) {
             if let screenshot = Screenshot.init(fromUrl: url) {
                 userScreenshots.append(screenshot)
             }
         }
         
-        track("\(userScreenshots.count) user screenshots loaded")
-    }
-    
-    func loadScreenshots() throws {
-
-        try loadAutoScreenshots()
-        try loadUserScreenshots()
+        track("\(userScreenshots.count) screenshots loaded")
     }
 }

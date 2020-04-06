@@ -11,9 +11,6 @@ class SnapshotDialog: DialogController {
     
     var now: Date!
 
-    @IBOutlet weak var selector: NSSegmentedControl!
-
-    @IBOutlet weak var autoLabel: NSTextField!
     @IBOutlet weak var autoSeperator: NSBox!
     @IBOutlet weak var autoCarousel: iCarousel!
     @IBOutlet weak var autoPrev: NSButton!
@@ -24,10 +21,7 @@ class SnapshotDialog: DialogController {
     @IBOutlet weak var autoNr: NSTextField!
     @IBOutlet weak var autoText1: NSTextField!
     @IBOutlet weak var autoText2: NSTextField!
-    @IBOutlet weak var autoFinderLabel: NSTextField!
-    @IBOutlet weak var autoFinderButton: NSButton!
     
-    @IBOutlet weak var userLabel: NSTextField!
     @IBOutlet weak var userSeperator: NSBox!
     @IBOutlet weak var userCarousel: iCarousel!
     @IBOutlet weak var userPrev: NSButton!
@@ -38,11 +32,7 @@ class SnapshotDialog: DialogController {
     @IBOutlet weak var userNr: NSTextField!
     @IBOutlet weak var userText1: NSTextField!
     @IBOutlet weak var userText2: NSTextField!
-    @IBOutlet weak var userFinderLabel: NSTextField!
-    @IBOutlet weak var userFinderButton: NSButton!
-
-    @IBOutlet weak var moveToUser: NSButton!
-
+ 
     let carouselType = iCarouselType.timeMachine //   coverFlow
     
     // Fingerprint of disk in df0
@@ -50,12 +40,8 @@ class SnapshotDialog: DialogController {
     
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
-    var snapshotView: Bool { return selector.selectedSegment == 0 }
-    var screenshotView: Bool { return selector.selectedSegment == 1 }
     var autoIndex: Int { return autoCarousel.currentItemIndex }
     var userIndex: Int { return userCarousel.currentItemIndex }
-    var autoFolder: URL? { return Screenshot.autoFolder(checksum: checksum) }
-    var userFolder: URL? { return Screenshot.userFolder(checksum: checksum) }
     var autoSelection: Int { return autoCarousel.currentItemIndex }
     var userSelection: Int { return userCarousel.currentItemIndex }
     var numAutoItems: Int { return autoCarousel.numberOfItems }
@@ -93,7 +79,7 @@ class SnapshotDialog: DialogController {
         autoNext.isEnabled = autoIndex >= 0 && autoIndex < lastAutoItem
         autoPrev.isEnabled = autoIndex > 0
 
-        snapshotView ? updateAutoSnapshotLabels() : updateAutoScreenshotLabels()
+        updateAutoSnapshotLabels()
         
         let autoItems: [NSView] = [
             autoSeperator,
@@ -114,7 +100,7 @@ class SnapshotDialog: DialogController {
         userNext.isEnabled = userIndex >= 0 && userIndex < lastUserItem
         userPrev.isEnabled = userIndex > 0
         
-        snapshotView ? updateUserSnapshotLabels() : updateUserScreenshotLabels()
+        updateUserSnapshotLabels()
 
         let userItems: [NSView] = [
             userSeperator,
@@ -131,20 +117,10 @@ class SnapshotDialog: DialogController {
     }
     
     func updateAutoSnapshotLabels() {
-        
-        moveToUser.isHidden = true
-        
-        autoLabel.stringValue = "Automatically saved snapshots"
-        autoTrash.toolTip = "Delete snapshot"
+                
         autoTrash.isEnabled = autoIndex >= 0
-        autoAction1.image = NSImage.init(named: "restoreTemplate")
-        autoAction1.toolTip = "Restore snapshot"
         autoAction1.isEnabled = autoIndex >= 0
-        autoAction2.image = NSImage.init(named: "saveTemplate")
-        autoAction2.toolTip = "Save snapshot to disk"
         autoAction2.isEnabled = autoIndex >= 0
-        autoFinderButton.isHidden = true
-        autoFinderLabel.isHidden = true
         
         if let snapshot = myDocument.autoSnapshots.element(at: autoIndex) {
             
@@ -165,17 +141,9 @@ class SnapshotDialog: DialogController {
     
     func updateUserSnapshotLabels() {
         
-        userLabel.stringValue = "Manually saved snapshots"
-        userTrash.toolTip = "Delete snapshot"
         userTrash.isEnabled = userIndex >= 0
-        userAction1.image = NSImage.init(named: "restoreTemplate")
-        userAction1.toolTip = "Restore snapshot"
         userAction1.isEnabled = userIndex >= 0
-        userAction2.image = NSImage.init(named: "saveTemplate")
-        userAction2.toolTip = "Save snapshot to disk"
         userAction2.isEnabled = userIndex >= 0
-        userFinderButton.isHidden = true
-        userFinderLabel.isHidden = true
         
         if let snapshot = myDocument.userSnapshots.element(at: userIndex) {
             
@@ -194,68 +162,6 @@ class SnapshotDialog: DialogController {
         }
     }
     
-    func updateAutoScreenshotLabels() {
-        
-        moveToUser.isHidden = false
-        
-        autoLabel.stringValue = "Automatically saved screenshots"
-        autoTrash.toolTip = "Delete screenshot"
-        autoTrash.isEnabled = autoIndex >= 0
-        autoAction1.image = NSImage.init(named: "backTemplate")
-        autoAction1.toolTip = "Move screenshot down"
-        autoAction1.isEnabled = autoIndex > 0
-        autoAction2.image = NSImage.init(named: "frontTemplate")
-        autoAction2.toolTip = "Move screenshot up"
-        autoAction2.isEnabled = autoIndex < numAutoItems - 1
-        autoFinderButton.isHidden = false
-        autoFinderLabel.isHidden = false
-
-        if let screenshot = myDocument.autoScreenshots.element(at: autoIndex) {
-            
-            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-            autoNr.textColor = .labelColor
-            autoText1.stringValue = screenshot.sizeString
-            autoText2.stringValue = screenshot.description
-            
-        } else {
-            
-            autoNr.stringValue = "No screenshots available"
-            autoNr.textColor = .secondaryLabelColor
-            autoText1.stringValue = ""
-            autoText2.stringValue = ""
-        }
-    }
-    
-    func updateUserScreenshotLabels() {
-        
-        userLabel.stringValue = "Manually saved screenshots"
-        userTrash.toolTip = "Delete screenshot"
-        userTrash.isEnabled = userIndex >= 0
-        userAction1.image = NSImage.init(named: "backTemplate")
-        userAction1.toolTip = "Move screenshot down"
-        userAction1.isEnabled = userIndex > 0
-        userAction2.image = NSImage.init(named: "frontTemplate")
-        userAction2.toolTip = "Move screenshot up"
-        userAction2.isEnabled = userIndex < numUserItems - 1
-        userFinderButton.isHidden = false
-        userFinderLabel.isHidden = false
-        
-        if let screenshot = myDocument.userScreenshots.element(at: userIndex) {
-            
-            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-            userNr.textColor = .labelColor
-            userText1.stringValue = screenshot.sizeString
-            userText2.stringValue = screenshot.description
-            
-        } else {
-            
-            userNr.stringValue = "No screenshots available"
-            userNr.textColor = .secondaryLabelColor
-            userText1.stringValue = ""
-            userText2.stringValue = ""
-        }
-    }
-
     func updateCarousel(carousel: iCarousel, goto item: Int, animated: Bool) {
         
         carousel.reloadData()
@@ -411,24 +317,14 @@ class SnapshotDialog: DialogController {
     @IBAction func autoTrashAction(_ sender: NSButton!) {
         
         let index = autoCarousel.currentItemIndex
-        track("index = \(index)")
-
-        snapshotView ?
-            myDocument.autoSnapshots.remove(at: index) :
-            myDocument.autoScreenshots.remove(at: index)
-
+        myDocument.autoSnapshots.remove(at: index)
         updateAutoCarousel()
     }
     
     @IBAction func userTrashAction(_ sender: NSButton!) {
         
         let index = userCarousel.currentItemIndex
-        track("index = \(index)")
-        
-        snapshotView ?
-            myDocument.userSnapshots.remove(at: index) :
-            myDocument.userScreenshots.remove(at: index)
-
+        myDocument.userSnapshots.remove(at: index)
         updateUserCarousel()
     }
     
@@ -436,12 +332,8 @@ class SnapshotDialog: DialogController {
         
         track()
         let index = autoCarousel.currentItemIndex
-        
-        if snapshotView {
-            if !parent.restoreAutoSnapshot(item: index) { NSSound.beep() }
-        } else if index > 0 {
-            myDocument.autoScreenshots.swapAt(index, index - 1)
-            updateAutoCarousel(goto: index - 1, animated: true)
+        if !parent.restoreAutoSnapshot(item: index) {
+            NSSound.beep()
         }
     }
     
@@ -449,12 +341,8 @@ class SnapshotDialog: DialogController {
         
         track()
         let index = userCarousel.currentItemIndex
-        
-        if snapshotView {
-            if !parent.restoreUserSnapshot(item: index) { NSSound.beep() }
-        } else if index > 0 {
-            myDocument.userScreenshots.swapAt(index, index - 1)
-            updateUserCarousel(goto: index - 1, animated: true)
+        if !parent.restoreUserSnapshot(item: index) {
+            NSSound.beep()
         }
     }
     
@@ -462,32 +350,19 @@ class SnapshotDialog: DialogController {
         
         track()
         let index = autoCarousel.currentItemIndex
-        
-        if snapshotView {
-            saveSnapshotAs(item: index, auto: true)
-        } else if index < autoCarousel.numberOfItems - 1 {
-            myDocument.autoScreenshots.swapAt(index, index + 1)
-            updateAutoCarousel(goto: index + 1, animated: true)
-        }
+        saveSnapshotAs(item: index, auto: true)
     }
     
     @IBAction func user2Action(_ sender: NSButton!) {
         
         track()
         let index = userCarousel.currentItemIndex
-        
-        if snapshotView {
-            saveSnapshotAs(item: index, auto: false)
-        } else if index < userCarousel.numberOfItems - 1 {
-            myDocument.userScreenshots.swapAt(index, index + 1)
-            updateUserCarousel(goto: index + 1, animated: true)
-        }
+        saveSnapshotAs(item: index, auto: false)
     }
 
     @IBAction func moveToUserAction(_ sender: NSButton!) {
         
         track()
-        assert(screenshotView)
         
         let index = autoCarousel.currentItemIndex
         if let screenshot = myDocument.autoScreenshots.element(at: index) {
@@ -498,30 +373,6 @@ class SnapshotDialog: DialogController {
         updateUserCarousel(goto: Int.max, animated: true)
     }
 
-    @IBAction func autoFinderAction(_ sender: NSButton!) {
-        
-        track()
-        assert(screenshotView)
-
-        if let url = autoFolder {
-            
-            try? myDocument.persistScreenshots()
-            NSWorkspace.shared.open(url)
-        }
-    }
-    
-    @IBAction func userFinderAction(_ sender: NSButton!) {
-        
-        track()
-        assert(screenshotView)
-        
-        if let url = userFolder {
-            
-            try? myDocument.persistScreenshots()
-            NSWorkspace.shared.open(url)
-        }
-    }
-    
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
@@ -598,11 +449,9 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
         var numItems: Int
         
         if carousel == autoCarousel {
-            numItems = snapshotView ?
-                myDocument.autoSnapshots.count : myDocument.autoScreenshots.count
+            numItems = myDocument.autoSnapshots.count
         } else {
-            numItems = snapshotView ?
-                myDocument.userSnapshots.count : myDocument.userScreenshots.count
+            numItems = myDocument.userSnapshots.count
         }
         
         return numItems
@@ -614,18 +463,9 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        if snapshotView {
-            
-            itemView.image = (carousel == autoCarousel) ?
-                myDocument.autoSnapshots.element(at: index)?.previewImage()?.roundCorners() :
-                myDocument.userSnapshots.element(at: index)?.previewImage()?.roundCorners()
-            
-        } else {
-            
-            itemView.image = (carousel == autoCarousel) ?
-                myDocument.autoScreenshots.element(at: index)?.screen?.roundCorners() :
-                myDocument.userScreenshots.element(at: index)?.screen?.roundCorners()
-        }
+        itemView.image = (carousel == autoCarousel) ?
+            myDocument.autoSnapshots.element(at: index)?.previewImage()?.roundCorners() :
+            myDocument.userSnapshots.element(at: index)?.previewImage()?.roundCorners()
         
         /*
         itemView.wantsLayer = true

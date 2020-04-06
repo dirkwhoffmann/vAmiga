@@ -31,7 +31,6 @@ class ScreenshotDialog: DialogController {
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
     var favoriteView: Bool { return selector.selectedSegment == 1 }
-    var folder: URL? { return Screenshot.userFolder(checksum: checksum) }
     var numItems: Int { return carousel.numberOfItems }
     var currentItem: Int { return carousel.currentItemIndex }
     var centerItem: Int { return numItems / 2 }
@@ -165,7 +164,7 @@ class ScreenshotDialog: DialogController {
 
     @IBAction func finderAction(_ sender: NSButton!) {
         
-        if let url = Screenshot.userFolder(checksum: checksum) {
+        if let url = Screenshot.folder(forDisk: checksum) {
             
             try? myDocument.persistScreenshots()
             NSWorkspace.shared.open(url)

@@ -11,9 +11,6 @@
                 <outlet property="autoAction1" destination="z2W-nw-hCn" id="ldQ-fO-aK9"/>
                 <outlet property="autoAction2" destination="BCr-UE-dHB" id="JLT-qT-0Ir"/>
                 <outlet property="autoCarousel" destination="Hdf-K3-cDR" id="dar-xc-Hpy"/>
-                <outlet property="autoFinderButton" destination="RTz-oi-7GF" id="gr1-0c-NDI"/>
-                <outlet property="autoFinderLabel" destination="qxe-s4-QaN" id="JIH-OI-MyM"/>
-                <outlet property="autoLabel" destination="8Ee-MV-bns" id="MwL-QH-JBf"/>
                 <outlet property="autoNext" destination="pJH-uM-MUc" id="raO-D4-Myb"/>
                 <outlet property="autoNr" destination="2D7-XS-vht" id="zms-CR-e2R"/>
                 <outlet property="autoPrev" destination="3bw-7I-GfT" id="TcZ-qV-XWX"/>
@@ -21,14 +18,9 @@
                 <outlet property="autoText1" destination="Rq8-Y3-VHm" id="UBB-EG-tve"/>
                 <outlet property="autoText2" destination="fHH-O7-CYc" id="ah6-L3-EA0"/>
                 <outlet property="autoTrash" destination="RuY-8N-VlA" id="qQg-bL-XPa"/>
-                <outlet property="moveToUser" destination="9LS-xJ-Hcw" id="RnU-Rc-SwO"/>
-                <outlet property="selector" destination="UQI-MZ-FnG" id="gji-KA-o0l"/>
                 <outlet property="userAction1" destination="RrW-RG-49a" id="yUq-e8-Pg4"/>
                 <outlet property="userAction2" destination="bQQ-Sb-ZMw" id="P9f-Pr-zvC"/>
                 <outlet property="userCarousel" destination="hHm-XN-YUe" id="KHj-j4-3nU"/>
-                <outlet property="userFinderButton" destination="cgU-Kz-9DN" id="RaO-kY-C93"/>
-                <outlet property="userFinderLabel" destination="E3c-ih-TFg" id="fjg-ps-64Q"/>
-                <outlet property="userLabel" destination="ao1-tX-n3w" id="u5C-Z8-EHP"/>
                 <outlet property="userNext" destination="eRJ-zI-zwL" id="39L-Mw-Sfq"/>
                 <outlet property="userNr" destination="BpQ-cz-rtX" id="0WU-Si-paR"/>
                 <outlet property="userPrev" destination="zaV-nr-IDU" id="Osl-IO-vDh"/>
@@ -64,20 +56,6 @@ Gw
                             <action selector="cancelAction:" target="-2" id="XPq-fZ-WFL"/>
                         </connections>
                     </button>
-                    <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-MZ-FnG">
-                        <rect key="frame" x="274" y="453" width="207" height="24"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <segmentedCell key="cell" borderStyle="border" alignment="left" style="rounded" trackingMode="selectOne" id="dHf-wb-GUN">
-                            <font key="font" metaFont="system"/>
-                            <segments>
-                                <segment label="Snapshots" width="100" selected="YES"/>
-                                <segment label="Screenshots" width="100" tag="1"/>
-                            </segments>
-                        </segmentedCell>
-                        <connections>
-                            <action selector="selectorAction:" target="-2" id="b4d-Qi-Cu7"/>
-                        </connections>
-                    </segmentedControl>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ao1-tX-n3w">
                         <rect key="frame" x="405" y="417" width="304" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -133,7 +111,7 @@ Gw
                                         <outlet property="delegate" destination="-2" id="UeK-16-AzC"/>
                                     </connections>
                                 </customView>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RuY-8N-VlA">
+                                <button hidden="YES" toolTip="Delete snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RuY-8N-VlA">
                                     <rect key="frame" x="293" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="9Et-2J-1vf">
@@ -175,7 +153,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCr-UE-dHB">
+                                <button hidden="YES" toolTip="Save snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BCr-UE-dHB">
                                     <rect key="frame" x="177" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="saveTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="B64-cu-InJ">
@@ -186,7 +164,7 @@ Gw
                                         <action selector="auto2Action:" target="-2" id="4qK-jV-F2t"/>
                                     </connections>
                                 </button>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2W-nw-hCn">
+                                <button hidden="YES" toolTip="Restore snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z2W-nw-hCn">
                                     <rect key="frame" x="149" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="restoreTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="DC8-W3-uaR">
@@ -200,17 +178,6 @@ Gw
                             </subviews>
                         </view>
                     </box>
-                    <button toolTip="Open images in Finder" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RTz-oi-7GF">
-                        <rect key="frame" x="20" y="48" width="18" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="folderTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bUZ-hz-xXO">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="autoFinderAction:" target="-2" id="Fq9-ii-Dio"/>
-                        </connections>
-                    </button>
                     <box fixedFrame="YES" title="Box" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="5YA-lD-pBL">
                         <rect key="frame" x="389" y="70" width="349" height="341"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -266,7 +233,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0q-ff-7S7">
+                                <button hidden="YES" toolTip="Delete snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U0q-ff-7S7">
                                     <rect key="frame" x="293" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="trashTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="eeH-Gb-YPQ">
@@ -290,7 +257,7 @@ Gw
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQQ-Sb-ZMw">
+                                <button hidden="YES" toolTip="Save snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQQ-Sb-ZMw">
                                     <rect key="frame" x="177" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="saveTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="bzW-En-QMc">
@@ -301,7 +268,7 @@ Gw
                                         <action selector="user2Action:" target="-2" id="70o-qo-ASE"/>
                                     </connections>
                                 </button>
-                                <button hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RrW-RG-49a">
+                                <button hidden="YES" toolTip="Restore snapshot" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RrW-RG-49a">
                                     <rect key="frame" x="149" y="305" width="16" height="16"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="restoreTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="JBK-m8-fMN">
@@ -315,55 +282,13 @@ Gw
                             </subviews>
                         </view>
                     </box>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qxe-s4-QaN">
-                        <rect key="frame" x="42" y="50" width="140" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Open images in Finder" id="G1C-0E-28i">
-                            <font key="font" metaFont="message" size="11"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button toolTip="Open images in Finder" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cgU-Kz-9DN">
-                        <rect key="frame" x="392" y="48" width="18" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="folderTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="eFr-OJ-Rvw">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="userFinderAction:" target="-2" id="wZJ-3c-pHw"/>
-                        </connections>
-                    </button>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="E3c-ih-TFg">
-                        <rect key="frame" x="414" y="50" width="140" height="14"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Open images in Finder" id="es0-8K-46G">
-                            <font key="font" metaFont="message" size="11"/>
-                            <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9LS-xJ-Hcw">
-                        <rect key="frame" x="369" y="240" width="16" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="NSGoForwardTemplate" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="h2V-2p-AoU">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="moveToUserAction:" target="-2" id="rP0-4u-R4r"/>
-                        </connections>
-                    </button>
                 </subviews>
             </view>
             <point key="canvasLocation" x="286.5" y="296"/>
         </window>
     </objects>
     <resources>
-        <image name="NSGoForwardTemplate" width="9" height="12"/>
         <image name="downTemplate" width="220" height="199"/>
-        <image name="folderTemplate" width="144" height="145"/>
         <image name="restoreTemplate" width="213" height="213"/>
         <image name="saveTemplate" width="217" height="217"/>
         <image name="trashTemplate" width="174" height="214"/>
