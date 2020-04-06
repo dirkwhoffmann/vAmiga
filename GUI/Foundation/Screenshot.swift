@@ -164,7 +164,7 @@ class Screenshot {
     }
     
     static func newUrl(diskID: UInt64,
-                           using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
+                       using format: NSBitmapImageRep.FileType = .jpeg) -> URL? {
 
         let folder = Screenshot.folder(forDisk: diskID)
         return Screenshot.newUrl(in: folder, using: format)

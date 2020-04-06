@@ -25,27 +25,10 @@ class DiskMountDialog: DialogController {
     
     var disk: ADFFileProxy!
     var writeProtect = false
-    
+
     var myDocument: MyDocument { return parent.mydocument! }
-    
-    var numAutoScreenshots: Int {
-        return myDocument.autoScreenshots.count
-    }
-    var numUserScreenshots: Int {
-        return myDocument.userScreenshots.count
-    }
-    var numScreenshots: Int {
-        if numUserScreenshots > 0 { return numUserScreenshots }
-        // if numAutoScreenshots > 0 { return numAutoScreenshots }
-        return 0
-    }
-    var displaysUserScreenshots: Bool {
-        return numUserScreenshots > 0
-    }
-    var displaysAutoScreenshots: Bool {
-        return numUserScreenshots == 0 && numAutoScreenshots > 0
-    }
-    var screenshotsModified = false
+    var numScreenshots: Int { return myDocument.userScreenshots.count }
+    var displaysScreenshots: Bool { return numScreenshots > 0 }
 
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
@@ -155,14 +138,10 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("leftAction: \(index)")
         
-        if displaysUserScreenshots, index > 0 {
+        if index > 0 {
             myDocument.userScreenshots.swapAt(index, index - 1)
+            updateCarousel(goto: index - 1, animated: true)
         }
-        if displaysAutoScreenshots, index > 0 {
-            myDocument.autoScreenshots.swapAt(index, index - 1)
-        }
-        screenshotsModified = true
-        updateCarousel(goto: index - 1, animated: true)
     }
     
     @IBAction func rightAction(_ sender: NSButton!) {
@@ -170,14 +149,10 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("rightAction: \(index)")
         
-        if displaysUserScreenshots, index < numUserScreenshots - 1 {
+        if index < numScreenshots - 1 {
             myDocument.userScreenshots.swapAt(index, index + 1)
+            updateCarousel(goto: index + 1, animated: true)
         }
-        if displaysAutoScreenshots, index < numAutoScreenshots - 1 {
-            myDocument.autoScreenshots.swapAt(index, index + 1)
-        }
-        screenshotsModified = true
-        updateCarousel(goto: index + 1, animated: true)
     }
 
     @IBAction func middleAction(_ sender: NSButton!) {
@@ -185,13 +160,7 @@ class DiskMountDialog: DialogController {
         let index = carousel.currentItemIndex
         track("middleAction: \(index)")
         
-        if displaysUserScreenshots {
-            myDocument.userScreenshots.remove(at: index)
-        }
-        if displaysAutoScreenshots {
-            myDocument.autoScreenshots.remove(at: index)
-        }
-        screenshotsModified = true
+        myDocument.userScreenshots.remove(at: index)
         updateCarousel()
     }
     
@@ -250,15 +219,8 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        if numUserScreenshots > 0 {
-            assert(index < numUserScreenshots)
-            itemView.image =
-                myDocument.userScreenshots.element(at: index)?.screen?.roundCorners()
-        } else {
-            assert(index < numAutoScreenshots)
-            itemView.image =
-                myDocument.autoScreenshots.element(at: index)?.screen?.roundCorners()
-        }
+        itemView.image =
+            myDocument.userScreenshots.element(at: index)?.screen?.roundCorners()
         
         return itemView
     }
