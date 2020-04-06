@@ -17,29 +17,32 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
-    @IBOutlet weak var leftButton: NSButton!
-    @IBOutlet weak var middleButton: NSButton!
-    @IBOutlet weak var rightButton: NSButton!
-
-    let carouselType = iCarouselType.coverFlow
     
     var disk: ADFFileProxy!
     var writeProtect = false
-
+    var screenshots: [Screenshot] = []
+    
     var myDocument: MyDocument { return parent.mydocument! }
-    var numScreenshots: Int { return myDocument.userScreenshots.count }
-    var displaysScreenshots: Bool { return numScreenshots > 0 }
-
+    var numItems: Int { return carousel.numberOfItems }
+    var currentItem: Int { return carousel.currentItemIndex }
+    var centerItem: Int { return numItems / 2 }
+    var lastItem: Int { return numItems - 1 }
+    var empty: Bool { return numItems == 0 }
+    
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
-
-            // Force the screenshot cache to update
-            myDocument.adfChecksum = disk.fnv()
             
+            // Load screenshots (if any)
+            for url in Screenshot.collectFiles(forDisk: disk.fnv()) {
+                if let screenshot = Screenshot.init(fromUrl: url) {
+                    screenshots.append(screenshot)
+                }
+            }
+        
             super.showSheet(completionHandler: handler)
         }
     }
@@ -50,27 +53,25 @@ class DiskMountDialog: DialogController {
         window?.makeFirstResponder(carousel)
         
         update()
-        updateCarousel(goto: numScreenshots / 2, animated: false)
+        updateCarousel(goto: centerItem, animated: false)
     }
     
     override func windowDidLoad() {
 
-        if numScreenshots == 0 {
+        track("numItems = \(numItems)")
+
+        if empty {
 
             setHeight(196)
             
         } else {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                self.carousel.type = self.carouselType
+                self.carousel.type = iCarouselType.coverFlow
                 self.carousel.isHidden = false
-                self.leftButton.isHidden = false
-                self.middleButton.isHidden = false
-                self.rightButton.isHidden = false
-                self.carousel.scrollToItem(at: self.numScreenshots / 2, animated: false)
+                self.carousel.scrollToItem(at: self.centerItem, animated: false)
             }
         }
-        track()
     }
     
     func setHeight(_ newHeight: CGFloat) {
@@ -133,37 +134,6 @@ class DiskMountDialog: DialogController {
         update()
     }
 
-    @IBAction func leftAction(_ sender: NSButton!) {
-
-        let index = carousel.currentItemIndex
-        track("leftAction: \(index)")
-        
-        if index > 0 {
-            myDocument.userScreenshots.swapAt(index, index - 1)
-            updateCarousel(goto: index - 1, animated: true)
-        }
-    }
-    
-    @IBAction func rightAction(_ sender: NSButton!) {
-        
-        let index = carousel.currentItemIndex
-        track("rightAction: \(index)")
-        
-        if index < numScreenshots - 1 {
-            myDocument.userScreenshots.swapAt(index, index + 1)
-            updateCarousel(goto: index + 1, animated: true)
-        }
-    }
-
-    @IBAction func middleAction(_ sender: NSButton!) {
-        
-        let index = carousel.currentItemIndex
-        track("middleAction: \(index)")
-        
-        myDocument.userScreenshots.remove(at: index)
-        updateCarousel()
-    }
-    
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
@@ -210,7 +180,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         
-        return numScreenshots
+        return screenshots.count
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -220,7 +190,7 @@ extension DiskMountDialog: iCarouselDataSource, iCarouselDelegate {
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
         itemView.image =
-            myDocument.userScreenshots.element(at: index)?.screen?.roundCorners()
+            screenshots[index].screen?.roundCorners()
         
         return itemView
     }

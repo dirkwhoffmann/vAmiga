@@ -186,7 +186,7 @@ extension MyController {
         
         switch sender.selectedSegment {
             
-        case 0: takeAutoScreenshotAction(self)
+        case 0: takeUserScreenshotAction(self)
         case 1: browseScreenshotsAction(self)
             
         default:

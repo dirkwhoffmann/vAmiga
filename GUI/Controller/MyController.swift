@@ -633,7 +633,9 @@ extension MyController {
             refreshStatusBar()
 
         case MSG_RESET:
-
+            
+            mydocument?.deleteBootDiskID()
+            mydocument?.setBootDiskID(amiga.df0.fnv())
             inspector?.fullRefresh()
 
         case MSG_WARP_ON,
@@ -745,13 +747,13 @@ extension MyController {
         case MSG_DISK_INSERT:
             
             track("MSG_DISK_INSERT")
-            if msg.data == 0 { mydocument?.adfChecksum = amiga.df0.fnv() }
+            if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:
             
             track("MSG_DISK_EJECT")
-            if msg.data == 0 { mydocument?.adfChecksum = amiga.df0.fnv() }
+            // if msg.data == 0 { mydocument?.setBootDiskID(0)  }
             refreshStatusBar()
             
         case MSG_DISK_INSERTED,

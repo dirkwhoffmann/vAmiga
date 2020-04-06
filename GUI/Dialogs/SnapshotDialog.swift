@@ -55,11 +55,12 @@ class SnapshotDialog: DialogController {
     
     func updateLabels() {
         
+        track("current = \(currentItem) last = \(lastItem)")
         moveUp.isEnabled = currentItem >= 0 && currentItem < lastItem
         moveDown.isEnabled = currentItem > 0
         nr.stringValue = "\(currentItem + 1) / \(numItems)"
     
-        seperator.isHidden = empty
+        seperator.isHidden = true
         moveUp.isHidden = empty
         moveDown.isHidden = empty
         nr.isHidden = empty
@@ -80,6 +81,8 @@ class SnapshotDialog: DialogController {
             text1.stringValue = "No snapshots available"
             text2.stringValue = ""
         }
+        text1.isHidden = false
+        text2.isHidden = false
     }
     
     func updateAutoLabels() {
@@ -92,6 +95,8 @@ class SnapshotDialog: DialogController {
             text1.stringValue = "No snapshots available"
             text2.stringValue = ""
         }
+        text1.isHidden = false
+        text2.isHidden = false
     }
   
     func updateCarousel(goto item: Int, animated: Bool) {
@@ -192,21 +197,21 @@ class SnapshotDialog: DialogController {
         updateCarousel(goto: Int.max, animated: false)
     }
     
-    @IBAction func moveUpAction(carousel: iCarousel) {
+    @IBAction func moveUpAction(_ sender: NSButton!) {
                 
-        let index = carousel.currentItemIndex
+        track("current = \(currentItem) last = \(lastItem)")
         
-        if index < carousel.numberOfItems - 1 {
-            carousel.scrollToItem(at: index + 1, animated: true)
+        if currentItem < lastItem {
+            carousel.scrollToItem(at: currentItem + 1, animated: true)
         }
     }
 
-    @IBAction func moveDownAction(carousel: iCarousel) {
+    @IBAction func moveDownAction(_ sender: NSButton!) {
                 
-        let index = carousel.currentItemIndex
-        
-        if index > 0 {
-            carousel.scrollToItem(at: index - 1, animated: true)
+        track("current = \(currentItem)")
+
+        if currentItem > 0 {
+            carousel.scrollToItem(at: currentItem - 1, animated: true)
         }
     }
     

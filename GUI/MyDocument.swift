@@ -42,19 +42,9 @@ class MyDocument: NSDocument {
     private(set) var autoScreenshots = ManagedArray<Screenshot>.init(capacity: 32)
     private(set) var userScreenshots = ManagedArray<Screenshot>.init(capacity: Int.max)
 
-    // Screenshots are associated the ADF file with this fingerprint
-    var adfChecksum = UInt64(0) {
-        willSet {
-            track("Will set: \(adfChecksum) \(newValue)")
-            if newValue != adfChecksum {
-                track("New ADF checksum: \(newValue)")
-                try? persistScreenshots()
-            }
-        }
-        didSet {
-            if oldValue != adfChecksum { try? loadScreenshots() }
-        }
-    }
+    // Fingerprint of the first disk inserted into df0 after a reset
+    // The value is used to determine the screenshot save folder
+    private var bootDiskID = UInt64(0)
         
     override init() {
         
@@ -315,6 +305,22 @@ class MyDocument: NSDocument {
     // Screenshots
     //
     
+    func deleteBootDiskID() {
+     
+        bootDiskID = 0
+    }
+
+    @discardableResult
+    func setBootDiskID(_ id: UInt64) -> Bool {
+        
+        if bootDiskID == 0 {
+            bootDiskID = id
+            try? loadScreenshots()
+            return true
+        }
+        return false
+    }
+    
     // Writes screenshots back to disk if needed
     func persistScreenshots() throws {
 
@@ -323,14 +329,14 @@ class MyDocument: NSDocument {
 
     func saveScreenshots() throws {
         
-        track("Saving user screenshots to disk (\(adfChecksum))")
+        track("Saving user screenshots to disk (\(bootDiskID))")
         
         let format = parent!.screenshotTarget
         
-        Screenshot.deleteFolder(forDisk: adfChecksum)
+        Screenshot.deleteFolder(forDisk: bootDiskID)
         for n in 0 ..< userScreenshots.count {
             let data = userScreenshots.element(at: n)?.screen?.representation(using: format)
-            if let url = Screenshot.newUrl(diskID: adfChecksum, using: format) {
+            if let url = Screenshot.newUrl(diskID: bootDiskID, using: format) {
                 try data?.write(to: url, options: .atomic)
             }
         }
@@ -338,10 +344,10 @@ class MyDocument: NSDocument {
         
     func loadScreenshots() throws {
         
-        track("Loading screenshots for disk (\(adfChecksum))")
+        track("Loading screenshots for disk (\(bootDiskID))")
         
         userScreenshots.clear()
-        for url in Screenshot.collectFiles(forDisk: adfChecksum) {
+        for url in Screenshot.collectFiles(forDisk: bootDiskID) {
             if let screenshot = Screenshot.init(fromUrl: url) {
                 userScreenshots.append(screenshot)
             }
