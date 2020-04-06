@@ -11,43 +11,28 @@ class SnapshotDialog: DialogController {
     
     var now: Date!
 
-    @IBOutlet weak var autoSeperator: NSBox!
-    @IBOutlet weak var autoCarousel: iCarousel!
-    @IBOutlet weak var autoPrev: NSButton!
-    @IBOutlet weak var autoNext: NSButton!
-    @IBOutlet weak var autoTrash: NSButton!
-    @IBOutlet weak var autoAction1: NSButton!
-    @IBOutlet weak var autoAction2: NSButton!
-    @IBOutlet weak var autoNr: NSTextField!
-    @IBOutlet weak var autoText1: NSTextField!
-    @IBOutlet weak var autoText2: NSTextField!
+    @IBOutlet weak var selector: NSSegmentedControl!
     
-    @IBOutlet weak var userSeperator: NSBox!
-    @IBOutlet weak var userCarousel: iCarousel!
-    @IBOutlet weak var userPrev: NSButton!
-    @IBOutlet weak var userNext: NSButton!
-    @IBOutlet weak var userTrash: NSButton!
-    @IBOutlet weak var userAction1: NSButton!
-    @IBOutlet weak var userAction2: NSButton!
-    @IBOutlet weak var userNr: NSTextField!
-    @IBOutlet weak var userText1: NSTextField!
-    @IBOutlet weak var userText2: NSTextField!
- 
-    let carouselType = iCarouselType.timeMachine //   coverFlow
-    
-    // Fingerprint of disk in df0
-    var checksum = UInt64(0)
+    @IBOutlet weak var seperator: NSBox!
+    @IBOutlet weak var carousel: iCarousel!
+    @IBOutlet weak var moveUp: NSButton!
+    @IBOutlet weak var moveDown: NSButton!
+    @IBOutlet weak var save: NSButton!
+    @IBOutlet weak var restore: NSButton!
+    @IBOutlet weak var trash: NSButton!
+    @IBOutlet weak var nr: NSTextField!
+    @IBOutlet weak var text1: NSTextField!
+    @IBOutlet weak var text2: NSTextField!
     
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
-    var autoIndex: Int { return autoCarousel.currentItemIndex }
-    var userIndex: Int { return userCarousel.currentItemIndex }
-    var autoSelection: Int { return autoCarousel.currentItemIndex }
-    var userSelection: Int { return userCarousel.currentItemIndex }
-    var numAutoItems: Int { return autoCarousel.numberOfItems }
-    var numUserItems: Int { return userCarousel.numberOfItems }
-    var lastAutoItem: Int { return numAutoItems - 1 }
-    var lastUserItem: Int { return numUserItems - 1 }
+    var userView: Bool { return selector.selectedSegment == 0 }
+    var autoView: Bool { return selector.selectedSegment == 1 }
+    var numItems: Int { return carousel.numberOfItems }
+    var currentItem: Int { return carousel.currentItemIndex }
+    var centerItem: Int { return numItems / 2 }
+    var lastItem: Int { return numItems - 1 }
+    var empty: Bool { return numItems == 0 }
     
     override func windowWillLoad() {
    
@@ -61,130 +46,70 @@ class SnapshotDialog: DialogController {
         now = Date()
         
         parent.stopSnapshotTimer()
-        parent.stopScreenshotTimer()
-        updateAutoLabels()
-        updateUserLabels()
+        updateLabels()
         
-        self.autoCarousel.type = self.carouselType
-        self.autoCarousel.isHidden = false
-        self.updateAutoCarousel(goto: self.lastAutoItem, animated: false)
-        
-        self.userCarousel.type = self.carouselType
-        self.userCarousel.isHidden = false
-        self.updateUserCarousel(goto: self.lastUserItem, animated: false)
+        self.carousel.type = iCarouselType.timeMachine
+        self.carousel.isHidden = false
+        self.updateCarousel(goto: self.lastItem, animated: false)
     }
     
-    func updateAutoLabels() {
-                
-        autoNext.isEnabled = autoIndex >= 0 && autoIndex < lastAutoItem
-        autoPrev.isEnabled = autoIndex > 0
-
-        updateAutoSnapshotLabels()
+    func updateLabels() {
         
-        let autoItems: [NSView] = [
-            autoSeperator,
-            autoNext,
-            autoPrev,
-            autoAction1,
-            autoAction2,
-            autoTrash,
-            autoText1,
-            autoText2
-        ]
-        for item in autoItems { item.isHidden = (numAutoItems == 0) }
-        autoNr.isHidden = false
+        moveUp.isEnabled = currentItem >= 0 && currentItem < lastItem
+        moveDown.isEnabled = currentItem > 0
+        nr.stringValue = "\(currentItem + 1) / \(numItems)"
+    
+        seperator.isHidden = empty
+        moveUp.isHidden = empty
+        moveDown.isHidden = empty
+        nr.isHidden = empty
+        save.isHidden = empty
+        restore.isHidden = empty
+        trash.isHidden = empty
+        
+        userView ? updateUserLabels() : updateAutoLabels()
     }
     
     func updateUserLabels() {
         
-        userNext.isEnabled = userIndex >= 0 && userIndex < lastUserItem
-        userPrev.isEnabled = userIndex > 0
-        
-        updateUserSnapshotLabels()
-
-        let userItems: [NSView] = [
-            userSeperator,
-            userNext,
-            userPrev,
-            userAction1,
-            userAction2,
-            userTrash,
-            userText1,
-            userText2
-        ]
-        for item in userItems { item.isHidden = (numUserItems == 0) }
-        userNr.isHidden = false
-    }
-    
-    func updateAutoSnapshotLabels() {
-                
-        autoTrash.isEnabled = autoIndex >= 0
-        autoAction1.isEnabled = autoIndex >= 0
-        autoAction2.isEnabled = autoIndex >= 0
-        
-        if let snapshot = myDocument.autoSnapshots.element(at: autoIndex) {
-            
-            autoNr.stringValue = "\(autoIndex + 1) / \(numAutoItems)"
-            autoNr.textColor = .labelColor
+        if let snapshot = myDocument.userSnapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp()
-            autoText1.stringValue = timeDiffInfo(time: takenAt)
-            autoText2.stringValue = timeInfo(time: takenAt)
-            
+            text1.stringValue = timeDiffInfo(time: takenAt)
+            text2.stringValue = timeInfo(time: takenAt)
         } else {
-            
-            autoNr.stringValue = "No snapshots available"
-            autoNr.textColor = .secondaryLabelColor
-            autoText1.stringValue = ""
-            autoText2.stringValue = ""
+            text1.stringValue = "No snapshots available"
+            text2.stringValue = ""
         }
     }
     
-    func updateUserSnapshotLabels() {
+    func updateAutoLabels() {
         
-        userTrash.isEnabled = userIndex >= 0
-        userAction1.isEnabled = userIndex >= 0
-        userAction2.isEnabled = userIndex >= 0
-        
-        if let snapshot = myDocument.userSnapshots.element(at: userIndex) {
-            
-            userNr.stringValue = "\(userIndex + 1) / \(numUserItems)"
-            userNr.textColor = .labelColor
+        if let snapshot = myDocument.autoSnapshots.element(at: currentItem) {
             let takenAt = snapshot.timeStamp()
-            userText1.stringValue = timeDiffInfo(time: takenAt)
-            userText2.stringValue = timeInfo(time: takenAt)
-            
+            text1.stringValue = timeDiffInfo(time: takenAt)
+            text2.stringValue = timeInfo(time: takenAt)
         } else {
-            
-            userNr.stringValue = "No snapshots available"
-            userNr.textColor = .secondaryLabelColor
-            userText1.stringValue = ""
-            userText2.stringValue = ""
+            text1.stringValue = "No snapshots available"
+            text2.stringValue = ""
         }
     }
-    
-    func updateCarousel(carousel: iCarousel, goto item: Int, animated: Bool) {
+  
+    func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()
         
         let index = min(item, carousel.numberOfItems - 1)
         if index >= 0 { carousel.scrollToItem(at: index, animated: animated) }
         
-        track("index = \(index) num = \(carousel.numberOfItems)")
         carousel.layOutItemViews()
+        updateLabels()
     }
 
-    func updateAutoCarousel(goto item: Int = -1, animated: Bool = false) {
+    func updateCarousel(animated: Bool = false) {
         
-        updateCarousel(carousel: autoCarousel, goto: item, animated: animated)
-        updateAutoLabels()
+        updateCarousel(goto: -1, animated: animated)
     }
-
-    func updateUserCarousel(goto item: Int = -1, animated: Bool = false) {
-        
-        updateCarousel(carousel: userCarousel, goto: item, animated: animated)
-        updateUserLabels()
-    }
-
+    
     func timeInfo(date: Date?) -> String {
          
          if date == nil { return "" }
@@ -264,14 +189,11 @@ class SnapshotDialog: DialogController {
 
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
                 
-        updateAutoCarousel(goto: Int.max, animated: false)
-        updateUserCarousel(goto: Int.max, animated: false)
+        updateCarousel(goto: Int.max, animated: false)
     }
     
-    func nextAction(carousel: iCarousel) {
-        
-        track("numberOfItems = \(carousel.numberOfItems)")
-        
+    @IBAction func moveUpAction(carousel: iCarousel) {
+                
         let index = carousel.currentItemIndex
         
         if index < carousel.numberOfItems - 1 {
@@ -279,100 +201,46 @@ class SnapshotDialog: DialogController {
         }
     }
 
-    func prevAction(carousel: iCarousel) {
-        
-        track("numberOfItems = \(carousel.numberOfItems)")
-        
+    @IBAction func moveDownAction(carousel: iCarousel) {
+                
         let index = carousel.currentItemIndex
         
         if index > 0 {
             carousel.scrollToItem(at: index - 1, animated: true)
         }
     }
-
-    @IBAction func autoNextAction(_ sender: NSButton!) {
+    
+    @IBAction func trashAction(_ sender: NSButton!) {
         
-        track()
-        nextAction(carousel: autoCarousel)
+        if userView {
+            myDocument.userSnapshots.remove(at: currentItem)
+        } else {
+            myDocument.autoSnapshots.remove(at: currentItem)
+        }
+        updateCarousel()
     }
     
-    @IBAction func autoPrevAction(_ sender: NSButton!) {
+    @IBAction func restoreAction(_ sender: NSButton!) {
         
         track()
-        prevAction(carousel: autoCarousel)
-    }
-
-    @IBAction func userNextAction(_ sender: NSButton!) {
-        
-        track()
-        nextAction(carousel: userCarousel)
-    }
-
-    @IBAction func userPrevAction(_ sender: NSButton!) {
-        
-        track()
-        prevAction(carousel: userCarousel)
-    }
-
-    @IBAction func autoTrashAction(_ sender: NSButton!) {
-        
-        let index = autoCarousel.currentItemIndex
-        myDocument.autoSnapshots.remove(at: index)
-        updateAutoCarousel()
-    }
-    
-    @IBAction func userTrashAction(_ sender: NSButton!) {
-        
-        let index = userCarousel.currentItemIndex
-        myDocument.userSnapshots.remove(at: index)
-        updateUserCarousel()
-    }
-    
-    @IBAction func auto1Action(_ sender: NSButton!) {
-        
-        track()
-        let index = autoCarousel.currentItemIndex
-        if !parent.restoreAutoSnapshot(item: index) {
+        if userView && !parent.restoreUserSnapshot(item: currentItem) {
+            NSSound.beep()
+        }
+        if autoView && !parent.restoreAutoSnapshot(item: currentItem) {
             NSSound.beep()
         }
     }
     
-    @IBAction func user1Action(_ sender: NSButton!) {
+    @IBAction func saveAction(_ sender: NSButton!) {
         
         track()
-        let index = userCarousel.currentItemIndex
-        if !parent.restoreUserSnapshot(item: index) {
-            NSSound.beep()
+        if userView {
+            saveAs(snapshot: myDocument.userSnapshots.element(at: currentItem))
+        } else {
+            saveAs(snapshot: myDocument.autoSnapshots.element(at: currentItem))
         }
     }
     
-    @IBAction func auto2Action(_ sender: NSButton!) {
-        
-        track()
-        let index = autoCarousel.currentItemIndex
-        saveSnapshotAs(item: index, auto: true)
-    }
-    
-    @IBAction func user2Action(_ sender: NSButton!) {
-        
-        track()
-        let index = userCarousel.currentItemIndex
-        saveSnapshotAs(item: index, auto: false)
-    }
-
-    @IBAction func moveToUserAction(_ sender: NSButton!) {
-        
-        track()
-        
-        let index = autoCarousel.currentItemIndex
-        if let screenshot = myDocument.autoScreenshots.element(at: index) {
-            myDocument.userScreenshots.append(screenshot)
-            myDocument.autoScreenshots.remove(at: index)
-        }
-        updateAutoCarousel(goto: index - 1, animated: true)
-        updateUserCarousel(goto: Int.max, animated: true)
-    }
-
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
@@ -380,62 +248,44 @@ class SnapshotDialog: DialogController {
         hideSheet()
 
         parent.startSnapshotTimer()
-        parent.startScreenshotTimer()
         
         // Hide some controls
         let items: [NSView] = [
             
-            autoSeperator,
-            autoNr,
-            autoNext,
-            autoPrev,
-            autoAction1,
-            autoAction2,
-            autoTrash,
-            autoText1,
-            autoText2,
-            
-            userSeperator,
-            userNr,
-            userNext,
-            userPrev,
-            userAction1,
-            userAction2,
-            userTrash,
-            userText1,
-            userText2
+            seperator,
+            nr,
+            moveUp,
+            moveDown,
+            restore,
+            save,
+            trash,
+            text1,
+            text2,
+            carousel
         ]
         
         for item in items { item.isHidden = true }
-
+        
         try? myDocument.persistScreenshots()
     }
     
-    func saveSnapshotAs(item: Int, auto: Bool) {
-         
-         track()
-         
-         let panel = NSSavePanel()
-         panel.prompt = "Save As"
-         panel.allowedFileTypes = ["vAmiga"]
+    func saveAs(snapshot: SnapshotProxy?) {
+        
+        track()
+        if snapshot == nil { return }
+        
+        let panel = NSSavePanel()
+        panel.prompt = "Save As"
+        panel.allowedFileTypes = ["vAmiga"]
         
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = panel.url {
-                    
-                    if auto {
-                        if let s = self.myDocument.autoSnapshots.element(at: item) {
-                            try? s.data()?.write(to: url)
-                        }
-                    } else {
-                        if let s = self.myDocument.userSnapshots.element(at: item) {
-                            try? s.data()?.write(to: url)
-                        }
-                    }
+                    try? snapshot!.data()?.write(to: url)
                 }
             }
-         })
-     }
+        })
+    }
 }
 
 //
@@ -445,16 +295,10 @@ class SnapshotDialog: DialogController {
 extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
-        
-        var numItems: Int
-        
-        if carousel == autoCarousel {
-            numItems = myDocument.autoSnapshots.count
-        } else {
-            numItems = myDocument.userSnapshots.count
-        }
-        
-        return numItems
+                
+        return userView ?
+            myDocument.userSnapshots.count :
+            myDocument.autoSnapshots.count
     }
     
     func carousel(_ carousel: iCarousel, viewForItemAt index: Int, reusing view: NSView?) -> NSView {
@@ -463,9 +307,9 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        itemView.image = (carousel == autoCarousel) ?
-            myDocument.autoSnapshots.element(at: index)?.previewImage()?.roundCorners() :
-            myDocument.userSnapshots.element(at: index)?.previewImage()?.roundCorners()
+        itemView.image = userView ?
+            myDocument.userSnapshots.element(at: index)?.previewImage()?.roundCorners() :
+            myDocument.autoSnapshots.element(at: index)?.previewImage()?.roundCorners()
         
         /*
         itemView.wantsLayer = true
@@ -478,6 +322,6 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func carouselCurrentItemIndexDidChange(_ carousel: iCarousel) {
         
-        carousel == autoCarousel ? updateAutoLabels() : updateUserLabels()
+        updateLabels()
     }
 }

@@ -154,7 +154,6 @@ extension MyController {
             let name = NSNib.Name("SnapshotDialog")
             snapshotBrowser = SnapshotDialog.make(parent: self, nibName: name)
         }
-        snapshotBrowser?.checksum = amiga.df0.fnv()
         snapshotBrowser?.showSheet()
     }
 

@@ -114,8 +114,10 @@ class ScreenshotDialog: DialogController {
     func updateCarousel(goto item: Int, animated: Bool) {
         
         carousel.reloadData()
+        
         let index = min(item, lastItem)
         if index >= 0 { carousel.scrollToItem(at: index, animated: animated) }
+        
         carousel.layOutItemViews()
         updateLabels()
     }
