@@ -30,7 +30,8 @@ class ScreenshotDialog: DialogController {
     
     // Computed variables
     var myDocument: MyDocument { return parent.mydocument! }
-    var favoriteView: Bool { return selector.selectedSegment == 1 }
+    var userView: Bool { return selector.selectedSegment == 0 }
+    var autoView: Bool { return selector.selectedSegment == 1 }
     var numItems: Int { return carousel.numberOfItems }
     var currentItem: Int { return carousel.currentItemIndex }
     var centerItem: Int { return numItems / 2 }
@@ -69,10 +70,10 @@ class ScreenshotDialog: DialogController {
         rightButton.isEnabled = currentItem >= 0 && currentItem < lastItem
         itemLabel.stringValue = "\(currentItem + 1) / \(numItems)"
 
-        favoriteView ? updateFavoriteLabels() : updateLatestLabels()
+        userView ? updateUserLabels() : updateAutoLabels()
     }
     
-    func updateFavoriteLabels() {
+    func updateUserLabels() {
         
         actionButton.image = NSImage.init(named: "trashTemplate")
         actionButton.toolTip = "Delete screenshot from disk"
@@ -91,7 +92,7 @@ class ScreenshotDialog: DialogController {
         }
     }
    
-    func updateLatestLabels() {
+    func updateAutoLabels() {
         
         actionButton.image = NSImage.init(named: "starTemplate")
         actionButton.toolTip = "Move screenshot to favorites"
@@ -147,7 +148,7 @@ class ScreenshotDialog: DialogController {
 
     @IBAction func actionAction(_ sender: NSButton!) {
         
-        if favoriteView {
+        if userView {
             
             myDocument.userScreenshots.remove(at: currentItem)
             
@@ -226,7 +227,7 @@ extension ScreenshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
                 
-        if favoriteView {
+        if userView {
             return myDocument.userScreenshots.count
         } else {
             return myDocument.autoScreenshots.count
@@ -239,7 +240,7 @@ extension ScreenshotDialog: iCarouselDataSource, iCarouselDelegate {
         let w = h * 4 / 3
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
-        itemView.image = favoriteView ?
+        itemView.image = userView ?
             myDocument.userScreenshots.element(at: index)?.screen?.roundCorners() :
             myDocument.autoScreenshots.element(at: index)?.screen?.roundCorners()
     

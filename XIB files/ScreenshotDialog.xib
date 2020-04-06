@@ -33,13 +33,13 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1K-Z4-wOG">
-                        <rect key="frame" x="214" y="365" width="165" height="20"/>
+                        <rect key="frame" x="146" y="365" width="305" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <segmentedCell key="cell" borderStyle="border" alignment="left" style="roundRect" trackingMode="selectOne" id="HgQ-8K-Z7D">
                             <font key="font" metaFont="cellTitle"/>
                             <segments>
-                                <segment label="Latest" width="80" selected="YES"/>
-                                <segment label="Favorites" width="80" tag="1"/>
+                                <segment label="Manually saved" width="150" selected="YES"/>
+                                <segment label="Automatically saved" width="150" tag="1"/>
                             </segments>
                         </segmentedCell>
                         <connections>
@@ -142,7 +142,7 @@ Gw
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QX-vC-XeZ">
                         <rect key="frame" x="44" y="23" width="137" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Open Favorites in Finder" id="xVf-qY-I4F">
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Open images in Finder" id="xVf-qY-I4F">
                             <font key="font" metaFont="label" size="11"/>
                             <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
