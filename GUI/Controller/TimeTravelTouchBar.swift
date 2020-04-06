@@ -22,12 +22,6 @@ class TimeTravelTouchBar: NSTouchBar {
     var parentItem: NSPopoverTouchBarItem?
     var c: MyController?
     
-    /*
-    func rebuild()
-    {
-    }
-    */
-    
     func dismiss(_ sender: Any?) {
 
         guard let popover = parentItem else { return }

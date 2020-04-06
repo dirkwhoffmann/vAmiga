@@ -135,27 +135,37 @@ extension MyController {
         renderer.blendIn(steps: 20)
     }
         
+    @IBAction func takeAutoScreenshotAction(_ sender: Any!) {
+        
+        track()
+        takeAutoScreenshot()
+        renderer.blendIn(steps: 20)
+    }
+
     @IBAction func takeUserScreenshotAction(_ sender: Any!) {
         
         takeUserScreenshot()
         renderer.blendIn(steps: 20)
     }
 
-    @IBAction func browseStorageAction(_ sender: Any!) {
+    @IBAction func browseSnapshotsAction(_ sender: Any!) {
         
-        if browser == nil {
-            let name = NSNib.Name("StorageDialog")
-            browser = StorageDialog.make(parent: self, nibName: name)
+        if snapshotBrowser == nil {
+            let name = NSNib.Name("SnapshotDialog")
+            snapshotBrowser = SnapshotDialog.make(parent: self, nibName: name)
         }
-        browser?.checksum = amiga.df0.fnv()
-        browser?.showSheet()
+        snapshotBrowser?.checksum = amiga.df0.fnv()
+        snapshotBrowser?.showSheet()
+    }
 
-        /*
-        let name = NSNib.Name("StorageDialog")
-        let controller = StorageDialog.make(parent: self, nibName: name)
-        controller?.checksum = amiga.df0.fnv()
-        controller?.showSheet()
-        */
+    @IBAction func browseScreenshotsAction(_ sender: Any!) {
+        
+        if screenshotBrowser == nil {
+            let name = NSNib.Name("ScreenshotDialog")
+            screenshotBrowser = ScreenshotDialog.make(parent: self, nibName: name)
+        }
+        screenshotBrowser?.checksum = amiga.df0.fnv()
+        screenshotBrowser?.showSheet()
     }
 
     @IBAction func snapshotAction(_ sender: NSSegmentedControl) {
@@ -164,8 +174,21 @@ extension MyController {
             
         case 0: takeUserSnapshotAction(self)
         case 1: restoreLatestUserSnapshotAction(self)
-        case 2: takeUserScreenshotAction(self)
-        case 3: browseStorageAction(self)
+        case 2: browseSnapshotsAction(self)
+            
+        default:
+            assert(false)
+        }
+    }
+    
+    @IBAction func screenshotAction(_ sender: NSSegmentedControl) {
+        
+        track()
+        
+        switch sender.selectedSegment {
+            
+        case 0: takeAutoScreenshotAction(self)
+        case 1: browseScreenshotsAction(self)
             
         default:
             assert(false)

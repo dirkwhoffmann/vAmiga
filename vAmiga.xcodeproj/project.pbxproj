@@ -108,6 +108,8 @@
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
 		509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4D02208487900C500F0 /* TraceTableView.swift */; };
+		509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */; };
+		509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
@@ -127,8 +129,8 @@
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* AmigaConstants.cpp */; };
-		50B9354924347EF9000C78B8 /* StorageDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* StorageDialog.xib */; };
-		50B9354B243481AB000C78B8 /* StorageDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B9354A243481AB000C78B8 /* StorageDialog.swift */; };
+		50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* SnapshotDialog.xib */; };
+		50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B9354A243481AB000C78B8 /* SnapshotDialog.swift */; };
 		50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */; };
 		50C1684C242C89FD00197C33 /* Thumbnail.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C1684A242C89FD00197C33 /* Thumbnail.cpp */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
@@ -305,6 +307,8 @@
 		509CF4CE220847C600C500F0 /* InstrTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstrTableView.swift; sourceTree = "<group>"; };
 		509CF4D02208487900C500F0 /* TraceTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TraceTableView.swift; sourceTree = "<group>"; };
 		509D4EF4228596A900E2C252 /* PaulaTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaTypes.h; sourceTree = "<group>"; };
+		509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ScreenshotDialog.xib; sourceTree = "<group>"; };
+		509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotDialog.swift; sourceTree = "<group>"; };
 		509F7F1B21EDEA0200A530E4 /* RomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RomFile.cpp; sourceTree = "<group>"; };
 		509F7F1C21EDEA0200A530E4 /* RomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RomFile.h; sourceTree = "<group>"; };
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
@@ -334,8 +338,8 @@
 		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* AmigaConstants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaConstants.cpp; sourceTree = "<group>"; };
-		50B9354824347EF9000C78B8 /* StorageDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StorageDialog.xib; sourceTree = "<group>"; };
-		50B9354A243481AB000C78B8 /* StorageDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageDialog.swift; sourceTree = "<group>"; };
+		50B9354824347EF9000C78B8 /* SnapshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SnapshotDialog.xib; sourceTree = "<group>"; };
+		50B9354A243481AB000C78B8 /* SnapshotDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotDialog.swift; sourceTree = "<group>"; };
 		50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = A1000ANSI.xib; path = "XIB files/A1000ANSI.xib"; sourceTree = SOURCE_ROOT; };
 		50C1684A242C89FD00197C33 /* Thumbnail.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Thumbnail.cpp; sourceTree = "<group>"; };
 		50C1684B242C89FD00197C33 /* Thumbnail.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Thumbnail.h; sourceTree = "<group>"; };
@@ -547,7 +551,8 @@
 				508FDFAF21EA1FF10043D0E9 /* MyDocument.xib */,
 				50DED6AE2202EBA200B8195F /* Inspector.xib */,
 				5019605A231257270051B669 /* Monitor.xib */,
-				50B9354824347EF9000C78B8 /* StorageDialog.xib */,
+				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
+				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
 				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
@@ -612,7 +617,8 @@
 				508FE00D21EA227B0043D0E9 /* Alerts.swift */,
 				508FE04721EA22CC0043D0E9 /* DialogController.swift */,
 				508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */,
-				50B9354A243481AB000C78B8 /* StorageDialog.swift */,
+				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
+				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */,
 				502D04DA2413A32B0063EBF9 /* DmaDebugDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
@@ -951,6 +957,7 @@
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
+				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
 				50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
@@ -964,7 +971,7 @@
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */,
-				50B9354924347EF9000C78B8 /* StorageDialog.xib in Resources */,
+				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1060,6 +1067,7 @@
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
+				509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50C1684C242C89FD00197C33 /* Thumbnail.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
@@ -1082,7 +1090,7 @@
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
 				502D04DB2413A32C0063EBF9 /* DmaDebugDialog.swift in Sources */,
 				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
-				50B9354B243481AB000C78B8 /* StorageDialog.swift in Sources */,
+				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,

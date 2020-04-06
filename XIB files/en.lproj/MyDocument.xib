@@ -109,7 +109,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
@@ -152,7 +152,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -181,7 +181,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -210,7 +210,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
@@ -220,7 +220,7 @@
                             <constraint firstAttribute="height" constant="11" id="eTx-0c-FGQ"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Clock" id="1703">
-                            <font key="font" metaFont="label" size="9"/>
+                            <font key="font" metaFont="menu" size="9"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -470,22 +470,38 @@
                             <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Storage" paletteLabel="Storage" sizingBehavior="auto" id="nxb-IG-KLe">
+                    <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
-                            <rect key="frame" x="0.0" y="14" width="170" height="24"/>
+                            <rect key="frame" x="0.0" y="14" width="129" height="24"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                             <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
                                 <font key="font" metaFont="system"/>
                                 <segments>
-                                    <segment toolTip="Take Snapshot" image="ttStoreTemplate" width="40"/>
-                                    <segment toolTip="Revert To Most Recent Snapshot" image="ttRestoreTemplate" width="40" tag="1"/>
-                                    <segment toolTip="Take screenshot" image="ttCameraTemplate" width="40"/>
-                                    <segment toolTip="Open storage browser" image="ttFolderTemplate" width="40"/>
+                                    <segment toolTip="Take Snapshot" image="ttSaveTemplate" width="40"/>
+                                    <segment toolTip="Revert To Most Recent Snapshot" image="ttLoadTemplate" width="40" tag="1"/>
+                                    <segment toolTip="Open Snapshot Browser" image="ttRestoreTemplate" width="40"/>
                                 </segments>
                             </segmentedCell>
                             <connections>
                                 <action selector="snapshotAction:" target="-2" id="S6l-w4-GtS"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="DED3DE3D-DF11-4A29-819C-8BF266B0BAAE" label="Screenshots" paletteLabel="Screenshots" sizingBehavior="auto" id="SPM-UH-LKw">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="Hbj-1i-i1y">
+                            <rect key="frame" x="0.0" y="14" width="88" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Take Screenshot" image="ttClickTemplate" width="40"/>
+                                    <segment toolTip="Open Screenshot Browser" image="ttGalleryTemplate" width="40" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="screenshotAction:" target="-2" id="gLo-1V-lhE"/>
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
@@ -511,6 +527,7 @@
                     <toolbarItem reference="EzM-bM-4na"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="nxb-IG-KLe"/>
+                    <toolbarItem reference="SPM-UH-LKw"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="kR6-IR-lNs"/>
                     <toolbarItem reference="Klt-YL-0mv"/>
@@ -560,9 +577,10 @@
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
         <image name="resetTemplate" width="241" height="240"/>
-        <image name="ttCameraTemplate" width="241" height="241"/>
-        <image name="ttFolderTemplate" width="241" height="241"/>
+        <image name="ttClickTemplate" width="240" height="241"/>
+        <image name="ttGalleryTemplate" width="241" height="241"/>
+        <image name="ttLoadTemplate" width="241" height="240"/>
         <image name="ttRestoreTemplate" width="241" height="240"/>
-        <image name="ttStoreTemplate" width="241" height="240"/>
+        <image name="ttSaveTemplate" width="241" height="240"/>
     </resources>
 </document>

@@ -6,7 +6,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="StorageDialog" customModule="vAmiga" customModuleProvider="target">
+        <customObject id="-2" userLabel="File's Owner" customClass="SnapshotDialog" customModule="vAmiga" customModuleProvider="target">
             <connections>
                 <outlet property="autoAction1" destination="z2W-nw-hCn" id="ldQ-fO-aK9"/>
                 <outlet property="autoAction2" destination="BCr-UE-dHB" id="JLT-qT-0Ir"/>
@@ -61,7 +61,7 @@ Gw
 </string>
                         </buttonCell>
                         <connections>
-                            <action selector="cancelAction:" target="-1" id="eep-2O-Kfl"/>
+                            <action selector="cancelAction:" target="-2" id="XPq-fZ-WFL"/>
                         </connections>
                     </button>
                     <segmentedControl verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UQI-MZ-FnG">

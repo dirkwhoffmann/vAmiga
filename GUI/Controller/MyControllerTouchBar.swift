@@ -10,10 +10,12 @@
 @available(OSX 10.12.2, *)
 extension NSTouchBarItem.Identifier {
     
-    static let snap = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.snap")
-    static let revert = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.revert")
+    static let save = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.save")
+    static let load = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.load")
+    static let restore = NSTouchBarItem.Identifier("com.vAMiga.TouchBarItem.restore")
+
     static let click = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.click")
-    static let browse = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.browse")
+    static let gallery = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.gallery")
 }
 
 @available(OSX 10.12.2, *)
@@ -28,12 +30,12 @@ extension MyController: NSTouchBarDelegate {
 
         // Configure items
         touchBar.defaultItemIdentifiers =
-            [ .snap, .revert, .click, .browse ]
+            [ .save, .load, .restore, . click, .gallery ]
         
         // Make touchbar customizable
         touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier("com.vAmiga.touchbar")
         touchBar.customizationAllowedItemIdentifiers =
-            [ .snap, .revert, .click, .browse ]
+            [ .save, .load, .restore, . click, .gallery ]
         
         return touchBar
     }
@@ -42,29 +44,39 @@ extension MyController: NSTouchBarDelegate {
         
         switch identifier {
                         
-        case NSTouchBarItem.Identifier.snap:
+        case NSTouchBarItem.Identifier.save:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttStoreTemplate"))!
+            let icon = NSImage(named: NSImage.Name("ttSaveTemplate"))!
             let resizedIcon = icon.resize(width: 24, height: 24)
-            item.customizationLabel = "Snap"
+            item.customizationLabel = "Save"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
                                  action: #selector(takeUserSnapshotAction(_:)))
             return item
         
-        case NSTouchBarItem.Identifier.revert:
+        case NSTouchBarItem.Identifier.load:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttRestoreTemplate"))!
+            let icon = NSImage(named: NSImage.Name("ttLoadTemplate"))!
             let resizedIcon = icon.resize(width: 24, height: 24)
-            item.customizationLabel = "Revert"
+            item.customizationLabel = "Load"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
                                  action: #selector(restoreLatestUserSnapshotAction(_:)))
             return item
             
+        case NSTouchBarItem.Identifier.restore:
+            let item = NSCustomTouchBarItem(identifier: identifier)
+            let icon = NSImage(named: NSImage.Name("ttRestoreTemplate"))!
+            let resizedIcon = icon.resize(width: 24, height: 24)
+            item.customizationLabel = "Restore"
+            item.view = NSButton(image: resizedIcon,
+                                 target: self,
+                                 action: #selector(browseSnapshotsAction(_:)))
+            return item
+
         case NSTouchBarItem.Identifier.click:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttCameraTemplate"))!
+            let icon = NSImage(named: NSImage.Name("ttClickTemplate"))!
             let resizedIcon = icon.resize(width: 24, height: 24)
             item.customizationLabel = "Click"
             item.view = NSButton(image: resizedIcon,
@@ -72,14 +84,14 @@ extension MyController: NSTouchBarDelegate {
                                  action: #selector(takeUserScreenshotAction(_:)))
             return item
             
-        case NSTouchBarItem.Identifier.browse:
+        case NSTouchBarItem.Identifier.gallery:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttFolderTemplate"))!
+            let icon = NSImage(named: NSImage.Name("ttGalleryTemplate"))!
             let resizedIcon = icon.resize(width: 24, height: 24)
-            item.customizationLabel = "Browse"
+            item.customizationLabel = "Gallery"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
-                                 action: #selector(browseStorageAction(_:)))
+                                 action: #selector(browseScreenshotsAction(_:)))
             return item
 
         default:

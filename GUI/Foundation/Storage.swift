@@ -61,6 +61,7 @@ class ManagedArray<Element> {
     
     func remove(at index: Int) {
         
+        track("elements = \(elements.count) index = \(index)")
         elements.remove(at: index)
         modified = true
     }

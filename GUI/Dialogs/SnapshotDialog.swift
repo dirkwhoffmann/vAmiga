@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class StorageDialog: DialogController {
+class SnapshotDialog: DialogController {
     
     var now: Date!
 
@@ -356,36 +356,6 @@ class StorageDialog: DialogController {
         return timeDiffInfo(date: url.modificationDate())
     }
 
-    /*
-    func imageSizeInfo(image: NSImage?) -> String {
-
-        let w = image?.size.width ?? 0
-        let h = image?.size.height ?? 0
-        return w != 0 && h != 0 ? " (\(w) x \(h))" : ""
-    }
-
-    func imageFormatInfo(image: NSImage?, url: URL?) -> String {
-
-        if image == nil || url == nil { return "" }
-        
-        let suffix = url!.pathExtension.uppercased()
-        let width  = Int(image!.size.width)
-        let height = Int(image!.size.height)
-           
-        return "\(suffix) image (\(width) x \(height))"
-    }
-    
-    func autoImageInfo(_ nr: Int) -> String {
-
-        return imageInfo(image: autoScreenshotImage[nr], url: autoScreenshotUrls[nr])
-    }
-
-    func userImageInfo(_ nr: Int) -> String {
-
-        return imageInfo(image: userScreenshotImage[nr], url: userScreenshotUrls[nr])
-    }
-    */
-    
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
                 
         updateAutoCarousel(goto: Int.max, animated: false)
@@ -621,7 +591,7 @@ class StorageDialog: DialogController {
 // iCarousel data source and delegate
 //
 
-extension StorageDialog: iCarouselDataSource, iCarouselDelegate {
+extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
     
     func numberOfItems(in carousel: iCarousel) -> Int {
         

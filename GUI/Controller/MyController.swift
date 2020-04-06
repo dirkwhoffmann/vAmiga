@@ -32,9 +32,10 @@ class MyController: NSWindowController, MessageReceiver {
     // Monitor of this emulator instance
     var monitor: Monitor?
 
-    // Sotrage browser of this emulator instance
-    var browser: StorageDialog?
-    
+    // Snapshot and screenshot browsers
+    var snapshotBrowser: SnapshotDialog?
+    var screenshotBrowser: ScreenshotDialog?
+
     // Preferences controller
     var preferencesController: PreferencesController?
 
