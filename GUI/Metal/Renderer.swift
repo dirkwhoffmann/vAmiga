@@ -215,9 +215,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var bgRect: Node?
     var quad2D: Node?
     var quad3D: Quad?
-    
-    var positionBuffer: MTLBuffer! = nil
-    
+        
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -659,8 +657,6 @@ class Renderer: NSObject, MTKViewDelegate {
                                         length: MemoryLayout<ShaderOptions>.stride,
                                         index: 0)
         
-        commandEncoder.setVertexBuffer(positionBuffer, offset: 0, index: 0)
-
         // Finally, we have to decide for a texture sampler. We use a linear
         // interpolation sampler, if Gaussian blur is enabled, and a nearest
         // neighbor sampler if Gaussian blur is disabled.

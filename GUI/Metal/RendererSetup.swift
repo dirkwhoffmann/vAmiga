@@ -329,36 +329,8 @@ extension Renderer {
 
     func buildVertexBuffer() {
 
-        let capacity = 16 * 3 * 8
-        let pos = UnsafeMutablePointer<Float>.allocate(capacity: capacity)
-
-        func setVertex(_ i: Int, _ position: SIMD3<Float>, _ texture: SIMD2<Float>) {
-
-            let first = i * 8
-            pos[first + 0] = position.x
-            pos[first + 1] = position.y
-            pos[first + 2] = position.z
-            pos[first + 3] = 1.0
-            pos[first + 4] = texture.x
-            pos[first + 5] = texture.y
-            pos[first + 6] = 0.0 /* alignment byte (unused) */
-            pos[first + 7] = 0.0 /* alignment byte (unused) */
-        }
-
-        let dx = Float(0.64)
-        let dy = Float(0.48)
-        let dz = Float(0.64)
-        let bgx = Float(6.4)
-        let bgy = Float(4.8)
-        let bgz = Float(-6.8)
-
-        let upperLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.minY))
-        let upperRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.minY))
-        let lowerLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.maxY))
-        let lowerRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.maxY))
-        
         bgRect = Node.init(device: device,
-                           x: -bgx, y: -bgy, z: -bgz, w: 2*bgx, h: 2*bgy,
+                           x: -6.4, y: -4.8, z: 6.8, w: 12.8, h: 9.6,
                            t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
 
         quad2D = Node.init(device: device,
@@ -366,85 +338,9 @@ extension Renderer {
                            t: textureRect)
 
         quad3D = Quad.init(device: device,
-                           x1: -dx, y1: -dy, z1: -dz, x2: dx, y2: dy, z2: dz,
+                           x1: -0.64, y1: -0.48, z1: -0.64,
+                           x2: 0.64, y2: 0.48, z2: 0.64,
                            t: textureRect)
-        
-        // Background (DEPRECATED)
-        setVertex(0, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
-        setVertex(1, SIMD3<Float>(-bgx, -bgy, -bgz), SIMD2<Float>(0.0, 1.0))
-        setVertex(2, SIMD3<Float>(+bgx, -bgy, -bgz), SIMD2<Float>(1.0, 1.0))
-
-        setVertex(3, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
-        setVertex(4, SIMD3<Float>(+bgx, +bgy, -bgz), SIMD2<Float>(1.0, 0.0))
-        setVertex(5, SIMD3<Float>(+bgx, -bgy, -bgz), SIMD2<Float>(1.0, 1.0))
-
-        // -Z
-        setVertex(6, SIMD3<Float>(-dx, +dy, -dz), upperLeft)
-        setVertex(7, SIMD3<Float>(-dx, -dy, -dz), lowerLeft)
-        setVertex(8, SIMD3<Float>(+dx, -dy, -dz), lowerRight)
-
-        setVertex(9, SIMD3<Float>(-dx, +dy, -dz), upperLeft)
-        setVertex(10, SIMD3<Float>(+dx, +dy, -dz), upperRight)
-        setVertex(11, SIMD3<Float>(+dx, -dy, -dz), lowerRight)
-
-        // +Z
-        setVertex(12, SIMD3<Float>(-dx, +dy, +dz), upperRight)
-        setVertex(13, SIMD3<Float>(-dx, -dy, +dz), lowerRight)
-        setVertex(14, SIMD3<Float>(+dx, -dy, +dz), lowerLeft)
-
-        setVertex(15, SIMD3<Float>(-dx, +dy, +dz), upperRight)
-        setVertex(16, SIMD3<Float>(+dx, +dy, +dz), upperLeft)
-        setVertex(17, SIMD3<Float>(+dx, -dy, +dz), lowerLeft)
-
-        // -X
-        setVertex(18, SIMD3<Float>(-dx, +dy, -dz), upperRight)
-        setVertex(19, SIMD3<Float>(-dx, -dy, -dz), lowerRight)
-        setVertex(20, SIMD3<Float>(-dx, -dy, +dz), lowerLeft)
-
-        setVertex(21, SIMD3<Float>(-dx, +dy, -dz), upperRight)
-        setVertex(22, SIMD3<Float>(-dx, +dy, +dz), upperLeft)
-        setVertex(23, SIMD3<Float>(-dx, -dy, +dz), lowerLeft)
-
-        // +X
-        setVertex(24, SIMD3<Float>(+dx, +dy, -dz), upperLeft)
-        setVertex(25, SIMD3<Float>(+dx, -dy, -dz), lowerLeft)
-        setVertex(26, SIMD3<Float>(+dx, -dy, +dz), lowerRight)
-
-        setVertex(27, SIMD3<Float>(+dx, +dy, -dz), upperLeft)
-        setVertex(28, SIMD3<Float>(+dx, +dy, +dz), upperRight)
-        setVertex(29, SIMD3<Float>(+dx, -dy, +dz), lowerRight)
-
-        // -Y
-        setVertex(30, SIMD3<Float>(+dx, -dy, -dz), upperRight)
-        setVertex(31, SIMD3<Float>(-dx, -dy, -dz), upperLeft)
-        setVertex(32, SIMD3<Float>(-dx, -dy, -dz + 2*dy), lowerLeft)
-
-        setVertex(33, SIMD3<Float>(+dx, -dy, -dz), upperRight)
-        setVertex(34, SIMD3<Float>(+dx, -dy, -dz + 2*dy), lowerRight)
-        setVertex(35, SIMD3<Float>(-dx, -dy, -dz + 2*dy), lowerLeft)
-
-        // +Y
-        setVertex(36, SIMD3<Float>(+dx, +dy, -dz), lowerRight)
-        setVertex(37, SIMD3<Float>(-dx, +dy, -dz), lowerLeft)
-        setVertex(38, SIMD3<Float>(-dx, +dy, -dz + 2*dy), upperLeft)
-
-        setVertex(39, SIMD3<Float>(+dx, +dy, -dz), lowerRight)
-        setVertex(40, SIMD3<Float>(-dx, +dy, -dz + 2*dy), upperLeft)
-        setVertex(41, SIMD3<Float>(+dx, +dy, -dz + 2*dy), upperRight)
-
-        // 2D drawing quad
-        setVertex(42, SIMD3<Float>(-1, 1, 0), upperLeft)
-        setVertex(43, SIMD3<Float>(-1, -1, 0), lowerLeft)
-        setVertex(44, SIMD3<Float>( 1, -1, 0), lowerRight)
-
-        setVertex(45, SIMD3<Float>(-1, 1, 0), upperLeft)
-        setVertex(46, SIMD3<Float>( 1, 1, 0), upperRight)
-        setVertex(47, SIMD3<Float>( 1, -1, 0), lowerRight)
-
-        let opt = MTLResourceOptions.cpuCacheModeWriteCombined
-        let len = capacity * 4
-        positionBuffer = device.makeBuffer(bytes: pos, length: len, options: opt)
-        assert(positionBuffer != nil, "positionBuffer must not be nil")
     }
 
     func buildMatricesBg() {
