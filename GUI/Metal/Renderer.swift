@@ -212,8 +212,9 @@ class Renderer: NSObject, MTKViewDelegate {
     // Metal buffers and uniforms
     //
     
-    var background: Node?
-    var quad: Quad?
+    var bgRect: Node?
+    var quad2D: Node?
+    var quad3D: Quad?
     
     var positionBuffer: MTLBuffer! = nil
     
@@ -683,10 +684,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                         index: 1)
 
         // Draw
-        commandEncoder.drawPrimitives(type: MTLPrimitiveType.triangle,
-                                      vertexStart: 42,
-                                      vertexCount: 6,
-                                      instanceCount: 1)
+        quad2D!.drawPrimitives(commandEncoder)
         endFrame()
     }
 
@@ -725,13 +723,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                             index: 1)
 
             // Draw
-            background!.drawPrimitives(commandEncoder)
-            /*
-            commandEncoder.drawPrimitives(type: MTLPrimitiveType.triangle,
-                                          vertexStart: 0,
-                                          vertexCount: 6,
-                                          instanceCount: 1)
-             */
+            bgRect!.drawPrimitives(commandEncoder)
         }
 
         // Render emulator texture
@@ -754,15 +746,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                             index: 1)
 
             // Draw (part of) cube
-            quad!.draw(commandEncoder, allSides: animates != 0)
-
-            /*
-            commandEncoder.setVertexBuffer(positionBuffer, offset: 0, index: 0)
-            commandEncoder.drawPrimitives(type: MTLPrimitiveType.triangle,
-                                          vertexStart: 6,
-                                          vertexCount: (animates != 0 ? 36 : 6),
-                                          instanceCount: 1)
-            */
+            quad3D!.draw(commandEncoder, allSides: animates != 0)
         }
 
         endFrame()

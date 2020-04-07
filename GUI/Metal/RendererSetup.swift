@@ -357,13 +357,17 @@ extension Renderer {
         let lowerLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.maxY))
         let lowerRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.maxY))
         
-        background = Node.init(device: device,
-                               x: -bgx, y: -bgy, z: -bgz, w: 2*bgx, h: 2*bgy,
-                               t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
-        
-        quad = Quad.init(device: device,
-                         x1: -dx, y1: -dy, z1: -dz,
-                         x2: dx, y2: dy, z2: dz, t: textureRect)
+        bgRect = Node.init(device: device,
+                           x: -bgx, y: -bgy, z: -bgz, w: 2*bgx, h: 2*bgy,
+                           t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+
+        quad2D = Node.init(device: device,
+                           x: -1.0, y: -1.0, z: 0.0, w: 2.0, h: 2.0,
+                           t: textureRect)
+
+        quad3D = Quad.init(device: device,
+                           x1: -dx, y1: -dy, z1: -dz, x2: dx, y2: dy, z2: dz,
+                           t: textureRect)
         
         // Background (DEPRECATED)
         setVertex(0, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
