@@ -338,7 +338,7 @@ extension Renderer {
             pos[first + 0] = position.x
             pos[first + 1] = position.y
             pos[first + 2] = position.z
-            pos[first + 3] = 1.0 /* alpha */
+            pos[first + 3] = 1.0
             pos[first + 4] = texture.x
             pos[first + 5] = texture.y
             pos[first + 6] = 0.0 /* alignment byte (unused) */
@@ -356,8 +356,16 @@ extension Renderer {
         let upperRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.minY))
         let lowerLeft = SIMD2<Float>(Float(textureRect.minX), Float(textureRect.maxY))
         let lowerRight = SIMD2<Float>(Float(textureRect.maxX), Float(textureRect.maxY))
-
-        // Background
+        
+        background = Node.init(device: device,
+                               x: -bgx, y: -bgy, z: -bgz, w: 2*bgx, h: 2*bgy,
+                               t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+        
+        quad = Quad.init(device: device,
+                         x1: -dx, y1: -dy, z1: -dz,
+                         x2: dx, y2: dy, z2: dz, t: textureRect)
+        
+        // Background (DEPRECATED)
         setVertex(0, SIMD3<Float>(-bgx, +bgy, -bgz), SIMD2<Float>(0.0, 0.0))
         setVertex(1, SIMD3<Float>(-bgx, -bgy, -bgz), SIMD2<Float>(0.0, 1.0))
         setVertex(2, SIMD3<Float>(+bgx, -bgy, -bgz), SIMD2<Float>(1.0, 1.0))
