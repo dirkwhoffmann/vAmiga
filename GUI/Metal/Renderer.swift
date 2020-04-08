@@ -65,7 +65,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var quad2D: Node?
     var quad3D: Quad?
         
-    var chart: BarChart?
+    var monitor1, monitor2, monitor3, monitor4, monitor5, monitor6: BarChart?
     
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -598,13 +598,24 @@ class Renderer: NSObject, MTKViewDelegate {
             quad3D!.draw(commandEncoder, allSides: animates != 0)
             
             // Draw monitoring panels
+            /*
+            monitor1!.addValue(Float.random(in: 0...1.0))
+            monitor2!.addValue(Float.random(in: 0...1.0))
+            monitor3!.addValue(Float.random(in: 0...1.0))
+            monitor4!.addValue(Float.random(in: 0...1.0))
+            monitor5!.addValue(Float.random(in: 0...1.0))
+            monitor6!.addValue(Float.random(in: 0...1.0))
+            */
+            
             // angle += 2
-            chart!.addValue(Float.random(in: 0...1.0))
-
-            let trans = Renderer.translationMatrix(x: 0.3, y: 0.3, z: 0.5)
             let rot = Renderer.rotationMatrix(radians: Float(angle) * .pi / 180.0,
                                      x: 0.5, y: 0.0, z: 0.0)
-            chart!.draw(commandEncoder, matrix: trans * rot)
+            monitor1!.draw(commandEncoder, matrix: rot)
+            monitor2!.draw(commandEncoder, matrix: rot)
+            monitor3!.draw(commandEncoder, matrix: rot)
+            monitor4!.draw(commandEncoder, matrix: rot)
+            monitor5!.draw(commandEncoder, matrix: rot)
+            monitor6!.draw(commandEncoder, matrix: rot)
         }
 
         endFrame()

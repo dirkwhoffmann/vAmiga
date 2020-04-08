@@ -75,7 +75,47 @@ extension Renderer {
         assert(library != nil, "Metal library must not be nil")
         
         // Objects
-        chart = BarChart.init(device: device)
+        /*
+        monitor1 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: 0.7),
+                                 color: .red)
+        monitor2 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: 0.4),
+                                 color: .blue)
+        monitor3 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: 0.1),
+                                 color: .yellow)
+        monitor4 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: -0.2),
+                                 color: .cyan)
+        monitor5 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: -0.5),
+                                 color: .green)
+        monitor6 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: 0.65, y: -0.8),
+         color: .magenta)
+         */
+        let x1 = -0.90
+        let x6 = 0.66
+        let d = (x6 - x1) / 5
+        monitor1 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1, y: -0.95),
+                                 color: .red)
+        monitor2 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1 + d, y: -0.95),
+                                 color: .blue)
+        monitor3 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1 + 2*d, y: -0.95),
+                                 color: .yellow)
+        monitor4 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1 + 3*d, y: -0.95),
+                                 color: .cyan)
+        monitor5 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1 + 4*d, y: -0.95),
+                                 color: .green)
+        monitor6 = BarChart.init(device: device,
+                                 position: NSPoint.init(x: x1 + 5*d, y: -0.95),
+                                 color: .magenta)
     }
 
     internal func buildTextures() {

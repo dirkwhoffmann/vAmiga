@@ -168,6 +168,13 @@ extension Monitor {
         romView.add(val1: romReads / frames, val2: romWrites / frames)
         diskView.add(val1: diskActivity / frames)
         serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
+
+        parent.renderer.monitor1?.addValue(Float(copperActivity / frames))
+        parent.renderer.monitor2?.addValue(Float(blitterActivity / frames))
+        parent.renderer.monitor3?.addValue(Float(spriteActivity / frames))
+        parent.renderer.monitor4?.addValue(Float((chipReads + chipWrites) / frames))
+        parent.renderer.monitor5?.addValue(Float(diskActivity / frames))
+        parent.renderer.monitor6?.addValue(Float(serialReads / frames))
     }
 }
 

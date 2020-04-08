@@ -167,9 +167,16 @@ class BarChart {
     // Number of scroll steps until a new bar shows up
     let steps = 20
     
+    // Variables needed inside addValue()
+    var sum = Float(0)
+    var sumCnt = 0
+    
+    // Position of this view
+    var position: matrix_float4x4
+    
     // Drawing dimensions
     let width = Float(0.01)
-    let space = Float(0.005)
+    let space = Float(0.0025)
     let scale = Float(0.2)
     let border = Float(0.02)
     
@@ -180,7 +187,6 @@ class BarChart {
     var rectangles: [Node]
     var bgRectangle: Node?
     var offset = 0
-    var sum = Float(0)
         
     // Texture for drawing a single bar
     var foreground: MTLTexture?
@@ -188,20 +194,24 @@ class BarChart {
     // Shared texture for drawing the background
     static var background: MTLTexture?
 
-    init(device: MTLDevice) {
+    init(device: MTLDevice, position p: NSPoint, color: NSColor) {
         
         self.device = device
+        self.position = Renderer.translationMatrix(x: Float(p.x), y: Float(p.y), z: 0.5)
         rectangles = []
         
+        let r = Int(color.redComponent * 255)
+        let g = Int(color.greenComponent * 255)
+        let b = Int(color.blueComponent * 255)
         foreground = device.makeGradientTexture(width: 128, height: 128,
-                                                r1: 255, g1: 0, b1: 0, a1: 255,
-                                                r2: 255, g2: 255, b2: 255, a2: 128)
+                                                r1: r, g1: g, b1: b, a1: 128,
+                                                r2: 255, g2: 255, b2: 255, a2: 255)
         
         if BarChart.background == nil {
             BarChart.background =
                 device.makeGradientTexture(width: 256, height: 256,
-                                           r1: 64, g1: 64, b1: 64, a1: 200,
-                                           r2: 128, g2: 128, b2: 128, a2: 200,
+                                           r1: 64, g1: 64, b1: 64, a1: 128,
+                                           r2: 128, g2: 128, b2: 128, a2: 128,
                                            radius: 10)
         }
         
@@ -211,16 +221,9 @@ class BarChart {
         
     func addValue(_ value: Float) {
         
+        if sumCnt == 0 { sum = 0 }
         sum += value
-        offset += 1
-        
-        if offset == steps {
-            values.remove(at: 0)
-            values.append(sum / Float(steps))
-            sum = 0
-            offset = 0
-            updateRectangles()
-        }
+        sumCnt += 1
     }
     
     var xOffset: Float {
@@ -248,10 +251,21 @@ class BarChart {
     
     func draw(_ commandEncoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
+        offset += 1
+        
+        if offset == steps {
+            values.remove(at: 0)
+            values.append(sumCnt == 0 ? sum : sum / Float(sumCnt))
+            sumCnt = 0
+            offset = 0
+            updateRectangles()
+        }
+        
+        let base = position * matrix
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
 
         // Draw background
-        var uniforms = VertexUniforms(mvp: matrix)
+        var uniforms = VertexUniforms(mvp: base)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
@@ -259,7 +273,7 @@ class BarChart {
         bgRectangle!.drawPrimitives(commandEncoder)
 
         // Draw bars
-        uniforms = VertexUniforms(mvp: shift * matrix)
+        uniforms = VertexUniforms(mvp: shift * base)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
