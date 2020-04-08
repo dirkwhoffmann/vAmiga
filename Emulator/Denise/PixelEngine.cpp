@@ -268,18 +268,6 @@ PixelEngine::getNoise()
     return noise + offset;
 }
 
-u32 *
-PixelEngine::getGradient(u8 r, u8 g, u8 b)
-{
-    for (int row = 0; row < 128; row++) {
-        u32 color = HI_HI_LO_LO(255 - 2 * row, b, g, r);
-        for (int col = 0; col < 128; col++) {
-            gradient[row][col] = color;
-        }
-    }
-    return (u32 *)gradient;
-}
-
 int *
 PixelEngine::pixelAddr(int pixel)
 {

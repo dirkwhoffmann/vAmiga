@@ -16,8 +16,8 @@ import simd
 // Parameters of a short / long frame texture delivered by the emulator
 struct EmulatorTexture {
 
-    static let width = 1024 // Int(HPIXELS)
-    static let height = 320 // Int(VPIXELS)
+    static let width = 1024
+    static let height = 320
 }
 
 // Parameters of a textures that combines a short and a long frame
@@ -76,7 +76,6 @@ extension Renderer {
         
         // Objects
         chart = BarChart.init(device: device)
-        darkBg = Node.init(device: device, x: 0, y: 0, z: 0, w: 0.4, h: 0.2, t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
     }
 
     internal func buildTextures() {
@@ -152,34 +151,6 @@ extension Renderer {
         // Scanline texture
         scanlineTexture = device.makeTexture(descriptor: descriptor)
         assert(scanlineTexture != nil, "Failed to create scanline texture.")
-        
-        let bytes = controller.amiga.denise.gradientR(255, g: 0, b: 0)
-        // Surfaces
-        gradientBlack = device.makeGradientTexture(ptr: bytes!,
-                                                   width: 128, height: 128,
-                                                   r1: 255, g1: 255, b1: 255, a1: 128,
-                                                   r2: 255, g2: 255, b2: 255, a2: 128)
-        gradientRed = device.makeGradientTexture(ptr: bytes!,
-                                                 width: 128, height: 128,
-                                                 r1: 255, g1: 0, b1: 0, a1: 255,
-                                                 r2: 255, g2: 0, b2: 0, a2: 128)
-        
-        /*
-        let w = 128
-        let h = 128
-        let surfaceDescriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: MTLPixelFormat.rgba8Unorm,
-            width: w,
-            height: h,
-            mipmapped: false)
-        gradientRed = device.makeTexture(descriptor: surfaceDescriptor)
-        let region = MTLRegionMake2D(0, 0, w, h)
-        let bytes = controller.amiga.denise.gradientR(255, g: 0, b: 0)
-        gradientRed.replace(region: region,
-                            mipmapLevel: 0,
-                            withBytes: bytes!,
-                            bytesPerRow: 4 * w)
-         */
     }
 
     internal func buildSamplers() {
@@ -379,7 +350,7 @@ extension Renderer {
         let model  = matrix_identity_float4x4
         let view   = matrix_identity_float4x4
         let aspect = Float(size.width) / Float(size.height)
-        let proj   = perspectiveMatrix(fovY: (Float(65.0 * (.pi / 180.0))),
+        let proj   = Renderer.perspectiveMatrix(fovY: (Float(65.0 * (.pi / 180.0))),
                                        aspect: aspect,
                                        nearZ: 0.1,
                                        farZ: 100.0)
@@ -409,22 +380,22 @@ extension Renderer {
         let aspect = Float(size.width) / Float(size.height)
 
         let view = matrix_identity_float4x4
-        let proj = perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
+        let proj = Renderer.perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
                                      aspect: aspect,
                                      nearZ: 0.1,
                                      farZ: 100.0)
 
-        let transEye = translationMatrix(x: xShift,
+        let transEye = Renderer.translationMatrix(x: xShift,
                                          y: yShift,
                                          z: zShift + 1.393 - 0.16)
 
-        let transRotX = translationMatrix(x: 0.0,
+        let transRotX = Renderer.translationMatrix(x: 0.0,
                                           y: 0.0,
                                           z: 0.16)
 
-        let rotX = rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
-        let rotY = rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
-        let rotZ = rotationMatrix(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
+        let rotX = Renderer.rotationMatrix(radians: xAngle, x: 0.5, y: 0.0, z: 0.0)
+        let rotY = Renderer.rotationMatrix(radians: yAngle, x: 0.0, y: 0.5, z: 0.0)
+        let rotZ = Renderer.rotationMatrix(radians: zAngle, x: 0.0, y: 0.0, z: 0.5)
 
         // Chain all transformations
         let model = transEye * rotX * transRotX * rotY * rotZ

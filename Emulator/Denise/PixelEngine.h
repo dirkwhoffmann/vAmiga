@@ -209,9 +209,6 @@ public:
 
     // Returns a pointer to randon noise
     i32 *getNoise();
-
-    // Returns a pointer to a gradient texture
-    u32 *getGradient(u8 r, u8 g, u8 b);
     
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);

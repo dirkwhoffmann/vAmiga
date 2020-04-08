@@ -113,10 +113,10 @@ public extension CGImage {
 
 extension MTLDevice {
     
-    func makeGradientTexture(ptr: UnsafeMutablePointer<UInt32>,
-                             width: Int, height: Int,
+    func makeGradientTexture(width: Int, height: Int,
                              r1: Int, g1: Int, b1: Int, a1: Int,
-                             r2: Int, g2: Int, b2: Int, a2: Int) -> MTLTexture? {
+                             r2: Int, g2: Int, b2: Int, a2: Int,
+                             radius: Int = 0) -> MTLTexture? {
         
         let d = MTLTextureDescriptor.texture2DDescriptor(
               pixelFormat: MTLPixelFormat.rgba8Unorm,
@@ -142,6 +142,19 @@ extension MTLDevice {
                 data[row * width + col] = c
             }
             r += dr; g += dg; b += db; a += da
+        }
+        
+        for row in 0 ..< radius {
+            let dy = radius - row
+            for col in 0 ..< radius {
+                let dx = radius - col
+                if dx*dx + dy*dy >= radius*radius {
+                    data[row * width + col] &= 0xFFFFFF
+                    data[(height - 1 - row) * width + col] &= 0xFFFFFF
+                    data[(height - 1 - row) * width + (width - 1 - col)] &= 0xFFFFFF
+                    data[row * width + (width - 1 - col)] &= 0xFFFFFF
+                }
+            }
         }
         
         let region = MTLRegionMake2D(0, 0, width, height)

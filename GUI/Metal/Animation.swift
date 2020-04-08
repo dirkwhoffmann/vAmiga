@@ -321,21 +321,21 @@ extension Renderer {
     // Matrix utilities
     //
 
-    func perspectiveMatrix(fovY: Float,
-                           aspect: Float,
-                           nearZ: Float,
-                           farZ: Float) -> matrix_float4x4 {
-
+    static func perspectiveMatrix(fovY: Float,
+                                  aspect: Float,
+                                  nearZ: Float,
+                                  farZ: Float) -> matrix_float4x4 {
+        
         // Variant 1: Keeps correct aspect ratio independent of window size
         let yscale = 1.0 / tanf(fovY * 0.5) // 1 / tan == cot
         let xscale = yscale / aspect
         let q = farZ / (farZ - nearZ)
-
+        
         // Alternative: Adjust to window size
         // float yscale = 1.0f / tanf(fovY * 0.5f);
         // float xscale = 0.75 * yscale;
         // float q = farZ / (farZ - nearZ);
-
+        
         var m = matrix_float4x4()
         m.columns.0 = SIMD4<Float>(xscale, 0.0, 0.0, 0.0)
         m.columns.1 = SIMD4<Float>(0.0, yscale, 0.0, 0.0)
@@ -345,27 +345,27 @@ extension Renderer {
         return m
     }
 
-    func translationMatrix(x: Float,
-                           y: Float,
-                           z: Float) -> matrix_float4x4 {
-
+    static func translationMatrix(x: Float,
+                                  y: Float,
+                                  z: Float) -> matrix_float4x4 {
+        
         var m = matrix_identity_float4x4
         m.columns.3 = SIMD4<Float>(x, y, z, 1.0)
-
+        
         return m
     }
 
-    func rotationMatrix(radians: Float,
-                        x: Float,
-                        y: Float,
-                        z: Float) -> matrix_float4x4 {
-
+    static func rotationMatrix(radians: Float,
+                               x: Float,
+                               y: Float,
+                               z: Float) -> matrix_float4x4 {
+        
         var v = vector_float3(x, y, z)
         v = normalize(v)
         let cos = cosf(radians)
         let cosp = 1.0 - cos
         let sin = sinf(radians)
-
+        
         var m = matrix_float4x4()
         m.columns.0 = SIMD4<Float>(cos + cosp * v.x * v.x,
                                    cosp * v.x * v.y + v.z * sin,

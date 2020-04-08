@@ -580,10 +580,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->pixelEngine.getNoise(); 
 }
-- (u32 *) gradientR:(NSInteger)r G:(NSInteger)g B:(NSInteger)b
-{
-    return wrapper->denise->pixelEngine.getGradient(r, g, b);
-}
 
 @end
 
