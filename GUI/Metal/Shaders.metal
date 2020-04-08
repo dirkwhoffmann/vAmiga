@@ -194,7 +194,7 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
         color += gain - loose;
     }
     
-    return half4(color.r, color.g, color.b, uniforms.alpha);
+    return half4(color.r, color.g, color.b, color.a * uniforms.alpha);
 }
 
 

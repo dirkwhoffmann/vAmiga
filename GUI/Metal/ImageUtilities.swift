@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// swiftlint:disable function_parameter_count
+
 import Cocoa
 import Metal
 
@@ -106,11 +108,56 @@ public extension CGImage {
 }
 
 //
-// Extensions to MTLTexture
+// Extensions to MTLDevice
 //
 
-extension MTLTexture {
+extension MTLDevice {
     
+    func makeGradientTexture(ptr: UnsafeMutablePointer<UInt32>,
+                             width: Int, height: Int,
+                             r1: Int, g1: Int, b1: Int, a1: Int,
+                             r2: Int, g2: Int, b2: Int, a2: Int) -> MTLTexture? {
+        
+        let d = MTLTextureDescriptor.texture2DDescriptor(
+              pixelFormat: MTLPixelFormat.rgba8Unorm,
+              width: width,
+              height: height,
+              mipmapped: false)
+        d.usage = [ .shaderRead ]
+        
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: width * height)
+        
+        var r = Double(r1)
+        var g = Double(g1)
+        var b = Double(b1)
+        var a = Double(a1)
+        let dr = Double(r2 - r1) / Double(height)
+        let dg = Double(g2 - g1) / Double(height)
+        let db = Double(b2 - b1) / Double(height)
+        let da = Double(a2 - a1) / Double(height)
+        
+        for row in 0 ..< height {
+            let c = UInt32(a) << 24 | UInt32(b) << 16 | UInt32(g) << 8 | UInt32(r)
+            for col in 0 ..< width {
+                data[row * width + col] = c
+            }
+            r += dr; g += dg; b += db; a += da
+        }
+        
+        let region = MTLRegionMake2D(0, 0, width, height)
+        let texture = makeTexture(descriptor: d)
+        texture!.replace(region: region,
+                         mipmapLevel: 0,
+                         withBytes: data,
+                         bytesPerRow: 4 * width)
+        
+        data.deallocate()
+        /*
+        let buffer = makeBuffer(bytes: data, length: bytes, options: d.resourceOptions)
+        return buffer?.makeTexture(descriptor: d, offset: 0, bytesPerRow: bytesPerRow)
+        */
+        return texture
+    }
 }
 
 //

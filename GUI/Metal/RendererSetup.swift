@@ -73,15 +73,18 @@ extension Renderer {
         // Shader library
         library = device.makeDefaultLibrary()
         assert(library != nil, "Metal library must not be nil")
-
-        // View parameters
-        // self.sampleCount = 1
+        
+        // Objects
+        chart = BarChart.init(device: device)
+        darkBg = Node.init(device: device, x: 0, y: 0, z: 0, w: 0.4, h: 0.2, t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
     }
 
     internal func buildTextures() {
 
         track()
 
+        // let loader = MTKTextureLoader.init(device: device)
+                   
         //
         // Background texture
         //
@@ -149,6 +152,34 @@ extension Renderer {
         // Scanline texture
         scanlineTexture = device.makeTexture(descriptor: descriptor)
         assert(scanlineTexture != nil, "Failed to create scanline texture.")
+        
+        let bytes = controller.amiga.denise.gradientR(255, g: 0, b: 0)
+        // Surfaces
+        gradientBlack = device.makeGradientTexture(ptr: bytes!,
+                                                   width: 128, height: 128,
+                                                   r1: 255, g1: 255, b1: 255, a1: 128,
+                                                   r2: 255, g2: 255, b2: 255, a2: 128)
+        gradientRed = device.makeGradientTexture(ptr: bytes!,
+                                                 width: 128, height: 128,
+                                                 r1: 255, g1: 0, b1: 0, a1: 255,
+                                                 r2: 255, g2: 0, b2: 0, a2: 128)
+        
+        /*
+        let w = 128
+        let h = 128
+        let surfaceDescriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: MTLPixelFormat.rgba8Unorm,
+            width: w,
+            height: h,
+            mipmapped: false)
+        gradientRed = device.makeTexture(descriptor: surfaceDescriptor)
+        let region = MTLRegionMake2D(0, 0, w, h)
+        let bytes = controller.amiga.denise.gradientR(255, g: 0, b: 0)
+        gradientRed.replace(region: region,
+                            mipmapLevel: 0,
+                            withBytes: bytes!,
+                            bytesPerRow: 4 * w)
+         */
     }
 
     internal func buildSamplers() {

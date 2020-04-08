@@ -350,6 +350,7 @@ struct AmigaFileWrapper;
 - (ScreenBuffer) stableLongFrame;
 - (ScreenBuffer) stableShortFrame;
 - (i32 *) noise;
+- (u32 *) gradientR:(NSInteger)r G:(NSInteger)g B:(NSInteger)b;
 
 @end
 

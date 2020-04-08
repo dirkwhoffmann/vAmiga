@@ -162,6 +162,74 @@ class Quad {
     }
 }
 
+class BarChart {
+    
+    // Number of scroll steps until a new bar shows up
+    let steps = 20
+    
+    // Drawing dimensions
+    let width = Float(0.01)
+    let space = Float(0.005)
+    let scale = Float(0.2)
+
+    let device: MTLDevice
+    var values: [Float]
+    var rectangles: [Node]
+    var offset = 0
+    var sum = Float(0)
+    
+    init(device: MTLDevice) {
+        
+        self.device = device
+        rectangles = []
+        
+        values = Array(repeating: 0.0, count: 20)
+        updateRectangles()
+    }
+        
+    func addValue(_ value: Float) {
+        
+        sum += value
+        offset += 1
+        
+        if offset == steps {
+            values.remove(at: 0)
+            values.append(sum / Float(steps))
+            sum = 0
+            offset = 0
+            updateRectangles()
+        }
+    }
+    
+    var xOffset: Float {
+    
+        return -(width + space) * (Float(offset) / Float(steps))
+    }
+    
+    func updateRectangles() {
+                
+        rectangles = []
+        for n in 0 ..< values.count {
+            let rect = NSRect.init(x: 0,
+                                   y: 1.0 - Double(values[n]),
+                                   width: 1.0,
+                                   height: Double(values[n]))
+            let x = Float(n) * (width + space)
+            rectangles.append(Node.init(device: device,
+                                        x: x, y: 0, z: 0,
+                                        w: width, h: values[n] * scale, t: rect))
+        }
+    }
+    
+    func draw(_ commandEncoder: MTLRenderCommandEncoder) {
+        
+        // track("\(rectangles.count) rectangles to draw")
+        for rect in rectangles {
+            rect.drawPrimitives(commandEncoder)
+        }
+    }
+}
+
 class Renderer: NSObject, MTKViewDelegate {
     
     let mtkView: MTKView
@@ -216,6 +284,9 @@ class Renderer: NSObject, MTKViewDelegate {
     var quad2D: Node?
     var quad3D: Quad?
         
+    var chart: BarChart?
+    var darkBg: Node?
+    
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -293,6 +364,11 @@ class Renderer: NSObject, MTKViewDelegate {
      * effect.
      */
     var dotMaskTexture: MTLTexture! = nil
+    
+    /* Surfaces (bar charts)
+     */
+    var gradientBlack: MTLTexture! = nil
+    var gradientRed: MTLTexture! = nil
     
     /* An instance of the merge filter
      */
@@ -683,7 +759,9 @@ class Renderer: NSObject, MTKViewDelegate {
         quad2D!.drawPrimitives(commandEncoder)
         endFrame()
     }
-
+    
+    var angle = 0
+ 
     func drawScene3D() {
 
         let paused = controller.amiga.isPaused()
@@ -743,13 +821,34 @@ class Renderer: NSObject, MTKViewDelegate {
 
             // Draw (part of) cube
             quad3D!.draw(commandEncoder, allSides: animates != 0)
+            
+            // Draw monitoring panels
+            // angle += 2
+            chart!.addValue(Float.random(in: 0...1.0))
+
+            let transBg = translationMatrix(x: 0.0, y: 0.0, z: 0.51)
+            let trans = translationMatrix(x: chart!.xOffset, y: 0.0, z: 0.5)
+            let rot = rotationMatrix(radians: Float(angle) * .pi / 180.0,
+                                     x: 0.5, y: 0.0, z: 0.0)
+            var uniformsBg = VertexUniforms(mvp: transBg * rot)
+            var uniforms = VertexUniforms(mvp: trans * rot)
+
+
+            
+            commandEncoder.setVertexBytes(&uniformsBg,
+                                          length: MemoryLayout<VertexUniforms>.stride,
+                                          index: 1)
+            commandEncoder.setFragmentTexture(gradientBlack, index: 0)
+            darkBg!.drawPrimitives(commandEncoder)
+
+            commandEncoder.setVertexBytes(&uniforms,
+                                          length: MemoryLayout<VertexUniforms>.stride,
+                                          index: 1)
+            commandEncoder.setFragmentTexture(gradientRed, index: 0)
+            chart!.draw(commandEncoder)
         }
 
         endFrame()
-    }
-
-    func drawBarChart(_ values: [Float], x: Float, y: Float, shift: Int) {
-    
     }
     
     func endFrame() {
