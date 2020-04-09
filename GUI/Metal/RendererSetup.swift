@@ -99,17 +99,27 @@ extension Renderer {
         let x6 = 0.66
         let d = (x6 - x1) / 5
         copMonitor = BarChart.init(device: device, name: "Copper",
-                                 position: NSPoint.init(x: x1, y: -0.95))
+                                   position: NSPoint.init(x: x1, y: -0.95))
         bltMonitor = BarChart.init(device: device, name: "Blitter",
-                                 position: NSPoint.init(x: x1 + d, y: -0.95))
+                                   position: NSPoint.init(x: x1 + d, y: -0.95))
         dskMonitor = BarChart.init(device: device, name: "Disk",
-                                 position: NSPoint.init(x: x1 + 2*d, y: -0.95))
+                                   position: NSPoint.init(x: x1 + 2*d, y: -0.95))
         audMonitor = BarChart.init(device: device, name: "Audio",
-                                 position: NSPoint.init(x: x1 + 3*d, y: -0.95))
+                                   position: NSPoint.init(x: x1 + 3*d, y: -0.95))
         sprMonitor = BarChart.init(device: device, name: "Sprites",
-                                 position: NSPoint.init(x: x1 + 4*d, y: -0.95))
+                                   position: NSPoint.init(x: x1 + 4*d, y: -0.95))
         bplMonitor = BarChart.init(device: device, name: "Bitplanes",
-                                 position: NSPoint.init(x: x1 + 5*d, y: -0.95))
+                                   position: NSPoint.init(x: x1 + 5*d, y: -0.95))
+        
+        copMonitor!.logScale = true
+        bltMonitor!.logScale = true
+
+        copMonitor!.color = NSColor.red
+        bltMonitor!.color = NSColor.yellow
+        dskMonitor!.color = NSColor.blue
+        audMonitor!.color = NSColor.green
+        sprMonitor!.color = NSColor.magenta
+        bplMonitor!.color = NSColor.cyan
     }
 
     internal func buildTextures() {

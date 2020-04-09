@@ -89,6 +89,8 @@ class DmaDebugDialog: DialogController {
 
     @IBAction func dmaDebugColorAction(_ sender: NSColorWell!) {
 
+        track("tag = \(sender.tag)")
+        
         let color = sender.color
         let owner = BusOwner(Int8(sender.tag))
         let r = Double(color.redComponent)

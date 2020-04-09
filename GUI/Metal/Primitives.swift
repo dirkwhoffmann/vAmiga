@@ -182,6 +182,9 @@ class BarChart {
     // Color
     var color: NSColor! { didSet { updateTextures() } }
 
+    // Scaling method on y axis
+    var logScale = false
+    
     // Drawing dimensions
     let width = Float(0.01)
     let space = Float(0.0025)
@@ -213,23 +216,6 @@ class BarChart {
         self.position = Renderer.translationMatrix(x: Float(p.x), y: Float(p.y), z: 0.5)
         self.color = .red
 
-        /*
-        let r = Int(color.redComponent * 255)
-        let g = Int(color.greenComponent * 255)
-        let b = Int(color.blueComponent * 255)
-        foreground = device.makeGradientTexture(width: 128, height: 128,
-                                                r1: r, g1: g, b1: b, a1: 128,
-                                                r2: 255, g2: 255, b2: 255, a2: 255)
-        
-        if BarChart.background == nil {
-            BarChart.background =
-                device.makeGradientTexture(width: 320, height: 200,
-                                           r1: 64, g1: 64, b1: 64, a1: 128,
-                                           r2: 128, g2: 128, b2: 128, a2: 128,
-                                           radius: 10)
-        }
-        */
-        
         self.rectangles = []
         values = Array(repeating: 0.0, count: capacity)
 
@@ -256,19 +242,28 @@ class BarChart {
  
     func updateBackgroundTexture() {
         
-        let r1 = 64 // Int(color.redComponent * 255)
-        let g1 = 64 // Int(color.greenComponent * 255)
-        let b1 = 64 // Int(color.blueComponent * 255)
-        let r2 = 128 // Int(color.redComponent * 255)
-        let g2 = 128 // Int(color.greenComponent * 255)
-        let b2 = 128 // Int(color.blueComponent * 255)
-        
+        /*
+        let r1 = 64
+        let g1 = 64
+        let b1 = 64
+        let r2 = 128
+        let g2 = 128
+        let b2 = 128
+        */
+        let r1 = Int(color.redComponent * 255) / 2
+        let g1 = Int(color.greenComponent * 255) / 2
+        let b1 = Int(color.blueComponent * 255) / 2
+        let r2 = 128
+        let g2 = 128
+        let b2 = 128
+
         let size = MTLSizeMake(320, 200, 0)
         let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
         
         data.drawGradient(size: size,
                           r1: r1, g1: g1, b1: b1, a1: 128,
                           r2: r2, g2: g2, b2: b2, a2: 128)
+        data.drawGrid(size: size, y1: 10, y2: 135, lines: 5, logScale: logScale)
         data.makeRoundCorner(size: size, radius: 10)
         data.imprint(size: size, text: name)
         

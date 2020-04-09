@@ -112,6 +112,48 @@ public extension CGImage {
 //
 
 extension UnsafeMutablePointer where Pointee == UInt32 {
+
+    func darken(size: MTLSize, region: MTLRegion, factor: Double) {
+
+        var index = size.width * region.origin.y + region.origin.x
+        let skip = size.width - region.size.width
+        assert(skip >= 0)
+        
+        for _ in 0 ..< region.size.height {
+            for _ in 0 ..< region.size.width {
+                
+                let b = UInt32(Double(self[index] >> 16 & 0xFF) * factor) & 0xFF
+                let g = UInt32(Double(self[index] >> 8 & 0xFF) * factor) & 0xFF
+                let r = UInt32(Double(self[index] >> 0 & 0xFF) * factor) & 0xFF
+                let c = self[index] & 0xFF000000 | b << 16 | g << 8 | r
+                self[index] = c
+                index += 1
+            }
+            index += skip
+        }
+    }
+          
+    func drawLine(size: MTLSize, y: Int, border: Int) {
+        
+        let width = size.width - 2 * border
+        let origin = MTLOrigin.init(x: border, y: size.height - y, z: 0)
+        let lineSize = MTLSize.init(width: width, height: 1, depth: 0)
+        let region = MTLRegion.init(origin: origin, size: lineSize)
+        
+        darken(size: size, region: region, factor: 1.5)
+    }
+    
+    func drawGrid(size: MTLSize, y1: Int, y2: Int, lines: Int, logScale: Bool) {
+        
+        let height = Double(y2 - y1)
+        
+        for i in 0 ... lines {
+            
+            var y = Double(i) / Double(lines)
+            if logScale { y = log10(1.0 + 9*y) }
+            drawLine(size: size, y: Int(Double(y1) + height * y), border: 20)
+        }
+    }
     
     func drawGradient(size: MTLSize,
                       region: MTLRegion? = nil,
@@ -128,7 +170,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         let da = Double(a2 - a1) / Double(h); var a = Double(a1)
 
         // Create gradient
-        var index = origin.y * Int(size.width) * 4 + origin.x
+        var index = size.width * origin.y + origin.x
         let skip = Int(size.width) - w
         assert(skip >= 0)
         

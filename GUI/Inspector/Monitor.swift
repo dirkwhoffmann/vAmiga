@@ -139,7 +139,26 @@ extension Monitor {
     func refreshActivityViews() {
 
         let stats = amiga.getStats()
+        let counts = [
+            stats.agnus.count.0,
+            stats.agnus.count.1,
+            stats.agnus.count.2,
+            stats.agnus.count.3,
+            stats.agnus.count.4,
+            stats.agnus.count.5,
+            stats.agnus.count.6,
+            stats.agnus.count.7,
+            stats.agnus.count.8
+        ]
+     
+        let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
+        let bltDMA = Double(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
+        let dskDMA = Double(counts[Int(BUS_DISK.rawValue)]) / (313*3)
+        let audDMA = Double(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
+        let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
+        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / (313*192)
 
+        // DEPRECATED
         let copperActivity = Double(stats.agnus.count.7) / (313*100)
         let blitterActivity = Double(stats.agnus.count.8) / (313*120)
         let spriteActivity = Double(stats.denise.spriteLines) / 313
@@ -169,12 +188,12 @@ extension Monitor {
         diskView.add(val1: diskActivity / frames)
         serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
 
-        parent.renderer.copMonitor?.addValue(Float(copperActivity / frames))
-        parent.renderer.bltMonitor?.addValue(Float(blitterActivity / frames))
-        parent.renderer.dskMonitor?.addValue(Float(diskActivity / frames))
-        parent.renderer.audMonitor?.addValue(Float(0)) // TODO
-        parent.renderer.sprMonitor?.addValue(Float(spriteActivity / frames))
-        parent.renderer.bplMonitor?.addValue(Float(0)) // TODO
+        parent.renderer.copMonitor?.addValue(Float(copDMA / frames))
+        parent.renderer.bltMonitor?.addValue(Float(bltDMA / frames))
+        parent.renderer.dskMonitor?.addValue(Float(dskDMA / frames))
+        parent.renderer.audMonitor?.addValue(Float(audDMA / frames))
+        parent.renderer.sprMonitor?.addValue(Float(sprDMA / frames))
+        parent.renderer.bplMonitor?.addValue(Float(bplDMA / frames))
     }
 }
 
