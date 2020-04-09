@@ -352,6 +352,26 @@ Agnus::getInfo()
     return result;
 }
 
+void
+Agnus::clearStats()
+{
+    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
+        stats.count[i] = 0;
+        stats.interpolated[i] = 0.0;
+    }
+}
+
+void
+Agnus::updateStats()
+{
+    const double weight = 0.5;
+        
+    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
+        stats.interpolated[i] = weight * stats.interpolated[i] + (1 - weight) * stats.count[i];
+        stats.count[i] = 0;
+    }
+}
+
 Cycle
 Agnus::cyclesInFrame()
 {
@@ -1845,9 +1865,12 @@ Agnus::vsyncHandler()
     joystick1.execute();
     joystick2.execute();
 
-    // Update statistics
+    // Update statistics (DEPRECATED)
     amiga.updateStats();
 
+    // Update statistics
+    updateStats();
+    
     // Count some sheep (zzzzzz) ...
     if (!amiga.getWarp()) {
         amiga.synchronizeTiming();

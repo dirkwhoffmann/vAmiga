@@ -506,7 +506,8 @@ public:
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
     AgnusStats getStats() { return stats; }
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
+    void clearStats();
+    void updateStats();
 
 
     //

@@ -150,7 +150,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         for i in 0 ... lines {
             
             var y = Double(i) / Double(lines)
-            if logScale { y = log10(1.0 + 9*y) }
+            if logScale { y = log10(1.0 + 9.0 * y) }
             drawLine(size: size, y: Int(Double(y1) + height * y), border: 20)
         }
     }
@@ -218,12 +218,12 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
                                      bitmapInfo: alphaInfo | orderInfo)
         
         // Create an attributed string
-        let string = NSAttributedString.init(text, size: 32, color: .white)
+        let string = NSAttributedString.init(text, size: 28, color: .white)
        
         // Draw text centered on top
         let line = CTLineCreateWithAttributedString(string)
         let offset = CTLineGetPenOffsetForFlush(line, 0.5, Double(size.width))
-        context!.textPosition = CGPoint(x: Int(offset), y: size.height - 48)
+        context!.textPosition = CGPoint(x: Int(offset), y: size.height - 38)
         CTLineDraw(line, context!)
     }
 }

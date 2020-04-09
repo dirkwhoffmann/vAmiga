@@ -444,6 +444,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->agnus->blitter.getInfo();
 }
+- (AgnusStats) getStats
+{
+    return wrapper->agnus->getStats();
+}
 - (BOOL) interlaceMode
 {
     return wrapper->agnus->frame.interlaced;

@@ -164,6 +164,28 @@ class BarChart {
     let device: MTLDevice
 
     //
+    // Dimensions
+    //
+    
+    let barWidth    = Float(0.01)      // Width of a singe bar
+    let barHeight   = Float(0.15)       // Maximum height of a single bar
+    let delimiter   = Float(0.0025)    // Space between bars
+
+    var totalBarWidth: Float { return barWidth + delimiter }
+
+    let leftBorder  = Float(0.02) + Float(0.0125)
+    let rightBorder = Float(0.02)
+    let upperBorder = Float(0.07)
+    let lowerBorder = Float(0.02)
+
+    var borderWidth: Float { return leftBorder + rightBorder }
+    var borderHeight: Float { return upperBorder + lowerBorder }
+    var innerWidth: Float { return Float(capacity) * totalBarWidth - delimiter }
+    var innerHeight: Float { return barHeight }
+    var totalWidth: Float { return innerWidth + borderWidth }
+    var totalHeight: Float { return innerHeight + borderHeight }
+        
+    //
     // Appearance
     //
     
@@ -178,20 +200,13 @@ class BarChart {
 
     // Position of this view
     var position: matrix_float4x4
-        
+            
     // Color
     var color: NSColor! { didSet { updateTextures() } }
 
     // Scaling method on y axis
     var logScale = false
     
-    // Drawing dimensions
-    let width = Float(0.01)
-    let space = Float(0.0025)
-    let scale = Float(0.2)
-    let border = Float(0.02)
-    var totalWidth: Float { return Float(capacity + 1) * (width + space) - space }
-        
     //
     // Data
     //
@@ -199,7 +214,7 @@ class BarChart {
     var values: [Float]
     var rectangles: [Node]
     var bgRectangle: Node?
-    var offset = 0
+    var offset = Int.random(in: 0 ... 19)
     
     // Variables needed inside addValue()
     var sum = Float(0)
@@ -257,13 +272,22 @@ class BarChart {
         let g2 = 128
         let b2 = 128
 
-        let size = MTLSizeMake(320, 200, 0)
-        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
+        let bgWidth = 300
+        let bgHeight = 240
         
+        let size = MTLSizeMake(bgWidth, bgHeight, 0)
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
+                
         data.drawGradient(size: size,
                           r1: r1, g1: g1, b1: b1, a1: 128,
                           r2: r2, g2: g2, b2: b2, a2: 128)
-        data.drawGrid(size: size, y1: 10, y2: 135, lines: 5, logScale: logScale)
+
+        let gridy = (lowerBorder / totalHeight) * Float(bgHeight)
+        let gridh = (innerHeight / totalHeight) * Float(bgHeight)
+        data.drawGrid(size: size,
+                      y1: Int(gridy), y2: Int(gridy + gridh),
+                      lines: 5, logScale: logScale)
+        
         data.makeRoundCorner(size: size, radius: 10)
         data.imprint(size: size, text: name)
         
@@ -280,13 +304,13 @@ class BarChart {
     func addValue(_ value: Float) {
         
         if sumCnt == 0 { sum = 0 }
-        sum += value
+        sum += logScale ? log10(1.0 + 9.0 * value) : value // log2(1.0 + 1.0 * value) : value
         sumCnt += 1
     }
     
     var xOffset: Float {
     
-        return -(width + space) * (Float(offset) / Float(steps))
+        return -totalBarWidth * (Float(offset) / Float(steps))
     }
     
     func updateRectangles() {
@@ -297,14 +321,15 @@ class BarChart {
                                    y: 1.0 - Double(values[n]),
                                    width: 1.0,
                                    height: Double(values[n]))
-            let x = Float(n) * (width + space)
+            let x = Float(n) * totalBarWidth
+            let h = max(values[n], 0.025) * barHeight
             rectangles.append(Node.init(device: device,
                                         x: x, y: 0, z: 0,
-                                        w: width, h: values[n] * scale, t: rect))
+                                        w: barWidth, h: h, t: rect))
         }
         bgRectangle = Node.init(device: device,
-                                x: -border - width - space, y: -border, z: 0.01,
-                                w: totalWidth + 2*border, h: scale + 2*border)
+                                x: -leftBorder, y: -lowerBorder, z: 0.01,
+                                w: totalWidth, h: totalHeight)
     }
     
     func draw(_ commandEncoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
@@ -321,9 +346,10 @@ class BarChart {
         
         let base = position * matrix
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
+        let rot = matrix_identity_float4x4; //  Renderer.rotationMatrix(radians: 20 * .pi/180.0, x: 0, y: 0.5, z: 0)
 
         // Draw background
-        var uniforms = VertexUniforms(mvp: base)
+        var uniforms = VertexUniforms(mvp: base * rot)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
@@ -331,7 +357,7 @@ class BarChart {
         bgRectangle!.drawPrimitives(commandEncoder)
 
         // Draw bars
-        uniforms = VertexUniforms(mvp: shift * base)
+        uniforms = VertexUniforms(mvp: shift * base * rot)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)

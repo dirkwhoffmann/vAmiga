@@ -302,6 +302,7 @@ struct AmigaFileWrapper;
 - (EventInfo) getEventInfo;
 - (CopperInfo) getCopperInfo;
 - (BlitterInfo) getBlitterInfo;
+- (AgnusStats) getStats;
 
 - (BOOL) interlaceMode;
 

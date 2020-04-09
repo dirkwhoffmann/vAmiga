@@ -221,7 +221,6 @@ Amiga::clearStats()
 
     memset(&stats, 0, sizeof(stats));
     mem.clearStats();
-    agnus.clearStats();
     denise.clearStats();
     paula.uart.clearStats();
     paula.diskController.clearStats();

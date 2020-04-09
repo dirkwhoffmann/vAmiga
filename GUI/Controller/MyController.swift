@@ -63,8 +63,8 @@ class MyController: NSWindowController, MessageReceiver {
     var snapshotTimer: Timer?
     var screenshotTimer: Timer?
 
-    // Counts the number of screenshots taken (DEPRECATED)
-    var screenshotCounter = 0
+    // Indicates if the activity monitors need to be updated
+    var monitorsNeedDisplay = false
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
@@ -570,12 +570,12 @@ extension MyController {
         
         // Do 3 times a second ...
         if (animationCounter % 4) == 0 {
-            speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: renderer.frames)
-            let mhz = speedometer.mhz
-            let fps = speedometer.fps
-            clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
-            clockSpeedBar.doubleValue = 10 * mhz
-        
+
+            updateSpeedometer()
+            
+            monitorsNeedDisplay = true // REMOVE ASAP
+            if monitorsNeedDisplay { updateMonitoringPanels() }
+            
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
                 CGEventSource.secondsSinceLastEventType(.combinedSessionState,
@@ -583,10 +583,58 @@ extension MyController {
                 NSCursor.setHiddenUntilMouseMoves(true)
             }
         }
-        
+                
         timerLock.unlock()
     }
-
+    
+    func updateSpeedometer() {
+        
+        speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: renderer.frames)
+        let mhz = speedometer.mhz
+        let fps = speedometer.fps
+        clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
+        clockSpeedBar.doubleValue = 10 * mhz
+    }
+    
+    func updateMonitoringPanels() {
+        
+        let stats = amiga.agnus.getStats()
+        
+        let counts = [
+            stats.interpolated.0,
+            stats.interpolated.1,
+            stats.interpolated.2,
+            stats.interpolated.3,
+            stats.interpolated.4,
+            stats.interpolated.5,
+            stats.interpolated.6,
+            stats.interpolated.7,
+            stats.interpolated.8
+        ]
+                
+        let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
+        let bltDMA = Double(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
+        let dskDMA = Double(counts[Int(BUS_DISK.rawValue)]) / (313*3)
+        let audDMA = Double(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
+        let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
+        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / 30000 // (313*192)
+        
+        renderer.copMonitor?.addValue(Float(copDMA))
+        renderer.bltMonitor?.addValue(Float(bltDMA))
+        renderer.dskMonitor?.addValue(Float(dskDMA))
+        renderer.audMonitor?.addValue(Float(audDMA))
+        renderer.sprMonitor?.addValue(Float(sprDMA))
+        renderer.bplMonitor?.addValue(Float(bplDMA))
+        
+        monitorsNeedDisplay =
+        renderer.copMonitor != nil ||
+        renderer.bltMonitor != nil ||
+        renderer.dskMonitor != nil ||
+        renderer.audMonitor != nil ||
+        renderer.sprMonitor != nil ||
+        renderer.bplMonitor != nil
+    }
+    
     @objc func snapshotTimerFunc() {
 
         if autoSnapshots { takeAutoSnapshot() }

@@ -208,6 +208,7 @@ AgnusInfo;
 typedef struct
 {
     long count[BUS_OWNER_COUNT];
+    double interpolated[BUS_OWNER_COUNT];
 }
 AgnusStats;
 
