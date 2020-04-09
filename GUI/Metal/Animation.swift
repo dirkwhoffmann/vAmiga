@@ -344,6 +344,17 @@ extension Renderer {
 
         return m
     }
+    
+    static func scalingMatrix(xs: Float, ys: Float, zs: Float) -> matrix_float4x4 {
+                
+        var m = matrix_float4x4()
+        m.columns.0 = SIMD4<Float>(xs, 0.0, 0.0, 0.0)
+        m.columns.1 = SIMD4<Float>(0.0, ys, 0.0, 0.0)
+        m.columns.2 = SIMD4<Float>(0.0, 0.0, zs, 0.0)
+        m.columns.3 = SIMD4<Float>(0.0, 0.0, 0.0, 1.0)
+        
+        return m
+    }
 
     static func translationMatrix(x: Float,
                                   y: Float,

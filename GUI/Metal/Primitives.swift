@@ -164,27 +164,57 @@ class BarChart {
     let device: MTLDevice
 
     //
-    // Dimensions
+    // Dimensions in normalized rectangle (0,0) - (1,1)
     //
     
+    let leftBorder  = Float(0.1)
+    let rightBorder = Float(0.1)
+    let upperBorder = Float(0.275)
+    let lowerBorder = Float(0.1)
+
+    var borderWidth: Float { return leftBorder + rightBorder }
+    var innerWidth: Float { return 1.0 - borderWidth }
+    var borderHeight: Float { return upperBorder + lowerBorder }
+    var innerHeight: Float { return 1.0 - borderHeight }
+
+    let bars        = 20
+    let thickness   = Float(0.03)
+
+    let barHeight   = Float(0.625)
+    var barWidth: Float { innerWidth / Float(bars + 1) }
+    
+    // var delimiter: Float { return innerWidth / Float(bars + 1) - barWidth }
+            /*
+    let barWidth    = Float(0.03)
+    let barHeight   = Float(0.625)
+    let delimiter   = Float(
+    )
     let barWidth    = Float(0.01)      // Width of a singe bar
     let barHeight   = Float(0.15)       // Maximum height of a single bar
     let delimiter   = Float(0.0025)    // Space between bars
 
-    var totalBarWidth: Float { return barWidth + delimiter }
+    var totalBarWidth: Float { return barWidth + delimiter } // 0.0125  0.2475+0.05125 = 0.29825
 
     let leftBorder  = Float(0.02) + Float(0.0125)
     let rightBorder = Float(0.02)
     let upperBorder = Float(0.07)
     let lowerBorder = Float(0.02)
 
-    var borderWidth: Float { return leftBorder + rightBorder }
-    var borderHeight: Float { return upperBorder + lowerBorder }
     var innerWidth: Float { return Float(capacity) * totalBarWidth - delimiter }
     var innerHeight: Float { return barHeight }
     var totalWidth: Float { return innerWidth + borderWidth }
-    var totalHeight: Float { return innerHeight + borderHeight }
+    var totalHeight: Float { return innerHeight + borderHeight } // 0.24
+        */
+    
+    //
+    // Transformations
+    //
         
+    var posm = matrix_identity_float4x4
+
+    var position: NSRect = NSRect.init() { didSet { updateMatrices() } }
+    var angle: Float = 0.0 { didSet { updateMatrices() } }
+    
     //
     // Appearance
     //
@@ -197,9 +227,6 @@ class BarChart {
     
     // Name of this view
     var name = "Lorem ipsum"
-
-    // Position of this view
-    var position: matrix_float4x4
             
     // Color
     var color: NSColor! { didSet { updateTextures() } }
@@ -224,11 +251,11 @@ class BarChart {
     var foreground: MTLTexture?
     var background: MTLTexture?
 
-    init(device: MTLDevice, name: String, position p: NSPoint) {
+    init(device: MTLDevice, name: String, position: NSRect) {
         
         self.device = device
         self.name = name
-        self.position = Renderer.translationMatrix(x: Float(p.x), y: Float(p.y), z: 0.5)
+        self.position = position
         self.color = .red
 
         self.rectangles = []
@@ -236,6 +263,7 @@ class BarChart {
 
         updateRectangles()
         updateTextures()
+        updateMatrices()
     }
      
     func updateForegroundTexture() {
@@ -282,8 +310,8 @@ class BarChart {
                           r1: r1, g1: g1, b1: b1, a1: 128,
                           r2: r2, g2: g2, b2: b2, a2: 128)
 
-        let gridy = (lowerBorder / totalHeight) * Float(bgHeight)
-        let gridh = (innerHeight / totalHeight) * Float(bgHeight)
+        let gridy = lowerBorder * Float(bgHeight)
+        let gridh = innerHeight * Float(bgHeight)
         data.drawGrid(size: size,
                       y1: Int(gridy), y2: Int(gridy + gridh),
                       lines: 5, logScale: logScale)
@@ -301,6 +329,19 @@ class BarChart {
         updateBackgroundTexture()
     }
     
+    func updateMatrices() {
+    
+        let trans = Renderer.translationMatrix(x: Float(position.origin.x),
+                                               y: Float(position.origin.y),
+                                               z: 0.0)
+        let scale = Renderer.scalingMatrix(xs: Float(position.size.width),
+                                           ys: Float(position.size.height),
+                                           zs: 1.0)
+        let rot = Renderer.rotationMatrix(radians: angle * .pi/180.0, x: 0, y: 0.5, z: 0)
+     
+        posm = trans * rot * scale
+    }
+    
     func addValue(_ value: Float) {
         
         if sumCnt == 0 { sum = 0 }
@@ -310,26 +351,29 @@ class BarChart {
     
     var xOffset: Float {
     
-        return -totalBarWidth * (Float(offset) / Float(steps))
+        return -barWidth * (Float(offset) / Float(steps))
     }
     
     func updateRectangles() {
                 
         rectangles = []
         for n in 0 ..< values.count {
-            let rect = NSRect.init(x: 0,
-                                   y: 1.0 - Double(values[n]),
-                                   width: 1.0,
-                                   height: Double(values[n]))
-            let x = Float(n) * totalBarWidth
+            
+            let t = NSRect.init(x: 0,
+                                y: 1.0 - Double(values[n]),
+                                width: 1.0,
+                                height: Double(values[n]))
+            
+            let x = leftBorder + (Float(n) + 1) * barWidth
+            let y = lowerBorder
+            let w = thickness
             let h = max(values[n], 0.025) * barHeight
+            
             rectangles.append(Node.init(device: device,
-                                        x: x, y: 0, z: 0,
-                                        w: barWidth, h: h, t: rect))
+                                        x: x, y: y, z: 0, w: w, h: h, t: t))
         }
         bgRectangle = Node.init(device: device,
-                                x: -leftBorder, y: -lowerBorder, z: 0.01,
-                                w: totalWidth, h: totalHeight)
+                                x: 0, y: 0, z: 0.01, w: 1.0, h: 1.0)
     }
     
     func draw(_ commandEncoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
@@ -343,13 +387,11 @@ class BarChart {
             offset = 0
             updateRectangles()
         }
-        
-        let base = position * matrix
+
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
-        let rot = matrix_identity_float4x4; //  Renderer.rotationMatrix(radians: 20 * .pi/180.0, x: 0, y: 0.5, z: 0)
 
         // Draw background
-        var uniforms = VertexUniforms(mvp: base * rot)
+        var uniforms = VertexUniforms(mvp: posm)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
@@ -357,7 +399,7 @@ class BarChart {
         bgRectangle!.drawPrimitives(commandEncoder)
 
         // Draw bars
-        uniforms = VertexUniforms(mvp: shift * base * rot)
+        uniforms = VertexUniforms(mvp: posm * shift)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)

@@ -95,21 +95,29 @@ extension Renderer {
                                  position: NSPoint.init(x: 0.65, y: -0.8),
          color: .magenta)
          */
-        let x1 = -0.90
-        let x6 = 0.66
-        let d = (x6 - x1) / 5
+        // d  w  d  w  d  w  d  w  d  w  d
+        //   ___   ___   ___   ___   ___
+        // -|   |-|   |-|   |-|   |-|   |- h
+        //   ---   ---   ---   ---   ---
+        let d = 0.04
+        let w = (2.0 - 6 * d) / 5
+        let s = d + w
+        let h = 0.25
+        let y = -1 + d
+        let b = d - 1.0
+        
         copMonitor = BarChart.init(device: device, name: "Copper",
-                                   position: NSPoint.init(x: x1, y: -0.95))
+                                   position: NSRect.init(x: b, y: y, width: w, height: h))
         bltMonitor = BarChart.init(device: device, name: "Blitter",
-                                   position: NSPoint.init(x: x1 + d, y: -0.95))
+                                   position: NSRect.init(x: b + s, y: y, width: w, height: h))
         dskMonitor = BarChart.init(device: device, name: "Disk",
-                                   position: NSPoint.init(x: x1 + 2*d, y: -0.95))
+                                   position: NSRect.init(x: b + 2*s, y: y, width: w, height: h))
         audMonitor = BarChart.init(device: device, name: "Audio",
-                                   position: NSPoint.init(x: x1 + 3*d, y: -0.95))
+                                   position: NSRect.init(x: b + 3*s, y: y, width: w, height: h))
         sprMonitor = BarChart.init(device: device, name: "Sprites",
-                                   position: NSPoint.init(x: x1 + 4*d, y: -0.95))
+                                   position: NSRect.init(x: b + 4*s, y: y, width: w, height: h))
         bplMonitor = BarChart.init(device: device, name: "Bitplanes",
-                                   position: NSPoint.init(x: x1 + 5*d, y: -0.95))
+                                   position: NSRect.init(x: b + 5*s, y: y, width: w, height: h))
         
         copMonitor!.logScale = true
         bltMonitor!.logScale = true
