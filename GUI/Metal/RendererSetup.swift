@@ -74,50 +74,54 @@ extension Renderer {
         library = device.makeDefaultLibrary()
         assert(library != nil, "Metal library must not be nil")
         
-        // Objects
+        // d  w  d  w  d  w  d  w  d  w  d  w  d
+        //   ___   ___   ___   ___   ___   ___
+        // -|   |-|   |-|   |-|   |-|   |-|   |- h
+        //   ---   ---   ---   ---   ---   ---
+        
         /*
-        monitor1 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: 0.7),
-                                 color: .red)
-        monitor2 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: 0.4),
-                                 color: .blue)
-        monitor3 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: 0.1),
-                                 color: .yellow)
-        monitor4 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: -0.2),
-                                 color: .cyan)
-        monitor5 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: -0.5),
-                                 color: .green)
-        monitor6 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: 0.65, y: -0.8),
-         color: .magenta)
-         */
-        // d  w  d  w  d  w  d  w  d  w  d
-        //   ___   ___   ___   ___   ___
-        // -|   |-|   |-|   |-|   |-|   |- h
-        //   ---   ---   ---   ---   ---
-        let d = 0.04
-        let w = (2.0 - 6 * d) / 5
+         let d = 0.04
+         let w = (2.0 - 6 * d) / 5
+         let s = d + w
+         let h = 0.25
+         let y = -1 + d
+         let b = d - 1.0
+        */
+        
+        let xmin = -0.59
+        let xmax = 0.59
+        let ymin = -0.45
+        let xspan = xmax - xmin
+        
+        let d = 0.02
+        let w = (xspan - 7 * d) / 6
         let s = d + w
-        let h = 0.25
-        let y = -1 + d
-        let b = d - 1.0
+        let h = 0.125
+        let y = ymin + d
+        let x = xmin + d
+        
+        /*
+        let scalex = 0.5
+        let d = 0.04
+        let w = 0.25
+        let s = w + 0.1
+        let h = 0.25 * scalex
+        let y = (-1 + d + 0.6) * scalex
+        let b = -0.6
+        */
         
         copMonitor = BarChart.init(device: device, name: "Copper",
-                                   position: NSRect.init(x: b, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x, y: y, width: w, height: h))
         bltMonitor = BarChart.init(device: device, name: "Blitter",
-                                   position: NSRect.init(x: b + s, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x + s, y: y, width: w, height: h))
         dskMonitor = BarChart.init(device: device, name: "Disk",
-                                   position: NSRect.init(x: b + 2*s, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x + 2*s, y: y, width: w, height: h))
         audMonitor = BarChart.init(device: device, name: "Audio",
-                                   position: NSRect.init(x: b + 3*s, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x + 3*s, y: y, width: w, height: h))
         sprMonitor = BarChart.init(device: device, name: "Sprites",
-                                   position: NSRect.init(x: b + 4*s, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x + 4*s, y: y, width: w, height: h))
         bplMonitor = BarChart.init(device: device, name: "Bitplanes",
-                                   position: NSRect.init(x: b + 5*s, y: y, width: w, height: h))
+                                   position: NSRect.init(x: x + 5*s, y: y, width: w, height: h))
         
         copMonitor!.logScale = true
         bltMonitor!.logScale = true
@@ -128,6 +132,13 @@ extension Renderer {
         audMonitor!.color = NSColor.green
         sprMonitor!.color = NSColor.magenta
         bplMonitor!.color = NSColor.cyan
+
+        copMonitor!.angle = -20
+        bltMonitor!.angle = -14
+        dskMonitor!.angle = -8
+        audMonitor!.angle = 8
+        sprMonitor!.angle = 14
+        bplMonitor!.angle = 20
     }
 
     internal func buildTextures() {

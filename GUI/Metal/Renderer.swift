@@ -578,8 +578,6 @@ class Renderer: NSObject, MTKViewDelegate {
         // Render emulator texture
         if renderForeground {
 
-            // track("RenderForground")
-
             // Configure vertex shader
             commandEncoder.setVertexBytes(&vertexUniforms3D,
                                           length: MemoryLayout<VertexUniforms>.stride,
@@ -597,25 +595,13 @@ class Renderer: NSObject, MTKViewDelegate {
             // Draw (part of) cube
             quad3D!.draw(commandEncoder, allSides: animates != 0)
             
-            // Draw monitoring panels
-            /*
-            monitor1!.addValue(Float.random(in: 0...1.0))
-            monitor2!.addValue(Float.random(in: 0...1.0))
-            monitor3!.addValue(Float.random(in: 0...1.0))
-            monitor4!.addValue(Float.random(in: 0...1.0))
-            monitor5!.addValue(Float.random(in: 0...1.0))
-            monitor6!.addValue(Float.random(in: 0...1.0))
-            */
-            
-            // angle += 2
-            let rot = Renderer.rotationMatrix(radians: Float(angle) * .pi / 180.0,
-                                     x: 0.5, y: 0.0, z: 0.0)
-            copMonitor!.draw(commandEncoder, matrix: rot)
-            bltMonitor!.draw(commandEncoder, matrix: rot)
-            dskMonitor!.draw(commandEncoder, matrix: rot)
-            audMonitor!.draw(commandEncoder, matrix: rot)
-            sprMonitor!.draw(commandEncoder, matrix: rot)
-            bplMonitor!.draw(commandEncoder, matrix: rot)
+            let m = vertexUniforms3D.mvp
+            copMonitor!.draw(commandEncoder, matrix: m)
+            bltMonitor!.draw(commandEncoder, matrix: m)
+            dskMonitor!.draw(commandEncoder, matrix: m)
+            audMonitor!.draw(commandEncoder, matrix: m)
+            sprMonitor!.draw(commandEncoder, matrix: m)
+            bplMonitor!.draw(commandEncoder, matrix: m)
         }
 
         endFrame()

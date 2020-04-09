@@ -214,7 +214,7 @@ class BarChart {
 
     var position: NSRect = NSRect.init() { didSet { updateMatrices() } }
     var angle: Float = 0.0 { didSet { updateMatrices() } }
-    
+
     //
     // Appearance
     //
@@ -333,13 +333,19 @@ class BarChart {
     
         let trans = Renderer.translationMatrix(x: Float(position.origin.x),
                                                y: Float(position.origin.y),
-                                               z: 0.0)
+                                               z: -0.7)
         let scale = Renderer.scalingMatrix(xs: Float(position.size.width),
                                            ys: Float(position.size.height),
                                            zs: 1.0)
-        let rot = Renderer.rotationMatrix(radians: angle * .pi/180.0, x: 0, y: 0.5, z: 0)
+        let t1 = Renderer.translationMatrix(x: -0.5 * Float(position.size.width),
+                                            y: -0.5 * Float(position.size.height),
+                                            z: 0)
+        let t2 = Renderer.translationMatrix(x: 0.5 * Float(position.size.width),
+                                            y: 0.5 * Float(position.size.height),
+                                            z: 0)
+        let rot = Renderer.rotationMatrix(radians: angle * .pi/180.0, x: 0, y: 1, z: 0)
      
-        posm = trans * rot * scale
+        posm = trans * t2 * rot * t1 * scale
     }
     
     func addValue(_ value: Float) {
@@ -390,8 +396,11 @@ class BarChart {
 
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
 
+        // angle += 2
+        // updateMatrices()
+        
         // Draw background
-        var uniforms = VertexUniforms(mvp: posm)
+        var uniforms = VertexUniforms(mvp: matrix * posm)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
@@ -399,7 +408,7 @@ class BarChart {
         bgRectangle!.drawPrimitives(commandEncoder)
 
         // Draw bars
-        uniforms = VertexUniforms(mvp: posm * shift)
+        uniforms = VertexUniforms(mvp: matrix * posm * shift)
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
