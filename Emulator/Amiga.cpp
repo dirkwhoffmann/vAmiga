@@ -205,10 +205,6 @@ Amiga::updateStats()
 
     stats.mem = mem.getStats();
     stats.agnus = agnus.getStats();
-    stats.denise = denise.getStats();
-    stats.audio = paula.audioUnit.getStats();
-    stats.uart = paula.uart.getStats();
-    stats.disk = paula.diskController.getStats();
     stats.frames++;
 
     pthread_mutex_unlock(&lock);
@@ -221,9 +217,6 @@ Amiga::clearStats()
 
     memset(&stats, 0, sizeof(stats));
     mem.clearStats();
-    denise.clearStats();
-    paula.uart.clearStats();
-    paula.diskController.clearStats();
 }
 
 bool

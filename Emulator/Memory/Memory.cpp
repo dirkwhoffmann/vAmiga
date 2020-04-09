@@ -187,6 +187,32 @@ Memory::didSaveToBuffer(u8 *buffer)
     return writer.ptr - buffer;
 }
 
+void
+Memory::updateStats()
+{
+    const double w = 0.5;
+    
+    stats.chipReads.accumulated =
+    w * stats.chipReads.accumulated + (1.0 - w) * stats.chipReads.raw;
+    stats.chipWrites.accumulated =
+    w * stats.chipWrites.accumulated + (1.0 - w) * stats.chipWrites.raw;
+    stats.fastReads.accumulated =
+    w * stats.fastReads.accumulated + (1.0 - w) * stats.fastReads.raw;
+    stats.fastWrites.accumulated =
+    w * stats.fastWrites.accumulated + (1.0 - w) * stats.fastWrites.raw;
+    stats.romReads.accumulated =
+    w * stats.romReads.accumulated + (1.0 - w) * stats.romReads.raw;
+    stats.romWrites.accumulated =
+    w * stats.romWrites.accumulated + (1.0 - w) * stats.romWrites.raw;
+
+    stats.chipReads.raw = 0;
+    stats.chipWrites.raw = 0;
+    stats.fastReads.raw = 0;
+    stats.fastWrites.raw = 0;
+    stats.romReads.raw = 0;
+    stats.romWrites.raw = 0;
+}
+
 bool
 Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 {
@@ -689,7 +715,7 @@ Memory::peek8(u32 addr)
         case MEM_UNMAPPED:
 
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = 0;
             return dataBus;
 
@@ -697,14 +723,14 @@ Memory::peek8(u32 addr)
 
             ASSERT_CHIP_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = READ_CHIP_8(addr);
             return dataBus;
 
         case MEM_FAST:
 
             ASSERT_FAST_ADDR(addr);
-            stats.fastReads++;
+            stats.fastReads.raw++;
             dataBus = READ_FAST_8(addr);
             return dataBus;
 
@@ -712,7 +738,7 @@ Memory::peek8(u32 addr)
 
             ASSERT_CIA_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = peekCIA8(addr);
             return dataBus;
 
@@ -720,7 +746,7 @@ Memory::peek8(u32 addr)
 
             ASSERT_SLOW_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = READ_SLOW_8(addr);
             return dataBus;
 
@@ -728,7 +754,7 @@ Memory::peek8(u32 addr)
 
             ASSERT_RTC_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = peekRTC8(addr);
             return dataBus;
 
@@ -736,7 +762,7 @@ Memory::peek8(u32 addr)
 
             ASSERT_OCS_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = peekCustom8(addr);
             return dataBus;
 
@@ -744,26 +770,26 @@ Memory::peek8(u32 addr)
 
             ASSERT_AUTO_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads++;
+            stats.chipReads.raw++;
             dataBus = peekAutoConf8(addr);
             return dataBus;
 
         case MEM_ROM:
 
             ASSERT_ROM_ADDR(addr);
-            stats.romReads++;
+            stats.romReads.raw++;
             return READ_ROM_8(addr);
 
         case MEM_WOM:
 
             ASSERT_WOM_ADDR(addr);
-            stats.romReads++;
+            stats.romReads.raw++;
             return READ_WOM_8(addr);
 
         case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
-            stats.romReads++;
+            stats.romReads.raw++;
             return READ_EXT_8(addr);
 
         default:
@@ -803,7 +829,7 @@ Memory::peek16(u32 addr)
                 case MEM_UNMAPPED:
 
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = 0;
                     return dataBus;
 
@@ -811,21 +837,21 @@ Memory::peek16(u32 addr)
 
                     ASSERT_CHIP_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = READ_CHIP_16(addr);
                     return dataBus;
 
                 case MEM_FAST:
 
                     ASSERT_FAST_ADDR(addr);
-                    stats.fastReads++;
+                    stats.fastReads.raw++;
                     return READ_FAST_16(addr);
 
                 case MEM_CIA:
 
                     ASSERT_CIA_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = peekCIA16(addr);
                     return dataBus;
 
@@ -833,7 +859,7 @@ Memory::peek16(u32 addr)
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = READ_SLOW_16(addr);
                     return dataBus;
 
@@ -841,7 +867,7 @@ Memory::peek16(u32 addr)
 
                     ASSERT_RTC_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = peekRTC16(addr);
                     return dataBus;
 
@@ -849,7 +875,7 @@ Memory::peek16(u32 addr)
 
                     ASSERT_OCS_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = peekCustom16(addr);
                     return dataBus;
 
@@ -857,26 +883,26 @@ Memory::peek16(u32 addr)
 
                     ASSERT_AUTO_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads++;
+                    stats.chipReads.raw++;
                     dataBus = peekAutoConf16(addr);
                     return dataBus;
 
                 case MEM_ROM:
 
                     ASSERT_ROM_ADDR(addr);
-                    stats.romReads++;
+                    stats.romReads.raw++;
                     return READ_ROM_16(addr);
 
                 case MEM_WOM:
 
                     ASSERT_WOM_ADDR(addr);
-                    stats.romReads++;
+                    stats.romReads.raw++;
                     return READ_WOM_16(addr);
 
                 case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
-                    stats.romReads++;
+                    stats.romReads.raw++;
                     return READ_EXT_16(addr);
             }
     }
@@ -955,76 +981,76 @@ Memory::poke8(u32 addr, u8 value)
             
         case MEM_UNMAPPED:
 
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             return;
 
         case MEM_CHIP:
 
             ASSERT_CHIP_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             WRITE_CHIP_8(addr, value);
             break;
 
         case MEM_FAST:
 
             ASSERT_FAST_ADDR(addr);
-            stats.fastWrites++;
+            stats.fastWrites.raw++;
             WRITE_FAST_8(addr, value);
             break;
 
         case MEM_CIA:
 
             ASSERT_CIA_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             pokeCIA8(addr, value);
             break;
 
         case MEM_SLOW:
 
             ASSERT_SLOW_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             WRITE_SLOW_8(addr, value);
             break;
 
         case MEM_RTC:
 
             ASSERT_RTC_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             pokeRTC8(addr, value);
             break;
 
         case MEM_OCS:
 
             ASSERT_OCS_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             pokeCustom8(addr, value);
             break;
 
         case MEM_AUTOCONF:
 
             ASSERT_AUTO_ADDR(addr);
-            stats.chipWrites++;
+            stats.chipWrites.raw++;
             pokeAutoConf8(addr, value);
             break;
 
         case MEM_ROM:
 
             ASSERT_ROM_ADDR(addr);
-            stats.romWrites++;
+            stats.romWrites.raw++;
             pokeRom8(addr, value);
             break;
 
         case MEM_WOM:
 
             ASSERT_WOM_ADDR(addr);
-            stats.romWrites++;
+            stats.romWrites.raw++;
             pokeWom8(addr, value);
             break;
 
         case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
-            stats.romWrites++;
+            stats.romWrites.raw++;
             break;
 
         default:
@@ -1062,7 +1088,7 @@ Memory::poke16(u32 addr, u16 value)
                 case MEM_UNMAPPED:
 
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     return;
 
@@ -1070,7 +1096,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_CHIP_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     WRITE_CHIP_16(addr, value);
                     return;
@@ -1078,7 +1104,7 @@ Memory::poke16(u32 addr, u16 value)
                 case MEM_FAST:
 
                     ASSERT_FAST_ADDR(addr);
-                    stats.fastWrites++;
+                    stats.fastWrites.raw++;
                     WRITE_FAST_16(addr, value);
                     return;
 
@@ -1086,7 +1112,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_CIA_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     pokeCIA16(addr, value);
                     return;
@@ -1095,7 +1121,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     WRITE_SLOW_16(addr, value);
                     return;
@@ -1104,7 +1130,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_RTC_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     pokeRTC16(addr, value);
                     return;
@@ -1113,7 +1139,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_OCS_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     pokeCustom16<POKE_CPU>(addr, value);
                     return;
@@ -1122,7 +1148,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_AUTO_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites++;
+                    stats.chipWrites.raw++;
                     dataBus = value;
                     pokeAutoConf16(addr, value);
                     return;
@@ -1130,21 +1156,21 @@ Memory::poke16(u32 addr, u16 value)
                 case MEM_ROM:
 
                     ASSERT_ROM_ADDR(addr);
-                    stats.romWrites++;
+                    stats.romWrites.raw++;
                     pokeRom16(addr, value);
                     return;
 
                 case MEM_WOM:
 
                     ASSERT_WOM_ADDR(addr);
-                    stats.romWrites++;
+                    stats.romWrites.raw++;
                     pokeWom16(addr, value);
                     return;
 
                 case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
-                    stats.romWrites++;
+                    stats.romWrites.raw++;
                     return;
 
                 default:

@@ -72,10 +72,4 @@ typedef struct
 }
 DiskControllerInfo;
 
-typedef struct
-{
-    long wordCount[4];
-}
-DiskControllerStats;
-
 #endif

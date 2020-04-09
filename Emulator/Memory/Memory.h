@@ -257,12 +257,15 @@ private:
 
 public:
     
-    // Returns statistical information about the current activiy
+    // Returns statistical information about the current activity
     MemoryStats getStats() { return stats; }
 
     // Resets the collected statistical information
     void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
+    // Called in the vsync handler to compute the interpolated values
+    void updateStats();
+    
     
     //
     // Allocating memory

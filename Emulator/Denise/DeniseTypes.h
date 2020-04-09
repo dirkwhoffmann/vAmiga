@@ -142,10 +142,4 @@ typedef struct
 }
 DeniseInfo;
 
-typedef struct
-{
-    long spriteLines;
-}
-DeniseStats;
-
 #endif

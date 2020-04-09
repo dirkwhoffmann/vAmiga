@@ -19,7 +19,6 @@ class DiskController : public AmigaComponent {
     // Bookkeeping
     DiskControllerConfig config;
     DiskControllerInfo info;
-    DiskControllerStats stats;
 
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
@@ -91,8 +90,6 @@ public:
 
     DiskControllerConfig getConfig() { return config; }
     DiskControllerInfo getInfo();
-    DiskControllerStats getStats() { return stats; }
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
     template <class T>
     void applyToPersistentItems(T& worker)

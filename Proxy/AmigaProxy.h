@@ -236,6 +236,7 @@ struct AmigaFileWrapper;
 }
 
 - (MemoryConfig) getConfig;
+- (MemoryStats) getStats;
 - (void) dump;
 
 - (BOOL) isBootRom:(RomRevision)rev;

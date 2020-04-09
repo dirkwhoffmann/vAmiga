@@ -30,9 +30,6 @@ class Denise : public AmigaComponent {
     // Sprite information recorded in the current frame (constantly changing)
     SpriteInfo spriteInfo[8];
 
-    // Collected statistical information
-    DeniseStats stats;
-
     
     //
     // Sub components
@@ -379,12 +376,6 @@ public:
     u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }
     u16 getSpriteColor(int nr, int reg) { return latchedSpriteInfo[nr].colors[reg]; }
     u64 getSpriteData(int nr, int line) { return latchedSpriteInfo[nr].data[line]; }
-
-    // Returns statistical information about the current activiy
-    DeniseStats getStats() { return stats; }
-
-    // Resets the collected statistical information
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //

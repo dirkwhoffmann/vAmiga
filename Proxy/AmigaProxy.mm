@@ -230,6 +230,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->getConfig();
 }
+- (MemoryStats) getStats
+{
+    return wrapper->mem->getStats();
+}
 - (void) dump
 {
     wrapper->mem->dump();

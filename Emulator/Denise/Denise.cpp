@@ -771,8 +771,6 @@ Denise::drawSprites()
 {
     if (wasArmed && config.emulateSprites) {
 
-        stats.spriteLines++;
-
         if (wasArmed & 0b11000000) drawSpritePair<7>();
         if (wasArmed & 0b00110000) drawSpritePair<5>();
         if (wasArmed & 0b00001100) drawSpritePair<3>();

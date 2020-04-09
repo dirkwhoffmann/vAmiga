@@ -601,15 +601,15 @@ extension MyController {
         let stats = amiga.agnus.getStats()
         
         let counts = [
-            stats.interpolated.0,
-            stats.interpolated.1,
-            stats.interpolated.2,
-            stats.interpolated.3,
-            stats.interpolated.4,
-            stats.interpolated.5,
-            stats.interpolated.6,
-            stats.interpolated.7,
-            stats.interpolated.8
+            stats.bus.accumulated.0,
+            stats.bus.accumulated.1,
+            stats.bus.accumulated.2,
+            stats.bus.accumulated.3,
+            stats.bus.accumulated.4,
+            stats.bus.accumulated.5,
+            stats.bus.accumulated.6,
+            stats.bus.accumulated.7,
+            stats.bus.accumulated.8
         ]
                 
         let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)

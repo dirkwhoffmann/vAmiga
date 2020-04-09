@@ -138,62 +138,37 @@ extension Monitor {
 
     func refreshActivityViews() {
 
-        let stats = amiga.getStats()
+        let agnusStats = amiga.agnus.getStats()
+        let memStats = amiga.mem.getStats()
+        
         let counts = [
-            stats.agnus.count.0,
-            stats.agnus.count.1,
-            stats.agnus.count.2,
-            stats.agnus.count.3,
-            stats.agnus.count.4,
-            stats.agnus.count.5,
-            stats.agnus.count.6,
-            stats.agnus.count.7,
-            stats.agnus.count.8
+            agnusStats.bus.accumulated.0,
+            agnusStats.bus.accumulated.1,
+            agnusStats.bus.accumulated.2,
+            agnusStats.bus.accumulated.3,
+            agnusStats.bus.accumulated.4,
+            agnusStats.bus.accumulated.5,
+            agnusStats.bus.accumulated.6,
+            agnusStats.bus.accumulated.7,
+            agnusStats.bus.accumulated.8
         ]
      
         let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
         let bltDMA = Double(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
-        let dskDMA = Double(counts[Int(BUS_DISK.rawValue)]) / (313*3)
-        let audDMA = Double(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
-        let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
-        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / (313*192)
 
         // DEPRECATED
-        let copperActivity = Double(stats.agnus.count.7) / (313*100)
-        let blitterActivity = Double(stats.agnus.count.8) / (313*120)
-        let spriteActivity = Double(stats.denise.spriteLines) / 313
-        let chipReads = Double(stats.mem.chipReads) / (313*226)
-        let chipWrites = Double(stats.mem.chipWrites) / (313*226)
-        let fastReads = Double(stats.mem.fastReads) / (313*226)
-        let fastWrites = Double(stats.mem.fastWrites) / (313*226)
-        let romReads = Double(stats.mem.romReads) / (313*226)
-        let romWrites = Double(stats.mem.romWrites) / (313*226)
+        let chipReads = Double(memStats.chipReads.accumulated) / (313*226)
+        let chipWrites = Double(memStats.chipWrites.accumulated) / (313*226)
+        let fastReads = Double(memStats.fastReads.accumulated) / (313*226)
+        let fastWrites = Double(memStats.fastWrites.accumulated) / (313*226)
+        let romReads = Double(memStats.romReads.accumulated) / (313*226)
+        let romWrites = Double(memStats.romWrites.accumulated) / (313*226)
 
-        let wc0 = stats.disk.wordCount.0
-        let wc1 = stats.disk.wordCount.1
-        let wc2 = stats.disk.wordCount.2
-        let wc3 = stats.disk.wordCount.3
-        let diskActivity = Double(wc0 + wc1 + wc2 + wc3) / (313.0 * 3)
-        let serialReads = Double(stats.uart.reads) / 500
-        let serialWrites = Double(stats.uart.writes) / 500
-
-        let frames = Double(max(stats.frames, 1))
-
-        copperView.add(val1: copperActivity / frames)
-        blitterView.add(val1: blitterActivity / frames)
-        spriteView.add(val1: spriteActivity / frames)
-        chipView.add(val1: chipReads / frames, val2: chipWrites / frames)
-        fastView.add(val1: fastReads / frames, val2: fastWrites / frames)
-        romView.add(val1: romReads / frames, val2: romWrites / frames)
-        diskView.add(val1: diskActivity / frames)
-        serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
-
-        parent.renderer.copMonitor?.addValue(Float(copDMA / frames))
-        parent.renderer.bltMonitor?.addValue(Float(bltDMA / frames))
-        parent.renderer.dskMonitor?.addValue(Float(dskDMA / frames))
-        parent.renderer.audMonitor?.addValue(Float(audDMA / frames))
-        parent.renderer.sprMonitor?.addValue(Float(sprDMA / frames))
-        parent.renderer.bplMonitor?.addValue(Float(bplDMA / frames))
+        copperView.add(val1: copDMA)
+        blitterView.add(val1: bltDMA)
+        chipView.add(val1: chipReads, val2: chipWrites)
+        fastView.add(val1: fastReads, val2: fastWrites)
+        romView.add(val1: romReads, val2: romWrites)
     }
 }
 

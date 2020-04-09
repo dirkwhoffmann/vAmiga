@@ -64,11 +64,4 @@ typedef struct
 }
 UARTInfo;
 
-typedef struct
-{
-    long reads;
-    long writes;
-}
-UARTStats;
-
 #endif

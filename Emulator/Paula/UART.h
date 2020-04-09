@@ -19,9 +19,6 @@ class UART : public AmigaComponent {
     // Result of the latest inspection
     UARTInfo info;
 
-    // Collected statistical information
-    UARTStats stats;
-
     // Port period and control register
     u16 serper;
 
@@ -94,12 +91,6 @@ public:
 
     // Returns the latest internal state recorded by inspect()
     UARTInfo getInfo();
-
-    // Returns statistical information about the current activiy
-    UARTStats getStats() { return stats; }
-
-    // Resets the collected statistical information
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
 
 
     //

@@ -207,8 +207,10 @@ AgnusInfo;
 
 typedef struct
 {
-    long count[BUS_OWNER_COUNT];
-    double interpolated[BUS_OWNER_COUNT];
+    struct {
+        long raw[BUS_OWNER_COUNT];
+        double accumulated[BUS_OWNER_COUNT];
+    } bus;
 }
 AgnusStats;
 

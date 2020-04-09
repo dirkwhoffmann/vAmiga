@@ -356,19 +356,19 @@ void
 Agnus::clearStats()
 {
     for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.count[i] = 0;
-        stats.interpolated[i] = 0.0;
+        stats.bus.raw[i] = 0;
+        stats.bus.accumulated[i] = 0.0;
     }
 }
 
 void
 Agnus::updateStats()
 {
-    const double weight = 0.5;
-        
+    const double w = 0.5;
+    
     for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.interpolated[i] = weight * stats.interpolated[i] + (1 - weight) * stats.count[i];
-        stats.count[i] = 0;
+        stats.bus.accumulated[i] = w * stats.bus.accumulated[i] + (1 - w) * stats.bus.raw[i];
+        stats.bus.raw[i] = 0;
     }
 }
 
@@ -518,7 +518,7 @@ Agnus::doDiskDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = result;
-    stats.count[BUS_DISK]++;
+    stats.bus.raw[BUS_DISK]++;
 
     return result;
 }
@@ -532,7 +532,7 @@ Agnus::doAudioDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;
-    stats.count[BUS_AUDIO]++;
+    stats.bus.raw[BUS_AUDIO]++;
 
     return result;
 }
@@ -546,7 +546,7 @@ Agnus::doBitplaneDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BITPLANE;
     busValue[pos.h] = result;
-    stats.count[BUS_BITPLANE]++;
+    stats.bus.raw[BUS_BITPLANE]++;
 
     return result;
 }
@@ -560,7 +560,7 @@ Agnus::doSpriteDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
-    stats.count[BUS_SPRITE]++;
+    stats.bus.raw[BUS_SPRITE]++;
 
     return result;
 }
@@ -573,7 +573,7 @@ Agnus::doCopperDMA(u32 addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = result;
-    stats.count[BUS_COPPER]++;
+    stats.bus.raw[BUS_COPPER]++;
 
     return result;
 }
@@ -589,7 +589,7 @@ Agnus::doBlitterDMA(u32 addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
-    stats.count[BUS_BLITTER]++;
+    stats.bus.raw[BUS_BLITTER]++;
 
     return result;
 }
@@ -603,7 +603,7 @@ Agnus::doDiskDMA(u16 value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
-    stats.count[BUS_DISK]++;
+    stats.bus.raw[BUS_DISK]++;
 }
 
 void
@@ -614,7 +614,7 @@ Agnus::doCopperDMA(u32 addr, u16 value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
-    stats.count[BUS_COPPER]++;
+    stats.bus.raw[BUS_COPPER]++;
 }
 
 void
@@ -625,7 +625,7 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busValue[pos.h] = value;
-    stats.count[BUS_BLITTER]++;
+    stats.bus.raw[BUS_BLITTER]++;
 }
 
 void
@@ -1870,6 +1870,7 @@ Agnus::vsyncHandler()
 
     // Update statistics
     updateStats();
+    mem.updateStats();
     
     // Count some sheep (zzzzzz) ...
     if (!amiga.getWarp()) {

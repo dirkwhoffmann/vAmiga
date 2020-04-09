@@ -120,12 +120,12 @@ MemoryConfig;
 
 typedef struct
 {
-    long chipReads;
-    long chipWrites;
-    long fastReads;
-    long fastWrites;
-    long romReads;
-    long romWrites;
+    struct { long raw; double accumulated; } chipReads;
+    struct { long raw; double accumulated; } chipWrites;
+    struct { long raw; double accumulated; } fastReads;
+    struct { long raw; double accumulated; } fastWrites;
+    struct { long raw; double accumulated; } romReads;
+    struct { long raw; double accumulated; } romWrites;
 }
 MemoryStats;
 

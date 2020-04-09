@@ -109,8 +109,6 @@ UART::copyToTransmitShiftRegister()
 {
     debug(SER_DEBUG, "Copying %X into transmit shift register\n", transmitBuffer);
 
-    stats.writes++;
-
     assert(transmitShiftReg == 0);
     assert(transmitBuffer != 0);
 
@@ -139,8 +137,6 @@ UART::copyFromReceiveShiftRegister()
     static int count = 0;
 
     debug(SER_DEBUG, "Copying %X into receive buffer\n", receiveShiftReg);
-
-    stats.reads++;
     
     receiveBuffer = receiveShiftReg;
     receiveShiftReg = 0;
