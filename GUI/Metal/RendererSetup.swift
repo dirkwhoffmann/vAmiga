@@ -98,24 +98,18 @@ extension Renderer {
         let x1 = -0.90
         let x6 = 0.66
         let d = (x6 - x1) / 5
-        monitor1 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1, y: -0.95),
-                                 color: .red)
-        monitor2 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1 + d, y: -0.95),
-                                 color: .blue)
-        monitor3 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1 + 2*d, y: -0.95),
-                                 color: .yellow)
-        monitor4 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1 + 3*d, y: -0.95),
-                                 color: .cyan)
-        monitor5 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1 + 4*d, y: -0.95),
-                                 color: .green)
-        monitor6 = BarChart.init(device: device,
-                                 position: NSPoint.init(x: x1 + 5*d, y: -0.95),
-                                 color: .magenta)
+        copMonitor = BarChart.init(device: device, name: "Copper",
+                                 position: NSPoint.init(x: x1, y: -0.95))
+        bltMonitor = BarChart.init(device: device, name: "Blitter",
+                                 position: NSPoint.init(x: x1 + d, y: -0.95))
+        dskMonitor = BarChart.init(device: device, name: "Disk",
+                                 position: NSPoint.init(x: x1 + 2*d, y: -0.95))
+        audMonitor = BarChart.init(device: device, name: "Audio",
+                                 position: NSPoint.init(x: x1 + 3*d, y: -0.95))
+        sprMonitor = BarChart.init(device: device, name: "Sprites",
+                                 position: NSPoint.init(x: x1 + 4*d, y: -0.95))
+        bplMonitor = BarChart.init(device: device, name: "Bitplanes",
+                                 position: NSPoint.init(x: x1 + 5*d, y: -0.95))
     }
 
     internal func buildTextures() {

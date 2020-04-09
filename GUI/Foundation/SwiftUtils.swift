@@ -63,6 +63,23 @@ extension String {
     }
 }
 
+extension NSAttributedString {
+    
+    convenience init(_ text: String, size: CGFloat, color: NSColor) {
+        
+        let paraStyle = NSMutableParagraphStyle()
+        paraStyle.alignment = .center
+
+        let attr: [NSAttributedString.Key: Any] = [
+            .font: NSFont.systemFont(ofSize: size),
+            .foregroundColor: color,
+            .paragraphStyle: paraStyle
+        ]
+        
+        self.init(string: text, attributes: attr)
+    }
+}
+
 //
 // Handling URLs
 //

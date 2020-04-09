@@ -108,11 +108,140 @@ public extension CGImage {
 }
 
 //
+// Buffer utilities
+//
+
+extension UnsafeMutablePointer where Pointee == UInt32 {
+    
+    func drawGradient(size: MTLSize,
+                      region: MTLRegion? = nil,
+                      r1: Int, g1: Int, b1: Int, a1: Int,
+                      r2: Int, g2: Int, b2: Int, a2: Int) {
+        
+        let origin = region?.origin ?? MTLOriginMake(0, 0, 0)
+        let w = region?.size.width ?? size.width
+        let h = region?.size.height ?? size.height
+        
+        let dr = Double(r2 - r1) / Double(h); var r = Double(r1)
+        let dg = Double(g2 - g1) / Double(h); var g = Double(g1)
+        let db = Double(b2 - b1) / Double(h); var b = Double(b1)
+        let da = Double(a2 - a1) / Double(h); var a = Double(a1)
+
+        // Create gradient
+        var index = origin.y * Int(size.width) * 4 + origin.x
+        let skip = Int(size.width) - w
+        assert(skip >= 0)
+        
+        for _ in 0 ..< h {
+            let c = UInt32(a) << 24 | UInt32(b) << 16 | UInt32(g) << 8 | UInt32(r)
+            for _ in 0 ..< w {
+                self[index] = c
+                index += 1
+            }
+            r += dr; g += dg; b += db; a += da
+            index += skip
+        }
+    }
+    
+    func makeRoundCorner(size: MTLSize, radius: Int) {
+        
+        let w = size.width
+        let h = size.height
+        
+        for row in 0 ..< radius {
+            let dy = radius - row
+            for col in 0 ..< radius {
+                let dx = radius - col
+                if dx*dx + dy*dy >= radius*radius {
+                    self[row * w + col] &= 0xFFFFFF
+                    self[(h - 1 - row) * w + col] &= 0xFFFFFF
+                    self[(h - 1 - row) * w + (w - 1 - col)] &= 0xFFFFFF
+                    self[row * w + (w - 1 - col)] &= 0xFFFFFF
+                }
+            }
+        }
+    }
+    
+    func imprint(size: MTLSize, text: String) {
+        
+        // Wrap this buffer into a CGContext
+        let alphaInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+        let orderInfo = CGBitmapInfo.byteOrder32Big.rawValue
+        let context = CGContext.init(data: self,
+                                     width: size.width,
+                                     height: size.height,
+                                     bitsPerComponent: 8,
+                                     bytesPerRow: 4 * size.width,
+                                     space: CGColorSpaceCreateDeviceRGB(),
+                                     bitmapInfo: alphaInfo | orderInfo)
+        
+        // Create an attributed string
+        let string = NSAttributedString.init(text, size: 32, color: .white)
+       
+        // Draw text centered on top
+        let line = CTLineCreateWithAttributedString(string)
+        let offset = CTLineGetPenOffsetForFlush(line, 0.5, Double(size.width))
+        context!.textPosition = CGPoint(x: Int(offset), y: size.height - 48)
+        CTLineDraw(line, context!)
+    }
+}
+
+//
 // Extensions to MTLDevice
 //
 
+extension MTLTexture {
+
+    func replace(region: MTLRegion,
+                 r1: Int, g1: Int, b1: Int, a1: Int,
+                 r2: Int, g2: Int, b2: Int, a2: Int,
+                 radius: Int) {
+        
+        let w = region.size.width
+        let h = region.size.height
+        
+        // Allocate working buffer
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
+        
+        // Create gradient
+        data.drawGradient(size: region.size,
+                          r1: r1, g1: g1, b1: b1, a1: a1,
+                          r2: r2, g2: g2, b2: b2, a2: a2)
+        
+        // Create round corners
+        data.makeRoundCorner(size: region.size, radius: radius)
+        
+        // Copy working buffer into texture
+        replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: 4 * w)
+        data.deallocate()
+    }
+}
+
 extension MTLDevice {
     
+    func makeTexture(from data: UnsafeMutablePointer<UInt32>,
+                     size: MTLSize) -> MTLTexture? {
+        
+        // Create texture
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: MTLPixelFormat.rgba8Unorm,
+            width: size.width,
+            height: size.height,
+            mipmapped: false)
+        descriptor.usage = [ .shaderRead ]
+        let texture = makeTexture(descriptor: descriptor)
+        
+        // Copy buffer into texture
+        let region = MTLRegionMake2D(0, 0, size.width, size.height)
+        texture?.replace(region: region,
+                         mipmapLevel: 0,
+                         withBytes: data,
+                         bytesPerRow: 4 * size.width)
+        
+        return texture
+    }
+
+    /*
     func makeGradientTexture(width: Int, height: Int,
                              r1: Int, g1: Int, b1: Int, a1: Int,
                              r2: Int, g2: Int, b2: Int, a2: Int,
@@ -157,6 +286,30 @@ extension MTLDevice {
             }
         }
         
+        let context = CGContext.init(data: data,
+                                     width: width,
+                                     height: height,
+                                     bitsPerComponent: 8,
+                                     bytesPerRow: 4 * width,
+                                     space: CGColorSpaceCreateDeviceRGB(),
+                                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
+        )
+        
+        let font = NSFont.systemFont(ofSize: 32)
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .center
+        let attr: [NSAttributedString.Key: Any] = [
+            .font: font,
+            .foregroundColor: NSColor.white,
+            .paragraphStyle: paragraphStyle
+        ]
+        let astr = NSAttributedString.init(string: "Blitter", attributes: attr)
+        let line = CTLineCreateWithAttributedString(astr)
+        
+        let offset = CTLineGetPenOffsetForFlush(line, 0.5, Double(width))
+        context!.textPosition = CGPoint(x: Int(offset), y: height - 48)
+        CTLineDraw(line, context!)
+        
         let region = MTLRegionMake2D(0, 0, width, height)
         let texture = makeTexture(descriptor: d)
         texture!.replace(region: region,
@@ -171,8 +324,9 @@ extension MTLDevice {
         */
         return texture
     }
+     */
 }
-
+ 
 //
 // Extensions to NSImage
 //

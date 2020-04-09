@@ -161,45 +161,59 @@ class Quad {
 
 class BarChart {
     
+    let device: MTLDevice
+
+    //
+    // Appearance
+    //
+    
     // Number of displayed values (bars)
     let capacity = 20
     
     // Number of scroll steps until a new bar shows up
     let steps = 20
     
-    // Variables needed inside addValue()
-    var sum = Float(0)
-    var sumCnt = 0
-    
+    // Name of this view
+    var name = "Lorem ipsum"
+
     // Position of this view
     var position: matrix_float4x4
-    
+        
+    // Color
+    var color: NSColor! { didSet { updateTextures() } }
+
     // Drawing dimensions
     let width = Float(0.01)
     let space = Float(0.0025)
     let scale = Float(0.2)
     let border = Float(0.02)
-    
     var totalWidth: Float { return Float(capacity + 1) * (width + space) - space }
+        
+    //
+    // Data
+    //
     
-    let device: MTLDevice
     var values: [Float]
     var rectangles: [Node]
     var bgRectangle: Node?
     var offset = 0
-        
-    // Texture for drawing a single bar
-    var foreground: MTLTexture?
     
-    // Shared texture for drawing the background
-    static var background: MTLTexture?
+    // Variables needed inside addValue()
+    var sum = Float(0)
+    var sumCnt = 0
 
-    init(device: MTLDevice, position p: NSPoint, color: NSColor) {
+    // Surface textures
+    var foreground: MTLTexture?
+    var background: MTLTexture?
+
+    init(device: MTLDevice, name: String, position p: NSPoint) {
         
         self.device = device
+        self.name = name
         self.position = Renderer.translationMatrix(x: Float(p.x), y: Float(p.y), z: 0.5)
-        rectangles = []
-        
+        self.color = .red
+
+        /*
         let r = Int(color.redComponent * 255)
         let g = Int(color.greenComponent * 255)
         let b = Int(color.blueComponent * 255)
@@ -209,16 +223,65 @@ class BarChart {
         
         if BarChart.background == nil {
             BarChart.background =
-                device.makeGradientTexture(width: 256, height: 256,
+                device.makeGradientTexture(width: 320, height: 200,
                                            r1: 64, g1: 64, b1: 64, a1: 128,
                                            r2: 128, g2: 128, b2: 128, a2: 128,
                                            radius: 10)
         }
+        */
         
+        self.rectangles = []
         values = Array(repeating: 0.0, count: capacity)
+
         updateRectangles()
+        updateTextures()
     }
+     
+    func updateForegroundTexture() {
         
+        let r = Int(color.redComponent * 255)
+        let g = Int(color.greenComponent * 255)
+        let b = Int(color.blueComponent * 255)
+        
+        let size = MTLSizeMake(128, 128, 0)
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
+        
+        data.drawGradient(size: size,
+                          r1: r, g1: g, b1: b, a1: 128,
+                          r2: 255, g2: 255, b2: 255, a2: 255)
+
+        foreground = device.makeTexture(from: data, size: size)
+        assert(foreground != nil)
+    }
+ 
+    func updateBackgroundTexture() {
+        
+        let r1 = 64 // Int(color.redComponent * 255)
+        let g1 = 64 // Int(color.greenComponent * 255)
+        let b1 = 64 // Int(color.blueComponent * 255)
+        let r2 = 128 // Int(color.redComponent * 255)
+        let g2 = 128 // Int(color.greenComponent * 255)
+        let b2 = 128 // Int(color.blueComponent * 255)
+        
+        let size = MTLSizeMake(320, 200, 0)
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
+        
+        data.drawGradient(size: size,
+                          r1: r1, g1: g1, b1: b1, a1: 128,
+                          r2: r2, g2: g2, b2: b2, a2: 128)
+        data.makeRoundCorner(size: size, radius: 10)
+        data.imprint(size: size, text: name)
+        
+        background = device.makeTexture(from: data, size: size)
+        assert(background != nil)
+    }
+    
+    func updateTextures() {
+        
+        updateForegroundTexture()
+        updateBackgroundTexture()
+    }
+    
     func addValue(_ value: Float) {
         
         if sumCnt == 0 { sum = 0 }
@@ -269,7 +332,7 @@ class BarChart {
         commandEncoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
-        commandEncoder.setFragmentTexture(BarChart.background, index: 0)
+        commandEncoder.setFragmentTexture(background, index: 0)
         bgRectangle!.drawPrimitives(commandEncoder)
 
         // Draw bars

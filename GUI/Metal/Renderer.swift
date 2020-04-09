@@ -65,7 +65,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var quad2D: Node?
     var quad3D: Quad?
         
-    var monitor1, monitor2, monitor3, monitor4, monitor5, monitor6: BarChart?
+    var copMonitor, bltMonitor, dskMonitor, audMonitor, sprMonitor, bplMonitor: BarChart?
     
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -610,12 +610,12 @@ class Renderer: NSObject, MTKViewDelegate {
             // angle += 2
             let rot = Renderer.rotationMatrix(radians: Float(angle) * .pi / 180.0,
                                      x: 0.5, y: 0.0, z: 0.0)
-            monitor1!.draw(commandEncoder, matrix: rot)
-            monitor2!.draw(commandEncoder, matrix: rot)
-            monitor3!.draw(commandEncoder, matrix: rot)
-            monitor4!.draw(commandEncoder, matrix: rot)
-            monitor5!.draw(commandEncoder, matrix: rot)
-            monitor6!.draw(commandEncoder, matrix: rot)
+            copMonitor!.draw(commandEncoder, matrix: rot)
+            bltMonitor!.draw(commandEncoder, matrix: rot)
+            dskMonitor!.draw(commandEncoder, matrix: rot)
+            audMonitor!.draw(commandEncoder, matrix: rot)
+            sprMonitor!.draw(commandEncoder, matrix: rot)
+            bplMonitor!.draw(commandEncoder, matrix: rot)
         }
 
         endFrame()

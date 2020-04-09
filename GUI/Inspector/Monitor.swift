@@ -169,12 +169,12 @@ extension Monitor {
         diskView.add(val1: diskActivity / frames)
         serialView.add(val1: serialReads / frames, val2: serialWrites / frames)
 
-        parent.renderer.monitor1?.addValue(Float(copperActivity / frames))
-        parent.renderer.monitor2?.addValue(Float(blitterActivity / frames))
-        parent.renderer.monitor3?.addValue(Float(spriteActivity / frames))
-        parent.renderer.monitor4?.addValue(Float((chipReads + chipWrites) / frames))
-        parent.renderer.monitor5?.addValue(Float(diskActivity / frames))
-        parent.renderer.monitor6?.addValue(Float(serialReads / frames))
+        parent.renderer.copMonitor?.addValue(Float(copperActivity / frames))
+        parent.renderer.bltMonitor?.addValue(Float(blitterActivity / frames))
+        parent.renderer.dskMonitor?.addValue(Float(diskActivity / frames))
+        parent.renderer.audMonitor?.addValue(Float(0)) // TODO
+        parent.renderer.sprMonitor?.addValue(Float(spriteActivity / frames))
+        parent.renderer.bplMonitor?.addValue(Float(0)) // TODO
     }
 }
 
