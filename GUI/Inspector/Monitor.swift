@@ -22,16 +22,6 @@ class Monitor: DialogController {
     @IBOutlet weak var audioBufferUnderflows: NSTextField!
     @IBOutlet weak var audioBufferOverflows: NSTextField!
 
-    // Activity views
-    @IBOutlet weak var blitterView: ActivityView!
-    @IBOutlet weak var copperView: ActivityView!
-    @IBOutlet weak var spriteView: ActivityView!
-    @IBOutlet weak var chipView: ActivityView!
-    @IBOutlet weak var fastView: ActivityView!
-    @IBOutlet weak var romView: ActivityView!
-    @IBOutlet weak var diskView: ActivityView!
-    @IBOutlet weak var serialView: ActivityView!
-
     // Timer for triggering continous update
     var timer: Timer?
 
@@ -73,7 +63,6 @@ class Monitor: DialogController {
         }
 
         refreshWaveformView()
-        refreshActivityViews()
 
         if refreshCounter % 8 == 0 {
             let info = amiga.agnus.getDebuggerInfo()
@@ -127,48 +116,6 @@ extension Monitor {
         audioBufferUnderflows.integerValue = stats.bufferUnderflows
         audioBufferOverflows.integerValue = stats.bufferOverflows
         audioWaveformView.update()
-    }
-}
-
-//
-// Activity views
-//
-
-extension Monitor {
-
-    func refreshActivityViews() {
-
-        let agnusStats = amiga.agnus.getStats()
-        let memStats = amiga.mem.getStats()
-        
-        let counts = [
-            agnusStats.bus.accumulated.0,
-            agnusStats.bus.accumulated.1,
-            agnusStats.bus.accumulated.2,
-            agnusStats.bus.accumulated.3,
-            agnusStats.bus.accumulated.4,
-            agnusStats.bus.accumulated.5,
-            agnusStats.bus.accumulated.6,
-            agnusStats.bus.accumulated.7,
-            agnusStats.bus.accumulated.8
-        ]
-     
-        let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
-        let bltDMA = Double(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
-
-        // DEPRECATED
-        let chipReads = Double(memStats.chipReads.accumulated) / (313*226)
-        let chipWrites = Double(memStats.chipWrites.accumulated) / (313*226)
-        let fastReads = Double(memStats.fastReads.accumulated) / (313*226)
-        let fastWrites = Double(memStats.fastWrites.accumulated) / (313*226)
-        let romReads = Double(memStats.romReads.accumulated) / (313*226)
-        let romWrites = Double(memStats.romWrites.accumulated) / (313*226)
-
-        copperView.add(val1: copDMA)
-        blitterView.add(val1: bltDMA)
-        chipView.add(val1: chipReads, val2: chipWrites)
-        fastView.add(val1: fastReads, val2: fastWrites)
-        romView.add(val1: romReads, val2: romWrites)
     }
 }
 
