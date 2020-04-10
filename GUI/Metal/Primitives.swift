@@ -256,8 +256,13 @@ class BarChart {
         let size = MTLSizeMake(128, 128, 0)
         let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
         
+        /*
         data.drawGradient(size: size,
                           r1: r, g1: g, b1: b, a1: 128,
+         r2: 255, g2: 255, b2: 255, a2: 255)
+         */
+        data.drawGradient(size: size,
+                          r1: r, g1: g, b1: b, a1: 255,
                           r2: 255, g2: 255, b2: 255, a2: 255)
 
         foreground = device.makeTexture(from: data, size: size)
@@ -280,8 +285,8 @@ class BarChart {
         let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
                 
         data.drawGradient(size: size,
-                          r1: r1, g1: g1, b1: b1, a1: 128,
-                          r2: r2, g2: g2, b2: b2, a2: 128)
+                          r1: r1, g1: g1, b1: b1, a1: 255,
+                          r2: r2, g2: g2, b2: b2, a2: 255)
 
         let gridy = lowerBorder * Float(bgHeight)
         let gridh = innerHeight * Float(bgHeight)
@@ -312,15 +317,6 @@ class BarChart {
         let trans = Renderer.translationMatrix(x: posx, y: posy, z: -0.8)
         let scale = Renderer.scalingMatrix(xs: posw, ys: posh, zs: 1.0)
 
-        /*
-        let t1 = Renderer.translationMatrix(x: -0.5 * Float(position.size.width),
-                                            y: -0.5 * Float(position.size.height),
-                                            z: 0)
-        let t2 = Renderer.translationMatrix(x: 0.5 * Float(position.size.width),
-                                            y: 0.5 * Float(position.size.height),
-                                            z: 0)
-        */
-        
         var rx, ry, tx, ty, a: Float
         switch alignment {
         case 0:
@@ -352,7 +348,8 @@ class BarChart {
     func addValue(_ value: Float) {
         
         if sumCnt == 0 { sum = 0 }
-        sum += logScale ? log10(1.0 + 9.0 * value) : value // log2(1.0 + 1.0 * value) : value
+        // sum += logScale ? log10(1.0 + 9.0 * value) : value
+        sum += logScale ? log(1.0 + 19.0 * value) / log(20) : value
         sumCnt += 1
     }
     

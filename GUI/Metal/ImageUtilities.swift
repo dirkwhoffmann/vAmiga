@@ -150,7 +150,8 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         for i in 0 ... lines {
             
             var y = Double(i) / Double(lines)
-            if logScale { y = log10(1.0 + 9.0 * y) }
+            // if logScale { y = log10(1.0 + 9.0 * y) }
+            if logScale { y = log(1.0 + 19.0 * y) / log(20) }
             drawLine(size: size, y: Int(Double(y1) + height * y), border: 20)
         }
     }
