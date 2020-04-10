@@ -65,7 +65,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Dhp-Pr-Lug">
                                     <rect key="frame" x="84" y="227" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Blitter DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="lCg-rw-clK">
+                                    <buttonCell key="cell" type="check" title="Blitter DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="lCg-rw-clK">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -76,7 +76,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="84K-Ze-s8R">
                                     <rect key="frame" x="84" y="253" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Copper DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="S3l-ne-Uuc">
+                                    <buttonCell key="cell" type="check" title="Copper DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="S3l-ne-Uuc">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -87,7 +87,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Rqk-gS-j5d">
                                     <rect key="frame" x="84" y="201" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Disk DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="jYu-xf-dQJ">
+                                    <buttonCell key="cell" type="check" title="Disk DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="jYu-xf-dQJ">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -98,7 +98,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="pgP-AB-gkQ">
                                     <rect key="frame" x="84" y="149" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Sprite DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="JL2-oL-6K0">
+                                    <buttonCell key="cell" type="check" title="Sprite DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="JL2-oL-6K0">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -109,7 +109,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Cf1-Ob-LnZ">
                                     <rect key="frame" x="84" y="123" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Bitplane DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="aXz-bk-eH9">
+                                    <buttonCell key="cell" type="check" title="Bitplane DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="aXz-bk-eH9">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -120,7 +120,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="kyy-Pa-cLS">
                                     <rect key="frame" x="84" y="175" width="106" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Audio DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="7HR-Ho-DcK">
+                                    <buttonCell key="cell" type="check" title="Audio DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="7HR-Ho-DcK">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -150,7 +150,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="EGK-nz-ZP8">
                                     <rect key="frame" x="207" y="253" width="89" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Chip Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="rYa-LC-H9t">
+                                    <buttonCell key="cell" type="check" title="Chip Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="rYa-LC-H9t">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -161,7 +161,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="Dag-do-tER">
                                     <rect key="frame" x="207" y="227" width="89" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Slow Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2TU-Cp-Efl">
+                                    <buttonCell key="cell" type="check" title="Slow Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="2TU-Cp-Efl">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -172,7 +172,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="OOK-iJ-gL1">
                                     <rect key="frame" x="207" y="201" width="89" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Fast Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPV-vm-GYy">
+                                    <buttonCell key="cell" type="check" title="Fast Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="SPV-vm-GYy">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -183,7 +183,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="kmY-JW-Q4i">
                                     <rect key="frame" x="207" y="175" width="89" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Rom" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="XD1-kM-Q0g">
+                                    <buttonCell key="cell" type="check" title="Rom" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="XD1-kM-Q0g">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
@@ -194,7 +194,7 @@
                                 <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Cfn-f1-lFY">
                                     <rect key="frame" x="85" y="76" width="105" height="14"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <buttonCell key="cell" type="check" title="Waveforms" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Jnl-iZ-FV9">
+                                    <buttonCell key="cell" type="check" title="Waveforms" bezelStyle="regularSquare" imagePosition="left" controlSize="small" inset="2" id="Jnl-iZ-FV9">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                         <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>

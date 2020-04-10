@@ -127,9 +127,12 @@ extension Renderer {
         if (animates & AnimationType.monitors) != 0 {
             
             var cont = false
+            drawActivityMonitors = false
+            
             for i in 0 ..< dmaMonAngle.count {
                 dmaMonAngle[i].move()
                 if dmaMonAngle[i].animates() { cont = true }
+                if dmaMonAngle[i].current != 90 { drawActivityMonitors = true }
             }
 
             // Check if animation has terminated

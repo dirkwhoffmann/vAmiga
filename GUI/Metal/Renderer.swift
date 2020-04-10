@@ -94,6 +94,9 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var dmaMonitors = [BarChart?](repeatElement(nil, count: 6))
 
+    // Indicates if activity monitors need to be drawn
+    var drawActivityMonitors = false 
+        
     //
     // Textures
     //
@@ -421,7 +424,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
-    // Managing the activity monitors
+    // Managing activity monitors
     //
 
     func monitor(forTag tag: Int) -> BarChart? {
@@ -429,6 +432,19 @@ class Renderer: NSObject, MTKViewDelegate {
         if tag < 6 { return dmaMonitors[tag] }
         fatalError()
     }
+
+    func activateMonitor(_ nr: Int, on: Bool) {
+
+        assert(nr < dmaMonitors.count)
+        
+        track("Activating monitor \(nr)")
+        dmaMonAngle[nr].target = on ? 20 : 90
+        dmaMonAngle[nr].steps = 200
+        animates |= AnimationType.monitors
+    }
+        
+    func activateMonitor(_ nr: Int) { activateMonitor(nr, on: true) }
+    func deactivateMonitor(_ nr: Int) { activateMonitor(nr, on: false) }
     
     //
     //  Drawing
@@ -621,10 +637,12 @@ class Renderer: NSObject, MTKViewDelegate {
             // Draw (part of) cube
             quad3D!.draw(commandEncoder, allSides: animates != 0)
             
-            let m = vertexUniforms3D.mvp
-            for i in 0 ... 5 {
-                dmaMonitors[i]!.angle = dmaMonAngle[i].current
-                dmaMonitors[i]!.draw(commandEncoder, matrix: m)
+            // Draw activity monitors
+            if drawActivityMonitors {
+                for i in 0 ... 5 where dmaMonAngle[i].current != 90 {
+                    dmaMonitors[i]!.angle = dmaMonAngle[i].current
+                    dmaMonitors[i]!.draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+                }
             }
         }
         

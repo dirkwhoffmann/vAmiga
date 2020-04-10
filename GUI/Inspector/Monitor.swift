@@ -101,16 +101,18 @@ class Monitor: DialogController {
 
         // Activity monitors
         monEnable.state = .on
-        monBlitter.state = .on
-        monCopper.state = .on
-        monDisk.state = .on
-        monAudio.state = .on
-        monSprites.state = .on
-        monWaveforms.state = .on
-        monChipRam.state = .on
-        monSlowRam.state = .on
-        monFastRam.state = .on
-        monKickRom.state = .on
+        /*
+        monCopper.state = mask & (1 << monCopper.tag) != 0 ? .on : .off
+        monBlitter.state = mask & (1 << monBlitter.tag) != 0 ? .on : .off
+        monDisk.state = mask & (1 << monDisk.tag) != 0 ? .on : .off
+        monAudio.state = mask & (1 << monAudio.tag) != 0 ? .on : .off
+        monSprites.state = mask & (1 << monSprites.tag) != 0 ? .on : .off
+        */
+        monWaveforms.state = .off
+        monChipRam.state = .off
+        monSlowRam.state = .off
+        monFastRam.state = .off
+        monKickRom.state = .off
         monOpacity.doubleValue = 50.0
         monDisplayMode.selectItem(withTag: 0)
 
@@ -190,7 +192,13 @@ class Monitor: DialogController {
     
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
-        track()
+        track("\(sender.tag)")
+        
+        if sender.state == .on {
+            parent.renderer.activateMonitor(sender.tag)
+        } else {
+            parent.renderer.deactivateMonitor(sender.tag)
+        }
         refresh()
     }
     
