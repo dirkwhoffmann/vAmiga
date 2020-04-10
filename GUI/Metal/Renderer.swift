@@ -94,9 +94,17 @@ class Renderer: NSObject, MTKViewDelegate {
 
     var dmaMonitors = [BarChart?](repeatElement(nil, count: 6))
 
-    // Indicates if activity monitors need to be drawn
-    var drawActivityMonitors = false 
-        
+    // Indicates if activity monitoring is enabled
+    var drawActivityMonitors = false {
+        didSet { updateMonitorAlphas() }
+    }
+    var monitorEnabled = [Bool](repeatElement(true, count: 6)) {
+        didSet { updateMonitorAlphas() }
+    }
+    
+    // Global alpha value of activity monitors
+    var monitorGlobalAlpha = Float(0.5)
+    
     //
     // Textures
     //
@@ -209,7 +217,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
     
-    var dmaMonAngle: [AnimatedFloat] = []
+    var monitorAlpha: [AnimatedFloat] = []
     
     // Parameters determining the visible part of the texture
     var hCenter = Defaults.hCenter
@@ -432,19 +440,35 @@ class Renderer: NSObject, MTKViewDelegate {
         if tag < 6 { return dmaMonitors[tag] }
         fatalError()
     }
-
-    func activateMonitor(_ nr: Int, on: Bool) {
+    
+    func fadeIn(monitor nr: Int) {
 
         assert(nr < dmaMonitors.count)
         
-        track("Activating monitor \(nr)")
-        dmaMonAngle[nr].target = on ? 20 : 90
-        dmaMonAngle[nr].steps = 200
+        monitorAlpha[nr].target = 1.0
+        monitorAlpha[nr].steps = 40
         animates |= AnimationType.monitors
     }
         
-    func activateMonitor(_ nr: Int) { activateMonitor(nr, on: true) }
-    func deactivateMonitor(_ nr: Int) { activateMonitor(nr, on: false) }
+    func fadeOut(monitor nr: Int) {
+
+        assert(nr < dmaMonitors.count)
+        
+        monitorAlpha[nr].target = 0.0
+        monitorAlpha[nr].steps = 40
+        animates |= AnimationType.monitors
+    }
+
+    func updateMonitorAlphas() {
+        
+        for i in 0 ..< dmaMonitors.count {
+            if drawActivityMonitors && monitorEnabled[i] {
+                fadeIn(monitor: i)
+            } else {
+                fadeOut(monitor: i)
+            }
+        }
+    }
     
     //
     //  Drawing
@@ -639,8 +663,13 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // Draw activity monitors
             if drawActivityMonitors {
-                for i in 0 ... 5 where dmaMonAngle[i].current != 90 {
-                    dmaMonitors[i]!.angle = dmaMonAngle[i].current
+                
+                for i in 0 ... 5 where monitorAlpha[i].current != 0.0 {
+
+                    fragmentUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
+                    commandEncoder.setFragmentBytes(&fragmentUniforms,
+                                                    length: MemoryLayout<FragmentUniforms>.stride,
+                                                    index: 1)
                     dmaMonitors[i]!.draw(commandEncoder, matrix: vertexUniforms3D.mvp)
                 }
             }

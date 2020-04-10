@@ -191,6 +191,7 @@ class BarChart {
 
     var position: NSRect = NSRect.init() { didSet { updateMatrices() } }
     var angle: Float = 0.0 { didSet { if angle != oldValue { updateMatrices() } } }
+    var alignment = 0 { didSet { if alignment != oldValue { updateMatrices() } } }
 
     //
     // Appearance
@@ -229,13 +230,12 @@ class BarChart {
     var background: MTLTexture?
 
     init(device: MTLDevice, name: String,
-         position: NSRect,
          color: NSColor,
          logScale: Bool = false) {
         
         self.device = device
         self.name = name
-        self.position = position
+        // self.position = position
         self.color = color
         self.logScale = logScale
         
@@ -266,14 +266,6 @@ class BarChart {
  
     func updateBackgroundTexture() {
         
-        /*
-        let r1 = 64
-        let g1 = 64
-        let b1 = 64
-        let r2 = 128
-        let g2 = 128
-        let b2 = 128
-        */
         let r1 = Int(color.redComponent * 255) / 2
         let g1 = Int(color.greenComponent * 255) / 2
         let b1 = Int(color.blueComponent * 255) / 2
@@ -309,23 +301,46 @@ class BarChart {
         updateForegroundTexture()
         updateBackgroundTexture()
     }
-    
+        
     func updateMatrices() {
     
-        let trans = Renderer.translationMatrix(x: Float(position.origin.x),
-                                               y: Float(position.origin.y),
-                                               z: -0.7)
-        let scale = Renderer.scalingMatrix(xs: Float(position.size.width),
-                                           ys: Float(position.size.height),
-                                           zs: 1.0)
+        let posx = Float(position.origin.x)
+        let posy = Float(position.origin.y)
+        let posw = Float(position.size.width)
+        let posh = Float(position.size.height)
+
+        let trans = Renderer.translationMatrix(x: posx, y: posy, z: -0.8)
+        let scale = Renderer.scalingMatrix(xs: posw, ys: posh, zs: 1.0)
+
+        /*
         let t1 = Renderer.translationMatrix(x: -0.5 * Float(position.size.width),
                                             y: -0.5 * Float(position.size.height),
                                             z: 0)
         let t2 = Renderer.translationMatrix(x: 0.5 * Float(position.size.width),
                                             y: 0.5 * Float(position.size.height),
                                             z: 0)
-        let rot = Renderer.rotationMatrix(radians: angle * .pi/180.0, x: 0, y: 1, z: 0)
-     
+        */
+        
+        var rx, ry, tx, ty, a: Float
+        switch alignment {
+        case 0:
+            rx = 1; ry = 0; a = angle     // bottom
+            tx = 0; ty = 0
+        case 1:
+            rx = 1; ry = 0; a = -angle    // top
+            tx = 0; ty = -posh
+        case 2:
+            rx = 0; ry = 1; a = -angle    // left
+            tx = 0; ty = 0
+        case 3:
+            rx = 0; ry = 1; a = angle     // right
+            tx = -posw; ty = 0
+        default: fatalError()
+        }
+        let t1 = Renderer.translationMatrix(x: tx, y: ty, z: 0)
+        let t2 = Renderer.translationMatrix(x: -tx, y: -ty, z: 0)
+        let rot = Renderer.rotationMatrix(radians: a * .pi/180.0, x: rx, y: ry, z: 0)
+
         posm = trans * t2 * rot * t1 * scale
     }
     
@@ -365,10 +380,11 @@ class BarChart {
                                         x: x, y: y, z: 0, w: w, h: h, t: t))
         }
         bgRectangle = Node.init(device: device,
-                                x: 0, y: 0, z: 0.01, w: 1.0, h: 1.0)
+                                x: 0, y: 0, z: 0.001, w: 1.0, h: 1.0)
     }
 
-    func draw(_ commandEncoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
+    func draw(_ commandEncoder: MTLRenderCommandEncoder,
+              matrix: matrix_float4x4) {
                 
         offset += 1
         
@@ -381,9 +397,6 @@ class BarChart {
         }
 
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
-
-        // angle += 2
-        // updateMatrices()
         
         // Draw background
         var uniforms = VertexUniforms(mvp: matrix * posm)

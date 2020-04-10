@@ -92,70 +92,67 @@ extension Renderer {
             NSColor.init(info.colorRGB.8)
         ]
 
-        // d  w  d  w  d  w  d  w  d  w  d  w  d
-        //   ___   ___   ___   ___   ___   ___
-        // -|   |-|   |-|   |-|   |-|   |-|   |- h
-        //   ---   ---   ---   ---   ---   ---
-        
-        /*
-         let d = 0.04
-         let w = (2.0 - 6 * d) / 5
-         let s = d + w
-         let h = 0.25
-         let y = -1 + d
-         let b = d - 1.0
-        */
-        
-        let xmin = -0.59
-        let xmax = 0.59
-        let ymin = -0.45
-        let xspan = xmax - xmin
-        
-        let d = 0.02
-        let w = (xspan - 7 * d) / 6
-        let s = d + w
-        let h = 0.125
-        let y = ymin + d
-        let x = xmin + d
-        
-        /*
-        let scalex = 0.5
-        let d = 0.04
-        let w = 0.25
-        let s = w + 0.1
-        let h = 0.25 * scalex
-        let y = (-1 + d + 0.6) * scalex
-        let b = -0.6
-        */
-        
         dmaMonitors[Monitor.copper] =
             BarChart.init(device: device, name: "Copper DMA",
-                          position: NSRect.init(x: x, y: y, width: w, height: h),
                           color: rgb[Int(BUS_COPPER.rawValue)], logScale: true)
         dmaMonitors[Monitor.blitter] =
             BarChart.init(device: device, name: "Blitter DMA",
-                          position: NSRect.init(x: x + s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_BLITTER.rawValue)], logScale: true)
         dmaMonitors[Monitor.disk] =
             BarChart.init(device: device, name: "Disk DMA",
-                          position: NSRect.init(x: x + 2*s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_DISK.rawValue)])
         dmaMonitors[Monitor.audio] =
             BarChart.init(device: device, name: "Audio DMA",
-                          position: NSRect.init(x: x + 3*s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_AUDIO.rawValue)])
         dmaMonitors[Monitor.sprite] =
             BarChart.init(device: device, name: "Sprite DMA",
-                          position: NSRect.init(x: x + 4*s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_SPRITE.rawValue)])
         dmaMonitors[Monitor.bitplane] =
             BarChart.init(device: device, name: "Bitplane DMA",
-                          position: NSRect.init(x: x + 5*s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_BITPLANE.rawValue)])
             
-        for _ in 0 ... 5 { dmaMonAngle.append(AnimatedFloat(90)) }
+        for _ in 0 ... 5 { monitorAlpha.append(AnimatedFloat(0)) }
+        
+        updateMonitorPositions()
     }
 
+    func updateMonitorPositions() {
+        
+        //    w  d  w  d  w  d  w  d  w  d  w
+        //   ___   ___   ___   ___   ___   ___
+        //  |   |-|   |-|   |-|   |-|   |-|   | h
+        //   ---   ---   ---   ---   ---   ---
+        
+        let xmax = 0.49
+        let xmin = -xmax
+        let xspan = xmax - xmin
+
+        let ymax = 0.365
+        let ymin = -ymax
+        let yspan = ymax - ymin
+
+        let d = 0.02
+        let w = (xspan - 5 * d) / 6
+        let h = (yspan - 5 * d) / 6 // w * 2/3
+        
+        var bx, by, dx, dy: Double
+        
+        switch dmaMonitors[0]!.alignment {
+        case 0: bx = xmin;     by = ymin;     dx = w + d; dy = 0    // bottom
+        case 1: bx = xmin;     by = ymax - h; dx = w + d; dy = 0    // top
+        case 2: bx = xmin;     by = ymax - h; dx = 0; dy = -(h + d) // left
+        case 3: bx = xmax - w; by = ymax - h; dx = 0; dy = -(h + d) // right
+        default: fatalError()
+        }
+
+        for i in 0 ..< dmaMonitors.count {
+            
+            let rect = NSRect.init(x: bx + Double(i) * dx,
+                                   y: by + Double(i) * dy, width: w, height: h)
+            dmaMonitors[i]!.position = rect
+        }
+    }
+    
     internal func buildTextures() {
 
         track()

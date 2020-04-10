@@ -52,7 +52,8 @@ class Monitor: DialogController {
 
     @IBOutlet weak var monOpacity: NSSlider!
     @IBOutlet weak var monDisplayMode: NSPopUpButton!
-    
+    @IBOutlet weak var monSlider: NSSlider!
+
     override func awakeFromNib() {
 
         track()
@@ -100,22 +101,22 @@ class Monitor: DialogController {
         busDisplayMode.selectItem(withTag: info.displayMode.rawValue)
 
         // Activity monitors
-        monEnable.state = .on
-        /*
-        monCopper.state = mask & (1 << monCopper.tag) != 0 ? .on : .off
-        monBlitter.state = mask & (1 << monBlitter.tag) != 0 ? .on : .off
-        monDisk.state = mask & (1 << monDisk.tag) != 0 ? .on : .off
-        monAudio.state = mask & (1 << monAudio.tag) != 0 ? .on : .off
-        monSprites.state = mask & (1 << monSprites.tag) != 0 ? .on : .off
-        */
+        monEnable.state = parent.renderer.drawActivityMonitors ? .on : .off
+        monCopper.state = parent.renderer.monitorEnabled[0] ? .on : .off
+        monBlitter.state = parent.renderer.monitorEnabled[1] ? .on : .off
+        monDisk.state = parent.renderer.monitorEnabled[2] ? .on : .off
+        monAudio.state = parent.renderer.monitorEnabled[3] ? .on : .off
+        monSprites.state = parent.renderer.monitorEnabled[4] ? .on : .off
+        monBitplanes.state = parent.renderer.monitorEnabled[5] ? .on : .off
         monWaveforms.state = .off
         monChipRam.state = .off
         monSlowRam.state = .off
         monFastRam.state = .off
         monKickRom.state = .off
-        monOpacity.doubleValue = 50.0
-        monDisplayMode.selectItem(withTag: 0)
-
+        monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
+        monDisplayMode.selectItem(withTag: parent.renderer.dmaMonitors[0]!.alignment)
+        monSlider.floatValue = parent.renderer.dmaMonitors[0]!.angle
+        
         // Colors
         colBlitter.setColor(rgb[Int(BUS_BLITTER.rawValue)])
         colCopper.setColor(rgb[Int(BUS_COPPER.rawValue)])
@@ -185,32 +186,40 @@ class Monitor: DialogController {
     }
     
     @IBAction func monEnableAction(_ sender: NSButton!) {
-        
-        track()
+    
+        parent.renderer.drawActivityMonitors = sender.state == .on
         refresh()
     }
     
     @IBAction func monDisplayAction(_ sender: NSButton!) {
         
         track("\(sender.tag)")
-        
-        if sender.state == .on {
-            parent.renderer.activateMonitor(sender.tag)
-        } else {
-            parent.renderer.deactivateMonitor(sender.tag)
-        }
+        parent.renderer.monitorEnabled[sender.tag] = sender.state == .on
         refresh()
     }
     
     @IBAction func monDisplayModeAction(_ sender: NSPopUpButton!) {
         
+        track("\(sender.selectedTag())")
+        for i in 0 ..< parent.renderer.dmaMonitors.count {
+            parent.renderer.dmaMonitors[i]?.alignment = sender.selectedTag()
+        }
+        parent.renderer.updateMonitorPositions()
+        refresh()
+    }
+    
+    @IBAction func monRotationAction(_ sender: NSSlider!) {
+        
         track()
+        for i in 0 ..< parent.renderer.dmaMonitors.count {
+            parent.renderer.dmaMonitors[i]?.angle = sender.floatValue
+        }
         refresh()
     }
     
     @IBAction func monOpacityAction(_ sender: NSSlider!) {
         
-        track()
+        parent.renderer.monitorGlobalAlpha = sender.floatValue / 100.0
         refresh()
     }
 }

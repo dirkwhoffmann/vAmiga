@@ -126,13 +126,10 @@ extension Renderer {
         // Check for activity monitor animation
         if (animates & AnimationType.monitors) != 0 {
             
-            var cont = false
-            drawActivityMonitors = false
-            
-            for i in 0 ..< dmaMonAngle.count {
-                dmaMonAngle[i].move()
-                if dmaMonAngle[i].animates() { cont = true }
-                if dmaMonAngle[i].current != 90 { drawActivityMonitors = true }
+            cont = false
+            for i in 0 ..< monitorAlpha.count {
+                monitorAlpha[i].move()
+                if monitorAlpha[i].animates() { cont = true }
             }
 
             // Check if animation has terminated
