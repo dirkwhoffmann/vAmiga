@@ -206,6 +206,8 @@ class Renderer: NSObject, MTKViewDelegate {
     var alpha = AnimatedFloat(0.0)
     var noise = AnimatedFloat(0.0)
     
+    var dmaMonAngle: [AnimatedFloat] = []
+    
     // Parameters determining the visible part of the texture
     var hCenter = Defaults.hCenter
     var vCenter = Defaults.vCenter
@@ -621,6 +623,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             let m = vertexUniforms3D.mvp
             for i in 0 ... 5 {
+                dmaMonitors[i]!.angle = dmaMonAngle[i].current
                 dmaMonitors[i]!.draw(commandEncoder, matrix: m)
             }
         }

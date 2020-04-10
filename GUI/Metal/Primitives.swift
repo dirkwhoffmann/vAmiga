@@ -183,29 +183,6 @@ class BarChart {
     let barHeight   = Float(0.625)
     var barWidth: Float { innerWidth / Float(bars + 1) }
     
-    // var delimiter: Float { return innerWidth / Float(bars + 1) - barWidth }
-            /*
-    let barWidth    = Float(0.03)
-    let barHeight   = Float(0.625)
-    let delimiter   = Float(
-    )
-    let barWidth    = Float(0.01)      // Width of a singe bar
-    let barHeight   = Float(0.15)       // Maximum height of a single bar
-    let delimiter   = Float(0.0025)    // Space between bars
-
-    var totalBarWidth: Float { return barWidth + delimiter } // 0.0125  0.2475+0.05125 = 0.29825
-
-    let leftBorder  = Float(0.02) + Float(0.0125)
-    let rightBorder = Float(0.02)
-    let upperBorder = Float(0.07)
-    let lowerBorder = Float(0.02)
-
-    var innerWidth: Float { return Float(capacity) * totalBarWidth - delimiter }
-    var innerHeight: Float { return barHeight }
-    var totalWidth: Float { return innerWidth + borderWidth }
-    var totalHeight: Float { return innerHeight + borderHeight } // 0.24
-        */
-    
     //
     // Transformations
     //
@@ -213,7 +190,7 @@ class BarChart {
     var posm = matrix_identity_float4x4
 
     var position: NSRect = NSRect.init() { didSet { updateMatrices() } }
-    var angle: Float = 0.0 { didSet { updateMatrices() } }
+    var angle: Float = 0.0 { didSet { if angle != oldValue { updateMatrices() } } }
 
     //
     // Appearance
@@ -390,7 +367,7 @@ class BarChart {
         bgRectangle = Node.init(device: device,
                                 x: 0, y: 0, z: 0.01, w: 1.0, h: 1.0)
     }
-    
+
     func draw(_ commandEncoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
         offset += 1

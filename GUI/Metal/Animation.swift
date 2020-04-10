@@ -14,6 +14,7 @@ struct AnimationType {
     static let geometry = 1
     static let alpha = 2
     static let texture = 4
+    static let monitors = 8
 }
 
 class AnimatedFloat {
@@ -119,6 +120,21 @@ extension Renderer {
             // Check if animation has terminated
             if !cont {
                 animates -= AnimationType.texture
+            }
+        }
+        
+        // Check for activity monitor animation
+        if (animates & AnimationType.monitors) != 0 {
+            
+            var cont = false
+            for i in 0 ..< dmaMonAngle.count {
+                dmaMonAngle[i].move()
+                if dmaMonAngle[i].animates() { cont = true }
+            }
+
+            // Check if animation has terminated
+            if !cont {
+                animates -= AnimationType.monitors
             }
         }
     }

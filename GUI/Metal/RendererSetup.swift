@@ -153,12 +153,19 @@ extension Renderer {
                           position: NSRect.init(x: x + 5*s, y: y, width: w, height: h),
                           color: rgb[Int(BUS_BITPLANE.rawValue)])
             
-        dmaMonitors[0]!.angle = -20
-        dmaMonitors[1]!.angle = -14
-        dmaMonitors[2]!.angle = -8
-        dmaMonitors[3]!.angle = 8
-        dmaMonitors[4]!.angle = 14
-        dmaMonitors[5]!.angle = 20
+        for _ in 0 ... 5 { dmaMonAngle.append(AnimatedFloat(0.0)) }
+        
+        dmaMonAngle[0].target = 270
+        dmaMonAngle[0].steps = 300
+        dmaMonAngle[1].target = 270
+        dmaMonAngle[1].steps = 500
+        dmaMonAngle[2].target = 270
+        dmaMonAngle[2].steps = 200
+        dmaMonAngle[3].target = 270
+        dmaMonAngle[3].steps = 300
+        dmaMonAngle[4].target = 270
+        dmaMonAngle[4].steps = 500
+        animates |= AnimationType.monitors
     }
 
     internal func buildTextures() {
