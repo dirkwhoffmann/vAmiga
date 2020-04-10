@@ -159,10 +159,8 @@ class Quad {
     }
 }
 
-class BarChart {
+class BarChart : ActivityMonitor {
     
-    let device: MTLDevice
-
     //
     // Dimensions in normalized rectangle (0,0) - (1,1)
     //
@@ -183,16 +181,6 @@ class BarChart {
     let barHeight   = Float(0.625)
     var barWidth: Float { innerWidth / Float(bars + 1) }
     
-    //
-    // Transformations
-    //
-        
-    var posm = matrix_identity_float4x4
-
-    var position: NSRect = NSRect.init() { didSet { updateMatrices() } }
-    var angle: Float = 0.0 { didSet { if angle != oldValue { updateMatrices() } } }
-    var alignment = 0 { didSet { if alignment != oldValue { updateMatrices() } } }
-
     //
     // Appearance
     //
@@ -233,18 +221,18 @@ class BarChart {
          color: NSColor,
          logScale: Bool = false) {
         
-        self.device = device
         self.name = name
-        // self.position = position
         self.color = color
         self.logScale = logScale
         
         self.rectangles = []
         values = Array(repeating: 0.0, count: capacity)
 
+        super.init(device: device)
+
         updateRectangles()
         updateTextures()
-        updateMatrices()
+        updateMatrix()
     }
      
     func updateForegroundTexture() {
@@ -256,11 +244,6 @@ class BarChart {
         let size = MTLSizeMake(128, 128, 0)
         let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
         
-        /*
-        data.drawGradient(size: size,
-                          r1: r, g1: g, b1: b, a1: 128,
-         r2: 255, g2: 255, b2: 255, a2: 255)
-         */
         data.drawGradient(size: size,
                           r1: r, g1: g, b1: b, a1: 255,
                           r2: 255, g2: 255, b2: 255, a2: 255)
@@ -307,6 +290,7 @@ class BarChart {
         updateBackgroundTexture()
     }
         
+    /*
     func updateMatrices() {
     
         let posx = Float(position.origin.x)
@@ -339,6 +323,7 @@ class BarChart {
 
         posm = trans * t2 * rot * t1 * scale
     }
+    */
     
     func setColor(_ rgb: (Double, Double, Double) ) {
         
@@ -380,8 +365,7 @@ class BarChart {
                                 x: 0, y: 0, z: 0.001, w: 1.0, h: 1.0)
     }
 
-    func draw(_ commandEncoder: MTLRenderCommandEncoder,
-              matrix: matrix_float4x4) {
+    override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
                 
         offset += 1
         
@@ -396,19 +380,19 @@ class BarChart {
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
         
         // Draw background
-        var uniforms = VertexUniforms(mvp: matrix * posm)
-        commandEncoder.setVertexBytes(&uniforms,
+        var uniforms = VertexUniforms(mvp: matrix * self.matrix)
+        encoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
-        commandEncoder.setFragmentTexture(background, index: 0)
-        bgRectangle!.drawPrimitives(commandEncoder)
+        encoder.setFragmentTexture(background, index: 0)
+        bgRectangle!.drawPrimitives(encoder)
 
         // Draw bars
-        uniforms = VertexUniforms(mvp: matrix * posm * shift)
-        commandEncoder.setVertexBytes(&uniforms,
+        uniforms = VertexUniforms(mvp: matrix * self.matrix * shift)
+        encoder.setVertexBytes(&uniforms,
                                       length: MemoryLayout<VertexUniforms>.stride,
                                       index: 1)
-        commandEncoder.setFragmentTexture(foreground, index: 0)
-        for rect in rectangles { rect.drawPrimitives(commandEncoder) }
+        encoder.setFragmentTexture(foreground, index: 0)
+        for rect in rectangles { rect.drawPrimitives(encoder) }
     }
 }

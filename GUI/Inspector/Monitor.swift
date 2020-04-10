@@ -114,8 +114,13 @@ class Monitor: DialogController {
         monFastRam.state = .off
         monKickRom.state = .off
         monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
-        monDisplayMode.selectItem(withTag: parent.renderer.dmaMonitors[0]!.alignment)
         monSlider.floatValue = parent.renderer.dmaMonitors[0]!.angle
+        switch parent.renderer.dmaMonitors[0]!.rotationSide {
+        case .lower: monDisplayMode.selectItem(withTag: 0)
+        case .upper: monDisplayMode.selectItem(withTag: 1)
+        case .left: monDisplayMode.selectItem(withTag: 2)
+        case .right: monDisplayMode.selectItem(withTag: 3)
+        }
         
         // Colors
         colBlitter.setColor(rgb[Int(BUS_BLITTER.rawValue)])
@@ -202,7 +207,13 @@ class Monitor: DialogController {
         
         track("\(sender.selectedTag())")
         for i in 0 ..< parent.renderer.dmaMonitors.count {
-            parent.renderer.dmaMonitors[i]?.alignment = sender.selectedTag()
+            switch sender.selectedTag() {
+            case 0: parent.renderer.dmaMonitors[i]?.rotationSide = .lower
+            case 1: parent.renderer.dmaMonitors[i]?.rotationSide = .upper
+            case 2: parent.renderer.dmaMonitors[i]?.rotationSide = .left
+            case 3: parent.renderer.dmaMonitors[i]?.rotationSide = .right
+            default: fatalError()
+            }
         }
         parent.renderer.updateMonitorPositions()
         refresh()

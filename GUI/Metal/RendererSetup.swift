@@ -137,12 +137,11 @@ extension Renderer {
         
         var bx, by, dx, dy: Double
         
-        switch dmaMonitors[0]!.alignment {
-        case 0: bx = xmin;     by = ymin;     dx = w + d; dy = 0    // bottom
-        case 1: bx = xmin;     by = ymax - h; dx = w + d; dy = 0    // top
-        case 2: bx = xmin;     by = ymax - h; dx = 0; dy = -(h + d) // left
-        case 3: bx = xmax - w; by = ymax - h; dx = 0; dy = -(h + d) // right
-        default: fatalError()
+        switch dmaMonitors[0]!.rotationSide {
+        case .lower: bx = xmin;     by = ymin;     dx = w + d; dy = 0
+        case .upper: bx = xmin;     by = ymax - h; dx = w + d; dy = 0
+        case .left:  bx = xmin;     by = ymax - h; dx = 0; dy = -(h + d)
+        case .right: bx = xmax - w; by = ymax - h; dx = 0; dy = -(h + d)
         }
 
         for i in 0 ..< dmaMonitors.count {

@@ -157,6 +157,7 @@
 		50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEB621F4F5C60091155D /* Disk.cpp */; };
 		50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F6EEBC21F4F61F0091155D /* Drive.cpp */; };
 		50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F924FB2428B8CD00DD91AB /* DDF.cpp */; };
+		50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -398,6 +399,7 @@
 		50F6EEBD21F4F61F0091155D /* Drive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Drive.h; sourceTree = "<group>"; };
 		50F924FB2428B8CD00DD91AB /* DDF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DDF.cpp; sourceTree = "<group>"; };
 		50F924FC2428B8CD00DD91AB /* DDF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDF.h; sourceTree = "<group>"; };
+		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -568,8 +570,9 @@
 			isa = PBXGroup;
 			children = (
 				508FDFCF21EA20510043D0E9 /* MetalView.swift */,
-				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				5057E4C4243DF10A004005EB /* Primitives.swift */,
+				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
+				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				50357BB5239123B2007E7563 /* Renderer.swift */,
 				50357BB723912929007E7563 /* RendererSetup.swift */,
 				508FDFCD21EA20510043D0E9 /* Animation.swift */,
@@ -1006,6 +1009,7 @@
 				508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */,
 				50B14C1221EB4314002E32A6 /* AmigaUtils.cpp in Sources */,
 				508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */,
+				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
