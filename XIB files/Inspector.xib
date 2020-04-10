@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="15705" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15705"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -907,18 +907,18 @@
                                             <font key="font" metaFont="system"/>
                                             <tabViewItems>
                                                 <tabViewItem label="Program" identifier="" id="apc-46-abt">
-                                                    <view key="view" ambiguous="YES" id="3O7-B1-2Zj">
+                                                    <view key="view" id="3O7-B1-2Zj">
                                                         <rect key="frame" x="10" y="33" width="384" height="364"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yGd-hM-2LN">
                                                                 <rect key="frame" x="7" y="7" width="370" height="317"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="8NX-89-8Zy">
+                                                                <clipView key="contentView" drawsBackground="NO" id="8NX-89-8Zy">
                                                                     <rect key="frame" x="1" y="0.0" width="368" height="316"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="GgW-ee-CoV" id="vBZ-nM-TQD" customClass="InstrTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="GgW-ee-CoV" id="vBZ-nM-TQD" customClass="InstrTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="368" height="291"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="0.0" height="2"/>
@@ -927,7 +927,6 @@
                                                                             <tableColumns>
                                                                                 <tableColumn identifier="break" editable="NO" width="22" minWidth="22" maxWidth="1000" id="hle-qf-HMx">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
@@ -940,7 +939,6 @@
                                                                                 </tableColumn>
                                                                                 <tableColumn identifier="addr" editable="NO" width="56" minWidth="56" maxWidth="1000" id="Smj-2g-qye" userLabel="Address">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Address">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
@@ -953,7 +951,6 @@
                                                                                 </tableColumn>
                                                                                 <tableColumn identifier="data" editable="NO" width="108.5" minWidth="48" maxWidth="1000" id="pQw-Ew-pd2">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Data">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -966,7 +963,6 @@
                                                                                 </tableColumn>
                                                                                 <tableColumn identifier="instr" editable="NO" width="181.5" minWidth="48" maxWidth="1000" id="DUe-oo-gwG">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -1067,7 +1063,6 @@
                                                                             <tableColumns>
                                                                                 <tableColumn identifier="addr" width="56" minWidth="56" maxWidth="1000" id="tAl-xT-YWR">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="PC">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
@@ -1080,7 +1075,6 @@
                                                                                 </tableColumn>
                                                                                 <tableColumn identifier="flags" width="118.5" minWidth="48" maxWidth="1000" id="71a-4g-QEF">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Flags">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -1093,7 +1087,6 @@
                                                                                 </tableColumn>
                                                                                 <tableColumn identifier="instr" width="186.5" minWidth="48" maxWidth="1000" id="5GN-JB-KLO">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
-                                                                                        <font key="font" metaFont="message" size="11"/>
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                                     </tableHeaderCell>
@@ -1184,11 +1177,11 @@
                                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8j-b6-Uk2">
                                                         <rect key="frame" x="11" y="9" width="170" height="111"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="K6U-NB-Phg">
+                                                        <clipView key="contentView" drawsBackground="NO" id="K6U-NB-Phg">
                                                             <rect key="frame" x="1" y="0.0" width="168" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="168" height="85"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -1197,7 +1190,6 @@
                                                                     <tableColumns>
                                                                         <tableColumn identifier="break" editable="NO" width="34" minWidth="22" maxWidth="1000" id="fgP-Bq-o0H">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -1210,7 +1202,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="addr" width="91" minWidth="56" maxWidth="1000" id="hYe-AX-TdC">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Address">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -1223,7 +1214,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="delete" width="34" minWidth="10" maxWidth="3.4028234663852886e+38" id="cSw-ol-th3">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -1268,11 +1258,11 @@
                                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bwx-3g-Pr3">
                                                         <rect key="frame" x="11" y="9" width="170" height="111"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="lYO-RC-hWy">
+                                                        <clipView key="contentView" drawsBackground="NO" id="lYO-RC-hWy">
                                                             <rect key="frame" x="1" y="0.0" width="168" height="110"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="bK4-tf-JR6" id="pd6-3V-YaN" customClass="BreakTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="bK4-tf-JR6" id="pd6-3V-YaN" customClass="BreakTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="168" height="85"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -1281,7 +1271,6 @@
                                                                     <tableColumns>
                                                                         <tableColumn identifier="break" editable="NO" width="34" minWidth="22" maxWidth="1000" id="Rpn-NM-tIB">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -1294,7 +1283,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="addr" width="91" minWidth="56" maxWidth="1000" id="DLi-MI-lqK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Address">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -1307,7 +1295,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="delete" width="34" minWidth="10" maxWidth="3.4028234663852886e+38" id="CzH-dg-PR1">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -2078,7 +2065,6 @@
                                                         <tableColumns>
                                                             <tableColumn identifier="bank" width="38" minWidth="31" maxWidth="3.4028234663852886e+38" id="cl1-ZK-B09" userLabel="Src">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Bank">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -2091,7 +2077,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="source" editable="NO" width="107" minWidth="64" maxWidth="1000" id="AgH-5i-byS">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Source">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -2139,7 +2124,6 @@
                                                         <tableColumns>
                                                             <tableColumn identifier="addr" editable="NO" width="64" minWidth="64" maxWidth="1000" id="5IB-2O-wGX">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="Addr">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -2152,7 +2136,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="0" width="56" minWidth="56" maxWidth="1000" id="pEq-3v-Gsl">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="0">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -2165,7 +2148,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="2" width="48" minWidth="48" maxWidth="1000" id="g2u-ta-eqf">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="2">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2178,7 +2160,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="4" width="48" minWidth="48" maxWidth="1000" id="B1u-Yz-Udl">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="4">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2191,7 +2172,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="6" width="48" minWidth="48" maxWidth="1000" id="CnU-p3-Wmn">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="6">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2204,7 +2184,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="8" editable="NO" width="48" minWidth="48" maxWidth="1000" id="ABp-xQ-19t">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="8">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2217,7 +2196,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="A" editable="NO" width="48" minWidth="48" maxWidth="1000" id="d9d-Ar-62Z">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="A">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2230,7 +2208,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="C" editable="NO" width="48" minWidth="48" maxWidth="1000" id="ppY-yI-bon">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="C">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2243,7 +2220,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="E" editable="NO" width="48" minWidth="48" maxWidth="1000" id="69X-QZ-YLV">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="E">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -2256,7 +2232,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="ascii" width="138" minWidth="128" maxWidth="3.4028234663852886e+38" id="ERn-7D-o3h" userLabel="ASCII">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="ASCII">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -3493,7 +3468,6 @@
                                                                     <tableColumns>
                                                                         <tableColumn identifier="addr" width="56" minWidth="56" maxWidth="1000" id="iq4-nw-BQL">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Address">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
@@ -3506,7 +3480,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="data1" width="58.5" minWidth="48" maxWidth="1000" id="wFK-mz-qv0">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Data 1">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                             </tableHeaderCell>
@@ -3519,7 +3492,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="data2" width="64" minWidth="10" maxWidth="3.4028234663852886e+38" id="c7G-Zs-IIh">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Data 2">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -3532,7 +3504,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="instr" width="169.5" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ey1-1u-uti">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4072,7 +4043,7 @@
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Denise" identifier="" id="kn4-b1-ULt">
-                                <view key="view" ambiguous="YES" id="iv0-wC-hpe">
+                                <view key="view" id="iv0-wC-hpe">
                                     <rect key="frame" x="10" y="33" width="822" height="406"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
@@ -4086,11 +4057,11 @@
                                                     <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mg0-zY-cjI">
                                                         <rect key="frame" x="23" y="43" width="254" height="258"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                        <clipView key="contentView" ambiguous="YES" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
+                                                        <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="252" height="256"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" ambiguous="YES" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="252" height="256"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <size key="intercellSpacing" width="2" height="2"/>
@@ -4099,7 +4070,6 @@
                                                                     <tableColumns>
                                                                         <tableColumn identifier="0" width="14" minWidth="10" maxWidth="64" id="FHs-9Z-UoK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                             </tableHeaderCell>
@@ -4112,7 +4082,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="1" width="14" minWidth="10" maxWidth="64" id="0lZ-IH-edO">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4125,7 +4094,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="2" width="14" minWidth="10" maxWidth="64" id="Y4l-4x-04V">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4138,7 +4106,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="3" width="14" minWidth="10" maxWidth="64" id="Mpy-sv-7F4">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4151,7 +4118,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="4" width="14" minWidth="10" maxWidth="64" id="ccv-ER-i26">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4164,7 +4130,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="5" width="14" minWidth="10" maxWidth="64" id="z4Q-Dp-rvb">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4177,7 +4142,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="6" width="13.5" minWidth="10" maxWidth="64" id="Ahe-fx-42V">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4190,7 +4154,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="7" width="13.5" minWidth="10" maxWidth="64" id="WaI-iI-b08">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4203,7 +4166,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="8" width="13.5" minWidth="10" maxWidth="64" id="ZQz-UV-Iec">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4216,7 +4178,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="9" width="13.5" minWidth="10" maxWidth="64" id="SEo-Ac-x32">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4229,7 +4190,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="10" width="13.5" minWidth="10" maxWidth="64" id="mrK-Xn-WSp">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4242,7 +4202,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="11" width="13.5" minWidth="10" maxWidth="64" id="Y61-8Z-o8Q">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4255,7 +4214,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="12" width="13.5" minWidth="10" maxWidth="64" id="hvv-qI-8Wq">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4268,7 +4226,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="13" width="13.5" minWidth="10" maxWidth="64" id="cPh-Ds-mmw">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4281,7 +4238,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="14" width="13.5" minWidth="10" maxWidth="64" id="ZRR-rR-oBK">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4294,7 +4250,6 @@
                                                                         </tableColumn>
                                                                         <tableColumn identifier="15" width="14.5" minWidth="10" maxWidth="64" id="Bld-Ji-Igu">
                                                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left">
-                                                                                <font key="font" metaFont="message" size="11"/>
                                                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                             </tableHeaderCell>
@@ -4732,7 +4687,7 @@
                                                     <box fixedFrame="YES" boxType="custom" borderWidth="2" title="Box" translatesAutoresizingMaskIntoConstraints="NO" id="woQ-nc-1eo">
                                                         <rect key="frame" x="85" y="42" width="58" height="33"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <view key="contentView" ambiguous="YES" id="UK9-Gm-6AH">
+                                                        <view key="contentView" id="UK9-Gm-6AH">
                                                             <rect key="frame" x="2" y="2" width="54" height="29"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         </view>
@@ -6384,7 +6339,6 @@
                                                         <tableColumns>
                                                             <tableColumn identifier="slot" width="128" minWidth="56" maxWidth="1000" id="pVi-a3-LH0">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Event Slot">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                 </tableHeaderCell>
@@ -6397,7 +6351,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="event" width="128" minWidth="10" maxWidth="3.4028234663852886e+38" id="9m4-KU-bkC">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Event">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -6410,7 +6363,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="trigger" width="112" minWidth="48" maxWidth="1000" id="uUJ-zE-Btf">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Trigger Cycle">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                                 </tableHeaderCell>
@@ -6423,7 +6375,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="frame" width="96" minWidth="10" maxWidth="3.4028234663852886e+38" id="Ehf-Wb-r2H">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Frame">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -6436,7 +6387,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="vpos" width="40" minWidth="10" maxWidth="3.4028234663852886e+38" id="I5Y-Ij-J3p">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="VPos">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -6449,7 +6399,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="hpos" width="40" minWidth="10" maxWidth="3.4028234663852886e+38" id="1HG-qM-JcQ">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="HPos">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -6462,7 +6411,6 @@
                                                             </tableColumn>
                                                             <tableColumn identifier="remark" width="221" minWidth="10" maxWidth="3.4028234663852886e+38" id="GJv-hb-iGq">
                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Remark">
-                                                                    <font key="font" metaFont="message" size="11"/>
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>

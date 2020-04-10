@@ -43,6 +43,7 @@ extension Renderer {
         track()
 
         buildMetal()
+        buildMonitors()
         buildTextures()
         buildSamplers()
         buildKernels()
@@ -73,6 +74,9 @@ extension Renderer {
         // Shader library
         library = device.makeDefaultLibrary()
         assert(library != nil, "Metal library must not be nil")
+    }
+    
+    func buildMonitors() {
         
         // d  w  d  w  d  w  d  w  d  w  d  w  d
         //   ___   ___   ___   ___   ___   ___
@@ -110,28 +114,42 @@ extension Renderer {
         let b = -0.6
         */
         
-        copMonitor = BarChart.init(device: device, name: "Copper",
+        copMonitor = BarChart.init(device: device, name: "Copper DMA",
                                    position: NSRect.init(x: x, y: y, width: w, height: h))
-        bltMonitor = BarChart.init(device: device, name: "Blitter",
+        bltMonitor = BarChart.init(device: device, name: "Blitter DMA",
                                    position: NSRect.init(x: x + s, y: y, width: w, height: h))
-        dskMonitor = BarChart.init(device: device, name: "Disk",
+        dskMonitor = BarChart.init(device: device, name: "Disk DMA",
                                    position: NSRect.init(x: x + 2*s, y: y, width: w, height: h))
-        audMonitor = BarChart.init(device: device, name: "Audio",
+        audMonitor = BarChart.init(device: device, name: "Audio DMA",
                                    position: NSRect.init(x: x + 3*s, y: y, width: w, height: h))
-        sprMonitor = BarChart.init(device: device, name: "Sprites",
+        sprMonitor = BarChart.init(device: device, name: "Sprites DMA",
                                    position: NSRect.init(x: x + 4*s, y: y, width: w, height: h))
-        bplMonitor = BarChart.init(device: device, name: "Bitplanes",
+        bplMonitor = BarChart.init(device: device, name: "Bitplanes DMA",
                                    position: NSRect.init(x: x + 5*s, y: y, width: w, height: h))
         
         copMonitor!.logScale = true
         bltMonitor!.logScale = true
 
-        copMonitor!.color = NSColor.red
-        bltMonitor!.color = NSColor.yellow
-        dskMonitor!.color = NSColor.blue
-        audMonitor!.color = NSColor.green
-        sprMonitor!.color = NSColor.magenta
-        bplMonitor!.color = NSColor.cyan
+        // Assign colors from the bus debuggger
+        let info = controller.amiga.agnus.getDebuggerInfo()
+        let rgb = [
+            info.colorRGB.0,
+            info.colorRGB.1,
+            info.colorRGB.2,
+            info.colorRGB.3,
+            info.colorRGB.4,
+            info.colorRGB.5,
+            info.colorRGB.6,
+            info.colorRGB.7,
+            info.colorRGB.8
+        ]
+    
+        copMonitor!.setColor(rgb[Int(BUS_COPPER.rawValue)])
+        bltMonitor!.setColor(rgb[Int(BUS_BLITTER.rawValue)])
+        dskMonitor!.setColor(rgb[Int(BUS_DISK.rawValue)])
+        audMonitor!.setColor(rgb[Int(BUS_AUDIO.rawValue)])
+        sprMonitor!.setColor(rgb[Int(BUS_SPRITE.rawValue)])
+        bplMonitor!.setColor(rgb[Int(BUS_BITPLANE.rawValue)])
 
         copMonitor!.angle = -20
         bltMonitor!.angle = -14

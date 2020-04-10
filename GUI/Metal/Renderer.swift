@@ -405,6 +405,23 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
+    // Managing the activity monitors
+    //
+
+    func monitor(forTag tag: Int) -> BarChart? {
+        
+        switch tag {
+        case 0: return copMonitor
+        case 1: return bltMonitor
+        case 2: return dskMonitor
+        case 3: return audMonitor
+        case 4: return sprMonitor
+        case 5: return bplMonitor
+        default: fatalError()
+        }
+    }
+    
+    //
     //  Drawing
     //
 

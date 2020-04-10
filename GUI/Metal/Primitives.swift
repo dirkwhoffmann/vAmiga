@@ -348,6 +348,11 @@ class BarChart {
         posm = trans * t2 * rot * t1 * scale
     }
     
+    func setColor(_ rgb: (Double, Double, Double) ) {
+        
+        color = NSColor.init(r: rgb.0, g: rgb.1, b: rgb.2)
+    }
+    
     func addValue(_ value: Float) {
         
         if sumCnt == 0 { sum = 0 }
