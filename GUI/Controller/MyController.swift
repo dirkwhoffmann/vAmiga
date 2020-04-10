@@ -619,20 +619,20 @@ extension MyController {
         let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
         let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / 30000 // (313*192)
         
-        renderer.copMonitor?.addValue(Float(copDMA))
-        renderer.bltMonitor?.addValue(Float(bltDMA))
-        renderer.dskMonitor?.addValue(Float(dskDMA))
-        renderer.audMonitor?.addValue(Float(audDMA))
-        renderer.sprMonitor?.addValue(Float(sprDMA))
-        renderer.bplMonitor?.addValue(Float(bplDMA))
+        renderer.dmaMonitors[Renderer.Monitor.copper]?.addValue(Float(copDMA))
+        renderer.dmaMonitors[Renderer.Monitor.blitter]?.addValue(Float(bltDMA))
+        renderer.dmaMonitors[Renderer.Monitor.disk]?.addValue(Float(dskDMA))
+        renderer.dmaMonitors[Renderer.Monitor.audio]?.addValue(Float(audDMA))
+        renderer.dmaMonitors[Renderer.Monitor.sprite]?.addValue(Float(sprDMA))
+        renderer.dmaMonitors[Renderer.Monitor.bitplane]?.addValue(Float(bplDMA))
         
         monitorsNeedDisplay =
-        renderer.copMonitor != nil ||
-        renderer.bltMonitor != nil ||
-        renderer.dskMonitor != nil ||
-        renderer.audMonitor != nil ||
-        renderer.sprMonitor != nil ||
-        renderer.bplMonitor != nil
+        renderer.dmaMonitors[Renderer.Monitor.copper] != nil ||
+        renderer.dmaMonitors[Renderer.Monitor.blitter] != nil ||
+        renderer.dmaMonitors[Renderer.Monitor.disk] != nil ||
+        renderer.dmaMonitors[Renderer.Monitor.audio] != nil ||
+        renderer.dmaMonitors[Renderer.Monitor.sprite] != nil ||
+        renderer.dmaMonitors[Renderer.Monitor.bitplane] != nil
     }
     
     @objc func snapshotTimerFunc() {

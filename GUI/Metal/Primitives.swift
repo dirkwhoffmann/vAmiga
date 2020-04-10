@@ -251,13 +251,17 @@ class BarChart {
     var foreground: MTLTexture?
     var background: MTLTexture?
 
-    init(device: MTLDevice, name: String, position: NSRect) {
+    init(device: MTLDevice, name: String,
+         position: NSRect,
+         color: NSColor,
+         logScale: Bool = false) {
         
         self.device = device
         self.name = name
         self.position = position
-        self.color = .red
-
+        self.color = color
+        self.logScale = logScale
+        
         self.rectangles = []
         values = Array(repeating: 0.0, count: capacity)
 

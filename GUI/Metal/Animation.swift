@@ -57,18 +57,6 @@ class AnimatedFloat {
 
 extension Renderer {
 
-    // Returns true iff an animation is in progress
-    func animatesDeprecated() -> Bool {
-
-        return angleX.animates()
-            || angleY.animates()
-            || angleZ.animates()
-            || shiftX.animates()
-            || shiftY.animates()
-            || shiftZ.animates()
-            || alpha.animates()
-    }
-
     func performAnimationStep() {
 
         assert(animates != 0)

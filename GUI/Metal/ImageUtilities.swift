@@ -368,7 +368,19 @@ extension MTLDevice {
     }
      */
 }
- 
+
+//
+// Extensions to NSColor
+//
+
+extension NSColor {
+    
+    convenience init(_ rgb: (Double, Double, Double)) {
+        
+        self.init(r: rgb.0, g: rgb.1, b: rgb.2)
+    }
+}
+
 //
 // Extensions to NSImage
 //

@@ -64,9 +64,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var bgRect: Node?
     var quad2D: Node?
     var quad3D: Quad?
-        
-    var copMonitor, bltMonitor, dskMonitor, audMonitor, sprMonitor, bplMonitor: BarChart?
-    
+            
     var vertexUniforms2D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniforms3D = VertexUniforms(mvp: matrix_identity_float4x4)
     var vertexUniformsBg = VertexUniforms(mvp: matrix_identity_float4x4)
@@ -79,6 +77,22 @@ class Renderer: NSObject, MTKViewDelegate {
     var mergeUniforms = MergeUniforms(interlace: 0,
                                       longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
+
+    //
+    // Activity monitors
+    //
+
+    struct Monitor {
+        
+        static let copper = 0
+        static let blitter = 1
+        static let disk = 2
+        static let audio = 3
+        static let sprite = 4
+        static let bitplane = 5
+    }
+
+    var dmaMonitors = [BarChart?](repeatElement(nil, count: 6))
 
     //
     // Textures
@@ -410,15 +424,8 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func monitor(forTag tag: Int) -> BarChart? {
         
-        switch tag {
-        case 0: return copMonitor
-        case 1: return bltMonitor
-        case 2: return dskMonitor
-        case 3: return audMonitor
-        case 4: return sprMonitor
-        case 5: return bplMonitor
-        default: fatalError()
-        }
+        if tag < 6 { return dmaMonitors[tag] }
+        fatalError()
     }
     
     //
@@ -613,14 +620,11 @@ class Renderer: NSObject, MTKViewDelegate {
             quad3D!.draw(commandEncoder, allSides: animates != 0)
             
             let m = vertexUniforms3D.mvp
-            copMonitor!.draw(commandEncoder, matrix: m)
-            bltMonitor!.draw(commandEncoder, matrix: m)
-            dskMonitor!.draw(commandEncoder, matrix: m)
-            audMonitor!.draw(commandEncoder, matrix: m)
-            sprMonitor!.draw(commandEncoder, matrix: m)
-            bplMonitor!.draw(commandEncoder, matrix: m)
+            for i in 0 ... 5 {
+                dmaMonitors[i]!.draw(commandEncoder, matrix: m)
+            }
         }
-
+        
         endFrame()
     }
     

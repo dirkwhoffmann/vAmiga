@@ -78,6 +78,20 @@ extension Renderer {
     
     func buildMonitors() {
         
+        // Activity monitors are colorized with the bus debuggger colors
+        let info = controller.amiga.agnus.getDebuggerInfo()
+        let rgb = [
+            NSColor.init(info.colorRGB.0),
+            NSColor.init(info.colorRGB.1),
+            NSColor.init(info.colorRGB.2),
+            NSColor.init(info.colorRGB.3),
+            NSColor.init(info.colorRGB.4),
+            NSColor.init(info.colorRGB.5),
+            NSColor.init(info.colorRGB.6),
+            NSColor.init(info.colorRGB.7),
+            NSColor.init(info.colorRGB.8)
+        ]
+
         // d  w  d  w  d  w  d  w  d  w  d  w  d
         //   ___   ___   ___   ___   ___   ___
         // -|   |-|   |-|   |-|   |-|   |-|   |- h
@@ -114,49 +128,37 @@ extension Renderer {
         let b = -0.6
         */
         
-        copMonitor = BarChart.init(device: device, name: "Copper DMA",
-                                   position: NSRect.init(x: x, y: y, width: w, height: h))
-        bltMonitor = BarChart.init(device: device, name: "Blitter DMA",
-                                   position: NSRect.init(x: x + s, y: y, width: w, height: h))
-        dskMonitor = BarChart.init(device: device, name: "Disk DMA",
-                                   position: NSRect.init(x: x + 2*s, y: y, width: w, height: h))
-        audMonitor = BarChart.init(device: device, name: "Audio DMA",
-                                   position: NSRect.init(x: x + 3*s, y: y, width: w, height: h))
-        sprMonitor = BarChart.init(device: device, name: "Sprites DMA",
-                                   position: NSRect.init(x: x + 4*s, y: y, width: w, height: h))
-        bplMonitor = BarChart.init(device: device, name: "Bitplanes DMA",
-                                   position: NSRect.init(x: x + 5*s, y: y, width: w, height: h))
-        
-        copMonitor!.logScale = true
-        bltMonitor!.logScale = true
-
-        // Assign colors from the bus debuggger
-        let info = controller.amiga.agnus.getDebuggerInfo()
-        let rgb = [
-            info.colorRGB.0,
-            info.colorRGB.1,
-            info.colorRGB.2,
-            info.colorRGB.3,
-            info.colorRGB.4,
-            info.colorRGB.5,
-            info.colorRGB.6,
-            info.colorRGB.7,
-            info.colorRGB.8
-        ]
-    
-        copMonitor!.setColor(rgb[Int(BUS_COPPER.rawValue)])
-        bltMonitor!.setColor(rgb[Int(BUS_BLITTER.rawValue)])
-        dskMonitor!.setColor(rgb[Int(BUS_DISK.rawValue)])
-        audMonitor!.setColor(rgb[Int(BUS_AUDIO.rawValue)])
-        sprMonitor!.setColor(rgb[Int(BUS_SPRITE.rawValue)])
-        bplMonitor!.setColor(rgb[Int(BUS_BITPLANE.rawValue)])
-
-        copMonitor!.angle = -20
-        bltMonitor!.angle = -14
-        dskMonitor!.angle = -8
-        audMonitor!.angle = 8
-        sprMonitor!.angle = 14
-        bplMonitor!.angle = 20
+        dmaMonitors[Monitor.copper] =
+            BarChart.init(device: device, name: "Copper DMA",
+                          position: NSRect.init(x: x, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_COPPER.rawValue)], logScale: true)
+        dmaMonitors[Monitor.blitter] =
+            BarChart.init(device: device, name: "Blitter DMA",
+                          position: NSRect.init(x: x + s, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_BLITTER.rawValue)], logScale: true)
+        dmaMonitors[Monitor.disk] =
+            BarChart.init(device: device, name: "Disk DMA",
+                          position: NSRect.init(x: x + 2*s, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_DISK.rawValue)])
+        dmaMonitors[Monitor.audio] =
+            BarChart.init(device: device, name: "Audio DMA",
+                          position: NSRect.init(x: x + 3*s, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_AUDIO.rawValue)])
+        dmaMonitors[Monitor.sprite] =
+            BarChart.init(device: device, name: "Sprite DMA",
+                          position: NSRect.init(x: x + 4*s, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_SPRITE.rawValue)])
+        dmaMonitors[Monitor.bitplane] =
+            BarChart.init(device: device, name: "Bitplane DMA",
+                          position: NSRect.init(x: x + 5*s, y: y, width: w, height: h),
+                          color: rgb[Int(BUS_BITPLANE.rawValue)])
+            
+        dmaMonitors[0]!.angle = -20
+        dmaMonitors[1]!.angle = -14
+        dmaMonitors[2]!.angle = -8
+        dmaMonitors[3]!.angle = 8
+        dmaMonitors[4]!.angle = 14
+        dmaMonitors[5]!.angle = 20
     }
 
     internal func buildTextures() {
