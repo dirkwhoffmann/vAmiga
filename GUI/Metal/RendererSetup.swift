@@ -91,26 +91,27 @@ extension Renderer {
             NSColor.init(info.colorRGB.7),
             NSColor.init(info.colorRGB.8)
         ]
-
+        
         dmaMonitors[Monitor.copper] =
-            BarChart.init(device: device, name: "Copper DMA",
-                          color: rgb[Int(BUS_COPPER.rawValue)], logScale: true)
+            BarChart.init(device: device, name: "Copper DMA", logScale: true)
         dmaMonitors[Monitor.blitter] =
-            BarChart.init(device: device, name: "Blitter DMA",
-                          color: rgb[Int(BUS_BLITTER.rawValue)], logScale: true)
+            BarChart.init(device: device, name: "Blitter DMA", logScale: true)
         dmaMonitors[Monitor.disk] =
-            BarChart.init(device: device, name: "Disk DMA",
-                          color: rgb[Int(BUS_DISK.rawValue)])
+            BarChart.init(device: device, name: "Disk DMA")
         dmaMonitors[Monitor.audio] =
-            BarChart.init(device: device, name: "Audio DMA",
-                          color: rgb[Int(BUS_AUDIO.rawValue)])
+            BarChart.init(device: device, name: "Audio DMA")
         dmaMonitors[Monitor.sprite] =
-            BarChart.init(device: device, name: "Sprite DMA",
-                          color: rgb[Int(BUS_SPRITE.rawValue)])
+            BarChart.init(device: device, name: "Sprite DMA")
         dmaMonitors[Monitor.bitplane] =
-            BarChart.init(device: device, name: "Bitplane DMA",
-                          color: rgb[Int(BUS_BITPLANE.rawValue)])
-            
+            BarChart.init(device: device, name: "Bitplane DMA")
+        
+        dmaMonitors[Monitor.copper]!.upperColor = rgb[Int(BUS_COPPER.rawValue)]
+        dmaMonitors[Monitor.blitter]!.upperColor = rgb[Int(BUS_BLITTER.rawValue)]
+        dmaMonitors[Monitor.disk]!.upperColor = rgb[Int(BUS_DISK.rawValue)]
+        dmaMonitors[Monitor.audio]!.upperColor = rgb[Int(BUS_AUDIO.rawValue)]
+        dmaMonitors[Monitor.sprite]!.upperColor = rgb[Int(BUS_SPRITE.rawValue)]
+        dmaMonitors[Monitor.bitplane]!.upperColor = rgb[Int(BUS_BITPLANE.rawValue)]
+
         for _ in 0 ... 5 { monitorAlpha.append(AnimatedFloat(0)) }
         
         updateMonitorPositions()        

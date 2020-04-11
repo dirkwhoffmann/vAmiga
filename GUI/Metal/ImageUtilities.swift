@@ -380,6 +380,15 @@ extension NSColor {
         
         self.init(r: rgb.0, g: rgb.1, b: rgb.2)
     }
+    
+    func integerComponents() -> (Int, Int, Int) {
+        
+        let r = Int(redComponent * 255)
+        let g = Int(greenComponent * 255)
+        let b = Int(blueComponent * 255)
+        
+        return (r, g, b)
+    }
 }
 
 //

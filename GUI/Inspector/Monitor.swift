@@ -161,7 +161,7 @@ class Monitor: DialogController {
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
         amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
-        parent.renderer.monitor(forTag: sender.tag)?.color = sender.color
+        parent.renderer.monitor(forTag: sender.tag)?.upperColor = sender.color
         refresh()
     }
 
