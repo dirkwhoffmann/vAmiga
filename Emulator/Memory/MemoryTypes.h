@@ -122,10 +122,12 @@ typedef struct
 {
     struct { long raw; double accumulated; } chipReads;
     struct { long raw; double accumulated; } chipWrites;
+    struct { long raw; double accumulated; } slowReads;
+    struct { long raw; double accumulated; } slowWrites;
     struct { long raw; double accumulated; } fastReads;
     struct { long raw; double accumulated; } fastWrites;
-    struct { long raw; double accumulated; } romReads;
-    struct { long raw; double accumulated; } romWrites;
+    struct { long raw; double accumulated; } kickReads;
+    struct { long raw; double accumulated; } kickWrites;
 }
 MemoryStats;
 

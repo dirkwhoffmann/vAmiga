@@ -309,12 +309,16 @@ class BarChart: ActivityMonitor {
         lowerSum += logScale ? log(1.0 + 19.0 * value) / log(20) : value
         lowerSumCnt += 1
     }
-
+    
     func addValue(_ value: Float) {
         addUpperValue(value)
-        addLowerValue(value)
     }
     
+    func addValues(_ value1: Float, _ value2: Float) {
+        addUpperValue(value1)
+        addLowerValue(value2)
+    }
+
     func updateBars() {
         
         updateUpperBars()

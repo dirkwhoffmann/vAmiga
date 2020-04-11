@@ -92,28 +92,35 @@ extension Renderer {
             NSColor.init(info.colorRGB.8)
         ]
         
-        dmaMonitors[Monitor.copper] =
-            BarChart.init(device: device, name: "Copper DMA", logScale: true)
-        dmaMonitors[Monitor.blitter] =
-            BarChart.init(device: device, name: "Blitter DMA", logScale: true)
-        dmaMonitors[Monitor.disk] =
-            BarChart.init(device: device, name: "Disk DMA")
-        dmaMonitors[Monitor.audio] =
-            BarChart.init(device: device, name: "Audio DMA")
-        dmaMonitors[Monitor.sprite] =
-            BarChart.init(device: device, name: "Sprite DMA")
-        dmaMonitors[Monitor.bitplane] =
-            BarChart.init(device: device, name: "Bitplane DMA")
+        // DMA monitors
+        monitors.append(BarChart.init(device: device, name: "Copper DMA", logScale: true))
+        monitors.append(BarChart.init(device: device, name: "Blitter DMA", logScale: true))
+        monitors.append(BarChart.init(device: device, name: "Disk DMA"))
+        monitors.append(BarChart.init(device: device, name: "Audio DMA"))
+        monitors.append(BarChart.init(device: device, name: "Sprite DMA"))
+        monitors.append(BarChart.init(device: device, name: "Bitplane DMA"))
         
-        dmaMonitors[Monitor.copper]!.upperColor = rgb[Int(BUS_COPPER.rawValue)]
-        dmaMonitors[Monitor.blitter]!.upperColor = rgb[Int(BUS_BLITTER.rawValue)]
-        dmaMonitors[Monitor.disk]!.upperColor = rgb[Int(BUS_DISK.rawValue)]
-        dmaMonitors[Monitor.audio]!.upperColor = rgb[Int(BUS_AUDIO.rawValue)]
-        dmaMonitors[Monitor.sprite]!.upperColor = rgb[Int(BUS_SPRITE.rawValue)]
-        dmaMonitors[Monitor.bitplane]!.upperColor = rgb[Int(BUS_BITPLANE.rawValue)]
+        monitors[0].upperColor = rgb[Int(BUS_COPPER.rawValue)]
+        monitors[1].upperColor = rgb[Int(BUS_BLITTER.rawValue)]
+        monitors[2].upperColor = rgb[Int(BUS_DISK.rawValue)]
+        monitors[3].upperColor = rgb[Int(BUS_AUDIO.rawValue)]
+        monitors[4].upperColor = rgb[Int(BUS_SPRITE.rawValue)]
+        monitors[5].upperColor = rgb[Int(BUS_BITPLANE.rawValue)]
 
-        for _ in 0 ... 5 { monitorAlpha.append(AnimatedFloat(0)) }
+        // Memory monitors
+        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)", splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)", splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Rom)", splitView: true))
+
+        // Waveform monitors
+        monitors.append(BarChart.init(device: device, name: "Left channel"))
+        monitors.append(BarChart.init(device: device, name: "Right channel"))
         
+        for _ in 0 ... monitors.count {
+            monitorAlpha.append(AnimatedFloat(0))
+            monitorEnabled.append(true)
+        }
         updateMonitorPositions()        
     }
 
@@ -133,23 +140,25 @@ extension Renderer {
         let yspan = ymax - ymin
 
         let d = 0.02
-        let w = (xspan - 5 * d) / 6
-        let h = (yspan - 5 * d) / 6 // w * 2/3
-        
+        // let w = (xspan - 5 * d) / 6
+        // let h = (yspan - 5 * d) / 6
+        let w = (xspan - 11 * d) / 12
+        let h = (yspan - 11 * d) / 12
+
         var bx, by, dx, dy: Double
         
-        switch dmaMonitors[0]!.rotationSide {
+        switch monitors[0].rotationSide {
         case .lower: bx = xmin;     by = ymin;     dx = w + d; dy = 0
         case .upper: bx = xmin;     by = ymax - h; dx = w + d; dy = 0
         case .left:  bx = xmin;     by = ymax - h; dx = 0; dy = -(h + d)
         case .right: bx = xmax - w; by = ymax - h; dx = 0; dy = -(h + d)
         }
 
-        for i in 0 ..< dmaMonitors.count {
-            
+        for i in 0 ..< monitors.count {
+    
             let rect = NSRect.init(x: bx + Double(i) * dx,
                                    y: by + Double(i) * dy, width: w, height: h)
-            dmaMonitors[i]!.position = rect
+            monitors[i].position = rect
         }
     }
     

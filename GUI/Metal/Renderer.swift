@@ -90,17 +90,23 @@ class Renderer: NSObject, MTKViewDelegate {
         static let audio = 3
         static let sprite = 4
         static let bitplane = 5
+        
+        static let chipRam = 6
+        static let slowRam = 7
+        static let fastRam = 8
+        static let kickRom = 9
+
+        static let waveformL = 10
+        static let waveformR = 11
     }
 
-    var dmaMonitors = [BarChart?](repeatElement(nil, count: 6))
+    var monitors: [BarChart] = [] // [BarChart?](repeatElement(nil, count: 12))
 
-    // Indicates if activity monitoring is enabled
-    var drawActivityMonitors = false {
-        didSet { updateMonitorAlphas() }
-    }
-    var monitorEnabled = [Bool](repeatElement(true, count: 6)) {
-        didSet { updateMonitorAlphas() }
-    }
+    // Global enable switch for all activity monitors
+    var drawActivityMonitors = false { didSet { updateMonitorAlphas() } }
+
+    // Individual enable switch for each activity monitor
+    var monitorEnabled: [Bool] = [] { didSet { updateMonitorAlphas() } }
     
     // Global alpha value of activity monitors
     var monitorGlobalAlpha = Float(0.5)
@@ -435,15 +441,9 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing activity monitors
     //
 
-    func monitor(forTag tag: Int) -> BarChart? {
-        
-        if tag < 6 { return dmaMonitors[tag] }
-        fatalError()
-    }
-    
     func fadeIn(monitor nr: Int) {
 
-        assert(nr < dmaMonitors.count)
+        assert(nr < monitors.count)
         
         monitorAlpha[nr].target = 1.0
         monitorAlpha[nr].steps = 40
@@ -452,7 +452,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
     func fadeOut(monitor nr: Int) {
 
-        assert(nr < dmaMonitors.count)
+        assert(nr < monitors.count)
         
         monitorAlpha[nr].target = 0.0
         monitorAlpha[nr].steps = 40
@@ -461,7 +461,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func updateMonitorAlphas() {
         
-        for i in 0 ..< dmaMonitors.count {
+        for i in 0 ..< monitors.count where i < monitorEnabled.count {
             if drawActivityMonitors && monitorEnabled[i] {
                 fadeIn(monitor: i)
             } else {
@@ -664,13 +664,13 @@ class Renderer: NSObject, MTKViewDelegate {
             // Draw activity monitors
             if drawActivityMonitors {
                 
-                for i in 0 ... 5 where monitorAlpha[i].current != 0.0 {
-
+                for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
+                    
                     fragmentUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
                     commandEncoder.setFragmentBytes(&fragmentUniforms,
                                                     length: MemoryLayout<FragmentUniforms>.stride,
                                                     index: 1)
-                    dmaMonitors[i]!.draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+                    monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
                 }
             }
         }

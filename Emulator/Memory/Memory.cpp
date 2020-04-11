@@ -196,21 +196,27 @@ Memory::updateStats()
     w * stats.chipReads.accumulated + (1.0 - w) * stats.chipReads.raw;
     stats.chipWrites.accumulated =
     w * stats.chipWrites.accumulated + (1.0 - w) * stats.chipWrites.raw;
+    stats.slowReads.accumulated =
+    w * stats.slowReads.accumulated + (1.0 - w) * stats.slowReads.raw;
+    stats.slowWrites.accumulated =
+    w * stats.slowWrites.accumulated + (1.0 - w) * stats.slowWrites.raw;
     stats.fastReads.accumulated =
     w * stats.fastReads.accumulated + (1.0 - w) * stats.fastReads.raw;
     stats.fastWrites.accumulated =
     w * stats.fastWrites.accumulated + (1.0 - w) * stats.fastWrites.raw;
-    stats.romReads.accumulated =
-    w * stats.romReads.accumulated + (1.0 - w) * stats.romReads.raw;
-    stats.romWrites.accumulated =
-    w * stats.romWrites.accumulated + (1.0 - w) * stats.romWrites.raw;
+    stats.kickReads.accumulated =
+    w * stats.kickReads.accumulated + (1.0 - w) * stats.kickReads.raw;
+    stats.kickWrites.accumulated =
+    w * stats.kickWrites.accumulated + (1.0 - w) * stats.kickWrites.raw;
 
     stats.chipReads.raw = 0;
     stats.chipWrites.raw = 0;
+    stats.slowReads.raw = 0;
+    stats.slowWrites.raw = 0;
     stats.fastReads.raw = 0;
     stats.fastWrites.raw = 0;
-    stats.romReads.raw = 0;
-    stats.romWrites.raw = 0;
+    stats.kickReads.raw = 0;
+    stats.kickWrites.raw = 0;
 }
 
 bool
@@ -746,7 +752,7 @@ Memory::peek8(u32 addr)
 
             ASSERT_SLOW_ADDR(addr);
             agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
+            stats.slowReads.raw++;
             dataBus = READ_SLOW_8(addr);
             return dataBus;
 
@@ -777,19 +783,19 @@ Memory::peek8(u32 addr)
         case MEM_ROM:
 
             ASSERT_ROM_ADDR(addr);
-            stats.romReads.raw++;
+            stats.kickReads.raw++;
             return READ_ROM_8(addr);
 
         case MEM_WOM:
 
             ASSERT_WOM_ADDR(addr);
-            stats.romReads.raw++;
+            stats.kickReads.raw++;
             return READ_WOM_8(addr);
 
         case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
-            stats.romReads.raw++;
+            stats.kickReads.raw++;
             return READ_EXT_8(addr);
 
         default:
@@ -859,7 +865,7 @@ Memory::peek16(u32 addr)
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
+                    stats.slowReads.raw++;
                     dataBus = READ_SLOW_16(addr);
                     return dataBus;
 
@@ -890,19 +896,19 @@ Memory::peek16(u32 addr)
                 case MEM_ROM:
 
                     ASSERT_ROM_ADDR(addr);
-                    stats.romReads.raw++;
+                    stats.kickReads.raw++;
                     return READ_ROM_16(addr);
 
                 case MEM_WOM:
 
                     ASSERT_WOM_ADDR(addr);
-                    stats.romReads.raw++;
+                    stats.kickReads.raw++;
                     return READ_WOM_16(addr);
 
                 case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
-                    stats.romReads.raw++;
+                    stats.kickReads.raw++;
                     return READ_EXT_16(addr);
             }
     }
@@ -1008,7 +1014,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_SLOW:
 
             ASSERT_SLOW_ADDR(addr);
-            stats.chipWrites.raw++;
+            stats.slowWrites.raw++;
             WRITE_SLOW_8(addr, value);
             break;
 
@@ -1036,21 +1042,21 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_ROM:
 
             ASSERT_ROM_ADDR(addr);
-            stats.romWrites.raw++;
+            stats.kickWrites.raw++;
             pokeRom8(addr, value);
             break;
 
         case MEM_WOM:
 
             ASSERT_WOM_ADDR(addr);
-            stats.romWrites.raw++;
+            stats.kickWrites.raw++;
             pokeWom8(addr, value);
             break;
 
         case MEM_EXT:
 
             ASSERT_EXT_ADDR(addr);
-            stats.romWrites.raw++;
+            stats.kickWrites.raw++;
             break;
 
         default:
@@ -1121,7 +1127,7 @@ Memory::poke16(u32 addr, u16 value)
 
                     ASSERT_SLOW_ADDR(addr);
                     agnus.executeUntilBusIsFree();
-                    stats.chipWrites.raw++;
+                    stats.slowWrites.raw++;
                     dataBus = value;
                     WRITE_SLOW_16(addr, value);
                     return;
@@ -1156,21 +1162,21 @@ Memory::poke16(u32 addr, u16 value)
                 case MEM_ROM:
 
                     ASSERT_ROM_ADDR(addr);
-                    stats.romWrites.raw++;
+                    stats.kickWrites.raw++;
                     pokeRom16(addr, value);
                     return;
 
                 case MEM_WOM:
 
                     ASSERT_WOM_ADDR(addr);
-                    stats.romWrites.raw++;
+                    stats.kickWrites.raw++;
                     pokeWom16(addr, value);
                     return;
 
                 case MEM_EXT:
 
                     ASSERT_EXT_ADDR(addr);
-                    stats.romWrites.raw++;
+                    stats.kickWrites.raw++;
                     return;
 
                 default:

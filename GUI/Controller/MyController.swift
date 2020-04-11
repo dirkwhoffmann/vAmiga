@@ -62,9 +62,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
     var screenshotTimer: Timer?
-
-    // Indicates if the activity monitors need to be updated
-    var monitorsNeedDisplay = false
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
@@ -572,9 +569,7 @@ extension MyController {
         if (animationCounter % 4) == 0 {
 
             updateSpeedometer()
-            
-            monitorsNeedDisplay = true // REMOVE ASAP
-            if monitorsNeedDisplay { updateMonitoringPanels() }
+            updateMonitoringPanels()
             
             // Let the cursor disappear in fullscreen mode
             if renderer.fullscreen &&
@@ -598,18 +593,21 @@ extension MyController {
     
     func updateMonitoringPanels() {
         
-        let stats = amiga.agnus.getStats()
+        if !renderer.drawActivityMonitors { return }
+            
+        // DMA monitors
+        let dma = amiga.agnus.getStats()
         
         let counts = [
-            stats.bus.accumulated.0,
-            stats.bus.accumulated.1,
-            stats.bus.accumulated.2,
-            stats.bus.accumulated.3,
-            stats.bus.accumulated.4,
-            stats.bus.accumulated.5,
-            stats.bus.accumulated.6,
-            stats.bus.accumulated.7,
-            stats.bus.accumulated.8
+            dma.bus.accumulated.0,
+            dma.bus.accumulated.1,
+            dma.bus.accumulated.2,
+            dma.bus.accumulated.3,
+            dma.bus.accumulated.4,
+            dma.bus.accumulated.5,
+            dma.bus.accumulated.6,
+            dma.bus.accumulated.7,
+            dma.bus.accumulated.8
         ]
                 
         let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
@@ -617,22 +615,35 @@ extension MyController {
         let dskDMA = Double(counts[Int(BUS_DISK.rawValue)]) / (313*3)
         let audDMA = Double(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
         let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
-        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / 30000 // (313*192)
+        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / 30000
         
-        renderer.dmaMonitors[Renderer.Monitor.copper]?.addValue(Float(copDMA))
-        renderer.dmaMonitors[Renderer.Monitor.blitter]?.addValue(Float(bltDMA))
-        renderer.dmaMonitors[Renderer.Monitor.disk]?.addValue(Float(dskDMA))
-        renderer.dmaMonitors[Renderer.Monitor.audio]?.addValue(Float(audDMA))
-        renderer.dmaMonitors[Renderer.Monitor.sprite]?.addValue(Float(sprDMA))
-        renderer.dmaMonitors[Renderer.Monitor.bitplane]?.addValue(Float(bplDMA))
+        renderer.monitors[Renderer.Monitor.copper].addValue(Float(copDMA))
+        renderer.monitors[Renderer.Monitor.blitter].addValue(Float(bltDMA))
+        renderer.monitors[Renderer.Monitor.disk].addValue(Float(dskDMA))
+        renderer.monitors[Renderer.Monitor.audio].addValue(Float(audDMA))
+        renderer.monitors[Renderer.Monitor.sprite].addValue(Float(sprDMA))
+        renderer.monitors[Renderer.Monitor.bitplane].addValue(Float(bplDMA))
         
-        monitorsNeedDisplay =
-        renderer.dmaMonitors[Renderer.Monitor.copper] != nil ||
-        renderer.dmaMonitors[Renderer.Monitor.blitter] != nil ||
-        renderer.dmaMonitors[Renderer.Monitor.disk] != nil ||
-        renderer.dmaMonitors[Renderer.Monitor.audio] != nil ||
-        renderer.dmaMonitors[Renderer.Monitor.sprite] != nil ||
-        renderer.dmaMonitors[Renderer.Monitor.bitplane] != nil
+        // Memory monitors
+        let mem = amiga.mem.getStats()
+        
+        let max = Float((HPOS_CNT * VPOS_CNT) / 2)
+        let chipR = Float(mem.chipReads.accumulated) / max
+        let chipW = Float(mem.chipWrites.accumulated) / max
+        let slowR = Float(mem.slowReads.accumulated) / max
+        let slowW = Float(mem.slowWrites.accumulated) / max
+        let fastR = Float(mem.fastReads.accumulated) / max
+        let fastW = Float(mem.fastWrites.accumulated) / max
+        let kickR = Float(mem.kickReads.accumulated) / max
+        let kickW = Float(mem.kickWrites.accumulated) / max
+
+        renderer.monitors[Renderer.Monitor.chipRam].addValues(chipR, chipW)
+        renderer.monitors[Renderer.Monitor.slowRam].addValues(slowR, slowW)
+        renderer.monitors[Renderer.Monitor.fastRam].addValues(fastR, fastW)
+        renderer.monitors[Renderer.Monitor.kickRom].addValues(kickR, kickW)
+        
+        // Waveform monitors
+        // TODO
     }
     
     @objc func snapshotTimerFunc() {

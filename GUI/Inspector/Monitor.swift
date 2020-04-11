@@ -44,11 +44,13 @@ class Monitor: DialogController {
     @IBOutlet weak var monSprites: NSButton!
     @IBOutlet weak var monBitplanes: NSButton!
 
-    @IBOutlet weak var monWaveforms: NSButton!
     @IBOutlet weak var monChipRam: NSButton!
     @IBOutlet weak var monSlowRam: NSButton!
     @IBOutlet weak var monFastRam: NSButton!
     @IBOutlet weak var monKickRom: NSButton!
+
+    @IBOutlet weak var monLeftWave: NSButton!
+    @IBOutlet weak var monRightWave: NSButton!
 
     @IBOutlet weak var monOpacity: NSSlider!
     @IBOutlet weak var monDisplayMode: NSPopUpButton!
@@ -61,6 +63,10 @@ class Monitor: DialogController {
     }
 
     override func refresh() {
+        
+        func enabled(_ monitor: Int) -> NSControl.StateValue {
+            return parent.renderer.monitorEnabled[monitor] ? .on : .off
+        }
         
         let info = amiga.agnus.getDebuggerInfo()
         
@@ -102,20 +108,21 @@ class Monitor: DialogController {
 
         // Activity monitors
         monEnable.state = parent.renderer.drawActivityMonitors ? .on : .off
-        monCopper.state = parent.renderer.monitorEnabled[0] ? .on : .off
-        monBlitter.state = parent.renderer.monitorEnabled[1] ? .on : .off
-        monDisk.state = parent.renderer.monitorEnabled[2] ? .on : .off
-        monAudio.state = parent.renderer.monitorEnabled[3] ? .on : .off
-        monSprites.state = parent.renderer.monitorEnabled[4] ? .on : .off
-        monBitplanes.state = parent.renderer.monitorEnabled[5] ? .on : .off
-        monWaveforms.state = .off
-        monChipRam.state = .off
-        monSlowRam.state = .off
-        monFastRam.state = .off
-        monKickRom.state = .off
+        monCopper.state = enabled(Renderer.Monitor.copper)
+        monBlitter.state = enabled(Renderer.Monitor.blitter)
+        monDisk.state = enabled(Renderer.Monitor.disk)
+        monAudio.state = enabled(Renderer.Monitor.audio)
+        monSprites.state = enabled(Renderer.Monitor.sprite)
+        monBitplanes.state = enabled(Renderer.Monitor.bitplane)
+        monChipRam.state = enabled(Renderer.Monitor.chipRam)
+        monSlowRam.state = enabled(Renderer.Monitor.slowRam)
+        monFastRam.state = enabled(Renderer.Monitor.fastRam)
+        monKickRom.state = enabled(Renderer.Monitor.kickRom)
+        monLeftWave.state = enabled(Renderer.Monitor.waveformL)
+        monRightWave.state = enabled(Renderer.Monitor.waveformR)
         monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
-        monSlider.floatValue = parent.renderer.dmaMonitors[0]!.angle
-        switch parent.renderer.dmaMonitors[0]!.rotationSide {
+        monSlider.floatValue = parent.renderer.monitors[0].angle
+        switch parent.renderer.monitors[0].rotationSide {
         case .lower: monDisplayMode.selectItem(withTag: 0)
         case .upper: monDisplayMode.selectItem(withTag: 1)
         case .left: monDisplayMode.selectItem(withTag: 2)
@@ -161,7 +168,7 @@ class Monitor: DialogController {
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
         amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
-        parent.renderer.monitor(forTag: sender.tag)?.upperColor = sender.color
+        parent.renderer.monitors[sender.tag].upperColor = sender.color
         refresh()
     }
 
@@ -206,12 +213,12 @@ class Monitor: DialogController {
     @IBAction func monDisplayModeAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        for i in 0 ..< parent.renderer.dmaMonitors.count {
+        for i in 0 ..< parent.renderer.monitors.count {
             switch sender.selectedTag() {
-            case 0: parent.renderer.dmaMonitors[i]?.rotationSide = .lower
-            case 1: parent.renderer.dmaMonitors[i]?.rotationSide = .upper
-            case 2: parent.renderer.dmaMonitors[i]?.rotationSide = .left
-            case 3: parent.renderer.dmaMonitors[i]?.rotationSide = .right
+            case 0: parent.renderer.monitors[i].rotationSide = .lower
+            case 1: parent.renderer.monitors[i].rotationSide = .upper
+            case 2: parent.renderer.monitors[i].rotationSide = .left
+            case 3: parent.renderer.monitors[i].rotationSide = .right
             default: fatalError()
             }
         }
@@ -222,8 +229,8 @@ class Monitor: DialogController {
     @IBAction func monRotationAction(_ sender: NSSlider!) {
         
         track()
-        for i in 0 ..< parent.renderer.dmaMonitors.count {
-            parent.renderer.dmaMonitors[i]?.angle = sender.floatValue
+        for i in 0 ..< parent.renderer.monitors.count {
+            parent.renderer.monitors[i].angle = sender.floatValue
         }
         refresh()
     }
