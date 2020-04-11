@@ -134,16 +134,15 @@ class BarChart: ActivityMonitor {
     var foreground: MTLTexture?
     var background: MTLTexture?
     
-    init(device: MTLDevice, name: String,
-         color: NSColor,
-         logScale: Bool = false) {
+    init(device: MTLDevice, name: String, color: NSColor, logScale: Bool = false) {
         
         self.name = name
         self.color = color
         self.logScale = logScale
         
-        self.rectangles = []
         values = Array(repeating: 0.0, count: capacity)
+        rectangles = []
+        bgRectangle = Node.init(device: device, x: 0, y: 0, z: 0.001, w: 1.0, h: 1.0)
         
         super.init(device: device)
         
@@ -167,6 +166,22 @@ class BarChart: ActivityMonitor {
         
         foreground = device.makeTexture(from: data, size: size)
         assert(foreground != nil)
+    }
+    
+    var oldScale = Float(0.1)
+    func experimental(amiga: AmigaProxy) {
+    
+        let bgWidth = 300
+        let bgHeight = 240
+        
+        let size = MTLSizeMake(bgWidth, bgHeight, 0)
+        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: size.width * size.height)
+        
+        let s = NSSize(width: bgWidth, height: bgHeight)
+        oldScale = amiga.paula.drawWaveformL(data, size: s, scale: oldScale)
+        
+        background = device.makeTexture(from: data, size: size)
+        assert(background != nil)
     }
     
     func updateBackgroundTexture() {
@@ -237,8 +252,6 @@ class BarChart: ActivityMonitor {
             rectangles.append(Node.init(device: device,
                                         x: x, y: y, z: 0, w: w, h: h, t: t))
         }
-        bgRectangle = Node.init(device: device,
-                                x: 0, y: 0, z: 0.001, w: 1.0, h: 1.0)
     }
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {

@@ -131,56 +131,6 @@ AudioUnit::_reset()
     targetVolume = 100000;
 }
 
-/*
-void
-AudioUnit::executeUntil(Cycle targetClock)
-{
-    double dmaCyclesPerSample = MHz(dmaClockFrequency) / config.sampleRate;
-
-    dmaCycleCounter1 += AS_DMA_CYCLES(targetClock - clock);
-    dmaCycleCounter2 += AS_DMA_CYCLES(targetClock - clock);
-    clock = targetClock;
-
-    while (dmaCycleCounter1 > 0) {
-
-        short left = 0;
-        short right = 0;
-
-        // Compute number of DMA cycles in the next sampling interval
-        dmaCycleCounter1 -= dmaCyclesPerSample;
-        Cycle toExecute = (Cycle)(dmaCycleCounter2 - dmaCycleCounter1);
-        dmaCycleCounter2 -= toExecute;
-
-        // Execute the state machines for all four channels
-        if (dmaEnabled) {
-
-            // Channel 0 (left)
-            if (GET_BIT(dmaEnabled, 0)) {
-                left += channel0.execute(toExecute);
-            }
-
-            // Channel 1 (right)
-            if (GET_BIT(dmaEnabled, 1)) {
-                right += channel1.execute(toExecute);
-            }
-
-            // Channel 2 (right)
-            if (GET_BIT(dmaEnabled, 2)) {
-                right += channel2.execute(toExecute);
-            }
-
-            // Channel 3 (left)
-            if (GET_BIT(dmaEnabled, 3)) {
-                left += channel3.execute(toExecute);
-            }
-        }
-
-        // Write sound samples into buffers
-        writeData(left, right);
-    }
-}
-*/
-
 void
 AudioUnit::executeUntil(Cycle targetClock)
 {
@@ -467,7 +417,53 @@ AudioUnit::handleBufferOverflow()
     alignWritePtr();
 }
 
+float
+AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
+                        bool left, float highestAmplitude, unsigned color)
+{
+    int dw = bufferSize / width;
+    float newHighestAmplitude = 0.001;
+    float *ringBuffer = left ? ringBufferL : ringBufferR;
+    
+    // Clear buffer
+    for (int i = 0; i < width * height; i++) {
+        buffer[i] = color & 0xFFFFFF;
+    }
+    
+    // Draw waveform
+    for (int w = 0; w < width; w++) {
+        
+        // Read samples from ringbuffer
+        float sample = abs(ringBuffer[w * dw]);
+        
+        // Remember the highest amplitude
+        if (sample > newHighestAmplitude) newHighestAmplitude = sample;
+        
+        // Scale the sample
+        int scaled = sample * height / highestAmplitude;
+        if (scaled > height) scaled = height;
+        
+        scaled = 0;
+        if (scaled == 0) {
+
+            // Draw some noise to make it look sexy
+            unsigned *ptr = buffer + width * height / 2 + w;
+            *ptr = color;
+            if (rand() % 2) *(ptr + width) = color;
+            if (rand() % 2) *(ptr - width) = color;
+
+        } else {
+            
+            // Draw vertical line
+            unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;
+            for (int j = 0; j < scaled; j++, ptr += width) *ptr = color;
+        }
+    }
+    return newHighestAmplitude;
+}
+
 template<> u8 AudioUnit::getState<0>() { return channel0.state; }
 template<> u8 AudioUnit::getState<1>() { return channel1.state; }
 template<> u8 AudioUnit::getState<2>() { return channel2.state; }
 template<> u8 AudioUnit::getState<3>() { return channel3.state; }
+

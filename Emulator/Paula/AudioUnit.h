@@ -295,6 +295,14 @@ public:
     const u32 samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
 
+    /* Plots a graphical representation of the waveform.
+     * Returns the highest amplitute that was found in the ringbuffer. To
+     * implement auto-scaling, pass the returned value as parameter
+     * highestAmplitude in the next call to this function.
+     */
+    float drawWaveform(unsigned *buffer, int width, int height,
+                       bool left, float highestAmplitude, unsigned color);
+
     //
     // Accessing the state machines
     //
@@ -307,10 +315,6 @@ public:
     //
 
 public:
-
-    // Starts or ends DMA for a certain audio channel (called by pokeDMACON)
-    // void enableDMA(int nr);
-    // void disableDMA(int nr);
     
     // Executes the device until the given master clock cycle has been reached.
     void executeUntil(Cycle targetClock);

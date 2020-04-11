@@ -113,7 +113,7 @@ extension Renderer {
             
         for _ in 0 ... 5 { monitorAlpha.append(AnimatedFloat(0)) }
         
-        updateMonitorPositions()
+        updateMonitorPositions()        
     }
 
     func updateMonitorPositions() {

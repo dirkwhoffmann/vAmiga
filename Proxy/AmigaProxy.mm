@@ -702,6 +702,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.rampDown();
 }
+- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s
+{
+    int w = int(size.width);
+    int h = int(size.height);
+    return wrapper->paula->audioUnit.drawWaveform(buffer, w, h, true, s, 0xFFFFFFFF);
+}
 
 @end
 
