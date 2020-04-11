@@ -387,7 +387,10 @@ struct AmigaFileWrapper;
 - (void) rampUpFromZero;
 - (void) rampDown;
 
-- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)scale;
+- (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
+- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
+- (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c;
+- (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c;
 
 @end
 

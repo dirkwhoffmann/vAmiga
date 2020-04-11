@@ -590,7 +590,19 @@ extension MyController {
         clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
         clockSpeedBar.doubleValue = 10 * mhz
     }
+
+    func addValue(_ nr: Int, _ v: Float) {
+        if let monitor = renderer.monitors[nr] as? BarChart {
+            monitor.addValue(v)
+        }
+    }
     
+    func addValues(_ nr: Int, _ v1: Float, _ v2: Float) {
+        if let monitor = renderer.monitors[nr] as? BarChart {
+            monitor.addValues(v1, v2)
+        }
+    }
+
     func updateMonitoringPanels() {
         
         if !renderer.drawActivityMonitors { return }
@@ -610,19 +622,19 @@ extension MyController {
             dma.bus.accumulated.8
         ]
                 
-        let copDMA = Double(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
-        let bltDMA = Double(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
-        let dskDMA = Double(counts[Int(BUS_DISK.rawValue)]) / (313*3)
-        let audDMA = Double(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
-        let sprDMA = Double(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
-        let bplDMA = Double(counts[Int(BUS_BITPLANE.rawValue)]) / 30000
+        let copDMA = Float(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
+        let bltDMA = Float(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
+        let dskDMA = Float(counts[Int(BUS_DISK.rawValue)]) / (313*3)
+        let audDMA = Float(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
+        let sprDMA = Float(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
+        let bplDMA = Float(counts[Int(BUS_BITPLANE.rawValue)]) / 30000
         
-        renderer.monitors[Renderer.Monitor.copper].addValue(Float(copDMA))
-        renderer.monitors[Renderer.Monitor.blitter].addValue(Float(bltDMA))
-        renderer.monitors[Renderer.Monitor.disk].addValue(Float(dskDMA))
-        renderer.monitors[Renderer.Monitor.audio].addValue(Float(audDMA))
-        renderer.monitors[Renderer.Monitor.sprite].addValue(Float(sprDMA))
-        renderer.monitors[Renderer.Monitor.bitplane].addValue(Float(bplDMA))
+        addValue(Renderer.Monitor.copper, copDMA)
+        addValue(Renderer.Monitor.blitter, bltDMA)
+        addValue(Renderer.Monitor.disk, dskDMA)
+        addValue(Renderer.Monitor.audio, audDMA)
+        addValue(Renderer.Monitor.sprite, sprDMA)
+        addValue(Renderer.Monitor.bitplane, bplDMA)
         
         // Memory monitors
         let mem = amiga.mem.getStats()
@@ -637,13 +649,10 @@ extension MyController {
         let kickR = Float(mem.kickReads.accumulated) / max
         let kickW = Float(mem.kickWrites.accumulated) / max
 
-        renderer.monitors[Renderer.Monitor.chipRam].addValues(chipR, chipW)
-        renderer.monitors[Renderer.Monitor.slowRam].addValues(slowR, slowW)
-        renderer.monitors[Renderer.Monitor.fastRam].addValues(fastR, fastW)
-        renderer.monitors[Renderer.Monitor.kickRom].addValues(kickR, kickW)
-        
-        // Waveform monitors
-        // TODO
+        addValues(Renderer.Monitor.chipRam, chipR, chipW)
+        addValues(Renderer.Monitor.slowRam, slowR, slowW)
+        addValues(Renderer.Monitor.fastRam, fastR, fastW)
+        addValues(Renderer.Monitor.kickRom, kickR, kickW)
     }
     
     @objc func snapshotTimerFunc() {

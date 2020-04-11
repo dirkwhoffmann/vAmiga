@@ -702,11 +702,21 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.rampDown();
 }
-- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s
+- (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    int w = int(size.width);
-    int h = int(size.height);
-    return wrapper->paula->audioUnit.drawWaveform(buffer, w, h, true, s, 0xFFFFFFFF);
+    return wrapper->paula->audioUnit.drawWaveform(buffer, w, h, true, s, c);
+}
+- (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
+{
+    return [self drawWaveformL:buffer w:size.width h:size.height scale:s color:c];
+}
+- (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
+{
+    return wrapper->paula->audioUnit.drawWaveform(buffer, w, h, false, s, c);
+}
+- (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
+{
+    return [self drawWaveformR:buffer w:size.width h:size.height scale:s color:c];
 }
 
 @end

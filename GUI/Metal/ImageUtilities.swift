@@ -150,12 +150,19 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         for i in 0 ... lines {
             
             var y = Double(i) / Double(lines)
-            // if logScale { y = log10(1.0 + 9.0 * y) }
             if logScale { y = log(1.0 + 19.0 * y) / log(20) }
             drawLine(size: size, y: Int(Double(y1) + height * y), border: 20)
         }
     }
-    
+ 
+    func drawDoubleGrid(size: MTLSize, y1: Int, y2: Int, lines: Int, logScale: Bool) {
+        
+        let middle = y1 + (y2 - y1) / 2
+        
+        drawGrid(size: size, y1: middle, y2: y1, lines: lines, logScale: logScale)
+        drawGrid(size: size, y1: middle, y2: y2, lines: lines, logScale: logScale)
+    }
+        
     func drawGradient(size: MTLSize,
                       region: MTLRegion? = nil,
                       r1: Int, g1: Int, b1: Int, a1: Int,

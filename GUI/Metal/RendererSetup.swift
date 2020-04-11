@@ -100,23 +100,27 @@ extension Renderer {
         monitors.append(BarChart.init(device: device, name: "Sprite DMA"))
         monitors.append(BarChart.init(device: device, name: "Bitplane DMA"))
         
-        monitors[0].upperColor = rgb[Int(BUS_COPPER.rawValue)]
-        monitors[1].upperColor = rgb[Int(BUS_BLITTER.rawValue)]
-        monitors[2].upperColor = rgb[Int(BUS_DISK.rawValue)]
-        monitors[3].upperColor = rgb[Int(BUS_AUDIO.rawValue)]
-        monitors[4].upperColor = rgb[Int(BUS_SPRITE.rawValue)]
-        monitors[5].upperColor = rgb[Int(BUS_BITPLANE.rawValue)]
+        monitors[0].setColor(rgb[Int(BUS_COPPER.rawValue)])
+        monitors[1].setColor(rgb[Int(BUS_BLITTER.rawValue)])
+        monitors[2].setColor(rgb[Int(BUS_DISK.rawValue)])
+        monitors[3].setColor(rgb[Int(BUS_AUDIO.rawValue)])
+        monitors[4].setColor(rgb[Int(BUS_SPRITE.rawValue)])
+        monitors[5].setColor(rgb[Int(BUS_BITPLANE.rawValue)])
 
         // Memory monitors
-        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", logScale: true, splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)", splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)", splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Rom)", splitView: true))
 
         // Waveform monitors
-        monitors.append(BarChart.init(device: device, name: "Left channel"))
-        monitors.append(BarChart.init(device: device, name: "Right channel"))
-        
+        monitors.append(WaveformMonitor.init(device: device,
+                                             paula: controller.amiga.paula,
+                                             leftChannel: true))
+        monitors.append(WaveformMonitor.init(device: device,
+                                             paula: controller.amiga.paula,
+                                             leftChannel: false))
+
         for _ in 0 ... monitors.count {
             monitorAlpha.append(AnimatedFloat(0))
             monitorEnabled.append(true)

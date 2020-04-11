@@ -443,7 +443,6 @@ AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
         int scaled = sample * height / highestAmplitude;
         if (scaled > height) scaled = height;
         
-        scaled = 0;
         if (scaled == 0) {
 
             // Draw some noise to make it look sexy

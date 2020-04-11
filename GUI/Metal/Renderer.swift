@@ -100,7 +100,7 @@ class Renderer: NSObject, MTKViewDelegate {
         static let waveformR = 11
     }
 
-    var monitors: [BarChart] = []
+    var monitors: [ActivityMonitor] = []
 
     // Global enable switch for all activity monitors
     var drawActivityMonitors = false { didSet { updateMonitorAlphas() } }
