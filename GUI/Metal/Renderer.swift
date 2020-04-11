@@ -100,7 +100,7 @@ class Renderer: NSObject, MTKViewDelegate {
         static let waveformR = 11
     }
 
-    var monitors: [BarChart] = [] // [BarChart?](repeatElement(nil, count: 12))
+    var monitors: [BarChart] = []
 
     // Global enable switch for all activity monitors
     var drawActivityMonitors = false { didSet { updateMonitorAlphas() } }
@@ -110,6 +110,9 @@ class Renderer: NSObject, MTKViewDelegate {
     
     // Global alpha value of activity monitors
     var monitorGlobalAlpha = Float(0.5)
+    
+    // Layout scheme used for positioning the monitors
+    var monitorLayout = 0 { didSet { updateMonitorPositions() } }
     
     //
     // Textures

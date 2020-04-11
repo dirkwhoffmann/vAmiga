@@ -53,7 +53,7 @@ class Monitor: DialogController {
     @IBOutlet weak var monRightWave: NSButton!
 
     @IBOutlet weak var monOpacity: NSSlider!
-    @IBOutlet weak var monDisplayMode: NSPopUpButton!
+    @IBOutlet weak var monLayout: NSPopUpButton!
     @IBOutlet weak var monSlider: NSSlider!
 
     override func awakeFromNib() {
@@ -122,12 +122,7 @@ class Monitor: DialogController {
         monRightWave.state = enabled(Renderer.Monitor.waveformR)
         monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
         monSlider.floatValue = parent.renderer.monitors[0].angle
-        switch parent.renderer.monitors[0].rotationSide {
-        case .lower: monDisplayMode.selectItem(withTag: 0)
-        case .upper: monDisplayMode.selectItem(withTag: 1)
-        case .left: monDisplayMode.selectItem(withTag: 2)
-        case .right: monDisplayMode.selectItem(withTag: 3)
-        }
+        monLayout.selectItem(withTag: parent.renderer.monitorLayout)
         
         // Colors
         colBlitter.setColor(rgb[Int(BUS_BLITTER.rawValue)])
@@ -210,19 +205,10 @@ class Monitor: DialogController {
         refresh()
     }
     
-    @IBAction func monDisplayModeAction(_ sender: NSPopUpButton!) {
+    @IBAction func monLayoutAction(_ sender: NSPopUpButton!) {
         
         track("\(sender.selectedTag())")
-        for i in 0 ..< parent.renderer.monitors.count {
-            switch sender.selectedTag() {
-            case 0: parent.renderer.monitors[i].rotationSide = .lower
-            case 1: parent.renderer.monitors[i].rotationSide = .upper
-            case 2: parent.renderer.monitors[i].rotationSide = .left
-            case 3: parent.renderer.monitors[i].rotationSide = .right
-            default: fatalError()
-            }
-        }
-        parent.renderer.updateMonitorPositions()
+        parent.renderer.monitorLayout = sender.selectedTag()
         refresh()
     }
     

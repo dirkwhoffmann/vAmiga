@@ -33,10 +33,10 @@
                 <outlet property="monChipRam" destination="EGK-nz-ZP8" id="Qpa-sl-kY3"/>
                 <outlet property="monCopper" destination="84K-Ze-s8R" id="Mbv-ed-pFP"/>
                 <outlet property="monDisk" destination="Rqk-gS-j5d" id="AM1-EO-OEe"/>
-                <outlet property="monDisplayMode" destination="3FF-ec-heM" id="r0l-h6-XwA"/>
                 <outlet property="monEnable" destination="s8F-em-msz" id="bRy-jU-yHT"/>
                 <outlet property="monFastRam" destination="OOK-iJ-gL1" id="5dH-9h-dYl"/>
                 <outlet property="monKickRom" destination="kmY-JW-Q4i" id="K5W-R2-xg8"/>
+                <outlet property="monLayout" destination="3FF-ec-heM" id="pqe-g9-gwG"/>
                 <outlet property="monLeftWave" destination="Cfn-f1-lFY" id="uDA-LR-StP"/>
                 <outlet property="monOpacity" destination="7Ip-Jf-uVb" id="Sg0-To-zGp"/>
                 <outlet property="monRightWave" destination="Cml-je-RMN" id="DgT-Gz-RXh"/>
@@ -69,7 +69,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Blitter DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="lCg-rw-clK">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="sbI-lF-Ekh"/>
@@ -80,7 +80,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Copper DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="S3l-ne-Uuc">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="qAu-51-V4g"/>
@@ -91,7 +91,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Disk DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="jYu-xf-dQJ">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="LZo-4m-4JV"/>
@@ -102,7 +102,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Sprite DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="JL2-oL-6K0">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="3bF-wk-xxJ"/>
@@ -113,7 +113,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Bitplane DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="aXz-bk-eH9">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="0Wh-5Z-U1N"/>
@@ -124,7 +124,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Audio DMA" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="7HR-Ho-DcK">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="jcp-ve-NYg"/>
@@ -154,7 +154,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Chip Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="rYa-LC-H9t">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="Wuw-N2-MXI"/>
@@ -165,7 +165,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Slow Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="2TU-Cp-Efl">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="YzK-Kt-cAL"/>
@@ -176,7 +176,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Fast Ram" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="SPV-vm-GYy">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="1bM-L9-bDc"/>
@@ -187,7 +187,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Rom" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="XD1-kM-Q0g">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="aQx-Cb-PUD"/>
@@ -198,7 +198,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Left audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="Jnl-iZ-FV9">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="6N8-Z0-HVG"/>
@@ -207,20 +207,22 @@
                                 <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3FF-ec-heM">
                                     <rect key="frame" x="87" y="25" width="166" height="18"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                    <popUpButtonCell key="cell" type="roundRect" title="Position below" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="YdS-RD-RdJ" id="76j-Bf-Gob">
+                                    <popUpButtonCell key="cell" type="roundRect" title="Top and bottom" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" selectedItem="YdS-RD-RdJ" id="76j-Bf-Gob">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                         <font key="font" metaFont="cellTitle"/>
                                         <menu key="menu" id="7pd-Ta-cse">
                                             <items>
-                                                <menuItem title="Position below" state="on" id="YdS-RD-RdJ"/>
-                                                <menuItem title="Position top" tag="1" id="enA-hX-HEo"/>
-                                                <menuItem title="Position left" tag="2" id="ruc-Ky-h1m"/>
-                                                <menuItem title="Position right" tag="3" id="dLs-1B-UZU"/>
+                                                <menuItem title="Top and bottom" state="on" id="YdS-RD-RdJ"/>
+                                                <menuItem title="Top" tag="1" id="enA-hX-HEo"/>
+                                                <menuItem title="Bottom" tag="2" id="ruc-Ky-h1m"/>
+                                                <menuItem title="Left and right" tag="3" id="dLs-1B-UZU"/>
+                                                <menuItem title="Left" tag="4" id="i5Q-Od-Zhu"/>
+                                                <menuItem title="Right" tag="5" id="OEk-9z-e0B"/>
                                             </items>
                                         </menu>
                                     </popUpButtonCell>
                                     <connections>
-                                        <action selector="monDisplayModeAction:" target="-2" id="SKy-g7-Ldq"/>
+                                        <action selector="monLayoutAction:" target="-2" id="fLZ-5T-qma"/>
                                     </connections>
                                 </popUpButton>
                                 <slider horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cyx-oK-rWM">
@@ -236,7 +238,7 @@
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     <buttonCell key="cell" type="check" title="Right audio" bezelStyle="regularSquare" imagePosition="left" controlSize="small" state="on" inset="2" id="xtT-fa-k8T">
                                         <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                        <font key="font" metaFont="menu" size="11"/>
+                                        <font key="font" metaFont="message" size="11"/>
                                     </buttonCell>
                                     <connections>
                                         <action selector="monDisplayAction:" target="-2" id="7Cn-Qr-5fX"/>
