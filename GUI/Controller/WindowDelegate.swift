@@ -74,12 +74,16 @@ extension MyController: NSWindowDelegate {
     public func windowWillEnterFullScreen(_ notification: Notification) {
 
         track()
+
+        // for m in renderer.monitors { m.isHidden = true }
         renderer.fullscreen = true
         showStatusBar(false)
     }
     
-    public func  windowDidEnterFullScreen(_ notification: Notification) {
+    public func windowDidEnterFullScreen(_ notification: Notification) {
 
+        renderer.updateMonitorPositions()
+        // for m in renderer.monitors { m.isHidden = false }
         track()
     }
     
@@ -87,12 +91,15 @@ extension MyController: NSWindowDelegate {
 
         track()
         renderer.fullscreen = false
+        for m in renderer.monitors { m.isHidden = true }
         showStatusBar(true)
     }
     
     public func windowDidExitFullScreen(_ notification: Notification) {
 
-        // track()
+        renderer.updateMonitorPositions()
+        for m in renderer.monitors { m.isHidden = false }
+        track()
     }
     
     public func window(_ window: NSWindow, willUseFullScreenPresentationOptions proposedOptions: NSApplication.PresentationOptions = []) -> NSApplication.PresentationOptions {

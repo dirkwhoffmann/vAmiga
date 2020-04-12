@@ -274,7 +274,7 @@ class Renderer: NSObject, MTKViewDelegate {
     
     // If true, the 3D renderer is also used in fullscreen mode
     var keepAspectRatio = Defaults.keepAspectRatio
-    
+        
     //
     // Initializing
     //
@@ -444,22 +444,27 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing activity monitors
     //
 
-    func fadeIn(monitor nr: Int) {
+    func fadeIn(monitor nr: Int, steps: Int = 40) {
 
         assert(nr < monitors.count)
         
         monitorAlpha[nr].target = 1.0
-        monitorAlpha[nr].steps = 40
+        monitorAlpha[nr].steps = steps
         animates |= AnimationType.monitors
     }
         
-    func fadeOut(monitor nr: Int) {
+    func fadeOut(monitor nr: Int, steps: Int = 40) {
 
         assert(nr < monitors.count)
         
         monitorAlpha[nr].target = 0.0
-        monitorAlpha[nr].steps = 40
+        monitorAlpha[nr].steps = steps
         animates |= AnimationType.monitors
+    }
+
+    func fadeOutMonitors() {
+
+        for i in 0 ..< monitors.count { fadeOut(monitor: i) }
     }
 
     func updateMonitorAlphas() {
@@ -559,7 +564,8 @@ class Renderer: NSObject, MTKViewDelegate {
         // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
+        // descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
 
@@ -601,6 +607,20 @@ class Renderer: NSObject, MTKViewDelegate {
 
         // Draw
         quad2D!.drawPrimitives(commandEncoder)
+        
+        // Draw activity monitors
+        if drawActivityMonitors {
+            
+            for i in 0 ... monitors.count where monitorAlpha[i].current != 0.0 {
+                
+                fragmentUniforms.alpha = monitorAlpha[i].current * monitorGlobalAlpha
+                commandEncoder.setFragmentBytes(&fragmentUniforms,
+                                                length: MemoryLayout<FragmentUniforms>.stride,
+                                                index: 1)
+                monitors[i].draw(commandEncoder, matrix: vertexUniforms3D.mvp)
+            }
+        }
+        
         endFrame()
     }
     
@@ -723,7 +743,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
-        // track("drawableSizeWillChange \(size)")
+        track("drawableSizeWillChange \(size)")
         reshape(withSize: size)
     }
     

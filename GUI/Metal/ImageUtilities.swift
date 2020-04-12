@@ -130,7 +130,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
             index += skip
         }
     }
-          
+    
     func drawLine(size: MTLSize, y: Int, border: Int) {
         
         let width = size.width - 2 * border
@@ -140,8 +140,20 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         
         darken(size: size, region: region, factor: 1.5)
     }
+
+    /*
+    func drawLine(size: MTLSize, y: Int, border: Int) {
+        
+        let index = size.width * (size.height - y) + border
+        
+        for x in border ..< size.width - border {
+            self[index + x] = self[index + x] & 0xFF000000 | 0x888888
+        }
+    }
+    */
     
-    func drawGrid(size: MTLSize, y1: Int, y2: Int, lines: Int, logScale: Bool) {
+    func drawGrid(size: MTLSize,
+                  y1: Int, y2: Int, lines: Int, logScale: Bool, start: Int = 0) {
         
         let height = Double(y2 - y1)
         
@@ -149,7 +161,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
             
             var y = Double(i) / Double(lines)
             if logScale { y = log(1.0 + 19.0 * y) / log(20) }
-            drawLine(size: size, y: Int(Double(y1) + height * y), border: 20)
+            drawLine(size: size, y: Int(Double(y1) + height * y), border: 0)
         }
     }
  
@@ -158,7 +170,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         let middle = y1 + (y2 - y1) / 2
         
         drawGrid(size: size, y1: middle, y2: y1, lines: lines, logScale: logScale)
-        drawGrid(size: size, y1: middle, y2: y2, lines: lines, logScale: logScale)
+        drawGrid(size: size, y1: middle, y2: y2, lines: lines, logScale: logScale, start: 1)
     }
         
     func drawGradient(size: MTLSize, region: MTLRegion,
@@ -391,91 +403,6 @@ extension MTLDevice {
         
         return texture
     }
-
-    /*
-    func makeGradientTexture(width: Int, height: Int,
-                             r1: Int, g1: Int, b1: Int, a1: Int,
-                             r2: Int, g2: Int, b2: Int, a2: Int,
-                             radius: Int = 0) -> MTLTexture? {
-        
-        let d = MTLTextureDescriptor.texture2DDescriptor(
-              pixelFormat: MTLPixelFormat.rgba8Unorm,
-              width: width,
-              height: height,
-              mipmapped: false)
-        d.usage = [ .shaderRead ]
-        
-        let data = UnsafeMutablePointer<UInt32>.allocate(capacity: width * height)
-        
-        var r = Double(r1)
-        var g = Double(g1)
-        var b = Double(b1)
-        var a = Double(a1)
-        let dr = Double(r2 - r1) / Double(height)
-        let dg = Double(g2 - g1) / Double(height)
-        let db = Double(b2 - b1) / Double(height)
-        let da = Double(a2 - a1) / Double(height)
-        
-        for row in 0 ..< height {
-            let c = UInt32(a) << 24 | UInt32(b) << 16 | UInt32(g) << 8 | UInt32(r)
-            for col in 0 ..< width {
-                data[row * width + col] = c
-            }
-            r += dr; g += dg; b += db; a += da
-        }
-        
-        for row in 0 ..< radius {
-            let dy = radius - row
-            for col in 0 ..< radius {
-                let dx = radius - col
-                if dx*dx + dy*dy >= radius*radius {
-                    data[row * width + col] &= 0xFFFFFF
-                    data[(height - 1 - row) * width + col] &= 0xFFFFFF
-                    data[(height - 1 - row) * width + (width - 1 - col)] &= 0xFFFFFF
-                    data[row * width + (width - 1 - col)] &= 0xFFFFFF
-                }
-            }
-        }
-        
-        let context = CGContext.init(data: data,
-                                     width: width,
-                                     height: height,
-                                     bitsPerComponent: 8,
-                                     bytesPerRow: 4 * width,
-                                     space: CGColorSpaceCreateDeviceRGB(),
-                                     bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue | CGBitmapInfo.byteOrder32Big.rawValue
-        )
-        
-        let font = NSFont.systemFont(ofSize: 32)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.alignment = .center
-        let attr: [NSAttributedString.Key: Any] = [
-            .font: font,
-            .foregroundColor: NSColor.white,
-            .paragraphStyle: paragraphStyle
-        ]
-        let astr = NSAttributedString.init(string: "Blitter", attributes: attr)
-        let line = CTLineCreateWithAttributedString(astr)
-        
-        let offset = CTLineGetPenOffsetForFlush(line, 0.5, Double(width))
-        context!.textPosition = CGPoint(x: Int(offset), y: height - 48)
-        CTLineDraw(line, context!)
-        
-        let region = MTLRegionMake2D(0, 0, width, height)
-        let texture = makeTexture(descriptor: d)
-        texture!.replace(region: region,
-                         mipmapLevel: 0,
-                         withBytes: data,
-                         bytesPerRow: 4 * width)
-        
-        data.deallocate()
-        /*
-        let buffer = makeBuffer(bytes: data, length: bytes, options: d.resourceOptions)
-        return buffer?.makeTexture(descriptor: d, offset: 0, bytesPerRow: bytesPerRow)
-        */
-        return texture
-    }
-     */
 }
 
 //

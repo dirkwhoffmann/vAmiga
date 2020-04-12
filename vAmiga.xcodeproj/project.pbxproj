@@ -70,7 +70,6 @@
 		508FE01021EA227B0043D0E9 /* Speedometer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEB21EA22780043D0E9 /* Speedometer.swift */; };
 		508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */; };
 		508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFEE21EA22780043D0E9 /* CIAPanel.swift */; };
-		508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF021EA22780043D0E9 /* WaveformView.swift */; };
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
 		508FE01821EA227B0043D0E9 /* MyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF421EA22790043D0E9 /* MyController.swift */; };
 		508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */; };
@@ -265,7 +264,6 @@
 		508FDFEB21EA22780043D0E9 /* Speedometer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Speedometer.swift; sourceTree = "<group>"; };
 		508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerToolbar.swift; sourceTree = "<group>"; };
 		508FDFEE21EA22780043D0E9 /* CIAPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CIAPanel.swift; sourceTree = "<group>"; };
-		508FDFF021EA22780043D0E9 /* WaveformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WaveformView.swift; sourceTree = "<group>"; };
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
 		508FDFF421EA22790043D0E9 /* MyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyController.swift; sourceTree = "<group>"; };
 		508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerMenu.swift; sourceTree = "<group>"; };
@@ -736,7 +734,6 @@
 				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
 				50DF2C9F2269135800795256 /* SpriteTableView.swift */,
 				502EFD0B2248ECAA00F0E118 /* EventTableView.swift */,
-				508FDFF021EA22780043D0E9 /* WaveformView.swift */,
 				508FDFF621EA22790043D0E9 /* Formatter.swift */,
 			);
 			path = Inspector;
@@ -1115,7 +1112,6 @@
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
-				508FE01421EA227B0043D0E9 /* WaveformView.swift in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,

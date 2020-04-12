@@ -31,6 +31,9 @@ class ActivityMonitor {
     // Reference to the owning MTLDevice
     let device: MTLDevice
     
+    // Set to true to hide the view
+    var isHidden = false
+    
     // Canvas dimensions on the xy plane
     var position = NSRect.init() { didSet { updateMatrix() } }
     
@@ -351,7 +354,7 @@ class BarChart: ActivityMonitor {
     }
     
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
-        
+                
         microStep += 1
         
         if microStep == microSteps {
@@ -365,6 +368,8 @@ class BarChart: ActivityMonitor {
             updateBars()
         }
         
+        if isHidden { return }
+
         let shift = Renderer.translationMatrix(x: xOffset, y: 0.0, z: 0.0)
         
         // Draw background
@@ -452,7 +457,7 @@ class WaveformMonitor: ActivityMonitor {
         let rgba2 = (92, 92, 92, 255)
         
         bgBuffer.drawGradient(size: size, rgba1, rgba2)
-        bgBuffer.drawLine(size: size, y: size.height / 2, border: 10)
+        // bgBuffer.drawLine(size: size, y: Int(lowerBorder + innerHeight / 2), border: 10)
         bgBuffer.imprint(size: size, text: name)
         bgBuffer.makeRoundCorner(size: size, radius: 10)
     }
@@ -485,6 +490,8 @@ class WaveformMonitor: ActivityMonitor {
     }
 
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
+
+        if isHidden { return }
         
         count += 1
 

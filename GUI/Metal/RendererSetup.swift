@@ -108,7 +108,7 @@ extension Renderer {
         monitors[5].setColor(rgb[Int(BUS_BITPLANE.rawValue)])
 
         // Memory monitors
-        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", logScale: true, splitView: true))
+        monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Slow Ram)", splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Fast Ram)", splitView: true))
         monitors.append(BarChart.init(device: device, name: "CPU (Rom)", splitView: true))
@@ -129,6 +129,11 @@ extension Renderer {
     }
 
     func updateMonitorPositions() {
+
+        updateMonitorPositions(aspectRatio: Double(size.width) / Double(size.height))
+    }
+    
+    func updateMonitorPositions(aspectRatio: Double) {
         
         //    w  d  w  d  w  d  w  d  w  d  w
         //   ___   ___   ___   ___   ___   ___
@@ -184,14 +189,14 @@ extension Renderer {
 
         default: fatalError()
         }
-        
-        let xmax = 0.49
-        let xmin = -xmax
-        let xspan = xmax - xmin
 
         let ymax = 0.365
         let ymin = -ymax
         let yspan = ymax - ymin
+
+        let xmax = ymax * aspectRatio // 0.49
+        let xmin = -xmax
+        let xspan = xmax - xmin
 
         let d = 0.02
         let w = (xspan - 5 * d) / 6
@@ -488,7 +493,7 @@ extension Renderer {
 
     func buildMatrices2D() {
 
-        let model = matrix_identity_float4x4
+        let model = Renderer.translationMatrix(x: 0, y: 0, z: 0.99)
         let view  = matrix_identity_float4x4
         let proj  = matrix_identity_float4x4
 
@@ -506,7 +511,8 @@ extension Renderer {
         let zShift = shiftZ.current
 
         let aspect = Float(size.width) / Float(size.height)
-
+        // track("\(size.width) \(size.height) \(aspect)")
+        
         let view = matrix_identity_float4x4
         let proj = Renderer.perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),
                                      aspect: aspect,
