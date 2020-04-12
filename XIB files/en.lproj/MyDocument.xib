@@ -38,11 +38,11 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" restorable="NO" releasedWhenClosed="NO" animationBehavior="default" tabbingMode="preferred" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
-            <rect key="contentRect" x="0.0" y="0.0" width="800" height="626"/>
+            <rect key="contentRect" x="0.0" y="0.0" width="800" height="624"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1536" height="937"/>
-            <value key="minSize" type="size" width="400" height="313"/>
+            <value key="minSize" type="size" width="400" height="314"/>
             <view key="contentView" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="800" height="626"/>
+                <rect key="frame" x="0.0" y="0.0" width="800" height="624"/>
                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                 <subviews>
                     <button toolTip="Connect / Disconnect drive" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="1208">
@@ -270,7 +270,7 @@
                         </textFieldCell>
                     </textField>
                     <customView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DD4-5B-w9h" customClass="MetalView" customModule="vAmiga" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="26" width="800" height="600"/>
+                        <rect key="frame" x="0.0" y="24" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <connections>
                             <outlet property="parent" destination="-2" id="DoA-Vt-vqv"/>
