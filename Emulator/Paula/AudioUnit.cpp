@@ -434,7 +434,7 @@ AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
     for (int w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        float sample = abs(ringBuffer[w * dw]);
+        float sample = abs(ringBuffer[(readPtr + w * dw) % bufferSize]);
         
         // Remember the highest amplitude
         if (sample > newHighestAmplitude) newHighestAmplitude = sample;

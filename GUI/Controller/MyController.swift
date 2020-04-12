@@ -627,7 +627,7 @@ extension MyController {
         let dskDMA = Float(counts[Int(BUS_DISK.rawValue)]) / (313*3)
         let audDMA = Float(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
         let sprDMA = Float(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
-        let bplDMA = Float(counts[Int(BUS_BITPLANE.rawValue)]) / 30000
+        let bplDMA = Float(counts[Int(BUS_BITPLANE.rawValue)]) / 39330
         
         addValue(Renderer.Monitor.copper, copDMA)
         addValue(Renderer.Monitor.blitter, bltDMA)

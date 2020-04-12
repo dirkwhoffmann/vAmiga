@@ -18,6 +18,16 @@ enum Side {
 
 class ActivityMonitor {
     
+    // Dimensions in normalized rectangle (0,0) - (1,1)
+    let leftBorder  = Float(0.1)
+    let rightBorder = Float(0.1)
+    let upperBorder = Float(0.275)
+    let lowerBorder = Float(0.1)
+    var borderWidth: Float { return leftBorder + rightBorder }
+    var innerWidth: Float { return 1.0 - borderWidth }
+    var borderHeight: Float { return upperBorder + lowerBorder }
+    var innerHeight: Float { return 1.0 - borderHeight }
+    
     // Reference to the owning MTLDevice
     let device: MTLDevice
     
@@ -89,16 +99,8 @@ class BarChart: ActivityMonitor {
     let capacity = 20
 
     // Dimensions in normalized rectangle (0,0) - (1,1)
-    let leftBorder  = Float(0.1)
-    let rightBorder = Float(0.1)
-    let upperBorder = Float(0.275)
-    let lowerBorder = Float(0.1)
     let thickness = Float(0.03)
     let barHeight = Float(0.625)
-    var borderWidth: Float { return leftBorder + rightBorder }
-    var innerWidth: Float { return 1.0 - borderWidth }
-    var borderHeight: Float { return upperBorder + lowerBorder }
-    var innerHeight: Float { return 1.0 - borderHeight }
     var barWidth: Float { innerWidth / Float(capacity + 1) }
             
     //  Number of scroll steps until a new bar shows up
@@ -180,41 +182,32 @@ class BarChart: ActivityMonitor {
     
     func updateBgBuffer() {
         
+        let y1 = lowerBorder * Float(bgSize.height)
+        let y2 = y1 + innerHeight * Float(bgSize.height)
+
         if splitView {
             
-            let (r1, g1, b1) = upperColor.integerComponents()
-            let (r2, g2, b2) = (255, 255, 255)
-            let (r3, g3, b3) = lowerColor.integerComponents()
+            let (r1, g1, b1, a1) = upperColor.rgba()
+            let (r3, g3, b3, a3) = lowerColor.rgba()
             
-            let bgBuffer2 = bgBuffer + bgSize.width * (bgSize.height / 2)
-            let size2 = MTLSizeMake(bgSize.width, bgSize.height / 2, 0)
-            
-            bgBuffer.drawGradient(size: size2,
-                                  r1: r1 / 2, g1: g1 / 2, b1: b1 / 2, a1: 255,
-                                  r2: r2 / 2, g2: g2 / 2, b2: b2 / 2, a2: 255)
-            bgBuffer2.drawGradient(size: size2,
-                                   r1: r2 / 2, g1: g2 / 2, b1: b2 / 2, a1: 255,
-                                   r2: r3 / 2, g2: g3 / 2, b2: b3 / 2, a2: 255)
-            
-            let y1 = lowerBorder * Float(bgSize.height)
-            let y2 = y1 + innerHeight * Float(bgSize.height)
+            let rgba1 = (r1 / 2, g1 / 2, b1 / 2, a1)
+            let rgba2 = (128, 128, 128, 255)
+            let rgba3 = (r3 / 2, g3 / 2, b3 / 2, a3)
+                        
+            bgBuffer.drawGradient(size: bgSize, rgba1, rgba2, rgba3)
             bgBuffer.drawDoubleGrid(size: bgSize, y1: Int(y1), y2: Int(y2),
                                     lines: 5, logScale: logScale)
             
         } else {
             
-            let (r1, g1, b1) = upperColor.integerComponents()
-            let (r2, g2, b2) = (255, 255, 255)
+            let (r1, g1, b1, a1) = upperColor.rgba()
             
-            bgBuffer.drawGradient(size: bgSize,
-                                  r1: r1 / 2, g1: g1 / 2, b1: b1 / 2, a1: 255,
-                                  r2: r2 / 2, g2: g2 / 2, b2: b2 / 2, a2: 255)
+            let rgba1 = (r1 / 2, g1 / 2, b1 / 2, a1)
+            let rgba2 = (128, 128, 128, 255)
             
-            let y1 = lowerBorder * Float(bgSize.height)
-            let y2 = y1 + innerHeight * Float(bgSize.height)
+            bgBuffer.drawGradient(size: bgSize, rgba1, rgba2)
             bgBuffer.drawGrid(size: bgSize, y1: Int(y1), y2: Int(y2),
                               lines: 5, logScale: logScale)
-            
         }
 
         // Print title and round off corners
@@ -224,13 +217,10 @@ class BarChart: ActivityMonitor {
     
     func updateFgBuffer(_ buffer: UnsafeMutablePointer<UInt32>, color: NSColor) {
         
-        let r = Int(color.redComponent * 255)
-        let g = Int(color.greenComponent * 255)
-        let b = Int(color.blueComponent * 255)
+        let rgba1 = color.rgba()
+        let rgba2 = (255, 255, 255, 255)
         
-        buffer.drawGradient(size: fgSize,
-                            r1: r, g1: g, b1: b, a1: 255,
-                            r2: 255, g2: 255, b2: 255, a2: 255)
+        buffer.drawGradient(size: fgSize, rgba1, rgba2)
     }
             
     func updateUpperBuffer() {
@@ -406,6 +396,9 @@ class WaveformMonitor: ActivityMonitor {
     // Left or right audio channel
     var leftChannel: Bool!
     
+    // Name of this monitor
+    var name: String { return leftChannel ? "Left channel" : "Right channel" }
+
     // Update counter
     var count = 0
     
@@ -444,21 +437,23 @@ class WaveformMonitor: ActivityMonitor {
         bgTexture = device.makeTexture(from: bgBuffer, size: size)!
         fgTexture = device.makeTexture(from: fgBuffer, size: size)!
         
-        bgRect = Node.init(device: device, x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
-        fgRect = Node.init(device: device, x: 0.05, y: 0.05, z: 0.000, w: 0.9, h: 0.9)
+        bgRect = Node.init(device: device,
+                           x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
+        fgRect = Node.init(device: device,
+                           x: leftBorder, y: lowerBorder,
+                           z: 0.000, w: innerWidth, h: innerHeight)
     }
      
     func initBgBuffer() {
         
         bgBuffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)
         
-        let (r1, g1, b1) = (164, 164, 164)
-        let (r2, g2, b2) = (128, 128, 128)
+        let rgba1 = (128, 128, 128, 255)
+        let rgba2 = (92, 92, 92, 255)
         
-        bgBuffer.drawGradient(size: size,
-                              r1: r1 / 2, g1: g1 / 2, b1: b1 / 2, a1: 255,
-                              r2: r2 / 2, g2: g2 / 2, b2: b2 / 2, a2: 255)
+        bgBuffer.drawGradient(size: size, rgba1, rgba2)
         bgBuffer.drawLine(size: size, y: size.height / 2, border: 10)
+        bgBuffer.imprint(size: size, text: name)
         bgBuffer.makeRoundCorner(size: size, radius: 10)
     }
     
@@ -485,17 +480,16 @@ class WaveformMonitor: ActivityMonitor {
 
     override func setColor(_ color: NSColor) {
         
-        let (r, g, b) = color.integerComponents()
-        self.color = UInt32(0xFF << 24 | r << 16 | g << 8 | b)
+        let (r, g, b, a) = color.rgba()
+        self.color = UInt32(a << 24 | r << 16 | g << 8 | b)
     }
 
     override func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) {
         
-        let len = MemoryLayout<VertexUniforms>.stride
-        
-        // Update the foreground texture from time to time
         count += 1
-        if count % 4 == 0 {
+
+        // Update the foreground texture from time to time
+        if count % 5 == 0 {
             
             let nssize = NSSize(width: size.width, height: size.height)
             
@@ -511,6 +505,7 @@ class WaveformMonitor: ActivityMonitor {
         }
         
         // Configure vertex shader
+        let len = MemoryLayout<VertexUniforms>.stride
         var uniforms = VertexUniforms(mvp: matrix * self.matrix)
         encoder.setVertexBytes(&uniforms, length: len, index: 1)
         

@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// swiftlint:disable function_parameter_count
-
 import Cocoa
 import Metal
 
@@ -163,22 +161,21 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         drawGrid(size: size, y1: middle, y2: y2, lines: lines, logScale: logScale)
     }
         
-    func drawGradient(size: MTLSize,
-                      region: MTLRegion? = nil,
-                      r1: Int, g1: Int, b1: Int, a1: Int,
-                      r2: Int, g2: Int, b2: Int, a2: Int) {
+    func drawGradient(size: MTLSize, region: MTLRegion,
+                      _ rgba1: (Int, Int, Int, Int),
+                      _ rgba2: (Int, Int, Int, Int)) {
         
-        let origin = region?.origin ?? MTLOriginMake(0, 0, 0)
-        let w = region?.size.width ?? size.width
-        let h = region?.size.height ?? size.height
+        let w = region.size.width
+        let h = region.size.height
         
-        let dr = Double(r2 - r1) / Double(h); var r = Double(r1)
-        let dg = Double(g2 - g1) / Double(h); var g = Double(g1)
-        let db = Double(b2 - b1) / Double(h); var b = Double(b1)
-        let da = Double(a2 - a1) / Double(h); var a = Double(a1)
+        // Compute delta steps
+        let dr = Double(rgba2.0 - rgba1.0) / Double(h); var r = Double(rgba1.0)
+        let dg = Double(rgba2.1 - rgba1.1) / Double(h); var g = Double(rgba1.1)
+        let db = Double(rgba2.2 - rgba1.2) / Double(h); var b = Double(rgba1.2)
+        let da = Double(rgba2.3 - rgba1.3) / Double(h); var a = Double(rgba1.3)
 
         // Create gradient
-        var index = size.width * origin.y + origin.x
+        var index = size.width * region.origin.y + region.origin.x
         let skip = Int(size.width) - w
         assert(skip >= 0)
         
@@ -193,6 +190,108 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
         }
     }
     
+    func drawGradient(size: MTLSize,
+                      _ rgba1: (Int, Int, Int, Int),
+                      _ rgba2: (Int, Int, Int, Int)) {
+        
+        let origin = MTLOriginMake(0, 0, 0)
+        let region = MTLRegion.init(origin: origin, size: size)
+        
+        drawGradient(size: size, region: region, rgba1, rgba2)
+    }
+    
+    func drawGradient(size: MTLSize, region: MTLRegion,
+                      _ rgba1: (Int, Int, Int, Int),
+                      _ rgba2: (Int, Int, Int, Int),
+                      _ rgba3: (Int, Int, Int, Int)) {
+        
+        var upper = region
+        var lower = region
+        
+        upper.size.height /= 2
+        lower.size.height /= 2
+        lower.origin.y += region.size.height / 2
+        
+        drawGradient(size: size, region: upper, rgba1, rgba2)
+        drawGradient(size: size, region: lower, rgba2, rgba3)
+    }
+    
+    func drawGradient(size: MTLSize,
+                      _ rgba1: (Int, Int, Int, Int),
+                      _ rgba2: (Int, Int, Int, Int),
+                      _ rgba3: (Int, Int, Int, Int)) {
+        
+        let origin = MTLOriginMake(0, 0, 0)
+        let region = MTLRegion.init(origin: origin, size: size)
+        
+        drawGradient(size: size, region: region, rgba1, rgba2, rgba3)
+    }
+
+    /*
+     func drawGradient(size: MTLSize, region: MTLRegion? = nil,
+                       r1: Int, g1: Int, b1: Int, a1: Int,
+                       r2: Int, g2: Int, b2: Int, a2: Int) {
+         
+         let origin = region?.origin ?? MTLOriginMake(0, 0, 0)
+         let w = region?.size.width ?? size.width
+         let h = region?.size.height ?? size.height
+         
+         let dr = Double(r2 - r1) / Double(h); var r = Double(r1)
+         let dg = Double(g2 - g1) / Double(h); var g = Double(g1)
+         let db = Double(b2 - b1) / Double(h); var b = Double(b1)
+         let da = Double(a2 - a1) / Double(h); var a = Double(a1)
+
+         // Create gradient
+         var index = size.width * origin.y + origin.x
+         let skip = Int(size.width) - w
+         assert(skip >= 0)
+         
+         for _ in 0 ..< h {
+             let c = UInt32(a) << 24 | UInt32(b) << 16 | UInt32(g) << 8 | UInt32(r)
+             for _ in 0 ..< w {
+                 self[index] = c
+                 index += 1
+             }
+             r += dr; g += dg; b += db; a += da
+             index += skip
+         }
+     }
+     */
+    
+    /*
+    func drawGradient(size: MTLSize, region: MTLRegion? = nil,
+                      rgb1: (Int, Int, Int, Int),
+                      rgb2: (Int, Int, Int, Int),
+                      rgb3: (Int, Int, Int, Int)) {
+        
+        var x1, x2, y1, y2: Int
+        
+        if region =
+        let x1 = region == nil ? MTLOrigin.init()
+        let origin = region == nil ? MTLOrigin.init() : region!.origin
+        let size = region == nil ? size : region!.size
+        
+        var upper = MTLRegion.init()
+        var lower = MTLRegion.init()
+        
+        if region != nil {
+            upper.origin = region!.origin
+            upper.size = MTLSize.init(width: <#T##Int#>, height: <#T##Int#>, depth: <#T##Int#>)
+        }
+        var lower = region == nil ? size : region
+        
+        upper.
+        let origin = region?.origin ?? MTLOriginMake(0, 0, 0)
+        let w = region?.size.width ?? size.width
+        let h = (region?.size.height ?? size.height) / 2
+        
+        
+        let upper =
+        drawGradient(size: size, rgba1: rgba1, rgba2: rgba2)
+        
+    }
+    */
+ 
     func makeRoundCorner(size: MTLSize, radius: Int) {
         
         let w = size.width
@@ -242,6 +341,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
 
 extension MTLTexture {
 
+    /*
     func replace(region: MTLRegion,
                  r1: Int, g1: Int, b1: Int, a1: Int,
                  r2: Int, g2: Int, b2: Int, a2: Int,
@@ -265,6 +365,7 @@ extension MTLTexture {
         replace(region: region, mipmapLevel: 0, withBytes: data, bytesPerRow: 4 * w)
         data.deallocate()
     }
+ */
 }
 
 extension MTLDevice {
@@ -388,13 +489,22 @@ extension NSColor {
         self.init(r: rgb.0, g: rgb.1, b: rgb.2)
     }
     
-    func integerComponents() -> (Int, Int, Int) {
+    func rgb() -> (Int, Int, Int) {
         
         let r = Int(redComponent * 255)
         let g = Int(greenComponent * 255)
         let b = Int(blueComponent * 255)
         
         return (r, g, b)
+    }
+    
+    func rgba() -> (Int, Int, Int, Int) {
+        
+        let r = Int(redComponent * 255)
+        let g = Int(greenComponent * 255)
+        let b = Int(blueComponent * 255)
+        
+        return (r, g, b, 255)
     }
 }
 
