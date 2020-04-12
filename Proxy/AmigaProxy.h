@@ -351,7 +351,7 @@ struct AmigaFileWrapper;
 
 - (ScreenBuffer) stableLongFrame;
 - (ScreenBuffer) stableShortFrame;
-- (i32 *) noise;
+- (u32 *) noise;
 
 @end
 

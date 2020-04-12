@@ -135,6 +135,11 @@ extension MyController: NSMenuItemValidation {
     // Action methods (App menu)
     //
 
+    @IBAction func preferencesAction(_ sender: Any!) {
+        
+        openPreferences()
+    }
+    
     @IBAction func importPrefsAction(_ sender: Any!) {
         
         track()
@@ -180,6 +185,48 @@ extension MyController: NSMenuItemValidation {
     // Action methods (File menu)
     //
     
+    @IBAction func takeSnapshotAction(_ sender: Any!) {
+        
+        takeUserSnapshot()
+        renderer.blendIn(steps: 20)
+    }
+        
+    @IBAction func restoreSnapshotAction(_ sender: Any!) {
+        
+        if !restoreLatestUserSnapshot() {
+            NSSound.beep()
+            return
+        }
+        
+        renderer.blendIn(steps: 20)
+    }
+        
+    @IBAction func browseSnapshotsAction(_ sender: Any!) {
+        
+        if snapshotBrowser == nil {
+            let name = NSNib.Name("SnapshotDialog")
+            snapshotBrowser = SnapshotDialog.make(parent: self, nibName: name)
+        }
+        snapshotBrowser?.showSheet()
+    }
+
+    @IBAction func takeScreenshotAction(_ sender: Any!) {
+        
+        takeUserScreenshot()
+        renderer.blendIn(steps: 20)
+    }
+
+    @IBAction func browseScreenshotsAction(_ sender: Any!) {
+        
+        if screenshotBrowser == nil {
+            let name = NSNib.Name("ScreenshotDialog")
+            screenshotBrowser = ScreenshotDialog.make(parent: self, nibName: name)
+        }
+        screenshotBrowser?.checksum = amiga.df0.fnv()
+        screenshotBrowser?.showSheet()
+    }
+    
+    /*
     // DEPRECATED
     @IBAction func saveScreenshotDialog(_ sender: Any!) {
         
@@ -257,7 +304,8 @@ extension MyController: NSMenuItemValidation {
         // Save to file
         try data?.write(to: url, options: .atomic)
     }
-        
+    */
+    
     //
     // Action methods (Edit menu)
     //

@@ -143,22 +143,42 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI">
-                                <connections>
-                                    <action selector="takeUserSnapshotAction:" target="-1" id="eOH-IU-76n"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Take Screenshot" id="LS1-f4-bNu">
+                            <menuItem title="Snapshots" id="1Vv-eE-oyc">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="takeUserScreenshotAction:" target="-1" id="7lf-XJ-INp"/>
-                                </connections>
+                                <menu key="submenu" title="Snapshots" id="rNg-oL-iGa">
+                                    <items>
+                                        <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI">
+                                            <connections>
+                                                <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open Browser..." id="NXb-gr-Vem">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="browseSnapshotsAction:" target="-1" id="3RJ-Yf-Aab"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
-                            <menuItem title="Browse..." id="NXb-gr-Vem">
+                            <menuItem title="Screenshots" id="jDe-cG-iRQ">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="browseStorageAction:" target="-1" id="TR2-ka-yJq"/>
-                                </connections>
+                                <menu key="submenu" title="Screenshots" id="Igm-g6-nxl">
+                                    <items>
+                                        <menuItem title="Take Screenshot" id="fOc-QP-hyG">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Open Browser..." id="qjw-YT-39t">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                         </items>
                     </menu>
@@ -1033,5 +1053,6 @@
         <menuItem title="Narrow style" id="hwU-hm-b10">
             <modifierMask key="keyEquivalentModifierMask"/>
         </menuItem>
+        <menuItem isSeparatorItem="YES" id="GUM-Ys-uP8"/>
     </objects>
 </document>
