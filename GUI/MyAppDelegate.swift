@@ -228,14 +228,18 @@ extension MyAppDelegate {
                 if window == con.window {
 
                     // Start playback
-                    con.audioEngine!.startPlayback()
-                    con.amiga.paula.rampUpFromZero()
+                    if !con.audioEngine!.isRunning {
+                        con.audioEngine!.startPlayback()
+                        con.amiga.paula.rampUpFromZero()
+                    }
 
                 } else {
 
                     // Stop playback
-                    con.audioEngine!.stopPlayback()
-                    con.amiga.paula.rampDown()
+                    if con.audioEngine!.isRunning {
+                        con.audioEngine!.stopPlayback()
+                        con.amiga.paula.rampDown()
+                    }
                 }
             }
         }
