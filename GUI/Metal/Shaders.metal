@@ -209,14 +209,17 @@ kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
                   uint2                          gid         [[ thread_position_in_grid ]])
 {
     half4 result;
+    float s;
     
     if (!uniforms.interlace || gid.y % 2 == 0) {
-        result = longFrame.read(uint2(gid.x, gid.y / 2)) * uniforms.longFrameScale;
+        s = uniforms.longFrameScale;
+        result = longFrame.read(uint2(gid.x, gid.y / 2));
     } else {
-        result = shortFrame.read(uint2(gid.x, gid.y / 2)) * uniforms.shortFrameScale;
+        s = uniforms.shortFrameScale;
+        result = shortFrame.read(uint2(gid.x, gid.y / 2));
     }
     
-    outTexture.write(result, gid);
+    outTexture.write(result * vec<half,4>(s,s,s,1), gid);
 }
 
 
