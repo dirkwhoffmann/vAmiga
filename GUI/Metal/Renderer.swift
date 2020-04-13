@@ -118,8 +118,9 @@ class Renderer: NSObject, MTKViewDelegate {
     // Textures
     //
 
-    // Background image behind the cube
+    // Background textures
     var bgTexture: MTLTexture! = nil
+    var bgFullscreenTexture: MTLTexture! = nil
 
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
@@ -297,7 +298,7 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing textures
     //
 
-    func updateBgTexture(bytes: UnsafeMutablePointer<Int32>) {
+    func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 
         let w = 512
         let h = 512
@@ -309,6 +310,18 @@ class Renderer: NSObject, MTKViewDelegate {
                           bytesPerRow: 4 * w)
     }
 
+    func clearBgTexture() {
+        
+        let w = 512
+        let h = 512
+
+        let bytes = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h * 4)
+        bytes.initialize(repeating: 0xFFFF0000, count: w * h)
+        
+        updateBgTexture(bytes: bytes)
+        bytes.deallocate()
+    }
+    
     func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
 
         let w = Int(HPIXELS)
@@ -564,8 +577,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // Create a render pass descriptor
         let descriptor = MTLRenderPassDescriptor.init()
         descriptor.colorAttachments[0].texture = drawable.texture
-        // descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
-        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.0, 0.0, 0.0, 1)
+        descriptor.colorAttachments[0].clearColor = MTLClearColorMake(0.95, 0.95, 0.95, 1)
         descriptor.colorAttachments[0].loadAction = MTLLoadAction.clear
         descriptor.colorAttachments[0].storeAction = MTLStoreAction.store
 
@@ -630,7 +642,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
         let paused = controller.amiga.isPaused()
         let poweredOff = controller.amiga.isPoweredOff()
-        let renderBackground = poweredOff && !fullscreen // && (animates != 0 || (alpha.current < 1.0))
+        let renderBackground = poweredOff || fullscreen
         let renderForeground = alpha.current > 0.0
 
         // Perform a single animation step
@@ -640,22 +652,29 @@ class Renderer: NSObject, MTKViewDelegate {
 
         // Render background
         if renderBackground {
-
-            // track("poweredOff \(poweredOff) \(alpha.current)")
-
+            
             // Update background texture
-            let buffer = controller.amiga.denise.noise()
-            updateBgTexture(bytes: buffer!)
+            if !fullscreen {
+                let buffer = controller.amiga.denise.noise()
+                updateBgTexture(bytes: buffer!)
+            }
 
             // Configure vertex shader
+            vertexUniformsBg.mvp = matrix_identity_float4x4
             commandEncoder.setVertexBytes(&vertexUniformsBg,
                                           length: MemoryLayout<VertexUniforms>.stride,
                                           index: 1)
 
             // Configure fragment shader
-            fragmentUniforms.alpha = noise.current
-            commandEncoder.setFragmentTexture(bgTexture, index: 0)
-            commandEncoder.setFragmentTexture(bgTexture, index: 1)
+            if fullscreen {
+                fragmentUniforms.alpha = 1.0
+                commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 0)
+                commandEncoder.setFragmentTexture(bgFullscreenTexture, index: 1)
+            } else {
+                fragmentUniforms.alpha = noise.current
+                commandEncoder.setFragmentTexture(bgTexture, index: 0)
+                commandEncoder.setFragmentTexture(bgTexture, index: 1)
+            }
             commandEncoder.setFragmentBytes(&fragmentUniforms,
                                             length: MemoryLayout<FragmentUniforms>.stride,
                                             index: 1)
@@ -743,7 +762,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {
 
-        track("drawableSizeWillChange \(size)")
         reshape(withSize: size)
     }
     

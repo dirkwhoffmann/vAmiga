@@ -168,24 +168,24 @@ extension Renderer {
             
         case 3: // Left and right
             
-            grid = [ (0, 0, .left ), (0, 1, .left ), (0, 2, .left ),
-                     (0, 3, .left ), (0, 4, .left ), (0, 5, .left ),
-                     (5, 0, .right), (5, 1, .right), (5, 2, .right), (5, 3, .right),
-                     (5, 4, .right), (5, 5, .right) ]
+            grid = [ (0, 5, .left ), (0, 4, .left ), (0, 3, .left ),
+                     (0, 2, .left ), (0, 1, .left ), (0, 0, .left ),
+                     (5, 4, .right), (5, 3, .right), (5, 2, .right), (5, 1, .right),
+                     (5, 5, .right), (5, 0, .right) ]
             
         case 4: // Left
             
-            grid = [ (0, 0, .left), (0, 1, .left), (0, 2, .left),
-                     (0, 3, .left), (0, 4, .left), (0, 5, .left),
-                     (1, 1, .left), (1, 2, .left), (1, 3, .left), (1, 4, .left),
-                     (1, 0, .left), (1, 5, .left) ]
+            grid = [ (0, 5, .left), (0, 4, .left), (0, 3, .left),
+                     (0, 2, .left), (0, 1, .left), (0, 0, .left),
+                     (1, 4, .left), (1, 3, .left), (1, 2, .left), (1, 1, .left),
+                     (1, 5, .left), (1, 0, .left) ]
             
-        case 5: // Left and right
+        case 5: // Right
             
-            grid = [ (5, 0, .right), (5, 1, .right), (5, 2, .right),
-                     (5, 3, .right), (5, 4, .right), (5, 5, .right),
-                     (4, 1, .right), (4, 2, .right), (4, 3, .right), (4, 4, .right),
-                     (4, 0, .right), (4, 5, .right) ]
+            grid = [ (5, 5, .right), (5, 4, .right), (5, 3, .right),
+                     (5, 2, .right), (5, 1, .right), (5, 0, .right),
+                     (4, 4, .right), (4, 3, .right), (4, 2, .right), (4, 1, .right),
+                     (4, 5, .right), (4, 0, .right) ]
 
         default: fatalError()
         }
@@ -221,15 +221,20 @@ extension Renderer {
         // Background texture
         //
 
+        // Background textures
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
             width: 512,
             height: 512,
             mipmapped: false)
+        descriptor.usage = [ .shaderRead ]
 
-        // Background texture (drawn behind the cube)
         bgTexture = device.makeTexture(descriptor: descriptor)
-
+        let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: 512 * 512 * 4)
+        buffer.drawGradient(size: MTLSizeMake(512, 512, 0),
+                            (0x00, 0x00, 0x00, 0xFF), (0x44, 0x44, 0x44, 0xFF))
+        bgFullscreenTexture = device.makeTexture(from: buffer, size: MTLSizeMake(512, 512, 0))
+        
         //
         // Emulator textures (one for short frames, one for long frames)
         //
@@ -464,8 +469,13 @@ extension Renderer {
 
     func buildVertexBuffer() {
 
+        /*
         bgRect = Node.init(device: device,
                            x: -6.4, y: -4.8, z: 6.8, w: 12.8, h: 9.6,
+                           t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
+        */
+        bgRect = Node.init(device: device,
+                           x: -1.0, y: -1.0, z: 0.99, w: 2.0, h: 2.0,
                            t: NSRect.init(x: 0.0, y: 0.0, width: 1.0, height: 1.0))
 
         quad2D = Node.init(device: device,

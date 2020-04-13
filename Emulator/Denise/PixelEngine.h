@@ -51,10 +51,10 @@ private:
     ScreenBuffer *frameBuffer = &longFrame[0];
 
     // Buffer storing background noise (random black and white pixels)
-    i32 *noise;
+    u32 *noise;
 
     // Buffer storing programatically generated textures
-    i32 gradient[128][128];
+    // i32 gradient[128][128];
     
     //
     // Color management
@@ -208,7 +208,7 @@ public:
     ScreenBuffer getStableShortFrame();
 
     // Returns a pointer to randon noise
-    i32 *getNoise();
+    u32 *getNoise();
     
     // Returns the frame buffer address of a certain pixel in the current line
     int *pixelAddr(int pixel);

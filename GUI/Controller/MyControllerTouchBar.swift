@@ -51,7 +51,7 @@ extension MyController: NSTouchBarDelegate {
             item.customizationLabel = "Save"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
-                                 action: #selector(takeUserSnapshotAction(_:)))
+                                 action: #selector(takeSnapshotAction(_:)))
             return item
         
         case NSTouchBarItem.Identifier.load:
@@ -61,7 +61,7 @@ extension MyController: NSTouchBarDelegate {
             item.customizationLabel = "Load"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
-                                 action: #selector(restoreLatestUserSnapshotAction(_:)))
+                                 action: #selector(restoreSnapshotAction(_:)))
             return item
             
         case NSTouchBarItem.Identifier.restore:
@@ -81,7 +81,7 @@ extension MyController: NSTouchBarDelegate {
             item.customizationLabel = "Click"
             item.view = NSButton(image: resizedIcon,
                                  target: self,
-                                 action: #selector(takeUserScreenshotAction(_:)))
+                                 action: #selector(takeScreenshotAction(_:)))
             return item
             
         case NSTouchBarItem.Identifier.gallery:
