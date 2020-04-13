@@ -59,7 +59,10 @@ public:
     // Trigger cycle for setting a bit in INTREQ
     Cycle setIntreq[16];
 
-
+    // Value pipe for emulating the four cycle delay on the IPL pins
+    u64 iplPipe;
+    
+    
     //
     // Control port registers
     //
@@ -106,6 +109,7 @@ public:
         & intreq
         & intena
         & setIntreq
+        & iplPipe
         & potgo
         & potCntX0
         & potCntY0

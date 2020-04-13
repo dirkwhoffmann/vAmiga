@@ -114,6 +114,7 @@ protected:
 
     // Current value on the IPL pins (Interrupt Priority Level)
     u8 ipl;
+    u8 ipl2; // REMOVE ASAP
 
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
@@ -304,11 +305,12 @@ public:
 
     u8 getIPL() { return ipl; }
     void setIPL(u8 val);
+    void setIPL2(u8 val); // REMOVE ASAP
 
 private:
 
     // Polls the IPL pins
-    void pollIrq() { reg.ipl = ipl; }
+    void pollIrq() { reg.ipl = ipl; } // assert(ipl == ipl2); }
 
     // Selects the IRQ vector to branch to
     int getIrqVector(int level);

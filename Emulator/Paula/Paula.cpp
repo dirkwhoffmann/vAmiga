@@ -212,9 +212,17 @@ void
 Paula::serviceIplEvent()
 {
     assert(agnus.slot[IPL_SLOT].id == IPL_CHANGE);
-
-    cpu.setIPL(agnus.slot[IPL_SLOT].data);
-    agnus.cancel<IPL_SLOT>();
+    
+    cpu.setIPL((iplPipe >> 32) & 0xFF);
+    iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
+    
+    // Reschedule event until the pipe has been shifted through entirely
+    i64 repeat = agnus.slot[IPL_SLOT].data;
+    if (repeat) {
+        agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(1), IPL_CHANGE, repeat - 1);
+    } else {
+        agnus.cancel<IPL_SLOT>();
+    }
 }
 
 template <int x> u16
@@ -366,7 +374,13 @@ Paula::interruptLevel()
 void
 Paula::checkInterrupt()
 {
-    agnus.scheduleRel<IPL_SLOT>(DMA_CYCLES(4), IPL_CHANGE, interruptLevel());
+    int level = interruptLevel();
+    
+    if ((iplPipe & 0xFF) != level) {
+        
+        iplPipe = (iplPipe & ~0xFF) | level;
+        agnus.scheduleRel<IPL_SLOT>(0, IPL_CHANGE, 5);
+    }
 }
 
 template u16 Paula::peekPOTxDAT<0>();
