@@ -61,10 +61,10 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
     func drawLine(size: MTLSize, y: Int, border: Int) {
         
         let width = size.width - 2 * border
-        let origin = MTLOrigin.init(x: border, y: size.height - y, z: 0)
-        let lineSize = MTLSize.init(width: width, height: 1, depth: 0)
-        let region = MTLRegion.init(origin: origin, size: lineSize)
-        
+        // let origin = MTLOrigin.init(x: border, y: size.height - y, z: 0)
+        // let lineSize = MTLSize.init(width: width, height: 1, depth: 0)
+        // let region = MTLRegion.init(origin: origin, size: lineSize)
+        let region = MTLRegionMake2D(border, size.height - y, width, 1)
         scale(size: size, region: region, factor: 1.5)
     }
 
@@ -130,9 +130,7 @@ extension UnsafeMutablePointer where Pointee == UInt32 {
     
     func drawGradient(size: MTLSize, gradient: [ (Int, Int, Int, Int) ]) {
         
-        let origin = MTLOriginMake(0, 0, 0)
-        let region = MTLRegion.init(origin: origin, size: size)
-        
+        let region = MTLRegionMake2D(0, 0, size.width, size.height)
         drawGradient(size: size, region: region, gradient: gradient)
     }
     
@@ -193,6 +191,12 @@ extension MTLTexture {
         }
     }
     
+    func replace(size: MTLSize, buffer: UnsafeMutablePointer<UInt32>?) {
+        
+        let region = MTLRegionMake2D(0, 0, size.width, size.height)
+        replace(region: region, buffer: buffer)
+    }
+    
     func replace(w: Int, h: Int, buffer: UnsafeMutablePointer<UInt32>?) {
         
         let region = MTLRegionMake2D(0, 0, w, h)
@@ -206,27 +210,39 @@ extension MTLTexture {
 
 extension MTLDevice {
     
-    func makeTexture(w: Int, h: Int,
+    func makeTexture(size: MTLSize,
                      buffer: UnsafeMutablePointer<UInt32>? = nil,
                      usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
         
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
-            width: w,
-            height: h,
+            width: size.width,
+            height: size.height,
             mipmapped: false)
         descriptor.usage = usage
         
         let texture = makeTexture(descriptor: descriptor)
-        texture?.replace(w: w, h: h, buffer: buffer)
+        texture?.replace(size: size, buffer: buffer)
         return texture
     }
     
-    func makeTexture(size: MTLSize,
+    func makeTexture(w: Int, h: Int,
                      buffer: UnsafeMutablePointer<UInt32>? = nil,
                      usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
         
-        makeTexture(w: size.width, h: size.height, buffer: buffer, usage: usage)
+        let size = MTLSizeMake(w, h, 0)
+        return makeTexture(size: size, buffer: buffer, usage: usage)
+    }
+    
+    func makeTexture(size: MTLSize,
+                     gradient: [ (Int, Int, Int, Int) ],
+                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
+        
+        let capacity = size.width * size.height
+        let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: capacity)
+        buffer.drawGradient(size: size, gradient: gradient)
+        
+        return makeTexture(size: size, buffer: buffer, usage: usage)
     }
     
     func makeTexture(w: Int, h: Int,
@@ -234,40 +250,6 @@ extension MTLDevice {
                      usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
         
         let size = MTLSizeMake(w, h, 0)
-        let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
-        buffer.drawGradient(size: size, gradient: gradient)
-        
-        return makeTexture(w: w, h: h, buffer: buffer, usage: usage)
+        return makeTexture(size: size, gradient: gradient, usage: usage)
     }
-    
-    func makeTexture(size: MTLSize,
-                     gradient: [ (Int, Int, Int, Int) ],
-                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
-        
-        makeTexture(w: size.width, h: size.height, gradient: gradient, usage: usage)
-    }
-    
-    /*
-    func makeTexture(from data: UnsafeMutablePointer<UInt32>,
-                     size: MTLSize) -> MTLTexture? {
-        
-        // Create texture
-        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: MTLPixelFormat.rgba8Unorm,
-            width: size.width,
-            height: size.height,
-            mipmapped: false)
-        descriptor.usage = [ .shaderRead ]
-        let texture = makeTexture(descriptor: descriptor)
-        
-        // Copy buffer into texture
-        let region = MTLRegionMake2D(0, 0, size.width, size.height)
-        texture?.replace(region: region,
-                         mipmapLevel: 0,
-                         withBytes: data,
-                         bytesPerRow: 4 * size.width)
-        
-        return texture
-    }
-    */
 }
