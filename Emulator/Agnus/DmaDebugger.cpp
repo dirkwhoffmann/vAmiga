@@ -130,7 +130,7 @@ DmaDebugger::computeOverlay()
 
     BusOwner *owners = agnus.busOwner;
     u16 *values = agnus.busValue;
-    int *ptr = denise.pixelEngine.pixelAddr(0);
+    u32 *ptr = denise.pixelEngine.pixelAddr(0);
 
     double bgWeight, fgWeight;
 
@@ -201,7 +201,7 @@ DmaDebugger::vSyncHandler()
     if (!enabled) return;
 
     // Clear old data in the next frame's VBLANK area
-    int *ptr = denise.pixelEngine.frameBuffer->data;
+    u32 *ptr = denise.pixelEngine.frameBuffer->data;
     for (int row = 0; row < VBLANK_CNT; row++) {
         for (int col = 0; col <= LAST_PIXEL; col++) {
             ptr[row * HPIXELS + col] = PixelEngine::rgbaVBlank;

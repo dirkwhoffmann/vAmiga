@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
+		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
 		5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5014DD1321F3625200BC14BA /* Keyboard.cpp */; };
 		5019605B231257270051B669 /* Monitor.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5019605A231257270051B669 /* Monitor.xib */; };
 		5019605D23125E680051B669 /* Monitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5019605C23125E680051B669 /* Monitor.swift */; };
@@ -59,7 +60,7 @@
 		508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCF21EA20510043D0E9 /* MetalView.swift */; };
 		508FDFD821EA20510043D0E9 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFD021EA20510043D0E9 /* Shaders.metal */; };
 		508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */; };
-		508FDFDA21EA20510043D0E9 /* ImageUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFD221EA20510043D0E9 /* ImageUtilities.swift */; };
+		508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFD221EA20510043D0E9 /* ImageToolbox.swift */; };
 		508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFD321EA20510043D0E9 /* Shaders.swift */; };
 		508FDFE021EA214A0043D0E9 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFDE21EA214A0043D0E9 /* MetalKit.framework */; };
 		508FDFE121EA214A0043D0E9 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 508FDFDF21EA214A0043D0E9 /* Metal.framework */; };
@@ -165,6 +166,7 @@
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
+		501429D82445F12B00FBDC90 /* TextureToolbox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextureToolbox.swift; sourceTree = "<group>"; };
 		5014DD1321F3625200BC14BA /* Keyboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Keyboard.cpp; sourceTree = "<group>"; };
 		5014DD1421F3625200BC14BA /* Keyboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Keyboard.h; sourceTree = "<group>"; };
 		5015FF3E242BA00F005175D9 /* Frame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Frame.h; sourceTree = "<group>"; };
@@ -253,7 +255,7 @@
 		508FDFCF21EA20510043D0E9 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
 		508FDFD021EA20510043D0E9 /* Shaders.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalViewEvents.swift; sourceTree = "<group>"; };
-		508FDFD221EA20510043D0E9 /* ImageUtilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageUtilities.swift; sourceTree = "<group>"; };
+		508FDFD221EA20510043D0E9 /* ImageToolbox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageToolbox.swift; sourceTree = "<group>"; };
 		508FDFD321EA20510043D0E9 /* Shaders.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shaders.swift; sourceTree = "<group>"; };
 		508FDFDE21EA214A0043D0E9 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
 		508FDFDF21EA214A0043D0E9 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -575,7 +577,8 @@
 				50357BB723912929007E7563 /* RendererSetup.swift */,
 				508FDFCD21EA20510043D0E9 /* Animation.swift */,
 				508FDFD121EA20510043D0E9 /* MetalViewEvents.swift */,
-				508FDFD221EA20510043D0E9 /* ImageUtilities.swift */,
+				508FDFD221EA20510043D0E9 /* ImageToolbox.swift */,
+				501429D82445F12B00FBDC90 /* TextureToolbox.swift */,
 				508FDFD321EA20510043D0E9 /* Shaders.swift */,
 				508FDFD021EA20510043D0E9 /* Shaders.metal */,
 			);
@@ -1024,10 +1027,11 @@
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
+				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */,
-				508FDFDA21EA20510043D0E9 /* ImageUtilities.swift in Sources */,
+				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */,
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,

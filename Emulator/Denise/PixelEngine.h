@@ -209,7 +209,7 @@ public:
     u32 *getNoise();
     
     // Returns the frame buffer address of a certain pixel in the current line
-    int *pixelAddr(int pixel);
+    u32 *pixelAddr(int pixel);
 
     // Called after each line in the VBLANK area
     void endOfVBlankLine();
@@ -243,8 +243,8 @@ public:
 
 private:
 
-    void colorize(int *dst, int from, int to);
-    void colorizeHAM(int *dst, int from, int to, u16& ham);
+    void colorize(u32 *dst, int from, int to);
+    void colorizeHAM(u32 *dst, int from, int to, u16& ham);
 
 };
 

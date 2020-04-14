@@ -16,10 +16,10 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     // Allocate frame buffers
     for (int i = 0; i < 2; i++) {
 
-        longFrame[i].data = new int[PIXELS];
+        longFrame[i].data = new u32[PIXELS];
         longFrame[i].longFrame = true;
 
-        shortFrame[i].data = new int[PIXELS];
+        shortFrame[i].data = new u32[PIXELS];
         shortFrame[i].longFrame = false;
     }
 
@@ -268,10 +268,10 @@ PixelEngine::getNoise()
     return noise + offset;
 }
 
-int *
+u32 *
 PixelEngine::pixelAddr(int pixel)
 {
-    int offset = pixel + agnus.pos.v * HPIXELS;
+    u32 offset = pixel + agnus.pos.v * HPIXELS;
 
     assert(pixel < HPIXELS);
     assert(offset < PIXELS);
@@ -348,7 +348,7 @@ void
 PixelEngine::colorize(int line)
 {
     // Jump to the first pixel in the specified line in the active frame buffer
-    i32 *dst = frameBuffer->data + line * HPIXELS;
+    u32 *dst = frameBuffer->data + line * HPIXELS;
     int pixel = 0;
 
     // Check for HAM mode
@@ -388,7 +388,7 @@ PixelEngine::colorize(int line)
 }
 
 void
-PixelEngine::colorize(int *dst, int from, int to)
+PixelEngine::colorize(u32 *dst, int from, int to)
 {
     u8 *mbuf = denise.mBuffer;
 
@@ -398,7 +398,7 @@ PixelEngine::colorize(int *dst, int from, int to)
 }
 
 void
-PixelEngine::colorizeHAM(int *dst, int from, int to, u16& ham)
+PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
 {
     u8 *ibuf = denise.iBuffer;
     u8 *mbuf = denise.mBuffer;

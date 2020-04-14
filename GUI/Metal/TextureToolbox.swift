@@ -1,0 +1,273 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
+//
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
+//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
+
+//
+// RGBA values
+//
+
+extension UInt32 {
+
+    init(rgba: (UInt8, UInt8, UInt8, UInt8)) {
+        
+        let r = UInt32(rgba.0)
+        let g = UInt32(rgba.1)
+        let b = UInt32(rgba.2)
+        let a = UInt32(rgba.3)
+        
+        self.init(bigEndian: r << 24 | g << 16 | b << 8 | a)
+    }
+
+    init(rgba: (UInt8, UInt8, UInt8)) {
+        
+        self.init(rgba: (rgba.0, rgba.1, rgba.2, 0xFF))
+     }
+    
+    init(r: UInt8, g: UInt8, b: UInt8, a: UInt8) { self.init(rgba: (r, g, b, a)) }
+    init(r: UInt8, g: UInt8, b: UInt8) { self.init(rgba: (r, g, b)) }
+}
+
+//
+// RGBA buffers
+//
+
+extension UnsafeMutablePointer where Pointee == UInt32 {
+
+    func scale(size: MTLSize, region: MTLRegion, factor: Double) {
+
+        var index = size.width * region.origin.y + region.origin.x
+        let skip = size.width - region.size.width
+        assert(skip >= 0)
+        
+        for _ in 0 ..< region.size.height {
+            for _ in 0 ..< region.size.width {
+                
+                let b = UInt32(Double(self[index] >> 16 & 0xFF) * factor) & 0xFF
+                let g = UInt32(Double(self[index] >> 8 & 0xFF) * factor) & 0xFF
+                let r = UInt32(Double(self[index] >> 0 & 0xFF) * factor) & 0xFF
+                let c = self[index] & 0xFF000000 | b << 16 | g << 8 | r
+                self[index] = c
+                index += 1
+            }
+            index += skip
+        }
+    }
+    
+    func drawLine(size: MTLSize, y: Int, border: Int) {
+        
+        let width = size.width - 2 * border
+        let origin = MTLOrigin.init(x: border, y: size.height - y, z: 0)
+        let lineSize = MTLSize.init(width: width, height: 1, depth: 0)
+        let region = MTLRegion.init(origin: origin, size: lineSize)
+        
+        scale(size: size, region: region, factor: 1.5)
+    }
+
+    func drawGrid(size: MTLSize,
+                  y1: Int, y2: Int, lines: Int, logScale: Bool, start: Int = 0) {
+        
+        let height = Double(y2 - y1)
+        
+        for i in start ... lines {
+            
+            var y = Double(i) / Double(lines)
+            if logScale { y = log(1.0 + 19.0 * y) / log(20) }
+            drawLine(size: size, y: Int(Double(y1) + height * y), border: 0)
+        }
+    }
+ 
+    func drawDoubleGrid(size: MTLSize, y1: Int, y2: Int, lines: Int, logScale: Bool) {
+        
+        let middle = y1 + (y2 - y1) / 2
+        
+        drawGrid(size: size, y1: middle, y2: y1, lines: lines, logScale: logScale)
+        drawGrid(size: size, y1: middle, y2: y2, lines: lines, logScale: logScale, start: 1)
+    }
+        
+    func drawGradient(size: MTLSize, region: MTLRegion,
+                      rgba1: (Int, Int, Int, Int), rgba2: (Int, Int, Int, Int)) {
+        
+        let w = region.size.width
+        let h = region.size.height
+        
+        // Compute delta steps
+        let dr = Double(rgba2.0 - rgba1.0) / Double(h); var r = Double(rgba1.0)
+        let dg = Double(rgba2.1 - rgba1.1) / Double(h); var g = Double(rgba1.1)
+        let db = Double(rgba2.2 - rgba1.2) / Double(h); var b = Double(rgba1.2)
+        let da = Double(rgba2.3 - rgba1.3) / Double(h); var a = Double(rgba1.3)
+
+        // Create gradient
+        var index = size.width * region.origin.y + region.origin.x
+        let skip = Int(size.width) - w
+        assert(skip >= 0)
+        
+        for _ in 0 ..< h {
+            let c = UInt32(a) << 24 | UInt32(b) << 16 | UInt32(g) << 8 | UInt32(r)
+            for _ in 0 ..< w {
+                self[index] = c
+                index += 1
+            }
+            r += dr; g += dg; b += db; a += da
+            index += skip
+        }
+    }
+    
+    func drawGradient(size: MTLSize, region: MTLRegion, gradient: [ (Int, Int, Int, Int) ]) {
+        
+        let h = region.size.height / (gradient.count - 1)
+        var r = region; r.size.height = h
+        
+        for i in 0 ..< gradient.count - 1 {
+            drawGradient(size: size, region: r, rgba1: gradient[i], rgba2: gradient[i+1])
+            r.origin.y += h
+        }
+    }
+    
+    func drawGradient(size: MTLSize, gradient: [ (Int, Int, Int, Int) ]) {
+        
+        let origin = MTLOriginMake(0, 0, 0)
+        let region = MTLRegion.init(origin: origin, size: size)
+        
+        drawGradient(size: size, region: region, gradient: gradient)
+    }
+    
+    func makeRoundCorners(size: MTLSize, radius: Int) {
+        
+        let w = size.width
+        let h = size.height
+        
+        for row in 0 ..< radius {
+            let dy = radius - row
+            for col in 0 ..< radius {
+                let dx = radius - col
+                if dx*dx + dy*dy >= radius*radius {
+                    self[row * w + col] &= 0xFFFFFF
+                    self[(h - 1 - row) * w + col] &= 0xFFFFFF
+                    self[(h - 1 - row) * w + (w - 1 - col)] &= 0xFFFFFF
+                    self[row * w + (w - 1 - col)] &= 0xFFFFFF
+                }
+            }
+        }
+    }
+    
+    func imprint(size: MTLSize, text: String) {
+        
+        // Wrap this buffer into a CGContext
+        let alphaInfo = CGImageAlphaInfo.premultipliedLast.rawValue
+        let orderInfo = CGBitmapInfo.byteOrder32Big.rawValue
+        let context = CGContext.init(data: self,
+                                     width: size.width,
+                                     height: size.height,
+                                     bitsPerComponent: 8,
+                                     bytesPerRow: 4 * size.width,
+                                     space: CGColorSpaceCreateDeviceRGB(),
+                                     bitmapInfo: alphaInfo | orderInfo)
+        
+        // Create an attributed string
+        let string = NSAttributedString.init(text, size: 28, color: .white)
+       
+        // Draw text centered on top
+        let line = CTLineCreateWithAttributedString(string)
+        let offset = CTLineGetPenOffsetForFlush(line, 0.5, Double(size.width))
+        context!.textPosition = CGPoint(x: Int(offset), y: size.height - 38)
+        CTLineDraw(line, context!)
+    }
+}
+
+//
+// Extensions to MTLTexture
+//
+
+extension MTLTexture {
+    
+    func replace(region: MTLRegion, buffer: UnsafeMutablePointer<UInt32>?) {
+        
+        if buffer != nil {
+            let bpr = 4 * region.size.width
+            replace(region: region, mipmapLevel: 0, withBytes: buffer!, bytesPerRow: bpr)
+        }
+    }
+    
+    func replace(w: Int, h: Int, buffer: UnsafeMutablePointer<UInt32>?) {
+        
+        let region = MTLRegionMake2D(0, 0, w, h)
+        replace(region: region, buffer: buffer)
+    }
+}
+
+//
+// Extensions to MTLDevice
+//
+
+extension MTLDevice {
+    
+    func makeTexture(w: Int, h: Int,
+                     buffer: UnsafeMutablePointer<UInt32>? = nil,
+                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
+        
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: MTLPixelFormat.rgba8Unorm,
+            width: w,
+            height: h,
+            mipmapped: false)
+        descriptor.usage = usage
+        
+        let texture = makeTexture(descriptor: descriptor)
+        texture?.replace(w: w, h: h, buffer: buffer)
+        return texture
+    }
+    
+    func makeTexture(size: MTLSize,
+                     buffer: UnsafeMutablePointer<UInt32>? = nil,
+                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
+        
+        makeTexture(w: size.width, h: size.height, buffer: buffer, usage: usage)
+    }
+    
+    func makeTexture(w: Int, h: Int,
+                     gradient: [ (Int, Int, Int, Int) ],
+                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
+        
+        let size = MTLSizeMake(w, h, 0)
+        let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
+        buffer.drawGradient(size: size, gradient: gradient)
+        
+        return makeTexture(w: w, h: h, buffer: buffer, usage: usage)
+    }
+    
+    func makeTexture(size: MTLSize,
+                     gradient: [ (Int, Int, Int, Int) ],
+                     usage: MTLTextureUsage = [.shaderRead]) -> MTLTexture? {
+        
+        makeTexture(w: size.width, h: size.height, gradient: gradient, usage: usage)
+    }
+    
+    /*
+    func makeTexture(from data: UnsafeMutablePointer<UInt32>,
+                     size: MTLSize) -> MTLTexture? {
+        
+        // Create texture
+        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+            pixelFormat: MTLPixelFormat.rgba8Unorm,
+            width: size.width,
+            height: size.height,
+            mipmapped: false)
+        descriptor.usage = [ .shaderRead ]
+        let texture = makeTexture(descriptor: descriptor)
+        
+        // Copy buffer into texture
+        let region = MTLRegionMake2D(0, 0, size.width, size.height)
+        texture?.replace(region: region,
+                         mipmapLevel: 0,
+                         withBytes: data,
+                         bytesPerRow: 4 * size.width)
+        
+        return texture
+    }
+    */
+}

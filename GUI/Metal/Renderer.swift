@@ -300,14 +300,7 @@ class Renderer: NSObject, MTKViewDelegate {
 
     func updateBgTexture(bytes: UnsafeMutablePointer<UInt32>) {
 
-        let w = 512
-        let h = 512
-        let region = MTLRegionMake2D(0, 0, w, h)
-
-        bgTexture.replace(region: region,
-                          mipmapLevel: 0,
-                          withBytes: bytes,
-                          bytesPerRow: 4 * w)
+        bgTexture.replace(w: 512, h: 512, buffer: bytes)
     }
 
     func clearBgTexture() {
@@ -315,17 +308,26 @@ class Renderer: NSObject, MTKViewDelegate {
         let w = 512
         let h = 512
 
-        let bytes = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h * 4)
+        let bytes = UnsafeMutablePointer<UInt32>.allocate(capacity: w * h)
         bytes.initialize(repeating: 0xFFFF0000, count: w * h)
         
         updateBgTexture(bytes: bytes)
         bytes.deallocate()
     }
     
-    func updateTexture(bytes: UnsafeMutablePointer<Int32>, longFrame: Bool) {
+    func updateTexture(bytes: UnsafeMutablePointer<UInt32>, longFrame: Bool) {
 
         let w = Int(HPIXELS)
         let h = longFrameTexture.height
+        let offset = Int(HBLANK_MIN) * 4
+        
+        if longFrame {
+            longFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
+        } else {
+            shortFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
+        }
+
+        /*
         let region = MTLRegionMake2D(0, 0, w, h)
 
         if longFrame {
@@ -339,6 +341,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                       withBytes: bytes + (Int(HBLANK_MIN) * 4),
                                       bytesPerRow: 4 * w)
         }
+        */
     }
 
     func updateTexture() {
@@ -392,11 +395,7 @@ class Renderer: NSObject, MTKViewDelegate {
         let bw = aw + hCenter * (maxWidth - width)
         let height = (1 - vZoom) * maxHeight
         let bh = ah + vCenter * (maxHeight - height)
-        
-        track("aw \(aw) ah \(ah) dw \(dw) dh \(dh)")
-        track("maxWidth \(maxWidth) maxHeight \(maxHeight)")
-        track("width \(width) height \(height)")
-        
+                
         let texW = CGFloat(EmulatorTexture.width)
         let texH = CGFloat(EmulatorTexture.height)
         

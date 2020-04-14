@@ -216,10 +216,13 @@ extension Renderer {
         track()
                    
         //
-        // Background texture
+        // Background textures
         //
 
-        // Background textures
+        let g = [ (0x00, 0x00, 0x00, 0xFF), (0x44, 0x44, 0x44, 0xFF) ]
+        bgTexture = device.makeTexture(w: 512, h: 512)
+        bgFullscreenTexture = device.makeTexture(w: 512, h: 512, gradient: g)
+        
         let descriptor = MTLTextureDescriptor.texture2DDescriptor(
             pixelFormat: MTLPixelFormat.rgba8Unorm,
             width: 512,
@@ -227,12 +230,13 @@ extension Renderer {
             mipmapped: false)
         descriptor.usage = [ .shaderRead ]
 
-        bgTexture = device.makeTexture(descriptor: descriptor)
+        /*
         let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: 512 * 512 * 4)
         buffer.drawGradient(size: MTLSizeMake(512, 512, 0),
                             (0x00, 0x00, 0x00, 0xFF), (0x44, 0x44, 0x44, 0xFF))
         bgFullscreenTexture = device.makeTexture(from: buffer, size: MTLSizeMake(512, 512, 0))
-        
+        */
+ 
         //
         // Emulator textures (one for short frames, one for long frames)
         //

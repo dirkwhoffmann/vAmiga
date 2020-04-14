@@ -167,9 +167,9 @@ class BarChart: ActivityMonitor {
         upperBuffer = UnsafeMutablePointer<UInt32>.allocate(capacity: fgCap)
         lowerBuffer = UnsafeMutablePointer<UInt32>.allocate(capacity: fgCap)
 
-        bgTexture = device.makeTexture(from: bgBuffer, size: bgSize)!
-        upperTexture = device.makeTexture(from: upperBuffer, size: fgSize)!
-        lowerTexture = device.makeTexture(from: lowerBuffer, size: fgSize)!
+        bgTexture = device.makeTexture(size: bgSize, buffer: bgBuffer)!
+        upperTexture = device.makeTexture(size: fgSize, buffer: upperBuffer)!
+        lowerTexture = device.makeTexture(size: fgSize, buffer: lowerBuffer)!
 
         bgRect = Node.init(device: device, x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
         
@@ -192,38 +192,36 @@ class BarChart: ActivityMonitor {
             
             let (r1, g1, b1, a1) = upperColor.rgba()
             let (r3, g3, b3, a3) = lowerColor.rgba()
-            
-            let rgba1 = (r1 / 2, g1 / 2, b1 / 2, a1)
-            let rgba2 = (128, 128, 128, 255)
-            let rgba3 = (r3 / 2, g3 / 2, b3 / 2, a3)
+            let c1 = (r1 / 2, g1 / 2, b1 / 2, a1)
+            let c2 = (128, 128, 128, 255)
+            let c3 = (r3 / 2, g3 / 2, b3 / 2, a3)
                         
-            bgBuffer.drawGradient(size: bgSize, rgba1, rgba2, rgba3)
+            bgBuffer.drawGradient(size: bgSize, gradient: [ c1, c2, c3] )
             bgBuffer.drawDoubleGrid(size: bgSize, y1: Int(y1), y2: Int(y2),
                                     lines: 5, logScale: logScale)
             
         } else {
             
             let (r1, g1, b1, a1) = upperColor.rgba()
+            let c1 = (r1 / 2, g1 / 2, b1 / 2, a1)
+            let c2 = (128, 128, 128, 255)
             
-            let rgba1 = (r1 / 2, g1 / 2, b1 / 2, a1)
-            let rgba2 = (128, 128, 128, 255)
-            
-            bgBuffer.drawGradient(size: bgSize, rgba1, rgba2)
+            bgBuffer.drawGradient(size: bgSize, gradient: [ c1, c2 ] )
             bgBuffer.drawGrid(size: bgSize, y1: Int(y1), y2: Int(y2),
                               lines: 5, logScale: logScale)
         }
 
         // Print title and round off corners
-        bgBuffer.makeRoundCorner(size: bgSize, radius: 10)
+        bgBuffer.makeRoundCorners(size: bgSize, radius: 10)
         bgBuffer.imprint(size: bgSize, text: name)
     }
     
     func updateFgBuffer(_ buffer: UnsafeMutablePointer<UInt32>, color: NSColor) {
         
-        let rgba1 = color.rgba()
-        let rgba2 = (255, 255, 255, 255)
+        let c1 = color.rgba()
+        let c2 = (255, 255, 255, 255)
         
-        buffer.drawGradient(size: fgSize, rgba1, rgba2)
+        buffer.drawGradient(size: fgSize, gradient: [c1, c2])
     }
             
     func updateUpperBuffer() {
@@ -239,33 +237,21 @@ class BarChart: ActivityMonitor {
     func updateBgTexture() {
         
         updateBgBuffer()
-        let region = MTLRegionMake2D(0, 0, bgSize.width, bgSize.height)
-        bgTexture?.replace(region: region,
-                           mipmapLevel: 0,
-                           withBytes: bgBuffer,
-                           bytesPerRow: 4 * bgSize.width)
+        bgTexture?.replace(w: bgSize.width, h: bgSize.height, buffer: bgBuffer)
     }
     
     func updateUpperTexture() {
         
         updateUpperBuffer()
-        let region = MTLRegionMake2D(0, 0, fgSize.width, fgSize.height)
-        upperTexture?.replace(region: region,
-                              mipmapLevel: 0,
-                              withBytes: upperBuffer,
-                              bytesPerRow: 4 * fgSize.width)
+        upperTexture?.replace(w: fgSize.width, h: fgSize.height, buffer: upperBuffer)
     }
- 
+
     func updateLowerTexture() {
         
         updateLowerBuffer()
-        let region = MTLRegionMake2D(0, 0, fgSize.width, fgSize.height)
-        lowerTexture?.replace(region: region,
-                              mipmapLevel: 0,
-                              withBytes: lowerBuffer,
-                              bytesPerRow: 4 * fgSize.width)
+        lowerTexture?.replace(w: fgSize.width, h: fgSize.height, buffer: lowerBuffer)
     }
-    
+
     func updateTextures() {
         
         updateBgTexture()
@@ -439,8 +425,8 @@ class WaveformMonitor: ActivityMonitor {
         initBgBuffer()
         initFgBuffer()
         
-        bgTexture = device.makeTexture(from: bgBuffer, size: size)!
-        fgTexture = device.makeTexture(from: fgBuffer, size: size)!
+        bgTexture = device.makeTexture(size: size, buffer: bgBuffer)!
+        fgTexture = device.makeTexture(size: size, buffer: fgBuffer)!
         
         bgRect = Node.init(device: device,
                            x: 0.00, y: 0.00, z: 0.001, w: 1.0, h: 1.0)
@@ -453,13 +439,12 @@ class WaveformMonitor: ActivityMonitor {
         
         bgBuffer = UnsafeMutablePointer<UInt32>.allocate(capacity: wordCount)
         
-        let rgba1 = (128, 128, 128, 255)
-        let rgba2 = (92, 92, 92, 255)
+        let c1 = (128, 128, 128, 255)
+        let c2 = (92, 92, 92, 255)
         
-        bgBuffer.drawGradient(size: size, rgba1, rgba2)
-        // bgBuffer.drawLine(size: size, y: Int(lowerBorder + innerHeight / 2), border: 10)
+        bgBuffer.drawGradient(size: size, gradient: [c1, c2])
         bgBuffer.imprint(size: size, text: name)
-        bgBuffer.makeRoundCorner(size: size, radius: 10)
+        bgBuffer.makeRoundCorners(size: size, radius: 10)
     }
     
     func initFgBuffer() {
@@ -469,18 +454,12 @@ class WaveformMonitor: ActivityMonitor {
 
     func updateBgTexture() {
         
-        bgTexture.replace(region: MTLRegionMake2D(0, 0, size.width, size.height),
-                          mipmapLevel: 0,
-                          withBytes: bgBuffer,
-                          bytesPerRow: 4 * size.width)
+        bgTexture.replace(w: size.width, h: size.height, buffer: bgBuffer)
     }
-
+    
     func updateFgTexture() {
         
-        fgTexture.replace(region: MTLRegionMake2D(0, 0, size.width, size.height),
-                          mipmapLevel: 0,
-                          withBytes: fgBuffer,
-                          bytesPerRow: 4 * size.width)
+        fgTexture.replace(w: size.width, h: size.height, buffer: fgBuffer)
     }
 
     override func setColor(_ color: NSColor) {
