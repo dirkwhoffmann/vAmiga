@@ -635,8 +635,8 @@ extension Inspector: NSWindowDelegate {
         timerLock.unlock()
 
         // Leave debugging mode
-        amiga.disableDebugging()
-        amiga.clearInspectionTarget()
+        amiga?.disableDebugging()
+        amiga?.clearInspectionTarget()
     }
 }
 

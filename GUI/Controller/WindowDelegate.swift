@@ -48,10 +48,13 @@ extension MyController: NSWindowDelegate {
         // Write back screenshot cache
         try? mydocument!.persistScreenshots()
         
-        // Close auxiliary windows
+        // Disconnect and close auxiliary windows
+        inspector?.amiga = nil
+        monitor?.amiga = nil
+        monitor?.amiga = nil
         inspector?.close()
         monitor?.close()
-        virtualKeyboardSheet?.close()
+        monitor?.close()
 
         // Stop timers
         timerLock.lock()
