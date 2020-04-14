@@ -60,7 +60,7 @@ PixelEngine::_powerOn()
         for (unsigned i = 0; i < HPIXELS; i++) {
 
             int pos = line * HPIXELS + i;
-            int col = (line / 4) % 2 == (i / 8) % 2 ? 0x00222222 : 0x00444444;
+            int col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
             longFrame[0].data[pos] = longFrame[1].data[pos] = col;
             shortFrame[0].data[pos] = shortFrame[1].data[pos] = col;
         }

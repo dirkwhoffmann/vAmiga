@@ -214,8 +214,6 @@ extension Renderer {
     internal func buildTextures() {
 
         track()
-
-        // let loader = MTKTextureLoader.init(device: device)
                    
         //
         // Background texture

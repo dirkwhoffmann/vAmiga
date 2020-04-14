@@ -19,8 +19,8 @@ class PixelEngine : public AmigaComponent {
 public:
 
     // RGBA colors used to visualize the HBLANK and VBLANK area in the debugger
-    static const i32 rgbaHBlank = 0x00444444;
-    static const i32 rgbaVBlank = 0x00444444;
+    static const i32 rgbaHBlank = 0xFF444444;
+    static const i32 rgbaVBlank = 0xFF444444;
 
 private:
 
@@ -53,8 +53,6 @@ private:
     // Buffer storing background noise (random black and white pixels)
     u32 *noise;
 
-    // Buffer storing programatically generated textures
-    // i32 gradient[128][128];
     
     //
     // Color management
@@ -82,7 +80,7 @@ private:
     double saturation = 1.25;
 
 
-    // The current drawing mode
+    // Drawing mode (single playfield, dual playfield, or HAM)
     DrawingMode mode;
     
 

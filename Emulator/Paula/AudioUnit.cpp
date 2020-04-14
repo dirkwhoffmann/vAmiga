@@ -436,22 +436,22 @@ AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
         // Read samples from ringbuffer
         float sample = abs(ringBuffer[(readPtr + w * dw) % bufferSize]);
         
-        // Remember the highest amplitude
-        if (sample > newHighestAmplitude) newHighestAmplitude = sample;
-        
-        // Scale the sample
-        int scaled = sample * height / highestAmplitude;
-        if (scaled > height) scaled = height;
-        
-        if (scaled == 0) {
-
+        if (sample == 0) {
+            
             // Draw some noise to make it look sexy
             unsigned *ptr = buffer + width * height / 2 + w;
             *ptr = color;
             if (rand() % 2) *(ptr + width) = color;
             if (rand() % 2) *(ptr - width) = color;
-
+            
         } else {
+            
+            // Remember the highest amplitude
+            if (sample > newHighestAmplitude) newHighestAmplitude = sample;
+            
+            // Scale the sample
+            int scaled = sample * height / highestAmplitude;
+            if (scaled > height) scaled = height;
             
             // Draw vertical line
             unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;

@@ -173,8 +173,8 @@ extension Renderer {
 
         cutoutX1.target = 0.0
         cutoutY1.target = 0.0
-        cutoutX2.target = 1.0
-        cutoutY2.target = 1.0
+        cutoutX2.target = Float(HPIXELS) / Float(EmulatorTexture.width)
+        cutoutY2.target = Float(VPIXELS) / Float(EmulatorTexture.height)
 
         cutoutX1.steps = steps
         cutoutY1.steps = steps
