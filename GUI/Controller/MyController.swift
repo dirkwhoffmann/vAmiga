@@ -72,9 +72,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Current mouse coordinate
     var mouseXY = NSPoint(x: 0, y: 0)
     
-    // Indicates if mouse is currently hidden DEPRECATED
-    var hideMouse = false
-
     // Indicates if a status bar is shown
     var statusBar = true
 
@@ -437,7 +434,6 @@ extension MyController {
         
         // Reset mouse coordinates
         mouseXY = NSPoint.zero
-        hideMouse = false
         
         // Create keyboard controller
         kbController = KBController(parent: self)

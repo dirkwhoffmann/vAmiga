@@ -60,10 +60,6 @@ extension MyController: NSMenuItemValidation {
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
             return true
 
-        case #selector(MyController.hideMouseAction(_:)):
-            item.title = hideMouse ? "Show Mouse Cursor" : "Hide Mouse Cursor"
-            return true
-
             //
             // Keyboard menu
             //
@@ -375,23 +371,6 @@ extension MyController: NSMenuItemValidation {
         showStatusBar(!statusBar)
     }
     
-    @IBAction func hideMouseAction(_ sender: Any!) {
-        
-        undoManager?.registerUndo(withTarget: self) { targetSelf in
-            targetSelf.hideMouseAction(sender)
-        }
-        
-        if hideMouse {
-            NSCursor.unhide()
-            CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
-        } else {
-            NSCursor.hide()
-            CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: false))
-        }
-        
-        hideMouse = !hideMouse
-    }
-
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if inspector == nil {

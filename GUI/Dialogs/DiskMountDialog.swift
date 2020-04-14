@@ -140,7 +140,7 @@ class DiskMountDialog: DialogController {
                 
         amiga.diskController.insert(sender.tag, adf: disk)
         amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
-        parent.renderer.rotateDown()
+        // parent.renderer.rotateDown()
      
         hideSheet()
     }

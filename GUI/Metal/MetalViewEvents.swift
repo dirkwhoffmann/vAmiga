@@ -36,7 +36,6 @@ public extension MetalView {
     
     func retainMouse() {
         
-        // track("retainMouse")
         NSCursor.hide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: false))
         gotMouse = true
@@ -44,7 +43,6 @@ public extension MetalView {
     
     func releaseMouse() {
         
-        // track("releaseMouse")
         NSCursor.unhide()
         CGAssociateMouseAndMouseCursorPosition(boolean_t(truncating: true))
         gotMouse = false
@@ -52,8 +50,6 @@ public extension MetalView {
     
     override func updateTrackingAreas() {
 
-        // track()
-        
         let options: NSTrackingArea.Options = [ .activeInKeyWindow, .mouseEnteredAndExited ]
         
         if trackingArea != nil {
@@ -158,7 +154,7 @@ public extension MetalView {
     }
     
     func checkForMouseKeys(with event: NSEvent) {
-        
+                
         if !gotMouse && retainMouseWithKeys {
             
             switch retainMouseKeyComb {

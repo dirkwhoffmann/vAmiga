@@ -32,38 +32,6 @@
                                 </connections>
                             </menuItem>
                             <menuItem title="Check for Updates..." enabled="NO" keyEquivalent="u" id="412"/>
-                            <menuItem title="Preferences" id="4Wh-i3-n7L">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Preferences" id="sB1-CL-iAJ">
-                                    <items>
-                                        <menuItem title="Show ..." keyEquivalent="," id="L87-Y8-Gla">
-                                            <connections>
-                                                <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Azm-fl-Tcf"/>
-                                        <menuItem title="Import settings ..." id="pcy-gf-QDR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="importPrefsAction:" target="-1" id="kdv-Rr-qzs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Export settings ..." id="WND-Dt-Sq8">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportPrefsAction:" target="-1" id="XiY-H4-A5y"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="lCW-rx-2mw"/>
-                                        <menuItem title="Restore factory settings" id="m5l-K9-GLd">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="factorySettingsAction:" target="-1" id="OZa-HG-B7e"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
@@ -143,16 +111,61 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
+                            <menuItem title="Settings" id="4Wh-i3-n7L">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Settings" id="sB1-CL-iAJ">
+                                    <items>
+                                        <menuItem title="Show..." keyEquivalent="," id="L87-Y8-Gla">
+                                            <connections>
+                                                <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Azm-fl-Tcf"/>
+                                        <menuItem title="Import..." id="pcy-gf-QDR">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="importPrefsAction:" target="-1" id="kdv-Rr-qzs"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Export..." id="WND-Dt-Sq8">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportPrefsAction:" target="-1" id="XiY-H4-A5y"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="lCW-rx-2mw"/>
+                                        <menuItem title="Restore defaults" id="m5l-K9-GLd">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="factorySettingsAction:" target="-1" id="OZa-HG-B7e"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Open Inspector" id="jIT-6f-DxM">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Open Monitor" id="BgY-MS-366">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
                             <menuItem title="Snapshots" id="1Vv-eE-oyc">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Snapshots" id="rNg-oL-iGa">
                                     <items>
-                                        <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI">
+                                        <menuItem title="Take" keyEquivalent="t" id="BX4-y5-PoI">
                                             <connections>
                                                 <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Open Browser..." id="NXb-gr-Vem">
+                                        <menuItem title="Browse..." id="NXb-gr-Vem">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="browseSnapshotsAction:" target="-1" id="3RJ-Yf-Aab"/>
@@ -165,13 +178,13 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Screenshots" id="Igm-g6-nxl">
                                     <items>
-                                        <menuItem title="Take Screenshot" id="fOc-QP-hyG">
+                                        <menuItem title="Take" id="fOc-QP-hyG">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
                                             </connections>
                                         </menuItem>
-                                        <menuItem title="Open Browser..." id="qjw-YT-39t">
+                                        <menuItem title="Browse..." id="qjw-YT-39t">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
@@ -414,29 +427,11 @@
                                     <action selector="toggleStatusBarAction:" target="-1" id="XV7-PD-saG"/>
                                 </connections>
                             </menuItem>
-                            <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Open Inspector" id="jIT-6f-DxM">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Open Activity Monitor" id="BgY-MS-366">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
-                                </connections>
-                            </menuItem>
                             <menuItem isSeparatorItem="YES" id="ztM-kT-EyU"/>
                             <menuItem title="Enter Full Screen" keyEquivalent="f" id="1r4-M9-Ar1">
                                 <modifierMask key="keyEquivalentModifierMask" control="YES" command="YES"/>
                                 <connections>
                                     <action selector="toggleFullScreen:" target="-1" id="zFC-jn-Li0"/>
-                                </connections>
-                            </menuItem>
-                            <menuItem title="Hide Mouse" keyEquivalent="i" id="9zf-pV-mFk">
-                                <connections>
-                                    <action selector="hideMouseAction:" target="-1" id="jcw-FB-gQz"/>
                                 </connections>
                             </menuItem>
                         </items>
