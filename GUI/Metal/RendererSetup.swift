@@ -14,27 +14,38 @@ import simd
 //
 
 // Parameters of a short / long frame texture delivered by the emulator
+let EmulatorTexture = MTLSizeMake(1024, 320, 0)
+
+/*
 struct EmulatorTexture {
 
     static let width = 1024
     static let height = 320
-}
+
+*/
 
 // Parameters of a textures that combines a short and a long frame
+let MergedTexture = MTLSizeMake(EmulatorTexture.width, 2 * EmulatorTexture.height, 0)
+/*
 struct MergedTexture {
 
     static let width = EmulatorTexture.width
     static let height = 2 * EmulatorTexture.height
     static let cutout = (width, height)
 }
+*/
 
 // Parameters of a (merged) texture that got upscaled
+let UpscaledTexture = MTLSizeMake(2 * MergedTexture.width, 2 * MergedTexture.height, 0)
+
+/*
 struct UpscaledTexture {
 
     static let width = 2 * MergedTexture.width
     static let height = 2 * MergedTexture.height
     static let cutout = (width, height)
 }
+*/
 
 extension Renderer {
 
@@ -214,83 +225,51 @@ extension Renderer {
     internal func buildTextures() {
 
         track()
-                   
-        //
-        // Background textures
-        //
-
-        let g = [ (0x00, 0x00, 0x00, 0xFF), (0x44, 0x44, 0x44, 0xFF) ]
-        bgTexture = device.makeTexture(w: 512, h: 512)
-        bgFullscreenTexture = device.makeTexture(w: 512, h: 512, gradient: g)
         
-        let descriptor = MTLTextureDescriptor.texture2DDescriptor(
-            pixelFormat: MTLPixelFormat.rgba8Unorm,
-            width: 512,
-            height: 512,
-            mipmapped: false)
-        descriptor.usage = [ .shaderRead ]
+        // Texture usages
+        let r: MTLTextureUsage = [ .shaderRead ]
+        let rwt: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget ]
+        let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
 
-        /*
-        let buffer = UnsafeMutablePointer<UInt32>.allocate(capacity: 512 * 512 * 4)
-        buffer.drawGradient(size: MTLSizeMake(512, 512, 0),
-                            (0x00, 0x00, 0x00, 0xFF), (0x44, 0x44, 0x44, 0xFF))
-        bgFullscreenTexture = device.makeTexture(from: buffer, size: MTLSizeMake(512, 512, 0))
-        */
- 
-        //
-        // Emulator textures (one for short frames, one for long frames)
-        //
+        // Background texture used in window mode
+        bgTexture = device.makeTexture(w: 512, h: 512)
+        assert(bgTexture != nil, "Failed to create bgTexture")
+        
+        // Background texture used in fullscreen mode
+        let c1 = (0x00, 0x00, 0x00, 0xFF)
+        let c2 = (0x44, 0x44, 0x44, 0xFF)
+        bgFullscreenTexture = device.makeTexture(w: 512, h: 512, gradient: [c1, c2], usage: r)
+        assert(bgFullscreenTexture != nil, "Failed to create bgFullscreenTexture")
 
-        descriptor.width = EmulatorTexture.width
-        descriptor.height = EmulatorTexture.height
+        // Emulator texture (long frames)
+        longFrameTexture = device.makeTexture(size: EmulatorTexture, usage: r)
+        assert(bgFullscreenTexture != nil, "Failed to create longFrameTexture")
 
-        // Emulator textures (raw data of long and short frames)
-        descriptor.usage = [ .shaderRead ]
-        longFrameTexture = device.makeTexture(descriptor: descriptor)
-        assert(longFrameTexture != nil, "Failed to create long frame texture.")
-        shortFrameTexture = device.makeTexture(descriptor: descriptor)
-        assert(shortFrameTexture != nil, "Failed to create short frame texture.")
-
-        //
-        // Textures that combine a short and a long frame (not yet upscaled)
-        //
-
-        descriptor.width = MergedTexture.width
-        descriptor.height = MergedTexture.height
+        // Emulator texture (short frames)
+        shortFrameTexture = device.makeTexture(size: EmulatorTexture, usage: r)
+        assert(bgFullscreenTexture != nil, "Failed to create shortFrameTexture")
 
         // Merged emulator texture (long frame + short frame)
-        descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
-        mergeTexture = device.makeTexture(descriptor: descriptor)
-        assert(mergeTexture != nil, "Failed to create merge texture.")
+        mergeTexture = device.makeTexture(size: MergedTexture, usage: rwt)
+        assert(bgFullscreenTexture != nil, "Failed to create mergeTexture")
 
         // Bloom textures
-        descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
-        bloomTextureR = device.makeTexture(descriptor: descriptor)
-        bloomTextureG = device.makeTexture(descriptor: descriptor)
-        bloomTextureB = device.makeTexture(descriptor: descriptor)
-        assert(bloomTextureR != nil, "Failed to create bloom texture (R).")
-        assert(bloomTextureG != nil, "Failed to create bloom texture (G).")
-        assert(bloomTextureB != nil, "Failed to create bloom texture (B).")
+        bloomTextureR = device.makeTexture(size: MergedTexture, usage: rwt)
+        bloomTextureG = device.makeTexture(size: MergedTexture, usage: rwt)
+        bloomTextureB = device.makeTexture(size: MergedTexture, usage: rwt)
+        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureR")
+        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureG")
+        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureB")
 
-        descriptor.usage = [ .shaderRead, .shaderWrite, .renderTarget ]
-        lowresEnhancedTexture = device.makeTexture(descriptor: descriptor)
-        assert(lowresEnhancedTexture != nil, "Failed to create lowres enhancement texture.")
+        // Target for in-texture upscaling
+        lowresEnhancedTexture = device.makeTexture(size: MergedTexture, usage: rwt)
+        assert(bgFullscreenTexture != nil, "Failed to create lowresEnhancedTexture")
 
-        //
-        // Upscaled textures
-        //
-
-        descriptor.width  = UpscaledTexture.width
-        descriptor.height = UpscaledTexture.height
-
-        // Upscaled emulator texture
-        descriptor.usage = [ .shaderRead, .shaderWrite, .pixelFormatView, .renderTarget ]
-        upscaledTexture = device.makeTexture(descriptor: descriptor)
-        assert(upscaledTexture != nil, "Failed to create upscaling texture.")
-
-        // Scanline texture
-        scanlineTexture = device.makeTexture(descriptor: descriptor)
-        assert(scanlineTexture != nil, "Failed to create scanline texture.")
+        // Upscaled merge texture
+        upscaledTexture = device.makeTexture(size: UpscaledTexture, usage: rwtp)
+        scanlineTexture = device.makeTexture(size: UpscaledTexture, usage: rwtp)
+        assert(bgFullscreenTexture != nil, "Failed to create upscaledTexture")
+        assert(bgFullscreenTexture != nil, "Failed to create scanlineTexture")
     }
 
     internal func buildSamplers() {
@@ -315,8 +294,8 @@ extension Renderer {
 
         assert(library != nil)
 
-        let mc = MergedTexture.cutout
-        let uc = UpscaledTexture.cutout
+        let mc = (MergedTexture.width, MergedTexture.height)
+        let uc = (UpscaledTexture.width, UpscaledTexture.height)
 
         // Build the mergefilter
         mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)
