@@ -39,7 +39,6 @@ Moira::reset()
     reg.usp = 0;
     reg.ipl = 0;
     ipl = 0;
-    ipl2 = 0; // REMOVE ASAP
     fcl = 0;
     
     reg.sr.t = 0;
@@ -134,7 +133,7 @@ done:
     if (flags & CPU_CHECK_BP) {
         if (debugger.breakpointMatches(reg.pc)) {
             breakpointReached(reg.pc);
-        } 
+        }
     }
 }
 
@@ -265,16 +264,6 @@ Moira::setIPL(u8 val)
         ipl = val;
         flags |= CPU_CHECK_IRQ;
     }
-}
-
-void
-Moira::setIPL2(u8 val)
-{
-    if (ipl2 != val) {
-        ipl2 = val;
-        flags |= CPU_CHECK_IRQ;
-    }
-    assert(ipl2 == ipl); 
 }
 
 int

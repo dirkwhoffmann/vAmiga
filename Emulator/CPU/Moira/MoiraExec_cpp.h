@@ -112,7 +112,6 @@ Moira::execLineA(u16 opcode)
 void
 Moira::execLineF(u16 opcode)
 {
-    printf("execLineF(%x) PC = %x\n", opcode, reg.pc);
     execUnimplemented(11);
 }
 
