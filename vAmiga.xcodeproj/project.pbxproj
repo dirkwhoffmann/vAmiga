@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
 		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
+		500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EA724472B4F002A4DE1 /* door_open.aiff */; };
+		500A4EAA24472B55002A4DE1 /* door_close.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EA924472B55002A4DE1 /* door_close.aiff */; };
+		500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EAB2447364D002A4DE1 /* eject.aiff */; };
+		500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EAC2447364E002A4DE1 /* insert.aiff */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
@@ -162,6 +166,10 @@
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
 		500A4E9E24470713002A4DE1 /* disk_insert.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_insert.aiff; sourceTree = "<group>"; };
+		500A4EA724472B4F002A4DE1 /* door_open.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = door_open.aiff; sourceTree = "<group>"; };
+		500A4EA924472B55002A4DE1 /* door_close.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = door_close.aiff; sourceTree = "<group>"; };
+		500A4EAB2447364D002A4DE1 /* eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = eject.aiff; sourceTree = "<group>"; };
+		500A4EAC2447364E002A4DE1 /* insert.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = insert.aiff; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
@@ -812,6 +820,10 @@
 		50B14C1321EB8445002E32A6 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
+				500A4EAC2447364E002A4DE1 /* insert.aiff */,
+				500A4EAB2447364D002A4DE1 /* eject.aiff */,
+				500A4EA924472B55002A4DE1 /* door_close.aiff */,
+				500A4EA724472B4F002A4DE1 /* door_open.aiff */,
 				500A4E9D24470713002A4DE1 /* disk_eject.aiff */,
 				500A4E9E24470713002A4DE1 /* disk_insert.aiff */,
 				50B14C1721EB8445002E32A6 /* drive_click.aiff */,
@@ -939,12 +951,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
 				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
+				500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
@@ -957,10 +971,12 @@
 				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
+				500A4EAA24472B55002A4DE1 /* door_close.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
+				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
