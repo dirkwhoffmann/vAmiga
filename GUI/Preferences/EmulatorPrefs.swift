@@ -17,9 +17,17 @@ extension PreferencesController {
 
         // Drive
         emuWarpLoad.state = parent.warpLoad ? .on : .off
-        emuDriveSounds.state = parent.driveNoise ? .on : .off
-        emuDriveSoundsNoPoll.state = parent.driveNoiseNoPoll ? .on : .off
-        emuDriveSoundsNoPoll.isEnabled = parent.driveNoise
+        emuDriveSounds.state = parent.driveSounds ? .on : .off
+        emuDriveSoundPan.selectItem(withTag: Int(parent.driveSoundPan))
+        emuDriveInsertSound.state = parent.driveInsertSound ? .on : .off
+        emuDriveEjectSound.state = parent.driveEjectSound ? .on : .off
+        emuDriveHeadSound.state = parent.driveHeadSound ? .on : .off
+        emuDrivePollSound.state = parent.drivePollSound ? .on : .off
+        emuDriveSoundPan.isEnabled = parent.driveSounds
+        emuDriveInsertSound.isEnabled = parent.driveSounds
+        emuDriveEjectSound.isEnabled = parent.driveSounds
+        emuDriveHeadSound.isEnabled = parent.driveSounds
+        emuDrivePollSound.isEnabled = parent.driveSounds
         emuDriveBlankDiskFormat.selectItem(withTag: parent.driveBlankDiskFormatIntValue)
 
         // Fullscreen
@@ -57,13 +65,40 @@ extension PreferencesController {
     
     @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
         
-        parent.driveNoise = sender.state == .on
+        parent.driveSounds = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuDriveSoundsNoPollAction(_ sender: NSButton!) {
+    @IBAction func emuDriveSoundPanAction(_ sender: NSPopUpButton!) {
         
-        parent.driveNoiseNoPoll = sender.state == .on
+        track("tag = \(sender.selectedTag())")
+        parent.driveSoundPan = Double(sender.selectedTag())
+        refresh()
+    }
+
+    @IBAction func emuDriveInsertSoundAction(_ sender: NSButton!) {
+        
+        parent.driveInsertSound = sender.state == .on
+        track("value = \(parent.driveInsertSound)")
+        refresh()
+    }
+
+    @IBAction func emuDriveEjectSoundAction(_ sender: NSButton!) {
+        
+        parent.driveEjectSound = sender.state == .on
+        track("value = \(parent.driveEjectSound)")
+        refresh()
+    }
+
+    @IBAction func emuDriveHeadSoundAction(_ sender: NSButton!) {
+        
+        parent.driveHeadSound = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func emuDrivePollSoundAction(_ sender: NSButton!) {
+        
+        parent.drivePollSound = sender.state == .on
         refresh()
     }
 

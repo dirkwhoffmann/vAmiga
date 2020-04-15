@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
+		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
 		500C0A562259402D000121CD /* DiskController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 500C0A542259402D000121CD /* DiskController.cpp */; };
 		5010A78222B50B690041388B /* PortPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5010A78122B50B690041388B /* PortPanel.swift */; };
 		501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 501429D82445F12B00FBDC90 /* TextureToolbox.swift */; };
@@ -116,14 +118,9 @@
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
 		50B14C1021EB410B002E32A6 /* Amiga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0E21EB410B002E32A6 /* Amiga.cpp */; };
 		50B14C1221EB4314002E32A6 /* AmigaUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C1121EB4314002E32A6 /* AmigaUtils.cpp */; };
-		50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */; };
-		50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */; };
-		50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */; };
 		50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1721EB8445002E32A6 /* drive_click.aiff */; };
-		50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */; };
-		50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */; };
+		50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1821EB8445002E32A6 /* drive_head.aiff */; };
 		50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */; };
-		50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */; };
 		50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 50B14C2521EB9059002E32A6 /* Credits.rtf */; };
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
@@ -163,6 +160,8 @@
 /* Begin PBXFileReference section */
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
+		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
+		500A4E9E24470713002A4DE1 /* disk_insert.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_insert.aiff; sourceTree = "<group>"; };
 		500C0A542259402D000121CD /* DiskController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskController.cpp; sourceTree = "<group>"; };
 		500C0A552259402D000121CD /* DiskController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskController.h; sourceTree = "<group>"; };
 		5010A78122B50B690041388B /* PortPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortPanel.swift; sourceTree = "<group>"; };
@@ -323,14 +322,9 @@
 		50B14C0E21EB410B002E32A6 /* Amiga.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Amiga.cpp; sourceTree = "<group>"; };
 		50B14C0F21EB410B002E32A6 /* Amiga.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Amiga.h; sourceTree = "<group>"; };
 		50B14C1121EB4314002E32A6 /* AmigaUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaUtils.cpp; sourceTree = "<group>"; };
-		50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_closed_2.aiff; sourceTree = "<group>"; };
-		50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_power_on_0.aiff; sourceTree = "<group>"; };
-		50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_2.aiff; sourceTree = "<group>"; };
 		50B14C1721EB8445002E32A6 /* drive_click.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_click.aiff; sourceTree = "<group>"; };
-		50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_0.aiff; sourceTree = "<group>"; };
-		50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_track_change_1.aiff; sourceTree = "<group>"; };
+		50B14C1821EB8445002E32A6 /* drive_head.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_head.aiff; sourceTree = "<group>"; };
 		50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = drive_snatch_uae.aiff; sourceTree = "<group>"; };
-		50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = 1541_door_open_1.aiff; sourceTree = "<group>"; };
 		50B14C2521EB9059002E32A6 /* Credits.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Credits.rtf; sourceTree = "<group>"; };
 		50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AmigaProxy.mm; sourceTree = "<group>"; };
 		50B14C2921EB9806002E32A6 /* AmigaProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaProxy.h; sourceTree = "<group>"; };
@@ -818,14 +812,11 @@
 		50B14C1321EB8445002E32A6 /* sounds */ = {
 			isa = PBXGroup;
 			children = (
-				50B14C1421EB8445002E32A6 /* 1541_door_closed_2.aiff */,
-				50B14C1521EB8445002E32A6 /* 1541_power_on_0.aiff */,
-				50B14C1621EB8445002E32A6 /* 1541_track_change_2.aiff */,
+				500A4E9D24470713002A4DE1 /* disk_eject.aiff */,
+				500A4E9E24470713002A4DE1 /* disk_insert.aiff */,
 				50B14C1721EB8445002E32A6 /* drive_click.aiff */,
-				50B14C1821EB8445002E32A6 /* 1541_track_change_0.aiff */,
-				50B14C1921EB8445002E32A6 /* 1541_track_change_1.aiff */,
+				50B14C1821EB8445002E32A6 /* drive_head.aiff */,
 				50B14C1A21EB8445002E32A6 /* drive_snatch_uae.aiff */,
-				50B14C1B21EB8445002E32A6 /* 1541_door_open_1.aiff */,
 			);
 			path = sounds;
 			sourceTree = "<group>";
@@ -955,22 +946,19 @@
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
 				5019605B231257270051B669 /* Monitor.xib in Resources */,
 				50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */,
-				50B14C1C21EB8445002E32A6 /* 1541_door_closed_2.aiff in Resources */,
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
+				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
-				50B14C2321EB8445002E32A6 /* 1541_door_open_1.aiff in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */,
 				50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */,
-				50B14C2021EB8445002E32A6 /* 1541_track_change_0.aiff in Resources */,
-				50B14C1D21EB8445002E32A6 /* 1541_power_on_0.aiff in Resources */,
+				50B14C2021EB8445002E32A6 /* drive_head.aiff in Resources */,
+				500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */,
 				508FDE6E21EA1FA50043D0E9 /* Assets.xcassets in Resources */,
 				50B14C2221EB8445002E32A6 /* drive_snatch_uae.aiff in Resources */,
-				50B14C1E21EB8445002E32A6 /* 1541_track_change_2.aiff in Resources */,
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
-				50B14C2121EB8445002E32A6 /* 1541_track_change_1.aiff in Resources */,
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
 			);

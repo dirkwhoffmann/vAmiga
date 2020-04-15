@@ -35,12 +35,12 @@ static const bool USE_SSE = true;
 
 // Register debugging (set to 1 to generate debug output)
 
-extern int OCSREG_DEBUG;  // General OCS register debugging
+static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
 static const int ECSREG_DEBUG  = 2;  // Special ECS register debugging
 static const int BLTREG_DEBUG  = 2;  // Blitter registers
 static const int INTREG_DEBUG  = 2;  // Interrupt registers
 static const int DSKREG_DEBUG  = 2;  // Disk controller registers
-extern int CIAREG_DEBUG;  // CIA registers
+static const int CIAREG_DEBUG  = 2;  // CIA registers
 static const int BPLREG_DEBUG  = 2;  // Bitplane registers
 static const int SPRREG_DEBUG  = 2;  // Sprite registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
@@ -52,7 +52,7 @@ static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 static const int RUN_DEBUG     = 2;  // Run loop, component states
 static const int CPU_DEBUG     = 2;  // CPU
-extern int INT_DEBUG;  // Interrupts
+static const int INT_DEBUG     = 2;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock
@@ -68,7 +68,7 @@ static const int AUDBUF_DEBUG  = 2;  // Audio buffers
 static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
 
-extern int BLT_DEBUG;  // Blitter
+static const int BLT_DEBUG     = 2;  // Blitter
 static const int BLTTIM_DEBUG  = 2;  // Blitter Timing
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
@@ -82,11 +82,10 @@ static const int DSK_CHECKSUM  = false;  // Disk checksums
 static const int BLT_CHECKSUM  = false;  // Blitter checksums
 static const int COP_CHECKSUM  = false;  // Copper checksums
 
-// Additional debug settings (uncomment to enable)
+// Uncomment to lauch the emulator with a preloaed disk in df0
+// #define BOOT_DISK "/Downloads/Cabal.adf"
 
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Tools/SynchroExpressII.adf"
-// #define BOOT_DISK "/Users/hoff/Downloads/Cabal.adf"
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Demos/tbl_eon_party_ver_disk1.adf"
+// Additional debug settings (uncomment to enable)
 #define HARD_RESET       // Restore the initial power up state in reset()
 // #define BORDER_DEBUG     // Draw the border in debug colors
 // #define PIXEL_DEBUG      // Highlight first pixel in each 16-bit pixel chunk

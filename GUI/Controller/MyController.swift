@@ -7,6 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+import AVFoundation
+
 enum WarpMode {
 
     case auto
@@ -41,7 +43,8 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Audio Engine
     var audioEngine: AudioEngine!
-    
+    var audioPlayer: AVAudioPlayer?
+     
     // Game pad manager
     var gamePadManager: GamePadManager!
     
@@ -237,12 +240,14 @@ class MyController: NSWindowController, MessageReceiver {
     //
     // Emulator preferences
     //
-    
-    // var alwaysWarp = false { didSet { updateWarp() } }
-    
+        
     var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
-    var driveNoise = Defaults.driveNoise
-    var driveNoiseNoPoll = Defaults.driveNoiseNoPoll
+    var driveSounds = Defaults.driveSounds
+    var driveSoundPan = Defaults.driveSoundPan
+    var driveInsertSound = Defaults.driveInsertSound
+    var driveEjectSound = Defaults.driveEjectSound
+    var driveHeadSound = Defaults.driveHeadSound
+    var drivePollSound = Defaults.drivePollSound
     var driveBlankDiskFormat = Defaults.driveBlankDiskFormat
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
@@ -796,28 +801,31 @@ extension MyController {
 
         case MSG_DRIVE_HEAD:
 
-            if driveNoise {
-                playSound(name: "drive_click", volume: 1.0)
+            if driveSounds && driveHeadSound {
+                playSound(name: "drive_head", volume: 0.9)
             }
             refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
  
-            if driveNoise && !driveNoiseNoPoll {
-                playSound(name: "drive_click", volume: 1.0)
+            if driveSounds && drivePollSound {
+                playSound(name: "drive_head", volume: 0.9)
             }
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
             
-            track("MSG_DISK_INSERT")
+            if driveSounds && driveInsertSound {
+                playSound(name: "disk_insert")
+            }
             if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:
             
-            track("MSG_DISK_EJECT")
-            // if msg.data == 0 { mydocument?.setBootDiskID(0)  }
+            if driveSounds && driveEjectSound {
+                playSound(name: "disk_eject")
+            }
             refreshStatusBar()
             
         case MSG_DISK_INSERTED,
@@ -920,13 +928,28 @@ extension MyController {
     // Misc
     //
     
-    func playSound(name: String, volume: Float) {
+    func playSound(name: String, volume: Float = 1.0) {
         
+        guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
+            track("Cannot open sound file \(name)")
+            return
+        }
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.volume = volume
+            audioPlayer?.pan = Float(driveSoundPan)
+            audioPlayer?.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+        /*
         if let s = NSSound.init(named: name) {
             s.volume = volume
             s.play()
-        } else {
-            track("ERROR: Cannot create NSSound object.")
         }
+        */
     }
 }

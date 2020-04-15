@@ -330,12 +330,6 @@ extension Defaults {
         MacKey.init(keyCode: kVK_ANSI_C): PRESS_FIRE.rawValue
     ]
     static let mouseKeyMap: [MacKey: UInt32] = [:]
-    /* FOR TESTING
-    static let mouseKeyMap = [
-        MacKey.init(keyCode: kVK_Shift): PRESS_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightShift): PRESS_RIGHT.rawValue
-    ]
-    */
     static let disconnectJoyKeys = true
 
     // Joysticks
@@ -609,8 +603,12 @@ extension Keys {
     
     // Drives
     static let warpLoad               = "VAMIGAWarpLoadKey"
-    static let driveNoise             = "VAMIGADriveNoiseKey"
-    static let driveNoiseNoPoll       = "VAMIGADriveNoiseNoPollKey"
+    static let driveSounds            = "VAMIGADriveSounds"
+    static let driveSoundPan          = "VAMIGADriveSoundPan"
+    static let driveInsertSound       = "VAMIGADriveInsertSound"
+    static let driveEjectSound        = "VAMIGADriveEjectSound"
+    static let driveHeadSound         = "VAMIGADriveHeadSound"
+    static let drivePollSound         = "VAMIGADrivePollSound"
     static let driveBlankDiskFormat   = "VAMIGADriveBlankDiskFormatKey"
 
     // Snapshots and screenshots
@@ -637,8 +635,12 @@ extension Defaults {
    
     // Drives
     static let warpLoad               = true
-    static let driveNoise             = true
-    static let driveNoiseNoPoll       = true
+    static let driveSounds            = true
+    static let driveSoundPan          = 1.0
+    static let driveInsertSound       = true
+    static let driveEjectSound        = true
+    static let driveHeadSound         = true
+    static let drivePollSound         = false
     static let driveBlankDiskFormat   = FS_OFS
     
     // Snapshots and Screenshots
@@ -668,8 +670,12 @@ extension MyController {
         let dictionary: [String: Any] = [
             
             Keys.warpLoad: Defaults.warpLoad,
-            Keys.driveNoise: Defaults.driveNoise,
-            Keys.driveNoiseNoPoll: Defaults.driveNoiseNoPoll,
+            Keys.driveSounds: Defaults.driveSounds,
+            Keys.driveSoundPan: Defaults.driveSoundPan,
+            Keys.driveInsertSound: Defaults.driveInsertSound,
+            Keys.driveEjectSound: Defaults.driveEjectSound,
+            Keys.driveHeadSound: Defaults.driveHeadSound,
+            Keys.drivePollSound: Defaults.drivePollSound,
             Keys.driveBlankDiskFormat: Int(Defaults.driveBlankDiskFormat.rawValue),
 
             Keys.autoSnapshots: Defaults.autoSnapshots,
@@ -697,8 +703,12 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         let keys = [Keys.warpLoad,
-                    Keys.driveNoise,
-                    Keys.driveNoiseNoPoll,
+                    Keys.driveSounds,
+                    Keys.driveSoundPan,
+                    Keys.driveInsertSound,
+                    Keys.driveEjectSound,
+                    Keys.driveHeadSound,
+                    Keys.drivePollSound,
                     Keys.driveBlankDiskFormat,
                     
                     Keys.autoSnapshots,
@@ -728,8 +738,12 @@ extension MyController {
         amiga.suspend()
         
         warpLoad = defaults.bool(forKey: Keys.warpLoad)
-        driveNoise = defaults.bool(forKey: Keys.driveNoise)
-        driveNoiseNoPoll = defaults.bool(forKey: Keys.driveNoiseNoPoll)
+        driveSounds = defaults.bool(forKey: Keys.driveSounds)
+        driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
+        driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
+        driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
+        driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
+        drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
         driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
         autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
@@ -754,8 +768,12 @@ extension MyController {
         let defaults = UserDefaults.standard
         
         defaults.set(warpLoad, forKey: Keys.warpLoad)
-        defaults.set(driveNoise, forKey: Keys.driveNoise)
-        defaults.set(driveNoiseNoPoll, forKey: Keys.driveNoiseNoPoll)
+        defaults.set(driveSounds, forKey: Keys.driveSounds)
+        defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
+        defaults.set(driveInsertSound, forKey: Keys.driveInsertSound)
+        defaults.set(driveEjectSound, forKey: Keys.driveEjectSound)
+        defaults.set(driveHeadSound, forKey: Keys.driveHeadSound)
+        defaults.set(drivePollSound, forKey: Keys.drivePollSound)
         defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
         
         defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
