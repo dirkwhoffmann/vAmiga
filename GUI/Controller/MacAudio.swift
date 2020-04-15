@@ -20,7 +20,10 @@ public class MacAudio: NSObject {
     var isRunning = false
 
     // Reference storage used by playSound()
-    var audioPlayers: [AVAudioPlayer] = []
+    // var audioPlayers: [AVAudioPlayer] = []
+    
+    // Cached audio players
+    var audioPlayers: [String: [AVAudioPlayer]] = [:]
     
     override init() {
 
@@ -152,31 +155,34 @@ public class MacAudio: NSObject {
     
     // Plays a sound file
     func playSound(name: String, volume: Float = 1.0) {
-                
-        guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
-            track("Cannot open sound file \(name)")
-            return
+        
+        // Check for cached players for this sound file
+        if audioPlayers[name] == nil {
+            
+            // Lookup sound file in bundle
+            guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
+                track("Cannot open sound file \(name)")
+                return
+            }
+            
+            // Create a couple of player instances for this sound file
+            do {
+                audioPlayers[name] = []
+                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
+                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
+                try audioPlayers[name]!.append(AVAudioPlayer(contentsOf: url))
+            } catch let error {
+                print(error.localizedDescription)
+            }
         }
         
-        // Remove references to outdated players
-        audioPlayers.removeAll(where: { !$0.isPlaying })
-
-        // Bail out if the number of active players is still too high
-        if audioPlayers.count >= 3 { return }
-
-        // Play sound
-        do {
-            let player = try AVAudioPlayer(contentsOf: url)
-
+        // Play sound if a free is available
+        for player in audioPlayers[name]! where !player.isPlaying {
+            
             player.volume = volume
             player.pan = Float(parent.driveSoundPan)
             player.play()
-
-            // Keep a reference to the player to avoid early deletion
-            audioPlayers.append(player)
-
-        } catch let error {
-            print(error.localizedDescription)
+            return
         }
     }
 }

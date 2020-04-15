@@ -35,6 +35,41 @@
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
+                            <menuItem title="Preferences" id="4Wh-i3-n7L" userLabel="Preferences">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Preferences" id="sB1-CL-iAJ">
+                                    <items>
+                                        <menuItem title="Open..." keyEquivalent="," id="L87-Y8-Gla">
+                                            <connections>
+                                                <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Azm-fl-Tcf"/>
+                                        <menuItem title="Import..." id="pcy-gf-QDR">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="importPrefsAction:" target="-1" id="kdv-Rr-qzs"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Export..." id="WND-Dt-Sq8">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportPrefsAction:" target="-1" id="XiY-H4-A5y"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="lCW-rx-2mw"/>
+                                        <menuItem title="Restore defaults" id="m5l-K9-GLd">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="factorySettingsAction:" target="-1" id="OZa-HG-B7e"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="S4e-Lg-pAW">
+                                <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                            </menuItem>
                             <menuItem title="Hide vAmiga" keyEquivalent="h" id="134">
                                 <connections>
                                     <action selector="hide:" target="-2" id="152"/>
@@ -62,8 +97,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="File" id="83">
-                    <menu key="submenu" title="File" id="81">
+                <menuItem title="Machine" id="83">
+                    <menu key="submenu" title="Machine" id="81">
                         <items>
                             <menuItem title="New" keyEquivalent="n" id="82">
                                 <connections>
@@ -111,87 +146,47 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Settings" id="4Wh-i3-n7L">
+                            <menuItem title="Settings..." id="Y6J-U9-htE" userLabel="Configure...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Settings" id="sB1-CL-iAJ">
-                                    <items>
-                                        <menuItem title="Show..." keyEquivalent="," id="L87-Y8-Gla">
-                                            <connections>
-                                                <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Azm-fl-Tcf"/>
-                                        <menuItem title="Import..." id="pcy-gf-QDR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="importPrefsAction:" target="-1" id="kdv-Rr-qzs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Export..." id="WND-Dt-Sq8">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportPrefsAction:" target="-1" id="XiY-H4-A5y"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="lCW-rx-2mw"/>
-                                        <menuItem title="Restore defaults" id="m5l-K9-GLd">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="factorySettingsAction:" target="-1" id="OZa-HG-B7e"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <connections>
+                                    <action selector="preferencesAction:" target="-1" id="W7W-us-qti"/>
+                                </connections>
                             </menuItem>
-                            <menuItem title="Open Inspector" id="jIT-6f-DxM">
+                            <menuItem title="Inspector..." id="jIT-6f-DxM" userLabel="Inspector...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Open Monitor" id="BgY-MS-366">
+                            <menuItem title="Monitor..." id="BgY-MS-366" userLabel="Monitor...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="monitorAction:" target="-1" id="hps-FK-7Yl"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Snapshots" id="1Vv-eE-oyc">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Snapshots" id="rNg-oL-iGa">
-                                    <items>
-                                        <menuItem title="Take" keyEquivalent="t" id="BX4-y5-PoI">
-                                            <connections>
-                                                <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Browse..." id="NXb-gr-Vem">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="browseSnapshotsAction:" target="-1" id="3RJ-Yf-Aab"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                            <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI" userLabel="Take Snapshot">
+                                <connections>
+                                    <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
+                                </connections>
                             </menuItem>
-                            <menuItem title="Screenshots" id="jDe-cG-iRQ">
+                            <menuItem title="Browse Snapshots..." id="NXb-gr-Vem" userLabel="Browse Snapshots...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Screenshots" id="Igm-g6-nxl">
-                                    <items>
-                                        <menuItem title="Take" id="fOc-QP-hyG">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Browse..." id="qjw-YT-39t">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                                <connections>
+                                    <action selector="browseSnapshotsAction:" target="-1" id="3RJ-Yf-Aab"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem isSeparatorItem="YES" id="5uV-Cr-Apb"/>
+                            <menuItem title="Take Screenshot" keyEquivalent="T" id="fOc-QP-hyG" userLabel="Take Screenshot">
+                                <connections>
+                                    <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
+                                </connections>
+                            </menuItem>
+                            <menuItem title="Browse Screenshots..." id="qjw-YT-39t" userLabel="Browse Screenshots...">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
+                                </connections>
                             </menuItem>
                         </items>
                     </menu>
