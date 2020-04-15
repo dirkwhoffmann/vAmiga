@@ -11,23 +11,29 @@ import AVFoundation
 
 public class AudioEngine: NSObject {
 
+    // References
+    var parent: MyController!
     var paula: PaulaProxy!
-    
     var audiounit: AUAudioUnit!
     
+    // Indicates if the this emulator instance owns the audio unit
     var isRunning = false
+
+    // Reference storage used by playSound()
+    var audioPlayers: [AVAudioPlayer] = []
     
     override init() {
 
         super.init()
     }
     
-    convenience init?(withPaula proxy: PaulaProxy) {
+    convenience init?(with controller: MyController) {
 
         track()
     
         self.init()
-        paula = proxy
+        parent = controller
+        paula = controller.amiga.paula
         
         // Setup component description for AudioUnit
         let compDesc = AudioComponentDescription(
@@ -120,7 +126,7 @@ public class AudioEngine: NSObject {
         paula.readStereoSamples(ptr1, buffer2: ptr2, size: Int(frameCount))
     }
     
-    // Start playing sound
+    // Connects Paula to the audio backend
     @discardableResult
     func startPlayback() -> Bool {
 
@@ -135,12 +141,42 @@ public class AudioEngine: NSObject {
         return true
     }
     
-    //! @brief  Stop playing sound
+    // Disconnects Paula from the audio backend
     func stopPlayback() {
 
         if isRunning {
             audiounit.stopHardware()
             isRunning = false
+        }
+    }
+    
+    // Plays a sound file
+    func playSound(name: String, volume: Float = 1.0) {
+                
+        guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
+            track("Cannot open sound file \(name)")
+            return
+        }
+        
+        // Remove references to outdated players
+        audioPlayers.removeAll(where: { !$0.isPlaying })
+
+        // Bail out if the number of active players is still too high
+        if audioPlayers.count >= 3 { return }
+
+        // Play sound
+        do {
+            let player = try AVAudioPlayer(contentsOf: url)
+
+            player.volume = volume
+            player.pan = Float(parent.driveSoundPan)
+            player.play()
+
+            // Keep a reference to the player to avoid early deletion
+            audioPlayers.append(player)
+
+        } catch let error {
+            print(error.localizedDescription)
         }
     }
 }

@@ -43,7 +43,6 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Audio Engine
     var audioEngine: AudioEngine!
-    var audioPlayer: [AVAudioPlayer] = []
      
     // Game pad manager
     var gamePadManager: GamePadManager!
@@ -430,7 +429,7 @@ extension MyController {
         track()
                 
         // Create audio engine
-        audioEngine = AudioEngine.init(withPaula: amiga.paula)
+        audioEngine = AudioEngine.init(with: self)
     }
 
     override open func windowDidLoad() {
@@ -802,21 +801,21 @@ extension MyController {
         case MSG_DRIVE_HEAD:
 
             if driveSounds && driveHeadSound {
-                playSound(name: "drive_head", volume: 0.8)
+                audioEngine.playSound(name: "drive_head", volume: 0.8)
             }
             refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
  
             if driveSounds && drivePollSound {
-                playSound(name: "drive_head", volume: 0.8)
+                audioEngine.playSound(name: "drive_head", volume: 0.8)
             }
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
             
             if driveSounds && driveInsertSound {
-                playSound(name: "insert", volume: 0.5)
+                audioEngine.playSound(name: "insert", volume: 0.5)
             }
             if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
@@ -824,7 +823,7 @@ extension MyController {
         case MSG_DISK_EJECT:
             
             if driveSounds && driveEjectSound {
-                playSound(name: "eject", volume: 0.5)
+                audioEngine.playSound(name: "eject", volume: 0.5)
             }
             refreshStatusBar()
             
@@ -922,39 +921,5 @@ extension MyController {
         }
 
         refreshStatusBar()
-    }
-
-    //
-    // Misc
-    //
-    
-    func playSound(name: String, volume: Float = 1.0) {
-                
-        guard let url = Bundle.main.url(forResource: name, withExtension: "aiff") else {
-            track("Cannot open sound file \(name)")
-            return
-        }
-        
-        // Remove references to outdated players
-        for p in audioPlayer where !p.isPlaying {
-            audioPlayer.removeAll(where: { !$0.isPlaying })
-        }
-
-        // Skip if too many players are still active
-        if audioPlayer.count > 2 { return }
-                
-        do {
-            let player = try AVAudioPlayer(contentsOf: url)
-
-            player.volume = volume
-            player.pan = Float(driveSoundPan)
-            player.play()
-
-            // Keep a reference to the player to avoid deletion
-            audioPlayer.append(player)
-
-        } catch let error {
-            print(error.localizedDescription)
-        }
     }
 }
