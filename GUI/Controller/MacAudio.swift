@@ -9,7 +9,7 @@
 
 import AVFoundation
 
-public class AudioEngine: NSObject {
+public class MacAudio: NSObject {
 
     // References
     var parent: MyController!

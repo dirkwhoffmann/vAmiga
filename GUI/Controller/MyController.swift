@@ -42,7 +42,7 @@ class MyController: NSWindowController, MessageReceiver {
     var preferencesController: PreferencesController?
 
     // Audio Engine
-    var audioEngine: AudioEngine!
+    var macAudio: MacAudio!
      
     // Game pad manager
     var gamePadManager: GamePadManager!
@@ -429,7 +429,7 @@ extension MyController {
         track()
                 
         // Create audio engine
-        audioEngine = AudioEngine.init(with: self)
+        macAudio = MacAudio.init(with: self)
     }
 
     override open func windowDidLoad() {
@@ -801,21 +801,21 @@ extension MyController {
         case MSG_DRIVE_HEAD:
 
             if driveSounds && driveHeadSound {
-                audioEngine.playSound(name: "drive_head", volume: 0.8)
+                macAudio.playSound(name: "drive_head", volume: 0.8)
             }
             refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
  
             if driveSounds && drivePollSound {
-                audioEngine.playSound(name: "drive_head", volume: 0.8)
+                macAudio.playSound(name: "drive_head", volume: 0.8)
             }
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
             
             if driveSounds && driveInsertSound {
-                audioEngine.playSound(name: "insert", volume: 0.5)
+                macAudio.playSound(name: "insert", volume: 0.5)
             }
             if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
@@ -823,7 +823,7 @@ extension MyController {
         case MSG_DISK_EJECT:
             
             if driveSounds && driveEjectSound {
-                audioEngine.playSound(name: "eject", volume: 0.5)
+                macAudio.playSound(name: "eject", volume: 0.5)
             }
             refreshStatusBar()
             

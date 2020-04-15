@@ -67,7 +67,7 @@ extension MyController: NSWindowDelegate {
         screenshotTimer = nil
         
         // Disconnect the audio engine
-        audioEngine.shutDown()
+        macAudio.shutDown()
 
         // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())

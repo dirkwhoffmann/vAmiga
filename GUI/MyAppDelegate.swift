@@ -228,16 +228,16 @@ extension MyAppDelegate {
                 if window == con.window {
 
                     // Start playback
-                    if !con.audioEngine!.isRunning {
-                        con.audioEngine!.startPlayback()
+                    if !con.macAudio!.isRunning {
+                        con.macAudio!.startPlayback()
                         con.amiga.paula.rampUpFromZero()
                     }
 
                 } else {
 
                     // Stop playback
-                    if con.audioEngine!.isRunning {
-                        con.audioEngine!.stopPlayback()
+                    if con.macAudio!.isRunning {
+                        con.macAudio!.stopPlayback()
                         con.amiga.paula.rampDown()
                     }
                 }

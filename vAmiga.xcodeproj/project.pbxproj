@@ -94,7 +94,7 @@
 		508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00921EA227B0043D0E9 /* WindowDelegate.swift */; };
 		508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */; };
 		508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00D21EA227B0043D0E9 /* Alerts.swift */; };
-		508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* AudioEngine.swift */; };
+		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */; };
 		508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */; };
 		508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */; };
@@ -291,7 +291,7 @@
 		508FE00921EA227B0043D0E9 /* WindowDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowDelegate.swift; sourceTree = "<group>"; };
 		508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAppDelegate.swift; sourceTree = "<group>"; };
 		508FE00D21EA227B0043D0E9 /* Alerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
-		508FE00E21EA227B0043D0E9 /* AudioEngine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioEngine.swift; sourceTree = "<group>"; };
+		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomPrefs.swift; sourceTree = "<group>"; };
 		508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmulatorPrefs.swift; sourceTree = "<group>"; };
 		508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwarePrefs.swift; sourceTree = "<group>"; };
@@ -712,7 +712,7 @@
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,
-				508FE00E21EA227B0043D0E9 /* AudioEngine.swift */,
+				508FE00E21EA227B0043D0E9 /* MacAudio.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1081,7 +1081,7 @@
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */,
-				508FE02F21EA227B0043D0E9 /* AudioEngine.swift in Sources */,
+				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
