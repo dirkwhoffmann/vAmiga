@@ -59,7 +59,7 @@ extension MyController {
         track()
         
         registerGeneralUserDefaults()
-        EmulatorPreferences.registerRomUserDefaults()
+        registerRomUserDefaults()
         registerDevicesUserDefaults()
         registerVideoUserDefaults()
         registerEmulatorUserDefaults()
@@ -74,7 +74,7 @@ extension MyController {
         amiga.suspend()
         
         resetGeneralUserDefaults()
-        config.resetRomUserDefaults()
+        resetRomUserDefaults()
         resetDevicesUserDefaults()
         resetVideoUserDefaults()
         resetEmulatorUserDefaults()
@@ -91,7 +91,7 @@ extension MyController {
         amiga.suspend()
         
         loadGeneralUserDefaults()
-        config.loadRomUserDefaults()
+        loadRomUserDefaults()
         loadDevicesUserDefaults()
         loadVideoUserDefaults()
         loadEmulatorUserDefaults()
@@ -122,7 +122,7 @@ extension MyController {
         track()
         
         saveGeneralUserDefaults()
-        config.saveRomUserDefaults()
+        saveRomUserDefaults()
         saveDevicesUserDefaults()
         saveVideoUserDefaults()
         saveEmulatorUserDefaults()
@@ -229,7 +229,7 @@ extension Defaults {
     static let extStart          = 0xE0
 }
 
-extension EmulatorPreferences {
+extension MyController {
     
     static func registerRomUserDefaults() {
         
@@ -264,12 +264,12 @@ extension EmulatorPreferences {
         amiga.suspend()
         
         if let url = defaults.url(forKey: Keys.rom) {
-            romURL = url
-            amiga.mem.loadRom(fromFile: romURL)
+            config.romURL = url
+            amiga.mem.loadRom(fromFile: config.romURL)
         }
         if let url = defaults.url(forKey: Keys.ext) {
-            extURL = url
-            amiga.mem.loadExt(fromFile: extURL)
+            config.extURL = url
+            amiga.mem.loadExt(fromFile: config.extURL)
         }
         amiga.configure(VA_EXT_START, value: defaults.integer(forKey: Keys.extStart))
 
@@ -278,12 +278,12 @@ extension EmulatorPreferences {
     
     func saveRomUserDefaults() {
         
-        let config = amiga.config()
+        let hwconfig = amiga.config()
         let defaults = UserDefaults.standard
 
-        defaults.set(romURL, forKey: Keys.rom)
-        defaults.set(extURL, forKey: Keys.ext)
-        defaults.set(config.mem.extStart, forKey: Keys.extStart)
+        defaults.set(config.romURL, forKey: Keys.rom)
+        defaults.set(config.extURL, forKey: Keys.ext)
+        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
     }
 }
 
@@ -414,7 +414,7 @@ extension MyController {
         defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         defaults.decode(&gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
-        kbController.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
+        prefs.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
         amiga.joystick1.setAutofire(defaults.bool(forKey: Keys.autofire))
@@ -444,7 +444,7 @@ extension MyController {
         defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
         defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
         defaults.encode(gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
-        defaults.set(kbController.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
+        defaults.set(prefs.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
         defaults.set(amiga.joystick1.autofire(), forKey: Keys.autofire)
@@ -557,16 +557,16 @@ extension MyController {
         
         amiga.suspend()
         
-        renderer.enhancer = defaults.integer(forKey: Keys.enhancer)
-        renderer.upscaler = defaults.integer(forKey: Keys.upscaler)
-        prefs.palette = defaults.integer(forKey: Keys.palette)
-        prefs.brightness = defaults.double(forKey: Keys.brightness)
-        prefs.contrast = defaults.double(forKey: Keys.contrast)
-        prefs.saturation = defaults.double(forKey: Keys.saturation)
-        renderer.hCenter = defaults.float(forKey: Keys.hCenter)
-        renderer.vCenter = defaults.float(forKey: Keys.vCenter)
-        renderer.hZoom = defaults.float(forKey: Keys.hZoom)
-        renderer.vZoom = defaults.float(forKey: Keys.vZoom)
+        config.enhancer = defaults.integer(forKey: Keys.enhancer)
+        config.upscaler = defaults.integer(forKey: Keys.upscaler)
+        config.palette = defaults.integer(forKey: Keys.palette)
+        config.brightness = defaults.double(forKey: Keys.brightness)
+        config.contrast = defaults.double(forKey: Keys.contrast)
+        config.saturation = defaults.double(forKey: Keys.saturation)
+        config.hCenter = defaults.float(forKey: Keys.hCenter)
+        config.vCenter = defaults.float(forKey: Keys.vCenter)
+        config.hZoom = defaults.float(forKey: Keys.hZoom)
+        config.vZoom = defaults.float(forKey: Keys.vZoom)
 
         defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
 
@@ -580,16 +580,16 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(renderer.enhancer, forKey: Keys.enhancer)
-        defaults.set(renderer.upscaler, forKey: Keys.upscaler)
-        defaults.set(prefs.palette, forKey: Keys.palette)
-        defaults.set(prefs.brightness, forKey: Keys.brightness)
-        defaults.set(prefs.contrast, forKey: Keys.contrast)
-        defaults.set(prefs.saturation, forKey: Keys.saturation)
-        defaults.set(renderer.hCenter, forKey: Keys.hCenter)
-        defaults.set(renderer.vCenter, forKey: Keys.vCenter)
-        defaults.set(renderer.hZoom, forKey: Keys.hZoom)
-        defaults.set(renderer.vZoom, forKey: Keys.vZoom)
+        defaults.set(config.enhancer, forKey: Keys.enhancer)
+        defaults.set(config.upscaler, forKey: Keys.upscaler)
+        defaults.set(config.palette, forKey: Keys.palette)
+        defaults.set(config.brightness, forKey: Keys.brightness)
+        defaults.set(config.contrast, forKey: Keys.contrast)
+        defaults.set(config.saturation, forKey: Keys.saturation)
+        defaults.set(config.hCenter, forKey: Keys.hCenter)
+        defaults.set(config.vCenter, forKey: Keys.vCenter)
+        defaults.set(config.hZoom, forKey: Keys.hZoom)
+        defaults.set(config.vZoom, forKey: Keys.vZoom)
 
         defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
@@ -753,8 +753,8 @@ extension MyController {
         prefs.screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         prefs.screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
-        renderer.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        kbController.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+        prefs.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        prefs.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
         prefs.pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         prefs.closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
@@ -783,8 +783,8 @@ extension MyController {
         defaults.set(prefs.screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(prefs.screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
-        defaults.set(renderer.keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(prefs.kbController.exitOnEsc, forKey: Keys.exitOnEsc)
+        defaults.set(prefs.keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(prefs.exitOnEsc, forKey: Keys.exitOnEsc)
                 
         defaults.set(prefs.pauseInBackground, forKey: Keys.pauseInBackground)
         defaults.set(prefs.closeWithoutAsking, forKey: Keys.closeWithoutAsking)

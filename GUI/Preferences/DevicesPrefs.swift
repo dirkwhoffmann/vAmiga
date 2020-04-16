@@ -14,7 +14,6 @@ extension PreferencesController {
         var map: [MacKey: UInt32]
 
         let manager    = parent.gamePadManager!
-        let keyboard   = parent.kbController!
         let metal      = parent.metal!
         let joystick1  = amiga.joystick1!
         let joystick2  = amiga.joystick2!
@@ -67,7 +66,7 @@ extension PreferencesController {
         refreshKey(dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
         refreshKey(dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
 
-        devDisconnectKeys.state = keyboard.disconnectJoyKeys ? .on : .off
+        devDisconnectKeys.state = prefs.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
         assert(joystick1.autofire() == joystick2.autofire())
@@ -147,7 +146,7 @@ extension PreferencesController {
     
     @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
         
-        parent.kbController.disconnectJoyKeys = (sender.state == .on)
+        prefs.disconnectJoyKeys = (sender.state == .on)
         
         refresh()
     }

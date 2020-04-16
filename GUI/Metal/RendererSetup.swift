@@ -90,7 +90,7 @@ extension Renderer {
     func buildMonitors() {
         
         // Activity monitors are colorized with the bus debuggger colors
-        let info = controller.amiga.agnus.getDebuggerInfo()
+        let info = parent.amiga.agnus.getDebuggerInfo()
         let rgb = [
             NSColor.init(info.colorRGB.0),
             NSColor.init(info.colorRGB.1),
@@ -126,10 +126,10 @@ extension Renderer {
 
         // Waveform monitors
         monitors.append(WaveformMonitor.init(device: device,
-                                             paula: controller.amiga.paula,
+                                             paula: parent.amiga.paula,
                                              leftChannel: true))
         monitors.append(WaveformMonitor.init(device: device,
-                                             paula: controller.amiga.paula,
+                                             paula: parent.amiga.paula,
                                              leftChannel: false))
 
         for _ in 0 ... monitors.count {

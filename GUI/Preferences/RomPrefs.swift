@@ -9,6 +9,8 @@
 
 extension PreferencesController {
 
+    var config: EmulatorPreferences { return parent.config }
+    
     func refreshRomTab() {
 
         let poweredOff     = amiga.isPoweredOff()

@@ -7,9 +7,18 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* Application-level preferences.
- * There is a single object of this class.
+/* Preferences items are managed by two different classes.
+ *
+ * ApplicationPreferences
+ * This class stores all items that belong to the application level. There is
+ * a single object of this class and the stored values apply to all emulator
+ * instances.
+ *
+ * EmulatorPreferences
+ * This class stores all items that are specific to an individual emulator
+ * instance. Each instance keeps its own object of this class.
  */
+
 class ApplicationPreferences {
     
     var parent: MyController!
@@ -43,14 +52,9 @@ class ApplicationPreferences {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
-    var keepAspectRatio: Bool {
-        get { return renderer.keepAspectRatio }
-        set { renderer.keepAspectRatio = newValue }
-    }
-    var exitOnEsc: Bool {
-        get { return kbController.exitOnEsc }
-        set { kbController.exitOnEsc = newValue }
-    }
+    var keepAspectRatio = Defaults.keepAspectRatio
+    var exitOnEsc = Defaults.exitOnEsc
+    
     var closeWithoutAsking = Defaults.closeWithoutAsking
     var ejectWithoutAsking = Defaults.ejectWithoutAsking
     var pauseInBackground = Defaults.pauseInBackground
@@ -75,21 +79,75 @@ class ApplicationPreferences {
     }
     
     //
+    // Devices preferences
+    //
+    
+    var disconnectJoyKeys = Defaults.disconnectJoyKeys
+    
+    var autofire: Bool {
+        get { return amiga.joystick1.autofire() }
+        set {
+            amiga.joystick1.setAutofire(newValue)
+            amiga.joystick2.setAutofire(newValue)
+        }
+    }
+    var autofireBullets: Int {
+        get { return amiga.joystick1.autofireBullets() }
+        set {
+            amiga.joystick1.setAutofireBullets(newValue)
+            amiga.joystick2.setAutofireBullets(newValue)
+        }
+    }
+    var autofireFrequency: Float {
+        get { return amiga.joystick1.autofireFrequency() }
+        set {
+            amiga.joystick1.setAutofireFrequency(newValue)
+            amiga.joystick2.setAutofireFrequency(newValue)
+        }
+    }
+    var keyMap0: [MacKey: UInt32]? {
+        get { return gamePadManager.gamePads[0]?.keyMap }
+        set { gamePadManager.gamePads[0]?.keyMap = newValue }
+    }
+    var keyMap1: [MacKey: UInt32]? {
+        get { return gamePadManager.gamePads[1]?.keyMap }
+        set { gamePadManager.gamePads[1]?.keyMap = newValue }
+    }
+    
+    init(with controller: MyController) {
+        
+        parent = controller
+    }
+}
+
+class EmulatorPreferences {
+
+    var parent: MyController!
+    var amiga: AmigaProxy { return parent.amiga }
+    var renderer: Renderer { return parent.renderer }
+    var gamePadManager: GamePadManager { return parent.gamePadManager }
+    var kbController: KBController { return parent.kbController }
+
+    //
+    // Rom preferences
+    //
+    
+    // Rom URLs
+    var romURL: URL = Defaults.rom
+    var extURL: URL = Defaults.ext
+    
+    //
     // Video preferences
     //
     
-    var enhancer: Int {
-        get { return renderer.enhancer }
-        set { renderer.enhancer = newValue }
-    }
-    var upscaler: Int {
-        get { return renderer.upscaler }
-        set { renderer.upscaler = newValue }
-    }
-    var palette: Int {
-        get { return Int(amiga.denise.palette()) }
-        set { amiga.denise.setPalette(Palette(newValue)) }
-    }
+    var enhancer = Defaults.enhancer
+    var upscaler = Defaults.upscaler
+    
+    var hCenter = Defaults.hCenter
+    var vCenter = Defaults.vCenter
+    var hZoom = Defaults.hZoom
+    var vZoom = Defaults.vZoom
+    
     var brightness: Double {
         get { return amiga.denise.brightness() }
         set { amiga.denise.setBrightness(newValue) }
@@ -101,6 +159,10 @@ class ApplicationPreferences {
     var saturation: Double {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
+    }
+    var palette: Int {
+        get { return Int(amiga.denise.palette()) }
+        set { amiga.denise.setPalette(Palette(newValue)) }
     }
     var blur: Int32 {
         get { return renderer.shaderOptions.blur }
@@ -166,66 +228,6 @@ class ApplicationPreferences {
         get { return renderer.shaderOptions.disalignmentV }
         set { renderer.shaderOptions.disalignmentV = newValue }
     }
-    
-    //
-    // Devices preferences
-    //
-    
-    var disconnectJoyKeys: Bool {
-        get { return kbController.disconnectJoyKeys }
-        set { kbController.disconnectJoyKeys = newValue }
-    }
-    var autofire: Bool {
-        get { return amiga.joystick1.autofire() }
-        set {
-            amiga.joystick1.setAutofire(newValue)
-            amiga.joystick2.setAutofire(newValue)
-        }
-    }
-    var autofireBullets: Int {
-        get { return amiga.joystick1.autofireBullets() }
-        set {
-            amiga.joystick1.setAutofireBullets(newValue)
-            amiga.joystick2.setAutofireBullets(newValue)
-        }
-    }
-    var autofireFrequency: Float {
-        get { return amiga.joystick1.autofireFrequency() }
-        set {
-            amiga.joystick1.setAutofireFrequency(newValue)
-            amiga.joystick2.setAutofireFrequency(newValue)
-        }
-    }
-    var keyMap0: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[0]?.keyMap }
-        set { gamePadManager.gamePads[0]?.keyMap = newValue }
-    }
-    var keyMap1: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[1]?.keyMap }
-        set { gamePadManager.gamePads[1]?.keyMap = newValue }
-    }
-    
-    init(with controller: MyController) {
-        
-        parent = controller
-    }
-}
-
-/* Document-level preferences.
- * Every emulator instance has its own object.
- */
-class EmulatorPreferences {
-    
-    var parent: MyController!
-    var amiga: AmigaProxy { return parent.amiga }
-    
-    //
-    // Rom preferences
-    //
-    
-    // Rom URLs
-    var romURL: URL = Defaults.rom
-    var extURL: URL = Defaults.ext
     
     init(with controller: MyController) {
         

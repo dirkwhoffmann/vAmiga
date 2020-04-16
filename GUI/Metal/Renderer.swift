@@ -15,7 +15,10 @@ class Renderer: NSObject, MTKViewDelegate {
     
     let mtkView: MTKView
     let device: MTLDevice
-    let controller: MyController
+    let parent: MyController
+    
+    var prefs: ApplicationPreferences { return parent.prefs }
+    var config: EmulatorPreferences { return parent.config }
     
     /* Number of drawn frames since power up
      * Used to determine the fps value shown in the emulator's bottom bar.
@@ -230,11 +233,13 @@ class Renderer: NSObject, MTKViewDelegate {
     var monitorAlpha: [AnimatedFloat] = []
     
     // Parameters determining the visible part of the texture
+    /*
     var hCenter = Defaults.hCenter
     var vCenter = Defaults.vCenter
     var hZoom = Defaults.hZoom
     var vZoom = Defaults.vZoom
-
+    */
+    
     // Animation variables for smooth texture zooming
     var cutoutX1 = AnimatedFloat.init()
     var cutoutY1 = AnimatedFloat.init()
@@ -243,26 +248,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
     // Part of the texture that is currently visible
     var textureRect = CGRect.init()
-        
-    // Currently selected texture enhancer
-    var enhancer = Defaults.enhancer {
-        didSet {
-            if upscaler >= enhancerGallery.count || enhancerGallery[upscaler] == nil {
-                track("Sorry, the selected texture enhancer is unavailable.")
-                enhancer = 0
-            }
-        }
-    }
-    
-    // Currently selected texture upscaler
-    var upscaler = Defaults.upscaler {
-        didSet {
-            if upscaler >= upscalerGallery.count || upscalerGallery[upscaler] == nil {
-                track("Sorry, the selected texture upscaler is unavailable.")
-                upscaler = 0
-            }
-        }
-    }
 
     // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
     var flickerToggle = 0
@@ -273,9 +258,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Is set to true when fullscreen mode is entered (usually enables the 2D renderer)
     var fullscreen = false
     
-    // If true, the 3D renderer is also used in fullscreen mode
-    var keepAspectRatio = Defaults.keepAspectRatio
-        
     //
     // Initializing
     //
@@ -284,7 +266,7 @@ class Renderer: NSObject, MTKViewDelegate {
         
         self.mtkView = view
         self.device = device
-        self.controller = controller
+        self.parent = controller
         super.init()
 
         textureRect = computeTextureRect()
@@ -348,15 +330,15 @@ class Renderer: NSObject, MTKViewDelegate {
 
         if requestLongFrame {
 
-            let buffer = controller.amiga.denise.stableLongFrame()
+            let buffer = parent.amiga.denise.stableLongFrame()
             updateTexture(bytes: buffer.data, longFrame: true)
 
             // If interlace mode is on, the next frame will be a short frame
-            if controller.amiga.agnus.interlaceMode() { requestLongFrame = false }
+            if parent.amiga.agnus.interlaceMode() { requestLongFrame = false }
             
         } else {
 
-            let buffer = controller.amiga.denise.stableShortFrame()
+            let buffer = parent.amiga.denise.stableShortFrame()
             updateTexture(bytes: buffer.data, longFrame: false)
 
             // The next frame will be a long frame
@@ -391,10 +373,10 @@ class Renderer: NSObject, MTKViewDelegate {
         let maxWidth = dw - aw
         let maxHeight = dh - ah
         
-        let width = (1 - hZoom) * maxWidth
-        let bw = aw + hCenter * (maxWidth - width)
-        let height = (1 - vZoom) * maxHeight
-        let bh = ah + vCenter * (maxHeight - height)
+        let width = (1 - config.hZoom) * maxWidth
+        let bw = aw + config.hCenter * (maxWidth - width)
+        let height = (1 - config.vZoom) * maxHeight
+        let bh = ah + config.vCenter * (maxHeight - height)
                 
         let texW = EmulatorTexture.width
         let texH = EmulatorTexture.height
@@ -419,37 +401,33 @@ class Renderer: NSObject, MTKViewDelegate {
     // Returns the compute kernel of the currently selected upscaler (first pass)
     func currentEnhancer() -> ComputeKernel {
 
-        assert(enhancer < enhancerGallery.count)
-        assert(enhancerGallery[0] != nil)
-
-        return enhancerGallery[enhancer]!
+        var nr = config.enhancer
+        if enhancerGallery.count <= nr || enhancerGallery[nr] == nil { nr = 0 }
+        return enhancerGallery[nr]!
     }
 
     // Returns the compute kernel of the currently selected upscaler (second pass)
     func currentUpscaler() -> ComputeKernel {
 
-        assert(upscaler < upscalerGallery.count)
-        assert(upscalerGallery[0] != nil)
-
-        return upscalerGallery[upscaler]!
+        var nr = config.upscaler
+        if upscalerGallery.count <= nr || upscalerGallery[nr] == nil { nr = 0 }
+        return upscalerGallery[nr]!
     }
 
     // Returns the compute kernel of the currently selected bloom filter
     func currentBloomFilter() -> ComputeKernel {
 
-        assert(shaderOptions.bloom < bloomFilterGallery.count)
-        assert(bloomFilterGallery[0] != nil)
-
-        return bloomFilterGallery[Int(shaderOptions.bloom)]!
+        var nr = Int(shaderOptions.bloom)
+        if bloomFilterGallery.count <= nr || bloomFilterGallery[nr] == nil { nr = 0 }
+        return bloomFilterGallery[nr]!
     }
 
     // Returns the compute kernel of the currently selected scanline filter
     func currentScanlineFilter() -> ComputeKernel {
 
-        assert(shaderOptions.scanlines < scanlineFilterGallery.count)
-        assert(scanlineFilterGallery[0] != nil)
-
-        return scanlineFilterGallery[Int(shaderOptions.scanlines)]!
+        var nr = Int(shaderOptions.scanlines)
+        if scanlineFilterGallery.count <= nr || scanlineFilterGallery[nr] == nil { nr = 0 }
+        return scanlineFilterGallery[nr]!
     }
 
     //
@@ -506,7 +484,7 @@ class Renderer: NSObject, MTKViewDelegate {
         fragmentUniforms.scanlineDistance = Int32(size.height / 256)
 
         // Set uniforms for the merge shader
-        if controller.amiga.agnus.interlaceMode() {
+        if parent.amiga.agnus.interlaceMode() {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
@@ -639,8 +617,8 @@ class Renderer: NSObject, MTKViewDelegate {
  
     func drawScene3D() {
 
-        let paused = controller.amiga.isPaused()
-        let poweredOff = controller.amiga.isPoweredOff()
+        let paused = parent.amiga.isPaused()
+        let poweredOff = parent.amiga.isPoweredOff()
         let renderBackground = poweredOff || fullscreen
         let renderForeground = alpha.current > 0.0
 
@@ -654,7 +632,7 @@ class Renderer: NSObject, MTKViewDelegate {
             
             // Update background texture
             if !fullscreen {
-                let buffer = controller.amiga.denise.noise()
+                let buffer = parent.amiga.denise.noise()
                 updateBgTexture(bytes: buffer!)
             }
 
@@ -771,7 +749,7 @@ class Renderer: NSObject, MTKViewDelegate {
         drawable = metalLayer.nextDrawable()
         if drawable != nil {
             updateTexture()
-            if fullscreen && !keepAspectRatio {
+            if fullscreen && !parent.prefs.keepAspectRatio {
                 drawScene2D()
             } else {
                 drawScene3D()

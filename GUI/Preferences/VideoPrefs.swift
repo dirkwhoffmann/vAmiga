@@ -13,7 +13,7 @@ extension PreferencesController {
 
         // Check for available enhancers
         let enhancers = parent.renderer.enhancerGallery
-        for i in 0 ... enhancers.count - 1 {
+        for i in 0 ..< enhancers.count {
             if let item = vidEnhancerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (enhancers[i] != nil)
             }
@@ -21,7 +21,7 @@ extension PreferencesController {
 
         // Check for available upscalers
         let upscalers = parent.renderer.upscalerGallery
-        for i in 0 ... upscalers.count - 1 {
+        for i in 0 ..< upscalers.count {
             if let item = vidUpscalerPopUp.menu?.item(withTag: i) {
                 item.isEnabled = (upscalers[i] != nil)
             }
@@ -36,12 +36,12 @@ extension PreferencesController {
         let renderer = parent.renderer!
 
         // Video
-        vidEnhancerPopUp.selectItem(withTag: renderer.enhancer)
-        vidUpscalerPopUp.selectItem(withTag: renderer.upscaler)
-        vidPalettePopUp.selectItem(withTag: prefs.palette)
-        vidBrightnessSlider.doubleValue = prefs.brightness
-        vidContrastSlider.doubleValue = prefs.contrast
-        vidSaturationSlider.doubleValue = prefs.saturation
+        vidEnhancerPopUp.selectItem(withTag: config.enhancer)
+        vidUpscalerPopUp.selectItem(withTag: config.upscaler)
+        vidPalettePopUp.selectItem(withTag: config.palette)
+        vidBrightnessSlider.doubleValue = config.brightness
+        vidContrastSlider.doubleValue = config.contrast
+        vidSaturationSlider.doubleValue = config.saturation
         
         // Effects
         let shaderOptions = renderer.shaderOptions
@@ -81,10 +81,10 @@ extension PreferencesController {
         vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
 
         // Geometry
-        vidHCenter.floatValue = parent.renderer.hCenter * 1000
-        vidVCenter.floatValue = parent.renderer.vCenter * 1000
-        vidHZoom.floatValue = parent.renderer.hZoom * 1000
-        vidVZoom.floatValue = parent.renderer.vZoom * 1000
+        vidHCenter.floatValue = config.hCenter * 1000
+        vidVCenter.floatValue = config.vCenter * 1000
+        vidHZoom.floatValue = config.hZoom * 1000
+        vidVZoom.floatValue = config.vZoom * 1000
   
         // OK Button
         vidOKButton.title = buttonLabel
@@ -96,25 +96,25 @@ extension PreferencesController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        prefs.palette = sender.selectedTag()
+        config.palette = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
-        prefs.brightness = sender.doubleValue
+        config.brightness = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
-        parent.prefs.contrast = sender.doubleValue
+        config.contrast = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
-        parent.prefs.saturation = sender.doubleValue
+        config.saturation = sender.doubleValue
         refresh()
     }
     
@@ -124,13 +124,13 @@ extension PreferencesController {
     
     @IBAction func vidEnhancerAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.enhancer = sender.selectedTag()
+        config.enhancer = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidUpscalerAction(_ sender: NSPopUpButton!) {
 
-        parent.renderer.upscaler = sender.selectedTag()
+        config.upscaler = sender.selectedTag()
         refresh()
     }
     
@@ -238,37 +238,29 @@ extension PreferencesController {
         
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
-        parent.renderer.hCenter = sender.floatValue / 1000
-        parent.renderer.updateTextureRect()
-        track("vidHCenterAction: \(parent.renderer.hCenter)")
-        
+        config.hCenter = sender.floatValue / 1000
+        renderer.updateTextureRect()
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
-        parent.renderer.vCenter = sender.floatValue / 1000
-        parent.renderer.updateTextureRect()
-        track("vidVCenterAction: \(parent.renderer.vCenter)")
-        
+        config.vCenter = sender.floatValue / 1000
+        renderer.updateTextureRect()
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
-        parent.renderer.hZoom = sender.floatValue / 1000
-        parent.renderer.updateTextureRect()
-        track("vidHZoomAction: \(parent.renderer.hZoom)")
-        
+        config.hZoom = sender.floatValue / 1000
+        renderer.updateTextureRect()
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
         
-        parent.renderer.vZoom = sender.floatValue / 1000
-        parent.renderer.updateTextureRect()
-        track("vidVZoomAction: \(parent.renderer.vZoom)")
-        
+        config.vZoom = sender.floatValue / 1000
+        renderer.updateTextureRect()
         refresh()
     }
     

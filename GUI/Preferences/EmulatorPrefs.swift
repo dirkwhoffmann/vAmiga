@@ -13,8 +13,6 @@ extension PreferencesController {
         
         track()
 
-        let renderer = parent.renderer!
-
         // Drive
         emuWarpLoad.state = prefs.warpLoad ? .on : .off
         emuDriveSounds.state = prefs.driveSounds ? .on : .off
@@ -31,8 +29,8 @@ extension PreferencesController {
         emuDriveBlankDiskFormat.selectItem(withTag: prefs.driveBlankDiskFormatIntValue)
 
         // Fullscreen
-        emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
-        emuExitOnEscButton.state = parent.kbController.exitOnEsc ? .on : .off
+        emuAspectRatioButton.state = prefs.keepAspectRatio ? .on : .off
+        emuExitOnEscButton.state = prefs.exitOnEsc ? .on : .off
         
         // Snapshots and Screenshots
         emuAutoSnapshots.state = prefs.autoSnapshots ? .on : .off
@@ -112,13 +110,13 @@ extension PreferencesController {
     
     @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
         
-        parent.renderer.keepAspectRatio = (sender.state == .on)
+        prefs.keepAspectRatio = (sender.state == .on)
         refresh()
     }
 
     @IBAction func emuExitOnEscAction(_ sender: NSButton!) {
         
-        parent.kbController.exitOnEsc = (sender.state == .on)
+        prefs.exitOnEsc = (sender.state == .on)
         refresh()
     }
 

@@ -12,17 +12,18 @@ import Carbon.HIToolbox
 // Keyboard event handler
 class KBController: NSObject {
 
-    // The window controller of the owning emulator instance
     var parent: MyController!
-
+    var renderer: Renderer { return parent.renderer }
+    var prefs: ApplicationPreferences { return parent.prefs }
+    
     // The Amiga proxy of the owning emulator instance
      var amiga: AmigaProxy!
 
     // Indicates if the joystick emulation keys should trigger key events.
-    var disconnectJoyKeys = Defaults.disconnectJoyKeys
+    // var disconnectJoyKeys = Defaults.disconnectJoyKeys
     
     // Indicates if the pressing the ESC key should exit fullscreen mode.
-    var exitOnEsc = Defaults.exitOnEsc
+    // var exitOnEsc = Defaults.exitOnEsc
     
     // Remembers the currently pressed key modifiers
     var leftShift   = false, rightShift   = false
@@ -66,7 +67,7 @@ class KBController: NSObject {
         }
 
         // Exit fullscreen mode if escape key is pressed
-        if event.keyCode == kVK_Escape && parent.renderer.fullscreen && exitOnEsc {
+        if event.keyCode == kVK_Escape && renderer.fullscreen && prefs.exitOnEsc {
             parent.window!.toggleFullScreen(nil)
         }
         
@@ -131,7 +132,7 @@ class KBController: NSObject {
     func keyDown(with macKey: MacKey) {
         
         // Check if this key is used for joystick emulation
-        if parent.gamePadManager.keyDown(with: macKey) && disconnectJoyKeys {
+        if parent.gamePadManager.keyDown(with: macKey) && prefs.disconnectJoyKeys {
             return
         }
         
@@ -141,7 +142,7 @@ class KBController: NSObject {
     func keyUp(with macKey: MacKey) {
 
         // Check if this key is used for joystick emulation
-        if parent.gamePadManager.keyUp(with: macKey) && disconnectJoyKeys {
+        if parent.gamePadManager.keyUp(with: macKey) && prefs.disconnectJoyKeys {
             return
         }
         

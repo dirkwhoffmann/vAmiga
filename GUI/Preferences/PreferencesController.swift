@@ -10,7 +10,7 @@
 class PreferencesController: DialogController {
 
     var prefs: ApplicationPreferences { return parent.prefs }
-    var config: EmulatorPreferences { return parent.config }
+    var renderer: Renderer { return prefs.renderer }
     
     @IBOutlet weak var prefTabView: NSTabView!
         

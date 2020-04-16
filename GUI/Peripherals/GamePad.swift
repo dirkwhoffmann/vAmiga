@@ -16,6 +16,9 @@ import IOKit.hid
 
 class GamePad {
 
+    var manager: GamePadManager
+    var prefs: ApplicationPreferences { return manager.controller.prefs }
+
     // Keymap of the managed device (only used for keyboard emulated devices)
     var keyMap: [MacKey: UInt32]?
     
@@ -50,9 +53,6 @@ class GamePad {
     var lThumbYUsageID = kHIDUsage_GD_Y
     var rThumbXUsageID = kHIDUsage_GD_Rz
     var rThumbYUsageID = kHIDUsage_GD_Z
-
-    // Reference to the GamePadManager
-    var manager: GamePadManager
     
     init(manager: GamePadManager,
          vendorID: Int, productID: Int, locationID: Int) {

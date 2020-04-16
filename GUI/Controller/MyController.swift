@@ -38,13 +38,13 @@ class MyController: NSWindowController, MessageReceiver {
     var snapshotBrowser: SnapshotDialog?
     var screenshotBrowser: ScreenshotDialog?
 
-    // Hardware configuration of this emulator instance
-    var config: EmulatorPreferences!
-
     // Preferences
     // MOVE TO APPLICATION DELEGATE LATER. KEEP A COMPUTED VARIABLE HERE
     var prefs: ApplicationPreferences!
 
+    // Emulator configuration
+    var config: EmulatorPreferences!
+    
     // Preferences controller
     var preferencesController: PreferencesController?
 
@@ -97,7 +97,11 @@ class MyController: NSWindowController, MessageReceiver {
     // Warp mode
     var warpMode = WarpMode.auto { didSet { updateWarp() } }
     
-    // 
+    // Rom URLs
+    // var romURL: URL = Defaults.rom
+    // var extURL: URL = Defaults.ext
+    
+    //
     // Timers
     //
         
@@ -248,8 +252,8 @@ extension MyController {
 
         track()
         
-        config = EmulatorPreferences.init(with: self)
         prefs = ApplicationPreferences.init(with: self)
+        config = EmulatorPreferences.init(with: self)
         
         // Create audio engine
         macAudio = MacAudio.init(with: self)

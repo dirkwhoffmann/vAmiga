@@ -7,19 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-//! @brief   Holds and manages an array of GamePad objects
-/*! @details Up to five devices are managed. The first three are always present
- *           and represent two keyset and an analog mouse. All other objects
- *           are dynamically added when a USB joystick or game pad is plugged in.
+/* Holds and manages an array of GamePad objects
+ * Up to five devices are managed. The first three are always present and
+ * represent two keyset and an analog mouse. All other objects are dynamically
+ * added when a USB joystick or game pad is plugged in.
  */
-class GamePadManager: NSObject {
+class GamePadManager {
     
     // private let inputLock = NSLock()
     // Such a thing is used here: TODO: Check if we need this
     // https://github.com/joekarl/swift_handmade_hero/blob/master/Handmade%20Hero%20OSX/Handmade%20Hero%20OSX/InputManager.swift
     
     // Reference to the the controller
-    private var controller: MyController!
+    var controller: MyController!
     
     // Reference to the HID manager
     private var hidManager: IOHIDManager
@@ -29,10 +29,10 @@ class GamePadManager: NSObject {
      */
     var gamePads: [Int: GamePad] = [:]
 
-    override init() {
+    init() {
 
         hidManager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
-        super.init()
+        // super.init()
     }
     
     convenience init?(controller: MyController) {
