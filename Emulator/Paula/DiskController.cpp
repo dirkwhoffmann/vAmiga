@@ -22,18 +22,23 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+DiskController::_finalize()
+{
+    // Finish any ongoing disk change activity
+    debug("Checking for ongoing disk change\n");
+    serviceDiskChangeEvent();
+}
+
+void
 DiskController::_reset()
 {
     RESET_SNAPSHOT_ITEMS
-
+    
     prb = 0xFF;
     selected = -1;
     dsksync = 0x4489;
-
-    if (diskToInsert) {
-        free(diskToInsert);
-        diskToInsert = NULL;
-    }
+    
+    assert(diskToInsert == NULL);
 }
 
 void
@@ -422,26 +427,29 @@ DiskController::serviceDiskEvent()
 }
 
 void
-DiskController::serviceDiskChangeEvent(EventID id, int driveNr)
+DiskController::serviceDiskChangeEvent()
 {
-    assert(driveNr >= 0 && driveNr <= 3);
+    if (agnus.slot[DCH_SLOT].id == EVENT_NONE) return;
+    
+    int n = (int)agnus.slot[DCH_SLOT].data;
+    assert(n >= 0 && n <= 3);
 
-    switch (id) {
+    switch (agnus.slot[DCH_SLOT].id) {
 
         case DCH_INSERT:
 
-            debug(DSK_DEBUG, "DCH_INSERT (df%d)\n", driveNr);
+            debug(DSK_DEBUG, "DCH_INSERT (df%d)\n", n);
 
             assert(diskToInsert != NULL);
-            df[driveNr]->insertDisk(diskToInsert);
+            df[n]->insertDisk(diskToInsert);
             diskToInsert = NULL;
             break;
 
         case DCH_EJECT:
 
-            debug(DSK_DEBUG, "DCH_EJECT (df%d)\n", driveNr);
+            debug(DSK_DEBUG, "DCH_EJECT (df%d)\n", n);
 
-            df[driveNr]->ejectDisk();
+            df[n]->ejectDisk();
             break;
 
         default:

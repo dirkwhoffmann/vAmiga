@@ -482,11 +482,29 @@ Amiga::prefix()
     if (agnus.copper.servicing) {
         fprintf(stderr, "[%06X] ", agnus.copper.getCopPC());
     }
+}
 
-    /*
-    if (getDescription())
-        fprintf(stderr, "%s: ", getDescription());
-    */
+void
+Amiga::_initialize()
+{
+}
+
+void
+Amiga::powerOn()
+{
+    if (readyToPowerOn() == ERR_OK) HardwareComponent::powerOn();
+}
+
+void
+Amiga::powerOff()
+{
+    HardwareComponent::powerOff();
+}
+
+void
+Amiga::run()
+{
+    if (readyToPowerOn() == ERR_OK) HardwareComponent::run();
 }
 
 void
@@ -495,6 +513,9 @@ Amiga::reset()
     suspend();
 
     assert(!isRunning());
+    
+    // Ask all components to finish ongoing activities
+    finalize();
     
     // Execute the standard reset routine
     HardwareComponent::reset();
@@ -506,18 +527,6 @@ Amiga::reset()
     putMessage(MSG_RESET);
 
     resume();
-}
-
-void
-Amiga::_initialize()
-{
- 
-}
-
-void
-Amiga::powerOn()
-{
-    if (readyToPowerOn() == ERR_OK) HardwareComponent::powerOn();
 }
 
 void
@@ -560,12 +569,6 @@ Amiga::_powerOff()
     inspect();
     
     putMessage(MSG_POWER_OFF);
-}
-
-void
-Amiga::run()
-{
-    if (readyToPowerOn() == ERR_OK) HardwareComponent::run();
 }
 
 void

@@ -33,6 +33,18 @@ HardwareComponent::initialize()
 }
 
 void
+HardwareComponent::finalize()
+{
+    // Finalize all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->finalize();
+    }
+    
+    // Finalize this component
+    _finalize();
+}
+
+void
 HardwareComponent::powerOn()
 {
     if (!power) {

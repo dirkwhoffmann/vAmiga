@@ -78,6 +78,14 @@ public:
     void initialize();
     virtual void _initialize() { };
     
+    /* Terminates ongoing activites in the component and it's sub-component.
+     * This function is called when the Amiga top level object is going to be
+     * reset. It gives each component the chance to clean up its current state
+     * before the actual reset happens.
+     */
+    void finalize();
+    virtual void _finalize() { };
+    
     /* There are several functions for querying and changing state:
      *
      *          -----------------------------------------------
@@ -121,7 +129,7 @@ public:
      * paused    | off       | _powerOff() on each subcomponent
      * running   | off       | pause(), _powerOff() on each subcomponent
      */
-    void powerOff();
+    virtual void powerOff();
     virtual void _powerOff() { }
     
     /* run() puts the component in 'running' state.
@@ -146,13 +154,12 @@ public:
     virtual void pause();
     virtual void _pause() { };
     
-    
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its subcomponents.
      */
     virtual void reset();
     virtual void _reset() = 0;
-    
+
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
      * elements. This happens, e.g., when a snapshot file was loaded.

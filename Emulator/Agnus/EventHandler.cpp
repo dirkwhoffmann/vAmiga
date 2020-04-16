@@ -522,7 +522,7 @@ Agnus::executeEventsUntil(Cycle cycle) {
             paula.diskController.serviceDiskEvent();
         }
         if (isDue<DCH_SLOT>(cycle)) {
-            paula.diskController.serviceDiskChangeEvent(slot[DCH_SLOT].id, (int)slot[DCH_SLOT].data);
+            paula.diskController.serviceDiskChangeEvent();
         }
         if (isDue<VBL_SLOT>(cycle)) {
             serviceVblEvent();

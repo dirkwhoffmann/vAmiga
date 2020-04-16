@@ -125,6 +125,7 @@ public:
     
 private:
     
+    void _finalize() override;
     void _reset() override;
     void _ping() override;
     void _inspect() override;
@@ -233,7 +234,7 @@ public:
     void serviceDiskEvent();
 
     // Services an event in the disk change slot
-    void serviceDiskChangeEvent(EventID id, int driveNr);
+    void serviceDiskChangeEvent();
 
     // Performs periodic actions for each frame
     void vsyncHandler();

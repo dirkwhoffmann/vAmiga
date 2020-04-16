@@ -223,10 +223,11 @@ public:
 public:
 
     void prefix() override;
-    void reset() override;
 
     void powerOn() override;
+    void powerOff() override;
     void run() override;
+    void reset() override;
 
 private:
 
