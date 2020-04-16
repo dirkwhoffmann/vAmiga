@@ -11,16 +11,14 @@ import AVFoundation
 
 public class MacAudio: NSObject {
 
-    // References
     var parent: MyController!
     var paula: PaulaProxy!
+    var prefs: ApplicationPreferences { return parent.prefs }
+
     var audiounit: AUAudioUnit!
     
     // Indicates if the this emulator instance owns the audio unit
     var isRunning = false
-
-    // Reference storage used by playSound()
-    // var audioPlayers: [AVAudioPlayer] = []
     
     // Cached audio players
     var audioPlayers: [String: [AVAudioPlayer]] = [:]
@@ -180,7 +178,7 @@ public class MacAudio: NSObject {
         for player in audioPlayers[name]! where !player.isPlaying {
             
             player.volume = volume
-            player.pan = Float(parent.driveSoundPan)
+            player.pan = Float(prefs.driveSoundPan)
             player.play()
             return
         }

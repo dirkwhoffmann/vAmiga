@@ -25,7 +25,7 @@ extension MyController {
                 device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
 
         amiga.controlPort1.connect(cpd)
-        inputDevice1 = device
+        prefs.inputDevice1 = device
         UserDefaults.standard.set(device, forKey: Keys.inputDevice1)
     }
 
@@ -36,7 +36,7 @@ extension MyController {
                 device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
 
         amiga.controlPort2.connect(cpd)
-        inputDevice2 = device
+        prefs.inputDevice2 = device
         UserDefaults.standard.set(device, forKey: Keys.inputDevice2)
     }
 
@@ -48,14 +48,14 @@ extension MyController {
     func setPort1(_ value: Int) {
 
         let newDevice1 = value
-        var newDevice2 = inputDevice2
+        var newDevice2 = prefs.inputDevice2
 
         // Avoid double mappings
         if newDevice1 == newDevice2 { newDevice2 = InputDevice.none }
 
         // Update ports
-        if newDevice1 != inputDevice1 { connectPort1(device: newDevice1) }
-        if newDevice2 != inputDevice2 { connectPort2(device: newDevice2) }
+        if newDevice1 != prefs.inputDevice1 { connectPort1(device: newDevice1) }
+        if newDevice2 != prefs.inputDevice2 { connectPort2(device: newDevice2) }
 
         toolbar.validateVisibleItems()
     }
@@ -67,15 +67,15 @@ extension MyController {
     
     func setPort2(_ value: Int) {
         
-        var newDevice1 = inputDevice1
+        var newDevice1 = prefs.inputDevice1
         let newDevice2 = value
 
         // Avoid double mappings
         if newDevice1 == newDevice2 { newDevice1 = InputDevice.none }
 
         // Update ports
-        if newDevice1 != inputDevice1 { connectPort1(device: newDevice1) }
-        if newDevice2 != inputDevice2 { connectPort2(device: newDevice2) }
+        if newDevice1 != prefs.inputDevice1 { connectPort1(device: newDevice1) }
+        if newDevice2 != prefs.inputDevice2 { connectPort2(device: newDevice2) }
 
         toolbar.validateVisibleItems()
     }

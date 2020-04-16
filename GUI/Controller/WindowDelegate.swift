@@ -17,7 +17,7 @@ extension MyController: NSWindowDelegate {
         myAppDelegate.windowDidBecomeMain(window)
         
         // Start emulator if it was only paused while in background
-        if pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
+        if prefs.pauseInBackground && prefs.pauseInBackgroundSavedState { amiga.run() }
 
         // Register for mouse move events
         window.acceptsMouseMovedEvents = true
@@ -37,8 +37,8 @@ extension MyController: NSWindowDelegate {
         // track()
         
         // Stop emulator if it is configured to pause in background
-        pauseInBackgroundSavedState = amiga.isRunning()
-        if pauseInBackground { amiga.pause() }
+        prefs.pauseInBackgroundSavedState = amiga.isRunning()
+        if prefs.pauseInBackground { amiga.pause() }
     }
     
     public func windowWillClose(_ notification: Notification) {

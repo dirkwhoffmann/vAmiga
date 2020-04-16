@@ -16,38 +16,38 @@ extension PreferencesController {
         let renderer = parent.renderer!
 
         // Drive
-        emuWarpLoad.state = parent.warpLoad ? .on : .off
-        emuDriveSounds.state = parent.driveSounds ? .on : .off
-        emuDriveSoundPan.selectItem(withTag: Int(parent.driveSoundPan))
-        emuDriveInsertSound.state = parent.driveInsertSound ? .on : .off
-        emuDriveEjectSound.state = parent.driveEjectSound ? .on : .off
-        emuDriveHeadSound.state = parent.driveHeadSound ? .on : .off
-        emuDrivePollSound.state = parent.drivePollSound ? .on : .off
-        emuDriveSoundPan.isEnabled = parent.driveSounds
-        emuDriveInsertSound.isEnabled = parent.driveSounds
-        emuDriveEjectSound.isEnabled = parent.driveSounds
-        emuDriveHeadSound.isEnabled = parent.driveSounds
-        emuDrivePollSound.isEnabled = parent.driveSounds
-        emuDriveBlankDiskFormat.selectItem(withTag: parent.driveBlankDiskFormatIntValue)
+        emuWarpLoad.state = prefs.warpLoad ? .on : .off
+        emuDriveSounds.state = prefs.driveSounds ? .on : .off
+        emuDriveSoundPan.selectItem(withTag: Int(prefs.driveSoundPan))
+        emuDriveInsertSound.state = prefs.driveInsertSound ? .on : .off
+        emuDriveEjectSound.state = prefs.driveEjectSound ? .on : .off
+        emuDriveHeadSound.state = prefs.driveHeadSound ? .on : .off
+        emuDrivePollSound.state = prefs.drivePollSound ? .on : .off
+        emuDriveSoundPan.isEnabled = prefs.driveSounds
+        emuDriveInsertSound.isEnabled = prefs.driveSounds
+        emuDriveEjectSound.isEnabled = prefs.driveSounds
+        emuDriveHeadSound.isEnabled = prefs.driveSounds
+        emuDrivePollSound.isEnabled = prefs.driveSounds
+        emuDriveBlankDiskFormat.selectItem(withTag: prefs.driveBlankDiskFormatIntValue)
 
         // Fullscreen
         emuAspectRatioButton.state = renderer.keepAspectRatio ? .on : .off
         emuExitOnEscButton.state = parent.kbController.exitOnEsc ? .on : .off
         
         // Snapshots and Screenshots
-        emuAutoSnapshots.state = parent.autoSnapshots ? .on : .off
-        emuSnapshotInterval.integerValue = parent.snapshotInterval
-        emuSnapshotInterval.isEnabled = parent.autoSnapshots
-        emuAutoScreenshots.state = parent.autoScreenshots ? .on : .off
-        emuScreenshotInterval.integerValue = parent.screenshotInterval
-        emuScreenshotInterval.isEnabled = parent.autoScreenshots
-        emuScreenshotSourcePopup.selectItem(withTag: parent.screenshotSource)
-        emuScreenshotTargetPopup.selectItem(withTag: parent.screenshotTargetIntValue)
+        emuAutoSnapshots.state = prefs.autoSnapshots ? .on : .off
+        emuSnapshotInterval.integerValue = prefs.snapshotInterval
+        emuSnapshotInterval.isEnabled = prefs.autoSnapshots
+        emuAutoScreenshots.state = prefs.autoScreenshots ? .on : .off
+        emuScreenshotInterval.integerValue = prefs.screenshotInterval
+        emuScreenshotInterval.isEnabled = prefs.autoScreenshots
+        emuScreenshotSourcePopup.selectItem(withTag: prefs.screenshotSource)
+        emuScreenshotTargetPopup.selectItem(withTag: prefs.screenshotTargetIntValue)
         
         // Miscellaneous
-        emuPauseInBackground.state = parent.pauseInBackground ? .on : .off
-        emuCloseWithoutAskingButton.state = parent.closeWithoutAsking ? .on : .off
-        emuEjectWithoutAskingButton.state = parent.ejectWithoutAsking ? .on : .off
+        emuPauseInBackground.state = prefs.pauseInBackground ? .on : .off
+        emuCloseWithoutAskingButton.state = prefs.closeWithoutAsking ? .on : .off
+        emuEjectWithoutAskingButton.state = prefs.ejectWithoutAsking ? .on : .off
 
         // OK Button
         emuOKButton.title = buttonLabel
@@ -59,53 +59,50 @@ extension PreferencesController {
     
     @IBAction func emuWarpLoadAction(_ sender: NSButton!) {
         
-        parent.warpLoad = sender.state == .on
+        prefs.warpLoad = sender.state == .on
         refresh()
     }
     
     @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
         
-        parent.driveSounds = sender.state == .on
+        prefs.driveSounds = sender.state == .on
         refresh()
     }
 
     @IBAction func emuDriveSoundPanAction(_ sender: NSPopUpButton!) {
         
-        track("tag = \(sender.selectedTag())")
-        parent.driveSoundPan = Double(sender.selectedTag())
+        prefs.driveSoundPan = Double(sender.selectedTag())
         refresh()
     }
 
     @IBAction func emuDriveInsertSoundAction(_ sender: NSButton!) {
         
-        parent.driveInsertSound = sender.state == .on
-        track("value = \(parent.driveInsertSound)")
+        prefs.driveInsertSound = sender.state == .on
         refresh()
     }
 
     @IBAction func emuDriveEjectSoundAction(_ sender: NSButton!) {
         
-        parent.driveEjectSound = sender.state == .on
-        track("value = \(parent.driveEjectSound)")
+        prefs.driveEjectSound = sender.state == .on
         refresh()
     }
 
     @IBAction func emuDriveHeadSoundAction(_ sender: NSButton!) {
         
-        parent.driveHeadSound = sender.state == .on
+        prefs.driveHeadSound = sender.state == .on
         refresh()
     }
 
     @IBAction func emuDrivePollSoundAction(_ sender: NSButton!) {
         
-        parent.drivePollSound = sender.state == .on
+        prefs.drivePollSound = sender.state == .on
         refresh()
     }
 
     @IBAction func emuBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        parent.driveBlankDiskFormat = FileSystemType(rawValue: tag)
+        prefs.driveBlankDiskFormat = FileSystemType(rawValue: tag)
         refresh()
     }
 
@@ -131,41 +128,41 @@ extension PreferencesController {
     
     @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
         
-        parent.autoSnapshots = sender.state == .on
+        prefs.autoSnapshots = sender.state == .on
         refresh()
     }
     
     @IBAction func emuSnapshotIntervalAction(_ sender: NSTextField!) {
         
         if sender.integerValue > 0 {
-            parent.snapshotInterval = sender.integerValue
+            prefs.snapshotInterval = sender.integerValue
         }
         refresh()
     }
     
     @IBAction func emuAutoScreenshotAction(_ sender: NSButton!) {
         
-        parent.autoScreenshots = sender.state == .on
+        prefs.autoScreenshots = sender.state == .on
         refresh()
     }
     
     @IBAction func emuScreenshotIntervalAction(_ sender: NSTextField!) {
         
         if sender.integerValue > 0 {
-            parent.screenshotInterval = sender.integerValue
+            prefs.screenshotInterval = sender.integerValue
         }
         refresh()
     }
     
     @IBAction func emuScreenshotSourceAction(_ sender: NSPopUpButton!) {
         
-        parent.screenshotSource = sender.selectedTag()
+        prefs.screenshotSource = sender.selectedTag()
         refresh()
     }
     
     @IBAction func emuScreenshotTargetAction(_ sender: NSPopUpButton!) {
         
-        parent.screenshotTargetIntValue = sender.selectedTag()
+        prefs.screenshotTargetIntValue = sender.selectedTag()
         refresh()
     }
 
@@ -175,20 +172,20 @@ extension PreferencesController {
     
     @IBAction func emuPauseInBackgroundAction(_ sender: NSButton!) {
         
-        parent.pauseInBackground = (sender.state == .on)
+        prefs.pauseInBackground = (sender.state == .on)
         refresh()
     }
     
     @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
         
-        parent.closeWithoutAsking = (sender.state == .on)
+        prefs.closeWithoutAsking = (sender.state == .on)
         parent.needsSaving = amiga.isRunning()
         refresh()
     }
     
     @IBAction func emuEjectWithoutAskingAction(_ sender: NSButton!) {
         
-        parent.ejectWithoutAsking = (sender.state == .on)
+        prefs.ejectWithoutAsking = (sender.state == .on)
         refresh()
     }
     

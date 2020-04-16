@@ -92,7 +92,7 @@ extension PreferencesController {
 
     @IBAction func romDeleteAction(_ sender: NSButton!) {
 
-        parent.romURL = URL(fileURLWithPath: "/")
+        config.romURL = URL(fileURLWithPath: "/")
         amiga.mem.deleteRom()
         
         refresh()
@@ -102,7 +102,7 @@ extension PreferencesController {
 
         track()
 
-        parent.extURL = URL(fileURLWithPath: "/")
+        config.extURL = URL(fileURLWithPath: "/")
         amiga.mem.deleteExt()
 
         refresh()
@@ -127,8 +127,8 @@ extension PreferencesController {
         let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")?.data
         let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")?.data
 
-        parent.romURL = URL(fileURLWithPath: "")
-        parent.extURL = URL(fileURLWithPath: "")
+        config.romURL = URL(fileURLWithPath: "")
+        config.extURL = URL(fileURLWithPath: "")
 
         amiga.mem.loadRom(fromBuffer: arosRom)
         amiga.mem.loadExt(fromBuffer: arosExt)

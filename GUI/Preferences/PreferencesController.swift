@@ -9,8 +9,11 @@
 
 class PreferencesController: DialogController {
 
-    @IBOutlet weak var prefTabView: NSTabView!
+    var prefs: ApplicationPreferences { return parent.prefs }
+    var config: EmulatorPreferences { return parent.config }
     
+    @IBOutlet weak var prefTabView: NSTabView!
+        
     //
     // Rom preferences
     //

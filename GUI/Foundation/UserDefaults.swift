@@ -59,7 +59,7 @@ extension MyController {
         track()
         
         registerGeneralUserDefaults()
-        registerRomUserDefaults()
+        EmulatorPreferences.registerRomUserDefaults()
         registerDevicesUserDefaults()
         registerVideoUserDefaults()
         registerEmulatorUserDefaults()
@@ -74,7 +74,7 @@ extension MyController {
         amiga.suspend()
         
         resetGeneralUserDefaults()
-        resetRomUserDefaults()
+        config.resetRomUserDefaults()
         resetDevicesUserDefaults()
         resetVideoUserDefaults()
         resetEmulatorUserDefaults()
@@ -91,7 +91,7 @@ extension MyController {
         amiga.suspend()
         
         loadGeneralUserDefaults()
-        loadRomUserDefaults()
+        config.loadRomUserDefaults()
         loadDevicesUserDefaults()
         loadVideoUserDefaults()
         loadEmulatorUserDefaults()
@@ -122,7 +122,7 @@ extension MyController {
         track()
         
         saveGeneralUserDefaults()
-        saveRomUserDefaults()
+        config.saveRomUserDefaults()
         saveDevicesUserDefaults()
         saveVideoUserDefaults()
         saveEmulatorUserDefaults()
@@ -206,8 +206,8 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(inputDevice1, forKey: Keys.inputDevice1)
-        defaults.set(inputDevice2, forKey: Keys.inputDevice2)
+        defaults.set(prefs.inputDevice1, forKey: Keys.inputDevice1)
+        defaults.set(prefs.inputDevice2, forKey: Keys.inputDevice2)
     }
 }
 
@@ -229,7 +229,7 @@ extension Defaults {
     static let extStart          = 0xE0
 }
 
-extension MyController {
+extension EmulatorPreferences {
     
     static func registerRomUserDefaults() {
         
@@ -559,10 +559,10 @@ extension MyController {
         
         renderer.enhancer = defaults.integer(forKey: Keys.enhancer)
         renderer.upscaler = defaults.integer(forKey: Keys.upscaler)
-        palette = defaults.integer(forKey: Keys.palette)
-        brightness = defaults.double(forKey: Keys.brightness)
-        contrast = defaults.double(forKey: Keys.contrast)
-        saturation = defaults.double(forKey: Keys.saturation)
+        prefs.palette = defaults.integer(forKey: Keys.palette)
+        prefs.brightness = defaults.double(forKey: Keys.brightness)
+        prefs.contrast = defaults.double(forKey: Keys.contrast)
+        prefs.saturation = defaults.double(forKey: Keys.saturation)
         renderer.hCenter = defaults.float(forKey: Keys.hCenter)
         renderer.vCenter = defaults.float(forKey: Keys.vCenter)
         renderer.hZoom = defaults.float(forKey: Keys.hZoom)
@@ -582,10 +582,10 @@ extension MyController {
         
         defaults.set(renderer.enhancer, forKey: Keys.enhancer)
         defaults.set(renderer.upscaler, forKey: Keys.upscaler)
-        defaults.set(palette, forKey: Keys.palette)
-        defaults.set(brightness, forKey: Keys.brightness)
-        defaults.set(contrast, forKey: Keys.contrast)
-        defaults.set(saturation, forKey: Keys.saturation)
+        defaults.set(prefs.palette, forKey: Keys.palette)
+        defaults.set(prefs.brightness, forKey: Keys.brightness)
+        defaults.set(prefs.contrast, forKey: Keys.contrast)
+        defaults.set(prefs.saturation, forKey: Keys.saturation)
         defaults.set(renderer.hCenter, forKey: Keys.hCenter)
         defaults.set(renderer.vCenter, forKey: Keys.vCenter)
         defaults.set(renderer.hZoom, forKey: Keys.hZoom)
@@ -737,28 +737,28 @@ extension MyController {
         
         amiga.suspend()
         
-        warpLoad = defaults.bool(forKey: Keys.warpLoad)
-        driveSounds = defaults.bool(forKey: Keys.driveSounds)
-        driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
-        driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
-        driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
-        driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
-        drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
-        driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
+        prefs.warpLoad = defaults.bool(forKey: Keys.warpLoad)
+        prefs.driveSounds = defaults.bool(forKey: Keys.driveSounds)
+        prefs.driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
+        prefs.driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
+        prefs.driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
+        prefs.driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
+        prefs.drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
+        prefs.driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
-        autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
-        snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
-        autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
-        screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
-        screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
-        screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
+        prefs.autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
+        prefs.snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
+        prefs.autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
+        prefs.screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
+        prefs.screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
+        prefs.screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
         renderer.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         kbController.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
         
-        pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
-        ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
+        prefs.pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
+        prefs.closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
+        prefs.ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
         
         amiga.resume()
     }
@@ -767,28 +767,28 @@ extension MyController {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(warpLoad, forKey: Keys.warpLoad)
-        defaults.set(driveSounds, forKey: Keys.driveSounds)
-        defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
-        defaults.set(driveInsertSound, forKey: Keys.driveInsertSound)
-        defaults.set(driveEjectSound, forKey: Keys.driveEjectSound)
-        defaults.set(driveHeadSound, forKey: Keys.driveHeadSound)
-        defaults.set(drivePollSound, forKey: Keys.drivePollSound)
-        defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
+        defaults.set(prefs.warpLoad, forKey: Keys.warpLoad)
+        defaults.set(prefs.driveSounds, forKey: Keys.driveSounds)
+        defaults.set(prefs.driveSoundPan, forKey: Keys.driveSoundPan)
+        defaults.set(prefs.driveInsertSound, forKey: Keys.driveInsertSound)
+        defaults.set(prefs.driveEjectSound, forKey: Keys.driveEjectSound)
+        defaults.set(prefs.driveHeadSound, forKey: Keys.driveHeadSound)
+        defaults.set(prefs.drivePollSound, forKey: Keys.drivePollSound)
+        defaults.set(prefs.driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
         
-        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
-        defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
-        defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
-        defaults.set(screenshotSource, forKey: Keys.screenshotSource)
-        defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
+        defaults.set(prefs.autoSnapshots, forKey: Keys.autoSnapshots)
+        defaults.set(prefs.snapshotInterval, forKey: Keys.autoSnapshotInterval)
+        defaults.set(prefs.autoScreenshots, forKey: Keys.autoScreenshots)
+        defaults.set(prefs.screenshotInterval, forKey: Keys.autoScreenshotInterval)
+        defaults.set(prefs.screenshotSource, forKey: Keys.screenshotSource)
+        defaults.set(prefs.screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
         defaults.set(renderer.keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(kbController.exitOnEsc, forKey: Keys.exitOnEsc)
+        defaults.set(prefs.kbController.exitOnEsc, forKey: Keys.exitOnEsc)
                 
-        defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
-        defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
+        defaults.set(prefs.pauseInBackground, forKey: Keys.pauseInBackground)
+        defaults.set(prefs.closeWithoutAsking, forKey: Keys.closeWithoutAsking)
+        defaults.set(prefs.ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
     }
 }
 

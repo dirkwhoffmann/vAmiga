@@ -38,10 +38,10 @@ extension PreferencesController {
         // Video
         vidEnhancerPopUp.selectItem(withTag: renderer.enhancer)
         vidUpscalerPopUp.selectItem(withTag: renderer.upscaler)
-        vidPalettePopUp.selectItem(withTag: parent.palette)
-        vidBrightnessSlider.doubleValue = parent.brightness
-        vidContrastSlider.doubleValue = parent.contrast
-        vidSaturationSlider.doubleValue = parent.saturation
+        vidPalettePopUp.selectItem(withTag: prefs.palette)
+        vidBrightnessSlider.doubleValue = prefs.brightness
+        vidContrastSlider.doubleValue = prefs.contrast
+        vidSaturationSlider.doubleValue = prefs.saturation
         
         // Effects
         let shaderOptions = renderer.shaderOptions
@@ -96,25 +96,25 @@ extension PreferencesController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        parent.palette = sender.selectedTag()
+        prefs.palette = sender.selectedTag()
         refresh()
     }
     
     @IBAction func vidBrightnessAction(_ sender: NSSlider!) {
         
-        parent.brightness = sender.doubleValue
+        prefs.brightness = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidContrastAction(_ sender: NSSlider!) {
         
-        parent.contrast = sender.doubleValue
+        parent.prefs.contrast = sender.doubleValue
         refresh()
     }
     
     @IBAction func vidSaturationAction(_ sender: NSSlider!) {
         
-        parent.saturation = sender.doubleValue
+        parent.prefs.saturation = sender.doubleValue
         refresh()
     }
     

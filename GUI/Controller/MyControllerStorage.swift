@@ -75,14 +75,14 @@ extension MyController {
     func takeScreenshot(auto: Bool) {
         
         track()
-        let upscaled = screenshotSource > 0
+        let upscaled = prefs.screenshotSource > 0
         
         // Take screenshot
         guard let screen = renderer.screenshot(afterUpscaling: upscaled) else {
             track("Failed to create screenshot")
             return
         }
-        let screenshot = Screenshot.init(screen: screen, format: screenshotTarget)
+        let screenshot = Screenshot.init(screen: screen, format: prefs.screenshotTarget)
         
         auto ?
             mydocument!.autoScreenshots.append(screenshot) :

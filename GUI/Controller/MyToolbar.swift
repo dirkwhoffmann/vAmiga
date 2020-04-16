@@ -77,8 +77,8 @@ class MyToolbar: NSToolbar {
     func validateJoystickToolbarItems() {
 
         let amiga = parent.amiga!
-        let device1 = parent.inputDevice1
-        let device2 = parent.inputDevice2
+        let device1 = parent.prefs.inputDevice1
+        let device2 = parent.prefs.inputDevice2
         let port1 = amiga.controlPort1
         let port2 = amiga.controlPort2
             

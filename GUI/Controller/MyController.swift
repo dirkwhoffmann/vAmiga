@@ -38,6 +38,13 @@ class MyController: NSWindowController, MessageReceiver {
     var snapshotBrowser: SnapshotDialog?
     var screenshotBrowser: ScreenshotDialog?
 
+    // Hardware configuration of this emulator instance
+    var config: EmulatorPreferences!
+
+    // Preferences
+    // MOVE TO APPLICATION DELEGATE LATER. KEEP A COMPUTED VARIABLE HERE
+    var prefs: ApplicationPreferences!
+
     // Preferences controller
     var preferencesController: PreferencesController?
 
@@ -90,204 +97,17 @@ class MyController: NSWindowController, MessageReceiver {
     // Warp mode
     var warpMode = WarpMode.auto { didSet { updateWarp() } }
     
-    //
-    // Preferences items
-    //
-    
-    // General
-    
-    // Selected game pad slot for joystick in port A
-    var inputDevice1 = Defaults.inputDevice1
-    
-    // Selected game pad slot for joystick in port B
-    var inputDevice2 = Defaults.inputDevice2
-
-    // Rom preferences
-    
-    // Rom URLs
-    var romURL: URL = Defaults.rom
-    var extURL: URL = Defaults.ext
-
-    // Devices preferences
-    var disconnectJoyKeys: Bool {
-        get { return kbController.disconnectJoyKeys }
-        set {
-            kbController.disconnectJoyKeys = newValue
-        }
-    }
-    var autofire: Bool {
-        get { return amiga.joystick1.autofire() }
-        set {
-            amiga.joystick1.setAutofire(newValue)
-            amiga.joystick2.setAutofire(newValue)
-        }
-    }
-    var autofireBullets: Int {
-        get { return amiga.joystick1.autofireBullets() }
-        set {
-            amiga.joystick1.setAutofireBullets(newValue)
-            amiga.joystick2.setAutofireBullets(newValue)
-        }
-    }
-    var autofireFrequency: Float {
-        get { return amiga.joystick1.autofireFrequency() }
-        set {
-            amiga.joystick1.setAutofireFrequency(newValue)
-            amiga.joystick2.setAutofireFrequency(newValue)
-        }
-    }
-    var keyMap0: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[0]?.keyMap }
-        set { gamePadManager.gamePads[0]?.keyMap = newValue }
-    }
-    var keyMap1: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[1]?.keyMap }
-        set { gamePadManager.gamePads[1]?.keyMap = newValue }
-    }
- 
-    // Video preferences
- 
-    var enhancer: Int {
-        get { return renderer.enhancer }
-        set { renderer.enhancer = newValue }
-    }
-    var upscaler: Int {
-        get { return renderer.upscaler }
-        set { renderer.upscaler = newValue }
-    }
-    var palette: Int {
-        get { return Int(amiga.denise.palette()) }
-        set { amiga.denise.setPalette(Palette(newValue)) }
-    }
-    var brightness: Double {
-        get { return amiga.denise.brightness() }
-        set { amiga.denise.setBrightness(newValue) }
-    }
-    var contrast: Double {
-        get { return amiga.denise.contrast() }
-        set { amiga.denise.setContrast(newValue) }
-    }
-    var saturation: Double {
-        get { return amiga.denise.saturation() }
-        set { amiga.denise.setSaturation(newValue) }
-    }
-    var blur: Int32 {
-        get { return renderer.shaderOptions.blur }
-        set { renderer.shaderOptions.blur = newValue }
-    }
-    var blurRadius: Float {
-        get { return renderer.shaderOptions.blurRadius }
-        set { renderer.shaderOptions.blurRadius = newValue }
-    }
-    var bloom: Int32 {
-        get { return renderer.shaderOptions.bloom }
-        set { renderer.shaderOptions.bloom = newValue }
-    }
-    var bloomRadius: Float {
-        get { return renderer.shaderOptions.bloomRadius }
-        set { renderer.shaderOptions.bloomRadius = newValue }
-    }
-    var bloomBrightness: Float {
-        get { return renderer.shaderOptions.bloomBrightness }
-        set { renderer.shaderOptions.bloomBrightness = newValue }
-    }
-    var bloomWeight: Float {
-        get { return renderer.shaderOptions.bloomWeight }
-        set { renderer.shaderOptions.bloomWeight = newValue }
-    }
-    var flicker: Int32 {
-        get { return renderer.shaderOptions.flicker }
-        set { renderer.shaderOptions.flicker = newValue }
-    }
-    var flickerWeight: Float {
-        get { return renderer.shaderOptions.flickerWeight }
-        set { renderer.shaderOptions.flickerWeight = newValue }
-    }
-    var dotMask: Int32 {
-        get { return renderer.shaderOptions.dotMask }
-        set { renderer.shaderOptions.dotMask = newValue }
-    }
-    var dotMaskBrightness: Float {
-        get { return renderer.shaderOptions.dotMaskBrightness }
-        set { renderer.shaderOptions.dotMaskBrightness = newValue }
-    }
-    var scanlines: Int32 {
-        get { return renderer.shaderOptions.scanlines }
-        set { renderer.shaderOptions.scanlines = newValue }
-    }
-    var scanlineBrightness: Float {
-        get { return renderer.shaderOptions.scanlineBrightness }
-        set { renderer.shaderOptions.scanlineBrightness = newValue }
-    }
-    var scanlineWeight: Float {
-        get { return renderer.shaderOptions.scanlineWeight }
-        set { renderer.shaderOptions.scanlineWeight = newValue }
-    }
-    var disalignment: Int32 {
-        get { return renderer.shaderOptions.disalignment }
-        set { renderer.shaderOptions.disalignment = newValue }
-    }
-    var disalignmentH: Float {
-        get { return renderer.shaderOptions.disalignmentH }
-        set { renderer.shaderOptions.disalignmentH = newValue }
-    }
-    var disalignmentV: Float {
-        get { return renderer.shaderOptions.disalignmentV }
-        set { renderer.shaderOptions.disalignmentV = newValue }
-    }
-    
-    //
-    // Emulator preferences
+    // 
+    // Timers
     //
         
-    var warpLoad = Defaults.warpLoad { didSet { updateWarp() } }
-    var driveSounds = Defaults.driveSounds
-    var driveSoundPan = Defaults.driveSoundPan
-    var driveInsertSound = Defaults.driveInsertSound
-    var driveEjectSound = Defaults.driveEjectSound
-    var driveHeadSound = Defaults.driveHeadSound
-    var drivePollSound = Defaults.drivePollSound
-    var driveBlankDiskFormat = Defaults.driveBlankDiskFormat
-    var driveBlankDiskFormatIntValue: Int {
-        get { return Int(driveBlankDiskFormat.rawValue) }
-        set { driveBlankDiskFormat = FileSystemType.init(newValue) }
-    }
-    var keepAspectRatio: Bool {
-        get { return renderer.keepAspectRatio }
-        set { renderer.keepAspectRatio = newValue }
-    }
-    var exitOnEsc: Bool {
-        get { return kbController.exitOnEsc }
-        set { kbController.exitOnEsc = newValue }
-    }
-    var closeWithoutAsking = Defaults.closeWithoutAsking
-    var ejectWithoutAsking = Defaults.ejectWithoutAsking
-    var pauseInBackground = Defaults.pauseInBackground
-    
-    // Remembers if the emulator was running or paused when it lost focus.
-    // Needed to implement the pauseInBackground feature.
-    var pauseInBackgroundSavedState = false
-    
-    var autoSnapshots = Defaults.autoSnapshots
-    var snapshotInterval = 0 { didSet { startSnapshotTimer() } }
-
-    var autoScreenshots = Defaults.autoScreenshots
-    var screenshotInterval = 0 { didSet { startScreenshotTimer() } }
-
-    var screenshotSource = Defaults.screenshotSource
-    var screenshotTarget = Defaults.screenshotTarget
-    var screenshotTargetIntValue: Int {
-        get { return Int(screenshotTarget.rawValue) }
-        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
-    }
-    
     func startSnapshotTimer() {
         
-        if snapshotInterval > 0 {
+        if prefs.snapshotInterval > 0 {
             
             snapshotTimer?.invalidate()
             snapshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(snapshotInterval),
+                Timer.scheduledTimer(timeInterval: TimeInterval(prefs.snapshotInterval),
                                      target: self,
                                      selector: #selector(snapshotTimerFunc),
                                      userInfo: nil,
@@ -302,11 +122,11 @@ class MyController: NSWindowController, MessageReceiver {
             
     func startScreenshotTimer() {
         
-        if snapshotInterval > 0 {
+        if prefs.snapshotInterval > 0 {
             
             screenshotTimer?.invalidate()
             screenshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(screenshotInterval),
+                Timer.scheduledTimer(timeInterval: TimeInterval(prefs.screenshotInterval),
                                      target: self,
                                      selector: #selector(screenshotTimerFunc),
                                      userInfo: nil,
@@ -325,7 +145,7 @@ class MyController: NSWindowController, MessageReceiver {
         var warp: Bool
 
         switch warpMode {
-        case .auto: warp = amiga.diskController.spinning() && warpLoad
+        case .auto: warp = amiga.diskController.spinning() && prefs.warpLoad
         case .on: warp = true
         case .off: warp = false
         }
@@ -412,7 +232,7 @@ extension MyController {
             return document?.changeCount != 0
         }
         set {
-            if newValue && !closeWithoutAsking {
+            if newValue && !prefs.closeWithoutAsking {
                 document?.updateChangeCount(.changeDone)
             } else {
                 document?.updateChangeCount(.changeCleared)
@@ -423,11 +243,14 @@ extension MyController {
     //
     // Initialization
     //
-
+    
     override open func awakeFromNib() {
 
         track()
-                
+        
+        config = EmulatorPreferences.init(with: self)
+        prefs = ApplicationPreferences.init(with: self)
+        
         // Create audio engine
         macAudio = MacAudio.init(with: self)
     }
@@ -657,13 +480,13 @@ extension MyController {
     
     @objc func snapshotTimerFunc() {
 
-        if autoSnapshots { takeAutoSnapshot() }
+        if prefs.autoSnapshots { takeAutoSnapshot() }
     }
     
     @objc func screenshotTimerFunc() {
         
         track()
-        if autoScreenshots { takeAutoScreenshot() }
+        if prefs.autoScreenshots { takeAutoScreenshot() }
     }
         
     func processMessage(_ msg: Message) {
@@ -800,21 +623,21 @@ extension MyController {
 
         case MSG_DRIVE_HEAD:
 
-            if driveSounds && driveHeadSound {
+            if prefs.driveSounds && prefs.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
  
-            if driveSounds && drivePollSound {
+            if prefs.driveSounds && prefs.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
             
-            if driveSounds && driveInsertSound {
+            if prefs.driveSounds && prefs.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
             if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
@@ -822,7 +645,7 @@ extension MyController {
             
         case MSG_DISK_EJECT:
             
-            if driveSounds && driveEjectSound {
+            if prefs.driveSounds && prefs.driveEjectSound {
                 macAudio.playSound(name: "eject", volume: 0.3)
             }
             refreshStatusBar()
@@ -887,7 +710,7 @@ extension MyController {
     @discardableResult
     func joystickAction(slot: Int, events: [GamePadAction]) -> Bool {
         
-        if slot == inputDevice1 {
+        if slot == prefs.inputDevice1 {
             for event in events {
                 amiga.joystick1.trigger(event)
                 amiga.mouse.trigger(event)
@@ -895,7 +718,7 @@ extension MyController {
             return true
         }
 
-        if slot == inputDevice2 {
+        if slot == prefs.inputDevice2 {
             for event in events {
                 amiga.joystick2.trigger(event)
                 amiga.mouse.trigger(event)

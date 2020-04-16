@@ -331,7 +331,7 @@ class MyDocument: NSDocument {
         
         track("Saving user screenshots to disk (\(bootDiskID))")
         
-        let format = parent!.screenshotTarget
+        let format = parent!.prefs.screenshotTarget
         
         Screenshot.deleteFolder(forDisk: bootDiskID)
         for n in 0 ..< userScreenshots.count {

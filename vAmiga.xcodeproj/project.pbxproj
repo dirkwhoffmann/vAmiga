@@ -23,6 +23,7 @@
 		501B821D2262FFB200042871 /* RTC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 501B821B2262FFB200042871 /* RTC.cpp */; };
 		5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17B21EF121E00B9E80E /* Agnus.cpp */; };
 		5020B18021EF136100B9E80E /* Denise.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5020B17E21EF136100B9E80E /* Denise.cpp */; };
+		5023519024485BBF00F6C088 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5023518F24485BBF00F6C088 /* Preferences.swift */; };
 		5027418F2297CACF0038E5AF /* Colors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5027418D2297CACF0038E5AF /* Colors.cpp */; };
 		502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */; };
 		502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 502EFD092248EC0200F0E118 /* EventPanel.swift */; };
@@ -188,6 +189,7 @@
 		5020B17C21EF121E00B9E80E /* Agnus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Agnus.h; sourceTree = "<group>"; };
 		5020B17E21EF136100B9E80E /* Denise.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Denise.cpp; sourceTree = "<group>"; };
 		5020B17F21EF136100B9E80E /* Denise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Denise.h; sourceTree = "<group>"; };
+		5023518F24485BBF00F6C088 /* Preferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preferences.swift; sourceTree = "<group>"; };
 		5027418D2297CACF0038E5AF /* Colors.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Colors.cpp; sourceTree = "<group>"; };
 		5027418E2297CACF0038E5AF /* Colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Colors.h; sourceTree = "<group>"; };
 		502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompatibilityPrefs.swift; sourceTree = "<group>"; };
@@ -634,6 +636,7 @@
 		508FE03A21EA22CC0043D0E9 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				5023518F24485BBF00F6C088 /* Preferences.swift */,
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
@@ -1026,6 +1029,7 @@
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
+				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
 				508FE02721EA227B0043D0E9 /* SwiftUtils.swift in Sources */,
 				505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */,
 				502BB09E229C00C800A8DFCD /* CompatibilityPrefs.swift in Sources */,
