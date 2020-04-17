@@ -141,9 +141,9 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefsController?.showSheet()
     }
     
-    @IBAction func importPrefsAction(_ sender: Any!) {
+    func importPrefs(prefixes: [String]) {
         
-        track()
+        track("Importing user defaults with prefixes \(prefixes)")
         
         let panel = NSOpenPanel()
         panel.prompt = "Import"
@@ -152,15 +152,15 @@ extension MyController: NSMenuItemValidation {
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = panel.url {
-                    self.loadUserDefaults(url: url)
+                    self.loadUserDefaults(url: url, prefixes: prefixes)
                 }
             }
         })
     }
-
-    @IBAction func exportPrefsAction(_ sender: Any!) {
+    
+    func exportPrefs(prefixes: [String]) {
         
-        track()
+        track("Exporting user defaults with prefixes \(prefixes)")
         
         let panel = NSSavePanel()
         panel.prompt = "Export"
@@ -170,10 +170,30 @@ extension MyController: NSMenuItemValidation {
             if result == .OK {
                 if let url = panel.url {
                     track()
-                    self.saveUserDefaults(url: url)
+                    self.saveUserDefaults(url: url, prefixes: prefixes)
                 }
             }
         })
+    }
+    
+    @IBAction func importAppPrefsAction(_ sender: Any!) {
+        
+        importPrefs(prefixes: ["VAMIGA1", "VAMIGA2"])
+    }
+
+    @IBAction func exportAppPrefsAction(_ sender: Any!) {
+        
+        exportPrefs(prefixes: ["VAMIGA1", "VAMIGA2"])
+    }
+    
+    @IBAction func importEmuPrefsAction(_ sender: Any!) {
+        
+        importPrefs(prefixes: ["VAMIGA3", "VAMIGA4", "VAMIGA5", "VAMIGA6"])
+    }
+    
+    @IBAction func exportEmuPrefsAction(_ sender: Any!) {
+        
+        exportPrefs(prefixes: ["VAMIGA3", "VAMIGA4", "VAMIGA5", "VAMIGA6"])
     }
     
     @IBAction func factorySettingsAction(_ sender: Any!) {

@@ -624,7 +624,6 @@ extension MyController {
   
         case MSG_DRIVE_HEAD_POLL:
  
-            track("POLL \(prefs.driveSounds) \(prefs.drivePollSound)")
             if prefs.driveSounds && prefs.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }

@@ -15,7 +15,7 @@ import Carbon.HIToolbox
 
 extension UserDefaults {
     
-    /// Registers an item of generic type 'Encodable'
+    // Registers an item of generic type 'Encodable'
     func register<T: Encodable>(encodableItem item: T, forKey key: String) {
         
         if let data = try? PropertyListEncoder().encode(item) {
@@ -23,7 +23,7 @@ extension UserDefaults {
         }
     }
 
-    /// Encodes an item of generic type 'Encodable'
+    // Encodes an item of generic type 'Encodable'
     func encode<T: Encodable>(_ item: T, forKey key: String) {
         
         if let encoded = try? PropertyListEncoder().encode(item) {
@@ -34,7 +34,7 @@ extension UserDefaults {
         }
     }
     
-    /// Encodes an item of generic type 'Decodable'
+    // Encodes an item of generic type 'Decodable'
     func decode<T: Decodable>(_ item: inout T, forKey key: String) {
         
         if let data = data(forKey: key) {
@@ -58,11 +58,11 @@ extension MyController {
         
         track()
         
-        registerGeneralUserDefaults()
+        registerPortUserDefaults()
         registerRomUserDefaults()
         registerDevicesUserDefaults()
         registerVideoUserDefaults()
-        registerEmulatorUserDefaults()
+        registerGeneralUserDefaults()
         registerHardwareUserDefaults()
         registerCompatibilityUserDefaults()
     }
@@ -73,11 +73,11 @@ extension MyController {
         
         amiga.suspend()
         
-        resetGeneralUserDefaults()
+        resetPortUserDefaults()
         resetRomUserDefaults()
         resetDevicesUserDefaults()
         resetVideoUserDefaults()
-        resetEmulatorUserDefaults()
+        resetGeneralUserDefaults()
         resetHardwareUserDefaults()
         resetCompatibilityUserDefaults()
         
@@ -90,24 +90,24 @@ extension MyController {
         
         amiga.suspend()
         
-        loadGeneralUserDefaults()
+        loadPortUserDefaults()
         loadRomUserDefaults()
         loadDevicesUserDefaults()
         loadVideoUserDefaults()
-        loadEmulatorUserDefaults()
+        loadGeneralUserDefaults()
         loadHardwareUserDefaults()
         loadCompatibilityUserDefaults()
         
         amiga.resume()
     }
     
-    func loadUserDefaults(url: URL) {
+    func loadUserDefaults(url: URL, prefixes: [String]) {
         
         if let fileContents = NSDictionary(contentsOf: url) {
             
             if let dict = fileContents as? [String: Any] {
                 
-                let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
+                let filteredDict = dict.filter { prefixes.contains(where: $0.0.hasPrefix) }
                 
                 let defaults = UserDefaults.standard
                 defaults.setValuesForKeys(filteredDict)
@@ -121,35 +121,36 @@ extension MyController {
         
         track()
         
-        saveGeneralUserDefaults()
+        savePortUserDefaults()
         saveRomUserDefaults()
         saveDevicesUserDefaults()
         saveVideoUserDefaults()
-        saveEmulatorUserDefaults()
+        saveGeneralUserDefaults()
         saveHardwareUserDefaults()
         saveCompatibilityUserDefaults()
     }
 
-    func saveUserDefaults(url: URL) {
+    func saveUserDefaults(url: URL, prefixes: [String]) {
         
         track()
         
         let dict = UserDefaults.standard.dictionaryRepresentation()
-        let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
+        // let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
+        let filteredDict = dict.filter { prefixes.contains(where: $0.0.hasPrefix) }
         let nsDict = NSDictionary.init(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
     }
 }
 
 //
-// User defaults (general)
+// User defaults (Ports)
 //
 
 struct Keys {
     
     // Control ports
-    static let inputDevice1      = "VAMIGAInputDevice1Key"
-    static let inputDevice2      = "VAMIGAInputDevice2Key"
+    static let inputDevice1      = "VAMIGA0InputDevice1Key"
+    static let inputDevice2      = "VAMIGA0InputDevice2Key"
 }
 
 struct Defaults {
@@ -165,7 +166,7 @@ struct Defaults {
 
 extension MyController {
 
-    static func registerGeneralUserDefaults() {
+    static func registerPortUserDefaults() {
         
         let dictionary: [String: Any] = [
             
@@ -177,7 +178,7 @@ extension MyController {
         defaults.register(defaults: dictionary)
     }
     
-    func resetGeneralUserDefaults() {
+    func resetPortUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -187,10 +188,10 @@ extension MyController {
 
          for key in keys { defaults.removeObject(forKey: key) }
         
-        loadGeneralUserDefaults()
+        loadPortUserDefaults()
     }
     
-    func loadGeneralUserDefaults() {
+    func loadPortUserDefaults() {
         
         let defaults = UserDefaults.standard
         
@@ -202,7 +203,7 @@ extension MyController {
         amiga.resume()
     }
     
-    func saveGeneralUserDefaults() {
+    func savePortUserDefaults() {
         
         let defaults = UserDefaults.standard
         
@@ -212,104 +213,225 @@ extension MyController {
 }
 
 //
-// User defaults (Roms)
+// User defaults (General)
 //
 
 extension Keys {
     
-    static let rom               = "VAMIGARomFileKey"
-    static let ext               = "VAMIGAExtFileKey"
-    static let extStart          = "VAMIGAExtStartKey"
+    // Drives
+    static let warpLoad               = "VAMIGA1WarpLoadKey"
+    static let driveSounds            = "VAMIGA1DriveSounds"
+    static let driveSoundPan          = "VAMIGA1DriveSoundPan"
+    static let driveInsertSound       = "VAMIGA1DriveInsertSound"
+    static let driveEjectSound        = "VAMIGA1DriveEjectSound"
+    static let driveHeadSound         = "VAMIGA1DriveHeadSound"
+    static let drivePollSound         = "VAMIGA1DrivePollSound"
+    static let driveBlankDiskFormat   = "VAMIGA1DriveBlankDiskFormatKey"
+
+    // Snapshots and screenshots
+    static let autoSnapshots          = "VAMIGA1AutoSnapshots"
+    static let autoSnapshotInterval   = "VAMIGA1ScreenshotInterval"
+    static let autoScreenshots        = "VAMIGA1AutoScreenshots"
+    static let autoScreenshotInterval = "VAMIGA1SnapshotInterval"
+    static let screenshotSource       = "VAMIGA1ScreenshotSourceKey"
+    static let screenshotTarget       = "VAMIGA1ScreenshotTargetKey"
+    
+    // Fullscreen
+    static let keepAspectRatio        = "VAMIGA1FullscreenKeepAspectRatioKey"
+    static let exitOnEsc              = "VAMIGA1FullscreenExitOnEscKey"
+
+    // User dialogs
+    static let closeWithoutAsking     = "VAMIGA1CloseWithoutAsking"
+    static let ejectWithoutAsking     = "VAMIGA1EjectWithoutAsking"
+    
+    // Miscellaneous
+    static let pauseInBackground      = "VAMIGA1PauseInBackground"
 }
 
 extension Defaults {
+   
+    // Drives
+    static let warpLoad               = true
+    static let driveSounds            = true
+    static let driveSoundPan          = 1.0
+    static let driveInsertSound       = true
+    static let driveEjectSound        = true
+    static let driveHeadSound         = true
+    static let drivePollSound         = false
+    static let driveBlankDiskFormat   = FS_OFS
     
-    static let rom               = URL(fileURLWithPath: "")
-    static let ext               = URL(fileURLWithPath: "")
-    static let extStart          = 0xE0
+    // Snapshots and Screenshots
+    static let autoSnapshots          = true
+    static let autoSnapshotInterval   = 20
+    static let autoScreenshots        = true
+    static let autoScreenshotInterval = 10
+    static let screenshotSource       = 0
+    static let screenshotTarget       = NSBitmapImageRep.FileType.png
+
+    // Fullscreen
+    static let keepAspectRatio        = false
+    static let exitOnEsc              = false
+
+    // User dialogs
+    
+    // Miscellaneous
+    static let pauseInBackground      = false
+    static let closeWithoutAsking     = false
+    static let ejectWithoutAsking     = false
 }
 
 extension MyController {
     
-    static func registerRomUserDefaults() {
+    static func registerGeneralUserDefaults() {
         
         let dictionary: [String: Any] = [
             
-            Keys.rom: Defaults.rom,
-            Keys.ext: Defaults.ext,
-            Keys.extStart: Defaults.extStart
-            ]
+            Keys.warpLoad: Defaults.warpLoad,
+            Keys.driveSounds: Defaults.driveSounds,
+            Keys.driveSoundPan: Defaults.driveSoundPan,
+            Keys.driveInsertSound: Defaults.driveInsertSound,
+            Keys.driveEjectSound: Defaults.driveEjectSound,
+            Keys.driveHeadSound: Defaults.driveHeadSound,
+            Keys.drivePollSound: Defaults.drivePollSound,
+            Keys.driveBlankDiskFormat: Int(Defaults.driveBlankDiskFormat.rawValue),
+
+            Keys.autoSnapshots: Defaults.autoSnapshots,
+            Keys.autoSnapshotInterval: Defaults.autoSnapshotInterval,
+            Keys.autoScreenshots: Defaults.autoScreenshots,
+            Keys.autoScreenshotInterval: Defaults.autoScreenshotInterval,
+            Keys.screenshotSource: Defaults.screenshotSource,
+            Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
+
+            Keys.keepAspectRatio: Defaults.keepAspectRatio,
+            Keys.exitOnEsc: Defaults.exitOnEsc,
+            
+            Keys.pauseInBackground: Defaults.pauseInBackground,
+            Keys.closeWithoutAsking: Defaults.closeWithoutAsking,
+            Keys.ejectWithoutAsking: Defaults.ejectWithoutAsking
+        ]
         
         let defaults = UserDefaults.standard
+        
         defaults.register(defaults: dictionary)
     }
 
-    func resetRomUserDefaults() {
+    func resetGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.rom,
-                     Keys.ext,
-                     Keys.extStart ]
+        let keys = [Keys.warpLoad,
+                    Keys.driveSounds,
+                    Keys.driveSoundPan,
+                    Keys.driveInsertSound,
+                    Keys.driveEjectSound,
+                    Keys.driveHeadSound,
+                    Keys.drivePollSound,
+                    Keys.driveBlankDiskFormat,
+                    
+                    Keys.autoSnapshots,
+                    Keys.autoSnapshotInterval,
+                    Keys.autoScreenshots,
+                    Keys.autoScreenshotInterval,
+                    Keys.screenshotSource,
+                    Keys.screenshotTarget,
+                    
+                    Keys.keepAspectRatio,
+                    Keys.exitOnEsc,
+                    
+                    Keys.pauseInBackground,
+                    Keys.closeWithoutAsking,
+                    Keys.ejectWithoutAsking
+        ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
-        loadRomUserDefaults()
+        loadGeneralUserDefaults()
     }
     
-    func loadRomUserDefaults() {
+    func loadGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         amiga.suspend()
         
-        if let url = defaults.url(forKey: Keys.rom) {
-            config.romURL = url
-            amiga.mem.loadRom(fromFile: config.romURL)
-        }
-        if let url = defaults.url(forKey: Keys.ext) {
-            config.extURL = url
-            amiga.mem.loadExt(fromFile: config.extURL)
-        }
-        config.extStart = defaults.integer(forKey: Keys.extStart)
-
+        prefs.warpLoad = defaults.bool(forKey: Keys.warpLoad)
+        prefs.driveSounds = defaults.bool(forKey: Keys.driveSounds)
+        prefs.driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
+        prefs.driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
+        prefs.driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
+        prefs.driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
+        prefs.drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
+        prefs.driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
+        
+        prefs.autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
+        prefs.snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
+        prefs.autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
+        prefs.screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
+        prefs.screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
+        prefs.screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
+    
+        prefs.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        prefs.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+        
+        prefs.pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
+        prefs.closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
+        prefs.ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
+        
         amiga.resume()
     }
     
-    func saveRomUserDefaults() {
+    func saveGeneralUserDefaults() {
         
-        let hwconfig = amiga.config()
         let defaults = UserDefaults.standard
-
-        defaults.set(config.romURL, forKey: Keys.rom)
-        defaults.set(config.extURL, forKey: Keys.ext)
-        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
+        
+        defaults.set(prefs.warpLoad, forKey: Keys.warpLoad)
+        defaults.set(prefs.driveSounds, forKey: Keys.driveSounds)
+        defaults.set(prefs.driveSoundPan, forKey: Keys.driveSoundPan)
+        defaults.set(prefs.driveInsertSound, forKey: Keys.driveInsertSound)
+        defaults.set(prefs.driveEjectSound, forKey: Keys.driveEjectSound)
+        defaults.set(prefs.driveHeadSound, forKey: Keys.driveHeadSound)
+        defaults.set(prefs.drivePollSound, forKey: Keys.drivePollSound)
+        defaults.set(prefs.driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
+        
+        defaults.set(prefs.autoSnapshots, forKey: Keys.autoSnapshots)
+        defaults.set(prefs.snapshotInterval, forKey: Keys.autoSnapshotInterval)
+        defaults.set(prefs.autoScreenshots, forKey: Keys.autoScreenshots)
+        defaults.set(prefs.screenshotInterval, forKey: Keys.autoScreenshotInterval)
+        defaults.set(prefs.screenshotSource, forKey: Keys.screenshotSource)
+        defaults.set(prefs.screenshotTargetIntValue, forKey: Keys.screenshotTarget)
+        
+        defaults.set(prefs.keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(prefs.exitOnEsc, forKey: Keys.exitOnEsc)
+                
+        defaults.set(prefs.pauseInBackground, forKey: Keys.pauseInBackground)
+        defaults.set(prefs.closeWithoutAsking, forKey: Keys.closeWithoutAsking)
+        defaults.set(prefs.ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
     }
 }
 
 //
-// User defaults (Devices)
+// User defaults (Input Devices)
 //
 
 extension Keys {
     
     // Joysticks
-    static let joyKeyMap1            = "VAMIGAJoyKeyMap1"
-    static let joyKeyMap2            = "VAMIGAJoyKeyMap2"
-    static let mouseKeyMap           = "VAMIGAMouseKeyMap"
-    static let disconnectJoyKeys     = "VAMIGADisconnectKeys"
-    static let autofire              = "VAMIGAAutofire"
-    static let autofireBullets       = "VAMIGAAutofireBullets"
-    static let autofireFrequency     = "VAMIGAAutofireFrequency"
+    static let joyKeyMap1            = "VAMIGA2JoyKeyMap1"
+    static let joyKeyMap2            = "VAMIGA2JoyKeyMap2"
+    static let mouseKeyMap           = "VAMIGA2MouseKeyMap"
+    static let disconnectJoyKeys     = "VAMIGA2DisconnectKeys"
+    static let autofire              = "VAMIGA2Autofire"
+    static let autofireBullets       = "VAMIGA2AutofireBullets"
+    static let autofireFrequency     = "VAMIGA2AutofireFrequency"
     
     // Mouse
-    static let retainMouseKeyComb    = "VAMIGARetainMouseKeyComb"
-    static let retainMouseWithKeys   = "VAMIGARetainMouseWithKeys"
-    static let retainMouseByClick    = "VAMIGARetainMouseByClick"
-    static let retainMouseByEntering = "VAMIGARetainMouseByEntering"
-    static let releaseMouseKeyComb   = "VAMIGAReleaseMouseKeyComb"
-    static let releaseMouseWithKeys  = "VAMIGAReleaseMouseWithKeys"
-    static let releaseMouseByShaking = "VAMIGAReleaseMouseByShaking"
+    static let retainMouseKeyComb    = "VAMIGA2RetainMouseKeyComb"
+    static let retainMouseWithKeys   = "VAMIGA2RetainMouseWithKeys"
+    static let retainMouseByClick    = "VAMIGA2RetainMouseByClick"
+    static let retainMouseByEntering = "VAMIGA2RetainMouseByEntering"
+    static let releaseMouseKeyComb   = "VAMIGA2ReleaseMouseKeyComb"
+    static let releaseMouseWithKeys  = "VAMIGA2ReleaseMouseWithKeys"
+    static let releaseMouseByShaking = "VAMIGA2ReleaseMouseByShaking"
 }
 
 extension Defaults {
@@ -460,332 +582,78 @@ extension MyController {
 }
 
 //
-// User defaults (Video)
+// User defaults (Roms)
 //
 
 extension Keys {
     
-    static let palette         = "VAMIGAPaletteKey"
-    static let brightness      = "VAMIGABrightnessKey"
-    static let contrast        = "VAMIGAContrastKey"
-    static let saturation      = "VAMIGASaturationKey"
-    static let enhancer        = "VVAMIGAEnhancerKey"
-    static let upscaler        = "VAMIGAUpscalerKey"
-
-    // Geometry
-    static let hCenter         = "VAMIGAHCenter"
-    static let vCenter         = "VAMIGAVCenter"
-    static let hZoom           = "VAMIGAHZoom"
-    static let vZoom           = "VAMIGAVZoom"
-
-    // GPU options
-    static let shaderOptions   = "VAMIGAShaderOptionsKey"
+    static let rom               = "VAMIGA3RomFileKey"
+    static let ext               = "VAMIGA3ExtFileKey"
+    static let extStart          = "VAMIGA3ExtStartKey"
 }
 
 extension Defaults {
     
-    static let palette = COLOR_PALETTE
-    static let brightness = Double(50.0)
-    static let contrast = Double(100.0)
-    static let saturation = Double(50.0)
-    static let enhancer = 0
-    static let upscaler = 0
-    
-    // Geometry
-    static let hCenter = Float(0.1169)
-    static let vCenter = Float(0.1683)
-    static let hZoom   = Float(0.0454)
-    static let vZoom   = Float(0.0349)
-
-    // GPU options
-    static let shaderOptions = ShaderDefaultsTFT
+    static let rom               = URL(fileURLWithPath: "")
+    static let ext               = URL(fileURLWithPath: "")
+    static let extStart          = 0xE0
 }
 
 extension MyController {
     
-    static func registerVideoUserDefaults() {
+    static func registerRomUserDefaults() {
         
         let dictionary: [String: Any] = [
             
-            Keys.palette: Int(Defaults.palette.rawValue),
-            Keys.brightness: Defaults.brightness,
-            Keys.contrast: Defaults.contrast,
-            Keys.saturation: Defaults.saturation,
-            Keys.enhancer: Defaults.enhancer,
-            Keys.upscaler: Defaults.upscaler,
-
-            Keys.hCenter: Defaults.hCenter,
-            Keys.vCenter: Defaults.vCenter,
-            Keys.hZoom: Defaults.hZoom,
-            Keys.vZoom: Defaults.vZoom
-        ]
+            Keys.rom: Defaults.rom,
+            Keys.ext: Defaults.ext,
+            Keys.extStart: Defaults.extStart
+            ]
         
         let defaults = UserDefaults.standard
         defaults.register(defaults: dictionary)
-        defaults.register(encodableItem: Defaults.shaderOptions, forKey: Keys.shaderOptions)
     }
-    
-    func resetVideoUserDefaults() {
+
+    func resetRomUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.palette,
-                     Keys.brightness,
-                     Keys.contrast,
-                     Keys.saturation,
-                     Keys.enhancer,
-                     Keys.upscaler,
-                     
-                     Keys.hCenter,
-                     Keys.vCenter,
-                     Keys.hZoom,
-                     Keys.vZoom,
-
-                     Keys.shaderOptions ]
+        let keys = [ Keys.rom,
+                     Keys.ext,
+                     Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
-        loadVideoUserDefaults()
+        loadRomUserDefaults()
     }
     
-    func loadVideoUserDefaults() {
+    func loadRomUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         amiga.suspend()
         
-        config.enhancer = defaults.integer(forKey: Keys.enhancer)
-        config.upscaler = defaults.integer(forKey: Keys.upscaler)
-        config.palette = defaults.integer(forKey: Keys.palette)
-        config.brightness = defaults.double(forKey: Keys.brightness)
-        config.contrast = defaults.double(forKey: Keys.contrast)
-        config.saturation = defaults.double(forKey: Keys.saturation)
-        config.hCenter = defaults.float(forKey: Keys.hCenter)
-        config.vCenter = defaults.float(forKey: Keys.vCenter)
-        config.hZoom = defaults.float(forKey: Keys.hZoom)
-        config.vZoom = defaults.float(forKey: Keys.vZoom)
+        if let url = defaults.url(forKey: Keys.rom) {
+            config.romURL = url
+            amiga.mem.loadRom(fromFile: config.romURL)
+        }
+        if let url = defaults.url(forKey: Keys.ext) {
+            config.extURL = url
+            amiga.mem.loadExt(fromFile: config.extURL)
+        }
+        config.extStart = defaults.integer(forKey: Keys.extStart)
 
-        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
-
-        renderer.updateTextureRect()
-        renderer.buildDotMasks()
-        
         amiga.resume()
     }
     
-    func saveVideoUserDefaults() {
+    func saveRomUserDefaults() {
         
-        let defaults = UserDefaults.standard
-        
-        defaults.set(config.enhancer, forKey: Keys.enhancer)
-        defaults.set(config.upscaler, forKey: Keys.upscaler)
-        defaults.set(config.palette, forKey: Keys.palette)
-        defaults.set(config.brightness, forKey: Keys.brightness)
-        defaults.set(config.contrast, forKey: Keys.contrast)
-        defaults.set(config.saturation, forKey: Keys.saturation)
-        defaults.set(config.hCenter, forKey: Keys.hCenter)
-        defaults.set(config.vCenter, forKey: Keys.vCenter)
-        defaults.set(config.hZoom, forKey: Keys.hZoom)
-        defaults.set(config.vZoom, forKey: Keys.vZoom)
-
-        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
-    }
-}
-
-//
-// User defaults (Emulator)
-//
-
-extension Keys {
-    
-    // Drives
-    static let warpLoad               = "VAMIGAWarpLoadKey"
-    static let driveSounds            = "VAMIGADriveSounds"
-    static let driveSoundPan          = "VAMIGADriveSoundPan"
-    static let driveInsertSound       = "VAMIGADriveInsertSound"
-    static let driveEjectSound        = "VAMIGADriveEjectSound"
-    static let driveHeadSound         = "VAMIGADriveHeadSound"
-    static let drivePollSound         = "VAMIGADrivePollSound"
-    static let driveBlankDiskFormat   = "VAMIGADriveBlankDiskFormatKey"
-
-    // Snapshots and screenshots
-    static let autoSnapshots          = "VAMIGAAutoSnapshots"
-    static let autoSnapshotInterval   = "VAMIGAScreenshotInterval"
-    static let autoScreenshots        = "VAMIGAAutoScreenshots"
-    static let autoScreenshotInterval = "VAMIGASnapshotInterval"
-    static let screenshotSource       = "VAMIGAScreenshotSourceKey"
-    static let screenshotTarget       = "VAMIGAScreenshotTargetKey"
-    
-    // Fullscreen
-    static let keepAspectRatio        = "VAMIGAFullscreenKeepAspectRatioKey"
-    static let exitOnEsc              = "VAMIGAFullscreenExitOnEscKey"
-
-    // User dialogs
-    static let closeWithoutAsking     = "VAMIGACloseWithoutAsking"
-    static let ejectWithoutAsking     = "VAMIGAEjectWithoutAsking"
-    
-    // Miscellaneous
-    static let pauseInBackground      = "VAMIGAPauseInBackground"
-}
-
-extension Defaults {
-   
-    // Drives
-    static let warpLoad               = true
-    static let driveSounds            = true
-    static let driveSoundPan          = 1.0
-    static let driveInsertSound       = true
-    static let driveEjectSound        = true
-    static let driveHeadSound         = true
-    static let drivePollSound         = false
-    static let driveBlankDiskFormat   = FS_OFS
-    
-    // Snapshots and Screenshots
-    static let autoSnapshots          = true
-    static let autoSnapshotInterval   = 20
-    static let autoScreenshots        = true
-    static let autoScreenshotInterval = 10
-    static let screenshotSource       = 0
-    static let screenshotTarget       = NSBitmapImageRep.FileType.png
-
-    // Fullscreen
-    static let keepAspectRatio        = false
-    static let exitOnEsc              = false
-
-    // User dialogs
-    
-    // Miscellaneous
-    static let pauseInBackground      = false
-    static let closeWithoutAsking     = false
-    static let ejectWithoutAsking     = false
-}
-
-extension MyController {
-    
-    static func registerEmulatorUserDefaults() {
-        
-        let dictionary: [String: Any] = [
-            
-            Keys.warpLoad: Defaults.warpLoad,
-            Keys.driveSounds: Defaults.driveSounds,
-            Keys.driveSoundPan: Defaults.driveSoundPan,
-            Keys.driveInsertSound: Defaults.driveInsertSound,
-            Keys.driveEjectSound: Defaults.driveEjectSound,
-            Keys.driveHeadSound: Defaults.driveHeadSound,
-            Keys.drivePollSound: Defaults.drivePollSound,
-            Keys.driveBlankDiskFormat: Int(Defaults.driveBlankDiskFormat.rawValue),
-
-            Keys.autoSnapshots: Defaults.autoSnapshots,
-            Keys.autoSnapshotInterval: Defaults.autoSnapshotInterval,
-            Keys.autoScreenshots: Defaults.autoScreenshots,
-            Keys.autoScreenshotInterval: Defaults.autoScreenshotInterval,
-            Keys.screenshotSource: Defaults.screenshotSource,
-            Keys.screenshotTarget: Int(Defaults.screenshotTarget.rawValue),
-
-            Keys.keepAspectRatio: Defaults.keepAspectRatio,
-            Keys.exitOnEsc: Defaults.exitOnEsc,
-            
-            Keys.pauseInBackground: Defaults.pauseInBackground,
-            Keys.closeWithoutAsking: Defaults.closeWithoutAsking,
-            Keys.ejectWithoutAsking: Defaults.ejectWithoutAsking
-        ]
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.register(defaults: dictionary)        
-    }
-
-    func resetEmulatorUserDefaults() {
-        
+        let hwconfig = amiga.config()
         let defaults = UserDefaults.standard
 
-        let keys = [Keys.warpLoad,
-                    Keys.driveSounds,
-                    Keys.driveSoundPan,
-                    Keys.driveInsertSound,
-                    Keys.driveEjectSound,
-                    Keys.driveHeadSound,
-                    Keys.drivePollSound,
-                    Keys.driveBlankDiskFormat,
-                    
-                    Keys.autoSnapshots,
-                    Keys.autoSnapshotInterval,
-                    Keys.autoScreenshots,
-                    Keys.autoScreenshotInterval,
-                    Keys.screenshotSource,
-                    Keys.screenshotTarget,
-                    
-                    Keys.keepAspectRatio,
-                    Keys.exitOnEsc,
-                    
-                    Keys.pauseInBackground,
-                    Keys.closeWithoutAsking,
-                    Keys.ejectWithoutAsking
-        ]
-
-        for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadEmulatorUserDefaults()
-    }
-    
-    func loadEmulatorUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        prefs.warpLoad = defaults.bool(forKey: Keys.warpLoad)
-        prefs.driveSounds = defaults.bool(forKey: Keys.driveSounds)
-        prefs.driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
-        prefs.driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
-        prefs.driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
-        prefs.driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
-        prefs.drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
-        prefs.driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
-        
-        prefs.autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
-        prefs.snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
-        prefs.autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
-        prefs.screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
-        prefs.screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
-        prefs.screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
-    
-        prefs.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        prefs.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
-        
-        prefs.pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        prefs.closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
-        prefs.ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
-        
-        amiga.resume()
-    }
-    
-    func saveEmulatorUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.set(prefs.warpLoad, forKey: Keys.warpLoad)
-        defaults.set(prefs.driveSounds, forKey: Keys.driveSounds)
-        defaults.set(prefs.driveSoundPan, forKey: Keys.driveSoundPan)
-        defaults.set(prefs.driveInsertSound, forKey: Keys.driveInsertSound)
-        defaults.set(prefs.driveEjectSound, forKey: Keys.driveEjectSound)
-        defaults.set(prefs.driveHeadSound, forKey: Keys.driveHeadSound)
-        defaults.set(prefs.drivePollSound, forKey: Keys.drivePollSound)
-        defaults.set(prefs.driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
-        
-        defaults.set(prefs.autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(prefs.snapshotInterval, forKey: Keys.autoSnapshotInterval)
-        defaults.set(prefs.autoScreenshots, forKey: Keys.autoScreenshots)
-        defaults.set(prefs.screenshotInterval, forKey: Keys.autoScreenshotInterval)
-        defaults.set(prefs.screenshotSource, forKey: Keys.screenshotSource)
-        defaults.set(prefs.screenshotTargetIntValue, forKey: Keys.screenshotTarget)
-        
-        defaults.set(prefs.keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(prefs.exitOnEsc, forKey: Keys.exitOnEsc)
-                
-        defaults.set(prefs.pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(prefs.closeWithoutAsking, forKey: Keys.closeWithoutAsking)
-        defaults.set(prefs.ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
+        defaults.set(config.romURL, forKey: Keys.rom)
+        defaults.set(config.extURL, forKey: Keys.ext)
+        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
     }
 }
 
@@ -796,27 +664,27 @@ extension MyController {
 extension Keys {
     
     // Chipset
-    static let agnusRev           = "VAMIGAAgnusRevKey"
-    static let deniseRev          = "VAMIGADeniseRevKey"
-    static let realTimeClock      = "VAMIGARealTimeClockKey"
+    static let agnusRev           = "VAMIGA4AgnusRevKey"
+    static let deniseRev          = "VAMIGA4DeniseRevKey"
+    static let realTimeClock      = "VAMIGA4RealTimeClockKey"
 
     // Memory
-    static let chipRam            = "VAMIGAChipRamKey"
-    static let slowRam            = "VAMIGASlowRamKey"
-    static let fastRam            = "VAMIGAFastRamKey"
+    static let chipRam            = "VAMIGA4ChipRamKey"
+    static let slowRam            = "VAMIGA4SlowRamKey"
+    static let fastRam            = "VAMIGA4FastRamKey"
 
     // Drives
-    static let df0Connect         = "VAMIGADF0ConnectKey"
-    static let df0Type            = "VAMIGADF0TypeKey"
-    static let df1Connect         = "VAMIGADF1ConnectKey"
-    static let df1Type            = "VAMIGADF1TypeKey"
-    static let df2Connect         = "VAMIGADF2ConnectKey"
-    static let df2Type            = "VAMIGADF2TypeKey"
-    static let df3Connect         = "VAMIGADF3ConnectKey"
-    static let df3Type            = "VAMIGADF3TypeKey"
+    static let df0Connect         = "VAMIGA4DF0ConnectKey"
+    static let df0Type            = "VAMIGA4DF0TypeKey"
+    static let df1Connect         = "VAMIGA4DF1ConnectKey"
+    static let df1Type            = "VAMIGA4DF1TypeKey"
+    static let df2Connect         = "VAMIGA4DF2ConnectKey"
+    static let df2Type            = "VAMIGA4DF2TypeKey"
+    static let df3Connect         = "VAMIGA4DF3ConnectKey"
+    static let df3Type            = "VAMIGA4DF3TypeKey"
 
     // Ports
-    static let serialDevice       = "VAMIGASerialDeviceKey"
+    static let serialDevice       = "VAMIGA4SerialDeviceKey"
 }
 
 extension Defaults {
@@ -999,24 +867,24 @@ extension MyController {
 extension Keys {
 
     // Graphics
-    static let clxSprSpr         = "VAMIGAClxSprSpr"
-    static let clxSprPlf         = "VAMIGAClxSprPlf"
-    static let clxPlfPlf         = "VAMIGAClxPlfPlf"
+    static let clxSprSpr         = "VAMIGA5ClxSprSpr"
+    static let clxSprPlf         = "VAMIGA5ClxSprPlf"
+    static let clxPlfPlf         = "VAMIGA5ClxPlfPlf"
 
     // Audio
-    static let samplingMethod    = "VAMIGASamplingMethod"
-    static let filterActivation  = "VAMIGAFilterActivation"
-    static let filterType        = "VAMIGAFilterType"
+    static let samplingMethod    = "VAMIGA5SamplingMethod"
+    static let filterActivation  = "VAMIGA5FilterActivation"
+    static let filterType        = "VAMIGA5FilterType"
 
     // Blitter
-    static let blitterAccuracy   = "VAMIGABlitterAccuracy"
+    static let blitterAccuracy   = "VAMIGA5BlitterAccuracy"
 
     // Floppy drives
-    static let driveSpeed        = "VAMIGADriveSpeedKey"
-    static let fifoBuffering     = "VAMIGAFifoBufferingKey"
+    static let driveSpeed        = "VAMIGA5DriveSpeedKey"
+    static let fifoBuffering     = "VAMIGA5FifoBufferingKey"
 
     // CIAs
-    static let todBug            = "VAMIGATodBugKey"
+    static let todBug            = "VAMIGA5TodBugKey"
 }
 
 extension Defaults {
@@ -1116,5 +984,149 @@ extension MyController {
         defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
         defaults.set(config.diskController.useFifo, forKey: Keys.fifoBuffering)
         defaults.set(config.ciaA.todBug, forKey: Keys.todBug)
+    }
+}
+
+//
+// User defaults (Video)
+//
+
+extension Keys {
+    
+    // Colors
+    static let palette         = "VAMIGA6PaletteKey"
+    static let brightness      = "VAMIGA6BrightnessKey"
+    static let contrast        = "VAMIGA6ContrastKey"
+    static let saturation      = "VAMIGA6SaturationKey"
+
+    // Geometry
+    static let hCenter         = "VAMIGA6HCenter"
+    static let vCenter         = "VAMIGA6VCenter"
+    static let hZoom           = "VAMIGA6HZoom"
+    static let vZoom           = "VAMIGA6VZoom"
+
+    // Upscalers
+    static let enhancer        = "VVAMIG6AEnhancerKey"
+    static let upscaler        = "VAMIGA6UpscalerKey"
+
+    // GPU options
+    static let shaderOptions   = "VAMIGA6ShaderOptionsKey"
+}
+
+extension Defaults {
+    
+    static let palette = COLOR_PALETTE
+    static let brightness = Double(50.0)
+    static let contrast = Double(100.0)
+    static let saturation = Double(50.0)
+    
+    // Geometry
+    static let hCenter = Float(0.1169)
+    static let vCenter = Float(0.1683)
+    static let hZoom   = Float(0.0454)
+    static let vZoom   = Float(0.0349)
+
+    // Upscalers
+    static let enhancer = 0
+    static let upscaler = 0
+
+    // GPU options
+    static let shaderOptions = ShaderDefaultsTFT
+}
+
+extension MyController {
+    
+    static func registerVideoUserDefaults() {
+        
+        let dictionary: [String: Any] = [
+            
+            Keys.palette: Int(Defaults.palette.rawValue),
+            Keys.brightness: Defaults.brightness,
+            Keys.contrast: Defaults.contrast,
+            Keys.saturation: Defaults.saturation,
+
+            Keys.hCenter: Defaults.hCenter,
+            Keys.vCenter: Defaults.vCenter,
+            Keys.hZoom: Defaults.hZoom,
+            Keys.vZoom: Defaults.vZoom,
+
+            Keys.enhancer: Defaults.enhancer,
+            Keys.upscaler: Defaults.upscaler
+        ]
+        
+        let defaults = UserDefaults.standard
+        defaults.register(defaults: dictionary)
+        defaults.register(encodableItem: Defaults.shaderOptions, forKey: Keys.shaderOptions)
+    }
+    
+    func resetVideoUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+
+        let keys = [ Keys.palette,
+                     Keys.brightness,
+                     Keys.contrast,
+                     Keys.saturation,
+                     
+                     Keys.hCenter,
+                     Keys.vCenter,
+                     Keys.hZoom,
+                     Keys.vZoom,
+
+                     Keys.enhancer,
+                     Keys.upscaler,
+
+                     Keys.shaderOptions ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+        
+        loadVideoUserDefaults()
+    }
+    
+    func loadVideoUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        config.palette = defaults.integer(forKey: Keys.palette)
+        config.brightness = defaults.double(forKey: Keys.brightness)
+        config.contrast = defaults.double(forKey: Keys.contrast)
+        config.saturation = defaults.double(forKey: Keys.saturation)
+
+        config.hCenter = defaults.float(forKey: Keys.hCenter)
+        config.vCenter = defaults.float(forKey: Keys.vCenter)
+        config.hZoom = defaults.float(forKey: Keys.hZoom)
+        config.vZoom = defaults.float(forKey: Keys.vZoom)
+
+        config.enhancer = defaults.integer(forKey: Keys.enhancer)
+        config.upscaler = defaults.integer(forKey: Keys.upscaler)
+
+        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
+
+        renderer.updateTextureRect()
+        renderer.buildDotMasks()
+        
+        amiga.resume()
+    }
+    
+    func saveVideoUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(config.palette, forKey: Keys.palette)
+        defaults.set(config.brightness, forKey: Keys.brightness)
+        defaults.set(config.contrast, forKey: Keys.contrast)
+        defaults.set(config.saturation, forKey: Keys.saturation)
+
+        defaults.set(config.hCenter, forKey: Keys.hCenter)
+        defaults.set(config.vCenter, forKey: Keys.vCenter)
+        defaults.set(config.hZoom, forKey: Keys.hZoom)
+        defaults.set(config.vZoom, forKey: Keys.vZoom)
+
+        defaults.set(config.enhancer, forKey: Keys.enhancer)
+        defaults.set(config.upscaler, forKey: Keys.upscaler)
+
+        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }
