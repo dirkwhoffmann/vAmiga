@@ -39,7 +39,6 @@ extension ConfigController {
         romDeleteButton.isEnabled = poweredOff
         extDropView.isEnabled = poweredOff
         extDeleteButton.isEnabled = poweredOff
-        romArosButton.isEnabled = poweredOff
         
         // Icons
         romDropView.image =
@@ -76,6 +75,8 @@ extension ConfigController {
         extDeleteButton.isHidden = !hasExt
         extMapText.isHidden = !hasExt
         extMapAddr.isHidden = !hasExt
+        
+        romArosButton.isHidden = !poweredOff
 
         // Lock symbol and explanation
         romLockImage.isHidden = poweredOff

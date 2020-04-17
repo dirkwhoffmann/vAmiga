@@ -46,7 +46,7 @@
                 <outlet property="hwSerialDevice" destination="mIs-oj-bJf" id="T5v-aA-n7y"/>
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
-                <outlet property="romArosButton" destination="fIT-af-UYt" id="B5E-Gt-vyU"/>
+                <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
                 <outlet property="romLockImage" destination="mlY-fv-BuR" id="jKz-dJ-e1F"/>
@@ -106,9 +106,8 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="Ztn-DU-0CG">
-                                <view key="view" id="FCe-qX-IrM">
+                                <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FCe-qX-IrM">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" id="A4H-Al-xc0">
                                             <rect key="frame" x="535" y="5" width="59" height="32"/>
@@ -167,6 +166,9 @@ Gw
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="unlockAction:" target="-2" id="dHQ-VR-SGY"/>
+                                            </connections>
                                         </button>
                                         <box fixedFrame="YES" borderType="line" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="9op-d3-c3J">
                                             <rect key="frame" x="237" y="268" width="126" height="126"/>
@@ -373,24 +375,22 @@ Gw
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <button verticalHuggingPriority="750" id="fIT-af-UYt">
-                                            <rect key="frame" x="88" y="5" width="275" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="push" title="Install Aros Kickstart Replacement" bezelStyle="rounded" image="aros" imagePosition="trailing" alignment="center" refusesFirstResponder="YES" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="pca-qB-5HU">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" id="Bae-L4-jQm">
+                                            <rect key="frame" x="88" y="5" width="165" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Install Aros Rom" bezelStyle="rounded" image="aros" imagePosition="trailing" alignment="center" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" id="OgI-Be-WQh">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="installArosAction:" target="-2" id="Lsd-kY-4eh"/>
+                                                <action selector="installArosAction:" target="-2" id="jl3-8i-loB"/>
                                             </connections>
                                         </button>
                                     </subviews>
                                     <constraints>
-                                        <constraint firstItem="fIT-af-UYt" firstAttribute="leading" secondItem="fvU-1G-BTz" secondAttribute="trailing" constant="12" symbolic="YES" id="7gg-Yd-oRc"/>
                                         <constraint firstItem="fvU-1G-BTz" firstAttribute="leading" secondItem="FCe-qX-IrM" secondAttribute="leading" constant="12" id="MKI-EL-XHM"/>
                                         <constraint firstAttribute="bottom" secondItem="fvU-1G-BTz" secondAttribute="bottom" constant="12" id="dw5-Dc-RwZ"/>
                                         <constraint firstAttribute="trailing" secondItem="A4H-Al-xc0" secondAttribute="trailing" constant="12" id="etB-ge-xQD"/>
-                                        <constraint firstAttribute="bottom" secondItem="fIT-af-UYt" secondAttribute="bottom" constant="12" id="jVh-E4-3HH"/>
                                         <constraint firstItem="fvU-1G-BTz" firstAttribute="top" secondItem="xGt-sM-Vi2" secondAttribute="bottom" constant="20" symbolic="YES" id="qJB-wd-pTr"/>
                                         <constraint firstAttribute="bottom" secondItem="A4H-Al-xc0" secondAttribute="bottom" constant="12" id="xaT-Om-8Nr"/>
                                     </constraints>
@@ -1683,7 +1683,7 @@ DQ
                                             <rect key="frame" x="504" y="366" width="36" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="COLOR" id="egi-TJ-Irt">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1692,7 +1692,7 @@ DQ
                                             <rect key="frame" x="421" y="365" width="55" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CONTRAST" id="Db5-G0-5qw">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1701,7 +1701,7 @@ DQ
                                             <rect key="frame" x="343" y="366" width="63" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="BRIGHTNESS" id="Y01-3D-JQd">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1734,7 +1734,7 @@ DQ
                                             <rect key="frame" x="205" y="366" width="42" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H ZOOM" id="Vam-1Q-o7q">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1743,7 +1743,7 @@ DQ
                                             <rect key="frame" x="119" y="366" width="67" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V CENTERING" id="VkC-L7-bpV">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1752,7 +1752,7 @@ DQ
                                             <rect key="frame" x="45" y="366" width="67" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H CENTERING" id="unf-Nv-yeR">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -1876,7 +1876,7 @@ DQ
                                             <rect key="frame" x="279" y="366" width="42" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V ZOOM" id="jev-Xn-reR">
-                                                <font key="font" metaFont="menu" size="9"/>
+                                                <font key="font" metaFont="label" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>

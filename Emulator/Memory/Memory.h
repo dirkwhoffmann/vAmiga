@@ -29,7 +29,7 @@ assert(rom != NULL); assert(((x) % config.romSize) == ((x) & romMask));
 #define ASSERT_WOM_ADDR(x) \
 assert(wom != NULL); assert(((x) % config.womSize) == ((x) & womMask));
 #define ASSERT_EXT_ADDR(x)  \
-assert(ext != NULL); assert(((x) & config.extSize) == ((x) & extMask));
+assert(ext != NULL); assert(((x) % config.extSize) == ((x) & extMask));
 #define ASSERT_CIA_ADDR(x) \
 assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x) \

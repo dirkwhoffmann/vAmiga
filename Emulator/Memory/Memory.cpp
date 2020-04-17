@@ -145,12 +145,12 @@ Memory::didLoadFromBuffer(u8 *buffer)
     dealloc();
 
     // Allocate new memory
-    if (config.romSize) rom = new (std::nothrow) u8[config.romSize + 3];
-    if (config.womSize) wom = new (std::nothrow) u8[config.womSize + 3];
-    if (config.extSize) ext = new (std::nothrow) u8[config.extSize + 3];
-    if (config.chipSize) chip = new (std::nothrow) u8[config.chipSize + 3];
-    if (config.slowSize) slow = new (std::nothrow) u8[config.slowSize + 3];
-    if (config.fastSize) fast = new (std::nothrow) u8[config.fastSize + 3];
+    if (config.romSize) rom = new (std::nothrow) u8[config.romSize];
+    if (config.womSize) wom = new (std::nothrow) u8[config.womSize];
+    if (config.extSize) ext = new (std::nothrow) u8[config.extSize];
+    if (config.chipSize) chip = new (std::nothrow) u8[config.chipSize];
+    if (config.slowSize) slow = new (std::nothrow) u8[config.slowSize];
+    if (config.fastSize) fast = new (std::nothrow) u8[config.fastSize];
 
     // Load memory contents from buffer
     reader.copy(rom, config.romSize);
@@ -236,9 +236,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
     // Allocate memory
     if (bytes) {
         
-        // We allocate three bytes more than we need to handle the case
-        // that a long word access is performed on the last memory address.
-        size_t allocSize = bytes + 3;
+        size_t allocSize = bytes;
         
         if (!(ptr = new (std::nothrow) u8[allocSize])) {
             warn("Cannot allocate %d KB of memory\n", bytes);
