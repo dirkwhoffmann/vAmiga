@@ -93,6 +93,7 @@ extension PreferencesController {
 
     @IBAction func emuDrivePollSoundAction(_ sender: NSButton!) {
         
+        track()
         prefs.drivePollSound = sender.state == .on
         refresh()
     }

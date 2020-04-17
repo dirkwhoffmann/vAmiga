@@ -557,20 +557,16 @@ extension MyController {
             inspector?.fullRefresh()
 
         case MSG_DRIVE_CONNECT:
-            
             switch msg.data {
-                
             case 0: myAppDelegate.df0Menu.isHidden = false
             case 1: myAppDelegate.df1Menu.isHidden = false
             case 2: myAppDelegate.df2Menu.isHidden = false
             case 3: myAppDelegate.df3Menu.isHidden = false
             default: fatalError()
             }
-            
             refreshStatusBar()
             
         case MSG_DRIVE_DISCONNECT:
-            
             switch msg.data {
             case 0: myAppDelegate.df0Menu.isHidden = true
             case 1: myAppDelegate.df1Menu.isHidden = true
@@ -628,6 +624,7 @@ extension MyController {
   
         case MSG_DRIVE_HEAD_POLL:
  
+            track("POLL \(prefs.driveSounds) \(prefs.drivePollSound)")
             if prefs.driveSounds && prefs.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
