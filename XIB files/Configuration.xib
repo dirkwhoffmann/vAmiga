@@ -37,6 +37,7 @@
                 <outlet property="hwDf2Type" destination="Xv5-mL-jH9" id="bvs-s9-Q6C"/>
                 <outlet property="hwDf3Connect" destination="iRW-DK-apM" id="8g0-G4-lft"/>
                 <outlet property="hwDf3Type" destination="QB1-YY-C4v" id="sCa-Q5-Vwc"/>
+                <outlet property="hwFactorySettingsPopup" destination="uR2-36-afT" id="Grf-w6-zUu"/>
                 <outlet property="hwFastRamPopup" destination="iWk-tj-yn8" id="N1b-mT-Uz5"/>
                 <outlet property="hwLockImage" destination="nxr-43-cIJ" id="0Zz-Tf-muE"/>
                 <outlet property="hwLockSubText" destination="aVX-Vl-HNT" id="hCr-aY-VMf"/>
@@ -1224,7 +1225,7 @@ DQ
                                     </constraints>
                                 </view>
                             </tabViewItem>
-                            <tabViewItem label="Display" identifier="Video" id="JEj-rV-IeL">
+                            <tabViewItem label="Display" identifier="Display" id="JEj-rV-IeL">
                                 <view key="view" id="Dz1-EM-iCQ">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1894,6 +1895,9 @@ DQ
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
+                        <connections>
+                            <outlet property="delegate" destination="-2" id="ugp-a0-QYP"/>
+                        </connections>
                     </tabView>
                 </subviews>
             </view>

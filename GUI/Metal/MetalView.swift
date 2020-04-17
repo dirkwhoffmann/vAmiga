@@ -29,17 +29,6 @@ public class MetalView: MTKView {
     
     // Shows whether the Amiga is currently in control of the mouse.
     var gotMouse = false
-
-    // The selected method for retaining and releasing the mouse
-    /*
-    var retainMouseKeyComb = 0
-    var retainMouseWithKeys = true
-    var retainMouseByClick = true
-    var retainMouseByEntering = false
-    var releaseMouseKeyComb = 0
-    var releaseMouseWithKeys = true
-    var releaseMouseByShaking = true
-    */
     
     // Variables needed to detect a mouse detection
     var dxsign = CGFloat(1)

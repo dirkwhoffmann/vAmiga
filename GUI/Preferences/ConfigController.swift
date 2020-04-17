@@ -195,7 +195,7 @@ class ConfigController: DialogController {
             case "Hardware": refreshHardwareTab()
             case "Compatibility": refreshCompatibilityTab()
             case "Display": refreshVideoTab()
-            default: break
+            default: fatalError()
             }
         }
     }
@@ -230,6 +230,7 @@ extension ConfigController: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 
+        track()
         refresh()
     }
 }

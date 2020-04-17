@@ -130,7 +130,6 @@ class PreferencesController: DialogController {
 
     override func sheetDidShow() {
 
-        track("sheetDidShow")
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
     }
 
@@ -141,7 +140,7 @@ class PreferencesController: DialogController {
             switch id {
             case "General": refreshEmulatorTab()
             case "Devices": refreshDevicesTab()
-            default: break
+            default: fatalError()
             }
         }
     }

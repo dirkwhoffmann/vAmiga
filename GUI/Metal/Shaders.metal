@@ -104,7 +104,7 @@ vertex ProjectedVertex vertex_main(const device InVertex *vertices [[buffer(0)]]
 // Fragment shader
 //
 
-float4 scanlineWeight(uint2 pixel, uint height, float weight, float brightness, float bloom) {
+float3 scanlineWeight(uint2 pixel, uint height, float weight, float brightness, float bloom) {
     
     // Calculate distance to nearest scanline
     float dy = ((float(pixel.y % height) / float(height - 1)) - 0.5);
@@ -113,7 +113,8 @@ float4 scanlineWeight(uint2 pixel, uint height, float weight, float brightness, 
     float scanlineWeight = max(1.0 - dy * dy * 24 * weight, brightness);
     
     // Apply bloom effect an return
-    return scanlineWeight * bloom;
+    float3 result = scanlineWeight * bloom;
+    return result;
 }
 
 float3 rgb2hsv(float3 c)
@@ -157,7 +158,7 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
         float4 r = texture.sample(texSampler, tc + float2(dx,dy));
         float4 g = texture.sample(texSampler, tc);
         float4 b = texture.sample(texSampler, tc - float2(dx,dy));
-        color = float4(r.r, g.g, b.b,0);
+        color = float4(r.r, g.g, b.b, 1.0);
     } else {
         color = texture.sample(texSampler, float2(vert.texCoords.x, vert.texCoords.y));
     }
@@ -177,11 +178,11 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
     
     // Apply scanline effect (if emulation type matches)
     if (options.scanlines == 2) {
-        color *= scanlineWeight(pixel,
-                                uniforms.scanlineDistance,
-                                options.scanlineWeight,
-                                options.scanlineBrightness,
-                                1.0);
+        color.rgb *= scanlineWeight(pixel,
+                                    uniforms.scanlineDistance,
+                                    options.scanlineWeight,
+                                    options.scanlineBrightness,
+                                    1.0);
     }
 
     if (options.dotMask) {
