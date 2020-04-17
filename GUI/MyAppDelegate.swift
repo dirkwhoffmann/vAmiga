@@ -7,14 +7,16 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+// swiftlint:disable force_cast
+
 import Cocoa
 
 /* The delegate object of this application.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
 var myAppDelegate: MyAppDelegate {
-    let delegate = NSApp.delegate as? MyAppDelegate
-    return delegate!
+
+    return NSApp.delegate as! MyAppDelegate
 }
 
 /* An event tap for interception CGEvents
@@ -116,6 +118,9 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df2Menu: NSMenuItem!
     @IBOutlet weak var df3Menu: NSMenuItem!
     
+    // Preferences
+    var prefs: ApplicationPreferences!
+
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
     
@@ -125,10 +130,16 @@ func cgEventCallback(proxy: CGEventTapProxy,
     var recentlyExportedDisk2URLs: [URL] = []
     var recentlyExportedDisk3URLs: [URL] = []
     
+    override init() {
+        
+        super.init()
+        prefs = ApplicationPreferences.init(with: self)
+    }
+    
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
         
         track()
-        
+                
         // Make touch bar customizable
         if #available(OSX 10.12.2, *) {
             NSApplication.shared.isAutomaticCustomizeTouchBarMenuItemEnabled = true

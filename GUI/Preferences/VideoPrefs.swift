@@ -239,28 +239,24 @@ extension PreferencesController {
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
         config.hCenter = sender.floatValue / 1000
-        renderer.updateTextureRect()
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
         config.vCenter = sender.floatValue / 1000
-        renderer.updateTextureRect()
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
         config.hZoom = sender.floatValue / 1000
-        renderer.updateTextureRect()
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
         
         config.vZoom = sender.floatValue / 1000
-        renderer.updateTextureRect()
         refresh()
     }
     

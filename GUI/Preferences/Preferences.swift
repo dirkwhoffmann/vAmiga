@@ -21,11 +21,13 @@
 
 class ApplicationPreferences {
     
-    var parent: MyController!
+    var parent: MyAppDelegate!
+    /*
     var amiga: AmigaProxy { return parent.amiga }
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
     var kbController: KBController { return parent.kbController }
+    */
     
     //
     // General
@@ -38,7 +40,7 @@ class ApplicationPreferences {
     var inputDevice2 = Defaults.inputDevice2
     
     var warpLoad = Defaults.warpLoad {
-        didSet { parent.updateWarp() }
+        didSet { for c in parent.controllers { c.updateWarp() } }
     }
     var driveSounds = Defaults.driveSounds
     var driveSoundPan = Defaults.driveSoundPan
@@ -65,11 +67,11 @@ class ApplicationPreferences {
     
     var autoSnapshots = Defaults.autoSnapshots
     var snapshotInterval = 0 {
-        didSet { parent.startSnapshotTimer() }
+        didSet { for c in parent.controllers { c.startSnapshotTimer() } }
     }
     var autoScreenshots = Defaults.autoScreenshots
     var screenshotInterval = 0 {
-        didSet { parent.startScreenshotTimer() }
+        didSet { for c in parent.controllers { c.startScreenshotTimer() } }
     }
     var screenshotSource = Defaults.screenshotSource
     var screenshotTarget = Defaults.screenshotTarget
@@ -84,30 +86,27 @@ class ApplicationPreferences {
     
     var disconnectJoyKeys = Defaults.disconnectJoyKeys
     
-    var autofire: Bool {
-        get { return amiga.joystick1.autofire() }
-        set {
+    var autofire = Defaults.autofire {
+        didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.setAutofire(newValue)
-                amiga.joystick2.setAutofire(newValue)
+                amiga.joystick1.setAutofire(autofire)
+                amiga.joystick2.setAutofire(autofire)
             }
         }
     }
-    var autofireBullets: Int {
-        get { return myAppDelegate.proxy?.joystick1.autofireBullets() ?? 0 }
-        set {
+    var autofireBullets = Defaults.autofireBullets {
+        didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.setAutofireBullets(newValue)
-                amiga.joystick2.setAutofireBullets(newValue)
+                amiga.joystick1.setAutofireBullets(autofireBullets)
+                amiga.joystick2.setAutofireBullets(autofireBullets)
             }
         }
     }
-    var autofireFrequency: Float {
-        get { return myAppDelegate.proxy?.joystick1.autofireFrequency() ?? 0 }
-        set {
+    var autofireFrequency = Defaults.autofireFrequency {
+        didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.setAutofireFrequency(newValue)
-                amiga.joystick2.setAutofireFrequency(newValue)
+                amiga.joystick1.setAutofireFrequency(autofireFrequency)
+                amiga.joystick2.setAutofireFrequency(autofireFrequency)
             }
         }
     }
@@ -122,10 +121,7 @@ class ApplicationPreferences {
     var releaseMouseWithKeys = Defaults.releaseMouseWithKeys
     var releaseMouseByShaking = Defaults.releaseMouseByShaking
  
-    init(with controller: MyController) {
-        
-        parent = controller
-    }
+    init(with delegate: MyAppDelegate) { parent = delegate }
 }
 
 class EmulatorPreferences {
@@ -265,11 +261,18 @@ class EmulatorPreferences {
     var enhancer = Defaults.enhancer
     var upscaler = Defaults.upscaler
     
-    var hCenter = Defaults.hCenter
-    var vCenter = Defaults.vCenter
-    var hZoom = Defaults.hZoom
-    var vZoom = Defaults.vZoom
-    
+    var hCenter = Defaults.hCenter {
+        didSet { renderer.updateTextureRect() }
+    }
+    var vCenter = Defaults.vCenter {
+        didSet { renderer.updateTextureRect() }
+    }
+    var hZoom = Defaults.hZoom {
+        didSet { renderer.updateTextureRect() }
+    }
+    var vZoom = Defaults.vZoom {
+        didSet { renderer.updateTextureRect() }
+    }
     var brightness: Double {
         get { return amiga.denise.brightness() }
         set { amiga.denise.setBrightness(newValue) }
