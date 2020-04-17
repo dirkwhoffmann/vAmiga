@@ -64,7 +64,7 @@ public extension MetalView {
         insideTrackingArea = true
         
         // Check if we need to retain the mouse
-        if retainMouseByEntering {
+        if prefs.retainMouseByEntering {
    
             // Only retain if the user didn't shake the mouse recently
             if DispatchTime.diffMilliSec(lastShake) > UInt64(500) {
@@ -89,7 +89,7 @@ public extension MetalView {
         }
         
         // Check if we need to retain the mouse
-        if retainMouseByClick && insideTrackingArea {
+        if prefs.retainMouseByClick && insideTrackingArea {
             retainMouse()
         }
     }
@@ -137,7 +137,7 @@ public extension MetalView {
             parent.amiga.mouse.setXY(newLocation)
             
             // Check for a shaking mouse movement
-            if releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
+            if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
                 releaseMouse()
             }
         }
@@ -155,9 +155,9 @@ public extension MetalView {
     
     func checkForMouseKeys(with event: NSEvent) {
                 
-        if !gotMouse && retainMouseWithKeys {
+        if !gotMouse && prefs.retainMouseWithKeys {
             
-            switch retainMouseKeyComb {
+            switch prefs.retainMouseKeyComb {
               
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):
@@ -168,10 +168,10 @@ public extension MetalView {
             default: break
             }
 
-        } else if gotMouse && releaseMouseWithKeys {
+        } else if gotMouse && prefs.releaseMouseWithKeys {
             
             track()
-            switch releaseMouseKeyComb {
+            switch prefs.releaseMouseKeyComb {
                 
             case 0 where event.modifierFlags.contains([.option, .command]),
                  1 where event.modifierFlags.contains([.option, .control]):

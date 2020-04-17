@@ -141,17 +141,19 @@ private:
     //
 
 public:
-
+    
     // Connects or disconnect an external drive
-     void setConnected(int df, bool value);
-     void connect(int df) { setConnected(df, true); }
-     void disconnect(int df) { setConnected(df, false); }
-
-     // Sets the speed acceleration factor for all connected drives
-     void setSpeed(i32 value);
-
-     // Enables or disables the emulation of a FIFO buffer
-     void setUseFifo(bool value);
+    bool isConnected(int df) { return config.connected[df]; }
+    void setConnected(int df, bool value);
+    void connect(int df) { setConnected(df, true); }
+    void disconnect(int df) { setConnected(df, false); }
+    
+    // Sets the speed acceleration factor for all connected drives
+    void setSpeed(i32 value);
+    
+    // Enables or disables the emulation of a FIFO buffer
+    bool getUseFifo() { return config.useFifo; }
+    void setUseFifo(bool value);
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);

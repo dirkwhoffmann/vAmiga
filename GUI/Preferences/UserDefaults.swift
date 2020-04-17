@@ -411,27 +411,24 @@ extension MyController {
         amiga.suspend()
 
         // Emulation keys
-        defaults.decode(&gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
-        defaults.decode(&gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
-        defaults.decode(&gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
+        defaults.decode(&prefs.keyMaps[0], forKey: Keys.joyKeyMap1)
+        defaults.decode(&prefs.keyMaps[1], forKey: Keys.joyKeyMap2)
+        defaults.decode(&prefs.keyMaps[2], forKey: Keys.mouseKeyMap)
         prefs.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
-        amiga.joystick1.setAutofire(defaults.bool(forKey: Keys.autofire))
-        amiga.joystick2.setAutofire(defaults.bool(forKey: Keys.autofire))
-        amiga.joystick1.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
-        amiga.joystick2.setAutofireBullets(defaults.integer(forKey: Keys.autofireBullets))
-        amiga.joystick1.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
-        amiga.joystick2.setAutofireFrequency(defaults.float(forKey: Keys.autofireFrequency))
+        prefs.autofire = defaults.bool(forKey: Keys.autofire)
+        prefs.autofireBullets = defaults.integer(forKey: Keys.autofireBullets)
+        prefs.autofireFrequency = defaults.float(forKey: Keys.autofireFrequency)
  
         // Mouse
-        metal.retainMouseKeyComb    = defaults.integer(forKey: Keys.retainMouseKeyComb)
-        metal.retainMouseWithKeys   = defaults.bool(forKey: Keys.retainMouseWithKeys)
-        metal.retainMouseByClick    = defaults.bool(forKey: Keys.retainMouseByClick)
-        metal.retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
-        metal.releaseMouseKeyComb    = defaults.integer(forKey: Keys.releaseMouseKeyComb)
-        metal.releaseMouseWithKeys  = defaults.bool(forKey: Keys.releaseMouseWithKeys)
-        metal.releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
+        prefs.retainMouseKeyComb = defaults.integer(forKey: Keys.retainMouseKeyComb)
+        prefs.retainMouseWithKeys = defaults.bool(forKey: Keys.retainMouseWithKeys)
+        prefs.retainMouseByClick = defaults.bool(forKey: Keys.retainMouseByClick)
+        prefs.retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
+        prefs.releaseMouseKeyComb = defaults.integer(forKey: Keys.releaseMouseKeyComb)
+        prefs.releaseMouseWithKeys = defaults.bool(forKey: Keys.releaseMouseWithKeys)
+        prefs.releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
         
         amiga.resume()
     }
@@ -441,24 +438,24 @@ extension MyController {
         let defaults = UserDefaults.standard
 
         // Emulation keys
-        defaults.encode(gamePadManager.gamePads[0]!.keyMap, forKey: Keys.joyKeyMap1)
-        defaults.encode(gamePadManager.gamePads[1]!.keyMap, forKey: Keys.joyKeyMap2)
-        defaults.encode(gamePadManager.gamePads[2]!.keyMap, forKey: Keys.mouseKeyMap)
+        defaults.encode(prefs.keyMaps[0], forKey: Keys.joyKeyMap1)
+        defaults.encode(prefs.keyMaps[1], forKey: Keys.joyKeyMap2)
+        defaults.encode(prefs.keyMaps[2], forKey: Keys.mouseKeyMap)
         defaults.set(prefs.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
 
         // Joysticks
-        defaults.set(amiga.joystick1.autofire(), forKey: Keys.autofire)
-        defaults.set(amiga.joystick1.autofireBullets(), forKey: Keys.autofireBullets)
-        defaults.set(amiga.joystick1.autofireFrequency(), forKey: Keys.autofireFrequency)
+        defaults.set(prefs.autofire, forKey: Keys.autofire)
+        defaults.set(prefs.autofireBullets, forKey: Keys.autofireBullets)
+        defaults.set(prefs.autofireFrequency, forKey: Keys.autofireFrequency)
         
         // Mouse
-        defaults.set(metal.retainMouseKeyComb, forKey: Keys.retainMouseKeyComb)
-        defaults.set(metal.retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
-        defaults.set(metal.retainMouseByClick, forKey: Keys.retainMouseByClick)
-        defaults.set(metal.retainMouseByEntering, forKey: Keys.retainMouseByEntering)
-        defaults.set(metal.releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
-        defaults.set(metal.releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
-        defaults.set(metal.releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
+        defaults.set(prefs.retainMouseKeyComb, forKey: Keys.retainMouseKeyComb)
+        defaults.set(prefs.retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
+        defaults.set(prefs.retainMouseByClick, forKey: Keys.retainMouseByClick)
+        defaults.set(prefs.retainMouseByEntering, forKey: Keys.retainMouseByEntering)
+        defaults.set(prefs.releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
+        defaults.set(prefs.releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
+        defaults.set(prefs.releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
     }
 }
 

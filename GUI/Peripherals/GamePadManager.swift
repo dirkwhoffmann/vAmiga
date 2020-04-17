@@ -306,8 +306,8 @@ class GamePadManager {
     
     func restoreFactorySettings() {
     
-        gamePads[0]!.keyMap = Defaults.joyKeyMap1
-        gamePads[1]!.keyMap = Defaults.joyKeyMap2
-        gamePads[2]!.keyMap = Defaults.mouseKeyMap
+        gamePads[0]!.keyMap = 0 // Defaults.joyKeyMap1
+        gamePads[1]!.keyMap = 1 // Defaults.joyKeyMap2
+        gamePads[2]!.keyMap = 2 // Defaults.mouseKeyMap
     }
 }

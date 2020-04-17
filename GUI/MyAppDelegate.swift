@@ -218,9 +218,46 @@ func cgEventCallback(proxy: CGEventTapProxy,
 
 extension MyAppDelegate {
     
+    var documents: [MyDocument] {
+        return NSDocumentController.shared.documents as? [MyDocument] ?? []
+    }
+    var windows: [NSWindow] {
+        return documents.compactMap({ $0.windowForSheet })
+    }
+    var controllers: [MyController] {
+        return documents.compactMap({ $0.windowForSheet?.windowController as? MyController })
+    }
+    var proxies: [AmigaProxy] {
+        return documents.map({ $0.amiga })
+    }
+    var proxy: AmigaProxy? {
+        return (NSDocumentController.shared.currentDocument as? MyDocument)?.amiga
+    }
+    
     func windowDidBecomeMain(_ window: NSWindow) {
-
+        
+        for con in controllers {
+            
+            if con.window == window {
+                
+                // Start playback
+                if !con.macAudio!.isRunning {
+                    con.macAudio!.startPlayback()
+                    con.amiga.paula.rampUpFromZero()
+                }
+                
+            } else {
+                
+                // Stop playback
+                if con.macAudio!.isRunning {
+                    con.macAudio!.stopPlayback()
+                    con.amiga.paula.rampDown()
+                }
+            }
+        }
+        
         // Iterate through all controllers
+        /*
         for case let document as MyDocument in NSApplication.shared.orderedDocuments {
 
             if let con = document.windowControllers.first as? MyController {
@@ -243,5 +280,6 @@ extension MyAppDelegate {
                 }
             }
         }
+        */
     }
 }

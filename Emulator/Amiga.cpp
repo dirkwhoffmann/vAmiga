@@ -458,6 +458,51 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
     return true;
 }
 
+long
+Amiga::getConfig(ConfigOption option)
+{
+    switch (option) {
+
+        case VA_AGNUS_REVISION: return agnus.getRevision();
+        case VA_DENISE_REVISION: return denise.getRevision();
+        case VA_RT_CLOCK: return rtc.getModel();
+        case VA_CHIP_RAM: return mem.chipRamSize() / KB(1);
+        case VA_SLOW_RAM: return mem.slowRamSize() / KB(1);
+        case VA_FAST_RAM: return mem.fastRamSize() / KB(1);
+        case VA_EXT_START: return mem.getExtStart();
+        case VA_DRIVE_SPEED: return df0.getSpeed();
+        case VA_EMULATE_SPRITES: return denise.getEmulateSprites();
+        case VA_CLX_SPR_SPR: return denise.getClxSprSpr();
+        case VA_CLX_SPR_PLF: return denise.getClxSprPlf();
+        case VA_CLX_PLF_PLF: return denise.getClxPlfPlf();
+        case VA_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
+        case VA_FILTER_ACTIVATION: return paula.audioUnit.getFilterActivation();
+        case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
+        case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
+        case VA_FIFO_BUFFERING: paula.diskController.getUseFifo();
+        case VA_SERIAL_DEVICE: return serialPort.getDevice();
+        case VA_TODBUG: return ciaA.getTodBug();
+
+        default: assert(false); return 0;
+    }
+}
+
+long
+Amiga::getDriveConfig(unsigned drive, ConfigOption option)
+{
+    assert(drive < 4);
+            
+    switch (option) {
+            
+        case VA_DRIVE_CONNECT: return paula.diskController.isConnected(drive);
+        case VA_DRIVE_TYPE: return df[drive]->getType();
+
+        default: assert(false);
+    }
+    
+    return 0;
+}
+
 void
 Amiga::prefix()
 {

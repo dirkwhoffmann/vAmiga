@@ -16,7 +16,8 @@ import MetalPerformanceShaders
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
-
+    var prefs: ApplicationPreferences { return parent.prefs }
+    
     /* Tracking area for trapping the mouse
      * We use a tracking area to determine when the mouse is moved into or
      * out of the emulator window.
@@ -30,6 +31,7 @@ public class MetalView: MTKView {
     var gotMouse = false
 
     // The selected method for retaining and releasing the mouse
+    /*
     var retainMouseKeyComb = 0
     var retainMouseWithKeys = true
     var retainMouseByClick = true
@@ -37,6 +39,7 @@ public class MetalView: MTKView {
     var releaseMouseKeyComb = 0
     var releaseMouseWithKeys = true
     var releaseMouseByShaking = true
+    */
     
     // Variables needed to detect a mouse detection
     var dxsign = CGFloat(1)

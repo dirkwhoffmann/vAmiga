@@ -87,33 +87,41 @@ class ApplicationPreferences {
     var autofire: Bool {
         get { return amiga.joystick1.autofire() }
         set {
-            amiga.joystick1.setAutofire(newValue)
-            amiga.joystick2.setAutofire(newValue)
+            for amiga in myAppDelegate.proxies {
+                amiga.joystick1.setAutofire(newValue)
+                amiga.joystick2.setAutofire(newValue)
+            }
         }
     }
     var autofireBullets: Int {
-        get { return amiga.joystick1.autofireBullets() }
+        get { return myAppDelegate.proxy?.joystick1.autofireBullets() ?? 0 }
         set {
-            amiga.joystick1.setAutofireBullets(newValue)
-            amiga.joystick2.setAutofireBullets(newValue)
+            for amiga in myAppDelegate.proxies {
+                amiga.joystick1.setAutofireBullets(newValue)
+                amiga.joystick2.setAutofireBullets(newValue)
+            }
         }
     }
     var autofireFrequency: Float {
-        get { return amiga.joystick1.autofireFrequency() }
+        get { return myAppDelegate.proxy?.joystick1.autofireFrequency() ?? 0 }
         set {
-            amiga.joystick1.setAutofireFrequency(newValue)
-            amiga.joystick2.setAutofireFrequency(newValue)
+            for amiga in myAppDelegate.proxies {
+                amiga.joystick1.setAutofireFrequency(newValue)
+                amiga.joystick2.setAutofireFrequency(newValue)
+            }
         }
     }
-    var keyMap0: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[0]?.keyMap }
-        set { gamePadManager.gamePads[0]?.keyMap = newValue }
-    }
-    var keyMap1: [MacKey: UInt32]? {
-        get { return gamePadManager.gamePads[1]?.keyMap }
-        set { gamePadManager.gamePads[1]?.keyMap = newValue }
-    }
     
+    var keyMaps = [ Defaults.joyKeyMap1, Defaults.joyKeyMap2, Defaults.mouseKeyMap ]
+
+    var retainMouseKeyComb = Defaults.retainMouseKeyComb
+    var retainMouseWithKeys = Defaults.retainMouseWithKeys
+    var retainMouseByClick = Defaults.retainMouseByClick
+    var retainMouseByEntering = Defaults.retainMouseByEntering
+    var releaseMouseKeyComb = Defaults.retainMouseKeyComb
+    var releaseMouseWithKeys = Defaults.releaseMouseWithKeys
+    var releaseMouseByShaking = Defaults.releaseMouseByShaking
+ 
     init(with controller: MyController) {
         
         parent = controller

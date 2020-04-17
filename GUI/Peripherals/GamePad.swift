@@ -20,7 +20,7 @@ class GamePad {
     var prefs: ApplicationPreferences { return manager.controller.prefs }
 
     // Keymap of the managed device (only used for keyboard emulated devices)
-    var keyMap: [MacKey: UInt32]?
+    var keyMap: Int?
     
     // Indicates if a joystick emulation key is currently pressed
     var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
@@ -128,18 +128,22 @@ extension GamePad {
     // Binds a key to a gamepad action
     func bind(key: MacKey, action: GamePadAction) {
 
+        guard let n = keyMap else { return }
+        
         // Avoid double mappings
         unbind(action: action)
 
-        keyMap![key] = action.rawValue
+        prefs.keyMaps[n][key] = action.rawValue
     }
 
     // Removes any existing key binding to the specified gampad action
-     func unbind(action: GamePadAction) {
-
-         for (k, dir) in keyMap! where dir == action.rawValue {
-             keyMap![k] = nil
-         }
+    func unbind(action: GamePadAction) {
+        
+        guard let n = keyMap else { return }
+        
+        for (k, dir) in prefs.keyMaps[n] where dir == action.rawValue {
+            prefs.keyMaps[n][k] = nil
+        }
      }
 
     /* Handles a keyboard down event
@@ -149,7 +153,7 @@ extension GamePad {
      */
     func keyDown(_ macKey: MacKey) -> Bool {
         
-        if let direction = keyMap?[macKey] {
+        if let n = keyMap, let direction = prefs.keyMaps[n][macKey] {
 
             var events: [GamePadAction]
             
@@ -197,7 +201,7 @@ extension GamePad {
      */
     func keyUp(_ macKey: MacKey) -> Bool {
 
-        if let direction = keyMap?[macKey] {
+        if let n = keyMap, let direction = prefs.keyMaps[n][macKey] {
             
             var events: [GamePadAction]
             
