@@ -271,7 +271,7 @@ extension MyController {
             config.extURL = url
             amiga.mem.loadExt(fromFile: config.extURL)
         }
-        amiga.configure(VA_EXT_START, value: defaults.integer(forKey: Keys.extStart))
+        config.extStart = defaults.integer(forKey: Keys.extStart)
 
         amiga.resume()
     }
@@ -941,25 +941,26 @@ extension MyController {
         
         amiga.suspend()
         
-        amiga.configure(VA_AGNUS_REVISION, value: defaults.integer(forKey: Keys.agnusRev))
-        amiga.configure(VA_DENISE_REVISION, value: defaults.integer(forKey: Keys.deniseRev))
-        amiga.configure(VA_RT_CLOCK, enable: defaults.bool(forKey: Keys.realTimeClock))
+        config.agnusRev = defaults.integer(forKey: Keys.agnusRev)
+        config.deniseRev = defaults.integer(forKey: Keys.deniseRev)
+        config.rtClock = defaults.integer(forKey: Keys.realTimeClock)
 
-        amiga.configure(VA_CHIP_RAM, value: defaults.integer(forKey: Keys.chipRam))
-        amiga.configure(VA_SLOW_RAM, value: defaults.integer(forKey: Keys.slowRam))
-        amiga.configure(VA_FAST_RAM, value: defaults.integer(forKey: Keys.fastRam))
+        config.chipRam = defaults.integer(forKey: Keys.chipRam)
+        config.slowRam = defaults.integer(forKey: Keys.slowRam)
+        config.fastRam = defaults.integer(forKey: Keys.fastRam)
 
-        amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
-        amiga.configureDrive(0, connected: defaults.bool(forKey: Keys.df0Connect))
-        amiga.configureDrive(0, type: defaults.integer(forKey: Keys.df0Type))
-        amiga.configureDrive(1, connected: defaults.bool(forKey: Keys.df1Connect))
-        amiga.configureDrive(1, type: defaults.integer(forKey: Keys.df1Type))
-        amiga.configureDrive(2, connected: defaults.bool(forKey: Keys.df2Connect))
-        amiga.configureDrive(2, type: defaults.integer(forKey: Keys.df2Type))
-        amiga.configureDrive(3, connected: defaults.bool(forKey: Keys.df3Connect))
-        amiga.configureDrive(3, type: defaults.integer(forKey: Keys.df3Type))
+        config.driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+        config.df0Connected = defaults.bool(forKey: Keys.df0Connect)
+        config.df1Connected = defaults.bool(forKey: Keys.df1Connect)
+        config.df2Connected = defaults.bool(forKey: Keys.df2Connect)
+        config.df3Connected = defaults.bool(forKey: Keys.df3Connect)
+        config.df0Type = defaults.integer(forKey: Keys.df0Type)
+        config.df1Type = defaults.integer(forKey: Keys.df1Type)
+        config.df2Type = defaults.integer(forKey: Keys.df2Type)
+        config.df3Type = defaults.integer(forKey: Keys.df3Type)
 
-        amiga.configure(VA_SERIAL_DEVICE, value: defaults.integer(forKey: Keys.serialDevice))
+        config.serialDevice = defaults.integer(forKey: Keys.serialDevice)
+
         amiga.resume()
     }
 
@@ -1087,16 +1088,16 @@ extension MyController {
 
         amiga.suspend()
 
-        amiga.configure(VA_CLX_SPR_SPR, enable: defaults.bool(forKey: Keys.clxSprSpr))
-        amiga.configure(VA_CLX_SPR_PLF, enable: defaults.bool(forKey: Keys.clxSprPlf))
-        amiga.configure(VA_CLX_PLF_PLF, enable: defaults.bool(forKey: Keys.clxPlfPlf))
-        amiga.configure(VA_SAMPLING_METHOD, value: defaults.integer(forKey: Keys.samplingMethod))
-        amiga.configure(VA_FILTER_ACTIVATION, value: defaults.integer(forKey: Keys.filterActivation))
-        amiga.configure(VA_FILTER_TYPE, value: defaults.integer(forKey: Keys.filterType))
-        amiga.configure(VA_BLITTER_ACCURACY, value: defaults.integer(forKey: Keys.blitterAccuracy))
-        amiga.configure(VA_DRIVE_SPEED, value: defaults.integer(forKey: Keys.driveSpeed))
-        amiga.configure(VA_FIFO_BUFFERING, enable: defaults.bool(forKey: Keys.fifoBuffering))
-        amiga.configure(VA_TODBUG, enable: defaults.bool(forKey: Keys.todBug))
+        config.clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
+        config.clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
+        config.clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
+        config.samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
+        config.filterActivation = defaults.integer(forKey: Keys.filterActivation)
+        config.filterType = defaults.integer(forKey: Keys.filterType)
+        config.blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        config.driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+        config.fifoBuffering = defaults.bool(forKey: Keys.fifoBuffering)
+        config.todBug = defaults.bool(forKey: Keys.todBug)
 
         amiga.resume()
     }

@@ -1477,21 +1477,29 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getConfig();
 }
-- (BOOL) configure:(ConfigOption)option value:(NSInteger)value
+- (BOOL) configure:(ConfigOption)opt value:(NSInteger)val
 {
-    return wrapper->amiga->configure(option, value);
+    return wrapper->amiga->configure(opt, val);
 }
-- (BOOL) configure:(ConfigOption)option enable:(BOOL)value
+- (BOOL) configure:(ConfigOption)opt enable:(BOOL)val
 {
-    return wrapper->amiga->configure(option, value ? 1 : 0);
+    return wrapper->amiga->configure(opt, val ? 1 : 0);
 }
-- (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value
+- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr value:(NSInteger)val
 {
-    return wrapper->amiga->configureDrive(nr, VA_DRIVE_CONNECT, value);
+    return wrapper->amiga->configureDrive(nr, opt, val);
 }
-- (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)type
+- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val;
 {
-    return wrapper->amiga->configureDrive(nr, VA_DRIVE_TYPE, type);
+    return wrapper->amiga->configureDrive(nr, opt, val ? 1 : 0);
+}
+- (NSInteger) getConfig:(ConfigOption)option
+{
+    return wrapper->amiga->getConfig(option);
+}
+- (NSInteger) getConfig:(ConfigOption)option drive:(NSInteger)nr
+{
+    return wrapper->amiga->getDriveConfig(nr, option);
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

@@ -568,17 +568,8 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Debug menu)
     //
 
-    /*
-     @IBAction func debugLevelAction(_ sender: Any!) {
-     // Dummy target to make menu item validatable
-     }
-     @IBAction func setDebugLevelAction(_ sender: NSMenuItem!) {
-     amiga.suspend()
-     amiga.setDebugLevel(sender.tag)
-     amiga.resume()
-     }
-     */
     @IBAction func emulateSpritesAction(_ sender: NSMenuItem!) {
+
         amiga.suspend()
         amiga.configure(VA_EMULATE_SPRITES, enable: sender.state == .off)
         amiga.resume()

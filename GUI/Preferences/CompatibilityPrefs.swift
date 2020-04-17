@@ -48,55 +48,55 @@ extension PreferencesController {
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {
 
-        amiga.configure(VA_CLX_SPR_SPR, enable: sender.state == .on)
+        config.clxSprSpr = sender.state == .on
         refresh()
     }
 
     @IBAction func compClxSprPlfAction(_ sender: NSButton!) {
 
-        amiga.configure(VA_CLX_SPR_PLF, enable: sender.state == .on)
+        config.clxSprPlf = sender.state == .on
         refresh()
     }
 
     @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
 
-        amiga.configure(VA_CLX_PLF_PLF, enable: sender.state == .on)
+        config.clxPlfPlf = sender.state == .on
         refresh()
     }
 
     @IBAction func compSamplingMethodAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_SAMPLING_METHOD, value: sender.selectedTag())
+        config.samplingMethod = sender.selectedTag()
         refresh()
     }
 
     @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_FILTER_ACTIVATION, value: sender.selectedTag())
+        config.filterActivation = sender.selectedTag()
         refresh()
     }
 
     @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
-        amiga.configure(VA_BLITTER_ACCURACY, value: sender.integerValue)
+        config.blitterAccuracy = sender.integerValue
         refresh()
     }
 
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_DRIVE_SPEED, value: sender.selectedTag())
+        config.driveSpeed = sender.selectedTag()
         refresh()
     }
 
     @IBAction func compFifoBufferingAction(_ sender: NSButton!) {
 
-        amiga.configure(VA_FIFO_BUFFERING, enable: sender.state == .on)
+        config.fifoBuffering = sender.state == .on
         refresh()
     }
 
     @IBAction func compTodBugAction(_ sender: NSButton!) {
 
-        amiga.configure(VA_TODBUG, enable: sender.state == .on)
+        config.todBug = sender.state == .on
         refresh()
     }
 

@@ -119,8 +119,7 @@ extension PreferencesController {
 
     @IBAction func extMapAddrAction(_ sender: NSPopUpButton!) {
 
-        track()
-        amiga.configure(VA_EXT_START, value: sender.selectedTag())
+        config.extStart = sender.selectedTag()
         refresh()
     }
 
@@ -134,14 +133,13 @@ extension PreferencesController {
 
         amiga.mem.loadRom(fromBuffer: arosRom)
         amiga.mem.loadExt(fromBuffer: arosExt)
-        amiga.configure(VA_EXT_START, value: 0xE0)
+        config.extStart = 0xE0
 
         // Make sure the machine has enough Ram to run Aros
-        let config = amiga.mem.getConfig()
-        let mem = config.chipSize + config.slowSize + config.fastSize
-        if mem < 1024*1024 {
-            amiga.configure(VA_SLOW_RAM, value: 512)
-        }
+        let chip = amiga.getConfig(VA_CHIP_RAM)
+        let slow = amiga.getConfig(VA_SLOW_RAM)
+        let fast = amiga.getConfig(VA_FAST_RAM)
+        if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
         refresh()
     }
 }

@@ -134,10 +134,14 @@ struct AmigaFileWrapper;
 - (SnapshotProxy *) latestUserSnapshot;
 
 - (AmigaConfiguration) config;
-- (BOOL) configure:(ConfigOption)option value:(NSInteger)value;
-- (BOOL) configure:(ConfigOption)option enable:(BOOL)value;
-- (BOOL) configureDrive:(NSInteger)nr connected:(BOOL)value;
-- (BOOL) configureDrive:(NSInteger)nr type:(NSInteger)value;
+- (BOOL) configure:(ConfigOption)opt value:(NSInteger)val;
+- (BOOL) configure:(ConfigOption)opt enable:(BOOL)val;
+- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr value:(NSInteger)val;
+- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val;
+
+- (NSInteger) getConfig:(ConfigOption)option;
+- (NSInteger) getConfig:(ConfigOption)option drive:(NSInteger)nr;
+
 
 // Message queue
 - (void) addListener:(const void *)sender function:(Callback *)func;

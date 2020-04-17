@@ -137,15 +137,129 @@ class EmulatorPreferences {
     var kbController: KBController { return parent.kbController }
 
     //
-    // Rom preferences
+    // Rom settings
     //
     
-    // Rom URLs
     var romURL: URL = Defaults.rom
     var extURL: URL = Defaults.ext
     
+    var extStart: Int {
+        get { return amiga.getConfig(VA_EXT_START) }
+        set { amiga.configure(VA_EXT_START, value: newValue) }
+    }
+
     //
-    // Video preferences
+    // Hardware settings
+    //
+    
+    var agnusRev: Int {
+        get { return amiga.getConfig(VA_AGNUS_REVISION) }
+        set { amiga.configure(VA_AGNUS_REVISION, value: newValue) }
+    }
+    var deniseRev: Int {
+        get { return amiga.getConfig(VA_DENISE_REVISION) }
+        set { amiga.configure(VA_DENISE_REVISION, value: newValue) }
+    }
+    var rtClock: Int {
+        get { return amiga.getConfig(VA_RT_CLOCK) }
+        set { amiga.configure(VA_RT_CLOCK, value: newValue) }
+    }
+    var chipRam: Int {
+        get { return amiga.getConfig(VA_CHIP_RAM) }
+        set { amiga.configure(VA_CHIP_RAM, value: newValue) }
+    }
+    var slowRam: Int {
+        get { return amiga.getConfig(VA_SLOW_RAM) }
+        set { amiga.configure(VA_SLOW_RAM, value: newValue) }
+    }
+    var fastRam: Int {
+        get { return amiga.getConfig(VA_FAST_RAM) }
+        set { amiga.configure(VA_FAST_RAM, value: newValue) }
+    }
+    var serialDevice: Int {
+        get { return amiga.getConfig(VA_SERIAL_DEVICE) }
+        set { amiga.configure(VA_SERIAL_DEVICE, value: newValue) }
+    }
+    var df0Connected: Bool {
+        get { return amiga.getConfig(VA_DRIVE_CONNECT, drive: 0) != 0 }
+        set { amiga.configure(VA_DRIVE_CONNECT, drive: 0, enable: newValue) }
+    }
+    var df0Type: Int {
+        get { return amiga.getConfig(VA_DRIVE_TYPE, drive: 0) }
+        set { amiga.configure(VA_DRIVE_TYPE, drive: 0, value: newValue) }
+    }
+    var df1Connected: Bool {
+        get { return amiga.getConfig(VA_DRIVE_CONNECT, drive: 1) != 0 }
+        set { amiga.configure(VA_DRIVE_CONNECT, drive: 1, enable: newValue) }
+    }
+    var df1Type: Int {
+        get { return amiga.getConfig(VA_DRIVE_TYPE, drive: 1) }
+        set { amiga.configure(VA_DRIVE_TYPE, drive: 1, value: newValue) }
+    }
+    var df2Connected: Bool {
+        get { return amiga.getConfig(VA_DRIVE_CONNECT, drive: 2) != 0 }
+        set { amiga.configure(VA_DRIVE_CONNECT, drive: 2, enable: newValue) }
+    }
+    var df2Type: Int {
+        get { return amiga.getConfig(VA_DRIVE_TYPE, drive: 2) }
+        set { amiga.configure(VA_DRIVE_TYPE, drive: 2, value: newValue) }
+    }
+    var df3Connected: Bool {
+        get { return amiga.getConfig(VA_DRIVE_CONNECT, drive: 3) != 0 }
+        set { amiga.configure(VA_DRIVE_CONNECT, drive: 3, enable: newValue) }
+    }
+    var df3Type: Int {
+        get { return amiga.getConfig(VA_DRIVE_TYPE, drive: 3) }
+        set { amiga.configure(VA_DRIVE_TYPE, drive: 3, value: newValue) }
+    }
+
+    //
+    // Compatibility settings
+    //
+
+    var clxSprSpr: Bool {
+        get { return amiga.getConfig(VA_CLX_SPR_SPR) != 0 }
+        set { amiga.configure(VA_CLX_SPR_SPR, enable: newValue) }
+    }
+    var clxSprPlf: Bool {
+        get { return amiga.getConfig(VA_CLX_SPR_PLF) != 0 }
+        set { amiga.configure(VA_CLX_SPR_PLF, enable: newValue) }
+    }
+    var clxPlfPlf: Bool {
+        get { return amiga.getConfig(VA_CLX_PLF_PLF) != 0 }
+        set { amiga.configure(VA_CLX_PLF_PLF, enable: newValue) }
+    }
+    var samplingMethod: Int {
+        get { return amiga.getConfig(VA_SAMPLING_METHOD) }
+        set { amiga.configure(VA_SAMPLING_METHOD, value: newValue) }
+    }
+    var filterActivation: Int {
+        get { return amiga.getConfig(VA_FILTER_ACTIVATION) }
+        set { amiga.configure(VA_FILTER_ACTIVATION, value: newValue) }
+    }
+    var filterType: Int {
+        get { return amiga.getConfig(VA_FILTER_TYPE) }
+        set { amiga.configure(VA_FILTER_TYPE, value: newValue) }
+    }
+    var blitterAccuracy: Int {
+        get { return amiga.getConfig(VA_BLITTER_ACCURACY) }
+        set { amiga.configure(VA_BLITTER_ACCURACY, value: newValue) }
+    }
+    var driveSpeed: Int {
+        get { return amiga.getConfig(VA_DRIVE_SPEED) }
+        set { amiga.configure(VA_DRIVE_SPEED, value: newValue) }
+    }
+    var fifoBuffering: Bool {
+        get { return amiga.getConfig(VA_FIFO_BUFFERING) != 0 }
+        set { amiga.configure(VA_FIFO_BUFFERING, enable: newValue) }
+    }
+    var todBug: Bool {
+        get { return amiga.getConfig(VA_TODBUG) != 0 }
+        set { amiga.configure(VA_TODBUG, enable: newValue) }
+    }
+    
+    //
+    // Monitor settings
     //
     
     var enhancer = Defaults.enhancer

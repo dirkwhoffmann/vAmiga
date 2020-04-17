@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// swiftlint:disable colon
-
 extension PreferencesController {
     
     func refreshHardwareTab() {
@@ -66,19 +64,19 @@ extension PreferencesController {
 
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_AGNUS_REVISION, value: sender.selectedTag())
+        config.agnusRev = sender.selectedTag()
         refresh()
     }
 
     @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_DENISE_REVISION, value: sender.selectedTag())
+        config.deniseRev = sender.selectedTag()
         refresh()
     }
 
     @IBAction func hwRealTimeClockAction(_ sender: NSPopUpButton!) {
         
-        amiga.configure(VA_RT_CLOCK, value: sender.selectedTag())
+        config.rtClock = sender.selectedTag()
         refresh()
     }
     
@@ -90,74 +88,84 @@ extension PreferencesController {
         if chipRamWanted > chipRamLimit {
             parent.mydocument?.showConfigurationAltert(ERR_CHIP_RAM_LIMIT)
         } else {
-            amiga.configure(VA_CHIP_RAM, value: sender.selectedTag())
+            config.chipRam = sender.selectedTag()
         }
+        
         refresh()
     }
 
     @IBAction func hwSlowRamAction(_ sender: NSPopUpButton!) {
         
-        amiga.configure(VA_SLOW_RAM, value: sender.selectedTag())
+        config.slowRam = sender.selectedTag()
         refresh()
     }
 
     @IBAction func hwFastRamAction(_ sender: NSPopUpButton!) {
         
-        amiga.configure(VA_FAST_RAM, value: sender.selectedTag())
+        config.fastRam = sender.selectedTag()
         refresh()
     }
 
     @IBAction func hwDriveConnectAction(_ sender: NSButton!) {
         
-        let driveNr = sender.tag
-        amiga.configureDrive(driveNr, connected: sender.state == .on)
+        switch sender.tag {
+        case 0: config.df0Connected = sender.state == .on
+        case 1: config.df1Connected = sender.state == .on
+        case 2: config.df2Connected = sender.state == .on
+        case 3: config.df3Connected = sender.state == .on
+        default: fatalError()
+        }
         refresh()
     }
     
     @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
         
-        track()
-        
-        let nr = sender.tag
-        amiga.configureDrive(nr, type: sender.selectedTag())
+        switch sender.tag {
+        case 0: config.df0Type = sender.tag
+        case 1: config.df1Type = sender.tag
+        case 2: config.df2Type = sender.tag
+        case 3: config.df3Type = sender.tag
+        default: fatalError()
+        }
         refresh()
     }
  
     @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
 
-        amiga.configure(VA_SERIAL_DEVICE, value: sender.selectedTag())
+        config.serialDevice = sender.selectedTag()
         refresh()
     }
 
     @IBAction func hwFactorySettingsAction(_ sender: NSPopUpButton!) {
         
-        track("\(sender.selectedTag())")
-
         switch sender.selectedTag() {
-
         case 0: hwFactorySettingsAction(Defaults.A500)
         case 1: hwFactorySettingsAction(Defaults.A1000)
         case 2: hwFactorySettingsAction(Defaults.A2000)
-        default: track("Cannot restore factory defaults (unknown Amiga model).")
-         }
+        default: fatalError()
+        }
     }
 
     func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
 
-        amiga.configure(VA_AGNUS_REVISION, value: defaults.agnusRevision.rawValue)
-        amiga.configure(VA_DENISE_REVISION, value: defaults.deniseRevision.rawValue)
-        amiga.configure(VA_RT_CLOCK, value: defaults.realTimeClock.rawValue)
+        config.agnusRev = defaults.agnusRevision.rawValue
+        config.deniseRev = defaults.deniseRevision.rawValue
+        config.rtClock = defaults.realTimeClock.rawValue
 
-        amiga.configure(VA_CHIP_RAM, value: defaults.chipRam)
-        amiga.configure(VA_SLOW_RAM, value: defaults.slowRam)
-        amiga.configure(VA_FAST_RAM, value: defaults.fastRam)
+        config.chipRam = defaults.chipRam
+        config.slowRam = defaults.slowRam
+        config.fastRam = defaults.fastRam
 
-        amiga.configure(VA_SERIAL_DEVICE, value: defaults.serialDevice.rawValue)
+        config.serialDevice = defaults.serialDevice.rawValue
 
-        for i in 0...3 {
-            amiga.configureDrive(i, connected: defaults.driveConnect[i])
-            amiga.configureDrive(i, type:      defaults.driveType[i].rawValue)
-        }
+        config.df0Connected = defaults.driveConnect[0]
+        config.df1Connected = defaults.driveConnect[1]
+        config.df2Connected = defaults.driveConnect[2]
+        config.df3Connected = defaults.driveConnect[3]
+        config.df0Type = defaults.driveType[0].rawValue
+        config.df1Type = defaults.driveType[1].rawValue
+        config.df2Type = defaults.driveType[2].rawValue
+        config.df3Type = defaults.driveType[3].rawValue
 
         refresh()
     }
