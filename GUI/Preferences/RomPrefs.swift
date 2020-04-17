@@ -7,9 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-extension PreferencesController {
-
-    var config: EmulatorPreferences { return parent.config }
+extension ConfigController {
     
     func refreshRomTab() {
 

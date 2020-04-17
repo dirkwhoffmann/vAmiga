@@ -109,7 +109,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
@@ -152,7 +152,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -181,7 +181,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -210,7 +210,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
@@ -231,7 +231,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="IhF-AY-mVz"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="caT-w9-zJ9">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -242,7 +242,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="nXc-Zj-MRR"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="smR-ZO-LAl">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -253,7 +253,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="tt4-Cp-9yw"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="ShU-59-vsV">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -264,7 +264,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="8qi-yX-Fbb"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="5Zl-Dc-eev">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -406,22 +406,6 @@
                             <action selector="keyboardAction:" target="-2" id="eA2-HY-f3N"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="38FD6B45-A44B-426A-9E68-08467618DE03" label="Preferences" paletteLabel="Preferences" image="prefEmulatorTemplate" id="z3f-Tz-HUC">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" id="KfB-pG-OPp">
-                            <rect key="frame" x="16" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="prefEmulatorTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="tar-YG-CqC">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="preferencesAction:" target="-2" id="FxD-8P-Rg6"/>
-                        </connections>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="D1EF6989-92F2-4FC1-AA6B-A14A2A38C473" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" id="BPW-KG-AkM" userLabel="Pause">
                         <nil key="toolTip"/>
                         <size key="minSize" width="38" height="25"/>
@@ -505,6 +489,23 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="E58BE7CC-80A0-4160-88DB-486199BE286E" label="Preferences" paletteLabel="Preferences" sizingBehavior="auto" id="Tmo-Cs-EVn" userLabel="Preferences">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="EgW-z1-uFY">
+                            <rect key="frame" x="0.0" y="14" width="88" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="DyT-NH-Vuk">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Take Screenshot" image="prefEmulatorTemplate" width="40"/>
+                                    <segment toolTip="Open Screenshot Browser" image="prefHwTemplate" width="40" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="toolbarPrefAction:" target="-2" id="6Eo-kr-grW"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="06922A6F-0283-42AA-9BE1-47C4D3246922" label="Inspect" paletteLabel="Inspect" sizingBehavior="auto" id="EzM-bM-4na">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
@@ -534,7 +535,7 @@
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="Ckl-d3-vFW"/>
                     <toolbarItem reference="1851"/>
-                    <toolbarItem reference="z3f-Tz-HUC"/>
+                    <toolbarItem reference="Tmo-Cs-EVn"/>
                     <toolbarItem reference="1851"/>
                     <toolbarItem reference="BPW-KG-AkM"/>
                     <toolbarItem reference="Yax-iM-1LE"/>
@@ -576,6 +577,7 @@
         <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
+        <image name="prefHwTemplate" width="240" height="241"/>
         <image name="resetTemplate" width="241" height="240"/>
         <image name="ttClickTemplate" width="240" height="241"/>
         <image name="ttGalleryTemplate" width="241" height="241"/>

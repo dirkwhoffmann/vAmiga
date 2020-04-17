@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		500217B82449CF7000E1A096 /* Configuration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 500217B72449CF7000E1A096 /* Configuration.xib */; };
+		500217BA2449CFF500E1A096 /* ConfigController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500217B92449CFF500E1A096 /* ConfigController.swift */; };
 		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
 		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
 		500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EA724472B4F002A4DE1 /* door_open.aiff */; };
@@ -97,7 +99,7 @@
 		508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00D21EA227B0043D0E9 /* Alerts.swift */; };
 		508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00E21EA227B0043D0E9 /* MacAudio.swift */; };
 		508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */; };
-		508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */; };
+		508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */; };
 		508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */; };
 		508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE03F21EA22CC0043D0E9 /* RomDropView.swift */; };
 		508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */; };
@@ -163,6 +165,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		500217B72449CF7000E1A096 /* Configuration.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Configuration.xib; sourceTree = "<group>"; };
+		500217B92449CFF500E1A096 /* ConfigController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigController.swift; sourceTree = "<group>"; };
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
@@ -295,7 +299,7 @@
 		508FE00D21EA227B0043D0E9 /* Alerts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		508FE00E21EA227B0043D0E9 /* MacAudio.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacAudio.swift; sourceTree = "<group>"; };
 		508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomPrefs.swift; sourceTree = "<group>"; };
-		508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmulatorPrefs.swift; sourceTree = "<group>"; };
+		508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GeneralPrefs.swift; sourceTree = "<group>"; };
 		508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HardwarePrefs.swift; sourceTree = "<group>"; };
 		508FE03F21EA22CC0043D0E9 /* RomDropView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RomDropView.swift; sourceTree = "<group>"; };
 		508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoPrefs.swift; sourceTree = "<group>"; };
@@ -559,6 +563,7 @@
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
 				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
+				500217B72449CF7000E1A096 /* Configuration.xib */,
 				508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
@@ -636,16 +641,17 @@
 			isa = PBXGroup;
 			children = (
 				5023518F24485BBF00F6C088 /* Preferences.swift */,
-				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
+				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
+				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
+				500217B92449CFF500E1A096 /* ConfigController.swift */,
 				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
 				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
 				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
-				508FE03C21EA22CC0043D0E9 /* EmulatorPrefs.swift */,
-				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
+				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -979,6 +985,7 @@
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
+				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1052,6 +1059,7 @@
 				509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */,
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
+				500217BA2449CFF500E1A096 /* ConfigController.swift in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */,
 				50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */,
@@ -1092,7 +1100,7 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
-				508FE04F21EA22CC0043D0E9 /* EmulatorPrefs.swift in Sources */,
+				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,

@@ -133,7 +133,12 @@ extension MyController: NSMenuItemValidation {
 
     @IBAction func preferencesAction(_ sender: Any!) {
         
-        openPreferences()
+        if myAppDelegate.prefsController == nil {
+            let name = NSNib.Name("Preferences")
+            myAppDelegate.prefsController = PreferencesController.make(parent: self,
+                                                                       nibName: name)
+        }
+        myAppDelegate.prefsController?.showSheet()
     }
     
     @IBAction func importPrefsAction(_ sender: Any!) {
@@ -180,6 +185,36 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (File menu)
     //
+    
+    func openConfigurator(tab: String = "") {
+        
+        if configurator == nil {
+            let name = NSNib.Name("Configuration")
+            configurator = ConfigController.make(parent: self, nibName: name)
+        }
+        configurator?.showSheet(tab: tab)
+    }
+        
+    @IBAction func configureAction(_ sender: Any!) {
+        
+        openConfigurator()
+    }
+
+    @IBAction func inspectorAction(_ sender: Any!) {
+        
+        if inspector == nil {
+            inspector = Inspector.make(parent: self, nibName: "Inspector")
+        }
+        inspector?.showWindow(self)
+    }
+
+    @IBAction func monitorAction(_ sender: Any!) {
+
+        if monitor == nil {
+            monitor = Monitor.make(parent: self, nibName: "Monitor")
+        }
+        monitor?.showWindow(self)
+    }
     
     @IBAction func takeSnapshotAction(_ sender: Any!) {
         
@@ -371,22 +406,6 @@ extension MyController: NSMenuItemValidation {
         showStatusBar(!statusBar)
     }
     
-    @IBAction func inspectorAction(_ sender: Any!) {
-        
-        if inspector == nil {
-            inspector = Inspector.make(parent: self, nibName: "Inspector")
-        }
-        inspector?.showWindow(self)
-    }
-
-    @IBAction func monitorAction(_ sender: Any!) {
-
-        if monitor == nil {
-            monitor = Monitor.make(parent: self, nibName: "Monitor")
-        }
-        monitor?.showWindow(self)
-    }
-
     //
     // Action methods (Keyboard menu)
     //

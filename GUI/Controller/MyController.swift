@@ -34,6 +34,9 @@ class MyController: NSWindowController, MessageReceiver {
     // Monitor of this emulator instance
     var monitor: Monitor?
 
+    // Configuration panel of this emulator instance
+    var configurator: ConfigController?
+    
     // Snapshot and screenshot browsers
     var snapshotBrowser: SnapshotDialog?
     var screenshotBrowser: ScreenshotDialog?
@@ -41,9 +44,6 @@ class MyController: NSWindowController, MessageReceiver {
     // Emulator configuration
     var config: EmulatorPreferences!
     
-    // Preferences controller
-    var preferencesController: PreferencesController?
-
     // Audio Engine
     var macAudio: MacAudio!
      
@@ -303,7 +303,7 @@ extension MyController {
         } else {
 
             // Open the Rom dialog
-            openPreferences(tab: "Roms")
+            openConfigurator(tab: "Roms")
             renderer.zoomOut()
         }
 
@@ -681,16 +681,6 @@ extension MyController {
     //
     // Dialogs
     //
-    
-    func openPreferences(tab: String = "") {
-        
-        if preferencesController == nil {
-            let name = NSNib.Name("Preferences")
-            preferencesController = PreferencesController.make(parent: self,
-                                                               nibName: name)
-        }
-        preferencesController?.showSheet(tab: tab)
-    }
     
     //
     // Keyboard events

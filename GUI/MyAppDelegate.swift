@@ -120,7 +120,8 @@ func cgEventCallback(proxy: CGEventTapProxy,
     
     // Preferences
     var prefs: ApplicationPreferences!
-
+    var prefsController: PreferencesController?
+    
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = []
     
