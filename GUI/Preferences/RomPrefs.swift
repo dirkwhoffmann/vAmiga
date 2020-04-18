@@ -143,6 +143,7 @@ extension ConfigController {
     
     @IBAction func romDefaultAction(_ sender: NSButton!) {
         
+        track()
         config.saveRomUserDefaults()
     }
 }

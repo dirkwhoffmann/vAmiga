@@ -93,9 +93,13 @@ class MyController: NSWindowController, MessageReceiver {
     // Warp mode
     var warpMode = WarpMode.auto { didSet { updateWarp() } }
     
+    // Remembers if the emulator was running or paused when it lost focus.
+    // Needed to implement the pauseInBackground feature.
+    var pauseInBackgroundSavedState = false
+
     // Application preferences
     var prefs: Preferences { return myAppDelegate.prefs }
-    
+         
     //
     // Timers
     //

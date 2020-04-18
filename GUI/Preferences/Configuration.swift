@@ -166,20 +166,9 @@ class Configuration {
     // Monitor settings
     //
     
-    var enhancer = VideoDefaults.tft.enhancer
-    var upscaler = VideoDefaults.tft.upscaler
-    
-    var hCenter = VideoDefaults.tft.hCenter {
-        didSet { renderer.updateTextureRect() }
-    }
-    var vCenter = VideoDefaults.tft.vCenter {
-        didSet { renderer.updateTextureRect() }
-    }
-    var hZoom = VideoDefaults.tft.hZoom {
-        didSet { renderer.updateTextureRect() }
-    }
-    var vZoom = VideoDefaults.tft.vZoom {
-        didSet { renderer.updateTextureRect() }
+    var palette: Int {
+        get { return Int(amiga.denise.palette()) }
+        set { amiga.denise.setPalette(Palette(newValue)) }
     }
     var brightness: Double {
         get { return amiga.denise.brightness() }
@@ -193,10 +182,23 @@ class Configuration {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
     }
-    var palette: Int {
-        get { return Int(amiga.denise.palette()) }
-        set { amiga.denise.setPalette(Palette(newValue)) }
+        
+    var hCenter = VideoDefaults.tft.hCenter {
+        didSet { renderer.updateTextureRect() }
     }
+    var vCenter = VideoDefaults.tft.vCenter {
+        didSet { renderer.updateTextureRect() }
+    }
+    var hZoom = VideoDefaults.tft.hZoom {
+        didSet { renderer.updateTextureRect() }
+    }
+    var vZoom = VideoDefaults.tft.vZoom {
+        didSet { renderer.updateTextureRect() }
+    }
+ 
+    var enhancer = VideoDefaults.tft.enhancer
+    var upscaler = VideoDefaults.tft.upscaler
+ 
     var blur: Int32 {
         get { return renderer.shaderOptions.blur }
         set { renderer.shaderOptions.blur = newValue }
@@ -276,10 +278,12 @@ class Configuration {
         
         if let url = defaults.url(forKey: Keys.rom) {
             romURL = url
+            track("romURL = \(romURL)")
             amiga.mem.loadRom(fromFile: romURL)
         }
         if let url = defaults.url(forKey: Keys.ext) {
             extURL = url
+            track("extURL = \(romURL)")
             amiga.mem.loadExt(fromFile: extURL)
         }
         extStart = defaults.integer(forKey: Keys.extStart)
@@ -291,12 +295,11 @@ class Configuration {
         
         track()
         
-        let hwconfig = amiga.config()
         let defaults = UserDefaults.standard
 
         defaults.set(romURL, forKey: Keys.rom)
         defaults.set(extURL, forKey: Keys.ext)
-        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
+        defaults.set(extStart, forKey: Keys.extStart)
     }
 
     //
@@ -391,6 +394,32 @@ class Configuration {
         defaults.set(serialDevice, forKey: Keys.serialDevice)
     }
     
+    //
+    // Compatibility
+    //
+    
+    func loadCompatibilityDefaults(_ defaults: CompatibilityDefaults) {
+         
+        amiga.suspend()
+        
+        clxSprSpr = defaults.clxSprSpr
+        clxSprPlf = defaults.clxSprPlf
+        clxPlfPlf = defaults.clxPlfPlf
+        
+        samplingMethod = defaults.samplingMethod.rawValue
+        filterActivation = defaults.filterActivation.rawValue
+        filterType = defaults.filterType.rawValue
+        
+        blitterAccuracy = defaults.blitterAccuracy
+        
+        driveSpeed = defaults.driveSpeed
+        fifoBuffering = defaults.fifoBuffering
+        
+        todBug = defaults.todBug
+        
+        amiga.resume()
+     }
+    
     func loadCompatibilityUserDefaults() {
 
          let defaults = UserDefaults.standard
@@ -400,12 +429,16 @@ class Configuration {
          clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
          clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
          clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
+        
          samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
          filterActivation = defaults.integer(forKey: Keys.filterActivation)
          filterType = defaults.integer(forKey: Keys.filterType)
+        
          blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        
          driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
          fifoBuffering = defaults.bool(forKey: Keys.fifoBuffering)
+        
          todBug = defaults.bool(forKey: Keys.todBug)
 
          amiga.resume()
@@ -428,6 +461,51 @@ class Configuration {
          defaults.set(todBug, forKey: Keys.todBug)
      }
     
+    //
+    // Video
+    //
+    
+    func loadVideoDefaults(_ defaults: VideoDefaults) {
+        
+        amiga.suspend()
+        
+        palette = defaults.palette.rawValue
+        brightness = defaults.brightness
+        contrast = defaults.contrast
+        saturation = defaults.saturation
+        
+        hCenter = defaults.hCenter
+        vCenter = defaults.vCenter
+        hZoom = defaults.hZoom
+        vZoom = defaults.vZoom
+        
+        enhancer = defaults.enhancer
+        upscaler = defaults.upscaler
+        
+        blur = defaults.blur
+        blurRadius = defaults.blurRadius
+        
+        bloom = defaults.bloom
+        bloomRadius = defaults.bloomRadius
+        bloomBrightness = defaults.bloomBrightness
+        bloomWeight = defaults.bloomWeight
+        flicker = defaults.flicker
+        flickerWeight = defaults.flickerWeight
+        dotMask = defaults.dotMask
+        dotMaskBrightness = defaults.dotMaskBrightness
+        scanlines = defaults.scanlines
+        scanlineBrightness = defaults.scanlineBrightness
+        scanlineWeight = defaults.scanlineWeight
+        disalignment = defaults.disalignment
+        disalignmentH = defaults.disalignmentH
+        disalignment = defaults.disalignment
+            
+        renderer.updateTextureRect()
+        renderer.buildDotMasks()
+        
+        amiga.resume()
+    }
+    
     func loadVideoUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -446,9 +524,22 @@ class Configuration {
 
         enhancer = defaults.integer(forKey: Keys.enhancer)
         upscaler = defaults.integer(forKey: Keys.upscaler)
-
-        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
-
+        
+        bloom = Int32(defaults.integer(forKey: Keys.bloom))
+        bloomRadius = defaults.float(forKey: Keys.bloomRadius)
+        bloomBrightness = defaults.float(forKey: Keys.bloomBrightness)
+        bloomWeight = defaults.float(forKey: Keys.bloomWeight)
+        flicker = Int32(defaults.integer(forKey: Keys.flicker))
+        flickerWeight = defaults.float(forKey: Keys.flickerWeight)
+        dotMask = Int32(defaults.integer(forKey: Keys.dotMask))
+        dotMaskBrightness = defaults.float(forKey: Keys.dotMaskBrightness)
+        scanlines = Int32(defaults.integer(forKey: Keys.scanlines))
+        scanlineBrightness = defaults.float(forKey: Keys.scanlineBrightness)
+        scanlineWeight = defaults.float(forKey: Keys.scanlineWeight)
+        disalignment = Int32(defaults.integer(forKey: Keys.disalignment))
+        disalignmentH = defaults.float(forKey: Keys.disalignmentH)
+        disalignmentV = defaults.float(forKey: Keys.disalignmentV)
+        
         renderer.updateTextureRect()
         renderer.buildDotMasks()
         
@@ -473,7 +564,20 @@ class Configuration {
 
         defaults.set(enhancer, forKey: Keys.enhancer)
         defaults.set(upscaler, forKey: Keys.upscaler)
-
-        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
+        
+        defaults.set(bloom, forKey: Keys.bloom)
+        defaults.set(bloomRadius, forKey: Keys.bloomRadius)
+        defaults.set(bloomBrightness, forKey: Keys.bloomBrightness)
+        defaults.set(bloomWeight, forKey: Keys.bloomWeight)
+        defaults.set(flicker, forKey: Keys.flicker)
+        defaults.set(flickerWeight, forKey: Keys.flickerWeight)
+        defaults.set(dotMask, forKey: Keys.dotMask)
+        defaults.set(dotMaskBrightness, forKey: Keys.dotMaskBrightness)
+        defaults.set(scanlines, forKey: Keys.scanlines)
+        defaults.set(scanlineBrightness, forKey: Keys.scanlineBrightness)
+        defaults.set(scanlineWeight, forKey: Keys.scanlineWeight)
+        defaults.set(disalignment, forKey: Keys.disalignment)
+        defaults.set(disalignmentH, forKey: Keys.disalignmentH)
+        defaults.set(disalignmentV, forKey: Keys.disalignmentV)
     }
 }

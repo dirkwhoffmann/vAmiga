@@ -27,6 +27,7 @@ class Preferences {
     // General
     //
         
+    // Floppy
     var warpLoad = GeneralDefaults.std.warpLoad {
         didSet { for c in parent.controllers { c.updateWarp() } }
     }
@@ -37,22 +38,16 @@ class Preferences {
     var driveHeadSound = GeneralDefaults.std.driveHeadSound
     var drivePollSound = GeneralDefaults.std.drivePollSound
     var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
-    
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
+    
+    // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
     var exitOnEsc = GeneralDefaults.std.exitOnEsc
-    
-    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
-    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
-    var pauseInBackground = GeneralDefaults.std.pauseInBackground
-    
-    // Remembers if the emulator was running or paused when it lost focus.
-    // Needed to implement the pauseInBackground feature.
-    var pauseInBackgroundSavedState = false
-    
+        
+    // Snapshots and screenshots
     var autoSnapshots = GeneralDefaults.std.autoSnapshots
     var snapshotInterval = 0 {
         didSet { for c in parent.controllers { c.startSnapshotTimer() } }
@@ -68,12 +63,22 @@ class Preferences {
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
     
+    // Misc
+    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
+    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
+    var pauseInBackground = GeneralDefaults.std.pauseInBackground
+
     //
     // Devices preferences
     //
+        
+    // Emulation keys
+    var keyMaps = [ DevicesDefaults.std.joyKeyMap1,
+                     DevicesDefaults.std.joyKeyMap2,
+                     DevicesDefaults.std.mouseKeyMap ]
     
+    // Joystick
     var disconnectJoyKeys = DevicesDefaults.std.disconnectJoyKeys
-    
     var autofire = DevicesDefaults.std.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
@@ -99,10 +104,7 @@ class Preferences {
         }
     }
     
-    var keyMaps = [ DevicesDefaults.std.joyKeyMap1,
-                    DevicesDefaults.std.joyKeyMap2,
-                    DevicesDefaults.std.mouseKeyMap ]
-
+    // Mouse
     var retainMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
     var retainMouseWithKeys = DevicesDefaults.std.retainMouseWithKeys
     var retainMouseByClick = DevicesDefaults.std.retainMouseByClick
@@ -113,10 +115,45 @@ class Preferences {
  
     init(with delegate: MyAppDelegate) { parent = delegate }
     
+    //
+    // General
+    //
+    
+    func loadGeneralDefaults(_ defaults: GeneralDefaults) {
+        
+        // Floppy
+        warpLoad = defaults.warpLoad
+        driveSounds = defaults.driveSounds
+        driveSoundPan = defaults.driveSoundPan
+        driveInsertSound = defaults.driveInsertSound
+        driveEjectSound = defaults.driveEjectSound
+        driveHeadSound = defaults.driveHeadSound
+        drivePollSound = defaults.drivePollSound
+        driveBlankDiskFormat = defaults.driveBlankDiskFormat
+
+        // Fullscreen
+        keepAspectRatio = defaults.keepAspectRatio
+        exitOnEsc = defaults.exitOnEsc
+
+        // Snapshots and screenshots
+        autoSnapshots = defaults.autoSnapshots
+        snapshotInterval = defaults.autoSnapshotInterval
+        autoScreenshots = defaults.autoScreenshots
+        screenshotInterval = defaults.autoScreenshotInterval
+        screenshotSource = defaults.screenshotSource
+        screenshotTarget = defaults.screenshotTarget
+        
+        // Misc
+        pauseInBackground = defaults.pauseInBackground
+        closeWithoutAsking = defaults.closeWithoutAsking
+        ejectWithoutAsking = defaults.ejectWithoutAsking
+    }
+    
     func loadGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
-                
+           
+        // Floppy
         warpLoad = defaults.bool(forKey: Keys.warpLoad)
         driveSounds = defaults.bool(forKey: Keys.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
@@ -126,6 +163,11 @@ class Preferences {
         drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
         driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
+        // Fullscreen
+        keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
+        exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+
+        // Snapshots and screenshots
         autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
         snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
         autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
@@ -133,9 +175,7 @@ class Preferences {
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
-        keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
-        
+        // Misc
         pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
         ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
@@ -145,6 +185,7 @@ class Preferences {
         
         let defaults = UserDefaults.standard
         
+        // Floppy
         defaults.set(warpLoad, forKey: Keys.warpLoad)
         defaults.set(driveSounds, forKey: Keys.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
@@ -154,6 +195,11 @@ class Preferences {
         defaults.set(drivePollSound, forKey: Keys.drivePollSound)
         defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
         
+        // Fullscreen
+        defaults.set(keepAspectRatio, forKey: Keys.keepAspectRatio)
+        defaults.set(exitOnEsc, forKey: Keys.exitOnEsc)
+
+        // Snapshots and screenshots
         defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
         defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
         defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
@@ -161,12 +207,37 @@ class Preferences {
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
-        defaults.set(keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(exitOnEsc, forKey: Keys.exitOnEsc)
-                
+        // Misc
         defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
+    }
+    
+    //
+    // Devices
+    //
+    
+    func loadDevicesDefaults(_ defaults: DevicesDefaults) {
+        
+        // Emulation keys
+        keyMaps[0] = defaults.joyKeyMap1
+        keyMaps[1] = defaults.joyKeyMap2
+        keyMaps[2] = defaults.mouseKeyMap
+        disconnectJoyKeys = defaults.disconnectJoyKeys
+        
+        // Joysticks
+        autofire = defaults.autofire
+        autofireBullets = defaults.autofireBullets
+        autofireFrequency = defaults.autofireFrequency
+        
+        // Mouse
+        retainMouseKeyComb = defaults.retainMouseKeyComb
+        retainMouseWithKeys = defaults.retainMouseWithKeys
+        retainMouseByClick = defaults.retainMouseByClick
+        retainMouseByEntering = defaults.retainMouseByEntering
+        releaseMouseKeyComb = defaults.releaseMouseKeyComb
+        releaseMouseWithKeys = defaults.releaseMouseWithKeys
+        releaseMouseByShaking = defaults.releaseMouseByShaking
     }
     
     func loadDevicesUserDefaults() {

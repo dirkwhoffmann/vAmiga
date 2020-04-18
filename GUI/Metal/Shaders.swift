@@ -23,67 +23,31 @@ struct VertexUniforms {
 //
 // Uniforms passed to all compute shaders and the fragment shader
 //
-
+    
 struct ShaderOptions: Codable {
 
-    var blur: Int32
-    var blurRadius: Float
+    var blur: Int32 = VideoDefaults.tft.blur
+    var blurRadius: Float = VideoDefaults.tft.blurRadius
     
-    var bloom: Int32
-    var bloomRadius: Float
-    var bloomBrightness: Float
-    var bloomWeight: Float
+    var bloom: Int32 = VideoDefaults.tft.bloom
+    var bloomRadius: Float = VideoDefaults.tft.bloomRadius
+    var bloomBrightness: Float = VideoDefaults.tft.bloomBrightness
+    var bloomWeight: Float = VideoDefaults.tft.bloomWeight
 
-    var flicker: Int32
-    var flickerWeight: Float
+    var flicker: Int32 = VideoDefaults.tft.flicker
+    var flickerWeight: Float = VideoDefaults.tft.flickerWeight
 
-    var dotMask: Int32
-    var dotMaskBrightness: Float
+    var dotMask: Int32 = VideoDefaults.tft.dotMask
+    var dotMaskBrightness: Float = VideoDefaults.tft.dotMaskBrightness
     
-    var scanlines: Int32
-    var scanlineBrightness: Float
-    var scanlineWeight: Float
+    var scanlines: Int32 = VideoDefaults.tft.scanlines
+    var scanlineBrightness: Float = VideoDefaults.tft.scanlineBrightness
+    var scanlineWeight: Float = VideoDefaults.tft.scanlineWeight
     
-    var disalignment: Int32
-    var disalignmentH: Float
-    var disalignmentV: Float
+    var disalignment: Int32 = VideoDefaults.tft.disalignment
+    var disalignmentH: Float = VideoDefaults.tft.disalignmentH
+    var disalignmentV: Float = VideoDefaults.tft.disalignmentV
 }
-
-// Default settings for TFT monitor emulation (retro effects off)
-let ShaderDefaultsTFT = ShaderOptions(blur: 1,
-                                      blurRadius: 0,
-                                      bloom: 0,
-                                      bloomRadius: 1.0,
-                                      bloomBrightness: 0.4,
-                                      bloomWeight: 1.21,
-                                      flicker: 1,
-                                      flickerWeight: 0.5,
-                                      dotMask: 0,
-                                      dotMaskBrightness: 0.7,
-                                      scanlines: 0,
-                                      scanlineBrightness: 0.55,
-                                      scanlineWeight: 0.11,
-                                      disalignment: 0,
-                                      disalignmentH: 0.001,
-                                      disalignmentV: 0.001)
-
-// Default settings for CRT monitor emulation (retro effects on)
-let ShaderDefaultsCRT = ShaderOptions(blur: 1,
-                                      blurRadius: 1.5,
-                                      bloom: 1,
-                                      bloomRadius: 1.0,
-                                      bloomBrightness: 0.4,
-                                      bloomWeight: 1.21,
-                                      flicker: 1,
-                                      flickerWeight: 0.5,
-                                      dotMask: 1,
-                                      dotMaskBrightness: 0.5,
-                                      scanlines: 2,
-                                      scanlineBrightness: 0.55,
-                                      scanlineWeight: 0.11,
-                                      disalignment: 0,
-                                      disalignmentH: 0.001,
-                                      disalignmentV: 0.001)
 
 //
 // Uniforms passed to the merge shader

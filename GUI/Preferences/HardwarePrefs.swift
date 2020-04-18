@@ -149,43 +149,18 @@ extension ConfigController {
         refresh()
     }
 
-    @IBAction func hwFactorySettingsAction(_ sender: NSPopUpButton!) {
+    @IBAction func hwPresetAction(_ sender: NSPopUpButton!) {
         
         switch sender.selectedTag() {
-        case 0: hwFactorySettingsAction(HardwareDefaults.A500)
-        case 1: hwFactorySettingsAction(HardwareDefaults.A1000)
-        case 2: hwFactorySettingsAction(HardwareDefaults.A2000)
+        case 0: config.loadHardwareDefaults(HardwareDefaults.A500)
+        case 1: config.loadHardwareDefaults(HardwareDefaults.A1000)
+        case 2: config.loadHardwareDefaults(HardwareDefaults.A2000)
         default: fatalError()
         }
-    }
-
-    func hwFactorySettingsAction(_ defaults: HardwareDefaults) {
-
-        config.agnusRev = defaults.agnusRevision.rawValue
-        config.deniseRev = defaults.deniseRevision.rawValue
-        config.rtClock = defaults.realTimeClock.rawValue
-
-        config.chipRam = defaults.chipRam
-        config.slowRam = defaults.slowRam
-        config.fastRam = defaults.fastRam
-
-        config.df0Connected = defaults.driveConnect[0]
-        config.df1Connected = defaults.driveConnect[1]
-        config.df2Connected = defaults.driveConnect[2]
-        config.df3Connected = defaults.driveConnect[3]
-        config.df0Type = defaults.driveType[0].rawValue
-        config.df1Type = defaults.driveType[1].rawValue
-        config.df2Type = defaults.driveType[2].rawValue
-        config.df3Type = defaults.driveType[3].rawValue
-        
-        config.gameDevice1 = defaults.gameDevice1
-        config.gameDevice2 = defaults.gameDevice2
-        config.serialDevice = defaults.serialDevice.rawValue
-
         refresh()
     }
-    
-    @IBAction func hwDefaultAction(_ sender: NSButton!) {
+
+    @IBAction func hwDefaultsAction(_ sender: NSButton!) {
         
         config.saveHardwareUserDefaults()
     }

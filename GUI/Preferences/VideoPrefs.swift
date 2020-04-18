@@ -270,21 +270,18 @@ extension ConfigController {
         config.loadVideoUserDefaults()
         refresh()
     }
-
-    @IBAction func vidFactorySettingsActionTFT(_ sender: Any!) {
-
-        parent.renderer.shaderOptions = ShaderDefaultsTFT
-        refresh()
-    }
-
-    @IBAction func vidFactorySettingsActionCRT(_ sender: Any!) {
-
-        parent.renderer.shaderOptions = ShaderDefaultsCRT
-        parent.renderer.buildDotMasks()
+    
+    @IBAction func vidPresetAction(_ sender: NSPopUpButton!) {
+        
+        switch sender.selectedTag() {
+        case 0: config.loadVideoDefaults(VideoDefaults.tft)
+        case 1: config.loadVideoDefaults(VideoDefaults.crt)
+        default: fatalError()
+        }
         refresh()
     }
     
-    @IBAction func vidDefaultAction(_ sender: NSButton!) {
+    @IBAction func vidDefaultsAction(_ sender: NSButton!) {
         
         config.saveVideoUserDefaults()
     }

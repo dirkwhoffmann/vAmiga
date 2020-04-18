@@ -222,8 +222,6 @@ class ConfigController: DialogController {
         track()
 
         hideSheet()
-        parent.saveUserDefaults()
-
         if buttonLabel == "Boot" { amiga.run() }
     }
 }

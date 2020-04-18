@@ -157,10 +157,7 @@ extension PreferencesController {
 
     @IBAction func devAutofireAction(_ sender: NSButton!) {
         
-        for amiga in myAppDelegate.proxies {
-            amiga.joystick1.setAutofire(sender.state == .on)
-            amiga.joystick2.setAutofire(sender.state == .on)
-        }
+        prefs.autofire = (sender.state == .on)
         refresh()
     }
     
@@ -168,43 +165,22 @@ extension PreferencesController {
         
         let sign = sender.state == .on ? 1 : -1
         let bullets = prefs.autofireBullets.magnitude
-        
-        for amiga in myAppDelegate.proxies {
-            amiga.joystick1.setAutofireBullets(Int(bullets) * sign)
-            amiga.joystick2.setAutofireBullets(Int(bullets) * sign)
-        }
+        prefs.autofireBullets = Int(bullets) * sign
         refresh()
     }
     
     @IBAction func devAutofireBulletsAction(_ sender: NSTextField!) {
         
-        let value = sender.integerValue
-        
-        for amiga in myAppDelegate.proxies {
-            amiga.joystick1.setAutofireBullets(value)
-            amiga.joystick2.setAutofireBullets(value)
-        }
+        prefs.autofireBullets = sender.integerValue
         refresh()
     }
     
     @IBAction func devAutofireFrequencyAction(_ sender: NSSlider!) {
         
-        let value = sender.floatValue
-        
-        for amiga in myAppDelegate.proxies {
-            amiga.joystick1.setAutofireFrequency(value)
-            amiga.joystick2.setAutofireFrequency(value)
-        }
+        prefs.autofireFrequency = sender.floatValue
         refresh()
     }
         
-    @IBAction func devFactorySettingsAction(_ sender: Any!) {
-        
-        UserDefaults.resetDevicesUserDefaults()
-        prefs.loadDevicesUserDefaults()
-        refresh()
-    }
-
     @IBAction func devRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
         prefs.retainMouseKeyComb = sender.selectedTag()
@@ -240,5 +216,26 @@ extension PreferencesController {
         }
         
         refresh()
+    }
+    
+    //
+    // Action methods (Misc)
+    //
+    
+    @IBAction func devicesPresetAction(_ sender: NSPopUpButton!) {
+        
+        track()
+        
+        switch sender.selectedTag() {
+        case 0: prefs.loadDevicesDefaults(DevicesDefaults.std)
+        default: fatalError()
+        }
+        refresh()
+    }
+    
+    @IBAction func devicesDefaultsAction(_ sender: NSButton!) {
+        
+        track()
+        prefs.saveDevicesUserDefaults()
     }
 }

@@ -192,10 +192,20 @@ extension PreferencesController {
     // Action methods (Misc)
     //
     
-    @IBAction func emuFactorySettingsAction(_ sender: Any!) {
+    @IBAction func generalPresetAction(_ sender: NSPopUpButton!) {
         
-        UserDefaults.resetGeneralUserDefaults()
-        prefs.loadGeneralUserDefaults()
+        track()
+        
+        switch sender.selectedTag() {
+        case 0: prefs.loadGeneralDefaults(GeneralDefaults.std)
+        default: fatalError()
+        }
         refresh()
+    }
+    
+    @IBAction func generalDefaultsAction(_ sender: NSButton!) {
+        
+        track()
+        prefs.saveGeneralUserDefaults()
     }
 }

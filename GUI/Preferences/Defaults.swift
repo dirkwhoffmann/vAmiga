@@ -93,10 +93,10 @@ extension MyController {
         prefs.loadDevicesUserDefaults()
 
         config.loadRomUserDefaults()
-        config.loadVideoUserDefaults()
         config.loadHardwareUserDefaults()
         config.loadCompatibilityUserDefaults()
-        
+        config.loadVideoUserDefaults()
+
         amiga.resume()
     }
     
@@ -116,19 +116,6 @@ extension MyController {
         }
     }
     
-    func saveUserDefaults() {
-        
-        track()
-        
-        prefs.saveGeneralUserDefaults()
-        prefs.saveDevicesUserDefaults()
-
-        config.saveRomUserDefaults()
-        config.saveVideoUserDefaults()
-        config.saveHardwareUserDefaults()
-        config.saveCompatibilityUserDefaults()
-    }
-
     func saveUserDefaults(url: URL, prefixes: [String]) {
         
         track()
@@ -832,27 +819,43 @@ extension UserDefaults {
 extension Keys {
     
     // Colors
-    static let palette         = "VAMIGA6PaletteKey"
-    static let brightness      = "VAMIGA6BrightnessKey"
-    static let contrast        = "VAMIGA6ContrastKey"
-    static let saturation      = "VAMIGA6SaturationKey"
+    static let palette            = "VAMIGA6PaletteKey"
+    static let brightness         = "VAMIGA6BrightnessKey"
+    static let contrast           = "VAMIGA6ContrastKey"
+    static let saturation         = "VAMIGA6SaturationKey"
 
     // Geometry
-    static let hCenter         = "VAMIGA6HCenter"
-    static let vCenter         = "VAMIGA6VCenter"
-    static let hZoom           = "VAMIGA6HZoom"
-    static let vZoom           = "VAMIGA6VZoom"
+    static let hCenter            = "VAMIGA6HCenter"
+    static let vCenter            = "VAMIGA6VCenter"
+    static let hZoom              = "VAMIGA6HZoom"
+    static let vZoom              = "VAMIGA6VZoom"
 
     // Upscalers
-    static let enhancer        = "VVAMIG6AEnhancerKey"
-    static let upscaler        = "VAMIGA6UpscalerKey"
+    static let enhancer           = "VVAMIG6AEnhancerKey"
+    static let upscaler           = "VAMIGA6UpscalerKey"
 
-    // GPU options
-    static let shaderOptions   = "VAMIGA6ShaderOptionsKey"
+    // Shader options
+    static let blur               = "VAMIGA6Blur"
+    static let blurRadius         = "VAMIGA6BlurRadius"
+    static let bloom              = "VAMIGA6Bloom"
+    static let bloomRadius        = "VAMIGA6BloonRadius"
+    static let bloomBrightness    = "VAMIGA6BloomBrightness"
+    static let bloomWeight        = "VAMIGA6BloomWeight"
+    static let flicker            = "VAMIGA6Flicker"
+    static let flickerWeight      = "VAMIGA6FlickerWeight"
+    static let dotMask            = "VAMIGA6DotMask"
+    static let dotMaskBrightness  = "VAMIGA6DotMaskBrightness"
+    static let scanlines          = "VAMIGA6Scanlines"
+    static let scanlineBrightness = "VAMIGA6ScanlineBrightness"
+    static let scanlineWeight     = "VAMIGA6ScanlineWeight"
+    static let disalignment       = "VAMIGA6Disalignment"
+    static let disalignmentH      = "VAMIGA6DisalignmentH"
+    static let disalignmentV      = "VAMIGA6DisalignmentV"
 }
 
 struct VideoDefaults {
     
+    // Colors
     let palette: Palette
     let brightness: Double
     let contrast: Double
@@ -868,8 +871,23 @@ struct VideoDefaults {
     let enhancer: Int
     let upscaler: Int
     
-    // GPU options
-    let shaderOptions: ShaderOptions
+    // Shader options
+    let blur: Int32
+    let blurRadius: Float
+    let bloom: Int32
+    let bloomRadius: Float
+    let bloomBrightness: Float
+    let bloomWeight: Float
+    let flicker: Int32
+    let flickerWeight: Float
+    let dotMask: Int32
+    let dotMaskBrightness: Float
+    let scanlines: Int32
+    let scanlineBrightness: Float
+    let scanlineWeight: Float
+    let disalignment: Int32
+    let disalignmentH: Float
+    let disalignmentV: Float
     
     //
     // Schemes
@@ -890,7 +908,22 @@ struct VideoDefaults {
         enhancer: 0,
         upscaler: 0,
         
-        shaderOptions: ShaderDefaultsTFT
+        blur: 1,
+        blurRadius: 0,
+        bloom: 0,
+        bloomRadius: 1.0,
+        bloomBrightness: 0.4,
+        bloomWeight: 1.21,
+        flicker: 1,
+        flickerWeight: 0.5,
+        dotMask: 0,
+        dotMaskBrightness: 0.7,
+        scanlines: 0,
+        scanlineBrightness: 0.55,
+        scanlineWeight: 0.11,
+        disalignment: 0,
+        disalignmentH: 0.001,
+        disalignmentV: 0.001
     )
     
     static let crt = VideoDefaults.init(
@@ -908,7 +941,22 @@ struct VideoDefaults {
         enhancer: 0,
         upscaler: 0,
         
-        shaderOptions: ShaderDefaultsCRT
+        blur: 1,
+        blurRadius: 1.5,
+        bloom: 1,
+        bloomRadius: 1.0,
+        bloomBrightness: 0.4,
+        bloomWeight: 1.21,
+        flicker: 1,
+        flickerWeight: 0.5,
+        dotMask: 1,
+        dotMaskBrightness: 0.5,
+        scanlines: 2,
+        scanlineBrightness: 0.55,
+        scanlineWeight: 0.11,
+        disalignment: 0,
+        disalignmentH: 0.001,
+        disalignmentV: 0.001
     )
 }
 
@@ -930,12 +978,28 @@ extension UserDefaults {
             Keys.vZoom: defaults.vZoom,
 
             Keys.enhancer: defaults.enhancer,
-            Keys.upscaler: defaults.upscaler
+            Keys.upscaler: defaults.upscaler,
+            
+            Keys.blur: defaults.blur,
+            Keys.blurRadius: defaults.blurRadius,
+            Keys.bloom: defaults.bloom,
+            Keys.bloomRadius: defaults.bloomRadius,
+            Keys.bloomBrightness: defaults.bloomBrightness,
+            Keys.bloomWeight: defaults.bloomWeight,
+            Keys.flicker: defaults.flicker,
+            Keys.flickerWeight: defaults.flickerWeight,
+            Keys.dotMask: defaults.dotMask,
+            Keys.dotMaskBrightness: defaults.dotMaskBrightness,
+            Keys.scanlines: defaults.scanlines,
+            Keys.scanlineBrightness: defaults.scanlineBrightness,
+            Keys.scanlineWeight: defaults.scanlineWeight,
+            Keys.disalignment: defaults.disalignment,
+            Keys.disalignmentH: defaults.disalignmentH,
+            Keys.disalignmentV: defaults.disalignmentV
         ]
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
-        userDefaults.register(encodableItem: defaults.shaderOptions, forKey: Keys.shaderOptions)
     }
 
     static func resetVideoUserDefaults() {
@@ -955,7 +1019,22 @@ extension UserDefaults {
                      Keys.enhancer,
                      Keys.upscaler,
 
-                     Keys.shaderOptions ]
+                     Keys.blur,
+                     Keys.blurRadius,
+                     Keys.bloom,
+                     Keys.bloomRadius,
+                     Keys.bloomBrightness,
+                     Keys.bloomWeight,
+                     Keys.flicker,
+                     Keys.flickerWeight,
+                     Keys.dotMask,
+                     Keys.dotMaskBrightness,
+                     Keys.scanlines,
+                     Keys.scanlineBrightness,
+                     Keys.scanlineWeight,
+                     Keys.disalignment,
+                     Keys.disalignmentH,
+                     Keys.disalignmentV ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
