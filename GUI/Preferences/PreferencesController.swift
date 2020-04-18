@@ -9,7 +9,7 @@
 
 class PreferencesController: DialogController {
 
-    var prefs: ApplicationPreferences { return parent.prefs }
+    var prefs: Preferences { return parent.prefs }
     
     @IBOutlet weak var prefTabView: NSTabView!
         

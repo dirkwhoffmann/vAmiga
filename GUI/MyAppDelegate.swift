@@ -119,7 +119,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     @IBOutlet weak var df3Menu: NSMenuItem!
     
     // Preferences
-    var prefs: ApplicationPreferences!
+    var prefs: Preferences!
     var prefsController: PreferencesController?
     
     // The list of recently inserted disk URLs.
@@ -134,7 +134,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     override init() {
         
         super.init()
-        prefs = ApplicationPreferences.init(with: self)
+        prefs = Preferences.init(with: self)
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {

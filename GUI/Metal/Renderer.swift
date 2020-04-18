@@ -17,8 +17,8 @@ class Renderer: NSObject, MTKViewDelegate {
     let device: MTLDevice
     let parent: MyController
     
-    var prefs: ApplicationPreferences { return parent.prefs }
-    var config: EmulatorPreferences { return parent.config }
+    var prefs: Preferences { return parent.prefs }
+    var config: Configuration { return parent.config }
     
     /* Number of drawn frames since power up
      * Used to determine the fps value shown in the emulator's bottom bar.

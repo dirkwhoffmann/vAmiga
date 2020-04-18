@@ -46,6 +46,8 @@ Memory::setExtStart(u32 page)
 void
 Memory::_powerOn()
 {
+    dump();
+    
     // Erase WOM (if any)
     if (hasWom()) eraseWom();
 

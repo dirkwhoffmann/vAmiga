@@ -48,6 +48,7 @@
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		507727EE242F2CE4009D01DA /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 507727ED242F2CE3009D01DA /* iCarousel.m */; };
+		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
 		5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5821FB6856009753EF /* ProxyExtensions.swift */; };
@@ -236,6 +237,7 @@
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		507727EC242F2CE3009D01DA /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		507727ED242F2CE3009D01DA /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
+		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
 		5082D83A21EF891200CF7692 /* AmigaConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaConstants.h; sourceTree = "<group>"; };
@@ -641,6 +643,7 @@
 			isa = PBXGroup;
 			children = (
 				5023518F24485BBF00F6C088 /* Preferences.swift */,
+				507957AB244AD25B007B8B8D /* Configuration.swift */,
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
 				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
 				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
@@ -1099,6 +1102,7 @@
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
+				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,

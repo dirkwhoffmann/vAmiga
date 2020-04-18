@@ -42,7 +42,7 @@ class MyController: NSWindowController, MessageReceiver {
     var screenshotBrowser: ScreenshotDialog?
 
     // Emulator configuration
-    var config: EmulatorPreferences!
+    var config: Configuration!
     
     // Audio Engine
     var macAudio: MacAudio!
@@ -94,7 +94,7 @@ class MyController: NSWindowController, MessageReceiver {
     var warpMode = WarpMode.auto { didSet { updateWarp() } }
     
     // Application preferences
-    var prefs: ApplicationPreferences { return myAppDelegate.prefs }
+    var prefs: Preferences { return myAppDelegate.prefs }
     
     //
     // Timers
@@ -225,7 +225,7 @@ extension MyController {
     // Provides the document casted to the correct type
     var mydocument: MyDocument? { return document as? MyDocument }
     
-    /// Indicates if the emulator needs saving
+    // Indicates if the emulator needs saving
     var needsSaving: Bool {
         get {
             return document?.changeCount != 0
@@ -247,7 +247,7 @@ extension MyController {
 
         track()
         
-        config = EmulatorPreferences.init(with: self)
+        config = Configuration.init(with: self)
         
         // Create audio engine
         macAudio = MacAudio.init(with: self)
@@ -694,7 +694,7 @@ extension MyController {
     @discardableResult
     func joystickAction(slot: Int, events: [GamePadAction]) -> Bool {
         
-        if slot == prefs.inputDevice1 {
+        if slot == config.gameDevice1 {
             for event in events {
                 amiga.joystick1.trigger(event)
                 amiga.mouse.trigger(event)
@@ -702,7 +702,7 @@ extension MyController {
             return true
         }
 
-        if slot == prefs.inputDevice2 {
+        if slot == config.gameDevice2 {
             for event in events {
                 amiga.joystick2.trigger(event)
                 amiga.mouse.trigger(event)

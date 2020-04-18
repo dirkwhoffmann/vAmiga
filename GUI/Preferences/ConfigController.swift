@@ -9,7 +9,7 @@
 
 class ConfigController: DialogController {
 
-    var config: EmulatorPreferences { return parent.config }
+    var config: Configuration { return parent.config }
     
     @IBOutlet weak var prefTabView: NSTabView!
         
@@ -55,9 +55,6 @@ class ConfigController: DialogController {
     @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
     @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
 
-    // Ports
-    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
-
     // Memory
     @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
     @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
@@ -71,6 +68,11 @@ class ConfigController: DialogController {
     @IBOutlet weak var hwDf2Type: NSPopUpButton!
     @IBOutlet weak var hwDf3Connect: NSButton!
     @IBOutlet weak var hwDf3Type: NSPopUpButton!
+
+    // Ports
+    @IBOutlet weak var hwGameDevice1: NSPopUpButton!
+    @IBOutlet weak var hwGameDevice2: NSPopUpButton!
+    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var hwLockImage: NSButton!

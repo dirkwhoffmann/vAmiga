@@ -58,7 +58,6 @@ extension MyController {
         
         track()
         
-        registerPortUserDefaults()
         registerRomUserDefaults()
         registerDevicesUserDefaults()
         registerVideoUserDefaults()
@@ -73,7 +72,6 @@ extension MyController {
         
         amiga.suspend()
         
-        resetPortUserDefaults()
         resetRomUserDefaults()
         resetDevicesUserDefaults()
         resetVideoUserDefaults()
@@ -90,7 +88,6 @@ extension MyController {
         
         amiga.suspend()
         
-        loadPortUserDefaults()
         loadRomUserDefaults()
         loadDevicesUserDefaults()
         loadVideoUserDefaults()
@@ -121,7 +118,6 @@ extension MyController {
         
         track()
         
-        savePortUserDefaults()
         saveRomUserDefaults()
         saveDevicesUserDefaults()
         saveVideoUserDefaults()
@@ -143,80 +139,10 @@ extension MyController {
 }
 
 //
-// User defaults (Ports)
-//
-
-struct Keys {
-    
-    // Control ports
-    static let inputDevice1      = "VAMIGA0InputDevice1Key"
-    static let inputDevice2      = "VAMIGA0InputDevice2Key"
-}
-
-struct Defaults {
-    
-    // Control ports
-    static let inputDevice1 = -1
-    static let inputDevice2 = -1
-
-    // Keyboard
-    static let kbStyle = KBStyle.wide
-    static let kbLayout = KBLayout.us
-}
-
-extension MyController {
-
-    static func registerPortUserDefaults() {
-        
-        let dictionary: [String: Any] = [
-            
-            Keys.inputDevice1: Defaults.inputDevice1,
-            Keys.inputDevice2: Defaults.inputDevice2
-        ]
-        
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
-    }
-    
-    func resetPortUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-
-        let keys = [ Keys.inputDevice1,
-                     Keys.inputDevice2
-        ]
-
-         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadPortUserDefaults()
-    }
-    
-    func loadPortUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        setPort1(defaults.integer(forKey: Keys.inputDevice1))
-        setPort2(defaults.integer(forKey: Keys.inputDevice2))
-
-        amiga.resume()
-    }
-    
-    func savePortUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.set(prefs.inputDevice1, forKey: Keys.inputDevice1)
-        defaults.set(prefs.inputDevice2, forKey: Keys.inputDevice2)
-    }
-}
-
-//
 // User defaults (General)
 //
 
-extension Keys {
+struct Keys {
     
     // Drives
     static let warpLoad               = "VAMIGA1WarpLoadKey"
@@ -248,7 +174,7 @@ extension Keys {
     static let pauseInBackground      = "VAMIGA1PauseInBackground"
 }
 
-extension Defaults {
+struct Defaults {
    
     // Drives
     static let warpLoad               = true
@@ -684,6 +610,8 @@ extension Keys {
     static let df3Type            = "VAMIGA4DF3TypeKey"
 
     // Ports
+    static let gameDevice1        = "VAMIGA4GameDevice1Key"
+    static let gameDevice2        = "VAMIGA4GameDevice2Key"
     static let serialDevice       = "VAMIGA4SerialDeviceKey"
 }
 
@@ -701,8 +629,6 @@ extension Defaults {
 
         let driveConnect: [Bool]
         let driveType: [DriveType]
-
-        let serialDevice: SerialPortDevice
     }
 
     static let A500 = ModelDefaults.init(
@@ -714,8 +640,7 @@ extension Defaults {
         slowRam: 0,
         fastRam: 0,
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        serialDevice: SPD_NONE)
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD])
 
     static let A1000 = ModelDefaults.init(
 
@@ -726,8 +651,7 @@ extension Defaults {
         slowRam: 0,
         fastRam: 0,
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        serialDevice: SPD_NONE)
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD])
 
     static let A2000 = ModelDefaults.init(
         
@@ -738,8 +662,11 @@ extension Defaults {
         slowRam: 512,
         fastRam: 0,
         driveConnect: [true, true, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
-        serialDevice: SPD_NONE)
+        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD])
+    
+    static let gameDevice1  = 0
+    static let gameDevice2  = -1
+    static let serialDevice = SPD_NONE
 }
 
 extension MyController {
@@ -767,7 +694,9 @@ extension MyController {
             Keys.df3Connect: defaultModel.driveConnect[3],
             Keys.df3Type: defaultModel.driveType[3].rawValue,
 
-            Keys.serialDevice: defaultModel.serialDevice.rawValue
+            Keys.gameDevice1: Defaults.gameDevice1,
+            Keys.gameDevice2: Defaults.gameDevice2,
+            Keys.serialDevice: Defaults.serialDevice.rawValue
         ]
         
         let defaults = UserDefaults.standard
@@ -796,6 +725,8 @@ extension MyController {
                     Keys.df3Connect,
                     Keys.df3Type,
 
+                    Keys.gameDevice1,
+                    Keys.gameDevice2,
                     Keys.serialDevice ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -817,6 +748,8 @@ extension MyController {
         config.slowRam = defaults.integer(forKey: Keys.slowRam)
         config.fastRam = defaults.integer(forKey: Keys.fastRam)
 
+        track("chip = \(defaults.integer(forKey: Keys.chipRam))")
+        
         config.driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         config.df0Connected = defaults.bool(forKey: Keys.df0Connect)
         config.df1Connected = defaults.bool(forKey: Keys.df1Connect)
@@ -827,6 +760,8 @@ extension MyController {
         config.df2Type = defaults.integer(forKey: Keys.df2Type)
         config.df3Type = defaults.integer(forKey: Keys.df3Type)
 
+        config.gameDevice1 = defaults.integer(forKey: Keys.gameDevice1)
+        config.gameDevice2 = defaults.integer(forKey: Keys.gameDevice2)
         config.serialDevice = defaults.integer(forKey: Keys.serialDevice)
 
         amiga.resume()
@@ -835,28 +770,28 @@ extension MyController {
     func saveHardwareUserDefaults() {
         
         let defaults = UserDefaults.standard
-        let config = amiga.config()
-        let dc = config.diskController
 
-        defaults.set(config.agnus.revision.rawValue, forKey: Keys.agnusRev)
-        defaults.set(config.denise.revision.rawValue, forKey: Keys.deniseRev)
-        defaults.set(config.rtc.model.rawValue, forKey: Keys.realTimeClock)
+        defaults.set(config.agnusRev, forKey: Keys.agnusRev)
+        defaults.set(config.deniseRev, forKey: Keys.deniseRev)
+        defaults.set(config.rtClock, forKey: Keys.realTimeClock)
 
-        defaults.set(config.mem.chipSize / 1024, forKey: Keys.chipRam)
-        defaults.set(config.mem.slowSize / 1024, forKey: Keys.slowRam)
-        defaults.set(config.mem.fastSize / 1024, forKey: Keys.fastRam)
+        defaults.set(config.chipRam, forKey: Keys.chipRam)
+        defaults.set(config.slowRam, forKey: Keys.slowRam)
+        defaults.set(config.fastRam, forKey: Keys.fastRam)
 
-        defaults.set(config.df0.speed, forKey: Keys.driveSpeed)
-        defaults.set(dc.connected.0, forKey: Keys.df0Connect)
-        defaults.set(dc.connected.1, forKey: Keys.df1Connect)
-        defaults.set(dc.connected.2, forKey: Keys.df2Connect)
-        defaults.set(dc.connected.3, forKey: Keys.df3Connect)
-        defaults.set(config.df0.type.rawValue, forKey: Keys.df0Type)
-        defaults.set(config.df1.type.rawValue, forKey: Keys.df1Type)
-        defaults.set(config.df2.type.rawValue, forKey: Keys.df2Type)
-        defaults.set(config.df3.type.rawValue, forKey: Keys.df3Type)
+        defaults.set(config.driveSpeed, forKey: Keys.driveSpeed)
+        defaults.set(config.df0Connected, forKey: Keys.df0Connect)
+        defaults.set(config.df1Connected, forKey: Keys.df1Connect)
+        defaults.set(config.df2Connected, forKey: Keys.df2Connect)
+        defaults.set(config.df3Connected, forKey: Keys.df3Connect)
+        defaults.set(config.df0Type, forKey: Keys.df0Type)
+        defaults.set(config.df1Type, forKey: Keys.df1Type)
+        defaults.set(config.df2Type, forKey: Keys.df2Type)
+        defaults.set(config.df3Type, forKey: Keys.df3Type)
 
-        defaults.set(config.serialPort.device.rawValue, forKey: Keys.serialDevice)
+        defaults.set(config.gameDevice1, forKey: Keys.gameDevice1)
+        defaults.set(config.gameDevice2, forKey: Keys.gameDevice2)
+        defaults.set(config.serialDevice, forKey: Keys.serialDevice)
     }
 }
 

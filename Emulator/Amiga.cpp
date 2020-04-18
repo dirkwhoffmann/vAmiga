@@ -739,6 +739,11 @@ Amiga::readyToPowerOn()
         return ERR_ROM_MISSING;
     }
 
+    if (!mem.hasChipRam()) {
+        msg("readyToPowerUp: No Chip Ram found\n");
+        return ERR_ROM_MISSING;
+    }
+    
     if (mem.hasArosRom()) {
 
         if (!mem.hasExt()) {

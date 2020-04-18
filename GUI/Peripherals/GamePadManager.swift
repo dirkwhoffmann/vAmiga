@@ -41,9 +41,9 @@ class GamePadManager {
         self.controller = controller
         
         // Add generic devices
-        gamePads[0] = GamePad(manager: self) // Keyset 1
-        gamePads[1] = GamePad(manager: self) // Keyset 2
-        gamePads[2] = GamePad(manager: self) // Mouse
+        gamePads[0] = GamePad(manager: self) // Mouse
+        gamePads[1] = GamePad(manager: self) // Joystick (Keyset 1)
+        gamePads[2] = GamePad(manager: self) // Joystick (Keyset 2)
         restoreFactorySettings()
 
         // Prepare for accepting HID devices

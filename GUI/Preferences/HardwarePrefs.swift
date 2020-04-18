@@ -12,30 +12,31 @@ extension ConfigController {
     func refreshHardwareTab() {
 
         track()
-        let config = amiga.config()
         let poweredOff = amiga.isPoweredOff()
 
         // Chipset
-        hwAgnusRevisionPopup.selectItem(withTag: config.agnus.revision.rawValue)
-        hwDeniseRevisionPopup.selectItem(withTag: config.denise.revision.rawValue)
-        hwRealTimeClock.selectItem(withTag: config.rtc.model.rawValue)
-
-        // Ports
-        hwSerialDevice.selectItem(withTag: Int(config.serialPort.device.rawValue))
+        hwAgnusRevisionPopup.selectItem(withTag: config.agnusRev)
+        hwDeniseRevisionPopup.selectItem(withTag: config.deniseRev)
+        hwRealTimeClock.selectItem(withTag: config.rtClock)
 
         // Memory
-        hwChipRamPopup.selectItem(withTag: config.mem.chipSize / 1024)
-        hwSlowRamPopup.selectItem(withTag: config.mem.slowSize / 1024)
-        hwFastRamPopup.selectItem(withTag: config.mem.fastSize / 1024)
+        hwChipRamPopup.selectItem(withTag: config.chipRam)
+        hwSlowRamPopup.selectItem(withTag: config.slowRam)
+        hwFastRamPopup.selectItem(withTag: config.fastRam)
 
         // Drive
-        hwDf1Connect.state = config.diskController.connected.1 ? .on : .off
-        hwDf2Connect.state = config.diskController.connected.2 ? .on : .off
-        hwDf3Connect.state = config.diskController.connected.3 ? .on : .off
-        hwDf0Type.selectItem(withTag: config.df0.type.rawValue)
-        hwDf1Type.selectItem(withTag: config.df1.type.rawValue)
-        hwDf2Type.selectItem(withTag: config.df2.type.rawValue)
-        hwDf3Type.selectItem(withTag: config.df3.type.rawValue)
+        hwDf1Connect.state = config.df1Connected ? .on : .off
+        hwDf2Connect.state = config.df2Connected ? .on : .off
+        hwDf3Connect.state = config.df3Connected ? .on : .off
+        hwDf0Type.selectItem(withTag: config.df0Type)
+        hwDf1Type.selectItem(withTag: config.df1Type)
+        hwDf2Type.selectItem(withTag: config.df2Type)
+        hwDf3Type.selectItem(withTag: config.df3Type)
+
+        // Ports
+        hwGameDevice1.selectItem(withTag: config.gameDevice1)
+        hwGameDevice2.selectItem(withTag: config.gameDevice2)
+        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
 
         // Lock controls if emulator is powered on
         hwAgnusRevisionPopup.isEnabled = poweredOff
@@ -48,9 +49,9 @@ extension ConfigController {
         hwDf2Connect.isEnabled = poweredOff
         hwDf3Connect.isEnabled = poweredOff
         hwDf0Type.isEnabled = poweredOff
-        hwDf1Type.isEnabled = poweredOff && config.diskController.connected.1
-        hwDf2Type.isEnabled = poweredOff && config.diskController.connected.2
-        hwDf3Type.isEnabled = poweredOff && config.diskController.connected.3
+        hwDf1Type.isEnabled = poweredOff && config.df1Connected
+        hwDf2Type.isEnabled = poweredOff && config.df2Connected
+        hwDf3Type.isEnabled = poweredOff && config.df3Connected
         hwFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -129,7 +130,19 @@ extension ConfigController {
         }
         refresh()
     }
- 
+
+    @IBAction func hwGameDeviceAction(_ sender: NSPopUpButton!) {
+
+        track("port: \(sender.tag) device: \(sender.selectedTag())")
+        
+        switch sender.tag {
+        case 1: config.gameDevice1 = sender.selectedTag()
+        case 2: config.gameDevice2 = sender.selectedTag()
+        default: fatalError()
+        }
+        refresh()
+    }
+
     @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
 
         config.serialDevice = sender.selectedTag()
@@ -156,8 +169,6 @@ extension ConfigController {
         config.slowRam = defaults.slowRam
         config.fastRam = defaults.fastRam
 
-        config.serialDevice = defaults.serialDevice.rawValue
-
         config.df0Connected = defaults.driveConnect[0]
         config.df1Connected = defaults.driveConnect[1]
         config.df2Connected = defaults.driveConnect[2]
@@ -166,6 +177,10 @@ extension ConfigController {
         config.df1Type = defaults.driveType[1].rawValue
         config.df2Type = defaults.driveType[2].rawValue
         config.df3Type = defaults.driveType[3].rawValue
+        
+        config.gameDevice1 = Defaults.gameDevice1
+        config.gameDevice2 = Defaults.gameDevice2
+        config.serialDevice = Defaults.serialDevice.rawValue
 
         refresh()
     }

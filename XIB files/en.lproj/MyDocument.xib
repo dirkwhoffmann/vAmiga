@@ -231,7 +231,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="IhF-AY-mVz"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="caT-w9-zJ9">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -242,7 +242,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="nXc-Zj-MRR"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="smR-ZO-LAl">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -253,7 +253,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="tt4-Cp-9yw"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="ShU-59-vsV">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -264,7 +264,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="8qi-yX-Fbb"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="5Zl-Dc-eev">
-                            <font key="font" metaFont="menu" size="11"/>
+                            <font key="font" metaFont="message" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -339,13 +339,13 @@
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
                                     <items>
                                         <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="VD3-Wr-Ufe"/>
-                                        <menuItem title="Keyset 1" image="joyKeys1Template" id="L2h-xt-iO6"/>
-                                        <menuItem title="Keyset 2" image="joyKeys2Template" tag="1" id="Ohe-Pi-c1S"/>
-                                        <menuItem title="Mouse" image="devMouseTemplate" tag="2" id="yOc-MG-77p"/>
-                                        <menuItem title="USB Joystick 1" image="devGamepad1Template" tag="3" id="1PP-xx-NoT" userLabel="USB Joystick 1">
+                                        <menuItem title="Mouse" image="devMouseTemplate" id="yOc-MG-77p"/>
+                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="L2h-xt-iO6"/>
+                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="Ohe-Pi-c1S"/>
+                                        <menuItem title="USB device" image="devGamepad1Template" tag="3" id="1PP-xx-NoT" userLabel="USB Joystick 1">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
-                                        <menuItem title="USB Joystick 2" image="devGamepad2Template" tag="4" id="7sJ-UA-Pfj">
+                                        <menuItem title="USB device" image="devGamepad2Template" tag="4" id="7sJ-UA-Pfj">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>
@@ -369,13 +369,13 @@
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
                                     <items>
                                         <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="xyt-eC-0im"/>
-                                        <menuItem title="Keyset 1" image="joyKeys1Template" id="PAa-za-K8O"/>
-                                        <menuItem title="Keyset 2" image="joyKeys2Template" tag="1" id="1M8-Dz-dop"/>
-                                        <menuItem title="Mouse" image="devMouseTemplate" tag="2" id="JM3-8Y-xZU"/>
-                                        <menuItem title="USB Joystick 1" image="devGamepad1Template" tag="3" id="Ahc-WA-2jp">
+                                        <menuItem title="Mouse" image="devMouseTemplate" id="JM3-8Y-xZU"/>
+                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="PAa-za-K8O"/>
+                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="1M8-Dz-dop"/>
+                                        <menuItem title="USB device" image="devGamepad1Template" tag="3" id="Ahc-WA-2jp">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
-                                        <menuItem title="USB Joystick 2" image="devGamepad2Template" tag="4" id="L3T-8p-gOj">
+                                        <menuItem title="USB device" image="devGamepad2Template" tag="4" id="L3T-8p-gOj">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                         </menuItem>
                                     </items>
@@ -564,13 +564,13 @@
         <image name="debugTemplate" width="240" height="241"/>
         <image name="devGamepad1Template" width="24" height="24"/>
         <image name="devGamepad2Template" width="24" height="24"/>
+        <image name="devKeys1Template" width="24" height="24"/>
+        <image name="devKeys2Template" width="24" height="24"/>
         <image name="devMouseTemplate" width="24" height="24"/>
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
         <image name="hourglass1Template" width="240" height="241"/>
-        <image name="joyKeys1Template" width="24" height="24"/>
-        <image name="joyKeys2Template" width="24" height="24"/>
         <image name="keyboardTemplate" width="24" height="24"/>
         <image name="monitorTemplate" width="241" height="240"/>
         <image name="pauseTemplate" width="240" height="241"/>

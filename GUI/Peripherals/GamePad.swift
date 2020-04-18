@@ -17,7 +17,7 @@ import IOKit.hid
 class GamePad {
 
     var manager: GamePadManager
-    var prefs: ApplicationPreferences { return manager.controller.prefs }
+    var prefs: Preferences { return manager.controller.prefs }
 
     // Keymap of the managed device (only used for keyboard emulated devices)
     var keyMap: Int?

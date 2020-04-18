@@ -14,7 +14,7 @@ class KBController: NSObject {
 
     var parent: MyController!
     var renderer: Renderer { return parent.renderer }
-    var prefs: ApplicationPreferences { return parent.prefs }
+    var prefs: Preferences { return parent.prefs }
     
     // The Amiga proxy of the owning emulator instance
      var amiga: AmigaProxy!

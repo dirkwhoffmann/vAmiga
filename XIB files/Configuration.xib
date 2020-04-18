@@ -39,6 +39,8 @@
                 <outlet property="hwDf3Type" destination="QB1-YY-C4v" id="sCa-Q5-Vwc"/>
                 <outlet property="hwFactorySettingsPopup" destination="uR2-36-afT" id="Grf-w6-zUu"/>
                 <outlet property="hwFastRamPopup" destination="iWk-tj-yn8" id="N1b-mT-Uz5"/>
+                <outlet property="hwGameDevice1" destination="2x8-wH-ffw" id="dfW-gb-x8X"/>
+                <outlet property="hwGameDevice2" destination="ghO-Tp-9AX" id="2UC-sN-iSo"/>
                 <outlet property="hwLockImage" destination="nxr-43-cIJ" id="0Zz-Tf-muE"/>
                 <outlet property="hwLockSubText" destination="aVX-Vl-HNT" id="hCr-aY-VMf"/>
                 <outlet property="hwLockText" destination="M7q-Kn-Sca" id="GR6-SH-pNA"/>
@@ -849,17 +851,17 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mIs-oj-bJf">
-                                            <rect key="frame" x="412" y="243" width="182" height="26"/>
+                                            <rect key="frame" x="412" y="184" width="182" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="hwG-B8-9bP" id="34p-Y7-TMz">
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="hwG-B8-9bP" id="34p-Y7-TMz">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <menu key="menu" title="OtherViews" id="vdg-dz-irq">
                                                     <items>
-                                                        <menuItem title="No device" state="on" id="hwG-B8-9bP">
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" id="hwG-B8-9bP">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="Loopback cable" tag="1" id="615-u3-OFN">
+                                                        <menuItem title="Loopback cable" image="devLoopbackTemplate" tag="1" id="615-u3-OFN">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -870,7 +872,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YzV-ZO-Y0q">
-                                            <rect key="frame" x="366" y="249" width="42" height="17"/>
+                                            <rect key="frame" x="366" y="191" width="42" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Serial:" id="zoI-n3-oxv">
                                                 <font key="font" metaFont="system"/>
@@ -878,6 +880,90 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="2x8-wH-ffw">
+                                            <rect key="frame" x="412" y="243" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="LRW-mw-96o" id="cFE-yj-hlJ">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" title="OtherViews" id="Twx-Bf-T5w">
+                                                    <items>
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="LRW-mw-96o">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Mouse" image="devMouseTemplate" id="saA-RB-kKV">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="nbM-KT-7ss">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="Mtw-em-2mr">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device" image="devGamepad1Template" tag="3" id="OVK-HJ-QmL">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device" image="devGamepad2Template" tag="4" id="5zr-Fs-pnK">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwGameDeviceAction:" target="-2" id="KID-tD-b9q"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ieC-Of-W9M">
+                                            <rect key="frame" x="313" y="249" width="95" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 1:" id="bte-a8-06Q">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AtN-fc-Jrg">
+                                            <rect key="frame" x="313" y="217" width="95" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 2:" id="hkE-74-Unt">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="ghO-Tp-9AX">
+                                            <rect key="frame" x="412" y="214" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Ajv-a7-SDD" id="mKX-HL-yoM">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" title="OtherViews" id="X3b-zg-7ej">
+                                                    <items>
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="Ajv-a7-SDD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Mouse" image="devMouseTemplate" id="JPN-e3-rl8">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="POT-6v-Mrh">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="aO2-K1-t8i">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="ZRE-wm-66r">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="OBj-dd-n3Y">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="hwGameDeviceAction:" target="-2" id="6cC-of-MEK"/>
+                                            </connections>
+                                        </popUpButton>
                                     </subviews>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="RnF-fY-9yx" secondAttribute="bottom" constant="12" id="1Xy-QA-wKJ"/>
@@ -1906,10 +1992,20 @@ DQ
             </connections>
             <point key="canvasLocation" x="139" y="147"/>
         </window>
+        <menuItem title="Joystick (Keyset 1)" tag="1" id="xxB-Gw-yMw">
+            <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
     </objects>
     <resources>
         <image name="Lock" width="120" height="170"/>
         <image name="aros_half" width="79" height="62"/>
+        <image name="devGamepad1Template" width="24" height="24"/>
+        <image name="devGamepad2Template" width="24" height="24"/>
+        <image name="devKeys1Template" width="24" height="24"/>
+        <image name="devKeys2Template" width="24" height="24"/>
+        <image name="devLoopbackTemplate" width="24" height="24"/>
+        <image name="devMouseTemplate" width="24" height="24"/>
+        <image name="devNoneTemplate" width="24" height="24"/>
         <image name="rom_light" width="129" height="157"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
