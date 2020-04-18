@@ -642,6 +642,7 @@
 		508FE03A21EA22CC0043D0E9 /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 				5023518F24485BBF00F6C088 /* Preferences.swift */,
 				507957AB244AD25B007B8B8D /* Configuration.swift */,
 				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
@@ -654,7 +655,6 @@
 				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
-				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";

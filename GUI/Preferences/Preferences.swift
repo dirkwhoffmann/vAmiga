@@ -22,53 +22,47 @@
 class Preferences {
     
     var parent: MyAppDelegate!
-    /*
-    var amiga: AmigaProxy { return parent.amiga }
-    var renderer: Renderer { return parent.renderer }
-    var gamePadManager: GamePadManager { return parent.gamePadManager }
-    var kbController: KBController { return parent.kbController }
-    */
-    
+ 
     //
     // General
     //
         
-    var warpLoad = Defaults.warpLoad {
+    var warpLoad = Defaults.general.warpLoad {
         didSet { for c in parent.controllers { c.updateWarp() } }
     }
-    var driveSounds = Defaults.driveSounds
-    var driveSoundPan = Defaults.driveSoundPan
-    var driveInsertSound = Defaults.driveInsertSound
-    var driveEjectSound = Defaults.driveEjectSound
-    var driveHeadSound = Defaults.driveHeadSound
-    var drivePollSound = Defaults.drivePollSound
-    var driveBlankDiskFormat = Defaults.driveBlankDiskFormat
+    var driveSounds = Defaults.general.driveSounds
+    var driveSoundPan = Defaults.general.driveSoundPan
+    var driveInsertSound = Defaults.general.driveInsertSound
+    var driveEjectSound = Defaults.general.driveEjectSound
+    var driveHeadSound = Defaults.general.driveHeadSound
+    var drivePollSound = Defaults.general.drivePollSound
+    var driveBlankDiskFormat = Defaults.general.driveBlankDiskFormat
     
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
-    var keepAspectRatio = Defaults.keepAspectRatio
-    var exitOnEsc = Defaults.exitOnEsc
+    var keepAspectRatio = Defaults.general.keepAspectRatio
+    var exitOnEsc = Defaults.general.exitOnEsc
     
-    var closeWithoutAsking = Defaults.closeWithoutAsking
-    var ejectWithoutAsking = Defaults.ejectWithoutAsking
-    var pauseInBackground = Defaults.pauseInBackground
+    var closeWithoutAsking = Defaults.general.closeWithoutAsking
+    var ejectWithoutAsking = Defaults.general.ejectWithoutAsking
+    var pauseInBackground = Defaults.general.pauseInBackground
     
     // Remembers if the emulator was running or paused when it lost focus.
     // Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
-    var autoSnapshots = Defaults.autoSnapshots
+    var autoSnapshots = Defaults.general.autoSnapshots
     var snapshotInterval = 0 {
         didSet { for c in parent.controllers { c.startSnapshotTimer() } }
     }
-    var autoScreenshots = Defaults.autoScreenshots
+    var autoScreenshots = Defaults.general.autoScreenshots
     var screenshotInterval = 0 {
         didSet { for c in parent.controllers { c.startScreenshotTimer() } }
     }
-    var screenshotSource = Defaults.screenshotSource
-    var screenshotTarget = Defaults.screenshotTarget
+    var screenshotSource = Defaults.general.screenshotSource
+    var screenshotTarget = Defaults.general.screenshotTarget
     var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
@@ -78,9 +72,9 @@ class Preferences {
     // Devices preferences
     //
     
-    var disconnectJoyKeys = Defaults.disconnectJoyKeys
+    var disconnectJoyKeys = Defaults.devices.disconnectJoyKeys
     
-    var autofire = Defaults.autofire {
+    var autofire = Defaults.devices.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofire(autofire)
@@ -88,7 +82,7 @@ class Preferences {
             }
         }
     }
-    var autofireBullets = Defaults.autofireBullets {
+    var autofireBullets = Defaults.devices.autofireBullets {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofireBullets(autofireBullets)
@@ -96,7 +90,7 @@ class Preferences {
             }
         }
     }
-    var autofireFrequency = Defaults.autofireFrequency {
+    var autofireFrequency = Defaults.devices.autofireFrequency {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofireFrequency(autofireFrequency)
@@ -105,15 +99,17 @@ class Preferences {
         }
     }
     
-    var keyMaps = [ Defaults.joyKeyMap1, Defaults.joyKeyMap2, Defaults.mouseKeyMap ]
+    var keyMaps = [ Defaults.devices.joyKeyMap1,
+                    Defaults.devices.joyKeyMap2,
+                    Defaults.devices.mouseKeyMap ]
 
-    var retainMouseKeyComb = Defaults.retainMouseKeyComb
-    var retainMouseWithKeys = Defaults.retainMouseWithKeys
-    var retainMouseByClick = Defaults.retainMouseByClick
-    var retainMouseByEntering = Defaults.retainMouseByEntering
-    var releaseMouseKeyComb = Defaults.retainMouseKeyComb
-    var releaseMouseWithKeys = Defaults.releaseMouseWithKeys
-    var releaseMouseByShaking = Defaults.releaseMouseByShaking
+    var retainMouseKeyComb = Defaults.devices.retainMouseKeyComb
+    var retainMouseWithKeys = Defaults.devices.retainMouseWithKeys
+    var retainMouseByClick = Defaults.devices.retainMouseByClick
+    var retainMouseByEntering = Defaults.devices.retainMouseByEntering
+    var releaseMouseKeyComb = Defaults.devices.retainMouseKeyComb
+    var releaseMouseWithKeys = Defaults.devices.releaseMouseWithKeys
+    var releaseMouseByShaking = Defaults.devices.releaseMouseByShaking
  
     init(with delegate: MyAppDelegate) { parent = delegate }
     

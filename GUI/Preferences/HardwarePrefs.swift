@@ -159,7 +159,7 @@ extension ConfigController {
         }
     }
 
-    func hwFactorySettingsAction(_ defaults: Defaults.ModelDefaults) {
+    func hwFactorySettingsAction(_ defaults: Defaults.HwDefaults) {
 
         config.agnusRev = defaults.agnusRevision.rawValue
         config.deniseRev = defaults.deniseRevision.rawValue
@@ -178,9 +178,9 @@ extension ConfigController {
         config.df2Type = defaults.driveType[2].rawValue
         config.df3Type = defaults.driveType[3].rawValue
         
-        config.gameDevice1 = Defaults.gameDevice1
-        config.gameDevice2 = Defaults.gameDevice2
-        config.serialDevice = Defaults.serialDevice.rawValue
+        config.gameDevice1 = defaults.gameDevice1
+        config.gameDevice2 = defaults.gameDevice2
+        config.serialDevice = defaults.serialDevice.rawValue
 
         refresh()
     }

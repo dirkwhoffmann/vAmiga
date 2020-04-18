@@ -19,8 +19,8 @@ class Configuration {
     // Rom settings
     //
     
-    var romURL: URL = Defaults.rom
-    var extURL: URL = Defaults.ext
+    var romURL: URL = Defaults.rom.rom
+    var extURL: URL = Defaults.rom.ext
     
     var extStart: Int {
         get { return amiga.getConfig(VA_EXT_START) }
@@ -94,7 +94,7 @@ class Configuration {
     }
 
     // Ports
-    var gameDevice1 = Defaults.gameDevice1 {
+    var gameDevice1 = Defaults.A500.gameDevice1 {
         didSet {
             if oldValue != gameDevice1 {
                 parent.connect(device: gameDevice1, port: 1)
@@ -103,7 +103,7 @@ class Configuration {
             }
         }
     }
-    var gameDevice2 = Defaults.gameDevice2 {
+    var gameDevice2 = Defaults.A500.gameDevice2 {
         didSet {
             if oldValue != gameDevice2 {
                 parent.connect(device: gameDevice2, port: 2)
