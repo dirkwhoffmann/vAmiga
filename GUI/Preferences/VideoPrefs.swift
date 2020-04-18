@@ -264,24 +264,28 @@ extension ConfigController {
     // Action methods (Misc)
     //
     
-    func vidFactorySettingsAction() {
-        
-        parent.resetVideoUserDefaults()
+    @IBAction func vidFactorySettingsAction(_ sender: NSPopUpButton!) {
+
+        UserDefaults.resetVideoUserDefaults()
+        config.loadVideoUserDefaults()
         refresh()
     }
-    
+
     @IBAction func vidFactorySettingsActionTFT(_ sender: Any!) {
 
-        parent.resetVideoUserDefaults()
         parent.renderer.shaderOptions = ShaderDefaultsTFT
         refresh()
     }
-    
+
     @IBAction func vidFactorySettingsActionCRT(_ sender: Any!) {
 
-        parent.resetVideoUserDefaults()
         parent.renderer.shaderOptions = ShaderDefaultsCRT
         parent.renderer.buildDotMasks()
         refresh()
+    }
+    
+    @IBAction func vidDefaultAction(_ sender: NSButton!) {
+        
+        config.saveVideoUserDefaults()
     }
 }

@@ -184,4 +184,9 @@ extension ConfigController {
 
         refresh()
     }
+    
+    @IBAction func hwDefaultAction(_ sender: NSButton!) {
+        
+        config.saveHardwareUserDefaults()
+    }
 }

@@ -165,19 +165,12 @@ class PreferencesController: DialogController {
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
-
-        parent.loadUserDefaults()
-        refresh()
         hideSheet()
     }
     
     @IBAction override func okAction(_ sender: Any!) {
         
-        track()
-
         hideSheet()
-        parent.saveUserDefaults()
-
         if buttonLabel == "Boot" { amiga.run() }
     }
 }

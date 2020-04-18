@@ -194,7 +194,8 @@ extension PreferencesController {
     
     @IBAction func emuFactorySettingsAction(_ sender: Any!) {
         
-        parent.resetGeneralUserDefaults()
+        UserDefaults.resetGeneralUserDefaults()
+        prefs.loadGeneralUserDefaults()
         refresh()
     }
 }

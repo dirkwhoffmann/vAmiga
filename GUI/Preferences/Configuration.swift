@@ -262,8 +262,182 @@ class Configuration {
         set { renderer.shaderOptions.disalignmentV = newValue }
     }
     
-    init(with controller: MyController) {
+    init(with controller: MyController) { parent = controller }
+
+    func loadRomUserDefaults() {
         
-        parent = controller
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        if let url = defaults.url(forKey: Keys.rom) {
+            romURL = url
+            amiga.mem.loadRom(fromFile: romURL)
+        }
+        if let url = defaults.url(forKey: Keys.ext) {
+            extURL = url
+            amiga.mem.loadExt(fromFile: extURL)
+        }
+        extStart = defaults.integer(forKey: Keys.extStart)
+
+        amiga.resume()
+    }
+    
+    func saveRomUserDefaults() {
+        
+        track()
+        
+        let hwconfig = amiga.config()
+        let defaults = UserDefaults.standard
+
+        defaults.set(romURL, forKey: Keys.rom)
+        defaults.set(extURL, forKey: Keys.ext)
+        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
+    }
+
+    func loadHardwareUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        agnusRev = defaults.integer(forKey: Keys.agnusRev)
+        deniseRev = defaults.integer(forKey: Keys.deniseRev)
+        rtClock = defaults.integer(forKey: Keys.realTimeClock)
+
+        chipRam = defaults.integer(forKey: Keys.chipRam)
+        slowRam = defaults.integer(forKey: Keys.slowRam)
+        fastRam = defaults.integer(forKey: Keys.fastRam)
+        
+        driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+        df0Connected = defaults.bool(forKey: Keys.df0Connect)
+        df1Connected = defaults.bool(forKey: Keys.df1Connect)
+        df2Connected = defaults.bool(forKey: Keys.df2Connect)
+        df3Connected = defaults.bool(forKey: Keys.df3Connect)
+        df0Type = defaults.integer(forKey: Keys.df0Type)
+        df1Type = defaults.integer(forKey: Keys.df1Type)
+        df2Type = defaults.integer(forKey: Keys.df2Type)
+        df3Type = defaults.integer(forKey: Keys.df3Type)
+
+        gameDevice1 = defaults.integer(forKey: Keys.gameDevice1)
+        gameDevice2 = defaults.integer(forKey: Keys.gameDevice2)
+        serialDevice = defaults.integer(forKey: Keys.serialDevice)
+
+        amiga.resume()
+    }
+
+    func saveHardwareUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+
+        defaults.set(agnusRev, forKey: Keys.agnusRev)
+        defaults.set(deniseRev, forKey: Keys.deniseRev)
+        defaults.set(rtClock, forKey: Keys.realTimeClock)
+
+        defaults.set(chipRam, forKey: Keys.chipRam)
+        defaults.set(slowRam, forKey: Keys.slowRam)
+        defaults.set(fastRam, forKey: Keys.fastRam)
+
+        defaults.set(driveSpeed, forKey: Keys.driveSpeed)
+        defaults.set(df0Connected, forKey: Keys.df0Connect)
+        defaults.set(df1Connected, forKey: Keys.df1Connect)
+        defaults.set(df2Connected, forKey: Keys.df2Connect)
+        defaults.set(df3Connected, forKey: Keys.df3Connect)
+        defaults.set(df0Type, forKey: Keys.df0Type)
+        defaults.set(df1Type, forKey: Keys.df1Type)
+        defaults.set(df2Type, forKey: Keys.df2Type)
+        defaults.set(df3Type, forKey: Keys.df3Type)
+
+        defaults.set(gameDevice1, forKey: Keys.gameDevice1)
+        defaults.set(gameDevice2, forKey: Keys.gameDevice2)
+        defaults.set(serialDevice, forKey: Keys.serialDevice)
+    }
+    
+    func loadCompatibilityUserDefaults() {
+
+         let defaults = UserDefaults.standard
+
+         amiga.suspend()
+
+         clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
+         clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
+         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
+         samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
+         filterActivation = defaults.integer(forKey: Keys.filterActivation)
+         filterType = defaults.integer(forKey: Keys.filterType)
+         blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+         fifoBuffering = defaults.bool(forKey: Keys.fifoBuffering)
+         todBug = defaults.bool(forKey: Keys.todBug)
+
+         amiga.resume()
+     }
+
+     func saveCompatibilityUserDefaults() {
+
+         track()
+         
+         let defaults = UserDefaults.standard
+
+         defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
+         defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
+         defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
+         defaults.set(samplingMethod, forKey: Keys.samplingMethod)
+         defaults.set(filterActivation, forKey: Keys.filterActivation)
+         defaults.set(filterType, forKey: Keys.filterType)
+         defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+         defaults.set(fifoBuffering, forKey: Keys.fifoBuffering)
+         defaults.set(todBug, forKey: Keys.todBug)
+     }
+    
+    func loadVideoUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        palette = defaults.integer(forKey: Keys.palette)
+        brightness = defaults.double(forKey: Keys.brightness)
+        contrast = defaults.double(forKey: Keys.contrast)
+        saturation = defaults.double(forKey: Keys.saturation)
+
+        hCenter = defaults.float(forKey: Keys.hCenter)
+        vCenter = defaults.float(forKey: Keys.vCenter)
+        hZoom = defaults.float(forKey: Keys.hZoom)
+        vZoom = defaults.float(forKey: Keys.vZoom)
+
+        enhancer = defaults.integer(forKey: Keys.enhancer)
+        upscaler = defaults.integer(forKey: Keys.upscaler)
+
+        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
+
+        renderer.updateTextureRect()
+        renderer.buildDotMasks()
+        
+        amiga.resume()
+    }
+    
+    func saveVideoUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(palette, forKey: Keys.palette)
+        defaults.set(brightness, forKey: Keys.brightness)
+        defaults.set(contrast, forKey: Keys.contrast)
+        defaults.set(saturation, forKey: Keys.saturation)
+
+        defaults.set(hCenter, forKey: Keys.hCenter)
+        defaults.set(vCenter, forKey: Keys.vCenter)
+        defaults.set(hZoom, forKey: Keys.hZoom)
+        defaults.set(vZoom, forKey: Keys.vZoom)
+
+        defaults.set(enhancer, forKey: Keys.enhancer)
+        defaults.set(upscaler, forKey: Keys.upscaler)
+
+        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }

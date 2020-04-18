@@ -102,7 +102,13 @@ extension ConfigController {
 
     @IBAction func compFactorySettingsAction(_ sender: Any!) {
 
-        parent.resetCompatibilityUserDefaults()
+        UserDefaults.resetCompatibilityUserDefaults()
+        config.loadCompatibilityUserDefaults()
         refresh()
+    }
+    
+    @IBAction func compDefaultAction(_ sender: NSButton!) {
+        
+        config.saveCompatibilityUserDefaults()
     }
 }

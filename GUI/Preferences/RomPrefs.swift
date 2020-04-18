@@ -39,6 +39,7 @@ extension ConfigController {
         romDeleteButton.isEnabled = poweredOff
         extDropView.isEnabled = poweredOff
         extDeleteButton.isEnabled = poweredOff
+        romArosButton.isEnabled = poweredOff
         
         // Icons
         romDropView.image =
@@ -76,8 +77,6 @@ extension ConfigController {
         extMapText.isHidden = !hasExt
         extMapAddr.isHidden = !hasExt
         
-        romArosButton.isHidden = !poweredOff
-
         // Lock symbol and explanation
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
@@ -140,5 +139,10 @@ extension ConfigController {
         let fast = amiga.getConfig(VA_FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
         refresh()
+    }
+    
+    @IBAction func romDefaultAction(_ sender: NSButton!) {
+        
+        config.saveRomUserDefaults()
     }
 }

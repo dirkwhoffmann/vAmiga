@@ -87,7 +87,7 @@
 		508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF621EA22790043D0E9 /* Formatter.swift */; };
 		508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF721EA22790043D0E9 /* MyDocument.swift */; };
 		508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF821EA22790043D0E9 /* MemTableView.swift */; };
-		508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* UserDefaults.swift */; };
+		508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* Defaults.swift */; };
 		508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */; };
 		508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFF21EA227A0043D0E9 /* MacKey.swift */; };
 		508FE02321EA227B0043D0E9 /* KBController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KBController.swift */; };
@@ -287,7 +287,7 @@
 		508FDFF621EA22790043D0E9 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
 		508FDFF721EA22790043D0E9 /* MyDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDocument.swift; sourceTree = "<group>"; };
 		508FDFF821EA22790043D0E9 /* MemTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemTableView.swift; sourceTree = "<group>"; };
-		508FDFF921EA22790043D0E9 /* UserDefaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserDefaults.swift; sourceTree = "<group>"; };
+		508FDFF921EA22790043D0E9 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		508FDFFA21EA22790043D0E9 /* VirtualC64-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "VirtualC64-Bridging-Header.h"; sourceTree = "<group>"; };
 		508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTravelTouchBar.swift; sourceTree = "<group>"; };
 		508FDFFF21EA227A0043D0E9 /* MacKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacKey.swift; sourceTree = "<group>"; };
@@ -654,7 +654,7 @@
 				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
-				508FDFF921EA22790043D0E9 /* UserDefaults.swift */,
+				508FDFF921EA22790043D0E9 /* Defaults.swift */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -1110,7 +1110,7 @@
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
 				508FDFDB21EA20510043D0E9 /* Shaders.swift in Sources */,
-				508FE01D21EA227B0043D0E9 /* UserDefaults.swift in Sources */,
+				508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */,
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,

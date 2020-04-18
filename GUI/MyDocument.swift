@@ -59,7 +59,7 @@ class MyDocument: NSDocument {
         }
 
         // Register standard user defaults
-        MyController.registerUserDefaults()
+        UserDefaults.registerUserDefaults()
         
         // Create emulator instance
         amiga = AmigaProxy()

@@ -52,19 +52,22 @@ extension UserDefaults {
 // User defaults (all)
 //
 
-extension MyController {
+extension UserDefaults {
     
     static func registerUserDefaults() {
         
         track()
         
-        registerRomUserDefaults()
-        registerDevicesUserDefaults()
-        registerVideoUserDefaults()
-        registerGeneralUserDefaults()
-        registerHardwareUserDefaults()
-        registerCompatibilityUserDefaults()
+        UserDefaults.registerRomUserDefaults()
+        UserDefaults.registerDevicesUserDefaults()
+        UserDefaults.registerVideoUserDefaults()
+        UserDefaults.registerGeneralUserDefaults()
+        UserDefaults.registerHardwareUserDefaults()
+        UserDefaults.registerCompatibilityUserDefaults()
     }
+}
+
+extension MyController {
     
     func resetUserDefaults() {
         
@@ -72,13 +75,11 @@ extension MyController {
         
         amiga.suspend()
         
-        resetRomUserDefaults()
-        resetDevicesUserDefaults()
-        resetVideoUserDefaults()
-        resetGeneralUserDefaults()
-        resetHardwareUserDefaults()
-        resetCompatibilityUserDefaults()
-        
+        UserDefaults.resetRomUserDefaults()
+        UserDefaults.resetHardwareUserDefaults()
+        UserDefaults.resetCompatibilityUserDefaults()
+        UserDefaults.resetVideoUserDefaults()
+
         amiga.resume()
     }
     
@@ -88,12 +89,13 @@ extension MyController {
         
         amiga.suspend()
         
-        loadRomUserDefaults()
-        loadDevicesUserDefaults()
-        loadVideoUserDefaults()
-        loadGeneralUserDefaults()
-        loadHardwareUserDefaults()
-        loadCompatibilityUserDefaults()
+        prefs.loadGeneralUserDefaults()
+        prefs.loadDevicesUserDefaults()
+
+        config.loadRomUserDefaults()
+        config.loadVideoUserDefaults()
+        config.loadHardwareUserDefaults()
+        config.loadCompatibilityUserDefaults()
         
         amiga.resume()
     }
@@ -118,12 +120,13 @@ extension MyController {
         
         track()
         
-        saveRomUserDefaults()
-        saveDevicesUserDefaults()
-        saveVideoUserDefaults()
-        saveGeneralUserDefaults()
-        saveHardwareUserDefaults()
-        saveCompatibilityUserDefaults()
+        prefs.saveGeneralUserDefaults()
+        prefs.saveDevicesUserDefaults()
+
+        config.saveRomUserDefaults()
+        config.saveVideoUserDefaults()
+        config.saveHardwareUserDefaults()
+        config.saveCompatibilityUserDefaults()
     }
 
     func saveUserDefaults(url: URL, prefixes: [String]) {
@@ -206,7 +209,7 @@ struct Defaults {
     static let ejectWithoutAsking     = false
 }
 
-extension MyController {
+extension UserDefaults {
     
     static func registerGeneralUserDefaults() {
         
@@ -240,8 +243,8 @@ extension MyController {
         
         defaults.register(defaults: dictionary)
     }
-
-    func resetGeneralUserDefaults() {
+    
+    static func resetGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -270,68 +273,6 @@ extension MyController {
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadGeneralUserDefaults()
-    }
-    
-    func loadGeneralUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        prefs.warpLoad = defaults.bool(forKey: Keys.warpLoad)
-        prefs.driveSounds = defaults.bool(forKey: Keys.driveSounds)
-        prefs.driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
-        prefs.driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
-        prefs.driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
-        prefs.driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
-        prefs.drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
-        prefs.driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
-        
-        prefs.autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
-        prefs.snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
-        prefs.autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
-        prefs.screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
-        prefs.screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
-        prefs.screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
-    
-        prefs.keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        prefs.exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
-        
-        prefs.pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        prefs.closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
-        prefs.ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
-        
-        amiga.resume()
-    }
-    
-    func saveGeneralUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.set(prefs.warpLoad, forKey: Keys.warpLoad)
-        defaults.set(prefs.driveSounds, forKey: Keys.driveSounds)
-        defaults.set(prefs.driveSoundPan, forKey: Keys.driveSoundPan)
-        defaults.set(prefs.driveInsertSound, forKey: Keys.driveInsertSound)
-        defaults.set(prefs.driveEjectSound, forKey: Keys.driveEjectSound)
-        defaults.set(prefs.driveHeadSound, forKey: Keys.driveHeadSound)
-        defaults.set(prefs.drivePollSound, forKey: Keys.drivePollSound)
-        defaults.set(prefs.driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
-        
-        defaults.set(prefs.autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(prefs.snapshotInterval, forKey: Keys.autoSnapshotInterval)
-        defaults.set(prefs.autoScreenshots, forKey: Keys.autoScreenshots)
-        defaults.set(prefs.screenshotInterval, forKey: Keys.autoScreenshotInterval)
-        defaults.set(prefs.screenshotSource, forKey: Keys.screenshotSource)
-        defaults.set(prefs.screenshotTargetIntValue, forKey: Keys.screenshotTarget)
-        
-        defaults.set(prefs.keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(prefs.exitOnEsc, forKey: Keys.exitOnEsc)
-                
-        defaults.set(prefs.pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(prefs.closeWithoutAsking, forKey: Keys.closeWithoutAsking)
-        defaults.set(prefs.ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
     }
 }
 
@@ -395,7 +336,7 @@ extension Defaults {
     static let releaseMouseByShaking = true
 }
     
-extension MyController {
+extension UserDefaults {
     
     static func registerDevicesUserDefaults() {
         
@@ -425,8 +366,8 @@ extension MyController {
         defaults.register(encodableItem: Defaults.joyKeyMap2, forKey: Keys.joyKeyMap2)
         defaults.register(encodableItem: Defaults.mouseKeyMap, forKey: Keys.mouseKeyMap)
     }
-
-    func resetDevicesUserDefaults() {
+    
+    static func resetDevicesUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -448,62 +389,6 @@ extension MyController {
                      Keys.releaseMouseByShaking ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadDevicesUserDefaults()
-    }
-    
-    func loadDevicesUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-    
-        amiga.suspend()
-
-        // Emulation keys
-        defaults.decode(&prefs.keyMaps[0], forKey: Keys.joyKeyMap1)
-        defaults.decode(&prefs.keyMaps[1], forKey: Keys.joyKeyMap2)
-        defaults.decode(&prefs.keyMaps[2], forKey: Keys.mouseKeyMap)
-        prefs.disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
-
-        // Joysticks
-        prefs.autofire = defaults.bool(forKey: Keys.autofire)
-        prefs.autofireBullets = defaults.integer(forKey: Keys.autofireBullets)
-        prefs.autofireFrequency = defaults.float(forKey: Keys.autofireFrequency)
- 
-        // Mouse
-        prefs.retainMouseKeyComb = defaults.integer(forKey: Keys.retainMouseKeyComb)
-        prefs.retainMouseWithKeys = defaults.bool(forKey: Keys.retainMouseWithKeys)
-        prefs.retainMouseByClick = defaults.bool(forKey: Keys.retainMouseByClick)
-        prefs.retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
-        prefs.releaseMouseKeyComb = defaults.integer(forKey: Keys.releaseMouseKeyComb)
-        prefs.releaseMouseWithKeys = defaults.bool(forKey: Keys.releaseMouseWithKeys)
-        prefs.releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
-        
-        amiga.resume()
-    }
-    
-    func saveDevicesUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-
-        // Emulation keys
-        defaults.encode(prefs.keyMaps[0], forKey: Keys.joyKeyMap1)
-        defaults.encode(prefs.keyMaps[1], forKey: Keys.joyKeyMap2)
-        defaults.encode(prefs.keyMaps[2], forKey: Keys.mouseKeyMap)
-        defaults.set(prefs.disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
-
-        // Joysticks
-        defaults.set(prefs.autofire, forKey: Keys.autofire)
-        defaults.set(prefs.autofireBullets, forKey: Keys.autofireBullets)
-        defaults.set(prefs.autofireFrequency, forKey: Keys.autofireFrequency)
-        
-        // Mouse
-        defaults.set(prefs.retainMouseKeyComb, forKey: Keys.retainMouseKeyComb)
-        defaults.set(prefs.retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
-        defaults.set(prefs.retainMouseByClick, forKey: Keys.retainMouseByClick)
-        defaults.set(prefs.retainMouseByEntering, forKey: Keys.retainMouseByEntering)
-        defaults.set(prefs.releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
-        defaults.set(prefs.releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
-        defaults.set(prefs.releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
     }
 }
 
@@ -525,7 +410,7 @@ extension Defaults {
     static let extStart          = 0xE0
 }
 
-extension MyController {
+extension UserDefaults {
     
     static func registerRomUserDefaults() {
         
@@ -539,8 +424,8 @@ extension MyController {
         let defaults = UserDefaults.standard
         defaults.register(defaults: dictionary)
     }
-
-    func resetRomUserDefaults() {
+    
+    static func resetRomUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -549,37 +434,6 @@ extension MyController {
                      Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadRomUserDefaults()
-    }
-    
-    func loadRomUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        if let url = defaults.url(forKey: Keys.rom) {
-            config.romURL = url
-            amiga.mem.loadRom(fromFile: config.romURL)
-        }
-        if let url = defaults.url(forKey: Keys.ext) {
-            config.extURL = url
-            amiga.mem.loadExt(fromFile: config.extURL)
-        }
-        config.extStart = defaults.integer(forKey: Keys.extStart)
-
-        amiga.resume()
-    }
-    
-    func saveRomUserDefaults() {
-        
-        let hwconfig = amiga.config()
-        let defaults = UserDefaults.standard
-
-        defaults.set(config.romURL, forKey: Keys.rom)
-        defaults.set(config.extURL, forKey: Keys.ext)
-        defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
     }
 }
 
@@ -669,7 +523,7 @@ extension Defaults {
     static let serialDevice = SPD_NONE
 }
 
-extension MyController {
+extension UserDefaults {
     
     static func registerHardwareUserDefaults() {
         
@@ -702,8 +556,8 @@ extension MyController {
         let defaults = UserDefaults.standard
         defaults.register(defaults: dictionary)
     }
-    
-    func resetHardwareUserDefaults() {
+        
+    static func resetHardwareUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -730,68 +584,6 @@ extension MyController {
                     Keys.serialDevice ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadHardwareUserDefaults()
-    }
-    
-    func loadHardwareUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        config.agnusRev = defaults.integer(forKey: Keys.agnusRev)
-        config.deniseRev = defaults.integer(forKey: Keys.deniseRev)
-        config.rtClock = defaults.integer(forKey: Keys.realTimeClock)
-
-        config.chipRam = defaults.integer(forKey: Keys.chipRam)
-        config.slowRam = defaults.integer(forKey: Keys.slowRam)
-        config.fastRam = defaults.integer(forKey: Keys.fastRam)
-
-        track("chip = \(defaults.integer(forKey: Keys.chipRam))")
-        
-        config.driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
-        config.df0Connected = defaults.bool(forKey: Keys.df0Connect)
-        config.df1Connected = defaults.bool(forKey: Keys.df1Connect)
-        config.df2Connected = defaults.bool(forKey: Keys.df2Connect)
-        config.df3Connected = defaults.bool(forKey: Keys.df3Connect)
-        config.df0Type = defaults.integer(forKey: Keys.df0Type)
-        config.df1Type = defaults.integer(forKey: Keys.df1Type)
-        config.df2Type = defaults.integer(forKey: Keys.df2Type)
-        config.df3Type = defaults.integer(forKey: Keys.df3Type)
-
-        config.gameDevice1 = defaults.integer(forKey: Keys.gameDevice1)
-        config.gameDevice2 = defaults.integer(forKey: Keys.gameDevice2)
-        config.serialDevice = defaults.integer(forKey: Keys.serialDevice)
-
-        amiga.resume()
-    }
-
-    func saveHardwareUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-
-        defaults.set(config.agnusRev, forKey: Keys.agnusRev)
-        defaults.set(config.deniseRev, forKey: Keys.deniseRev)
-        defaults.set(config.rtClock, forKey: Keys.realTimeClock)
-
-        defaults.set(config.chipRam, forKey: Keys.chipRam)
-        defaults.set(config.slowRam, forKey: Keys.slowRam)
-        defaults.set(config.fastRam, forKey: Keys.fastRam)
-
-        defaults.set(config.driveSpeed, forKey: Keys.driveSpeed)
-        defaults.set(config.df0Connected, forKey: Keys.df0Connect)
-        defaults.set(config.df1Connected, forKey: Keys.df1Connect)
-        defaults.set(config.df2Connected, forKey: Keys.df2Connect)
-        defaults.set(config.df3Connected, forKey: Keys.df3Connect)
-        defaults.set(config.df0Type, forKey: Keys.df0Type)
-        defaults.set(config.df1Type, forKey: Keys.df1Type)
-        defaults.set(config.df2Type, forKey: Keys.df2Type)
-        defaults.set(config.df3Type, forKey: Keys.df3Type)
-
-        defaults.set(config.gameDevice1, forKey: Keys.gameDevice1)
-        defaults.set(config.gameDevice2, forKey: Keys.gameDevice2)
-        defaults.set(config.serialDevice, forKey: Keys.serialDevice)
     }
 }
 
@@ -843,8 +635,24 @@ extension Defaults {
     static let todBug            = true
 }
 
-extension MyController {
+extension UserDefaults {
 
+    /*
+    struct CompatibilityScheme {
+
+        let agnusRevision: AgnusRevision
+        let deniseRevision: DeniseRevision
+        let realTimeClock: RTCModel
+
+        let chipRam: Int
+        let slowRam: Int
+        let fastRam: Int
+
+        let driveConnect: [Bool]
+        let driveType: [DriveType]
+    }
+    */
+    
     static func registerCompatibilityUserDefaults() {
 
         let dictionary: [String: Any] = [
@@ -865,7 +673,7 @@ extension MyController {
         defaults.register(defaults: dictionary)
     }
 
-    func resetCompatibilityUserDefaults() {
+    static func resetCompatibilityUserDefaults() {
 
         let defaults = UserDefaults.standard
 
@@ -881,44 +689,6 @@ extension MyController {
                      Keys.todBug]
 
         for key in keys { defaults.removeObject(forKey: key) }
-
-        loadCompatibilityUserDefaults()
-    }
-
-    func loadCompatibilityUserDefaults() {
-
-        let defaults = UserDefaults.standard
-
-        amiga.suspend()
-
-        config.clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
-        config.clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
-        config.clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
-        config.samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
-        config.filterActivation = defaults.integer(forKey: Keys.filterActivation)
-        config.filterType = defaults.integer(forKey: Keys.filterType)
-        config.blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
-        config.driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
-        config.fifoBuffering = defaults.bool(forKey: Keys.fifoBuffering)
-        config.todBug = defaults.bool(forKey: Keys.todBug)
-
-        amiga.resume()
-    }
-
-    func saveCompatibilityUserDefaults() {
-
-        let defaults = UserDefaults.standard
-        let config = amiga.config()
-
-        defaults.set(config.denise.clxSprSpr, forKey: Keys.clxSprSpr)
-        defaults.set(config.denise.clxSprPlf, forKey: Keys.clxSprPlf)
-        defaults.set(config.denise.clxPlfPlf, forKey: Keys.clxPlfPlf)
-        defaults.set(config.audio.samplingMethod.rawValue, forKey: Keys.samplingMethod)
-        defaults.set(config.audio.filterActivation.rawValue, forKey: Keys.filterActivation)
-        defaults.set(config.audio.filterType.rawValue, forKey: Keys.filterType)
-        defaults.set(config.blitter.accuracy, forKey: Keys.blitterAccuracy)
-        defaults.set(config.diskController.useFifo, forKey: Keys.fifoBuffering)
-        defaults.set(config.ciaA.todBug, forKey: Keys.todBug)
     }
 }
 
@@ -969,7 +739,7 @@ extension Defaults {
     static let shaderOptions = ShaderDefaultsTFT
 }
 
-extension MyController {
+extension UserDefaults {
     
     static func registerVideoUserDefaults() {
         
@@ -993,8 +763,8 @@ extension MyController {
         defaults.register(defaults: dictionary)
         defaults.register(encodableItem: Defaults.shaderOptions, forKey: Keys.shaderOptions)
     }
-    
-    func resetVideoUserDefaults() {
+
+    static func resetVideoUserDefaults() {
         
         let defaults = UserDefaults.standard
 
@@ -1014,54 +784,5 @@ extension MyController {
                      Keys.shaderOptions ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        
-        loadVideoUserDefaults()
-    }
-    
-    func loadVideoUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        config.palette = defaults.integer(forKey: Keys.palette)
-        config.brightness = defaults.double(forKey: Keys.brightness)
-        config.contrast = defaults.double(forKey: Keys.contrast)
-        config.saturation = defaults.double(forKey: Keys.saturation)
-
-        config.hCenter = defaults.float(forKey: Keys.hCenter)
-        config.vCenter = defaults.float(forKey: Keys.vCenter)
-        config.hZoom = defaults.float(forKey: Keys.hZoom)
-        config.vZoom = defaults.float(forKey: Keys.vZoom)
-
-        config.enhancer = defaults.integer(forKey: Keys.enhancer)
-        config.upscaler = defaults.integer(forKey: Keys.upscaler)
-
-        defaults.decode(&renderer.shaderOptions, forKey: Keys.shaderOptions)
-
-        renderer.updateTextureRect()
-        renderer.buildDotMasks()
-        
-        amiga.resume()
-    }
-    
-    func saveVideoUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.set(config.palette, forKey: Keys.palette)
-        defaults.set(config.brightness, forKey: Keys.brightness)
-        defaults.set(config.contrast, forKey: Keys.contrast)
-        defaults.set(config.saturation, forKey: Keys.saturation)
-
-        defaults.set(config.hCenter, forKey: Keys.hCenter)
-        defaults.set(config.vCenter, forKey: Keys.vCenter)
-        defaults.set(config.hZoom, forKey: Keys.hZoom)
-        defaults.set(config.vZoom, forKey: Keys.vZoom)
-
-        defaults.set(config.enhancer, forKey: Keys.enhancer)
-        defaults.set(config.upscaler, forKey: Keys.upscaler)
-
-        defaults.encode(renderer.shaderOptions, forKey: Keys.shaderOptions)
     }
 }
