@@ -19,8 +19,8 @@ class Configuration {
     // Rom settings
     //
     
-    var romURL: URL = Defaults.rom.rom
-    var extURL: URL = Defaults.rom.ext
+    var romURL: URL = RomDefaults.std.rom
+    var extURL: URL = RomDefaults.std.ext
     
     var extStart: Int {
         get { return amiga.getConfig(VA_EXT_START) }
@@ -94,7 +94,7 @@ class Configuration {
     }
 
     // Ports
-    var gameDevice1 = Defaults.A500.gameDevice1 {
+    var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
             if oldValue != gameDevice1 {
                 parent.connect(device: gameDevice1, port: 1)
@@ -103,7 +103,7 @@ class Configuration {
             }
         }
     }
-    var gameDevice2 = Defaults.A500.gameDevice2 {
+    var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
         didSet {
             if oldValue != gameDevice2 {
                 parent.connect(device: gameDevice2, port: 2)
@@ -166,19 +166,19 @@ class Configuration {
     // Monitor settings
     //
     
-    var enhancer = Defaults.enhancer
-    var upscaler = Defaults.upscaler
+    var enhancer = VideoDefaults.tft.enhancer
+    var upscaler = VideoDefaults.tft.upscaler
     
-    var hCenter = Defaults.hCenter {
+    var hCenter = VideoDefaults.tft.hCenter {
         didSet { renderer.updateTextureRect() }
     }
-    var vCenter = Defaults.vCenter {
+    var vCenter = VideoDefaults.tft.vCenter {
         didSet { renderer.updateTextureRect() }
     }
-    var hZoom = Defaults.hZoom {
+    var hZoom = VideoDefaults.tft.hZoom {
         didSet { renderer.updateTextureRect() }
     }
-    var vZoom = Defaults.vZoom {
+    var vZoom = VideoDefaults.tft.vZoom {
         didSet { renderer.updateTextureRect() }
     }
     var brightness: Double {
@@ -264,6 +264,10 @@ class Configuration {
     
     init(with controller: MyController) { parent = controller }
 
+    //
+    // Roms
+    //
+    
     func loadRomUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -295,6 +299,38 @@ class Configuration {
         defaults.set(hwconfig.mem.extStart, forKey: Keys.extStart)
     }
 
+    //
+    // Hardware
+    //
+    
+    func loadHardwareDefaults(_ defaults: HardwareDefaults) {
+        
+        amiga.suspend()
+        
+        agnusRev = defaults.agnusRevision.rawValue
+        deniseRev = defaults.deniseRevision.rawValue
+        rtClock = defaults.realTimeClock.rawValue
+        
+        chipRam = defaults.chipRam
+        slowRam = defaults.slowRam
+        fastRam = defaults.fastRam
+        
+        df0Connected = defaults.driveConnect[0]
+        df1Connected = defaults.driveConnect[1]
+        df2Connected = defaults.driveConnect[2]
+        df3Connected = defaults.driveConnect[3]
+        df0Type = defaults.driveType[0].rawValue
+        df1Type = defaults.driveType[1].rawValue
+        df2Type = defaults.driveType[2].rawValue
+        df3Type = defaults.driveType[3].rawValue
+        
+        gameDevice1 = defaults.gameDevice1
+        gameDevice2 = defaults.gameDevice2
+        serialDevice = defaults.serialDevice.rawValue
+        
+        amiga.resume()
+    }
+    
     func loadHardwareUserDefaults() {
         
         let defaults = UserDefaults.standard
@@ -325,7 +361,7 @@ class Configuration {
 
         amiga.resume()
     }
-
+    
     func saveHardwareUserDefaults() {
         
         track()

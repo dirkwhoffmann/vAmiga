@@ -177,39 +177,40 @@ struct Keys {
     static let pauseInBackground      = "VAMIGA1PauseInBackground"
 }
 
-struct Defaults {
-   
-    struct GeneralDefaults {
-
-        // Drives
-        let warpLoad: Bool
-        let driveSounds: Bool
-        let driveSoundPan: Double
-        let driveInsertSound: Bool
-        let driveEjectSound: Bool
-        let driveHeadSound: Bool
-        let drivePollSound: Bool
-        let driveBlankDiskFormat: FileSystemType
-        
-        // Snapshots and Screenshots
-        let autoSnapshots: Bool
-        let autoSnapshotInterval: Int
-        let autoScreenshots: Bool
-        let autoScreenshotInterval: Int
-        let screenshotSource: Int
-        let screenshotTarget: NSBitmapImageRep.FileType
-        
-        // Fullscreen
-        let keepAspectRatio: Bool
-        let exitOnEsc: Bool
-        
-        // Miscellaneous
-        let pauseInBackground: Bool
-        let closeWithoutAsking: Bool
-        let ejectWithoutAsking: Bool
-    }
+struct GeneralDefaults {
     
-    static let general = GeneralDefaults.init(
+    // Drives
+    let warpLoad: Bool
+    let driveSounds: Bool
+    let driveSoundPan: Double
+    let driveInsertSound: Bool
+    let driveEjectSound: Bool
+    let driveHeadSound: Bool
+    let drivePollSound: Bool
+    let driveBlankDiskFormat: FileSystemType
+    
+    // Snapshots and Screenshots
+    let autoSnapshots: Bool
+    let autoSnapshotInterval: Int
+    let autoScreenshots: Bool
+    let autoScreenshotInterval: Int
+    let screenshotSource: Int
+    let screenshotTarget: NSBitmapImageRep.FileType
+    
+    // Fullscreen
+    let keepAspectRatio: Bool
+    let exitOnEsc: Bool
+    
+    // Miscellaneous
+    let pauseInBackground: Bool
+    let closeWithoutAsking: Bool
+    let ejectWithoutAsking: Bool
+
+    //
+    // Schemes
+    //
+    
+    static let std = GeneralDefaults.init(
         
         warpLoad: true,
         driveSounds: true,
@@ -232,42 +233,44 @@ struct Defaults {
         
         pauseInBackground: false,
         closeWithoutAsking: false,
-        ejectWithoutAsking: false)
+        ejectWithoutAsking: false
+    )
 }
 
 extension UserDefaults {
     
     static func registerGeneralUserDefaults() {
-        
+    
+        let defaults = GeneralDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.warpLoad: Defaults.general.warpLoad,
-            Keys.driveSounds: Defaults.general.driveSounds,
-            Keys.driveSoundPan: Defaults.general.driveSoundPan,
-            Keys.driveInsertSound: Defaults.general.driveInsertSound,
-            Keys.driveEjectSound: Defaults.general.driveEjectSound,
-            Keys.driveHeadSound: Defaults.general.driveHeadSound,
-            Keys.drivePollSound: Defaults.general.drivePollSound,
-            Keys.driveBlankDiskFormat: Int(Defaults.general.driveBlankDiskFormat.rawValue),
+            Keys.warpLoad: defaults.warpLoad,
+            Keys.driveSounds: defaults.driveSounds,
+            Keys.driveSoundPan: defaults.driveSoundPan,
+            Keys.driveInsertSound: defaults.driveInsertSound,
+            Keys.driveEjectSound: defaults.driveEjectSound,
+            Keys.driveHeadSound: defaults.driveHeadSound,
+            Keys.drivePollSound: defaults.drivePollSound,
+            Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),
 
-            Keys.autoSnapshots: Defaults.general.autoSnapshots,
-            Keys.autoSnapshotInterval: Defaults.general.autoSnapshotInterval,
-            Keys.autoScreenshots: Defaults.general.autoScreenshots,
-            Keys.autoScreenshotInterval: Defaults.general.autoScreenshotInterval,
-            Keys.screenshotSource: Defaults.general.screenshotSource,
-            Keys.screenshotTarget: Int(Defaults.general.screenshotTarget.rawValue),
+            Keys.autoSnapshots: defaults.autoSnapshots,
+            Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
+            Keys.autoScreenshots: defaults.autoScreenshots,
+            Keys.autoScreenshotInterval: defaults.autoScreenshotInterval,
+            Keys.screenshotSource: defaults.screenshotSource,
+            Keys.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
 
-            Keys.keepAspectRatio: Defaults.general.keepAspectRatio,
-            Keys.exitOnEsc: Defaults.general.exitOnEsc,
+            Keys.keepAspectRatio: defaults.keepAspectRatio,
+            Keys.exitOnEsc: defaults.exitOnEsc,
             
-            Keys.pauseInBackground: Defaults.general.pauseInBackground,
-            Keys.closeWithoutAsking: Defaults.general.closeWithoutAsking,
-            Keys.ejectWithoutAsking: Defaults.general.ejectWithoutAsking
+            Keys.pauseInBackground: defaults.pauseInBackground,
+            Keys.closeWithoutAsking: defaults.closeWithoutAsking,
+            Keys.ejectWithoutAsking: defaults.ejectWithoutAsking
         ]
         
-        let defaults = UserDefaults.standard
+        let userDefaults = UserDefaults.standard
         
-        defaults.register(defaults: dictionary)
+        userDefaults.register(defaults: dictionary)
     }
     
     static func resetGeneralUserDefaults() {
@@ -327,32 +330,33 @@ extension Keys {
     static let releaseMouseByShaking = "VAMIGA2ReleaseMouseByShaking"
 }
 
-extension Defaults {
+struct DevicesDefaults {
     
-    struct DevicesDefaults {
-
-        // Emulation keys
-        let joyKeyMap1: [MacKey: UInt32]
-        let joyKeyMap2: [MacKey: UInt32]
-        let mouseKeyMap: [MacKey: UInt32]
-        let disconnectJoyKeys: Bool
-        
-        // Joysticks
-        let autofire: Bool
-        let autofireBullets: Int
-        let autofireFrequency: Float
-        
-        // Mouse
-        let retainMouseKeyComb: Int
-        let retainMouseWithKeys: Bool
-        let retainMouseByClick: Bool
-        let retainMouseByEntering: Bool
-        let releaseMouseKeyComb: Int
-        let releaseMouseWithKeys: Bool
-        let releaseMouseByShaking: Bool
-    }
+    // Emulation keys
+    let joyKeyMap1: [MacKey: UInt32]
+    let joyKeyMap2: [MacKey: UInt32]
+    let mouseKeyMap: [MacKey: UInt32]
+    let disconnectJoyKeys: Bool
     
-    static let joyKeyMap1 = [
+    // Joysticks
+    let autofire: Bool
+    let autofireBullets: Int
+    let autofireFrequency: Float
+    
+    // Mouse
+    let retainMouseKeyComb: Int
+    let retainMouseWithKeys: Bool
+    let retainMouseByClick: Bool
+    let retainMouseByEntering: Bool
+    let releaseMouseKeyComb: Int
+    let releaseMouseWithKeys: Bool
+    let releaseMouseByShaking: Bool
+    
+    //
+    // Schemes
+    //
+    
+    static let stdKeyMap1 = [
         
         MacKey.init(keyCode: kVK_LeftArrow): PULL_LEFT.rawValue,
         MacKey.init(keyCode: kVK_RightArrow): PULL_RIGHT.rawValue,
@@ -360,7 +364,7 @@ extension Defaults {
         MacKey.init(keyCode: kVK_DownArrow): PULL_DOWN.rawValue,
         MacKey.init(keyCode: kVK_Space): PRESS_FIRE.rawValue
     ]
-    static let joyKeyMap2 = [
+    static let stdKeyMap2 = [
         
         MacKey.init(keyCode: kVK_ANSI_S): PULL_LEFT.rawValue,
         MacKey.init(keyCode: kVK_ANSI_D): PULL_RIGHT.rawValue,
@@ -369,10 +373,10 @@ extension Defaults {
         MacKey.init(keyCode: kVK_ANSI_C): PRESS_FIRE.rawValue
     ]
     
-    static let devices = DevicesDefaults.init(
+    static let std = DevicesDefaults.init(
         
-        joyKeyMap1: joyKeyMap1,
-        joyKeyMap2: joyKeyMap2,
+        joyKeyMap1: stdKeyMap1,
+        joyKeyMap2: stdKeyMap2,
         mouseKeyMap: [:],
         disconnectJoyKeys: true,
         
@@ -389,36 +393,37 @@ extension Defaults {
         releaseMouseByShaking: true
     )
 }
-    
+
 extension UserDefaults {
     
     static func registerDevicesUserDefaults() {
         
+        let defaults = DevicesDefaults.std
         let dictionary: [String: Any] = [
 
             // Emulation keys
-            Keys.disconnectJoyKeys: Defaults.devices.disconnectJoyKeys,
+            Keys.disconnectJoyKeys: defaults.disconnectJoyKeys,
 
             // Joysticks
-            Keys.autofire: Defaults.devices.autofire,
-            Keys.autofireBullets: Defaults.devices.autofireBullets,
-            Keys.autofireFrequency: Defaults.devices.autofireFrequency,
+            Keys.autofire: defaults.autofire,
+            Keys.autofireBullets: defaults.autofireBullets,
+            Keys.autofireFrequency: defaults.autofireFrequency,
             
             // Mouse
-            Keys.retainMouseKeyComb: Defaults.devices.retainMouseKeyComb,
-            Keys.retainMouseWithKeys: Defaults.devices.retainMouseWithKeys,
-            Keys.retainMouseByClick: Defaults.devices.retainMouseByClick,
-            Keys.retainMouseByEntering: Defaults.devices.retainMouseByEntering,
-            Keys.releaseMouseKeyComb: Defaults.devices.releaseMouseKeyComb,
-            Keys.releaseMouseWithKeys: Defaults.devices.releaseMouseWithKeys,
-            Keys.releaseMouseByShaking: Defaults.devices.releaseMouseByShaking
+            Keys.retainMouseKeyComb: defaults.retainMouseKeyComb,
+            Keys.retainMouseWithKeys: defaults.retainMouseWithKeys,
+            Keys.retainMouseByClick: defaults.retainMouseByClick,
+            Keys.retainMouseByEntering: defaults.retainMouseByEntering,
+            Keys.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
+            Keys.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
+            Keys.releaseMouseByShaking: defaults.releaseMouseByShaking
         ]
         
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
-        defaults.register(encodableItem: Defaults.devices.joyKeyMap1, forKey: Keys.joyKeyMap1)
-        defaults.register(encodableItem: Defaults.devices.joyKeyMap2, forKey: Keys.joyKeyMap2)
-        defaults.register(encodableItem: Defaults.devices.mouseKeyMap, forKey: Keys.mouseKeyMap)
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.joyKeyMap1)
+        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.joyKeyMap2)
+        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.mouseKeyMap)
     }
     
     static func resetDevicesUserDefaults() {
@@ -457,16 +462,13 @@ extension Keys {
     static let extStart          = "VAMIGA3ExtStartKey"
 }
 
-extension Defaults {
+struct RomDefaults {
     
-    struct RomDefaults {
-        
-        let rom: URL
-        let ext: URL
-        let extStart: Int
-    }
+    let rom: URL
+    let ext: URL
+    let extStart: Int
     
-    static let rom = RomDefaults.init(
+    static let std = RomDefaults.init(
         
         rom: URL(fileURLWithPath: ""),
         ext: URL(fileURLWithPath: ""),
@@ -478,15 +480,16 @@ extension UserDefaults {
     
     static func registerRomUserDefaults() {
         
+        let defaults = RomDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.rom: Defaults.rom.rom,
-            Keys.ext: Defaults.rom.ext,
-            Keys.extStart: Defaults.rom.extStart
-            ]
+            Keys.rom: defaults.rom,
+            Keys.ext: defaults.ext,
+            Keys.extStart: defaults.extStart
+        ]
         
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
     }
     
     static func resetRomUserDefaults() {
@@ -533,66 +536,76 @@ extension Keys {
     static let serialDevice       = "VAMIGA4SerialDeviceKey"
 }
 
-extension Defaults {
-
-    struct HwDefaults {
-
-        let agnusRevision: AgnusRevision
-        let deniseRevision: DeniseRevision
-        let realTimeClock: RTCModel
-
-        let chipRam: Int
-        let slowRam: Int
-        let fastRam: Int
-
-        let driveConnect: [Bool]
-        let driveType: [DriveType]
+struct HardwareDefaults {
+    
+    var agnusRevision: AgnusRevision
+    var deniseRevision: DeniseRevision
+    var realTimeClock: RTCModel
+    
+    var chipRam: Int
+    var slowRam: Int
+    var fastRam: Int
+    
+    var driveConnect: [Bool]
+    var driveType: [DriveType]
+    
+    var gameDevice1: Int
+    var gameDevice2: Int
+    var serialDevice: SerialPortDevice
+    
+    //
+    // Schemes
+    //
+    
+    static let A500 = HardwareDefaults.init(
         
-        let gameDevice1: Int
-        let gameDevice2: Int
-        let serialDevice: SerialPortDevice
-    }
-
-    static let A500 = HwDefaults.init(
-
         agnusRevision: AGNUS_8372,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_NONE,
+        
         chipRam: 512,
         slowRam: 0,
         fastRam: 0,
+        
         driveConnect: [true, false, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        
         gameDevice1: 0,
         gameDevice2: -1,
         serialDevice: SPD_NONE
     )
-
-    static let A1000 = HwDefaults.init(
-
+    
+    static let A1000 = HardwareDefaults.init(
+        
         agnusRevision: AGNUS_8367,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_NONE,
+        
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
+        
         driveConnect: [true, false, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        
         gameDevice1: 0,
         gameDevice2: -1,
         serialDevice: SPD_NONE
     )
-
-    static let A2000 = HwDefaults.init(
+    
+    static let A2000 = HardwareDefaults.init(
         
         agnusRevision: AGNUS_8375,
         deniseRevision: DENISE_8362R8,
         realTimeClock: RTC_M6242B,
+        
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
+        
         driveConnect: [true, true, false, false],
         driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        
         gameDevice1: 0,
         gameDevice2: -1,
         serialDevice: SPD_NONE
@@ -603,34 +616,33 @@ extension UserDefaults {
     
     static func registerHardwareUserDefaults() {
         
-        let defaultModel = Defaults.A500
-        
+        let defaults = HardwareDefaults.A500
         let dictionary: [String: Any] = [
             
-            Keys.agnusRev: defaultModel.agnusRevision.rawValue,
-            Keys.deniseRev: defaultModel.deniseRevision.rawValue,
-            Keys.realTimeClock: defaultModel.realTimeClock.rawValue,
+            Keys.agnusRev: defaults.agnusRevision.rawValue,
+            Keys.deniseRev: defaults.deniseRevision.rawValue,
+            Keys.realTimeClock: defaults.realTimeClock.rawValue,
 
-            Keys.chipRam: defaultModel.chipRam,
-            Keys.slowRam: defaultModel.slowRam,
-            Keys.fastRam: defaultModel.fastRam,
+            Keys.chipRam: defaults.chipRam,
+            Keys.slowRam: defaults.slowRam,
+            Keys.fastRam: defaults.fastRam,
 
-            Keys.df0Connect: defaultModel.driveConnect[0],
-            Keys.df0Type: defaultModel.driveType[0].rawValue,
-            Keys.df1Connect: defaultModel.driveConnect[1],
-            Keys.df1Type: defaultModel.driveType[1].rawValue,
-            Keys.df2Connect: defaultModel.driveConnect[2],
-            Keys.df2Type: defaultModel.driveType[2].rawValue,
-            Keys.df3Connect: defaultModel.driveConnect[3],
-            Keys.df3Type: defaultModel.driveType[3].rawValue,
+            Keys.df0Connect: defaults.driveConnect[0],
+            Keys.df0Type: defaults.driveType[0].rawValue,
+            Keys.df1Connect: defaults.driveConnect[1],
+            Keys.df1Type: defaults.driveType[1].rawValue,
+            Keys.df2Connect: defaults.driveConnect[2],
+            Keys.df2Type: defaults.driveType[2].rawValue,
+            Keys.df3Connect: defaults.driveConnect[3],
+            Keys.df3Type: defaults.driveType[3].rawValue,
 
-            Keys.gameDevice1: defaultModel.gameDevice1,
-            Keys.gameDevice2: defaultModel.gameDevice2,
-            Keys.serialDevice: defaultModel.serialDevice.rawValue
+            Keys.gameDevice1: defaults.gameDevice1,
+            Keys.gameDevice2: defaults.gameDevice2,
+            Keys.serialDevice: defaults.serialDevice.rawValue
         ]
         
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
     }
         
     static func resetHardwareUserDefaults() {
@@ -690,7 +702,7 @@ extension Keys {
     static let todBug            = "VAMIGA5TodBugKey"
 }
 
-struct CompDefaults {
+struct CompatibilityDefaults {
     
     // Graphics
     let clxSprSpr: Bool
@@ -712,7 +724,29 @@ struct CompDefaults {
     // CIAs
     let todBug: Bool
     
-    static let accurate = CompDefaults.init(
+    //
+    // Schemes
+    //
+    
+    static let std = CompatibilityDefaults.init(
+         
+         clxSprSpr: false,
+         clxSprPlf: false,
+         clxPlfPlf: false,
+         
+         samplingMethod: SMP_NEAREST,
+         filterActivation: FILTACT_POWER_LED,
+         filterType: FILT_BUTTERWORTH,
+         
+         blitterAccuracy: 2,
+         
+         driveSpeed: 1,
+         fifoBuffering: true,
+         
+         todBug: true
+     )
+    
+    static let accurate = CompatibilityDefaults.init(
         
         clxSprSpr: true,
         clxSprPlf: true,
@@ -729,26 +763,8 @@ struct CompDefaults {
         
         todBug: true
     )
-    
-    static let std = CompDefaults.init(
-        
-        clxSprSpr: false,
-        clxSprPlf: false,
-        clxPlfPlf: false,
-        
-        samplingMethod: SMP_NEAREST,
-        filterActivation: FILTACT_POWER_LED,
-        filterType: FILT_BUTTERWORTH,
-        
-        blitterAccuracy: 2,
-        
-        driveSpeed: 1,
-        fifoBuffering: true,
-        
-        todBug: true
-    )
-    
-    static let accelerated = CompDefaults.init(
+
+    static let accelerated = CompatibilityDefaults.init(
         
         clxSprSpr: false,
         clxSprPlf: false,
@@ -771,8 +787,7 @@ extension UserDefaults {
 
     static func registerCompatibilityUserDefaults() {
 
-        let defaults = CompDefaults.std
-        
+        let defaults = CompatibilityDefaults.std
         let dictionary: [String: Any] = [
 
             Keys.clxSprSpr: defaults.clxSprSpr,
@@ -836,50 +851,91 @@ extension Keys {
     static let shaderOptions   = "VAMIGA6ShaderOptionsKey"
 }
 
-extension Defaults {
+struct VideoDefaults {
     
-    static let palette = COLOR_PALETTE
-    static let brightness = Double(50.0)
-    static let contrast = Double(100.0)
-    static let saturation = Double(50.0)
+    let palette: Palette
+    let brightness: Double
+    let contrast: Double
+    let saturation: Double
     
     // Geometry
-    static let hCenter = Float(0.1169)
-    static let vCenter = Float(0.1683)
-    static let hZoom   = Float(0.0454)
-    static let vZoom   = Float(0.0349)
-
+    let hCenter: Float
+    let vCenter: Float
+    let hZoom: Float
+    let vZoom: Float
+    
     // Upscalers
-    static let enhancer = 0
-    static let upscaler = 0
-
+    let enhancer: Int
+    let upscaler: Int
+    
     // GPU options
-    static let shaderOptions = ShaderDefaultsTFT
+    let shaderOptions: ShaderOptions
+    
+    //
+    // Schemes
+    //
+    
+    static let tft = VideoDefaults.init(
+        
+        palette: COLOR_PALETTE,
+        brightness: 50.0,
+        contrast: 100.0,
+        saturation: 50.0,
+        
+        hCenter: 0.1169,
+        vCenter: 0.1683,
+        hZoom: 0.0454,
+        vZoom: 0.0349,
+        
+        enhancer: 0,
+        upscaler: 0,
+        
+        shaderOptions: ShaderDefaultsTFT
+    )
+    
+    static let crt = VideoDefaults.init(
+        
+        palette: COLOR_PALETTE,
+        brightness: 50.0,
+        contrast: 100.0,
+        saturation: 50.0,
+        
+        hCenter: 0.1169,
+        vCenter: 0.1683,
+        hZoom: 0.0454,
+        vZoom: 0.0349,
+        
+        enhancer: 0,
+        upscaler: 0,
+        
+        shaderOptions: ShaderDefaultsCRT
+    )
 }
 
 extension UserDefaults {
     
     static func registerVideoUserDefaults() {
         
+        let defaults = VideoDefaults.tft
         let dictionary: [String: Any] = [
             
-            Keys.palette: Int(Defaults.palette.rawValue),
-            Keys.brightness: Defaults.brightness,
-            Keys.contrast: Defaults.contrast,
-            Keys.saturation: Defaults.saturation,
+            Keys.palette: Int(defaults.palette.rawValue),
+            Keys.brightness: defaults.brightness,
+            Keys.contrast: defaults.contrast,
+            Keys.saturation: defaults.saturation,
 
-            Keys.hCenter: Defaults.hCenter,
-            Keys.vCenter: Defaults.vCenter,
-            Keys.hZoom: Defaults.hZoom,
-            Keys.vZoom: Defaults.vZoom,
+            Keys.hCenter: defaults.hCenter,
+            Keys.vCenter: defaults.vCenter,
+            Keys.hZoom: defaults.hZoom,
+            Keys.vZoom: defaults.vZoom,
 
-            Keys.enhancer: Defaults.enhancer,
-            Keys.upscaler: Defaults.upscaler
+            Keys.enhancer: defaults.enhancer,
+            Keys.upscaler: defaults.upscaler
         ]
         
-        let defaults = UserDefaults.standard
-        defaults.register(defaults: dictionary)
-        defaults.register(encodableItem: Defaults.shaderOptions, forKey: Keys.shaderOptions)
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+        userDefaults.register(encodableItem: defaults.shaderOptions, forKey: Keys.shaderOptions)
     }
 
     static func resetVideoUserDefaults() {

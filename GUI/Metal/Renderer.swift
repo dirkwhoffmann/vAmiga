@@ -213,7 +213,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var samplerLinear: MTLSamplerState! = nil
     
     // Shader options
-    var shaderOptions = Defaults.shaderOptions
+    var shaderOptions = ShaderDefaultsTFT
     
     // Indicates if an animation is currently performed
     var animates = 0

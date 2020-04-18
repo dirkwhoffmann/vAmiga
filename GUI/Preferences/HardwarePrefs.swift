@@ -152,14 +152,14 @@ extension ConfigController {
     @IBAction func hwFactorySettingsAction(_ sender: NSPopUpButton!) {
         
         switch sender.selectedTag() {
-        case 0: hwFactorySettingsAction(Defaults.A500)
-        case 1: hwFactorySettingsAction(Defaults.A1000)
-        case 2: hwFactorySettingsAction(Defaults.A2000)
+        case 0: hwFactorySettingsAction(HardwareDefaults.A500)
+        case 1: hwFactorySettingsAction(HardwareDefaults.A1000)
+        case 2: hwFactorySettingsAction(HardwareDefaults.A2000)
         default: fatalError()
         }
     }
 
-    func hwFactorySettingsAction(_ defaults: Defaults.HwDefaults) {
+    func hwFactorySettingsAction(_ defaults: HardwareDefaults) {
 
         config.agnusRev = defaults.agnusRevision.rawValue
         config.deniseRev = defaults.deniseRevision.rawValue

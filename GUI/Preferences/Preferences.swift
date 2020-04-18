@@ -27,42 +27,42 @@ class Preferences {
     // General
     //
         
-    var warpLoad = Defaults.general.warpLoad {
+    var warpLoad = GeneralDefaults.std.warpLoad {
         didSet { for c in parent.controllers { c.updateWarp() } }
     }
-    var driveSounds = Defaults.general.driveSounds
-    var driveSoundPan = Defaults.general.driveSoundPan
-    var driveInsertSound = Defaults.general.driveInsertSound
-    var driveEjectSound = Defaults.general.driveEjectSound
-    var driveHeadSound = Defaults.general.driveHeadSound
-    var drivePollSound = Defaults.general.drivePollSound
-    var driveBlankDiskFormat = Defaults.general.driveBlankDiskFormat
+    var driveSounds = GeneralDefaults.std.driveSounds
+    var driveSoundPan = GeneralDefaults.std.driveSoundPan
+    var driveInsertSound = GeneralDefaults.std.driveInsertSound
+    var driveEjectSound = GeneralDefaults.std.driveEjectSound
+    var driveHeadSound = GeneralDefaults.std.driveHeadSound
+    var drivePollSound = GeneralDefaults.std.drivePollSound
+    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
     
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
-    var keepAspectRatio = Defaults.general.keepAspectRatio
-    var exitOnEsc = Defaults.general.exitOnEsc
+    var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
+    var exitOnEsc = GeneralDefaults.std.exitOnEsc
     
-    var closeWithoutAsking = Defaults.general.closeWithoutAsking
-    var ejectWithoutAsking = Defaults.general.ejectWithoutAsking
-    var pauseInBackground = Defaults.general.pauseInBackground
+    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
+    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
+    var pauseInBackground = GeneralDefaults.std.pauseInBackground
     
     // Remembers if the emulator was running or paused when it lost focus.
     // Needed to implement the pauseInBackground feature.
     var pauseInBackgroundSavedState = false
     
-    var autoSnapshots = Defaults.general.autoSnapshots
+    var autoSnapshots = GeneralDefaults.std.autoSnapshots
     var snapshotInterval = 0 {
         didSet { for c in parent.controllers { c.startSnapshotTimer() } }
     }
-    var autoScreenshots = Defaults.general.autoScreenshots
+    var autoScreenshots = GeneralDefaults.std.autoScreenshots
     var screenshotInterval = 0 {
         didSet { for c in parent.controllers { c.startScreenshotTimer() } }
     }
-    var screenshotSource = Defaults.general.screenshotSource
-    var screenshotTarget = Defaults.general.screenshotTarget
+    var screenshotSource = GeneralDefaults.std.screenshotSource
+    var screenshotTarget = GeneralDefaults.std.screenshotTarget
     var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
@@ -72,9 +72,9 @@ class Preferences {
     // Devices preferences
     //
     
-    var disconnectJoyKeys = Defaults.devices.disconnectJoyKeys
+    var disconnectJoyKeys = DevicesDefaults.std.disconnectJoyKeys
     
-    var autofire = Defaults.devices.autofire {
+    var autofire = DevicesDefaults.std.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofire(autofire)
@@ -82,7 +82,7 @@ class Preferences {
             }
         }
     }
-    var autofireBullets = Defaults.devices.autofireBullets {
+    var autofireBullets = DevicesDefaults.std.autofireBullets {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofireBullets(autofireBullets)
@@ -90,7 +90,7 @@ class Preferences {
             }
         }
     }
-    var autofireFrequency = Defaults.devices.autofireFrequency {
+    var autofireFrequency = DevicesDefaults.std.autofireFrequency {
         didSet {
             for amiga in myAppDelegate.proxies {
                 amiga.joystick1.setAutofireFrequency(autofireFrequency)
@@ -99,17 +99,17 @@ class Preferences {
         }
     }
     
-    var keyMaps = [ Defaults.devices.joyKeyMap1,
-                    Defaults.devices.joyKeyMap2,
-                    Defaults.devices.mouseKeyMap ]
+    var keyMaps = [ DevicesDefaults.std.joyKeyMap1,
+                    DevicesDefaults.std.joyKeyMap2,
+                    DevicesDefaults.std.mouseKeyMap ]
 
-    var retainMouseKeyComb = Defaults.devices.retainMouseKeyComb
-    var retainMouseWithKeys = Defaults.devices.retainMouseWithKeys
-    var retainMouseByClick = Defaults.devices.retainMouseByClick
-    var retainMouseByEntering = Defaults.devices.retainMouseByEntering
-    var releaseMouseKeyComb = Defaults.devices.retainMouseKeyComb
-    var releaseMouseWithKeys = Defaults.devices.releaseMouseWithKeys
-    var releaseMouseByShaking = Defaults.devices.releaseMouseByShaking
+    var retainMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
+    var retainMouseWithKeys = DevicesDefaults.std.retainMouseWithKeys
+    var retainMouseByClick = DevicesDefaults.std.retainMouseByClick
+    var retainMouseByEntering = DevicesDefaults.std.retainMouseByEntering
+    var releaseMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
+    var releaseMouseWithKeys = DevicesDefaults.std.releaseMouseWithKeys
+    var releaseMouseByShaking = DevicesDefaults.std.releaseMouseByShaking
  
     init(with delegate: MyAppDelegate) { parent = delegate }
     
