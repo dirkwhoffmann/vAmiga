@@ -711,31 +711,40 @@ extension MyController {
     //
     //  Game pad events
     //
+
+    // Feeds game pad actions into the Amiga's first control port
+    func emulateEventsOnGamePort1(_ events: [GamePadAction]) -> Bool {
+        
+        for event in events {
+            amiga.joystick1.trigger(event)
+            amiga.mouse.trigger(event)
+        }
+        return events != []
+    }
     
-    // GamePadManager delegation method
-    // Returns true, iff a joystick event has been triggered on port A or B
+    // Feeds game pad actions into the Amiga's second control port
+    func emulateEventsOnGamePort2(_ events: [GamePadAction]) -> Bool {
+        
+        for event in events {
+            amiga.joystick2.trigger(event)
+            amiga.mouse.trigger(event)
+        }
+        return events != []
+    }
+
+    // Feeds game pad actions into the port associated with a certain game pad
     @discardableResult
-    func joystickAction(slot: Int, events: [GamePadAction]) -> Bool {
+    func emulateEventsOnGamePort(slot: Int, events: [GamePadAction]) -> Bool {
         
         if slot == config.gameDevice1 {
-            for event in events {
-                amiga.joystick1.trigger(event)
-                amiga.mouse.trigger(event)
-            }
-            return true
+            return emulateEventsOnGamePort1(events)
         }
-
         if slot == config.gameDevice2 {
-            for event in events {
-                amiga.joystick2.trigger(event)
-                amiga.mouse.trigger(event)
-            }
-            return true
+            return emulateEventsOnGamePort2(events)
         }
-        
         return false
-    }    
-
+    }
+    
     //
     // Action methods (status bar)
     //

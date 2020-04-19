@@ -41,14 +41,14 @@ class GamePadManager {
         self.controller = controller
         
         // Add generic devices
-        gamePads[0] = GamePad(manager: self)     // Mouse
-        gamePads[0]!.keyMap = 0                  // Mouse keyset
+        gamePads[0] = GamePad(0, manager: self)     // Mouse
+        gamePads[0]!.keyMap = 0                     // Mouse keyset
 
-        gamePads[1] = GamePad(manager: self)     // Joystick
-        gamePads[1]!.keyMap = 1                  // Joystick keyset 1
+        gamePads[1] = GamePad(1, manager: self)     // Joystick
+        gamePads[1]!.keyMap = 1                     // Joystick keyset 1
 
-        gamePads[2] = GamePad(manager: self)     // Joystick
-        gamePads[2]!.keyMap = 2                  // Joystick keyset 2
+        gamePads[2] = GamePad(2, manager: self)     // Joystick
+        gamePads[2]!.keyMap = 2                     // Joystick keyset 2
 
         // Prepare to accept HID devices
         let deviceCriteria = [
@@ -137,39 +137,7 @@ class GamePadManager {
         }
         return -1
     }
-    
-    //
-    // Keyboard handling
-    //
-    
-    // Handles a keyboard down event
-    // Returns true if a joystick event was triggered
-    @discardableResult
-    func keyDown(with macKey: MacKey) -> Bool {
         
-        var result = false
-        
-        for (_, device) in gamePads {
-            result = result || device.keyDown(macKey)
-        }
-        
-        return result
-    }
-
-    // Handles a keyboard up event
-    // Returns true if a joystick event was triggered
-    @discardableResult
-    func keyUp(with macKey: MacKey) -> Bool {
-        
-        var result = false
-        
-        for (_, device) in gamePads {
-            result = result || device.keyUp(macKey)
-        }
-        
-        return result
-    }
-    
     //
     // HID stuff
     //
@@ -207,8 +175,9 @@ class GamePadManager {
         if let value = IOHIDDeviceGetProperty(device, locationIDKey) as? Int {
             locationID = value
         }
-            
-        gamePads[slotNr] = GamePad(manager: self,
+        
+        gamePads[slotNr] = GamePad(slotNr,
+                                   manager: self,
                                    vendorID: vendorID,
                                    productID: productID,
                                    locationID: locationID)
@@ -275,6 +244,7 @@ class GamePadManager {
     
     // Action method for events on a gamePad
     // Returns true, iff a joystick event has been triggered on port A or B
+    /*
     @discardableResult
     func joystickAction(_ sender: GamePad!, events: [GamePadAction]) -> Bool {
     
@@ -284,7 +254,8 @@ class GamePadManager {
         // Pass joystick event to the main controller
         return controller.joystickAction(slot: slot, events: events)
     }
- 
+    */
+    
     func listDevices() {
         
         for (slotNr, dev) in gamePads {

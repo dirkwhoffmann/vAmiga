@@ -132,31 +132,16 @@ class KBController: NSObject {
     func keyDown(with macKey: MacKey) {
         
         // Check if this key is used for joystick emulation
-        var joyKey = false
-        
+        var joyKey1 = false, joyKey2 = false
         if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {
-            for event in device.keyDownEvents(macKey) {
-                amiga.joystick1.trigger(event)
-                amiga.mouse.trigger(event)
-                joyKey = true
-            }
+            joyKey1 = parent.emulateEventsOnGamePort1(device.keyDownEvents(macKey))
         }
         if let device = parent.gamePadManager.gamePads[parent.config.gameDevice2] {
-            for event in device.keyDownEvents(macKey) {
-                amiga.joystick2.trigger(event)
-                amiga.mouse.trigger(event)
-                joyKey = true
-            }
+            joyKey2 = parent.emulateEventsOnGamePort2(device.keyDownEvents(macKey))
         }
         
         // Exit if emulation keys are disconnected from the keyboard
-        if joyKey && prefs.disconnectJoyKeys { return }
-        
-        /*
-        if parent.gamePadManager.keyDown(with: macKey) && prefs.disconnectJoyKeys {
-            return
-        }
-        */
+        if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
         
         amiga.keyboard.pressKey(macKey.amigaKeyCode)
     }
@@ -164,31 +149,16 @@ class KBController: NSObject {
     func keyUp(with macKey: MacKey) {
         
         // Check if this key is used for joystick emulation
-        var joyKey = false
-        
+        var joyKey1 = false, joyKey2 = false
         if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {
-            for event in device.keyUpEvents(macKey) {
-                amiga.joystick1.trigger(event)
-                amiga.mouse.trigger(event)
-                joyKey = true
-            }
+            joyKey1 = parent.emulateEventsOnGamePort1(device.keyUpEvents(macKey))
         }
         if let device = parent.gamePadManager.gamePads[parent.config.gameDevice2] {
-            for event in device.keyUpEvents(macKey) {
-                amiga.joystick2.trigger(event)
-                amiga.mouse.trigger(event)
-                joyKey = true
-            }
+            joyKey2 = parent.emulateEventsOnGamePort2(device.keyUpEvents(macKey))
         }
         
         // Exit if emulation keys are disconnected from the keyboard
-        if joyKey && prefs.disconnectJoyKeys { return }
-
-        /*
-        if parent.gamePadManager.keyUp(with: macKey) && prefs.disconnectJoyKeys {
-            return
-        }
-        */
+        if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
         
         amiga.keyboard.releaseKey(macKey.amigaKeyCode)
     }

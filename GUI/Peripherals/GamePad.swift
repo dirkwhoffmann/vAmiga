@@ -16,9 +16,12 @@ import IOKit.hid
 
 class GamePad {
 
+    // Reference to the game pad manager
     var manager: GamePadManager
-    var prefs: Preferences { return manager.controller.prefs }
 
+    // Position of this game pad in the manager's game pad list
+    var nr = 0
+    
     // Keymap of the managed device (only used for keyboard emulated devices)
     var keyMap: Int?
     
@@ -54,11 +57,15 @@ class GamePad {
     var rThumbXUsageID = kHIDUsage_GD_Rz
     var rThumbYUsageID = kHIDUsage_GD_Z
     
-    init(manager: GamePadManager,
-         vendorID: Int, productID: Int, locationID: Int) {
+    // Quick references
+    var prefs: Preferences { return manager.controller.prefs }
+
+    init(_ nr: Int, manager: GamePadManager,
+         vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
         track("\(vendorID) \(productID) \(locationID)")
         
+        self.nr = nr
         self.manager = manager
         self.vendorID = vendorID
         self.productID = productID
@@ -109,9 +116,11 @@ class GamePad {
         }
     }
     
-    convenience init(manager: GamePadManager) {
-        self.init(manager: manager, vendorID: 0, productID: 0, locationID: 0)
+    /*
+    convenience init(_ nr: Int, manager: GamePadManager) {
+        self.init(nr, manager: manager, vendorID: 0, productID: 0, locationID: 0)
     }
+    */
     
     let actionCallback: IOHIDValueCallback = { inContext, inResult, inSender, value in
         let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
@@ -146,55 +155,7 @@ extension GamePad {
         }
      }
 
-    /* Handles a keyboard down event
-     * Checks if the provided keycode matches a joystick emulation key and
-     * triggeres an event if a match has been found.
-     * Returns true if a joystick event has been triggered.
-     * DEPRECATED
-     */
-    func keyDown(_ macKey: MacKey) -> Bool {
-        
-        if let n = keyMap, let direction = prefs.keyMaps[n][macKey] {
-
-            var events: [GamePadAction]
-            
-            switch GamePadAction(direction) {
-                
-            case PULL_UP:
-                keyUp = true
-                events = [PULL_UP]
-                
-            case PULL_DOWN:
-                keyDown = true
-                events = [PULL_DOWN]
-                
-            case PULL_LEFT:
-                keyLeft = true
-                events = [PULL_LEFT]
-                
-            case PULL_RIGHT:
-                keyRight = true
-                events = [PULL_RIGHT]
-                
-            case PRESS_FIRE:
-                events = [PRESS_FIRE]
-
-            case PRESS_LEFT:
-                events = [PRESS_LEFT]
-
-            case PRESS_RIGHT:
-                events = [PRESS_RIGHT]
-
-            default:
-                fatalError()
-            }
-            
-            return manager.joystickAction(self, events: events)
-        }
-        
-        return false
-    }
- 
+    // Handles a key press event
     func keyDownEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -230,56 +191,8 @@ extension GamePad {
             fatalError()
         }
     }
-    
-    /* Handles a keyboard up event
-     * Checks if the provided keycode matches a joystick emulation key
-     * and triggeres an event if a match has been found.
-     * Returns true if a joystick event has been triggered.
-     * DEPRECATED
-     */
-    func keyUp(_ macKey: MacKey) -> Bool {
-
-        if let n = keyMap, let direction = prefs.keyMaps[n][macKey] {
-            
-            var events: [GamePadAction]
-            
-            switch GamePadAction(direction) {
-            
-            case PULL_UP:
-                keyUp = false
-                events = keyDown ? [PULL_DOWN] : [RELEASE_Y]
-                
-            case PULL_DOWN:
-                keyDown = false
-                events = keyUp ? [PULL_UP] : [RELEASE_Y]
-                
-            case PULL_LEFT:
-                keyLeft = false
-                events = keyRight ? [PULL_RIGHT] : [RELEASE_X]
-                
-            case PULL_RIGHT:
-                keyRight = false
-                events = keyLeft ? [PULL_LEFT] : [RELEASE_X]
-                
-            case PRESS_FIRE:
-                events = [RELEASE_FIRE]
-
-            case PRESS_LEFT:
-                events = [RELEASE_LEFT]
-
-            case PRESS_RIGHT:
-                events = [RELEASE_RIGHT]
-
-            default:
-                fatalError()
-            }
-            
-            return manager.joystickAction(self, events: events)
-        }
-    
-        return false
-    }
-    
+        
+    // Handles a key release event
     func keyUpEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -328,11 +241,11 @@ extension GamePad {
         
         if min == nil {
             min = IOHIDElementGetLogicalMin(element)
-            track("Minumum axis value = \(min!)")
+            // track("Minumum axis value = \(min!)")
         }
         if max == nil {
             max = IOHIDElementGetLogicalMax(element)
-            track("Maximum axis value = \(max!)")
+            // track("Maximum axis value = \(max!)")
         }
         let val = IOHIDValueGetIntegerValue(value)
         
@@ -357,8 +270,9 @@ extension GamePad {
         
         // Buttons
         if usagePage == kHIDPage_Button {
-            track("BUTTON")
-            manager.joystickAction(self, events: (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE])
+
+            let events = (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE]
+            manager.controller.emulateEventsOnGamePort(slot: nr, events: events)
             return
         }
         
@@ -371,21 +285,21 @@ extension GamePad {
                 
             case lThumbXUsageID, rThumbXUsageID:
                 
-                track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
+                // track("lThumbXUsageID, rThumbXUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events = (v == 2) ? [PULL_RIGHT] : (v == -2) ? [PULL_LEFT] : [RELEASE_X]
                 }
    
             case lThumbYUsageID, rThumbYUsageID:
                 
-                track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
+                // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events = (v == 2) ? [PULL_DOWN] : (v == -2) ? [PULL_UP] : [RELEASE_Y]
                 }
                 
             case kHIDUsage_GD_Hatswitch:
                 
-                track("kHIDUsage_GD_Hatswitch \(intValue)")
+                // track("kHIDUsage_GD_Hatswitch \(intValue)")
                 switch intValue {
                 case 0: events = [PULL_UP, RELEASE_X]
                 case 1: events = [PULL_UP, PULL_RIGHT]
@@ -412,7 +326,7 @@ extension GamePad {
             }
             
             // Trigger event
-            manager.joystickAction(self, events: events!)
+            manager.controller.emulateEventsOnGamePort(slot: nr, events: events!)
         }
     }
 }
