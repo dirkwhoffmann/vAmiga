@@ -190,9 +190,15 @@ class Renderer: NSObject, MTKViewDelegate {
     // Array holding all available lowres enhancers
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     
+    // The currently selected enhancer
+    var enhancer: ComputeKernel!
+
     // Array holding all available upscalers
     var upscalerGallery = [ComputeKernel?](repeating: nil, count: 3)
-    
+
+    // The currently selected enhancer
+    var upscaler: ComputeKernel!
+
     // Array holding all available bloom filters
     var bloomFilterGallery = [ComputeKernel?](repeating: nil, count: 2)
     
@@ -390,22 +396,48 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing kernels
     //
 
+    // Tries to select a new enhancer
+    func selectEnhancer(_ nr: Int) -> Bool {
+        
+        if nr < enhancerGallery.count && enhancerGallery[nr] != nil {
+            enhancer = enhancerGallery[nr]!
+            return true
+        }
+        return false
+    }
+  
+    // Tries to select a new enhancer
+    func selectUpscaler(_ nr: Int) -> Bool {
+        
+        if nr < upscalerGallery.count && upscalerGallery[nr] != nil {
+            upscaler = upscalerGallery[nr]!
+            return true
+        }
+        return false
+    }
+    
     // Returns the compute kernel of the currently selected upscaler (first pass)
+    // DEPRECATED
+    /*
     func currentEnhancer() -> ComputeKernel {
 
         var nr = config.enhancer
         if enhancerGallery.count <= nr || enhancerGallery[nr] == nil { nr = 0 }
         return enhancerGallery[nr]!
     }
-
+    */
+    
     // Returns the compute kernel of the currently selected upscaler (second pass)
+    // DEPRECATED
+    /*
     func currentUpscaler() -> ComputeKernel {
 
         var nr = config.upscaler
         if upscalerGallery.count <= nr || upscalerGallery[nr] == nil { nr = 0 }
         return upscalerGallery[nr]!
     }
-
+    */
+    
     // Returns the compute kernel of the currently selected bloom filter
     func currentBloomFilter() -> ComputeKernel {
 
@@ -495,7 +527,6 @@ class Renderer: NSObject, MTKViewDelegate {
                           options: &mergeUniforms)
 
         // Compute upscaled texture (first pass, in-texture upscaling)
-        let enhancer = currentEnhancer()
         enhancer.apply(commandBuffer: commandBuffer,
                        source: mergeTexture,
                        target: lowresEnhancedTexture)
@@ -519,13 +550,11 @@ class Renderer: NSObject, MTKViewDelegate {
             applyGauss(&bloomTextureG, radius: shaderOptions.bloomRadius)
             applyGauss(&bloomTextureB, radius: shaderOptions.bloomRadius)
         }
-
+        
         // Compute upscaled texture (second pass)
-
-        let upscaler = currentUpscaler()
         upscaler.apply(commandBuffer: commandBuffer,
-                       source: lowresEnhancedTexture, // mergeTexture,
-            target: upscaledTexture)
+                       source: lowresEnhancedTexture,
+                       target: upscaledTexture)
 
         // Blur the upscaled texture
         if #available(OSX 10.13, *), shaderOptions.blur > 0 {

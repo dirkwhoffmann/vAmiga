@@ -323,12 +323,14 @@ extension Renderer {
         enhancerGallery[0] = BypassFilter.init(device: device, library: library, cutout: mc)
         enhancerGallery[1] = InPlaceEpxScaler.init(device: device, library: library, cutout: mc)
         enhancerGallery[2] = InPlaceXbrScaler.init(device: device, library: library, cutout: mc)
+        enhancer = enhancerGallery[0]
 
         // Build upscalers (second-pass upscaling)
         upscalerGallery[0] = BypassUpscaler.init(device: device, library: library, cutout: uc)
         upscalerGallery[1] = EPXUpscaler.init(device: device, library: library, cutout: uc)
         upscalerGallery[2] = XBRUpscaler.init(device: device, library: library, cutout: uc)
-
+        upscaler = upscalerGallery[0]
+        
         // Build bloom filters
         bloomFilterGallery[0] = BypassFilter.init(device: device, library: library, cutout: uc)
         bloomFilterGallery[1] = SplitFilter.init(device: device, library: library, cutout: uc)

@@ -893,6 +893,7 @@ struct VideoDefaults {
     // Schemes
     //
     
+    // TFT Monior appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
         palette: COLOR_PALETTE,
@@ -926,6 +927,7 @@ struct VideoDefaults {
         disalignmentV: 0.001
     )
     
+    // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
         palette: COLOR_PALETTE,
@@ -933,7 +935,7 @@ struct VideoDefaults {
         contrast: 100.0,
         saturation: 50.0,
         
-        hCenter: 0.1169,
+        hCenter: 0.6333,
         vCenter: 0.1683,
         hZoom: 0.0454,
         vZoom: 0.0349,

@@ -194,9 +194,12 @@ class Configuration {
     var vZoom = VideoDefaults.tft.vZoom {
         didSet { renderer.updateTextureRect() }
     }
-    var enhancer = VideoDefaults.tft.enhancer // TODO: SET ENHANCER IMMEDIATELY
-    var upscaler = VideoDefaults.tft.upscaler
- 
+    var enhancer = VideoDefaults.tft.enhancer {
+        didSet { if !renderer.selectEnhancer(enhancer) { enhancer = oldValue } }
+    }
+    var upscaler = VideoDefaults.tft.upscaler {
+        didSet { if !renderer.selectUpscaler(upscaler) { upscaler = oldValue } }
+    }
     var blur = VideoDefaults.tft.blur {
         didSet { renderer.shaderOptions.blur = blur }
     }
@@ -452,8 +455,8 @@ class Configuration {
     //
     // Video
     //
-    
-    func loadVideoDefaults(_ defaults: VideoDefaults) {
+
+    func loadColorDefaults(_ defaults: VideoDefaults) {
         
         amiga.suspend()
         
@@ -462,10 +465,20 @@ class Configuration {
         contrast = defaults.contrast
         saturation = defaults.saturation
         
+        amiga.resume()
+    }
+    
+    func loadGeometryDefaults(_ defaults: VideoDefaults) {
+        
         hCenter = defaults.hCenter
         vCenter = defaults.vCenter
         hZoom = defaults.hZoom
         vZoom = defaults.vZoom
+        
+        renderer.updateTextureRect()
+    }
+    
+    func loadShaderDefaults(_ defaults: VideoDefaults) {
         
         enhancer = defaults.enhancer
         upscaler = defaults.upscaler
@@ -487,13 +500,17 @@ class Configuration {
         disalignment = defaults.disalignment
         disalignmentH = defaults.disalignmentH
         disalignment = defaults.disalignment
-            
-        renderer.updateTextureRect()
-        renderer.buildDotMasks()
         
-        amiga.resume()
+        renderer.buildDotMasks()
     }
     
+    func loadVideoDefaults(_ defaults: VideoDefaults) {
+        
+        loadColorDefaults(defaults)
+        loadGeometryDefaults(defaults)
+        loadColorDefaults(defaults)
+    }
+
     func loadVideoUserDefaults() {
         
         let defaults = UserDefaults.standard

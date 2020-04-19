@@ -1637,7 +1637,7 @@ DQ
                                         <popUpButton id="amv-0p-qxj" userLabel="System">
                                             <rect key="frame" x="6" y="9" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="cQe-Hf-N2J" id="6oC-xH-my8" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="6oC-xH-my8" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <menu key="menu" title="Restore" id="IV3-gq-ORj">
@@ -1645,10 +1645,17 @@ DQ
                                                         <menuItem title="Revert to..." hidden="YES" id="cQe-Hf-N2J">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="TFT Monitor Defaults" id="B7f-wu-fjI">
+                                                        <menuItem title="Standard Geometry" id="B7f-wu-fjI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="CRT Monitor Defaults" tag="1" id="8Bz-wr-Ata">
+                                                        <menuItem title="Centered Geometry" tag="1" id="Pop-59-k1j">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
+                                                        <menuItem title="TFT Appearance" tag="2" id="jIW-Xg-Q5L">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="CRT Appearance" tag="3" id="8Bz-wr-Ata">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -1949,6 +1956,9 @@ DQ
         </window>
         <menuItem title="Joystick (Keyset 1)" tag="1" id="xxB-Gw-yMw">
             <modifierMask key="keyEquivalentModifierMask"/>
+        </menuItem>
+        <menuItem title="TFT Monitor Defaults" id="TsP-Kr-5Vo">
+            <attributedString key="attributedTitle"/>
         </menuItem>
     </objects>
     <resources>

@@ -236,24 +236,28 @@ extension ConfigController {
     @IBAction func vidHCenterAction(_ sender: NSSlider!) {
 
         config.hCenter = sender.floatValue / 1000
+        track("hcenter = \(config.hCenter)")
         refresh()
     }
     
     @IBAction func vidVCenterAction(_ sender: NSSlider!) {
         
         config.vCenter = sender.floatValue / 1000
+        track("vcenter = \(config.vCenter)")
         refresh()
     }
     
     @IBAction func vidHZoomAction(_ sender: NSSlider!) {
         
         config.hZoom = sender.floatValue / 1000
+        track("hzoom = \(config.hZoom)")
         refresh()
     }
 
     @IBAction func vidVZoomAction(_ sender: NSSlider!) {
         
         config.vZoom = sender.floatValue / 1000
+        track("vzoom = \(config.vZoom)")
         refresh()
     }
     
@@ -271,9 +275,23 @@ extension ConfigController {
     @IBAction func vidPresetAction(_ sender: NSPopUpButton!) {
         
         switch sender.selectedTag() {
-        case 0: config.loadVideoDefaults(VideoDefaults.tft)
-        case 1: config.loadVideoDefaults(VideoDefaults.crt)
-        default: fatalError()
+            
+        case 0: // Standard Geometry (taken from TFT profile)
+            config.loadGeometryDefaults(VideoDefaults.tft)
+            
+        case 1: // Centered Geometry (taken from CRT profile)
+            config.loadGeometryDefaults(VideoDefaults.crt)
+            
+        case 2: // TFT Appearance
+            config.loadColorDefaults(VideoDefaults.tft)
+            config.loadShaderDefaults(VideoDefaults.tft)
+            
+        case 3: // CRT Appearance
+            config.loadColorDefaults(VideoDefaults.crt)
+            config.loadShaderDefaults(VideoDefaults.crt)
+            
+        default:
+            fatalError()
         }
         refresh()
     }
