@@ -119,11 +119,38 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="aWt-rp-gig"/>
-                            <menuItem title="Settings..." id="Y6J-U9-htE" userLabel="Configure...">
+                            <menuItem title="Hardware" id="J9m-QD-9VI">
                                 <modifierMask key="keyEquivalentModifierMask"/>
-                                <connections>
-                                    <action selector="preferencesAction:" target="-1" id="W7W-us-qti"/>
-                                </connections>
+                                <menu key="submenu" title="Hardware" id="k7j-8d-ksq">
+                                    <items>
+                                        <menuItem title="Configure..." id="Y6J-U9-htE" userLabel="Configure...">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="Dr6-F8-vOV"/>
+                                        <menuItem title="Import Configuration..." id="pGH-Dt-WKs">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="importConfigAction:" target="-1" id="T0q-ll-SEc"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Export Configuration..." id="8nM-jc-TLM">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="exportConfigAction:" target="-1" id="Bbn-3Y-dzo"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem isSeparatorItem="YES" id="nO5-f2-o5s"/>
+                                        <menuItem title="Restore Factory Settings" id="TX7-U7-EG7">
+                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                            <connections>
+                                                <action selector="resetConfigAction:" target="-1" id="DKu-TY-Qdq"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
                             </menuItem>
                             <menuItem title="Inspector..." id="jIT-6f-DxM" userLabel="Inspector...">
                                 <modifierMask key="keyEquivalentModifierMask"/>
@@ -208,7 +235,7 @@
                                     <action selector="resetAction:" target="-1" id="SV8-EZ-6HI"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Power Down" id="434">
+                            <menuItem title="Power Off" id="434">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="powerAction:" target="-1" id="16h-2c-33h"/>

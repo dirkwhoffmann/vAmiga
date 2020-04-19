@@ -269,12 +269,10 @@ class Configuration {
         
         if let url = defaults.url(forKey: Keys.rom) {
             romURL = url
-            track("romURL = \(romURL)")
             amiga.mem.loadRom(fromFile: romURL)
         }
         if let url = defaults.url(forKey: Keys.ext) {
             extURL = url
-            track("extURL = \(romURL)")
             amiga.mem.loadExt(fromFile: extURL)
         }
         extStart = defaults.integer(forKey: Keys.extStart)

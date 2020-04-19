@@ -10,7 +10,11 @@
 extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
-
+        
+        let powered = amiga.isPoweredOn()
+        let running = amiga.isRunning()
+        let paused = amiga.isPaused()
+        
         var dfn: DriveProxy {
             
             switch item.tag {
@@ -41,15 +45,24 @@ extension MyController: NSMenuItemValidation {
         switch item.action {
             
             //
+            // File menu
+            //
+            
+        case #selector(MyController.importConfigAction(_:)),
+             #selector(MyController.exportConfigAction(_:)),
+             #selector(MyController.resetConfigAction(_:)):
+            return !powered
+            
+            //
             // Edit menu
             //
             
         case #selector(MyController.stopAndGoAction(_:)):
-            item.title = amiga.isRunning() ? "Pause" : "Continue"
+            item.title = running ? "Pause" : "Continue"
             return true
             
         case #selector(MyController.powerAction(_:)):
-            item.title = amiga.isPoweredOn() ? "Power Off" : "Power On"
+            item.title = powered ? "Power Off" : "Power On"
             return true
             
             //
@@ -59,7 +72,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.toggleStatusBarAction(_:)):
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
             return true
-
+            
             //
             // Keyboard menu
             //
@@ -67,7 +80,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.mapCmdKeysAction(_:)):
             item.state = (eventTap != nil) ? .on : .off
             return true
-
+            
             //
             // Drive menu
             //
@@ -75,24 +88,23 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.insertRecentDiskAction(_:)):
             
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
-
+            
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
-            
             return dfn.hasDisk()
-
+            
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):
             return amiga.df0.hasDisk()
-
+            
         case #selector(MyController.exportRecentDiskDummyAction1(_:)):
             return amiga.df1.hasDisk()
-
+            
         case #selector(MyController.exportRecentDiskDummyAction2(_:)):
             return amiga.df2.hasDisk()
-
+            
         case #selector(MyController.exportRecentDiskDummyAction3(_:)):
             return amiga.df3.hasDisk()
-
+            
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
             case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
@@ -105,7 +117,7 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
             return dfn.hasDisk()
-
+            
         case #selector(MyController.dragAndDropTargetAction(_:)):
             item.state = dfn === dragAndDropDrive ? .on : .off
             return true
@@ -117,8 +129,8 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.stepIntoAction(_:)),
              #selector(MyController.stepOverAction(_:)),
              #selector(MyController.stopAndGoAction(_:)):
-            return amiga.isPaused()
-
+            return paused
+            
         case #selector(MyController.dumpStateAction(_:)):
             return !amiga.releaseBuild()
             
@@ -126,11 +138,11 @@ extension MyController: NSMenuItemValidation {
             return true
         }
     }
-
+    
     //
     // Action methods (App menu)
     //
-
+    
     @IBAction func preferencesAction(_ sender: Any!) {
         
         if myAppDelegate.prefsController == nil {
@@ -141,13 +153,13 @@ extension MyController: NSMenuItemValidation {
         myAppDelegate.prefsController?.showWindow(self)
     }
     
-    func importPrefs(prefixes: [String]) {
+    func importPrefs(_ prefixes: [String]) {
         
         track("Importing user defaults with prefixes \(prefixes)")
         
         let panel = NSOpenPanel()
         panel.prompt = "Import"
-        panel.allowedFileTypes = ["amigacnf"]
+        panel.allowedFileTypes = ["vaconf"]
         
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
@@ -158,13 +170,13 @@ extension MyController: NSMenuItemValidation {
         })
     }
     
-    func exportPrefs(prefixes: [String]) {
+    func exportPrefs(_ prefixes: [String]) {
         
         track("Exporting user defaults with prefixes \(prefixes)")
         
         let panel = NSSavePanel()
         panel.prompt = "Export"
-        panel.allowedFileTypes = ["amigacnf"]
+        panel.allowedFileTypes = ["vaconf"]
         
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
@@ -176,31 +188,31 @@ extension MyController: NSMenuItemValidation {
         })
     }
     
-    @IBAction func importAppPrefsAction(_ sender: Any!) {
+    @IBAction func importConfigAction(_ sender: Any!) {
         
-        importPrefs(prefixes: ["VAMIGA1", "VAMIGA2"])
-    }
-
-    @IBAction func exportAppPrefsAction(_ sender: Any!) {
-        
-        exportPrefs(prefixes: ["VAMIGA1", "VAMIGA2"])
+        importPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID"])
     }
     
-    @IBAction func importEmuPrefsAction(_ sender: Any!) {
+    @IBAction func exportConfigAction(_ sender: Any!) {
         
-        importPrefs(prefixes: ["VAMIGA3", "VAMIGA4", "VAMIGA5", "VAMIGA6"])
+        exportPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID"])
     }
     
-    @IBAction func exportEmuPrefsAction(_ sender: Any!) {
-        
-        exportPrefs(prefixes: ["VAMIGA3", "VAMIGA4", "VAMIGA5", "VAMIGA6"])
-    }
-    
-    @IBAction func factorySettingsAction(_ sender: Any!) {
+    @IBAction func resetConfigAction(_ sender: Any!) {
         
         track()
-        // resetUserDefaults()
-        // loadUserDefaults()
+        
+        UserDefaults.resetRomUserDefaults()
+        UserDefaults.resetHardwareUserDefaults()
+        UserDefaults.resetCompatibilityUserDefaults()
+        UserDefaults.resetVideoUserDefaults()
+        
+        amiga.suspend()
+        config.loadRomUserDefaults()
+        config.loadHardwareUserDefaults()
+        config.loadCompatibilityUserDefaults()
+        config.loadVideoUserDefaults()
+        amiga.resume()
     }
     
     //
@@ -215,12 +227,12 @@ extension MyController: NSMenuItemValidation {
         }
         configurator?.showSheet(tab: tab)
     }
-        
+    
     @IBAction func configureAction(_ sender: Any!) {
         
         openConfigurator()
     }
-
+    
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if inspector == nil {
@@ -228,9 +240,9 @@ extension MyController: NSMenuItemValidation {
         }
         inspector?.showWindow(self)
     }
-
+    
     @IBAction func monitorAction(_ sender: Any!) {
-
+        
         if monitor == nil {
             monitor = Monitor.make(parent: self, nibName: "Monitor")
         }
@@ -242,7 +254,7 @@ extension MyController: NSMenuItemValidation {
         takeUserSnapshot()
         renderer.blendIn(steps: 20)
     }
-        
+    
     @IBAction func restoreSnapshotAction(_ sender: Any!) {
         
         if !restoreLatestUserSnapshot() {
@@ -252,7 +264,7 @@ extension MyController: NSMenuItemValidation {
         
         renderer.blendIn(steps: 20)
     }
-        
+    
     @IBAction func browseSnapshotsAction(_ sender: Any!) {
         
         if snapshotBrowser == nil {
@@ -261,13 +273,13 @@ extension MyController: NSMenuItemValidation {
         }
         snapshotBrowser?.showSheet()
     }
-
+    
     @IBAction func takeScreenshotAction(_ sender: Any!) {
         
         takeUserScreenshot()
         renderer.blendIn(steps: 20)
     }
-
+    
     @IBAction func browseScreenshotsAction(_ sender: Any!) {
         
         if screenshotBrowser == nil {
@@ -279,84 +291,84 @@ extension MyController: NSMenuItemValidation {
     }
     
     /*
-    // DEPRECATED
-    @IBAction func saveScreenshotDialog(_ sender: Any!) {
-        
-        // Halt emulation to freeze the current texture
-        amiga.pause()
-        
-        // Create save panel
-        let savePanel = NSSavePanel()
-        savePanel.prompt = "Export"
-        
-        // Set allowed file types
-        switch screenshotTarget {
-        case .tiff: savePanel.allowedFileTypes = ["jpg"]
-        case .bmp: savePanel.allowedFileTypes = ["bmp"]
-        case .gif: savePanel.allowedFileTypes = ["gif"]
-        case .jpeg: savePanel.allowedFileTypes = ["jpg"]
-        case .png: savePanel.allowedFileTypes = ["png"]
-        default:
-            track("Unsupported image format: \(screenshotTarget)")
-            return
-        }
-        
-        // Run panel as sheet
-        savePanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = savePanel.url {
-                    do {
-                        try self.saveScreenshot(url: url)
-                    } catch {
-                        NSApp.presentError(error)
-                    }
-                }
-            }
-            self.amiga.run()
-        })
-    }
-
-    // DEPRECATED
-    @IBAction func quicksaveScreenshot(_ sender: Any!) {
-        
-        // Determine file suffix
-        var suffix: String
-        switch screenshotTarget {
-        case .tiff: suffix = "tiff"
-        case .bmp: suffix = "bmp"
-        case .gif: suffix = "gif"
-        case .jpeg: suffix = "jpg"
-        case .png: suffix = "png"
-        default:
-            track("Unsupported image format: \(screenshotTarget)")
-            return
-        }
-        
-        // Assemble URL and save
-        let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true)
-        let desktopUrl = NSURL.init(fileURLWithPath: paths[0])
-        if let url = desktopUrl.appendingPathComponent("Screenshot." + suffix) {
-            do {
-                try saveScreenshot(url: url.addTimeStamp().makeUnique())
-            } catch {
-                track("Cannot quicksave screenshot")
-            }
-        }
-    }
-    
-    // DEPRECATED
-    func saveScreenshot(url: URL) throws {
-        
-        // Take screenshot
-        let image = renderer.screenshot(afterUpscaling: screenshotSource > 0)
-        
-        // Convert to target format
-        let data = image?.representation(using: screenshotTarget)
-        
-        // Save to file
-        try data?.write(to: url, options: .atomic)
-    }
-    */
+     // DEPRECATED
+     @IBAction func saveScreenshotDialog(_ sender: Any!) {
+     
+     // Halt emulation to freeze the current texture
+     amiga.pause()
+     
+     // Create save panel
+     let savePanel = NSSavePanel()
+     savePanel.prompt = "Export"
+     
+     // Set allowed file types
+     switch screenshotTarget {
+     case .tiff: savePanel.allowedFileTypes = ["jpg"]
+     case .bmp: savePanel.allowedFileTypes = ["bmp"]
+     case .gif: savePanel.allowedFileTypes = ["gif"]
+     case .jpeg: savePanel.allowedFileTypes = ["jpg"]
+     case .png: savePanel.allowedFileTypes = ["png"]
+     default:
+     track("Unsupported image format: \(screenshotTarget)")
+     return
+     }
+     
+     // Run panel as sheet
+     savePanel.beginSheetModal(for: window!, completionHandler: { result in
+     if result == .OK {
+     if let url = savePanel.url {
+     do {
+     try self.saveScreenshot(url: url)
+     } catch {
+     NSApp.presentError(error)
+     }
+     }
+     }
+     self.amiga.run()
+     })
+     }
+     
+     // DEPRECATED
+     @IBAction func quicksaveScreenshot(_ sender: Any!) {
+     
+     // Determine file suffix
+     var suffix: String
+     switch screenshotTarget {
+     case .tiff: suffix = "tiff"
+     case .bmp: suffix = "bmp"
+     case .gif: suffix = "gif"
+     case .jpeg: suffix = "jpg"
+     case .png: suffix = "png"
+     default:
+     track("Unsupported image format: \(screenshotTarget)")
+     return
+     }
+     
+     // Assemble URL and save
+     let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true)
+     let desktopUrl = NSURL.init(fileURLWithPath: paths[0])
+     if let url = desktopUrl.appendingPathComponent("Screenshot." + suffix) {
+     do {
+     try saveScreenshot(url: url.addTimeStamp().makeUnique())
+     } catch {
+     track("Cannot quicksave screenshot")
+     }
+     }
+     }
+     
+     // DEPRECATED
+     func saveScreenshot(url: URL) throws {
+     
+     // Take screenshot
+     let image = renderer.screenshot(afterUpscaling: screenshotSource > 0)
+     
+     // Convert to target format
+     let data = image?.representation(using: screenshotTarget)
+     
+     // Save to file
+     try data?.write(to: url, options: .atomic)
+     }
+     */
     
     //
     // Action methods (Edit menu)
@@ -374,50 +386,50 @@ extension MyController: NSMenuItemValidation {
         
         kbController.autoType(text)
     }
-
+    
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
-
+        
         amiga?.stopAndGo()
     }
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
-
+        
         amiga?.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
-
+        
         amiga?.stepOver()
     }
-
+    
     @IBAction func resetAction(_ sender: Any!) {
-
+        
         track()
         renderer.blendIn(steps: 20)
         amiga.reset()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
-
+        
         if amiga.isPoweredOn() {
             amiga.powerOff()
             return
         }
-
+        
         switch amiga.readyToPowerOn() {
-
+            
         case ERR_OK:
             amiga.run()
-
+            
         default:
             mydocument?.showConfigurationAltert(amiga.readyToPowerOn())
         }
     }
-
+    
     //
     // Action methods (View menu)
     //
-
+    
     @IBAction func toggleStatusBarAction(_ sender: Any!) {
         
         undoManager?.registerUndo(withTarget: self) { targetSelf in
@@ -430,7 +442,7 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (Keyboard menu)
     //
-
+    
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a window
@@ -439,7 +451,7 @@ extension MyController: NSMenuItemValidation {
         }
         virtualKeyboardSheet?.showWindow(autoClose: false)
     }
-
+    
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
         mapCommandKeys = !mapCommandKeys
@@ -450,7 +462,7 @@ extension MyController: NSMenuItemValidation {
         
         amiga.keyboard.releaseAllKeys()
     }
-
+    
     //
     // Action methods (Disk menu)
     //
@@ -480,7 +492,7 @@ extension MyController: NSMenuItemValidation {
         
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
-
+    
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
         // Ask user to continue if the current disk contains modified data
@@ -552,7 +564,7 @@ extension MyController: NSMenuItemValidation {
         let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
         drive.toggleWriteProtection()
     }
-
+    
     @IBAction func exportRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
@@ -573,15 +585,15 @@ extension MyController: NSMenuItemValidation {
     }
     
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
-
+        
         myAppDelegate.recentlyInsertedDiskURLs = []
     }
-
+    
     @IBAction func clearRecentlyExportedDisksAction(_ sender: NSMenuItem!) {
-
+        
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
-
+    
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
@@ -607,16 +619,16 @@ extension MyController: NSMenuItemValidation {
     //
     // Action methods (Debug menu)
     //
-
+    
     @IBAction func emulateSpritesAction(_ sender: NSMenuItem!) {
-
+        
         amiga.suspend()
         amiga.configure(VA_EMULATE_SPRITES, enable: sender.state == .off)
         amiga.resume()
         sender.state = (sender.state == .off) ? .on : .off
         track()
     }
-
+    
     @IBAction func dumpStateAction(_ sender: Any!) {
         // Dummy target to make menu item validatable
     }

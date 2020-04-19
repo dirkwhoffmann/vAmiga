@@ -69,6 +69,7 @@ extension UserDefaults {
 
 extension MyController {
     
+    /*
     func resetUserDefaults() {
         
         track()
@@ -82,6 +83,7 @@ extension MyController {
 
         amiga.resume()
     }
+    */
     
     func loadUserDefaults() {
         
@@ -121,7 +123,6 @@ extension MyController {
         track()
         
         let dict = UserDefaults.standard.dictionaryRepresentation()
-        // let filteredDict = dict.filter { $0.0.hasPrefix("VAMIGA") }
         let filteredDict = dict.filter { prefixes.contains(where: $0.0.hasPrefix) }
         let nsDict = NSDictionary.init(dictionary: filteredDict)
         nsDict.write(to: url, atomically: true)
@@ -135,33 +136,33 @@ extension MyController {
 struct Keys {
     
     // Drives
-    static let warpLoad               = "VAMIGA1WarpLoadKey"
-    static let driveSounds            = "VAMIGA1DriveSounds"
-    static let driveSoundPan          = "VAMIGA1DriveSoundPan"
-    static let driveInsertSound       = "VAMIGA1DriveInsertSound"
-    static let driveEjectSound        = "VAMIGA1DriveEjectSound"
-    static let driveHeadSound         = "VAMIGA1DriveHeadSound"
-    static let drivePollSound         = "VAMIGA1DrivePollSound"
-    static let driveBlankDiskFormat   = "VAMIGA1DriveBlankDiskFormatKey"
+    static let warpLoad               = "VAMIGA_GEN_WarpLoad"
+    static let driveSounds            = "VAMIGA_GEN_DriveSounds"
+    static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
+    static let driveInsertSound       = "VAMIGA_GEN_DriveInsertSound"
+    static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
+    static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
+    static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
+    static let driveBlankDiskFormat   = "VAMIGA_GEN_DriveBlankDiskFormat"
 
     // Snapshots and screenshots
-    static let autoSnapshots          = "VAMIGA1AutoSnapshots"
-    static let autoSnapshotInterval   = "VAMIGA1ScreenshotInterval"
-    static let autoScreenshots        = "VAMIGA1AutoScreenshots"
-    static let autoScreenshotInterval = "VAMIGA1SnapshotInterval"
-    static let screenshotSource       = "VAMIGA1ScreenshotSourceKey"
-    static let screenshotTarget       = "VAMIGA1ScreenshotTargetKey"
+    static let autoSnapshots          = "VAMIGA_GEN_AutoSnapshots"
+    static let autoSnapshotInterval   = "VAMIGA_GEN_ScreenshotInterval"
+    static let autoScreenshots        = "VAMIGA_GEN_AutoScreenshots"
+    static let autoScreenshotInterval = "VAMIGA_GEN_SnapshotInterval"
+    static let screenshotSource       = "VAMIGA_GEN_ScreenshotSource"
+    static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
     
     // Fullscreen
-    static let keepAspectRatio        = "VAMIGA1FullscreenKeepAspectRatioKey"
-    static let exitOnEsc              = "VAMIGA1FullscreenExitOnEscKey"
+    static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
+    static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
 
     // User dialogs
-    static let closeWithoutAsking     = "VAMIGA1CloseWithoutAsking"
-    static let ejectWithoutAsking     = "VAMIGA1EjectWithoutAsking"
+    static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
+    static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
     
     // Miscellaneous
-    static let pauseInBackground      = "VAMIGA1PauseInBackground"
+    static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
 }
 
 struct GeneralDefaults {
@@ -299,22 +300,22 @@ extension UserDefaults {
 extension Keys {
             
     // Joysticks
-    static let joyKeyMap1            = "VAMIGA2JoyKeyMap1"
-    static let joyKeyMap2            = "VAMIGA2JoyKeyMap2"
-    static let mouseKeyMap           = "VAMIGA2MouseKeyMap"
-    static let disconnectJoyKeys     = "VAMIGA2DisconnectKeys"
-    static let autofire              = "VAMIGA2Autofire"
-    static let autofireBullets       = "VAMIGA2AutofireBullets"
-    static let autofireFrequency     = "VAMIGA2AutofireFrequency"
+    static let joyKeyMap1            = "VAMIGA_DEV_JoyKeyMap1"
+    static let joyKeyMap2            = "VAMIGA_DEV_JoyKeyMap2"
+    static let mouseKeyMap           = "VAMIGA_DEV_MouseKeyMap"
+    static let disconnectJoyKeys     = "VAMIGA_DEV_DisconnectKeys"
+    static let autofire              = "VAMIGA_DEV_Autofire"
+    static let autofireBullets       = "VAMIGA_DEV_AutofireBullets"
+    static let autofireFrequency     = "VAMIGA_DEV_AutofireFrequency"
     
     // Mouse
-    static let retainMouseKeyComb    = "VAMIGA2RetainMouseKeyComb"
-    static let retainMouseWithKeys   = "VAMIGA2RetainMouseWithKeys"
-    static let retainMouseByClick    = "VAMIGA2RetainMouseByClick"
-    static let retainMouseByEntering = "VAMIGA2RetainMouseByEntering"
-    static let releaseMouseKeyComb   = "VAMIGA2ReleaseMouseKeyComb"
-    static let releaseMouseWithKeys  = "VAMIGA2ReleaseMouseWithKeys"
-    static let releaseMouseByShaking = "VAMIGA2ReleaseMouseByShaking"
+    static let retainMouseKeyComb    = "VAMIGA_DEV_RetainMouseKeyComb"
+    static let retainMouseWithKeys   = "VAMIGA_DEV_RetainMouseWithKeys"
+    static let retainMouseByClick    = "VAMIGA_DEV_RetainMouseByClick"
+    static let retainMouseByEntering = "VAMIGA_DEV_RetainMouseByEntering"
+    static let releaseMouseKeyComb   = "VAMIGA_DEV_ReleaseMouseKeyComb"
+    static let releaseMouseWithKeys  = "VAMIGA_DEV_ReleaseMouseWithKeys"
+    static let releaseMouseByShaking = "VAMIGA_DEV_ReleaseMouseByShaking"
 }
 
 struct DevicesDefaults {
@@ -444,9 +445,9 @@ extension UserDefaults {
 
 extension Keys {
     
-    static let rom               = "VAMIGA3RomFileKey"
-    static let ext               = "VAMIGA3ExtFileKey"
-    static let extStart          = "VAMIGA3ExtStartKey"
+    static let rom               = "VAMIGA_ROM_RomFile"
+    static let ext               = "VAMIGA_ROM_ExtFile"
+    static let extStart          = "VAMIGA_ROM_ExtStart"
 }
 
 struct RomDefaults {
@@ -498,29 +499,29 @@ extension UserDefaults {
 extension Keys {
         
     // Chipset
-    static let agnusRev           = "VAMIGA4AgnusRevKey"
-    static let deniseRev          = "VAMIGA4DeniseRevKey"
-    static let realTimeClock      = "VAMIGA4RealTimeClockKey"
+    static let agnusRev           = "VAMIGA_HW_AgnusRev"
+    static let deniseRev          = "VAMIGA_HW_DeniseRev"
+    static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
 
     // Memory
-    static let chipRam            = "VAMIGA4ChipRamKey"
-    static let slowRam            = "VAMIGA4SlowRamKey"
-    static let fastRam            = "VAMIGA4FastRamKey"
+    static let chipRam            = "VAMIGA_HW_ChipRam"
+    static let slowRam            = "VAMIGA_HW_SlowRam"
+    static let fastRam            = "VAMIGA_HW_FastRam"
 
     // Drives
-    static let df0Connect         = "VAMIGA4DF0ConnectKey"
-    static let df0Type            = "VAMIGA4DF0TypeKey"
-    static let df1Connect         = "VAMIGA4DF1ConnectKey"
-    static let df1Type            = "VAMIGA4DF1TypeKey"
-    static let df2Connect         = "VAMIGA4DF2ConnectKey"
-    static let df2Type            = "VAMIGA4DF2TypeKey"
-    static let df3Connect         = "VAMIGA4DF3ConnectKey"
-    static let df3Type            = "VAMIGA4DF3TypeKey"
+    static let df0Connect         = "VAMIGA_HW_DF0Connect"
+    static let df0Type            = "VAMIGA_HW_DF0Type"
+    static let df1Connect         = "VAMIGA_HW_DF1Connect"
+    static let df1Type            = "VAMIGA_HW_DF1Type"
+    static let df2Connect         = "VAMIGA_HW_DF2Connect"
+    static let df2Type            = "VAMIGA_HW_DF2Type"
+    static let df3Connect         = "VAMIGA_HW_DF3Connect"
+    static let df3Type            = "VAMIGA_HW_DF3Type"
 
     // Ports
-    static let gameDevice1        = "VAMIGA4GameDevice1Key"
-    static let gameDevice2        = "VAMIGA4GameDevice2Key"
-    static let serialDevice       = "VAMIGA4SerialDeviceKey"
+    static let gameDevice1        = "VAMIGA_HW_GameDevice1"
+    static let gameDevice2        = "VAMIGA_HW_GameDevice2"
+    static let serialDevice       = "VAMIGA_HW_SerialDevice"
 }
 
 struct HardwareDefaults {
@@ -669,24 +670,24 @@ extension UserDefaults {
 extension Keys {
     
     // Graphics
-    static let clxSprSpr         = "VAMIGA5ClxSprSpr"
-    static let clxSprPlf         = "VAMIGA5ClxSprPlf"
-    static let clxPlfPlf         = "VAMIGA5ClxPlfPlf"
+    static let clxSprSpr         = "VAMIGA_COM_ClxSprSpr"
+    static let clxSprPlf         = "VAMIGA_COM_ClxSprPlf"
+    static let clxPlfPlf         = "VAMIGA_COM_ClxPlfPlf"
 
     // Audio
-    static let samplingMethod    = "VAMIGA5SamplingMethod"
-    static let filterActivation  = "VAMIGA5FilterActivation"
-    static let filterType        = "VAMIGA5FilterType"
+    static let samplingMethod    = "VAMIGA_COM_SamplingMethod"
+    static let filterActivation  = "VAMIGA_COM_FilterActivation"
+    static let filterType        = "VAMIGA_COM_FilterType"
 
     // Blitter
-    static let blitterAccuracy   = "VAMIGA5BlitterAccuracy"
+    static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
 
     // Floppy drives
-    static let driveSpeed        = "VAMIGA5DriveSpeedKey"
-    static let fifoBuffering     = "VAMIGA5FifoBufferingKey"
+    static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
+    static let fifoBuffering     = "VAMIGA_COM_FifoBuffering"
 
     // CIAs
-    static let todBug            = "VAMIGA5TodBugKey"
+    static let todBug            = "VAMIGA_COM_TodBug"
 }
 
 struct CompatibilityDefaults {
@@ -819,38 +820,38 @@ extension UserDefaults {
 extension Keys {
     
     // Colors
-    static let palette            = "VAMIGA6PaletteKey"
-    static let brightness         = "VAMIGA6BrightnessKey"
-    static let contrast           = "VAMIGA6ContrastKey"
-    static let saturation         = "VAMIGA6SaturationKey"
+    static let palette            = "VAMIGA_VID_Palette"
+    static let brightness         = "VAMIGA_VID_Brightness"
+    static let contrast           = "VAMIGA_VID_Contrast"
+    static let saturation         = "VAMIGA_VID_Saturation"
 
     // Geometry
-    static let hCenter            = "VAMIGA6HCenter"
-    static let vCenter            = "VAMIGA6VCenter"
-    static let hZoom              = "VAMIGA6HZoom"
-    static let vZoom              = "VAMIGA6VZoom"
+    static let hCenter            = "VAMIGA_VID_HCenter"
+    static let vCenter            = "VAMIGA_VID_VCenter"
+    static let hZoom              = "VAMIGA_VID_HZoom"
+    static let vZoom              = "VAMIGA_VID_VZoom"
 
     // Upscalers
-    static let enhancer           = "VVAMIG6AEnhancerKey"
-    static let upscaler           = "VAMIGA6UpscalerKey"
+    static let enhancer           = "VVAMIG_VID_Enhancer"
+    static let upscaler           = "VAMIGA_VID_Upscaler"
 
     // Shader options
-    static let blur               = "VAMIGA6Blur"
-    static let blurRadius         = "VAMIGA6BlurRadius"
-    static let bloom              = "VAMIGA6Bloom"
-    static let bloomRadius        = "VAMIGA6BloonRadius"
-    static let bloomBrightness    = "VAMIGA6BloomBrightness"
-    static let bloomWeight        = "VAMIGA6BloomWeight"
-    static let flicker            = "VAMIGA6Flicker"
-    static let flickerWeight      = "VAMIGA6FlickerWeight"
-    static let dotMask            = "VAMIGA6DotMask"
-    static let dotMaskBrightness  = "VAMIGA6DotMaskBrightness"
-    static let scanlines          = "VAMIGA6Scanlines"
-    static let scanlineBrightness = "VAMIGA6ScanlineBrightness"
-    static let scanlineWeight     = "VAMIGA6ScanlineWeight"
-    static let disalignment       = "VAMIGA6Disalignment"
-    static let disalignmentH      = "VAMIGA6DisalignmentH"
-    static let disalignmentV      = "VAMIGA6DisalignmentV"
+    static let blur               = "VAMIGA_VID_Blur"
+    static let blurRadius         = "VAMIGA_VID_BlurRadius"
+    static let bloom              = "VAMIGA_VID_Bloom"
+    static let bloomRadius        = "VAMIGA_VID_BloonRadius"
+    static let bloomBrightness    = "VAMIGA_VID_BloomBrightness"
+    static let bloomWeight        = "VAMIGA_VID_BloomWeight"
+    static let flicker            = "VAMIGA_VID_Flicker"
+    static let flickerWeight      = "VAMIGA_VID_FlickerWeight"
+    static let dotMask            = "VAMIGA_VID_DotMask"
+    static let dotMaskBrightness  = "VAMIGA_VID_DotMaskBrightness"
+    static let scanlines          = "VAMIGA_VID_Scanlines"
+    static let scanlineBrightness = "VAMIGA_VID_ScanlineBrightness"
+    static let scanlineWeight     = "VAMIGA_VID_ScanlineWeight"
+    static let disalignment       = "VAMIGA_VID_Disalignment"
+    static let disalignmentH      = "VAMIGA_VID_DisalignmentH"
+    static let disalignmentV      = "VAMIGA_VID_DisalignmentV"
 }
 
 struct VideoDefaults {
