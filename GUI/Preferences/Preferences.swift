@@ -220,9 +220,9 @@ class Preferences {
     func loadDevicesDefaults(_ defaults: DevicesDefaults) {
         
         // Emulation keys
-        keyMaps[0] = defaults.joyKeyMap1
-        keyMaps[1] = defaults.joyKeyMap2
-        keyMaps[2] = defaults.mouseKeyMap
+        keyMaps[0] = defaults.mouseKeyMap
+        keyMaps[1] = defaults.joyKeyMap1
+        keyMaps[2] = defaults.joyKeyMap2
         disconnectJoyKeys = defaults.disconnectJoyKeys
         
         // Joysticks
@@ -245,9 +245,9 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.decode(&keyMaps[0], forKey: Keys.joyKeyMap1)
-        defaults.decode(&keyMaps[1], forKey: Keys.joyKeyMap2)
-        defaults.decode(&keyMaps[2], forKey: Keys.mouseKeyMap)
+        defaults.decode(&keyMaps[0], forKey: Keys.mouseKeyMap)
+        defaults.decode(&keyMaps[1], forKey: Keys.joyKeyMap1)
+        defaults.decode(&keyMaps[2], forKey: Keys.joyKeyMap2)
         disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
         
         // Joysticks
@@ -270,9 +270,9 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.encode(keyMaps[0], forKey: Keys.joyKeyMap1)
-        defaults.encode(keyMaps[1], forKey: Keys.joyKeyMap2)
-        defaults.encode(keyMaps[2], forKey: Keys.mouseKeyMap)
+        defaults.encode(keyMaps[0], forKey: Keys.mouseKeyMap)
+        defaults.encode(keyMaps[1], forKey: Keys.joyKeyMap1)
+        defaults.encode(keyMaps[2], forKey: Keys.joyKeyMap2)
         defaults.set(disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
         
         // Joysticks

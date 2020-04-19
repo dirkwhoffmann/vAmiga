@@ -96,20 +96,20 @@ class Configuration {
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
-            if oldValue != gameDevice1 {
-                parent.connect(device: gameDevice1, port: 1)
-                if gameDevice1 == gameDevice2 { gameDevice2 = InputDevice.none }
-                parent.toolbar.validateVisibleItems()
+            parent.connect(device: gameDevice1, port: 1)
+            if gameDevice1 == gameDevice2 && gameDevice2 != InputDevice.none {
+                gameDevice2 = InputDevice.none
             }
+            parent.toolbar.validateVisibleItems()
         }
     }
     var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
         didSet {
-            if oldValue != gameDevice2 {
-                parent.connect(device: gameDevice2, port: 2)
-                if gameDevice2 == gameDevice1 { gameDevice1 = InputDevice.none }
-                parent.toolbar.validateVisibleItems()
+            parent.connect(device: gameDevice2, port: 2)
+            if gameDevice2 == gameDevice1 && gameDevice1 != InputDevice.none {
+                gameDevice1 = InputDevice.none
             }
+            parent.toolbar.validateVisibleItems()
         }
     }
     var serialDevice: Int {

@@ -13,9 +13,6 @@ extension NSTouchBarItem.Identifier {
     static let ttscrubber = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.ttscrubber")
 }
 
-/*! @brief   TimeTravel TouchBar
- *  @details TouchBar is associated with a popup button
- */
 @available(OSX 10.12.2, *)
 class TimeTravelTouchBar: NSTouchBar {
     

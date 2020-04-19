@@ -34,12 +34,12 @@ extension MyController {
         
         if auto {
             if let snapshot = mydocument!.autoSnapshots.element(at: item) {
-                amiga.load(fromSnapshot: snapshot)
+                load(snapshot: snapshot)
                 return true
             }
         } else {
             if let snapshot = mydocument!.userSnapshots.element(at: item) {
-                amiga.load(fromSnapshot: snapshot)
+                load(snapshot: snapshot)
                 return true
             }
         }

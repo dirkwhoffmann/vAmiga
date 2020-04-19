@@ -178,7 +178,7 @@ class MyDocument: NSDocument {
 
         case _ as SnapshotProxy:
             
-            amiga.load(fromSnapshot: amigaAttachment as? SnapshotProxy)
+            parent?.load(snapshot: amigaAttachment as? SnapshotProxy)
        
         case _ as ADFFileProxy:
             

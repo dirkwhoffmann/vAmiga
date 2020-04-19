@@ -142,6 +142,25 @@ class MyController: NSWindowController, MessageReceiver {
         screenshotTimer?.invalidate()
     }
     
+    // Loads a snapshot into the emulator
+    func load(snapshot: SnapshotProxy?) {
+        
+        if snapshot == nil { return }
+        
+        amiga.suspend()
+        
+        // Load the snapshot
+        amiga.load(fromSnapshot: snapshot)
+        
+        // Reconnect the currently selected input devices
+        /*
+        connect(device: config.gameDevice1, port: 1)
+        connect(device: config.gameDevice2, port: 2)
+        */
+        
+        amiga.resume()
+    }
+        
     // Updates the warp status
     func updateWarp() {
 

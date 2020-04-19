@@ -100,7 +100,7 @@ public extension MetalView {
             if document.proceedWithUnexportedDisk() {
                 DispatchQueue.main.async {
                     let snap = snapshot
-                    self.parent.amiga.load(fromSnapshot: snap)
+                    self.parent.load(snapshot: snap)
                 }
                 return true
             } else {

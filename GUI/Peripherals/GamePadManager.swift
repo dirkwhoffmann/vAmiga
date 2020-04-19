@@ -41,12 +41,16 @@ class GamePadManager {
         self.controller = controller
         
         // Add generic devices
-        gamePads[0] = GamePad(manager: self) // Mouse
-        gamePads[1] = GamePad(manager: self) // Joystick (Keyset 1)
-        gamePads[2] = GamePad(manager: self) // Joystick (Keyset 2)
-        restoreFactorySettings()
+        gamePads[0] = GamePad(manager: self)     // Mouse
+        gamePads[0]!.keyMap = 0                  // Mouse keyset
 
-        // Prepare for accepting HID devices
+        gamePads[1] = GamePad(manager: self)     // Joystick
+        gamePads[1]!.keyMap = 1                  // Joystick keyset 1
+
+        gamePads[2] = GamePad(manager: self)     // Joystick
+        gamePads[2]!.keyMap = 2                  // Joystick keyset 2
+
+        // Prepare to accept HID devices
         let deviceCriteria = [
             [
                 kIOHIDDeviceUsagePageKey: kHIDPage_GenericDesktop,
@@ -87,7 +91,7 @@ class GamePadManager {
         IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
     
-    //! @brief   Removes all registered devices
+    // Removes all registered devices
     func shutDown() {
         
         gamePads = [:]
@@ -98,15 +102,13 @@ class GamePadManager {
     // Slot handling
     //
     
-    //! @brief   Returns true iff the specified game pad slot is free
+    // Returns true iff the specified game pad slot is free
     public func slotIsEmpty(_ nr: Int) -> Bool {
         
         return gamePads[nr] == nil
     }
     
-    //! @brief   Returns the lowest free slot number
-    /*! @details Returns nil if all slots are already filled up
-     */
+    // Returns the lowest free slot number or nil if all slots are occupied
     func findFreeSlot() -> Int? {
         
         var nr = 0
@@ -118,9 +120,7 @@ class GamePadManager {
         return (nr < 5) ? nr : nil
     }
     
-    //! @brief   Lookup gamePad
-    /*! @details Returns slot number or -1, if no such gamePad was found
-     */
+    // Looks up a game pad. Returns -1 if no game pad was found
     func lookupGamePad(_ gamePad: GamePad) -> Int {
         
         for (slotNr, device) in gamePads where device === gamePad {
@@ -129,9 +129,7 @@ class GamePadManager {
         return -1
     }
     
-    //! @brief   Lookup gamePad by locationID
-    /*! @details Returns slot number or -1, if no such gamePad was found
-     */
+    // Looks up game pad by locationID. Returns -1 if no game pad was found
     func lookupGamePad(locationID: Int) -> Int {
         
         for (slotNr, device) in gamePads where device.locationID == locationID {
@@ -144,9 +142,8 @@ class GamePadManager {
     // Keyboard handling
     //
     
-    //! @brief   Handles a keyboard down event
-    /*! @result  Returns true if a joystick event has been triggered.
-     */
+    // Handles a keyboard down event
+    // Returns true if a joystick event was triggered
     @discardableResult
     func keyDown(with macKey: MacKey) -> Bool {
         
@@ -159,9 +156,8 @@ class GamePadManager {
         return result
     }
 
-    //! @brief   Handles a keyboard up event
-    /*! @result  Returns true if a joystick event has been triggered.
-     */
+    // Handles a keyboard up event
+    // Returns true if a joystick event was triggered
     @discardableResult
     func keyUp(with macKey: MacKey) -> Bool {
         
@@ -178,9 +174,8 @@ class GamePadManager {
     // HID stuff
     //
     
-    //! @brief   Device matching callback
-    /*! @details Method is invoked when a matching HID device is plugged in
-     */
+    // Device matching callback
+    // Method is invoked when a matching HID device is plugged in
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
                         result: IOReturn,
                         sender: UnsafeMutableRawPointer?,
@@ -278,9 +273,8 @@ class GamePadManager {
         listDevices()
     }
     
-    //! @brief   Action method for events on a gamePad
-    /*! @returns true, iff a joystick event has been triggered on port A or port B
-     */
+    // Action method for events on a gamePad
+    // Returns true, iff a joystick event has been triggered on port A or B
     @discardableResult
     func joystickAction(_ sender: GamePad!, events: [GamePadAction]) -> Bool {
     
@@ -302,12 +296,5 @@ class GamePadManager {
                 print("Placeholder device")
             }
         }
-    }
-    
-    func restoreFactorySettings() {
-    
-        gamePads[0]!.keyMap = 0 // Defaults.joyKeyMap1
-        gamePads[1]!.keyMap = 1 // Defaults.joyKeyMap2
-        gamePads[2]!.keyMap = 2 // Defaults.mouseKeyMap
     }
 }
