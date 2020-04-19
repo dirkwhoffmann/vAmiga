@@ -195,11 +195,10 @@ extension PreferencesController {
     @IBAction func generalPresetAction(_ sender: NSPopUpButton!) {
         
         track()
-        
-        switch sender.selectedTag() {
-        case 0: prefs.loadGeneralDefaults(GeneralDefaults.std)
-        default: fatalError()
-        }
+        assert(sender.selectedTag() == 0)
+
+        UserDefaults.resetGeneralUserDefaults()
+        prefs.loadGeneralUserDefaults()
         refresh()
     }
     

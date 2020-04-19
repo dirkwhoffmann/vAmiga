@@ -225,11 +225,10 @@ extension PreferencesController {
     @IBAction func devicesPresetAction(_ sender: NSPopUpButton!) {
         
         track()
+        assert(sender.selectedTag() == 0)
         
-        switch sender.selectedTag() {
-        case 0: prefs.loadDevicesDefaults(DevicesDefaults.std)
-        default: fatalError()
-        }
+        UserDefaults.resetDevicesUserDefaults()
+        prefs.loadDevicesUserDefaults()
         refresh()
     }
     

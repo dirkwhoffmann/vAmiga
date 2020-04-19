@@ -35,37 +35,10 @@
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>
-                            <menuItem title="Preferences" id="4Wh-i3-n7L" userLabel="Preferences">
-                                <modifierMask key="keyEquivalentModifierMask"/>
-                                <menu key="submenu" title="Preferences" id="sB1-CL-iAJ">
-                                    <items>
-                                        <menuItem title="Open..." keyEquivalent="," id="L87-Y8-Gla">
-                                            <connections>
-                                                <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="Azm-fl-Tcf"/>
-                                        <menuItem title="Import..." id="pcy-gf-QDR">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="importPrefsAction:" target="-1" id="kdv-Rr-qzs"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem title="Export..." id="WND-Dt-Sq8">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="exportPrefsAction:" target="-1" id="XiY-H4-A5y"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="lCW-rx-2mw"/>
-                                        <menuItem title="Restore defaults" id="m5l-K9-GLd">
-                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="factorySettingsAction:" target="-1" id="OZa-HG-B7e"/>
-                                            </connections>
-                                        </menuItem>
-                                    </items>
-                                </menu>
+                            <menuItem title="Preferences..." keyEquivalent="," id="L87-Y8-Gla">
+                                <connections>
+                                    <action selector="preferencesAction:" target="-1" id="x7k-IT-b56"/>
+                                </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="S4e-Lg-pAW">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
