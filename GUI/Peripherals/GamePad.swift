@@ -150,6 +150,7 @@ extension GamePad {
      * Checks if the provided keycode matches a joystick emulation key and
      * triggeres an event if a match has been found.
      * Returns true if a joystick event has been triggered.
+     * DEPRECATED
      */
     func keyDown(_ macKey: MacKey) -> Bool {
         
@@ -193,11 +194,48 @@ extension GamePad {
         
         return false
     }
+ 
+    func keyDownEvents(_ macKey: MacKey) -> [GamePadAction] {
+        
+        guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
+                    
+        switch GamePadAction(direction) {
+            
+        case PULL_UP:
+            keyUp = true
+            return [PULL_UP]
+            
+        case PULL_DOWN:
+            keyDown = true
+            return [PULL_DOWN]
+            
+        case PULL_LEFT:
+            keyLeft = true
+            return [PULL_LEFT]
+            
+        case PULL_RIGHT:
+            keyRight = true
+            return [PULL_RIGHT]
+            
+        case PRESS_FIRE:
+            return [PRESS_FIRE]
+            
+        case PRESS_LEFT:
+            return [PRESS_LEFT]
+            
+        case PRESS_RIGHT:
+            return [PRESS_RIGHT]
+            
+        default:
+            fatalError()
+        }
+    }
     
     /* Handles a keyboard up event
      * Checks if the provided keycode matches a joystick emulation key
      * and triggeres an event if a match has been found.
      * Returns true if a joystick event has been triggered.
+     * DEPRECATED
      */
     func keyUp(_ macKey: MacKey) -> Bool {
 
@@ -240,6 +278,42 @@ extension GamePad {
         }
     
         return false
+    }
+    
+    func keyUpEvents(_ macKey: MacKey) -> [GamePadAction] {
+        
+        guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
+                
+        switch GamePadAction(direction) {
+            
+        case PULL_UP:
+            keyUp = false
+            return keyDown ? [PULL_DOWN] : [RELEASE_Y]
+            
+        case PULL_DOWN:
+            keyDown = false
+            return keyUp ? [PULL_UP] : [RELEASE_Y]
+            
+        case PULL_LEFT:
+            keyLeft = false
+            return keyRight ? [PULL_RIGHT] : [RELEASE_X]
+            
+        case PULL_RIGHT:
+            keyRight = false
+            return keyLeft ? [PULL_LEFT] : [RELEASE_X]
+            
+        case PRESS_FIRE:
+            return [RELEASE_FIRE]
+            
+        case PRESS_LEFT:
+            return [RELEASE_LEFT]
+            
+        case PRESS_RIGHT:
+            return [RELEASE_RIGHT]
+            
+        default:
+            fatalError()
+        }
     }
 }
 

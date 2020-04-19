@@ -132,19 +132,63 @@ class KBController: NSObject {
     func keyDown(with macKey: MacKey) {
         
         // Check if this key is used for joystick emulation
+        var joyKey = false
+        
+        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {
+            for event in device.keyDownEvents(macKey) {
+                amiga.joystick1.trigger(event)
+                amiga.mouse.trigger(event)
+                joyKey = true
+            }
+        }
+        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice2] {
+            for event in device.keyDownEvents(macKey) {
+                amiga.joystick2.trigger(event)
+                amiga.mouse.trigger(event)
+                joyKey = true
+            }
+        }
+        
+        // Exit if emulation keys are disconnected from the keyboard
+        if joyKey && prefs.disconnectJoyKeys { return }
+        
+        /*
         if parent.gamePadManager.keyDown(with: macKey) && prefs.disconnectJoyKeys {
             return
         }
+        */
         
         amiga.keyboard.pressKey(macKey.amigaKeyCode)
     }
     
     func keyUp(with macKey: MacKey) {
-
+        
         // Check if this key is used for joystick emulation
+        var joyKey = false
+        
+        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {
+            for event in device.keyUpEvents(macKey) {
+                amiga.joystick1.trigger(event)
+                amiga.mouse.trigger(event)
+                joyKey = true
+            }
+        }
+        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice2] {
+            for event in device.keyUpEvents(macKey) {
+                amiga.joystick2.trigger(event)
+                amiga.mouse.trigger(event)
+                joyKey = true
+            }
+        }
+        
+        // Exit if emulation keys are disconnected from the keyboard
+        if joyKey && prefs.disconnectJoyKeys { return }
+
+        /*
         if parent.gamePadManager.keyUp(with: macKey) && prefs.disconnectJoyKeys {
             return
         }
+        */
         
         amiga.keyboard.releaseKey(macKey.amigaKeyCode)
     }
