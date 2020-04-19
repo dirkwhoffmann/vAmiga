@@ -207,13 +207,13 @@ class Renderer: NSObject, MTKViewDelegate {
     //
     
     // Nearest neighbor sampler
-    var samplerNearest: MTLSamplerState! = nil
+    var samplerNearest: MTLSamplerState!
     
     // Linear interpolation sampler
-    var samplerLinear: MTLSamplerState! = nil
+    var samplerLinear: MTLSamplerState!
     
     // Shader options
-    var shaderOptions = ShaderOptions.init()
+    var shaderOptions: ShaderOptions!
     
     // Indicates if an animation is currently performed
     var animates = 0
@@ -231,14 +231,6 @@ class Renderer: NSObject, MTKViewDelegate {
     var noise = AnimatedFloat(0.0)
     
     var monitorAlpha: [AnimatedFloat] = []
-    
-    // Parameters determining the visible part of the texture
-    /*
-    var hCenter = Defaults.hCenter
-    var vCenter = Defaults.vCenter
-    var hZoom = Defaults.hZoom
-    var vZoom = Defaults.vZoom
-    */
     
     // Animation variables for smooth texture zooming
     var cutoutX1 = AnimatedFloat.init()

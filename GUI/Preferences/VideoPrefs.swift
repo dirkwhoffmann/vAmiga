@@ -44,41 +44,40 @@ extension ConfigController {
         vidSaturationSlider.doubleValue = config.saturation
         
         // Effects
-        let shaderOptions = renderer.shaderOptions
-        vidBlurPopUp.selectItem(withTag: Int(shaderOptions.blur))
-        vidBlurRadiusSlider.floatValue = shaderOptions.blurRadius
-        vidBlurRadiusSlider.isEnabled = shaderOptions.blur > 0
+        vidBlurPopUp.selectItem(withTag: Int(config.blur))
+        vidBlurRadiusSlider.floatValue = config.blurRadius
+        vidBlurRadiusSlider.isEnabled = config.blur > 0
         
-        vidBloomPopUp.selectItem(withTag: Int(shaderOptions.bloom))
-        vidBloomRadiusSlider.floatValue = shaderOptions.bloomRadius
-        vidBloomRadiusSlider.isEnabled = shaderOptions.bloom > 0
-        vidBloomBrightnessSlider.floatValue = shaderOptions.bloomBrightness
-        vidBloomBrightnessSlider.isEnabled = shaderOptions.bloom > 0
-        vidBloomWeightSlider.floatValue = shaderOptions.bloomWeight
-        vidBloomWeightSlider.isEnabled = shaderOptions.bloom > 0
+        vidBloomPopUp.selectItem(withTag: Int(config.bloom))
+        vidBloomRadiusSlider.floatValue = config.bloomRadius
+        vidBloomRadiusSlider.isEnabled = config.bloom > 0
+        vidBloomBrightnessSlider.floatValue = config.bloomBrightness
+        vidBloomBrightnessSlider.isEnabled = config.bloom > 0
+        vidBloomWeightSlider.floatValue = config.bloomWeight
+        vidBloomWeightSlider.isEnabled = config.bloom > 0
 
-        vidFlickerPopUp.selectItem(withTag: Int(shaderOptions.flicker))
-        vidFlickerWeightSlider.floatValue = shaderOptions.flickerWeight
-        vidFlickerWeightSlider.isEnabled = shaderOptions.flicker > 0
+        vidFlickerPopUp.selectItem(withTag: Int(config.flicker))
+        vidFlickerWeightSlider.floatValue = config.flickerWeight
+        vidFlickerWeightSlider.isEnabled = config.flicker > 0
 
-        vidDotMaskPopUp.selectItem(withTag: Int(shaderOptions.dotMask))
+        vidDotMaskPopUp.selectItem(withTag: Int(config.dotMask))
         for i in 0 ... 4 {
             vidDotMaskPopUp.item(at: i)?.image = renderer.dotmaskImages[i]
         }
-        vidDotMaskBrightnessSlider.floatValue = shaderOptions.dotMaskBrightness
-        vidDotMaskBrightnessSlider.isEnabled = shaderOptions.dotMask > 0
+        vidDotMaskBrightnessSlider.floatValue = config.dotMaskBrightness
+        vidDotMaskBrightnessSlider.isEnabled = config.dotMask > 0
         
-        vidScanlinesPopUp.selectItem(withTag: Int(shaderOptions.scanlines))
-        vidScanlineBrightnessSlider.floatValue = shaderOptions.scanlineBrightness
-        vidScanlineBrightnessSlider.isEnabled = shaderOptions.scanlines > 0
-        vidScanlineWeightSlider.floatValue = shaderOptions.scanlineWeight
-        vidScanlineWeightSlider.isEnabled = shaderOptions.scanlines == 2
+        vidScanlinesPopUp.selectItem(withTag: Int(config.scanlines))
+        vidScanlineBrightnessSlider.floatValue = config.scanlineBrightness
+        vidScanlineBrightnessSlider.isEnabled = config.scanlines > 0
+        vidScanlineWeightSlider.floatValue = config.scanlineWeight
+        vidScanlineWeightSlider.isEnabled = config.scanlines == 2
         
-        vidMisalignmentPopUp.selectItem(withTag: Int(shaderOptions.disalignment))
-        vidMisalignmentXSlider.floatValue = shaderOptions.disalignmentH
-        vidMisalignmentXSlider.isEnabled = shaderOptions.disalignment > 0
-        vidMisalignmentYSlider.floatValue = shaderOptions.disalignmentV
-        vidMisalignmentYSlider.isEnabled = shaderOptions.disalignment > 0
+        vidMisalignmentPopUp.selectItem(withTag: Int(config.disalignment))
+        vidMisalignmentXSlider.floatValue = config.disalignmentH
+        vidMisalignmentXSlider.isEnabled = config.disalignment > 0
+        vidMisalignmentYSlider.floatValue = config.disalignmentV
+        vidMisalignmentYSlider.isEnabled = config.disalignment > 0
 
         // Geometry
         vidHCenter.floatValue = config.hCenter * 1000
@@ -136,99 +135,97 @@ extension ConfigController {
     
     @IBAction func vidBlurAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.shaderOptions.blur = Int32(sender.selectedTag())
+        config.blur = Int32(sender.selectedTag())
         refresh()
     }
     
     @IBAction func vidBlurRadiusAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.blurRadius = sender.floatValue
+        config.blurRadius = sender.floatValue
         refresh()
     }
     
     @IBAction func vidBloomAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.shaderOptions.bloom = Int32(sender.selectedTag())
-        vidBloomRadiusAction(vidBloomRadiusSlider)
+        config.bloom = Int32(sender.selectedTag())
+        refresh()
     }
     
     @IBAction func vidBloomRadiusAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.bloomRadius = sender.floatValue
+        config.bloomRadius = sender.floatValue
         refresh()
     }
 
     @IBAction func vidBloomBrightnessAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.bloomBrightness = sender.floatValue
+        config.bloomBrightness = sender.floatValue
         refresh()
     }
     
     @IBAction func vidBloomWeightAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.bloomWeight = sender.floatValue
+        config.bloomWeight = sender.floatValue
         refresh()
     }
 
     @IBAction func vidFlickerAction(_ sender: NSPopUpButton!) {
 
-        parent.renderer.shaderOptions.flicker = Int32(sender.selectedTag())
+        config.flicker = Int32(sender.selectedTag())
         refresh()
     }
 
     @IBAction func vidFlickerWeightAction(_ sender: NSSlider!) {
 
-        parent.renderer.shaderOptions.flickerWeight = sender.floatValue
+        config.flickerWeight = sender.floatValue
         refresh()
     }
     
     @IBAction func vidDotMaskAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.shaderOptions.dotMask = Int32(sender.selectedTag())
-        parent.renderer.buildDotMasks()
+        config.dotMask = Int32(sender.selectedTag())
         refresh()
     }
     
     @IBAction func vidDotMaskBrightnessAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.dotMaskBrightness = sender.floatValue
-        parent.renderer.buildDotMasks()
+        config.dotMaskBrightness = sender.floatValue
         refresh()
     }
     
     @IBAction func vidScanlinesAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.shaderOptions.scanlines = Int32(sender.selectedTag())
+        config.scanlines = Int32(sender.selectedTag())
         refresh()
     }
 
     @IBAction func vidScanlineBrightnessAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.scanlineBrightness = sender.floatValue
+        config.scanlineBrightness = sender.floatValue
         refresh()
     }
     
     @IBAction func vidScanlineWeightAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.scanlineWeight = sender.floatValue
+        config.scanlineWeight = sender.floatValue
         refresh()
     }
     
     @IBAction func vidDisalignmentAction(_ sender: NSPopUpButton!) {
         
-        parent.renderer.shaderOptions.disalignment = Int32(sender.selectedTag())
+        config.disalignment = Int32(sender.selectedTag())
         refresh()
     }
 
     @IBAction func vidDisalignmentHAction(_ sender: NSSlider!) {
         
-        parent.renderer.shaderOptions.disalignmentH = sender.floatValue
+        config.disalignmentH = sender.floatValue
         refresh()
     }
     
     @IBAction func vidDisalignmentVAction(_ sender: NSSlider!) {
 
-        parent.renderer.shaderOptions.disalignmentV = sender.floatValue
+        config.disalignmentV = sender.floatValue
         refresh()
     }
     

@@ -291,9 +291,28 @@ extension Renderer {
     }
 
     internal func buildKernels() {
-
+        
         assert(library != nil)
-
+        
+        shaderOptions = ShaderOptions.init(
+            blur: config.blur,
+            blurRadius: config.blurRadius,
+            bloom: config.bloom,
+            bloomRadius: config.bloomRadius,
+            bloomBrightness: config.bloomBrightness,
+            bloomWeight: config.bloomWeight,
+            flicker: config.flicker,
+            flickerWeight: config.flickerWeight,
+            dotMask: config.dotMask,
+            dotMaskBrightness: config.dotMaskBrightness,
+            scanlines: config.scanlines,
+            scanlineBrightness: config.scanlineBrightness,
+            scanlineWeight: config.scanlineWeight,
+            disalignment: config.disalignment,
+            disalignmentH: config.disalignmentH,
+            disalignmentV: config.disalignmentV
+        )
+        
         let mc = (MergedTexture.width, MergedTexture.height)
         let uc = (UpscaledTexture.width, UpscaledTexture.height)
 

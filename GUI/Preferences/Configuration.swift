@@ -182,7 +182,6 @@ class Configuration {
         get { return amiga.denise.saturation() }
         set { amiga.denise.setSaturation(newValue) }
     }
-        
     var hCenter = VideoDefaults.tft.hCenter {
         didSet { renderer.updateTextureRect() }
     }
@@ -195,73 +194,62 @@ class Configuration {
     var vZoom = VideoDefaults.tft.vZoom {
         didSet { renderer.updateTextureRect() }
     }
- 
-    var enhancer = VideoDefaults.tft.enhancer
+    var enhancer = VideoDefaults.tft.enhancer // TODO: SET ENHANCER IMMEDIATELY
     var upscaler = VideoDefaults.tft.upscaler
  
-    var blur: Int32 {
-        get { return renderer.shaderOptions.blur }
-        set { renderer.shaderOptions.blur = newValue }
+    var blur = VideoDefaults.tft.blur {
+        didSet { renderer.shaderOptions.blur = blur }
     }
-    var blurRadius: Float {
-        get { return renderer.shaderOptions.blurRadius }
-        set { renderer.shaderOptions.blurRadius = newValue }
+    var blurRadius = VideoDefaults.tft.blurRadius {
+        didSet { renderer.shaderOptions.blurRadius = blurRadius }
     }
-    var bloom: Int32 {
-        get { return renderer.shaderOptions.bloom }
-        set { renderer.shaderOptions.bloom = newValue }
+    var bloom = VideoDefaults.tft.bloom {
+        didSet { renderer.shaderOptions.bloom = bloom }
     }
-    var bloomRadius: Float {
-        get { return renderer.shaderOptions.bloomRadius }
-        set { renderer.shaderOptions.bloomRadius = newValue }
+    var bloomRadius = VideoDefaults.tft.bloomRadius {
+        didSet { renderer.shaderOptions.bloomRadius = bloomRadius }
     }
-    var bloomBrightness: Float {
-        get { return renderer.shaderOptions.bloomBrightness }
-        set { renderer.shaderOptions.bloomBrightness = newValue }
+    var bloomBrightness = VideoDefaults.tft.bloomBrightness {
+        didSet { renderer.shaderOptions.bloomBrightness = bloomBrightness }
     }
-    var bloomWeight: Float {
-        get { return renderer.shaderOptions.bloomWeight }
-        set { renderer.shaderOptions.bloomWeight = newValue }
+    var bloomWeight = VideoDefaults.tft.bloomWeight {
+        didSet { renderer.shaderOptions.bloomWeight = bloomWeight }
     }
-    var flicker: Int32 {
-        get { return renderer.shaderOptions.flicker }
-        set { renderer.shaderOptions.flicker = newValue }
+    var flicker = VideoDefaults.tft.flicker {
+        didSet { renderer.shaderOptions.flicker = flicker }
     }
-    var flickerWeight: Float {
-        get { return renderer.shaderOptions.flickerWeight }
-        set { renderer.shaderOptions.flickerWeight = newValue }
+    var flickerWeight = VideoDefaults.tft.flickerWeight {
+        didSet { renderer.shaderOptions.flickerWeight = flickerWeight }
     }
-    var dotMask: Int32 {
-        get { return renderer.shaderOptions.dotMask }
-        set { renderer.shaderOptions.dotMask = newValue }
+    var dotMask = VideoDefaults.tft.dotMask {
+        didSet {
+            renderer.shaderOptions.dotMask = dotMask
+            renderer.buildDotMasks()
+        }
     }
-    var dotMaskBrightness: Float {
-        get { return renderer.shaderOptions.dotMaskBrightness }
-        set { renderer.shaderOptions.dotMaskBrightness = newValue }
+    var dotMaskBrightness = VideoDefaults.tft.dotMaskBrightness {
+        didSet {
+            renderer.shaderOptions.dotMaskBrightness = dotMaskBrightness
+            renderer.buildDotMasks()
+        }
     }
-    var scanlines: Int32 {
-        get { return renderer.shaderOptions.scanlines }
-        set { renderer.shaderOptions.scanlines = newValue }
+    var scanlines = VideoDefaults.tft.scanlines {
+        didSet { renderer.shaderOptions.scanlines = scanlines }
     }
-    var scanlineBrightness: Float {
-        get { return renderer.shaderOptions.scanlineBrightness }
-        set { renderer.shaderOptions.scanlineBrightness = newValue }
+    var scanlineBrightness = VideoDefaults.tft.scanlineBrightness {
+        didSet { renderer.shaderOptions.scanlineBrightness = scanlineBrightness }
     }
-    var scanlineWeight: Float {
-        get { return renderer.shaderOptions.scanlineWeight }
-        set { renderer.shaderOptions.scanlineWeight = newValue }
+    var scanlineWeight = VideoDefaults.tft.scanlineWeight {
+        didSet { renderer.shaderOptions.scanlineWeight = scanlineWeight }
     }
-    var disalignment: Int32 {
-        get { return renderer.shaderOptions.disalignment }
-        set { renderer.shaderOptions.disalignment = newValue }
+    var disalignment = VideoDefaults.tft.disalignment {
+        didSet { renderer.shaderOptions.disalignment = disalignment }
     }
-    var disalignmentH: Float {
-        get { return renderer.shaderOptions.disalignmentH }
-        set { renderer.shaderOptions.disalignmentH = newValue }
+    var disalignmentH = VideoDefaults.tft.disalignmentH {
+        didSet { renderer.shaderOptions.disalignmentH = disalignmentH }
     }
-    var disalignmentV: Float {
-        get { return renderer.shaderOptions.disalignmentV }
-        set { renderer.shaderOptions.disalignmentV = newValue }
+    var disalignmentV = VideoDefaults.tft.disalignmentV {
+        didSet { renderer.shaderOptions.disalignmentV = disalignmentV }
     }
     
     init(with controller: MyController) { parent = controller }

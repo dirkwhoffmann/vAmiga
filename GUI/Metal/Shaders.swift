@@ -26,27 +26,27 @@ struct VertexUniforms {
     
 struct ShaderOptions: Codable {
 
-    var blur: Int32 = VideoDefaults.tft.blur
-    var blurRadius: Float = VideoDefaults.tft.blurRadius
+    var blur: Int32
+    var blurRadius: Float
     
-    var bloom: Int32 = VideoDefaults.tft.bloom
-    var bloomRadius: Float = VideoDefaults.tft.bloomRadius
-    var bloomBrightness: Float = VideoDefaults.tft.bloomBrightness
-    var bloomWeight: Float = VideoDefaults.tft.bloomWeight
+    var bloom: Int32
+    var bloomRadius: Float
+    var bloomBrightness: Float
+    var bloomWeight: Float
 
-    var flicker: Int32 = VideoDefaults.tft.flicker
-    var flickerWeight: Float = VideoDefaults.tft.flickerWeight
+    var flicker: Int32
+    var flickerWeight: Float
 
-    var dotMask: Int32 = VideoDefaults.tft.dotMask
-    var dotMaskBrightness: Float = VideoDefaults.tft.dotMaskBrightness
+    var dotMask: Int32
+    var dotMaskBrightness: Float
     
-    var scanlines: Int32 = VideoDefaults.tft.scanlines
-    var scanlineBrightness: Float = VideoDefaults.tft.scanlineBrightness
-    var scanlineWeight: Float = VideoDefaults.tft.scanlineWeight
+    var scanlines: Int32
+    var scanlineBrightness: Float
+    var scanlineWeight: Float
     
-    var disalignment: Int32 = VideoDefaults.tft.disalignment
-    var disalignmentH: Float = VideoDefaults.tft.disalignmentH
-    var disalignmentV: Float = VideoDefaults.tft.disalignmentV
+    var disalignment: Int32
+    var disalignmentH: Float
+    var disalignmentV: Float
 }
 
 //
