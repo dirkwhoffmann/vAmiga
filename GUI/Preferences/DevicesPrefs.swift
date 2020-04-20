@@ -93,10 +93,10 @@ extension PreferencesController {
     func gamePadAction(for tag: Int) -> (Int, GamePadAction) {
 
         switch tag {
-        case 0...4:   return (0, GamePadAction(UInt32(tag)))
-        case 10...14: return (1, GamePadAction(UInt32(tag - 10)))
-        case 5...6:   return (2, GamePadAction(UInt32(tag)))
-        default: fatalError()
+        case 0...4:   return (1, GamePadAction(UInt32(tag)))      // Joy 1
+        case 10...14: return (2, GamePadAction(UInt32(tag - 10))) // Joy 2
+        case 5...6:   return (0, GamePadAction(UInt32(tag)))      // Mouse
+        default:      fatalError()
         }
     }
 
