@@ -86,7 +86,7 @@ inline bool isValidDriveSpeed(i16 speed)
 typedef struct
 {
     DriveHead head;
-    bool write;
+    bool hasDisk;
     bool motor;
 }
 DriveInfo;

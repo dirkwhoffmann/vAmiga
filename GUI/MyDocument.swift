@@ -240,10 +240,10 @@ class MyDocument: NSDocument {
     
     func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
         
-        track("url = \(url) typeName = \(typeName)")
+        // track("url = \(url) typeName = \(typeName)")
         assert(["ADF"].contains(typeName))
         
-        let drive = amiga.df(nr)
+        let drive = amiga.df(nr)!
         
         // Convert disk to ADF format
         guard let adf = ADFFileProxy.make(withDrive: drive) else {

@@ -9,7 +9,7 @@
 
 public extension AmigaProxy {
     
-    func df(_ nr: Int) -> DriveProxy {
+    func df(_ nr: Int) -> DriveProxy? {
         
         switch nr {
             
@@ -17,17 +17,16 @@ public extension AmigaProxy {
         case 1: return df1
         case 2: return df2
         case 3: return df3
-
-        default: fatalError()
+        default:return nil
         }
     }
     
-    func df(_ item: NSButton!) -> DriveProxy {
+    func df(_ item: NSButton!) -> DriveProxy? {
         
         return df(item.tag)
     }
     
-    func df(_ item: NSMenuItem!) -> DriveProxy {
+    func df(_ item: NSMenuItem!) -> DriveProxy? {
         
         return df(item.tag)
     }

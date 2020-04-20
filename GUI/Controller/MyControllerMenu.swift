@@ -15,30 +15,22 @@ extension MyController: NSMenuItemValidation {
         let running = amiga.isRunning()
         let paused = amiga.isPaused()
         
-        var dfn: DriveProxy {
-            
-            switch item.tag {
-            case 0: return amiga.df0
-            case 1: return amiga.df1
-            case 2: return amiga.df2
-            case 3: return amiga.df3
-            default: fatalError()
-            }
-        }
+        var dfn: DriveProxy { return amiga.df(item.tag)! }
         
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
             
-            if let pos = Int(item.title) {
-                
-                if let url = myAppDelegate.getRecentlyUsedURL(pos, from: list) {
-                    item.title = url.lastPathComponent
-                    item.isHidden = false
-                    item.image = image
-                } else {
-                    item.isHidden = true
-                    item.image = nil
-                }
+            let slot = item.tag % 10
+            
+            if let url = myAppDelegate.getRecentlyUsedURL(slot, from: list) {
+                item.title = url.lastPathComponent
+                item.isHidden = false
+                item.image = image
+            } else {
+                item.title = ""
+                item.isHidden = true
+                item.image = nil
             }
+            
             return true
         }
         
@@ -471,7 +463,7 @@ extension MyController: NSMenuItemValidation {
         
         track()
         
-        let drive = amiga.df(sender)
+        let drive = amiga.df(sender)!
         let model = drive.type()
         
         var adf: ADFFileProxy
@@ -488,8 +480,7 @@ extension MyController: NSMenuItemValidation {
         
         // Insert disk into drive
         amiga.diskController.insert(sender.tag, adf: adf)
-        // drive.insertDisk(adf)
-        
+
         myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
     }
     
@@ -522,47 +513,39 @@ extension MyController: NSMenuItemValidation {
             }
         })
     }
+        
+    func insertRecentDiskAction(drive: Int, slot: Int) {
+        
+        track("drive: \(drive) slot: \(slot)")
+
+        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
+            
+            amiga.suspend()
+            do {
+                let adf = try self.mydocument?.createADF(from: url)
+                if proceedWithUnexportedDisk(drive: drive) {
+                    amiga.diskController.insert(drive, adf: adf)
+                }
+            } catch {
+                NSApp.presentError(error)
+            }
+            amiga.resume()
+        }
+    }
     
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
         
         let drive = sender.tag / 10
         let slot  = sender.tag % 10
         
-        track("\(drive) \(slot)")
-        
-        // Get URL and insert
-        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            do {
-                let adf = try self.mydocument?.createADF(from: url)
-                if proceedWithUnexportedDisk(drive: drive) {
-                    // amiga.df(drive).insertDisk(adf)
-                    amiga.diskController.insert(sender.tag, adf: adf)
-                }
-            } catch {
-                NSApp.presentError(error)
-            }
-        }
+        insertRecentDiskAction(drive: drive, slot: slot)
     }
-    
-    func insertRecentDiskAction(drive: DriveProxy, slot: Int) {
-        
-        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            do {
-                let adf = try self.mydocument?.createADF(from: url)
-                if proceedWithUnexportedDisk(drive: drive) {
-                    // drive.insertDisk(adf)
-                    amiga.diskController.insert(drive.nr(), adf: adf)
-                }
-            } catch {
-                NSApp.presentError(error)
-            }
-        }
-    }
-    
+
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
-        let drive = sender.tag == 0 ? amiga.df0! : amiga.df1!
-        drive.toggleWriteProtection()
+        amiga.suspend()
+        amiga.df(sender)!.toggleWriteProtection()
+        amiga.resume()
     }
     
     @IBAction func exportRecentDiskDummyAction0(_ sender: NSMenuItem!) {}
@@ -597,7 +580,6 @@ extension MyController: NSMenuItemValidation {
     @IBAction func ejectDiskAction(_ sender: NSMenuItem!) {
         
         if proceedWithUnexportedDisk(drive: sender.tag) {
-            // amiga.df(sender.tag).ejectDisk()
             amiga.diskController.eject(sender.tag)
             myAppDelegate.clearRecentlyExportedDiskURLs(drive: sender.tag)
         }
@@ -670,7 +652,7 @@ extension MyController: NSMenuItemValidation {
     }
     @IBAction func dumpDfxAction(_ sender: NSMenuItem!) {
         amiga.suspend()
-        amiga.df(sender).dump()
+        amiga.df(sender)!.dump()
         amiga.resume()
     }
     @IBAction func dumpDf0Action(_ sender: Any!) {

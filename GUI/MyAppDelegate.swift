@@ -123,7 +123,9 @@ func cgEventCallback(proxy: CGEventTapProxy,
     var prefsController: PreferencesController?
     
     // The list of recently inserted disk URLs.
-    var recentlyInsertedDiskURLs: [URL] = []
+    var recentlyInsertedDiskURLs: [URL] = [] {
+        didSet { track() }
+    }
     
     // The list of recently exported disk URLs.
     var recentlyExportedDisk0URLs: [URL] = []

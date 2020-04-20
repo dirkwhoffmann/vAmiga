@@ -78,13 +78,7 @@ extension MyDocument {
         
     func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
         
-        switch nr {
-        case 0: return proceedWithUnexportedDisk(drives: [amiga.df0])
-        case 1: return proceedWithUnexportedDisk(drives: [amiga.df1])
-        case 2: return proceedWithUnexportedDisk(drives: [amiga.df2])
-        case 3: return proceedWithUnexportedDisk(drives: [amiga.df3])
-        default: fatalError()
-        }
+        return proceedWithUnexportedDisk(drive: amiga.df(nr)!)
     }
     
     func proceedWithUnexportedDisk() -> Bool {
@@ -147,5 +141,4 @@ extension MyController {
     func proceedWithUnexportedDisk() -> Bool {
         return mydocument?.proceedWithUnexportedDisk() ?? false
     }
-
 }

@@ -56,6 +56,7 @@ Drive::_inspect()
     pthread_mutex_lock(&lock);
 
     info.head = head;
+    info.hasDisk = hasDisk();
     info.motor = motor;
 
     pthread_mutex_unlock(&lock);
@@ -487,8 +488,9 @@ Drive::setWriteProtection(bool value)
 void
 Drive::toggleWriteProtection()
 {
-    if (hasWriteProtectedDisk()) setWriteProtection(false);
-    if (hasWriteEnabledDisk())   setWriteProtection(true);
+    if (hasDisk()) {
+        disk->setWriteProtection(!disk->isWriteProtected());
+    }
 }
 
 void
