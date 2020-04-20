@@ -10,6 +10,7 @@
 class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
+    
     var type: AmigaFileType = FILETYPE_ADF
     var savePanel: NSSavePanel!
     var selectedURL: URL?

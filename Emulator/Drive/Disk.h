@@ -206,12 +206,12 @@ private:
 public:
     
     // Decodes the whole disk
-    bool decodeDisk(u8 *dst);
+    bool decodeDisk(u8 *dst, int tracks, int sectors);
     
 private:
     
     // Work horses
-    size_t decodeTrack(u8 *dst, Track t, long smax);
+    bool decodeTrack(u8 *dst, Track t, long smax);
     void decodeSector(u8 *dst, u8 *src);
     void decodeOddEven(u8 *dst, u8 *src, size_t count);
 };

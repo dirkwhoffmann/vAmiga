@@ -101,10 +101,13 @@ ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
     
-    ADFFile *adf = makeWithDiskType(disk->getType());
+    // We only support 3.5"DD disks at the moment
+    if (disk->getType() != DISK_35_DD) { return NULL; }
+    
+    ADFFile *adf = makeWithDiskType(DISK_35_DD);
     
     if (adf) {
-        if (!disk->decodeDisk(adf->data)) {
+        if (!disk->decodeDisk(adf->data, 160, 11)) {
             delete adf;
             return NULL;
         }

@@ -299,30 +299,29 @@ Disk::encodeOddEven(u8 *target, u8 *source, size_t count)
 }
 
 bool
-Disk::decodeDisk(u8 *dst)
+Disk::decodeDisk(u8 *dst, int tracks, int sectors)
 {
     bool result = true;
-    long tmax = numTracks();
-    long smax = numSectorsPerTrack();
+        
+    debug("Decoding disk (%d tracks, %d sectors each)...\n", tracks, sectors);
     
-    debug("Decoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
+    for (Track t = 0; t < tracks; t++) {
+        result &= decodeTrack(dst, t, sectors);
+        dst += sectors * 512;
     
-    for (Track t = 0; t < tmax; t++) {
-        result &= decodeTrack(dst, t, smax);
-        dst += smax * 512;
     }
     
     return result;
 }
 
-size_t
+bool
 Disk::decodeTrack(u8 *dst, Track t, long smax)
 {
     assert(isValidTrack(t));
         
     debug(2, "Decoding track %d\n", t);
     
-    // Create a local (double) copy of the track to easy analysis
+    // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];
     memcpy(local, data.track[t], trackSize);
     memcpy(local + trackSize, data.track[t], trackSize);

@@ -599,8 +599,8 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
         let nibName = NSNib.Name("ExportDiskDialog")
-        let exportPanel = ExportDiskDialog.init(windowNibName: nibName)
-        exportPanel.showSheet(forDrive: sender.tag)
+        let exportPanel = ExportDiskDialog.make(parent: self, nibName: nibName)
+        exportPanel?.showSheet(forDrive: sender.tag)
     }
     
     @IBAction func dragAndDropTargetAction(_ sender: NSMenuItem!) {

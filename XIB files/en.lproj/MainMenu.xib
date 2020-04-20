@@ -467,7 +467,7 @@
                                     <action selector="newDiskAction:" target="-1" id="csx-lP-2mG"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert ..." id="le3-dz-mCC">
+                            <menuItem title="Insert..." id="le3-dz-mCC">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="insertDiskAction:" target="-1" id="qhe-PC-Bq0"/>
@@ -562,7 +562,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="8fO-nY-y8g"/>
-                            <menuItem title="Export ..." id="inq-yB-iPf" userLabel="Export disk">
+                            <menuItem title="Export..." id="inq-yB-iPf" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportDiskAction:" target="-1" id="rL4-3t-mjC"/>
@@ -603,7 +603,7 @@
                                     <action selector="newDiskAction:" target="-1" id="pbg-ot-FbZ"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert ..." tag="1" id="ZBw-6F-9jk">
+                            <menuItem title="Insert..." tag="1" id="ZBw-6F-9jk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="insertDiskAction:" target="-1" id="3Xy-MS-NBP"/>
@@ -698,7 +698,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="jyn-pH-Tv0"/>
-                            <menuItem title="Export ..." tag="1" id="Qpf-ys-Bkr" userLabel="Export disk">
+                            <menuItem title="Export..." tag="1" id="Qpf-ys-Bkr" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportDiskAction:" target="-1" id="D9T-K0-SqX"/>
@@ -739,7 +739,7 @@
                                     <action selector="newDiskAction:" target="-1" id="fbD-eL-G5T"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert ..." tag="2" id="ZfI-M9-QjR">
+                            <menuItem title="Insert..." tag="2" id="ZfI-M9-QjR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="insertDiskAction:" target="-1" id="tnT-cp-Ucy"/>
@@ -834,7 +834,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="0QR-VA-UY0"/>
-                            <menuItem title="Export ..." tag="2" id="h74-u0-iEw" userLabel="Export disk">
+                            <menuItem title="Export..." tag="2" id="h74-u0-iEw" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportDiskAction:" target="-1" id="a63-IX-ymF"/>
@@ -875,7 +875,7 @@
                                     <action selector="newDiskAction:" target="-1" id="t8S-Do-0uq"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Insert ..." tag="3" id="iiL-Ys-SrX">
+                            <menuItem title="Insert..." tag="3" id="iiL-Ys-SrX">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="insertDiskAction:" target="-1" id="27N-sn-5Di"/>
@@ -970,7 +970,7 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="HcB-7e-MEa"/>
-                            <menuItem title="Export ..." tag="3" id="hhZ-v4-oPp" userLabel="Export disk">
+                            <menuItem title="Export..." tag="3" id="hhZ-v4-oPp" userLabel="Export disk">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="exportDiskAction:" target="-1" id="NW7-vA-1aH"/>

@@ -213,8 +213,6 @@ extension VKBController {
 
         // Determine if an A1000 is emulated
         let a1000 = parent.amiga.mem.hasBootRom()
-
-        track("Boot Rom: \(parent.amiga.mem.hasBootRom)")
         
         // Use a narrow keyboard for the A1000 and a wide keyboard otherwise
         return a1000 ? .narrow : .wide
