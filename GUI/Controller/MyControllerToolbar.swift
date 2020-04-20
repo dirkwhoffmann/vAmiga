@@ -78,15 +78,6 @@ extension MyController {
         }
     }
         
-    @IBAction func keyboardAction(_ sender: Any!) {
-        
-        // Open the virtual keyboard as a sheet
-        if virtualKeyboardSheet == nil {
-            virtualKeyboardSheet = VKBController.make(parent: self)
-        }
-        virtualKeyboardSheet?.showSheet(autoClose: true)
-    }
-    
     @IBAction func toolbarPrefAction(_ sender: NSSegmentedControl) {
 
         switch sender.selectedSegment {

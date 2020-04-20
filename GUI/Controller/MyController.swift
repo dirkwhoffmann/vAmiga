@@ -54,7 +54,7 @@ class MyController: NSWindowController, MessageReceiver {
     var kbController: KBController!
 
     // Virtual keyboard
-    var virtualKeyboardSheet: VKBController?
+    var virtualKeyboard: VKBController?
     
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be
@@ -503,7 +503,6 @@ extension MyController {
     
     @objc func screenshotTimerFunc() {
         
-        track()
         if prefs.autoScreenshots { takeAutoScreenshot() }
     }
         
@@ -518,6 +517,7 @@ extension MyController {
 
             serialIn = ""
             serialOut = ""
+            virtualKeyboard = nil
             renderer.zoomIn()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()

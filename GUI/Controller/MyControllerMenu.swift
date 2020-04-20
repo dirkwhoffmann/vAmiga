@@ -435,15 +435,26 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Keyboard menu)
     //
     
+    /*
     @IBAction func stickyKeyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a window
-        if virtualKeyboardSheet == nil {
-            virtualKeyboardSheet = VKBController.make(parent: self)
+        if virtualKeyboard == nil {
+            virtualKeyboard = VKBController.make(parent: self)
         }
-        virtualKeyboardSheet?.showWindow(autoClose: false)
+        virtualKeyboard?.showWindow(autoClose: false)
     }
+    */
     
+    @IBAction func keyboardAction(_ sender: Any!) {
+        
+        // Open the virtual keyboard as a sheet
+        if virtualKeyboard == nil {
+            virtualKeyboard = VKBController.make(parent: self)
+        }
+        virtualKeyboard?.showSheet(autoClose: true)
+    }
+     
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
         mapCommandKeys = !mapCommandKeys

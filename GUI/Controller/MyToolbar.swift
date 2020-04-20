@@ -28,7 +28,7 @@ class MyToolbar: NSToolbar {
         let kb = keyboardButton.view as? NSButton
 
         // Disable the keyboard button, if the virtual keyboard is open
-        if let window = parent.virtualKeyboardSheet?.window {
+        if let window = parent.virtualKeyboard?.window {
             kb?.isEnabled = !window.isVisible
         } else {
             kb?.isEnabled = true
