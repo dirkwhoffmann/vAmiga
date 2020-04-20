@@ -9,7 +9,7 @@
 
 extension PreferencesController {
     
-    func refreshEmulatorTab() {
+    func refreshGeneralTab() {
         
         track()
 
@@ -46,9 +46,6 @@ extension PreferencesController {
         emuPauseInBackground.state = prefs.pauseInBackground ? .on : .off
         emuCloseWithoutAskingButton.state = prefs.closeWithoutAsking ? .on : .off
         emuEjectWithoutAskingButton.state = prefs.ejectWithoutAsking ? .on : .off
-
-        // OK Button
-        emuOKButton.title = buttonLabel
     }
 
     //
@@ -178,7 +175,9 @@ extension PreferencesController {
     @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
         
         prefs.closeWithoutAsking = (sender.state == .on)
-        parent.needsSaving = amiga.isRunning()
+        for c in myAppDelegate.controllers {
+            c.needsSaving = c.amiga.isRunning()
+        }
         refresh()
     }
     
@@ -200,11 +199,5 @@ extension PreferencesController {
         UserDefaults.resetGeneralUserDefaults()
         prefs.loadGeneralUserDefaults()
         refresh()
-    }
-    
-    @IBAction func generalDefaultsAction(_ sender: NSButton!) {
-        
-        track()
-        prefs.saveGeneralUserDefaults()
     }
 }

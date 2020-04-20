@@ -31,7 +31,7 @@
                                     <action selector="orderFrontStandardAboutPanel:" target="-2" id="142"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Check for Updates..." enabled="NO" keyEquivalent="u" id="412"/>
+                            <menuItem title="Check for Updates..." hidden="YES" enabled="NO" keyEquivalent="u" id="412"/>
                             <menuItem isSeparatorItem="YES" id="202">
                                 <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                             </menuItem>

@@ -41,23 +41,23 @@ extension PreferencesController {
             txt.stringValue = macKeyDesc
         }
 
+        // Mouse button keyset
+        refreshKey(map: 0, dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
+        refreshKey(map: 0, dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
+
         // First joystick keyset
-        refreshKey(map: 0, dir: PULL_UP, button: devUp1button, txt: devUp1)
-        refreshKey(map: 0, dir: PULL_DOWN, button: devDown1button, txt: devDown1)
-        refreshKey(map: 0, dir: PULL_LEFT, button: devLeft1button, txt: devLeft1)
-        refreshKey(map: 0, dir: PULL_RIGHT, button: devRight1button, txt: devRight1)
-        refreshKey(map: 0, dir: PRESS_FIRE, button: devFire1button, txt: devFire1)
+        refreshKey(map: 1, dir: PULL_UP, button: devUp1button, txt: devUp1)
+        refreshKey(map: 1, dir: PULL_DOWN, button: devDown1button, txt: devDown1)
+        refreshKey(map: 1, dir: PULL_LEFT, button: devLeft1button, txt: devLeft1)
+        refreshKey(map: 1, dir: PULL_RIGHT, button: devRight1button, txt: devRight1)
+        refreshKey(map: 1, dir: PRESS_FIRE, button: devFire1button, txt: devFire1)
 
         // Second joystick keyset
-        refreshKey(map: 1, dir: PULL_UP, button: devUp2button, txt: devUp2)
-        refreshKey(map: 1, dir: PULL_DOWN, button: devDown2button, txt: devDown2)
-        refreshKey(map: 1, dir: PULL_LEFT, button: devLeft2button, txt: devLeft2)
-        refreshKey(map: 1, dir: PULL_RIGHT, button: devRight2button, txt: devRight2)
-        refreshKey(map: 1, dir: PRESS_FIRE, button: devFire2button, txt: devFire2)
-
-        // Mouse button keyset
-        refreshKey(map: 2, dir: PRESS_LEFT, button: devMouseLeftButton, txt: devMouseLeft)
-        refreshKey(map: 2, dir: PRESS_RIGHT, button: devMouseRightButton, txt: devMouseRight)
+        refreshKey(map: 2, dir: PULL_UP, button: devUp2button, txt: devUp2)
+        refreshKey(map: 2, dir: PULL_DOWN, button: devDown2button, txt: devDown2)
+        refreshKey(map: 2, dir: PULL_LEFT, button: devLeft2button, txt: devLeft2)
+        refreshKey(map: 2, dir: PULL_RIGHT, button: devRight2button, txt: devRight2)
+        refreshKey(map: 2, dir: PRESS_FIRE, button: devFire2button, txt: devFire2)
 
         devDisconnectKeys.state = prefs.disconnectJoyKeys ? .on : .off
 
@@ -87,9 +87,6 @@ extension PreferencesController {
         devReleaseMouseKeyComb.isEnabled = prefs.releaseMouseWithKeys
         devReleaseMouseWithKeys.state = prefs.releaseMouseWithKeys ? .on : .off
         devReleaseMouseByShaking.state = prefs.releaseMouseByShaking ? .on : .off
-
-        // OK Button
-        devOKButton.title = buttonLabel
     }
 
     // Translates a button tag back to the related slot and gamepad action
@@ -230,11 +227,5 @@ extension PreferencesController {
         UserDefaults.resetDevicesUserDefaults()
         prefs.loadDevicesUserDefaults()
         refresh()
-    }
-    
-    @IBAction func devicesDefaultsAction(_ sender: NSButton!) {
-        
-        track()
-        prefs.saveDevicesUserDefaults()
     }
 }

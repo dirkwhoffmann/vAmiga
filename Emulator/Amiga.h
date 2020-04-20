@@ -341,6 +341,7 @@ public:
     
     // Removes a listener callback function.
     void removeListener(const void *sender) {
+        debug("removeListener\n");
         queue.removeListener(sender);
     }
     

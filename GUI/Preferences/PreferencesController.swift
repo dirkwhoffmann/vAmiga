@@ -44,9 +44,6 @@ class PreferencesController: DialogController {
     @IBOutlet weak var emuCloseWithoutAskingButton: NSButton!
     @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
 
-    // Button
-    @IBOutlet weak var emuOKButton: NSButton!
-
     //
     // Devices preferences
     //
@@ -102,19 +99,9 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devAutofireCeaseText: NSTextField!
     @IBOutlet weak var devAutofireBullets: NSTextField!
     @IBOutlet weak var devAutofireFrequency: NSSlider!
-
-    // Button
-    @IBOutlet weak var devOKButton: NSButton!
-
-    // The button label
-    var buttonLabel: String {
-        let off   = amiga.isPoweredOff()
-        let ready = amiga.readyToPowerOn() == ERR_OK
-        return off && ready ? "Boot" : "OK"
-    }
     
     // The tab to open first
-     var firstTab = ""
+    var firstTab: String?
 
     func showSheet(tab: String) {
 
@@ -124,13 +111,13 @@ class PreferencesController: DialogController {
 
     override func awakeFromNib() {
 
-        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
+        if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
         refresh()
     }
 
     override func sheetDidShow() {
 
-        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
+        if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
     }
 
     override func refresh() {
@@ -138,7 +125,7 @@ class PreferencesController: DialogController {
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
-            case "General": refreshEmulatorTab()
+            case "General": refreshGeneralTab()
             case "Devices": refreshDevicesTab()
             default: fatalError()
             }
@@ -155,23 +142,12 @@ class PreferencesController: DialogController {
             }
         }
     }
-
-    @IBAction func unlockAction(_ sender: Any!) {
-
-        amiga.powerOff()
-        refresh()
-    }
-
-    @IBAction override func cancelAction(_ sender: Any!) {
-        
-        track()
-        hideSheet()
-    }
     
     @IBAction override func okAction(_ sender: Any!) {
-        
+                
+        prefs.saveGeneralUserDefaults()
+        prefs.saveDevicesUserDefaults()
         hideSheet()
-        if buttonLabel == "Boot" { amiga.run() }
     }
 }
 
