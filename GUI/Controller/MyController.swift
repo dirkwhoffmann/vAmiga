@@ -285,17 +285,11 @@ extension MyController {
         
         // Create keyboard controller
         kbController = KBController(parent: self)
-        if kbController == nil {
-            track("Failed to create keyboard controller")
-            return
-        }
+        assert(kbController != nil, "Failed to create keyboard controller")
 
         // Create game pad manager
-        gamePadManager = GamePadManager(controller: self)
-        if gamePadManager == nil {
-            track("Failed to create game pad manager")
-            return
-        }
+        gamePadManager = GamePadManager(parent: self)
+        assert(gamePadManager != nil, "Failed to create game pad manager")
 
         // Setup renderer
          renderer = Renderer(view: metal,

@@ -9,122 +9,112 @@
 
 import IOKit.hid
 
-//
-// A GamePad object is created for each connected USB device
-// Creation and destruction is done by the GamePadManager
-//
-
+/* An object that represents a single input device connected to the Game Port.
+ * The object can either represent a connected HID device or a keyboard emulated
+ * device. In the first case, the object serves as a callback handler for HID
+ * events. In the latter case, it translates keyboard events to GamePadAction
+ * events by using a key map.
+ */
 class GamePad {
 
     // Reference to the game pad manager
     var manager: GamePadManager
 
+    // Quick references
+    var prefs: Preferences { return manager.parent.prefs }
+
+    // Name of the managed device
+    var name: String?
+
     // Position of this game pad in the manager's game pad list
     var nr = 0
     
-    // Keymap of the managed device (only used for keyboard emulated devices)
+    // Keymap of the managed device (set for keyboard emulated devices only)
     var keyMap: Int?
     
     // Indicates if a joystick emulation key is currently pressed
     var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
     
-    // Name of the connected controller
-    var name: String?
-
-    // Vendor ID of the managed device (only used for HID devices)
+    // Vendor ID of the managed device (used for HID devices only)
     var vendorID: Int
 
-    // Product ID of the managed device (only used for HID devices)
+    // Product ID of the managed device (used for HID devices only)
     var productID: Int
 
-    // Location ID of the managed device (only used for HID devices)
+    // Location ID of the managed device (used for HID devices only)
     var locationID: Int
 
-    // Minimum value of analog axis event
-    var min: Int?
+    // Minimum and maximum value of analog axis event
+    var min: Int?, max: Int?
     
-    // Maximum value of analog axis event
-    var max: Int?
-    
-    /* Rescued information from the last invocation of the action function
-     * Used to determine if a joystick event needs to be triggered.
-     */
-    var oldEvents: [Int: [GamePadAction]] = [:]
-    
-    // Cotroller dependent usage IDs for left and right gamepad joysticks
+    // Cotroller specific usage IDs for left and right gamepad joysticks
     var lThumbXUsageID = kHIDUsage_GD_X
     var lThumbYUsageID = kHIDUsage_GD_Y
     var rThumbXUsageID = kHIDUsage_GD_Rz
     var rThumbYUsageID = kHIDUsage_GD_Z
-    
-    // Quick references
-    var prefs: Preferences { return manager.controller.prefs }
 
+    /* Rescued information from the latest invocation of the action function.
+     * It is needed to determine whether a joystick event has to be triggered.
+     */
+    var oldEvents: [Int: [GamePadAction]] = [:]
+    
+    // Receiver for HID events
+    let actionCallback: IOHIDValueCallback = {
+        inContext, inResult, inSender, value in
+        let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
+        this.hidDeviceAction(context: inContext,
+                             result: inResult,
+                             sender: inSender,
+                             value: value)
+    }
+    
     init(_ nr: Int, manager: GamePadManager,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
-        track("\(vendorID) \(productID) \(locationID)")
+        // track("\(nr): \(vendorID) \(productID) \(locationID)")
         
         self.nr = nr
         self.manager = manager
         self.vendorID = vendorID
         self.productID = productID
         self.locationID = locationID
-    
-        // Check for known devices
-        if vendorID == 0x40B && productID == 0x6533 {
-            
-            name = "Competition Pro SL-6602"
         
-        } else if vendorID == 0xF0D && productID == 0xC1 {
-
+        // Check for known devices
+        switch vendorID {
+            
+        case 0x40B where productID == 0x6533:
+            name = "Competition Pro SL-6602"
+            
+        case 0xF0D where productID == 0xC1:
             name = "iNNEXT Retro (N64)"
-
-        } else if vendorID == 0x79 && productID == 0x11 {
-
+            
+        case 0x79 where productID == 0x11:
             name = "iNNEXT Retro (SNES)"
-
-        } else if vendorID == 0x54C && productID == 0x268 {
-
+            
+        case 0x54C where productID == 0x268:
             name = "Sony DualShock 3"
             rThumbXUsageID = kHIDUsage_GD_Z
             rThumbYUsageID = kHIDUsage_GD_Rz
-        
-        } else if vendorID == 0x54C && productID == 0x5C4 {
             
+        case 0x54C where productID == 0x5C4:
             name = "Sony DualShock 4"
             rThumbXUsageID = kHIDUsage_GD_Z
             rThumbYUsageID = kHIDUsage_GD_Rz
-
-        } else if vendorID == 0x54C && productID == 0x9CC {
             
+        case 0x54C where productID == 0x9CC:
             name = "Sony Dualshock 4 (2nd Gen)"
             rThumbXUsageID = kHIDUsage_GD_Z
             rThumbYUsageID = kHIDUsage_GD_Rz
-        
-        } else if vendorID == 0x483 && productID == 0x9005 {
             
+        case 0x483 where productID == 0x9005:
             name = "RetroFun! Joystick Adapter"
-
-        } else if vendorID == 0x004 && productID == 0x0001 {
             
+        case 0x004 where productID == 0x0001:
             name = "aJoy Retro Adapter"
             
-        } else {
-        
-            // name = "Generic Gamepad"
+        default:
+            break  // name = "Generic Gamepad"
         }
-    }
-    
-    /*
-    convenience init(_ nr: Int, manager: GamePadManager) {
-        self.init(nr, manager: manager, vendorID: 0, productID: 0, locationID: 0)
-    }
-    */
-    
-    let actionCallback: IOHIDValueCallback = { inContext, inResult, inSender, value in
-        let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
-        this.hidDeviceAction(context: inContext, result: inResult, sender: inSender, value: value)
     }
 }
 
@@ -145,7 +135,7 @@ extension GamePad {
         prefs.keyMaps[n][key] = action.rawValue
     }
 
-    // Removes any existing key binding to the specified gampad action
+    // Removes a key binding to the specified gampad action (if any)
     func unbind(action: GamePadAction) {
         
         guard let n = keyMap else { return }
@@ -155,7 +145,7 @@ extension GamePad {
         }
      }
 
-    // Handles a key press event
+    // Translates a key press event to a list of gamepad actions
     func keyDownEvents(_ macKey: MacKey) -> [GamePadAction] {
         
         guard let n = keyMap, let direction = prefs.keyMaps[n][macKey] else { return [] }
@@ -272,7 +262,7 @@ extension GamePad {
         if usagePage == kHIDPage_Button {
 
             let events = (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE]
-            manager.controller.emulateEventsOnGamePort(slot: nr, events: events)
+            manager.parent.emulateEventsOnGamePort(slot: nr, events: events)
             return
         }
         
@@ -289,7 +279,7 @@ extension GamePad {
                 if let v = mapAnalogAxis(value: value, element: element) {
                     events = (v == 2) ? [PULL_RIGHT] : (v == -2) ? [PULL_LEFT] : [RELEASE_X]
                 }
-   
+                
             case lThumbYUsageID, rThumbYUsageID:
                 
                 // track("lThumbYUsageID, rThumbYUsageID: \(intValue)")
@@ -310,7 +300,6 @@ extension GamePad {
                 case 6: events = [PULL_LEFT, RELEASE_Y]
                 case 7: events = [PULL_LEFT, PULL_UP]
                 default: events = [RELEASE_XY]
-                // default: break
                 }
                 
             default:
@@ -319,14 +308,11 @@ extension GamePad {
             }
             
             // Only proceed if the event is different than the previous one
-            if events == nil || oldEvents[usage] == events {
-                return
-            } else {
-                oldEvents[usage] = events!
-            }
+            if events == nil || oldEvents[usage] == events { return }
+            oldEvents[usage] = events!
             
-            // Trigger event
-            manager.controller.emulateEventsOnGamePort(slot: nr, events: events!)
+            // Trigger events
+            manager.parent.emulateEventsOnGamePort(slot: nr, events: events!)
         }
     }
 }

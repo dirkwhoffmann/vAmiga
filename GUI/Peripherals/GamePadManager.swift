@@ -7,40 +7,38 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* Holds and manages an array of GamePad objects
- * Up to five devices are managed. The first three are always present and
- * represent two keyset and an analog mouse. All other objects are dynamically
- * added when a USB joystick or game pad is plugged in.
+/* Holds and manages an array of GamePad objects.
+ * Up to five gamepads are managed. The first three gamepads are initialized
+ * by default and represent a mouse and two keyboard emulated joysticks.
+ * All remaining gamepads are added dynamically when a HID device is connected.
  */
 class GamePadManager {
+
+    // Reference to the the controller
+    var parent: MyController!
     
+    // Reference to the HID manager
+    var hidManager: IOHIDManager
+
     // private let inputLock = NSLock()
     // Such a thing is used here: TODO: Check if we need this
     // https://github.com/joekarl/swift_handmade_hero/blob/master/Handmade%20Hero%20OSX/Handmade%20Hero%20OSX/InputManager.swift
     
-    // Reference to the the controller
-    var controller: MyController!
-    
-    // Reference to the HID manager
-    private var hidManager: IOHIDManager
-
-    /* References to all registered game pads
-     * Each device ist referenced by a slot number
-     */
+    // Gamepad storage
     var gamePads: [Int: GamePad] = [:]
-
-    init() {
-
-        hidManager = IOHIDManagerCreate(kCFAllocatorDefault, IOOptionBits(kIOHIDOptionsTypeNone))
-        // super.init()
-    }
     
-    convenience init?(controller: MyController) {
-        
-        self.init()
-        self.controller = controller
-        
-        // Add generic devices
+    //
+    // Initialization
+    //
+    
+    init(parent: MyController) {
+    
+        self.parent = parent
+      
+        hidManager = IOHIDManagerCreate(kCFAllocatorDefault,
+                                        IOOptionBits(kIOHIDOptionsTypeNone))
+
+        // Add default devices
         gamePads[0] = GamePad(0, manager: self)     // Mouse
         gamePads[0]!.keyMap = 0                     // Mouse keyset
 
@@ -77,7 +75,7 @@ class GamePadManager {
             this.hidDeviceRemoved(context: inContext, result: inResult, sender: inSender, device: device)
         }
         
-        // Configure HID manager
+        // Configure the HID manager
         let hidContext = unsafeBitCast(self, to: UnsafeMutableRawPointer.self)
         IOHIDManagerSetDeviceMatchingMultiple(hidManager, deviceCriteria as CFArray)
         IOHIDManagerRegisterDeviceMatchingCallback(hidManager, matchingCallback, hidContext)
@@ -86,20 +84,20 @@ class GamePadManager {
         IOHIDManagerOpen(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
     
+    func shutDown() {
+
+        track()
+        gamePads = [:]
+    }
+
     deinit {
+
         track()
         IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
-    
-    // Removes all registered devices
-    func shutDown() {
         
-        gamePads = [:]
-
-    }
-    
     //
-    // Slot handling
+    // Managing slots
     //
     
     // Returns true iff the specified game pad slot is free
@@ -112,15 +110,14 @@ class GamePadManager {
     func findFreeSlot() -> Int? {
         
         var nr = 0
-        while !slotIsEmpty(nr) {
-            nr += 1
-        }
+        while !slotIsEmpty(nr) { nr += 1 }
         
         // We support up to 5 devices
         return (nr < 5) ? nr : nil
     }
     
     // Looks up a game pad. Returns -1 if no game pad was found
+    /*
     func lookupGamePad(_ gamePad: GamePad) -> Int {
         
         for (slotNr, device) in gamePads where device === gamePad {
@@ -128,8 +125,10 @@ class GamePadManager {
         }
         return -1
     }
+    */
     
     // Looks up game pad by locationID. Returns -1 if no game pad was found
+    /*
     func lookupGamePad(locationID: Int) -> Int {
         
         for (slotNr, device) in gamePads where device.locationID == locationID {
@@ -137,13 +136,14 @@ class GamePadManager {
         }
         return -1
     }
-        
+    */
+ 
     //
     // HID stuff
     //
     
     // Device matching callback
-    // Method is invoked when a matching HID device is plugged in
+    // This method is invoked when a matching HID device is plugged in.
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
                         result: IOReturn,
                         sender: UnsafeMutableRawPointer?,
@@ -196,11 +196,14 @@ class GamePadManager {
         }
     
         // Register input value callback
-        let hidContext = unsafeBitCast(gamePads[slotNr], to: UnsafeMutableRawPointer.self)
-        IOHIDDeviceRegisterInputValueCallback(device, gamePads[slotNr]!.actionCallback, hidContext)
+        let hidContext = unsafeBitCast(gamePads[slotNr],
+                                       to: UnsafeMutableRawPointer.self)
+        IOHIDDeviceRegisterInputValueCallback(device,
+                                              gamePads[slotNr]!.actionCallback,
+                                              hidContext)
 
-        // Inform controller
-        controller.toolbar.validateVisibleItems()
+        // Inform the controller about the new device
+        parent.toolbar.validateVisibleItems()
         
         listDevices()
     }
@@ -217,9 +220,7 @@ class GamePadManager {
         if let value = IOHIDDeviceGetProperty(device, locationIDKey) as? Int {
             locationID = value
         }
-        
-        // let locationID = String(describing: IOHIDDeviceGetProperty(device, locationIDKey))
-        
+                
         // Search for a matching locationID and remove device
         for (slotNr, device) in gamePads where device.locationID == locationID {
             gamePads[slotNr] = nil
@@ -236,25 +237,11 @@ class GamePadManager {
         }
         */
         
-        // Inform controller
-        controller.toolbar.validateVisibleItems()
+        // Inform the controller about the new device
+        parent.toolbar.validateVisibleItems()
         
         listDevices()
     }
-    
-    // Action method for events on a gamePad
-    // Returns true, iff a joystick event has been triggered on port A or B
-    /*
-    @discardableResult
-    func joystickAction(_ sender: GamePad!, events: [GamePadAction]) -> Bool {
-    
-        // Find slot of connected GamePad
-        let slot = lookupGamePad(sender)
-        
-        // Pass joystick event to the main controller
-        return controller.joystickAction(slot: slot, events: events)
-    }
-    */
     
     func listDevices() {
         
