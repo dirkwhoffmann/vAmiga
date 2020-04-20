@@ -612,7 +612,13 @@ class Inspector: DialogController {
 
         refresh(full: true)
     }
-
+    
+    @IBAction func refreshAction(_ sender: Any!) {
+        
+        track()
+        fullRefresh()
+    }
+    
     func scrollToPC() {
 
         instrTableView.jumpTo(addr: cpuInfo!.pc)
