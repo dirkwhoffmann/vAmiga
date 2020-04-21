@@ -9,14 +9,7 @@
 
 class DialogWindow: NSWindow {
 
-    /*
-    override func awakeFromNib() {
-        
-        track()
-    }
-    */
-    
-    // Called when the user presses ESC or Cmd+.
+    // Delegation method for ESC and Cmd+.
     override func cancelOperation(_ sender: Any?) {
                 
         if let controller = delegate as? DialogController {
