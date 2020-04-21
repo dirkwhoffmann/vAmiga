@@ -84,7 +84,10 @@ class GamePad {
             
         case 0x40B where productID == 0x6533:
             name = "Competition Pro SL-6602"
-            
+
+        case 0x738 where productID == 0x2217:
+            name = "Competition Pro SL-650212"
+
         case 0x1C59 where productID == 0x24:
             name = "The C64 Joystick"
             
