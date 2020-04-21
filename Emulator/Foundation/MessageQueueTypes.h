@@ -65,6 +65,9 @@ typedef enum
     MSG_DISK_PROTECTED,
     MSG_DISK_UNPROTECTED,
 
+    // Keyboard
+    MSG_CTRL_AMIGA_AMIGA,
+    
     // Ports
     MSG_SER_IN,
     MSG_SER_OUT,

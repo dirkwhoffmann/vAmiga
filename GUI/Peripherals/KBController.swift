@@ -13,18 +13,11 @@ import Carbon.HIToolbox
 class KBController: NSObject {
 
     var parent: MyController!
+    
+    var keyboard: KeyboardProxy { return parent.amiga.keyboard }
     var renderer: Renderer { return parent.renderer }
     var prefs: Preferences { return parent.prefs }
-    
-    // The Amiga proxy of the owning emulator instance
-     var amiga: AmigaProxy!
-
-    // Indicates if the joystick emulation keys should trigger key events.
-    // var disconnectJoyKeys = Defaults.disconnectJoyKeys
-    
-    // Indicates if the pressing the ESC key should exit fullscreen mode.
-    // var exitOnEsc = Defaults.exitOnEsc
-    
+        
     // Remembers the currently pressed key modifiers
     var leftShift   = false, rightShift   = false
     var leftControl = false, rightControl = false
@@ -36,12 +29,8 @@ class KBController: NSObject {
     var symKeyMapShifted: [UnicodeScalar: UInt16] = [:]
 
     init(parent: MyController) {
-//     override init() {
         
-        track()
-
         self.parent = parent
-        amiga = parent.amiga
 
         // Setup symbolic key maps
         for keyCode: UInt16 in 0 ... 255 {
@@ -143,7 +132,7 @@ class KBController: NSObject {
         // Exit if emulation keys are disconnected from the keyboard
         if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
         
-        amiga.keyboard.pressKey(macKey.amigaKeyCode)
+        keyboard.pressKey(macKey.amigaKeyCode)
     }
     
     func keyUp(with macKey: MacKey) {
@@ -160,19 +149,19 @@ class KBController: NSObject {
         // Exit if emulation keys are disconnected from the keyboard
         if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
         
-        amiga.keyboard.releaseKey(macKey.amigaKeyCode)
+        keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
     func keyDown(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        amiga.keyboard.pressKey(macKey.amigaKeyCode)
+        keyboard.pressKey(macKey.amigaKeyCode)
     }
     
     func keyUp(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        amiga.keyboard.releaseKey(macKey.amigaKeyCode)
+        keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
     func autoType(_ string: String) {

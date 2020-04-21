@@ -670,6 +670,9 @@ extension MyController {
 
             refreshStatusBar()
 
+        case MSG_CTRL_AMIGA_AMIGA:
+            resetAction(self)
+            
         case MSG_SER_IN:
             serialIn += String(UnicodeScalar(msg.data & 0xFF)!)
 
