@@ -59,8 +59,8 @@ extension ConfigController {
         hwLockText.isHidden = poweredOff
         hwLockSubText.isHidden = poweredOff
 
-        // OK Button
-        hwOKButton.title = buttonLabel
+        // Boot button
+        hwBootButton.isHidden = !bootable
     }
 
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {

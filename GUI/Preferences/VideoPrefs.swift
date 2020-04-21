@@ -85,8 +85,8 @@ extension ConfigController {
         vidHZoom.floatValue = config.hZoom * 1000
         vidVZoom.floatValue = config.vZoom * 1000
   
-        // OK Button
-        vidOKButton.title = buttonLabel
+        // Boot button
+        vidBootButton.isHidden = !bootable
     }
 
     //

@@ -42,8 +42,8 @@ extension ConfigController {
         // CIAs
         compTodBug.state = config.ciaA.todBug ? .on : .off
 
-        // OK Button
-        compOKButton.title = buttonLabel
+        // Boot Button
+        compBootButton.isHidden = !bootable
     }
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {

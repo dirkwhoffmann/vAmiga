@@ -43,8 +43,9 @@ class ConfigController: DialogController {
    
     @IBOutlet weak var romArosButton: NSButton!
 
-    // Button
+    // Buttons
     @IBOutlet weak var romOKButton: NSButton!
+    @IBOutlet weak var romBootButton: NSButton!
 
     //
     // Hardware preferences
@@ -82,6 +83,7 @@ class ConfigController: DialogController {
     // Buttons
     @IBOutlet weak var hwFactorySettingsPopup: NSPopUpButton!
     @IBOutlet weak var hwOKButton: NSButton!
+    @IBOutlet weak var hwBootButton: NSButton!
 
     //
     // Compatibility preferences
@@ -112,8 +114,9 @@ class ConfigController: DialogController {
     @IBOutlet weak var compLockText: NSTextField!
     @IBOutlet weak var compLockSubText: NSTextField!
 
-    // Button
+    // Buttons
     @IBOutlet weak var compOKButton: NSButton!
+    @IBOutlet weak var compBootButton: NSButton!
 
     //
     // Video preferences
@@ -156,14 +159,14 @@ class ConfigController: DialogController {
     @IBOutlet weak var vidHZoom: NSSlider!
     @IBOutlet weak var vidVZoom: NSSlider!
 
-    // Button
+    // Buttons
     @IBOutlet weak var vidOKButton: NSButton!
+    @IBOutlet weak var vidBootButton: NSButton!
 
-    // The button label
-    var buttonLabel: String {
+    var bootable: Bool {
         let off   = amiga.isPoweredOff()
         let ready = amiga.readyToPowerOn() == ERR_OK
-        return off && ready ? "Boot" : "OK"
+        return off && ready
     }
     
     // The tab to open first
@@ -219,10 +222,13 @@ class ConfigController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
         
-        track()
-
         hideSheet()
-        if buttonLabel == "Boot" { amiga.run() }
+    }
+
+    @IBAction func bootAction(_ sender: Any!) {
+        
+        hideSheet()
+        amiga.run()
     }
 }
 

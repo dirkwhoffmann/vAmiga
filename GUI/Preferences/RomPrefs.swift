@@ -82,8 +82,8 @@ extension ConfigController {
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
 
-        // OK Button
-        romOKButton.title = buttonLabel
+        // Boot button
+        romBootButton.isHidden = !bootable
     }
 
     //

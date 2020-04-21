@@ -11,6 +11,7 @@
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
                 <outlet property="compBltLevel1" destination="6br-Nl-Ztc" id="nMu-vk-ygR"/>
                 <outlet property="compBltLevel2" destination="V3E-d1-ztH" id="CLY-sh-STa"/>
+                <outlet property="compBootButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
                 <outlet property="compClxPlfPlf" destination="sdI-ho-fbb" id="dGa-sd-0gw"/>
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
@@ -28,6 +29,7 @@
                 <outlet property="extSubtitle" destination="c28-hS-Q9K" id="7yj-Lz-YZ1"/>
                 <outlet property="extTitle" destination="JWp-8A-LFh" id="tHC-Lo-79Z"/>
                 <outlet property="hwAgnusRevisionPopup" destination="dyR-Jf-UoN" id="orJ-f9-WtQ"/>
+                <outlet property="hwBootButton" destination="A9W-ux-mNv" id="b37-Qm-5eT"/>
                 <outlet property="hwChipRamPopup" destination="kPl-Wj-a9T" id="RZv-ib-fCE"/>
                 <outlet property="hwDeniseRevisionPopup" destination="M5c-fi-zMW" id="fS7-GD-0aF"/>
                 <outlet property="hwDf0Type" destination="6be-dT-F0g" id="xOn-Ik-VvV"/>
@@ -50,6 +52,7 @@
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
+                <outlet property="romBootButton" destination="2k7-hF-2uo" id="SYO-o2-xvo"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
                 <outlet property="romLockImage" destination="mlY-fv-BuR" id="jKz-dJ-e1F"/>
@@ -67,6 +70,7 @@
                 <outlet property="vidBloomWeightSlider" destination="X5P-s8-sLT" id="vHx-K7-QCd"/>
                 <outlet property="vidBlurPopUp" destination="85u-7O-Nsd" id="10z-Fy-2dG"/>
                 <outlet property="vidBlurRadiusSlider" destination="2Xn-Rh-ewd" id="d0G-vF-x36"/>
+                <outlet property="vidBootButton" destination="vrE-h3-1TF" id="VII-NJ-cQn"/>
                 <outlet property="vidBrightnessSlider" destination="zzU-KL-7dh" id="yOS-Ym-ZEX"/>
                 <outlet property="vidContrastSlider" destination="Mnh-Qb-xHP" id="Vda-5U-Q3G"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="QSV-1J-MdT" id="U21-sd-6r8"/>
@@ -109,12 +113,13 @@
                         <font key="font" metaFont="system"/>
                         <tabViewItems>
                             <tabViewItem label="Roms" identifier="Roms" id="Ztn-DU-0CG">
-                                <view key="view" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FCe-qX-IrM">
+                                <view key="view" translatesAutoresizingMaskIntoConstraints="NO" id="FCe-qX-IrM">
                                     <rect key="frame" x="10" y="33" width="600" height="424"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" id="A4H-Al-xc0">
-                                            <rect key="frame" x="535" y="5" width="59" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="528" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="OJw-jQ-CQy">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -386,11 +391,18 @@ DQ
                                                 <action selector="romDefaultAction:" target="-2" id="5M6-6I-7wR"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2k7-hF-2uo">
+                                            <rect key="frame" x="459" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Boot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ucp-6T-iK3">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="bootAction:" target="-2" id="V3o-g1-AMw"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="A4H-Al-xc0" secondAttribute="trailing" constant="12" id="etB-ge-xQD"/>
-                                        <constraint firstAttribute="bottom" secondItem="A4H-Al-xc0" secondAttribute="bottom" constant="12" id="xaT-Om-8Nr"/>
-                                    </constraints>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Hardware" identifier="Hardware" id="qjM-gP-Ggq">
@@ -447,7 +459,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" id="RnF-fY-9yx">
-                                            <rect key="frame" x="535" y="5" width="59" height="32"/>
+                                            <rect key="frame" x="528" y="5" width="69" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="Yig-5P-Eg5">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -461,7 +473,7 @@ DQ
                                             </connections>
                                         </button>
                                         <box verticalHuggingPriority="750" boxType="separator" id="9La-6F-c1a">
-                                            <rect key="frame" x="9" y="51" width="579" height="5"/>
+                                            <rect key="frame" x="9" y="51" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <popUpButton id="uR2-36-afT" userLabel="System">
@@ -955,12 +967,18 @@ DQ
                                                 <action selector="hwDefaultsAction:" target="-2" id="XZL-eA-KWg"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="A9W-ux-mNv">
+                                            <rect key="frame" x="459" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Boot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="PBx-Hc-CBg">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="bootAction:" target="-2" id="SCy-yG-ptN"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="bottom" secondItem="RnF-fY-9yx" secondAttribute="bottom" constant="12" id="1Xy-QA-wKJ"/>
-                                        <constraint firstAttribute="trailing" secondItem="RnF-fY-9yx" secondAttribute="trailing" constant="12" id="Zzp-xq-o7n"/>
-                                        <constraint firstAttribute="bottom" secondItem="uR2-36-afT" secondAttribute="bottom" constant="12" id="ptB-vY-clF"/>
-                                    </constraints>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Compatibility" identifier="Compatibility" id="afr-lU-o15">
@@ -969,7 +987,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" id="XEX-Bs-kpl">
-                                            <rect key="frame" x="535" y="5" width="59" height="32"/>
+                                            <rect key="frame" x="528" y="5" width="69" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="bdG-PE-xKb">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -983,7 +1001,7 @@ DQ
                                             </connections>
                                         </button>
                                         <box verticalHuggingPriority="750" boxType="separator" id="3xg-uv-E8Y">
-                                            <rect key="frame" x="9" y="51" width="579" height="5"/>
+                                            <rect key="frame" x="9" y="51" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YEJ-Wr-ldH">
@@ -1269,11 +1287,18 @@ DQ
                                                 <action selector="compPresetAction:" target="-2" id="qsd-c1-vgL"/>
                                             </connections>
                                         </popUpButton>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56p-by-mEB">
+                                            <rect key="frame" x="459" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Boot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="a6Q-7m-V1t">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="bootAction:" target="-2" id="5rA-Pz-1Yg"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="XEX-Bs-kpl" secondAttribute="trailing" constant="12" id="Vf3-0N-QUf"/>
-                                        <constraint firstAttribute="bottom" secondItem="XEX-Bs-kpl" secondAttribute="bottom" constant="12" id="l1d-MF-Np2"/>
-                                    </constraints>
                                 </view>
                             </tabViewItem>
                             <tabViewItem label="Display" identifier="Display" id="JEj-rV-IeL">
@@ -1282,7 +1307,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <box verticalHuggingPriority="750" boxType="separator" id="CPR-fX-RaL">
-                                            <rect key="frame" x="9" y="51" width="579" height="5"/>
+                                            <rect key="frame" x="9" y="51" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XQk-WZ-wqi">
@@ -1666,8 +1691,8 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" id="WcH-gc-UkP">
-                                            <rect key="frame" x="535" y="5" width="59" height="32"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <rect key="frame" x="528" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="LSD-U8-Qmm">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
@@ -1934,12 +1959,18 @@ DQ
                                                 <action selector="vidDefaultAction:" target="-2" id="TYN-0f-EdA"/>
                                             </connections>
                                         </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vrE-h3-1TF">
+                                            <rect key="frame" x="459" y="5" width="69" height="32"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                            <buttonCell key="cell" type="push" title="Boot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="eV7-wt-Emb">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="bootAction:" target="-2" id="JEA-I4-8RB"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
-                                    <constraints>
-                                        <constraint firstAttribute="trailing" secondItem="WcH-gc-UkP" secondAttribute="trailing" constant="12" id="973-8t-JWx"/>
-                                        <constraint firstAttribute="bottom" secondItem="WcH-gc-UkP" secondAttribute="bottom" constant="12" id="VsE-y4-TiP"/>
-                                        <constraint firstAttribute="bottom" secondItem="amv-0p-qxj" secondAttribute="bottom" constant="12" id="rbU-gb-Tqh"/>
-                                    </constraints>
                                 </view>
                             </tabViewItem>
                         </tabViewItems>
