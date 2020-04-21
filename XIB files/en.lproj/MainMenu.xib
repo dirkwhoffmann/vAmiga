@@ -123,7 +123,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Hardware" id="k7j-8d-ksq">
                                     <items>
-                                        <menuItem title="Configure..." id="Y6J-U9-htE" userLabel="Configure...">
+                                        <menuItem title="Configure..." keyEquivalent="" id="Y6J-U9-htE" userLabel="Configure...">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="configureAction:" target="-1" id="63m-54-OYh"/>
@@ -152,8 +152,7 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Inspector..." id="jIT-6f-DxM" userLabel="Inspector...">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Inspector..." keyEquivalent="i" id="jIT-6f-DxM" userLabel="Inspector...">
                                 <connections>
                                     <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
                                 </connections>
@@ -165,7 +164,8 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="bDU-dO-xxe"/>
-                            <menuItem title="Take Snapshot" keyEquivalent="t" id="BX4-y5-PoI" userLabel="Take Snapshot">
+                            <menuItem title="Take Snapshot" id="BX4-y5-PoI" userLabel="Take Snapshot">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="takeSnapshotAction:" target="-1" id="eOH-IU-76n"/>
                                 </connections>
@@ -177,7 +177,8 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="5uV-Cr-Apb"/>
-                            <menuItem title="Take Screenshot" keyEquivalent="T" id="fOc-QP-hyG" userLabel="Take Screenshot">
+                            <menuItem title="Take Screenshot" id="fOc-QP-hyG" userLabel="Take Screenshot">
+                                <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
                                     <action selector="takeScreenshotAction:" target="-1" id="bdx-QR-vOK"/>
                                 </connections>
@@ -223,14 +224,12 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="qq8-Qm-VmD"/>
-                            <menuItem title="Pause" id="430">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Pause" keyEquivalent="p" id="430">
                                 <connections>
                                     <action selector="pauseAction:" target="-1" id="505"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Reset" id="432">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Reset" keyEquivalent="r" id="432">
                                 <connections>
                                     <action selector="resetAction:" target="-1" id="SV8-EZ-6HI"/>
                                 </connections>
@@ -435,8 +434,7 @@
                 <menuItem title="Keyboard" id="212">
                     <menu key="submenu" title="Keyboard" id="213">
                         <items>
-                            <menuItem title="Show..." id="q11-Wg-Mnp">
-                                <modifierMask key="keyEquivalentModifierMask"/>
+                            <menuItem title="Show..." keyEquivalent="k" id="q11-Wg-Mnp">
                                 <connections>
                                     <action selector="keyboardAction:" target="-1" id="5ZR-vX-Iyg"/>
                                 </connections>
