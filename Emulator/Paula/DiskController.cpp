@@ -104,7 +104,6 @@ DiskController::spinning(unsigned driveNr)
 bool
 DiskController::spinning()
 {
-    // debug("spinning = %d%d%d%d\n", df[0]->motor, df[1]->motor, df[2]->motor, df[3]->motor); 
     return df[0]->motor || df[1]->motor || df[2]->motor || df[3]->motor;
 }
 

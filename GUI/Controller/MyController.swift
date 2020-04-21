@@ -178,29 +178,17 @@ class MyController: NSWindowController, MessageReceiver {
     // Returns the icon of the sand clock in the bottom bar
     var hourglassIcon: NSImage? {
         switch warpMode {
+        case .auto where amiga.warp():
+            return NSImage.init(named: "hourglass3Template")
         case .auto:
-            return NSImage.init(named: amiga.warp() ? "hourglass3Template" : "hourglass1Template")
+            return NSImage.init(named: "hourglass1Template")
         case .on:
             return NSImage.init(named: "warpLockOnTemplate")
         case .off:
             return NSImage.init(named: "warpLockOffTemplate")
         }
     }
-
-    /*
-    var hourglassIcon: NSImage? {
-        if amiga.warp() {
-            if warpMode == .auto {
-                return NSImage.init(named: "hourglass2Template")
-            } else {
-                return NSImage.init(named: "hourglass3Template")
-            }
-        } else {
-            return NSImage.init(named: "hourglass1Template")
-        }
-    }
-    */
-
+    
     //
     // Outlets
     //
@@ -751,9 +739,9 @@ extension MyController {
         track()
 
         switch warpMode {
-        case .auto: warpMode = .on
-        case .on: warpMode = .off
-        case .off: warpMode = .auto
+        case .auto: warpMode = .off
+        case .off: warpMode = .on
+        case .on: warpMode = .auto
         }
 
         refreshStatusBar()

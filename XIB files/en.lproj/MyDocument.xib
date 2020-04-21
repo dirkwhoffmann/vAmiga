@@ -109,11 +109,11 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
-                        <rect key="frame" x="607" y="4" width="42" height="16"/>
+                        <rect key="frame" x="578" y="4" width="42" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="42" id="9hs-2E-rP5"/>
                             <constraint firstAttribute="height" constant="16" id="ymp-gN-SpH"/>
@@ -152,7 +152,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -181,7 +181,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -210,16 +210,16 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
-                        <rect key="frame" x="655" y="7" width="29" height="11"/>
+                        <rect key="frame" x="626" y="7" width="58" height="11"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="25" id="do5-xh-bdQ"/>
                             <constraint firstAttribute="height" constant="11" id="eTx-0c-FGQ"/>
+                            <constraint firstAttribute="width" constant="54" id="rkf-cA-xTO"/>
                         </constraints>
-                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="Clock" id="1703">
+                        <textFieldCell key="cell" controlSize="mini" sendsActionOnEndEditing="YES" alignment="right" title="99.99 MHz" id="1703">
                             <font key="font" metaFont="menu" size="9"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

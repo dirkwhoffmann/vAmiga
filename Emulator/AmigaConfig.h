@@ -16,7 +16,7 @@
 
 // Snapshot version number
 #define V_MAJOR 0
-#define V_MINOR 1
+#define V_MINOR 9
 #define V_SUBMINOR 0
 
 // Assertion checking (uncomment in release build)
