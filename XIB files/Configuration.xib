@@ -1670,10 +1670,10 @@ DQ
                                                         <menuItem title="Revert to..." hidden="YES" id="cQe-Hf-N2J">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Standard Geometry" id="B7f-wu-fjI">
+                                                        <menuItem title="Centered Geometry" id="B7f-wu-fjI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Centered Geometry" tag="1" id="Pop-59-k1j">
+                                                        <menuItem title="UAE Geometry" tag="1" id="Pop-59-k1j">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
                                                         <menuItem isSeparatorItem="YES" id="fps-H7-T2w"/>
