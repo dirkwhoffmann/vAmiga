@@ -62,7 +62,7 @@ class Monitor: DialogController {
         refresh()
     }
 
-    override func refresh() {
+    func refresh() {
         
         func enabled(_ monitor: Int) -> NSControl.StateValue {
             return parent.renderer.monitorEnabled[monitor] ? .on : .off

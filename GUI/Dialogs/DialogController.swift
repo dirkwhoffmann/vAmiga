@@ -8,51 +8,47 @@
 // -----------------------------------------------------------------------------
 
 class DialogWindow: NSWindow {
-    
-    /* Fetch first responder status
-     * This function is called in awakeFromNib() to ensure that we receive key
-     * key events. In theory, this call should not be needed, but I had issues
-     * in the past with not responding windows.
-     */
-    func respondToEvents() {
-        
-        track()
-        DispatchQueue.main.async {
-            self.makeFirstResponder(self)
-        }
-    }
-    
+
+    /*
     override func awakeFromNib() {
         
         track()
-        // respondToEvents()
     }
+    */
     
     // Called when the user presses ESC or Cmd+.
     override func cancelOperation(_ sender: Any?) {
-        
-        let controller = delegate as? DialogController
-        controller?.cancelAction(sender)
+                
+        if let controller = delegate as? DialogController {
+            controller.cancelAction(sender)
+        }
     }
 }
 
 /* Base class for all auxiliary windows.
- * The class extends NSWindowController by a reference to the window controller
+ * The class extends NSWindowController by a reference to the controller
  * of the connected emulator window (parent) and a reference to the parents
- * proxy object (amiga).
+ * proxy object (amiga). It also provides some wrappers around showing and
+ * hiding the window.
  */
-class DialogController: NSWindowController {
+protocol DialogControllerDelegate: class {
+    
+    // Called before beginSheet() is called
+    func sheetWillShow()
 
-    // The window controller of the owning emulator instance
+    // Called after beginSheet() has beed called
+    func sheetDidShow()
+
+    // Called after the completion handler has been executed
+    func cleanup()
+}
+
+class DialogController: NSWindowController, DialogControllerDelegate {
+
     var parent: MyController!
-
-    // The Amiga proxy of the owning emulator instance
     var amiga: AmigaProxy!
 
-    // Factory method
     static func make(parent: MyController, nibName: NSNib.Name) -> Self? {
-
-        track()
 
         let controller = Self.init(windowNibName: nibName)
         controller.parent = parent
@@ -61,15 +57,26 @@ class DialogController: NSWindowController {
         return controller
     }
 
-    func sheetWillShow() { }
-    func sheetDidShow() { }
-
     override func windowWillLoad() {
         track()
     }
+    
     override func windowDidLoad() {
         track()
     }
+
+    func sheetWillShow() {
+         
+    }
+    
+    func sheetDidShow() {
+        
+    }
+    
+    func cleanup() {
+        
+    }
+    
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
         sheetWillShow()
@@ -77,24 +84,14 @@ class DialogController: NSWindowController {
         parent.window?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {
                 
-                self.cleanup()
                 handler?()
+                self.cleanup()
             }
         })
 
         sheetDidShow()
-        refresh()
     }
-        
-    func refresh() {
-        
-    }
-    
-    func cleanup() {
-        // Don't delete this function. Calling cleanup in the sheet's completion
-        // handler makes sure that ARC doesn't delete the reference too early.
-    }
-    
+            
     func hideSheet() {
     
         if let win = window {
@@ -103,13 +100,13 @@ class DialogController: NSWindowController {
         }
     }
     
-    // Default action method for OK
+    // Default action method for the OK button
     @IBAction func okAction(_ sender: Any!) {
         
         hideSheet()
     }
     
-    // Default action method for Cancel
+    // Default action method for the Cancel button
     @IBAction func cancelAction(_ sender: Any!) {
         
         hideSheet()

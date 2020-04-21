@@ -117,7 +117,7 @@ class VKBController: DialogController, NSWindowDelegate {
         refresh()
     }
     
-    override func refresh() {
+    func refresh() {
                 
         guard let keyboard = amiga.keyboard else { return }
         

@@ -188,7 +188,7 @@ class ConfigController: DialogController {
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
     }
 
-    override func refresh() {
+    func refresh() {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
             

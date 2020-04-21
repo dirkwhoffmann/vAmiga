@@ -10,6 +10,7 @@
 class PreferencesController: DialogController {
 
     var prefs: Preferences { return parent.prefs }
+    var gamePadManager: GamePadManager { return parent.gamePadManager! }
     
     @IBOutlet weak var prefTabView: NSTabView!
         
@@ -120,7 +121,7 @@ class PreferencesController: DialogController {
         if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
     }
 
-    override func refresh() {
+    func refresh() {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
             
@@ -132,15 +133,17 @@ class PreferencesController: DialogController {
         }
     }
     
-    func keyDown(with key: MacKey) {
+    @discardableResult
+    func keyDown(with key: MacKey) -> Bool {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
-            case "Devices": devKeyDown(with: key)
+            case "Devices": return devKeyDown(with: key)
             default: break
             }
         }
+        return false
     }
     
     @IBAction override func okAction(_ sender: Any!) {

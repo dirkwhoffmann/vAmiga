@@ -631,16 +631,13 @@ extension Inspector: NSWindowDelegate {
 
         track("Closing inspector")
 
-        // Disconnect the inspector from the parent controller
-        parent?.inspector = nil
-
         // Stop the refresh timer
         timerLock.lock()
         timer?.invalidate()
         timer = nil
         timerLock.unlock()
 
-        // Leave debugging mode
+        // Leave debug mode
         amiga?.disableDebugging()
         amiga?.clearInspectionTarget()
     }

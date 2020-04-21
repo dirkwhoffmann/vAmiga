@@ -254,12 +254,9 @@ extension MyController {
             return document?.changeCount != 0
         }
         set {
-            track("needsSaving: \(newValue) \(prefs.closeWithoutAsking)")
             if newValue && !prefs.closeWithoutAsking {
-                track("Change done")
                 document?.updateChangeCount(.changeDone)
             } else {
-                track("Change cleared")
                 document?.updateChangeCount(.changeCleared)
             }
         }

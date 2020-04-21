@@ -104,27 +104,25 @@ extension PreferencesController {
     // Keyboard events
     //
     
-    func devKeyDown(with macKey: MacKey) {
+    /* Handles a key press event.
+     * Returns true if the controller has responded to this key.
+     */
+    func devKeyDown(with macKey: MacKey) -> Bool {
+
+        // Only proceed if a recording sessing is in progress
+        if devRecordedKey == nil { return false }
         
-        let manager = parent.gamePadManager!
-
-        // Check for the ESC key
-        if macKey == MacKey.escape {
-
-            // Close sheet if no key is being recorded at the moment
-            if devRecordedKey == nil { cancelAction(self); return }
-
-            // Abort the recording sessing
-            devRecordedKey = nil
+        track()
+        
+        // Record the key if it is not the ESC key
+        if macKey != MacKey.escape {
+            let (slot, action) = gamePadAction(for: devRecordedKey!)
+            gamePadManager.gamePads[slot]?.bind(key: macKey, action: action)
         }
 
-        if let rec = devRecordedKey {
-            let (slot, action) = gamePadAction(for: rec)
-            manager.gamePads[slot]?.bind(key: macKey, action: action)
-            devRecordedKey = nil
-        }
-
+        devRecordedKey = nil
         refresh()
+        return true
     }
     
     //

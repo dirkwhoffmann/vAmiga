@@ -7172,36 +7172,6 @@
             </connections>
             <point key="canvasLocation" x="143" y="217"/>
         </window>
-        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="ESC-cU-9qo">
-            <rect key="frame" x="0.0" y="0.0" width="58" height="16"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <textFieldCell key="cell" lineBreakMode="clipping" title="Minterm " id="AXY-jY-f3Z">
-                <font key="font" metaFont="system"/>
-                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-            </textFieldCell>
-            <point key="canvasLocation" x="73" y="545"/>
-        </textField>
-        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" id="0Lt-aI-85U">
-            <rect key="frame" x="0.0" y="0.0" width="76" height="14"/>
-            <autoresizingMask key="autoresizingMask"/>
-            <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Blitter control" id="gxx-MO-Ccb">
-                <font key="font" metaFont="message" size="11"/>
-                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-            </textFieldCell>
-            <point key="canvasLocation" x="114" y="538"/>
-        </textField>
-        <textField verticalHuggingPriority="750" id="7EC-pk-rNR">
-            <rect key="frame" x="0.0" y="0.0" width="58" height="14"/>
-            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Channel A " id="V8O-r6-Emf">
-                <font key="font" metaFont="message" size="11"/>
-                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-            </textFieldCell>
-            <point key="canvasLocation" x="260" y="538"/>
-        </textField>
     </objects>
     <resources>
         <image name="NSAddTemplate" width="11" height="11"/>

@@ -9,8 +9,9 @@
 
 import Carbon.HIToolbox
 
-class PreferencesWindow: NSWindow {
+class PreferencesWindow: DialogWindow {
     
+    /*
     func respondToEvents() {
         DispatchQueue.main.async {
             self.makeFirstResponder(self)
@@ -22,12 +23,20 @@ class PreferencesWindow: NSWindow {
         track()
         respondToEvents()
     }
+    */
     
     override func keyDown(with event: NSEvent) {
         
         track()
-        let controller = delegate as? PreferencesController
-        controller?.keyDown(with: MacKey.init(event: event))
+        
+        if let parent = delegate as? PreferencesController {
+            if parent.keyDown(with: MacKey.init(event: event)) {
+                return
+            }
+        }
+        
+        // The controller wasn't interested. Process it as usual.
+        interpretKeyEvents([event])
     }
 
     override func flagsChanged(with event: NSEvent) {
