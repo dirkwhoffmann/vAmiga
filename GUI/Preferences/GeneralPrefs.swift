@@ -14,7 +14,8 @@ extension PreferencesController {
         track()
 
         // Drive
-        emuWarpLoad.state = prefs.warpLoad ? .on : .off
+        emuDriveBlankDiskFormat.selectItem(withTag: prefs.driveBlankDiskFormatIntValue)
+        emuEjectWithoutAskingButton.state = prefs.ejectWithoutAsking ? .on : .off
         emuDriveSounds.state = prefs.driveSounds ? .on : .off
         emuDriveSoundPan.selectItem(withTag: Int(prefs.driveSoundPan))
         emuDriveInsertSound.state = prefs.driveInsertSound ? .on : .off
@@ -26,7 +27,6 @@ extension PreferencesController {
         emuDriveEjectSound.isEnabled = prefs.driveSounds
         emuDriveHeadSound.isEnabled = prefs.driveSounds
         emuDrivePollSound.isEnabled = prefs.driveSounds
-        emuDriveBlankDiskFormat.selectItem(withTag: prefs.driveBlankDiskFormatIntValue)
 
         // Fullscreen
         emuAspectRatioButton.state = prefs.keepAspectRatio ? .on : .off
@@ -42,22 +42,18 @@ extension PreferencesController {
         emuScreenshotSourcePopup.selectItem(withTag: prefs.screenshotSource)
         emuScreenshotTargetPopup.selectItem(withTag: prefs.screenshotTargetIntValue)
         
+        // Drive
+        emuWarpMode.selectItem(withTag: prefs.warpModeIntValue)
+
         // Miscellaneous
         emuPauseInBackground.state = prefs.pauseInBackground ? .on : .off
         emuCloseWithoutAskingButton.state = prefs.closeWithoutAsking ? .on : .off
-        emuEjectWithoutAskingButton.state = prefs.ejectWithoutAsking ? .on : .off
     }
 
     //
     // Action methods (Drive)
     //
-    
-    @IBAction func emuWarpLoadAction(_ sender: NSButton!) {
         
-        prefs.warpLoad = sender.state == .on
-        refresh()
-    }
-    
     @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
         
         prefs.driveSounds = sender.state == .on
@@ -162,6 +158,16 @@ extension PreferencesController {
         refresh()
     }
 
+    //
+    // Action methods (Warp mode)
+    //
+
+    @IBAction func emuWarpModeAction(_ sender: NSPopUpButton!) {
+        
+        prefs.warpMode = WarpMode(rawValue: sender.selectedTag())!
+        refresh()
+    }
+    
     //
     // Action methods (Miscellaneous)
     //

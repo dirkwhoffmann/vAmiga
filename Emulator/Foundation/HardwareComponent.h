@@ -194,11 +194,11 @@ public:
     bool getWarp() { return warp; }
 
     // Switches warp mode on
-    void warpOn();
+    virtual void warpOn();
     virtual void _warpOn() { }
 
     // Switches warp mode off
-    void warpOff();
+    virtual void warpOff();
     virtual void _warpOff() { }
 
 

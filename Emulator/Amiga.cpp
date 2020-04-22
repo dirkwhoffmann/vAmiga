@@ -575,6 +575,22 @@ Amiga::reset()
 }
 
 void
+Amiga::warpOn()
+{
+    suspend();
+    HardwareComponent::warpOn();
+    resume();
+}
+
+void
+Amiga::warpOff()
+{
+    suspend();
+    HardwareComponent::warpOff();
+    resume();
+}
+
+void
 Amiga::_powerOn()
 {
     debug(RUN_DEBUG, "Power on\n");

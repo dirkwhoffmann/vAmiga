@@ -232,6 +232,8 @@ public:
     void powerOff() override;
     void run() override;
     void reset() override;
+    void warpOn() override;
+    void warpOff() override;
 
 private:
 

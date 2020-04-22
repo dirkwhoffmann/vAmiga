@@ -9,11 +9,11 @@
 
 import AVFoundation
 
-enum WarpMode {
+enum WarpMode: Int {
 
     case auto
-    case on
     case off
+    case on
 }
 
 protocol MessageReceiver {
@@ -89,12 +89,8 @@ class MyController: NSWindowController, MessageReceiver {
     // Serial input and output
     var serialIn = ""
     var serialOut = ""
-
-    // Warp mode
-    var warpMode = WarpMode.auto { didSet { updateWarp() } }
     
-    // Remembers if the emulator was running or paused when it lost focus.
-    // Needed to implement the pauseInBackground feature.
+    // Remembers the running state for the pauseInBackground feature
     var pauseInBackgroundSavedState = false
 
     // Application preferences
@@ -163,29 +159,30 @@ class MyController: NSWindowController, MessageReceiver {
         
     // Updates the warp status
     func updateWarp() {
-
+        
         var warp: Bool
-
-        switch warpMode {
-        case .auto: warp = amiga.diskController.spinning() && prefs.warpLoad
-        case .on: warp = true
+        
+        switch prefs.warpMode {
+        case .auto: warp = amiga.diskController.spinning()
         case .off: warp = false
+        case .on: warp = true
         }
-
+        
         warp ? amiga.warpOn() : amiga.warpOff()
+        refreshStatusBar()
     }
     
     // Returns the icon of the sand clock in the bottom bar
     var hourglassIcon: NSImage? {
-        switch warpMode {
+        switch prefs.warpMode {
         case .auto where amiga.warp():
             return NSImage.init(named: "hourglass3Template")
         case .auto:
             return NSImage.init(named: "hourglass1Template")
-        case .on:
-            return NSImage.init(named: "warpLockOnTemplate")
         case .off:
             return NSImage.init(named: "warpLockOffTemplate")
+        case .on:
+            return NSImage.init(named: "warpLockOnTemplate")
         }
     }
     
@@ -499,7 +496,6 @@ extension MyController {
             inspector?.fullRefresh()
 
         case MSG_POWER_ON:
-
             serialIn = ""
             serialOut = ""
             virtualKeyboard = nil
@@ -508,33 +504,28 @@ extension MyController {
             inspector?.fullRefresh()
 
         case MSG_POWER_OFF:
-
             renderer.zoomOut(steps: 20) // blendOut()
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
 
         case MSG_RUN:
-
             needsSaving = true
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
 
         case MSG_PAUSE:
-
             toolbar.validateVisibleItems()
             inspector?.fullRefresh()
             refreshStatusBar()
 
         case MSG_RESET:
-            
             mydocument?.deleteBootDiskID()
             mydocument?.setBootDiskID(amiga.df0.fnv())
             inspector?.fullRefresh()
 
         case MSG_WARP_ON,
              MSG_WARP_OFF:
-
             refreshStatusBar()
 
         case MSG_POWER_LED_ON:
@@ -593,7 +584,6 @@ extension MyController {
             refreshStatusBar()
 
         case MSG_DRIVE_LED_ON:
-            
             let image = NSImage.init(named: "driveLedOn")
             switch msg.data {
             case 0: df0LED.image = image
@@ -604,7 +594,6 @@ extension MyController {
             }
             
         case MSG_DRIVE_LED_OFF:
-            
             let image = NSImage.init(named: "driveLedOff")
             switch msg.data {
             case 0: df0LED.image = image
@@ -616,26 +605,22 @@ extension MyController {
             
         case MSG_DRIVE_MOTOR_ON,
              MSG_DRIVE_MOTOR_OFF:
-            
             updateWarp()
             refreshStatusBar()
 
         case MSG_DRIVE_HEAD:
-
             if prefs.driveSounds && prefs.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar()
   
         case MSG_DRIVE_HEAD_POLL:
- 
             if prefs.driveSounds && prefs.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar()
             
         case MSG_DISK_INSERT:
-            
             if prefs.driveSounds && prefs.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
@@ -643,7 +628,6 @@ extension MyController {
             refreshStatusBar()
             
         case MSG_DISK_EJECT:
-            
             if prefs.driveSounds && prefs.driveEjectSound {
                 macAudio.playSound(name: "eject", volume: 0.3)
             }
@@ -655,7 +639,6 @@ extension MyController {
              MSG_DISK_SAVED,
              MSG_DISK_PROTECTED,
              MSG_DISK_UNPROTECTED:
-
             refreshStatusBar()
 
         case MSG_CTRL_AMIGA_AMIGA:
@@ -738,10 +721,10 @@ extension MyController {
 
         track()
 
-        switch warpMode {
-        case .auto: warpMode = .off
-        case .off: warpMode = .on
-        case .on: warpMode = .auto
+        switch prefs.warpMode {
+        case .auto: prefs.warpMode = .off
+        case .off: prefs.warpMode = .on
+        case .on: prefs.warpMode = .auto
         }
 
         refreshStatusBar()

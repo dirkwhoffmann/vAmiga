@@ -28,20 +28,18 @@ class Preferences {
     //
         
     // Floppy
-    var warpLoad = GeneralDefaults.std.warpLoad {
-        didSet { for c in parent.controllers { c.updateWarp() } }
+    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
+    var driveBlankDiskFormatIntValue: Int {
+        get { return Int(driveBlankDiskFormat.rawValue) }
+        set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
+    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
     var driveSoundPan = GeneralDefaults.std.driveSoundPan
     var driveInsertSound = GeneralDefaults.std.driveInsertSound
     var driveEjectSound = GeneralDefaults.std.driveEjectSound
     var driveHeadSound = GeneralDefaults.std.driveHeadSound
     var drivePollSound = GeneralDefaults.std.drivePollSound
-    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
-    var driveBlankDiskFormatIntValue: Int {
-        get { return Int(driveBlankDiskFormat.rawValue) }
-        set { driveBlankDiskFormat = FileSystemType.init(newValue) }
-    }
     
     // Fullscreen
     var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
@@ -63,9 +61,17 @@ class Preferences {
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
     
+    // Warp mode
+    var warpMode = GeneralDefaults.std.warpMode {
+        didSet { for c in parent.controllers { c.updateWarp() } }
+    }
+    var warpModeIntValue: Int {
+        get { return Int(warpMode.rawValue) }
+        set { warpMode = WarpMode.init(rawValue: newValue)! }
+    }
+    
     // Misc
     var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
-    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var pauseInBackground = GeneralDefaults.std.pauseInBackground
 
     //
@@ -122,14 +128,14 @@ class Preferences {
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
         
         // Floppy
-        warpLoad = defaults.warpLoad
+        driveBlankDiskFormat = defaults.driveBlankDiskFormat
+        ejectWithoutAsking = defaults.ejectWithoutAsking
         driveSounds = defaults.driveSounds
         driveSoundPan = defaults.driveSoundPan
         driveInsertSound = defaults.driveInsertSound
         driveEjectSound = defaults.driveEjectSound
         driveHeadSound = defaults.driveHeadSound
         drivePollSound = defaults.drivePollSound
-        driveBlankDiskFormat = defaults.driveBlankDiskFormat
 
         // Fullscreen
         keepAspectRatio = defaults.keepAspectRatio
@@ -143,10 +149,12 @@ class Preferences {
         screenshotSource = defaults.screenshotSource
         screenshotTarget = defaults.screenshotTarget
         
+        // Warp mode
+        warpMode = defaults.warpMode
+
         // Misc
         pauseInBackground = defaults.pauseInBackground
         closeWithoutAsking = defaults.closeWithoutAsking
-        ejectWithoutAsking = defaults.ejectWithoutAsking
     }
     
     func loadGeneralUserDefaults() {
@@ -154,14 +162,14 @@ class Preferences {
         let defaults = UserDefaults.standard
            
         // Floppy
-        warpLoad = defaults.bool(forKey: Keys.warpLoad)
+        driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
+        ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
         driveSounds = defaults.bool(forKey: Keys.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
         driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
         driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
         driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
         drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
-        driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
         
         // Fullscreen
         keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
@@ -175,10 +183,12 @@ class Preferences {
         screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
         screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
+        // Warp mode
+        warpModeIntValue = defaults.integer(forKey: Keys.warpMode)
+
         // Misc
         pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
-        ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
     }
     
     func saveGeneralUserDefaults() {
@@ -186,7 +196,8 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Floppy
-        defaults.set(warpLoad, forKey: Keys.warpLoad)
+        defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
+        defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
         defaults.set(driveInsertSound, forKey: Keys.driveInsertSound)
@@ -205,12 +216,13 @@ class Preferences {
         defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
         defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
         defaults.set(screenshotSource, forKey: Keys.screenshotSource)
-        defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         
+        // Warp mode
+        defaults.set(warpModeIntValue, forKey: Keys.warpMode)
+
         // Misc
         defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
         defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
-        defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
     }
     
     //

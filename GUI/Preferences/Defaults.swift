@@ -136,14 +136,14 @@ extension MyController {
 struct Keys {
     
     // Drives
-    static let warpLoad               = "VAMIGA_GEN_WarpLoad"
+    static let driveBlankDiskFormat   = "VAMIGA_GEN_DriveBlankDiskFormat"
+    static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
     static let driveSounds            = "VAMIGA_GEN_DriveSounds"
     static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
     static let driveInsertSound       = "VAMIGA_GEN_DriveInsertSound"
     static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
     static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
     static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
-    static let driveBlankDiskFormat   = "VAMIGA_GEN_DriveBlankDiskFormat"
 
     // Snapshots and screenshots
     static let autoSnapshots          = "VAMIGA_GEN_AutoSnapshots"
@@ -159,8 +159,10 @@ struct Keys {
 
     // User dialogs
     static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
-    static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
     
+    // Warp mode
+    static let warpMode               = "VAMIGA_GEN_WarpMode"
+
     // Miscellaneous
     static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
 }
@@ -168,14 +170,14 @@ struct Keys {
 struct GeneralDefaults {
     
     // Drives
-    let warpLoad: Bool
+    let driveBlankDiskFormat: FileSystemType
+    let ejectWithoutAsking: Bool
     let driveSounds: Bool
     let driveSoundPan: Double
     let driveInsertSound: Bool
     let driveEjectSound: Bool
     let driveHeadSound: Bool
     let drivePollSound: Bool
-    let driveBlankDiskFormat: FileSystemType
     
     // Snapshots and Screenshots
     let autoSnapshots: Bool
@@ -189,10 +191,12 @@ struct GeneralDefaults {
     let keepAspectRatio: Bool
     let exitOnEsc: Bool
     
+    // Warp mode
+    let warpMode: WarpMode
+
     // Miscellaneous
     let pauseInBackground: Bool
     let closeWithoutAsking: Bool
-    let ejectWithoutAsking: Bool
 
     //
     // Schemes
@@ -200,14 +204,14 @@ struct GeneralDefaults {
     
     static let std = GeneralDefaults.init(
         
-        warpLoad: true,
+        driveBlankDiskFormat: FS_OFS,
+        ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
         driveInsertSound: true,
         driveEjectSound: true,
         driveHeadSound: true,
         drivePollSound: false,
-        driveBlankDiskFormat: FS_OFS,
         
         autoSnapshots: false,
         autoSnapshotInterval: 20,
@@ -219,9 +223,10 @@ struct GeneralDefaults {
         keepAspectRatio: false,
         exitOnEsc: true,
         
+        warpMode: .auto,
+
         pauseInBackground: false,
-        closeWithoutAsking: false,
-        ejectWithoutAsking: false
+        closeWithoutAsking: false
     )
 }
 
@@ -232,14 +237,14 @@ extension UserDefaults {
         let defaults = GeneralDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.warpLoad: defaults.warpLoad,
+            Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),
+            Keys.ejectWithoutAsking: defaults.ejectWithoutAsking,
             Keys.driveSounds: defaults.driveSounds,
             Keys.driveSoundPan: defaults.driveSoundPan,
             Keys.driveInsertSound: defaults.driveInsertSound,
             Keys.driveEjectSound: defaults.driveEjectSound,
             Keys.driveHeadSound: defaults.driveHeadSound,
             Keys.drivePollSound: defaults.drivePollSound,
-            Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),
 
             Keys.autoSnapshots: defaults.autoSnapshots,
             Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
@@ -251,9 +256,10 @@ extension UserDefaults {
             Keys.keepAspectRatio: defaults.keepAspectRatio,
             Keys.exitOnEsc: defaults.exitOnEsc,
             
+            Keys.warpMode: Int(defaults.warpMode.rawValue),
+
             Keys.pauseInBackground: defaults.pauseInBackground,
-            Keys.closeWithoutAsking: defaults.closeWithoutAsking,
-            Keys.ejectWithoutAsking: defaults.ejectWithoutAsking
+            Keys.closeWithoutAsking: defaults.closeWithoutAsking
         ]
         
         let userDefaults = UserDefaults.standard
@@ -264,29 +270,30 @@ extension UserDefaults {
     static func resetGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
-
-        let keys = [Keys.warpLoad,
-                    Keys.driveSounds,
-                    Keys.driveSoundPan,
-                    Keys.driveInsertSound,
-                    Keys.driveEjectSound,
-                    Keys.driveHeadSound,
-                    Keys.drivePollSound,
-                    Keys.driveBlankDiskFormat,
-                    
-                    Keys.autoSnapshots,
-                    Keys.autoSnapshotInterval,
-                    Keys.autoScreenshots,
-                    Keys.autoScreenshotInterval,
-                    Keys.screenshotSource,
-                    Keys.screenshotTarget,
-                    
-                    Keys.keepAspectRatio,
-                    Keys.exitOnEsc,
-                    
-                    Keys.pauseInBackground,
-                    Keys.closeWithoutAsking,
-                    Keys.ejectWithoutAsking
+        
+        let keys = [ Keys.driveBlankDiskFormat,
+                     Keys.ejectWithoutAsking,
+                     Keys.driveSounds,
+                     Keys.driveSoundPan,
+                     Keys.driveInsertSound,
+                     Keys.driveEjectSound,
+                     Keys.driveHeadSound,
+                     Keys.drivePollSound,
+                     
+                     Keys.autoSnapshots,
+                     Keys.autoSnapshotInterval,
+                     Keys.autoScreenshots,
+                     Keys.autoScreenshotInterval,
+                     Keys.screenshotSource,
+                     Keys.screenshotTarget,
+                     
+                     Keys.keepAspectRatio,
+                     Keys.exitOnEsc,
+                     
+                     Keys.warpMode,
+                     
+                     Keys.pauseInBackground,
+                     Keys.closeWithoutAsking
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }

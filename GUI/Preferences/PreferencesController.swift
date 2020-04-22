@@ -19,14 +19,14 @@ class PreferencesController: DialogController {
     //
     
     // Drive
-    @IBOutlet weak var emuWarpLoad: NSButton!
+    @IBOutlet weak var emuDriveBlankDiskFormat: NSPopUpButton!
+    @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
     @IBOutlet weak var emuDriveSounds: NSButton!
     @IBOutlet weak var emuDriveSoundPan: NSPopUpButton!
     @IBOutlet weak var emuDriveInsertSound: NSButton!
     @IBOutlet weak var emuDriveEjectSound: NSButton!
     @IBOutlet weak var emuDriveHeadSound: NSButton!
     @IBOutlet weak var emuDrivePollSound: NSButton!
-    @IBOutlet weak var emuDriveBlankDiskFormat: NSPopUpButton!
 
     // Fullscreen
     @IBOutlet weak var emuAspectRatioButton: NSButton!
@@ -40,10 +40,12 @@ class PreferencesController: DialogController {
     @IBOutlet weak var emuScreenshotSourcePopup: NSPopUpButton!
     @IBOutlet weak var emuScreenshotTargetPopup: NSPopUpButton!
         
+    // Warp mode
+    @IBOutlet weak var emuWarpMode: NSPopUpButton!
+
     // Misc
     @IBOutlet weak var emuPauseInBackground: NSButton!
     @IBOutlet weak var emuCloseWithoutAskingButton: NSButton!
-    @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
 
     //
     // Devices preferences
