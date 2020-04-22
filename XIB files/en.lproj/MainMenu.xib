@@ -706,7 +706,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="bgq-nN-pbJ">
                                     <items>
-                                        <menuItem title="0" tag="1" id="KKB-IG-ytS">
+                                        <menuItem title="0" tag="10" id="KKB-IG-ytS">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="exportRecentDiskAction:" target="-1" id="vNT-eP-y7y"/>
@@ -842,7 +842,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="Yve-kj-w1H">
                                     <items>
-                                        <menuItem title="0" tag="2" id="EjO-Lp-hf9">
+                                        <menuItem title="0" tag="20" id="EjO-Lp-hf9">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="exportRecentDiskAction:" target="-1" id="O3c-Mv-fbT"/>
@@ -978,7 +978,7 @@
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Export To" id="Vfk-95-hI3">
                                     <items>
-                                        <menuItem title="0" tag="3" id="EAL-ZQ-aF7">
+                                        <menuItem title="0" tag="30" id="EAL-ZQ-aF7">
                                             <modifierMask key="keyEquivalentModifierMask"/>
                                             <connections>
                                                 <action selector="exportRecentDiskAction:" target="-1" id="4w8-Th-3kW"/>

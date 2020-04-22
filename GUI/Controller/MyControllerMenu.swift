@@ -563,19 +563,26 @@ extension MyController: NSMenuItemValidation {
     @IBAction func exportRecentDiskDummyAction1(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction2(_ sender: NSMenuItem!) {}
     @IBAction func exportRecentDiskDummyAction3(_ sender: NSMenuItem!) {}
+    
+    func exportRecentDiskAction(drive: Int, slot: Int) {
+        
+        track("drive: \(drive) slot: \(slot)")
+        
+        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
+            do {
+                mydocument?.export(drive: drive, to: url)
+            }
+        }
+    }
+
     @IBAction func exportRecentDiskAction(_ sender: NSMenuItem!) {
         
         track()
         
-        let nr = sender.tag
-        let slot = Int(sender.title)!
-        
-        // Get URL and export
-        if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: nr) {
-            do {
-                mydocument?.export(drive: nr, to: url)
-            }
-        }
+        let drive = sender.tag / 10
+        let slot  = sender.tag % 10
+                
+        exportRecentDiskAction(drive: drive, slot: slot)
     }
     
     @IBAction func clearRecentlyInsertedDisksAction(_ sender: NSMenuItem!) {
