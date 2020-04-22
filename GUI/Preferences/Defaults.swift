@@ -69,22 +69,6 @@ extension UserDefaults {
 
 extension MyController {
     
-    /*
-    func resetUserDefaults() {
-        
-        track()
-        
-        amiga.suspend()
-        
-        UserDefaults.resetRomUserDefaults()
-        UserDefaults.resetHardwareUserDefaults()
-        UserDefaults.resetCompatibilityUserDefaults()
-        UserDefaults.resetVideoUserDefaults()
-
-        amiga.resume()
-    }
-    */
-    
     func loadUserDefaults() {
         
         track()

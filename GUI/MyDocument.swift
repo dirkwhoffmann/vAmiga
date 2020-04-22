@@ -344,7 +344,7 @@ class MyDocument: NSDocument {
         
     func loadScreenshots() throws {
         
-        track("Loading screenshots for disk (\(bootDiskID))")
+        track("Seeking screenshots for disk with id \(bootDiskID)")
         
         userScreenshots.clear()
         for url in Screenshot.collectFiles(forDisk: bootDiskID) {

@@ -15,7 +15,6 @@ AmigaFile::AmigaFile()
 
 AmigaFile::~AmigaFile()
 {
-    printf("AmigaFile::~AmigaFile");
     dealloc();
     
     if (path)
@@ -171,7 +170,7 @@ AmigaFile::readFromFile(const char *filename)
     setPath(filename);
     success = true;
     
-    debug(1, "File %s read\n", path);
+    msg("Rom: %s\n", path);
     
 exit:
     

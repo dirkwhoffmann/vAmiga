@@ -406,6 +406,11 @@ Moira::jumpToVector(int nr)
     // Update the program counter
     reg.pc = readM<Long>(4 * nr);
 
+    // Align the exception pointer to an even address
+    // Note: This is almost certainly wrong.
+    // TODO: Find out what the real CPU is doing here
+    reg.pc &= ~1;
+    
     // Update the prefetch queue
     queue.ird = readM<Word>(reg.pc);
     sync(2);
