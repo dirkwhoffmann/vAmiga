@@ -85,7 +85,7 @@ public:
     Drive(unsigned nr, Amiga& ref);
 
     DriveConfig getConfig() { return config; }
-    DriveInfo getInfo();
+    DriveInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     template <class T>
     void applyToPersistentItems(T& worker)

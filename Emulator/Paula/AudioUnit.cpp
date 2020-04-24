@@ -157,10 +157,13 @@ AudioUnit::executeUntil(Cycle targetClock)
     }
 }
 
+/*
 AudioInfo
 AudioUnit::getInfo()
 {
     AudioInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -168,6 +171,7 @@ AudioUnit::getInfo()
 
     return result;
 }
+*/
 
 void
 AudioUnit::pokeAUDxPER(int nr, u16 value)

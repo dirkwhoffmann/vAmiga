@@ -182,6 +182,24 @@ public:
     void inspect();
     virtual void _inspect() { }
 
+    /* Base method for buildung the class specific getInfo() methods
+     * If the emulator is running, the result of the most recent inspection is
+     * returned. If the emulator is not running, the function first updates the
+     * cached values in order to return up-to-date results.
+     */
+    template<class T> T getInfo(T &cachedValues) {
+        
+        T result;
+        
+        if (!isRunning()) _inspect();
+        
+        pthread_mutex_lock(&lock);
+        result = cachedValues;
+        pthread_mutex_unlock(&lock);
+        
+        return result;
+    }
+    
     // Dumps debug information about the current configuration to the console
     void dumpConfig();
     virtual void _dumpConfig() { }

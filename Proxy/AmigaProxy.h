@@ -338,7 +338,7 @@ struct AmigaFileWrapper;
 - (void) dump;
 - (DeniseInfo) getInfo;
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr;
-- (void) inspect;
+// - (void) inspect;
 
 - (NSInteger) sprDataLines:(NSInteger)nr;
 - (u64) sprData:(NSInteger)nr line:(NSInteger)line;
@@ -500,7 +500,7 @@ struct AmigaFileWrapper;
     struct DiskControllerWrapper *wrapper;
 }
 
-- (void) inspect;
+// - (void) inspect;
 - (DiskControllerConfig) getConfig;
 - (DiskControllerInfo) getInfo;
 - (void) dump;
@@ -530,7 +530,7 @@ struct AmigaFileWrapper;
 - (NSInteger) nr;
 - (DriveType) type;
 
-- (void) inspect;
+// - (void) inspect;
 - (BOOL) hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;

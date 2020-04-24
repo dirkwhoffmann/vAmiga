@@ -110,7 +110,7 @@ public:
     // Analyzing and profiling
     //
 
-    CopperInfo getInfo();
+    CopperInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 
     //

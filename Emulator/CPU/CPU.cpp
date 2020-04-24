@@ -187,17 +187,21 @@ CPU::_dump()
     msg("   Flags: %X\n", info.sr);
 }
 
+/*
 CPUInfo
 CPU::getInfo()
 {
     CPUInfo result;
-    
+
+    if (!isRunning()) _inspect();
+
     pthread_mutex_lock(&lock);
     result = info;
     pthread_mutex_unlock(&lock);
     
     return result;
 }
+*/
 
 DisassembledInstr
 CPU::getInstrInfo(long index)

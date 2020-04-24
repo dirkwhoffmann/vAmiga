@@ -178,7 +178,7 @@ private:
 public:
 
     // Returns the result of the most recent call to inspect()
-    AudioInfo getInfo();
+    AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     // Returns statistical information about this device
     AudioStats getStats() { return stats; }

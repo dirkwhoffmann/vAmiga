@@ -84,7 +84,7 @@ private:
 public:
     
     // Returns the result of the most recent call to inspect()
-    CPUInfo getInfo();
+    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
     DisassembledInstr getInstrInfo(long nr);
     DisassembledInstr getLoggedInstrInfo(long nr);
 

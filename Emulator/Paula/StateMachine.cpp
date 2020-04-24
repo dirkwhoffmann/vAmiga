@@ -59,10 +59,13 @@ StateMachine<nr>::_inspect()
     pthread_mutex_unlock(&lock);
 }
 
+/*
 template <int nr> AudioChannelInfo
 StateMachine<nr>::getInfo()
 {
     AudioChannelInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -70,6 +73,7 @@ StateMachine<nr>::getInfo()
 
     return result;
 }
+*/
 
 template <int nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)

@@ -101,7 +101,7 @@ public:
 public:
 
     // Returns the result of the most recent call to inspect()
-    CounterInfo getInfo();
+    CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 
     //

@@ -21,10 +21,13 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
     config.speed = 1; 
 }
 
+/*
 DriveInfo
 Drive::getInfo()
 {
     DriveInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -32,6 +35,7 @@ Drive::getInfo()
 
     return result;
 }
+*/
 
 void
 Drive::_reset()

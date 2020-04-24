@@ -524,10 +524,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->denise->getInfo();
 }
+/*
 - (void) inspect
 {
     wrapper->denise->inspect();
 }
+*/
 - (SpriteInfo) getSpriteInfo:(NSInteger)nr
 {
     return wrapper->denise->getSpriteInfo(nr);
@@ -924,10 +926,12 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+/*
 - (void) inspect
 {
     wrapper->controller->inspect();
 }
+*/
 - (DiskControllerConfig) getConfig
 {
     return wrapper->controller->getConfig();
@@ -993,10 +997,12 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->drive->getType();
 }
+/*
 - (void) inspect
 {
     wrapper->drive->inspect();
 }
+*/
 - (void) dump
 {
     wrapper->drive->dump();

@@ -107,17 +107,21 @@ DiskController::spinning()
     return df[0]->motor || df[1]->motor || df[2]->motor || df[3]->motor;
 }
 
+/*
 DiskControllerInfo
 DiskController::getInfo()
 {
     DiskControllerInfo result;
     
+    if (!isRunning()) _inspect();
+
     pthread_mutex_lock(&lock);
     result = info;
     pthread_mutex_unlock(&lock);
     
     return result;
 }
+*/
 
 void
 DiskController::setState(DriveState s)

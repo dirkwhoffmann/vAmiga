@@ -89,7 +89,7 @@ public:
     DiskController(Amiga& ref);
 
     DiskControllerConfig getConfig() { return config; }
-    DiskControllerInfo getInfo();
+    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     template <class T>
     void applyToPersistentItems(T& worker)

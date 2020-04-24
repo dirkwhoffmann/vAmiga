@@ -502,7 +502,7 @@ public:
     // Analyzing and profiling
     //
 
-    AgnusInfo getInfo();
+    AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
     AgnusStats getStats() { return stats; }

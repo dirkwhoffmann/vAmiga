@@ -146,17 +146,21 @@ Blitter::_dump()
     msg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
+/*
 BlitterInfo
 Blitter::getInfo()
 {
     BlitterInfo result;
     
+    if (!isRunning()) _inspect();
+
     pthread_mutex_lock(&lock);
     result = info;
     pthread_mutex_unlock(&lock);
     
     return result;
 }
+*/
 
 void
 Blitter::pokeBLTCON0(u16 value)

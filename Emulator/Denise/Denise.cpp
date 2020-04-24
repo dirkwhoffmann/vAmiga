@@ -98,17 +98,21 @@ Denise::_dump()
 {
 }
 
+/*
 DeniseInfo
 Denise::getInfo()
 {
     DeniseInfo result;
     
+    if (!isRunning()) _inspect();
+
     pthread_mutex_lock(&lock);
     result = info;
     pthread_mutex_unlock(&lock);
     
     return result;
 }
+*/
 
 SpriteInfo
 Denise::getSpriteInfo(int nr)

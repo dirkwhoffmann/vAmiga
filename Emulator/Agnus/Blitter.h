@@ -280,7 +280,7 @@ private:
 public:
 
     // Returns the result of the most recent call to inspect()
-    BlitterInfo getInfo();
+    BlitterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 
     //

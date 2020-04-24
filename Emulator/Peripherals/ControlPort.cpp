@@ -49,10 +49,13 @@ ControlPort::_dump()
     msg("  mouseCounterY: %d\n", mouseCounterY);
 }
 
+/*
 ControlPortInfo
 ControlPort::getInfo()
 {
     ControlPortInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -60,6 +63,7 @@ ControlPort::getInfo()
 
     return result;
 }
+*/
 
 u16
 ControlPort::joydat()

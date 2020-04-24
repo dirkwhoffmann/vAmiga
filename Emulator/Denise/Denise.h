@@ -370,7 +370,7 @@ private:
 public:
 
     // Returns the result of the most recent call to inspect()
-    DeniseInfo getInfo();
+    DeniseInfo getInfo() { return HardwareComponent::getInfo(info); }
     SpriteInfo getSpriteInfo(int nr);
     
     u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }

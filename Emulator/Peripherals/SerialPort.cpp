@@ -55,10 +55,13 @@ SerialPort::_dump()
     msg("      port: %X\n", port);
 }
 
+/*
 SerialPortInfo
 SerialPort::getInfo()
 {
     SerialPortInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -66,6 +69,7 @@ SerialPort::getInfo()
 
     return result;
 }
+*/
 
 bool
 SerialPort::getPin(int nr)

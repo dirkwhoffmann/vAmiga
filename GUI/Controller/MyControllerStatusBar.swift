@@ -11,13 +11,6 @@ extension MyController {
     
     public func refreshStatusBar() {
         
-        // Make sure the displayed information is up to date
-        amiga.diskController.inspect()
-        amiga.df0.inspect()
-        amiga.df1.inspect()
-        amiga.df2.inspect()
-        amiga.df3.inspect()
-
         let running = amiga.isRunning()
         let config = amiga.diskController.getConfig()
         let info = amiga.diskController.getInfo()

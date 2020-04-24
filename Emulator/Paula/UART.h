@@ -90,7 +90,7 @@ private:
 public:
 
     // Returns the latest internal state recorded by inspect()
-    UARTInfo getInfo();
+    UARTInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 
     //

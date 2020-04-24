@@ -40,10 +40,13 @@ UART::_dump()
     msg("   serper: %X\n", serper);
 }
 
+/*
 UARTInfo
 UART::getInfo()
 {
     UARTInfo result;
+
+    if (!isRunning()) _inspect();
 
     pthread_mutex_lock(&lock);
     result = info;
@@ -51,6 +54,7 @@ UART::getInfo()
 
     return result;
 }
+*/
 
 u16
 UART::peekSERDATR()

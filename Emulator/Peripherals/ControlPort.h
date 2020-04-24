@@ -78,7 +78,7 @@ private:
 public:
 
     // Returns the latest internal state recorded by inspect()
-    ControlPortInfo getInfo();
+    ControlPortInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     // Getter for the delta charges
     i16 getChargeDX() { return chargeDX; }

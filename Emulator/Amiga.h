@@ -255,7 +255,7 @@ private:
 public:
 
     // Returns the result of the most recent call to inspect()
-    AmigaInfo getInfo();
+    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     // Returns the statistical information for the most recently finished frame
     AmigaStats getStats();

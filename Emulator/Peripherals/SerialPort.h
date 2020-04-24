@@ -88,7 +88,7 @@ private:
 public:
 
     // Returns the latest internal state recorded by inspect()
-    SerialPortInfo getInfo();
+    SerialPortInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 
     //

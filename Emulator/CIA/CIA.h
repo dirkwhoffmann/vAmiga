@@ -354,10 +354,8 @@ public:
     // Configuring
     //
 
-
-
     // Returns the result of the most recent call to inspect()
-    CIAInfo getInfo();
+    CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     
     //

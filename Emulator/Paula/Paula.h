@@ -93,7 +93,7 @@ public:
 public:
     
     Paula(Amiga& ref);
-    PaulaInfo getInfo();
+    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     template <class T>
     void applyToPersistentItems(T& worker)

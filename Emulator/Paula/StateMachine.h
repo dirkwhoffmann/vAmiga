@@ -112,9 +112,9 @@ private:
 public:
 
     // Returns the latest internal state recorded by inspect()
-    AudioChannelInfo getInfo();
+    AudioChannelInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-
+    
     //
     // Accessing registers
     //
