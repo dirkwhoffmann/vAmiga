@@ -170,8 +170,11 @@ class ConfigController: DialogController {
     }
     
     // The tab to open first
-     var firstTab = ""
+    var firstTab = ""
 
+    // Remembers whether awakeFromNib has been called
+    var awake = false
+    
     func showSheet(tab: String) {
 
         firstTab = tab
@@ -180,16 +183,32 @@ class ConfigController: DialogController {
 
     override func awakeFromNib() {
 
-        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
+        track()
         awakeVideoPrefsFromNib()
+
+        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
         refresh()
+
+        awake = true
     }
 
+    override func sheetWillShow() {
+
+        track()
+        
+        if awake {
+            if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
+            refresh()
+        }
+    }
+
+    /*
     override func sheetDidShow() {
 
         track("sheetDidShow")
         if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
     }
+    */
 
     func refresh() {
         
