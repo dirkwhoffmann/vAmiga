@@ -86,10 +86,10 @@
             filePath = "Emulator/Paula/AudioUnit.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "466"
-            endingLineNumber = "466"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            startingLineNumber = "450"
+            endingLineNumber = "450"
+            landmarkName = "AudioUnit::drawWaveform(buffer, width, height, left, highestAmplitude, color)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

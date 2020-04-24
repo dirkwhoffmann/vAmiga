@@ -750,22 +750,6 @@ CIA::_dump()
 	tod.dump();
 }
 
-/*
-CIAInfo
-CIA::getInfo()
-{
-    CIAInfo result;
-    
-    if (!isRunning()) _inspect();
-
-    pthread_mutex_lock(&lock);
-    result = info;
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-*/
-
 void
 CIA::executeOneCycle()
 {

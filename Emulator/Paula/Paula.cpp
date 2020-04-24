@@ -47,22 +47,6 @@ Paula::_dump()
     
 }
 
-/*
-PaulaInfo
-Paula::getInfo()
-{
-    PaulaInfo result;
-    
-    if (!isRunning()) _inspect();
-
-    pthread_mutex_lock(&lock);
-    result = info;
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-*/
-
 void
 Paula::_warpOn()
 {

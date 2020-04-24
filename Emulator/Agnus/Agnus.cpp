@@ -340,22 +340,6 @@ Agnus::_dump()
     dumpDasEventTable();
 }
 
-/*
-AgnusInfo
-Agnus::getInfo()
-{
-    AgnusInfo result;
-    
-    if (!isRunning()) _inspect();
-
-    pthread_mutex_lock(&lock);
-    result = info;
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-*/
-
 void
 Agnus::clearStats()
 {
