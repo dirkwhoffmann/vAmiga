@@ -414,7 +414,7 @@ extension MyController: NSMenuItemValidation {
             amiga.run()
             
         default:
-            mydocument?.showConfigurationAltert(amiga.readyToPowerOn())
+            mydocument.showConfigurationAltert(amiga.readyToPowerOn())
         }
     }
     
@@ -514,7 +514,7 @@ extension MyController: NSMenuItemValidation {
             if result == .OK {
                 if let url = openPanel.url {
                     do {
-                        let adf = try self.mydocument?.createADF(from: url)
+                        let adf = try self.mydocument.createADF(from: url)
                         // self.amiga.df(sender).insertDisk(adf)
                         self.amiga.diskController.insert(sender.tag, adf: adf)
                     } catch {
@@ -533,7 +533,7 @@ extension MyController: NSMenuItemValidation {
             
             amiga.suspend()
             do {
-                let adf = try self.mydocument?.createADF(from: url)
+                let adf = try self.mydocument.createADF(from: url)
                 if proceedWithUnexportedDisk(drive: drive) {
                     amiga.diskController.insert(drive, adf: adf)
                 }
@@ -570,7 +570,7 @@ extension MyController: NSMenuItemValidation {
         
         if let url = myAppDelegate.getRecentlyExportedDiskURL(slot, drive: drive) {
             do {
-                mydocument?.export(drive: drive, to: url)
+                mydocument.export(drive: drive, to: url)
             }
         }
     }

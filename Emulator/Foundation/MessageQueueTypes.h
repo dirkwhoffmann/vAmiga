@@ -17,6 +17,10 @@ typedef enum
 {
     MSG_NONE = 0,
     
+    // Queue
+    MSG_REGISTER,
+    MSG_UNREGISTER,
+    
     // Emulator state
     MSG_CONFIG,
     MSG_POWER_ON,

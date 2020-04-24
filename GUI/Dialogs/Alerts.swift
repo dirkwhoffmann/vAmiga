@@ -131,14 +131,14 @@ extension MyDocument {
 extension MyController {
             
     func proceedWithUnexportedDisk(drive: DriveProxy) -> Bool {
-        return mydocument?.proceedWithUnexportedDisk(drive: drive) ?? false
+        return mydocument.proceedWithUnexportedDisk(drive: drive)
     }
     
     func proceedWithUnexportedDisk(drive nr: Int) -> Bool {
-        return mydocument?.proceedWithUnexportedDisk(drive: nr) ?? false
+        return mydocument.proceedWithUnexportedDisk(drive: nr)
     }
 
     func proceedWithUnexportedDisk() -> Bool {
-        return mydocument?.proceedWithUnexportedDisk() ?? false
+        return mydocument.proceedWithUnexportedDisk()
     }
 }

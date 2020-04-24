@@ -22,7 +22,10 @@ protocol MessageReceiver {
 
 class MyController: NSWindowController, MessageReceiver {
 
-    // Proxy
+    // Reference to the connected document
+    var mydocument: MyDocument!
+    
+    // Amiga proxy
     // Implements a bridge between the emulator written in C++ and the
     // GUI written in Swift. Because Swift cannot interact with C++ directly,
     // the proxy is written in Objective-C.
@@ -229,10 +232,7 @@ extension MyController {
 
     // Provides the undo manager
     override open var undoManager: UndoManager? { return metal.undoManager }
- 
-    // Provides the document casted to the correct type
-    var mydocument: MyDocument? { return document as? MyDocument }
-    
+     
     // Indicates if the emulator needs saving
     var needsSaving: Bool {
         get {
@@ -259,6 +259,8 @@ extension MyController {
         
         // Create audio engine
         macAudio = MacAudio.init(with: self)
+        
+        mydocument = document as? MyDocument
     }
 
     override open func windowDidLoad() {
@@ -297,7 +299,7 @@ extension MyController {
             amiga.powerOn()
 
             // Process attachment (if any)
-            mydocument?.mountAmigaAttachment()
+            mydocument.mountAmigaAttachment()
 
             // Launch the emulator thread
             amiga.run()
@@ -492,6 +494,15 @@ extension MyController {
 
         switch msg.type {
     
+        case MSG_REGISTER:
+            track("Registered to message queue")
+            
+        case MSG_UNREGISTER:
+            track("Unregistered from message queue")
+            // From now on, it's save to delete the document.
+            // To trigger deletion, we remove any reference to it.
+            mydocument = nil
+            
         case MSG_CONFIG:
             inspector?.fullRefresh()
 
@@ -520,8 +531,8 @@ extension MyController {
             refreshStatusBar()
 
         case MSG_RESET:
-            mydocument?.deleteBootDiskID()
-            mydocument?.setBootDiskID(amiga.df0.fnv())
+            mydocument.deleteBootDiskID()
+            mydocument.setBootDiskID(amiga.df0.fnv())
             inspector?.fullRefresh()
 
         case MSG_WARP_ON,
@@ -624,7 +635,7 @@ extension MyController {
             if prefs.driveSounds && prefs.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
-            if msg.data == 0 { mydocument?.setBootDiskID(amiga.df0.fnv()) }
+            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:

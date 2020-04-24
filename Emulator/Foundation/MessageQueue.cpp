@@ -32,11 +32,15 @@ MessageQueue::addListener(const void *listener, Callback *func)
     while ((msg = getMessage()).type != MSG_NONE) {
         propagateMessage(&msg);
     }
+
+    putMessage(MSG_REGISTER);
 }
 
 void
 MessageQueue::removeListener(const void *listener)
 {
+    putMessage(MSG_UNREGISTER);
+
     pthread_mutex_lock(&lock);
     listeners.erase(listener);
     pthread_mutex_unlock(&lock);
