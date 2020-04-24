@@ -467,7 +467,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_FILTER_ACTIVATION: return paula.audioUnit.getFilterActivation();
         case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
         case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
-        case VA_FIFO_BUFFERING: paula.diskController.getUseFifo();
+        case VA_FIFO_BUFFERING: return paula.diskController.getUseFifo();
         case VA_SERIAL_DEVICE: return serialPort.getDevice();
         case VA_TODBUG: return ciaA.getTodBug();
 
