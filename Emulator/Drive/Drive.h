@@ -149,7 +149,10 @@ public:
     bool idMode() { return !motor; }
     u32 getDriveId();
 
-
+    // Operation
+    bool getMotor() { return motor; }
+    u8 getCylinder() { return head.cylinder; }
+    
     //
     // Handling the drive status register flags
     //

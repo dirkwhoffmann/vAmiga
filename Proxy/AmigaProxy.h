@@ -499,10 +499,13 @@ struct AmigaFileWrapper;
     struct DiskControllerWrapper *wrapper;
 }
 
+- (void) dump;
 - (DiskControllerConfig) getConfig;
 - (DiskControllerInfo) getInfo;
-- (void) dump;
+- (NSInteger) selectedDrive;
+- (DriveState) state;
 - (BOOL) spinning;
+- (BOOL) connected:(NSInteger)nr;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
@@ -535,6 +538,9 @@ struct AmigaFileWrapper;
 
 - (BOOL) hasModifiedDisk;
 - (void) setModifiedDisk:(BOOL)value;
+
+- (BOOL) motor;
+- (NSInteger) cylinder;
 
 - (u64)  fnv;
 

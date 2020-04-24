@@ -11,25 +11,23 @@ extension MyController {
     
     public func refreshStatusBar() {
         
-        let running = amiga.isRunning()
         let config = amiga.diskController.getConfig()
-        let info = amiga.diskController.getInfo()
-        let info0 = amiga.df0.getInfo()
-        let info1 = amiga.df1.getInfo()
-        let info2 = amiga.df2.getInfo()
-        let info3 = amiga.df3.getInfo()
+        let connected0 = config.connected.0
+        let connected1 = config.connected.1
+        let connected2 = config.connected.2
+        let connected3 = config.connected.3
 
-        let df0Connected = config.connected.0
-        let df1Connected = config.connected.1
-        let df2Connected = config.connected.2
-        let df3Connected = config.connected.3
-        
-        let df0Sel = info.selectedDrive == 0
-        let df1Sel = info.selectedDrive == 1
-        let df2Sel = info.selectedDrive == 2
-        let df3Sel = info.selectedDrive == 3
-
-        let writing = info.state == DRIVE_DMA_WRITE
+        let sel = amiga.diskController.selectedDrive()
+        let writing = amiga.diskController.state() == DRIVE_DMA_WRITE
+        let motor0 = amiga.df0.motor()
+        let motor1 = amiga.df1.motor()
+        let motor2 = amiga.df2.motor()
+        let motor3 = amiga.df3.motor()
+        let hasDisk0 = amiga.df0.hasDisk()
+        let hasDisk1 = amiga.df1.hasDisk()
+        let hasDisk2 = amiga.df2.hasDisk()
+        let hasDisk3 = amiga.df3.hasDisk()
+        let running = amiga.isRunning()
 
         // Icons
         df0Disk.image = amiga.df0.icon
@@ -39,43 +37,43 @@ extension MyController {
         warpIcon.image = hourglassIcon
 
         // Cylinders
-        df0Cylinder.integerValue = Int(info0.head.cylinder)
-        df1Cylinder.integerValue = Int(info1.head.cylinder)
-        df2Cylinder.integerValue = Int(info2.head.cylinder)
-        df3Cylinder.integerValue = Int(info3.head.cylinder)
+        df0Cylinder.integerValue = amiga.df0.cylinder()
+        df1Cylinder.integerValue = amiga.df1.cylinder()
+        df2Cylinder.integerValue = amiga.df2.cylinder()
+        df3Cylinder.integerValue = amiga.df3.cylinder()
 
-        df0Cylinder.textColor = writing && df0Sel ? .red : .secondaryLabelColor
-        df1Cylinder.textColor = writing && df1Sel ? .red : .secondaryLabelColor
-        df2Cylinder.textColor = writing && df2Sel ? .red : .secondaryLabelColor
-        df3Cylinder.textColor = writing && df3Sel ? .red : .secondaryLabelColor
+        df0Cylinder.textColor = writing && (sel == 0) ? .red : .secondaryLabelColor
+        df1Cylinder.textColor = writing && (sel == 1) ? .red : .secondaryLabelColor
+        df2Cylinder.textColor = writing && (sel == 2) ? .red : .secondaryLabelColor
+        df3Cylinder.textColor = writing && (sel == 3) ? .red : .secondaryLabelColor
 
         // Animation
-        info0.motor && running ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
-        info1.motor && running ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
-        info2.motor && running ? df2DMA.startAnimation(self) : df2DMA.stopAnimation(self)
-        info3.motor && running ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
+        motor0 && running ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
+        motor1 && running ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+        motor2 && running ? df2DMA.startAnimation(self) : df2DMA.stopAnimation(self)
+        motor3 && running ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
 
         // Visibility
         let items: [NSView: Bool] = [
             
             powerLED: true,
             
-            df0LED: df0Connected,
-            df1LED: df1Connected,
-            df2LED: df2Connected,
-            df3LED: df3Connected,
-            df0Disk: df0Connected && info0.hasDisk,
-            df1Disk: df1Connected && info1.hasDisk,
-            df2Disk: df2Connected && info2.hasDisk,
-            df3Disk: df3Connected && info3.hasDisk,
-            df0Cylinder: df0Connected,
-            df1Cylinder: df1Connected,
-            df2Cylinder: df2Connected,
-            df3Cylinder: df3Connected,
-            df0DMA: info0.motor,
-            df1DMA: info1.motor,
-            df2DMA: info2.motor,
-            df3DMA: info3.motor,
+            df0LED: connected0,
+            df1LED: connected1,
+            df2LED: connected2,
+            df3LED: connected3,
+            df0Disk: connected0 && hasDisk0,
+            df1Disk: connected1 && hasDisk1,
+            df2Disk: connected2 && hasDisk2,
+            df3Disk: connected3 && hasDisk3,
+            df0Cylinder: connected0,
+            df1Cylinder: connected1,
+            df2Cylinder: connected2,
+            df3Cylinder: connected3,
+            df0DMA: motor0,
+            df1DMA: motor1,
+            df2DMA: motor2,
+            df3DMA: motor3,
 
             cmdLock: mapCommandKeys,
             

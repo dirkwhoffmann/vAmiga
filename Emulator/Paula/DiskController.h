@@ -179,8 +179,9 @@ public:
     bool getUseFifoLatched() { return useFifo; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
+    i8 getSelected() { return selected; }
     class Drive *getSelectedDrive();
-
+    
 
     //
     // Handling disks
@@ -254,7 +255,7 @@ private:
     bool fifoHasWord() { return fifoCount >= 2; }
     bool fifoCanStoreWord() { return fifoCount <= 4; }
 
-    // Clears the FIFO buffer.
+    // Clears the FIFO buffer
     void clearFifo();
     
     // Reads or writes a byte from or to the FIFO

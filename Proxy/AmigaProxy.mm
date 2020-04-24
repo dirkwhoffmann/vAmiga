@@ -920,6 +920,10 @@ struct ADFFileWrapper { ADFFile *adf; };
     }
     return self;
 }
+- (void) dump
+{
+    wrapper->controller->dump();
+}
 - (DiskControllerConfig) getConfig
 {
     return wrapper->controller->getConfig();
@@ -928,13 +932,21 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->controller->getInfo();
 }
-- (void) dump
+- (NSInteger) selectedDrive
 {
-    wrapper->controller->dump();
+    return wrapper->controller->getSelected();
+}
+- (DriveState) state
+{
+    return wrapper->controller->getState();
 }
 - (BOOL) spinning
 {
     return wrapper->controller->spinning();
+}
+- (BOOL) connected:(NSInteger)nr
+{
+    return wrapper->controller->isConnected(nr);
 }
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 {
@@ -1012,6 +1024,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setModifiedDisk:(BOOL)value
 {
     wrapper->drive->setModifiedDisk(value);
+}
+- (BOOL) motor
+{
+    return wrapper->drive->getMotor();
+}
+- (NSInteger) cylinder
+{
+    return wrapper->drive->getCylinder();
 }
 - (u64) fnv
 {
