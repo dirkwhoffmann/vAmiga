@@ -83,15 +83,7 @@ template <int nr> void
 StateMachine<nr>::pokeAUDxPER(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
-
-    /* "The minimum period is 124 color clocks. This means that the smallest
-     *  number that should be placed in this register is 124 decimal. This
-     *  corresponds to a maximum sample frequency of 28.86 khz." [HRM]
-     */
-    if (value < 124) {
-        debug(AUDREG_DEBUG, "pokeAUD%dPER(%X): Very low value\n");
-        value = 124;
-    }
+    
     audperLatch = value;
 }
 
@@ -100,8 +92,8 @@ StateMachine<nr>::pokeAUDxVOL(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
-    // 1. Only the lowest 7 bits are evaluated.
-    // 2. All values greater than 64 are treated as 64 (max volume).
+    // 1. Only the lowest 7 bits are evaluated
+    // 2. All values greater than 64 are treated as 64 (max volume)
     audvolLatch = MIN(value & 0x7F, 64);
 }
 
@@ -270,7 +262,6 @@ StateMachine<nr>::move_000_001() {
     assert(AUDxON());
 
     lencntrld();
-    // AUDxDSR();
     AUDxDR();
 
     state = 0b001;
@@ -443,7 +434,18 @@ StateMachine<nr>::percntrld()
 {
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
 
-    agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+    /*
+    if (audperLatch == 0) {
+        warn("audperLatch == 0");
+    }
+    */
+    
+    if (audperLatch <= 1) {
+        // agnus.scheduleRel<slot>(DMA_CYCLES(0), CHX_PERFIN);
+        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+    } else {
+        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
+    }
     /*
     if (audperLatch < 64) {
         // What shall we do with very small audper values?
@@ -500,13 +502,13 @@ StateMachine<nr>::penhi()
 {
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
-
+    
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
-
-    if (samples.isFull()) {
-        warn("penhi: Sample buffer is full\n");
-    } else {
+    
+    if (!samples.isFull()) {
         samples.insert(agnus.clock, scaled);
+    } else {
+        debug(AUD_DEBUG, "penhi: Sample buffer is full\n");
     }
 }
 
@@ -517,11 +519,11 @@ StateMachine<nr>::penlo()
     i16 scaled = sample * audvol;
 
     debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
-
-     if (samples.isFull()) {
-         warn("penlo: Sample buffer is full\n");
-     } else {
-         samples.insert(agnus.clock, scaled);
+    
+    if (!samples.isFull()) {
+        samples.insert(agnus.clock, scaled);
+    } else {
+        debug(AUD_DEBUG, "penlo: Sample buffer is full\n");
      }
 }
 
