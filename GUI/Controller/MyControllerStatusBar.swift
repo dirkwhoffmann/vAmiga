@@ -17,8 +17,6 @@ extension MyController {
         let connected2 = config.connected.2
         let connected3 = config.connected.3
 
-        let sel = amiga.diskController.selectedDrive()
-        let writing = amiga.diskController.state() == DRIVE_DMA_WRITE
         let motor0 = amiga.df0.motor()
         let motor1 = amiga.df1.motor()
         let motor2 = amiga.df2.motor()
@@ -29,30 +27,28 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk()
         let running = amiga.isRunning()
 
-        // Icons
+        // Cylinders
+        refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder())
+        refreshStatusBar(drive: 1, cyclinder: amiga.df1.cylinder())
+        refreshStatusBar(drive: 2, cyclinder: amiga.df2.cylinder())
+        refreshStatusBar(drive: 3, cyclinder: amiga.df3.cylinder())
+        refreshStatusBar(writing: nil)
+        
+        // Animation
+        refreshStatusBar(drive: 0, motor: motor0)
+        refreshStatusBar(drive: 1, motor: motor1)
+        refreshStatusBar(drive: 2, motor: motor2)
+        refreshStatusBar(drive: 3, motor: motor3)
+
+        // Drive icons
         df0Disk.image = amiga.df0.icon
         df1Disk.image = amiga.df1.icon
         df2Disk.image = amiga.df2.icon
         df3Disk.image = amiga.df3.icon
+        
+        // Warp mode icon
         warpIcon.image = hourglassIcon
-
-        // Cylinders
-        df0Cylinder.integerValue = amiga.df0.cylinder()
-        df1Cylinder.integerValue = amiga.df1.cylinder()
-        df2Cylinder.integerValue = amiga.df2.cylinder()
-        df3Cylinder.integerValue = amiga.df3.cylinder()
-
-        df0Cylinder.textColor = writing && (sel == 0) ? .red : .secondaryLabelColor
-        df1Cylinder.textColor = writing && (sel == 1) ? .red : .secondaryLabelColor
-        df2Cylinder.textColor = writing && (sel == 2) ? .red : .secondaryLabelColor
-        df3Cylinder.textColor = writing && (sel == 3) ? .red : .secondaryLabelColor
-
-        // Animation
-        motor0 && running ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
-        motor1 && running ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
-        motor2 && running ? df2DMA.startAnimation(self) : df2DMA.stopAnimation(self)
-        motor3 && running ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
-
+        
         // Visibility
         let items: [NSView: Bool] = [
             
@@ -88,6 +84,54 @@ extension MyController {
         
     }
     
+    public func refreshStatusBar(drive: Int, led: Bool) {
+        
+        let image = NSImage.init(named: led ? "driveLedOn" : "driveLedOff")
+        
+        switch drive {
+        case 0: df0LED.image = image
+        case 1: df1LED.image = image
+        case 2: df2LED.image = image
+        case 3: df3LED.image = image
+        default: fatalError()
+        }
+    }
+    
+    public func refreshStatusBar(drive: Int, cyclinder: Int) {
+        
+        switch drive {
+        case 0: df0Cylinder.integerValue = cyclinder
+        case 1: df1Cylinder.integerValue = cyclinder
+        case 2: df2Cylinder.integerValue = cyclinder
+        case 3: df3Cylinder.integerValue = cyclinder
+        default: fatalError()
+        }
+    }
+         
+    public func refreshStatusBar(writing: Bool?) {
+        
+        let sel = amiga.diskController.selectedDrive()
+        let w = writing ?? (amiga.diskController.state() == DRIVE_DMA_WRITE)
+        
+        df0Cylinder.textColor = w && (sel == 0) ? .red : .secondaryLabelColor
+        df1Cylinder.textColor = w && (sel == 1) ? .red : .secondaryLabelColor
+        df2Cylinder.textColor = w && (sel == 2) ? .red : .secondaryLabelColor
+        df3Cylinder.textColor = w && (sel == 3) ? .red : .secondaryLabelColor
+    }
+        
+    public func refreshStatusBar(drive: Int, motor: Bool) {
+        
+        let spin = amiga.isRunning() && motor
+        
+        switch drive {
+        case 0: spin ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)
+        case 1: spin ? df1DMA.startAnimation(self) : df1DMA.stopAnimation(self)
+        case 2: spin ? df2DMA.startAnimation(self) : df2DMA.stopAnimation(self)
+        case 3: spin ? df3DMA.startAnimation(self) : df3DMA.stopAnimation(self)
+        default: fatalError()
+        }
+    }
+         
     public func showStatusBar(_ value: Bool) {
         
         if statusBar != value {

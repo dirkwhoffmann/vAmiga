@@ -171,8 +171,10 @@ class MyController: NSWindowController, MessageReceiver {
         case .on: warp = true
         }
         
-        warp ? amiga.warpOn() : amiga.warpOff()
-        refreshStatusBar()
+        if warp != amiga.warp() {
+            warp ? amiga.warpOn() : amiga.warpOff()
+            refreshStatusBar()
+        }
     }
     
     // Returns the icon of the sand clock in the bottom bar
@@ -589,48 +591,41 @@ extension MyController {
             
             refreshStatusBar()
 
-        case MSG_DRIVE_SELECT,
-             MSG_DRIVE_READ,
-             MSG_DRIVE_WRITE:
-            refreshStatusBar()
+        case MSG_DRIVE_SELECT:
+            refreshStatusBar(writing: nil)
+
+        case MSG_DRIVE_READ:
+            refreshStatusBar(writing: false)
+            
+        case MSG_DRIVE_WRITE:
+            refreshStatusBar(writing: true)
 
         case MSG_DRIVE_LED_ON:
-            let image = NSImage.init(named: "driveLedOn")
-            switch msg.data {
-            case 0: df0LED.image = image
-            case 1: df1LED.image = image
-            case 2: df2LED.image = image
-            case 3: df3LED.image = image
-            default: fatalError()
-            }
+            refreshStatusBar(drive: msg.data, led: true)
             
         case MSG_DRIVE_LED_OFF:
-            let image = NSImage.init(named: "driveLedOff")
-            switch msg.data {
-            case 0: df0LED.image = image
-            case 1: df1LED.image = image
-            case 2: df2LED.image = image
-            case 3: df3LED.image = image
-            default: fatalError()
-            }
-            
-        case MSG_DRIVE_MOTOR_ON,
-             MSG_DRIVE_MOTOR_OFF:
+            refreshStatusBar(drive: msg.data, led: false)
+
+        case MSG_DRIVE_MOTOR_ON:
+            refreshStatusBar(drive: msg.data, motor: true)
             updateWarp()
-            refreshStatusBar()
+
+        case MSG_DRIVE_MOTOR_OFF:
+            refreshStatusBar(drive: msg.data, motor: false)
+            updateWarp()
 
         case MSG_DRIVE_HEAD:
             if prefs.driveSounds && prefs.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
-            refreshStatusBar()
+            refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
   
         case MSG_DRIVE_HEAD_POLL:
             if prefs.driveSounds && prefs.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
-            refreshStatusBar()
-            
+            refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
+
         case MSG_DISK_INSERT:
             if prefs.driveSounds && prefs.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)

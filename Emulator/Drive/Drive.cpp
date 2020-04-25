@@ -404,7 +404,11 @@ Drive::moveHead(int dir)
 #endif
     
     // Inform the GUI
-    amiga.putMessage(pollsForDisk() ? MSG_DRIVE_HEAD_POLL : MSG_DRIVE_HEAD);
+    if (pollsForDisk()) {
+        amiga.putMessage(MSG_DRIVE_HEAD_POLL, (nr << 8) | head.cylinder);
+    } else {
+        amiga.putMessage(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
+    }
 }
 
 void

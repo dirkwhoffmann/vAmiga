@@ -117,9 +117,9 @@ DiskController::setState(DriveState s)
     bool isWriting = (s == DRIVE_DMA_WRITE);
 
     state = s;
-
+    
     if (wasWriting != isWriting) {
-        amiga.putMessage(isWriting ? MSG_DRIVE_WRITE : MSG_DRIVE_READ);
+        amiga.putMessage(isWriting ? MSG_DRIVE_WRITE : MSG_DRIVE_READ, selected);
     }
 }
 
