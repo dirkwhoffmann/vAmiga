@@ -1060,13 +1060,16 @@ CIA::executeOneCycle()
     // Go into idle state if possible
     if (oldDelay == delay && oldFeed == feed) tiredness++; else tiredness = 0;
   
+#ifndef CIA_ON_STEROIDS
     // Sleep if threshold is reached
     if (tiredness > 8) {
         sleep();
         scheduleWakeUp();
-    } else {
-        scheduleNextExecution();
+        return;
     }
+#endif
+    
+    scheduleNextExecution();
 }
 
 void

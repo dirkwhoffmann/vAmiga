@@ -33,6 +33,7 @@
 // Set to false to disable SSE optimizations
 static const bool USE_SSE = true;
 
+// Set to 
 // Register debugging (set to 1 to generate debug output)
 
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
@@ -95,5 +96,5 @@ static const int COP_CHECKSUM  = false;  // Copper checksums
 // #define ALIGN_DRIVE_HEAD // Make drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Execute all slow Blitter instructions in one chunk
 // #define AGNUS_EXEC_DEBUG // Fall back to a simpler Agnus execution function
-
+#define CIA_ON_STEROIDS  // Disables the CIA sleep logic
 #endif
