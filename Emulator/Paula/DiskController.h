@@ -29,10 +29,10 @@ class DiskController : public AmigaComponent {
     // The current drive state (off, read, or write)
     DriveState state;
 
-    // Indicates if the current disk operation used FIFO buffering
-    bool useFifo;
+    // Indicates if the Fifo should be filled asynchroneously
+    bool asyncFifo;
 
-    // Set to true if the currently read disk word matches the sync word.
+    // Set to true if the currently read disk word matches the sync word
     bool syncFlag = false;
     
     
@@ -107,7 +107,7 @@ public:
 
         & selected
         & state
-        & useFifo
+        & asyncFifo
         & syncFlag
         & incoming
         & incomingCycle
@@ -174,9 +174,6 @@ private:
     //
     
 public:
-    
-    // Connection status
-    bool getUseFifoLatched() { return useFifo; }
     
     // Returns the currently selected drive or NULL if no drive is selected.
     i8 getSelected() { return selected; }
@@ -284,28 +281,42 @@ private:
 
 public:
 
-    /* The emulator supports three disk DMA modes at the moment:
+    /* The emulator supports two basic disk DMA modes:
      *
-     *     1. Standard DMA mode    (most accurate)
-     *     2. Simple DMA mode
-     *     3. Turbo DMA mode       (least accurate)
+     *     1. Standard DMA mode    (more compatible, but slow)
+     *     2. Turbo DMA mode       (fast, but less compatible)
      *
      * In standard DMA mode, performDMA() is invoked three times per raster
      * line, in each of the three DMA slots. Communication with the drive is
-     * decoupled by a FIFO buffer. Data is never read directly from or written
-     * to the drive. It is always exchanged via the FIFO. Data transfer
-     * between the FIFO and the drive takes place in serviceDiskEvent(), which
-     * is called periodically by the event handler.
+     * managed by a FIFO buffer. Data is never read directly from or written
+     * to the drive. It is always exchanged via the FIFO.
      *
-     * In simple DMA mode, performDMA() is called three times per raster
-     * line, just like in standard mode. The FIFO phase is skipped. I.e., data
-     * is read from or written to the drive immediately when a DMA transfer
-     * takes place.
+     * The FIFO buffer supports two emulation modes:
      *
-     * Turbo DMA mode is applied when the drive is configured as a turbo drive.
-     * With these drives, data is transferred immediately when the DSKLEN
-     * register is written. This mode is the least compatible. Neither does it
-     * uses the rasterline DMA slots, nor does it use a FIFO buffer.
+     *     1. Asynchroneous       (more compatible)
+     *     2. Synchroneous        (less compatibile)
+     *
+     * If the FIFO buffer is emulated asynchroneously, the event scheduler
+     * is utilized to execute a DSK_ROTATE event from time to time. Whenever
+     * this event triggers, a byte is read from the disk drive and fed into
+     * the buffer. If the FIFO buffer is emulated synchroneously, the DSK_ROTATE
+     * events have no effect. Instead, the FIFO buffer is filled at the same
+     * time when the drive DMA slots are processed. Synchroneous mode is
+     * slightly faster, because the FIFO can never run out of data. It is filled
+     * exactly at the time when data is needed.
+     *
+     * To speed up emulation, standard drives can be run with an acceleration
+     * factor greater than 1. In this case, multiple words are transferred
+     * in each disk drive DMA slot. The first word is taken from the Fifo as
+     * usual. All other words are emulated on-the-fly, with the same mechanism
+     * as used in synchroneous Fifo mode.
+     *
+     * Turbo DMA is applied iff the drive is configured as a turbo drive.
+     * In this mode, data is transferred immediately when the DSKLEN
+     * register is written to. This mode is fast, but far from being accurate.
+     * Neither does it uses the disk DMA slots, nor does it interact with
+     * the FIFO buffer.
+
      */
   
     // 1. Standard DMA mode
@@ -314,11 +325,13 @@ public:
     void performDMAWrite(Drive *drive, u32 count);
  
     // 2. Simple DMA mode
+    /*
     void performSimpleDMA();
     void performSimpleDMAWait(Drive *drive, u32 count);
     void performSimpleDMARead(Drive *drive, u32 count);
     void performSimpleDMAWrite(Drive *drive, u32 count);
-
+    */
+    
     // 3. Turbo DMA mode
     void performTurboDMA(Drive *d);
     void performTurboRead(Drive *drive);

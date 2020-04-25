@@ -256,7 +256,7 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     }
 
     // Determine if a FIFO buffer should be emulated
-    useFifo = config.useFifo;
+    asyncFifo = config.useFifo;
     
     // Disable DMA if bit 15 (DMAEN) is zero
     if (!(newDskLen & 0x8000)) {
@@ -388,7 +388,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         if (df[i]->isSelected()) selected = i;
     }
     
-    // Schedule the first rotation event if at least one drive is spinning.
+    // Schedule the first rotation event if at least one drive is spinning
     if (!spinning()) {
         agnus.cancel<DSK_SLOT>();
     }
@@ -403,7 +403,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
 void
 DiskController::serviceDiskEvent()
 {
-    if (useFifo) {
+    if (asyncFifo) {
         
         // Receive next byte from the selected drive
         executeFifo();
@@ -519,20 +519,18 @@ DiskController::executeFifo()
             incoming = drive->readHead();
             incomingCycle = agnus.clock;
             
-            // Write byte into the FIFO buffer.
+            // Write byte into the FIFO buffer
             writeFifo(incoming);
-            // if (dsksync) { debug("offset = %d incoming = %X\n", drive->head.offset, incoming); }
 
             // Check if we've reached a SYNC mark
             if ((syncFlag = compareFifo(dsksync))) {
-                
+
                 // Trigger a word SYNC interrupt
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
                 paula.raiseIrq(INT_DSKSYN);
 
                 // Enable DMA if the controller was waiting for it
                 if (state == DRIVE_DMA_WAIT) {
-
                     setState(DRIVE_DMA_READ);
                     clearFifo();
                 }
@@ -544,7 +542,7 @@ DiskController::executeFifo()
             
             if (fifoIsEmpty()) {
                 
-                // Switch off DMA is the last byte has been flushed out
+                // Switch off DMA if the last byte has been flushed out
                 if (state == DRIVE_DMA_FLUSH) setState(DRIVE_DMA_OFF);
                 
             } else {
@@ -562,6 +560,9 @@ DiskController::executeFifo()
 void
 DiskController::performDMA()
 {
+    // Emulate the FIFO buffer if asynchroneous mode is disabled
+    if (!asyncFifo) { executeFifo(); executeFifo(); }
+    
     // Only proceed if there are remaining bytes to read
     if ((dsklen & 0x3FFF) == 0) return;
 
@@ -577,15 +578,15 @@ DiskController::performDMA()
 
     // Perform DMA
     switch (state) {
-        
+            
         case DRIVE_DMA_READ:
-        performDMARead(drive, count);
-        break;
-        
+            performDMARead(drive, count);
+            break;
+            
         case DRIVE_DMA_WRITE:
-        performDMAWrite(drive, count);
-        break;
-        
+            performDMAWrite(drive, count);
+            break;
+            
         default: assert(false);
     }
 }
@@ -617,16 +618,15 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                plaindebug("performRead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+                plaindebug("read: cnt = %d chk = %X\n", checkcnt, checksum);
 
             return;
         }
         
-        // If the loop repeats, do what the event handler would do in between
+        // If the loop repeats, fill the Fifo with new data
         if (--remaining) {
             executeFifo();
             executeFifo();
-            assert(fifoHasWord());
         }
         
     } while (remaining);
@@ -677,7 +677,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                debug("performWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+                plaindebug("write: cnt = %d chk = %X\n", checkcnt, checksum);
 
             return;
         }
@@ -692,6 +692,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
     } while (remaining);
 }
 
+/*
 void
 DiskController::performSimpleDMA()
 {
@@ -735,12 +736,14 @@ DiskController::performSimpleDMAWait(Drive *drive, u32 remaining)
 
     for (unsigned i = 0; i < remaining; i++) {
 
-        // Read word from disk.
+        // Read word from disk
         u16 word = drive->readHead16();
 
-        // Check if we've reached a SYNC mark
+        // Check if a SYNC mark has been reached
         if ((syncFlag = (word == dsksync))) {
 
+            debug("SYNC mark found\n"); // REMOVE ASAP
+            
             // Trigger a word SYNC interrupt
             debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
             paula.raiseIrq(INT_DSKSYN);
@@ -777,7 +780,7 @@ DiskController::performSimpleDMARead(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                debug("doSimpleDMARead: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+                plaindebug("simple read: cnt = %d chk = %X\n", checkcnt, checksum);
 
             return;
         }
@@ -809,12 +812,13 @@ DiskController::performSimpleDMAWrite(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                debug("doSimpleDMAWrite: checkcnt = %d checksum = %X\n", checkcnt, checksum);
+                debug("simple write: cnt = %d chk = %X\n", checkcnt, checksum);
 
             return;
         }
     }
 }
+*/
 
 void
 DiskController::performTurboDMA(Drive *drive)

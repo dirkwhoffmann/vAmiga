@@ -84,6 +84,8 @@ static const int COP_CHECKSUM  = false;  // Copper checksums
 
 // Uncomment to lauch the emulator with a preloaed disk in df0
 // #define BOOT_DISK "/Downloads/Cabal.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf"
+// #define BOOT_DISK "/Users/hoff/Downloads/Ghostsngoblins.adf"
 
 // Additional debug settings (uncomment to enable)
 #define HARD_RESET       // Restore the initial power up state in reset()

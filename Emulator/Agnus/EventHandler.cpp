@@ -943,10 +943,7 @@ Agnus::serviceDASEvent()
         case DAS_D1:
         case DAS_D2:
 
-            if (paula.diskController.getUseFifoLatched())
-                paula.diskController.performDMA();
-            else
-                paula.diskController.performSimpleDMA();
+            paula.diskController.performDMA();
             break;
 
         case DAS_A0:
