@@ -44,7 +44,11 @@ ControlPort::_inspect()
 void
 ControlPort::_dump()
 {
-    msg("         device: %d\n", device);
+    msg("         device: %d (%s)\n",
+        device,
+        device == CPD_NONE ? "CPD_NONE" :
+        device == CPD_MOUSE ? "CPD_MOUSE" :
+        device == CPD_JOYSTICK ? "CPD_JOYSTICK" : "???");
     msg("  mouseCounterX: %d\n", mouseCounterX);
     msg("  mouseCounterY: %d\n", mouseCounterY);
 }

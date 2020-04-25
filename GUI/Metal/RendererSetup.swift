@@ -79,10 +79,12 @@ extension Renderer {
         metalLayer.frame = metalLayer.frame
 
         // Command queue
+        track("Build command queue")
         queue = device.makeCommandQueue()
         assert(queue != nil, "Metal command queue must not be nil")
 
         // Shader library
+        track("Build shader library")
         library = device.makeDefaultLibrary()
         assert(library != nil, "Metal library must not be nil")
     }

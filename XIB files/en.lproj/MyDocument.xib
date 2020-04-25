@@ -95,14 +95,14 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="xzf-hU-AKK">
-                        <rect key="frame" x="118" y="4" width="16" height="16"/>
+                        <rect key="frame" x="120" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="LCc-E4-06q"/>
                             <constraint firstAttribute="height" constant="16" id="XWV-WW-8m8"/>
                         </constraints>
                     </progressIndicator>
                     <button hidden="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="D1i-Ep-fTN">
-                        <rect key="frame" x="94" y="4" width="16" height="16"/>
+                        <rect key="frame" x="96" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="0YO-ou-V4s"/>
                             <constraint firstAttribute="height" constant="16" id="x4m-32-wE6"/>
@@ -127,14 +127,14 @@
                         </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="X4r-q5-8Lh">
-                        <rect key="frame" x="220" y="4" width="16" height="16"/>
+                        <rect key="frame" x="224" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="GlZ-3P-Iw8"/>
                             <constraint firstAttribute="height" constant="16" id="Xnc-R3-VYp"/>
                         </constraints>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="K68-Xr-JJH">
-                        <rect key="frame" x="142" y="4" width="24" height="16"/>
+                        <rect key="frame" x="144" y="4" width="24" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="6yf-KR-Ktc"/>
                             <constraint firstAttribute="height" constant="16" id="xqg-uv-aof"/>
@@ -145,7 +145,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="gkQ-Nr-aDz">
-                        <rect key="frame" x="196" y="4" width="16" height="16"/>
+                        <rect key="frame" x="200" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="0I4-ia-QTw"/>
                             <constraint firstAttribute="height" constant="16" id="r8b-AE-oED"/>
@@ -156,14 +156,14 @@
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
-                        <rect key="frame" x="322" y="4" width="16" height="16"/>
+                        <rect key="frame" x="328" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="VEL-hf-bo8"/>
                             <constraint firstAttribute="height" constant="16" id="x7t-20-ztp"/>
                         </constraints>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Pjc-SJ-rsn">
-                        <rect key="frame" x="244" y="4" width="24" height="16"/>
+                        <rect key="frame" x="248" y="4" width="24" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="24" id="mEh-o9-0E2"/>
                             <constraint firstAttribute="height" constant="16" id="sNf-Op-1bs"/>
@@ -174,7 +174,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="BLY-CO-Zam">
-                        <rect key="frame" x="298" y="4" width="16" height="16"/>
+                        <rect key="frame" x="304" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="cuN-zd-vdz"/>
                             <constraint firstAttribute="height" constant="16" id="dmS-Es-Z1P"/>
@@ -185,14 +185,14 @@
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
-                        <rect key="frame" x="424" y="4" width="16" height="16"/>
+                        <rect key="frame" x="432" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="bmx-Ha-dRn"/>
                             <constraint firstAttribute="height" constant="16" id="slm-Eu-J1F"/>
                         </constraints>
                     </progressIndicator>
                     <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="wnl-Bi-Ego">
-                        <rect key="frame" x="346" y="4" width="24" height="16"/>
+                        <rect key="frame" x="352" y="4" width="24" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="auz-SM-rdx"/>
                             <constraint firstAttribute="width" constant="24" id="pq7-6z-gpt"/>
@@ -203,7 +203,7 @@
                         </buttonCell>
                     </button>
                     <button hidden="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Cg3-r8-KR5">
-                        <rect key="frame" x="400" y="4" width="16" height="16"/>
+                        <rect key="frame" x="408" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="Bwu-c8-TgM"/>
                             <constraint firstAttribute="height" constant="16" id="D2y-CA-Xcz"/>
@@ -226,45 +226,45 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f19-16-42W">
-                        <rect key="frame" x="70" y="5" width="18" height="14"/>
+                        <rect key="frame" x="70" y="5" width="20" height="14"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="IhF-AY-mVz"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="IhF-AY-mVz"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="caT-w9-zJ9">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="f7g-mT-LE7">
-                        <rect key="frame" x="172" y="5" width="18" height="14"/>
+                        <rect key="frame" x="174" y="5" width="20" height="14"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="nXc-Zj-MRR"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="nXc-Zj-MRR"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="smR-ZO-LAl">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="P62-wC-T1P">
-                        <rect key="frame" x="274" y="5" width="18" height="14"/>
+                        <rect key="frame" x="278" y="5" width="20" height="14"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="tt4-Cp-9yw"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="tt4-Cp-9yw"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="ShU-59-vsV">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="8yk-0g-1sA">
-                        <rect key="frame" x="376" y="5" width="18" height="14"/>
+                        <rect key="frame" x="382" y="5" width="20" height="14"/>
                         <constraints>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="14" id="8qi-yX-Fbb"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="8qi-yX-Fbb"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="5Zl-Dc-eev">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="controlContent" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -363,7 +363,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
