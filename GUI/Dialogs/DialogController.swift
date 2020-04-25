@@ -41,6 +41,9 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     var parent: MyController!
     var amiga: AmigaProxy!
 
+    // Remembers whether awakeFromNib has been called
+    var awake = false
+    
     static func make(parent: MyController, nibName: NSNib.Name) -> Self? {
 
         let controller = Self.init(windowNibName: nibName)
@@ -57,9 +60,16 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     override func windowDidLoad() {
         track()
     }
-
+    
+    override func awakeFromNib() {
+    
+        track()
+        awake = true
+        sheetWillShow()
+    }
+    
     func sheetWillShow() {
-         
+        
     }
     
     func sheetDidShow() {
@@ -72,7 +82,7 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     
     func showSheet(completionHandler handler:(() -> Void)? = nil) {
 
-        sheetWillShow()
+        if awake { sheetWillShow() }
         
         parent.window?.beginSheet(window!, completionHandler: { result in
             if result == NSApplication.ModalResponse.OK {

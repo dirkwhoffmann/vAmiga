@@ -548,12 +548,7 @@ class Inspector: DialogController {
 
     // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
-    
-    override func awakeFromNib() {
         
-        track()
-    }
-    
     override func showWindow(_ sender: Any?) {
 
         track()

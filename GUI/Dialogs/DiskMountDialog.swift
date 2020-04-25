@@ -50,6 +50,7 @@ class DiskMountDialog: DialogController {
     override public func awakeFromNib() {
         
         track()
+        super.awakeFromNib()
         window?.makeFirstResponder(carousel)
         
         update()

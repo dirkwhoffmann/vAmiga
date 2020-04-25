@@ -114,6 +114,8 @@ class PreferencesController: DialogController {
 
     override func awakeFromNib() {
 
+        super.awakeFromNib()
+        
         if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
         refresh()
     }

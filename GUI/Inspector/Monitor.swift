@@ -59,6 +59,7 @@ class Monitor: DialogController {
     override func awakeFromNib() {
 
         track()
+        super.awakeFromNib()
         refresh()
     }
 
