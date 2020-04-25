@@ -675,7 +675,7 @@ extension Keys {
 
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
-    static let fifoBuffering     = "VAMIGA_COM_FifoBuffering"
+    static let asyncFifo         = "VAMIGA_COM_AsyncFifo"
 
     // CIAs
     static let todBug            = "VAMIGA_COM_TodBug"
@@ -698,7 +698,7 @@ struct CompatibilityDefaults {
     
     // Floppy drives
     let driveSpeed: Int
-    let fifoBuffering: Bool
+    let asyncFifo: Bool
     
     // CIAs
     let todBug: Bool
@@ -720,7 +720,7 @@ struct CompatibilityDefaults {
          blitterAccuracy: 2,
          
          driveSpeed: 1,
-         fifoBuffering: true,
+         asyncFifo: true,
          
          todBug: true
      )
@@ -738,7 +738,7 @@ struct CompatibilityDefaults {
         blitterAccuracy: 2,
         
         driveSpeed: 1,
-        fifoBuffering: true,
+        asyncFifo: true,
         
         todBug: true
     )
@@ -756,7 +756,7 @@ struct CompatibilityDefaults {
         blitterAccuracy: 0,
         
         driveSpeed: -1,
-        fifoBuffering: false,
+        asyncFifo: false,
         
         todBug: true
     )
@@ -777,7 +777,7 @@ extension UserDefaults {
             Keys.filterType: defaults.filterType.rawValue,
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.driveSpeed: defaults.driveSpeed,
-            Keys.fifoBuffering: defaults.fifoBuffering,
+            Keys.asyncFifo: defaults.asyncFifo,
             Keys.todBug: defaults.todBug
         ]
 
@@ -797,7 +797,7 @@ extension UserDefaults {
                      Keys.filterType,
                      Keys.blitterAccuracy,
                      Keys.driveSpeed,
-                     Keys.fifoBuffering,
+                     Keys.asyncFifo,
                      Keys.todBug]
 
         for key in keys { userDefaults.removeObject(forKey: key) }

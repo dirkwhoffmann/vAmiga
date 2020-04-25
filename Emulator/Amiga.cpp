@@ -367,10 +367,10 @@ Amiga::configure(ConfigOption option, long value)
             agnus.blitter.setAccuracy(value);
             break;
             
-        case VA_FIFO_BUFFERING:
+        case VA_ASYNC_FIFO:
 
-            if (current.diskController.useFifo == value) return true;
-            paula.diskController.setUseFifo(value);
+            if (current.diskController.asyncFifo == value) return true;
+            paula.diskController.setAsyncFifo(value);
             break;
 
         case VA_SERIAL_DEVICE:
@@ -467,7 +467,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_FILTER_ACTIVATION: return paula.audioUnit.getFilterActivation();
         case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
         case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
-        case VA_FIFO_BUFFERING: return paula.diskController.getUseFifo();
+        case VA_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
         case VA_SERIAL_DEVICE: return serialPort.getDevice();
         case VA_TODBUG: return ciaA.getTodBug();
 

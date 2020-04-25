@@ -18,7 +18,7 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
     config.connected[1] = false;
     config.connected[2] = false;
     config.connected[3] = false;
-    config.useFifo = true;
+    config.asyncFifo = true;
 }
 
 void
@@ -75,7 +75,7 @@ DiskController::_dumpConfig()
     msg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
     msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
-    msg("      useFifo : %s\n", config.useFifo ? "yes" : "no");
+    msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
 }
 
 void
@@ -154,10 +154,10 @@ DiskController::setSpeed(i32 value)
 }
 
 void
-DiskController::setUseFifo(bool value)
+DiskController::setAsyncFifo(bool value)
 {
     pthread_mutex_lock(&lock);
-    config.useFifo = value;
+    config.asyncFifo = value;
     pthread_mutex_unlock(&lock);
 }
 
@@ -256,7 +256,7 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     }
 
     // Determine if a FIFO buffer should be emulated
-    asyncFifo = config.useFifo;
+    asyncFifo = config.asyncFifo;
     
     // Disable DMA if bit 15 (DMAEN) is zero
     if (!(newDskLen & 0x8000)) {
@@ -560,7 +560,7 @@ DiskController::executeFifo()
 void
 DiskController::performDMA()
 {
-    // Emulate the FIFO buffer if asynchroneous mode is disabled
+    // Emulate the FIFO buffer if asynchronous mode is disabled
     if (!asyncFifo) { executeFifo(); executeFifo(); }
     
     // Only proceed if there are remaining bytes to read

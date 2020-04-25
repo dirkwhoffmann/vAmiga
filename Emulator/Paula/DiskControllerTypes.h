@@ -54,7 +54,7 @@ inline const char *driveStateName(DriveState state)
 typedef struct
 {
     bool connected[4];
-    bool useFifo;
+    bool asyncFifo;
 }
 DiskControllerConfig;
 

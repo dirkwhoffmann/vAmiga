@@ -8,6 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ConfigController" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="compAsyncFifo" destination="Ps4-Oa-QV1" id="RaA-Nc-4td"/>
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
                 <outlet property="compBltLevel1" destination="6br-Nl-Ztc" id="nMu-vk-ygR"/>
                 <outlet property="compBltLevel2" destination="V3E-d1-ztH" id="CLY-sh-STa"/>
@@ -16,7 +17,6 @@
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
                 <outlet property="compDriveSpeed" destination="4Ny-q7-06h" id="TAF-pD-4dp"/>
-                <outlet property="compFifoBuffering" destination="Ps4-Oa-QV1" id="IyU-ZU-O6d"/>
                 <outlet property="compFilterActivation" destination="u3T-Yc-Mdc" id="Jvo-Xf-DLp"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compSamplingMethod" destination="M8L-zD-9wR" id="RpJ-t5-W4C"/>
@@ -1127,14 +1127,14 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ps4-Oa-QV1">
-                                            <rect key="frame" x="420" y="337" width="143" height="18"/>
+                                            <rect key="frame" x="420" y="337" width="144" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate FIFO buffer" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dZJ-X3-GIS">
+                                            <buttonCell key="cell" type="check" title="Asynchronous FIFO " bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dZJ-X3-GIS">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="compFifoBufferingAction:" target="-2" id="qzJ-Xs-ME4"/>
+                                                <action selector="compAsyncFifoAction:" target="-2" id="ysq-wL-cG1"/>
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SM8-ef-Qsp">

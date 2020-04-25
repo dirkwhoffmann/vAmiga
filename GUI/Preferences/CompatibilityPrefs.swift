@@ -36,8 +36,8 @@ extension ConfigController {
         assert(speed == config.df2.speed)
         assert(speed == config.df3.speed)
         compDriveSpeed.selectItem(withTag: Int(speed))
-        compFifoBuffering.isHidden = speed == -1
-        compFifoBuffering.state = config.diskController.useFifo ? .on : .off
+        compAsyncFifo.isHidden = speed == -1
+        compAsyncFifo.state = config.diskController.asyncFifo ? .on : .off
 
         // CIAs
         compTodBug.state = config.ciaA.todBug ? .on : .off
@@ -88,9 +88,9 @@ extension ConfigController {
         refresh()
     }
 
-    @IBAction func compFifoBufferingAction(_ sender: NSButton!) {
+    @IBAction func compAsyncFifoAction(_ sender: NSButton!) {
 
-        config.fifoBuffering = sender.state == .on
+        config.asyncFifo = sender.state == .on
         refresh()
     }
 

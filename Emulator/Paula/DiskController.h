@@ -29,7 +29,7 @@ class DiskController : public AmigaComponent {
     // The current drive state (off, read, or write)
     DriveState state;
 
-    // Indicates if the Fifo should be filled asynchroneously
+    // Indicates if the Fifo should be filled asynchronously
     bool asyncFifo;
 
     // Set to true if the currently read disk word matches the sync word
@@ -97,7 +97,7 @@ public:
         worker
 
         & config.connected
-        & config.useFifo;
+        & config.asyncFifo;
     }
 
     template <class T>
@@ -151,9 +151,9 @@ public:
     // Sets the speed acceleration factor for all connected drives
     void setSpeed(i32 value);
     
-    // Enables or disables the emulation of a FIFO buffer
-    bool getUseFifo() { return config.useFifo; }
-    void setUseFifo(bool value);
+    // Enables or disables asynchronous FIFO buffer emulation
+    bool getAsyncFifo() { return config.asyncFifo; }
+    void setAsyncFifo(bool value);
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
@@ -293,15 +293,15 @@ public:
      *
      * The FIFO buffer supports two emulation modes:
      *
-     *     1. Asynchroneous       (more compatible)
-     *     2. Synchroneous        (less compatibile)
+     *     1. Asynchronous        (more compatible)
+     *     2. Synchronous         (less compatibile)
      *
-     * If the FIFO buffer is emulated asynchroneously, the event scheduler
+     * If the FIFO buffer is emulated asynchronously, the event scheduler
      * is utilized to execute a DSK_ROTATE event from time to time. Whenever
      * this event triggers, a byte is read from the disk drive and fed into
-     * the buffer. If the FIFO buffer is emulated synchroneously, the DSK_ROTATE
+     * the buffer. If the FIFO buffer is emulated synchronously, the DSK_ROTATE
      * events have no effect. Instead, the FIFO buffer is filled at the same
-     * time when the drive DMA slots are processed. Synchroneous mode is
+     * time when the drive DMA slots are processed. Synchronous mode is
      * slightly faster, because the FIFO can never run out of data. It is filled
      * exactly at the time when data is needed.
      *
@@ -309,7 +309,7 @@ public:
      * factor greater than 1. In this case, multiple words are transferred
      * in each disk drive DMA slot. The first word is taken from the Fifo as
      * usual. All other words are emulated on-the-fly, with the same mechanism
-     * as used in synchroneous Fifo mode.
+     * as used in synchronous Fifo mode.
      *
      * Turbo DMA is applied iff the drive is configured as a turbo drive.
      * In this mode, data is transferred immediately when the DSKLEN

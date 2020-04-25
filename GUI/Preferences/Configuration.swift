@@ -153,9 +153,9 @@ class Configuration {
         get { return amiga.getConfig(VA_DRIVE_SPEED) }
         set { amiga.configure(VA_DRIVE_SPEED, value: newValue) }
     }
-    var fifoBuffering: Bool {
-        get { return amiga.getConfig(VA_FIFO_BUFFERING) != 0 }
-        set { amiga.configure(VA_FIFO_BUFFERING, enable: newValue) }
+    var asyncFifo: Bool {
+        get { return amiga.getConfig(VA_ASYNC_FIFO) != 0 }
+        set { amiga.configure(VA_ASYNC_FIFO, enable: newValue) }
     }
     var todBug: Bool {
         get { return amiga.getConfig(VA_TODBUG) != 0 }
@@ -402,7 +402,7 @@ class Configuration {
         blitterAccuracy = defaults.blitterAccuracy
         
         driveSpeed = defaults.driveSpeed
-        fifoBuffering = defaults.fifoBuffering
+        asyncFifo = defaults.asyncFifo
         
         todBug = defaults.todBug
         
@@ -426,7 +426,7 @@ class Configuration {
          blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
         
          driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
-         fifoBuffering = defaults.bool(forKey: Keys.fifoBuffering)
+         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         
          todBug = defaults.bool(forKey: Keys.todBug)
 
@@ -446,7 +446,7 @@ class Configuration {
          defaults.set(filterActivation, forKey: Keys.filterActivation)
          defaults.set(filterType, forKey: Keys.filterType)
          defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
-         defaults.set(fifoBuffering, forKey: Keys.fifoBuffering)
+         defaults.set(asyncFifo, forKey: Keys.asyncFifo)
          defaults.set(todBug, forKey: Keys.todBug)
      }
     
