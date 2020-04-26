@@ -138,6 +138,16 @@ Disk::clearDisk()
     for (int i = 0; i < sizeof(data); i++)
         data.raw[i] = rand() & 0xFF;
     
+    /* We are allowed to place random data here.
+     * In order to make some copy protected game titles work, we place
+     * add some magic values.
+     * Crunch factory: Looks for 0x44A2 on cylinder 80
+     */
+    for (int t = 0; t < 2*84; t++) {
+        data.track[t][0] = 0x44;
+        data.track[t][1] = 0xA2;
+    }
+    
     fnv = 0;
 }
 

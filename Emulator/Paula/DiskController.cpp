@@ -351,7 +351,6 @@ void
 DiskController::pokeDSKSYNC(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
-    // assert(false);
     dsksync = value;
 }
 
@@ -506,9 +505,6 @@ DiskController::executeFifo()
     Drive *drive = getSelectedDrive();
     if (drive == NULL) return;
 
-    // Only proceed if the selected drive is not a turbo drive
-    // if (drive->isTurbo()) return;
-    
     switch (state) {
             
         case DRIVE_DMA_OFF:
