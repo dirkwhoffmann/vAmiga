@@ -676,6 +676,8 @@ extension Keys {
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
     static let asyncFifo         = "VAMIGA_COM_AsyncFifo"
+    static let lockDskSync       = "VAMIGA_COM_LockDskSync"
+    static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
 
     // CIAs
     static let todBug            = "VAMIGA_COM_TodBug"
@@ -699,6 +701,8 @@ struct CompatibilityDefaults {
     // Floppy drives
     let driveSpeed: Int
     let asyncFifo: Bool
+    let lockDskSync: Bool
+    let autoDskSync: Bool
     
     // CIAs
     let todBug: Bool
@@ -721,6 +725,8 @@ struct CompatibilityDefaults {
          
          driveSpeed: 1,
          asyncFifo: true,
+         lockDskSync: false,
+         autoDskSync: false,
          
          todBug: true
      )
@@ -739,6 +745,8 @@ struct CompatibilityDefaults {
         
         driveSpeed: 1,
         asyncFifo: true,
+        lockDskSync: false,
+        autoDskSync: false,
         
         todBug: true
     )
@@ -757,6 +765,8 @@ struct CompatibilityDefaults {
         
         driveSpeed: -1,
         asyncFifo: false,
+        lockDskSync: false,
+        autoDskSync: false,
         
         todBug: true
     )
@@ -778,6 +788,8 @@ extension UserDefaults {
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.asyncFifo: defaults.asyncFifo,
+            Keys.lockDskSync: defaults.lockDskSync,
+            Keys.autoDskSync: defaults.autoDskSync,
             Keys.todBug: defaults.todBug
         ]
 
@@ -798,6 +810,8 @@ extension UserDefaults {
                      Keys.blitterAccuracy,
                      Keys.driveSpeed,
                      Keys.asyncFifo,
+                     Keys.lockDskSync,
+                     Keys.autoDskSync,
                      Keys.todBug]
 
         for key in keys { userDefaults.removeObject(forKey: key) }

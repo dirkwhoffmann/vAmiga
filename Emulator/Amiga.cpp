@@ -373,6 +373,18 @@ Amiga::configure(ConfigOption option, long value)
             paula.diskController.setAsyncFifo(value);
             break;
 
+        case VA_LOCK_DSKSYNC:
+
+            if (current.diskController.lockDskSync == value) return true;
+            paula.diskController.setLockDskSync(value);
+            break;
+            
+        case VA_AUTO_DSKSYNC:
+            
+            if (current.diskController.autoDskSync == value) return true;
+            paula.diskController.setAutoDskSync(value);
+            break;
+
         case VA_SERIAL_DEVICE:
 
             if (!isSerialPortDevice(value)) {
@@ -468,6 +480,8 @@ Amiga::getConfig(ConfigOption option)
         case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
         case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
         case VA_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
+        case VA_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
+        case VA_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
         case VA_SERIAL_DEVICE: return serialPort.getDevice();
         case VA_TODBUG: return ciaA.getTodBug();
 

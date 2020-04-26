@@ -38,6 +38,8 @@ extension ConfigController {
         compDriveSpeed.selectItem(withTag: Int(speed))
         compAsyncFifo.isHidden = speed == -1
         compAsyncFifo.state = config.diskController.asyncFifo ? .on : .off
+        compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
+        compAutoDskSync.state = config.diskController.autoDskSync ? .on : .off
 
         // CIAs
         compTodBug.state = config.ciaA.todBug ? .on : .off
@@ -91,6 +93,18 @@ extension ConfigController {
     @IBAction func compAsyncFifoAction(_ sender: NSButton!) {
 
         config.asyncFifo = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func compLockDskSyncAction(_ sender: NSButton!) {
+        
+        config.lockDskSync = sender.state == .on
+        refresh()
+    }
+    
+    @IBAction func compAutoDskSyncAction(_ sender: NSButton!) {
+        
+        config.autoDskSync = sender.state == .on
         refresh()
     }
 

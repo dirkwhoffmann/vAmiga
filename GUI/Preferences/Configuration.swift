@@ -157,6 +157,14 @@ class Configuration {
         get { return amiga.getConfig(VA_ASYNC_FIFO) != 0 }
         set { amiga.configure(VA_ASYNC_FIFO, enable: newValue) }
     }
+    var lockDskSync: Bool {
+        get { return amiga.getConfig(VA_LOCK_DSKSYNC) != 0 }
+        set { amiga.configure(VA_LOCK_DSKSYNC, enable: newValue) }
+    }
+    var autoDskSync: Bool {
+        get { return amiga.getConfig(VA_AUTO_DSKSYNC) != 0 }
+        set { amiga.configure(VA_AUTO_DSKSYNC, enable: newValue) }
+    }
     var todBug: Bool {
         get { return amiga.getConfig(VA_TODBUG) != 0 }
         set { amiga.configure(VA_TODBUG, enable: newValue) }
@@ -403,6 +411,8 @@ class Configuration {
         
         driveSpeed = defaults.driveSpeed
         asyncFifo = defaults.asyncFifo
+        lockDskSync = defaults.lockDskSync
+        autoDskSync = defaults.autoDskSync
         
         todBug = defaults.todBug
         
@@ -410,27 +420,29 @@ class Configuration {
      }
     
     func loadCompatibilityUserDefaults() {
-
-         let defaults = UserDefaults.standard
-
-         amiga.suspend()
-
-         clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
-         clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
-         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
         
-         samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
-         filterActivation = defaults.integer(forKey: Keys.filterActivation)
-         filterType = defaults.integer(forKey: Keys.filterType)
+        let defaults = UserDefaults.standard
         
-         blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        amiga.suspend()
         
-         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
-         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
+        clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
+        clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
+        clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
         
-         todBug = defaults.bool(forKey: Keys.todBug)
-
-         amiga.resume()
+        samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
+        filterActivation = defaults.integer(forKey: Keys.filterActivation)
+        filterType = defaults.integer(forKey: Keys.filterType)
+        
+        blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        
+        driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+        asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
+        lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
+        autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
+        
+        todBug = defaults.bool(forKey: Keys.todBug)
+        
+        amiga.resume()
      }
 
      func saveCompatibilityUserDefaults() {
@@ -447,6 +459,8 @@ class Configuration {
          defaults.set(filterType, forKey: Keys.filterType)
          defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
          defaults.set(asyncFifo, forKey: Keys.asyncFifo)
+         defaults.set(lockDskSync, forKey: Keys.lockDskSync)
+         defaults.set(autoDskSync, forKey: Keys.autoDskSync)
          defaults.set(todBug, forKey: Keys.todBug)
      }
     

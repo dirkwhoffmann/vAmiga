@@ -19,6 +19,8 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
     config.connected[2] = false;
     config.connected[3] = false;
     config.asyncFifo = true;
+    config.lockDskSync = false;
+    config.autoDskSync = false;
 }
 
 void
@@ -76,6 +78,8 @@ DiskController::_dumpConfig()
     msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
     msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
+    msg("  lockDskSync : %s\n", config.lockDskSync ? "yes" : "no");
+    msg("  autoDskSync : %s\n", config.autoDskSync ? "yes" : "no");
 }
 
 void
@@ -161,6 +165,21 @@ DiskController::setAsyncFifo(bool value)
     pthread_mutex_unlock(&lock);
 }
 
+void
+DiskController::setLockDskSync(bool value)
+{
+    pthread_mutex_lock(&lock);
+    config.lockDskSync = value;
+    pthread_mutex_unlock(&lock);
+}
+
+void
+DiskController::setAutoDskSync(bool value)
+{
+    pthread_mutex_lock(&lock);
+    config.autoDskSync = value;
+    pthread_mutex_unlock(&lock);
+}
 
 Drive *
 DiskController::getSelectedDrive()
@@ -351,6 +370,12 @@ void
 DiskController::pokeDSKSYNC(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
+    
+    if (value != 0x4489 && config.lockDskSync) {
+        debug("Write to DSKSYNC blocked (%x)\n", value);
+        return;
+    }
+    
     dsksync = value;
 }
 
@@ -517,9 +542,10 @@ DiskController::executeFifo()
             
             // Write byte into the FIFO buffer
             writeFifo(incoming);
-
+            
             // Check if we've reached a SYNC mark
-            if ((syncFlag = compareFifo(dsksync))) {
+            if ((syncFlag = compareFifo(dsksync)) ||
+                (config.autoDskSync && syncCounter++ > 20000)) {
 
                 // Trigger a word SYNC interrupt
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
@@ -530,6 +556,9 @@ DiskController::executeFifo()
                     setState(DRIVE_DMA_READ);
                     clearFifo();
                 }
+                
+                // Reset the watchdog counter
+                syncCounter = 0;
             }
             break;
             

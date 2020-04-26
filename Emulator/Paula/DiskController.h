@@ -20,6 +20,14 @@ class DiskController : public AmigaComponent {
     DiskControllerConfig config;
     DiskControllerInfo info;
 
+    /* Indicates whether the FIFO buffer should be filled asynchronously
+     * At the beginning of each disk operation, this variable is assigned
+     * the value of the corresponding configuration option. Latching the value
+     * enables the user to change the configuration in the middle of a disk
+      operation without causing any damage.
+     */
+    bool asyncFifo;
+
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
 
@@ -29,11 +37,16 @@ class DiskController : public AmigaComponent {
     // The current drive state (off, read, or write)
     DriveState state;
 
-    // Indicates if the Fifo should be filled asynchronously
-    bool asyncFifo;
-
     // Set to true if the currently read disk word matches the sync word
     bool syncFlag = false;
+    
+    /* Watchdog counter for SYNC marks
+     * This counter is incremented after each disk rotation and reset when
+     * a SYNC mark was found. It is used to implement the auto DSKSYNC feature
+     * which forces the DSKSYNC interrupt to trigger even if no SYNC mark
+     * is present.
+     */
+    i16 syncCounter = 0;
     
     
     //
@@ -97,7 +110,9 @@ public:
         worker
 
         & config.connected
-        & config.asyncFifo;
+        & config.asyncFifo
+        & config.lockDskSync
+        & config.autoDskSync;
     }
 
     template <class T>
@@ -109,6 +124,7 @@ public:
         & state
         & asyncFifo
         & syncFlag
+        & syncCounter
         & incoming
         & incomingCycle
         & fifo
@@ -154,6 +170,12 @@ public:
     // Enables or disables asynchronous FIFO buffer emulation
     bool getAsyncFifo() { return config.asyncFifo; }
     void setAsyncFifo(bool value);
+
+    // Getters and setters for copy-protection related settings
+    bool getLockDskSync() { return config.lockDskSync; }
+    void setLockDskSync(bool value);
+    bool getAutoDskSync() { return config.autoDskSync; }
+    void setAutoDskSync(bool value);
 
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);

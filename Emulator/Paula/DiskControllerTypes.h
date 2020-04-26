@@ -55,6 +55,8 @@ typedef struct
 {
     bool connected[4];
     bool asyncFifo;
+    bool lockDskSync;
+    bool autoDskSync;
 }
 DiskControllerConfig;
 
