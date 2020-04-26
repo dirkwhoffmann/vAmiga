@@ -1989,7 +1989,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="vidDefaultAction:" target="-2" id="TYN-0f-EdA"/>
+                                                <action selector="vidDefaultsAction:" target="-2" id="BVg-cn-fFu"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vrE-h3-1TF">
