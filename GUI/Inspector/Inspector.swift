@@ -199,6 +199,10 @@ class Inspector: DialogController {
     @IBOutlet weak var dmaAUD1Enable: NSButton!
     @IBOutlet weak var dmaAUD2Enable: NSButton!
     @IBOutlet weak var dmaAUD3Enable: NSButton!
+    @IBOutlet weak var dmaAUD0LC: NSTextField!
+    @IBOutlet weak var dmaAUD1LC: NSTextField!
+    @IBOutlet weak var dmaAUD2LC: NSTextField!
+    @IBOutlet weak var dmaAUD3LC: NSTextField!
 
     @IBOutlet weak var dmaBLTAPT: NSTextField!
     @IBOutlet weak var dmaBLTBPT: NSTextField!

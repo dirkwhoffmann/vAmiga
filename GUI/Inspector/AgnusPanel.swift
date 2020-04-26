@@ -47,6 +47,10 @@ extension Inspector {
                               dmaAUD1PT: fmt24,
                               dmaAUD2PT: fmt24,
                               dmaAUD3PT: fmt24,
+                              dmaAUD0LC: fmt24,
+                              dmaAUD1LC: fmt24,
+                              dmaAUD2LC: fmt24,
+                              dmaAUD3LC: fmt24,
 
                               dmaBLTAPT: fmt24,
                               dmaBLTBPT: fmt24,
@@ -124,6 +128,10 @@ extension Inspector {
         dmaAUD1Enable.state = aud1en ? .on : .off
         dmaAUD2Enable.state = aud2en ? .on : .off
         dmaAUD3Enable.state = aud3en ? .on : .off
+        dmaAUD0LC.integerValue = Int(agnusInfo!.audlc.0)
+        dmaAUD1LC.integerValue = Int(agnusInfo!.audlc.1)
+        dmaAUD2LC.integerValue = Int(agnusInfo!.audlc.2)
+        dmaAUD3LC.integerValue = Int(agnusInfo!.audlc.3)
 
         dmaBLTAPT.integerValue = Int(agnusInfo!.bltpt.0)
         dmaBLTBPT.integerValue = Int(agnusInfo!.bltpt.1)

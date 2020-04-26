@@ -310,6 +310,7 @@ Agnus::_inspect()
     info.bltpt[3] = blitter.bltdpt & mask;
     for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & mask;
     for (unsigned i = 0; i < 4; i++) info.audpt[i] = audpt[i] & mask;
+    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i] & mask;
     for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & mask;
 
     pthread_mutex_unlock(&lock);

@@ -219,12 +219,16 @@
                 <outlet property="denisePF2P2" destination="Zl0-8X-Ozz" id="nuY-H5-NNV"/>
                 <outlet property="denisePF2PRI" destination="gpm-Lf-tEg" id="wOC-BT-xof"/>
                 <outlet property="dmaAUD0Enable" destination="MRy-st-dIt" id="yEn-aM-MCV"/>
+                <outlet property="dmaAUD0LC" destination="O3t-Vu-MLI" id="3mJ-0T-LIf"/>
                 <outlet property="dmaAUD0PT" destination="MRL-hC-kaB" id="Ub2-X6-P9X"/>
                 <outlet property="dmaAUD1Enable" destination="MIw-4W-Xzd" id="2AS-AP-9bW"/>
+                <outlet property="dmaAUD1LC" destination="sib-3W-i28" id="NJV-pj-kh4"/>
                 <outlet property="dmaAUD1PT" destination="wmt-YM-jui" id="OSd-El-YRv"/>
                 <outlet property="dmaAUD2Enable" destination="Uhs-ld-je8" id="sLi-NF-Jbe"/>
+                <outlet property="dmaAUD2LC" destination="bgv-hh-WsQ" id="yei-WI-Mhc"/>
                 <outlet property="dmaAUD2PT" destination="ugp-hk-G5c" id="de4-wt-Mg3"/>
                 <outlet property="dmaAUD3Enable" destination="BqS-ce-Nxn" id="5eB-Z8-Ous"/>
+                <outlet property="dmaAUD3LC" destination="0VR-Oh-9Oe" id="d1z-m3-YnS"/>
                 <outlet property="dmaAUD3PT" destination="8gY-aS-gao" id="ZQu-La-92h"/>
                 <outlet property="dmaBLS" destination="9ek-JG-Evb" id="pna-Ue-N8v"/>
                 <outlet property="dmaBLTAEnable" destination="Ye4-5g-1Kt" id="iEa-lj-9S0"/>
@@ -961,7 +965,7 @@
                                                                                         <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                                     </tableHeaderCell>
                                                                                     <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="left" title="Text Cell" id="QqJ-RW-OQL">
-                                                                                        <font key="font" metaFont="cellTitle"/>
+                                                                                        <font key="font" metaFont="label" size="12"/>
                                                                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                                     </textFieldCell>
@@ -1224,7 +1228,7 @@
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
                                                                             <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="IpZ-JB-xst">
-                                                                                <font key="font" metaFont="cellTitle"/>
+                                                                                <font key="font" metaFont="label" size="12"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
@@ -1305,7 +1309,7 @@
                                                                                 <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
                                                                             </tableHeaderCell>
                                                                             <textFieldCell key="dataCell" lineBreakMode="truncatingTail" selectable="YES" editable="YES" alignment="center" title="Text Cell" id="YTa-21-Eis">
-                                                                                <font key="font" metaFont="cellTitle"/>
+                                                                                <font key="font" metaFont="label" size="12"/>
                                                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                                 <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                                             </textFieldCell>
@@ -2159,7 +2163,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="jJo-Pz-BlY">
                                                 <rect key="frame" x="1" y="0.0" width="151" height="246"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="lgi-Sv-OLV" id="RzZ-Zx-t06" customClass="BankTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="151" height="221"/>
@@ -2218,7 +2222,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="858-OJ-L3r">
                                                 <rect key="frame" x="1" y="0.0" width="625" height="246"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WPj-Ua-UtF" id="WbL-UR-zTx" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="625" height="221"/>
@@ -3640,7 +3644,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="TcC-cK-PaI">
                                                             <rect key="frame" x="1" y="0.0" width="360" height="280"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="e4D-rb-dVX" id="rUL-h6-KIi" customClass="CopperTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="360" height="255"/>
@@ -4311,7 +4315,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="252" height="256"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="252" height="256"/>
@@ -6788,7 +6792,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="5dn-W1-111">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Uk2-Ez-Oya">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6824,7 +6828,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="QrR-nh-kxQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" spellingCorrection="YES" smartInsertDelete="YES" id="mjy-kd-clj">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6859,7 +6863,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="0.0" width="786" height="280"/>
-                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                <autoresizingMask key="autoresizingMask"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="786" height="255"/>
