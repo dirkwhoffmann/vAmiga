@@ -54,7 +54,25 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    SortedRingBuffer<short, 256> samples;
+    SortedRingBuffer<short, 2048> samples;
+    
+    /* Two locks regulating the access to the sample buffer.
+     *
+     * "The minimum period is 124 color clocks. This means that the smallest
+     *  number that should be placed in this register [AUDxPER] is 124 decimal.
+     *  This corresponds to a maximum sample frequency of 28.86 khz." [HRM]
+     *
+     * Many games initialize the period  programs write a value of 1 into
+     * AUDxPER (e.g., James Pond 2 and Ghosts'n Goblins). As a result, the
+     * sample buffer is flooded with identical samples. To prevent this,
+     * these two variables prevent the sample buffer from being written to in
+     * penlo() and penhi(). The locks are released whenever a new sample is
+     * written into the AUDxDAT register.
+     *
+     * This feature is experimental (and might well be disabled).
+     */
+    bool enablePenlo = false;
+    bool enablePenhi = false;
 
     
     //

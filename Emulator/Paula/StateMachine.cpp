@@ -91,6 +91,7 @@ StateMachine<nr>::pokeAUDxDAT(u16 value)
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
     
     auddat = value;
+    enablePenlo = enablePenhi = true;
     
     if (AUDxON()) {
         
@@ -293,8 +294,9 @@ StateMachine<nr>::move_011_000() {
     debug(AUD_DEBUG, "move_011_000\n");
 
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-
     agnus.cancel<slot>();
+
+    intreq2 = false;
     state = 0b000;
 }
 
@@ -335,9 +337,7 @@ template <int nr> void
 StateMachine<nr>::AUDxIR()
 {
     IrqSource source =
-    nr == 0 ? INT_AUD0 :
-    nr == 1 ? INT_AUD1 :
-    nr == 2 ? INT_AUD2 : INT_AUD3;
+    nr == 0 ? INT_AUD0 : nr == 1 ? INT_AUD1 : nr == 2 ? INT_AUD2 : INT_AUD3;
     
     paula.scheduleIrqRel(source, DMA_CYCLES(1));
     /*
@@ -364,10 +364,12 @@ StateMachine<nr>::percntrld()
     } else {
         agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
     }
+    
     /*
-    if (audperLatch < 64) {
+    if (audperLatch < 124) {
+        debug("Very small audperLatch %d\n", audperLatch);
         // What shall we do with very small audper values?
-        agnus.scheduleRel<slot>(DMA_CYCLES(64), CHX_PERFIN);
+        agnus.scheduleRel<slot>(DMA_CYCLES(124), CHX_PERFIN);
     } else {
         agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
     }
@@ -418,6 +420,8 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
+    // if (!enablePenhi) return;
+    
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
@@ -426,13 +430,17 @@ StateMachine<nr>::penhi()
     if (!samples.isFull()) {
         samples.insert(agnus.clock, scaled);
     } else {
-        debug(AUD_DEBUG, "penhi: Sample buffer is full\n");
+        debug("penhi: Sample buffer is full\n");
     }
+    
+    enablePenhi = false;
 }
 
 template <int nr> void
 StateMachine<nr>::penlo()
 {
+    // if (!enablePenlo) return;
+
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
 
@@ -441,8 +449,10 @@ StateMachine<nr>::penlo()
     if (!samples.isFull()) {
         samples.insert(agnus.clock, scaled);
     } else {
-        debug(AUD_DEBUG, "penlo: Sample buffer is full\n");
-     }
+        debug("penlo: Sample buffer is full\n");
+    }
+    
+    enablePenlo = false;
 }
 
 template <int nr> void
@@ -519,8 +529,8 @@ StateMachine<nr>::interpolate(Cycle clock)
         }
         default:
             assert(false);
+            return 0;
     }
-    return 0;
 }
 
 template StateMachine<0>::StateMachine(Amiga &ref);
