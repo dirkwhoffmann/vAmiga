@@ -30,7 +30,7 @@ class DmaDebugger;
 class Denise;
 class PixelEngine;
 class Paula;
-class AudioUnit;
+class PaulaAudio;
 class DiskController;
 class UART;
 class ZorroManager;
@@ -61,7 +61,7 @@ protected:
     Denise &denise;
     PixelEngine &pixelEngine;
     Paula &paula;
-    AudioUnit &audioUnit;
+    PaulaAudio &audioUnit;
     DiskController &diskController;
     UART &uart;
     ZorroManager &zorro;

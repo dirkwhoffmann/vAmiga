@@ -12,7 +12,7 @@
 #ifndef _PAULA_T_INC
 #define _PAULA_T_INC
 
-#include "AudioUnitTypes.h"
+#include "PaulaAudioTypes.h"
 #include "DiskControllerTypes.h"
 #include "DriveTypes.h"
 

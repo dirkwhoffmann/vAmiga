@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _AUDIOUNIT_T_INC
-#define _AUDIOUNIT_T_INC
+#ifndef _PAULA_AUDIO_T_INC
+#define _PAULA_AUDIO_T_INC
 
 //
 // Enumerations

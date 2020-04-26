@@ -10,7 +10,7 @@
 #ifndef _PAULA_INC
 #define _PAULA_INC
 
-#include "AudioUnit.h"
+#include "PaulaAudio.h"
 #include "DiskController.h"
 #include "UART.h"
 
@@ -29,7 +29,7 @@ private:
 public:
 
     // Sound chip
-    AudioUnit audioUnit = AudioUnit(amiga);
+    PaulaAudio audioUnit = PaulaAudio(amiga);
 
     // Disk controller
     DiskController diskController = DiskController(amiga);

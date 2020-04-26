@@ -7,14 +7,14 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_UNIT_INC
-#define _AUDIO_UNIT_INC
+#ifndef _PAULA_AUDIO_INC
+#define _PAULA_AUDIO_INC
 
 #include "AmigaComponent.h"
 #include "StateMachine.h"
 #include "AudioFilter.h"
 
-class AudioUnit : public AmigaComponent {
+class PaulaAudio : public AmigaComponent {
 
     // Current configuration
     AudioConfig config;
@@ -118,7 +118,7 @@ private:
     
 public:
     
-    AudioUnit(Amiga& ref);
+    PaulaAudio(Amiga& ref);
     
     template <class T>
     void applyToPersistentItems(T& worker)

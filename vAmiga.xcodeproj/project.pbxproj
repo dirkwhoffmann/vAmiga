@@ -153,7 +153,7 @@
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
-		50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */; };
+		50EE994021FF4D8E003BD74B /* PaulaAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
 		50F580662431D1A000E7D84D /* Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F580652431D1A000E7D84D /* Screenshot.swift */; };
@@ -212,7 +212,7 @@
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
-		5042FD7E23FFF0D200B315B2 /* AudioUnitTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnitTypes.h; sourceTree = "<group>"; };
+		5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaAudioTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
@@ -394,8 +394,8 @@
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtFile.h; sourceTree = "<group>"; };
-		50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioUnit.cpp; sourceTree = "<group>"; };
-		50EE993F21FF4D8E003BD74B /* AudioUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioUnit.h; sourceTree = "<group>"; };
+		50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaAudio.cpp; sourceTree = "<group>"; };
+		50EE993F21FF4D8E003BD74B /* PaulaAudio.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaAudio.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
@@ -887,9 +887,9 @@
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
-				5042FD7E23FFF0D200B315B2 /* AudioUnitTypes.h */,
-				50EE993F21FF4D8E003BD74B /* AudioUnit.h */,
-				50EE993E21FF4D8E003BD74B /* AudioUnit.cpp */,
+				5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */,
+				50EE993F21FF4D8E003BD74B /* PaulaAudio.h */,
+				50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				505A214F22869FF10016EA21 /* AudioFilter.h */,
@@ -1048,7 +1048,7 @@
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
 				504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
-				50EE994021FF4D8E003BD74B /* AudioUnit.cpp in Sources */,
+				50EE994021FF4D8E003BD74B /* PaulaAudio.cpp in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
 				508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */,
 				508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */,

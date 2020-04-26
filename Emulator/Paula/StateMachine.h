@@ -15,7 +15,7 @@
 template <int nr>
 class StateMachine : public AmigaComponent {
 
-    friend class AudioUnit;
+    friend class PaulaAudio;
 
     // Result of the latest inspection
     AudioChannelInfo info;

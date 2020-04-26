@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-AudioUnit::AudioUnit(Amiga& ref) : AmigaComponent(ref)
+PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("AudioUnit");
     
@@ -25,7 +25,7 @@ AudioUnit::AudioUnit(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-AudioUnit::setSampleRate(double hz)
+PaulaAudio::setSampleRate(double hz)
 {
     debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
@@ -37,7 +37,7 @@ AudioUnit::setSampleRate(double hz)
 }
 
 void
-AudioUnit::setSamplingMethod(SamplingMethod  method)
+PaulaAudio::setSamplingMethod(SamplingMethod  method)
 {
     debug(AUD_DEBUG, "setSamplingMethod(%d)\n", method);
     assert(isSamplingMethod(method));
@@ -46,7 +46,7 @@ AudioUnit::setSamplingMethod(SamplingMethod  method)
 }
 
 void
-AudioUnit::setFilterActivation(FilterActivation activation)
+PaulaAudio::setFilterActivation(FilterActivation activation)
 {
     debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);
     assert(isFilterActivation(activation));
@@ -55,7 +55,7 @@ AudioUnit::setFilterActivation(FilterActivation activation)
 }
 
 FilterType
-AudioUnit::getFilterType()
+PaulaAudio::getFilterType()
 {
     assert(filterL.getFilterType() == config.filterType);
     assert(filterR.getFilterType() == config.filterType);
@@ -64,7 +64,7 @@ AudioUnit::getFilterType()
 }
 
 void
-AudioUnit::setFilterType(FilterType type)
+PaulaAudio::setFilterType(FilterType type)
 {
     debug(AUD_DEBUG, "setFilterType(%d)\n", type);
     assert(isFilterType(type));
@@ -75,12 +75,12 @@ AudioUnit::setFilterType(FilterType type)
 }
 
 void
-AudioUnit::_powerOn()
+PaulaAudio::_powerOn()
 {
 }
 
 void
-AudioUnit::_inspect()
+PaulaAudio::_inspect()
 {
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
@@ -94,31 +94,31 @@ AudioUnit::_inspect()
 }
 
 void
-AudioUnit::_dump()
+PaulaAudio::_dump()
 {
 }
 
 size_t
-AudioUnit::didLoadFromBuffer(u8 *buffer)
+PaulaAudio::didLoadFromBuffer(u8 *buffer)
 {
     clearRingbuffer();
     return 0;
 }
 
 void
-AudioUnit::_run()
+PaulaAudio::_run()
 {
     clearRingbuffer();
 }
 
 void
-AudioUnit::_pause()
+PaulaAudio::_pause()
 {
     clearRingbuffer();
 }
 
 void
-AudioUnit::_reset()
+PaulaAudio::_reset()
 {
    RESET_SNAPSHOT_ITEMS
 
@@ -132,7 +132,7 @@ AudioUnit::_reset()
 }
 
 void
-AudioUnit::executeUntil(Cycle targetClock)
+PaulaAudio::executeUntil(Cycle targetClock)
 {
     switch (config.samplingMethod) {
         case SMP_NONE:    executeUntil<SMP_NONE>   (targetClock); return;
@@ -142,7 +142,7 @@ AudioUnit::executeUntil(Cycle targetClock)
 }
 
 template <SamplingMethod method> void
-AudioUnit::executeUntil(Cycle targetClock)
+PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
@@ -158,7 +158,7 @@ AudioUnit::executeUntil(Cycle targetClock)
 }
 
 void
-AudioUnit::pokeAUDxPER(int nr, u16 value)
+PaulaAudio::pokeAUDxPER(int nr, u16 value)
 {
     switch (nr) {
         case 0: channel0.pokeAUDxPER(value); return;
@@ -170,7 +170,7 @@ AudioUnit::pokeAUDxPER(int nr, u16 value)
 }
 
 void
-AudioUnit::pokeAUDxVOL(int nr, u16 value)
+PaulaAudio::pokeAUDxVOL(int nr, u16 value)
 {
     switch (nr) {
          case 0: channel0.pokeAUDxVOL(value); return;
@@ -182,7 +182,7 @@ AudioUnit::pokeAUDxVOL(int nr, u16 value)
 }
 
 void
-AudioUnit::rampUp()
+PaulaAudio::rampUp()
 {
     // Only proceed if the emulator is not running in warp mode
     if (warp) return;
@@ -193,14 +193,14 @@ AudioUnit::rampUp()
 }
 
 void
-AudioUnit::rampUpFromZero()
+PaulaAudio::rampUpFromZero()
 {
     volume = 0;
     rampUp();
 }
  
 void
-AudioUnit::rampDown()
+PaulaAudio::rampDown()
 {    
     targetVolume = 0;
     volumeDelta = 50;
@@ -208,7 +208,7 @@ AudioUnit::rampDown()
 }
 
 void
-AudioUnit::clearRingbuffer()
+PaulaAudio::clearRingbuffer()
 {
     debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
     
@@ -226,7 +226,7 @@ AudioUnit::clearRingbuffer()
 }
 
 void
-AudioUnit::readMonoSample(float *mono)
+PaulaAudio::readMonoSample(float *mono)
 {
     float left, right;
 
@@ -235,7 +235,7 @@ AudioUnit::readMonoSample(float *mono)
 }
 
 void
-AudioUnit::readStereoSample(float *left, float *right)
+PaulaAudio::readStereoSample(float *left, float *right)
 {
     // Read sound samples
     float l = ringBufferL[readPtr];
@@ -269,25 +269,25 @@ AudioUnit::readStereoSample(float *left, float *right)
 }
 
 float
-AudioUnit::ringbufferDataL(size_t offset)
+PaulaAudio::ringbufferDataL(size_t offset)
 {
     return ringBufferL[(readPtr + offset) % bufferSize];
 }
 
 float
-AudioUnit::ringbufferDataR(size_t offset)
+PaulaAudio::ringbufferDataR(size_t offset)
 {
     return ringBufferR[(readPtr + offset) % bufferSize];
 }
 
 float
-AudioUnit::ringbufferData(size_t offset)
+PaulaAudio::ringbufferData(size_t offset)
 {
     return ringbufferDataL(offset) + ringbufferDataR(offset);
 }
 
 void
-AudioUnit::readMonoSamples(float *target, size_t n)
+PaulaAudio::readMonoSamples(float *target, size_t n)
 {
     // Check for a buffer underflow
     if (samplesInBuffer() < n) {
@@ -301,7 +301,7 @@ AudioUnit::readMonoSamples(float *target, size_t n)
 }
 
 void
-AudioUnit::readStereoSamples(float *target1, float *target2, size_t n)
+PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
 {
     // Check for a buffer underflow
     if (samplesInBuffer() < n)
@@ -313,7 +313,7 @@ AudioUnit::readStereoSamples(float *target1, float *target2, size_t n)
 }
 
 void
-AudioUnit::readStereoSamplesInterleaved(float *target, size_t n)
+PaulaAudio::readStereoSamplesInterleaved(float *target, size_t n)
 {
     // Check for a buffer underflow
     if (samplesInBuffer() < n)
@@ -325,7 +325,7 @@ AudioUnit::readStereoSamplesInterleaved(float *target, size_t n)
 }
 
 void
-AudioUnit::writeData(short left, short right)
+PaulaAudio::writeData(short left, short right)
 {
     // Check for buffer overflow
     if (bufferCapacity() == 0) handleBufferOverflow();
@@ -348,7 +348,7 @@ AudioUnit::writeData(short left, short right)
 }
 
 void
-AudioUnit::handleBufferUnderflow()
+PaulaAudio::handleBufferUnderflow()
 {
     // There are two common scenarios in which buffer underflows occur:
     //
@@ -377,7 +377,7 @@ AudioUnit::handleBufferUnderflow()
 }
 
 void
-AudioUnit::handleBufferOverflow()
+PaulaAudio::handleBufferOverflow()
 {
     // There are two common scenarios in which buffer overflows occur:
     //
@@ -406,7 +406,7 @@ AudioUnit::handleBufferOverflow()
 }
 
 float
-AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
+PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
                         bool left, float highestAmplitude, unsigned color)
 {
     int dw = bufferSize / width;
@@ -449,8 +449,8 @@ AudioUnit::drawWaveform(unsigned *buffer, int width, int height,
     return newHighestAmplitude;
 }
 
-template<> u8 AudioUnit::getState<0>() { return channel0.state; }
-template<> u8 AudioUnit::getState<1>() { return channel1.state; }
-template<> u8 AudioUnit::getState<2>() { return channel2.state; }
-template<> u8 AudioUnit::getState<3>() { return channel3.state; }
+template<> u8 PaulaAudio::getState<0>() { return channel0.state; }
+template<> u8 PaulaAudio::getState<1>() { return channel1.state; }
+template<> u8 PaulaAudio::getState<2>() { return channel2.state; }
+template<> u8 PaulaAudio::getState<3>() { return channel3.state; }
 
