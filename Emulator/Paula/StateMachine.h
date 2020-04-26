@@ -133,13 +133,10 @@ public:
     // OCS registers 0xAA, 0xBA, 0xCA, 0xDA (w)
     void pokeAUDxDAT(u16 value);
 
-
-    //
-    // Synthesizing samples
-    //
-
-    template <SamplingMethod method> i16 interpolate(Cycle clock);
-
+    // Called when the DMA mode changes
+    void enableDMA();
+    void disableDMA();
+    
     
     //
     // Performing state machine actions
@@ -203,11 +200,6 @@ public:
     // Performing state machine transitions
     //
 
-public:
-
-    void enableDMA();
-    void disableDMA();
-
 private:
 
     void move_000_010();
@@ -220,6 +212,7 @@ private:
     void move_011_000();
     void move_011_010();
 
+    
     //
     // Servicing events
     //
@@ -227,6 +220,13 @@ private:
 public:
 
     void serviceEvent();
+    
+    
+    //
+    // Synthesizing samples
+    //
+
+    template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
 
 #endif

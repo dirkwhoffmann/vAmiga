@@ -136,8 +136,10 @@ extension Inspector {
         dskMsbsync.state  = (adkcon & 0x0200 != 0) ? .on : .off
         dskFast.state     = (adkcon & 0x0100 != 0) ? .on : .off
 
-        dskDsksync.integerValue = Int(diskInfo!.dsksync)
-
+        let dsksync = Int(diskInfo!.dsksync)
+        dskDsksync.integerValue = dsksync
+        dskDsksync.textColor = (dsksync == 0x4489) ? .textColor : .systemRed
+        
         switch diskInfo!.fifoCount {
         case 0: dskFifo0.stringValue = ""; fallthrough
         case 1: dskFifo1.stringValue = ""; fallthrough

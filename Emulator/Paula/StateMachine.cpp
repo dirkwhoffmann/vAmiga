@@ -89,105 +89,53 @@ template <int nr> void
 StateMachine<nr>::pokeAUDxDAT(u16 value)
 {
     debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
-
+    
     auddat = value;
-
-    if (!AUDxON()) {
-
-        // IRQ mode
-        switch(state) {
-
-            case 0b000:
-
-                if (!AUDxIP()) move_000_010();
-                break;
-        }
-
-    } else {
-
+    
+    if (AUDxON()) {
+        
         // DMA mode
         switch(state) {
-
+                
             case 0b000:
-
+                
                 move_000_001();
                 break;
-
+                
             case 0b001:
-
+                
                 move_001_101();
                 break;
-
+                
             case 0b101:
-
+                
                 move_101_010();
                 break;
-
+                
             case 0b010:
             case 0b011:
-
-                if (!lenfin()) lencount();
-                else {
+                
+                if (!lenfin()) {
+                    lencount();
+                } else {
                     lencntrld();
                     AUDxDSR();
                     intreq2 = true;
                 }
                 break;
         }
-    }
-}
-
-template <int nr> template <SamplingMethod method> i16
-StateMachine<nr>::interpolate(Cycle clock)
-{
-    int w  = samples.w;
-    int r1 = samples.r;
-    int r2 = samples.next(r1);
-
-    assert(!samples.isEmpty());
-
-    // Remove all outdated entries
-    while (r2 != w && samples.keys[r2] <= clock) {
-        (void)samples.read();
-        r1 = r2;
-        r2 = samples.next(r1);
-    }
-
-    // If the buffer contains a single element only, return that element
-    if (r2 == w) return samples.elements[r1];
-
-    // Interpolate between position r1 and p2
-    Cycle c1 = samples.keys[r1];
-    Cycle c2 = samples.keys[r2];
-    i16 s1 = samples.elements[r1];
-    i16 s2 = samples.elements[r2];
-    assert(clock >= c1 && clock < c2);
-
-    switch (method) {
-
-        case SMP_NONE:
-        {
-            return s1;
+        
+    } else {
+        
+        // IRQ mode
+        switch(state) {
+                
+            case 0b000:
+                
+                if (!AUDxIP()) move_000_010();
+                break;
         }
-        case SMP_NEAREST:
-        {
-            if (clock - c1 < c2 - clock) {
-                return s1;
-            } else {
-                return s2;
-            }
-        }
-        case SMP_LINEAR:
-        {
-            double dx = (double)(c2 - c1);
-            double dy = (double)(s2 - s1);
-            double weight = (double)(clock - c1) / dx;
-            return (i16)(s1 + weight * dy);
-        }
-        default:
-            assert(false);
     }
-    return 0;
 }
 
 template <int nr> void
@@ -357,7 +305,6 @@ StateMachine<nr>::move_011_010()
 
     percntrld();
     pbufld1();
-    volcntrld();
     
     if (napnav()) {
 
@@ -376,31 +323,6 @@ StateMachine<nr>::move_011_010()
 
     state = 0b010;
     penhi();
-}
-
-template <int nr> void
-StateMachine<nr>::serviceEvent()
-{
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-
-    debug(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
-    assert(agnus.slot[slot].id == CHX_PERFIN);
-
-    switch (state) {
-
-        case 0b010:
-
-            move_010_011();
-            return;
-
-        case 0b011:
-
-            (AUDxON() || !AUDxIP()) ? move_011_010() : move_011_000();
-            return;
-
-        default:
-            assert(false);
-    }
 }
 
 template <int nr> bool
@@ -521,6 +443,84 @@ StateMachine<nr>::penlo()
     } else {
         debug(AUD_DEBUG, "penlo: Sample buffer is full\n");
      }
+}
+
+template <int nr> void
+StateMachine<nr>::serviceEvent()
+{
+    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+
+    debug(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
+    assert(agnus.slot[slot].id == CHX_PERFIN);
+
+    switch (state) {
+
+        case 0b010:
+
+            move_010_011();
+            return;
+
+        case 0b011:
+
+            (AUDxON() || !AUDxIP()) ? move_011_010() : move_011_000();
+            return;
+
+        default:
+            assert(false);
+    }
+}
+
+template <int nr> template <SamplingMethod method> i16
+StateMachine<nr>::interpolate(Cycle clock)
+{
+    int w  = samples.w;
+    int r1 = samples.r;
+    int r2 = samples.next(r1);
+
+    assert(!samples.isEmpty());
+
+    // Remove all outdated entries
+    while (r2 != w && samples.keys[r2] <= clock) {
+        (void)samples.read();
+        r1 = r2;
+        r2 = samples.next(r1);
+    }
+
+    // If the buffer contains a single element only, return that element
+    if (r2 == w) return samples.elements[r1];
+
+    // Interpolate between position r1 and p2
+    Cycle c1 = samples.keys[r1];
+    Cycle c2 = samples.keys[r2];
+    i16 s1 = samples.elements[r1];
+    i16 s2 = samples.elements[r2];
+    assert(clock >= c1 && clock < c2);
+
+    switch (method) {
+
+        case SMP_NONE:
+        {
+            return s1;
+        }
+        case SMP_NEAREST:
+        {
+            if (clock - c1 < c2 - clock) {
+                return s1;
+            } else {
+                return s2;
+            }
+        }
+        case SMP_LINEAR:
+        {
+            double dx = (double)(c2 - c1);
+            double dy = (double)(s2 - s1);
+            double weight = (double)(clock - c1) / dx;
+            return (i16)(s1 + weight * dy);
+        }
+        default:
+            assert(false);
+    }
+    return 0;
 }
 
 template StateMachine<0>::StateMachine(Amiga &ref);
