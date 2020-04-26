@@ -17,7 +17,7 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 0
+#define V_SUBMINOR 2
 
 // Assertion checking (uncomment in release build)
 // #define NDEBUG
@@ -93,7 +93,7 @@ static const int COP_CHECKSUM  = false;  // Copper checksums
 // #define BORDER_DEBUG     // Draws the border in debug colors
 // #define PIXEL_DEBUG      // Highlights the first pixel in each word
 // #define LINE_DEBUG       // Colorizes certain rasterlines
-#define ALIGN_DRIVE_HEAD // Make drive operations deterministic
+// #define ALIGN_DRIVE_HEAD // Make drive operations deterministic
 // #define SLOW_BLT_DEBUG   // Executes SlowBlitter instructions in one chunk
 // #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
 // #define CIA_ON_STEROIDS  // Disables the CIA sleep logic

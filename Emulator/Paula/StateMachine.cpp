@@ -282,6 +282,8 @@ StateMachine<nr>::move_010_011() {
             // Additional IRQ mode action
             AUDxIR();
         }
+        
+        // intreq2 = false;
     }
 
     state = 0b011;
@@ -321,6 +323,8 @@ StateMachine<nr>::move_011_010()
             // Additional IRQ mode action
             AUDxIR();
         }
+        
+        // intreq2 = false;
     }
 
     state = 0b010;
@@ -420,7 +424,7 @@ StateMachine<nr>::AUDxAP()
 template <int nr> void
 StateMachine<nr>::penhi()
 {
-    // if (!enablePenhi) return;
+    if (!enablePenhi) return;
     
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
@@ -439,7 +443,7 @@ StateMachine<nr>::penhi()
 template <int nr> void
 StateMachine<nr>::penlo()
 {
-    // if (!enablePenlo) return;
+    if (!enablePenlo) return;
 
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;

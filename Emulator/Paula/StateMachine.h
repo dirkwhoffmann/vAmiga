@@ -45,7 +45,6 @@ public:
 
     // Audio data (AUDxDAT)
     u16 auddat;
-    // u16 auddat;
 
     // Audio location (AUDxLC)
     u32 audlcLatch;
@@ -54,7 +53,7 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    SortedRingBuffer<short, 2048> samples;
+    SortedRingBuffer<short, 256> samples;
     
     /* Two locks regulating the access to the sample buffer.
      *
@@ -74,7 +73,7 @@ public:
     bool enablePenlo = false;
     bool enablePenhi = false;
 
-    
+
     //
     // Constructing and serializing
     //
@@ -105,7 +104,9 @@ public:
         & auddat
         & audlcLatch
         & intreq2
-        & samples;
+        & samples
+        & enablePenlo
+        & enablePenhi;
     }
 
 
