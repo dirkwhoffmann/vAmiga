@@ -210,7 +210,8 @@ class ConfigController: DialogController {
             case "Roms": refreshRomTab()
             case "Hardware": refreshHardwareTab()
             case "Compatibility": refreshCompatibilityTab()
-            case "Display": refreshVideoTab()
+            case "Audio": refreshAudioTab()
+            case "Video": refreshVideoTab()
             default: fatalError()
             }
         }

@@ -45,6 +45,7 @@
 		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioPrefs.swift */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		507727EE242F2CE4009D01DA /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 507727ED242F2CE3009D01DA /* iCarousel.m */; };
@@ -233,6 +234,7 @@
 		5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStorage.swift; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		5072CAF92456D1C800C8F606 /* AudioPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPrefs.swift; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
 		507727EC242F2CE3009D01DA /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
@@ -653,6 +655,7 @@
 				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
 				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
 				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
+				5072CAF92456D1C800C8F606 /* AudioPrefs.swift */,
 				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
 				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
 			);
@@ -1034,6 +1037,7 @@
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
+				5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
