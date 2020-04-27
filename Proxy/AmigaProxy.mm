@@ -636,13 +636,37 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
-- (FilterActivation) filterActivation
+- (double) vol:(NSInteger)nr
 {
-    return wrapper->paula->audioUnit.getFilterActivation();
+    return wrapper->paula->audioUnit.getVol(nr);
 }
-- (void) setFilterActivation:(FilterActivation)activation
+- (void) setVol:(NSInteger)nr value:(double)value
 {
-    wrapper->paula->audioUnit.setFilterActivation(activation);
+    wrapper->paula->audioUnit.setVol(nr, value);
+}
+- (double) pan:(NSInteger)nr
+{
+    return wrapper->paula->audioUnit.getPan(nr);
+}
+- (void) setPan:(NSInteger)nr value:(double)value
+{
+    wrapper->paula->audioUnit.setPan(nr, value);
+}
+- (double) volL
+{
+    return wrapper->paula->audioUnit.getVolL();
+}
+- (void) setVolL:(double)value
+{
+    wrapper->paula->audioUnit.setVolL(value);
+}
+- (double) volR
+{
+    return wrapper->paula->audioUnit.getVolR();
+}
+- (void) setVolR:(double)value
+{
+    wrapper->paula->audioUnit.setVolR(value);
 }
 - (FilterType) filterType
 {
@@ -651,6 +675,14 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) setFilterType:(FilterType)type
 {
     wrapper->paula->audioUnit.setFilterType(type);
+}
+- (BOOL) filterAlwaysOn
+{
+    return wrapper->paula->audioUnit.getFilterAlwaysOn();
+}
+- (void) setFilterAlwaysOn:(BOOL)value
+{
+    wrapper->paula->audioUnit.setFilterAlwaysOn(value);
 }
 - (NSInteger) ringbufferSize
 {

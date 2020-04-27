@@ -377,6 +377,15 @@ struct AmigaFileWrapper;
 - (u32) sampleRate;
 - (void) setSampleRate:(double)rate;
 
+- (double) vol:(NSInteger)nr;
+- (void) setVol:(NSInteger)nr value:(double)value;
+- (double) pan:(NSInteger)nr;
+- (void) setPan:(NSInteger)nr value:(double)value;
+- (double) volL;
+- (void) setVolL:(double)value;
+- (double) volR;
+- (void) setVolR:(double)value;
+
 - (NSInteger) ringbufferSize;
 - (double) ringbufferDataL:(NSInteger)offset;
 - (double) ringbufferDataR:(NSInteger)offset;

@@ -58,6 +58,11 @@ AudioFilter::clear()
 float
 AudioFilter::apply(float sample)
 {
+    if (type == FILT_NONE) return sample;
+    
+    // Apply butterworth filter
+    assert(type == FILT_BUTTERWORTH);
+    
     // Run pipeline
     double x0 = (double)sample;
     double y0 = (b0 * x0) + (b1 * x1) + (b2 * x2) + (a1 * y1) + (a2 * y2);

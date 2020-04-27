@@ -99,10 +99,6 @@ class ConfigController: DialogController {
     @IBOutlet weak var compBltLevel2: NSTextField!
     @IBOutlet weak var compBltLevel1: NSTextField!
 
-    // Audio
-    @IBOutlet weak var compSamplingMethod: NSPopUpButton!
-    @IBOutlet weak var compFilterActivation: NSPopUpButton!
-
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
     @IBOutlet weak var compAsyncFifo: NSButton!
@@ -119,6 +115,27 @@ class ConfigController: DialogController {
     // Buttons
     @IBOutlet weak var compOKButton: NSButton!
     @IBOutlet weak var compBootButton: NSButton!
+    
+    //
+    // Audio preferences
+    //
+    
+    // In
+    @IBOutlet weak var audVol0: NSSlider!
+    @IBOutlet weak var audVol1: NSSlider!
+    @IBOutlet weak var audVol2: NSSlider!
+    @IBOutlet weak var audVol3: NSSlider!
+    @IBOutlet weak var audPan0: NSSlider!
+    @IBOutlet weak var audPan1: NSSlider!
+    @IBOutlet weak var audPan2: NSSlider!
+    @IBOutlet weak var audPan3: NSSlider!
+    
+    // Out
+    @IBOutlet weak var audVolL: NSSlider!
+    @IBOutlet weak var audVolR: NSSlider!
+    @IBOutlet weak var audSamplingMethod: NSPopUpButton!
+    @IBOutlet weak var audFilterType: NSPopUpButton!
+    @IBOutlet weak var audFilterAlwaysOn: NSButton!
 
     //
     // Video preferences

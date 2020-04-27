@@ -36,16 +36,6 @@ FilterType;
 
 static inline bool isFilterType(long value) { return value >= 0 && value < FILT_COUNT; }
 
-typedef enum : long
-{
-    FILTACT_POWER_LED,
-    FILTACT_NEVER,
-    FILTACT_ALWAYS,
-    FILTACT_COUNT
-}
-FilterActivation;
-
-static inline bool isFilterActivation(long value) { return value >= 0 && value < FILTACT_COUNT; }
 
 //
 // Structures
@@ -53,17 +43,25 @@ static inline bool isFilterActivation(long value) { return value >= 0 && value <
 
 typedef struct
 {
-    // The sample rate in Hz
+    // The target frequency in Hz
     double sampleRate;
 
-    // The sample interpolation method
+    // Selects how the audio buffer is resampled to match the target frequency
     SamplingMethod samplingMethod;
 
-    // Determines when the audio filter is active
-    FilterActivation filterActivation;
-
-    // Selected audio filter type
+    // The selected audio filter
     FilterType filterType;
+
+    // If set to true, the Amiga can't deactivate the filter
+    bool filterAlwaysOn;
+
+    // Input channel volumes and pan settings
+    double vol[4];
+    double pan[4];
+    
+    // Output channel volumes
+    double volL;
+    double volR;
 }
 AudioConfig;
 

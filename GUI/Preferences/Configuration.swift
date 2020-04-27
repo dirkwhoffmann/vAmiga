@@ -133,18 +133,6 @@ class Configuration {
         get { return amiga.getConfig(VA_CLX_PLF_PLF) != 0 }
         set { amiga.configure(VA_CLX_PLF_PLF, enable: newValue) }
     }
-    var samplingMethod: Int {
-        get { return amiga.getConfig(VA_SAMPLING_METHOD) }
-        set { amiga.configure(VA_SAMPLING_METHOD, value: newValue) }
-    }
-    var filterActivation: Int {
-        get { return amiga.getConfig(VA_FILTER_ACTIVATION) }
-        set { amiga.configure(VA_FILTER_ACTIVATION, value: newValue) }
-    }
-    var filterType: Int {
-        get { return amiga.getConfig(VA_FILTER_TYPE) }
-        set { amiga.configure(VA_FILTER_TYPE, value: newValue) }
-    }
     var blitterAccuracy: Int {
         get { return amiga.getConfig(VA_BLITTER_ACCURACY) }
         set { amiga.configure(VA_BLITTER_ACCURACY, value: newValue) }
@@ -171,7 +159,64 @@ class Configuration {
     }
     
     //
-    // Monitor settings
+    // Audio settings
+    //
+
+    var vol0: Double {
+        get { return amiga.paula.vol(0) }
+        set { amiga.paula.setVol(0, value: newValue) }
+    }
+    var vol1: Double {
+        get { return amiga.paula.vol(1) }
+        set { amiga.paula.setVol(1, value: newValue) }
+    }
+    var vol2: Double {
+        get { return amiga.paula.vol(2) }
+        set { amiga.paula.setVol(2, value: newValue) }
+    }
+    var vol3: Double {
+        get { return amiga.paula.vol(3) }
+        set { amiga.paula.setVol(3, value: newValue) }
+    }
+    var pan0: Double {
+        get { return amiga.paula.pan(0) }
+        set { amiga.paula.setPan(0, value: newValue) }
+    }
+    var pan1: Double {
+        get { return amiga.paula.pan(1) }
+        set { amiga.paula.setPan(1, value: newValue) }
+    }
+    var pan2: Double {
+        get { return amiga.paula.pan(2) }
+        set { amiga.paula.setPan(2, value: newValue) }
+    }
+    var pan3: Double {
+        get { return amiga.paula.pan(3) }
+        set { amiga.paula.setPan(3, value: newValue) }
+    }
+    var volL: Double {
+        get { return amiga.paula.volL() }
+        set { amiga.paula.setVolL(newValue) }
+    }
+    var volR: Double {
+        get { return amiga.paula.volR() }
+        set { amiga.paula.setVolR(newValue) }
+    }
+    var samplingMethod: Int {
+        get { return amiga.getConfig(VA_SAMPLING_METHOD) }
+        set { amiga.configure(VA_SAMPLING_METHOD, value: newValue) }
+    }
+    var filterType: Int {
+        get { return amiga.getConfig(VA_FILTER_TYPE) }
+        set { amiga.configure(VA_FILTER_TYPE, value: newValue) }
+    }
+    var filterAlwaysOn: Bool {
+        get { return amiga.getConfig(VA_FILTER_ALWAYS_ON) != 0}
+        set { amiga.configure(VA_FILTER_ALWAYS_ON, enable: newValue) }
+    }
+    
+    //
+    // Video settings
     //
     
     var palette: Int {
@@ -402,11 +447,7 @@ class Configuration {
         clxSprSpr = defaults.clxSprSpr
         clxSprPlf = defaults.clxSprPlf
         clxPlfPlf = defaults.clxPlfPlf
-        
-        samplingMethod = defaults.samplingMethod.rawValue
-        filterActivation = defaults.filterActivation.rawValue
-        filterType = defaults.filterType.rawValue
-        
+                
         blitterAccuracy = defaults.blitterAccuracy
         
         driveSpeed = defaults.driveSpeed
@@ -428,18 +469,11 @@ class Configuration {
         clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
         clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
-        
-        samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
-        filterActivation = defaults.integer(forKey: Keys.filterActivation)
-        filterType = defaults.integer(forKey: Keys.filterType)
-        
         blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
-        
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
         autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
-        
         todBug = defaults.bool(forKey: Keys.todBug)
         
         amiga.resume()
@@ -454,15 +488,85 @@ class Configuration {
          defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
          defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
          defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
-         defaults.set(samplingMethod, forKey: Keys.samplingMethod)
-         defaults.set(filterActivation, forKey: Keys.filterActivation)
-         defaults.set(filterType, forKey: Keys.filterType)
          defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+         defaults.set(driveSpeed, forKey: Keys.driveSpeed)
          defaults.set(asyncFifo, forKey: Keys.asyncFifo)
          defaults.set(lockDskSync, forKey: Keys.lockDskSync)
          defaults.set(autoDskSync, forKey: Keys.autoDskSync)
          defaults.set(todBug, forKey: Keys.todBug)
      }
+    
+    //
+    // Audio
+    //
+    
+    func loadAudioDefaults(_ defaults: AudioDefaults) {
+        
+        amiga.suspend()
+        
+        vol0 = defaults.vol0
+        vol1 = defaults.vol1
+        vol2 = defaults.vol2
+        vol3 = defaults.vol3
+        pan0 = defaults.pan0
+        pan1 = defaults.pan1
+        pan2 = defaults.pan2
+        pan3 = defaults.pan3
+        
+        volL = defaults.volL
+        volR = defaults.volR
+        samplingMethod = defaults.samplingMethod.rawValue
+        filterType = defaults.filterType.rawValue
+        filterAlwaysOn = defaults.filterAlwaysOn
+        
+        amiga.resume()
+    }
+    
+    func loadAudioUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        vol0 = defaults.double(forKey: Keys.vol0)
+        vol1 = defaults.double(forKey: Keys.vol1)
+        vol2 = defaults.double(forKey: Keys.vol2)
+        vol3 = defaults.double(forKey: Keys.vol3)
+        pan0 = defaults.double(forKey: Keys.pan0)
+        pan1 = defaults.double(forKey: Keys.pan1)
+        pan2 = defaults.double(forKey: Keys.pan2)
+        pan3 = defaults.double(forKey: Keys.pan3)
+        
+        volL = defaults.double(forKey: Keys.volL)
+        volR = defaults.double(forKey: Keys.volR)
+        samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
+        filterType = defaults.integer(forKey: Keys.filterType)
+        filterAlwaysOn = defaults.bool(forKey: Keys.filterAlwaysOn)
+        
+        amiga.resume()
+    }
+    
+    func saveAudioUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(vol0, forKey: Keys.vol0)
+        defaults.set(vol1, forKey: Keys.vol1)
+        defaults.set(vol2, forKey: Keys.vol2)
+        defaults.set(vol3, forKey: Keys.vol3)
+        defaults.set(pan0, forKey: Keys.pan0)
+        defaults.set(pan1, forKey: Keys.pan1)
+        defaults.set(pan2, forKey: Keys.pan2)
+        defaults.set(pan3, forKey: Keys.pan3)
+        
+        defaults.set(volL, forKey: Keys.volL)
+        defaults.set(volR, forKey: Keys.volR)
+        defaults.set(samplingMethod, forKey: Keys.samplingMethod)
+        defaults.set(filterType, forKey: Keys.filterType)
+        defaults.set(filterAlwaysOn, forKey: Keys.filterAlwaysOn)
+    }
     
     //
     // Video

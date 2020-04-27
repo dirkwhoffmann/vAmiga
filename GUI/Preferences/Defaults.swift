@@ -58,12 +58,14 @@ extension UserDefaults {
         
         track()
         
-        UserDefaults.registerRomUserDefaults()
-        UserDefaults.registerDevicesUserDefaults()
-        UserDefaults.registerVideoUserDefaults()
         UserDefaults.registerGeneralUserDefaults()
+        UserDefaults.registerDevicesUserDefaults()
+
+        UserDefaults.registerRomUserDefaults()
         UserDefaults.registerHardwareUserDefaults()
         UserDefaults.registerCompatibilityUserDefaults()
+        UserDefaults.registerAudioUserDefaults()
+        UserDefaults.registerVideoUserDefaults()
     }
 }
 
@@ -81,6 +83,7 @@ extension MyController {
         config.loadRomUserDefaults()
         config.loadHardwareUserDefaults()
         config.loadCompatibilityUserDefaults()
+        config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
 
         amiga.resume()
@@ -665,11 +668,6 @@ extension Keys {
     static let clxSprPlf         = "VAMIGA_COM_ClxSprPlf"
     static let clxPlfPlf         = "VAMIGA_COM_ClxPlfPlf"
 
-    // Audio
-    static let samplingMethod    = "VAMIGA_COM_SamplingMethod"
-    static let filterActivation  = "VAMIGA_COM_FilterActivation"
-    static let filterType        = "VAMIGA_COM_FilterType"
-
     // Blitter
     static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
 
@@ -689,11 +687,6 @@ struct CompatibilityDefaults {
     let clxSprSpr: Bool
     let clxSprPlf: Bool
     let clxPlfPlf: Bool
-    
-    // Audio
-    let samplingMethod: SamplingMethod
-    let filterActivation: FilterActivation
-    let filterType: FilterType
     
     // Blitter
     let blitterAccuracy: Int
@@ -716,11 +709,7 @@ struct CompatibilityDefaults {
          clxSprSpr: false,
          clxSprPlf: false,
          clxPlfPlf: false,
-         
-         samplingMethod: SMP_NEAREST,
-         filterActivation: FILTACT_POWER_LED,
-         filterType: FILT_BUTTERWORTH,
-         
+                  
          blitterAccuracy: 2,
          
          driveSpeed: 1,
@@ -736,11 +725,7 @@ struct CompatibilityDefaults {
         clxSprSpr: true,
         clxSprPlf: true,
         clxPlfPlf: true,
-        
-        samplingMethod: SMP_LINEAR,
-        filterActivation: FILTACT_POWER_LED,
-        filterType: FILT_BUTTERWORTH,
-        
+                
         blitterAccuracy: 2,
         
         driveSpeed: 1,
@@ -756,11 +741,7 @@ struct CompatibilityDefaults {
         clxSprSpr: false,
         clxSprPlf: false,
         clxPlfPlf: false,
-        
-        samplingMethod: SMP_NONE,
-        filterActivation: FILTACT_NEVER,
-        filterType: FILT_BUTTERWORTH,
-        
+                
         blitterAccuracy: 0,
         
         driveSpeed: -1,
@@ -782,9 +763,6 @@ extension UserDefaults {
             Keys.clxSprSpr: defaults.clxSprSpr,
             Keys.clxSprPlf: defaults.clxSprPlf,
             Keys.clxPlfPlf: defaults.clxPlfPlf,
-            Keys.samplingMethod: defaults.samplingMethod.rawValue,
-            Keys.filterActivation: defaults.filterActivation.rawValue,
-            Keys.filterType: defaults.filterType.rawValue,
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.asyncFifo: defaults.asyncFifo,
@@ -804,15 +782,128 @@ extension UserDefaults {
         let keys = [ Keys.clxSprSpr,
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
-                     Keys.samplingMethod,
-                     Keys.filterActivation,
-                     Keys.filterType,
                      Keys.blitterAccuracy,
                      Keys.driveSpeed,
                      Keys.asyncFifo,
                      Keys.lockDskSync,
                      Keys.autoDskSync,
                      Keys.todBug]
+
+        for key in keys { userDefaults.removeObject(forKey: key) }
+    }
+}
+
+//
+// User defaults (Audio)
+//
+
+extension Keys {
+    
+    // In
+    static let vol0               = "VAMIGA_AUD_Vol0"
+    static let vol1               = "VAMIGA_AUD_Vol1"
+    static let vol2               = "VAMIGA_AUD_Vol2"
+    static let vol3               = "VAMIGA_AUD_Vol3"
+    static let pan0               = "VAMIGA_AUD_Pan0"
+    static let pan1               = "VAMIGA_AUD_Pan1"
+    static let pan2               = "VAMIGA_AUD_Pan2"
+    static let pan3               = "VAMIGA_AUD_Pan3"
+
+    // Out
+    static let volL               = "VAMIGA_AUD_VolL"
+    static let volR               = "VAMIGA_AUD_VolR"
+    static let samplingMethod     = "VAMIGA_AUD_SamplingMethod"
+    static let filterType         = "VAMIGA_AUD_FilterType"
+    static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
+}
+
+struct AudioDefaults {
+    
+    // In
+    let vol0: Double
+    let vol1: Double
+    let vol2: Double
+    let vol3: Double
+    let pan0: Double
+    let pan1: Double
+    let pan2: Double
+    let pan3: Double
+    
+    // Out
+    let volL: Double
+    let volR: Double
+    let samplingMethod: SamplingMethod
+    let filterType: FilterType
+    let filterAlwaysOn: Bool
+    
+    //
+    // Schemes
+    //
+    
+    static let std = AudioDefaults.init(
+        
+        vol0: 0.0000025,
+        vol1: 0.0000025,
+        vol2: 0.0000025,
+        vol3: 0.0000025,
+        pan0: 0.7,
+        pan1: 0.3,
+        pan2: 0.3,
+        pan3: 0.7,
+        
+        volL: 1.0,
+        volR: 1.0,
+        samplingMethod: SMP_NONE,
+        filterType: FILT_BUTTERWORTH,
+        filterAlwaysOn: false
+    )
+}
+
+extension UserDefaults {
+
+    static func registerAudioUserDefaults() {
+
+        let defaults = AudioDefaults.std
+        let dictionary: [String: Any] = [
+
+            Keys.vol0: defaults.vol0,
+            Keys.vol1: defaults.vol1,
+            Keys.vol2: defaults.vol2,
+            Keys.vol3: defaults.vol3,
+            Keys.pan0: defaults.pan0,
+            Keys.pan1: defaults.pan1,
+            Keys.pan2: defaults.pan2,
+            Keys.pan3: defaults.pan3,
+            
+            Keys.volL: defaults.volL,
+            Keys.volR: defaults.volR,
+            Keys.samplingMethod: Int(defaults.samplingMethod.rawValue),
+            Keys.filterType: Int(defaults.filterType.rawValue),
+            Keys.filterAlwaysOn: defaults.filterAlwaysOn
+        ]
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+    }
+
+    static func resetAudioUserDefaults() {
+
+        let userDefaults = UserDefaults.standard
+        
+        let keys = [ Keys.vol0,
+                     Keys.vol1,
+                     Keys.vol2,
+                     Keys.vol3,
+                     Keys.pan0,
+                     Keys.pan1,
+                     Keys.pan2,
+                     Keys.pan3,
+                     
+                     Keys.volL,
+                     Keys.volR,
+                     Keys.samplingMethod,
+                     Keys.filterType,
+                     Keys.filterAlwaysOn]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }

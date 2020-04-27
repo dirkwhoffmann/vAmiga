@@ -337,18 +337,6 @@ Amiga::configure(ConfigOption option, long value)
             paula.audioUnit.setSamplingMethod((SamplingMethod)value);
             break;
 
-        case VA_FILTER_ACTIVATION:
-
-            if (!isFilterActivation(value)) {
-                warn("Invalid filter activation: %d\n", value);
-                warn("       Valid values: 0 ... %d\n", FILTACT_COUNT - 1);
-                return false;
-            }
-
-            if (current.audio.filterActivation == value) return true;
-            paula.audioUnit.setFilterActivation((FilterActivation)value);
-            break;
-
         case VA_FILTER_TYPE:
 
             if (!isFilterType(value)) {
@@ -360,7 +348,13 @@ Amiga::configure(ConfigOption option, long value)
             if (current.audio.filterType == value) return true;
             paula.audioUnit.setFilterType((FilterType)value);
             break;
-
+            
+        case VA_FILTER_ALWAYS_ON:
+            
+            if (current.audio.filterAlwaysOn == value) return true;
+            paula.audioUnit.setFilterAlwaysOn(value);
+            break;
+            
         case VA_BLITTER_ACCURACY:
             
             if (current.blitter.accuracy == value) return true;
@@ -476,8 +470,8 @@ Amiga::getConfig(ConfigOption option)
         case VA_CLX_SPR_PLF: return denise.getClxSprPlf();
         case VA_CLX_PLF_PLF: return denise.getClxPlfPlf();
         case VA_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
-        case VA_FILTER_ACTIVATION: return paula.audioUnit.getFilterActivation();
         case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
+        case VA_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
         case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
         case VA_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
         case VA_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();

@@ -26,10 +26,6 @@ extension ConfigController {
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
 
-        // Audio
-        compSamplingMethod.selectItem(withTag: config.audio.samplingMethod.rawValue)
-        compFilterActivation.selectItem(withTag: config.audio.filterActivation.rawValue)
-
         // Floppy drives
         let speed = config.df0.speed        
         assert(speed == config.df1.speed)
@@ -63,18 +59,6 @@ extension ConfigController {
     @IBAction func compClxPlfPlfAction(_ sender: NSButton!) {
 
         config.clxPlfPlf = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func compSamplingMethodAction(_ sender: NSPopUpButton!) {
-
-        config.samplingMethod = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func compFilterActivationAction(_ sender: NSPopUpButton!) {
-
-        config.filterActivation = sender.selectedTag()
         refresh()
     }
 

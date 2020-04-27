@@ -197,12 +197,14 @@ extension MyController: NSMenuItemValidation {
         UserDefaults.resetRomUserDefaults()
         UserDefaults.resetHardwareUserDefaults()
         UserDefaults.resetCompatibilityUserDefaults()
+        UserDefaults.resetAudioUserDefaults()
         UserDefaults.resetVideoUserDefaults()
         
         amiga.suspend()
         config.loadRomUserDefaults()
         config.loadHardwareUserDefaults()
         config.loadCompatibilityUserDefaults()
+        config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
         amiga.resume()
     }

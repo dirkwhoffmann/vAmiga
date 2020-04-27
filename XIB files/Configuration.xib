@@ -8,6 +8,19 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ConfigController" customModule="vAmiga" customModuleProvider="target">
             <connections>
+                <outlet property="audFilterAlwaysOn" destination="VH1-nb-Ddh" id="9we-WR-PQ4"/>
+                <outlet property="audFilterType" destination="xCH-PP-UHi" id="NFX-km-fvL"/>
+                <outlet property="audPan0" destination="8Fk-fj-DxW" id="3Lp-fP-dga"/>
+                <outlet property="audPan1" destination="ysl-BF-7tF" id="UDb-yJ-Cb7"/>
+                <outlet property="audPan2" destination="9EQ-fL-r94" id="bth-MM-dRm"/>
+                <outlet property="audPan3" destination="aRP-0C-dri" id="I8G-u6-RDl"/>
+                <outlet property="audSamplingMethod" destination="txj-Ww-WLR" id="zpN-9X-g87"/>
+                <outlet property="audVol0" destination="GZ6-p3-gSo" id="tBN-no-gYb"/>
+                <outlet property="audVol1" destination="gmM-I9-4bY" id="4zG-BG-QQA"/>
+                <outlet property="audVol2" destination="IT6-jK-1Pi" id="OHL-bj-8b0"/>
+                <outlet property="audVol3" destination="2bQ-iF-w7D" id="NGk-yJ-Jla"/>
+                <outlet property="audVolL" destination="jvz-D4-oTo" id="zvg-Xz-1jz"/>
+                <outlet property="audVolR" destination="8nv-hz-sKL" id="0Eq-fU-Xjl"/>
                 <outlet property="compAsyncFifo" destination="Ps4-Oa-QV1" id="RaA-Nc-4td"/>
                 <outlet property="compAutoDskSync" destination="7qA-QS-ZCZ" id="uwn-En-oTm"/>
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
@@ -1340,7 +1353,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button verticalHuggingPriority="750" id="vfM-cG-XrA">
-                                            <rect key="frame" x="520" y="10" width="69" height="32"/>
+                                            <rect key="frame" x="528" y="5" width="69" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="push" title="OK" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="tMQ-xZ-Mcp">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1354,13 +1367,13 @@ DQ
                                             </connections>
                                         </button>
                                         <box verticalHuggingPriority="750" boxType="separator" id="SnX-eg-bQr">
-                                            <rect key="frame" x="9" y="56" width="582" height="5"/>
+                                            <rect key="frame" x="9" y="51" width="582" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
                                         <popUpButton id="tt1-Jf-9DJ" userLabel="System">
-                                            <rect key="frame" x="14" y="14" width="128" height="25"/>
+                                            <rect key="frame" x="6" y="9" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="qMg-Aq-pzO" id="wtz-CC-IAy" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="wtz-CC-IAy" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                                 <menu key="menu" title="Restore" id="3m2-wP-OA2">
@@ -1368,31 +1381,29 @@ DQ
                                                         <menuItem title="Revert to..." hidden="YES" id="qMg-Aq-pzO">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 500" id="JcM-tc-ojI">
+                                                        <menuItem title="Standard Settings" id="JcM-tc-ojI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
-                                                        <menuItem title="Amiga 1000" tag="1" id="f3c-xq-XUH"/>
-                                                        <menuItem title="Amiga 2000" tag="2" id="Zjk-yZ-Q6X"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="hwPresetAction:" target="-2" id="jWw-YO-D2m"/>
+                                                <action selector="audPresetAction:" target="-2" id="Njq-HO-ElJ"/>
                                             </connections>
                                         </popUpButton>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nov-sQ-q58">
-                                            <rect key="frame" x="141" y="10" width="128" height="32"/>
+                                            <rect key="frame" x="140" y="5" width="128" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Use as Default" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="rhg-1F-pxr">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="hwDefaultsAction:" target="-2" id="1ND-D9-QBi"/>
+                                                <action selector="audDefaultsAction:" target="-2" id="cz8-8M-pZ7"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iui-fS-mFj">
-                                            <rect key="frame" x="451" y="10" width="69" height="32"/>
+                                            <rect key="frame" x="459" y="5" width="69" height="32"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                             <buttonCell key="cell" type="push" title="Boot" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Ac2-gD-PNj">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1412,7 +1423,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GZ6-p3-gSo">
                                                         <rect key="frame" x="12" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="h2O-zs-dRQ"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="h2O-zs-dRQ"/>
+                                                        <connections>
+                                                            <action selector="audVol0Action:" target="-2" id="SK1-n6-MXu"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="206-u1-vbE">
                                                         <rect key="frame" x="36" y="137" width="33" height="11"/>
@@ -1453,7 +1467,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IT6-jK-1Pi">
                                                         <rect key="frame" x="164" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="gfE-Av-FHX"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="gfE-Av-FHX"/>
+                                                        <connections>
+                                                            <action selector="audVol2Action:" target="-2" id="ZI5-Sh-KbJ"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mrg-pu-qPP">
                                                         <rect key="frame" x="187" y="137" width="33" height="11"/>
@@ -1494,7 +1511,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2bQ-iF-w7D">
                                                         <rect key="frame" x="240" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="Nvt-Op-Ebf"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="Nvt-Op-Ebf"/>
+                                                        <connections>
+                                                            <action selector="audVol3Action:" target="-2" id="ANk-oj-eKk"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Be5-ti-NFA">
                                                         <rect key="frame" x="262" y="137" width="33" height="11"/>
@@ -1526,7 +1546,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gmM-I9-4bY">
                                                         <rect key="frame" x="88" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="b3o-1f-DNG"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="b3o-1f-DNG"/>
+                                                        <connections>
+                                                            <action selector="audVol1Action:" target="-2" id="OtF-HK-O71"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Om-HY-GGy">
                                                         <rect key="frame" x="111" y="137" width="33" height="11"/>
@@ -1586,7 +1609,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jvz-D4-oTo">
                                                         <rect key="frame" x="44" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="tfc-se-BAN"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="tfc-se-BAN"/>
+                                                        <connections>
+                                                            <action selector="audVolLAction:" target="-2" id="HUi-Vk-GZv"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NFY-2C-a31">
                                                         <rect key="frame" x="70" y="137" width="33" height="11"/>
@@ -1636,7 +1662,10 @@ DQ
                                                     <slider horizontalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8nv-hz-sKL">
                                                         <rect key="frame" x="139" y="12" width="24" height="140"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <sliderCell key="cell" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="FxL-Dg-DfB"/>
+                                                        <sliderCell key="cell" alignment="left" maxValue="200" doubleValue="100" tickMarkPosition="right" numberOfTickMarks="20" sliderType="linear" id="FxL-Dg-DfB"/>
+                                                        <connections>
+                                                            <action selector="audVolRAction:" target="-2" id="SXf-0A-xQL"/>
+                                                        </connections>
                                                     </slider>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FTe-qA-L12">
                                                         <rect key="frame" x="162" y="137" width="33" height="11"/>
@@ -1685,7 +1714,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="compSamplingMethodAction:" target="-2" id="Mnw-eZ-pHE"/>
+                                                <action selector="audSamplingMethodAction:" target="-2" id="7nk-DH-dV3"/>
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9cK-6H-rMm">
@@ -1869,7 +1898,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="compFilterActivationAction:" target="-2" id="sA1-Ty-CN0"/>
+                                                <action selector="audFilterTypeAction:" target="-2" id="wWE-Ml-umF"/>
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OUh-Ev-hUh">
@@ -1888,6 +1917,9 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="audFilterAlwaysOnAction:" target="-2" id="ibB-y2-y1u"/>
+                                            </connections>
                                         </button>
                                     </subviews>
                                 </view>

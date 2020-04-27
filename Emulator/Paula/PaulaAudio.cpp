@@ -46,12 +46,11 @@ PaulaAudio::setSamplingMethod(SamplingMethod  method)
 }
 
 void
-PaulaAudio::setFilterActivation(FilterActivation activation)
+PaulaAudio::setFilterAlwaysOn(bool value)
 {
-    debug(AUD_DEBUG, "setFilterActivation(%d)\n", activation);
-    assert(isFilterActivation(activation));
+    debug(AUD_DEBUG, "setFilterAlwaysOn(%d)\n", value);
 
-    config.filterActivation = activation;
+    config.filterAlwaysOn = value;
 }
 
 FilterType
@@ -335,8 +334,7 @@ PaulaAudio::writeData(short left, short right)
     float fr = float(right) * scale;
 
     // Apply audio filter if applicable
-    if ((config.filterActivation == FILTACT_POWER_LED && ciaa.powerLED()) ||
-        (config.filterActivation == FILTACT_ALWAYS)) {
+    if (ciaa.powerLED() || config.filterAlwaysOn) {
         fl = filterL.apply(fl);
         fr = filterR.apply(fr);
     }

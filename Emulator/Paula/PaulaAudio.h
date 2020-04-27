@@ -126,8 +126,12 @@ public:
         worker
 
         & config.samplingMethod
-        & config.filterActivation
-        & config.filterType;
+        & config.filterType
+        & config.filterAlwaysOn
+        & config.vol
+        & config.pan
+        & config.volL
+        & config.volR;
     }
 
     template <class T>
@@ -154,9 +158,20 @@ public:
     FilterType getFilterType();
     void setFilterType(FilterType type);
 
-    FilterActivation getFilterActivation() { return config.filterActivation; }
-    void setFilterActivation(FilterActivation activation);
+    bool getFilterAlwaysOn() { return config.filterAlwaysOn; }
+    void setFilterAlwaysOn(bool val);
 
+    double getVol(unsigned nr) { assert(nr < 4); return config.vol[nr]; }
+    void setVol(unsigned nr, double val) { assert(nr < 4); config.vol[nr] = val; }
+
+    double getPan(unsigned nr) { assert(nr < 4); return config.pan[nr]; }
+    void setPan(unsigned nr, double val) { assert(nr < 4); config.pan[nr] = val; }
+
+    double getVolL() { return config.volL; }
+    void setVolL(double val) { config.volL = val; }
+
+    double getVolR() { return config.volR; }
+    void setVolR(double val) { config.volR = val; }
 
     //
     // Methods from HardwareComponent
