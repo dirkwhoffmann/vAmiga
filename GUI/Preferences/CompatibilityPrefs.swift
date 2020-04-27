@@ -11,8 +11,6 @@ extension ConfigController {
 
     func refreshCompatibilityTab() {
 
-        track()
-
         let config = amiga.config()
 
         // Graphics
