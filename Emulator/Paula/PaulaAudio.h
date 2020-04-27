@@ -162,10 +162,10 @@ public:
     void setFilterAlwaysOn(bool val);
 
     double getVol(unsigned nr) { assert(nr < 4); return config.vol[nr]; }
-    void setVol(unsigned nr, double val) { assert(nr < 4); config.vol[nr] = val; }
+    void setVol(unsigned nr, double val);
 
     double getPan(unsigned nr) { assert(nr < 4); return config.pan[nr]; }
-    void setPan(unsigned nr, double val) { assert(nr < 4); config.pan[nr] = val; }
+    void setPan(unsigned nr, double val);
 
     double getVolL() { return config.volL; }
     void setVolL(double val) { config.volL = val; }
@@ -269,7 +269,7 @@ public:
     
     /* Writes a stereo sample into the ringbuffer
      */
-    void writeData(short left, short right);
+    void writeData(float left, float right);
     
     /* Handles a buffer underflow condition.
      * A buffer underflow occurs when the computer's audio device needs sound

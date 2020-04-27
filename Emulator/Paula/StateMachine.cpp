@@ -309,6 +309,7 @@ StateMachine<nr>::move_011_010()
 
     percntrld();
     pbufld1();
+    volcntrld();
     
     if (napnav()) {
 
@@ -371,7 +372,7 @@ StateMachine<nr>::percntrld()
     
     /*
     if (audperLatch < 124) {
-        debug("Very small audperLatch %d\n", audperLatch);
+        // debug("Very small audperLatch %d\n", audperLatch);
         // What shall we do with very small audper values?
         agnus.scheduleRel<slot>(DMA_CYCLES(124), CHX_PERFIN);
     } else {

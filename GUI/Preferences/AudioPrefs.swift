@@ -30,6 +30,7 @@ extension ConfigController {
         audSamplingMethod.selectItem(withTag: config.samplingMethod.rawValue)
         audFilterType.selectItem(withTag: config.filterType.rawValue)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
+        audFilterAlwaysOn.isEnabled = config.filterType != FILT_NONE
     }
 
     @IBAction func audVol0Action(_ sender: NSSlider!) {
@@ -116,7 +117,7 @@ extension ConfigController {
 
     @IBAction func audFilterAlwaysOnAction(_ sender: NSButton!) {
 
-        track()
+        config.filterAlwaysOn = sender.state == .on
         refresh()
     }
     

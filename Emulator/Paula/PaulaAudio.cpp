@@ -53,6 +53,20 @@ PaulaAudio::setFilterAlwaysOn(bool value)
     config.filterAlwaysOn = value;
 }
 
+void
+PaulaAudio::setVol(unsigned nr, double val)
+{
+    assert(nr < 4);
+    config.vol[nr] = MAX(0.0, MIN(val, 1.0));
+}
+
+void
+PaulaAudio::setPan(unsigned nr, double val)
+{
+    assert(nr < 4);
+    config.pan[nr] = MAX(0.0, MIN(val, 1.0));
+}
+
 FilterType
 PaulaAudio::getFilterType()
 {
@@ -145,12 +159,26 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
+        /*
         short left1  = channel0.interpolate<method>(clock);
         short right1 = channel1.interpolate<method>(clock);
         short right2 = channel2.interpolate<method>(clock);
         short left2  = channel3.interpolate<method>(clock);
-
-        writeData(left1 + left2, right1 + right2);
+        */
+        double ch0 = channel0.interpolate<method>(clock) * config.vol[0];
+        double ch1 = channel1.interpolate<method>(clock) * config.vol[1];
+        double ch2 = channel2.interpolate<method>(clock) * config.vol[2];
+        double ch3 = channel3.interpolate<method>(clock) * config.vol[3];
+        
+        double l =
+        ch0 * config.pan[0] + ch1 * config.pan[1] +
+        ch2 * config.pan[2] + ch3 * config.pan[3];
+        
+        double r =
+        ch0 * (1 - config.pan[0]) + ch1 * (1 - config.pan[1]) +
+        ch2 * (1 - config.pan[2]) + ch3 * (1 - config.pan[3]);
+        
+        writeData((float)(l * config.volL), (float)(r * config.volR));
 
         clock += cyclesPerSample;
     }
@@ -324,24 +352,20 @@ PaulaAudio::readStereoSamplesInterleaved(float *target, size_t n)
 }
 
 void
-PaulaAudio::writeData(short left, short right)
+PaulaAudio::writeData(float left, float right)
 {
     // Check for buffer overflow
     if (bufferCapacity() == 0) handleBufferOverflow();
 
-    // Convert samples to floating point values
-    float fl = float(left) * scale;
-    float fr = float(right) * scale;
-
     // Apply audio filter if applicable
     if (ciaa.powerLED() || config.filterAlwaysOn) {
-        fl = filterL.apply(fl);
-        fr = filterR.apply(fr);
+        left = filterL.apply(left);
+        right = filterR.apply(right);
     }
 
     // Write samples into ringbuffer
-    ringBufferL[writePtr] = fl;
-    ringBufferR[writePtr] = fr;
+    ringBufferL[writePtr] = left;
+    ringBufferR[writePtr] = right;
     advanceWritePtr();
 }
 
