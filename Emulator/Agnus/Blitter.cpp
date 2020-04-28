@@ -150,7 +150,12 @@ void
 Blitter::pokeBLTCON0(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON0, value);
+}
 
+void
+Blitter::setBLTCON0(u16 value)
+{
     bltcon0 = value;
 }
 
@@ -158,7 +163,12 @@ void
 Blitter::pokeBLTCON1(u16 value)
 {
     debug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON1, value);
+}
 
+void
+Blitter::setBLTCON1(u16 value)
+{
     bltcon1 = value;
 }
 
@@ -272,6 +282,12 @@ Blitter::pokeBLTCON0L(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON0L, value);
+}
+
+void
+Blitter::setBLTCON0L(u16 value)
+{
     bltcon0 = HI_LO(HI_BYTE(bltcon0), LO_BYTE(value));
 }
 
@@ -283,6 +299,12 @@ Blitter::pokeBLTSIZV(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
+    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTSIZV, value);
+}
+
+void
+Blitter::setBLTSIZV(u16 value)
+{
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0 h14 h13 h12 h11 h10 h9 h8 h7 h6 h5 h4 h3 h2 h1 h0
     bltsizeH = value & 0x7FFF;

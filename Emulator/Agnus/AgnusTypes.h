@@ -49,6 +49,10 @@ typedef enum : i32
 {
     REG_NONE = 0,
     REG_BLTSIZE,
+    REG_BLTSIZV,
+    REG_BLTCON0,
+    REG_BLTCON0L,
+    REG_BLTCON1,
     REG_INTREQ,
     REG_INTENA,
     REG_BPLCON0_AGNUS,

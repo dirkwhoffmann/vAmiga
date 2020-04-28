@@ -307,7 +307,8 @@ public:
     
     // OCS register 0x040 (w)
     void pokeBLTCON0(u16 value);
-    
+    void setBLTCON0(u16 value);
+
     u16 bltconASH()   { return bltcon0 >> 12; }
     u16 bltconLF()    { return bltcon0 & 0xF; }
     u16 bltconUSE()   { return (bltcon0 >> 8) & 0xF; }
@@ -319,6 +320,7 @@ public:
 
     // OCS register 0x042 (w)
     void pokeBLTCON1(u16 value);
+    void setBLTCON1(u16 value);
 
     u16 bltconBSH()   { return bltcon1 >> 12; }
     bool bltconEFE()  { return bltcon1 & (1 << 4); }
@@ -349,9 +351,11 @@ public:
 
     // ECS register 0x05A (w)
     void pokeBLTCON0L(u16 value);
-
+    void setBLTCON0L(u16 value);
+    
     // ECS register 0x05C (w)
     void pokeBLTSIZV(u16 value);
+    void setBLTSIZV(u16 value);
 
     // ECS register 0x05E (w)
     void pokeBLTSIZH(u16 value);

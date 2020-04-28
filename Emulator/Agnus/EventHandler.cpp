@@ -603,6 +603,10 @@ Agnus::serviceREGEvent(Cycle until)
         switch (change.addr) {
 
             case REG_BLTSIZE: blitter.setBLTSIZE(change.value); break;
+            case REG_BLTSIZV: blitter.setBLTSIZV(change.value); break;
+            case REG_BLTCON0: blitter.setBLTCON0(change.value); break;
+            case REG_BLTCON0L: blitter.setBLTCON0L(change.value); break;
+            case REG_BLTCON1: blitter.setBLTCON1(change.value); break;
             case REG_INTREQ: paula.setINTREQ(change.value); break;
             case REG_INTENA: paula.setINTENA(change.value); break;
             case REG_BPLCON0_AGNUS: setBPLCON0(change.value); break;
