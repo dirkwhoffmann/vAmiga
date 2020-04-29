@@ -287,10 +287,9 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     // Enable DMA if bit 15 (DMAEN) has been written twice
     else if (oldDsklen & newDskLen & 0x8000) {
 
-#ifdef ALIGN_DRIVE_HEAD
-        if (drive) drive->head.offset = 0;
-#endif
-        
+        // Reset head position in debug mode to generate reproducable results
+        if (DRIVE_DEBUG) drive->head.offset = 0;
+
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
             

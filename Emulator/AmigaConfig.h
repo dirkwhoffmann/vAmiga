@@ -33,7 +33,9 @@
 // Set to false to disable SSE optimizations
 static const bool USE_SSE = true;
 
-// Set to 
+// Uncomment to colorize certain rasterlines
+// #define LINE_DEBUG (agnus.pos.v == 260)
+
 // Register debugging (set to 1 to generate debug output)
 
 static const int OCSREG_DEBUG  = 2;  // General OCS register debugging
@@ -83,18 +85,22 @@ static const int DSK_CHECKSUM  = false;  // Disk checksums
 static const int BLT_CHECKSUM  = false;  // Blitter checksums
 static const int COP_CHECKSUM  = false;  // Copper checksums
 
+// Drive debugging (set to true to enable debugging)
+
+static const bool DRIVE_DEBUG = false;   // Fallback to a simple turbo drive
+static const bool FORCE_FASTBLT = false; // Always use the fast Blitter
+
 // Uncomment to lauch the emulator with a preloaed disk in df0
 // #define BOOT_DISK "/Downloads/Cabal.adf"
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Workbench/A2000WB1.2D.adf"
+// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Ghostsngoblins.adf"
 
 // Additional debug settings (uncomment to enable)
-#define HARD_RESET       // Restores the initial power up state in reset()
-// #define BORDER_DEBUG     // Draws the border in debug colors
-// #define PIXEL_DEBUG      // Highlights the first pixel in each word
-// #define LINE_DEBUG       // Colorizes certain rasterlines
-// #define ALIGN_DRIVE_HEAD // Make drive operations deterministic
-// #define SLOW_BLT_DEBUG   // Executes SlowBlitter instructions in one chunk
-// #define AGNUS_EXEC_DEBUG // Falls back to a simpler Agnus execution function
-// #define CIA_ON_STEROIDS  // Disables the CIA sleep logic
+// #define HARD_RESET        // Restores the initial power up state in reset()
+// #define BORDER_DEBUG      // Draws the border in debug colors
+// #define PIXEL_DEBUG       // Highlights the first pixel in each word
+// #define SLOW_BLT_DEBUG    // Executes SlowBlitter instructions in one chunk
+// #define AGNUS_EXEC_DEBUG  // Falls back to a simpler Agnus execution function
+// #define CIA_ON_STEROIDS   // Disables the CIA sleep logic
+
 #endif

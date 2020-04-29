@@ -294,6 +294,10 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_DRIVE_SPEED:
 
+            if (DRIVE_DEBUG) {
+                warn("Falling back to a turbo drive for debugging.\n");
+                value = -1;
+            }
             if (!isValidDriveSpeed(value)) {
                 warn("Invalid drive speed: %d\n", value);
                 return false;
@@ -357,6 +361,10 @@ Amiga::configure(ConfigOption option, long value)
             
         case VA_BLITTER_ACCURACY:
             
+            if (FORCE_FASTBLT) {
+                warn("Falling back to the FastBlitter for debugging\n");
+                value = 0;
+            }
             if (current.blitter.accuracy == value) return true;
             agnus.blitter.setAccuracy(value);
             break;

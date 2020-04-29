@@ -399,9 +399,8 @@ Drive::moveHead(int dir)
             plaindebug("Stepping up to cylinder %d\n", head.cylinder);
     }
 
-#ifdef ALIGN_DRIVE_HEAD
-    head.offset = 0; 
-#endif
+    // Reset the head position in debug mode to generate reproducable results
+    if (DRIVE_DEBUG) head.offset = 0;
     
     // Inform the GUI
     if (pollsForDisk()) {
