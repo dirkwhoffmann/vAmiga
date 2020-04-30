@@ -15,18 +15,18 @@ extension ConfigController {
         let config = amiga.config().audio
         
         // In
-        audVol0.doubleValue = config.vol.0 * 100 / 0.0000025
-        audVol1.doubleValue = config.vol.1 * 100 / 0.0000025
-        audVol2.doubleValue = config.vol.2 * 100 / 0.0000025
-        audVol3.doubleValue = config.vol.3 * 100 / 0.0000025
+        audVol0.doubleValue = exp2(config.vol.0 / 0.0000025) * 100
+        audVol1.doubleValue = exp2(config.vol.1 / 0.0000025) * 100
+        audVol2.doubleValue = exp2(config.vol.2 / 0.0000025) * 100
+        audVol3.doubleValue = exp2(config.vol.3 / 0.0000025) * 100
         audPan0.doubleValue = config.pan.0 * 100
         audPan1.doubleValue = config.pan.1 * 100
         audPan2.doubleValue = config.pan.2 * 100
         audPan3.doubleValue = config.pan.3 * 100
 
         // Out
-        audVolL.doubleValue = config.volL * 100
-        audVolR.doubleValue = config.volR * 100
+        audVolL.doubleValue = exp2(config.volL) * 100
+        audVolR.doubleValue = exp2(config.volR) * 100
         audSamplingMethod.selectItem(withTag: config.samplingMethod.rawValue)
         audFilterType.selectItem(withTag: config.filterType.rawValue)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
@@ -36,28 +36,28 @@ extension ConfigController {
     @IBAction func audVol0Action(_ sender: NSSlider!) {
 
         track()
-        config.vol0 = (sender.doubleValue / 100.0) * 0.0000025
+        config.vol0 = log2(sender.doubleValue / 100) * 0.0000025
         refresh()
     }
     
     @IBAction func audVol1Action(_ sender: NSSlider!) {
 
         track()
-        config.vol1 = (sender.doubleValue / 100.0) * 0.0000025
+        config.vol1 = log2(sender.doubleValue / 100) * 0.0000025
         refresh()
     }
     
     @IBAction func audVol2Action(_ sender: NSSlider!) {
 
         track()
-        config.vol2 = (sender.doubleValue / 100.0) * 0.0000025
+        config.vol2 = log2(sender.doubleValue / 100) * 0.0000025
         refresh()
     }
     
     @IBAction func audVol3Action(_ sender: NSSlider!) {
 
         track()
-        config.vol3 = (sender.doubleValue / 100.0) * 0.0000025
+        config.vol3 = log2(sender.doubleValue / 100) * 0.0000025
         refresh()
     }
     
@@ -71,14 +71,14 @@ extension ConfigController {
     @IBAction func audPan1Action(_ sender: NSSlider!) {
         
         track()
-        config.pan1 = sender.doubleValue / 100.0
+        config.pan1 = sender.doubleValue / 100
         refresh()
     }
     
     @IBAction func audPan2Action(_ sender: NSSlider!) {
         
         track()
-        config.pan2 = sender.doubleValue / 100.0
+        config.pan2 = sender.doubleValue / 100
         refresh()
     }
     
@@ -92,14 +92,14 @@ extension ConfigController {
     @IBAction func audVolLAction(_ sender: NSSlider!) {
         
         track()
-        config.volL = sender.doubleValue / 100.0
+        config.volL = log2(sender.doubleValue / 100)
         refresh()
     }
 
     @IBAction func audVolRAction(_ sender: NSSlider!) {
         
         track()
-        config.volR = sender.doubleValue / 100.0
+        config.volR = log2(sender.doubleValue / 100)
         refresh()
     }
 
