@@ -1067,6 +1067,13 @@ Memory::poke8(u32 addr, u8 value)
 template <BusOwner owner> void
 Memory::poke16(u32 addr, u16 value)
 {
+    /*
+    if (addr == 0xC01EC2) {
+        debug("poke16(%x,%x)\n", addr, value);
+        return;
+    }
+    */
+    
     if (!IS_EVEN(addr)) {
         warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);
     }

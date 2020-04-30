@@ -216,7 +216,7 @@ Moira::readM(u32 addr)
     }
 
     // Check if a watchpoint is being accessed
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr)) {
+    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 
@@ -256,7 +256,7 @@ Moira::writeM(u32 addr, u32 val)
     if (EMULATE_FC) fcl = 1;
 
     // Check if a watchpoint is being accessed
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr)) {
+    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 

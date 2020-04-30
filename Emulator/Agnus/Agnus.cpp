@@ -898,9 +898,6 @@ Agnus::dumpDasEventTable()
     dumpDasEventTable(0xA0, 0xE2);
 }
 
-
-
-
 u16
 Agnus::peekVHPOSR()
 {
@@ -917,12 +914,14 @@ Agnus::peekVHPOSR()
     }
 
     // posv wraps over in cycle 2
-    if (posh > 1)
+    if (posh > 1) {
         return HI_LO(posv & 0xFF, posh);
-
-    if (posv == 0)
-       return HI_LO(frame.isLongFrame() ? (312 & 0xFF) : (313 & 0xFF), posh);
-
+    }
+    
+    if (posv == 0) {
+        return HI_LO(frame.isLongFrame() ? (312 & 0xFF) : (313 & 0xFF), posh);
+    }
+    
     return HI_LO((posv - 1) & 0xFF, posh);
 }
 
@@ -948,7 +947,7 @@ Agnus::peekVPOSR()
 
         case AGNUS_8367: id = 0x00; break;
         case AGNUS_8372: id = 0x20; break;
-        case AGNUS_8375: id = 0x20; break; // ??? CHECK ON REAL MACHINE
+        case AGNUS_8375: id = 0x20; break; // TODO: CHECK ON REAL MACHINE
         default: assert(false);
     }
     result |= (id << 8);
@@ -960,6 +959,7 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
+    debug(2, "pokeVPOS(%x) (vpos = %d lof = %d)\n", value, pos.v, frame.lof);
     // Don't know what to do here ...
 }
 

@@ -29,7 +29,7 @@ struct Guard {
 public:
 
     // Returns true if the guard hits
-    bool eval(u32 addr);
+    bool eval(u32 addr, Size S = Byte);
 
 };
 
@@ -109,7 +109,7 @@ public:
 
 private:
 
-    bool eval(u32 addr);
+    bool eval(u32 addr, Size S = Byte);
 };
 
 class Breakpoints : public Guards {
@@ -185,7 +185,7 @@ public:
     bool breakpointMatches(u32 addr);
 
     // Returns true if a watchpoint hits at the provides address
-    bool watchpointMatches(u32 addr);
+    bool watchpointMatches(u32 addr, Size S);
 
     //
     // Working with the log buffer

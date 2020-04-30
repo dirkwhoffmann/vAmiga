@@ -15,9 +15,9 @@
 namespace moira {
 
 bool
-Guard::eval(u32 addr)
+Guard::eval(u32 addr, Size S)
 {
-    if (this->addr == addr && this->enabled) {
+    if (this->addr >= addr && this->addr < addr + S && this->enabled) {
         if (++hits > skip) {
             return true;
         }
@@ -136,10 +136,10 @@ Guards::setEnableAt(u32 addr, bool value)
 }
 
 bool
-Guards::eval(u32 addr)
+Guards::eval(u32 addr, Size S)
 {
     for (int i = 0; i < count; i++)
-        if (guards[i].eval(addr)) return true;
+        if (guards[i].eval(addr, S)) return true;
 
     return false;
 }
@@ -203,9 +203,9 @@ Debugger::breakpointMatches(u32 addr)
 }
 
 bool
-Debugger::watchpointMatches(u32 addr)
+Debugger::watchpointMatches(u32 addr, Size S)
 {
-    return watchpoints.eval(addr);
+    return watchpoints.eval(addr, S);
 }
 
 void
