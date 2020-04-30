@@ -1865,7 +1865,6 @@ Agnus::vsyncHandler()
     blitter.vsyncHandler();
     copper.vsyncHandler();
     denise.beginOfFrame(frame.interlaced);
-    diskController.vsyncHandler();
     joystick1.execute();
     joystick2.execute();
 

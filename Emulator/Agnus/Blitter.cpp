@@ -123,8 +123,8 @@ Blitter::_dump()
     msg("               DESC: %s\n", bltconDESC() ? "yes" : "no");
     msg("               LINE: %s\n", bltconLINE() ? "yes" : "no");
     msg("\n");
-    msg("  bltsizeH: %d\n", bltsizeH);
-    msg("  bltsizeW: %d\n", bltsizeW);
+    msg("  bltsizeH: %d\n", bltsizeV);
+    msg("  bltsizeW: %d\n", bltsizeH);
     msg("\n");
     msg("    bltapt: %X\n", bltapt);
     msg("    bltbpt: %X\n", bltbpt);
@@ -264,12 +264,12 @@ Blitter::setBLTSIZE(u16 value)
 
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // h9 h8 h7 h6 h5 h4 h3 h2 h1 h0 w5 w4 w3 w2 w1 w0
-    bltsizeH = value >> 6;
-    bltsizeW = value & 0x3F;
+    bltsizeV = value >> 6;
+    bltsizeH = value & 0x3F;
 
     // Overwrite with default values if zero
-    if (!bltsizeH) bltsizeH = 0x0400;
-    if (!bltsizeW) bltsizeW = 0x0040;
+    if (!bltsizeV) bltsizeV = 0x0400;
+    if (!bltsizeH) bltsizeH = 0x0040;
 
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
 }
@@ -307,7 +307,7 @@ Blitter::setBLTSIZV(u16 value)
 {
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0 h14 h13 h12 h11 h10 h9 h8 h7 h6 h5 h4 h3 h2 h1 h0
-    bltsizeH = value & 0x7FFF;
+    bltsizeV = value & 0x7FFF;
 }
 
 void
@@ -320,11 +320,11 @@ Blitter::pokeBLTSIZH(u16 value)
 
     // 15  14  13  12  11  10 09 08 07 06 05 04 03 02 01 00
     //  0   0   0   0   0 w10 w9 w8 w7 w6 w5 w4 w3 w2 w1 w0
-    bltsizeW = value & 0x07FF;
+    bltsizeH = value & 0x07FF;
 
     // Overwrite with default values if zero
-    if (!bltsizeH) bltsizeH = 0x8000;
-    if (!bltsizeW) bltsizeW = 0x0800;
+    if (!bltsizeV) bltsizeV = 0x8000;
+    if (!bltsizeH) bltsizeH = 0x0800;
 
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
 }
@@ -780,8 +780,8 @@ Blitter::doFill(u16 &data, bool &carry)
 void
 Blitter::prepareBlit()
 {
-    remaining = bltsizeW * bltsizeH;
-    cntA = cntB = cntC = cntD = bltsizeW;
+    remaining = bltsizeH * bltsizeV;
+    cntA = cntB = cntC = cntD = bltsizeH;
 
     running = true;
     bzero = true;
@@ -802,7 +802,7 @@ Blitter::startBlit()
             linecount++;
             check1 = check2 = fnv_1a_init32();
             plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
-                       linecount, bltsizeW, bltsizeH,
+                       linecount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt, bltbpt, bltcpt, bltdpt);
@@ -812,11 +812,11 @@ Blitter::startBlit()
 
     } else {
 
-        if (BLT_CHECKSUM) { // && (bltsizeW != 1 || bltsizeH != 4)
+        if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
             copycount++;
             check1 = check2 = fnv_1a_init32();
             plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
-                       copycount, bltsizeW, bltsizeH,
+                       copycount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt, bltbpt, bltcpt, bltdpt,
@@ -850,7 +850,7 @@ Blitter::endBlit()
     agnus.cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    if (BLT_CHECKSUM) { // && (bltsizeW != 1 || bltsizeH != 4)
+    if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
         plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
     }

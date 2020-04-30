@@ -86,7 +86,7 @@ void Blitter::doFastCopyBlit()
     aold = 0;
     bold = 0;
 
-    for (int y = 0; y < bltsizeH; y++) {
+    for (int y = 0; y < bltsizeV; y++) {
 
         // Reset the fill carry bit
         fillCarry = !!bltconFCI();
@@ -94,10 +94,10 @@ void Blitter::doFastCopyBlit()
         // Apply the "first word mask" in the first iteration
         u16 mask = bltafwm;
 
-        for (int x = 0; x < bltsizeW; x++) {
+        for (int x = 0; x < bltsizeH; x++) {
 
             // Apply the "last word mask" in the last iteration
-            if (x == bltsizeW - 1) mask &= bltalwm;
+            if (x == bltsizeH - 1) mask &= bltalwm;
 
             // Fetch A
             if (useA) {
@@ -173,10 +173,10 @@ void Blitter::doFastCopyBlit()
 
     // Do some consistency checks
     /*
-    assert(apt == useA ? bltapt + (incr * bltsizeW + amod) * bltsizeH : bltapt);
-    assert(bpt == useB ? bltbpt + (incr * bltsizeW + bmod) * bltsizeH : bltbpt);
-    assert(cpt == useC ? bltcpt + (incr * bltsizeW + cmod) * bltsizeH : bltcpt);
-    assert(dpt == useD ? bltdpt + (incr * bltsizeW + dmod) * bltsizeH : bltdpt);
+    assert(apt == useA ? bltapt + (incr * bltsizeH + amod) * bltsizeV : bltapt);
+    assert(bpt == useB ? bltbpt + (incr * bltsizeH + bmod) * bltsizeV : bltbpt);
+    assert(cpt == useC ? bltcpt + (incr * bltsizeH + cmod) * bltsizeV : bltcpt);
+    assert(dpt == useD ? bltdpt + (incr * bltsizeH + dmod) * bltsizeV : bltdpt);
     */
 
     // Write back pointer registers
@@ -216,7 +216,7 @@ Blitter::doFastLineBlit()
 
     u32 bltcon = HI_W_LO_W(bltcon0, bltcon1);
     
-    int height = bltsizeH;
+    int height = bltsizeV;
     
     u16 bltadat_local = 0;
     u16 bltbdat_local = 0;

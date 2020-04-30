@@ -58,8 +58,8 @@ class Blitter : public AmigaComponent
     u16 bltalwm;
     
     // The Blitter size register
-    u16 bltsizeW;
     u16 bltsizeH;
+    u16 bltsizeV;
 
     // The Blitter modulo registers
     i16 bltamod;
@@ -201,8 +201,8 @@ public:
         & bltafwm
         & bltalwm
 
-        & bltsizeW
         & bltsizeH
+        & bltsizeV
 
         & bltamod
         & bltbmod
@@ -371,7 +371,7 @@ public:
     void pokeBLTBDAT(u16 value);
     void pokeBLTCDAT(u16 value);
     
-    bool isFirstWord() { return xCounter == bltsizeW; }
+    bool isFirstWord() { return xCounter == bltsizeH; }
     bool isLastWord() { return xCounter == 1; }
 
     
@@ -469,14 +469,14 @@ private:
     template <u16 instr> void fakeExec();
 
     // Check iterations
-    bool isFirstIteration() { return xCounter == bltsizeW; }
+    bool isFirstIteration() { return xCounter == bltsizeH; }
     bool isLastIteration() { return xCounter == 1; }
 
     // Sets the x or y counter to a new value
     void setXCounter(u16 value);
     void setYCounter(u16 value);
-    void resetXCounter() { setXCounter(bltsizeW); }
-    void resetYCounter() { setYCounter(bltsizeH); }
+    void resetXCounter() { setXCounter(bltsizeH); }
+    void resetYCounter() { setYCounter(bltsizeV); }
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
 

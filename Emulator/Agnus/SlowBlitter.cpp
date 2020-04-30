@@ -852,7 +852,7 @@ Blitter::beginFakeLineBlit()
     doFastLineBlit();
 
     // Prepare the slow Blitter
-    bltsizeW = 1;
+    bltsizeH = 1;
     resetXCounter();
     resetYCounter();
 
@@ -996,7 +996,7 @@ Blitter::exec()
             bltdpt += incr;
             if (--cntD == 0) {
                 bltdpt += dmod;
-                cntD = bltsizeW;
+                cntD = bltsizeH;
                 fillCarry = !!bltconFCI();
             }
         }
@@ -1012,7 +1012,7 @@ Blitter::exec()
         bltapt += incr;
         if (--cntA == 0) {
             bltapt += amod;
-            cntA = bltsizeW;
+            cntA = bltsizeH;
         }
     }
 
@@ -1026,7 +1026,7 @@ Blitter::exec()
         bltbpt += incr;
         if (--cntB == 0) {
             bltbpt += bmod;
-            cntB = bltsizeW;
+            cntB = bltsizeH;
         }
     }
 
@@ -1040,7 +1040,7 @@ Blitter::exec()
         bltcpt += incr;
         if (--cntC == 0) {
             bltcpt += cmod;
-            cntC = bltsizeW;
+            cntC = bltsizeH;
         }
     }
 

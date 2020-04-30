@@ -258,10 +258,7 @@ public:
     // Services an event in the disk change slot
     void serviceDiskChangeEvent();
 
-    // Performs periodic actions for each frame
-    void vsyncHandler();
-
-
+    
     //
     // Working with the FIFO buffer
     //

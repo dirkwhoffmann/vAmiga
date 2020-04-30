@@ -470,12 +470,6 @@ DiskController::serviceDiskChangeEvent()
 }
 
 void
-DiskController::vsyncHandler()
-{
- 
-}
-
-void
 DiskController::clearFifo()
 {
     fifo = 0;
