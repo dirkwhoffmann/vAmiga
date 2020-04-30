@@ -48,19 +48,19 @@
 
 public:
 
-// Returns true iff the specified slot contains any event.
+// Returns true iff the specified slot contains any event
 template<EventSlot s> bool hasEvent() {
     assert(s < SLOT_COUNT); return slot[s].id != (EventID)0; }
 
-// Returns true iff the specified slot contains a specific event.
+// Returns true iff the specified slot contains a specific event
 template<EventSlot s> bool hasEvent(EventID id) {
     assert(s < SLOT_COUNT); return slot[s].id == id; }
 
-// Returns true iff the specified slot contains a pending event.
+// Returns true iff the specified slot contains a pending event
 template<EventSlot s> bool isPending() {
     assert(s < SLOT_COUNT); return slot[s].triggerCycle != NEVER; }
 
-// Returns true iff the specified slot contains a due event.
+// Returns true iff the specified slot contains a due event
 template<EventSlot s> bool isDue(Cycle cycle) {
     assert(s < SLOT_COUNT); return cycle >= slot[s].triggerCycle; }
 
@@ -101,12 +101,10 @@ public:
 
 template<EventSlot s> void scheduleAbs(Cycle cycle, EventID id)
 {
-    // Schedule event
     slot[s].triggerCycle = cycle;
     slot[s].id = id;
     if (cycle < nextTrigger) nextTrigger = cycle;
 
-    // Perform special actions for secondary events
     if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
         slot[SEC_SLOT].triggerCycle = cycle;
 }
@@ -152,18 +150,21 @@ template<EventSlot s> void scheduleInc(Cycle cycle, EventID id, i64 data)
 
 template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id)
 {
-    scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id);
+    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id);
 }
 
 template<EventSlot s> void schedulePos(i16 vpos, i16 hpos, EventID id, i64 data)
 {
-    scheduleAbs<s>(beamToCycle( Beam(vpos, hpos) ), id, data);
+    scheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ), id, data);
 }
 
 template<EventSlot s> void rescheduleAbs(Cycle cycle)
 {
     slot[s].triggerCycle = cycle;
     if (cycle < nextTrigger) nextTrigger = cycle;
+    
+     if (isSecondarySlot(s) && cycle < slot[SEC_SLOT].triggerCycle)
+         slot[SEC_SLOT].triggerCycle = cycle;
 }
 
 template<EventSlot s> void rescheduleInc(Cycle cycle)
@@ -176,7 +177,7 @@ template<EventSlot s> void rescheduleRel(Cycle cycle)
     rescheduleAbs<s>(clock + cycle);
 }
 
-template<EventSlot s> void schedulePos(i16 vpos, i16 hpos)
+template<EventSlot s> void reschedulePos(i16 vpos, i16 hpos)
 {
     rescheduleAbs<s>(beamToCycle( Beam { vpos, hpos } ));
 }

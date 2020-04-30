@@ -961,7 +961,21 @@ void
 Agnus::pokeVPOS(u16 value)
 {
     debug(2, "pokeVPOS(%x) (vpos = %d lof = %d)\n", value, pos.v, frame.lof);
-    // Don't know what to do here ...
+
+    // I don't really know what exactly we are supposed to do here.
+    // For the time being, I only take care of the LOF bit.
+    bool newlof = value & 0x8000;
+    if (frame.lof == newlof) return;
+    
+    // If a long frame gets changed to a short frame, we only proceed if
+    // Agnus is not in the last rasterline. Otherwise, we would corrupt the
+    // emulators internal state (we would be in a line that is unreachable).
+    if (!newlof && inLastRasterline()) return;
+    frame.lof = newlof;
+    
+    // Reschedule the next VBL event according to the new value
+    assert(slot[VBL_SLOT].id == VBL_STROBE);
+    reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
 }
 
 template <PokeSource s> void
