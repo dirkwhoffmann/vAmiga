@@ -922,7 +922,7 @@ Agnus::peekVHPOSR()
     if (posv > 0) {
         return HI_LO((posv - 1) & 0xFF, posh);
     } else {
-        return HI_LO(frame.prevNumLines() & 0xFF, posh);
+        return HI_LO(frame.prevLastLine() & 0xFF, posh);
     }
 }
 
