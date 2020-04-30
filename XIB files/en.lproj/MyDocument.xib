@@ -110,22 +110,8 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
-                    </button>
-                    <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
-                        <rect key="frame" x="578" y="4" width="42" height="16"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="42" id="9hs-2E-rP5"/>
-                            <constraint firstAttribute="height" constant="16" id="ymp-gN-SpH"/>
-                        </constraints>
-                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="kM6-fj-IIO">
-                            <behavior key="behavior" lightByContents="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="mapCmdKeysAction:" target="-2" id="iVB-Kz-avV"/>
-                        </connections>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="X4r-q5-8Lh">
                         <rect key="frame" x="224" y="4" width="16" height="16"/>
@@ -153,7 +139,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -182,7 +168,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -211,7 +197,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="menu" size="10"/>
+                            <font key="font" metaFont="system" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
@@ -277,8 +263,8 @@
                             <outlet property="parent" destination="-2" id="DoA-Vt-vqv"/>
                         </connections>
                     </customView>
-                    <button toolTip="Drive LED" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="iho-fa-H5O" userLabel="Cmd Lock">
-                        <rect key="frame" x="554" y="4" width="16" height="16"/>
+                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="iho-fa-H5O" userLabel="Debug Mode">
+                        <rect key="frame" x="604" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="pUP-tV-Q4e"/>
                             <constraint firstAttribute="width" constant="16" id="zrl-Qm-DYQ"/>
@@ -291,6 +277,20 @@
                             <action selector="mapCmdKeysAction:" target="-2" id="bIk-ex-zpY"/>
                         </connections>
                     </button>
+                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="70n-GV-8LP" userLabel="Cmd Lock">
+                        <rect key="frame" x="560" y="4" width="36" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="36" id="9hs-2E-rP5"/>
+                            <constraint firstAttribute="height" constant="16" id="ymp-gN-SpH"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="cmdLockTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="kM6-fj-IIO">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="mapCmdKeysAction:" target="-2" id="iVB-Kz-avV"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="iho-fa-H5O" secondAttribute="bottom" constant="4" id="02t-sL-zFr"/>
@@ -299,7 +299,6 @@
                     <constraint firstItem="iKN-RM-vsV" firstAttribute="leading" secondItem="1208" secondAttribute="trailing" constant="8" symbolic="YES" id="5C4-zy-CEW"/>
                     <constraint firstAttribute="bottom" secondItem="iKN-RM-vsV" secondAttribute="bottom" constant="4" id="5YA-3H-hJB"/>
                     <constraint firstAttribute="bottom" secondItem="Pjc-SJ-rsn" secondAttribute="bottom" constant="4" id="6dF-1B-uXj"/>
-                    <constraint firstItem="70n-GV-8LP" firstAttribute="leading" secondItem="iho-fa-H5O" secondAttribute="trailing" constant="8" symbolic="YES" id="6hg-HZ-gn9"/>
                     <constraint firstItem="1208" firstAttribute="leading" secondItem="6" secondAttribute="leading" constant="8" id="7lx-9H-ApR"/>
                     <constraint firstAttribute="bottom" secondItem="f7g-mT-LE7" secondAttribute="bottom" constant="5" id="80f-ZK-qbp"/>
                     <constraint firstItem="Pjc-SJ-rsn" firstAttribute="leading" secondItem="X4r-q5-8Lh" secondAttribute="trailing" constant="8" symbolic="YES" id="CN4-cd-WOz"/>
@@ -307,6 +306,7 @@
                     <constraint firstAttribute="bottom" secondItem="Qp9-H4-2Q7" secondAttribute="bottom" constant="4" id="E4V-Zk-iJg"/>
                     <constraint firstAttribute="bottom" secondItem="K68-Xr-JJH" secondAttribute="bottom" constant="4" id="EaJ-4B-OvH"/>
                     <constraint firstAttribute="bottom" secondItem="Lc0-yC-JdI" secondAttribute="bottom" constant="4" id="EjN-oJ-pRo"/>
+                    <constraint firstItem="214" firstAttribute="leading" secondItem="iho-fa-H5O" secondAttribute="trailing" constant="8" symbolic="YES" id="Ek8-FZ-mnN"/>
                     <constraint firstAttribute="bottom" secondItem="BLY-CO-Zam" secondAttribute="bottom" constant="4" id="FME-Gj-71o"/>
                     <constraint firstAttribute="bottom" secondItem="wnl-Bi-Ego" secondAttribute="bottom" constant="4" id="HZ5-3c-jQM"/>
                     <constraint firstAttribute="bottom" secondItem="xzf-hU-AKK" secondAttribute="bottom" constant="4" id="LWM-UY-mJf"/>
@@ -314,6 +314,7 @@
                     <constraint firstItem="8yk-0g-1sA" firstAttribute="leading" secondItem="wnl-Bi-Ego" secondAttribute="trailing" constant="8" symbolic="YES" id="MlT-f5-q4J"/>
                     <constraint firstAttribute="bottom" secondItem="Cg3-r8-KR5" secondAttribute="bottom" constant="4" id="NOR-Ny-a3Q"/>
                     <constraint firstItem="D1i-Ep-fTN" firstAttribute="leading" secondItem="f19-16-42W" secondAttribute="trailing" constant="8" symbolic="YES" id="Ns6-ev-VQ5"/>
+                    <constraint firstItem="iho-fa-H5O" firstAttribute="leading" secondItem="70n-GV-8LP" secondAttribute="trailing" constant="8" symbolic="YES" id="OTp-CM-5zC"/>
                     <constraint firstItem="Qp9-H4-2Q7" firstAttribute="leading" secondItem="Cg3-r8-KR5" secondAttribute="trailing" constant="8" symbolic="YES" id="Rne-JT-wcT"/>
                     <constraint firstItem="212" firstAttribute="leading" secondItem="1052" secondAttribute="trailing" constant="4" id="TJ4-DR-MGg"/>
                     <constraint firstItem="gkQ-Nr-aDz" firstAttribute="leading" secondItem="f7g-mT-LE7" secondAttribute="trailing" constant="8" symbolic="YES" id="VTr-UY-q2o"/>
@@ -335,7 +336,6 @@
                     <constraint firstItem="Cg3-r8-KR5" firstAttribute="leading" secondItem="8yk-0g-1sA" secondAttribute="trailing" constant="8" symbolic="YES" id="vwB-Ut-UAc"/>
                     <constraint firstItem="f7g-mT-LE7" firstAttribute="leading" secondItem="K68-Xr-JJH" secondAttribute="trailing" constant="8" symbolic="YES" id="wTE-yN-DTf"/>
                     <constraint firstItem="f19-16-42W" firstAttribute="leading" secondItem="iKN-RM-vsV" secondAttribute="trailing" constant="8" symbolic="YES" id="wUU-gO-cXK"/>
-                    <constraint firstItem="214" firstAttribute="leading" secondItem="70n-GV-8LP" secondAttribute="trailing" constant="8" symbolic="YES" id="xSs-mH-MIH"/>
                     <constraint firstAttribute="bottom" secondItem="D1i-Ep-fTN" secondAttribute="bottom" constant="4" id="zlK-sj-gaS"/>
                 </constraints>
             </view>
@@ -380,7 +380,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
