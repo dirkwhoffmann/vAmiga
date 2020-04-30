@@ -907,22 +907,23 @@ Agnus::peekVHPOSR()
     i16 posh = pos.h + 4;
     i16 posv = pos.v;
 
-    // posh might have wrapped over, because we added 4
+    // Check if posh has wrapped over (we just added 4)
     if (posh > HPOS_MAX) {
         posh -= HPOS_CNT;
         if (++posv >= frame.numLines()) posv = 0;
     }
 
-    // posv wraps over in cycle 2
+    // The value of posv only shows up in cycle 2 and later
     if (posh > 1) {
         return HI_LO(posv & 0xFF, posh);
     }
     
-    if (posv == 0) {
-        return HI_LO(frame.isLongFrame() ? (312 & 0xFF) : (313 & 0xFF), posh);
+    // In cycle 0 and 1, We need to return the old value of posv
+    if (posv > 0) {
+        return HI_LO((posv - 1) & 0xFF, posh);
+    } else {
+        return HI_LO(frame.prevNumLines() & 0xFF, posh);
     }
-    
-    return HI_LO((posv - 1) & 0xFF, posh);
 }
 
 void

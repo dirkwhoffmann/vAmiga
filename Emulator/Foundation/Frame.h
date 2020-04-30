@@ -21,6 +21,9 @@ struct Frame
     // The long frame flipflop
     bool lof;
     
+    // Value of the frame flipflop in the previous frame
+    bool prevlof;
+    
     template <class T>
     void applyToItems(T& worker)
     {
@@ -28,7 +31,8 @@ struct Frame
 
         & nr
         & interlaced
-        & lof;
+        & lof
+        & prevlof;
     }
 
     Frame() : nr(0), interlaced(false), lof(true) { }
@@ -38,15 +42,20 @@ struct Frame
     int numLines() { return lof ? 313 : 312; }
     int lastLine() { return lof ? 312 : 311; }
     
+    bool wasLongFrame() { return prevlof; }
+    bool wasShortFrame() { return !prevlof; }
+    int prevNumLines() { return prevlof ? 313 : 312; }
+    int prevLastLine() { return prevlof ? 312 : 311; }
+
     // Advances one frame
     void next(bool laceBit)
     {
         nr++;
+        prevlof = lof;
         
         // Update the long frame flipflop
         if ((interlaced = laceBit)) { lof = !lof; } else { lof = true; }
-     }
-    
+    }
 };
 
 #endif

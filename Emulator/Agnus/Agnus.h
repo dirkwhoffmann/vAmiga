@@ -857,7 +857,7 @@ private:
 
 
     //
-    // Serving events
+    // Servicing events
     //
 
 public:
