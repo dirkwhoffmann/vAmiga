@@ -99,7 +99,7 @@ static const bool FORCE_FASTBLT = false; // Always use the fast Blitter
 // #define BOOT_DISK "/Users/hoff/Downloads/Ghostsngoblins.adf"
 
 // Additional debug settings (uncomment to enable)
-// #define HARD_RESET        // Restores the initial power up state in reset()
+#define HARD_RESET        // Restores the initial power up state in reset()
 // #define BORDER_DEBUG      // Draws the border in debug colors
 // #define PIXEL_DEBUG       // Highlights the first pixel in each word
 // #define SLOW_BLT_DEBUG    // Executes SlowBlitter instructions in one chunk

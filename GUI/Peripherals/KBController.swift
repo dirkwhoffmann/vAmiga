@@ -82,37 +82,37 @@ class KBController: NSObject {
         switch Int(event.keyCode) {
             
         case kVK_Shift:
-            leftShift = event.modifierFlags.contains(.shift)
+            leftShift = event.modifierFlags.contains(.shift) ? !leftShift : false
             leftShift ? keyDown(with: MacKey.shift) : keyUp(with: MacKey.shift)
-            
+
         case kVK_RightShift:
-            rightShift = event.modifierFlags.contains(.shift)
+            rightShift = event.modifierFlags.contains(.shift) ? !rightShift : false
             rightShift ? keyDown(with: MacKey.rightShift) : keyUp(with: MacKey.rightShift)
-            
+
         case kVK_Control:
-            leftControl = event.modifierFlags.contains(.control)
+            leftControl = event.modifierFlags.contains(.control) ? !leftControl : false
             leftControl ? keyDown(with: MacKey.control) : keyUp(with: MacKey.control)
-
-        case kVK_RightControl:
-            rightControl = event.modifierFlags.contains(.control)
-            rightControl ? keyDown(with: MacKey.rightControl) : keyUp(with: MacKey.rightControl)
-
-        case kVK_Option:
-            leftOption = event.modifierFlags.contains(.option)
-            leftOption ? keyDown(with: MacKey.option) : keyUp(with: MacKey.option)
             
+        case kVK_RightControl:
+            rightControl = event.modifierFlags.contains(.control) ? !rightControl : false
+            rightControl ? keyDown(with: MacKey.rightControl) : keyUp(with: MacKey.rightControl)
+            
+        case kVK_Option:
+            leftOption = event.modifierFlags.contains(.option) ? !leftOption : false
+            leftOption ? keyDown(with: MacKey.option) : keyUp(with: MacKey.option)
+
         case kVK_RightOption:
-            rightOption = event.modifierFlags.contains(.option)
+            rightOption = event.modifierFlags.contains(.option) ? !rightOption : false
             rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
             
         case kVK_Command where mapCommandKeys:
-            leftCommand = event.modifierFlags.contains(.command)
+            leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
         case kVK_RightCommand where mapCommandKeys:
-            rightCommand = event.modifierFlags.contains(.command)
+            rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
-            
+
         default:
             break
         }
