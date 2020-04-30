@@ -54,7 +54,7 @@ RTC::getTime()
     Cycle master = amiga.cpu.getMasterClock();
 
     long timeBetweenCalls = (master - lastCall) / 28000000;
-    // debug(2, "timeBetweenCalls = %d\n", timeBetweenCalls);
+    // debug("timeBetweenCalls = %d\n", timeBetweenCalls);
     
     if (timeBetweenCalls > 2) {
 
@@ -132,7 +132,7 @@ RTC::time2registers()
     
     // Convert the time_t value to a tm struct.
     tm *t = localtime(&rtcTime);
-    debug(2, "Time stamp: %s\n", asctime(t));
+    // debug("Time stamp: %s\n", asctime(t));
     
     // Write the registers.
     

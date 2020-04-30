@@ -929,7 +929,7 @@ Agnus::peekVHPOSR()
 void
 Agnus::pokeVHPOS(u16 value)
 {
-    debug(2, "pokeVHPOS(%X)\n", value);
+    debug(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
     // Don't know what to do here ...
 }
 
@@ -943,7 +943,7 @@ Agnus::peekVPOSR()
     u16 result = (pos.v >> 8) | (frame.isLongFrame() ? 0x8000 : 0);
     assert((result & 0x7FFE) == 0);
 
-    // Add indentification bits
+    // Add identification bits
     switch (config.revision) {
 
         case AGNUS_8367: id = 0x00; break;
@@ -953,14 +953,14 @@ Agnus::peekVPOSR()
     }
     result |= (id << 8);
 
-    debug(2, "peekVPOSR() = %X\n", result);
+    debug(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
 }
 
 void
 Agnus::pokeVPOS(u16 value)
 {
-    debug(2, "pokeVPOS(%x) (vpos = %d lof = %d)\n", value, pos.v, frame.lof);
+    debug(POSREG_DEBUG, "pokeVPOS(%x) (vpos = %d lof = %d)\n", value, pos.v, frame.lof);
 
     // I don't really know what exactly we are supposed to do here.
     // For the time being, I only take care of the LOF bit.

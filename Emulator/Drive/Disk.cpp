@@ -197,7 +197,7 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 {
     assert(isValidTrack(t));
 
-    debug(2, "Encoding track %d\n", t);
+    debug(MFM_DEBUG, "Encoding track %d\n", t);
 
     // Format track
     clearTrack(t, 0xAA);
@@ -216,7 +216,7 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
         for (unsigned i = 0; i < trackSize / 2; i+=2) {
             check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
         }
-        plaindebug(2, "Track %d checksum = %X\n", t, check);
+        plaindebug(MFM_DEBUG, "Track %d checksum = %X\n", t, check);
     }
 
     return result;
@@ -228,7 +228,7 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     assert(isValidTrack(t));
     assert(isValidSector(s));
     
-    debug(2, "Encoding sector %d\n", s);
+    debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
     /* Block header layout:
      *                     Start  Size   Value
@@ -329,7 +329,7 @@ Disk::decodeTrack(u8 *dst, Track t, long smax)
 {
     assert(isValidTrack(t));
         
-    debug(2, "Decoding track %d\n", t);
+    debug(MFM_DEBUG, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];

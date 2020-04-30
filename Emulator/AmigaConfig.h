@@ -49,6 +49,8 @@ static const int SPRREG_DEBUG  = 2;  // Sprite registers
 static const int AUDREG_DEBUG  = 2;  // Audio registers
 static const int COPREG_DEBUG  = 2;  // Copper registers
 static const int COLREG_DEBUG  = 2;  // Color registers
+static const int POSREG_DEBUG  = 2;  // POSxxx registers
+static const int JOYREG_DEBUG  = 2;  // JOYxxx registers
 static const int INVREG_DEBUG  = 2;  // Ivalid register accesses
 
 // Component debugging (set to 1 to generate debug output)
@@ -59,6 +61,7 @@ static const int INT_DEBUG     = 2;  // Interrupts
 static const int CIA_DEBUG     = 2;  // CIAs
 static const int TOD_DEBUG     = 2;  // TODs (CIA 24-bit counters)
 static const int RTC_DEBUG     = 2;  // Real-time clock
+static const int RAM_DEBUG     = 2;  // RAM
 static const int DMA_DEBUG     = 2;  // DMA registers
 static const int BPL_DEBUG     = 2;  // Bitplane DMA
 static const int DIW_DEBUG     = 2;  // Display window
@@ -70,13 +73,13 @@ static const int AUD_DEBUG     = 2;  // Audio
 static const int AUDBUF_DEBUG  = 2;  // Audio buffers
 static const int PORT_DEBUG    = 2;  // Control ports and connected devices
 static const int COP_DEBUG     = 2;  // Copper
-
 static const int BLT_DEBUG     = 2;  // Blitter
 static const int BLTTIM_DEBUG  = 2;  // Blitter Timing
 static const int SER_DEBUG     = 2;  // Serial interface
 static const int POT_DEBUG     = 2;  // Potentiometer inputs
 static const int KBD_DEBUG     = 2;  // Keyboard
 static const int SNP_DEBUG     = 2;  // Snapshot debugging (Serialization)
+static const int MFM_DEBUG     = 2;  // Disc encoder / decoder
 
 
 // Checksum computation (set to true to compute checksums)

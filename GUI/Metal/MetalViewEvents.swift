@@ -170,7 +170,6 @@ public extension MetalView {
 
         } else if gotMouse && prefs.releaseMouseWithKeys {
             
-            track()
             switch prefs.releaseMouseKeyComb {
                 
             case 0 where event.modifierFlags.contains([.option, .command]),

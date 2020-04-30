@@ -628,7 +628,7 @@ Amiga::_powerOn()
 void
 Amiga::_powerOff()
 {
-    debug(1, "Power off\n");
+    debug("Power off\n");
     
     // Update the recorded debug information
     inspect();

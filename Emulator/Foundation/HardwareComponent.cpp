@@ -17,7 +17,7 @@ HardwareComponent::HardwareComponent()
 HardwareComponent::~HardwareComponent()
 {
     pthread_mutex_destroy(&lock);
-    debug(3, "Terminated\n");
+    debug(RUN_DEBUG, "Terminated\n");
 }
 
 void

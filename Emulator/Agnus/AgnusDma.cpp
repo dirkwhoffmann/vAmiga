@@ -19,7 +19,7 @@ Agnus::peekDMACONR()
     if (blitter.isBusy()) result |= (1 << 14);
     if (blitter.isZero()) result |= (1 << 13);
 
-    debug(2, "peekDMACONR: %X\n", result);
+    // debug(DMA_DEBUG, "peekDMACONR: %X\n", result);
     return result;
 }
 

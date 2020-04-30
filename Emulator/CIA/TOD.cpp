@@ -12,8 +12,6 @@
 TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 {
     setDescription(cia->nr == 0 ? "TODA" : "TODB");
-    debug(3, "    Creating TOD at address %p...\n", this);
-    
     this->cia = cia;
 }
 

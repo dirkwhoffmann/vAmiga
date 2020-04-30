@@ -114,7 +114,7 @@ u16
 Denise::peekJOY0DATR()
 {
     u16 result = amiga.controlPort1.joydat();
-    debug(2, "peekJOY0DATR() = $%04X (%d)\n", result, result);
+    debug(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -123,7 +123,7 @@ u16
 Denise::peekJOY1DATR()
 {
     u16 result = amiga.controlPort2.joydat();
-    debug(2, "peekJOY1DATR() = $%04X (%d)\n", result, result);
+    debug(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -131,7 +131,7 @@ Denise::peekJOY1DATR()
 void
 Denise::pokeJOYTEST(u16 value)
 {
-    debug(2, "pokeJOYTEST(%04X)\n", value);
+    debug(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
 
     amiga.controlPort1.pokeJOYTEST(value);
     amiga.controlPort2.pokeJOYTEST(value);
@@ -148,7 +148,7 @@ Denise::peekDENISEID()
         result = mem.peekCustomFaulty16(0xDFF07C); // OCS
     }
 
-    debug(2, "peekDENISEID() = $%04X (%d)\n", result, result);
+    debug(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
 

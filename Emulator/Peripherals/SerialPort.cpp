@@ -62,63 +62,17 @@ SerialPort::getPin(int nr)
 
     bool result = GET_BIT(port, nr);
 
-    debug(2, "getPin(%d) = %d port = %X\n", nr, result, port);
+    // debug(SER_DEBUG, "getPin(%d) = %d port = %X\n", nr, result, port);
     return result;
 }
 
 void
 SerialPort::setPin(int nr, bool value)
 {
-    debug(2, "setPin(%d,%d)\n", nr, value);
+    // debug(SER_DEBUG, "setPin(%d,%d)\n", nr, value);
     assert(nr >= 1 && nr <= 25);
 
     setPort(1 << nr, value);
-
-    /*
-    if (GET_BIT(port, nr) != value) {
-        setPort(1 << nr, value);
-    }
-    */
-
-    /*
-    // Set the new pin value
-    REPLACE_BIT(port, nr, value);
-
-    // Perform special actions
-    switch (nr) {
-
-        case 2: // TXD
-
-            // Emulate the loopback cable (if connected)
-            if (device == SPD_LOOPBACK) {
-                setRXD(value);
-            }
-            break;
-
-        case 3: // RXD
-
-            // Let the UART know about the change
-            uart->rxdHasChanged(value);
-            break;
-
-        case 4: // RTS
-
-            // Emulate the loopback cable (if connected)
-            if (device == SPD_LOOPBACK) {
-                setCTS(value);
-                setDSR(value);
-            }
-            break;
-
-        case 20: // DTR
-
-            // Emulate the loopback cable (if connected)
-            if (device == SPD_LOOPBACK) {
-                setCD(value);
-            }
-            break;
-    }
-    */
 }
 
 void

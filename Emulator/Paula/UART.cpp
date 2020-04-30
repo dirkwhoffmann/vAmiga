@@ -67,7 +67,6 @@ UART::peekSERDATR()
     REPLACE_BIT(result, 11, serialPort.getRXD());
 
     // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
-    debug(2, "peekSERDATR() = %X\n", result);
 
     return result;
 }
@@ -173,7 +172,7 @@ UART::rxdHasChanged(bool value)
 void
 UART::serviceTxdEvent(EventID id)
 {
-    debug(2, "serveTxdEvent(%d)\n", id);
+    // debug(SER_DEBUG, "serveTxdEvent(%d)\n", id);
 
     switch (id) {
 
@@ -183,8 +182,7 @@ UART::serviceTxdEvent(EventID id)
             assert(!shiftRegEmpty());
 
             // Shift out bit and let it appear on the TXD line
-            debug(2, "Transmitting bit %d\n", transmitShiftReg & 1);
-            // serialPort->setTXD(transmitShiftReg & 1);
+            debug(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
             outBit = transmitShiftReg & 1;
             transmitShiftReg >>= 1;
             updateTXD();
@@ -196,7 +194,7 @@ UART::serviceTxdEvent(EventID id)
                 if (transmitBuffer) {
 
                     // Copy new packet into shift register
-                    // debug(1, "Transmission continues with packet %X '%c'\n", transmitBuffer, transmitBuffer & 0xFF);
+                    // debug("Transmission continues with packet %X '%c'\n", transmitBuffer, transmitBuffer & 0xFF);
                     copyToTransmitShiftRegister();
 
                 } else {
@@ -220,10 +218,10 @@ UART::serviceTxdEvent(EventID id)
 void
 UART::serviceRxdEvent(EventID id)
 {
-    debug(2, "serveRxdEvent(%d)\n", id);
+    // debug(SER_DEBUG, "serveRxdEvent(%d)\n", id);
 
     bool rxd = serialPort.getRXD();
-    debug(2, "Receiving bit %d: %d\n", recCnt, rxd);
+    // debug(SER_DEBUG, "Receiving bit %d: %d\n", recCnt, rxd);
 
     // Shift in bit from RXD line
     REPLACE_BIT(receiveShiftReg, recCnt++, rxd);
