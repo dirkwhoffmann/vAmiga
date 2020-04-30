@@ -401,6 +401,7 @@ extension MyController: NSMenuItemValidation {
         track()
         renderer.blendIn(steps: 20)
         amiga.reset()
+        amiga.run()
     }
     
     @IBAction func powerAction(_ sender: Any!) {
