@@ -61,10 +61,10 @@ AmigaObject::debug(const char *fmt, ...)
 }
 
 void
-AmigaObject::debug(int level, const char *fmt, ...)
+AmigaObject::debug(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG
-    if (level <= debugLevel) {
+    if (verbose) {
         VAOBJ_PARSE
         VAPRINT("")
     }
@@ -81,10 +81,10 @@ AmigaObject::plaindebug(const char *fmt, ...)
 }
 
 void
-AmigaObject::plaindebug(int level, const char *fmt, ...)
+AmigaObject::plaindebug(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG
-    if (level <= debugLevel) {
+    if (verbose) {
         VAOBJ_PARSE
         VAPRINTPLAIN("")
     }

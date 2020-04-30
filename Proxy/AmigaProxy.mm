@@ -1425,12 +1425,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->disableDebugging();
 }
-- (void) setDebugLevel:(NSInteger)value
-{
-    wrapper->amiga->debugLevel = value;
-    wrapper->amiga->agnus.debugLevel = value;
-    wrapper->amiga->denise.debugLevel = value;
-}
 - (ErrorCode) readyToPowerOn
 {
     return wrapper->amiga->readyToPowerOn();

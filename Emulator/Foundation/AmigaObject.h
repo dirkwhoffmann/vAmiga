@@ -26,16 +26,11 @@ using std::swap;
  */
 class AmigaObject {
     
-    public:
+private:
     
-    // Debug level for this component
-    unsigned debugLevel = 1;
-    
-    private:
-    
-    /* Textual description of this object
+    /* Textual description of this object.
      * Most debug output methods preceed their output with this string.
-     * The default value is NULL. In that case, no prefix is printed.
+     * If set to NULL, no prefix is printed.
      */
     const char *description = NULL;
     
@@ -44,9 +39,8 @@ class AmigaObject {
     // Initializing the component
     //
     
-    public:
+public:
     
-    // Getter and setter for the textual description.
     const char *getDescription() const { return description ? description : ""; }
     void setDescription(const char *str) { description = strdup(str); }
     
@@ -55,7 +49,7 @@ class AmigaObject {
     // Debugging the component
     //
     
-    protected:
+protected:
     
     /* There a four types of messages:
      *
@@ -65,20 +59,20 @@ class AmigaObject {
      *   - debug   Debug message   (Shows up in debug builds, only)
      *
      * Debug messages are prefixed by the string description produced by the
-     * prefix() function. To omit the prefix, use plaindebug(...) instead.
-     * Some Amiga objects overwrite prefix() to provide addition standard debug
-     * information when a message is printed.
+     * prefix() function. To omit the prefix, use plaindebug(...).
+     * Some Amiga objects overwrite prefix() to output additional debug
+     * information.
      */
     virtual void prefix();
     
     void msg(const char *fmt, ...);
     void warn(const char *fmt, ...);
     void panic(const char *fmt, ...);
-
+    
     void debug(const char *fmt, ...);
-    void debug(int level, const char *fmt, ...);
+    void debug(int verbose, const char *fmt, ...);
     void plaindebug(const char *fmt, ...);
-    void plaindebug(int level, const char *fmt, ...);
+    void plaindebug(int verbose, const char *fmt, ...);
 };
 
 #endif

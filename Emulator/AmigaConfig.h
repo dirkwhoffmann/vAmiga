@@ -45,75 +45,75 @@
 static const int NO_SSE          = 0;  // Don't use SSE extensions
 
 // Runloop and CPU
-static const int RUN_DEBUG       = 2;  // Run loop, component states
-static const int SNP_DEBUG       = 2;  // Serialization (snapshots)
-static const int CPU_DEBUG       = 2;  // CPU
-static const int HARD_RESET      = 0;  // Restores the power up state in reset()
+static const int RUN_DEBUG       = 0;  // Run loop, component states
+static const int SNP_DEBUG       = 0;  // Serialization (snapshots)
+static const int CPU_DEBUG       = 0;  // CPU
+static const int HARD_RESET      = 1;  // Restores the power up state in reset()
 
 // Memory access
-static const int OCSREG_DEBUG    = 2;  // General OCS register debugging
-static const int ECSREG_DEBUG    = 2;  // Special ECS register debugging
-static const int INVREG_DEBUG    = 2;  // Ivalid register accesses
-static const int RAM_DEBUG       = 2;  // Fast RAM
+static const int OCSREG_DEBUG    = 0;  // General OCS register debugging
+static const int ECSREG_DEBUG    = 0;  // Special ECS register debugging
+static const int INVREG_DEBUG    = 0;  // Ivalid register accesses
+static const int RAM_DEBUG       = 0;  // Fast RAM
 
 // Agnus
-static const int DMA_DEBUG       = 2;  // DMA registers
-static const int DDF_DEBUG       = 2;  // Display data fetch
+static const int DMA_DEBUG       = 0;  // DMA registers
+static const int DDF_DEBUG       = 0;  // Display data fetch
 
 // Denise
-static const int BPLREG_DEBUG    = 2;  // Bitplane registers
-static const int SPRREG_DEBUG    = 2;  // Sprite registers
-static const int COLREG_DEBUG    = 2;  // Color registers
-static const int BPL_DEBUG       = 2;  // Bitplane DMA
-static const int DIW_DEBUG       = 2;  // Display window
-static const int SPR_DEBUG       = 2;  // Sprites
-static const int CLX_DEBUG       = 2;  // Collision detection (CLXDAT, CLXCON)
+static const int BPLREG_DEBUG    = 0;  // Bitplane registers
+static const int SPRREG_DEBUG    = 0;  // Sprite registers
+static const int COLREG_DEBUG    = 0;  // Color registers
+static const int BPL_DEBUG       = 0;  // Bitplane DMA
+static const int DIW_DEBUG       = 0;  // Display window
+static const int SPR_DEBUG       = 0;  // Sprites
+static const int CLX_DEBUG       = 0;  // Collision detection (CLXDAT, CLXCON)
 static const int BORDER_DEBUG    = 0;  // Draw the border in debug colors
 
 // Paula
-static const int INTREG_DEBUG    = 2;  // Interrupt registers
-static const int INT_DEBUG       = 2;  // Interrupt logic
+static const int INTREG_DEBUG    = 0;  // Interrupt registers
+static const int INT_DEBUG       = 0;  // Interrupt logic
 
 // CIAs
 static const int CIA_ON_STEROIDS = 0;  // Keep the CIAs awake all the time
-static const int CIAREG_DEBUG    = 2;  // CIA registers
-static const int CIA_DEBUG       = 2;  // CIA execution
-static const int TOD_DEBUG       = 2;  // TODs (CIA 24-bit counters)
+static const int CIAREG_DEBUG    = 0;  // CIA registers
+static const int CIA_DEBUG       = 0;  // CIA execution
+static const int TOD_DEBUG       = 0;  // TODs (CIA 24-bit counters)
 
 // Blitter
 static const int BLT_CHECKSUM    = 0;  // Compute Blitter checksums
-static const int BLTREG_DEBUG    = 2;  // Blitter registers
-static const int BLT_DEBUG       = 2;  // Blitter execution
-static const int BLTTIM_DEBUG    = 2;  // Blitter Timing
+static const int BLTREG_DEBUG    = 0;  // Blitter registers
+static const int BLT_DEBUG       = 0;  // Blitter execution
+static const int BLTTIM_DEBUG    = 0;  // Blitter Timing
 static const int FORCE_FASTBLT   = 0;  // Always use the fast Blitter
 static const int SLOW_BLT_DEBUG  = 0;  // Execute micro-instruction in one chunk
 
 // Copper
 static const int COP_CHECKSUM    = 0;  // Compute Copper checksums
-static const int COPREG_DEBUG    = 2;  // Copper registers
-static const int COP_DEBUG       = 2;  // Copper execution
+static const int COPREG_DEBUG    = 0;  // Copper registers
+static const int COP_DEBUG       = 0;  // Copper execution
 
 // Drive
 static const int DSK_CHECKSUM    = 0;  // Compute disk checksums
-static const int DSKREG_DEBUG    = 2;  // Disk controller registers
-static const int DSK_DEBUG       = 2;  // Disk controller execution
+static const int DSKREG_DEBUG    = 0;  // Disk controller registers
+static const int DSK_DEBUG       = 0;  // Disk controller execution
 static const int DRIVE_DEBUG     = 0;  // Fallback to a simple turbo drive
-static const int MFM_DEBUG       = 2;  // Disk encoder / decoder
+static const int MFM_DEBUG       = 0;  // Disk encoder / decoder
 
 // Audio
-static const int AUDREG_DEBUG    = 2;  // Audio registers
-static const int AUD_DEBUG       = 2;  // Audio execution
-static const int AUDBUF_DEBUG    = 2;  // Audio buffers
+static const int AUDREG_DEBUG    = 0;  // Audio registers
+static const int AUD_DEBUG       = 0;  // Audio execution
+static const int AUDBUF_DEBUG    = 0;  // Audio buffers
 
 // Ports
-static const int POSREG_DEBUG    = 2;  // POSxxx registers
-static const int JOYREG_DEBUG    = 2;  // JOYxxx registers
-static const int PORT_DEBUG      = 2;  // Control ports and connected devices
-static const int SER_DEBUG       = 2;  // Serial interface
-static const int POT_DEBUG       = 2;  // Potentiometer inputs
+static const int POSREG_DEBUG    = 0;  // POSxxx registers
+static const int JOYREG_DEBUG    = 0;  // JOYxxx registers
+static const int PORT_DEBUG      = 0;  // Control ports and connected devices
+static const int SER_DEBUG       = 0;  // Serial interface
+static const int POT_DEBUG       = 0;  // Potentiometer inputs
 
 // Other components
-static const int RTC_DEBUG       = 2;  // Real-time clock
-static const int KBD_DEBUG       = 2;  // Keyboard
+static const int RTC_DEBUG       = 0;  // Real-time clock
+static const int KBD_DEBUG       = 0;  // Keyboard
 
 #endif
