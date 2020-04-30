@@ -212,6 +212,7 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df3DMA: NSProgressIndicator!
 
     @IBOutlet weak var cmdLock: NSButton!
+    @IBOutlet weak var debugIcon: NSButton!
 
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
