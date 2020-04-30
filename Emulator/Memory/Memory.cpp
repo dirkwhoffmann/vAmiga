@@ -62,14 +62,12 @@ void
 Memory::_reset()
 {
     RESET_SNAPSHOT_ITEMS
-
+    
     // Set up the memory lookup table
     updateMemSrcTable();
-
-#ifdef HARD_RESET
+    
     // In hard-reset mode, we also initialize Ram
-    fillRamWithStartupPattern();
-#endif
+    if (HARD_RESET) fillRamWithStartupPattern();
 }
 
 void

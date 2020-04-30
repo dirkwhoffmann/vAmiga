@@ -940,22 +940,20 @@ Blitter::beginSlowCopyBlit()
     // Schedule the first slow Blitter execution event
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_COPY_SLOW);
 
-#ifdef SLOW_BLT_DEBUG
-
     // In debug mode, we execute the whole micro program immediately.
     // This let's us compare checksums with the fast Blitter.
-    
-    BusOwner owner = agnus.busOwner[agnus.pos.h];
-    agnus.setBls(false);
-
-    while (agnus.hasEvent<BLT_SLOT>()) {
-        agnus.busOwner[agnus.pos.h] = BUS_NONE;
-        serviceEvent(agnus.slot[BLT_SLOT].id);
+    if (SLOW_BLT_DEBUG) {
+        
+        BusOwner owner = agnus.busOwner[agnus.pos.h];
+        agnus.setBLS(false);
+        
+        while (agnus.hasEvent<BLT_SLOT>()) {
+            agnus.busOwner[agnus.pos.h] = BUS_NONE;
+            serviceEvent(agnus.slot[BLT_SLOT].id);
+        }
+        
+        agnus.busOwner[agnus.pos.h] = owner;
     }
-
-    agnus.busOwner[agnus.pos.h] = owner;
-
-#endif
 }
 
 template <u16 instr> void

@@ -426,7 +426,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
         case 1: shiftReg[0] = bpldat[0];
     }
     
-    if (USE_SSE) {
+    if (!NO_SSE) {
         
         transposeSSE(shiftReg, slice);
         
