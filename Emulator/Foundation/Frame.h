@@ -53,8 +53,8 @@ struct Frame
         nr++;
         prevlof = lof;
         
-        // Update the long frame flipflop
-        if ((interlaced = laceBit)) { lof = !lof; } else { lof = true; }
+        // Toggle the long frame flipflop in interlace mode
+        if ((interlaced = laceBit)) { lof = !lof; }
     }
 };
 
