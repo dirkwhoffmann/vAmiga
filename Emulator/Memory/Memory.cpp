@@ -257,6 +257,11 @@ Memory::fillRamWithStartupPattern()
     if (chip) memset(chip, 0x0, config.chipSize);
     if (slow) memset(slow, 0x0, config.slowSize);
     if (fast) memset(fast, 0x0, config.fastSize);
+    /*
+    if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
+    if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
+    if (fast) for (int i = 0; i < config.fastSize; i++) fast[i] = rand();
+    */
 }
 
 RomRevision
@@ -680,12 +685,6 @@ Memory::updateMemSrcTable()
     // Extended Rom
     for (unsigned i = 0; i < extRomPages; i++)
         memSrc[config.extStart + i] = MEM_EXT;
-    /*
-    if (hasExt()) {
-        for (unsigned i = config.extStart; i < config.extStart + 8; i++)
-            memSrc[i] = MEM_EXT;
-    }
-    */
 
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++)
