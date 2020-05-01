@@ -35,7 +35,7 @@ struct Frame
         & prevlof;
     }
 
-    Frame() : nr(0), interlaced(false), lof(true) { }
+    Frame() : nr(0), interlaced(false), lof(false) { }
     
     bool isLongFrame() { return lof; }
     bool isShortFrame() { return !lof; }
