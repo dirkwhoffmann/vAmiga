@@ -254,12 +254,9 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 void
 Memory::fillRamWithStartupPattern()
 {
-    // Until we know more about the proper startup pattern, we erase the
-    // Ram by writing zeroes.
-
-    if (chip) memset(chip, 0, config.chipSize);
-    if (slow) memset(slow, 0, config.slowSize);
-    if (fast) memset(fast, 0, config.fastSize);
+    if (chip) memset(chip, 0x0, config.chipSize);
+    if (slow) memset(slow, 0x0, config.slowSize);
+    if (fast) memset(fast, 0x0, config.fastSize);
 }
 
 RomRevision
@@ -712,7 +709,6 @@ Memory::updateMemSrcTable()
 u8
 Memory::peek8(u32 addr)
 {
-    // debug("PC: %X peek8(%X)\n", cpu.getPC(), addr);
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
@@ -720,7 +716,6 @@ Memory::peek8(u32 addr)
 
             agnus.executeUntilBusIsFree();
             stats.chipReads.raw++;
-            dataBus = 0;
             return dataBus;
 
         case MEM_CHIP:
@@ -817,13 +812,13 @@ Memory::peek16(u32 addr)
         case BUS_COPPER:
 
             ASSERT_CHIP_ADDR(addr);
-            dataBus = (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            if (memSrc[addr >> 16] != MEM_UNMAPPED) dataBus = READ_CHIP_16(addr);
             return dataBus;
 
         case BUS_BLITTER:
 
             ASSERT_CHIP_ADDR(addr);
-            dataBus = (memSrc[addr >> 16] == MEM_UNMAPPED) ? 0 : READ_CHIP_16(addr);
+            if (memSrc[addr >> 16] != MEM_UNMAPPED) dataBus = READ_CHIP_16(addr);
             return dataBus;
 
         case BUS_CPU:
@@ -834,7 +829,6 @@ Memory::peek16(u32 addr)
 
                     agnus.executeUntilBusIsFree();
                     stats.chipReads.raw++;
-                    dataBus = 0;
                     return dataBus;
 
                 case MEM_CHIP:
