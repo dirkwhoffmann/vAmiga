@@ -51,7 +51,7 @@ Blitter::_powerOn()
 }
 
 void
-Blitter::_reset()
+Blitter::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

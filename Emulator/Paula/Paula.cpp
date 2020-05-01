@@ -22,7 +22,7 @@ Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-Paula::_reset()
+Paula::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

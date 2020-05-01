@@ -118,7 +118,7 @@ public:
 private:
 
     void _dump() override;
-    void _reset() override;
+    void _reset(bool hard) override;
     void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }

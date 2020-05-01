@@ -16,7 +16,7 @@ Joystick::Joystick(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
 }
 
 void
-Joystick::_reset()
+Joystick::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

@@ -110,7 +110,8 @@ struct AmigaFileWrapper;
 - (ErrorCode) readyToPowerOn;
 - (void) powerOn;
 - (void) powerOff;
-- (void) reset;
+- (void) hardReset;
+- (void) softReset;
 - (void) ping;
 - (void) dump;
 

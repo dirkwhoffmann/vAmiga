@@ -76,7 +76,7 @@ public:
 
 private:
 
-    void _reset() override { }
+    void _reset(bool hard) override { }
     size_t _size() override { return 0; }
     size_t _load(u8 *buffer) override {return 0; }
     size_t _save(u8 *buffer) override { return 0; }

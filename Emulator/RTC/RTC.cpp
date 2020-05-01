@@ -30,7 +30,7 @@ RTC::_powerOn()
 }
 
 void
-RTC::_reset()
+RTC::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

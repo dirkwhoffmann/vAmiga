@@ -32,7 +32,7 @@ DiskController::_finalize()
 }
 
 void
-DiskController::_reset()
+DiskController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
     

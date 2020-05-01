@@ -240,7 +240,7 @@ Agnus::_powerOn()
 {
 }
 
-void Agnus::_reset()
+void Agnus::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

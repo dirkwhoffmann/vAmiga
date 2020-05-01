@@ -157,9 +157,11 @@ public:
     /* Emulates a reset event on the virtual Amiga.
      * By default, each component resets its subcomponents.
      */
-    virtual void reset();
-    virtual void _reset() = 0;
-
+    virtual void reset(bool hard);
+    virtual void _reset(bool hard) = 0;
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
+    
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual
      * elements. This happens, e.g., when a snapshot file was loaded.

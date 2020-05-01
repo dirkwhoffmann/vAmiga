@@ -15,7 +15,7 @@ Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-Keyboard::_reset()
+Keyboard::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

@@ -25,7 +25,7 @@ SerialPort::setDevice(SerialPortDevice device)
 }
 
 void
-SerialPort::_reset()
+SerialPort::_reset(bool hard)
 {
    RESET_SNAPSHOT_ITEMS
    // port = 0x1FFFFFE;

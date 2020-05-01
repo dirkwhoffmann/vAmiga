@@ -68,7 +68,7 @@ PixelEngine::_powerOn()
 }
 
 void
-PixelEngine::_reset()
+PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

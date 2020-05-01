@@ -35,7 +35,7 @@ CIA::_run()
 }
 
 void
-CIA::_reset()
+CIA::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

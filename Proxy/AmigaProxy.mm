@@ -1437,9 +1437,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->powerOff();
 }
-- (void) reset
+- (void) hardReset
 {
-    wrapper->amiga->reset();
+    wrapper->amiga->reset(true);
+}
+- (void) softReset
+{
+    wrapper->amiga->reset(false);
 }
 - (void) ping
 {

@@ -31,7 +31,7 @@ StateMachine<nr>::_dump()
 }
 
 template <int nr> void
-StateMachine<nr>::_reset()
+StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

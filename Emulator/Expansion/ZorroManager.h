@@ -64,7 +64,7 @@ private:
     void _powerOff() override;
     void _ping() override;
     void _dump() override;
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }

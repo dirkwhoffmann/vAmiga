@@ -119,7 +119,7 @@ public:
     
 private:
 
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     void _inspect() override; 
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

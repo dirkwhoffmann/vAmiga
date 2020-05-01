@@ -21,7 +21,7 @@ Mouse::_powerOn()
 {
 }
 
-void Mouse::_reset()
+void Mouse::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 

@@ -359,7 +359,7 @@ public:
 private:
 
     void _powerOn() override;
-    void _reset() override;
+    void _reset(bool hard) override;
     void _inspect() override;
     void _dumpConfig() override;
     void _dump() override;

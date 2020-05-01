@@ -78,7 +78,7 @@ public:
 private:
     
     void _powerOn() override;
-    void _reset() override;
+    void _reset(bool hard) override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }

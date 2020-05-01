@@ -101,7 +101,7 @@ Amiga::Amiga()
 
     // Set up initial state
     initialize();
-    reset();
+    hardReset();
 
     // Initialize the mach timer info
     mach_timebase_info(&tb);
@@ -557,7 +557,7 @@ Amiga::run()
 }
 
 void
-Amiga::reset()
+Amiga::reset(bool hard)
 {
     suspend();
 
@@ -567,7 +567,7 @@ Amiga::reset()
     finalize();
     
     // Execute the standard reset routine
-    HardwareComponent::reset();
+    HardwareComponent::reset(hard);
 
     // Discard all previously recorded stastical information
     clearStats();

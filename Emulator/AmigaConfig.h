@@ -48,7 +48,6 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 static const int CPU_DEBUG       = 0; // CPU
-static const int HARD_RESET      = 1; // Restores the power up state in reset()
 
 // Memory access
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging

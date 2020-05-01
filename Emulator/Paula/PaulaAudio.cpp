@@ -131,7 +131,7 @@ PaulaAudio::_pause()
 }
 
 void
-PaulaAudio::_reset()
+PaulaAudio::_reset(bool hard)
 {
    RESET_SNAPSHOT_ITEMS
 

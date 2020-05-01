@@ -231,7 +231,7 @@ public:
     void powerOn() override;
     void powerOff() override;
     void run() override;
-    void reset() override;
+    void reset(bool hard) override;
     void warpOn() override;
     void warpOff() override;
 
@@ -242,7 +242,7 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-    void _reset() override { RESET_SNAPSHOT_ITEMS }
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     void _ping() override;
     void _inspect() override;
     void _dump() override;

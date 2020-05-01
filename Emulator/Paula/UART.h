@@ -75,7 +75,7 @@ public:
 
 private:
 
-    void _reset() override;
+    void _reset(bool hard) override;
     void _inspect() override;
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

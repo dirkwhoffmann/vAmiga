@@ -57,7 +57,7 @@ HardwareComponent::powerOn()
         }
         
         // Reset all non-persistant snapshot items
-        _reset();
+        _reset(true);
 
         // Power this component on
         debug(RUN_DEBUG, "Powering on\n");
@@ -124,16 +124,16 @@ HardwareComponent::pause()
 }
 
 void
-HardwareComponent::reset()
+HardwareComponent::reset(bool hard)
 {
     // Reset all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->reset();
+        c->reset(hard);
     }
     
     // Reset this component
     debug(RUN_DEBUG, "Reset [%p]\n", this);
-    _reset();
+    _reset(hard);
 }
 
 void

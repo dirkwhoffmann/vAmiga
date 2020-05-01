@@ -59,15 +59,15 @@ Memory::_powerOn()
 }
 
 void
-Memory::_reset()
+Memory::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
     
     // Set up the memory lookup table
     updateMemSrcTable();
     
-    // In hard-reset mode, we also initialize Ram
-    if (HARD_RESET) fillRamWithStartupPattern();
+    // In hard-reset mode, we also initialize RAM
+    if (hard) fillRamWithStartupPattern();
 }
 
 void

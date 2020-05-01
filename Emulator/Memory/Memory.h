@@ -241,7 +241,7 @@ public:
 private:
 
     void _powerOn() override;
-    void _reset() override;
+    void _reset(bool hard) override;
     void _dump() override;
     
     size_t _size() override;

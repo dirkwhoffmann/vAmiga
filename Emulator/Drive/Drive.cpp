@@ -22,7 +22,7 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
 }
 
 void
-Drive::_reset()
+Drive::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 }

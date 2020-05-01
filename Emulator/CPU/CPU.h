@@ -71,7 +71,7 @@ private:
     void _powerOn() override;
     void _powerOff() override; 
     void _run() override;
-    void _reset() override;
+    void _reset(bool hard) override;
     void _inspect() override;
     void _dumpConfig() override;
     void _dump() override;

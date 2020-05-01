@@ -103,9 +103,9 @@ CPU::_run()
 }
 
 void
-CPU::_reset()
+CPU::_reset(bool hard)
 {
-    debug(CPU_DEBUG, "CPU::_reset()\n");
+    debug(CPU_DEBUG, "CPU::_reset(%d)\n", hard);
 
     RESET_SNAPSHOT_ITEMS
 

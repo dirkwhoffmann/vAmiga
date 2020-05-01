@@ -46,7 +46,7 @@ TOD::_dump()
 }
 
 void
-TOD::_reset()
+TOD::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
     stopped = true;

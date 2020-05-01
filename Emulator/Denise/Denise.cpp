@@ -40,7 +40,7 @@ Denise::_powerOn()
 }
 
 void
-Denise::_reset()
+Denise::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 
