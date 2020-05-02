@@ -254,15 +254,19 @@ private:
     static const u16 Z_SP6 = 0b00000000'00100000;
     static const u16 Z_SP7 = 0b00000000'00010000;
     static const u16 Z_4   = 0b00000000'00001000;
-    static const u16 Z_PF1 = 0b00000000'00000100;
-    static const u16 Z_PF2 = 0b00000000'00000010;
-    static const u16 Z_DPF = 0b00000000'00000001;
+ 
+    // Dual-playfield bits (meta-information, not used for depth)
+    static const u16 Z_DPF   = 0x1;  // Both playfields transparent
+    static const u16 Z_DPF1  = 0x2;  // PF1 opaque, PF2 transparent
+    static const u16 Z_DPF2  = 0x3;  // PF1 transparent, PF2 opaque
+    static const u16 Z_DPF12 = 0x4;  // Both playfields opaque, PF1 visible
+    static const u16 Z_DPF21 = 0x5;  // Both playfields opaque, PF2 visible
+    static const u16 Z_DUAL  = 0x7;  // Mask covering all DPF bits
 
     constexpr static const u16 Z_SP[8] = { Z_SP0, Z_SP1, Z_SP2, Z_SP3, Z_SP4, Z_SP5, Z_SP6, Z_SP7 };
     static const u16 Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
     static const u16 Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
     static const u16 Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
-    // static const u16 Z_01234 = Z_0|Z_1|Z_2|Z_3|Z_4;
 
     //
     // Constructing and serializing

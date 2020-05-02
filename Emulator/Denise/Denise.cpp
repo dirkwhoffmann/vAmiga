@@ -695,17 +695,17 @@ Denise::translateDPF(int from, int to)
                 // PF1 is solid, PF2 is solid
                 if (pf2pri) {
                     iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                    zBuffer[i] = prio2 | Z_DPF | Z_PF1 | Z_PF2;
+                    zBuffer[i] = prio2 | Z_DPF21;
                 } else {
                     iBuffer[i] = mBuffer[i] = index1 & mask1;
-                    zBuffer[i] = prio1 | Z_DPF | Z_PF1 | Z_PF2;
+                    zBuffer[i] = prio1 | Z_DPF12;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
                 iBuffer[i] = mBuffer[i] = index1 & mask1;
-                zBuffer[i] = prio1 | Z_DPF | Z_PF1;
+                zBuffer[i] = prio1 | Z_DPF1;
             }
 
         } else {
@@ -713,7 +713,7 @@ Denise::translateDPF(int from, int to)
 
                 // PF1 is transparent, PF2 is solid
                 iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                zBuffer[i] = prio2 | Z_DPF | Z_PF2;
+                zBuffer[i] = prio2 | Z_DPF2;
 
             } else {
 
@@ -1065,7 +1065,7 @@ Denise::checkS2PCollisions(int start, int end)
             // There is a hardware oddity in single-playfield mode. If PF2
             // doesn't match, playfield 1 doesn't match, too. No matter what.
             // See http://eab.abime.net/showpost.php?p=965074&postcount=2
-            if ((zBuffer[pos] & Z_DPF) == 0) continue;
+            if (zBuffer[pos] & Z_DUAL) continue;
         }
 
         // Check for a collision with playfield 1
