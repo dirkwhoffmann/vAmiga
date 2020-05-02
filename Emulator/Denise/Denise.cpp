@@ -56,7 +56,7 @@ Denise::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    // Biplane information
+    // Bitplane information
     info.bplcon0 = bplcon0;
     info.bplcon1 = bplcon1;
     info.bplcon2 = bplcon2;
@@ -377,47 +377,7 @@ bool
 Denise::spritePixelIsVisible(int hpos)
 {
     u16 z = zBuffer[hpos];
-
-    if ((z & Z_SP01234567) == 0) return false;
-
-    if (z & (Z_SP0 | Z_SP1)) return ((z & Z_0) == 0);
-    if (z & (Z_SP2 | Z_SP3)) return ((z & (Z_0 | Z_1)) == 0);
-    if (z & (Z_SP4 | Z_SP5)) return ((z & (Z_0 | Z_1 | Z_2)) == 0);
-    return (z & (Z_0 | Z_1 | Z_2 | Z_3)) == 0;
-}
-
-void
-Denise::updateSpritePriorities(u16 bplcon2)
-{
-    switch (bplcon2 & 0b111) {
-
-        case 0: prio1 = Z_0; break;
-        case 1: prio1 = Z_1; break;
-        case 2: prio1 = Z_2; break;
-        case 3: prio1 = Z_3; break;
-        case 4: prio1 = Z_4; break;
-
-        default: // Illegal value
-            prio1 = 0;
-            break;
-    }
-
-    switch ((bplcon2 >> 3) & 0b111) {
-
-        case 0: prio2 = Z_0; break;
-        case 1: prio2 = Z_1; break;
-        case 2: prio2 = Z_2; break;
-        case 3: prio2 = Z_3; break;
-        case 4: prio2 = Z_4; break;
-
-        default: // Illegal value
-            prio2 = 0;
-            break;
-    }
-
-    prio12 = MAX(prio1, prio2);
-
-    // debug("bplcon2 = %X prio1 = %d prio2 = %d prio12 = %d\n", bplcon2, prio1, prio2, prio12);
+    return (z & Z_SP01234567) > (z & ~Z_SP01234567);
 }
 
 void

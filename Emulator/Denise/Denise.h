@@ -181,7 +181,7 @@ private:
     u16 prio2;
 
     // Minimum of prio1 and prio2
-    u16 prio12;
+    // u16 prio12;
 
     
     //
@@ -262,7 +262,7 @@ private:
     static const u16 Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
     static const u16 Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
     static const u16 Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
-
+    // static const u16 Z_01234 = Z_0|Z_1|Z_2|Z_3|Z_4;
 
     //
     // Constructing and serializing
@@ -325,8 +325,8 @@ public:
         & spriteClipBegin
         & spriteClipEnd
         & prio1
-        & prio2
-        & prio12;
+        & prio2;
+        // & prio12;
     }
 
     
@@ -490,9 +490,6 @@ public:
 
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(int hpos);
-
-    // Extracts the sprite priorities from BPLCON2 (DEPRECATED)
-    void updateSpritePriorities(u16 bplcon2);
 
 
     //
