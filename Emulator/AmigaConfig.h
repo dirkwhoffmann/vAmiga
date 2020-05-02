@@ -17,7 +17,7 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 2
+#define V_SUBMINOR 4
 
 // Assertion checking (uncomment in release build)
 // #define NDEBUG
@@ -34,7 +34,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Downloads/Cabal.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Wolf.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Ghostsngoblins.adf"
 
@@ -93,10 +93,10 @@ static const int COPREG_DEBUG    = 0; // Copper registers
 static const int COP_DEBUG       = 0; // Copper execution
 
 // Drive
+static const int DRIVE_DEBUG     = 0; // Fallback to a simple turbo drive
 static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
-static const int DRIVE_DEBUG     = 0; // Fallback to a simple turbo drive
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
 
 // Audio

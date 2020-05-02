@@ -78,10 +78,9 @@ private:
     double brightness = 50.0;
     double contrast = 100.0;
     double saturation = 1.25;
-
-
-    // Drawing mode (single playfield, dual playfield, or HAM)
-    DrawingMode mode;
+    
+    // Indicates whether HAM mode is switched
+    bool hamMode;
     
 
     //
@@ -115,7 +114,7 @@ public:
 
         & colChanges
         & colreg
-        & mode;
+        & hamMode;
     }
 
 

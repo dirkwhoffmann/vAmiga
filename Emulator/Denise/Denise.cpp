@@ -168,7 +168,11 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
     conChanges.insert(pixel, RegChange { REG_BPLCON0_DENISE, newValue });
-
+    
+    if (ham(oldValue) ^ ham(newValue)) {
+        pixelEngine.colChanges.insert(pixel, RegChange { BPLCON0, newValue } );
+    }
+    
     // Update value
     bplcon0 = newValue;
 }
@@ -329,8 +333,6 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record sprite data in debug mode
     if (amiga.getDebugMode()) recordSpriteData(x);
-        // spriteDatNew.lines[x]++;
-        // spriteDatNew.lines[x] %= VPOS_CNT;
 }
 
 template <PokeSource s, int xx> void
@@ -339,12 +341,21 @@ Denise::pokeCOLORxx(u16 value)
     debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
     u32 reg = 0x180 + 2*xx;
+    i16 pos = agnus.pos.h;
 
+    // If the CPU modifies color, the change takes effect one DMA cycle earlier
+    if (s != POKE_COPPER && agnus.pos.h != 0) pos--;
+    
+    // Record the color change
+    pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
+    
+    /*
     if (s == POKE_COPPER || agnus.pos.h == 0) {
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
     } else {
         pixelEngine.colChanges.insert(4 * (agnus.pos.h - 1), RegChange { reg, value } );
     }
+    */
 }
 
 bool

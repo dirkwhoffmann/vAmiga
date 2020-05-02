@@ -335,9 +335,11 @@ PixelEngine::applyRegisterChange(const RegChange &change)
         case REG_NONE:
             break;
 
-        default:
-
-            // It must be a color register then
+        case BPLCON0:
+            hamMode = Denise::ham(change.value);
+            break;
+            
+        default: // It must be a color register then
             assert(change.addr >= 0x180 && change.addr <= 0x1BE);
             setColor((change.addr - 0x180) >> 1, change.value);
             break;
@@ -350,9 +352,6 @@ PixelEngine::colorize(int line)
     // Jump to the first pixel in the specified line in the active frame buffer
     u32 *dst = frameBuffer->data + line * HPIXELS;
     int pixel = 0;
-
-    // Check for HAM mode
-    bool ham = denise.ham();
 
     // Initialize the HAM mode hold register with the current background color
     u16 hold = colreg[0];
@@ -367,7 +366,7 @@ PixelEngine::colorize(int line)
         RegChange &change = colChanges.elements[i];
 
         // Colorize a chunk of pixels
-        if (ham) {
+        if (hamMode) {
             colorizeHAM(dst, pixel, trigger, hold);
         } else {
             colorize(dst, pixel, trigger);
