@@ -70,6 +70,15 @@ class Monitor: DialogController {
     @IBOutlet weak var synPlayfield2: NSButton!
     @IBOutlet weak var synOpacity: NSSlider!
 
+    var layers: Int {
+        get { return amiga.getConfig(VA_HIDDEN_LAYERS) }
+        set { amiga.configure(VA_HIDDEN_LAYERS, value: newValue) }
+    }
+    var layerAlpha: Int {
+        get { return 255 - amiga.getConfig(VA_HIDDEN_LAYER_ALPHA) }
+        set { amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: 255 - newValue) }
+    }
+    
     override func awakeFromNib() {
 
         track()
@@ -187,7 +196,7 @@ class Monitor: DialogController {
         colRefresh.isHidden = !col
         
         // Layers
-        synOpacity.integerValue = 255 - amiga.getConfig(VA_HIDDEN_LAYER_ALPHA)
+        synOpacity.integerValue = layerAlpha
         synSprite0.isEnabled = syn
         synSprite1.isEnabled = syn
         synSprite2.isEnabled = syn
@@ -218,8 +227,8 @@ class Monitor: DialogController {
             if synPlayfield2.state == .on { mask |= 0x200 }
         }
 
-        amiga.configure(VA_HIDDEN_LAYERS, value: mask)
-        amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: synOpacity.integerValue)
+        layers = mask
+        layerAlpha = synOpacity.integerValue
     }
     
     //
@@ -325,7 +334,7 @@ class Monitor: DialogController {
 
     @IBAction func synOpacityAction(_ sender: NSSlider!) {
         
-        amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: 255 - sender.integerValue)
+        updateHiddenLayers()
         refresh()
     }
 }

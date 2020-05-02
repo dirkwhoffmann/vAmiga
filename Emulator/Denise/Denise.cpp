@@ -39,14 +39,14 @@ Denise::setRevision(DeniseRevision revision)
 void
 Denise::setHiddenLayers(u16 value)
 {
-    msg("Changing layer mask to %x\n", value);
+    // msg("Changing layer mask to %x\n", value);
     config.hiddenLayers = value;
 }
 
 void
 Denise::setHiddenLayerAlpha(u8 value)
 {
-    msg("Changing layer alpha to %x\n", value);
+    // msg("Changing layer alpha to %x\n", value);
     config.hiddenLayerAlpha = value;
 }
 
