@@ -602,6 +602,7 @@
 			children = (
 				508FE00C21EA227B0043D0E9 /* MyAppDelegate.swift */,
 				508FDFF721EA22790043D0E9 /* MyDocument.swift */,
+				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				509F7F1421ED13F300A530E4 /* Controller */,
 				505B801E23FE6582002407FE /* Foundation */,
 				508FE03A21EA22CC0043D0E9 /* Preferences */,
@@ -723,7 +724,6 @@
 				508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */,
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
 				5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */,
-				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
 				508FDFEB21EA22780043D0E9 /* Speedometer.swift */,

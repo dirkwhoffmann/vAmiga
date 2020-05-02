@@ -19,7 +19,8 @@
 #define V_MINOR 9
 #define V_SUBMINOR 4
 
-// Assertion checking (uncomment in release build)
+// Uncomment these settings in a release build
+// #define RELEASEBUILD
 // #define NDEBUG
 
 
@@ -36,7 +37,7 @@
 // Uncomment to lauch the emulator with a disk in df0
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Wolf.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
-// #define BOOT_DISK "/Users/hoff/Downloads/Ghostsngoblins.adf"
+// #define BOOT_DISK "/Users/hoff/Downloads/Gettysburg.adf"
 
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)

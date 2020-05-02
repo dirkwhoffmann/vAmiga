@@ -12,7 +12,7 @@
 bool
 releaseBuild()
 {
-#ifdef NDEBUG
+#ifdef RELEASEBUILD
     return true;
 #else
     return false;
