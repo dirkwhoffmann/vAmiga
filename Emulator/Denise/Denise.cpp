@@ -20,6 +20,7 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
     };
 
     config.emulateSprites = true;
+    config.hiddenLayers = 0;
     config.clxSprSpr = true;
     config.clxSprPlf = true;
     config.clxPlfPlf = true;
@@ -88,6 +89,7 @@ void
 Denise::_dumpConfig()
 {
     msg(" emulateSprites: %d\n", config.emulateSprites);
+    msg("   hiddenLayers: %d\n", config.hiddenLayers);
     msg("      clxSprSpr: %d\n", config.clxSprSpr);
     msg("      clxSprPlf: %d\n", config.clxSprPlf);
     msg("      clxPlfPlf: %d\n", config.clxPlfPlf);
@@ -1175,9 +1177,12 @@ Denise::endOfLine(int vpos)
 
         // Perform playfield-playfield collision check (if enabled)
         if (config.clxPlfPlf) checkP2PCollisions();
-
+        
         // Synthesize RGBA values and write the result into the frame buffer
         pixelEngine.colorize(vpos);
+
+        // Remove certain graphics layers if requested
+        if (config.hiddenLayers) pixelEngine.hide(vpos, config.hiddenLayers);
 
     } else {
         pixelEngine.endOfVBlankLine();

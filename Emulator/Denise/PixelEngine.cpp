@@ -444,3 +444,34 @@ PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
         }
     }
 }
+
+void
+PixelEngine::hide(int line, u16 layers)
+{
+    u32 *p = frameBuffer->data + line * HPIXELS;
+    for (int i = 0; i < HPIXELS; i++) {
+
+        u16 z = denise.zBuffer[i];
+
+        // Case 1: We see a sprite pixel
+        if (Denise::isSpritePixel(z)) {
+            if (Denise::isSpritePixel<0>(z) && !(layers & 0x01)) continue;
+            if (Denise::isSpritePixel<1>(z) && !(layers & 0x02)) continue;
+            if (Denise::isSpritePixel<2>(z) && !(layers & 0x04)) continue;
+            if (Denise::isSpritePixel<3>(z) && !(layers & 0x08)) continue;
+            if (Denise::isSpritePixel<4>(z) && !(layers & 0x10)) continue;
+            if (Denise::isSpritePixel<5>(z) && !(layers & 0x20)) continue;
+            if (Denise::isSpritePixel<6>(z) && !(layers & 0x40)) continue;
+            if (Denise::isSpritePixel<7>(z) && !(layers & 0x80)) continue;
+        }
+
+        // Case 2: We see playfield 1
+        if ((Denise::upperPlayfield(z) == 1) && !(layers & 0x100)) continue;
+        
+        // Case 3: We see playfield 2
+        if (!(layers & 0x200)) continue;
+                
+        // Wipe out this pixel
+        p[i] = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
+    }
+}

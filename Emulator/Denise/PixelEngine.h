@@ -232,19 +232,27 @@ public:
     //
 
 public:
-
+    
     /* Colorizes a rasterline.
      * This function implements the last stage in the emulator's graphics
      * pipelile. It translates a line of color register indices into a line
      * of RGBA values in GPU format.
      */
     void colorize(int line);
-
+    
 private:
-
+    
     void colorize(u32 *dst, int from, int to);
     void colorizeHAM(u32 *dst, int from, int to, u16& ham);
-
+    
+    /* Hides some graphics layers.
+     * This function is an optional stage applied after colorize(). It can
+     * be used to hide some layers for debugging.
+     */
+    
+public:
+    
+    void hide(int line, u16 layers);
 };
 
 #endif

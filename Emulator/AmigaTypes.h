@@ -49,7 +49,8 @@ typedef enum : long
     
     VA_SERIAL_DEVICE,
 
-    VA_EMULATE_SPRITES,
+    VA_EMULATE_SPRITES, // DEPRECATED
+    VA_HIDDEN_LAYERS,
     VA_CLX_SPR_SPR,
     VA_CLX_SPR_PLF,
     VA_CLX_PLF_PLF,

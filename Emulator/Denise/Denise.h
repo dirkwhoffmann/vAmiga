@@ -267,7 +267,19 @@ private:
     static const u16 Z_SP01234567 = Z_SP0|Z_SP1|Z_SP2|Z_SP3|Z_SP4|Z_SP5|Z_SP6|Z_SP7;
     static const u16 Z_SP0246 = Z_SP0|Z_SP2|Z_SP4|Z_SP6;
     static const u16 Z_SP1357 = Z_SP1|Z_SP3|Z_SP5|Z_SP7;
-
+    
+    static bool isSpritePixel(u16 z) {
+        return (z & Z_SP01234567) > (z & ~Z_SP01234567);
+    }
+    template <int nr> static bool isSpritePixel(u16 z) {
+        assert(nr < 8);
+        return (z & Z_SP[nr]) > (z & ~Z_SP[nr]);
+    }
+    static int upperPlayfield(u16 z) {
+        
+        return ((z & Z_DUAL) == Z_DPF2 || (z & Z_DUAL) == Z_DPF21) ? 2 : 1;
+    }
+    
     //
     // Constructing and serializing
     //
@@ -282,7 +294,8 @@ public:
         worker
 
         & config.revision
-        & config.emulateSprites
+        // & config.emulateSprites
+        // & config.hiddenLayers
         & config.clxSprSpr
         & config.clxSprPlf
         & config.clxPlfPlf;
@@ -343,9 +356,12 @@ public:
     DeniseRevision getRevision() { return config.revision; }
     void setRevision(DeniseRevision type);
 
-    bool getEmulateSprites() { return config.emulateSprites; }
-    void setEmulateSprites(bool value) { config.emulateSprites = value; }
-    
+    bool getEmulateSprites() { return config.emulateSprites; } // DEPRECATED
+    void setEmulateSprites(bool value) { config.emulateSprites = value; } // DEPRECATED
+
+    bool getHiddenLayers() { return config.hiddenLayers; }
+    void setHiddenLayers(bool value) { config.hiddenLayers = value; }
+
     bool getClxSprSpr() { return config.clxSprSpr; }
     void setClxSprSpr(bool value) { config.clxSprSpr = value; }
 
@@ -532,7 +548,6 @@ private:
     // Called by translate() in dual-playfield mode
     void translateDPF(bool pf2pri, int from, int to);
     template <bool pf2pri> void translateDPF(int from, int to);
-
 
 public:
 

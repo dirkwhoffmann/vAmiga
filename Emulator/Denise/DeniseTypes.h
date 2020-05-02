@@ -93,9 +93,12 @@ typedef struct
     // Emulated chip model
     DeniseRevision revision;
 
-    // Turns sprite emulation on or off
+    // Turns sprite emulation on or off (DEPRECATED)
     bool emulateSprites;
 
+    // Hides some graphics layers
+    u16 hiddenLayers;
+    
     // Checks for sprite-sprite collisions
     bool clxSprSpr;
 
