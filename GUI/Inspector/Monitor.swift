@@ -56,6 +56,20 @@ class Monitor: DialogController {
     @IBOutlet weak var monLayout: NSPopUpButton!
     @IBOutlet weak var monSlider: NSSlider!
 
+    // Pixel synthesis
+    @IBOutlet weak var synEnable: NSButton!
+    @IBOutlet weak var synSprite0: NSButton!
+    @IBOutlet weak var synSprite1: NSButton!
+    @IBOutlet weak var synSprite2: NSButton!
+    @IBOutlet weak var synSprite3: NSButton!
+    @IBOutlet weak var synSprite4: NSButton!
+    @IBOutlet weak var synSprite5: NSButton!
+    @IBOutlet weak var synSprite6: NSButton!
+    @IBOutlet weak var synSprite7: NSButton!
+    @IBOutlet weak var synPlayfield1: NSButton!
+    @IBOutlet weak var synPlayfield2: NSButton!
+    @IBOutlet weak var synOpacity: NSSlider!
+
     override func awakeFromNib() {
 
         track()
@@ -70,6 +84,10 @@ class Monitor: DialogController {
         }
         
         let info = amiga.agnus.getDebuggerInfo()
+        let bus = info.enabled
+        let mon = parent.renderer.drawActivityMonitors
+        let syn = synEnable.state == .on
+        let col = bus || mon
         
         let visualize = [
             info.visualize.0,
@@ -95,7 +113,7 @@ class Monitor: DialogController {
         ]
         
         // Bus debugger
-        busEnable.state = info.enabled ? .on : .off
+        busEnable.state = bus ? .on : .off
         busBlitter.state = visualize[Int(BUS_BLITTER.rawValue)] ? .on : .off
         busCopper.state = visualize[Int(BUS_COPPER.rawValue)] ? .on : .off
         busDisk.state = visualize[Int(BUS_DISK.rawValue)] ? .on : .off
@@ -106,9 +124,19 @@ class Monitor: DialogController {
         busRefresh.state = visualize[Int(BUS_REFRESH.rawValue)] ? .on : .off
         busOpacity.doubleValue = info.opacity * 100.0
         busDisplayMode.selectItem(withTag: info.displayMode.rawValue)
-
+        busBlitter.isEnabled = bus
+        busCopper.isEnabled = bus
+        busDisk.isEnabled = bus
+        busAudio.isEnabled = bus
+        busSprites.isEnabled = bus
+        busBitplanes.isEnabled = bus
+        busCPU.isEnabled = bus
+        busRefresh.isEnabled = bus
+        busOpacity.isEnabled = bus
+        busDisplayMode.isEnabled = bus
+        
         // Activity monitors
-        monEnable.state = parent.renderer.drawActivityMonitors ? .on : .off
+        monEnable.state = mon ? .on : .off
         monCopper.state = enabled(Renderer.Monitor.copper)
         monBlitter.state = enabled(Renderer.Monitor.blitter)
         monDisk.state = enabled(Renderer.Monitor.disk)
@@ -124,6 +152,21 @@ class Monitor: DialogController {
         monOpacity.floatValue = parent.renderer.monitorGlobalAlpha * 100.0
         monSlider.floatValue = parent.renderer.monitors[0].angle
         monLayout.selectItem(withTag: parent.renderer.monitorLayout)
+        monCopper.isEnabled = mon
+        monBlitter.isEnabled = mon
+        monDisk.isEnabled = mon
+        monAudio.isEnabled = mon
+        monSprites.isEnabled = mon
+        monBitplanes.isEnabled = mon
+        monChipRam.isEnabled = mon
+        monSlowRam.isEnabled = mon
+        monFastRam.isEnabled = mon
+        monKickRom.isEnabled = mon
+        monLeftWave.isEnabled = mon
+        monRightWave.isEnabled = mon
+        monOpacity.isEnabled = mon
+        monSlider.isEnabled = mon
+        monLayout.isEnabled = mon
         
         // Colors
         colBlitter.setColor(rgb[Int(BUS_BLITTER.rawValue)])
@@ -134,8 +177,51 @@ class Monitor: DialogController {
         colBitplanes.setColor(rgb[Int(BUS_BITPLANE.rawValue)])
         colCPU.setColor(rgb[Int(BUS_CPU.rawValue)])
         colRefresh.setColor(rgb[Int(BUS_REFRESH.rawValue)])
+        colBlitter.isHidden = !col
+        colCopper.isHidden = !col
+        colDisk.isHidden = !col
+        colAudio.isHidden = !col
+        colSprites.isHidden = !col
+        colBitplanes.isHidden = !col
+        colCPU.isHidden = !col
+        colRefresh.isHidden = !col
+        
+        // Layers
+        synOpacity.integerValue = 255 - amiga.getConfig(VA_HIDDEN_LAYER_ALPHA)
+        synSprite0.isEnabled = syn
+        synSprite1.isEnabled = syn
+        synSprite2.isEnabled = syn
+        synSprite3.isEnabled = syn
+        synSprite4.isEnabled = syn
+        synSprite5.isEnabled = syn
+        synSprite6.isEnabled = syn
+        synSprite7.isEnabled = syn
+        synPlayfield1.isEnabled = syn
+        synPlayfield2.isEnabled = syn
+        synOpacity.isEnabled = syn
     }
 
+    func updateHiddenLayers() {
+                        
+        var mask = 0
+        
+        if synEnable.state == .on {
+            if synSprite0.state == .on { mask |= 0x01 }
+            if synSprite1.state == .on { mask |= 0x02 }
+            if synSprite2.state == .on { mask |= 0x04 }
+            if synSprite3.state == .on { mask |= 0x08 }
+            if synSprite4.state == .on { mask |= 0x10 }
+            if synSprite5.state == .on { mask |= 0x20 }
+            if synSprite6.state == .on { mask |= 0x40 }
+            if synSprite7.state == .on { mask |= 0x80 }
+            if synPlayfield1.state == .on { mask |= 0x100 }
+            if synPlayfield2.state == .on { mask |= 0x200 }
+        }
+
+        amiga.configure(VA_HIDDEN_LAYERS, value: mask)
+        amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: synOpacity.integerValue)
+    }
+    
     //
     // Action methods
     //
@@ -228,6 +314,18 @@ class Monitor: DialogController {
     @IBAction func monOpacityAction(_ sender: NSSlider!) {
         
         parent.renderer.monitorGlobalAlpha = sender.floatValue / 100.0
+        refresh()
+    }
+
+    @IBAction func synAction(_ sender: NSButton!) {
+        
+        updateHiddenLayers()
+        refresh()
+    }
+
+    @IBAction func synOpacityAction(_ sender: NSSlider!) {
+        
+        amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: 255 - sender.integerValue)
         refresh()
     }
 }

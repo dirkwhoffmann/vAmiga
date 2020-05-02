@@ -317,6 +317,11 @@ Amiga::configure(ConfigOption option, long value)
             if (current.denise.hiddenLayers == value) return true;
             denise.setHiddenLayers(value);
             
+        case VA_HIDDEN_LAYER_ALPHA:
+            
+            if (current.denise.hiddenLayerAlpha == value) return true;
+            denise.setHiddenLayerAlpha(value);
+            
         case VA_CLX_SPR_SPR:
 
             if (current.denise.clxSprSpr == value) return true;
@@ -480,6 +485,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_DRIVE_SPEED: return df0.getSpeed();
         case VA_EMULATE_SPRITES: return denise.getEmulateSprites();
         case VA_HIDDEN_LAYERS: return denise.getHiddenLayers();
+        case VA_HIDDEN_LAYER_ALPHA: return denise.getHiddenLayerAlpha();
         case VA_CLX_SPR_SPR: return denise.getClxSprSpr();
         case VA_CLX_SPR_PLF: return denise.getClxSprPlf();
         case VA_CLX_PLF_PLF: return denise.getClxPlfPlf();

@@ -314,7 +314,7 @@ PixelEngine::beginOfFrame(bool interlace)
     frameBuffer->interlace = interlace;
     
     pthread_mutex_unlock(&lock);
-
+    
     dmaDebugger.vSyncHandler();
 }
 
@@ -446,15 +446,17 @@ PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
 }
 
 void
-PixelEngine::hide(int line, u16 layers)
+PixelEngine::hide(int line, u16 layers, u8 alpha)
 {
     u32 *p = frameBuffer->data + line * HPIXELS;
+
     for (int i = 0; i < HPIXELS; i++) {
 
         u16 z = denise.zBuffer[i];
 
-        // Case 1: We see a sprite pixel
+        // Check for case 1: A sprite is visible
         if (Denise::isSpritePixel(z)) {
+
             if (Denise::isSpritePixel<0>(z) && !(layers & 0x01)) continue;
             if (Denise::isSpritePixel<1>(z) && !(layers & 0x02)) continue;
             if (Denise::isSpritePixel<2>(z) && !(layers & 0x04)) continue;
@@ -463,15 +465,26 @@ PixelEngine::hide(int line, u16 layers)
             if (Denise::isSpritePixel<5>(z) && !(layers & 0x20)) continue;
             if (Denise::isSpritePixel<6>(z) && !(layers & 0x40)) continue;
             if (Denise::isSpritePixel<7>(z) && !(layers & 0x80)) continue;
-        }
-
-        // Case 2: We see playfield 1
-        if ((Denise::upperPlayfield(z) == 1) && !(layers & 0x100)) continue;
         
-        // Case 3: We see playfield 2
-        if (!(layers & 0x200)) continue;
-                
-        // Wipe out this pixel
-        p[i] = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
+        } else {
+
+            // Check for case 2: Playfield 1 is visible
+            if ((Denise::upperPlayfield(z) == 1) && !(layers & 0x100)) continue;
+        
+            // Check for case 3: layfield 2 is visible
+            if ((Denise::upperPlayfield(z) == 2) && !(layers & 0x200)) continue;
+        }
+        
+        u8 r = p[i] & 0xFF;
+        u8 g = (p[i] >> 8) & 0xFF;
+        u8 b = (p[i] >> 16) & 0xFF;
+
+        double scale = alpha / 255.0;
+        u8 bg = (line / 4) % 2 == (i / 8) % 2 ? 0x22 : 0x44;
+        u8 newr = r * (1 - scale) + bg * scale;
+        u8 newg = g * (1 - scale) + bg * scale;
+        u8 newb = b * (1 - scale) + bg * scale;
+        
+        p[i] = 0xFF000000 | newb << 16 | newg << 8 | newr;
     }
 }

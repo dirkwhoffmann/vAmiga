@@ -21,6 +21,7 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 
     config.emulateSprites = true;
     config.hiddenLayers = 0;
+    config.hiddenLayerAlpha = 128;
     config.clxSprSpr = true;
     config.clxSprPlf = true;
     config.clxPlfPlf = true;
@@ -33,6 +34,20 @@ Denise::setRevision(DeniseRevision revision)
 
     assert(isDeniseRevision(revision));
     config.revision = revision;
+}
+
+void
+Denise::setHiddenLayers(u16 value)
+{
+    msg("Changing layer mask to %x\n", value);
+    config.hiddenLayers = value;
+}
+
+void
+Denise::setHiddenLayerAlpha(u8 value)
+{
+    msg("Changing layer alpha to %x\n", value);
+    config.hiddenLayerAlpha = value;
 }
 
 void
@@ -88,11 +103,12 @@ Denise::_inspect()
 void
 Denise::_dumpConfig()
 {
-    msg(" emulateSprites: %d\n", config.emulateSprites);
-    msg("   hiddenLayers: %d\n", config.hiddenLayers);
-    msg("      clxSprSpr: %d\n", config.clxSprSpr);
-    msg("      clxSprPlf: %d\n", config.clxSprPlf);
-    msg("      clxPlfPlf: %d\n", config.clxPlfPlf);
+    msg("  emulateSprites: %d\n", config.emulateSprites);
+    msg("    hiddenLayers: %d\n", config.hiddenLayers);
+    msg("hiddenLayerAlpha: %d\n", config.hiddenLayerAlpha);
+    msg("       clxSprSpr: %d\n", config.clxSprSpr);
+    msg("       clxSprPlf: %d\n", config.clxSprPlf);
+    msg("       clxPlfPlf: %d\n", config.clxPlfPlf);
 }
 
 void
@@ -1182,8 +1198,9 @@ Denise::endOfLine(int vpos)
         pixelEngine.colorize(vpos);
 
         // Remove certain graphics layers if requested
-        if (config.hiddenLayers) pixelEngine.hide(vpos, config.hiddenLayers);
-
+        if (config.hiddenLayers) {
+            pixelEngine.hide(vpos, config.hiddenLayers, config.hiddenLayerAlpha);
+        }
     } else {
         pixelEngine.endOfVBlankLine();
     }

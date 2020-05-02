@@ -356,11 +356,14 @@ public:
     DeniseRevision getRevision() { return config.revision; }
     void setRevision(DeniseRevision type);
 
-    bool getEmulateSprites() { return config.emulateSprites; } // DEPRECATED
-    void setEmulateSprites(bool value) { config.emulateSprites = value; } // DEPRECATED
+    bool getEmulateSprites() { return config.emulateSprites; }
+    void setEmulateSprites(bool value) { config.emulateSprites = value; }
 
-    bool getHiddenLayers() { return config.hiddenLayers; }
-    void setHiddenLayers(bool value) { config.hiddenLayers = value; }
+    u16 getHiddenLayers() { return config.hiddenLayers; }
+    void setHiddenLayers(u16 value);
+
+    u8 getHiddenLayerAlpha() { return config.hiddenLayerAlpha; }
+    void setHiddenLayerAlpha(u8 value);
 
     bool getClxSprSpr() { return config.clxSprSpr; }
     void setClxSprSpr(bool value) { config.clxSprSpr = value; }

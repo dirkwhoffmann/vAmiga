@@ -82,7 +82,7 @@ private:
     // Indicates whether HAM mode is switched
     bool hamMode;
     
-
+    
     //
     // Register change history buffer
     //
@@ -252,7 +252,7 @@ private:
     
 public:
     
-    void hide(int line, u16 layers);
+    void hide(int line, u16 layer, u8 alpha);
 };
 
 #endif

@@ -96,8 +96,11 @@ typedef struct
     // Turns sprite emulation on or off (DEPRECATED)
     bool emulateSprites;
 
-    // Hides some graphics layers
+    // Hides certain graphics layers
     u16 hiddenLayers;
+    
+    // Alpha channel value for hidden layers
+    u8 hiddenLayerAlpha;
     
     // Checks for sprite-sprite collisions
     bool clxSprSpr;
