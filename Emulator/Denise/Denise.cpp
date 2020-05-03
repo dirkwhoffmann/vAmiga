@@ -39,7 +39,7 @@ Denise::setRevision(DeniseRevision revision)
 void
 Denise::setHiddenLayers(u16 value)
 {
-    // msg("Changing layer mask to %x\n", value);
+    msg("Changing layer mask to %x\n", value);
     config.hiddenLayers = value;
 }
 
@@ -298,7 +298,8 @@ Denise::pokeSPRxPOS(u16 value)
     sprpos[x] = value;
 
     // Record the register change
-    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0POS + x, value } );
+    i64 pos = 4 * (agnus.pos.h + 1);
+    sprChanges.insert(pos, RegChange { REG_SPR0POS + x, value } );
 }
 
 template <int x> void
@@ -314,12 +315,13 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Save the attach bit
     REPLACE_BIT(attach, x, GET_BIT(value, 7));
-
+    
     // Disarm the sprite
     CLR_BIT(armed, x);
 
     // Record the register change
-    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0CTL + x, value } );
+    i64 pos = 4 * (agnus.pos.h + 1);
+    sprChanges.insert(pos, RegChange { REG_SPR0CTL + x, value } );
 }
 
 template <int x> void
@@ -335,7 +337,8 @@ Denise::pokeSPRxDATA(u16 value)
     SET_BIT(wasArmed, x);
 
     // Record the register change
-    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATA + x, value } );
+    i64 pos = 4 * (agnus.pos.h + 1);
+    sprChanges.insert(pos, RegChange { REG_SPR0DATA + x, value } );
 }
 
 template <int x> void
@@ -347,7 +350,8 @@ Denise::pokeSPRxDATB(u16 value)
     sprdatb[x] = value;
 
     // Record the register change
-    sprChanges.insert(4 * agnus.pos.h, RegChange { REG_SPR0DATB + x, value });
+    i64 pos = 4 * (agnus.pos.h + 1);
+    sprChanges.insert(pos, RegChange { REG_SPR0DATB + x, value });
 
     // Record sprite data in debug mode
     if (amiga.getDebugMode()) recordSpriteData(x);
@@ -383,12 +387,6 @@ Denise::attached(int x) {
     assert(IS_ODD(x));
 
     return GET_BIT(attach,x);
-}
-
-void
-Denise::armSprite(int x)
-{
-    SET_BIT(armed, x);
 }
 
 bool
@@ -830,6 +828,7 @@ Denise::drawSpritePair()
                 case REG_SPR0CTL+x:
                     sprctl2 = change.value;
                     strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
+                    at = GET_BIT(sprctl2, 7);
                     armed2 = false;
                     break;
             }
