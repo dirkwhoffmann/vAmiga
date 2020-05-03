@@ -1656,16 +1656,22 @@ Agnus::executeFirstSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        // Read in the next control word (POS part)
-        u16 value = doSpriteDMA<nr>();
-        agnus.pokeSPRxPOS<nr>(value);
-        denise.pokeSPRxPOS<nr>(value);
+        if (busOwner[pos.h] == BUS_NONE) {
+
+            // Read in the next control word (POS part)
+            u16 value = doSpriteDMA<nr>();
+            agnus.pokeSPRxPOS<nr>(value);
+            denise.pokeSPRxPOS<nr>(value);
+        }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        // Read in the next data word (part A)
-        u16 value = doSpriteDMA<nr>();
-        denise.pokeSPRxDATA<nr>(value);
+        if (busOwner[pos.h] == BUS_NONE) {
+
+            // Read in the next data word (part A)
+            u16 value = doSpriteDMA<nr>();
+            denise.pokeSPRxDATA<nr>(value);
+        }
     }
 }
 
@@ -1678,16 +1684,22 @@ Agnus::executeSecondSpriteCycle()
 
         sprDmaState[nr] = SPR_DMA_IDLE;
 
-        // Read in the next control word (CTL part)
-        u16 value = doSpriteDMA<nr>();
-        agnus.pokeSPRxCTL<nr>(value);
-        denise.pokeSPRxCTL<nr>(value);
+        if (busOwner[pos.h] == BUS_NONE) {
+            
+            // Read in the next control word (CTL part)
+            u16 value = doSpriteDMA<nr>();
+            agnus.pokeSPRxCTL<nr>(value);
+            denise.pokeSPRxCTL<nr>(value);
+        }
 
     } else if (sprDmaState[nr] == SPR_DMA_ACTIVE) {
 
-        // Read in the next data word (part B)
-        u16 value = doSpriteDMA<nr>();
-        denise.pokeSPRxDATB<nr>(value);
+        if (busOwner[pos.h] == BUS_NONE) {
+
+            // Read in the next data word (part B)
+            u16 value = doSpriteDMA<nr>();
+            denise.pokeSPRxDATB<nr>(value);
+        }
     }
 }
 
