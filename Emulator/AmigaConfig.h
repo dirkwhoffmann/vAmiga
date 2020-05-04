@@ -47,7 +47,7 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop and CPU
 static const int RUN_DEBUG       = 0; // Run loop, component states
-static const int SNP_DEBUG       = 1; // Serialization (snapshots)
+static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 static const int CPU_DEBUG       = 0; // CPU
 
 // Memory access
