@@ -49,15 +49,6 @@ inline u64 read64(u8 *& buffer)
     return ((u64)hi << 32) | lo;
 }
 
-/*
-inline float readFloat(u8 *& buffer)
-{
-    float result;
-    *((u32 *)(&result)) = read32(buffer);
-    return result;
-}
-*/
-
 inline double readDouble(u8 *& buffer)
 {
     double result;
@@ -88,13 +79,6 @@ inline void write64(u8 *& buffer, u64 value)
     write32(buffer, (u32)(value >> 32));
     write32(buffer, (u32)(value));
 }
-
-/*
-inline void writeFloat(u8 *& buffer, float value)
-{
-    write32(buffer, *((u32 *)(&value)));
-}
-*/
 
 inline void writeDouble(u8 *& buffer, double value)
 {
@@ -141,7 +125,6 @@ public:
     COUNT(const unsigned long)
     COUNT(const long long)
     COUNT(const unsigned long long)
-//    COUNT(const float)
     COUNT(const double)
 
     COUNT(const MemorySource)
@@ -166,7 +149,6 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -220,7 +202,6 @@ public:
     DESERIALIZE64(unsigned long)
     DESERIALIZE64(long long)
     DESERIALIZE64(unsigned long long)
-//     DESERIALIZE32(float)
     DESERIALIZED(double)
     DESERIALIZE32(MemorySource)
     DESERIALIZE64(EventID)
@@ -244,7 +225,6 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -304,7 +284,6 @@ public:
     SERIALIZE64(const unsigned long)
     SERIALIZE64(const long long)
     SERIALIZE64(const unsigned long long)
-//     SERIALIZE32(const float)
     SERIALIZED(const double)
     SERIALIZE32(const MemorySource)
     SERIALIZE64(const EventID)
@@ -328,7 +307,6 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -381,7 +359,6 @@ public:
     RESET(unsigned long)
     RESET(long long)
     RESET(unsigned long long)
-//     RESET(float)
     RESET(double)
     RESET(MemorySource)
     RESET(EventID)
@@ -401,7 +378,6 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
-    // template <u16 capacity> STRUCT(ChangeRecorder<capacity>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
