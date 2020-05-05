@@ -50,8 +50,11 @@ class Copper : public AmigaComponent
     // The Copper program counter
     u32 coppc = 0;
 
-    // The Copper program counter at the time of the COP_FETCH event
-    // u32 coppcBase = 0;
+    /* Indicates whether the Copper has been active since the last vertical
+     * sync. The value of this variable is used to determine if a write to the
+     * location registers will be pushed through the Copper's program counter.
+     */
+    bool activeInThisFrame;
    
     // Storage for disassembled instruction
     char disassembly[128];
@@ -102,7 +105,8 @@ public:
         & cdang
         & cop1ins
         & cop2ins
-        & coppc;
+        & coppc
+        & activeInThisFrame;
     }
 
 

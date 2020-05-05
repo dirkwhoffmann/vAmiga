@@ -128,6 +128,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     // Copper DMA
     if (oldCOPEN ^ newCOPEN) {
         debug(DMA_DEBUG, "Copper DMA switched %s\n", newCOPEN ? "on" : "off");
+        if (newCOPEN) copper.activeInThisFrame = true;
     }
 
     // Blitter DMA

@@ -121,6 +121,11 @@ Copper::pokeCOP1LCH(u16 value)
     if (HI_WORD(cop1lc) != value) {
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
         cop1end = cop1lc;
+
+        if (!activeInThisFrame) {
+            assert(copList == 1);
+            coppc = cop1lc;
+        }
     }
 }
 
@@ -134,6 +139,11 @@ Copper::pokeCOP1LCL(u16 value)
     if (LO_WORD(cop1lc) != value) {
         cop1lc = REPLACE_LO_WORD(cop1lc, value);
         cop1end = cop1lc;
+        
+        if (!activeInThisFrame) {
+            assert(copList == 1);
+            coppc = cop1lc;
+        }
     }
 }
 
@@ -867,7 +877,8 @@ Copper::vsyncHandler()
      *  in COP1LC." [HRM]
      */
     agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-
+    activeInThisFrame = agnus.copdma();
+    
     if (COP_CHECKSUM) {
 
         if (checkcnt) debug("Checksum: %x (%d)\n", checksum, checkcnt);
