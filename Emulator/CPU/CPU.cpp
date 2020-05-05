@@ -229,23 +229,14 @@ CPU::_size()
 size_t
 CPU::didLoadFromBuffer(u8 *buffer)
 {
-    SerReader reader(buffer);
-
-    debug(SNP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
-          fnv_1a_64(buffer, reader.ptr - buffer), reader.ptr - buffer);
-
-    return reader.ptr - buffer;
-}
-
-size_t
-CPU::didSaveToBuffer(u8 *buffer)
-{
-    SerWriter writer(buffer);
-
-    debug(SNP_DEBUG, "CPU state checksum: %x (%d bytes)\n",
-          fnv_1a_64(buffer, writer.ptr - buffer), writer.ptr - buffer);
-
-    return writer.ptr - buffer;
+    /* Because we don't save breakpoints and watchpoints in a snapshot, the
+     * CPU flags for checking breakpoints and watchpoints can be in a corrupt
+     * state after loading. These flags need to be updated according to the
+     * current breakpoint and watchpoint list.
+     */
+    debugger.breakpoints.setNeedsCheck(debugger.breakpoints.elements() != 0);
+    debugger.watchpoints.setNeedsCheck(debugger.watchpoints.elements() != 0);
+    return 0;
 }
 
 DisassembledInstr
