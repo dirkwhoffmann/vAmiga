@@ -142,7 +142,7 @@ StateMachine<nr>::pokeAUDxDAT(u16 value)
 template <int nr> void
 StateMachine<nr>::enableDMA()
 {
-    debug(AUD_DEBUG, "Disable DMA\n");
+    debug(AUD_DEBUG, "Enable DMA\n");
 
     switch (state) {
 
