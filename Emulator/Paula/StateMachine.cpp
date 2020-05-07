@@ -355,28 +355,10 @@ StateMachine<nr>::percntrld()
 {
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
 
-    /*
-    if (audperLatch == 0) {
-        warn("audperLatch == 0");
-    }
-    */
     
-    if (audperLatch <= 1) {
-        // agnus.scheduleRel<slot>(DMA_CYCLES(0), CHX_PERFIN);
-        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
-    } else {
-        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
-    }
-    
-    /*
-    if (audperLatch < 124) {
-        // debug("Very small audperLatch %d\n", audperLatch);
-        // What shall we do with very small audper values?
-        agnus.scheduleRel<slot>(DMA_CYCLES(124), CHX_PERFIN);
-    } else {
-        agnus.scheduleRel<slot>(DMA_CYCLES(audperLatch), CHX_PERFIN);
-    }
-    */
+    u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
+
+    agnus.scheduleRel<slot>(DMA_CYCLES(delay), CHX_PERFIN);
 }
 
 template <int nr> bool
