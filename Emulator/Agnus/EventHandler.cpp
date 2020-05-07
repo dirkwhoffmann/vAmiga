@@ -934,8 +934,6 @@ Agnus::serviceDASEvent()
     switch (slot[DAS_SLOT].id) {
 
         case DAS_REFRESH:
-
-            // Block memory refresh DMA cycles
             busOwner[0x01] = BUS_REFRESH;
             busOwner[0x03] = BUS_REFRESH;
             busOwner[0x05] = BUS_REFRESH;
@@ -946,12 +944,10 @@ Agnus::serviceDASEvent()
         case DAS_D0:
         case DAS_D1:
         case DAS_D2:
-
             paula.diskController.performDMA();
             break;
 
         case DAS_A0:
-
             if (audxDR[0]) {
                 audxDR[0] = false;
                 audioUnit.channel0.pokeAUDxDAT(doAudioDMA<0>());
@@ -959,7 +955,6 @@ Agnus::serviceDASEvent()
             break;
 
         case DAS_A1:
-
             if (audxDR[1]) {
                 audxDR[1] = false;
                 audioUnit.channel1.pokeAUDxDAT(doAudioDMA<1>());
@@ -967,7 +962,6 @@ Agnus::serviceDASEvent()
             break;
 
         case DAS_A2:
-
             if (audxDR[2]) {
                 audxDR[2] = false;
                 audioUnit.channel2.pokeAUDxDAT(doAudioDMA<2>());
@@ -975,7 +969,6 @@ Agnus::serviceDASEvent()
             break;
 
         case DAS_A3:
-
             if (audxDR[3]) {
                 audxDR[3] = false;
                 audioUnit.channel3.pokeAUDxDAT(doAudioDMA<3>());
