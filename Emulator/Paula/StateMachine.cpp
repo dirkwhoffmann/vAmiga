@@ -282,8 +282,6 @@ StateMachine<nr>::move_010_011() {
             // Additional IRQ mode action
             AUDxIR();
         }
-        
-        // intreq2 = false;
     }
 
     state = 0b011;
