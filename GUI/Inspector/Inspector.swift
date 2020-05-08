@@ -561,6 +561,7 @@ class Inspector: DialogController {
         amiga.enableDebugging()
         updateInspectionTarget()
 
+        /*
         timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
 
             self.timerLock.lock()
@@ -571,12 +572,13 @@ class Inspector: DialogController {
 
             self.timerLock.unlock()
         }
+        */
     }
 
     deinit {
         track()
     }
-
+    
     // Assigns a number formatter to a control
     func assignFormatter(_ formatter: Formatter, _ control: NSControl) {
         
@@ -584,7 +586,14 @@ class Inspector: DialogController {
         control.formatter = formatter
         control.needsDisplay = true
     }
-
+    
+    func triggerRefresh() {
+        
+        if isRunning { refresh(count: refreshCnt) }
+        isRunning = amiga.isRunning()
+        refreshCnt += 1
+    }
+    
     func refresh(count: Int = 0, full: Bool = false) {
         
         if window?.isVisible == false { return }

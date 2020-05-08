@@ -361,7 +361,7 @@ extension MyController {
         
         // Create timer and speedometer
         timerLock = NSLock()
-        timer = Timer.scheduledTimer(timeInterval: 1.0/12, // 12 times a second
+        timer = Timer.scheduledTimer(timeInterval: 1.0/10, // 10 times a second
                                      target: self,
                                      selector: #selector(timerFunc),
                                      userInfo: nil,
@@ -379,13 +379,16 @@ extension MyController {
  
         animationCounter += 1
 
-        // Do 6 times a second ...
+        // Animate the inspector
+        if inspector?.window?.isVisible == true { inspector!.triggerRefresh() }
+        
+        // Do less times...
         if (animationCounter % 2) == 0 {
  
         }
         
-        // Do 3 times a second ...
-        if (animationCounter % 4) == 0 {
+        // Do lesser times...
+        if (animationCounter % 3) == 0 {
 
             updateSpeedometer()
             updateMonitoringPanels()
