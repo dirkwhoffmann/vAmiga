@@ -17,15 +17,17 @@ Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 void
 Copper::_inspect()
 {
+    u32 mask = agnus.chipRamMask();
+    
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
     info.copList = copList;
     info.active  = agnus.isPending<COP_SLOT>();
     info.cdang   = cdang;
-    info.coppc   = coppc;
-    info.cop1lc  = cop1lc;
-    info.cop2lc  = cop2lc;
+    info.coppc   = coppc & mask;
+    info.cop1lc  = cop1lc & mask;
+    info.cop2lc  = cop2lc & mask;
     info.cop1ins = cop1ins;
     info.cop2ins = cop2ins;
     info.length1 = (cop1end - cop1lc) / 4;

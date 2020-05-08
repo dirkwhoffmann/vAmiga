@@ -806,13 +806,13 @@ Memory::peek16(u32 addr)
         case BUS_COPPER:
 
             ASSERT_CHIP_ADDR(addr);
-            if (memSrc[addr >> 16] != MEM_UNMAPPED) dataBus = READ_CHIP_16(addr);
+            dataBus = READ_CHIP_16(addr);
             return dataBus;
 
         case BUS_BLITTER:
 
             ASSERT_CHIP_ADDR(addr);
-            if (memSrc[addr >> 16] != MEM_UNMAPPED) dataBus = READ_CHIP_16(addr);
+            dataBus = READ_CHIP_16(addr);
             return dataBus;
 
         case BUS_CPU:
