@@ -175,19 +175,19 @@ Disk::encodeDisk(ADFFile *adf)
     assert(adf != NULL);
     assert(adf->getDiskType() == getType());
 
-    long tmax = adf->numTracks();
-    long smax = adf->numSectorsPerTrack();
+    long tracks = adf->numTracks();
+    long sectors = adf->numSectorsPerTrack();
 
-    debug("Encoding disk (%d tracks, %d sectors each)...\n", tmax, smax);
-    assert(tmax <= numTracks());
-    assert(smax == numSectorsPerTrack());
+    debug("Encoding disk (%d tracks, %d sectors each)...\n", tracks, sectors);
+    assert(tracks <= numTracks());
+    assert(sectors == numSectorsPerTrack());
 
     // Initialize disk with random data
     clearDisk();
 
     // Encode all tracks
     bool result = true;
-    for (Track t = 0; t < tmax; t++) result &= encodeTrack(adf, t, smax);
+    for (Track t = 0; t < tracks; t++) result &= encodeTrack(adf, t, sectors);
 
     return result;
 }

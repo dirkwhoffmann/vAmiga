@@ -20,6 +20,10 @@ ADFFile::isADFBuffer(const u8 *buffer, size_t length)
     // There are no magic bytes. We can only check the buffer size.
     return
     length == ADFSIZE_35_DD ||
+    length == ADFSIZE_35_DD_81 ||
+    length == ADFSIZE_35_DD_82 ||
+    length == ADFSIZE_35_DD_83 ||
+    length == ADFSIZE_35_DD_84 ||
     length == ADFSIZE_35_DD_PC ||
     length == ADFSIZE_35_HD ||
     length == ADFSIZE_35_HD_PC ||
@@ -32,6 +36,10 @@ ADFFile::isADFFile(const char *path)
     // There are no magic bytes. We can only check the file size.
     return
     checkFileSize(path, ADFSIZE_35_DD) ||
+    checkFileSize(path, ADFSIZE_35_DD_81) ||
+    checkFileSize(path, ADFSIZE_35_DD_82) ||
+    checkFileSize(path, ADFSIZE_35_DD_83) ||
+    checkFileSize(path, ADFSIZE_35_DD_84) ||
     checkFileSize(path, ADFSIZE_35_DD_PC) ||
     checkFileSize(path, ADFSIZE_35_HD) ||
     checkFileSize(path, ADFSIZE_35_HD_PC) ||
@@ -131,6 +139,10 @@ ADFFile::getDiskType()
     switch(size) {
         
         case ADFSIZE_35_DD:    return DISK_35_DD;
+        case ADFSIZE_35_DD_81: return DISK_35_DD;
+        case ADFSIZE_35_DD_82: return DISK_35_DD;
+        case ADFSIZE_35_DD_83: return DISK_35_DD;
+        case ADFSIZE_35_DD_84: return DISK_35_DD;
         case ADFSIZE_35_DD_PC: return DISK_35_DD_PC;
         case ADFSIZE_35_HD:    return DISK_35_HD;
         case ADFSIZE_35_HD_PC: return DISK_35_HD_PC;
