@@ -541,12 +541,6 @@ class Inspector: DialogController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-    // Timer for triggering continous update
-    var timer: Timer?
-
-    // Lock to prevent reentrance to the timer execution code
-    var timerLock = NSLock()
-
     // Used to determine the items that should be refreshed
     var refreshCnt = 0
 
@@ -560,19 +554,6 @@ class Inspector: DialogController {
         super.showWindow(self)
         amiga.enableDebugging()
         updateInspectionTarget()
-
-        /*
-        timer = Timer.scheduledTimer(withTimeInterval: inspectionInterval, repeats: true) { _ in
-
-            self.timerLock.lock()
-
-            if self.isRunning { self.refresh(count: self.refreshCnt) }
-            self.isRunning = self.amiga.isRunning()
-            self.refreshCnt += 1
-
-            self.timerLock.unlock()
-        }
-        */
     }
 
     deinit {
@@ -638,12 +619,6 @@ extension Inspector: NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
 
         track("Closing inspector")
-
-        // Stop the refresh timer
-        timerLock.lock()
-        timer?.invalidate()
-        timer = nil
-        timerLock.unlock()
 
         // Leave debug mode
         amiga?.disableDebugging()
