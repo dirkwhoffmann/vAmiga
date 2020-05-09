@@ -72,8 +72,8 @@ extension BankTableView: NSTableViewDataSource {
                 return "CIA"
             case MEM_RTC.rawValue:
                 return "Clock"
-            case MEM_OCS.rawValue:
-                return "OCS"
+            case MEM_CUSTOM.rawValue:
+                return "Chipset"
             case MEM_AUTOCONF.rawValue:
                 return "Autoconf"
             case MEM_ROM.rawValue:

@@ -24,7 +24,7 @@ typedef enum
     MEM_SLOW,
     MEM_CIA,
     MEM_RTC,
-    MEM_OCS,
+    MEM_CUSTOM,
     MEM_AUTOCONF,
     MEM_ROM,
     MEM_WOM,

@@ -64,7 +64,7 @@ extension Inspector {
             case MEM_EXT.rawValue:      color = MemColors.ext
             case MEM_CIA.rawValue:      color = MemColors.cia
             case MEM_RTC.rawValue:      color = MemColors.rtc
-            case MEM_OCS.rawValue:      color = MemColors.ocs
+            case MEM_CUSTOM.rawValue:   color = MemColors.ocs
             case MEM_AUTOCONF.rawValue: color = MemColors.auto
             default:                    fatalError()
             }
@@ -210,7 +210,7 @@ extension Inspector {
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_OCS)
+        setBank(src: MEM_CUSTOM)
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
