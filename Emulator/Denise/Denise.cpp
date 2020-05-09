@@ -302,7 +302,6 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0POS + x, value } );
     sprChanges[pair].insert(pos, RegChange { REG_SPR0POS + x, value } );
 }
 
@@ -328,7 +327,6 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0CTL + x, value } );
     sprChanges[pair].insert(pos, RegChange { REG_SPR0CTL + x, value } );
 }
 
@@ -349,7 +347,6 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0DATA + x, value } );
     sprChanges[pair].insert(pos, RegChange { REG_SPR0DATA + x, value } );
 }
 
@@ -366,7 +363,6 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0DATB + x, value });
     sprChanges[pair].insert(pos, RegChange { REG_SPR0DATB + x, value });
 }
 
@@ -761,8 +757,6 @@ Denise::drawSprites()
             if (GET_BIT(wasArmed, i)) recordSpriteData(i);
         }
     }
-
-    sprChangesDeprecated.clear();
 }
 
 template <unsigned pair> void
@@ -773,11 +767,8 @@ Denise::drawSpritePair()
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
 
-    // Check for quick exit
-    // if (spriteClipBegin == HPIXELS) return;
-
-    int strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
-    int strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+    int strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
+    int strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
     bool at = attached(sprite2);
@@ -792,11 +783,9 @@ Denise::drawSpritePair()
             RegChange &change = sprChanges[pair].elements[i];
             
             // Draw a chunk of pixels
-            drawSpritePair<sprite2>(strt, trigger,
-                                    strt1, strt2,
-                                    sprdata[sprite1], sprdata[sprite2],
-                                    sprdatb[sprite1], sprdatb[sprite2],
-                                    armed1, armed2, at);
+            drawSpritePair<pair>(strt, trigger,
+                                 strt1, strt2,
+                                 armed1, armed2, at);
             strt = trigger;
             
             // Apply the recorded register change
@@ -849,142 +838,60 @@ Denise::drawSpritePair()
     }
     
     // Draw until the end of the line
-    drawSpritePair<sprite2>(strt, sizeof(mBuffer) - 1,
-                            strt1, strt2,
-                            sprdata[sprite1], sprdata[sprite2],
-                            sprdatb[sprite1], sprdatb[sprite2],
-                            armed1, armed2, at);
+    drawSpritePair<pair>(strt, sizeof(mBuffer) - 1,
+                         strt1, strt2,
+                         armed1, armed2, at);
     
     sprChanges[pair].clear();
 }
 
-template <int x> void
-Denise::drawSpritePairDeprecated()
-{
-    assert(x >= 0 && x <= 7);
-    assert(IS_ODD(x));
-
-    // Check for quick exit
-    if (spriteClipBegin == HPIXELS) return;
-
-    u16 data1 = initialSprdata[x-1];
-    u16 data2 = initialSprdata[x];
-    u16 datb1 = initialSprdatb[x-1];
-    u16 datb2 = initialSprdatb[x];
-    int sprpos1 = initialSprpos[x-1];
-    int sprpos2 = initialSprpos[x];
-    int sprctl1 = initialSprctl[x-1];
-    int sprctl2 = initialSprctl[x];
-    int strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
-    int strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-    u8 arm = initialArmed;
-    bool armed1 = GET_BIT(arm, x-1);
-    bool armed2 = GET_BIT(arm, x);
-    bool at = attached(x);
-    int strt = 0;
-
-    // Iterate over all recorded register changes
-    if (!sprChangesDeprecated.isEmpty()) {
-
-        for (int i = sprChangesDeprecated.begin(); i != sprChangesDeprecated.end(); i = sprChangesDeprecated.next(i)) {
-
-            Cycle trigger = sprChangesDeprecated.keys[i];
-            RegChange &change = sprChangesDeprecated.elements[i];
-
-            // Draw a chunk of pixels
-            drawSpritePair<x>(strt, trigger,
-                              strt1, strt2,
-                              data1, data2, datb1, datb2,
-                              armed1,armed2, at);
-            strt = trigger;
-
-            // Apply the recorded register change
-            switch (change.addr) {
-
-                case REG_SPR0DATA+x-1:
-                    data1 = change.value;
-                    armed1 = true;
-                    break;
-                case REG_SPR0DATA+x:
-                    data2 = change.value;
-                    armed2 = true;
-                    break;
-                case REG_SPR0DATB+x-1:
-                    datb1 = change.value;
-                    break;
-                case REG_SPR0DATB+x:
-                    datb2 = change.value;
-                    break;
-                case REG_SPR0POS+x-1:
-                    sprpos1 = change.value;
-                    strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
-                    break;
-                case REG_SPR0POS+x:
-                    sprpos2 = change.value;
-                    strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-                    break;
-                case REG_SPR0CTL+x-1:
-                    sprctl1 = change.value;
-                    strt1 = 2 + 2 * sprhpos(sprpos1, sprctl1);
-                    armed1 = false;
-                    break;
-                case REG_SPR0CTL+x:
-                    sprctl2 = change.value;
-                    strt2 = 2 + 2 * sprhpos(sprpos2, sprctl2);
-                    at = GET_BIT(sprctl2, 7);
-                    armed2 = false;
-                    break;
-            }
-        }
-    }
-
-    // Draw until the end of the line
-    drawSpritePair<x>(strt, sizeof(mBuffer) - 1,
-                      strt1, strt2,
-                      data1, data2, datb1, datb2,
-                      armed1, armed2, at);
-}
-
-template <int x> void
+template <unsigned pair> void
 Denise::drawSpritePair(int hstrt, int hstop,
                        int strt1, int strt2,
-                       u16 data1, u16 data2,
-                       u16 datb1, u16 datb2,
                        bool armed1, bool armed2, bool at)
 {
+    assert(pair < 4);
+    
+    const unsigned sprite1 = 2 * pair;
+    const unsigned sprite2 = 2 * pair + 1;
+
+    assert(at == attached(sprite2));
+
     assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
     assert(hstop >= 0 && hstop <= sizeof(mBuffer));
 
     for (int hpos = hstrt; hpos < hstop; hpos += 2) {
 
         if (hpos == strt1 && armed1) {
-            ssra[x-1] = data1;
-            ssrb[x-1] = datb1;
+            ssra[sprite1] = sprdata[sprite1];
+            ssrb[sprite1] = sprdatb[sprite1];
         }
         if (hpos == strt2 && armed2) {
-            ssra[x] = data2;
-            ssrb[x] = datb2;
+            ssra[sprite2] = sprdata[sprite2];
+            ssrb[sprite2] = sprdatb[sprite2];
         }
 
-        if (ssra[x-1] | ssrb[x-1] | ssra[x] | ssrb[x]) {
+        if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
+            
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
                 if (at) {
-                    drawAttachedSpritePixelPair<x>(hpos);
+                    drawAttachedSpritePixelPair<sprite2>(hpos);
                 } else {
-                    drawSpritePixel<x-1>(hpos);
-                    drawSpritePixel<x>(hpos);
+                    drawSpritePixel<sprite1>(hpos);
+                    drawSpritePixel<sprite2>(hpos);
                 }
             }
-            ssra[x-1] <<= 1;
-            ssrb[x-1] <<= 1;
-            ssra[x] <<= 1;
-            ssrb[x] <<= 1;
+            
+            ssra[sprite1] <<= 1;
+            ssrb[sprite1] <<= 1;
+            ssra[sprite2] <<= 1;
+            ssrb[sprite2] <<= 1;
         }
     }
 
     // Perform collision checks (if enabled)
-    if (config.clxSprSpr) checkS2SCollisions<x>(strt1, strt1 + 31);
-    if (config.clxSprPlf) checkS2PCollisions<x>(strt1, strt1 + 31);
+    if (config.clxSprSpr) checkS2SCollisions<2 * pair + 1>(strt1, strt1 + 31);
+    if (config.clxSprPlf) checkS2PCollisions<2 * pair + 1>(strt1, strt1 + 31);
 }
 
 template <int x> void

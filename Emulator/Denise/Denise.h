@@ -109,10 +109,6 @@ public:
     // Ringbuffer recording control register changes
     RegChangeRecorder<128> conChanges;
 
-    // Ringbuffer recording sprite register changes
-    // DEPRECATED. WILL BE REPLACED BY sprChanges aray
-    RegChangeRecorder<128> sprChangesDeprecated;
-
     // Ringbuffers recording sprite register changes (one for each sprite pair)
     RegChangeRecorder<128> sprChanges[4];
 
@@ -333,7 +329,6 @@ public:
         & pixelOffsetOdd
         & pixelOffsetEven
         & conChanges
-        & sprChangesDeprecated
         & sprChanges
 
         & sprpos
@@ -562,12 +557,9 @@ public:
 
     // Draws an sprite pair. Called by drawSprites()
     template <unsigned pair> void drawSpritePair();
-    template <int x> void drawSpritePairDeprecated();
-    template <int x> void drawSpritePair(int hstrt, int hstop,
-                                         int strt1, int strt2,
-                                         u16 data1, u16 data2,
-                                         u16 datb1, u16 datb2,
-                                         bool armed1, bool armed2, bool at);
+    template <unsigned pair> void drawSpritePair(int hstrt, int hstop,
+                                                 int strt1, int strt2,
+                                                 bool armed1, bool armed2, bool at);
     
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);
