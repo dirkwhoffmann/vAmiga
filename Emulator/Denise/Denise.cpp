@@ -295,11 +295,15 @@ Denise::pokeSPRxPOS(u16 value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
-    sprpos[x] = value;
+    // Determine the sprite pair this sprite belongs to
+    const int pair = x / 2;
+
+    // sprpos[x] = value;
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges.insert(pos, RegChange { REG_SPR0POS + x, value } );
+    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0POS + x, value } );
+    sprChanges[pair].insert(pos, RegChange { REG_SPR0POS + x, value } );
 }
 
 template <int x> void
@@ -311,17 +315,21 @@ Denise::pokeSPRxCTL(u16 value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
 
-    sprctl[x] = value;
+    // Determine the sprite pair this sprite belongs to
+    const int pair = x / 2;
+
+    // sprctl[x] = value;
 
     // Save the attach bit
-    REPLACE_BIT(attach, x, GET_BIT(value, 7));
+    // REPLACE_BIT(attach, x, GET_BIT(value, 7));
     
     // Disarm the sprite
     CLR_BIT(armed, x);
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges.insert(pos, RegChange { REG_SPR0CTL + x, value } );
+    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0CTL + x, value } );
+    sprChanges[pair].insert(pos, RegChange { REG_SPR0CTL + x, value } );
 }
 
 template <int x> void
@@ -330,7 +338,10 @@ Denise::pokeSPRxDATA(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
-    sprdata[x] = value;
+    // Determine the sprite pair this sprite belongs to
+     const int pair = x / 2;
+    
+    // sprdata[x] = value;
 
     // Arm the sprite
     SET_BIT(armed, x);
@@ -338,7 +349,8 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges.insert(pos, RegChange { REG_SPR0DATA + x, value } );
+    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0DATA + x, value } );
+    sprChanges[pair].insert(pos, RegChange { REG_SPR0DATA + x, value } );
 }
 
 template <int x> void
@@ -347,11 +359,15 @@ Denise::pokeSPRxDATB(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
-    sprdatb[x] = value;
+    // Determine the sprite pair this sprite belongs to
+    const int pair = x / 2;
+    
+    // sprdatb[x] = value;
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges.insert(pos, RegChange { REG_SPR0DATB + x, value });
+    sprChangesDeprecated.insert(pos, RegChange { REG_SPR0DATB + x, value });
+    sprChanges[pair].insert(pos, RegChange { REG_SPR0DATB + x, value });
 }
 
 template <PokeSource s, int xx> void
@@ -367,14 +383,6 @@ Denise::pokeCOLORxx(u16 value)
     
     // Record the color change
     pixelEngine.colChanges.insert(4 * pos, RegChange { reg, value } );
-    
-    /*
-    if (s == POKE_COPPER || agnus.pos.h == 0) {
-        pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { reg, value } );
-    } else {
-        pixelEngine.colChanges.insert(4 * (agnus.pos.h - 1), RegChange { reg, value } );
-    }
-    */
 }
 
 bool
@@ -383,7 +391,7 @@ Denise::attached(int x) {
     assert(x >= 1 && x <= 7);
     assert(IS_ODD(x));
 
-    return GET_BIT(attach,x);
+    return GET_BIT(attach, x);
 }
 
 bool
@@ -741,27 +749,117 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    if (wasArmed && config.emulateSprites) {
-
-        if (wasArmed & 0b11000000) drawSpritePair<7>();
-        if (wasArmed & 0b00110000) drawSpritePair<5>();
-        if (wasArmed & 0b00001100) drawSpritePair<3>();
-        if (wasArmed & 0b00000011) drawSpritePair<1>();
-        
-        if (amiga.getDebugMode()) {
-
-            // Record sprite data (shown by the debugger)
-            for (int i = 0; i < 8; i++) {
-                if (GET_BIT(wasArmed, i)) recordSpriteData(i);
-            }
+    
+    if (!sprChanges[3].isEmpty()) drawSpritePair<3>();
+    if (!sprChanges[2].isEmpty()) drawSpritePair<2>();
+    if (!sprChanges[1].isEmpty()) drawSpritePair<1>();
+    if (!sprChanges[0].isEmpty()) drawSpritePair<0>();
+    
+    // Record sprite data in debug mode
+    if (amiga.getDebugMode()) {
+        for (int i = 0; i < 8; i++) {
+            if (GET_BIT(wasArmed, i)) recordSpriteData(i);
         }
     }
 
-    sprChanges.clear();
+    sprChangesDeprecated.clear();
+}
+
+template <unsigned pair> void
+Denise::drawSpritePair()
+{
+    assert(pair < 4);
+
+    const unsigned sprite1 = 2 * pair;
+    const unsigned sprite2 = 2 * pair + 1;
+
+    // Check for quick exit
+    // if (spriteClipBegin == HPIXELS) return;
+
+    int strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
+    int strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+    bool armed1 = GET_BIT(armed, sprite1);
+    bool armed2 = GET_BIT(armed, sprite2);
+    bool at = attached(sprite2);
+    int strt = 0;
+    
+    // Iterate over all recorded register changes
+    if (!sprChanges[pair].isEmpty()) {
+        
+        for (int i = sprChanges[pair].begin(); i != sprChanges[pair].end(); i = sprChanges[pair].next(i)) {
+            
+            Cycle trigger = sprChanges[pair].keys[i];
+            RegChange &change = sprChanges[pair].elements[i];
+            
+            // Draw a chunk of pixels
+            drawSpritePair<sprite2>(strt, trigger,
+                                    strt1, strt2,
+                                    sprdata[sprite1], sprdata[sprite2],
+                                    sprdatb[sprite1], sprdatb[sprite2],
+                                    armed1, armed2, at);
+            strt = trigger;
+            
+            // Apply the recorded register change
+            switch (change.addr) {
+                    
+                case REG_SPR0DATA + sprite1:
+                    sprdata[sprite1] = change.value;
+                    armed1 = true;
+                    break;
+                case REG_SPR0DATA + sprite2:
+                    sprdata[sprite2] = change.value;
+                    armed2 = true;
+                    break;
+                case REG_SPR0DATB + sprite1:
+                    sprdatb[sprite1] = change.value;
+                    break;
+                case REG_SPR0DATB + sprite2:
+                    sprdatb[sprite2] = change.value;
+                    break;
+                case REG_SPR0POS + sprite1:
+                    sprpos[sprite1] = change.value;
+                    strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
+                    break;
+                case REG_SPR0POS + sprite2:
+                    sprpos[sprite2] = change.value;
+                    strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+                    break;
+                case REG_SPR0CTL + sprite1:
+                    sprctl[sprite1] = change.value;
+                    strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
+                    armed1 = false;
+                    break;
+                case REG_SPR0CTL + sprite2:
+                    sprctl[sprite2] = change.value;
+                    strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+                    armed2 = false;
+                    if (GET_BIT(change.value, 7)) {
+                        SET_BIT(attach, sprite2);
+                        at = true;
+                    } else {
+                        CLR_BIT(attach, sprite2);
+                        at = false;
+                    }
+                    break;
+
+                default:
+                    assert(false);
+            }
+        }
+    }
+    
+    // Draw until the end of the line
+    drawSpritePair<sprite2>(strt, sizeof(mBuffer) - 1,
+                            strt1, strt2,
+                            sprdata[sprite1], sprdata[sprite2],
+                            sprdatb[sprite1], sprdatb[sprite2],
+                            armed1, armed2, at);
+    
+    sprChanges[pair].clear();
 }
 
 template <int x> void
-Denise::drawSpritePair()
+Denise::drawSpritePairDeprecated()
 {
     assert(x >= 0 && x <= 7);
     assert(IS_ODD(x));
@@ -786,12 +884,12 @@ Denise::drawSpritePair()
     int strt = 0;
 
     // Iterate over all recorded register changes
-    if (!sprChanges.isEmpty()) {
+    if (!sprChangesDeprecated.isEmpty()) {
 
-        for (int i = sprChanges.begin(); i != sprChanges.end(); i = sprChanges.next(i)) {
+        for (int i = sprChangesDeprecated.begin(); i != sprChangesDeprecated.end(); i = sprChangesDeprecated.next(i)) {
 
-            Cycle trigger = sprChanges.keys[i];
-            RegChange &change = sprChanges.elements[i];
+            Cycle trigger = sprChangesDeprecated.keys[i];
+            RegChange &change = sprChangesDeprecated.elements[i];
 
             // Draw a chunk of pixels
             drawSpritePair<x>(strt, trigger,

@@ -110,7 +110,11 @@ public:
     RegChangeRecorder<128> conChanges;
 
     // Ringbuffer recording sprite register changes
-    RegChangeRecorder<128> sprChanges;
+    // DEPRECATED. WILL BE REPLACED BY sprChanges aray
+    RegChangeRecorder<128> sprChangesDeprecated;
+
+    // Ringbuffers recording sprite register changes (one for each sprite pair)
+    RegChangeRecorder<128> sprChanges[4];
 
 
     //
@@ -131,6 +135,7 @@ public:
     u16 ssrb[8];
     
     // Attach control bits of all 8 sprites.
+    // DEPRECATED. GET THE BIT FROM SPRxCTL
     u8 attach;
 
     /* Indicates which sprites are curently armed.
@@ -328,6 +333,7 @@ public:
         & pixelOffsetOdd
         & pixelOffsetEven
         & conChanges
+        & sprChangesDeprecated
         & sprChanges
 
         & sprpos
@@ -551,17 +557,18 @@ private:
 
 public:
 
-    // Draws all armed sprites. Called at the end of a rasterline
+    // Draws all sprites. Called at the end of a rasterline
     void drawSprites();
 
-    // Draws an armed sprite pair. Called by drawSprites()
-    template <int x> void drawSpritePair();
+    // Draws an sprite pair. Called by drawSprites()
+    template <unsigned pair> void drawSpritePair();
+    template <int x> void drawSpritePairDeprecated();
     template <int x> void drawSpritePair(int hstrt, int hstop,
                                          int strt1, int strt2,
                                          u16 data1, u16 data2,
                                          u16 datb1, u16 datb2,
                                          bool armed1, bool armed2, bool at);
-
+    
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);
