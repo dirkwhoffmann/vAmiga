@@ -352,9 +352,6 @@ Denise::pokeSPRxDATB(u16 value)
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges.insert(pos, RegChange { REG_SPR0DATB + x, value });
-
-    // Record sprite data in debug mode
-    if (amiga.getDebugMode()) recordSpriteData(x);
 }
 
 template <PokeSource s, int xx> void
@@ -750,6 +747,14 @@ Denise::drawSprites()
         if (wasArmed & 0b00110000) drawSpritePair<5>();
         if (wasArmed & 0b00001100) drawSpritePair<3>();
         if (wasArmed & 0b00000011) drawSpritePair<1>();
+        
+        if (amiga.getDebugMode()) {
+
+            // Record sprite data (shown by the debugger)
+            for (int i = 0; i < 8; i++) {
+                if (GET_BIT(wasArmed, i)) recordSpriteData(i);
+            }
+        }
     }
 
     sprChanges.clear();

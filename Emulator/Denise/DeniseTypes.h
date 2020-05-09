@@ -94,6 +94,7 @@ typedef struct
     DeniseRevision revision;
 
     // Turns sprite emulation on or off (DEPRECATED)
+    // Replace by hiddenSprites
     bool emulateSprites;
 
     // Hides certain graphics layers

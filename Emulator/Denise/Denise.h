@@ -122,6 +122,7 @@ public:
     u16 sprctl[8];
 
     // The position and control registers at cycle 0 in the current rasterline
+    // DEPRECATED
     u16 initialSprpos[8];
     u16 initialSprctl[8];
 
@@ -490,7 +491,6 @@ public:
     static i16 sprhpos(u16 sprpos, u16 sprctl) {
         return ((sprpos & 0xFF) << 1) | (sprctl & 0x01);
     }
-    template <int x> i16 sprhpos() { return sprhpos(sprpos[x], sprctl[x]); }
 
     // SPRxDATA: $144, $14C ... $174, $17C (w)
     // SPRxDATB: $146, $14E ... $176, $17E (w)
