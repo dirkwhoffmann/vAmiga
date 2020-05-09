@@ -130,10 +130,6 @@ public:
     u16 ssra[8];
     u16 ssrb[8];
     
-    // Attach control bits of all 8 sprites.
-    // DEPRECATED. GET THE BIT FROM SPRxCTL
-    u8 attach;
-
     /* Indicates which sprites are curently armed.
      * An armed sprite is a sprite that will be drawn in this line.
      */
@@ -333,7 +329,6 @@ public:
         & sprctl
         & ssra
         & ssrb
-        & attach
         & armed
         & wasArmed
         & initialArmed
@@ -500,9 +495,6 @@ public:
     //
     // Handling sprites
     //
-
-    // Returns true if sprite x is attached to sprite x - 1
-    bool attached(int x);
 
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(int hpos);

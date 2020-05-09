@@ -362,15 +362,6 @@ Denise::pokeCOLORxx(u16 value)
 }
 
 bool
-Denise::attached(int x) {
-
-    assert(x >= 1 && x <= 7);
-    assert(IS_ODD(x));
-
-    return GET_BIT(attach, x);
-}
-
-bool
 Denise::spritePixelIsVisible(int hpos)
 {
     u16 z = zBuffer[hpos];
@@ -822,7 +813,6 @@ Denise::drawSpritePair()
                     sprctl[sprite2] = change.value;
                     strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
                     armed2 = false;
-                    REPLACE_BIT(attach, sprite2, GET_BIT(change.value, 7));
                     break;
 
                 default:
@@ -887,7 +877,6 @@ Denise::replaySpriteRegChanges()
                 
             case REG_SPR0CTL + sprite2:
                 sprctl[sprite2] = change.value;
-                REPLACE_BIT(attach, sprite2, GET_BIT(change.value, 7));
                 break;
                 
             default:
@@ -1306,7 +1295,7 @@ Denise::recordSpriteData(unsigned nr)
         spriteInfo[nr].hstrt = sprhpos(sprpos[nr], sprctl[nr]);
         spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
-        spriteInfo[nr].attach = IS_ODD(nr) ? attached(nr) : 0;
+        spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(sprctl[nr], 7) : 0;
         
         for (int i = 0; i < 16; i++) {
             spriteInfo[nr].colors[i] = pixelEngine.getColor(i + 16);
