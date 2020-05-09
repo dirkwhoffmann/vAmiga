@@ -559,7 +559,7 @@ public:
     template <unsigned pair> void drawSpritePair();
     template <unsigned pair> void drawSpritePair(int hstrt, int hstop,
                                                  int strt1, int strt2,
-                                                 bool armed1, bool armed2, bool at);
+                                                 bool armed1, bool armed2);
     
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);

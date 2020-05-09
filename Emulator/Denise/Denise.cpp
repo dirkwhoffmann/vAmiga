@@ -268,12 +268,15 @@ Denise::peekCLXDAT()
 {
     u16 result = clxdat | 0x8000;
     clxdat = 0;
+    
+    debug(CLX_DEBUG, "peekCLXDAT() = %x\n", result);
     return result;
 }
 
 void
 Denise::pokeCLXCON(u16 value)
 {
+    debug(CLX_DEBUG, "pokeCLXCON(%x)\n", value);
     clxcon = value;
 }
 
@@ -771,21 +774,21 @@ Denise::drawSpritePair()
     int strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
-    bool at = attached(sprite2);
     int strt = 0;
     
     // Iterate over all recorded register changes
     if (!sprChanges[pair].isEmpty()) {
         
-        for (int i = sprChanges[pair].begin(); i != sprChanges[pair].end(); i = sprChanges[pair].next(i)) {
+        int begin = sprChanges[pair].begin();
+        int end = sprChanges[pair].end();
+        
+        for (int i = begin; i != end; i = sprChanges[pair].next(i)) {
             
             Cycle trigger = sprChanges[pair].keys[i];
             RegChange &change = sprChanges[pair].elements[i];
             
             // Draw a chunk of pixels
-            drawSpritePair<pair>(strt, trigger,
-                                 strt1, strt2,
-                                 armed1, armed2, at);
+            drawSpritePair<pair>(strt, trigger, strt1, strt2, armed1, armed2);
             strt = trigger;
             
             // Apply the recorded register change
@@ -795,40 +798,48 @@ Denise::drawSpritePair()
                     sprdata[sprite1] = change.value;
                     armed1 = true;
                     break;
+                    
                 case REG_SPR0DATA + sprite2:
                     sprdata[sprite2] = change.value;
                     armed2 = true;
                     break;
+                    
                 case REG_SPR0DATB + sprite1:
                     sprdatb[sprite1] = change.value;
                     break;
+                    
                 case REG_SPR0DATB + sprite2:
                     sprdatb[sprite2] = change.value;
                     break;
+                    
                 case REG_SPR0POS + sprite1:
                     sprpos[sprite1] = change.value;
-                    strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
+                    strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
                     break;
+                    
                 case REG_SPR0POS + sprite2:
                     sprpos[sprite2] = change.value;
-                    strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+                    strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
                     break;
+                    
                 case REG_SPR0CTL + sprite1:
                     sprctl[sprite1] = change.value;
-                    strt1 = 2 + 2 * sprhpos(sprpos[sprite1], sprctl[sprite1]);
+                    strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
                     armed1 = false;
                     break;
+                    
                 case REG_SPR0CTL + sprite2:
                     sprctl[sprite2] = change.value;
-                    strt2 = 2 + 2 * sprhpos(sprpos[sprite2], sprctl[sprite2]);
+                    strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
                     armed2 = false;
+                    REPLACE_BIT(attach, sprite2, GET_BIT(change.value, 7));
+                    /*
                     if (GET_BIT(change.value, 7)) {
                         SET_BIT(attach, sprite2);
-                        at = true;
                     } else {
                         CLR_BIT(attach, sprite2);
-                        at = false;
                     }
+                    */
                     break;
 
                 default:
@@ -840,22 +851,18 @@ Denise::drawSpritePair()
     // Draw until the end of the line
     drawSpritePair<pair>(strt, sizeof(mBuffer) - 1,
                          strt1, strt2,
-                         armed1, armed2, at);
+                         armed1, armed2);
     
     sprChanges[pair].clear();
 }
 
 template <unsigned pair> void
-Denise::drawSpritePair(int hstrt, int hstop,
-                       int strt1, int strt2,
-                       bool armed1, bool armed2, bool at)
+Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, bool armed2)
 {
     assert(pair < 4);
     
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
-
-    assert(at == attached(sprite2));
 
     assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
     assert(hstop >= 0 && hstop <= sizeof(mBuffer));
@@ -874,7 +881,8 @@ Denise::drawSpritePair(int hstrt, int hstop,
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
             
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                if (at) {
+                
+                if (attached(sprite2)) {
                     drawAttachedSpritePixelPair<sprite2>(hpos);
                 } else {
                     drawSpritePixel<sprite1>(hpos);
@@ -890,8 +898,14 @@ Denise::drawSpritePair(int hstrt, int hstop,
     }
 
     // Perform collision checks (if enabled)
-    if (config.clxSprSpr) checkS2SCollisions<2 * pair + 1>(strt1, strt1 + 31);
-    if (config.clxSprPlf) checkS2PCollisions<2 * pair + 1>(strt1, strt1 + 31);
+    if (config.clxSprSpr) {
+        checkS2SCollisions<2 * pair>(strt1, strt1 + 31);
+        checkS2SCollisions<2 * pair + 1>(strt2, strt2 + 31);
+    }
+    if (config.clxSprPlf) {
+        checkS2PCollisions<2 * pair>(strt1, strt1 + 31);
+        checkS2PCollisions<2 * pair + 1>(strt2, strt2 + 31);
+    }
 }
 
 template <int x> void
@@ -1019,7 +1033,7 @@ Denise::checkS2SCollisions(int start, int end)
     for (int pos = end; pos >= start; pos -= 2) {
 
         u16 z = zBuffer[pos];
-
+        
         // Skip if there are no other sprites at this pixel coordinate
         if (!(z & (Z_SP01234567 ^ Z_SP[x]))) continue;
 
@@ -1034,7 +1048,7 @@ Denise::checkS2SCollisions(int start, int end)
         if ((z & comp01) && (z & comp45)) SET_BIT(clxdat, 10);
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
 
-        if (CLX_DEBUG == 1) {
+        if (CLX_DEBUG) {
             if ((z & comp45) && (z & comp67)) debug("Collision between 45 and 67\n");
             if ((z & comp23) && (z & comp67)) debug("Collision between 23 and 67\n");
             if ((z & comp23) && (z & comp45)) debug("Collision between 23 and 45\n");
@@ -1048,6 +1062,8 @@ Denise::checkS2SCollisions(int start, int end)
 template <int x> void
 Denise::checkS2PCollisions(int start, int end)
 {
+    debug(CLX_DEBUG, "checkS2PCollisions<%d>(%d, %d)\n", x, start, end);
+    
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !getENSP<x>()) return;
 
@@ -1090,7 +1106,7 @@ Denise::checkS2PCollisions(int start, int end)
 
         } else {
             // There is a hardware oddity in single-playfield mode. If PF2
-            // doesn't match, playfield 1 doesn't match, too. No matter what.
+            // doesn't match, PF1 doesn't match either. No matter what.
             // See http://eab.abime.net/showpost.php?p=965074&postcount=2
             if (zBuffer[pos] & Z_DUAL) continue;
         }
