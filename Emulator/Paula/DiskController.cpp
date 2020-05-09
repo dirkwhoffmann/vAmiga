@@ -24,14 +24,6 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-DiskController::_finalize()
-{
-    // Finish any ongoing disk change activity
-    debug("Checking for ongoing disk change\n");
-    serviceDiskChangeEvent();
-}
-
-void
 DiskController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS

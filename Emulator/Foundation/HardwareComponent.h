@@ -78,14 +78,6 @@ public:
     void initialize();
     virtual void _initialize() { };
     
-    /* Terminates ongoing activites in the component and it's sub-component.
-     * This function is called when the Amiga top level object is going to be
-     * reset. It gives each component the chance to clean up its current state
-     * before the actual reset happens.
-     */
-    void finalize();
-    virtual void _finalize() { };
-    
     /* There are several functions for querying and changing state:
      *
      *          -----------------------------------------------

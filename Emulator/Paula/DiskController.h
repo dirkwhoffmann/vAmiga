@@ -141,7 +141,6 @@ public:
     
 private:
     
-    void _finalize() override;
     void _reset(bool hard) override;
     void _ping() override;
     void _inspect() override;

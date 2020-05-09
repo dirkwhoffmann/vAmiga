@@ -575,8 +575,8 @@ Amiga::reset(bool hard)
 
     assert(!isRunning());
     
-    // Ask all components to finish ongoing activities
-    finalize();
+    // If a disk change is in progress, finish it
+    paula.diskController.serviceDiskChangeEvent();
     
     // Execute the standard reset routine
     HardwareComponent::reset(hard);
