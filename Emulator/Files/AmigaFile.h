@@ -117,16 +117,13 @@ public:
     virtual bool fileHasSameType(const char *path) { return false; }
     
     /* Deserializes this object from a memory buffer.
-     *   - buffer   The address of a binary representation in memory.
-     *   - length   The size of the binary representation.
      * This function uses bufferHasSameType() to verify that the buffer
      * contains a compatible binary representation.
      */
     virtual bool readFromBuffer(const u8 *buffer, size_t length);
     
     /* Deserializes this object from a file.
-     *   - path     The name of the file containing the binary representation.
-     * This function uses fileHasSameType() to verify that the buffer
+     * This function uses fileHasSameType() to verify that the file
      * contains a compatible binary representation.
      * This function requires no custom implementation. It first reads in the
      * file contents in memory and invokes readFromBuffer afterwards.
@@ -142,7 +139,6 @@ public:
     /* Writes the file contents to a file.
      * This function requires no custom implementation. It invokes writeToBuffer
      * first and writes the data to disk afterwards.
-     *   - filename   The name of a file to be written.
      */
     bool writeToFile(const char *filename);
 };

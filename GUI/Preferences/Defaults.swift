@@ -439,34 +439,53 @@ extension UserDefaults {
 
 extension Keys {
     
-    static let rom               = "VAMIGA_ROM_RomFile"
-    static let ext               = "VAMIGA_ROM_ExtFile"
     static let extStart          = "VAMIGA_ROM_ExtStart"
 }
 
 struct RomDefaults {
     
-    let rom: URL
-    let ext: URL
     let extStart: Int
     
     static let std = RomDefaults.init(
         
-        rom: URL(fileURLWithPath: ""),
-        ext: URL(fileURLWithPath: ""),
         extStart: 0xE0
     )
 }
 
 extension UserDefaults {
     
+    static func romUrl(name: String) -> URL? {
+        
+        let fm = FileManager.default
+        guard let support = fm.urls(for: .applicationSupportDirectory,
+                                    in: .userDomainMask).first else {
+                                        return nil
+        }
+        
+        let folder = support.appendingPathComponent("vAmiga/Roms")
+        var isDirectory: ObjCBool = false
+        let folderExists = fm.fileExists(atPath: folder.path,
+                                         isDirectory: &isDirectory)
+        
+        if !folderExists || !isDirectory.boolValue {
+            
+            do {
+                try fm.createDirectory(at: folder,
+                                       withIntermediateDirectories: true,
+                                       attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+        
+        return folder.appendingPathComponent(name)
+    }
+    
     static func registerRomUserDefaults() {
         
         let defaults = RomDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.rom: defaults.rom,
-            Keys.ext: defaults.ext,
             Keys.extStart: defaults.extStart
         ]
         
@@ -478,11 +497,27 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.rom,
-                     Keys.ext,
-                     Keys.extStart ]
+        let keys = [ Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
+        
+        // Delete previously saved Rom files
+        let fm = FileManager.default
+        
+        if let wom = romUrl(name: "wom.bin") {
+            track("Deleting Wom")
+            try? fm.removeItem(at: wom)
+        }
+        
+        if let rom = romUrl(name: "rom.bin") {
+            track("Deleting Rom")
+            try? fm.removeItem(at: rom)
+        }
+        
+        if let ext = romUrl(name: "ext.bin") {
+            track("Deleting Ext")
+            try? fm.removeItem(at: ext)
+        }
     }
 }
 

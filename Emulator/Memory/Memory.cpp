@@ -623,6 +623,33 @@ Memory::loadRom(AmigaFile *file, u8 *target, size_t length)
     }
 }
 
+bool
+Memory::saveRom(const char *path)
+{
+    if (rom == NULL) return false;
+
+    RomFile *file = RomFile::makeWithBuffer(rom, config.romSize);
+    return file && file->writeToFile(path);
+}
+
+bool
+Memory::saveWom(const char *path)
+{
+    if (wom == NULL) return false;
+    
+    RomFile *file = RomFile::makeWithBuffer(wom, config.womSize);
+    return file && file->writeToFile(path);
+}
+
+bool
+Memory::saveExt(const char *path)
+{
+    if (ext == NULL) return false;
+
+    RomFile *file = RomFile::makeWithBuffer(ext, config.extSize);
+    return file && file->writeToFile(path);
+}
+
 void
 Memory::updateMemSrcTable()
 {

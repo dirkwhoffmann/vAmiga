@@ -71,37 +71,4 @@ class ManagedArray<Element> {
         elements.swapAt(i, j)
         modified = true
     }
-    
-    /*
-    func save(to folder: URL) {
-        
-        if modified {
-            ManagedArray.delete(folder: folder)
-
-        }
-    }
-    
-    //
-    // Static functions
-    //
-    
-    static func contentsOf(folder: URL) -> [URL] {
-        
-        let fm = FileManager.default
-        do {
-            let contents = try fm.contentsOfDirectory(atPath: folder.path)
-            let urls = contents.map { return folder.appendingPathComponent($0) }
-            return urls
-        } catch {
-            return []
-        }
-    }
-    
-    static func delete(folder: URL) {
-        
-        let fm = FileManager.default
-        let urls = ManagedArray.contentsOf(folder: folder)
-        for url in urls { try? fm.removeItem(at: url) }
-    }
-    */
 }

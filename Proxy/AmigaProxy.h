@@ -274,6 +274,10 @@ struct AmigaFileWrapper;
 - (NSString *) extReleased;
 - (NSInteger) extStart;
 
+- (BOOL) saveWom:(NSURL *)url;
+- (BOOL) saveRom:(NSURL *)url;
+- (BOOL) saveExt:(NSURL *)url;
+
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
 - (NSInteger) spypeek8:(NSInteger)addr;

@@ -92,7 +92,7 @@ extension ConfigController {
 
     @IBAction func romDeleteAction(_ sender: NSButton!) {
 
-        config.romURL = URL(fileURLWithPath: "/")
+        // config.romURL = URL(fileURLWithPath: "/")
         amiga.mem.deleteRom()
         
         refresh()
@@ -102,7 +102,7 @@ extension ConfigController {
 
         track()
 
-        config.extURL = URL(fileURLWithPath: "/")
+        // config.extURL = URL(fileURLWithPath: "/")
         amiga.mem.deleteExt()
 
         refresh()
@@ -126,9 +126,7 @@ extension ConfigController {
         let arosRom = NSDataAsset(name: "aros-amiga-m68k-rom")?.data
         let arosExt = NSDataAsset(name: "aros-amiga-m68k-ext")?.data
 
-        config.romURL = URL(fileURLWithPath: "")
-        config.extURL = URL(fileURLWithPath: "")
-
+        // Install the Aros Roms
         amiga.mem.loadRom(fromBuffer: arosRom)
         amiga.mem.loadExt(fromBuffer: arosExt)
         config.extStart = 0xE0
@@ -138,6 +136,7 @@ extension ConfigController {
         let slow = amiga.getConfig(VA_SLOW_RAM)
         let fast = amiga.getConfig(VA_FAST_RAM)
         if chip + slow + fast < 1024*1024 { config.slowRam = 512 }
+        
         refresh()
     }
     

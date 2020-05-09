@@ -57,7 +57,7 @@ class DropView: NSImageView {
 
         guard let url = sender.url else { return false }
 
-        parent.parent.config.romURL = url
+        // parent.parent.config.romURL = url
         return amiga.mem.loadRom(fromFile: url)
     }
     

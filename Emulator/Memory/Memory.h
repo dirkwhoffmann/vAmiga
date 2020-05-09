@@ -363,12 +363,12 @@ public:
     bool hasWom() { return wom != NULL; }
     bool hasExt() { return ext != NULL; }
 
-    // Erases an installed ROM
+    // Erases an installed Rom
     void eraseRom() { assert(rom); memset(rom, 0, config.romSize); }
     void eraseWom() { assert(wom); memset(wom, 0, config.womSize); }
     void eraseExt() { assert(ext); memset(ext, 0, config.extSize); }
 
-    // Installs a new Boot Rom or Kickstart Rom
+    // Installs a Boot Rom or Kickstart Rom
     bool loadRom(RomFile *rom);
     bool loadRomFromBuffer(const u8 *buffer, size_t length);
     bool loadRomFromFile(const char *path);
@@ -376,11 +376,19 @@ public:
     bool loadExt(ExtFile *rom);
     bool loadExtFromBuffer(const u8 *buffer, size_t length);
     bool loadExtFromFile(const char *path);
-
+    
 private:
 
-    // Loads Rom data from a file.
+    // Loads Rom data from a file
+    // DEPRECATED: ADD copy method to AmigaFile and use that method
     void loadRom(AmigaFile *rom, u8 *target, size_t length);
+
+public:
+    
+    // Saves a Rom to disk
+    bool saveRom(const char *filename);
+    bool saveWom(const char *filename);
+    bool saveExt(const char *filename);
 
     
     //

@@ -19,8 +19,8 @@ class Configuration {
     // Rom settings
     //
     
-    var romURL: URL = RomDefaults.std.rom
-    var extURL: URL = RomDefaults.std.ext
+    // var romURL: URL = RomDefaults.std.rom
+    // var extURL: URL = RomDefaults.std.ext
     
     var extStart: Int {
         get { return amiga.getConfig(VA_EXT_START) }
@@ -315,19 +315,25 @@ class Configuration {
     //
     
     func loadRomUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
+
         amiga.suspend()
         
-        if let url = defaults.url(forKey: Keys.rom) {
-            romURL = url
-            amiga.mem.loadRom(fromFile: romURL)
+        if let wom = UserDefaults.romUrl(name: "wom.bin") {
+            track("Seeking Wom")
+            amiga.mem.loadRom(fromFile: wom)
         }
-        if let url = defaults.url(forKey: Keys.ext) {
-            extURL = url
-            amiga.mem.loadExt(fromFile: extURL)
+        
+        if let rom = UserDefaults.romUrl(name: "rom.bin") {
+            track("Seeking Rom")
+            amiga.mem.loadRom(fromFile: rom)
         }
+  
+        if let ext = UserDefaults.romUrl(name: "ext.bin") {
+            track("Seeking Ext")
+            amiga.mem.loadExt(fromFile: ext)
+        }
+        
+        let defaults = UserDefaults.standard
         extStart = defaults.integer(forKey: Keys.extStart)
 
         amiga.resume()
@@ -335,12 +341,29 @@ class Configuration {
     
     func saveRomUserDefaults() {
         
-        track()
+        let fm = FileManager.default
+        
+        amiga.suspend()
+                
+        if let wom = UserDefaults.romUrl(name: "wom.bin") {
+            track("Saving Wom")
+            try? fm.removeItem(at: wom)
+            amiga.mem.saveWom(wom)
+        }
+        
+        if let rom = UserDefaults.romUrl(name: "rom.bin") {
+            track("Saving Rom")
+            try? fm.removeItem(at: rom)
+            amiga.mem.saveRom(rom)
+        }
+        
+        if let ext = UserDefaults.romUrl(name: "ext.bin") {
+            track("Saving Ext")
+            try? fm.removeItem(at: ext)
+            amiga.mem.saveExt(ext)
+        }
         
         let defaults = UserDefaults.standard
-
-        defaults.set(romURL, forKey: Keys.rom)
-        defaults.set(extURL, forKey: Keys.ext)
         defaults.set(extStart, forKey: Keys.extStart)
     }
 

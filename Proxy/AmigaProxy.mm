@@ -360,6 +360,18 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->getExtStart(); 
 }
+- (BOOL) saveWom:(NSURL *)url
+{
+    return wrapper->mem->saveWom([[url path] UTF8String]);
+}
+- (BOOL) saveRom:(NSURL *)url
+{
+    return wrapper->mem->saveRom([[url path] UTF8String]);
+}
+- (BOOL) saveExt:(NSURL *)url
+{
+    return wrapper->mem->saveExt([[url path] UTF8String]);
+}
 - (MemorySource *) getMemSrcTable
 {
     return wrapper->mem->getMemSrcTable();

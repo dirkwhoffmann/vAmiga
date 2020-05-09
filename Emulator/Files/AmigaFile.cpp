@@ -196,37 +196,27 @@ AmigaFile::writeToBuffer(u8 *buffer)
 bool
 AmigaFile::writeToFile(const char *filename)
 {
+    assert (filename != NULL);
+
     bool success = false;
     u8 *data = NULL;
     FILE *file;
     size_t filesize;
     
-    // Determine file size
-    filesize = writeToBuffer(NULL);
-    if (filesize == 0)
-        return false;
+    // Determine the size of the file in bytes
+    if (!(filesize = writeToBuffer(NULL))) return false;
     
     // Open file
-    assert (filename != NULL);
-    if (!(file = fopen(filename, "w"))) {
-        goto exit;
-    }
+    if (!(file = fopen(filename, "w"))) goto exit;
     
-    // Allocate memory
-    if (!(data = new u8[filesize])) {
-        goto exit;
-    }
+    // Allocate a buffer
+    if (!(data = new u8[filesize])) goto exit;
     
-    // Write to buffer
-    if (!writeToBuffer(data)) {
-        goto exit;
-    }
+    // Write contents to the created buffer
+    if (!writeToBuffer(data)) goto exit;
     
-    // Write to file
-    for (unsigned i = 0; i < filesize; i++) {
-        fputc(data[i], file);
-    }
-    
+    // Write the buffer to a file
+    for (unsigned i = 0; i < filesize; i++) fputc(data[i], file);
     success = true;
     
 exit:
