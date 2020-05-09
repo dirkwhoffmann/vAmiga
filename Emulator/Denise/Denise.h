@@ -66,13 +66,9 @@ public:
     // The 6 bitplane data registers
     u16 bpldat[6];
     
-    // Sprite data registers (SPRxDATA, SPRxDATAB)
-    u16 sprdata[8];
-    u16 sprdatb[8];
-
     // Initial values of sprite data registers at cycle 0 in the current rasterline
-     u16 initialSprdata[8];
-     u16 initialSprdatb[8];
+    // u16 initialSprdata[8];
+    // u16 initialSprdatb[8];
 
     // Sprite collision registers
     u16 clxdat;
@@ -117,14 +113,18 @@ public:
     // Sprites
     //
 
+    // Sprite data registers (SPRxDATA, SPRxDATAB)
+    u16 sprdata[8];
+    u16 sprdatb[8];
+
     // The position and control registers of all 8 sprites
     u16 sprpos[8];
     u16 sprctl[8];
 
     // The position and control registers at cycle 0 in the current rasterline
     // DEPRECATED
-    u16 initialSprpos[8];
-    u16 initialSprctl[8];
+    // u16 initialSprpos[8];
+    // u16 initialSprctl[8];
 
     // The serial shift registers of all 8 sprites.
     u16 ssra[8];
@@ -317,10 +317,6 @@ public:
         & initialBplcon1
         & initialBplcon2
         & bpldat
-        & sprdata
-        & sprdatb
-        & initialSprdata
-        & initialSprdatb
         & clxdat
         & clxcon
         & shiftReg
@@ -331,10 +327,10 @@ public:
         & conChanges
         & sprChanges
 
+        & sprdata
+        & sprdatb
         & sprpos
         & sprctl
-        & initialSprpos
-        & initialSprctl
         & ssra
         & ssrb
         & attach
@@ -345,7 +341,6 @@ public:
         & spriteClipEnd
         & prio1
         & prio2;
-        // & prio12;
     }
 
     
@@ -560,7 +555,10 @@ public:
     template <unsigned pair> void drawSpritePair(int hstrt, int hstop,
                                                  int strt1, int strt2,
                                                  bool armed1, bool armed2);
-    
+
+    // Replays all recorded sprite register changes
+    template <unsigned pair> void replaySpriteRegChanges();
+
     // Draws a single sprite pixel
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);

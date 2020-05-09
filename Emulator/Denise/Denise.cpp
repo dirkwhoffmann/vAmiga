@@ -748,18 +748,31 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites()
 {
-    
-    if (!sprChanges[3].isEmpty()) drawSpritePair<3>();
-    if (!sprChanges[2].isEmpty()) drawSpritePair<2>();
-    if (!sprChanges[1].isEmpty()) drawSpritePair<1>();
-    if (!sprChanges[0].isEmpty()) drawSpritePair<0>();
-    
-    // Record sprite data in debug mode
-    if (amiga.getDebugMode()) {
-        for (int i = 0; i < 8; i++) {
-            if (GET_BIT(wasArmed, i)) recordSpriteData(i);
+    if (wasArmed) {
+        
+        if (wasArmed & 0b11000000) drawSpritePair<3>();
+        if (wasArmed & 0b00110000) drawSpritePair<2>();
+        if (wasArmed & 0b00001100) drawSpritePair<1>();
+        if (wasArmed & 0b00000011) drawSpritePair<0>();
+        
+        // Record sprite data in debug mode
+        if (amiga.getDebugMode()) {
+            for (int i = 0; i < 8; i++) {
+                if (GET_BIT(wasArmed, i)) recordSpriteData(i);
+            }
         }
     }
+    
+    /* If a sprite was armed, the code above has been executed which means
+     * that all recorded register changes have been applied and the relevant
+     * sprite registers are all up to date at this time. For unarmed sprites,
+     * however, the register change buffers may contain unprocessed entried.
+     * We replay those to get the sprite registers up to date.
+     */
+    if (!sprChanges[3].isEmpty()) replaySpriteRegChanges<3>();
+    if (!sprChanges[2].isEmpty()) replaySpriteRegChanges<2>();
+    if (!sprChanges[1].isEmpty()) replaySpriteRegChanges<1>();
+    if (!sprChanges[0].isEmpty()) replaySpriteRegChanges<0>();
 }
 
 template <unsigned pair> void
@@ -772,8 +785,8 @@ Denise::drawSpritePair()
 
     int strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
     int strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
-    bool armed1 = GET_BIT(armed, sprite1);
-    bool armed2 = GET_BIT(armed, sprite2);
+    bool armed1 = GET_BIT(initialArmed, sprite1);
+    bool armed2 = GET_BIT(initialArmed, sprite2);
     int strt = 0;
     
     // Iterate over all recorded register changes
@@ -833,13 +846,6 @@ Denise::drawSpritePair()
                     strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
                     armed2 = false;
                     REPLACE_BIT(attach, sprite2, GET_BIT(change.value, 7));
-                    /*
-                    if (GET_BIT(change.value, 7)) {
-                        SET_BIT(attach, sprite2);
-                    } else {
-                        CLR_BIT(attach, sprite2);
-                    }
-                    */
                     break;
 
                 default:
@@ -852,6 +858,65 @@ Denise::drawSpritePair()
     drawSpritePair<pair>(strt, sizeof(mBuffer) - 1,
                          strt1, strt2,
                          armed1, armed2);
+    
+    sprChanges[pair].clear();
+}
+
+template <unsigned pair> void
+Denise::replaySpriteRegChanges()
+{
+    assert(pair < 4);
+    
+    const unsigned sprite1 = 2 * pair;
+    const unsigned sprite2 = 2 * pair + 1;
+    
+    int begin = sprChanges[pair].begin();
+    int end = sprChanges[pair].end();
+    
+    for (int i = begin; i != end; i = sprChanges[pair].next(i)) {
+        
+        RegChange &change = sprChanges[pair].elements[i];
+        
+        // Apply the recorded register change
+        switch (change.addr) {
+                
+            case REG_SPR0DATA + sprite1:
+                sprdata[sprite1] = change.value;
+                break;
+                
+            case REG_SPR0DATA + sprite2:
+                sprdata[sprite2] = change.value;
+                break;
+                
+            case REG_SPR0DATB + sprite1:
+                sprdatb[sprite1] = change.value;
+                break;
+                
+            case REG_SPR0DATB + sprite2:
+                sprdatb[sprite2] = change.value;
+                break;
+                
+            case REG_SPR0POS + sprite1:
+                sprpos[sprite1] = change.value;
+                break;
+                
+            case REG_SPR0POS + sprite2:
+                sprpos[sprite2] = change.value;
+                break;
+                
+            case REG_SPR0CTL + sprite1:
+                sprctl[sprite1] = change.value;
+                break;
+                
+            case REG_SPR0CTL + sprite2:
+                sprctl[sprite2] = change.value;
+                REPLACE_BIT(attach, sprite2, GET_BIT(change.value, 7));
+                break;
+                
+            default:
+                assert(false);
+        }
+    }
     
     sprChanges[pair].clear();
 }
@@ -1179,12 +1244,6 @@ Denise::beginOfLine(int vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
-    for (int i = 0; i < 8; i++) {
-        initialSprpos[i] = sprpos[i];
-        initialSprctl[i] = sprctl[i];
-        initialSprdata[i] = sprdata[i];
-        initialSprdatb[i] = sprdatb[i];
-    }
     initialArmed = armed;
     wasArmed = armed;
 
