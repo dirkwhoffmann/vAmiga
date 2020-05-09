@@ -298,14 +298,9 @@ Denise::pokeSPRxPOS(u16 value)
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
 
-    // Determine the sprite pair this sprite belongs to
-    const int pair = x / 2;
-
-    // sprpos[x] = value;
-
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[pair].insert(pos, RegChange { REG_SPR0POS + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { REG_SPR0POS + x, value } );
 }
 
 template <int x> void
@@ -316,21 +311,13 @@ Denise::pokeSPRxCTL(u16 value)
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
-
-    // Determine the sprite pair this sprite belongs to
-    const int pair = x / 2;
-
-    // sprctl[x] = value;
-
-    // Save the attach bit
-    // REPLACE_BIT(attach, x, GET_BIT(value, 7));
     
     // Disarm the sprite
     CLR_BIT(armed, x);
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[pair].insert(pos, RegChange { REG_SPR0CTL + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { REG_SPR0CTL + x, value } );
 }
 
 template <int x> void
@@ -339,18 +326,13 @@ Denise::pokeSPRxDATA(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
-    // Determine the sprite pair this sprite belongs to
-     const int pair = x / 2;
-    
-    // sprdata[x] = value;
-
     // Arm the sprite
     SET_BIT(armed, x);
     SET_BIT(wasArmed, x);
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[pair].insert(pos, RegChange { REG_SPR0DATA + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { REG_SPR0DATA + x, value } );
 }
 
 template <int x> void
@@ -359,14 +341,9 @@ Denise::pokeSPRxDATB(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
-    // Determine the sprite pair this sprite belongs to
-    const int pair = x / 2;
-    
-    // sprdatb[x] = value;
-
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[pair].insert(pos, RegChange { REG_SPR0DATB + x, value });
+    sprChanges[x/2].insert(pos, RegChange { REG_SPR0DATB + x, value });
 }
 
 template <PokeSource s, int xx> void
@@ -932,6 +909,8 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
     assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
     assert(hstop >= 0 && hstop <= sizeof(mBuffer));
 
+    bool attached = GET_BIT(sprctl[sprite2], 7);
+
     for (int hpos = hstrt; hpos < hstop; hpos += 2) {
 
         if (hpos == strt1 && armed1) {
@@ -946,8 +925,8 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
         if (ssra[sprite1] | ssrb[sprite1] | ssra[sprite2] | ssrb[sprite2]) {
             
             if (hpos >= spriteClipBegin && hpos < spriteClipEnd) {
-                
-                if (attached(sprite2)) {
+                                
+                if (attached) {
                     drawAttachedSpritePixelPair<sprite2>(hpos);
                 } else {
                     drawSpritePixel<sprite1>(hpos);
