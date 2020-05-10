@@ -1701,9 +1701,6 @@ Agnus::vsyncHandler()
     joystick1.execute();
     joystick2.execute();
 
-    // Update statistics (DEPRECATED)
-    amiga.updateStats();
-
     // Update statistics
     updateStats();
     mem.updateStats();

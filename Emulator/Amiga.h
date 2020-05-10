@@ -54,9 +54,6 @@ class Amiga : public HardwareComponent {
     // Result of the latest inspection
     AmigaInfo info;
 
-    // Collected statistical information
-    AmigaStats stats;
-
 public:
 
     /* Inspection target
@@ -256,15 +253,6 @@ public:
 
     // Returns the result of the most recent call to inspect()
     AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-    // Returns the statistical information for the most recently finished frame
-    AmigaStats getStats();
-
-    // Updates the statistical information returned by getStats()
-    void updateStats();
-
-    // Clears all previously recorded statistical information
-    void clearStats();
 
     
     //

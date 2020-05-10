@@ -1469,10 +1469,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->amiga->getInfo();
 }
-- (AmigaStats) getStats
-{
-   return wrapper->amiga->getStats();
-}
 - (BOOL) isPoweredOn
 {
     return wrapper->amiga->isPoweredOn();

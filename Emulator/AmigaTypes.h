@@ -132,13 +132,4 @@ typedef struct
 }
 AmigaInfo;
 
-typedef struct
-{
-    MemoryStats mem;
-    AgnusStats agnus;
-    long frames;
-}
-AmigaStats;
-
 #endif
-

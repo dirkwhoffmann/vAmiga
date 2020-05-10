@@ -171,42 +171,6 @@ Amiga::getConfig()
     return config;
 }
 
-AmigaStats
-Amiga::getStats()
-{
-    AmigaStats result;
-
-    pthread_mutex_lock(&lock);
-
-    result = stats;
-    clearStats();
-
-    pthread_mutex_unlock(&lock);
-
-    return result;
-}
-
-void
-Amiga::updateStats()
-{
-    pthread_mutex_lock(&lock);
-
-    stats.mem = mem.getStats();
-    stats.agnus = agnus.getStats();
-    stats.frames++;
-
-    pthread_mutex_unlock(&lock);
-}
-
-void
-Amiga::clearStats()
-{
-    // debug("Amiga::clearStats\n");
-
-    memset(&stats, 0, sizeof(stats));
-    mem.clearStats();
-}
-
 bool
 Amiga::configure(ConfigOption option, long value)
 {
@@ -580,9 +544,6 @@ Amiga::reset(bool hard)
     
     // Execute the standard reset routine
     HardwareComponent::reset(hard);
-
-    // Discard all previously recorded stastical information
-    clearStats();
 
     // Inform the GUI
     putMessage(MSG_RESET);

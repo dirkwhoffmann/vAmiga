@@ -116,7 +116,6 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (AmigaInfo) getInfo;
-- (AmigaStats) getStats;
 
 - (BOOL) isPoweredOn;
 - (BOOL) isPoweredOff;
