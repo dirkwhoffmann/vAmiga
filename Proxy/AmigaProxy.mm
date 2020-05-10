@@ -1071,7 +1071,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (BOOL) motor
 {
-    return wrapper->drive->getMotor();
+    return wrapper->drive->motor();
 }
 - (NSInteger) cylinder
 {

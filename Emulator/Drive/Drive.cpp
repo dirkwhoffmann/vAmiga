@@ -45,8 +45,7 @@ Drive::_inspect()
 
     info.head = head;
     info.hasDisk = hasDisk();
-    assert(motorDeprecated == motor());
-    info.motor = motorDeprecated;
+    info.motor = motor();
 
     pthread_mutex_unlock(&lock);
 }
@@ -63,18 +62,24 @@ Drive::_dumpConfig()
 void
 Drive::_dump()
 {
-    msg("             Nr: %d\n", nr);
-    msg("       Id count: %d\n", idCount);
-    msg("         Id bit: %d\n", idBit);
-    msg("          Motor: %s\n", motorDeprecated ? "on" : "off");
-    msg("      dskchange: %d\n", dskchange);
-    msg("         dsklen: %X\n", dsklen);
-    msg("            prb: %X\n", prb);
-    msg("           Side: %d\n", head.side);
-    msg("      Cyclinder: %d\n", head.cylinder);
-    msg("         Offset: %d\n", head.offset);
-    msg("cylinderHistory: %X\n", cylinderHistory);
-    msg("           Disk: %s\n", disk ? "yes" : "no");
+    msg("                Nr: %d\n", nr);
+    msg("          Id count: %d\n", idCount);
+    msg("            Id bit: %d\n", idBit);
+    msg("      motorOnCycle: %s\n", motorOnCycle);
+    msg("     motorOffCycle: %s\n", motorOffCycle);
+    msg("           motor(): %s\n", motor() ? "on" : "off");
+    msg(" motorSpeedingUp(): %s\n", motorSpeedingUp() ? "yes" : "no");
+    msg("motorAtFullSpeed(): %s\n", motorAtFullSpeed() ? "yes" : "no");
+    msg("motorSlowingDown(): %s\n", motorSlowingDown() ? "yes" : "no");
+    msg("    motorStopped(): %s\n", motorStopped() ? "yes" : "no");
+    msg("         dskchange: %d\n", dskchange);
+    msg("            dsklen: %X\n", dsklen);
+    msg("               prb: %X\n", prb);
+    msg("              Side: %d\n", head.side);
+    msg("         Cyclinder: %d\n", head.cylinder);
+    msg("            Offset: %d\n", head.offset);
+    msg("   cylinderHistory: %X\n", cylinderHistory);
+    msg("              Disk: %s\n", disk ? "yes" : "no");
 }
 
 size_t
@@ -232,8 +237,9 @@ Drive::driveStatusFlags()
 void
 Drive::setMotor(bool value)
 {
-    assert(motorDeprecated == motor());
-    if (!motorDeprecated && value) {
+    bool oldValue = motor();
+    
+    if (!oldValue && value) {
         
         motorOnCycle = cpu.getMasterClock();
 
@@ -243,8 +249,7 @@ Drive::setMotor(bool value)
         amiga.putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
-    else if (motorDeprecated && !value) {
-
+    if (oldValue && !value) {
 
         idCount = 0; // Reset identification shift register counter
         motorOffCycle = cpu.getMasterClock();
@@ -255,35 +260,29 @@ Drive::setMotor(bool value)
         amiga.putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
     
-    motorDeprecated = value;
-    assert(motorDeprecated == motor());
 }
 
 Cycle
 Drive::motorOnTime()
 {
-    assert(motorDeprecated == motor());
     return motor() ? cpu.getMasterClock() - motorOnCycle : 0;
 }
 
 Cycle
 Drive::motorOffTime()
 {
-    assert(motorDeprecated == motor());
     return motor() ? 0 : (cpu.getMasterClock() - motorOffCycle);
 }
 
 bool
 Drive::motorSpeedingUp()
 {
-    assert(motorDeprecated == motor());    
-    return motor() && !motorAtFullSpeed(); 
+    return motor() && !motorAtFullSpeed();
 }
 
 bool
 Drive::motorAtFullSpeed()
 {
-    assert(motorDeprecated == motor());
     Cycle delay = 380 * 28000; // 380 msec
     return isOriginal() ? (motorOnTime() > delay) : motor();
 }
@@ -291,14 +290,12 @@ Drive::motorAtFullSpeed()
 bool
 Drive::motorSlowingDown()
 {
-    assert(motorDeprecated == motor());
     return !motor() && !motorStopped();
 }
 
 bool
 Drive::motorStopped()
 {
-    assert(motorDeprecated == motor());
     Cycle delay = 80 * 28000; // 80 msec
     return isOriginal() ? (motorOffTime() > delay) : !motor();
 }

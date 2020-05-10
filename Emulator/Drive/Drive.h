@@ -30,16 +30,6 @@ class Drive : public AmigaComponent {
     // Value of the currently transmitted identification bit
     bool idBit;
 
-    /* Indicates if the motor is running at full speed
-     * On a real drive, it can take up to one half second (500ms) until the
-     * drive runs at full speed. We don't emulate  accurate timing here and
-     * set the variable to true once the drive motor is switched on.
-     *
-     * TODO: MAKE it A COMPUTED VALUE:
-     *
-     */
-    bool motorDeprecated;
-
     // Records when the drive motor was switch on the last time
     Cycle motorOnCycle;
 
@@ -103,7 +93,6 @@ public:
 
         & idCount
         & idBit
-        & motorDeprecated
         & motorOnCycle
         & motorOffCycle
         & dskchange
@@ -146,11 +135,10 @@ public:
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
-    bool idMode() { assert(motorDeprecated == motor()); return motorStopped() || motorSpeedingUp(); }
+    bool idMode() { return motorStopped() || motorSpeedingUp(); }
     u32 getDriveId();
 
     // Operation
-    bool getMotor() { assert(motorDeprecated == motor()); return motorDeprecated; } // DEPRECATED, USE motor()
     u8 getCylinder() { return head.cylinder; }
     
     //
