@@ -752,8 +752,8 @@ Denise::drawSpritePair()
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
 
-    int strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
-    int strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
+    int strt1 = sprhppos<sprite1>();
+    int strt2 = sprhppos<sprite2>();
     bool armed1 = GET_BIT(armed, sprite1);
     bool armed2 = GET_BIT(armed, sprite2);
     int strt = 0;
@@ -798,24 +798,24 @@ Denise::drawSpritePair()
                     
                 case REG_SPR0POS + sprite1:
                     sprpos[sprite1] = change.value;
-                    strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
+                    strt1 = sprhppos<sprite1>();
                     break;
                     
                 case REG_SPR0POS + sprite2:
                     sprpos[sprite2] = change.value;
-                    strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
+                    strt2 = sprhppos<sprite2>();
                     break;
                     
                 case REG_SPR0CTL + sprite1:
                     sprctl[sprite1] = change.value;
-                    strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
+                    strt1 = sprhppos<sprite1>();
                     CLR_BIT(armed, sprite1);
                     armed1 = false;
                     break;
                     
                 case REG_SPR0CTL + sprite2:
                     sprctl[sprite2] = change.value;
-                    strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
+                    strt2 = sprhppos<sprite2>();
                     CLR_BIT(armed, sprite2);
                     armed2 = false;
                     break;
@@ -1299,7 +1299,7 @@ Denise::recordSpriteData(unsigned nr)
     // Record additional information in sprite line 0
     if (line == 0) {
         
-        spriteInfo[nr].hstrt = sprhpos(sprpos[nr], sprctl[nr]);
+        spriteInfo[nr].hstrt = ((sprpos[nr] & 0xFF) << 1) | (sprctl[nr] & 0x01);
         spriteInfo[nr].vstrt = agnus.sprVStrt[nr];
         spriteInfo[nr].vstop = agnus.sprVStop[nr];
         spriteInfo[nr].attach = IS_ODD(nr) ? GET_BIT(sprctl[nr], 7) : 0;

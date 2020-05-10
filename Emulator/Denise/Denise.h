@@ -474,10 +474,6 @@ public:
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 
-    static i16 sprhpos(u16 sprpos, u16 sprctl) {
-        return ((sprpos & 0xFF) << 1) | (sprctl & 0x01);
-    }
-
     // SPRxDATA: $144, $14C ... $174, $17C (w)
     // SPRxDATB: $146, $14E ... $176, $17E (w)
     template <int x> void pokeSPRxDATA(u16 value);
@@ -491,6 +487,12 @@ public:
     // Handling sprites
     //
 
+    // Returns the horizontal position of a sprite in sprite coordinates
+    template <int x> i16 sprhpos() { return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
+
+    // Returns the horizontal position of a sprite in pixel coordinates
+    template <int x> i16 sprhppos() { return 2 * (sprhpos<x>() + 1); }
+    
     // Checks the z buffer and returns true if a sprite pixel is visible
     bool spritePixelIsVisible(int hpos);
 
