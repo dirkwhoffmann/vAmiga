@@ -36,9 +36,9 @@ class Drive : public AmigaComponent {
      * set the variable to true once the drive motor is switched on.
      *
      * TODO: MAKE it A COMPUTED VALUE:
-     * bool motor() { motorOffCycle >= motorOnCycle; }
+     *
      */
-    bool motor;
+    bool motorDeprecated;
 
     // Records when the drive motor was switch on the last time
     Cycle motorOnCycle;
@@ -103,7 +103,7 @@ public:
 
         & idCount
         & idBit
-        & motor
+        & motorDeprecated
         & motorOnCycle
         & motorOffCycle
         & dskchange
@@ -146,11 +146,11 @@ public:
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
-    bool idMode() { return !motor; }
+    bool idMode() { assert(motorDeprecated == motor()); return motorStopped() || motorSpeedingUp(); }
     u32 getDriveId();
 
     // Operation
-    bool getMotor() { return motor; }
+    bool getMotor() { assert(motorDeprecated == motor()); return motorDeprecated; } // DEPRECATED, USE motor()
     u8 getCylinder() { return head.cylinder; }
     
     //
@@ -160,9 +160,6 @@ public:
     // Returns true if this drive is currently selected
     inline bool isSelected() { return (prb & (0b1000 << nr)) == 0; }
     
-    // Returns true if this drive is pushing data onto the data lines
-    bool isDataSource();
-
     u8 driveStatusFlags();
     
 
@@ -175,12 +172,13 @@ public:
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
 
+    bool motor() { return motorOnCycle > motorOffCycle; }
     Cycle motorOnTime();
     Cycle motorOffTime();
+    bool motorSpeedingUp();
     bool motorAtFullSpeed();
+    bool motorSlowingDown();
     bool motorStopped();
-    bool motorSpeedingUp() { return motor && !motorAtFullSpeed(); }
-    bool motorSlowingDown() { return !motor && !motorStopped(); }
 
     // Selects the active drive head (0 = lower, 1 = upper)
     void selectSide(int side);

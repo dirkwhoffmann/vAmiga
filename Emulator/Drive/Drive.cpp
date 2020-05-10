@@ -45,7 +45,8 @@ Drive::_inspect()
 
     info.head = head;
     info.hasDisk = hasDisk();
-    info.motor = motor;
+    assert(motorDeprecated == motor());
+    info.motor = motorDeprecated;
 
     pthread_mutex_unlock(&lock);
 }
@@ -65,7 +66,7 @@ Drive::_dump()
     msg("             Nr: %d\n", nr);
     msg("       Id count: %d\n", idCount);
     msg("         Id bit: %d\n", idBit);
-    msg("          Motor: %s\n", motor ? "on" : "off");
+    msg("          Motor: %s\n", motorDeprecated ? "on" : "off");
     msg("      dskchange: %d\n", dskchange);
     msg("         dsklen: %X\n", dsklen);
     msg("            prb: %X\n", prb);
@@ -196,16 +197,6 @@ Drive::getDriveId()
     }
 }
 
-bool
-Drive::isDataSource()
-{
-    /* I'm not exactly sure abot the conditions to make the drive writes onto
-     * the data lines. I assume that the drive must be selected *and* the motor
-     * needs to be switched on. 
-     */
-    return isSelected() && motor; 
-}
-
 u8
 Drive::driveStatusFlags()
 {
@@ -214,12 +205,10 @@ Drive::driveStatusFlags()
     if (isSelected()) {
         
         // PA5: /DSKRDY
-        // debug("ID mode is %s\n", idMode() ? "on" : "off");
         if (idMode()) {
             if (idBit) result &= 0b11011111;
-            // debug("idBit = %d result = %X\n", idBit, result);
-        } else {
-            if (motorAtFullSpeed() && hasDisk()) result &= 0b11011111;
+        } else if (hasDisk()) {
+            if (motorAtFullSpeed() || motorSlowingDown()) result &= 0b11011111;
         }
         
         // PA4: /DSKTRACK0
@@ -243,7 +232,8 @@ Drive::driveStatusFlags()
 void
 Drive::setMotor(bool value)
 {
-    if (!motor && value) {
+    assert(motorDeprecated == motor());
+    if (!motorDeprecated && value) {
         
         motorOnCycle = cpu.getMasterClock();
 
@@ -253,7 +243,7 @@ Drive::setMotor(bool value)
         amiga.putMessage(MSG_DRIVE_MOTOR_ON, nr);
     }
     
-    else if (motor && !value) {
+    else if (motorDeprecated && !value) {
 
 
         idCount = 0; // Reset identification shift register counter
@@ -265,33 +255,52 @@ Drive::setMotor(bool value)
         amiga.putMessage(MSG_DRIVE_MOTOR_OFF, nr);
     }
     
-    motor = value;
+    motorDeprecated = value;
+    assert(motorDeprecated == motor());
 }
 
 Cycle
 Drive::motorOnTime()
 {
-    return motor ? cpu.getMasterClock() - motorOnCycle : 0;
+    assert(motorDeprecated == motor());
+    return motor() ? cpu.getMasterClock() - motorOnCycle : 0;
 }
 
 Cycle
 Drive::motorOffTime()
 {
-    return motor ? 0 : (cpu.getMasterClock() - motorOffCycle);
+    assert(motorDeprecated == motor());
+    return motor() ? 0 : (cpu.getMasterClock() - motorOffCycle);
+}
+
+bool
+Drive::motorSpeedingUp()
+{
+    assert(motorDeprecated == motor());    
+    return motor() && !motorAtFullSpeed(); 
 }
 
 bool
 Drive::motorAtFullSpeed()
 {
+    assert(motorDeprecated == motor());
     Cycle delay = 380 * 28000; // 380 msec
-    return isOriginal() ? (motorOnTime() > delay) : motor;
+    return isOriginal() ? (motorOnTime() > delay) : motor();
+}
+
+bool
+Drive::motorSlowingDown()
+{
+    assert(motorDeprecated == motor());
+    return !motor() && !motorStopped();
 }
 
 bool
 Drive::motorStopped()
 {
-    Cycle delay = 0;
-    return isOriginal() ? (motorOffTime() > delay) : !motor;
+    assert(motorDeprecated == motor());
+    Cycle delay = 80 * 28000; // 80 msec
+    return isOriginal() ? (motorOffTime() > delay) : !motor();
 }
 
 void

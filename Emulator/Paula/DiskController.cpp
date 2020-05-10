@@ -94,13 +94,18 @@ bool
 DiskController::spinning(unsigned driveNr)
 {
     assert(driveNr < 4);
-    return df[driveNr]->motor;
+    assert(df[driveNr]->motorDeprecated == df[driveNr]->motor());
+    return df[driveNr]->motorDeprecated;
 }
 
 bool
 DiskController::spinning()
 {
-    return df[0]->motor || df[1]->motor || df[2]->motor || df[3]->motor;
+    assert(df[0]->motorDeprecated == df[0]->motor());
+    assert(df[1]->motorDeprecated == df[1]->motor());
+    assert(df[2]->motorDeprecated == df[2]->motor());
+    assert(df[3]->motorDeprecated == df[3]->motor());
+    return df[0]->motorDeprecated || df[1]->motorDeprecated || df[2]->motorDeprecated || df[3]->motorDeprecated;
 }
 
 void
