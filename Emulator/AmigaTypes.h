@@ -49,7 +49,7 @@ typedef enum : long
     
     VA_SERIAL_DEVICE,
 
-    VA_EMULATE_SPRITES,
+    VA_HIDDEN_SPRITES,
     VA_HIDDEN_LAYERS,
     VA_HIDDEN_LAYER_ALPHA,
     VA_CLX_SPR_SPR,

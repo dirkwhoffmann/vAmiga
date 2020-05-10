@@ -19,7 +19,7 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
         &pixelEngine,
     };
 
-    config.emulateSprites = true;
+    config.hiddenSprites = 0;
     config.hiddenLayers = 0;
     config.hiddenLayerAlpha = 128;
     config.clxSprSpr = true;
@@ -37,9 +37,16 @@ Denise::setRevision(DeniseRevision revision)
 }
 
 void
+Denise::setHiddenSprites(u8 value)
+{
+    msg("Changing hidden sprite mask to %x\n", value);
+    config.hiddenSprites = value;
+}
+
+void
 Denise::setHiddenLayers(u16 value)
 {
-    msg("Changing layer mask to %x\n", value);
+    msg("Changing hidden layer mask to %x\n", value);
     config.hiddenLayers = value;
 }
 
@@ -103,12 +110,12 @@ Denise::_inspect()
 void
 Denise::_dumpConfig()
 {
-    msg("  emulateSprites: %d\n", config.emulateSprites);
-    msg("    hiddenLayers: %d\n", config.hiddenLayers);
+    msg("   hiddenSprites: $%x\n", config.hiddenSprites);
+    msg("    hiddenLayers: $%x\n", config.hiddenLayers);
     msg("hiddenLayerAlpha: %d\n", config.hiddenLayerAlpha);
-    msg("       clxSprSpr: %d\n", config.clxSprSpr);
-    msg("       clxSprPlf: %d\n", config.clxSprPlf);
-    msg("       clxPlfPlf: %d\n", config.clxPlfPlf);
+    msg("       clxSprSpr: $%x\n", config.clxSprSpr);
+    msg("       clxSprPlf: $%x\n", config.clxSprPlf);
+    msg("       clxPlfPlf: $%x\n", config.clxPlfPlf);
 }
 
 void
@@ -326,8 +333,9 @@ Denise::pokeSPRxDATA(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
-    // SET_BIT(armed, x);
-
+    // If requested, let this sprite disappear by making it transparent
+    if (GET_BIT(config.hiddenSprites, x)) value = 0;
+    
     // Remember that the sprite was armed at least once in this rasterline
     SET_BIT(wasArmed, x);
 
@@ -342,6 +350,9 @@ Denise::pokeSPRxDATB(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
+    // If requested, let this sprite disappear by making it transparent
+    if (GET_BIT(config.hiddenSprites, x)) value = 0;
+
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
     sprChanges[x/2].insert(pos, RegChange { REG_SPR0DATB + x, value });

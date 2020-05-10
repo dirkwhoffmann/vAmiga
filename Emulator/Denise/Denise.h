@@ -288,8 +288,6 @@ public:
         worker
 
         & config.revision
-        // & config.emulateSprites
-        // & config.hiddenLayers
         & config.clxSprSpr
         & config.clxSprPlf
         & config.clxPlfPlf;
@@ -343,8 +341,8 @@ public:
     DeniseRevision getRevision() { return config.revision; }
     void setRevision(DeniseRevision type);
 
-    bool getEmulateSprites() { return config.emulateSprites; }
-    void setEmulateSprites(bool value) { config.emulateSprites = value; }
+    u8 getHiddenSprites() { return config.hiddenSprites; }
+    void setHiddenSprites(u8 value);
 
     u16 getHiddenLayers() { return config.hiddenLayers; }
     void setHiddenLayers(u16 value);

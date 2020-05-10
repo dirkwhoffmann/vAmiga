@@ -306,10 +306,10 @@ Amiga::configure(ConfigOption option, long value)
             paula.diskController.setSpeed(value);
             break;
 
-        case VA_EMULATE_SPRITES:
+        case VA_HIDDEN_SPRITES:
 
-            if (current.denise.emulateSprites == value) return true;
-            denise.setEmulateSprites(value);
+            if (current.denise.hiddenSprites == value) return true;
+            denise.setHiddenSprites(value);
             break;
 
         case VA_HIDDEN_LAYERS:
@@ -483,7 +483,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_FAST_RAM: return mem.fastRamSize() / KB(1);
         case VA_EXT_START: return mem.getExtStart();
         case VA_DRIVE_SPEED: return df0.getSpeed();
-        case VA_EMULATE_SPRITES: return denise.getEmulateSprites();
+        case VA_HIDDEN_SPRITES: return denise.getHiddenSprites();
         case VA_HIDDEN_LAYERS: return denise.getHiddenLayers();
         case VA_HIDDEN_LAYER_ALPHA: return denise.getHiddenLayerAlpha();
         case VA_CLX_SPR_SPR: return denise.getClxSprSpr();

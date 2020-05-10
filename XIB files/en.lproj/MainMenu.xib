@@ -256,14 +256,60 @@
                                         <menuItem isSeparatorItem="YES" id="427">
                                             <modifierMask key="keyEquivalentModifierMask" command="YES"/>
                                         </menuItem>
-                                        <menuItem title="Emulate Sprites" state="on" id="l45-bY-cgb">
+                                        <menuItem title="Hide Sprite" id="irJ-D4-BXl">
                                             <modifierMask key="keyEquivalentModifierMask"/>
-                                            <connections>
-                                                <action selector="emulateSpritesAction:" target="-1" id="y0h-Ms-NaO"/>
-                                            </connections>
-                                        </menuItem>
-                                        <menuItem isSeparatorItem="YES" id="M9P-Su-DAk">
-                                            <modifierMask key="keyEquivalentModifierMask" command="YES"/>
+                                            <menu key="submenu" title="Hide Sprite" id="xQW-i3-kCC">
+                                                <items>
+                                                    <menuItem title="0" id="WlE-Pq-fMy">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="GNP-XP-PrY"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="1" tag="1" id="lAP-NG-QRi">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="h8v-gc-4oT"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="2" tag="2" id="FHO-fY-J3P">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="eWl-8V-bP4"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="3" tag="3" id="fNO-Pt-B1C">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="Ran-3E-2Vm"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="4" tag="4" id="zSp-Fs-fJD">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="VTq-S9-913"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="5" tag="5" id="y6t-iK-wYt">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="nWV-S7-afK"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="6" tag="6" id="E5g-VG-hth">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="yKw-Rr-uiX"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                    <menuItem title="7" tag="7" id="bCc-Ig-T2l">
+                                                        <modifierMask key="keyEquivalentModifierMask"/>
+                                                        <connections>
+                                                            <action selector="hideSpriteAction:" target="-1" id="Npd-lV-eNR"/>
+                                                        </connections>
+                                                    </menuItem>
+                                                </items>
+                                            </menu>
                                         </menuItem>
                                         <menuItem title="Dump State" id="421">
                                             <modifierMask key="keyEquivalentModifierMask"/>

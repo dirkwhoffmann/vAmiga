@@ -623,12 +623,21 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Debug menu)
     //
     
-    @IBAction func emulateSpritesAction(_ sender: NSMenuItem!) {
+    @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
+
+        var mask = amiga.getConfig(VA_HIDDEN_SPRITES)
+        
+        sender.state = (sender.state == .off) ? .on : .off
+        if sender.state == .on {
+            mask |= 1 << sender.tag
+        } else {
+            mask &= ~(1 << sender.tag)
+        }
         
         amiga.suspend()
-        amiga.configure(VA_EMULATE_SPRITES, enable: sender.state == .off)
+        amiga.configure(VA_HIDDEN_SPRITES, value: mask)
         amiga.resume()
-        sender.state = (sender.state == .off) ? .on : .off
+        
         track()
     }
     
