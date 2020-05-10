@@ -62,6 +62,12 @@ class GamePadManager {
                 kIOHIDDeviceUsagePageKey: kHIDPage_GenericDesktop,
                 kIOHIDDeviceUsageKey: kHIDUsage_GD_MultiAxisController
             ]
+            /*
+            [
+                kIOHIDDeviceUsagePageKey: kHIDPage_GenericDesktop,
+                kIOHIDDeviceUsageKey: kHIDUsage_GD_Pointer
+            ]
+            */
         ]
         
         // Declare bridging closures (needed to bridge between Swift methods and C callbacks)
@@ -87,13 +93,20 @@ class GamePadManager {
     func shutDown() {
 
         track()
+        
+        // Terminate communication with all connected HID devices
+        for (_, pad) in gamePads { pad.close() }
+
+        // Close the HID manager
+        IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
+
+        // Free all slots
         gamePads = [:]
     }
 
     deinit {
 
         track()
-        IOHIDManagerClose(hidManager, IOOptionBits(kIOHIDOptionsTypeNone))
     }
         
     //
@@ -116,28 +129,6 @@ class GamePadManager {
         return (nr < 5) ? nr : nil
     }
     
-    // Looks up a game pad. Returns -1 if no game pad was found
-    /*
-    func lookupGamePad(_ gamePad: GamePad) -> Int {
-        
-        for (slotNr, device) in gamePads where device === gamePad {
-            return slotNr
-        }
-        return -1
-    }
-    */
-    
-    // Looks up game pad by locationID. Returns -1 if no game pad was found
-    /*
-    func lookupGamePad(locationID: Int) -> Int {
-        
-        for (slotNr, device) in gamePads where device.locationID == locationID {
-            return slotNr
-        }
-        return -1
-    }
-    */
- 
     //
     // HID stuff
     //
@@ -175,25 +166,27 @@ class GamePadManager {
         if let value = IOHIDDeviceGetProperty(device, locationIDKey) as? Int {
             locationID = value
         }
-        
-        gamePads[slotNr] = GamePad(slotNr,
-                                   manager: self,
-                                   vendorID: vendorID,
-                                   productID: productID,
-                                   locationID: locationID)
 
         track("    slotNr = \(slotNr)")
         track("  vendorID = \(vendorID)")
         track(" productID = \(productID)")
         track("locationID = \(locationID)")
 
-        // Open HID device
+        // Open device
         let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
         let status = IOHIDDeviceOpen(device, IOOptionBits(optionBits))
         if status != kIOReturnSuccess {
             track("WARNING: Cannot open HID device")
             return
         }
+
+        // Create a GamePad object for this device
+        gamePads[slotNr] = GamePad(slotNr,
+                                   manager: self,
+                                   device: device,
+                                   vendorID: vendorID,
+                                   productID: productID,
+                                   locationID: locationID)
     
         // Register input value callback
         let hidContext = unsafeBitCast(gamePads[slotNr],
@@ -226,17 +219,7 @@ class GamePadManager {
             gamePads[slotNr] = nil
             track("Clearing slot \(slotNr)")
         }
-        
-        // Closing the HID device always fails.
-        // Think, we don't have to close it, because it's disconnected anyway. Am I right?
-        /* 
-        let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
-        let status = IOHIDDeviceClose(device, IOOptionBits(optionBits))
-        if (status != kIOReturnSuccess) {
-            track("WARNING: Cannot close HID device")
-        }
-        */
-        
+                
         // Inform the controller about the new device
         parent.toolbar.validateVisibleItems()
         

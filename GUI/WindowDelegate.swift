@@ -67,6 +67,9 @@ extension MyController: NSWindowDelegate {
         // Disconnect the audio engine
         macAudio.shutDown()
 
+        // Disconnect all game pads
+        gamePadManager.shutDown()
+        
         // Unregister from the message queue
         let myself = UnsafeRawPointer(Unmanaged.passUnretained(self).toOpaque())
         amiga.removeListener(myself)

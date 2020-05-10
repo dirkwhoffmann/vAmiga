@@ -23,6 +23,9 @@ class GamePad {
     // Quick references
     var prefs: Preferences { return manager.parent.prefs }
 
+    // Reference to the device object
+    var device: IOHIDDevice?
+    
     // Name of the managed device
     var name: String?
 
@@ -69,12 +72,14 @@ class GamePad {
     }
     
     init(_ nr: Int, manager: GamePadManager,
+         device: IOHIDDevice? = nil,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
         // track("\(nr): \(vendorID) \(productID) \(locationID)")
         
         self.nr = nr
         self.manager = manager
+        self.device = device
         self.vendorID = vendorID
         self.productID = productID
         self.locationID = locationID
@@ -117,6 +122,18 @@ class GamePad {
             
         default:
             break  // name = "Generic Gamepad"
+        }
+    }
+    
+    func close() {
+        
+        if device == nil { return }
+        
+        let optionBits = IOOptionBits(kIOHIDOptionsTypeNone)
+        if IOHIDDeviceClose(device!, optionBits) == kIOReturnSuccess {
+            track("Closed HID device \(nr)")
+        } else {
+            track("WARNING: Cannot close HID device")
         }
     }
 }
