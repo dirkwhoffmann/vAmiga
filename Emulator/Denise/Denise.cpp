@@ -313,7 +313,7 @@ Denise::pokeSPRxCTL(u16 value)
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
     
     // Disarm the sprite
-    CLR_BIT(armed, x);
+    // CLR_BIT(armed, x);
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
@@ -326,8 +326,9 @@ Denise::pokeSPRxDATA(u16 value)
     assert(x < 8);
     debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
-    // Arm the sprite
-    SET_BIT(armed, x);
+    // SET_BIT(armed, x);
+
+    // Remember that the sprite was armed at least once in this rasterline
     SET_BIT(wasArmed, x);
 
     // Record the register change
@@ -753,8 +754,8 @@ Denise::drawSpritePair()
 
     int strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
     int strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
-    bool armed1 = GET_BIT(initialArmed, sprite1);
-    bool armed2 = GET_BIT(initialArmed, sprite2);
+    bool armed1 = GET_BIT(armed, sprite1);
+    bool armed2 = GET_BIT(armed, sprite2);
     int strt = 0;
     
     // Iterate over all recorded register changes
@@ -777,11 +778,13 @@ Denise::drawSpritePair()
                     
                 case REG_SPR0DATA + sprite1:
                     sprdata[sprite1] = change.value;
+                    SET_BIT(armed, sprite1);
                     armed1 = true;
                     break;
                     
                 case REG_SPR0DATA + sprite2:
                     sprdata[sprite2] = change.value;
+                    SET_BIT(armed, sprite2);
                     armed2 = true;
                     break;
                     
@@ -806,12 +809,14 @@ Denise::drawSpritePair()
                 case REG_SPR0CTL + sprite1:
                     sprctl[sprite1] = change.value;
                     strt1 = 2 * (sprhpos(sprpos[sprite1], sprctl[sprite1]) + 1);
+                    CLR_BIT(armed, sprite1);
                     armed1 = false;
                     break;
                     
                 case REG_SPR0CTL + sprite2:
                     sprctl[sprite2] = change.value;
                     strt2 = 2 * (sprhpos(sprpos[sprite2], sprctl[sprite2]) + 1);
+                    CLR_BIT(armed, sprite2);
                     armed2 = false;
                     break;
 
@@ -897,6 +902,9 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
 
     assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
     assert(hstop >= 0 && hstop <= sizeof(mBuffer));
+
+    assert(armed1 == !!GET_BIT(armed, sprite1));
+    assert(armed2 == !!GET_BIT(armed, sprite2));
 
     bool attached = GET_BIT(sprctl[sprite2], 7);
 
@@ -1212,7 +1220,6 @@ Denise::beginOfLine(int vpos)
     initialBplcon0 = bplcon0;
     initialBplcon1 = bplcon1;
     initialBplcon2 = bplcon2;
-    initialArmed = armed;
     wasArmed = armed;
 
     // Prepare the bitplane shift registers

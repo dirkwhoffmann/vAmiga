@@ -135,15 +135,11 @@ public:
      */
     u8 armed;
 
-    /* Indicates which sprites had been armed at least once in the current
-     * rasterline.
+    /* Remembers the sprites that were armed in the current rasterline.
      * Note that a sprite can be armed and disarmed multiple times in a
      * rasterline by manually modifying SPRxDATA and SPRxCTL, respectively.
      */
     u8 wasArmed;
-
-    // Value of variable 'armed' at cycle 0 in the current rasterline
-    u8 initialArmed;
 
     /* Sprite clipping window
      *
@@ -331,7 +327,6 @@ public:
         & ssrb
         & armed
         & wasArmed
-        & initialArmed
         & spriteClipBegin
         & spriteClipEnd
         & prio1
