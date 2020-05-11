@@ -18,7 +18,7 @@ class KBController: NSObject {
     var renderer: Renderer { return parent.renderer }
     var prefs: Preferences { return parent.prefs }
         
-    // Remembers the currently pressed key modifiers
+    // Remembers the current state of some keys
     var leftShift   = false, rightShift   = false
     var leftControl = false, rightControl = false
     var leftOption  = false, rightOption  = false
@@ -49,15 +49,14 @@ class KBController: NSObject {
     }
     
     func keyDown(with event: NSEvent) {
-
+        
         // Ignore repeating keys
-        if event.isARepeat {
-            return
-        }
-
+        if event.isARepeat { return }
+        
         // Exit fullscreen mode if escape key is pressed
         if event.keyCode == kVK_Escape && renderer.fullscreen && prefs.exitOnEsc {
             parent.window!.toggleFullScreen(nil)
+            return
         }
         
         // Ignore keys that are pressed in combination with the Command key
@@ -69,7 +68,7 @@ class KBController: NSObject {
     }
     
     func keyUp(with event: NSEvent) {
-        
+                
         keyUp(with: MacKey.init(event: event))
     }
     
@@ -119,7 +118,7 @@ class KBController: NSObject {
     }
     
     func keyDown(with macKey: MacKey) {
-        
+                
         // Check if this key is used for joystick emulation
         var joyKey1 = false, joyKey2 = false
         if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {

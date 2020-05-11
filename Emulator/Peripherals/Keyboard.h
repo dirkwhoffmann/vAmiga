@@ -101,7 +101,8 @@ public:
     void pressKey(long keycode);
     void releaseKey(long keycode);
     void releaseAllKeys();
-
+    
+    bool escKeyIsPressed() { return keyIsPressed(0x45); }
 
     //
     // Managing the type-ahead buffer
