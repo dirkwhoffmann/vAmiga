@@ -37,8 +37,8 @@ ZorroManager::peekFastRamDevice(u32 addr)
 {
     size_t fastRamSize = mem.config.fastSize;
     
-    debug(RAM_DEBUG, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
-    debug(RAM_DEBUG, "    fastRamSize = %d\n", fastRamSize);
+    debug(FAS_DEBUG, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    debug(FAS_DEBUG, "    fastRamSize = %d\n", fastRamSize);
 
     if (fastRamConf || fastRamSize == 0) return 0xF; // Already configured
     

@@ -737,6 +737,7 @@ Memory::peek8(u32 addr)
 
             agnus.executeUntilBusIsFree();
             stats.chipReads.raw++;
+            debug(MEM_DEBUG, "peek8(%x [UNMAPPED]) = %x\n", addr, dataBus);
             return dataBus;
 
         case MEM_CHIP:
@@ -850,6 +851,8 @@ Memory::peek16(u32 addr)
 
                     agnus.executeUntilBusIsFree();
                     stats.chipReads.raw++;
+                    if (amiga.getDebugMode())
+                        debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
                     return dataBus;
 
                 case MEM_CHIP:
@@ -1000,6 +1003,7 @@ Memory::poke8(u32 addr, u8 value)
             
         case MEM_UNMAPPED:
 
+            debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
             stats.chipWrites.raw++;
             return;
 
@@ -1113,6 +1117,7 @@ Memory::poke16(u32 addr, u16 value)
 
                 case MEM_UNMAPPED:
 
+                    debug(MEM_DEBUG, "poke16(%x [UNMAPPED], %x)\n", addr, value);
                     agnus.executeUntilBusIsFree();
                     stats.chipWrites.raw++;
                     dataBus = value;

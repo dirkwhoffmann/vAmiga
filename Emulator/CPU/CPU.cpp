@@ -58,73 +58,57 @@ CPU::write16 (u32 addr, u16 val)
 void
 CPU::addressErrorException(u16 addr, bool read)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("addressErrorException(%x) [%s]\n", addr, read ? "R" : "W");
-    }
+    debug(ECP_DEBUG, "addressErrorException(%x) [%s]\n", addr, read ? "R" : "W");
 }
 
 void
 CPU::lineAException(u16 opcode)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("lineAException(%x)\n", opcode);
-    }
+    debug(ECP_DEBUG, "lineAException(%x)\n", opcode);
 }
 
 void
 CPU::lineFException(u16 opcode)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("lineFException(%x)\n", opcode);
-    }
+    debug(ECP_DEBUG, "lineFException(%x)\n", opcode);
 }
 
 void
 CPU::illegalOpcodeException(u16 opcode)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("lineAException(%x)\n", opcode);
-    }
+    debug(ECP_DEBUG, "lineAException(%x)\n", opcode);
 }
 
 void
 CPU::traceException()
 {
-    if (EXCEPTION_DEBUG) {
-        debug("traceException\n");
-    }
+    debug(ECP_DEBUG, "traceException\n");
 }
 
 void
 CPU::trapException()
 {
-    if (EXCEPTION_DEBUG) {
-        debug("trapException\n");
-    }
+    debug(ECP_DEBUG, "trapException\n");
 }
 
 void
 CPU::privilegeException()
 {
-    if (EXCEPTION_DEBUG) {
-        debug("privilegeException\n");
-    }
+    // debug(ECP_DEBUG, "privilegeException\n");
 }
 
 void
 CPU::interruptException(u8 level)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("*** INTERRUPT %d ***\n", level);
+    if (ECP_DEBUG) {
+        // debug("*** INTERRUPT %d ***\n", level);
     }
 }
 
 void
 CPU::exceptionJump(int nr, u32 oldpc, u32 newpc)
 {
-    if (EXCEPTION_DEBUG) {
-        debug("Exception %d: Changing PC from %x to %x\n", oldpc, newpc);
-    }
+    // debug(ECP_DEBUG, "Exception %d: Changing PC from %x to %x\n", nr oldpc, newpc);
 }
 
 void

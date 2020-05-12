@@ -51,17 +51,32 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
-static const int EXCEPTION_DEBUG = 0; // CPU exceptions and interrupts
+static const int ECP_DEBUG       = 0; // CPU exceptions and interrupts
 
 // Memory access
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
-static const int INVREG_DEBUG    = 0; // Ivalid register accesses
-static const int RAM_DEBUG       = 0; // Fast RAM
+static const int INVREG_DEBUG    = 0; // Invalid register accesses
+static const int MEM_DEBUG       = 0; // Memory oddities
+static const int FAS_DEBUG       = 0; // Fast RAM
 
 // Agnus
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
+
+// Copper
+static const int COP_CHECKSUM    = 0; // Compute Copper checksums
+static const int COPREG_DEBUG    = 0; // Copper registers
+static const int COP_DEBUG       = 0; // Copper execution
+
+// Blitter
+static const int BLT_CHECKSUM    = 0; // Compute Blitter checksums
+static const int BLTREG_DEBUG    = 0; // Blitter registers
+static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
+static const int BLT_DEBUG       = 0; // Blitter execution
+static const int BLTTIM_DEBUG    = 0; // Blitter Timing
+static const int FORCE_FASTBLT   = 0; // Always use the fast Blitter
+static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instruction in one chunk
 
 // Denise
 static const int BPLREG_DEBUG    = 0; // Bitplane registers
@@ -82,19 +97,6 @@ static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
 static const int CIAREG_DEBUG    = 0; // CIA registers
 static const int CIA_DEBUG       = 0; // CIA execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
-
-// Blitter
-static const int BLT_CHECKSUM    = 0; // Compute Blitter checksums
-static const int BLTREG_DEBUG    = 0; // Blitter registers
-static const int BLT_DEBUG       = 0; // Blitter execution
-static const int BLTTIM_DEBUG    = 0; // Blitter Timing
-static const int FORCE_FASTBLT   = 0; // Always use the fast Blitter
-static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instruction in one chunk
-
-// Copper
-static const int COP_CHECKSUM    = 0; // Compute Copper checksums
-static const int COPREG_DEBUG    = 0; // Copper registers
-static const int COP_DEBUG       = 0; // Copper execution
 
 // Drive
 static const int DRIVE_DEBUG     = 0; // Fallback to a simple turbo drive
