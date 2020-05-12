@@ -35,7 +35,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Wolf.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Batman.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Gettysburg.adf"
 
@@ -75,7 +75,8 @@ static const int BLTREG_DEBUG    = 0; // Blitter registers
 static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
 static const int BLT_DEBUG       = 0; // Blitter execution
 static const int BLTTIM_DEBUG    = 0; // Blitter Timing
-static const int FORCE_FASTBLT   = 0; // Always use the fast Blitter
+static const int FORCE_FASTBLT   = 0; // Always use the FastBlitter
+static const int FORCE_SLOWBLT   = 0; // Always use the SlowBlitter
 static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instruction in one chunk
 
 // Denise

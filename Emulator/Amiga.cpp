@@ -336,8 +336,14 @@ Amiga::configure(ConfigOption option, long value)
         case VA_BLITTER_ACCURACY:
             
             if (FORCE_FASTBLT) {
-                warn("Falling back to the FastBlitter for debugging\n");
+                assert(!FORCE_SLOWBLT);
+                warn("Using the FastBlitter for debugging\n");
                 value = 0;
+            }
+            if (FORCE_SLOWBLT) {
+                assert(!FORCE_FASTBLT);
+                warn("Using the SlowBlitter for debugging\n");
+                value = 2;
             }
             if (current.blitter.accuracy == value) return true;
             agnus.blitter.setAccuracy(value);
