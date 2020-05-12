@@ -48,7 +48,10 @@ static const int NO_SSE          = 0; // Don't use SSE extensions
 // Runloop and CPU
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
+
+// CPU
 static const int CPU_DEBUG       = 0; // CPU
+static const int EXCEPTION_DEBUG = 0; // CPU exceptions and interrupts
 
 // Memory access
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging
@@ -104,6 +107,7 @@ static const int MFM_DEBUG       = 0; // Disk encoder / decoder
 static const int AUDREG_DEBUG    = 0; // Audio registers
 static const int AUD_DEBUG       = 0; // Audio execution
 static const int AUDBUF_DEBUG    = 0; // Audio buffers
+static const int DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 
 // Ports
 static const int POSREG_DEBUG    = 0; // POSxxx registers

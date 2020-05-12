@@ -101,7 +101,17 @@ private:
     void write8 (u32 addr, u8  val) override;
     void write16 (u32 addr, u16 val) override;
     int readIrqUserVector(u8 level) override { return 0; }
-    void irqOccurred(u8 level) override;
+ 
+    void addressErrorException(u16 addr, bool read) override;
+    void lineAException(u16 opcode) override;
+    void lineFException(u16 opcode) override;
+    void illegalOpcodeException(u16 opcode) override;
+    void traceException() override;
+    void trapException() override;
+    void privilegeException() override;
+    void interruptException(u8 level) override;
+    void exceptionJump(int nr, u32 oldpc, u32 newpc) override;
+    
     void breakpointReached(u32 addr) override;
     void watchpointReached(u32 addr) override;
 

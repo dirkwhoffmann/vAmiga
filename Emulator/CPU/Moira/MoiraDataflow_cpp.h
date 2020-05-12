@@ -401,6 +401,8 @@ Moira::readExt()
 void
 Moira::jumpToVector(int nr)
 {
+    u32 oldpc = reg.pc;
+    
     if (EMULATE_FC) fcl = 1;
     
     // Update the program counter
@@ -415,4 +417,6 @@ Moira::jumpToVector(int nr)
     queue.ird = readM<Word>(reg.pc);
     sync(2);
     queue.irc = readM<Word,LAST_BUS_CYCLE>(reg.pc + 2);
+    
+    exceptionJump(nr, oldpc, reg.pc);
 }

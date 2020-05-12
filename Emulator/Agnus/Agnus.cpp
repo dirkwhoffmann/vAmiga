@@ -419,6 +419,12 @@ Agnus::doDiskDMA(u16 value)
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
+    /*
+    if ((addr & 0xFFF) == 0x9C) {
+        debug("Copper poke INTREQ %x\n", value);
+    }
+    */
+    
     mem.pokeCustom16<POKE_COPPER>(addr, value);
 
     assert(pos.h < HPOS_CNT);

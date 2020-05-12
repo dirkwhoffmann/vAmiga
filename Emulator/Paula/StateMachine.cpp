@@ -339,15 +339,12 @@ StateMachine<nr>::AUDxON()
 template <int nr> void
 StateMachine<nr>::AUDxIR()
 {
+    if (DISABLE_AUDIRQ) return;
+    
     IrqSource source =
     nr == 0 ? INT_AUD0 : nr == 1 ? INT_AUD1 : nr == 2 ? INT_AUD2 : INT_AUD3;
     
     paula.scheduleIrqRel(source, DMA_CYCLES(1));
-    /*
-    paula.raiseIrq(nr == 0 ? INT_AUD0 :
-                   nr == 1 ? INT_AUD1 :
-                   nr == 2 ? INT_AUD2 : INT_AUD3);
-    */
 }
 
 template <int nr> void

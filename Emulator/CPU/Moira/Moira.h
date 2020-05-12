@@ -208,8 +208,16 @@ protected:
     // Provides the interrupt level in IRQ_USER mode
     virtual int readIrqUserVector(u8 level) { return 0; }
 
-    // Called when an interrupt is initiated
-    virtual void irqOccurred(u8 level) { };
+    // Exception delegation methods
+    virtual void addressErrorException(u16 addr, bool read) { };
+    virtual void lineAException(u16 opcode) { };
+    virtual void lineFException(u16 opcode) { };
+    virtual void illegalOpcodeException(u16 opcode) { };
+    virtual void traceException() { };
+    virtual void trapException() { };
+    virtual void privilegeException() { };
+    virtual void interruptException(u8 level) { };
+    virtual void exceptionJump(int nr, u32 oldpc, u32 newpc) { };
 
     // Called when a breakpoint is reached
     virtual void breakpointReached(u32 addr) { };

@@ -68,6 +68,7 @@ Moira::execAddressError(u32 addr, bool read)
 {
     assert(addr & 1);
 
+    addressErrorException(addr, read);
     u16 status = getSR();
 
     // Memory access type and function code
@@ -106,18 +107,24 @@ Moira::execUnimplemented(int nr)
 void
 Moira::execLineA(u16 opcode)
 {
+    lineAException(opcode);
+    
     execUnimplemented(10);
 }
 
 void
 Moira::execLineF(u16 opcode)
 {
+    lineFException(opcode);
+
     execUnimplemented(11);
 }
 
 void
 Moira::execIllegal(u16 opcode)
 {
+    illegalOpcodeException(opcode);
+    
     u16 status = getSR();
 
     // Enter supervisor mode
@@ -137,6 +144,8 @@ Moira::execIllegal(u16 opcode)
 void
 Moira::execTraceException()
 {
+    traceException();
+    
     u16 status = getSR();
 
     // Recover from stop state
@@ -159,14 +168,12 @@ Moira::execTraceException()
 void
 Moira::execTrapException(int nr)
 {
+    trapException();
+    
     u16 status = getSR();
 
     // Enter supervisor mode
     setSupervisorMode(true);
-
-    // Disable tracing
-    // clearTraceFlag();
-    // flags &= ~CPU_TRACE_EXCEPTION;
 
     // Write exception information to stack
     saveToStackBrief(status);
@@ -177,6 +184,8 @@ Moira::execTrapException(int nr)
 void
 Moira::execPrivilegeException()
 {
+    privilegeException();
+    
     u16 status = getSR();
 
     // Enter supervisor mode
@@ -199,7 +208,8 @@ void
 Moira::execIrqException(int level)
 {
     assert(level < 8);
-
+    interruptException(level);
+    
     // Remember the current value of the status register
     u16 status = getSR();
 
@@ -209,9 +219,10 @@ Moira::execIrqException(int level)
     // Clear the polled IPL value
     reg.ipl = 0;
 
-    // Tempararily raise the interrupt threshold
+    // Temporarily raise the interrupt threshold
     reg.sr.ipl = level;
-
+    // printf("Raising IRQ mask to %d (status = %x)\n", level, status); // DIRK
+    
     // Enter supervisor mode and update the status register
     setSupervisorMode(true);
     clearTraceFlag();
@@ -1583,6 +1594,8 @@ Moira::execReset(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRte(u16 opcode)
 {
+    // printf("execRte\n"); // DIRK
+    
     SUPERVISOR_MODE_ONLY
 
     if (EMULATE_FC) fcl = 1;
