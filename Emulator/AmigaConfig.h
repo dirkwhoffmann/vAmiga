@@ -35,7 +35,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Batman.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/BatmanBeyonders.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Gettysburg.adf"
 
@@ -75,8 +75,8 @@ static const int BLTREG_DEBUG    = 0; // Blitter registers
 static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
 static const int BLT_DEBUG       = 0; // Blitter execution
 static const int BLTTIM_DEBUG    = 0; // Blitter Timing
-static const int FORCE_FASTBLT   = 0; // Always use the FastBlitter
-static const int FORCE_SLOWBLT   = 0; // Always use the SlowBlitter
+static const int FORCE_FAST_BLT  = 0; // Always use the FastBlitter
+static const int FORCE_SLOW_BLT  = 0; // Always use the SlowBlitter
 static const int SLOW_BLT_DEBUG  = 0; // Execute micro-instruction in one chunk
 
 // Denise
@@ -118,6 +118,8 @@ static const int JOYREG_DEBUG    = 0; // JOYxxx registers
 static const int PORT_DEBUG      = 0; // Control ports and connected devices
 static const int SER_DEBUG       = 0; // Serial interface
 static const int POT_DEBUG       = 0; // Potentiometer inputs
+static const int HOLD_MOUSE_L    = 0; // Hold down the left mouse button
+static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock

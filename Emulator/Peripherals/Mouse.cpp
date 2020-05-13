@@ -57,7 +57,7 @@ Mouse::changePotgo(int port, u16 &potgo)
 {
     u16 mask = (port == 1) ? 0x0400 : 0x4000;
 
-    if (rightButton) {
+    if (rightButton || HOLD_MOUSE_R) {
         potgo &= ~mask;
     } else if (config.pullUpResistors) {
         potgo |= mask;
@@ -69,7 +69,7 @@ Mouse::changePra(int port, u8 &pra)
 {
     u16 mask = (port == 1) ? 0x40 : 0x80;
 
-    if (leftButton) {
+    if (leftButton || HOLD_MOUSE_L) {
         pra &= ~mask;
     } else if (config.pullUpResistors) {
         pra |= mask;

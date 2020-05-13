@@ -139,12 +139,10 @@ class Blitter : public AmigaComponent
      * This flag shows up in DMACON and has a similar meaning as variable
      * 'running'. The only difference is that the busy flag is cleared a few
      * cycles before the Blitter actually terminates.
-     * TODO: USE THE CORRESPONDING BIT IN DMACON
      */
     bool bbusy;
 
     // The Blitter zero flag
-    // TODO: USE THE CORRESPONDING BIT IN DMACON
     bool bzero;
 
 
