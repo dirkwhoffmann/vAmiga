@@ -206,12 +206,6 @@ Agnus::peekDMACONR()
     if (blitter.isBusy()) result |= (1 << 14);
     if (blitter.isZero()) result |= (1 << 13);
     
-    // if (blitter.finalZero) result |= (1 << 13);
-
-    // if (blitter.copycount >= 17 && blitter.copycount <= 19) {
-    {
-        // plaindebug("peekDMACONR: %X BUSY = %d ZERO = %d\n", result, blitter.isBusy(), blitter.finalZero);
-    }
     return result;
 }
 

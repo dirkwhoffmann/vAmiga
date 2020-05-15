@@ -144,8 +144,8 @@ class Blitter : public AmigaComponent
 
     // The Blitter zero flag
     bool bzero;
-    bool finalZero; // EXPERIMENTAL
 
+    
     //
     // Counters
     //
@@ -243,7 +243,6 @@ public:
         & running
         & bbusy
         & bzero
-        & finalZero
 
         & remaining;
     }

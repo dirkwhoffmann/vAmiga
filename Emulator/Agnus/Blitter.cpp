@@ -873,7 +873,6 @@ Blitter::endBlit()
     plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
 
     running = false;
-    finalZero = bzero;
 
     // Trigger the Blitter interrupt
     paula.raiseIrq(INT_BLIT);
