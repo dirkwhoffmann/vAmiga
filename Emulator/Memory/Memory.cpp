@@ -1003,13 +1003,15 @@ Memory::poke8(u32 addr, u8 value)
             
         case MEM_UNMAPPED:
 
-            debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
+            debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
             return;
 
         case MEM_CHIP:
 
             ASSERT_CHIP_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             WRITE_CHIP_8(addr, value);
             break;
@@ -1024,6 +1026,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_CIA:
 
             ASSERT_CIA_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             pokeCIA8(addr, value);
             break;
@@ -1031,6 +1034,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_SLOW:
 
             ASSERT_SLOW_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.slowWrites.raw++;
             WRITE_SLOW_8(addr, value);
             break;
@@ -1038,6 +1042,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_RTC:
 
             ASSERT_RTC_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             pokeRTC8(addr, value);
             break;
@@ -1045,6 +1050,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_CUSTOM:
 
             ASSERT_OCS_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             pokeCustom8(addr, value);
             break;
@@ -1052,6 +1058,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_AUTOCONF:
 
             ASSERT_AUTO_ADDR(addr);
+            agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             pokeAutoConf8(addr, value);
             break;
