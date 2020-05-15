@@ -861,13 +861,10 @@ Blitter::startBlit()
 void
 Blitter::signalEnd()
 {
-    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter interrupts\n", agnus.pos.v, agnus.pos.h);
+    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
-
-    // Trigger the Blitter interrupt
-    // paula.raiseIrq(INT_BLIT);
 }
 
 void
@@ -877,7 +874,10 @@ Blitter::endBlit()
 
     running = false;
     finalZero = bzero;
-    
+
+    // Trigger the Blitter interrupt
+    paula.raiseIrq(INT_BLIT);
+
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 
@@ -892,9 +892,6 @@ Blitter::endBlit()
 
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
-    
-    // Trigger the Blitter interrupt
-    paula.raiseIrq(INT_BLIT);
 }
 
 template void Blitter::pokeBLTSIZE<POKE_CPU>(u16 value);
