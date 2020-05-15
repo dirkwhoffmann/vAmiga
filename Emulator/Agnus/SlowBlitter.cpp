@@ -1083,9 +1083,6 @@ Blitter::exec()
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
         assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
-        // Run the fill logic circuitry
-        if ((instr & FILL) && !lockD) doFill(dhold, fillCarry);
-        
         if (!lockD) {
 
             // Run the fill logic circuitry
@@ -1094,6 +1091,7 @@ Blitter::exec()
             // Update the zero flag
             if (dhold) bzero = false;
         }
+        
     }
 
     if (instr & REPEAT) {
