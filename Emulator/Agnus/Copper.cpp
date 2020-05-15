@@ -917,8 +917,6 @@ Copper::blitterDidTerminate()
 {
     if (agnus.hasEvent<COP_SLOT>(COP_WAIT_BLIT)) {
 
-        debug("Blitter did terminate\n");
-
         // Wake up the Copper in the next even cycle
         if (IS_EVEN(agnus.pos.h)) {
             serviceEvent(COP_WAIT_BLIT);
