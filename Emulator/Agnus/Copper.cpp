@@ -643,7 +643,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_REQ_DMA\n");
             
             // Check if we need to wait for the Blitter
-            if (!getBFD()) {
+            if (!bfd) {
                 if (agnus.blitter.isRunning()) {
                     agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                     break;
@@ -666,7 +666,7 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_FETCH\n");
 
             // Check if we need to wait for the Blitter
-            if (!getBFD()) {
+            if (!bfd) {
                 if (agnus.blitter.isRunning()) {
                     agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                     break;
@@ -772,7 +772,7 @@ Copper::serviceEvent(EventID id)
             bfd = getBFD();
             
             // Check if we need to wait for the Blitter
-            if (!getBFD() && agnus.blitter.isRunning()) {
+            if (!bfd && agnus.blitter.isRunning()) {
                 agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                 break;
             }
