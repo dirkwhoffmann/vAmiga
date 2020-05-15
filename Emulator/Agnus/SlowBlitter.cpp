@@ -1091,6 +1091,7 @@ Blitter::exec()
             // Update the zero flag
             if (dhold) bzero = false;
         }
+        
     }
 
     if (instr & REPEAT) {
