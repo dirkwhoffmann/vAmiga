@@ -867,7 +867,7 @@ Blitter::signalEnd()
     bbusy = false;
 
     // Trigger the Blitter interrupt
-    paula.raiseIrq(INT_BLIT);
+    // paula.raiseIrq(INT_BLIT);
 }
 
 void
@@ -892,6 +892,9 @@ Blitter::endBlit()
 
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
+    
+    // Trigger the Blitter interrupt
+    paula.raiseIrq(INT_BLIT);
 }
 
 template void Blitter::pokeBLTSIZE<POKE_CPU>(u16 value);
