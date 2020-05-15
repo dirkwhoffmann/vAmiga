@@ -40,8 +40,11 @@ class Copper : public AmigaComponent
     u32 cop1end;
     u32 cop2end;
 
-    // The Copper Danger Bit (CDANG)
+    // The Copper Danger bit (CDANG)
     bool cdang;
+    
+    // The Blitter Finish Disable bit (BFD)
+    bool bfd;
     
     // The Copper instruction registers
     u16 cop1ins = 0;
@@ -103,6 +106,7 @@ public:
         & cop1end
         & cop2end
         & cdang
+        & bfd
         & cop1ins
         & cop2ins
         & coppc
@@ -123,7 +127,7 @@ public:
     
 private:
 
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+    void _reset(bool hard) override;
     void _inspect() override; 
     void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

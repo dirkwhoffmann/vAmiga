@@ -15,6 +15,13 @@ Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+Copper::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS
+    bfd = true;
+}
+
+void
 Copper::_inspect()
 {
     u32 mask = agnus.chipRamMask();
@@ -638,6 +645,10 @@ Copper::serviceEvent(EventID id)
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
+            // Wait for the Bliter if the BFD flag is cleared
+            if (!bfd && blitter.isRunning()) { reschedule(); break; }
+            bfd = true;
+
             // Don't wake up in an odd cycle
             if (agnus.pos.h % 2) { reschedule(); break; }
 
@@ -651,6 +662,10 @@ Copper::serviceEvent(EventID id)
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+
+            // Wait for the Bliter if the BFD flag is cleared
+            if (!bfd && blitter.isRunning()) { reschedule(); break; }
+            bfd = true;
 
             // Load the first instruction word
             cop1ins = agnus.doCopperDMA(coppc);
@@ -743,14 +758,9 @@ Copper::serviceEvent(EventID id)
             // Clear the skip flag
             skip = false;
 
-            // Check the Blitter Finish Disable bit
-            if (!getBFD()) {
-                if (agnus.blitter.isRunning()) {
-                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                    break;
-                }
-            }
-
+            // Remember the Blitter Finish Disable bit
+            bfd = getBFD();
+            
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
