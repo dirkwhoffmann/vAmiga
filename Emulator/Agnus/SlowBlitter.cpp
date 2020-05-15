@@ -1086,11 +1086,6 @@ Blitter::exec()
         // Run the fill logic circuitry
         if ((instr & FILL) && !lockD) doFill(dhold, fillCarry);
         
-        // Update the zero flag
-        if (dhold) bzero = false;
-        // if (dhold && !lockD) { bzero = false; debug("BZERO = FALSE\n"); }
-        
-        /*
         if (!lockD) {
 
             // Run the fill logic circuitry
@@ -1099,7 +1094,6 @@ Blitter::exec()
             // Update the zero flag
             if (dhold) bzero = false;
         }
-        */
     }
 
     if (instr & REPEAT) {
