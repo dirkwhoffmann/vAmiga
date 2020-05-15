@@ -139,7 +139,7 @@ void Blitter::doFastCopyBlit()
             // Run the minterm logic circuit
             debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-            assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+            assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
             // Run the fill logic circuit
             if (fill) doFill(dhold, fillCarry);
@@ -237,7 +237,7 @@ Blitter::doFastLineBlit()
     u32 bltcpt_local = bltcpt;
     u32 bltdpt_local = bltdpt;
     u32 blit_a_shift_local = bltconASH();
-    u32 bltzero_local = 0;
+    u32 bzero_local = 0;
     u32 i;
     
     u32 sulsudaul = (bltcon >> 2) & 0x7;
@@ -285,7 +285,7 @@ Blitter::doFastLineBlit()
         }
         
         // Remember zero result status
-        bltzero_local = bltzero_local | bltddat_local;
+        bzero_local = bzero_local | bltddat_local;
         
         // Rotate mask
         mask = (mask << 1) | (mask >> 15);
@@ -348,7 +348,7 @@ Blitter::doFastLineBlit()
     bltapt = decision_variable;
     bltcpt = bltcpt_local;
     bltdpt = bltdpt_local;
-    bzero  = bltzero_local;
+    bzero  = bzero_local;
 }
     /*
      void blitterLineMode(void)

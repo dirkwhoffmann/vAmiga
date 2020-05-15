@@ -180,7 +180,7 @@ Blitter::setBLTCON1(u16 value)
 void
 Blitter::pokeBLTAPTH(u16 value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
+    plaindebug(BLTREG_DEBUG, "pokeBLTAPTH(%X)\n", value);
     debug(BLT_GUARD && running, "BLTAPTH written while Blitter is running");
 
     bltapt = REPLACE_HI_WORD(bltapt, value);
@@ -189,7 +189,7 @@ Blitter::pokeBLTAPTH(u16 value)
 void
 Blitter::pokeBLTAPTL(u16 value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
+    plaindebug(BLTREG_DEBUG, "pokeBLTAPTL(%X)\n", value);
     debug(BLT_GUARD && running, "BLTAPTL written while Blitter is running");
 
     bltapt = REPLACE_LO_WORD(bltapt, value & 0xFFFE);
@@ -397,7 +397,7 @@ Blitter::pokeBLTDMOD(u16 value)
 void
 Blitter::pokeBLTADAT(u16 value)
 {
-    debug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
+    plaindebug(BLTREG_DEBUG, "pokeBLTADAT(%X)\n", value);
     debug(BLT_GUARD && running, "BLTADAT written while Blitter is running");
 
     anew = value;
@@ -453,7 +453,6 @@ Blitter::serviceEvent(EventID id)
 
             // Postpone the operation if Blitter DMA is disabled
             if (!agnus.bltdma()) {
-                // agnus.scheduleAbs<BLT_SLOT>(NEVER, BLT_STRT1);
                 agnus.rescheduleAbs<BLT_SLOT>(NEVER);
                 break;
             }
@@ -877,7 +876,8 @@ Blitter::endBlit()
     plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
 
     running = false;
-
+    finalZero = bzero;
+    
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 
@@ -885,6 +885,9 @@ Blitter::endBlit()
     if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
         plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+        plaindebug("Memory: %x (%x)\n",
+                   fnv_1a_32(mem.chip, mem.chipRamSize()),
+                   fnv_1a_32(mem.slow, mem.slowRamSize()));
     }
 
     // Let the Copper know about the termination

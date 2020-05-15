@@ -1081,13 +1081,16 @@ Blitter::exec()
         // Run the minterm logic circuit
         debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
-        assert(dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
+        assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
-        // Run the fill logic circuitry
-        if ((instr & FILL) && !lockD) doFill(dhold, fillCarry);
+        if (!lockD) {
 
-        // Update the zero flag
-        if (dhold) bzero = false;
+            // Run the fill logic circuitry
+            if (instr & FILL) doFill(dhold, fillCarry);
+
+            // Update the zero flag
+            if (dhold) bzero = false;
+        }
     }
 
     if (instr & REPEAT) {
@@ -1150,15 +1153,6 @@ Blitter::fakeExec()
         assert(agnus.pos.h < HPOS_CNT);
         agnus.busValue[agnus.pos.h] = 0x8888;
     }
-
-    /*
-    if (instr & FETCH_A) { }
-    if (instr & FETCH_B) { }
-    if (instr & FETCH_C) { }
-    if (instr & HOLD_A) { }
-    if (instr & HOLD_B) { }
-    if (instr & HOLD_D) { }
-    */
 
     if (instr & REPEAT) {
 
