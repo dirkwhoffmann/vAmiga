@@ -643,11 +643,14 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_REQ_DMA\n");
             
             // Check if we need to wait for the Blitter
-            if (!getBFD() && agnus.blitter.isRunning()) {
-                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                break;
+            if (!getBFD()) {
+                if (agnus.blitter.isRunning()) {
+                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                    break;
+                }
+                bfd = true;
             }
-
+            
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
@@ -663,9 +666,12 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_FETCH\n");
 
             // Check if we need to wait for the Blitter
-            if (!getBFD() && agnus.blitter.isRunning()) {
-                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                break;
+            if (!getBFD()) {
+                if (agnus.blitter.isRunning()) {
+                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                    break;
+                }
+                bfd = true;
             }
 
             // Wait for the next possible DMA cycle
