@@ -641,13 +641,15 @@ Copper::serviceEvent(EventID id)
         case COP_REQ_DMA:
 
             if (verbose) debug("COP_REQ_DMA\n");
+            
+            // Check if we need to wait for the Blitter
+            if (!getBFD() && agnus.blitter.isRunning()) {
+                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                break;
+            }
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
-
-            // Wait for the Bliter if the BFD flag is cleared
-            if (!bfd && blitter.isRunning()) { reschedule(); break; }
-            bfd = true;
 
             // Don't wake up in an odd cycle
             if (agnus.pos.h % 2) { reschedule(); break; }
@@ -660,12 +662,14 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_FETCH\n");
 
+            // Check if we need to wait for the Blitter
+            if (!getBFD() && agnus.blitter.isRunning()) {
+                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                break;
+            }
+
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
-
-            // Wait for the Bliter if the BFD flag is cleared
-            if (!bfd && blitter.isRunning()) { reschedule(); break; }
-            bfd = true;
 
             // Load the first instruction word
             cop1ins = agnus.doCopperDMA(coppc);
@@ -759,14 +763,12 @@ Copper::serviceEvent(EventID id)
             skip = false;
 
             // Remember the Blitter Finish Disable bit
-            // bfd = getBFD();
+            bfd = getBFD();
             
-            // Check the Blitter Finish Disable bit
-            if (!getBFD()) {
-                if (agnus.blitter.isRunning()) {
-                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                    break;
-                }
+            // Check if we need to wait for the Blitter
+            if (!getBFD() && agnus.blitter.isRunning()) {
+                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                break;
             }
             
             // Wait for the next possible DMA cycle
@@ -781,7 +783,9 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT_BLIT:
             
-            // debug("COP_WAIT_BLIT\n");
+            if (verbose) debug("COP_WAIT_BLIT\n");
+
+            bfd = true;
             
             // Wait for the next free cycle
             if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
@@ -913,7 +917,7 @@ Copper::blitterDidTerminate()
 {
     if (agnus.hasEvent<COP_SLOT>(COP_WAIT_BLIT)) {
 
-        // debug("Blitter did terminate\n");
+        debug("Blitter did terminate\n");
 
         // Wake up the Copper in the next even cycle
         if (IS_EVEN(agnus.pos.h)) {
