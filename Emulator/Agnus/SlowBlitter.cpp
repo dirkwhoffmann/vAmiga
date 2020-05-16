@@ -152,8 +152,7 @@ Blitter::initSlowBlitter()
             }
         },
 
-        // 1: D0 -- D1 -- | -- D2 (most likely wrong, see correction below)
-        // 1: D0 -- -- D1 -- -- | -- D2
+        // 1:  -- D0 -- D1 | -- D2
         {
             {
                 {   // Full execution, no fill
@@ -970,6 +969,9 @@ Blitter::exec()
         busidle = instr & BUSIDLE;
     }
 
+    // Trigger Blitter interrupt if this is the termination cycle
+    if (instr & BLTDONE) paula.raiseIrq(INT_BLIT);
+    
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
 

@@ -873,17 +873,14 @@ void
 Blitter::endBlit()
 {
     plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
-
+    
     running = false;
-
-    // Trigger the Blitter interrupt
-    paula.raiseIrq(INT_BLIT);
-
+    
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();
 
     // Dump checksums if requested
-    if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
+    if (BLT_CHECKSUM) {
         plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
         plaindebug("Memory: %x (%x)\n",
