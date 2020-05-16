@@ -933,12 +933,6 @@ Memory::peek16(u32 addr)
     return 0;
 }
 
-u32
-Memory::peek32(u32 addr)
-{
-    return HI_W_LO_W(peek16<BUS_CPU>(addr), peek16<BUS_CPU>(addr + 2));
-}
-
 u8
 Memory::spypeek8(u32 addr)
 {
@@ -1216,13 +1210,6 @@ Memory::poke16(u32 addr, u16 value)
             }
             break;
     }
-}
-
-void
-Memory::poke32(u32 addr, u32 value)
-{
-    poke16<BUS_CPU>(addr,     HI_WORD(value));
-    poke16<BUS_CPU>(addr + 2, LO_WORD(value));
 }
 
 u8

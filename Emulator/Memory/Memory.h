@@ -415,7 +415,6 @@ public:
 
     u8 peek8(u32 addr);
     template <BusOwner owner> u16 peek16(u32 addr);
-    u32 peek32(u32 addr);
 
     u8 spypeek8(u32 addr);
     u16 spypeek16(u32 addr);
@@ -423,7 +422,6 @@ public:
     
     void poke8(u32 addr, u8 value);
     template <BusOwner owner> void poke16(u32 addr, u16 value);
-    void poke32(u32 addr, u32 value);
 
     
     //
