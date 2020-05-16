@@ -34,7 +34,7 @@ assert(ext != NULL); assert(((x) % config.extSize) == ((x) & extMask));
 assert((x) >= 0xA00000 && (x) <= 0xBFFFFF);
 #define ASSERT_RTC_ADDR(x) \
 assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
-#define ASSERT_OCS_ADDR(x) \
+#define ASSERT_CUSTOM_ADDR(x) \
 assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
 #define ASSERT_AUTO_ADDR(x) \
 assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);

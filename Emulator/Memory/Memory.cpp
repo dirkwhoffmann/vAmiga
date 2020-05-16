@@ -781,7 +781,7 @@ Memory::peek8(u32 addr)
 
         case MEM_CUSTOM:
 
-            ASSERT_OCS_ADDR(addr);
+            ASSERT_CUSTOM_ADDR(addr);
             agnus.executeUntilBusIsFree();
             stats.chipReads.raw++;
             dataBus = peekCustom8(addr);
@@ -895,7 +895,7 @@ Memory::peek16(u32 addr)
 
                 case MEM_CUSTOM:
 
-                    ASSERT_OCS_ADDR(addr);
+                    ASSERT_CUSTOM_ADDR(addr);
                     agnus.executeUntilBusIsFree();
                     stats.chipReads.raw++;
                     dataBus = peekCustom16(addr);
@@ -945,7 +945,7 @@ Memory::spypeek8(u32 addr)
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA8(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
-        case MEM_CUSTOM:   ASSERT_OCS_ADDR(addr);  return spypeekCustom8(addr);
+        case MEM_CUSTOM:   ASSERT_CUSTOM_ADDR(addr);  return spypeekCustom8(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
         case MEM_ROM:      ASSERT_ROM_ADDR(addr);  return READ_ROM_8(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr);  return READ_WOM_8(addr);
@@ -971,7 +971,7 @@ Memory::spypeek16(u32 addr)
         case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA16(addr);
         case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
         case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
-        case MEM_CUSTOM:   ASSERT_OCS_ADDR(addr);  return spypeekCustom16(addr);
+        case MEM_CUSTOM:   ASSERT_CUSTOM_ADDR(addr);  return spypeekCustom16(addr);
         case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
         case MEM_ROM:      ASSERT_ROM_ADDR(addr);  return READ_ROM_16(addr);
         case MEM_WOM:      ASSERT_WOM_ADDR(addr);  return READ_WOM_16(addr);
@@ -1043,7 +1043,7 @@ Memory::poke8(u32 addr, u8 value)
 
         case MEM_CUSTOM:
 
-            ASSERT_OCS_ADDR(addr);
+            ASSERT_CUSTOM_ADDR(addr);
             agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             pokeCustom8(addr, value);
@@ -1169,7 +1169,7 @@ Memory::poke16(u32 addr, u16 value)
 
                 case MEM_CUSTOM:
 
-                    ASSERT_OCS_ADDR(addr);
+                    ASSERT_CUSTOM_ADDR(addr);
                     agnus.executeUntilBusIsFree();
                     stats.chipWrites.raw++;
                     dataBus = value;
