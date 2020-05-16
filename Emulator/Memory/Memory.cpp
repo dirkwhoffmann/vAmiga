@@ -730,6 +730,8 @@ Memory::updateMemSrcTable()
 u8
 Memory::peek8(u32 addr)
 {
+    // if (blitter.copycount >= 580) debug("peek8(%x)\n", addr);
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
@@ -822,6 +824,8 @@ Memory::peek8(u32 addr)
 template <BusOwner owner> u16
 Memory::peek16(u32 addr)
 {
+    // if (blitter.copycount >= 580) debug("peek16<%d>(%x)\n", owner, addr);
+    
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
         assert(false);
@@ -992,6 +996,8 @@ Memory::poke8(u32 addr, u8 value)
 {
     // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** poke8(%X,%X)\n", addr, value);
 
+    // if (blitter.copycount >= 580) debug("poke8(%x,%x)\n", addr, value);
+
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
@@ -1085,6 +1091,8 @@ Memory::poke8(u32 addr, u8 value)
 template <BusOwner owner> void
 Memory::poke16(u32 addr, u16 value)
 {
+    // if (blitter.copycount >= 580) debug("pokek16<%d>(%x,%x)\n", owner, addr, value);
+
     /*
     if (addr == 0xC01EC2) {
         debug("poke16(%x,%x)\n", addr, value);

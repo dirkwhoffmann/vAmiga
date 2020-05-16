@@ -279,6 +279,10 @@ Agnus::busIsFree()
         {
             // Deny if Blitter DMA is disabled
             if (!bltdma()) return false;
+            
+            // Deny if the CPU has precedence
+            if (bls && !bltpri()) return false;
+
             return true;
         }
     }
