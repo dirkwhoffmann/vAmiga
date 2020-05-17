@@ -20,6 +20,9 @@ class Keyboard : public AmigaComponent {
     // The current keyboard state
     KeyboardState state;
     
+    // Shift register storing the transmission bits
+    u8 shiftReg;
+    
     /* Time stamps recording an Amiga triggered change of the SP line.
      * The SP line is driven by the Amiga to transmit a handshake.
      */
@@ -58,6 +61,7 @@ public:
         worker
 
         & state
+        & shiftReg
         & spLow
         & spHigh
         & typeAheadBuffer

@@ -12,6 +12,7 @@
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Keyboard");
+    config.accurate = true;
 }
 
 void
@@ -54,7 +55,7 @@ Keyboard::pressKey(long keycode)
         keyDown[keycode] = true;
         writeToBuffer(keycode);
         
-        // Check for reset key combination (CTRL - Amiga Left - Amiga Right)
+        // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
             amiga.putMessage(MSG_CTRL_AMIGA_AMIGA);
         }
@@ -171,88 +172,6 @@ Keyboard::serviceKeyboardEvent(EventID id)
     }
 }
 
-/*
-void
-Keyboard::serviceKeyboardEvent(EventID id)
-{
-    switch(id) {
-
-        case KBD_SELFTEST:
-
-            debug(KBD_DEBUG, "KBD_SELFTEST\n");
-
-            // Continue with KBD_STRM_ON after receiving a handshake
-            agnus.scheduleInc<KBD_SLOT>(SEC(1), KBD_TIMEOUT, KBD_STRM_ON);
-            break;
-
-        case KBD_SYNC:
-
-            debug(KBD_DEBUG, "KBD_SYNC\n");
-
-            // Send a SYNC byte
-            sendKeyCode(0xFF);
-
-            // Continue with KBD_STRM_ON after receiving a handshake
-            agnus.scheduleInc<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT, KBD_STRM_ON);
-            break;
-
-        case KBD_STRM_ON:
-
-            debug(KBD_DEBUG, "KBD_STRM_ON\n");
-
-            // Send the "Initiate power-up key stream" code ($FD)
-            sendKeyCode(0xFD);
-
-            // Continue with KBD_STRM_OFF after receiving a handshake
-            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_STRM_OFF);
-            break;
-
-        case KBD_STRM_OFF:
-
-            debug(KBD_DEBUG, "KBD_STRM_OFF\n");
-
-            // Send the "Terminate key stream" code ($FE)
-            sendKeyCode(0xFE);
-
-            // Continue with KBD_STRM_OFF after receiving a handshake
-            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT, KBD_SEND);
-            break;
-
-        case KBD_SEND:
-
-            debug(KBD_DEBUG, "KBD_SEND\n");
-
-            // Send a key code if the buffer is filled
-            if (!bufferIsEmpty()) sendKeyCode(readFromBuffer());
-
-            // Check if there are more keys to send
-            if (!bufferIsEmpty()) {
-
-                // Continue in this state after receiving a handshake
-                agnus.scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT, KBD_SEND);
-
-            } else {
-
-                // Go idle
-                agnus.rescheduleAbs<KBD_SLOT>(NEVER);
-
-            }
-            break;
-
-        case KBD_TIMEOUT:
-
-            debug(KBD_DEBUG, "KBD_TIMEOUT\n");
-
-            // We've received a time-out. Reinitiate the SYNC sequence
-            agnus.scheduleInc<KBD_SLOT>(DMA_CYCLES(1), KBD_SYNC);
-            break;
-
-        default:
-            assert(false);
-    }
-}
-*/
-
 void
 Keyboard::processHandshake()
 {
@@ -289,7 +208,7 @@ Keyboard::execute()
             
             debug(KBD_DEBUG, "KB_SELFTEST\n");
             
-            // Start a watchdog timer for the next handshake
+            // Await a handshake within the next second
             agnus.scheduleRel<KBD_SLOT>(SEC(1), KBD_TIMEOUT);
             break;
             
@@ -299,9 +218,6 @@ Keyboard::execute()
             
             // Send a SYNC byte
             sendKeyCode(0xFF);
-            
-            // Start a watchdog timer for the next handshake
-            agnus.scheduleRel<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT);
             break;
             
         case KB_STRM_ON:
@@ -310,9 +226,6 @@ Keyboard::execute()
             
             // Send the "Initiate power-up key stream" code ($FD)
             sendKeyCode(0xFD);
-            
-            // Start a watchdog timer for the next handshake
-            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT);
             break;
             
         case KB_STRM_OFF:
@@ -321,9 +234,6 @@ Keyboard::execute()
             
             // Send the "Terminate key stream" code ($FE)
             sendKeyCode(0xFE);
-            
-            // Start a watchdog timer for the next handshake
-            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT);
             break;
             
         case KB_SEND:
@@ -331,32 +241,37 @@ Keyboard::execute()
             debug(KBD_DEBUG, "KB_SEND\n");
             
             // Send a key code if the buffer is filled
-            if (!bufferIsEmpty()) sendKeyCode(readFromBuffer());
-            
-            // Check if there are more keys to send
             if (!bufferIsEmpty()) {
-                
-                // Start a watchdog timer for the next handshake
-                agnus.scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT);
-                
+                sendKeyCode(readFromBuffer());
             } else {
-                
-                // Go idle
                 agnus.cancel<KBD_SLOT>();
-                
             }
             break;
     }
 }
 
 void
-Keyboard::sendKeyCode(u8 keyCode)
+Keyboard::sendKeyCode(u8 code)
 {
-    debug(KBD_DEBUG, "sendKeyCode(%d)\n", keyCode);
+    debug(KBD_DEBUG, "sendKeyCode(%d)\n", code);
 
     // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
-    keyCode  = ~((keyCode << 1) | (keyCode >> 7)) & 0xFF;
+    shiftReg = ~((code << 1) | (code >> 7)) & 0xFF;
 
     // Send it over to CIA A
-    ciaa.setKeyCode(keyCode);
+    ciaa.setKeyCode(shiftReg);
+    
+    /* Start a watchdog timer to monitor the expected handshake
+     *
+     * "The keyboard processor sets the KDAT line about 20 microseconds before
+     *  it pulls KCLK low. KCLK stays low for about 20 microseconds, then goes
+     *  high again. The processor waits another 20 microseconds before changing
+     *  KDAT. Therefore, the bit rate during transmission is about 60
+     *  microseconds per bit" [HRM]
+     * "If the handshake pulse does not arrive within 143 ms of the last clock
+     *  of the transmission, the keyboard will assume that the computer is
+     *  still waiting for the rest of the transmission and is therefore out
+     *  of sync." [HRM]
+     */
+    agnus.scheduleRel<KBD_SLOT>(8*MSEC(60) + MSEC(143), KBD_TIMEOUT);
 }

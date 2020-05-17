@@ -36,6 +36,7 @@ inline bool isKeyboardState(long value) {
 
 typedef struct
 {
+    bool accurate;
 }
 KeyboardConfig;
 
