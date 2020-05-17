@@ -821,8 +821,32 @@ Memory::peek8(u32 addr)
     return 0;
 }
 
-template <BusOwner owner> u16
-Memory::peek16(u32 addr)
+template <> u16
+Memory::peek16<BUS_COPPER>(u32 addr)
+{
+    assert(IS_EVEN(addr));
+    
+    addr &= 0xFFFFFF;
+    
+    ASSERT_CHIP_ADDR(addr);
+    dataBus = READ_CHIP_16(addr);
+    return dataBus;
+}
+
+template <> u16
+Memory::peek16<BUS_BLITTER>(u32 addr)
+{
+    assert(IS_EVEN(addr));
+    
+    addr &= 0xFFFFFF;
+    
+    ASSERT_CHIP_ADDR(addr);
+    dataBus = READ_CHIP_16(addr);
+    return dataBus;
+}
+
+template <> u16
+Memory::peek16<BUS_CPU>(u32 addr)
 {
     // if (blitter.copycount >= 580) debug("peek16<%d>(%x)\n", owner, addr);
     
@@ -832,107 +856,90 @@ Memory::peek16(u32 addr)
     }
 
     addr &= 0xFFFFFF;
-
-    switch(owner) {
-
-        case BUS_COPPER:
-
+    
+    switch (memSrc[addr >> 16]) {
+            
+        case MEM_UNMAPPED:
+            
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
+            if (amiga.getDebugMode())
+                debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
+            return dataBus;
+            
+        case MEM_CHIP:
+            
             ASSERT_CHIP_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
             dataBus = READ_CHIP_16(addr);
             return dataBus;
-
-        case BUS_BLITTER:
-
-            ASSERT_CHIP_ADDR(addr);
-            dataBus = READ_CHIP_16(addr);
+            
+        case MEM_FAST:
+            
+            ASSERT_FAST_ADDR(addr);
+            stats.fastReads.raw++;
+            return READ_FAST_16(addr);
+            
+        case MEM_CIA:
+            
+            ASSERT_CIA_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
+            dataBus = peekCIA16(addr);
             return dataBus;
-
-        case BUS_CPU:
-
-            switch (memSrc[addr >> 16]) {
-
-                case MEM_UNMAPPED:
-
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    if (amiga.getDebugMode())
-                        debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
-                    return dataBus;
-
-                case MEM_CHIP:
-
-                    ASSERT_CHIP_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    dataBus = READ_CHIP_16(addr);
-                    return dataBus;
-
-                case MEM_FAST:
-
-                    ASSERT_FAST_ADDR(addr);
-                    stats.fastReads.raw++;
-                    return READ_FAST_16(addr);
-
-                case MEM_CIA:
-
-                    ASSERT_CIA_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    dataBus = peekCIA16(addr);
-                    return dataBus;
-
-                case MEM_SLOW:
-
-                    ASSERT_SLOW_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.slowReads.raw++;
-                    dataBus = READ_SLOW_16(addr);
-                    return dataBus;
-
-                case MEM_RTC:
-
-                    ASSERT_RTC_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    dataBus = peekRTC16(addr);
-                    return dataBus;
-
-                case MEM_CUSTOM:
-
-                    ASSERT_CUSTOM_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    dataBus = peekCustom16(addr);
-                    return dataBus;
-
-                case MEM_AUTOCONF:
-
-                    ASSERT_AUTO_ADDR(addr);
-                    agnus.executeUntilBusIsFree();
-                    stats.chipReads.raw++;
-                    dataBus = peekAutoConf16(addr);
-                    return dataBus;
-
-                case MEM_ROM:
-
-                    ASSERT_ROM_ADDR(addr);
-                    stats.kickReads.raw++;
-                    return READ_ROM_16(addr);
-
-                case MEM_WOM:
-
-                    ASSERT_WOM_ADDR(addr);
-                    stats.kickReads.raw++;
-                    return READ_WOM_16(addr);
-
-                case MEM_EXT:
-
-                    ASSERT_EXT_ADDR(addr);
-                    stats.kickReads.raw++;
-                    return READ_EXT_16(addr);
-            }
+            
+        case MEM_SLOW:
+            
+            ASSERT_SLOW_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.slowReads.raw++;
+            dataBus = READ_SLOW_16(addr);
+            return dataBus;
+            
+        case MEM_RTC:
+            
+            ASSERT_RTC_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
+            dataBus = peekRTC16(addr);
+            return dataBus;
+            
+        case MEM_CUSTOM:
+            
+            ASSERT_CUSTOM_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
+            dataBus = peekCustom16(addr);
+            return dataBus;
+            
+        case MEM_AUTOCONF:
+            
+            ASSERT_AUTO_ADDR(addr);
+            agnus.executeUntilBusIsFree();
+            stats.chipReads.raw++;
+            dataBus = peekAutoConf16(addr);
+            return dataBus;
+            
+        case MEM_ROM:
+            
+            ASSERT_ROM_ADDR(addr);
+            stats.kickReads.raw++;
+            return READ_ROM_16(addr);
+            
+        case MEM_WOM:
+            
+            ASSERT_WOM_ADDR(addr);
+            stats.kickReads.raw++;
+            return READ_WOM_16(addr);
+            
+        case MEM_EXT:
+            
+            ASSERT_EXT_ADDR(addr);
+            stats.kickReads.raw++;
+            return READ_EXT_16(addr);
     }
-
+    
     assert(false);
     return 0;
 }
@@ -2079,7 +2086,3 @@ Memory::hex(u32 addr, size_t bytes)
 
 template void Memory::pokeCustom16<POKE_CPU>(u32 addr, u16 value);
 template void Memory::pokeCustom16<POKE_COPPER>(u32 addr, u16 value);
-
-template u16 Memory::peek16<BUS_CPU>(u32 addr);
-template u16 Memory::peek16<BUS_COPPER>(u32 addr);
-template u16 Memory::peek16<BUS_BLITTER>(u32 addr);
