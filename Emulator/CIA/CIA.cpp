@@ -176,7 +176,7 @@ CIA::peek(u16 addr)
     if (addr == 0 || addr == 1) {
         // debug(DSKREG_DEBUG, "Peek($%X) DDRA = $%X DDRB = $%X\n", addr, DDRA, DDRB);
     }
-    debug(CIAREG_DEBUG, "Peek($%X)\n", addr);
+    debug(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, ciaRegName(addr));
 
     wakeUp();
 
@@ -378,7 +378,7 @@ CIA::poke(u16 addr, u8 value)
     if (addr == 0 || addr == 1) {
         // debug(DSKREG_DEBUG, "Poke($%X,$%X) DDRA = $%X DDRB = $%X\n", addr, value, DDRA, DDRB);
     }
-    debug(CIAREG_DEBUG, "Poke($%X,$%X) (%d,%d)\n", addr, value, addr, value);
+    debug(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, ciaRegName(addr), value);
     
     wakeUp();
     

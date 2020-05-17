@@ -268,6 +268,9 @@ static const double dmaClockFrequency = masterClockFrequency / 8.0;
 // Returns a printable name for a custom register
 const char *regName(u32 addr);
 
+// Returns a printable name for a CIA register
+const char *ciaRegName(u32 addr);
+
 // DMACON register bits
 #define BBUSY  0x4000
 #define BZERO  0x2000
