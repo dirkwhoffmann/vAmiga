@@ -17,22 +17,15 @@ class Keyboard : public AmigaComponent {
     // Current configuration
      KeyboardConfig config;
 
-public:
-    
-    /* The keybord layout identifier.
-     * This variable is set and read by the GUI, only.
-     */
-    long layout = 0;
-    
-private:
-
     /* Time stamps recording an Amiga triggered change of the SP line.
      * The SP line is driven by the Amiga to transmit a handshake.
      */
     Cycle spLow;
     Cycle spHigh;
 
-    // The keycode type-ahead buffer (10 keycodes on an original Amiga)
+    /* The keycode type-ahead buffer.
+     * The Amiga can hold up to 10 keycodes in this buffer.
+     */
     static const size_t bufferSize = 10;
     u8 typeAheadBuffer[bufferSize];
     
@@ -54,9 +47,6 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-
-        & layout;
     }
 
     template <class T>
@@ -102,8 +92,7 @@ public:
     void releaseKey(long keycode);
     void releaseAllKeys();
     
-    bool escKeyIsPressed() { return keyIsPressed(0x45); }
-
+    
     //
     // Managing the type-ahead buffer
     //
@@ -113,10 +102,10 @@ private:
     bool bufferIsEmpty() { return bufferIndex == 0; }
     bool bufferIsFull() { return bufferIndex == bufferSize; }
 
-    // Reads a keycode from the type-ahead buffer.
+    // Reads a keycode from the type-ahead buffer
     u8 readFromBuffer();
 
-    // Writes a keycode into the type-ahead buffer.
+    // Writes a keycode into the type-ahead buffer
     void writeToBuffer(u8 keycode);
 
     
@@ -126,9 +115,9 @@ private:
     
 public:
 
-    /* Emulates a handshake from the Amiga
+    /* Emulates a handshake from the Amiga.
      * This function is called whenever the CIA switches the serial register
-     * between from input mode to output mode or vice versa.
+     * from input mode to output mode or vice versa.
      */
     void setSPLine(bool value, Cycle cycle);
 
