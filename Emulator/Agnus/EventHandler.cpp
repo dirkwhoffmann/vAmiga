@@ -293,6 +293,9 @@ Agnus::inspectEventSlot(EventSlot nr)
 
                 case 0:             i->eventName = "none"; break;
                 case KBD_TIMEOUT:   i->eventName = "KBD_TIMEOUT"; break;
+                case KBD_DAT:       i->eventName = "KBD_DAT"; break;
+                case KBD_CLK0:      i->eventName = "KBD_CLK0"; break;
+                case KBD_CLK1:      i->eventName = "KBD_CLK1"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;

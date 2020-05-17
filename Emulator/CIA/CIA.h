@@ -235,7 +235,7 @@ protected:
     // Chip interface (port pins)
     //
     
-    // Serial clock or input timer clock or timer gate
+    bool SP;
     bool CNT;
     bool INT;
     
@@ -315,6 +315,7 @@ public:
         & SDR
         & serClk
         & serCounter
+        & SP
         & CNT
         & INT
         & tiredness
@@ -385,6 +386,9 @@ public:
     // Simulates a falling edge on the CNT pin
     void emulateFallingEdgeOnCntPin();
 
+    // Set the SP pin (serial port pin)
+    void setSP(bool value) { SP = value; }
+    
 private:
     
     //

@@ -155,6 +155,8 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
+    u64 nr = agnus.slot[KBD_SLOT].data;
+
     switch(id) {
             
         case KBD_TIMEOUT:
@@ -166,6 +168,42 @@ Keyboard::serviceKeyboardEvent(EventID id)
             execute();
             break;
             
+        case KBD_DAT:
+            
+            debug(KBD_DEBUG, "KBD_DAT_%d\n", nr);
+
+            if (nr < 8) {
+                
+                // Put a bit from the shift register onto the SP line
+                ciaa.setSP(GET_BIT(shiftReg, 7 - nr));
+                agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_CLK0);
+                
+            } else {
+                
+                // Put the SP line back to normal
+                ciaa.setSP(1);
+                agnus.scheduleRel<KBD_SLOT>(MSEC(143), KBD_TIMEOUT);
+            }
+            break;
+            
+        case KBD_CLK0:
+
+            debug(KBD_DEBUG, "KBD_CLK0\n");
+
+            // Pull the clock line low
+            ciaa.emulateFallingEdgeOnCntPin();
+            agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_CLK1);
+            break;
+            
+        case KBD_CLK1:
+
+            debug(KBD_DEBUG, "KBD_CLK1\n");
+
+            // Pull the clock line high
+            ciaa.emulateRisingEdgeOnCntPin();
+            agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_DAT, nr + 1);
+            break;
+
         default:
             assert(false);
             break;
@@ -175,28 +213,17 @@ Keyboard::serviceKeyboardEvent(EventID id)
 void
 Keyboard::processHandshake()
 {
+    // Switch to the next state
     switch(state) {
-            
-        case KB_SELFTEST:
-        case KB_SYNC:
-            
-            state = KB_STRM_ON;
-            execute();
-            break;
-            
-        case KB_STRM_ON:
-            
-            state = KB_STRM_OFF;
-            execute();
-            break;
-            
-        case KB_STRM_OFF:
-        case KB_SEND:
-            
-            state = KB_SEND;
-            execute();
-            break;
+        case KB_SELFTEST:  state = KB_STRM_ON;  break;
+        case KB_SYNC:      state = KB_STRM_ON;  break;
+        case KB_STRM_ON:   state = KB_STRM_OFF; break;
+        case KB_STRM_OFF:  state = KB_SEND;     break;
+        case KB_SEND:                           break;
     }
+    
+    // Perform all state specific actions
+    execute();
 }
 
 void
@@ -257,9 +284,6 @@ Keyboard::sendKeyCode(u8 code)
 
     // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
     shiftReg = ~((code << 1) | (code >> 7)) & 0xFF;
-
-    // Send it over to CIA A
-    ciaa.setKeyCode(shiftReg);
     
     /* Start a watchdog timer to monitor the expected handshake
      *
@@ -273,5 +297,15 @@ Keyboard::sendKeyCode(u8 code)
      *  still waiting for the rest of the transmission and is therefore out
      *  of sync." [HRM]
      */
-    agnus.scheduleRel<KBD_SLOT>(8*MSEC(60) + MSEC(143), KBD_TIMEOUT);
+    if (config.accurate) {
+        
+        // Start with the transmission of the first shift register bit
+        agnus.scheduleImm<KBD_SLOT>(KBD_DAT, 0);
+        
+    } else {
+
+        // In simple keyboard mode, send the keycode over in one chunk
+        ciaa.setKeyCode(shiftReg);
+        agnus.scheduleRel<KBD_SLOT>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
+    }
 }

@@ -208,12 +208,10 @@ typedef enum : long
     IPL_EVENT_COUNT,
 
     // Keyboard
-    //KBD_SELFTEST = 1, // DEPRECATED
-    // KBD_SYNC, // DEPRECATED
-    //KBD_STRM_ON, // DEPRECATED
-    //KBD_STRM_OFF, // DEPRECATED
-    // KBD_SEND,  // DEPRECATED
     KBD_TIMEOUT = 1,
+    KBD_DAT,
+    KBD_CLK0,
+    KBD_CLK1,
     KBD_EVENT_COUNT,
 
     // Serial data out (UART)

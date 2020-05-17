@@ -123,12 +123,28 @@ void
 CIA::emulateRisingEdgeOnCntPin()
 {
     wakeUp();
-
+    
     // Timer A
     if ((CRA & 0x21) == 0x21) delay |= CIACountA1;
-
+    
     // Timer B
     if ((CRB & 0x61) == 0x21) delay |= CIACountB1;
+    
+    // Serial register
+    if (!(CRA & 0x40) /* input mode */ ) {
+        
+        if (serCounter == 0) serCounter = 8;
+        
+        // Shift in a bit from the SP line
+        SDR = SDR << 1 | SP;
+        debug("New SDR: %x\n", SDR);
+
+        // Decrement serial counter and trigger interrupt if a byte is complete
+        if (--serCounter == 0) {
+            delay |= CIASerInt0;
+            debug("Received serial byte: %x\n", SDR);
+        }
+    }
 }
 
 void
@@ -889,7 +905,7 @@ CIA::executeOneCycle()
     }
     
     // Run shift register with generated clock signal
-    if (serCounter) {
+    if (serCounter && (CRA & 0x40) /* output mode */) {
         if ((delay & (CIASerClk2 | CIASerClk1)) == CIASerClk1) {      // Positive edge
             if (serCounter == 1) {
                 delay |= CIASerInt0; // Trigger interrupt
