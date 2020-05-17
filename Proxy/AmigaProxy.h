@@ -184,6 +184,7 @@ struct AmigaFileWrapper;
 - (BOOL) breakpointIsDisabled:(NSInteger)nr;
 - (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) removeBreakpoint:(NSInteger)nr;
+- (void) replaceBreakpoint:(NSInteger)nr addr:(u32)addr;
 
 - (BOOL) breakpointIsSetAt:(u32)addr;
 - (BOOL) breakpointIsSetAndEnabledAt:(u32)addr;
@@ -198,6 +199,7 @@ struct AmigaFileWrapper;
 - (BOOL) watchpointIsDisabled:(NSInteger)nr;
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val;
 - (void) removeWatchpoint:(NSInteger)nr;
+- (void) replaceWatchpoint:(NSInteger)nr addr:(u32)addr;
 
 - (BOOL) watchpointIsSetAt:(u32)addr;
 - (BOOL) watchpointIsSetAndEnabledAt:(u32)addr;

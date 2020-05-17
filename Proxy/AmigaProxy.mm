@@ -93,6 +93,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->debugger.breakpoints.remove(nr);
 }
+- (void) replaceBreakpoint:(NSInteger)nr addr:(u32)addr
+{
+    wrapper->cpu->debugger.breakpoints.replace(nr, addr);
+}
 - (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val
 {
     wrapper->cpu->debugger.breakpoints.setEnable(nr, val);
@@ -140,6 +144,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void) removeWatchpoint:(NSInteger)nr
 {
     return wrapper->cpu->debugger.watchpoints.remove(nr);
+}
+- (void) replaceWatchpoint:(NSInteger)nr addr:(u32)addr
+{
+    wrapper->cpu->debugger.watchpoints.replace(nr, addr);
 }
 - (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val
 {

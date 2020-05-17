@@ -88,6 +88,8 @@ public:
     void remove(long nr);
     void removeAll() { count = 0; setNeedsCheck(false); }
 
+    void replace(long nr, u32 addr);
+
     //
     // Enabling or disabling guards
     //

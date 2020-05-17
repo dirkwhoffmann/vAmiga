@@ -116,6 +116,15 @@ Guards::removeAt(u32 addr)
     setNeedsCheck(count != 0);
 }
 
+void
+Guards::replace(long nr, u32 addr)
+{
+    if (nr >= count || isSetAt(addr)) return;
+    
+    guards[nr].addr = addr;
+    guards[nr].hits = 0;
+}
+
 bool
 Guards::isEnabled(long nr)
 {
