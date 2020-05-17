@@ -148,6 +148,9 @@ private:
     
     // Sends a keycode to the Amiga
     void sendKeyCode(u8 keyCode);
+
+    // Sends a sync pulse to the Amiga
+    void sendSyncPulse();
 };
 
 #endif

@@ -137,12 +137,12 @@ CIA::emulateRisingEdgeOnCntPin()
         
         // Shift in a bit from the SP line
         SDR = SDR << 1 | SP;
-        debug("New SDR: %x\n", SDR);
+        debug(KBD_DEBUG, "SDR: %02x\n", SDR);
 
         // Decrement serial counter and trigger interrupt if a byte is complete
         if (--serCounter == 0) {
             delay |= CIASerInt0;
-            debug("Received serial byte: %x\n", SDR);
+            debug(KBD_DEBUG, "Received serial byte: %02x\n", SDR);
         }
     }
 }

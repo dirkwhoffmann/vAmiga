@@ -204,6 +204,34 @@ Keyboard::serviceKeyboardEvent(EventID id)
             agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_DAT, nr + 1);
             break;
 
+        case KBD_SYNC_DAT0:
+
+            debug(KBD_DEBUG, "KBD_SYNC_DAT0\n");
+            ciaa.setSP(0);
+            agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_SYNC_CLK0);
+            break;
+
+        case KBD_SYNC_CLK0:
+
+            debug(KBD_DEBUG, "KBD_SYNC_CLK0\n");
+            ciaa.emulateFallingEdgeOnCntPin();
+            agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_SYNC_CLK1);
+            break;
+            
+        case KBD_SYNC_CLK1:
+            
+            debug(KBD_DEBUG, "KBD_SYNC_CLK1\n");
+            ciaa.emulateRisingEdgeOnCntPin();
+            agnus.scheduleRel<KBD_SLOT>(USEC(20), KBD_SYNC_DAT1);
+            break;
+            
+        case KBD_SYNC_DAT1:
+            
+            debug(KBD_DEBUG, "KBD_SYNC_DAT1\n");
+            ciaa.setSP(1);
+            agnus.scheduleRel<KBD_SLOT>(MSEC(143), KBD_TIMEOUT);
+            break;
+
         default:
             assert(false);
             break;
@@ -242,9 +270,7 @@ Keyboard::execute()
         case KB_SYNC:
             
             debug(KBD_DEBUG, "KB_SYNC\n");
-            
-            // Send a SYNC byte
-            sendKeyCode(0xFF);
+            sendSyncPulse();
             break;
             
         case KB_STRM_ON:
@@ -308,4 +334,26 @@ Keyboard::sendKeyCode(u8 code)
         ciaa.setKeyCode(shiftReg);
         agnus.scheduleRel<KBD_SLOT>(8*USEC(60) + MSEC(143), KBD_TIMEOUT);
     }
+}
+
+void
+Keyboard::sendSyncPulse()
+{
+    /* "The keyboard will then attempt to restore sync by going into 'resync
+     *  mode.' In this mode, the keyboard clocks out a 1 and waits for a
+     *  handshake pulse. If none arrives within 143 ms, it clocks out another
+     *  1 and waits again. This process will continue until a handshake pulse
+     *  arrives."
+     */
+    debug(KBD_DEBUG, "sendSyncPulse\n");
+    
+    if (config.accurate) {
+         
+         agnus.scheduleImm<KBD_SLOT>(KBD_SYNC_DAT0);
+         
+     } else {
+
+         // In simple keyboard mode, send a whole byte
+         sendKeyCode(0xFF);
+     }
 }

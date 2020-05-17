@@ -296,6 +296,10 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case KBD_DAT:       i->eventName = "KBD_DAT"; break;
                 case KBD_CLK0:      i->eventName = "KBD_CLK0"; break;
                 case KBD_CLK1:      i->eventName = "KBD_CLK1"; break;
+                case KBD_SYNC_DAT0: i->eventName = "KBD_SYNC_DAT0"; break;
+                case KBD_SYNC_CLK0: i->eventName = "KBD_SYNC_CLK0"; break;
+                case KBD_SYNC_DAT1: i->eventName = "KBD_SYNC_DAT1"; break;
+                case KBD_SYNC_CLK1: i->eventName = "KBD_SYNC_CLK1"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;

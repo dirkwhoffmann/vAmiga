@@ -212,6 +212,10 @@ typedef enum : long
     KBD_DAT,
     KBD_CLK0,
     KBD_CLK1,
+    KBD_SYNC_DAT0,
+    KBD_SYNC_CLK0,
+    KBD_SYNC_DAT1,
+    KBD_SYNC_CLK1,
     KBD_EVENT_COUNT,
 
     // Serial data out (UART)
