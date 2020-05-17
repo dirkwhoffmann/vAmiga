@@ -12,6 +12,28 @@
 #ifndef _KEYBOARD_T_INC
 #define _KEYBOARD_T_INC
 
+//
+// Enumerations
+//
+
+typedef enum : long
+{
+    KB_SELFTEST,
+    KB_SYNC,
+    KB_STRM_ON,
+    KB_STRM_OFF,
+    KB_SEND
+}
+KeyboardState;
+
+inline bool isKeyboardState(long value) {
+    return value >= 0 && value <= KB_SEND;
+}
+
+//
+// Structures
+//
+
 typedef struct
 {
 }

@@ -20,6 +20,9 @@ Keyboard::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS
 
     memset(keyDown, 0, sizeof(keyDown));
+    
+    state = KB_SELFTEST;
+    execute();
 }
 
 void
@@ -104,10 +107,10 @@ Keyboard::writeToBuffer(u8 keycode)
     bufferIndex++;
 
     // Wake up the keyboard if it has gone idle
-    if (!agnus.isPending<KBD_SLOT>()) {
+    if (!agnus.hasEvent<KBD_SLOT>()) {
         debug(KBD_DEBUG, "Wake up\n");
-        agnus.rescheduleRel<KBD_SLOT>(0);
-
+        state = KB_SEND;
+        execute();
     }
 }
 
@@ -139,10 +142,7 @@ Keyboard::setSPLine(bool value, Cycle cycle)
     if (accept) {
 
         debug(KBD_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
-        if (agnus.hasEvent<KBD_SLOT>(KBD_TIMEOUT)) {
-            // Note: Watchdog events store the next event in their data field
-            agnus.scheduleRel<KBD_SLOT>(0, (EventID)agnus.slot[KBD_SLOT].data);
-        }
+        processHandshake();
     }
 
     if (reject) {
@@ -154,7 +154,27 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 void
 Keyboard::serviceKeyboardEvent(EventID id)
 {
+    switch(id) {
+            
+        case KBD_TIMEOUT:
+            
+            debug(KBD_DEBUG, "KBD_TIMEOUT\n");
+            
+            // A timeout has occured. Try to resynchronize with the Amiga.
+            state = KB_SYNC;
+            execute();
+            break;
+            
+        default:
+            assert(false);
+            break;
+    }
+}
 
+/*
+void
+Keyboard::serviceKeyboardEvent(EventID id)
+{
     switch(id) {
 
         case KBD_SELFTEST:
@@ -229,6 +249,103 @@ Keyboard::serviceKeyboardEvent(EventID id)
 
         default:
             assert(false);
+    }
+}
+*/
+
+void
+Keyboard::processHandshake()
+{
+    switch(state) {
+            
+        case KB_SELFTEST:
+        case KB_SYNC:
+            
+            state = KB_STRM_ON;
+            execute();
+            break;
+            
+        case KB_STRM_ON:
+            
+            state = KB_STRM_OFF;
+            execute();
+            break;
+            
+        case KB_STRM_OFF:
+        case KB_SEND:
+            
+            state = KB_SEND;
+            execute();
+            break;
+    }
+}
+
+void
+Keyboard::execute()
+{
+    switch(state) {
+            
+        case KB_SELFTEST:
+            
+            debug(KBD_DEBUG, "KB_SELFTEST\n");
+            
+            // Start a watchdog timer for the next handshake
+            agnus.scheduleRel<KBD_SLOT>(SEC(1), KBD_TIMEOUT);
+            break;
+            
+        case KB_SYNC:
+            
+            debug(KBD_DEBUG, "KB_SYNC\n");
+            
+            // Send a SYNC byte
+            sendKeyCode(0xFF);
+            
+            // Start a watchdog timer for the next handshake
+            agnus.scheduleRel<KBD_SLOT>(8 * MSEC(145), KBD_TIMEOUT);
+            break;
+            
+        case KB_STRM_ON:
+            
+            debug(KBD_DEBUG, "KB_STRM_ON\n");
+            
+            // Send the "Initiate power-up key stream" code ($FD)
+            sendKeyCode(0xFD);
+            
+            // Start a watchdog timer for the next handshake
+            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT);
+            break;
+            
+        case KB_STRM_OFF:
+            
+            debug(KBD_DEBUG, "KB_STRM_OFF\n");
+            
+            // Send the "Terminate key stream" code ($FE)
+            sendKeyCode(0xFE);
+            
+            // Start a watchdog timer for the next handshake
+            agnus.scheduleInc<KBD_SLOT>(MSEC(145), KBD_TIMEOUT);
+            break;
+            
+        case KB_SEND:
+            
+            debug(KBD_DEBUG, "KB_SEND\n");
+            
+            // Send a key code if the buffer is filled
+            if (!bufferIsEmpty()) sendKeyCode(readFromBuffer());
+            
+            // Check if there are more keys to send
+            if (!bufferIsEmpty()) {
+                
+                // Start a watchdog timer for the next handshake
+                agnus.scheduleRel<KBD_SLOT>(9*MSEC(145), KBD_TIMEOUT);
+                
+            } else {
+                
+                // Go idle
+                agnus.cancel<KBD_SLOT>();
+                
+            }
+            break;
     }
 }
 

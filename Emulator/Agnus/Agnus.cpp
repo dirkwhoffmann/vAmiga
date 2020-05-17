@@ -89,7 +89,6 @@ void Agnus::_reset(bool hard)
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleAbs<KBD_SLOT>(DMA_CYCLES(1), KBD_SELFTEST);
     scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 1), VBL_STROBE);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();

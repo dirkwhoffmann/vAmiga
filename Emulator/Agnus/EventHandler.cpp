@@ -292,12 +292,7 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case KBD_SELFTEST:  i->eventName = "KBD_SELFTEST"; break;
-                case KBD_SYNC:      i->eventName = "KBD_SYNC"; break;
-                case KBD_STRM_ON:   i->eventName = "KBD_STRM_ON"; break;
-                case KBD_STRM_OFF:  i->eventName = "KBD_STRM_OFF"; break;
                 case KBD_TIMEOUT:   i->eventName = "KBD_TIMEOUT"; break;
-                case KBD_SEND:      i->eventName = "KBD_SEND"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;

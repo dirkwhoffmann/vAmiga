@@ -17,6 +17,9 @@ class Keyboard : public AmigaComponent {
     // Current configuration
      KeyboardConfig config;
 
+    // The current keyboard state
+    KeyboardState state;
+    
     /* Time stamps recording an Amiga triggered change of the SP line.
      * The SP line is driven by the Amiga to transmit a handshake.
      */
@@ -54,6 +57,7 @@ public:
     {
         worker
 
+        & state
         & spLow
         & spHigh
         & typeAheadBuffer
@@ -115,17 +119,29 @@ private:
     
 public:
 
-    /* Emulates a handshake from the Amiga.
+    /* Emulates a change on the SP line.
      * This function is called whenever the CIA switches the serial register
-     * from input mode to output mode or vice versa.
+     * from input mode to output mode or vice versa. The SP line is controlled
+     * by the Amiga to signal a handshake.
      */
     void setSPLine(bool value, Cycle cycle);
-
+    
     // Services a keyboard event
     void serviceKeyboardEvent(EventID id);
 
+    
+    //
+    // Running the device
+    //
+
 private:
 
+    // Processes a detected handshake
+    void processHandshake();
+
+    // Performs all actions according to the current state
+    void execute();
+    
     // Sends a keycode to the Amiga
     void sendKeyCode(u8 keyCode);
 };
