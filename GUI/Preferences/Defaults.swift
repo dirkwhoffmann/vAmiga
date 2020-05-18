@@ -706,14 +706,17 @@ extension Keys {
     // Blitter
     static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
 
+    // CIAs
+    static let todBug            = "VAMIGA_COM_TodBug"
+
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
     static let asyncFifo         = "VAMIGA_COM_AsyncFifo"
     static let lockDskSync       = "VAMIGA_COM_LockDskSync"
     static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
 
-    // CIAs
-    static let todBug            = "VAMIGA_COM_TodBug"
+    // Keyboard
+    static let accurateKeyboard  = "VAMIGA_COM_AccurateKeyboard"
 }
 
 struct CompatibilityDefaults {
@@ -726,15 +729,18 @@ struct CompatibilityDefaults {
     // Blitter
     let blitterAccuracy: Int
     
+    // CIAs
+    let todBug: Bool
+
     // Floppy drives
     let driveSpeed: Int
     let asyncFifo: Bool
     let lockDskSync: Bool
     let autoDskSync: Bool
     
-    // CIAs
-    let todBug: Bool
-    
+    // Keyboard
+    let accurateKeyboard: Bool
+
     //
     // Schemes
     //
@@ -746,13 +752,15 @@ struct CompatibilityDefaults {
          clxPlfPlf: false,
                   
          blitterAccuracy: 2,
-         
+
+         todBug: true,
+
          driveSpeed: 1,
          asyncFifo: true,
          lockDskSync: false,
          autoDskSync: false,
-         
-         todBug: true
+
+         accurateKeyboard: true
      )
     
     static let accurate = CompatibilityDefaults.init(
@@ -763,12 +771,14 @@ struct CompatibilityDefaults {
                 
         blitterAccuracy: 2,
         
+        todBug: true,
+
         driveSpeed: 1,
         asyncFifo: true,
         lockDskSync: false,
         autoDskSync: false,
         
-        todBug: true
+        accurateKeyboard: true
     )
 
     static let accelerated = CompatibilityDefaults.init(
@@ -779,12 +789,14 @@ struct CompatibilityDefaults {
                 
         blitterAccuracy: 0,
         
+        todBug: true,
+
         driveSpeed: -1,
         asyncFifo: false,
         lockDskSync: false,
         autoDskSync: false,
         
-        todBug: true
+        accurateKeyboard: false
     )
 }
 
@@ -799,11 +811,12 @@ extension UserDefaults {
             Keys.clxSprPlf: defaults.clxSprPlf,
             Keys.clxPlfPlf: defaults.clxPlfPlf,
             Keys.blitterAccuracy: defaults.blitterAccuracy,
+            Keys.todBug: defaults.todBug,
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.asyncFifo: defaults.asyncFifo,
             Keys.lockDskSync: defaults.lockDskSync,
             Keys.autoDskSync: defaults.autoDskSync,
-            Keys.todBug: defaults.todBug
+            Keys.accurateKeyboard: defaults.accurateKeyboard
         ]
 
         let userDefaults = UserDefaults.standard
@@ -818,11 +831,12 @@ extension UserDefaults {
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
                      Keys.blitterAccuracy,
+                     Keys.todBug,
                      Keys.driveSpeed,
                      Keys.asyncFifo,
                      Keys.lockDskSync,
                      Keys.autoDskSync,
-                     Keys.todBug]
+                     Keys.accurateKeyboard]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }

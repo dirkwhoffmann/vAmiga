@@ -157,6 +157,10 @@ class Configuration {
         get { return amiga.getConfig(VA_TODBUG) != 0 }
         set { amiga.configure(VA_TODBUG, enable: newValue) }
     }
+    var accurateKeyboard: Bool {
+        get { return amiga.getConfig(VA_ACCURATE_KEYBOARD) != 0 }
+        set { amiga.configure(VA_ACCURATE_KEYBOARD, enable: newValue) }
+    }
     
     //
     // Audio settings
@@ -472,14 +476,16 @@ class Configuration {
         clxPlfPlf = defaults.clxPlfPlf
                 
         blitterAccuracy = defaults.blitterAccuracy
-        
+
+        todBug = defaults.todBug
+
         driveSpeed = defaults.driveSpeed
         asyncFifo = defaults.asyncFifo
         lockDskSync = defaults.lockDskSync
         autoDskSync = defaults.autoDskSync
         
-        todBug = defaults.todBug
-        
+        accurateKeyboard = defaults.accurateKeyboard
+
         amiga.resume()
      }
     
@@ -493,12 +499,13 @@ class Configuration {
         clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
         blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        todBug = defaults.bool(forKey: Keys.todBug)
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
         autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
-        todBug = defaults.bool(forKey: Keys.todBug)
-        
+        accurateKeyboard = defaults.bool(forKey: Keys.accurateKeyboard)
+
         amiga.resume()
      }
 
@@ -512,11 +519,12 @@ class Configuration {
          defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
          defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
          defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+         defaults.set(todBug, forKey: Keys.todBug)
          defaults.set(driveSpeed, forKey: Keys.driveSpeed)
          defaults.set(asyncFifo, forKey: Keys.asyncFifo)
          defaults.set(lockDskSync, forKey: Keys.lockDskSync)
          defaults.set(autoDskSync, forKey: Keys.autoDskSync)
-         defaults.set(todBug, forKey: Keys.todBug)
+         defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)
      }
     
     //

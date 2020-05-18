@@ -157,6 +157,7 @@ Amiga::getConfig()
     config.agnus = agnus.getConfig();
     config.denise = denise.getConfig();
     config.serialPort = serialPort.getConfig();
+    config.keyboard = keyboard.getConfig();
     config.blitter = agnus.blitter.getConfig(); 
     config.diskController = paula.diskController.getConfig();
     config.df0 = df0.getConfig();
@@ -384,6 +385,11 @@ Amiga::configure(ConfigOption option, long value)
             ciaB.setTodBug(value);
             break;
 
+        case VA_ACCURATE_KEYBOARD:
+            
+            keyboard.setAccurate(value);
+            break;
+            
         default: assert(false);
     }
     
@@ -468,6 +474,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
         case VA_SERIAL_DEVICE: return serialPort.getDevice();
         case VA_TODBUG: return ciaA.getTodBug();
+        case VA_ACCURATE_KEYBOARD: return keyboard.getAccurate();
 
         default: assert(false); return 0;
     }

@@ -24,6 +24,9 @@ extension ConfigController {
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
 
+        // CIAs
+        compTodBug.state = config.ciaA.todBug ? .on : .off
+
         // Floppy drives
         let speed = config.df0.speed        
         assert(speed == config.df1.speed)
@@ -35,8 +38,8 @@ extension ConfigController {
         compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
         compAutoDskSync.state = config.diskController.autoDskSync ? .on : .off
 
-        // CIAs
-        compTodBug.state = config.ciaA.todBug ? .on : .off
+        // Keyboard
+        compAccurateKeyboard.state = config.keyboard.accurate ? .on : .off
 
         // Boot Button
         compBootButton.isHidden = !bootable
@@ -66,6 +69,12 @@ extension ConfigController {
         refresh()
     }
 
+    @IBAction func compTodBugAction(_ sender: NSButton!) {
+
+        config.todBug = sender.state == .on
+        refresh()
+    }
+
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
         config.driveSpeed = sender.selectedTag()
@@ -90,9 +99,9 @@ extension ConfigController {
         refresh()
     }
 
-    @IBAction func compTodBugAction(_ sender: NSButton!) {
+    @IBAction func compAccurateKeyboardAction(_ sender: NSButton!) {
 
-        config.todBug = sender.state == .on
+        config.accurateKeyboard = sender.state == .on
         refresh()
     }
 

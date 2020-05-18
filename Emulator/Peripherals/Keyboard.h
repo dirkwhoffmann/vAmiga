@@ -53,6 +53,7 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
+        worker & config.accurate;
     }
 
     template <class T>
@@ -75,7 +76,10 @@ public:
 
     KeyboardConfig getConfig() { return config; }
 
+    bool getAccurate() { return config.accurate; }
+    void setAccurate(bool value) { config.accurate = value; }
 
+    
     //
     // Methods from HardwareComponent
     //

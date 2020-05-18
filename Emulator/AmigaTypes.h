@@ -62,6 +62,7 @@ typedef enum : long
     VA_AUTO_DSKSYNC,
     
     VA_TODBUG,
+    VA_ACCURATE_KEYBOARD,
     
     VA_SAMPLING_METHOD,
     VA_FILTER_TYPE,
@@ -112,6 +113,7 @@ typedef struct
     DeniseConfig denise;
     BlitterConfig blitter;
     SerialPortConfig serialPort;
+    KeyboardConfig keyboard;
     DiskControllerConfig diskController;
     DriveConfig df0;
     DriveConfig df1;

@@ -99,6 +99,9 @@ class ConfigController: DialogController {
     @IBOutlet weak var compBltLevel2: NSTextField!
     @IBOutlet weak var compBltLevel1: NSTextField!
 
+    // CIAs
+    @IBOutlet weak var compTodBug: NSButton!
+
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
     @IBOutlet weak var compAsyncFifo: NSButton!
@@ -106,7 +109,7 @@ class ConfigController: DialogController {
     @IBOutlet weak var compAutoDskSync: NSButton!
     
     // CIAs
-    @IBOutlet weak var compTodBug: NSButton!
+    @IBOutlet weak var compAccurateKeyboard: NSButton!
 
     // Lock
     @IBOutlet weak var compLockText: NSTextField!
