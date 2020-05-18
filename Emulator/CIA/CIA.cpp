@@ -1432,6 +1432,9 @@ CIAB::updatePA()
     // PA1 is connected to the CNT pin
     if (!(oldPA & 2) &&  (PA & 2)) emulateRisingEdgeOnCntPin();
     if ( (oldPA & 2) && !(PA & 2)) emulateFallingEdgeOnCntPin();
+    
+    // PA0 is connected to the SP pin
+    if (DDRA & 1) setSP(PA & 1); else setSP(1);
 }
 
 //            -------
