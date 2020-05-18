@@ -229,7 +229,7 @@ protected:
      * The counter is set to 8 when the shift register is loaded and decremented
      * when a bit is shifted out.
      */
-    u8 serCounter;
+    i8 serCounter;
     
     //
     // Chip interface (port pins)
