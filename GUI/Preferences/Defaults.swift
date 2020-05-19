@@ -708,6 +708,7 @@ extension Keys {
 
     // CIAs
     static let todBug            = "VAMIGA_COM_TodBug"
+    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
 
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
@@ -731,7 +732,8 @@ struct CompatibilityDefaults {
     
     // CIAs
     let todBug: Bool
-
+    let eClockSyncing: Bool
+    
     // Floppy drives
     let driveSpeed: Int
     let asyncFifo: Bool
@@ -754,7 +756,8 @@ struct CompatibilityDefaults {
          blitterAccuracy: 2,
 
          todBug: true,
-
+         eClockSyncing: true,
+         
          driveSpeed: 1,
          asyncFifo: true,
          lockDskSync: false,
@@ -772,6 +775,7 @@ struct CompatibilityDefaults {
         blitterAccuracy: 2,
         
         todBug: true,
+        eClockSyncing: true,
 
         driveSpeed: 1,
         asyncFifo: true,
@@ -790,6 +794,7 @@ struct CompatibilityDefaults {
         blitterAccuracy: 0,
         
         todBug: true,
+        eClockSyncing: false,
 
         driveSpeed: -1,
         asyncFifo: false,
@@ -812,6 +817,7 @@ extension UserDefaults {
             Keys.clxPlfPlf: defaults.clxPlfPlf,
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.todBug: defaults.todBug,
+            Keys.eClockSyncing: defaults.eClockSyncing,
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.asyncFifo: defaults.asyncFifo,
             Keys.lockDskSync: defaults.lockDskSync,
@@ -832,6 +838,7 @@ extension UserDefaults {
                      Keys.clxPlfPlf,
                      Keys.blitterAccuracy,
                      Keys.todBug,
+                     Keys.eClockSyncing,
                      Keys.driveSpeed,
                      Keys.asyncFifo,
                      Keys.lockDskSync,

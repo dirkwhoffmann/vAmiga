@@ -62,6 +62,7 @@ typedef enum : long
     VA_AUTO_DSKSYNC,
     
     VA_TODBUG,
+    VA_ECLOCK_SYNCING,
     VA_ACCURATE_KEYBOARD,
     
     VA_SAMPLING_METHOD,
@@ -72,7 +73,7 @@ ConfigOption;
 
 inline bool isConfigOption(long value)
 {
-    return value >= VA_AGNUS_REVISION && value <= VA_TODBUG;
+    return value >= VA_AGNUS_REVISION && value <= VA_FILTER_ALWAYS_ON;
 }
 
 typedef enum

@@ -17,6 +17,7 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 
     config.type = CIA_8520_DIP;
     config.todBug = true;
+    config.eClockSyncing = true;
     
     PA = 0xFF;
     PB = 0xFF;

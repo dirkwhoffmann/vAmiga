@@ -32,6 +32,7 @@
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
                 <outlet property="compDriveSpeed" destination="4Ny-q7-06h" id="TAF-pD-4dp"/>
+                <outlet property="compEClockSyncing" destination="DYo-L9-ZL7" id="FVd-hs-ARb"/>
                 <outlet property="compLockDskSync" destination="z9Z-9Z-AmZ" id="52g-mi-sUD"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compTodBug" destination="fD3-tY-14r" id="5nh-OO-E3U"/>
@@ -1253,7 +1254,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9G2-KJ-ejc">
-                                            <rect key="frame" x="307" y="155" width="66" height="16"/>
+                                            <rect key="frame" x="308" y="129" width="66" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Keyboard:" id="GbN-Cg-XYG">
                                                 <font key="font" metaFont="system"/>
@@ -1295,14 +1296,25 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nv2-YM-NLV">
-                                            <rect key="frame" x="377" y="154" width="206" height="18"/>
+                                            <rect key="frame" x="378" y="128" width="193" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate keycode transmission" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vK9-9e-M55">
+                                            <buttonCell key="cell" type="check" title="Transmit keycodes bit by bit" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vK9-9e-M55">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
                                                 <action selector="compAccurateKeyboardAction:" target="-2" id="hHn-V2-6jh"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYo-L9-ZL7">
+                                            <rect key="frame" x="378" y="154" width="188" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Sync accesses with E clock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHk-7Y-h2r">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compEClockSyncingAction:" target="-2" id="rBe-nc-eeW"/>
                                             </connections>
                                         </button>
                                     </subviews>

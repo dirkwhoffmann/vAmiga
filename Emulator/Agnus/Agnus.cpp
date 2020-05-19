@@ -1434,6 +1434,9 @@ Agnus::executeUntil(Cycle targetClock)
 void
 Agnus::syncWithEClock()
 {
+    // Check if E clock syncing is disabled
+    if (!ciaa.getEClockSyncing()) return;
+
     /* At this point, we need to execute Agnus until the next E clock cycle
      * begins. From the current clock position, the next cycle would begin at
      *
@@ -1458,6 +1461,9 @@ Agnus::syncWithEClock()
 bool
 Agnus::inSyncWithEClock()
 {
+    // Check if E clock syncing is disabled
+    if (!ciaa.getEClockSyncing()) return true;
+    
     return IS_CIA_CYCLE(clock);
 }
 

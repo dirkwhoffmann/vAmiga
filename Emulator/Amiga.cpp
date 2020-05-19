@@ -168,6 +168,7 @@ Amiga::getConfig()
     // Assure both CIAs are configured equally
     assert(config.ciaA.type == config.ciaB.type);
     assert(config.ciaA.todBug == config.ciaB.todBug);
+    assert(config.ciaA.eClockSyncing == config.ciaB.eClockSyncing);
 
     return config;
 }
@@ -175,6 +176,8 @@ Amiga::getConfig()
 bool
 Amiga::configure(ConfigOption option, long value)
 {
+    suspend();
+    
     AmigaConfiguration current = getConfig();
     
     switch (option) {
@@ -183,79 +186,79 @@ Amiga::configure(ConfigOption option, long value)
 
             if (!isAgnusRevision(value)) {
                 warn("Invalid Agnus revision: %d\n", value);
-                return false;
+                goto error;
              }
 
-            if (current.agnus.revision == value) return true;
+            if (current.agnus.revision == value) goto exit;
             agnus.setRevision((AgnusRevision)value);
-            break;
+            goto success;
 
         case VA_DENISE_REVISION:
 
             if (!isDeniseRevision(value)) {
                 warn("Invalid Denise revision: %d\n", value);
-                return false;
+                goto error;
             }
 
-            if (current.denise.revision == value) return true;
+            if (current.denise.revision == value) goto exit;
             denise.setRevision((DeniseRevision)value);
-            break;
+            goto success;
 
         case VA_RT_CLOCK:
 
             if (!isRTCModel(value)) {
                 warn("Invalid RTC model: %d\n", value);
-                return false;
+                goto error;
             }
 
-            if (current.rtc.model == value) return true;
+            if (current.rtc.model == value) goto exit;
             rtc.setModel((RTCModel)value);
             mem.updateMemSrcTable();
-            break;
+            goto success;
 
         case VA_CHIP_RAM:
             
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 warn("Invalid Chip Ram size: %d\n", value);
                 warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
-                return false;
+                goto error;
             }
             
             mem.allocChip(KB(value));
-            break;
+            goto success;
     
         case VA_SLOW_RAM:
             
             if ((value % 256) != 0 || value > 512) {
                 warn("Invalid Slow Ram size: %d\n", value);
                 warn("         Valid values: 0KB, 256KB, 512KB\n");
-                return false;
+                goto error;
             }
             
             mem.allocSlow(KB(value));
-            break;
+            goto success;
         
         case VA_FAST_RAM:
             
             if ((value % 64) != 0 || value > 8192) {
                 warn("Invalid Fast Ram size: %d\n", value);
                 warn("Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
-                return false;
+                goto error;
             }
             
             mem.allocFast(KB(value));
-            break;
+            goto success;
 
         case VA_EXT_START:
 
             if (value != 0xE0 && value != 0xF0) {
                 warn("Invalid Extended ROM start page: %x\n", value);
                 warn("Valid values: 0xE0, 0xF0\n");
-                return false;
+                goto error;
             }
 
             mem.setExtStart(value);
-            break;
+            goto success;
 
         case VA_DRIVE_SPEED:
 
@@ -265,74 +268,76 @@ Amiga::configure(ConfigOption option, long value)
             }
             if (!isValidDriveSpeed(value)) {
                 warn("Invalid drive speed: %d\n", value);
-                return false;
+                goto error;
             }
 
             paula.diskController.setSpeed(value);
-            break;
+            goto success;
 
         case VA_HIDDEN_SPRITES:
 
-            if (current.denise.hiddenSprites == value) return true;
+            if (current.denise.hiddenSprites == value) goto exit;
             denise.setHiddenSprites(value);
-            break;
+            goto success;
 
         case VA_HIDDEN_LAYERS:
             
-            if (current.denise.hiddenLayers == value) return true;
+            if (current.denise.hiddenLayers == value) goto exit;
             denise.setHiddenLayers(value);
+            goto success;
             
         case VA_HIDDEN_LAYER_ALPHA:
             
-            if (current.denise.hiddenLayerAlpha == value) return true;
+            if (current.denise.hiddenLayerAlpha == value) goto exit;
             denise.setHiddenLayerAlpha(value);
+            goto success;
             
         case VA_CLX_SPR_SPR:
 
-            if (current.denise.clxSprSpr == value) return true;
+            if (current.denise.clxSprSpr == value) goto exit;
             denise.setClxSprSpr(value);
-            break;
+            goto success;
 
         case VA_CLX_SPR_PLF:
 
-            if (current.denise.clxSprPlf == value) return true;
+            if (current.denise.clxSprPlf == value) goto exit;
             denise.setClxSprPlf(value);
-            break;
+            goto success;
 
         case VA_CLX_PLF_PLF:
 
-            if (current.denise.clxPlfPlf == value) return true;
+            if (current.denise.clxPlfPlf == value) goto exit;
             denise.setClxPlfPlf(value);
-            break;
+            goto success;
 
         case VA_SAMPLING_METHOD:
 
             if (!isSamplingMethod(value)) {
                 warn("Invalid filter activation: %d\n", value);
-                return false;
+                goto error;
             }
             
-            if (current.audio.samplingMethod == value) return true;
+            if (current.audio.samplingMethod == value) goto exit;
             paula.audioUnit.setSamplingMethod((SamplingMethod)value);
-            break;
+            goto success;
 
         case VA_FILTER_TYPE:
 
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %d\n", value);
                 warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
-                return false;
+                goto error;
             }
 
-            if (current.audio.filterType == value) return true;
+            if (current.audio.filterType == value) goto exit;
             paula.audioUnit.setFilterType((FilterType)value);
-            break;
+            goto success;
             
         case VA_FILTER_ALWAYS_ON:
             
-            if (current.audio.filterAlwaysOn == value) return true;
+            if (current.audio.filterAlwaysOn == value) goto exit;
             paula.audioUnit.setFilterAlwaysOn(value);
-            break;
+            goto success;
             
         case VA_BLITTER_ACCURACY:
             
@@ -346,54 +351,72 @@ Amiga::configure(ConfigOption option, long value)
                 warn("Using the SlowBlitter level %d for debugging\n", FORCE_SLOW_BLT);
                 value = FORCE_SLOW_BLT;
             }
-            if (current.blitter.accuracy == value) return true;
+            if (current.blitter.accuracy == value) goto exit;
             agnus.blitter.setAccuracy(value);
-            break;
+            goto success;
             
         case VA_ASYNC_FIFO:
 
-            if (current.diskController.asyncFifo == value) return true;
+            if (current.diskController.asyncFifo == value) goto exit;
             paula.diskController.setAsyncFifo(value);
-            break;
+            goto success;
 
         case VA_LOCK_DSKSYNC:
 
-            if (current.diskController.lockDskSync == value) return true;
+            if (current.diskController.lockDskSync == value) goto exit;
             paula.diskController.setLockDskSync(value);
-            break;
+            goto success;
             
         case VA_AUTO_DSKSYNC:
             
-            if (current.diskController.autoDskSync == value) return true;
+            if (current.diskController.autoDskSync == value) goto exit;
             paula.diskController.setAutoDskSync(value);
-            break;
+            goto success;
 
         case VA_SERIAL_DEVICE:
 
             if (!isSerialPortDevice(value)) {
                 warn("Invalid serial port device: %d\n", value);
-                return false;
+                goto error;
             }
 
-            if (current.serialPort.device == value) return true;
+            if (current.serialPort.device == value) goto exit;
             serialPort.setDevice((SerialPortDevice)value);
-            break;
+            goto success;
 
         case VA_TODBUG:
 
+            if (current.ciaA.todBug == value) goto exit;
             ciaA.setTodBug(value);
             ciaB.setTodBug(value);
-            break;
-
-        case VA_ACCURATE_KEYBOARD:
+            goto success;
             
+        case VA_ECLOCK_SYNCING:
+            
+            if (current.ciaA.eClockSyncing == value) goto exit;
+            ciaA.setEClockSyncing(value);
+            ciaB.setEClockSyncing(value);
+            goto success;
+            
+        case VA_ACCURATE_KEYBOARD:
+
+            if (current.keyboard.accurate == value) goto exit;
             keyboard.setAccurate(value);
-            break;
+            goto success;
             
         default: assert(false);
     }
     
+    
+error:
+    resume();
+    return false;
+    
+success:
     putMessage(MSG_CONFIG);
+    
+exit:
+    resume();
     return true;
 }
 
@@ -474,6 +497,7 @@ Amiga::getConfig(ConfigOption option)
         case VA_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
         case VA_SERIAL_DEVICE: return serialPort.getDevice();
         case VA_TODBUG: return ciaA.getTodBug();
+        case VA_ECLOCK_SYNCING: return ciaA.getEClockSyncing();
         case VA_ACCURATE_KEYBOARD: return keyboard.getAccurate();
 
         default: assert(false); return 0;

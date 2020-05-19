@@ -101,6 +101,7 @@ class ConfigController: DialogController {
 
     // CIAs
     @IBOutlet weak var compTodBug: NSButton!
+    @IBOutlet weak var compEClockSyncing: NSButton!
 
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!

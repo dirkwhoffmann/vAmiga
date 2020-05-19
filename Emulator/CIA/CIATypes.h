@@ -64,6 +64,7 @@ typedef struct
 {
     CIAType type;
     bool    todBug;
+    bool    eClockSyncing;
 }
 CIAConfig;
 

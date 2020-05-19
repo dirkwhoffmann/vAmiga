@@ -157,6 +157,10 @@ class Configuration {
         get { return amiga.getConfig(VA_TODBUG) != 0 }
         set { amiga.configure(VA_TODBUG, enable: newValue) }
     }
+    var eClockSyncing: Bool {
+        get { return amiga.getConfig(VA_ECLOCK_SYNCING) != 0 }
+        set { amiga.configure(VA_ECLOCK_SYNCING, enable: newValue) }
+    }
     var accurateKeyboard: Bool {
         get { return amiga.getConfig(VA_ACCURATE_KEYBOARD) != 0 }
         set { amiga.configure(VA_ACCURATE_KEYBOARD, enable: newValue) }
@@ -478,7 +482,8 @@ class Configuration {
         blitterAccuracy = defaults.blitterAccuracy
 
         todBug = defaults.todBug
-
+        eClockSyncing = defaults.eClockSyncing
+        
         driveSpeed = defaults.driveSpeed
         asyncFifo = defaults.asyncFifo
         lockDskSync = defaults.lockDskSync
@@ -500,6 +505,7 @@ class Configuration {
         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
         blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
         todBug = defaults.bool(forKey: Keys.todBug)
+        eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
@@ -520,6 +526,7 @@ class Configuration {
          defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
          defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
          defaults.set(todBug, forKey: Keys.todBug)
+         defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
          defaults.set(driveSpeed, forKey: Keys.driveSpeed)
          defaults.set(asyncFifo, forKey: Keys.asyncFifo)
          defaults.set(lockDskSync, forKey: Keys.lockDskSync)

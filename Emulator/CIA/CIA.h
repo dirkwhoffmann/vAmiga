@@ -281,8 +281,11 @@ public:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker & config.type;
-        worker & config.todBug;
+        worker
+        
+        & config.type
+        & config.todBug
+        & config.eClockSyncing;
     }
 
     template <class T>
@@ -332,6 +335,9 @@ public:
 
     bool getTodBug() { return config.todBug; }
     void setTodBug(bool value) { config.todBug = value; }
+
+    bool getEClockSyncing() { return config.eClockSyncing; }
+    void setEClockSyncing(bool value) { config.eClockSyncing = value; }
 
     
     //
