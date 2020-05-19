@@ -1463,6 +1463,65 @@ Agnus::executeUntilBusIsFree()
 }
 
 void
+Agnus::syncWithEClock()
+{
+    // Align the clock to the E clock
+    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock - 1) + 1);
+    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 39));
+    // assert(target == target2);
+    Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
+
+    // Determine how many DMA cycles need to be executed
+    Cycle delay = target - clock;
+    assert(DMA_CYCLES(AS_DMA_CYCLES(delay)) == delay);
+
+    // debug("Next E clock: %lld. Delaying for %d DMA cycles\n", target, AS_DMA_CYCLES(delay));
+    
+    // Execute Agnus until the target cycle has been reached
+    executeUntil(target);
+
+    // Add wait states to the CPU
+    cpu.addWaitStates(AS_CPU_CYCLES(delay));
+}
+
+void
+Agnus::executeUntilBusIsFreeForCIA()
+{
+    // Sync with the E clock driving the CIA
+    syncWithEClock();
+    
+    i16 posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
+    
+    // Check if the bus is blocked
+    if (busOwner[posh] != BUS_NONE) {
+
+        // This variable counts the number of DMA cycles the CPU will be suspended
+        DMACycle delay = 0;
+
+        // Execute Agnus until the bus is free
+        do {
+
+            posh = pos.h;
+            execute();
+            if (++delay == 2) bls = true;
+
+            if (busOwner[posh] == BUS_NONE && (delay % 5) != 0) {
+                // debug("Delaying additional E cycle\n");
+            }
+        } while (busOwner[posh] != BUS_NONE || (delay % 5) != 0);
+
+        // Clear the BLS line (Blitter slow down)
+        bls = false;
+
+        // Add wait states to the CPU
+        cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
+    }
+
+    // Assign bus to the CPU
+    busOwner[posh] = BUS_CPU;
+}
+
+void
 Agnus::recordRegisterChange(Cycle delay, u32 addr, u16 value)
 {
     // Record the new register value

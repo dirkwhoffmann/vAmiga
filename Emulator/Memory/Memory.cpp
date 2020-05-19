@@ -760,7 +760,7 @@ Memory::peek8(u32 addr)
         case MEM_CIA:
 
             ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFree();
+            agnus.executeUntilBusIsFreeForCIA();
             stats.chipReads.raw++;
             dataBus = peekCIA8(addr);
             return dataBus;
@@ -889,7 +889,7 @@ Memory::peek16<BUS_CPU>(u32 addr)
         case MEM_CIA:
             
             ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFree();
+            agnus.executeUntilBusIsFreeForCIA();
             stats.chipReads.raw++;
             dataBus = peekCIA16(addr);
             return dataBus;
@@ -1038,7 +1038,7 @@ Memory::poke8(u32 addr, u8 value)
         case MEM_CIA:
 
             ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFree();
+            agnus.executeUntilBusIsFreeForCIA();
             stats.chipWrites.raw++;
             pokeCIA8(addr, value);
             break;
@@ -1129,13 +1129,6 @@ Memory::poke16<BUS_CPU>(u32 addr, u16 value)
         warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);
     }
     
-    /*
-    if (blitter.copycount >= 580) {
-        debug("poke16<CPU>(%x,%x)\n", addr, value);
-        CIAREG_DEBUG= 1;
-    }
-    */
-    
     addr &= 0xFFFFFF;
     
     switch (memSrc[addr >> 16]) {
@@ -1167,7 +1160,7 @@ Memory::poke16<BUS_CPU>(u32 addr, u16 value)
         case MEM_CIA:
             
             ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFree();
+            agnus.executeUntilBusIsFreeForCIA();
             stats.chipWrites.raw++;
             dataBus = value;
             pokeCIA16(addr, value);

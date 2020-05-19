@@ -829,9 +829,13 @@ public:
     // Executes the device until the target clock is reached
     void executeUntil(Cycle targetClock);
 
+    // Executes the device until the next E clock cycle begins
+    void syncWithEClock();
+    
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
-
+    void executeUntilBusIsFreeForCIA();
+    
     // Schedules a register to change its value
     void recordRegisterChange(Cycle delay, u32 addr, u16 value);
 
