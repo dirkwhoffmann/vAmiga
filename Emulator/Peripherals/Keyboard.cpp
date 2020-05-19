@@ -137,7 +137,7 @@ Keyboard::setSPLine(bool value, Cycle cycle)
      *  models of Amiga keyboards." [HRM 3rd editon]
      */
     int diff = (spHigh - spLow) / 28;
-    bool accept = diff >= 45;
+    bool accept = diff >= 1;
     bool reject = diff > 0 && !accept;
 
     if (accept) {
@@ -170,8 +170,8 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_DAT:
             
-            debug(KBD_DEBUG, "KBD_DAT_%d\n", nr);
-
+            debug(KBD_DEBUG, "KBD_DAT [%d]\n", nr);
+            
             if (nr < 8) {
                 
                 // Put a bit from the shift register onto the SP line
@@ -188,7 +188,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_CLK0:
 
-            debug(KBD_DEBUG, "KBD_CLK0\n");
+            debug(KBD_DEBUG, "KBD_CLK0 [%d]\n", nr);
 
             // Pull the clock line low
             ciaa.emulateFallingEdgeOnCntPin();
@@ -197,7 +197,7 @@ Keyboard::serviceKeyboardEvent(EventID id)
             
         case KBD_CLK1:
 
-            debug(KBD_DEBUG, "KBD_CLK1\n");
+            debug(KBD_DEBUG, "KBD_CLK1 [%d]\n", nr);
 
             // Pull the clock line high
             ciaa.emulateRisingEdgeOnCntPin();

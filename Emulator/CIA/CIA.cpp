@@ -106,6 +106,7 @@ CIA::_inspect()
 void
 CIA::emulateRisingEdgeOnFlagPin()
 {
+    wakeUp();
 }
 
 void
@@ -123,8 +124,9 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::emulateRisingEdgeOnCntPin()
 {
+    debug(KBD_DEBUG, "emulateRisingEdgeOnCntPin");
+    
     wakeUp();
- 
     CNT = 1;
     
     // Timer A
@@ -142,14 +144,7 @@ CIA::emulateRisingEdgeOnCntPin()
         SDR = SDR << 1 | SP;
         debug(KBD_DEBUG, "SDR: %02x\n", SDR);
     }
-}
-
-void
-CIA::emulateFallingEdgeOnCntPin()
-{
-    CNT = 0;
     
-    // Serial register
     if (!(CRA & 0x40) /* input mode */ ) {
         
         // Decrement serial counter and trigger interrupt if a byte is complete
@@ -158,6 +153,15 @@ CIA::emulateFallingEdgeOnCntPin()
             debug(KBD_DEBUG, "Received serial byte: %02x\n", SDR);
         }
     }
+}
+
+void
+CIA::emulateFallingEdgeOnCntPin()
+{
+    debug(KBD_DEBUG, "emulateRisingEdgeOnCntPin");
+
+    wakeUp();
+    CNT = 0;
 }
 
 void
