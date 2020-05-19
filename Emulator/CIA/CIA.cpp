@@ -124,7 +124,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::emulateRisingEdgeOnCntPin()
 {
-    debug(KBD_DEBUG, "emulateRisingEdgeOnCntPin");
+    debug(CIASER_DEBUG, "emulateRisingEdgeOnCntPin\n");
     
     wakeUp();
     CNT = 1;
@@ -140,6 +140,7 @@ CIA::emulateRisingEdgeOnCntPin()
         
         // debug("rising CNT: serCounter %d\n", serCounter);
         if (serCounter == 0) serCounter = 8;
+        debug(CIASER_DEBUG, "Clocking in bit %d [%d]\n", SP, serCounter);
         
         // Shift in a bit from the SP line
         ssr = ssr << 1 | SP;
@@ -148,7 +149,8 @@ CIA::emulateRisingEdgeOnCntPin()
         if (--serCounter == 0) {
             
             // Load the data register (SDR) with the shift register (SSR)
-            sdr = ssr;
+            debug(CIASER_DEBUG, "Loading %x into sdr\n", sdr);
+            delay |= CIASsrToSdr0; // sdr = ssr;
             
             // Trigger interrupt
             delay |= CIASerInt0;
@@ -160,7 +162,7 @@ CIA::emulateRisingEdgeOnCntPin()
 void
 CIA::emulateFallingEdgeOnCntPin()
 {
-    debug(KBD_DEBUG, "emulateRisingEdgeOnCntPin");
+    debug(CIASER_DEBUG, "emulateFallingEdgeOnCntPin\n");
 
     wakeUp();
     CNT = 0;
@@ -556,8 +558,8 @@ CIA::poke(u16 addr, u8 value)
         case 0x0C: // CIA_DATA_REGISTER
             
             sdr = value;
-            delay |= CIASerToSsr0;
-            feed |= CIASerToSsr0;
+            delay |= CIASdrToSsr0;
+            feed |= CIASdrToSsr0;
 			return;
 			
         case 0x0D: // CIA_INTERRUPT_CONTROL
@@ -634,17 +636,19 @@ CIA::poke(u16 addr, u8 value)
     
             // -0------ : Serial shift register in input mode (read)
             // -1------ : Serial shift register in output mode (write)
-            if (isCIAA() && ((CRA & 0x40) ^ (value & 0x40))) {
-                keyboard.setSPLine(!(value & 0x40), clock);
-            }
-                
-            if ((CRA & 0x40) ^ (value & 0x40)) {
-                
+            if ((value ^ CRA) & 0x40) {
+
                 // Serial direction changing
-                delay &= ~(CIASerToSsr0 | CIASerToSsr1);
-                feed &= ~CIASerToSsr0;
-                // debug("Resetting serCounter\n");
+                debug(CIASER_DEBUG, "Serial register: %s\n", (value & 0x40) ? "output" : "input");
+
+                // Inform the keyboard if this CIA is connected to it
+                if (isCIAA()) keyboard.setSPLine(!(value & 0x40), clock);
+                                
                 serCounter = 0;
+                
+                delay &= ~(CIASsrToSdr0 | CIASsrToSdr1 | CIASsrToSdr2 | CIASsrToSdr3);
+                delay &= ~(CIASdrToSsr0 | CIASdrToSsr1);
+                feed &= ~CIASdrToSsr0;
             
                 delay &= ~(CIASerClk0 | CIASerClk1 | CIASerClk2);
                 feed &= ~CIASerClk0;
@@ -899,6 +903,10 @@ CIA::executeOneCycle()
     // Serial register
     //
     
+    if (delay & CIASsrToSdr3) {
+        sdr = ssr;
+    }
+    
     // Generate clock signal
     if (timerAOutput && (CRA & 0x40) /* output mode */ ) {
         
@@ -907,12 +915,12 @@ CIA::executeOneCycle()
             // Toggle serial clock signal
             feed ^= CIASerClk0;
             
-        } else if (delay & CIASerToSsr1) {
+        } else if (delay & CIASdrToSsr1) {
             
             // Load the shift register (SSR) with the data register (SDR)
             ssr = sdr;
-            delay &= ~(CIASerToSsr1 | CIASerToSsr0);
-            feed &= ~CIASerToSsr0;
+            delay &= ~(CIASdrToSsr1 | CIASdrToSsr0);
+            feed &= ~CIASdrToSsr0;
             serCounter = 8;
             
             // Toggle serial clock signal
@@ -1452,8 +1460,10 @@ CIAB::updatePA()
      * the SP pin first and emulate the edge on the CNT pin afterwards.
      */
     if (DDRA & 1) setSP(PA & 1); else setSP(1);
+
     if (!(oldPA & 2) &&  (PA & 2)) emulateRisingEdgeOnCntPin();
     if ( (oldPA & 2) && !(PA & 2)) emulateFallingEdgeOnCntPin();
+    
 }
 
 //            -------

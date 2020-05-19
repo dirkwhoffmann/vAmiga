@@ -96,6 +96,7 @@ static const int INT_DEBUG       = 0; // Interrupt logic
 // CIAs
 static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
 static const int CIAREG_DEBUG    = 0; // CIA registers
+static const int CIASER_DEBUG    = 0; // CIA serial register
 static const int CIA_DEBUG       = 0; // CIA execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 

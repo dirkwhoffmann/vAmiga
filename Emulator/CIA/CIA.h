@@ -49,14 +49,18 @@
 #define CIASerInt0     (1ULL << 33) // Triggers an IRQ with serial reg as source
 #define CIASerInt1     (1ULL << 34)
 #define CIASerInt2     (1ULL << 35)
-#define CIASerToSsr0   (1ULL << 36) // Move serial data reg to serial shift reg
-#define CIASerToSsr1   (1ULL << 37)
-#define CIASerClk0     (1ULL << 38) // Clock signal driving the serial register
-#define CIASerClk1     (1ULL << 39)
-#define CIASerClk2     (1ULL << 40)
-#define CIASerClk3     (1ULL << 41)
+#define CIASdrToSsr0   (1ULL << 36) // Move serial data reg to serial shift reg
+#define CIASdrToSsr1   (1ULL << 37)
+#define CIASsrToSdr0   (1ULL << 38) // Move serial shift reg to serial data reg
+#define CIASsrToSdr1   (1ULL << 39)
+#define CIASsrToSdr2   (1ULL << 40)
+#define CIASsrToSdr3   (1ULL << 41)
+#define CIASerClk0     (1ULL << 42) // Clock signal driving the serial register
+#define CIASerClk1     (1ULL << 43)
+#define CIASerClk2     (1ULL << 44)
+#define CIASerClk3     (1ULL << 45)
 
-#define CIADelayMask ~((1ULL << 42) \
+#define CIADelayMask ~((1ULL << 46) \
 | CIACountA0 | CIACountB0 \
 | CIALoadA0 | CIALoadB0 \
 | CIAPB6Low0 | CIAPB7Low0 \
@@ -65,8 +69,8 @@
 | CIAReadIcr0 | CIAClearIcr0 \
 | CIAAckIcr0 | CIASetIcr0 \
 | CIATODInt0 | CIASerInt0 \
-| CIASerToSsr0 | CIASerClk0)
-
+| CIASdrToSsr0 | CIASsrToSdr0 \
+| CIASerClk0)
 
 // Virtual complex interface adapter (CIA)
 class CIA : public AmigaComponent {
