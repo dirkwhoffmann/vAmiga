@@ -49,8 +49,8 @@
 #define CIASerInt0     (1ULL << 33) // Triggers an IRQ with serial reg as source
 #define CIASerInt1     (1ULL << 34)
 #define CIASerInt2     (1ULL << 35)
-#define CIASerLoad0    (1ULL << 36) // Loads the serial shift register
-#define CIASerLoad1    (1ULL << 37)
+#define CIASerToSsr0   (1ULL << 36) // Move serial data reg to serial shift reg
+#define CIASerToSsr1   (1ULL << 37)
 #define CIASerClk0     (1ULL << 38) // Clock signal driving the serial register
 #define CIASerClk1     (1ULL << 39)
 #define CIASerClk2     (1ULL << 40)
@@ -65,7 +65,7 @@
 | CIAReadIcr0 | CIAClearIcr0 \
 | CIAAckIcr0 | CIASetIcr0 \
 | CIATODInt0 | CIASerInt0 \
-| CIASerLoad0 | CIASerClk0)
+| CIASerToSsr0 | CIASerClk0)
 
 
 // Virtual complex interface adapter (CIA)
@@ -220,10 +220,10 @@ protected:
      *  shifted out MSB first and serial input data should also appear in this
      *  format.
      */
-    u8 SDR;
-    
-    // Clock signal for driving the serial register
-    bool serClk;
+    u8 sdr;
+        
+    // Serial shift register
+    u8 ssr;
     
     /* Shift register counter
      * The counter is set to 8 when the shift register is loaded and decremented
@@ -315,8 +315,8 @@ public:
         & DDRB
         & PA
         & PB
-        & SDR
-        & serClk
+        & sdr
+        & ssr
         & serCounter
         & SP
         & CNT

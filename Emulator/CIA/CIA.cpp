@@ -88,7 +88,7 @@ CIA::_inspect()
     info.timerB.pbout = CRB & 0x02;
     info.timerB.oneShot = CRB & 0x08;
     
-    info.sdr = SDR;
+    info.sdr = sdr;
     
     info.icr = icr;
     info.imr = imr;
@@ -141,16 +141,17 @@ CIA::emulateRisingEdgeOnCntPin()
         if (serCounter == 0) serCounter = 8;
         
         // Shift in a bit from the SP line
-        SDR = SDR << 1 | SP;
-        debug(KBD_DEBUG, "SDR: %02x\n", SDR);
-    }
-    
-    if (!(CRA & 0x40) /* input mode */ ) {
+        ssr = ssr << 1 | SP;
         
-        // Decrement serial counter and trigger interrupt if a byte is complete
+        // Perform special action if a byte is complete
         if (--serCounter == 0) {
+            
+            // Load the data register (SDR) with the shift register (SSR)
+            sdr = ssr;
+            
+            // Trigger interrupt
             delay |= CIASerInt0;
-            debug(KBD_DEBUG, "Received serial byte: %02x\n", SDR);
+            debug(KBD_DEBUG, "Received serial byte: %02x\n", sdr);
         }
     }
 }
@@ -283,7 +284,7 @@ CIA::peek(u16 addr)
 			
         case 0x0C: // CIA_SERIAL_DATA_REGISTER
 			
-			result = SDR;
+			result = sdr;
 			break;
 			
         case 0x0D: // CIA_INTERRUPT_CONTROL
@@ -383,7 +384,7 @@ CIA::spypeek(u16 addr)
             return 0;
             
         case 0x0C: // CIA_SERIAL_DATA_REGISTER
-            return SDR;
+            return sdr;
             
         case 0x0D: // CIA_INTERRUPT_CONTROL
             return icr;
@@ -553,10 +554,9 @@ CIA::poke(u16 addr, u8 value)
 			
         case 0x0C: // CIA_DATA_REGISTER
             
-            SDR = value;
-            delay |= CIASerLoad0;
-            feed |= CIASerLoad0;
-            // delay &= ~SerLoad1;
+            sdr = value;
+            delay |= CIASerToSsr0;
+            feed |= CIASerToSsr0;
 			return;
 			
         case 0x0D: // CIA_INTERRUPT_CONTROL
@@ -636,12 +636,12 @@ CIA::poke(u16 addr, u8 value)
             if (isCIAA() && ((CRA & 0x40) ^ (value & 0x40))) {
                 keyboard.setSPLine(!(value & 0x40), clock);
             }
-
-            if ((value ^ CRA) & 0x40)
-            {
+                
+            if (value ^ CRA) {
+                
                 // Serial direction changing
-                delay &= ~(CIASerLoad0 | CIASerLoad1);
-                feed &= ~CIASerLoad0;
+                delay &= ~(CIASerToSsr0 | CIASerToSsr1);
+                feed &= ~CIASerToSsr0;
                 serCounter = 0;
             
                 delay &= ~(CIASerClk0 | CIASerClk1 | CIASerClk2);
@@ -767,8 +767,7 @@ CIA::_dump()
 	msg("   Interrupt control reg : %02X\n", info.icr);
 	msg("      Interrupt mask reg : %02X\n", info.imr);
 	msg("\n");
-    msg("                     SDR : %02X %02X\n", info.sdr, SDR);
-    msg("                  serClk : %02X\n", serClk);
+    msg("                     SDR : %02X %02X\n", info.sdr, sdr);
     msg("              serCounter : %02X\n", serCounter);
     msg("\n");
     msg("                     CNT : %d\n", CNT);
@@ -906,12 +905,15 @@ CIA::executeOneCycle()
             // Toggle serial clock signal
             feed ^= CIASerClk0;
             
-        } else if (delay & CIASerLoad1) {
+        } else if (delay & CIASerToSsr1) {
             
-            // Load shift register
-            delay &= ~(CIASerLoad1 | CIASerLoad0);
-            feed &= ~CIASerLoad0;
+            // Load the shift register (SSR) with the data register (SDR)
+            ssr = sdr;
+            delay &= ~(CIASerToSsr1 | CIASerToSsr0);
+            feed &= ~CIASerToSsr0;
             serCounter = 8;
+            
+            // Toggle serial clock signal
             feed ^= CIASerClk0;
         }
     }
@@ -1350,7 +1352,7 @@ CIAA::setKeyCode(u8 keyCode)
     debug(CIA_DEBUG, "setKeyCode: %X\n", keyCode);
     
     // Put the key code into the serial data register
-    SDR = keyCode;
+    sdr = keyCode;
     
     // Trigger a serial data interrupt
     delay |= CIASerInt0;
