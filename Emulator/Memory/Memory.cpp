@@ -848,13 +848,6 @@ Memory::peek16<BUS_BLITTER>(u32 addr)
 template <> u16
 Memory::peek16<BUS_CPU>(u32 addr)
 {
-    /*
-    if (blitter.copycount >= 580) {
-        debug("peek16<CPU>(%x)\n", addr);
-        CIAREG_DEBUG= 1;
-    }
-    */
-    
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
         assert(false);

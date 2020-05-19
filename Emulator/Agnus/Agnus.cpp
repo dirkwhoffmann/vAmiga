@@ -1432,8 +1432,38 @@ Agnus::executeUntil(Cycle targetClock)
 #endif
 
 void
-Agnus::executeUntilBusIsFree()
+Agnus::syncWithEClock()
 {
+    /* At this point, we need to execute Agnus until the next E clock cycle
+     * begins. From the current clock position, the next cycle would begin at
+     *
+     *     CIA_CYCLES(AS_CIA_CYCLES(clock + 39));
+     *
+     * However, some timing tests suggest that the CPU is still running too
+     * fast with this delay. Until we know better, we use an offset of 50.
+     */
+    Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
+
+    // Determine how many DMA cycles need to be executed
+    Cycle delay = target - clock;
+    assert(DMA_CYCLES(AS_DMA_CYCLES(delay)) == delay);
+    
+    // Execute Agnus until the target cycle has been reached
+    executeUntil(target);
+
+    // Add wait states to the CPU
+    cpu.addWaitStates(AS_CPU_CYCLES(delay));
+}
+
+bool
+Agnus::inSyncWithEClock()
+{
+    return IS_CIA_CYCLE(clock);
+}
+
+void
+Agnus::executeUntilBusIsFree()
+{    
     i16 posh = pos.h == 0 ? HPOS_MAX : pos.h - 1;
 
     // Check if the bus is blocked
@@ -1444,11 +1474,11 @@ Agnus::executeUntilBusIsFree()
 
         // Execute Agnus until the bus is free
         do {
-
+            
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;
-
+            
         } while (busOwner[posh] != BUS_NONE);
 
         // Clear the BLS line (Blitter slow down)
@@ -1460,28 +1490,6 @@ Agnus::executeUntilBusIsFree()
 
     // Assign bus to the CPU
     busOwner[posh] = BUS_CPU;
-}
-
-void
-Agnus::syncWithEClock()
-{
-    // Align the clock to the E clock
-    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock - 1) + 1);
-    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 39));
-    // assert(target == target2);
-    Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
-
-    // Determine how many DMA cycles need to be executed
-    Cycle delay = target - clock;
-    assert(DMA_CYCLES(AS_DMA_CYCLES(delay)) == delay);
-
-    // debug("Next E clock: %lld. Delaying for %d DMA cycles\n", target, AS_DMA_CYCLES(delay));
-    
-    // Execute Agnus until the target cycle has been reached
-    executeUntil(target);
-
-    // Add wait states to the CPU
-    cpu.addWaitStates(AS_CPU_CYCLES(delay));
 }
 
 void
@@ -1505,10 +1513,7 @@ Agnus::executeUntilBusIsFreeForCIA()
             execute();
             if (++delay == 2) bls = true;
 
-            if (busOwner[posh] == BUS_NONE && (delay % 5) != 0) {
-                // debug("Delaying additional E cycle\n");
-            }
-        } while (busOwner[posh] != BUS_NONE || (delay % 5) != 0);
+        } while (busOwner[posh] != BUS_NONE || !inSyncWithEClock());
 
         // Clear the BLS line (Blitter slow down)
         bls = false;

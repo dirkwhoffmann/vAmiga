@@ -26,10 +26,8 @@ typedef uint32_t u32;
 typedef uint64_t u64;
 
 //
-// Frame and cycle counts
+// Cycle counts
 //
-
-// typedef i64 Frame;
 
 typedef i64 Cycle;            // Master cycle units
 typedef i64 CPUCycle;         // CPU cycle units
@@ -49,6 +47,10 @@ typedef i64 DMACycle;         // DMA cycle units
 #define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
+
+#define IS_CPU_CYCLE(cycles)  ((cycles) & 3 == 0)
+#define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
+#define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
 
 #define AS_USEC(delay)        (delay / 28)
 #define AS_MSEC(delay)        (delay / 28000)

@@ -829,9 +829,12 @@ public:
     // Executes the device until the target clock is reached
     void executeUntil(Cycle targetClock);
 
-    // Executes the device until the next E clock cycle begins
+    // Executes the device to the beginning of the next E clock cycle
     void syncWithEClock();
-    
+
+    // Returns true if the device is in sync with the E clock
+    bool inSyncWithEClock();
+
     // Executes the device until the CPU can acquire the bus
     void executeUntilBusIsFree();
     void executeUntilBusIsFreeForCIA();

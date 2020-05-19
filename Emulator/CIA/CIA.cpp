@@ -1120,7 +1120,7 @@ CIA::sleep()
     assert(!sleeping);
     
     // Determine maximum possible sleep cycle based on timer counts
-    assert(clock % 40 == 0);
+    assert(IS_CIA_CYCLE(clock));
     Cycle sleepA = clock + CIA_CYCLES((counterA > 2) ? (counterA - 1) : 0);
     Cycle sleepB = clock + CIA_CYCLES((counterB > 2) ? (counterB - 1) : 0);
     
