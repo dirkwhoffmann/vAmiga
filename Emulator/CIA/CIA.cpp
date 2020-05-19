@@ -138,6 +138,7 @@ CIA::emulateRisingEdgeOnCntPin()
     // Serial register
     if (!(CRA & 0x40) /* input mode */ ) {
         
+        // debug("rising CNT: serCounter %d\n", serCounter);
         if (serCounter == 0) serCounter = 8;
         
         // Shift in a bit from the SP line
@@ -151,7 +152,7 @@ CIA::emulateRisingEdgeOnCntPin()
             
             // Trigger interrupt
             delay |= CIASerInt0;
-            debug(KBD_DEBUG, "Received serial byte: %02x\n", sdr);
+            // debug(KBD_DEBUG, "Received serial byte: %02x\n", sdr);
         }
     }
 }
@@ -637,11 +638,12 @@ CIA::poke(u16 addr, u8 value)
                 keyboard.setSPLine(!(value & 0x40), clock);
             }
                 
-            if (value ^ CRA) {
+            if ((CRA & 0x40) ^ (value & 0x40)) {
                 
                 // Serial direction changing
                 delay &= ~(CIASerToSsr0 | CIASerToSsr1);
                 feed &= ~CIASerToSsr0;
+                // debug("Resetting serCounter\n");
                 serCounter = 0;
             
                 delay &= ~(CIASerClk0 | CIASerClk1 | CIASerClk2);
@@ -1443,12 +1445,15 @@ CIAB::updatePA()
     // We ignore PLCC emulation until the A600 is supported
     // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
 
-    // PA1 is connected to the CNT pin
+    /* Inside the Amiga, PA0 and PA1 of CIAB are wired to the SP pin and the
+     * CNT pin, respectively. If the shift register is run in input mode,
+     * a positive edge on the CNT pin will transfer the value on the SP pin
+     * into the shift register. To shift in the correct value, we need to set
+     * the SP pin first and emulate the edge on the CNT pin afterwards.
+     */
+    if (DDRA & 1) setSP(PA & 1); else setSP(1);
     if (!(oldPA & 2) &&  (PA & 2)) emulateRisingEdgeOnCntPin();
     if ( (oldPA & 2) && !(PA & 2)) emulateFallingEdgeOnCntPin();
-    
-    // PA0 is connected to the SP pin
-    if (DDRA & 1) setSP(PA & 1); else setSP(1);
 }
 
 //            -------
