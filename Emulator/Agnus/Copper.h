@@ -42,10 +42,7 @@ class Copper : public AmigaComponent
 
     // The Copper Danger bit (CDANG)
     bool cdang;
-    
-    // The Blitter Finish Disable bit (BFD)
-    bool bfd;
-    
+        
     // The Copper instruction registers
     u16 cop1ins = 0;
     u16 cop2ins = 0;
@@ -106,7 +103,6 @@ public:
         & cop1end
         & cop2end
         & cdang
-        & bfd
         & cop1ins
         & cop2ins
         & coppc

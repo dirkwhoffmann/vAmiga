@@ -18,7 +18,6 @@ void
 Copper::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
-    bfd = true;
 }
 
 void
@@ -200,7 +199,6 @@ Copper::switchToCopperList(int nr)
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
     agnus.scheduleRel<COP_SLOT>(0, COP_REQ_DMA);
-    bfd = true;
 }
 
 bool
@@ -646,15 +644,6 @@ Copper::serviceEvent(EventID id)
 
             if (verbose) debug("COP_REQ_DMA\n");
             
-            // Check if we need to wait for the Blitter
-            if (!bfd) {
-                if (agnus.blitter.isRunning()) {
-                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                    break;
-                }
-                bfd = true;
-            }
-            
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
@@ -684,12 +673,9 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("COP_WAKEUP_BLIT\n");
             
             // Check if the Blitter is busy, keep on waiting
-            if (!bfd) {
-                if (agnus.blitter.isRunning()) {
-                    agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
-                    break;
-                }
-                bfd = true;
+            if (agnus.blitter.isRunning()) {
+                agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
+                break;
             }
             
             // Wait for the next possible DMA cycle
@@ -799,12 +785,9 @@ Copper::serviceEvent(EventID id)
 
             // Clear the skip flag
             skip = false;
-
-            // Remember the Blitter Finish Disable bit
-            bfd = getBFD();
             
             // Check if we need to wait for the Blitter
-            if (!bfd && agnus.blitter.isRunning()) {
+            if (!getBFD() && agnus.blitter.isRunning()) {
                 agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
                 break;
             }
@@ -816,14 +799,12 @@ Copper::serviceEvent(EventID id)
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Schedule a wakeup event at the target position
-            scheduleWaitWakeup(bfd);
+            scheduleWaitWakeup(getBFD());
             break;
 
         case COP_WAIT_BLIT:
             
             if (verbose) debug("COP_WAIT_BLIT\n");
-
-            bfd = true;
             
             // Wait for the next free cycle
             if (agnus.busOwner[agnus.pos.h] != BUS_NONE &&
