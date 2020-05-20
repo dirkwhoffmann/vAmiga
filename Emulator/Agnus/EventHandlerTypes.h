@@ -153,6 +153,8 @@ typedef enum : long
 
     // Copper slot
     COP_REQ_DMA = 1,
+    COP_WAKEUP,
+    COP_WAKEUP_BLIT,
     COP_FETCH,
     COP_MOVE,
     COP_WAIT_OR_SKIP,

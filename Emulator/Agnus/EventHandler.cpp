@@ -184,6 +184,8 @@ Agnus::inspectEventSlot(EventSlot nr)
 
                 case 0:                i->eventName = "none"; break;
                 case COP_REQ_DMA:      i->eventName = "COP_REQ_DMA"; break;
+                case COP_WAKEUP:       i->eventName = "COP_WAKEUP"; break;
+                case COP_WAKEUP_BLIT:  i->eventName = "COP_WAKEUP_BLIT"; break;
                 case COP_FETCH:        i->eventName = "COP_FETCH"; break;
                 case COP_MOVE:         i->eventName = "COP_MOVE"; break;
                 case COP_WAIT_OR_SKIP: i->eventName = "WAIT_OR_SKIP"; break;

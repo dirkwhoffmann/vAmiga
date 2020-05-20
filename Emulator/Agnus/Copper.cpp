@@ -464,7 +464,7 @@ Copper::comparator()
 }
 
 void
-Copper::scheduleWaitWakeup()
+Copper::scheduleWaitWakeup(bool bfd)
 {
     Beam trigger;
 
@@ -488,9 +488,13 @@ Copper::scheduleWaitWakeup()
 
         } else {
 
-            // Wake up 2 cycles earlier with a COP_REQ_DMA event
+            // Wake up 2 cycles earlier with a WAKEUP event
             delay -= 2;
-            agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_REQ_DMA);
+            if (bfd) {
+                agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_WAKEUP);
+            } else {
+                agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(delay), COP_WAKEUP_BLIT);
+            }
         }
 
     } else {
@@ -660,12 +664,26 @@ Copper::serviceEvent(EventID id)
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
             break;
-
-        case COP_FETCH:
-
-            if (verbose) debug("COP_FETCH\n");
-
-            // Check if we need to wait for the Blitter
+            
+        case COP_WAKEUP:
+            
+            if (verbose) debug("COP_WAKEUP\n");
+            
+            // Wait for the next possible DMA cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            
+            // Don't wake up in an odd cycle
+            if (agnus.pos.h % 2) { reschedule(); break; }
+            
+            // Continue with fetching the first instruction word
+            schedule(COP_FETCH);
+            break;
+            
+        case COP_WAKEUP_BLIT:
+            
+            if (verbose) debug("COP_WAKEUP_BLIT\n");
+            
+            // Check if the Blitter is busy, keep on waiting
             if (!bfd) {
                 if (agnus.blitter.isRunning()) {
                     agnus.scheduleAbs<COP_SLOT>(NEVER, COP_WAIT_BLIT);
@@ -673,6 +691,20 @@ Copper::serviceEvent(EventID id)
                 }
                 bfd = true;
             }
+            
+            // Wait for the next possible DMA cycle
+            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            
+            // Don't wake up in an odd cycle
+            if (agnus.pos.h % 2) { reschedule(); break; }
+            
+            // Continue with fetching the first instruction word
+            schedule(COP_FETCH);
+            break;
+            
+        case COP_FETCH:
+
+            if (verbose) debug("COP_FETCH\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -784,7 +816,7 @@ Copper::serviceEvent(EventID id)
             if (agnus.pos.h == 0xE1) { reschedule(); break; }
 
             // Schedule a wakeup event at the target position
-            scheduleWaitWakeup();
+            scheduleWaitWakeup(bfd);
             break;
 
         case COP_WAIT_BLIT:
@@ -801,7 +833,7 @@ Copper::serviceEvent(EventID id)
             }
             
             // Schedule a wakeup event at the target position
-            scheduleWaitWakeup();
+            scheduleWaitWakeup(false /* BFD */);
             break;
 
         case COP_SKIP1:

@@ -202,7 +202,7 @@ private:
     bool comparator();
 
     // Emulates a WAIT command
-    void scheduleWaitWakeup();
+    void scheduleWaitWakeup(bool bfd);
 
 
     //
