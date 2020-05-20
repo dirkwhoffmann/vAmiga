@@ -132,7 +132,6 @@ Copper::pokeCOP1LCH(u16 value)
         cop1end = cop1lc;
 
         if (!activeInThisFrame) {
-            assert(copList == 1);
             coppc = cop1lc;
         }
     }
