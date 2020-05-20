@@ -145,6 +145,9 @@ class Blitter : public AmigaComponent
     // The Blitter zero flag
     bool bzero;
 
+    // Indicates if the Blitter interrupts has been triggered
+    bool birq;
+    
     
     //
     // Counters
@@ -243,6 +246,7 @@ public:
         & running
         & bbusy
         & bzero
+        & birq
 
         & remaining;
     }

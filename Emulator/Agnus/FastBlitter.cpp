@@ -46,6 +46,7 @@ Blitter::beginFastLineBlit()
 
     // Terminate immediately
     signalEnd();
+    paula.raiseIrq(INT_BLIT);
     endBlit();
 }
 
@@ -61,6 +62,7 @@ Blitter::beginFastCopyBlit()
 
     // Terminate immediately
     signalEnd();
+    paula.raiseIrq(INT_BLIT);
     endBlit();
 }
 

@@ -817,6 +817,7 @@ Blitter::prepareBlit()
     running = true;
     bzero = true;
     bbusy = true;
+    birq = false;
 
     bltpc = 0;
     iteration = 0;
