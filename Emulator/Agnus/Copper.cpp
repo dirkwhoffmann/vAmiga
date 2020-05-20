@@ -200,6 +200,7 @@ Copper::switchToCopperList(int nr)
     coppc = (nr == 1) ? cop1lc : cop2lc;
     copList = nr;
     agnus.scheduleRel<COP_SLOT>(0, COP_REQ_DMA);
+    bfd = true;
 }
 
 bool
