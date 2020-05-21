@@ -36,6 +36,9 @@ class Drive : public AmigaComponent {
     // Records when the drive motor was switch off the last time
     Cycle motorOffCycle;
 
+    // Records when the head started to step to another cylinder
+    Cycle stepCycle;
+    
     /* Disk change status
      * This variable controls the /CHNG bit in the CIA A PRA register. Note
      * that the variable only changes its value under certain circumstances.
@@ -95,6 +98,7 @@ public:
         & idBit
         & motorOnCycle
         & motorOffCycle
+        & stepCycle
         & dskchange
         & dsklen
         & prb
@@ -141,6 +145,7 @@ public:
     // Operation
     u8 getCylinder() { return head.cylinder; }
     
+    
     //
     // Handling the drive status register flags
     //
@@ -154,6 +159,9 @@ public:
     //
     // Operating the drive
     //
+    
+    // Returns true if this drive emulates mechanical delays
+    bool emulateMechanics() { return !isTurbo(); }
     
     // Turns the drive motor on or off
     void setMotor(bool value);
@@ -189,6 +197,9 @@ public:
     // Moving the drive head
     //
 
+    // Returns wheather the drive is ready to accept a stepping pulse
+    bool readyToStep();
+    
     // Moves the drive head (0 = inwards, 1 = outwards).
     void moveHead(int dir);
 

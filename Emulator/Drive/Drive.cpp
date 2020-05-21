@@ -241,7 +241,7 @@ Drive::setMotor(bool value)
     
     if (!oldValue && value) {
         
-        motorOnCycle = cpu.getMasterClock();
+        motorOnCycle = cpu.getMasterClock(); // TODO: Use agnus.clock
 
         debug(DSK_DEBUG, "Motor on (Cycle: %d)\n", motorOnCycle);
 
@@ -252,7 +252,7 @@ Drive::setMotor(bool value)
     if (oldValue && !value) {
 
         idCount = 0; // Reset identification shift register counter
-        motorOffCycle = cpu.getMasterClock();
+        motorOffCycle = cpu.getMasterClock(); // TODO: Use agnus.clock
 
         debug(DSK_DEBUG, "Motor off (Cycle: %d)\n", motorOffCycle);
 
@@ -284,7 +284,7 @@ bool
 Drive::motorAtFullSpeed()
 {
     Cycle delay = 380 * 28000; // 380 msec
-    return isOriginal() ? (motorOnTime() > delay) : motor();
+    return emulateMechanics() ? (motorOnTime() > delay) : motor();
 }
 
 bool
@@ -297,7 +297,7 @@ bool
 Drive::motorStopped()
 {
     Cycle delay = 80 * 28000; // 80 msec
-    return isOriginal() ? (motorOffTime() > delay) : !motor();
+    return emulateMechanics() ? (motorOffTime() > delay) : !motor();
 }
 
 void
@@ -378,11 +378,21 @@ Drive::findSyncMark()
     debug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
 }
 
+bool
+Drive::readyToStep()
+{
+    Cycle delay = agnus.clock - stepCycle;
+    return emulateMechanics() ? delay > 1060 : true;
+}
+
 void
 Drive::moveHead(int dir)
 {
     // Update disk change signal
     if (hasDisk()) dskchange = true;
+ 
+    // Only proceed if the last head step was a while ago
+    if (!readyToStep()) return;
     
     if (dir) {
         
@@ -404,7 +414,7 @@ Drive::moveHead(int dir)
         if (DSK_CHECKSUM)
             plaindebug("Stepping up to cylinder %d\n", head.cylinder);
     }
-
+    
     // Reset the head position in debug mode to generate reproducable results
     if (DRIVE_DEBUG) head.offset = 0;
     
@@ -414,6 +424,9 @@ Drive::moveHead(int dir)
     } else {
         amiga.putMessage(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
     }
+    
+    // Remember when we've performed the step
+    stepCycle = agnus.clock;
 }
 
 void
