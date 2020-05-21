@@ -67,6 +67,28 @@ PaulaAudio::setPan(unsigned nr, double val)
     config.pan[nr] = MAX(0.0, MIN(val, 1.0));
 }
 
+void
+PaulaAudio::setVolL(double val)
+{
+    bool wasMuted = isMuted();
+    config.volL = val;
+
+    if (wasMuted != isMuted()) {
+        amiga.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+    }
+}
+
+void
+PaulaAudio::setVolR(double val)
+{
+    bool wasMuted = isMuted();
+    config.volR = val;
+
+    if (wasMuted != isMuted()) {
+        amiga.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+    }
+}
+
 FilterType
 PaulaAudio::getFilterType()
 {

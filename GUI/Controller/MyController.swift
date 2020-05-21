@@ -77,6 +77,12 @@ class MyController: NSWindowController, MessageReceiver {
     // Used inside the timer function to fine tune timed events
     var animationCounter = 0
         
+    // Remembers if audio is muted (master volume of both channels is 0)
+    var muted = false
+
+    // Remembers if we run in warp mode
+    var warp = false
+
     // Current mouse coordinate
     var mouseXY = NSPoint(x: 0, y: 0)
     
@@ -213,11 +219,12 @@ class MyController: NSWindowController, MessageReceiver {
 
     @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
+    @IBOutlet weak var muteIcon: NSButton!
 
     @IBOutlet weak var clockSpeed: NSTextField!
     @IBOutlet weak var clockSpeedBar: NSLevelIndicator!
     @IBOutlet weak var warpIcon: NSButton!
-    
+
     // Toolbar
     @IBOutlet weak var toolbar: NSToolbar!
 }
@@ -381,7 +388,7 @@ extension MyController {
 
         // Animate the inspector
         if inspector?.window?.isVisible == true { inspector!.triggerRefresh() }
-        
+ 
         // Do less times...
         if (animationCounter % 2) == 0 {
  
@@ -389,7 +396,7 @@ extension MyController {
         
         // Do lesser times...
         if (animationCounter % 3) == 0 {
-
+            
             updateSpeedometer()
             updateMonitoringPanels()
             
@@ -532,8 +539,20 @@ extension MyController {
             mydocument.setBootDiskID(amiga.df0.fnv())
             inspector?.fullRefresh()
 
-        case MSG_WARP_ON,
-             MSG_WARP_OFF:
+        case MSG_MUTE_ON:
+            muted = true
+            refreshStatusBar()
+            
+        case MSG_MUTE_OFF:
+            muted = false
+            refreshStatusBar()
+
+        case MSG_WARP_ON:
+            warp = true
+            refreshStatusBar()
+
+        case MSG_WARP_OFF:
+            warp = false
             refreshStatusBar()
 
         case MSG_POWER_LED_ON:

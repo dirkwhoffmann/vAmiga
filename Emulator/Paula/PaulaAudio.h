@@ -168,11 +168,14 @@ public:
     void setPan(unsigned nr, double val);
 
     double getVolL() { return config.volL; }
-    void setVolL(double val) { config.volL = val; }
+    void setVolL(double val);
 
     double getVolR() { return config.volR; }
-    void setVolR(double val) { config.volR = val; }
+    void setVolR(double val);
 
+    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+    
+    
     //
     // Methods from HardwareComponent
     //

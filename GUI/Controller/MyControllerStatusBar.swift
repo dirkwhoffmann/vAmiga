@@ -27,7 +27,6 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk()
         let running = amiga.isRunning()
         let debug = amiga.debugMode()
-        // let release = amiga.releaseBuild()
         
         // Cylinders
         refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder())
@@ -75,7 +74,8 @@ extension MyController {
 
             cmdLock: mapCommandKeys,
             debugIcon: debug,
-            
+            muteIcon: warp || muted,
+
             clockSpeed: running,
             clockSpeedBar: running,
             warpIcon: running
@@ -84,7 +84,6 @@ extension MyController {
         for (item, visible) in items {
             item.isHidden = !visible || !statusBar
         }
-        
     }
     
     public func refreshStatusBar(drive: Int, led: Bool) {

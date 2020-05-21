@@ -30,6 +30,8 @@ typedef enum
     MSG_RESET,
     MSG_WARP_ON,
     MSG_WARP_OFF,
+    MSG_MUTE_ON,
+    MSG_MUTE_OFF,
     MSG_POWER_LED_ON,
     MSG_POWER_LED_DIM,
     MSG_POWER_LED_OFF,
