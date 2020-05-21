@@ -845,6 +845,9 @@ Copper::serviceEvent(EventID id)
             if (verbose) debug("Running comparator with (%d,%d)\n", beam.v, beam.h);
             skip = comparator(beam);
 
+            // If the BFD flag is cleared, we also need to check the Blitter
+            if (!getBFD()) skip &= !blitter.isRunning();
+            
             // Continue with the next command
             schedule(COP_FETCH);
             break;
