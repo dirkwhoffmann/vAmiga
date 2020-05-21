@@ -190,7 +190,7 @@ Drive::getDriveId()
      *   5.25"SD :  0x55555555
      *
      * An unconnected drive corresponds to ID 0x00000000. The internal drive
-     * does not identify itself. It's ID is also read as 0x00000000.
+     * does not identify itself. Its ID is also read as 0x00000000.
      */
     
     assert(config.type == DRIVE_35_DD);
@@ -573,7 +573,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
         
         // Emulate the identification shift register
         idCount = (idCount + 1) % 32;
-        idBit = !!GET_BIT(getDriveId(), 31 - idCount);
+        idBit = GET_BIT(getDriveId(), 31 - idCount);
         
         // Drive motor logic from SAE / UAE
         if (!oldMtr || !newMtr) {

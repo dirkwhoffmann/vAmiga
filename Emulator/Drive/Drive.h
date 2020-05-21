@@ -139,7 +139,8 @@ public:
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
-    bool idMode() { return motorStopped() || motorSpeedingUp(); }
+    bool idMode() { return !motor(); }
+    
     u32 getDriveId();
 
     // Operation
