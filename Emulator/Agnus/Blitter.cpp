@@ -847,7 +847,7 @@ Blitter::startBlit()
         if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
             copycount++;
             check1 = check2 = fnv_1a_init32();
-            // if (copycount == 580) amiga.signalStop(); // Set BP at 0707D4
+            // if (copycount == 357) amiga.signalStop(); 
             
             plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount, bltsizeH, bltsizeV,
@@ -891,7 +891,7 @@ Blitter::endBlit()
         */
     }
 
-    // if (copycount == 23) OCSREG_DEBUG = 1;
+    // if (copycount == 356) { debug("Enabling debug output\n"); OCSREG_DEBUG = 1; }
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();

@@ -29,7 +29,8 @@
 //
 
 // Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xFE4510
+// #define INITIAL_BREAKPOINT 0xFC5A6E
+// #define INITIAL_BREAKPOINT 0x0158EC LED SWITCHED OFF 
 
 // Uncomment to fallback to a simpler Agnus execution function
 // #define AGNUS_EXEC_DEBUG

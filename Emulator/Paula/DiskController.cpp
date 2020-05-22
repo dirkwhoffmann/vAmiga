@@ -849,6 +849,7 @@ DiskController::performTurboDMA(Drive *drive)
         case DRIVE_DMA_READ:
             
             performTurboRead(drive);
+            paula.raiseIrq(INT_DSKSYN);
             break;
             
         case DRIVE_DMA_WRITE:

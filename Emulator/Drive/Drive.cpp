@@ -373,7 +373,6 @@ Drive::findSyncMark()
         if (readHead() != 0x89) continue;
         break;
     }
-    paula.raiseIrq(INT_DSKSYN);
 
     debug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
 }
