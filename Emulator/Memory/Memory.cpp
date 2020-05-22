@@ -10,6 +10,8 @@
 #include "Amiga.h"
 #include <new>
 
+int OCSREG_DEBUG = 0;
+
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Memory");

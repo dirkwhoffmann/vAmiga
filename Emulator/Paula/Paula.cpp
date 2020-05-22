@@ -234,6 +234,8 @@ Paula::peekPOTGOR()
     REPLACE_BIT(result, 10, chargeY0 >= 1.0);
     REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
+    debug(POT_DEBUG, "charges: %f %f %f %f\n", chargeY1, chargeX1, chargeY0, chargeX0);
+    
     // A connected device may force the output level to a specific value
     controlPort1.changePotgo(result);
     controlPort2.changePotgo(result);

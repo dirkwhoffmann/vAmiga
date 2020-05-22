@@ -347,10 +347,12 @@ Blitter::doFastLineBlit()
     
     setBltconASH(blit_a_shift_local);
     bnew   = bltbdat_local;
-    bltapt = decision_variable;
-    bltcpt = bltcpt_local;
-    bltdpt = bltdpt_local;
-    bzero  = bzero_local;
+    
+    u32 chipRamMask = agnus.chipRamMask();
+    bltapt = decision_variable & chipRamMask;
+    bltcpt = bltcpt_local & chipRamMask;
+    bltdpt = bltdpt_local & chipRamMask;
+    bzero  = bzero_local & chipRamMask;
 }
     /*
      void blitterLineMode(void)

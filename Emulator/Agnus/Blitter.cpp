@@ -884,11 +884,15 @@ Blitter::endBlit()
     if (BLT_CHECKSUM) {
         plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2, bltapt, bltbpt, bltcpt, bltdpt);
+        /*
         plaindebug("Memory: %x (%x)\n",
                    fnv_1a_32(mem.chip, mem.chipRamSize()),
                    fnv_1a_32(mem.slow, mem.slowRamSize()));
+        */
     }
 
+    // if (copycount == 23) OCSREG_DEBUG = 1;
+    
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
 }

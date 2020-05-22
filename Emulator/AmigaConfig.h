@@ -35,7 +35,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/BatmanBeyonders.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Impossamole.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Gettysburg.adf"
 
@@ -54,7 +54,7 @@ static const int CPU_DEBUG       = 0; // CPU
 static const int ECP_DEBUG       = 0; // CPU exceptions and interrupts
 
 // Memory access
-static const int OCSREG_DEBUG    = 0; // General OCS register debugging
+extern int OCSREG_DEBUG; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
 static const int MEM_DEBUG       = 0; // Memory oddities

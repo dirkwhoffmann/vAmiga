@@ -101,7 +101,7 @@ UART::copyToTransmitShiftRegister()
 
     // Inform the GUI about the outgoing data
     amiga.putMessage(MSG_SER_OUT, transmitBuffer);
-    debug(POT_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
+    debug(SER_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
 
     // Move the contents of the transmit buffer into the shift register
     transmitShiftReg = transmitBuffer;

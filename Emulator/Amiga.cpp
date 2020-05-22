@@ -614,6 +614,7 @@ Amiga::_powerOn()
     ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
     if (adf) {
         Disk *disk = Disk::makeWithFile(adf);
+        df0.ejectDisk();
         df0.insertDisk(disk);
     }
 
