@@ -875,7 +875,8 @@ DiskController::performTurboRead(Drive *drive)
         u16 word = drive->readHead16();
         
         // Write word into memory
-        mem.pokeChip16(agnus.dskpt, word);
+        // mem.pokeChip16(agnus.dskpt, word);
+        agnus.poke(agnus.dskpt, word);
         agnus.dskpt += 2;
 
         if (DSK_CHECKSUM) {
@@ -895,7 +896,8 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        u16 word = mem.peekChip16(agnus.dskpt);
+        u16 word = agnus.peek(agnus.dskpt);
+        assert(word == mem.peekChip16(agnus.dskpt));
         agnus.dskpt += 2;
         
         if (DSK_CHECKSUM) {

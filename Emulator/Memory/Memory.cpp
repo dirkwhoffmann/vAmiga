@@ -944,6 +944,14 @@ Memory::peek16<BUS_CPU>(u32 addr)
     return 0;
 }
 
+u16
+Memory::peekChip16(u32 addr)
+{
+    ASSERT_CHIP_ADDR(addr);
+    dataBus = READ_CHIP_16(addr);
+    return dataBus;
+}
+
 u8
 Memory::spypeek8(u32 addr)
 {
@@ -1001,10 +1009,6 @@ Memory::spypeek32(u32 addr)
 void
 Memory::poke8(u32 addr, u8 value)
 {
-    // if (addr >= 0xC2F3A0 && addr <= 0xC2F3B0) debug("**** poke8(%X,%X)\n", addr, value);
-
-    // if (blitter.copycount >= 580) debug("poke8(%x,%x)\n", addr, value);
-
     addr &= 0xFFFFFF;
     switch (memSrc[addr >> 16]) {
             
@@ -1094,7 +1098,7 @@ Memory::poke8(u32 addr, u8 value)
             assert(false);
     }
 }
-
+            
 template <> void
 Memory::poke16<BUS_COPPER>(u32 addr, u16 value)
 {
@@ -1222,6 +1226,14 @@ Memory::poke16<BUS_CPU>(u32 addr, u16 value)
     }
 }
 
+void
+Memory::pokeChip16(u32 addr, u16 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+    dataBus = value;
+    WRITE_CHIP_16(addr, value);
+}
+                
 u8
 Memory::peekCIA8(u32 addr)
 {

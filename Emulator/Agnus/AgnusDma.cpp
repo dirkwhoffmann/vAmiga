@@ -631,7 +631,7 @@ Agnus::allocateBus()
 u16
 Agnus::doDiskDMA()
 {
-    u16 result = mem.peekChip16(dskpt);
+    u16 result = peek(dskpt);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -645,7 +645,7 @@ Agnus::doDiskDMA()
 template <int channel> u16
 Agnus::doAudioDMA()
 {
-    u16 result = mem.peekChip16(audpt[channel]);
+    u16 result = peek(audpt[channel]);
     audpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -659,7 +659,7 @@ Agnus::doAudioDMA()
 template <int bitplane> u16
 Agnus::doBitplaneDMA()
 {
-    u16 result = mem.peekChip16(bplpt[bitplane]);
+    u16 result = peek(bplpt[bitplane]);
     bplpt[bitplane] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -673,7 +673,7 @@ Agnus::doBitplaneDMA()
 template <int channel> u16
 Agnus::doSpriteDMA()
 {
-    u16 result = mem.peekChip16(sprpt[channel]);
+    u16 result = peek(sprpt[channel]);
     sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -687,7 +687,7 @@ Agnus::doSpriteDMA()
 u16
 Agnus::doCopperDMA(u32 addr)
 {
-    u16 result = mem.peek16<BUS_COPPER>(addr);
+    u16 result = peek(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -703,7 +703,7 @@ Agnus::doBlitterDMA(u32 addr)
     // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    u16 result = mem.peek16<BUS_BLITTER>(addr);
+    u16 result = peek(addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BLITTER;
@@ -716,7 +716,7 @@ Agnus::doBlitterDMA(u32 addr)
 void
 Agnus::doDiskDMA(u16 value)
 {
-    mem.pokeChip16(dskpt, value);
+    poke(dskpt, value);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -728,14 +728,8 @@ Agnus::doDiskDMA(u16 value)
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
-    /*
-    if ((addr & 0xFFF) == 0x9C) {
-        debug("Copper poke INTREQ %x\n", value);
-    }
-    */
-    
     mem.pokeCustom16<POKE_COPPER>(addr, value);
-
+    
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
@@ -745,8 +739,8 @@ Agnus::doCopperDMA(u32 addr, u16 value)
 void
 Agnus::doBlitterDMA(u32 addr, u16 value)
 {
-    mem.poke16<BUS_BLITTER>(addr, value);
-
+    poke(addr, value);
+    
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busValue[pos.h] = value;

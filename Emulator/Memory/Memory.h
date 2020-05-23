@@ -408,46 +408,34 @@ public:
     
     
     //
-    // Accessing memory cells
+    // Accessing memory
     //
     
 public:
 
     u8 peek8(u32 addr);
     template <BusOwner owner> u16 peek16(u32 addr);
+    u16 peekChip16(u32 addr);
 
+    void poke8(u32 addr, u8 value);
+    template <BusOwner owner> void poke16(u32 addr, u16 value);
+    void pokeChip16(u32 addr, u16 value);
+    
     u8 spypeek8(u32 addr);
     u16 spypeek16(u32 addr);
     u32 spypeek32(u32 addr);
-    
-    void poke8(u32 addr, u8 value);
-    template <BusOwner owner> void poke16(u32 addr, u16 value);
 
-    
-    //
-    // Chip Ram
-    //
-    
-    inline u8 peekChip8(u32 addr) {
-        ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-    }
-    inline u16 peekChip16(u32 addr) {
+    /*
+    u16 peekChip16(u32 addr) {
         ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
     }
-
-    inline u8 spypeekChip8(u32 addr) {
-        return peekChip8(addr);
-    }
-    inline u16 spypeekChip16(u32 addr) {
-        return peekChip16(addr);
-    }
-
-    inline void pokeChip8(u32 addr, u8 value) {
-        ASSERT_CHIP_ADDR(addr); WRITE_CHIP_8(addr, value);
-    }
-    inline void pokeChip16(u32 addr, u16 value) {
+    void pokeChip16(u32 addr, u16 value) {
         ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value);
     }
+    */
+    
+    u16 spypeekChip16(u32 addr) { return peekChip16(addr); }
+
 
     //
     // CIA space
