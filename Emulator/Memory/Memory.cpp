@@ -952,6 +952,14 @@ Memory::peekChip16(u32 addr)
     return dataBus;
 }
 
+u16
+Memory::peekSlow16(u32 addr)
+{
+    ASSERT_SLOW_ADDR(addr);
+    dataBus = READ_SLOW_16(addr);
+    return dataBus;
+}
+
 u8
 Memory::spypeek8(u32 addr)
 {
@@ -1233,7 +1241,15 @@ Memory::pokeChip16(u32 addr, u16 value)
     dataBus = value;
     WRITE_CHIP_16(addr, value);
 }
-                
+
+void
+Memory::pokeSlow16(u32 addr, u16 value)
+{
+    ASSERT_SLOW_ADDR(addr);
+    dataBus = value;
+    WRITE_SLOW_16(addr, value);
+}
+
 u8
 Memory::peekCIA8(u32 addr)
 {

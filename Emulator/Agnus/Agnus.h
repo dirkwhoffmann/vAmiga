@@ -501,7 +501,14 @@ public:
     // Returns the connected bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
 
-
+    /* Returns true if Agnus is able to access to the Slow Ram area.
+     * The ECS Agnus has a special feature that makes Slow Ram accessible.
+     * In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow Ram is
+     * mapped into the second Chip Ram segment. The OCS Agnus does not have
+     * this feature. It has access to Chip Ram, only.
+     */
+    bool slowRamIsMirroredIn();
+    
     //
     // Analyzing and profiling
     //

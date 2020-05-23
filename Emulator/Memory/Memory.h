@@ -416,23 +416,16 @@ public:
     u8 peek8(u32 addr);
     template <BusOwner owner> u16 peek16(u32 addr);
     u16 peekChip16(u32 addr);
-
+    u16 peekSlow16(u32 addr);
+    
     void poke8(u32 addr, u8 value);
     template <BusOwner owner> void poke16(u32 addr, u16 value);
     void pokeChip16(u32 addr, u16 value);
-    
+    void pokeSlow16(u32 addr, u16 value);
+
     u8 spypeek8(u32 addr);
     u16 spypeek16(u32 addr);
     u32 spypeek32(u32 addr);
-
-    /*
-    u16 peekChip16(u32 addr) {
-        ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-    }
-    void pokeChip16(u32 addr, u16 value) {
-        ASSERT_CHIP_ADDR(addr); WRITE_CHIP_16(addr, value);
-    }
-    */
     
     u16 spypeekChip16(u32 addr) { return peekChip16(addr); }
 

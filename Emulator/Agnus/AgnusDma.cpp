@@ -549,10 +549,19 @@ Agnus::pokeSPRxCTL(u16 value)
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
 }
 
+static bool extracted(Agnus &object) {
+    return object.slowRamIsMirroredIn();
+}
+
 u32
 Agnus::peek(u32 addr)
 {
     addr &= ptrMask;
+    
+    if (addr >= 0x80000 && extracted(*this)) {
+        return mem.peekSlow16(addr);
+    }
+    
     return mem.peekChip16(addr);
 }
 
@@ -560,6 +569,13 @@ void
 Agnus::poke(u32 addr, u16 value)
 {
     addr &= ptrMask;
+
+    // Check if SlowRam is mirrored in
+    if (addr >= 0x80000 && slowRamIsMirroredIn()) {
+        mem.pokeSlow16(addr, value);
+        return;
+    }
+    
     mem.pokeChip16(addr, value);
 }
 

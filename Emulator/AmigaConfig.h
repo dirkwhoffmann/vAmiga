@@ -25,6 +25,14 @@
 
 
 //
+// Compatibility settings
+//
+
+// Enable to emulate the Slow Ram mirroring feature of the ECS Agnus
+#define MIRROR_SLOW_RAM
+
+
+//
 // Debug settings
 //
 
