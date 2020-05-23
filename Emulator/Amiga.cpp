@@ -218,6 +218,11 @@ Amiga::configure(ConfigOption option, long value)
 
         case VA_CHIP_RAM:
             
+#ifdef FORCE_CHIP_RAM
+            value = FORCE_CHIP_RAM;
+            warn("Overriding Chip Ram size: %d KB\n", value);
+#endif
+            
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 warn("Invalid Chip Ram size: %d\n", value);
                 warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
@@ -229,6 +234,11 @@ Amiga::configure(ConfigOption option, long value)
     
         case VA_SLOW_RAM:
             
+#ifdef FORCE_SLOW_RAM
+            value = FORCE_SLOW_RAM;
+            warn("Overriding Slow Ram size: %d KB\n", value);
+#endif
+
             if ((value % 256) != 0 || value > 512) {
                 warn("Invalid Slow Ram size: %d\n", value);
                 warn("         Valid values: 0KB, 256KB, 512KB\n");
@@ -239,6 +249,11 @@ Amiga::configure(ConfigOption option, long value)
             goto success;
         
         case VA_FAST_RAM:
+            
+#ifdef FORCE_FAST_RAM
+            value = FORCE_FAST_RAM;
+            warn("Overriding Fast Ram size: %d KB\n", value);
+#endif
             
             if ((value % 64) != 0 || value > 8192) {
                 warn("Invalid Fast Ram size: %d\n", value);
@@ -341,16 +356,11 @@ Amiga::configure(ConfigOption option, long value)
             
         case VA_BLITTER_ACCURACY:
             
-            if (FORCE_FAST_BLT) {
-                assert(!FORCE_SLOW_BLT);
-                warn("Using the FastBlitter for debugging\n");
-                value = 0;
-            }
-            if (FORCE_SLOW_BLT) {
-                assert(!FORCE_FAST_BLT);
-                warn("Using the SlowBlitter level %d for debugging\n", FORCE_SLOW_BLT);
-                value = FORCE_SLOW_BLT;
-            }
+#ifdef FORCE_BLITTER_ACCURACY
+            value = FORCE_BLITTER_ACCURACY;
+            warn("Overriding Blitter accuracy level: %d\n", value);
+#endif
+
             if (current.blitter.accuracy == value) goto exit;
             agnus.blitter.setAccuracy(value);
             goto success;
