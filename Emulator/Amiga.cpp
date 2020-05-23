@@ -187,7 +187,7 @@ Amiga::configure(ConfigOption option, long value)
             if (!isAgnusRevision(value)) {
                 warn("Invalid Agnus revision: %d\n", value);
                 goto error;
-             }
+            }
 
             if (current.agnus.revision == value) goto exit;
             agnus.setRevision((AgnusRevision)value);

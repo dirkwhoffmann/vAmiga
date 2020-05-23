@@ -131,6 +131,9 @@ public:
     // Registers
     //
 
+    // Memory mask (determines the width of all DMA memory pointer registers)
+    u32 ptrMask;
+    
     // A copy of BPLCON0 and BPLCON1 (Denise has its own copies)
     u16 bplcon0;
     u16 bplcon1;
@@ -397,7 +400,8 @@ public:
     {
         worker
 
-        & config.revision;
+        & config.revision
+        & ptrMask;
     }
 
     template <class T>
@@ -684,6 +688,12 @@ public:
     // Performing DMA
     //
 
+    // Reads a word from memory
+    u32 peek(u32 addr);
+    
+    // Write a word to memory
+    void poke(u32 addr, u16 value);
+    
     /* Checks if the bus is currently available for the specified resource.
      */
     template <BusOwner owner> bool busIsFree();
