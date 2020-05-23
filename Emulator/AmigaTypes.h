@@ -37,7 +37,7 @@ typedef enum : long
 {
     VA_AGNUS_REVISION,
     VA_DENISE_REVISION,
-    VA_RT_CLOCK,
+    VA_RTC,
     VA_CHIP_RAM,
     VA_SLOW_RAM,
     VA_FAST_RAM,

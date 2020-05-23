@@ -36,10 +36,13 @@
 //
 
 // Uncomment to override a configuration setting
-// #define FORCE_BLT_LEVEL      1
+
+// #define FORCE_AGNUS_REVISION AGNUS_8367
+// #define FORCE_BLT_LEVEL      0
 // #define FORCE_CHIP_RAM       512
-// #define FORCE_SLOW_RAM       0
-// #define FORCE_FAST_RAM       8192
+// #define FORCE_SLOW_RAM       512
+// #define FORCE_FAST_RAM       0
+// #define FORCE_RTC            RTC_NONE
 
 
 //
@@ -47,7 +50,8 @@
 //
 
 // Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xFC5A6E
+// #define INITIAL_BREAKPOINT 0xFC5C58
+// #define INITIAL_BREAKPOINT 0xFC5BCE
 // #define INITIAL_BREAKPOINT 0x0158EC LED SWITCHED OFF 
 
 // Uncomment to fallback to a simpler Agnus execution function

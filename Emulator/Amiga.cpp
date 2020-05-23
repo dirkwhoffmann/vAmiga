@@ -183,7 +183,12 @@ Amiga::configure(ConfigOption option, long value)
     switch (option) {
 
         case VA_AGNUS_REVISION:
-
+            
+#ifdef FORCE_AGNUS_REVISION
+            value = VA_AGNUS_REVISION;
+            warn("Overriding Agnus revision: %d KB\n", value);
+#endif
+            
             if (!isAgnusRevision(value)) {
                 warn("Invalid Agnus revision: %d\n", value);
                 goto error;
@@ -204,7 +209,12 @@ Amiga::configure(ConfigOption option, long value)
             denise.setRevision((DeniseRevision)value);
             goto success;
 
-        case VA_RT_CLOCK:
+        case VA_RTC:
+            
+#ifdef FORCE_RTC
+            value = FORCE_RTC;
+            warn("Overriding RTC: %d KB\n", value);
+#endif
 
             if (!isRTCModel(value)) {
                 warn("Invalid RTC model: %d\n", value);
@@ -486,7 +496,7 @@ Amiga::getConfig(ConfigOption option)
 
         case VA_AGNUS_REVISION: return agnus.getRevision();
         case VA_DENISE_REVISION: return denise.getRevision();
-        case VA_RT_CLOCK: return rtc.getModel();
+        case VA_RTC: return rtc.getModel();
         case VA_CHIP_RAM: return mem.chipRamSize() / KB(1);
         case VA_SLOW_RAM: return mem.slowRamSize() / KB(1);
         case VA_FAST_RAM: return mem.fastRamSize() / KB(1);
