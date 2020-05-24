@@ -697,7 +697,8 @@ public:
 
     // Reads a word from memory
     u16 peek(u32 addr);
-        
+    u16 spypeek(u32 addr);
+    
     // Write a word to memory
     void poke(u32 addr, u16 value);
     

@@ -118,12 +118,12 @@ Amiga::setDebugMode(bool enable)
 {
     if ((debugMode = enable)) {
         
-        debug("Enabling debug mode\n");
+        msg("Enabling debug mode\n");
         cpu.debugger.enableLogging();
 
     } else {
 
-        debug("Disabling debug mode\n");
+        msg("Disabling debug mode\n");
         cpu.debugger.disableLogging();
     }
 }

@@ -561,6 +561,18 @@ Agnus::peek(u32 addr)
     return mem.peek16 <ACC_AGNUS, MEM_CHIP> (addr);
 }
 
+u16
+Agnus::spypeek(u32 addr)
+{
+    addr &= ptrMask;
+    
+    if (addr >= 0x80000 && slowRamIsMirroredIn()) {
+        return mem.spypeek16 <MEM_SLOW> (addr);
+    }
+    
+    return mem.spypeek16 <MEM_CHIP> (addr);
+}
+
 void
 Agnus::poke(u32 addr, u16 value)
 {
