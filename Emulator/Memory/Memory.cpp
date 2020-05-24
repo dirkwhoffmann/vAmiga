@@ -747,6 +747,12 @@ Memory::peek16 <ACC_CPU, MEM_UNMAPPED> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::spypeek16 <MEM_UNMAPPED> (u32 addr)
+{
+    return dataBus;
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_CHIP> (u32 addr)
 {
@@ -776,6 +782,12 @@ Memory::peek16 <ACC_AGNUS, MEM_CHIP> (u32 addr)
     
     dataBus = READ_CHIP_16(addr);
     return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <MEM_CHIP> (u32 addr)
+{
+    return READ_CHIP_16(addr);
 }
 
 template<> u8
@@ -809,6 +821,12 @@ Memory::peek16 <ACC_AGNUS, MEM_SLOW> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::spypeek16 <MEM_SLOW> (u32 addr)
+{
+    return READ_SLOW_16(addr);
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_FAST> (u32 addr)
 {
@@ -824,6 +842,12 @@ Memory::peek16 <ACC_CPU, MEM_FAST> (u32 addr)
     ASSERT_FAST_ADDR(addr);
     
     stats.fastReads.raw++;
+    return READ_FAST_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <MEM_FAST> (u32 addr)
+{
     return READ_FAST_16(addr);
 }
 
@@ -849,6 +873,12 @@ Memory::peek16 <ACC_CPU, MEM_CIA> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::spypeek16 <MEM_CIA> (u32 addr)
+{
+    return spypeekCIA16(addr);
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_RTC> (u32 addr)
 {
@@ -869,6 +899,12 @@ Memory::peek16 <ACC_CPU, MEM_RTC> (u32 addr)
 
     dataBus = peekRTC16(addr);
     return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <MEM_RTC> (u32 addr)
+{
+    return spypeekRTC16(addr);
 }
 
 template<> u8
@@ -893,6 +929,12 @@ Memory::peek16 <ACC_CPU, MEM_CUSTOM> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::spypeek16 <MEM_CUSTOM> (u32 addr)
+{
+    return spypeekCustom16(addr);
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
 {
@@ -915,6 +957,12 @@ Memory::peek16 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::spypeek16 <MEM_AUTOCONF> (u32 addr)
+{
+    return spypeekAutoConf16(addr);
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_ROM> (u32 addr)
 {
@@ -930,6 +978,12 @@ Memory::peek16 <ACC_CPU, MEM_ROM> (u32 addr)
     ASSERT_ROM_ADDR(addr);
     
     stats.kickReads.raw++;
+    return READ_ROM_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <MEM_ROM> (u32 addr)
+{
     return READ_ROM_16(addr);
 }
 
@@ -951,6 +1005,12 @@ Memory::peek16 <ACC_CPU, MEM_WOM> (u32 addr)
     return READ_WOM_16(addr);
 }
 
+template<> u16
+Memory::spypeek16 <MEM_WOM> (u32 addr)
+{
+    return READ_WOM_16(addr);
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_EXT> (u32 addr)
 {
@@ -966,6 +1026,12 @@ Memory::peek16 <ACC_CPU, MEM_EXT> (u32 addr)
     ASSERT_EXT_ADDR(addr);
     
     stats.kickReads.raw++;
+    return READ_EXT_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <MEM_EXT> (u32 addr)
+{
     return READ_EXT_16(addr);
 }
 
@@ -1013,62 +1079,27 @@ Memory::peek16 <ACC_CPU> (u32 addr)
     }
 }
 
-
-
-
-
-u8
-Memory::spypeek8(u32 addr)
-{
-    addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
-            
-        case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_8(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_8(addr);
-        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA8(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_8(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
-        case MEM_CUSTOM:   ASSERT_CUSTOM_ADDR(addr);  return spypeekCustom8(addr);
-        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf8(addr);
-        case MEM_ROM:      ASSERT_ROM_ADDR(addr);  return READ_ROM_8(addr);
-        case MEM_WOM:      ASSERT_WOM_ADDR(addr);  return READ_WOM_8(addr);
-        case MEM_EXT:      ASSERT_EXT_ADDR(addr);  return READ_EXT_8(addr);
-        default:           assert(false);
-    }
-    return 0;
-}
-
 u16
-Memory::spypeek16(u32 addr)
+Memory::spypeek16 (u32 addr)
 {
-    if (!IS_EVEN(addr)) {
-        // warn("spypeek16(%X): Address violation error (reading odd address)\n", addr);
-    }
-
-    addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
+    assert(IS_EVEN(addr));
+    
+    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: return 0;
-        case MEM_CHIP:     ASSERT_CHIP_ADDR(addr); return READ_CHIP_16(addr);
-        case MEM_FAST:     ASSERT_FAST_ADDR(addr); return READ_FAST_16(addr);
-        case MEM_CIA:      ASSERT_CIA_ADDR(addr);  return spypeekCIA16(addr);
-        case MEM_SLOW:     ASSERT_SLOW_ADDR(addr); return READ_SLOW_16(addr);
-        case MEM_RTC:      ASSERT_RTC_ADDR(addr);  return spypeekRTC8(addr);
-        case MEM_CUSTOM:   ASSERT_CUSTOM_ADDR(addr);  return spypeekCustom16(addr);
-        case MEM_AUTOCONF: ASSERT_AUTO_ADDR(addr); return spypeekAutoConf16(addr);
-        case MEM_ROM:      ASSERT_ROM_ADDR(addr);  return READ_ROM_16(addr);
-        case MEM_WOM:      ASSERT_WOM_ADDR(addr);  return READ_WOM_16(addr);
-        case MEM_EXT:      ASSERT_EXT_ADDR(addr);  return READ_EXT_16(addr);
-        default:           assert(false);
+        case MEM_UNMAPPED: return spypeek16 <MEM_UNMAPPED> (addr);
+        case MEM_CHIP:     return spypeek16 <MEM_CHIP>     (addr);
+        case MEM_SLOW:     return spypeek16 <MEM_SLOW>     (addr);
+        case MEM_FAST:     return spypeek16 <MEM_FAST>     (addr);
+        case MEM_CIA:      return spypeek16 <MEM_CIA>      (addr);
+        case MEM_RTC:      return spypeek16 <MEM_RTC>      (addr);
+        case MEM_CUSTOM:   return spypeek16 <MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF: return spypeek16 <MEM_AUTOCONF> (addr);
+        case MEM_ROM:      return spypeek16 <MEM_ROM>      (addr);
+        case MEM_WOM:      return spypeek16 <MEM_WOM>      (addr);
+        case MEM_EXT:      return spypeek16 <MEM_EXT>      (addr);
+            
+        default: assert(false); return 0;
     }
-    return 0;
-}
-
-u32
-Memory::spypeek32(u32 addr)
-{
-    return HI_W_LO_W(spypeek16(addr), spypeek16(addr + 2));
 }
 
 void
@@ -2132,9 +2163,10 @@ Memory::pokeWom16(u32 addr, u16 value)
 const char *
 Memory::ascii(u32 addr)
 {
-    for (unsigned i = 0; i < 16; i++) {
-        u8 value = spypeek8(addr + i);
-        str[i] = isprint(value) ? value : '.';
+    for (unsigned i = 0; i < 16; i += 2) {
+        u16 word = spypeek16(addr + i);
+        str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
+        str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
     }
     str[16] = 0;
     return str;

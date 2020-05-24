@@ -875,7 +875,6 @@ DiskController::performTurboRead(Drive *drive)
         u16 word = drive->readHead16();
         
         // Write word into memory
-        // mem.pokeChip16(agnus.dskpt, word);
         agnus.poke(agnus.dskpt, word);
         agnus.dskpt += 2;
 

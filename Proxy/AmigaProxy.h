@@ -281,7 +281,6 @@ struct AmigaFileWrapper;
 
 - (MemorySource *) getMemSrcTable; 
 - (MemorySource) memSrc:(NSInteger)addr;
-- (NSInteger) spypeek8:(NSInteger)addr;
 - (NSInteger) spypeek16:(NSInteger)addr;
 
 - (NSString *) ascii:(NSInteger)addr;

@@ -584,8 +584,8 @@ Copper::getBFD()
 bool
 Copper::getBFD(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return (LO_WORD(instr) & 0x8000) != 0;
+    u16 instr = mem.spypeek16(addr + 2);
+    return (instr & 0x8000) != 0;
 }
 
 u16
@@ -597,8 +597,8 @@ Copper::getVPHP()
 u16
 Copper::getVPHP(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return HI_WORD(instr) & 0xFFFE;
+    u16 instr = mem.spypeek16(addr);
+    return instr & 0xFFFE;
 }
 
 u16
@@ -610,8 +610,8 @@ Copper::getVMHM()
 u16
 Copper::getVMHM(u32 addr)
 {
-    u32 instr = mem.spypeek32(addr);
-    return (LO_WORD(instr) & 0x7FFE) | 0x8001;
+    u16 instr = mem.spypeek16(addr + 2);
+    return (instr & 0x7FFE) | 0x8001;
 }
 
 bool

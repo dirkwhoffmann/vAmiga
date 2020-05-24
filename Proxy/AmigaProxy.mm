@@ -388,10 +388,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->mem->getMemSrc((u32)addr);
 }
-- (NSInteger) spypeek8:(NSInteger)addr
-{
-    return wrapper->mem->spypeek8((u32)addr);
-}
 - (NSInteger) spypeek16:(NSInteger)addr
 {
     return wrapper->mem->spypeek16((u32)addr);
