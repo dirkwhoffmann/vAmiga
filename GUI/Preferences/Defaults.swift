@@ -581,7 +581,7 @@ struct HardwareDefaults {
         realTimeClock: RTC_NONE,
         
         chipRam: 512,
-        slowRam: 0,
+        slowRam: 512,
         fastRam: 0,
         
         driveConnect: [true, false, false, false],
