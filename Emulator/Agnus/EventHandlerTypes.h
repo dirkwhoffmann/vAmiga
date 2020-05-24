@@ -199,6 +199,7 @@ typedef enum : long
 
     // Strobe slot
     VBL_STROBE = 1,
+    VBL_END = 2,
     VBL_EVENT_COUNT,
     
     // IRQ slot

@@ -342,9 +342,11 @@ Agnus::pokeVPOS(u16 value)
     if (!newlof && inLastRasterline()) return;
     frame.lof = newlof;
     
-    // Reschedule the next VBL event according to the new value
-    assert(slot[VBL_SLOT].id == VBL_STROBE);
-    reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
+    // Reschedule a pending VBL_STROBE event with a trigger cycle that is
+    // consistent with new LOF bit value.
+    if (slot[VBL_SLOT].id == VBL_STROBE) {
+        reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
+    }
 }
 
 template <Accessor s> void
@@ -1308,10 +1310,7 @@ Agnus::vsyncHandler()
     // Initialize the DIW flipflops
     diwVFlop = false;
     diwHFlop = true; 
-    
-    // CIA A counts VSYNCs
-    amiga.ciaA.incrementTOD();
-        
+            
     // Let other subcomponents do their own VSYNC stuff
     blitter.vsyncHandler();
     copper.vsyncHandler();
@@ -1331,13 +1330,36 @@ Agnus::vsyncHandler()
 
 void
 Agnus::serviceVblEvent()
-{
-    assert(slot[VBL_SLOT].id == VBL_STROBE);
-    assert(pos.v == 0 || pos.v == 1);
-    assert(pos.h == 1);
-
-    paula.setINTREQ(true, 1 << INT_VERTB);
-    rescheduleRel<VBL_SLOT>(cyclesInFrame());
+{    
+    switch (slot[VBL_SLOT].id) {
+            
+        case VBL_STROBE:
+            
+            assert(pos.v == 0 || pos.v == 1);
+            assert(pos.h == 1);
+            
+            // Trigger the vertical blank interrupt
+            paula.raiseIrq(INT_VERTB);
+            
+            // Schedule the next VBL_END event
+            schedulePos<VBL_SLOT>(6, 1, VBL_END);
+            break;
+            
+        case VBL_END:
+            
+            assert(pos.v == 6);
+            assert(pos.h == 1);
+            
+            // Increment the TOD counter of CIA A
+            amiga.ciaA.incrementTOD();
+            
+            // Schedule the next VBL_STROBE event
+            schedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1, VBL_STROBE);
+            break;
+            
+        default:
+            assert(false);
+    }
 }
 
 
