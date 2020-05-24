@@ -267,13 +267,13 @@ Blitter::pokeBLTALWM(u16 value)
     bltalwm = value;
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Blitter::pokeBLTSIZE(u16 value)
 {
     plaindebug(BLTTIM_DEBUG, "(%d,%d) BLTSIZE(%x)\n", agnus.pos.v, agnus.pos.h, value);
     plaindebug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
-    if (s == POKE_COPPER) {
+    if (s == ACC_AGNUS) {
         agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
@@ -907,8 +907,8 @@ Blitter::endBlit()
     copper.blitterDidTerminate();
 }
 
-template void Blitter::pokeBLTSIZE<POKE_CPU>(u16 value);
-template void Blitter::pokeBLTSIZE<POKE_COPPER>(u16 value);
+template void Blitter::pokeBLTSIZE<ACC_CPU>(u16 value);
+template void Blitter::pokeBLTSIZE<ACC_AGNUS>(u16 value);
 
 void
 Blitter::beginLineBlit(int level)

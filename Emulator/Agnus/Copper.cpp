@@ -70,33 +70,33 @@ Copper::pokeCOPCON(u16 value)
     cdang = (value & 0b10) != 0;
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Copper::pokeCOPJMP1()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
 
-    if (s == POKE_COPPER) {
+    if (s == ACC_AGNUS) {
 
         assert(false);
 
     }
-    if (s == POKE_CPU) {
+    if (s == ACC_CPU) {
 
         switchToCopperList(1);
     }
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Copper::pokeCOPJMP2()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
-    if (s == POKE_COPPER) {
+    if (s == ACC_AGNUS) {
 
         assert(false);
 
     }
-    if (s == POKE_CPU) {
+    if (s == ACC_CPU) {
 
         switchToCopperList(2);
     }
@@ -1017,7 +1017,7 @@ Copper::dumpCopperList(unsigned list, unsigned length)
     }
 }
 
-template void Copper::pokeCOPJMP1<POKE_CPU>();
-template void Copper::pokeCOPJMP1<POKE_COPPER>();
-template void Copper::pokeCOPJMP2<POKE_CPU>();
-template void Copper::pokeCOPJMP2<POKE_COPPER>();
+template void Copper::pokeCOPJMP1<ACC_CPU>();
+template void Copper::pokeCOPJMP1<ACC_AGNUS>();
+template void Copper::pokeCOPJMP2<ACC_CPU>();
+template void Copper::pokeCOPJMP2<ACC_AGNUS>();

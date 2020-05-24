@@ -1151,7 +1151,7 @@ Memory::poke16(u32 addr, u16 value)
             agnus.executeUntilBusIsFree();
             stats.chipWrites.raw++;
             dataBus = value;
-            pokeCustom16<POKE_CPU>(addr, value);
+            pokeCustom16<ACC_CPU>(addr, value);
             return;
             
         case MEM_AUTOCONF:
@@ -1463,7 +1463,7 @@ Memory::peekCustomFaulty16(u32 addr)
 
      debug(INVREG_DEBUG, "Reading a non-readable chipset register\n");
 
-     pokeCustom16<POKE_CPU>(addr, dataBus);
+     pokeCustom16<ACC_CPU>(addr, dataBus);
 
      if (agnus.busOwner[agnus.pos.h] != BUS_NONE) {
          return agnus.busValue[agnus.pos.h];
@@ -1502,10 +1502,10 @@ Memory::pokeCustom8(u32 addr, u8 value)
      *  writes same value to upper and lower byte."
      *     [http://eab.abime.net/showthread.php?p=1156399]
      */
-    pokeCustom16<POKE_CPU>(addr & 0x1FE, HI_LO(value, value));
+    pokeCustom16<ACC_CPU>(addr & 0x1FE, HI_LO(value, value));
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Memory::pokeCustom16(u32 addr, u16 value)
 {
 
@@ -2066,5 +2066,5 @@ Memory::hex(u32 addr, size_t bytes)
     return str;
 }
 
-template void Memory::pokeCustom16<POKE_CPU>(u32 addr, u16 value);
-template void Memory::pokeCustom16<POKE_COPPER>(u32 addr, u16 value);
+template void Memory::pokeCustom16<ACC_CPU>(u32 addr, u16 value);
+template void Memory::pokeCustom16<ACC_AGNUS>(u32 addr, u16 value);

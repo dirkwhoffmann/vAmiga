@@ -347,17 +347,17 @@ Agnus::pokeVPOS(u16 value)
     reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", pokeSourceName(s), value);
+    debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorName(s), value);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTRT, value);
 }
 
-template <PokeSource s> void
+template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", pokeSourceName(s), value);
+    debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorName(s), value);
     recordRegisterChange(DMA_CYCLES(2), REG_DIWSTOP, value);
 }
 
@@ -1363,7 +1363,7 @@ template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
 
-template void Agnus::pokeDIWSTRT<POKE_CPU>(u16 value);
-template void Agnus::pokeDIWSTRT<POKE_COPPER>(u16 value);
-template void Agnus::pokeDIWSTOP<POKE_CPU>(u16 value);
-template void Agnus::pokeDIWSTOP<POKE_COPPER>(u16 value);
+template void Agnus::pokeDIWSTRT<ACC_CPU>(u16 value);
+template void Agnus::pokeDIWSTRT<ACC_AGNUS>(u16 value);
+template void Agnus::pokeDIWSTOP<ACC_CPU>(u16 value);
+template void Agnus::pokeDIWSTOP<ACC_AGNUS>(u16 value);

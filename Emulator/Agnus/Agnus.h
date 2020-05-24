@@ -790,8 +790,8 @@ public:
     void pokeVPOS(u16 value);
     
     // DIWSTRT, DIWSTOP
-    template <PokeSource s> void pokeDIWSTRT(u16 value);
-    template <PokeSource s> void pokeDIWSTOP(u16 value);
+    template <Accessor s> void pokeDIWSTRT(u16 value);
+    template <Accessor s> void pokeDIWSTOP(u16 value);
     void setDIWSTRT(u16 value);
     void setDIWSTOP(u16 value);
 

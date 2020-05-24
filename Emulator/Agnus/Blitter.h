@@ -348,7 +348,7 @@ public:
     void pokeBLTDPTL(u16 value);
     
     // OCS register 0x058 (w)
-    template <PokeSource s> void pokeBLTSIZE(u16 value);
+    template <Accessor s> void pokeBLTSIZE(u16 value);
     void setBLTSIZE(u16 value);
 
     // ECS register 0x05A (w)

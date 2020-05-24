@@ -146,8 +146,8 @@ public:
     //
 
     void pokeCOPCON(u16 value);
-    template <PokeSource s> void pokeCOPJMP1();
-    template <PokeSource s> void pokeCOPJMP2();
+    template <Accessor s> void pokeCOPJMP1();
+    template <Accessor s> void pokeCOPJMP2();
     void pokeCOPINS(u16 value);
     void pokeCOP1LCH(u16 value);
     void pokeCOP1LCL(u16 value);

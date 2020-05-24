@@ -470,7 +470,7 @@ public:
     u16 spypeekCustom16(u32 addr);
  
     void pokeCustom8(u32 addr, u8 value);
-    template <PokeSource s> void pokeCustom16(u32 addr, u16 value);
+    template <Accessor s> void pokeCustom16(u32 addr, u16 value);
     
     
     //

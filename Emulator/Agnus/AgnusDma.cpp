@@ -744,7 +744,7 @@ Agnus::doDiskDMA(u16 value)
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
-    mem.pokeCustom16<POKE_COPPER>(addr, value);
+    mem.pokeCustom16<ACC_AGNUS>(addr, value);
     
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;

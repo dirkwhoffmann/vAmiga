@@ -81,24 +81,23 @@ RomRevision;
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
-/* Poke source.
- * Some poke methods need to know who called them.
+/* Access identifiers
+ * Some memory methods need to know who called them.
  */
 typedef enum
 {
-    POKE_CPU,
-    POKE_COPPER,
-    POKE_SOURCE_COUNT
+    ACC_CPU,
+    ACC_AGNUS
 }
-PokeSource;
+Accessor;
 
-static inline bool isPokeSource(long value) { return value >= 0 && value < POKE_SOURCE_COUNT; }
+static inline bool isAccessor(long value) { return value >= 0 && value <= ACC_AGNUS; }
 
-inline const char *pokeSourceName(PokeSource source)
+inline const char *AccessorName(Accessor accessor)
 {
     return
-    source == POKE_CPU ? "CPU" :
-    source == POKE_COPPER ? "Copper" : "???";
+    accessor == ACC_CPU ? "CPU" :
+    accessor == ACC_AGNUS ? "Agnus" : "???";
 }
 
 typedef struct

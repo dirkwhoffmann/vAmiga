@@ -478,7 +478,7 @@ public:
     template <int x> void pokeSPRxDATB(u16 value);
 
     // COLORxx:  $180, $181 ... $1BC, $1BE (w)
-    template <PokeSource s, int xx> void pokeCOLORxx(u16 value);
+    template <Accessor s, int xx> void pokeCOLORxx(u16 value);
 
     
     //
