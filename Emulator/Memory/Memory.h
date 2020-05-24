@@ -94,9 +94,6 @@ assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 class Memory : public AmigaComponent {
 
-    friend class Copper;
-    friend class ZorroManager;
-
     // Current configuration
     MemoryConfig config;
 
@@ -110,12 +107,12 @@ public:
      * There are 6 types of dynamically allocated memory:
      *
      *     rom: Read-only memory
-     *          Holds a Kickstart Rom or a Boot Rom (A1000)
+     *          Holds a Kickstart Rom or a Boot Rom (A1000).
 
      *     wom: Write-once Memory
      *          If rom holds a Boot Rom, a wom is automatically created. It
-     *          it the place where the A1000 stores the Kickstart that it
-     *          loads from disk.
+     *          is the place where the A1000 stores the Kickstart loaded
+     *          from disk.
      *
      *     ext: Extended Rom
      *          Such a Rom was added to newer Amiga models when the 512 KB
@@ -124,23 +121,23 @@ public:
      *
      *    chip: Chip Ram
      *          Holds the memory which is shared by the CPU and the Amiga Chip
-     *          set. The original Agnus chip was able to address 512 KB Chip
-     *          memory. Newer models were able to address up to 2 MB.
+     *          set. The original Agnus chip is able to address 512 KB Chip
+     *          memory. Newer models are able to address up to 2 MB.
      *
      *    slow: Slow Ram (aka Bogo Ram)
      *          This Ram is addressed by the same bus as Chip Ram, but it can
      *          used by the CPU only.
      *
      *    fast: Fast Ram
-     *          This Ram can be used by the CPU only. It is connected via a
-     *          seperate bus and won't slow down the Chip set when the CPU
-     *          addressed it.
+     *          Only the CPU can access this Ram. It is connected via a
+     *          seperate bus and doesn't slow down the Chip set when the CPU
+     *          addresses it.
      *
      * Each memory type is represented by three variables:
      *
-     *    A pointer to the allocates memory
-     *    A variable storing the memory size in bytes (in MemoryConfig)
-     *    A bit mask to emulate address mirroring
+     *    A pointer to the allocates memory.
+     *    A variable storing the memory size in bytes (in MemoryConfig).
+     *    A bit mask to emulate address mirroring.
      *
      * The following invariants hold:
      *
@@ -162,16 +159,15 @@ public:
     u32 slowMask = 0;
     u32 fastMask = 0;
 
-    /* Indicates if the Kickstart Wom is writable
+    /* Indicates if the Kickstart Wom is writable.
      * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
      * Memory) is added automatically. On startup, the WOM is unlocked which
-     * means that it is writable. During the boot process, the WOM will
-     * be locked.
+     * means that it is writable. During the boot process, the WOM gets locked.
      */
     bool womIsLocked = false;
     
-    /* We divide the memory into banks of size 64KB.
-     * The Amiga has 24 address lines. Hence, the accessible memory is divided
+    /* Memory is divided into 64KB banks.
+     * The Amiga has 24 address lines which means that memory is divided
      * into 256 different banks. For each bank, this array indicates the type
      * of memory seen by the Amiga.
      * See also: updateMemSrcTable()
@@ -181,7 +177,7 @@ public:
     // The last value on the data bus
     u16 dataBus;
 
-    // Buffer for returning string values
+    // Static buffer for returning textual representations
     char str[256];
     
 
@@ -273,7 +269,7 @@ public:
     
 private:
     
-    /* Dynamically allocates Ram or Rom.
+    /* Dynamically allocates Ram or Rom
      *
      * Side effects:
      *    - Updates the memory lookup table
@@ -335,7 +331,7 @@ public:
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
-    // Analyzes a ROM identifier by type
+    // Classifies a ROM identifier by type
     static bool isBootRom(RomRevision rev);
     static bool isArosRom(RomRevision rev);
     static bool isDiagRom(RomRevision rev);
@@ -355,7 +351,7 @@ public:
     const char *extVersion();
     const char *extReleased()  { return released(extRevision()); }
 
-    // Check if a certain Rom is present
+    // Checks if a certain Rom is present
     bool hasRom() { return rom != NULL; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
@@ -397,13 +393,13 @@ public:
     
 public:
     
-    // Returns the memory source lookup table.
+    // Returns the memory source lookup table
     MemorySource *getMemSrcTable() { return memSrc; }
     
-    // Returns the memory source for a given address.
+    // Returns the memory source for a given address
     MemorySource getMemSrc(u32 addr) { return memSrc[(addr >> 16) & 0xFF]; }
     
-    // Updates the memory source lookup table.
+    // Updates the memory source lookup table
     void updateMemSrcTable();
     
     
@@ -455,32 +451,28 @@ public:
 
     
     //
-    // Custom chips (OCS)
+    // Custom chip space
     //
     
-    u8 peekCustom8(u32 addr);
     u16 peekCustom16(u32 addr);
     u16 peekCustomFaulty16(u32 addr);
-
-    u8 spypeekCustom8(u32 addr);
+    
     u16 spypeekCustom16(u32 addr);
  
     template <Accessor s> void pokeCustom16(u32 addr, u16 value);
     
     
-
     //
     // Debugging
     //
     
 public:
     
-    // Returns 16 bytes of memory as an ASCII string.
+    // Returns 16 bytes of memory as an ASCII string
     const char *ascii(u32 addr);
     
-    // Returns a certain amount of bytes as a string containing hex words.
+    // Returns a certain amount of bytes as a string containing hex words
     const char *hex(u32 addr, size_t bytes);
-
 };
 
 #endif

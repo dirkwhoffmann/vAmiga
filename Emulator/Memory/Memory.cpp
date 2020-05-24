@@ -913,8 +913,12 @@ Memory::peek8 <ACC_CPU, MEM_CUSTOM> (u32 addr)
     ASSERT_CUSTOM_ADDR(addr);
     
     agnus.executeUntilBusIsFree();
-    
-    dataBus = peekCustom8(addr);
+
+    if (IS_EVEN(addr)) {
+        dataBus = HI_BYTE(peekCustom16(addr));
+    } else {
+        dataBus = LO_BYTE(peekCustom16(addr & 0x1FE));
+    }
     return dataBus;
 }
 
@@ -1569,16 +1573,6 @@ Memory::pokeRTC16(u32 addr, u16 value)
     pokeRTC8(addr + 1, LO_BYTE(value));
 }
 
-u8
-Memory::peekCustom8(u32 addr)
-{
-    if (IS_EVEN(addr)) {
-        return HI_BYTE(peekCustom16(addr));
-    } else {
-        return LO_BYTE(peekCustom16(addr & 0x1FE));
-    }
-}
-
 u16
 Memory::peekCustom16(u32 addr)
 {
@@ -1663,16 +1657,6 @@ Memory::peekCustomFaulty16(u32 addr)
      }
 }
 
-u8
-Memory::spypeekCustom8(u32 addr)
-{
-    if (IS_EVEN(addr)) {
-        return HI_BYTE(spypeekCustom16(addr));
-    } else {
-        return LO_BYTE(spypeekCustom16(addr & 0x1FE));
-    }
-}
-
 u16
 Memory::spypeekCustom16(u32 addr)
 {
@@ -1683,7 +1667,6 @@ Memory::spypeekCustom16(u32 addr)
     }
 
     return 42;
-    // return peekCustom16(addr);
 }
 
 template <Accessor s> void

@@ -34,13 +34,11 @@ ZorroManager::_dump()
 
 u8
 ZorroManager::peekFastRamDevice(u32 addr)
-{
-    size_t fastRamSize = mem.config.fastSize;
-    
+{    
     debug(FAS_DEBUG, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
-    debug(FAS_DEBUG, "    fastRamSize = %d\n", fastRamSize);
+    debug(FAS_DEBUG, "    fastRamSize = %d\n", mem.fastRamSize());
 
-    if (fastRamConf || fastRamSize == 0) return 0xF; // Already configured
+    if (fastRamConf || mem.fastRamSize() == 0) return 0xF; // Already configured
     
     /* Register pair 00/02 (er_Type)
      *
@@ -65,7 +63,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
     u8 erTypeHi = 0b1110; // Zorro II, Free pool, Don't boot
     u8 erTypeLo;
     
-    switch (fastRamSize) {
+    switch (mem.fastRamSize()) {
         case KB(64):  erTypeLo = 0b001; break;
         case KB(128): erTypeLo = 0b010; break;
         case KB(256): erTypeLo = 0b011; break;
@@ -182,7 +180,7 @@ ZorroManager::spypeekFastRamDevice(u32 addr)
 void
 ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
 {
-    if (mem.config.fastSize == 0) return;
+    if (mem.fastRamSize() == 0) return;
     
     // debug("pokeFastRamDevice(%X, %X)\n", addr, value);
     
