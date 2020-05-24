@@ -823,32 +823,8 @@ Memory::peek8(u32 addr)
     return 0;
 }
 
-template <> u16
-Memory::peek16<BUS_COPPER>(u32 addr)
-{
-    assert(IS_EVEN(addr));
-    
-    addr &= 0xFFFFFF;
-    
-    ASSERT_CHIP_ADDR(addr);
-    dataBus = READ_CHIP_16(addr);
-    return dataBus;
-}
-
-template <> u16
-Memory::peek16<BUS_BLITTER>(u32 addr)
-{
-    assert(IS_EVEN(addr));
-    
-    addr &= 0xFFFFFF;
-    
-    ASSERT_CHIP_ADDR(addr);
-    dataBus = READ_CHIP_16(addr);
-    return dataBus;
-}
-
-template <> u16
-Memory::peek16<BUS_CPU>(u32 addr)
+u16
+Memory::peek16(u32 addr)
 {
     if (!IS_EVEN(addr)) {
         warn("peek16(%X): Address violation error (reading odd address)\n", addr);
@@ -1107,30 +1083,8 @@ Memory::poke8(u32 addr, u8 value)
     }
 }
             
-template <> void
-Memory::poke16<BUS_COPPER>(u32 addr, u16 value)
-{
-    assert(IS_EVEN(addr));
-    ASSERT_CHIP_ADDR(addr);
-
-    addr &= 0xFFFFFF;
-    
-    if (memSrc[addr >> 16] != MEM_UNMAPPED) WRITE_CHIP_16(addr, value);
-}
-  
-template <> void
-Memory::poke16<BUS_BLITTER>(u32 addr, u16 value)
-{
-    assert(IS_EVEN(addr));
-    ASSERT_CHIP_ADDR(addr);
-    
-    addr &= 0xFFFFFF;
-    
-    if (memSrc[addr >> 16] != MEM_UNMAPPED) WRITE_CHIP_16(addr, value);
-}
-
-template <> void
-Memory::poke16<BUS_CPU>(u32 addr, u16 value)
+void
+Memory::poke16(u32 addr, u16 value)
 {
     if (!IS_EVEN(addr)) {
         warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);

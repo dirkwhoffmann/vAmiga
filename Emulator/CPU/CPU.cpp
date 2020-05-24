@@ -28,7 +28,7 @@ CPU::read8(u32 addr)
 u16
 CPU::read16(u32 addr)
 {
-     return mem.peek16<BUS_CPU>(addr);
+     return mem.peek16(addr);
 }
 
 u16
@@ -52,7 +52,7 @@ CPU::write8(u32 addr, u8 val)
 void
 CPU::write16 (u32 addr, u16 val)
 {
-    mem.poke16<BUS_CPU>(addr, val);
+    mem.poke16(addr, val);
 }
 
 void

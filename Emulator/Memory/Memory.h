@@ -414,12 +414,12 @@ public:
 public:
 
     u8 peek8(u32 addr);
-    template <BusOwner owner> u16 peek16(u32 addr);
-    u16 peekChip16(u32 addr);
-    u16 peekSlow16(u32 addr);
-    
+    u16 peek16(u32 addr);
+    u16 peekChip16(u32 addr); // DEPRECATED
+    u16 peekSlow16(u32 addr); // DEPRECATED
+
     void poke8(u32 addr, u8 value);
-    template <BusOwner owner> void poke16(u32 addr, u16 value);
+    void poke16(u32 addr, u16 value);
     void pokeChip16(u32 addr, u16 value);
     void pokeSlow16(u32 addr, u16 value);
 
