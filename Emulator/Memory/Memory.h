@@ -418,9 +418,6 @@ public:
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
     
-    u16 peekChip16(u32 addr); // DEPRECATED
-    u16 peekSlow16(u32 addr); // DEPRECATED
-
     void poke8(u32 addr, u8 value);
     void poke16(u32 addr, u16 value);
     void pokeChip16(u32 addr, u16 value);
@@ -430,7 +427,7 @@ public:
     u16 spypeek16(u32 addr);
     u32 spypeek32(u32 addr);
     
-    u16 spypeekChip16(u32 addr) { return peekChip16(addr); }
+    u16 spypeekChip16(u32 addr) { return READ_CHIP_16(addr); }
 
 
     //

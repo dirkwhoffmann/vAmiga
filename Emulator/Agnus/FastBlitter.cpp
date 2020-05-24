@@ -103,21 +103,21 @@ void Blitter::doFastCopyBlit()
 
             // Fetch A
             if (useA) {
-                anew = mem.peekChip16(apt);
+                anew = agnus.peek(apt);
                 debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
                 apt += incr;
             }
 
             // Fetch B
             if (useB) {
-                bnew = mem.peekChip16(bpt);
+                bnew = agnus.peek(bpt);
                 debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
                 bpt += incr;
             }
 
             // Fetch C
             if (useC) {
-                chold = mem.peekChip16(cpt);
+                chold = agnus.peek(cpt);
                 debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
                 cpt += incr;
             }
@@ -253,7 +253,7 @@ Blitter::doFastLineBlit()
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {
-            bltcdat_local = mem.peekChip16(bltcpt_local);
+            bltcdat_local = agnus.peek(bltcpt_local);
         }
         
         // Calculate data for the A-channel

@@ -769,6 +769,15 @@ Memory::peek16 <ACC_CPU, MEM_CHIP> (u32 addr)
     return dataBus;
 }
 
+template<> u16
+Memory::peek16 <ACC_AGNUS, MEM_CHIP> (u32 addr)
+{
+    ASSERT_CHIP_ADDR(addr);
+    
+    dataBus = READ_CHIP_16(addr);
+    return dataBus;
+}
+
 template<> u8
 Memory::peek8 <ACC_CPU, MEM_SLOW> (u32 addr)
 {
@@ -787,6 +796,15 @@ Memory::peek16 <ACC_CPU, MEM_SLOW> (u32 addr)
     agnus.executeUntilBusIsFree();
     
     stats.slowReads.raw++;
+    dataBus = READ_SLOW_16(addr);
+    return dataBus;
+}
+
+template<> u16
+Memory::peek16 <ACC_AGNUS, MEM_SLOW> (u32 addr)
+{
+    ASSERT_SLOW_ADDR(addr);
+    
     dataBus = READ_SLOW_16(addr);
     return dataBus;
 }
@@ -998,21 +1016,6 @@ Memory::peek16 <ACC_CPU> (u32 addr)
 
 
 
-u16
-Memory::peekChip16(u32 addr)
-{
-    ASSERT_CHIP_ADDR(addr);
-    dataBus = READ_CHIP_16(addr);
-    return dataBus;
-}
-
-u16
-Memory::peekSlow16(u32 addr)
-{
-    ASSERT_SLOW_ADDR(addr);
-    dataBus = READ_SLOW_16(addr);
-    return dataBus;
-}
 
 u8
 Memory::spypeek8(u32 addr)

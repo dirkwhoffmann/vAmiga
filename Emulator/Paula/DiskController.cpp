@@ -897,7 +897,7 @@ DiskController::performTurboWrite(Drive *drive)
         
         // Read word from memory
         u16 word = agnus.peek(agnus.dskpt);
-        assert(word == mem.peekChip16(agnus.dskpt));
+        assert(word == agnus.peek(agnus.dskpt));
         agnus.dskpt += 2;
         
         if (DSK_CHECKSUM) {
