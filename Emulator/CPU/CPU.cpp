@@ -28,7 +28,7 @@ CPU::read8(u32 addr)
 u16
 CPU::read16(u32 addr)
 {
-     return mem.peek16(addr);
+     return mem.peek16 <ACC_CPU> (addr);
 }
 
 u16

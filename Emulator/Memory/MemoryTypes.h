@@ -20,8 +20,8 @@ typedef enum
 {
     MEM_UNMAPPED,
     MEM_CHIP,
-    MEM_FAST,
     MEM_SLOW,
+    MEM_FAST,
     MEM_CIA,
     MEM_RTC,
     MEM_CUSTOM,
