@@ -424,11 +424,6 @@ public:
     template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
     template <Accessor acc> void poke8(u32 addr, u8 value);
     template <Accessor acc> void poke16(u32 addr, u16 value);
-
-
-    void pokeChip16(u32 addr, u16 value);
-    void pokeSlow16(u32 addr, u16 value);
-
     
 
     //

@@ -151,7 +151,7 @@ void Blitter::doFastCopyBlit()
 
             // Write D
             if (useD) {
-                mem.pokeChip16(dpt, dhold);
+                agnus.poke(dpt, dhold);
 
                 if (BLT_CHECKSUM) {
                     check1 = fnv_1a_it32(check1, dhold);
@@ -278,7 +278,7 @@ Blitter::doFastLineBlit()
         
         // Save result to D-channel, same as the C ptr after first pixel.
         if (c_enabled) { // C-channel must be enabled
-            mem.pokeChip16(bltdpt_local, bltddat_local);
+            agnus.poke(bltdpt_local, bltddat_local);
 
             if (BLT_CHECKSUM) {
                 check1 = fnv_1a_it32(check1, bltddat_local);

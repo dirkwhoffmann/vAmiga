@@ -1385,25 +1385,6 @@ Memory::poke16 <ACC_CPU> (u32 addr, u16 value)
     }
 }
 
-
-
-
-void
-Memory::pokeChip16(u32 addr, u16 value)
-{
-    ASSERT_CHIP_ADDR(addr);
-    dataBus = value;
-    WRITE_CHIP_16(addr, value);
-}
-
-void
-Memory::pokeSlow16(u32 addr, u16 value)
-{
-    ASSERT_SLOW_ADDR(addr);
-    dataBus = value;
-    WRITE_SLOW_16(addr, value);
-}
-
 u8
 Memory::peekCIA8(u32 addr)
 {
