@@ -1297,16 +1297,19 @@ Memory::poke8 <ACC_CPU, MEM_ROM> (u32 addr, u8 value)
     ASSERT_ROM_ADDR(addr);
     
     stats.kickWrites.raw++;
-    pokeRom8(addr, value);
+    
+    // On Amigas with a WOM, writing into ROM space locks the WOM
+    if (hasWom()) {
+        if (!womIsLocked) debug("Locking WOM\n");
+        womIsLocked = true;
+        updateMemSrcTable();
+    }
 }
 
 template <> void
 Memory::poke16 <ACC_CPU, MEM_ROM> (u32 addr, u16 value)
 {
-    ASSERT_ROM_ADDR(addr);
-
-    stats.kickWrites.raw++;
-    pokeRom16(addr, value);
+    poke8 <ACC_CPU, MEM_ROM> (addr, value);
 }
 
 template <> void
@@ -1315,7 +1318,7 @@ Memory::poke8 <ACC_CPU, MEM_WOM> (u32 addr, u8 value)
     ASSERT_WOM_ADDR(addr);
     
     stats.kickWrites.raw++;
-    pokeWom8(addr, value);
+    if (!womIsLocked) WRITE_WOM_8(addr, value);
 }
 
 template <> void
@@ -1324,7 +1327,7 @@ Memory::poke16 <ACC_CPU, MEM_WOM> (u32 addr, u16 value)
     ASSERT_WOM_ADDR(addr);
 
     stats.kickWrites.raw++;
-    pokeWom16(addr, value);
+    if (!womIsLocked) WRITE_WOM_16(addr, value);
 }
 
 template <> void
@@ -2170,53 +2173,6 @@ Memory::pokeAutoConf16(u32 addr, u16 value)
     // debug("pokeAutoConf16(%X, %X)\n", addr, value);
     zorro.pokeFastRamDevice(addr, HI_BYTE(value));
     zorro.pokeFastRamDevice(addr + 1, LO_BYTE(value));
-}
-
-void
-Memory::pokeRom8(u32 addr, u8 value)
-{
-    // debug("pokeRom8(%X, %X)\n", addr, value);
-
-    // Lock the WOM (if any)
-    if (hasWom()) {
-        if (!womIsLocked) debug("Locking WOM\n");
-        womIsLocked = true;
-        updateMemSrcTable();
-    }
-}
-
-void
-Memory::pokeRom16(u32 addr, u16 value)
-{
-    // debug("pokeRom16(%X, %X)\n", addr, value);
-
-    // Lock the WOM (if any)
-    if (hasWom()) {
-        if (!womIsLocked) debug("Locking WOM\n");
-        womIsLocked = true;
-        updateMemSrcTable();
-    }
-}
-
-void
-Memory::pokeWom8(u32 addr, u8 value)
-{
-    // debug("pokeWom8(%X, %X)\n", addr, value);
-
-    if (!womIsLocked) {
-        WRITE_WOM_8(addr, value);
-    }
-
-}
-
-void
-Memory::pokeWom16(u32 addr, u16 value)
-{
-    // debug("pokeWom16(%X, %X)\n", addr, value);
-
-    if (!womIsLocked) {
-        WRITE_WOM_16(addr, value);
-    }
 }
 
 const char *

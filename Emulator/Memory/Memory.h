@@ -481,23 +481,6 @@ public:
     void pokeAutoConf8(u32 addr, u8 value);
     void pokeAutoConf16(u32 addr, u16 value);
 
-
-    //
-    // Boot ROM or Kickstart ROM
-    //
-
-    void pokeRom8(u32 addr, u8 value);
-    void pokeRom16(u32 addr, u16 value);
-
-
-    //
-    // Kickstart WOM (Amiga 1000)
-    //
-
-    void pokeWom8(u32 addr, u8 value);
-    void pokeWom16(u32 addr, u16 value);
-
-
     //
     // Debugging
     //
