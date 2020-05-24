@@ -413,10 +413,10 @@ public:
     
 public:
 
-    u8 peek8(u32 addr);
-    
-    template <Accessor acc> u16 peek16(u32 addr);
+    template <Accessor acc, MemorySource src> u8 peek8(u32 addr);
     template <Accessor acc, MemorySource src> u16 peek16(u32 addr);
+    template <Accessor acc> u8 peek8(u32 addr);
+    template <Accessor acc> u16 peek16(u32 addr);
     
     u16 peekChip16(u32 addr); // DEPRECATED
     u16 peekSlow16(u32 addr); // DEPRECATED

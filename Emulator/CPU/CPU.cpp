@@ -22,7 +22,7 @@ CPU::sync(int cycles)
 u8
 CPU::read8(u32 addr)
 {
-    return mem.peek8(addr);
+    return mem.peek8 <ACC_CPU> (addr);
 }
 
 u16

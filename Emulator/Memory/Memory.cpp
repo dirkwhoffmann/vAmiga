@@ -729,98 +729,13 @@ Memory::updateMemSrcTable()
     amiga.putMessage(MSG_MEM_LAYOUT);
 }
 
-u8
-Memory::peek8(u32 addr)
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_UNMAPPED> (u32 addr)
 {
-    // if (blitter.copycount >= 580) debug("peek8(%x)\n", addr);
-
-    addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
-            
-        case MEM_UNMAPPED:
-
-            agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
-            debug(MEM_DEBUG, "peek8(%x [UNMAPPED]) = %x\n", addr, dataBus);
-            return dataBus;
-
-        case MEM_CHIP:
-
-            ASSERT_CHIP_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
-            dataBus = READ_CHIP_8(addr);
-            return dataBus;
-
-        case MEM_FAST:
-
-            ASSERT_FAST_ADDR(addr);
-            stats.fastReads.raw++;
-            dataBus = READ_FAST_8(addr);
-            return dataBus;
-
-        case MEM_CIA:
-
-            ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFreeForCIA();
-            stats.chipReads.raw++;
-            dataBus = peekCIA8(addr);
-            return dataBus;
-
-        case MEM_SLOW:
-
-            ASSERT_SLOW_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.slowReads.raw++;
-            dataBus = READ_SLOW_8(addr);
-            return dataBus;
-
-        case MEM_RTC:
-
-            ASSERT_RTC_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
-            dataBus = peekRTC8(addr);
-            return dataBus;
-
-        case MEM_CUSTOM:
-
-            ASSERT_CUSTOM_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
-            dataBus = peekCustom8(addr);
-            return dataBus;
-
-        case MEM_AUTOCONF:
-
-            ASSERT_AUTO_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipReads.raw++;
-            dataBus = peekAutoConf8(addr);
-            return dataBus;
-
-        case MEM_ROM:
-
-            ASSERT_ROM_ADDR(addr);
-            stats.kickReads.raw++;
-            return READ_ROM_8(addr);
-
-        case MEM_WOM:
-
-            ASSERT_WOM_ADDR(addr);
-            stats.kickReads.raw++;
-            return READ_WOM_8(addr);
-
-        case MEM_EXT:
-
-            ASSERT_EXT_ADDR(addr);
-            stats.kickReads.raw++;
-            return READ_EXT_8(addr);
-
-        default:
-            assert(false);
-    }
-    return 0;
+    agnus.executeUntilBusIsFree();
+    
+    debug(MEM_DEBUG, "peek8(%x [UNMAPPED]) = %x\n", addr, dataBus);
+    return (u8)dataBus;
 }
 
 template<> u16
@@ -828,9 +743,18 @@ Memory::peek16 <ACC_CPU, MEM_UNMAPPED> (u32 addr)
 {
     agnus.executeUntilBusIsFree();
     
-    if (amiga.getDebugMode())
-        debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
+    debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
+    return dataBus;
+}
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_CHIP> (u32 addr)
+{
+    ASSERT_CHIP_ADDR(addr);
+    agnus.executeUntilBusIsFree();
+    
+    stats.chipReads.raw++;
+    dataBus = READ_CHIP_8(addr);
     return dataBus;
 }
 
@@ -845,6 +769,17 @@ Memory::peek16 <ACC_CPU, MEM_CHIP> (u32 addr)
     return dataBus;
 }
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_SLOW> (u32 addr)
+{
+    ASSERT_SLOW_ADDR(addr);
+    agnus.executeUntilBusIsFree();
+    
+    stats.slowReads.raw++;
+    dataBus = READ_SLOW_8(addr);
+    return dataBus;
+}
+    
 template<> u16
 Memory::peek16 <ACC_CPU, MEM_SLOW> (u32 addr)
 {
@@ -856,6 +791,15 @@ Memory::peek16 <ACC_CPU, MEM_SLOW> (u32 addr)
     return dataBus;
 }
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_FAST> (u32 addr)
+{
+    ASSERT_FAST_ADDR(addr);
+    
+    stats.fastReads.raw++;
+    return READ_FAST_8(addr);
+}
+
 template<> u16
 Memory::peek16 <ACC_CPU, MEM_FAST> (u32 addr)
 {
@@ -863,6 +807,17 @@ Memory::peek16 <ACC_CPU, MEM_FAST> (u32 addr)
     
     stats.fastReads.raw++;
     return READ_FAST_16(addr);
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_CIA> (u32 addr)
+{
+    ASSERT_CIA_ADDR(addr);
+    
+    agnus.executeUntilBusIsFreeForCIA();
+
+    dataBus = peekCIA8(addr);
+    return dataBus;
 }
 
 template<> u16
@@ -873,6 +828,17 @@ Memory::peek16 <ACC_CPU, MEM_CIA> (u32 addr)
     agnus.executeUntilBusIsFreeForCIA();
     
     dataBus = peekCIA16(addr);
+    return dataBus;
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_RTC> (u32 addr)
+{
+    ASSERT_RTC_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = peekRTC8(addr);
     return dataBus;
 }
 
@@ -887,6 +853,17 @@ Memory::peek16 <ACC_CPU, MEM_RTC> (u32 addr)
     return dataBus;
 }
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_CUSTOM> (u32 addr)
+{
+    ASSERT_CUSTOM_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = peekCustom8(addr);
+    return dataBus;
+}
+
 template<> u16
 Memory::peek16 <ACC_CPU, MEM_CUSTOM> (u32 addr)
 {
@@ -895,6 +872,17 @@ Memory::peek16 <ACC_CPU, MEM_CUSTOM> (u32 addr)
     agnus.executeUntilBusIsFree();
     
     dataBus = peekCustom16(addr);
+    return dataBus;
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
+{
+    ASSERT_AUTO_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = peekAutoConf8(addr);
     return dataBus;
 }
 
@@ -909,6 +897,15 @@ Memory::peek16 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
     return dataBus;
 }
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_ROM> (u32 addr)
+{
+    ASSERT_ROM_ADDR(addr);
+    
+    stats.kickReads.raw++;
+    return READ_ROM_8(addr);
+}
+
 template<> u16
 Memory::peek16 <ACC_CPU, MEM_ROM> (u32 addr)
 {
@@ -916,6 +913,15 @@ Memory::peek16 <ACC_CPU, MEM_ROM> (u32 addr)
     
     stats.kickReads.raw++;
     return READ_ROM_16(addr);
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_WOM> (u32 addr)
+{
+    ASSERT_WOM_ADDR(addr);
+    
+    stats.kickReads.raw++;
+    return READ_WOM_8(addr);
 }
 
 template<> u16
@@ -927,6 +933,15 @@ Memory::peek16 <ACC_CPU, MEM_WOM> (u32 addr)
     return READ_WOM_16(addr);
 }
 
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_EXT> (u32 addr)
+{
+    ASSERT_EXT_ADDR(addr);
+    
+    stats.kickReads.raw++;
+    return READ_EXT_8(addr);
+}
+
 template<> u16
 Memory::peek16 <ACC_CPU, MEM_EXT> (u32 addr)
 {
@@ -934,6 +949,27 @@ Memory::peek16 <ACC_CPU, MEM_EXT> (u32 addr)
     
     stats.kickReads.raw++;
     return READ_EXT_16(addr);
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU> (u32 addr)
+{    
+    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_UNMAPPED: return peek8 <ACC_CPU, MEM_UNMAPPED> (addr);
+        case MEM_CHIP:     return peek8 <ACC_CPU, MEM_CHIP>     (addr);
+        case MEM_SLOW:     return peek8 <ACC_CPU, MEM_SLOW>     (addr);
+        case MEM_FAST:     return peek8 <ACC_CPU, MEM_FAST>     (addr);
+        case MEM_CIA:      return peek8 <ACC_CPU, MEM_CIA>      (addr);
+        case MEM_RTC:      return peek8 <ACC_CPU, MEM_RTC>      (addr);
+        case MEM_CUSTOM:   return peek8 <ACC_CPU, MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF: return peek8 <ACC_CPU, MEM_AUTOCONF> (addr);
+        case MEM_ROM:      return peek8 <ACC_CPU, MEM_ROM>      (addr);
+        case MEM_WOM:      return peek8 <ACC_CPU, MEM_WOM>      (addr);
+        case MEM_EXT:      return peek8 <ACC_CPU, MEM_EXT>      (addr);
+            
+        default: assert(false); return 0;
+    }
 }
 
 template<> u16
@@ -958,6 +994,9 @@ Memory::peek16 <ACC_CPU> (u32 addr)
         default: assert(false); return 0;
     }
 }
+
+
+
 
 u16
 Memory::peekChip16(u32 addr)
