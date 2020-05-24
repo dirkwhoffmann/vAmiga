@@ -1102,203 +1102,291 @@ Memory::spypeek16 (u32 addr)
     }
 }
 
-void
-Memory::poke8(u32 addr, u8 value)
+template <> void
+Memory::poke8 <ACC_CPU, MEM_UNMAPPED> (u32 addr, u8 value)
 {
-    addr &= 0xFFFFFF;
-    switch (memSrc[addr >> 16]) {
+    debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
+    agnus.executeUntilBusIsFree();
+    dataBus = value;
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_UNMAPPED> (u32 addr, u16 value)
+{
+    debug(MEM_DEBUG, "poke16(%x [UNMAPPED], %x)\n", addr, value);
+    agnus.executeUntilBusIsFree();
+    dataBus = value;
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_CHIP> (u32 addr, u8 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    stats.chipWrites.raw++;
+    dataBus = value;
+    WRITE_CHIP_8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_CHIP> (u32 addr, u16 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    stats.chipWrites.raw++;
+    dataBus = value;
+    WRITE_CHIP_16(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_AGNUS, MEM_CHIP> (u32 addr, u16 value)
+{
+    ASSERT_CHIP_ADDR(addr);
+ 
+    dataBus = value;
+    WRITE_CHIP_16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_SLOW> (u32 addr, u8 value)
+{
+    ASSERT_SLOW_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    stats.slowWrites.raw++;
+    dataBus = value;
+    WRITE_SLOW_8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_SLOW> (u32 addr, u16 value)
+{
+    ASSERT_SLOW_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    stats.slowWrites.raw++;
+    dataBus = value;
+    WRITE_SLOW_16(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_AGNUS, MEM_SLOW> (u32 addr, u16 value)
+{
+    ASSERT_SLOW_ADDR(addr);
+    
+    dataBus = value;
+    WRITE_SLOW_16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_FAST> (u32 addr, u8 value)
+{
+    ASSERT_FAST_ADDR(addr);
+    
+    stats.fastWrites.raw++;
+    WRITE_FAST_8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_FAST> (u32 addr, u16 value)
+{
+    ASSERT_FAST_ADDR(addr);
+    
+    stats.fastWrites.raw++;
+    WRITE_FAST_16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_CIA> (u32 addr, u8 value)
+{
+    ASSERT_CIA_ADDR(addr);
+    
+    agnus.executeUntilBusIsFreeForCIA();
+    
+    dataBus = value;
+    pokeCIA8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_CIA> (u32 addr, u16 value)
+{
+    ASSERT_CIA_ADDR(addr);
+    
+    agnus.executeUntilBusIsFreeForCIA();
+    
+    dataBus = value;
+    pokeCIA16(addr, value);
+}
+    
+template <> void
+Memory::poke8 <ACC_CPU, MEM_RTC> (u32 addr, u8 value)
+{
+    ASSERT_RTC_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = value;
+    pokeRTC8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_RTC> (u32 addr, u16 value)
+{
+    ASSERT_RTC_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = value;
+    pokeRTC16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_CUSTOM> (u32 addr, u8 value)
+{
+    ASSERT_CUSTOM_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = value;
+    // http://eab.abime.net/showthread.php?p=1156399
+    pokeCustom16<ACC_CPU>(addr & 0x1FE, HI_LO(value, value));
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_CUSTOM> (u32 addr, u16 value)
+{
+    ASSERT_CUSTOM_ADDR(addr);
+
+    agnus.executeUntilBusIsFree();
+
+    dataBus = value;
+    pokeCustom16<ACC_CPU>(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
+{
+    ASSERT_AUTO_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+    
+    dataBus = value;
+    pokeAutoConf8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
+{
+    ASSERT_AUTO_ADDR(addr);
+    
+    agnus.executeUntilBusIsFree();
+
+    dataBus = value;
+    pokeAutoConf16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_ROM> (u32 addr, u8 value)
+{
+    ASSERT_ROM_ADDR(addr);
+    
+    stats.kickWrites.raw++;
+    pokeRom8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_ROM> (u32 addr, u16 value)
+{
+    ASSERT_ROM_ADDR(addr);
+
+    stats.kickWrites.raw++;
+    pokeRom16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_WOM> (u32 addr, u8 value)
+{
+    ASSERT_WOM_ADDR(addr);
+    
+    stats.kickWrites.raw++;
+    pokeWom8(addr, value);
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_WOM> (u32 addr, u16 value)
+{
+    ASSERT_WOM_ADDR(addr);
+
+    stats.kickWrites.raw++;
+    pokeWom16(addr, value);
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_EXT> (u32 addr, u8 value)
+{
+    ASSERT_EXT_ADDR(addr);
+    stats.kickWrites.raw++;
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_EXT> (u32 addr, u16 value)
+{
+    ASSERT_EXT_ADDR(addr);
+    stats.kickWrites.raw++;
+}
+
+template<> void
+Memory::poke8 <ACC_CPU> (u32 addr, u8 value)
+{
+    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED:
-
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
-            return;
-
-        case MEM_CHIP:
-
-            ASSERT_CHIP_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            WRITE_CHIP_8(addr, value);
-            break;
-
-        case MEM_FAST:
-
-            ASSERT_FAST_ADDR(addr);
-            stats.fastWrites.raw++;
-            WRITE_FAST_8(addr, value);
-            break;
-
-        case MEM_CIA:
-
-            ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFreeForCIA();
-            stats.chipWrites.raw++;
-            pokeCIA8(addr, value);
-            break;
-
-        case MEM_SLOW:
-
-            ASSERT_SLOW_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.slowWrites.raw++;
-            WRITE_SLOW_8(addr, value);
-            break;
-
-        case MEM_RTC:
-
-            ASSERT_RTC_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            pokeRTC8(addr, value);
-            break;
-
-        case MEM_CUSTOM:
-
-            ASSERT_CUSTOM_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            pokeCustom8(addr, value);
-            break;
-
-        case MEM_AUTOCONF:
-
-            ASSERT_AUTO_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            pokeAutoConf8(addr, value);
-            break;
-
-        case MEM_ROM:
-
-            ASSERT_ROM_ADDR(addr);
-            stats.kickWrites.raw++;
-            pokeRom8(addr, value);
-            break;
-
-        case MEM_WOM:
-
-            ASSERT_WOM_ADDR(addr);
-            stats.kickWrites.raw++;
-            pokeWom8(addr, value);
-            break;
-
-        case MEM_EXT:
-
-            ASSERT_EXT_ADDR(addr);
-            stats.kickWrites.raw++;
-            break;
-
-        default:
-            assert(false);
+        case MEM_UNMAPPED: poke8 <ACC_CPU, MEM_UNMAPPED> (addr, value); return;
+        case MEM_CHIP:     poke8 <ACC_CPU, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:     poke8 <ACC_CPU, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:     poke8 <ACC_CPU, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:      poke8 <ACC_CPU, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:      poke8 <ACC_CPU, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:   poke8 <ACC_CPU, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF: poke8 <ACC_CPU, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:      poke8 <ACC_CPU, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:      poke8 <ACC_CPU, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:      poke8 <ACC_CPU, MEM_EXT>      (addr, value); return;
+            
+        default: assert(false);
     }
 }
-            
-void
-Memory::poke16(u32 addr, u16 value)
+
+template<> void
+Memory::poke16 <ACC_CPU> (u32 addr, u16 value)
 {
-    if (!IS_EVEN(addr)) {
-        warn("poke16(%X,%X): Address violation error (writing odd address)\n",addr, value);
-    }
+    assert(IS_EVEN(addr));
     
-    addr &= 0xFFFFFF;
-    
-    switch (memSrc[addr >> 16]) {
+    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED:
+        case MEM_UNMAPPED: poke16 <ACC_CPU, MEM_UNMAPPED> (addr, value); return;
+        case MEM_CHIP:     poke16 <ACC_CPU, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:     poke16 <ACC_CPU, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:     poke16 <ACC_CPU, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:      poke16 <ACC_CPU, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:      poke16 <ACC_CPU, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:   poke16 <ACC_CPU, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF: poke16 <ACC_CPU, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:      poke16 <ACC_CPU, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:      poke16 <ACC_CPU, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:      poke16 <ACC_CPU, MEM_EXT>      (addr, value); return;
             
-            debug(MEM_DEBUG, "poke16(%x [UNMAPPED], %x)\n", addr, value);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            return;
-            
-        case MEM_CHIP:
-            
-            ASSERT_CHIP_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            WRITE_CHIP_16(addr, value);
-            return;
-            
-        case MEM_FAST:
-            
-            ASSERT_FAST_ADDR(addr);
-            stats.fastWrites.raw++;
-            WRITE_FAST_16(addr, value);
-            return;
-            
-        case MEM_CIA:
-            
-            ASSERT_CIA_ADDR(addr);
-            agnus.executeUntilBusIsFreeForCIA();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            pokeCIA16(addr, value);
-            return;
-            
-        case MEM_SLOW:
-            
-            ASSERT_SLOW_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.slowWrites.raw++;
-            dataBus = value;
-            WRITE_SLOW_16(addr, value);
-            return;
-            
-        case MEM_RTC:
-            
-            ASSERT_RTC_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            pokeRTC16(addr, value);
-            return;
-            
-        case MEM_CUSTOM:
-            
-            ASSERT_CUSTOM_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            pokeCustom16<ACC_CPU>(addr, value);
-            return;
-            
-        case MEM_AUTOCONF:
-            
-            ASSERT_AUTO_ADDR(addr);
-            agnus.executeUntilBusIsFree();
-            stats.chipWrites.raw++;
-            dataBus = value;
-            pokeAutoConf16(addr, value);
-            return;
-            
-        case MEM_ROM:
-            
-            ASSERT_ROM_ADDR(addr);
-            stats.kickWrites.raw++;
-            pokeRom16(addr, value);
-            return;
-            
-        case MEM_WOM:
-            
-            ASSERT_WOM_ADDR(addr);
-            stats.kickWrites.raw++;
-            pokeWom16(addr, value);
-            return;
-            
-        case MEM_EXT:
-            
-            ASSERT_EXT_ADDR(addr);
-            stats.kickWrites.raw++;
-            return;
-            
-        default:
-            assert(false);
+        default: assert(false);
     }
 }
+
+
+
 
 void
 Memory::pokeChip16(u32 addr, u16 value)
@@ -1605,16 +1693,6 @@ Memory::spypeekCustom16(u32 addr)
 
     return 42;
     // return peekCustom16(addr);
-}
-
-void
-Memory::pokeCustom8(u32 addr, u8 value)
-{
-    /* "Custom register byte write bug = normally byte write to custom register
-     *  writes same value to upper and lower byte."
-     *     [http://eab.abime.net/showthread.php?p=1156399]
-     */
-    pokeCustom16<ACC_CPU>(addr & 0x1FE, HI_LO(value, value));
 }
 
 template <Accessor s> void

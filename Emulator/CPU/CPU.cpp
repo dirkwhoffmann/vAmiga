@@ -46,13 +46,13 @@ CPU::read16OnReset(u32 addr)
 void
 CPU::write8(u32 addr, u8 val)
 {
-    mem.poke8(addr, val);
+    mem.poke8 <ACC_CPU> (addr, val);
 }
 
 void
 CPU::write16 (u32 addr, u16 val)
 {
-    mem.poke16(addr, val);
+    mem.poke16 <ACC_CPU> (addr, val);
 }
 
 void

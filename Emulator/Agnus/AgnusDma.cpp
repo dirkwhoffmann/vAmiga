@@ -580,11 +580,11 @@ Agnus::poke(u32 addr, u16 value)
 
     // Check if SlowRam is mirrored in
     if (addr >= 0x80000 && slowRamIsMirroredIn()) {
-        mem.pokeSlow16(addr, value);
+        mem.poke16 <ACC_AGNUS, MEM_SLOW> (addr, value);
         return;
     }
     
-    mem.pokeChip16(addr, value);
+    mem.poke16 <ACC_AGNUS, MEM_CHIP> (addr, value);
 }
 
 template <BusOwner owner> bool
