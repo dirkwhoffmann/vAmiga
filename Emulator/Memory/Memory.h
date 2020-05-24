@@ -468,18 +468,6 @@ public:
     template <Accessor s> void pokeCustom16(u32 addr, u16 value);
     
     
-    //
-    // Auto-config space (Zorro II)
-    //
-    
-    u8 peekAutoConf8(u32 addr);
-    u16 peekAutoConf16(u32 addr);
-    
-    u8 spypeekAutoConf8(u32 addr) { return peekAutoConf8(addr); }
-    u16 spypeekAutoConf16(u32 addr) { return peekAutoConf16(addr); }
-    
-    void pokeAutoConf8(u32 addr, u8 value);
-    void pokeAutoConf16(u32 addr, u16 value);
 
     //
     // Debugging

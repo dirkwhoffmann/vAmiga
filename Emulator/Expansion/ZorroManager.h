@@ -82,6 +82,8 @@ public:
     //
     
     u8 peekFastRamDevice(u32 addr);
+    u8 spypeekFastRamDevice(u32 addr);
+    
     void pokeFastRamDevice(u32 addr, u8 value);
 };
 

@@ -942,7 +942,7 @@ Memory::peek8 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
     
     agnus.executeUntilBusIsFree();
     
-    dataBus = peekAutoConf8(addr);
+    dataBus = zorro.peekFastRamDevice(addr) << 4;         
     return dataBus;
 }
 
@@ -953,14 +953,20 @@ Memory::peek16 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
     
     agnus.executeUntilBusIsFree();
     
-    dataBus = peekAutoConf16(addr);
+    u8 hi = zorro.peekFastRamDevice(addr) << 4;
+    u8 lo = zorro.peekFastRamDevice(addr + 1) << 4;
+    
+    dataBus = HI_LO(hi,lo);
     return dataBus;
 }
 
 template<> u16
 Memory::spypeek16 <MEM_AUTOCONF> (u32 addr)
 {
-    return spypeekAutoConf16(addr);
+    u8 hi = zorro.spypeekFastRamDevice(addr) << 4;
+    u8 lo = zorro.spypeekFastRamDevice(addr + 1) << 4;
+    
+    return HI_LO(hi,lo);
 }
 
 template<> u8
@@ -1277,7 +1283,7 @@ Memory::poke8 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
     agnus.executeUntilBusIsFree();
     
     dataBus = value;
-    pokeAutoConf8(addr, value);
+    zorro.pokeFastRamDevice(addr, value);
 }
 
 template <> void
@@ -1288,7 +1294,8 @@ Memory::poke16 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
     agnus.executeUntilBusIsFree();
 
     dataBus = value;
-    pokeAutoConf16(addr, value);
+    zorro.pokeFastRamDevice(addr, HI_BYTE(value));
+    zorro.pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }
 
 template <> void
@@ -2140,39 +2147,6 @@ Memory::pokeCustom16(u32 addr, u16 value)
         debug(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): NON-OCS\n", addr, regName(addr));
     }
-}
-
-u8
-Memory::peekAutoConf8(u32 addr)
-{
-    u8 result = zorro.peekFastRamDevice(addr) << 4;
-    
-    // debug("peekAutoConf8(%X) = %X\n", addr, result);
-    return result;
-}
-
-u16
-Memory::peekAutoConf16(u32 addr)
-{
-    u16 result = HI_LO(peekAutoConf8(addr), peekAutoConf8(addr + 1));
-    
-    // debug("peekAutoConf16(%X) = %d\n", addr, result);
-    return result;
-}
-
-void
-Memory::pokeAutoConf8(u32 addr, u8 value)
-{
-    // debug("pokeAutoConf8(%X, %X)\n", addr, value);
-    zorro.pokeFastRamDevice(addr, value);
-}
-
-void
-Memory::pokeAutoConf16(u32 addr, u16 value)
-{
-    // debug("pokeAutoConf16(%X, %X)\n", addr, value);
-    zorro.pokeFastRamDevice(addr, HI_BYTE(value));
-    zorro.pokeFastRamDevice(addr + 1, LO_BYTE(value));
 }
 
 const char *

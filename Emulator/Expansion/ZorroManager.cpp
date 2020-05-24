@@ -173,6 +173,12 @@ ZorroManager::peekFastRamDevice(u32 addr)
     return autoConfData;
 }
 
+u8
+ZorroManager::spypeekFastRamDevice(u32 addr)
+{
+    return peekFastRamDevice(addr);
+}
+
 void
 ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
 {
