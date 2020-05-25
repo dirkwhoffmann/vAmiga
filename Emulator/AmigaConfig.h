@@ -65,16 +65,17 @@
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
 
-// Optimizations
+// General
+static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
-// Runloop and CPU
+// Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
-static const int ECP_DEBUG       = 0; // CPU exceptions and interrupts
+static const int IRQ_DEBUG       = 0; // CPU interrupts
 
 // Memory access
 extern int OCSREG_DEBUG; // General OCS register debugging

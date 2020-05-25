@@ -362,9 +362,14 @@ DiskController::pokeDSKSYNC(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
     
-    if (value != 0x4489 && config.lockDskSync) {
-        debug("Write to DSKSYNC blocked (%x)\n", value);
-        return;
+    if (value != 0x4489) {
+        
+        debug(XFILES, "XFILES (DSKSYNC): Unusual sync mark $%04X\n", value);
+        
+        if (config.lockDskSync) {
+            debug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);
+            return;
+        }
     }
     
     dsksync = value;

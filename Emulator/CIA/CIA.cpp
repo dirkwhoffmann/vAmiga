@@ -220,7 +220,7 @@ CIA::peek(u16 addr)
             updatePA();
             //plaindebug("%s Peek %d (hex: %02X) = %d (DDRA = %X)\n",
             //           getDescription(), addr, addr, PA, DDRA);
-            debug(DSKREG_DEBUG, "  PA = %X\n", PA);
+            // debug(DSKREG_DEBUG, "  PA = %X\n", PA);
             return PA;
 
         case 0x01: // CIA_DATA_PORT_B

@@ -866,7 +866,8 @@ template<> u16
 Memory::peek16 <ACC_CPU, MEM_CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
-    
+    debug(XFILES, "XFILES (CIA): Reading a WORD from %x\n", addr);
+
     agnus.executeUntilBusIsFreeForCIA();
     
     dataBus = peekCIA16(addr);
@@ -1216,7 +1217,7 @@ template <> void
 Memory::poke8 <ACC_CPU, MEM_CIA> (u32 addr, u8 value)
 {
     ASSERT_CIA_ADDR(addr);
-    
+
     agnus.executeUntilBusIsFreeForCIA();
     
     dataBus = value;
@@ -1227,7 +1228,8 @@ template <> void
 Memory::poke16 <ACC_CPU, MEM_CIA> (u32 addr, u16 value)
 {
     ASSERT_CIA_ADDR(addr);
-    
+    debug(XFILES, "XFILES (CIA): Writing a WORD into %x\n", addr);
+
     agnus.executeUntilBusIsFreeForCIA();
     
     dataBus = value;

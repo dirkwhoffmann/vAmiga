@@ -98,11 +98,26 @@ Paula::pokeINTENA(u16 value)
 void
 Paula::pokeADKCON(u16 value)
 {
-    plaindebug(AUDREG_DEBUG, "pokeADKCON(%X)\n", value);
+    plaindebug(MAX(AUDREG_DEBUG, DSKREG_DEBUG), "pokeADKCON(%X)\n", value);
 
-    // u16 oldAdkcon = adkcon;
-
-    if (value & 0x8000) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
+    bool set = value & 0x8000;
+    bool clr = !set;
+    
+    // Report unusual values for debugging
+    if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
+        debug(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
+    }
+        if (clr && GET_BIT(value, 12)) {
+        debug(XFILES, "XFILES (ADKCON): MFMPREC cleared (GCR) (%x)\n", value);
+    }
+        if (set && GET_BIT(value, 9)) {
+        debug(XFILES, "XFILES (ADKCON): MSBSYNC set (GCR) (%x)\n", value);
+    }
+        if (clr && GET_BIT(value, 8)) {
+        debug(XFILES, "XFILES (ADKCON): FAST cleared (GCR) (%x)\n", value);
+    }
+        
+    if (set) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
 
     // Take care of a possible change of the UARTBRK bit
     uart.updateTXD();
