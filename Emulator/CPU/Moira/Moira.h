@@ -209,8 +209,9 @@ protected:
     virtual int readIrqUserVector(u8 level) { return 0; }
 
     // Instrution delegates
-    virtual void stopInstr() { };
     virtual void resetInstr() { };
+    virtual void stopInstr() { };
+    virtual void tasInstr() { };
 
     // Exception delegates
     virtual void addressErrorException(u16 addr, bool read) { };

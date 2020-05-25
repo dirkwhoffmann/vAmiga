@@ -56,17 +56,23 @@ CPU::write16 (u32 addr, u16 val)
 }
 
 void
+CPU::resetInstr()
+{
+    debug(XFILES, "XFILES (CPU): RESET instruction\n");
+    amiga.softReset();
+    debug("Reset done\n");
+}
+
+void
 CPU::stopInstr()
 {
     debug(XFILES, "XFILES (CPU): STOP instruction\n");
 }
 
 void
-CPU::resetInstr()
+CPU::tasInstr()
 {
-    debug(XFILES, "XFILES (CPU): RESET instruction\n");
-    amiga.softReset();
-    debug("Reset done\n");
+    debug(XFILES, "XFILES (CPU): TAS instruction\n");
 }
 
 void

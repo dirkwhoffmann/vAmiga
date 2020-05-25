@@ -1705,6 +1705,8 @@ Moira::execSwap(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasRg(u16 opcode)
 {
+    tasInstr();
+    
     int dst = ( _____________xxx(opcode) );
 
     u32 ea, data;
@@ -1724,6 +1726,8 @@ Moira::execTasRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTasEa(u16 opcode)
 {
+    tasInstr();
+
     int dst = ( _____________xxx(opcode) );
 
     u32 ea, data;

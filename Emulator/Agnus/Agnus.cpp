@@ -329,7 +329,8 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
-    debug(POSREG_DEBUG, "pokeVPOS(%x) (vpos = %d lof = %d)\n", value, pos.v, frame.lof);
+    debug(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
+    debug(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
 
     // I don't really know what exactly we are supposed to do here.
     // For the time being, I only take care of the LOF bit.

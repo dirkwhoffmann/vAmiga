@@ -1715,6 +1715,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x03A >> 1: // STRVBL
         case 0x03C >> 1: // STRHOR
         case 0x03E >> 1: // STRLONG
+            debug(XFILES, "XFILES (STROBE): %x\n", addr);
             return; // ignore
         case 0x040 >> 1: // BLTCON0
             blitter.pokeBLTCON0(value); return;

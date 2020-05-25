@@ -102,8 +102,9 @@ private:
     void write16 (u32 addr, u16 val) override;
     int readIrqUserVector(u8 level) override { return 0; }
  
-    void stopInstr() override;
     void resetInstr() override;
+    void stopInstr() override;
+    void tasInstr() override;
     void addressErrorException(u16 addr, bool read) override;
     void lineAException(u16 opcode) override;
     void lineFException(u16 opcode) override;
