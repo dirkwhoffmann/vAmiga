@@ -592,20 +592,29 @@ Amiga::run()
 void
 Amiga::reset(bool hard)
 {
-    suspend();
+    if (hard) {
+        
+        suspend();
+                
+        // If a disk change is in progress, finish it
+        paula.diskController.serviceDiskChangeEvent();
+        
+        // Execute the standard reset routine
+        HardwareComponent::reset(hard);
+        
+        // Inform the GUI
+        putMessage(MSG_RESET);
+        
+        resume();
 
-    assert(!isRunning());
-    
-    // If a disk change is in progress, finish it
-    paula.diskController.serviceDiskChangeEvent();
-    
-    // Execute the standard reset routine
-    HardwareComponent::reset(hard);
-
-    // Inform the GUI
-    putMessage(MSG_RESET);
-
-    resume();
+    } else {
+        
+        // If a disk change is in progress, finish it
+        paula.diskController.serviceDiskChangeEvent();
+        
+        // Execute the standard reset routine
+        HardwareComponent::reset(hard);
+    }
 }
 
 void

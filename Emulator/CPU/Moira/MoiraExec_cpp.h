@@ -1586,7 +1586,8 @@ template<Instr I, Mode M, Size S> void
 Moira::execReset(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
-
+    resetInstr();
+    
     sync(128);
     prefetch<LAST_BUS_CYCLE>();
 }
@@ -1674,7 +1675,8 @@ template<Instr I, Mode M, Size S> void
 Moira::execStop(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
-
+    stopInstr();
+    
     u16 src = readI<Word>();
 
     setSR(src | (MIMIC_MUSASHI ? 0 : 1 << 13));

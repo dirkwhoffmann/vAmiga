@@ -56,6 +56,20 @@ CPU::write16 (u32 addr, u16 val)
 }
 
 void
+CPU::stopInstr()
+{
+    debug(XFILES, "XFILES (CPU): STOP instruction\n");
+}
+
+void
+CPU::resetInstr()
+{
+    debug(XFILES, "XFILES (CPU): RESET instruction\n");
+    amiga.softReset();
+    debug("Reset done\n");
+}
+
+void
 CPU::addressErrorException(u16 addr, bool read)
 {
     if (read) {
@@ -160,13 +174,24 @@ CPU::_reset(bool hard)
 {
     debug(CPU_DEBUG, "CPU::_reset(%d)\n", hard);
 
-    RESET_SNAPSHOT_ITEMS
+    if (hard) {
+        
+        RESET_SNAPSHOT_ITEMS
+        
+        // Reset the Moira core
+        Moira::reset();
+        
+        // Remove all previously recorded instructions
+        debugger.clearLog();
 
-    // Reset the Moira core
-    Moira::reset();
-
-    // Remove all previously recorded instructions
-    debugger.clearLog();
+    } else {
+        
+        /* A soft reset doesn't affect the CPU inside a real Amiga.
+         * Hence, we only need to reset the clock to resync with the rest of
+         * the system.
+         */
+        clock = 0;
+    }
 }
 
 void

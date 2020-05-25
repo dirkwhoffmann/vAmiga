@@ -146,8 +146,13 @@ public:
     virtual void pause();
     virtual void _pause() { };
     
-    /* Emulates a reset event on the virtual Amiga.
-     * By default, each component resets its subcomponents.
+    /* Resets the virtual Amiga. Two reset modes are distinguished:
+     *
+     *     hard: A hard reset restores the initial state of all components.
+     *           It resets the Amiga from an emulator point of view.
+     *
+     *     soft: A soft reset emulates a reset inside the virtual Amiga. It
+     *           is used to emulate the CPU's RESET instruction.
      */
     virtual void reset(bool hard);
     virtual void _reset(bool hard) = 0;

@@ -53,22 +53,6 @@ TOD::_reset(bool hard)
     matching = true;
 }
 
-/*
-CounterInfo
-TOD::getInfo()
-{
-    CounterInfo result;
-    
-    if (!isRunning()) _inspect();
-
-    pthread_mutex_lock(&lock);
-    result = info;
-    pthread_mutex_unlock(&lock);
-    
-    return result;
-}
-*/
-
 void
 TOD::increment()
 {
