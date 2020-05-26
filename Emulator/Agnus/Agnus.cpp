@@ -1364,13 +1364,13 @@ Agnus::serviceVblEvent()
             paula.raiseIrq(INT_VERTB);
             
             // Schedule the next VBL_END event
-            schedulePos<VBL_SLOT>(6, 1, VBL_END);
+            schedulePos<VBL_SLOT>(5, 209, VBL_END);
             break;
             
         case VBL_END:
             
-            assert(pos.v == 6);
-            assert(pos.h == 1);
+            assert(pos.v == 5);
+            assert(pos.h == 209);
             
             // Increment the TOD counter of CIA A
             amiga.ciaA.incrementTOD();

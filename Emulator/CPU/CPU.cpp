@@ -64,9 +64,9 @@ CPU::resetInstr()
 }
 
 void
-CPU::stopInstr()
+CPU::stopInstr(u16 op)
 {
-    debug(XFILES, "XFILES (CPU): STOP instruction\n");
+    debug(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
 }
 
 void

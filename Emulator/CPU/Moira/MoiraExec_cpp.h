@@ -1675,14 +1675,15 @@ template<Instr I, Mode M, Size S> void
 Moira::execStop(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
-    stopInstr();
-    
+
     u16 src = readI<Word>();
 
     setSR(src | (MIMIC_MUSASHI ? 0 : 1 << 13));
     flags |= CPU_IS_STOPPED;
 
     pollIrq();
+
+    stopInstr(src);
 }
 
 template<Instr I, Mode M, Size S> void

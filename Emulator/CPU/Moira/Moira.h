@@ -210,7 +210,7 @@ protected:
 
     // Instrution delegates
     virtual void resetInstr() { };
-    virtual void stopInstr() { };
+    virtual void stopInstr(u16 op) { };
     virtual void tasInstr() { };
 
     // Exception delegates

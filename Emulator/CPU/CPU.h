@@ -103,7 +103,7 @@ private:
     int readIrqUserVector(u8 level) override { return 0; }
  
     void resetInstr() override;
-    void stopInstr() override;
+    void stopInstr(u16 op) override;
     void tasInstr() override;
     void addressErrorException(u16 addr, bool read) override;
     void lineAException(u16 opcode) override;
