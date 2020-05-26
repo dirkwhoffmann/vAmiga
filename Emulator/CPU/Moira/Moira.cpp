@@ -113,6 +113,16 @@ Moira::execute()
 
     // If the CPU is stopped, poll the IPL lines and return
     if (flags & CPU_IS_STOPPED) {
+        
+        // Initiate a privilege exception if the supervisor bit is cleared
+        if (!reg.sr.s) {
+            sync(4);
+            reg.pc -= 2;
+            flags &= ~CPU_IS_STOPPED;
+            execPrivilegeException();
+            return;
+        }
+        
         pollIrq();
         sync(MIMIC_MUSASHI ? 1 : 2);
         return;
