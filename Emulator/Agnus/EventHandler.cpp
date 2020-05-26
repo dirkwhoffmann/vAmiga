@@ -174,6 +174,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case DAS_S7_1:      i->eventName = "DAS_S7_1"; break;
                 case DAS_S7_2:      i->eventName = "DAS_S7_2"; break;
                 case DAS_SDMA:      i->eventName = "DAS_SDMA"; break;
+                case DAS_TICK:      i->eventName = "DAS_TICK"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;
@@ -1058,6 +1059,10 @@ Agnus::serviceDASEvent()
             updateSpriteDMA();
             break;
 
+        case DAS_TICK:
+            ciab.incrementTOD();
+            break;
+            
         default:
             assert(false);
     }

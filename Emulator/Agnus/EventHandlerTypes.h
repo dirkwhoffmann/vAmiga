@@ -149,6 +149,7 @@ typedef enum : long
     DAS_S7_1,
     DAS_S7_2,
     DAS_SDMA,
+    DAS_TICK,
     DAS_EVENT_COUNT,
 
     // Copper slot

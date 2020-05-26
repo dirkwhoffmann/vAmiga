@@ -161,12 +161,6 @@ Agnus::initDasEventTable()
             p[0x0B] = DAS_D2;
         }
         
-        /*
-        if (dmacon & AUD0EN) p[0x0D] = DAS_A0;
-        if (dmacon & AUD1EN) p[0x0F] = DAS_A1;
-        if (dmacon & AUD2EN) p[0x11] = DAS_A2;
-        if (dmacon & AUD3EN) p[0x13] = DAS_A3;
-        */
         // Audio DMA is possible even in lines where the DMACON bits are false
         p[0x0D] = DAS_A0;
         p[0x0F] = DAS_A1;
@@ -193,6 +187,7 @@ Agnus::initDasEventTable()
         }
 
         p[0xDF] = DAS_SDMA;
+        p[0x66] = DAS_TICK;
     }
 }
 
@@ -777,7 +772,8 @@ Agnus::clearBplEvents()
     for (int i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
     for (int i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
 
-    verifyBplEvents();
+    // Check table consistency
+    if (VERIFY_EVENTS) verifyBplEvents();
 }
 
 void
@@ -828,7 +824,8 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
     
-    verifyBplEvents();
+    // Check table consistency
+    if (VERIFY_EVENTS) verifyBplEvents();
 }
 
 void
@@ -877,7 +874,8 @@ Agnus::updateDasEvents(u16 dmacon)
     for (int i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
     updateDasJumpTable(0x38);
 
-    verifyDasEvents();
+    // Check table consistency
+    if (VERIFY_EVENTS) verifyDasEvents();
 }
 
 void
@@ -885,8 +883,13 @@ Agnus::verifyDasEvents()
 {
     assert(dasEvent[0x01] == DAS_REFRESH);
     assert(dasEvent[0xDF] == DAS_SDMA);
+    assert(dasEvent[0x66] == DAS_TICK);
 
-    for (int i = 0x34; i < 0xDF; i++) {
+    for (int i = 0x34; i < 0x66; i++) {
+        assert(dasEvent[i] == EVENT_NONE);
+        assert(nextDasEvent[i] == 0x66);
+    }
+    for (int i = 0x67; i < 0xDF; i++) {
         assert(dasEvent[i] == EVENT_NONE);
         assert(nextDasEvent[i] == 0xDF);
     }
@@ -1037,6 +1040,7 @@ Agnus::dumpDasEventTable(int from, int to)
     str[(int)DAS_S7_1][0]    = '7'; str[(int)DAS_S7_1][1]    = '1';
     str[(int)DAS_S7_2][0]    = '7'; str[(int)DAS_S7_2][1]    = '2';
     str[(int)DAS_SDMA][0]    = 'S'; str[(int)DAS_SDMA][1]    = 'D';
+    str[(int)DAS_TICK][0]    = 'T'; str[(int)DAS_TICK][1]    = 'K';
 
     for (int i = 1; i < 256; i++) str[i][2] = ' ';
     

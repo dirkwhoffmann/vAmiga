@@ -1210,7 +1210,7 @@ Agnus::hsyncHandler()
     if (paula.chargeY1 < 1.0) paula.potCntY1++;
 
     // Let CIA B count the HSYNCs
-    amiga.ciaB.incrementTOD();
+    // amiga.ciaB.incrementTOD();
 
     // Reset the horizontal counter
     pos.h = 0;
