@@ -1022,13 +1022,11 @@ Agnus::inSyncWithEClock()
 {
     // Check if E clock syncing is disabled
     if (!ciaa.getEClockSyncing()) return true;
-    
-    // return IS_CIA_CYCLE(clock); // WRONG
-    
+        
     // Determine where we are in the current E clock cycle
     Cycle eClk = AS_CPU_CYCLES(clock) % 10;
     
-    
+    // Unsure if this condition is accurate
     return eClk >= 2 || eClk <= 6;
 }
 
