@@ -48,9 +48,6 @@ CIA::_reset(bool hard)
     latchA = 0xFFFF;
     latchB = 0xFFFF;
 
-    CRA = 0x4; // seen in SAE
-    CRB = 0x4; // seen in SAE
-
     updatePA();
     updatePB();
 
@@ -282,7 +279,7 @@ CIA::peek(u16 addr)
 			
         case 0x0B: // UNUSED
 
-            result = 0;
+            result = 0xFF;
 			break;
 			
         case 0x0C: // CIA_SERIAL_DATA_REGISTER
