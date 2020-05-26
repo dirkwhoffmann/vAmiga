@@ -979,6 +979,34 @@ Agnus::syncWithEClock()
     // Check if E clock syncing is disabled
     if (!ciaa.getEClockSyncing()) return;
 
+    /* The E clock is 6 clocks low and 4 clocks high:
+     *
+     *     |   |   |   |   |   |   |---|---|---|---|
+     *     |---|---|---|---|---|---|   |   |   |   |
+     *      (4) (5) (6) (7) (8) (9) (0) (1) (2) (3)   (eClk)
+     */
+
+    // Determine where we are in the current E clock cycle
+    Cycle eClk = AS_CPU_CYCLES(clock) % 10;
+    
+    // We want to sync to position (2).
+    // If we are already too close, we seek (2) in the next E clock cycle.
+    Cycle offset;
+    switch (eClk) {
+        case 0: offset = 2 + 10; break;
+        case 1: offset = 1 + 10; break;
+        case 2: offset = 0 + 10; break;
+        case 3: offset = 9;      break;
+        case 4: offset = 8;      break;
+        case 5: offset = 7;      break;
+        case 6: offset = 6;      break;
+        case 7: offset = 5 + 10; break;
+        case 8: offset = 4 + 10; break;
+        case 9: offset = 3 + 10; break;
+        default: assert(false);
+    }
+    Cycle target = clock + CPU_CYCLES(offset);
+    
     /* At this point, we need to execute Agnus until the next E clock cycle
      * begins. From the current clock position, the next cycle would begin at
      *
@@ -987,7 +1015,7 @@ Agnus::syncWithEClock()
      * However, some timing tests suggest that the CPU is still running too
      * fast with this delay. Until we know better, we use an offset of 50.
      */
-    Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
+    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
 
     // Determine how many DMA cycles need to be executed
     Cycle delay = target - clock;
@@ -1006,7 +1034,13 @@ Agnus::inSyncWithEClock()
     // Check if E clock syncing is disabled
     if (!ciaa.getEClockSyncing()) return true;
     
-    return IS_CIA_CYCLE(clock);
+    // return IS_CIA_CYCLE(clock); // WRONG
+    
+    // Determine where we are in the current E clock cycle
+    Cycle eClk = AS_CPU_CYCLES(clock) % 10;
+    
+    
+    return eClk >= 2 || eClk <= 6;
 }
 
 void
@@ -1060,7 +1094,7 @@ Agnus::executeUntilBusIsFreeForCIA()
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;
-
+            
         } while (busOwner[posh] != BUS_NONE || !inSyncWithEClock());
 
         // Clear the BLS line (Blitter slow down)

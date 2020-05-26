@@ -202,7 +202,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     bplcon0 = newValue;
     
     // Report a suspicious BPU value
-    if (((bplcon0 >> 12) & 0b111) > hires(bplcon0) ? 5 : 7) {
+    if (((bplcon0 >> 12) & 0b111) > (hires(bplcon0) ? 5 : 7)) {
         debug(XFILES, "XFILES (BPLCON0): BPU = %d\n", (bplcon0 >> 12) & 0b111);
     }
 }
