@@ -105,6 +105,10 @@ private:
     void resetInstr() override;
     void stopInstr(u16 op) override;
     void tasInstr() override;
+    
+    void traceFlagSet() override;
+    void traceFlagCleared() override;
+    
     void addressErrorException(u16 addr, bool read) override;
     void lineAException(u16 opcode) override;
     void lineFException(u16 opcode) override;

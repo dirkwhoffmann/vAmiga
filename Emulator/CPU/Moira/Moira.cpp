@@ -232,9 +232,9 @@ Moira::setSR(u16 val)
     bool s = (val >> 13) & 1;
     u8 ipl = (val >>  8) & 7;
 
-    /*
-    if (ipl != reg.sr.ipl) printf("ipl mask changes from %d to %d\n", reg.sr.ipl, ipl); // DIRK
-    */
+    // Delegation call
+    if (reg.sr.t != t) t ? traceFlagSet() : traceFlagCleared();
+
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
     t ? setTraceFlag() : clearTraceFlag();

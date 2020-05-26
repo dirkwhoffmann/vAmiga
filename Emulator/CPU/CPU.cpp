@@ -76,6 +76,18 @@ CPU::tasInstr()
 }
 
 void
+CPU::traceFlagSet()
+{
+    debug(XFILES, "XFILES (CPU): TRACING ON\n");
+}
+
+void
+CPU::traceFlagCleared()
+{
+    debug(XFILES, "XFILES (CPU): TRACING OFF\n");
+}
+
+void
 CPU::addressErrorException(u16 addr, bool read)
 {
     if (read) {

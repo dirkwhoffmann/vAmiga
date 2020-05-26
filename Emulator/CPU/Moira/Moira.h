@@ -213,6 +213,10 @@ protected:
     virtual void stopInstr(u16 op) { };
     virtual void tasInstr() { };
 
+    // Mode delegates
+    virtual void traceFlagSet() { };
+    virtual void traceFlagCleared() { };
+
     // Exception delegates
     virtual void addressErrorException(u16 addr, bool read) { };
     virtual void lineAException(u16 opcode) { };
@@ -223,7 +227,7 @@ protected:
     virtual void privilegeException() { };
     virtual void interruptException(u8 level) { };
     virtual void exceptionJump(int nr, u32 oldpc, u32 newpc) { };
-    
+
     // Called when a breakpoint is reached
     virtual void breakpointReached(u32 addr) { };
 
