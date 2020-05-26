@@ -991,41 +991,30 @@ Agnus::syncWithEClock()
     
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
-    Cycle offset;
+    CPUCycle delay;
     switch (eClk) {
-        case 0: offset = 2 + 10; break;
-        case 1: offset = 1 + 10; break;
-        case 2: offset = 0 + 10; break;
-        case 3: offset = 9;      break;
-        case 4: offset = 8;      break;
-        case 5: offset = 7;      break;
-        case 6: offset = 6;      break;
-        case 7: offset = 5 + 10; break;
-        case 8: offset = 4 + 10; break;
-        case 9: offset = 3 + 10; break;
+        case 0: delay = 2 + 10; break;
+        case 1: delay = 1 + 10; break;
+        case 2: delay = 0 + 10; break;
+        case 3: delay = 9;      break;
+        case 4: delay = 8;      break;
+        case 5: delay = 7;      break;
+        case 6: delay = 6;      break;
+        case 7: delay = 5 + 10; break;
+        case 8: delay = 4 + 10; break;
+        case 9: delay = 3 + 10; break;
         default: assert(false);
     }
-    Cycle target = clock + CPU_CYCLES(offset);
+    Cycle target = clock + CPU_CYCLES(delay);
     
-    /* At this point, we need to execute Agnus until the next E clock cycle
-     * begins. From the current clock position, the next cycle would begin at
-     *
-     *     CIA_CYCLES(AS_CIA_CYCLES(clock + 39));
-     *
-     * However, some timing tests suggest that the CPU is still running too
-     * fast with this delay. Until we know better, we use an offset of 50.
-     */
-    // Cycle target = CIA_CYCLES(AS_CIA_CYCLES(clock + 50));
-
-    // Determine how many DMA cycles need to be executed
-    Cycle delay = target - clock;
-    assert(DMA_CYCLES(AS_DMA_CYCLES(delay)) == delay);
+    // Doublecheck that we are going to sync to a DMA cycle
+    assert(DMA_CYCLES(AS_DMA_CYCLES(target)) == target);
     
     // Execute Agnus until the target cycle has been reached
     executeUntil(target);
 
     // Add wait states to the CPU
-    cpu.addWaitStates(AS_CPU_CYCLES(delay));
+    cpu.addWaitStates(delay);
 }
 
 bool
