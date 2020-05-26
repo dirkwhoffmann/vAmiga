@@ -66,7 +66,9 @@ CPU::resetInstr()
 void
 CPU::stopInstr(u16 op)
 {
-    debug(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
+    if (!(op & 0x2000)) {
+        debug(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
+    }
 }
 
 void
