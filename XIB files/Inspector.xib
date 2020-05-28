@@ -155,6 +155,7 @@
                 <outlet property="cpuStepOverButton" destination="RyZ-E9-b7L" id="P2h-eL-dss"/>
                 <outlet property="cpuStopAndGoButton" destination="rfh-1e-vf2" id="mHM-HO-Ctc"/>
                 <outlet property="cpuT" destination="kji-ty-NOX" id="d2C-Sl-1Jm"/>
+                <outlet property="cpuTab" destination="5Cb-q9-UWh" id="2JG-QD-DKf"/>
                 <outlet property="cpuTraceClearButton" destination="KgG-yb-NNc" id="9nJ-mh-hx2"/>
                 <outlet property="cpuTraceStepIntoButton" destination="D4j-Y8-ayb" id="YWi-Xb-Cp9"/>
                 <outlet property="cpuTraceStepOverButton" destination="mgB-ce-57G" id="gbN-h0-aQg"/>
@@ -1079,18 +1080,18 @@
                                                 </tabViewItem>
                                                 <tabViewItem label="Trace Log" identifier="" id="Xdk-NT-sgm">
                                                     <view key="view" id="5md-tg-otg">
-                                                        <rect key="frame" x="10" y="33" width="386" height="364"/>
+                                                        <rect key="frame" x="10" y="33" width="384" height="364"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
                                                             <scrollView fixedFrame="YES" autohidesScrollers="YES" horizontalLineScroll="17" horizontalPageScroll="10" verticalLineScroll="17" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZbE-Lf-a28">
-                                                                <rect key="frame" x="7" y="7" width="372" height="317"/>
+                                                                <rect key="frame" x="7" y="7" width="370" height="317"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                                                <clipView key="contentView" ambiguous="YES" drawsBackground="NO" id="GzR-dn-mO8">
-                                                                    <rect key="frame" x="1" y="0.0" width="370" height="316"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
+                                                                    <rect key="frame" x="1" y="0.0" width="368" height="316"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
-                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" ambiguous="YES" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
-                                                                            <rect key="frame" x="0.0" y="0.0" width="370" height="291"/>
+                                                                        <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
+                                                                            <rect key="frame" x="0.0" y="0.0" width="368" height="291"/>
                                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                             <size key="intercellSpacing" width="3" height="2"/>
                                                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1120,7 +1121,7 @@
                                                                                     </textFieldCell>
                                                                                     <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                                                 </tableColumn>
-                                                                                <tableColumn identifier="instr" width="186.5" minWidth="48" maxWidth="1000" id="5GN-JB-KLO">
+                                                                                <tableColumn identifier="instr" width="184.5" minWidth="48" maxWidth="1000" id="5GN-JB-KLO">
                                                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Instruction">
                                                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1141,7 +1142,7 @@
                                                                     <nil key="backgroundColor"/>
                                                                 </clipView>
                                                                 <scroller key="horizontalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="YES" id="r5u-Iy-MSD">
-                                                                    <rect key="frame" x="1" y="300" width="370" height="16"/>
+                                                                    <rect key="frame" x="1" y="300" width="368" height="16"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <scroller key="verticalScroller" hidden="YES" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="57s-YL-mqU">
@@ -1149,7 +1150,7 @@
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </scroller>
                                                                 <tableHeaderView key="headerView" wantsLayer="YES" id="DdI-Dc-nEd">
-                                                                    <rect key="frame" x="0.0" y="0.0" width="370" height="25"/>
+                                                                    <rect key="frame" x="0.0" y="0.0" width="368" height="25"/>
                                                                     <autoresizingMask key="autoresizingMask"/>
                                                                 </tableHeaderView>
                                                             </scrollView>
@@ -1201,6 +1202,9 @@
                                                     </view>
                                                 </tabViewItem>
                                             </tabViewItems>
+                                            <connections>
+                                                <outlet property="delegate" destination="-2" id="3Ke-Vu-knt"/>
+                                            </connections>
                                         </tabView>
                                         <box fixedFrame="YES" title="Watchpoints" translatesAutoresizingMaskIntoConstraints="NO" id="5Bp-ro-zeD">
                                             <rect key="frame" x="618" y="1" width="198" height="147"/>

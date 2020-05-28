@@ -1040,11 +1040,13 @@ Amiga::runLoop()
             
             // Are we requested to take a snapshot?
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
+                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
                 autoSnapshot = Snapshot::makeWithAmiga(this);
                 putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
+                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
                 putMessage(MSG_USER_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_USER_SNAPSHOT);
@@ -1052,6 +1054,7 @@ Amiga::runLoop()
 
             // Are we requested to update the debugger info structs?
             if (runLoopCtrl & RL_INSPECT) {
+                debug(RUN_DEBUG, "RL_INSPECT\n");
                 inspect();
                 clearControlFlags(RL_INSPECT);
             }
@@ -1060,7 +1063,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
                 putMessage(MSG_BREAKPOINT_REACHED);
-                debug(RUN_DEBUG, "BREAKPOINT_REACHED\n");
+                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
             }
@@ -1069,7 +1072,7 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
                 putMessage(MSG_WATCHPOINT_REACHED);
-                debug(RUN_DEBUG, "WATCHPOINT_REACHED\n");
+                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;
             }

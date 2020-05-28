@@ -18,7 +18,8 @@ class Inspector: DialogController {
 
     // Debug panel (Commons)
     @IBOutlet weak var debugPanel: NSTabView!
-    
+    @IBOutlet weak var cpuTab: NSTabView!
+
     // Debug panel (CPU)
     @IBOutlet weak var instrTableView: InstrTableView!
     @IBOutlet weak var traceTableView: TraceTableView!
@@ -649,9 +650,17 @@ extension Inspector: NSTabViewDelegate {
             fullRefresh()
         }
     }
-
+    
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
-
-        updateInspectionTarget()
+        
+        if tabView === debugPanel {
+            track("debugView")
+            updateInspectionTarget()
+        }
+        if tabView === cpuTab {
+            track("cpuTab")
+            instrTableView.refresh(full: true)
+            traceTableView.refresh(full: true)
+        }
     }
 }

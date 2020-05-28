@@ -50,7 +50,10 @@
 //
 
 // Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xFC5C58
+#define INITIAL_BREAKPOINT 0xC07B0C   // Impossamole
+// #define INITIAL_BREAKPOINT 0xC07D5A // moveq #0,D7
+// #define INITIAL_BREAKPOINT 0xC07D5C // BRA c07b6c
+// #define INITIAL_BREAKPOINT 0xC0A008   // Jetsons
 // #define INITIAL_BREAKPOINT 0xFC5BCE
 // #define INITIAL_BREAKPOINT 0x0158EC LED SWITCHED OFF 
 

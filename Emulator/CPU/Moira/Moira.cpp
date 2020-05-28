@@ -138,12 +138,15 @@ Moira::execute()
     (this->*exec[queue.ird])(queue.ird);
 
 done:
-
+    
     // Check if a breakpoint has been reached
     if (flags & CPU_CHECK_BP) {
-        if (debugger.breakpointMatches(reg.pc)) {
-            breakpointReached(reg.pc);
-        }
+        
+        // Don't break if the instruction won't be executed due to tracing
+        if (flags & CPU_TRACE_EXCEPTION) return;
+        
+        // Compare breakpoint addresses with current address
+        if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
     }
 }
 
