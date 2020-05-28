@@ -35,7 +35,7 @@ HardwareComponent::initialize()
 void
 HardwareComponent::powerOn()
 {
-    if (!power) {
+    if (isPoweredOff()) {
 
         assert(!isRunning());
         
@@ -49,7 +49,7 @@ HardwareComponent::powerOn()
 
         // Power this component on
         debug(RUN_DEBUG, "Powering on\n");
-        power = true;
+        state = EMU_PAUSED;
         _powerOn();
     }
 }
@@ -57,14 +57,14 @@ HardwareComponent::powerOn()
 void
 HardwareComponent::powerOff()
 {
-    if (power) {
+    if (isPoweredOn()) {
         
          // Pause if needed
         pause();
         
         // Power off this component
         debug(RUN_DEBUG, "Powering off\n");
-        power = false;
+        state = EMU_OFF;
         _powerOff();
 
         // Power all subcomponents off
@@ -77,7 +77,7 @@ HardwareComponent::powerOff()
 void
 HardwareComponent::run()
 {
-    if (!running) {
+    if (!isRunning()) {
         
         // Power on if needed
         powerOn();
@@ -89,7 +89,7 @@ HardwareComponent::run()
         
         // Start this component
         debug(RUN_DEBUG, "Run\n");
-        running = true;
+        state = EMU_RUNNING;
         _run();
     }
 }
@@ -97,11 +97,11 @@ HardwareComponent::run()
 void
 HardwareComponent::pause()
 {
-    if (running) {
+    if (isRunning()) {
         
         // Pause this component
         debug(RUN_DEBUG, "Pause\n");
-        running = false;
+        state = EMU_PAUSED;
         _pause();
 
         // Pause all subcomponents

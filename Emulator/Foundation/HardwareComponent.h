@@ -12,6 +12,14 @@
 
 #include "AmigaObject.h"
 
+typedef enum
+{
+    EMU_OFF,
+    EMU_PAUSED,
+    EMU_RUNNING
+}
+EmulatorState;
+
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
  * it comprises functions for powering up and down, resetting, suspending and
@@ -32,20 +40,15 @@ protected:
      */
     pthread_mutex_t lock;
 
-    /* State model:
-     * The virtual hardware components can be in three different states,
-     * called 'Off', 'Paused', and 'Running'. The current state is determined
-     * by variables 'power' and 'running' according to the following table:
+    /* State model
+     * The virtual hardware components can be in three different states
+     * called 'Off', 'Paused', and 'Running'.
      *
-     *     power     | running    | State
-     *     --------------------------------------
-     *     false     | false      | Off
-     *     false     | true       | INVALID
-     *     true      | false      | Paused
-     *     true      | true       | Running
+     *        Off: The Amiga is turned off
+     *     Paused: The Amiga is turned on, but there is no emulator thread
+     *    Running: The Amiga is turned on and the emulator thread running
      */
-    bool power = false;
-    bool running = false;
+    EmulatorState state = EMU_OFF;
     
     // Indicates if this component should run in warp mode
     bool warp = false;
@@ -91,16 +94,16 @@ public:
      *         |                   powerOff()                  |
      *          -----------------------------------------------
      *
-     *     isPoweredOff()                  isPoweredOn()
-     * |-------------------||----------------------------------------|
-     *                      |-------------------||-------------------|
-     *                            isPaused()          isRunning()
+     *     isPoweredOff()         isPaused()          isRunning()
+     * |-------------------||-------------------||-------------------|
+     *                      |----------------------------------------|
+     *                                     isPoweredOn()
      */
     
-    bool isPoweredOn() { return power; }
-    bool isPoweredOff() { return !power; }
-    bool isPaused() { return power && !running; }
-    bool isRunning() { return running; }
+    bool isPoweredOff() { return state == EMU_OFF; }
+    bool isPoweredOn() { return state != EMU_OFF; }
+    bool isPaused() { return state == EMU_PAUSED; }
+    bool isRunning() { return state == EMU_RUNNING; }
     
     /* powerOn() powers the component on.
      *
