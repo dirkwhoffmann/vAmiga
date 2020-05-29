@@ -692,11 +692,13 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
+    /*
     // Cancel the emulator thread if it still running
     if (p) signalStop();
     
     // Wait until the thread has terminated
     pthread_join(p, NULL);
+    */
     
     // Update the recorded debug information
     inspect();
@@ -776,7 +778,14 @@ Amiga::suspend()
     debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
     
     if (suspendCounter || isRunning()) {
-        pause();
+        
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
+        
+        // At this point, the emulator must be paused or powered off
+        assert(!isRunning());
+        
         suspendCounter++;
     }
         
@@ -790,17 +799,47 @@ Amiga::resume()
     
     debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
     
-    if (suspendCounter) {
-        if (--suspendCounter == 0) run();
+    if (suspendCounter && --suspendCounter == 0) {
+        
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
+        
+        run();
     }
     
     pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
+Amiga::requestThreadLock()
+{
+    if (state == EMU_RUNNING) {
+
+        // The emulator thread is running
+        assert(p != NULL);
+        
+        // Free the thread lock by terminating the thread
+        signalStop();
+        
+    } else {
+        
+        // There must be no emulator thread
+        assert(p == NULL);
+        
+        // It's save to free the lock immediately
+        pthread_mutex_unlock(&threadLock);
+    }
+}
+
+void
 Amiga::powerOnEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
+    
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
     
     powerOn();
     
@@ -812,6 +851,10 @@ Amiga::powerOffEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
     
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
+
     powerOff();
     
     pthread_mutex_unlock(&stateChangeLock);
@@ -822,6 +865,10 @@ Amiga::runEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
     
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
+
     run();
     
     pthread_mutex_unlock(&stateChangeLock);
@@ -832,7 +879,12 @@ Amiga::pauseEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    pause();
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
+
+    // At this point, the emulator is already paused or powered off
+    assert(!isRunning());
     
     pthread_mutex_unlock(&stateChangeLock);
 }
@@ -1034,14 +1086,15 @@ void
 Amiga::threadDidTerminate()
 {
     debug(RUN_DEBUG, "Emulator thread terminated\n");
+
+    // Trash the thread pointer
     p = NULL;
     
-    /* Put emulator into pause mode. If we got here by a call to pause(), the
-     * following (reentrant) call to pause() has no effect. If we got here
-     * because a breakpoint was reached, the following call will perform the
-     * state transition.
-     */
+    // Enter pause mode
     pause();
+    
+    // Release the thread lock
+    pthread_mutex_unlock(&threadLock);
 }
 
 void

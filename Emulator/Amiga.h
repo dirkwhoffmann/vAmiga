@@ -293,6 +293,7 @@ public:
 public:
     
     // Thread-safe state control
+    void requestThreadLock();
     void powerOnEmulator();
     void powerOffEmulator();
     void runEmulator();
@@ -364,7 +365,7 @@ public:
 public:
     
     // Runs or pauses the emulator
-    void stopAndGo() { isRunning() ? pause() : run(); }
+    void stopAndGo() { isRunning() ? pauseEmulator() : runEmulator(); }
     
     /* Executes a single instruction
      * This function is used for single-stepping through the code inside the
