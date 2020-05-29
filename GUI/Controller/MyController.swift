@@ -294,7 +294,7 @@ extension MyController {
         addListener()
 
         // Check if the Amiga is ready to power on
-        if amiga.readyToPowerOn() == ERR_OK {
+        if amiga.readyToPowerOn() {
 
             // Power on the Amiga
             amiga.powerOn()

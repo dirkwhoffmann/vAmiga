@@ -188,7 +188,7 @@ class ConfigController: DialogController {
 
     var bootable: Bool {
         let off   = amiga.isPoweredOff()
-        let ready = amiga.readyToPowerOn() == ERR_OK
+        let ready = amiga.readyToPowerOn()
         return off && ready
     }
     

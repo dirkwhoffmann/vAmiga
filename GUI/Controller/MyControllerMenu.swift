@@ -411,13 +411,11 @@ extension MyController: NSMenuItemValidation {
             return
         }
         
-        switch amiga.readyToPowerOn() {
-            
-        case ERR_OK:
+        var error: ErrorCode = ERR_OK
+        if amiga.readyToPower(on: &error) {
             amiga.run()
-            
-        default:
-            mydocument.showConfigurationAltert(amiga.readyToPowerOn())
+        } else {
+            mydocument.showConfigurationAltert(error)
         }
     }
     
