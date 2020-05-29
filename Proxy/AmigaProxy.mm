@@ -1447,11 +1447,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) powerOn
 {
-    wrapper->amiga->powerOn();
+    wrapper->amiga->powerOnEmulator();
 }
 - (void) powerOff
 {
-    wrapper->amiga->powerOff();
+    wrapper->amiga->powerOffEmulator();
 }
 - (void) hardReset
 {
@@ -1491,11 +1491,11 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) run
 {
-    wrapper->amiga->run();
+    wrapper->amiga->runEmulator();
 }
 - (void) pause
 {
-    wrapper->amiga->pause();
+    wrapper->amiga->pauseEmulator();
 }
 - (void) suspend
 {

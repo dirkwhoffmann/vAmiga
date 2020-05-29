@@ -136,6 +136,10 @@ private:
     // The emulator thread
     pthread_t p = NULL;
     
+    // Mutexes to coordinate the order of execution
+    pthread_mutex_t threadLock;
+    pthread_mutex_t stateChangeLock;
+
     
     //
     // Emulation speed
@@ -225,9 +229,13 @@ public:
 
     void prefix() override;
 
+protected:
+    
     void powerOn() override;
-    void powerOff() override;
     void run() override;
+
+public:
+    
     void reset(bool hard) override;
     void warpOn() override;
     void warpOff() override;
@@ -284,6 +292,12 @@ public:
     
 public:
     
+    // Thread-safe state control
+    void powerOnEmulator();
+    void powerOffEmulator();
+    void runEmulator();
+    void pauseEmulator();
+
     /* Returns true if a call to powerUp() will be successful.
      * It returns false, e.g., if no Kickstart Rom or Boot Rom is installed.
      */

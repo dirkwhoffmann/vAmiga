@@ -105,6 +105,8 @@ public:
     bool isPaused() { return state == EMU_PAUSED; }
     bool isRunning() { return state == EMU_RUNNING; }
     
+protected:
+    
     /* powerOn() powers the component on.
      *
      * current   | next      | action
@@ -148,6 +150,8 @@ public:
      */
     virtual void pause();
     virtual void _pause() { };
+    
+public:
     
     /* Resets the virtual Amiga. Two reset modes are distinguished:
      *

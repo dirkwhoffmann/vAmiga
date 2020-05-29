@@ -105,12 +105,19 @@ Amiga::Amiga()
 
     // Initialize the mach timer info
     mach_timebase_info(&tb);
+    
+    // Initialize mutexes
+    pthread_mutex_init(&threadLock, NULL);
+    pthread_mutex_init(&stateChangeLock, NULL);
 }
 
 Amiga::~Amiga()
 {
     debug("Destroying Amiga[%p]\n", this);
     powerOff();
+    
+    pthread_mutex_destroy(&threadLock);
+    pthread_mutex_destroy(&stateChangeLock);
 }
 
 void
@@ -578,12 +585,6 @@ Amiga::powerOn()
 }
 
 void
-Amiga::powerOff()
-{
-    HardwareComponent::powerOff();
-}
-
-void
 Amiga::run()
 {
     if (readyToPowerOn() == ERR_OK) HardwareComponent::run();
@@ -789,6 +790,46 @@ Amiga::resume()
     
     if (--suspendCounter == 0)
     run();
+}
+
+void
+Amiga::powerOnEmulator()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    powerOn();
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
+Amiga::powerOffEmulator()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    powerOff();
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
+Amiga::runEmulator()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    run();
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
+Amiga::pauseEmulator()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    pause();
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 ErrorCode
