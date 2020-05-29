@@ -228,14 +228,6 @@ public:
 public:
 
     void prefix() override;
-
-protected:
-    
-    void powerOn() override;
-    void run() override;
-
-public:
-    
     void reset(bool hard) override;
     void warpOn() override;
     void warpOff() override;

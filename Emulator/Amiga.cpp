@@ -579,18 +579,6 @@ Amiga::_initialize()
 }
 
 void
-Amiga::powerOn()
-{
-    if (isReady()) HardwareComponent::powerOn();
-}
-
-void
-Amiga::run()
-{
-    if (isReady()) HardwareComponent::run();
-}
-
-void
 Amiga::reset(bool hard)
 {
     if (hard) {
@@ -830,11 +818,14 @@ Amiga::powerOnEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    // Acquire the thread lock
-    requestThreadLock();
-    pthread_mutex_lock(&threadLock);
+    if (isReady()) {
+
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
     
-    powerOn();
+        powerOn();
+    }
     
     pthread_mutex_unlock(&stateChangeLock);
 }
@@ -858,11 +849,14 @@ Amiga::runEmulator()
 {
     pthread_mutex_lock(&stateChangeLock);
     
-    // Acquire the thread lock
-    requestThreadLock();
-    pthread_mutex_lock(&threadLock);
-
-    run();
+    if (isReady()) {
+        
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
+        
+        run();
+    }
     
     pthread_mutex_unlock(&stateChangeLock);
 }
