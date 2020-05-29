@@ -107,8 +107,8 @@ struct AmigaFileWrapper;
 - (void) enableDebugging;
 - (void) disableDebugging;
 
-- (BOOL) readyToPowerOn:(ErrorCode *)error;
-- (BOOL) readyToPowerOn;
+- (BOOL) isReady:(ErrorCode *)error;
+- (BOOL) isReady;
 - (void) powerOn;
 - (void) powerOff;
 - (void) hardReset;

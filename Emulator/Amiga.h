@@ -301,7 +301,7 @@ public:
     /* Returns true if a call to powerUp() will be successful.
      * It returns false, e.g., if no Kickstart Rom or Boot Rom is installed.
      */
-    bool readyToPowerOn(ErrorCode *error = NULL);
+    bool isReady(ErrorCode *error = NULL);
     
     /* Pauses the emulation thread temporarily.
      * Because the emulator is running in a separate thread, the GUI has to

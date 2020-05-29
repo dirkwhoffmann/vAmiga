@@ -1441,13 +1441,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->amiga->disableDebugging();
 }
-- (BOOL) readyToPowerOn:(ErrorCode *)error
+- (BOOL) isReady:(ErrorCode *)error
 {
-    return wrapper->amiga->readyToPowerOn(error);
+    return wrapper->amiga->isReady(error);
 }
-- (BOOL) readyToPowerOn
+- (BOOL) isReady
 {
-    return wrapper->amiga->readyToPowerOn();
+    return wrapper->amiga->isReady();
 }
 - (void) powerOn
 {

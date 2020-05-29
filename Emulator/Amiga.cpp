@@ -581,13 +581,13 @@ Amiga::_initialize()
 void
 Amiga::powerOn()
 {
-    if (readyToPowerOn()) HardwareComponent::powerOn();
+    if (isReady()) HardwareComponent::powerOn();
 }
 
 void
 Amiga::run()
 {
-    if (readyToPowerOn()) HardwareComponent::run();
+    if (isReady()) HardwareComponent::run();
 }
 
 void
@@ -838,16 +838,16 @@ Amiga::pauseEmulator()
 }
 
 bool
-Amiga::readyToPowerOn(ErrorCode *error)
+Amiga::isReady(ErrorCode *error)
 {
     if (!mem.hasRom()) {
-        msg("readyToPowerUp: No Boot Rom or Kickstart Rom found\n");
+        msg("isReady: No Boot Rom or Kickstart Rom found\n");
         if (error) *error = ERR_ROM_MISSING;
         return false;
     }
 
     if (!mem.hasChipRam()) {
-        msg("readyToPowerUp: No Chip Ram found\n");
+        msg("isReady: No Chip Ram found\n");
         if (error) *error = ERR_ROM_MISSING;
         return false;
     }
@@ -855,20 +855,20 @@ Amiga::readyToPowerOn(ErrorCode *error)
     if (mem.hasArosRom()) {
 
         if (!mem.hasExt()) {
-            msg("readyToPowerUp: Aros requires an extension Rom\n");
+            msg("isReady: Aros requires an extension Rom\n");
             if (error) *error = ERR_AROS_NO_EXTROM;
             return false;
         }
 
         if (mem.ramSize() < MB(1)) {
-            msg("readyToPowerUp: Aros requires at least 1 MB of memory\n");
+            msg("isReady: Aros requires at least 1 MB of memory\n");
             if (error) *error = ERR_AROS_RAM_LIMIT;
             return false;
         }
     }
 
     if (mem.chipRamSize() > KB(agnus.chipRamLimit())) {
-        msg("readyToPowerUp: Chip Ram exceeds Agnus limit\n");
+        msg("isReady: Chip Ram exceeds Agnus limit\n");
         if (error) *error = ERR_CHIP_RAM_LIMIT;
         return false;
     }
