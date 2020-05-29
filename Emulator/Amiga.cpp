@@ -680,8 +680,6 @@ Amiga::_powerOff()
 void
 Amiga::_run()
 {
-    debug(RUN_DEBUG, "Starting emulation thread (PC = %X)\n", cpu.getPC());
-
     // Start the emulator thread
     pthread_create(&p, NULL, threadMain, (void *)this);
     
@@ -692,13 +690,8 @@ Amiga::_run()
 void
 Amiga::_pause()
 {
-    /*
-    // Cancel the emulator thread if it still running
-    if (p) signalStop();
-    
-    // Wait until the thread has terminated
-    pthread_join(p, NULL);
-    */
+    // When we reach this line, the emulator thread is already gone
+    assert(p == NULL);
     
     // Update the recorded debug information
     inspect();
