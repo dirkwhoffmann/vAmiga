@@ -89,7 +89,7 @@ Copper::pokeCOPJMP1()
 template <Accessor s> void
 Copper::pokeCOPJMP2()
 {
-    debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    debug("pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
     if (s == ACC_AGNUS) {
 
@@ -130,7 +130,7 @@ Copper::pokeCOP1LCH(u16 value)
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
         cop1end = cop1lc;
 
-        if (!activeInThisFrame) {
+        if (!activeInThisFrame && copList == 1) {
             coppc = cop1lc;
         }
     }
@@ -147,8 +147,7 @@ Copper::pokeCOP1LCL(u16 value)
         cop1lc = REPLACE_LO_WORD(cop1lc, value);
         cop1end = cop1lc;
         
-        if (!activeInThisFrame) {
-            assert(copList == 1);
+        if (!activeInThisFrame && copList == 1) {
             coppc = cop1lc;
         }
     }
@@ -162,6 +161,10 @@ Copper::pokeCOP2LCH(u16 value)
     if (HI_WORD(cop2lc) != value) {
         cop2lc = REPLACE_HI_WORD(cop2lc, value);
         cop2end = cop2lc;
+
+        if (!activeInThisFrame && copList == 2) {
+            coppc = cop2lc;
+        }
     }
 }
 
@@ -175,6 +178,10 @@ Copper::pokeCOP2LCL(u16 value)
     if (LO_WORD(cop2lc) != value) {
         cop2lc = REPLACE_LO_WORD(cop2lc, value);
         cop2end = cop2lc;
+        
+        if (!activeInThisFrame && copList == 2) {
+            coppc = cop2lc;
+        }
     }
 }
 
@@ -888,6 +895,7 @@ Copper::serviceEvent(EventID id)
             if (!agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
 
             switchToCopperList(1);
+            activeInThisFrame = agnus.copdma();
             schedule(COP_FETCH);
 
             break;
@@ -923,7 +931,6 @@ Copper::vsyncHandler()
      *  in COP1LC." [HRM]
      */
     agnus.scheduleRel<COP_SLOT>(DMA_CYCLES(0), COP_VBLANK);
-    activeInThisFrame = agnus.copdma();
     
     if (COP_CHECKSUM) {
         

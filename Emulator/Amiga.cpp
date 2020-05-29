@@ -114,7 +114,7 @@ Amiga::Amiga()
 Amiga::~Amiga()
 {
     debug("Destroying Amiga[%p]\n", this);
-    powerOff();
+    powerOffEmulator();
     
     pthread_mutex_destroy(&threadLock);
     pthread_mutex_destroy(&stateChangeLock);
