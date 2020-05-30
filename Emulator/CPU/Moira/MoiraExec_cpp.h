@@ -926,19 +926,7 @@ Moira::execJsr(u16 opcode)
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
-    /*
-    bool error;
-    // if (reg.sp & 1) { printf("ODD reg.sp: %x reg.pc: %x (%x %x)\n", reg.sp, reg.pc, pc1, pc2); }
-    push<Long>(oldpc, error);
-    if (error) {
-        // printf("ERROR: oldpc = %x (%x %x) ea = %x sp: %x\n", oldpc, pc1, pc2, ea, reg.sp);
-        return;
-    }
-    */
-    
-    // if (reg.sp & 1) { printf("ODD reg.sp: %x reg.pc: %x\n", reg.sp, reg.pc); }
-    // if (ea & 1) { printf("ODD ea: %x reg.sp: %x reg.pc: %x\n", ea, reg.sp, reg.pc); }
-
+    // Intercept if the target address is odd
     if (ea & 1) {
         if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
             reg.pc = oldpc;
@@ -947,12 +935,14 @@ Moira::execJsr(u16 opcode)
         return;
     }
 
-    push<Long>(reg.pc);
+    // Save old address on stack
+    bool error;
+    push<Long>(reg.pc, error);
+    if (error) return;
 
     // Jump to new address
     reg.pc = ea;
 
-    // if (addressReadError<Word>(ea)) return;
     queue.irc = readM<Word>(ea);
     prefetch<LAST_BUS_CYCLE>();
 }
