@@ -178,6 +178,9 @@ Moira::execTrapException(int nr)
     // Enter supervisor mode
     setSupervisorMode(true);
 
+    // Disable tracing
+    clearTraceFlag();
+
     // Write exception information to stack
     saveToStackBrief(status);
 
