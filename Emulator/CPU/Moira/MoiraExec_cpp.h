@@ -178,7 +178,7 @@ Moira::execTrapException(int nr)
     // Enter supervisor mode
     setSupervisorMode(true);
 
-    // Disable tracing
+    // Disable tracing, but keep the CPU_TRACE_EXCEPTION flag
     clearTraceFlag();
 
     // Write exception information to stack
@@ -926,6 +926,18 @@ Moira::execJsr(u16 opcode)
 
     // Jump to new address
     u32 oldpc = reg.pc;
+
+    /*
+    bool error;
+    // if (reg.sp & 1) { printf("ODD reg.sp: %x reg.pc: %x (%x %x)\n", reg.sp, reg.pc, pc1, pc2); }
+    push<Long>(oldpc, error);
+    if (error) {
+        // printf("ERROR: oldpc = %x (%x %x) ea = %x sp: %x\n", oldpc, pc1, pc2, ea, reg.sp);
+        return;
+    }
+    */
+    
+    // Jump to new address
     reg.pc = ea;
 
     if (addressReadError<Word>(ea)) return;
@@ -1641,8 +1653,11 @@ template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
     if (EMULATE_FC) fcl = 1;
+
+    bool error;
+    u32 newpc = readM<Long>(reg.sp, error);
+    if (error) return;
     
-    u32 newpc = readM<Long>(reg.sp);
     reg.sp += 4;
 
     setPC(newpc);

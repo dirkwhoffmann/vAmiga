@@ -278,6 +278,8 @@ Moira::writeM(u32 addr, u32 val)
 template<Size S, bool last> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
+    if (EMULATE_FC) fcl = 1;
+    
     if ((error = addressWriteError<S,2>(addr))) { return; }
     writeM<S,last>(addr, val);
 }
@@ -341,6 +343,14 @@ Moira::push(u32 val)
     writeM<S,last>(reg.sp, val);
 }
 
+template<Size S, bool last> void
+Moira::push(u32 val, bool &error)
+{
+    // printf("push<%d>(%x)\n", S, val);
+    reg.sp -= S;
+    writeM<S,last>(reg.sp, val, error);
+}
+
 template <Size S, int delay> bool
 Moira::addressReadError(u32 addr)
 {
@@ -361,6 +371,7 @@ Moira::addressWriteError(u32 addr)
     if (EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
+            // printf("addressWriteError: S = %d addr = %x\n", S, addr);
             sync(delay);
             execAddressError(addr, false);
             return true;

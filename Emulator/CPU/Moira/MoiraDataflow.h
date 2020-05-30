@@ -91,10 +91,11 @@ template<Size S, bool last = false> void writeMrev(u32 addr, u32 val);
 template<Size S, bool last = false> void writeMrev(u32 addr, u32 val, bool &error);
 
 // Reads an immediate value from memory
- template<Size S> u32 readI();
+template<Size S> u32 readI();
 
 // Pushes a value onto the stack
- template<Size S, bool last = false> void push(u32 value);
+template<Size S, bool last = false> void push(u32 value);
+template<Size S, bool last = false> void push(u32 value, bool &error);
 
 /* Checks for an address error
  * An address error occurs if the CPU tries to access a word or a long word
