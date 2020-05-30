@@ -166,19 +166,19 @@ Instr;
 
 typedef enum {
 
-    MODE_DN,   //           Dn : Data register direct
-    MODE_AN,   //           An : Address register direct
-    MODE_AI,   //         (An) : Register indirect
-    MODE_PI,   //        (An)+ : Postincrement register indirect
-    MODE_PD,   //        -(An) : Predecrement register indirect
-    MODE_DI,   //       (d,An) : Register indirect with displacement
-    MODE_IX,   //    (d,An,Xi) : Indexed register indirect with displacement
-    MODE_AW,   //     (####).w : Absolute addressing short
-    MODE_AL,   //     (####).l : Absolute addressing long
-    MODE_DIPC, //       (d,PC) : PC relative with displacement
-    MODE_PCIX, //    (d,An,Xi) : Indexed PC relative with displacement
-    MODE_IM,   //         #### : Immediate data addressing
-    MODE_IP    //         ---- : Implied addressing
+    MODE_DN,   //  0         Dn : Data register direct
+    MODE_AN,   //  1         An : Address register direct
+    MODE_AI,   //  2       (An) : Register indirect
+    MODE_PI,   //  3      (An)+ : Postincrement register indirect
+    MODE_PD,   //  4      -(An) : Predecrement register indirect
+    MODE_DI,   //  5     (d,An) : Register indirect with displacement
+    MODE_IX,   //  6  (d,An,Xi) : Indexed register indirect with displacement
+    MODE_AW,   //  7   (####).w : Absolute addressing short
+    MODE_AL,   //  8   (####).l : Absolute addressing long
+    MODE_DIPC, //  9     (d,PC) : PC relative with displacement
+    MODE_PCIX, // 10  (d,An,Xi) : Indexed PC relative with displacement
+    MODE_IM,   // 11       #### : Immediate data addressing
+    MODE_IP    // 12       ---- : Implied addressing
 }
 Mode;
 

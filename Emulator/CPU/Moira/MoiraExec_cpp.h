@@ -918,14 +918,13 @@ Moira::execJmp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execJsr(u16 opcode)
 {
+    u32 oldpc = reg.pc;
+
     int src = _____________xxx(opcode);
     u32 ea  = computeEA <M,Long, true /* skip last read */> (src);
 
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
-
-    // Jump to new address
-    u32 oldpc = reg.pc;
 
     /*
     bool error;
@@ -937,12 +936,24 @@ Moira::execJsr(u16 opcode)
     }
     */
     
+    // if (reg.sp & 1) { printf("ODD reg.sp: %x reg.pc: %x\n", reg.sp, reg.pc); }
+    // if (ea & 1) { printf("ODD ea: %x reg.sp: %x reg.pc: %x\n", ea, reg.sp, reg.pc); }
+
+    if (ea & 1) {
+        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
+            reg.pc = oldpc;
+        }
+        addressReadError<Word>(ea);
+        return;
+    }
+
+    push<Long>(reg.pc);
+
     // Jump to new address
     reg.pc = ea;
 
-    if (addressReadError<Word>(ea)) return;
+    // if (addressReadError<Word>(ea)) return;
     queue.irc = readM<Word>(ea);
-    push<Long>(oldpc);
     prefetch<LAST_BUS_CYCLE>();
 }
 
