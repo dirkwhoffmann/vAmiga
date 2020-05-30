@@ -28,11 +28,11 @@
 #define xxxx____________(opcode) (u16)((opcode >> 12) & 0b1111)
 
 void
-Moira::saveToStackDetailed(u16 sr, u32 addr, u16 code)
+Moira::saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code)
 {
     // Push PC
-    push<Word>((u16)reg.pc);
-    push<Word>(reg.pc >> 16);
+    push<Word>((u16)pc);
+    push<Word>(pc >> 16);
 
     // Push SR and IRD
     push<Word>(sr);
@@ -64,7 +64,7 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 }
 
 void
-Moira::execAddressError(u32 addr, bool read)
+Moira::execAddressError(u32 addr, u32 pc, bool read)
 {
     assert(addr & 1);
 
@@ -82,7 +82,7 @@ Moira::execAddressError(u32 addr, bool read)
 
     // Write exception information to stack
     sync(8);
-    saveToStackDetailed(status, addr, code);
+    saveToStackDetailed(status, addr, pc, code);
     sync(2);
 
     jumpToVector(3);
@@ -910,16 +910,8 @@ Moira::execJmp(u16 opcode)
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
-    if (ea & 1) {
-        printf("ODD ea: %x\n", ea);
-    }
-    
     // Intercept if the target address is odd
-    if (ea & 1) {
-        reg.pc = oldpc;
-        addressReadError<Word>(ea);
-        return;
-    }
+    if (addressReadError<Word>(ea, oldpc)) return;
     
     // Jump to new address
     reg.pc = ea;
@@ -940,14 +932,12 @@ Moira::execJsr(u16 opcode)
     sync(delay[M]);
 
     // Intercept if the target address is odd
-    if (ea & 1) {
-        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
-            reg.pc = oldpc;
-        }
-        addressReadError<Word>(ea);
-        return;
+    if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
+        if (addressReadError<Word>(ea, oldpc)) return;
+    } else {
+        if (addressReadError<Word>(ea)) return;
     }
-
+ 
     // Save old address on stack
     bool error;
     push<Long>(reg.pc, error);

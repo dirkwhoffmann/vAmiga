@@ -352,13 +352,34 @@ Moira::push(u32 val, bool &error)
 }
 
 template <Size S, int delay> bool
-Moira::addressReadError(u32 addr)
+Moira::addressReadError(u32 addr, u32 pc)
 {
     if (EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
             sync(delay);
-            execAddressError(addr, true);
+            execAddressError(addr, pc, true);
+            return true;
+        }
+    }
+    return false;
+}
+
+template <Size S, int delay> bool
+Moira::addressReadError(u32 addr)
+{
+    return addressReadError <S,delay> (addr, reg.pc);
+}
+
+template <Size S, int delay> bool
+Moira::addressWriteError(u32 addr, u32 pc)
+{
+    if (EMULATE_ADDRESS_ERROR) {
+
+        if ((addr & 1) && S != Byte) {
+            // printf("addressWriteError: S = %d addr = %x\n", S, addr);
+            sync(delay);
+            execAddressError(addr, pc, false);
             return true;
         }
     }
@@ -368,16 +389,7 @@ Moira::addressReadError(u32 addr)
 template <Size S, int delay> bool
 Moira::addressWriteError(u32 addr)
 {
-    if (EMULATE_ADDRESS_ERROR) {
-
-        if ((addr & 1) && S != Byte) {
-            // printf("addressWriteError: S = %d addr = %x\n", S, addr);
-            sync(delay);
-            execAddressError(addr, false);
-            return true;
-        }
-    }
-    return false;
+    return addressWriteError <S,delay> (addr, reg.pc);
 }
 
 template<bool last> void

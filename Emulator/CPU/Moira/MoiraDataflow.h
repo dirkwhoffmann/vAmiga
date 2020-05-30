@@ -102,6 +102,8 @@ template<Size S, bool last = false> void push(u32 value, bool &error);
  * that is located at an odd address. If an address error is encountered,
  * the function calls execAddressError to initiate exception processing.
  */
+template<Size S, int delay = 0> bool addressReadError(u32 addr, u32 pc);
+template<Size S, int delay = 0> bool addressWriteError(u32 addr, u32 pc);
 template<Size S, int delay = 0> bool addressReadError(u32 addr);
 template<Size S, int delay = 0> bool addressWriteError(u32 addr);
 

@@ -8,14 +8,14 @@
 // -----------------------------------------------------------------------------
 
 // Saves information to stack for group 0 exceptions
-void saveToStackDetailed(u16 sr, u32 addr, u16 code);
+void saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code);
 
 // Saves information to stack for group 1 and group 2 exceptions
 void saveToStackBrief(u16 sr, u32 pc);
 void saveToStackBrief(u16 sr) { saveToStackBrief(sr, reg.pc); }
 
 // Emulates an address error
-void execAddressError(u32 addr, bool read);
+void execAddressError(u32 addr, u32 pc, bool read);
 
 // Emulates the execution of unimplemented and illegal instructions
 void execUnimplemented(int nr);
