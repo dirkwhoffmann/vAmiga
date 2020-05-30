@@ -226,7 +226,7 @@ protected:
     virtual void trapException() { };
     virtual void privilegeException() { };
     virtual void interruptException(u8 level) { };
-    virtual void exceptionJump(int nr, u32 oldpc, u32 newpc) { };
+    virtual void exceptionJump(int nr, u32 addr) { };
 
     // Called when a breakpoint is reached
     virtual void breakpointReached(u32 addr) { };

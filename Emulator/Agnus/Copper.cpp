@@ -89,7 +89,7 @@ Copper::pokeCOPJMP1()
 template <Accessor s> void
 Copper::pokeCOPJMP2()
 {
-    debug("pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
     if (s == ACC_AGNUS) {
 

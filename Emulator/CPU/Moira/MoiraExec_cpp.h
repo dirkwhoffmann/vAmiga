@@ -92,12 +92,15 @@ void
 Moira::execUnimplemented(int nr)
 {
     u16 status = getSR();
-
-    // Enter supervisor mode and update the status register
+    
+    // Enter supervisor mode
     setSupervisorMode(true);
+    
+    // Disable tracing
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
 
+    // Write exception information to stack
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
 
@@ -195,11 +198,9 @@ Moira::execPrivilegeException()
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
 
-    reg.pc -= 2;
-
     // Write exception information to stack
     sync(4);
-    saveToStackBrief(status);
+    saveToStackBrief(status, reg.pc - 2);
 
     jumpToVector(8);
 }
@@ -221,12 +222,14 @@ Moira::execIrqException(int level)
 
     // Temporarily raise the interrupt threshold
     reg.sr.ipl = level;
-    // printf("Raising IRQ mask to %d (status = %x)\n", level, status); // DIRK
     
-    // Enter supervisor mode and update the status register
+    // Enter supervisor mode
     setSupervisorMode(true);
-    clearTraceFlag();
 
+    // Disable tracing
+    clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
+        
     sync(6);
     reg.sp -= 6;
     writeM<Word>(reg.sp + 4, reg.pc & 0xFFFF);

@@ -117,7 +117,7 @@ private:
     void trapException() override;
     void privilegeException() override;
     void interruptException(u8 level) override;
-    void exceptionJump(int nr, u32 oldpc, u32 newpc) override;
+    void exceptionJump(int nr, u32 addr) override;
     
     void breakpointReached(u32 addr) override;
     void watchpointReached(u32 addr) override;

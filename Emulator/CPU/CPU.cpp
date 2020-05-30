@@ -143,7 +143,7 @@ CPU::interruptException(u8 level)
 }
 
 void
-CPU::exceptionJump(int nr, u32 oldpc, u32 newpc)
+CPU::exceptionJump(int nr, u32 addr)
 {
     // debug(IRQ_DEBUG, "Exception %d: Changing PC from %x to %x\n", nr oldpc, newpc);
 }
