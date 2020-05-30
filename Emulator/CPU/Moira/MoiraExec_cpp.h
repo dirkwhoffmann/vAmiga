@@ -902,12 +902,25 @@ Moira::execExt(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execJmp(u16 opcode)
 {
+    u32 oldpc = reg.pc;
+    
     int src = _____________xxx(opcode);
     u32 ea  = computeEA <M,Long,true /* skip last read */> (src);
 
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
+    if (ea & 1) {
+        printf("ODD ea: %x\n", ea);
+    }
+    
+    // Intercept if the target address is odd
+    if (ea & 1) {
+        reg.pc = oldpc;
+        addressReadError<Word>(ea);
+        return;
+    }
+    
     // Jump to new address
     reg.pc = ea;
 
