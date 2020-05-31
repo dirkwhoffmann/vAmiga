@@ -97,7 +97,16 @@ template<Size S> u32 readI();
 template<Size S, bool last = false> void push(u32 value);
 template<Size S, bool last = false> void push(u32 value, bool &error);
 
-/* Checks for an address error
+// Checks whether the provided address should trigger an address error
+template<Size S> bool misaligned(u32 addr);
+
+// Creates an address error stack frame
+AEStackFrame makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write = false);
+AEStackFrame makeFrame(u32 addr, u32 pc, bool write = false);
+AEStackFrame makeFrame(u32 addr, bool write = false);
+
+//
+/* Checks for an address error (DEPRECATED)
  * An address error occurs if the CPU tries to access a word or a long word
  * that is located at an odd address. If an address error is encountered,
  * the function calls execAddressError to initiate exception processing.

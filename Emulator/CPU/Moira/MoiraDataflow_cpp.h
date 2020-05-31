@@ -240,7 +240,13 @@ Moira::readM(u32 addr)
 template<Size S, bool last> u32
 Moira::readM(u32 addr, bool &error)
 {
-    if ((error = addressReadError<S,2>(addr))) { return 0; }
+    // Check for address error
+    if ((error = misaligned<S>(addr))) {
+        execAddressError(makeFrame(addr), 2);
+        return 0;
+    }
+    
+    // if ((error = addressReadError<S,2>(addr))) { return 0; }
     return readM<S,last>(addr);
 }
 
@@ -351,6 +357,38 @@ Moira::push(u32 val, bool &error)
     writeM<S,last>(reg.sp, val, error);
 }
 
+template<Size S> bool
+Moira::misaligned(u32 addr)
+{
+    return EMULATE_ADDRESS_ERROR ? ((addr & 1) && S != Byte) : false;
+}
+
+AEStackFrame
+Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
+{
+    AEStackFrame frame;
+    
+    frame.code = (ird & 0xFFE0) | readFC() | (write ? 0x00 : 0x10);
+    frame.addr = addr;
+    frame.ird = ird;
+    frame.sr = sr;
+    frame.pc = pc;
+        
+    return frame;
+}
+
+AEStackFrame
+Moira::makeFrame(u32 addr, u32 pc, bool write)
+{
+    return makeFrame(addr, pc, getSR(), getIRD(), write);
+}
+
+AEStackFrame
+Moira::makeFrame(u32 addr, bool write)
+{
+    return makeFrame(addr, getPC(), getSR(), getIRD(), write);
+}
+
 template <Size S, int delay> bool
 Moira::addressReadError(u32 addr, u32 pc)
 {
@@ -404,7 +442,13 @@ template<bool last> void
 Moira::fullPrefetch()
 {
     if (EMULATE_FC) fcl = 2;
-    if (addressReadError<Word,2>(reg.pc)) return;
+    
+    // TODO: In theory, all PC address errors should be intercepted by now
+    if (misaligned<Word>(reg.pc)) {
+        execAddressError(makeFrame(reg.pc), 2);
+        return;
+    }
+    // if (addressReadError<Word,2>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
     prefetch<last>();
@@ -414,9 +458,18 @@ template<bool skip> void
 Moira::readExt()
 {
     reg.pc += 2;
+    
     if (!skip) {
+        
         if (EMULATE_FC) fcl = 2;
-        if (addressReadError<Word>(reg.pc)) return;
+        
+        // Check for address error
+        if (misaligned<Word>(reg.pc)) {
+            execAddressError(makeFrame(reg.pc));
+            return;
+        }
+        
+        // if (addressReadError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
 }

@@ -8,14 +8,16 @@
 // -----------------------------------------------------------------------------
 
 // Saves information to stack for group 0 exceptions
-void saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code);
+void saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code); // DEPRECATED
+void saveToStack(AEStackFrame frame);
 
 // Saves information to stack for group 1 and group 2 exceptions
 void saveToStackBrief(u16 sr, u32 pc);
 void saveToStackBrief(u16 sr) { saveToStackBrief(sr, reg.pc); }
 
 // Emulates an address error
-void execAddressError(u32 addr, u32 pc, bool read);
+void execAddressError(u32 addr, u32 pc, bool read); // DEPRECATED
+void execAddressError(AEStackFrame frame, int delay = 0);
 
 // Emulates the execution of unimplemented and illegal instructions
 void execUnimplemented(int nr);

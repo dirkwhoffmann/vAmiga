@@ -28,6 +28,25 @@
 #define xxxx____________(opcode) (u16)((opcode >> 12) & 0b1111)
 
 void
+Moira::saveToStack(AEStackFrame frame)
+{
+    // Push PC
+    push<Word>((u16)frame.pc);
+    push<Word>(frame.pc >> 16);
+    
+    // Push SR and IRD
+    push<Word>(frame.sr);
+    push<Word>(frame.ird);
+    
+    // Push address
+    push<Word>((u16)frame.addr);
+    push<Word>(frame.addr >> 16);
+    
+    // Push memory access type and function code
+    push<Word>(frame.code);
+}
+
+void
 Moira::saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code)
 {
     // Push PC
@@ -61,6 +80,28 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
         writeM<Word>(reg.sp + 0, sr);
         writeM<Word>(reg.sp + 2, pc >> 16);
     }
+}
+
+void
+Moira::execAddressError(AEStackFrame frame, int delay)
+{
+    assert(frame.addr & 1);
+    
+    sync(delay);
+    
+    // Enter supervisor mode
+    setSupervisorMode(true);
+    
+    // Disable tracing
+    clearTraceFlag();
+    flags &= ~CPU_TRACE_EXCEPTION;
+
+    // Write stack frame
+    sync(8);
+    saveToStack(frame);
+    sync(2);
+
+    jumpToVector(3);
 }
 
 void
@@ -581,9 +622,14 @@ Moira::execBcc(u16 opcode)
     if (cond<I>()) {
 
         u32 newpc = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
-
-        // Intercept if the target address is odd
-        if (addressReadError<Word>(newpc, reg.pc)) return;
+        
+        // Check for address error
+        if (misaligned<Word>(newpc)) {
+            execAddressError(makeFrame(newpc, reg.pc));
+            return;
+        }
+        
+        // if (addressReadError<Word>(newpc, reg.pc)) return;
         
         // Take branch
         reg.pc = newpc;
@@ -912,9 +958,13 @@ Moira::execJmp(u16 opcode)
 
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
-
-    // Intercept if the target address is odd
-    if (addressReadError<Word>(ea, oldpc)) return;
+    
+    // Check for address error
+    if (misaligned<Word>(ea)) {
+        execAddressError(makeFrame(ea, oldpc));
+        return;
+    }
+    // if (addressReadError<Word>(ea, oldpc)) return;
     
     // Jump to new address
     reg.pc = ea;
@@ -934,11 +984,17 @@ Moira::execJsr(u16 opcode)
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
-    // Intercept if the target address is odd
-    if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
-        if (addressReadError<Word>(ea, oldpc)) return;
-    } else {
-        if (addressReadError<Word>(ea)) return;
+    // Check for address error
+    if (misaligned<Word>(ea)) {
+        
+        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
+            execAddressError(makeFrame(ea, oldpc));
+            // if (addressReadError<Word>(ea, oldpc)) return;
+        } else {
+            execAddressError(makeFrame(ea));
+            // if (addressReadError<Word>(ea)) return;
+        }
+        return;
     }
  
     // Save old address on stack
@@ -1217,9 +1273,15 @@ Moira::execMovemEaRg(u16 opcode)
 {
     int src  = _____________xxx(opcode);
     u16 mask = readI<Word>();
-
-    u32 ea = computeEA<M,S>(src);
-    if (mask && addressReadError<S>(ea)) return;
+    u32 ea   = computeEA<M,S>(src);
+    
+    // Check for address error
+    if (mask && misaligned<S>(ea)) {
+        execAddressError(makeFrame(ea));
+        return;
+    }
+    // if (mask && addressReadError<S>(ea)) return;
+    
     if (S == Long) (void)readM<Word>(ea);
 
     switch (M) {
@@ -1263,7 +1325,13 @@ Moira::execMovemRgEa(u16 opcode)
         case 4: // -(An)
         {
             u32 ea = readA(dst);
-            if (mask && addressReadError<S>(ea)) return;
+            
+            // Check for address error
+            if (mask && misaligned<S>(ea)) {
+                execAddressError(makeFrame(ea));
+                return;
+            }
+            // if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 15; i >= 0; i--) {
 
@@ -1278,7 +1346,13 @@ Moira::execMovemRgEa(u16 opcode)
         default:
         {
             u32 ea = computeEA<M,S>(dst);
-            if (mask && addressReadError<S>(ea)) return;
+            
+            // Check for address error
+            if (mask && misaligned<S>(ea)) {
+                execAddressError(makeFrame(ea));
+                return;
+            }
+            // if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 0; i < 16; i++) {
 

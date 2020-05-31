@@ -223,6 +223,16 @@ typedef enum
 }
 FunctionCode;
 
+typedef struct
+{
+    u16 code;
+    u32 addr;
+    u16 ird;
+    u16 sr;
+    u32 pc;
+}
+AEStackFrame;
+
 struct StatusRegister {
 
     bool t;               // Trace flag
