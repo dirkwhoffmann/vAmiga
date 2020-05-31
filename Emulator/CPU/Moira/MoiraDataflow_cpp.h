@@ -286,7 +286,12 @@ Moira::writeM(u32 addr, u32 val, bool &error)
 {
     if (EMULATE_FC) fcl = 1;
     
-    if ((error = addressWriteError<S,2>(addr))) { return; }
+    if ((error = misaligned<S>(addr))) {
+        execAddressError(makeFrame(addr, true /* write */), 2);
+        return;
+    }
+    // if ((error = addressWriteError<S,2>(addr))) { return; }
+    
     writeM<S,last>(addr, val);
 }
 
@@ -313,7 +318,11 @@ Moira::writeMrev(u32 addr, u32 val)
 template<Size S, bool last> void
 Moira::writeMrev(u32 addr, u32 val, bool &error)
 {
-    if ((error = addressWriteError<S,2>(addr))) { return; }
+    if ((error = misaligned<S>(addr))) {
+        execAddressError(makeFrame(addr, true /* write */), 2);
+        return;
+    }
+    // if ((error = addressWriteError<S,2>(addr))) { return; }
     writeMrev<S,last>(addr, val);
 }
 
@@ -389,6 +398,7 @@ Moira::makeFrame(u32 addr, bool write)
     return makeFrame(addr, getPC(), getSR(), getIRD(), write);
 }
 
+/*
 template <Size S, int delay> bool
 Moira::addressReadError(u32 addr, u32 pc)
 {
@@ -415,7 +425,6 @@ Moira::addressWriteError(u32 addr, u32 pc)
     if (EMULATE_ADDRESS_ERROR) {
 
         if ((addr & 1) && S != Byte) {
-            // printf("addressWriteError: S = %d addr = %x\n", S, addr);
             sync(delay);
             execAddressError(addr, pc, false);
             return true;
@@ -429,6 +438,7 @@ Moira::addressWriteError(u32 addr)
 {
     return addressWriteError <S,delay> (addr, reg.pc);
 }
+*/
 
 template<bool last> void
 Moira::prefetch()

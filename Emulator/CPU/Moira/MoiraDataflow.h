@@ -111,10 +111,12 @@ AEStackFrame makeFrame(u32 addr, bool write = false);
  * that is located at an odd address. If an address error is encountered,
  * the function calls execAddressError to initiate exception processing.
  */
+/*
 template<Size S, int delay = 0> bool addressReadError(u32 addr, u32 pc);
 template<Size S, int delay = 0> bool addressWriteError(u32 addr, u32 pc);
 template<Size S, int delay = 0> bool addressReadError(u32 addr);
 template<Size S, int delay = 0> bool addressWriteError(u32 addr);
+*/
 
 // Prefetches the next instruction
 template<bool last = false> void prefetch();

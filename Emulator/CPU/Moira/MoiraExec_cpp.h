@@ -28,7 +28,7 @@
 #define xxxx____________(opcode) (u16)((opcode >> 12) & 0b1111)
 
 void
-Moira::saveToStack(AEStackFrame frame)
+Moira::saveToStack(AEStackFrame &frame)
 {
     // Push PC
     push<Word>((u16)frame.pc);
@@ -46,6 +46,7 @@ Moira::saveToStack(AEStackFrame frame)
     push<Word>(frame.code);
 }
 
+/*
 void
 Moira::saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code)
 {
@@ -64,6 +65,7 @@ Moira::saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code)
     // Push memory access type and function code
     push<Word>(code);
 }
+*/
 
 void
 Moira::saveToStackBrief(u16 sr, u32 pc)
@@ -104,6 +106,7 @@ Moira::execAddressError(AEStackFrame frame, int delay)
     jumpToVector(3);
 }
 
+/*
 void
 Moira::execAddressError(u32 addr, u32 pc, bool read)
 {
@@ -128,6 +131,7 @@ Moira::execAddressError(u32 addr, u32 pc, bool read)
 
     jumpToVector(3);
 }
+*/
 
 void
 Moira::execUnimplemented(int nr)
