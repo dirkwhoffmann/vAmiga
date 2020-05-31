@@ -582,6 +582,9 @@ Moira::execBcc(u16 opcode)
 
         u32 newpc = reg.pc + (S == Word ? (i16)queue.irc : (i8)opcode);
 
+        // Intercept if the target address is odd
+        if (addressReadError<Word>(newpc, reg.pc)) return;
+        
         // Take branch
         reg.pc = newpc;
         fullPrefetch<LAST_BUS_CYCLE>();
@@ -965,9 +968,25 @@ Moira::execLea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execLink(u16 opcode)
 {
+    /*
+    if (reg.sp & 1) {
+        
+        reg.sp -= Long;
+        writeA(ax, reg.sp);
+        reg.sp += (i32)disp;
+        
+        printf("ERROR: pc: %x, sp: %x (%x %x)\n", reg.pc, reg.sp, reg.usp, reg.ssp);
+
+        printf("ird = %x\n", queue.ird);
+        printf("reg.sp - 4 = %x\n", reg.sp - Long);
+        assert(false);
+        return;
+    }
+    */
+    
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
-
+    
     if (MIMIC_MUSASHI) {
         push<Long>(readA(ax) - (ax == 7 ? 4 : 0));
     } else {
