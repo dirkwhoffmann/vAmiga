@@ -64,11 +64,11 @@ Moira::writeOp(int n, u32 val)
 
     // Early exit in case of an address error
     if (error) return false;
-
+    
     // Emulate (An)+ register modification
-      updateAnPI<M,S>(n);
-
-     return !error;
+    updateAnPI<M,S>(n);
+    
+    return !error;
 }
 
 template<Mode M, Size S, bool last> void

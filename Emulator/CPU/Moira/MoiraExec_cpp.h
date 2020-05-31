@@ -87,6 +87,7 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 void
 Moira::execAddressError(AEStackFrame frame, int delay)
 {
+    // printf("ADDRESS ERROR VIOLATION: %x\n", frame.addr);    
     assert(frame.addr & 1);
     
     sync(delay);
