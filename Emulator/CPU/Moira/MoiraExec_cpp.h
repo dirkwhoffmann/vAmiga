@@ -1028,30 +1028,26 @@ Moira::execLea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execLink(u16 opcode)
 {
-    static int counter = 0;
-    counter++;
-    
     u16 ird  = getIRD();
-    u32 sp   = getSP();
+    u32 sp   = getSP() - 4;
+    
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
 
     if (EMULATE_FC) fcl = 1;
     
     // Check for address error
-    if (misaligned<Long>(reg.sp)) {
-        writeA(ax, sp - 4);
-        execAddressError(makeFrame(sp - 4, getPC() + 2, getSR(), ird, true));
+    if (misaligned<Long>(sp)) {
+        writeA(ax, sp);
+        execAddressError(makeFrame(sp, getPC() + 2, getSR(), ird, true));
         return;
     }
-        
-    if (MIMIC_MUSASHI) {
-        push<Long>(readA(ax) - (ax == 7 ? 4 : 0));
-    } else {
-        push<Long>(readA(ax));
-    }
+    
+    // Write to stack
+    push<Long>(readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
 
-    writeA(ax, reg.sp);
+    // Modify address register and stack pointer
+    writeA(ax, sp);
     reg.sp += (i32)disp;
 
     prefetch<LAST_BUS_CYCLE>();
