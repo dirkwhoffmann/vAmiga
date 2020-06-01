@@ -89,6 +89,7 @@ Moira::execute()
 
         reg.pc += 2;
         (this->*exec[queue.ird])(queue.ird);
+        assert(reg.pc0 == reg.pc);
         return;
     }
 
@@ -137,6 +138,7 @@ Moira::execute()
     // Execute the instruction
     reg.pc += 2;
     (this->*exec[queue.ird])(queue.ird);
+    assert(reg.pc0 == reg.pc);
 
 done:
     
@@ -146,8 +148,8 @@ done:
         // Don't break if the instruction won't be executed due to tracing
         if (flags & CPU_TRACE_EXCEPTION) return;
         
-        // Compare breakpoint addresses with current address
-        if (debugger.breakpointMatches(reg.pc)) breakpointReached(reg.pc);
+        // Compare breakpoint addresses with instruction address
+        if (debugger.breakpointMatches(reg.pc0)) breakpointReached(reg.pc0);
     }
 }
 
