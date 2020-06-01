@@ -265,6 +265,9 @@ public:
     u32 getPC() { return reg.pc; }
     void setPC(u32 val) { reg.pc = val; }
 
+    u32 getPC0() { return reg.pc0; }
+    void setPC0(u32 val) { reg.pc0 = val; }
+
     u16 getIRC() { return queue.irc; }
     void setIRC(u16 val) { queue.irc = val; }
 

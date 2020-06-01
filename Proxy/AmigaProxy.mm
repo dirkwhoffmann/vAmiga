@@ -53,10 +53,6 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getInfo();
 }
-- (u32) getPC
-{
-    return wrapper->cpu->getPC();
-}
 - (DisassembledInstr) getInstrInfo:(NSInteger)index
 {
     return wrapper->cpu->getInstrInfo(index);

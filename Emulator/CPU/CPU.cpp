@@ -217,16 +217,15 @@ CPU::_reset(bool hard)
 void
 CPU::_inspect()
 {
-    u32 pc;
-
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
 
-    pc = getPC();
+    u32 pc0 = getPC0();
 
     // Registers
-    info.pc = pc;
-
+    // info.pc = getPC();
+    info.pc0 = pc0;
+    
     for (int i = 0; i < 8; i++) {
         info.d[i] = getD(i);
         info.a[i] = getA(i);
@@ -238,12 +237,12 @@ CPU::_inspect()
     // Disassemble the program starting at the program counter
     for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
 
-        int bytes = disassemble(pc, info.instr[i].instr);
-        disassemblePC(pc, info.instr[i].addr);
-        disassembleMemory(pc, bytes / 2, info.instr[i].data);
+        int bytes = disassemble(pc0, info.instr[i].instr);
+        disassemblePC(pc0, info.instr[i].addr);
+        disassembleMemory(pc0, bytes / 2, info.instr[i].data);
         info.instr[i].sr[0] = 0;
         info.instr[i].bytes = bytes;
-        pc += bytes;
+        pc0 += bytes;
     }
 
     // Disassemble the most recent entries in the trace buffer
@@ -268,7 +267,7 @@ CPU::_dump()
 {
     _inspect();
     
-    msg("      PC: %8X\n", info.pc);
+    msg("     PC0: %8X\n", info.pc0);
     msg(" D0 - D3: ");
     for (unsigned i = 0; i < 4; i++) msg("%8X ", info.d[i]);
     msg("\n");
