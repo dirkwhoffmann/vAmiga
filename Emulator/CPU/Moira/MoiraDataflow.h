@@ -119,10 +119,10 @@ template<Size S, int delay = 0> bool addressWriteError(u32 addr);
 */
 
 // Prefetches the next instruction
-template<bool last = false> void prefetch();
+template<bool last = false, int delay = 0> void prefetch();
 
 // Performs a full prefetch cycle
-template<bool last = false> void fullPrefetch();
+template<bool last = false, int delay = 0> void fullPrefetch();
 
 // Reads an extension word from memory
 template<bool skip = false> void readExt();

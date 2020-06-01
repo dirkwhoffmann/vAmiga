@@ -249,6 +249,7 @@ struct StatusRegister {
 struct Registers {
 
     u32 pc;               // Program counter
+    u32 pc0;              // Beginning of the currently executed instruction
     StatusRegister sr;    // Status register
 
     union {

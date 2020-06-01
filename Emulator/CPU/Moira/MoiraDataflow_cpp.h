@@ -440,15 +440,20 @@ Moira::addressWriteError(u32 addr)
 }
 */
 
-template<bool last> void
+template<bool last, int delay> void
 Moira::prefetch()
 {
+    // At this point, the program counter points to the beginning of the
+    // next instruction to execute. We save this value for further reference.
+    reg.pc0 = reg.pc;
+    
     if (EMULATE_FC) fcl = 2;
     queue.ird = queue.irc;
+    if (delay) sync(delay);
     queue.irc = readM<Word,last>(reg.pc + 2);
 }
 
-template<bool last> void
+template<bool last, int delay> void
 Moira::fullPrefetch()
 {
     if (EMULATE_FC) fcl = 2;
@@ -461,7 +466,7 @@ Moira::fullPrefetch()
     // if (addressReadError<Word,2>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
-    prefetch<last>();
+    prefetch<last, delay>();
 }
 
 template<bool skip> void
@@ -493,14 +498,18 @@ Moira::jumpToVector(int nr)
     reg.pc = readM<Long>(4 * nr);
 
     // Align the exception pointer to an even address
-    // Note: This is almost certainly wrong.
+    // FIXME: This is wrong.
     // TODO: Find out what the real CPU is doing here
     reg.pc &= ~1;
     
     // Update the prefetch queue
+    fullPrefetch<LAST_BUS_CYCLE,2>();
+    
+    /*
     queue.ird = readM<Word>(reg.pc);
     sync(2);
     queue.irc = readM<Word,LAST_BUS_CYCLE>(reg.pc + 2);
+    */
     
     exceptionJump(nr, reg.pc);
 }

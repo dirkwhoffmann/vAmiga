@@ -1799,8 +1799,9 @@ Moira::execStop(u16 opcode)
     setSR(src);
     flags |= CPU_IS_STOPPED;
 
-    pollIrq();
-
+    // pollIrq();
+    prefetch<LAST_BUS_CYCLE>();
+    
     stopInstr(src);
 }
 

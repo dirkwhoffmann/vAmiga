@@ -74,12 +74,13 @@ Moira::reset()
 void
 Moira::execute()
 {
-    // Check integrity of the CPU_CHECK_IRQ flag
+    // Check the integrity of the CPU flags
     if (reg.ipl > reg.sr.ipl || reg.ipl == 7) assert(flags & CPU_CHECK_IRQ);
-
-    // Check integrity of the CPU_TRACE_FLAG flag
     assert(!!(flags & CPU_TRACE_FLAG) == reg.sr.t);
 
+    // Check the integrity of the program counter
+    assert(reg.pc0 == reg.pc);
+    
     //
     // The quick execution path: Call the instruction handler and return
     //
