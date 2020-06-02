@@ -1179,9 +1179,16 @@ Moira::execMoveq(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMoveToCcr(u16 opcode)
 {
-    int src = _____________xxx(opcode);
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
 
+    int src = _____________xxx(opcode);
     u32 ea, data;
+    
     if (!readOp<M,S>(src, ea, data)) return;
 
     sync(4);
@@ -1189,6 +1196,9 @@ Moira::execMoveToCcr(u16 opcode)
 
     (void)readM<Word>(reg.pc + 2);
     prefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1233,6 +1243,13 @@ Moira::execMoveToSr(u16 opcode)
 
     int src = _____________xxx(opcode);
 
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+
     u32 ea, data;
     if (!readOp<M,S>(src, ea, data)) return;
 
@@ -1241,6 +1258,9 @@ Moira::execMoveToSr(u16 opcode)
 
     (void)readM<Word>(reg.pc + 2);
     prefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void

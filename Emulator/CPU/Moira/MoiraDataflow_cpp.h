@@ -536,6 +536,8 @@ Moira::jumpToVector(int nr)
     if (reg.pc & 1) {
         printf("ODD EXCEPTION %d POINTER: %x\n", nr, reg.pc); 
         reg.pc &= ~1;
+        
+        if (reg.sr.s) assert(false);
     }
     
     // Update the prefetch queue
