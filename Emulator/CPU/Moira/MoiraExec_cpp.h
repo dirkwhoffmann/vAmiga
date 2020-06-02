@@ -102,23 +102,38 @@ Moira::execAbcd(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddEaRg(u16 opcode)
 {
-    u32 ea, data, result;
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
 
+    u32 ea, data, result;
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
-
+    
     if (!readOp<M,S>(src, ea, data)) return;
-
+    
     result = addsub<I,S>(data, readD<S>(dst));
     prefetch<LAST_BUS_CYCLE>();
-
+    
     if (S == Long) sync(2 + (isMemMode(M) ? 0 : 2));
     writeD<S>(dst, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execAddRgEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+
     u32 ea, data, result;
 
     int src = ____xxx_________(opcode);
@@ -129,6 +144,9 @@ Moira::execAddRgEa(u16 opcode)
 
     prefetch();
     writeM<S,LAST_BUS_CYCLE>(ea, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -169,6 +187,11 @@ Moira::execAddiRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddiEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
 
@@ -179,6 +202,9 @@ Moira::execAddiEa(u16 opcode)
     prefetch();
 
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -212,6 +238,11 @@ Moira::execAddqAn(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAddqEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
 
@@ -223,6 +254,9 @@ Moira::execAddqEa(u16 opcode)
     prefetch();
 
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
