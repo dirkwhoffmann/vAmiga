@@ -56,6 +56,11 @@ Moira::execShiftIm(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execShiftEa(u16 op)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S == Word) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI && S == Word) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX && S == Word) aeFlags = DEC_PC_BY_2;
+
     int src = _____________xxx(op);
 
     u32 ea, data;
@@ -64,6 +69,9 @@ Moira::execShiftEa(u16 op)
     prefetch();
 
     writeM<S,LAST_BUS_CYCLE>(ea, shift<I,S>(1, data));
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -103,7 +111,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execAddEaRg(u16 opcode)
 {
     // Configure stack frame format
-    if (S != Long && M == MODE_PD) aeFlags = INC_PC_BY_2;
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
@@ -153,7 +161,7 @@ template<Instr I, Mode M, Size S> void
 Moira::execAdda(u16 opcode)
 {
     // Configure stack frame format
-    if (S != Long && M == MODE_PD) aeFlags = INC_PC_BY_2;
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
@@ -325,6 +333,13 @@ Moira::execAddxEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndEaRg(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -336,11 +351,19 @@ Moira::execAndEaRg(u16 opcode)
 
     if (S == Long) sync(isRegMode(M) || isImmMode(M) ? 4 : 2);
     writeD<S>(dst, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execAndRgEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+
     int src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
 
@@ -352,6 +375,9 @@ Moira::execAndRgEa(u16 opcode)
 
     if (S == Long && isRegMode(M)) sync(4);
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -370,6 +396,11 @@ Moira::execAndiRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execAndiEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+
     u32 ea, data, result;
 
     u32 src = readI<S>();
@@ -381,6 +412,9 @@ Moira::execAndiEa(u16 opcode)
     prefetch();
 
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
