@@ -183,6 +183,13 @@ Moira::updateAnPD(int n)
 }
 
 template<Mode M, Size S> void
+Moira::undoAnPD(int n)
+{
+    // -(An)
+    if (M == 4) reg.a[n] += (n == 7 && S == Byte) ? 2 : S;
+}
+
+template<Mode M, Size S> void
 Moira::updateAnPI(int n)
 {
     // (An)+
@@ -378,6 +385,8 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
     // Apply modification flags
     if (aeFlags & INC_PC_BY_2)    frame.pc += 2;
     if (aeFlags & DEC_PC_BY_2)    frame.pc -= 2;
+    if (aeFlags & INC_ADDR_BY_2)  frame.addr += 2;
+    if (aeFlags & DEC_ADDR_BY_2)  frame.addr -= 2;
     if (aeFlags & SET_CODE_BIT_3) frame.code |= (1 << 3);
     if (aeFlags & CLR_CODE_BIT_3) frame.code &= ~(1 << 3);
     

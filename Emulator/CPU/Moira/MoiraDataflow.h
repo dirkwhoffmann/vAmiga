@@ -76,6 +76,7 @@ template<Mode M, Size S, bool skip = false> u32 computeEA(u32 n);
 // Emulates the address register modification for modes (An)+, (An)-
 template<Mode M, Size S> void updateAn(int n);
 template<Mode M, Size S> void updateAnPD(int n);
+template<Mode M, Size S> void undoAnPD(int n);
 template<Mode M, Size S> void updateAnPI(int n);
 
 // Reads an operand from memory (without or with address error checking)

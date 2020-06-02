@@ -234,10 +234,12 @@ typedef struct
 AEStackFrame;
 
 typedef u16 AEStackFrameFlags;
-static const u16 INC_PC_BY_2 =    (1 << 0);
-static const u16 DEC_PC_BY_2 =    (1 << 1);
-static const u16 SET_CODE_BIT_3 = (1 << 2);
-static const u16 CLR_CODE_BIT_3 = (1 << 3);
+static const u16 INC_PC_BY_2    = (1 << 0);
+static const u16 DEC_PC_BY_2    = (1 << 1);
+static const u16 INC_ADDR_BY_2  = (1 << 2);
+static const u16 DEC_ADDR_BY_2  = (1 << 3);
+static const u16 SET_CODE_BIT_3 = (1 << 4);
+static const u16 CLR_CODE_BIT_3 = (1 << 5);
 
 struct StatusRegister {
 
