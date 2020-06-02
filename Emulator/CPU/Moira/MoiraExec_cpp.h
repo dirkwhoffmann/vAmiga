@@ -103,11 +103,11 @@ template<Instr I, Mode M, Size S> void
 Moira::execAddEaRg(u16 opcode)
 {
     // Configure stack frame format
-    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+    if (S != Long && M == MODE_PD) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
 
     u32 ea, data, result;
     
@@ -130,9 +130,9 @@ template<Instr I, Mode M, Size S> void
 Moira::execAddRgEa(u16 opcode)
 {
     // Configure stack frame format
-    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (S != Long && M == MODE_PD) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
 
     u32 ea, data, result;
 
@@ -188,9 +188,9 @@ template<Instr I, Mode M, Size S> void
 Moira::execAddiEa(u16 opcode)
 {
     // Configure stack frame format
-    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -239,9 +239,9 @@ template<Instr I, Mode M, Size S> void
 Moira::execAddqEa(u16 opcode)
 {
     // Configure stack frame format
-    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
 
     i8  src = ____xxx_________(opcode);
     int dst = _____________xxx(opcode);
