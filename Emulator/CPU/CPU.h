@@ -58,7 +58,9 @@ public:
         & queue.ird
 
         & ipl
-        & fcl;
+        & fcl
+        & aeFlags
+        & exception;
     }
 
     //
@@ -109,7 +111,9 @@ private:
     void traceFlagSet() override;
     void traceFlagCleared() override;
     
-    void addressErrorException(u16 addr, bool read) override;
+    // void addressErrorException(u16 addr, bool read) override;
+    void addressErrorHandler(moira::AEStackFrame &frame) override;
+    
     void lineAException(u16 opcode) override;
     void lineFException(u16 opcode) override;
     void illegalOpcodeException(u16 opcode) override;

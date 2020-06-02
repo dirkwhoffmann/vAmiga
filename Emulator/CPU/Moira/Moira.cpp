@@ -19,6 +19,7 @@ namespace moira {
 #include "MoiraInit_cpp.h"
 #include "MoiraALU_cpp.h"
 #include "MoiraDataflow_cpp.h"
+#include "MoiraExceptions_cpp.h"
 #include "MoiraExec_cpp.h"
 #include "StrWriter_cpp.h"
 #include "MoiraDasm_cpp.h"
@@ -273,6 +274,20 @@ Moira::setSupervisorMode(bool enable)
         reg.ssp = reg.a[7];
         reg.a[7] = reg.usp;
     }
+}
+
+void
+Moira::setFC(FunctionCode value)
+{
+    if (!EMULATE_FC) return;
+    fcl = value;
+}
+
+template<Mode M> void
+Moira::setFC()
+{
+    if (!EMULATE_FC) return;
+    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? FC_USER_PROG : FC_USER_DATA;
 }
 
 void

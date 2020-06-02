@@ -8,7 +8,6 @@
 // -----------------------------------------------------------------------------
 
 // Saves information to stack for group 0 exceptions
-// void saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code); // DEPRECATED
 void saveToStack(AEStackFrame &frame);
 
 // Saves information to stack for group 1 and group 2 exceptions

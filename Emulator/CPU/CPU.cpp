@@ -90,13 +90,10 @@ CPU::traceFlagCleared()
 }
 
 void
-CPU::addressErrorException(u16 addr, bool read)
+CPU::addressErrorHandler(moira::AEStackFrame &frame)
 {
-    if (read) {
-        debug(XFILES, "XFILES (CPU): Address read error exception (%x)\n", addr);
-    } else {
-        debug(XFILES, "XFILES (CPU): Address write error exception (%x)\n", addr);
-    }
+    debug(XFILES, "XFILES (CPU): Address error exception %x %x %x %x %x\n",
+          frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
@@ -145,7 +142,11 @@ CPU::interruptException(u8 level)
 void
 CPU::exceptionJump(int nr, u32 addr)
 {
-    // debug(IRQ_DEBUG, "Exception %d: Changing PC from %x to %x\n", nr oldpc, newpc);
+    bool isIrqException = nr >= 24 && nr <= 31;
+
+    if (isIrqException) {
+        debug(IRQ_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+    }
 }
 
 void

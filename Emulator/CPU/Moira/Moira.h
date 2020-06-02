@@ -118,6 +118,12 @@ protected:
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
     
+    // Modification flags used for building address error stack frames
+    AEStackFrameFlags aeFlags;
+        
+    // Remembers the number of the last processed exception
+    int exception;
+
     // Jump table holding the instruction handlers
     void (Moira::*exec[65536])(u16);
 
@@ -217,7 +223,7 @@ protected:
     virtual void traceFlagSet() { };
     virtual void traceFlagCleared() { };
 
-    // Exception delegates
+    // Exception delegates (DEPRECATED)
     virtual void addressErrorException(u16 addr, bool read) { };
     virtual void lineAException(u16 opcode) { };
     virtual void lineFException(u16 opcode) { };
@@ -228,6 +234,9 @@ protected:
     virtual void interruptException(u8 level) { };
     virtual void exceptionJump(int nr, u32 addr) { };
 
+    // Exception delegates
+    virtual void addressErrorHandler(AEStackFrame &frame) { };
+    
     // Called when a breakpoint is reached
     virtual void breakpointReached(u32 addr) { };
 
@@ -309,13 +318,21 @@ protected:
     template<Size S = Long> void writeR(int n, u32 v);
 
     //
-    // Accessing the function code pins
+    // Managing the function code pins
     //
-
+    
 public:
     
     // Returns the current value on the function code pins
     FunctionCode readFC() { return (FunctionCode)((reg.sr.s ? 4 : 0) | fcl); }
+
+    private:
+    
+    // Sets the function code pins to a specific value
+    void setFC(FunctionCode value);
+
+    // Sets the function code pins according the the provided addressing mode
+    template<Mode M> void setFC();
 
 
     //
@@ -339,7 +356,7 @@ private:
     #include "MoiraInit.h"
     #include "MoiraALU.h"
     #include "MoiraDataflow.h"
-    #include "MoiraExec.h"
+    #include "MoiraExceptions.h"
     #include "MoiraDasm.h"
 };
 

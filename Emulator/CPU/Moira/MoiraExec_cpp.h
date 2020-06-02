@@ -27,271 +27,6 @@
 #define ____x___________(opcode) (u16)((opcode >> 11) & 0b1)
 #define xxxx____________(opcode) (u16)((opcode >> 12) & 0b1111)
 
-void
-Moira::saveToStack(AEStackFrame &frame)
-{
-    // Push PC
-    push<Word>((u16)frame.pc);
-    push<Word>(frame.pc >> 16);
-    
-    // Push SR and IRD
-    push<Word>(frame.sr);
-    push<Word>(frame.ird);
-    
-    // Push address
-    push<Word>((u16)frame.addr);
-    push<Word>(frame.addr >> 16);
-    
-    // Push memory access type and function code
-    push<Word>(frame.code);
-}
-
-/*
-void
-Moira::saveToStackDetailed(u16 sr, u32 addr, u32 pc, u16 code)
-{
-    // Push PC
-    push<Word>((u16)pc);
-    push<Word>(pc >> 16);
-
-    // Push SR and IRD
-    push<Word>(sr);
-    push<Word>(queue.ird);
-
-    // Push address
-    push<Word>((u16)addr);
-    push<Word>(addr >> 16);
-
-    // Push memory access type and function code
-    push<Word>(code);
-}
-*/
-
-void
-Moira::saveToStackBrief(u16 sr, u32 pc)
-{
-    if (MIMIC_MUSASHI) {
-
-        push<Long>(pc);
-        push<Word>(sr);
-
-    } else {
-
-        reg.sp -= 6;
-        writeM<Word>(reg.sp + 4, pc & 0xFFFF);
-        writeM<Word>(reg.sp + 0, sr);
-        writeM<Word>(reg.sp + 2, pc >> 16);
-    }
-}
-
-void
-Moira::execAddressError(AEStackFrame frame, int delay)
-{
-    // printf("ADDRESS ERROR VIOLATION: %x\n", frame.addr);    
-    assert(frame.addr & 1);
-    
-    sync(delay);
-    
-    // Enter supervisor mode
-    setSupervisorMode(true);
-    
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write stack frame
-    sync(8);
-    saveToStack(frame);
-    sync(2);
-
-    jumpToVector(3);
-}
-
-/*
-void
-Moira::execAddressError(u32 addr, u32 pc, bool read)
-{
-    assert(addr & 1);
-
-    addressErrorException(addr, read);
-    u16 status = getSR();
-
-    // Memory access type and function code
-    u16 code = (queue.ird & 0xFFE0) | readFC();
-    if (read) code |= 0x10;
-
-    // Enter supervisor mode and update the status register
-    setSupervisorMode(true);
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(8);
-    saveToStackDetailed(status, addr, pc, code);
-    sync(2);
-
-    jumpToVector(3);
-}
-*/
-
-void
-Moira::execUnimplemented(int nr)
-{
-    u16 status = getSR();
-    
-    // Enter supervisor mode
-    setSupervisorMode(true);
-    
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(4);
-    saveToStackBrief(status, reg.pc - 2);
-
-    jumpToVector(nr);
-}
-
-void
-Moira::execLineA(u16 opcode)
-{
-    lineAException(opcode);
-    
-    execUnimplemented(10);
-}
-
-void
-Moira::execLineF(u16 opcode)
-{
-    lineFException(opcode);
-
-    execUnimplemented(11);
-}
-
-void
-Moira::execIllegal(u16 opcode)
-{
-    illegalOpcodeException(opcode);
-    
-    u16 status = getSR();
-
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(4);
-    saveToStackBrief(status, reg.pc - 2);
-
-    jumpToVector(4);
-}
-
-void
-Moira::execTraceException()
-{
-    traceException();
-    
-    u16 status = getSR();
-
-    // Recover from stop state
-    flags &= ~CPU_IS_STOPPED;
-
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(4);
-    saveToStackBrief(status, reg.pc);
-
-    jumpToVector(9);
-}
-
-void
-Moira::execTrapException(int nr)
-{
-    trapException();
-    
-    u16 status = getSR();
-
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing, but keep the CPU_TRACE_EXCEPTION flag
-    clearTraceFlag();
-
-    // Write exception information to stack
-    saveToStackBrief(status);
-
-    jumpToVector(nr);
-}
-
-void
-Moira::execPrivilegeException()
-{
-    privilegeException();
-    
-    u16 status = getSR();
-
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(4);
-    saveToStackBrief(status, reg.pc - 2);
-
-    jumpToVector(8);
-}
-
-void
-Moira::execIrqException(int level)
-{
-    assert(level < 8);
-    interruptException(level);
-    
-    // Remember the current value of the status register
-    u16 status = getSR();
-
-    // Recover from stop state
-    flags &= ~CPU_IS_STOPPED;
-
-    // Clear the polled IPL value
-    reg.ipl = 0;
-
-    // Temporarily raise the interrupt threshold
-    reg.sr.ipl = level;
-    
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-        
-    sync(6);
-    reg.sp -= 6;
-    writeM<Word>(reg.sp + 4, reg.pc & 0xFFFF);
-
-    u8 vector = getIrqVector(level);
-
-    sync(4);
-    writeM<Word>(reg.sp + 0, status);
-    writeM<Word>(reg.sp + 2, reg.pc >> 16);
-
-    jumpToVector(vector);
-}
-
 template<Instr I, Mode M, Size S> void
 Moira::execShiftRg(u16 opcode)
 {
@@ -991,13 +726,10 @@ Moira::execJsr(u16 opcode)
 
     // Check for address error
     if (misaligned<Word>(ea)) {
-        
         if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
             execAddressError(makeFrame(ea, oldpc));
-            // if (addressReadError<Word>(ea, oldpc)) return;
         } else {
             execAddressError(makeFrame(ea));
-            // if (addressReadError<Word>(ea)) return;
         }
         return;
     }
@@ -1035,8 +767,9 @@ Moira::execLink(u16 opcode)
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
 
-    if (EMULATE_FC) fcl = 1;
-    
+    // Update the function code pins
+    setFC(FC_USER_DATA);
+
     // Check for address error
     if (misaligned<Long>(sp)) {
         writeA(ax, sp);
@@ -1131,20 +864,28 @@ Moira::execMove4(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
+    // Configure stack frame format
+    aeFlags = reg.sr.c ? SET_CODE_BIT_3 : CLR_CODE_BIT_3;
+
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    prefetch();
+    newPrefetch();
     sync(-2);
-
+    
     ea = computeEA<MODE_PD,S>(dst);
 
+    setFC<M>();
     bool error; writeMrev<S,LAST_BUS_CYCLE>(ea, data, error);
-    if (error) return;
-
+    
     updateAn<MODE_PD,S>(dst);
+
+    if (!error) compensateNewPrefetch();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1468,11 +1209,21 @@ Moira::execMoveFromSrEa(u16 opcode)
 {
     int dst = _____________xxx(opcode);
 
+    // Configure stack frame format
+    if (M == MODE_PD) aeFlags |= INC_PC_BY_2;
+    if (M == MODE_DI) aeFlags |= DEC_PC_BY_2;
+    if (M == MODE_IX) aeFlags |= DEC_PC_BY_2;
+
     u32 ea, data;
     if (!readOp<M,S>(dst, ea, data)) return;
-    prefetch();
+    newPrefetch();
 
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, getSR());
+
+    compensateNewPrefetch();
+
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1714,7 +1465,8 @@ Moira::execRte(u16 opcode)
     
     SUPERVISOR_MODE_ONLY
 
-    if (EMULATE_FC) fcl = 1;
+    // Update the function code pins
+    setFC(FC_USER_DATA);
 
     u16 newsr = readM<Word>(reg.sp);
     reg.sp += 2;
@@ -1725,13 +1477,14 @@ Moira::execRte(u16 opcode)
     setPC(newpc);
     setSR(newsr);
 
-    fullPrefetch<LAST_BUS_CYCLE>();
+    fullPrefetch<LAST_BUS_CYCLE>();    
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
 {
-    if (EMULATE_FC) fcl = 1;
+    // Update the function code pins
+    setFC(FC_USER_DATA);
 
     u16 newccr = readM<Word>(reg.sp);
     reg.sp += 2;
@@ -1748,7 +1501,8 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    if (EMULATE_FC) fcl = 1;
+    // Update the function code pins
+    setFC(FC_USER_DATA);
 
     bool error;
     u32 newpc = readM<Long>(reg.sp, error);

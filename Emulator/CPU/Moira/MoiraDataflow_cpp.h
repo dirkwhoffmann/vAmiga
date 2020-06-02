@@ -21,9 +21,7 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     ea = computeEA<M,S>(n);
 
     // Update the function code pins
-    if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
-    assert(isPrgMode(M) == (fcl == 2));
-    assert(!isPrgMode(M) == (fcl == 1));
+    setFC<M>();
 
     // Read from effective address
     bool error; result = readM<S>(ea, error);
@@ -52,9 +50,7 @@ Moira::writeOp(int n, u32 val)
     u32 ea = computeEA<M,S>(n);
 
     // Update the function code pins
-    if (EMULATE_FC) fcl = (M == MODE_DIPC || M == MODE_PCIX) ? 2 : 1;
-    assert(isPrgMode(M) == (fcl == 2));
-    assert(!isPrgMode(M) == (fcl == 1));
+    setFC<M>();
 
     // Write to effective address
     bool error; writeM<S,last>(ea, val, error);
@@ -259,8 +255,6 @@ Moira::writeM(u32 addr, u32 val)
         return;
     }
 
-    if (EMULATE_FC) fcl = 1;
-
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
@@ -284,8 +278,6 @@ Moira::writeM(u32 addr, u32 val)
 template<Size S, bool last> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
-    if (EMULATE_FC) fcl = 1;
-    
     if ((error = misaligned<S>(addr))) {
         execAddressError(makeFrame(addr, true /* write */), 2);
         return;
@@ -382,7 +374,13 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
     frame.ird = ird;
     frame.sr = sr;
     frame.pc = pc;
-        
+    
+    // Apply modification flags
+    if (aeFlags & INC_PC_BY_2)    frame.pc += 2;
+    if (aeFlags & DEC_PC_BY_2)    frame.pc -= 2;
+    if (aeFlags & SET_CODE_BIT_3) frame.code |= (1 << 3);
+    if (aeFlags & CLR_CODE_BIT_3) frame.code &= ~(1 << 3);
+    
     return frame;
 }
 
@@ -447,16 +445,47 @@ Moira::prefetch()
     // next instruction to execute. We save this value for further reference.
     reg.pc0 = reg.pc;
     
-    if (EMULATE_FC) fcl = 2;
+    // Update the function code pins
+    setFC(FC_USER_PROG);
+
     queue.ird = queue.irc;
     if (delay) sync(delay);
     queue.irc = readM<Word,last>(reg.pc + 2);
 }
 
 template<bool last, int delay> void
+Moira::newPrefetch()
+{
+    /* Whereas pc is a moving target (it moves forward while an instruction is
+     * being processed, pc0 stays stable throughout instruction execution. It
+     * always points to the start address of the currently executed instruction.
+     */
+    reg.pc0 = reg.pc;
+    
+    // Update the function code pins
+    setFC(FC_USER_PROG);
+
+    queue.ird = queue.irc;
+    if (delay) sync(delay);
+    reg.pc += 2;
+    queue.irc = readM<Word,last>(reg.pc);
+}
+
+void
+Moira::compensateNewPrefetch()
+{
+    // THIS METHOD MUST BE CALLED WHEN THE NEW PREFETCH FUNCTION IS USED.
+    // IT FIXES THE PROGRAM COUNTER TO BE COMPATIBLE WITH THE OLD SEMANTICS
+    // OF THE PC. ONCE ALL FUNCIONS USE THE NEW PREFETCH STYLE, THIS FUNCTION
+    // WILL BE DELETET ENTIRELY.
+    reg.pc -= 2;
+}
+
+template<bool last, int delay> void
 Moira::fullPrefetch()
 {
-    if (EMULATE_FC) fcl = 2;
+    // Update the function code pins
+    setFC(FC_USER_PROG);
     
     // TODO: In theory, all PC address errors should be intercepted by now
     if (misaligned<Word>(reg.pc)) {
@@ -476,7 +505,8 @@ Moira::readExt()
     
     if (!skip) {
         
-        if (EMULATE_FC) fcl = 2;
+        // Update the function code pins
+        setFC(FC_USER_PROG);
         
         // Check for address error
         if (misaligned<Word>(reg.pc)) {
@@ -492,15 +522,21 @@ Moira::readExt()
 void
 Moira::jumpToVector(int nr)
 {
-    if (EMULATE_FC) fcl = 1;
+    exception = nr;
     
+    // Update the function code pins
+    setFC(FC_USER_DATA);
+
     // Update the program counter
     reg.pc = readM<Long>(4 * nr);
 
     // Align the exception pointer to an even address
     // FIXME: This is wrong.
     // TODO: Find out what the real CPU is doing here
-    reg.pc &= ~1;
+    if (reg.pc & 1) {
+        printf("ODD EXCEPTION %d POINTER: %x\n", nr, reg.pc); 
+        reg.pc &= ~1;
+    }
     
     // Update the prefetch queue
     fullPrefetch<LAST_BUS_CYCLE,2>();

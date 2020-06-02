@@ -114,6 +114,7 @@
 		508FE05F21EA22CC0043D0E9 /* ExportDiskDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
+		50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */ = {isa = PBXBuildFile; fileRef = 50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */; };
 		50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50950ED622881B7A0073F755 /* ZorroManager.cpp */; };
 		509CF4CD22083F9800C500F0 /* CPUPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CC22083F9800C500F0 /* CPUPanel.swift */; };
 		509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509CF4CE220847C600C500F0 /* InstrTableView.swift */; };
@@ -317,6 +318,7 @@
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
+		50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions_cpp.h; sourceTree = "<group>"; };
 		50950ED622881B7A0073F755 /* ZorroManager.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ZorroManager.cpp; sourceTree = "<group>"; };
 		50950ED722881B7A0073F755 /* ZorroManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZorroManager.h; sourceTree = "<group>"; };
 		509CF4CC22083F9800C500F0 /* CPUPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CPUPanel.swift; sourceTree = "<group>"; };
@@ -375,7 +377,7 @@
 		50E204E82295A3F20082B63D /* DmaDebugger.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DmaDebugger.cpp; sourceTree = "<group>"; };
 		50E204E92295A3F20082B63D /* DmaDebugger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebugger.h; sourceTree = "<group>"; };
 		50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDasm_cpp.h; sourceTree = "<group>"; };
-		50E2BE27240D418500155AE4 /* MoiraExec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExec.h; sourceTree = "<group>"; };
+		50E2BE27240D418500155AE4 /* MoiraExceptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraExceptions.h; sourceTree = "<group>"; };
 		50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraInit_cpp.h; sourceTree = "<group>"; };
 		50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MoiraDebugger.cpp; sourceTree = "<group>"; };
 		50E2BE2A240D418500155AE4 /* MoiraDataflow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MoiraDataflow.h; sourceTree = "<group>"; };
@@ -873,8 +875,9 @@
 				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
 				50E2BE29240D418500155AE4 /* MoiraDebugger.cpp */,
 				50E2BE2B240D418500155AE4 /* MoiraDebugger.h */,
+				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,
+				50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */,
 				50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */,
-				50E2BE27240D418500155AE4 /* MoiraExec.h */,
 				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
 				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
@@ -1088,6 +1091,7 @@
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
+				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
