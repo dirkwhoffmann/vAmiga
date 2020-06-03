@@ -1005,7 +1005,7 @@ Moira::execMove2(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
     
-    if (M != MODE_DN && M != MODE_AN && M != MODE_IM) {
+    if (S == Word || (M != MODE_DN && M != MODE_AN && M != MODE_IM)) {
         reg.sr.n = NBIT<Word>(data);
         reg.sr.z = ZERO<Word>(data);
         reg.sr.v = 0;
@@ -1015,7 +1015,7 @@ Moira::execMove2(u16 opcode)
     // Configure stack frame format
     aeFlags = INC_PC_BY_2;
     
-    if (!writeOp<MODE_AI,S>(dst, data)) return;
+    if (!writeOp<MODE_AI,S>(dst, data)  ) return;
     prefetch<LAST_BUS_CYCLE>();
     
     reg.sr.n = NBIT<S>(data);
@@ -1030,6 +1030,13 @@ Moira::execMove2(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove3(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+
     u32 ea, data;
 
     int src = _____________xxx(opcode);
@@ -1037,13 +1044,26 @@ Moira::execMove3(u16 opcode)
 
     if (!readOp<M,S>(src, ea, data)) return;
 
+    if (S == Word || (M != MODE_DN && M != MODE_AN && M != MODE_IM)) {
+        reg.sr.n = NBIT<Word>(data);
+        reg.sr.z = ZERO<Word>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+
+    if (!writeOp<MODE_PI,S>(dst, data)) return;
+    prefetch<LAST_BUS_CYCLE>();
+
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    if (!writeOp<MODE_PI,S>(dst, data)) return;
-    prefetch<LAST_BUS_CYCLE>();
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1080,13 +1100,14 @@ Moira::execMove4(u16 opcode)
 
     setFC<M>();
     bool error; writeMrev<S,LAST_BUS_CYCLE>(ea, data, error);
-    
     updateAn<MODE_PD,S>(dst);
 
-    if (!error) compensateNewPrefetch();
-    
+    if (error) return;
+
     // Revert to standard stack frame format
     aeFlags = 0;
+
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
