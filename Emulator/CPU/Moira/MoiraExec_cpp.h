@@ -779,6 +779,7 @@ Moira::execDbcc(u16 opcode)
 
         bool takeBranch = readD<Word>(dn) != 0;
         
+        // Check for address error
         if (misaligned<S>(newpc)) {
             execAddressError(makeFrame(newpc, newpc + 2));
             return;
@@ -870,6 +871,7 @@ Moira::execJmp(u16 opcode)
     
     // Check for address error
     if (misaligned<Word>(ea)) {
+        // printf("");
         execAddressError(makeFrame(ea, oldpc));
         return;
     }
@@ -959,6 +961,13 @@ Moira::execLink(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove0(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    
     u32 ea, data;
 
     int src = _____________xxx(opcode);
@@ -974,25 +983,48 @@ Moira::execMove0(u16 opcode)
     if (!writeOp<MODE_DN,S>(dst, data)) return;
 
     prefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMove2(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    
     u32 ea, data;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     if (!readOp<M,S>(src, ea, data)) return;
-
+    
+    if (M != MODE_DN && M != MODE_AN && M != MODE_IM) {
+        reg.sr.n = NBIT<Word>(data);
+        reg.sr.z = ZERO<Word>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+    }
+    
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+    
+    if (!writeOp<MODE_AI,S>(dst, data)) return;
+    prefetch<LAST_BUS_CYCLE>();
+    
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     reg.sr.v = 0;
     reg.sr.c = 0;
-
-    if (!writeOp<MODE_AI,S>(dst, data)) return;
-    prefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
