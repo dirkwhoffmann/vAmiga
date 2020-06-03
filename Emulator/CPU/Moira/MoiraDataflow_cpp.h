@@ -389,6 +389,7 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
     if (aeFlags & DEC_ADDR_BY_2)  frame.addr -= 2;
     if (aeFlags & SET_CODE_BIT_3) frame.code |= (1 << 3);
     if (aeFlags & CLR_CODE_BIT_3) frame.code &= ~(1 << 3);
+    aeFlags = 0;
     
     return frame;
 }

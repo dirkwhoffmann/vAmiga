@@ -576,6 +576,13 @@ Moira::execBsr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execChk(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -583,6 +590,9 @@ Moira::execChk(u16 opcode)
     u32 ea, data, dy;
     if (!readOp<M,S>(src, ea, data)) return;
     dy = readD<S>(dst);
+
+    // Revert to standard stack frame format
+    aeFlags = 0;
 
     // printf("M: %d S: %d execChk: dst = %d (%x) ea = %x data = %x\n", M, S, dst, dy, ea, data);
     prefetch<LAST_BUS_CYCLE>();
@@ -612,12 +622,17 @@ Moira::execChk(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execClr(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+
     int dst = _____________xxx(opcode);
 
     u32 ea, data;
     if (!readOp<M,S>(dst, ea, data)) return;
 
-    isMemMode(M) ? prefetch() : prefetch<LAST_BUS_CYCLE>();
+    isMemMode(M) ? newPrefetch() : newPrefetch<LAST_BUS_CYCLE>();
 
     if (S == Long && isRegMode(M)) sync(2);
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, 0);
@@ -626,11 +641,23 @@ Moira::execClr(u16 opcode)
     reg.sr.z = 1;
     reg.sr.v = 0;
     reg.sr.c = 0;
+    
+    compensateNewPrefetch();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execCmp(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -638,14 +665,26 @@ Moira::execCmp(u16 opcode)
     if (!readOp<M,S>(src, ea, data)) return;
 
     cmp<S>(data, readD<S>(dst));
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
 
     if (S == Long) sync(2);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execCmpa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -654,9 +693,14 @@ Moira::execCmpa(u16 opcode)
 
     data = SEXT<S>(data);
     cmp<Long>(data, readA(dst));
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
 
     sync(2);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -665,28 +709,45 @@ Moira::execCmpiRg(u16 opcode)
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
 
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
 
     if (S == Long) sync(2);
     cmp<S>(src, readD<S>(dst));
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execCmpiEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
 
     u32 ea, data;
     if (!readOp<M,S>(dst, ea, data)) return;
-    prefetch();
+    newPrefetch();
 
     cmp<S>(src, data);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execCmpm(u16 opcode)
 {
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
@@ -696,24 +757,38 @@ Moira::execCmpm(u16 opcode)
     if (!readOp<M,S>(dst, ea2, data2)) return;
 
     cmp<S>(data1, data2);
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execDbcc(u16 opcode)
 {
+    if (I == BRA) {
+        printf("execDBRA M = %d S = %d cond = %d\n", M, S, cond<I>());
+    }
     sync(2);
     if (!cond<I>()) {
 
         int dn = _____________xxx(opcode);
         u32 newpc = reg.pc + (i16)queue.irc;
 
+        bool takeBranch = readD<Word>(dn) != 0;
+        
+        if (misaligned<S>(newpc)) {
+            execAddressError(makeFrame(newpc, newpc + 2));
+            return;
+        }
+        
         // Decrement loop counter
         writeD<Word>(dn, readD<Word>(dn) - 1);
 
-        // Take branch if Dn does not equal -1
-        if ((i16)readD<Word>(dn) != -1) {
-
+        // Branch
+        if (takeBranch) {
             reg.pc = newpc;
             fullPrefetch<LAST_BUS_CYCLE>();
             return;
@@ -1424,14 +1499,23 @@ Moira::execDiv(u16 opcode)
         return;
     }
 
+    // Configure stack frame format
+    if (M == MODE_PD) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 ea, divisor, result;
     if (!readOp<M, Word>(src, ea, divisor)) return;
-
     u32 dividend = readD(dst);
 
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
     // Check for division by zero
     if (divisor == 0) {
 
