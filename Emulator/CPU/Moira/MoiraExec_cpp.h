@@ -1069,6 +1069,15 @@ Moira::execMove3(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMove4(u16 opcode)
 {
+    u16 ird = getIRD();
+    
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+
     u32 ea, data;
 
     int src = _____________xxx(opcode);
@@ -1082,11 +1091,10 @@ Moira::execMove4(u16 opcode)
      *  transfer size (byte, word or long), and disregarding the source
      *  addressing mode."
      */
-
     if (!readOp<M,S>(src, ea, data)) return;
 
     // Configure stack frame format
-    aeFlags = reg.sr.c ? SET_CODE_BIT_3 : CLR_CODE_BIT_3;
+    aeFlags = S == Long ? 0 : reg.sr.c ? SET_CODE_BIT_3 : CLR_CODE_BIT_3;
 
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
@@ -1095,15 +1103,27 @@ Moira::execMove4(u16 opcode)
 
     newPrefetch();
     sync(-2);
-    
+
+    setFC<MODE_PD>();
     ea = computeEA<MODE_PD,S>(dst);
+    
+    // Check for address error
+    if (misaligned<S>(ea)) {
+        if (S == Long) {
+            undoAnPD<MODE_PD, S>(dst);
+            execAddressError(makeFrame(ea + 2, reg.pc, getSR(), ird, true /* write */));
+        } else {
+            execAddressError(makeFrame(ea, true /* write */), 2);
+        }
+                
+        updateAn<MODE_PD,S>(dst);
+        return;
+    }
 
-    setFC<M>();
-    bool error; writeMrev<S,LAST_BUS_CYCLE>(ea, data, error);
+    // bool error; writeMrev<S,LAST_BUS_CYCLE>(ea, data, error);
+    writeMrev<S,LAST_BUS_CYCLE>(ea, data);
     updateAn<MODE_PD,S>(dst);
-
-    if (error) return;
-
+    
     // Revert to standard stack frame format
     aeFlags = 0;
 
