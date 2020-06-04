@@ -1667,11 +1667,11 @@ Moira::execDiv(u16 opcode)
     }
 
     // Configure stack frame format
-    if (M == MODE_PD) aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PD)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -1742,7 +1742,7 @@ Moira::execNbcd(u16 opcode)
 
         case 0: // Dn
         {
-            prefetch<LAST_BUS_CYCLE>();
+            newPrefetch<LAST_BUS_CYCLE>();
 
             sync(2);
             writeD<Byte>(reg, bcd<SBCD,Byte>(readD<Byte>(reg), 0));
@@ -1752,11 +1752,13 @@ Moira::execNbcd(u16 opcode)
         {
             u32 ea, data;
             if (!readOp<M,Byte>(reg, ea, data)) return;
-            prefetch();
+            newPrefetch();
             writeM<Byte,LAST_BUS_CYCLE>(ea, bcd<SBCD,Byte>(data, 0));
             break;
         }
     }
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1777,15 +1779,25 @@ Moira::execNegRg(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNegEa(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+
     int dst = ( _____________xxx(opcode) );
     u32 ea, data;
 
     if (!readOp<M,S>(dst, ea, data)) return;
-
+    
     data = logic<I,S>(data);
-    prefetch();
+    newPrefetch();
 
     writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, data);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
