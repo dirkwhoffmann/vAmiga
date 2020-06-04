@@ -406,48 +406,6 @@ Moira::makeFrame(u32 addr, bool write)
     return makeFrame(addr, getPC(), getSR(), getIRD(), write);
 }
 
-/*
-template <Size S, int delay> bool
-Moira::addressReadError(u32 addr, u32 pc)
-{
-    if (EMULATE_ADDRESS_ERROR) {
-
-        if ((addr & 1) && S != Byte) {
-            sync(delay);
-            execAddressError(addr, pc, true);
-            return true;
-        }
-    }
-    return false;
-}
-
-template <Size S, int delay> bool
-Moira::addressReadError(u32 addr)
-{
-    return addressReadError <S,delay> (addr, reg.pc);
-}
-
-template <Size S, int delay> bool
-Moira::addressWriteError(u32 addr, u32 pc)
-{
-    if (EMULATE_ADDRESS_ERROR) {
-
-        if ((addr & 1) && S != Byte) {
-            sync(delay);
-            execAddressError(addr, pc, false);
-            return true;
-        }
-    }
-    return false;
-}
-
-template <Size S, int delay> bool
-Moira::addressWriteError(u32 addr)
-{
-    return addressWriteError <S,delay> (addr, reg.pc);
-}
-*/
-
 template<bool last, int delay> void
 Moira::prefetch()
 {

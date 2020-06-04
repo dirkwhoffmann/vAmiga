@@ -1275,19 +1275,42 @@ Moira::execMove8(u16 opcode)
      */
     if (isMemMode(M)) {
 
+        // Configure stack frame format
+        if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+        if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+        if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+        if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+        if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+        
         if (!readOp<M,S>(src, ea, data)) return;
 
-        reg.sr.n = NBIT<S>(data);
-        reg.sr.z = ZERO<S>(data);
+        // Configure stack frame format
+        aeFlags = 0;
+        
+        reg.sr.n = NBIT<Word>(data);
+        reg.sr.z = ZERO<Word>(data);
         reg.sr.v = 0;
         reg.sr.c = 0;
 
         u32 ea2 = queue.irc << 16;
         readExt();
         ea2 |= queue.irc;
+
+        setFC<MODE_AL>();
+
+        if (misaligned<S>(ea2)) {
+            execAddressError(makeFrame(ea2, true /* write */));
+            return;
+        }
+
+        reg.sr.n = NBIT<S>(data);
+        reg.sr.z = ZERO<S>(data);
+        reg.sr.v = 0;
+        reg.sr.c = 0;
+
         writeM<S>(ea2, data);
         readExt();
-
+        
     } else {
 
         if (!readOp<M,S>(src, ea, data)) return;
@@ -1300,7 +1323,12 @@ Moira::execMove8(u16 opcode)
         if (!writeOp<MODE_AL,S>(dst, data)) return;
     }
 
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+
+    // Revert to standard stack frame format
+    aeFlags = 0;
+
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
