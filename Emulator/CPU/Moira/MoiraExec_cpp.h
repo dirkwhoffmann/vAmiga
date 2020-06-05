@@ -570,7 +570,6 @@ Moira::execBsr(u16 opcode)
     reg.pc = newpc;
 
     fullPrefetch<LAST_BUS_CYCLE>();
-    return;
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1818,11 +1817,13 @@ Moira::execPea(u16 opcode)
 
     if (isAbsMode(M)) {
         push<Long>(ea);
-        prefetch<LAST_BUS_CYCLE>();
+        newPrefetch<LAST_BUS_CYCLE>();
     } else {
-        prefetch();
+        newPrefetch();
         push<Long,LAST_BUS_CYCLE>(ea);
     }
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1837,9 +1838,7 @@ Moira::execReset(u16 opcode)
 
 template<Instr I, Mode M, Size S> void
 Moira::execRte(u16 opcode)
-{
-    // printf("execRte\n"); // DIRK
-    
+{    
     SUPERVISOR_MODE_ONLY
 
     // Update the function code pins
@@ -1851,8 +1850,15 @@ Moira::execRte(u16 opcode)
     u32 newpc = readM<Long>(reg.sp);
     reg.sp += 4;
 
-    setPC(newpc);
     setSR(newsr);
+
+    if (misaligned(newpc)) {
+        setFC(FC_USER_PROG);
+        execAddressError(makeFrame(newpc, reg.pc));
+        return;
+    }
+
+    setPC(newpc);
 
     fullPrefetch<LAST_BUS_CYCLE>();    
 }
