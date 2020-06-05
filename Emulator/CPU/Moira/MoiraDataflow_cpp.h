@@ -454,7 +454,7 @@ Moira::fullPrefetch()
     setFC(FC_USER_PROG);
     
     // TODO: In theory, all PC address errors should be intercepted by now
-    if (misaligned<Word>(reg.pc)) {
+    if (misaligned(reg.pc)) {
         execAddressError(makeFrame(reg.pc), 2);
         return;
     }
@@ -490,30 +490,24 @@ Moira::jumpToVector(int nr)
 {
     exception = nr;
     
+    u32 vectorAddr = 4 * nr;
+    
     // Update the function code pins
     setFC(FC_USER_DATA);
 
     // Update the program counter
-    reg.pc = readM<Long>(4 * nr);
-
-    // Align the exception pointer to an even address
-    // FIXME: This is wrong.
-    // TODO: Find out what the real CPU is doing here
-    if (reg.pc & 1) {
-        printf("ODD EXCEPTION %d POINTER: %x\n", nr, reg.pc); 
-        reg.pc &= ~1;
-        
-        if (reg.sr.s) assert(false);
+    reg.pc = readM<Long>(vectorAddr);
+    
+    // Check for address error
+    if (misaligned(reg.pc)) {
+        printf("Misaligned %x (nr = %d)\n", reg.pc, nr); 
+        setFC(FC_USER_PROG);
+        execAddressError(makeFrame(reg.pc, vectorAddr));
+        return;
     }
     
     // Update the prefetch queue
     fullPrefetch<LAST_BUS_CYCLE,2>();
-    
-    /*
-    queue.ird = readM<Word>(reg.pc);
-    sync(2);
-    queue.irc = readM<Word,LAST_BUS_CYCLE>(reg.pc + 2);
-    */
     
     exceptionJump(nr, reg.pc);
 }

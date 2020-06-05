@@ -92,7 +92,9 @@ Moira::execLineA(u16 opcode)
 {
     lineAException(opcode);
     
+    aeFlags = SET_CODE_BIT_3;
     execUnimplemented(10);
+    aeFlags = 0;
 }
 
 void
@@ -100,7 +102,9 @@ Moira::execLineF(u16 opcode)
 {
     lineFException(opcode);
 
+    aeFlags = SET_CODE_BIT_3;
     execUnimplemented(11);
+    aeFlags = 0;
 }
 
 void
@@ -121,7 +125,9 @@ Moira::execIllegal(u16 opcode)
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
 
+    aeFlags = SET_CODE_BIT_3;
     jumpToVector(4);
+    aeFlags = 0;
 }
 
 void
@@ -185,7 +191,9 @@ Moira::execPrivilegeException()
     sync(4);
     saveToStackBrief(status, reg.pc - 2);
 
+    aeFlags = SET_CODE_BIT_3;
     jumpToVector(8);
+    aeFlags = 0;
 }
 
 void

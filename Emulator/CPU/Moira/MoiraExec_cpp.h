@@ -597,7 +597,6 @@ Moira::execChk(u16 opcode)
     aeFlags = 0;
 
     // printf("M: %d S: %d execChk: dst = %d (%x) ea = %x data = %x\n", M, S, dst, dy, ea, data);
-    prefetch<LAST_BUS_CYCLE>();
     sync(4);
 
     reg.sr.z = ZERO<S>(dy);
@@ -619,6 +618,10 @@ Moira::execChk(u16 opcode)
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execTrapException(6);
     }
+    
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -2092,8 +2095,11 @@ Moira::execTrap(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTrapv(u16 opcode)
 {
-    prefetch<LAST_BUS_CYCLE>();
-    if (reg.sr.v) execTrapException(7);
+    if (reg.sr.v) {
+        execTrapException(7);
+    } else {
+        prefetch<LAST_BUS_CYCLE>();
+    }
 }
 
 template<Instr I, Mode M, Size S> void
