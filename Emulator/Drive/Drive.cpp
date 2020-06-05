@@ -179,6 +179,12 @@ Drive::setSpeed(i16 value)
     amiga.resume();
 }
 
+bool
+Drive::idMode()
+{
+    return motorStopped() || motorSpeedingUp();
+}
+
 u32
 Drive::getDriveId()
 {
