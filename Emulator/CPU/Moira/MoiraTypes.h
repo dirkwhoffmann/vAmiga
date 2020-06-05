@@ -176,7 +176,7 @@ typedef enum {
     MODE_AW,   //  7   (####).w : Absolute addressing short
     MODE_AL,   //  8   (####).l : Absolute addressing long
     MODE_DIPC, //  9     (d,PC) : PC relative with displacement
-    MODE_PCIX, // 10  (d,An,Xi) : Indexed PC relative with displacement
+    MODE_IXPC, // 10  (d,PC,Xi) : Indexed PC relative with displacement
     MODE_IM,   // 11       #### : Immediate data addressing
     MODE_IP    // 12       ---- : Implied addressing
 }

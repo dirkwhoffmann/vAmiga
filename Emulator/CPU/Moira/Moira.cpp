@@ -287,7 +287,7 @@ template<Mode M> void
 Moira::setFC()
 {
     if (!EMULATE_FC) return;
-    fcl = (M == MODE_DIPC || M == MODE_PCIX) ? FC_USER_PROG : FC_USER_DATA;
+    fcl = (M == MODE_DIPC || M == MODE_IXPC) ? FC_USER_PROG : FC_USER_DATA;
 }
 
 void

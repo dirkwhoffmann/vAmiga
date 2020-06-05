@@ -115,7 +115,7 @@ Moira::execAddEaRg(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     u32 ea, data, result;
     
@@ -165,7 +165,7 @@ Moira::execAdda(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     u32 ea, data, result;
 
@@ -338,7 +338,7 @@ Moira::execAndEaRg(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -580,7 +580,7 @@ Moira::execChk(u16 opcode)
     if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -655,7 +655,7 @@ Moira::execCmp(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -682,7 +682,7 @@ Moira::execCmpa(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -724,7 +724,7 @@ Moira::execCmpiEa(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     u32 src = readI<S>();
     int dst = _____________xxx(opcode);
@@ -896,7 +896,7 @@ Moira::execJsr(u16 opcode)
 
     // Check for address error
     if (misaligned<Word>(ea)) {
-        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_PCIX) {
+        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_IXPC) {
             execAddressError(makeFrame(ea, oldpc));
         } else {
             execAddressError(makeFrame(ea));
@@ -965,7 +965,7 @@ Moira::execMove0(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     u32 ea, data;
 
@@ -995,7 +995,7 @@ Moira::execMove2(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     u32 ea, data;
 
@@ -1034,7 +1034,7 @@ Moira::execMove3(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     u32 ea, data;
 
@@ -1075,7 +1075,7 @@ Moira::execMove4(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
 
     u32 ea, data;
 
@@ -1137,7 +1137,7 @@ Moira::execMove5(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     u32 ea, data;
 
@@ -1181,7 +1181,7 @@ Moira::execMove6(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     u32 ea, data;
     
@@ -1225,7 +1225,7 @@ Moira::execMove7(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     u32 ea, data;
 
@@ -1279,7 +1279,7 @@ Moira::execMove8(u16 opcode)
         if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
         if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
         if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-        if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+        if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
         
         if (!readOp<M,S>(src, ea, data)) return;
 
@@ -1333,29 +1333,46 @@ Moira::execMove8(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovea(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
+    
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
     u32 ea, data;
     if (!readOp<M,S>(src, ea, data)) return;
 
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
     writeA(dst, SEXT<S>(data));
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMovemEaRg(u16 opcode)
 {
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
+
     int src  = _____________xxx(opcode);
     u16 mask = readI<Word>();
     u32 ea   = computeEA<M,S>(src);
     
     // Check for address error
-    if (mask && misaligned<S>(ea)) {
+    setFC<M>();
+    if (misaligned<S>(ea)) {
         execAddressError(makeFrame(ea));
         return;
     }
-    // if (mask && addressReadError<S>(ea)) return;
     
     if (S == Long) (void)readM<Word>(ea);
 
@@ -1386,12 +1403,22 @@ Moira::execMovemEaRg(u16 opcode)
         }
     }
     if (S == Word) (void)readM<Word>(ea);
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMovemRgEa(u16 opcode)
 {
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+    if (M == MODE_IX)   aeFlags = INC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = INC_PC_BY_2;
+
     int dst  = _____________xxx(opcode);
     u16 mask = readI<Word>();
 
@@ -1402,11 +1429,12 @@ Moira::execMovemRgEa(u16 opcode)
             u32 ea = readA(dst);
             
             // Check for address error
+            setFC<M>();
             if (mask && misaligned<S>(ea)) {
-                execAddressError(makeFrame(ea));
+                ea -= S;
+                execAddressError(makeFrame(ea, true));
                 return;
             }
-            // if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 15; i >= 0; i--) {
 
@@ -1423,8 +1451,9 @@ Moira::execMovemRgEa(u16 opcode)
             u32 ea = computeEA<M,S>(dst);
             
             // Check for address error
+            setFC<M>();
             if (mask && misaligned<S>(ea)) {
-                execAddressError(makeFrame(ea));
+                execAddressError(makeFrame(ea, true));
                 return;
             }
             // if (mask && addressReadError<S>(ea)) return;
@@ -1439,7 +1468,12 @@ Moira::execMovemRgEa(u16 opcode)
             break;
         }
     }
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1519,7 +1553,7 @@ Moira::execMoveToCcr(u16 opcode)
     if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
 
     int src = _____________xxx(opcode);
     u32 ea, data;
@@ -1583,7 +1617,7 @@ Moira::execMoveToSr(u16 opcode)
     if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
 
     u32 ea, data;
     if (!readOp<M,S>(src, ea, data)) return;
@@ -1626,6 +1660,13 @@ Moira::execMul(u16 opcode)
         return;
     }
 
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
+    
     u32 ea, data, result;
 
     int src = _____________xxx(opcode);
@@ -1633,10 +1674,15 @@ Moira::execMul(u16 opcode)
 
     if (!readOp<M, Word>(src, ea, data)) return;
 
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
     result = mul<I>(data, readD<Word>(dst));
 
     writeD(dst, result);
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1670,7 +1716,7 @@ Moira::execDiv(u16 opcode)
     if (M == MODE_DI)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC) aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX) aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
@@ -2039,7 +2085,7 @@ Moira::execTst(u16 opcode)
     if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
     if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
     
     int rg = _____________xxx(opcode);
 
