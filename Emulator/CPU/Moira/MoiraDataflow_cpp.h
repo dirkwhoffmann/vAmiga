@@ -289,7 +289,6 @@ Moira::writeM(u32 addr, u32 val, bool &error)
         execAddressError(makeFrame(addr, true /* write */), 2);
         return;
     }
-    // if ((error = addressWriteError<S,2>(addr))) { return; }
     
     writeM<S,last>(addr, val);
 }
@@ -360,7 +359,6 @@ Moira::push(u32 val)
 template<Size S, bool last> void
 Moira::push(u32 val, bool &error)
 {
-    // printf("push<%d>(%x)\n", S, val);
     reg.sp -= S;
     writeM<S,last>(reg.sp, val, error);
 }

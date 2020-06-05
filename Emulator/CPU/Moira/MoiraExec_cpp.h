@@ -564,8 +564,11 @@ Moira::execBsr(u16 opcode)
 
     // Save the return address
     sync(2);
-    push<Long>(retpc);
-
+    setFC(FC_USER_DATA);
+    bool error;
+    push<Long>(retpc, error);
+    if (error) return;
+    
     // Take branch
     reg.pc = newpc;
 
@@ -905,6 +908,7 @@ Moira::execJsr(u16 opcode)
     }
  
     // Save old address on stack
+    setFC(FC_USER_DATA);
     bool error;
     push<Long>(reg.pc, error);
     if (error) return;
@@ -1861,6 +1865,18 @@ Moira::execPea(u16 opcode)
 
     if (isIdxMode(M)) sync(2);
 
+    setFC(FC_USER_DATA);
+    
+    if (misaligned(reg.sp)) {
+        reg.sp -= S;
+        aeFlags = INC_PC_BY_2;
+        if (M == MODE_AW || M == MODE_AL) aeFlags = 0;
+        setFC(FC_USER_DATA);
+        execAddressError(makeFrame(reg.sp, true));
+        aeFlags = 0;
+        return;
+    }
+    
     if (isAbsMode(M)) {
         push<Long>(ea);
         newPrefetch<LAST_BUS_CYCLE>();
@@ -1914,8 +1930,11 @@ Moira::execRtr(u16 opcode)
 {
     // Update the function code pins
     setFC(FC_USER_DATA);
-
-    u16 newccr = readM<Word>(reg.sp);
+    
+    bool error;
+    u16 newccr = readM<Word>(reg.sp, error);
+    if (error) return;
+    
     reg.sp += 2;
 
     u32 newpc = readM<Long>(reg.sp);
