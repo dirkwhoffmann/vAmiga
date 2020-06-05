@@ -1838,7 +1838,7 @@ Moira::execReset(u16 opcode)
 
 template<Instr I, Mode M, Size S> void
 Moira::execRte(u16 opcode)
-{    
+{
     SUPERVISOR_MODE_ONLY
 
     // Update the function code pins
@@ -1874,9 +1874,16 @@ Moira::execRtr(u16 opcode)
 
     u32 newpc = readM<Long>(reg.sp);
     reg.sp += 4;
-
-    setPC(newpc);
+    
     setCCR((u8)newccr);
+    
+    if (misaligned(newpc)) {
+        setFC(FC_USER_PROG);
+        execAddressError(makeFrame(newpc, reg.pc));
+        return;
+    }
+    
+    setPC(newpc);
 
     fullPrefetch<LAST_BUS_CYCLE>();
 }
@@ -1892,7 +1899,13 @@ Moira::execRts(u16 opcode)
     if (error) return;
     
     reg.sp += 4;
-
+    
+    if (misaligned(newpc)) {
+        setFC(FC_USER_PROG);
+        execAddressError(makeFrame(newpc, reg.pc));
+        return;
+    }
+    
     setPC(newpc);
     fullPrefetch<LAST_BUS_CYCLE>();
 }
