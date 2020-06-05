@@ -500,7 +500,6 @@ Moira::jumpToVector(int nr)
     
     // Check for address error
     if (misaligned(reg.pc)) {
-        printf("Misaligned %x (nr = %d)\n", reg.pc, nr); 
         setFC(FC_USER_PROG);
         execAddressError(makeFrame(reg.pc, vectorAddr));
         return;

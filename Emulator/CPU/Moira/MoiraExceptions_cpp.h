@@ -225,12 +225,15 @@ Moira::execIrqException(int level)
     reg.sp -= 6;
     writeM<Word>(reg.sp + 4, reg.pc & 0xFFFF);
 
-    u8 vector = getIrqVector(level);
-
+    // u8 vector = getIrqVector(level);
+    queue.ird = getIrqVector(level);
+    
     sync(4);
     writeM<Word>(reg.sp + 0, status);
     writeM<Word>(reg.sp + 2, reg.pc >> 16);
 
-    jumpToVector(vector);
+    aeFlags = SET_CODE_BIT_3;
+    jumpToVector(queue.ird);
+    aeFlags = 0;
 }
 
