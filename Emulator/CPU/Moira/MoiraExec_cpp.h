@@ -2034,6 +2034,13 @@ Moira::execTrapv(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execTst(u16 opcode)
 {
+    // Configure stack frame format
+    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
+    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
+    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
+    if (M == MODE_PCIX)            aeFlags = DEC_PC_BY_2;
+    
     int rg = _____________xxx(opcode);
 
     u32 ea, data;
@@ -2044,13 +2051,29 @@ Moira::execTst(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execUnlk(u16 opcode)
 {
     int an = _____________xxx(opcode);
+    // u32 oldsp = reg.sp;
+
+    // Configure stack frame format
+    aeFlags = INC_PC_BY_2;
+    
+    setFC<MODE_AI>();
+    if (misaligned(readA(an))) {
+        execAddressError(makeFrame(readA(an)));
+        return;
+    }
+
     reg.sp = readA(an);
 
     u32 ea, data;
@@ -2058,5 +2081,10 @@ Moira::execUnlk(u16 opcode)
     writeA(an, data);
 
     if (an != 7) reg.sp += 4;
-    prefetch<LAST_BUS_CYCLE>();
+    newPrefetch<LAST_BUS_CYCLE>();
+    
+    // Revert to standard stack frame format
+    aeFlags = 0;
+    
+    compensateNewPrefetch();
 }
