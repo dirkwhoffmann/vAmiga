@@ -205,7 +205,7 @@ Moira::readM(u32 addr, bool &error)
     // Check for address errors
     if ((error = misaligned<S>(addr))) {
         setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError(makeFrame(addr), 2);
+        execAddressError(makeFrame <F> (addr), 2);
         return 0;
     }
     
@@ -267,7 +267,7 @@ Moira::writeM(u32 addr, u32 val, bool &error)
     // Check for address errors
     if ((error = misaligned<S>(addr))) {
         setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError(makeFrame<AE_WRITE>(addr), 2);
+        execAddressError(makeFrame <F|AE_WRITE> (addr), 2);
         return;
     }
     
