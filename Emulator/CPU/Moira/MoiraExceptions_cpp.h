@@ -11,19 +11,19 @@ void
 Moira::saveToStack(AEStackFrame &frame)
 {
     // Push PC
-    push<Word>((u16)frame.pc);
-    push<Word>(frame.pc >> 16);
+    push <Word> ((u16)frame.pc);
+    push <Word> (frame.pc >> 16);
     
     // Push SR and IRD
-    push<Word>(frame.sr);
-    push<Word>(frame.ird);
+    push <Word> (frame.sr);
+    push <Word> (frame.ird);
     
     // Push address
-    push<Word>((u16)frame.addr);
-    push<Word>(frame.addr >> 16);
+    push <Word> ((u16)frame.addr);
+    push <Word> (frame.addr >> 16);
     
     // Push memory access type and function code
-    push<Word>(frame.code);
+    push <Word> (frame.code);
 }
 
 void
@@ -31,8 +31,8 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 {
     if (MIMIC_MUSASHI) {
 
-        push<Long>(pc);
-        push<Word>(sr);
+        push <Long> (pc);
+        push <Word> (sr);
 
     } else {
 

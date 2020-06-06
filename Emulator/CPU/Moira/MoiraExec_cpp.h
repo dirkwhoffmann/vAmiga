@@ -566,7 +566,7 @@ Moira::execBsr(u16 opcode)
     sync(2);
     setFC(FC_USER_DATA);
     bool error;
-    push<Long>(retpc, error);
+    push <Long> (retpc, error);
     if (error) return;
     
     // Take branch
@@ -913,7 +913,7 @@ Moira::execJsr(u16 opcode)
     // Save old address on stack
     setFC(FC_USER_DATA);
     bool error;
-    push<Long>(reg.pc, error);
+    push <Long> (reg.pc, error);
     if (error) return;
 
     // Jump to new address
@@ -955,7 +955,7 @@ Moira::execLink(u16 opcode)
     }
     
     // Write to stack
-    push<Long>(readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
+    push <Long> (readA(ax) - ((MIMIC_MUSASHI && ax == 7) ? 4 : 0));
 
     // Modify address register and stack pointer
     writeA(ax, sp);
@@ -1880,11 +1880,11 @@ Moira::execPea(u16 opcode)
     }
     
     if (isAbsMode(M)) {
-        push<Long>(ea);
+        push <Long> (ea);
         newPrefetch<LAST_BUS_CYCLE>();
     } else {
         newPrefetch();
-        push<Long,LAST_BUS_CYCLE>(ea);
+        push <Long, POLL> (ea);
     }
     
     compensateNewPrefetch();

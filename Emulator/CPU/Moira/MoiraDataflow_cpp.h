@@ -324,18 +324,18 @@ Moira::readI()
     return result;
 }
 
-template<Size S, bool last> void
+template<Size S, Flags F> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    writeM <S, last ? POLL : 0> (reg.sp, val);
+    writeM <S,F> (reg.sp, val);
 }
 
-template<Size S, bool last> void
+template<Size S, Flags F> void
 Moira::push(u32 val, bool &error)
 {
     reg.sp -= S;
-    writeM <S, last ? POLL : 0> (reg.sp, val, error);
+    writeM <S,F> (reg.sp, val, error);
 }
 
 template<Size S> bool

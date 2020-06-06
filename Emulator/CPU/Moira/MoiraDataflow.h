@@ -91,8 +91,8 @@ template<Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
 template<Size S> u32 readI();
 
 // Pushes a value onto the stack
-template<Size S, bool last = false> void push(u32 value);
-template<Size S, bool last = false> void push(u32 value, bool &error);
+template<Size S, Flags F = 0> void push(u32 value);
+template<Size S, Flags F = 0> void push(u32 value, bool &error);
 
 // Checks whether the provided address should trigger an address error
 template<Size S = Word> bool misaligned(u32 addr);
