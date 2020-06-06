@@ -94,13 +94,13 @@ bool
 DiskController::spinning(unsigned driveNr)
 {
     assert(driveNr < 4);
-    return df[driveNr]->motor();
+    return df[driveNr]->getMotor();
 }
 
 bool
 DiskController::spinning()
 {
-    return df[0]->motor() || df[1]->motor() || df[2]->motor() || df[3]->motor();
+    return df0.getMotor() || df1.getMotor() ||df2.getMotor() || df3.getMotor();
 }
 
 void

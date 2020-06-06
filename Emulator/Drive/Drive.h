@@ -24,8 +24,8 @@ class Drive : public AmigaComponent {
     DriveConfig config;
     DriveInfo info;
 
-    // Drive motor status (on or off) TODO: RENAME TO motor
-    bool motorState;
+    // Drive motor status (on or off)
+    bool motor;
     
     // Time stamp indicating the the latest change of the motor status
     Cycle switchCycle;
@@ -38,14 +38,6 @@ class Drive : public AmigaComponent {
 
     // Value of the currently transmitted identification bit
     bool idBit;
-
-    // Records when the drive motor was switch on the last time
-    // DEPRECATED
-    Cycle motorOnCycle;
-
-    // Records when the drive motor was switch off the last time
-    // DEPRECATED
-    Cycle motorOffCycle;
 
     // Records when the head started to step to another cylinder
     Cycle stepCycle;
@@ -105,13 +97,11 @@ public:
     {
         worker
 
-        & motorState
+        & motor
         & switchCycle
         & switchSpeed
         & idCount
         & idBit
-        & motorOnCycle
-        & motorOffCycle
         & stepCycle
         & dskchange
         & dsklen
@@ -181,15 +171,12 @@ public:
     double motorSpeed();
 
     // Turns the drive motor on or off
+    bool getMotor() { return motor; }
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
 
-    
-    bool motor() { return motorState; }
-    // bool motor() { return motorOnCycle > motorOffCycle; } // DEPRECATED
-    // Cycle motorOnTime(); // DEPRECATED
-    // Cycle motorOffTime(); // DEPRECATED
+    // Informs about the current drive motor state
     bool motorSpeedingUp();
     bool motorAtFullSpeed();
     bool motorSlowingDown();
