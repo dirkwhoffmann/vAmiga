@@ -1570,7 +1570,7 @@ Moira::execMoveToCcr(u16 opcode)
     setCCR(data);
 
     (void)readM<Word>(reg.pc + 2);
-    prefetch <POLL> ();
+    prefetch<POLL>();
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -1583,7 +1583,7 @@ Moira::execMoveFromSrRg(u16 opcode)
 
     u32 ea, data;
     if (!readOp<M,S>(dst, ea, data)) return;
-    prefetch <POLL> ();
+    prefetch<POLL>();
 
     sync(2);
     writeD<S>(dst, getSR());
@@ -1632,7 +1632,7 @@ Moira::execMoveToSr(u16 opcode)
     setSR(data);
 
     (void)readM<Word>(reg.pc + 2);
-    prefetch <POLL> ();
+    prefetch<POLL>();
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -1644,7 +1644,7 @@ Moira::execMoveUspAn(u16 opcode)
     SUPERVISOR_MODE_ONLY
 
     int an = _____________xxx(opcode);
-    prefetch <POLL> ();
+    prefetch<POLL>();
     writeA(an, getUSP());
 }
 

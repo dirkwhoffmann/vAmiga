@@ -59,7 +59,7 @@
  * If the source is a register or an immediate value, variable ea remains
  * untouched.
  */
-template<Mode M, Size S> bool readOp(int n, u32 &ea, u32 &result);
+template<Mode M, Size S, Flags F = 0> bool readOp(int n, u32 &ea, u32 &result);
 
 /* Writes an operand
  *
@@ -80,8 +80,8 @@ template<Mode M, Size S> void undoAnPD(int n);
 template<Mode M, Size S> void updateAnPI(int n);
 
 // Reads an operand from memory (without or with address error checking)
-template<Size S, bool last = false> u32 readM(u32 addr);
-template<Size S, bool last = false> u32 readM(u32 addr, bool &error);
+template<Size S, Flags F = 0> u32 readM(u32 addr);
+template<Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
 // Writes an operand to memory (without or with address error checking)
 template<Size S, Flags F = 0> void writeM(u32 addr, u32 val);

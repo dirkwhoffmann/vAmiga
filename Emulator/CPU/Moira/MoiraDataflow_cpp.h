@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-template<Mode M, Size S> bool
+template<Mode M, Size S, Flags F> bool
 Moira::readOp(int n, u32 &ea, u32 &result)
 {
     // Handle non-memory modes
@@ -22,7 +22,7 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     setFC<M>();
 
     // Read from effective address
-    bool error; result = readM<S>(ea, error);
+    bool error; result = readM<S,F>(ea, error);
 
     // Emulate -(An) register modification
     updateAnPD<M,S>(n);
@@ -205,14 +205,14 @@ Moira::updateAn(int n)
     if (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
 }
 
-template<Size S, bool last> u32
+template<Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     u32 result;
 
     if (S == Long) {
-        result = readM<Word>(addr) << 16;
-        result |= readM<Word,last>(addr + 2);
+        result = readM <Word> (addr) << 16;
+        result |= readM <Word,F> (addr + 2);
         return result;
     }
 
@@ -223,14 +223,14 @@ Moira::readM(u32 addr)
 
     if (S == Byte) {
         sync(2);
-        if (last) pollIrq();
+        if (F & POLL) pollIrq();
         result = read8(addr & 0xFFFFFF);
         sync(2);
     }
 
     if (S == Word) {
         sync(2);
-        if (last) pollIrq();
+        if (F & POLL) pollIrq();
         result = read16(addr & 0xFFFFFF);
         sync(2);
     }
@@ -238,7 +238,7 @@ Moira::readM(u32 addr)
     return result;
 }
 
-template<Size S, bool last> u32
+template<Size S, Flags F> u32
 Moira::readM(u32 addr, bool &error)
 {
     // Check for address error
@@ -247,8 +247,7 @@ Moira::readM(u32 addr, bool &error)
         return 0;
     }
     
-    // if ((error = addressReadError<S,2>(addr))) { return 0; }
-    return readM<S,last>(addr);
+    return readM <S,F> (addr);
 }
 
 template<Size S, Flags F> void
@@ -389,7 +388,7 @@ Moira::prefetch()
 
     queue.ird = queue.irc;
     if (delay) sync(delay);
-    queue.irc = readM <Word,(F & POLL) ? true : false> (reg.pc + 2);
+    queue.irc = readM <Word,F> (reg.pc + 2);
 }
 
 template<Flags F, int delay> void
@@ -407,7 +406,7 @@ Moira::newPrefetch()
     queue.ird = queue.irc;
     if (delay) sync(delay);
     reg.pc += 2;
-    queue.irc = readM <Word,(F & POLL) ? true : false> (reg.pc);
+    queue.irc = readM <Word,F> (reg.pc);
 }
 
 void
@@ -433,7 +432,7 @@ Moira::fullPrefetch()
     }
 
     queue.irc = readM<Word>(reg.pc);
-    prefetch<F, delay>();
+    prefetch<F,delay>();
 }
 
 template<bool skip> void
@@ -452,7 +451,6 @@ Moira::readExt()
             return;
         }
         
-        // if (addressReadError<Word>(reg.pc)) return;
         queue.irc = readM<Word>(reg.pc);
     }
 }
