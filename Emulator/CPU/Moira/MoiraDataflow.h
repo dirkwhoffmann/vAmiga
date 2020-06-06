@@ -81,7 +81,7 @@ template<Mode M, Size S> void updateAnPI(int n);
 
 // Reads an operand from memory (without or with address error checking)
 template<Size S, Flags F = 0> u32 readM(u32 addr);
-template<Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
+template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
 // Writes an operand to memory (without or with address error checking)
 template<Size S, Flags F = 0> void writeM(u32 addr, u32 val);

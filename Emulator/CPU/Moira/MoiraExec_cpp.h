@@ -1929,12 +1929,9 @@ Moira::execRte(u16 opcode)
 
 template<Instr I, Mode M, Size S> void
 Moira::execRtr(u16 opcode)
-{
-    // Update the function code pins
-    setFC(FC_USER_DATA);
-    
+{    
     bool error;
-    u16 newccr = readM<Word>(reg.sp, error);
+    u16 newccr = readM<M, Word>(reg.sp, error);
     if (error) return;
     
     reg.sp += 2;
@@ -1958,11 +1955,8 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    // Update the function code pins
-    setFC(FC_USER_DATA);
-
     bool error;
-    u32 newpc = readM<Long>(reg.sp, error);
+    u32 newpc = readM<M, Long>(reg.sp, error);
     if (error) return;
     
     reg.sp += 4;

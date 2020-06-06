@@ -18,11 +18,8 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     // Compute effective address
     ea = computeEA<M,S>(n);
 
-    // Update the function code pins
-    setFC<M>();
-
     // Read from effective address
-    bool error; result = readM<S,F>(ea, error);
+    bool error; result = readM<M,S,F>(ea, error);
 
     // Emulate -(An) register modification
     updateAnPD<M,S>(n);
@@ -238,16 +235,19 @@ Moira::readM(u32 addr)
     return result;
 }
 
-template<Size S, Flags F> u32
+template<Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr, bool &error)
 {
+    // Update function code pins according to the provided addressing mode
+    setFC<M>();
+    
     // Check for address error
     if ((error = misaligned<S>(addr))) {
         execAddressError(makeFrame(addr), 2);
         return 0;
     }
     
-    return readM <S,F> (addr);
+    return readM<S,F>(addr);
 }
 
 template<Size S, Flags F> void
@@ -388,7 +388,7 @@ Moira::prefetch()
 
     queue.ird = queue.irc;
     if (delay) sync(delay);
-    queue.irc = readM <Word,F> (reg.pc + 2);
+    queue.irc = readM<Word,F>(reg.pc + 2);
 }
 
 template<Flags F, int delay> void
