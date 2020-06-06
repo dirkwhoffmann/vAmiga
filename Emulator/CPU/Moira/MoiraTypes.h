@@ -280,5 +280,26 @@ struct Registers {
     u8 ipl;               // Polled Interrupt Priority Level
 };
 
+struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
+
+    u16 irc;              // The most recent word prefetched from memory
+    u16 ird;              // The instruction currently being executed
+};
+
+/* Execution flags
+ *
+ * The Motorola 68000 is a well organized processor that utilizes the same
+ * general execution scheme for many instructions. However, the schemes
+ * slighty differ between instruction. To take care of the subtle differences,
+ * some execution functions take an dditional 'flags' argument which allows to
+ * alter their behavior. All flags are passed as a template parameter for
+ * efficiency.
+ */
+ 
+typedef u64 Flags;
+
+// Reads or writes a long word in reversed memory order
+static const u64 REVERSE (1 << 0);
+
 }
 #endif

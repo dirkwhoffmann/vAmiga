@@ -16,11 +16,8 @@
 
 namespace moira {
 
-struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
+// Execution control flags
 
-    u16 irc;              // The most recent word prefetched from memory
-    u16 ird;              // The instruction currently being executed
-};
 
 class Moira {
 

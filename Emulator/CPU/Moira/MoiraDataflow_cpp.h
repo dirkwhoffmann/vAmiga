@@ -253,12 +253,18 @@ Moira::readM(u32 addr, bool &error)
     return readM<S,last>(addr);
 }
 
-template<Size S, bool last> void
+template<Size S, Flags F, bool last> void
 Moira::writeM(u32 addr, u32 val)
 {
+    // Break down long word accesses into two word accesses
     if (S == Long) {
-        writeM<Word>     (addr,     val >> 16   );
-        writeM<Word,last>(addr + 2, val & 0xFFFF);
+        if (F & REVERSE) {
+            writeM<Word>     (addr + 2, val & 0xFFFF);
+            writeM<Word,last>(addr,     val >> 16   );
+        } else {
+            writeM<Word>     (addr,     val >> 16   );
+            writeM<Word,last>(addr + 2, val & 0xFFFF);
+        }
         return;
     }
 
@@ -282,7 +288,7 @@ Moira::writeM(u32 addr, u32 val)
     }
 }
 
-template<Size S, bool last> void
+template<Size S, Flags F, bool last> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
     if ((error = misaligned<S>(addr))) {
@@ -291,37 +297,6 @@ Moira::writeM(u32 addr, u32 val, bool &error)
     }
     
     writeM<S,last>(addr, val);
-}
-
-template<Size S, bool last> void
-Moira::writeMrev(u32 addr, u32 val)
-{
-    switch (S) {
-
-        case Byte:
-        case Word:
-        {
-            writeM<S,last>(addr, val);
-            break;
-        }
-        case Long:
-        {
-            writeM<Word>     (addr + 2, val & 0xFFFF);
-            writeM<Word,last>(addr,     val >> 16   );
-            break;
-        }
-    }
-}
-
-template<Size S, bool last> void
-Moira::writeMrev(u32 addr, u32 val, bool &error)
-{
-    if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr, true /* write */), 2);
-        return;
-    }
-    // if ((error = addressWriteError<S,2>(addr))) { return; }
-    writeMrev<S,last>(addr, val);
 }
 
 template<Size S> u32

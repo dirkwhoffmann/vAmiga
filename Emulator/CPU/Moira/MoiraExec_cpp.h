@@ -1126,8 +1126,7 @@ Moira::execMove4(u16 opcode)
         return;
     }
 
-    // bool error; writeMrev<S,LAST_BUS_CYCLE>(ea, data, error);
-    writeMrev<S,LAST_BUS_CYCLE>(ea, data);
+    writeM <S, REVERSE, LAST_BUS_CYCLE> (ea, data);
     updateAn<MODE_PD,S>(dst);
     
     // Revert to standard stack frame format
@@ -1447,7 +1446,7 @@ Moira::execMovemRgEa(u16 opcode)
 
                 if (mask & (0x8000 >> i)) {
                     ea -= S;
-                    MIMIC_MUSASHI ? writeMrev<S>(ea, reg.r[i]) : writeM<S>(ea, reg.r[i]);
+                    writeM <S, MIMIC_MUSASHI ? REVERSE : 0> (ea, reg.r[i]);
                 }
             }
             writeA(dst, ea);
