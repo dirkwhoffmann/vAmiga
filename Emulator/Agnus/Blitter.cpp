@@ -65,7 +65,7 @@ Blitter::_inspect()
     // Prevent external access to variable 'info'
     pthread_mutex_lock(&lock);
     
-    info.active  = agnus.isPending<BLT_SLOT>();
+    // info.active  = agnus.isPending<BLT_SLOT>();
     info.bltcon0 = bltcon0;
     info.bltcon1 = bltcon1;
     info.ash = bltconASH();

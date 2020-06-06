@@ -242,7 +242,7 @@ BlitterConfig;
 
 typedef struct
 {
-    bool active;
+    // bool active;
     u16 bltcon0;
     u16 bltcon1;
     u16 ash;

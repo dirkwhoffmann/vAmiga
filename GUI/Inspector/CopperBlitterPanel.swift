@@ -99,7 +99,8 @@ extension Inspector {
         bltDESC.state = bltcon1 & 0x02 != 0 ? .on : .off
         bltLINE.state = bltcon1 & 0x01 != 0 ? .on : .off
 
-        bltActive.state = blitterInfo!.active ? .on : .off
+        bltBBUSY.state = blitterInfo!.bbusy ? .on : .off
+        bltBZERO.state = blitterInfo!.bzero ? .on : .off
 
         bltAhold.integerValue = Int(blitterInfo!.ahold)
         bltBhold.integerValue = Int(blitterInfo!.bhold)

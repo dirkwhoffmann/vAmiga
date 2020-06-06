@@ -275,7 +275,8 @@ class Inspector: DialogController {
     @IBOutlet weak var bltDESC: NSButton!
     @IBOutlet weak var bltLINE: NSButton!
 
-    @IBOutlet weak var bltActive: NSButton!
+    @IBOutlet weak var bltBZERO: NSButton!
+    @IBOutlet weak var bltBBUSY: NSButton!
 
     @IBOutlet weak var bltAold: NSTextField!
     @IBOutlet weak var bltBold: NSTextField!
