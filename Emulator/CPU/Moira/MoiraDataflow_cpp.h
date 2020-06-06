@@ -391,7 +391,7 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     if (F & AE_DEC_PC) frame.pc -= 2;
     if (F & AE_INC_ADDR) frame.addr += 2;
     if (F & AE_DEC_ADDR) frame.addr -= 2;
-
+    if (F & AE_SET_CB3) frame.code |= (1 << 3);
     
     // Apply modification flags (DEPRECATED)
     if (aeFlags & INC_PC_BY_2)    frame.pc += 2;

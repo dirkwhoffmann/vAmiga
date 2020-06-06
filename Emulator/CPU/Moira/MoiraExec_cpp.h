@@ -1004,33 +1004,25 @@ Moira::execMove2(u16 opcode)
     }
         
     if (!writeOp <MODE_AI,S,AE_INC_PC> (dst, data)) return;
-    prefetch <POLLIPL> ();
     
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     reg.sr.v = 0;
     reg.sr.c = 0;
-    
-    // Revert to standard stack frame format
-    // aeFlags = 0;
+
+    newPrefetch <POLLIPL> ();
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMove3(u16 opcode)
 {
-    // Configure stack frame format
-    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
-
     u32 ea, data;
 
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
-    if (!readOp<M,S>(src, ea, data)) return;
+    if (!readOp <M, S, STD_AE_FRAME> (src, ea, data)) return;
 
     if (S == Word || (M != MODE_DN && M != MODE_AN && M != MODE_IM)) {
         reg.sr.n = NBIT<Word>(data);
@@ -1039,33 +1031,19 @@ Moira::execMove3(u16 opcode)
         reg.sr.c = 0;
     }
 
-    // Configure stack frame format
-    aeFlags = INC_PC_BY_2;
-
-    if (!writeOp <MODE_PI,S> (dst, data)) return;
+    if (!writeOp <MODE_PI, S, AE_INC_PC> (dst, data)) return;
     prefetch <POLLIPL> ();
 
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
     reg.sr.v = 0;
     reg.sr.c = 0;
-
-    // Revert to standard stack frame format
-    aeFlags = 0;
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMove4(u16 opcode)
 {
     u16 ird = getIRD();
-    
-    // Configure stack frame format
-    if (M == MODE_PD && S != Long) aeFlags = INC_PC_BY_2;
-    if (M == MODE_DI)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IX)              aeFlags = DEC_PC_BY_2;
-    if (M == MODE_DIPC)            aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IXPC)            aeFlags = DEC_PC_BY_2;
-
     u32 ea, data;
 
     int src = _____________xxx(opcode);
@@ -1079,10 +1057,13 @@ Moira::execMove4(u16 opcode)
      *  transfer size (byte, word or long), and disregarding the source
      *  addressing mode."
      */
-    if (!readOp<M,S>(src, ea, data)) return;
+    if (!readOp <M,S,STD_AE_FRAME> (src, ea, data)) return;
 
-    // Configure stack frame format
-    aeFlags = S == Long ? 0 : reg.sr.c ? SET_CODE_BIT_3 : CLR_CODE_BIT_3;
+    // Determine next address error stack frame format
+    const u64 flags0 = AE_WRITE | AE_DATA;
+    const u64 flags1 = AE_WRITE | AE_DATA | AE_SET_CB3;
+    const u64 flags2 = AE_WRITE | AE_DATA;
+    int format = (S == Long) ? 0 : reg.sr.c ? 1 : 2;
 
     reg.sr.n = NBIT<S>(data);
     reg.sr.z = ZERO<S>(data);
@@ -1092,25 +1073,20 @@ Moira::execMove4(u16 opcode)
     newPrefetch();
     sync(-2);
 
-    ea = computeEA<MODE_PD,S>(dst);
+    ea = computeEA <MODE_PD, S> (dst);
     
     // Check for address error
     if (misaligned<S>(ea)) {
-        if (S == Long) {
-            execAddressError(makeFrame<AE_WRITE|AE_DATA>(ea + 2, reg.pc, getSR(), ird));
-        } else {
-            execAddressError(makeFrame<AE_WRITE|AE_DATA>(ea), 2);
-            updateAnPD <MODE_PD,S> (dst);
-        }
+        if (format == 0) execAddressError(makeFrame <flags0> (ea + 2, reg.pc, getSR(), ird));
+        if (format == 1) execAddressError(makeFrame <flags1> (ea), 2);
+        if (format == 2) execAddressError(makeFrame <flags2> (ea), 2);
+        if (S != Long) updateAn <MODE_PD, S> (dst);
         return;
     }
-
-    writeM <MODE_PD, S, REVERSE | POLLIPL> (ea, data);
-    updateAnPD <MODE_PD, S> (dst);
     
-    // Revert to standard stack frame format
-    aeFlags = 0;
-
+    writeM <MODE_PD, S, REVERSE | POLLIPL> (ea, data);
+    updateAn <MODE_PD, S> (dst);
+    
     compensateNewPrefetch();
 }
 

@@ -240,13 +240,13 @@ typedef struct
 }
 AEStackFrame;
 
-typedef u16 AEStackFrameFlags;
-static const u16 INC_PC_BY_2    = (1 << 0);
-static const u16 DEC_PC_BY_2    = (1 << 1);
-static const u16 INC_ADDR_BY_2  = (1 << 2);
-static const u16 DEC_ADDR_BY_2  = (1 << 3);
-static const u16 SET_CODE_BIT_3 = (1 << 4);
-static const u16 CLR_CODE_BIT_3 = (1 << 5);
+typedef u16 AEStackFrameFlags;              // DEPRECATED
+static const u16 INC_PC_BY_2    = (1 << 0); // DEPRECATED
+static const u16 DEC_PC_BY_2    = (1 << 1); // DEPRECATED
+static const u16 INC_ADDR_BY_2  = (1 << 2); // DEPRECATED
+static const u16 DEC_ADDR_BY_2  = (1 << 3); // DEPRECATED
+static const u16 SET_CODE_BIT_3 = (1 << 4); // DEPRECATED
+static const u16 CLR_CODE_BIT_3 = (1 << 5); // DEPRECATED
 
 struct StatusRegister {
 
@@ -319,6 +319,7 @@ static const u64 AE_INC_PC   (1 << 5);  // Increment PC by 2 in stack frame
 static const u64 AE_DEC_PC   (1 << 6);  // Decrement PC by 2 in stack frame
 static const u64 AE_INC_ADDR (1 << 7);  // Increment ADDR by 2 in stack frame
 static const u64 AE_DEC_ADDR (1 << 8);  // Decrement ADDR by 2 in stack frame
+static const u64 AE_SET_CB3  (1 << 9);  // Set bit 3 in CODE segment
 
 }
 #endif
