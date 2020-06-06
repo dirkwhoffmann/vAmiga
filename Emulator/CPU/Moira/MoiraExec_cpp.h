@@ -219,7 +219,7 @@ Moira::execAddiEa(u16 opcode)
     result = addsub<I,S>(src, data);
     prefetch();
 
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    writeOp <M,S, POLL> (dst, ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -271,7 +271,7 @@ Moira::execAddqEa(u16 opcode)
     result = addsub<I,S>(src, data);
     prefetch();
 
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    writeOp <M,S, POLL> (dst, ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -374,7 +374,7 @@ Moira::execAndRgEa(u16 opcode)
     isMemMode(M) ? prefetch() : prefetch <POLL> ();
 
     if (S == Long && isRegMode(M)) sync(4);
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    writeOp <M,S, POLL> (dst, ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -411,7 +411,7 @@ Moira::execAndiEa(u16 opcode)
     result = logic<I,S>(src, data);
     prefetch();
 
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, result);
+    writeOp <M,S, POLL> (dst, ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -640,7 +640,7 @@ Moira::execClr(u16 opcode)
     isMemMode(M) ? newPrefetch() : newPrefetch <POLL> ();
 
     if (S == Long && isRegMode(M)) sync(2);
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, 0);
+    writeOp <M,S, POLL> (dst, ea, 0);
 
     reg.sr.n = 0;
     reg.sr.z = 1;
@@ -986,7 +986,7 @@ Moira::execMove0(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    if (!writeOp<MODE_DN,S>(dst, data)) return;
+    if (!writeOp <MODE_DN,S> (dst, data)) return;
 
     prefetch <POLL> ();
     
@@ -1021,7 +1021,7 @@ Moira::execMove2(u16 opcode)
     // Configure stack frame format
     aeFlags = INC_PC_BY_2;
     
-    if (!writeOp<MODE_AI,S>(dst, data)  ) return;
+    if (!writeOp <MODE_AI,S> (dst, data)  ) return;
     prefetch <POLL> ();
     
     reg.sr.n = NBIT<S>(data);
@@ -1060,7 +1060,7 @@ Moira::execMove3(u16 opcode)
     // Configure stack frame format
     aeFlags = INC_PC_BY_2;
 
-    if (!writeOp<MODE_PI,S>(dst, data)) return;
+    if (!writeOp <MODE_PI,S> (dst, data)) return;
     prefetch <POLL> ();
 
     reg.sr.n = NBIT<S>(data);
@@ -1165,7 +1165,7 @@ Moira::execMove5(u16 opcode)
     // Configure stack frame format
     aeFlags = 0;
     
-    if (!writeOp<MODE_DI,S>(dst, data)) return;
+    if (!writeOp <MODE_DI,S> (dst, data)) return;
     newPrefetch <POLL> ();
     
     reg.sr.n = NBIT<S>(data);
@@ -1209,7 +1209,7 @@ Moira::execMove6(u16 opcode)
     // Configure stack frame format
     aeFlags = 0;
     
-    if (!writeOp<MODE_IX,S>(dst, data)) return;
+    if (!writeOp <MODE_IX,S> (dst, data)) return;
     newPrefetch <POLL> ();
 
     reg.sr.n = NBIT<S>(data);
@@ -1248,7 +1248,7 @@ Moira::execMove7(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
     
-    if (!writeOp<MODE_AW,S>(dst, data)) return;
+    if (!writeOp <MODE_AW,S> (dst, data)) return;
     
     newPrefetch <POLL> ();
 
@@ -1325,7 +1325,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        if (!writeOp<MODE_AL,S>(dst, data)) return;
+        if (!writeOp <MODE_AL,S> (dst, data)) return;
     }
 
     newPrefetch <POLL> ();
@@ -1603,7 +1603,7 @@ Moira::execMoveFromSrEa(u16 opcode)
     if (!readOp<M,S>(dst, ea, data)) return;
     newPrefetch();
 
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, getSR());
+    writeOp <M,S, POLL> (dst, ea, getSR());
 
     compensateNewPrefetch();
 
@@ -1843,7 +1843,7 @@ Moira::execNegEa(u16 opcode)
     data = logic<I,S>(data);
     newPrefetch();
 
-    writeOp<M,S,LAST_BUS_CYCLE>(dst, ea, data);
+    writeOp <M,S, POLL> (dst, ea, data);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -2003,7 +2003,7 @@ Moira::execSccEa(u16 opcode)
     data = cond<I>() ? 0xFF : 0;
     prefetch();
 
-    writeOp<M,Byte,LAST_BUS_CYCLE>(dst, ea, data);
+    writeOp <M,Byte, POLL> (dst, ea, data);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -2077,7 +2077,7 @@ Moira::execTasEa(u16 opcode)
     data |= 0x80;
 
     if (!isRegMode(M)) sync(2);
-    writeOp<M,S>(dst, ea, data);
+    writeOp <M,S> (dst, ea, data);
 
     prefetch <POLL> ();
 }

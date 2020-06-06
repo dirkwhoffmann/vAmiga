@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#define LAST_BUS_CYCLE true
-
 template<Mode M, Size S> bool
 Moira::readOp(int n, u32 &ea, u32 &result)
 {
@@ -38,7 +36,7 @@ Moira::readOp(int n, u32 &ea, u32 &result)
     return !error;
 }
 
-template<Mode M, Size S, bool last> bool
+template<Mode M, Size S, Flags F> bool
 Moira::writeOp(int n, u32 val)
 {
     // Handle non-memory modes
@@ -53,7 +51,7 @@ Moira::writeOp(int n, u32 val)
     setFC<M>();
 
     // Write to effective address
-    bool error; writeM <S, last ? POLL : 0> (ea, val, error);
+    bool error; writeM <S,F> (ea, val, error);
 
     // Emulate -(An) register modification
     updateAnPD<M,S>(n);
@@ -67,7 +65,7 @@ Moira::writeOp(int n, u32 val)
     return !error;
 }
 
-template<Mode M, Size S, bool last> void
+template<Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
     // Handle non-memory modes
@@ -75,7 +73,7 @@ Moira::writeOp(int n, u32 ea, u32 val)
     if (M == MODE_AN) { writeA<S>(n, val); return; }
     if (M == MODE_IM) { assert(false);     return; }
 
-    writeM <S,last ? POLL : 0> (ea, val);
+    writeM <S,F> (ea, val);
 }
 
 template<Mode M, Size S, bool skip> u32
@@ -480,7 +478,7 @@ Moira::jumpToVector(int nr)
     }
     
     // Update the prefetch queue
-    fullPrefetch<LAST_BUS_CYCLE,2>();
+    fullPrefetch <POLL, 2> ();
     
     exceptionJump(nr, reg.pc);
 }
