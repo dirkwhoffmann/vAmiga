@@ -379,7 +379,7 @@ Moira::makeFrame(u32 addr, bool write)
     return makeFrame(addr, getPC(), getSR(), getIRD(), write);
 }
 
-template<bool last, int delay> void
+template<Flags F, int delay> void
 Moira::prefetch()
 {
     // At this point, the program counter points to the beginning of the
@@ -391,10 +391,10 @@ Moira::prefetch()
 
     queue.ird = queue.irc;
     if (delay) sync(delay);
-    queue.irc = readM<Word,last>(reg.pc + 2);
+    queue.irc = readM <Word,(F & POLL) ? true : false> (reg.pc + 2);
 }
 
-template<bool last, int delay> void
+template<Flags F, int delay> void
 Moira::newPrefetch()
 {
     /* Whereas pc is a moving target (it moves forward while an instruction is
@@ -409,7 +409,7 @@ Moira::newPrefetch()
     queue.ird = queue.irc;
     if (delay) sync(delay);
     reg.pc += 2;
-    queue.irc = readM<Word,last>(reg.pc);
+    queue.irc = readM <Word,(F & POLL) ? true : false> (reg.pc);
 }
 
 void
@@ -422,21 +422,20 @@ Moira::compensateNewPrefetch()
     reg.pc -= 2;
 }
 
-template<bool last, int delay> void
+template<Flags F, int delay> void
 Moira::fullPrefetch()
 {
     // Update the function code pins
     setFC(FC_USER_PROG);
     
-    // TODO: In theory, all PC address errors should be intercepted by now
+    // Check for address error
     if (misaligned(reg.pc)) {
         execAddressError(makeFrame(reg.pc), 2);
         return;
     }
-    // if (addressReadError<Word,2>(reg.pc)) return;
 
     queue.irc = readM<Word>(reg.pc);
-    prefetch<last, delay>();
+    prefetch<F, delay>();
 }
 
 template<bool skip> void

@@ -116,16 +116,16 @@ template<Size S, int delay = 0> bool addressWriteError(u32 addr);
 */
 
 // Prefetches the next instruction
-template<bool last = false, int delay = 0> void prefetch();
+template<Flags F = 0, int delay = 0> void prefetch();
 
 // Prefetches the next instruction
 // TODO: This function is going to replace the old replace function.
 // TODO: It increases the pc while the the old one did not
-template<bool last = false, int delay = 0> void newPrefetch();
+template<Flags F = 0, int delay = 0> void newPrefetch();
 void compensateNewPrefetch(); // WILL GO AWAY
 
 // Performs a full prefetch cycle
-template<bool last = false, int delay = 0> void fullPrefetch();
+template<Flags F = 0, int delay = 0> void fullPrefetch();
 
 // Reads an extension word from memory
 template<bool skip = false> void readExt();
