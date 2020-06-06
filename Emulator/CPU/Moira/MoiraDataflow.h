@@ -84,8 +84,8 @@ template<Size S, bool last = false> u32 readM(u32 addr);
 template<Size S, bool last = false> u32 readM(u32 addr, bool &error);
 
 // Writes an operand to memory (without or with address error checking)
-template<Size S, Flags F = 0, bool last = false> void writeM(u32 addr, u32 val);
-template<Size S, Flags F = 0, bool last = false> void writeM(u32 addr, u32 val, bool &error);
+template<Size S, Flags F = 0> void writeM(u32 addr, u32 val);
+template<Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
 
 // Reads an immediate value from memory
 template<Size S> u32 readI();

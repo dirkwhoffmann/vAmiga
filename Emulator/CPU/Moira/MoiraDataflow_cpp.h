@@ -53,7 +53,7 @@ Moira::writeOp(int n, u32 val)
     setFC<M>();
 
     // Write to effective address
-    bool error; writeM<S,last>(ea, val, error);
+    bool error; writeM <S, last ? POLL : 0> (ea, val, error);
 
     // Emulate -(An) register modification
     updateAnPD<M,S>(n);
@@ -75,7 +75,7 @@ Moira::writeOp(int n, u32 ea, u32 val)
     if (M == MODE_AN) { writeA<S>(n, val); return; }
     if (M == MODE_IM) { assert(false);     return; }
 
-    writeM<S,last>(ea, val);
+    writeM <S,last ? POLL : 0> (ea, val);
 }
 
 template<Mode M, Size S, bool skip> u32
@@ -253,17 +253,17 @@ Moira::readM(u32 addr, bool &error)
     return readM<S,last>(addr);
 }
 
-template<Size S, Flags F, bool last> void
+template<Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
     // Break down long word accesses into two word accesses
     if (S == Long) {
         if (F & REVERSE) {
-            writeM<Word>     (addr + 2, val & 0xFFFF);
-            writeM<Word,last>(addr,     val >> 16   );
+            writeM <Word>    (addr + 2, val & 0xFFFF);
+            writeM <Word, F> (addr,     val >> 16   );
         } else {
-            writeM<Word>     (addr,     val >> 16   );
-            writeM<Word,last>(addr + 2, val & 0xFFFF);
+            writeM <Word>    (addr,     val >> 16   );
+            writeM <Word, F> (addr + 2, val & 0xFFFF);
         }
         return;
     }
@@ -275,20 +275,20 @@ Moira::writeM(u32 addr, u32 val)
 
     if (S == Byte) {
         sync(2);
-        if (last) pollIrq();
+        if (F & POLL) pollIrq();
         write8(addr & 0xFFFFFF, (u8)val);
         sync(2);
     }
 
     if (S == Word) {
         sync(2);
-        if (last) pollIrq();
+        if (F & POLL) pollIrq();
         write16(addr & 0xFFFFFF, (u16)val);
         sync(2);
     }
 }
 
-template<Size S, Flags F, bool last> void
+template<Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
     if ((error = misaligned<S>(addr))) {
@@ -296,7 +296,7 @@ Moira::writeM(u32 addr, u32 val, bool &error)
         return;
     }
     
-    writeM<S,last>(addr, val);
+    writeM <S,F> (addr, val);
 }
 
 template<Size S> u32
@@ -328,14 +328,14 @@ template<Size S, bool last> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    writeM<S,last>(reg.sp, val);
+    writeM <S, last ? POLL : 0> (reg.sp, val);
 }
 
 template<Size S, bool last> void
 Moira::push(u32 val, bool &error)
 {
     reg.sp -= S;
-    writeM<S,last>(reg.sp, val, error);
+    writeM <S, last ? POLL : 0> (reg.sp, val, error);
 }
 
 template<Size S> bool

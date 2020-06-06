@@ -82,7 +82,7 @@ static const int CPU_DEBUG       = 0; // CPU
 static const int IRQ_DEBUG       = 0; // CPU interrupts
 
 // Memory access
-extern int OCSREG_DEBUG; // General OCS register debugging
+static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
 static const int MEM_DEBUG       = 0; // Memory oddities

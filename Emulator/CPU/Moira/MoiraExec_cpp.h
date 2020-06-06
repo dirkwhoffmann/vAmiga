@@ -68,7 +68,7 @@ Moira::execShiftEa(u16 op)
 
     prefetch();
 
-    writeM<S,LAST_BUS_CYCLE>(ea, shift<I,S>(1, data));
+    writeM <S, POLL> (ea, shift<I,S>(1, data));
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -101,7 +101,7 @@ Moira::execAbcd(u16 opcode)
             u32 result = bcd<I,Byte>(data1, data2);
             prefetch();
 
-            writeM<Byte,LAST_BUS_CYCLE>(ea2, result);
+            writeM <Byte, POLL> (ea2, result);
             break;
         }
     }
@@ -151,7 +151,7 @@ Moira::execAddRgEa(u16 opcode)
     result = addsub<I,S>(readD<S>(src), data);
 
     prefetch();
-    writeM<S,LAST_BUS_CYCLE>(ea, result);
+    writeM <S, POLL> (ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -317,14 +317,14 @@ Moira::execAddxEa(u16 opcode)
     u32 result = addsub<I,S>(data1, data2);
 
     if (S == Long && !MIMIC_MUSASHI) {
-        writeM<Word>(ea2 + 2, result & 0xFFFF);
+        writeM <Word> (ea2 + 2, result & 0xFFFF);
         prefetch();
-        writeM<Word,LAST_BUS_CYCLE>(ea2, result >> 16);
+        writeM <Word, POLL> (ea2, result >> 16);
         return;
     }
 
     prefetch();
-    writeM<S,LAST_BUS_CYCLE>(ea2, result);
+    writeM <S, POLL> (ea2, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -509,7 +509,7 @@ Moira::execBitDxEa(u16 opcode)
 
             if (I != BTST) {
                 prefetch();
-                writeM<Byte,LAST_BUS_CYCLE>(ea, data);
+                writeM <Byte, POLL> (ea, data);
             } else {
                 prefetch<LAST_BUS_CYCLE>();
             }
@@ -547,7 +547,7 @@ Moira::execBitImEa(u16 opcode)
 
             if (I != BTST) {
                 prefetch();
-                writeM<S,LAST_BUS_CYCLE>(ea, data);
+                writeM <S, POLL> (ea, data);
             } else {
                 prefetch<LAST_BUS_CYCLE>();
             }
@@ -1126,7 +1126,7 @@ Moira::execMove4(u16 opcode)
         return;
     }
 
-    writeM <S, REVERSE, LAST_BUS_CYCLE> (ea, data);
+    writeM <S, REVERSE | POLL> (ea, data);
     updateAn<MODE_PD,S>(dst);
     
     // Revert to standard stack frame format
@@ -1313,7 +1313,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeM<S>(ea2, data);
+        writeM <S> (ea2, data);
         readExt();
         
     } else {
@@ -1467,7 +1467,7 @@ Moira::execMovemRgEa(u16 opcode)
             for(int i = 0; i < 16; i++) {
 
                 if (mask & (1 << i)) {
-                    writeM<S>(ea, reg.r[i]);
+                    writeM <S> (ea, reg.r[i]);
                     ea += S;
                 }
             }
@@ -1495,13 +1495,13 @@ Moira::execMovepDxEa(u16 opcode)
 
         case Long:
         {
-            writeM<Byte>(ea, (dx >> 24) & 0xFF); ea += 2;
-            writeM<Byte>(ea, (dx >> 16) & 0xFF); ea += 2;
+            writeM <Byte> (ea, (dx >> 24) & 0xFF); ea += 2;
+            writeM <Byte> (ea, (dx >> 16) & 0xFF); ea += 2;
         }
         case Word:
         {
-            writeM<Byte>(ea, (dx >>  8) & 0xFF); ea += 2;
-            writeM<Byte>(ea, (dx >>  0) & 0xFF);
+            writeM <Byte> (ea, (dx >>  8) & 0xFF); ea += 2;
+            writeM <Byte> (ea, (dx >>  0) & 0xFF);
         }
     }
     prefetch<LAST_BUS_CYCLE>();
@@ -1802,9 +1802,9 @@ Moira::execNbcd(u16 opcode)
         default: // Ea
         {
             u32 ea, data;
-            if (!readOp<M,Byte>(reg, ea, data)) return;
+            if (!readOp <M, Byte> (reg, ea, data)) return;
             newPrefetch();
-            writeM<Byte,LAST_BUS_CYCLE>(ea, bcd<SBCD,Byte>(data, 0));
+            writeM <Byte, POLL> (ea, bcd <SBCD,Byte> (data, 0));
             break;
         }
     }
