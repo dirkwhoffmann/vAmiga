@@ -37,9 +37,9 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
     } else {
 
         reg.sp -= 6;
-        writeM <Word> (reg.sp + 4, pc & 0xFFFF);
-        writeM <Word> (reg.sp + 0, sr);
-        writeM <Word> (reg.sp + 2, pc >> 16);
+        writeM <MEM_DATA, Word> (reg.sp + 4, pc & 0xFFFF);
+        writeM <MEM_DATA, Word> (reg.sp + 0, sr);
+        writeM <MEM_DATA, Word> (reg.sp + 2, pc >> 16);
     }
 }
 
@@ -223,14 +223,14 @@ Moira::execIrqException(int level)
         
     sync(6);
     reg.sp -= 6;
-    writeM <Word> (reg.sp + 4, reg.pc & 0xFFFF);
+    writeM <MEM_DATA, Word> (reg.sp + 4, reg.pc & 0xFFFF);
 
     // u8 vector = getIrqVector(level);
     queue.ird = getIrqVector(level);
     
     sync(4);
-    writeM <Word> (reg.sp + 0, status);
-    writeM <Word> (reg.sp + 2, reg.pc >> 16);
+    writeM <MEM_DATA, Word> (reg.sp + 0, status);
+    writeM <MEM_DATA, Word> (reg.sp + 2, reg.pc >> 16);
 
     aeFlags = SET_CODE_BIT_3;
     jumpToVector(queue.ird);

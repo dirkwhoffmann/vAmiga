@@ -87,9 +87,13 @@ template<MemSpace M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
 template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
+// Writes a value to a specific memory space
+template<MemSpace M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
+template<MemSpace M, Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
+
 // Writes an operand to memory (without or with address error checking)
-template<Size S, Flags F = 0> void writeM(u32 addr, u32 val);
-template<Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
+template<Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val);
+template<Mode M, Size S, Flags F = 0> void writeM(u32 addr, u32 val, bool &error);
 
 // Reads an immediate value from memory
 template<Size S> u32 readI();

@@ -44,11 +44,8 @@ Moira::writeOp(int n, u32 val)
     // Compute effective address
     u32 ea = computeEA<M,S>(n);
 
-    // Update the function code pins
-    setFC<M>();
-
     // Write to effective address
-    bool error; writeM <S,F> (ea, val, error);
+    bool error; writeM <M,S,F> (ea, val, error);
 
     // Emulate -(An) register modification
     updateAnPD<M,S>(n);
@@ -66,11 +63,11 @@ template<Mode M, Size S, Flags F> void
 Moira::writeOp(int n, u32 ea, u32 val)
 {
     // Handle non-memory modes
-    if (M == MODE_DN) { writeD<S>(n, val); return; }
-    if (M == MODE_AN) { writeA<S>(n, val); return; }
-    if (M == MODE_IM) { assert(false);     return; }
+    if (M == MODE_DN) { writeD <S> (n, val); return; }
+    if (M == MODE_AN) { writeA <S> (n, val); return; }
+    if (M == MODE_IM) { assert(false);       return; }
 
-    writeM <S,F> (ea, val);
+    writeM <M,S,F> (ea, val);
 }
 
 template<Mode M, Size S, bool skip> u32
@@ -212,23 +209,24 @@ Moira::readM(u32 addr, bool &error)
         return 0;
     }
     
-    return readM<M,S,F>(addr);
+    return readM <M,S,F> (addr);
 }
 
 template<MemSpace M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     u32 result;
-    
-    // Update function code pins
-    setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-    
+        
+    // Break down long word accesses into two word accesses
     if (S == Long) {
         result = readM<M, Word>(addr) << 16;
         result |= readM<M, Word, F>(addr + 2);
         return result;
     }
     
+    // Update function code pins
+    setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
@@ -247,80 +245,94 @@ template<Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr, bool &error)
 {
     if (isPrgMode(M)) {
-        return readM<MEM_PROG, S, F>(addr, error);
+        return readM <MEM_PROG, S, F> (addr, error);
     } else {
-        return readM<MEM_DATA, S, F>(addr, error);
+        return readM <MEM_DATA, S, F> (addr, error);
     }
-    
-    /*
-    // Update function code pins according to the provided addressing mode
-    setFC<M>();
-    
-    // Check for address error
-    if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr), 2);
-        return 0;
-    }
-    
-    return readM<S,F>(addr);
-    */
 }
 
 template<Mode M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
     if (isPrgMode(M)) {
-        return readM<MEM_PROG, S, F>(addr);
+        return readM <MEM_PROG, S, F> (addr);
     } else {
-        return readM<MEM_DATA, S, F>(addr);
+        return readM <MEM_DATA, S, F> (addr);
+    }
+}
+
+template<MemSpace M, Size S, Flags F> void
+Moira::writeM(u32 addr, u32 val, bool &error)
+{
+    // Check for address errors
+    if ((error = misaligned<S>(addr))) {
+        setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+        execAddressError(makeFrame(addr, true /* write */), 2);
+        return;
     }
     
-    /*
-    u32 result;
+    writeM <M,S,F> (addr, val);
+}
 
+template<MemSpace M, Size S, Flags F> void
+Moira::writeM(u32 addr, u32 val)
+{
+    // Break down long word accesses into two word accesses
     if (S == Long) {
-        result = readM <Word> (addr) << 16;
-        result |= readM <Word,F> (addr + 2);
-        return result;
+        if (F & REVERSE) {
+            writeM <M, Word>    (addr + 2, val & 0xFFFF);
+            writeM <M, Word, F> (addr,     val >> 16   );
+        } else {
+            writeM <M, Word>    (addr,     val >> 16   );
+            writeM <M, Word, F> (addr + 2, val & 0xFFFF);
+        }
+        return;
     }
-
+    
+    // Update function code pins
+    setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    
     // Check if a watchpoint is being accessed
     if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
         watchpointReached(addr);
     }
 
-    if (S == Byte) {
-        sync(2);
-        if (F & POLLIPL) pollIrq();
-        result = read8(addr & 0xFFFFFF);
-        sync(2);
-    }
-
-    if (S == Word) {
-        sync(2);
-        if (F & POLLIPL) pollIrq();
-        result = read16(addr & 0xFFFFFF);
-        sync(2);
-    }
-
-    return result;
-    */
+    // Perform the write operation
+    sync(2);
+    if (F & POLLIPL) pollIrq();
+    S == Byte ? write8(addr & 0xFFFFFF, (u8)val) : write16(addr & 0xFFFFFF, (u16)val);
+    sync(2);
 }
 
-template<Size S, Flags F> void
+template<Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val, bool &error)
 {
+    if (isPrgMode(M)) {
+        writeM <MEM_PROG, S, F> (addr, val, error);
+    } else {
+        writeM <MEM_DATA, S, F> (addr, val, error);
+    }
+    
+    /*
     if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr, true /* write */), 2);
+        execAddressError(makeFrame(addr, true), 2);
         return;
     }
     
     writeM <S,F> (addr, val);
+    */
 }
 
-template<Size S, Flags F> void
+template<Mode M, Size S, Flags F> void
 Moira::writeM(u32 addr, u32 val)
 {
+    if (isPrgMode(M)) {
+        writeM <MEM_PROG, S, F> (addr, val);
+    } else {
+        writeM <MEM_DATA, S, F> (addr, val);
+    }
+    
+    /*
     // Break down long word accesses into two word accesses
     if (S == Long) {
         if (F & REVERSE) {
@@ -351,6 +363,7 @@ Moira::writeM(u32 addr, u32 val)
         write16(addr & 0xFFFFFF, (u16)val);
         sync(2);
     }
+    */
 }
 
 template<Size S> u32
@@ -382,14 +395,14 @@ template<Size S, Flags F> void
 Moira::push(u32 val)
 {
     reg.sp -= S;
-    writeM <S,F> (reg.sp, val);
+    writeM <MEM_DATA,S,F> (reg.sp, val);
 }
 
 template<Size S, Flags F> void
 Moira::push(u32 val, bool &error)
 {
     reg.sp -= S;
-    writeM <S,F> (reg.sp, val, error);
+    writeM <MEM_DATA,S,F> (reg.sp, val, error);
 }
 
 template<Size S> bool

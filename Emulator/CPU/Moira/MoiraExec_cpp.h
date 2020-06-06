@@ -68,7 +68,7 @@ Moira::execShiftEa(u16 op)
 
     prefetch();
 
-    writeM <S, POLLIPL> (ea, shift<I,S>(1, data));
+    writeM <M, S, POLLIPL> (ea, shift<I,S>(1, data));
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -101,7 +101,7 @@ Moira::execAbcd(u16 opcode)
             u32 result = bcd<I,Byte>(data1, data2);
             prefetch();
 
-            writeM <Byte, POLLIPL> (ea2, result);
+            writeM <M, Byte, POLLIPL> (ea2, result);
             break;
         }
     }
@@ -151,7 +151,7 @@ Moira::execAddRgEa(u16 opcode)
     result = addsub<I,S>(readD<S>(src), data);
 
     prefetch();
-    writeM <S, POLLIPL> (ea, result);
+    writeM <M, S, POLLIPL> (ea, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -317,14 +317,14 @@ Moira::execAddxEa(u16 opcode)
     u32 result = addsub<I,S>(data1, data2);
 
     if (S == Long && !MIMIC_MUSASHI) {
-        writeM <Word> (ea2 + 2, result & 0xFFFF);
+        writeM <M, Word> (ea2 + 2, result & 0xFFFF);
         prefetch();
-        writeM <Word, POLLIPL> (ea2, result >> 16);
+        writeM <M, Word, POLLIPL> (ea2, result >> 16);
         return;
     }
 
     prefetch();
-    writeM <S, POLLIPL> (ea2, result);
+    writeM <M, S, POLLIPL> (ea2, result);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -503,13 +503,13 @@ Moira::execBitDxEa(u16 opcode)
             u8 b = readD(src) & 0b111;
 
             u32 ea, data;
-            if (!readOp<M,Byte>(dst, ea, data)) return;
+            if (!readOp<M, Byte>(dst, ea, data)) return;
 
             data = bit<I>(data, b);
 
             if (I != BTST) {
                 prefetch();
-                writeM <Byte, POLLIPL> (ea, data);
+                writeM<M, Byte, POLLIPL>(ea, data);
             } else {
                 prefetch <POLLIPL> ();
             }
@@ -547,7 +547,7 @@ Moira::execBitImEa(u16 opcode)
 
             if (I != BTST) {
                 prefetch();
-                writeM <S, POLLIPL> (ea, data);
+                writeM <M, S, POLLIPL> (ea, data);
             } else {
                 prefetch <POLLIPL> ();
             }
@@ -1126,8 +1126,8 @@ Moira::execMove4(u16 opcode)
         return;
     }
 
-    writeM <S, REVERSE | POLLIPL> (ea, data);
-    updateAn<MODE_PD,S>(dst);
+    writeM <MODE_PD, S, REVERSE | POLLIPL> (ea, data);
+    updateAn <MODE_PD, S> (dst);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -1301,7 +1301,7 @@ Moira::execMove8(u16 opcode)
         readExt();
         ea2 |= queue.irc;
 
-        setFC<MODE_AL>();
+        setFC <MODE_AL> ();
 
         if (misaligned<S>(ea2)) {
             execAddressError(makeFrame(ea2, true /* write */));
@@ -1313,7 +1313,7 @@ Moira::execMove8(u16 opcode)
         reg.sr.v = 0;
         reg.sr.c = 0;
 
-        writeM <S> (ea2, data);
+        writeM <MODE_AL, S> (ea2, data);
         readExt();
         
     } else {
@@ -1446,7 +1446,7 @@ Moira::execMovemRgEa(u16 opcode)
 
                 if (mask & (0x8000 >> i)) {
                     ea -= S;
-                    writeM <S, MIMIC_MUSASHI ? REVERSE : 0> (ea, reg.r[i]);
+                    writeM <M, S, MIMIC_MUSASHI ? REVERSE : 0> (ea, reg.r[i]);
                 }
             }
             writeA(dst, ea);
@@ -1462,12 +1462,11 @@ Moira::execMovemRgEa(u16 opcode)
                 execAddressError(makeFrame(ea, true));
                 return;
             }
-            // if (mask && addressReadError<S>(ea)) return;
 
             for(int i = 0; i < 16; i++) {
 
                 if (mask & (1 << i)) {
-                    writeM <S> (ea, reg.r[i]);
+                    writeM <M, S> (ea, reg.r[i]);
                     ea += S;
                 }
             }
@@ -1495,13 +1494,13 @@ Moira::execMovepDxEa(u16 opcode)
 
         case Long:
         {
-            writeM <Byte> (ea, (dx >> 24) & 0xFF); ea += 2;
-            writeM <Byte> (ea, (dx >> 16) & 0xFF); ea += 2;
+            writeM <M, Byte> (ea, (dx >> 24) & 0xFF); ea += 2;
+            writeM <M, Byte> (ea, (dx >> 16) & 0xFF); ea += 2;
         }
         case Word:
         {
-            writeM <Byte> (ea, (dx >>  8) & 0xFF); ea += 2;
-            writeM <Byte> (ea, (dx >>  0) & 0xFF);
+            writeM <M, Byte> (ea, (dx >>  8) & 0xFF); ea += 2;
+            writeM <M, Byte> (ea, (dx >>  0) & 0xFF);
         }
     }
     prefetch <POLLIPL> ();
@@ -1804,7 +1803,7 @@ Moira::execNbcd(u16 opcode)
             u32 ea, data;
             if (!readOp <M, Byte> (reg, ea, data)) return;
             newPrefetch();
-            writeM <Byte, POLLIPL> (ea, bcd <SBCD,Byte> (data, 0));
+            writeM <M, Byte, POLLIPL> (ea, bcd <SBCD,Byte> (data, 0));
             break;
         }
     }
