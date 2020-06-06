@@ -223,14 +223,14 @@ Moira::readM(u32 addr)
 
     if (S == Byte) {
         sync(2);
-        if (F & POLL) pollIrq();
+        if (F & POLLIPL) pollIrq();
         result = read8(addr & 0xFFFFFF);
         sync(2);
     }
 
     if (S == Word) {
         sync(2);
-        if (F & POLL) pollIrq();
+        if (F & POLLIPL) pollIrq();
         result = read16(addr & 0xFFFFFF);
         sync(2);
     }
@@ -272,14 +272,14 @@ Moira::writeM(u32 addr, u32 val)
 
     if (S == Byte) {
         sync(2);
-        if (F & POLL) pollIrq();
+        if (F & POLLIPL) pollIrq();
         write8(addr & 0xFFFFFF, (u8)val);
         sync(2);
     }
 
     if (S == Word) {
         sync(2);
-        if (F & POLL) pollIrq();
+        if (F & POLLIPL) pollIrq();
         write16(addr & 0xFFFFFF, (u16)val);
         sync(2);
     }
@@ -476,7 +476,7 @@ Moira::jumpToVector(int nr)
     }
     
     // Update the prefetch queue
-    fullPrefetch <POLL, 2> ();
+    fullPrefetch <POLLIPL, 2> ();
     
     exceptionJump(nr, reg.pc);
 }

@@ -299,7 +299,7 @@ struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
 typedef u64 Flags;
 
 static const u64 REVERSE (1 << 0);   // Reverse access order for long words
-static const u64 POLL    (1 << 1);   // Polls the interrupt line
+static const u64 POLLIPL (1 << 1);   // Polls the interrupt lines
 
 }
 #endif
