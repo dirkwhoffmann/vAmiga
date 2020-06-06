@@ -240,6 +240,7 @@ Drive::driveStatusFlags()
     return result;
 }
 
+/*
 void
 Drive::setMotor(bool value)
 {
@@ -267,7 +268,59 @@ Drive::setMotor(bool value)
     }
     
 }
+*/
 
+double
+Drive::motorSpeed()
+{
+    // Quick exit if mechanics is not emulated
+    if (!emulateMechanics()) return motorState ? 100.0 : 0.0;
+    
+    // We assume the motor speeds up in 380 msec and slows down in 80 msec
+    static const double ACCEL_DELAY = 380 * 28000;
+    static const double DECEL_DELAY =  80 * 28000;
+
+    // Determine the elapsed cycles since the last motor change
+    Cycle elapsed = agnus.clock - switchCycle;
+    assert(elapsed >= 0);
+    
+    /*
+    debug("elapsed: %lld\n", elapsed);
+    debug("predicted Speed: %f\n", switchSpeed + 100.0 * (elapsed / ACCEL_DELAY));
+    */
+    
+    // Compute the current speed
+    if (motorState) {
+        return MIN(switchSpeed + 100.0 * (elapsed / ACCEL_DELAY), 100.0);
+    } else {
+        return MAX(switchSpeed - 100.0 * (elapsed / DECEL_DELAY), 0.0);
+    }
+}
+
+void
+Drive::setMotor(bool value)
+{
+    // Only proceed if motor state will change
+    if (motorState == value) return;
+    
+    // Switch motor state
+    switchSpeed = motorSpeed();
+    switchCycle = agnus.clock;
+    motorState = value;
+    
+    // Reset the identification bit counter if motor has been turned off
+    idCount = 0;
+    
+    // Inform the GUI
+    amiga.putMessage(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
+    amiga.putMessage(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
+    
+    // debug(DSK_DEBUG, "Motor %s [%d]\n", motorState ? "on" : "off", idCount);
+    debug("Motor %s [%d]\n", motorState ? "on" : "off", idCount);
+    debug("Switch speed = %f\n", switchSpeed);
+}
+
+/*
 Cycle
 Drive::motorOnTime()
 {
@@ -279,7 +332,33 @@ Drive::motorOffTime()
 {
     return motor() ? 0 : (cpu.getMasterClock() - motorOffCycle);
 }
+*/
 
+bool
+Drive::motorSpeedingUp()
+{
+    return motorState && motorSpeed() < 100.0;
+}
+
+bool
+Drive::motorAtFullSpeed()
+{
+    return motorSpeed() == 100.0;
+}
+
+bool
+Drive::motorSlowingDown()
+{
+    return !motorState && motorSpeed() > 0.0;
+}
+
+bool
+Drive::motorStopped()
+{
+    return motorSpeed() == 0.0;
+}
+
+/*
 bool
 Drive::motorSpeedingUp()
 {
@@ -305,6 +384,7 @@ Drive::motorStopped()
     Cycle delay = 80 * 28000; // 80 msec
     return emulateMechanics() ? (motorOffTime() > delay) : !motor();
 }
+*/
 
 void
 Drive::selectSide(int side)

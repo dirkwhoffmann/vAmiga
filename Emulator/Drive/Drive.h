@@ -24,6 +24,15 @@ class Drive : public AmigaComponent {
     DriveConfig config;
     DriveInfo info;
 
+    // Drive motor status (on or off) TODO: RENAME TO motor
+    bool motorState;
+    
+    // Time stamp indicating the the latest change of the motor status
+    Cycle switchCycle;
+    
+    // Recorded motor speed at 'motorCycle' in percent
+    double switchSpeed;
+    
     // Position of the currently transmitted identification bit
     u8 idCount;
 
@@ -31,9 +40,11 @@ class Drive : public AmigaComponent {
     bool idBit;
 
     // Records when the drive motor was switch on the last time
+    // DEPRECATED
     Cycle motorOnCycle;
 
     // Records when the drive motor was switch off the last time
+    // DEPRECATED
     Cycle motorOffCycle;
 
     // Records when the head started to step to another cylinder
@@ -94,6 +105,9 @@ public:
     {
         worker
 
+        & motorState
+        & switchCycle
+        & switchSpeed
         & idCount
         & idBit
         & motorOnCycle
@@ -139,9 +153,7 @@ public:
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
-    // bool idMode() { return !motor(); }
     bool idMode();
-    
     u32 getDriveId();
 
     // Operation
@@ -165,14 +177,19 @@ public:
     // Returns true if this drive emulates mechanical delays
     bool emulateMechanics() { return !isTurbo(); }
     
+    // Returns the current motor speed in percent
+    double motorSpeed();
+
     // Turns the drive motor on or off
     void setMotor(bool value);
     void switchMotorOn() { setMotor(true); }
     void switchMotorOff() { setMotor(false); }
 
-    bool motor() { return motorOnCycle > motorOffCycle; }
-    Cycle motorOnTime();
-    Cycle motorOffTime();
+    
+    bool motor() { return motorState; }
+    // bool motor() { return motorOnCycle > motorOffCycle; } // DEPRECATED
+    // Cycle motorOnTime(); // DEPRECATED
+    // Cycle motorOffTime(); // DEPRECATED
     bool motorSpeedingUp();
     bool motorAtFullSpeed();
     bool motorSlowingDown();
