@@ -564,7 +564,6 @@ Moira::execBsr(u16 opcode)
 
     // Save the return address
     sync(2);
-    setFC(FC_USER_DATA);
     bool error;
     push <Long> (retpc, error);
     if (error) return;
@@ -911,7 +910,6 @@ Moira::execJsr(u16 opcode)
     }
  
     // Save old address on stack
-    setFC(FC_USER_DATA);
     bool error;
     push <Long> (reg.pc, error);
     if (error) return;
@@ -944,13 +942,10 @@ Moira::execLink(u16 opcode)
     int ax   = _____________xxx(opcode);
     i16 disp = (i16)readI<S>();
 
-    // Update the function code pins
-    setFC(FC_USER_DATA);
-
     // Check for address error
     if (misaligned<Long>(sp)) {
         writeA(ax, sp);
-        execAddressError(makeFrame(sp, getPC() + 2, getSR(), ird, true));
+        execAddressError(makeFrame<AE_DATA|AE_WRITE>(sp, getPC() + 2, getSR(), ird));
         return;
     }
     
@@ -1110,24 +1105,21 @@ Moira::execMove4(u16 opcode)
     newPrefetch();
     sync(-2);
 
-    setFC<MODE_PD>();
     ea = computeEA<MODE_PD,S>(dst);
     
     // Check for address error
     if (misaligned<S>(ea)) {
         if (S == Long) {
-            undoAnPD<MODE_PD, S>(dst);
-            execAddressError(makeFrame(ea + 2, reg.pc, getSR(), ird, true /* write */));
+            execAddressError(makeFrame<AE_WRITE|AE_DATA>(ea + 2, reg.pc, getSR(), ird));
         } else {
-            execAddressError(makeFrame(ea, true /* write */), 2);
+            execAddressError(makeFrame<AE_WRITE|AE_DATA>(ea), 2);
+            updateAnPD <MODE_PD,S> (dst);
         }
-                
-        updateAn<MODE_PD,S>(dst);
         return;
     }
 
     writeM <MODE_PD, S, REVERSE | POLLIPL> (ea, data);
-    updateAn <MODE_PD, S> (dst);
+    updateAnPD <MODE_PD, S> (dst);
     
     // Revert to standard stack frame format
     aeFlags = 0;
@@ -1301,10 +1293,8 @@ Moira::execMove8(u16 opcode)
         readExt();
         ea2 |= queue.irc;
 
-        setFC <MODE_AL> ();
-
         if (misaligned<S>(ea2)) {
-            execAddressError(makeFrame(ea2, true /* write */));
+            execAddressError(makeFrame<AE_WRITE|AE_DATA>(ea2));
             return;
         }
 
@@ -1364,19 +1354,18 @@ Moira::execMovea(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execMovemEaRg(u16 opcode)
 {
-    // Configure stack frame format
-    aeFlags = INC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = DEC_PC_BY_2;
-    if (M == MODE_IXPC) aeFlags = DEC_PC_BY_2;
-
     int src  = _____________xxx(opcode);
     u16 mask = readI<Word>();
     u32 ea   = computeEA<M,S>(src);
     
     // Check for address error
-    setFC<M>();
     if (misaligned<S>(ea)) {
-        execAddressError(makeFrame(ea));
+        setFC<M>();
+        if (M == MODE_IX || M == MODE_IXPC) {
+            execAddressError(makeFrame <AE_DEC_PC> (ea));
+        } else {
+            execAddressError(makeFrame <AE_INC_PC> (ea));
+        }
         return;
     }
     
@@ -1410,21 +1399,13 @@ Moira::execMovemEaRg(u16 opcode)
     }
     if (S == Word) (void)readM<MEM_DATA, Word>(ea);
     newPrefetch <POLLIPL> ();
-    
-    // Revert to standard stack frame format
-    aeFlags = 0;
-    
+        
     compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
 Moira::execMovemRgEa(u16 opcode)
 {
-    // Configure stack frame format
-    aeFlags = INC_PC_BY_2;
-    if (M == MODE_IX)   aeFlags = INC_PC_BY_2;
-    if (M == MODE_IXPC) aeFlags = INC_PC_BY_2;
-
     int dst  = _____________xxx(opcode);
     u16 mask = readI<Word>();
 
@@ -1435,10 +1416,9 @@ Moira::execMovemRgEa(u16 opcode)
             u32 ea = readA(dst);
             
             // Check for address error
-            setFC<M>();
             if (mask && misaligned<S>(ea)) {
-                ea -= S;
-                execAddressError(makeFrame(ea, true));
+                setFC<M>();
+                execAddressError(makeFrame <AE_INC_PC|AE_WRITE> (ea - S));
                 return;
             }
 
@@ -1457,14 +1437,14 @@ Moira::execMovemRgEa(u16 opcode)
             u32 ea = computeEA<M,S>(dst);
             
             // Check for address error
-            setFC<M>();
             if (mask && misaligned<S>(ea)) {
-                execAddressError(makeFrame(ea, true));
+                setFC<M>();
+                execAddressError(makeFrame <AE_INC_PC|AE_WRITE> (ea));
                 return;
             }
-
+  
             for(int i = 0; i < 16; i++) {
-
+                
                 if (mask & (1 << i)) {
                     writeM <M, S> (ea, reg.r[i]);
                     ea += S;
@@ -1474,10 +1454,6 @@ Moira::execMovemRgEa(u16 opcode)
         }
     }
     newPrefetch <POLLIPL> ();
-    
-    // Revert to standard stack frame format
-    aeFlags = 0;
-    
     compensateNewPrefetch();
 }
 
@@ -1865,15 +1841,12 @@ Moira::execPea(u16 opcode)
     u32 ea = computeEA<M,Long>(src);
 
     if (isIdxMode(M)) sync(2);
-
-    setFC(FC_USER_DATA);
     
     if (misaligned(reg.sp)) {
         reg.sp -= S;
         aeFlags = INC_PC_BY_2;
         if (M == MODE_AW || M == MODE_AL) aeFlags = 0;
-        setFC(FC_USER_DATA);
-        execAddressError(makeFrame(reg.sp, true));
+        execAddressError(makeFrame<AE_WRITE|AE_DATA>(reg.sp));
         aeFlags = 0;
         return;
     }
@@ -1913,8 +1886,7 @@ Moira::execRte(u16 opcode)
     setSR(newsr);
 
     if (misaligned(newpc)) {
-        setFC(FC_USER_PROG);
-        execAddressError(makeFrame(newpc, reg.pc));
+        execAddressError(makeFrame <AE_PROG> (newpc, reg.pc));
         return;
     }
 
@@ -1938,8 +1910,7 @@ Moira::execRtr(u16 opcode)
     setCCR((u8)newccr);
     
     if (misaligned(newpc)) {
-        setFC(FC_USER_PROG);
-        execAddressError(makeFrame(newpc, reg.pc));
+        execAddressError(makeFrame <AE_PROG> (newpc, reg.pc));
         return;
     }
     
@@ -1958,8 +1929,7 @@ Moira::execRts(u16 opcode)
     reg.sp += 4;
     
     if (misaligned(newpc)) {
-        setFC(FC_USER_PROG);
-        execAddressError(makeFrame(newpc, reg.pc));
+        execAddressError(makeFrame <AE_PROG> (newpc, reg.pc));
         return;
     }
     
@@ -2128,9 +2098,8 @@ Moira::execUnlk(u16 opcode)
     // Configure stack frame format
     aeFlags = INC_PC_BY_2;
     
-    setFC<MODE_AI>();
     if (misaligned(readA(an))) {
-        execAddressError(makeFrame(readA(an)));
+        execAddressError(makeFrame <AE_PROG> (readA(an)));
         return;
     }
 

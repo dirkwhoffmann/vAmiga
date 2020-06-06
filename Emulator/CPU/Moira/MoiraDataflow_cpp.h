@@ -267,7 +267,7 @@ Moira::writeM(u32 addr, u32 val, bool &error)
     // Check for address errors
     if ((error = misaligned<S>(addr))) {
         setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError(makeFrame(addr, true /* write */), 2);
+        execAddressError(makeFrame<AE_WRITE>(addr), 2);
         return;
     }
     
@@ -312,15 +312,6 @@ Moira::writeM(u32 addr, u32 val, bool &error)
     } else {
         writeM <MEM_DATA, S, F> (addr, val, error);
     }
-    
-    /*
-    if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr, true), 2);
-        return;
-    }
-    
-    writeM <S,F> (addr, val);
-    */
 }
 
 template<Mode M, Size S, Flags F> void
@@ -331,39 +322,6 @@ Moira::writeM(u32 addr, u32 val)
     } else {
         writeM <MEM_DATA, S, F> (addr, val);
     }
-    
-    /*
-    // Break down long word accesses into two word accesses
-    if (S == Long) {
-        if (F & REVERSE) {
-            writeM <Word>    (addr + 2, val & 0xFFFF);
-            writeM <Word, F> (addr,     val >> 16   );
-        } else {
-            writeM <Word>    (addr,     val >> 16   );
-            writeM <Word, F> (addr + 2, val & 0xFFFF);
-        }
-        return;
-    }
-
-    // Check if a watchpoint is being accessed
-    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
-        watchpointReached(addr);
-    }
-
-    if (S == Byte) {
-        sync(2);
-        if (F & POLLIPL) pollIrq();
-        write8(addr & 0xFFFFFF, (u8)val);
-        sync(2);
-    }
-
-    if (S == Word) {
-        sync(2);
-        if (F & POLLIPL) pollIrq();
-        write16(addr & 0xFFFFFF, (u16)val);
-        sync(2);
-    }
-    */
 }
 
 template<Size S> u32
@@ -411,18 +369,31 @@ Moira::misaligned(u32 addr)
     return EMULATE_ADDRESS_ERROR ? ((addr & 1) && S != Byte) : false;
 }
 
-AEStackFrame
-Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
+template <Flags F> AEStackFrame
+Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
 {
     AEStackFrame frame;
+    u16 read = 0x10;
     
-    frame.code = (ird & 0xFFE0) | readFC() | (write ? 0x00 : 0x10);
+    // Apply flags
+    if (F & AE_WRITE) read = 0;
+    if (F & AE_PROG)  setFC(FC_USER_PROG);
+    if (F & AE_DATA)  setFC(FC_USER_DATA);
+
+    frame.code = (ird & 0xFFE0) | readFC() | read;
     frame.addr = addr;
     frame.ird = ird;
     frame.sr = sr;
     frame.pc = pc;
+
+    // Apply more flags
+    if (F & AE_INC_PC) frame.pc += 2;
+    if (F & AE_DEC_PC) frame.pc -= 2;
+    if (F & AE_INC_ADDR) frame.addr += 2;
+    if (F & AE_DEC_ADDR) frame.addr -= 2;
+
     
-    // Apply modification flags
+    // Apply modification flags (DEPRECATED)
     if (aeFlags & INC_PC_BY_2)    frame.pc += 2;
     if (aeFlags & DEC_PC_BY_2)    frame.pc -= 2;
     if (aeFlags & INC_ADDR_BY_2)  frame.addr += 2;
@@ -434,16 +405,16 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write)
     return frame;
 }
 
-AEStackFrame
-Moira::makeFrame(u32 addr, u32 pc, bool write)
+template <Flags F> AEStackFrame
+Moira::makeFrame(u32 addr, u32 pc)
 {
-    return makeFrame(addr, pc, getSR(), getIRD(), write);
+    return makeFrame <F> (addr, pc, getSR(), getIRD());
 }
 
-AEStackFrame
-Moira::makeFrame(u32 addr, bool write)
+template <Flags F> AEStackFrame
+Moira::makeFrame(u32 addr)
 {
-    return makeFrame(addr, getPC(), getSR(), getIRD(), write);
+    return makeFrame <F> (addr, getPC(), getSR(), getIRD());
 }
 
 template<Flags F, int delay> void
@@ -525,8 +496,7 @@ Moira::jumpToVector(int nr)
     
     // Check for address error
     if (misaligned(reg.pc)) {
-        setFC(FC_USER_PROG);
-        execAddressError(makeFrame(reg.pc, vectorAddr));
+        execAddressError(makeFrame<AE_PROG>(reg.pc, vectorAddr));
         return;
     }
     

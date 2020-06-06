@@ -106,22 +106,9 @@ template<Size S, Flags F = 0> void push(u32 value, bool &error);
 template<Size S = Word> bool misaligned(u32 addr);
 
 // Creates an address error stack frame
-AEStackFrame makeFrame(u32 addr, u32 pc, u16 sr, u16 ird, bool write = false);
-AEStackFrame makeFrame(u32 addr, u32 pc, bool write = false);
-AEStackFrame makeFrame(u32 addr, bool write = false);
-
-//
-/* Checks for an address error (DEPRECATED)
- * An address error occurs if the CPU tries to access a word or a long word
- * that is located at an odd address. If an address error is encountered,
- * the function calls execAddressError to initiate exception processing.
- */
-/*
-template<Size S, int delay = 0> bool addressReadError(u32 addr, u32 pc);
-template<Size S, int delay = 0> bool addressWriteError(u32 addr, u32 pc);
-template<Size S, int delay = 0> bool addressReadError(u32 addr);
-template<Size S, int delay = 0> bool addressWriteError(u32 addr);
-*/
+template<Flags F = 0> AEStackFrame makeFrame(u32 addr, u32 pc, u16 sr, u16 ird);
+template<Flags F = 0> AEStackFrame makeFrame(u32 addr, u32 pc);
+template<Flags F = 0> AEStackFrame makeFrame(u32 addr);
 
 // Prefetches the next instruction
 template<Flags F = 0, int delay = 0> void prefetch();

@@ -305,8 +305,20 @@ struct PrefetchQueue {    // http://pasti.fxatari.com/68kdocs/68kPrefetch.html
  
 typedef u64 Flags;
 
-static const u64 REVERSE (1 << 0);   // Reverse access order for long words
-static const u64 POLLIPL (1 << 1);   // Polls the interrupt lines
+// Memory access flags
+static const u64 REVERSE     (1 << 0);  // Reverse the access order for long words
+
+// Interrupt flags
+static const u64 POLLIPL     (1 << 1);  // Poll the interrupt lines
+                           
+// Address error stack frame flags
+static const u64 AE_WRITE    (1 << 2);  // Clear read flag in code word
+static const u64 AE_PROG     (1 << 3);  // Set FC pins to program space
+static const u64 AE_DATA     (1 << 4);  // Set FC pins to user space
+static const u64 AE_INC_PC   (1 << 5);  // Increment PC by 2 in stack frame
+static const u64 AE_DEC_PC   (1 << 6);  // Decrement PC by 2 in stack frame
+static const u64 AE_INC_ADDR (1 << 7);  // Increment ADDR by 2 in stack frame
+static const u64 AE_DEC_ADDR (1 << 8);  // Decrement ADDR by 2 in stack frame
 
 }
 #endif
