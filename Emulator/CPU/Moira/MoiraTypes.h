@@ -223,6 +223,13 @@ typedef enum
 }
 FunctionCode;
 
+typedef enum
+{
+    MEM_DATA = 1,
+    MEM_PROG = 2
+}
+MemSpace;
+
 typedef struct
 {
     u16 code;

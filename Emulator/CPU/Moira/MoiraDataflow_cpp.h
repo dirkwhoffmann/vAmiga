@@ -202,9 +202,80 @@ Moira::updateAn(int n)
     if (M == 4) reg.a[n] -= (n == 7 && S == Byte) ? 2 : S;
 }
 
-template<Size S, Flags F> u32
+template<MemSpace M, Size S, Flags F> u32
+Moira::readM(u32 addr, bool &error)
+{
+    // Check for address errors
+    if ((error = misaligned<S>(addr))) {
+        setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+        execAddressError(makeFrame(addr), 2);
+        return 0;
+    }
+    
+    return readM<M,S,F>(addr);
+}
+
+template<MemSpace M, Size S, Flags F> u32
 Moira::readM(u32 addr)
 {
+    u32 result;
+    
+    // Update function code pins
+    setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
+    
+    if (S == Long) {
+        result = readM<M, Word>(addr) << 16;
+        result |= readM<M, Word, F>(addr + 2);
+        return result;
+    }
+    
+    // Check if a watchpoint is being accessed
+    if ((flags & CPU_CHECK_WP) && debugger.watchpointMatches(addr, S)) {
+        watchpointReached(addr);
+    }
+    
+    // Perform the read operation
+    sync(2);
+    if (F & POLLIPL) pollIrq();
+    result = (S == Byte) ? read8(addr & 0xFFFFFF) : read16(addr & 0xFFFFFF);
+    sync(2);
+    
+    return result;
+}
+
+template<Mode M, Size S, Flags F> u32
+Moira::readM(u32 addr, bool &error)
+{
+    if (isPrgMode(M)) {
+        return readM<MEM_PROG, S, F>(addr, error);
+    } else {
+        return readM<MEM_DATA, S, F>(addr, error);
+    }
+    
+    /*
+    // Update function code pins according to the provided addressing mode
+    setFC<M>();
+    
+    // Check for address error
+    if ((error = misaligned<S>(addr))) {
+        execAddressError(makeFrame(addr), 2);
+        return 0;
+    }
+    
+    return readM<S,F>(addr);
+    */
+}
+
+template<Mode M, Size S, Flags F> u32
+Moira::readM(u32 addr)
+{
+    if (isPrgMode(M)) {
+        return readM<MEM_PROG, S, F>(addr);
+    } else {
+        return readM<MEM_DATA, S, F>(addr);
+    }
+    
+    /*
     u32 result;
 
     if (S == Long) {
@@ -233,21 +304,18 @@ Moira::readM(u32 addr)
     }
 
     return result;
+    */
 }
 
-template<Mode M, Size S, Flags F> u32
-Moira::readM(u32 addr, bool &error)
+template<Size S, Flags F> void
+Moira::writeM(u32 addr, u32 val, bool &error)
 {
-    // Update function code pins according to the provided addressing mode
-    setFC<M>();
-    
-    // Check for address error
     if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr), 2);
-        return 0;
+        execAddressError(makeFrame(addr, true /* write */), 2);
+        return;
     }
     
-    return readM<S,F>(addr);
+    writeM <S,F> (addr, val);
 }
 
 template<Size S, Flags F> void
@@ -283,17 +351,6 @@ Moira::writeM(u32 addr, u32 val)
         write16(addr & 0xFFFFFF, (u16)val);
         sync(2);
     }
-}
-
-template<Size S, Flags F> void
-Moira::writeM(u32 addr, u32 val, bool &error)
-{
-    if ((error = misaligned<S>(addr))) {
-        execAddressError(makeFrame(addr, true /* write */), 2);
-        return;
-    }
-    
-    writeM <S,F> (addr, val);
 }
 
 template<Size S> u32
@@ -383,12 +440,9 @@ Moira::prefetch()
     // next instruction to execute. We save this value for further reference.
     reg.pc0 = reg.pc;
     
-    // Update the function code pins
-    setFC(FC_USER_PROG);
-
     queue.ird = queue.irc;
     if (delay) sync(delay);
-    queue.irc = readM<Word,F>(reg.pc + 2);
+    queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
 }
 
 template<Flags F, int delay> void
@@ -400,13 +454,10 @@ Moira::newPrefetch()
      */
     reg.pc0 = reg.pc;
     
-    // Update the function code pins
-    setFC(FC_USER_PROG);
-
     queue.ird = queue.irc;
     if (delay) sync(delay);
     reg.pc += 2;
-    queue.irc = readM <Word,F> (reg.pc);
+    queue.irc = readM<MEM_PROG, Word, F>(reg.pc);
 }
 
 void
@@ -421,17 +472,14 @@ Moira::compensateNewPrefetch()
 
 template<Flags F, int delay> void
 Moira::fullPrefetch()
-{
-    // Update the function code pins
-    setFC(FC_USER_PROG);
-    
+{    
     // Check for address error
     if (misaligned(reg.pc)) {
         execAddressError(makeFrame(reg.pc), 2);
         return;
     }
 
-    queue.irc = readM<Word>(reg.pc);
+    queue.irc = readM<MEM_PROG, Word>(reg.pc);
     prefetch<F,delay>();
 }
 
@@ -441,17 +489,14 @@ Moira::readExt()
     reg.pc += 2;
     
     if (!skip) {
-        
-        // Update the function code pins
-        setFC(FC_USER_PROG);
-        
+                
         // Check for address error
         if (misaligned<Word>(reg.pc)) {
             execAddressError(makeFrame(reg.pc));
             return;
         }
         
-        queue.irc = readM<Word>(reg.pc);
+        queue.irc = readM<MEM_PROG, Word>(reg.pc);
     }
 }
 
@@ -462,11 +507,8 @@ Moira::jumpToVector(int nr)
     
     u32 vectorAddr = 4 * nr;
     
-    // Update the function code pins
-    setFC(FC_USER_DATA);
-
     // Update the program counter
-    reg.pc = readM<Long>(vectorAddr);
+    reg.pc = readM<MEM_DATA, Long>(vectorAddr);
     
     // Check for address error
     if (misaligned(reg.pc)) {

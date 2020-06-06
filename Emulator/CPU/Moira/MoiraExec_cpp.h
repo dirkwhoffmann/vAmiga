@@ -428,7 +428,7 @@ Moira::execAndiccr(u16 opcode)
     u32 result = logic<I,S>(src, dst);
     setCCR(result);
 
-    (void)readM<Word>(reg.pc+2);
+    (void)readM<MEM_DATA, Word>(reg.pc+2);
     prefetch <POLLIPL> ();
 }
 
@@ -445,7 +445,7 @@ Moira::execAndisr(u16 opcode)
     u32 result = logic<I,S>(src, dst);
     setSR(result);
 
-    (void)readM<Word>(reg.pc+2);
+    (void)readM<MEM_DATA, Word>(reg.pc+2);
     prefetch <POLLIPL> ();
 }
 
@@ -799,7 +799,7 @@ Moira::execDbcc(u16 opcode)
             fullPrefetch <POLLIPL> ();
             return;
         } else {
-            (void)readM<Word>(reg.pc + 2);
+            (void)readM<MEM_PROG, Word>(reg.pc + 2);
         }
     } else {
         sync(2);
@@ -919,7 +919,7 @@ Moira::execJsr(u16 opcode)
     // Jump to new address
     reg.pc = ea;
 
-    queue.irc = readM<Word>(ea);
+    queue.irc = readM<MEM_PROG, Word>(ea);
     prefetch <POLLIPL> ();
 }
 
@@ -1380,7 +1380,7 @@ Moira::execMovemEaRg(u16 opcode)
         return;
     }
     
-    if (S == Long) (void)readM<Word>(ea);
+    if (S == Long) (void)readM<MEM_DATA, Word>(ea);
 
     switch (M) {
 
@@ -1389,7 +1389,7 @@ Moira::execMovemEaRg(u16 opcode)
             for(int i = 0; i <= 15; i++) {
 
                 if (mask & (1 << i)) {
-                    writeR(i, SEXT<S>(readM<S>(ea)));
+                    writeR(i, SEXT<S>(readM<M,S>(ea)));
                     ea += S;
                 }
             }
@@ -1401,14 +1401,14 @@ Moira::execMovemEaRg(u16 opcode)
             for(int i = 0; i <= 15; i++) {
 
                 if (mask & (1 << i)) {
-                    writeR(i, SEXT<S>(readM<S>(ea)));
+                    writeR(i, SEXT<S>(readM<M,S>(ea)));
                     ea += S;
                 }
             }
             break;
         }
     }
-    if (S == Word) (void)readM<Word>(ea);
+    if (S == Word) (void)readM<MEM_DATA, Word>(ea);
     newPrefetch <POLLIPL> ();
     
     // Revert to standard stack frame format
@@ -1520,14 +1520,14 @@ Moira::execMovepEaDx(u16 opcode)
 
         case Long:
         {
-            dx |= readM<Byte>(ea) << 24; ea += 2;
-            dx |= readM<Byte>(ea) << 16; ea += 2;
+            dx |= readM<MEM_DATA, Byte>(ea) << 24; ea += 2;
+            dx |= readM<MEM_DATA, Byte>(ea) << 16; ea += 2;
             // fallthrough
         }
         case Word:
         {
-            dx |= readM<Byte>(ea) << 8; ea += 2;
-            dx |= readM<Byte>(ea) << 0;
+            dx |= readM<MEM_DATA, Byte>(ea) << 8; ea += 2;
+            dx |= readM<MEM_DATA, Byte>(ea) << 0;
         }
 
     }
@@ -1569,7 +1569,7 @@ Moira::execMoveToCcr(u16 opcode)
     sync(4);
     setCCR(data);
 
-    (void)readM<Word>(reg.pc + 2);
+    (void)readM<MEM_PROG, Word>(reg.pc + 2);
     prefetch<POLLIPL>();
     
     // Revert to standard stack frame format
@@ -1631,7 +1631,7 @@ Moira::execMoveToSr(u16 opcode)
     sync(4);
     setSR(data);
 
-    (void)readM<Word>(reg.pc + 2);
+    (void)readM<MEM_PROG, Word>(reg.pc + 2);
     prefetch<POLLIPL>();
     
     // Revert to standard stack frame format
@@ -1905,13 +1905,10 @@ Moira::execRte(u16 opcode)
 {
     SUPERVISOR_MODE_ONLY
 
-    // Update the function code pins
-    setFC(FC_USER_DATA);
-
-    u16 newsr = readM<Word>(reg.sp);
+    u16 newsr = readM<MEM_DATA, Word>(reg.sp);
     reg.sp += 2;
 
-    u32 newpc = readM<Long>(reg.sp);
+    u32 newpc = readM<MEM_DATA, Long>(reg.sp);
     reg.sp += 4;
 
     setSR(newsr);
@@ -1936,7 +1933,7 @@ Moira::execRtr(u16 opcode)
     
     reg.sp += 2;
 
-    u32 newpc = readM<Long>(reg.sp);
+    u32 newpc = readM<MEM_DATA, Long>(reg.sp);
     reg.sp += 4;
     
     setCCR((u8)newccr);

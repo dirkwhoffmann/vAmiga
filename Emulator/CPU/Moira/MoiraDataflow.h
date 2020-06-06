@@ -79,8 +79,12 @@ template<Mode M, Size S> void updateAnPD(int n);
 template<Mode M, Size S> void undoAnPD(int n);
 template<Mode M, Size S> void updateAnPI(int n);
 
-// Reads an operand from memory (without or with address error checking)
-template<Size S, Flags F = 0> u32 readM(u32 addr);
+// Reads a value from a specific memory space
+template<MemSpace M, Size S, Flags F = 0> u32 readM(u32 addr);
+template<MemSpace M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
+
+// Reads a value from program or data space, depending on the addressing mode
+template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr);
 template<Mode M, Size S, Flags F = 0> u32 readM(u32 addr, bool &error);
 
 // Writes an operand to memory (without or with address error checking)
