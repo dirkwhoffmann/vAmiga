@@ -71,7 +71,7 @@ template<Mode M, Size S, Flags F = 0> bool writeOp(int n, u32 val);
 template<Mode M, Size S, Flags F = 0> void writeOp(int n, u32 ea, u32 val);
 
 // Computes an effective address
-template<Mode M, Size S, bool skip = false> u32 computeEA(u32 n);
+template<Mode M, Size S, Flags F = 0> u32 computeEA(u32 n);
 
 // Emulates the address register modification for modes (An)+, (An)-
 template<Mode M, Size S> void updateAn(int n);
@@ -123,7 +123,7 @@ void compensateNewPrefetch(); // WILL GO AWAY
 template<Flags F = 0, int delay = 0> void fullPrefetch();
 
 // Reads an extension word from memory
-template<bool skip = false> void readExt();
+void readExt();
 
 // Jumps to an exception vector
 void jumpToVector(int nr);

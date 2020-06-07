@@ -70,7 +70,7 @@ Moira::writeOp(int n, u32 ea, u32 val)
     writeM <M,S,F> (ea, val);
 }
 
-template<Mode M, Size S, bool skip> u32
+template<Mode M, Size S, Flags F> u32
 Moira::computeEA(u32 n) {
 
     assert(n < 8);
@@ -107,7 +107,7 @@ Moira::computeEA(u32 n) {
             i16  d = (i16)queue.irc;
 
             result = d + an;
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 6: // (d,An,Xi)
@@ -119,13 +119,13 @@ Moira::computeEA(u32 n) {
             result = d + an + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
 
             sync(2);
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 7: // ABS.W
         {
             result = (i16)queue.irc;
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 8: // ABS.L
@@ -133,7 +133,7 @@ Moira::computeEA(u32 n) {
             result = queue.irc << 16;
             readExt();
             result |= queue.irc;
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 9: // (d,PC)
@@ -141,7 +141,7 @@ Moira::computeEA(u32 n) {
             i16  d = (i16)queue.irc;
 
             result = reg.pc + d;
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 10: // (d,PC,Xi)
@@ -151,7 +151,7 @@ Moira::computeEA(u32 n) {
 
             result = d + reg.pc + ((queue.irc & 0x800) ? xi : SEXT<Word>(xi));
             sync(2);
-            readExt<skip>();
+            if ((F & SKIP_LAST_READ) == 0) readExt();
             break;
         }
         case 11: // Im
@@ -467,21 +467,18 @@ Moira::fullPrefetch()
     prefetch<F,delay>();
 }
 
-template<bool skip> void
+void
 Moira::readExt()
 {
     reg.pc += 2;
     
-    if (!skip) {
-                
-        // Check for address error
-        if (misaligned<Word>(reg.pc)) {
-            execAddressError(makeFrame(reg.pc));
-            return;
-        }
-        
-        queue.irc = readM<MEM_PROG, Word>(reg.pc);
+    // Check for address error
+    if (misaligned<Word>(reg.pc)) {
+        execAddressError(makeFrame(reg.pc));
+        return;
     }
+    
+    queue.irc = readM<MEM_PROG, Word>(reg.pc);
 }
 
 void

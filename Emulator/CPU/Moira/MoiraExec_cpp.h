@@ -768,8 +768,8 @@ Moira::execJmp(u16 opcode)
     u32 oldpc = reg.pc;
     
     int src = _____________xxx(opcode);
-    u32 ea  = computeEA <M,Long,true /* skip last read */> (src);
-
+    u32 ea  = computeEA <M,Long, SKIP_LAST_READ> (src);
+    
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
     
@@ -789,24 +789,27 @@ Moira::execJmp(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execJsr(u16 opcode)
 {
-    u32 oldpc = reg.pc;
-
     int src = _____________xxx(opcode);
-    u32 ea  = computeEA <M,Long, true /* skip last read */> (src);
-
+    u32 ea  = computeEA<M, Long, SKIP_LAST_READ>(src);
+    
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
-    // Check for address error
-    if (misaligned<Word>(ea)) {
-        if (M == MODE_DI || M == MODE_IX || M == MODE_DIPC || M == MODE_IXPC) {
-            execAddressError(makeFrame(ea, oldpc));
-        } else {
-            execAddressError(makeFrame(ea));
-        }
+    // Check for address error in displacement modes
+    if (isDspMode(M) && misaligned<Word>(ea)) {
+        execAddressError(makeFrame(ea));
         return;
     }
- 
+
+    // Update program counter
+    if (isAbsMode(M) || isDspMode(M)) reg.pc += 2;
+
+    // Check for address error in all other modes
+    if (misaligned<Word>(ea)) {
+        execAddressError(makeFrame(ea));
+        return;
+    }
+
     // Save old address on stack
     bool error;
     push <Long> (reg.pc, error);
