@@ -409,41 +409,18 @@ Moira::makeFrame(u32 addr)
     return makeFrame <F> (addr, getPC(), getSR(), getIRD());
 }
 
-template<Flags F, int delay> void
+template<Flags F> void
 Moira::prefetch()
 {
-    // At this point, the program counter points to the beginning of the
-    // next instruction to execute. We save this value for further reference.
-    reg.pc0 = reg.pc;
-    
-    queue.ird = queue.irc;
-    if (delay) sync(delay);
-    queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
-}
-
-template<Flags F, int delay> void
-Moira::newPrefetch()
-{
     /* Whereas pc is a moving target (it moves forward while an instruction is
-     * being processed, pc0 stays stable throughout instruction execution. It
-     * always points to the start address of the currently executed instruction.
+     * being processed, pc0 stays stable throughout the entire execution of
+     * an instruction. It always points to the start address of the currently
+     * executed instruction.
      */
     reg.pc0 = reg.pc;
     
     queue.ird = queue.irc;
-    if (delay) sync(delay);
-    reg.pc += 2;
-    queue.irc = readM<MEM_PROG, Word, F>(reg.pc);
-}
-
-void
-Moira::compensateNewPrefetch()
-{
-    // THIS METHOD MUST BE CALLED WHEN THE NEW PREFETCH FUNCTION IS USED.
-    // IT FIXES THE PROGRAM COUNTER TO BE COMPATIBLE WITH THE OLD SEMANTICS
-    // OF THE PC. ONCE ALL FUNCIONS USE THE NEW PREFETCH STYLE, THIS FUNCTION
-    // WILL BE DELETET ENTIRELY.
-    reg.pc -= 2;
+    queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
 }
 
 template<Flags F, int delay> void
@@ -456,7 +433,8 @@ Moira::fullPrefetch()
     }
 
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
-    prefetch<F,delay>();
+    if (delay) sync(delay);
+    prefetch<F>();
 }
 
 void

@@ -111,13 +111,7 @@ template<Flags F = 0> AEStackFrame makeFrame(u32 addr, u32 pc);
 template<Flags F = 0> AEStackFrame makeFrame(u32 addr);
 
 // Prefetches the next instruction
-template<Flags F = 0, int delay = 0> void prefetch();
-
-// Prefetches the next instruction
-// TODO: This function is going to replace the old replace function.
-// TODO: It increases the pc while the the old one did not
-template<Flags F = 0, int delay = 0> void newPrefetch();
-void compensateNewPrefetch(); // WILL GO AWAY
+template<Flags F = 0> void prefetch();
 
 // Performs a full prefetch cycle
 template<Flags F = 0, int delay = 0> void fullPrefetch();
