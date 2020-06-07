@@ -423,7 +423,7 @@ Moira::prefetch()
     queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
 }
 
-template<Flags F, int delay> void
+template<Flags F> void
 Moira::fullPrefetch()
 {    
     // Check for address error
@@ -433,7 +433,6 @@ Moira::fullPrefetch()
     }
 
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
-    if (delay) sync(delay);
     prefetch<F>();
 }
 
@@ -468,7 +467,9 @@ Moira::jumpToVector(int nr)
     }
     
     // Update the prefetch queue
-    fullPrefetch <POLLIPL, 2> ();
-
+    queue.irc = readM<MEM_PROG, Word>(reg.pc);
+    sync(2);
+    prefetch<F>();
+    
     exceptionJump(nr, reg.pc);
 }
