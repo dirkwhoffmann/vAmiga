@@ -675,9 +675,6 @@ Moira::execCmpm(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execDbcc(u16 opcode)
 {
-    if (I == BRA) {
-        printf("execDBRA M = %d S = %d cond = %d\n", M, S, cond<I>());
-    }
     sync(2);
     if (!cond<I>()) {
 
@@ -778,11 +775,9 @@ Moira::execJmp(u16 opcode)
     
     // Check for address error
     if (misaligned<Word>(ea)) {
-        // printf("");
         execAddressError(makeFrame(ea, oldpc));
         return;
     }
-    // if (addressReadError<Word>(ea, oldpc)) return;
     
     // Jump to new address
     reg.pc = ea;
@@ -969,19 +964,19 @@ Moira::execMove4(u16 opcode)
     newPrefetch();
     sync(-2);
 
-    ea = computeEA <MODE_PD, S> (dst);
+    ea = computeEA<MODE_PD, S>(dst);
     
     // Check for address error
     if (misaligned<S>(ea)) {
-        if (format == 0) execAddressError(makeFrame <flags0> (ea + 2, reg.pc, getSR(), ird));
-        if (format == 1) execAddressError(makeFrame <flags1> (ea), 2);
-        if (format == 2) execAddressError(makeFrame <flags2> (ea), 2);
+        if (format == 0) execAddressError(makeFrame<flags0>(ea + 2, reg.pc, getSR(), ird));
+        if (format == 1) execAddressError(makeFrame<flags1>(ea), 2);
+        if (format == 2) execAddressError(makeFrame<flags2>(ea), 2);
         if (S != Long) updateAn <MODE_PD, S> (dst);
         return;
     }
     
-    writeM <MODE_PD, S, REVERSE | POLLIPL> (ea, data);
-    updateAn <MODE_PD, S> (dst);
+    writeM<MODE_PD, S, REVERSE | POLLIPL>(ea, data);
+    updateAn<MODE_PD, S>(dst);
     
     compensateNewPrefetch();
 }
@@ -1283,7 +1278,7 @@ Moira::execMovepEaDx(u16 opcode)
     int src = _____________xxx(opcode);
     int dst = ____xxx_________(opcode);
 
-    u32 ea = computeEA <M,S> (src);
+    u32 ea = computeEA<M,S>(src);
     u32 dx = 0;
 
     switch (S) {
