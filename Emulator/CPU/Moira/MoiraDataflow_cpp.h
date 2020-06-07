@@ -205,11 +205,11 @@ Moira::readM(u32 addr, bool &error)
     // Check for address errors
     if ((error = misaligned<S>(addr))) {
         setFC(M == MEM_DATA ? FC_USER_DATA : FC_USER_PROG);
-        execAddressError(makeFrame <F> (addr), 2);
+        execAddressError(makeFrame<F>(addr), 2);
         return 0;
     }
     
-    return readM <M,S,F> (addr);
+    return readM<M,S,F>(addr);
 }
 
 template<MemSpace M, Size S, Flags F> u32
