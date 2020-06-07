@@ -375,33 +375,25 @@ Moira::makeFrame(u32 addr, u32 pc, u16 sr, u16 ird)
     AEStackFrame frame;
     u16 read = 0x10;
     
-    // Apply flags
+    // Prepare
     if (F & AE_WRITE) read = 0;
-    if (F & AE_PROG)  setFC(FC_USER_PROG);
-    if (F & AE_DATA)  setFC(FC_USER_DATA);
+    if (F & AE_PROG) setFC(FC_USER_PROG);
+    if (F & AE_DATA) setFC(FC_USER_DATA);
 
+    // Create
     frame.code = (ird & 0xFFE0) | readFC() | read;
     frame.addr = addr;
     frame.ird = ird;
     frame.sr = sr;
     frame.pc = pc;
 
-    // Apply more flags
+    // Adjust
     if (F & AE_INC_PC) frame.pc += 2;
     if (F & AE_DEC_PC) frame.pc -= 2;
     if (F & AE_INC_ADDR) frame.addr += 2;
     if (F & AE_DEC_ADDR) frame.addr -= 2;
     if (F & AE_SET_CB3) frame.code |= (1 << 3);
-    
-    // Apply modification flags (DEPRECATED)
-    if (aeFlags & INC_PC_BY_2)    frame.pc += 2;
-    if (aeFlags & DEC_PC_BY_2)    frame.pc -= 2;
-    if (aeFlags & INC_ADDR_BY_2)  frame.addr += 2;
-    if (aeFlags & DEC_ADDR_BY_2)  frame.addr -= 2;
-    if (aeFlags & SET_CODE_BIT_3) frame.code |= (1 << 3);
-    if (aeFlags & CLR_CODE_BIT_3) frame.code &= ~(1 << 3);
-    aeFlags = 0;
-    
+        
     return frame;
 }
 
@@ -467,6 +459,19 @@ Moira::fullPrefetch()
     prefetch<F,delay>();
 }
 
+template<Flags F, int delay> void
+Moira::newFullPrefetch()
+{
+    // Check for address error
+    if (misaligned(reg.pc)) {
+        execAddressError(makeFrame(reg.pc), 2);
+        return;
+    }
+
+    queue.irc = readM<MEM_PROG, Word>(reg.pc);
+    newPrefetch<F,delay>();
+}
+
 void
 Moira::readExt()
 {
@@ -481,7 +486,7 @@ Moira::readExt()
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
 }
 
-void
+template<Flags F> void
 Moira::jumpToVector(int nr)
 {
     exception = nr;
@@ -493,12 +498,14 @@ Moira::jumpToVector(int nr)
     
     // Check for address error
     if (misaligned(reg.pc)) {
-        execAddressError(makeFrame<AE_PROG>(reg.pc, vectorAddr));
+        execAddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
         return;
     }
     
     // Update the prefetch queue
-    fullPrefetch <POLLIPL, 2> ();
+    newFullPrefetch <POLLIPL, 2> ();
     
     exceptionJump(nr, reg.pc);
+    
+    compensateNewPrefetch();
 }

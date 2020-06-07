@@ -114,10 +114,7 @@ protected:
 
     // Value on the lower two function code pins (FC1|FC0)
     u8 fcl;
-    
-    // Modification flags used for building address error stack frames
-    AEStackFrameFlags aeFlags;
-        
+            
     // Remembers the number of the last processed exception
     int exception;
 

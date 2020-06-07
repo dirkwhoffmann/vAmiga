@@ -241,14 +241,6 @@ typedef struct
 }
 AEStackFrame;
 
-typedef u16 AEStackFrameFlags;              // DEPRECATED
-static const u16 INC_PC_BY_2    = (1 << 0); // DEPRECATED
-static const u16 DEC_PC_BY_2    = (1 << 1); // DEPRECATED
-static const u16 INC_ADDR_BY_2  = (1 << 2); // DEPRECATED
-static const u16 DEC_ADDR_BY_2  = (1 << 3); // DEPRECATED
-static const u16 SET_CODE_BIT_3 = (1 << 4); // DEPRECATED
-static const u16 CLR_CODE_BIT_3 = (1 << 5); // DEPRECATED
-
 struct StatusRegister {
 
     bool t;               // Trace flag

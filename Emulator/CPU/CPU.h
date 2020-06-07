@@ -59,7 +59,6 @@ public:
 
         & ipl
         & fcl
-        & aeFlags
         & exception;
     }
 

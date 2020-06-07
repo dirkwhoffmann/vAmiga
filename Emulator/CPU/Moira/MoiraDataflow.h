@@ -120,10 +120,11 @@ template<Flags F = 0, int delay = 0> void newPrefetch();
 void compensateNewPrefetch(); // WILL GO AWAY
 
 // Performs a full prefetch cycle
+template<Flags F = 0, int delay = 0> void newFullPrefetch();
 template<Flags F = 0, int delay = 0> void fullPrefetch();
 
 // Reads an extension word from memory
 void readExt();
 
 // Jumps to an exception vector
-void jumpToVector(int nr);
+template<Flags F = 0> void jumpToVector(int nr);
