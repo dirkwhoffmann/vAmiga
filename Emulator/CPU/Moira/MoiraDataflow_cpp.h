@@ -409,7 +409,6 @@ Moira::makeFrame(u32 addr)
     return makeFrame <F> (addr, getPC(), getSR(), getIRD());
 }
 
-/*
 template<Flags F, int delay> void
 Moira::prefetch()
 {
@@ -421,7 +420,6 @@ Moira::prefetch()
     if (delay) sync(delay);
     queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
 }
-*/
 
 template<Flags F, int delay> void
 Moira::newPrefetch()
@@ -448,7 +446,6 @@ Moira::compensateNewPrefetch()
     reg.pc -= 2;
 }
 
-/*
 template<Flags F, int delay> void
 Moira::fullPrefetch()
 {    
@@ -461,7 +458,6 @@ Moira::fullPrefetch()
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
     prefetch<F,delay>();
 }
-*/
 
 template<Flags F, int delay> void
 Moira::newFullPrefetch()
