@@ -227,11 +227,9 @@ Moira::execAddqEa(u16 opcode)
 
     if (src == 0) src = 8;
     result = addsub<I,S>(src, data);
-    newPrefetch();
+    prefetch();
 
     writeOp<M,S, POLLIPL>(dst, ea, result);
-
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -241,12 +239,10 @@ Moira::execAddxRg(u16 opcode)
     int dst = ____xxx_________(opcode);
 
     u32 result = addsub<I,S>(readD<S>(src), readD<S>(dst));
-    newPrefetch<POLLIPL>();
+    prefetch<POLLIPL>();
 
     if (S == Long) sync(4);
     writeD<S>(dst, result);
-    
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -276,16 +272,13 @@ Moira::execAddxEa(u16 opcode)
 
     if (S == Long && !MIMIC_MUSASHI) {
         writeM <M, Word> (ea2 + 2, result & 0xFFFF);
-        newPrefetch();
+        prefetch();
         writeM<M, Word, POLLIPL>(ea2, result >> 16);
-        compensateNewPrefetch();
         return;
     }
 
-    newPrefetch();
+    prefetch();
     writeM<M, S, POLLIPL>(ea2, result);
-        
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -298,12 +291,10 @@ Moira::execAndEaRg(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
 
     u32 result = logic<I,S>(data, readD<S>(dst));
-    newPrefetch<POLLIPL>();
+    prefetch<POLLIPL>();
 
     if (S == Long) sync(isRegMode(M) || isImmMode(M) ? 4 : 2);
     writeD<S>(dst, result);
-
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -316,12 +307,10 @@ Moira::execAndRgEa(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
     u32 result = logic<I,S>(readD<S>(src), data);
-    isMemMode(M) ? newPrefetch() : newPrefetch<POLLIPL>();
+    isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
 
     if (S == Long && isRegMode(M)) sync(4);
     writeOp <M,S, POLLIPL> (dst, ea, result);
-    
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -331,12 +320,10 @@ Moira::execAndiRg(u16 opcode)
     int dst = _____________xxx(opcode);
 
     u32 result = logic<I,S>(src, readD<S>(dst));
-    newPrefetch<POLLIPL>();
+    prefetch<POLLIPL>();
 
     if (S == Long) sync(4);
     writeD<S>(dst, result);
-    
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -350,11 +337,9 @@ Moira::execAndiEa(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(dst, ea, data)) return;
 
     result = logic<I,S>(src, data);
-    newPrefetch();
+    prefetch();
 
     writeOp <M,S, POLLIPL> (dst, ea, result);
-    
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -369,8 +354,7 @@ Moira::execAndiccr(u16 opcode)
     setCCR(result);
 
     (void)readM<MEM_DATA, Word>(reg.pc+2);
-    newPrefetch<POLLIPL>();
-    compensateNewPrefetch();
+    prefetch<POLLIPL>();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -387,8 +371,7 @@ Moira::execAndisr(u16 opcode)
     setSR(result);
 
     (void)readM<MEM_DATA, Word>(reg.pc+2);
-    newPrefetch<POLLIPL>();
-    compensateNewPrefetch();
+    prefetch<POLLIPL>();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -407,17 +390,15 @@ Moira::execBcc(u16 opcode)
                 
         // Take branch
         reg.pc = newpc;
-        newFullPrefetch<POLLIPL>();
+        fullPrefetch<POLLIPL>();
 
     } else {
 
         // Fall through to next instruction
         sync(2);
         if (S == Word) readExt();
-        newPrefetch<POLLIPL>();
+        prefetch<POLLIPL>();
     }
-    
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -434,7 +415,7 @@ Moira::execBitDxEa(u16 opcode)
             u32 data = readD(dst);
             data = bit<I>(data, b);
 
-            newPrefetch<POLLIPL>();
+            prefetch<POLLIPL>();
 
             sync(cyclesBit<I>(b));
             if (I != BTST) writeD(dst, data);
@@ -450,14 +431,13 @@ Moira::execBitDxEa(u16 opcode)
             data = bit<I>(data, b);
 
             if (I != BTST) {
-                newPrefetch();
+                prefetch();
                 writeM<M, Byte, POLLIPL>(ea, data);
             } else {
-                newPrefetch<POLLIPL>();
+                prefetch<POLLIPL>();
             }
         }
     }
-    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
