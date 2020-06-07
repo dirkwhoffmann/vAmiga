@@ -459,19 +459,6 @@ Moira::fullPrefetch()
     prefetch<F,delay>();
 }
 
-template<Flags F, int delay> void
-Moira::newFullPrefetch()
-{
-    // Check for address error
-    if (misaligned(reg.pc)) {
-        execAddressError(makeFrame(reg.pc), 2);
-        return;
-    }
-
-    queue.irc = readM<MEM_PROG, Word>(reg.pc);
-    newPrefetch<F,delay>();
-}
-
 void
 Moira::readExt()
 {
@@ -503,9 +490,7 @@ Moira::jumpToVector(int nr)
     }
     
     // Update the prefetch queue
-    newFullPrefetch <POLLIPL, 2> ();
-    
+    fullPrefetch <POLLIPL, 2> ();
+
     exceptionJump(nr, reg.pc);
-    
-    compensateNewPrefetch();
 }
