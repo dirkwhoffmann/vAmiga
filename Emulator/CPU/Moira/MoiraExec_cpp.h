@@ -424,15 +424,17 @@ Moira::execBcc(u16 opcode)
                 
         // Take branch
         reg.pc = newpc;
-        fullPrefetch<POLLIPL>();
+        newFullPrefetch<POLLIPL>();
 
     } else {
 
         // Fall through to next instruction
         sync(2);
         if (S == Word) readExt();
-        prefetch<POLLIPL>();
+        newPrefetch<POLLIPL>();
     }
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -449,7 +451,7 @@ Moira::execBitDxEa(u16 opcode)
             u32 data = readD(dst);
             data = bit<I>(data, b);
 
-            prefetch<POLLIPL>();
+            newPrefetch<POLLIPL>();
 
             sync(cyclesBit<I>(b));
             if (I != BTST) writeD(dst, data);
@@ -465,13 +467,14 @@ Moira::execBitDxEa(u16 opcode)
             data = bit<I>(data, b);
 
             if (I != BTST) {
-                prefetch();
+                newPrefetch();
                 writeM<M, Byte, POLLIPL>(ea, data);
             } else {
-                prefetch<POLLIPL>();
+                newPrefetch<POLLIPL>();
             }
         }
     }
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -488,7 +491,7 @@ Moira::execBitImEa(u16 opcode)
             u32 data = readD(dst);
             data = bit<I>(data, src);
 
-            prefetch<POLLIPL>();
+            newPrefetch<POLLIPL>();
 
             sync(cyclesBit<I>(src));
             if (I != BTST) writeD(dst, data);
@@ -503,13 +506,14 @@ Moira::execBitImEa(u16 opcode)
             data = bit<I>(data, src);
 
             if (I != BTST) {
-                prefetch();
+                newPrefetch();
                 writeM <M, S, POLLIPL> (ea, data);
             } else {
-                prefetch<POLLIPL>();
+                newPrefetch<POLLIPL>();
             }
         }
     }
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -528,7 +532,8 @@ Moira::execBsr(u16 opcode)
     // Take branch
     reg.pc = newpc;
 
-    fullPrefetch<POLLIPL>();
+    newFullPrefetch<POLLIPL>();
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -695,7 +700,8 @@ Moira::execDbcc(u16 opcode)
         // Branch
         if (takeBranch) {
             reg.pc = newpc;
-            fullPrefetch<POLLIPL>();
+            newFullPrefetch<POLLIPL>();
+            compensateNewPrefetch();
             return;
         } else {
             (void)readM<MEM_PROG, Word>(reg.pc + 2);
@@ -706,7 +712,8 @@ Moira::execDbcc(u16 opcode)
 
     // Fall through to next instruction
     reg.pc += 2;
-    fullPrefetch<POLLIPL>();
+    newFullPrefetch<POLLIPL>();
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -716,9 +723,11 @@ Moira::execExgDxDy(u16 opcode)
     int dst = ____xxx_________(opcode);
 
     std::swap(reg.d[src], reg.d[dst]);
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
 
     sync(2);
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -729,8 +738,10 @@ Moira::execExgAxDy(u16 opcode)
 
     std::swap(reg.a[src], reg.d[dst]);
 
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
     sync(2);
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -741,8 +752,10 @@ Moira::execExgAxAy(u16 opcode)
 
     std::swap(reg.a[src], reg.a[dst]);
 
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
     sync(2);
+    
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -759,7 +772,8 @@ Moira::execExt(u16 opcode)
     reg.sr.v = 0;
     reg.sr.c = 0;
 
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1279,7 +1293,8 @@ Moira::execMovepDxEa(u16 opcode)
             writeM <M,Byte> (ea, (dx >>  0) & 0xFF);
         }
     }
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
+    compensateNewPrefetch();
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1830,7 +1845,7 @@ Moira::execTrapv(u16 opcode)
         return;
     }
     
-    prefetch<POLLIPL>();
+    newPrefetch<POLLIPL>();
     compensateNewPrefetch();
 }
 

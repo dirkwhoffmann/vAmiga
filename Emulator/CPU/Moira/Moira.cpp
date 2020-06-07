@@ -67,8 +67,9 @@ Moira::reset()
     sync(4);
     queue.irc = read16OnReset(reg.pc & 0xFFFFFF);
     sync(2);
-    prefetch();
-
+    newPrefetch();
+    compensateNewPrefetch();
+    
     debugger.reset();
 }
 
