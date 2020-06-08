@@ -49,11 +49,18 @@ public:
     // Audio location (AUDxLC)
     u32 audlcLatch;
 
+    // Audio DMA request to Agnus for one word of data
+    bool audDR;
+    // bool audDRLatch;
+    
+    // Audio DMA request to Agnus to reset pointer to start of block
+    bool audDSR;
+    // bool audDSRLatch;
+    
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    // SortedRingBuffer<short, 256> samples;
     SortedRingBuffer<short, 256> samples;
     
     /* Two locks regulating the access to the sample buffer.
@@ -104,6 +111,10 @@ public:
         & audvol
         & auddat
         & audlcLatch
+        & audDR
+        // & audDRLatch
+        & audDSR
+        // & audDSRLatch
         & intreq2
         & samples
         & enablePenlo
@@ -174,10 +185,10 @@ public:
     void AUDxIR();
 
     // Asks Agnus for one word of data
-    void AUDxDR() { agnus.setAudxDR<nr>(); }
+    void AUDxDR() { audDR = true; }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR() { agnus.reloadAUDxPT<nr>(); }
+    void AUDxDSR() { audDSR = true; agnus.reloadAUDxPT<nr>(); }
 
     // Reloads the period counter from its backup latch
     void percntrld();
@@ -215,7 +226,10 @@ public:
     // Enables the high byte of data to go to the digital-analog converter
     void penlo();
 
-
+    // Transfers DMA requests to Agnus (done in the first refresh cycle)
+    void requestDMA() { if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; } }
+    
+    
     //
     // Performing state machine transitions
     //

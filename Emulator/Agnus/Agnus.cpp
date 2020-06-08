@@ -1197,7 +1197,7 @@ Agnus::hsyncHandler()
 {
     assert(pos.h == 0 || pos.h == HPOS_MAX + 1);
 
-    // Call the hsync handlers of Denise and Paula
+    // Call the hsync handlers of Denise
     denise.endOfLine(pos.v);
 
     // Synthesize sound samples
@@ -1209,8 +1209,11 @@ Agnus::hsyncHandler()
     if (paula.chargeX1 < 1.0) paula.potCntX1++;
     if (paula.chargeY1 < 1.0) paula.potCntY1++;
 
-    // Let CIA B count the HSYNCs
-    // amiga.ciaB.incrementTOD();
+    // Transfer DMA requests from Paula to Agnus
+    paula.audioUnit.channel0.requestDMA();
+    paula.audioUnit.channel1.requestDMA();
+    paula.audioUnit.channel2.requestDMA();
+    paula.audioUnit.channel3.requestDMA();
 
     // Reset the horizontal counter
     pos.h = 0;
