@@ -968,12 +968,20 @@ Agnus::serviceDASEvent()
                 audxDR[0] = false;
                 audioUnit.channel0.pokeAUDxDAT(doAudioDMA<0>());
             }
+            if (audxDSR[0]) {
+                audxDSR[0] = false;
+                reloadAUDxPT<0>();
+            }
             break;
 
         case DAS_A1:
             if (audxDR[1]) {
                 audxDR[1] = false;
                 audioUnit.channel1.pokeAUDxDAT(doAudioDMA<1>());
+            }
+            if (audxDSR[1]) {
+                audxDSR[1] = false;
+                reloadAUDxPT<1>();
             }
             break;
 
@@ -982,12 +990,20 @@ Agnus::serviceDASEvent()
                 audxDR[2] = false;
                 audioUnit.channel2.pokeAUDxDAT(doAudioDMA<2>());
             }
+            if (audxDSR[2]) {
+                audxDSR[2] = false;
+                reloadAUDxPT<2>();
+            }
             break;
 
         case DAS_A3:
             if (audxDR[3]) {
                 audxDR[3] = false;
                 audioUnit.channel3.pokeAUDxDAT(doAudioDMA<3>());
+            }
+            if (audxDSR[3]) {
+                audxDSR[3] = false;
+                reloadAUDxPT<3>();
             }
             break;
 

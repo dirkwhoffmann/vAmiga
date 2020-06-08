@@ -188,7 +188,7 @@ public:
     void AUDxDR() { audDR = true; }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR() { audDSR = true; agnus.reloadAUDxPT<nr>(); }
+    void AUDxDSR() { audDSR = true; }
 
     // Reloads the period counter from its backup latch
     void percntrld();
@@ -227,7 +227,10 @@ public:
     void penlo();
 
     // Transfers DMA requests to Agnus (done in the first refresh cycle)
-    void requestDMA() { if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; } }
+    void requestDMA() {
+        if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; }
+        if (audDSR) { agnus.setAudxDSR<nr>(); audDSR = 0; }
+    }
     
     
     //

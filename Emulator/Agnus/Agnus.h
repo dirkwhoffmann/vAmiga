@@ -211,10 +211,10 @@ public:
     
 private:
 
-    // Audio DMA request from Paula
-    // This signal is set to true by Paula when a new audio DMA word is needed.
+    // DMA request from Paula
     bool audxDR[4];
-
+    bool audxDSR[4];
+    
     /* Blitter slow down
      * The BLS signal indicates that the CPU's request to access the bus has
      * been denied for three or more consecutive cycles.
@@ -448,6 +448,7 @@ public:
         & busOwner
 
         & audxDR
+        & audxDSR
         & bls
 
         & ddfstrt
@@ -663,11 +664,8 @@ public:
     // Audio DMA
     template <int x> void pokeAUDxLCH(u16 value);
     template <int x> void pokeAUDxLCL(u16 value);
-
-    template <int x> void reloadAUDxPT() {
-        audpt[x] = audlc[x];
-    }
-
+    template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
+    
     // Bitplane DMA
     bool skipBPLxPT(int x);
     template <int x> void pokeBPLxPTH(u16 value);
@@ -725,8 +723,9 @@ public:
     void doCopperDMA(u32 addr, u16 value);
     void doBlitterDMA(u32 addr, u16 value);
 
-    // Called by Paula's audio engine to requests a DMA word
+    // Transmits a DMA request from Agnus to Paula
     template <int channel> void setAudxDR() { audxDR[channel] = true; }
+    template <int channel> void setAudxDSR() { audxDSR[channel] = true; }
 
     // Getter and setter for the BLS signal (Blitter slow down)
     bool getBLS() { return bls; }
