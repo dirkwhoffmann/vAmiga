@@ -297,7 +297,7 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     // if (oldDAS != newDAS) {
     
     // Disk DMA and sprite DMA
-    // We don't need to rebuild the table if audio DMA changes, because the
+    // We don't need to rebuild the table if audio DMA changes, because
     // audio events are always executed.
     if (toggleDSKEN || toggleSPREN) {
         

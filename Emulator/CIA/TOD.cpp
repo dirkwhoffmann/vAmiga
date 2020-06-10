@@ -50,7 +50,7 @@ TOD::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
     stopped = true;
-    matching = true;
+    matching = false;
 }
 
 void
@@ -62,6 +62,11 @@ TOD::increment()
     if (!incHiNibble(tod.lo))  goto check;
     if (!incLoNibble(tod.mid)) goto check;
 
+    /*
+    if ((tod.value) == (alarm.value)) {
+        debug("TOD matches (BUG): %x %x\n", tod.value, alarm.value);
+    }
+    */
     if (cia->config.todBug) checkForInterrupt();
 
     if (!incHiNibble(tod.mid)) goto check;

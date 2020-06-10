@@ -134,8 +134,8 @@ CPU::privilegeException()
 void
 CPU::interruptException(u8 level)
 {
-    if (IRQ_DEBUG) {
-        // debug("*** INTERRUPT %d ***\n", level);
+    if (INT_DEBUG) {
+        debug("*** INTERRUPT %d ***\n", level);
     }
 }
 
@@ -145,7 +145,7 @@ CPU::exceptionJump(int nr, u32 addr)
     bool isIrqException = nr >= 24 && nr <= 31;
 
     if (isIrqException) {
-        debug(IRQ_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+        debug(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
     }
 }
 

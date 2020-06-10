@@ -94,7 +94,7 @@ public:
      */
     // const char *readHex(size_t num = 1);
     
-    //! Copies the whole file data into a buffer.
+    // Copies the whole file data into a buffer.
     virtual void flash(u8 *buffer, size_t offset = 0);
     
     

@@ -9,12 +9,14 @@
 
 #include "Amiga.h"
 
+#define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
+
 CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
-	setDescription("CIA");
-
+    setDescription("CIA");
+    
     subComponents = vector<HardwareComponent *> { &tod };
-
+    
     config.type = CIA_8520_DIP;
     config.todBug = true;
     config.eClockSyncing = true;
@@ -268,7 +270,6 @@ CIA::peek(u16 addr)
         case 0x09: // EVENT_8_15
 
 			result = tod.getCounterMid();
-            // if (nr == 1) debug("EVENT_8_15 = %d (frozen = %d)\n", result, tod.frozen);
 			break;
 			
         case 0x0A: // EVENT_16_23

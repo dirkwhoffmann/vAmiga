@@ -1429,8 +1429,7 @@ Memory::peekCIA8(u32 addr)
 u16
 Memory::peekCIA16(u32 addr)
 {
-    debug(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
-    // assert(false);
+    // debug(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
     
     u32 reg = (addr >> 8)  & 0b1111;
     u32 sel = (addr >> 12) & 0b11;

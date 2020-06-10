@@ -117,7 +117,7 @@ public:
     // Returns the counter's low byte (bits 0 - 7).
     u8 getCounterLo() { return frozen ? latch.lo : tod.lo; }
 
-    //! Returns the alarm value's high byte (bits 16 - 23).
+    // Returns the alarm value's high byte (bits 16 - 23).
     u8 getAlarmHi() { return alarm.hi; }
 
     // Returns the alarm value's intermediate byte (bits 8 - 15).
@@ -132,7 +132,7 @@ public:
     // Sets the counter's intermediate byte (bits 8 - 15).
     void setCounterMid(u8 value) { tod.mid = value; checkForInterrupt(); }
 
-    //! Sets the counter's low byte (bits 0 - 7).
+    // Sets the counter's low byte (bits 0 - 7).
     void setCounterLo(u8 value) { tod.lo = value; checkForInterrupt(); }
 
     // Sets the alarm value's high byte (bits 16 - 23).

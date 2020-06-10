@@ -79,7 +79,6 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
-static const int IRQ_DEBUG       = 0; // CPU interrupts
 
 // Memory access
 static const int OCSREG_DEBUG    = 0; // General OCS register debugging
@@ -123,7 +122,8 @@ static const int INT_DEBUG       = 0; // Interrupt logic
 static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
 static const int CIAREG_DEBUG    = 0; // CIA registers
 static const int CIASER_DEBUG    = 0; // CIA serial register
-static const int CIA_DEBUG       = 0; // CIA execution
+static const int CIAA_DEBUG      = 0; // CIA A execution
+static const int CIAB_DEBUG      = 0; // CIA B execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 
 // Drive

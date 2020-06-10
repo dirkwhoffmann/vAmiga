@@ -44,9 +44,9 @@ typedef union
 {
     struct
     {
-        u8 hi;
-        u8 mid;
         u8 lo;
+        u8 mid;
+        u8 hi;
     };
     u32 value;
 }
