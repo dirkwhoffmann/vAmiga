@@ -280,7 +280,7 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     else if (oldDsklen & newDskLen & 0x8000) {
 
         // Reset head position in debug mode to generate reproducable results
-        if (DRIVE_DEBUG) drive->head.offset = 0;
+        if (DRIVE_DEBUG | ALIGN_HEAD) drive->head.offset = 0;
 
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
@@ -555,6 +555,8 @@ DiskController::executeFifo()
         case DRIVE_DMA_WRITE:
         case DRIVE_DMA_FLUSH:
             
+            // debug("DRIVE_DMA_WRITE\n");
+            
             if (fifoIsEmpty()) {
                 
                 // Switch off DMA if the last byte has been flushed out
@@ -706,134 +708,6 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
         
     } while (remaining);
 }
-
-/*
-void
-DiskController::performSimpleDMA()
-{
-    Drive *drive = getSelectedDrive();
-    
-    // Only proceed if a drive is selected
-    if (drive == NULL) return;
-
-    // Only proceed if there are remaining bytes to read
-    if (!(dsklen & 0x3FFF)) return;
-
-    // How many word shall we read in?
-    u32 count = drive->config.speed;
-    
-    // Perform DMA
-    switch (state) {
-
-        case DRIVE_DMA_WAIT:
-        {
-            performSimpleDMAWait(drive, count);
-            break;
-        }
-        case DRIVE_DMA_READ:
-        {
-            performSimpleDMARead(drive, count);
-            break;
-        }
-        case DRIVE_DMA_WRITE:
-        {
-            performSimpleDMAWrite(drive, count);
-            break;
-        }
-        default: return;
-    }
-}
-
-void
-DiskController::performSimpleDMAWait(Drive *drive, u32 remaining)
-{
-    assert(drive != NULL);
-
-    for (unsigned i = 0; i < remaining; i++) {
-
-        // Read word from disk
-        u16 word = drive->readHead16();
-
-        // Check if a SYNC mark has been reached
-        if ((syncFlag = (word == dsksync))) {
-
-            debug("SYNC mark found\n"); // REMOVE ASAP
-            
-            // Trigger a word SYNC interrupt
-            debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
-            paula.raiseIrq(INT_DSKSYN);
-
-            // Enable DMA if the controller was waiting for it
-            setState(DRIVE_DMA_READ);
-
-            return;
-        }
-    }
-}
-
-void
-DiskController::performSimpleDMARead(Drive *drive, u32 remaining)
-{
-    assert(drive != NULL);
-
-    for (unsigned i = 0; i < remaining; i++) {
-        
-        // Read word from disk
-        u16 word = drive->readHead16();
-        
-        // Write word into memory
-        agnus.doDiskDMA(word);
-
-        if (DSK_CHECKSUM) {
-            checkcnt++;
-            checksum = fnv_1a_it32(checksum, word);
-        }
-
-        if ((--dsklen & 0x3FFF) == 0) {
-
-            paula.raiseIrq(INT_DSKBLK);
-            setState(DRIVE_DMA_OFF);
-
-            if (DSK_CHECKSUM)
-                plaindebug("simple read: cnt = %d chk = %X\n", checkcnt, checksum);
-
-            return;
-        }
-    }
-}
-
-void
-DiskController::performSimpleDMAWrite(Drive *drive, u32 remaining)
-{
-    assert(drive != NULL);
-    // debug("Writing %d words to disk\n", dsklen & 0x3FFF);
-
-    for (unsigned i = 0; i < remaining; i++) {
-        
-        // Read word from memory
-        u16 word = agnus.doDiskDMA();
-
-        if (DSK_CHECKSUM) {
-            checkcnt++;
-            checksum = fnv_1a_it32(checksum, word);
-        }
-
-        // Write word to disk
-        drive->writeHead16(word);
-        
-        if ((--dsklen & 0x3FFF) == 0) {
-            
-            paula.raiseIrq(INT_DSKBLK);
-            setState(DRIVE_DMA_OFF);
-
-            if (DSK_CHECKSUM)
-                debug("simple write: cnt = %d chk = %X\n", checkcnt, checksum);
-
-            return;
-        }
-    }
-}
-*/
 
 void
 DiskController::performTurboDMA(Drive *drive)

@@ -39,10 +39,12 @@
 
 // #define FORCE_AGNUS_REVISION AGNUS_8367
 // #define FORCE_BLT_LEVEL      0
-// #define FORCE_CHIP_RAM       512
+// #define FORCE_CHIP_RAM       1024
 // #define FORCE_SLOW_RAM       512
 // #define FORCE_FAST_RAM       0
 // #define FORCE_RTC            RTC_NONE
+// #define FORCE_DRIVE_SPEED    1
+// #define FORCE_ASYNC_FIFO     false
 
 
 //
@@ -50,18 +52,13 @@
 //
 
 // Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xC07B0C   // Impossamole
-// #define INITIAL_BREAKPOINT 0xC07D5A // moveq #0,D7
-// #define INITIAL_BREAKPOINT 0xC07D5C // BRA c07b6c
 // #define INITIAL_BREAKPOINT 0xC0A008   // Jetsons
-// #define INITIAL_BREAKPOINT 0xFC5BCE
-// #define INITIAL_BREAKPOINT 0x0158EC LED SWITCHED OFF 
 
 // Uncomment to fallback to a simpler Agnus execution function
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Impossamole.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/5to12.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Gettysburg.adf"
 
@@ -128,6 +125,7 @@ static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 
 // Drive
 static const int DRIVE_DEBUG     = 0; // Fallback to a simple turbo drive
+static const int ALIGN_HEAD      = 0; // Align the drive when switching tracks
 static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution

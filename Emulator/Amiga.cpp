@@ -9,6 +9,8 @@
 
 #include "Amiga.h"
 
+bool serdebug = 0;
+
 //
 // Static class variables
 //
@@ -298,6 +300,13 @@ Amiga::configure(ConfigOption option, long value)
                 warn("Falling back to a turbo drive for debugging.\n");
                 value = -1;
             }
+            
+#ifdef FORCE_DRIVE_SPEED
+            assert(!DRIVE_DEBUG);
+            value = FORCE_DRIVE_SPEED;
+            warn("Overriding drive speed: %d\n", value);
+#endif
+            
             if (!isValidDriveSpeed(value)) {
                 warn("Invalid drive speed: %d\n", value);
                 goto error;
@@ -383,7 +392,12 @@ Amiga::configure(ConfigOption option, long value)
             goto success;
             
         case VA_ASYNC_FIFO:
-
+            
+#ifdef FORCE_ASYNC_FIFO
+            value = FORCE_ASYNC_FIFO;
+            warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
+#endif
+            
             if (current.diskController.asyncFifo == value) goto exit;
             paula.diskController.setAsyncFifo(value);
             goto success;
@@ -584,6 +598,10 @@ Amiga::reset(bool hard)
     if (hard) {
         
         suspend();
+        assert(!isRunning());
+                
+        // Execute the standard reset routine
+        // HardwareComponent::reset(hard);
                 
         // If a disk change is in progress, finish it
         paula.diskController.serviceDiskChangeEvent();
@@ -593,7 +611,7 @@ Amiga::reset(bool hard)
         
         // Inform the GUI
         putMessage(MSG_RESET);
-        
+
         resume();
 
     } else {
@@ -626,24 +644,6 @@ void
 Amiga::_powerOn()
 {
     debug(RUN_DEBUG, "Power on\n");
-
-#ifdef BOOT_DISK
-
-    ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
-    if (adf) {
-        Disk *disk = Disk::makeWithFile(adf);
-        df0.ejectDisk();
-        df0.insertDisk(disk);
-    }
-
-#endif
-
-#ifdef INITIAL_BREAKPOINT
-
-    debugMode = true;
-    cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
-
-#endif
 
     // Clear all runloop flags
     runLoopCtrl = 0;
@@ -741,6 +741,7 @@ Amiga::_dump()
 void
 Amiga::_warpOn()
 {
+    // debug("MSG_WARP_ON\n");
     putMessage(MSG_WARP_ON);
 }
 
@@ -748,6 +749,7 @@ void
 Amiga::_warpOff()
 {
     restartTimer();
+    // debug("MSG_WARP_OFF\n");
     putMessage(MSG_WARP_OFF);
 }
 
@@ -816,6 +818,25 @@ Amiga::requestThreadLock()
 void
 Amiga::powerOnEmulator()
 {
+    #ifdef BOOT_DISK
+
+        ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
+        if (adf) {
+            Disk *disk = Disk::makeWithFile(adf);
+            df0.ejectDisk();
+            df0.insertDisk(disk);
+            df0.setWriteProtection(false);
+        }
+
+    #endif
+
+    #ifdef INITIAL_BREAKPOINT
+
+        debugMode = true;
+        cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
+
+    #endif
+
     pthread_mutex_lock(&stateChangeLock);
     
     if (isReady()) {

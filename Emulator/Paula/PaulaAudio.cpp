@@ -22,6 +22,9 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
         &filterL,
         &filterR
     };
+    
+    volume = maxVolume;
+    targetVolume = maxVolume;
 }
 
 void
@@ -155,15 +158,12 @@ PaulaAudio::_pause()
 void
 PaulaAudio::_reset(bool hard)
 {
-   RESET_SNAPSHOT_ITEMS
-
+    RESET_SNAPSHOT_ITEMS
+    
     clearRingbuffer();
-
+    
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
-
-    volume = 100000;
-    targetVolume = 100000;
 }
 
 void

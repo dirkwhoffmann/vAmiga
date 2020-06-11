@@ -269,31 +269,5 @@ extension MyAppDelegate {
                 }
             }
         }
-        
-        // Iterate through all controllers
-        /*
-        for case let document as MyDocument in NSApplication.shared.orderedDocuments {
-
-            if let con = document.windowControllers.first as? MyController {
-
-                if window == con.window {
-
-                    // Start playback
-                    if !con.macAudio!.isRunning {
-                        con.macAudio!.startPlayback()
-                        con.amiga.paula.rampUpFromZero()
-                    }
-
-                } else {
-
-                    // Stop playback
-                    if con.macAudio!.isRunning {
-                        con.macAudio!.stopPlayback()
-                        con.amiga.paula.rampDown()
-                    }
-                }
-            }
-        }
-        */
     }
 }

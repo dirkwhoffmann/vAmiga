@@ -112,9 +112,7 @@ public:
         & auddat
         & audlcLatch
         & audDR
-        // & audDRLatch
         & audDSR
-        // & audDSRLatch
         & intreq2
         & samples
         & enablePenlo

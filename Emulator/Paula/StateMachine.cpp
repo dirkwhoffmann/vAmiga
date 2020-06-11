@@ -34,7 +34,8 @@ template <int nr> void
 StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
-
+    assert(samples.isEmpty());
+    
     // Some methods assume that the sample buffer is never empty. We assure
     // this by initializing the buffer with a dummy element.
     samples.insert(0,0);

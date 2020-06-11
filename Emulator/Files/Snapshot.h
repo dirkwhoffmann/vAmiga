@@ -117,10 +117,6 @@ public:
     // Returns the screenshot image height
     // DEPRECATED
     unsigned getImageHeight() { return getHeader()->screenshot.height; }
-    
-    // Stores a screenshot inside this snapshot
-    // DEPRECATED
-    // void takeScreenshot(Amiga *amiga);
 };
 
 #endif

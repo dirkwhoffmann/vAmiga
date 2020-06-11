@@ -120,9 +120,9 @@ public:
     {
         worker
 
+        & asyncFifo
         & selected
         & state
-        & asyncFifo
         & syncFlag
         & syncCounter
         & incoming

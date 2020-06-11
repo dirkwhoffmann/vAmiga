@@ -421,7 +421,7 @@ Drive::moveHead(int dir)
     }
     
     // Reset the head position in debug mode to generate reproducable results
-    if (DRIVE_DEBUG) head.offset = 0;
+    if (DRIVE_DEBUG | ALIGN_HEAD) head.offset = 0;
     
     // Inform the GUI
     if (pollsForDisk()) {
