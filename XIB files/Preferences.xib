@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -454,27 +454,6 @@ DQ
                                                 <action selector="emuDriveSoundPanAction:" target="-2" id="A3c-sT-2Nw"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton id="Meu-JM-7Xk" userLabel="System">
-                                            <rect key="frame" x="7" y="9" width="128" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="6lK-kp-arK" userLabel="System">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                                <menu key="menu" title="Restore" id="E34-sC-5K2">
-                                                    <items>
-                                                        <menuItem title="Revert to..." hidden="YES" id="0hA-hs-1BS">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                        <menuItem title="Standard Settings" id="ceg-st-34d">
-                                                            <attributedString key="attributedTitle"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="generalPresetAction:" target="-2" id="L7r-OA-RVb"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ocC-cr-vSR">
                                             <rect key="frame" x="315" y="161" width="143" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -534,6 +513,27 @@ DQ
                                             </popUpButtonCell>
                                             <connections>
                                                 <action selector="emuScreenshotTargetAction:" target="-2" id="s5Y-rx-fQe"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton id="Meu-JM-7Xk" userLabel="System">
+                                            <rect key="frame" x="7" y="9" width="128" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="6lK-kp-arK" userLabel="System">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                                <menu key="menu" title="Restore" id="E34-sC-5K2">
+                                                    <items>
+                                                        <menuItem title="Revert to..." hidden="YES" id="0hA-hs-1BS">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="Standard Settings" id="ceg-st-34d">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="generalPresetAction:" target="-2" id="L7r-OA-RVb"/>
                                             </connections>
                                         </popUpButton>
                                     </subviews>
@@ -1155,7 +1155,7 @@ DQ
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                         </box>
                                         <popUpButton id="RT5-xO-ZGZ" userLabel="System">
-                                            <rect key="frame" x="6" y="14" width="128" height="25"/>
+                                            <rect key="frame" x="7" y="9" width="128" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="Revert to..." bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" imageScaling="proportionallyDown" inset="2" pullsDown="YES" selectedItem="UUg-rU-KdA" id="Vk2-3M-vWm" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
