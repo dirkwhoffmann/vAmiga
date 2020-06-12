@@ -89,7 +89,10 @@ public:
         worker
 
         & config.type
-        & config.speed;
+        & config.speed
+        & config.startDelay
+        & config.stopDelay
+        & config.stepDelay;
     }
 
     template <class T>

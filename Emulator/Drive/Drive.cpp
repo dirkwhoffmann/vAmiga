@@ -17,8 +17,11 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
                    nr == 1 ? "Df1" :
                    nr == 2 ? "Df2" : "Df3");
 
-    config.type = DRIVE_35_DD;
-    config.speed = 1; 
+    config.type =       DRIVE_35_DD;
+    config.speed =      1;
+    config.startDelay = MSEC(380);
+    config.stopDelay =  MSEC(80);
+    config.stepDelay =  USEC(1500);
 }
 
 void
@@ -57,6 +60,9 @@ Drive::_dumpConfig()
     msg("          Speed: %d\n", config.speed);
     msg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
     msg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
+    msg("    Start delay: %d\n", config.startDelay);
+    msg("     Stop delay: %d\n", config.stopDelay);
+    msg("     Step delay: %d\n", config.stepDelay);
 }
 
 void
@@ -243,21 +249,19 @@ double
 Drive::motorSpeed()
 {
     // Quick exit if mechanics is not emulated
-    if (!emulateMechanics()) return motor ? 100.0 : 0.0;
+    // if (!emulateMechanics()) return motor ? 100.0 : 0.0;
+    if (config.startDelay == 0 && motor) return 100.0;
+    if (config.stopDelay == 0 && !motor) return   0.0;
     
-    // We assume the motor speeds up in 380 msec and slows down in 80 msec
-    static const double ACCEL_DELAY = 380 * 28000;
-    static const double DECEL_DELAY =  80 * 28000;
-
     // Determine the elapsed cycles since the last motor change
     Cycle elapsed = agnus.clock - switchCycle;
     assert(elapsed >= 0);
     
     // Compute the current speed
     if (motor) {
-        return MIN(switchSpeed + 100.0 * (elapsed / ACCEL_DELAY), 100.0);
+        return MIN(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
     } else {
-        return MAX(switchSpeed - 100.0 * (elapsed / DECEL_DELAY), 0.0);
+        return MAX(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
     }
 }
 
@@ -328,6 +332,7 @@ Drive::readHead()
 
     // Only proceed if no step operation is in progress
     if (emulateMechanics() && (agnus.clock - stepCycle) < USEC(1500)) {
+        assert(config.stepDelay == USEC(1500));
         result = 0xFF;
         goto exit;
     }

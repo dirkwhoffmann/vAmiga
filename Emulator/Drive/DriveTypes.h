@@ -59,12 +59,12 @@ DriveHead;
 
 typedef struct
 {
-    /* Drive type.
+    /* Drive type
      * At the moment, we only support standard 3.5" DD drives.
      */
      DriveType type;
 
-    /* Acceleration factor.
+    /* Acceleration factor
      * This value equals the number of words that get transfered into memory
      * during a single disk DMA cycle. This value must be 1 to emulate a real
      * Amiga. If it set to, e.g., 2, the drive loads twice as fast.
@@ -72,6 +72,17 @@ typedef struct
      * the acceleration factor has no meaning.
      */
     i16 speed;
+    
+    /* Mechanical delays
+     * The start and stop delays specify the number of cycles that pass between
+     * switching the drive motor on or off until the drive motor runs at full
+     * speed or came to rest, respectively. The step delay specifies the number
+     * of cycle needed by the drive head to move to another cylinder. During
+     * this time, the FIFO is filled with garbage data.
+     */
+    Cycle startDelay;
+    Cycle stopDelay;
+    Cycle stepDelay;
 }
 DriveConfig;
 
