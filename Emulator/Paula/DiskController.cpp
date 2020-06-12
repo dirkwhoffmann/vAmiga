@@ -585,7 +585,7 @@ DiskController::performDMA()
     // Emulate the FIFO buffer if asynchronous mode is disabled
     if (!asyncFifo) { executeFifo(); executeFifo(); }
     
-    // Only proceed if there are remaining bytes to read
+    // Only proceed if there are remaining bytes to process
     if ((dsklen & 0x3FFF) == 0) return;
 
     // Only proceed if DMA is enabled
@@ -595,7 +595,7 @@ DiskController::performDMA()
     Drive *drive = getSelectedDrive();
     if (drive == NULL) return;
 
-    // How many word shall we read in?
+    // How many words shall we read in?
     u32 count = drive->config.speed;
 
     // Perform DMA

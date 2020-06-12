@@ -407,7 +407,7 @@ Drive::moveHead(int dir)
             recordCylinder(head.cylinder);
         }
         if (DSK_CHECKSUM)
-            plaindebug("Stepping down to cylinder %d\n", head.cylinder);
+            debug("Stepping down to cylinder %d (%d)\n", head.cylinder, head.offset);
 
     } else {
         
@@ -421,7 +421,11 @@ Drive::moveHead(int dir)
     }
     
     // Reset the head position in debug mode to generate reproducable results
-    if (DRIVE_DEBUG | ALIGN_HEAD) head.offset = 0;
+    if (DRIVE_DEBUG | ALIGN_HEAD) {
+        head.offset = 0;
+    } else {
+        head.offset = (head.offset + 117) % Disk::trackSize;
+    }
     
     // Inform the GUI
     if (pollsForDisk()) {
