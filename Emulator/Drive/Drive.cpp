@@ -21,7 +21,7 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
     config.speed =      1;
     config.startDelay = MSEC(380);
     config.stopDelay =  MSEC(80);
-    config.stepDelay =  USEC(1500);
+    config.stepDelay =  USEC(2000);
 }
 
 void
@@ -322,6 +322,8 @@ Drive::selectSide(int side)
 u8
 Drive::readHead()
 {
+    static int skipped = 0;
+    
     u8 result;
     
     // Only proceed if a disk in inserted
@@ -331,13 +333,14 @@ Drive::readHead()
     }
 
     // Only proceed if no step operation is in progress
-    if (emulateMechanics() && (agnus.clock - stepCycle) < USEC(1500)) {
-        assert(config.stepDelay == USEC(1500));
+    if (emulateMechanics() && (agnus.clock - stepCycle) < config.stepDelay) {
         result = 0xFF;
+        // debug("Skipping %d\n", ++skipped);
         goto exit;
     }
     
     // Read byte from disk
+    skipped = 0; 
     result = disk->readByte(head.cylinder, head.side, head.offset);
 
 exit:
@@ -409,10 +412,7 @@ Drive::readyToStep()
 
 void
 Drive::step(int dir)
-{
-    // Computes bytes to skip (step delay)
-    int skip = emulateMechanics() ? 100 : 0;
-    
+{    
     // Update disk change signal
     if (hasDisk()) dskchange = true;
  
@@ -441,7 +441,7 @@ Drive::step(int dir)
     }
     
     // Push drive head forward
-    // head.offset = ALIGN_HEAD ? 0 : ((head.offset + skip) % Disk::trackSize);
+    // head.offset = ALIGN_HEAD ? 0 : ((head.offset + 117) % Disk::trackSize);
     if (ALIGN_HEAD) head.offset = 0;
 
     // Inform the GUI
