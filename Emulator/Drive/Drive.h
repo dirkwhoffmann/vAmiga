@@ -207,7 +207,7 @@ public:
     bool readyToStep();
     
     // Moves the drive head (0 = inwards, 1 = outwards).
-    void moveHead(int dir);
+    void step(int dir);
 
     // Records a cylinder change (needed for diskPollingMode() to work)
     void recordCylinder(u8 cylinder);

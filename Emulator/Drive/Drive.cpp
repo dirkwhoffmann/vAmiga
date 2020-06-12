@@ -391,8 +391,11 @@ Drive::readyToStep()
 }
 
 void
-Drive::moveHead(int dir)
+Drive::step(int dir)
 {
+    // Computes bytes to skip (step delay)
+    int skip = emulateMechanics() ? 117 : 0;
+    
     // Update disk change signal
     if (hasDisk()) dskchange = true;
  
@@ -420,12 +423,8 @@ Drive::moveHead(int dir)
             plaindebug("Stepping up to cylinder %d\n", head.cylinder);
     }
     
-    // Reset the head position in debug mode to generate reproducable results
-    if (DRIVE_DEBUG | ALIGN_HEAD) {
-        head.offset = 0;
-    } else {
-        head.offset = (head.offset + 117) % Disk::trackSize;
-    }
+    // Push drive head forward
+    head.offset = ALIGN_HEAD ? 0 : ((head.offset + skip) % Disk::trackSize);
     
     // Inform the GUI
     if (pollsForDisk()) {
@@ -600,7 +599,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
     //
     
     // Move head if STEP goes high and drive was selected
-    if (RISING_EDGE(oldStep, newStep) && !oldSel) moveHead(newDir);
+    if (RISING_EDGE(oldStep, newStep) && !oldSel) step(newDir);
     
     // Evaluate the side selection bit
     if (head.side != !(newValue & 0b100)) {

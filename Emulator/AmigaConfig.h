@@ -124,8 +124,7 @@ static const int CIAB_DEBUG      = 0; // CIA B execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 
 // Drive
-static const int DRIVE_DEBUG     = 0; // Fallback to a simple turbo drive
-static const int ALIGN_HEAD      = 0; // Align the drive when switching tracks
+static const int ALIGN_HEAD      = 0; // Make head movement deterministic
 static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution

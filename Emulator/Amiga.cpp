@@ -295,14 +295,8 @@ Amiga::configure(ConfigOption option, long value)
             goto success;
 
         case VA_DRIVE_SPEED:
-
-            if (DRIVE_DEBUG) {
-                warn("Falling back to a turbo drive for debugging.\n");
-                value = -1;
-            }
             
 #ifdef FORCE_DRIVE_SPEED
-            assert(!DRIVE_DEBUG);
             value = FORCE_DRIVE_SPEED;
             warn("Overriding drive speed: %d\n", value);
 #endif

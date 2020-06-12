@@ -281,7 +281,7 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     else if (oldDsklen & newDskLen & 0x8000) {
 
         // Reset head position in debug mode to generate reproducable results
-        if (DRIVE_DEBUG | ALIGN_HEAD) drive->head.offset = 0;
+        if (ALIGN_HEAD) drive->head.offset = 0;
 
         // Check if the WRITE bit (bit 14) also has been written twice.
         if (oldDsklen & newDskLen & 0x4000) {
