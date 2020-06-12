@@ -44,7 +44,7 @@
 // #define FORCE_FAST_RAM       0
 // #define FORCE_RTC            RTC_NONE
 // #define FORCE_DRIVE_SPEED    1
-// #define FORCE_ASYNC_FIFO     false
+// #define FORCE_ASYNC_FIFO     true
 
 
 //

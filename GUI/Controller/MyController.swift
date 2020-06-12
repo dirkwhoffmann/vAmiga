@@ -614,18 +614,13 @@ extension MyController {
         case MSG_DRIVE_WRITE:
             refreshStatusBar(writing: true)
 
-        case MSG_DRIVE_LED_ON:
-            refreshStatusBar(drive: msg.data, led: true)
+        case MSG_DRIVE_LED_ON,
+             MSG_DRIVE_LED_OFF:
+            refreshStatusBar()
             
-        case MSG_DRIVE_LED_OFF:
-            refreshStatusBar(drive: msg.data, led: false)
-
-        case MSG_DRIVE_MOTOR_ON:
-            refreshStatusBar(drive: msg.data, motor: true)
-            updateWarp()
-
-        case MSG_DRIVE_MOTOR_OFF:
-            refreshStatusBar(drive: msg.data, motor: false)
+        case MSG_DRIVE_MOTOR_ON,
+             MSG_DRIVE_MOTOR_OFF:
+            refreshStatusBar()
             updateWarp()
 
         case MSG_DRIVE_HEAD:

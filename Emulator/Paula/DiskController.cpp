@@ -80,7 +80,8 @@ DiskController::_dump()
     msg("     selected : %d\n", selected);
     msg("        state : %s\n", driveStateName(state));
     msg("     syncFlag : %s\n", syncFlag ? "true" : "false");
-    msg("     incoming : %X (cylcle = %lld)\n", incoming, incomingCycle);
+    msg("    syncCycle : %lld\n", syncCycle);
+    msg("     incoming : %02X\n", incoming);
     msg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
     msg("\n");
     msg("       dsklen : %X\n", dsklen);
@@ -338,12 +339,11 @@ DiskController::computeDSKBYTR()
      *  7 - 0  DATA       Disk byte data
      */
     
-    // DATA
+    // DSKBYT and DATA
     u16 result = incoming;
     
-    // DSKBYT
-    assert(agnus.clock >= incomingCycle);
-    if (agnus.clock - incomingCycle <= 7) SET_BIT(result, 15);
+    // Clear the DSKBYT bit, so it won't show up in the next read
+    incoming &= 0x7FFF;
     
     // DMAON
     if (agnus.dskdma() && state != DRIVE_DMA_OFF) SET_BIT(result, 14);
@@ -352,8 +352,10 @@ DiskController::computeDSKBYTR()
     if (dsklen & 0x4000) SET_BIT(result, 13);
     
     // WORDEQUAL
-    if (syncFlag) SET_BIT(result, 12);
-
+    // if (syncFlag) SET_BIT(result, 12);
+    assert(agnus.clock >= syncCycle);
+    if (agnus.clock - syncCycle <= USEC(2)) SET_BIT(result, 12);
+    
     return result;
 }
 
@@ -526,16 +528,19 @@ DiskController::executeFifo()
         case DRIVE_DMA_WAIT:
         case DRIVE_DMA_READ:
             
-            // Read a byte from the drive and store a time stamp
+            // Read a byte from the drive
             incoming = drive->readHead();
-            incomingCycle = agnus.clock;
             
             // Write byte into the FIFO buffer
             writeFifo(incoming);
+            incoming |= 0x8000;
             
             // Check if we've reached a SYNC mark
             if ((syncFlag = compareFifo(dsksync)) ||
                 (config.autoDskSync && syncCounter++ > 20000)) {
+
+                // Save time stamp
+                syncCycle = agnus.clock;
 
                 // Trigger a word SYNC interrupt
                 debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);

@@ -38,8 +38,12 @@ class DiskController : public AmigaComponent {
     DriveState state;
 
     // Set to true if the currently read disk word matches the sync word
+    // DEPRECATED
     bool syncFlag = false;
-    
+
+    // Timestamp of the latest DSKSYNC match
+    Cycle syncCycle;
+
     /* Watchdog counter for SYNC marks
      * This counter is incremented after each disk rotation and reset when
      * a SYNC mark was found. It is used to implement the auto DSKSYNC feature
@@ -54,11 +58,8 @@ class DiskController : public AmigaComponent {
     //
     
     // The latest incoming byte (value shows up in DSKBYTER)
-    u8 incoming;
-    
-    // Timestamp of the latest write to variable 'incoming'
-    Cycle incomingCycle;
-    
+    u16 incoming;
+        
     /* The drive controller's FIFO buffer
      * On each DSK_ROTATE event, a byte is read from the selected drive and
      * put into this buffer. Each Disk DMA operation will read two bytes from
@@ -124,9 +125,9 @@ public:
         & selected
         & state
         & syncFlag
+        & syncCycle
         & syncCounter
         & incoming
-        & incomingCycle
         & fifo
         & fifoCount
         & dsklen
