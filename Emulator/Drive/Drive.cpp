@@ -318,13 +318,25 @@ Drive::selectSide(int side)
 u8
 Drive::readHead()
 {
-    u8 result = 0xFF;
+    u8 result;
     
-    if (disk) {
-        result = disk->readByte(head.cylinder, head.side, head.offset);
+    // Only proceed if a disk in inserted
+    if (!disk) {
+        result = 0xFF;
+        goto exit;
     }
-    rotate();
 
+    // Only proceed if no step operation is in progress
+    if (emulateMechanics() && (agnus.clock - stepCycle) < USEC(1500)) {
+        result = 0xFF;
+        goto exit;
+    }
+    
+    // Read byte from disk
+    result = disk->readByte(head.cylinder, head.side, head.offset);
+
+exit:
+    rotate();
     return result;
 }
 
@@ -394,7 +406,7 @@ void
 Drive::step(int dir)
 {
     // Computes bytes to skip (step delay)
-    int skip = emulateMechanics() ? 117 : 0;
+    int skip = emulateMechanics() ? 100 : 0;
     
     // Update disk change signal
     if (hasDisk()) dskchange = true;
@@ -424,8 +436,9 @@ Drive::step(int dir)
     }
     
     // Push drive head forward
-    head.offset = ALIGN_HEAD ? 0 : ((head.offset + skip) % Disk::trackSize);
-    
+    // head.offset = ALIGN_HEAD ? 0 : ((head.offset + skip) % Disk::trackSize);
+    if (ALIGN_HEAD) head.offset = 0;
+
     // Inform the GUI
     if (pollsForDisk()) {
         amiga.putMessage(MSG_DRIVE_HEAD_POLL, (nr << 8) | head.cylinder);
