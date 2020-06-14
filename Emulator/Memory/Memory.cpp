@@ -706,7 +706,7 @@ Memory::updateMemSrcTable()
     
     // Auto-config (Zorro II)
     for (unsigned i = 0xE8; i <= 0xEF; i++)
-        memSrc[i] = MEM_AUTOCONF;
+        memSrc[i] = hasFastRam() ? MEM_AUTOCONF : MEM_NONE_FAST;
     
     // Extended Rom
     for (unsigned i = 0; i < extRomPages; i++)
