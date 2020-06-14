@@ -39,9 +39,9 @@ typedef i64 DMACycle;         // DMA cycle units
 #define CIA_CYCLES(cycles)    ((cycles) * 40)
 #define DMA_CYCLES(cycles)    ((cycles) << 3)
 
-#define USEC(delay)           (delay * 28)
-#define MSEC(delay)           (delay * 28000)
-#define SEC(delay)            (delay * 28000000)
+#define USEC(delay)           ((delay) * 28)
+#define MSEC(delay)           ((delay) * 28000)
+#define SEC(delay)            ((delay) * 28000000)
 
 // Converts from master cycles to a certain cycle unit
 #define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
@@ -52,9 +52,9 @@ typedef i64 DMACycle;         // DMA cycle units
 #define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
 #define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
 
-#define AS_USEC(delay)        (delay / 28)
-#define AS_MSEC(delay)        (delay / 28000)
-#define AS_SEC(delay)         (delay / 28000000)
+#define AS_USEC(delay)        ((delay) / 28)
+#define AS_MSEC(delay)        ((delay) / 28000)
+#define AS_SEC(delay)         ((delay) / 28000000)
 
 //
 // Positions

@@ -60,30 +60,19 @@ extension BankTableView: NSTableViewDataSource {
 
             switch bankCache[row]?.rawValue {
                 
-            case MEM_UNMAPPED.rawValue:
-                return "Unmapped"
-            case MEM_CHIP.rawValue:
-                return "Chip Ram"
-            case MEM_FAST.rawValue:
-                return "Fast Ram"
-            case MEM_SLOW.rawValue:
-                return "Slow Ram"
-            case MEM_CIA.rawValue:
-                return "CIA"
-            case MEM_RTC.rawValue:
-                return "Clock"
-            case MEM_CUSTOM.rawValue:
-                return "Chipset"
-            case MEM_AUTOCONF.rawValue:
-                return "Autoconf"
-            case MEM_ROM.rawValue:
-                return "Rom"
-            case MEM_WOM.rawValue:
-                return "Wom"
-            case MEM_EXT.rawValue:
-                return "Extended Rom"
-            default:
-                return "???"
+            case MEM_NONE_FAST.rawValue: return "Unmapped"
+            case MEM_NONE_SLOW.rawValue: return "Unmapped"
+            case MEM_CHIP.rawValue:      return "Chip Ram"
+            case MEM_FAST.rawValue:      return "Fast Ram"
+            case MEM_SLOW.rawValue:      return "Slow Ram"
+            case MEM_CIA.rawValue:       return "CIA"
+            case MEM_RTC.rawValue:       return "Clock"
+            case MEM_CUSTOM.rawValue:    return "Chipset"
+            case MEM_AUTOCONF.rawValue:  return "Autoconf"
+            case MEM_ROM.rawValue:       return "Rom"
+            case MEM_WOM.rawValue:       return "Wom"
+            case MEM_EXT.rawValue:       return "Extended Rom"
+            default:                     return "???"
             }
 
         default:
@@ -98,7 +87,7 @@ extension BankTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
 
-            if bankCache[row] == MEM_UNMAPPED {
+            if bankCache[row] == MEM_NONE_FAST || bankCache[row] == MEM_NONE_SLOW {
                 cell.textColor = .gray
             } else {
                 cell.textColor = .textColor

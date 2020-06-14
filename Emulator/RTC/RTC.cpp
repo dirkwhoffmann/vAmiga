@@ -53,9 +53,8 @@ RTC::getTime()
     Cycle result;
     Cycle master = amiga.cpu.getMasterClock();
 
-    long timeBetweenCalls = (master - lastCall) / 28000000;
-    // debug("timeBetweenCalls = %d\n", timeBetweenCalls);
-    
+    long timeBetweenCalls = AS_SEC(master - lastCall);
+           
     if (timeBetweenCalls > 2) {
 
         /* If the time between two read accesses is long, we compute the result
@@ -70,13 +69,13 @@ RTC::getTime()
         /* If the time between two read accesses is short, we compute the result
          * out of the master-clock cycles that have elapsed since the host
          * machine's time was queried the last time.
-         * This ensures that the real-time clock behaves properly if the
-         * emulator runs in warp mode. E.g., when Kickstarts boots, it tests
-         * the real-time clock by peeking the time twice with a time delay
-         * of more than 1 second. If we simply query the host machine's
-         * time, the time difference would be less than 1 second in warp mode.
+         * This ensures that the real-time clock behaves properly in warp mode.
+         * E.g., when the Amiga boots, Kickstart tests the real-time clock by
+         * peeking the time twice with a time delay of more than 1 second. If
+         * we simply query the host machine's time, the time difference would
+         * be less than 1 second in warp mode.
          */
-        long elapsedTime = (master - lastMeasure) / 28000000;
+        long elapsedTime = AS_SEC(master - lastMeasure);
         result = lastMeasuredValue + elapsedTime;
     }
     
@@ -127,16 +126,15 @@ RTC::poke(unsigned nr, u8 value)
 void
 RTC::time2registers()
 {
-    // Convert the internally stored time diff to an absolute time_t value.
+    // Convert the internally stored time diff to an absolute time_t value
     time_t rtcTime = getTime();
     
-    // Convert the time_t value to a tm struct.
+    // Convert the time_t value to a tm struct
     tm *t = localtime(&rtcTime);
-    // debug("Time stamp: %s\n", asctime(t));
     
-    // Write the registers.
-    
-    /* 0000 (S1)   : S8   S4   S2   S1    (1-second digit register)
+    /* Write the registers
+     *
+     * 0000 (S1)   : S8   S4   S2   S1    (1-second digit register)
      * 0001 (S10)  : **** S40  S20  S10   (10-second digit register)
      * 0010 (MI1)  : mi8  mi4  mi2  mi1   (1-minute digit register)
      * 0011 (MI10) : **** mi40 mi20 mi10  (10-minute digit register)
@@ -177,7 +175,7 @@ RTC::time2registers()
 void
 RTC::registers2time()
 {
-    // Read the registers.
+    // Read the registers
     tm t = {0};
     t.tm_sec  = reg[0] + 10 * reg[1];
     t.tm_min  = reg[2] + 10 * reg[3];
@@ -186,9 +184,9 @@ RTC::registers2time()
     t.tm_mon  = reg[8] + 10 * reg[9] - 1;
     t.tm_year = reg[10] + 10 * reg[11];
   
-    // Convert the tm struct to a time_t value.
+    // Convert the tm struct to a time_t value
     time_t rtcTime = mktime(&t);
     
-    // Update the real-time clock.
+    // Update the real-time clock
     setTime(rtcTime);
 }

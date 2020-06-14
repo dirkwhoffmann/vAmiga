@@ -653,17 +653,14 @@ Memory::saveExt(const char *path)
 void
 Memory::updateMemSrcTable()
 {
-    MemorySource mem_rom = rom ? MEM_ROM : MEM_UNMAPPED;
+    MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE_FAST;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
 
     int chipRamPages = hasChipRam() ? 32 : 0;
     int slowRamPages = config.slowSize / 0x10000;
     int fastRamPages = config.fastSize / 0x10000;
-    int extRomPages  = hasExt() ? 8 : 0;
-
-    // Mirror Chip Ram if only a 256KB Rom is present
-    if (chipRamPages == 4) chipRamPages = 8;
-
+    int extRomPages = hasExt() ? 8 : 0;
+    
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
     assert(config.fastSize % 0x10000 == 0);
@@ -672,34 +669,41 @@ Memory::updateMemSrcTable()
         
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
-        memSrc[i] = MEM_UNMAPPED;
-    
+        memSrc[i] = MEM_NONE_FAST;
+
     // Chip Ram
-    for (unsigned i = 0; i < chipRamPages; i++)
-        memSrc[i] = MEM_CHIP;
+    for (unsigned i = 0x00; i <= 0x1F; i++)
+        memSrc[i] = i < chipRamPages ? MEM_CHIP : MEM_NONE_SLOW;
     
     // Fast Ram
-    for (unsigned i = 0; i < fastRamPages; i++)
-        memSrc[0x20 + i] = MEM_FAST;
+    for (unsigned i = 0x20; i <= 0x9F; i++)
+        memSrc[i] = (i - 0x20) < fastRamPages ? MEM_FAST : MEM_NONE_FAST;
 
     // CIA range
     for (unsigned i = 0xA0; i <= 0xBF; i++)
         memSrc[i] = MEM_CIA;
 
-    // OCS (some assignments will be overwritten below by Slow Ram and RTC)
-    for (unsigned i = 0xC0; i <= 0xDF; i++)
-        memSrc[i] = MEM_CUSTOM;
-    
     // Slow Ram
-    for (unsigned i = 0; i < slowRamPages; i++)
-        memSrc[0xC0 + i] = MEM_SLOW;
+    for (unsigned i = 0xC0; i <= 0xD7; i++)
+        memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM;
+    for (unsigned i = 0xD8; i <= 0xDB; i++)
+        memSrc[i] = (i - 0xCF) < slowRamPages ? MEM_SLOW : MEM_NONE_SLOW;
 
-    // Real-time clock (RTC)
-    if (rtc.getModel() != RTC_NONE) {
-        for (unsigned i = 0xDC; i <= 0xDE; i++)
-            memSrc[i] = MEM_RTC;
-    }
+    // Real-time clock
+    for (unsigned i = 0xDC; i <= 0xDC; i++)
+        memSrc[i] = rtc.getModel() != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
 
+    // Reserved
+    memSrc[0xDD] = MEM_NONE_FAST;
+
+    // Custom chip set
+    for (unsigned i = 0xDE; i <= 0xDF; i++)
+        memSrc[i] = MEM_CUSTOM;
+
+    // Reserved
+    for (unsigned i = 0xE0; i <= 0xE7; i++)
+        memSrc[i] = MEM_NONE_FAST;
+    
     // Auto-config (Zorro II)
     for (unsigned i = 0xE8; i <= 0xEF; i++)
         memSrc[i] = MEM_AUTOCONF;
@@ -720,7 +724,7 @@ Memory::updateMemSrcTable()
 
     // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
-        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_UNMAPPED; i++)
+        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_NONE_FAST; i++)
             memSrc[i] = memSrc[0xF8 + i];
     }
 
@@ -728,25 +732,45 @@ Memory::updateMemSrcTable()
 }
 
 template<> u8
-Memory::peek8 <ACC_CPU, MEM_UNMAPPED> (u32 addr)
+Memory::peek8 <ACC_CPU, MEM_NONE_FAST> (u32 addr)
+{
+    debug(MEM_DEBUG, "peek8(%x [NONE_FAST]) = %x\n", addr, dataBus);
+    return (u8)dataBus;
+}
+
+template<> u8
+Memory::peek8 <ACC_CPU, MEM_NONE_SLOW> (u32 addr)
 {
     agnus.executeUntilBusIsFree();
     
-    debug(MEM_DEBUG, "peek8(%x [UNMAPPED]) = %x\n", addr, dataBus);
+    debug(MEM_DEBUG, "peek8(%x [NONE_SLOW]) = %x\n", addr, dataBus);
     return (u8)dataBus;
 }
 
 template<> u16
-Memory::peek16 <ACC_CPU, MEM_UNMAPPED> (u32 addr)
+Memory::peek16 <ACC_CPU, MEM_NONE_FAST> (u32 addr)
 {
-    agnus.executeUntilBusIsFree();
-    
-    debug(MEM_DEBUG, "peek16(%x [UNMAPPED]) = %x\n", addr, dataBus);
+    debug(MEM_DEBUG, "peek16(%x [NONE_FAST]) = %x\n", addr, dataBus);
     return dataBus;
 }
 
 template<> u16
-Memory::spypeek16 <MEM_UNMAPPED> (u32 addr)
+Memory::peek16 <ACC_CPU, MEM_NONE_SLOW> (u32 addr)
+{
+    agnus.executeUntilBusIsFree();
+    
+    debug(MEM_DEBUG, "peek16(%x [NONE_SLOW]) = %x\n", addr, dataBus);
+    return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <MEM_NONE_FAST> (u32 addr)
+{
+    return dataBus;
+}
+
+template<> u16
+Memory::spypeek16 <MEM_NONE_SLOW> (u32 addr)
 {
     return dataBus;
 }
@@ -943,7 +967,7 @@ Memory::peek8 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
     
     dataBus = zorro.peekFastRamDevice(addr) << 4;         
     return dataBus;
@@ -954,7 +978,7 @@ Memory::peek16 <ACC_CPU, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
     
     u8 hi = zorro.peekFastRamDevice(addr) << 4;
     u8 lo = zorro.peekFastRamDevice(addr + 1) << 4;
@@ -1049,17 +1073,18 @@ Memory::peek8 <ACC_CPU> (u32 addr)
 {    
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: return peek8 <ACC_CPU, MEM_UNMAPPED> (addr);
-        case MEM_CHIP:     return peek8 <ACC_CPU, MEM_CHIP>     (addr);
-        case MEM_SLOW:     return peek8 <ACC_CPU, MEM_SLOW>     (addr);
-        case MEM_FAST:     return peek8 <ACC_CPU, MEM_FAST>     (addr);
-        case MEM_CIA:      return peek8 <ACC_CPU, MEM_CIA>      (addr);
-        case MEM_RTC:      return peek8 <ACC_CPU, MEM_RTC>      (addr);
-        case MEM_CUSTOM:   return peek8 <ACC_CPU, MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF: return peek8 <ACC_CPU, MEM_AUTOCONF> (addr);
-        case MEM_ROM:      return peek8 <ACC_CPU, MEM_ROM>      (addr);
-        case MEM_WOM:      return peek8 <ACC_CPU, MEM_WOM>      (addr);
-        case MEM_EXT:      return peek8 <ACC_CPU, MEM_EXT>      (addr);
+        case MEM_NONE_FAST: return peek8 <ACC_CPU, MEM_NONE_FAST> (addr);
+        case MEM_NONE_SLOW: return peek8 <ACC_CPU, MEM_NONE_SLOW> (addr);
+        case MEM_CHIP:      return peek8 <ACC_CPU, MEM_CHIP>      (addr);
+        case MEM_SLOW:      return peek8 <ACC_CPU, MEM_SLOW>      (addr);
+        case MEM_FAST:      return peek8 <ACC_CPU, MEM_FAST>      (addr);
+        case MEM_CIA:       return peek8 <ACC_CPU, MEM_CIA>       (addr);
+        case MEM_RTC:       return peek8 <ACC_CPU, MEM_RTC>       (addr);
+        case MEM_CUSTOM:    return peek8 <ACC_CPU, MEM_CUSTOM>    (addr);
+        case MEM_AUTOCONF:  return peek8 <ACC_CPU, MEM_AUTOCONF>  (addr);
+        case MEM_ROM:       return peek8 <ACC_CPU, MEM_ROM>       (addr);
+        case MEM_WOM:       return peek8 <ACC_CPU, MEM_WOM>       (addr);
+        case MEM_EXT:       return peek8 <ACC_CPU, MEM_EXT>       (addr);
             
         default: assert(false); return 0;
     }
@@ -1072,17 +1097,18 @@ Memory::peek16 <ACC_CPU> (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: return peek16 <ACC_CPU, MEM_UNMAPPED> (addr);
-        case MEM_CHIP:     return peek16 <ACC_CPU, MEM_CHIP>     (addr);
-        case MEM_SLOW:     return peek16 <ACC_CPU, MEM_SLOW>     (addr);
-        case MEM_FAST:     return peek16 <ACC_CPU, MEM_FAST>     (addr);
-        case MEM_CIA:      return peek16 <ACC_CPU, MEM_CIA>      (addr);
-        case MEM_RTC:      return peek16 <ACC_CPU, MEM_RTC>      (addr);
-        case MEM_CUSTOM:   return peek16 <ACC_CPU, MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF: return peek16 <ACC_CPU, MEM_AUTOCONF> (addr);
-        case MEM_ROM:      return peek16 <ACC_CPU, MEM_ROM>      (addr);
-        case MEM_WOM:      return peek16 <ACC_CPU, MEM_WOM>      (addr);
-        case MEM_EXT:      return peek16 <ACC_CPU, MEM_EXT>      (addr);
+        case MEM_NONE_FAST: return peek16 <ACC_CPU, MEM_NONE_FAST> (addr);
+        case MEM_NONE_SLOW: return peek16 <ACC_CPU, MEM_NONE_SLOW> (addr);
+        case MEM_CHIP:      return peek16 <ACC_CPU, MEM_CHIP>      (addr);
+        case MEM_SLOW:      return peek16 <ACC_CPU, MEM_SLOW>      (addr);
+        case MEM_FAST:      return peek16 <ACC_CPU, MEM_FAST>      (addr);
+        case MEM_CIA:       return peek16 <ACC_CPU, MEM_CIA>       (addr);
+        case MEM_RTC:       return peek16 <ACC_CPU, MEM_RTC>       (addr);
+        case MEM_CUSTOM:    return peek16 <ACC_CPU, MEM_CUSTOM>    (addr);
+        case MEM_AUTOCONF:  return peek16 <ACC_CPU, MEM_AUTOCONF>  (addr);
+        case MEM_ROM:       return peek16 <ACC_CPU, MEM_ROM>       (addr);
+        case MEM_WOM:       return peek16 <ACC_CPU, MEM_WOM>       (addr);
+        case MEM_EXT:       return peek16 <ACC_CPU, MEM_EXT>       (addr);
             
         default: assert(false); return 0;
     }
@@ -1095,34 +1121,49 @@ Memory::spypeek16 (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: return spypeek16 <MEM_UNMAPPED> (addr);
-        case MEM_CHIP:     return spypeek16 <MEM_CHIP>     (addr);
-        case MEM_SLOW:     return spypeek16 <MEM_SLOW>     (addr);
-        case MEM_FAST:     return spypeek16 <MEM_FAST>     (addr);
-        case MEM_CIA:      return spypeek16 <MEM_CIA>      (addr);
-        case MEM_RTC:      return spypeek16 <MEM_RTC>      (addr);
-        case MEM_CUSTOM:   return spypeek16 <MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF: return spypeek16 <MEM_AUTOCONF> (addr);
-        case MEM_ROM:      return spypeek16 <MEM_ROM>      (addr);
-        case MEM_WOM:      return spypeek16 <MEM_WOM>      (addr);
-        case MEM_EXT:      return spypeek16 <MEM_EXT>      (addr);
+        case MEM_NONE_FAST: return spypeek16 <MEM_NONE_FAST> (addr);
+        case MEM_NONE_SLOW: return spypeek16 <MEM_NONE_SLOW> (addr);
+        case MEM_CHIP:      return spypeek16 <MEM_CHIP>      (addr);
+        case MEM_SLOW:      return spypeek16 <MEM_SLOW>      (addr);
+        case MEM_FAST:      return spypeek16 <MEM_FAST>      (addr);
+        case MEM_CIA:       return spypeek16 <MEM_CIA>       (addr);
+        case MEM_RTC:       return spypeek16 <MEM_RTC>       (addr);
+        case MEM_CUSTOM:    return spypeek16 <MEM_CUSTOM>    (addr);
+        case MEM_AUTOCONF:  return spypeek16 <MEM_AUTOCONF>  (addr);
+        case MEM_ROM:       return spypeek16 <MEM_ROM>       (addr);
+        case MEM_WOM:       return spypeek16 <MEM_WOM>       (addr);
+        case MEM_EXT:       return spypeek16 <MEM_EXT>       (addr);
             
         default: assert(false); return 0;
     }
 }
 
 template <> void
-Memory::poke8 <ACC_CPU, MEM_UNMAPPED> (u32 addr, u8 value)
+Memory::poke8 <ACC_CPU, MEM_NONE_FAST> (u32 addr, u8 value)
 {
-    debug(MEM_DEBUG, "poke8(%x [UNMAPPED], %x)\n", addr, value);
+    debug(MEM_DEBUG, "poke8(%x [NONE_FAST], %x)\n", addr, value);
+    dataBus = value;
+}
+
+template <> void
+Memory::poke8 <ACC_CPU, MEM_NONE_SLOW> (u32 addr, u8 value)
+{
+    debug(MEM_DEBUG, "poke8(%x [NONE_SLOW], %x)\n", addr, value);
     agnus.executeUntilBusIsFree();
     dataBus = value;
 }
 
 template <> void
-Memory::poke16 <ACC_CPU, MEM_UNMAPPED> (u32 addr, u16 value)
+Memory::poke16 <ACC_CPU, MEM_NONE_FAST> (u32 addr, u16 value)
 {
-    debug(MEM_DEBUG, "poke16(%x [UNMAPPED], %x)\n", addr, value);
+    debug(MEM_DEBUG, "poke16(%x [NONE_FAST], %x)\n", addr, value);
+    dataBus = value;
+}
+
+template <> void
+Memory::poke16 <ACC_CPU, MEM_NONE_SLOW> (u32 addr, u16 value)
+{
+    debug(MEM_DEBUG, "poke16(%x [NONE_SLOW], %x)\n", addr, value);
     agnus.executeUntilBusIsFree();
     dataBus = value;
 }
@@ -1284,7 +1325,7 @@ Memory::poke8 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u8 value)
 {
     ASSERT_AUTO_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
     
     dataBus = value;
     zorro.pokeFastRamDevice(addr, value);
@@ -1295,7 +1336,7 @@ Memory::poke16 <ACC_CPU, MEM_AUTOCONF> (u32 addr, u16 value)
 {
     ASSERT_AUTO_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
 
     dataBus = value;
     zorro.pokeFastRamDevice(addr, HI_BYTE(value));
@@ -1310,8 +1351,8 @@ Memory::poke8 <ACC_CPU, MEM_ROM> (u32 addr, u8 value)
     stats.kickWrites.raw++;
     
     // On Amigas with a WOM, writing into ROM space locks the WOM
-    if (hasWom()) {
-        if (!womIsLocked) debug("Locking WOM\n");
+    if (hasWom() && !womIsLocked) {
+        debug("Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTable();
     }
@@ -1360,17 +1401,18 @@ Memory::poke8 <ACC_CPU> (u32 addr, u8 value)
 {
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: poke8 <ACC_CPU, MEM_UNMAPPED> (addr, value); return;
-        case MEM_CHIP:     poke8 <ACC_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:     poke8 <ACC_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:     poke8 <ACC_CPU, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:      poke8 <ACC_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:      poke8 <ACC_CPU, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:   poke8 <ACC_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF: poke8 <ACC_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ROM:      poke8 <ACC_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:      poke8 <ACC_CPU, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:      poke8 <ACC_CPU, MEM_EXT>      (addr, value); return;
+        case MEM_NONE_FAST: poke8 <ACC_CPU, MEM_NONE_FAST> (addr, value); return;
+        case MEM_NONE_SLOW: poke8 <ACC_CPU, MEM_NONE_SLOW> (addr, value); return;
+        case MEM_CHIP:      poke8 <ACC_CPU, MEM_CHIP>      (addr, value); return;
+        case MEM_SLOW:      poke8 <ACC_CPU, MEM_SLOW>      (addr, value); return;
+        case MEM_FAST:      poke8 <ACC_CPU, MEM_FAST>      (addr, value); return;
+        case MEM_CIA:       poke8 <ACC_CPU, MEM_CIA>       (addr, value); return;
+        case MEM_RTC:       poke8 <ACC_CPU, MEM_RTC>       (addr, value); return;
+        case MEM_CUSTOM:    poke8 <ACC_CPU, MEM_CUSTOM>    (addr, value); return;
+        case MEM_AUTOCONF:  poke8 <ACC_CPU, MEM_AUTOCONF>  (addr, value); return;
+        case MEM_ROM:       poke8 <ACC_CPU, MEM_ROM>       (addr, value); return;
+        case MEM_WOM:       poke8 <ACC_CPU, MEM_WOM>       (addr, value); return;
+        case MEM_EXT:       poke8 <ACC_CPU, MEM_EXT>       (addr, value); return;
             
         default: assert(false);
     }
@@ -1383,17 +1425,18 @@ Memory::poke16 <ACC_CPU> (u32 addr, u16 value)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_UNMAPPED: poke16 <ACC_CPU, MEM_UNMAPPED> (addr, value); return;
-        case MEM_CHIP:     poke16 <ACC_CPU, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:     poke16 <ACC_CPU, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:     poke16 <ACC_CPU, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:      poke16 <ACC_CPU, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:      poke16 <ACC_CPU, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:   poke16 <ACC_CPU, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF: poke16 <ACC_CPU, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ROM:      poke16 <ACC_CPU, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:      poke16 <ACC_CPU, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:      poke16 <ACC_CPU, MEM_EXT>      (addr, value); return;
+        case MEM_NONE_FAST: poke16 <ACC_CPU, MEM_NONE_FAST> (addr, value); return;
+        case MEM_NONE_SLOW: poke16 <ACC_CPU, MEM_NONE_SLOW> (addr, value); return;
+        case MEM_CHIP:      poke16 <ACC_CPU, MEM_CHIP>      (addr, value); return;
+        case MEM_SLOW:      poke16 <ACC_CPU, MEM_SLOW>      (addr, value); return;
+        case MEM_FAST:      poke16 <ACC_CPU, MEM_FAST>      (addr, value); return;
+        case MEM_CIA:       poke16 <ACC_CPU, MEM_CIA>       (addr, value); return;
+        case MEM_RTC:       poke16 <ACC_CPU, MEM_RTC>       (addr, value); return;
+        case MEM_CUSTOM:    poke16 <ACC_CPU, MEM_CUSTOM>    (addr, value); return;
+        case MEM_AUTOCONF:  poke16 <ACC_CPU, MEM_AUTOCONF>  (addr, value); return;
+        case MEM_ROM:       poke16 <ACC_CPU, MEM_ROM>       (addr, value); return;
+        case MEM_WOM:       poke16 <ACC_CPU, MEM_WOM>       (addr, value); return;
+        case MEM_EXT:       poke16 <ACC_CPU, MEM_EXT>       (addr, value); return;
             
         default: assert(false);
     }
@@ -1537,7 +1580,7 @@ Memory::peekRTC8(u32 addr)
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
      * Reg:   --   -0   --   -0   --   -1   --   -1   --   -2   --   -2
      */
-    if (IS_EVEN(addr)) return 0;
+    if (IS_EVEN(addr)) return HI_BYTE(dataBus);
     
     /* Addr: 0001 0011 0101 0111 1001 1011
      * Reg:   -0   -0   -1   -1   -2   -2

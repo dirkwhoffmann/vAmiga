@@ -55,18 +55,19 @@ extension Inspector {
             var color: NSColor
 
             switch src {
-            case MEM_UNMAPPED.rawValue: color = MemColors.unmapped
-            case MEM_CHIP.rawValue:     color = MemColors.chip
-            case MEM_FAST.rawValue:     color = MemColors.fast
-            case MEM_SLOW.rawValue:     color = MemColors.slow
-            case MEM_ROM.rawValue:      color = MemColors.rom
-            case MEM_WOM.rawValue:      color = MemColors.wom
-            case MEM_EXT.rawValue:      color = MemColors.ext
-            case MEM_CIA.rawValue:      color = MemColors.cia
-            case MEM_RTC.rawValue:      color = MemColors.rtc
-            case MEM_CUSTOM.rawValue:   color = MemColors.ocs
-            case MEM_AUTOCONF.rawValue: color = MemColors.auto
-            default:                    fatalError()
+            case MEM_NONE_FAST.rawValue: color = MemColors.unmapped
+            case MEM_NONE_SLOW.rawValue: color = MemColors.unmapped
+            case MEM_CHIP.rawValue:      color = MemColors.chip
+            case MEM_FAST.rawValue:      color = MemColors.fast
+            case MEM_SLOW.rawValue:      color = MemColors.slow
+            case MEM_ROM.rawValue:       color = MemColors.rom
+            case MEM_WOM.rawValue:       color = MemColors.wom
+            case MEM_EXT.rawValue:       color = MemColors.ext
+            case MEM_CIA.rawValue:       color = MemColors.cia
+            case MEM_RTC.rawValue:       color = MemColors.rtc
+            case MEM_CUSTOM.rawValue:    color = MemColors.ocs
+            case MEM_AUTOCONF.rawValue:  color = MemColors.auto
+            default:                     fatalError()
             }
             let ciColor: CIColor = CIColor(color: color)!
 
@@ -142,7 +143,7 @@ extension Inspector {
         if value >= 0 && value <= 0xFF {
             
             bank = value
-            memSrc = parent?.amiga.mem.memSrc(bank << 16) ?? MEM_UNMAPPED
+            memSrc = parent?.amiga.mem.memSrc(bank << 16) ?? MEM_NONE_FAST
             memLayoutSlider.integerValue = bank
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(value)

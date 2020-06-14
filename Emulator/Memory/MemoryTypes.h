@@ -18,7 +18,8 @@
  */
 typedef enum
 {
-    MEM_UNMAPPED,
+    MEM_NONE_FAST,
+    MEM_NONE_SLOW,
     MEM_CHIP,
     MEM_SLOW,
     MEM_FAST,
