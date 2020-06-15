@@ -970,7 +970,11 @@ Blitter::exec()
     }
 
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) { paula.raiseIrq(INT_BLIT); birq = true; }
+    if ((instr & BLTDONE) && !birq) {
+        signalEnd();
+        paula.raiseIrq(INT_BLIT);
+        birq = true;
+    }
     
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
@@ -1121,7 +1125,7 @@ Blitter::exec()
 
         } else {
 
-            signalEnd();
+            // signalEnd();
         }
     }
 
@@ -1147,7 +1151,10 @@ Blitter::fakeExec()
     }
 
     // Trigger Blitter interrupt if this is the termination cycle
-    if ((instr & BLTDONE) && !birq) { paula.raiseIrq(INT_BLIT); birq = true; }
+    if ((instr & BLTDONE) && !birq) {
+        signalEnd();
+        paula.raiseIrq(INT_BLIT); birq = true;
+    }
 
     // Allocate the bus if needed
     if (bus && !agnus.allocateBus<BUS_BLITTER>()) return;
@@ -1185,7 +1192,7 @@ Blitter::fakeExec()
 
         } else {
 
-            signalEnd();
+            // signalEnd();
         }
     }
 
