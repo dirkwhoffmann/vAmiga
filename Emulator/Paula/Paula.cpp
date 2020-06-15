@@ -87,7 +87,6 @@ Paula::pokeINTENA(u16 value)
 {
     debug(INTREG_DEBUG, "pokeINTENA(%X)\n", value);
 
-    // agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTENA, value);
     paula.setINTENA(value);
 }
 

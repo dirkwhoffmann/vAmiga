@@ -1240,7 +1240,6 @@ void
 CIAA::releaseInterruptLine()
 {
     debug(CIA_DEBUG, "Releasing IRQ line\n");
-    paula.checkInterrupt();
 }
 
 //              -------
@@ -1395,7 +1394,6 @@ void
 CIAB::releaseInterruptLine()
 {
     debug(CIA_DEBUG, "Releasing IRQ line\n");
-    paula.checkInterrupt();
 }
 
 //                                 -------
