@@ -73,7 +73,7 @@ Copper::pokeCOPCON(u16 value)
 template <Accessor s> void
 Copper::pokeCOPJMP1()
 {
-    debug(COPREG_DEBUG, "pokeCOPJMP1(): Jumping to %X\n", cop1lc);
+    debug(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
     if (s == ACC_AGNUS) {
 
@@ -82,6 +82,9 @@ Copper::pokeCOPJMP1()
     }
     if (s == ACC_CPU) {
 
+        if (blitter.isRunning()) {
+            debug(XFILES, "pokeCOPJMP1: Blitter is running\n");
+        }
         switchToCopperList(1);
     }
 }
@@ -98,6 +101,9 @@ Copper::pokeCOPJMP2()
     }
     if (s == ACC_CPU) {
 
+        if (blitter.isRunning()) {
+            debug(XFILES, "pokeCOPJMP2: Blitter is running\n");
+        }
         switchToCopperList(2);
     }
 }
