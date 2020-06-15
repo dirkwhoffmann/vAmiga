@@ -469,7 +469,7 @@ Moira::jumpToVector(int nr)
     // Update the prefetch queue
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
     sync(2);
-    prefetch<F>();
+    prefetch<POLLIPL>();
     
     exceptionJump(nr, reg.pc);
 }
