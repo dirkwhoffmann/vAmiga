@@ -844,6 +844,12 @@ Memory::peek16 <ACC_AGNUS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
+Memory::peek16 <ACC_AGNUS, MEM_NONE_SLOW> (u32 addr)
+{
+    return dataBus;
+}
+
+template<> u16
 Memory::spypeek16 <MEM_SLOW> (u32 addr)
 {
     return READ_SLOW_16(addr);
@@ -1173,7 +1179,7 @@ Memory::poke8 <ACC_CPU, MEM_CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if (blitter.memguard[addr & mem.chipMask]) {
+    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
         debug("CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
 
@@ -1189,7 +1195,7 @@ Memory::poke16 <ACC_CPU, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
-    if (blitter.memguard[addr & mem.chipMask]) {
+    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
         debug("CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
     
@@ -1205,7 +1211,7 @@ Memory::poke16 <ACC_AGNUS, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
  
-    if (blitter.memguard[addr & mem.chipMask]) {
+    if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
         debug("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
 

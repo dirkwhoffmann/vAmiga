@@ -553,10 +553,16 @@ Agnus::peek(u32 addr)
 {
     addr &= ptrMask;
     
-    if (addr >= 0x80000 && slowRamIsMirroredIn()) {
-        return mem.peek16 <ACC_AGNUS, MEM_SLOW> (addr);
+    if (addr >= 0x80000) {
+        
+        if (slowRamIsMirroredIn()) {
+            return mem.peek16 <ACC_AGNUS, MEM_SLOW> (addr);
+        }
+        if (addr >= mem.chipRamSize()) {
+            return mem.peek16 <ACC_AGNUS, MEM_NONE_SLOW> (addr);
+        }
     }
-    
+        
     return mem.peek16 <ACC_AGNUS, MEM_CHIP> (addr);
 }
 
@@ -565,8 +571,14 @@ Agnus::spypeek(u32 addr)
 {
     addr &= ptrMask;
     
-    if (addr >= 0x80000 && slowRamIsMirroredIn()) {
-        return mem.spypeek16 <MEM_SLOW> (addr);
+    if (addr >= 0x80000) {
+        
+        if (slowRamIsMirroredIn()) {
+            return mem.spypeek16 <MEM_SLOW> (addr);
+        }
+        if (addr >= mem.chipRamSize()) {
+            return mem.spypeek16 <MEM_NONE_SLOW> (addr);
+        }
     }
     
     return mem.spypeek16 <MEM_CHIP> (addr);
@@ -576,11 +588,16 @@ void
 Agnus::poke(u32 addr, u16 value)
 {
     addr &= ptrMask;
-
-    // Check if SlowRam is mirrored in
-    if (addr >= 0x80000 && slowRamIsMirroredIn()) {
-        mem.poke16 <ACC_AGNUS, MEM_SLOW> (addr, value);
-        return;
+    
+    if (addr >= 0x80000) {
+        
+        if (slowRamIsMirroredIn()) {
+            mem.poke16 <ACC_AGNUS, MEM_SLOW> (addr, value);
+            return;
+        }
+        if (addr >= mem.chipRamSize()) {
+            return;
+        }
     }
     
     mem.poke16 <ACC_AGNUS, MEM_CHIP> (addr, value);
