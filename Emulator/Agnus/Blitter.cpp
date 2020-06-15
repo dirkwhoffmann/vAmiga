@@ -184,6 +184,10 @@ Blitter::pokeBLTAPTH(u16 value)
     debug(BLT_GUARD && running, "BLTAPTH written while Blitter is running");
 
     bltapt = REPLACE_HI_WORD(bltapt, value);
+
+    if (bltapt & ~agnus.ptrMask) {
+        debug(XFILES, "BLTAPT out of range: %x\n", bltapt);
+    }
 }
 
 void
@@ -202,6 +206,10 @@ Blitter::pokeBLTBPTH(u16 value)
     debug(BLT_GUARD && running, "BLTBPTH written while Blitter is running");
 
     bltbpt = REPLACE_HI_WORD(bltbpt, value);
+    
+    if (bltbpt & ~agnus.ptrMask) {
+        debug(XFILES, "BLTBPT out of range: %x\n", bltbpt);
+    }
 }
 
 void
@@ -220,6 +228,10 @@ Blitter::pokeBLTCPTH(u16 value)
     debug(BLT_GUARD && running, "BLTCPTH written while Blitter is running");
 
     bltcpt = REPLACE_HI_WORD(bltcpt, value);
+    
+    if (bltcpt & ~agnus.ptrMask) {
+        debug(XFILES, "BLTCPT out of range: %x\n", bltcpt);
+    }
 }
 
 void
@@ -238,6 +250,10 @@ Blitter::pokeBLTDPTH(u16 value)
     debug(BLT_GUARD && running, "BLTDPTH written while Blitter is running");
 
     bltdpt = REPLACE_HI_WORD(bltdpt, value);
+    
+    if (bltdpt & ~agnus.ptrMask) {
+        debug(XFILES, "BLTDPT out of range: %x\n", bltdpt);
+    }
 }
 
 void
@@ -828,6 +844,8 @@ Blitter::startBlit()
 {
     int level = config.accuracy;
 
+    if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
+    
     if (bltconLINE()) {
 
         if (BLT_CHECKSUM) {
@@ -882,6 +900,8 @@ Blitter::endBlit()
     plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
+    
+    if (BLT_GUARD) memset(memguard, 0, sizeof(memguard));
     
     // Clear the Blitter slot
     agnus.cancel<BLT_SLOT>();

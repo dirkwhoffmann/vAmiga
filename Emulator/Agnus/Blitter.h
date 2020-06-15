@@ -145,7 +145,7 @@ class Blitter : public AmigaComponent
     // The Blitter zero flag
     bool bzero;
 
-    // Indicates if the Blitter interrupts has been triggered
+    // Indicates whether the Blitter interrupt has been triggered
     bool birq;
     
     
@@ -166,7 +166,11 @@ private:
     u32 check1;
     u32 check2;
 
-
+public:
+    
+    // Experimental
+    u8 memguard[KB(512)];
+    
     //
     // Constructing and serializing
     //

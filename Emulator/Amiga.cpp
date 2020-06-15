@@ -376,8 +376,8 @@ Amiga::configure(ConfigOption option, long value)
             
         case VA_BLITTER_ACCURACY:
             
-#ifdef FORCE_BLITTER_ACCURACY
-            value = FORCE_BLITTER_ACCURACY;
+#ifdef FORCE_BLT_LEVEL
+            value = FORCE_BLT_LEVEL;
             warn("Overriding Blitter accuracy level: %d\n", value);
 #endif
 

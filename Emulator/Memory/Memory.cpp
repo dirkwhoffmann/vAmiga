@@ -1173,6 +1173,10 @@ Memory::poke8 <ACC_CPU, MEM_CHIP> (u32 addr, u8 value)
 {
     ASSERT_CHIP_ADDR(addr);
     
+    if (blitter.memguard[addr & mem.chipMask]) {
+        debug("CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
+    }
+
     agnus.executeUntilBusIsFree();
     
     stats.chipWrites.raw++;
@@ -1184,6 +1188,10 @@ template <> void
 Memory::poke16 <ACC_CPU, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
+    
+    if (blitter.memguard[addr & mem.chipMask]) {
+        debug("CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
+    }
     
     agnus.executeUntilBusIsFree();
     
@@ -1197,6 +1205,10 @@ Memory::poke16 <ACC_AGNUS, MEM_CHIP> (u32 addr, u16 value)
 {
     ASSERT_CHIP_ADDR(addr);
  
+    if (blitter.memguard[addr & mem.chipMask]) {
+        debug("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
+    }
+
     dataBus = value;
     WRITE_CHIP_16(addr, value);
 }

@@ -41,6 +41,7 @@ public:
         & clock
 
         & reg.pc
+        & reg.pc0
         & reg.sr.t
         & reg.sr.s
         & reg.sr.x

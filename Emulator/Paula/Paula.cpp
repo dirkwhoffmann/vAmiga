@@ -69,9 +69,6 @@ Paula::peekINTREQR()
 {
     u16 result = intreq;
 
-    // if (ciaa.irqPin() == 0) SET_BIT(result, 3);
-    // if (ciab.irqPin() == 0) SET_BIT(result, 13);
-
     debug(INTREG_DEBUG, "peekINTREQR(): %x\n", result);
 
     return result;
@@ -82,7 +79,6 @@ Paula::pokeINTREQ(u16 value)
 {
     debug(INTREG_DEBUG, "pokeINTREQ(%X)\n", value);
 
-    // agnus.recordRegisterChange(DMA_CYCLES(2), REG_INTREQ, value);
     paula.setINTREQ(value);
 }
 

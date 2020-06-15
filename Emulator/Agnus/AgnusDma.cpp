@@ -352,6 +352,10 @@ Agnus::pokeDSKPTH(u16 value)
 {
     debug(DSKREG_DEBUG, "pokeDSKPTH(%X)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value);
+    
+    if (dskpt & ~agnus.ptrMask) {
+        debug(XFILES, "DSKPT out of range: %x\n", dskpt);
+    }
 }
 
 void

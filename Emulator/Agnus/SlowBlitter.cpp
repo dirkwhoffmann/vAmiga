@@ -987,12 +987,16 @@ Blitter::exec()
 
             agnus.doBlitterDMA(bltdpt, dhold);
 
+            if (BLT_GUARD) {
+                memguard[bltdpt & agnus.ptrMask & mem.chipMask] = 1;
+            }
+
             if (BLT_CHECKSUM) {
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
             }
             debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
-
+                
             bltdpt += incr;
             if (--cntD == 0) {
                 bltdpt += dmod;
