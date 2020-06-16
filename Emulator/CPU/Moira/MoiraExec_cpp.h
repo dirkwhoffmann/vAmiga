@@ -42,7 +42,8 @@ Moira::execShiftRg(u16 opcode)
     int cnt = readD(src) & 0x3F;
 
     prefetch<POLLIPL>();
-    sync((S == Long ? 4 : 2) + 2 * cnt);
+    sync((S == Long ? 4 : S == Word ? 2 : 0) + 2 * cnt);
+    // sync((S == Long ? 4 : 2) + 2 * cnt);
 
     writeD<S>(dst, shift<I,S>(cnt, readD<S>(dst)));
 }

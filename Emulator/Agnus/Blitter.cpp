@@ -186,7 +186,7 @@ Blitter::pokeBLTAPTH(u16 value)
     bltapt = REPLACE_HI_WORD(bltapt, value);
 
     if (bltapt & ~agnus.ptrMask) {
-        debug(XFILES, "BLTAPT out of range: %x\n", bltapt);
+        debug(BLT_GUARD, "BLTAPT out of range: %x\n", bltapt);
     }
 }
 
@@ -208,7 +208,7 @@ Blitter::pokeBLTBPTH(u16 value)
     bltbpt = REPLACE_HI_WORD(bltbpt, value);
     
     if (bltbpt & ~agnus.ptrMask) {
-        debug(XFILES, "BLTBPT out of range: %x\n", bltbpt);
+        debug(BLT_GUARD, "BLTBPT out of range: %x\n", bltbpt);
     }
 }
 
@@ -230,7 +230,7 @@ Blitter::pokeBLTCPTH(u16 value)
     bltcpt = REPLACE_HI_WORD(bltcpt, value);
     
     if (bltcpt & ~agnus.ptrMask) {
-        debug(XFILES, "BLTCPT out of range: %x\n", bltcpt);
+        debug(BLT_GUARD, "BLTCPT out of range: %x\n", bltcpt);
     }
 }
 
@@ -252,7 +252,7 @@ Blitter::pokeBLTDPTH(u16 value)
     bltdpt = REPLACE_HI_WORD(bltdpt, value);
     
     if (bltdpt & ~agnus.ptrMask) {
-        debug(XFILES, "BLTDPT out of range: %x\n", bltdpt);
+        debug(BLT_GUARD, "BLTDPT out of range: %x\n", bltdpt);
     }
 }
 

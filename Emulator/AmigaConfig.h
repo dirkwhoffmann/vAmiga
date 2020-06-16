@@ -67,7 +67,7 @@
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
 
 // General
-static const int XFILES          = 1; // Report paranormal activity
+static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
 static const int VERIFY_EVENTS   = 0; // Check event table consistency
 
