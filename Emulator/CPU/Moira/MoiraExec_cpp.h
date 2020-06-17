@@ -1590,12 +1590,14 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
+    sync(2);
+
     bool error;
     u32 newpc = readM<M, Long>(reg.sp, error);
     if (error) return;
     
     reg.sp += 4;
-    
+
     if (misaligned(newpc)) {
         execAddressError(makeFrame<AE_PROG>(newpc, reg.pc));
         return;
