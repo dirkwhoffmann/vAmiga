@@ -114,7 +114,7 @@ template<Flags F = 0> AEStackFrame makeFrame(u32 addr);
 template<Flags F = 0> void prefetch();
 
 // Performs a full prefetch cycle
-template<Flags F = 0> void fullPrefetch();
+template<Flags F = 0, int delay = 0> void fullPrefetch();
 
 // Reads an extension word from memory
 void readExt();

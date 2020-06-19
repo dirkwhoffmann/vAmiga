@@ -311,7 +311,7 @@ Moira::execAndRgEa(u16 opcode)
     isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
 
     if (S == Long && isRegMode(M)) sync(4);
-    writeOp <M,S, POLLIPL> (dst, ea, result);
+    writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -340,7 +340,7 @@ Moira::execAndiEa(u16 opcode)
     result = logic<I,S>(src, data);
     prefetch();
 
-    writeOp <M,S, POLLIPL> (dst, ea, result);
+    writeOp <M,S, POLLIPL | REVERSE> (dst, ea, result);
 }
 
 template<Instr I, Mode M, Size S> void
@@ -1590,12 +1590,10 @@ Moira::execRtr(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execRts(u16 opcode)
 {
-    sync(2);
-
     bool error;
     u32 newpc = readM<M, Long>(reg.sp, error);
     if (error) return;
-    
+ 
     reg.sp += 4;
 
     if (misaligned(newpc)) {

@@ -423,7 +423,7 @@ Moira::prefetch()
     queue.irc = readM<MEM_PROG, Word, F>(reg.pc + 2);
 }
 
-template<Flags F> void
+template<Flags F, int delay> void
 Moira::fullPrefetch()
 {    
     // Check for address error
@@ -433,6 +433,7 @@ Moira::fullPrefetch()
     }
 
     queue.irc = readM<MEM_PROG, Word>(reg.pc);
+    if (delay) sync(delay);
     prefetch<F>();
 }
 

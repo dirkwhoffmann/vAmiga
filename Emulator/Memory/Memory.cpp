@@ -940,7 +940,7 @@ template<> u8
 Memory::peek8 <ACC_CPU, MEM_CUSTOM> (u32 addr)
 {
     ASSERT_CUSTOM_ADDR(addr);
-    
+            
     agnus.executeUntilBusIsFree();
 
     if (IS_EVEN(addr)) {
@@ -1692,29 +1692,25 @@ Memory::peekCustomFaulty16(u32 addr)
 {
     /* This functions is called when a write-only register or a
      * non-existing chipset register is read.
-      *
-      * Derived from the UAE source code documentation:
-      *
-      * Reading a write-only OCS register causes the last value of the
-      * data bus to be written into this registers.
-      *
-      * Return values:
-      *
-      * - BLTDDAT (0x000) always returns the last data bus value.
-      * - All other registers return
-      *   - DMA cycle data (if DMA happened on the bus).
-      *   - 0xFFFF or some some ANDed old data otherwise.
-      */
-
-     debug(INVREG_DEBUG, "Reading a non-readable chipset register\n");
-
-     pokeCustom16<ACC_CPU>(addr, dataBus);
-
-     if (agnus.busOwner[agnus.pos.h] != BUS_NONE) {
-         return agnus.busValue[agnus.pos.h];
-     } else {
-         return 0xFFFF;
-     }
+     *
+     * Derived from the UAE source code documentation:
+     *
+     * Reading a write-only OCS register causes the last value of the
+     * data bus to be written into this registers.
+     *
+     * Return values:
+     *
+     * - BLTDDAT (0x000) always returns the last data bus value.
+     * - All other registers return
+     *   - DMA cycle data (if DMA happened on the bus).
+     *   - 0xFFFF or some some ANDed old data otherwise.
+     */
+    
+    debug(INVREG_DEBUG, "Reading a non-readable chipset register\n");
+    
+    pokeCustom16<ACC_CPU>(addr, dataBus);
+    
+    return dataBus;
 }
 
 u16
