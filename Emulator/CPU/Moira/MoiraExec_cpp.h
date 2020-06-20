@@ -486,13 +486,19 @@ Moira::execBsr(u16 opcode)
     u32 newpc = reg.pc + offset;
     u32 retpc = reg.pc + (S == Word ? 2 : 0);
 
-    // Save the return address
+    // Check for address error
+    if (misaligned<Word>(newpc)) {
+        execAddressError(makeFrame(newpc));
+        return;
+    }
+    
+    // Save return address on stack
     sync(2);
     bool error;
     push <Long> (retpc, error);
     if (error) return;
     
-    // Take branch
+    // Jump to new address
     reg.pc = newpc;
 
     fullPrefetch<POLLIPL>();
@@ -763,7 +769,7 @@ Moira::execJsr(u16 opcode)
         return;
     }
 
-    // Save old address on stack
+    // Save return address on stack
     bool error;
     push <Long> (reg.pc, error);
     if (error) return;

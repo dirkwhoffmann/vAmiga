@@ -69,6 +69,10 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     return wrapper->cpu->getCpuClock();
 }
+- (bool) isHalted
+{
+    return wrapper->cpu->isHalted();
+}
 - (NSInteger) numberOfBreakpoints
 {
     return wrapper->cpu->debugger.breakpoints.elements();

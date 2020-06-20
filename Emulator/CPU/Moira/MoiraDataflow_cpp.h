@@ -465,13 +465,10 @@ Moira::jumpToVector(int nr)
     if (misaligned(reg.pc)) {
         if (nr != 3) {
             execAddressError(makeFrame<F|AE_PROG>(reg.pc, vectorAddr));
-            return;
         } else {
-            
-            // TODO: Put CPU in HALT state
-            // printf("Double fault\n");
-            // reg.pc &= ~1;
+            halt(); // Double fault
         }
+        return;
     }
     
     // Update the prefetch queue

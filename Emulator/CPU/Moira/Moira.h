@@ -61,7 +61,7 @@ protected:
     /* State flags
      *
      * CPU_IS_HALTED:
-     *     Set when the CPU is in "halted" state (not implemented yet)
+     *     Set when the CPU is in "halted" state.
      *
      * CPU_IS_STOPPED:
      *     Set when the CPU is in "stopped" state. This state is entered when
@@ -152,12 +152,18 @@ public:
 
     // Executes the next instruction
     void execute();
-
+    
+    // Returns true if the CPU is in HALT state
+    bool isHalted() { return flags & CPU_IS_HALTED; }
+    
 private:
 
     // Invoked inside execute() to check for a pending interrupt
     bool checkForIrq();
 
+    // Puts the CPU into HALT state
+    void halt();
+    
 
     //
     // Running the disassembler
@@ -214,6 +220,7 @@ protected:
     virtual void tasInstr() { };
 
     // Mode delegates
+    virtual void signalHalted() { };
     virtual void traceFlagSet() { };
     virtual void traceFlagCleared() { };
 

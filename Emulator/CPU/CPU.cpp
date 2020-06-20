@@ -78,6 +78,12 @@ CPU::tasInstr()
 }
 
 void
+CPU::signalHalted()
+{
+    amiga.putMessage(MSG_CPU_HALT);
+}
+
+void
 CPU::traceFlagSet()
 {
     debug(XFILES, "XFILES (CPU): TRACING ON\n");

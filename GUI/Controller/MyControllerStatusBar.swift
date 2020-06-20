@@ -27,7 +27,8 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk()
         let running = amiga.isRunning()
         let debug = amiga.debugMode()
-                
+        let halted = amiga.cpu.isHalted()
+        
         // Cylinders
         refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder())
         refreshStatusBar(drive: 1, cyclinder: amiga.df1.cylinder())
@@ -72,6 +73,7 @@ extension MyController {
             df2DMA: motor2,
             df3DMA: motor3,
 
+            haltIcon: halted,
             cmdLock: mapCommandKeys,
             debugIcon: debug,
             muteIcon: warp || muted,

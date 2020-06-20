@@ -28,6 +28,7 @@
                 <outlet property="df3DMA" destination="Qp9-H4-2Q7" id="OfX-DH-845"/>
                 <outlet property="df3Disk" destination="Cg3-r8-KR5" id="66V-MN-kd5"/>
                 <outlet property="df3LED" destination="wnl-Bi-Ego" id="1Bn-5L-EfU"/>
+                <outlet property="haltIcon" destination="46l-A8-v8C" id="IN7-Hf-03C"/>
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
@@ -111,7 +112,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="X4r-q5-8Lh">
@@ -140,7 +141,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -169,7 +170,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -198,7 +199,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
@@ -219,7 +220,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="IhF-AY-mVz"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="caT-w9-zJ9">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -230,7 +231,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="nXc-Zj-MRR"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="smR-ZO-LAl">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -241,7 +242,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="tt4-Cp-9yw"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="ShU-59-vsV">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -252,7 +253,7 @@
                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="16" id="8qi-yX-Fbb"/>
                         </constraints>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="00" id="5Zl-Dc-eev">
-                            <font key="font" metaFont="message" size="11"/>
+                            <font key="font" metaFont="menu" size="11"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
@@ -300,6 +301,20 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
+                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="46l-A8-v8C" userLabel="Cmd Lock">
+                        <rect key="frame" x="512" y="4" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="7oV-Xa-E8H"/>
+                            <constraint firstAttribute="height" constant="16" id="eVf-94-C8j"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="haltTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Qoa-ac-fgt">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="mapCmdKeysAction:" target="-2" id="4rP-jE-apn"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="iho-fa-H5O" secondAttribute="bottom" constant="4" id="02t-sL-zFr"/>
@@ -313,6 +328,7 @@
                     <constraint firstAttribute="bottom" secondItem="f7g-mT-LE7" secondAttribute="bottom" constant="5" id="80f-ZK-qbp"/>
                     <constraint firstItem="iho-fa-H5O" firstAttribute="leading" secondItem="cdG-NT-T3J" secondAttribute="trailing" constant="8" id="8Bg-Rk-4WS"/>
                     <constraint firstItem="Pjc-SJ-rsn" firstAttribute="leading" secondItem="X4r-q5-8Lh" secondAttribute="trailing" constant="8" symbolic="YES" id="CN4-cd-WOz"/>
+                    <constraint firstAttribute="bottom" secondItem="46l-A8-v8C" secondAttribute="bottom" constant="4" id="Chw-1Y-BK8"/>
                     <constraint firstItem="K68-Xr-JJH" firstAttribute="leading" secondItem="xzf-hU-AKK" secondAttribute="trailing" constant="8" symbolic="YES" id="Dfi-NW-4u7"/>
                     <constraint firstAttribute="bottom" secondItem="Qp9-H4-2Q7" secondAttribute="bottom" constant="4" id="E4V-Zk-iJg"/>
                     <constraint firstAttribute="bottom" secondItem="K68-Xr-JJH" secondAttribute="bottom" constant="4" id="EaJ-4B-OvH"/>
@@ -335,6 +351,7 @@
                     <constraint firstAttribute="bottom" secondItem="X4r-q5-8Lh" secondAttribute="bottom" constant="4" id="ZrM-Pv-WFD"/>
                     <constraint firstItem="wnl-Bi-Ego" firstAttribute="leading" secondItem="Lc0-yC-JdI" secondAttribute="trailing" constant="8" symbolic="YES" id="Zuh-BK-0Ep"/>
                     <constraint firstAttribute="trailing" secondItem="212" secondAttribute="trailing" constant="8" id="Zyb-LZ-BLB"/>
+                    <constraint firstItem="70n-GV-8LP" firstAttribute="leading" secondItem="46l-A8-v8C" secondAttribute="trailing" constant="8" symbolic="YES" id="abU-bK-Tnf"/>
                     <constraint firstAttribute="bottom" secondItem="f19-16-42W" secondAttribute="bottom" constant="5" id="auB-jf-bUb"/>
                     <constraint firstAttribute="bottom" secondItem="gkQ-Nr-aDz" secondAttribute="bottom" constant="4" id="exj-M2-b7S"/>
                     <constraint firstItem="Lc0-yC-JdI" firstAttribute="leading" secondItem="BLY-CO-Zam" secondAttribute="trailing" constant="8" symbolic="YES" id="lkf-LH-ulx"/>
@@ -391,7 +408,7 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
@@ -599,6 +616,7 @@
         <image name="devNoneTemplate" width="24" height="24"/>
         <image name="diskTemplate" width="217" height="217"/>
         <image name="driveLedOff" width="100" height="50"/>
+        <image name="haltTemplate" width="240" height="241"/>
         <image name="hourglass1Template" width="240" height="241"/>
         <image name="keyboardTemplate" width="24" height="24"/>
         <image name="monitorTemplate" width="241" height="240"/>

@@ -217,6 +217,7 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df2DMA: NSProgressIndicator!
     @IBOutlet weak var df3DMA: NSProgressIndicator!
 
+    @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
     @IBOutlet weak var muteIcon: NSButton!
@@ -576,6 +577,9 @@ extension MyController {
             inspector?.fullRefresh()
             inspector?.scrollToPC()
 
+        case MSG_CPU_HALT:
+            refreshStatusBar()
+            
         case MSG_MEM_LAYOUT:
             inspector?.fullRefresh()
 

@@ -177,6 +177,7 @@ struct AmigaFileWrapper;
 
 - (i64) clock;
 - (i64) cycles;
+- (bool) isHalted;
 
 - (NSInteger) numberOfBreakpoints;
 - (u32) breakpointAddr:(NSInteger)nr;

@@ -98,6 +98,12 @@ Moira::execute()
     // The slow execution path: Process flags one by one
     //
 
+    // Only continue if the CPU is not halted
+    if (flags & CPU_IS_HALTED) {
+        sync(2);
+        return;
+    }
+        
     // Process pending trace exception (if any)
     if (flags & CPU_TRACE_EXCEPTION) {
         execTraceException();
@@ -176,6 +182,19 @@ Moira::checkForIrq()
         if (reg.ipl == ipl) flags &= ~CPU_CHECK_IRQ;
         return false;
     }
+}
+
+void
+Moira::halt()
+{
+    printf("HALTING CPU\n");
+    
+    // Halt the CPU
+    flags |= CPU_IS_HALTED;
+    reg.pc = reg.pc0;
+
+    // Inform the delegate
+    signalHalted();
 }
 
 template<Size S> u32

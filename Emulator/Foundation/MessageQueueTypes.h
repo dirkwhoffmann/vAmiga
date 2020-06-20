@@ -42,14 +42,11 @@ typedef enum
     MSG_BREAKPOINT_CONFIG,
     MSG_BREAKPOINT_REACHED,
     MSG_WATCHPOINT_REACHED,
+    MSG_CPU_HALT,
 
     // Memory
     MSG_MEM_LAYOUT,
-    
-    // Keyboard
-    // MSG_MAP_CMD_KEYS,
-    // MSG_UNMAP_CMD_KEYS,
-    
+        
     // Floppy drives
     MSG_DRIVE_CONNECT,
     MSG_DRIVE_DISCONNECT,

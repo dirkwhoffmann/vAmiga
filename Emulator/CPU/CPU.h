@@ -108,6 +108,7 @@ private:
     void stopInstr(u16 op) override;
     void tasInstr() override;
     
+    void signalHalted() override;
     void traceFlagSet() override;
     void traceFlagCleared() override;
     
