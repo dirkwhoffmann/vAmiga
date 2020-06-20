@@ -104,25 +104,24 @@ private:
     void write16 (u32 addr, u16 val) override;
     int readIrqUserVector(u8 level) override { return 0; }
  
-    void resetInstr() override;
-    void stopInstr(u16 op) override;
-    void tasInstr() override;
+    void signalReset() override;
+    void signalStop(u16 op) override;
+    void signalTAS() override;
     
-    void signalHalted() override;
-    void traceFlagSet() override;
-    void traceFlagCleared() override;
+    void signalHalt() override;
+    void signalTracingOn() override;
+    void signalTracingOff() override;
     
-    // void addressErrorException(u16 addr, bool read) override;
-    void addressErrorHandler(moira::AEStackFrame &frame) override;
+    void signalAddressError(moira::AEStackFrame &frame) override;
+    void signalLineAException(u16 opcode) override;
+    void signalLineFException(u16 opcode) override;
+    void signalIllegalOpcodeException(u16 opcode) override;
+    void signalTraceException() override;
+    void signalTrapException() override;
+    void signalPrivilegeViolation() override;
+    void signalInterrupt(u8 level) override;
     
-    void lineAException(u16 opcode) override;
-    void lineFException(u16 opcode) override;
-    void illegalOpcodeException(u16 opcode) override;
-    void traceException() override;
-    void trapException() override;
-    void privilegeException() override;
-    void interruptException(u8 level) override;
-    void exceptionJump(int nr, u32 addr) override;
+    void signalJumpToVector(int nr, u32 addr) override;
     
     void breakpointReached(u32 addr) override;
     void watchpointReached(u32 addr) override;

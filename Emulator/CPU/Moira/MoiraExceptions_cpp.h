@@ -65,7 +65,7 @@ Moira::execAddressError(AEStackFrame frame, int delay)
 
     jumpToVector(3);
     
-    addressErrorHandler(frame);
+    signalAddressError(frame);
 }
 
 void
@@ -90,21 +90,21 @@ Moira::execUnimplemented(int nr)
 void
 Moira::execLineA(u16 opcode)
 {
-    lineAException(opcode);
+    signalLineAException(opcode);
     execUnimplemented(10);
 }
 
 void
 Moira::execLineF(u16 opcode)
 {
-    lineFException(opcode);
+    signalLineFException(opcode);
     execUnimplemented(11);
 }
 
 void
 Moira::execIllegal(u16 opcode)
 {
-    illegalOpcodeException(opcode);
+    signalIllegalOpcodeException(opcode);
     
     u16 status = getSR();
 
@@ -125,7 +125,7 @@ Moira::execIllegal(u16 opcode)
 void
 Moira::execTraceException()
 {
-    traceException();
+    signalTraceException();
     
     u16 status = getSR();
 
@@ -149,7 +149,7 @@ Moira::execTraceException()
 void
 Moira::execTrapException(int nr)
 {
-    trapException();
+    signalTrapException();
     
     u16 status = getSR();
 
@@ -168,7 +168,7 @@ Moira::execTrapException(int nr)
 void
 Moira::execPrivilegeException()
 {
-    privilegeException();
+    signalPrivilegeViolation();
     
     u16 status = getSR();
 
@@ -190,7 +190,7 @@ void
 Moira::execIrqException(int level)
 {
     assert(level < 8);
-    interruptException(level);
+    signalInterrupt(level);
     
     // Remember the current value of the status register
     u16 status = getSR();

@@ -215,28 +215,28 @@ protected:
     virtual int readIrqUserVector(u8 level) { return 0; }
 
     // Instrution delegates
-    virtual void resetInstr() { };
-    virtual void stopInstr(u16 op) { };
-    virtual void tasInstr() { };
+    virtual void signalReset() { };
+    virtual void signalStop(u16 op) { };
+    virtual void signalTAS() { };
 
-    // Mode delegates
-    virtual void signalHalted() { };
-    virtual void traceFlagSet() { };
-    virtual void traceFlagCleared() { };
-
-    // Exception delegates (DEPRECATED)
-    virtual void addressErrorException(u16 addr, bool read) { };
-    virtual void lineAException(u16 opcode) { };
-    virtual void lineFException(u16 opcode) { };
-    virtual void illegalOpcodeException(u16 opcode) { };
-    virtual void traceException() { };
-    virtual void trapException() { };
-    virtual void privilegeException() { };
-    virtual void interruptException(u8 level) { };
-    virtual void exceptionJump(int nr, u32 addr) { };
+    // State delegates
+    virtual void signalHalt() { };
+    virtual void signalTracingOn() { };
+    virtual void signalTracingOff() { };
 
     // Exception delegates
-    virtual void addressErrorHandler(AEStackFrame &frame) { };
+    virtual void signalAddressError(AEStackFrame &frame) { };
+    virtual void signalLineAException(u16 opcode) { };
+    virtual void signalLineFException(u16 opcode) { };
+    virtual void signalIllegalOpcodeException(u16 opcode) { };
+    virtual void signalTraceException() { };
+    virtual void signalTrapException() { };
+    virtual void signalPrivilegeViolation() { };
+    virtual void signalInterrupt(u8 level) { };
+    virtual void signalJumpToVector(int nr, u32 addr) { };
+
+    // Exception delegates
+    virtual void addressErrorHandler() { };
     
     // Called when a breakpoint is reached
     virtual void breakpointReached(u32 addr) { };

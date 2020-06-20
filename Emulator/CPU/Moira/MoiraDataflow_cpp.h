@@ -476,5 +476,5 @@ Moira::jumpToVector(int nr)
     sync(2);
     prefetch<POLLIPL>();
     
-    exceptionJump(nr, reg.pc);
+    signalJumpToVector(nr, reg.pc);
 }

@@ -215,6 +215,24 @@ typedef enum
 }
 IrqMode;
 
+/*
+typedef enum
+{
+    EXC_ADDRESS_ERROR        = 0x0C,
+    EXC_ILLEGAL_INSTRUCTION  = 0x10,
+    EXC_DIVISON_BY_ZERO      = 0x14,
+    EXC_CHK_INSTRUCTION      = 0x18,
+    EXC_TRAPV_INSTRUCTION    = 0x1C,
+    EXC_PRIVILEGE_VIOLATION  = 0x20,
+    EXC_TRACE                = 0x24,
+    EXC_LINE_A               = 0x28,
+    EXC_LINE_F               = 0x2C,
+    EXC_INTERRUPT            = 0x64,
+    EXC_TRAP                 = 0x80,
+}
+ExceptionType;
+*/
+
 typedef enum
 {
     FC_USER_DATA       = 1,

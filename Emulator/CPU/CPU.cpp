@@ -56,7 +56,7 @@ CPU::write16 (u32 addr, u16 val)
 }
 
 void
-CPU::resetInstr()
+CPU::signalReset()
 {
     debug(XFILES, "XFILES (CPU): RESET instruction\n");
     amiga.softReset();
@@ -64,7 +64,7 @@ CPU::resetInstr()
 }
 
 void
-CPU::stopInstr(u16 op)
+CPU::signalStop(u16 op)
 {
     if (!(op & 0x2000)) {
         debug(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
@@ -72,73 +72,73 @@ CPU::stopInstr(u16 op)
 }
 
 void
-CPU::tasInstr()
+CPU::signalTAS()
 {
     debug(XFILES, "XFILES (CPU): TAS instruction\n");
 }
 
 void
-CPU::signalHalted()
+CPU::signalHalt()
 {
     amiga.putMessage(MSG_CPU_HALT);
 }
 
 void
-CPU::traceFlagSet()
+CPU::signalTracingOn()
 {
     debug(XFILES, "XFILES (CPU): TRACING ON\n");
 }
 
 void
-CPU::traceFlagCleared()
+CPU::signalTracingOff()
 {
     debug(XFILES, "XFILES (CPU): TRACING OFF\n");
 }
 
 void
-CPU::addressErrorHandler(moira::AEStackFrame &frame)
+CPU::signalAddressError(moira::AEStackFrame &frame)
 {
     debug(XFILES, "XFILES (CPU): Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
-CPU::lineAException(u16 opcode)
+CPU::signalLineAException(u16 opcode)
 {
     debug(XFILES, "XFILES (CPU): lineAException(%x)\n", opcode);
 }
 
 void
-CPU::lineFException(u16 opcode)
+CPU::signalLineFException(u16 opcode)
 {
     debug(XFILES, "XFILES (CPU): lineFException(%x)\n", opcode);
 }
 
 void
-CPU::illegalOpcodeException(u16 opcode)
+CPU::signalIllegalOpcodeException(u16 opcode)
 {
     debug(XFILES, "XFILES (CPU): illegalOpcodeException(%x)\n", opcode);
 }
 
 void
-CPU::traceException()
+CPU::signalTraceException()
 {
     debug(XFILES, "XFILES (CPU): traceException\n");
 }
 
 void
-CPU::trapException()
+CPU::signalTrapException()
 {
     debug(XFILES, "XFILES (CPU): trapException\n");
 }
 
 void
-CPU::privilegeException()
+CPU::signalPrivilegeViolation()
 {
 }
 
 void
-CPU::interruptException(u8 level)
+CPU::signalInterrupt(u8 level)
 {
     if (INT_DEBUG) {
         debug("*** INTERRUPT %d ***\n", level);
@@ -146,7 +146,7 @@ CPU::interruptException(u8 level)
 }
 
 void
-CPU::exceptionJump(int nr, u32 addr)
+CPU::signalJumpToVector(int nr, u32 addr)
 {
     bool isIrqException = nr >= 24 && nr <= 31;
 

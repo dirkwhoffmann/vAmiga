@@ -194,7 +194,7 @@ Moira::halt()
     reg.pc = reg.pc0;
 
     // Inform the delegate
-    signalHalted();
+    signalHalt();
 }
 
 template<Size S> u32
@@ -269,7 +269,7 @@ Moira::setSR(u16 val)
     u8 ipl = (val >>  8) & 7;
 
     // Delegation call
-    if (reg.sr.t != t) t ? traceFlagSet() : traceFlagCleared();
+    if (reg.sr.t != t) t ? signalTracingOn() : signalTracingOff();
 
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
