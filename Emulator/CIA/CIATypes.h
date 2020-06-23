@@ -101,11 +101,14 @@ typedef struct
     } timerB;
 
     u8 sdr;
+    u8 ssr;
     u8 icr;
     u8 imr;
     bool intLine;
+    
     CounterInfo cnt;
     bool cntIntEnable;
+    
     Cycle idleCycles;
     double idlePercentage;
 }

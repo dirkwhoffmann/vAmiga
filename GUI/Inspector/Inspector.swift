@@ -155,7 +155,7 @@ class Inspector: DialogController {
     @IBOutlet weak var ciaAlarmLo: NSTextField!
 
     @IBOutlet weak var ciaSDR: NSTextField!
-    @IBOutlet weak var ciaSDRbinary: NSTextField!
+    @IBOutlet weak var ciaSSR: NSTextField!
     
     @IBOutlet weak var ciaIdleCycles: NSTextField!
     @IBOutlet weak var ciaIdleLevelText: NSTextField!

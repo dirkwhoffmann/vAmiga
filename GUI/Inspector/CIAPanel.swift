@@ -46,7 +46,6 @@ extension Inspector {
                              ciaDDRAbinary: fmt8b,
                              ciaPRBbinary: fmt8b,
                              ciaDDRBbinary: fmt8b,
-                             ciaSDRbinary: fmt8b,
                              ciaICRbinary: fmt8b,
                              ciaIMRbinary: fmt8b,
                              ciaPRA: fmt8,
@@ -62,6 +61,7 @@ extension Inspector {
                              ciaIMR: fmt8,
                              ciaICR: fmt8,
                              ciaSDR: fmt8,
+                             ciaSSR: fmt8b,
                              ciaTA: fmt16,
                              ciaTAlatch: fmt16,
                              ciaTB: fmt16,
@@ -129,7 +129,7 @@ extension Inspector {
         ciaAlarmLo.intValue = Int32(ciaInfo!.cnt.alarm.lo)
 
         ciaSDR.intValue = Int32(ciaInfo!.sdr)
-        ciaSDRbinary.intValue = Int32(ciaInfo!.sdr)
+        ciaSSR.intValue = Int32(ciaInfo!.ssr)
 
         let idlePercentage = Int(ciaInfo!.idlePercentage * 100)
         ciaIdleCycles.stringValue = "\(ciaInfo!.idleCycles) cycles"

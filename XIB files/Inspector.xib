@@ -106,8 +106,8 @@
                 <outlet property="ciaPRAbinary" destination="Qji-ZR-vsl" id="Oqv-aE-xWA"/>
                 <outlet property="ciaPRB" destination="Pae-iX-XUM" id="1AN-WU-NsS"/>
                 <outlet property="ciaPRBbinary" destination="hZM-Jq-0EH" id="tfZ-5L-cky"/>
-                <outlet property="ciaSDR" destination="z3Q-qB-vEw" id="WmK-UE-lvK"/>
-                <outlet property="ciaSDRbinary" destination="fY6-mZ-6rU" id="gwf-pb-Gdf"/>
+                <outlet property="ciaSDR" destination="z3Q-qB-vEw" id="Ji3-Aw-qTc"/>
+                <outlet property="ciaSSR" destination="fY6-mZ-6rU" id="ySO-hH-Iyj"/>
                 <outlet property="ciaSelector" destination="fRp-NP-vaa" id="DMR-jd-6o5"/>
                 <outlet property="ciaTA" destination="hdX-8n-Lad" id="5d0-y5-TQT"/>
                 <outlet property="ciaTAlatch" destination="fqu-OX-Kab" id="mDz-Fh-cFl"/>
@@ -1690,7 +1690,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Idk-kc-DXu">
-                                                        <rect key="frame" x="4" y="42" width="92" height="15"/>
+                                                        <rect key="frame" x="4" y="43" width="92" height="15"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Interrupts at:" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" inset="2" id="l6x-B1-N25">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1707,7 +1707,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rSu-cj-aZE">
-                                                        <rect key="frame" x="137" y="72" width="13" height="14"/>
+                                                        <rect key="frame" x="135" y="72" width="13" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title=":" id="99h-gB-Bmv">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1716,7 +1716,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JVX-Ta-KaL">
-                                                        <rect key="frame" x="181" y="73" width="13" height="14"/>
+                                                        <rect key="frame" x="179" y="72" width="13" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title=":" id="EXS-qd-tge">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1725,7 +1725,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5R0-nq-KIm">
-                                                        <rect key="frame" x="137" y="45" width="13" height="14"/>
+                                                        <rect key="frame" x="135" y="44" width="13" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title=":" id="bZJ-k5-uCB">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1734,7 +1734,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lG3-k6-hRe">
-                                                        <rect key="frame" x="181" y="45" width="13" height="14"/>
+                                                        <rect key="frame" x="179" y="44" width="13" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="center" title=":" id="fQM-kO-9s9">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1797,7 +1797,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XOh-ZU-RdW">
-                                                        <rect key="frame" x="1" y="16" width="95" height="14"/>
+                                                        <rect key="frame" x="1" y="14" width="95" height="14"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                                                         <textFieldCell key="cell" controlSize="small" sendsActionOnEndEditing="YES" alignment="right" title="Serial shift:" id="9IF-iO-cBo">
                                                             <font key="font" metaFont="message" size="11"/>
@@ -1806,7 +1806,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z3Q-qB-vEw">
-                                                        <rect key="frame" x="105" y="11" width="30" height="22"/>
+                                                        <rect key="frame" x="193" y="11" width="30" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="255" drawsBackground="YES" id="5iL-Sg-Zsp">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
@@ -1815,11 +1815,20 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fY6-mZ-6rU">
-                                                        <rect key="frame" x="157" y="11" width="66" height="22"/>
+                                                        <rect key="frame" x="105" y="11" width="66" height="22"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="right" title="00000000" drawsBackground="YES" id="eme-jb-RCO">
                                                             <font key="font" size="12" name="CourierNewPS-BoldMT"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                        </textFieldCell>
+                                                    </textField>
+                                                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bLt-dJ-hUu">
+                                                        <rect key="frame" x="174" y="13" width="17" height="17"/>
+                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                        <textFieldCell key="cell" lineBreakMode="clipping" title="↔︎" id="Ljj-gY-HNB">
+                                                            <font key="font" usesAppearanceFont="YES"/>
+                                                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
                                                     </textField>

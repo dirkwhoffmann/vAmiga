@@ -88,7 +88,7 @@ CIA::_inspect()
     info.timerB.oneShot = CRB & 0x08;
     
     info.sdr = sdr;
-    
+    info.ssr = ssr;
     info.icr = icr;
     info.imr = imr;
     info.intLine = INT;
