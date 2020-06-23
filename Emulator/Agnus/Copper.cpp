@@ -895,10 +895,11 @@ Copper::serviceEvent(EventID id)
         case COP_VBLANK:
 
             if (verbose) debug("COP_VBLANK\n");
-
+            // debug("agnus.copdma = %d\n", agnus.copdma());
+            
             // Allocate the bus
             // TODO: FIND OUT IF THE BUS IS REALLY ALLOCATED IN THIS STATE
-            if (!agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
+            if (agnus.copdma() && !agnus.allocateBus<BUS_COPPER>()) { reschedule(); break; }
 
             switchToCopperList(1);
             activeInThisFrame = agnus.copdma();

@@ -1043,7 +1043,8 @@ Agnus::executeUntilBusIsFree()
 
         // Execute Agnus until the bus is free
         do {
-            
+            // debug("Blocked by %d\n", busOwner[posh]);
+
             posh = pos.h;
             execute();
             if (++delay == 2) bls = true;
