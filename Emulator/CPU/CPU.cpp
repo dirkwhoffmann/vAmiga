@@ -230,8 +230,7 @@ CPU::_inspect()
     u32 pc0 = getPC0();
 
     // Registers
-    // info.pc = getPC();
-    info.pc0 = pc0;
+    info.pc0 = pc0 & 0xFFFFFF;
     
     for (int i = 0; i < 8; i++) {
         info.d[i] = getD(i);

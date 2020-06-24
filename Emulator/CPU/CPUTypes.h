@@ -28,7 +28,6 @@ DisassembledInstr;
 typedef struct
 {
     // Registers
-    // u32 pc;
     u32 pc0;
     u32 d[8];
     u32 a[8];
