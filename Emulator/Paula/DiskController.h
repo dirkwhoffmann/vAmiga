@@ -342,15 +342,7 @@ public:
     void performDMA();
     void performDMARead(Drive *drive, u32 count);
     void performDMAWrite(Drive *drive, u32 count);
- 
-    // 2. Simple DMA mode
-    /*
-    void performSimpleDMA();
-    void performSimpleDMAWait(Drive *drive, u32 count);
-    void performSimpleDMARead(Drive *drive, u32 count);
-    void performSimpleDMAWrite(Drive *drive, u32 count);
-    */
-    
+     
     // 3. Turbo DMA mode
     void performTurboDMA(Drive *d);
     void performTurboRead(Drive *drive);
