@@ -1153,7 +1153,8 @@ Blitter::fakeExec()
     // Trigger Blitter interrupt if this is the termination cycle
     if ((instr & BLTDONE) && !birq) {
         signalEnd();
-        paula.raiseIrq(INT_BLIT); birq = true;
+        paula.raiseIrq(INT_BLIT);
+        birq = true;
     }
 
     // Allocate the bus if needed

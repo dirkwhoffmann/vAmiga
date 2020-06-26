@@ -58,7 +58,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Dragonlance.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Dragonlance88.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Jetsons1.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Jetsons1.adf"
