@@ -31,6 +31,10 @@
 // Enable to emulate the Slow Ram mirroring feature of the ECS Agnus
 #define MIRROR_SLOW_RAM
 
+// Enable to initialize Ram with (pseudo)random numbers
+// #define RANDOM_RAM_PATTERN
+
+
 //
 // Configuration overrides
 //

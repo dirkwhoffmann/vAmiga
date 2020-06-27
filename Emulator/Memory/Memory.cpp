@@ -245,6 +245,13 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         size = bytes;
         mask = bytes - 1;
         memset(ptr, 0, allocSize);
+        
+#ifdef RANDOM_RAM_PATTERN
+        srand(0);
+        for (int i = 0; i < allocSize; i++) {
+            ptr[i] = rand() & 0xFF;
+        }
+#endif
     }
 
     updateMemSrcTable();
