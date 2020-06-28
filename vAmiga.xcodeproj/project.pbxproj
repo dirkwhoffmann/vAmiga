@@ -45,6 +45,7 @@
 		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
+		5069684324A8A76400E803CB /* MyControllerDevices.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5069684224A8A76400E803CB /* MyControllerDevices.swift */; };
 		5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioPrefs.swift */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
@@ -235,6 +236,7 @@
 		5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStorage.swift; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		5069684224A8A76400E803CB /* MyControllerDevices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerDevices.swift; sourceTree = "<group>"; };
 		5072CAF92456D1C800C8F606 /* AudioPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPrefs.swift; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
@@ -725,6 +727,7 @@
 				508FDFED21EA22780043D0E9 /* MyControllerToolbar.swift */,
 				508FE00721EA227A0043D0E9 /* MyControllerTouchBar.swift */,
 				50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */,
+				5069684224A8A76400E803CB /* MyControllerDevices.swift */,
 				5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */,
 				5043F6C4221972F90047CC30 /* MyToolbar.swift */,
 				508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */,
@@ -1148,6 +1151,7 @@
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
+				5069684324A8A76400E803CB /* MyControllerDevices.swift in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountDialog.swift in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
