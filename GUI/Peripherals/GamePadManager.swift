@@ -61,15 +61,13 @@ class GamePadManager {
             [
                 kIOHIDDeviceUsagePageKey: kHIDPage_GenericDesktop,
                 kIOHIDDeviceUsageKey: kHIDUsage_GD_MultiAxisController
-            ]
-            /*
+            ],
             [
                 kIOHIDDeviceUsagePageKey: kHIDPage_GenericDesktop,
-                kIOHIDDeviceUsageKey: kHIDUsage_GD_Pointer
+                kIOHIDDeviceUsageKey: kHIDUsage_GD_Mouse
             ]
-            */
         ]
-        
+                
         // Declare bridging closures (needed to bridge between Swift methods and C callbacks)
         let matchingCallback: IOHIDDeviceCallback = { inContext, inResult, inSender, device in
             let this: GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
@@ -133,6 +131,39 @@ class GamePadManager {
     // HID stuff
     //
     
+    func isBuiltIn(device: IOHIDDevice) -> Bool {
+        
+        let key = kIOHIDBuiltInKey as CFString
+        
+        if let value = IOHIDDeviceGetProperty(device, key) as? Int {
+            return value != 0
+        } else {
+            return false
+        }
+    }
+    
+    func isMouse(device: IOHIDDevice) -> Bool {
+        
+        let key = kIOHIDPrimaryUsageKey as CFString
+        
+        if let value = IOHIDDeviceGetProperty(device, key) as? Int {
+            return value == kHIDUsage_GD_Mouse
+        } else {
+            return false
+        }
+    }
+    
+    func listProperties(device: IOHIDDevice) {
+        
+        let keys = [kIOHIDTransportKey, kIOHIDVendorIDKey, kIOHIDVendorIDSourceKey, kIOHIDProductIDKey, kIOHIDVersionNumberKey, kIOHIDManufacturerKey, kIOHIDProductKey, kIOHIDSerialNumberKey, kIOHIDCountryCodeKey, kIOHIDStandardTypeKey, kIOHIDLocationIDKey, kIOHIDDeviceUsageKey, kIOHIDDeviceUsagePageKey, kIOHIDDeviceUsagePairsKey, kIOHIDPrimaryUsageKey, kIOHIDPrimaryUsagePageKey, kIOHIDMaxInputReportSizeKey, kIOHIDMaxOutputReportSizeKey, kIOHIDMaxFeatureReportSizeKey, kIOHIDReportIntervalKey, kIOHIDSampleIntervalKey, kIOHIDBatchIntervalKey, kIOHIDRequestTimeoutKey, kIOHIDReportDescriptorKey, kIOHIDResetKey, kIOHIDKeyboardLanguageKey, kIOHIDAltHandlerIdKey, kIOHIDBuiltInKey, kIOHIDDisplayIntegratedKey, kIOHIDProductIDMaskKey, kIOHIDProductIDArrayKey, kIOHIDPowerOnDelayNSKey, kIOHIDCategoryKey, kIOHIDMaxResponseLatencyKey, kIOHIDUniqueIDKey, kIOHIDPhysicalDeviceUniqueIDKey]
+        
+        for key in keys {
+            if let prop = IOHIDDeviceGetProperty(device, key as CFString) {
+                print("\t" + key + ": \(prop)")
+            }
+        }
+    }
+    
     // Device matching callback
     // This method is invoked when a matching HID device is plugged in.
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
@@ -141,18 +172,33 @@ class GamePadManager {
                         device: IOHIDDevice) {
     
         track()
+
+        // Ignore internal devices
+        if isBuiltIn(device: device) {
+            // track("Ignoring built-in device")
+            return
+        }
         
         // Find a free slot for the new device
         guard let slotNr = findFreeSlot() else {
             track("Maximum number of devices reached. Ignoring device")
             return
         }
+
+        // Check if we have the permission to open this device
+        if isMouse(device: device) {
+            let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
+            let accessEnabled = AXIsProcessTrustedWithOptions(options)
+            if !accessEnabled {
+                track("Access denied. Ignoring device")
+                return
+            }
+        }
         
         // Create GamePad object
         let vendorIDKey = kIOHIDVendorIDKey as CFString
         let productIDKey = kIOHIDProductIDKey as CFString
         let locationIDKey = kIOHIDLocationIDKey as CFString
-
         var vendorID = 0
         var productID = 0
         var locationID = 0
@@ -166,7 +212,7 @@ class GamePadManager {
         if let value = IOHIDDeviceGetProperty(device, locationIDKey) as? Int {
             locationID = value
         }
-
+        
         track("    slotNr = \(slotNr)")
         track("  vendorID = \(vendorID)")
         track(" productID = \(productID)")
@@ -189,12 +235,19 @@ class GamePadManager {
                                    locationID: locationID)
     
         // Register input value callback
-        let hidContext = unsafeBitCast(gamePads[slotNr],
-                                       to: UnsafeMutableRawPointer.self)
-        IOHIDDeviceRegisterInputValueCallback(device,
-                                              gamePads[slotNr]!.actionCallback,
-                                              hidContext)
-
+        let hidContext = unsafeBitCast(gamePads[slotNr], to: UnsafeMutableRawPointer.self)
+        if isMouse(device: device) {
+            track("Registering as Mouse")
+            IOHIDDeviceRegisterInputValueCallback(device,
+                                                  gamePads[slotNr]!.mouseActionCallback,
+                                                  hidContext)
+        } else {
+            track("Registering as Joystick")
+            IOHIDDeviceRegisterInputValueCallback(device,
+                                                  gamePads[slotNr]!.joystickActionCallback,
+                                                  hidContext)
+        }
+        
         // Inform the controller about the new device
         parent.toolbar.validateVisibleItems()
         

@@ -123,6 +123,8 @@ public extension MetalView {
             let dx = event.deltaX
             let dy = event.deltaY
             
+            // track("dx = \(dx) dy = \(dy)")
+            
             parent.mouseXY.x += dx
             parent.mouseXY.y += dy
             
