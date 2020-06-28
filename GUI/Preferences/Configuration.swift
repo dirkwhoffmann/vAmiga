@@ -100,6 +100,9 @@ class Configuration {
             if gameDevice1 == gameDevice2 && gameDevice2 != InputDevice.none {
                 gameDevice2 = InputDevice.none
             }
+            gamePadManager.connect(slot: gameDevice1, port: 1)
+            gamePadManager.listDevices()
+
             parent.toolbar.validateVisibleItems()
         }
     }
@@ -109,6 +112,9 @@ class Configuration {
             if gameDevice2 == gameDevice1 && gameDevice1 != InputDevice.none {
                 gameDevice1 = InputDevice.none
             }
+            gamePadManager.connect(slot: gameDevice2, port: 2)
+            gamePadManager.listDevices()
+
             parent.toolbar.validateVisibleItems()
         }
     }

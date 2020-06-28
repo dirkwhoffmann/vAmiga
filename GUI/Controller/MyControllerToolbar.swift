@@ -18,18 +18,6 @@ struct InputDevice {
 
 extension MyController {
 
-    func connect(device: Int, port: Int) {
-        
-        let cpd: ControlPortDevice =
-            device == InputDevice.none ? CPD_NONE :
-                device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
-        
-        amiga.suspend()
-        if port == 1 { amiga.controlPort1.connect(cpd) }
-        if port == 2 { amiga.controlPort2.connect(cpd) }
-        amiga.resume()
-    }
-
     @IBAction func port1Action(_ sender: NSPopUpButton) {
         
         config.gameDevice1 = sender.selectedTag()

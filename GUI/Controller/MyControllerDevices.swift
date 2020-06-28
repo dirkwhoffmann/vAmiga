@@ -20,6 +20,19 @@ extension MyController {
     //  Game port events
     //
     
+    // DEPRECATED
+    func connect(device: Int, port: Int) {
+        
+        let cpd: ControlPortDevice =
+            device == InputDevice.none ? CPD_NONE :
+                device == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+        
+        amiga.suspend()
+        if port == 1 { amiga.controlPort1.connect(cpd) }
+        if port == 2 { amiga.controlPort2.connect(cpd) }
+        amiga.resume()
+    }
+    
     // Feeds game pad actions into the port associated with a certain game pad
     @discardableResult
     func emulateEventsOnGamePort(slot: Int, events: [GamePadAction]) -> Bool {

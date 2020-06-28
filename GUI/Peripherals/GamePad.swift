@@ -29,6 +29,9 @@ class GamePad {
     // Name of the managed device
     var name: String?
 
+    // The Amiga port this device is connected to (0 = unconnected)
+    var port = 0
+    
     // Position of this game pad in the manager's game pad list
     var nr = 0
     

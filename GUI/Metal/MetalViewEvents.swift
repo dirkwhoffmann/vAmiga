@@ -83,6 +83,8 @@ public extension MetalView {
     
     override func mouseDown(with event: NSEvent) {
 
+        // track("Device ID = \(event.deviceID)")
+
         if gotMouse {
             parent.amiga.mouse.setLeftButton(true)
             return
@@ -96,12 +98,16 @@ public extension MetalView {
     
     override func mouseUp(with event: NSEvent) {
 
+        // track("Device ID = \(event.deviceID)")
+
         if gotMouse {
             parent.amiga.mouse.setLeftButton(false)
         }
     }
     
     override func rightMouseDown(with event: NSEvent) {
+
+        // track("Device ID = \(event.deviceID)")
 
         if gotMouse {
             parent.amiga.mouse.setRightButton(true)
@@ -110,12 +116,16 @@ public extension MetalView {
 
     override func rightMouseUp(with event: NSEvent) {
 
+        // track("Device ID = \(event.deviceID)")
+
         if gotMouse {
             parent.amiga.mouse.setRightButton(false)
         }
     }
     
     override func mouseMoved(with event: NSEvent) {
+        
+        // track("Device ID = \(event.deviceID)")
         
         if gotMouse {
             

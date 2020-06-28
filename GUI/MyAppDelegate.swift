@@ -66,7 +66,9 @@ var mapCommandKeys: Bool {
             
             // Set up an event mask that matches keyDown and keyUp events
             let mask = CGEventMask(
-                (1 << CGEventType.keyDown.rawValue) | (1 << CGEventType.keyUp.rawValue))
+                (1 << CGEventType.keyDown.rawValue) |
+                    (1 << CGEventType.keyUp.rawValue) |
+                    (1 << CGEventType.mouseMoved.rawValue))
             
             // Try to create the event tap
             eventTap = CGEvent.tapCreate(tap: .cgSessionEventTap,

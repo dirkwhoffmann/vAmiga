@@ -127,6 +127,36 @@ class GamePadManager {
         return (nr < 5) ? nr : nil
     }
     
+    func connect(slot: Int, port: Int) {
+        
+        // Remove any existing binding to this port
+        for (_, pad) in gamePads where pad.port == port { pad.port = 0 }
+        
+        // Bind the new device
+        gamePads[slot]?.port = port
+        
+        // Connect the proper device on the Amiga side
+        let cpd: ControlPortDevice =
+            slot == InputDevice.none ? CPD_NONE :
+                slot == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+        parent.amiga.suspend()
+        if port == 1 { parent.amiga.controlPort1.connect(cpd) }
+        if port == 2 { parent.amiga.controlPort2.connect(cpd) }
+        parent.amiga.resume()
+    }
+    
+    func slotConnectedTo(port: Int) -> Int {
+        
+        var result = InputDevice.none
+        
+        for (slot, pad) in gamePads where pad.port == port {
+            assert(result == InputDevice.none)
+            result = slot
+        }
+        
+        return result
+    }
+        
     //
     // HID stuff
     //
@@ -173,6 +203,8 @@ class GamePadManager {
     
         track()
 
+        // listProperties(device: device)
+        
         // Ignore internal devices
         if isBuiltIn(device: device) {
             // track("Ignoring built-in device")
@@ -283,7 +315,7 @@ class GamePadManager {
         
         for (slotNr, dev) in gamePads {
             
-            print("Game pad slot \(slotNr): ", terminator: "")
+            print("Game pad slot \(slotNr) [\(dev.port)]: ", terminator: "")
             if let name = dev.name {
                 print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))")
             } else {
