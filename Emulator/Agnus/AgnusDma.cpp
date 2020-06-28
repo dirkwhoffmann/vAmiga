@@ -556,9 +556,11 @@ Agnus::peek(u32 addr)
     if (addr >= 0x80000) {
         
         if (slowRamIsMirroredIn()) {
+            debug(XFILES, "Reading from Slow RAM mirror\n");
             return mem.peek16 <ACC_AGNUS, MEM_SLOW> (addr);
         }
         if (addr >= mem.chipRamSize()) {
+            debug(XFILES, "Reading from unmapped Chip Ram\n");
             return mem.peek16 <ACC_AGNUS, MEM_NONE_SLOW> (addr);
         }
     }
@@ -592,10 +594,12 @@ Agnus::poke(u32 addr, u16 value)
     if (addr >= 0x80000) {
         
         if (slowRamIsMirroredIn()) {
+            debug(XFILES, "Writing to Slow RAM mirror\n");
             mem.poke16 <ACC_AGNUS, MEM_SLOW> (addr, value);
             return;
         }
         if (addr >= mem.chipRamSize()) {
+            debug(XFILES, "Writing to unmapped Chip Ram\n");
             return;
         }
     }
