@@ -29,9 +29,11 @@ class GamePad {
     // Name of the managed device
     var name: String?
 
-    // Indicates if this device is a mouse or a joystick
-    var isMouse = false
-    
+    // Type of the managed device (joystick or mouse)
+    var type: ControlPortDevice
+    var isMouse: Bool { return type == CPD_MOUSE }
+    var isJoystick: Bool { return type == CPD_JOYSTICK }
+
     // The Amiga port this device is connected to (0 = unconnected)
     var port = 0
     
@@ -90,6 +92,7 @@ class GamePad {
     
     init(_ nr: Int, manager: GamePadManager,
          device: IOHIDDevice? = nil,
+         type: ControlPortDevice,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
         // track("\(nr): \(vendorID) \(productID) \(locationID)")
@@ -97,6 +100,7 @@ class GamePad {
         self.nr = nr
         self.manager = manager
         self.device = device
+        self.type = type
         self.vendorID = vendorID
         self.productID = productID
         self.locationID = locationID
@@ -142,16 +146,6 @@ class GamePad {
             
         default:
             break  // name = "Generic Gamepad"
-        }
-        
-        // Let the mouse event receiver know about this device
-        if device?.isMouse() == true {
-            self.isMouse = true
-            if nr == 0 {
-                manager.parent.metal.mouse1 = self // Internal mouse
-            } else {
-                manager.parent.metal.mouse2 = self // External mouse
-            }
         }
     }
     
