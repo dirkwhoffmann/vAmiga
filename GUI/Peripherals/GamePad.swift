@@ -38,7 +38,7 @@ class GamePad {
     var port = 0
     
     // Position of this game pad in the manager's game pad list
-    var nr = 0
+    // var nr = 0
     
     // Keymap of the managed device (set for keyboard emulated devices only)
     var keyMap: Int?
@@ -79,14 +79,13 @@ class GamePad {
                                      value: value)
     }
     
-    init(_ nr: Int, manager: GamePadManager,
+    init(manager: GamePadManager,
          device: IOHIDDevice? = nil,
          type: ControlPortDevice,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
         // track("\(nr): \(vendorID) \(productID) \(locationID)")
         
-        self.nr = nr
         self.manager = manager
         self.device = device
         self.type = type
@@ -144,7 +143,7 @@ class GamePad {
         
         let optionBits = IOOptionBits(kIOHIDOptionsTypeNone)
         if IOHIDDeviceClose(device!, optionBits) == kIOReturnSuccess {
-            track("Closed HID device \(nr)")
+            track("Closed HID device")
         } else {
             track("WARNING: Cannot close HID device")
         }
@@ -295,7 +294,7 @@ extension GamePad {
         if usagePage == kHIDPage_Button {
 
             let events = (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE]
-            manager.parent.emulateEventsOnGamePort(slot: nr, events: events)
+            processJoystickEvents(events: events)                
             return
         }
         

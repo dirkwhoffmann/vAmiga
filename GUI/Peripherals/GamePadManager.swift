@@ -39,14 +39,13 @@ class GamePadManager {
                                         IOOptionBits(kIOHIDOptionsTypeNone))
 
         // Add default devices
-        gamePads[0] = GamePad(0, manager: self, type: CPD_MOUSE)
+        gamePads[0] = GamePad(manager: self, type: CPD_MOUSE)
         gamePads[0]!.keyMap = 0
-        parent.metal.mouse1 = gamePads[0]!
         
-        gamePads[1] = GamePad(1, manager: self, type: CPD_JOYSTICK)
+        gamePads[1] = GamePad(manager: self, type: CPD_JOYSTICK)
         gamePads[1]!.keyMap = 1
 
-        gamePads[2] = GamePad(2, manager: self, type: CPD_JOYSTICK)
+        gamePads[2] = GamePad(manager: self, type: CPD_JOYSTICK)
         gamePads[2]!.keyMap = 2
 
         // Tell the mouse event receiver where the mouse resides
@@ -245,8 +244,7 @@ class GamePadManager {
         }
         
         // Create a GamePad object
-        gamePads[slot] = GamePad(slot,
-                                 manager: self,
+        gamePads[slot] = GamePad(manager: self,
                                  device: device,
                                  type: CPD_JOYSTICK,
                                  vendorID: vendorID,
@@ -267,8 +265,7 @@ class GamePadManager {
                   locationID: Int) {
                 
         // Create a GamePad object
-        gamePads[slot] = GamePad(slot,
-                                 manager: self,
+        gamePads[slot] = GamePad(manager: self,
                                  device: device,
                                  type: CPD_MOUSE,
                                  vendorID: vendorID,

@@ -52,6 +52,8 @@ class MyController: NSWindowController, MessageReceiver {
      
     // Game pad manager
     var gamePadManager: GamePadManager!
+    var gamePad1: GamePad? { return gamePadManager.gamePads[config.gameDevice1] }
+    var gamePad2: GamePad? { return gamePadManager.gamePads[config.gameDevice2] }
     
     // Keyboard controller
     var kbController: KBController!

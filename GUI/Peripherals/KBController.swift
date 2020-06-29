@@ -127,19 +127,6 @@ class KBController: NSObject {
             if prefs.disconnectJoyKeys { return }
         }
 
-        /*
-        var joyKey1 = false, joyKey2 = false
-        if let device = parent.gamePad1 {
-            joyKey1 = parent.emulateEventsOnGamePort1(device.keyDownEvents(macKey))
-        }
-        if let device = parent.gamePad2 {
-            joyKey2 = parent.emulateEventsOnGamePort2(device.keyDownEvents(macKey))
-        }
-        
-        // Exit if emulation keys are disconnected from the keyboard
-        if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
-        */
-        
         keyboard.pressKey(macKey.amigaKeyCode)
     }
     
@@ -153,20 +140,6 @@ class KBController: NSObject {
             if prefs.disconnectJoyKeys { return }
         }
 
-        /*
-        // Check if this key is used for joystick emulation
-        var joyKey1 = false, joyKey2 = false
-        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice1] {
-            joyKey1 = parent.emulateEventsOnGamePort1(device.keyUpEvents(macKey))
-        }
-        if let device = parent.gamePadManager.gamePads[parent.config.gameDevice2] {
-            joyKey2 = parent.emulateEventsOnGamePort2(device.keyUpEvents(macKey))
-        }
-        
-        // Exit if emulation keys are disconnected from the keyboard
-        if (joyKey1 || joyKey2) && prefs.disconnectJoyKeys { return }
-        */
-        
         keyboard.releaseKey(macKey.amigaKeyCode)
     }
     
