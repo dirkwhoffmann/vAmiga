@@ -197,7 +197,8 @@ typedef struct
     u16 bltbmod;
     u16 bltcmod;
     u16 bltdmod;
-
+    u16 bltcon0;
+    
     u32 coppc;
     u32 dskpt;
     u32 bplpt[6];

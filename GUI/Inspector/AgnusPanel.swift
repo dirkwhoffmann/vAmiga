@@ -17,67 +17,68 @@ extension Inspector {
     func refreshAgnus(count: Int = 0, full: Bool = false) {
 
         cacheAgnus()
-
+        
         if full {
             let elements = [ dmaVPOS: fmt16,
-                              dmaHPOS: fmt16,
-
-                              dmaDMACON: fmt16,
-                              dmaBPL0CON: fmt16,
-                              dmaDDFSTRT: fmt16,
-                              dmaDDFSTOP: fmt16,
-                              dmaDIWSTRT: fmt16,
-                              dmaDIWSTOP: fmt16,
-
-                              dmaBLTAMOD: fmt16,
-                              dmaBLTBMOD: fmt16,
-                              dmaBLTCMOD: fmt16,
-                              dmaBLTDMOD: fmt16,
-                              dmaBPL1MOD: fmt16,
-                              dmaBPL2MOD: fmt16,
-
-                              dmaBPL1PT: fmt24,
-                              dmaBPL2PT: fmt24,
-                              dmaBPL3PT: fmt24,
-                              dmaBPL4PT: fmt24,
-                              dmaBPL5PT: fmt24,
-                              dmaBPL6PT: fmt24,
-
-                              dmaAUD0PT: fmt24,
-                              dmaAUD1PT: fmt24,
-                              dmaAUD2PT: fmt24,
-                              dmaAUD3PT: fmt24,
-                              dmaAUD0LC: fmt24,
-                              dmaAUD1LC: fmt24,
-                              dmaAUD2LC: fmt24,
-                              dmaAUD3LC: fmt24,
-
-                              dmaBLTAPT: fmt24,
-                              dmaBLTBPT: fmt24,
-                              dmaBLTCPT: fmt24,
-                              dmaBLTDPT: fmt24,
-
-                              dmaCOPPC: fmt24,
-
-                              dmaSPR0PT: fmt24,
-                              dmaSPR1PT: fmt24,
-                              dmaSPR2PT: fmt24,
-                              dmaSPR3PT: fmt24,
-                              dmaSPR4PT: fmt24,
-                              dmaSPR5PT: fmt24,
-                              dmaSPR6PT: fmt24,
-                              dmaSPR7PT: fmt24,
-
-                              dmaDSKPT: fmt24
-             ]
-             for (c, f) in elements { assignFormatter(f, c!) }
+                             dmaHPOS: fmt16,
+                             
+                             dmaDMACON: fmt16,
+                             dmaBPL0CON: fmt16,
+                             dmaDDFSTRT: fmt16,
+                             dmaDDFSTOP: fmt16,
+                             dmaDIWSTRT: fmt16,
+                             dmaDIWSTOP: fmt16,
+                             
+                             dmaBLTAMOD: fmt16,
+                             dmaBLTBMOD: fmt16,
+                             dmaBLTCMOD: fmt16,
+                             dmaBLTDMOD: fmt16,
+                             dmaBPL1MOD: fmt16,
+                             dmaBPL2MOD: fmt16,
+                             
+                             dmaBPL1PT: fmt24,
+                             dmaBPL2PT: fmt24,
+                             dmaBPL3PT: fmt24,
+                             dmaBPL4PT: fmt24,
+                             dmaBPL5PT: fmt24,
+                             dmaBPL6PT: fmt24,
+                             
+                             dmaAUD0PT: fmt24,
+                             dmaAUD1PT: fmt24,
+                             dmaAUD2PT: fmt24,
+                             dmaAUD3PT: fmt24,
+                             dmaAUD0LC: fmt24,
+                             dmaAUD1LC: fmt24,
+                             dmaAUD2LC: fmt24,
+                             dmaAUD3LC: fmt24,
+                             
+                             dmaBLTAPT: fmt24,
+                             dmaBLTBPT: fmt24,
+                             dmaBLTCPT: fmt24,
+                             dmaBLTDPT: fmt24,
+                             
+                             dmaCOPPC: fmt24,
+                             
+                             dmaSPR0PT: fmt24,
+                             dmaSPR1PT: fmt24,
+                             dmaSPR2PT: fmt24,
+                             dmaSPR3PT: fmt24,
+                             dmaSPR4PT: fmt24,
+                             dmaSPR5PT: fmt24,
+                             dmaSPR6PT: fmt24,
+                             dmaSPR7PT: fmt24,
+                             
+                             dmaDSKPT: fmt24
+            ]
+            for (c, f) in elements { assignFormatter(f, c!) }
         }
 
         dmaVPOS.integerValue = Int(agnusInfo!.vpos)
         dmaHPOS.integerValue = Int(agnusInfo!.hpos)
 
-        let dmacon  = Int(agnusInfo!.dmacon)
-        let bplcon0 = Int(agnusInfo!.bplcon0)
+        let dmacon = Int(agnusInfo!.dmacon)
+        let bplcon = Int(agnusInfo!.bplcon0)
+        let bltcon = Int(agnusInfo!.bltcon0)
 
         dmaDMACON.integerValue = dmacon
         let bltpri  = (dmacon & 0b0000010000000000) != 0
@@ -91,9 +92,13 @@ extension Inspector {
         let aud2en  = (dmacon & 0b0000000000000100) != 0 && dmaen
         let aud1en  = (dmacon & 0b0000000000000010) != 0 && dmaen
         let aud0en  = (dmacon & 0b0000000000000001) != 0 && dmaen
+        let bltA    = (bltcon & 0b0000100000000000) != 0 && blten
+        let bltB    = (bltcon & 0b0000010000000000) != 0 && blten
+        let bltC    = (bltcon & 0b0000001000000000) != 0 && blten
+        let bltD    = (bltcon & 0b0000000100000000) != 0 && blten
 
-        dmaBPL0CON.integerValue = bplcon0
-        let bpu     = (bplcon0 >> 12) & 0b111
+        dmaBPL0CON.integerValue = bplcon
+        let bpu     = (bplcon >> 12) & 0b111
 
         dmaDIWSTRT.integerValue = Int(agnusInfo!.diwstrt)
         dmaDIWSTOP.integerValue = Int(agnusInfo!.diwstop)
@@ -137,10 +142,10 @@ extension Inspector {
         dmaBLTBPT.integerValue = Int(agnusInfo!.bltpt.1)
         dmaBLTCPT.integerValue = Int(agnusInfo!.bltpt.2)
         dmaBLTDPT.integerValue = Int(agnusInfo!.bltpt.3)
-        dmaBLTAEnable.state = blten ? .on : .off
-        dmaBLTBEnable.state = blten ? .on : .off
-        dmaBLTCEnable.state = blten ? .on : .off
-        dmaBLTDEnable.state = blten ? .on : .off
+        dmaBLTAEnable.state = bltA ? .on : .off
+        dmaBLTBEnable.state = bltB ? .on : .off
+        dmaBLTCEnable.state = bltC ? .on : .off
+        dmaBLTDEnable.state = bltD ? .on : .off
         dmaBLTPRI.state = bltpri ? .on : .off
         dmaBLS.state = agnusInfo!.bls ? .on : .off
 

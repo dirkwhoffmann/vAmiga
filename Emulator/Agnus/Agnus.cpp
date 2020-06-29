@@ -130,6 +130,7 @@ Agnus::_inspect()
     info.bltbmod  = blitter.bltbmod;
     info.bltcmod  = blitter.bltcmod;
     info.bltdmod  = blitter.bltdmod;
+    info.bltcon0  = blitter.bltcon0;
     info.bls      = bls;
 
     info.coppc    = copper.coppc & ptrMask;

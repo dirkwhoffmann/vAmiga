@@ -360,7 +360,7 @@ Moira::disassembleWord(u32 value, char *str)
 void
 Moira::disassembleMemory(u32 addr, int cnt, char *str)
 {
-    for (int i = 0; i < cnt; i++, addr += 2) {
+    for (int i = 0; i < cnt; i++) {
         u32 value = dasmRead<Word>(addr);
         sprintx(str, value, true, 0, 4);
         *str++ = (i == cnt - 1) ? 0 : ' ';
