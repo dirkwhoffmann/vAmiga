@@ -77,6 +77,7 @@ class GamePad {
                                      value: value)
     }
     
+    /*
     let mouseActionCallback: IOHIDValueCallback = {
         inContext, inResult, inSender, value in
         let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
@@ -85,7 +86,8 @@ class GamePad {
                                   sender: inSender,
                                   value: value)
     }
-
+    */
+    
     init(_ nr: Int, manager: GamePadManager,
          device: IOHIDDevice? = nil,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
@@ -105,7 +107,7 @@ class GamePad {
         case 0x40B where productID == 0x6533:
             name = "Competition Pro SL-6602"
 
-        case 0x46D where productID == 0xC063:
+        case 0x46D where productID == 0xC062:
             name = "Logitech Laser Mouse"
             
         case 0x738 where productID == 0x2217:
@@ -363,55 +365,7 @@ extension GamePad {
             // manager.parent.emulateEventsOnGamePort(slot: nr, events: events!)
             processJoystickEvents(events: events!)
         }
-    }
-    
-    func hidMouseDeviceAction(context: UnsafeMutableRawPointer?,
-                              result: IOReturn,
-                              sender: UnsafeMutableRawPointer?,
-                              value: IOHIDValue) {
-        
-        let element   = IOHIDValueGetElement(value)
-        let intValue  = Int(IOHIDValueGetIntegerValue(value))
-        let usagePage = Int(IOHIDElementGetUsagePage(element))
-        let usage     = Int(IOHIDElementGetUsage(element))
-        
-        if intValue == 0 { return }
-        
-        // track("usagePage: \(usagePage) usage: \(usage)")
-        
-        // Buttons
-        if usagePage == kHIDPage_Button {
-            
-            track()
-            /*
-            let events = (intValue != 0) ? [PRESS_FIRE] : [RELEASE_FIRE]
-            manager.parent.emulateEventsOnGamePort(slot: nr, events: events)
-            return
-            */
-        }
-        
-        // Movements
-        if usagePage == kHIDPage_GenericDesktop {
-                                    
-            switch usage {
-                
-            case kHIDUsage_GD_X:
-                
-                track("kHIDUsage_GD_X: \(intValue)")
-                
-            case kHIDUsage_GD_Y:
-                
-                track("kHIDUsage_GD_Y: \(intValue)")
-                                
-            default:
-                // track("Unknown HID usage: \(usage)")")
-                break
-            }
-                        
-            // Trigger events
-            // TODO
-        }
-    }
+    }    
 }
 
 //
@@ -440,5 +394,14 @@ extension GamePad {
         if port == 2 { for event in events { amiga.mouse2.trigger(event) } }
         
         return events != []
+    }
+    
+    func processMouseEvents(delta: NSPoint) {
+        
+        track("nr = \(nr) port = \(port)")
+        let amiga = manager.parent.amiga!
+        
+        if port == 1 { amiga.mouse1.setDeltaXY(delta) }
+        if port == 2 { amiga.mouse2.setDeltaXY(delta) }
     }
 }

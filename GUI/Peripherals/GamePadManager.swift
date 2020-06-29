@@ -138,9 +138,12 @@ class GamePadManager {
         gamePads[slot]?.port = port
         
         // Connect the proper device on the Amiga side
-        let cpd: ControlPortDevice =
-            slot == InputDevice.none ? CPD_NONE :
-                slot == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+        var cpd: ControlPortDevice
+        if slot == InputDevice.none {
+            cpd = CPD_NONE
+        } else {
+            cpd = (gamePads[slot]?.isMouse == true) ? CPD_MOUSE : CPD_JOYSTICK
+        }
         
         parent.amiga.suspend()
         if port == 1 { parent.amiga.controlPort1.connect(cpd) }
@@ -246,13 +249,15 @@ class GamePadManager {
         track("locationID = \(locationID)")
 
         // Open device
-        let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
-        let status = IOHIDDeviceOpen(device, IOOptionBits(optionBits))
-        if status != kIOReturnSuccess {
-            track("WARNING: Cannot open HID device")
-            return
+        if !device.isMouse() {
+            let optionBits = kIOHIDOptionsTypeNone // kIOHIDOptionsTypeSeizeDevice
+            let status = IOHIDDeviceOpen(device, IOOptionBits(optionBits))
+            if status != kIOReturnSuccess {
+                track("WARNING: Cannot open HID device")
+                return
+            }
         }
-
+        
         // Create a GamePad object for this device
         gamePads[slotNr] = GamePad(slotNr,
                                    manager: self,
@@ -262,13 +267,8 @@ class GamePadManager {
                                    locationID: locationID)
     
         // Register input value callback
-        let hidContext = unsafeBitCast(gamePads[slotNr], to: UnsafeMutableRawPointer.self)
-        if device.isMouse() {
-            track("Registering as Mouse")
-            IOHIDDeviceRegisterInputValueCallback(device,
-                                                  gamePads[slotNr]!.mouseActionCallback,
-                                                  hidContext)
-        } else {
+        if !device.isMouse() {
+            let hidContext = unsafeBitCast(gamePads[slotNr], to: UnsafeMutableRawPointer.self)
             track("Registering as Joystick")
             IOHIDDeviceRegisterInputValueCallback(device,
                                                   gamePads[slotNr]!.joystickActionCallback,

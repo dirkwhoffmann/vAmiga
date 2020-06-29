@@ -142,9 +142,12 @@ public extension MetalView {
             let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
             
             // Report the new location to the Amiga mouse
-            parent.amiga.mouse1.setDeltaXY(dxdy)
-            parent.amiga.mouse2.setDeltaXY(dxdy)
-
+            if mouse2 == nil || event.deviceID != 0 {
+                mouse1!.processMouseEvents(delta: dxdy)
+            } else {
+                mouse2!.processMouseEvents(delta: dxdy)
+            }
+            
             // Check for a shaking mouse movement
             if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
                 releaseMouse()
