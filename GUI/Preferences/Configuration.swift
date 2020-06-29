@@ -96,24 +96,32 @@ class Configuration {
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
-            parent.connect(device: gameDevice1, port: 1)
-            if gameDevice1 == gameDevice2 && gameDevice2 != InputDevice.none {
-                gameDevice2 = InputDevice.none
-            }
+ 
+            if oldValue == gameDevice1 { return }
+
+            // Try to connect the device
             gamePadManager.connect(slot: gameDevice1, port: 1)
             gamePadManager.listDevices()
+
+            // Read back the real connection status
+            gameDevice1 = gamePadManager.slotConnectedTo(port: 1)
+            gameDevice2 = gamePadManager.slotConnectedTo(port: 2)
 
             parent.toolbar.validateVisibleItems()
         }
     }
     var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
         didSet {
-            parent.connect(device: gameDevice2, port: 2)
-            if gameDevice2 == gameDevice1 && gameDevice1 != InputDevice.none {
-                gameDevice1 = InputDevice.none
-            }
+ 
+            if oldValue == gameDevice2 { return }
+
+            // Try to connect the device
             gamePadManager.connect(slot: gameDevice2, port: 2)
             gamePadManager.listDevices()
+
+            // Read back the real connection status
+            gameDevice1 = gamePadManager.slotConnectedTo(port: 1)
+            gameDevice2 = gamePadManager.slotConnectedTo(port: 2)
 
             parent.toolbar.validateVisibleItems()
         }

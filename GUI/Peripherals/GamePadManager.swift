@@ -313,9 +313,12 @@ class GamePadManager {
     
     func listDevices() {
         
-        for (slotNr, dev) in gamePads {
+        print("Input devices:")
+        for i in 0 ... Int.max {
             
-            print("Game pad slot \(slotNr) [\(dev.port)]: ", terminator: "")
+            guard let dev = gamePads[i] else { break }
+            
+            print("Slot \(i) [\(dev.port)]: ", terminator: "")
             if let name = dev.name {
                 print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))")
             } else {
