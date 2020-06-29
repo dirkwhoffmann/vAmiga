@@ -82,9 +82,6 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Remembers if we run in warp mode
     var warp = false
-
-    // Current mouse coordinate
-    var mouseXY = NSPoint(x: 0, y: 0)
     
     // Indicates if a status bar is shown
     var statusBar = true
@@ -268,10 +265,7 @@ extension MyController {
     override open func windowDidLoad() {
  
         track()
-        
-        // Reset mouse coordinates
-        mouseXY = NSPoint.zero
-        
+                
         // Create keyboard controller
         kbController = KBController(parent: self)
         assert(kbController != nil, "Failed to create keyboard controller")

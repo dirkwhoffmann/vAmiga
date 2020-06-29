@@ -135,22 +135,15 @@ public extension MetalView {
             // Determine delta movement steps
             let dx = event.deltaX
             let dy = event.deltaY
-            
-            // track("dx = \(dx) dy = \(dy)")
-            
-            parent.mouseXY.x += dx
-            parent.mouseXY.y += dy
-            
+                                    
             // Make coordinate independent of the actual window size
             let scaleX = (256.0 * 400.0) / frame.width
             let scaleY = (256.0 * 300.0) / frame.height
-            let newX = parent.mouseXY.x * scaleX
-            let newY = parent.mouseXY.y * scaleY
-            let newLocation = NSPoint.init(x: newX, y: newY)
+            let dxdy = NSPoint.init(x: dx * scaleX, y: dy * scaleY)
             
             // Report the new location to the Amiga mouse
-            parent.amiga.mouse1.setXY(newLocation)
-            parent.amiga.mouse2.setXY(newLocation)
+            parent.amiga.mouse1.setDeltaXY(dxdy)
+            parent.amiga.mouse2.setDeltaXY(dxdy)
 
             // Check for a shaking mouse movement
             if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
