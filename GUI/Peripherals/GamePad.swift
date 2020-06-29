@@ -79,17 +79,6 @@ class GamePad {
                                      value: value)
     }
     
-    /*
-    let mouseActionCallback: IOHIDValueCallback = {
-        inContext, inResult, inSender, value in
-        let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
-        this.hidMouseDeviceAction(context: inContext,
-                                  result: inResult,
-                                  sender: inSender,
-                                  value: value)
-    }
-    */
-    
     init(_ nr: Int, manager: GamePadManager,
          device: IOHIDDevice? = nil,
          type: ControlPortDevice,
@@ -392,10 +381,50 @@ extension GamePad {
     
     func processMouseEvents(delta: NSPoint) {
         
-        track("nr = \(nr) port = \(port)")
         let amiga = manager.parent.amiga!
         
         if port == 1 { amiga.mouse1.setDeltaXY(delta) }
         if port == 2 { amiga.mouse2.setDeltaXY(delta) }
+    }
+    
+    func processKeyDownEvent(macKey: MacKey) -> Bool {
+
+        // Only proceed if a keymap is present
+         if keyMap == nil { return false }
+         
+         // Only proceed if this key is used for emulation
+         let events = keyDownEvents(macKey)
+         if events.isEmpty { return false }
+         
+         // Process the events
+         processKeyboardEvent(events: events)
+         return true
+    }
+
+    func processKeyUpEvent(macKey: MacKey) -> Bool {
+        
+        // Only proceed if a keymap is present
+        if keyMap == nil { return false }
+        
+        // Only proceed if this key is used for emulation
+        let events = keyUpEvents(macKey)
+        if events.isEmpty { return false }
+        
+        // Process the events
+        processKeyboardEvent(events: events)
+        return true
+    }
+
+    func processKeyboardEvent(events: [GamePadAction]) {
+
+        let amiga = manager.parent.amiga!
+        
+        if isMouse {
+            if port == 1 { for event in events { amiga.mouse1.trigger(event) } }
+            if port == 2 { for event in events { amiga.mouse2.trigger(event) } }
+        } else {
+            if port == 1 { for event in events { amiga.joystick1.trigger(event) } }
+            if port == 2 { for event in events { amiga.joystick2.trigger(event) } }
+        }
     }
 }

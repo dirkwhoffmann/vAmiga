@@ -139,17 +139,11 @@ class GamePadManager {
         // Bind the new device
         gamePads[slot]?.port = port
         
-        // Connect the proper device on the Amiga side
-        var cpd: ControlPortDevice
-        if slot == InputDevice.none {
-            cpd = CPD_NONE
-        } else {
-            cpd = (gamePads[slot]?.isMouse == true) ? CPD_MOUSE : CPD_JOYSTICK
-        }
-        
+        // Update the device type on the Amiga side
         parent.amiga.suspend()
-        if port == 1 { parent.amiga.controlPort1.connect(cpd) }
-        if port == 2 { parent.amiga.controlPort2.connect(cpd) }
+        let deviceType = gamePads[slot]?.type ?? CPD_NONE
+        if port == 1 { parent.amiga.controlPort1.connect(deviceType) }
+        if port == 2 { parent.amiga.controlPort2.connect(deviceType) }
         parent.amiga.resume()
     }
     
@@ -180,17 +174,6 @@ class GamePadManager {
         }
     }
 
-    func listProperties(device: IOHIDDevice) {
-        
-        let keys = [kIOHIDTransportKey, kIOHIDVendorIDKey, kIOHIDVendorIDSourceKey, kIOHIDProductIDKey, kIOHIDVersionNumberKey, kIOHIDManufacturerKey, kIOHIDProductKey, kIOHIDSerialNumberKey, kIOHIDCountryCodeKey, kIOHIDStandardTypeKey, kIOHIDLocationIDKey, kIOHIDDeviceUsageKey, kIOHIDDeviceUsagePageKey, kIOHIDDeviceUsagePairsKey, kIOHIDPrimaryUsageKey, kIOHIDPrimaryUsagePageKey, kIOHIDMaxInputReportSizeKey, kIOHIDMaxOutputReportSizeKey, kIOHIDMaxFeatureReportSizeKey, kIOHIDReportIntervalKey, kIOHIDSampleIntervalKey, kIOHIDBatchIntervalKey, kIOHIDRequestTimeoutKey, kIOHIDReportDescriptorKey, kIOHIDResetKey, kIOHIDKeyboardLanguageKey, kIOHIDAltHandlerIdKey, kIOHIDBuiltInKey, kIOHIDDisplayIntegratedKey, kIOHIDProductIDMaskKey, kIOHIDProductIDArrayKey, kIOHIDPowerOnDelayNSKey, kIOHIDCategoryKey, kIOHIDMaxResponseLatencyKey, kIOHIDUniqueIDKey, kIOHIDPhysicalDeviceUniqueIDKey]
-        
-        for key in keys {
-            if let prop = IOHIDDeviceGetProperty(device, key as CFString) {
-                print("\t" + key + ": \(prop)")
-            }
-        }
-    }
-    
     // Device matching callback
     // This method is invoked when a matching HID device is plugged in.
     func hidDeviceAdded(context: UnsafeMutableRawPointer?,
@@ -349,6 +332,17 @@ extension IOHIDDevice {
             return value == kHIDUsage_GD_Mouse
         } else {
             return false
+        }
+    }
+    
+    func listProperties() {
+        
+        let keys = [kIOHIDTransportKey, kIOHIDVendorIDKey, kIOHIDVendorIDSourceKey, kIOHIDProductIDKey, kIOHIDVersionNumberKey, kIOHIDManufacturerKey, kIOHIDProductKey, kIOHIDSerialNumberKey, kIOHIDCountryCodeKey, kIOHIDStandardTypeKey, kIOHIDLocationIDKey, kIOHIDDeviceUsageKey, kIOHIDDeviceUsagePageKey, kIOHIDDeviceUsagePairsKey, kIOHIDPrimaryUsageKey, kIOHIDPrimaryUsagePageKey, kIOHIDMaxInputReportSizeKey, kIOHIDMaxOutputReportSizeKey, kIOHIDMaxFeatureReportSizeKey, kIOHIDReportIntervalKey, kIOHIDSampleIntervalKey, kIOHIDBatchIntervalKey, kIOHIDRequestTimeoutKey, kIOHIDReportDescriptorKey, kIOHIDResetKey, kIOHIDKeyboardLanguageKey, kIOHIDAltHandlerIdKey, kIOHIDBuiltInKey, kIOHIDDisplayIntegratedKey, kIOHIDProductIDMaskKey, kIOHIDProductIDArrayKey, kIOHIDPowerOnDelayNSKey, kIOHIDCategoryKey, kIOHIDMaxResponseLatencyKey, kIOHIDUniqueIDKey, kIOHIDPhysicalDeviceUniqueIDKey]
+        
+        for key in keys {
+            if let prop = IOHIDDeviceGetProperty(self, key as CFString) {
+                print("\t" + key + ": \(prop)")
+            }
         }
     }
 }
