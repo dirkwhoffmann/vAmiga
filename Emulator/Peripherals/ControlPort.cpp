@@ -67,8 +67,8 @@ ControlPort::joydat()
 
         case CPD_MOUSE:
 
-            mouseCounterX += mouse.getDeltaX();
-            mouseCounterY += mouse.getDeltaY();
+            mouseCounterX += nr == 1 ? mouse1.getDeltaX() : mouse2.getDeltaX();
+            mouseCounterY += nr == 1 ? mouse1.getDeltaY() : mouse2.getDeltaY();
             return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
 
         case CPD_JOYSTICK:
@@ -115,14 +115,16 @@ ControlPort::pokeJOYTEST(u16 value)
 void
 ControlPort::changePotgo(u16 &potgo)
 {
-    if (device == CPD_MOUSE) mouse.changePotgo(nr, potgo);
+    if (device == CPD_MOUSE) {
+        nr == 1 ? mouse1.changePotgo(potgo) : mouse2.changePotgo(potgo);
+    }
 }
 
 void
 ControlPort::changePra(u8 &pra)
 {
     if (device == CPD_MOUSE) {
-        mouse.changePra(nr, pra);
+        nr == 1 ? mouse1.changePra(pra) : mouse2.changePra(pra);
         return;
     }
     if (device == CPD_JOYSTICK) {

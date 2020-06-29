@@ -18,10 +18,7 @@ class Configuration {
     //
     // Rom settings
     //
-    
-    // var romURL: URL = RomDefaults.std.rom
-    // var extURL: URL = RomDefaults.std.ext
-    
+        
     var extStart: Int {
         get { return amiga.getConfig(VA_EXT_START) }
         set { amiga.configure(VA_EXT_START, value: newValue) }
@@ -96,16 +93,16 @@ class Configuration {
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
- 
-            if oldValue == gameDevice1 { return }
-
+             
             // Try to connect the device
             gamePadManager.connect(slot: gameDevice1, port: 1)
             gamePadManager.listDevices()
 
             // Read back the real connection status
-            gameDevice1 = gamePadManager.slotConnectedTo(port: 1)
-            gameDevice2 = gamePadManager.slotConnectedTo(port: 2)
+            let device1 = gamePadManager.slotConnectedTo(port: 1)
+            let device2 = gamePadManager.slotConnectedTo(port: 2)
+            if gameDevice1 != device1 { gameDevice1 = device1 }
+            if gameDevice2 != device2 { gameDevice2 = device2 }
 
             parent.toolbar.validateVisibleItems()
         }
@@ -113,15 +110,15 @@ class Configuration {
     var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
         didSet {
  
-            if oldValue == gameDevice2 { return }
-
             // Try to connect the device
             gamePadManager.connect(slot: gameDevice2, port: 2)
             gamePadManager.listDevices()
 
             // Read back the real connection status
-            gameDevice1 = gamePadManager.slotConnectedTo(port: 1)
-            gameDevice2 = gamePadManager.slotConnectedTo(port: 2)
+            let device1 = gamePadManager.slotConnectedTo(port: 1)
+            let device2 = gamePadManager.slotConnectedTo(port: 2)
+            if gameDevice1 != device1 { gameDevice1 = device1 }
+            if gameDevice2 != device2 { gameDevice2 = device2 }
 
             parent.toolbar.validateVisibleItems()
         }

@@ -14,7 +14,7 @@
 
 class Joystick : public AmigaComponent {
 
-    // The control port this joystick is connected to
+    // The control port this device is connected to
     const PortNr nr;
 
     // Button state

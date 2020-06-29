@@ -38,7 +38,7 @@ extension MyController {
         
         for event in events {
             amiga.joystick1.trigger(event)
-            amiga.mouse.trigger(event)
+            amiga.mouse1.trigger(event)
         }
         return events != []
     }
@@ -48,7 +48,7 @@ extension MyController {
         
         for event in events {
             amiga.joystick2.trigger(event)
-            amiga.mouse.trigger(event)
+            amiga.mouse2.trigger(event)
         }
         return events != []
     }

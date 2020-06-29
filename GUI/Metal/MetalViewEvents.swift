@@ -151,8 +151,9 @@ public extension MetalView {
             let newLocation = NSPoint.init(x: newX, y: newY)
             
             // Report the new location to the Amiga mouse
-            parent.amiga.mouse.setXY(newLocation)
-            
+            parent.amiga.mouse1.setXY(newLocation)
+            parent.amiga.mouse2.setXY(newLocation)
+
             // Check for a shaking mouse movement
             if prefs.releaseMouseByShaking && mouseIsShaking(dx: dx, dy: dy) {
                 releaseMouse()

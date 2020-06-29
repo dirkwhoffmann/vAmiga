@@ -9,9 +9,10 @@
 
 #include "Amiga.h"
 
-Mouse::Mouse(Amiga& ref) : AmigaComponent(ref)
+Mouse::Mouse(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
 {
-    setDescription("Mouse");
+    assert(isPortNr(n));
+    setDescription(n == PORT_1 ? "Mouse1" : "Mouse2");
 
     config.pullUpResistors = true;
 }
@@ -53,9 +54,9 @@ Mouse::_dump()
 }
 
 void
-Mouse::changePotgo(int port, u16 &potgo)
+Mouse::changePotgo(u16 &potgo)
 {
-    u16 mask = (port == 1) ? 0x0400 : 0x4000;
+    u16 mask = nr == 1 ? 0x0400 : 0x4000;
 
     if (rightButton || HOLD_MOUSE_R) {
         potgo &= ~mask;
@@ -65,9 +66,9 @@ Mouse::changePotgo(int port, u16 &potgo)
 }
 
 void
-Mouse::changePra(int port, u8 &pra)
+Mouse::changePra(u8 &pra)
 {
-    u16 mask = (port == 1) ? 0x40 : 0x80;
+    u16 mask = nr == 1 ? 0x0040 : 0x0080;
 
     if (leftButton || HOLD_MOUSE_L) {
         pra &= ~mask;

@@ -140,6 +140,7 @@ class GamePadManager {
         let cpd: ControlPortDevice =
             slot == InputDevice.none ? CPD_NONE :
                 slot == InputDevice.mouse ? CPD_MOUSE : CPD_JOYSTICK
+        
         parent.amiga.suspend()
         if port == 1 { parent.amiga.controlPort1.connect(cpd) }
         if port == 2 { parent.amiga.controlPort2.connect(cpd) }

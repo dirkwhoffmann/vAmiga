@@ -13,6 +13,9 @@
 #include "AmigaComponent.h"
 
 class Mouse : public AmigaComponent {
+    
+    // The control port this device is connected to
+    const PortNr nr;
 
     // Current configuration
     MouseConfig config;
@@ -57,7 +60,7 @@ private:
     
 public:
     
-    Mouse(Amiga& ref);
+    Mouse(PortNr n, Amiga& ref);
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -92,10 +95,10 @@ private:
 public:
 
     // Modifies the POTGOR bits according to the current button state
-    void changePotgo(int port, u16 &potgo);
+    void changePotgo(u16 &potgo);
 
     // Modifies the PRA bits of CIA A according to the current button state
-    void changePra(int port, u8 &pra);
+    void changePra(u8 &pra);
 
     
     //

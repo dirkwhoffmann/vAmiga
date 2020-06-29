@@ -427,8 +427,8 @@ extension GamePad {
         
         let amiga = manager.parent.amiga!
         
-        if port == 1 { for event in events { amiga.mouse.trigger(event) } }
-        if port == 2 { for event in events { amiga.mouse.trigger(event) } }
+        if port == 1 { for event in events { amiga.mouse1.trigger(event) } }
+        if port == 2 { for event in events { amiga.mouse2.trigger(event) } }
         
         return events != []
     }
