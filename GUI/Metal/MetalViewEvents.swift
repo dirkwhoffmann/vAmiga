@@ -82,44 +82,49 @@ public extension MetalView {
     }
     
     override func mouseDown(with event: NSEvent) {
-
-        // track("Device ID = \(event.deviceID)")
-
-        if gotMouse {
-            parent.amiga.mouse.setLeftButton(true)
+        
+        if !gotMouse {
+            if prefs.retainMouseByClick && insideTrackingArea { retainMouse() }
             return
         }
         
-        // Check if we need to retain the mouse
-        if prefs.retainMouseByClick && insideTrackingArea {
-            retainMouse()
+        // track("Device ID = \(event.deviceID)")
+        
+        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
+            mouse.processMouseEvents(events: [PRESS_LEFT])
         }
     }
     
     override func mouseUp(with event: NSEvent) {
+        
+        if !gotMouse { return }
 
         // track("Device ID = \(event.deviceID)")
-
-        if gotMouse {
-            parent.amiga.mouse.setLeftButton(false)
+                
+        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
+            mouse.processMouseEvents(events: [RELEASE_LEFT])
         }
     }
     
     override func rightMouseDown(with event: NSEvent) {
 
-        // track("Device ID = \(event.deviceID)")
+        if !gotMouse { return }
 
-        if gotMouse {
-            parent.amiga.mouse.setRightButton(true)
+        // track("Device ID = \(event.deviceID)")
+        
+        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
+            mouse.processMouseEvents(events: [PRESS_RIGHT])
         }
     }
 
     override func rightMouseUp(with event: NSEvent) {
-
+        
+        if !gotMouse { return }
+        
         // track("Device ID = \(event.deviceID)")
-
-        if gotMouse {
-            parent.amiga.mouse.setRightButton(false)
+        
+        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
+            mouse.processMouseEvents(events: [RELEASE_RIGHT])
         }
     }
     

@@ -41,6 +41,7 @@ class GamePadManager {
         // Add default devices
         gamePads[0] = GamePad(0, manager: self)     // Mouse
         gamePads[0]!.keyMap = 0                     // Mouse keyset
+        gamePads[0]!.isMouse = true
 
         gamePads[1] = GamePad(1, manager: self)     // Joystick
         gamePads[1]!.keyMap = 1                     // Joystick keyset 1
@@ -172,6 +173,7 @@ class GamePadManager {
         }
     }
     
+    /*
     func isMouse(device: IOHIDDevice) -> Bool {
         
         let key = kIOHIDPrimaryUsageKey as CFString
@@ -182,6 +184,7 @@ class GamePadManager {
             return false
         }
     }
+    */
     
     func listProperties(device: IOHIDDevice) {
         
@@ -215,16 +218,6 @@ class GamePadManager {
         guard let slotNr = findFreeSlot() else {
             track("Maximum number of devices reached. Ignoring device")
             return
-        }
-
-        // Check if we have the permission to open this device
-        if isMouse(device: device) {
-            let options: NSDictionary = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true]
-            let accessEnabled = AXIsProcessTrustedWithOptions(options)
-            if !accessEnabled {
-                track("Access denied. Ignoring device")
-                return
-            }
         }
         
         // Create GamePad object
@@ -268,7 +261,7 @@ class GamePadManager {
     
         // Register input value callback
         let hidContext = unsafeBitCast(gamePads[slotNr], to: UnsafeMutableRawPointer.self)
-        if isMouse(device: device) {
+        if device.isMouse() {
             track("Registering as Mouse")
             IOHIDDeviceRegisterInputValueCallback(device,
                                                   gamePads[slotNr]!.mouseActionCallback,
@@ -320,10 +313,25 @@ class GamePadManager {
             
             print("Slot \(i) [\(dev.port)]: ", terminator: "")
             if let name = dev.name {
-                print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))")
+                print("\(name) (\(dev.vendorID), \(dev.productID), \(dev.locationID))", terminator: "")
             } else {
-                print("Placeholder device")
+                print("Placeholder device", terminator: "")
             }
+            print(dev.isMouse ? " (Mouse)" : "")
+        }
+    }
+}
+
+extension IOHIDDevice {
+    
+    func isMouse() -> Bool {
+        
+        let key = kIOHIDPrimaryUsageKey as CFString
+        
+        if let value = IOHIDDeviceGetProperty(self, key) as? Int {
+            return value == kHIDUsage_GD_Mouse
+        } else {
+            return false
         }
     }
 }

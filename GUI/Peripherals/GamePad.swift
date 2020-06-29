@@ -29,6 +29,9 @@ class GamePad {
     // Name of the managed device
     var name: String?
 
+    // Indicates if this device is a mouse or a joystick
+    var isMouse = false
+    
     // The Amiga port this device is connected to (0 = unconnected)
     var port = 0
     
@@ -95,7 +98,8 @@ class GamePad {
         self.vendorID = vendorID
         self.productID = productID
         self.locationID = locationID
-        
+        self.isMouse = device?.isMouse() ?? false
+
         // Check for known devices
         switch vendorID {
             
@@ -347,7 +351,8 @@ extension GamePad {
             oldEvents[usage] = events!
             
             // Trigger events
-            manager.parent.emulateEventsOnGamePort(slot: nr, events: events!)
+            // manager.parent.emulateEventsOnGamePort(slot: nr, events: events!)
+            processJoystickEvents(events: events!)
         }
     }
     
@@ -397,5 +402,34 @@ extension GamePad {
             // Trigger events
             // TODO
         }
+    }
+}
+
+//
+// Emulate events on the Amiga side
+//
+
+extension GamePad {
+    
+    @discardableResult
+    func processJoystickEvents(events: [GamePadAction]) -> Bool {
+        
+        let amiga = manager.parent.amiga!
+        
+        if port == 1 { for event in events { amiga.joystick1.trigger(event) } }
+        if port == 2 { for event in events { amiga.joystick2.trigger(event) } }
+        
+        return events != []
+    }
+    
+    @discardableResult
+    func processMouseEvents(events: [GamePadAction]) -> Bool {
+        
+        let amiga = manager.parent.amiga!
+        
+        if port == 1 { for event in events { amiga.mouse.trigger(event) } }
+        if port == 2 { for event in events { amiga.mouse.trigger(event) } }
+        
+        return events != []
     }
 }
