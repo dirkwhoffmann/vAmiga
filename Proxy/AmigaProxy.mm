@@ -848,8 +848,13 @@ struct ADFFileWrapper { ADFFile *adf; };
 }
 - (void) setXY:(NSPoint)pos
 {
-    wrapper->mouse->setXY((i64)pos.x, (i64)pos.y);
+    wrapper->mouse->setXY((double)pos.x, (double)pos.y);
 }
+- (void) setDeltaXY:(NSPoint)pos
+{
+    wrapper->mouse->setDeltaXY((double)pos.x, (double)pos.y);
+}
+/*
 - (void) setLeftButton:(BOOL)value
 {
     wrapper->mouse->setLeftButton(value);
@@ -858,6 +863,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 {
     wrapper->mouse->setRightButton(value);
 }
+*/
 - (void) trigger:(GamePadAction)event
 {
     wrapper->mouse->trigger(event);

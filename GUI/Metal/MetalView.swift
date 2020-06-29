@@ -24,12 +24,18 @@ public class MetalView: MTKView {
      */
     var trackingArea: NSTrackingArea?
     
-    // Indicates whether the mouse is currently within the tracking area.
+    // Indicates whether the mouse is currently within the tracking area
     var insideTrackingArea = false
     
-    // Shows whether the Amiga is currently in control of the mouse.
+    // Shows whether the Amiga is currently in control of the mouse
     var gotMouse = false
     
+    // Reference to the first mouse (internal, always connected)
+    var mouse1: GamePad?
+
+    // Reference to the second mouse (USB, usually unconnected)
+    var mouse2: GamePad?
+
     // Variables needed to detect a mouse detection
     var dxsign = CGFloat(1)
     var dxsum = CGFloat(0)

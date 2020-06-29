@@ -98,8 +98,7 @@ class GamePad {
         self.vendorID = vendorID
         self.productID = productID
         self.locationID = locationID
-        self.isMouse = device?.isMouse() ?? false
-
+        
         // Check for known devices
         switch vendorID {
             
@@ -141,6 +140,16 @@ class GamePad {
             
         default:
             break  // name = "Generic Gamepad"
+        }
+        
+        // Let the mouse event receiver know about this device
+        if device?.isMouse() == true {
+            self.isMouse = true
+            if nr == 0 {
+                manager.parent.metal.mouse1 = self // Internal mouse
+            } else {
+                manager.parent.metal.mouse2 = self // External mouse
+            }
         }
     }
     

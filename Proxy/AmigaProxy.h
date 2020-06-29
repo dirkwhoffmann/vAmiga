@@ -458,8 +458,9 @@ struct AmigaFileWrapper;
 - (void) dump;
 
 - (void) setXY:(NSPoint)pos;
-- (void) setLeftButton:(BOOL)value;
-- (void) setRightButton:(BOOL)value;
+- (void) setDeltaXY:(NSPoint)pos;
+// - (void) setLeftButton:(BOOL)value;
+// - (void) setRightButton:(BOOL)value;
 - (void) trigger:(GamePadAction)event;
 
 @end

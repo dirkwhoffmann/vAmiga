@@ -10,16 +10,19 @@
 extension MyController {
     
     //
-    // Keyboard events
+    // Keyboard
     //
     
     // Keyboard events are handled by the emulator window.
     // If they are handled here, some keys such as 'TAB' don't trigger an event.
     
     //
-    //  Game port events
+    //  Game ports
     //
     
+    var gamePad1: GamePad? { return gamePadManager.gamePads[config.gameDevice1] }
+    var gamePad2: GamePad? { return gamePadManager.gamePads[config.gameDevice2] }
+
     // Feeds game pad actions into the port associated with a certain game pad
     @discardableResult
     func emulateEventsOnGamePort(slot: Int, events: [GamePadAction]) -> Bool {

@@ -29,12 +29,12 @@ public:
 private:
     
     // The current mouse position
-    i64 mouseX;
-    i64 mouseY;
+    double mouseX;
+    double mouseY;
 
     // Recorded mouse position in getDeltaX() and getDeltaY()
-    i64 oldMouseX;
-    i64 oldMouseY;
+    double oldMouseX;
+    double oldMouseY;
 
     /* The target mouse position
      * In order to achieve a smooth mouse movement, a new mouse coordinate is
@@ -42,16 +42,16 @@ private:
      * are set. In execute(), mouseX and mouseY are shifted smoothly towards
      * the target positions.
      */
-    i64 targetX;
-    i64 targetY;
+    double targetX;
+    double targetY;
     
     // Dividers applied to raw coordinates in setXY()
-    int dividerX = 128;
-    int dividerY = 128;
+    const double dividerX = 128;
+    const double dividerY = 128;
     
     // Mouse movement in pixels per execution step
-    i64 shiftX = 31;
-    i64 shiftY = 31;
+    double shiftX = 31;
+    double shiftY = 31;
 
 
     //
@@ -115,8 +115,9 @@ public:
     u16 getXY();
     
     // Emulates a mouse movement
-    void setXY(i64 x, i64 y);
-    
+    void setXY(double x, double y);
+    void setDeltaXY(double dx, double dy);
+
     // Presses or releases a mouse button
     void setLeftButton(bool value);
     void setRightButton(bool value);

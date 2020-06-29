@@ -41,16 +41,16 @@ Mouse::_dump()
 {
     msg(" leftButton = %d\n", leftButton);
     msg("rightButton = %d\n", rightButton);
-    msg("     mouseX = %lld\n", mouseX);
-    msg("     mouseY = %lld\n", mouseY);
-    msg("  oldMouseX = %lld\n", oldMouseX);
-    msg("  oldMouseY = %lld\n", oldMouseY);
-    msg("    targetX = %d\n", targetX);
-    msg("    targetY = %d\n", targetY);
-    msg("   dividerX = %d\n", dividerX);
-    msg("   dividerY = %d\n", dividerY);
-    msg("     shiftX = %d\n", shiftX);
-    msg("     shiftY = %d\n", shiftY);
+    msg("     mouseX = %f\n", mouseX);
+    msg("     mouseY = %f\n", mouseY);
+    msg("  oldMouseX = %f\n", oldMouseX);
+    msg("  oldMouseY = %f\n", oldMouseY);
+    msg("    targetX = %f\n", targetX);
+    msg("    targetY = %f\n", targetY);
+    msg("   dividerX = %f\n", dividerX);
+    msg("   dividerY = %f\n", dividerY);
+    msg("     shiftX = %f\n", shiftX);
+    msg("     shiftY = %f\n", shiftY);
 }
 
 void
@@ -106,18 +106,21 @@ Mouse::getXY()
     execute();
     
     // Assemble the result
-    return HI_LO(mouseY & 0xFF, mouseX & 0xFF);
+    return HI_LO((u16)mouseY & 0xFF, (u16)mouseX & 0xFF);
 }
 
 void
-Mouse::setXY(i64 x, i64 y)
+Mouse::setXY(double x, double y)
 {
-    // debug("setXY(%lld,%lld)\n", x, y);
-    
     targetX = x / dividerX;
     targetY = y / dividerY;
+}
 
-    // debug("targetX = %lld targetY = %lld\n", targetX, targetY);
+void
+Mouse::setDeltaXY(double dx, double dy)
+{
+    targetX += dx / dividerX;
+    targetY += dy / dividerY;
 }
 
 void

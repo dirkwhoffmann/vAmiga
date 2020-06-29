@@ -88,10 +88,10 @@ public extension MetalView {
             return
         }
         
-        // track("Device ID = \(event.deviceID)")
-        
-        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
-            mouse.processMouseEvents(events: [PRESS_LEFT])
+        if mouse2 == nil || event.deviceID != 0 {
+            mouse1!.processMouseEvents(events: [PRESS_LEFT])
+        } else {
+            mouse2!.processMouseEvents(events: [PRESS_LEFT])
         }
     }
     
@@ -99,10 +99,10 @@ public extension MetalView {
         
         if !gotMouse { return }
 
-        // track("Device ID = \(event.deviceID)")
-                
-        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
-            mouse.processMouseEvents(events: [RELEASE_LEFT])
+        if mouse2 == nil || event.deviceID != 0 {
+            mouse1!.processMouseEvents(events: [RELEASE_LEFT])
+        } else {
+            mouse2!.processMouseEvents(events: [RELEASE_LEFT])
         }
     }
     
@@ -110,10 +110,10 @@ public extension MetalView {
 
         if !gotMouse { return }
 
-        // track("Device ID = \(event.deviceID)")
-        
-        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
-            mouse.processMouseEvents(events: [PRESS_RIGHT])
+        if mouse2 == nil || event.deviceID != 0 {
+            mouse1!.processMouseEvents(events: [PRESS_RIGHT])
+        } else {
+            mouse2!.processMouseEvents(events: [PRESS_RIGHT])
         }
     }
 
@@ -121,16 +121,14 @@ public extension MetalView {
         
         if !gotMouse { return }
         
-        // track("Device ID = \(event.deviceID)")
-        
-        if let mouse = parent.gamePadManager.gamePads[InputDevice.mouse] {
-            mouse.processMouseEvents(events: [RELEASE_RIGHT])
+        if mouse2 == nil || event.deviceID != 0 {
+            mouse1!.processMouseEvents(events: [RELEASE_RIGHT])
+        } else {
+            mouse2!.processMouseEvents(events: [RELEASE_RIGHT])
         }
     }
     
     override func mouseMoved(with event: NSEvent) {
-        
-        // track("Device ID = \(event.deviceID)")
         
         if gotMouse {
             

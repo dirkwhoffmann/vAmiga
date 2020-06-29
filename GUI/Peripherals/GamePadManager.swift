@@ -42,7 +42,8 @@ class GamePadManager {
         gamePads[0] = GamePad(0, manager: self)     // Mouse
         gamePads[0]!.keyMap = 0                     // Mouse keyset
         gamePads[0]!.isMouse = true
-
+        parent.metal.mouse1 = gamePads[0]!
+        
         gamePads[1] = GamePad(1, manager: self)     // Joystick
         gamePads[1]!.keyMap = 1                     // Joystick keyset 1
 
