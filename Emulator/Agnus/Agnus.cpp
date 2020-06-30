@@ -988,22 +988,22 @@ Agnus::syncWithEClock()
      */
 
     // Determine where we are in the current E clock cycle
-    Cycle eClk = AS_CPU_CYCLES(clock) % 10;
+    Cycle eClk = (clock >> 2) % 10;
     
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
     Cycle delay;
     switch (eClk) {
-        case 0: delay = CPU_CYCLES(2 + 10); break;
-        case 1: delay = CPU_CYCLES(1 + 10); break;
-        case 2: delay = CPU_CYCLES(0 + 10); break;
-        case 3: delay = CPU_CYCLES(9);      break;
-        case 4: delay = CPU_CYCLES(8);      break;
-        case 5: delay = CPU_CYCLES(7);      break;
-        case 6: delay = CPU_CYCLES(6);      break;
-        case 7: delay = CPU_CYCLES(5 + 10); break;
-        case 8: delay = CPU_CYCLES(4 + 10); break;
-        case 9: delay = CPU_CYCLES(3 + 10); break;
+        case 0: delay = 4 * (2 + 10); break;
+        case 1: delay = 4 * (1 + 10); break;
+        case 2: delay = 4 * (0 + 10); break;
+        case 3: delay = 4 * 9;        break;
+        case 4: delay = 4 * 8;        break;
+        case 5: delay = 4 * 7;        break;
+        case 6: delay = 4 * 6;        break;
+        case 7: delay = 4 * (5 + 10); break;
+        case 8: delay = 4 * (4 + 10); break;
+        case 9: delay = 4 * (3 + 10); break;
         default: assert(false);
     }
     
@@ -1024,7 +1024,7 @@ Agnus::inSyncWithEClock()
     if (!ciaa.getEClockSyncing()) return true;
         
     // Determine where we are in the current E clock cycle
-    Cycle eClk = AS_CPU_CYCLES(clock) % 10;
+    Cycle eClk = (clock >> 2) % 10;
     
     // Unsure if this condition is accurate
     return eClk >= 2 || eClk <= 6;

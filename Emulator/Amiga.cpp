@@ -1198,25 +1198,21 @@ Amiga::runLoop()
 void
 Amiga::dumpClock()
 {
-    msg("               Master cycles     CPU cycles    DMA cycles    CIA cycles\n");
-    msg("    CPU clock: %13lld  %13lld %13lld %13lld\n",
+    msg("               Master cycles     DMA cycles    CIA cycles\n");
+    msg("    CPU clock: %13lld %13lld %13lld\n",
              cpu.getMasterClock(),
-             AS_CPU_CYCLES(cpu.getMasterClock()),
              AS_DMA_CYCLES(cpu.getMasterClock()),
              AS_CIA_CYCLES(cpu.getMasterClock()));
     msg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
              agnus.clock,
-             AS_CPU_CYCLES(agnus.clock),
              AS_DMA_CYCLES(agnus.clock),
              AS_CIA_CYCLES(agnus.clock));
     msg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
              ciaA.clock,
-             AS_CPU_CYCLES(ciaA.clock),
              AS_DMA_CYCLES(ciaA.clock),
              AS_CIA_CYCLES(ciaA.clock));
     msg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
              ciaB.clock,
-             AS_CPU_CYCLES(ciaB.clock),
              AS_DMA_CYCLES(ciaB.clock),
              AS_CIA_CYCLES(ciaB.clock));
     msg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
