@@ -105,21 +105,7 @@ void
 Moira::execIllegal(u16 opcode)
 {
     signalIllegalOpcodeException(opcode);
-    
-    u16 status = getSR();
-
-    // Enter supervisor mode
-    setSupervisorMode(true);
-
-    // Disable tracing
-    clearTraceFlag();
-    flags &= ~CPU_TRACE_EXCEPTION;
-
-    // Write exception information to stack
-    sync(4);
-    saveToStackBrief(status, reg.pc - 2);
-    
-    jumpToVector<AE_SET_CB3>(4);
+    execUnimplemented(4);
 }
 
 void
