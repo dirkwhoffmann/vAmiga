@@ -992,27 +992,26 @@ Agnus::syncWithEClock()
     
     // We want to sync to position (2).
     // If we are already too close, we seek (2) in the next E clock cycle.
-    CPUCycle delay;
+    Cycle delay;
     switch (eClk) {
-        case 0: delay = 2 + 10; break;
-        case 1: delay = 1 + 10; break;
-        case 2: delay = 0 + 10; break;
-        case 3: delay = 9;      break;
-        case 4: delay = 8;      break;
-        case 5: delay = 7;      break;
-        case 6: delay = 6;      break;
-        case 7: delay = 5 + 10; break;
-        case 8: delay = 4 + 10; break;
-        case 9: delay = 3 + 10; break;
+        case 0: delay = CPU_CYCLES(2 + 10); break;
+        case 1: delay = CPU_CYCLES(1 + 10); break;
+        case 2: delay = CPU_CYCLES(0 + 10); break;
+        case 3: delay = CPU_CYCLES(9);      break;
+        case 4: delay = CPU_CYCLES(8);      break;
+        case 5: delay = CPU_CYCLES(7);      break;
+        case 6: delay = CPU_CYCLES(6);      break;
+        case 7: delay = CPU_CYCLES(5 + 10); break;
+        case 8: delay = CPU_CYCLES(4 + 10); break;
+        case 9: delay = CPU_CYCLES(3 + 10); break;
         default: assert(false);
     }
-    Cycle target = clock + CPU_CYCLES(delay);
     
     // Doublecheck that we are going to sync to a DMA cycle
-    assert(DMA_CYCLES(AS_DMA_CYCLES(target)) == target);
+    assert(DMA_CYCLES(AS_DMA_CYCLES(clock + delay)) == clock + delay);
     
     // Execute Agnus until the target cycle has been reached
-    executeUntil(target);
+    executeUntil(clock + delay);
 
     // Add wait states to the CPU
     cpu.addWaitStates(delay);
@@ -1056,7 +1055,7 @@ Agnus::executeUntilBusIsFree()
         bls = false;
 
         // Add wait states to the CPU
-        cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
+        cpu.addWaitStates(DMA_CYCLES(delay));
     }
 
     // Assign bus to the CPU
@@ -1090,7 +1089,7 @@ Agnus::executeUntilBusIsFreeForCIA()
         bls = false;
 
         // Add wait states to the CPU
-        cpu.addWaitStates(AS_CPU_CYCLES(DMA_CYCLES(delay)));
+        cpu.addWaitStates(DMA_CYCLES(delay));
     }
 
     // Assign bus to the CPU

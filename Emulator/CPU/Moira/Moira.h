@@ -251,8 +251,8 @@ protected:
 
 public:
 
-    virtual i64 getClock() { return clock; }
-    virtual void setClock(i64 val) { clock = val; }
+    i64 getClock() { return clock; }
+    void setClock(i64 val) { clock = val; }
 
 protected:
 

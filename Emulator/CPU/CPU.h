@@ -135,11 +135,11 @@ public:
     // Returns the clock in CPU cycles
     CPUCycle getCpuClock() { return getClock(); }
 
-    // Returns the CPU clock measured in master cycles
+    // Returns the clock in master cycles
     Cycle getMasterClock() { return CPU_CYCLES(getClock()); }
 
-    // Delays the CPU by a certain number of cycles
-    void addWaitStates(i64 cycles) { clock += cycles; }
+    // Delays the CPU by a certain amout of master cycles
+    void addWaitStates(Cycle cycles) { clock += AS_CPU_CYCLES(cycles); }
 
 
     //
