@@ -127,7 +127,7 @@ class KBController: NSObject {
             if prefs.disconnectJoyKeys { return }
         }
 
-        keyboard.pressKey(macKey.amigaKeyCode)
+        if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
     }
     
     func keyUp(with macKey: MacKey) {
@@ -140,19 +140,19 @@ class KBController: NSObject {
             if prefs.disconnectJoyKeys { return }
         }
 
-        keyboard.releaseKey(macKey.amigaKeyCode)
+        if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
     }
     
     func keyDown(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        keyboard.pressKey(macKey.amigaKeyCode)
+        if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
     }
     
     func keyUp(with keyCode: UInt16) {
         
         let macKey = MacKey.init(keyCode: keyCode)
-        keyboard.releaseKey(macKey.amigaKeyCode)
+        if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }
     }
     
     func autoType(_ string: String) {

@@ -41,13 +41,13 @@
 
 // Uncomment to override a configuration setting
 
-// #define FORCE_AGNUS_REVISION AGNUS_8367
-// #define FORCE_BLT_LEVEL      0
-// #define FORCE_CHIP_RAM       512
-// #define FORCE_SLOW_RAM       512
-// #define FORCE_FAST_RAM       0
-// #define FORCE_RTC            RTC_NONE
-// #define FORCE_DRIVE_SPEED    -1
+#define FORCE_AGNUS_REVISION AGNUS_8367
+#define FORCE_BLT_LEVEL      0
+#define FORCE_CHIP_RAM       512
+#define FORCE_SLOW_RAM       512
+#define FORCE_FAST_RAM       0
+#define FORCE_RTC            RTC_NONE
+#define FORCE_DRIVE_SPEED    -1
 // #define FORCE_ASYNC_FIFO     true
 
 
@@ -63,7 +63,7 @@
 
 // Uncomment to lauch the emulator with a disk in df0
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Dragonlance88.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Jetsons1.adf"
+#define BOOT_DISK "/Users/hoff/Desktop/Testing/Jetsons1.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Jetsons1.adf"
 
@@ -99,7 +99,7 @@ static const int COPREG_DEBUG    = 0; // Copper registers
 static const int COP_DEBUG       = 0; // Copper execution
 
 // Blitter
-static const int BLT_CHECKSUM    = 0; // Compute Blitter checksums
+static const int BLT_CHECKSUM    = 1; // Compute Blitter checksums
 static const int BLTREG_DEBUG    = 0; // Blitter registers
 static const int BLT_GUARD       = 0; // Guard registers while Blitter runs
 static const int BLT_DEBUG       = 0; // Blitter execution
@@ -129,8 +129,8 @@ static const int CIAB_DEBUG      = 0; // CIA B execution
 static const int TOD_DEBUG       = 0; // TODs (CIA 24-bit counters)
 
 // Drive
-static const int ALIGN_HEAD      = 0; // Make head movement deterministic
-static const int DSK_CHECKSUM    = 0; // Compute disk checksums
+static const int ALIGN_HEAD      = 1; // Make head movement deterministic
+static const int DSK_CHECKSUM    = 1; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
@@ -152,6 +152,6 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock
-static const int KBD_DEBUG       = 0; // Keyboard
+static const int KBD_DEBUG       = 1; // Keyboard
 
 #endif

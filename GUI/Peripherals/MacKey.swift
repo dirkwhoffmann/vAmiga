@@ -222,14 +222,14 @@ struct MacKey: Codable {
     }
     
     // Returns the Amiga key code for this key
-    var amigaKeyCode: Int {
+    var amigaKeyCode: Int? {
 
         // Catch key 0x32 manually, because it has a different physical
         // position on an ANSI Mac keyboard.
         if keyCode == 0x32, KBGetLayoutType(Int16(LMGetKbdType())) == kKeyboardANSI {
             return AmigaKeycode.Ansi.grave
         }
-        return isomac2amiga[keyCode]!
+        return isomac2amiga[keyCode]
     }
     
     // Returns a string representation for this key
