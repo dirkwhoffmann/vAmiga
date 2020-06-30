@@ -48,8 +48,8 @@ extension ConfigController {
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
         hwDf1Connect.isEnabled = poweredOff
-        hwDf2Connect.isEnabled = poweredOff
-        hwDf3Connect.isEnabled = poweredOff
+        hwDf2Connect.isEnabled = poweredOff && hwDf1Connect.state == .on
+        hwDf3Connect.isEnabled = poweredOff && hwDf2Connect.state == .on
         hwDf0Type.isEnabled = poweredOff
         hwDf1Type.isEnabled = poweredOff && config.df1Connected
         hwDf2Type.isEnabled = poweredOff && config.df2Connected
@@ -118,6 +118,11 @@ extension ConfigController {
         case 3: config.df3Connected = sender.state == .on
         default: fatalError()
         }
+        
+        // Disconnect df(n+1) if dfn is disconnected
+        if !config.df1Connected { config.df2Connected = false }
+        if !config.df2Connected { config.df3Connected = false }
+
         refresh()
     }
     
