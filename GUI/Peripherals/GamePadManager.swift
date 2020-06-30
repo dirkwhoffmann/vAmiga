@@ -342,7 +342,7 @@ class GamePadManager {
         }
     }
     
-    func refresh(popup: NSPopUpButton) {
+    func refresh(popup: NSPopUpButton, hide: Bool = false) {
         
         let slots = [
             InputDevice.mouse,
@@ -357,7 +357,7 @@ class GamePadManager {
                 item.title = getName(slot: s)
                 item.image = getIcon(slot: s)
                 item.isEnabled = isUsed(slot: s)
-                item.isHidden = isEmpty(slot: s)
+                item.isHidden = isEmpty(slot: s) && hide
             }
         }
     }

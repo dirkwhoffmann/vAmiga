@@ -34,8 +34,8 @@ extension ConfigController {
         hwDf3Type.selectItem(withTag: config.df3Type)
 
         // Ports
-        parent.gamePadManager.refresh(popup: hwGameDevice1)
-        parent.gamePadManager.refresh(popup: hwGameDevice2)
+        parent.gamePadManager.refresh(popup: hwGameDevice1, hide: true)
+        parent.gamePadManager.refresh(popup: hwGameDevice2, hide: true)
         hwGameDevice1.selectItem(withTag: config.gameDevice1)
         hwGameDevice2.selectItem(withTag: config.gameDevice2)
         hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
