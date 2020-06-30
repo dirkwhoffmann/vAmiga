@@ -9,42 +9,23 @@
 
 import IOKit.hid
 
-/* An object that represents a single input device connected to the Game Port.
+/* An object that represents an input device connected to the Game Port.
  * The object can either represent a connected HID device or a keyboard emulated
  * device. In the first case, the object serves as a callback handler for HID
  * events. In the latter case, it translates keyboard events to GamePadAction
- * events by using a key map.
+ * events by utilizing a key map.
  */
 class GamePad {
 
     // Reference to the game pad manager
     var manager: GamePadManager
-
-    // Quick references
     var prefs: Preferences { return manager.parent.prefs }
-
-    // Reference to the device object
-    var device: IOHIDDevice?
-    
-    // Name of the managed device
-    var name: String?
-
-    // Type of the managed device (joystick or mouse)
-    var type: ControlPortDevice
-    var isMouse: Bool { return type == CPD_MOUSE }
-    var isJoystick: Bool { return type == CPD_JOYSTICK }
 
     // The Amiga port this device is connected to (0 = unconnected)
     var port = 0
-    
-    // Position of this game pad in the manager's game pad list
-    // var nr = 0
-    
-    // Keymap of the managed device (set for keyboard emulated devices only)
-    var keyMap: Int?
-    
-    // Indicates if a joystick emulation key is currently pressed
-    var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
+
+    // Reference to the device object
+    var device: IOHIDDevice?
     
     // Vendor ID of the managed device (used for HID devices only)
     var vendorID: Int
@@ -55,6 +36,23 @@ class GamePad {
     // Location ID of the managed device (used for HID devices only)
     var locationID: Int
 
+    // Type of the managed device (joystick or mouse)
+    var type: ControlPortDevice
+    var isMouse: Bool { return type == CPD_MOUSE }
+    var isJoystick: Bool { return type == CPD_JOYSTICK }
+
+    // Name of the managed device
+    var name: String?
+
+    // Icon of this device
+    var icon: NSImage?
+            
+    // Keymap of the managed device (set for keyboard emulated devices only)
+    var keyMap: Int?
+    
+    // Indicates if a joystick emulation key is currently pressed
+    var keyUp = false, keyDown = false, keyLeft = false, keyRight = false
+    
     // Minimum and maximum value of analog axis event
     var min: Int?, max: Int?
     
@@ -70,18 +68,17 @@ class GamePad {
     var oldEvents: [Int: [GamePadAction]] = [:]
     
     // Receivers for HID events
-    let joystickActionCallback: IOHIDValueCallback = {
+    let inputValueCallback: IOHIDValueCallback = {
         inContext, inResult, inSender, value in
         let this: GamePad = unsafeBitCast(inContext, to: GamePad.self)
-        this.hidJoystickDeviceAction(context: inContext,
-                                     result: inResult,
-                                     sender: inSender,
-                                     value: value)
+        this.hidInputValueAction(context: inContext,
+                                 result: inResult,
+                                 sender: inSender,
+                                 value: value)
     }
     
     init(manager: GamePadManager,
-         device: IOHIDDevice? = nil,
-         type: ControlPortDevice,
+         device: IOHIDDevice? = nil, type: ControlPortDevice,
          vendorID: Int = 0, productID: Int = 0, locationID: Int = 0) {
         
         // track("\(nr): \(vendorID) \(productID) \(locationID)")
@@ -93,29 +90,36 @@ class GamePad {
         self.productID = productID
         self.locationID = locationID
         
+        let joystick = "devJoystickTemplate"
+        let mouse = "devMouseTemplate"
+        
         // Check for known devices
         switch vendorID {
             
         case 0x40B where productID == 0x6533:
             name = "Competition Pro SL-6602"
+            icon = NSImage.init(named: joystick)
 
-        case 0x46D where productID == 0xC062:
-            name = "Logitech Laser Mouse"
-            
+        case 0x46D where type == CPD_MOUSE:
+            name = "Logitech Mouse"
+            icon = NSImage.init(named: mouse)
+
         case 0x738 where productID == 0x2217:
             name = "Competition Pro SL-650212"
+            icon = NSImage.init(named: joystick)
 
         case 0x1C59 where productID == 0x24:
             name = "The C64 Joystick"
-            
+            icon = NSImage.init(named: joystick)
+
         case 0x79 where productID == 0x11:
             name = "iNNEXT Retro (SNES)"
-            
+
         case 0x54C where productID == 0x268:
             name = "Sony DualShock 3"
             rThumbXUsageID = kHIDUsage_GD_Z
             rThumbYUsageID = kHIDUsage_GD_Rz
-            
+
         case 0x54C where productID == 0x5C4:
             name = "Sony DualShock 4"
             rThumbXUsageID = kHIDUsage_GD_Z
@@ -131,7 +135,7 @@ class GamePad {
             
         case 0x004 where productID == 0x0001:
             name = "aJoy Retro Adapter"
-            
+
         default:
             break  // name = "Generic Gamepad"
         }
@@ -147,6 +151,11 @@ class GamePad {
         } else {
             track("WARNING: Cannot close HID device")
         }
+    }
+    
+    func setIcon(name: String) {
+        
+        icon = NSImage.init(named: name)
     }
 }
 
@@ -280,10 +289,10 @@ extension GamePad {
         return 2
     }
     
-    func hidJoystickDeviceAction(context: UnsafeMutableRawPointer?,
-                                 result: IOReturn,
-                                 sender: UnsafeMutableRawPointer?,
-                                 value: IOHIDValue) {
+    func hidInputValueAction(context: UnsafeMutableRawPointer?,
+                             result: IOReturn,
+                             sender: UnsafeMutableRawPointer?,
+                             value: IOHIDValue) {
         
         let element   = IOHIDValueGetElement(value)
         let intValue  = Int(IOHIDValueGetIntegerValue(value))

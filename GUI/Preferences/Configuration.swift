@@ -99,8 +99,8 @@ class Configuration {
             gamePadManager.listDevices()
 
             // Read back the real connection status
-            let device1 = gamePadManager.slotConnectedTo(port: 1)
-            let device2 = gamePadManager.slotConnectedTo(port: 2)
+            let device1 = gamePadManager.getSlot(port: 1)
+            let device2 = gamePadManager.getSlot(port: 2)
             if gameDevice1 != device1 { gameDevice1 = device1 }
             if gameDevice2 != device2 { gameDevice2 = device2 }
 
@@ -115,8 +115,8 @@ class Configuration {
             gamePadManager.listDevices()
 
             // Read back the real connection status
-            let device1 = gamePadManager.slotConnectedTo(port: 1)
-            let device2 = gamePadManager.slotConnectedTo(port: 2)
+            let device1 = gamePadManager.getSlot(port: 1)
+            let device2 = gamePadManager.getSlot(port: 2)
             if gameDevice1 != device1 { gameDevice1 = device1 }
             if gameDevice2 != device2 { gameDevice2 = device2 }
 

@@ -53,36 +53,10 @@ class MyToolbar: NSToolbar {
         resetButton.label = ""
         resetButton.label = "Reset"
 
-        validateJoystickToolbarItems()
-    }
-    
-    func validateJoystickToolbarItem(_ popup: NSPopUpButton, selectedSlot: Int, port: ControlPortProxy!) {
-        
-        let gpm = parent.gamePadManager!
-        let menu =  popup.menu
-        
-        let item3 = menu?.item(withTag: InputDevice.joystick1)
-        let item4 = menu?.item(withTag: InputDevice.joystick2)
-        
-        // USB joysticks
-        item3?.title = gpm.gamePads[3]?.name ?? "USB Device 1"
-        item4?.title = gpm.gamePads[4]?.name ?? "USB Device 2"
-        item3?.isEnabled = !gpm.slotIsEmpty(InputDevice.joystick1)
-        item4?.isEnabled = !gpm.slotIsEmpty(InputDevice.joystick2)
-        
-        // Mark game pad connected to port
-        popup.selectItem(withTag: selectedSlot)
-    }
-    
-    func validateJoystickToolbarItems() {
-
-        let amiga = parent.amiga!
-        let device1 = parent.config.gameDevice1
-        let device2 = parent.config.gameDevice2
-        let port1 = amiga.controlPort1
-        let port2 = amiga.controlPort2
-            
-        validateJoystickToolbarItem(controlPort1, selectedSlot: device1, port: port1)
-        validateJoystickToolbarItem(controlPort2, selectedSlot: device2, port: port2)
+        // Update input device selectors
+        parent.gamePadManager.refresh(popup: controlPort1)
+        parent.gamePadManager.refresh(popup: controlPort2)
+        controlPort1.selectItem(withTag: parent.config.gameDevice1)
+        controlPort2.selectItem(withTag: parent.config.gameDevice2)
     }
 }

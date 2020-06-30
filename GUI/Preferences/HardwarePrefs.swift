@@ -34,6 +34,8 @@ extension ConfigController {
         hwDf3Type.selectItem(withTag: config.df3Type)
 
         // Ports
+        parent.gamePadManager.refresh(popup: hwGameDevice1)
+        parent.gamePadManager.refresh(popup: hwGameDevice2)
         hwGameDevice1.selectItem(withTag: config.gameDevice1)
         hwGameDevice2.selectItem(withTag: config.gameDevice2)
         hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
@@ -62,7 +64,7 @@ extension ConfigController {
         // Boot button
         hwBootButton.isHidden = !bootable
     }
-
+    
     @IBAction func hwAgnusRevAction(_ sender: NSPopUpButton!) {
 
         config.agnusRev = sender.selectedTag()

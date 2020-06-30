@@ -40,12 +40,18 @@ class GamePadManager {
 
         // Add default devices
         gamePads[0] = GamePad(manager: self, type: CPD_MOUSE)
+        gamePads[0]!.name = "Mouse"
+        gamePads[0]!.setIcon(name: "devMouseTemplate")
         gamePads[0]!.keyMap = 0
         
         gamePads[1] = GamePad(manager: self, type: CPD_JOYSTICK)
+        gamePads[1]!.name = "Joystick Keyset 1"
+        gamePads[1]!.setIcon(name: "devKeys1Template")
         gamePads[1]!.keyMap = 1
 
         gamePads[2] = GamePad(manager: self, type: CPD_JOYSTICK)
+        gamePads[2]!.name = "Joystick Keyset 2"
+        gamePads[2]!.setIcon(name: "devKeys2Template")
         gamePads[2]!.keyMap = 2
 
         // Tell the mouse event receiver where the mouse resides
@@ -71,7 +77,7 @@ class GamePadManager {
             ]
         ]
                 
-        // Declare bridging closures (needed to bridge between Swift methods and C callbacks)
+        // Declare bridging closures (bridge between Swift methods and C callbacks)
         let matchingCallback: IOHIDDeviceCallback = { inContext, inResult, inSender, device in
             let this: GamePadManager = unsafeBitCast(inContext, to: GamePadManager.self)
             this.hidDeviceAdded(context: inContext, result: inResult, sender: inSender, device: device)
@@ -114,17 +120,15 @@ class GamePadManager {
     // Managing slots
     //
     
-    // Returns true iff the specified game pad slot is free
-    public func slotIsEmpty(_ nr: Int) -> Bool {
-        
-        return gamePads[nr] == nil
-    }
+    // Returns true iff the specified game pad slot is used or free
+    func isUsed(slot: Int) -> Bool { return gamePads[slot] != nil }
+    func isEmpty(slot: Int) -> Bool { return gamePads[slot] == nil }
     
     // Returns the lowest free slot number or nil if all slots are occupied
     func findFreeSlot() -> Int? {
         
         var nr = 0
-        while !slotIsEmpty(nr) { nr += 1 }
+        while !isEmpty(slot: nr) { nr += 1 }
         
         // We support up to 5 devices
         return (nr < 5) ? nr : nil
@@ -145,8 +149,28 @@ class GamePadManager {
         if port == 2 { parent.amiga.controlPort2.connect(deviceType) }
         parent.amiga.resume()
     }
-    
-    func slotConnectedTo(port: Int) -> Int {
+
+    func getName(slot: Int) -> String {
+        
+        if let name = gamePads[slot]?.name {
+            return name
+        } else {
+            return "USB device"
+        }
+    }
+
+    func getIcon(slot: Int) -> NSImage {
+        
+        if let icon = gamePads[slot]?.icon {
+            return icon
+        } else if gamePads[slot]?.isMouse == true {
+            return NSImage.init(named: "devMouseTemplate")!
+        } else {
+            return NSImage.init(named: "devGamepad1Template")!
+        }
+    }
+
+    func getSlot(port: Int) -> Int {
         
         var result = InputDevice.none
         
@@ -254,7 +278,7 @@ class GamePadManager {
         // Register input value callback
         let hidContext = unsafeBitCast(gamePads[slot], to: UnsafeMutableRawPointer.self)
         IOHIDDeviceRegisterInputValueCallback(device,
-                                              gamePads[slot]!.joystickActionCallback,
+                                              gamePads[slot]!.inputValueCallback,
                                               hidContext)
     }
     
@@ -315,6 +339,26 @@ class GamePadManager {
                 print("Placeholder device", terminator: "")
             }
             print(dev.isMouse ? " (Mouse)" : "")
+        }
+    }
+    
+    func refresh(popup: NSPopUpButton) {
+        
+        let slots = [
+            InputDevice.mouse,
+            InputDevice.keyset1,
+            InputDevice.keyset2,
+            InputDevice.joystick1,
+            InputDevice.joystick2
+        ]
+                
+        for s in slots {
+            if let item = popup.menu?.item(withTag: s) {
+                item.title = getName(slot: s)
+                item.image = getIcon(slot: s)
+                item.isEnabled = isUsed(slot: s)
+                item.isHidden = isEmpty(slot: s)
+            }
         }
     }
 }
