@@ -51,10 +51,7 @@ public:
 
     // Audio DMA request to Agnus for one word of data
     bool audDR;
-    
-    // Audio DMA request to Agnus to reset pointer to start of block
-    bool audDSR;
-    
+        
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
@@ -110,7 +107,6 @@ public:
         & auddat
         & audlcLatch
         & audDR
-        & audDSR
         & intreq2
         & samples
         & enablePenlo
@@ -184,7 +180,7 @@ public:
     void AUDxDR() { audDR = true; }
 
     // Tells Agnus to reset the DMA pointer to the block start
-    void AUDxDSR() { audDSR = true; }
+    void AUDxDSR()  { agnus.reloadAUDxPT<nr>(); }
 
     // Reloads the period counter from its backup latch
     void percntrld();
@@ -223,10 +219,7 @@ public:
     void penlo();
 
     // Transfers DMA requests to Agnus (done in the first refresh cycle)
-    void requestDMA() {
-        if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; }
-        if (audDSR) { agnus.setAudxDSR<nr>(); audDSR = 0; }
-    }
+    void requestDMA() { if (audDR) { agnus.setAudxDR<nr>(); audDR = 0; } }
     
     
     //
