@@ -222,10 +222,10 @@ extension NSImage {
         
         img.lockFocus()
         let ctx = NSGraphicsContext.current
-        ctx?.imageInterpolation = interpolation // NSImageInterpolation.none // .high
+        ctx?.imageInterpolation = interpolation
         self.draw(in: cutout,
                   from: NSRect.init(x: 0, y: 0, width: size.width, height: size.height),
-                  operation: .copy,
+                  operation: .sourceOver,
                   fraction: 1)
         img.unlockFocus()
         
@@ -246,7 +246,7 @@ extension NSImage {
                            cutout: cutout,
                            interpolation: .none)
     }
-    
+        
     func roundCorners(withRadius radius: CGFloat) -> NSImage {
         
         let rect = NSRect.init(origin: NSPoint.zero, size: size)

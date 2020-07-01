@@ -55,7 +55,6 @@ class SnapshotDialog: DialogController {
     
     func updateLabels() {
         
-        track("current = \(currentItem) last = \(lastItem)")
         moveUp.isEnabled = currentItem >= 0 && currentItem < lastItem
         moveDown.isEnabled = currentItem > 0
         nr.stringValue = "\(currentItem + 1) / \(numItems)"
@@ -199,8 +198,6 @@ class SnapshotDialog: DialogController {
     
     @IBAction func moveUpAction(_ sender: NSButton!) {
                 
-        track("current = \(currentItem) last = \(lastItem)")
-        
         if currentItem < lastItem {
             carousel.scrollToItem(at: currentItem + 1, animated: true)
         }
@@ -208,8 +205,6 @@ class SnapshotDialog: DialogController {
 
     @IBAction func moveDownAction(_ sender: NSButton!) {
                 
-        track("current = \(currentItem)")
-
         if currentItem > 0 {
             carousel.scrollToItem(at: currentItem - 1, animated: true)
         }
