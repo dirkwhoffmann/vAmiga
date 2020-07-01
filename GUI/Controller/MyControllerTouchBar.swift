@@ -46,7 +46,7 @@ extension MyController: NSTouchBarDelegate {
                         
         case NSTouchBarItem.Identifier.save:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttSaveTemplate"))!
+            let icon = NSImage(named: NSImage.Name("pushTemplate"))!
             item.customizationLabel = "Save"
             item.view = NSButton(image: icon,
                                  target: self,
@@ -55,7 +55,7 @@ extension MyController: NSTouchBarDelegate {
         
         case NSTouchBarItem.Identifier.load:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttLoadTemplate"))!
+            let icon = NSImage(named: NSImage.Name("popTemplate"))!
             item.customizationLabel = "Load"
             item.view = NSButton(image: icon,
                                  target: self,
@@ -64,7 +64,7 @@ extension MyController: NSTouchBarDelegate {
             
         case NSTouchBarItem.Identifier.restore:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttRestoreTemplate"))!
+            let icon = NSImage(named: NSImage.Name("timeMachineTemplate"))!
             item.customizationLabel = "Restore"
             item.view = NSButton(image: icon,
                                  target: self,
@@ -73,7 +73,7 @@ extension MyController: NSTouchBarDelegate {
 
         case NSTouchBarItem.Identifier.click:
             let item = NSCustomTouchBarItem(identifier: identifier)
-            let icon = NSImage(named: NSImage.Name("ttClickTemplate"))!
+            let icon = NSImage(named: NSImage.Name("clickTemplate"))!
             item.customizationLabel = "Click"
             item.view = NSButton(image: icon,
                                  target: self,
