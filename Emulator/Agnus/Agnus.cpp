@@ -1411,7 +1411,7 @@ template void Agnus::executeSecondSpriteCycle<5>();
 template void Agnus::executeSecondSpriteCycle<6>();
 template void Agnus::executeSecondSpriteCycle<7>();
 
-template void Agnus::pokeDIWSTRT<ACC_CPU>(u16 value);
-template void Agnus::pokeDIWSTRT<ACC_AGNUS>(u16 value);
-template void Agnus::pokeDIWSTOP<ACC_CPU>(u16 value);
-template void Agnus::pokeDIWSTOP<ACC_AGNUS>(u16 value);
+template void Agnus::pokeDIWSTRT<CPU_ACCESS>(u16 value);
+template void Agnus::pokeDIWSTRT<AGNUS_ACCESS>(u16 value);
+template void Agnus::pokeDIWSTOP<CPU_ACCESS>(u16 value);
+template void Agnus::pokeDIWSTOP<AGNUS_ACCESS>(u16 value);

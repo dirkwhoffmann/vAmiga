@@ -51,11 +51,9 @@ public:
 
     // Audio DMA request to Agnus for one word of data
     bool audDR;
-    // bool audDRLatch;
     
     // Audio DMA request to Agnus to reset pointer to start of block
     bool audDSR;
-    // bool audDSRLatch;
     
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;

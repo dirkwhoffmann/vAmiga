@@ -75,12 +75,12 @@ Copper::pokeCOPJMP1()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
-    if (s == ACC_AGNUS) {
+    if (s == AGNUS_ACCESS) {
 
         assert(false);
 
     }
-    if (s == ACC_CPU) {
+    if (s == CPU_ACCESS) {
 
         if (blitter.isRunning()) {
             debug(XFILES, "pokeCOPJMP1: Blitter is running\n");
@@ -94,12 +94,12 @@ Copper::pokeCOPJMP2()
 {
     debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
-    if (s == ACC_AGNUS) {
+    if (s == AGNUS_ACCESS) {
 
         assert(false);
 
     }
-    if (s == ACC_CPU) {
+    if (s == CPU_ACCESS) {
 
         if (blitter.isRunning()) {
             debug(XFILES, "pokeCOPJMP2: Blitter is running\n");
@@ -1031,7 +1031,7 @@ Copper::dumpCopperList(unsigned list, unsigned length)
     }
 }
 
-template void Copper::pokeCOPJMP1<ACC_CPU>();
-template void Copper::pokeCOPJMP1<ACC_AGNUS>();
-template void Copper::pokeCOPJMP2<ACC_CPU>();
-template void Copper::pokeCOPJMP2<ACC_AGNUS>();
+template void Copper::pokeCOPJMP1<CPU_ACCESS>();
+template void Copper::pokeCOPJMP1<AGNUS_ACCESS>();
+template void Copper::pokeCOPJMP2<CPU_ACCESS>();
+template void Copper::pokeCOPJMP2<AGNUS_ACCESS>();

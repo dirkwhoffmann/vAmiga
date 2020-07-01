@@ -557,15 +557,15 @@ Agnus::peek(u32 addr)
         
         if (slowRamIsMirroredIn()) {
             debug(XFILES, "Reading from Slow RAM mirror\n");
-            return mem.peek16 <ACC_AGNUS, MEM_SLOW> (addr);
+            return mem.peek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
         }
         if (addr >= mem.chipRamSize()) {
             debug(XFILES, "Reading from unmapped Chip Ram\n");
-            return mem.peek16 <ACC_AGNUS, MEM_NONE_SLOW> (addr);
+            return mem.peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (addr);
         }
     }
         
-    return mem.peek16 <ACC_AGNUS, MEM_CHIP> (addr);
+    return mem.peek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
 }
 
 u16
@@ -595,7 +595,7 @@ Agnus::poke(u32 addr, u16 value)
         
         if (slowRamIsMirroredIn()) {
             debug(XFILES, "Writing to Slow RAM mirror\n");
-            mem.poke16 <ACC_AGNUS, MEM_SLOW> (addr, value);
+            mem.poke16 <AGNUS_ACCESS, MEM_SLOW> (addr, value);
             return;
         }
         if (addr >= mem.chipRamSize()) {
@@ -604,7 +604,7 @@ Agnus::poke(u32 addr, u16 value)
         }
     }
     
-    mem.poke16 <ACC_AGNUS, MEM_CHIP> (addr, value);
+    mem.poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value);
 }
 
 template <BusOwner owner> bool
@@ -772,7 +772,7 @@ Agnus::doDiskDMA(u16 value)
 void
 Agnus::doCopperDMA(u32 addr, u16 value)
 {
-    mem.pokeCustom16<ACC_AGNUS>(addr, value);
+    mem.pokeCustom16<AGNUS_ACCESS>(addr, value);
     
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;

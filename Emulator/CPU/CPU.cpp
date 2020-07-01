@@ -22,13 +22,13 @@ CPU::sync(int cycles)
 u8
 CPU::read8(u32 addr)
 {
-    return mem.peek8 <ACC_CPU> (addr);
+    return mem.peek8 <CPU_ACCESS> (addr);
 }
 
 u16
 CPU::read16(u32 addr)
 {
-     return mem.peek16 <ACC_CPU> (addr);
+     return mem.peek16 <CPU_ACCESS> (addr);
 }
 
 u16
@@ -46,13 +46,13 @@ CPU::read16OnReset(u32 addr)
 void
 CPU::write8(u32 addr, u8 val)
 {
-    mem.poke8 <ACC_CPU> (addr, val);
+    mem.poke8 <CPU_ACCESS> (addr, val);
 }
 
 void
 CPU::write16 (u32 addr, u16 val)
 {
-    mem.poke16 <ACC_CPU> (addr, val);
+    mem.poke16 <CPU_ACCESS> (addr, val);
 }
 
 void

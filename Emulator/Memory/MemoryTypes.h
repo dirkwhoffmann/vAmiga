@@ -87,18 +87,18 @@ static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM
  */
 typedef enum
 {
-    ACC_CPU,
-    ACC_AGNUS
+    CPU_ACCESS,
+    AGNUS_ACCESS
 }
 Accessor;
 
-static inline bool isAccessor(long value) { return value >= 0 && value <= ACC_AGNUS; }
+static inline bool isAccessor(long value) { return value >= 0 && value <= AGNUS_ACCESS; }
 
 inline const char *AccessorName(Accessor accessor)
 {
     return
-    accessor == ACC_CPU ? "CPU" :
-    accessor == ACC_AGNUS ? "Agnus" : "???";
+    accessor == CPU_ACCESS ? "CPU" :
+    accessor == AGNUS_ACCESS ? "Agnus" : "???";
 }
 
 typedef struct
