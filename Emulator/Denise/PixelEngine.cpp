@@ -244,20 +244,16 @@ PixelEngine::isShortFrame(ScreenBuffer *buf)
 ScreenBuffer
 PixelEngine::getStableLongFrame()
 {
-    pthread_mutex_lock(&lock);
-    ScreenBuffer result = *stableLongFrame;
-    pthread_mutex_unlock(&lock);
-
+    ScreenBuffer result;
+    synchronized { result = *stableLongFrame; }
     return result;
 }
 
 ScreenBuffer
 PixelEngine::getStableShortFrame()
 {
-    pthread_mutex_lock(&lock);
-    ScreenBuffer result = *stableShortFrame;
-    pthread_mutex_unlock(&lock);
-
+    ScreenBuffer result;
+    synchronized { result = *stableShortFrame; }
     return result;
 }
 
@@ -281,39 +277,30 @@ PixelEngine::pixelAddr(int pixel)
 
 void
 PixelEngine::beginOfFrame(bool interlace)
-{
-    assert(workingLongFrame == &longFrame[0] || workingLongFrame == &longFrame[1]);
-    assert(workingShortFrame == &shortFrame[0] || workingShortFrame == &shortFrame[1]);
-    assert(stableLongFrame == &longFrame[0] || stableLongFrame == &longFrame[1]);
-    assert(stableShortFrame == &shortFrame[0] || stableShortFrame == &shortFrame[1]);
-    assert(workingLongFrame != stableLongFrame);
-    assert(workingShortFrame != stableShortFrame);
-    assert(frameBuffer == workingLongFrame || frameBuffer == workingShortFrame);
-
-    pthread_mutex_lock(&lock);
-
-    if (isLongFrame(frameBuffer)) {
-
-        // Declare the finished buffer stable
-        swap(workingLongFrame, stableLongFrame);
-
-        // Select the next buffer to work on
-        frameBuffer = interlace ? workingShortFrame : workingLongFrame;
-
-    } else {
-
-        assert(isShortFrame(frameBuffer));
-
-        // Declare the finished buffer stable
-        swap(workingShortFrame, stableShortFrame);
-
-        // Select the next buffer to work on
-        frameBuffer = workingLongFrame;
+{     
+    synchronized {
+        
+        if (isLongFrame(frameBuffer)) {
+            
+            // Declare the finished buffer stable
+            swap(workingLongFrame, stableLongFrame);
+            
+            // Select the next buffer to work on
+            frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+            
+        } else {
+            
+            assert(isShortFrame(frameBuffer));
+            
+            // Declare the finished buffer stable
+            swap(workingShortFrame, stableShortFrame);
+            
+            // Select the next buffer to work on
+            frameBuffer = workingLongFrame;
+        }
+        
+        frameBuffer->interlace = interlace;
     }
-
-    frameBuffer->interlace = interlace;
-    
-    pthread_mutex_unlock(&lock);
     
     dmaDebugger.vSyncHandler();
 }

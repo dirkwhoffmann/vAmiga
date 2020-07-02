@@ -60,46 +60,44 @@ CIA::_reset(bool hard)
 void
 CIA::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-
-    updatePA();
-    info.portA.port = PA;
-    info.portA.reg = PRA;
-    info.portA.dir = DDRA;
-
-    updatePB();
-    info.portB.port = PB;
-    info.portB.reg = PRB;
-    info.portB.dir = DDRB;
-    
-    info.timerA.count = LO_HI(spypeek(0x04), spypeek(0x05));
-    info.timerA.latch = latchA;
-    info.timerA.running = (delay & CIACountA3);
-    info.timerA.toggle = CRA & 0x04;
-    info.timerA.pbout = CRA & 0x02;
-    info.timerA.oneShot = CRA & 0x08;
-    
-    info.timerB.count = LO_HI(spypeek(0x06), spypeek(0x07));
-    info.timerB.latch = latchB;
-    info.timerB.running = (delay & CIACountB3);
-    info.timerB.toggle = CRB & 0x04;
-    info.timerB.pbout = CRB & 0x02;
-    info.timerB.oneShot = CRB & 0x08;
-    
-    info.sdr = sdr;
-    info.ssr = ssr;
-    info.icr = icr;
-    info.imr = imr;
-    info.intLine = INT;
-    
-    info.cnt = tod.info;
-    info.cntIntEnable = imr & 0x04;
-    
-    info.idleCycles = idle();
-    info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
-    
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        updatePA();
+        info.portA.port = PA;
+        info.portA.reg = PRA;
+        info.portA.dir = DDRA;
+        
+        updatePB();
+        info.portB.port = PB;
+        info.portB.reg = PRB;
+        info.portB.dir = DDRB;
+        
+        info.timerA.count = LO_HI(spypeek(0x04), spypeek(0x05));
+        info.timerA.latch = latchA;
+        info.timerA.running = (delay & CIACountA3);
+        info.timerA.toggle = CRA & 0x04;
+        info.timerA.pbout = CRA & 0x02;
+        info.timerA.oneShot = CRA & 0x08;
+        
+        info.timerB.count = LO_HI(spypeek(0x06), spypeek(0x07));
+        info.timerB.latch = latchB;
+        info.timerB.running = (delay & CIACountB3);
+        info.timerB.toggle = CRB & 0x04;
+        info.timerB.pbout = CRB & 0x02;
+        info.timerB.oneShot = CRB & 0x08;
+        
+        info.sdr = sdr;
+        info.ssr = ssr;
+        info.icr = icr;
+        info.imr = imr;
+        info.intLine = INT;
+        
+        info.cnt = tod.info;
+        info.cntIntEnable = imr & 0x04;
+        
+        info.idleCycles = idle();
+        info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
+    }
 }
 
 void

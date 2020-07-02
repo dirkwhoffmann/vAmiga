@@ -200,7 +200,7 @@ void
 CPU::_reset(bool hard)
 {
     debug(CPU_DEBUG, "CPU::_reset(%d)\n", hard);
-
+    
     if (hard) {
         
         RESET_SNAPSHOT_ITEMS
@@ -210,7 +210,7 @@ CPU::_reset(bool hard)
         
         // Remove all previously recorded instructions
         debugger.clearLog();
-
+        
     } else {
         
         /* A soft reset doesn't affect the CPU inside a real Amiga.
@@ -224,45 +224,44 @@ CPU::_reset(bool hard)
 void
 CPU::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-
-    u32 pc0 = getPC0();
-
-    // Registers
-    info.pc0 = pc0 & 0xFFFFFF;
-    
-    for (int i = 0; i < 8; i++) {
-        info.d[i] = getD(i);
-        info.a[i] = getA(i);
+    synchronized {
+        
+        u32 pc0 = getPC0();
+        
+        // Registers
+        info.pc0 = pc0 & 0xFFFFFF;
+        
+        for (int i = 0; i < 8; i++) {
+            info.d[i] = getD(i);
+            info.a[i] = getA(i);
+        }
+        info.usp = getUSP();
+        info.ssp = getSSP();
+        info.sr = getSR();
+        
+        // Disassemble the program starting at the program counter
+        for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
+            
+            int bytes = disassemble(pc0, info.instr[i].instr);
+            disassemblePC(pc0, info.instr[i].addr);
+            disassembleMemory(pc0, bytes / 2, info.instr[i].data);
+            info.instr[i].sr[0] = 0;
+            info.instr[i].bytes = bytes;
+            pc0 += bytes;
+        }
+        
+        // Disassemble the most recent entries in the trace buffer
+        long count = debugger.loggedInstructions();
+        for (int i = 0; i < count; i++) {
+            
+            moira::Registers r = debugger.logEntryAbs(i);
+            disassemble(r.pc, info.loggedInstr[i].instr);
+            disassemblePC(r.pc, info.loggedInstr[i].addr);
+            disassembleSR(r.sr, info.loggedInstr[i].sr);
+        }
     }
-    info.usp = getUSP();
-    info.ssp = getSSP();
-    info.sr = getSR();
-
-    // Disassemble the program starting at the program counter
-    for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
-
-        int bytes = disassemble(pc0, info.instr[i].instr);
-        disassemblePC(pc0, info.instr[i].addr);
-        disassembleMemory(pc0, bytes / 2, info.instr[i].data);
-        info.instr[i].sr[0] = 0;
-        info.instr[i].bytes = bytes;
-        pc0 += bytes;
-    }
-
-    // Disassemble the most recent entries in the trace buffer
-    long count = debugger.loggedInstructions();
-    for (int i = 0; i < count; i++) {
-
-        moira::Registers r = debugger.logEntryAbs(i);
-        disassemble(r.pc, info.loggedInstr[i].instr);
-        disassemblePC(r.pc, info.loggedInstr[i].addr);
-        disassembleSR(r.sr, info.loggedInstr[i].sr);
-    }
-
-    pthread_mutex_unlock(&lock);
 }
+
 void
 CPU::_dumpConfig()
 {
@@ -296,11 +295,7 @@ CPU::getInstrInfo(long index)
     assert(index < CPUINFO_INSTR_COUNT);
     
     DisassembledInstr result;
-    
-    pthread_mutex_lock(&lock);
-    result = info.instr[index];
-    pthread_mutex_unlock(&lock);
-    
+    synchronized { result = info.instr[index]; }
     return result;
 }
 
@@ -310,11 +305,7 @@ CPU::getLoggedInstrInfo(long index)
     assert(index < CPUINFO_INSTR_COUNT);
     
     DisassembledInstr result;
-    
-    pthread_mutex_lock(&lock);
-    result = info.loggedInstr[index];
-    pthread_mutex_unlock(&lock);
-    
+    synchronized { result = info.loggedInstr[index]; }
     return result;
 }
 

@@ -76,35 +76,32 @@ Denise::_reset(bool hard)
 void
 Denise::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-    
-    // Bitplane information
-    info.bplcon0 = bplcon0;
-    info.bplcon1 = bplcon1;
-    info.bplcon2 = bplcon2;
-    info.bpu = bpu();
-
-    info.diwstrt = agnus.diwstrt;
-    info.diwstop = agnus.diwstop;
-    info.diwHstrt = agnus.diwHstrt;
-    info.diwHstop = agnus.diwHstop;
-    info.diwVstrt = agnus.diwVstrt;
-    info.diwVstop = agnus.diwVstop;
-
-    info.joydat[0] = amiga.controlPort1.joydat();
-    info.joydat[1] = amiga.controlPort2.joydat();
-    info.clxdat = 0;
-
-    for (unsigned i = 0; i < 6; i++) {
-        info.bpldat[i] = bpldat[i];
+    synchronized {
+        
+        info.bplcon0 = bplcon0;
+        info.bplcon1 = bplcon1;
+        info.bplcon2 = bplcon2;
+        info.bpu = bpu();
+        
+        info.diwstrt = agnus.diwstrt;
+        info.diwstop = agnus.diwstop;
+        info.diwHstrt = agnus.diwHstrt;
+        info.diwHstop = agnus.diwHstop;
+        info.diwVstrt = agnus.diwVstrt;
+        info.diwVstop = agnus.diwVstop;
+        
+        info.joydat[0] = amiga.controlPort1.joydat();
+        info.joydat[1] = amiga.controlPort2.joydat();
+        info.clxdat = 0;
+        
+        for (unsigned i = 0; i < 6; i++) {
+            info.bpldat[i] = bpldat[i];
+        }
+        for (unsigned i = 0; i < 32; i++) {
+            info.colorReg[i] = pixelEngine.getColor(i);
+            info.color[i] = pixelEngine.getRGBA(i);
+        }
     }
-    for (unsigned i = 0; i < 32; i++) {
-        info.colorReg[i] = pixelEngine.getColor(i);
-        info.color[i] = pixelEngine.getRGBA(i);
-    }
-    
-    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -127,11 +124,7 @@ SpriteInfo
 Denise::getSpriteInfo(int nr)
 {
     SpriteInfo result;
-    
-    pthread_mutex_lock(&lock);
-    result = latchedSpriteInfo[nr];
-    pthread_mutex_unlock(&lock);
-    
+    synchronized { result = latchedSpriteInfo[nr]; }
     return result;
 }
 

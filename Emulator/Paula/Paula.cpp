@@ -32,13 +32,12 @@ Paula::_reset(bool hard)
 void
 Paula::_inspect()
 {
-    pthread_mutex_lock(&lock);
-    
-    info.intreq = intreq;
-    info.intena = intena;
-    info.adkcon = adkcon;
-    
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.intreq = intreq;
+        info.intena = intena;
+        info.adkcon = adkcon;
+    }
 }
 
 void

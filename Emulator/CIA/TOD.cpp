@@ -24,14 +24,12 @@ TOD::_powerOn()
 void
 TOD::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-    
-    info.value = tod;
-    info.latch = latch;
-    info.alarm = alarm;
-    
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.value = tod;
+        info.latch = latch;
+        info.alarm = alarm;
+    }
 }
 
 void 

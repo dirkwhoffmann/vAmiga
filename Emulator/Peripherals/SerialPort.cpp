@@ -34,18 +34,17 @@ SerialPort::_reset(bool hard)
 void
 SerialPort::_inspect()
 {
-    pthread_mutex_lock(&lock);
-
-    info.port = port; 
-    info.txd = getTXD();
-    info.rxd = getRXD();
-    info.rts = getRTS();
-    info.cts = getCTS();
-    info.dsr = getDSR();
-    info.cd = getCD();
-    info.dtr = getDTR();
-
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.port = port;
+        info.txd = getTXD();
+        info.rxd = getRXD();
+        info.rts = getRTS();
+        info.cts = getCTS();
+        info.dsr = getDSR();
+        info.cd = getCD();
+        info.dtr = getDTR();
+    }
 }
 
 void

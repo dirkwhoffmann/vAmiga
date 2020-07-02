@@ -46,20 +46,20 @@ DiskController::_ping()
 void
 DiskController::_inspect()
 {
-    pthread_mutex_lock(&lock);
-
-    info.selectedDrive = selected;
-    info.state = state;
-    info.fifoCount = fifoCount;
-    info.dsklen = dsklen;
-    info.dskbytr =  computeDSKBYTR();
-    info.dsksync = dsksync;
-    info.prb = prb;
- 
-    for (unsigned i = 0; i < 6; i++) {
-        info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
+    synchronized {
+        
+        info.selectedDrive = selected;
+        info.state = state;
+        info.fifoCount = fifoCount;
+        info.dsklen = dsklen;
+        info.dskbytr =  computeDSKBYTR();
+        info.dsksync = dsksync;
+        info.prb = prb;
+        
+        for (unsigned i = 0; i < 6; i++) {
+            info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
+        }
     }
-    pthread_mutex_unlock(&lock);
 }
 
 void
@@ -129,9 +129,7 @@ DiskController::setConnected(int df, bool value)
     if (df == 0 && value == false) { return; }
     
     // Plug the drive in our out and inform the GUI
-    pthread_mutex_lock(&lock);
-    config.connected[df] = value;
-    pthread_mutex_unlock(&lock);
+    synchronized { config.connected[df] = value; }
 
     amiga.putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     amiga.putMessage(MSG_CONFIG);
@@ -153,25 +151,19 @@ DiskController::setSpeed(i32 value)
 void
 DiskController::setAsyncFifo(bool value)
 {
-    pthread_mutex_lock(&lock);
-    config.asyncFifo = value;
-    pthread_mutex_unlock(&lock);
+    synchronized { config.asyncFifo = value; }
 }
 
 void
 DiskController::setLockDskSync(bool value)
 {
-    pthread_mutex_lock(&lock);
-    config.lockDskSync = value;
-    pthread_mutex_unlock(&lock);
+    synchronized { config.lockDskSync = value; }
 }
 
 void
 DiskController::setAutoDskSync(bool value)
 {
-    pthread_mutex_lock(&lock);
-    config.autoDskSync = value;
-    pthread_mutex_unlock(&lock);
+    synchronized { config.autoDskSync = value; }
 }
 
 Drive *

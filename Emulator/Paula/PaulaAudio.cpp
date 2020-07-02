@@ -120,15 +120,13 @@ PaulaAudio::_powerOn()
 void
 PaulaAudio::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-
-    info.channel[0] = channel0.getInfo();
-    info.channel[1] = channel1.getInfo();
-    info.channel[2] = channel2.getInfo();
-    info.channel[3] = channel3.getInfo();
-
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.channel[0] = channel0.getInfo();
+        info.channel[1] = channel1.getInfo();
+        info.channel[2] = channel2.getInfo();
+        info.channel[3] = channel3.getInfo();
+    }
 }
 
 void

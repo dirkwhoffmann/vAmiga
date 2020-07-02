@@ -12,22 +12,20 @@
 void
 Agnus::inspectEvents()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-    
-    eventInfo.cpuClock = cpu.getMasterClock();
-    eventInfo.cpuCycles = cpu.getCpuClock();
-    eventInfo.dmaClock = clock;
-    eventInfo.ciaAClock = ciaa.clock;
-    eventInfo.ciaBClock  = ciab.clock;
-    eventInfo.frame = frame.nr;
-    eventInfo.vpos = pos.v;
-    eventInfo.hpos = pos.h;
-
-    // Inspect all slots
-    for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
-    
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        eventInfo.cpuClock = cpu.getMasterClock();
+        eventInfo.cpuCycles = cpu.getCpuClock();
+        eventInfo.dmaClock = clock;
+        eventInfo.ciaAClock = ciaa.clock;
+        eventInfo.ciaBClock  = ciab.clock;
+        eventInfo.frame = frame.nr;
+        eventInfo.vpos = pos.v;
+        eventInfo.hpos = pos.h;
+        
+        // Inspect all slots
+        for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
+    }
 }
 
 void
@@ -400,11 +398,7 @@ EventInfo
 Agnus::getEventInfo()
 {
     EventInfo result;
-    
-    pthread_mutex_lock(&lock);
-    result = eventInfo;
-    pthread_mutex_unlock(&lock);
-    
+    synchronized { result = eventInfo; }
     return result;
 }
 
@@ -414,11 +408,7 @@ Agnus::getEventSlotInfo(int nr)
     assert(isEventSlot(nr));
 
     EventSlotInfo result;
-
-    pthread_mutex_lock(&lock);
-    result = eventInfo.slotInfo[nr];
-    pthread_mutex_unlock(&lock);
-
+    synchronized { result = eventInfo.slotInfo[nr]; }
     return result;
 }
 

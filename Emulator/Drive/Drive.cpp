@@ -44,13 +44,12 @@ Drive::_ping()
 void
 Drive::_inspect()
 {
-    pthread_mutex_lock(&lock);
-
-    info.head = head;
-    info.hasDisk = hasDisk();
-    info.motor = getMotor();
-
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.head = head;
+        info.hasDisk = hasDisk();
+        info.motor = getMotor();
+    }
 }
 
 void

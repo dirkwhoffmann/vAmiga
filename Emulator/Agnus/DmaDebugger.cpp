@@ -33,23 +33,22 @@ DMADebuggerInfo
 DmaDebugger::getInfo()
 {
     DMADebuggerInfo result;
-
-    pthread_mutex_lock(&lock);
-
-    result.enabled = enabled;
-    result.opacity = opacity;
-    result.displayMode = displayMode;
-
-    for (u8 i = 0; i < BUS_OWNER_COUNT; i++) {
-
-        RgbColor color = getColor((BusOwner)i);
-        result.visualize[i] = visualize[i];
-        result.colorRGB[i][0] = color.r;
-        result.colorRGB[i][1] = color.g;
-        result.colorRGB[i][2] = color.b;
+    
+    synchronized {
+        
+        result.enabled = enabled;
+        result.opacity = opacity;
+        result.displayMode = displayMode;
+        
+        for (u8 i = 0; i < BUS_OWNER_COUNT; i++) {
+            
+            RgbColor color = getColor((BusOwner)i);
+            result.visualize[i] = visualize[i];
+            result.colorRGB[i][0] = color.r;
+            result.colorRGB[i][1] = color.g;
+            result.colorRGB[i][2] = color.b;
+        }
     }
-
-    pthread_mutex_unlock(&lock);
 
     return result;
 }

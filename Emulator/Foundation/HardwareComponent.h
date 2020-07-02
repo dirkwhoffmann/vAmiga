@@ -37,8 +37,9 @@ protected:
     /* Access lock for shared variables
      * This lock is used to control the read and write operations for all
      * variables that are accessed by both the emulator thread and the GUI.
+     * DEPRECATED
      */
-    pthread_mutex_t lock;
+    // pthread_mutex_t lock;
 
     /* State model
      * The virtual hardware components can be in three different states
@@ -195,14 +196,10 @@ public:
      */
     template<class T> T getInfo(T &cachedValues) {
         
-        T result;
-        
         if (!isRunning()) _inspect();
-        
-        pthread_mutex_lock(&lock);
-        result = cachedValues;
-        pthread_mutex_unlock(&lock);
-        
+
+        T result;
+        synchronized { result = cachedValues; }
         return result;
     }
     

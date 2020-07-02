@@ -692,18 +692,16 @@ Amiga::_ping()
 void
 Amiga::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-    
-    info.cpuClock = cpu.getMasterClock();
-    info.dmaClock = agnus.clock;
-    info.ciaAClock = ciaA.clock;
-    info.ciaBClock = ciaB.clock;
-    info.frame = agnus.frame.nr;
-    info.vpos = agnus.pos.v;
-    info.hpos = agnus.pos.h;
-    
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.cpuClock = cpu.getMasterClock();
+        info.dmaClock = agnus.clock;
+        info.ciaAClock = ciaA.clock;
+        info.ciaBClock = ciaB.clock;
+        info.frame = agnus.frame.nr;
+        info.vpos = agnus.pos.v;
+        info.hpos = agnus.pos.h;
+    }
 }
 
 void
@@ -934,17 +932,13 @@ Amiga::isReady(ErrorCode *error)
 void
 Amiga::setControlFlags(u32 flags)
 {
-    pthread_mutex_lock(&lock);
-    runLoopCtrl |= flags;
-    pthread_mutex_unlock(&lock);
+    synchronized { runLoopCtrl |= flags; }
 }
 
 void
 Amiga::clearControlFlags(u32 flags)
 {
-    pthread_mutex_lock(&lock);
-    runLoopCtrl &= ~flags;
-    pthread_mutex_unlock(&lock);
+    synchronized { runLoopCtrl &= ~flags; }
 }
 
 void

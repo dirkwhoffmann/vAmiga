@@ -24,14 +24,13 @@ UART::_reset(bool hard)
 void
 UART::_inspect()
 {
-    pthread_mutex_lock(&lock);
-
-    info.receiveBuffer = receiveBuffer;
-    info.receiveShiftReg = receiveShiftReg;
-    info.transmitBuffer = transmitBuffer;
-    info.transmitShiftReg = transmitShiftReg;
-
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.receiveBuffer = receiveBuffer;
+        info.receiveShiftReg = receiveShiftReg;
+        info.transmitBuffer = transmitBuffer;
+        info.transmitShiftReg = transmitShiftReg;
+    }
 }
 
 void

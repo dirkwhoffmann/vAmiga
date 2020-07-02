@@ -14,11 +14,16 @@
 
 #include <vector>
 #include <map>
+#include <mutex>
 
 using std::vector;
 using std::map;
 using std::pair;
 using std::swap;
+
+#define synchronized \
+    for(std::unique_lock<std::recursive_mutex> _l(mutex); _l; _l.unlock())
+
 
 /* Base class for all vAmiga objects.
  * This class contains a textual description of the object and offers various
@@ -33,6 +38,15 @@ private:
      * If set to NULL, no prefix is printed.
      */
     const char *description = NULL;
+    
+protected:
+    
+    /* Mutex for implementing the 'synchronized' macro.
+     * The macro can be used to prevent multiple threads to enter the
+     * same code block. It mimics the behaviour of the well known and very
+     * handy Java construct 'synchronized(this) { }'.
+     */
+    std::recursive_mutex mutex;
     
     
     //

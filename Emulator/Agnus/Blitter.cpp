@@ -62,43 +62,40 @@ Blitter::_reset(bool hard)
 void
 Blitter::_inspect()
 {
-    // Prevent external access to variable 'info'
-    pthread_mutex_lock(&lock);
-    
-    // info.active  = agnus.isPending<BLT_SLOT>();
-    info.bltcon0 = bltcon0;
-    info.bltcon1 = bltcon1;
-    info.ash = bltconASH();
-    info.bsh = bltconBSH();
-    info.minterm = bltconLF();
-    info.bltapt  = bltapt;
-    info.bltbpt  = bltbpt;
-    info.bltcpt  = bltcpt;
-    info.bltdpt  = bltdpt;
-    info.bltafwm = bltafwm;
-    info.bltalwm = bltalwm;
-    info.bltamod = bltamod;
-    info.bltbmod = bltbmod;
-    info.bltcmod = bltcmod;
-    info.bltdmod = bltdmod;
-    info.aold = aold;
-    info.bold = bold;
-    info.anew = anew;
-    info.bnew = bnew;
-    info.ahold = ahold;
-    info.bhold = bhold;
-    info.chold = chold;
-    info.dhold = dhold;
-    info.bbusy = bbusy;
-    info.bzero = bzero;
-    info.firstIteration = isFirstIteration();
-    info.lastIteration = isLastIteration();
-    info.fci = bltconFCI();
-    info.fco = fillCarry;
-    info.fillEnable = bltconFE();
-    info.storeToDest = bltconUSED() && !lockD;
-
-    pthread_mutex_unlock(&lock);
+    synchronized {
+        
+        info.bltcon0 = bltcon0;
+        info.bltcon1 = bltcon1;
+        info.ash = bltconASH();
+        info.bsh = bltconBSH();
+        info.minterm = bltconLF();
+        info.bltapt  = bltapt;
+        info.bltbpt  = bltbpt;
+        info.bltcpt  = bltcpt;
+        info.bltdpt  = bltdpt;
+        info.bltafwm = bltafwm;
+        info.bltalwm = bltalwm;
+        info.bltamod = bltamod;
+        info.bltbmod = bltbmod;
+        info.bltcmod = bltcmod;
+        info.bltdmod = bltdmod;
+        info.aold = aold;
+        info.bold = bold;
+        info.anew = anew;
+        info.bnew = bnew;
+        info.ahold = ahold;
+        info.bhold = bhold;
+        info.chold = chold;
+        info.dhold = dhold;
+        info.bbusy = bbusy;
+        info.bzero = bzero;
+        info.firstIteration = isFirstIteration();
+        info.lastIteration = isLastIteration();
+        info.fci = bltconFCI();
+        info.fco = fillCarry;
+        info.fillEnable = bltconFE();
+        info.storeToDest = bltconUSED() && !lockD;
+    }
 }
 
 void

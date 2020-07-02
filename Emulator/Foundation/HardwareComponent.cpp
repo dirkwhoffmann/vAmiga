@@ -11,12 +11,10 @@
 
 HardwareComponent::HardwareComponent()
 {
-    pthread_mutex_init(&lock, NULL);
 }
 
 HardwareComponent::~HardwareComponent()
 {
-    pthread_mutex_destroy(&lock);
     debug(RUN_DEBUG, "Terminated\n");
 }
 
