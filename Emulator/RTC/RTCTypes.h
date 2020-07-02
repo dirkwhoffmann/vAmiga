@@ -19,13 +19,14 @@
 typedef enum : long
 {
     RTC_NONE,
-    RTC_M6242B
+    RTC_OKI,
+    RTC_RICOH
 }
 RTCModel;
 
 inline bool isRTCModel(long value)
 {
-    return value >= RTC_NONE && value <= RTC_M6242B;
+    return value >= RTC_NONE && value <= RTC_RICOH;
 }
 
 inline const char *RTCModelName(RTCModel model)
@@ -34,7 +35,8 @@ inline const char *RTCModelName(RTCModel model)
 
     switch (model) {
         case RTC_NONE:   return "RTC_NONE";
-        case RTC_M6242B: return "RTC_M6242B";
+        case RTC_OKI:    return "RTC_OKI";
+        case RTC_RICOH:  return "RTC_RICOH";
         default:         return "???";
     }
 }

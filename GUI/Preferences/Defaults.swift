@@ -578,7 +578,7 @@ struct HardwareDefaults {
         
         agnusRevision: AGNUS_8372,
         deniseRevision: DENISE_8362R8,
-        realTimeClock: RTC_NONE,
+        realTimeClock: RTC_OKI,
         
         chipRam: 512,
         slowRam: 512,
@@ -614,7 +614,7 @@ struct HardwareDefaults {
         
         agnusRevision: AGNUS_8375,
         deniseRevision: DENISE_8362R8,
-        realTimeClock: RTC_M6242B,
+        realTimeClock: RTC_OKI,
         
         chipRam: 512,
         slowRam: 512,

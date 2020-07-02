@@ -831,7 +831,8 @@ DQ
                                                 <menu key="menu" id="uIa-JY-1iE">
                                                     <items>
                                                         <menuItem title="None" state="on" id="aJJ-Yq-h7E"/>
-                                                        <menuItem title="OKI (6242B)" tag="1" id="eMB-9L-d48"/>
+                                                        <menuItem title="Oki (MSM6242B)" tag="1" id="eMB-9L-d48"/>
+                                                        <menuItem title="Ricoh (RF5C01A)" tag="2" id="r2Q-33-9vh"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

@@ -33,10 +33,19 @@ void
 RTC::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
-
-    reg[13] = 0b001; // Control register D
-    reg[14] = 0b000; // Control register E
-    reg[15] = 0b100; // Control register F
+    
+    if (config.model == RTC_RICOH) {
+        
+        reg[0][0xD] = 0b1000;
+        reg[0][0xE] = 0b0000;
+        reg[0][0xF] = 0b0000;
+    }
+    if (config.model == RTC_OKI) {
+        
+        reg[0][0xD] = 0b0001;
+        reg[0][0xE] = 0b0000;
+        reg[0][0xF] = 0b0100;
+    }
 }
 
 void
@@ -93,11 +102,23 @@ u8
 RTC::peek(unsigned nr)
 {
     assert(nr < 16);
-
-    time2registers();
-    u8 result = reg[nr];
-
-    debug(RTC_DEBUG, "peek(%d) = $%X\n", result);
+    assert(config.model != RTC_NONE);
+    
+    u8 result;
+    
+    switch (nr) {
+            
+        case 0xD: result = peekD(); break;
+        case 0xE: result = peekE(); break;
+        case 0xF: result = peekF(); break;
+            
+        default: // Time or date register
+            
+            time2registers();
+            result = reg[bank()][nr];
+    }
+    
+    debug(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", result, bank());
     return result;
 }
 
@@ -105,20 +126,19 @@ void
 RTC::poke(unsigned nr, u8 value)
 {
     assert(nr < 16);
-    debug(RTC_DEBUG, "poke(%d, $%02X)\n", nr, value);
+    assert(config.model != RTC_NONE);
+    
+    debug(RTC_DEBUG, "poke(%d, $%02X) [bank %d]\n", nr, value, bank());
     
     switch (nr) {
-        
-        case 13: // Control register D
-        case 14: // Control register E
-        case 15: // Control register F
-        
-            reg[nr] = value & 0xF;
-            return;
-        
+            
+        case 0xD: pokeD(value); break;
+        case 0xE: pokeE(value); break;
+        case 0xF: pokeF(value); break;
+            
         default: // Time or date register
-        
-            reg[nr] = value & 0xF;
+            
+            reg[bank()][nr] = value & 0xF;
             registers2time();
     }
 }
@@ -132,61 +152,108 @@ RTC::time2registers()
     // Convert the time_t value to a tm struct
     tm *t = localtime(&rtcTime);
     
-    /* Write the registers
-     *
-     * 0000 (S1)   : S8   S4   S2   S1    (1-second digit register)
-     * 0001 (S10)  : **** S40  S20  S10   (10-second digit register)
-     * 0010 (MI1)  : mi8  mi4  mi2  mi1   (1-minute digit register)
-     * 0011 (MI10) : **** mi40 mi20 mi10  (10-minute digit register)
-     * 0100 (H1)   : h8   h4   h2   h1    (1-hour digit register)
-     * 0101 (H10)  : **** PMAM h20  h10   (PM/AM, 10-hour digit register)
-     * 0110 (D1)   : d8   d4   d2   d1    (1-day digit register)
-     * 0111 (D10)  : **** **** d20  d10   (10-day digit register)
-     * 1000 (MO1)  : mo8  mo4  mo2  mo1   (1-month digit register)
-     * 1001 (MO10) : **** **** **** MO10  (10-month digit register)
-     * 1010 (Y1)   : y8   y4   y2   y1    (1-year digit register)
-     * 1011 (Y10)  : y80  y40  y20  y10   (10-year digit register)
-     * 1100 (W)    : **** w4   w2   w1    (Week register)
-     */
-    reg[0] = t->tm_sec % 10;
-    reg[1] = t->tm_sec / 10;
-    reg[2] = t->tm_min % 10;
-    reg[3] = t->tm_min / 10;
-    reg[4] = t->tm_hour % 10;
-    reg[5] = t->tm_hour / 10;
-    reg[6] = t->tm_mday % 10;
-    reg[7] = t->tm_mday / 10;
-    reg[8] = (t->tm_mon + 1) % 10;
-    reg[9] = (t->tm_mon + 1) / 10;
-    reg[10] = t->tm_year % 10;
-    reg[11] = t->tm_year / 10;
-    reg[12] = t->tm_yday / 7;
+    // Write the registers
+    config.model == RTC_RICOH ? time2registersRicoh(t) : time2registersOki(t);
+}
 
-    // Change the hour format if the 24/12 flag is cleared (AM/PM format)
-    if (GET_BIT(reg[15], 2) == 0) {
-        if (t->tm_hour > 12) {
-            reg[4] = (t->tm_hour - 12) % 10;
-            reg[5] = (t->tm_hour - 12) / 10;
-            reg[5] |= 0b100;
-        }
+void
+RTC::time2registersOki(tm *t)
+{
+    reg[0][0x0] = t->tm_sec % 10;
+    reg[0][0x1] = t->tm_sec / 10;
+    reg[0][0x2] = t->tm_min % 10;
+    reg[0][0x3] = t->tm_min / 10;
+    reg[0][0x4] = t->tm_hour % 10;
+    reg[0][0x5] = t->tm_hour / 10;
+    reg[0][0x6] = t->tm_mday % 10;
+    reg[0][0x7] = t->tm_mday / 10;
+    reg[0][0x8] = (t->tm_mon + 1) % 10;
+    reg[0][0x9] = (t->tm_mon + 1) / 10;
+    reg[0][0xA] = t->tm_year % 10;
+    reg[0][0xB] = t->tm_year / 10;
+    reg[0][0xC] = t->tm_yday / 7;
+    
+    // Change the hour format in AM/PM mode
+    if (t->tm_hour > 12 && GET_BIT(reg[0][15], 2) == 0) {
+        reg[0][4] = (t->tm_hour - 12) % 10;
+        reg[0][5] = (t->tm_hour - 12) / 10;
+        reg[0][5] |= 0b100;
     }
+}
+
+void
+RTC::time2registersRicoh(tm *t)
+{
+    reg[0][0x0] = t->tm_sec % 10;
+    reg[0][0x1] = t->tm_sec / 10;
+    reg[0][0x2] = t->tm_min % 10;
+    reg[0][0x3] = t->tm_min / 10;
+    reg[0][0x4] = t->tm_hour % 10;
+    reg[0][0x5] = t->tm_hour / 10;
+    reg[0][0x6] = t->tm_yday / 7;
+    reg[0][0x7] = t->tm_mday % 10;
+    reg[0][0x8] = t->tm_mday / 10;
+    reg[0][0x9] = (t->tm_mon + 1) % 10;
+    reg[0][0xA] = (t->tm_mon + 1) / 10;
+    reg[0][0xB] = t->tm_year % 10;
+    reg[0][0xC] = t->tm_year / 10;
+    
+    // Change the hour format in AM/PM mode
+    if (t->tm_hour > 12 && GET_BIT(reg[0][10], 0) == 0) {
+        reg[0][4] = (t->tm_hour - 12) % 10;
+        reg[0][5] = (t->tm_hour - 12) / 10;
+        reg[0][5] |= 0b010;
+    }
+    
+    // Wipe out the unused bits in the alarm bank
+    reg[1][0x0] &= 0b0000;
+    reg[1][0x1] &= 0b0000;
+    reg[1][0x2] &= 0b1111;
+    reg[1][0x3] &= 0b0111;
+    reg[1][0x4] &= 0b1111;
+    reg[1][0x5] &= 0b0011;
+    reg[1][0x6] &= 0b0111;
+    reg[1][0x7] &= 0b1111;
+    reg[1][0x8] &= 0b0011;
+    reg[1][0x9] &= 0b0000;
+    reg[1][0xA] &= 0b0001;
+    reg[1][0xB] &= 0b0011;
+    reg[1][0xC] &= 0b0000;
 }
 
 void
 RTC::registers2time()
 {
-    // Read the registers
     tm t = {0};
-    t.tm_sec  = reg[0] + 10 * reg[1];
-    t.tm_min  = reg[2] + 10 * reg[3];
-    t.tm_hour = reg[4] + 10 * reg[5];
-    t.tm_mday = reg[6] + 10 * reg[7];
-    t.tm_mon  = reg[8] + 10 * reg[9] - 1;
-    t.tm_year = reg[10] + 10 * reg[11];
+
+    // Read the registers
+    config.model == RTC_RICOH ? registers2timeRicoh(&t) : registers2timeOki(&t);
   
     // Convert the tm struct to a time_t value
     time_t rtcTime = mktime(&t);
     
     // Update the real-time clock
     setTime(rtcTime);
+}
+
+void
+RTC::registers2timeOki(tm *t)
+{
+    t->tm_sec  = reg[0][0x0] + 10 * reg[0][0x1];
+    t->tm_min  = reg[0][0x2] + 10 * reg[0][0x3];
+    t->tm_hour = reg[0][0x4] + 10 * reg[0][0x5];
+    t->tm_mday = reg[0][0x6] + 10 * reg[0][0x7];
+    t->tm_mon  = reg[0][0x8] + 10 * reg[0][0x9] - 1;
+    t->tm_year = reg[0][0xA] + 10 * reg[0][0xB];
+}
+
+void
+RTC::registers2timeRicoh(tm *t)
+{
+    t->tm_sec  = reg[0][0x0] + 10 * reg[0][0x1];
+    t->tm_min  = reg[0][0x2] + 10 * reg[0][0x3];
+    t->tm_hour = reg[0][0x4] + 10 * reg[0][0x5];
+    t->tm_mday = reg[0][0x7] + 10 * reg[0][0x8];
+    t->tm_mon  = reg[0][0x9] + 10 * reg[0][0xA] - 1;
+    t->tm_year = reg[0][0xB] + 10 * reg[0][0xC];
 }
