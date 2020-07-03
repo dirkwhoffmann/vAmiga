@@ -747,17 +747,11 @@ public:
         updateBplEvents(dmacon, bplcon0, first, last); }
     void updateDrawingFlags(bool hires);
     
-    // Checks the integrity of the BPL event table (for debugging only)
-    void verifyBplEvents();
-
     // Removes all events from the DAS event table
     void clearDasEvents();
 
     // Renews all events in the the DAS event table
     void updateDasEvents(u16 dmacon);
-
-    // Checks the integrity of the DAS event table (for debugging only)
-    void verifyDasEvents();
 
 private:
 

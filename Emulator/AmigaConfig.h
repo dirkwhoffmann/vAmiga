@@ -73,7 +73,6 @@
 // General
 static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
-static const int VERIFY_EVENTS   = 0; // Check event table consistency
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states

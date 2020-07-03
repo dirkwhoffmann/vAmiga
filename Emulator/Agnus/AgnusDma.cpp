@@ -796,9 +796,6 @@ Agnus::clearBplEvents()
 {
     for (int i = 0; i < HPOS_MAX; i++) bplEvent[i] = EVENT_NONE;
     for (int i = 0; i < HPOS_MAX; i++) nextBplEvent[i] = HPOS_MAX;
-
-    // Check table consistency
-    if (VERIFY_EVENTS) verifyBplEvents();
 }
 
 void
@@ -848,9 +845,6 @@ Agnus::updateBplEvents(u16 dmacon, u16 bplcon0, int first, int last)
 
     // Update the drawing flags and update the jump table
     updateDrawingFlags(hires);
-    
-    // Check table consistency
-    if (VERIFY_EVENTS) verifyBplEvents();
 }
 
 void
@@ -878,13 +872,6 @@ Agnus::updateDrawingFlags(bool hires)
 }
 
 void
-Agnus::verifyBplEvents()
-{
-    assert((bplEvent[HPOS_MAX] & 0b11111100) == BPL_EOL);
-    assert(nextBplEvent[HPOS_MAX] == 0);
-}
-
-void
 Agnus::clearDasEvents()
 {
     updateDasEvents(0);
@@ -898,30 +885,6 @@ Agnus::updateDasEvents(u16 dmacon)
     // Allocate slots and renew the jump table
     for (int i = 0; i < 0x38; i++) dasEvent[i] = dasDMA[dmacon][i];
     updateDasJumpTable(0x38);
-
-    // Check table consistency
-    if (VERIFY_EVENTS) verifyDasEvents();
-}
-
-void
-Agnus::verifyDasEvents()
-{
-    assert(dasEvent[0x01] == DAS_REFRESH);
-    assert(dasEvent[0xDF] == DAS_SDMA);
-    assert(dasEvent[0x66] == DAS_TICK);
-
-    for (int i = 0x34; i < 0x66; i++) {
-        assert(dasEvent[i] == EVENT_NONE);
-        assert(nextDasEvent[i] == 0x66);
-    }
-    for (int i = 0x67; i < 0xDF; i++) {
-        assert(dasEvent[i] == EVENT_NONE);
-        assert(nextDasEvent[i] == 0xDF);
-    }
-    for (int i = 0xE0; i < HPOS_CNT; i++) {
-        assert(dasEvent[i] == EVENT_NONE);
-        assert(nextDasEvent[i] == 0);
-    }
 }
 
 void
