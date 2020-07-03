@@ -112,7 +112,7 @@ let isomac2amiga: [Int: Int] = [
     kVK_ANSI_KeypadDivide:   AmigaKeycode.keypadDivide,
     kVK_ANSI_KeypadMultiply: AmigaKeycode.keypadMultiply,
     kVK_ANSI_KeypadPlus:     AmigaKeycode.keypadPlus,
-    kVK_F12:                 AmigaKeycode.help,
+    kVK_F11:                 AmigaKeycode.help,
     
     kVK_Shift:               AmigaKeycode.leftShift,
     kVK_RightShift:          AmigaKeycode.rightShift,
