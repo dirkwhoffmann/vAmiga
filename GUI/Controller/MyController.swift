@@ -290,14 +290,14 @@ extension MyController {
         // Register listener
         addListener()
 
+        // Process attachment (if any)
+        mydocument.mountAmigaAttachment()
+
         // Check if the Amiga is ready to power on
         if amiga.isReady() {
 
             // Power on the Amiga
             amiga.powerOn()
-
-            // Process attachment (if any)
-            mydocument.mountAmigaAttachment()
 
             // Launch the emulator thread
             amiga.run()

@@ -25,11 +25,6 @@ prefix(); \
 fprintf(stderr, "%s: %s%s", getDescription(), trailer, buf);
 
 void
-AmigaObject::prefix()
-{
-}
-
-void
 AmigaObject::msg(const char *fmt, ...)
 {
     VAOBJ_PARSE

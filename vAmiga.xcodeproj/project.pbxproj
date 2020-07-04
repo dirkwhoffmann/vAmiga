@@ -65,7 +65,6 @@
 		508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB821EA1FF10043D0E9 /* A500ISO.xib */; };
 		508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */; };
 		508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBB21EA1FF10043D0E9 /* Preferences.xib */; };
-		508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */; };
 		508FDFD521EA20510043D0E9 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCD21EA20510043D0E9 /* Animation.swift */; };
 		508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */; };
 		508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCF21EA20510043D0E9 /* MetalView.swift */; };
@@ -267,7 +266,6 @@
 		508FDFB821EA1FF10043D0E9 /* A500ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ISO.xib; sourceTree = "<group>"; };
 		508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskMountDialog.xib; sourceTree = "<group>"; };
 		508FDFBB21EA1FF10043D0E9 /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
-		508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExportScreenshotDialog.xib; sourceTree = "<group>"; };
 		508FDFCD21EA20510043D0E9 /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragAndDrop.swift; sourceTree = "<group>"; };
 		508FDFCF21EA20510043D0E9 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
@@ -570,7 +568,6 @@
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
 				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
-				508FDFBC21EA1FF10043D0E9 /* ExportScreenshotDialog.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
@@ -993,7 +990,6 @@
 				50B14C2621EB905A002E32A6 /* Credits.rtf in Resources */,
 				508FDFBF21EA1FF10043D0E9 /* MainMenu.xib in Resources */,
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
-				508FDFC921EA1FF10043D0E9 /* ExportScreenshotDialog.xib in Resources */,
 				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
 			);

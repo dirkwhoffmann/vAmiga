@@ -20,17 +20,9 @@ class MyDocument: NSDocument {
 
     /*
      An otional media object attached to this document.
-     This variable is checked by the GUI, e.g., when the READY_TO_RUN message
-     is received. If an attachment is present, e.g., a T64 archive,
-     is displays a user dialog. The user can then choose to mount the archive
-     as a disk or to flash a single file into memory. If the attachment is a
-     snapshot, it is read into the emulator without asking the user.
-     This variable is also used when the user selects the "Insert Disk",
-     "Insert Tape" or "Attach Cartridge" menu items. In that case, the selected
-     URL is translated into an attachment and then processed. The actual
-     post-processing depends on the attachment type and user options. E.g.,
-     snapshots are flashed while T64 archives are converted to a disk and
-     inserted into the disk drive.
+     This variable is checked in mountAmigaAttachment() which is called in
+     windowDidLoad(). If an attachment is present, e.g., an ADF archive, it
+     is automatically attached to the emulator.
      */
     var amigaAttachment: AmigaFileProxy?
     
