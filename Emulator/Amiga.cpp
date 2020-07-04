@@ -790,7 +790,7 @@ Amiga::resume()
 void
 Amiga::requestThreadLock()
 {
-    if (state == EMU_RUNNING) {
+    if (state == STATE_RUNNING) {
 
         // The emulator thread is running
         assert(p != NULL);

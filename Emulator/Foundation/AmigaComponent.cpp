@@ -43,4 +43,8 @@ df3(ref.df3)
 
 };
 
-void AmigaComponent::prefix() { amiga.prefix(); }
+void
+AmigaComponent::prefix()
+{
+    amiga.prefix();
+}

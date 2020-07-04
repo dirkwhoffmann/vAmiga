@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SUB_COMPONENT_INC
-#define _SUB_COMPONENT_INC
+#ifndef _AMIGA_COMPONENT_INC
+#define _AMIGA_COMPONENT_INC
 
 #include "HardwareComponent.h"
 

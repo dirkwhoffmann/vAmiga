@@ -47,7 +47,7 @@ HardwareComponent::powerOn()
 
         // Power this component on
         debug(RUN_DEBUG, "Powering on\n");
-        state = EMU_PAUSED;
+        state = STATE_PAUSED;
         _powerOn();
     }
 }
@@ -62,7 +62,7 @@ HardwareComponent::powerOff()
         
         // Power off this component
         debug(RUN_DEBUG, "Powering off\n");
-        state = EMU_OFF;
+        state = STATE_OFF;
         _powerOff();
 
         // Power all subcomponents off
@@ -87,7 +87,7 @@ HardwareComponent::run()
         
         // Start this component
         debug(RUN_DEBUG, "Run\n");
-        state = EMU_RUNNING;
+        state = STATE_RUNNING;
         _run();
     }
 }
@@ -99,7 +99,7 @@ HardwareComponent::pause()
         
         // Pause this component
         debug(RUN_DEBUG, "Pause\n");
-        state = EMU_PAUSED;
+        state = STATE_PAUSED;
         _pause();
 
         // Pause all subcomponents

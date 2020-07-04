@@ -7,16 +7,16 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGACOMPONENT_INC
-#define _AMIGACOMPONENT_INC
+#ifndef _HARDWARE_COMPONENT_INC
+#define _HARDWARE_COMPONENT_INC
 
 #include "AmigaObject.h"
 
 typedef enum
 {
-    EMU_OFF,
-    EMU_PAUSED,
-    EMU_RUNNING
+    STATE_OFF,
+    STATE_PAUSED,
+    STATE_RUNNING
 }
 EmulatorState;
 
@@ -49,7 +49,7 @@ protected:
      *     Paused: The Amiga is turned on, but there is no emulator thread
      *    Running: The Amiga is turned on and the emulator thread running
      */
-    EmulatorState state = EMU_OFF;
+    EmulatorState state = STATE_OFF;
     
     // Indicates if this component should run in warp mode
     bool warp = false;
@@ -101,10 +101,10 @@ public:
      *                                     isPoweredOn()
      */
     
-    bool isPoweredOff() { return state == EMU_OFF; }
-    bool isPoweredOn() { return state != EMU_OFF; }
-    bool isPaused() { return state == EMU_PAUSED; }
-    bool isRunning() { return state == EMU_RUNNING; }
+    bool isPoweredOff() { return state == STATE_OFF; }
+    bool isPoweredOn() { return state != STATE_OFF; }
+    bool isPaused() { return state == STATE_PAUSED; }
+    bool isRunning() { return state == STATE_RUNNING; }
     
 protected:
     

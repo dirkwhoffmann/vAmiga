@@ -14,11 +14,11 @@
 
 class Mouse : public AmigaComponent {
     
-    // The control port this device is connected to
-    const PortNr nr;
-
     // Current configuration
     MouseConfig config;
+
+    // The control port this device is connected to
+    const PortNr nr;
 
 public:
     
