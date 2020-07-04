@@ -31,6 +31,10 @@ using std::swap;
  */
 class AmigaObject {
     
+public:
+    
+    virtual ~AmigaObject() { };
+    
 private:
     
     /* Textual description of this object.

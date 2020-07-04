@@ -25,6 +25,10 @@ class Moira {
     friend class Breakpoints;
     friend class Watchpoints;
 
+public:
+    
+    virtual ~Moira() { };
+    
     //
     // Configuration
     //

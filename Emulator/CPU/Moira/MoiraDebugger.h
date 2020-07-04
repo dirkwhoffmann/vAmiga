@@ -37,6 +37,10 @@ class Guards {
 
     friend class Debugger;
 
+public:
+    
+    virtual ~Guards() { };
+    
 protected:
 
     // Reference to the connected CPU
