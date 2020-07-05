@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BLITTER_INC
-#define _BLITTER_INC
+#ifndef _BLITTER_H
+#define _BLITTER_H
 
 /* The Blitter supports three accuracy levels:
  *

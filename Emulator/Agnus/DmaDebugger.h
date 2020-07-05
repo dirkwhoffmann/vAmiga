@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DMA_DEBUGGER_INC
-#define _DMA_DEBUGGER_INC
+#ifndef _DMA_DEBUGGER_H
+#define _DMA_DEBUGGER_H
 
 #include "AmigaComponent.h"
 #include "Colors.h"

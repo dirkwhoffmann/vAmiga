@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGAUTILS_INC
-#define _AMIGAUTILS_INC
+#ifndef _AMIGA_UTILS_H
+#define _AMIGA_UTILS_H
 
 #include <assert.h>
 #include <limits.h>

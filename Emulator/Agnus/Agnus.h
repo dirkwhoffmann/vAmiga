@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AGNUS_INC
-#define _AGNUS_INC
+#ifndef _AGNUS_H
+#define _AGNUS_H
 
 #include "AmigaConstants.h"
 #include "Beam.h"

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_SCREENSHOT_INC
-#define _AMIGA_SCREENSHOT_INC
+#ifndef _THUMBNAIL_H
+#define _THUMBNAIL_H
 
 #include "Aliases.h"
 #include "AmigaConstants.h"

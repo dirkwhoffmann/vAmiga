@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FRAME_INC
-#define _FRAME_INC
+#ifndef _FRAME_H
+#define _FRAME_H
 
 struct Frame
 {

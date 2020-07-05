@@ -14,8 +14,8 @@
  *     SortedRingBuffer : A ringbuffer that keeps the entries sorted
  */
 
-#ifndef _BUFFERS_INC
-#define _BUFFERS_INC
+#ifndef _BUFFERS_H
+#define _BUFFERS_H
 
 template <class T, int capacity> struct RingBuffer
 {

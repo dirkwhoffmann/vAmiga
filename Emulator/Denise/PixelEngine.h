@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COLORIZER_INC
-#define _COLORIZER_INC
+#ifndef _COLORIZER_H
+#define _COLORIZER_H
 
 #include "AmigaComponent.h"
 

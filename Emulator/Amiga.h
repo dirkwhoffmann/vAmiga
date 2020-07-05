@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_INC
-#define _AMIGA_INC
+#ifndef _AMIGA_H
+#define _AMIGA_H
 
 // General
 #include "AmigaComponent.h"

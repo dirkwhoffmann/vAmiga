@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _AMIGA_T_INC
-#define _AMIGA_T_INC
+#ifndef _AMIGA_TYPES_H
+#define _AMIGA_TYPES_H
 
 #include "Aliases.h"
 
@@ -75,6 +75,14 @@ inline bool isConfigOption(long value)
 {
     return value >= VA_AGNUS_REVISION && value <= VA_FILTER_ALWAYS_ON;
 }
+
+typedef enum
+{
+    STATE_OFF,
+    STATE_PAUSED,
+    STATE_RUNNING
+}
+EmulatorState;
 
 typedef enum
 {

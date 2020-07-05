@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGAOBJECT_INC
-#define _AMIGAOBJECT_INC
+#ifndef _AMIGA_OBJECT_H
+#define _AMIGA_OBJECT_H
 
 #include "AmigaUtils.h"
 

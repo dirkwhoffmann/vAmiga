@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIALIZATION_INC
-#define _SERIALIZATION_INC
+#ifndef _SERIALIZATION_H
+#define _SERIALIZATION_H
 
 #include "AmigaTypes.h"
 #include "Beam.h"

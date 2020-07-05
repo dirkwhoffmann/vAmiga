@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DDF_INC
-#define _DDF_INC
+#ifndef _DDF_H
+#define _DDF_H
 
 #include <sys/param.h>
 #include "Aliases.h"

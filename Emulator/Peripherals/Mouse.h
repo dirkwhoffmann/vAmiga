@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _MOUSE_INC
-#define _MOUSE_INC
+#ifndef _MOUSE_H
+#define _MOUSE_H
 
 #include "AmigaComponent.h"
 

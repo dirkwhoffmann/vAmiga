@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _KEYBOARD_T_INC
-#define _KEYBOARD_T_INC
+#ifndef _KEYBOARD_TYPES_H
+#define _KEYBOARD_TYPES_H
 
 //
 // Enumerations

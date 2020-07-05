@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DISK_CONTROLLER_INC
-#define _DISK_CONTROLLER_INC
+#ifndef _DISK_CONTROLLER_H
+#define _DISK_CONTROLLER_H
 
 #include "AmigaComponent.h"
 

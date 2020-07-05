@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AUDIO_FILTER_INC
-#define _AUDIO_FILTER_INC
+#ifndef _AUDIO_FILTER_H
+#define _AUDIO_FILTER_H
 
 #include "HardwareComponent.h"
 

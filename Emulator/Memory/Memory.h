@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_MEMORY_INC
-#define _AMIGA_MEMORY_INC
+#ifndef _MEMORY_H
+#define _MEMORY_H
 
 #include "AmigaComponent.h"
 #include "RomFile.h"

@@ -7,23 +7,15 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _HARDWARE_COMPONENT_INC
-#define _HARDWARE_COMPONENT_INC
+#ifndef _HARDWARE_COMPONENT_H
+#define _HARDWARE_COMPONENT_H
 
 #include "AmigaObject.h"
 
-typedef enum
-{
-    STATE_OFF,
-    STATE_PAUSED,
-    STATE_RUNNING
-}
-EmulatorState;
-
 /* Base class for all hardware components
  * This class defines the base functionality of all hardware components.
- * it comprises functions for powering up and down, resetting, suspending and
- * resuming, as well as functions for loading and saving snapshots.
+ * It comprises functions for powering up, powering down, resetting, and
+ * serializing.
  */
 class HardwareComponent : public AmigaObject {
 
@@ -34,13 +26,6 @@ public:
 
 protected:
     
-    /* Access lock for shared variables
-     * This lock is used to control the read and write operations for all
-     * variables that are accessed by both the emulator thread and the GUI.
-     * DEPRECATED
-     */
-    // pthread_mutex_t lock;
-
     /* State model
      * The virtual hardware components can be in three different states
      * called 'Off', 'Paused', and 'Running'.

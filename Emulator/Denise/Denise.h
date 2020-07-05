@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DENISE_INC
-#define _DENISE_INC
+#ifndef _DENISE_H
+#define _DENISE_H
 
 #include "AmigaComponent.h"
 #include "Colors.h"

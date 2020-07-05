@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SEE_UTILS_INC
-#define _SEE_UTILS_INC
+#ifndef _SEE_UTILS_H
+#define _SEE_UTILS_H
 
 #include "AmigaUtils.h"
 

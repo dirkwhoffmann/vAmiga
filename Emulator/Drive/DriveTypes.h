@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _DRIVE_T_INC
-#define _DRIVE_T_INC
+#ifndef _DRIVE_TYPES_H
+#define _DRIVE_TYPES_H
 
 //
 // Enumerations

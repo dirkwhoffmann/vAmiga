@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ZORRO_MANAGER_INC
-#define _ZORRO_MANAGER_INC
+#ifndef _ZORRO_MANAGER_H
+#define _ZORRO_MANAGER_H
 
 #include "AmigaComponent.h"
 

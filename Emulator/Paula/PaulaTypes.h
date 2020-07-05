@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _PAULA_T_INC
-#define _PAULA_T_INC
+#ifndef _PAULA_T_H
+#define _PAULA_T_H
 
 #include "PaulaAudioTypes.h"
 #include "DiskControllerTypes.h"

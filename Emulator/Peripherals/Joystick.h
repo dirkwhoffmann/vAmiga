@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _JOYSTICK_INC
-#define _JOYSTICK_INC
+#ifndef _JOYSTICK_H
+#define _JOYSTICK_H
 
 #include "AmigaComponent.h"
 

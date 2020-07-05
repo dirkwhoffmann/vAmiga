@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _MEMORY_T_INC
-#define _MEMORY_T_INC
+#ifndef _MEMORY_TYPES_H
+#define _MEMORY_TYPES_H
 
 /* Memory source identifiers
  * The identifiers are used in the mem source lookup table to specify the

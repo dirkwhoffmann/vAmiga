@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _PAULA_INC
-#define _PAULA_INC
+#ifndef _PAULA_H
+#define _PAULA_H
 
 #include "PaulaAudio.h"
 #include "DiskController.h"

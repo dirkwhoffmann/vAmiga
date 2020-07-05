@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _BEAM_INC
-#define _BEAM_INC
+#ifndef _BEAM_H
+#define _BEAM_H
 
 struct Beam
 {

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _SERIAL_PORT_INC
-#define _SERIAL_PORT_INC
+#ifndef _SERIAL_PORT_H
+#define _SERIAL_PORT_H
 
 #include "AmigaComponent.h"
 

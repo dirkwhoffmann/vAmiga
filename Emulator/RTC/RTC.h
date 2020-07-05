@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _RTC_INC
-#define _RTC_INC
+#ifndef _RTC_H
+#define _RTC_H
 
 #include "HardwareComponent.h"
 

@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _DISKCONTROLLER_T_INC
-#define _DISKCONTROLLER_T_INC
+#ifndef _DISK_CONTROLLER_T_H
+#define _DISK_CONTROLLER_T_H
 
 //
 // Enumerations

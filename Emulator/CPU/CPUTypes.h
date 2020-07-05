@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _CPU_T_INC
-#define _CPU_T_INC
+#ifndef _CPU_TYPES_H
+#define _CPU_TYPES_H
 
 // A disassembled instruction
 typedef struct

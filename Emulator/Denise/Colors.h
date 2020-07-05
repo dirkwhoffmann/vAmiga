@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COLORS_INC
-#define _COLORS_INC
+#ifndef _COLORS_H
+#define _COLORS_H
 
 struct RgbColor {
 

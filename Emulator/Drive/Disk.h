@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_DISK_INC
-#define _AMIGA_DISK_INC
+#ifndef _AMIGA_DISK_H
+#define _AMIGA_DISK_H
 
 #include "HardwareComponent.h"
 #include "ADFFile.h"

@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _EVENT_T_INC
-#define _EVENT_T_INC
+#ifndef _EVENT_TYPES_H
+#define _EVENT_TYPES_H
 
 // Time stamp used for messages that never trigger
 #define NEVER INT64_MAX

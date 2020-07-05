@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _DISK_T_INC
-#define _DISK_T_INC
+#ifndef _DISK_TYPES_H
+#define _DISK_TYPES_H
 
 
 //

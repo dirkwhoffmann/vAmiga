@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _PORT_T_INC
-#define _PORT_T_INC
+#ifndef _PORT_TYPES_H
+#define _PORT_TYPES_H
 
 //
 // Enumerations

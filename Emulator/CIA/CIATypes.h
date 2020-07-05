@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _CIA_T_INC
-#define _CIA_T_INC
+#ifndef _CIA_TYPES_H
+#define _CIA_TYPES_H
 
 /* Emulated CIA model
  *

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _COPPER_INC
-#define _COPPER_INC
+#ifndef _COPPER_H
+#define _COPPER_H
 
 #include "Beam.h"
 

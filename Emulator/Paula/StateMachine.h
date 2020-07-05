@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _STATE_MACHINE_INC
-#define _STATE_MACHINE_INC
+#ifndef _STATE_MACHINE_H
+#define _STATE_MACHINE_H
 
 #include "AmigaComponent.h"
 

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_DRIVE_INC
-#define _AMIGA_DRIVE_INC
+#ifndef _AMIGA_DRIVE_H
+#define _AMIGA_DRIVE_H
 
 #include "AmigaComponent.h"
 #include "Disk.h"

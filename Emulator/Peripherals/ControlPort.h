@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _CONTROL_PORT_INC
-#define _CONTROL_PORT_INC
+#ifndef _CONTROL_PORT_H
+#define _CONTROL_PORT_H
 
 #include "AmigaComponent.h"
 

@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _AGNUS_T_INC
-#define _AGNUS_T_INC
+#ifndef _AGNUS_TYPES_H
+#define _AGNUS_TYPES_H
 
 typedef enum : long
 {

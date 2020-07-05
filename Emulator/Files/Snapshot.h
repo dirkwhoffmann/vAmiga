@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _AMIGA_SNAPSHOT_INC
-#define _AMIGA_SNAPSHOT_INC
+#ifndef _SNAPSHOT_H
+#define _SNAPSHOT_H
 
 #include "AmigaFile.h"
 #include "Thumbnail.h"

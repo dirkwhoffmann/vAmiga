@@ -9,8 +9,8 @@
 
 // This file must conform to standard ANSI-C to be compatible with Swift.
 
-#ifndef _RTC_T_INC
-#define _RTC_T_INC
+#ifndef _RTC_TYPES_H
+#define _RTC_TYPES_H
 
 //
 // Enumerations

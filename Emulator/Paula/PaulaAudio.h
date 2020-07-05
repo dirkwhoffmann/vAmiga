@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _PAULA_AUDIO_INC
-#define _PAULA_AUDIO_INC
+#ifndef _PAULA_AUDIO_H
+#define _PAULA_AUDIO_H
 
 #include "AmigaComponent.h"
 #include "StateMachine.h"

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _UART_INC
-#define _UART_INC
+#ifndef _UART_H
+#define _UART_H
 
 #include "AmigaComponent.h"
 
