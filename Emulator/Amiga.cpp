@@ -102,7 +102,7 @@ Amiga::Amiga()
         &cpu,
     };
 
-    // Set up initial state
+    // Set up the initial state
     initialize();
     hardReset();
 
@@ -583,21 +583,13 @@ Amiga::prefix()
 }
 
 void
-Amiga::_initialize()
-{
-}
-
-void
 Amiga::reset(bool hard)
 {
     if (hard) {
         
         suspend();
         assert(!isRunning());
-                
-        // Execute the standard reset routine
-        // HardwareComponent::reset(hard);
-                
+                                
         // If a disk change is in progress, finish it
         paula.diskController.serviceDiskChangeEvent();
         

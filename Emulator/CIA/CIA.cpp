@@ -1207,12 +1207,6 @@ CIAA::CIAA(Amiga& ref) : CIA(0, ref)
     setDescription("CIAA");
 }
 
-void 
-CIAA::_dump()
-{
-    CIA::_dump();
-}
-
 void
 CIAA::_powerOn()
 {
@@ -1373,12 +1367,6 @@ CIAA::setKeyCode(u8 keyCode)
 CIAB::CIAB(Amiga& ref) : CIA(1, ref)
 {
     setDescription("CIAB");
-}
-
-void 
-CIAB::_dump()
-{
-    CIA::_dump();
 }
 
 void 

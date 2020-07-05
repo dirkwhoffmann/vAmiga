@@ -561,12 +561,12 @@ class CIAA : public CIA {
 public:
     
     CIAA(Amiga& ref);
+
+private:
+    
     void _powerOn() override;
     void _powerOff() override;
-    void _dump() override;
     
-private:
-
     void pullDownInterruptLine() override;
     void releaseInterruptLine() override;
     
@@ -593,7 +593,6 @@ class CIAB : public CIA {
 public:
     
     CIAB(Amiga& ref);
-    void _dump() override;
     
 private:
         

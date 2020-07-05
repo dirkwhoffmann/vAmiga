@@ -87,12 +87,13 @@ public:
 
     
     //
-    // Methods
+    // Constructing and serializing
     //
     
 public:
     
     Paula(Amiga& ref);
+    
     PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     template <class T>
@@ -122,6 +123,11 @@ public:
         & adkcon;
     }
 
+    
+    //
+    // Methods from HardwareComponent
+    //
+    
 private:
 
     void _reset(bool hard) override;

@@ -54,7 +54,7 @@ protected:
     
     
     //
-    // Initializing the component
+    // Initializing
     //
     
 public:

@@ -173,12 +173,6 @@ CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-CPU::_initialize()
-{
-    debug(CPU_DEBUG, "CPU::_initialize()\n");
-}
-
-void
 CPU::_powerOn()
 {
     debug(CPU_DEBUG, "CPU::_powerOn()\n");

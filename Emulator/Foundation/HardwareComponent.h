@@ -36,7 +36,11 @@ protected:
      */
     EmulatorState state = STATE_OFF;
     
-    // Indicates if this component should run in warp mode
+    /* Warp mode
+     * To speed up emulation (e.g., during disk accesses), the virtual hardware
+     * can be put into warp mode. In this mode, the emulation thread is no
+     * longer paused to match the target frequency and runs as fast as possible.
+     */
     bool warp = false;
 
 
@@ -51,18 +55,16 @@ public:
     
     
     //
-    // Initializing the component
+    // Initializing
     //
     
 public:
     
     /* Initializes the component and it's sub-component.
      * This function is called exactly once, in the constructor of the Amiga
-     * class. It's main purpose is to initialize the quick-reference pointers
-     * contained in class HardwareComponent. Some components implement the
-     * delegation method _initialize() to finalize their initialization, e.g.,
-     * by setting up referecens that do not exist at the time they are
-     * constructed.
+     * class. Sub-components can implement the delegation method _initialize()
+     * to finalize their initialization, e.g., by setting up referecens that
+     * did not exist when they were constructed.
      */
     void initialize();
     virtual void _initialize() { };
