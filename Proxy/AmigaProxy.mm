@@ -1427,7 +1427,7 @@ struct ADFFileWrapper { ADFFile *adf; };
 
 - (BOOL) releaseBuild
 {
-    return releaseBuild(); // see vastd.h
+    return releaseBuild();
 }
 - (void) setInspectionTarget:(EventID)id
 {

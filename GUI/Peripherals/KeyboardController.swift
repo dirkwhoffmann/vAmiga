@@ -10,7 +10,7 @@
 import Carbon.HIToolbox
 
 // Keyboard event handler
-class KBController: NSObject {
+class KeyboardController: NSObject {
 
     var parent: MyController!
     

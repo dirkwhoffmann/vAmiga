@@ -112,7 +112,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="dWc-LE-E52">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="X4r-q5-8Lh">
@@ -141,7 +141,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="Gux-DH-DEb">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Lc0-yC-JdI">
@@ -170,7 +170,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="V6v-tW-Pyx">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" translatesAutoresizingMaskIntoConstraints="NO" id="Qp9-H4-2Q7">
@@ -199,7 +199,7 @@
                         </constraints>
                         <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="diskTemplate" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="WyV-Pn-TKr">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system" size="10"/>
+                            <font key="font" metaFont="menu" size="10"/>
                         </buttonCell>
                     </button>
                     <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="214">
@@ -369,6 +369,58 @@
             </view>
             <toolbar key="toolbar" implicitIdentifier="562FDE63-25B0-4E4E-80C7-EF6E742B5F6F" displayMode="iconAndLabel" sizeMode="regular" id="1845" customClass="MyToolbar" customModule="vAmiga" customModuleProvider="target">
                 <allowedToolbarItems>
+                    <toolbarItem implicitItemIdentifier="9054C81F-F3B3-47C7-867A-1B9C59B2173C" label="Inspect" paletteLabel="Inspect" sizingBehavior="auto" id="EzM-bM-4na">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
+                            <rect key="frame" x="0.0" y="14" width="87" height="23"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Open Inspector" image="debugTemplate" width="40"/>
+                                    <segment toolTip="Open Monitor" image="monitorTemplate" width="40" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="inspectAction:" target="-2" id="MEA-qk-7j3"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="A118822F-35DB-424C-89D6-CD7D30B4BD7E" label="Screenshots" paletteLabel="Screenshots" sizingBehavior="auto" id="SPM-UH-LKw">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="Hbj-1i-i1y" userLabel="clickTemplate, ttGalleryTemplate">
+                            <rect key="frame" x="0.0" y="14" width="88" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Take Screenshot" image="clickTemplate" width="40"/>
+                                    <segment toolTip="Open Screenshot Browser" image="folderTemplate" width="40" tag="1"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="screenshotAction:" target="-2" id="gLo-1V-lhE"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="B72B6037-7F6A-47AE-B78F-2C5FE590098E" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
+                        <nil key="toolTip"/>
+                        <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
+                            <rect key="frame" x="0.0" y="14" width="129" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
+                                <font key="font" metaFont="system"/>
+                                <segments>
+                                    <segment toolTip="Take Snapshot" image="pushTemplate" width="40"/>
+                                    <segment toolTip="Revert To Most Recent Snapshot" image="popTemplate" width="40" tag="1"/>
+                                    <segment toolTip="Open Snapshot Browser" image="timeMachineTemplate" width="40"/>
+                                </segments>
+                            </segmentedCell>
+                            <connections>
+                                <action selector="snapshotAction:" target="-2" id="S6l-w4-GtS"/>
+                            </connections>
+                        </segmentedControl>
+                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="NSToolbarSpaceItem" id="1850"/>
                     <toolbarItem implicitItemIdentifier="NSToolbarFlexibleSpaceItem" id="1851"/>
                     <toolbarItem implicitItemIdentifier="F19B641C-3162-47E1-8228-6B75CA6F1A5A" label="Port 1" paletteLabel="Port 1" tag="10" image="devNoneTemplate" id="kR6-IR-lNs">
@@ -378,7 +430,7 @@
                         <popUpButton key="view" tag="10" id="L2b-nG-yBo" userLabel="Port 1">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
@@ -451,89 +503,6 @@
                             <action selector="keyboardAction:" target="-2" id="eA2-HY-f3N"/>
                         </connections>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="D1EF6989-92F2-4FC1-AA6B-A14A2A38C473" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" id="BPW-KG-AkM" userLabel="Pause">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="Hi7-3E-CdD">
-                            <rect key="frame" x="1" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="pauseTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CS0-py-1mX">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="stopAndGoAction:" target="-1" id="9Yy-Ej-fDB"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="8971C7C7-912D-4B39-9399-870B3826DBA5" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" id="Yax-iM-1LE" userLabel="Reset">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="1" id="aeA-0b-sne">
-                            <rect key="frame" x="0.0" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="resetTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IQr-xE-Y9D">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="A1ADC8F5-68BD-4C4E-A04D-EEDAB0B3DE33" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
-                        <nil key="toolTip"/>
-                        <size key="minSize" width="38" height="25"/>
-                        <size key="maxSize" width="38" height="38"/>
-                        <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
-                            <rect key="frame" x="1" y="14" width="38" height="25"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
-                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
-                            </buttonCell>
-                        </button>
-                        <connections>
-                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
-                        </connections>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="24E37695-F012-4018-9A52-6D5F6A2522D8" label="Snapshots" paletteLabel="Snapshots" sizingBehavior="auto" id="nxb-IG-KLe">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="AHD-MB-nXC">
-                            <rect key="frame" x="0.0" y="14" width="129" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="yaX-4D-cAY">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Take Snapshot" image="pushTemplate" width="40"/>
-                                    <segment toolTip="Revert To Most Recent Snapshot" image="popTemplate" width="40" tag="1"/>
-                                    <segment toolTip="Open Snapshot Browser" image="timeMachineTemplate" width="40"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="snapshotAction:" target="-2" id="S6l-w4-GtS"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="DED3DE3D-DF11-4A29-819C-8BF266B0BAAE" label="Screenshots" paletteLabel="Screenshots" sizingBehavior="auto" id="SPM-UH-LKw">
-                        <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="Hbj-1i-i1y" userLabel="clickTemplate, ttGalleryTemplate">
-                            <rect key="frame" x="0.0" y="14" width="88" height="24"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="bCK-Ap-v2u">
-                                <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Take Screenshot" image="clickTemplate" width="40"/>
-                                    <segment toolTip="Open Screenshot Browser" image="folderTemplate" width="40" tag="1"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="screenshotAction:" target="-2" id="gLo-1V-lhE"/>
-                            </connections>
-                        </segmentedControl>
-                    </toolbarItem>
                     <toolbarItem implicitItemIdentifier="E58BE7CC-80A0-4160-88DB-486199BE286E" label="Preferences" paletteLabel="Preferences" sizingBehavior="auto" id="Tmo-Cs-EVn" userLabel="Preferences">
                         <nil key="toolTip"/>
                         <segmentedControl key="view" verticalHuggingPriority="750" id="EgW-z1-uFY">
@@ -551,22 +520,53 @@
                             </connections>
                         </segmentedControl>
                     </toolbarItem>
-                    <toolbarItem implicitItemIdentifier="06922A6F-0283-42AA-9BE1-47C4D3246922" label="Inspect" paletteLabel="Inspect" sizingBehavior="auto" id="EzM-bM-4na">
+                    <toolbarItem implicitItemIdentifier="38C1F02C-6E2B-41A9-A7C0-22595E378CC9" label="Pause" paletteLabel="Pause" tag="30" image="pauseTemplate" id="BPW-KG-AkM" userLabel="Pause">
                         <nil key="toolTip"/>
-                        <segmentedControl key="view" verticalHuggingPriority="750" id="MNc-2l-pfj">
-                            <rect key="frame" x="0.0" y="14" width="87" height="23"/>
+                        <size key="minSize" width="38" height="25"/>
+                        <size key="maxSize" width="38" height="38"/>
+                        <button key="view" verticalHuggingPriority="750" tag="30" id="Hi7-3E-CdD">
+                            <rect key="frame" x="1" y="14" width="38" height="25"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                            <segmentedCell key="cell" borderStyle="border" alignment="left" style="texturedSquare" trackingMode="momentary" id="3Uk-v8-yDJ">
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="pauseTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="CS0-py-1mX">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                 <font key="font" metaFont="system"/>
-                                <segments>
-                                    <segment toolTip="Open Inspector" image="debugTemplate" width="40"/>
-                                    <segment toolTip="Open Monitor" image="monitorTemplate" width="40" tag="1"/>
-                                </segments>
-                            </segmentedCell>
-                            <connections>
-                                <action selector="inspectAction:" target="-2" id="MEA-qk-7j3"/>
-                            </connections>
-                        </segmentedControl>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="stopAndGoAction:" target="-1" id="9Yy-Ej-fDB"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="A7703F1E-1ECE-4A69-B243-7B7358E0BFC2" label="Reset" paletteLabel="Reset" tag="1" image="resetTemplate" id="Yax-iM-1LE" userLabel="Reset">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="38" height="25"/>
+                        <size key="maxSize" width="38" height="38"/>
+                        <button key="view" verticalHuggingPriority="750" tag="1" id="aeA-0b-sne">
+                            <rect key="frame" x="0.0" y="14" width="38" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="resetTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="IQr-xE-Y9D">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="resetAction:" target="-2" id="MKH-2d-rUU"/>
+                        </connections>
+                    </toolbarItem>
+                    <toolbarItem implicitItemIdentifier="FDB7F361-51A6-49C0-8DA9-F7290508D826" label="Power" paletteLabel="Power" tag="30" image="powerTemplate" id="wVB-PW-axj">
+                        <nil key="toolTip"/>
+                        <size key="minSize" width="38" height="25"/>
+                        <size key="maxSize" width="38" height="38"/>
+                        <button key="view" verticalHuggingPriority="750" tag="30" id="tu0-4o-Osa">
+                            <rect key="frame" x="1" y="14" width="38" height="25"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                            <buttonCell key="cell" type="roundTextured" bezelStyle="texturedRounded" image="powerTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="22E-O0-WFm">
+                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                <font key="font" metaFont="system"/>
+                            </buttonCell>
+                        </button>
+                        <connections>
+                            <action selector="powerAction:" target="-2" id="eFg-df-Hnh"/>
+                        </connections>
                     </toolbarItem>
                 </allowedToolbarItems>
                 <defaultToolbarItems>
@@ -624,13 +624,13 @@
         <image name="monitorTemplate" width="241" height="240"/>
         <image name="muteTemplate" width="240" height="241"/>
         <image name="pauseTemplate" width="240" height="241"/>
-        <image name="popTemplate" width="241" height="240"/>
+        <image name="popTemplate" width="37" height="37"/>
         <image name="powerLedOff" width="100" height="50"/>
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefEmulatorTemplate" width="241" height="240"/>
         <image name="prefHwTemplate" width="240" height="241"/>
-        <image name="pushTemplate" width="241" height="240"/>
+        <image name="pushTemplate" width="37" height="37"/>
         <image name="resetTemplate" width="241" height="240"/>
-        <image name="timeMachineTemplate" width="241" height="240"/>
+        <image name="timeMachineTemplate" width="37" height="37"/>
     </resources>
 </document>

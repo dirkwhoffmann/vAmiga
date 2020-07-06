@@ -137,9 +137,8 @@ private:
     // The emulator thread
     pthread_t p = NULL;
     
-    // Mutexes to coordinate the order of execution     
+    // Mutex to coordinate operations on the emulator thread
     pthread_mutex_t threadLock;
-    pthread_mutex_t stateChangeLock;
 
     
     //

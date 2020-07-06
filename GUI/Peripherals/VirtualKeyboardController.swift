@@ -34,7 +34,7 @@ class VirtualKeyboardWindow: DialogWindow {
  
 }
 
-class VKBController: DialogController, NSWindowDelegate {
+class VirtualKeyboardController: DialogController, NSWindowDelegate {
 
     // Array holding a reference to the view of each key
     var keyView = Array(repeating: nil as NSButton?, count: 128)
@@ -52,7 +52,7 @@ class VKBController: DialogController, NSWindowDelegate {
     var autoClose = true
 
     // Factory method
-    static func make(parent: MyController) -> VKBController? {
+    static func make(parent: MyController) -> VirtualKeyboardController? {
 
         let style = kbStyle(parent)
         let layout = kbLayout(parent)
@@ -68,7 +68,7 @@ class VKBController: DialogController, NSWindowDelegate {
             xibName = ansi ? "A500ANSI" : "A500ISO"
         }
 
-        let keyboard = VKBController.init(windowNibName: xibName)
+        let keyboard = VirtualKeyboardController.init(windowNibName: xibName)
         keyboard.parent = parent
         keyboard.amiga = parent.amiga
 
@@ -128,8 +128,8 @@ class VKBController: DialogController, NSWindowDelegate {
     
     func updateImageCache() {
 
-        let style = VKBController.kbStyle(parent)
-        let layout = VKBController.kbLayout(parent)
+        let style = VirtualKeyboardController.kbStyle(parent)
+        let layout = VirtualKeyboardController.kbLayout(parent)
 
         for keycode in 0 ... 127 {
             let key = AmigaKey.init(keyCode: keycode)
@@ -187,7 +187,7 @@ class Keycap: NSButton {
     
     override func mouseDown(with event: NSEvent) {
         
-        if let controller = window?.delegate as? VKBController {
+        if let controller = window?.delegate as? VirtualKeyboardController {
             
             controller.pressKey(keyCode: self.tag)
         }
@@ -195,14 +195,14 @@ class Keycap: NSButton {
     
     override func rightMouseDown(with event: NSEvent) {
     
-        if let controller = window?.delegate as? VKBController {
+        if let controller = window?.delegate as? VirtualKeyboardController {
             
             controller.holdKey(keyCode: self.tag)
         }
     }
 }
 
-extension VKBController {
+extension VirtualKeyboardController {
 
     static func kbStyle(_ parent: MyController) -> KBStyle {
 

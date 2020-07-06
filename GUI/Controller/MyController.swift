@@ -56,10 +56,10 @@ class MyController: NSWindowController, MessageReceiver {
     var gamePad2: GamePad? { return gamePadManager.gamePads[config.gameDevice2] }
     
     // Keyboard controller
-    var kbController: KBController!
+    var kbController: KeyboardController!
 
     // Virtual keyboard
-    var virtualKeyboard: VKBController?
+    var virtualKeyboard: VirtualKeyboardController?
     
     // Loop timer
     // The timer fires 60 times a second and executes all tasks that need to be
@@ -269,7 +269,7 @@ extension MyController {
         track()
                 
         // Create keyboard controller
-        kbController = KBController(parent: self)
+        kbController = KeyboardController(parent: self)
         assert(kbController != nil, "Failed to create keyboard controller")
 
         // Create game pad manager

@@ -451,7 +451,7 @@ extension MyController: NSMenuItemValidation {
         
         // Open the virtual keyboard as a sheet
         if virtualKeyboard == nil {
-            virtualKeyboard = VKBController.make(parent: self)
+            virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
         virtualKeyboard?.showSheet(autoClose: true)
     }

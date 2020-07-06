@@ -50,7 +50,6 @@ protected:
 
 public:
     
-    HardwareComponent();
     virtual ~HardwareComponent();
     
     
@@ -60,7 +59,7 @@ public:
     
 public:
     
-    /* Initializes the component and it's sub-component.
+    /* Initializes the component and it's subcomponent.
      * This function is called exactly once, in the constructor of the Amiga
      * class. Sub-components can implement the delegation method _initialize()
      * to finalize their initialization, e.g., by setting up referecens that
@@ -161,7 +160,7 @@ public:
     void ping();
     virtual void _ping() { }
     
-    /* Collects information about the component and it's sub-components.
+    /* Collects information about the component and it's subcomponents.
      * Many components contains an info variable of a class specific type
      * (e.g., CPUInfo, MemoryInfo, ...). These variables contain the
      * information shown in the GUI's inspector window and are updated by

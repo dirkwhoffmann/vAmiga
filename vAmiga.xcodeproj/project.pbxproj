@@ -90,7 +90,7 @@
 		508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* Defaults.swift */; };
 		508FE02021EA227B0043D0E9 /* TimeTravelTouchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */; };
 		508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFFF21EA227A0043D0E9 /* MacKey.swift */; };
-		508FE02321EA227B0043D0E9 /* KBController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KBController.swift */; };
+		508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00021EA227A0043D0E9 /* KeyboardController.swift */; };
 		508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00121EA227A0043D0E9 /* GamePadManager.swift */; };
 		508FE02521EA227B0043D0E9 /* MemoryPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00221EA227A0043D0E9 /* MemoryPanel.swift */; };
 		508FE02721EA227B0043D0E9 /* SwiftUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE00521EA227A0043D0E9 /* SwiftUtils.swift */; };
@@ -107,7 +107,7 @@
 		508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */; };
 		508FE05521EA22CC0043D0E9 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */; };
 		508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04321EA22CC0043D0E9 /* PreferencesController.swift */; };
-		508FE05921EA22CC0043D0E9 /* VKBController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VKBController.swift */; };
+		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
 		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
 		508FE05C21EA22CC0043D0E9 /* DiskMountDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */; };
@@ -292,7 +292,7 @@
 		508FDFFA21EA22790043D0E9 /* Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
 		508FDFFD21EA22790043D0E9 /* TimeTravelTouchBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimeTravelTouchBar.swift; sourceTree = "<group>"; };
 		508FDFFF21EA227A0043D0E9 /* MacKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MacKey.swift; sourceTree = "<group>"; };
-		508FE00021EA227A0043D0E9 /* KBController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KBController.swift; sourceTree = "<group>"; };
+		508FE00021EA227A0043D0E9 /* KeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardController.swift; sourceTree = "<group>"; };
 		508FE00121EA227A0043D0E9 /* GamePadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePadManager.swift; sourceTree = "<group>"; };
 		508FE00221EA227A0043D0E9 /* MemoryPanel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemoryPanel.swift; sourceTree = "<group>"; };
 		508FE00521EA227A0043D0E9 /* SwiftUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUtils.swift; sourceTree = "<group>"; };
@@ -309,7 +309,7 @@
 		508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DevicesPrefs.swift; sourceTree = "<group>"; };
 		508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
 		508FE04321EA22CC0043D0E9 /* PreferencesController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreferencesController.swift; sourceTree = "<group>"; };
-		508FE04621EA22CC0043D0E9 /* VKBController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VKBController.swift; sourceTree = "<group>"; };
+		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
 		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
 		508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMountDialog.swift; sourceTree = "<group>"; };
 		508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskDialog.swift; sourceTree = "<group>"; };
@@ -763,8 +763,8 @@
 			children = (
 				508FDFF121EA22780043D0E9 /* GamePad.swift */,
 				508FE00121EA227A0043D0E9 /* GamePadManager.swift */,
-				508FE00021EA227A0043D0E9 /* KBController.swift */,
-				508FE04621EA22CC0043D0E9 /* VKBController.swift */,
+				508FE00021EA227A0043D0E9 /* KeyboardController.swift */,
+				508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */,
 				508FDFFF21EA227A0043D0E9 /* MacKey.swift */,
 				50F5F27121F1B6DF000627D1 /* AmigaKey.swift */,
 			);
@@ -1032,7 +1032,7 @@
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
-				508FE05921EA22CC0043D0E9 /* VKBController.swift in Sources */,
+				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
@@ -1127,7 +1127,7 @@
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
-				508FE02321EA227B0043D0E9 /* KBController.swift in Sources */,
+				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,

@@ -9,10 +9,6 @@
 
 #include "Amiga.h"
 
-HardwareComponent::HardwareComponent()
-{
-}
-
 HardwareComponent::~HardwareComponent()
 {
     debug(RUN_DEBUG, "Terminated\n");
