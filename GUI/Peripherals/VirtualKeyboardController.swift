@@ -51,7 +51,6 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
      */
     var autoClose = true
 
-    // Factory method
     static func make(parent: MyController) -> VirtualKeyboardController? {
 
         let style = kbStyle(parent)
@@ -104,7 +103,6 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
     func windowWillClose(_ notification: Notification) {
 
         track()
-        // parent?.virtualKeyboard = nil
     }
     
     func windowDidBecomeMain(_ notification: Notification) {

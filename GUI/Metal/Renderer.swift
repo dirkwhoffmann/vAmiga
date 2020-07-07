@@ -738,6 +738,11 @@ class Renderer: NSObject, MTKViewDelegate {
     // Managing layout
     //
 
+    func reshape() {
+
+        reshape(withSize: size)
+    }
+
     func reshape(withSize size: CGSize) {
 
         // Rebuild matrices
@@ -748,12 +753,7 @@ class Renderer: NSObject, MTKViewDelegate {
         // Rebuild depth buffer
         buildDepthBuffer()
     }
-
-    func reshape() {
-
-        reshape(withSize: size)
-    }
-
+    
     //
     // Methods from MTKViewDelegate
     //

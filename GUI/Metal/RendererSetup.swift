@@ -525,7 +525,6 @@ extension Renderer {
         let zShift = shiftZ.current
 
         let aspect = Float(size.width) / Float(size.height)
-        // track("\(size.width) \(size.height) \(aspect)")
         
         let view = matrix_identity_float4x4
         let proj = Renderer.perspectiveMatrix(fovY: Float(65.0 * (.pi / 180.0)),

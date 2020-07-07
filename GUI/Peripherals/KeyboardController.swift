@@ -18,7 +18,7 @@ class KeyboardController: NSObject {
     var renderer: Renderer { return parent.renderer }
     var prefs: Preferences { return parent.prefs }
         
-    // Remembers the current state of some keys
+    // Remembers the state of some keys (true = currently pressed)
     var leftShift   = false, rightShift   = false
     var leftControl = false, rightControl = false
     var leftOption  = false, rightOption  = false

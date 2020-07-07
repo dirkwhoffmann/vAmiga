@@ -378,7 +378,7 @@ extension MyController: NSMenuItemValidation {
             return
         }
         
-        kbController.autoType(text)
+        keyboard.autoType(text)
     }
     
     @IBAction func stopAndGoAction(_ sender: NSButton!) {
@@ -388,11 +388,13 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func stepIntoAction(_ sender: NSButton!) {
         
+        needsSaving = true
         amiga?.stepInto()
     }
     
     @IBAction func stepOverAction(_ sender: NSButton!) {
         
+        needsSaving = true
         amiga?.stepOver()
     }
     
@@ -436,24 +438,13 @@ extension MyController: NSMenuItemValidation {
     // Action methods (Keyboard menu)
     //
     
-    /*
-    @IBAction func stickyKeyboardAction(_ sender: Any!) {
-        
-        // Open the virtual keyboard as a window
-        if virtualKeyboard == nil {
-            virtualKeyboard = VKBController.make(parent: self)
-        }
-        virtualKeyboard?.showWindow(autoClose: false)
-    }
-    */
-    
     @IBAction func keyboardAction(_ sender: Any!) {
         
         // Open the virtual keyboard as a sheet
         if virtualKeyboard == nil {
             virtualKeyboard = VirtualKeyboardController.make(parent: self)
         }
-        virtualKeyboard?.showSheet(autoClose: true)
+        virtualKeyboard?.showSheet()
     }
      
     @IBAction func mapCmdKeysAction(_ sender: Any!) {

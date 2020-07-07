@@ -83,9 +83,32 @@ public extension CGImage {
 
 extension NSColor {
     
+    convenience init(r: Double, g: Double, b: Double) {
+        
+        self.init(red: CGFloat(r), green: CGFloat(g), blue: CGFloat(b), alpha: 1.0)
+    }
+    
     convenience init(_ rgb: (Double, Double, Double)) {
         
         self.init(r: rgb.0, g: rgb.1, b: rgb.2)
+    }
+    
+    convenience init(rgba: UInt32) {
+        
+        let r = CGFloat(rgba & 0xFF)
+        let g = CGFloat((rgba >> 8) & 0xFF)
+        let b = CGFloat((rgba >> 16) & 0xFF)
+        
+        self.init(red: r / 255.0, green: g / 255.0, blue: b / 255.0, alpha: 1.0)
+    }
+    
+    convenience init(amigaRGB: UInt16) {
+        
+        let r = CGFloat((amigaRGB >> 8) & 0xF)
+        let g = CGFloat((amigaRGB >> 4) & 0xF)
+        let b = CGFloat(amigaRGB & 0xF)
+        
+        self.init(red: r / 15.0, green: g / 15.0, blue: b / 15.0, alpha: 1.0)
     }
     
     func rgb() -> (Int, Int, Int) {
@@ -104,6 +127,15 @@ extension NSColor {
         let b = Int(blueComponent * 255)
         
         return (r, g, b, 255)
+    }
+    
+    func amigaRGB() -> UInt16 {
+        
+        let r = UInt16(redComponent * 15.0)
+        let g = UInt16(greenComponent * 15.0)
+        let b = UInt16(blueComponent * 15.0)
+        
+        return (r << 8) | (g << 4) | b
     }
 }
 

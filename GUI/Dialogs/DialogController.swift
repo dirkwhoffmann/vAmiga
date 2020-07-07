@@ -21,8 +21,8 @@ class DialogWindow: NSWindow {
 /* Base class for all auxiliary windows.
  * The class extends NSWindowController by a reference to the controller
  * of the connected emulator window (parent) and a reference to the parents
- * proxy object (amiga). It also provides some wrappers around showing and
- * hiding the window.
+ * proxy object. It also provides some wrappers around showing and hiding the
+ * window.
  */
 protocol DialogControllerDelegate: class {
     

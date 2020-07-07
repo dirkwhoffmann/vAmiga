@@ -56,7 +56,7 @@ class MyController: NSWindowController, MessageReceiver {
     var gamePad2: GamePad? { return gamePadManager.gamePads[config.gameDevice2] }
     
     // Keyboard controller
-    var kbController: KeyboardController!
+    var keyboard: KeyboardController!
 
     // Virtual keyboard
     var virtualKeyboard: VirtualKeyboardController?
@@ -269,8 +269,8 @@ extension MyController {
         track()
                 
         // Create keyboard controller
-        kbController = KeyboardController(parent: self)
-        assert(kbController != nil, "Failed to create keyboard controller")
+        keyboard = KeyboardController(parent: self)
+        assert(keyboard != nil, "Failed to create keyboard controller")
 
         // Create game pad manager
         gamePadManager = GamePadManager(parent: self)

@@ -7,12 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/*
-import Metal
-import MetalKit
-import MetalPerformanceShaders
-*/
-
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
@@ -36,7 +30,7 @@ public class MetalView: MTKView {
     // Reference to the second mouse (USB, usually unconnected)
     var mouse2: GamePad?
 
-    // Variables needed to detect a mouse detection
+    // Variables needed to detect a shaking mouse
     var dxsign = CGFloat(1)
     var dxsum = CGFloat(0)
     var dxturns = 0
