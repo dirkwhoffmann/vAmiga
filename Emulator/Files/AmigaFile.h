@@ -129,7 +129,11 @@ public:
      * file contents in memory and invokes readFromBuffer afterwards.
      */
     bool readFromFile(const char *filename);
-    
+
+    /* Deserializes this object from a file that is already open.
+     */
+    bool readFromFile(FILE *file);
+
     /* Writes the file contents into a memory buffer.
      * If a NULL pointer is passed in, a test run is performed. Test runs can
      * be performed to determine the size of the file on disk.

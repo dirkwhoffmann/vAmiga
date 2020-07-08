@@ -169,9 +169,7 @@ AmigaFile::readFromFile(const char *filename)
     
     setPath(filename);
     success = true;
-    
-    msg("Rom: %s\n", path);
-    
+        
 exit:
     
     if (file)
@@ -180,6 +178,40 @@ exit:
         delete[] buffer;
     
     return success;
+}
+
+bool
+AmigaFile::readFromFile(FILE *file)
+{
+    assert (file != NULL);
+    
+    u8 *buffer = NULL;
+
+    // Get file size
+    fseek(file, 0, SEEK_END);
+    size_t size = (size_t)ftell(file);
+    rewind(file);
+    
+    // Allocate memory
+    if (!(buffer = new u8[size])) {
+        return false;
+    }
+
+    // Read from file
+    int c;
+    for (unsigned i = 0; i < size; i++) {
+        if ((c = fgetc(file)) == EOF) break;
+        buffer[i] = (u8)c;
+    }
+
+    // Check type
+    if (!bufferHasSameType(buffer, size)) {
+        delete[] buffer;
+        return false;
+    }
+    
+    delete[] buffer;
+    return true;
 }
 
 size_t

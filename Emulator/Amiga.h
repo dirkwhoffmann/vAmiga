@@ -40,6 +40,7 @@
 #include "ExtFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "DMSFile.h"
 
 /* A complete virtual Amiga
  * This class is the most prominent one of all. To run the emulator, it is

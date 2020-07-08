@@ -157,6 +157,19 @@
 		50EE994021FF4D8E003BD74B /* PaulaAudio.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
+		50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0C24B5D31D0078FDC9 /* u_heavy.c */; };
+		50F54B2624B5D31D0078FDC9 /* tables.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0D24B5D31D0078FDC9 /* tables.c */; };
+		50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0E24B5D31D0078FDC9 /* u_deep.c */; };
+		50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B0F24B5D31D0078FDC9 /* u_medium.c */; };
+		50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1124B5D31D0078FDC9 /* xdms.c */; };
+		50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1324B5D31D0078FDC9 /* u_init.c */; };
+		50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1424B5D31D0078FDC9 /* maketbl.c */; };
+		50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1624B5D31D0078FDC9 /* crc_csum.c */; };
+		50F54B2D24B5D31D0078FDC9 /* pfile.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1B24B5D31D0078FDC9 /* pfile.c */; };
+		50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B1E24B5D31D0078FDC9 /* u_rle.c */; };
+		50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2124B5D31D0078FDC9 /* getbits.c */; };
+		50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B2324B5D31D0078FDC9 /* u_quick.c */; };
+		50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */; };
 		50F580662431D1A000E7D84D /* Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F580652431D1A000E7D84D /* Screenshot.swift */; };
 		50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5A84D2214112F00AD5611 /* PaulaPanel.swift */; };
 		50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F5F27121F1B6DF000627D1 /* AmigaKey.swift */; };
@@ -402,6 +415,33 @@
 		50F0BD2422AF883C001F4616 /* UART.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UART.cpp; sourceTree = "<group>"; };
 		50F0BD2522AF883C001F4616 /* UART.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UART.h; sourceTree = "<group>"; };
 		50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperBlitterPanel.swift; sourceTree = "<group>"; };
+		50F54B0C24B5D31D0078FDC9 /* u_heavy.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_heavy.c; sourceTree = "<group>"; };
+		50F54B0D24B5D31D0078FDC9 /* tables.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = tables.c; sourceTree = "<group>"; };
+		50F54B0E24B5D31D0078FDC9 /* u_deep.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_deep.c; sourceTree = "<group>"; };
+		50F54B0F24B5D31D0078FDC9 /* u_medium.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_medium.c; sourceTree = "<group>"; };
+		50F54B1024B5D31D0078FDC9 /* pfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pfile.h; sourceTree = "<group>"; };
+		50F54B1124B5D31D0078FDC9 /* xdms.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = xdms.c; sourceTree = "<group>"; };
+		50F54B1224B5D31D0078FDC9 /* getbits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = getbits.h; sourceTree = "<group>"; };
+		50F54B1324B5D31D0078FDC9 /* u_init.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_init.c; sourceTree = "<group>"; };
+		50F54B1424B5D31D0078FDC9 /* maketbl.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = maketbl.c; sourceTree = "<group>"; };
+		50F54B1524B5D31D0078FDC9 /* u_rle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_rle.h; sourceTree = "<group>"; };
+		50F54B1624B5D31D0078FDC9 /* crc_csum.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = crc_csum.c; sourceTree = "<group>"; };
+		50F54B1724B5D31D0078FDC9 /* u_quick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_quick.h; sourceTree = "<group>"; };
+		50F54B1824B5D31D0078FDC9 /* tables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tables.h; sourceTree = "<group>"; };
+		50F54B1924B5D31D0078FDC9 /* u_heavy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_heavy.h; sourceTree = "<group>"; };
+		50F54B1A24B5D31D0078FDC9 /* u_medium.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_medium.h; sourceTree = "<group>"; };
+		50F54B1B24B5D31D0078FDC9 /* pfile.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pfile.c; sourceTree = "<group>"; };
+		50F54B1C24B5D31D0078FDC9 /* xdmsconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = xdmsconfig.h; sourceTree = "<group>"; };
+		50F54B1D24B5D31D0078FDC9 /* u_deep.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_deep.h; sourceTree = "<group>"; };
+		50F54B1E24B5D31D0078FDC9 /* u_rle.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_rle.c; sourceTree = "<group>"; };
+		50F54B1F24B5D31D0078FDC9 /* maketbl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = maketbl.h; sourceTree = "<group>"; };
+		50F54B2024B5D31D0078FDC9 /* u_init.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = u_init.h; sourceTree = "<group>"; };
+		50F54B2124B5D31D0078FDC9 /* getbits.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = getbits.c; sourceTree = "<group>"; };
+		50F54B2224B5D31D0078FDC9 /* cdata.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cdata.h; sourceTree = "<group>"; };
+		50F54B2324B5D31D0078FDC9 /* u_quick.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = u_quick.c; sourceTree = "<group>"; };
+		50F54B2424B5D31D0078FDC9 /* crc_csum.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = crc_csum.h; sourceTree = "<group>"; };
+		50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DMSFile.cpp; sourceTree = "<group>"; };
+		50F54B3224B5DDAF0078FDC9 /* DMSFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DMSFile.h; sourceTree = "<group>"; };
 		50F580652431D1A000E7D84D /* Screenshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Screenshot.swift; sourceTree = "<group>"; };
 		50F5A84D2214112F00AD5611 /* PaulaPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaulaPanel.swift; sourceTree = "<group>"; };
 		50F5F27121F1B6DF000627D1 /* AmigaKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmigaKey.swift; sourceTree = "<group>"; };
@@ -681,6 +721,7 @@
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* Files */,
+				50F54B0B24B5D31D0078FDC9 /* xdms */,
 			);
 			path = Emulator;
 			sourceTree = "<group>";
@@ -701,6 +742,8 @@
 				50384C8421FC6B66006E7748 /* Snapshot.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
+				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
+				50F54B3124B5DDAF0078FDC9 /* DMSFile.cpp */,
 			);
 			path = Files;
 			sourceTree = "<group>";
@@ -906,6 +949,38 @@
 			path = Paula;
 			sourceTree = "<group>";
 		};
+		50F54B0B24B5D31D0078FDC9 /* xdms */ = {
+			isa = PBXGroup;
+			children = (
+				50F54B0C24B5D31D0078FDC9 /* u_heavy.c */,
+				50F54B0D24B5D31D0078FDC9 /* tables.c */,
+				50F54B0E24B5D31D0078FDC9 /* u_deep.c */,
+				50F54B0F24B5D31D0078FDC9 /* u_medium.c */,
+				50F54B1024B5D31D0078FDC9 /* pfile.h */,
+				50F54B1124B5D31D0078FDC9 /* xdms.c */,
+				50F54B1224B5D31D0078FDC9 /* getbits.h */,
+				50F54B1324B5D31D0078FDC9 /* u_init.c */,
+				50F54B1424B5D31D0078FDC9 /* maketbl.c */,
+				50F54B1524B5D31D0078FDC9 /* u_rle.h */,
+				50F54B1624B5D31D0078FDC9 /* crc_csum.c */,
+				50F54B1724B5D31D0078FDC9 /* u_quick.h */,
+				50F54B1824B5D31D0078FDC9 /* tables.h */,
+				50F54B1924B5D31D0078FDC9 /* u_heavy.h */,
+				50F54B1A24B5D31D0078FDC9 /* u_medium.h */,
+				50F54B1B24B5D31D0078FDC9 /* pfile.c */,
+				50F54B1C24B5D31D0078FDC9 /* xdmsconfig.h */,
+				50F54B1D24B5D31D0078FDC9 /* u_deep.h */,
+				50F54B1E24B5D31D0078FDC9 /* u_rle.c */,
+				50F54B1F24B5D31D0078FDC9 /* maketbl.h */,
+				50F54B2024B5D31D0078FDC9 /* u_init.h */,
+				50F54B2124B5D31D0078FDC9 /* getbits.c */,
+				50F54B2224B5D31D0078FDC9 /* cdata.h */,
+				50F54B2324B5D31D0078FDC9 /* u_quick.c */,
+				50F54B2424B5D31D0078FDC9 /* crc_csum.h */,
+			);
+			path = xdms;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1034,6 +1109,7 @@
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
+				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
 				5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */,
@@ -1072,7 +1148,9 @@
 				5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */,
 				50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */,
 				502F7DCE2221706000AEEC65 /* Copper.cpp in Sources */,
+				50F54B2D24B5D31D0078FDC9 /* pfile.c in Sources */,
 				508FE02D21EA227B0043D0E9 /* MyAppDelegate.swift in Sources */,
+				50F54B2F24B5D31D0078FDC9 /* getbits.c in Sources */,
 				508FE02E21EA227B0043D0E9 /* Alerts.swift in Sources */,
 				508FE02921EA227B0043D0E9 /* MyControllerTouchBar.swift in Sources */,
 				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
@@ -1087,7 +1165,9 @@
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
+				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
+				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
@@ -1107,9 +1187,13 @@
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
+				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
+				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,
+				50F54B3324B5DDAF0078FDC9 /* DMSFile.cpp in Sources */,
+				50F54B2524B5D31D0078FDC9 /* u_heavy.c in Sources */,
 				502EFD0A2248EC0200F0E118 /* EventPanel.swift in Sources */,
 				5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */,
 				508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */,
@@ -1118,21 +1202,25 @@
 				50B9354B243481AB000C78B8 /* SnapshotDialog.swift in Sources */,
 				509CF4CF220847C600C500F0 /* InstrTableView.swift in Sources */,
 				508FE04E21EA22CC0043D0E9 /* RomPrefs.swift in Sources */,
+				50F54B2A24B5D31D0078FDC9 /* u_init.c in Sources */,
 				507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */,
 				5062DB1224370FE400ACEEE2 /* MyControllerStorage.swift in Sources */,
 				508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */,
 				50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */,
 				508FE05621EA22CC0043D0E9 /* PreferencesController.swift in Sources */,
 				505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */,
+				50F54B2C24B5D31D0078FDC9 /* crc_csum.c in Sources */,
 				508FE05321EA22CC0043D0E9 /* VideoPrefs.swift in Sources */,
 				50357BB823912929007E7563 /* RendererSetup.swift in Sources */,
 				508833EE21F0D21B009890EA /* ADFFile.cpp in Sources */,
 				508FE02321EA227B0043D0E9 /* KeyboardController.swift in Sources */,
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
+				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
+				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,

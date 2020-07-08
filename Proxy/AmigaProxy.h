@@ -28,6 +28,7 @@
 @class DriveProxy;
 @class AmigaFileProxy;
 @class ADFFileProxy;
+@class DMSFileProxy;
 @class SnapshotProxy;
 
 /* Forward declarations of C++ class wrappers.
@@ -524,6 +525,7 @@ struct AmigaFileWrapper;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
+- (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
@@ -645,3 +647,16 @@ struct AmigaFileWrapper;
 
 @end
 
+
+//
+// DMSFile proxy
+//
+
+@interface DMSFileProxy : AmigaFileProxy {
+}
+
++ (BOOL)isDMSFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
+
+@end

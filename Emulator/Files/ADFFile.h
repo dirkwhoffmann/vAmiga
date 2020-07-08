@@ -58,6 +58,7 @@ public:
     static ADFFile *makeWithDiskType(DiskType t);
     static ADFFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
+    static ADFFile *makeWithFile(FILE *file);
     static ADFFile *makeWithDisk(Disk *disk);
   
     

@@ -26,7 +26,7 @@ struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { Drive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
-struct ADFFileWrapper { ADFFile *adf; };
+// struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
@@ -1015,6 +1015,11 @@ struct ADFFileWrapper { ADFFile *adf; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((ADFFile *)(fileWrapper->file), nr);
 }
+- (void) insert:(NSInteger)nr dms:(ADFFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((DMSFile *)(fileWrapper->file), nr);
+}
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
     wrapper->controller->setWriteProtection(nr, value);
@@ -1346,6 +1351,35 @@ struct ADFFileWrapper { ADFFile *adf; };
 - (void)seekSector:(NSInteger)nr
 {
     ((ADFFile *)wrapper->file)->seekSector(nr);
+}
+
+@end
+
+
+//
+// DMSFile proxy
+//
+
+@implementation DMSFileProxy
+
++ (BOOL)isDMSFile:(NSString *)path
+{
+    return DMSFile::isDMSFile([path UTF8String]);
+}
++ (instancetype) make:(DMSFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    DMSFile *archive = DMSFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    DMSFile *archive = DMSFile::makeWithFile([path UTF8String]);
+    return [self make: archive];
 }
 
 @end

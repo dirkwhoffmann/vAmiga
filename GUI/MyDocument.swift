@@ -96,10 +96,33 @@ class MyDocument: NSDocument {
             throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
         }
         
-        // Try to create ADF file proxy
+        // Try to create a proxy
         let buffer = (data as NSData).bytes
         let length = data.count
         let proxy = ADFFileProxy.make(withBuffer: buffer, length: length)
+        
+        if proxy != nil {
+            myAppDelegate.noteNewRecentlyUsedURL(url)
+        }
+        
+        return proxy
+    }
+    
+    // Creates an DMS file proxy from a URL
+    func createDMS(from url: URL) throws -> DMSFileProxy? {
+        
+        track("Creating DMS proxy from URL \(url.lastPathComponent).")
+                
+        // Try to create a file wrapper
+        let fileWrapper = try FileWrapper.init(url: url)
+        guard let data = fileWrapper.regularFileContents else {
+            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
+        }
+        
+        // Try to create a proxy
+        let buffer = (data as NSData).bytes
+        let length = data.count
+        let proxy = DMSFileProxy.make(withBuffer: buffer, length: length)
         
         if proxy != nil {
             myAppDelegate.noteNewRecentlyUsedURL(url)
@@ -155,6 +178,9 @@ class MyDocument: NSDocument {
         case "ADF":
             amigaAttachment = ADFFileProxy.make(withBuffer: buffer, length: length)
             
+        case "DMS":
+            amigaAttachment = DMSFileProxy.make(withBuffer: buffer, length: length)
+
         default:
             throw NSError.unsupportedFormatError(filename: filename)
         }
@@ -189,6 +215,14 @@ class MyDocument: NSDocument {
                 runDiskMountDialog()
             }
             
+        case _ as DMSFileProxy:
+            
+            if let df = parent?.dragAndDropDrive?.nr() {
+                amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
+            } else {
+                runDiskMountDialog()
+            }
+
         default:
             break
         }

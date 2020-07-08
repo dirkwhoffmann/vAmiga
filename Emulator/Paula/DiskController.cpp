@@ -229,6 +229,13 @@ DiskController::insertDisk(class ADFFile *file, int nr, Cycle delay)
 }
 
 void
+DiskController::insertDisk(class DMSFile *file, int nr, Cycle delay)
+{
+    debug("IMPLEMENTATION MISSING\n");
+    assert(false);
+}
+
+void
 DiskController::setWriteProtection(int nr, bool value)
 {
     assert(nr >= 0 && nr <= 3);

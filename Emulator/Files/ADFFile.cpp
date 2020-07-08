@@ -105,6 +105,19 @@ ADFFile::makeWithFile(const char *path)
 }
 
 ADFFile *
+ADFFile::makeWithFile(FILE *file)
+{
+    ADFFile *adf = new ADFFile();
+    
+    if (!adf->readFromFile(file)) {
+        delete adf;
+        return NULL;
+    }
+    
+    return adf;
+}
+
+ADFFile *
 ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
