@@ -139,7 +139,8 @@ private:
     
     // Mutex to coordinate operations on the emulator thread
     pthread_mutex_t threadLock;
-
+    pthread_mutex_t stateChangeLock;
+    
     
     //
     // Emulation speed

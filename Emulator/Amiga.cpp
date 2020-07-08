@@ -109,6 +109,7 @@ Amiga::Amiga()
     
     // Initialize mutex
     pthread_mutex_init(&threadLock, NULL);
+    pthread_mutex_init(&stateChangeLock, NULL);
 }
 
 Amiga::~Amiga()
@@ -117,6 +118,7 @@ Amiga::~Amiga()
     powerOffEmulator();
     
     pthread_mutex_destroy(&threadLock);
+    pthread_mutex_destroy(&stateChangeLock);
 }
 
 void
@@ -737,47 +739,49 @@ Amiga::_warpOff()
 void
 Amiga::suspend()
 {
-    synchronized {
+    pthread_mutex_lock(&stateChangeLock);
+    
+    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
+    
+    if (suspendCounter || isRunning()) {
         
-        debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
         
-        if (suspendCounter || isRunning()) {
-            
-            // Acquire the thread lock
-            requestThreadLock();
-            pthread_mutex_lock(&threadLock);
-            
-            // At this point, the emulator must be paused or powered off
-            assert(!isRunning());
-            
-            suspendCounter++;
-        }
+        // At this point, the emulator must be paused or powered off
+        assert(!isRunning());
+        
+        suspendCounter++;
     }
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
 Amiga::resume()
 {
-    synchronized {
+    pthread_mutex_lock(&stateChangeLock);
+    
+    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
+    
+    if (suspendCounter && --suspendCounter == 0) {
         
-        debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
         
-        if (suspendCounter && --suspendCounter == 0) {
-            
-            // Acquire the thread lock
-            requestThreadLock();
-            pthread_mutex_lock(&threadLock);
-            
-            run();
-        }
+        run();
     }
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
 Amiga::requestThreadLock()
 {
     if (state == STATE_RUNNING) {
-
+        
         // The emulator thread is running
         assert(p != NULL);
         
@@ -797,79 +801,83 @@ Amiga::requestThreadLock()
 void
 Amiga::powerOnEmulator()
 {
-    synchronized {
-        
+    pthread_mutex_lock(&stateChangeLock);
+    
 #ifdef BOOT_DISK
-        
-        ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
-        if (adf) {
-            Disk *disk = Disk::makeWithFile(adf);
-            df0.ejectDisk();
-            df0.insertDisk(disk);
-            df0.setWriteProtection(false);
-        }
-        
-#endif
-        
-#ifdef INITIAL_BREAKPOINT
-        
-        debugMode = true;
-        cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
-        
-#endif
-        
-        if (isReady()) {
-            
-            // Acquire the thread lock
-            requestThreadLock();
-            pthread_mutex_lock(&threadLock);
-            
-            powerOn();
-        }
+    
+    ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
+    if (adf) {
+        Disk *disk = Disk::makeWithFile(adf);
+        df0.ejectDisk();
+        df0.insertDisk(disk);
+        df0.setWriteProtection(false);
     }
+    
+#endif
+    
+#ifdef INITIAL_BREAKPOINT
+    
+    debugMode = true;
+    cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
+    
+#endif
+    
+    if (isReady()) {
+        
+        // Acquire the thread lock
+        requestThreadLock();
+        pthread_mutex_lock(&threadLock);
+        
+        powerOn();
+    }
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
 Amiga::powerOffEmulator()
 {
-    synchronized {
-        
-        // Acquire the thread lock
-        requestThreadLock();
-        pthread_mutex_lock(&threadLock);
-        
-        powerOff();
-    }
+    pthread_mutex_lock(&stateChangeLock);
+    
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
+    
+    powerOff();
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
 Amiga::runEmulator()
 {
-    synchronized {
-        
-        if (isReady()) {
-            
-            // Acquire the thread lock
-            requestThreadLock();
-            pthread_mutex_lock(&threadLock);
-            
-            run();
-        }
-    }
-}
-
-void
-Amiga::pauseEmulator()
-{
-    synchronized {
+    pthread_mutex_lock(&stateChangeLock);
+    
+    if (isReady()) {
         
         // Acquire the thread lock
         requestThreadLock();
         pthread_mutex_lock(&threadLock);
         
-        // At this point, the emulator is already paused or powered off
-        assert(!isRunning());
+        run();
     }
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
+Amiga::pauseEmulator()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    // Acquire the thread lock
+    requestThreadLock();
+    pthread_mutex_lock(&threadLock);
+    
+    // At this point, the emulator is already paused or powered off
+    assert(!isRunning());
+    
+    pthread_mutex_unlock(&stateChangeLock);
 }
 
 bool

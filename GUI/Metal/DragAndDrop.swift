@@ -109,9 +109,47 @@ public extension MetalView {
             
         case .compatibleFileURL:
             
-            if let url = NSURL.init(from: pasteBoard) as URL? {
+            if var url = NSURL.init(from: pasteBoard) as URL? {
                 do {
+                    
+                    let suffix = url.pathExtension
+                    track("url = \(url)")
+                    track("pathExtension = \(suffix)")
+                    if suffix == "adz" {
+                     
+                        track("ADZ found")
+                        var url2 = url
+                        url2.deletePathExtension()
+                        track("url = \(url)")
+                        track("url2 = \(url2)")
+                        let file = url2.lastPathComponent + ".adf"
+                        track("file = \(file)")
+
+                        let fm = FileManager.default
+                        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
+                        let mask = FileManager.SearchPathDomainMask.userDomainMask
+                        guard var support = fm.urls(for: path, in: mask).first else { return false }
+                        support.appendPathComponent("vAmiga")
+                        track("Support dir = \(support)")
+                        
+                        let args = ["-o",
+                                    url.path,
+                                    file,
+                                    "-d",
+                                    support.path
+                            ]
+                        track("args = \(args)")
+                        
+                        let res = shell(launchPath: "/usr/bin/unzip",
+                                        arguments: args)
+                        print("unzip:\n\(res)")
+                        url = support
+                        url.appendPathComponent(file)
+                        print("Changing URL to \(url)")
+                    }
+                    
                     try document.createAmigaAttachment(from: url)
+                    track("***")
                     return document.mountAmigaAttachment()
                     
                 } catch {
@@ -130,5 +168,23 @@ public extension MetalView {
     }
     
     override func concludeDragOperation(_ sender: NSDraggingInfo?) {
+    }
+
+    func shell(launchPath path: String, arguments args: [String]) -> String {
+        
+        let task = Process()
+        task.launchPath = path
+        task.arguments = args
+
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = pipe
+        task.launch()
+
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let output = String(data: data, encoding: .utf8)
+        task.waitUntilExit()
+
+        return output!
     }
 }
