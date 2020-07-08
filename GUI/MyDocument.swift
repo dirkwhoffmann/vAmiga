@@ -102,7 +102,6 @@ class MyDocument: NSDocument {
         let proxy = ADFFileProxy.make(withBuffer: buffer, length: length)
         
         if proxy != nil {
-            track("********")
             myAppDelegate.noteNewRecentlyUsedURL(url)
         }
         
