@@ -32,6 +32,30 @@ class DiskMountDialog: DialogController {
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
+                
+        disk = nil
+        if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
+            disk = attachment
+        }
+        if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
+            if let adf = attachment.adf() {
+                disk = adf
+            }
+        }
+        
+        if disk != nil {
+            
+            // Load screenshots (if any)
+            for url in Screenshot.collectFiles(forDisk: disk!.fnv()) {
+                if let screenshot = Screenshot.init(fromUrl: url) {
+                    screenshots.append(screenshot)
+                }
+            }
+            
+            super.showSheet(completionHandler: handler)
+        }
+        
+        /*
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
             
             disk = attachment
@@ -45,6 +69,7 @@ class DiskMountDialog: DialogController {
         
             super.showSheet(completionHandler: handler)
         }
+        */
     }
     
     override public func awakeFromNib() {

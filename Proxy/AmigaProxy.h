@@ -659,4 +659,6 @@ struct AmigaFileWrapper;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
 
+- (ADFFileProxy *)adf;
+
 @end

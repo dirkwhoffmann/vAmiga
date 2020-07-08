@@ -13,10 +13,11 @@
 #include "ADFFile.h"
 
 class DMSFile : public AmigaFile {
-
-    ADFFile *adf = nullptr;
     
 public:
+    
+    ADFFile *adf = nullptr;
+    
     
     //
     // Class methods

@@ -85,7 +85,7 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
 
     // Create output file
     fpi = fopen("/tmp/tmp.dms", "r");
-    fpo = fopen("/tmp/tmp.adf", "w");
+    fpo = fopen("/tmp/tmp.adf", "w"); 
     extractDMS(fpi, fpo);
     fclose(fpi);
     fclose(fpo);
@@ -95,6 +95,5 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
     adf = ADFFile::makeWithFile(fpo);
     fclose(fpo);
     
-    debug("adf = %p\n", adf);    
     return adf != NULL;
 }

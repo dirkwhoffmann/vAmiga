@@ -210,6 +210,13 @@ AmigaFile::readFromFile(FILE *file)
         return false;
     }
     
+    // Read from buffer
+    dealloc();
+    if (!readFromBuffer(buffer, size)) {
+        delete[] buffer;
+        return false;
+    }
+    
     delete[] buffer;
     return true;
 }

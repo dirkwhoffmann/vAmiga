@@ -1382,6 +1382,12 @@ struct AmigaFileWrapper { AmigaFile *file; };
     return [self make: archive];
 }
 
+- (ADFFileProxy *)adf
+{
+    DMSFile *archive = (DMSFile *)wrapper->file;
+    return [ADFFileProxy make:archive->adf];
+}
+
 @end
 
 
