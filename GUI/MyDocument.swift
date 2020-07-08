@@ -12,6 +12,9 @@ class MyDocument: NSDocument {
     // The window controller for this document
     var parent: MyController? { return windowControllers.first as? MyController }
 
+    // The application delegate
+    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    
     /*
      Emulator proxy object. This object is an Objective-C bridge between
      the GUI (written in Swift) an the core emulator (written in C++).
@@ -84,8 +87,11 @@ class MyDocument: NSDocument {
 
         track("Creating ADF proxy from URL \(url.lastPathComponent).")
         
+        // If the URL points to an ADZ, unzip it
+        let newUrl = url.adfFromAdz ?? url
+
         // Try to create a file wrapper
-        let fileWrapper = try FileWrapper.init(url: url)
+        let fileWrapper = try FileWrapper.init(url: newUrl)
         guard let data = fileWrapper.regularFileContents else {
             throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
         }
@@ -96,6 +102,7 @@ class MyDocument: NSDocument {
         let proxy = ADFFileProxy.make(withBuffer: buffer, length: length)
         
         if proxy != nil {
+            track("********")
             myAppDelegate.noteNewRecentlyUsedURL(url)
         }
         
@@ -107,9 +114,12 @@ class MyDocument: NSDocument {
         
         track("Creating attachment from URL \(url.lastPathComponent).")
         
+        // If the URL points to an ADZ, unzip it
+        let newUrl = url.adfFromAdz ?? url
+        
         // Try to create the attachment
-        let fileWrapper = try FileWrapper.init(url: url)
-        let pathExtension = url.pathExtension.uppercased()
+        let fileWrapper = try FileWrapper.init(url: newUrl)
+        let pathExtension = newUrl.pathExtension.uppercased()
         try createAmigaAttachment(from: fileWrapper, ofType: pathExtension)
         
         // Put URL in recently used URL lists

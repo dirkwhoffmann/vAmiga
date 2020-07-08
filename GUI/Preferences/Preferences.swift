@@ -21,8 +21,8 @@
 
 class Preferences {
     
-    var parent: MyAppDelegate!
- 
+    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+
     //
     // General
     //
@@ -48,11 +48,11 @@ class Preferences {
     // Snapshots and screenshots
     var autoSnapshots = GeneralDefaults.std.autoSnapshots
     var snapshotInterval = 0 {
-        didSet { for c in parent.controllers { c.startSnapshotTimer() } }
+        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
     }
     var autoScreenshots = GeneralDefaults.std.autoScreenshots
     var screenshotInterval = 0 {
-        didSet { for c in parent.controllers { c.startScreenshotTimer() } }
+        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
     }
     var screenshotSource = GeneralDefaults.std.screenshotSource
     var screenshotTarget = GeneralDefaults.std.screenshotTarget
@@ -63,7 +63,7 @@ class Preferences {
     
     // Warp mode
     var warpMode = GeneralDefaults.std.warpMode {
-        didSet { for c in parent.controllers { c.updateWarp() } }
+        didSet { for c in myAppDelegate.controllers { c.updateWarp() } }
     }
     var warpModeIntValue: Int {
         get { return Int(warpMode.rawValue) }
@@ -119,7 +119,7 @@ class Preferences {
     var releaseMouseWithKeys = DevicesDefaults.std.releaseMouseWithKeys
     var releaseMouseByShaking = DevicesDefaults.std.releaseMouseByShaking
  
-    init(with delegate: MyAppDelegate) { parent = delegate }
+    // init(with delegate: MyAppDelegate) { parent = delegate }
     
     //
     // General

@@ -501,13 +501,12 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Insert"
-        openPanel.allowedFileTypes = ["adf"]
+        openPanel.allowedFileTypes = ["adf", "adz"]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = openPanel.url {
                     do {
                         let adf = try self.mydocument.createADF(from: url)
-                        // self.amiga.df(sender).insertDisk(adf)
                         self.amiga.diskController.insert(sender.tag, adf: adf)
                     } catch {
                         NSApp.presentError(error)

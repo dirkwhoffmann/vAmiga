@@ -109,12 +109,9 @@ public extension MetalView {
             
         case .compatibleFileURL:
             
-            if var url = NSURL.init(from: pasteBoard) as URL? {
-                do {
-                    
-                    // If the URL points to an ADZ, unzip it
-                    if let newUrl = url.adfFromAdz { url = newUrl }
-                    
+            if let url = NSURL.init(from: pasteBoard) as URL? {
+                
+                do {                    
                     try document.createAmigaAttachment(from: url)
                     return document.mountAmigaAttachment()
                     

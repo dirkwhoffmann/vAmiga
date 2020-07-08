@@ -14,10 +14,12 @@ import Cocoa
 /* The delegate object of this application.
  * This variable is global and can be accessed from anywhere in the Swift code.
  */
+/*
 var myAppDelegate: MyAppDelegate {
 
     return NSApp.delegate as! MyAppDelegate
 }
+*/
 
 /* An event tap for interception CGEvents
  * CGEvents are intercepted to establish a direct mapping of the Command keys
@@ -138,7 +140,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
     override init() {
         
         super.init()
-        prefs = Preferences.init(with: self)
+        prefs = Preferences.init()
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {
