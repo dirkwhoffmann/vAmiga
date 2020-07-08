@@ -218,10 +218,10 @@ func cgEventCallback(proxy: CGEventTapProxy,
     }
     
     func noteNewRecentlyUsedURL(_ url: URL) {
-        
+                
         switch url.pathExtension.uppercased() {
             
-        case "ADF":
+        case "ADF", "ADZ":
             noteNewRecentlyInsertedDiskURL(url)
             
         default:
