@@ -26,7 +26,7 @@ public func track(_ message: String = "",
 }
 
 //
-// Manipulating Strings
+// String class extensions
 //
 
 extension String {
@@ -81,10 +81,43 @@ extension NSAttributedString {
 }
 
 //
-// Handling URLs
+// URL class extensions
 //
 
 extension URL {
+    
+    static var appSupportFolder: URL? {
+        
+        let fm = FileManager.default
+        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
+        let mask = FileManager.SearchPathDomainMask.userDomainMask
+        let url = fm.urls(for: path, in: mask).first
+        return url?.appendingPathComponent("vAmiga")
+    }
+    
+    static func appSupportFolder(_ name: String) -> URL? {
+    
+        guard let support = URL.appSupportFolder else { return nil }
+
+        let fm = FileManager.default
+        let folder = support.appendingPathComponent("\(name)")
+        var isDirectory: ObjCBool = false
+        let folderExists = fm.fileExists(atPath: folder.path,
+                                         isDirectory: &isDirectory)
+        
+        if !folderExists || !isDirectory.boolValue {
+            
+            do {
+                try fm.createDirectory(at: folder,
+                                       withIntermediateDirectories: true,
+                                       attributes: nil)
+            } catch {
+                return nil
+            }
+        }
+        
+        return folder
+    }
     
     func modificationDate() -> Date? {
         
@@ -155,10 +188,65 @@ extension URL {
         default: return nil
         }
     }
+
+    var adfFromAdz: URL? {
+        
+        if self.pathExtension.uppercased() != "ADZ" { return nil }
+        
+        let name = self.deletingPathExtension().lastPathComponent
+        let adfname = name + ".adf"
+        
+        if let support = URL.appSupportFolder {
+            
+            let exec = "/usr/bin/unzip"
+            let args = [
+                "-o",           // Overwrite existing file
+                self.path,      // Zipped archive
+                adfname,        // File to extract
+                "-d",           // Extract file to...
+                support.path    // ...the application support folder
+            ]
+            
+            track("exec = \(exec)")
+            track("args = \(args)")
+            
+            if let result = FileManager.exec(launchPath: exec, arguments: args) {
+                
+                print("\(result)")
+                return support.appendingPathComponent(adfname)
+            }
+        }
+        return nil
+    }
 }
 
 //
-// Processing images
+// FileManager
+//
+
+extension FileManager {
+    
+    static func exec(launchPath: String, arguments: [String]) -> String? {
+        
+        let task = Process()
+        task.launchPath = launchPath
+        task.arguments = arguments
+        
+        let pipe = Pipe()
+        task.standardOutput = pipe
+        task.standardError = pipe
+        task.launch()
+        
+        let data = pipe.fileHandleForReading.readDataToEndOfFile()
+        let result = String(data: data, encoding: .utf8)
+        task.waitUntilExit()
+        
+        return result
+    }
+}
+
+//
+// Data class extensions
 //
 
 extension Data {
@@ -166,6 +254,10 @@ extension Data {
         return NSBitmapImageRep(data: self)
     }
 }
+
+//
+// NSImage class extensions
+//
 
 extension NSImage {
     

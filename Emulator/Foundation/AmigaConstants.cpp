@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "AmigaUtils.h"
+#include "Utils.h"
 
 const char *regName(u32 addr)
 {

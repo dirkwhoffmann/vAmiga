@@ -10,7 +10,7 @@
 #ifndef _SEE_UTILS_H
 #define _SEE_UTILS_H
 
-#include "AmigaUtils.h"
+#include "Utils.h"
 
 /* Transposes a 8 x 16 bit matrix using SSE3 extensions
  *

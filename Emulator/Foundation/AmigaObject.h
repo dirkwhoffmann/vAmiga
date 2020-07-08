@@ -10,7 +10,7 @@
 #ifndef _AMIGA_OBJECT_H
 #define _AMIGA_OBJECT_H
 
-#include "AmigaUtils.h"
+#include "Utils.h"
 
 #include <vector>
 #include <map>

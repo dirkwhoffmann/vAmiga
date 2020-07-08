@@ -101,28 +101,8 @@ class Screenshot {
     
     static func folder(forDisk diskID: UInt64) -> URL? {
         
-        let fm = FileManager.default
-        let path = FileManager.SearchPathDirectory.applicationSupportDirectory
-        let mask = FileManager.SearchPathDomainMask.userDomainMask
-        guard let support = fm.urls(for: path, in: mask).first else { return nil }
         let subdir = String(format: "%8X", diskID)
-        let folder = support.appendingPathComponent("vAmiga/Screenshots/\(subdir)")
-        var isDirectory: ObjCBool = false
-        let folderExists = fm.fileExists(atPath: folder.path,
-                                         isDirectory: &isDirectory)
-        
-        if !folderExists || !isDirectory.boolValue {
-            
-            do {
-                try fm.createDirectory(at: folder,
-                                       withIntermediateDirectories: true,
-                                       attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        
-        return folder
+        return URL.appSupportFolder("Screenshots/\(subdir)")
     }
         
     static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {
