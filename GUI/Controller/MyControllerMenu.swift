@@ -284,86 +284,6 @@ extension MyController: NSMenuItemValidation {
         screenshotBrowser?.showSheet()
     }
     
-    /*
-     // DEPRECATED
-     @IBAction func saveScreenshotDialog(_ sender: Any!) {
-     
-     // Halt emulation to freeze the current texture
-     amiga.pause()
-     
-     // Create save panel
-     let savePanel = NSSavePanel()
-     savePanel.prompt = "Export"
-     
-     // Set allowed file types
-     switch screenshotTarget {
-     case .tiff: savePanel.allowedFileTypes = ["jpg"]
-     case .bmp: savePanel.allowedFileTypes = ["bmp"]
-     case .gif: savePanel.allowedFileTypes = ["gif"]
-     case .jpeg: savePanel.allowedFileTypes = ["jpg"]
-     case .png: savePanel.allowedFileTypes = ["png"]
-     default:
-     track("Unsupported image format: \(screenshotTarget)")
-     return
-     }
-     
-     // Run panel as sheet
-     savePanel.beginSheetModal(for: window!, completionHandler: { result in
-     if result == .OK {
-     if let url = savePanel.url {
-     do {
-     try self.saveScreenshot(url: url)
-     } catch {
-     NSApp.presentError(error)
-     }
-     }
-     }
-     self.amiga.run()
-     })
-     }
-     
-     // DEPRECATED
-     @IBAction func quicksaveScreenshot(_ sender: Any!) {
-     
-     // Determine file suffix
-     var suffix: String
-     switch screenshotTarget {
-     case .tiff: suffix = "tiff"
-     case .bmp: suffix = "bmp"
-     case .gif: suffix = "gif"
-     case .jpeg: suffix = "jpg"
-     case .png: suffix = "png"
-     default:
-     track("Unsupported image format: \(screenshotTarget)")
-     return
-     }
-     
-     // Assemble URL and save
-     let paths = NSSearchPathForDirectoriesInDomains(.desktopDirectory, .userDomainMask, true)
-     let desktopUrl = NSURL.init(fileURLWithPath: paths[0])
-     if let url = desktopUrl.appendingPathComponent("Screenshot." + suffix) {
-     do {
-     try saveScreenshot(url: url.addTimeStamp().makeUnique())
-     } catch {
-     track("Cannot quicksave screenshot")
-     }
-     }
-     }
-     
-     // DEPRECATED
-     func saveScreenshot(url: URL) throws {
-     
-     // Take screenshot
-     let image = renderer.screenshot(afterUpscaling: screenshotSource > 0)
-     
-     // Convert to target format
-     let data = image?.representation(using: screenshotTarget)
-     
-     // Save to file
-     try data?.write(to: url, options: .atomic)
-     }
-     */
-    
     //
     // Action methods (Edit menu)
     //
@@ -489,10 +409,8 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func insertDiskAction(_ sender: NSMenuItem!) {
         
-        // Ask user to continue if the current disk contains modified data
-        if !proceedWithUnexportedDisk(drive: sender.tag) {
-            return
-        }
+        // Ask the user if an unsafed disk should be replaced
+        if !proceedWithUnexportedDisk(drive: sender.tag) { return }
         
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
@@ -503,36 +421,11 @@ extension MyController: NSMenuItemValidation {
         openPanel.prompt = "Insert"
         openPanel.allowedFileTypes = ["adf", "adz", "dms"]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = openPanel.url {
-                    do {
-                        let adf = try self.mydocument.createADF(from: url)
-                        self.amiga.diskController.insert(sender.tag, adf: adf)
-                    } catch {
-                        NSApp.presentError(error)
-                    }
-                }
+
+            if result == .OK, let url = openPanel.url {
+                self.insertDiskAction(from: url, drive: sender.tag)
             }
         })
-    }
-        
-    func insertRecentDiskAction(drive: Int, slot: Int) {
-        
-        track("drive: \(drive) slot: \(slot)")
-
-        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
-            
-            amiga.suspend()
-            do {
-                let adf = try self.mydocument.createADF(from: url)
-                if proceedWithUnexportedDisk(drive: drive) {
-                    amiga.diskController.insert(drive, adf: adf)
-                }
-            } catch {
-                NSApp.presentError(error)
-            }
-            amiga.resume()
-        }
     }
     
     @IBAction func insertRecentDiskAction(_ sender: NSMenuItem!) {
@@ -543,6 +436,33 @@ extension MyController: NSMenuItemValidation {
         insertRecentDiskAction(drive: drive, slot: slot)
     }
 
+    func insertRecentDiskAction(drive: Int, slot: Int) {
+        
+        if let url = myAppDelegate.getRecentlyInsertedDiskURL(slot) {
+            insertDiskAction(from: url, drive: drive)
+        }
+    }
+    
+    func insertDiskAction(from url: URL, drive: Int) {
+        
+        do {
+            // Try to create the ADF proxy object
+            let proxy = try mydocument.createADFProxy(from: url)
+            
+            // Ask the user if an unsafed disk should be replaced
+            if !proceedWithUnexportedDisk(drive: drive) { return }
+            
+            // Insert the disk
+            amiga.diskController.insert(drive, adf: proxy)
+            
+            // Remember the URL
+            myAppDelegate.noteNewRecentlyUsedURL(url)
+            
+        } catch {
+            NSApp.presentError(error)
+        }
+    }
+    
     @IBAction func writeProtectAction(_ sender: NSMenuItem!) {
         
         amiga.suspend()

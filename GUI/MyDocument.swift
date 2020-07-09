@@ -41,6 +41,10 @@ class MyDocument: NSDocument {
     // The value is used to determine the screenshot save folder
     private var bootDiskID = UInt64(0)
         
+    //
+    // Initialization
+    //
+    
     override init() {
         
         track()
@@ -82,52 +86,108 @@ class MyDocument: NSDocument {
     // Creating attachments
     //
     
-    // Creates an ADF file proxy from a URL
-    func createADF(from url: URL) throws -> ADFFileProxy? {
-
-        track("Creating ADF proxy from URL \(url.lastPathComponent).")
+    func fileType(url: URL) -> AmigaFileType {
+        
+        switch url.pathExtension.uppercased() {
+            
+        case "VAMIGA": return FILETYPE_SNAPSHOT
+        case "ADF":    return FILETYPE_ADF
+        case "DMS":    return FILETYPE_DMS
+        default:       return FILETYPE_UKNOWN
+        }
+    }
+    
+    func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
+        
+        track("Creating proxy object from URL \(url.lastPathComponent).")
         
         // If the URL points to an ADZ, unzip it
         let newUrl = url.adfFromAdz ?? url
-
-        // Try to create a file wrapper
-        let fileWrapper = try FileWrapper.init(url: newUrl)
-        guard let data = fileWrapper.regularFileContents else {
-            throw NSError.fileAccessError(filename: url.lastPathComponent)
-        }
         
-        // Try to create a proxy
-        let buffer = (data as NSData).bytes
-        let length = data.count
-        if let proxy = ADFFileProxy.make(withBuffer: buffer, length: length) {
-            myAppDelegate.noteNewRecentlyUsedURL(url)
-            return proxy
-        }
+        // Only proceed if the file type is allowed
+        let type = fileType(url: newUrl)
+        if !allowedTypes.contains(type) { return nil }
         
-        throw NSError.corruptedFileError(filename: url.lastPathComponent)
+        // Get the file wrapper and create the proxy with it
+        let wrapper = try FileWrapper.init(url: newUrl)
+        return try createFileProxy(wrapper: wrapper, type: type)
     }
     
-    // Creates an DMS file proxy from a URL
-    /*
-    func createDMS(from url: URL) throws -> DMSFileProxy? {
-        
-        track("Creating DMS proxy from URL \(url.lastPathComponent).")
+    fileprivate
+    func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
                 
-        // Try to create a file wrapper
-        let fileWrapper = try FileWrapper.init(url: url)
-        guard let data = fileWrapper.regularFileContents else {
-            throw NSError.fileAccessError(filename: url.lastPathComponent)
+        guard let name = wrapper.filename else {
+            throw NSError.fileAccessError()
+        }
+        guard let data = wrapper.regularFileContents else {
+            throw NSError.fileAccessError(filename: name)
         }
         
-        // Try to create a proxy
+        var result: AmigaFileProxy?
         let buffer = (data as NSData).bytes
         let length = data.count
-        if let proxy = DMSFileProxy.make(withBuffer: buffer, length: length) {
-            myAppDelegate.noteNewRecentlyUsedURL(url)
-            return proxy
+        
+        track("Read \(length) bytes from file \(name) [\(type.rawValue)].")
+        
+        switch type {
+            
+        case FILETYPE_SNAPSHOT:
+            
+            // Check for outdated snapshot formats
+            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
+                throw NSError.snapshotVersionError(filename: name)
+            }
+            result = SnapshotProxy.make(withBuffer: buffer, length: length)
+            
+        case FILETYPE_ADF:
+
+            result = ADFFileProxy.make(withBuffer: buffer, length: length)
+            
+        case FILETYPE_DMS:
+            
+            result = DMSFileProxy.make(withBuffer: buffer, length: length)
+            
+        default:
+            fatalError()
         }
         
-        throw NSError.corruptedFileError(filename: url.lastPathComponent)
+        if result == nil {
+            throw NSError.corruptedFileError(filename: name)
+        }
+        result!.setPath(name)
+        return result
+    }
+    
+    func createADFProxy(from url: URL) throws -> ADFFileProxy? {
+        
+        track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
+                
+        let types = [ FILETYPE_ADF, FILETYPE_DMS ]
+        let proxy = try createFileProxy(url: url, allowedTypes: types)
+        
+        switch proxy {
+            
+        case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
+        case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
+        default: fatalError()
+        }
+    }
+    
+    /*
+    func createAndInsertADFProxy(from url: URL, drive: Int) throws {
+        
+        // Try to create the ADF proxy object
+        let adf = try createADFProxy(from: url)
+        
+        // Warn the user if an unsafed disk would be replaced
+        if proceedWithUnexportedDisk(drive: drive) {
+            
+            // Insert the disk
+            amiga.diskController.insert(drive, adf: adf)
+            
+            // Remember the URL
+            myAppDelegate.noteNewRecentlyUsedURL(url)
+        }
     }
     */
     
@@ -136,26 +196,23 @@ class MyDocument: NSDocument {
         
         track("Creating attachment from URL \(url.lastPathComponent).")
         
-        // If the URL points to an ADZ, unzip it
-        let newUrl = url.adfFromAdz ?? url
+        // Create file proxy
+        let types = [ FILETYPE_SNAPSHOT, FILETYPE_ADF, FILETYPE_DMS ]
+        amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
-        // Try to create the attachment
-        let fileWrapper = try FileWrapper.init(url: newUrl)
-        let pathExtension = newUrl.pathExtension.uppercased()
-        try createAmigaAttachment(from: fileWrapper, ofType: pathExtension)
-        
-        // Put URL in recently used URL lists
+        // Remember the URL
         myAppDelegate.noteNewRecentlyUsedURL(url)
     }
 
     // Creates an attachment from a file wrapper
+    /*
     fileprivate func createAmigaAttachment(from fileWrapper: FileWrapper,
                                            ofType typeName: String) throws {
         
         guard let filename = fileWrapper.filename else {
             throw NSError.fileAccessError()
         }
-        guard let data =  fileWrapper.regularFileContents else {
+        guard let data = fileWrapper.regularFileContents else {
             throw NSError.fileAccessError(filename: filename)
         }
         
@@ -193,7 +250,8 @@ class MyDocument: NSDocument {
         }
         amigaAttachment!.setPath(filename)
     }
-
+    */
+    
     //
     // Processing attachments
     //

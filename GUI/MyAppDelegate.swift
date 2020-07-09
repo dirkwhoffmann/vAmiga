@@ -221,7 +221,7 @@ func cgEventCallback(proxy: CGEventTapProxy,
                 
         switch url.pathExtension.uppercased() {
             
-        case "ADF", "ADZ":
+        case "ADF", "ADZ", "DMS":
             noteNewRecentlyInsertedDiskURL(url)
             
         default:
