@@ -68,6 +68,8 @@ bool
 DMSFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     FILE *fpi, *fpo;
+    char *pi, *po;
+    size_t si, so;
     
     if (!isDMSBuffer(buffer, length))
         return false;
@@ -76,22 +78,24 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
         return false;
     
     // We use a third-party tool called xdms to convert the DMS file into an
-    // ADF file. To communicate with xdms, we use temporary files.
+    // ADF file. Originally, xdms is a command line utility that is designed
+    // to work with the file system. To ease the integration of this tool, we
+    // utilize memory streams for getting data in and out. 
 
-    // Create input file
-    fpi = fopen("/tmp/tmp.dms", "w");
+    // Setup input stream
+    fpi = open_memstream(&pi, &si);
     for (size_t i = 0; i < size; i++) putc(data[i], fpi);
     fclose(fpi);
-
-    // Create output file
-    fpi = fopen("/tmp/tmp.dms", "r");
-    fpo = fopen("/tmp/tmp.adf", "w"); 
+    
+    // Setup output file
+    fpi = fmemopen(pi, si, "r");
+    fpo = open_memstream(&po, &so);
     extractDMS(fpi, fpo);
     fclose(fpi);
     fclose(fpo);
     
     // Create ADF
-    fpo = fopen("/tmp/tmp.adf", "r");
+    fpo = fmemopen(po, so, "r");
     adf = ADFFile::makeWithFile(fpo);
     fclose(fpo);
     
