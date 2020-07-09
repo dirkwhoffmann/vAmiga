@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,8 +14,9 @@
                 <outlet property="df2Button" destination="rcN-WL-VLh" id="6YD-Xv-5Wt"/>
                 <outlet property="df3Button" destination="ERu-ly-O7X" id="yXR-yR-hc0"/>
                 <outlet property="diskIcon" destination="Yxi-Ar-LgQ" id="wZB-Vy-nnw"/>
-                <outlet property="infoText" destination="JMf-QF-9dD" id="uaR-lO-RE7"/>
-                <outlet property="warningText" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
+                <outlet property="subtitle" destination="JMf-QF-9dD" id="mu1-nI-mvG"/>
+                <outlet property="title" destination="l19-lb-oYh" id="HXg-eI-fMW"/>
+                <outlet property="warning" destination="nyT-rh-hux" id="g8y-1l-ogq"/>
                 <outlet property="window" destination="WVX-DH-I0u" id="CxT-wS-1TR"/>
             </connections>
         </customObject>

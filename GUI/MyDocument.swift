@@ -93,22 +93,22 @@ class MyDocument: NSDocument {
         // Try to create a file wrapper
         let fileWrapper = try FileWrapper.init(url: newUrl)
         guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
+            throw NSError.fileAccessError(filename: url.lastPathComponent)
         }
         
         // Try to create a proxy
         let buffer = (data as NSData).bytes
         let length = data.count
-        let proxy = ADFFileProxy.make(withBuffer: buffer, length: length)
-        
-        if proxy != nil {
+        if let proxy = ADFFileProxy.make(withBuffer: buffer, length: length) {
             myAppDelegate.noteNewRecentlyUsedURL(url)
+            return proxy
         }
         
-        return proxy
+        throw NSError.corruptedFileError(filename: url.lastPathComponent)
     }
     
     // Creates an DMS file proxy from a URL
+    /*
     func createDMS(from url: URL) throws -> DMSFileProxy? {
         
         track("Creating DMS proxy from URL \(url.lastPathComponent).")
@@ -116,20 +116,20 @@ class MyDocument: NSDocument {
         // Try to create a file wrapper
         let fileWrapper = try FileWrapper.init(url: url)
         guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
+            throw NSError.fileAccessError(filename: url.lastPathComponent)
         }
         
         // Try to create a proxy
         let buffer = (data as NSData).bytes
         let length = data.count
-        let proxy = DMSFileProxy.make(withBuffer: buffer, length: length)
-        
-        if proxy != nil {
+        if let proxy = DMSFileProxy.make(withBuffer: buffer, length: length) {
             myAppDelegate.noteNewRecentlyUsedURL(url)
+            return proxy
         }
         
-        return proxy
+        throw NSError.corruptedFileError(filename: url.lastPathComponent)
     }
+    */
     
     // Creates an attachment from a URL
     func createAmigaAttachment(from url: URL) throws {
@@ -153,10 +153,10 @@ class MyDocument: NSDocument {
                                            ofType typeName: String) throws {
         
         guard let filename = fileWrapper.filename else {
-            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
+            throw NSError.fileAccessError()
         }
-        guard let data = fileWrapper.regularFileContents else {
-            throw NSError(domain: "vAmiga", code: 0, userInfo: nil)
+        guard let data =  fileWrapper.regularFileContents else {
+            throw NSError.fileAccessError(filename: filename)
         }
         
         let buffer = (data as NSData).bytes

@@ -26,6 +26,18 @@ extension NSError {
             [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
                 NSLocalizedRecoverySuggestionErrorKey: "The file appears to be corrupt. It's contents does not match the purported format."])
     }
+
+    static func fileAccessError(filename: String) -> NSError {
+        return NSError(domain: "vAmiga", code: 0, userInfo:
+            [NSLocalizedDescriptionKey: "The document \"\(filename)\" could not be opened.",
+                NSLocalizedRecoverySuggestionErrorKey: "Unable to access file."])
+    }
+
+    static func fileAccessError() -> NSError {
+        return NSError(domain: "vAmiga", code: 0, userInfo:
+            [NSLocalizedDescriptionKey: "The document could not be opened.",
+                NSLocalizedRecoverySuggestionErrorKey: "Unable to access file."])
+    }
 }
 
 extension MyDocument {

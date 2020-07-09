@@ -10,15 +10,17 @@
 class DiskMountDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
-    @IBOutlet weak var infoText: NSTextField!
-    @IBOutlet weak var warningText: NSTextField!
+    @IBOutlet weak var title: NSTextField!
+    @IBOutlet weak var subtitle: NSTextField!
+    @IBOutlet weak var warning: NSTextField!
     @IBOutlet weak var df0Button: NSButton!
     @IBOutlet weak var df1Button: NSButton!
     @IBOutlet weak var df2Button: NSButton!
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
     
-    var disk: ADFFileProxy!
+    var disk: ADFFileProxy?
+    var type: AmigaFileType?
     var writeProtect = false
     var screenshots: [Screenshot] = []
     
@@ -32,15 +34,16 @@ class DiskMountDialog: DialogController {
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
-                
-        disk = nil
+
+        type = myDocument.amigaAttachment?.type()
+
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
+            // title.stringValue = "Amiga Disk File (ADF)"
             disk = attachment
         }
         if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
-            if let adf = attachment.adf() {
-                disk = adf
-            }
+            // title.stringValue = "Disk Masher System (DMS)"
+            disk = attachment.adf()
         }
         
         if disk != nil {
@@ -84,8 +87,16 @@ class DiskMountDialog: DialogController {
     
     override func windowDidLoad() {
 
-        track("numItems = \(numItems)")
-
+        switch type {
+            
+        case FILETYPE_ADF:
+            title.stringValue = "Amiga Disk File (ADF)"
+        case FILETYPE_DMS:
+            title.stringValue = "Disk Masher System (DMS)"
+        default:
+            title.stringValue = "???"
+        }
+        
         if empty {
 
             setHeight(196)
@@ -123,10 +134,10 @@ class DiskMountDialog: DialogController {
             DISK_35_HD_PC.rawValue: "3.5\"HD PC",
             DISK_525_SD.rawValue: "5.25\"SD PC"
         ]
-        let str = typeName[disk.diskType().rawValue]!
-        infoText.stringValue = "A byte-accurate image of \(str) diskette."
-        let compatible = disk.diskType() == DISK_35_DD
-        warningText.isHidden = compatible
+        let str = typeName[disk!.diskType().rawValue]!
+        subtitle.stringValue = "A byte-accurate image of a \(str) diskette."
+        let compatible = disk!.diskType() == DISK_35_DD
+        warning.isHidden = compatible
                 
         // Check for available drives
         let dc = amiga.diskController.getConfig()
