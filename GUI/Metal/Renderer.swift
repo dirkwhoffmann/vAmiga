@@ -360,13 +360,13 @@ class Renderer: NSObject, MTKViewDelegate {
         let height = (1 - config.vZoom) * maxHeight
         let bh = ah + config.vCenter * (maxHeight - height)
                 
-        let texW = EmulatorTexture.width
-        let texH = EmulatorTexture.height
+        let texW = CGFloat(TextureSize.original.width)
+        let texH = CGFloat(TextureSize.original.height)
         
-        return CGRect.init(x: CGFloat(bw) / CGFloat(texW),
-                           y: CGFloat(bh) / CGFloat(texH),
-                           width: CGFloat(width) / CGFloat(texW),
-                           height: CGFloat(height) / CGFloat(texH))
+        return CGRect.init(x: CGFloat(bw) / texW,
+                           y: CGFloat(bh) / texH,
+                           width: CGFloat(width) / texW,
+                           height: CGFloat(height) / texH)
     }
     
     // DEPRECATED

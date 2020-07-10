@@ -870,9 +870,10 @@ Blitter::startBlit()
             check1 = check2 = fnv_1a_init32();
             // if (copycount == 67) amiga.signalStop(); 
             
-            plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x %s%s\n",
+            plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                       bltcon0 & 0xFF,
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt & agnus.ptrMask,
                        bltbpt & agnus.ptrMask,

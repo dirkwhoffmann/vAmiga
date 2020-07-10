@@ -13,14 +13,12 @@ import simd
 // Static texture parameters
 //
 
-// Parameters of a short / long frame texture delivered by the emulator
-let EmulatorTexture = MTLSizeMake(1024, 320, 0)
-
-// Parameters of a textures that combines a short and a long frame
-let MergedTexture = MTLSizeMake(EmulatorTexture.width, 2 * EmulatorTexture.height, 0)
-
-// Parameters of a (merged) texture that got upscaled
-let UpscaledTexture = MTLSizeMake(2 * MergedTexture.width, 2 * MergedTexture.height, 0)
+struct TextureSize {
+    
+    static let original = MTLSizeMake(1024, 320, 0)
+    static let merged   = MTLSizeMake(1024, 640, 0)
+    static let upscaled = MTLSizeMake(2048, 1280, 0)
+}
 
 extension Renderer {
 
@@ -217,32 +215,32 @@ extension Renderer {
         assert(bgFullscreenTexture != nil, "Failed to create bgFullscreenTexture")
 
         // Emulator texture (long frames)
-        longFrameTexture = device.makeTexture(size: EmulatorTexture, usage: r)
+        longFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
         assert(bgFullscreenTexture != nil, "Failed to create longFrameTexture")
 
         // Emulator texture (short frames)
-        shortFrameTexture = device.makeTexture(size: EmulatorTexture, usage: r)
+        shortFrameTexture = device.makeTexture(size: TextureSize.original, usage: r)
         assert(bgFullscreenTexture != nil, "Failed to create shortFrameTexture")
 
         // Merged emulator texture (long frame + short frame)
-        mergeTexture = device.makeTexture(size: MergedTexture, usage: rwt)
+        mergeTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
         assert(bgFullscreenTexture != nil, "Failed to create mergeTexture")
 
         // Bloom textures
-        bloomTextureR = device.makeTexture(size: MergedTexture, usage: rwt)
-        bloomTextureG = device.makeTexture(size: MergedTexture, usage: rwt)
-        bloomTextureB = device.makeTexture(size: MergedTexture, usage: rwt)
+        bloomTextureR = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        bloomTextureG = device.makeTexture(size: TextureSize.merged, usage: rwt)
+        bloomTextureB = device.makeTexture(size: TextureSize.merged, usage: rwt)
         assert(bloomTextureR != nil, "Failed to create bloomTextureR")
         assert(bloomTextureG != nil, "Failed to create bloomTextureG")
         assert(bloomTextureB != nil, "Failed to create bloomTextureB")
 
         // Target for in-texture upscaling
-        lowresEnhancedTexture = device.makeTexture(size: MergedTexture, usage: rwt)
+        lowresEnhancedTexture = device.makeTexture(size: TextureSize.merged, usage: rwt)
         assert(bgFullscreenTexture != nil, "Failed to create lowresEnhancedTexture")
 
         // Upscaled merge texture
-        upscaledTexture = device.makeTexture(size: UpscaledTexture, usage: rwtp)
-        scanlineTexture = device.makeTexture(size: UpscaledTexture, usage: rwtp)
+        upscaledTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
+        scanlineTexture = device.makeTexture(size: TextureSize.upscaled, usage: rwtp)
         assert(bgFullscreenTexture != nil, "Failed to create upscaledTexture")
         assert(bgFullscreenTexture != nil, "Failed to create scanlineTexture")
     }
@@ -288,8 +286,8 @@ extension Renderer {
             disalignmentV: config.disalignmentV
         )
         
-        let mc = (MergedTexture.width, MergedTexture.height)
-        let uc = (UpscaledTexture.width, UpscaledTexture.height)
+        let mc = (TextureSize.merged.width, TextureSize.merged.width)
+        let uc = (TextureSize.upscaled.width, TextureSize.upscaled.width)
 
         // Build the mergefilter
         mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)
