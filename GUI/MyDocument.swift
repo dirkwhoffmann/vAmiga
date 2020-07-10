@@ -23,7 +23,7 @@ class MyDocument: NSDocument {
 
     /*
      An otional media object attached to this document.
-     This variable is checked in mountAmigaAttachment() which is called in
+     This variable is checked in mountAttachment() which is called in
      windowDidLoad(). If an attachment is present, e.g., an ADF archive, it
      is automatically attached to the emulator.
      */
@@ -192,7 +192,7 @@ class MyDocument: NSDocument {
     */
     
     // Creates an attachment from a URL
-    func createAmigaAttachment(from url: URL) throws {
+    func createAttachment(from url: URL) throws {
         
         track("Creating attachment from URL \(url.lastPathComponent).")
         
@@ -204,60 +204,12 @@ class MyDocument: NSDocument {
         myAppDelegate.noteNewRecentlyUsedURL(url)
     }
 
-    // Creates an attachment from a file wrapper
-    /*
-    fileprivate func createAmigaAttachment(from fileWrapper: FileWrapper,
-                                           ofType typeName: String) throws {
-        
-        guard let filename = fileWrapper.filename else {
-            throw NSError.fileAccessError()
-        }
-        guard let data = fileWrapper.regularFileContents else {
-            throw NSError.fileAccessError(filename: filename)
-        }
-        
-        let buffer = (data as NSData).bytes
-        let length = data.count
-        var openAsUntitled = true
-        
-        track("Read \(length) bytes from file \(filename) [\(typeName)].")
-        
-        switch typeName {
-            
-        case "VAMIGA":
-            // Check for outdated snapshot formats
-            if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
-                throw NSError.snapshotVersionError(filename: filename)
-            }
-            amigaAttachment = SnapshotProxy.make(withBuffer: buffer, length: length)
-            openAsUntitled = false
-            
-        case "ADF":
-            amigaAttachment = ADFFileProxy.make(withBuffer: buffer, length: length)
-            
-        case "DMS":
-            amigaAttachment = DMSFileProxy.make(withBuffer: buffer, length: length)
-
-        default:
-            throw NSError.unsupportedFormatError(filename: filename)
-        }
-        
-        if amigaAttachment == nil {
-            throw NSError.corruptedFileError(filename: filename)
-        }
-        if openAsUntitled {
-            fileURL = nil
-        }
-        amigaAttachment!.setPath(filename)
-    }
-    */
-    
     //
     // Processing attachments
     //
     
     @discardableResult
-    func mountAmigaAttachment() -> Bool {
+    func mountAttachment() -> Bool {
         
         switch amigaAttachment {
 
@@ -300,7 +252,7 @@ class MyDocument: NSDocument {
     
     override open func read(from url: URL, ofType typeName: String) throws {
         
-        try createAmigaAttachment(from: url)
+        try createAttachment(from: url)
     }
 
     //

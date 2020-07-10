@@ -16,36 +16,11 @@ import simd
 // Parameters of a short / long frame texture delivered by the emulator
 let EmulatorTexture = MTLSizeMake(1024, 320, 0)
 
-/*
-struct EmulatorTexture {
-
-    static let width = 1024
-    static let height = 320
-
-*/
-
 // Parameters of a textures that combines a short and a long frame
 let MergedTexture = MTLSizeMake(EmulatorTexture.width, 2 * EmulatorTexture.height, 0)
-/*
-struct MergedTexture {
-
-    static let width = EmulatorTexture.width
-    static let height = 2 * EmulatorTexture.height
-    static let cutout = (width, height)
-}
-*/
 
 // Parameters of a (merged) texture that got upscaled
 let UpscaledTexture = MTLSizeMake(2 * MergedTexture.width, 2 * MergedTexture.height, 0)
-
-/*
-struct UpscaledTexture {
-
-    static let width = 2 * MergedTexture.width
-    static let height = 2 * MergedTexture.height
-    static let cutout = (width, height)
-}
-*/
 
 extension Renderer {
 
@@ -79,12 +54,10 @@ extension Renderer {
         metalLayer.frame = metalLayer.frame
 
         // Command queue
-        track("Build command queue")
         queue = device.makeCommandQueue()
         assert(queue != nil, "Metal command queue must not be nil")
 
         // Shader library
-        track("Build shader library")
         library = device.makeDefaultLibrary()
         assert(library != nil, "Metal library must not be nil")
     }
@@ -259,9 +232,9 @@ extension Renderer {
         bloomTextureR = device.makeTexture(size: MergedTexture, usage: rwt)
         bloomTextureG = device.makeTexture(size: MergedTexture, usage: rwt)
         bloomTextureB = device.makeTexture(size: MergedTexture, usage: rwt)
-        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureR")
-        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureG")
-        assert(bgFullscreenTexture != nil, "Failed to create bloomTextureB")
+        assert(bloomTextureR != nil, "Failed to create bloomTextureR")
+        assert(bloomTextureG != nil, "Failed to create bloomTextureG")
+        assert(bloomTextureB != nil, "Failed to create bloomTextureB")
 
         // Target for in-texture upscaling
         lowresEnhancedTexture = device.makeTexture(size: MergedTexture, usage: rwt)

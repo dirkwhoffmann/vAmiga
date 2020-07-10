@@ -622,7 +622,6 @@
 			children = (
 				508FDFCF21EA20510043D0E9 /* MetalView.swift */,
 				5057E4C4243DF10A004005EB /* Primitives.swift */,
-				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 				508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */,
 				50357BB5239123B2007E7563 /* Renderer.swift */,
 				50357BB723912929007E7563 /* RendererSetup.swift */,
@@ -632,6 +631,7 @@
 				501429D82445F12B00FBDC90 /* TextureToolbox.swift */,
 				508FDFD321EA20510043D0E9 /* Shaders.swift */,
 				508FDFD021EA20510043D0E9 /* Shaders.metal */,
+				50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */,
 			);
 			path = Metal;
 			sourceTree = "<group>";

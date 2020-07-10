@@ -655,11 +655,9 @@ extension Inspector: NSTabViewDelegate {
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
         if tabView === debugPanel {
-            track("debugView")
             updateInspectionTarget()
         }
         if tabView === cpuTab {
-            track("cpuTab")
             instrTableView.refresh(full: true)
             traceTableView.refresh(full: true)
         }

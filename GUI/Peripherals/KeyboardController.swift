@@ -13,7 +13,8 @@ import Carbon.HIToolbox
 class KeyboardController: NSObject {
 
     var parent: MyController!
-    
+    var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+
     var keyboard: KeyboardProxy { return parent.amiga.keyboard }
     var renderer: Renderer { return parent.renderer }
     var prefs: Preferences { return parent.prefs }
@@ -104,11 +105,11 @@ class KeyboardController: NSObject {
             rightOption = event.modifierFlags.contains(.option) ? !rightOption : false
             rightOption ? keyDown(with: MacKey.rightOption) : keyUp(with: MacKey.rightOption)
             
-        case kVK_Command where mapCommandKeys:
+        case kVK_Command where myAppDelegate.mapCommandKeys:
             leftCommand = event.modifierFlags.contains(.command) ? !leftCommand : false
             leftCommand ? keyDown(with: MacKey.command) : keyUp(with: MacKey.command)
             
-        case kVK_RightCommand where mapCommandKeys:
+        case kVK_RightCommand where myAppDelegate.mapCommandKeys:
             rightCommand = event.modifierFlags.contains(.command) ? !rightCommand : false
             rightCommand ? keyDown(with: MacKey.rightCommand) : keyUp(with: MacKey.rightCommand)
 

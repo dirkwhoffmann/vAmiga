@@ -70,7 +70,7 @@ extension MyController: NSMenuItemValidation {
             //
             
         case #selector(MyController.mapCmdKeysAction(_:)):
-            item.state = (eventTap != nil) ? .on : .off
+            item.state = (myAppDelegate.eventTap != nil) ? .on : .off
             return true
             
             //
@@ -369,7 +369,7 @@ extension MyController: NSMenuItemValidation {
      
     @IBAction func mapCmdKeysAction(_ sender: Any!) {
         
-        mapCommandKeys = !mapCommandKeys
+        myAppDelegate.mapCommandKeys = !myAppDelegate.mapCommandKeys
         refreshStatusBar()
     }
     

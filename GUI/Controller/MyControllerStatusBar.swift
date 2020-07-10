@@ -74,7 +74,7 @@ extension MyController {
             df3DMA: motor3,
 
             haltIcon: halted,
-            cmdLock: mapCommandKeys,
+            cmdLock: myAppDelegate.mapCommandKeys,
             debugIcon: debug,
             muteIcon: warp || muted,
 

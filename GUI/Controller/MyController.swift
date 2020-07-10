@@ -293,7 +293,7 @@ extension MyController {
         addListener()
 
         // Process attachment (if any)
-        mydocument.mountAmigaAttachment()
+        mydocument.mountAttachment()
 
         // Check if the Amiga is ready to power on
         if amiga.isReady() {

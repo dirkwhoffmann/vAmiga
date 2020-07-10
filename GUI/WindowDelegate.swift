@@ -79,7 +79,6 @@ extension MyController: NSWindowDelegate {
 
         track()
 
-        // for m in renderer.monitors { m.isHidden = true }
         renderer.fullscreen = true
         renderer.clearBgTexture()
         showStatusBar(false)
@@ -88,7 +87,6 @@ extension MyController: NSWindowDelegate {
     public func windowDidEnterFullScreen(_ notification: Notification) {
 
         renderer.updateMonitorPositions()
-        // for m in renderer.monitors { m.isHidden = false }
         track()
     }
     

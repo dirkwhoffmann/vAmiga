@@ -52,9 +52,6 @@ extension MyDocument {
         alert.addButton(withTitle: "Exit")
         alert.runModal()
     }
-}
-
-extension MyDocument {
     
     @discardableResult
     func showDiskIsUnexportedAlert(messageText: String) -> NSApplication.ModalResponse {
