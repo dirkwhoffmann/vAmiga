@@ -61,7 +61,7 @@ class Renderer: NSObject, MTKViewDelegate {
     }
 
     //
-    // Metal buffers and uniforms
+    // Buffers and uniforms
     //
     
     var bgRect: Node?
@@ -247,13 +247,13 @@ class Renderer: NSObject, MTKViewDelegate {
     // Part of the texture that is currently visible
     var textureRect = CGRect.init()
 
-    // Indicates if the current frame is a long frame or a short frame (DEPRECATED)
-    var flickerToggle = 0
+    // Used to emulate flickering in interlace mode (DEPRECATED)
+    // var flickerToggle = 0
 
     // Indicates the type of the frame that is read next
     var requestLongFrame = true
     
-    // Is set to true when fullscreen mode is entered (usually enables the 2D renderer)
+    // Is set to true when fullscreen mode is entered
     var fullscreen = false
     
     //
@@ -362,7 +362,6 @@ class Renderer: NSObject, MTKViewDelegate {
                 
         let texW = CGFloat(TextureSize.original.width)
         let texH = CGFloat(TextureSize.original.height)
-        
         return CGRect.init(x: CGFloat(bw) / texW,
                            y: CGFloat(bh) / texH,
                            width: CGFloat(width) / texW,
@@ -496,9 +495,11 @@ class Renderer: NSObject, MTKViewDelegate {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = (flickerToggle & 2) == 0 ? 1.0 : weight
-            mergeUniforms.shortFrameScale = (flickerToggle & 2) == 0 ? weight : 1.0
-            flickerToggle += 1
+            // mergeUniforms.longFrameScale = (flickerToggle & 2) == 0 ? 1.0 : weight
+            // mergeUniforms.shortFrameScale = (flickerToggle & 2) == 0 ? weight : 1.0
+            mergeUniforms.longFrameScale = requestLongFrame ? 1.0 : weight
+            mergeUniforms.shortFrameScale = requestLongFrame ? weight : 1.0
+            // flickerToggle += 1
         } else {
             mergeUniforms.interlace = 0
             mergeUniforms.longFrameScale = 1.0
