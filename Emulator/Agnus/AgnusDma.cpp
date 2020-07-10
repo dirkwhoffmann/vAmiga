@@ -210,7 +210,7 @@ Agnus::pokeDMACON(u16 value)
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
     // Record the change
-    recordRegisterChange(DMA_CYCLES(2), REG_DMACON, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
 }
 
 void
@@ -428,12 +428,12 @@ Agnus::pokeBPLxPTH(u16 value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTH, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTH, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTH, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTH, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTH, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTH, value); break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTH, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTH, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTH, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTH, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTH, value); break;
     }
 }
 
@@ -450,12 +450,12 @@ Agnus::pokeBPLxPTL(u16 value)
 
     // Schedule the register updated
     switch (x) {
-        case 1: recordRegisterChange(DMA_CYCLES(2), REG_BPL1PTL, value); break;
-        case 2: recordRegisterChange(DMA_CYCLES(2), REG_BPL2PTL, value); break;
-        case 3: recordRegisterChange(DMA_CYCLES(2), REG_BPL3PTL, value); break;
-        case 4: recordRegisterChange(DMA_CYCLES(2), REG_BPL4PTL, value); break;
-        case 5: recordRegisterChange(DMA_CYCLES(2), REG_BPL5PTL, value); break;
-        case 6: recordRegisterChange(DMA_CYCLES(2), REG_BPL6PTL, value); break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_BPL2PTL, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_BPL3PTL, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_BPL4PTL, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_BPL5PTL, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_BPL6PTL, value); break;
     }
 }
 
@@ -477,7 +477,7 @@ void
 Agnus::pokeBPL1MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), REG_BPL1MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
 }
 
 void
@@ -491,7 +491,7 @@ void
 Agnus::pokeBPL2MOD(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
-    recordRegisterChange(DMA_CYCLES(2), REG_BPL2MOD, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
 }
 
 void

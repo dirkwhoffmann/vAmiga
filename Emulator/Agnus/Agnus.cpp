@@ -353,14 +353,14 @@ template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
     debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorName(s), value);
-    recordRegisterChange(DMA_CYCLES(2), REG_DIWSTRT, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
     debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorName(s), value);
-    recordRegisterChange(DMA_CYCLES(2), REG_DIWSTOP, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP, value);
 }
 
 void
@@ -490,7 +490,7 @@ Agnus::pokeDDFSTRT(u16 value)
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
 
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(2), REG_DDFSTRT, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DDFSTRT, value);
 }
 
 void
@@ -503,7 +503,7 @@ Agnus::pokeDDFSTOP(u16 value)
     // ECS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 H2 --
 
     value &= ddfMask();
-    recordRegisterChange(DMA_CYCLES(2), REG_DDFSTOP, value);
+    recordRegisterChange(DMA_CYCLES(2), SET_DDFSTOP, value);
 }
 
 void
@@ -809,7 +809,7 @@ Agnus::pokeBPLCON0(u16 value)
     debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     if (bplcon0 != value) {
-        recordRegisterChange(DMA_CYCLES(4), REG_BPLCON0_AGNUS, value);
+        recordRegisterChange(DMA_CYCLES(4), SET_AGNUS_BPLCON0, value);
     }
 }
 
@@ -857,7 +857,7 @@ Agnus::pokeBPLCON1(u16 value)
     debug(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     if (bplcon1 != value) {
-        recordRegisterChange(DMA_CYCLES(1), REG_BPLCON1_AGNUS, value);
+        recordRegisterChange(DMA_CYCLES(1), SET_AGNUS_BPLCON1, value);
     }
 }
 

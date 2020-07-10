@@ -175,7 +175,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON0_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON0, value);
 }
 
 void
@@ -185,7 +185,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
-    conChanges.insert(pixel, RegChange { REG_BPLCON0_DENISE, newValue });
+    conChanges.insert(pixel, RegChange { SET_DENISE_BPLCON0, newValue });
     
     if (ham(oldValue) ^ ham(newValue)) {
         pixelEngine.colChanges.insert(pixel, RegChange { BPLCON0, newValue } );
@@ -220,7 +220,7 @@ Denise::pokeBPLCON1(u16 value)
     debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON1_DENISE, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON1, value);
 }
 
 void
@@ -239,7 +239,7 @@ Denise::pokeBPLCON2(u16 value)
 {
     debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), REG_BPLCON2, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON2, value);
 }
 
 void
@@ -250,7 +250,7 @@ Denise::setBPLCON2(u16 value)
     bplcon2 = value;
 
     // Record the pixel coordinate where the change takes place
-    conChanges.insert(4 * agnus.pos.h + 4, RegChange { REG_BPLCON2, value });
+    conChanges.insert(4 * agnus.pos.h + 4, RegChange { SET_BPLCON2, value });
 }
 
 u16
@@ -614,12 +614,12 @@ Denise::translate()
         // Apply the register change
         switch (change.addr) {
 
-            case REG_BPLCON0_DENISE:
+            case SET_DENISE_BPLCON0:
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
                 break;
 
-            case REG_BPLCON2:
+            case SET_BPLCON2:
                 bplcon2 = change.value;
                 pri = PF2PRI(bplcon2);
                 prio1 = zPF1(bplcon2);

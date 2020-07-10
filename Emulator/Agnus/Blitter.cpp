@@ -148,7 +148,7 @@ Blitter::pokeBLTCON0(u16 value)
 {
     plaindebug(BLTREG_DEBUG, "pokeBLTCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON0, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0, value);
 }
 
 void
@@ -163,7 +163,7 @@ void
 Blitter::pokeBLTCON1(u16 value)
 {
     plaindebug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON1, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON1, value);
 }
 
 void
@@ -287,7 +287,7 @@ Blitter::pokeBLTSIZE(u16 value)
     plaindebug(BLTREG_DEBUG, "pokeBLTSIZE(%X)\n", value);
 
     if (s == AGNUS_ACCESS) {
-        agnus.recordRegisterChange(DMA_CYCLES(1), REG_BLTSIZE, value);
+        agnus.recordRegisterChange(DMA_CYCLES(1), SET_BLTSIZE, value);
     } else {
         blitter.setBLTSIZE(value);
     }
@@ -319,7 +319,7 @@ Blitter::pokeBLTCON0L(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTCON0L, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0L, value);
 }
 
 void
@@ -338,7 +338,7 @@ Blitter::pokeBLTSIZV(u16 value)
     // ECS only register
     if (agnus.isOCS()) return;
 
-    agnus.recordRegisterChange(DMA_CYCLES(2), REG_BLTSIZV, value);
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTSIZV, value);
 }
 
 void
