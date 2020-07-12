@@ -99,26 +99,22 @@ class Monitor: DialogController {
         let col = bus || mon
         
         let visualize = [
-            info.visualize.0,
-            info.visualize.1,
-            info.visualize.2,
-            info.visualize.3,
-            info.visualize.4,
-            info.visualize.5,
-            info.visualize.6,
-            info.visualize.7,
-            info.visualize.8
+            info.visualize.0, info.visualize.1,
+            info.visualize.2, info.visualize.3,
+            info.visualize.4, info.visualize.5,
+            info.visualize.6, info.visualize.7,
+            info.visualize.8, info.visualize.9,
+            info.visualize.10, info.visualize.11,
+            info.visualize.12, info.visualize.13
         ]
         let rgb = [
-            info.colorRGB.0,
-            info.colorRGB.1,
-            info.colorRGB.2,
-            info.colorRGB.3,
-            info.colorRGB.4,
-            info.colorRGB.5,
-            info.colorRGB.6,
-            info.colorRGB.7,
-            info.colorRGB.8
+            info.colorRGB.0, info.colorRGB.1,
+            info.colorRGB.2, info.colorRGB.3,
+            info.colorRGB.4, info.colorRGB.5,
+            info.colorRGB.6, info.colorRGB.7,
+            info.colorRGB.8, info.colorRGB.9,
+            info.colorRGB.10, info.colorRGB.11,
+            info.colorRGB.12, info.colorRGB.13
         ]
         
         // Bus debugger
@@ -128,7 +124,7 @@ class Monitor: DialogController {
         busDisk.state = visualize[Int(BUS_DISK.rawValue)] ? .on : .off
         busAudio.state = visualize[Int(BUS_AUDIO.rawValue)] ? .on : .off
         busSprites.state = visualize[Int(BUS_SPRITE.rawValue)] ? .on : .off
-        busBitplanes.state = visualize[Int(BUS_BITPLANE.rawValue)] ? .on : .off
+        busBitplanes.state = visualize[Int(BUS_BPL1.rawValue)] ? .on : .off
         busCPU.state = visualize[Int(BUS_CPU.rawValue)] ? .on : .off
         busRefresh.state = visualize[Int(BUS_REFRESH.rawValue)] ? .on : .off
         busOpacity.doubleValue = info.opacity * 100.0
@@ -183,7 +179,7 @@ class Monitor: DialogController {
         colDisk.setColor(rgb[Int(BUS_DISK.rawValue)])
         colAudio.setColor(rgb[Int(BUS_AUDIO.rawValue)])
         colSprites.setColor(rgb[Int(BUS_SPRITE.rawValue)])
-        colBitplanes.setColor(rgb[Int(BUS_BITPLANE.rawValue)])
+        colBitplanes.setColor(rgb[Int(BUS_BPL1.rawValue)])
         colCPU.setColor(rgb[Int(BUS_CPU.rawValue)])
         colRefresh.setColor(rgb[Int(BUS_REFRESH.rawValue)])
         colBlitter.isHidden = !col
@@ -235,34 +231,34 @@ class Monitor: DialogController {
     // Action methods
     //
     
-    func busOwner(forTag tag: Int) -> BusOwner {
+    func busOwners(forTag tag: Int) -> [BusOwner] {
         
-        track("tag = \(tag)")
-
         switch tag {
-        case 0: return BUS_COPPER
-        case 1: return BUS_BLITTER
-        case 2: return BUS_DISK
-        case 3: return BUS_AUDIO
-        case 4: return BUS_SPRITE
-        case 5: return BUS_BITPLANE
-        case 6: return BUS_CPU
-        case 7: return BUS_REFRESH
+        case 0: return [BUS_COPPER]
+        case 1: return [BUS_BLITTER]
+        case 2: return [BUS_DISK]
+        case 3: return [BUS_AUDIO]
+        case 4: return [BUS_SPRITE]
+        case 5: return [BUS_BPL1, BUS_BPL2, BUS_BPL3, BUS_BPL4, BUS_BPL5, BUS_BPL6]
+        case 6: return [BUS_CPU]
+        case 7: return [BUS_REFRESH]
         default: fatalError()
         }
     }
-    
+
     @IBAction func colorAction(_ sender: NSColorWell!) {
         
-        let owner = busOwner(forTag: sender.tag)
         let r = Double(sender.color.redComponent)
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
-        amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        
+        for owner in busOwners(forTag: sender.tag) {
+            amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        }
         
         let monitor = parent.renderer.monitors[sender.tag]
         monitor.setColor(sender.color)
-
+        
         refresh()
     }
 
@@ -274,8 +270,9 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        let owner = busOwner(forTag: sender.tag)
-        amiga.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
+        for owner in busOwners(forTag: sender.tag) {
+            amiga.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
+        }
         refresh()
     }
     

@@ -398,20 +398,19 @@ Agnus::skipBPLxPT(int x)
      * The right scenario shows that the new value can get lost under certain
      * circumstances. The following must hold:
      *
-     *     (1) There is a Lx or Hx event once cycle after the BPL1PT write.
+     *     (1) There is a Lx or Hx event one cycle after the BPL1PT write.
      *     (2) There is no DMA going on when the write would happen.
      */
 
+    // THIS CODE IS BROKEN
+    /*
     if (isBplxEvent(bplEvent[pos.h + 1], x)) { // (1)
 
         if (bplEvent[pos.h + 2] == EVENT_NONE) { // (2)
-
-            // debug("skipBPLxPT: Value gets lost\n");
-            // dumpBplEventTable();
             return true;
         }
     }
-
+    */
     return false;
 }
 
@@ -703,13 +702,16 @@ Agnus::doAudioDMA()
 template <int bitplane> u16
 Agnus::doBitplaneDMA()
 {
+    assert(bitplane >= 0 && bitplane <= 5);
+    const BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
+    
     u16 result = peek(bplpt[bitplane]);
     bplpt[bitplane] += 2;
 
     assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_BITPLANE;
+    busOwner[pos.h] = owner;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_BITPLANE]++;
+    stats.bus.raw[owner]++;
 
     return result;
 }
