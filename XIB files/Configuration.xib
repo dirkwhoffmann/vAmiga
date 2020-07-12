@@ -403,7 +403,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="romDefaultAction:" target="-2" id="5M6-6I-7wR"/>
+                                                <action selector="romDefaultsAction:" target="-2" id="5M6-6I-7wR"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2k7-hF-2uo">

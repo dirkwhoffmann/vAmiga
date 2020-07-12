@@ -868,7 +868,6 @@ Blitter::startBlit()
         if (BLT_CHECKSUM) { // && (bltsizeH != 1 || bltsizeV != 4)
             copycount++;
             check1 = check2 = fnv_1a_init32();
-            // if (copycount == 67) amiga.signalStop(); 
             
             plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount, bltsizeH, bltsizeV,

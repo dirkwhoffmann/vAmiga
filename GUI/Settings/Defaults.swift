@@ -27,7 +27,6 @@ extension UserDefaults {
     func encode<T: Encodable>(_ item: T, forKey key: String) {
         
         if let encoded = try? PropertyListEncoder().encode(item) {
-            track("Encoded \(key) successfully")
             set(encoded, forKey: key)
         } else {
             track("Failed to encode \(key)")
@@ -39,7 +38,6 @@ extension UserDefaults {
         
         if let data = data(forKey: key) {
             if let decoded = try? PropertyListDecoder().decode(T.self, from: data) {
-                // track("Decoded \(key) successfully")
                 item = decoded
             } else {
                 track("Failed to decode \(key)")
@@ -58,14 +56,14 @@ extension UserDefaults {
         
         track()
         
-        UserDefaults.registerGeneralUserDefaults()
-        UserDefaults.registerDevicesUserDefaults()
+        registerGeneralUserDefaults()
+        registerDevicesUserDefaults()
 
-        UserDefaults.registerRomUserDefaults()
-        UserDefaults.registerHardwareUserDefaults()
-        UserDefaults.registerCompatibilityUserDefaults()
-        UserDefaults.registerAudioUserDefaults()
-        UserDefaults.registerVideoUserDefaults()
+        registerRomUserDefaults()
+        registerHardwareUserDefaults()
+        registerCompatibilityUserDefaults()
+        registerAudioUserDefaults()
+        registerVideoUserDefaults()
     }
 }
 

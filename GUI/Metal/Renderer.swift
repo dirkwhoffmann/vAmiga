@@ -619,8 +619,6 @@ class Renderer: NSObject, MTKViewDelegate {
         endFrame()
     }
     
-    var angle = 0
- 
     func drawScene3D() {
 
         let paused = parent.amiga.isPaused()
@@ -633,7 +631,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         startFrame()
 
-        // Render background
         if renderBackground {
             
             // Update background texture
@@ -666,7 +663,6 @@ class Renderer: NSObject, MTKViewDelegate {
             bgRect!.drawPrimitives(commandEncoder)
         }
 
-        // Render emulator texture
         if renderForeground {
 
             // Configure vertex shader

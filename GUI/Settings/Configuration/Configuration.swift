@@ -13,7 +13,6 @@ class Configuration {
     var amiga: AmigaProxy { return parent.amiga }
     var renderer: Renderer { return parent.renderer }
     var gamePadManager: GamePadManager { return parent.gamePadManager }
-    var kbController: KeyboardController { return parent.keyboard }
 
     //
     // Rom settings

@@ -215,14 +215,6 @@ class ConfigController: DialogController {
         refresh()
     }
 
-    /*
-    override func sheetDidShow() {
-
-        track("sheetDidShow")
-        if firstTab != "" { prefTabView?.selectTabViewItem(withIdentifier: firstTab) }
-    }
-    */
-
     func refresh() {
         
         if let id = prefTabView.selectedTabViewItem?.identifier as? String {
@@ -244,6 +236,7 @@ class ConfigController: DialogController {
         refresh()
     }
 
+    /*
     @IBAction override func cancelAction(_ sender: Any!) {
         
         track()
@@ -252,6 +245,7 @@ class ConfigController: DialogController {
         refresh()
         hideSheet()
     }
+    */
     
     @IBAction override func okAction(_ sender: Any!) {
         

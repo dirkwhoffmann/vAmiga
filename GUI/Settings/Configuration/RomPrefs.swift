@@ -140,9 +140,8 @@ extension ConfigController {
         refresh()
     }
     
-    @IBAction func romDefaultAction(_ sender: NSButton!) {
+    @IBAction func romDefaultsAction(_ sender: NSButton!) {
         
-        track()
         config.saveRomUserDefaults()
     }
 }

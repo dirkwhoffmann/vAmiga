@@ -531,4 +531,84 @@ extension Renderer {
         depthTexture = device.makeTexture(descriptor: descriptor)
         assert(depthTexture != nil, "Failed to create depth texture")
     }
+    
+    //
+    // Matrix utilities
+    //
+    
+    static func perspectiveMatrix(fovY: Float,
+                                  aspect: Float,
+                                  nearZ: Float,
+                                  farZ: Float) -> matrix_float4x4 {
+        
+        // Variant 1: Keeps correct aspect ratio independent of window size
+        let yscale = 1.0 / tanf(fovY * 0.5) // 1 / tan == cot
+        let xscale = yscale / aspect
+        let q = farZ / (farZ - nearZ)
+        
+        // Alternative: Adjust to window size
+        // float yscale = 1.0f / tanf(fovY * 0.5f);
+        // float xscale = 0.75 * yscale;
+        // float q = farZ / (farZ - nearZ);
+        
+        var m = matrix_float4x4()
+        m.columns.0 = SIMD4<Float>(xscale, 0.0, 0.0, 0.0)
+        m.columns.1 = SIMD4<Float>(0.0, yscale, 0.0, 0.0)
+        m.columns.2 = SIMD4<Float>(0.0, 0.0, q, 1.0)
+        m.columns.3 = SIMD4<Float>(0.0, 0.0, q * -nearZ, 0.0)
+        
+        return m
+    }
+    
+    static func scalingMatrix(xs: Float, ys: Float, zs: Float) -> matrix_float4x4 {
+        
+        var m = matrix_float4x4()
+        m.columns.0 = SIMD4<Float>(xs, 0.0, 0.0, 0.0)
+        m.columns.1 = SIMD4<Float>(0.0, ys, 0.0, 0.0)
+        m.columns.2 = SIMD4<Float>(0.0, 0.0, zs, 0.0)
+        m.columns.3 = SIMD4<Float>(0.0, 0.0, 0.0, 1.0)
+        
+        return m
+    }
+    
+    static func translationMatrix(x: Float,
+                                  y: Float,
+                                  z: Float) -> matrix_float4x4 {
+        
+        var m = matrix_identity_float4x4
+        m.columns.3 = SIMD4<Float>(x, y, z, 1.0)
+        
+        return m
+    }
+    
+    static func rotationMatrix(radians: Float,
+                               x: Float,
+                               y: Float,
+                               z: Float) -> matrix_float4x4 {
+        
+        var v = vector_float3(x, y, z)
+        v = normalize(v)
+        let cos = cosf(radians)
+        let cosp = 1.0 - cos
+        let sin = sinf(radians)
+        
+        var m = matrix_float4x4()
+        m.columns.0 = SIMD4<Float>(cos + cosp * v.x * v.x,
+                                   cosp * v.x * v.y + v.z * sin,
+                                   cosp * v.x * v.z - v.y * sin,
+                                   0.0)
+        m.columns.1 = SIMD4<Float>(cosp * v.x * v.y - v.z * sin,
+                                   cos + cosp * v.y * v.y,
+                                   cosp * v.y * v.z + v.x * sin,
+                                   0.0)
+        m.columns.2 = SIMD4<Float>(cosp * v.x * v.z + v.y * sin,
+                                   cosp * v.y * v.z - v.x * sin,
+                                   cos + cosp * v.z * v.z,
+                                   0.0)
+        m.columns.3 = SIMD4<Float>(0.0,
+                                   0.0,
+                                   0.0,
+                                   1.0)
+        return m
+    }
 }

@@ -644,7 +644,7 @@
 				508FE00921EA227B0043D0E9 /* WindowDelegate.swift */,
 				509F7F1421ED13F300A530E4 /* Controller */,
 				505B801E23FE6582002407FE /* Foundation */,
-				508FE03A21EA22CC0043D0E9 /* Preferences */,
+				508FE03A21EA22CC0043D0E9 /* Settings */,
 				508FE03921EA22CC0043D0E9 /* Dialogs */,
 				509F7F1521ED141F00A530E4 /* Inspector */,
 				509F7F1621ED156100A530E4 /* Peripherals */,
@@ -681,25 +681,14 @@
 			path = Dialogs;
 			sourceTree = "<group>";
 		};
-		508FE03A21EA22CC0043D0E9 /* Preferences */ = {
+		508FE03A21EA22CC0043D0E9 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
 				508FDFF921EA22790043D0E9 /* Defaults.swift */,
-				5023518F24485BBF00F6C088 /* Preferences.swift */,
-				507957AB244AD25B007B8B8D /* Configuration.swift */,
-				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
-				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
-				500217B92449CFF500E1A096 /* ConfigController.swift */,
-				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
-				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
-				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
-				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
-				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
-				5072CAF92456D1C800C8F606 /* AudioPrefs.swift */,
-				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
-				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
+				5099123C24BA46E10007CAB6 /* Preferences */,
+				5099123D24BA46EB0007CAB6 /* Configuration */,
 			);
-			path = Preferences;
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		508FE06021EA318D0043D0E9 /* Emulator */ = {
@@ -755,6 +744,33 @@
 				50950ED622881B7A0073F755 /* ZorroManager.cpp */,
 			);
 			path = Expansion;
+			sourceTree = "<group>";
+		};
+		5099123C24BA46E10007CAB6 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				5023518F24485BBF00F6C088 /* Preferences.swift */,
+				508FE04221EA22CC0043D0E9 /* PreferencesWindow.swift */,
+				508FE04321EA22CC0043D0E9 /* PreferencesController.swift */,
+				508FE03C21EA22CC0043D0E9 /* GeneralPrefs.swift */,
+				508FE04121EA22CC0043D0E9 /* DevicesPrefs.swift */,
+			);
+			path = Preferences;
+			sourceTree = "<group>";
+		};
+		5099123D24BA46EB0007CAB6 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				507957AB244AD25B007B8B8D /* Configuration.swift */,
+				500217B92449CFF500E1A096 /* ConfigController.swift */,
+				508FE03B21EA22CC0043D0E9 /* RomPrefs.swift */,
+				508FE03E21EA22CC0043D0E9 /* HardwarePrefs.swift */,
+				502BB09D229C00C800A8DFCD /* CompatibilityPrefs.swift */,
+				5072CAF92456D1C800C8F606 /* AudioPrefs.swift */,
+				508FE04021EA22CC0043D0E9 /* VideoPrefs.swift */,
+				508FE03F21EA22CC0043D0E9 /* RomDropView.swift */,
+			);
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		509F7F1421ED13F300A530E4 /* Controller */ = {
