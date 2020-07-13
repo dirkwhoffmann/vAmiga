@@ -381,57 +381,11 @@ Agnus::pokeAUDxLCL(u16 value)
     audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
 }
 
-bool
-Agnus::skipBPLxPT(int x)
-{
-    if (pos.h > 1 && busOwner[pos.h - 1] == BUS_BPL1 + x - 1) {
-        return true;
-    }
-    
-    
-    
-    /* If a new value is written into BPLxPTL or BPLxPTH, this usually happens
-     * as described in the left scenario:
-     *
-     * 88888888888888889999999999999999      88888888888888889999999999999999
-     * 0123456789ABCDEF0123456789ABCDEF      0123456789ABCDEF0123456789ABCDEF
-     * .4.2.351.4.2.351.4.2.351.4.2.351      .4.2.351.4.2.351.4.2.351.4.2.351
-     *     ^ ^                                     ^ ^
-     *     | |                                     | |
-     *     | Change takes effect here              | New value is lost
-     *     Write to BPLxPT                         Write to BPLxPT
-     *
-     * The right scenario shows that the new value can get lost under certain
-     * circumstances. The following must hold:
-     *
-     *     (1) There is a Lx or Hx event one cycle after the BPLxPT write.
-     *     (2) There is no DMA going on when the write would happen.
-     */
-
-    // THIS CODE IS BROKEN
-    /*
-    if (isBplxEvent(bplEvent[pos.h + 1], x)) { // (1)
-
-        if (bplEvent[pos.h + 2] == EVENT_NONE) { // (2)
-            return true;
-        }
-    }
-    */
-    return false;
-}
-
 template <int x> void
 Agnus::pokeBPLxPTH(u16 value)
 {
-    // debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
 
-    // Check if the written value gets lost
-    /*
-    if (skipBPLxPT(x)) {
-        return;
-    }
-    */
-    
     // Schedule the register updated
     switch (x) {
         case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value); break;
@@ -446,15 +400,8 @@ Agnus::pokeBPLxPTH(u16 value)
 template <int x> void
 Agnus::pokeBPLxPTL(u16 value)
 {
-    // debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
+    debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
 
-    // Check if the written value gets lost
-    /*
-    if (skipBPLxPT(x)) {
-        return;
-    }
-    */
-    
     // Schedule the register updated
     switch (x) {
         case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value); break;
@@ -471,12 +418,9 @@ Agnus::setBPLxPTH(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     
-    if (skipBPLxPT(x)) {
-        debug(XFILES, "XFILES: Access to BPL%dPTH is lost\n", x);
-        return;
+    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
+        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
     }
-    
-    bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
 }
 
 template <int x> void
@@ -484,12 +428,9 @@ Agnus::setBPLxPTL(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
-    if (skipBPLxPT(x)) {
-        debug(XFILES, "XFILES: Access to BPL%dPTL is lost\n", x);
-        return;
+    if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
+        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
     }
-
-    bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
 void
@@ -523,12 +464,48 @@ Agnus::setBPL2MOD(u16 value)
 template <int x> void
 Agnus::pokeSPRxPTH(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPTH($%d) (%X)\n", x, value, value);
+
+    switch (x) {
+        case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value); break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTH, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTH, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTH, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTH, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTH, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTH, value); break;
+        case 7: recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTH, value); break;
+        default: assert(false);
+    }
+}
+
+template <int x> void
+Agnus::setSPRxPTH(u16 value)
+{
+    debug(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
     sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
 }
 
 template <int x> void
 Agnus::pokeSPRxPTL(u16 value)
+{
+    debug(SPRREG_DEBUG, "pokeSPR%dPTL($%d) (%X)\n", x, value, value);
+
+    switch (x) {
+        case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value); break;
+        case 1: recordRegisterChange(DMA_CYCLES(2), SET_SPR1PTL, value); break;
+        case 2: recordRegisterChange(DMA_CYCLES(2), SET_SPR2PTL, value); break;
+        case 3: recordRegisterChange(DMA_CYCLES(2), SET_SPR3PTL, value); break;
+        case 4: recordRegisterChange(DMA_CYCLES(2), SET_SPR4PTL, value); break;
+        case 5: recordRegisterChange(DMA_CYCLES(2), SET_SPR5PTL, value); break;
+        case 6: recordRegisterChange(DMA_CYCLES(2), SET_SPR6PTL, value); break;
+        case 7: recordRegisterChange(DMA_CYCLES(2), SET_SPR7PTL, value); break;
+        default: assert(false);
+    }
+}
+
+template <int x> void
+Agnus::setSPRxPTL(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
     sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
@@ -565,6 +542,20 @@ Agnus::pokeSPRxCTL(u16 value)
     // Update sprite DMA status
     if (sprVStrt[x] == v) sprDmaState[x] = SPR_DMA_ACTIVE;
     if (sprVStop[x] == v) sprDmaState[x] = SPR_DMA_IDLE;
+}
+
+bool
+Agnus::dropWrite(BusOwner owner)
+{
+    // A write to a pointer register is dropped if the pointer was used one
+    // cycle before the pointer register would be updated.
+    
+    if (pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+        debug(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
+        return true;
+    }
+    
+    return false;
 }
 
 u16
@@ -1110,6 +1101,14 @@ template void Agnus::pokeSPRxPTH<4>(u16 value);
 template void Agnus::pokeSPRxPTH<5>(u16 value);
 template void Agnus::pokeSPRxPTH<6>(u16 value);
 template void Agnus::pokeSPRxPTH<7>(u16 value);
+template void Agnus::setSPRxPTH<0>(u16 value);
+template void Agnus::setSPRxPTH<1>(u16 value);
+template void Agnus::setSPRxPTH<2>(u16 value);
+template void Agnus::setSPRxPTH<3>(u16 value);
+template void Agnus::setSPRxPTH<4>(u16 value);
+template void Agnus::setSPRxPTH<5>(u16 value);
+template void Agnus::setSPRxPTH<6>(u16 value);
+template void Agnus::setSPRxPTH<7>(u16 value);
 
 template void Agnus::pokeSPRxPTL<0>(u16 value);
 template void Agnus::pokeSPRxPTL<1>(u16 value);
@@ -1119,6 +1118,14 @@ template void Agnus::pokeSPRxPTL<4>(u16 value);
 template void Agnus::pokeSPRxPTL<5>(u16 value);
 template void Agnus::pokeSPRxPTL<6>(u16 value);
 template void Agnus::pokeSPRxPTL<7>(u16 value);
+template void Agnus::setSPRxPTL<0>(u16 value);
+template void Agnus::setSPRxPTL<1>(u16 value);
+template void Agnus::setSPRxPTL<2>(u16 value);
+template void Agnus::setSPRxPTL<3>(u16 value);
+template void Agnus::setSPRxPTL<4>(u16 value);
+template void Agnus::setSPRxPTL<5>(u16 value);
+template void Agnus::setSPRxPTL<6>(u16 value);
+template void Agnus::setSPRxPTL<7>(u16 value);
 
 template void Agnus::pokeSPRxPOS<0>(u16 value);
 template void Agnus::pokeSPRxPOS<1>(u16 value);

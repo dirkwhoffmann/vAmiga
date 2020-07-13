@@ -319,7 +319,7 @@ PixelEngine::applyRegisterChange(const RegChange &change)
 {
     switch (change.addr) {
 
-        case REG_NONE:
+        case 0:
             break;
 
         case BPLCON0:
@@ -344,7 +344,7 @@ PixelEngine::colorize(int line)
     u16 hold = colreg[0];
 
     // Add a dummy register change to ensure we draw until the line end
-    colChanges.insert(HPIXELS, RegChange { REG_NONE, 0 } );
+    colChanges.insert(HPIXELS, RegChange { SET_NONE, 0 } );
 
     // Iterate over all recorded register changes
     for (int i = colChanges.begin(); i != colChanges.end(); i = colChanges.next(i)) {

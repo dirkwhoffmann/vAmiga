@@ -305,7 +305,7 @@ Denise::pokeSPRxPOS(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[x/2].insert(pos, RegChange { REG_SPR0POS + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { SET_SPR0POS + x, value } );
 }
 
 template <int x> void
@@ -322,7 +322,7 @@ Denise::pokeSPRxCTL(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[x/2].insert(pos, RegChange { REG_SPR0CTL + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { SET_SPR0CTL + x, value } );
 }
 
 template <int x> void
@@ -339,7 +339,7 @@ Denise::pokeSPRxDATA(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[x/2].insert(pos, RegChange { REG_SPR0DATA + x, value } );
+    sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATA + x, value } );
 }
 
 template <int x> void
@@ -353,7 +353,7 @@ Denise::pokeSPRxDATB(u16 value)
 
     // Record the register change
     i64 pos = 4 * (agnus.pos.h + 1);
-    sprChanges[x/2].insert(pos, RegChange { REG_SPR0DATB + x, value });
+    sprChanges[x/2].insert(pos, RegChange { SET_SPR0DATB + x, value });
 }
 
 template <Accessor s, int xx> void
@@ -595,7 +595,7 @@ Denise::translate()
     prio2 = zPF2(bplcon2);
 
     // Add a dummy register change to ensure we draw until the line ends
-    conChanges.insert(sizeof(bBuffer), RegChange { REG_NONE, 0 });
+    conChanges.insert(sizeof(bBuffer), RegChange { SET_NONE, 0 });
 
     // Iterate over all recorded register changes
     for (int i = conChanges.begin(); i != conChanges.end(); i = conChanges.next(i)) {
@@ -627,7 +627,7 @@ Denise::translate()
                 break;
 
             default:
-                assert(change.addr == REG_NONE);
+                assert(change.addr == SET_NONE);
                 break;
         }
     }
@@ -785,44 +785,44 @@ Denise::drawSpritePair()
             // Apply the recorded register change
             switch (change.addr) {
                     
-                case REG_SPR0DATA + sprite1:
+                case SET_SPR0DATA + sprite1:
                     sprdata[sprite1] = change.value;
                     SET_BIT(armed, sprite1);
                     armed1 = true;
                     break;
                     
-                case REG_SPR0DATA + sprite2:
+                case SET_SPR0DATA + sprite2:
                     sprdata[sprite2] = change.value;
                     SET_BIT(armed, sprite2);
                     armed2 = true;
                     break;
                     
-                case REG_SPR0DATB + sprite1:
+                case SET_SPR0DATB + sprite1:
                     sprdatb[sprite1] = change.value;
                     break;
                     
-                case REG_SPR0DATB + sprite2:
+                case SET_SPR0DATB + sprite2:
                     sprdatb[sprite2] = change.value;
                     break;
-                    
-                case REG_SPR0POS + sprite1:
+                                        
+                case SET_SPR0POS + sprite1:
                     sprpos[sprite1] = change.value;
                     strt1 = sprhppos<sprite1>();
                     break;
                     
-                case REG_SPR0POS + sprite2:
+                case SET_SPR0POS + sprite2:
                     sprpos[sprite2] = change.value;
                     strt2 = sprhppos<sprite2>();
                     break;
                     
-                case REG_SPR0CTL + sprite1:
+                case SET_SPR0CTL + sprite1:
                     sprctl[sprite1] = change.value;
                     strt1 = sprhppos<sprite1>();
                     CLR_BIT(armed, sprite1);
                     armed1 = false;
                     break;
                     
-                case REG_SPR0CTL + sprite2:
+                case SET_SPR0CTL + sprite2:
                     sprctl[sprite2] = change.value;
                     strt2 = sprhppos<sprite2>();
                     CLR_BIT(armed, sprite2);
@@ -861,35 +861,35 @@ Denise::replaySpriteRegChanges()
         // Apply the recorded register change
         switch (change.addr) {
                 
-            case REG_SPR0DATA + sprite1:
+            case SET_SPR0DATA + sprite1:
                 sprdata[sprite1] = change.value;
                 break;
                 
-            case REG_SPR0DATA + sprite2:
+            case SET_SPR0DATA + sprite2:
                 sprdata[sprite2] = change.value;
                 break;
                 
-            case REG_SPR0DATB + sprite1:
+            case SET_SPR0DATB + sprite1:
                 sprdatb[sprite1] = change.value;
                 break;
                 
-            case REG_SPR0DATB + sprite2:
+            case SET_SPR0DATB + sprite2:
                 sprdatb[sprite2] = change.value;
                 break;
                 
-            case REG_SPR0POS + sprite1:
+            case SET_SPR0POS + sprite1:
                 sprpos[sprite1] = change.value;
                 break;
                 
-            case REG_SPR0POS + sprite2:
+            case SET_SPR0POS + sprite2:
                 sprpos[sprite2] = change.value;
                 break;
                 
-            case REG_SPR0CTL + sprite1:
+            case SET_SPR0CTL + sprite1:
                 sprctl[sprite1] = change.value;
                 break;
                 
-            case REG_SPR0CTL + sprite2:
+            case SET_SPR0CTL + sprite2:
                 sprctl[sprite2] = change.value;
                 break;
                 

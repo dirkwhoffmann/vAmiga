@@ -628,17 +628,33 @@ Agnus::serviceREGEvent(Cycle until)
             case SET_BPL1MOD: setBPL1MOD(change.value); break;
             case SET_BPL2MOD: setBPL2MOD(change.value); break;
             case SET_BPL1PTH: setBPLxPTH<1>(change.value); break;
-            case SET_BPL1PTL: setBPLxPTL<1>(change.value); break;
             case SET_BPL2PTH: setBPLxPTH<2>(change.value); break;
-            case SET_BPL2PTL: setBPLxPTL<2>(change.value); break;
             case SET_BPL3PTH: setBPLxPTH<3>(change.value); break;
-            case SET_BPL3PTL: setBPLxPTL<3>(change.value); break;
             case SET_BPL4PTH: setBPLxPTH<4>(change.value); break;
-            case SET_BPL4PTL: setBPLxPTL<4>(change.value); break;
             case SET_BPL5PTH: setBPLxPTH<5>(change.value); break;
-            case SET_BPL5PTL: setBPLxPTL<5>(change.value); break;
             case SET_BPL6PTH: setBPLxPTH<6>(change.value); break;
+            case SET_BPL1PTL: setBPLxPTL<1>(change.value); break;
+            case SET_BPL2PTL: setBPLxPTL<2>(change.value); break;
+            case SET_BPL3PTL: setBPLxPTL<3>(change.value); break;
+            case SET_BPL4PTL: setBPLxPTL<4>(change.value); break;
+            case SET_BPL5PTL: setBPLxPTL<5>(change.value); break;
             case SET_BPL6PTL: setBPLxPTL<6>(change.value); break;
+            case SET_SPR0PTH: setSPRxPTH<0>(change.value); break;
+            case SET_SPR1PTH: setSPRxPTH<1>(change.value); break;
+            case SET_SPR2PTH: setSPRxPTH<2>(change.value); break;
+            case SET_SPR3PTH: setSPRxPTH<3>(change.value); break;
+            case SET_SPR4PTH: setSPRxPTH<4>(change.value); break;
+            case SET_SPR5PTH: setSPRxPTH<5>(change.value); break;
+            case SET_SPR6PTH: setSPRxPTH<6>(change.value); break;
+            case SET_SPR7PTH: setSPRxPTH<7>(change.value); break;
+            case SET_SPR0PTL: setSPRxPTL<0>(change.value); break;
+            case SET_SPR1PTL: setSPRxPTL<1>(change.value); break;
+            case SET_SPR2PTL: setSPRxPTL<2>(change.value); break;
+            case SET_SPR3PTL: setSPRxPTL<3>(change.value); break;
+            case SET_SPR4PTL: setSPRxPTL<4>(change.value); break;
+            case SET_SPR5PTL: setSPRxPTL<5>(change.value); break;
+            case SET_SPR6PTL: setSPRxPTL<6>(change.value); break;
+            case SET_SPR7PTL: setSPRxPTL<7>(change.value); break;
 
             default:
                 warn("Register change ID %d is invalid.\n", change.addr);

@@ -651,12 +651,12 @@ public:
     bool bltdma() { return bltdma(dmacon); }
     bool sprdma() { return sprdma(dmacon); }
     bool dskdma() { return dskdma(dmacon); }
-
-
+    
+    
     //
     // Managing DMA pointers
     //
-
+    
     // Disk DMA
     void pokeDSKPTH(u16 value);
     void pokeDSKPTL(u16 value);
@@ -667,7 +667,6 @@ public:
     template <int x> void reloadAUDxPT() { audpt[x] = audlc[x]; }
     
     // Bitplane DMA
-    bool skipBPLxPT(int x);
     template <int x> void pokeBPLxPTH(u16 value);
     template <int x> void pokeBPLxPTL(u16 value);
     template <int x> void setBPLxPTH(u16 value);
@@ -684,15 +683,24 @@ public:
 
     // Sprite DMA
     template <int x> void pokeSPRxPTH(u16 value);
+    template <int x> void setSPRxPTH(u16 value);
     template <int x> void pokeSPRxPTL(u16 value);
+    template <int x> void setSPRxPTL(u16 value);
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 
+private:
+    
+    // Checks whether a write to a pointer register sould be dropped
+    bool dropWrite(BusOwner owner);
 
+    
     //
     // Performing DMA
     //
 
+public:
+    
     // Reads a word from memory
     u16 peek(u32 addr);
     u16 spypeek(u32 addr);
