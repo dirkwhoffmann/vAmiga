@@ -218,10 +218,14 @@ AgnusInfo;
 
 typedef struct
 {
-    struct {
-        long raw[BUS_OWNER_COUNT];
-        double accumulated[BUS_OWNER_COUNT];
-    } bus;
+    long usage[BUS_OWNER_COUNT];
+    
+    double copperActivity;
+    double blitterActivity;
+    double diskActivity;
+    double audioActivity;
+    double spriteActivity;
+    double bitplaneActivity;
 }
 AgnusStats;
 

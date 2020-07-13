@@ -680,7 +680,7 @@ Agnus::doDiskDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_DISK]++;
+    stats.usage[BUS_DISK]++;
 
     return result;
 }
@@ -694,7 +694,7 @@ Agnus::doAudioDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_AUDIO;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_AUDIO]++;
+    stats.usage[BUS_AUDIO]++;
 
     return result;
 }
@@ -711,7 +711,7 @@ Agnus::doBitplaneDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = owner;
     busValue[pos.h] = result;
-    stats.bus.raw[owner]++;
+    stats.usage[owner]++;
 
     return result;
 }
@@ -725,7 +725,7 @@ Agnus::doSpriteDMA()
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_SPRITE;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_SPRITE]++;
+    stats.usage[BUS_SPRITE]++;
 
     return result;
 }
@@ -738,7 +738,7 @@ Agnus::doCopperDMA(u32 addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_COPPER]++;
+    stats.usage[BUS_COPPER]++;
 
     return result;
 }
@@ -754,7 +754,7 @@ Agnus::doBlitterDMA(u32 addr)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BLITTER;
     busValue[pos.h] = result;
-    stats.bus.raw[BUS_BLITTER]++;
+    stats.usage[BUS_BLITTER]++;
 
     return result;
 }
@@ -768,7 +768,7 @@ Agnus::doDiskDMA(u16 value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_DISK;
     busValue[pos.h] = value;
-    stats.bus.raw[BUS_DISK]++;
+    stats.usage[BUS_DISK]++;
 }
 
 void
@@ -779,7 +779,7 @@ Agnus::doCopperDMA(u32 addr, u16 value)
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
     busValue[pos.h] = value;
-    stats.bus.raw[BUS_COPPER]++;
+    stats.usage[BUS_COPPER]++;
 }
 
 void
@@ -790,7 +790,7 @@ Agnus::doBlitterDMA(u32 addr, u16 value)
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
     busValue[pos.h] = value;
-    stats.bus.raw[BUS_BLITTER]++;
+    stats.usage[BUS_BLITTER]++;
 }
 
 void

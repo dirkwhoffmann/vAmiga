@@ -434,25 +434,12 @@ extension MyController {
             
         // DMA monitors
         let dma = amiga.agnus.getStats()
-        
-        let counts = [
-            dma.bus.accumulated.0,
-            dma.bus.accumulated.1,
-            dma.bus.accumulated.2,
-            dma.bus.accumulated.3,
-            dma.bus.accumulated.4,
-            dma.bus.accumulated.5,
-            dma.bus.accumulated.6,
-            dma.bus.accumulated.7,
-            dma.bus.accumulated.8
-        ]
-                
-        let copDMA = Float(counts[Int(BUS_COPPER.rawValue)]) / (313*120)
-        let bltDMA = Float(counts[Int(BUS_BLITTER.rawValue)]) / (313*120)
-        let dskDMA = Float(counts[Int(BUS_DISK.rawValue)]) / (313*3)
-        let audDMA = Float(counts[Int(BUS_AUDIO.rawValue)]) / (313*4)
-        let sprDMA = Float(counts[Int(BUS_SPRITE.rawValue)]) / (313*16)
-        let bplDMA = Float(counts[Int(BUS_BPL1.rawValue)]) / 39330
+        let copDMA = Float(dma.copperActivity) / (313*120)
+        let bltDMA = Float(dma.blitterActivity) / (313*120)
+        let dskDMA = Float(dma.diskActivity) / (313*3)
+        let audDMA = Float(dma.audioActivity) / (313*4)
+        let sprDMA = Float(dma.spriteActivity) / (313*16)
+        let bplDMA = Float(dma.bitplaneActivity) / 39330
         
         addValue(Renderer.Monitor.copper, copDMA)
         addValue(Renderer.Monitor.blitter, bltDMA)

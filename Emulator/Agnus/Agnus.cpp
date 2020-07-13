@@ -173,10 +173,14 @@ Agnus::_dump()
 void
 Agnus::clearStats()
 {
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.bus.raw[i] = 0;
-        stats.bus.accumulated[i] = 0.0;
-    }
+    for (int i = 0; i < BUS_OWNER_COUNT; i++) stats.usage[i] = 0;
+    
+    stats.copperActivity = 0;
+    stats.blitterActivity = 0;
+    stats.diskActivity = 0;
+    stats.audioActivity = 0;
+    stats.spriteActivity = 0;
+    stats.bitplaneActivity = 0;
 }
 
 void
@@ -184,10 +188,28 @@ Agnus::updateStats()
 {
     const double w = 0.5;
     
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) {
-        stats.bus.accumulated[i] = w * stats.bus.accumulated[i] + (1 - w) * stats.bus.raw[i];
-        stats.bus.raw[i] = 0;
-    }
+    double copper = stats.usage[BUS_COPPER];
+    double blitter = stats.usage[BUS_BLITTER];
+    double disk = stats.usage[BUS_DISK];
+    double audio = stats.usage[BUS_AUDIO];
+    double sprite = stats.usage[BUS_SPRITE];
+    
+    double bitplane =
+    stats.usage[BUS_BPL1] +
+    stats.usage[BUS_BPL2] +
+    stats.usage[BUS_BPL3] +
+    stats.usage[BUS_BPL4] +
+    stats.usage[BUS_BPL5] +
+    stats.usage[BUS_BPL6];
+
+    stats.copperActivity = w * stats.copperActivity + (1 - w) * copper;
+    stats.blitterActivity = w * stats.blitterActivity + (1 - w) * blitter;
+    stats.diskActivity = w * stats.diskActivity + (1 - w) * disk;
+    stats.audioActivity = w * stats.audioActivity + (1 - w) * audio;
+    stats.spriteActivity = w * stats.spriteActivity + (1 - w) * sprite;
+    stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplane;
+    
+    for (int i = 0; i < BUS_OWNER_COUNT; i++) stats.usage[i] = 0;
 }
 
 Cycle

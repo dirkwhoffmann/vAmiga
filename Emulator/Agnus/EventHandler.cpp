@@ -944,7 +944,7 @@ Agnus::serviceDASEvent()
             busOwner[0x03] = BUS_REFRESH;
             busOwner[0x05] = BUS_REFRESH;
             busOwner[0xE2] = BUS_REFRESH;
-            stats.bus.raw[BUS_REFRESH] += 4;
+            stats.usage[BUS_REFRESH] += 4;
             break;
 
         case DAS_D0:
