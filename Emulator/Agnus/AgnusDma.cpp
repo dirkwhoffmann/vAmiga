@@ -384,6 +384,12 @@ Agnus::pokeAUDxLCL(u16 value)
 bool
 Agnus::skipBPLxPT(int x)
 {
+    if (pos.h > 1 && busOwner[pos.h - 1] == BUS_BPL1 + x - 1) {
+        return true;
+    }
+    
+    
+    
     /* If a new value is written into BPLxPTL or BPLxPTH, this usually happens
      * as described in the left scenario:
      *
@@ -420,11 +426,12 @@ Agnus::pokeBPLxPTH(u16 value)
     // debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
 
     // Check if the written value gets lost
+    /*
     if (skipBPLxPT(x)) {
-        // debug("BPLxPTH gets lost\n");
         return;
     }
-
+    */
+    
     // Schedule the register updated
     switch (x) {
         case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTH, value); break;
@@ -442,11 +449,12 @@ Agnus::pokeBPLxPTL(u16 value)
     // debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
 
     // Check if the written value gets lost
+    /*
     if (skipBPLxPT(x)) {
-        debug(BPLREG_DEBUG, "BPLxPTL gets lost\n");
         return;
     }
-
+    */
+    
     // Schedule the register updated
     switch (x) {
         case 1: recordRegisterChange(DMA_CYCLES(2), SET_BPL1PTL, value); break;
@@ -462,6 +470,12 @@ template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
+    
+    if (skipBPLxPT(x)) {
+        debug(XFILES, "XFILES: Access to BPL%dPTH is lost\n", x);
+        return;
+    }
+    
     bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
 }
 
@@ -469,6 +483,12 @@ template <int x> void
 Agnus::setBPLxPTL(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
+    
+    if (skipBPLxPT(x)) {
+        debug(XFILES, "XFILES: Access to BPL%dPTL is lost\n", x);
+        return;
+    }
+
     bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
 }
 
