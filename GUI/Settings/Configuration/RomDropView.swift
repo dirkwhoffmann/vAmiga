@@ -21,7 +21,7 @@ extension NSDraggingInfo {
 
 class DropView: NSImageView {
     
-    @IBOutlet var parent: ConfigController!
+    @IBOutlet var parent: ConfigurationController!
     var amiga: AmigaProxy!
 
     override func awakeFromNib() {

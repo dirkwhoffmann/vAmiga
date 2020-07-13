@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class ConfigController: DialogController {
+class ConfigurationController: DialogController {
 
     var config: Configuration { return parent.config }
     
@@ -259,7 +259,7 @@ class ConfigController: DialogController {
     }
 }
 
-extension ConfigController: NSTabViewDelegate {
+extension ConfigurationController: NSTabViewDelegate {
 
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
 

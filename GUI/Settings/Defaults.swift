@@ -553,8 +553,8 @@ extension Keys {
 
 struct HardwareDefaults {
     
-    var agnusRevision: AgnusRevision
-    var deniseRevision: DeniseRevision
+    var agnusRev: AgnusRevision
+    var deniseRev: DeniseRevision
     var realTimeClock: RTCModel
     
     var chipRam: Int
@@ -574,8 +574,8 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRevision: AGNUS_8372,
-        deniseRevision: DENISE_8362R8,
+        agnusRev: AGNUS_8372,
+        deniseRev: DENISE_8362R8,
         realTimeClock: RTC_OKI,
         
         chipRam: 512,
@@ -592,8 +592,8 @@ struct HardwareDefaults {
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRevision: AGNUS_8367,
-        deniseRevision: DENISE_8362R8,
+        agnusRev: AGNUS_8367,
+        deniseRev: DENISE_8362R8,
         realTimeClock: RTC_NONE,
         
         chipRam: 256,
@@ -610,8 +610,8 @@ struct HardwareDefaults {
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRevision: AGNUS_8375,
-        deniseRevision: DENISE_8362R8,
+        agnusRev: AGNUS_8375,
+        deniseRev: DENISE_8362R8,
         realTimeClock: RTC_OKI,
         
         chipRam: 512,
@@ -634,8 +634,8 @@ extension UserDefaults {
         let defaults = HardwareDefaults.A500
         let dictionary: [String: Any] = [
             
-            Keys.agnusRev: defaults.agnusRevision.rawValue,
-            Keys.deniseRev: defaults.deniseRevision.rawValue,
+            Keys.agnusRev: defaults.agnusRev.rawValue,
+            Keys.deniseRev: defaults.deniseRev.rawValue,
             Keys.realTimeClock: defaults.realTimeClock.rawValue,
 
             Keys.chipRam: defaults.chipRam,

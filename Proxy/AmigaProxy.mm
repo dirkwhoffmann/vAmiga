@@ -1579,6 +1579,14 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     return wrapper->amiga->getConfig();
 }
+- (NSInteger) getConfig:(ConfigOption)option
+{
+    return wrapper->amiga->getConfig(option);
+}
+- (NSInteger) getConfig:(ConfigOption)option drive:(NSInteger)nr
+{
+    return wrapper->amiga->getDriveConfig(nr, option);
+}
 - (BOOL) configure:(ConfigOption)opt value:(NSInteger)val
 {
     return wrapper->amiga->configure(opt, val);
@@ -1594,14 +1602,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val;
 {
     return wrapper->amiga->configureDrive(nr, opt, val ? 1 : 0);
-}
-- (NSInteger) getConfig:(ConfigOption)option
-{
-    return wrapper->amiga->getConfig(option);
-}
-- (NSInteger) getConfig:(ConfigOption)option drive:(NSInteger)nr
-{
-    return wrapper->amiga->getDriveConfig(nr, option);
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

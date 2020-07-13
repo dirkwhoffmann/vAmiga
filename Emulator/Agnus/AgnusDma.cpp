@@ -393,12 +393,12 @@ Agnus::skipBPLxPT(int x)
      *     ^ ^                                     ^ ^
      *     | |                                     | |
      *     | Change takes effect here              | New value is lost
-     *     Write to BPLxPT                         Write to BPL1PT
+     *     Write to BPLxPT                         Write to BPLxPT
      *
      * The right scenario shows that the new value can get lost under certain
      * circumstances. The following must hold:
      *
-     *     (1) There is a Lx or Hx event one cycle after the BPL1PT write.
+     *     (1) There is a Lx or Hx event one cycle after the BPLxPT write.
      *     (2) There is no DMA going on when the write would happen.
      */
 

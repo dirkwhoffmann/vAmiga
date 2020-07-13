@@ -71,12 +71,12 @@ class Monitor: DialogController {
     @IBOutlet weak var synOpacity: NSSlider!
 
     var layers: Int {
-        get { return amiga.getConfig(VA_HIDDEN_LAYERS) }
-        set { amiga.configure(VA_HIDDEN_LAYERS, value: newValue) }
+        get { return amiga.getConfig(OPT_HIDDEN_LAYERS) }
+        set { amiga.configure(OPT_HIDDEN_LAYERS, value: newValue) }
     }
     var layerAlpha: Int {
-        get { return 255 - amiga.getConfig(VA_HIDDEN_LAYER_ALPHA) }
-        set { amiga.configure(VA_HIDDEN_LAYER_ALPHA, value: 255 - newValue) }
+        get { return 255 - amiga.getConfig(OPT_HIDDEN_LAYER_ALPHA) }
+        set { amiga.configure(OPT_HIDDEN_LAYER_ALPHA, value: 255 - newValue) }
     }
     
     override func awakeFromNib() {

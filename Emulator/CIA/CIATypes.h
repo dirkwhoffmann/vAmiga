@@ -24,12 +24,14 @@ typedef enum : long
 }
 CIAType;
 
-inline bool isCIAType(long value)
+inline bool
+isCIAType(long value)
 {
     return value >= CIA_8520_DIP && value <= CIA_8520_PLCC;
 }
 
-inline const char *ciaTypeName(CIAType type)
+inline const char *
+ciaTypeName(CIAType type)
 {
     assert(isCIAType(type));
 

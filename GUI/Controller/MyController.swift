@@ -33,20 +33,20 @@ class MyController: NSWindowController, MessageReceiver {
     // the proxy is written in Objective-C.
     var amiga: AmigaProxy!
 
-    // Inspector of this emulator instance
+    // Inspector panel of this emulator instance
     var inspector: Inspector?
 
-    // Monitor of this emulator instance
+    // Monitor panel of this emulator instance
     var monitor: Monitor?
 
     // Configuration panel of this emulator instance
-    var configurator: ConfigController?
+    var configurator: ConfigurationController?
     
     // Snapshot and screenshot browsers
     var snapshotBrowser: SnapshotDialog?
     var screenshotBrowser: ScreenshotDialog?
 
-    // Emulator configuration
+    // The current emulator configuration
     var config: Configuration!
     
     // Audio Engine
@@ -258,12 +258,9 @@ extension MyController {
 
         track()
         
-        config = Configuration.init(with: self)
-        
-        // Create audio engine
-        macAudio = MacAudio.init(with: self)
-        
         mydocument = document as? MyDocument
+        config = Configuration.init(with: self)
+        macAudio = MacAudio.init(with: self)
     }
 
     override open func windowDidLoad() {

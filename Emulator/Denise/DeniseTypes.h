@@ -30,7 +30,7 @@ inline bool isDeniseRevision(long value)
     return value >= 0 && value <= DENISE_8373;
 }
 
-inline const char *DeniseRevisionName(DeniseRevision type)
+inline const char *deniseRevisionName(DeniseRevision type)
 {
     assert(isDeniseRevision(type));
 

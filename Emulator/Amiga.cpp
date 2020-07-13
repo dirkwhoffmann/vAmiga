@@ -181,6 +181,57 @@ Amiga::getConfig()
     return config;
 }
 
+long
+Amiga::getConfig(ConfigOption option)
+{
+    switch (option) {
+
+        case OPT_AGNUS_REVISION: return agnus.getRevision();
+        case OPT_DENISE_REVISION: return denise.getRevision();
+        case OPT_RTC: return rtc.getModel();
+        case OPT_CHIP_RAM: return mem.chipRamSize() / KB(1);
+        case OPT_SLOW_RAM: return mem.slowRamSize() / KB(1);
+        case OPT_FAST_RAM: return mem.fastRamSize() / KB(1);
+        case OPT_EXT_START: return mem.getExtStart();
+        case OPT_DRIVE_SPEED: return df0.getSpeed();
+        case OPT_HIDDEN_SPRITES: return denise.getHiddenSprites();
+        case OPT_HIDDEN_LAYERS: return denise.getHiddenLayers();
+        case OPT_HIDDEN_LAYER_ALPHA: return denise.getHiddenLayerAlpha();
+        case OPT_CLX_SPR_SPR: return denise.getClxSprSpr();
+        case OPT_CLX_SPR_PLF: return denise.getClxSprPlf();
+        case OPT_CLX_PLF_PLF: return denise.getClxPlfPlf();
+        case OPT_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
+        case OPT_FILTER_TYPE: return paula.audioUnit.getFilterType();
+        case OPT_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
+        case OPT_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
+        case OPT_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
+        case OPT_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
+        case OPT_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
+        case OPT_SERIAL_DEVICE: return serialPort.getDevice();
+        case OPT_TODBUG: return ciaA.getTodBug();
+        case OPT_ECLOCK_SYNCING: return ciaA.getEClockSyncing();
+        case OPT_ACCURATE_KEYBOARD: return keyboard.getAccurate();
+
+        default: assert(false); return 0;
+    }
+}
+
+long
+Amiga::getDriveConfig(unsigned drive, ConfigOption option)
+{
+    assert(drive < 4);
+            
+    switch (option) {
+            
+        case OPT_DRIVE_CONNECT: return paula.diskController.isConnected(drive);
+        case OPT_DRIVE_TYPE: return df[drive]->getType();
+
+        default: assert(false);
+    }
+    
+    return 0;
+}
+
 bool
 Amiga::configure(ConfigOption option, long value)
 {
@@ -190,10 +241,10 @@ Amiga::configure(ConfigOption option, long value)
     
     switch (option) {
 
-        case VA_AGNUS_REVISION:
+        case OPT_AGNUS_REVISION:
             
 #ifdef FORCE_AGNUS_REVISION
-            value = VA_AGNUS_REVISION;
+            value = OPT_AGNUS_REVISION;
             warn("Overriding Agnus revision: %d KB\n", value);
 #endif
             
@@ -206,7 +257,7 @@ Amiga::configure(ConfigOption option, long value)
             agnus.setRevision((AgnusRevision)value);
             goto success;
 
-        case VA_DENISE_REVISION:
+        case OPT_DENISE_REVISION:
 
             if (!isDeniseRevision(value)) {
                 warn("Invalid Denise revision: %d\n", value);
@@ -217,7 +268,7 @@ Amiga::configure(ConfigOption option, long value)
             denise.setRevision((DeniseRevision)value);
             goto success;
 
-        case VA_RTC:
+        case OPT_RTC:
             
 #ifdef FORCE_RTC
             value = FORCE_RTC;
@@ -234,7 +285,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             goto success;
 
-        case VA_CHIP_RAM:
+        case OPT_CHIP_RAM:
             
 #ifdef FORCE_CHIP_RAM
             value = FORCE_CHIP_RAM;
@@ -250,7 +301,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.allocChip(KB(value));
             goto success;
     
-        case VA_SLOW_RAM:
+        case OPT_SLOW_RAM:
             
 #ifdef FORCE_SLOW_RAM
             value = FORCE_SLOW_RAM;
@@ -266,7 +317,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.allocSlow(KB(value));
             goto success;
         
-        case VA_FAST_RAM:
+        case OPT_FAST_RAM:
             
 #ifdef FORCE_FAST_RAM
             value = FORCE_FAST_RAM;
@@ -282,7 +333,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.allocFast(KB(value));
             goto success;
 
-        case VA_EXT_START:
+        case OPT_EXT_START:
 
             if (value != 0xE0 && value != 0xF0) {
                 warn("Invalid Extended ROM start page: %x\n", value);
@@ -293,7 +344,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.setExtStart(value);
             goto success;
 
-        case VA_DRIVE_SPEED:
+        case OPT_DRIVE_SPEED:
             
 #ifdef FORCE_DRIVE_SPEED
             value = FORCE_DRIVE_SPEED;
@@ -308,43 +359,43 @@ Amiga::configure(ConfigOption option, long value)
             paula.diskController.setSpeed(value);
             goto success;
 
-        case VA_HIDDEN_SPRITES:
+        case OPT_HIDDEN_SPRITES:
 
             if (current.denise.hiddenSprites == value) goto exit;
             denise.setHiddenSprites(value);
             goto success;
 
-        case VA_HIDDEN_LAYERS:
+        case OPT_HIDDEN_LAYERS:
             
             if (current.denise.hiddenLayers == value) goto exit;
             denise.setHiddenLayers(value);
             goto success;
             
-        case VA_HIDDEN_LAYER_ALPHA:
+        case OPT_HIDDEN_LAYER_ALPHA:
             
             if (current.denise.hiddenLayerAlpha == value) goto exit;
             denise.setHiddenLayerAlpha(value);
             goto success;
             
-        case VA_CLX_SPR_SPR:
+        case OPT_CLX_SPR_SPR:
 
             if (current.denise.clxSprSpr == value) goto exit;
             denise.setClxSprSpr(value);
             goto success;
 
-        case VA_CLX_SPR_PLF:
+        case OPT_CLX_SPR_PLF:
 
             if (current.denise.clxSprPlf == value) goto exit;
             denise.setClxSprPlf(value);
             goto success;
 
-        case VA_CLX_PLF_PLF:
+        case OPT_CLX_PLF_PLF:
 
             if (current.denise.clxPlfPlf == value) goto exit;
             denise.setClxPlfPlf(value);
             goto success;
 
-        case VA_SAMPLING_METHOD:
+        case OPT_SAMPLING_METHOD:
 
             if (!isSamplingMethod(value)) {
                 warn("Invalid filter activation: %d\n", value);
@@ -355,7 +406,7 @@ Amiga::configure(ConfigOption option, long value)
             paula.audioUnit.setSamplingMethod((SamplingMethod)value);
             goto success;
 
-        case VA_FILTER_TYPE:
+        case OPT_FILTER_TYPE:
 
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %d\n", value);
@@ -367,13 +418,13 @@ Amiga::configure(ConfigOption option, long value)
             paula.audioUnit.setFilterType((FilterType)value);
             goto success;
             
-        case VA_FILTER_ALWAYS_ON:
+        case OPT_FILTER_ALWAYS_ON:
             
             if (current.audio.filterAlwaysOn == value) goto exit;
             paula.audioUnit.setFilterAlwaysOn(value);
             goto success;
             
-        case VA_BLITTER_ACCURACY:
+        case OPT_BLITTER_ACCURACY:
             
 #ifdef FORCE_BLT_LEVEL
             value = FORCE_BLT_LEVEL;
@@ -384,7 +435,7 @@ Amiga::configure(ConfigOption option, long value)
             agnus.blitter.setAccuracy(value);
             goto success;
             
-        case VA_ASYNC_FIFO:
+        case OPT_ASYNC_FIFO:
             
 #ifdef FORCE_ASYNC_FIFO
             value = FORCE_ASYNC_FIFO;
@@ -395,19 +446,19 @@ Amiga::configure(ConfigOption option, long value)
             paula.diskController.setAsyncFifo(value);
             goto success;
 
-        case VA_LOCK_DSKSYNC:
+        case OPT_LOCK_DSKSYNC:
 
             if (current.diskController.lockDskSync == value) goto exit;
             paula.diskController.setLockDskSync(value);
             goto success;
             
-        case VA_AUTO_DSKSYNC:
+        case OPT_AUTO_DSKSYNC:
             
             if (current.diskController.autoDskSync == value) goto exit;
             paula.diskController.setAutoDskSync(value);
             goto success;
 
-        case VA_SERIAL_DEVICE:
+        case OPT_SERIAL_DEVICE:
 
             if (!isSerialPortDevice(value)) {
                 warn("Invalid serial port device: %d\n", value);
@@ -418,21 +469,21 @@ Amiga::configure(ConfigOption option, long value)
             serialPort.setDevice((SerialPortDevice)value);
             goto success;
 
-        case VA_TODBUG:
+        case OPT_TODBUG:
 
             if (current.ciaA.todBug == value) goto exit;
             ciaA.setTodBug(value);
             ciaB.setTodBug(value);
             goto success;
             
-        case VA_ECLOCK_SYNCING:
+        case OPT_ECLOCK_SYNCING:
             
             if (current.ciaA.eClockSyncing == value) goto exit;
             ciaA.setEClockSyncing(value);
             ciaB.setEClockSyncing(value);
             goto success;
             
-        case VA_ACCURATE_KEYBOARD:
+        case OPT_ACCURATE_KEYBOARD:
 
             if (current.keyboard.accurate == value) goto exit;
             keyboard.setAccurate(value);
@@ -469,7 +520,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
     
     switch (option) {
             
-        case VA_DRIVE_CONNECT:
+        case OPT_DRIVE_CONNECT:
             
             if (drive == 0 && value == false) {
                 warn("Df0 cannot be disconnected. Ignoring.\n");
@@ -480,7 +531,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
             paula.diskController.setConnected(drive, value);
             break;
             
-        case VA_DRIVE_TYPE:
+        case OPT_DRIVE_TYPE:
             
             if (!isDriveType(value)) {
                 warn("Invalid drive type: %d\n", value);
@@ -501,57 +552,6 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
     
     putMessage(MSG_CONFIG);
     return true;
-}
-
-long
-Amiga::getConfig(ConfigOption option)
-{
-    switch (option) {
-
-        case VA_AGNUS_REVISION: return agnus.getRevision();
-        case VA_DENISE_REVISION: return denise.getRevision();
-        case VA_RTC: return rtc.getModel();
-        case VA_CHIP_RAM: return mem.chipRamSize() / KB(1);
-        case VA_SLOW_RAM: return mem.slowRamSize() / KB(1);
-        case VA_FAST_RAM: return mem.fastRamSize() / KB(1);
-        case VA_EXT_START: return mem.getExtStart();
-        case VA_DRIVE_SPEED: return df0.getSpeed();
-        case VA_HIDDEN_SPRITES: return denise.getHiddenSprites();
-        case VA_HIDDEN_LAYERS: return denise.getHiddenLayers();
-        case VA_HIDDEN_LAYER_ALPHA: return denise.getHiddenLayerAlpha();
-        case VA_CLX_SPR_SPR: return denise.getClxSprSpr();
-        case VA_CLX_SPR_PLF: return denise.getClxSprPlf();
-        case VA_CLX_PLF_PLF: return denise.getClxPlfPlf();
-        case VA_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
-        case VA_FILTER_TYPE: return paula.audioUnit.getFilterType();
-        case VA_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
-        case VA_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
-        case VA_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
-        case VA_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
-        case VA_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
-        case VA_SERIAL_DEVICE: return serialPort.getDevice();
-        case VA_TODBUG: return ciaA.getTodBug();
-        case VA_ECLOCK_SYNCING: return ciaA.getEClockSyncing();
-        case VA_ACCURATE_KEYBOARD: return keyboard.getAccurate();
-
-        default: assert(false); return 0;
-    }
-}
-
-long
-Amiga::getDriveConfig(unsigned drive, ConfigOption option)
-{
-    assert(drive < 4);
-            
-    switch (option) {
-            
-        case VA_DRIVE_CONNECT: return paula.diskController.isConnected(drive);
-        case VA_DRIVE_TYPE: return df[drive]->getType();
-
-        default: assert(false);
-    }
-    
-    return 0;
 }
 
 void

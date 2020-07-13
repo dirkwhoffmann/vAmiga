@@ -217,7 +217,7 @@ extension MyController: NSMenuItemValidation {
         
         if configurator == nil {
             let name = NSNib.Name("Configuration")
-            configurator = ConfigController.make(parent: self, nibName: name)
+            configurator = ConfigurationController.make(parent: self, nibName: name)
         }
         configurator?.showSheet(tab: tab)
     }
@@ -533,7 +533,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
 
-        var mask = amiga.getConfig(VA_HIDDEN_SPRITES)
+        var mask = amiga.getConfig(OPT_HIDDEN_SPRITES)
         
         sender.state = (sender.state == .off) ? .on : .off
         if sender.state == .on {
@@ -543,7 +543,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         amiga.suspend()
-        amiga.configure(VA_HIDDEN_SPRITES, value: mask)
+        amiga.configure(OPT_HIDDEN_SPRITES, value: mask)
         amiga.resume()
         
         track()
