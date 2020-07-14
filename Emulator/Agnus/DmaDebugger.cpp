@@ -19,19 +19,14 @@ DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
     }
 
     // Assign default colors
-    setColor(BUS_CPU,      RgbColor((u8)0xFF, 0xFF, 0xFF));
-    setColor(BUS_REFRESH,  RgbColor((u8)0xFF, 0x00, 0x00));
-    setColor(BUS_DISK,     RgbColor((u8)0x00, 0xFF, 0x00));
-    setColor(BUS_AUDIO,    RgbColor((u8)0xFF, 0x00, 0xFF));
-    setColor(BUS_BPL1,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_BPL2,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_BPL3,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_BPL4,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_BPL5,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_BPL6,     RgbColor((u8)0x00, 0xFF, 0xFF));
-    setColor(BUS_SPRITE,   RgbColor((u8)0x00, 0x80, 0xFF));
-    setColor(BUS_COPPER,   RgbColor((u8)0xFF, 0xFF, 0x00));
-    setColor(BUS_BLITTER,  RgbColor((u8)0xFF, 0x80, 0x00));
+    setCpuColor      (1.0, 1.0, 1.0);
+    setRefreshColor  (1.0, 0.0, 0.0);
+    setDiskColor     (0.0, 1.0, 0.0);
+    setAudioColor    (1.0, 0.0, 1.0);
+    setBitplaneColor (0.0, 1.0, 1.0);
+    setSpriteColor   (0.0, 0.5, 1.0);
+    setCopperColor   (1.0, 1.0, 0.0);
+    setCopperColor   (1.0, 0.8, 0.0);
 }
 
 DMADebuggerInfo
