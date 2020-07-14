@@ -21,7 +21,7 @@
 @class CPUProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
-// @class DmaDebuggerProxy;
+@class DmaDebuggerProxy;
 @class DMSFileProxy;
 @class DriveProxy;
 @class JoystickProxy;
@@ -42,6 +42,7 @@ struct AmigaControlPortWrapper;
 struct CPUWrapper;
 struct DeniseWrapper;
 struct DiskControllerWrapper;
+struct DmaDebuggerWrapper;
 struct AmigaDriveWrapper;
 struct KeyboardWrapper;
 struct MemWrapper;
@@ -50,7 +51,7 @@ struct AmigaFileWrapper;
 struct AmigaSerialPortWrapper;
 
 //
-// Amiga proxy
+// Amiga
 //
 
 @interface AmigaProxy : NSObject {
@@ -62,6 +63,7 @@ struct AmigaSerialPortWrapper;
     CIAProxy *ciaB;
     MemProxy *mem;
     AgnusProxy *agnus;
+    DmaDebuggerProxy *dmaDebugger;
     DeniseProxy *denise;
     PaulaProxy *paula;
     ControlPortProxy *controlPort1;
@@ -85,6 +87,7 @@ struct AmigaSerialPortWrapper;
 @property (readonly) CIAProxy *ciaB;
 @property (readonly) MemProxy *mem;
 @property (readonly) AgnusProxy *agnus;
+@property (readonly) DmaDebuggerProxy *dmaDebugger;
 @property (readonly) DeniseProxy *denise;
 @property (readonly) PaulaProxy *paula;
 @property (readonly) ControlPortProxy *controlPort1;
@@ -164,7 +167,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// CPU Proxy
+// CPU
 //
 
 @interface CPUProxy : NSObject {
@@ -219,7 +222,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// CIA Proxy
+// CIA
 //
 
 @interface CIAProxy : NSObject {
@@ -235,7 +238,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Memory Proxy
+// Memory
 //
 
 @interface MemProxy : NSObject {
@@ -293,7 +296,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// AgnusProxy Proxy
+// Agnus
 //
 
 @interface AgnusProxy : NSObject {
@@ -309,7 +312,6 @@ struct AmigaSerialPortWrapper;
 - (void) dumpBlitter;
 
 - (AgnusInfo) getInfo;
-- (DMADebuggerInfo) getDebuggerInfo;
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
 - (EventInfo) getEventInfo;
 - (CopperInfo) getCopperInfo;
@@ -324,8 +326,20 @@ struct AmigaSerialPortWrapper;
 - (NSString *) disassemble:(NSInteger)addr;
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 
-- (void) dmaDebugSetEnable:(BOOL)value;
-// - (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value;
+@end
+
+//
+// DmaDebugger
+//
+
+@interface DmaDebuggerProxy : NSObject {
+    
+    struct DmaDebuggerWrapper *wrapper;
+}
+
+- (DMADebuggerInfo) getInfo;
+
+- (void) setEnable:(BOOL)value;
 - (void) visualizeCopper:(BOOL)value;
 - (void) visualizeBlitter:(BOOL)value;
 - (void) visualizeDisk:(BOOL)value;
@@ -335,9 +349,8 @@ struct AmigaSerialPortWrapper;
 - (void) visualizeCpu:(BOOL)value;
 - (void) visualizeRefresh:(BOOL)value;
 
-// - (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b;
-- (void) dmaDebugSetOpacity:(double)value;
-- (void) dmaDebugSetDisplayMode:(NSInteger)mode;
+- (void) setOpacity:(double)value;
+- (void) setDisplayMode:(NSInteger)mode;
 - (void) setCopperColor:(double)r g:(double)g b:(double)b;
 - (void) setBlitterColor:(double)r g:(double)g b:(double)b;
 - (void) setDiskColor:(double)r g:(double)g b:(double)b;
@@ -349,9 +362,8 @@ struct AmigaSerialPortWrapper;
 
 @end
 
-
 //
-// Denise Proxy
+// Denise
 //
 
 @interface DeniseProxy : NSObject {
@@ -384,7 +396,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Paula Proxy
+// Paula
 //
 
 @interface PaulaProxy : NSObject {
@@ -432,7 +444,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// ControlPort Proxy
+// ControlPort
 //
 
 @interface ControlPortProxy : NSObject {
@@ -448,7 +460,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// SerialPort Proxy
+// SerialPort
 //
 
 @interface SerialPortProxy : NSObject {
@@ -464,7 +476,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Mouse Proxy
+// Mouse
 //
 
 @interface MouseProxy : NSObject {
@@ -482,7 +494,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Joystick Proxy
+// Joystick
 //
 
 @interface JoystickProxy : NSObject {
@@ -504,7 +516,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Keyboard Proxy
+// Keyboard
 //
 
 @interface KeyboardProxy : NSObject {
@@ -523,7 +535,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// DiskController Proxy
+// DiskController
 //
 
 @interface DiskControllerProxy : NSObject {
@@ -548,7 +560,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// AmigaDrive Proxy
+// AmigaDrive
 //
 
 @interface DriveProxy : NSObject {
@@ -583,11 +595,11 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// F I L E   T Y P E   P R O X Y S
+// F I L E   T Y P E S
 //
 
 //
-// AmigaFile proxy
+// AmigaFile
 //
 
 @interface AmigaFileProxy : NSObject {
@@ -611,15 +623,13 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// Snapshot proxy
+// Snapshot
 //
 
 @interface SnapshotProxy : AmigaFileProxy {
     
     NSImage *preview;
 }
-
-// @property NSImage *preview;
 
 + (BOOL)isSupportedSnapshot:(const void *)buffer length:(NSInteger)length;
 + (BOOL)isUnsupportedSnapshot:(const void *)buffer length:(NSInteger)length;
@@ -637,7 +647,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// ADFFile proxy
+// ADFFile
 //
 
 @interface ADFFileProxy : AmigaFileProxy {
@@ -665,7 +675,7 @@ struct AmigaSerialPortWrapper;
 
 
 //
-// DMSFile proxy
+// DMSFile
 //
 
 @interface DMSFileProxy : AmigaFileProxy {

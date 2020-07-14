@@ -16,6 +16,7 @@ struct CPUWrapper { CPU *cpu; };
 struct CIAWrapper { CIA *cia; };
 struct MemWrapper { Memory *mem; };
 struct AgnusWrapper { Agnus *agnus; };
+struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
 struct PaulaWrapper { Paula *paula; };
 struct AmigaControlPortWrapper { ControlPort *port; };
@@ -26,7 +27,6 @@ struct KeyboardWrapper { Keyboard *keyboard; };
 struct DiskControllerWrapper { DiskController *controller; };
 struct AmigaDriveWrapper { Drive *drive; };
 struct AmigaFileWrapper { AmigaFile *file; };
-// struct ADFFileWrapper { ADFFile *adf; };
 
 
 //
@@ -407,7 +407,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Agnus proxy
+// Agnus
 //
 
 @implementation AgnusProxy
@@ -443,10 +443,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (AgnusInfo) getInfo
 {
     return wrapper->agnus->getInfo();
-}
-- (DMADebuggerInfo) getDebuggerInfo
-{
-    return wrapper->agnus->dmaDebugger.getInfo();
 }
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot
 {
@@ -494,95 +490,104 @@ struct AmigaFileWrapper { AmigaFile *file; };
     const char *str = wrapper->agnus->copper.disassemble(list, offset);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (void) dmaDebugSetEnable:(BOOL)value
+
+@end
+
+
+//
+// DmaDebugger
+//
+
+@implementation DmaDebuggerProxy
+
+- (instancetype) initWithDmaDebugger:(DmaDebugger *)dmaDebugger
 {
-    wrapper->agnus->dmaDebugger.setEnabled(value);
+    if (self = [super init]) {
+        wrapper = new DmaDebuggerWrapper();
+        wrapper->dmaDebugger = dmaDebugger;
+    }
+    return self;
+}
+- (DMADebuggerInfo) getInfo
+{
+    return wrapper->dmaDebugger->getInfo();
+}
+- (void) setEnable:(BOOL)value
+{
+    wrapper->dmaDebugger->setEnabled(value);
 }
 - (void) visualizeCopper:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeCopper(value);
+    wrapper->dmaDebugger->visualizeCopper(value);
 }
 - (void) visualizeBlitter:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeBlitter(value);
+    wrapper->dmaDebugger->visualizeBlitter(value);
 }
 - (void) visualizeDisk:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeDisk(value);
+    wrapper->dmaDebugger->visualizeDisk(value);
 }
 - (void) visualizeAudio:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeAudio(value);
+    wrapper->dmaDebugger->visualizeAudio(value);
 }
 - (void) visualizeSprite:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeSprite(value);
+    wrapper->dmaDebugger->visualizeSprite(value);
 }
 - (void) visualizeBitplane:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeBitplane(value);
+    wrapper->dmaDebugger->visualizeBitplane(value);
 }
 - (void) visualizeCpu:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeCpu(value);
+    wrapper->dmaDebugger->visualizeCpu(value);
 }
 - (void) visualizeRefresh:(BOOL)value
 {
-    wrapper->agnus->dmaDebugger.visualizeRefresh(value);
+    wrapper->dmaDebugger->visualizeRefresh(value);
 }
-/*
-- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value
+- (void) setOpacity:(double)value
 {
-    wrapper->agnus->dmaDebugger.setVisualized(owner, value);
+    wrapper->dmaDebugger->setOpacity(value);
 }
- */
-/*
-- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
+- (void) setDisplayMode:(NSInteger)mode
 {
-    wrapper->agnus->dmaDebugger.setColor(owner, r, g, b);
-}
-*/
-- (void) dmaDebugSetOpacity:(double)value
-{
-    wrapper->agnus->dmaDebugger.setOpacity(value);
-}
-- (void) dmaDebugSetDisplayMode:(NSInteger)mode
-{
-    wrapper->agnus->dmaDebugger.setDisplayMode((DmaDebuggerDisplayMode)mode);
+    wrapper->dmaDebugger->setDisplayMode((DmaDebuggerDisplayMode)mode);
 }
 - (void) setCopperColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setCopperColor(r, g, b);
+    wrapper->dmaDebugger->setCopperColor(r, g, b);
 }
 - (void) setBlitterColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setBlitterColor(r, g, b);
+    wrapper->dmaDebugger->setBlitterColor(r, g, b);
 }
 - (void) setDiskColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setDiskColor(r, g, b);
+    wrapper->dmaDebugger->setDiskColor(r, g, b);
 }
 - (void) setAudioColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setAudioColor(r, g, b);
+    wrapper->dmaDebugger->setAudioColor(r, g, b);
 }
 - (void) setSpriteColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setSpriteColor(r, g, b);
+    wrapper->dmaDebugger->setSpriteColor(r, g, b);
 }
 - (void) setBitplaneColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setBitplaneColor(r, g, b);
+    wrapper->dmaDebugger->setBitplaneColor(r, g, b);
 }
 - (void) setCpuColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setCpuColor(r, g, b);
+    wrapper->dmaDebugger->setCpuColor(r, g, b);
 }
 - (void) setRefreshColor:(double)r g:(double)g b:(double)b
 {
-    wrapper->agnus->dmaDebugger.setRefreshColor(r, g, b);
+    wrapper->dmaDebugger->setRefreshColor(r, g, b);
 }
-
 @end
 
 
@@ -1471,6 +1476,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 @synthesize ciaB;
 @synthesize mem;
 @synthesize agnus;
+@synthesize dmaDebugger;
 @synthesize denise;
 @synthesize paula;
 @synthesize controlPort1;
@@ -1504,6 +1510,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
     agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWithDmaDebugger:&amiga->agnus.dmaDebugger];
     denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];

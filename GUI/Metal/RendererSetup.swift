@@ -59,7 +59,7 @@ extension Renderer {
     func buildMonitors() {
         
         // Activity monitors are colorized with the bus debuggger colors
-        let info = parent.amiga.agnus.getDebuggerInfo()
+        let info = parent.amiga.dmaDebugger.getInfo()
         
         // DMA monitors
         monitors.append(BarChart.init(device: device, name: "Copper DMA", logScale: true))
