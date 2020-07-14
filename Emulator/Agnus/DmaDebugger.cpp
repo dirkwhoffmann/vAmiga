@@ -42,17 +42,27 @@ DmaDebugger::getInfo()
     synchronized {
         
         result.enabled = enabled;
-        result.opacity = opacity;
-        result.displayMode = displayMode;
         
-        for (u8 i = 0; i < BUS_OWNER_COUNT; i++) {
-            
-            RgbColor color = getColor((BusOwner)i);
-            result.visualize[i] = visualize[i];
-            result.colorRGB[i][0] = color.r;
-            result.colorRGB[i][1] = color.g;
-            result.colorRGB[i][2] = color.b;
-        }
+        result.visualizeCopper = visualize[BUS_COPPER];
+        result.visualizeBlitter = visualize[BUS_BLITTER];
+        result.visualizeDisk = visualize[BUS_DISK];
+        result.visualizeAudio = visualize[BUS_AUDIO];
+        result.visualizeSprites = visualize[BUS_SPRITE];
+        result.visualizeBitplanes = visualize[BUS_BPL1];
+        result.visualizeCpu = visualize[BUS_CPU];
+        result.visualizeRefresh = visualize[BUS_REFRESH];
+
+        result.displayMode = displayMode;
+        result.opacity = opacity;
+
+        getColor(BUS_COPPER, result.copperColor);
+        getColor(BUS_BLITTER, result.blitterColor);
+        getColor(BUS_DISK, result.diskColor);
+        getColor(BUS_AUDIO, result.audioColor);
+        getColor(BUS_SPRITE, result.spriteColor);
+        getColor(BUS_BPL1, result.bitplaneColor);
+        getColor(BUS_CPU, result.cpuColor);
+        getColor(BUS_REFRESH, result.refreshColor);
     }
 
     return result;
@@ -84,11 +94,73 @@ DmaDebugger::setVisualized(BusOwner owner, bool value)
     visualize[owner] = value;
 }
 
+void
+DmaDebugger::visualizeCopper(bool value)
+{
+    setVisualized(BUS_COPPER, value);
+}
+
+void
+DmaDebugger::visualizeBlitter(bool value)
+{
+    setVisualized(BUS_BLITTER, value);
+}
+
+void
+DmaDebugger::visualizeDisk(bool value)
+{
+    setVisualized(BUS_DISK, value);
+}
+
+void
+DmaDebugger::visualizeAudio(bool value)
+{
+    setVisualized(BUS_AUDIO, value);
+}
+
+void
+DmaDebugger::visualizeSprite(bool value)
+{
+    setVisualized(BUS_SPRITE, value);
+}
+
+void
+DmaDebugger::visualizeBitplane(bool value)
+{
+    setVisualized(BUS_BPL1, value);
+    setVisualized(BUS_BPL2, value);
+    setVisualized(BUS_BPL3, value);
+    setVisualized(BUS_BPL4, value);
+    setVisualized(BUS_BPL5, value);
+    setVisualized(BUS_BPL6, value);
+}
+
+void
+DmaDebugger::visualizeCpu(bool value)
+{
+    setVisualized(BUS_CPU, value);
+}
+
+void
+DmaDebugger::visualizeRefresh(bool value)
+{
+    setVisualized(BUS_REFRESH, value);
+}
+
 RgbColor
 DmaDebugger::getColor(BusOwner owner)
 {
     assert(isBusOwner(owner));
     return debugColor[owner][4];
+}
+
+void
+DmaDebugger::getColor(BusOwner owner, double *rgb)
+{
+    RgbColor color = getColor(owner);
+    rgb[0] = color.r;
+    rgb[1] = color.g;
+    rgb[2] = color.b;
 }
 
 void
@@ -111,6 +183,59 @@ DmaDebugger::setColor(BusOwner owner, double r, double g, double b)
 {
     assert(isBusOwner(owner));
     setColor(owner, RgbColor(r, g, b));
+}
+
+void
+DmaDebugger::setCopperColor(double r, double g, double b)
+{
+    setColor(BUS_COPPER, r, g, b);
+}
+
+void
+DmaDebugger::setBlitterColor(double r, double g, double b)
+{
+    setColor(BUS_BLITTER, r, g, b);
+}
+
+void
+DmaDebugger::setDiskColor(double r, double g, double b)
+{
+    setColor(BUS_DISK, r, g, b);
+}
+
+void
+DmaDebugger::setAudioColor(double r, double g, double b)
+{
+    setColor(BUS_AUDIO, r, g, b);
+}
+
+void
+DmaDebugger::setSpriteColor(double r, double g, double b)
+{
+    setColor(BUS_SPRITE, r, g, b);
+}
+
+void
+DmaDebugger::setBitplaneColor(double r, double g, double b)
+{
+    setColor(BUS_BPL1, r, g, b);
+    setColor(BUS_BPL2, r, g, b);
+    setColor(BUS_BPL3, r, g, b);
+    setColor(BUS_BPL4, r, g, b);
+    setColor(BUS_BPL5, r, g, b);
+    setColor(BUS_BPL6, r, g, b);
+}
+
+void
+DmaDebugger::setCpuColor(double r, double g, double b)
+{
+    setColor(BUS_CPU, r, g, b);
+}
+
+void
+DmaDebugger::setRefreshColor(double r, double g, double b)
+{
+    setColor(BUS_REFRESH, r, g, b);
 }
 
 double

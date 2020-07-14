@@ -55,11 +55,14 @@ public:
     // Enables or disables the visual effects for a certain DMA source
     bool isVisualized(BusOwner owner);
     void setVisualized(BusOwner owner, bool value);
-
-    // Gets or sets a debug color
-    RgbColor getColor(BusOwner owner);
-    void setColor(BusOwner owner, RgbColor color);
-    void setColor(BusOwner owner, double r, double g, double b);
+    void visualizeCopper(bool value);
+    void visualizeBlitter(bool value);
+    void visualizeDisk(bool value);
+    void visualizeAudio(bool value);
+    void visualizeSprite(bool value);
+    void visualizeBitplane(bool value);
+    void visualizeCpu(bool value);
+    void visualizeRefresh(bool value);
 
     // Gets or sets the opacity of the superimposed visual effect
     double getOpacity();
@@ -69,7 +72,21 @@ public:
     DmaDebuggerDisplayMode getDisplayMode() { return displayMode; }
     void setDisplayMode(DmaDebuggerDisplayMode mode) { displayMode = mode; }
 
+    // Gets or sets a debug color
+    RgbColor getColor(BusOwner owner);
+    void getColor(BusOwner owner, double *rgb);
+    void setColor(BusOwner owner, RgbColor color);
+    void setColor(BusOwner owner, double r, double g, double b);
+    void setCopperColor(double r, double g, double b);
+    void setBlitterColor(double r, double g, double b);
+    void setDiskColor(double r, double g, double b);
+    void setAudioColor(double r, double g, double b);
+    void setSpriteColor(double r, double g, double b);
+    void setBitplaneColor(double r, double g, double b);
+    void setCpuColor(double r, double g, double b);
+    void setRefreshColor(double r, double g, double b);
 
+    
     //
     // Methods from HardwareComponent
     //

@@ -93,6 +93,7 @@ class ActivityMonitor {
     }
     
     func setColor(_ color: NSColor) { }
+    func setColor(rgb: (Double, Double, Double)) { setColor(NSColor.init(rgb)) }
     func draw(_ encoder: MTLRenderCommandEncoder, matrix: matrix_float4x4) { }
 }
 

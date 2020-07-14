@@ -60,15 +60,6 @@ extension Renderer {
         
         // Activity monitors are colorized with the bus debuggger colors
         let info = parent.amiga.agnus.getDebuggerInfo()
-        let rgb = [
-            NSColor.init(info.colorRGB.0), NSColor.init(info.colorRGB.1),
-            NSColor.init(info.colorRGB.2), NSColor.init(info.colorRGB.3),
-            NSColor.init(info.colorRGB.4), NSColor.init(info.colorRGB.5),
-            NSColor.init(info.colorRGB.6), NSColor.init(info.colorRGB.7),
-            NSColor.init(info.colorRGB.8), NSColor.init(info.colorRGB.9),
-            NSColor.init(info.colorRGB.10), NSColor.init(info.colorRGB.11),
-            NSColor.init(info.colorRGB.12), NSColor.init(info.colorRGB.13)
-        ]
         
         // DMA monitors
         monitors.append(BarChart.init(device: device, name: "Copper DMA", logScale: true))
@@ -78,12 +69,12 @@ extension Renderer {
         monitors.append(BarChart.init(device: device, name: "Sprite DMA"))
         monitors.append(BarChart.init(device: device, name: "Bitplane DMA"))
         
-        monitors[0].setColor(rgb[Int(BUS_COPPER.rawValue)])
-        monitors[1].setColor(rgb[Int(BUS_BLITTER.rawValue)])
-        monitors[2].setColor(rgb[Int(BUS_DISK.rawValue)])
-        monitors[3].setColor(rgb[Int(BUS_AUDIO.rawValue)])
-        monitors[4].setColor(rgb[Int(BUS_SPRITE.rawValue)])
-        monitors[5].setColor(rgb[Int(BUS_BPL1.rawValue)])
+        monitors[0].setColor(rgb: info.copperColor)
+        monitors[1].setColor(rgb: info.blitterColor)
+        monitors[2].setColor(rgb: info.diskColor)
+        monitors[3].setColor(rgb: info.audioColor)
+        monitors[4].setColor(rgb: info.spriteColor)
+        monitors[5].setColor(rgb: info.bitplaneColor)
 
         // Memory monitors
         monitors.append(BarChart.init(device: device, name: "CPU (Chip Ram)", splitView: true))

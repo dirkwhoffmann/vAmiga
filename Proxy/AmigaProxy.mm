@@ -498,14 +498,50 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     wrapper->agnus->dmaDebugger.setEnabled(value);
 }
+- (void) visualizeCopper:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeCopper(value);
+}
+- (void) visualizeBlitter:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeBlitter(value);
+}
+- (void) visualizeDisk:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeDisk(value);
+}
+- (void) visualizeAudio:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeAudio(value);
+}
+- (void) visualizeSprite:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeSprite(value);
+}
+- (void) visualizeBitplane:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeBitplane(value);
+}
+- (void) visualizeCpu:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeCpu(value);
+}
+- (void) visualizeRefresh:(BOOL)value
+{
+    wrapper->agnus->dmaDebugger.visualizeRefresh(value);
+}
+/*
 - (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value
 {
     wrapper->agnus->dmaDebugger.setVisualized(owner, value);
 }
+ */
+/*
 - (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b
 {
     wrapper->agnus->dmaDebugger.setColor(owner, r, g, b);
 }
+*/
 - (void) dmaDebugSetOpacity:(double)value
 {
     wrapper->agnus->dmaDebugger.setOpacity(value);
@@ -513,6 +549,38 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (void) dmaDebugSetDisplayMode:(NSInteger)mode
 {
     wrapper->agnus->dmaDebugger.setDisplayMode((DmaDebuggerDisplayMode)mode);
+}
+- (void) setCopperColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setCopperColor(r, g, b);
+}
+- (void) setBlitterColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setBlitterColor(r, g, b);
+}
+- (void) setDiskColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setDiskColor(r, g, b);
+}
+- (void) setAudioColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setAudioColor(r, g, b);
+}
+- (void) setSpriteColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setSpriteColor(r, g, b);
+}
+- (void) setBitplaneColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setBitplaneColor(r, g, b);
+}
+- (void) setCpuColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setCpuColor(r, g, b);
+}
+- (void) setRefreshColor:(double)r g:(double)g b:(double)b
+{
+    wrapper->agnus->dmaDebugger.setRefreshColor(r, g, b);
 }
 
 @end

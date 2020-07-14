@@ -97,36 +97,17 @@ class Monitor: DialogController {
         let mon = parent.renderer.drawActivityMonitors
         let syn = synEnable.state == .on
         let col = bus || mon
-        
-        let visualize = [
-            info.visualize.0, info.visualize.1,
-            info.visualize.2, info.visualize.3,
-            info.visualize.4, info.visualize.5,
-            info.visualize.6, info.visualize.7,
-            info.visualize.8, info.visualize.9,
-            info.visualize.10, info.visualize.11,
-            info.visualize.12, info.visualize.13
-        ]
-        let rgb = [
-            info.colorRGB.0, info.colorRGB.1,
-            info.colorRGB.2, info.colorRGB.3,
-            info.colorRGB.4, info.colorRGB.5,
-            info.colorRGB.6, info.colorRGB.7,
-            info.colorRGB.8, info.colorRGB.9,
-            info.colorRGB.10, info.colorRGB.11,
-            info.colorRGB.12, info.colorRGB.13
-        ]
-        
+                
         // Bus debugger
         busEnable.state = bus ? .on : .off
-        busBlitter.state = visualize[Int(BUS_BLITTER.rawValue)] ? .on : .off
-        busCopper.state = visualize[Int(BUS_COPPER.rawValue)] ? .on : .off
-        busDisk.state = visualize[Int(BUS_DISK.rawValue)] ? .on : .off
-        busAudio.state = visualize[Int(BUS_AUDIO.rawValue)] ? .on : .off
-        busSprites.state = visualize[Int(BUS_SPRITE.rawValue)] ? .on : .off
-        busBitplanes.state = visualize[Int(BUS_BPL1.rawValue)] ? .on : .off
-        busCPU.state = visualize[Int(BUS_CPU.rawValue)] ? .on : .off
-        busRefresh.state = visualize[Int(BUS_REFRESH.rawValue)] ? .on : .off
+        busCopper.state = info.visualizeCopper ? .on : .off
+        busBlitter.state = info.visualizeBlitter ? .on : .off
+        busDisk.state = info.visualizeDisk ? .on : .off
+        busAudio.state = info.visualizeAudio ? .on : .off
+        busSprites.state = info.visualizeSprites ? .on : .off
+        busBitplanes.state = info.visualizeBitplanes ? .on : .off
+        busCPU.state = info.visualizeCpu ? .on : .off
+        busRefresh.state = info.visualizeRefresh ? .on : .off
         busOpacity.doubleValue = info.opacity * 100.0
         busDisplayMode.selectItem(withTag: info.displayMode.rawValue)
         busBlitter.isEnabled = bus
@@ -174,14 +155,14 @@ class Monitor: DialogController {
         monLayout.isEnabled = mon
         
         // Colors
-        colBlitter.setColor(rgb[Int(BUS_BLITTER.rawValue)])
-        colCopper.setColor(rgb[Int(BUS_COPPER.rawValue)])
-        colDisk.setColor(rgb[Int(BUS_DISK.rawValue)])
-        colAudio.setColor(rgb[Int(BUS_AUDIO.rawValue)])
-        colSprites.setColor(rgb[Int(BUS_SPRITE.rawValue)])
-        colBitplanes.setColor(rgb[Int(BUS_BPL1.rawValue)])
-        colCPU.setColor(rgb[Int(BUS_CPU.rawValue)])
-        colRefresh.setColor(rgb[Int(BUS_REFRESH.rawValue)])
+        colCopper.setColor(info.copperColor)
+        colBlitter.setColor(info.blitterColor)
+        colDisk.setColor(info.diskColor)
+        colAudio.setColor(info.audioColor)
+        colSprites.setColor(info.spriteColor)
+        colBitplanes.setColor(info.bitplaneColor)
+        colCPU.setColor(info.cpuColor)
+        colRefresh.setColor(info.refreshColor)
         colBlitter.isHidden = !col
         colCopper.isHidden = !col
         colDisk.isHidden = !col
@@ -231,31 +212,24 @@ class Monitor: DialogController {
     // Action methods
     //
     
-    func busOwners(forTag tag: Int) -> [BusOwner] {
-        
-        switch tag {
-        case 0: return [BUS_COPPER]
-        case 1: return [BUS_BLITTER]
-        case 2: return [BUS_DISK]
-        case 3: return [BUS_AUDIO]
-        case 4: return [BUS_SPRITE]
-        case 5: return [BUS_BPL1, BUS_BPL2, BUS_BPL3, BUS_BPL4, BUS_BPL5, BUS_BPL6]
-        case 6: return [BUS_CPU]
-        case 7: return [BUS_REFRESH]
-        default: fatalError()
-        }
-    }
-
     @IBAction func colorAction(_ sender: NSColorWell!) {
         
         let r = Double(sender.color.redComponent)
         let g = Double(sender.color.greenComponent)
         let b = Double(sender.color.blueComponent)
         
-        for owner in busOwners(forTag: sender.tag) {
-            amiga.agnus.dmaDebugSetColor(owner, r: r, g: g, b: b)
+        switch sender.tag {
+        case 0: amiga.agnus.setCopperColor(r, g: g, b: b)
+        case 1: amiga.agnus.setBlitterColor(r, g: g, b: b)
+        case 2: amiga.agnus.setDiskColor(r, g: g, b: b)
+        case 3: amiga.agnus.setAudioColor(r, g: g, b: b)
+        case 4: amiga.agnus.setSpriteColor(r, g: g, b: b)
+        case 5: amiga.agnus.setBitplaneColor(r, g: g, b: b)
+        case 6: amiga.agnus.setCpuColor(r, g: g, b: b)
+        case 7: amiga.agnus.setRefreshColor(r, g: g, b: b)
+        default: fatalError()
         }
-        
+                
         let monitor = parent.renderer.monitors[sender.tag]
         monitor.setColor(sender.color)
         
@@ -270,8 +244,16 @@ class Monitor: DialogController {
     
     @IBAction func busDisplayAction(_ sender: NSButton!) {
         
-        for owner in busOwners(forTag: sender.tag) {
-            amiga.agnus.dmaDebugSetVisualize(owner, value: sender.state == .on)
+        switch sender.tag {
+        case 0: amiga.agnus.visualizeCopper(sender.state == .on)
+        case 1: amiga.agnus.visualizeBlitter(sender.state == .on)
+        case 2: amiga.agnus.visualizeDisk(sender.state == .on)
+        case 3: amiga.agnus.visualizeAudio(sender.state == .on)
+        case 4: amiga.agnus.visualizeSprite(sender.state == .on)
+        case 5: amiga.agnus.visualizeBitplane(sender.state == .on)
+        case 6: amiga.agnus.visualizeCpu(sender.state == .on)
+        case 7: amiga.agnus.visualizeRefresh(sender.state == .on)
+        default: fatalError()
         }
         refresh()
     }

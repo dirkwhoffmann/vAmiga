@@ -19,6 +19,7 @@
 #include "CIATypes.h"
 #include "DeniseTypes.h"
 #include "DiskTypes.h"
+#include "DmaDebuggerTypes.h"
 #include "DriveTypes.h"
 #include "EventHandlerTypes.h"
 #include "FileTypes.h"

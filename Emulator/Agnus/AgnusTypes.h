@@ -188,24 +188,6 @@ typedef enum
 }
 SprDMAState;
 
-typedef enum : long
-{
-    MODULATE_FG_LAYER,
-    MODULATE_BG_LAYER,
-    MODULATE_ODD_EVEN_LAYERS
-}
-DmaDebuggerDisplayMode;
-
-typedef struct
-{
-    bool enabled;
-    bool visualize[BUS_OWNER_COUNT];
-    double colorRGB[BUS_OWNER_COUNT][3];
-    double opacity;
-    DmaDebuggerDisplayMode displayMode;
-}
-DMADebuggerInfo;
-
 typedef struct
 {
     i16 vpos;

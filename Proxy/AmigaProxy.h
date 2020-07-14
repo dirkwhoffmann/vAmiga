@@ -13,40 +13,41 @@
 #import "Utils.h"
 
 // Forward declarations
-@class CPUProxy;
-@class CIAProxy;
-@class MemProxy;
+@class ADFFileProxy;
 @class AgnusProxy;
-@class DeniseProxy;
-@class PaulaProxy;
+@class AmigaFileProxy;
+@class CIAProxy;
 @class ControlPortProxy;
-@class SerialPortProxy;
-@class MouseProxy;
+@class CPUProxy;
+@class DeniseProxy;
+@class DiskControllerProxy;
+// @class DmaDebuggerProxy;
+@class DMSFileProxy;
+@class DriveProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
-@class DiskControllerProxy;
-@class DriveProxy;
-@class AmigaFileProxy;
-@class ADFFileProxy;
-@class DMSFileProxy;
+@class MemProxy;
+@class MouseProxy;
+@class PaulaProxy;
+@class SerialPortProxy;
 @class SnapshotProxy;
 
 /* Forward declarations of C++ class wrappers.
  * We wrap classes into normal C structs to avoid any reference to C++.
  */
-struct AmigaWrapper;
-struct CPUWrapper;
-struct CIAWrapper;
-struct MemWrapper;
 struct AgnusWrapper;
-struct DeniseWrapper;
-struct PaulaWrapper;
+struct AmigaWrapper;
+struct CIAWrapper;
 struct AmigaControlPortWrapper;
-struct AmigaSerialPortWrapper;
-struct KeyboardWrapper;
+struct CPUWrapper;
+struct DeniseWrapper;
 struct DiskControllerWrapper;
 struct AmigaDriveWrapper;
+struct KeyboardWrapper;
+struct MemWrapper;
+struct PaulaWrapper;
 struct AmigaFileWrapper;
+struct AmigaSerialPortWrapper;
 
 //
 // Amiga proxy
@@ -324,10 +325,27 @@ struct AmigaFileWrapper;
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset;
 
 - (void) dmaDebugSetEnable:(BOOL)value;
-- (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value;
-- (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b;
+// - (void) dmaDebugSetVisualize:(BusOwner)owner value:(BOOL)value;
+- (void) visualizeCopper:(BOOL)value;
+- (void) visualizeBlitter:(BOOL)value;
+- (void) visualizeDisk:(BOOL)value;
+- (void) visualizeAudio:(BOOL)value;
+- (void) visualizeSprite:(BOOL)value;
+- (void) visualizeBitplane:(BOOL)value;
+- (void) visualizeCpu:(BOOL)value;
+- (void) visualizeRefresh:(BOOL)value;
+
+// - (void) dmaDebugSetColor:(BusOwner)owner r:(double)r g:(double)g b:(double)b;
 - (void) dmaDebugSetOpacity:(double)value;
 - (void) dmaDebugSetDisplayMode:(NSInteger)mode;
+- (void) setCopperColor:(double)r g:(double)g b:(double)b;
+- (void) setBlitterColor:(double)r g:(double)g b:(double)b;
+- (void) setDiskColor:(double)r g:(double)g b:(double)b;
+- (void) setAudioColor:(double)r g:(double)g b:(double)b;
+- (void) setSpriteColor:(double)r g:(double)g b:(double)b;
+- (void) setBitplaneColor:(double)r g:(double)g b:(double)b;
+- (void) setCpuColor:(double)r g:(double)g b:(double)b;
+- (void) setRefreshColor:(double)r g:(double)g b:(double)b;
 
 @end
 
