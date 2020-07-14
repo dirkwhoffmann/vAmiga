@@ -483,7 +483,10 @@ template <int x> void
 Agnus::setSPRxPTH(u16 value)
 {
     debug(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
-    sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
+    
+    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
+        sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
+    }
 }
 
 template <int x> void
@@ -508,7 +511,10 @@ template <int x> void
 Agnus::setSPRxPTL(u16 value)
 {
     debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
-    sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
+
+    if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
+        sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
+    }
 }
 
 template <int x> void
@@ -730,13 +736,16 @@ Agnus::doBitplaneDMA()
 template <int channel> u16
 Agnus::doSpriteDMA()
 {
+    assert(channel >= 0 && channel <= 7);
+    const BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
+
     u16 result = peek(sprpt[channel]);
     sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
-    busOwner[pos.h] = BUS_SPRITE;
+    busOwner[pos.h] = owner;
     busValue[pos.h] = result;
-    stats.usage[BUS_SPRITE]++;
+    stats.usage[owner]++;
 
     return result;
 }

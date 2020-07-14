@@ -192,7 +192,16 @@ Agnus::updateStats()
     double blitter = stats.usage[BUS_BLITTER];
     double disk = stats.usage[BUS_DISK];
     double audio = stats.usage[BUS_AUDIO];
-    double sprite = stats.usage[BUS_SPRITE];
+    
+    double sprite =
+    stats.usage[BUS_SPRITE0] +
+    stats.usage[BUS_SPRITE1] +
+    stats.usage[BUS_SPRITE2] +
+    stats.usage[BUS_SPRITE3] +
+    stats.usage[BUS_SPRITE4] +
+    stats.usage[BUS_SPRITE5] +
+    stats.usage[BUS_SPRITE6] +
+    stats.usage[BUS_SPRITE7];
     
     double bitplane =
     stats.usage[BUS_BPL1] +

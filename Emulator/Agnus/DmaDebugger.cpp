@@ -26,7 +26,7 @@ DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
     setBitplaneColor (0.0, 1.0, 1.0);
     setSpriteColor   (0.0, 0.5, 1.0);
     setCopperColor   (1.0, 1.0, 0.0);
-    setCopperColor   (1.0, 0.8, 0.0);
+    setBlitterColor  (1.0, 0.8, 0.0);
 }
 
 DMADebuggerInfo
@@ -42,7 +42,7 @@ DmaDebugger::getInfo()
         result.visualizeBlitter = visualize[BUS_BLITTER];
         result.visualizeDisk = visualize[BUS_DISK];
         result.visualizeAudio = visualize[BUS_AUDIO];
-        result.visualizeSprites = visualize[BUS_SPRITE];
+        result.visualizeSprites = visualize[BUS_SPRITE0];
         result.visualizeBitplanes = visualize[BUS_BPL1];
         result.visualizeCpu = visualize[BUS_CPU];
         result.visualizeRefresh = visualize[BUS_REFRESH];
@@ -54,7 +54,7 @@ DmaDebugger::getInfo()
         getColor(BUS_BLITTER, result.blitterColor);
         getColor(BUS_DISK, result.diskColor);
         getColor(BUS_AUDIO, result.audioColor);
-        getColor(BUS_SPRITE, result.spriteColor);
+        getColor(BUS_SPRITE0, result.spriteColor);
         getColor(BUS_BPL1, result.bitplaneColor);
         getColor(BUS_CPU, result.cpuColor);
         getColor(BUS_REFRESH, result.refreshColor);
@@ -116,7 +116,14 @@ DmaDebugger::visualizeAudio(bool value)
 void
 DmaDebugger::visualizeSprite(bool value)
 {
-    setVisualized(BUS_SPRITE, value);
+    setVisualized(BUS_SPRITE0, value);
+    setVisualized(BUS_SPRITE1, value);
+    setVisualized(BUS_SPRITE2, value);
+    setVisualized(BUS_SPRITE3, value);
+    setVisualized(BUS_SPRITE4, value);
+    setVisualized(BUS_SPRITE5, value);
+    setVisualized(BUS_SPRITE6, value);
+    setVisualized(BUS_SPRITE7, value);
 }
 
 void
@@ -207,7 +214,14 @@ DmaDebugger::setAudioColor(double r, double g, double b)
 void
 DmaDebugger::setSpriteColor(double r, double g, double b)
 {
-    setColor(BUS_SPRITE, r, g, b);
+    setColor(BUS_SPRITE0, r, g, b);
+    setColor(BUS_SPRITE1, r, g, b);
+    setColor(BUS_SPRITE2, r, g, b);
+    setColor(BUS_SPRITE3, r, g, b);
+    setColor(BUS_SPRITE4, r, g, b);
+    setColor(BUS_SPRITE5, r, g, b);
+    setColor(BUS_SPRITE6, r, g, b);
+    setColor(BUS_SPRITE7, r, g, b);
 }
 
 void
