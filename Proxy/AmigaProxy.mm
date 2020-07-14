@@ -11,31 +11,32 @@
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 
-struct AmigaWrapper { Amiga *amiga; };
-struct CPUWrapper { CPU *cpu; };
-struct CIAWrapper { CIA *cia; };
-struct MemWrapper { Memory *mem; };
 struct AgnusWrapper { Agnus *agnus; };
+struct AmigaFileWrapper { AmigaFile *file; };
+struct AmigaWrapper { Amiga *amiga; };
+struct BlitterWrapper { Blitter *blitter; };
+struct CIAWrapper { CIA *cia; };
+struct ControlPortWrapper { ControlPort *port; };
+struct CopperWrapper { Copper *copper; };
+struct CPUWrapper { CPU *cpu; };
+struct DiskControllerWrapper { DiskController *controller; };
+struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
-struct PaulaWrapper { Paula *paula; };
-struct AmigaControlPortWrapper { ControlPort *port; };
-struct AmigaSerialPortWrapper { SerialPort *port; };
-struct MouseWrapper { Mouse *mouse; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
-struct DiskControllerWrapper { DiskController *controller; };
-struct AmigaDriveWrapper { Drive *drive; };
-struct AmigaFileWrapper { AmigaFile *file; };
+struct MemWrapper { Memory *mem; };
+struct MouseWrapper { Mouse *mouse; };
+struct PaulaWrapper { Paula *paula; };
+struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// CPU proxy
+// CPU
 //
 
 @implementation CPUProxy
 
-// Constructing
 - (instancetype) initWithCPU:(CPU *)cpu
 {
     if (self = [super init]) {
@@ -44,7 +45,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
     }
     return self;
 }
-
 - (void) dump
 {
     wrapper->cpu->dump();
@@ -190,12 +190,11 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// CIA proxy
+// CIA
 //
 
 @implementation CIAProxy
 
-// Constructing
 - (instancetype) initWithCIA:(CIA *)cia
 {
     if (self = [super init]) {
@@ -221,7 +220,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Memory proxy
+// Memory
 //
 
 @implementation MemProxy
@@ -432,14 +431,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     wrapper->agnus->dumpEvents();
 }
-- (void) dumpCopper
-{
-    wrapper->agnus->copper.dump();
-}
-- (void) dumpBlitter
-{
-    wrapper->agnus->blitter.dump();
-}
 - (AgnusInfo) getInfo
 {
     return wrapper->agnus->getInfo();
@@ -452,14 +443,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     return wrapper->agnus->getEventInfo();
 }
-- (CopperInfo) getCopperInfo
-{
-    return wrapper->agnus->copper.getInfo();
-}
-- (BlitterInfo) getBlitterInfo
-{
-    return wrapper->agnus->blitter.getInfo();
-}
 - (AgnusStats) getStats
 {
     return wrapper->agnus->getStats();
@@ -468,26 +451,52 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     return wrapper->agnus->frame.interlaced;
 }
+
+@end
+
+
+//
+// Copper
+//
+
+@implementation CopperProxy
+
+- (instancetype) initWithCopper:(Copper *)copper
+{
+    if (self = [super init]) {
+        wrapper = new CopperWrapper();
+        wrapper->copper = copper;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->copper->dump();
+}
+- (CopperInfo) getInfo
+{
+    return wrapper->copper->getInfo();
+}
 - (NSInteger) instrCount:(NSInteger)list
 {
-    return wrapper->agnus->copper.instrCount(list);
+    return wrapper->copper->instrCount(list);
 }
 - (void) adjustInstrCount:(NSInteger)list offset:(NSInteger)offset
 {
-    wrapper->agnus->copper.adjustInstrCount(list, offset);
+    wrapper->copper->adjustInstrCount(list, offset);
 }
 - (BOOL) isIllegalInstr:(NSInteger)addr
 {
-    return wrapper->agnus->copper.isIllegalInstr(addr);
+    return wrapper->copper->isIllegalInstr(addr);
 }
 - (NSString *) disassemble:(NSInteger)addr
 {
-    const char *str = wrapper->agnus->copper.disassemble(addr);
+    const char *str = wrapper->copper->disassemble(addr);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassemble:(NSInteger)list instr:(NSInteger)offset
 {
-    const char *str = wrapper->agnus->copper.disassemble(list, offset);
+    const char *str = wrapper->copper->disassemble(list, offset);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
@@ -495,7 +504,33 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// DmaDebugger
+// Blitter
+//
+
+@implementation BlitterProxy
+
+- (instancetype) initWithBlitter:(Blitter *)blitter
+{
+    if (self = [super init]) {
+        wrapper = new BlitterWrapper();
+        wrapper->blitter = blitter;
+    }
+    return self;
+}
+- (void) dump
+{
+    wrapper->blitter->dump();
+}
+- (BlitterInfo) getInfo
+{
+    return wrapper->blitter->getInfo();
+}
+
+@end
+
+
+//
+// DMA Debugger
 //
 
 @implementation DmaDebuggerProxy
@@ -592,7 +627,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Denise proxy
+// Denise
 //
 
 @implementation DeniseProxy
@@ -678,7 +713,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Paula proxy
+// Paula
 //
 
 @implementation PaulaProxy
@@ -710,7 +745,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Audio unit
+// Paula audio
 //
 
 - (void) dump
@@ -785,12 +820,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     return wrapper->paula->audioUnit.ringbufferDataR(offset);
 }
-/*
-- (double) ringbufferData:(NSInteger)offset
-{
-    return wrapper->paula->audioUnit.ringbufferData(offset);
-}
-*/
 - (double) fillLevel
 {
     return wrapper->paula->audioUnit.fillLevel();
@@ -848,7 +877,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (instancetype) initWithControlPort:(ControlPort *)port
 {
     if (self = [super init]) {
-        wrapper = new AmigaControlPortWrapper();
+        wrapper = new ControlPortWrapper();
         wrapper->port = port;
     }
     return self;
@@ -879,7 +908,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (instancetype) initWithSerialPort:(SerialPort *)port
 {
     if (self = [super init]) {
-        wrapper = new AmigaSerialPortWrapper();
+        wrapper = new SerialPortWrapper();
         wrapper->port = port;
     }
     return self;
@@ -902,7 +931,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Mouse proxy
+// Mouse
 //
 
 @implementation MouseProxy
@@ -927,16 +956,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
 {
     wrapper->mouse->setDeltaXY((double)pos.x, (double)pos.y);
 }
-/*
-- (void) setLeftButton:(BOOL)value
-{
-    wrapper->mouse->setLeftButton(value);
-}
-- (void) setRightButton:(BOOL)value
-{
-    wrapper->mouse->setRightButton(value);
-}
-*/
 - (void) trigger:(GamePadAction)event
 {
     wrapper->mouse->trigger(event);
@@ -946,7 +965,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Joystick proxy
+// Joystick
 //
 
 @implementation JoystickProxy
@@ -996,7 +1015,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Keyboard proxy
+// Keyboard
 //
 
 @implementation KeyboardProxy
@@ -1034,7 +1053,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// DiskController proxy
+// Disk Controller
 //
 
 @implementation DiskControllerProxy
@@ -1102,7 +1121,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// AmigaDrive proxy
+// Drive
 //
 
 @implementation DriveProxy
@@ -1112,7 +1131,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 - (instancetype) initWithDrive:(Drive *)drive
 {
     if (self = [super init]) {
-        wrapper = new AmigaDriveWrapper();
+        wrapper = new DriveWrapper();
         wrapper->drive = drive;
     }
     return self;
@@ -1179,7 +1198,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// AmigaFile proxy
+// AmigaFile
 //
 
 @implementation AmigaFileProxy
@@ -1250,12 +1269,10 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// Snapshot proxy
+// Snapshot
 //
 
 @implementation SnapshotProxy
-
-// @synthesize preview;
 
 + (BOOL) isSupportedSnapshot:(const void *)buffer length:(NSInteger)length
 {
@@ -1307,8 +1324,6 @@ struct AmigaFileWrapper { AmigaFile *file; };
     if (preview != NULL) { return preview; }
     
     // Create preview image
-    
-    // var bitmap = data
     Snapshot *snapshot = (Snapshot *)wrapper->file;
     
     NSInteger width = snapshot->getImageWidth();
@@ -1350,7 +1365,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// ADFFile proxy
+// ADF File
 //
 
 @implementation ADFFileProxy
@@ -1430,7 +1445,7 @@ struct AmigaFileWrapper { AmigaFile *file; };
 
 
 //
-// DMSFile proxy
+// DMS File
 //
 
 @implementation DMSFileProxy
@@ -1471,27 +1486,29 @@ struct AmigaFileWrapper { AmigaFile *file; };
 @implementation AmigaProxy
 
 @synthesize wrapper;
-@synthesize cpu;
+@synthesize agnus;
+@synthesize blitter;
 @synthesize ciaA;
 @synthesize ciaB;
-@synthesize mem;
-@synthesize agnus;
-@synthesize dmaDebugger;
-@synthesize denise;
-@synthesize paula;
 @synthesize controlPort1;
 @synthesize controlPort2;
-@synthesize serialPort;
-@synthesize mouse1;
-@synthesize mouse2;
-@synthesize joystick1;
-@synthesize joystick2;
-@synthesize keyboard;
-@synthesize diskController;
+@synthesize copper;
+@synthesize cpu;
+@synthesize denise;
 @synthesize df0;
 @synthesize df1;
 @synthesize df2;
 @synthesize df3;
+@synthesize diskController;
+@synthesize dmaDebugger;
+@synthesize joystick1;
+@synthesize joystick2;
+@synthesize keyboard;
+@synthesize mem;
+@synthesize mouse1;
+@synthesize mouse2;
+@synthesize paula;
+@synthesize serialPort;
 
 - (instancetype) init
 {
@@ -1505,27 +1522,29 @@ struct AmigaFileWrapper { AmigaFile *file; };
     wrapper->amiga = amiga;
     
     // Create sub proxys
-    cpu = [[CPUProxy alloc] initWithCPU:&amiga->cpu];
+    agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
+    blitter = [[BlitterProxy alloc] initWithBlitter:&amiga->agnus.blitter];
     ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
-    mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
-    agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
-    dmaDebugger = [[DmaDebuggerProxy alloc] initWithDmaDebugger:&amiga->agnus.dmaDebugger];
-    denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
-    paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
     controlPort2 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort2];
-    serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
-    mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
-    mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
-    joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
-    joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
-    keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
-    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
+    copper = [[CopperProxy alloc] initWithCopper:&amiga->agnus.copper];
+    cpu = [[CPUProxy alloc] initWithCPU:&amiga->cpu];
+    denise = [[DeniseProxy alloc] initWithDenise:&amiga->denise];
     df0 = [[DriveProxy alloc] initWithDrive:&amiga->df0];
     df1 = [[DriveProxy alloc] initWithDrive:&amiga->df1];
     df2 = [[DriveProxy alloc] initWithDrive:&amiga->df2];
     df3 = [[DriveProxy alloc] initWithDrive:&amiga->df3];
+    diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
+    dmaDebugger = [[DmaDebuggerProxy alloc] initWithDmaDebugger:&amiga->agnus.dmaDebugger];
+    joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
+    joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
+    keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
+    mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
+    mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
+    mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
+    paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
+    serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
 
     return self;
 }

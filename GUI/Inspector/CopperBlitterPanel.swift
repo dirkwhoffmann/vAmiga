@@ -16,7 +16,7 @@ extension Inspector {
 
     private func cacheCopper() {
 
-        copperInfo = amiga.agnus.getCopperInfo()
+        copperInfo = amiga.copper.getInfo()
     }
 
     func refreshCopper(count: Int = 0, full: Bool = false) {
@@ -44,7 +44,7 @@ extension Inspector {
 
     private func cacheBlitter() {
 
-        blitterInfo = amiga.agnus.getBlitterInfo()
+        blitterInfo = amiga.blitter.getInfo()
     }
 
     func refreshBlitter(count: Int = 0, full: Bool = false) {
@@ -128,14 +128,14 @@ extension Inspector {
 
     @IBAction func expandCopperListAction(_ sender: Any!) {
 
-        amiga.agnus.adjustInstrCount(selectedCopperList, offset: 4)
+        amiga.copper.adjustInstrCount(selectedCopperList, offset: 4)
         fullRefresh()
         copList.scrollToBottom()
     }
 
     @IBAction func shrinkCopperListAction(_ sender: Any!) {
 
-        amiga.agnus.adjustInstrCount(selectedCopperList, offset: -4)
+        amiga.copper.adjustInstrCount(selectedCopperList, offset: -4)
         fullRefresh()
         copList.scrollToBottom()
     }

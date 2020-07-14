@@ -16,8 +16,10 @@
 @class ADFFileProxy;
 @class AgnusProxy;
 @class AmigaFileProxy;
+@class BlitterProxy;
 @class CIAProxy;
 @class ControlPortProxy;
+@class CopperProxy;
 @class CPUProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
@@ -36,19 +38,21 @@
  * We wrap classes into normal C structs to avoid any reference to C++.
  */
 struct AgnusWrapper;
+struct AmigaFileWrapper;
 struct AmigaWrapper;
+struct BlitterWrapper;
 struct CIAWrapper;
-struct AmigaControlPortWrapper;
+struct ControlPortWrapper;
+struct CopperWrapper;
 struct CPUWrapper;
 struct DeniseWrapper;
 struct DiskControllerWrapper;
 struct DmaDebuggerWrapper;
-struct AmigaDriveWrapper;
+struct DriveWrapper;
 struct KeyboardWrapper;
 struct MemWrapper;
 struct PaulaWrapper;
-struct AmigaFileWrapper;
-struct AmigaSerialPortWrapper;
+struct SerialPortWrapper;
 
 //
 // Amiga
@@ -58,51 +62,54 @@ struct AmigaSerialPortWrapper;
     
     struct AmigaWrapper *wrapper;
     
-    CPUProxy *cpu;
+    AgnusProxy *agnus;
     CIAProxy *ciaA;
     CIAProxy *ciaB;
-    MemProxy *mem;
-    AgnusProxy *agnus;
-    DmaDebuggerProxy *dmaDebugger;
-    DeniseProxy *denise;
-    PaulaProxy *paula;
     ControlPortProxy *controlPort1;
     ControlPortProxy *controlPort2;
-    SerialPortProxy *serialPort;
-    MouseProxy *mouse1;
-    MouseProxy *mouse2;
-    JoystickProxy *joystick1;
-    JoystickProxy *joystick2;
-    KeyboardProxy *keyboard;
+    CopperProxy *copper;
+    CPUProxy *cpu;
+    DeniseProxy *denise;
     DiskControllerProxy *diskController;
+    DmaDebuggerProxy *dmaDebugger;
     DriveProxy *df0;
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
+    JoystickProxy *joystick1;
+    JoystickProxy *joystick2;
+    KeyboardProxy *keyboard;
+    MemProxy *mem;
+    MouseProxy *mouse1;
+    MouseProxy *mouse2;
+    PaulaProxy *paula;
+    SerialPortProxy *serialPort;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
-@property (readonly) CPUProxy *cpu;
+@property (readonly) AgnusProxy *agnus;
+@property (readonly) BlitterProxy *blitter;
 @property (readonly) CIAProxy *ciaA;
 @property (readonly) CIAProxy *ciaB;
-@property (readonly) MemProxy *mem;
-@property (readonly) AgnusProxy *agnus;
-@property (readonly) DmaDebuggerProxy *dmaDebugger;
-@property (readonly) DeniseProxy *denise;
-@property (readonly) PaulaProxy *paula;
 @property (readonly) ControlPortProxy *controlPort1;
 @property (readonly) ControlPortProxy *controlPort2;
-@property (readonly) SerialPortProxy *serialPort;
-@property (readonly) MouseProxy *mouse1;
-@property (readonly) MouseProxy *mouse2;
-@property (readonly) JoystickProxy *joystick1;
-@property (readonly) JoystickProxy *joystick2;
-@property (readonly) KeyboardProxy *keyboard;
+@property (readonly) CopperProxy *copper;
+@property (readonly) CPUProxy *cpu;
+@property (readonly) DeniseProxy *denise;
 @property (readonly) DiskControllerProxy *diskController;
+@property (readonly) DmaDebuggerProxy *dmaDebugger;
 @property (readonly) DriveProxy *df0;
 @property (readonly) DriveProxy *df1;
 @property (readonly) DriveProxy *df2;
 @property (readonly) DriveProxy *df3;
+@property (readonly) JoystickProxy *joystick1;
+@property (readonly) JoystickProxy *joystick2;
+@property (readonly) KeyboardProxy *keyboard;
+@property (readonly) MemProxy *mem;
+@property (readonly) MouseProxy *mouse1;
+@property (readonly) MouseProxy *mouse2;
+@property (readonly) PaulaProxy *paula;
+@property (readonly) SerialPortProxy *serialPort;
 
 - (void) kill;
 
@@ -308,17 +315,28 @@ struct AmigaSerialPortWrapper;
 
 - (void) dump;
 - (void) dumpEvents;
-- (void) dumpCopper;
-- (void) dumpBlitter;
 
 - (AgnusInfo) getInfo;
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
 - (EventInfo) getEventInfo;
-- (CopperInfo) getCopperInfo;
-- (BlitterInfo) getBlitterInfo;
 - (AgnusStats) getStats;
 
 - (BOOL) interlaceMode;
+
+@end
+
+
+//
+// Copper
+//
+
+@interface CopperProxy : NSObject {
+    
+    struct CopperWrapper *wrapper;
+}
+
+- (void) dump;
+- (CopperInfo) getInfo;
 
 - (BOOL) isIllegalInstr:(NSInteger)addr;
 - (NSInteger) instrCount:(NSInteger)list;
@@ -328,8 +346,24 @@ struct AmigaSerialPortWrapper;
 
 @end
 
+
 //
-// DmaDebugger
+// Blitter
+//
+
+@interface BlitterProxy : NSObject {
+    
+    struct BlitterWrapper *wrapper;
+}
+
+- (void) dump;
+- (BlitterInfo) getInfo;
+
+@end
+
+
+//
+// DMA Debugger
 //
 
 @interface DmaDebuggerProxy : NSObject {
@@ -449,7 +483,7 @@ struct AmigaSerialPortWrapper;
 
 @interface ControlPortProxy : NSObject {
     
-    struct AmigaControlPortWrapper *wrapper;
+    struct ControlPortWrapper *wrapper;
 }
 
 - (void) dump;
@@ -465,7 +499,7 @@ struct AmigaSerialPortWrapper;
 
 @interface SerialPortProxy : NSObject {
 
-    struct AmigaSerialPortWrapper *wrapper;
+    struct SerialPortWrapper *wrapper;
 }
 
 - (void) dump;
@@ -565,10 +599,10 @@ struct AmigaSerialPortWrapper;
 
 @interface DriveProxy : NSObject {
     
-    struct AmigaDriveWrapper *wrapper;
+    struct DriveWrapper *wrapper;
 }
 
-@property (readonly) struct AmigaDriveWrapper *wrapper;
+@property (readonly) struct DriveWrapper *wrapper;
 
 - (void) dump;
 

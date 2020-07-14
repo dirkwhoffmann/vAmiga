@@ -39,7 +39,7 @@ class CopperTableView: NSTableView {
         instrInRow = [:]
         illegalInRow = [:]
 
-        copperInfo = amiga.agnus.getCopperInfo()
+        copperInfo = amiga.copper.getInfo()
 
         assert(nr == 1 || nr == 2)
         var addr = nr == 1 ? Int(copperInfo!.cop1lc) : Int(copperInfo!.cop2lc)
@@ -50,8 +50,8 @@ class CopperTableView: NSTableView {
             addrInRow[i] = addr
             data1InRow[i] = amiga.mem.spypeek16(addr)
             data2InRow[i] = amiga.mem.spypeek16(addr + 2)
-            instrInRow[i] = amiga.agnus.disassemble(addr)
-            illegalInRow[i] = amiga.agnus.isIllegalInstr(addr)
+            instrInRow[i] = amiga.copper.disassemble(addr)
+            illegalInRow[i] = amiga.copper.isIllegalInstr(addr)
 
             addr += 4
         }

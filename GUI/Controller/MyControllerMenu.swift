@@ -610,12 +610,12 @@ extension MyController: NSMenuItemValidation {
     }
     @IBAction func dumpCopperAction(_ sender: Any!) {
         amiga.suspend()
-        amiga.agnus.dumpCopper()
+        amiga.copper.dump()
         amiga.resume()
     }
     @IBAction func dumpBlitterAction(_ sender: Any!) {
         amiga.suspend()
-        amiga.agnus.dumpBlitter()
+        amiga.blitter.dump()
         amiga.resume()
     }
     @IBAction func dumpPaulaAction(_ sender: Any!) {
