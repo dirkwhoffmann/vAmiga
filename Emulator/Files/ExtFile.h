@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXTFILE_H
-#define _EXTFILE_H
+#ifndef _EXT_H
+#define _EXT_H
 
 #include "AmigaFile.h"
 

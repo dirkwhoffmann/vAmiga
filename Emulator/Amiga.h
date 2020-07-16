@@ -37,6 +37,7 @@
 
 // File types
 #include "RomFile.h"
+#include "EncryptedRomFile.h"
 #include "ExtFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"

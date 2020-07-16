@@ -285,6 +285,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return RomFile::isRomFile([[url path] UTF8String]);
 }
+- (BOOL) isEncryptedRom:(NSURL *)url
+{
+    return EncryptedRomFile::isEncryptedRomFile([[url path] UTF8String]);
+}
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
     if (data == NULL) return NO;
@@ -294,6 +298,10 @@ struct SerialPortWrapper { SerialPort *port; };
 - (BOOL) loadRomFromFile:(NSURL *)url
 {
     return wrapper->mem->loadRomFromFile([[url path] UTF8String]);
+}
+- (BOOL) loadEncryptedRomFromFile:(NSURL *)url
+{
+    return wrapper->mem->loadEncryptedRomFromFile([[url path] UTF8String]);
 }
 - (u64) romFingerprint
 {
@@ -1257,8 +1265,6 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (void) dealloc
 {
-    // NSLog(@"AmigaFileProxy::dealloc");
-    
     if (wrapper) {
         if (wrapper->file) delete wrapper->file;
         delete wrapper;

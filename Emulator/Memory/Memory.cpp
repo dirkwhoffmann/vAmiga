@@ -561,14 +561,31 @@ Memory::loadRomFromFile(const char *path)
 {
     assert(path != NULL);
     
-    RomFile *file = RomFile::makeWithFile(path);
+    RomFile *rom = RomFile::makeWithFile(path);
+    if (rom == NULL) return false;
     
-    if (!file) {
-        msg("Failed to read Kick Rom from file %s\n", path);
-        return false;
-    }
+    bool success = loadRom(rom);
+    delete rom;
+    return success;
+}
+
+bool
+Memory::loadEncryptedRomFromFile(const char *path)
+{
+    assert(path != NULL);
     
-    return loadRom(file);
+    printf("loadEncryptedRomFromFile\n");
+    
+    EncryptedRomFile *encryptedRom = EncryptedRomFile::makeWithFile(path);
+    if (encryptedRom == NULL) return false;
+    
+    RomFile *rom = encryptedRom->decrypt();
+    if (rom == NULL) { delete encryptedRom; return false; }
+
+    bool success = loadRom(rom);
+    delete rom;
+    if (success) printf("ROM successfully loaded\n");
+    return success;
 }
 
 bool

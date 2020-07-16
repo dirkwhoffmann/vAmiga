@@ -268,8 +268,10 @@ struct SerialPortWrapper;
 - (BOOL) hasKickRom;
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
+- (BOOL) isEncryptedRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
+- (BOOL) loadEncryptedRomFromFile:(NSURL *)url;
 - (u64) romFingerprint;
 - (RomRevision) romRevision;
 - (NSString *) romTitle;
@@ -654,7 +656,6 @@ struct SerialPortWrapper;
 - (NSInteger)writeToBuffer:(void *)buffer;
 
 @end
-
 
 //
 // Snapshot

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ROMFILE_H
-#define _ROMFILE_H
+#ifndef _ROM_H
+#define _ROM_H
 
 #include "AmigaFile.h"
 
@@ -52,7 +52,6 @@ public:
         return isRomBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isRomFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
-    
 };
 
 #endif

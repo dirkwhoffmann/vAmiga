@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _ADF_FILE_H
-#define _ADF_FILE_H
+#ifndef _ADF_H
+#define _ADF_H
 
 #include "AmigaFile.h"
 

@@ -20,6 +20,15 @@ releaseBuild()
 }
 
 char *
+stripFilename(const char *path)
+{
+    assert(path != NULL);
+    
+    const char *pos = strrchr(path, '/');
+    return pos ? strndup(path, pos + 1 - path) : strdup("");
+}
+
+char *
 extractFilename(const char *path)
 {
     assert(path != NULL);
@@ -57,45 +66,45 @@ extractFilenameWithoutSuffix(const char *path)
 }
 
 bool
-checkFileSuffix(const char *filename, const char *suffix)
+checkFileSuffix(const char *path, const char *suffix)
 {
-    assert(filename != NULL);
+    assert(path != NULL);
     assert(suffix != NULL);
     
-    if (strlen(suffix) > strlen(filename))
+    if (strlen(suffix) > strlen(path))
         return false;
     
-    filename += (strlen(filename) - strlen(suffix));
-    if (strcmp(filename, suffix) == 0)
+    path += (strlen(path) - strlen(suffix));
+    if (strcmp(path, suffix) == 0)
         return true;
     else
         return false;
 }
 
 long
-getSizeOfFile(const char *filename)
+getSizeOfFile(const char *path)
 {
     struct stat fileProperties;
     
-    if (filename == NULL)
+    if (path == NULL)
         return -1;
     
-    if (stat(filename, &fileProperties) != 0)
+    if (stat(path, &fileProperties) != 0)
         return -1;
     
     return fileProperties.st_size;
 }
 
 bool
-checkFileSize(const char *filename, long size)
+checkFileSize(const char *path, long size)
 {
-    return checkFileSizeRange(filename, size, size);
+    return checkFileSizeRange(path, size, size);
 }
 
 bool
-checkFileSizeRange(const char *filename, long min, long max)
+checkFileSizeRange(const char *path, long min, long max)
 {
-    long filesize = getSizeOfFile(filename);
+    long filesize = getSizeOfFile(path);
     
     if (filesize == -1)
         return false;
@@ -170,6 +179,40 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
             return false;
     }
 
+    return true;
+}
+
+bool
+loadFile(const char *path, u8 **buffer, long *size)
+{
+    *buffer = NULL;
+    *size = 0;
+    
+    // Get file size
+    long bytes = getSizeOfFile(path);
+    if (bytes == -1) return false;
+    
+    // Open file
+    FILE *file = fopen(path, "r");
+    if (file == NULL) return false;
+     
+    // Allocate memory
+    u8 *data = new u8[bytes];
+    if (buffer == NULL) { fclose(file); return false; }
+    
+    // Read data
+    int c;
+    for (unsigned i = 0; i < bytes; i++) {
+        c = fgetc(file);
+        if (c == EOF) break;
+        data[i] = (u8)c;
+    }
+    
+    // Close file
+    fclose(file);
+    
+    *buffer = data;
+    *size = bytes;
     return true;
 }
 

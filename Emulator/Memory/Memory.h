@@ -370,6 +370,7 @@ public:
     bool loadRom(RomFile *rom);
     bool loadRomFromBuffer(const u8 *buffer, size_t length);
     bool loadRomFromFile(const char *path);
+    bool loadEncryptedRomFromFile(const char *path);
 
     bool loadExt(ExtFile *rom);
     bool loadExtFromBuffer(const u8 *buffer, size_t length);

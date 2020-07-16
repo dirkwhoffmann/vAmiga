@@ -118,6 +118,11 @@ bool releaseBuild();
 // Handling files
 //
 
+/* Strips the filename from a path
+ * Returns a newly created string. You need to delete it manually.
+ */
+char *stripFilename(const char *path);
+
 /* Extracts the filename from a path
  * Returns a newly created string. You need to delete it manually.
  */
@@ -136,18 +141,21 @@ char *extractFilenameWithoutSuffix(const char *path);
 /* Compares the file suffix with a given string
  * The function is used for determining the type of a file.
  */
-bool checkFileSuffix(const char *filename, const char *suffix);
+bool checkFileSuffix(const char *path, const char *suffix);
 
 // Returns the size of a file in bytes
-long getSizeOfFile(const char *filename);
+long getSizeOfFile(const char *path);
 
 // Checks the size of a file
-bool checkFileSize(const char *filename, long size);
-bool checkFileSizeRange(const char *filename, long min, long max);
+bool checkFileSize(const char *path, long size);
+bool checkFileSizeRange(const char *path, long min, long max);
 
 // Checks the header signature (magic bytes) of a file or buffer
 bool matchingFileHeader(const char *path, const u8 *header, size_t length);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
+
+// Loada a file from disk
+bool loadFile(const char *path, u8 **buffer, long *size);
 
 
 //
