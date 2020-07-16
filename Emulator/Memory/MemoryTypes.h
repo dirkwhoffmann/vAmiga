@@ -51,6 +51,7 @@ typedef enum
     ROM_KICK12_33_180,
     ROM_KICK121_34_004,
     ROM_KICK13_34_005,
+    ROM_KICK13_34_005_SK,
 
     // Kickstart V2.x
     ROM_KICK20_36_028,

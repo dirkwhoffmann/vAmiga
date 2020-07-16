@@ -281,6 +281,7 @@ Memory::revision(u32 fingerprint)
         case 0xA6CE1636: return ROM_KICK12_33_180;
         case 0xDB4C8033: return ROM_KICK121_34_004;
         case 0xC4F0F55F: return ROM_KICK13_34_005;
+        case 0xE0F37258: return ROM_KICK13_34_005_SK;
 
         case 0xB4113910: return ROM_KICK20_36_028;
 
@@ -358,6 +359,7 @@ Memory::isOrigRom(RomRevision rev)
         case ROM_KICK12_33_180:
         case ROM_KICK121_34_004:
         case ROM_KICK13_34_005:
+        case ROM_KICK13_34_005_SK:
 
         case ROM_KICK20_36_028:
         case ROM_KICK202_36_207:
@@ -389,35 +391,36 @@ Memory::title(RomRevision rev)
 {
     switch (rev) {
 
-        case ROM_UNKNOWN:        return "Unknown or patched Rom";
+        case ROM_UNKNOWN:          return "Unknown or patched Rom";
 
         case ROM_BOOT_A1000_8K:
-        case ROM_BOOT_A1000_64K: return "Amiga 1000 Boot Rom";
+        case ROM_BOOT_A1000_64K:   return "Amiga 1000 Boot Rom";
 
         case ROM_KICK11_31_034:
         case ROM_KICK12_33_166:
-        case ROM_KICK12_33_180:  return "Kickstart 1.2";
-        case ROM_KICK121_34_004: return "Kickstart 1.21";
-        case ROM_KICK13_34_005:  return "Kickstart 1.3";
+        case ROM_KICK12_33_180:    return "Kickstart 1.2";
+        case ROM_KICK121_34_004:   return "Kickstart 1.21";
+        case ROM_KICK13_34_005:
+        case ROM_KICK13_34_005_SK: return "Kickstart 1.3";
 
-        case ROM_KICK20_36_028:  return "Kickstart 2.0";
-        case ROM_KICK202_36_207: return "Kickstart 2.02";
-        case ROM_KICK204_37_175: return "Kickstart 2.04";
+        case ROM_KICK20_36_028:    return "Kickstart 2.0";
+        case ROM_KICK202_36_207:   return "Kickstart 2.02";
+        case ROM_KICK204_37_175:   return "Kickstart 2.04";
         case ROM_KICK205_37_299:
         case ROM_KICK205_37_300:
-        case ROM_KICK205_37_350: return "Kickstart 2.05";
+        case ROM_KICK205_37_350:   return "Kickstart 2.05";
 
-        case ROM_KICK30_39_106:  return "Kickstart 3.0";
-        case ROM_KICK31_40_063:  return "Kickstart 3.1";
+        case ROM_KICK30_39_106:    return "Kickstart 3.0";
+        case ROM_KICK31_40_063:    return "Kickstart 3.1";
 
-        case ROM_HYP314_46_143:  return "Kickstart 3.14 (Hyperion)";
+        case ROM_HYP314_46_143:    return "Kickstart 3.14 (Hyperion)";
 
-        case ROM_AROS_55696:     return "AROS Kickstart replacement";
-        case ROM_AROS_55696_EXT: return "AROS Kickstart extension";
+        case ROM_AROS_55696:       return "AROS Kickstart replacement";
+        case ROM_AROS_55696_EXT:   return "AROS Kickstart extension";
 
         case ROM_DIAG11:
-        case ROM_DIAG12:         return "Amiga DiagROM";
-        case ROM_LOGICA20:       return "Logica Diagnostic";
+        case ROM_DIAG12:           return "Amiga DiagROM";
+        case ROM_LOGICA20:         return "Logica Diagnostic";
 
         default:                 return "";
     }
@@ -428,35 +431,36 @@ Memory::version(RomRevision rev)
 {
     switch (rev) {
             
-        case ROM_BOOT_A1000_8K:  return "8KB";
-        case ROM_BOOT_A1000_64K: return "64KB";
+        case ROM_BOOT_A1000_8K:     return "8KB";
+        case ROM_BOOT_A1000_64K:    return "64KB";
 
-        case ROM_KICK11_31_034:  return "Rev 31.034";
-        case ROM_KICK12_33_166:  return "Rev 31.034";
-        case ROM_KICK12_33_180:  return "Rev 33.180";
-        case ROM_KICK121_34_004: return "Rev 34.004";
-        case ROM_KICK13_34_005:  return "Rev 34.005";
+        case ROM_KICK11_31_034:     return "Rev 31.034";
+        case ROM_KICK12_33_166:     return "Rev 31.034";
+        case ROM_KICK12_33_180:     return "Rev 33.180";
+        case ROM_KICK121_34_004:    return "Rev 34.004";
+        case ROM_KICK13_34_005:     return "Rev 34.005";
+        case ROM_KICK13_34_005_SK:  return "Rev 34.005 (A3000 SK)";
 
-        case ROM_KICK20_36_028:  return "Rev 36.028";
-        case ROM_KICK202_36_207: return "Rev 36.207";
-        case ROM_KICK204_37_175: return "Rev 37.175";
-        case ROM_KICK205_37_299: return "Rev 37.299";
-        case ROM_KICK205_37_300: return "Rev 37.300";
-        case ROM_KICK205_37_350: return "Rev 37.350";
+        case ROM_KICK20_36_028:     return "Rev 36.028";
+        case ROM_KICK202_36_207:    return "Rev 36.207";
+        case ROM_KICK204_37_175:    return "Rev 37.175";
+        case ROM_KICK205_37_299:    return "Rev 37.299";
+        case ROM_KICK205_37_300:    return "Rev 37.300";
+        case ROM_KICK205_37_350:    return "Rev 37.350";
 
-        case ROM_KICK30_39_106:  return "Rev 39.106";
-        case ROM_KICK31_40_063:  return "Rev 40.063";
+        case ROM_KICK30_39_106:     return "Rev 39.106";
+        case ROM_KICK31_40_063:     return "Rev 40.063";
 
-        case ROM_HYP314_46_143:  return "Rev 46.143";
+        case ROM_HYP314_46_143:     return "Rev 46.143";
 
-        case ROM_AROS_55696:     return "SVN 55696";
-        case ROM_AROS_55696_EXT: return "SVN 55696";
+        case ROM_AROS_55696:        return "SVN 55696";
+        case ROM_AROS_55696_EXT:    return "SVN 55696";
 
-        case ROM_DIAG11:         return "Version 1.1";
-        case ROM_DIAG12:         return "Version 1.2";
-        case ROM_LOGICA20:       return "Version 2.0";
+        case ROM_DIAG11:            return "Version 1.1";
+        case ROM_DIAG12:            return "Version 1.2";
+        case ROM_LOGICA20:          return "Version 2.0";
 
-        default:                 return "";
+        default:                    return "";
     }
 }
 
@@ -465,35 +469,36 @@ Memory::released(RomRevision rev)
 {
     switch (rev) {
 
-        case ROM_BOOT_A1000_8K:  return "1985";
-        case ROM_BOOT_A1000_64K: return "1985";
+        case ROM_BOOT_A1000_8K:     return "1985";
+        case ROM_BOOT_A1000_64K:    return "1985";
 
-        case ROM_KICK11_31_034:  return "February 1986";
-        case ROM_KICK12_33_166:  return "September 1986";
-        case ROM_KICK12_33_180:  return "October 1986";
-        case ROM_KICK121_34_004: return "November 1987";
-        case ROM_KICK13_34_005:  return "December 1987";
+        case ROM_KICK11_31_034:     return "February 1986";
+        case ROM_KICK12_33_166:     return "September 1986";
+        case ROM_KICK12_33_180:     return "October 1986";
+        case ROM_KICK121_34_004:    return "November 1987";
+        case ROM_KICK13_34_005:     return "December 1987";
+        case ROM_KICK13_34_005_SK:  return "December 1987";
 
-        case ROM_KICK20_36_028:  return "March 1990)";
-        case ROM_KICK202_36_207: return "October 1990";
-        case ROM_KICK204_37_175: return "May 1991";
-        case ROM_KICK205_37_299: return "November 1991";
-        case ROM_KICK205_37_300: return "November 1991";
-        case ROM_KICK205_37_350: return "April 1992";
+        case ROM_KICK20_36_028:     return "March 1990";
+        case ROM_KICK202_36_207:    return "October 1990";
+        case ROM_KICK204_37_175:    return "May 1991";
+        case ROM_KICK205_37_299:    return "November 1991";
+        case ROM_KICK205_37_300:    return "November 1991";
+        case ROM_KICK205_37_350:    return "April 1992";
 
-        case ROM_KICK30_39_106:  return "September 1992";
-        case ROM_KICK31_40_063:  return "July 1993";
+        case ROM_KICK30_39_106:     return "September 1992";
+        case ROM_KICK31_40_063:     return "July 1993";
 
-        case ROM_HYP314_46_143:  return "2018";
+        case ROM_HYP314_46_143:     return "2018";
 
-        case ROM_AROS_55696:     return "February 2019";
-        case ROM_AROS_55696_EXT: return "February 2019";
+        case ROM_AROS_55696:        return "February 2019";
+        case ROM_AROS_55696_EXT:    return "February 2019";
 
-        case ROM_DIAG11:         return "October 2018";
-        case ROM_DIAG12:         return "August 2019";
-        case ROM_LOGICA20:       return "";
+        case ROM_DIAG11:            return "October 2018";
+        case ROM_DIAG12:            return "August 2019";
+        case ROM_LOGICA20:          return "";
 
-        default:                 return "";
+        default:                    return "";
     }
 }
 
@@ -582,7 +587,7 @@ Memory::loadEncryptedRomFromFile(const char *path)
 
     bool success = loadRom(rom);
     delete rom;
-    return success;    
+    return success;
 }
 
 bool
