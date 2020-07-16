@@ -30,6 +30,21 @@ public:
     // Returns true if path points to a Boot Rom file or a Kickstart Rom file
     static bool isRomFile(const char *path);
     
+    // Translates a CRC-32 checksum into a ROM identifier
+    static RomRevision revision(u32 fingerprint);
+
+    // Classifies a ROM identifier by type
+    static bool isBootRom(RomRevision rev);
+    static bool isArosRom(RomRevision rev);
+    static bool isDiagRom(RomRevision rev);
+    static bool isCommodoreRom(RomRevision rev);
+    static bool isHyperionRom(RomRevision rev);
+
+    // Translates a ROM indentifier into a textual description
+    static const char *title(RomRevision rev);
+    static const char *version(RomRevision rev);
+    static const char *released(RomRevision rev);
+
     
     //
     // Creating and destructing

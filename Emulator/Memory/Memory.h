@@ -326,38 +326,23 @@ public:
     u32 romFingerprint() { return crc32(rom, config.romSize); }
     u32 extFingerprint() { return crc32(ext, config.extSize); }
 
-    // Translates a CRC-32 checksum into a ROM identifier
-    static RomRevision revision(u32 fingerprint);
-
     // Returns the ROM revisions of the currently installed ROMs
-    RomRevision romRevision() { return revision(romFingerprint()); }
-    RomRevision extRevision() { return revision(extFingerprint()); }
+    RomRevision romRevision() { return RomFile::revision(romFingerprint()); }
+    RomRevision extRevision() { return RomFile::revision(extFingerprint()); }
 
-    // Classifies a ROM identifier by type
-    static bool isBootRom(RomRevision rev);
-    static bool isArosRom(RomRevision rev);
-    static bool isDiagRom(RomRevision rev);
-    static bool isOrigRom(RomRevision rev);
-    static bool isHyperionRom(RomRevision rev);
-
-    // Translates a ROM indentifier into a textual description
-    static const char *title(RomRevision rev);
-    static const char *version(RomRevision rev);
-    static const char *released(RomRevision rev);
-
-    const char *romTitle() { return title(romRevision()); }
+    const char *romTitle() { return RomFile::title(romRevision()); }
     const char *romVersion();
-    const char *romReleased()  { return released(romRevision()); }
+    const char *romReleased()  { return RomFile::released(romRevision()); }
 
-    const char *extTitle() { return title(extRevision()); }
+    const char *extTitle() { return RomFile::title(extRevision()); }
     const char *extVersion();
-    const char *extReleased()  { return released(extRevision()); }
+    const char *extReleased()  { return RomFile::released(extRevision()); }
 
     // Checks if a certain Rom is present
     bool hasRom() { return rom != NULL; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
-    bool hasArosRom() { return isArosRom(romRevision()); }
+    bool hasArosRom() { return RomFile::isArosRom(romRevision()); }
     bool hasWom() { return wom != NULL; }
     bool hasExt() { return ext != NULL; }
 

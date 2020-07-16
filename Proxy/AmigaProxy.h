@@ -260,7 +260,7 @@ struct SerialPortWrapper;
 - (BOOL) isBootRom:(RomRevision)rev;
 - (BOOL) isArosRom:(RomRevision)rev;
 - (BOOL) isDiagRom:(RomRevision)rev;
-- (BOOL) isOrigRom:(RomRevision)rev;
+- (BOOL) isCommodoreRom:(RomRevision)rev;
 - (BOOL) isHyperionRom:(RomRevision)rev;
 
 - (BOOL) hasRom;

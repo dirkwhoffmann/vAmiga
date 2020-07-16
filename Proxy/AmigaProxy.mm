@@ -247,23 +247,23 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) isBootRom:(RomRevision)rev
 {
-    return wrapper->mem->isBootRom(rev);
+    return RomFile::isBootRom(rev);
 }
 - (BOOL) isArosRom:(RomRevision)rev
 {
-    return wrapper->mem->isArosRom(rev);
+    return RomFile::isArosRom(rev);
 }
 - (BOOL) isDiagRom:(RomRevision)rev
 {
-    return wrapper->mem->isDiagRom(rev);
+    return RomFile::isDiagRom(rev);
 }
-- (BOOL) isOrigRom:(RomRevision)rev
+- (BOOL) isCommodoreRom:(RomRevision)rev
 {
-    return wrapper->mem->isOrigRom(rev);
+    return RomFile::isCommodoreRom(rev);
 }
 - (BOOL) isHyperionRom:(RomRevision)rev
 {
-    return wrapper->mem->isHyperionRom(rev);
+    return RomFile::isHyperionRom(rev);
 }
 - (BOOL) hasRom
 {
