@@ -38,6 +38,19 @@ extractFilename(const char *path)
 }
 
 char *
+replaceFilename(const char *path, const char *name)
+{
+    char *dir = stripFilename(path);
+    char *result = (char *)malloc(strlen(dir) + strlen(name) + 1);
+
+    strcpy(result, dir);
+    strcat(result, name);
+
+    delete(dir);
+    return result;
+}
+
+char *
 extractSuffix(const char *path)
 {
     assert(path != NULL);
@@ -198,19 +211,16 @@ loadFile(const char *path, u8 **buffer, long *size)
      
     // Allocate memory
     u8 *data = new u8[bytes];
-    if (buffer == NULL) { fclose(file); return false; }
+    if (data == NULL) { fclose(file); return false; }
     
     // Read data
-    int c;
     for (unsigned i = 0; i < bytes; i++) {
-        c = fgetc(file);
+        int c = fgetc(file);
         if (c == EOF) break;
         data[i] = (u8)c;
     }
     
-    // Close file
     fclose(file);
-    
     *buffer = data;
     *size = bytes;
     return true;

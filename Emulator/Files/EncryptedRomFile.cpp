@@ -97,44 +97,35 @@ EncryptedRomFile::readFromBuffer(const u8 *buffer, size_t length)
 RomFile *
 EncryptedRomFile::decrypt()
 {
-    u8 *romKeyBuffer;
-    long romKeySize;
-    
-    printf("Path = %s\n", path);
-    
-    char *directory = stripFilename(path);
-    printf("Directory = %s\n", directory);
-
-    char *romKeyPath = strcat(directory, "rom.key");
-    printf("romKeyPath = %s\n", directory);
-    
-    if (!loadFile(romKeyPath, &romKeyBuffer, &romKeySize)) {
-        printf("Failed to load file\n");
-        return NULL;
-    }
-    
-    printf("buffer: %p size: %ld\n", romKeyBuffer, romKeySize);
-    
     const int headerSize = 11;
-    u8 *encrypted = data + headerSize;
-    long decryptedSize = size - headerSize;
-    u8 *decrypted = new u8[decryptedSize];
-    
-    // Decrypt
-    for (long i = 0; i < decryptedSize; i++) {
-        decrypted[i] = encrypted[i] ^ (romKeyBuffer[i % romKeySize]);
-    }
 
-    // Write out
-    FILE *out = fopen("/tmp/decrypted.rom", "w");
-    for (long i = 0; i < decryptedSize; i++) {
-        fputc(decrypted[i], out);
-    }
-    fclose(out);
-    printf("Written /tmp/decrypted.rom\n");
+    RomFile *rom = NULL;
+    u8 *encryptedData = NULL;
+    u8 *decryptedData = NULL;
+    u8 *romKeyData = NULL;
+    long romKeySize = 0;
     
-    RomFile *rom = RomFile::makeWithBuffer(decrypted, decryptedSize);
-    delete [] decrypted;
-    delete [] romKeyBuffer;
+    // Load the rom.key file
+    assert(path != NULL);
+    char *romKeyPath = replaceFilename(path, "rom.key");
+    if (romKeyPath == NULL) goto exit;
+    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) goto exit;
+    
+    // Create a buffer for the decrypted data
+    encryptedData = data + headerSize;
+    decryptedData = new u8[size - headerSize];
+        
+    // Decrypt
+    for (long i = 0; i < size - headerSize; i++) {
+        decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
+    }
+    
+    // Convert decrypted data into a Rom
+    rom = RomFile::makeWithBuffer(decryptedData, size - headerSize);
+    
+exit:
+    if (romKeyPath) free(romKeyPath);
+    if (decryptedData) delete [] decryptedData;
+    if (romKeyData) delete [] romKeyData;
     return rom;
 }

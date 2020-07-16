@@ -574,18 +574,15 @@ Memory::loadEncryptedRomFromFile(const char *path)
 {
     assert(path != NULL);
     
-    printf("loadEncryptedRomFromFile\n");
-    
     EncryptedRomFile *encryptedRom = EncryptedRomFile::makeWithFile(path);
     if (encryptedRom == NULL) return false;
-    
+        
     RomFile *rom = encryptedRom->decrypt();
     if (rom == NULL) { delete encryptedRom; return false; }
 
     bool success = loadRom(rom);
     delete rom;
-    if (success) printf("ROM successfully loaded\n");
-    return success;
+    return success;    
 }
 
 bool

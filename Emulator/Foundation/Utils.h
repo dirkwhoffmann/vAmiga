@@ -126,7 +126,12 @@ char *stripFilename(const char *path);
 /* Extracts the filename from a path
  * Returns a newly created string. You need to delete it manually.
  */
-char *extractFilename(const char *path);
+char *replaceFilename(const char *path, const char *name);
+
+/* Replaces a filename from a path
+ * Returns a newly created string. You need to delete it manually.
+ */
+char *stripFilename(const char *path);
 
 /* Extracts file suffix from a path
  * Returns a newly created string. You need to delete it manually.
