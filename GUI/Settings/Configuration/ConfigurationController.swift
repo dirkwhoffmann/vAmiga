@@ -41,11 +41,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romLockText: NSTextField!
     @IBOutlet weak var romLockSubText: NSTextField!
    
-    @IBOutlet weak var romArosButton: NSButton!
-
     // Buttons
+    @IBOutlet weak var romArosButton: NSButton!
     @IBOutlet weak var romOKButton: NSButton!
-    @IBOutlet weak var romBootButton: NSButton!
+    @IBOutlet weak var romPowerButton: NSButton!
 
     //
     // Hardware preferences
@@ -83,7 +82,7 @@ class ConfigurationController: DialogController {
     // Buttons
     @IBOutlet weak var hwFactorySettingsPopup: NSPopUpButton!
     @IBOutlet weak var hwOKButton: NSButton!
-    @IBOutlet weak var hwBootButton: NSButton!
+    @IBOutlet weak var hwPowerButton: NSButton!
 
     //
     // Compatibility preferences
@@ -118,7 +117,7 @@ class ConfigurationController: DialogController {
 
     // Buttons
     @IBOutlet weak var compOKButton: NSButton!
-    @IBOutlet weak var compBootButton: NSButton!
+    @IBOutlet weak var compPowerButton: NSButton!
     
     //
     // Audio preferences
@@ -184,7 +183,7 @@ class ConfigurationController: DialogController {
 
     // Buttons
     @IBOutlet weak var vidOKButton: NSButton!
-    @IBOutlet weak var vidBootButton: NSButton!
+    @IBOutlet weak var vidPowerButton: NSButton!
 
     var bootable: Bool {
         let off   = amiga.isPoweredOff()
@@ -235,24 +234,13 @@ class ConfigurationController: DialogController {
         amiga.powerOff()
         refresh()
     }
-
-    /*
-    @IBAction override func cancelAction(_ sender: Any!) {
-        
-        track()
-
-        parent.loadUserDefaults()
-        refresh()
-        hideSheet()
-    }
-    */
     
     @IBAction override func okAction(_ sender: Any!) {
         
         hideSheet()
     }
 
-    @IBAction func bootAction(_ sender: Any!) {
+    @IBAction func powerAction(_ sender: Any!) {
         
         hideSheet()
         amiga.run()

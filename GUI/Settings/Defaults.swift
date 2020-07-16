@@ -454,31 +454,14 @@ extension UserDefaults {
     
     static func romUrl(name: String) -> URL? {
         
-        let fm = FileManager.default
-        guard let support = fm.urls(for: .applicationSupportDirectory,
-                                    in: .userDomainMask).first else {
-                                        return nil
-        }
-        
-        let folder = support.appendingPathComponent("vAmiga/Roms")
-        var isDirectory: ObjCBool = false
-        let folderExists = fm.fileExists(atPath: folder.path,
-                                         isDirectory: &isDirectory)
-        
-        if !folderExists || !isDirectory.boolValue {
-            
-            do {
-                try fm.createDirectory(at: folder,
-                                       withIntermediateDirectories: true,
-                                       attributes: nil)
-            } catch {
-                return nil
-            }
-        }
-        
-        return folder.appendingPathComponent(name)
+        let folder = URL.appSupportFolder("Roms")
+        return folder?.appendingPathComponent(name)
     }
     
+    static var womUrl: URL? { return romUrl(name: "wom.bin") }
+    static var romUrl: URL? { return romUrl(name: "rom.bin") }
+    static var extUrl: URL? { return romUrl(name: "ext.bin") }
+
     static func registerRomUserDefaults() {
         
         let defaults = RomDefaults.std
@@ -502,19 +485,19 @@ extension UserDefaults {
         // Delete previously saved Rom files
         let fm = FileManager.default
         
-        if let wom = romUrl(name: "wom.bin") {
+        if let url = womUrl {
             track("Deleting Wom")
-            try? fm.removeItem(at: wom)
+            try? fm.removeItem(at: url)
         }
         
-        if let rom = romUrl(name: "rom.bin") {
+        if let url = romUrl {
             track("Deleting Rom")
-            try? fm.removeItem(at: rom)
+            try? fm.removeItem(at: url)
         }
         
-        if let ext = romUrl(name: "ext.bin") {
+        if let url = extUrl {
             track("Deleting Ext")
-            try? fm.removeItem(at: ext)
+            try? fm.removeItem(at: url)
         }
     }
 }

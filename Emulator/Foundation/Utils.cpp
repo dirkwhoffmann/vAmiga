@@ -235,7 +235,8 @@ fnv_1a_64(const u8 *addr, size_t size)
     return hash;
 }
 
-u32 crc32(const u8 *addr, size_t size)
+u32
+crc32(const u8 *addr, size_t size)
 {
     if (addr == NULL || size == 0) return 0;
 
@@ -252,7 +253,8 @@ u32 crc32(const u8 *addr, size_t size)
     return result;
 }
 
-u32 crc32forByte(u32 r)
+u32
+crc32forByte(u32 r)
 {
     for(int j = 0; j < 8; ++j)
         r = (r & 1? 0: (u32)0xEDB88320L) ^ r >> 1;

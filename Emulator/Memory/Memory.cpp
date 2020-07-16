@@ -272,6 +272,7 @@ Memory::revision(u32 fingerprint)
     switch(fingerprint) {
 
         case 0x00000000: return ROM_MISSING;
+            
         case 0x62F11C04: return ROM_BOOT_A1000_8K;
         case 0x0B1AD2D0: return ROM_BOOT_A1000_64K;
 

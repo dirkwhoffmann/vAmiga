@@ -274,11 +274,11 @@ extension MyController {
         // Create game pad manager
         gamePadManager = GamePadManager(parent: self)
         assert(gamePadManager != nil, "Failed to create game pad manager")
-
+        
         // Setup renderer
-         renderer = Renderer(view: metal,
-                             device: MTLCreateSystemDefaultDevice()!,
-                             controller: self)
+        renderer = Renderer(view: metal,
+                            device: MTLCreateSystemDefaultDevice()!,
+                            controller: self)
 
         // Setup window
         configureWindow()

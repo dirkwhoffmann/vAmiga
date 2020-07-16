@@ -12,22 +12,22 @@ extension ConfigurationController {
     func refreshRomTab() {
 
         let poweredOff     = amiga.isPoweredOff()
-        let romRev         = amiga.mem.romRevision()
-        let extRev         = amiga.mem.extRevision()
 
+        let romRev         = amiga.mem.romRevision()
         let hasRom         = romRev != ROM_MISSING
         let hasArosRom     = amiga.mem.isArosRom(romRev)
         let hasDiagRom     = amiga.mem.isDiagRom(romRev)
         let hasOrigRom     = amiga.mem.isOrigRom(romRev)
         let hasHyperionRom = amiga.mem.isHyperionRom(romRev)
 
+        let extRev         = amiga.mem.extRevision()
         let hasExt         = extRev != ROM_MISSING
         let hasArosExt     = amiga.mem.isArosRom(extRev)
         let hasDiagExt     = amiga.mem.isDiagRom(extRev)
         let hasOrigExt     = amiga.mem.isOrigRom(extRev)
         let hasHyperionExt = amiga.mem.isHyperionRom(extRev)
 
-        let romMissing     = NSImage.init(named: "rom_light")
+        let romMissing     = NSImage.init(named: "rom_missing")
         let romOrig        = NSImage.init(named: "rom_original")
         let romHyperion    = NSImage.init(named: "rom_hyp")
         let romAros        = NSImage.init(named: "rom_aros")
@@ -83,7 +83,7 @@ extension ConfigurationController {
         romLockSubText.isHidden = poweredOff
 
         // Boot button
-        romBootButton.isHidden = !bootable
+        romPowerButton.isHidden = !bootable
     }
 
     //

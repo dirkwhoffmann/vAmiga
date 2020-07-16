@@ -27,7 +27,6 @@
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
                 <outlet property="compBltLevel1" destination="6br-Nl-Ztc" id="nMu-vk-ygR"/>
                 <outlet property="compBltLevel2" destination="V3E-d1-ztH" id="CLY-sh-STa"/>
-                <outlet property="compBootButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
                 <outlet property="compClxPlfPlf" destination="sdI-ho-fbb" id="dGa-sd-0gw"/>
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
@@ -35,6 +34,7 @@
                 <outlet property="compEClockSyncing" destination="DYo-L9-ZL7" id="FVd-hs-ARb"/>
                 <outlet property="compLockDskSync" destination="z9Z-9Z-AmZ" id="52g-mi-sUD"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
+                <outlet property="compPowerButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
                 <outlet property="compTodBug" destination="fD3-tY-14r" id="5nh-OO-E3U"/>
                 <outlet property="extDeleteButton" destination="N41-Es-BhJ" id="XfO-xN-5fP"/>
                 <outlet property="extDropView" destination="TLP-ux-x2T" id="EfY-MO-d6h"/>
@@ -44,7 +44,6 @@
                 <outlet property="extSubtitle" destination="c28-hS-Q9K" id="7yj-Lz-YZ1"/>
                 <outlet property="extTitle" destination="JWp-8A-LFh" id="tHC-Lo-79Z"/>
                 <outlet property="hwAgnusRevisionPopup" destination="dyR-Jf-UoN" id="orJ-f9-WtQ"/>
-                <outlet property="hwBootButton" destination="A9W-ux-mNv" id="b37-Qm-5eT"/>
                 <outlet property="hwChipRamPopup" destination="kPl-Wj-a9T" id="RZv-ib-fCE"/>
                 <outlet property="hwDeniseRevisionPopup" destination="M5c-fi-zMW" id="fS7-GD-0aF"/>
                 <outlet property="hwDf0Type" destination="6be-dT-F0g" id="xOn-Ik-VvV"/>
@@ -62,12 +61,12 @@
                 <outlet property="hwLockSubText" destination="aVX-Vl-HNT" id="hCr-aY-VMf"/>
                 <outlet property="hwLockText" destination="M7q-Kn-Sca" id="GR6-SH-pNA"/>
                 <outlet property="hwOKButton" destination="RnF-fY-9yx" id="vcq-Ae-F9E"/>
+                <outlet property="hwPowerButton" destination="A9W-ux-mNv" id="b37-Qm-5eT"/>
                 <outlet property="hwRealTimeClock" destination="3nw-g4-iBc" id="lAh-yb-bC7"/>
                 <outlet property="hwSerialDevice" destination="mIs-oj-bJf" id="T5v-aA-n7y"/>
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
-                <outlet property="romBootButton" destination="2k7-hF-2uo" id="SYO-o2-xvo"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
                 <outlet property="romLockImage" destination="mlY-fv-BuR" id="jKz-dJ-e1F"/>
@@ -76,6 +75,7 @@
                 <outlet property="romMapAddr" destination="wNR-iB-FnF" id="n0z-Yh-U7L"/>
                 <outlet property="romMapText" destination="1s3-mF-457" id="BXd-oy-T0L"/>
                 <outlet property="romOKButton" destination="A4H-Al-xc0" id="3IV-bN-u66"/>
+                <outlet property="romPowerButton" destination="2k7-hF-2uo" id="SYO-o2-xvo"/>
                 <outlet property="romSubsubtitle" destination="QPv-hw-IeK" id="3ps-Wc-q0W"/>
                 <outlet property="romSubtitle" destination="GYj-mu-CCZ" id="KUk-1J-bjf"/>
                 <outlet property="romTitle" destination="BMh-ue-CcQ" id="g3e-oT-SfR"/>
@@ -85,7 +85,6 @@
                 <outlet property="vidBloomWeightSlider" destination="X5P-s8-sLT" id="vHx-K7-QCd"/>
                 <outlet property="vidBlurPopUp" destination="85u-7O-Nsd" id="10z-Fy-2dG"/>
                 <outlet property="vidBlurRadiusSlider" destination="2Xn-Rh-ewd" id="d0G-vF-x36"/>
-                <outlet property="vidBootButton" destination="vrE-h3-1TF" id="VII-NJ-cQn"/>
                 <outlet property="vidBrightnessSlider" destination="zzU-KL-7dh" id="yOS-Ym-ZEX"/>
                 <outlet property="vidContrastSlider" destination="Mnh-Qb-xHP" id="Vda-5U-Q3G"/>
                 <outlet property="vidDotMaskBrightnessSlider" destination="QSV-1J-MdT" id="U21-sd-6r8"/>
@@ -100,6 +99,7 @@
                 <outlet property="vidMisalignmentYSlider" destination="S3E-Cq-tuw" id="G31-bw-Kmd"/>
                 <outlet property="vidOKButton" destination="WcH-gc-UkP" id="yQi-GR-rum"/>
                 <outlet property="vidPalettePopUp" destination="R2c-W1-1Vz" id="TdY-Ha-d7c"/>
+                <outlet property="vidPowerButton" destination="vrE-h3-1TF" id="VII-NJ-cQn"/>
                 <outlet property="vidSaturationSlider" destination="dOW-wJ-mRR" id="3kl-Bh-ckj"/>
                 <outlet property="vidScanlineBrightnessSlider" destination="6ck-r4-4ij" id="HQu-xW-c2P"/>
                 <outlet property="vidScanlineWeightSlider" destination="Gd0-Yl-6CP" id="Hg6-Ji-Fjk"/>
@@ -189,7 +189,7 @@ DQ
                                                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Obf-WK-7zy" customClass="RomDropView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="9" y="9" width="102" height="102"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="gB6-P0-9eW"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_missing" id="gB6-P0-9eW"/>
                                                         <connections>
                                                             <outlet property="parent" destination="-2" id="xo8-tE-pEJ"/>
                                                         </connections>
@@ -243,7 +243,7 @@ DQ
                                                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TLP-ux-x2T" customClass="ExtRomDropView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="9" y="9" width="102" height="102"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_light" id="q1V-67-8We"/>
+                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" animates="YES" imageScaling="proportionallyDown" image="rom_missing" id="q1V-67-8We"/>
                                                         <connections>
                                                             <outlet property="parent" destination="-2" id="owk-3r-TQl"/>
                                                         </connections>
@@ -414,7 +414,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="bootAction:" target="-2" id="V3o-g1-AMw"/>
+                                                <action selector="powerAction:" target="-2" id="V3o-g1-AMw"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -991,7 +991,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="bootAction:" target="-2" id="SCy-yG-ptN"/>
+                                                <action selector="powerAction:" target="-2" id="SCy-yG-ptN"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -1315,7 +1315,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="bootAction:" target="-2" id="5rA-Pz-1Yg"/>
+                                                <action selector="powerAction:" target="-2" id="5rA-Pz-1Yg"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -1904,7 +1904,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="bootAction:" target="-2" id="HYD-KR-bAu"/>
+                                                <action selector="powerAction:" target="-2" id="HYD-KR-bAu"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -2576,7 +2576,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="bootAction:" target="-2" id="JEA-I4-8RB"/>
+                                                <action selector="powerAction:" target="-2" id="JEA-I4-8RB"/>
                                             </connections>
                                         </button>
                                     </subviews>
@@ -2611,7 +2611,7 @@ DQ
         <image name="devLoopbackTemplate" width="24" height="24"/>
         <image name="devMouseTemplate" width="24" height="24"/>
         <image name="devNoneTemplate" width="24" height="24"/>
-        <image name="rom_light" width="129" height="157"/>
+        <image name="rom_missing" width="129" height="157"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>
 </document>

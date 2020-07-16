@@ -328,6 +328,8 @@ public:
 
     // Translates a CRC-32 checksum into a ROM identifier
     static RomRevision revision(u32 fingerprint);
+
+    // Returns the ROM revisions of the currently installed ROMs
     RomRevision romRevision() { return revision(romFingerprint()); }
     RomRevision extRevision() { return revision(extFingerprint()); }
 
@@ -376,15 +378,15 @@ public:
 private:
 
     // Loads Rom data from a file
-    // DEPRECATED: ADD copy method to AmigaFile and use that method
+    // DEPRECATED: USE AnyAmigaFile::flash(...) instead
     void loadRom(AmigaFile *rom, u8 *target, size_t length);
 
 public:
     
     // Saves a Rom to disk
-    bool saveRom(const char *filename);
-    bool saveWom(const char *filename);
-    bool saveExt(const char *filename);
+    bool saveRom(const char *path);
+    bool saveWom(const char *path);
+    bool saveExt(const char *path);
 
     
     //

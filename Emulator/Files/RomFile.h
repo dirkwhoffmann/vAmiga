@@ -24,10 +24,10 @@ public:
     // Class methods
     //
     
-    // Returns true iff buffer contains a Boot Rom or an Kickstart Rom image
+    // Returns true if buffer contains a Boot Rom or an Kickstart Rom image
     static bool isRomBuffer(const u8 *buffer, size_t length);
     
-    // Returns true iff path points to a Boot Rom file or a Kickstart Rom file
+    // Returns true if path points to a Boot Rom file or a Kickstart Rom file
     static bool isRomFile(const char *path);
     
     

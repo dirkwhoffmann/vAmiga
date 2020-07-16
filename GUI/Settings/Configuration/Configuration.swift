@@ -336,19 +336,17 @@ class Configuration {
 
         amiga.suspend()
         
-        if let wom = UserDefaults.romUrl(name: "wom.bin") {
+        if let url = UserDefaults.womUrl {
             track("Seeking Wom")
-            amiga.mem.loadRom(fromFile: wom)
+            amiga.mem.loadRom(fromFile: url)
         }
-        
-        if let rom = UserDefaults.romUrl(name: "rom.bin") {
+        if let url = UserDefaults.romUrl {
             track("Seeking Rom")
-            amiga.mem.loadRom(fromFile: rom)
+            amiga.mem.loadRom(fromFile: url)
         }
-  
-        if let ext = UserDefaults.romUrl(name: "ext.bin") {
+        if let url = UserDefaults.extUrl {
             track("Seeking Ext")
-            amiga.mem.loadExt(fromFile: ext)
+            amiga.mem.loadExt(fromFile: url)
         }
         
         let defaults = UserDefaults.standard
@@ -363,26 +361,26 @@ class Configuration {
         
         amiga.suspend()
                 
-        if let wom = UserDefaults.romUrl(name: "wom.bin") {
+        if let url = UserDefaults.womUrl {
             track("Saving Wom")
-            try? fm.removeItem(at: wom)
-            amiga.mem.saveWom(wom)
+            try? fm.removeItem(at: url)
+            amiga.mem.saveWom(url)
         }
-        
-        if let rom = UserDefaults.romUrl(name: "rom.bin") {
+        if let url = UserDefaults.romUrl {
             track("Saving Rom")
-            try? fm.removeItem(at: rom)
-            amiga.mem.saveRom(rom)
+            try? fm.removeItem(at: url)
+            amiga.mem.saveRom(url)
         }
-        
-        if let ext = UserDefaults.romUrl(name: "ext.bin") {
+        if let url = UserDefaults.extUrl {
             track("Saving Ext")
-            try? fm.removeItem(at: ext)
-            amiga.mem.saveExt(ext)
+            try? fm.removeItem(at: url)
+            amiga.mem.saveExt(url)
         }
         
         let defaults = UserDefaults.standard
         defaults.set(extStart, forKey: Keys.extStart)
+        
+        amiga.resume()
     }
 
     //

@@ -43,7 +43,7 @@ extension ConfigurationController {
         compAccurateKeyboard.state = config.keyboard.accurate ? .on : .off
 
         // Boot Button
-        compBootButton.isHidden = !bootable
+        compPowerButton.isHidden = !bootable
     }
 
     @IBAction func compClxSprSprAction(_ sender: NSButton!) {
