@@ -43,8 +43,8 @@ const u8 RomFile::kickRomHeaders[6][7] = {
     { 0x11, 0x11, 0x4E, 0xF9, 0x00, 0xF8, 0x04 }
 };
 
-RomRevision
-RomFile::revision(u32 fingerprint)
+RomIdentifier
+RomFile::identifier(u32 fingerprint)
 {
     switch(fingerprint) {
 
@@ -85,7 +85,7 @@ RomFile::revision(u32 fingerprint)
 }
 
 bool
-RomFile::isBootRom(RomRevision rev)
+RomFile::isBootRom(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -97,7 +97,7 @@ RomFile::isBootRom(RomRevision rev)
 }
 
 bool
-RomFile::isArosRom(RomRevision rev)
+RomFile::isArosRom(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -111,7 +111,7 @@ RomFile::isArosRom(RomRevision rev)
 }
 
 bool
-RomFile::isDiagRom(RomRevision rev)
+RomFile::isDiagRom(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -124,7 +124,7 @@ RomFile::isDiagRom(RomRevision rev)
 }
 
 bool
-RomFile::isCommodoreRom(RomRevision rev)
+RomFile::isCommodoreRom(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -153,7 +153,7 @@ RomFile::isCommodoreRom(RomRevision rev)
 }
 
 bool
-RomFile::isHyperionRom(RomRevision rev)
+RomFile::isHyperionRom(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -164,7 +164,7 @@ RomFile::isHyperionRom(RomRevision rev)
 }
 
 const char *
-RomFile::title(RomRevision rev)
+RomFile::title(RomIdentifier rev)
 {
     switch (rev) {
 
@@ -204,7 +204,7 @@ RomFile::title(RomRevision rev)
 }
 
 const char *
-RomFile::version(RomRevision rev)
+RomFile::version(RomIdentifier rev)
 {
     switch (rev) {
             
@@ -242,7 +242,7 @@ RomFile::version(RomRevision rev)
 }
 
 const char *
-RomFile::released(RomRevision rev)
+RomFile::released(RomIdentifier rev)
 {
     switch (rev) {
 

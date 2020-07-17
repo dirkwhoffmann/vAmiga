@@ -23,6 +23,7 @@ protocol MessageReceiver {
 class MyController: NSWindowController, MessageReceiver {
 
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    var pref: Preferences { return myAppDelegate.pref }
 
     // Reference to the connected document
     var mydocument: MyDocument!
@@ -102,9 +103,6 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Remembers the running state for the pauseInBackground feature
     var pauseInBackgroundSavedState = false
-
-    // Application preferences
-    var prefs: Preferences { return myAppDelegate.prefs }
          
     //
     // Timers
@@ -112,11 +110,11 @@ class MyController: NSWindowController, MessageReceiver {
         
     func startSnapshotTimer() {
         
-        if prefs.snapshotInterval > 0 {
+        if pref.snapshotInterval > 0 {
             
             snapshotTimer?.invalidate()
             snapshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(prefs.snapshotInterval),
+                Timer.scheduledTimer(timeInterval: TimeInterval(pref.snapshotInterval),
                                      target: self,
                                      selector: #selector(snapshotTimerFunc),
                                      userInfo: nil,
@@ -131,11 +129,11 @@ class MyController: NSWindowController, MessageReceiver {
             
     func startScreenshotTimer() {
         
-        if prefs.snapshotInterval > 0 {
+        if pref.snapshotInterval > 0 {
             
             screenshotTimer?.invalidate()
             screenshotTimer =
-                Timer.scheduledTimer(timeInterval: TimeInterval(prefs.screenshotInterval),
+                Timer.scheduledTimer(timeInterval: TimeInterval(pref.screenshotInterval),
                                      target: self,
                                      selector: #selector(screenshotTimerFunc),
                                      userInfo: nil,
@@ -163,7 +161,7 @@ class MyController: NSWindowController, MessageReceiver {
         
         var warp: Bool
         
-        switch prefs.warpMode {
+        switch pref.warpMode {
         case .auto: warp = amiga.diskController.spinning()
         case .off: warp = false
         case .on: warp = true
@@ -177,7 +175,7 @@ class MyController: NSWindowController, MessageReceiver {
     
     // Returns the icon of the sand clock in the bottom bar
     var hourglassIcon: NSImage? {
-        switch prefs.warpMode {
+        switch pref.warpMode {
         case .auto where amiga.warp():
             return NSImage.init(named: "hourglass3Template")
         case .auto:
@@ -242,7 +240,7 @@ extension MyController {
             return document?.changeCount != 0
         }
         set {
-            if newValue && !prefs.closeWithoutAsking {
+            if newValue && !pref.closeWithoutAsking {
                 document?.updateChangeCount(.changeDone)
             } else {
                 document?.updateChangeCount(.changeCleared)
@@ -469,12 +467,12 @@ extension MyController {
     
     @objc func snapshotTimerFunc() {
 
-        if prefs.autoSnapshots { takeAutoSnapshot() }
+        if pref.autoSnapshots { takeAutoSnapshot() }
     }
     
     @objc func screenshotTimerFunc() {
         
-        if prefs.autoScreenshots { takeAutoScreenshot() }
+        if pref.autoScreenshots { takeAutoScreenshot() }
     }
         
     func processMessage(_ msg: Message) {
@@ -610,26 +608,26 @@ extension MyController {
             updateWarp()
 
         case MSG_DRIVE_HEAD:
-            if prefs.driveSounds && prefs.driveHeadSound {
+            if pref.driveSounds && pref.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
   
         case MSG_DRIVE_HEAD_POLL:
-            if prefs.driveSounds && prefs.drivePollSound {
+            if pref.driveSounds && pref.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
             refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
 
         case MSG_DISK_INSERT:
-            if prefs.driveSounds && prefs.driveInsertSound {
+            if pref.driveSounds && pref.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
             if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv()) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:
-            if prefs.driveSounds && prefs.driveEjectSound {
+            if pref.driveSounds && pref.driveEjectSound {
                 macAudio.playSound(name: "eject", volume: 0.3)
             }
             refreshStatusBar()
@@ -674,10 +672,10 @@ extension MyController {
 
         track()
 
-        switch prefs.warpMode {
-        case .auto: prefs.warpMode = .off
-        case .off: prefs.warpMode = .on
-        case .on: prefs.warpMode = .auto
+        switch pref.warpMode {
+        case .auto: pref.warpMode = .off
+        case .off: pref.warpMode = .on
+        case .on: pref.warpMode = .auto
         }
 
         refreshStatusBar()

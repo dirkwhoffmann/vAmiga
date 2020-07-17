@@ -17,7 +17,7 @@ class Renderer: NSObject, MTKViewDelegate {
     let device: MTLDevice
     let parent: MyController
     
-    var prefs: Preferences { return parent.prefs }
+    var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
     
     /* Number of drawn frames since power up
@@ -751,7 +751,7 @@ class Renderer: NSObject, MTKViewDelegate {
         drawable = metalLayer.nextDrawable()
         if drawable != nil {
             updateTexture()
-            if fullscreen && !parent.prefs.keepAspectRatio {
+            if fullscreen && !parent.pref.keepAspectRatio {
                 drawScene2D()
             } else {
                 drawScene3D()

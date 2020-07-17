@@ -13,7 +13,7 @@ public class MacAudio: NSObject {
 
     var parent: MyController!
     var paula: PaulaProxy!
-    var prefs: Preferences { return parent.prefs }
+    var prefs: Preferences { return parent.pref }
 
     var audiounit: AUAudioUnit!
     

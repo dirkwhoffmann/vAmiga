@@ -72,7 +72,7 @@ typedef enum
 
     ROM_CNT
 }
-RomRevision;
+RomIdentifier;
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 

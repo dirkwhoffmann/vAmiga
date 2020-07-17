@@ -19,7 +19,7 @@ class GamePad {
 
     // Reference to the game pad manager
     var manager: GamePadManager
-    var prefs: Preferences { return manager.parent.prefs }
+    var prefs: Preferences { return manager.parent.pref }
 
     // The Amiga port this device is connected to (0 = unconnected)
     var port = 0

@@ -326,23 +326,23 @@ public:
     u32 romFingerprint() { return crc32(rom, config.romSize); }
     u32 extFingerprint() { return crc32(ext, config.extSize); }
 
-    // Returns the ROM revisions of the currently installed ROMs
-    RomRevision romRevision() { return RomFile::revision(romFingerprint()); }
-    RomRevision extRevision() { return RomFile::revision(extFingerprint()); }
+    // Returns the ROM identifiers of the currently installed ROMs
+    RomIdentifier romIdentifier() { return RomFile::identifier(romFingerprint()); }
+    RomIdentifier extIdentifier() { return RomFile::identifier(extFingerprint()); }
 
-    const char *romTitle() { return RomFile::title(romRevision()); }
+    const char *romTitle() { return RomFile::title(romIdentifier()); }
     const char *romVersion();
-    const char *romReleased()  { return RomFile::released(romRevision()); }
+    const char *romReleased()  { return RomFile::released(romIdentifier()); }
 
-    const char *extTitle() { return RomFile::title(extRevision()); }
+    const char *extTitle() { return RomFile::title(extIdentifier()); }
     const char *extVersion();
-    const char *extReleased()  { return RomFile::released(extRevision()); }
+    const char *extReleased()  { return RomFile::released(extIdentifier()); }
 
     // Checks if a certain Rom is present
     bool hasRom() { return rom != NULL; }
     bool hasBootRom() { return hasRom() && config.romSize <= KB(16); }
     bool hasKickRom() { return hasRom() && config.romSize >= KB(256); }
-    bool hasArosRom() { return RomFile::isArosRom(romRevision()); }
+    bool hasArosRom() { return RomFile::isArosRom(romIdentifier()); }
     bool hasWom() { return wom != NULL; }
     bool hasExt() { return ext != NULL; }
 

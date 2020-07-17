@@ -65,15 +65,4 @@ extension MyController {
             assert(false)
         }
     }
-        
-    @IBAction func toolbarPrefAction(_ sender: NSSegmentedControl) {
-
-        switch sender.selectedSegment {
-
-        case 0: preferencesAction(sender)
-        case 1: configureAction(sender)
-
-        default: assert(false)
-        }
-    }
 }

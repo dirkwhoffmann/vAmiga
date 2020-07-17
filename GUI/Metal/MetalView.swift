@@ -10,7 +10,7 @@
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
-    var prefs: Preferences { return parent.prefs }
+    var prefs: Preferences { return parent.pref }
     
     /* Tracking area for trapping the mouse
      * We use a tracking area to determine when the mouse is moved into or

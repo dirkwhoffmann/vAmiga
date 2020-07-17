@@ -137,12 +137,12 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func preferencesAction(_ sender: Any!) {
         
-        if myAppDelegate.prefsController == nil {
-            myAppDelegate.prefsController =
+        if myAppDelegate.prefController == nil {
+            myAppDelegate.prefController =
                 PreferencesController.make(parent: self,
                                            nibName: NSNib.Name("Preferences"))
         }
-        myAppDelegate.prefsController?.showWindow(self)
+        myAppDelegate.prefController?.showWindow(self)
     }
     
     func importPrefs(_ prefixes: [String]) {
@@ -328,12 +328,13 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
+        var error: ErrorCode = ERR_OK
+
         if amiga.isPoweredOn() {
             amiga.powerOff()
             return
         }
         
-        var error: ErrorCode = ERR_OK
         if amiga.isReady(&error) {
             amiga.run()
         } else {
@@ -399,7 +400,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         // Write file system
-        adf.formatDisk(prefs.driveBlankDiskFormat)
+        adf.formatDisk(pref.driveBlankDiskFormat)
         
         // Insert disk into drive
         amiga.diskController.insert(sender.tag, adf: adf)

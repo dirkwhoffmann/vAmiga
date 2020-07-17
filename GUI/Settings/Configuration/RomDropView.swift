@@ -22,11 +22,10 @@ extension NSDraggingInfo {
 class DropView: NSImageView {
     
     @IBOutlet var parent: ConfigurationController!
-    var amiga: AmigaProxy!
+    var amiga: AmigaProxy { return parent.amiga }
 
     override func awakeFromNib() {
 
-        amiga = parent.amiga
         registerForDraggedTypes([NSPasteboard.PasteboardType.compatibleFileURL])
     }
 

@@ -13,19 +13,19 @@ extension ConfigurationController {
 
         let poweredOff      = amiga.isPoweredOff()
 
-        let romRev          = amiga.mem.romRevision()
-        let hasRom          = romRev != ROM_MISSING
-        let hasArosRom      = amiga.mem.isArosRom(romRev)
-        let hasDiagRom      = amiga.mem.isDiagRom(romRev)
-        let hasCommodoreRom = amiga.mem.isCommodoreRom(romRev)
-        let hasHyperionRom  = amiga.mem.isHyperionRom(romRev)
+        let romIdentifier   = amiga.mem.romIdentifier()
+        let hasRom          = romIdentifier != ROM_MISSING
+        let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
+        let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
+        let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
+        let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
 
-        let extRev          = amiga.mem.extRevision()
-        let hasExt          = extRev != ROM_MISSING
-        let hasArosExt      = amiga.mem.isArosRom(extRev)
-        let hasDiagExt      = amiga.mem.isDiagRom(extRev)
-        let hasCommodoreExt = amiga.mem.isCommodoreRom(extRev)
-        let hasHyperionExt  = amiga.mem.isHyperionRom(extRev)
+        let extIdentifier   = amiga.mem.extIdentifier()
+        let hasExt          = extIdentifier != ROM_MISSING
+        let hasArosExt      = amiga.mem.isArosRom(extIdentifier)
+        let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
+        let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
+        let hasHyperionExt  = amiga.mem.isHyperionRom(extIdentifier)
 
         let romMissing      = NSImage.init(named: "rom_missing")
         let romOrig         = NSImage.init(named: "rom_original")

@@ -25,8 +25,8 @@ import Cocoa
     var eventTap: CFMachPort?
 
     // Preferences
-    var prefs: Preferences!
-    var prefsController: PreferencesController?
+    var pref: Preferences!
+    var prefController: PreferencesController?
     
     // The list of recently inserted disk URLs.
     var recentlyInsertedDiskURLs: [URL] = [] {
@@ -42,7 +42,7 @@ import Cocoa
     override init() {
         
         super.init()
-        prefs = Preferences.init()
+        pref = Preferences.init()
     }
     
     public func applicationDidFinishLaunching(_ aNotification: Notification) {

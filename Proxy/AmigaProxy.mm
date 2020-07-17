@@ -245,23 +245,23 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->mem->dump();
 }
-- (BOOL) isBootRom:(RomRevision)rev
+- (BOOL) isBootRom:(RomIdentifier)rev
 {
     return RomFile::isBootRom(rev);
 }
-- (BOOL) isArosRom:(RomRevision)rev
+- (BOOL) isArosRom:(RomIdentifier)rev
 {
     return RomFile::isArosRom(rev);
 }
-- (BOOL) isDiagRom:(RomRevision)rev
+- (BOOL) isDiagRom:(RomIdentifier)rev
 {
     return RomFile::isDiagRom(rev);
 }
-- (BOOL) isCommodoreRom:(RomRevision)rev
+- (BOOL) isCommodoreRom:(RomIdentifier)rev
 {
     return RomFile::isCommodoreRom(rev);
 }
-- (BOOL) isHyperionRom:(RomRevision)rev
+- (BOOL) isHyperionRom:(RomIdentifier)rev
 {
     return RomFile::isHyperionRom(rev);
 }
@@ -307,9 +307,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->mem->romFingerprint();
 }
-- (RomRevision) romRevision
+- (RomIdentifier) romIdentifier
 {
-    return wrapper->mem->romRevision();
+    return wrapper->mem->romIdentifier();
 }
 - (NSString *) romTitle
 {
@@ -352,9 +352,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->mem->extFingerprint();
 }
-- (RomRevision) extRevision
+- (RomIdentifier) extIdentifier
 {
-    return wrapper->mem->extRevision();
+    return wrapper->mem->extIdentifier();
 }
 - (NSString *) extTitle
 {

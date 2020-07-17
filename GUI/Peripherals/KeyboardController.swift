@@ -17,7 +17,7 @@ class KeyboardController: NSObject {
 
     var keyboard: KeyboardProxy { return parent.amiga.keyboard }
     var renderer: Renderer { return parent.renderer }
-    var prefs: Preferences { return parent.prefs }
+    var prefs: Preferences { return parent.pref }
         
     // Remembers the state of some keys (true = currently pressed)
     var leftShift   = false, rightShift   = false

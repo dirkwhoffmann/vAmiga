@@ -9,11 +9,11 @@
 
 class PreferencesController: DialogController {
 
-    var prefs: Preferences { return parent.prefs }
+    var pref: Preferences { return parent.pref }
     var gamePadManager: GamePadManager { return parent.gamePadManager! }
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
-    @IBOutlet weak var prefTabView: NSTabView!
+    @IBOutlet weak var tabView: NSTabView!
         
     //
     // General preferences
@@ -117,18 +117,18 @@ class PreferencesController: DialogController {
 
         super.awakeFromNib()
         
-        if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
+        if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
         refresh()
     }
 
     override func sheetDidShow() {
 
-        if let id = firstTab { prefTabView?.selectTabViewItem(withIdentifier: id) }
+        if let id = firstTab { tabView?.selectTabViewItem(withIdentifier: id) }
     }
 
     func refresh() {
         
-        if let id = prefTabView.selectedTabViewItem?.identifier as? String {
+        if let id = tabView?.selectedTabViewItem?.identifier as? String {
             
             switch id {
             case "General": refreshGeneralTab()
@@ -141,7 +141,7 @@ class PreferencesController: DialogController {
     @discardableResult
     func keyDown(with key: MacKey) -> Bool {
         
-        if let id = prefTabView.selectedTabViewItem?.identifier as? String {
+        if let id = tabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
             case "Devices": return devKeyDown(with: key)
@@ -153,8 +153,8 @@ class PreferencesController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
                 
-        prefs.saveGeneralUserDefaults()
-        prefs.saveDevicesUserDefaults()
+        pref.saveGeneralUserDefaults()
+        pref.saveDevicesUserDefaults()
         hideSheet()
     }
 }

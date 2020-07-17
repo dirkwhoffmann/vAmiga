@@ -20,7 +20,7 @@ extension PreferencesController {
             var macKeyDesc: String = ""
 
             // Which MacKey is assigned to this joystick action?
-            for (key, direction) in prefs.keyMaps[map] where direction == dir.rawValue {
+            for (key, direction) in pref.keyMaps[map] where direction == dir.rawValue {
                 let attr = [NSAttributedString.Key.foregroundColor: NSColor.black]
                 let myStr = NSString(format: "%02X", key.keyCode) as String
                 macKeyCode = NSAttributedString(string: myStr, attributes: attr)
@@ -59,34 +59,34 @@ extension PreferencesController {
         refreshKey(map: 2, dir: PULL_RIGHT, button: devRight2button, txt: devRight2)
         refreshKey(map: 2, dir: PRESS_FIRE, button: devFire2button, txt: devFire2)
 
-        devDisconnectKeys.state = prefs.disconnectJoyKeys ? .on : .off
+        devDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
-        assert(prefs.autofire == joystick2.autofire())
-        assert(prefs.autofireBullets == joystick2.autofireBullets())
-        assert(prefs.autofireFrequency == joystick2.autofireFrequency())
+        assert(pref.autofire == joystick2.autofire())
+        assert(pref.autofireBullets == joystick2.autofireBullets())
+        assert(pref.autofireFrequency == joystick2.autofireFrequency())
         assert(joystick1.autofire() == joystick2.autofire())
         assert(joystick1.autofireBullets() == joystick2.autofireBullets())
         assert(joystick1.autofireFrequency() == joystick2.autofireFrequency())
-        devAutofire.state = prefs.autofire ? .on : .off
-        devAutofireCease.state = prefs.autofireBullets > 0 ? .on : .off
-        devAutofireBullets.integerValue = Int(prefs.autofireBullets.magnitude)
-        devAutofireFrequency.floatValue = prefs.autofireFrequency
+        devAutofire.state = pref.autofire ? .on : .off
+        devAutofireCease.state = pref.autofireBullets > 0 ? .on : .off
+        devAutofireBullets.integerValue = Int(pref.autofireBullets.magnitude)
+        devAutofireFrequency.floatValue = pref.autofireFrequency
         devAutofireCease.isEnabled = devAutofire.state == .on
         devAutofireCeaseText.textColor = devAutofire.state == .on ? .controlTextColor : .disabledControlTextColor
         devAutofireBullets.isEnabled = devAutofire.state == .on
         devAutofireFrequency.isEnabled = devAutofire.state == .on
         
         // Mouse
-        devRetainMouseKeyComb.selectItem(withTag: prefs.retainMouseKeyComb)
-        devRetainMouseKeyComb.isEnabled = prefs.retainMouseWithKeys
-        devRetainMouseWithKeys.state = prefs.retainMouseWithKeys ? .on : .off
-        devRetainMouseByClick.state = prefs.retainMouseByClick ? .on : .off
-        devRetainMouseByEntering.state = prefs.retainMouseByEntering ? .on : .off
-        devReleaseMouseKeyComb.selectItem(withTag: prefs.releaseMouseKeyComb)
-        devReleaseMouseKeyComb.isEnabled = prefs.releaseMouseWithKeys
-        devReleaseMouseWithKeys.state = prefs.releaseMouseWithKeys ? .on : .off
-        devReleaseMouseByShaking.state = prefs.releaseMouseByShaking ? .on : .off
+        devRetainMouseKeyComb.selectItem(withTag: pref.retainMouseKeyComb)
+        devRetainMouseKeyComb.isEnabled = pref.retainMouseWithKeys
+        devRetainMouseWithKeys.state = pref.retainMouseWithKeys ? .on : .off
+        devRetainMouseByClick.state = pref.retainMouseByClick ? .on : .off
+        devRetainMouseByEntering.state = pref.retainMouseByEntering ? .on : .off
+        devReleaseMouseKeyComb.selectItem(withTag: pref.releaseMouseKeyComb)
+        devReleaseMouseKeyComb.isEnabled = pref.releaseMouseWithKeys
+        devReleaseMouseWithKeys.state = pref.releaseMouseWithKeys ? .on : .off
+        devReleaseMouseByShaking.state = pref.releaseMouseByShaking ? .on : .off
     }
 
     // Translates a button tag back to the related slot and gamepad action
@@ -137,7 +137,7 @@ extension PreferencesController {
     
     @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
         
-        prefs.disconnectJoyKeys = (sender.state == .on)
+        pref.disconnectJoyKeys = (sender.state == .on)
         
         refresh()
     }
@@ -146,39 +146,39 @@ extension PreferencesController {
 
         assert(sender.tag >= 0 && sender.tag <= 2)
         
-        prefs.keyMaps[sender.tag] = [:]
+        pref.keyMaps[sender.tag] = [:]
         refresh()
     }
 
     @IBAction func devAutofireAction(_ sender: NSButton!) {
         
-        prefs.autofire = (sender.state == .on)
+        pref.autofire = (sender.state == .on)
         refresh()
     }
     
     @IBAction func devAutofireCeaseAction(_ sender: NSButton!) {
         
         let sign = sender.state == .on ? 1 : -1
-        let bullets = prefs.autofireBullets.magnitude
-        prefs.autofireBullets = Int(bullets) * sign
+        let bullets = pref.autofireBullets.magnitude
+        pref.autofireBullets = Int(bullets) * sign
         refresh()
     }
     
     @IBAction func devAutofireBulletsAction(_ sender: NSTextField!) {
         
-        prefs.autofireBullets = sender.integerValue
+        pref.autofireBullets = sender.integerValue
         refresh()
     }
     
     @IBAction func devAutofireFrequencyAction(_ sender: NSSlider!) {
         
-        prefs.autofireFrequency = sender.floatValue
+        pref.autofireFrequency = sender.floatValue
         refresh()
     }
         
     @IBAction func devRetainMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
-        prefs.retainMouseKeyComb = sender.selectedTag()
+        pref.retainMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
@@ -186,9 +186,9 @@ extension PreferencesController {
         
         switch sender.tag {
             
-        case 0: prefs.retainMouseWithKeys   = (sender.state == .on)
-        case 1: prefs.retainMouseByClick    = (sender.state == .on)
-        case 2: prefs.retainMouseByEntering = (sender.state == .on)
+        case 0: pref.retainMouseWithKeys   = (sender.state == .on)
+        case 1: pref.retainMouseByClick    = (sender.state == .on)
+        case 2: pref.retainMouseByEntering = (sender.state == .on)
         default: fatalError()
         }
         
@@ -197,7 +197,7 @@ extension PreferencesController {
     
     @IBAction func devReleaseMouseKeyCombAction(_ sender: NSPopUpButton!) {
         
-        prefs.releaseMouseKeyComb = sender.selectedTag()
+        pref.releaseMouseKeyComb = sender.selectedTag()
         refresh()
     }
     
@@ -205,8 +205,8 @@ extension PreferencesController {
         
         switch sender.tag {
             
-        case 0: prefs.releaseMouseWithKeys  = (sender.state == .on)
-        case 1: prefs.releaseMouseByShaking = (sender.state == .on)
+        case 0: pref.releaseMouseWithKeys  = (sender.state == .on)
+        case 1: pref.releaseMouseByShaking = (sender.state == .on)
         default: fatalError()
         }
         
@@ -223,7 +223,7 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
         
         UserDefaults.resetDevicesUserDefaults()
-        prefs.loadDevicesUserDefaults()
+        pref.loadDevicesUserDefaults()
         refresh()
     }
 }

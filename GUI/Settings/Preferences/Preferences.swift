@@ -7,16 +7,13 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/* All user-customizable items are managed by two different classes.
+/* Preferences
  *
- * Preferences
- * This class stores all items that belong to the application level. There is
- * a single object of this class and the stored values apply to all emulator
- * instances.
+ * This class stores all emulator settings that belong to the application level.
+ * There is a single object of this class stored in the application delegate.
+ * The object is shared among all emulator instances.
  *
- * Configuration
- * This class stores all items that are specific to an individual emulator
- * instance. Each instance keeps its own object of this class.
+ * See class "Configuration" for instance specific settings.
  */
 
 class Preferences {

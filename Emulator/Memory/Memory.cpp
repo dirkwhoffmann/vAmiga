@@ -271,12 +271,12 @@ Memory::romVersion()
 {
     static char str[32];
 
-    if (romRevision() == ROM_UNKNOWN) {
+    if (romIdentifier() == ROM_UNKNOWN) {
         sprintf(str, "CRC %x", romFingerprint());
         return str;
     }
 
-    return RomFile::version(romRevision());
+    return RomFile::version(romIdentifier());
 }
 
 const char *
@@ -284,12 +284,12 @@ Memory::extVersion()
 {
     static char str[32];
 
-    if (extRevision() == ROM_UNKNOWN) {
+    if (extIdentifier() == ROM_UNKNOWN) {
         sprintf(str, "CRC %x", extFingerprint());
         return str;
     }
 
-    return RomFile::version(extRevision());
+    return RomFile::version(extIdentifier());
 }
 
 bool

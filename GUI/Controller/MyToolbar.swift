@@ -51,4 +51,15 @@ class MyToolbar: NSToolbar {
         controlPort1.selectItem(withTag: parent.config.gameDevice1)
         controlPort2.selectItem(withTag: parent.config.gameDevice2)
     }
+    
+    @IBAction func toolbarPrefAction(_ sender: NSSegmentedControl) {
+
+        switch sender.selectedSegment {
+
+        case 0: parent.preferencesAction(sender)
+        case 1: parent.configureAction(sender)
+
+        default: assert(false)
+        }
+    }
 }

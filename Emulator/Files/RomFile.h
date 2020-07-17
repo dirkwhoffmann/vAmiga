@@ -31,19 +31,19 @@ public:
     static bool isRomFile(const char *path);
     
     // Translates a CRC-32 checksum into a ROM identifier
-    static RomRevision revision(u32 fingerprint);
+    static RomIdentifier identifier(u32 fingerprint);
 
     // Classifies a ROM identifier by type
-    static bool isBootRom(RomRevision rev);
-    static bool isArosRom(RomRevision rev);
-    static bool isDiagRom(RomRevision rev);
-    static bool isCommodoreRom(RomRevision rev);
-    static bool isHyperionRom(RomRevision rev);
+    static bool isBootRom(RomIdentifier rev);
+    static bool isArosRom(RomIdentifier rev);
+    static bool isDiagRom(RomIdentifier rev);
+    static bool isCommodoreRom(RomIdentifier rev);
+    static bool isHyperionRom(RomIdentifier rev);
 
     // Translates a ROM indentifier into a textual description
-    static const char *title(RomRevision rev);
-    static const char *version(RomRevision rev);
-    static const char *released(RomRevision rev);
+    static const char *title(RomIdentifier rev);
+    static const char *version(RomIdentifier rev);
+    static const char *released(RomIdentifier rev);
 
     
     //

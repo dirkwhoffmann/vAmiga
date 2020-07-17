@@ -75,8 +75,8 @@ extension MyController {
         
         amiga.suspend()
         
-        prefs.loadGeneralUserDefaults()
-        prefs.loadDevicesUserDefaults()
+        pref.loadGeneralUserDefaults()
+        pref.loadDevicesUserDefaults()
 
         config.loadRomUserDefaults()
         config.loadHardwareUserDefaults()

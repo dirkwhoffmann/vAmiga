@@ -293,7 +293,7 @@ public:
     void runEmulator();
     void pauseEmulator();
 
-    /* Returns true if a call to powerUp() will be successful.
+    /* Returns true if a call to powerOn() will be successful.
      * It returns false, e.g., if no Kickstart Rom or Boot Rom is installed.
      */
     bool isReady(ErrorCode *error = NULL);
