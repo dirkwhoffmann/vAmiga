@@ -262,7 +262,6 @@ Agnus::inBplDmaLine(u16 dmacon, u16 bplcon0) {
 
     return
     ddfVFlop                 // Outside VBLANK, inside DIW
-    && ddfstrtReached != -1  // Raster beam hits DDFSTRT value
     && bpu(bplcon0)          // At least one bitplane enabled
     && bpldma(dmacon);       // Bitplane DMA enabled
 }
