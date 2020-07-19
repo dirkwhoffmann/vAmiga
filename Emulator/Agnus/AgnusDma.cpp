@@ -983,6 +983,7 @@ Agnus::dumpBplEventTable(int from, int to)
     }
 
     // Drawing flags
+    for (int i = 0; i < 256; i += 4) str[i][2] = '.';
     for (int i = 1; i < 256; i += 4) str[i][2] = 'o';
     for (int i = 2; i < 256; i += 4) str[i][2] = 'e';
     for (int i = 3; i < 256; i += 4) str[i][2] = 'b';
