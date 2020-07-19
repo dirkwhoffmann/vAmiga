@@ -9,12 +9,12 @@
 
 import IOKit.hid
 
-/* An object that represents an input device connected to the Game Port.
- * The object can either represent a connected HID device or a keyboard emulated
- * device. In the first case, the object serves as a callback handler for HID
- * events. In the latter case, it translates keyboard events to GamePadAction
- * events by utilizing a key map.
- */
+// An object representing an input device connected to the Game Port. The object
+// can either represent a connected HID device or a keyboard emulated device.
+// In the first case, the object serves as a callback handler for HID events.
+// In the latter case, it translates keyboard events to GamePadAction events by
+// utilizing a key map.
+
 class GamePad {
 
     // Reference to the game pad manager
@@ -27,13 +27,13 @@ class GamePad {
     // Reference to the device object
     var device: IOHIDDevice?
     
-    // Vendor ID of the managed device (used for HID devices only)
+    // Vendor ID of the managed device (only set for HID devices)
     var vendorID: Int
 
-    // Product ID of the managed device (used for HID devices only)
+    // Product ID of the managed device (only set for HID devices)
     var productID: Int
 
-    // Location ID of the managed device (used for HID devices only)
+    // Location ID of the managed device (only set for HID devices)
     var locationID: Int
 
     // Type of the managed device (joystick or mouse)
@@ -47,7 +47,7 @@ class GamePad {
     // Icon of this device
     var icon: NSImage?
             
-    // Keymap of the managed device (set for keyboard emulated devices only)
+    // Keymap of the managed device (only set for keyboard emulated devices)
     var keyMap: Int?
     
     // Indicates if a joystick emulation key is currently pressed
@@ -267,7 +267,9 @@ extension GamePad {
 
 extension GamePad {
 
-    // Based on http://docs.ros.org/hydro/api/oculus_sdk/html/OSX__Gamepad_8cpp_source.html#l00170
+    // Based on
+    // http://docs.ros.org/hydro/api/oculus_sdk/html/OSX__Gamepad_8cpp_source.html#l00170
+    
     func mapAnalogAxis(value: IOHIDValue, element: IOHIDElement) -> Int? {
         
         if min == nil {

@@ -250,6 +250,7 @@ struct MacKey: Codable {
 }
 
 extension MacKey: Equatable, Hashable {
+    
     static func == (lhs: MacKey, rhs: MacKey) -> Bool {
         return lhs.keyCode == rhs.keyCode
     }

@@ -1679,13 +1679,13 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->amiga->getConfig();
 }
-- (NSInteger) getConfig:(ConfigOption)option
+- (NSInteger) getConfig:(ConfigOption)opt
 {
-    return wrapper->amiga->getConfig(option);
+    return wrapper->amiga->getConfig(opt);
 }
-- (NSInteger) getConfig:(ConfigOption)option drive:(NSInteger)nr
+- (NSInteger) getConfig:(ConfigOption)opt drive:(NSInteger)nr
 {
-    return wrapper->amiga->getDriveConfig(nr, option);
+    return wrapper->amiga->getDriveConfig(nr, opt);
 }
 - (BOOL) configure:(ConfigOption)opt value:(NSInteger)val
 {

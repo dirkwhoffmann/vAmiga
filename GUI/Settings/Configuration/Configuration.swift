@@ -24,7 +24,7 @@ class Configuration {
     var gamePadManager: GamePadManager { return parent.gamePadManager }
 
     //
-    // Rom settings
+    // Roms
     //
         
     var extStart: Int {
@@ -33,7 +33,7 @@ class Configuration {
     }
 
     //
-    // Hardware settings
+    // Hardware
     //
     
     // Chips

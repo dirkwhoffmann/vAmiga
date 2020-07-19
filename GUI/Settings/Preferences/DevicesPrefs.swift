@@ -138,7 +138,6 @@ extension PreferencesController {
     @IBAction func devDisconnectKeysAction(_ sender: NSButton!) {
         
         pref.disconnectJoyKeys = (sender.state == .on)
-        
         refresh()
     }
 
@@ -217,7 +216,7 @@ extension PreferencesController {
     // Action methods (Misc)
     //
     
-    @IBAction func devicesPresetAction(_ sender: NSPopUpButton!) {
+    @IBAction func devPresetAction(_ sender: NSPopUpButton!) {
         
         track()
         assert(sender.selectedTag() == 0)

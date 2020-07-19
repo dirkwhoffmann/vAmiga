@@ -12,12 +12,12 @@ import Carbon.HIToolbox
 // Keyboard event handler
 class KeyboardController: NSObject {
 
-    var parent: MyController!
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
+    var parent: MyController!
 
     var keyboard: KeyboardProxy { return parent.amiga.keyboard }
     var renderer: Renderer { return parent.renderer }
-    var prefs: Preferences { return parent.pref }
+    var pref: Preferences { return parent.pref }
         
     // Remembers the state of some keys (true = currently pressed)
     var leftShift   = false, rightShift   = false
@@ -55,7 +55,7 @@ class KeyboardController: NSObject {
         if event.isARepeat { return }
         
         // Exit fullscreen mode if escape key is pressed
-        if event.keyCode == kVK_Escape && renderer.fullscreen && prefs.exitOnEsc {
+        if event.keyCode == kVK_Escape && renderer.fullscreen && pref.exitOnEsc {
             parent.window!.toggleFullScreen(nil)
             return
         }
@@ -122,10 +122,10 @@ class KeyboardController: NSObject {
         
         // Check if this key is used for joystick emulation
         if parent.gamePad1?.processKeyDownEvent(macKey: macKey) == true {
-            if prefs.disconnectJoyKeys { return }
+            if pref.disconnectJoyKeys { return }
         }
         if parent.gamePad2?.processKeyDownEvent(macKey: macKey) == true {
-            if prefs.disconnectJoyKeys { return }
+            if pref.disconnectJoyKeys { return }
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard.pressKey(amigaKey) }
@@ -135,10 +135,10 @@ class KeyboardController: NSObject {
         
         // Check if this key is used for joystick emulation
         if parent.gamePad1?.processKeyUpEvent(macKey: macKey) == true {
-            if prefs.disconnectJoyKeys { return }
+            if pref.disconnectJoyKeys { return }
         }
         if parent.gamePad2?.processKeyUpEvent(macKey: macKey) == true {
-            if prefs.disconnectJoyKeys { return }
+            if pref.disconnectJoyKeys { return }
         }
 
         if let amigaKey = macKey.amigaKeyCode { keyboard.releaseKey(amigaKey) }

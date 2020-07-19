@@ -33,7 +33,7 @@ extension UserDefaults {
         }
     }
     
-    // Encodes an item of generic type 'Decodable'
+    // Decodes an item of generic type 'Decodable'
     func decode<T: Decodable>(_ item: inout T, forKey key: String) {
         
         if let data = data(forKey: key) {
@@ -1027,7 +1027,7 @@ struct VideoDefaults {
     // Schemes
     //
     
-    // TFT Monior appearance with a texture cutout similar to UAE
+    // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
         palette: COLOR_PALETTE,
@@ -1170,7 +1170,8 @@ extension UserDefaults {
                      Keys.scanlineWeight,
                      Keys.disalignment,
                      Keys.disalignmentH,
-                     Keys.disalignmentV ]
+                     Keys.disalignmentV
+        ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }

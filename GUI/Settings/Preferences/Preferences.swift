@@ -74,11 +74,11 @@ class Preferences {
     //
     // Devices preferences
     //
-        
+    
     // Emulation keys
     var keyMaps = [ DevicesDefaults.std.joyKeyMap1,
-                     DevicesDefaults.std.joyKeyMap2,
-                     DevicesDefaults.std.mouseKeyMap ]
+                    DevicesDefaults.std.joyKeyMap2,
+                    DevicesDefaults.std.mouseKeyMap ]
     
     // Joystick
     var disconnectJoyKeys = DevicesDefaults.std.disconnectJoyKeys

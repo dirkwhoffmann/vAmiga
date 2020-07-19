@@ -182,12 +182,12 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func importConfigAction(_ sender: Any!) {
         
-        importPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID"])
+        importPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID", "VAMIGA_AUD"])
     }
     
     @IBAction func exportConfigAction(_ sender: Any!) {
         
-        exportPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID"])
+        exportPrefs(["VAMIGA_ROM", "VAMIGA_HW", "VAMIGA_COM", "VAMIGA_VID", "VAMIGA_AUD"])
     }
     
     @IBAction func resetConfigAction(_ sender: Any!) {

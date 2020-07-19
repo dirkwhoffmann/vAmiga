@@ -247,9 +247,6 @@ class Renderer: NSObject, MTKViewDelegate {
     // Part of the texture that is currently visible
     var textureRect = CGRect.init()
 
-    // Used to emulate flickering in interlace mode (DEPRECATED)
-    // var flickerToggle = 0
-
     // Indicates the type of the frame that is read next
     var requestLongFrame = true
     
@@ -368,7 +365,7 @@ class Renderer: NSObject, MTKViewDelegate {
                            height: CGFloat(height) / texH)
     }
     
-    // DEPRECATED
+    // DEPRECATED (?)
     func updateTextureRect() {
         
         textureRect = computeTextureRect()
@@ -389,7 +386,7 @@ class Renderer: NSObject, MTKViewDelegate {
         return false
     }
   
-    // Tries to select a new enhancer
+    // Tries to select a new upscaler
     func selectUpscaler(_ nr: Int) -> Bool {
         
         if nr < upscalerGallery.count && upscalerGallery[nr] != nil {
@@ -398,28 +395,6 @@ class Renderer: NSObject, MTKViewDelegate {
         }
         return false
     }
-    
-    // Returns the compute kernel of the currently selected upscaler (first pass)
-    // DEPRECATED
-    /*
-    func currentEnhancer() -> ComputeKernel {
-
-        var nr = config.enhancer
-        if enhancerGallery.count <= nr || enhancerGallery[nr] == nil { nr = 0 }
-        return enhancerGallery[nr]!
-    }
-    */
-    
-    // Returns the compute kernel of the currently selected upscaler (second pass)
-    // DEPRECATED
-    /*
-    func currentUpscaler() -> ComputeKernel {
-
-        var nr = config.upscaler
-        if upscalerGallery.count <= nr || upscalerGallery[nr] == nil { nr = 0 }
-        return upscalerGallery[nr]!
-    }
-    */
     
     // Returns the compute kernel of the currently selected bloom filter
     func currentBloomFilter() -> ComputeKernel {
@@ -747,10 +722,12 @@ class Renderer: NSObject, MTKViewDelegate {
     func draw(in view: MTKView) {
         
         semaphore.wait()
-
         drawable = metalLayer.nextDrawable()
+        
         if drawable != nil {
+            
             updateTexture()
+            
             if fullscreen && !parent.pref.keepAspectRatio {
                 drawScene2D()
             } else {

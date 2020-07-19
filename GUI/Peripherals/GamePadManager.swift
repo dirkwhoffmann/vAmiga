@@ -10,7 +10,7 @@
 /* Holds and manages an array of GamePad objects.
  * Up to five gamepads are managed. The first three gamepads are initialized
  * by default and represent a mouse and two keyboard emulated joysticks.
- * All remaining gamepads are added dynamically when a HID device is connected.
+ * All remaining gamepads are added dynamically when HID devices are connected.
  */
 class GamePadManager {
 
