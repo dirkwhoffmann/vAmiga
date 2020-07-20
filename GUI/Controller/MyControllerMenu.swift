@@ -36,19 +36,13 @@ extension MyController: NSMenuItemValidation {
         
         switch item.action {
             
-            //
-            // File menu
-            //
-            
+        // File menu
         case #selector(MyController.importConfigAction(_:)),
              #selector(MyController.exportConfigAction(_:)),
              #selector(MyController.resetConfigAction(_:)):
             return !powered
             
-            //
-            // Edit menu
-            //
-            
+        // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
             item.title = running ? "Pause" : "Continue"
             return true
@@ -57,26 +51,17 @@ extension MyController: NSMenuItemValidation {
             item.title = powered ? "Power Off" : "Power On"
             return true
             
-            //
-            // View menu
-            //
-            
+        // View menu
         case #selector(MyController.toggleStatusBarAction(_:)):
             item.title = statusBar ? "Hide Status Bar" : "Show Status Bar"
             return true
             
-            //
-            // Keyboard menu
-            //
-            
+        // Keyboard menu
         case #selector(MyController.mapCmdKeysAction(_:)):
             item.state = (myAppDelegate.eventTap != nil) ? .on : .off
             return true
             
-            //
-            // Drive menu
-            //
-            
+        // Drive menu
         case #selector(MyController.insertRecentDiskAction(_:)):
             
             return validateURLlist(myAppDelegate.recentlyInsertedDiskURLs, image: smallDisk)
@@ -114,10 +99,7 @@ extension MyController: NSMenuItemValidation {
             item.state = dfn === dragAndDropDrive ? .on : .off
             return true
             
-            //
-            // Debug menu
-            //
-            
+        // Debug menu
         case #selector(MyController.stepIntoAction(_:)),
              #selector(MyController.stepOverAction(_:)),
              #selector(MyController.stopAndGoAction(_:)):

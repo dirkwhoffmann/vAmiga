@@ -203,7 +203,7 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
 
         UserDefaults.resetGeneralUserDefaults()
-        pref.loadGeneralUserDefaults()
+        pref.loadEmulatorUserDefaults()
         refresh()
     }
 }

@@ -75,7 +75,7 @@ extension MyController {
         
         amiga.suspend()
         
-        pref.loadGeneralUserDefaults()
+        pref.loadEmulatorUserDefaults()
         pref.loadDevicesUserDefaults()
 
         config.loadRomUserDefaults()
@@ -152,7 +152,7 @@ struct Keys {
     static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
 }
 
-struct GeneralDefaults {
+struct EmulatorDefaults {
     
     // Drives
     let driveBlankDiskFormat: FileSystemType
@@ -187,7 +187,7 @@ struct GeneralDefaults {
     // Schemes
     //
     
-    static let std = GeneralDefaults.init(
+    static let std = EmulatorDefaults.init(
         
         driveBlankDiskFormat: FS_OFS,
         ejectWithoutAsking: false,
@@ -219,7 +219,7 @@ extension UserDefaults {
     
     static func registerGeneralUserDefaults() {
     
-        let defaults = GeneralDefaults.std
+        let defaults = EmulatorDefaults.std
         let dictionary: [String: Any] = [
             
             Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),

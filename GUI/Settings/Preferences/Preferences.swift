@@ -25,41 +25,41 @@ class Preferences {
     //
         
     // Floppy
-    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
+    var driveBlankDiskFormat = EmulatorDefaults.std.driveBlankDiskFormat
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(newValue) }
     }
-    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
-    var driveSounds = GeneralDefaults.std.driveSounds
-    var driveSoundPan = GeneralDefaults.std.driveSoundPan
-    var driveInsertSound = GeneralDefaults.std.driveInsertSound
-    var driveEjectSound = GeneralDefaults.std.driveEjectSound
-    var driveHeadSound = GeneralDefaults.std.driveHeadSound
-    var drivePollSound = GeneralDefaults.std.drivePollSound
+    var ejectWithoutAsking = EmulatorDefaults.std.ejectWithoutAsking
+    var driveSounds = EmulatorDefaults.std.driveSounds
+    var driveSoundPan = EmulatorDefaults.std.driveSoundPan
+    var driveInsertSound = EmulatorDefaults.std.driveInsertSound
+    var driveEjectSound = EmulatorDefaults.std.driveEjectSound
+    var driveHeadSound = EmulatorDefaults.std.driveHeadSound
+    var drivePollSound = EmulatorDefaults.std.drivePollSound
     
     // Fullscreen
-    var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
-    var exitOnEsc = GeneralDefaults.std.exitOnEsc
+    var keepAspectRatio = EmulatorDefaults.std.keepAspectRatio
+    var exitOnEsc = EmulatorDefaults.std.exitOnEsc
         
     // Snapshots and screenshots
-    var autoSnapshots = GeneralDefaults.std.autoSnapshots
+    var autoSnapshots = EmulatorDefaults.std.autoSnapshots
     var snapshotInterval = 0 {
         didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
     }
-    var autoScreenshots = GeneralDefaults.std.autoScreenshots
+    var autoScreenshots = EmulatorDefaults.std.autoScreenshots
     var screenshotInterval = 0 {
         didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
     }
-    var screenshotSource = GeneralDefaults.std.screenshotSource
-    var screenshotTarget = GeneralDefaults.std.screenshotTarget
+    var screenshotSource = EmulatorDefaults.std.screenshotSource
+    var screenshotTarget = EmulatorDefaults.std.screenshotTarget
     var screenshotTargetIntValue: Int {
         get { return Int(screenshotTarget.rawValue) }
         set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
     }
     
     // Warp mode
-    var warpMode = GeneralDefaults.std.warpMode {
+    var warpMode = EmulatorDefaults.std.warpMode {
         didSet { for c in myAppDelegate.controllers { c.updateWarp() } }
     }
     var warpModeIntValue: Int {
@@ -68,8 +68,8 @@ class Preferences {
     }
     
     // Misc
-    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
-    var pauseInBackground = GeneralDefaults.std.pauseInBackground
+    var closeWithoutAsking = EmulatorDefaults.std.closeWithoutAsking
+    var pauseInBackground = EmulatorDefaults.std.pauseInBackground
 
     //
     // Devices preferences
@@ -115,14 +115,12 @@ class Preferences {
     var releaseMouseKeyComb = DevicesDefaults.std.retainMouseKeyComb
     var releaseMouseWithKeys = DevicesDefaults.std.releaseMouseWithKeys
     var releaseMouseByShaking = DevicesDefaults.std.releaseMouseByShaking
- 
-    // init(with delegate: MyAppDelegate) { parent = delegate }
-    
+     
     //
-    // General
+    // Emulator
     //
     
-    func loadGeneralDefaults(_ defaults: GeneralDefaults) {
+    func loadEmulatorDefaults(_ defaults: EmulatorDefaults) {
         
         // Floppy
         driveBlankDiskFormat = defaults.driveBlankDiskFormat
@@ -154,7 +152,7 @@ class Preferences {
         closeWithoutAsking = defaults.closeWithoutAsking
     }
     
-    func loadGeneralUserDefaults() {
+    func loadEmulatorUserDefaults() {
         
         let defaults = UserDefaults.standard
            
@@ -188,7 +186,7 @@ class Preferences {
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
     }
     
-    func saveGeneralUserDefaults() {
+    func saveEmulatorUserDefaults() {
         
         let defaults = UserDefaults.standard
         

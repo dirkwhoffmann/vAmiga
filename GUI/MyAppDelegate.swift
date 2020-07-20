@@ -91,7 +91,8 @@ import Cocoa
             
         case 0: noteRecentlyUsedURL(url, to: &recentlyExportedDisk0URLs, size: 1)
         case 1: noteRecentlyUsedURL(url, to: &recentlyExportedDisk1URLs, size: 1)
-            
+        case 2: noteRecentlyUsedURL(url, to: &recentlyExportedDisk2URLs, size: 1)
+        case 3: noteRecentlyUsedURL(url, to: &recentlyExportedDisk3URLs, size: 1)
         default: fatalError()
         }
     }
@@ -102,7 +103,8 @@ import Cocoa
             
         case 0: return getRecentlyUsedURL(pos, from: recentlyExportedDisk0URLs)
         case 1: return getRecentlyUsedURL(pos, from: recentlyExportedDisk1URLs)
-            
+        case 2: return getRecentlyUsedURL(pos, from: recentlyExportedDisk2URLs)
+        case 3: return getRecentlyUsedURL(pos, from: recentlyExportedDisk3URLs)
         default: fatalError()
         }
     }
