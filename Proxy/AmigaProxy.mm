@@ -303,6 +303,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->mem->loadEncryptedRomFromFile([[url path] UTF8String]);
 }
+- (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error
+{
+    return wrapper->mem->loadEncryptedRomFromFile([[url path] UTF8String]);
+}
 - (u64) romFingerprint
 {
     return wrapper->mem->romFingerprint();
@@ -1101,6 +1105,10 @@ struct SerialPortWrapper { SerialPort *port; };
 - (BOOL) connected:(NSInteger)nr
 {
     return wrapper->controller->isConnected(nr);
+}
+- (BOOL) disconnected:(NSInteger)nr
+{
+    return wrapper->controller->isDisconnected(nr);
 }
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
 {

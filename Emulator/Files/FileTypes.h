@@ -76,4 +76,11 @@ RomIdentifier;
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
+typedef enum
+{
+    DECRYPT_ROM_KEY_ERROR,
+    DECRYPT_DATA_ERROR
+}
+DecryptionError;
+
 #endif

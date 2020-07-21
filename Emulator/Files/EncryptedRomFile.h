@@ -60,7 +60,8 @@ public:
     // the encrypted Rom was loaded from and applies it to the encrypted data.
     // If the encryption was successful, an (unencrypted) Rom is returned.
     // Otherwise, NULL is returned.
-    RomFile *decrypt();
+    RomFile *decrypt(DecryptionError *error);
+    RomFile *decrypt() { return decrypt(NULL); }
 };
 
 #endif

@@ -95,7 +95,7 @@ EncryptedRomFile::readFromBuffer(const u8 *buffer, size_t length)
 }
 
 RomFile *
-EncryptedRomFile::decrypt()
+EncryptedRomFile::decrypt(DecryptionError *error)
 {
     const int headerSize = 11;
 
@@ -105,11 +105,17 @@ EncryptedRomFile::decrypt()
     u8 *romKeyData = NULL;
     long romKeySize = 0;
     
-    // Load the rom.key file
+    //  Load the rom.key file
     assert(path != NULL);
     char *romKeyPath = replaceFilename(path, "rom.key");
-    if (romKeyPath == NULL) goto exit;
-    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) goto exit;
+    if (romKeyPath == NULL) {
+        if (error) *error = DECRYPT_ROM_KEY_ERROR;
+        goto exit;
+    }
+    if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
+        if (error) *error = DECRYPT_ROM_KEY_ERROR;
+        goto exit;
+    }
     
     // Create a buffer for the decrypted data
     encryptedData = data + headerSize;
@@ -122,6 +128,9 @@ EncryptedRomFile::decrypt()
     
     // Convert decrypted data into a Rom
     rom = RomFile::makeWithBuffer(decryptedData, size - headerSize);
+    if (rom == NULL) {
+        if (error) *error = DECRYPT_DATA_ERROR;
+    }
     
 exit:
     if (romKeyPath) free(romKeyPath);

@@ -58,7 +58,7 @@ extension MyDocument {
        
         let alert = NSAlert()
         alert.alertStyle = .warning
-        alert.icon = NSImage.init(named: "diskette")
+        alert.icon = NSImage.init(named: "adf")
         alert.messageText = messageText
         alert.informativeText = "Your changes will be lost if you proceed."
         alert.addButton(withTitle: "Proceed")
@@ -103,7 +103,7 @@ extension MyDocument {
         let path = url.path
         let alert = NSAlert()
         alert.alertStyle = .critical
-        alert.icon = NSImage.init(named: "diskette")
+        alert.icon = NSImage.init(named: "adf")
         alert.messageText = "Failed to export disk to file"
         alert.informativeText = "\(path)."
         alert.addButton(withTitle: "OK")
@@ -134,6 +134,25 @@ extension MyDocument {
         alert.informativeText = msg
         alert.addButton(withTitle: "OK")
         alert.runModal()
+    }
+    
+    @discardableResult
+    func showDecryptionAlert(error: DecryptionError) -> NSApplication.ModalResponse {
+       
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage.init(named: "rom_alert")
+        alert.messageText = "Failed to decrypt Rom image"
+        alert.addButton(withTitle: "OK")
+        
+        switch error {
+        case DECRYPT_ROM_KEY_ERROR:
+            alert.informativeText = "A rom.key file is required to decrypt the image."
+        default:
+            alert.informativeText = "Decryption didn't produce a valid ROM."
+        }
+
+        return alert.runModal()
     }
 }
 

@@ -549,30 +549,17 @@ extension MyController {
             inspector?.fullRefresh()
 
         case MSG_DRIVE_CONNECT:
-            switch msg.data {
-            case 0: myAppDelegate.df0Menu.isHidden = false
-            case 1: myAppDelegate.df1Menu.isHidden = false
-            case 2: myAppDelegate.df2Menu.isHidden = false
-            case 3: myAppDelegate.df3Menu.isHidden = false
-            default: fatalError()
-            }
+            myAppDelegate.hideOrShowDriveMenus(proxy: amiga)
             refreshStatusBar()
             
         case MSG_DRIVE_DISCONNECT:
-            switch msg.data {
-            case 0: myAppDelegate.df0Menu.isHidden = true
-            case 1: myAppDelegate.df1Menu.isHidden = true
-            case 2: myAppDelegate.df2Menu.isHidden = true
-            case 3: myAppDelegate.df3Menu.isHidden = true
-            default: fatalError()
-            }
-            
+            myAppDelegate.hideOrShowDriveMenus(proxy: amiga)
+            refreshStatusBar()
+
             // Remove drop target status from the disconnect drive
             if dragAndDropDrive === amiga.df(msg.data) {
                 dragAndDropDrive = nil
             }
-            
-            refreshStatusBar()
 
         case MSG_DRIVE_SELECT:
             refreshStatusBar(writing: nil)

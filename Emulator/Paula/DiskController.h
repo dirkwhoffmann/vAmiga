@@ -160,6 +160,7 @@ public:
     
     // Connects or disconnect an external drive
     bool isConnected(int df) { return config.connected[df]; }
+    bool isDisconnected(int df) { return !config.connected[df]; }
     void setConnected(int df, bool value);
     void connect(int df) { setConnected(df, true); }
     void disconnect(int df) { setConnected(df, false); }
