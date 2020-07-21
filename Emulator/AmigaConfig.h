@@ -17,10 +17,10 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 8
+#define V_SUBMINOR 9
 
 // Uncomment these settings in a release build
-// #define RELEASEBUILD
+#define RELEASEBUILD
 // #define NDEBUG
 
 
