@@ -724,7 +724,6 @@ Amiga::_dump()
 void
 Amiga::_warpOn()
 {
-    // debug("MSG_WARP_ON\n");
     putMessage(MSG_WARP_ON);
 }
 
@@ -732,7 +731,6 @@ void
 Amiga::_warpOff()
 {
     restartTimer();
-    // debug("MSG_WARP_OFF\n");
     putMessage(MSG_WARP_OFF);
 }
 

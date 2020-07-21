@@ -1395,7 +1395,7 @@ DQ
                                                         <rect key="frame" x="36" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="BVU-1j-bCC">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1404,7 +1404,7 @@ DQ
                                                         <rect key="frame" x="36" y="77" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MID" id="Ovs-Td-rmv">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1422,7 +1422,7 @@ DQ
                                                         <rect key="frame" x="36" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="xjt-6p-Nm7">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1439,7 +1439,7 @@ DQ
                                                         <rect key="frame" x="187" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="azG-Z2-U1C">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1448,7 +1448,7 @@ DQ
                                                         <rect key="frame" x="187" y="76" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MID" id="66E-jt-pNR">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1457,7 +1457,7 @@ DQ
                                                         <rect key="frame" x="187" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="rhe-tz-ksK">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1483,7 +1483,7 @@ DQ
                                                         <rect key="frame" x="262" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="NpA-5c-S6b">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1492,7 +1492,7 @@ DQ
                                                         <rect key="frame" x="262" y="75" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MID" id="9e8-kf-nNe">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1501,7 +1501,7 @@ DQ
                                                         <rect key="frame" x="262" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="N9K-17-OB5">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1518,7 +1518,7 @@ DQ
                                                         <rect key="frame" x="111" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="3kD-O7-ssn">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1527,7 +1527,7 @@ DQ
                                                         <rect key="frame" x="111" y="76" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MID" id="YTN-S2-n9Y">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1536,7 +1536,7 @@ DQ
                                                         <rect key="frame" x="111" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="9fu-sD-6HW">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1581,7 +1581,7 @@ DQ
                                                         <rect key="frame" x="70" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="spd-aL-bjX">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1590,7 +1590,7 @@ DQ
                                                         <rect key="frame" x="70" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="TDI-UU-dHU">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1599,7 +1599,7 @@ DQ
                                                         <rect key="frame" x="74" y="77" width="25" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="MID" id="XXG-qs-w9L">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1617,7 +1617,7 @@ DQ
                                                         <rect key="frame" x="166" y="77" width="25" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" title="MID" id="9sg-Q0-bs3">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1634,7 +1634,7 @@ DQ
                                                         <rect key="frame" x="162" y="137" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MAX" id="eVY-89-fF7">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -1643,7 +1643,7 @@ DQ
                                                         <rect key="frame" x="162" y="17" width="33" height="11"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <textFieldCell key="cell" controlSize="mini" lineBreakMode="clipping" alignment="center" title="MIN" id="5L8-EX-fqh">
-                                                            <font key="font" metaFont="label" size="9"/>
+                                                            <font key="font" metaFont="menu" size="9"/>
                                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                                         </textFieldCell>
@@ -2359,7 +2359,7 @@ DQ
                                             <rect key="frame" x="504" y="366" width="36" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="COLOR" id="egi-TJ-Irt">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2368,7 +2368,7 @@ DQ
                                             <rect key="frame" x="421" y="365" width="55" height="12"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="CONTRAST" id="Db5-G0-5qw">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2377,7 +2377,7 @@ DQ
                                             <rect key="frame" x="343" y="366" width="63" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="BRIGHTNESS" id="Y01-3D-JQd">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2410,7 +2410,7 @@ DQ
                                             <rect key="frame" x="205" y="366" width="42" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H ZOOM" id="Vam-1Q-o7q">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2419,7 +2419,7 @@ DQ
                                             <rect key="frame" x="119" y="366" width="67" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V CENTERING" id="VkC-L7-bpV">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2428,7 +2428,7 @@ DQ
                                             <rect key="frame" x="45" y="366" width="67" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="H CENTERING" id="unf-Nv-yeR">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
@@ -2552,7 +2552,7 @@ DQ
                                             <rect key="frame" x="279" y="366" width="42" height="11"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="mini" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="V ZOOM" id="jev-Xn-reR">
-                                                <font key="font" metaFont="label" size="9"/>
+                                                <font key="font" metaFont="menu" size="9"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>

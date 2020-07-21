@@ -10,7 +10,7 @@
 class MyDocument: NSDocument {
 
     // The window controller for this document
-    var parent: MyController? { return windowControllers.first as? MyController }
+    var parent: MyController { return windowControllers.first as! MyController }
 
     // The application delegate
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
@@ -215,11 +215,11 @@ class MyDocument: NSDocument {
 
         case _ as SnapshotProxy:
             
-            parent?.load(snapshot: amigaAttachment as? SnapshotProxy)
+            parent.load(snapshot: amigaAttachment as? SnapshotProxy)
        
         case _ as ADFFileProxy:
             
-            if let df = parent?.dragAndDropDrive?.nr() {
+            if let df = parent.dragAndDropDrive?.nr() {
                 amiga.diskController.insert(df, adf: amigaAttachment as? ADFFileProxy)
             } else {
                 runDiskMountDialog()
@@ -227,7 +227,7 @@ class MyDocument: NSDocument {
             
         case _ as DMSFileProxy:
             
-            if let df = parent?.dragAndDropDrive?.nr() {
+            if let df = parent.dragAndDropDrive?.nr() {
                 amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
             } else {
                 runDiskMountDialog()
@@ -242,7 +242,7 @@ class MyDocument: NSDocument {
     
     func runDiskMountDialog() {
         let name = NSNib.Name("DiskMountDialog")
-        let controller = DiskMountDialog.make(parent: parent!, nibName: name)
+        let controller = DiskMountDialog.make(parent: parent, nibName: name)
         controller?.showSheet()
     }
 
@@ -376,7 +376,7 @@ class MyDocument: NSDocument {
         
         track("Saving user screenshots to disk (\(bootDiskID))")
         
-        let format = parent!.pref.screenshotTarget
+        let format = parent.pref.screenshotTarget
         
         Screenshot.deleteFolder(forDisk: bootDiskID)
         for n in 0 ..< userScreenshots.count {

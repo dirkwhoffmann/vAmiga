@@ -158,22 +158,22 @@ extension MyAppDelegate {
     
     func windowDidBecomeMain(_ window: NSWindow) {
         
-        for con in controllers {
+        for c in controllers {
             
-            if con.window == window {
+            if c.window == window {
                 
                 // Start playback
-                if !con.macAudio!.isRunning {
-                    con.macAudio!.startPlayback()
-                    con.amiga.paula.rampUpFromZero()
+                if !c.macAudio!.isRunning {
+                    c.macAudio!.startPlayback()
+                    c.amiga.paula.rampUpFromZero()
                 }
                 
             } else {
                 
                 // Stop playback
-                if con.macAudio!.isRunning {
-                    con.macAudio!.stopPlayback()
-                    con.amiga.paula.rampDown()
+                if c.macAudio!.isRunning {
+                    c.macAudio!.stopPlayback()
+                    c.amiga.paula.rampDown()
                 }
             }
         }

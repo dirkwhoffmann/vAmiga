@@ -12,10 +12,10 @@ import AVFoundation
 public class MacAudio: NSObject {
 
     var parent: MyController!
-    var paula: PaulaProxy!
-    var prefs: Preferences { return parent.pref }
-
     var audiounit: AUAudioUnit!
+    var paula: PaulaProxy!
+
+    var prefs: Preferences { return parent.pref }
     
     // Indicates if the this emulator instance owns the audio unit
     var isRunning = false
@@ -91,7 +91,7 @@ public class MacAudio: NSObject {
                 return 0
             }
         }
-
+        
         // Allocate render resources
         do { try audiounit.allocateRenderResources() } catch {
             track("Failed to allocate RenderResources")
@@ -99,7 +99,7 @@ public class MacAudio: NSObject {
         }
         
         track("Success")
-     }
+    }
 
     func shutDown() {
 

@@ -86,7 +86,7 @@ class MyController: NSWindowController, MessageReceiver {
     var muted = false
 
     // Remembers if we run in warp mode
-    var warp = false
+    // var warp = false
     
     // Indicates if a status bar is shown
     var statusBar = true
@@ -169,24 +169,9 @@ class MyController: NSWindowController, MessageReceiver {
         
         if warp != amiga.warp() {
             warp ? amiga.warpOn() : amiga.warpOff()
-            refreshStatusBar()
         }
     }
-    
-    // Returns the icon of the sand clock in the bottom bar
-    var hourglassIcon: NSImage? {
-        switch pref.warpMode {
-        case .auto where amiga.warp():
-            return NSImage.init(named: "hourglass3Template")
-        case .auto:
-            return NSImage.init(named: "hourglass1Template")
-        case .off:
-            return NSImage.init(named: "warpLockOffTemplate")
-        case .on:
-            return NSImage.init(named: "warpLockOnTemplate")
-        }
-    }
-    
+
     //
     // Outlets
     //
@@ -196,7 +181,7 @@ class MyController: NSWindowController, MessageReceiver {
 
     var renderer: Renderer!
 
-    // Bottom bar
+    // Status bar
     @IBOutlet weak var powerLED: NSButton!
 
     @IBOutlet weak var df0LED: NSButton!
@@ -529,11 +514,11 @@ extension MyController {
             refreshStatusBar()
 
         case MSG_WARP_ON:
-            warp = true
+            // warp = true
             refreshStatusBar()
 
         case MSG_WARP_OFF:
-            warp = false
+            // warp = false
             refreshStatusBar()
 
         case MSG_POWER_LED_ON:

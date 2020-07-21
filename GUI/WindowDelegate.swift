@@ -16,10 +16,10 @@ extension MyController: NSWindowDelegate {
         // Inform the application delegate
         myAppDelegate.windowDidBecomeMain(window)
         
-        // Start emulator if it was only paused while in background
+        // Restart the emulator if it was paused when the window lost focus
         if pref.pauseInBackground && pauseInBackgroundSavedState { amiga.run() }
 
-        // Register for mouse move events
+        // Register to receive mouse movement events
         window.acceptsMouseMovedEvents = true
         
         // Make sure the aspect ratio is correct

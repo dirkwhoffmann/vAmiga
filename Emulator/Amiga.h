@@ -68,7 +68,7 @@ public:
     
 private:
     
-    /* Indicates if the Amiga should be executed in debug mode.
+    /* Indicates if the emulator should be executed in debug mode.
      * Debug mode is enabled when the GUI debugger is opend and disabled when
      * the GUI debugger is closed. In debug mode, several time-consuming tasks
      * are performed that are usually left out. E.g., the CPU checks for
@@ -263,10 +263,10 @@ public:
 
 public:
     
-    // Indicates if debug mode is enabled.
+    // Indicates if debug mode is enabled
     bool getDebugMode() { return debugMode; }
     
-    // Enabled or disabled debug mode.
+    // Enabled or disabled debug mode
     void setDebugMode(bool enable);
     void enableDebugging() { setDebugMode(true); }
     void disableDebugging() { setDebugMode(false); }
