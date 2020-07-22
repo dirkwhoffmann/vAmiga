@@ -543,7 +543,7 @@ class Inspector: DialogController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-    // Used to determine the items that should be refreshed
+     // Used to determine the items to be refreshed
     var refreshCnt = 0
 
     // Returns the number of the currently inspected sprite

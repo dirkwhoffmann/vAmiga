@@ -208,7 +208,7 @@ extension MyController: NSMenuItemValidation {
         
         openConfigurator()
     }
-    
+ 
     @IBAction func inspectorAction(_ sender: Any!) {
         
         if inspector == nil {

@@ -48,10 +48,8 @@ extension MyController: NSWindowDelegate {
         
         // Disconnect and close auxiliary windows
         inspector?.amiga = nil
-        monitor?.amiga = nil
-        monitor?.amiga = nil
         inspector?.close()
-        monitor?.close()
+        monitor?.amiga = nil
         monitor?.close()
 
         // Stop timers

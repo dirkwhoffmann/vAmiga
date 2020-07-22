@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -1090,7 +1090,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="GzR-dn-mO8">
                                                                     <rect key="frame" x="1" y="0.0" width="368" height="316"/>
-                                                                    <autoresizingMask key="autoresizingMask"/>
+                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="DdI-Dc-nEd" id="9F9-Qx-tLH" customClass="TraceTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="368" height="291"/>
@@ -1835,7 +1835,7 @@
                                                 </subviews>
                                             </view>
                                         </box>
-                                        <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Emulation status" translatesAutoresizingMaskIntoConstraints="NO" id="No2-J5-R5o">
+                                        <box autoresizesSubviews="NO" fixedFrame="YES" borderType="line" title="Activity" translatesAutoresizingMaskIntoConstraints="NO" id="No2-J5-R5o">
                                             <rect key="frame" x="563" y="27" width="253" height="116"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <view key="contentView" id="x7H-2k-Rkn">
@@ -2179,7 +2179,7 @@
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="jJo-Pz-BlY">
                                                 <rect key="frame" x="1" y="0.0" width="151" height="246"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" typeSelect="NO" rowHeight="15" headerView="lgi-Sv-OLV" id="RzZ-Zx-t06" customClass="BankTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="151" height="221"/>
@@ -2238,7 +2238,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="858-OJ-L3r">
                                                 <rect key="frame" x="1" y="0.0" width="625" height="246"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="WPj-Ua-UtF" id="WbL-UR-zTx" customClass="MemTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="625" height="221"/>
