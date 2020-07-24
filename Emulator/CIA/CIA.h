@@ -103,12 +103,12 @@ protected:
 
 public:
     
-    // The CIA has been executed up to this clock cycle.
+    // The CIA has been executed up to this clock cycle
     Cycle clock;
 
 protected:
 
-    // Total number of skipped cycles (used by the debugger, only).
+    // Total number of skipped cycles (used by the debugger, only)
     Cycle idleCycles;
     
     // Timer A counter
@@ -116,9 +116,7 @@ protected:
     
     // Timer B counter
     u16 counterB;
-    
-protected:
-    
+        
     // Timer A latch
     u16 latchA;
     
@@ -248,10 +246,9 @@ protected:
     // Speeding up emulation (sleep logic)
     //
     
-    /* Idle counter
-     * When the CIA's state does not change during execution, this variable is
-     * increased by one. If it exceeds a certain threshhold, the chip is put
-     * into idle state via sleep().
+    /* Idle counter. When the CIA's state does not change during execution,
+     * this variable is increased by one. If it exceeds a certain threshhold,
+     * the chip is put into idle state via sleep().
      */
     u8 tiredness;
     
@@ -265,7 +262,7 @@ public:
      */
     Cycle sleepCycle;
     
-    /* The wake up cycle  executed cycle before the chip went idle.
+    /* The first cycle to be executed after the chip went idle.
      * The variable is set in sleep()
      */
     Cycle wakeUpCycle;
@@ -350,8 +347,8 @@ public:
 
 protected:
 
-    void _powerOn() override;
-    void _run() override;
+    // void _powerOn() override;
+    // void _run() override;
     void _reset(bool hard) override;
     void _inspect() override;
     void _dump() override;
@@ -359,11 +356,12 @@ protected:
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-public:
-
+    
     //
     // Configuring
     //
+
+public:
 
     // Returns the result of the most recent call to inspect()
     CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
@@ -523,33 +521,30 @@ private:
     
     
     //
-    // Speeding up emulation
+    // Speeding up emulation (sleep logic)
     //
     
 private:
     
-    // Puts the CIA into idle state.
+    // Puts the CIA into idle state
     void sleep();
     
 public:
     
-    // Emulates all previously skipped cycles.
+    // Emulates all previously skipped cycles
     void wakeUp();
     void wakeUp(Cycle targetCycle);
     
-    // Returns true if the CIA is in idle state.
+    // Returns true if the CIA is in idle state
     bool isSleeping() { return sleeping; }
     
-    // Returns true if the CIA is awake.
+    // Returns true if the CIA is awake
     bool isAwake() { return !sleeping; }
-    
-    // Returns true if the CIA has been executed up to the master clock.
-    // bool isUpToDate();
-    
-    // The CIA is idle since this number of cycles.
+        
+    // The CIA is idle since this number of cycles
     CIACycle idle();
     
-    // Total number of cycles the CIA was idle.
+    // Total number of cycles the CIA was idle
     CIACycle idleTotal() { return idleCycles; }
 };
 

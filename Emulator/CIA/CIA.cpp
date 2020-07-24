@@ -26,18 +26,6 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 }
 
 void
-CIA::_powerOn()
-{
-
-}
-
-void
-CIA::_run()
-{
-
-}
-
-void
 CIA::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
@@ -490,6 +478,7 @@ CIA::poke(u16 addr, u8 value)
 			
         case 0x07: // CIA_TIMER_B_HIGH
 			
+            // debug("CIA7: %x\n", value);
             latchB = (latchB & 0x00FF) | (value << 8);
             if (delay & CIALoadB2) {
                 counterB = (counterB & 0x00FF) | (value << 8);
@@ -1141,7 +1130,7 @@ CIA::sleep()
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
     
-    // ZZzzzz
+    // ZZzzz
     // debug("ZZzzzz: clock = %lld A = %d B = %d sleepA = %lld sleepB = %lld\n", clock, counterA, counterB, sleepA, sleepB);
     sleepCycle = clock;
     wakeUpCycle = MIN(sleepA, sleepB);
@@ -1157,7 +1146,6 @@ CIA::wakeUp()
     
     Cycle targetCycle = CIA_CYCLES(AS_CIA_CYCLES(agnus.clock));
     wakeUp(targetCycle);
-
 }
 
 void

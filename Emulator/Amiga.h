@@ -258,7 +258,7 @@ public:
 
     
     //
-    // Accessing properties
+    // Managing debug mode
     //
 
 public:

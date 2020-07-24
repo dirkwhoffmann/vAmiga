@@ -16,11 +16,10 @@ let fmt8b = MyFormatter.init(radix: 2, min: 0, max: 255)
 
 class Inspector: DialogController {
 
-    // Debug panel (Commons)
-    @IBOutlet weak var debugPanel: NSTabView!
-    @IBOutlet weak var cpuTab: NSTabView!
+    // Commons
+    @IBOutlet weak var panel: NSTabView!
 
-    // Debug panel (CPU)
+    // CPU panel
     @IBOutlet weak var instrTableView: InstrTableView!
     @IBOutlet weak var traceTableView: TraceTableView!
     @IBOutlet weak var breakTableView: BreakTableView!
@@ -64,7 +63,7 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuTraceStepOverButton: NSButton!
     @IBOutlet weak var cpuTraceClearButton: NSButton!
 
-    // Debug panel (Memory)
+    // Memory panel
     @IBOutlet weak var memSearchField: NSSearchField!
     @IBOutlet weak var memBankTableView: BankTableView!
     @IBOutlet weak var memTableView: MemTableView!
@@ -97,7 +96,7 @@ class Inspector: DialogController {
     var displayState2 = 0
     var displayState3 = 0
 
-    // Debug panel (CIA)
+    // CIA panel
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
     
     @IBOutlet weak var ciaPRA: NSTextField!
@@ -161,7 +160,7 @@ class Inspector: DialogController {
     @IBOutlet weak var ciaIdleLevelText: NSTextField!
     @IBOutlet weak var ciaIdleLevel: NSLevelIndicator!
     
-    // Debug panel (Agnus)
+    // Agnus panel
     @IBOutlet weak var dmaVPOS: NSTextField!
     @IBOutlet weak var dmaHPOS: NSTextField!
 
@@ -239,8 +238,7 @@ class Inspector: DialogController {
     @IBOutlet weak var dmaDSKPT: NSTextField!
     @IBOutlet weak var dmaDSKEnable: NSButton!
 
-    // Debug panel (Copper and Blitter)
-
+    // Copper and Blitter panel
     @IBOutlet weak var copSelector: NSSegmentedControl!
     @IBOutlet weak var copList: CopperTableView!
     @IBOutlet weak var copActive1: NSButton!
@@ -292,7 +290,7 @@ class Inspector: DialogController {
     @IBOutlet weak var bltFirstWord: NSButton!
     @IBOutlet weak var bltLastWord: NSButton!
 
-    // Debug panel (Blitter)
+    // Blitter panel
     @IBOutlet weak var bltAFWM: NSTextField!
     @IBOutlet weak var bltALWM: NSTextField!
     @IBOutlet weak var bltAShift: NSTextField!
@@ -307,7 +305,7 @@ class Inspector: DialogController {
     @IBOutlet weak var bltFillEnable: NSButton!
     @IBOutlet weak var bltStoreToDest: NSButton!
 
-    // Debug panel (Denise)
+    // Denise panel
     @IBOutlet weak var deniseBPLCON0: NSTextField!
     @IBOutlet weak var deniseHIRES: NSButton!
     @IBOutlet weak var deniseBPU: NSTextField!
@@ -383,7 +381,7 @@ class Inspector: DialogController {
     @IBOutlet weak var sprAttach: NSButton!
     @IBOutlet weak var sprTableView: SpriteTableView!
 
-    // Debug panel (Paula)
+    // Paula panel
     @IBOutlet weak var paulaIntena: NSTextField!
     @IBOutlet weak var paulaIntreq: NSTextField!
     @IBOutlet weak var paulaEna14: NSButton!
@@ -467,7 +465,7 @@ class Inspector: DialogController {
     @IBOutlet weak var dskFifo4: NSTextField!
     @IBOutlet weak var dskFifo5: NSTextField!
 
-    // Debug Panel (Ports)
+    // Ports panel
     @IBOutlet weak var po0JOYDAT: NSTextField!
     @IBOutlet weak var po0M0V: NSButton!
     @IBOutlet weak var po0M0H: NSButton!
@@ -513,7 +511,7 @@ class Inspector: DialogController {
     @IBOutlet weak var poSerialIn: NSTextView!
     @IBOutlet weak var poSerialOut: NSTextView!
 
-    // Debug Panel (Events)
+    // Events panel
     @IBOutlet weak var evCpuProgress: NSTextField!
     @IBOutlet weak var evCpuProgress2: NSTextField!
     @IBOutlet weak var evDmaProgress: NSTextField!
@@ -543,12 +541,12 @@ class Inspector: DialogController {
     var eventInfo: EventInfo?
     var isRunning = true
 
-     // Used to determine the items to be refreshed
-    var refreshCnt = 0
-
     // Returns the number of the currently inspected sprite
     var selectedSprite: Int { return sprSelector.indexOfSelectedItem }
-        
+
+    // Used to determine the items to be refreshed
+    private var refreshCnt = 0
+
     override func showWindow(_ sender: Any?) {
 
         track()
@@ -570,18 +568,23 @@ class Inspector: DialogController {
         control.needsDisplay = true
     }
     
-    func triggerRefresh() {
+    func fullRefresh() {
+
+        refresh(full: true)
+    }
+    
+    func continousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
         isRunning = amiga.isRunning()
         refreshCnt += 1
     }
     
-    func refresh(count: Int = 0, full: Bool = false) {
+    private func refresh(count: Int = 0, full: Bool = false) {
         
         if window?.isVisible == false { return }
 
-        if let id = debugPanel.selectedTabViewItem?.label {
+        if let id = panel.selectedTabViewItem?.label {
 
             switch id {
 
@@ -597,11 +600,6 @@ class Inspector: DialogController {
             default: break
             }
         }
-    }
-
-    func fullRefresh() {
-
-        refresh(full: true)
     }
     
     @IBAction func refreshAction(_ sender: Any!) {
@@ -632,7 +630,7 @@ extension Inspector: NSTabViewDelegate {
 
     func updateInspectionTarget() {
 
-        if let id = debugPanel.selectedTabViewItem?.label {
+        if let id = panel.selectedTabViewItem?.label {
 
             switch id {
 
@@ -654,12 +652,8 @@ extension Inspector: NSTabViewDelegate {
     
     func tabView(_ tabView: NSTabView, didSelect tabViewItem: NSTabViewItem?) {
         
-        if tabView === debugPanel {
+        if tabView === panel {
             updateInspectionTarget()
-        }
-        if tabView === cpuTab {
-            instrTableView.refresh(full: true)
-            traceTableView.refresh(full: true)
         }
     }
 }

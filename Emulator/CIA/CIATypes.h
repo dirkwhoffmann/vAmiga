@@ -42,6 +42,14 @@ ciaTypeName(CIAType type)
     }
 }
 
+typedef struct
+{
+    CIAType type;
+    bool    todBug;
+    bool    eClockSyncing;
+}
+CIAConfig;
+
 typedef union
 {
     struct
@@ -61,14 +69,6 @@ typedef struct
     Counter24 alarm;
 }
 CounterInfo;
-
-typedef struct
-{
-    CIAType type;
-    bool    todBug;
-    bool    eClockSyncing;
-}
-CIAConfig;
 
 typedef struct
 {

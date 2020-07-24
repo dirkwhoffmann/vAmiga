@@ -114,12 +114,11 @@ struct SerialPortWrapper;
 - (void) kill;
 
 - (BOOL) releaseBuild;
-
+- (void) enableDebugging;
+- (void) disableDebugging;
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
 - (BOOL) debugMode;
-- (void) enableDebugging;
-- (void) disableDebugging;
 
 - (BOOL) isReady:(ErrorCode *)error;
 - (BOOL) isReady;

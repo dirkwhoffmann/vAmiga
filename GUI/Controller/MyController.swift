@@ -366,7 +366,7 @@ extension MyController {
         animationCounter += 1
 
         // Animate the inspector
-        if inspector?.window?.isVisible == true { inspector!.triggerRefresh() }
+        if inspector?.window?.isVisible == true { inspector!.continousRefresh() }
  
         // Do less times...
         if (animationCounter % 2) == 0 {

@@ -16,12 +16,6 @@ TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-TOD::_powerOn()
-{
-
-}
-
-void
 TOD::_inspect()
 {
     synchronized {

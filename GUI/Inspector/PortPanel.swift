@@ -92,7 +92,7 @@ extension Inspector {
         poTransBuffer.integerValue = Int(uartInfo!.transmitBuffer)
 
         // Logging windows
-        if refreshCnt % 2 == 0 {
+        if count % 2 == 0 {
 
             let serialInSize = parent!.serialIn.count
 

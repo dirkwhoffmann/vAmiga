@@ -175,7 +175,7 @@ public:
     void inspect();
     virtual void _inspect() { }
 
-    /* Base method for buildung the class specific getInfo() methods
+    /* Base method for building the class specific getInfo() methods
      * If the emulator is running, the result of the most recent inspection is
      * returned. If the emulator is not running, the function first updates the
      * cached values in order to return up-to-date results.

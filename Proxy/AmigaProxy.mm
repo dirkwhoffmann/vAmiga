@@ -1577,14 +1577,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return releaseBuild();
 }
-- (void) setInspectionTarget:(EventID)id
-{
-    wrapper->amiga->setInspectionTarget(id);
-}
-- (void) clearInspectionTarget
-{
-    wrapper->amiga->clearInspectionTarget();
-}
 - (BOOL) debugMode
 {
     return wrapper->amiga->getDebugMode();
@@ -1596,6 +1588,14 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) disableDebugging
 {
     wrapper->amiga->disableDebugging();
+}
+- (void) setInspectionTarget:(EventID)id
+{
+    wrapper->amiga->setInspectionTarget(id);
+}
+- (void) clearInspectionTarget
+{
+    wrapper->amiga->clearInspectionTarget();
 }
 - (BOOL) isReady:(ErrorCode *)error
 {

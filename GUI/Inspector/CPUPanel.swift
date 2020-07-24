@@ -110,7 +110,7 @@ extension Inspector {
     @IBAction func cpuClearTraceBufferAction(_ sender: NSButton!) {
 
         amiga.cpu.clearLog()
-        refresh()
+        refreshCPU(full: true)
     }
     
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {

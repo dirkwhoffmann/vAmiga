@@ -348,21 +348,20 @@ public:
 
     u8 getIPL() { return ipl; }
     void setIPL(u8 val);
-
+    
 private:
-
+    
     // Polls the IPL pins
     void pollIrq() { reg.ipl = ipl; }
-
+    
     // Selects the IRQ vector to branch to
     int getIrqVector(int level);
-
-
-    #include "MoiraInit.h"
-    #include "MoiraALU.h"
-    #include "MoiraDataflow.h"
-    #include "MoiraExceptions.h"
-    #include "MoiraDasm.h"
+    
+#include "MoiraInit.h"
+#include "MoiraALU.h"
+#include "MoiraDataflow.h"
+#include "MoiraExceptions.h"
+#include "MoiraDasm.h"
 };
 
 }
