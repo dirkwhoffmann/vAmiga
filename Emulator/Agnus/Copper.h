@@ -114,6 +114,7 @@ public:
     // Analyzing and profiling
     //
 
+    // Returns the result of the latest inspection
     CopperInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 

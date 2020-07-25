@@ -110,40 +110,40 @@ public:
     //
 
     // Returns the counter's high byte (bits 16 - 23).
-    u8 getCounterHi() { return frozen ? latch.hi : tod.hi; }
+    u8 getCounterHi();
 
     // Returns the counter's intermediate byte (bits 8 - 15).
-    u8 getCounterMid() { return frozen ? latch.mid : tod.mid; }
+    u8 getCounterMid();
 
     // Returns the counter's low byte (bits 0 - 7).
-    u8 getCounterLo() { return frozen ? latch.lo : tod.lo; }
+    u8 getCounterLo();
 
     // Returns the alarm value's high byte (bits 16 - 23).
-    u8 getAlarmHi() { return alarm.hi; }
+    u8 getAlarmHi();
 
     // Returns the alarm value's intermediate byte (bits 8 - 15).
-    u8 getAlarmMid() { return alarm.mid; }
+    u8 getAlarmMid();
 
     // Returns the alarm value's low byte (bits 0 - 7).
-    u8 getAlarmLo() { return alarm.lo; }
+    u8 getAlarmLo();
 
     // Sets the counter's high byte (bits 16 - 23).
-    void setCounterHi(u8 value) { tod.hi = value; checkForInterrupt(); }
+    void setCounterHi(u8 value);
 
     // Sets the counter's intermediate byte (bits 8 - 15).
-    void setCounterMid(u8 value) { tod.mid = value; checkForInterrupt(); }
+    void setCounterMid(u8 value);
 
     // Sets the counter's low byte (bits 0 - 7).
-    void setCounterLo(u8 value) { tod.lo = value; checkForInterrupt(); }
+    void setCounterLo(u8 value);
 
     // Sets the alarm value's high byte (bits 16 - 23).
-    void setAlarmHi(u8 value) { alarm.hi = value; checkForInterrupt(); }
+    void setAlarmHi(u8 value);
 
     // Sets the alarm value's intermediate byte (bits 8 - 15).
-    void setAlarmMid(u8 value) { alarm.mid = value; checkForInterrupt(); }
+    void setAlarmMid(u8 value);
 
     // Sets the alarm value's low byte (bits 0 - 7).
-    void setAlarmLo(u8 value) { alarm.lo = value; checkForInterrupt(); }
+    void setAlarmLo(u8 value);
 
 
     //

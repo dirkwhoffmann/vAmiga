@@ -514,7 +514,9 @@ public:
     // Analyzing and profiling
     //
 
+    // Returns the result of the latest inspection
     AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
     AgnusStats getStats() { return stats; }

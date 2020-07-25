@@ -922,7 +922,9 @@ Blitter::endBlit()
         */
     }
 
-    // if (copycount == 356) { debug("Enabling debug output\n"); OCSREG_DEBUG = 1; }
+    /*
+    if (copycount == 1495) { debug("Enabling debug output\n"); OCSREG_DEBUG = 1; }
+    */
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();

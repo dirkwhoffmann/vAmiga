@@ -573,7 +573,7 @@ class Inspector: DialogController {
         refresh(full: true)
     }
     
-    func continousRefresh() {
+    func continuousRefresh() {
         
         if isRunning { refresh(count: refreshCnt) }
         isRunning = amiga.isRunning()

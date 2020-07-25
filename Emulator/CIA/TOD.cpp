@@ -43,6 +43,101 @@ TOD::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS
     stopped = true;
     matching = false;
+    tod.hi = 0x1;
+    // alarm.value = 0xFFFFFF;
+}
+
+u8
+TOD::getCounterHi()
+{
+    return frozen ? latch.hi : tod.hi;
+}
+
+u8
+TOD::getCounterMid()
+{
+    u8 result = frozen ? latch.mid : tod.mid;
+    
+    debug(TOD_DEBUG, "getCounterMid: %02x (frozen: %d)\n", result, frozen);
+    return result;
+}
+
+u8
+TOD::getCounterLo()
+{
+    u8 result = frozen ? latch.lo : tod.lo;
+
+    debug(TOD_DEBUG, "getCounterMid: %02x (frozen: %d)\n", result, frozen);
+    return result;
+}
+
+u8
+TOD::getAlarmHi()
+{
+    debug(TOD_DEBUG, "getAlarmHi: %02x\n", alarm.hi);
+    return alarm.hi;
+}
+
+u8
+TOD::getAlarmMid()
+{
+    debug(TOD_DEBUG, "getAlarmMid: %02x\n", alarm.mid);
+    return alarm.mid;
+}
+
+u8
+TOD::getAlarmLo()
+{
+    debug(TOD_DEBUG, "getAlarmLo: %02x\n", alarm.lo);
+    return alarm.lo;
+}
+
+void
+TOD::setCounterHi(u8 value)
+{
+    debug(TOD_DEBUG, "setCounterHi(%x)\n", value);
+    tod.hi = value;
+    checkForInterrupt();
+}
+
+void
+TOD::setCounterMid(u8 value)
+{
+    debug(TOD_DEBUG, "setCounterMid(%x)\n", value);
+    tod.mid = value;
+    checkForInterrupt();
+}
+
+void
+TOD::setCounterLo(u8 value)
+{
+    debug(TOD_DEBUG, "setCounterLo(%x)\n", value);
+    tod.lo = value;
+    checkForInterrupt();
+}
+
+void
+TOD::setAlarmHi(u8 value)
+{
+    debug(TOD_DEBUG, "setAlarmHi(%x)\n", value);
+    alarm.hi = value;
+    checkForInterrupt();
+}
+
+void
+TOD::setAlarmMid(u8 value)
+{
+    debug(TOD_DEBUG, "setAlarmMid(%x)\n", value);
+    alarm.mid = value;
+    checkForInterrupt();
+}
+
+void
+TOD::setAlarmLo(u8 value)
+{
+    debug(TOD_DEBUG, "setAlarmLo(%x)\n", value);
+    alarm.lo = value;
+    checkForInterrupt();
 }
 
 void

@@ -12,6 +12,10 @@
 #ifndef _AGNUS_TYPES_H
 #define _AGNUS_TYPES_H
 
+//
+// Enumerations
+//
+
 typedef enum : long
 {
     AGNUS_8367, // OCS Agnus
@@ -194,6 +198,10 @@ typedef enum
     SPR_DMA_ACTIVE
 }
 SprDMAState;
+
+//
+// Structures
+//
 
 typedef struct
 {

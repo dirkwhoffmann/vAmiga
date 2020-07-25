@@ -62,7 +62,10 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
+// #define BOOT_DISK "/Users/hoff/Desktop/911Rescue.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/PP-Extension.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/dmaaud1.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/blast.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Jetsons1.adf"
 // #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
 // #define BOOT_DISK "/Users/hoff/Downloads/Jetsons1.adf"
@@ -82,7 +85,7 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 static const int CPU_DEBUG       = 0; // CPU
 
 // Memory access
-static const int OCSREG_DEBUG    = 0; // General OCS register debugging
+extern int OCSREG_DEBUG; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
 static const int MEM_DEBUG       = 0; // Memory oddities
@@ -121,7 +124,7 @@ static const int INT_DEBUG       = 0; // Interrupt logic
 
 // CIAs
 static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
-static const int CIAREG_DEBUG    = 0; // CIA registers
+extern int CIAREG_DEBUG; // CIA registers
 static const int CIASER_DEBUG    = 0; // CIA serial register
 static const int CIAA_DEBUG      = 0; // CIA A execution
 static const int CIAB_DEBUG      = 0; // CIA B execution
