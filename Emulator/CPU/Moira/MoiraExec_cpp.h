@@ -514,8 +514,7 @@ Moira::execChk(u16 opcode)
     if (!readOp<M,S, STD_AE_FRAME>(src, ea, data)) return;
     dy = readD<S>(dst);
 
-    // printf("M: %d S: %d execChk: dst = %d (%x) ea = %x data = %x\n", M, S, dst, dy, ea, data);
-    sync(4);
+    sync(6);
 
     reg.sr.z = ZERO<S>(dy);
     reg.sr.v = 0;
@@ -524,7 +523,7 @@ Moira::execChk(u16 opcode)
 
     if ((i16)dy > (i16)data) {
 
-        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 0);
+        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 2);
         reg.sr.n = NBIT<S>(dy);
         execTrapException(6);
         return;
@@ -532,9 +531,10 @@ Moira::execChk(u16 opcode)
 
     if ((i16)dy < 0) {
 
-        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 0);
+        sync(MIMIC_MUSASHI ? 10 - (int)(clock - c) : 4);
         reg.sr.n = MIMIC_MUSASHI ? NBIT<S>(dy) : 1;
         execTrapException(6);
+        return;
     }
     
     prefetch<POLLIPL>();
