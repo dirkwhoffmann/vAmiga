@@ -173,32 +173,21 @@ class MyDocument: NSDocument {
         }
     }
     
-    /*
-    func createAndInsertADFProxy(from url: URL, drive: Int) throws {
-        
-        // Try to create the ADF proxy object
-        let adf = try createADFProxy(from: url)
-        
-        // Warn the user if an unsafed disk would be replaced
-        if proceedWithUnexportedDisk(drive: drive) {
-            
-            // Insert the disk
-            amiga.diskController.insert(drive, adf: adf)
-            
-            // Remember the URL
-            myAppDelegate.noteNewRecentlyUsedURL(url)
-        }
-    }
-    */
-    
     // Creates an attachment from a URL
     func createAttachment(from url: URL) throws {
-        
+                
         track("Creating attachment from URL \(url.lastPathComponent).")
+        
+        // Try to unpack the file (if compressed)
+        var newUrl = url
+        if let unpacked = try url.unpack(allowedFileTypes: ["adf", "dms"]) {
+            track("Unpacked: \(unpacked)")
+            newUrl = unpacked
+        }
         
         // Create file proxy
         let types = [ FILETYPE_SNAPSHOT, FILETYPE_ADF, FILETYPE_DMS ]
-        amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
+        amigaAttachment = try createFileProxy(url: newUrl, allowedTypes: types)
         
         // Remember the URL
         myAppDelegate.noteNewRecentlyUsedURL(url)

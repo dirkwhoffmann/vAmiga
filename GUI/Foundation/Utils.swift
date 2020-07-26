@@ -119,6 +119,95 @@ extension URL {
         return folder
     }
     
+    static var tmpFolder: URL? {
+
+        return appSupportFolder("tmp")
+    }
+    
+    func moveToTmpFolder() throws -> URL? {
+        
+        // Get the tmp folder
+        guard let tmp = URL.tmpFolder else { return nil }
+        
+        // Compose destination URL
+        let file = self.lastPathComponent
+        let dest = tmp.appendingPathComponent(file)
+        
+        track("moveToTmpFolder: \(tmp)")
+        
+        // Clear all existing items
+        try tmp.clear()
+                
+        // Copy the file
+        track("Copying \(self) to \(dest)")
+        try FileManager.default.copyItem(at: self, to: dest)
+        track("Item copied")
+        
+        return dest
+    }
+    
+    func clear(except file: URL? = nil) throws {
+        
+        track("clear: \(self)")
+        let urls = try FileManager.default.contentsOfDirectory(
+            at: self, includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
+
+        track("urls = \(urls)")
+
+        for url in urls where url.lastPathComponent != file?.lastPathComponent {
+            try FileManager.default.removeItem(at: url)
+        }
+        track("cleared")
+    }
+        
+    func unpack(allowedFileTypes: [String]) throws -> URL? {
+                
+        // Check if this file is compressed
+        let extensions = ["zip", "gz", "adz"]
+        if !extensions.contains( self.pathExtension) { return nil }
+        
+        // Get a temporary folder
+        guard let tmp = URL.tmpFolder else { return nil }
+        track("tmp folder = \(tmp)")
+                    
+        // Copy file to a temporary directory
+        guard let tmpFile = try self.moveToTmpFolder() else { return nil }
+        
+        // Get path to the temporary as a string
+        print("\(tmpFile.path)")
+        let path = tmpFile.path // .replacingOccurrences(of: " ", with: #"\ "#)
+        print("\(path)")
+
+        // Try to unzip
+        let exec = "/usr/bin/gunzip"
+        let args = [ path ]
+        
+        track("exec = \(exec)")
+        track("args = \(args)")
+        print("\(args)")
+        if let result = FileManager.exec(launchPath: exec, arguments: args) {
+            print("\(result)")
+        }
+        
+        // Get all files of the allowed file types
+        let urls = try FileManager.default.contentsOfDirectory(
+             at: tmp, includingPropertiesForKeys: nil,
+             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
+        track("urls = \(urls)")
+        var result: [URL] = []
+        for url in urls {
+            if allowedFileTypes.contains(url.pathExtension) {
+                result.append(url)
+            }
+        }
+        
+        // Pick the first one
+        let first = result.first
+        
+        return first
+    }
+        
     func modificationDate() -> Date? {
         
         let attr = try? FileManager.default.attributesOfItem(atPath: self.path)
@@ -243,6 +332,20 @@ extension FileManager {
         
         return result
     }
+    
+    /*
+    static func moveToTmpFolder(url: URL) throws {
+        
+        // Get the tmp folder
+        guard let tmp = URL.tmpFolder else { return }
+        
+        // Clear all existing items
+        try tmp.erase() //  clearFolder(folder: tmp)
+        
+        // Copy the file
+        try FileManager.default.copyItem(at: url, to: tmp)
+    }
+    */
 }
 
 //
