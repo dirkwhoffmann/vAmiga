@@ -125,7 +125,7 @@ import Cocoa
                 
         switch url.pathExtension.uppercased() {
             
-        case "ADF", "ADZ", "DMS":
+        case "ADF", "ADZ", "DMS", "ZIP", "GZ":
             noteNewRecentlyInsertedDiskURL(url)
             
         default:

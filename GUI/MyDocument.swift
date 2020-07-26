@@ -103,7 +103,6 @@ class MyDocument: NSDocument {
         
         // If url points to compressed file, redirect it to a decompressed file
         let newUrl = url.unpacked
-        track("newUrl = \(newUrl)")
         
         // Only proceed if the file type is allowed
         let type = fileType(url: newUrl)
