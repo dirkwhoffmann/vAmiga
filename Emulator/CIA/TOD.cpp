@@ -41,16 +41,19 @@ void
 TOD::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
+
     stopped = true;
-    matching = false;
+    matching = true;
     tod.hi = 0x1;
-    // alarm.value = 0xFFFFFF;
 }
 
 u8
 TOD::getCounterHi()
 {
-    return frozen ? latch.hi : tod.hi;
+    u8 result = frozen ? latch.hi : tod.hi;
+
+    debug(TOD_DEBUG, "getCounterHi: %02x\n", result);
+    return result;
 }
 
 u8
@@ -58,7 +61,7 @@ TOD::getCounterMid()
 {
     u8 result = frozen ? latch.mid : tod.mid;
     
-    debug(TOD_DEBUG, "getCounterMid: %02x (frozen: %d)\n", result, frozen);
+    debug(TOD_DEBUG, "getCounterMid: %02x\n", result);
     return result;
 }
 
@@ -67,7 +70,7 @@ TOD::getCounterLo()
 {
     u8 result = frozen ? latch.lo : tod.lo;
 
-    debug(TOD_DEBUG, "getCounterMid: %02x (frozen: %d)\n", result, frozen);
+    debug(TOD_DEBUG, "getCounterLo: %02x\n", result);
     return result;
 }
 
@@ -149,11 +152,10 @@ TOD::increment()
     if (!incHiNibble(tod.lo))  goto check;
     if (!incLoNibble(tod.mid)) goto check;
 
-    /*
-    if ((tod.value) == (alarm.value)) {
-        debug("TOD matches (BUG): %x %x\n", tod.value, alarm.value);
+    if (tod.value == alarm.value) {
+        debug(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
+              tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
-    */
     if (cia->config.todBug) checkForInterrupt();
 
     if (!incHiNibble(tod.mid)) goto check;
@@ -188,6 +190,7 @@ void
 TOD::checkForInterrupt()
 {
     if (!matching && tod.value == alarm.value) {
+        debug(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
         cia->todInterrupt();
     }
     matching = (tod.value == alarm.value);
