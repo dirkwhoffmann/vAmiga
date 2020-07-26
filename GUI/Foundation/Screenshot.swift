@@ -102,7 +102,11 @@ class Screenshot {
     static func folder(forDisk diskID: UInt64) -> URL? {
         
         let subdir = String(format: "%8X", diskID)
-        return URL.appSupportFolder("Screenshots/\(subdir)")
+        do {
+            return try URL.appSupportFolder("Screenshots/\(subdir)")
+        } catch {
+            return nil
+        }
     }
         
     static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {

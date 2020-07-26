@@ -99,10 +99,11 @@ class MyDocument: NSDocument {
     
     func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
         
-        track("Creating proxy object from URL \(url.lastPathComponent).")
+        track("Creating proxy object from URL: \(url.lastPathComponent)")
         
-        // If the URL points to an ADZ, unzip it
-        let newUrl = url.adfFromAdz ?? url
+        // If url points to compressed file, redirect it to a decompressed file
+        let newUrl = url.unpacked
+        track("newUrl = \(newUrl)")
         
         // Only proceed if the file type is allowed
         let type = fileType(url: newUrl)
@@ -176,18 +177,11 @@ class MyDocument: NSDocument {
     // Creates an attachment from a URL
     func createAttachment(from url: URL) throws {
                 
-        track("Creating attachment from URL \(url.lastPathComponent).")
-        
-        // Try to unpack the file (if compressed)
-        var newUrl = url
-        if let unpacked = try url.unpack(allowedFileTypes: ["adf", "dms"]) {
-            track("Unpacked: \(unpacked)")
-            newUrl = unpacked
-        }
+        track("Creating attachment from URL: \(url.lastPathComponent)")
         
         // Create file proxy
         let types = [ FILETYPE_SNAPSHOT, FILETYPE_ADF, FILETYPE_DMS ]
-        amigaAttachment = try createFileProxy(url: newUrl, allowedTypes: types)
+        amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
         // Remember the URL
         myAppDelegate.noteNewRecentlyUsedURL(url)

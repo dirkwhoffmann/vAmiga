@@ -85,19 +85,36 @@ extension NSAttributedString {
 //
 
 extension URL {
+
+    enum FolderError: Error {
+        case noAppSupportFolder
+    }
+    enum UnpackError: Error {
+        case noSupportedFiles
+    }
+
+    //
+    // Working with folders
+    //
     
-    static var appSupportFolder: URL? {
+    // Returns the URL of the application support folder of this application
+    static func appSupportFolder() throws -> URL {
         
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
-        let url = fm.urls(for: path, in: mask).first
-        return url?.appendingPathComponent("vAmiga")
+    
+        if let url = fm.urls(for: path, in: mask).first {
+            return url.appendingPathComponent("vAmiga")
+        } else {
+            throw FolderError.noAppSupportFolder
+        }
     }
     
-    static func appSupportFolder(_ name: String) -> URL? {
+    // Returns the URL of a subdirectory inside the application support folder
+    static func appSupportFolder(_ name: String) throws -> URL {
     
-        guard let support = URL.appSupportFolder else { return nil }
+        let support = try URL.appSupportFolder()
 
         let fm = FileManager.default
         let folder = support.appendingPathComponent("\(name)")
@@ -107,37 +124,52 @@ extension URL {
         
         if !folderExists || !isDirectory.boolValue {
             
-            do {
-                try fm.createDirectory(at: folder,
-                                       withIntermediateDirectories: true,
-                                       attributes: nil)
-            } catch {
-                return nil
-            }
+            try fm.createDirectory(at: folder,
+                                   withIntermediateDirectories: true,
+                                   attributes: nil)
         }
         
         return folder
     }
     
-    static var tmpFolder: URL? {
+    // Return the URL to an empty temporary folder
+    static func tmpFolder() throws -> URL {
+        
+        let tmp = try appSupportFolder("tmp")
+        try tmp.delete()
+        return tmp
+    }
 
-        return appSupportFolder("tmp")
+    // Returns all files inside a folder
+    func contents(allowedTypes: [String]? = nil) throws -> [URL] {
+        
+        let urls = try FileManager.default.contentsOfDirectory(
+            at: self, includingPropertiesForKeys: nil,
+            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
+        )
+
+        track("contents: urls = \(urls)")
+        let filtered = urls.filter { allowedTypes?.contains($0.pathExtension) ?? true }
+        track("filtered = \(filtered)")
+        return filtered
     }
     
-    func moveToTmpFolder() throws -> URL? {
+    // Deletes all files inside a folder
+    func delete() throws {
         
-        // Get the tmp folder
-        guard let tmp = URL.tmpFolder else { return nil }
+        let urls = try self.contents()
+        track("urls = \(urls)")
+        for url in urls { try FileManager.default.removeItem(at: url) }
+    }
         
-        // Compose destination URL
-        let file = self.lastPathComponent
-        let dest = tmp.appendingPathComponent(file)
+    // Copies a file into the specified folder
+    func copy(to folder: URL, replaceExtensionBy suffix: String) throws -> URL {
         
-        track("moveToTmpFolder: \(tmp)")
+        // Create the destination URL
+        var dest = folder.appendingPathComponent(self.lastPathComponent)
+        dest.deletePathExtension()
+        dest.appendPathExtension(suffix)
         
-        // Clear all existing items
-        try tmp.clear()
-                
         // Copy the file
         track("Copying \(self) to \(dest)")
         try FileManager.default.copyItem(at: self, to: dest)
@@ -146,68 +178,81 @@ extension URL {
         return dest
     }
     
-    func clear(except file: URL? = nil) throws {
+    var unpacked: URL {
         
-        track("clear: \(self)")
-        let urls = try FileManager.default.contentsOfDirectory(
-            at: self, includingPropertiesForKeys: nil,
-            options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
-
-        track("urls = \(urls)")
-
-        for url in urls where url.lastPathComponent != file?.lastPathComponent {
-            try FileManager.default.removeItem(at: url)
+        track("extension = \(self.pathExtension)")
+        
+        if self.pathExtension == "zip" || self.pathExtension == "adz" {
+            
+            do { return try unpackZip() } catch { }
         }
-        track("cleared")
-    }
-        
-    func unpack(allowedFileTypes: [String]) throws -> URL? {
-                
-        // Check if this file is compressed
-        let extensions = ["zip", "gz", "adz"]
-        if !extensions.contains( self.pathExtension) { return nil }
-        
-        // Get a temporary folder
-        guard let tmp = URL.tmpFolder else { return nil }
-        track("tmp folder = \(tmp)")
-                    
-        // Copy file to a temporary directory
-        guard let tmpFile = try self.moveToTmpFolder() else { return nil }
-        
-        // Get path to the temporary as a string
-        print("\(tmpFile.path)")
-        let path = tmpFile.path // .replacingOccurrences(of: " ", with: #"\ "#)
-        print("\(path)")
 
-        // Try to unzip
-        let exec = "/usr/bin/gunzip"
-        let args = [ path ]
+        if self.pathExtension == "gz" || self.pathExtension == "adz" {
+
+            do { return try unpackGz() } catch { }
+        }
+        
+        return self
+    }
+    
+    func unpackZip() throws -> URL {
+        
+        let urls = try unpack(suffix: "zip")
+        if let first = urls.first { return first }
+        
+        throw UnpackError.noSupportedFiles
+    }
+    
+    func unpackGz() throws -> URL {
+        
+        let urls = try unpack(suffix: "gz")
+        if let first = urls.first { return first }
+        
+        throw UnpackError.noSupportedFiles
+    }
+    
+    func unpack(suffix: String) throws -> [URL] {
+                
+        // Request the URL of a tempory folder
+        let tmp = try URL.tmpFolder()
+        track("tmp folder = \(tmp)")
+        
+        // Copy the compressed file into it and fix the extension
+        let url = try self.copy(to: tmp, replaceExtensionBy: suffix)
+        
+        // Try to decompress the file
+        var exec: String
+        var args: [String]
+        
+        switch suffix {
+            
+        case "zip":
+            exec = "/usr/bin/unzip"
+            args = [ "-o", url.path, "-d", tmp.path ]
+            
+        case "gz":
+            exec = "/usr/bin/gunzip"
+            args = [ url.path ]
+
+        default:
+            fatalError()
+        }
         
         track("exec = \(exec)")
         track("args = \(args)")
-        print("\(args)")
+        
         if let result = FileManager.exec(launchPath: exec, arguments: args) {
             print("\(result)")
         }
         
-        // Get all files of the allowed file types
-        let urls = try FileManager.default.contentsOfDirectory(
-             at: tmp, includingPropertiesForKeys: nil,
-             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants])
-        track("urls = \(urls)")
-        var result: [URL] = []
-        for url in urls {
-            if allowedFileTypes.contains(url.pathExtension) {
-                result.append(url)
-            }
-        }
+        // Collect all extracted URLs with a matching file format
+        let urls = try tmp.contents(allowedTypes: ["adf", "dms", "vAmiga"])
         
-        // Pick the first one
-        let first = result.first
-        
-        return first
+        // Arrange the URLs in alphabetical order
+        let sorted = urls.sorted { $0.path < $1.path }
+        return sorted
     }
-        
+    
     func modificationDate() -> Date? {
         
         let attr = try? FileManager.default.attributesOfItem(atPath: self.path)
@@ -278,6 +323,7 @@ extension URL {
         }
     }
 
+    /*
     var adfFromAdz: URL? {
         
         if self.pathExtension.uppercased() != "ADZ" { return nil }
@@ -307,6 +353,7 @@ extension URL {
         }
         return nil
     }
+    */
 }
 
 //
