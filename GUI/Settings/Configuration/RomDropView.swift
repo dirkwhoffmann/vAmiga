@@ -54,17 +54,17 @@ class DropView: NSImageView {
     
     override func performDragOperation(_ sender: NSDraggingInfo) -> Bool {
 
-        guard let url = sender.url else { return false }
-
+        guard let url = sender.url?.unpacked else { return false }
+        
         // Check for a standard ROM
         if amiga.mem.loadRom(fromFile: url) { return true }
 
         // Check for an encrypted ROM
-        var error = DECRYPT_ROM_KEY_ERROR
+        var error = DECRYPT_NOT_AN_ENCRYPTED_ROM
         if amiga.mem.loadEncryptedRom(fromFile: url, error: &error) { return true }
-
-        // Report error
         parent.parent.mydocument.showDecryptionAlert(error: error)
+        
+        parent.refresh()
         return false
     }
     
@@ -77,9 +77,16 @@ class DropView: NSImageView {
 class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
-
-        if !amiga.isPoweredOff() { return false }
-        return amiga.mem.isRom(url) || amiga.mem.isEncryptedRom(url)
+        
+        if amiga.isPoweredOff() {
+            
+            if url.pathExtension == "zip" { return true }
+            if url.pathExtension == "gz" { return true }
+            if amiga.mem.isRom(url) { return true }
+            if amiga.mem.isEncryptedRom(url) { return true }
+        }
+        
+        return false
     }
 }
 

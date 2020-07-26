@@ -270,7 +270,7 @@ struct SerialPortWrapper;
 - (BOOL) isEncryptedRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
-- (BOOL) loadEncryptedRomFromFile:(NSURL *)url;
+// - (BOOL) loadEncryptedRomFromFile:(NSURL *)url;
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error;
 - (u64) romFingerprint;
 - (RomIdentifier) romIdentifier;

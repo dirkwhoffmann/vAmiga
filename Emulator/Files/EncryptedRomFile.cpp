@@ -109,11 +109,11 @@ EncryptedRomFile::decrypt(DecryptionError *error)
     assert(path != NULL);
     char *romKeyPath = replaceFilename(path, "rom.key");
     if (romKeyPath == NULL) {
-        if (error) *error = DECRYPT_ROM_KEY_ERROR;
+        if (error) *error = DECRYPT_MISSING_ROM_KEY_FILE;
         goto exit;
     }
     if (!loadFile(romKeyPath, &romKeyData, &romKeySize)) {
-        if (error) *error = DECRYPT_ROM_KEY_ERROR;
+        if (error) *error = DECRYPT_MISSING_ROM_KEY_FILE;
         goto exit;
     }
     
@@ -129,7 +129,7 @@ EncryptedRomFile::decrypt(DecryptionError *error)
     // Convert decrypted data into a Rom
     rom = RomFile::makeWithBuffer(decryptedData, size - headerSize);
     if (rom == NULL) {
-        if (error) *error = DECRYPT_DATA_ERROR;
+        if (error) *error = DECRYPT_INVALID_ROM_KEY_FILE;
     }
     
 exit:

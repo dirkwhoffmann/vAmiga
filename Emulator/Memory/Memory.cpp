@@ -342,14 +342,14 @@ Memory::loadRomFromFile(const char *path)
 }
 
 bool
-Memory::loadEncryptedRomFromFile(const char *path)
+Memory::loadEncryptedRomFromFile(const char *path, DecryptionError *error)
 {
     assert(path != NULL);
     
     EncryptedRomFile *encryptedRom = EncryptedRomFile::makeWithFile(path);
     if (encryptedRom == NULL) return false;
         
-    RomFile *rom = encryptedRom->decrypt();
+    RomFile *rom = encryptedRom->decrypt(error);
     if (rom == NULL) { delete encryptedRom; return false; }
 
     bool success = loadRom(rom);

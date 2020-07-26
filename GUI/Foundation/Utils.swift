@@ -158,7 +158,6 @@ extension URL {
     func delete() throws {
         
         let urls = try self.contents()
-        track("urls = \(urls)")
         for url in urls { try FileManager.default.removeItem(at: url) }
     }
         
@@ -171,17 +170,13 @@ extension URL {
         dest.appendPathExtension(suffix)
         
         // Copy the file
-        track("Copying \(self) to \(dest)")
         try FileManager.default.copyItem(at: self, to: dest)
-        track("Item copied")
         
         return dest
     }
     
     var unpacked: URL {
-        
-        track("extension = \(self.pathExtension)")
-        
+                
         if self.pathExtension == "zip" || self.pathExtension == "adz" {
             
             do { return try unpackZip() } catch { }
@@ -215,7 +210,6 @@ extension URL {
                 
         // Request the URL of a tempory folder
         let tmp = try URL.tmpFolder()
-        track("tmp folder = \(tmp)")
         
         // Copy the compressed file into it and fix the extension
         let url = try self.copy(to: tmp, replaceExtensionBy: suffix)
@@ -245,8 +239,9 @@ extension URL {
             print("\(result)")
         }
         
-        // Collect all extracted URLs with a matching file format
-        let urls = try tmp.contents(allowedTypes: ["adf", "dms", "vAmiga"])
+        // Collect all extracted URLs with a supported file type
+        let types = ["adf", "dms", "rom", "bin", "vAmiga"]
+        let urls = try tmp.contents(allowedTypes: types)
         
         // Arrange the URLs in alphabetical order
         let sorted = urls.sorted { $0.path < $1.path }

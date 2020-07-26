@@ -78,8 +78,9 @@ static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM
 
 typedef enum
 {
-    DECRYPT_ROM_KEY_ERROR,
-    DECRYPT_DATA_ERROR
+    DECRYPT_NOT_AN_ENCRYPTED_ROM,
+    DECRYPT_MISSING_ROM_KEY_FILE,
+    DECRYPT_INVALID_ROM_KEY_FILE
 }
 DecryptionError;
 

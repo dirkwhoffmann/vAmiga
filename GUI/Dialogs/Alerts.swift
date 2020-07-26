@@ -146,13 +146,19 @@ extension MyDocument {
         alert.addButton(withTitle: "OK")
         
         switch error {
-        case DECRYPT_ROM_KEY_ERROR:
+        case DECRYPT_MISSING_ROM_KEY_FILE:
             alert.informativeText = "A rom.key file is required to decrypt the image."
-        default:
+            return alert.runModal()
+            
+        case DECRYPT_INVALID_ROM_KEY_FILE:
             alert.informativeText = "Decryption didn't produce a valid ROM."
+            return alert.runModal()
+            
+        default:
+            break
         }
-
-        return alert.runModal()
+        
+        return NSApplication.ModalResponse.OK
     }
 }
 
