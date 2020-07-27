@@ -551,7 +551,7 @@ Moira::execClr(u16 opcode)
     isMemMode(M) ? prefetch() : prefetch<POLLIPL>();
 
     if (S == Long && isRegMode(M)) sync(2);
-    writeOp <M,S, POLLIPL> (dst, ea, 0);
+    writeOp <M,S, REVERSE | POLLIPL> (dst, ea, 0);
 
     reg.sr.n = 0;
     reg.sr.z = 1;

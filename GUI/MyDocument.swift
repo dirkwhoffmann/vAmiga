@@ -101,7 +101,7 @@ class MyDocument: NSDocument {
         
         track("Creating proxy object from URL: \(url.lastPathComponent)")
         
-        // If url points to compressed file, redirect it to a decompressed file
+        // If url points to compressed file, decompress it first
         let newUrl = url.unpacked
         
         // Only proceed if the file type is allowed
