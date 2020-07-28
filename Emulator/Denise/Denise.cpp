@@ -285,13 +285,38 @@ Denise::pokeCLXCON(u16 value)
     clxcon = value;
 }
 
-template <int x> void
+template <int x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
     debug(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
+
+    if (s == AGNUS_ACCESS) {
+        /*
+        debug("BPL%dDAT written by Agnus (%x)\n", x, value);
+        */
+    }
     
+    setBPLxDAT<x>(value);
+}
+
+template <int x> void
+Denise::setBPLxDAT(u16 value)
+{
+    assert(x < 6);
+    debug(BPLREG_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
+        
     bpldat[x] = value;
+
+    if (x == 0) {
+        if (hires()) {
+            denise.fillShiftRegisters(agnus.ddfHires.inRangeOdd(agnus.pos.h),
+                                      agnus.ddfHires.inRangeEven(agnus.pos.h));
+        } else {
+            denise.fillShiftRegisters(agnus.ddfLores.inRangeOdd(agnus.pos.h),
+                                      agnus.ddfLores.inRangeEven(agnus.pos.h));
+        }
+    }
 }
 
 template <int x> void
@@ -1332,12 +1357,25 @@ Denise::dumpBuffer(u8 *buffer, size_t length)
     }
 }
 
-template void Denise::pokeBPLxDAT<0>(u16 value);
-template void Denise::pokeBPLxDAT<1>(u16 value);
-template void Denise::pokeBPLxDAT<2>(u16 value);
-template void Denise::pokeBPLxDAT<3>(u16 value);
-template void Denise::pokeBPLxDAT<4>(u16 value);
-template void Denise::pokeBPLxDAT<5>(u16 value);
+template void Denise::pokeBPLxDAT<0,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<0,AGNUS_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<1,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<1,AGNUS_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<2,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<2,AGNUS_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<3,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<3,AGNUS_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<4,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<4,AGNUS_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<5,CPU_ACCESS>(u16 value);
+template void Denise::pokeBPLxDAT<5,AGNUS_ACCESS>(u16 value);
+
+template void Denise::setBPLxDAT<0>(u16 value);
+template void Denise::setBPLxDAT<1>(u16 value);
+template void Denise::setBPLxDAT<2>(u16 value);
+template void Denise::setBPLxDAT<3>(u16 value);
+template void Denise::setBPLxDAT<4>(u16 value);
+template void Denise::setBPLxDAT<5>(u16 value);
 
 template void Denise::pokeSPRxPOS<0>(u16 value);
 template void Denise::pokeSPRxPOS<1>(u16 value);

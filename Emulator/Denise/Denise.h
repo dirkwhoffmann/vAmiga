@@ -465,7 +465,8 @@ public:
     void pokeCLXCON(u16 value);
 
     // BPLxDAT:  $110 - $11A (w)
-    template <int x> void pokeBPLxDAT(u16 value);
+    template <int x, Accessor s> void pokeBPLxDAT(u16 value);
+    template <int x> void setBPLxDAT(u16 value);
 
     // SPRxPOS:  $140, $148 ... $170, $178 (w)
     // SPRxCTL:  $142, $14A ... $172, $17A (w)

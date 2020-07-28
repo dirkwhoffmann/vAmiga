@@ -774,6 +774,8 @@ private:
     // Dumps an event table for debugging
     void dumpEventTable(EventID *table, char str[256][3], int from, int to);
 
+public:
+    
     // Dumps the BPL or DAS event table for debugging
     void dumpBplEventTable(int from, int to);
     void dumpBplEventTable();
