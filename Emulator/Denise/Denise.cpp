@@ -208,7 +208,8 @@ Denise::bpu(u16 v)
     bool hires = GET_BIT(v, 15);
 
     if (hires) {
-        return bpu < 5 ? bpu : 0; // Disable all bitplanes if value is invalid
+        // return bpu < 5 ? bpu : 0; // Disable all bitplanes if value is invalid
+        return bpu < 7 ? bpu : 6; 
     } else {
         return bpu < 7 ? bpu : 6; // Enable six bitplanes if value is invalid
     }
