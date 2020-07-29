@@ -186,7 +186,7 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var vidPowerButton: NSButton!
 
     var bootable: Bool {
-        let off   = amiga.isPoweredOff()
+        let off   = amiga.isPoweredOff
         let ready = amiga.isReady()
         return off && ready
     }

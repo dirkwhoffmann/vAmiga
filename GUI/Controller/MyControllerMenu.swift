@@ -11,9 +11,9 @@ extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
         
-        let powered = amiga.isPoweredOn()
-        let running = amiga.isRunning()
-        let paused = amiga.isPaused()
+        let powered = amiga.isPoweredOn
+        let running = amiga.isRunning
+        let paused = amiga.isPaused
         
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
@@ -68,19 +68,19 @@ extension MyController: NSMenuItemValidation {
             
         case  #selector(MyController.ejectDiskAction(_:)),
               #selector(MyController.exportDiskAction(_:)):
-            return dfn.hasDisk()
+            return dfn.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction0(_:)):
-            return amiga.df0.hasDisk()
+            return amiga.df0.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction1(_:)):
-            return amiga.df1.hasDisk()
+            return amiga.df1.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction2(_:)):
-            return amiga.df2.hasDisk()
+            return amiga.df2.hasDisk
             
         case #selector(MyController.exportRecentDiskDummyAction3(_:)):
-            return amiga.df3.hasDisk()
+            return amiga.df3.hasDisk
             
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
@@ -93,7 +93,7 @@ extension MyController: NSMenuItemValidation {
             
         case #selector(MyController.writeProtectAction(_:)):
             item.state = dfn.hasWriteProtectedDisk() ? .on : .off
-            return dfn.hasDisk()
+            return dfn.hasDisk
             
         case #selector(MyController.dragAndDropTargetAction(_:)):
             item.state = dfn === dragAndDropDrive ? .on : .off
@@ -106,7 +106,7 @@ extension MyController: NSMenuItemValidation {
             return paused
             
         case #selector(MyController.dumpStateAction(_:)):
-            return !amiga.releaseBuild()
+            return !amiga.isReleaseBuild
             
         default:
             return true
@@ -262,7 +262,7 @@ extension MyController: NSMenuItemValidation {
             let name = NSNib.Name("ScreenshotDialog")
             screenshotBrowser = ScreenshotDialog.make(parent: self, nibName: name)
         }
-        screenshotBrowser?.checksum = amiga.df0.fnv()
+        screenshotBrowser?.checksum = amiga.df0.fnv
         screenshotBrowser?.showSheet()
     }
     
@@ -312,7 +312,7 @@ extension MyController: NSMenuItemValidation {
         
         var error: ErrorCode = ERR_OK
 
-        if amiga.isPoweredOn() {
+        if amiga.isPoweredOn {
             amiga.powerOff()
             return
         }
@@ -370,14 +370,14 @@ extension MyController: NSMenuItemValidation {
         track()
         
         let drive = amiga.df(sender)!
-        let model = drive.type()
+        let model = drive.type
         
         var adf: ADFFileProxy
         
         // Create a blank disk
         switch model {
-        case DRIVE_35_DD:  adf = ADFFileProxy.make(with: DISK_35_DD)
-        case DRIVE_525_SD: adf = ADFFileProxy.make(with: DISK_525_SD)
+        case .DRIVE_35_DD:  adf = ADFFileProxy.make(with: .DISK_35_DD)
+        case .DRIVE_525_SD: adf = ADFFileProxy.make(with: .DISK_525_SD)
         default: fatalError()
         }
         

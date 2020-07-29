@@ -12,7 +12,7 @@ extension MyController {
     var hourglassIcon: NSImage? {
         
         switch pref.warpMode {
-        case .auto where amiga.warp():
+        case .auto where amiga.warp:
             return NSImage.init(named: "hourglass3Template")
         case .auto:
             return NSImage.init(named: "hourglass1Template")
@@ -31,25 +31,25 @@ extension MyController {
         let connected2 = config.connected.2
         let connected3 = config.connected.3
 
-        let motor0 = amiga.df0.motor()
-        let motor1 = amiga.df1.motor()
-        let motor2 = amiga.df2.motor()
-        let motor3 = amiga.df3.motor()
-        let hasDisk0 = amiga.df0.hasDisk()
-        let hasDisk1 = amiga.df1.hasDisk()
-        let hasDisk2 = amiga.df2.hasDisk()
-        let hasDisk3 = amiga.df3.hasDisk()
+        let motor0 = amiga.df0.motor
+        let motor1 = amiga.df1.motor
+        let motor2 = amiga.df2.motor
+        let motor3 = amiga.df3.motor
+        let hasDisk0 = amiga.df0.hasDisk
+        let hasDisk1 = amiga.df1.hasDisk
+        let hasDisk2 = amiga.df2.hasDisk
+        let hasDisk3 = amiga.df3.hasDisk
 
-        let running = amiga.isRunning()
-        let debug = amiga.debugMode()
-        let halted = amiga.cpu.isHalted()
-        let warp = amiga.warp()
+        let running = amiga.isRunning
+        let debug = amiga.debugMode
+        let halted = amiga.cpu.halted
+        let warp = amiga.warp
 
         // Cylinders
-        refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder())
-        refreshStatusBar(drive: 1, cyclinder: amiga.df1.cylinder())
-        refreshStatusBar(drive: 2, cyclinder: amiga.df2.cylinder())
-        refreshStatusBar(drive: 3, cyclinder: amiga.df3.cylinder())
+        refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder)
+        refreshStatusBar(drive: 1, cyclinder: amiga.df1.cylinder)
+        refreshStatusBar(drive: 2, cyclinder: amiga.df2.cylinder)
+        refreshStatusBar(drive: 3, cyclinder: amiga.df3.cylinder)
         refreshStatusBar(writing: nil)
         
         // Animation
@@ -130,8 +130,8 @@ extension MyController {
          
     public func refreshStatusBar(writing: Bool?) {
         
-        let sel = amiga.diskController.selectedDrive()
-        let w = writing ?? (amiga.diskController.state() == DRIVE_DMA_WRITE)
+        let sel = amiga.diskController.selectedDrive
+        let w = writing ?? (amiga.diskController.state == .DRIVE_DMA_WRITE)
         
         df0Cylinder.textColor = w && (sel == 0) ? .red : .secondaryLabelColor
         df1Cylinder.textColor = w && (sel == 1) ? .red : .secondaryLabelColor
@@ -141,7 +141,7 @@ extension MyController {
         
     public func refreshStatusBar(drive: Int, motor: Bool) {
         
-        let spin = amiga.isRunning() && motor
+        let spin = amiga.isRunning && motor
         
         switch drive {
         case 0: spin ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)

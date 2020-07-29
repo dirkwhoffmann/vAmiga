@@ -78,7 +78,7 @@ class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
 
-        if !amiga.isPoweredOff() { return false }
+        if !amiga.isPoweredOff { return false }
         return amiga.mem.isRom(url) || amiga.mem.isEncryptedRom(url)
     }
 }
@@ -87,7 +87,7 @@ class ExtRomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
 
-        if !amiga.isPoweredOff() { return false }
+        if !amiga.isPoweredOff { return false }
         return amiga.mem.isExt(url)
     }
 }

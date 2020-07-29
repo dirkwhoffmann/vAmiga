@@ -126,7 +126,7 @@ class BreakTableView: PointTableView {
 
     override func cache() {
 
-        numRows = amiga.cpu.numberOfBreakpoints()
+        numRows = amiga.cpu.numberOfBreakpoints
 
         for i in 0 ..< numRows {
             disabledCache[i] = amiga.cpu.breakpointIsDisabled(i)

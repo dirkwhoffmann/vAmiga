@@ -189,7 +189,7 @@ struct EmulatorDefaults {
     
     static let std = EmulatorDefaults.init(
         
-        driveBlankDiskFormat: FS_OFS,
+        driveBlankDiskFormat: .FS_OFS,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
@@ -557,56 +557,56 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8372,
-        deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_OKI,
+        agnusRev: .AGNUS_8372,
+        deniseRev: .DENISE_8362R8,
+        realTimeClock: .OKI,
         
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
         
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8367,
-        deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_NONE,
+        agnusRev: .AGNUS_8367,
+        deniseRev: .DENISE_8362R8,
+        realTimeClock: .NONE,
         
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
         
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8375,
-        deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_OKI,
+        agnusRev: .AGNUS_8375,
+        deniseRev: .DENISE_8362R8,
+        realTimeClock: .OKI,
         
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
         
         driveConnect: [true, true, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
 }
 
@@ -1030,7 +1030,7 @@ struct VideoDefaults {
     // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
-        palette: COLOR_PALETTE,
+        palette: Palette.COLOR_PALETTE,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,
@@ -1064,7 +1064,7 @@ struct VideoDefaults {
     // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
-        palette: COLOR_PALETTE,
+        palette: Palette.COLOR_PALETTE,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,

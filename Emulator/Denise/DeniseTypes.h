@@ -18,12 +18,11 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, DeniseRevision)
 {
     DENISE_8362R8, // OCS
     DENISE_8373    // ECS (not supported yet)
-}
-DeniseRevision;
+};
 
 inline bool isDeniseRevision(long value)
 {
@@ -41,7 +40,7 @@ inline const char *deniseRevisionName(DeniseRevision type)
     }
 }
 
-typedef enum : long
+typedef VA_ENUM(long, Palette)
 {
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,
@@ -49,8 +48,7 @@ typedef enum : long
     GREEN_PALETTE,
     AMBER_PALETTE,
     SEPIA_PALETTE
-}
-Palette;
+};
 
 inline bool isPalette(long value) {
     return value >= COLOR_PALETTE && value <= SEPIA_PALETTE;

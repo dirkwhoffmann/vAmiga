@@ -12,7 +12,7 @@ class EventTableView: NSTableView {
     @IBOutlet weak var inspector: Inspector!
     var amiga: AmigaProxy!
 
-    var slotInfo = [EventSlotInfo?](repeating: nil, count: SLOT_COUNT.rawValue)
+    var slotInfo = [EventSlotInfo?](repeating: nil, count: EventSlot.SLOT_COUNT.rawValue)
 
     override func awakeFromNib() {
 
@@ -23,7 +23,7 @@ class EventTableView: NSTableView {
     }
 
     private func cache() {
-         for row in 0 ..< SLOT_COUNT.rawValue {
+        for row in 0 ..< EventSlot.SLOT_COUNT.rawValue {
             slotInfo[row] = amiga.agnus.getEventSlotInfo(row)
         }
     }
@@ -39,7 +39,7 @@ extension EventTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
 
-        return SLOT_COUNT.rawValue
+        return EventSlot.SLOT_COUNT.rawValue
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

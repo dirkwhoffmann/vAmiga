@@ -35,7 +35,7 @@ extension MyController: NSWindowDelegate {
     public func windowDidResignMain(_ notification: Notification) {
         
         // Stop emulator if it is configured to pause in background
-        pauseInBackgroundSavedState = amiga.isRunning()
+        pauseInBackgroundSavedState = amiga.isRunning
         if pref.pauseInBackground { amiga.pause() }
     }
     

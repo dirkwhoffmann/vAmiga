@@ -20,7 +20,7 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, EventSlot)
 {
     // Primary slots
     REG_SLOT = 0,                   // Register changes
@@ -50,7 +50,7 @@ typedef enum : long
     INS_SLOT,                       // Handles periodic calls to inspect()
     SLOT_COUNT
 
-} EventSlot;
+};
 
 static inline bool isEventSlot(long s) { return s < SLOT_COUNT; }
 static inline bool isPrimarySlot(long s) { return s <= SEC_SLOT; }
@@ -90,7 +90,7 @@ inline const char *slotName(EventSlot nr)
     }
 }
 
-typedef enum : long
+typedef VA_ENUM(long, EventID)
 {
     EVENT_NONE = 0,
     
@@ -256,7 +256,7 @@ typedef enum : long
     RAS_HSYNC = 1,
     RAS_EVENT_COUNT
 
-} EventID;
+};
 
 static inline bool isRegEvent(EventID id) { return id < REG_EVENT_COUNT; }
 static inline bool isCiaEvent(EventID id) { return id < CIA_EVENT_COUNT; }

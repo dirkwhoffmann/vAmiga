@@ -30,7 +30,7 @@ extension Inspector {
 
         let nr = Int(copperInfo!.copList)
         let active = copperInfo!.active
-        let paused = amiga.isPaused()
+        let paused = amiga.isPaused
 
         copPC.integerValue = Int(copperInfo!.coppc)
         copCDANG.state = copperInfo!.cdang ? .on : .off

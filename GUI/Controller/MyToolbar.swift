@@ -27,12 +27,12 @@ class MyToolbar: NSToolbar {
         let reset = resetButton.view as? NSButton
 
         // Disable the Pause and Reset button if the emulator if powered off
-        let poweredOn = amiga.isPoweredOn()
+        let poweredOn = amiga.isPoweredOn
         pause?.isEnabled = poweredOn
         reset?.isEnabled = poweredOn
 
         // Adjust the appearance of the Pause button
-        if amiga.isRunning() {
+        if amiga.isRunning {
             pause?.image = NSImage.init(named: "pauseTemplate")
             pauseButton.label = "Pause"
         } else {

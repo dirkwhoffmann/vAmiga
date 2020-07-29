@@ -73,7 +73,7 @@ class SnapshotDialog: DialogController {
     func updateUserLabels() {
         
         if let snapshot = myDocument.userSnapshots.element(at: currentItem) {
-            let takenAt = snapshot.timeStamp()
+            let takenAt = snapshot.timeStamp
             text1.stringValue = timeDiffInfo(time: takenAt)
             text2.stringValue = timeInfo(time: takenAt)
         } else {
@@ -87,7 +87,7 @@ class SnapshotDialog: DialogController {
     func updateAutoLabels() {
         
         if let snapshot = myDocument.autoSnapshots.element(at: currentItem) {
-            let takenAt = snapshot.timeStamp()
+            let takenAt = snapshot.timeStamp
             text1.stringValue = timeDiffInfo(time: takenAt)
             text2.stringValue = timeInfo(time: takenAt)
         } else {
@@ -188,7 +188,7 @@ class SnapshotDialog: DialogController {
 
     func timeDiffInfo(url: URL) -> String {
         
-        return timeDiffInfo(date: url.modificationDate())
+        return timeDiffInfo(date: url.modificationDate)
     }
 
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {
@@ -281,7 +281,7 @@ class SnapshotDialog: DialogController {
         panel.beginSheetModal(for: window!, completionHandler: { result in
             if result == .OK {
                 if let url = panel.url {
-                    try? snapshot!.data()?.write(to: url)
+                    try? snapshot!.data?.write(to: url)
                 }
             }
         })
@@ -308,8 +308,8 @@ extension SnapshotDialog: iCarouselDataSource, iCarouselDelegate {
         let itemView = NSImageView(frame: CGRect(x: 0, y: 0, width: w, height: h))
         
         itemView.image = userView ?
-            myDocument.userSnapshots.element(at: index)?.previewImage()?.roundCorners() :
-            myDocument.autoSnapshots.element(at: index)?.previewImage()?.roundCorners()
+            myDocument.userSnapshots.element(at: index)?.previewImage?.roundCorners() :
+            myDocument.autoSnapshots.element(at: index)?.previewImage?.roundCorners()
         
         /*
         itemView.wantsLayer = true

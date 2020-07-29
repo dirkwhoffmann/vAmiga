@@ -94,7 +94,7 @@ extension PreferencesController {
     @IBAction func emuBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        pref.driveBlankDiskFormat = FileSystemType(rawValue: tag)
+        pref.driveBlankDiskFormat = FileSystemType(rawValue: tag)!
         refresh()
     }
 
@@ -182,7 +182,7 @@ extension PreferencesController {
         
         pref.closeWithoutAsking = (sender.state == .on)
         for c in myAppDelegate.controllers {
-            c.needsSaving = c.amiga.isRunning()
+            c.needsSaving = c.amiga.isRunning
         }
         refresh()
     }

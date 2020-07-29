@@ -12,14 +12,13 @@
 #ifndef _AGNUS_TYPES_H
 #define _AGNUS_TYPES_H
 
-typedef enum : long
+typedef VA_ENUM(long, AgnusRevision)
 {
     AGNUS_8367, // OCS Agnus
     AGNUS_8372, // ECS Agnus (up to 1MB Chip Ram)
     AGNUS_8375, // ECS Agnus (up to 2MB Chip Ram)
     AGNUS_CNT
-}
-AgnusRevision;
+};
 
 inline bool isAgnusRevision(long value)
 {
@@ -45,7 +44,7 @@ typedef struct
 AgnusConfig;
 
 // Register change identifiers
-typedef enum : i32
+typedef VA_ENUM(i32, RegChangeID)
 {
     SET_NONE = 0,
     
@@ -140,15 +139,14 @@ typedef enum : i32
     SET_SPR7PTL,
 
     REG_COUNT
-}
-RegChangeID;
+};
 
 static inline bool isRegChangeID(long value)
 {
     return value >= 0 && value < REG_COUNT;
 }
 
-typedef enum : i8
+typedef VA_ENUM(i8, BusOwner)
 {
     BUS_NONE,
     BUS_CPU,
@@ -172,8 +170,7 @@ typedef enum : i8
     BUS_COPPER,
     BUS_BLITTER,
     BUS_OWNER_COUNT
-}
-BusOwner;
+};
 
 static inline bool isBusOwner(long value)
 {

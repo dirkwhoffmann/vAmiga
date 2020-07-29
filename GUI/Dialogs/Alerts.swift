@@ -68,13 +68,13 @@ extension MyDocument {
 
     func proceedWithUnexportedDisk(drives: [DriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.hasModifiedDisk() }
+        let modified = drives.filter { $0.isModifiedDisk }
         
         if modified.isEmpty || parent.pref.ejectWithoutAsking {
             return true
         }
         
-        let names = drives.map({ "df" + String($0.nr()) }).joined(separator: ", ")
+        let names = drives.map({ "df" + String($0.nr) }).joined(separator: ", ")
         let text = "Drive \(names) contains an unexported disk."
 
         return showDiskIsUnexportedAlert(messageText: text) == .alertFirstButtonReturn

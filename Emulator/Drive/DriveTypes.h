@@ -16,15 +16,14 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_DD_PC,
     DRIVE_35_HD,
     DRIVE_35_HD_PC,
     DRIVE_525_SD
-}
-DriveType;
+};
 
 inline bool isDriveType(long value)
 {

@@ -162,12 +162,12 @@ class MyController: NSWindowController, MessageReceiver {
         var warp: Bool
         
         switch pref.warpMode {
-        case .auto: warp = amiga.diskController.spinning()
+        case .auto: warp = amiga.diskController.isSpinning
         case .off: warp = false
         case .on: warp = true
         }
         
-        if warp != amiga.warp() {
+        if warp != amiga.warp {
             warp ? amiga.warpOn() : amiga.warpOff()
         }
     }
@@ -392,7 +392,7 @@ extension MyController {
     
     func updateSpeedometer() {
         
-        speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: renderer.frames)
+        speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
         let mhz = speedometer.mhz
         let fps = speedometer.fps
         clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
@@ -502,7 +502,7 @@ extension MyController {
 
         case MSG_RESET:
             mydocument.deleteBootDiskID()
-            mydocument.setBootDiskID(amiga.df0.fnv())
+            mydocument.setBootDiskID(amiga.df0.fnv)
             inspector?.fullRefresh()
 
         case MSG_MUTE_ON:
@@ -595,7 +595,7 @@ extension MyController {
             if pref.driveSounds && pref.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
-            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv()) }
+            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:
@@ -623,11 +623,11 @@ extension MyController {
 
         case MSG_AUTO_SNAPSHOT_TAKEN:
             track("MSG_AUTO_SNAPSHOT_TAKEN")
-            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot())
+            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot)
 
         case MSG_USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
-            mydocument!.userSnapshots.append(amiga.latestUserSnapshot())
+            mydocument!.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
             
         default:
