@@ -12,7 +12,6 @@
 #ifndef _DISK_TYPES_H
 #define _DISK_TYPES_H
 
-#include "AmigaEnums.h"
 
 //
 // Enumerations

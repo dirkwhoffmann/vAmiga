@@ -17,12 +17,11 @@
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
  *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
-typedef enum : long
+typedef VA_ENUM(long, CIAType)
 {
     CIA_8520_DIP,
     CIA_8520_PLCC
-}
-CIAType;
+};
 
 inline bool
 isCIAType(long value)

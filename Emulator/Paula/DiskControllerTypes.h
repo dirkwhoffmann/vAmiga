@@ -12,8 +12,6 @@
 #ifndef _DISK_CONTROLLER_T_H
 #define _DISK_CONTROLLER_T_H
 
-#include "AmigaEnums.h"
-
 //
 // Enumerations
 //

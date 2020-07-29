@@ -557,9 +557,9 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8372,
+        agnusRev: .AGNUS_8372,
         deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_OKI,
+        realTimeClock: .OKI,
         
         chipRam: 512,
         slowRam: 512,
@@ -570,14 +570,14 @@ struct HardwareDefaults {
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8367,
+        agnusRev: .AGNUS_8367,
         deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_NONE,
+        realTimeClock: .NONE,
         
         chipRam: 256,
         slowRam: 0,
@@ -588,14 +588,14 @@ struct HardwareDefaults {
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRev: AGNUS_8375,
+        agnusRev: .AGNUS_8375,
         deniseRev: DENISE_8362R8,
-        realTimeClock: RTC_OKI,
+        realTimeClock: .OKI,
         
         chipRam: 512,
         slowRam: 512,
@@ -606,7 +606,7 @@ struct HardwareDefaults {
         
         gameDevice1: 0,
         gameDevice2: -1,
-        serialDevice: SPD_NONE
+        serialDevice: .SPD_NONE
     )
 }
 

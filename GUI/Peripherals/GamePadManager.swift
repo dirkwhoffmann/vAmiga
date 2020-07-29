@@ -39,17 +39,17 @@ class GamePadManager {
                                         IOOptionBits(kIOHIDOptionsTypeNone))
 
         // Add default devices
-        gamePads[0] = GamePad(manager: self, type: CPD_MOUSE)
+        gamePads[0] = GamePad(manager: self, type: .CPD_MOUSE)
         gamePads[0]!.name = "Mouse"
         gamePads[0]!.setIcon(name: "devMouseTemplate")
         gamePads[0]!.keyMap = 0
         
-        gamePads[1] = GamePad(manager: self, type: CPD_JOYSTICK)
+        gamePads[1] = GamePad(manager: self, type: .CPD_JOYSTICK)
         gamePads[1]!.name = "Joystick Keyset 1"
         gamePads[1]!.setIcon(name: "devKeys1Template")
         gamePads[1]!.keyMap = 1
 
-        gamePads[2] = GamePad(manager: self, type: CPD_JOYSTICK)
+        gamePads[2] = GamePad(manager: self, type: .CPD_JOYSTICK)
         gamePads[2]!.name = "Joystick Keyset 2"
         gamePads[2]!.setIcon(name: "devKeys2Template")
         gamePads[2]!.keyMap = 2
@@ -144,7 +144,7 @@ class GamePadManager {
         
         // Update the device type on the Amiga side
         parent.amiga.suspend()
-        let deviceType = gamePads[slot]?.type ?? CPD_NONE
+        let deviceType = gamePads[slot]?.type ?? .CPD_NONE
         if port == 1 { parent.amiga.controlPort1.connect(deviceType) }
         if port == 2 { parent.amiga.controlPort2.connect(deviceType) }
         parent.amiga.resume()
@@ -270,7 +270,7 @@ class GamePadManager {
         // Create a GamePad object
         gamePads[slot] = GamePad(manager: self,
                                  device: device,
-                                 type: CPD_JOYSTICK,
+                                 type: .CPD_JOYSTICK,
                                  vendorID: vendorID,
                                  productID: productID,
                                  locationID: locationID)
@@ -291,7 +291,7 @@ class GamePadManager {
         // Create a GamePad object
         gamePads[slot] = GamePad(manager: self,
                                  device: device,
-                                 type: CPD_MOUSE,
+                                 type: .CPD_MOUSE,
                                  vendorID: vendorID,
                                  productID: productID,
                                  locationID: locationID)

@@ -12,8 +12,6 @@
 #ifndef _DRIVE_TYPES_H
 #define _DRIVE_TYPES_H
 
-#include "AmigaEnums.h"
-
 //
 // Enumerations
 //

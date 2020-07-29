@@ -12,19 +12,17 @@
 #ifndef _DENISE_TYPES_H
 #define _DENISE_TYPES_H
 
-#include "AmigaEnums.h"
 #include "AmigaConstants.h"
 
 //
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, DeniseRevision)
 {
     DENISE_8362R8, // OCS
     DENISE_8373    // ECS (not supported yet)
-}
-DeniseRevision;
+};
 
 inline bool isDeniseRevision(long value)
 {

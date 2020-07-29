@@ -12,13 +12,12 @@
 #ifndef _DMA_DEBUGGER_TYPES_H
 #define _DMA_DEBUGGER_TYPES_H
 
-typedef enum : long
+typedef VA_ENUM(long, DmaDebuggerDisplayMode)
 {
     MODULATE_FG_LAYER,
     MODULATE_BG_LAYER,
     MODULATE_ODD_EVEN_LAYERS
-}
-DmaDebuggerDisplayMode;
+};
 
 typedef struct
 {
