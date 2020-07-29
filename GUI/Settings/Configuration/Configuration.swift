@@ -222,12 +222,12 @@ class Configuration {
         set { amiga.paula.setPan(3, value: newValue) }
     }
     var volL: Double {
-        get { return amiga.paula.volL() }
-        set { amiga.paula.setVolL(newValue) }
+        get { return amiga.paula.volL }
+        set { amiga.paula.volL = newValue }
     }
     var volR: Double {
-        get { return amiga.paula.volR() }
-        set { amiga.paula.setVolR(newValue) }
+        get { return amiga.paula.volR }
+        set { amiga.paula.volR = newValue }
     }
     var samplingMethod: Int {
         get { return amiga.getConfig(OPT_SAMPLING_METHOD) }
@@ -246,21 +246,21 @@ class Configuration {
     // Video settings
     //
     
-    var palette: Int {
-        get { return Int(amiga.denise.palette()) }
-        set { amiga.denise.setPalette(Palette(newValue)) }
+    var palette: Palette {
+        get { return amiga.denise.palette }
+        set { amiga.denise.palette = newValue }
     }
     var brightness: Double {
-        get { return amiga.denise.brightness() }
-        set { amiga.denise.setBrightness(newValue) }
+        get { return amiga.denise.brightness }
+        set { amiga.denise.brightness = newValue }
     }
     var contrast: Double {
-        get { return amiga.denise.contrast() }
-        set { amiga.denise.setContrast(newValue) }
+        get { return amiga.denise.contrast }
+        set { amiga.denise.contrast = newValue }
     }
     var saturation: Double {
-        get { return amiga.denise.saturation() }
-        set { amiga.denise.setSaturation(newValue) }
+        get { return amiga.denise.saturation }
+        set { amiga.denise.saturation = newValue }
     }
     var hCenter = VideoDefaults.tft.hCenter {
         didSet { renderer.updateTextureRect() }
@@ -633,7 +633,7 @@ class Configuration {
         
         amiga.suspend()
         
-        palette = defaults.palette.rawValue
+        palette = defaults.palette
         brightness = defaults.brightness
         contrast = defaults.contrast
         saturation = defaults.saturation
@@ -690,7 +690,7 @@ class Configuration {
         
         amiga.suspend()
         
-        palette = defaults.integer(forKey: Keys.palette)
+        palette = Palette(rawValue: defaults.integer(forKey: Keys.palette)) ?? .COLOR_PALETTE
         brightness = defaults.double(forKey: Keys.brightness)
         contrast = defaults.double(forKey: Keys.contrast)
         saturation = defaults.double(forKey: Keys.saturation)

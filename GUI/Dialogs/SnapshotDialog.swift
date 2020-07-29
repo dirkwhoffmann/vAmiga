@@ -188,7 +188,7 @@ class SnapshotDialog: DialogController {
 
     func timeDiffInfo(url: URL) -> String {
         
-        return timeDiffInfo(date: url.modificationDate())
+        return timeDiffInfo(date: url.modificationDate)
     }
 
     @IBAction func selectorAction(_ sender: NSSegmentedControl!) {

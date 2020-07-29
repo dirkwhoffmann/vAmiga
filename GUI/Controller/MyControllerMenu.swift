@@ -11,9 +11,9 @@ extension MyController: NSMenuItemValidation {
     
     open func validateMenuItem(_ item: NSMenuItem) -> Bool {
         
-        let powered = amiga.isPoweredOn()
-        let running = amiga.isRunning()
-        let paused = amiga.isPaused()
+        let powered = amiga.isPoweredOn
+        let running = amiga.isRunning
+        let paused = amiga.isPaused
         
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
@@ -106,7 +106,7 @@ extension MyController: NSMenuItemValidation {
             return paused
             
         case #selector(MyController.dumpStateAction(_:)):
-            return !amiga.releaseBuild()
+            return !amiga.isReleaseBuild
             
         default:
             return true
@@ -312,7 +312,7 @@ extension MyController: NSMenuItemValidation {
         
         var error: ErrorCode = ERR_OK
 
-        if amiga.isPoweredOn() {
+        if amiga.isPoweredOn {
             amiga.powerOff()
             return
         }

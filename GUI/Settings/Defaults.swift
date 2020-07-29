@@ -1030,7 +1030,7 @@ struct VideoDefaults {
     // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
-        palette: COLOR_PALETTE,
+        palette: Palette.COLOR_PALETTE,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,
@@ -1064,7 +1064,7 @@ struct VideoDefaults {
     // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
-        palette: COLOR_PALETTE,
+        palette: Palette.COLOR_PALETTE,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,

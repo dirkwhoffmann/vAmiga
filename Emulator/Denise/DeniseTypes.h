@@ -12,6 +12,7 @@
 #ifndef _DENISE_TYPES_H
 #define _DENISE_TYPES_H
 
+#include <CoreFoundation/CoreFoundation.h>
 #include "AmigaConstants.h"
 
 //
@@ -41,7 +42,7 @@ inline const char *deniseRevisionName(DeniseRevision type)
     }
 }
 
-typedef enum : long
+typedef CF_ENUM(long, Palette)
 {
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,
@@ -49,8 +50,7 @@ typedef enum : long
     GREEN_PALETTE,
     AMBER_PALETTE,
     SEPIA_PALETTE
-}
-Palette;
+};
 
 inline bool isPalette(long value) {
     return value >= COLOR_PALETTE && value <= SEPIA_PALETTE;

@@ -119,31 +119,30 @@ extension URL {
         return folder
     }
     
-    func modificationDate() -> Date? {
+    var modificationDate: Date? {
         
-        let attr = try? FileManager.default.attributesOfItem(atPath: self.path)
-        
-        if attr != nil {
-            return attr![.creationDate] as? Date
-        } else {
+        guard let resVal = try? resourceValues(forKeys: [.contentModificationDateKey]) else {
             return nil
         }
+        
+        return resVal.contentModificationDate
     }
         
-    func addTimeStamp() -> URL {
+    func byAddingTimeStamp() -> URL {
         
-        let path = self.deletingPathExtension().path
+        let path = self.deletingPathExtension()
+        var lastComp = path.lastPathComponent
         let suffix = self.pathExtension
         
-        let date = Date.init()
+        let date = Date()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let dateString = formatter.string(from: date)
         formatter.dateFormat = "hh.mm.ss"
         let timeString = formatter.string(from: date)
-        let timeStamp = dateString + " at " + timeString
+        lastComp.append(contentsOf: " \(dateString) at \(timeString)")
 
-        return URL(fileURLWithPath: path + " " + timeStamp + "." + suffix)
+        return self.deletingLastPathComponent().appendingPathComponent(lastComp, isDirectory: false).appendingPathExtension(suffix)
     }
     
     func makeUnique() -> URL {
@@ -164,7 +163,7 @@ extension URL {
         return self
     }
     
-    func addExtension(for format: NSBitmapImageRep.FileType) -> URL {
+    func byAddingExtension(for format: NSBitmapImageRep.FileType) -> URL {
     
         let extensions: [NSBitmapImageRep.FileType: String] =
         [ .tiff: "tiff", .bmp: "bmp", .gif: "gif", .jpeg: "jpeg", .png: "png" ]
@@ -237,9 +236,9 @@ extension FileManager {
         task.standardError = pipe
         task.launch()
         
+        task.waitUntilExit()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let result = String(data: data, encoding: .utf8)
-        task.waitUntilExit()
         
         return result
     }
@@ -287,9 +286,11 @@ extension Date {
 
 extension NSTabView {
     
-    func selectedIndex() -> Int {
+    var selectedIndex: Int {
         
-        let selected = self.selectedTabViewItem
-        return selected != nil ? self.indexOfTabViewItem(selected!) : -1
+        guard let selected = self.selectedTabViewItem else {
+            return -1
+        }
+        return self.indexOfTabViewItem(selected)
     }
 }

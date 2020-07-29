@@ -87,33 +87,33 @@ struct SerialPortWrapper;
 }
 
 @property (readonly) struct AmigaWrapper *wrapper;
-@property (readonly) AgnusProxy *agnus;
-@property (readonly) BlitterProxy *blitter;
-@property (readonly) CIAProxy *ciaA;
-@property (readonly) CIAProxy *ciaB;
-@property (readonly) ControlPortProxy *controlPort1;
-@property (readonly) ControlPortProxy *controlPort2;
-@property (readonly) CopperProxy *copper;
-@property (readonly) CPUProxy *cpu;
-@property (readonly) DeniseProxy *denise;
-@property (readonly) DiskControllerProxy *diskController;
-@property (readonly) DmaDebuggerProxy *dmaDebugger;
-@property (readonly) DriveProxy *df0;
-@property (readonly) DriveProxy *df1;
-@property (readonly) DriveProxy *df2;
-@property (readonly) DriveProxy *df3;
-@property (readonly) JoystickProxy *joystick1;
-@property (readonly) JoystickProxy *joystick2;
-@property (readonly) KeyboardProxy *keyboard;
-@property (readonly) MemProxy *mem;
-@property (readonly) MouseProxy *mouse1;
-@property (readonly) MouseProxy *mouse2;
-@property (readonly) PaulaProxy *paula;
-@property (readonly) SerialPortProxy *serialPort;
+@property (readonly, strong) AgnusProxy *agnus;
+@property (readonly, strong) BlitterProxy *blitter;
+@property (readonly, strong) CIAProxy *ciaA;
+@property (readonly, strong) CIAProxy *ciaB;
+@property (readonly, strong) ControlPortProxy *controlPort1;
+@property (readonly, strong) ControlPortProxy *controlPort2;
+@property (readonly, strong) CopperProxy *copper;
+@property (readonly, strong) CPUProxy *cpu;
+@property (readonly, strong) DeniseProxy *denise;
+@property (readonly, strong) DiskControllerProxy *diskController;
+@property (readonly, strong) DmaDebuggerProxy *dmaDebugger;
+@property (readonly, strong) DriveProxy *df0;
+@property (readonly, strong) DriveProxy *df1;
+@property (readonly, strong) DriveProxy *df2;
+@property (readonly, strong) DriveProxy *df3;
+@property (readonly, strong) JoystickProxy *joystick1;
+@property (readonly, strong) JoystickProxy *joystick2;
+@property (readonly, strong) KeyboardProxy *keyboard;
+@property (readonly, strong) MemProxy *mem;
+@property (readonly, strong) MouseProxy *mouse1;
+@property (readonly, strong) MouseProxy *mouse2;
+@property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) SerialPortProxy *serialPort;
 
 - (void) kill;
 
-- (BOOL) releaseBuild;
+@property (readonly, getter=isReleaseBuild) BOOL releaseBuild;
 - (void) enableDebugging;
 - (void) disableDebugging;
 - (void) setInspectionTarget:(EventID)id;
@@ -131,10 +131,10 @@ struct SerialPortWrapper;
 
 - (AmigaInfo) getInfo;
 
-- (BOOL) isPoweredOn;
-- (BOOL) isPoweredOff;
-- (BOOL) isRunning;
-- (BOOL) isPaused;
+@property (readonly, getter=isPoweredOn) BOOL poweredOn;
+@property (readonly, getter=isPoweredOff) BOOL poweredOff;
+@property (readonly, getter=isRunning) BOOL running;
+@property (readonly, getter=isPaused) BOOL paused;
 - (void) run;
 - (void) pause;
 
@@ -163,7 +163,7 @@ struct SerialPortWrapper;
 - (void) stepInto;
 - (void) stepOver;
 
-- (BOOL) warp;
+@property (readonly) BOOL warp;
 - (void) warpOn;
 - (void) warpOff;
 
@@ -186,11 +186,11 @@ struct SerialPortWrapper;
 - (DisassembledInstr) getInstrInfo:(NSInteger)index;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
-- (i64) clock;
-- (i64) cycles;
-- (bool) isHalted;
+@property (readonly) i64 clock;
+@property (readonly) i64 cycles;
+@property (readonly, getter=isHalted) bool isHalted;
 
-- (NSInteger) numberOfBreakpoints;
+@property (readonly) NSInteger numberOfBreakpoints;
 - (u32) breakpointAddr:(NSInteger)nr;
 - (BOOL) breakpointIsEnabled:(NSInteger)nr;
 - (BOOL) breakpointIsDisabled:(NSInteger)nr;
@@ -219,7 +219,7 @@ struct SerialPortWrapper;
 - (void) addWatchpointAt:(u32)addr;
 - (void) removeWatchpointAt:(u32)addr;
 
-- (NSInteger) loggedInstructions;
+@property (readonly) NSInteger loggedInstructions;
 - (void) clearLog;
 
 - (DisassembledInstr) disassembleInstr:(u32)addr;
@@ -262,9 +262,9 @@ struct SerialPortWrapper;
 - (BOOL) isCommodoreRom:(RomIdentifier)rev;
 - (BOOL) isHyperionRom:(RomIdentifier)rev;
 
-- (BOOL) hasRom;
-- (BOOL) hasBootRom;
-- (BOOL) hasKickRom;
+@property (readonly) BOOL hasRom;
+@property (readonly) BOOL hasBootRom;
+@property (readonly) BOOL hasKickRom;
 - (void) deleteRom;
 - (BOOL) isRom:(NSURL *)url;
 - (BOOL) isEncryptedRom:(NSURL *)url;
@@ -274,9 +274,9 @@ struct SerialPortWrapper;
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error;
 - (u64) romFingerprint;
 - (RomIdentifier) romIdentifier;
-- (NSString *) romTitle;
-- (NSString *) romVersion;
-- (NSString *) romReleased;
+@property (readonly, copy) NSString *romTitle;
+@property (readonly, copy) NSString *romVersion;
+@property (readonly, copy) NSString *romReleased;
 
 - (BOOL) hasExt;
 - (void) deleteExt;
@@ -284,7 +284,7 @@ struct SerialPortWrapper;
 - (BOOL) loadExtFromBuffer:(NSData *)buffer;
 - (BOOL) loadExtFromFile:(NSURL *)url;
 - (u64) extFingerprint;
-- (RomIdentifier) extIdentifier;
+@property (readonly) RomIdentifier extIdentifier;
 - (NSString *) extTitle;
 - (NSString *) extVersion;
 - (NSString *) extReleased;
@@ -415,14 +415,10 @@ struct SerialPortWrapper;
 - (u64) sprData:(NSInteger)nr line:(NSInteger)line;
 - (u16) sprColor:(NSInteger)nr reg:(NSInteger)reg;
 
-- (double) palette;
-- (void) setPalette:(Palette)p;
-- (double) brightness;
-- (void) setBrightness:(double)value;
-- (double) saturation;
-- (void) setSaturation:(double)value;
-- (double) contrast;
-- (void) setContrast:(double)value;
+@property Palette palette;
+@property double brightness;
+@property double saturation;
+@property double contrast;
 
 - (ScreenBuffer) stableLongFrame;
 - (ScreenBuffer) stableShortFrame;
@@ -453,12 +449,14 @@ struct SerialPortWrapper;
 - (void) setVol:(NSInteger)nr value:(double)value;
 - (double) pan:(NSInteger)nr;
 - (void) setPan:(NSInteger)nr value:(double)value;
+@property double volL;
+@property double volR;
 - (double) volL;
 - (void) setVolL:(double)value;
 - (double) volR;
 - (void) setVolR:(double)value;
 
-- (NSInteger) ringbufferSize;
+@property (readonly) NSInteger ringbufferSize;
 - (double) ringbufferDataL:(NSInteger)offset;
 - (double) ringbufferDataR:(NSInteger)offset;
 - (double) fillLevel;

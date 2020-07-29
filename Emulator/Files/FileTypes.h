@@ -12,6 +12,8 @@
 #ifndef _FILE_TYPES_H
 #define _FILE_TYPES_H
 
+#include <CoreFoundation/CoreFoundation.h>
+
 typedef enum
 {
     FILETYPE_UKNOWN = 0,
@@ -29,7 +31,7 @@ inline bool isAmigaFileType(long value) {
     return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
 }
 
-typedef enum
+typedef CF_ENUM(CFIndex, RomIdentifier)
 {
     ROM_MISSING,
     ROM_UNKNOWN,
@@ -71,8 +73,7 @@ typedef enum
     ROM_LOGICA20,
 
     ROM_CNT
-}
-RomIdentifier;
+};
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 

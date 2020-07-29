@@ -2,41 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "led_rectangular_h_black.pdf",
-      "scale" : "1x"
+      "filename" : "led_rectangular_h_black.pdf"
     },
     {
       "idiom" : "universal",
       "filename" : "LED_dim.pdf",
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x",
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ]
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x",
       "appearances" : [
         {
           "appearance" : "luminosity",

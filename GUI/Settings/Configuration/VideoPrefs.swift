@@ -38,7 +38,7 @@ extension ConfigurationController {
         // Video
         vidEnhancerPopUp.selectItem(withTag: config.enhancer)
         vidUpscalerPopUp.selectItem(withTag: config.upscaler)
-        vidPalettePopUp.selectItem(withTag: config.palette)
+        vidPalettePopUp.selectItem(withTag: config.palette.rawValue)
         vidBrightnessSlider.doubleValue = config.brightness
         vidContrastSlider.doubleValue = config.contrast
         vidSaturationSlider.doubleValue = config.saturation
@@ -95,7 +95,7 @@ extension ConfigurationController {
     
     @IBAction func vidPaletteAction(_ sender: NSPopUpButton!) {
         
-        config.palette = sender.selectedTag()
+        config.palette = Palette(rawValue: sender.selectedTag())!
         refresh()
     }
     

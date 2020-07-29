@@ -12,7 +12,7 @@ extension MyController {
     var hourglassIcon: NSImage? {
         
         switch pref.warpMode {
-        case .auto where amiga.warp():
+        case .auto where amiga.warp:
             return NSImage.init(named: "hourglass3Template")
         case .auto:
             return NSImage.init(named: "hourglass1Template")
@@ -40,10 +40,10 @@ extension MyController {
         let hasDisk2 = amiga.df2.hasDisk()
         let hasDisk3 = amiga.df3.hasDisk()
 
-        let running = amiga.isRunning()
+        let running = amiga.isRunning
         let debug = amiga.debugMode()
-        let halted = amiga.cpu.isHalted()
-        let warp = amiga.warp()
+        let halted = amiga.cpu.isHalted
+        let warp = amiga.warp
 
         // Cylinders
         refreshStatusBar(drive: 0, cyclinder: amiga.df0.cylinder())
@@ -141,7 +141,7 @@ extension MyController {
         
     public func refreshStatusBar(drive: Int, motor: Bool) {
         
-        let spin = amiga.isRunning() && motor
+        let spin = amiga.isRunning && motor
         
         switch drive {
         case 0: spin ? df0DMA.startAnimation(self) : df0DMA.stopAnimation(self)

@@ -283,11 +283,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) isRom:(NSURL *)url
 {
-    return RomFile::isRomFile([[url path] UTF8String]);
+    return RomFile::isRomFile([url fileSystemRepresentation]);
 }
 - (BOOL) isEncryptedRom:(NSURL *)url
 {
-    return EncryptedRomFile::isEncryptedRomFile([[url path] UTF8String]);
+    return EncryptedRomFile::isEncryptedRomFile([url fileSystemRepresentation]);
 }
 - (BOOL) loadRomFromBuffer:(NSData *)data
 {
@@ -297,15 +297,15 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) loadRomFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadRomFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadRomFromFile([url fileSystemRepresentation]);
 }
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadEncryptedRomFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation]);
 }
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error
 {
-    return wrapper->mem->loadEncryptedRomFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation]);
 }
 - (u64) romFingerprint
 {
@@ -340,7 +340,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) isExt:(NSURL *)url
 {
-    return ExtFile::isExtFile([[url path] UTF8String]);
+    return ExtFile::isExtFile([url fileSystemRepresentation]);
 }
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {
@@ -350,7 +350,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) loadExtFromFile:(NSURL *)url
 {
-    return wrapper->mem->loadExtFromFile([[url path] UTF8String]);
+    return wrapper->mem->loadExtFromFile([url fileSystemRepresentation]);
 }
 - (u64) extFingerprint
 {
@@ -381,15 +381,15 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) saveWom:(NSURL *)url
 {
-    return wrapper->mem->saveWom([[url path] UTF8String]);
+    return wrapper->mem->saveWom([url fileSystemRepresentation]);
 }
 - (BOOL) saveRom:(NSURL *)url
 {
-    return wrapper->mem->saveRom([[url path] UTF8String]);
+    return wrapper->mem->saveRom([url fileSystemRepresentation]);
 }
 - (BOOL) saveExt:(NSURL *)url
 {
-    return wrapper->mem->saveExt([[url path] UTF8String]);
+    return wrapper->mem->saveExt([url fileSystemRepresentation]);
 }
 - (MemorySource *) getMemSrcTable
 {
@@ -676,7 +676,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->denise->getSpriteColor(nr, reg);
 }
-- (double) palette
+- (Palette) palette
 {
    return wrapper->denise->pixelEngine.getPalette();
 }
@@ -1240,7 +1240,7 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void)setPath:(NSString *)path
 {
     AmigaFile *file = (AmigaFile *)([self wrapper]->file);
-    file->setPath([path UTF8String]);
+    file->setPath([path fileSystemRepresentation]);
 }
 - (AmigaFileWrapper *)wrapper
 {
@@ -1298,11 +1298,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (BOOL) isSupportedSnapshotFile:(NSString *)path
 {
-    return Snapshot::isSupportedSnapshotFile([path UTF8String]);
+    return Snapshot::isSupportedSnapshotFile([path fileSystemRepresentation]);
 }
 + (BOOL) isUnsupportedSnapshotFile:(NSString *)path
 {
-    return Snapshot::isUnsupportedSnapshotFile([path UTF8String]);
+    return Snapshot::isUnsupportedSnapshotFile([path fileSystemRepresentation]);
 }
 + (instancetype) make:(Snapshot *)snapshot
 {
@@ -1386,7 +1386,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (BOOL)isADFFile:(NSString *)path
 {
-    return ADFFile::isADFFile([path UTF8String]);
+    return ADFFile::isADFFile([path fileSystemRepresentation]);
 }
 + (instancetype) make:(ADFFile *)archive
 {
@@ -1400,7 +1400,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    ADFFile *archive = ADFFile::makeWithFile([path UTF8String]);
+    ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
 + (instancetype) makeWithDiskType:(DiskType)type
@@ -1466,7 +1466,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 + (BOOL)isDMSFile:(NSString *)path
 {
-    return DMSFile::isDMSFile([path UTF8String]);
+    return DMSFile::isDMSFile([path fileSystemRepresentation]);
 }
 + (instancetype) make:(DMSFile *)archive
 {
@@ -1480,7 +1480,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    DMSFile *archive = DMSFile::makeWithFile([path UTF8String]);
+    DMSFile *archive = DMSFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
 
@@ -1573,7 +1573,7 @@ struct SerialPortWrapper { SerialPort *port; };
     wrapper->amiga = NULL;
 }
 
-- (BOOL) releaseBuild
+- (BOOL) isReleaseBuild
 {
     return releaseBuild();
 }

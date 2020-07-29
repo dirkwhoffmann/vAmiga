@@ -167,7 +167,7 @@ class MyController: NSWindowController, MessageReceiver {
         case .on: warp = true
         }
         
-        if warp != amiga.warp() {
+        if warp != amiga.warp {
             warp ? amiga.warpOn() : amiga.warpOff()
         }
     }
@@ -392,7 +392,7 @@ extension MyController {
     
     func updateSpeedometer() {
         
-        speedometer.updateWith(cycle: amiga.cpu.cycles(), frame: renderer.frames)
+        speedometer.updateWith(cycle: amiga.cpu.cycles, frame: renderer.frames)
         let mhz = speedometer.mhz
         let fps = speedometer.fps
         clockSpeed.stringValue = String(format: "%.2f MHz %.0f fps", mhz, fps)
