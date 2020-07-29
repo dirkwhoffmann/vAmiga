@@ -456,6 +456,7 @@
 		50F924FB2428B8CD00DD91AB /* DDF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DDF.cpp; sourceTree = "<group>"; };
 		50F924FC2428B8CD00DD91AB /* DDF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDF.h; sourceTree = "<group>"; };
 		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
+		55220E4924D1517B00A6736A /* AmigaEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaEnums.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -702,6 +703,7 @@
 			children = (
 				50B14C0921EB228E002E32A6 /* AmigaConfig.h */,
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
+				55220E4924D1517B00A6736A /* AmigaEnums.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50B14C0421EB212E002E32A6 /* Foundation */,

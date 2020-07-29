@@ -12,7 +12,7 @@
 #ifndef _DENISE_TYPES_H
 #define _DENISE_TYPES_H
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "AmigaEnums.h"
 #include "AmigaConstants.h"
 
 //
@@ -42,7 +42,7 @@ inline const char *deniseRevisionName(DeniseRevision type)
     }
 }
 
-typedef CF_ENUM(long, Palette)
+typedef VA_ENUM(long, Palette)
 {
     COLOR_PALETTE = 0,
     BLACK_WHITE_PALETTE,

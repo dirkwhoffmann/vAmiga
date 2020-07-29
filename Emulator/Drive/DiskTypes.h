@@ -12,13 +12,13 @@
 #ifndef _DISK_TYPES_H
 #define _DISK_TYPES_H
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "AmigaEnums.h"
 
 //
 // Enumerations
 //
 
-typedef CF_ENUM(long, DiskType)
+typedef VA_ENUM(long, DiskType)
 {
     DISK_35_DD,
     DISK_35_DD_PC,
@@ -46,7 +46,7 @@ inline const char *diskTypeName(DiskType type)
     }
 }
 
-typedef CF_ENUM(long, FileSystemType)
+typedef VA_ENUM(long, FileSystemType)
 {
     FS_NONE,
     FS_OFS,

@@ -12,9 +12,9 @@
 #ifndef _FILE_TYPES_H
 #define _FILE_TYPES_H
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "AmigaEnums.h"
 
-typedef CF_ENUM(CFIndex, AmigaFileType)
+typedef VA_ENUM(long, AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,
     FILETYPE_SNAPSHOT,
@@ -30,7 +30,7 @@ inline bool isAmigaFileType(long value) {
     return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
 }
 
-typedef CF_ENUM(CFIndex, RomIdentifier)
+typedef VA_ENUM(long, RomIdentifier)
 {
     ROM_MISSING,
     ROM_UNKNOWN,

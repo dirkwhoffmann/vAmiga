@@ -12,13 +12,13 @@
 #ifndef _DISK_CONTROLLER_T_H
 #define _DISK_CONTROLLER_T_H
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "AmigaEnums.h"
 
 //
 // Enumerations
 //
 
-typedef CF_ENUM(int, DriveState)
+typedef VA_ENUM(int, DriveState)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 

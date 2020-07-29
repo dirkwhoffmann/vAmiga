@@ -12,13 +12,13 @@
 #ifndef _DRIVE_TYPES_H
 #define _DRIVE_TYPES_H
 
-#include <CoreFoundation/CoreFoundation.h>
+#include "AmigaEnums.h"
 
 //
 // Enumerations
 //
 
-typedef CF_ENUM(long, DriveType)
+typedef VA_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_DD_PC,
