@@ -262,7 +262,7 @@ extension MyController: NSMenuItemValidation {
             let name = NSNib.Name("ScreenshotDialog")
             screenshotBrowser = ScreenshotDialog.make(parent: self, nibName: name)
         }
-        screenshotBrowser?.checksum = amiga.df0.fnv()
+        screenshotBrowser?.checksum = amiga.df0.fnv
         screenshotBrowser?.showSheet()
     }
     

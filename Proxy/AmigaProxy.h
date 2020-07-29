@@ -118,7 +118,7 @@ struct SerialPortWrapper;
 - (void) disableDebugging;
 - (void) setInspectionTarget:(EventID)id;
 - (void) clearInspectionTarget;
-- (BOOL) debugMode;
+@property (readonly) BOOL debugMode;
 
 - (BOOL) isReady:(ErrorCode *)error;
 - (BOOL) isReady;
@@ -539,12 +539,9 @@ struct SerialPortWrapper;
 - (void) dump;
 
 - (void) trigger:(GamePadAction)event;
-- (BOOL) autofire;
-- (void) setAutofire:(BOOL)value;
-- (NSInteger) autofireBullets;
-- (void) setAutofireBullets:(NSInteger)value;
-- (float) autofireFrequency;
-- (void) setAutofireFrequency:(float)value;
+@property BOOL autofire;
+@property NSInteger autofireBullets;
+@property float autofireFrequency;
 
 @end
 
@@ -608,7 +605,7 @@ struct SerialPortWrapper;
 - (void) dump;
 
 - (DriveInfo) getInfo;
-- (NSInteger) nr;
+@property (readonly) NSInteger nr;
 @property (readonly) DriveType type;
 
 @property (readonly) BOOL hasDisk;
@@ -621,7 +618,7 @@ struct SerialPortWrapper;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
 
-- (u64)  fnv;
+@property (readonly) u64 fnv;
 
 - (ADFFileProxy *)convertDisk;
 
@@ -643,7 +640,7 @@ struct SerialPortWrapper;
 
 - (struct AmigaFileWrapper *)wrapper;
 
-- (AmigaFileType)type;
+@property (readonly) AmigaFileType type;
 - (void)setPath:(NSString *)path;
 @property (readonly) NSInteger sizeOnDisk;
 

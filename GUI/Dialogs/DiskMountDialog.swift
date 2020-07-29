@@ -35,7 +35,7 @@ class DiskMountDialog: DialogController {
     
         track()
 
-        type = myDocument.amigaAttachment?.type()
+        type = myDocument.amigaAttachment?.type
 
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
             // title.stringValue = "Amiga Disk File (ADF)"

@@ -502,7 +502,7 @@ extension MyController {
 
         case MSG_RESET:
             mydocument.deleteBootDiskID()
-            mydocument.setBootDiskID(amiga.df0.fnv())
+            mydocument.setBootDiskID(amiga.df0.fnv)
             inspector?.fullRefresh()
 
         case MSG_MUTE_ON:
@@ -595,7 +595,7 @@ extension MyController {
             if pref.driveSounds && pref.driveInsertSound {
                 macAudio.playSound(name: "insert", volume: 0.3)
             }
-            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv()) }
+            if msg.data == 0 { mydocument.setBootDiskID(amiga.df0.fnv) }
             refreshStatusBar()
             
         case MSG_DISK_EJECT:

@@ -41,8 +41,8 @@ extension MyController {
         let hasDisk3 = amiga.df3.hasDisk
 
         let running = amiga.isRunning
-        let debug = amiga.debugMode()
-        let halted = amiga.cpu.isHalted
+        let debug = amiga.debugMode
+        let halted = amiga.cpu.halted
         let warp = amiga.warp
 
         // Cylinders
