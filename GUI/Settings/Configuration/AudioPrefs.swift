@@ -12,7 +12,7 @@ extension ConfigurationController {
     func refreshAudioTab() {
         
         track()
-        let config = amiga.config().audio
+        let config = amiga.config.audio
         
         // In
         audVol0.doubleValue = exp2(config.vol.0 / 0.0000025) * 100

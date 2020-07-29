@@ -78,8 +78,8 @@ class Screenshot {
         // Assemble filename
         if var url = desktop.appendingPathComponent("Screenshot.") {
             
-            url = url.addExtension(for: format)
-            url = url.addTimeStamp()
+            url = url.byAddingExtension(for: format)
+            url = url.byAddingTimeStamp()
             url = url.makeUnique()
             
             do {
@@ -111,7 +111,7 @@ class Screenshot {
         
     static func fileExists(name: URL, type: NSBitmapImageRep.FileType) -> URL? {
         
-        let url = name.addExtension(for: type)
+        let url = name.byAddingExtension(for: type)
         return FileManager.default.fileExists(atPath: url.path) ? url : nil
     }
     
@@ -137,7 +137,7 @@ class Screenshot {
         for i in 0...999 {
             
             let filename = String(format: "%03d", i)
-            let url = folder!.appendingPathComponent(filename).addExtension(for: format)
+            let url = folder!.appendingPathComponent(filename).byAddingExtension(for: format)
             
             if !FileManager.default.fileExists(atPath: url.path) {
                 return url

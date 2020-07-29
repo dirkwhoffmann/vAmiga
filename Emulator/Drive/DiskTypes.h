@@ -17,15 +17,14 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, DiskType)
 {
     DISK_35_DD,
     DISK_35_DD_PC,
     DISK_35_HD,
     DISK_35_HD_PC,
     DISK_525_SD
-}
-DiskType;
+};
 
 inline bool isDiskType(DiskType model)
 {
@@ -46,15 +45,14 @@ inline const char *diskTypeName(DiskType type)
     }
 }
 
-typedef enum : long
+typedef VA_ENUM(long, FileSystemType)
 {
     FS_NONE,
     FS_OFS,
     FS_OFS_BOOTABLE,
     FS_FFS,
     FS_FFS_BOOTABLE
-}
-FileSystemType;
+};
 
 inline bool isFileSystemType(FileSystemType type)
 {

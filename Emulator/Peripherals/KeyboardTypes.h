@@ -16,15 +16,14 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, KeyboardState)
 {
     KB_SELFTEST,
     KB_SYNC,
     KB_STRM_ON,
     KB_STRM_OFF,
     KB_SEND
-}
-KeyboardState;
+};
 
 inline bool isKeyboardState(long value) {
     return value >= 0 && value <= KB_SEND;

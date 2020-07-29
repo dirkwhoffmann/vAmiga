@@ -12,7 +12,7 @@
 #ifndef _FILE_TYPES_H
 #define _FILE_TYPES_H
 
-typedef enum
+typedef VA_ENUM(long, AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,
     FILETYPE_SNAPSHOT,
@@ -22,14 +22,13 @@ typedef enum
     FILETYPE_KICK_ROM,
     FILETYPE_ENCRYPTED_KICK_ROM,
     FILETYPE_EXT_ROM
-}
-AmigaFileType;
+};
 
 inline bool isAmigaFileType(long value) {
     return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
 }
 
-typedef enum
+typedef VA_ENUM(long, RomIdentifier)
 {
     ROM_MISSING,
     ROM_UNKNOWN,
@@ -71,8 +70,7 @@ typedef enum
     ROM_LOGICA20,
 
     ROM_CNT
-}
-RomIdentifier;
+};
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 

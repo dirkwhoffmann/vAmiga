@@ -16,13 +16,12 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, RTCModel)
 {
     RTC_NONE,
     RTC_OKI,
     RTC_RICOH
-}
-RTCModel;
+};
 
 inline bool isRTCModel(long value)
 {

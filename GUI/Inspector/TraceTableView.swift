@@ -25,7 +25,7 @@ class TraceTableView: NSTableView {
 
     private func cache() {
 
-        numRows = amiga.cpu.loggedInstructions()
+        numRows = amiga.cpu.loggedInstructions
 
         for i in 0 ..< numRows {
             instrInRow[i] = amiga.cpu.getLoggedInstrInfo(i)

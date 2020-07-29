@@ -11,7 +11,7 @@ extension ConfigurationController {
 
     func refreshCompatibilityTab() {
 
-        let config = amiga.config()
+        let config = amiga.config
 
         // Graphics
         compClxSprSpr.state = config.denise.clxSprSpr ? .on : .off

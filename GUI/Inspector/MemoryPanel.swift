@@ -90,7 +90,7 @@ extension Inspector {
 
     private func refreshMemoryLayout() {
 
-        let config = amiga.config()
+        let config = amiga.config
         let size = NSSize(width: 16, height: 16)
 
         memLayoutButton.image   = memLayoutImage

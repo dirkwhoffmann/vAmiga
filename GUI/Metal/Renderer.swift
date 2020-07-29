@@ -596,8 +596,8 @@ class Renderer: NSObject, MTKViewDelegate {
     
     func drawScene3D() {
 
-        let paused = parent.amiga.isPaused()
-        let poweredOff = parent.amiga.isPoweredOff()
+        let paused = parent.amiga.isPaused
+        let poweredOff = parent.amiga.isPoweredOff
         let renderBackground = poweredOff || fullscreen
         let renderForeground = alpha.current > 0.0
 

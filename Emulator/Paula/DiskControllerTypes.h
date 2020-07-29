@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-typedef enum
+typedef VA_ENUM(int, DriveState)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 
@@ -25,8 +25,7 @@ typedef enum
 
     DRIVE_DMA_WRITE,   // Drive is writing
     DRIVE_DMA_FLUSH,   // Drive is finishing up the write process
-}
-DriveState;
+};
 
 inline bool isDriveState(long value)
 {

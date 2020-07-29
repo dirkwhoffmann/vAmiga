@@ -20,7 +20,7 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, IrqSource)
 {
     INT_TBE,
     INT_DSKBLK,
@@ -37,8 +37,7 @@ typedef enum : long
     INT_DSKSYN,
     INT_EXTER,
     INT_COUNT
-}
-IrqSource;
+};
 
 static inline bool isIrqSource(long value) { return value >= 0 && value < INT_COUNT; }
 

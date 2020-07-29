@@ -11,17 +11,17 @@ extension ConfigurationController {
     
     func refreshRomTab() {
 
-        let poweredOff      = amiga.isPoweredOff()
+        let poweredOff      = amiga.isPoweredOff
 
         let romIdentifier   = amiga.mem.romIdentifier()
-        let hasRom          = romIdentifier != ROM_MISSING
+        let hasRom          = romIdentifier != .ROM_MISSING
         let hasArosRom      = amiga.mem.isArosRom(romIdentifier)
         let hasDiagRom      = amiga.mem.isDiagRom(romIdentifier)
         let hasCommodoreRom = amiga.mem.isCommodoreRom(romIdentifier)
         let hasHyperionRom  = amiga.mem.isHyperionRom(romIdentifier)
 
-        let extIdentifier   = amiga.mem.extIdentifier()
-        let hasExt          = extIdentifier != ROM_MISSING
+        let extIdentifier   = amiga.mem.extIdentifier
+        let hasExt          = extIdentifier != .ROM_MISSING
         let hasArosExt      = amiga.mem.isArosRom(extIdentifier)
         let hasDiagExt      = amiga.mem.isDiagRom(extIdentifier)
         let hasCommodoreExt = amiga.mem.isCommodoreRom(extIdentifier)
@@ -57,9 +57,9 @@ extension ConfigurationController {
             hasExt          ? romUnknown : romMissing
 
         // Titles and subtitles
-        romTitle.stringValue = amiga.mem.romTitle()
-        romSubtitle.stringValue = amiga.mem.romVersion()
-        romSubsubtitle.stringValue = amiga.mem.romReleased()
+        romTitle.stringValue = amiga.mem.romTitle
+        romSubtitle.stringValue = amiga.mem.romVersion
+        romSubsubtitle.stringValue = amiga.mem.romReleased
 
         extTitle.stringValue = amiga.mem.extTitle()
         extSubtitle.stringValue = amiga.mem.extVersion()

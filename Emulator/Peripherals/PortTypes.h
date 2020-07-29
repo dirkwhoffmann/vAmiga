@@ -16,12 +16,11 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, SerialPortDevice)
 {
     SPD_NONE,
     SPD_LOOPBACK
-}
-SerialPortDevice;
+};
 
 inline bool isSerialPortDevice(long value) {
     return value >= 0 && value <= SPD_LOOPBACK;
@@ -38,13 +37,12 @@ inline bool isPortNr(long value) {
     return value == PORT_1 || value == PORT_2;
 }
 
-typedef enum : long
+typedef VA_ENUM(long, ControlPortDevice)
 {
     CPD_NONE,
     CPD_MOUSE,
     CPD_JOYSTICK
-}
-ControlPortDevice;
+};
 
 inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;

@@ -62,12 +62,12 @@ extension PreferencesController {
         devDisconnectKeys.state = pref.disconnectJoyKeys ? .on : .off
 
         // Joystick buttons
-        assert(pref.autofire == joystick2.autofire())
-        assert(pref.autofireBullets == joystick2.autofireBullets())
-        assert(pref.autofireFrequency == joystick2.autofireFrequency())
-        assert(joystick1.autofire() == joystick2.autofire())
-        assert(joystick1.autofireBullets() == joystick2.autofireBullets())
-        assert(joystick1.autofireFrequency() == joystick2.autofireFrequency())
+        assert(pref.autofire == joystick2.autofire)
+        assert(pref.autofireBullets == joystick2.autofireBullets)
+        assert(pref.autofireFrequency == joystick2.autofireFrequency)
+        assert(joystick1.autofire == joystick2.autofire)
+        assert(joystick1.autofireBullets == joystick2.autofireBullets)
+        assert(joystick1.autofireFrequency == joystick2.autofireFrequency)
         devAutofire.state = pref.autofire ? .on : .off
         devAutofireCease.state = pref.autofireBullets > 0 ? .on : .off
         devAutofireBullets.integerValue = Int(pref.autofireBullets.magnitude)
