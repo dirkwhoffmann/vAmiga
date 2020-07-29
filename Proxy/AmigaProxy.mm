@@ -307,7 +307,7 @@ struct SerialPortWrapper { SerialPort *port; };
 */
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error
 {
-    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation]);
+    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation], error);
 }
 - (u64) romFingerprint
 {

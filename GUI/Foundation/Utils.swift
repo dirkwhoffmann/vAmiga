@@ -103,7 +103,7 @@ extension URL {
         let fm = FileManager.default
         let path = FileManager.SearchPathDirectory.applicationSupportDirectory
         let mask = FileManager.SearchPathDomainMask.userDomainMask
-    
+        
         if let url = fm.urls(for: path, in: mask).first {
             return url.appendingPathComponent("vAmiga")
         } else {
@@ -113,9 +113,9 @@ extension URL {
     
     // Returns the URL of a subdirectory inside the application support folder
     static func appSupportFolder(_ name: String) throws -> URL {
-    
+        
         let support = try URL.appSupportFolder()
-
+        
         let fm = FileManager.default
         let folder = support.appendingPathComponent("\(name)")
         var isDirectory: ObjCBool = false
@@ -147,7 +147,7 @@ extension URL {
             at: self, includingPropertiesForKeys: nil,
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
         )
-
+        
         track("contents: urls = \(urls)")
         let filtered = urls.filter { allowedTypes?.contains($0.pathExtension) ?? true }
         track("filtered = \(filtered)")
@@ -160,7 +160,7 @@ extension URL {
         let urls = try self.contents()
         for url in urls { try FileManager.default.removeItem(at: url) }
     }
-        
+    
     // Copies a file into the specified folder
     func copy(to folder: URL, replaceExtensionBy suffix: String) throws -> URL {
         
@@ -176,14 +176,14 @@ extension URL {
     }
     
     var unpacked: URL {
-                
+        
         if self.pathExtension == "zip" || self.pathExtension == "adz" {
             
             do { return try unpackZip() } catch { }
         }
-
+        
         if self.pathExtension == "gz" || self.pathExtension == "adz" {
-
+            
             do { return try unpackGz() } catch { }
         }
         
@@ -207,7 +207,7 @@ extension URL {
     }
     
     func unpack(suffix: String) throws -> [URL] {
-                
+        
         // Request the URL of a tempory folder
         let tmp = try URL.tmpFolder()
         
@@ -227,7 +227,7 @@ extension URL {
         case "gz":
             exec = "/usr/bin/gunzip"
             args = [ url.path ]
-
+            
         default:
             fatalError()
         }
@@ -248,13 +248,6 @@ extension URL {
         return sorted
     }
     
-    func modificationDate() -> Date? {
-        
-        let attr = try? FileManager.default.attributesOfItem(atPath: self.path)
-        
-        if attr != nil {
-            return attr![.creationDate] as? Date
-        } else {
     var modificationDate: Date? {
         
         guard let resVal = try? resourceValues(forKeys: [.contentModificationDateKey]) else {
@@ -263,7 +256,7 @@ extension URL {
         
         return resVal.contentModificationDate
     }
-        
+    
     func byAddingTimeStamp() -> URL {
         
         let path = self.deletingPathExtension()
@@ -277,7 +270,7 @@ extension URL {
         formatter.dateFormat = "hh.mm.ss"
         let timeString = formatter.string(from: date)
         lastComp.append(contentsOf: " \(dateString) at \(timeString)")
-
+        
         return self.deletingLastPathComponent().appendingPathComponent(lastComp, isDirectory: false).appendingPathExtension(suffix)
     }
     
@@ -291,7 +284,7 @@ extension URL {
             
             let numberStr = (i == 0) ? "." : " \(i)."
             let url = URL(fileURLWithPath: path + numberStr + suffix)
-
+            
             if !fileManager.fileExists(atPath: url.path) {
                 return url
             }
@@ -300,15 +293,15 @@ extension URL {
     }
     
     func byAddingExtension(for format: NSBitmapImageRep.FileType) -> URL {
-    
+        
         let extensions: [NSBitmapImageRep.FileType: String] =
-        [ .tiff: "tiff", .bmp: "bmp", .gif: "gif", .jpeg: "jpeg", .png: "png" ]
-  
+            [ .tiff: "tiff", .bmp: "bmp", .gif: "gif", .jpeg: "jpeg", .png: "png" ]
+        
         guard let ext = extensions[format] else {
             track("Unsupported image format: \(format)")
             return self
         }
-            
+        
         return self.appendingPathExtension(ext)
     }
     
@@ -323,38 +316,6 @@ extension URL {
         default: return nil
         }
     }
-
-    /*
-    var adfFromAdz: URL? {
-        
-        if self.pathExtension.uppercased() != "ADZ" { return nil }
-        
-        let name = self.deletingPathExtension().lastPathComponent
-        let adfname = name + ".adf"
-        
-        if let support = URL.appSupportFolder {
-            
-            let exec = "/usr/bin/unzip"
-            let args = [
-                "-o",           // Overwrite existing file
-                self.path,      // Zipped archive
-                adfname,        // File to extract
-                "-d",           // Extract file to...
-                support.path    // ...the application support folder
-            ]
-            
-            track("exec = \(exec)")
-            track("args = \(args)")
-            
-            if let result = FileManager.exec(launchPath: exec, arguments: args) {
-                
-                print("\(result)")
-                return support.appendingPathComponent(adfname)
-            }
-        }
-        return nil
-    }
-    */
 }
 
 //
@@ -380,20 +341,6 @@ extension FileManager {
         
         return result
     }
-    
-    /*
-    static func moveToTmpFolder(url: URL) throws {
-        
-        // Get the tmp folder
-        guard let tmp = URL.tmpFolder else { return }
-        
-        // Clear all existing items
-        try tmp.erase() //  clearFolder(folder: tmp)
-        
-        // Copy the file
-        try FileManager.default.copyItem(at: url, to: tmp)
-    }
-    */
 }
 
 //

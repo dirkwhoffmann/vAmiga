@@ -78,18 +78,15 @@ class RomDropView: DropView {
 
     override func acceptDragSource(url: URL) -> Bool {
         
-        if amiga.isPoweredOff() {
+        if amiga.isPoweredOff {
             
-            if url.pathExtension == "zip" { return true }
-            if url.pathExtension == "gz" { return true }
-            if amiga.mem.isRom(url) { return true }
-            if amiga.mem.isEncryptedRom(url) { return true }
+            return url.pathExtension == "zip" ||
+                url.pathExtension == "gz" ||
+                amiga.mem.isRom(url) ||
+                amiga.mem.isEncryptedRom(url)
         }
         
         return false
-
-        if !amiga.isPoweredOff { return false }
-        return amiga.mem.isRom(url) || amiga.mem.isEncryptedRom(url)
     }
 }
 
