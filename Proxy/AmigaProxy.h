@@ -143,10 +143,10 @@ struct SerialPortWrapper;
 
 - (void) requestAutoSnapshot;
 - (void) requestUserSnapshot;
-- (SnapshotProxy *) latestAutoSnapshot;
-- (SnapshotProxy *) latestUserSnapshot;
+@property (readonly) SnapshotProxy *latestAutoSnapshot;
+@property (readonly) SnapshotProxy *latestUserSnapshot;
 
-- (AmigaConfiguration) config;
+@property (readonly) AmigaConfiguration config;
 - (NSInteger) getConfig:(ConfigOption)opt;
 - (NSInteger) getConfig:(ConfigOption)opt drive:(NSInteger)nr;
 - (BOOL) configure:(ConfigOption)opt value:(NSInteger)val;
@@ -188,7 +188,7 @@ struct SerialPortWrapper;
 
 @property (readonly) i64 clock;
 @property (readonly) i64 cycles;
-@property (readonly, getter=isHalted) bool isHalted;
+@property (readonly, getter=isHalted) bool halted;
 
 @property (readonly) NSInteger numberOfBreakpoints;
 - (u32) breakpointAddr:(NSInteger)nr;
@@ -580,9 +580,9 @@ struct SerialPortWrapper;
 - (void) dump;
 - (DiskControllerConfig) getConfig;
 - (DiskControllerInfo) getInfo;
-- (NSInteger) selectedDrive;
-- (DriveState) state;
-- (BOOL) spinning;
+@property (readonly) NSInteger selectedDrive;
+@property (readonly) DriveState state;
+@property (readonly, getter=isSpinning) BOOL spinning;
 - (BOOL) connected:(NSInteger)nr;
 - (BOOL) disconnected:(NSInteger)nr;
 - (void) setConnected:(NSInteger)nr value:(BOOL)value;
@@ -609,18 +609,17 @@ struct SerialPortWrapper;
 
 - (DriveInfo) getInfo;
 - (NSInteger) nr;
-- (DriveType) type;
+@property (readonly) DriveType type;
 
-- (BOOL) hasDisk;
+@property (readonly) BOOL hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
 - (void) toggleWriteProtection;
 
-- (BOOL) hasModifiedDisk;
-- (void) setModifiedDisk:(BOOL)value;
+@property (getter=isModifiedDisk) BOOL modifiedDisk;
 
-- (BOOL) motor;
-- (NSInteger) cylinder;
+@property (readonly) BOOL motor;
+@property (readonly) NSInteger cylinder;
 
 - (u64)  fnv;
 
@@ -646,7 +645,7 @@ struct SerialPortWrapper;
 
 - (AmigaFileType)type;
 - (void)setPath:(NSString *)path;
-- (NSInteger)sizeOnDisk;
+@property (readonly) NSInteger sizeOnDisk;
 
 - (void)seek:(NSInteger)offset;
 - (NSInteger)read;
@@ -673,9 +672,9 @@ struct SerialPortWrapper;
 + (instancetype)makeWithFile:(NSString *)path;
 + (instancetype)makeWithAmiga:(AmigaProxy *)amiga;
 
-- (NSImage *)previewImage;
-- (time_t)timeStamp;
-- (NSData *)data;
+@property (readonly, strong) NSImage *previewImage;
+@property (readonly) time_t timeStamp;
+@property (readonly, copy) NSData *data;
 
 @end
 
@@ -693,13 +692,13 @@ struct SerialPortWrapper;
 + (instancetype)makeWithDiskType:(DiskType)type;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
-- (DiskType)diskType;
-- (NSInteger)numCylinders;
-- (NSInteger)numHeads;
-- (NSInteger)numTracks;
-- (NSInteger)numSectors;
-- (NSInteger)numSectorsPerTrack;
-- (u64) fnv;
+@property (readonly) DiskType diskType;
+@property (readonly) NSInteger numCylinders;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numSectorsPerTrack;
+@property (readonly) u64 fnv;
 
 - (void)formatDisk:(FileSystemType)fs;
 - (void)seekTrack:(NSInteger)nr;

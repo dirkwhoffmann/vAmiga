@@ -189,7 +189,7 @@ struct EmulatorDefaults {
     
     static let std = EmulatorDefaults.init(
         
-        driveBlankDiskFormat: FS_OFS,
+        driveBlankDiskFormat: .FS_OFS,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
@@ -566,7 +566,7 @@ struct HardwareDefaults {
         fastRam: 0,
         
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,
@@ -584,7 +584,7 @@ struct HardwareDefaults {
         fastRam: 0,
         
         driveConnect: [true, false, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,
@@ -602,7 +602,7 @@ struct HardwareDefaults {
         fastRam: 0,
         
         driveConnect: [true, true, false, false],
-        driveType: [DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD, DRIVE_35_DD],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
         gameDevice1: 0,
         gameDevice2: -1,

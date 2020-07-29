@@ -12,19 +12,20 @@
 #ifndef _DRIVE_TYPES_H
 #define _DRIVE_TYPES_H
 
+#include <CoreFoundation/CoreFoundation.h>
+
 //
 // Enumerations
 //
 
-typedef enum : long
+typedef CF_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_DD_PC,
     DRIVE_35_HD,
     DRIVE_35_HD_PC,
     DRIVE_525_SD
-}
-DriveType;
+};
 
 inline bool isDriveType(long value)
 {

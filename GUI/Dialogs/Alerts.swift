@@ -68,7 +68,7 @@ extension MyDocument {
 
     func proceedWithUnexportedDisk(drives: [DriveProxy]) -> Bool {
         
-        let modified = drives.filter { $0.hasModifiedDisk() }
+        let modified = drives.filter { $0.isModifiedDisk }
         
         if modified.isEmpty || parent.pref.ejectWithoutAsking {
             return true

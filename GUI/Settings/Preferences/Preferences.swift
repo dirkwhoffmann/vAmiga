@@ -28,7 +28,7 @@ class Preferences {
     var driveBlankDiskFormat = EmulatorDefaults.std.driveBlankDiskFormat
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
-        set { driveBlankDiskFormat = FileSystemType.init(newValue) }
+        set { driveBlankDiskFormat = FileSystemType.init(rawValue: newValue)! }
     }
     var ejectWithoutAsking = EmulatorDefaults.std.ejectWithoutAsking
     var driveSounds = EmulatorDefaults.std.driveSounds

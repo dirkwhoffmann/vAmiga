@@ -11,7 +11,7 @@ class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
     
-    var type: AmigaFileType = FILETYPE_ADF
+    var type: AmigaFileType = .FILETYPE_ADF
     var savePanel: NSSavePanel!
     var selectedURL: URL?
     
@@ -40,6 +40,6 @@ class ExportDiskDialog: DialogController {
     @IBAction func selectADF(_ sender: Any!) {
         track()
         savePanel.allowedFileTypes = ["adf"]
-        type = FILETYPE_ADF
+        type = .FILETYPE_ADF
     }
 }

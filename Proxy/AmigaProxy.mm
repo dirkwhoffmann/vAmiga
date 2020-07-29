@@ -1098,7 +1098,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->controller->getState();
 }
-- (BOOL) spinning
+- (BOOL) isSpinning
 {
     return wrapper->controller->spinning();
 }
@@ -1184,7 +1184,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->drive->toggleWriteProtection();
 }
-- (BOOL) hasModifiedDisk
+- (BOOL) isModifiedDisk
 {
     return wrapper->drive->hasModifiedDisk();
 }

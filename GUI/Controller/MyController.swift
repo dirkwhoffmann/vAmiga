@@ -162,7 +162,7 @@ class MyController: NSWindowController, MessageReceiver {
         var warp: Bool
         
         switch pref.warpMode {
-        case .auto: warp = amiga.diskController.spinning()
+        case .auto: warp = amiga.diskController.isSpinning
         case .off: warp = false
         case .on: warp = true
         }
@@ -623,11 +623,11 @@ extension MyController {
 
         case MSG_AUTO_SNAPSHOT_TAKEN:
             track("MSG_AUTO_SNAPSHOT_TAKEN")
-            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot())
+            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot)
 
         case MSG_USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
-            mydocument!.userSnapshots.append(amiga.latestUserSnapshot())
+            mydocument!.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
             
         default:

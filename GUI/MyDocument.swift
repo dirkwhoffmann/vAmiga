@@ -90,10 +90,10 @@ class MyDocument: NSDocument {
         
         switch url.pathExtension.uppercased() {
             
-        case "VAMIGA": return FILETYPE_SNAPSHOT
-        case "ADF":    return FILETYPE_ADF
-        case "DMS":    return FILETYPE_DMS
-        default:       return FILETYPE_UKNOWN
+        case "VAMIGA": return .FILETYPE_SNAPSHOT
+        case "ADF":    return .FILETYPE_ADF
+        case "DMS":    return .FILETYPE_DMS
+        default:       return .FILETYPE_UKNOWN
         }
     }
     
@@ -131,7 +131,7 @@ class MyDocument: NSDocument {
         
         switch type {
             
-        case FILETYPE_SNAPSHOT:
+        case .FILETYPE_SNAPSHOT:
             
             // Check for outdated snapshot formats
             if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
@@ -139,11 +139,11 @@ class MyDocument: NSDocument {
             }
             result = SnapshotProxy.make(withBuffer: buffer, length: length)
             
-        case FILETYPE_ADF:
+        case .FILETYPE_ADF:
 
             result = ADFFileProxy.make(withBuffer: buffer, length: length)
             
-        case FILETYPE_DMS:
+        case .FILETYPE_DMS:
             
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
             
@@ -162,7 +162,7 @@ class MyDocument: NSDocument {
         
         track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
                 
-        let types = [ FILETYPE_ADF, FILETYPE_DMS ]
+        let types = [ AmigaFileType.FILETYPE_ADF, AmigaFileType.FILETYPE_DMS ]
         let proxy = try createFileProxy(url: url, allowedTypes: types)
         
         switch proxy {
@@ -197,7 +197,7 @@ class MyDocument: NSDocument {
         track("Creating attachment from URL \(url.lastPathComponent).")
         
         // Create file proxy
-        let types = [ FILETYPE_SNAPSHOT, FILETYPE_ADF, FILETYPE_DMS ]
+        let types = [ AmigaFileType.FILETYPE_SNAPSHOT, AmigaFileType.FILETYPE_ADF, AmigaFileType.FILETYPE_DMS ]
         amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
         // Remember the URL
@@ -269,7 +269,7 @@ class MyDocument: NSDocument {
             if let snapshot = SnapshotProxy.make(withAmiga: amiga) {
 
                 // Write to data buffer
-                if let data = NSMutableData.init(length: snapshot.sizeOnDisk()) {
+                if let data = NSMutableData.init(length: snapshot.sizeOnDisk) {
                     snapshot.write(toBuffer: data.mutableBytes)
                     return data as Data
                 }
@@ -297,7 +297,7 @@ class MyDocument: NSDocument {
         }
 
         // Serialize data
-        let data = NSMutableData.init(length: adf.sizeOnDisk())!
+        let data = NSMutableData.init(length: adf.sizeOnDisk)!
         adf.write(toBuffer: data.mutableBytes)
         
         // Write to file
@@ -307,7 +307,7 @@ class MyDocument: NSDocument {
         }
 
         // Mark disk as "not modified"
-        drive.setModifiedDisk(false)
+        drive.isModifiedDisk = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)

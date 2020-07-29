@@ -49,7 +49,7 @@ class DiskMountDialog: DialogController {
         if disk != nil {
             
             // Load screenshots (if any)
-            for url in Screenshot.collectFiles(forDisk: disk!.fnv()) {
+            for url in Screenshot.collectFiles(forDisk: disk!.fnv) {
                 if let screenshot = Screenshot.init(fromUrl: url) {
                     screenshots.append(screenshot)
                 }
@@ -89,9 +89,9 @@ class DiskMountDialog: DialogController {
 
         switch type {
             
-        case FILETYPE_ADF:
+        case .FILETYPE_ADF:
             title.stringValue = "Amiga Disk File (ADF)"
-        case FILETYPE_DMS:
+        case .FILETYPE_DMS:
             title.stringValue = "Disk Masher System (DMS)"
         default:
             title.stringValue = "???"
@@ -128,15 +128,15 @@ class DiskMountDialog: DialogController {
         
         // Update text fields
         let typeName = [
-            DISK_35_DD.rawValue: "3.5\"DD Amiga",
-            DISK_35_DD_PC.rawValue: "3.5\"DD PC",
-            DISK_35_HD.rawValue: "3.5\"HD Amiga",
-            DISK_35_HD_PC.rawValue: "3.5\"HD PC",
-            DISK_525_SD.rawValue: "5.25\"SD PC"
+            DiskType.DISK_35_DD: "3.5\"DD Amiga",
+            DiskType.DISK_35_DD_PC: "3.5\"DD PC",
+            DiskType.DISK_35_HD: "3.5\"HD Amiga",
+            DiskType.DISK_35_HD_PC: "3.5\"HD PC",
+            DiskType.DISK_525_SD: "5.25\"SD PC"
         ]
-        let str = typeName[disk!.diskType().rawValue]!
+        let str = typeName[disk!.diskType]!
         subtitle.stringValue = "A byte-accurate image of a \(str) diskette."
-        let compatible = disk!.diskType() == DISK_35_DD
+        let compatible = disk!.diskType == .DISK_35_DD
         warning.isHidden = compatible
                 
         // Check for available drives

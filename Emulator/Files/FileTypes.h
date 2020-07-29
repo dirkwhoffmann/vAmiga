@@ -14,7 +14,7 @@
 
 #include <CoreFoundation/CoreFoundation.h>
 
-typedef enum
+typedef CF_ENUM(CFIndex, AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,
     FILETYPE_SNAPSHOT,
@@ -24,8 +24,7 @@ typedef enum
     FILETYPE_KICK_ROM,
     FILETYPE_ENCRYPTED_KICK_ROM,
     FILETYPE_EXT_ROM
-}
-AmigaFileType;
+};
 
 inline bool isAmigaFileType(long value) {
     return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
