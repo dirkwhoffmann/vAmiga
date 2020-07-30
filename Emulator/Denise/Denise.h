@@ -430,7 +430,6 @@ public:
     bool dbplf() { return dbplf(bplcon0); }
     static bool lace(u16 v) { return GET_BIT(v, 2); }
     bool lace() { return lace(bplcon0); }
-    // static bool ham(u16 v) { return (v & 0x8C00) == 0x0800 && (bpu(v) == 5 || bpu(v) == 6); }
     static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
     bool ham() { return ham(bplcon0); }
 

@@ -58,56 +58,32 @@ ControlPort::joydat()
     assert(nr == 1 || nr == 2);
     assert(isControlPortDevice(device));
 
-    switch (device) {
-
-        case CPD_NONE:
-
-            return 0;
-
-        case CPD_MOUSE:
-
-            mouseCounterX += nr == 1 ? mouse1.getDeltaX() : mouse2.getDeltaX();
-            mouseCounterY += nr == 1 ? mouse1.getDeltaY() : mouse2.getDeltaY();
-            return HI_LO(mouseCounterY & 0xFF, mouseCounterX & 0xFF);
-
-        case CPD_JOYSTICK:
-
-            return nr == 1 ? joystick1.joydat() : joystick2.joydat();
+    // Update the mouse counters first if a mouse is connected
+    if (device == CPD_MOUSE) {
+        mouseCounterX += nr == 1 ? mouse1.getDeltaX() : mouse2.getDeltaX();
+        mouseCounterY += nr == 1 ? mouse1.getDeltaY() : mouse2.getDeltaY();
     }
+    
+    // Compose the register bits
+    u16 xxxxxx__xxxxxx__ = HI_LO(mouseCounterY & 0xFC, mouseCounterX & 0xFC);
+    u16 ______xx______xx = 0;
+
+    if (device == CPD_MOUSE)
+        ______xx______xx = HI_LO(mouseCounterY & 0x03, mouseCounterX & 0x03);
+
+    if (device == CPD_JOYSTICK)
+        ______xx______xx = nr == 1 ? joystick1.joydat() : joystick2.joydat();
+
+    return xxxxxx__xxxxxx__ | ______xx______xx;
 }
-
-/*
-u8
-ControlPort::ciapa()
-{
-    switch (device) {
-
-        case CPD_NONE:
-
-            return 0xFF;
-
-        case CPD_MOUSE:
-
-            if (mouse.leftButton) {
-                return (nr == 1) ? 0xBF : 0x7F;
-            } else {
-                return 0xFF;
-            }
-
-        case CPD_JOYSTICK:
-
-            return nr == 1 ? joystick1.ciapa() : joystick2.ciapa();
-    }
-}
-*/
 
 void
 ControlPort::pokeJOYTEST(u16 value)
 {
-    mouseCounterY &= ~0b11111100;
+    mouseCounterY &= 0b00000011;
     mouseCounterY |= HI_BYTE(value) & 0b11111100;
 
-    mouseCounterX &= ~0b11111100;
+    mouseCounterX &= 0b00000011;
     mouseCounterX |= LO_BYTE(value) & 0b11111100;
 }
 
