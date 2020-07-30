@@ -386,6 +386,7 @@ PixelEngine::colorize(u32 *dst, int from, int to)
 void
 PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
 {
+    u8 *bbuf = denise.bBuffer;
     u8 *ibuf = denise.iBuffer;
     u8 *mbuf = denise.mBuffer;
 
@@ -394,7 +395,8 @@ PixelEngine::colorizeHAM(u32 *dst, int from, int to, u16& ham)
         u8 index = ibuf[i];
         assert(isRgbaIndex(index));
 
-        switch ((index >> 4) & 0b11) {
+        // switch ((index >> 4) & 0b11) {
+        switch ((bbuf[i] >> 4) & 0b11) {
 
             case 0b00: // Get color from register
 
