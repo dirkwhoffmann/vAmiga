@@ -25,8 +25,16 @@ typedef uint16_t u16;
 typedef uint32_t u32;
 typedef uint64_t u64;
 
+
 //
-// Cycle counts
+// Syntactic sugar
+//
+
+#define fallthrough
+
+
+//
+// Cycles
 //
 
 typedef i64 Cycle;            // Master cycle units

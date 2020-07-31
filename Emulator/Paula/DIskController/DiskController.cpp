@@ -105,18 +105,32 @@ DiskController::spinning()
 }
 
 void
-DiskController::setState(DriveState s)
+DiskController::setState(DriveState newState)
 {
-    debug(DSK_DEBUG, "%s -> %s\n", driveStateName(state), driveStateName(s));
-    if (state == s) return;
+    if (state != newState) setState(state, newState);
+}
 
-    bool wasWriting = (state == DRIVE_DMA_WRITE);
-    bool isWriting = (s == DRIVE_DMA_WRITE);
-
-    state = s;
+void
+DiskController::setState(DriveState oldState, DriveState newState)
+{
+    debug(DSK_DEBUG, "%s -> %s\n",
+          driveStateName(oldState), driveStateName(newState));
     
-    if (wasWriting != isWriting) {
-        amiga.putMessage(isWriting ? MSG_DRIVE_WRITE : MSG_DRIVE_READ, selected);
+    state = newState;
+    
+    switch (state) {
+
+        case DRIVE_DMA_OFF:
+            dsklen = 0;
+            break;
+            
+        case DRIVE_DMA_WRITE:
+            amiga.putMessage(MSG_DRIVE_WRITE, selected);
+            break;
+            
+        default:
+            if (oldState == DRIVE_DMA_WRITE)
+                amiga.putMessage(MSG_DRIVE_READ, selected);
     }
 }
 
@@ -250,15 +264,19 @@ DiskController::peekDSKDATR()
 }
 
 void
-DiskController::pokeDSKLEN(u16 newDskLen)
+DiskController::pokeDSKLEN(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", newDskLen);
-    
-    Drive *drive = getSelectedDrive(); 
-    u16 oldDsklen = dsklen;
+    debug(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", value);
 
-    // Remember the new value
-    dsklen = newDskLen;
+    setDSKLEN(dsklen, value);
+}
+
+void
+DiskController::setDSKLEN(u16 oldValue, u16 newValue)
+{
+    Drive *drive = getSelectedDrive();
+
+    dsklen = newValue;
 
     // Initialize checksum (for debugging only)
     if (DSK_CHECKSUM) {
@@ -270,14 +288,14 @@ DiskController::pokeDSKLEN(u16 newDskLen)
     asyncFifo = config.asyncFifo;
     
     // Disable DMA if bit 15 (DMAEN) is zero
-    if (!(newDskLen & 0x8000)) {
+    if (!(oldValue & 0x8000)) {
 
         setState(DRIVE_DMA_OFF);
         clearFifo();
     }
     
     // Enable DMA if bit 15 (DMAEN) has been written twice
-    else if (oldDsklen & newDskLen & 0x8000) {
+    else if (oldValue & newValue & 0x8000) {
 
         // Only proceed if there are bytes to process
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
@@ -286,7 +304,7 @@ DiskController::pokeDSKLEN(u16 newDskLen)
         if (ALIGN_HEAD) drive->head.offset = 0;
 
         // Check if the WRITE bit (bit 14) also has been written twice.
-        if (oldDsklen & newDskLen & 0x4000) {
+        if (oldValue & newValue & 0x4000) {
             
             setState(DRIVE_DMA_WRITE);
             clearFifo();
@@ -684,7 +702,7 @@ DiskController::performTurboDMA(Drive *drive)
         case DRIVE_DMA_WAIT:
 
             drive->findSyncMark();
-            // fallthrough
+            fallthrough;
 
         case DRIVE_DMA_READ:
             

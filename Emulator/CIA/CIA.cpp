@@ -408,7 +408,7 @@ CIA::poke(u16 addr, u8 value)
             
         case 0x01: // CIA_DATA_PORT_B
             
-            // if (this == &amiga->ciaB) plaindebug("%s poke(1, %X)\n", getDescription(), value);
+            // if (isCIAB()) debug("poke(1, %X)\n", value);
             PRB = value;
             updatePB();
             return;

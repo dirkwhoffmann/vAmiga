@@ -190,7 +190,8 @@ public:
 private:
     
     void setState(DriveState s);
-    
+    void setState(DriveState oldState, DriveState newState);
+
     
     //
     // Getter and setter
@@ -230,6 +231,7 @@ public:
     
     // OCR register 0x024 (w)
     void pokeDSKLEN(u16 value);
+    void setDSKLEN(u16 oldValue, u16 newValue);
     
     // OCR register 0x026 (w)
     void pokeDSKDAT(u16 value);

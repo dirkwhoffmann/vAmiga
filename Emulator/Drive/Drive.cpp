@@ -426,7 +426,7 @@ Drive::step(int dir)
             recordCylinder(head.cylinder);
         }
         if (DSK_CHECKSUM)
-            debug("Stepping down to cylinder %d (%d)\n", head.cylinder, head.offset);
+            plaindebug("Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
