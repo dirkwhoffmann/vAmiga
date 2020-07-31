@@ -122,6 +122,15 @@
 		509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */; };
 		509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509F7F1B21EDEA0200A530E4 /* RomFile.cpp */; };
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
+		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
+		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
+		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
+		50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */; };
+		50AEBED824D3D7420037082D /* PaulaAudioEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */; };
+		50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */; };
+		50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDB24D3D8170037082D /* UARTEvents.cpp */; };
+		50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */; };
+		50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */; };
 		50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50B0AF92222531C500EE3689 /* CopperTableView.swift */; };
 		50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0521EB218E002E32A6 /* AmigaObject.cpp */; };
 		50B14C0D21EB3708002E32A6 /* HardwareComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C0B21EB3708002E32A6 /* HardwareComponent.cpp */; };
@@ -345,6 +354,17 @@
 		50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ControlPort.cpp; sourceTree = "<group>"; };
 		50A2953E21FF12EF0046BAA0 /* ControlPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ControlPort.h; sourceTree = "<group>"; };
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
+		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
+		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
+		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
+		50AEBECD24D3D4AD0037082D /* BlitterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlitterTypes.h; sourceTree = "<group>"; };
+		50AEBED024D3D61A0037082D /* PaulaEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaEvents.cpp; sourceTree = "<group>"; };
+		50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineEvents.cpp; sourceTree = "<group>"; };
+		50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaAudioEvents.cpp; sourceTree = "<group>"; };
+		50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerEvents.cpp; sourceTree = "<group>"; };
+		50AEBEDB24D3D8170037082D /* UARTEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UARTEvents.cpp; sourceTree = "<group>"; };
+		50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusEvents.cpp; sourceTree = "<group>"; };
+		50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardEvents.cpp; sourceTree = "<group>"; };
 		50B0AF92222531C500EE3689 /* CopperTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CopperTableView.swift; sourceTree = "<group>"; };
 		50B14C0521EB218E002E32A6 /* AmigaObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaObject.cpp; sourceTree = "<group>"; };
 		50B14C0621EB218E002E32A6 /* AmigaObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaObject.h; sourceTree = "<group>"; };
@@ -498,16 +518,13 @@
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
+				50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */,
 				504C48B324143AB4008ADAB3 /* AgnusDma.cpp */,
 				501E715122677BFF0070B17D /* EventHandlerTypes.h */,
 				5085FE5621FB3BAE009753EF /* EventHandler.h */,
 				5085FE5521FB3BAE009753EF /* EventHandler.cpp */,
-				502F7DD1222172CA00AEEC65 /* Copper.h */,
-				502F7DCD2221706000AEEC65 /* Copper.cpp */,
-				50D375DE222C7C6B0040987C /* Blitter.h */,
-				50D375DD222C7C6B0040987C /* Blitter.cpp */,
-				50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */,
-				509047B5230575E6009CEC1C /* SlowBlitter.cpp */,
+				50AEBEC924D3D3BE0037082D /* Copper */,
+				50AEBEC824D3D3B30037082D /* Blitter */,
 				50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */,
 				50E204E92295A3F20082B63D /* DmaDebugger.h */,
 				50E204E82295A3F20082B63D /* DmaDebugger.cpp */,
@@ -868,8 +885,70 @@
 				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
 				5014DD1421F3625200BC14BA /* Keyboard.h */,
 				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
+				50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */,
 			);
 			path = Peripherals;
+			sourceTree = "<group>";
+		};
+		50AEBEC824D3D3B30037082D /* Blitter */ = {
+			isa = PBXGroup;
+			children = (
+				50D375DE222C7C6B0040987C /* Blitter.h */,
+				50AEBECD24D3D4AD0037082D /* BlitterTypes.h */,
+				50D375DD222C7C6B0040987C /* Blitter.cpp */,
+				50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */,
+				50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */,
+				509047B5230575E6009CEC1C /* SlowBlitter.cpp */,
+			);
+			path = Blitter;
+			sourceTree = "<group>";
+		};
+		50AEBEC924D3D3BE0037082D /* Copper */ = {
+			isa = PBXGroup;
+			children = (
+				502F7DD1222172CA00AEEC65 /* Copper.h */,
+				50AEBECA24D3D40C0037082D /* CopperTypes.h */,
+				502F7DCD2221706000AEEC65 /* Copper.cpp */,
+				50AEBECB24D3D4540037082D /* CopperEvents.cpp */,
+			);
+			path = Copper;
+			sourceTree = "<group>";
+		};
+		50AEBED424D3D7050037082D /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */,
+				50EE993F21FF4D8E003BD74B /* PaulaAudio.h */,
+				50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */,
+				50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */,
+				507D7768228BE3EF001E97A9 /* StateMachine.h */,
+				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
+				50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */,
+				505A214F22869FF10016EA21 /* AudioFilter.h */,
+				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		50AEBED524D3D7160037082D /* DIskController */ = {
+			isa = PBXGroup;
+			children = (
+				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
+				500C0A552259402D000121CD /* DiskController.h */,
+				500C0A542259402D000121CD /* DiskController.cpp */,
+				50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */,
+			);
+			path = DIskController;
+			sourceTree = "<group>";
+		};
+		50AEBED624D3D7270037082D /* UART */ = {
+			isa = PBXGroup;
+			children = (
+				50F0BD2522AF883C001F4616 /* UART.h */,
+				50F0BD2422AF883C001F4616 /* UART.cpp */,
+				50AEBEDB24D3D8170037082D /* UARTEvents.cpp */,
+			);
+			path = UART;
 			sourceTree = "<group>";
 		};
 		50B14C0421EB212E002E32A6 /* Foundation */ = {
@@ -959,18 +1038,10 @@
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
-				5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */,
-				50EE993F21FF4D8E003BD74B /* PaulaAudio.h */,
-				50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */,
-				507D7768228BE3EF001E97A9 /* StateMachine.h */,
-				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
-				505A214F22869FF10016EA21 /* AudioFilter.h */,
-				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
-				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
-				500C0A552259402D000121CD /* DiskController.h */,
-				500C0A542259402D000121CD /* DiskController.cpp */,
-				50F0BD2522AF883C001F4616 /* UART.h */,
-				50F0BD2422AF883C001F4616 /* UART.cpp */,
+				50AEBED024D3D61A0037082D /* PaulaEvents.cpp */,
+				50AEBED424D3D7050037082D /* Audio */,
+				50AEBED524D3D7160037082D /* DIskController */,
+				50AEBED624D3D7270037082D /* UART */,
 			);
 			path = Paula;
 			sourceTree = "<group>";
@@ -1132,6 +1203,7 @@
 				50FFA7D02440CB0300BEBA6B /* ActivityMonitor.swift in Sources */,
 				509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */,
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
+				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
@@ -1140,6 +1212,7 @@
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
 				5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
+				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
 				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
@@ -1168,6 +1241,7 @@
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */,
+				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */,
 				50E5754024C01AFA00309084 /* EncryptedRomFile.cpp in Sources */,
@@ -1187,6 +1261,7 @@
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
+				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
@@ -1249,20 +1324,25 @@
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
+				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,
 				508FE05421EA22CC0043D0E9 /* DevicesPrefs.swift in Sources */,
 				50F924FD2428B8CD00DD91AB /* DDF.cpp in Sources */,
 				50F5F27221F1B6DF000627D1 /* AmigaKey.swift in Sources */,
+				50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */,
 				508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */,
 				508FDF8721EA1FBC0043D0E9 /* MessageQueue.cpp in Sources */,
+				50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */,
 				507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */,
 				500C0A562259402D000121CD /* DiskController.cpp in Sources */,
 				5010A78222B50B690041388B /* PortPanel.swift in Sources */,
 				509F7F1D21EDEA0200A530E4 /* RomFile.cpp in Sources */,
 				508FE05C21EA22CC0043D0E9 /* DiskMountDialog.swift in Sources */,
 				50F580662431D1A000E7D84D /* Screenshot.swift in Sources */,
+				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
+				50AEBED824D3D7420037082D /* PaulaAudioEvents.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

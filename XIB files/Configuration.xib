@@ -1253,9 +1253,9 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z9Z-9Z-AmZ">
-                                            <rect key="frame" x="376" y="293" width="177" height="18"/>
+                                            <rect key="frame" x="376" y="293" width="182" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Block writes to DSKSYNC" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Liy-0q-UA3">
+                                            <buttonCell key="cell" type="check" title="Ignore writes to DSKSYNC" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Liy-0q-UA3">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>

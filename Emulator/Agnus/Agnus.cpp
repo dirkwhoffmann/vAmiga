@@ -1383,41 +1383,6 @@ Agnus::vsyncHandler()
     }
 }
 
-void
-Agnus::serviceVblEvent()
-{    
-    switch (slot[VBL_SLOT].id) {
-            
-        case VBL_STROBE:
-            
-            assert(pos.v == 0 || pos.v == 1);
-            assert(pos.h == 1);
-            
-            // Trigger the vertical blank interrupt
-            paula.raiseIrq(INT_VERTB);
-            
-            // Schedule the next VBL_END event
-            schedulePos<VBL_SLOT>(5, 209, VBL_END);
-            break;
-            
-        case VBL_END:
-            
-            assert(pos.v == 5);
-            assert(pos.h == 209);
-            
-            // Increment the TOD counter of CIA A
-            amiga.ciaA.incrementTOD();
-            
-            // Schedule the next VBL_STROBE event
-            schedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1, VBL_STROBE);
-            break;
-            
-        default:
-            assert(false);
-    }
-}
-
-
 //
 // Instantiate template functions
 //

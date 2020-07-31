@@ -436,31 +436,6 @@ StateMachine<nr>::penlo()
     enablePenlo = false;
 }
 
-template <int nr> void
-StateMachine<nr>::serviceEvent()
-{
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-
-    debug(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
-    assert(agnus.slot[slot].id == CHX_PERFIN);
-
-    switch (state) {
-
-        case 0b010:
-
-            move_010_011();
-            return;
-
-        case 0b011:
-
-            (AUDxON() || !AUDxIP()) ? move_011_010() : move_011_000();
-            return;
-
-        default:
-            assert(false);
-    }
-}
-
 template <int nr> template <SamplingMethod method> i16
 StateMachine<nr>::interpolate(Cycle clock)
 {
@@ -554,10 +529,30 @@ template void StateMachine<1>::disableDMA();
 template void StateMachine<2>::disableDMA();
 template void StateMachine<3>::disableDMA();
 
-template void StateMachine<0>::serviceEvent();
-template void StateMachine<1>::serviceEvent();
-template void StateMachine<2>::serviceEvent();
-template void StateMachine<3>::serviceEvent();
+template bool StateMachine<0>::AUDxIP();
+template bool StateMachine<1>::AUDxIP();
+template bool StateMachine<2>::AUDxIP();
+template bool StateMachine<3>::AUDxIP();
+
+template bool StateMachine<0>::AUDxON();
+template bool StateMachine<1>::AUDxON();
+template bool StateMachine<2>::AUDxON();
+template bool StateMachine<3>::AUDxON();
+
+template void StateMachine<0>::move_010_011();
+template void StateMachine<1>::move_010_011();
+template void StateMachine<2>::move_010_011();
+template void StateMachine<3>::move_010_011();
+
+template void StateMachine<0>::move_011_000();
+template void StateMachine<1>::move_011_000();
+template void StateMachine<2>::move_011_000();
+template void StateMachine<3>::move_011_000();
+
+template void StateMachine<0>::move_011_010();
+template void StateMachine<1>::move_011_010();
+template void StateMachine<2>::move_011_010();
+template void StateMachine<3>::move_011_010();
 
 template i16 StateMachine<0>::interpolate<SMP_NONE>(Cycle clock);
 template i16 StateMachine<1>::interpolate<SMP_NONE>(Cycle clock);

@@ -12,6 +12,9 @@
 #ifndef _AGNUS_TYPES_H
 #define _AGNUS_TYPES_H
 
+#include "BlitterTypes.h"
+#include "CopperTypes.h"
+
 typedef VA_ENUM(long, AgnusRevision)
 {
     AGNUS_8367, // OCS Agnus
@@ -241,63 +244,5 @@ typedef struct
     double bitplaneActivity;
 }
 AgnusStats;
-
-typedef struct
-{
-    u8   copList;
-    bool active;
-    bool cdang;
-    u32  coppc;
-    u32  cop1lc;
-    u32  cop2lc;
-    u16  cop1ins;
-    u16  cop2ins;
-    i16  length1;
-    i16  length2;
-}
-CopperInfo;
-
-typedef struct
-{
-    int accuracy;
-}
-BlitterConfig;
-
-typedef struct
-{
-    // bool active;
-    u16 bltcon0;
-    u16 bltcon1;
-    u16 ash;
-    u16 bsh;
-    u16 minterm;
-    u16 bltapt;
-    u16 bltbpt;
-    u16 bltcpt;
-    u16 bltdpt;
-    u16 bltafwm;
-    u16 bltalwm;
-    i16 bltamod;
-    i16 bltbmod;
-    i16 bltcmod;
-    i16 bltdmod;
-    u16 aold;
-    u16 bold;
-    u16 anew;
-    u16 bnew;
-    u16 ahold;
-    u16 bhold;
-    u16 chold;
-    u16 dhold;
-    bool bbusy;
-    bool bzero;
-    bool firstIteration;
-    bool lastIteration;
-    bool fci;
-    bool fco;
-    bool fillEnable;
-    bool storeToDest;
-}
-BlitterInfo;
 
 #endif
