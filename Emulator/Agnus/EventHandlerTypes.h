@@ -199,8 +199,9 @@ typedef VA_ENUM(long, EventID)
     DCH_EVENT_COUNT,
 
     // Strobe slot
-    VBL_STROBE = 1,
-    VBL_END = 2,
+    VBL_STROBE0 = 1,
+    VBL_STROBE1,
+    VBL_END,
     VBL_EVENT_COUNT,
     
     // IRQ slot

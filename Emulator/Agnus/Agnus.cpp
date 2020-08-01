@@ -101,7 +101,7 @@ void Agnus::_reset(bool hard)
     scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
     scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine() + 1), VBL_STROBE);
+    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
@@ -375,7 +375,10 @@ Agnus::pokeVPOS(u16 value)
     
     // Reschedule a pending VBL_STROBE event with a trigger cycle that is
     // consistent with new LOF bit value.
-    if (slot[VBL_SLOT].id == VBL_STROBE) {
+    if (slot[VBL_SLOT].id == VBL_STROBE0) {
+        reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 0);
+    }
+    if (slot[VBL_SLOT].id == VBL_STROBE1) {
         reschedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1);
     }
 }

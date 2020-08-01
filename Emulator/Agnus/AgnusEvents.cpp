@@ -13,16 +13,29 @@ void
 Agnus::serviceVblEvent()
 {
     switch (slot[VBL_SLOT].id) {
-            
-        case VBL_STROBE:
+
+        case VBL_STROBE0:
             
             assert(pos.v == 0 || pos.v == 1);
-            assert(pos.h == 1);
+            assert(pos.h == 0);
             
             // Trigger the vertical blank interrupt
             paula.raiseIrq(INT_VERTB);
             
-            // Schedule the next VBL_END event
+            // Schedule next event
+            scheduleRel<VBL_SLOT>(1, VBL_STROBE1);
+            break;
+
+        case VBL_STROBE1:
+            
+            assert(pos.v == 0 || pos.v == 1);
+            assert(pos.h == 1);
+            
+            // This cycle is unused at the moment. Until v0.9.9, the VERTB
+            // interrupt was triggered here which turned out to be wrong.
+            // It can be deleted once the new code stands the test of time.
+            
+            // Schedule next event
             schedulePos<VBL_SLOT>(5, 209, VBL_END);
             break;
             
@@ -35,7 +48,7 @@ Agnus::serviceVblEvent()
             amiga.ciaA.incrementTOD();
             
             // Schedule the next VBL_STROBE event
-            schedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 1, VBL_STROBE);
+            schedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 0, VBL_STROBE0);
             break;
             
         default:

@@ -263,7 +263,8 @@ Agnus::inspectEventSlot(EventSlot nr)
             switch (slot[nr].id) {
 
                 case 0:             i->eventName = "none"; break;
-                case VBL_STROBE:    i->eventName = "VBL_STROBE"; break;
+                case VBL_STROBE0:   i->eventName = "VBL_STROBE0"; break;
+                case VBL_STROBE1:   i->eventName = "VBL_STROBE1"; break;
                 case VBL_END:       i->eventName = "VBL_END"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
