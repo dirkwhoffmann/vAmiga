@@ -305,7 +305,7 @@ template <int x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
-    debug(BPLREG_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
+    debug(BPLDAT_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
         
     bpldat[x] = value;
 
