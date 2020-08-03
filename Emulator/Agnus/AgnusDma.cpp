@@ -211,6 +211,7 @@ Agnus::pokeDMACON(u16 value)
 
     // Record the change
     recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+    // setDMACON(dmacon, value);
 }
 
 void
@@ -264,32 +265,21 @@ Agnus::setDMACON(u16 oldValue, u16 value)
 
     // Inform the delegates
     blitter.pokeDMACON(oldValue, newValue);
-
+    
     // Bitplane DMA
     if (toggleBPLEN) {
-
-        // Update the bpl event table in the next rasterline
-        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
-
-        if (newBPLEN) {
-
-            // Bitplane DMA is switched on
-            if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
-
-                updateBplEvents(newValue, bplcon0, pos.h + 2);
-                updateBplEvent();
-            }
-
+        
+        if (isOCS()) {
+            newBPLEN ? enableBplDmaOCS() : disableBplDmaOCS();
         } else {
-
-            // Bitplane DMA is switched off
-            updateBplEvents(newValue, bplcon0, pos.h + 2);
-            updateBplEvent();
+            newBPLEN ? enableBplDmaECS() : disableBplDmaECS();
         }
-
-        // Let Denise know about the change
-        denise.pokeDMACON(oldValue, newValue);
+        
+        hsyncActions |= HSYNC_UPDATE_BPL_TABLE;
     }
+    
+    // Let Denise know about the change
+    denise.pokeDMACON(oldValue, newValue);
 
     // Check DAS DMA (Disk, Audio, Sprites)
     // u16 oldDAS = oldDMAEN ? (oldValue & 0x3F) : 0;
@@ -345,6 +335,50 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     if (oldAUD3EN ^ newAUD3EN) {
         newAUD3EN ? audioUnit.channel3.enableDMA() : audioUnit.channel3.disableDMA();
     }
+}
+
+void
+Agnus::enableBplDmaOCS()
+{
+    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+        
+        updateBplEvents(dmacon, bplcon0, pos.h + 2);
+        updateBplEvent();
+    }
+}
+
+void
+Agnus::disableBplDmaOCS()
+{
+    updateBplEvents(dmacon, bplcon0, pos.h + 2);
+    updateBplEvent();
+}
+
+void
+Agnus::enableBplDmaECS()
+{
+    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+        
+        updateBplEvents(dmacon, bplcon0, pos.h + 2);
+        updateBplEvent();
+        return;
+    }
+    
+    // debug("Enable DMA ECS: %d %d %d %d (%x)\n", ddfstrt, ddfstrtReached, ddfstop, ddfstopReached, bplcon1);
+    
+    ddfLores.compute(MAX(pos.h + 2, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfHires.compute(MAX(pos.h + 2, ddfstrtReached), ddfstopReached, bplcon1);
+    hsyncActions |= HSYNC_PREDICT_DDF;
+    
+    updateBplEvents();
+    updateBplEvent();
+}
+
+void
+Agnus::disableBplDmaECS()
+{
+    updateBplEvents(dmacon, bplcon0, pos.h + 2);
+    updateBplEvent();
 }
 
 void

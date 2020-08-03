@@ -628,10 +628,6 @@ public:
     // Controlling DMA
     //
 
-    u16 peekDMACONR();
-    void pokeDMACON(u16 value);
-    void setDMACON(u16 oldValue, u16 newValue);
-
     // Returns true if the Blitter has priority over the CPU
     static bool bltpri(u16 v) { return GET_BIT(v, 10); }
     bool bltpri() { return bltpri(dmacon); }
@@ -654,6 +650,15 @@ public:
     bool sprdma() { return sprdma(dmacon); }
     bool dskdma() { return dskdma(dmacon); }
     
+    u16 peekDMACONR();
+    void pokeDMACON(u16 value);
+    void setDMACON(u16 oldValue, u16 newValue);
+
+    void enableBplDmaOCS();
+    void disableBplDmaOCS();
+    void enableBplDmaECS();
+    void disableBplDmaECS();
+
     
     //
     // Managing DMA pointers
