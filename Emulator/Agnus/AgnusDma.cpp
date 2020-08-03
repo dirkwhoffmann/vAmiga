@@ -210,8 +210,8 @@ Agnus::pokeDMACON(u16 value)
     debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
 
     // Record the change
-    recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
-    // setDMACON(dmacon, value);
+    // recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
+    setDMACON(dmacon, value);
 }
 
 void
@@ -357,21 +357,34 @@ Agnus::disableBplDmaOCS()
 void
 Agnus::enableBplDmaECS()
 {
-    if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
-        
+    // if (pos.h + 2 < ddfstrtReached || bpldma(dmaconAtDDFStrt)) {
+    if (pos.h + 2 < ddfstrtReached) {
+
         updateBplEvents(dmacon, bplcon0, pos.h + 2);
         updateBplEvent();
         return;
     }
     
+    if (pos.h + 2 >= ddfstopReached) return;
+    
     // debug("Enable DMA ECS: %d %d %d %d (%x)\n", ddfstrt, ddfstrtReached, ddfstop, ddfstopReached, bplcon1);
     
-    ddfLores.compute(MAX(pos.h + 2, ddfstrtReached), ddfstopReached, bplcon1);
-    ddfHires.compute(MAX(pos.h + 2, ddfstrtReached), ddfstopReached, bplcon1);
+    i16 posh = pos.h + 4;
+    // debug("posh = %d MAX = %d\n", posh, MAX(posh, ddfstrtReached));
+    ddfLores.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
+    ddfHires.compute(MAX(posh, ddfstrtReached), ddfstopReached, bplcon1);
     hsyncActions |= HSYNC_PREDICT_DDF;
     
     updateBplEvents();
     updateBplEvent();
+    updateDrawingFlags(false);
+    
+    /*
+    if (pos.v == 129) {
+        dumpBplEventTable();
+        dumpEvents();
+    }
+    */
 }
 
 void
