@@ -125,6 +125,9 @@
 		50AE6EDD24D93DC4000AA367 /* CopperReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperReg.cpp */; };
 		50AE6EDF24D93EDD000AA367 /* AgnusReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusReg.cpp */; };
 		50AE6EE124D9407F000AA367 /* BlitterReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterReg.cpp */; };
+		50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */; };
+		50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */; };
+		50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */; };
 		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
 		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
@@ -360,6 +363,9 @@
 		50AE6EDC24D93DC4000AA367 /* CopperReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperReg.cpp; sourceTree = "<group>"; };
 		50AE6EDE24D93EDD000AA367 /* AgnusReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusReg.cpp; sourceTree = "<group>"; };
 		50AE6EE024D9407F000AA367 /* BlitterReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterReg.cpp; sourceTree = "<group>"; };
+		50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaRegs.cpp; sourceTree = "<group>"; };
+		50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DeniseRegs.cpp; sourceTree = "<group>"; };
+		50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineRegs.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
 		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
 		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
@@ -508,6 +514,7 @@
 				501E715022671FC20070B17D /* DeniseTypes.h */,
 				5020B17F21EF136100B9E80E /* Denise.h */,
 				5020B17E21EF136100B9E80E /* Denise.cpp */,
+				50AE6EE424D9B210000AA367 /* DeniseRegs.cpp */,
 				5027418E2297CACF0038E5AF /* Colors.h */,
 				5027418D2297CACF0038E5AF /* Colors.cpp */,
 				502F7DD32221E52200AEEC65 /* PixelEngine.h */,
@@ -932,6 +939,7 @@
 				50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
+				50AE6EE624D9B2C7000AA367 /* StateMachineRegs.cpp */,
 				50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */,
 				505A214F22869FF10016EA21 /* AudioFilter.h */,
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
@@ -1047,6 +1055,7 @@
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
+				50AE6EE224D9B08C000AA367 /* PaulaRegs.cpp */,
 				50AEBED024D3D61A0037082D /* PaulaEvents.cpp */,
 				50AEBED424D3D7050037082D /* Audio */,
 				50AEBED524D3D7160037082D /* DIskController */,
@@ -1214,6 +1223,7 @@
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
+				50AE6EE324D9B08C000AA367 /* PaulaRegs.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
@@ -1252,6 +1262,7 @@
 				508FDFD921EA20510043D0E9 /* MetalViewEvents.swift in Sources */,
 				50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */,
 				500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */,
+				50AE6EE524D9B210000AA367 /* DeniseRegs.cpp in Sources */,
 				50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */,
 				508FDFAC21EA1FBC0043D0E9 /* TOD.cpp in Sources */,
 				50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */,
@@ -1286,6 +1297,7 @@
 				508FE05121EA22CC0043D0E9 /* HardwarePrefs.swift in Sources */,
 				50E2BE33240D418600155AE4 /* MoiraDebugger.cpp in Sources */,
 				509F41EA243B0FF700AD0FE4 /* ScreenshotDialog.swift in Sources */,
+				50AE6EE724D9B2C7000AA367 /* StateMachineRegs.cpp in Sources */,
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50C1684C242C89FD00197C33 /* Thumbnail.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,

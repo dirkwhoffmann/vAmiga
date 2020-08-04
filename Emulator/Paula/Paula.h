@@ -155,13 +155,17 @@ public:
 
     // OCS register 0x09C (w)
     void pokeINTREQ(u16 value);
-    
+    void setINTREQ(bool setclr, u16 value);
+    void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
+
     // OCS register 0x01C (r)
     u16 peekINTENAR() { return intena; }
     
     // OCS register 0x09A (w)
     void pokeINTENA(u16 value);
-    
+    void setINTENA(bool setclr, u16 value);
+    void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
+
     // OCS register 0x09E (w)
     void pokeADKCON(u16 value);
 
@@ -198,14 +202,6 @@ public:
     
 public:
     
-    // Changes the value of register INTREQ
-    void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
-    void setINTREQ(bool setclr, u16 value);
-
-    // Changes the value of register INTENA
-    void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
-    void setINTENA(bool setclr, u16 value);
-
     // Schedules an interrupt
     void raiseIrq(IrqSource src);
     void scheduleIrqAbs(IrqSource src, Cycle trigger);

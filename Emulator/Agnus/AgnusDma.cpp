@@ -366,7 +366,7 @@ Agnus::setBPL2MOD(u16 value)
 template <int x> void
 Agnus::pokeSPRxPTH(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTH($%d) (%X)\n", x, value, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
 
     switch (x) {
         case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value); break;
@@ -394,7 +394,7 @@ Agnus::setSPRxPTH(u16 value)
 template <int x> void
 Agnus::pokeSPRxPTL(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTL($%d) (%X)\n", x, value, value);
+    debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
 
     switch (x) {
         case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value); break;
