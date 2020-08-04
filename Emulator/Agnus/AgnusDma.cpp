@@ -471,16 +471,15 @@ Agnus::peek(u32 addr)
 {
     addr &= ptrMask;
     
-    if (addr >= 0x80000) {
+    if (addr >= mem.chipRamSize()) {
         
-        if (slowRamIsMirroredIn()) {
-            debug(XFILES, "Reading from Slow RAM mirror\n");
+        if (slowRamIsMirroredIn() && addr >= 0x80000) {
+            debug("Reading from Slow RAM mirror\n");
             return mem.peek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
         }
-        if (addr >= mem.chipRamSize()) {
-            debug(XFILES, "Reading from unmapped Chip Ram\n");
-            return mem.peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (addr);
-        }
+
+        debug(XFILES, "Reading from unmapped Chip Ram\n");
+        return mem.peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (addr);
     }
         
     return mem.peek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
@@ -491,14 +490,13 @@ Agnus::spypeek(u32 addr)
 {
     addr &= ptrMask;
     
-    if (addr >= 0x80000) {
+    if (addr >= mem.chipRamSize()) {
         
-        if (slowRamIsMirroredIn()) {
+        if (slowRamIsMirroredIn() && addr >= 0x80000) {
             return mem.spypeek16 <MEM_SLOW> (addr);
         }
-        if (addr >= mem.chipRamSize()) {
-            return mem.spypeek16 <MEM_NONE_SLOW> (addr);
-        }
+
+        return mem.spypeek16 <MEM_NONE_SLOW> (addr);
     }
     
     return mem.spypeek16 <MEM_CHIP> (addr);
@@ -509,17 +507,16 @@ Agnus::poke(u32 addr, u16 value)
 {
     addr &= ptrMask;
     
-    if (addr >= 0x80000) {
+    if (addr >= mem.chipRamSize()) {
         
-        if (slowRamIsMirroredIn()) {
+        if (slowRamIsMirroredIn() && addr >= 0x80000) {
             debug(XFILES, "Writing to Slow RAM mirror\n");
             mem.poke16 <AGNUS_ACCESS, MEM_SLOW> (addr, value);
             return;
         }
-        if (addr >= mem.chipRamSize()) {
-            debug(XFILES, "Writing to unmapped Chip Ram\n");
-            return;
-        }
+        
+        debug(XFILES, "Writing to unmapped Chip Ram\n");
+        return;
     }
     
     mem.poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value);

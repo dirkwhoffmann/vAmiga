@@ -35,8 +35,8 @@ Agnus::setRevision(AgnusRevision revision)
     switch (config.revision) {
             
         case AGNUS_8367: ptrMask = 0x07FFFF; break;
-        case AGNUS_8375: ptrMask = 0x1FFFFF; break;
         case AGNUS_8372: ptrMask = 0x0FFFFF; break;
+        case AGNUS_8375: ptrMask = 0x1FFFFF; break;
         default: assert(false);
     }
 }
