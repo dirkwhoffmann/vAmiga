@@ -955,7 +955,6 @@ Agnus::vsyncHandler()
     diwHFlop = true; 
             
     // Let other subcomponents do their own VSYNC stuff
-    blitter.vsyncHandler();
     copper.vsyncHandler();
     denise.beginOfFrame(frame.interlaced);
     joystick1.execute();

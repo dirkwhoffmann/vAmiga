@@ -124,6 +124,7 @@
 		50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50A2953D21FF12EF0046BAA0 /* ControlPort.cpp */; };
 		50AE6EDD24D93DC4000AA367 /* CopperReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDC24D93DC4000AA367 /* CopperReg.cpp */; };
 		50AE6EDF24D93EDD000AA367 /* AgnusReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EDE24D93EDD000AA367 /* AgnusReg.cpp */; };
+		50AE6EE124D9407F000AA367 /* BlitterReg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AE6EE024D9407F000AA367 /* BlitterReg.cpp */; };
 		50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */; };
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
 		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
@@ -358,6 +359,7 @@
 		50A493832374560D003ECD2C /* RTCTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RTCTypes.h; sourceTree = "<group>"; };
 		50AE6EDC24D93DC4000AA367 /* CopperReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperReg.cpp; sourceTree = "<group>"; };
 		50AE6EDE24D93EDD000AA367 /* AgnusReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusReg.cpp; sourceTree = "<group>"; };
+		50AE6EE024D9407F000AA367 /* BlitterReg.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterReg.cpp; sourceTree = "<group>"; };
 		50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BlitterEvents.cpp; sourceTree = "<group>"; };
 		50AEBECA24D3D40C0037082D /* CopperTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CopperTypes.h; sourceTree = "<group>"; };
 		50AEBECB24D3D4540037082D /* CopperEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CopperEvents.cpp; sourceTree = "<group>"; };
@@ -901,6 +903,7 @@
 				50D375DE222C7C6B0040987C /* Blitter.h */,
 				50AEBECD24D3D4AD0037082D /* BlitterTypes.h */,
 				50D375DD222C7C6B0040987C /* Blitter.cpp */,
+				50AE6EE024D9407F000AA367 /* BlitterReg.cpp */,
 				50AEBEC624D3D39D0037082D /* BlitterEvents.cpp */,
 				50E1E5D12242B9DA008EF4B0 /* FastBlitter.cpp */,
 				509047B5230575E6009CEC1C /* SlowBlitter.cpp */,
@@ -1271,6 +1274,7 @@
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,
 				50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */,
 				50A2953F21FF12EF0046BAA0 /* ControlPort.cpp in Sources */,
+				50AE6EE124D9407F000AA367 /* BlitterReg.cpp in Sources */,
 				501B821D2262FFB200042871 /* RTC.cpp in Sources */,
 				50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */,
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,

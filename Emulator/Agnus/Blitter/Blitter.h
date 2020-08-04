@@ -399,7 +399,7 @@ public:
     void serviceEvent(EventID id);
 
     // Performs periodic per-frame actions
-    void vsyncHandler();
+    // void vsyncHandler();
 
 
     //
