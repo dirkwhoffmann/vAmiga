@@ -10,8 +10,9 @@
 class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy!
-
+    var amiga: AmigaProxy { return inspector.parent.amiga }
+    var cpu: CPUProxy { return amiga.cpu }
+    
     enum BreakpointType {
         case none
         case enabled
@@ -29,7 +30,6 @@ class InstrTableView: NSTableView {
     
     override func awakeFromNib() {
         
-        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -38,7 +38,14 @@ class InstrTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
-    func cache(startAddr: UInt32) {
+    private func cache() {
+
+        if let addr = addrInRow[0] {
+            cache(startAddr: addr)
+        }
+    }
+
+    private func cache(startAddr: UInt32) {
 
         var addr = startAddr
 
@@ -50,27 +57,20 @@ class InstrTableView: NSTableView {
 
         for i in 0 ..< Int(CPUINFO_INSTR_COUNT) where addr <= 0xFFFFFF {
 
-            var info = amiga.cpu.disassembleInstr(addr)
+            var info = cpu.disassembleInstr(addr)
 
             instrInRow[i] = String(cString: &info.instr.0)
             addrInRow[i] = addr
             dataInRow[i] = String(cString: &info.data.0)
-            if amiga.cpu.breakpointIsSetAndDisabled(at: addr) {
+            if cpu.breakpointIsSetAndDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
-            } else if amiga.cpu.breakpointIsSet(at: addr) {
+            } else if cpu.breakpointIsSet(at: addr) {
                 bpInRow[i] = BreakpointType.enabled
             } else {
                 bpInRow[i] = BreakpointType.none
             }
             rowForAddr[addr] = i
             addr += UInt32(info.bytes)
-        }
-    }
-
-    private func cache() {
-
-        if let addr = addrInRow[0] {
-            cache(startAddr: addr)
         }
     }
 
@@ -130,7 +130,7 @@ class InstrTableView: NSTableView {
 
     func clickAction(row: Int) {
 
-        if let addr = addrInRow[row], let cpu = amiga?.cpu {
+        if let addr = addrInRow[row] {
 
             if !cpu.breakpointIsSet(at: addr) {
                 cpu.addBreakpoint(at: addr)
@@ -156,10 +156,10 @@ class InstrTableView: NSTableView {
 
         if let addr = addrInRow[row] {
 
-            if amiga.cpu.breakpointIsSet(at: addr) {
-                amiga.cpu.removeBreakpoint(at: addr)
+            if cpu.breakpointIsSet(at: addr) {
+                cpu.removeBreakpoint(at: addr)
             } else {
-                amiga.cpu.addBreakpoint(at: addr)
+                cpu.addBreakpoint(at: addr)
             }
 
             inspector.fullRefresh()

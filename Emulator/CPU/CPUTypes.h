@@ -36,7 +36,7 @@ typedef struct
     u16 sr;
 
     // Disassembled instructions starting at pc
-    DisassembledInstr instr[CPUINFO_INSTR_COUNT];
+    // DisassembledInstr instr[CPUINFO_INSTR_COUNT];
 
     // Disassembled instructions from the log buffer
     DisassembledInstr loggedInstr[CPUINFO_INSTR_COUNT];

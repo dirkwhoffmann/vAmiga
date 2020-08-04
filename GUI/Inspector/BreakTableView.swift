@@ -152,7 +152,7 @@ class BreakTableView: PointTableView {
             let addr = amiga.cpu.breakpointAddr(row)
             if addr <= 0xFFFFFF {
                 inspector.fullRefresh()
-                inspector.instrTableView.jumpTo(addr: addr)
+                inspector.cpuInstrView.jumpTo(addr: addr)
             }
         }
         
@@ -180,7 +180,7 @@ class BreakTableView: PointTableView {
             amiga.cpu.replaceBreakpoint(row, addr: addr)
         }
         
-        inspector.instrTableView.jumpTo(addr: addr)
+        inspector.cpuInstrView.jumpTo(addr: addr)
         
         amiga.resume()
     }

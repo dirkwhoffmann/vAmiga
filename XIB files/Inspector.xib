@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
-        <deployment identifier="macosx"/>
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -65,7 +64,6 @@
                 <outlet property="bltUseD" destination="mcq-lO-y2z" id="mYV-bM-1Ra"/>
                 <outlet property="bltX" destination="WQg-F3-F0s" id="ELC-Nr-SHc"/>
                 <outlet property="bltY" destination="TrE-oD-mky" id="twm-rl-s0O"/>
-                <outlet property="breakTableView" destination="pd6-3V-YaN" id="7aD-mh-ZjP"/>
                 <outlet property="ciaAlarmHi" destination="g4a-rb-TAd" id="LsO-a5-zkL"/>
                 <outlet property="ciaAlarmLo" destination="vQp-3y-fNZ" id="lZZ-Yq-ALh"/>
                 <outlet property="ciaAlarmMid" destination="cU8-pA-FF2" id="ajG-5f-tg3"/>
@@ -136,6 +134,7 @@
                 <outlet property="cpuA5" destination="N7A-zm-RMH" id="nsd-T8-Rly"/>
                 <outlet property="cpuA6" destination="YGc-gT-xRg" id="AIk-cX-3Cg"/>
                 <outlet property="cpuA7" destination="erY-EF-4ge" id="H2B-Fe-g1c"/>
+                <outlet property="cpuBreakView" destination="pd6-3V-YaN" id="7aD-mh-ZjP"/>
                 <outlet property="cpuC" destination="qfU-1M-Cid" id="Mm8-LQ-hR3"/>
                 <outlet property="cpuD0" destination="PRo-BO-2MZ" id="Bwk-8Y-8Aw"/>
                 <outlet property="cpuD1" destination="4W7-Qu-Z5L" id="nfb-H1-wRt"/>
@@ -148,6 +147,7 @@
                 <outlet property="cpuI0" destination="cdg-1r-plU" id="fZG-NB-Bi7"/>
                 <outlet property="cpuI1" destination="SK2-ME-2J5" id="fWV-ie-cvm"/>
                 <outlet property="cpuI2" destination="CdD-8Y-ejU" id="6Bl-oJ-i3l"/>
+                <outlet property="cpuInstrView" destination="vBZ-nM-TQD" id="RTC-Wm-6oe"/>
                 <outlet property="cpuN" destination="LDM-Gj-kSK" id="1pQ-ps-T1C"/>
                 <outlet property="cpuPC" destination="LKc-rz-j6m" id="zIU-VQ-s4u"/>
                 <outlet property="cpuS" destination="KJX-rt-0fr" id="5BO-yj-UYh"/>
@@ -160,8 +160,10 @@
                 <outlet property="cpuTraceStepIntoButton" destination="D4j-Y8-ayb" id="YWi-Xb-Cp9"/>
                 <outlet property="cpuTraceStepOverButton" destination="mgB-ce-57G" id="gbN-h0-aQg"/>
                 <outlet property="cpuTraceStopAndGoButton" destination="6rP-tx-mMX" id="6dG-V7-OEx"/>
+                <outlet property="cpuTraceView" destination="9F9-Qx-tLH" id="1zf-01-nk7"/>
                 <outlet property="cpuUSP" destination="mex-HF-QUG" id="0DW-Pu-DMg"/>
                 <outlet property="cpuV" destination="QXG-ho-9j4" id="qql-ca-tjH"/>
+                <outlet property="cpuWatchView" destination="g7V-Rx-9ei" id="AOD-Z4-m9g"/>
                 <outlet property="cpuX" destination="ams-8I-nYq" id="SpP-mY-SG2"/>
                 <outlet property="cpuZ" destination="umj-Cg-XaG" id="UzO-Ab-10M"/>
                 <outlet property="deniseBPLCON0" destination="VND-v2-3KF" id="L5w-Uf-3Aq"/>
@@ -323,7 +325,6 @@
                 <outlet property="evDmaProgress" destination="tuX-t6-3Ee" id="Plu-J3-ong"/>
                 <outlet property="evDmaProgress2" destination="ctY-zY-2I8" id="yLY-qs-pHV"/>
                 <outlet property="evTableView" destination="HR6-To-4IS" id="ah7-FL-OK7"/>
-                <outlet property="instrTableView" destination="vBZ-nM-TQD" id="RTC-Wm-6oe"/>
                 <outlet property="memAutoConfButton" destination="iYv-C0-PJh" id="pwS-Oa-5mI"/>
                 <outlet property="memBankTableView" destination="RzZ-Zx-t06" id="RpN-Cq-cet"/>
                 <outlet property="memCIAButton" destination="Uvd-uu-iLP" id="aJe-3t-y71"/>
@@ -430,8 +431,6 @@
                 <outlet property="sprTableView" destination="s6H-id-bwp" id="UCU-3E-do9"/>
                 <outlet property="sprVStart" destination="Dvm-aZ-h0W" id="659-TE-Xhj"/>
                 <outlet property="sprVStop" destination="z11-9N-wy4" id="o8h-b7-gu8"/>
-                <outlet property="traceTableView" destination="9F9-Qx-tLH" id="1zf-01-nk7"/>
-                <outlet property="watchTableView" destination="g7V-Rx-9ei" id="AOD-Z4-m9g"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="5Nr-At-Pvk"/>
             </connections>
         </customObject>
@@ -922,7 +921,7 @@
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <clipView key="contentView" drawsBackground="NO" id="8NX-89-8Zy">
                                                                     <rect key="frame" x="1" y="0.0" width="368" height="316"/>
-                                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                                    <autoresizingMask key="autoresizingMask"/>
                                                                     <subviews>
                                                                         <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="GgW-ee-CoV" id="vBZ-nM-TQD" customClass="InstrTableView" customModule="vAmiga" customModuleProvider="target">
                                                                             <rect key="frame" x="0.0" y="0.0" width="368" height="291"/>
@@ -1188,7 +1187,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="K6U-NB-Phg">
                                                             <rect key="frame" x="1" y="0.0" width="168" height="110"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="vNZ-f6-Hoj" id="g7V-Rx-9ei" customClass="WatchTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="168" height="85"/>
@@ -1269,7 +1268,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" id="lYO-RC-hWy">
                                                             <rect key="frame" x="1" y="0.0" width="168" height="110"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="bK4-tf-JR6" id="pd6-3V-YaN" customClass="BreakTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="168" height="85"/>
@@ -4085,7 +4084,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="252" height="256"/>
-                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                            <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="252" height="256"/>

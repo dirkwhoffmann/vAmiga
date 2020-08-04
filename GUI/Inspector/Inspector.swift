@@ -20,10 +20,10 @@ class Inspector: DialogController {
     @IBOutlet weak var panel: NSTabView!
 
     // CPU panel
-    @IBOutlet weak var instrTableView: InstrTableView!
-    @IBOutlet weak var traceTableView: TraceTableView!
-    @IBOutlet weak var breakTableView: BreakTableView!
-    @IBOutlet weak var watchTableView: WatchTableView!
+    @IBOutlet weak var cpuInstrView: InstrTableView!
+    @IBOutlet weak var cpuTraceView: TraceTableView!
+    @IBOutlet weak var cpuBreakView: BreakTableView!
+    @IBOutlet weak var cpuWatchView: WatchTableView!
     @IBOutlet weak var cpuPC: NSTextField!
     @IBOutlet weak var cpuD0: NSTextField!
     @IBOutlet weak var cpuD1: NSTextField!
@@ -610,7 +610,7 @@ class Inspector: DialogController {
     
     func scrollToPC() {
 
-        instrTableView.jumpTo(addr: cpuInfo!.pc0)
+        cpuInstrView.jumpTo(addr: cpuInfo!.pc0)
     }
 }
 

@@ -240,6 +240,7 @@ CPU::_inspect()
         info.sr = getSR();
         
         // Disassemble the program starting at the program counter
+        /*
         for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
             
             int bytes = disassemble(pc0, info.instr[i].instr);
@@ -249,6 +250,7 @@ CPU::_inspect()
             info.instr[i].bytes = bytes;
             pc0 += bytes;
         }
+        */
         
         // Disassemble the most recent entries in the trace buffer
         long count = debugger.loggedInstructions();
@@ -289,6 +291,7 @@ CPU::_dump()
     msg("   Flags: %X\n", info.sr);
 }
 
+/*
 DisassembledInstr
 CPU::getInstrInfo(long index)
 {
@@ -298,6 +301,7 @@ CPU::getInstrInfo(long index)
     synchronized { result = info.instr[index]; }
     return result;
 }
+*/
 
 DisassembledInstr
 CPU::getLoggedInstrInfo(long index)
