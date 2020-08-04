@@ -650,10 +650,6 @@ public:
     bool sprdma() { return sprdma(dmacon); }
     bool dskdma() { return dskdma(dmacon); }
     
-    u16 peekDMACONR();
-    void pokeDMACON(u16 value);
-    void setDMACON(u16 oldValue, u16 newValue);
-
     void enableBplDmaOCS();
     void disableBplDmaOCS();
     void enableBplDmaECS();
@@ -794,6 +790,11 @@ public:
     
 public:
 
+    // DMACONR, DMACON
+    u16 peekDMACONR();
+     void pokeDMACON(u16 value);
+     void setDMACON(u16 oldValue, u16 newValue);
+    
     // VHPOSR, VHPOS, VPOSR, VPOS
     u16 peekVHPOSR();
     void pokeVHPOS(u16 value);
@@ -812,18 +813,6 @@ public:
     void setDDFSTRT(u16 old, u16 value);
     void setDDFSTOP(u16 old, u16 value);
 
-    // Sets up the likely DDF values for the next rasterline
-    void predictDDF();
-
-private:
-
-    void computeDDFWindow();
-    void computeDDFWindowOCS();
-    void computeDDFWindowECS();
-    // void computeStandardDDFWindow(i16 strt, i16 stop);
-
-public:
-
     // BPLCON0 and BPLCON1
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
@@ -834,6 +823,27 @@ public:
     void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 oldValue, u16 newValue);
     void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }
+    
+    
+    //
+    // Managing the data fetch window
+    //
+    
+    // Sets up the likely DDF values for the next rasterline
+    void predictDDF();
+
+private:
+
+    void computeDDFWindow();
+    void computeDDFWindowOCS();
+    void computeDDFWindowECS();
+    // void computeStandardDDFWindow(i16 strt, i16 stop);
+
+    //
+    //
+    //
+    
+public:
 
     /* Returns the Agnus view of the BPU bits.
      * The value determines the number of enabled DMA channels. It is computed
