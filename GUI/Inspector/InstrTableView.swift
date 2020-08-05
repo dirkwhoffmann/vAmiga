@@ -12,12 +12,15 @@ class InstrTableView: NSTableView {
     @IBOutlet weak var inspector: Inspector!
     var amiga: AmigaProxy { return inspector.parent.amiga }
     var cpu: CPUProxy { return amiga.cpu }
-    
+        
     enum BreakpointType {
         case none
         case enabled
         case disabled
     }
+
+    // The first address to disassemble
+    var addrInFirstRow: UInt32 = 0
 
     // Data caches
     var addrInRow: [Int: UInt32] = [:]
@@ -25,8 +28,10 @@ class InstrTableView: NSTableView {
     var dataInRow: [Int: String] = [:]
     var bpInRow: [Int: BreakpointType] = [:]
     var rowForAddr: [UInt32: Int] = [:]
-
-    var hex = true
+    var numRows = 0
+    
+    // Number format
+    // var hex = true
     
     override func awakeFromNib() {
         
@@ -37,7 +42,33 @@ class InstrTableView: NSTableView {
         doubleAction = #selector(doubleClickAction(_:))
         action = #selector(clickAction(_:))
     }
-
+    
+    private func cache() {
+        
+        numRows = Int(CPUINFO_INSTR_COUNT)
+        
+        var addr = addrInFirstRow
+                
+        for i in 0 ..< numRows {
+            
+            var info = cpu.getInstrInfo(i, start: addrInFirstRow)
+            
+            instrInRow[i] = String(cString: &info.instr.0)
+            addrInRow[i] = addr
+            dataInRow[i] = String(cString: &info.data.0)
+            if cpu.breakpointIsSetAndDisabled(at: addr) {
+                bpInRow[i] = BreakpointType.disabled
+            } else if cpu.breakpointIsSet(at: addr) {
+                bpInRow[i] = BreakpointType.enabled
+            } else {
+                bpInRow[i] = BreakpointType.none
+            }
+            rowForAddr[addr] = i
+            addr += UInt32(info.bytes)
+        }
+    }
+    
+    /*
     private func cache() {
 
         if let addr = addrInRow[0] {
@@ -73,7 +104,8 @@ class InstrTableView: NSTableView {
             addr += UInt32(info.bytes)
         }
     }
-
+    */
+    
     func refresh(count: Int = 0, full: Bool = false, addr: UInt32 = 0) {
 
         if full {
@@ -108,7 +140,8 @@ class InstrTableView: NSTableView {
 
             // If the requested address is not displayed, we update the data
             // cache and display the address in row 0.
-            cache(startAddr: addr)
+            addrInFirstRow = addr
+            cache()
             reloadData()
             jumpTo(row: 0)
         }
@@ -170,7 +203,7 @@ class InstrTableView: NSTableView {
 extension InstrTableView: NSTableViewDataSource {
     
     func numberOfRows(in tableView: NSTableView) -> Int {
-        return Int(CPUINFO_INSTR_COUNT)
+        return numRows
     }
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {

@@ -53,15 +53,13 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->getInfo();
 }
-/*
-- (DisassembledInstr) getInstrInfo:(NSInteger)index
+- (DisassembledInstr) getInstrInfo:(NSInteger)nr start:(u32)addr
 {
-    return wrapper->cpu->getInstrInfo(index);
+    return wrapper->cpu->getInstrInfo(nr, addr);
 }
-*/
-- (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index
+- (DisassembledInstr) getLoggedInstrInfo:(NSInteger)nr
 {
-    return wrapper->cpu->getLoggedInstrInfo(index);
+    return wrapper->cpu->getLoggedInstrInfo(nr);
 }
 - (i64) clock
 {

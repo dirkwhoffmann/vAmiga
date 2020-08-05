@@ -183,7 +183,7 @@ struct SerialPortWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
-// - (DisassembledInstr) getInstrInfo:(NSInteger)index;
+- (DisassembledInstr) getInstrInfo:(NSInteger)index start:(u32)addr;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
 @property (readonly) i64 clock;

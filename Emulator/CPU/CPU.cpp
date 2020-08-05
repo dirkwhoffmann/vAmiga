@@ -224,12 +224,16 @@ CPU::_reset(bool hard)
 void
 CPU::_inspect()
 {
+    _inspect(getPC0());
+}
+
+void
+CPU::_inspect(u32 dasmStart)
+{
     synchronized {
-        
-        u32 pc0 = getPC0();
-        
+                
         // Registers
-        info.pc0 = pc0 & 0xFFFFFF;
+        info.pc0 = getPC0() & 0xFFFFFF;
         
         for (int i = 0; i < 8; i++) {
             info.d[i] = getD(i);
@@ -239,18 +243,18 @@ CPU::_inspect()
         info.ssp = getSSP();
         info.sr = getSR();
         
-        // Disassemble the program starting at the program counter
-        /*
+
+        // Disassemble the program starting at 'dasmStart'
+        info.start = dasmStart;
         for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
             
-            int bytes = disassemble(pc0, info.instr[i].instr);
-            disassemblePC(pc0, info.instr[i].addr);
-            disassembleMemory(pc0, bytes / 2, info.instr[i].data);
+            int bytes = disassemble(dasmStart, info.instr[i].instr);
+            disassemblePC(dasmStart, info.instr[i].addr);
+            disassembleMemory(dasmStart, bytes / 2, info.instr[i].data);
             info.instr[i].sr[0] = 0;
             info.instr[i].bytes = bytes;
-            pc0 += bytes;
+            dasmStart += bytes;
         }
-        */
         
         // Disassemble the most recent entries in the trace buffer
         long count = debugger.loggedInstructions();
@@ -291,25 +295,32 @@ CPU::_dump()
     msg("   Flags: %X\n", info.sr);
 }
 
-/*
 DisassembledInstr
-CPU::getInstrInfo(long index)
+CPU::getInstrInfo(long nr, u32 start)
 {
-    assert(index < CPUINFO_INSTR_COUNT);
-    
-    DisassembledInstr result;
-    synchronized { result = info.instr[index]; }
-    return result;
+    // Update the cache if necessary
+    if (info.start != start) _inspect(start);
+
+    return getInstrInfo(nr);
 }
-*/
 
 DisassembledInstr
-CPU::getLoggedInstrInfo(long index)
+CPU::getInstrInfo(long nr)
 {
-    assert(index < CPUINFO_INSTR_COUNT);
+    assert(nr < CPUINFO_INSTR_COUNT);
     
     DisassembledInstr result;
-    synchronized { result = info.loggedInstr[index]; }
+    synchronized { result = info.instr[nr]; }
+    return result;
+}
+
+DisassembledInstr
+CPU::getLoggedInstrInfo(long nr)
+{
+    assert(nr < CPUINFO_INSTR_COUNT);
+    
+    DisassembledInstr result;
+    synchronized { result = info.loggedInstr[nr]; }
     return result;
 }
 

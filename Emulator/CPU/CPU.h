@@ -74,6 +74,7 @@ private:
     void _run() override;
     void _reset(bool hard) override;
     void _inspect() override;
+    void _inspect(u32 dasmStart);
     void _dumpConfig() override;
     void _dump() override;
     size_t _size() override;
@@ -85,7 +86,9 @@ public:
     
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
-    // DisassembledInstr getInstrInfo(long nr);
+    
+    DisassembledInstr getInstrInfo(long nr, u32 startAddr);
+    DisassembledInstr getInstrInfo(long nr);
     DisassembledInstr getLoggedInstrInfo(long nr);
 
     //
