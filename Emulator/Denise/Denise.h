@@ -535,9 +535,10 @@ private:
 
 public:
 
-    // Draws all sprites. Called at the end of a rasterline
-    void drawSprites();
-
+    // Draws all sprites
+    void drawSprites(bool blank = false);
+    void drawSpritesVBlank() { drawSprites(true); }
+    
     // Draws an sprite pair. Called by drawSprites()
     template <unsigned pair> void drawSpritePair();
     template <unsigned pair> void drawSpritePair(int hstrt, int hstop,

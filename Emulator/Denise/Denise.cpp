@@ -550,9 +550,9 @@ Denise::translateDPF(int from, int to)
 }
 
 void
-Denise::drawSprites()
+Denise::drawSprites(bool vblank)
 {
-    if (wasArmed) {
+    if (wasArmed && !vblank) {
         
         if (wasArmed & 0b11000000) drawSpritePair<3>();
         if (wasArmed & 0b00110000) drawSpritePair<2>();
@@ -1079,7 +1079,7 @@ Denise::endOfLine(int vpos)
         // Translate bitplane data to color register indices
         translate();
 
-        // Draw sprites if at least one is armed
+        // Draw sprites
         drawSprites();
 
         // Draw border pixels
@@ -1096,6 +1096,8 @@ Denise::endOfLine(int vpos)
             pixelEngine.hide(vpos, config.hiddenLayers, config.hiddenLayerAlpha);
         }
     } else {
+        
+        drawSpritesVBlank();
         pixelEngine.endOfVBlankLine();
     }
 
