@@ -16,7 +16,7 @@ class PointTableView: NSTableView {
 
     // Data caches
     var disabledCache: [Int: Bool] = [:]
-    var addrCache: [Int: UInt32] = [:]
+    var addrCache: [Int: Int] = [:]
     var numRows = 0
 
     override func awakeFromNib() {
@@ -30,7 +30,7 @@ class PointTableView: NSTableView {
 
     func cache() { }
     func click(row: Int, col: Int) { }
-    func edit(row: Int, addr: UInt32) { }
+    func edit(row: Int, addr: Int) { }
 
     func refresh(count: Int = 0, full: Bool = false) {
 
@@ -116,7 +116,7 @@ extension PointTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, setObjectValue object: Any?, for tableColumn: NSTableColumn?, row: Int) {
 
         if tableColumn?.identifier.rawValue != "addr" { NSSound.beep(); return }
-        guard let addr = object as? UInt32 else { NSSound.beep(); return }
+        guard let addr = object as? Int else { NSSound.beep(); return }
 
         edit(row: row, addr: addr)
         inspector.fullRefresh()
@@ -170,7 +170,7 @@ class BreakTableView: PointTableView {
         amiga.resume()
     }
 
-    override func edit(row: Int, addr: UInt32) {
+    override func edit(row: Int, addr: Int) {
 
         // Abort if a breakpoint has been set already
         if breakpoints.isSet(at: addr) { NSSound.beep(); return }
@@ -223,7 +223,7 @@ class WatchTableView: PointTableView {
         }
     }
     
-    override func edit(row: Int, addr: UInt32) {
+    override func edit(row: Int, addr: Int) {
         
         // Abort if a watchpoint has been set already
         if watchpoints.isSet(at: addr) { NSSound.beep(); return }

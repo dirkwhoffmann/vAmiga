@@ -52,7 +52,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->guards->elements();
 }
-- (u32) addr:(NSInteger)nr
+- (NSInteger) addr:(NSInteger)nr
 {
     return wrapper->guards->guardAddr(nr);
 }
@@ -64,12 +64,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->guards->isDisabled(nr);
 }
-/*
-- (void) setEnable:(NSInteger)nr value:(BOOL)val
-{
-    wrapper->guards->setEnable(nr, val);
-}
-*/
 - (void) enable:(NSInteger)nr
 {
     wrapper->guards->enable(nr);
@@ -82,43 +76,37 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->guards->remove(nr);
 }
-- (void) replace:(NSInteger)nr addr:(u32)addr
+- (void) replace:(NSInteger)nr addr:(NSInteger)addr
 {
-    wrapper->guards->replace(nr, addr);
+    wrapper->guards->replace(nr, (u32)addr);
 }
-- (BOOL) isSetAt:(u32)addr
+- (BOOL) isSetAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAt(addr);
+    return wrapper->guards->isSetAt((u32)addr);
 }
-- (BOOL) isSetAndEnabledAt:(u32)addr
+- (BOOL) isSetAndEnabledAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAndEnabledAt(addr);
+    return wrapper->guards->isSetAndEnabledAt((u32)addr);
 }
-- (BOOL) isSetAndDisabledAt:(u32)addr
+- (BOOL) isSetAndDisabledAt:(NSInteger)addr
 {
-    return wrapper->guards->isSetAndDisabledAt(addr);
+    return wrapper->guards->isSetAndDisabledAt((u32)addr);
 }
-/*
-- (void) setEnableAt:(u32)addr value:(BOOL)val
+- (void) enableAt:(NSInteger)addr
 {
-    wrapper->guards->setEnableAt(addr, val);
+    wrapper->guards->enableAt((u32)addr);
 }
-*/
-- (void) enableAt:(u32)addr
+- (void) disableAt:(NSInteger)addr
 {
-    wrapper->guards->enableAt(addr);
+    wrapper->guards->disableAt((u32)addr);
 }
-- (void) disableAt:(u32)addr
+- (void) addAt:(NSInteger)addr
 {
-    wrapper->guards->disableAt(addr);
+    wrapper->guards->addAt((u32)addr);
 }
-- (void) addAt:(u32)addr
+- (void) removeAt:(NSInteger)addr
 {
-    wrapper->guards->addAt(addr);
-}
-- (void) removeAt:(u32)addr
-{
-    wrapper->guards->removeAt(addr);
+    wrapper->guards->removeAt((u32)addr);
 }
 
 @end
@@ -145,9 +133,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->getInfo();
 }
-- (DisassembledInstr) getInstrInfo:(NSInteger)nr start:(u32)addr
+- (DisassembledInstr) getInstrInfo:(NSInteger)nr start:(NSInteger)addr
 {
-    return wrapper->cpu->getInstrInfo(nr, addr);
+    return wrapper->cpu->getInstrInfo(nr, (u32)addr);
 }
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)nr
 {

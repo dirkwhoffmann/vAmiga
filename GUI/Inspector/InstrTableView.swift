@@ -21,13 +21,13 @@ class InstrTableView: NSTableView {
     }
 
     // The first address to disassemble
-    var addrInFirstRow: UInt32 = 0
+    var addrInFirstRow: Int = 0
 
     // Data caches
     var instrInRow: [Int: DisassembledInstr] = [:]
     var bpInRow: [Int: BreakpointType] = [:]
-    var addrInRow: [Int: UInt32] = [:]
-    var rowForAddr: [UInt32: Int] = [:]
+    var addrInRow: [Int: Int] = [:]
+    var rowForAddr: [Int: Int] = [:]
     var numRows = 0
     
     // Number format
@@ -43,7 +43,7 @@ class InstrTableView: NSTableView {
         action = #selector(clickAction(_:))
     }
 
-    private func cache(addrInFirstRow addr: UInt32) {
+    private func cache(addrInFirstRow addr: Int) {
 
         addrInFirstRow = addr
         cache()
@@ -65,13 +65,14 @@ class InstrTableView: NSTableView {
             } else {
                 bpInRow[i] = BreakpointType.none
             }
+            
             addrInRow[i] = addr
             rowForAddr[addr] = i
-            addr += UInt32(instrInRow[i]!.bytes)
+            addr += Int(instrInRow[i]!.bytes)
         }
     }
         
-    func refresh(count: Int = 0, full: Bool = false, addr: UInt32 = 0) {
+    func refresh(count: Int = 0, full: Bool = false, addr: Int = 0) {
 
         if full {
             for (c, f) in ["addr": fmt24] {
@@ -91,7 +92,7 @@ class InstrTableView: NSTableView {
         if count != 0 { jumpTo(addr: addr) }
     }
 
-    func jumpTo(addr: UInt32) {
+    func jumpTo(addr: Int) {
 
         if let row = rowForAddr[addr] {
 

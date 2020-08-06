@@ -179,7 +179,7 @@ struct SerialPortWrapper;
 
 
 //
-// Guards
+// Guards (Breakpoints, Watchpoints)
 //
 
 @interface GuardsProxy : NSObject {
@@ -188,23 +188,21 @@ struct SerialPortWrapper;
 }
 
 @property (readonly) NSInteger count;
-- (u32) addr:(NSInteger)nr;
+- (NSInteger) addr:(NSInteger)nr;
 - (BOOL) isEnabled:(NSInteger)nr;
 - (BOOL) isDisabled:(NSInteger)nr;
-// - (void) setEnable:(NSInteger)nr value:(BOOL)val;
 - (void) enable:(NSInteger)nr;
 - (void) disable:(NSInteger)nr;
 - (void) remove:(NSInteger)nr;
-- (void) replace:(NSInteger)nr addr:(u32)addr;
+- (void) replace:(NSInteger)nr addr:(NSInteger)addr;
 
-- (BOOL) isSetAt:(u32)addr;
-- (BOOL) isSetAndEnabledAt:(u32)addr;
-- (BOOL) isSetAndDisabledAt:(u32)addr;
-// - (void) setEnableAt:(u32)addr value:(BOOL)val;
-- (void) enableAt:(u32)addr;
-- (void) disableAt:(u32)addr;
-- (void) addAt:(u32)addr;
-- (void) removeAt:(u32)addr;
+- (BOOL) isSetAt:(NSInteger)addr;
+- (BOOL) isSetAndEnabledAt:(NSInteger)addr;
+- (BOOL) isSetAndDisabledAt:(NSInteger)addr;
+- (void) enableAt:(NSInteger)addr;
+- (void) disableAt:(NSInteger)addr;
+- (void) addAt:(NSInteger)addr;
+- (void) removeAt:(NSInteger)addr;
 
 @end
 
@@ -220,43 +218,12 @@ struct SerialPortWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
-- (DisassembledInstr) getInstrInfo:(NSInteger)index start:(u32)addr;
+- (DisassembledInstr) getInstrInfo:(NSInteger)index start:(NSInteger)addr;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
 @property (readonly) i64 clock;
 @property (readonly) i64 cycles;
 @property (readonly, getter=isHalted) bool halted;
-
-/*
-@property (readonly) NSInteger numberOfBreakpoints;
-- (u32) breakpointAddr:(NSInteger)nr;
-- (BOOL) breakpointIsEnabled:(NSInteger)nr;
-- (BOOL) breakpointIsDisabled:(NSInteger)nr;
-- (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val;
-- (void) removeBreakpoint:(NSInteger)nr;
-- (void) replaceBreakpoint:(NSInteger)nr addr:(u32)addr;
-
-- (BOOL) breakpointIsSetAt:(u32)addr;
-- (BOOL) breakpointIsSetAndEnabledAt:(u32)addr;
-- (BOOL) breakpointIsSetAndDisabledAt:(u32)addr;
-- (void) breakpointSetEnableAt:(u32)addr value:(BOOL)val;
-- (void) addBreakpointAt:(u32)addr;
-- (void) removeBreakpointAt:(u32)addr;
-
-- (NSInteger) numberOfWatchpoints;
-- (u32) watchpointAddr:(NSInteger)nr;
-- (BOOL) watchpointIsEnabled:(NSInteger)nr;
-- (BOOL) watchpointIsDisabled:(NSInteger)nr;
-- (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val;
-- (void) removeWatchpoint:(NSInteger)nr;
-- (void) replaceWatchpoint:(NSInteger)nr addr:(u32)addr;
-
-- (BOOL) watchpointIsSetAt:(u32)addr;
-- (BOOL) watchpointIsSetAndEnabledAt:(u32)addr;
-- (BOOL) watchpointIsSetAndDisabledAt:(u32)addr;
-- (void) addWatchpointAt:(u32)addr;
-- (void) removeWatchpointAt:(u32)addr;
-*/
 
 @property (readonly) NSInteger loggedInstructions;
 - (void) clearLog;

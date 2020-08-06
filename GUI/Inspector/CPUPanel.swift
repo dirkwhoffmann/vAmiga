@@ -86,7 +86,7 @@ extension Inspector {
         cpuV.state  = (sr & 0b0000000000000010 != 0) ? .on : .off
         cpuC.state  = (sr & 0b0000000000000001 != 0) ? .on : .off
 
-        cpuInstrView.refresh(count: count, full: full, addr: cpuInfo!.pc0)
+        cpuInstrView.refresh(count: count, full: full, addr: Int(cpuInfo!.pc0))
         cpuTraceView.refresh(count: count, full: full)
         cpuBreakView.refresh(count: count, full: full)
         cpuWatchView.refresh(count: count, full: full)
@@ -116,8 +116,8 @@ extension Inspector {
     @IBAction func cpuGotoAction(_ sender: NSSearchField!) {
 
         if sender.stringValue == "" {
-            cpuInstrView.jumpTo(addr: cpuInfo!.pc0)
-        } else if let addr = UInt32(sender.stringValue, radix: 16) {
+            cpuInstrView.jumpTo(addr: Int(cpuInfo!.pc0))
+        } else if let addr = Int(sender.stringValue, radix: 16) {
             cpuInstrView.jumpTo(addr: addr)
         } else {
             sender.stringValue = ""
