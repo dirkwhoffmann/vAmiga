@@ -11,6 +11,8 @@
 #import "Amiga.h"
 #import "vAmiga-Swift.h"
 
+using namespace moira;
+
 struct AgnusWrapper { Agnus *agnus; };
 struct AmigaFileWrapper { AmigaFile *file; };
 struct AmigaWrapper { Amiga *amiga; };
@@ -23,6 +25,7 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
+struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
 struct MemWrapper { Memory *mem; };
@@ -30,6 +33,95 @@ struct MouseWrapper { Mouse *mouse; };
 struct PaulaWrapper { Paula *paula; };
 struct SerialPortWrapper { SerialPort *port; };
 
+
+//
+// Guards (Breakpoints, Watchpoints)
+//
+
+@implementation GuardsProxy
+
+- (instancetype) initWithGuards:(Guards *)guards
+{
+    if (self = [super init]) {
+        wrapper = new GuardsWrapper();
+        wrapper->guards = guards;
+    }
+    return self;
+}
+- (NSInteger) count
+{
+    return wrapper->guards->elements();
+}
+- (u32) addr:(NSInteger)nr
+{
+    return wrapper->guards->guardAddr(nr);
+}
+- (BOOL) isEnabled:(NSInteger)nr
+{
+    return wrapper->guards->isEnabled(nr);
+}
+- (BOOL) isDisabled:(NSInteger)nr
+{
+    return wrapper->guards->isDisabled(nr);
+}
+/*
+- (void) setEnable:(NSInteger)nr value:(BOOL)val
+{
+    wrapper->guards->setEnable(nr, val);
+}
+*/
+- (void) enable:(NSInteger)nr
+{
+    wrapper->guards->enable(nr);
+}
+- (void) disable:(NSInteger)nr
+{
+    wrapper->guards->disable(nr);
+}
+- (void) remove:(NSInteger)nr
+{
+    return wrapper->guards->remove(nr);
+}
+- (void) replace:(NSInteger)nr addr:(u32)addr
+{
+    wrapper->guards->replace(nr, addr);
+}
+- (BOOL) isSetAt:(u32)addr
+{
+    return wrapper->guards->isSetAt(addr);
+}
+- (BOOL) isSetAndEnabledAt:(u32)addr
+{
+    return wrapper->guards->isSetAndEnabledAt(addr);
+}
+- (BOOL) isSetAndDisabledAt:(u32)addr
+{
+    return wrapper->guards->isSetAndDisabledAt(addr);
+}
+/*
+- (void) setEnableAt:(u32)addr value:(BOOL)val
+{
+    wrapper->guards->setEnableAt(addr, val);
+}
+*/
+- (void) enableAt:(u32)addr
+{
+    wrapper->guards->enableAt(addr);
+}
+- (void) disableAt:(u32)addr
+{
+    wrapper->guards->disableAt(addr);
+}
+- (void) addAt:(u32)addr
+{
+    wrapper->guards->addAt(addr);
+}
+- (void) removeAt:(u32)addr
+{
+    wrapper->guards->removeAt(addr);
+}
+
+@end
 
 //
 // CPU
@@ -180,10 +272,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) clearLog
 {
     return wrapper->cpu->debugger.clearLog();
-}
-- (DisassembledInstr)disassembleInstr:(u32)addr
-{
-    return wrapper->cpu->disassembleInstr(addr);
 }
 
 @end
@@ -1504,6 +1592,7 @@ struct SerialPortWrapper { SerialPort *port; };
 @synthesize wrapper;
 @synthesize agnus;
 @synthesize blitter;
+@synthesize breakpoints;
 @synthesize ciaA;
 @synthesize ciaB;
 @synthesize controlPort1;
@@ -1525,6 +1614,7 @@ struct SerialPortWrapper { SerialPort *port; };
 @synthesize mouse2;
 @synthesize paula;
 @synthesize serialPort;
+@synthesize watchpoints;
 
 - (instancetype) init
 {
@@ -1540,6 +1630,7 @@ struct SerialPortWrapper { SerialPort *port; };
     // Create sub proxys
     agnus = [[AgnusProxy alloc] initWithAgnus:&amiga->agnus];
     blitter = [[BlitterProxy alloc] initWithBlitter:&amiga->agnus.blitter];
+    breakpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.breakpoints];
     ciaA = [[CIAProxy alloc] initWithCIA:&amiga->ciaA];
     ciaB = [[CIAProxy alloc] initWithCIA:&amiga->ciaB];
     controlPort1 = [[ControlPortProxy alloc] initWithControlPort:&amiga->controlPort1];
@@ -1561,6 +1652,7 @@ struct SerialPortWrapper { SerialPort *port; };
     mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
+    watchpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.watchpoints];
 
     return self;
 }

@@ -14,6 +14,10 @@
 
 namespace moira {
 
+//
+// Guard
+//
+
 bool
 Guard::eval(u32 addr, Size S)
 {
@@ -24,6 +28,11 @@ Guard::eval(u32 addr, Size S)
     }
     return false;
 }
+
+
+//
+// Guards
+//
 
 Guard *
 Guards::guardWithNr(long nr)

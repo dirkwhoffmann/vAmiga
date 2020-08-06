@@ -26,6 +26,7 @@
 @class DmaDebuggerProxy;
 @class DMSFileProxy;
 @class DriveProxy;
+@class GuardsProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
 @class MemProxy;
@@ -49,6 +50,7 @@ struct DeniseWrapper;
 struct DiskControllerWrapper;
 struct DmaDebuggerWrapper;
 struct DriveWrapper;
+struct GuardsWrapper;
 struct KeyboardWrapper;
 struct MemWrapper;
 struct PaulaWrapper;
@@ -76,6 +78,8 @@ struct SerialPortWrapper;
     DriveProxy *df1;
     DriveProxy *df2;
     DriveProxy *df3;
+    GuardsProxy *breakpoints;
+    GuardsProxy *watchpoints;
     JoystickProxy *joystick1;
     JoystickProxy *joystick2;
     KeyboardProxy *keyboard;
@@ -102,6 +106,8 @@ struct SerialPortWrapper;
 @property (readonly, strong) DriveProxy *df1;
 @property (readonly, strong) DriveProxy *df2;
 @property (readonly, strong) DriveProxy *df3;
+@property (readonly, strong) GuardsProxy *breakpoints;
+@property (readonly, strong) GuardsProxy *watchpoints;
 @property (readonly, strong) JoystickProxy *joystick1;
 @property (readonly, strong) JoystickProxy *joystick2;
 @property (readonly, strong) KeyboardProxy *keyboard;
@@ -173,6 +179,37 @@ struct SerialPortWrapper;
 
 
 //
+// Guards
+//
+
+@interface GuardsProxy : NSObject {
+    
+    struct GuardsWrapper *wrapper;
+}
+
+@property (readonly) NSInteger count;
+- (u32) addr:(NSInteger)nr;
+- (BOOL) isEnabled:(NSInteger)nr;
+- (BOOL) isDisabled:(NSInteger)nr;
+// - (void) setEnable:(NSInteger)nr value:(BOOL)val;
+- (void) enable:(NSInteger)nr;
+- (void) disable:(NSInteger)nr;
+- (void) remove:(NSInteger)nr;
+- (void) replace:(NSInteger)nr addr:(u32)addr;
+
+- (BOOL) isSetAt:(u32)addr;
+- (BOOL) isSetAndEnabledAt:(u32)addr;
+- (BOOL) isSetAndDisabledAt:(u32)addr;
+// - (void) setEnableAt:(u32)addr value:(BOOL)val;
+- (void) enableAt:(u32)addr;
+- (void) disableAt:(u32)addr;
+- (void) addAt:(u32)addr;
+- (void) removeAt:(u32)addr;
+
+@end
+
+
+//
 // CPU
 //
 
@@ -190,6 +227,7 @@ struct SerialPortWrapper;
 @property (readonly) i64 cycles;
 @property (readonly, getter=isHalted) bool halted;
 
+/*
 @property (readonly) NSInteger numberOfBreakpoints;
 - (u32) breakpointAddr:(NSInteger)nr;
 - (BOOL) breakpointIsEnabled:(NSInteger)nr;
@@ -218,11 +256,10 @@ struct SerialPortWrapper;
 - (BOOL) watchpointIsSetAndDisabledAt:(u32)addr;
 - (void) addWatchpointAt:(u32)addr;
 - (void) removeWatchpointAt:(u32)addr;
+*/
 
 @property (readonly) NSInteger loggedInstructions;
 - (void) clearLog;
-
-- (DisassembledInstr) disassembleInstr:(u32)addr;
 
 @end
 

@@ -7,11 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef MOIRA_GUARD_H
-#define MOIRA_GUARD_H
+#ifndef MOIRA_DEBUGGER_H
+#define MOIRA_DEBUGGER_H
 
 namespace moira {
 
+// Base structure for a single breakpoint or watchpoint
 struct Guard {
 
     // The observed address
@@ -33,6 +34,7 @@ public:
 
 };
 
+// Base class for a collection of guards
 class Guards {
 
     friend class Debugger;
@@ -206,8 +208,11 @@ public:
 
     // Logs an instruction
     void logInstruction();
-
-    // Reads an entry from the log buffer
+    
+    /* Reads an entry from the log buffer
+     *    logEntry: n == 0 returns the most recently recorded entry
+     * logEntryAbs: n == 0 returns the oldest entry
+     */
     Registers logEntry(int n);
     Registers logEntryAbs(int n);
 

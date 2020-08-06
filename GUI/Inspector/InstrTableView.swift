@@ -12,7 +12,8 @@ class InstrTableView: NSTableView {
     @IBOutlet weak var inspector: Inspector!
     var amiga: AmigaProxy { return inspector.parent.amiga }
     var cpu: CPUProxy { return amiga.cpu }
-        
+    var breakpoints: GuardsProxy { return amiga.breakpoints }
+    
     enum BreakpointType {
         case none
         case enabled
@@ -57,9 +58,9 @@ class InstrTableView: NSTableView {
             
             instrInRow[i] = cpu.getInstrInfo(i, start: addrInFirstRow)
             
-            if cpu.breakpointIsSetAndDisabled(at: addr) {
+            if breakpoints.isSetAndDisabled(at: addr) {
                 bpInRow[i] = BreakpointType.disabled
-            } else if cpu.breakpointIsSet(at: addr) {
+            } else if breakpoints.isSet(at: addr) {
                 bpInRow[i] = BreakpointType.enabled
             } else {
                 bpInRow[i] = BreakpointType.none
@@ -86,9 +87,8 @@ class InstrTableView: NSTableView {
             reloadData()
         }
 
-        if count != 0 {
-            jumpTo(addr: addr)
-        }
+        // In animation mode, jump to the currently executed instruction
+        if count != 0 { jumpTo(addr: addr) }
     }
 
     func jumpTo(addr: UInt32) {
@@ -128,12 +128,12 @@ class InstrTableView: NSTableView {
 
         if let addr = addrInRow[row] {
 
-            if !cpu.breakpointIsSet(at: addr) {
-                cpu.addBreakpoint(at: addr)
-            } else if cpu.breakpointIsSetAndDisabled(at: addr) {
-                cpu.breakpointSetEnable(at: addr, value: true)
-            } else if cpu.breakpointIsSetAndEnabled(at: addr) {
-                cpu.breakpointSetEnable(at: addr, value: false)
+            if !breakpoints.isSet(at: addr) {
+                breakpoints.add(at: addr)
+            } else if breakpoints.isSetAndDisabled(at: addr) {
+                breakpoints.enable(at: addr)
+            } else if breakpoints.isSetAndEnabled(at: addr) {
+                breakpoints.disable(at: addr)
             }
 
             inspector.fullRefresh()
@@ -152,10 +152,10 @@ class InstrTableView: NSTableView {
 
         if let addr = addrInRow[row] {
 
-            if cpu.breakpointIsSet(at: addr) {
-                cpu.removeBreakpoint(at: addr)
+            if breakpoints.isSet(at: addr) {
+                breakpoints.remove(at: addr)
             } else {
-                cpu.addBreakpoint(at: addr)
+                breakpoints.add(at: addr)
             }
 
             inspector.fullRefresh()
@@ -187,7 +187,7 @@ extension InstrTableView: NSTableViewDataSource {
             case "instr":
                 return String(cString: &info.instr.0)
             default:
-                return "???"
+                return ""
             }
         }
         return "??"

@@ -243,7 +243,6 @@ CPU::_inspect(u32 dasmStart)
         info.ssp = getSSP();
         info.sr = getSR();
         
-
         // Disassemble the program starting at 'dasmStart'
         info.start = dasmStart;
         for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
