@@ -36,17 +36,19 @@ protected:
      */
     EmulatorState state = STATE_OFF;
     
-    /* Warp mode
+    /* Indicates if the emulator should be executed in warp mode.
      * To speed up emulation (e.g., during disk accesses), the virtual hardware
      * can be put into warp mode. In this mode, the emulation thread is no
      * longer paused to match the target frequency and runs as fast as possible.
      */
     bool warp = false;
 
-    /* Debug mode
-     * Components can be put into debug mode. In this mode, some components
-     * perform additional actions. E.g., the CPU records every executed
-     * instruction in a log buffer.
+    /* Debug mode.
+     * Indicates if the emulator should be executed in debug mode.
+     * Debug mode is enabled when the GUI debugger is opend and disabled when
+     * the GUI debugger is closed. In debug mode, several time-consuming tasks
+     * are performed that are usually left out. E.g., the CPU checks for
+     * breakpoints and records the executed instruction in it's trace buffer.
      */
     bool debugMode = false;
     
@@ -214,16 +216,16 @@ public:
     // Switches warp mode on or off
     virtual void setWarp(bool enable);
     virtual void _setWarp(bool enable) { };
-
-    // Switches warp mode on (DEPRECATED)
-    // virtual void warpOn();
-    // virtual void _warpOn() { }
-
-    // Switches warp mode off (DEPRECATED)
-    // virtual void warpOff();
-    // virtual void _warpOff() { }
-
-
+    void enableWarpMode() { setWarp(true); }
+    void disableWarpMode() { setWarp(false); }
+    
+    // Switches debug mode on or off
+    virtual void setDebug(bool enable);
+    virtual void _setDebug(bool enable) { };
+    void enableDebugMode() { setDebug(true); }
+    void disableDebugMode() { setDebug(false); }
+    
+    
     //
     // Loading and saving snapshots
     //

@@ -13,7 +13,6 @@
 // Static class variables
 //
 
-bool Amiga::debugMode = false;
 EventID Amiga::inspectionTarget = INS_NONE;
 
 
@@ -121,6 +120,7 @@ Amiga::~Amiga()
     pthread_mutex_destroy(&stateChangeLock);
 }
 
+/*
 void
 Amiga::setDebugMode(bool enable)
 {
@@ -135,6 +135,7 @@ Amiga::setDebugMode(bool enable)
         cpu.debugger.disableLogging();
     }
 }
+*/
 
 void
 Amiga::setInspectionTarget(EventID id)

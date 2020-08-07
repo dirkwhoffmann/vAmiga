@@ -65,18 +65,7 @@ public:
      * scheduled, inspect() is called on a certain Amiga component.
      */
     static EventID inspectionTarget;
-    
-private:
-    
-    /* Indicates if the emulator should be executed in debug mode.
-     * Debug mode is enabled when the GUI debugger is opend and disabled when
-     * the GUI debugger is closed. In debug mode, several time-consuming tasks
-     * are performed that are usually left out. E.g., the CPU checks for
-     * breakpoints and records the executed instruction in it's trace buffer.
-     */
-    static bool debugMode;
-    
-    
+     
     //
     // Sub components
     //
@@ -266,12 +255,11 @@ public:
 public:
     
     // Indicates if debug mode is enabled
-    bool getDebugMode() { return debugMode; }
+    // bool getDebugMode() { return debugMode; }
     
     // Enabled or disabled debug mode
-    void setDebugMode(bool enable);
-    void enableDebugging() { setDebugMode(true); }
-    void disableDebugging() { setDebugMode(false); }
+    // void setDebugMode(bool enable);
+ 
     
     /* Sets the inspection target.
      * If an inspection target is set (INS_xxx events), the emulator schedules

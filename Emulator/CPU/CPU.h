@@ -77,6 +77,7 @@ private:
     void _inspect(u32 dasmStart);
     void _dumpConfig() override;
     void _dump() override;
+    void _setDebug(bool enable) override;
     size_t _size() override;
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }

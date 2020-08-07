@@ -1661,15 +1661,15 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) debugMode
 {
-    return wrapper->amiga->getDebugMode();
+    return wrapper->amiga->inDebugMode();
 }
 - (void) enableDebugging
 {
-    wrapper->amiga->enableDebugging();
+    wrapper->amiga->enableDebugMode();
 }
 - (void) disableDebugging
 {
-    wrapper->amiga->disableDebugging();
+    wrapper->amiga->disableDebugMode();
 }
 - (void) setInspectionTarget:(EventID)id
 {

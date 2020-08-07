@@ -560,7 +560,7 @@ Denise::drawSprites(bool vblank)
         if (wasArmed & 0b00000011) drawSpritePair<0>();
         
         // Record sprite data in debug mode
-        if (amiga.getDebugMode()) {
+        if (amiga.inDebugMode()) {
             for (int i = 0; i < 8; i++) {
                 if (GET_BIT(wasArmed, i)) recordSpriteData(i);
             }
@@ -1031,7 +1031,7 @@ Denise::beginOfFrame(bool interlace)
 {
     pixelEngine.beginOfFrame(interlace);
     
-    if (amiga.getDebugMode()) {
+    if (amiga.inDebugMode()) {
         
         for (int i = 0; i < 8; i++) {
             latchedSpriteInfo[i] = spriteInfo[i];

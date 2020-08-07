@@ -174,39 +174,21 @@ HardwareComponent::setWarp(bool enable)
      _setWarp(enable);
 }
 
-/*
 void
-HardwareComponent::warpOn()
+HardwareComponent::setDebug(bool enable)
 {
-    if (warp) return;
+    if (debugMode == enable) return;
+    
+    debugMode = enable;
 
-    warp = true;
+     // Enable or disable debug mode for all subcomponents
+     for (HardwareComponent *c : subComponents) {
+         c->setDebug(enable);
+     }
 
-    // Enable warp mode for all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->warpOn();
-    }
-
-    // Enable warp mode for this component
-    _warpOn();
+     // Enable debug mode for this component
+     _setDebug(enable);
 }
-
-void
-HardwareComponent::warpOff()
-{
-    if (!warp) return;
-
-    warp = false;
-
-    // Disable warp mode for all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->warpOff();
-    }
-
-    // Disable warp mode for this component
-    _warpOff();
-}
-*/
 
 size_t
 HardwareComponent::size()

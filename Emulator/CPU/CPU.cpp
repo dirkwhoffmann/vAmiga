@@ -294,6 +294,21 @@ CPU::_dump()
     msg("   Flags: %X\n", info.sr);
 }
 
+void
+CPU::_setDebug(bool enable)
+{
+    if (enable) {
+         
+         msg("Enabling debug mode\n");
+         debugger.enableLogging();
+
+     } else {
+
+         msg("Disabling debug mode\n");
+         debugger.disableLogging();
+     }
+}
+
 DisassembledInstr
 CPU::getInstrInfo(long nr, u32 start)
 {
