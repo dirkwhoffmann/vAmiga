@@ -159,6 +159,23 @@ HardwareComponent::dump()
 }
 
 void
+HardwareComponent::setWarp(bool enable)
+{
+    if (warp == enable) return;
+    
+    warp = enable;
+
+     // Enable or disable warp mode for all subcomponents
+     for (HardwareComponent *c : subComponents) {
+         c->setWarp(enable);
+     }
+
+     // Enable warp mode for this component
+     _setWarp(enable);
+}
+
+/*
+void
 HardwareComponent::warpOn()
 {
     if (warp) return;
@@ -189,6 +206,7 @@ HardwareComponent::warpOff()
     // Disable warp mode for this component
     _warpOff();
 }
+*/
 
 size_t
 HardwareComponent::size()

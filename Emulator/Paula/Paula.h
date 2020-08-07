@@ -133,8 +133,7 @@ private:
     void _reset(bool hard) override;
     void _inspect() override;
     void _dump() override;
-    void _warpOn() override;
-    void _warpOff() override;
+    void _setWarp(bool enable) override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }

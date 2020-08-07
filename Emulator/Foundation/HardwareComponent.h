@@ -43,7 +43,13 @@ protected:
      */
     bool warp = false;
 
-
+    /* Debug mode
+     * Components can be put into debug mode. In this mode, some components
+     * perform additional actions. E.g., the CPU records every executed
+     * instruction in a log buffer.
+     */
+    bool debugMode = false;
+    
     //
     // Constructing and destroying
     //
@@ -54,7 +60,15 @@ public:
     
     
     //
-    // Initializing
+    // Acccessing properties
+    //
+    
+    bool getWarp() { return warp; }
+    bool inDebugMode() { return debugMode; }
+    
+    
+    //
+    // Controlling the component state
     //
     
 public:
@@ -197,16 +211,17 @@ public:
     void dump();
     virtual void _dump() { }
     
-    // Getter for warp mode
-    bool getWarp() { return warp; }
+    // Switches warp mode on or off
+    virtual void setWarp(bool enable);
+    virtual void _setWarp(bool enable) { };
 
-    // Switches warp mode on
-    virtual void warpOn();
-    virtual void _warpOn() { }
+    // Switches warp mode on (DEPRECATED)
+    // virtual void warpOn();
+    // virtual void _warpOn() { }
 
-    // Switches warp mode off
-    virtual void warpOff();
-    virtual void _warpOff() { }
+    // Switches warp mode off (DEPRECATED)
+    // virtual void warpOff();
+    // virtual void _warpOff() { }
 
 
     //

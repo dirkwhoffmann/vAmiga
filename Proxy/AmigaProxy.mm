@@ -1823,11 +1823,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) warpOn
 {
-    wrapper->amiga->warpOn();
+    wrapper->amiga->setWarp(true);
 }
 - (void) warpOff
 {
-    wrapper->amiga->warpOff();
+    wrapper->amiga->setWarp(false);
 }
 - (void) loadFromSnapshot:(SnapshotProxy *)proxy
 {

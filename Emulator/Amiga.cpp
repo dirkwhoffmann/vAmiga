@@ -610,18 +610,10 @@ Amiga::reset(bool hard)
 }
 
 void
-Amiga::warpOn()
+Amiga::setWarp(bool enable)
 {
     suspend();
-    HardwareComponent::warpOn();
-    resume();
-}
-
-void
-Amiga::warpOff()
-{
-    suspend();
-    HardwareComponent::warpOff();
+    HardwareComponent::setWarp(enable);
     resume();
 }
 
@@ -722,16 +714,17 @@ Amiga::_dump()
 }
 
 void
-Amiga::_warpOn()
+Amiga::_setWarp(bool enable)
 {
-    putMessage(MSG_WARP_ON);
-}
-
-void
-Amiga::_warpOff()
-{
-    restartTimer();
-    putMessage(MSG_WARP_OFF);
+    if (enable) {
+        
+        putMessage(MSG_WARP_ON);
+        
+    } else {
+        
+        restartTimer();
+        putMessage(MSG_WARP_OFF);
+    }
 }
 
 void
