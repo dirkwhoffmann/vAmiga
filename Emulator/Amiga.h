@@ -254,13 +254,6 @@ public:
 
 public:
     
-    // Indicates if debug mode is enabled
-    // bool getDebugMode() { return debugMode; }
-    
-    // Enabled or disabled debug mode
-    // void setDebugMode(bool enable);
- 
-    
     /* Sets the inspection target.
      * If an inspection target is set (INS_xxx events), the emulator schedules
      * periodic calls to inspect().

@@ -965,7 +965,7 @@ Agnus::vsyncHandler()
     mem.updateStats();
     
     // Count some sheep (zzzzzz) ...
-    if (!amiga.getWarp()) {
+    if (!amiga.inWarpMode()) {
         amiga.synchronizeTiming();
     }
 }

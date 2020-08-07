@@ -232,7 +232,7 @@ void
 PaulaAudio::rampUp()
 {
     // Only proceed if the emulator is not running in warp mode
-    if (warp) return;
+    if (warpMode) return;
     
     targetVolume = maxVolume;
     volumeDelta = 3;

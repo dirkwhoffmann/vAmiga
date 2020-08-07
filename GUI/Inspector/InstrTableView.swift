@@ -52,7 +52,8 @@ class InstrTableView: NSTableView {
     private func cache() {
         
         numRows = Int(CPUINFO_INSTR_COUNT)
-                        
+        rowForAddr = [:]
+        
         var addr = addrInFirstRow
         for i in 0 ..< numRows {
             

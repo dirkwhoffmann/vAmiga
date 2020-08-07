@@ -669,7 +669,7 @@ Amiga::_pause()
 void
 Amiga::_ping()
 {
-    putMessage(warp ? MSG_WARP_ON : MSG_WARP_OFF);
+    putMessage(warpMode ? MSG_WARP_ON : MSG_WARP_OFF);
 }
 
 void
@@ -710,7 +710,7 @@ Amiga::_dump()
              dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
 
     msg("\n");
-    msg("         warp: %d", warp);
+    msg("         warp: %d", warpMode);
     msg("\n");
 }
 

@@ -1819,7 +1819,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) warp
 {
-    return wrapper->amiga->getWarp();
+    return wrapper->amiga->inWarpMode();
 }
 - (void) warpOn
 {
