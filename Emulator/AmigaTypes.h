@@ -86,6 +86,10 @@ typedef enum
 }
 EmulatorState;
 
+inline bool isEmulatorState(long value) {
+    return value >= STATE_OFF && value <= STATE_RUNNING;
+}
+
 typedef enum
 {
     RL_STOP               = 0b000001,

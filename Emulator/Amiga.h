@@ -120,18 +120,16 @@ public:
     // Emulator thread
     //
     
-public:
+private:
     
     /* Run loop control
      * This variable is checked at the end of each runloop iteration. Most of
      * the time, the variable is 0 which causes the runloop to repeat. A value
      * greater than 0 means that one or more runloop control flags are set.
      * These flags are flags processed and the loop either repeats or
-     * terminates, depending on the set flags.
+     * terminates depending on the provided flags.
      */
     u32 runLoopCtrl = 0;
-    
-private:
     
     // The invocation counter for implementing suspend() / resume()
     unsigned suspendCounter = 0;
@@ -139,8 +137,14 @@ private:
     // The emulator thread
     pthread_t p = NULL;
     
-    // Mutex to coordinate operations on the emulator thread
+    /* Mutex to coordinate the ownership of the emulator thread.
+     *
+     */
     pthread_mutex_t threadLock;
+    
+    /* Lock to synchronize the access to all state changing methods such as
+     * run(), pause(), etc.
+     */
     pthread_mutex_t stateChangeLock;
     
     
@@ -359,7 +363,7 @@ public:
 public:
     
     // Runs or pauses the emulator
-    void stopAndGo() { isRunning() ? pauseEmulator() : runEmulator(); }
+    void stopAndGo();
     
     /* Executes a single instruction
      * This function is used for single-stepping through the code inside the
@@ -371,7 +375,7 @@ public:
     /* Executes until the instruction following the current one is reached.
      * This function is used for single-stepping through the code inside the
      * debugger. It sets a soft breakpoint to PC+n where n is the length
-     * bytes of the current instruction and starts the execution thread.
+     * bytes of the current instruction and starts the emulator thread.
      */
     void stepOver();
     

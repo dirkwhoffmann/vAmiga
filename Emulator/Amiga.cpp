@@ -780,7 +780,7 @@ Amiga::requestThreadLock()
 {
     if (state == STATE_RUNNING) {
         
-        // The emulator thread is running
+        // Assure the emulator thread exists
         assert(p != NULL);
         
         // Free the thread lock by terminating the thread
@@ -835,6 +835,8 @@ Amiga::powerOnEmulator()
 void
 Amiga::powerOffEmulator()
 {
+    debug(RUN_DEBUG, "powerOffEmulator()\n");
+    
     pthread_mutex_lock(&stateChangeLock);
     
     // Acquire the thread lock
@@ -1083,10 +1085,15 @@ Amiga::threadDidTerminate()
 }
 
 void
+Amiga::stopAndGo()
+{
+    isRunning() ? pauseEmulator() : runEmulator();
+}
+
+void
 Amiga::stepInto()
 {
-    if (isRunning())
-    return;
+    if (isRunning()) return;
 
     cpu.debugger.stepInto();
     run();
@@ -1095,8 +1102,7 @@ Amiga::stepInto()
 void
 Amiga::stepOver()
 {
-    if (isRunning())
-    return;
+    if (isRunning()) return;
     
     cpu.debugger.stepOver();
     run();
@@ -1119,7 +1125,7 @@ Amiga::runLoop()
     agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
     
     // Enter the loop
-    do {
+    while(1) {
         
         // Emulate the next CPU instruction
         cpu.execute();
@@ -1173,8 +1179,7 @@ Amiga::runLoop()
                 break;
             }
         }
-        
-    } while (1);
+    }
 }
 
 void

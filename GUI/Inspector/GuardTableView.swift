@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-class PointTableView: NSTableView {
+class GuardTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
     var amiga: AmigaProxy { return inspector.parent.amiga }
@@ -54,7 +54,7 @@ class PointTableView: NSTableView {
     }
 }
 
-extension PointTableView: NSTableViewDataSource {
+extension GuardTableView: NSTableViewDataSource {
 
     func numberOfRows(in tableView: NSTableView) -> Int {
 
@@ -81,7 +81,7 @@ extension PointTableView: NSTableViewDataSource {
     }
 }
 
-extension PointTableView: NSTableViewDelegate {
+extension GuardTableView: NSTableViewDelegate {
 
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 
@@ -106,7 +106,6 @@ extension PointTableView: NSTableViewDelegate {
     func tableView(_ tableView: NSTableView, shouldEdit tableColumn: NSTableColumn?, row: Int) -> Bool {
 
         if tableColumn?.identifier.rawValue == "addr" {
-            // return row == numberOfRows(in: tableView) - 1
             return true
         }
 
@@ -123,7 +122,7 @@ extension PointTableView: NSTableViewDelegate {
      }
 }
 
-class BreakTableView: PointTableView {
+class BreakTableView: GuardTableView {
 
     override func cache() {
 
@@ -172,7 +171,7 @@ class BreakTableView: PointTableView {
 
     override func edit(row: Int, addr: Int) {
 
-        // Abort if a breakpoint has been set already
+        // Abort if a breakpoint is already set
         if breakpoints.isSet(at: addr) { NSSound.beep(); return }
         
         amiga.suspend()
@@ -190,7 +189,7 @@ class BreakTableView: PointTableView {
     }
 }
 
-class WatchTableView: PointTableView {
+class WatchTableView: GuardTableView {
 
     override func cache() {
 
@@ -225,7 +224,7 @@ class WatchTableView: PointTableView {
     
     override func edit(row: Int, addr: Int) {
         
-        // Abort if a watchpoint has been set already
+        // Abort if a watchpoint is already set
         if watchpoints.isSet(at: addr) { NSSound.beep(); return }
         
         amiga.suspend()

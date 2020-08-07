@@ -38,7 +38,7 @@
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
-		504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* BreakTableView.swift */; };
+		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
 		5057E4C5243DF10A004005EB /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057E4C4243DF10A004005EB /* Primitives.swift */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
@@ -84,7 +84,7 @@
 		508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF121EA22780043D0E9 /* GamePad.swift */; };
 		508FE01821EA227B0043D0E9 /* MyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF421EA22790043D0E9 /* MyController.swift */; };
 		508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */; };
-		508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF621EA22790043D0E9 /* Formatter.swift */; };
+		508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF621EA22790043D0E9 /* MyFormatter.swift */; };
 		508FE01B21EA227B0043D0E9 /* MyDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF721EA22790043D0E9 /* MyDocument.swift */; };
 		508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF821EA22790043D0E9 /* MemTableView.swift */; };
 		508FE01D21EA227B0043D0E9 /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFF921EA22790043D0E9 /* Defaults.swift */; };
@@ -245,7 +245,7 @@
 		5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaAudioTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
-		504F9657220B2CEE005F8AB7 /* BreakTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreakTableView.swift; sourceTree = "<group>"; };
+		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
@@ -315,7 +315,7 @@
 		508FDFF121EA22780043D0E9 /* GamePad.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GamePad.swift; sourceTree = "<group>"; };
 		508FDFF421EA22790043D0E9 /* MyController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyController.swift; sourceTree = "<group>"; };
 		508FDFF521EA22790043D0E9 /* MyControllerMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyControllerMenu.swift; sourceTree = "<group>"; };
-		508FDFF621EA22790043D0E9 /* Formatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Formatter.swift; sourceTree = "<group>"; };
+		508FDFF621EA22790043D0E9 /* MyFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyFormatter.swift; sourceTree = "<group>"; };
 		508FDFF721EA22790043D0E9 /* MyDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyDocument.swift; sourceTree = "<group>"; };
 		508FDFF821EA22790043D0E9 /* MemTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MemTableView.swift; sourceTree = "<group>"; };
 		508FDFF921EA22790043D0E9 /* Defaults.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
@@ -847,13 +847,13 @@
 				502EFD092248EC0200F0E118 /* EventPanel.swift */,
 				509CF4CE220847C600C500F0 /* InstrTableView.swift */,
 				509CF4D02208487900C500F0 /* TraceTableView.swift */,
-				504F9657220B2CEE005F8AB7 /* BreakTableView.swift */,
+				504F9657220B2CEE005F8AB7 /* GuardTableView.swift */,
 				50C50B85220479E000D796DA /* BankTableView.swift */,
 				508FDFF821EA22790043D0E9 /* MemTableView.swift */,
 				50B0AF92222531C500EE3689 /* CopperTableView.swift */,
 				50DF2C9F2269135800795256 /* SpriteTableView.swift */,
 				502EFD0B2248ECAA00F0E118 /* EventTableView.swift */,
-				508FDFF621EA22790043D0E9 /* Formatter.swift */,
+				508FDFF621EA22790043D0E9 /* MyFormatter.swift */,
 			);
 			path = Inspector;
 			sourceTree = "<group>";
@@ -1026,11 +1026,11 @@
 		50E2BE25240D417200155AE4 /* Moira */ = {
 			isa = PBXGroup;
 			children = (
+				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
+				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
 				50E2BE36240D41EE00155AE4 /* MoiraALU_cpp.h */,
-				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
-				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE31240D418500155AE4 /* MoiraDasm.h */,
 				50E2BE26240D418500155AE4 /* MoiraDasm_cpp.h */,
 				50E2BE2A240D418500155AE4 /* MoiraDataflow.h */,
@@ -1234,7 +1234,7 @@
 				50AE6EDF24D93EDD000AA367 /* AgnusReg.cpp in Sources */,
 				50AEBEE024D3D9080037082D /* KeyboardEvents.cpp in Sources */,
 				5020B17D21EF121E00B9E80E /* Agnus.cpp in Sources */,
-				508FE01A21EA227B0043D0E9 /* Formatter.swift in Sources */,
+				508FE01A21EA227B0043D0E9 /* MyFormatter.swift in Sources */,
 				501A9937243A07A100D269B2 /* Storage.swift in Sources */,
 				509CF4D12208487900C500F0 /* TraceTableView.swift in Sources */,
 				5023519024485BBF00F6C088 /* Preferences.swift in Sources */,
@@ -1244,7 +1244,7 @@
 				50C50B86220479E000D796DA /* BankTableView.swift in Sources */,
 				508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */,
 				501429D92445F12B00FBDC90 /* TextureToolbox.swift in Sources */,
-				504F9658220B2CEE005F8AB7 /* BreakTableView.swift in Sources */,
+				504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */,
 				5027418F2297CACF0038E5AF /* Colors.cpp in Sources */,
 				50EE994021FF4D8E003BD74B /* PaulaAudio.cpp in Sources */,
 				508FDFDA21EA20510043D0E9 /* ImageToolbox.swift in Sources */,
