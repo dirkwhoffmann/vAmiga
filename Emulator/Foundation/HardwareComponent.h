@@ -164,7 +164,7 @@ public:
      *     soft: A soft reset emulates a reset inside the virtual Amiga. It
      *           is used to emulate the CPU's RESET instruction.
      */
-    virtual void reset(bool hard);
+    void reset(bool hard);
     virtual void _reset(bool hard) = 0;
     void hardReset() { reset(true); }
     void softReset() { reset(false); }
@@ -214,13 +214,13 @@ public:
     virtual void _dump() { }
     
     // Switches warp mode on or off
-    virtual void setWarp(bool enable);
+    void setWarp(bool enable);
     virtual void _setWarp(bool enable) { };
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }
     
     // Switches debug mode on or off
-    virtual void setDebug(bool enable);
+    void setDebug(bool enable);
     virtual void _setDebug(bool enable) { };
     void enableDebugMode() { setDebug(true); }
     void disableDebugMode() { setDebug(false); }

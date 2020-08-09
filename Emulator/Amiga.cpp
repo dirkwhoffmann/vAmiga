@@ -671,9 +671,6 @@ void
 Amiga::powerOff()
 {
     debug(RUN_DEBUG, "powerOff()\n");
-
-    // Pause if needed
-    pause();
     
     pthread_mutex_lock(&stateChangeLock);
     
