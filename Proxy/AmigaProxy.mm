@@ -1689,11 +1689,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) powerOn
 {
-    wrapper->amiga->powerOnEmulator();
+    wrapper->amiga->powerOn();
 }
 - (void) powerOff
 {
-    wrapper->amiga->powerOffEmulator();
+    wrapper->amiga->powerOff();
 }
 - (void) hardReset
 {
@@ -1733,11 +1733,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) run
 {
-    wrapper->amiga->runEmulator();
+    wrapper->amiga->run();
 }
 - (void) pause
 {
-    wrapper->amiga->pauseEmulator();
+    wrapper->amiga->pause();
 }
 - (void) suspend
 {

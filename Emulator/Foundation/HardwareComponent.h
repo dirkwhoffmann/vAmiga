@@ -118,7 +118,7 @@ protected:
      * paused    | paused    | none
      * running   | running   | none
      */
-    virtual void powerOn();
+    void powerOn();
     virtual void _powerOn() { }
     
     /* powerOff() powers the component off.
@@ -129,7 +129,7 @@ protected:
      * paused    | off       | _powerOff() on each subcomponent
      * running   | off       | pause(), _powerOff() on each subcomponent
      */
-    virtual void powerOff();
+    void powerOff();
     virtual void _powerOff() { }
     
     /* run() puts the component in 'running' state.
@@ -140,7 +140,7 @@ protected:
      * paused    | running   | _run() on each subcomponent
      * running   | running   | none
      */
-    virtual void run();
+    void run();
     virtual void _run() { }
     
     /* pause() puts the component in 'paused' state.
@@ -151,7 +151,7 @@ protected:
      * paused    | paused    | none
      * running   | paused    | _pause() on each subcomponent
      */
-    virtual void pause();
+    void pause();
     virtual void _pause() { };
     
 public:

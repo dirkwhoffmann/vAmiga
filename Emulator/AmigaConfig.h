@@ -17,10 +17,10 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 9
+#define V_SUBMINOR 10
 
 // Uncomment these settings in a release build
-#define RELEASEBUILD
+// #define RELEASEBUILD
 // #define NDEBUG
 
 
@@ -79,7 +79,7 @@ static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop
-static const int RUN_DEBUG       = 0; // Run loop, component states
+static const int RUN_DEBUG       = 1; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU

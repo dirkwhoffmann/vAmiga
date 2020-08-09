@@ -1027,6 +1027,7 @@
 			isa = PBXGroup;
 			children = (
 				50E2BE35240D41EE00155AE4 /* MoiraConfig.h */,
+				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
 				50E2BE34240D41DD00155AE4 /* Moira.h */,
 				50E2BE37240D41EE00155AE4 /* Moira.cpp */,
 				50E2BE38240D41EE00155AE4 /* MoiraALU.h */,
@@ -1040,11 +1041,10 @@
 				50E2BE27240D418500155AE4 /* MoiraExceptions.h */,
 				50927DAA24865F11008DF3B8 /* MoiraExceptions_cpp.h */,
 				50E2BE30240D418500155AE4 /* MoiraExec_cpp.h */,
-				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE2E240D418500155AE4 /* MoiraInit.h */,
-				50E2BE2F240D418500155AE4 /* MoiraTypes.h */,
-				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
+				50E2BE28240D418500155AE4 /* MoiraInit_cpp.h */,
 				50E2BE32240D418600155AE4 /* StrWriter.h */,
+				50E2BE2D240D418500155AE4 /* StrWriter_cpp.h */,
 			);
 			path = Moira;
 			sourceTree = "<group>";

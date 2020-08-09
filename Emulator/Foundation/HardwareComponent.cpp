@@ -53,7 +53,7 @@ HardwareComponent::powerOff()
 {
     if (isPoweredOn()) {
         
-         // Pause if needed
+        // Pause if needed
         pause();
         
         // Power off this component
