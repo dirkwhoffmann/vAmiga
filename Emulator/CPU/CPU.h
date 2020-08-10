@@ -88,8 +88,8 @@ public:
     // Returns the result of the most recent call to inspect()
     CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
     
-    DisassembledInstr getInstrInfo(long nr, u32 startAddr);
-    DisassembledInstr getInstrInfo(long nr);
+//    DisassembledInstr getInstrInfo(long nr, u32 startAddr);
+//    DisassembledInstr getInstrInfo(long nr);
     DisassembledInstr getLoggedInstrInfo(long nr);
 
     //

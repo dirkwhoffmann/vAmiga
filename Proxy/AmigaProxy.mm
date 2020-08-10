@@ -133,10 +133,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->getInfo();
 }
+/*
 - (DisassembledInstr) getInstrInfo:(NSInteger)nr start:(NSInteger)addr
 {
     return wrapper->cpu->getInstrInfo(nr, (u32)addr);
 }
+*/
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)nr
 {
     return wrapper->cpu->getLoggedInstrInfo(nr);

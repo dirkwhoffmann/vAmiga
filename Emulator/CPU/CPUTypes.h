@@ -39,7 +39,7 @@ typedef struct
     u32 start;
 
     // Disassembled instructions, starting at 'start'
-    DisassembledInstr instr[CPUINFO_INSTR_COUNT];
+    // DisassembledInstr instr[CPUINFO_INSTR_COUNT];
 
     // Disassembled instructions from the log buffer
     DisassembledInstr loggedInstr[CPUINFO_INSTR_COUNT];

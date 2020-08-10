@@ -244,6 +244,7 @@ CPU::_inspect(u32 dasmStart)
         info.sr = getSR();
         
         // Disassemble the program starting at 'dasmStart'
+        /*
         info.start = dasmStart;
         for (unsigned i = 0; i < CPUINFO_INSTR_COUNT; i++) {
             
@@ -254,6 +255,7 @@ CPU::_inspect(u32 dasmStart)
             info.instr[i].bytes = bytes;
             dasmStart += bytes;
         }
+        */
         
         // Disassemble the most recent entries in the trace buffer
         long count = debugger.loggedInstructions();
@@ -309,6 +311,7 @@ CPU::_setDebug(bool enable)
      }
 }
 
+/*
 DisassembledInstr
 CPU::getInstrInfo(long nr, u32 start)
 {
@@ -327,6 +330,7 @@ CPU::getInstrInfo(long nr)
     synchronized { result = info.instr[nr]; }
     return result;
 }
+*/
 
 DisassembledInstr
 CPU::getLoggedInstrInfo(long nr)
