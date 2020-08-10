@@ -542,7 +542,7 @@ public:
     bool isAwake() { return !sleeping; }
         
     // The CIA is idle since this number of cycles
-    CIACycle idle();
+    CIACycle idleSince();
     
     // Total number of cycles the CIA was idle
     CIACycle idleTotal() { return idleCycles; }

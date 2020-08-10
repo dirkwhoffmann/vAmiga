@@ -110,7 +110,8 @@ typedef struct
     CounterInfo cnt;
     bool cntIntEnable;
     
-    Cycle idleCycles;
+    Cycle idleSince;
+    Cycle idleTotal;
     double idlePercentage;
 }
 CIAInfo;

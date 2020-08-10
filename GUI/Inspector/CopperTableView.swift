@@ -16,7 +16,7 @@ class CopperTableView: NSTableView {
     var nr = 1
 
     // Data caches
-    var copperInfo: CopperInfo?
+    var copperInfo: CopperInfo!
     var addrInRow: [Int: Int] = [:]
     var data1InRow: [Int: Int] = [:]
     var data2InRow: [Int: Int] = [:]
@@ -42,8 +42,8 @@ class CopperTableView: NSTableView {
         copperInfo = amiga.copper.getInfo()
 
         assert(nr == 1 || nr == 2)
-        var addr = nr == 1 ? Int(copperInfo!.cop1lc) : Int(copperInfo!.cop2lc)
-        let count = nr == 1 ? Int(copperInfo!.length1) : Int(copperInfo!.length2)
+        var addr = nr == 1 ? Int(copperInfo.cop1lc) : Int(copperInfo.cop2lc)
+        let count = nr == 1 ? Int(copperInfo.length1) : Int(copperInfo.length2)
 
         for i in 0 ..< count {
 

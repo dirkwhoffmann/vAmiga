@@ -83,7 +83,8 @@ CIA::_inspect()
         info.cnt = tod.info;
         info.cntIntEnable = imr & 0x04;
         
-        info.idleCycles = idle();
+        info.idleSince = idleSince();
+        info.idleTotal = idleTotal();
         info.idlePercentage = clock ? (double)idleCycles / (double)clock : 100.0;
     }
 }
@@ -341,19 +342,19 @@ CIA::spypeek(u16 addr)
             
         case 0x04: // CIA_TIMER_A_LOW
             running = delay & CIACountA3;
-            return LO_BYTE(counterA - (running ? (u16)idle() : 0));
+            return LO_BYTE(counterA - (running ? (u16)idleSince() : 0));
             
         case 0x05: // CIA_TIMER_A_HIGH
             running = delay & CIACountA3;
-            return HI_BYTE(counterA - (running ? (u16)idle() : 0));
+            return HI_BYTE(counterA - (running ? (u16)idleSince() : 0));
             
         case 0x06: // CIA_TIMER_B_LOW
             running = delay & CIACountB3;
-            return LO_BYTE(counterB - (running ? (u16)idle() : 0));
+            return LO_BYTE(counterB - (running ? (u16)idleSince() : 0));
             
         case 0x07: // CIA_TIMER_B_HIGH
             running = delay & CIACountB3;
-            return HI_BYTE(counterB - (running ? (u16)idle() : 0));
+            return HI_BYTE(counterB - (running ? (u16)idleSince() : 0));
             
         case 0x08: // CIA_EVENT_0_7
             return tod.getCounterLo();
@@ -1175,7 +1176,7 @@ CIA::wakeUp(Cycle targetCycle)
 }
 
 CIACycle
-CIA::idle()
+CIA::idleSince()
 {
     return isAwake() ? 0 : AS_CIA_CYCLES(agnus.clock - sleepCycle);
 }

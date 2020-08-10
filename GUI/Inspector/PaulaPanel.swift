@@ -56,8 +56,8 @@ extension Inspector {
         }
 
         // Interrupt controller
-        let intena = Int(paulaInfo!.intena)
-        let intreq = Int(paulaInfo!.intreq)
+        let intena = Int(paulaInfo.intena)
+        let intreq = Int(paulaInfo.intreq)
 
         paulaIntena.integerValue = intena
         paulaEna14.state = (intena & 0b0100000000000000 != 0) ? .on : .off
@@ -94,7 +94,7 @@ extension Inspector {
         paulaReq0.state  = (intreq & 0b0000000000000001 != 0) ? .on : .off
 
         // Disk controller
-        switch diskInfo!.state {
+        switch diskInfo.state {
         case .DRIVE_DMA_OFF:
             dskStateText.stringValue = "Idle"
         case .DRIVE_DMA_WAIT:
@@ -107,10 +107,10 @@ extension Inspector {
             dskStateText.stringValue = "UNKNOWN"
         }
 
-        let selectedDrive = diskInfo!.selectedDrive
-        let dsklen = Int(diskInfo!.dsklen)
-        let dskbytr = Int(diskInfo!.dskbytr)
-        let adkcon = Int(paulaInfo!.adkcon)
+        let selectedDrive = diskInfo.selectedDrive
+        let dsklen = Int(diskInfo.dsklen)
+        let dskbytr = Int(diskInfo.dskbytr)
+        let adkcon = Int(paulaInfo.adkcon)
 
         dskSelectDf0.state = (selectedDrive == 0) ? .on : .off
         dskSelectDf1.state = (selectedDrive == 1) ? .on : .off
@@ -136,11 +136,11 @@ extension Inspector {
         dskMsbsync.state  = (adkcon & 0x0200 != 0) ? .on : .off
         dskFast.state     = (adkcon & 0x0100 != 0) ? .on : .off
 
-        let dsksync = Int(diskInfo!.dsksync)
+        let dsksync = Int(diskInfo.dsksync)
         dskDsksync.integerValue = dsksync
         dskDsksync.textColor = (dsksync == 0x4489) ? .textColor : .systemRed
         
-        switch diskInfo!.fifoCount {
+        switch diskInfo.fifoCount {
         case 0: dskFifo0.stringValue = ""; fallthrough
         case 1: dskFifo1.stringValue = ""; fallthrough
         case 2: dskFifo2.stringValue = ""; fallthrough
@@ -150,13 +150,13 @@ extension Inspector {
         default: break
         }
 
-        switch diskInfo!.fifoCount {
-        case 6: dskFifo5.stringValue = String(format: "%02X", diskInfo!.fifo.5); fallthrough
-        case 5: dskFifo4.stringValue = String(format: "%02X", diskInfo!.fifo.4); fallthrough
-        case 4: dskFifo3.stringValue = String(format: "%02X", diskInfo!.fifo.3); fallthrough
-        case 3: dskFifo2.stringValue = String(format: "%02X", diskInfo!.fifo.2); fallthrough
-        case 2: dskFifo1.stringValue = String(format: "%02X", diskInfo!.fifo.1); fallthrough
-        case 1: dskFifo0.stringValue = String(format: "%02X", diskInfo!.fifo.0); fallthrough
+        switch diskInfo.fifoCount {
+        case 6: dskFifo5.stringValue = String(format: "%02X", diskInfo.fifo.5); fallthrough
+        case 5: dskFifo4.stringValue = String(format: "%02X", diskInfo.fifo.4); fallthrough
+        case 4: dskFifo3.stringValue = String(format: "%02X", diskInfo.fifo.3); fallthrough
+        case 3: dskFifo2.stringValue = String(format: "%02X", diskInfo.fifo.2); fallthrough
+        case 2: dskFifo1.stringValue = String(format: "%02X", diskInfo.fifo.1); fallthrough
+        case 1: dskFifo0.stringValue = String(format: "%02X", diskInfo.fifo.0); fallthrough
         default: break
         }
 
@@ -190,10 +190,10 @@ extension Inspector {
             }
         }
 
-        let info0 = audioInfo!.channel.0
-        let info1 = audioInfo!.channel.1
-        let info2 = audioInfo!.channel.2
-        let info3 = audioInfo!.channel.3
+        let info0 = audioInfo.channel.0
+        let info1 = audioInfo.channel.1
+        let info2 = audioInfo.channel.2
+        let info3 = audioInfo.channel.3
 
         audioLen0.intValue = Int32(info0.audlenLatch)
         audioPer0.intValue = Int32(info0.audperLatch)

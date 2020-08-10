@@ -44,8 +44,8 @@ extension Inspector {
         }
 
         // Control port commons
-        let potgo = Int(port1Info!.potgo)
-        let potgor = Int(port1Info!.potgor)
+        let potgo = Int(port1Info.potgo)
+        let potgor = Int(port1Info.potgor)
 
         poPOTGO.integerValue = potgo
         poOUTRY.state = ((potgo & 0x8000) != 0) ? .on : .off
@@ -64,32 +64,32 @@ extension Inspector {
         poDATLXR.state = ((potgor & 0x0100) != 0) ? .on : .off
 
         // Control port 1
-        po0JOYDAT.integerValue = Int(port1Info!.joydat)
-        po0M0V.state = port1Info!.m0v ? .on : .off
-        po0M0H.state = port1Info!.m0h ? .on : .off
-        po0M1V.state = port1Info!.m1v ? .on : .off
-        po0M1H.state = port1Info!.m1h ? .on : .off
-        po0POTDAT.integerValue = Int(port1Info!.potdat)
+        po0JOYDAT.integerValue = Int(port1Info.joydat)
+        po0M0V.state = port1Info.m0v ? .on : .off
+        po0M0H.state = port1Info.m0h ? .on : .off
+        po0M1V.state = port1Info.m1v ? .on : .off
+        po0M1H.state = port1Info.m1h ? .on : .off
+        po0POTDAT.integerValue = Int(port1Info.potdat)
 
         // Control port 2
-        po1JOYDAT.integerValue = Int(port2Info!.joydat)
-        po1M0V.state = port2Info!.m0v ? .on : .off
-        po1M0H.state = port2Info!.m0h ? .on : .off
-        po1M1V.state = port2Info!.m1v ? .on : .off
-        po1M1H.state = port2Info!.m1h ? .on : .off
-        po1POTDAT.integerValue = Int(port2Info!.potdat)
+        po1JOYDAT.integerValue = Int(port2Info.joydat)
+        po1M0V.state = port2Info.m0v ? .on : .off
+        po1M0H.state = port2Info.m0h ? .on : .off
+        po1M1V.state = port2Info.m1v ? .on : .off
+        po1M1H.state = port2Info.m1h ? .on : .off
+        po1POTDAT.integerValue = Int(port2Info.potdat)
 
         // Serial port
-        poTXD.state = serInfo!.txd ? .on : .off
-        poRXD.state = serInfo!.rxd ? .on : .off
-        poCTS.state = serInfo!.cts ? .on : .off
-        poDSR.state = serInfo!.dsr ? .on : .off
-        poCD.state = serInfo!.cd ? .on : .off
-        poDTR.state = serInfo!.dtr ? .on : .off
-        poRecShift.integerValue = Int(uartInfo!.receiveShiftReg)
-        poRecBuffer.integerValue = Int(uartInfo!.receiveBuffer)
-        poTransShift.integerValue = Int(uartInfo!.transmitShiftReg)
-        poTransBuffer.integerValue = Int(uartInfo!.transmitBuffer)
+        poTXD.state = serInfo.txd ? .on : .off
+        poRXD.state = serInfo.rxd ? .on : .off
+        poCTS.state = serInfo.cts ? .on : .off
+        poDSR.state = serInfo.dsr ? .on : .off
+        poCD.state = serInfo.cd ? .on : .off
+        poDTR.state = serInfo.dtr ? .on : .off
+        poRecShift.integerValue = Int(uartInfo.receiveShiftReg)
+        poRecBuffer.integerValue = Int(uartInfo.receiveBuffer)
+        poTransShift.integerValue = Int(uartInfo.transmitShiftReg)
+        poTransBuffer.integerValue = Int(uartInfo.transmitBuffer)
 
         // Logging windows
         if count % 2 == 0 {

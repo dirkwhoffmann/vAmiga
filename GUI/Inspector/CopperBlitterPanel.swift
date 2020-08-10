@@ -28,12 +28,12 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
-        let nr = Int(copperInfo!.copList)
-        let active = copperInfo!.active
+        let nr = Int(copperInfo.copList)
+        let active = copperInfo.active
         let paused = amiga.isPaused
 
-        copPC.integerValue = Int(copperInfo!.coppc)
-        copCDANG.state = copperInfo!.cdang ? .on : .off
+        copPC.integerValue = Int(copperInfo.coppc)
+        copCDANG.state = copperInfo.cdang ? .on : .off
         copActive1.state = active && nr == 1 ? .on : .off
         copActive2.state = active && nr == 2 ? .on : .off
         copPlus.isEnabled = paused
@@ -72,7 +72,7 @@ extension Inspector {
             for (c, f) in elements { assignFormatter(f, c!) }
         }
 
-        let bltcon0 = Int(blitterInfo!.bltcon0)
+        let bltcon0 = Int(blitterInfo.bltcon0)
         bltBLTCON0a.integerValue = (bltcon0 >> 12) & 0xF
         bltBLTCON0b.integerValue = (bltcon0 >> 8) & 0xF
         bltBLTCON0c.integerValue = bltcon0 & 0xFF
@@ -89,7 +89,7 @@ extension Inspector {
         bltLF1.state = bltcon0 & 0x02 != 0 ? .on : .off
         bltLF0.state = bltcon0 & 0x01 != 0 ? .on : .off
 
-        let bltcon1 = Int(blitterInfo!.bltcon1)
+        let bltcon1 = Int(blitterInfo.bltcon1)
         bltBLTCON1a.integerValue = (bltcon1 >> 12) & 0xF
         bltBLTCON1b.integerValue = (bltcon1 >> 8) & 0xF
         bltBLTCON1c.integerValue = bltcon1 & 0xFF
@@ -99,19 +99,19 @@ extension Inspector {
         bltDESC.state = bltcon1 & 0x02 != 0 ? .on : .off
         bltLINE.state = bltcon1 & 0x01 != 0 ? .on : .off
 
-        bltBBUSY.state = blitterInfo!.bbusy ? .on : .off
-        bltBZERO.state = blitterInfo!.bzero ? .on : .off
+        bltBBUSY.state = blitterInfo.bbusy ? .on : .off
+        bltBZERO.state = blitterInfo.bzero ? .on : .off
 
-        bltAhold.integerValue = Int(blitterInfo!.ahold)
-        bltBhold.integerValue = Int(blitterInfo!.bhold)
-        bltChold.integerValue = Int(blitterInfo!.chold)
-        bltDhold.integerValue = Int(blitterInfo!.dhold)
-        bltAold.integerValue = Int(blitterInfo!.aold)
-        bltBold.integerValue = Int(blitterInfo!.bold)
-        bltAnew.integerValue = Int(blitterInfo!.anew)
-        bltBnew.integerValue = Int(blitterInfo!.bnew)
-        bltFirstWord.state = blitterInfo!.firstIteration ? .on : .off
-        bltLastWord.state  = blitterInfo!.lastIteration ? .on : .off
+        bltAhold.integerValue = Int(blitterInfo.ahold)
+        bltBhold.integerValue = Int(blitterInfo.bhold)
+        bltChold.integerValue = Int(blitterInfo.chold)
+        bltDhold.integerValue = Int(blitterInfo.dhold)
+        bltAold.integerValue = Int(blitterInfo.aold)
+        bltBold.integerValue = Int(blitterInfo.bold)
+        bltAnew.integerValue = Int(blitterInfo.anew)
+        bltBnew.integerValue = Int(blitterInfo.bnew)
+        bltFirstWord.state = blitterInfo.firstIteration ? .on : .off
+        bltLastWord.state  = blitterInfo.lastIteration ? .on : .off
     }
 
     func refreshCopperBlitter(count: Int, full: Bool) {

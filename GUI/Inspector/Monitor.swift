@@ -325,11 +325,3 @@ extension Monitor: NSWindowDelegate {
         track("Closing monitor")
     }
 }
-
-extension NSColorWell {
-    
-    func setColor(_ rgb: (Double, Double, Double) ) {
-        
-        color = NSColor.init(r: rgb.0, g: rgb.1, b: rgb.2)
-    }
-}

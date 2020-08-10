@@ -524,21 +524,21 @@ class Inspector: DialogController {
     @IBOutlet weak var evTableView: EventTableView!
 
     // Cached state of all Amiga components
-    var cpuInfo: CPUInfo?
-    var ciaInfo: CIAInfo?
-    var agnusInfo: AgnusInfo?
-    var copperInfo: CopperInfo?
-    var blitterInfo: BlitterInfo?
-    var deniseInfo: DeniseInfo?
-    var spriteInfo: SpriteInfo?
-    var paulaInfo: PaulaInfo?
-    var audioInfo: AudioInfo?
-    var diskInfo: DiskControllerInfo?
-    var port1Info: ControlPortInfo?
-    var port2Info: ControlPortInfo?
-    var serInfo: SerialPortInfo?
-    var uartInfo: UARTInfo?
-    var eventInfo: EventInfo?
+    var cpuInfo: CPUInfo!
+    var ciaInfo: CIAInfo!
+    var agnusInfo: AgnusInfo!
+    var copperInfo: CopperInfo!
+    var blitterInfo: BlitterInfo!
+    var deniseInfo: DeniseInfo!
+    var spriteInfo: SpriteInfo!
+    var paulaInfo: PaulaInfo!
+    var audioInfo: AudioInfo!
+    var diskInfo: DiskControllerInfo!
+    var port1Info: ControlPortInfo!
+    var port2Info: ControlPortInfo!
+    var serInfo: SerialPortInfo!
+    var uartInfo: UARTInfo!
+    var eventInfo: EventInfo!
     var isRunning = true
 
     // Returns the number of the currently inspected sprite
@@ -610,7 +610,7 @@ class Inspector: DialogController {
     
     func scrollToPC() {
 
-        cpuInstrView.jumpTo(addr: Int(cpuInfo!.pc0))
+        cpuInstrView.jumpTo(addr: Int(cpuInfo.pc0))
     }
 }
 

@@ -18,14 +18,14 @@ extension Inspector {
 
         cacheEvents()
 
-        evCpuProgress.integerValue = Int(eventInfo!.cpuClock)
-        evCpuProgress2.integerValue = Int(eventInfo!.cpuCycles)
-        evDmaProgress.integerValue = Int(eventInfo!.dmaClock)
-        evDmaProgress2.integerValue = Int(eventInfo!.dmaClock / 8)
-        evCiaAProgress.integerValue = Int(eventInfo!.ciaAClock)
-        evCiaAProgress2.integerValue = Int(eventInfo!.ciaAClock / 40)
-        evCiaBProgress.integerValue = Int(eventInfo!.ciaBClock)
-        evCiaBProgress2.integerValue = Int(eventInfo!.ciaBClock / 40)
+        evCpuProgress.integerValue = Int(eventInfo.cpuClock)
+        evCpuProgress2.integerValue = Int(eventInfo.cpuCycles)
+        evDmaProgress.integerValue = Int(eventInfo.dmaClock)
+        evDmaProgress2.integerValue = Int(eventInfo.dmaClock / 8)
+        evCiaAProgress.integerValue = Int(eventInfo.ciaAClock)
+        evCiaAProgress2.integerValue = Int(eventInfo.ciaAClock / 40)
+        evCiaBProgress.integerValue = Int(eventInfo.ciaBClock)
+        evCiaBProgress2.integerValue = Int(eventInfo.ciaBClock / 40)
 
         evTableView.refresh(count: count, full: full)
     }

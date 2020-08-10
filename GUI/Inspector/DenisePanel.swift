@@ -32,10 +32,10 @@ extension Inspector {
         }
 
         // Bitplane section
-        let bplcon0 = Int(deniseInfo!.bplcon0)
-        let bplcon1 = Int(deniseInfo!.bplcon1)
-        let bplcon2 = Int(deniseInfo!.bplcon1)
-        let bpu     = Int(deniseInfo!.bpu)
+        let bplcon0 = Int(deniseInfo.bplcon0)
+        let bplcon1 = Int(deniseInfo.bplcon1)
+        let bplcon2 = Int(deniseInfo.bplcon1)
+        let bpu     = Int(deniseInfo.bpu)
 
         deniseBPLCON0.integerValue = bplcon0
         deniseHIRES.state = (bplcon0 & 0b1000000000000000 != 0) ? .on : .off
@@ -58,17 +58,17 @@ extension Inspector {
         denisePF1P0.state  = (bplcon2 & 0b0000001 != 0) ? .on : .off
 
         // Display window section
-        let hstrt = deniseInfo!.diwHstrt
-        let vstrt = deniseInfo!.diwVstrt
-        let hstop = deniseInfo!.diwHstop
-        let vstop = deniseInfo!.diwVstop
-        deniseDIWSTRT.integerValue = Int(deniseInfo!.diwstrt)
+        let hstrt = deniseInfo.diwHstrt
+        let vstrt = deniseInfo.diwVstrt
+        let hstop = deniseInfo.diwHstop
+        let vstop = deniseInfo.diwVstop
+        deniseDIWSTRT.integerValue = Int(deniseInfo.diwstrt)
         deniseDIWSTRTText.stringValue = "(\(hstrt),\(vstrt))"
-        deniseDIWSTOP.integerValue = Int(deniseInfo!.diwstop)
+        deniseDIWSTOP.integerValue = Int(deniseInfo.diwstop)
         deniseDIWSTOPText.stringValue = "(\(hstop),\(vstop))"
 
         // Auxiliary register section
-        deniseCLXDAT.integerValue = Int(deniseInfo!.clxdat)
+        deniseCLXDAT.integerValue = Int(deniseInfo.clxdat)
 
         // Sprite section
         sprArmed1.state = amiga.denise.sprDataLines(0) != 0 ? .on : .off
@@ -80,44 +80,44 @@ extension Inspector {
         sprArmed7.state = amiga.denise.sprDataLines(6) != 0 ? .on : .off
         sprArmed8.state = amiga.denise.sprDataLines(7) != 0 ? .on : .off
 
-        sprHStart.integerValue = Int(spriteInfo!.hstrt)
-        sprVStart.integerValue = Int(spriteInfo!.vstrt)
-        sprVStop.integerValue = Int(spriteInfo!.vstop)
-        sprAttach.state = spriteInfo!.attach ? .on : .off
+        sprHStart.integerValue = Int(spriteInfo.hstrt)
+        sprVStart.integerValue = Int(spriteInfo.vstrt)
+        sprVStop.integerValue = Int(spriteInfo.vstop)
+        sprAttach.state = spriteInfo.attach ? .on : .off
 
         // Color section
-        deniseCol0.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.0)
-        deniseCol1.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.1)
-        deniseCol2.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.2)
-        deniseCol3.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.3)
-        deniseCol4.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.4)
-        deniseCol5.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.5)
-        deniseCol6.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.6)
-        deniseCol7.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.7)
-        deniseCol8.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.8)
-        deniseCol9.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.9)
-        deniseCol10.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.10)
-        deniseCol11.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.11)
-        deniseCol12.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.12)
-        deniseCol13.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.13)
-        deniseCol14.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.14)
-        deniseCol15.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.15)
-        deniseCol16.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.16)
-        deniseCol17.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.17)
-        deniseCol18.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.18)
-        deniseCol19.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.19)
-        deniseCol20.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.20)
-        deniseCol21.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.21)
-        deniseCol22.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.22)
-        deniseCol23.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.23)
-        deniseCol24.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.24)
-        deniseCol25.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.25)
-        deniseCol26.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.26)
-        deniseCol27.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.27)
-        deniseCol28.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.28)
-        deniseCol29.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.29)
-        deniseCol30.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.30)
-        deniseCol31.color = NSColor.init(amigaRGB: deniseInfo!.colorReg.31)
+        deniseCol0.color = NSColor.init(amigaRGB: deniseInfo.colorReg.0)
+        deniseCol1.color = NSColor.init(amigaRGB: deniseInfo.colorReg.1)
+        deniseCol2.color = NSColor.init(amigaRGB: deniseInfo.colorReg.2)
+        deniseCol3.color = NSColor.init(amigaRGB: deniseInfo.colorReg.3)
+        deniseCol4.color = NSColor.init(amigaRGB: deniseInfo.colorReg.4)
+        deniseCol5.color = NSColor.init(amigaRGB: deniseInfo.colorReg.5)
+        deniseCol6.color = NSColor.init(amigaRGB: deniseInfo.colorReg.6)
+        deniseCol7.color = NSColor.init(amigaRGB: deniseInfo.colorReg.7)
+        deniseCol8.color = NSColor.init(amigaRGB: deniseInfo.colorReg.8)
+        deniseCol9.color = NSColor.init(amigaRGB: deniseInfo.colorReg.9)
+        deniseCol10.color = NSColor.init(amigaRGB: deniseInfo.colorReg.10)
+        deniseCol11.color = NSColor.init(amigaRGB: deniseInfo.colorReg.11)
+        deniseCol12.color = NSColor.init(amigaRGB: deniseInfo.colorReg.12)
+        deniseCol13.color = NSColor.init(amigaRGB: deniseInfo.colorReg.13)
+        deniseCol14.color = NSColor.init(amigaRGB: deniseInfo.colorReg.14)
+        deniseCol15.color = NSColor.init(amigaRGB: deniseInfo.colorReg.15)
+        deniseCol16.color = NSColor.init(amigaRGB: deniseInfo.colorReg.16)
+        deniseCol17.color = NSColor.init(amigaRGB: deniseInfo.colorReg.17)
+        deniseCol18.color = NSColor.init(amigaRGB: deniseInfo.colorReg.18)
+        deniseCol19.color = NSColor.init(amigaRGB: deniseInfo.colorReg.19)
+        deniseCol20.color = NSColor.init(amigaRGB: deniseInfo.colorReg.20)
+        deniseCol21.color = NSColor.init(amigaRGB: deniseInfo.colorReg.21)
+        deniseCol22.color = NSColor.init(amigaRGB: deniseInfo.colorReg.22)
+        deniseCol23.color = NSColor.init(amigaRGB: deniseInfo.colorReg.23)
+        deniseCol24.color = NSColor.init(amigaRGB: deniseInfo.colorReg.24)
+        deniseCol25.color = NSColor.init(amigaRGB: deniseInfo.colorReg.25)
+        deniseCol26.color = NSColor.init(amigaRGB: deniseInfo.colorReg.26)
+        deniseCol27.color = NSColor.init(amigaRGB: deniseInfo.colorReg.27)
+        deniseCol28.color = NSColor.init(amigaRGB: deniseInfo.colorReg.28)
+        deniseCol29.color = NSColor.init(amigaRGB: deniseInfo.colorReg.29)
+        deniseCol30.color = NSColor.init(amigaRGB: deniseInfo.colorReg.30)
+        deniseCol31.color = NSColor.init(amigaRGB: deniseInfo.colorReg.31)
 
         sprTableView.refresh(count: count, full: full)
     }

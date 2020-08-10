@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 extension NSColor {
     
     convenience init(r: Int, g: Int, b: Int, a: Int) {
@@ -17,6 +18,7 @@ extension NSColor {
                   alpha: CGFloat(a) / 0xFF)
     }
 }
+*/
 
 struct MemColors {
 
