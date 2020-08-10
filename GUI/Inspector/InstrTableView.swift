@@ -30,13 +30,6 @@ class InstrTableView: NSTableView {
     var dataInRow: [Int: String] = [:]
     var instrInRow: [Int: String] = [:]
     var rowForAddr: [Int: Int] = [:]
-    /*
-    var instrInRow: [Int: DisassembledInstr] = [:]
-    var bpInRow: [Int: BreakpointType] = [:]
-    var addrInRow: [Int: Int] = [:]
-    var rowForAddr: [Int: Int] = [:]
-    var numRows = 0
-    */
     
     // Number format
     // var hex = true

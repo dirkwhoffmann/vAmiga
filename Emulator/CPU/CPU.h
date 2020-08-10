@@ -163,18 +163,6 @@ public:
     // Disassembles the currently executed instruction
     const char *disassembleInstruction(long *len);
     const char *disassembleDataBytes(int len);
-
-private:
-    
-    /*
-    const char *disassembleInstruction(moira::Registers &r, long *len);
-    const char *disassembleDataBytes(moira::Registers &r);
-    const char *disassembleRecordedFlags(moira::Registers &r);
-    */
-    
-public:
-    
-    DisassembledInstr disassembleInstr(u32 addr);
 };
 
 #endif

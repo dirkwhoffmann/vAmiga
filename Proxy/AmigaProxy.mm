@@ -133,10 +133,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->getInfo();
 }
-- (DisassembledInstr) getLoggedInstrInfo:(NSInteger)nr
-{
-    return wrapper->cpu->getLoggedInstrInfo(nr);
-}
 - (i64) clock
 {
     return wrapper->cpu->getMasterClock(); 
@@ -149,108 +145,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->isHalted();
 }
-/*
-- (NSInteger) numberOfBreakpoints
-{
-    return wrapper->cpu->debugger.breakpoints.elements();
-}
-- (u32) breakpointAddr:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.breakpoints.guardAddr(nr);
-}
-- (BOOL) breakpointIsEnabled:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.breakpoints.isEnabled(nr);
-}
-- (BOOL) breakpointIsDisabled:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.breakpoints.isDisabled(nr);
-}
-- (void) removeBreakpoint:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.breakpoints.remove(nr);
-}
-- (void) replaceBreakpoint:(NSInteger)nr addr:(u32)addr
-{
-    wrapper->cpu->debugger.breakpoints.replace(nr, addr);
-}
-- (void) breakpointSetEnable:(NSInteger)nr value:(BOOL)val
-{
-    wrapper->cpu->debugger.breakpoints.setEnable(nr, val);
-}
-- (BOOL) breakpointIsSetAt:(u32)addr
-{
-    return wrapper->cpu->debugger.breakpoints.isSetAt(addr);
-}
-- (BOOL) breakpointIsSetAndEnabledAt:(u32)addr
-{
-    return wrapper->cpu->debugger.breakpoints.isSetAndEnabledAt(addr);
-}
-- (BOOL) breakpointIsSetAndDisabledAt:(u32)addr
-{
-    return wrapper->cpu->debugger.breakpoints.isSetAndDisabledAt(addr);
-}
-- (void) breakpointSetEnableAt:(u32)addr value:(BOOL)val
-{
-    wrapper->cpu->debugger.breakpoints.setEnableAt(addr, val);
-}
-- (void) addBreakpointAt:(u32)addr
-{
-    wrapper->cpu->debugger.breakpoints.addAt(addr);
-}
-- (void) removeBreakpointAt:(u32)addr
-{
-    wrapper->cpu->debugger.breakpoints.removeAt(addr);
-}
-- (NSInteger) numberOfWatchpoints
-{
-    return wrapper->cpu->debugger.watchpoints.elements();
-}
-- (u32) watchpointAddr:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.watchpoints.guardAddr(nr);
-}
-- (BOOL) watchpointIsEnabled:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.watchpoints.isEnabled(nr);
-}
-- (BOOL) watchpointIsDisabled:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.watchpoints.isDisabled(nr);
-}
-- (void) removeWatchpoint:(NSInteger)nr
-{
-    return wrapper->cpu->debugger.watchpoints.remove(nr);
-}
-- (void) replaceWatchpoint:(NSInteger)nr addr:(u32)addr
-{
-    wrapper->cpu->debugger.watchpoints.replace(nr, addr);
-}
-- (void) watchpointSetEnable:(NSInteger)nr value:(BOOL)val
-{
-    wrapper->cpu->debugger.watchpoints.setEnable(nr, val);
-}
-- (BOOL) watchpointIsSetAt:(u32)addr
-{
-    return wrapper->cpu->debugger.watchpoints.isSetAt(addr);
-}
-- (BOOL) watchpointIsSetAndEnabledAt:(u32)addr
-{
-    return wrapper->cpu->debugger.watchpoints.isSetAndEnabledAt(addr);
-}
-- (BOOL) watchpointIsSetAndDisabledAt:(u32)addr
-{
-    return wrapper->cpu->debugger.watchpoints.isSetAndDisabledAt(addr);
-}
-- (void) addWatchpointAt:(u32)addr
-{
-    wrapper->cpu->debugger.watchpoints.addAt(addr);
-}
-- (void) removeWatchpointAt:(u32)addr
-{
-    wrapper->cpu->debugger.watchpoints.removeAt(addr);
-}
-*/
 - (NSInteger) loggedInstructions
 {
     return wrapper->cpu->debugger.loggedInstructions();

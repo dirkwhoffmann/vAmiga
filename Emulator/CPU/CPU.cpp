@@ -436,6 +436,7 @@ CPU::disassembleDataBytes(int len)
     return "";
 }
 
+/*
 DisassembledInstr
 CPU::disassembleInstr(u32 addr)
 {
@@ -448,3 +449,4 @@ CPU::disassembleInstr(u32 addr)
 
     return result;
 }
+*/
