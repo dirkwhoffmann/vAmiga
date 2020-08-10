@@ -153,6 +153,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->isHalted();
 }
+/*
 - (NSInteger) numberOfBreakpoints
 {
     return wrapper->cpu->debugger.breakpoints.elements();
@@ -253,6 +254,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->cpu->debugger.watchpoints.removeAt(addr);
 }
+*/
 - (NSInteger) loggedInstructions
 {
     return wrapper->cpu->debugger.loggedInstructions();
@@ -260,6 +262,31 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) clearLog
 {
     return wrapper->cpu->debugger.clearLog();
+}
+- (NSString *) disassembleRecordedInstruction:(NSInteger)i length:(NSInteger *)len
+{
+    const char *str = wrapper->cpu->disassembleRecordedInstruction((int)i, len);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleRecordedDataBytes:(NSInteger)i length:(NSInteger)len
+{
+    const char *str = wrapper->cpu->disassembleRecordedDataBytes((int)i, len);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleRecordedFlags:(NSInteger)i
+{
+    const char *str = wrapper->cpu->disassembleRecordedFlags((int)i);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len
+{
+    const char *str = wrapper->cpu->disassembleInstruction(addr, len);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len
+{
+    const char *str = wrapper->cpu->disassembleDataBytes(addr, len);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 
 @end

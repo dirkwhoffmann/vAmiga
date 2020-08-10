@@ -251,24 +251,32 @@ Debugger::logInstruction()
     logCnt++;
 }
 
-Registers
-Debugger::logEntry(int n)
+Registers &
+Debugger::logEntryRel(int n)
 {
     assert(n < loggedInstructions());
-
-    // n == 0 returns the most recently recorded entry
-    int offset = (logCnt - 1 - n) % logBufferCapacity;
-
-    return logBuffer[offset];
+    return logBuffer[(logCnt - 1 - n) % logBufferCapacity];
 }
 
-Registers
+Registers &
 Debugger::logEntryAbs(int n)
 {
     assert(n < loggedInstructions());
+    return logEntryRel(loggedInstructions() - n - 1);
+}
 
-    // n == 0 returns the oldest entry
-    return logEntry(loggedInstructions() - n - 1);
+u32
+Debugger::loggedPC0Rel(int n)
+{
+    assert(n < loggedInstructions());
+    return logBuffer[(logCnt - 1 - n) % logBufferCapacity].pc0;
+}
+
+u32
+Debugger::loggedPC0Abs(int n)
+{
+    assert(n < loggedInstructions());
+    return loggedPC0Rel(loggedInstructions() - n - 1);
 }
 
 }

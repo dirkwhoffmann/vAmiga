@@ -209,15 +209,20 @@ public:
     // Logs an instruction
     void logInstruction();
     
-    /* Reads an entry from the log buffer
-     *    logEntry: n == 0 returns the most recently recorded entry
-     * logEntryAbs: n == 0 returns the oldest entry
+    /* Reads an item from the log buffer
+     *
+     *    xxxRel: n == 0 returns the most recently recorded entry
+     *    xxxAbs: n == 0 returns the oldest entry
      */
-    Registers logEntry(int n);
-    Registers logEntryAbs(int n);
-
+    Registers &logEntryRel(int n);
+    Registers &logEntryAbs(int n);
+    u32 loggedPC0Rel(int n);
+    u32 loggedPC0Abs(int n);
+    
     // Clears the log buffer
     void clearLog() { logCnt = 0; }
+    
+    
 };
 
 }

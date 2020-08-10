@@ -143,12 +143,35 @@ public:
 
     // Delays the CPU by a certain amout of master cycles
     void addWaitStates(Cycle cycles) { clock += AS_CPU_CYCLES(cycles); }
-
-
+    
+    
     //
-    // Using the disassembler
+    // Running the disassembler
     //
+    
+    // Disassembles a recorded instruction from the log buffer
+    const char *disassembleRecordedInstruction(int i, long *len);
+    const char *disassembleRecordedDataBytes(int i, int len);
+    const char *disassembleRecordedFlags(int i);
+    
+    // Disassembles the instruction at the specified address
+    const char *disassembleInstruction(u32 addr, long *len);
+    const char *disassembleDataBytes(u32 addr, int len);
 
+    // Disassembles the currently executed instruction
+    const char *disassembleInstruction(long *len);
+    const char *disassembleDataBytes(int len);
+
+private:
+    
+    /*
+    const char *disassembleInstruction(moira::Registers &r, long *len);
+    const char *disassembleDataBytes(moira::Registers &r);
+    const char *disassembleRecordedFlags(moira::Registers &r);
+    */
+    
+public:
+    
     DisassembledInstr disassembleInstr(u32 addr);
 };
 

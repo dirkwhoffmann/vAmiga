@@ -228,6 +228,13 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger loggedInstructions;
 - (void) clearLog;
 
+- (NSString *) disassembleRecordedInstruction:(NSInteger)i length:(NSInteger *)len;
+- (NSString *) disassembleRecordedDataBytes:(NSInteger)i length:(NSInteger)len;
+- (NSString *) disassembleRecordedFlags:(NSInteger)i;
+
+- (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len;
+- (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len;
+
 @end
 
 
