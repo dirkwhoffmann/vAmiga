@@ -216,8 +216,8 @@ public:
      */
     Registers &logEntryRel(int n);
     Registers &logEntryAbs(int n);
-    u32 loggedPC0Rel(int n);
-    u32 loggedPC0Abs(int n);
+    // u32 loggedPC0Rel(int n);
+    // u32 loggedPC0Abs(int n);
     
     // Clears the log buffer
     void clearLog() { logCnt = 0; }

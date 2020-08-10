@@ -133,12 +133,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->getInfo();
 }
-/*
-- (DisassembledInstr) getInstrInfo:(NSInteger)nr start:(NSInteger)addr
-{
-    return wrapper->cpu->getInstrInfo(nr, (u32)addr);
-}
-*/
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)nr
 {
     return wrapper->cpu->getLoggedInstrInfo(nr);
@@ -265,19 +259,24 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->cpu->debugger.clearLog();
 }
-- (NSString *) disassembleRecordedInstruction:(NSInteger)i length:(NSInteger *)len
+- (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len
 {
-    const char *str = wrapper->cpu->disassembleRecordedInstruction((int)i, len);
+    const char *str = wrapper->cpu->disassembleRecordedInstr((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) disassembleRecordedDataBytes:(NSInteger)i length:(NSInteger)len
+- (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleRecordedDataBytes((int)i, len);
+    const char *str = wrapper->cpu->disassembleRecordedBytes((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleRecordedFlags:(NSInteger)i
 {
     const char *str = wrapper->cpu->disassembleRecordedFlags((int)i);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleRecordedPC:(NSInteger)i
+{
+    const char *str = wrapper->cpu->disassembleRecordedPC((int)i);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len
@@ -288,6 +287,11 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len
 {
     const char *str = wrapper->cpu->disassembleDataBytes(addr, len);
+    return str ? [NSString stringWithUTF8String:str] : NULL;
+}
+- (NSString *) disassembleAddr:(NSInteger)addr
+{
+    const char *str = wrapper->cpu->disassembleAddr(addr);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 

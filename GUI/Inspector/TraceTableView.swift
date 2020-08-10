@@ -14,8 +14,10 @@ class TraceTableView: NSTableView {
     var cpu: CPUProxy { return amiga.cpu }
     
     // Data caches
-    var instrInRow: [Int: DisassembledInstr] = [:]
     var numRows = 0
+    var addrInRow: [Int: String] = [:]
+    var flagsInRow: [Int: String] = [:]
+    var instrInRow: [Int: String] = [:]
 
     override func awakeFromNib() {
 
@@ -28,7 +30,11 @@ class TraceTableView: NSTableView {
         numRows = cpu.loggedInstructions
 
         for i in 0 ..< numRows {
-            instrInRow[i] = cpu.getLoggedInstrInfo(i)
+            
+            var len = 0
+            addrInRow[i] = amiga.cpu.disassembleRecordedPC(i)
+            instrInRow[i] = amiga.cpu.disassembleRecordedInstr(i, length: &len)
+            flagsInRow[i] = amiga.cpu.disassembleRecordedFlags(i)
         }
     }
 
@@ -48,20 +54,16 @@ extension TraceTableView: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if var info = instrInRow[row] {
+        switch tableColumn?.identifier.rawValue {
             
-            switch tableColumn?.identifier.rawValue {
-                
-            case "addr":
-                return String(cString: &info.addr.0)
-            case "flags":
-                return String(cString: &info.sr.0)
-            case "instr":
-                return String(cString: &info.instr.0)
-            default:
-                return "???"
-            }
+        case "addr":
+            return addrInRow[row]
+        case "flags":
+            return flagsInRow[row]
+        case "instr":
+            return instrInRow[row]
+        default:
+            return "???"
         }
-        return "??"
     }
 }

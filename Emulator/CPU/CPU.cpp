@@ -367,12 +367,12 @@ CPU::didLoadFromBuffer(u8 *buffer)
 }
 
 const char *
-CPU::disassembleRecordedInstruction(int i, long *len)
+CPU::disassembleRecordedInstr(int i, long *len)
 {
     return disassembleInstruction(debugger.logEntryAbs(i).pc0, len);
 }
 const char *
-CPU::disassembleRecordedDataBytes(int i, int len)
+CPU::disassembleRecordedBytes(int i, int len)
 {
     return disassembleDataBytes(debugger.logEntryAbs(i).pc0, len);
 }
@@ -383,7 +383,15 @@ CPU::disassembleRecordedFlags(int i)
     static char result[18];
     
     disassembleSR(debugger.logEntryAbs(i).sr, result);
+    return result;
+}
+
+const char *
+CPU::disassembleRecordedPC(int i)
+{
+    static char result[16];
     
+    Moira::disassemblePC(debugger.logEntryAbs(i).pc0, result);
     return result;
 }
 
@@ -404,6 +412,15 @@ CPU::disassembleDataBytes(u32 addr, int len)
     static char result[64];
 
     disassembleMemory(addr, len, result);
+    return result;
+}
+
+const char *
+CPU::disassembleAddr(u32 addr)
+{
+    static char result[16];
+
+    disassemblePC(addr, result);
     return result;
 }
 

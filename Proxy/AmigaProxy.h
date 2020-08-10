@@ -218,7 +218,6 @@ struct SerialPortWrapper;
 
 - (void) dump;
 - (CPUInfo) getInfo;
-// - (DisassembledInstr) getInstrInfo:(NSInteger)index start:(NSInteger)addr;
 - (DisassembledInstr) getLoggedInstrInfo:(NSInteger)index;
 
 @property (readonly) i64 clock;
@@ -228,12 +227,14 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger loggedInstructions;
 - (void) clearLog;
 
-- (NSString *) disassembleRecordedInstruction:(NSInteger)i length:(NSInteger *)len;
-- (NSString *) disassembleRecordedDataBytes:(NSInteger)i length:(NSInteger)len;
+- (NSString *) disassembleRecordedInstr:(NSInteger)i length:(NSInteger *)len;
+- (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len;
 - (NSString *) disassembleRecordedFlags:(NSInteger)i;
+- (NSString *) disassembleRecordedPC:(NSInteger)i;
 
 - (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len;
 - (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len;
+- (NSString *) disassembleAddr:(NSInteger)addr;
 
 @end
 
