@@ -175,12 +175,12 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len
 {
-    const char *str = wrapper->cpu->disassembleInstruction(addr, len);
+    const char *str = wrapper->cpu->disassembleInstr(addr, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleDataBytes(addr, len);
+    const char *str = wrapper->cpu->disassembleBytes(addr, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleAddr:(NSInteger)addr
@@ -302,12 +302,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->mem->loadRomFromFile([url fileSystemRepresentation]);
 }
-/*
-- (BOOL) loadEncryptedRomFromFile:(NSURL *)url
-{
-    return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation]);
-}
-*/
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error
 {
     return wrapper->mem->loadEncryptedRomFromFile([url fileSystemRepresentation], error);

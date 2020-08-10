@@ -153,13 +153,13 @@ public:
     const char *disassembleRecordedPC(int i);
 
     // Disassembles the instruction at the specified address
-    const char *disassembleInstruction(u32 addr, long *len);
-    const char *disassembleDataBytes(u32 addr, int len);
+    const char *disassembleInstr(u32 addr, long *len);
+    const char *disassembleBytes(u32 addr, int len);
     const char *disassembleAddr(u32 addr);
 
     // Disassembles the currently executed instruction
-    const char *disassembleInstruction(long *len);
-    const char *disassembleDataBytes(int len);
+    const char *disassembleInstr(long *len);
+    const char *disassembleBytes(int len);
 };
 
 #endif

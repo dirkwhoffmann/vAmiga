@@ -190,9 +190,6 @@ CIA::peek(u16 addr)
 {
 	u8 result;
 
-    if (addr == 0 || addr == 1) {
-        // debug(DSKREG_DEBUG, "Peek($%X) DDRA = $%X DDRB = $%X\n", addr, DDRA, DDRB);
-    }
     debug(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, ciaRegName(addr));
 
     wakeUp();
@@ -391,9 +388,6 @@ CIA::spypeek(u16 addr)
 void
 CIA::poke(u16 addr, u8 value)
 {
-    if (addr == 0 || addr == 1) {
-        // debug(DSKREG_DEBUG, "Poke($%X,$%X) DDRA = $%X DDRB = $%X\n", addr, value, DDRA, DDRB);
-    }
     debug(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, ciaRegName(addr), value);
     
     wakeUp();
@@ -1129,11 +1123,12 @@ CIA::sleep()
     // CIAs with stopped timers can sleep forever
     if (!(feed & CIACountA0)) sleepA = INT64_MAX;
     if (!(feed & CIACountB0)) sleepB = INT64_MAX;
+    Cycle sleep = MIN(sleepA, sleepB);
     
     // ZZzzz
     // debug("ZZzzzz: clock = %lld A = %d B = %d sleepA = %lld sleepB = %lld\n", clock, counterA, counterB, sleepA, sleepB);
     sleepCycle = clock;
-    wakeUpCycle = MIN(sleepA, sleepB);
+    wakeUpCycle = sleep;
     sleeping = true;
     tiredness = 0;
 }
