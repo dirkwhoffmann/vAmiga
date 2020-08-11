@@ -71,7 +71,7 @@ extension Inspector {
             case MEM_AUTOCONF.rawValue:  color = MemColors.auto
             default:                     fatalError()
             }
-            let ciColor: CIColor = CIColor(color: color)!
+            let ciColor = CIColor(color: color)!
 
             for y in 0...15 {
                 let c = 2
@@ -129,96 +129,96 @@ extension Inspector {
         memBankTableView.refresh(count: count, full: full)
     }
 
-    func setBank(src: MemorySource) {
+    func jumpTo(addr: Int) {
+        
+        if addr >= 0 && addr <= 0xFFFFFF {
+            
+            searchAddress = addr
+            jumpTo(bank: addr >> 16)
+            let row = (addr & 0xFFFF) / 16
+            memTableView.scrollRowToVisible(row)
+            memTableView.selectRowIndexes([row], byExtendingSelection: false)
+        }
+    }
+    
+    func jumpTo(source: MemorySource) {
 
         for bank in 0...255 {
 
-            if parent?.amiga.mem.memSrc(bank << 16) == src {
-                setBank(bank)
+            if parent?.amiga.mem.memSrc(bank << 16) == source {
+                jumpTo(bank: bank)
                 return
             }
         }
     }
 
-    func setBank(_ value: Int) {
+    func jumpTo(bank nr: Int) {
         
-        if value >= 0 && value <= 0xFF {
+        if nr >= 0 && nr <= 0xFF {
             
-            bank = value
-            memSrc = parent?.amiga.mem.memSrc(bank << 16) ?? MEM_NONE_FAST
-            memLayoutSlider.integerValue = bank
+            displayedBank = nr
+            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? MEM_NONE_FAST
+            memLayoutSlider.integerValue = displayedBank
             memTableView.scrollRowToVisible(0)
-            memBankTableView.scrollRowToVisible(value)
-            memBankTableView.selectRowIndexes([value], byExtendingSelection: false)
+            memBankTableView.scrollRowToVisible(nr)
+            memBankTableView.selectRowIndexes([nr], byExtendingSelection: false)
             fullRefresh()
-        }
-    }
-    
-    func setSelected(_ value: Int) {
-        
-        if value >= 0 && value <= 0xFFFFFF {
-            
-            selected = value
-            setBank(value >> 16)
-            let row = (selected / 16) % 4096
-            memTableView.scrollRowToVisible(row)
-            memTableView.selectRowIndexes([row], byExtendingSelection: false)
         }
     }
 
     @IBAction func memSliderAction(_ sender: NSSlider!) {
 
-        setBank(sender.integerValue)
+        jumpTo(bank: sender.integerValue)
     }
 
     @IBAction func memChipAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_CHIP)
+        jumpTo(source: MEM_CHIP)
     }
 
     @IBAction func memFastRamAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_FAST)
+        jumpTo(source: MEM_FAST)
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_SLOW)
+        jumpTo(source: MEM_SLOW)
     }
 
     @IBAction func memRomAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_ROM)
+        jumpTo(source: MEM_ROM)
     }
 
     @IBAction func memWomAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_WOM)
+        jumpTo(source: MEM_WOM)
     }
 
     @IBAction func memExtAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_EXT)
+        jumpTo(source: MEM_EXT)
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_CIA)
+        jumpTo(source: MEM_CIA)
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_RTC)
+        jumpTo(source: MEM_RTC)
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_CUSTOM)
+        jumpTo(source: MEM_CUSTOM)
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
 
-        setBank(src: MEM_AUTOCONF)
+        jumpTo(source: MEM_AUTOCONF)
     }
 
     @IBAction func memSearchAction(_ sender: NSTextField!) {
@@ -226,10 +226,10 @@ extension Inspector {
         let input = sender.stringValue
         if let addr = Int(input, radix: 16), input != "" {
             sender.stringValue = String(format: "%06X", addr)
-            setSelected(addr)
+            jumpTo(addr: addr)
         } else {
             sender.stringValue = ""
-            selected = -1
+            searchAddress = -1
         }
         fullRefresh()
     }

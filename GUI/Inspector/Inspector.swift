@@ -86,15 +86,9 @@ class Inspector: DialogController {
     @IBOutlet weak var memOCSButton: NSButton!
     @IBOutlet weak var memAutoConfButton: NSButton!
 
-    var bank = 0
-    var memSrc = MEM_CHIP
-    var selected = -1
-
-    // State to display in the state machine images (Paula panel)
-    var displayState0 = 0
-    var displayState1 = 0
-    var displayState2 = 0
-    var displayState3 = 0
+    var displayedBank = 0
+    var displayedBankType = MEM_CHIP
+    var searchAddress = -1
 
     // CIA panel
     @IBOutlet weak var ciaSelector: NSSegmentedControl!
@@ -464,6 +458,12 @@ class Inspector: DialogController {
     @IBOutlet weak var dskFifo3: NSTextField!
     @IBOutlet weak var dskFifo4: NSTextField!
     @IBOutlet weak var dskFifo5: NSTextField!
+
+    // State to display in the state machine images (Paula panel)
+    var displayState0 = 0
+    var displayState1 = 0
+    var displayState2 = 0
+    var displayState3 = 0
 
     // Ports panel
     @IBOutlet weak var po0JOYDAT: NSTextField!

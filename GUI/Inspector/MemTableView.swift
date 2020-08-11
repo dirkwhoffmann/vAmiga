@@ -27,7 +27,7 @@ class MemTableView: NSTableView {
         dataSource = self
         target = self
     
-        inspector.setBank(0)
+        inspector.jumpTo(addr: 0)
     }
 
     private func cache() {
@@ -36,7 +36,7 @@ class MemTableView: NSTableView {
         asciiInRow = [:]
         dataInAddr = [:]
 
-        var addr = inspector.bank * 65536
+        var addr = inspector.displayedBank * 65536
         let rows = numberOfRows(in: self)
 
         for i in 0 ..< rows {
@@ -93,7 +93,7 @@ extension MemTableView: NSTableViewDataSource {
     
     func tableView(_ tableView: NSTableView, objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
 
-        var addr = inspector.bank * 65536 + row * 16
+        var addr = inspector.displayedBank * 65536 + row * 16
      
         switch tableColumn?.identifier.rawValue {
 
@@ -122,10 +122,10 @@ extension MemTableView: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        var addr = inspector.bank * 65536 + row * 16
+        var addr = inspector.displayedBank * 65536 + row * 16
         let cell = cell as? NSTextFieldCell
         
-        if inspector.memSrc == MEM_NONE_FAST || inspector.memSrc == MEM_NONE_SLOW {
+        if inspector.displayedBankType == MEM_NONE_FAST || inspector.displayedBankType == MEM_NONE_SLOW {
             cell?.textColor = NSColor.gray
         } else {
             cell?.textColor = NSColor.textColor
@@ -141,7 +141,7 @@ extension MemTableView: NSTableViewDelegate {
         case "4": addr += 2; fallthrough
         case "2": addr += 2; fallthrough
         case "0":
-            if inspector.selected >> 1 == addr >> 1 {
+            if inspector.searchAddress >> 1 == addr >> 1 {
                 cell?.textColor = NSColor.red
             }
         default:

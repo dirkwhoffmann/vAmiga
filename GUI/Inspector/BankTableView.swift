@@ -10,7 +10,8 @@
 class BankTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy!
+    
+    var amiga: AmigaProxy { return inspector.parent.amiga }
 
     // Displayed memory bank
     var bank = 0
@@ -20,7 +21,6 @@ class BankTableView: NSTableView {
 
     override func awakeFromNib() {
 
-        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -44,7 +44,7 @@ class BankTableView: NSTableView {
 
     @IBAction func clickAction(_ sender: NSTableView!) {
 
-        inspector.setBank(sender.clickedRow)
+        inspector.jumpTo(bank: sender.clickedRow)
     }
 }
 

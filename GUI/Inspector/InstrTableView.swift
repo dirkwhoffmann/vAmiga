@@ -10,6 +10,7 @@
 class InstrTableView: NSTableView {
     
     @IBOutlet weak var inspector: Inspector!
+    
     var amiga: AmigaProxy { return inspector.parent.amiga }
     var cpu: CPUProxy { return amiga.cpu }
     var breakpoints: GuardsProxy { return amiga.breakpoints }
