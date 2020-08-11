@@ -660,6 +660,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ZYe-ZX-Ik9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kji-ty-NOX">
                                                         <rect key="frame" x="72" y="13" width="22" height="18"/>
@@ -668,6 +671,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="PAN-ec-3wZ"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SK2-ME-2J5">
                                                         <rect key="frame" x="186" y="13" width="22" height="18"/>
@@ -676,6 +682,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="R2U-fz-82k"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cdg-1r-plU">
                                                         <rect key="frame" x="205" y="13" width="22" height="18"/>
@@ -684,6 +693,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="6lv-QB-fZE"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CdD-8Y-ejU">
                                                         <rect key="frame" x="167" y="13" width="22" height="18"/>
@@ -692,6 +704,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="RWN-EB-2jR"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ams-8I-nYq">
                                                         <rect key="frame" x="282" y="13" width="22" height="18"/>
@@ -700,6 +715,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="SN4-p0-rSk"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QXG-ho-9j4">
                                                         <rect key="frame" x="339" y="13" width="22" height="18"/>
@@ -708,6 +726,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Ck6-YX-Ed8"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qfU-1M-Cid">
                                                         <rect key="frame" x="358" y="13" width="22" height="18"/>
@@ -716,6 +737,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="FRj-We-lku"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="umj-Cg-XaG">
                                                         <rect key="frame" x="320" y="13" width="22" height="18"/>
@@ -724,6 +748,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kaW-zg-uSw"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LDM-Gj-kSK">
                                                         <rect key="frame" x="301" y="13" width="22" height="18"/>
@@ -732,6 +759,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="system"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="eGS-8b-YZP"/>
+                                                        </connections>
                                                     </button>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wrq-MY-irM">
                                                         <rect key="frame" x="10" y="90" width="55" height="17"/>
@@ -1528,7 +1558,7 @@
                                                                 <tableColumnResizingMask key="resizingMask" resizeWithTable="YES" userResizable="YES"/>
                                                             </tableColumn>
                                                             <tableColumn identifier="ascii" width="138" minWidth="128" maxWidth="3.4028234663852886e+38" id="ERn-7D-o3h" userLabel="ASCII">
-                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="ASCII">
+                                                                <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="center" title="ASCII">
                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                                 </tableHeaderCell>
@@ -1841,7 +1871,7 @@
                                             </buttonCell>
                                         </button>
                                         <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Pc-Ka-BhB">
-                                            <rect key="frame" x="33" y="318" width="121" height="22"/>
+                                            <rect key="frame" x="17" y="363" width="153" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" sendsWholeSearchString="YES" id="KwS-ba-Rdd">
                                                 <font key="font" metaFont="system"/>
@@ -1883,6 +1913,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Rt0-xU-3O8"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tgF-ZW-aVo">
                                                         <rect key="frame" x="145" y="111" width="95" height="18"/>
@@ -1891,6 +1924,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="QF9-LP-ER0"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CjP-MW-UB8">
                                                         <rect key="frame" x="145" y="89" width="95" height="18"/>
@@ -1899,6 +1935,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="FOX-cp-9UQ"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GeO-Jw-rwJ">
                                                         <rect key="frame" x="145" y="69" width="95" height="18"/>
@@ -1907,6 +1946,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="DBn-5K-Eei"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BY4-N0-jjn">
                                                         <rect key="frame" x="145" y="153" width="95" height="18"/>
@@ -1915,6 +1957,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Ng4-5B-EOb"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ngr-ro-DDg">
                                                         <rect key="frame" x="145" y="49" width="95" height="18"/>
@@ -1923,6 +1968,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="oxL-hv-JF9"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oMv-eX-cF8">
                                                         <rect key="frame" x="145" y="29" width="95" height="18"/>
@@ -1931,6 +1979,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="jsO-ci-ndX"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W6H-Rb-M8p">
                                                         <rect key="frame" x="145" y="9" width="95" height="18"/>
@@ -1939,6 +1990,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="h4X-bz-VHW"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="h5v-4h-GgW">
                                                         <rect key="frame" x="68" y="145" width="30" height="22"/>
@@ -2002,6 +2056,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="nG3-dq-odJ"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gS5-lT-LB8">
                                                         <rect key="frame" x="147" y="111" width="95" height="18"/>
@@ -2010,6 +2067,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="A2D-io-jCY"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wHR-WI-utW">
                                                         <rect key="frame" x="147" y="89" width="95" height="18"/>
@@ -2018,6 +2078,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="lTK-dt-cFe"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lu9-dj-eEG">
                                                         <rect key="frame" x="147" y="69" width="95" height="18"/>
@@ -2026,6 +2089,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="FyV-JC-fjs"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VTx-a3-Ssw">
                                                         <rect key="frame" x="147" y="153" width="95" height="18"/>
@@ -2034,6 +2100,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kch-XD-W7E"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1W3-g7-TrM">
                                                         <rect key="frame" x="147" y="49" width="95" height="18"/>
@@ -2042,6 +2111,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ZGx-ZW-s7h"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OCh-LV-smC">
                                                         <rect key="frame" x="147" y="29" width="95" height="18"/>
@@ -2050,6 +2122,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="mbR-PS-cgc"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Gp-DY-A8n">
                                                         <rect key="frame" x="147" y="9" width="95" height="18"/>
@@ -2058,6 +2133,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="qUO-dh-24L"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pae-iX-XUM">
                                                         <rect key="frame" x="71" y="145" width="30" height="22"/>
@@ -2130,6 +2208,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="7qa-WG-gR2"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aPe-ye-fWa">
                                                         <rect key="frame" x="15" y="72" width="81" height="14"/>
@@ -2409,6 +2490,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="M8k-ur-eXI"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -2427,6 +2511,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="opT-eb-BYs"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I0m-EO-pAf">
                                                         <rect key="frame" x="131" y="111" width="100" height="18"/>
@@ -2435,6 +2522,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="wBp-Sv-id8"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fri-UR-ZYN">
                                                         <rect key="frame" x="131" y="153" width="65" height="18"/>
@@ -2443,6 +2533,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="gM3-DO-R9u"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lMe-6o-MdS">
                                                         <rect key="frame" x="131" y="90" width="104" height="18"/>
@@ -2451,6 +2544,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="F7Q-FT-eBb"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hdX-8n-Lad">
                                                         <rect key="frame" x="73" y="145" width="45" height="22"/>
@@ -2495,6 +2591,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Ptj-67-BM0"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sj9-0J-ksb">
                                                         <rect key="frame" x="131" y="28" width="99" height="18"/>
@@ -2503,6 +2602,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="XcX-3M-FdQ"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="umd-ag-k2T">
                                                         <rect key="frame" x="131" y="70" width="65" height="18"/>
@@ -2511,6 +2613,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="K7z-ll-f4Q"/>
+                                                        </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrE-EP-Ezl">
                                                         <rect key="frame" x="131" y="7" width="104" height="18"/>
@@ -2519,6 +2624,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="yZm-r7-APP"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" textCompletion="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qNC-d2-feW">
                                                         <rect key="frame" x="73" y="62" width="45" height="22"/>
@@ -2858,6 +2966,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="29t-gI-Nbk"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ugp-hk-G5c">
                                                         <rect key="frame" x="87" y="38" width="52" height="23"/>
@@ -2875,6 +2986,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="zsc-z3-bhz"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="BqS-ce-Nxn">
                                                         <rect key="frame" x="3" y="11" width="78" height="20"/>
@@ -2883,6 +2997,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="hEV-SW-N6O"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8gY-aS-gao">
                                                         <rect key="frame" x="87" y="9" width="52" height="23"/>
@@ -2900,6 +3017,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="htf-Jd-D4m"/>
+                                                        </connections>
                                                     </button>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YQc-Lh-3N4">
                                                         <rect key="frame" x="164" y="97" width="16" height="17"/>
@@ -3026,6 +3146,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="4jI-h0-5Id"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3117,6 +3240,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="f74-tw-f7F"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="P7l-oK-yHX">
                                                         <rect key="frame" x="4" y="177" width="78" height="20"/>
@@ -3125,6 +3251,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="BF4-aG-qnt"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="12v-Ql-aT2">
                                                         <rect key="frame" x="4" y="149" width="78" height="20"/>
@@ -3133,6 +3262,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="eOx-cs-Bd2"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JG1-4Z-zKc">
                                                         <rect key="frame" x="88" y="120" width="52" height="23"/>
@@ -3177,6 +3309,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="tCg-8S-Aq6"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="or7-Xr-peU">
                                                         <rect key="frame" x="4" y="65" width="78" height="20"/>
@@ -3185,6 +3320,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="2x1-N5-y4j"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="gzY-cc-bYu">
                                                         <rect key="frame" x="4" y="37" width="78" height="20"/>
@@ -3193,6 +3331,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="9Oj-oV-KH2"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="5HK-4X-h6S">
                                                         <rect key="frame" x="4" y="9" width="78" height="20"/>
@@ -3201,6 +3342,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="fAP-ex-L5k"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hBg-wT-xus">
                                                         <rect key="frame" x="88" y="8" width="52" height="23"/>
@@ -3218,6 +3362,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="eKF-c9-wSn"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3263,6 +3410,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Rnh-sf-2y3"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="BBX-e2-sbF">
                                                         <rect key="frame" x="4" y="93" width="78" height="20"/>
@@ -3271,6 +3421,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="vXO-Z2-O6s"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="XwG-Mq-Pm2">
                                                         <rect key="frame" x="4" y="65" width="78" height="20"/>
@@ -3279,6 +3432,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="QGg-e3-tSX"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nl4-eQ-9oB">
                                                         <rect key="frame" x="88" y="204" width="52" height="23"/>
@@ -3314,6 +3470,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="CeI-FL-TC9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="2EP-Oy-3ZM">
                                                         <rect key="frame" x="4" y="177" width="78" height="20"/>
@@ -3322,6 +3481,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="3hD-oO-0l9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="EUV-LU-xZN">
                                                         <rect key="frame" x="4" y="149" width="78" height="20"/>
@@ -3330,6 +3492,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Obz-VR-E8J"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3366,6 +3531,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="5CZ-sj-rOL"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="82y-xv-kn6">
                                                         <rect key="frame" x="3" y="177" width="78" height="20"/>
@@ -3374,6 +3542,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="OBA-e7-NtV"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mAa-ca-L0E">
                                                         <rect key="frame" x="87" y="148" width="52" height="23"/>
@@ -3391,6 +3562,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="9rQ-MO-Qdk"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="TYe-gU-RDW">
                                                         <rect key="frame" x="3" y="121" width="78" height="20"/>
@@ -3399,6 +3573,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="gBO-te-ya4"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="SsR-8i-n97">
                                                         <rect key="frame" x="3" y="93" width="78" height="20"/>
@@ -3407,6 +3584,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="0dL-Zk-hUZ"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kKq-kL-QAO">
                                                         <rect key="frame" x="87" y="120" width="52" height="23"/>
@@ -3424,6 +3604,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="dID-Rj-NNS"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3451,6 +3634,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="FQs-uv-yby"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3569,6 +3755,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="04h-AR-vm9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PJe-kl-Y7e">
                                                         <rect key="frame" x="157" y="338" width="17" height="20"/>
@@ -3577,6 +3766,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="KeA-Vp-9Na"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Y8M-6Z-zXj">
                                                         <rect key="frame" x="240" y="339" width="79" height="15"/>
@@ -3594,6 +3786,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Y9h-fx-97i"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VDi-I8-VU6">
                                                         <rect key="frame" x="13" y="10" width="23" height="25"/>
@@ -3774,6 +3969,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kmK-rQ-EKB"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OF3-W4-YMI">
                                                         <rect key="frame" x="276" y="7" width="98" height="20"/>
@@ -3782,6 +3980,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="fuu-N8-kJa"/>
+                                                        </connections>
                                                     </button>
                                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1z6-Cf-tr9">
                                                         <rect key="frame" x="89" y="116" width="33" height="14"/>
@@ -3835,6 +4036,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="E5k-Xs-Ysa"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W4p-Qh-D5w">
                                                         <rect key="frame" x="199" y="7" width="85" height="20"/>
@@ -3843,6 +4047,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Hx2-nd-rfM"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -3879,6 +4086,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="sR3-kG-Kjd"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="SKq-aA-ToE">
                                                         <rect key="frame" x="288" y="89" width="85" height="20"/>
@@ -3887,6 +4097,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="sVo-Ar-56s"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PDJ-pc-bBw">
                                                         <rect key="frame" x="288" y="69" width="85" height="20"/>
@@ -3895,6 +4108,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="FhY-XZ-YGz"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NUw-vd-C4j">
                                                         <rect key="frame" x="284" y="149" width="89" height="20"/>
@@ -3903,6 +4119,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kRT-s0-jZ4"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Nn-vO-B7u">
                                                         <rect key="frame" x="135" y="149" width="89" height="20"/>
@@ -3911,6 +4130,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ouy-Jf-wfK"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m7f-tQ-6h3">
                                                         <rect key="frame" x="135" y="129" width="89" height="20"/>
@@ -3919,6 +4141,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="2io-ZL-6mm"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mnl-Ut-RqD">
                                                         <rect key="frame" x="135" y="109" width="89" height="20"/>
@@ -3927,6 +4152,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="CGj-Q9-NFz"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="akn-bL-t8h">
                                                         <rect key="frame" x="135" y="89" width="89" height="20"/>
@@ -3935,6 +4163,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="jaD-kR-dSy"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NCc-Wm-Xyg">
                                                         <rect key="frame" x="287" y="129" width="86" height="20"/>
@@ -3943,6 +4174,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="L2V-nM-z2t"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yTo-Xe-tbR">
                                                         <rect key="frame" x="135" y="69" width="89" height="20"/>
@@ -3951,6 +4185,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="NFK-gq-FoY"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WmL-qi-HdV">
                                                         <rect key="frame" x="135" y="49" width="89" height="20"/>
@@ -3959,6 +4196,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="zlN-Le-Udc"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rfi-Re-D5X">
                                                         <rect key="frame" x="135" y="29" width="89" height="20"/>
@@ -3967,6 +4207,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="iQc-Le-70w"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w9X-AV-fLe">
                                                         <rect key="frame" x="135" y="9" width="89" height="20"/>
@@ -3975,6 +4218,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="NFz-a2-5dl"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Yky-yc-sEx">
                                                         <rect key="frame" x="90" y="175" width="16" height="23"/>
@@ -4001,6 +4247,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kxF-UU-6hz"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mcq-lO-y2z">
                                                         <rect key="frame" x="51" y="89" width="77" height="20"/>
@@ -4009,6 +4258,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="C1c-8H-dNY"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s9G-Re-zNN">
                                                         <rect key="frame" x="52" y="149" width="76" height="20"/>
@@ -4017,6 +4269,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="WUw-Qf-ghD"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o5f-Kx-mWQ">
                                                         <rect key="frame" x="52" y="129" width="76" height="20"/>
@@ -4025,6 +4280,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="q95-Ny-c1f"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LIp-Mu-CD1">
                                                         <rect key="frame" x="352" y="175" width="23" height="23"/>
@@ -4085,7 +4343,7 @@
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="1aG-KS-uL3">
                                                             <rect key="frame" x="1" y="1" width="252" height="256"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
                                                                 <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="2" allowsExpansionToolTips="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="s6H-id-bwp" customClass="SpriteTableView" customModule="vAmiga" customModuleProvider="target">
                                                                     <rect key="frame" x="0.0" y="0.0" width="252" height="256"/>
@@ -4375,6 +4633,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="uFA-MJ-rZq"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pk9-pg-aqv">
                                                         <rect key="frame" x="67" y="332" width="22" height="20"/>
@@ -4383,6 +4644,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kXW-xj-qI0"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NOc-tg-CIg">
                                                         <rect key="frame" x="96" y="332" width="22" height="20"/>
@@ -4391,6 +4655,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="vYb-i7-uuc"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jo4-2J-jN4">
                                                         <rect key="frame" x="125" y="332" width="22" height="20"/>
@@ -4399,6 +4666,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="sl9-LK-lmH"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ExB-4D-DAm">
                                                         <rect key="frame" x="154" y="332" width="22" height="20"/>
@@ -4407,6 +4677,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="C2r-LC-gWq"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZQo-X3-8FA">
                                                         <rect key="frame" x="183" y="332" width="22" height="20"/>
@@ -4415,6 +4688,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="8JG-Tt-cXM"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G05-Y9-Xip">
                                                         <rect key="frame" x="212" y="332" width="22" height="20"/>
@@ -4423,6 +4699,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="mG4-eM-vPu"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nEZ-Ak-aDH">
                                                         <rect key="frame" x="241" y="332" width="22" height="20"/>
@@ -4431,6 +4710,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="zth-HJ-S1L"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="15" translatesAutoresizingMaskIntoConstraints="NO" id="LHo-wy-B3G">
                                                         <rect key="frame" x="243" y="11" width="36" height="24"/>
@@ -4439,6 +4721,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="fxB-vc-VHi"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z11-9N-wy4">
                                                         <rect key="frame" x="111" y="11" width="37" height="23"/>
@@ -4502,6 +4787,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="vsa-kW-HyG"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="1Et-eT-Coi">
                                                         <rect key="frame" x="77" y="102" width="141" height="20"/>
@@ -4510,6 +4798,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kV5-1T-C6D"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="srT-Rj-zei">
                                                         <rect key="frame" x="77" y="62" width="101" height="20"/>
@@ -4518,6 +4809,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="mwk-lH-7bK"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Lfo-2n-rmB">
                                                         <rect key="frame" x="77" y="82" width="126" height="20"/>
@@ -4526,6 +4820,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="2vd-6v-bUn"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IPo-Nb-9eX">
                                                         <rect key="frame" x="125" y="132" width="101" height="16"/>
@@ -4552,6 +4849,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="aUb-OS-I1x"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="Zl0-8X-Ozz">
                                                         <rect key="frame" x="389" y="141" width="69" height="20"/>
@@ -4560,6 +4860,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ucm-2E-g2z"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="pfV-Jg-LYr">
                                                         <rect key="frame" x="389" y="101" width="69" height="20"/>
@@ -4568,6 +4871,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ccy-iu-y60"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="ywA-dO-l7t">
                                                         <rect key="frame" x="389" y="121" width="69" height="20"/>
@@ -4576,6 +4882,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="F6n-DB-lmv"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="V8M-Zk-QqD">
                                                         <rect key="frame" x="389" y="81" width="69" height="20"/>
@@ -4584,6 +4893,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="F0F-dN-NYJ"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tio-uO-wJc">
                                                         <rect key="frame" x="389" y="41" width="69" height="20"/>
@@ -4592,6 +4904,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="zhB-9y-XeO"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="XFR-Tn-LT0">
                                                         <rect key="frame" x="389" y="61" width="69" height="20"/>
@@ -4600,6 +4915,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="m3r-Mq-aH9"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ejM-r6-KV2">
                                                         <rect key="frame" x="78" y="20" width="37" height="23"/>
@@ -4992,6 +5310,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="xho-RC-Jzi"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="wtW-iN-dmb">
                                                         <rect key="frame" x="132" y="276" width="64" height="20"/>
@@ -5000,6 +5321,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kMv-1d-dd1"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="zy8-GY-wLO">
                                                         <rect key="frame" x="132" y="256" width="75" height="20"/>
@@ -5008,6 +5332,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="CNa-Vc-kVb"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="Pc6-Bl-EAj">
                                                         <rect key="frame" x="132" y="236" width="48" height="20"/>
@@ -5016,6 +5343,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="vBd-fa-k9s"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="Xr8-yV-kOy">
                                                         <rect key="frame" x="132" y="216" width="59" height="20"/>
@@ -5024,6 +5354,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="8w8-hL-HOW"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="BbS-ht-wSo">
                                                         <rect key="frame" x="132" y="196" width="59" height="20"/>
@@ -5032,6 +5365,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="6Hv-Wm-meo"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ysn-M6-ZOT">
                                                         <rect key="frame" x="132" y="176" width="57" height="20"/>
@@ -5040,6 +5376,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Z5X-m5-fXh"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="yBL-47-Jwz">
                                                         <rect key="frame" x="132" y="156" width="59" height="20"/>
@@ -5048,6 +5387,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="RW9-SX-H3I"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="e4s-ij-STz">
                                                         <rect key="frame" x="132" y="136" width="51" height="20"/>
@@ -5056,6 +5398,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="41w-Ql-QrB"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="OZA-1f-yTa">
                                                         <rect key="frame" x="132" y="116" width="65" height="20"/>
@@ -5064,6 +5409,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Z78-Cb-6uk"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="oEA-u4-uVE">
                                                         <rect key="frame" x="132" y="96" width="67" height="20"/>
@@ -5072,6 +5420,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="3fQ-Ox-GeW"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="HD3-R3-9yP">
                                                         <rect key="frame" x="132" y="76" width="66" height="20"/>
@@ -5080,6 +5431,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="G94-6o-wXO"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="OXP-le-HxH">
                                                         <rect key="frame" x="132" y="56" width="57" height="20"/>
@@ -5088,6 +5442,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="4SX-Vx-9UN"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="F91-q8-P1m">
                                                         <rect key="frame" x="132" y="36" width="74" height="20"/>
@@ -5096,6 +5453,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="MC1-G3-wpu"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M8M-D2-4G8">
                                                         <rect key="frame" x="132" y="16" width="48" height="20"/>
@@ -5104,6 +5464,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="pBk-ZE-rZ7"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="14" translatesAutoresizingMaskIntoConstraints="NO" id="JTa-qW-Eke">
                                                         <rect key="frame" x="43" y="296" width="62" height="20"/>
@@ -5112,6 +5475,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="bd4-J2-4le"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="ZnY-pH-jqI">
                                                         <rect key="frame" x="41" y="276" width="64" height="20"/>
@@ -5120,6 +5486,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="x01-Ac-4lN"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="J1H-Vy-1r5">
                                                         <rect key="frame" x="30" y="256" width="75" height="20"/>
@@ -5128,6 +5497,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="gOS-K6-Vx5"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="ASa-gY-n2Z">
                                                         <rect key="frame" x="57" y="236" width="48" height="20"/>
@@ -5136,6 +5508,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Fq0-hB-Fnb"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="10" translatesAutoresizingMaskIntoConstraints="NO" id="MHB-0V-Htu">
                                                         <rect key="frame" x="46" y="216" width="59" height="20"/>
@@ -5144,6 +5519,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Lea-Hd-fQn"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="9" translatesAutoresizingMaskIntoConstraints="NO" id="Yah-Gw-lon">
                                                         <rect key="frame" x="46" y="196" width="59" height="20"/>
@@ -5152,6 +5530,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Rhm-uy-Ugf"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="8" translatesAutoresizingMaskIntoConstraints="NO" id="Ke3-tV-Yte">
                                                         <rect key="frame" x="48" y="176" width="57" height="20"/>
@@ -5160,6 +5541,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="rCv-OR-3Ii"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="7" translatesAutoresizingMaskIntoConstraints="NO" id="Wne-bO-9pi">
                                                         <rect key="frame" x="46" y="156" width="59" height="20"/>
@@ -5168,6 +5552,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Kls-DN-IJj"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="6" translatesAutoresizingMaskIntoConstraints="NO" id="whS-zb-3tz">
                                                         <rect key="frame" x="54" y="136" width="51" height="20"/>
@@ -5176,6 +5563,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="R6T-gR-Yda"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="5" translatesAutoresizingMaskIntoConstraints="NO" id="yC2-xt-DYy">
                                                         <rect key="frame" x="40" y="116" width="65" height="20"/>
@@ -5184,6 +5574,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="EUB-vP-M09"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="Dq3-4y-0Wi">
                                                         <rect key="frame" x="38" y="96" width="67" height="20"/>
@@ -5192,6 +5585,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="L2A-f3-dH5"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="7G9-lx-UQU">
                                                         <rect key="frame" x="39" y="76" width="66" height="20"/>
@@ -5200,6 +5596,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="gxw-kL-6Fo"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="tCq-Ec-iWn">
                                                         <rect key="frame" x="48" y="56" width="57" height="20"/>
@@ -5208,6 +5607,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="591-2y-vtu"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="Djg-WO-eFj">
                                                         <rect key="frame" x="31" y="36" width="74" height="20"/>
@@ -5216,6 +5618,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="x0r-us-6wk"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x74-iy-AEc">
                                                         <rect key="frame" x="57" y="16" width="48" height="20"/>
@@ -5224,6 +5629,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="PZW-iw-Z8F"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -5486,6 +5894,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="fnJ-8h-nMj"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="u0B-qn-EZW">
                                                         <rect key="frame" x="150" y="224" width="84" height="20"/>
@@ -5494,6 +5905,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="tj6-BV-XmK"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tpA-45-XIV">
                                                         <rect key="frame" x="150" y="204" width="77" height="20"/>
@@ -5502,6 +5916,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="mJt-h4-I0V"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0oR-eF-cAb">
                                                         <rect key="frame" x="150" y="184" width="74" height="20"/>
@@ -5510,6 +5927,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Apj-H3-lqg"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VJs-jM-5VD">
                                                         <rect key="frame" x="20" y="199" width="66" height="14"/>
@@ -5536,6 +5956,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="j61-6Z-EML"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JjD-Gx-DKh">
                                                         <rect key="frame" x="52" y="152" width="64" height="20"/>
@@ -5544,6 +5967,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Z8A-z2-ZVv"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="i1V-XG-BQs">
                                                         <rect key="frame" x="30" y="270" width="56" height="14"/>
@@ -5570,6 +5996,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="wIe-h1-0ri"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="P3J-M5-WhQ">
                                                         <rect key="frame" x="112" y="324" width="32" height="20"/>
@@ -5578,6 +6007,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="fjX-Ie-AxR"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Rfu-KY-Xbf">
                                                         <rect key="frame" x="144" y="324" width="32" height="20"/>
@@ -5586,6 +6018,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="wDf-iT-XD9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eUg-YV-ICl">
                                                         <rect key="frame" x="178" y="324" width="32" height="20"/>
@@ -5594,6 +6029,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="kvW-UG-Fuc"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VYf-1L-TMI">
                                                         <rect key="frame" x="212" y="324" width="32" height="20"/>
@@ -5602,6 +6040,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="bHr-iz-BNF"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Uf7-60-U7H">
                                                         <rect key="frame" x="52" y="223" width="64" height="20"/>
@@ -5610,6 +6051,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="geF-0a-OgS"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hm5-xb-mYT">
                                                         <rect key="frame" x="33" y="132" width="83" height="20"/>
@@ -5618,6 +6062,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="5rL-fX-Hz2"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QDq-vL-4Si">
                                                         <rect key="frame" x="22" y="112" width="94" height="20"/>
@@ -5626,6 +6073,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="vnE-AS-KKD"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wtt-fL-H4e">
                                                         <rect key="frame" x="150" y="164" width="87" height="20"/>
@@ -5634,6 +6084,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="2ih-Tx-gSF"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FaJ-8O-PNO">
                                                         <rect key="frame" x="150" y="144" width="77" height="20"/>
@@ -5642,14 +6095,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="AD8-qr-3sb"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ptw-fx-qTL">
                                                         <rect key="frame" x="150" y="124" width="57" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="FAST" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="Zv2-CY-Fo9">
+                                                        <buttonCell key="cell" type="check" title="FAST" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="Zv2-CY-Fo9">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="I5N-Pw-YRG"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tsj-tP-USd">
                                                         <rect key="frame" x="69" y="305" width="35" height="14"/>
@@ -5875,6 +6334,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="s01-qt-0ak"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="1FL-BT-55b">
                                                         <rect key="frame" x="17" y="37" width="48" height="20"/>
@@ -5883,6 +6345,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="1gt-K5-uKo"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="gSc-cN-YNp">
                                                         <rect key="frame" x="17" y="17" width="48" height="20"/>
@@ -5891,6 +6356,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ItJ-60-cbP"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jUN-ST-5Na">
                                                         <rect key="frame" x="149" y="53" width="120" height="16"/>
@@ -5971,6 +6439,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="N6E-Yu-TZe"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6LW-nS-FA4">
                                                         <rect key="frame" x="77" y="37" width="48" height="20"/>
@@ -5979,6 +6450,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="pFA-gJ-4W5"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uSa-wo-0pL">
                                                         <rect key="frame" x="77" y="17" width="48" height="20"/>
@@ -5987,6 +6461,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="11e-Pt-I8H"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -6023,6 +6500,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="UBJ-Uu-8ek"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="krV-dc-s3z">
                                                         <rect key="frame" x="35" y="251" width="49" height="20"/>
@@ -6031,6 +6511,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="alr-ER-0iE"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="Xgr-gz-EkW">
                                                         <rect key="frame" x="39" y="271" width="45" height="20"/>
@@ -6039,6 +6522,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="toM-tL-dU1"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="rAs-rv-5c4">
                                                         <rect key="frame" x="38" y="231" width="46" height="20"/>
@@ -6047,6 +6533,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Ktr-E1-YKS"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="azK-py-zLS">
                                                         <rect key="frame" x="182" y="316" width="37" height="23"/>
@@ -6073,6 +6562,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Oq5-cF-3lI"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="12" translatesAutoresizingMaskIntoConstraints="NO" id="m0k-hE-o0i">
                                                         <rect key="frame" x="152" y="271" width="45" height="20"/>
@@ -6081,6 +6573,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="5gK-LD-ZY0"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="13" translatesAutoresizingMaskIntoConstraints="NO" id="RWU-91-SPb">
                                                         <rect key="frame" x="148" y="251" width="49" height="20"/>
@@ -6089,6 +6584,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="nrU-Nf-Ggx"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="11" translatesAutoresizingMaskIntoConstraints="NO" id="3Tq-56-ai0">
                                                         <rect key="frame" x="151" y="231" width="46" height="20"/>
@@ -6097,6 +6595,9 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="6yW-Sn-toz"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Fu-Kp-hg5">
                                                         <rect key="frame" x="68" y="20" width="37" height="23"/>
@@ -6159,14 +6660,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Uq2-tJ-xO3"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="mpu-kl-iNy">
                                                         <rect key="frame" x="88" y="149" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATRY" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="n91-Q3-WtQ">
+                                                        <buttonCell key="cell" type="check" title="DATRY" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="n91-Q3-WtQ">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="9bV-38-nDW"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="EPA-4M-JlC">
                                                         <rect key="frame" x="23" y="129" width="61" height="20"/>
@@ -6175,14 +6682,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="P6d-A6-Vgn"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="hKo-EC-iGA">
                                                         <rect key="frame" x="88" y="129" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATRX" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="nMa-oa-GZZ">
+                                                        <buttonCell key="cell" type="check" title="DATRX" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="nMa-oa-GZZ">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Lm3-aG-Gu9"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="JCQ-aL-aoq">
                                                         <rect key="frame" x="23" y="109" width="61" height="20"/>
@@ -6191,14 +6704,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="tuW-H0-vVJ"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="RBW-5u-mUs">
                                                         <rect key="frame" x="88" y="109" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATLY" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="r5U-c9-rm2">
+                                                        <buttonCell key="cell" type="check" title="DATLY" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="r5U-c9-rm2">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="GNW-JO-iXS"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="Jwk-oS-yUg">
                                                         <rect key="frame" x="23" y="89" width="61" height="20"/>
@@ -6207,14 +6726,20 @@
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="ESa-wz-aur"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="6eH-T4-eOB">
                                                         <rect key="frame" x="88" y="89" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATLX" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="cJD-Pt-Oan">
+                                                        <buttonCell key="cell" type="check" title="DATLX" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="cJD-Pt-Oan">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="M8x-Hz-zGp"/>
+                                                        </connections>
                                                     </button>
                                                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R9X-Ds-kVu">
                                                         <rect key="frame" x="182" y="174" width="37" height="23"/>
@@ -6237,34 +6762,46 @@
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="EQI-Jz-8h7">
                                                         <rect key="frame" x="179" y="149" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATRY" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="PYh-O1-iMS">
+                                                        <buttonCell key="cell" type="check" title="DATRY" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="PYh-O1-iMS">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="KbY-az-9ES"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="E7y-Ul-2Uc">
                                                         <rect key="frame" x="179" y="129" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATRX" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="yti-Lh-cSY">
+                                                        <buttonCell key="cell" type="check" title="DATRX" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="yti-Lh-cSY">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="Wbp-ae-aYb"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="vWJ-Fd-Bj3">
                                                         <rect key="frame" x="179" y="109" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATLY" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="pKp-Nc-crP">
+                                                        <buttonCell key="cell" type="check" title="DATLY" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="pKp-Nc-crP">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="38x-VR-jBU"/>
+                                                        </connections>
                                                     </button>
                                                     <button verticalHuggingPriority="750" fixedFrame="YES" tag="4" translatesAutoresizingMaskIntoConstraints="NO" id="IHt-Tb-abB">
                                                         <rect key="frame" x="179" y="89" width="61" height="20"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                                        <buttonCell key="cell" type="check" title="DATLX" bezelStyle="regularSquare" imagePosition="left" alignment="right" controlSize="small" state="on" inset="2" id="muN-Yq-jAg">
+                                                        <buttonCell key="cell" type="check" title="DATLX" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" state="on" inset="2" id="muN-Yq-jAg">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                             <font key="font" metaFont="message" size="11"/>
                                                         </buttonCell>
+                                                        <connections>
+                                                            <action selector="refreshAction:" target="-2" id="wXA-DJ-LPp"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </view>
@@ -6283,7 +6820,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="5dn-W1-111">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="Uk2-Ez-Oya">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6319,7 +6856,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="QrR-nh-kxQ">
                                                 <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <textView importsGraphics="NO" verticallyResizable="YES" usesFontPanel="YES" spellingCorrection="YES" smartInsertDelete="YES" id="mjy-kd-clj">
                                                         <rect key="frame" x="0.0" y="0.0" width="513" height="100"/>
@@ -6354,7 +6891,7 @@
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <clipView key="contentView" drawsBackground="NO" id="pnp-LT-l5r">
                                                 <rect key="frame" x="1" y="0.0" width="786" height="280"/>
-                                                <autoresizingMask key="autoresizingMask"/>
+                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <tableView wantsLayer="YES" focusRingType="exterior" verticalHuggingPriority="750" tag="1" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" rowHeight="15" headerView="oWx-2a-T42" id="HR6-To-4IS" userLabel="Primary Events" customClass="EventTableView" customModule="vAmiga" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="786" height="255"/>

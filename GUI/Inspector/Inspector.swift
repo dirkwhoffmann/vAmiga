@@ -607,7 +607,7 @@ class Inspector: DialogController {
         track()
         fullRefresh()
     }
-    
+        
     func scrollToPC() {
 
         cpuInstrView.jumpTo(addr: Int(cpuInfo.pc0))
