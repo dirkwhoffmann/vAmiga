@@ -26,10 +26,11 @@ class Denise : public AmigaComponent {
 
     // Sprite information recorded in the previous frame (shown by the GUI)
     SpriteInfo latchedSpriteInfo[8];
+    u64 latchedSpriteData[8][VPOS_CNT];
     
     // Sprite information recorded in the current frame (constantly changing)
     SpriteInfo spriteInfo[8];
-
+    u64 spriteData[8][VPOS_CNT];
     
     //
     // Sub components
@@ -383,7 +384,7 @@ public:
     
     u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }
     u16 getSpriteColor(int nr, int reg) { return latchedSpriteInfo[nr].colors[reg]; }
-    u64 getSpriteData(int nr, int line) { return latchedSpriteInfo[nr].data[line]; }
+    u64 getSpriteData(int nr, int line) { return latchedSpriteData[nr][line]; }
 
 
     //

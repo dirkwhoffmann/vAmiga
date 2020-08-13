@@ -1041,6 +1041,7 @@ Denise::beginOfFrame(bool interlace)
             spriteInfo[i].hstrt  = 0;
             spriteInfo[i].attach = false;
         }
+        memcpy(latchedSpriteData, spriteData, sizeof(spriteData));
     }
 }
 
@@ -1116,7 +1117,7 @@ Denise::recordSpriteData(unsigned nr)
     u16 line = spriteInfo[nr].height;
 
     // Record data registers
-    spriteInfo[nr].data[line] = HI_W_LO_W(sprdatb[nr], sprdata[nr]);
+    spriteData[nr][line] = HI_W_LO_W(sprdatb[nr], sprdata[nr]);
 
     // Record additional information in sprite line 0
     if (line == 0) {

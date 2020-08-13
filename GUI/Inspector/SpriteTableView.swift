@@ -29,11 +29,6 @@ class SpriteTableView: NSTableView {
 
         let nr = inspector.selectedSprite
         
-        /*
-        for i in 0 ..< 8 {
-            spriteInfo[i] = amiga.denise.getSpriteInfo(i)
-        }
-        */
         for i in 0 ..< 16 {
             spriteCol[i] = NSColor.init(amigaRGB: amiga.denise.sprColor(nr, reg: i))
         }

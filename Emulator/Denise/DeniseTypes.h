@@ -80,9 +80,6 @@ typedef struct
     
     // Upper 16 color register (recorded where the observed sprite starts)
     u16 colors[16];
-
-    // Recorded data words of the observed sprite
-    u64 data[VPOS_CNT];
 }
 SpriteInfo;
 
