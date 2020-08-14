@@ -9,8 +9,6 @@
 
 #include "Amiga.h"
 
-#include <stdio.h>
-
 void
 DiskController::serviceDiskEvent()
 {

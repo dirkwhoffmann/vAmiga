@@ -7,7 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include <stdio.h>
 #include "DDF.h"
 
 template <bool hires> void
