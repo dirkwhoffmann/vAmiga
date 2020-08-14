@@ -219,6 +219,10 @@ CPU::_reset(bool hard)
          */
         clock = 0;
     }
+    
+    // Initialize registers
+    for (int i = 0; i < 8; i++) reg.d[i] = reg.a[i] = 0xFFFFFFFF;
+    reg.d[5] = 0xFFFF7FFF; // To make test 'Init/cpu/registersX happy
 }
 
 void

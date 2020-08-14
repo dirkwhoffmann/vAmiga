@@ -62,6 +62,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
+#define BOOT_DISK "/Users/hoff/Desktop/Testing/MOVEFAIL.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/911Rescue.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/PP-Extension.adf"
@@ -79,7 +80,7 @@ static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop
-static const int RUN_DEBUG       = 1; // Run loop, component states
+static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
