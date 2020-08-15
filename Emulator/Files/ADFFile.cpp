@@ -161,7 +161,7 @@ ADFFile::getDiskType()
         case ADFSIZE_35_HD_PC: return DISK_35_HD_PC;
         case ADFSIZE_525_SD:   return DISK_525_SD;
     }
-    assert(0);
+    assert(false);
     return (DiskType)0;
 }
 
@@ -211,7 +211,7 @@ ADFFile::rootBlockNr()
     if (type == DISK_35_HD) return 1760;
 
     // Don't call this method with an incompatible disk type
-    assert(0);
+    assert(false);
     return 0;
 }
 

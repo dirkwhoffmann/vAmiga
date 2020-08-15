@@ -90,6 +90,44 @@ CIA::_inspect()
 }
 
 void
+CIA::_dump()
+{
+    _inspect();
+
+    msg("                   Clock : %lld\n", clock);
+    msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
+    msg("               Tiredness : %d\n", tiredness);
+    msg(" Most recent sleep cycle : %lld\n", sleepCycle);
+    msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
+    msg("\n");
+    msg("               Counter A : %04X\n", info.timerA.count);
+    msg("                 Latch A : %04X\n", info.timerA.latch);
+    msg("         Data register A : %02X\n", info.portA.reg);
+    msg("   Data port direction A : %02X\n", info.portA.dir);
+    msg("             Data port A : %02X\n", info.portA.port);
+    msg("      Control register A : %02X\n", CRA);
+    msg("\n");
+    msg("               Counter B : %04X\n", info.timerB.count);
+    msg("                 Latch B : %04X\n", info.timerB.latch);
+    msg("         Data register B : %02X\n", info.portB.reg);
+    msg("   Data port direction B : %02X\n", info.portB.dir);
+    msg("             Data port B : %02X\n", info.portB.port);
+    msg("      Control register B : %02X\n", CRB);
+    msg("\n");
+    msg("   Interrupt control reg : %02X\n", info.icr);
+    msg("      Interrupt mask reg : %02X\n", info.imr);
+    msg("\n");
+    msg("                     SDR : %02X %02X\n", info.sdr, sdr);
+    msg("              serCounter : %02X\n", serCounter);
+    msg("\n");
+    msg("                     CNT : %d\n", CNT);
+    msg("                     INT : %d\n", INT);
+    msg("\n");
+
+    tod.dump();
+}
+
+void
 CIA::emulateRisingEdgeOnFlagPin()
 {
     wakeUp();
@@ -186,56 +224,11 @@ CIA::triggerSerialIrq()
     delay |= CIASetIcr0;
 }
 
-
-void
-CIA::incrementTOD()
-{
-    tod.increment();
-}
-
 void
 CIA::todInterrupt()
 {
     wakeUp();
     delay |= CIATODInt0;
-}
-
-void
-CIA::_dump()
-{
-    _inspect();
-
-    msg("                   Clock : %lld\n", clock);
-    msg("                Sleeping : %s\n", sleeping ? "yes" : "no");
-    msg("               Tiredness : %d\n", tiredness);
-    msg(" Most recent sleep cycle : %lld\n", sleepCycle);
-    msg("Most recent wakeup cycle : %lld\n", wakeUpCycle);
-    msg("\n");
-	msg("               Counter A : %04X\n", info.timerA.count);
-    msg("                 Latch A : %04X\n", info.timerA.latch);
-    msg("         Data register A : %02X\n", info.portA.reg);
-    msg("   Data port direction A : %02X\n", info.portA.dir);
-    msg("             Data port A : %02X\n", info.portA.port);
-	msg("      Control register A : %02X\n", CRA);
-	msg("\n");
-	msg("               Counter B : %04X\n", info.timerB.count);
-	msg("                 Latch B : %04X\n", info.timerB.latch);
-    msg("         Data register B : %02X\n", info.portB.reg);
-	msg("   Data port direction B : %02X\n", info.portB.dir);
-    msg("             Data port B : %02X\n", info.portB.port);
-	msg("      Control register B : %02X\n", CRB);
-	msg("\n");
-	msg("   Interrupt control reg : %02X\n", info.icr);
-	msg("      Interrupt mask reg : %02X\n", info.imr);
-	msg("\n");
-    msg("                     SDR : %02X %02X\n", info.sdr, sdr);
-    msg("              serCounter : %02X\n", serCounter);
-    msg("\n");
-    msg("                     CNT : %d\n", CNT);
-    msg("                     INT : %d\n", INT);
-    msg("\n");
-
-	tod.dump();
 }
 
 void
@@ -566,23 +559,9 @@ CIA::executeOneCycle()
 }
 
 void
-CIA::scheduleNextExecution()
+CIA::incrementTOD()
 {
-    if (isCIAA()) {
-        agnus.scheduleAbs<CIAA_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
-    } else {
-        agnus.scheduleAbs<CIAB_SLOT>(clock + CIA_CYCLES(1), CIA_EXECUTE);
-    }
-}
-
-void
-CIA::scheduleWakeUp()
-{
-    if (isCIAA()) {
-        agnus.scheduleAbs<CIAA_SLOT>(wakeUpCycle, CIA_WAKEUP);
-    } else {
-        agnus.scheduleAbs<CIAB_SLOT>(wakeUpCycle, CIA_WAKEUP);
-    }
+    tod.increment();
 }
 
 void
@@ -657,9 +636,9 @@ CIA::idleSince()
 }
 
 
-// -----------------------------------------------------------------------------
-// Complex Interface Adapter A
-// -----------------------------------------------------------------------------
+//
+// CIA A
+//
 
 CIAA::CIAA(Amiga& ref) : CIA(0, ref)
 {
@@ -704,26 +683,6 @@ CIAA::releaseInterruptLine()
 //   /FIR1 ---> | PA7 |  Port 1 fire button
 //              -------
 
-u8
-CIAA::portAinternal()
-{
-    return PRA;
-}
-
-u8
-CIAA::portAexternal()
-{
-    u8 result;
-    
-    // Set drive status bits
-    result = diskController.driveStatusFlags();
-
-    // The OVL bit must be 1
-    assert(result & 1);
-    
-    return result;
-}
-
 void
 CIAA::updatePA()
 {
@@ -760,6 +719,26 @@ CIAA::updatePA()
     */
 }
 
+u8
+CIAA::portAinternal()
+{
+    return PRA;
+}
+
+u8
+CIAA::portAexternal()
+{
+    u8 result;
+    
+    // Set drive status bits
+    result = diskController.driveStatusFlags();
+
+    // The OVL bit must be 1
+    assert(result & 1);
+    
+    return result;
+}
+
 //                    -------
 //  Centronics 0 <--> | PB0 |
 //  Centronics 1 <--> | PB1 |
@@ -770,18 +749,6 @@ CIAA::updatePA()
 //  Centronics 6 <--> | PB6 |
 //  Centronics 7 <--> | PB7 |
 //                    -------
-
-u8
-CIAA::portBinternal()
-{
-    return PRB;
-}
-
-u8
-CIAA::portBexternal()
-{
-    return 0xFF;
-}
 
 void
 CIAA::updatePB()
@@ -804,6 +771,18 @@ CIAA::updatePB()
     // if (config.type == CIA_8520_PLCC) PB = (PB & ~DDRB) | (PRB & DDRB);
 }
 
+u8
+CIAA::portBinternal()
+{
+    return PRB;
+}
+
+u8
+CIAA::portBexternal()
+{
+    return 0xFF;
+}
+
 void
 CIAA::setKeyCode(u8 keyCode)
 {
@@ -819,9 +798,9 @@ CIAA::setKeyCode(u8 keyCode)
     wakeUp();
 }
 
-// -----------------------------------------------------------------------------
-// Complex Interface Adapter B
-// -----------------------------------------------------------------------------
+//
+// CIA B
+// 
 
 CIAB::CIAB(Amiga& ref) : CIA(1, ref)
 {

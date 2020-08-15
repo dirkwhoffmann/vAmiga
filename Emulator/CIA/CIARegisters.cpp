@@ -204,7 +204,7 @@ CIA::spypeek(u16 addr)
             return CRB & ~0x10;
             
         default:
-            assert(0);
+            assert(false);
             return 0;
     }
 }

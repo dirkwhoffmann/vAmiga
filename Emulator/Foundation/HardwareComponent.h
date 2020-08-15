@@ -166,8 +166,6 @@ public:
      */
     void reset(bool hard);
     virtual void _reset(bool hard) = 0;
-    void hardReset() { reset(true); }
-    void softReset() { reset(false); }
     
     /* Asks the component to inform the GUI about its current state.
      * The GUI invokes this function when it needs to update all of its visual

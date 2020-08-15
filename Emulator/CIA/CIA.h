@@ -72,7 +72,6 @@
 | CIASdrToSsr0 | CIASsrToSdr0 \
 | CIASerClk0)
 
-// Virtual complex interface adapter (CIA)
 class CIA : public AmigaComponent {
 
     friend TOD;
@@ -93,17 +92,17 @@ protected:
     //
     // Sub components
     //
-
+    
     TOD tod = TOD(this, amiga);
 
 
     //
-    // Internal state
+    // Internals
     //
 
 public:
     
-    // The CIA has been executed up to this clock cycle
+    // The CIA has been executed up to this master clock cycle
     Cycle clock;
 
 protected:
@@ -123,25 +122,17 @@ protected:
     // Timer B latch
     u16 latchB;
 
-    
-    //
-    // Adapted from PC64Win by Wolfgang Lorenz
-    //
-    
+
     //
     // Control
     //
     
     // Action flags
     u64 delay;
-    
-    // New bits to feed into delay
     u64 feed;
     
-    // Control register A
+    // Control registers
     u8 CRA;
-    
-    // Control register B
     u8 CRB;
     
     // Interrupt control register
@@ -155,7 +146,7 @@ protected:
     
 protected:
     
-    // Bit mask for PB outputs: 0 = port register, 1 = timer
+    // Bit mask for PB outputs (0 = port register, 1 = timer)
     u8 PB67TimerMode;
     
     // PB output bits 6 and 7 in timer mode
@@ -171,22 +162,16 @@ protected:
     
 protected:
     
-    // Peripheral data register A
+    // Peripheral data registers
     u8 PRA;
-    
-    // Peripheral data register B
     u8 PRB;
     
-    // Data directon register A (0 = input, 1 = output)
+    // Data directon registers
     u8 DDRA;
-    
-    // Data directon register B (0 = input, 1 = output)
     u8 DDRB;
     
-    // Peripheral port A (pins PA0 to PA7)
+    // Peripheral ports
     u8 PA;
-    
-    // Peripheral port A (pins PB0 to PB7)
     u8 PB;
     
     
@@ -234,7 +219,7 @@ protected:
     i8 serCounter;
     
     //
-    // Chip interface (port pins)
+    // Port pins
     //
     
     bool SP;
@@ -329,9 +314,11 @@ public:
     }
 
     //
-    // Configuring
+    // Configuring and analyzing
     //
 
+public:
+    
     CIAConfig getConfig() { return config; }
 
     bool getTodBug() { return config.todBug; }
@@ -339,16 +326,16 @@ public:
 
     bool getEClockSyncing() { return config.eClockSyncing; }
     void setEClockSyncing(bool value) { config.eClockSyncing = value; }
-
+    
+    CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
     
     //
-    // Methods from HardwareComponent
+    // Managing the component state
     //
 
 protected:
 
-    // void _powerOn() override;
-    // void _run() override;
     void _reset(bool hard) override;
     void _inspect() override;
     void _dump() override;
@@ -358,114 +345,54 @@ protected:
 
     
     //
-    // Configuring
+    // Accessing the I/O register space
     //
-
+    
 public:
-
-    // Returns the result of the most recent call to inspect()
-    CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
-
+    
+    // Reads a value from a CIA register
+    u8 peek(u16 addr);
+    
+    // Reads a value from a CIA register without causing side effects
+    u8 spypeek(u16 addr);
+    
+    // Writes a value into a CIA register
+    void poke(u16 addr, u8 value);
+    
     
     //
-    // Accessing properties
+    // Accessing the port registers
     //
     
-    // Getter for peripheral port A
+public:
+    
+    // Returns the data registers (call updatePA() or updatePB() first)
     u8 getPA() { return PA; }
-    u8 getDDRA() { return DDRA; }
-    
-    // Getter for peripheral port B
     u8 getPB() { return PB; }
+
+private:
+
+    // Returns the data direction register
+    u8 getDDRA() { return DDRA; }
     u8 getDDRB() { return DDRB; }
-
-    // Getter for the interrupt line
-    bool irqPin() { return INT; }
-
-    // Simulates a rising edge on the flag pin
-    void emulateRisingEdgeOnFlagPin();
     
-    // Simulates a falling edge on the flag pin
-    void emulateFallingEdgeOnFlagPin();
-
-    // Simulates a rising edge on the CNT pin
-    void emulateRisingEdgeOnCntPin();
-
-    // Simulates a falling edge on the CNT pin
-    void emulateFallingEdgeOnCntPin();
-
-    // Set the SP pin (serial port pin)
-    void setSP(bool value) { SP = value; }
-    
-private:
-    
-    //
-    // Interrupt control
-    //
-    
-    /* Requests the CPU to interrupt.
-     * This function is abstract and implemented differently by CIA1 and CIA2.
-     * CIA 1 activates the IRQ line and CIA 2 the NMI line.
-     */
-    virtual void pullDownInterruptLine() = 0;
-    
-    /* Removes the interrupt requests.
-     * This function is abstract and implemented differently by CIA1 and CIA2.
-     * CIA 1 clears the IRQ line and CIA 2 the NMI line.
-     */
-    virtual void releaseInterruptLine() = 0;
-    
-    /* Load latched value into timer.
-     * As a side effect, CountA2 is cleared. This causes the timer to wait
-     * for one cycle before it continues to count.
-     */
-    void reloadTimerA() { counterA = latchA; delay &= ~CIACountA2; }
-    
-    /* Loads latched value into timer.
-     * As a side effect, CountB2 is cleared. This causes the timer to wait for
-     * one cycle before it continues to count.
-     */
-    void reloadTimerB() { counterB = latchB; delay &= ~CIACountB2; }
-    
-    // Triggers a timer interrupt
-    void triggerTimerIrq();
-    
-    // Triggers a TOD interrupt
-    void triggerTodIrq();
-
-    // Triggers a flag pin interrupt
-    void triggerFlagPinIrq();
-
-    // Triggers a serial interrupt
-    void triggerSerialIrq();
-    
-private:
-    
-    //
-    // Port registers
-    //
-    
-    // Values driving port A from inside the chip
-    virtual u8 portAinternal() = 0;
-    
-    // Values driving port A from outside the chip
-    virtual u8 portAexternal() = 0;
-    
-public:
-    
-    // Computes the values which we currently see at port A
+    // Computes the values we currently see at port A
     virtual void updatePA() = 0;
     
-private:
+    // Returns the value driving port A from inside the chip
+    virtual u8 portAinternal() = 0;
+    
+    // Returns the value driving port A from outside the chip
+    virtual u8 portAexternal() = 0;
+    
+    // Computes the value we currently see at port B
+    virtual void updatePB() = 0;
     
     // Values driving port B from inside the chip
     virtual u8 portBinternal() = 0;
     
     // Values driving port B from outside the chip
     virtual u8 portBexternal() = 0;
-    
-    // Computes the values which we currently see at port B
-    virtual void updatePB() = 0;
     
 protected:
     
@@ -477,51 +404,78 @@ protected:
     
     
     //
-    // Accessing the I/O address space
+    // Accessing the port pins
     //
     
 public:
     
-    // Peeks a value from a CIA register.
-    u8 peek(u16 addr);
-    
-    // Peeks a value from a CIA register without causing side effects.
-    u8 spypeek(u16 addr);
-    
-    // Pokes a value into a CIA register.
-    void poke(u16 addr, u8 value);
+    // Getter for the interrupt line
+    bool irqPin() { return INT; }
+
+    // Simulates an edge edge on the flag pin
+    void emulateRisingEdgeOnFlagPin();
+    void emulateFallingEdgeOnFlagPin();
+
+    // Simulates an edge on the CNT pin
+    void emulateRisingEdgeOnCntPin();
+    void emulateFallingEdgeOnCntPin();
+
+    // Sets the serial port pin
+    void setSP(bool value) { SP = value; }
     
     
     //
-    // Running the device
+    // Handling interrupts
+    //
+
+private:
+
+    // Requests the CPU to interrupt
+    virtual void pullDownInterruptLine() = 0;
+    
+    // Removes the interrupt requests
+    virtual void releaseInterruptLine() = 0;
+    
+    // Loads a latched value into timer
+    void reloadTimerA() { counterA = latchA; delay &= ~CIACountA2; }
+    void reloadTimerB() { counterB = latchB; delay &= ~CIACountB2; }
+    
+    // Triggers an interrupt (invoked inside executeOneCycle())
+    void triggerTimerIrq();
+    void triggerTodIrq();
+    void triggerFlagPinIrq();
+    void triggerSerialIrq();
+    
+    // Handles an interrupt request from TOD
+    void todInterrupt();
+
+
+    //
+    // Executing
     //
     
 public:
     
-    // Advances the 24-bit counter by one tick.
+    // Advances the 24-bit counter by one tick
     void incrementTOD();
     
-    // Executes the CIA for one CIA cycle.
+    // Executes the CIA for one CIA cycle
     void executeOneCycle();
+                
+    
+    //
+    // Handling events
+    //
     
     // Schedules the next execution event
     void scheduleNextExecution();
     
     // Schedules the next wakeup event
     void scheduleWakeUp();
-    
-private:
-    
-    //
-    // Handling interrupt requests
-    //
-    
-    // Handles an interrupt request from TOD
-    void todInterrupt();
-    
+
     
     //
-    // Speeding up emulation (sleep logic)
+    // Speeding up (sleep logic)
     //
     
 private:
@@ -549,8 +503,10 @@ public:
 };
 
 
-/* The Amiga's first virtual Complex Interface Adapter (CIA A)
- */
+//
+// CIAA
+//
+
 class CIAA : public CIA {
     
 public:
@@ -581,8 +537,11 @@ public:
     void setKeyCode(u8 keyCode);
 };
 
-/* The Amiga's first virtual Complex Interface Adapter (CIA B)
- */
+
+//
+// CIAB
+//
+
 class CIAB : public CIA {
     
 public:
