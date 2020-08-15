@@ -152,7 +152,8 @@
                                     </items>
                                 </menu>
                             </menuItem>
-                            <menuItem title="Inspector..." keyEquivalent="i" id="jIT-6f-DxM" userLabel="Inspector...">
+                            <menuItem title="Inspector..." keyEquivalent="" id="jIT-6f-DxM" userLabel="Inspector...">
+                                <modifierMask key="keyEquivalentModifierMask" shift="YES"/>
                                 <connections>
                                     <action selector="inspectorAction:" target="-1" id="cTd-gU-VFK"/>
                                 </connections>

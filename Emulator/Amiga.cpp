@@ -583,10 +583,7 @@ Amiga::prefix()
 
 void
 Amiga::reset(bool hard)
-{
-    // Don't perform a hard reset on a running emulator
-    assert(!(hard && isRunning()));
-    
+{    
     if (hard) suspend();
     
     // If a disk change is in progress, finish it
