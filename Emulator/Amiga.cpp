@@ -584,30 +584,21 @@ Amiga::prefix()
 void
 Amiga::reset(bool hard)
 {
-    if (hard) {
-        
-        suspend();
-        assert(!isRunning());
-                                
-        // If a disk change is in progress, finish it
-        paula.diskController.serviceDiskChangeEvent();
-        
-        // Execute the standard reset routine
-        HardwareComponent::reset(hard);
-        
-        // Inform the GUI
-        putMessage(MSG_RESET);
+    // Don't perform a hard reset on a running emulator
+    assert(!(hard && isRunning()));
+    
+    if (hard) suspend();
+    
+    // If a disk change is in progress, finish it
+    paula.diskController.serviceDiskChangeEvent();
+    
+    // Execute the standard reset routine
+    HardwareComponent::reset(hard);
+    
+    if (hard) resume();
 
-        resume();
-
-    } else {
-        
-        // If a disk change is in progress, finish it
-        paula.diskController.serviceDiskChangeEvent();
-        
-        // Execute the standard reset routine
-        HardwareComponent::reset(hard);
-    }
+    // Inform the GUI
+    putMessage(MSG_RESET);
 }
 
 void
@@ -972,13 +963,6 @@ Amiga::synchronizeTiming()
         
         // See you soon...
         mach_wait_until(targetTime);
-        /*
-         i64 jitter = sleepUntil(targetTime, 1500000); // 1.5 usec early wakeup
-         if (jitter > 1000000000) { // 1 sec
-         warn("Jitter is too high (%lld).\n", jitter);
-         // restartTimer();
-         }
-         */
     }
 }
 

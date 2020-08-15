@@ -46,9 +46,9 @@ Moira::saveToStackBrief(u16 sr, u32 pc)
 void
 Moira::execAddressError(AEStackFrame frame, int delay)
 {
-    // printf("ADDRESS ERROR VIOLATION: %x\n", frame.addr);
     assert(frame.addr & 1);
     
+    // Emulate additional delay
     sync(delay);
     
     // Enter supervisor mode
@@ -57,15 +57,22 @@ Moira::execAddressError(AEStackFrame frame, int delay)
     // Disable tracing
     clearTraceFlag();
     flags &= ~CPU_TRACE_EXCEPTION;
+    sync(8);
 
     // Write stack frame
-    sync(8);
-    saveToStack(frame);
-    sync(2);
-
-    jumpToVector(3);
+    bool doubleFault;
+    if (!(doubleFault = misaligned<Word>(reg.sp))) {
+        
+        saveToStack(frame);
+        sync(2);
+        jumpToVector(3);
+    }
     
+    // Inform the delegate
     signalAddressError(frame);
+    
+    // Halt the CPU if a double fault occurred
+    if (doubleFault) halt();
 }
 
 void

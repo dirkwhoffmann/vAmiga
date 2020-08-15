@@ -225,6 +225,8 @@ public:
 
     void prefix() override;
     void reset(bool hard);
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
     void setWarp(bool enable);
 
     void powerOn();

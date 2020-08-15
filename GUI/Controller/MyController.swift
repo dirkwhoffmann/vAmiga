@@ -84,9 +84,6 @@ class MyController: NSWindowController, MessageReceiver {
         
     // Remembers if audio is muted (master volume of both channels is 0)
     var muted = false
-
-    // Remembers if we run in warp mode
-    // var warp = false
     
     // Indicates if a status bar is shown
     var statusBar = true
@@ -504,7 +501,8 @@ extension MyController {
             mydocument.deleteBootDiskID()
             mydocument.setBootDiskID(amiga.df0.fnv)
             inspector?.fullRefresh()
-
+            updateWarp()
+            
         case MSG_MUTE_ON:
             muted = true
             refreshStatusBar()
@@ -513,12 +511,8 @@ extension MyController {
             muted = false
             refreshStatusBar()
 
-        case MSG_WARP_ON:
-            // warp = true
-            refreshStatusBar()
-
-        case MSG_WARP_OFF:
-            // warp = false
+        case MSG_WARP_ON,
+             MSG_WARP_OFF:
             refreshStatusBar()
 
         case MSG_POWER_LED_ON:
