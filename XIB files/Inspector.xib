@@ -1075,6 +1075,17 @@
                                                                     <action selector="cpuGotoAction:" target="-2" id="99K-WO-KPO"/>
                                                                 </connections>
                                                             </searchField>
+                                                            <button toolTip="Refresh" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="o8Y-z2-avk">
+                                                                <rect key="frame" x="232" y="330" width="47" height="32"/>
+                                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSRefreshTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="72g-ve-xKg">
+                                                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                                    <font key="font" metaFont="system"/>
+                                                                </buttonCell>
+                                                                <connections>
+                                                                    <action selector="refreshAction:" target="-2" id="JhN-Mo-Xtv"/>
+                                                                </connections>
+                                                            </button>
                                                         </subviews>
                                                     </view>
                                                 </tabViewItem>
@@ -1907,7 +1918,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1oo-fb-W25">
-                                                        <rect key="frame" x="145" y="131" width="95" height="18"/>
+                                                        <rect key="frame" x="145" y="132" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PA6" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="AJ9-cv-cxV">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1929,7 +1940,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CjP-MW-UB8">
-                                                        <rect key="frame" x="145" y="89" width="95" height="18"/>
+                                                        <rect key="frame" x="145" y="90" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PA4" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="lmv-wi-1n4">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1962,7 +1973,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ngr-ro-DDg">
-                                                        <rect key="frame" x="145" y="49" width="95" height="18"/>
+                                                        <rect key="frame" x="145" y="48" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PA2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="rjH-KM-hxD">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1973,7 +1984,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oMv-eX-cF8">
-                                                        <rect key="frame" x="145" y="29" width="95" height="18"/>
+                                                        <rect key="frame" x="145" y="27" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PA1" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="FBz-dz-j12">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1984,7 +1995,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="W6H-Rb-M8p">
-                                                        <rect key="frame" x="145" y="9" width="95" height="18"/>
+                                                        <rect key="frame" x="145" y="6" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PA0" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="GWc-N1-24v">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2050,7 +2061,7 @@
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <subviews>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vIA-g4-krN">
-                                                        <rect key="frame" x="147" y="131" width="95" height="18"/>
+                                                        <rect key="frame" x="147" y="132" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PB6" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="eyl-cf-aGw">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2072,7 +2083,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wHR-WI-utW">
-                                                        <rect key="frame" x="147" y="89" width="95" height="18"/>
+                                                        <rect key="frame" x="147" y="90" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PB4" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="kqk-S1-fiW">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2105,7 +2116,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1W3-g7-TrM">
-                                                        <rect key="frame" x="147" y="49" width="95" height="18"/>
+                                                        <rect key="frame" x="147" y="48" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PB2" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="VSA-WF-Fuo">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2116,7 +2127,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OCh-LV-smC">
-                                                        <rect key="frame" x="147" y="29" width="95" height="18"/>
+                                                        <rect key="frame" x="147" y="27" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PB1" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="a3D-b6-8uZ">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2127,7 +2138,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Gp-DY-A8n">
-                                                        <rect key="frame" x="147" y="9" width="95" height="18"/>
+                                                        <rect key="frame" x="147" y="6" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="PB0" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="bk2-NJ-JVF">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2585,7 +2596,7 @@
                                                         </textFieldCell>
                                                     </textField>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vDW-uh-P6C">
-                                                        <rect key="frame" x="131" y="49" width="95" height="18"/>
+                                                        <rect key="frame" x="131" y="48" width="95" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Toggle output" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="xYc-yy-Xnu">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2596,7 +2607,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Sj9-0J-ksb">
-                                                        <rect key="frame" x="131" y="28" width="99" height="18"/>
+                                                        <rect key="frame" x="131" y="27" width="99" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Output on PB7" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="yfL-DR-9xF">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2607,7 +2618,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="umd-ag-k2T">
-                                                        <rect key="frame" x="131" y="70" width="65" height="18"/>
+                                                        <rect key="frame" x="131" y="69" width="65" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="Running" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="nno-Ud-hSe">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -2618,7 +2629,7 @@
                                                         </connections>
                                                     </button>
                                                     <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ZrE-EP-Ezl">
-                                                        <rect key="frame" x="131" y="7" width="104" height="18"/>
+                                                        <rect key="frame" x="131" y="6" width="104" height="18"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                         <buttonCell key="cell" type="check" title="One Shot Mode" bezelStyle="regularSquare" imagePosition="left" alignment="left" controlSize="small" inset="2" id="Vtw-D4-lc5">
                                                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -7207,6 +7218,7 @@
     </objects>
     <resources>
         <image name="NSAddTemplate" width="11" height="11"/>
+        <image name="NSRefreshTemplate" width="11" height="15"/>
         <image name="NSRemoveTemplate" width="11" height="11"/>
         <image name="pauseTemplate" width="240" height="241"/>
         <image name="state0Template" width="228" height="204"/>
