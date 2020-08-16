@@ -183,7 +183,7 @@ Amiga::getConfig()
 }
 
 long
-Amiga::getConfig(ConfigOption option)
+Amiga::getConfigItem(ConfigOption option)
 {
     switch (option) {
 
@@ -218,7 +218,7 @@ Amiga::getConfig(ConfigOption option)
 }
 
 long
-Amiga::getDriveConfig(unsigned drive, ConfigOption option)
+Amiga::getDriveConfigItem(unsigned drive, ConfigOption option)
 {
     assert(drive < 4);
             
@@ -236,56 +236,54 @@ Amiga::getDriveConfig(unsigned drive, ConfigOption option)
 bool
 Amiga::configure(ConfigOption option, long value)
 {
-    suspend();
-    
     AmigaConfiguration current = getConfig();
     
+    // Check validity of the provided argument
     switch (option) {
-
+            
         case OPT_AGNUS_REVISION:
             
 #ifdef FORCE_AGNUS_REVISION
-            value = OPT_AGNUS_REVISION;
-            warn("Overriding Agnus revision: %d KB\n", value);
+            value = FORCE_AGNUS_REVISION;
+            warn("Overriding Agnus revision: %d\n", value);
 #endif
             
             if (!isAgnusRevision(value)) {
                 warn("Invalid Agnus revision: %d\n", value);
-                goto error;
+                return false;
             }
-
-            if (current.agnus.revision == value) goto exit;
-            agnus.setRevision((AgnusRevision)value);
-            goto success;
-
+            if (current.agnus.revision == value) {
+                return true;
+            }
+            break;
+            
         case OPT_DENISE_REVISION:
-
+            
             if (!isDeniseRevision(value)) {
                 warn("Invalid Denise revision: %d\n", value);
-                goto error;
+                return false;
             }
-
-            if (current.denise.revision == value) goto exit;
-            denise.setRevision((DeniseRevision)value);
-            goto success;
-
+            if (current.denise.revision == value) {
+                return true;
+            }
+            break;
+            
         case OPT_RTC:
             
 #ifdef FORCE_RTC
             value = FORCE_RTC;
             warn("Overriding RTC: %d KB\n", value);
 #endif
-
+            
             if (!isRTCModel(value)) {
                 warn("Invalid RTC model: %d\n", value);
-                goto error;
+                return false;
             }
-
-            if (current.rtc.model == value) goto exit;
-            rtc.setModel((RTCModel)value);
-            mem.updateMemSrcTable();
-            goto success;
-
+            if (current.rtc.model == value) {
+                return true;
+            }
+            break;
+            
         case OPT_CHIP_RAM:
             
 #ifdef FORCE_CHIP_RAM
@@ -296,28 +294,24 @@ Amiga::configure(ConfigOption option, long value)
             if (value != 256 && value != 512 && value != 1024 && value != 2048) {
                 warn("Invalid Chip Ram size: %d\n", value);
                 warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
-                goto error;
+                return false;
             }
+            break;
             
-            mem.allocChip(KB(value));
-            goto success;
-    
         case OPT_SLOW_RAM:
             
 #ifdef FORCE_SLOW_RAM
             value = FORCE_SLOW_RAM;
             warn("Overriding Slow Ram size: %d KB\n", value);
 #endif
-
+            
             if ((value % 256) != 0 || value > 512) {
                 warn("Invalid Slow Ram size: %d\n", value);
                 warn("         Valid values: 0KB, 256KB, 512KB\n");
-                goto error;
+                return false;
             }
+            break;
             
-            mem.allocSlow(KB(value));
-            goto success;
-        
         case OPT_FAST_RAM:
             
 #ifdef FORCE_FAST_RAM
@@ -328,23 +322,19 @@ Amiga::configure(ConfigOption option, long value)
             if ((value % 64) != 0 || value > 8192) {
                 warn("Invalid Fast Ram size: %d\n", value);
                 warn("Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
-                goto error;
+                return false;
             }
+            break;
             
-            mem.allocFast(KB(value));
-            goto success;
-
         case OPT_EXT_START:
-
+            
             if (value != 0xE0 && value != 0xF0) {
                 warn("Invalid Extended ROM start page: %x\n", value);
                 warn("Valid values: 0xE0, 0xF0\n");
-                goto error;
+                return false;
             }
-
-            mem.setExtStart(value);
-            goto success;
-
+            break;
+            
         case OPT_DRIVE_SPEED:
             
 #ifdef FORCE_DRIVE_SPEED
@@ -354,76 +344,82 @@ Amiga::configure(ConfigOption option, long value)
             
             if (!isValidDriveSpeed(value)) {
                 warn("Invalid drive speed: %d\n", value);
-                goto error;
+                return false;
             }
-
-            paula.diskController.setSpeed(value);
-            goto success;
-
+            break;
+            
         case OPT_HIDDEN_SPRITES:
-
-            if (current.denise.hiddenSprites == value) goto exit;
-            denise.setHiddenSprites(value);
-            goto success;
-
+            
+            if (current.denise.hiddenSprites == value) {
+                return true;
+            }
+            break;
+            
         case OPT_HIDDEN_LAYERS:
             
-            if (current.denise.hiddenLayers == value) goto exit;
-            denise.setHiddenLayers(value);
-            goto success;
+            if (current.denise.hiddenLayers == value) {
+                return true;
+            }
+            break;
             
         case OPT_HIDDEN_LAYER_ALPHA:
             
-            if (current.denise.hiddenLayerAlpha == value) goto exit;
-            denise.setHiddenLayerAlpha(value);
-            goto success;
+            if (current.denise.hiddenLayerAlpha == value) {
+                return true;
+            }
+            break;
             
         case OPT_CLX_SPR_SPR:
-
-            if (current.denise.clxSprSpr == value) goto exit;
-            denise.setClxSprSpr(value);
-            goto success;
-
+            
+            if (current.denise.clxSprSpr == value) {
+                return true;
+            }
+            break;
+            
         case OPT_CLX_SPR_PLF:
-
-            if (current.denise.clxSprPlf == value) goto exit;
-            denise.setClxSprPlf(value);
-            goto success;
-
+            
+            if (current.denise.clxSprPlf == value) {
+                return true;
+            }
+            break;
+            
         case OPT_CLX_PLF_PLF:
-
-            if (current.denise.clxPlfPlf == value) goto exit;
-            denise.setClxPlfPlf(value);
-            goto success;
-
+            
+            if (current.denise.clxPlfPlf == value) {
+                return true;
+            }
+            break;
+            
         case OPT_SAMPLING_METHOD:
-
+            
             if (!isSamplingMethod(value)) {
                 warn("Invalid filter activation: %d\n", value);
-                goto error;
+                return false;
             }
+            if (current.audio.samplingMethod == value) {
+                return true;
+            }
+            break;
             
-            if (current.audio.samplingMethod == value) goto exit;
-            paula.audioUnit.setSamplingMethod((SamplingMethod)value);
-            goto success;
-
         case OPT_FILTER_TYPE:
-
+            
             if (!isFilterType(value)) {
                 warn("Invalid filter type: %d\n", value);
                 warn("       Valid values: 0 ... %d\n", FILT_COUNT - 1);
-                goto error;
+                return false;
             }
-
-            if (current.audio.filterType == value) goto exit;
-            paula.audioUnit.setFilterType((FilterType)value);
-            goto success;
+            
+            if (current.audio.filterType == value) {
+                return true;
+            }
+            break;
             
         case OPT_FILTER_ALWAYS_ON:
             
-            if (current.audio.filterAlwaysOn == value) goto exit;
-            paula.audioUnit.setFilterAlwaysOn(value);
-            goto success;
+            if (current.audio.filterAlwaysOn == value) {
+                return true;
+            }
+            break;
             
         case OPT_BLITTER_ACCURACY:
             
@@ -431,10 +427,11 @@ Amiga::configure(ConfigOption option, long value)
             value = FORCE_BLT_LEVEL;
             warn("Overriding Blitter accuracy level: %d\n", value);
 #endif
-
-            if (current.blitter.accuracy == value) goto exit;
-            agnus.blitter.setAccuracy(value);
-            goto success;
+            
+            if (current.blitter.accuracy == value) {
+                return true;
+            }
+            break;
             
         case OPT_ASYNC_FIFO:
             
@@ -443,65 +440,180 @@ Amiga::configure(ConfigOption option, long value)
             warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
 #endif
             
-            if (current.diskController.asyncFifo == value) goto exit;
-            paula.diskController.setAsyncFifo(value);
-            goto success;
-
+            if (current.diskController.asyncFifo == value) {
+                return true;
+            }
+            break;
+            
         case OPT_LOCK_DSKSYNC:
-
-            if (current.diskController.lockDskSync == value) goto exit;
-            paula.diskController.setLockDskSync(value);
-            goto success;
+            
+            if (current.diskController.lockDskSync == value) {
+                return true;
+            }
+            break;
             
         case OPT_AUTO_DSKSYNC:
             
-            if (current.diskController.autoDskSync == value) goto exit;
-            paula.diskController.setAutoDskSync(value);
-            goto success;
-
+            if (current.diskController.autoDskSync == value) {
+                return true;
+            }
+            break;
+            
         case OPT_SERIAL_DEVICE:
-
+            
             if (!isSerialPortDevice(value)) {
                 warn("Invalid serial port device: %d\n", value);
-                goto error;
+                return false;
             }
-
-            if (current.serialPort.device == value) goto exit;
-            serialPort.setDevice((SerialPortDevice)value);
-            goto success;
-
+            if (current.serialPort.device == value) {
+                return true;
+            }
+            break;
+            
         case OPT_TODBUG:
-
-            if (current.ciaA.todBug == value) goto exit;
-            ciaA.setTodBug(value);
-            ciaB.setTodBug(value);
-            goto success;
+            
+            if (current.ciaA.todBug == value) {
+                return true;
+            }
+            break;
             
         case OPT_ECLOCK_SYNCING:
             
-            if (current.ciaA.eClockSyncing == value) goto exit;
-            ciaA.setEClockSyncing(value);
-            ciaB.setEClockSyncing(value);
-            goto success;
+            if (current.ciaA.eClockSyncing == value) {
+                return true;
+            }
+            break;
             
         case OPT_ACCURATE_KEYBOARD:
-
-            if (current.keyboard.accurate == value) goto exit;
-            keyboard.setAccurate(value);
-            goto success;
+            
+            if (current.keyboard.accurate == value) {
+                return true;
+            }
+            break;
             
         default: assert(false);
     }
+            
+
+    // Apply the change
+
+    suspend();
+
+    switch (option) {
+
+        case OPT_AGNUS_REVISION:
+            agnus.setRevision((AgnusRevision)value);
+            break;
+
+        case OPT_DENISE_REVISION:
+            denise.setRevision((DeniseRevision)value);
+            break;
+
+        case OPT_RTC:
+            rtc.setModel((RTCModel)value);
+            mem.updateMemSrcTable();
+            break;
+
+        case OPT_CHIP_RAM:
+            mem.allocChip(KB(value));
+            break;
     
+        case OPT_SLOW_RAM:
+            mem.allocSlow(KB(value));
+            break;
+        
+        case OPT_FAST_RAM:
+            mem.allocFast(KB(value));
+            break;
+
+        case OPT_EXT_START:
+            mem.setExtStart(value);
+            break;
+
+        case OPT_DRIVE_SPEED:
+            paula.diskController.setSpeed(value);
+            break;
+
+        case OPT_HIDDEN_SPRITES:
+            denise.setHiddenSprites(value);
+            break;
+
+        case OPT_HIDDEN_LAYERS:
+            denise.setHiddenLayers(value);
+            break;
+            
+        case OPT_HIDDEN_LAYER_ALPHA:
+            denise.setHiddenLayerAlpha(value);
+            break;
+            
+        case OPT_CLX_SPR_SPR:
+            denise.setClxSprSpr(value);
+            break;
+
+        case OPT_CLX_SPR_PLF:
+            denise.setClxSprPlf(value);
+            break;
+
+        case OPT_CLX_PLF_PLF:
+            denise.setClxPlfPlf(value);
+            break;
+
+        case OPT_SAMPLING_METHOD:
+            paula.audioUnit.setSamplingMethod((SamplingMethod)value);
+            break;
+
+        case OPT_FILTER_TYPE:
+            paula.audioUnit.setFilterType((FilterType)value);
+            break;
+            
+        case OPT_FILTER_ALWAYS_ON:
+            paula.audioUnit.setFilterAlwaysOn(value);
+            break;
+            
+        case OPT_BLITTER_ACCURACY:
+            agnus.blitter.setAccuracy(value);
+            break;
+            
+        case OPT_ASYNC_FIFO:
+            paula.diskController.setAsyncFifo(value);
+            break;
+
+        case OPT_LOCK_DSKSYNC:
+            paula.diskController.setLockDskSync(value);
+            break;
+            
+        case OPT_AUTO_DSKSYNC:
+            paula.diskController.setAutoDskSync(value);
+            break;
+
+        case OPT_SERIAL_DEVICE:
+            serialPort.setDevice((SerialPortDevice)value);
+            break;
+
+            /*
+        case OPT_TODBUG:
+            ciaA.setTodBug(value);
+            ciaB.setTodBug(value);
+            break;
+            
+        case OPT_ECLOCK_SYNCING:
+            ciaA.setEClockSyncing(value);
+            ciaB.setEClockSyncing(value);
+            break;
+             */
+            
+        case OPT_ACCURATE_KEYBOARD:
+            keyboard.setAccurate(value);
+            break;
+            
+        default: break;
+    }
     
-error:
-    resume();
-    return false;
+    HardwareComponent::configure(option, value);
     
-success:
+    // Inform the GUI
     putMessage(MSG_CONFIG);
-    
-exit:
+
     resume();
     return true;
 }

@@ -12,7 +12,6 @@
 
 #include "TOD.h"
 
-// Action flags
 #define CIACountA0     (1ULL << 0) // Decrements timer A
 #define CIACountA1     (1ULL << 1)
 #define CIACountA2     (1ULL << 2)
@@ -73,9 +72,6 @@
 | CIASerClk0)
 
 class CIA : public AmigaComponent {
-
-    friend TOD;
-    friend Amiga;
 
 protected:
 
@@ -254,7 +250,7 @@ public:
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
 
 public:
@@ -263,6 +259,13 @@ public:
 
     bool isCIAA() { return nr == 0; }
     bool isCIAB() { return nr == 1; }
+
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Serializing
+    //
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -313,35 +316,36 @@ public:
         & wakeUpCycle;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
+    
     //
-    // Configuring and analyzing
+    // Configuring
     //
 
 public:
     
     CIAConfig getConfig() { return config; }
-
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
     bool getTodBug() { return config.todBug; }
     void setTodBug(bool value) { config.todBug = value; }
 
     bool getEClockSyncing() { return config.eClockSyncing; }
     void setEClockSyncing(bool value) { config.eClockSyncing = value; }
     
+    
+    //
+    // Analyzing
+    //
+    
     CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
-    
-    
-    //
-    // Managing the component state
-    //
 
-protected:
-
-    void _reset(bool hard) override;
     void _inspect() override;
     void _dump() override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
@@ -361,7 +365,7 @@ public:
     
     
     //
-    // Accessing the port registers
+    // Accessing port registers
     //
     
 public:
@@ -404,7 +408,7 @@ protected:
     
     
     //
-    // Accessing the port pins
+    // Accessing port pins
     //
     
 public:
@@ -437,8 +441,8 @@ private:
     virtual void releaseInterruptLine() = 0;
     
     // Loads a latched value into timer
-    void reloadTimerA() { counterA = latchA; delay &= ~CIACountA2; }
-    void reloadTimerB() { counterB = latchB; delay &= ~CIACountB2; }
+    void reloadTimerA();
+    void reloadTimerB();
     
     // Triggers an interrupt (invoked inside executeOneCycle())
     void triggerTimerIrq();
@@ -446,22 +450,11 @@ private:
     void triggerFlagPinIrq();
     void triggerSerialIrq();
     
+public:
+    
     // Handles an interrupt request from TOD
     void todInterrupt();
 
-
-    //
-    // Executing
-    //
-    
-public:
-    
-    // Advances the 24-bit counter by one tick
-    void incrementTOD();
-    
-    // Executes the CIA for one CIA cycle
-    void executeOneCycle();
-                
     
     //
     // Handling events
@@ -473,6 +466,19 @@ public:
     // Schedules the next wakeup event
     void scheduleWakeUp();
 
+    
+    //
+    // Executing
+    //
+    
+public:
+    
+    // Advances the 24-bit counter by one tick
+    void incrementTOD();
+    
+    // Executes the CIA for one CIA cycle
+    void executeOneCycle();
+    
     
     //
     // Speeding up (sleep logic)

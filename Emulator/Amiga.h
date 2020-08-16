@@ -205,12 +205,12 @@ public:
     // Configuring
     //
 
-    // Returns the currently set configuration
+    // Returns the current configuration
     AmigaConfiguration getConfig();
 
-    // Get a single configuration item
-    long getConfig(ConfigOption option);
-    long getDriveConfig(unsigned drive, ConfigOption option);
+    // Gets a single configuration item
+    long getConfigItem(ConfigOption option);
+    long getDriveConfigItem(unsigned drive, ConfigOption option);
 
     // Sets a single configuration item
     bool configure(ConfigOption option, long value);

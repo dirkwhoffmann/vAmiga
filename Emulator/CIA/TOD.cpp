@@ -11,7 +11,7 @@
 
 TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription(cia->nr == 0 ? "TODA" : "TODB");
+    setDescription(cia->isCIAA() ? "TODA" : "TODB");
     this->cia = cia;
 }
 
@@ -156,7 +156,7 @@ TOD::increment()
         debug(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
               tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
-    if (cia->config.todBug) checkForInterrupt();
+    if (cia->getTodBug()) checkForInterrupt();
 
     if (!incHiNibble(tod.mid)) goto check;
     if (!incLoNibble(tod.hi))  goto check;

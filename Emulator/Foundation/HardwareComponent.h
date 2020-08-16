@@ -12,8 +12,7 @@
 
 #include "AmigaObject.h"
 
-/* Base class for all hardware components
- * This class defines the base functionality of all hardware components.
+/* This class defines the base functionality of all hardware components.
  * It comprises functions for powering up, powering down, resetting, and
  * serializing.
  */
@@ -21,7 +20,7 @@ class HardwareComponent : public AmigaObject {
 
 public:
 
-    // The sub components of this component
+    // Sub components of this component
     vector<HardwareComponent *> subComponents;
 
 protected:
@@ -53,38 +52,132 @@ protected:
     
     
     //
-    // Constructing and destroying
+    // Initializing
     //
 
 public:
     
     virtual ~HardwareComponent();
     
-    
-    //
-    // Acccessing properties
-    //
-    
-    bool inWarpMode() { return warpMode; }
-    bool inDebugMode() { return debugMode; }
-    
-    
-    //
-    // Managing the component
-    //
-    
-public:
-    
-    /* Initializes the component and it's subcomponent.
-     * This function is called exactly once, in the constructor of the Amiga
-     * class. Sub-components can implement the delegation method _initialize()
+    /* Initializes the component and it's subcomponents. The initialization
+     * procedure is initiated exactly once, in the constructor of the Amiga
+     * class. Some subcomponents implement the delegation method _initialize()
      * to finalize their initialization, e.g., by setting up referecens that
      * did not exist when they were constructed.
      */
     void initialize();
     virtual void _initialize() { };
     
-    /* There are several functions for querying and changing state:
+    /* Resets the component and it's subcomponents. Two reset modes are
+     * distinguished:
+      *
+      *     hard: A hard reset restores the initial state.
+      *           It resets the Amiga from an emulator point of view.
+      *
+      *     soft: A soft reset emulates a reset inside the virtual Amiga. It
+      *           is used to emulate the CPU's RESET instruction.
+      */
+     void reset(bool hard);
+     virtual void _reset(bool hard) = 0;
+    
+    
+    //
+    // Serializing
+    //
+    
+    // Returns the size of the internal state in bytes
+    size_t size();
+    virtual size_t _size() = 0;
+
+    // Loads the internal state from a memory buffer
+    size_t load(u8 *buffer);
+    virtual size_t _load(u8 *buffer) = 0;
+
+    // Saves the internal state to a memory buffer
+    size_t save(u8 *buffer);
+    virtual size_t _save(u8 *buffer) = 0;
+
+    /* Delegation methods called inside load() or save(). Some components
+     * override these methods to add custom behavior if not all elements can be
+     * processed by the default implementation.
+     */
+    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
+    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
+    
+    
+    //
+    // Configuring
+    //
+    
+    /* Configures the component and it's subcomponents. This function
+     * distributes a configuration request to all subcomponents by calling
+     * setConfigItem(). The function returns false if the configuration failed,
+     * e.g., because an invalid value has been passed.
+     */
+    bool configure(ConfigOption option, long value);
+
+    // Sets a single configuration item
+    virtual void setConfigItem(ConfigOption option, long value) { };
+            
+    // Dumps debug information about the current configuration to the console
+    void dumpConfig();
+    virtual void _dumpConfig() { }
+
+    
+    //
+    // Analyzing
+    //
+    
+    /* Collects information about the component and it's subcomponents. Many
+     * components contains an info variable of a class specific type (e.g.,
+     * CPUInfo, MemoryInfo, ...). These variables contain the information shown
+     * in the GUI's inspector window and are updated by calling this function.
+     * Note: Because this function accesses the internal emulator state with
+     * many non-atomic operations, it must not be called on a running emulator.
+     * To carry out inspections while the emulator is running, set up an
+     * inspection target via Amiga::setInspectionTarget().
+     */
+    void inspect();
+    virtual void _inspect() { }
+    
+    /* Base method for building the class specific getInfo() methods. When the
+     * emulator is running, the result of the most recent inspection is
+     * returned. If the emulator isn't running, the function first updates the
+     * cached values in order to return up-to-date results.
+     */
+    template<class T> T getInfo(T &cachedValues) {
+        
+        if (!isRunning()) inspect();
+        
+        T result;
+        synchronized { result = cachedValues; }
+        return result;
+    }
+    
+    // Dumps debug information about the internal state to the console
+    void dump();
+    virtual void _dump() { }
+    
+    /* Asks the component to inform the GUI about its current state.
+     * The GUI invokes this function when it needs to update all of its visual
+     * elements. This happens, e.g., when a snapshot file was loaded.
+     * This function is likely to go away because the approach didn't turn out
+     * to be as fruitful as expected. At many places, the component state is
+     * already obtained by polling and not by calling ping().
+     */
+    void ping();
+    virtual void _ping() { }
+
+    
+    //
+    // Changing state
+    //
+    
+public:
+    
+    /* State model. At any time, a component is in one of three states:
      *
      *          -----------------------------------------------
      *         |                     run()                     |
@@ -101,6 +194,8 @@ public:
      * |-------------------||-------------------||-------------------|
      *                      |----------------------------------------|
      *                                     isPoweredOn()
+     *
+     * Additional component flags: warp (on / off), debug (on / off)
      */
     
     bool isPoweredOff() { return state == STATE_OFF; }
@@ -155,110 +250,24 @@ protected:
     virtual void _pause() { };
     
 public:
-    
-    /* Resets the virtual Amiga. Two reset modes are distinguished:
-     *
-     *     hard: A hard reset restores the initial state of all components.
-     *           It resets the Amiga from an emulator point of view.
-     *
-     *     soft: A soft reset emulates a reset inside the virtual Amiga. It
-     *           is used to emulate the CPU's RESET instruction.
-     */
-    void reset(bool hard);
-    virtual void _reset(bool hard) = 0;
-    
-    /* Asks the component to inform the GUI about its current state.
-     * The GUI invokes this function when it needs to update all of its visual
-     * elements. This happens, e.g., when a snapshot file was loaded.
-     */
-    void ping();
-    virtual void _ping() { }
-    
-    /* Collects information about the component and it's subcomponents.
-     * Many components contains an info variable of a class specific type
-     * (e.g., CPUInfo, MemoryInfo, ...). These variables contain the
-     * information shown in the GUI's inspector window and are updated by
-     * calling this function. The function is called automatically when the
-     * emulator switches to pause state to keep the GUI inspector data up
-     * to date.
-     * Note: Because this function accesses the internal emulator state with
-     * many non-atomic operations, it must not be called on a running emulator.
-     * To query information while the emulator is running, set up an inspection
-     * target via setInspectionTarget()
-     */
-    void inspect();
-    virtual void _inspect() { }
-
-    /* Base method for building the class specific getInfo() methods
-     * If the emulator is running, the result of the most recent inspection is
-     * returned. If the emulator is not running, the function first updates the
-     * cached values in order to return up-to-date results.
-     */
-    template<class T> T getInfo(T &cachedValues) {
         
-        if (!isRunning()) _inspect();
-
-        T result;
-        synchronized { result = cachedValues; }
-        return result;
-    }
-    
-    // Dumps debug information about the current configuration to the console
-    void dumpConfig();
-    virtual void _dumpConfig() { }
-
-    // Dumps debug information about the internal state to the console
-    void dump();
-    virtual void _dump() { }
-    
     // Switches warp mode on or off
     void setWarp(bool enable);
     virtual void _setWarp(bool enable) { };
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }
-    
+    bool inWarpMode() { return warpMode; }
+
     // Switches debug mode on or off
     void setDebug(bool enable);
     virtual void _setDebug(bool enable) { };
     void enableDebugMode() { setDebug(true); }
     void disableDebugMode() { setDebug(false); }
-    
-    
-    //
-    // Loading and saving snapshots
-    //
-
-public:
-
-    // Returns the size of the internal state in bytes.
-    size_t size();
-    virtual size_t _size() = 0;
-
-    // Loads the internal state from a memory buffer.
-    size_t load(u8 *buffer);
-    virtual size_t _load(u8 *buffer) = 0;
-
-    /* Delegation methods called inside load()
-     * A component can override this method to add custom behavior if not all
-     * elements can be processed by the default implementation.
-     */
-    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
-    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
-    
-    // Saves the internal state to a memory buffer.
-    size_t save(u8 *buffer);
-    virtual size_t _save(u8 *buffer) = 0;
-
-    /* Delegation methods called inside save()
-     * A component can override this method to add custom behavior if not all
-     * elements can be processed by the default implementation.
-     */
-    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
-    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
+    bool inDebugMode() { return debugMode; }
 };
 
 //
-// Standard implementations for _reset, _load, and _save
+// Standard implementations of _reset, _load, and _save
 //
 
 #define COMPUTE_SNAPSHOT_SIZE \

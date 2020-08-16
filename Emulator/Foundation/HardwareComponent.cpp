@@ -27,6 +27,141 @@ HardwareComponent::initialize()
 }
 
 void
+HardwareComponent::reset(bool hard)
+{
+    // Reset all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->reset(hard);
+    }
+    
+    // Reset this component
+    debug(RUN_DEBUG, "Reset [%p]\n", this);
+    _reset(hard);
+}
+
+size_t
+HardwareComponent::size()
+{
+    size_t result = _size();
+
+    for (HardwareComponent *c : subComponents) {
+        result += c->size();
+    }
+
+    return result;
+}
+
+size_t
+HardwareComponent::load(u8 *buffer)
+{
+    u8 *ptr = buffer;
+
+    // debug("Loading internal state ...\n");
+
+    // Call delegation method
+    ptr += willLoadFromBuffer(ptr);
+
+    // Load internal state of all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        ptr += c->load(ptr);
+    }
+
+    // Load internal state of this component
+    ptr += _load(ptr);
+
+    // Call delegation method
+    ptr += didLoadFromBuffer(ptr);
+
+    // Verify that the number of written bytes matches the snapshot size
+    debug(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
+    assert(ptr - buffer == size());
+    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, size());
+
+    return ptr - buffer;
+}
+
+size_t
+HardwareComponent::save(u8 *buffer)
+{
+    u8 *ptr = buffer;
+
+    // Call delegation method
+    ptr += willSaveToBuffer(ptr);
+
+    // Save internal state of all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        ptr += c->save(ptr);
+    }
+
+    // Save internal state of this component
+    ptr += _save(ptr);
+
+    // Call delegation method
+    ptr += didSaveToBuffer(ptr);
+
+    // Verify that the number of written bytes matches the snapshot size
+    debug(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
+    assert(ptr - buffer == size());
+    debug(SNP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
+    // hexdump(buffer, MIN(ptr - buffer, 128));
+
+    return ptr - buffer;
+}
+
+bool
+HardwareComponent::configure(ConfigOption option, long value)
+{
+    // Configure all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->configure(option, value);
+    }
+    
+    // Configure this component
+    setConfigItem(option, value);
+
+    return true;
+}
+
+void
+HardwareComponent::dumpConfig()
+{
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
+    _dumpConfig();
+}
+
+void
+HardwareComponent::inspect()
+{
+    // Inspect all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->inspect();
+    }
+    
+    // Inspect this component
+    _inspect();
+}
+
+void
+HardwareComponent::dump()
+{
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
+    _dump();
+}
+
+void
+HardwareComponent::ping()
+{
+    // Ping all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->ping();
+    }
+    
+    // Ping this component
+    debug(RUN_DEBUG, "Ping [%p]\n", this);
+    _ping();
+}
+
+void
 HardwareComponent::powerOn()
 {
     if (isPoweredOff()) {
@@ -106,59 +241,6 @@ HardwareComponent::pause()
 }
 
 void
-HardwareComponent::reset(bool hard)
-{
-    // Reset all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->reset(hard);
-    }
-    
-    // Reset this component
-    debug(RUN_DEBUG, "Reset [%p]\n", this);
-    _reset(hard);
-}
-
-void
-HardwareComponent::ping()
-{
-    // Ping all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->ping();
-    }
-    
-    // Ping this component
-    debug(RUN_DEBUG, "Ping [%p]\n", this);
-    _ping();
-}
-
-void
-HardwareComponent::inspect()
-{
-    // Inspect all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->inspect();
-    }
-    
-    // Inspect this component
-    _inspect();
-}
-
-void
-HardwareComponent::dumpConfig()
-{
-    msg("%s (memory location: %p)\n\n", getDescription(), this);
-    msg("Configuration:\n\n");
-    _dumpConfig();
-}
-
-void
-HardwareComponent::dump()
-{
-    msg("%s (memory location: %p)\n\n", getDescription(), this);
-    _dump();
-}
-
-void
 HardwareComponent::setWarp(bool enable)
 {
     if (warpMode == enable) return;
@@ -188,73 +270,4 @@ HardwareComponent::setDebug(bool enable)
 
      // Enable debug mode for this component
      _setDebug(enable);
-}
-
-size_t
-HardwareComponent::size()
-{
-    size_t result = _size();
-
-    for (HardwareComponent *c : subComponents) {
-        result += c->size();
-    }
-
-    return result;
-}
-
-size_t
-HardwareComponent::load(u8 *buffer)
-{
-    u8 *ptr = buffer;
-
-    // debug("Loading internal state ...\n");
-
-    // Call delegation method
-    ptr += willLoadFromBuffer(ptr);
-
-    // Load internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        ptr += c->load(ptr);
-    }
-
-    // Load internal state of this component
-    ptr += _load(ptr);
-
-    // Call delegation method
-    ptr += didLoadFromBuffer(ptr);
-
-    // Verify that the number of written bytes matches the snapshot size
-    debug(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
-    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, size());
-
-    return ptr - buffer;
-}
-
-size_t
-HardwareComponent::save(u8 *buffer)
-{
-    u8 *ptr = buffer;
-
-    // Call delegation method
-    ptr += willSaveToBuffer(ptr);
-
-    // Save internal state of all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        ptr += c->save(ptr);
-    }
-
-    // Save internal state of this component
-    ptr += _save(ptr);
-
-    // Call delegation method
-    ptr += didSaveToBuffer(ptr);
-
-    // Verify that the number of written bytes matches the snapshot size
-    debug(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
-    debug(SNP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
-    // hexdump(buffer, MIN(ptr - buffer, 128));
-
-    return ptr - buffer;
 }

@@ -45,6 +45,30 @@ CIA::_reset(bool hard)
     mem.updateMemSrcTable();
 }
 
+long
+CIA::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_TODBUG:         return config.todBug;
+        case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
+        
+        default: assert(false);
+    }
+}
+
+void
+CIA::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_TODBUG:         config.todBug = value; return;
+        case OPT_ECLOCK_SYNCING: config.eClockSyncing = value; return;
+            
+        default: return;
+    }
+}
+
 void
 CIA::_inspect()
 {
@@ -193,6 +217,24 @@ CIA::emulateFallingEdgeOnCntPin()
 }
 
 void
+CIA::reloadTimerA()
+{
+    counterA = latchA;
+    
+    // Make sure the timer waits for one cycle before it continues to count
+    delay &= ~CIACountA2;
+}
+
+void
+CIA::reloadTimerB()
+{
+    counterB = latchB;
+    
+    // Make sure the timer waits for one cycle before it continues to count
+    delay &= ~CIACountB2;
+}
+
+void
 CIA::triggerTimerIrq()
 {
     debug(CIA_DEBUG, "triggerTimerIrq()\n");
@@ -229,6 +271,12 @@ CIA::todInterrupt()
 {
     wakeUp();
     delay |= CIATODInt0;
+}
+
+void
+CIA::incrementTOD()
+{
+    tod.increment();
 }
 
 void
@@ -556,12 +604,6 @@ CIA::executeOneCycle()
     }
     
     scheduleNextExecution();
-}
-
-void
-CIA::incrementTOD()
-{
-    tod.increment();
 }
 
 void
