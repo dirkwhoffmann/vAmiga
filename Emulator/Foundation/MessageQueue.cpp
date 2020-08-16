@@ -29,8 +29,8 @@ MessageQueue::addListener(const void *listener, Callback *func)
     
     // Distribute all pending messages
     Message msg;
-    while ((msg = getMessage()).type != MSG_NONE) {
-        propagateMessage(&msg);
+    while ((msg = get()).type != MSG_NONE) {
+        propagate(&msg);
     }
 
     putMessage(MSG_REGISTER);
@@ -47,7 +47,7 @@ MessageQueue::removeListener(const void *listener)
 }
 
 Message
-MessageQueue::getMessage()
+MessageQueue::get()
 { 
 	Message result;
 
@@ -87,13 +87,13 @@ MessageQueue::putMessage(MessageType type, u64 data)
 	}
     
     // Serve registered callbacks
-    propagateMessage(&msg);
+    propagate(&msg);
 
 	pthread_mutex_unlock(&lock);
 }
 
 void
-MessageQueue::propagateMessage(Message *msg)
+MessageQueue::propagate(Message *msg)
 {
     map <const void *, Callback *> :: iterator i;
     

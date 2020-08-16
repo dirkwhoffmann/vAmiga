@@ -38,24 +38,24 @@ public:
     MessageQueue();
     ~MessageQueue();
     
-    // Registers a listener together with it's callback function.
+    // Registers a listener together with it's callback function
     void addListener(const void *listener, Callback *func);
     
     // Unregisters a listener.
     void removeListener(const void *listener);
     
-    // Returns the next pending message, or NULL if the queue is empty.
-    Message getMessage();
+    // Returns the next pending message, or NULL if the queue is empty
+    Message get();
     
-    // Writes a message into the queue and propagates it to all listeners.
+    // Writes a message into the queue and propagates it to all listeners
     void putMessage(MessageType type, u64 data = 0);
     
 private:
     
-    /* Propagates a single message to all registered listeners.
+    /* Propagates a single message to all registered listeners
      * Called by function putMessage(...)
      */
-    void propagateMessage(Message *msg);
+    void propagate(Message *msg);
 };
 
 #endif

@@ -33,11 +33,11 @@ Drive::_reset(bool hard)
 void
 Drive::_ping()
 {
-    amiga.putMessage(hasDisk() ?
+    mqueue.putMessage(hasDisk() ?
                      MSG_DISK_INSERTED : MSG_DISK_EJECTED, nr);
-    amiga.putMessage(hasWriteProtectedDisk() ?
+    mqueue.putMessage(hasWriteProtectedDisk() ?
                      MSG_DISK_PROTECTED : MSG_DISK_UNPROTECTED, nr);
-    amiga.putMessage(hasModifiedDisk() ?
+    mqueue.putMessage(hasModifiedDisk() ?
                      MSG_DISK_UNSAVED : MSG_DISK_SAVED, nr);
 }
 
@@ -279,8 +279,8 @@ Drive::setMotor(bool value)
     idCount = 0;
     
     // Inform the GUI
-    amiga.putMessage(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
-    amiga.putMessage(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
+    mqueue.putMessage(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
+    mqueue.putMessage(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
     
     debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
@@ -445,9 +445,9 @@ Drive::step(int dir)
 
     // Inform the GUI
     if (pollsForDisk()) {
-        amiga.putMessage(MSG_DRIVE_HEAD_POLL, (nr << 8) | head.cylinder);
+        mqueue.putMessage(MSG_DRIVE_HEAD_POLL, (nr << 8) | head.cylinder);
     } else {
-        amiga.putMessage(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
+        mqueue.putMessage(MSG_DRIVE_HEAD, (nr << 8) | head.cylinder);
     }
     
     // Remember when we've performed the step
@@ -510,12 +510,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            amiga.putMessage(MSG_DISK_PROTECTED);
+            mqueue.putMessage(MSG_DISK_PROTECTED);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            amiga.putMessage(MSG_DISK_UNPROTECTED);
+            mqueue.putMessage(MSG_DISK_UNPROTECTED);
         }
     }
 }
@@ -543,7 +543,7 @@ Drive::ejectDisk()
         disk = NULL;
         
         // Notify the GUI
-        amiga.putMessage(MSG_DISK_EJECT, nr);
+        mqueue.putMessage(MSG_DISK_EJECT, nr);
     }
 }
 
@@ -559,7 +559,7 @@ Drive::insertDisk(Disk *disk)
 
         // Insert the disk and inform the GUI
         this->disk = disk;
-        amiga.putMessage(MSG_DISK_INSERT, nr);
+        mqueue.putMessage(MSG_DISK_INSERT, nr);
     }
 }
 

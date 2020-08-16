@@ -616,7 +616,7 @@ Amiga::configure(ConfigOption option, long value)
     HardwareComponent::configure(option, value);
     
     // Inform the GUI
-    putMessage(MSG_CONFIG);
+    messageQueue.putMessage(MSG_CONFIG);
 
     resume();
     return true;
@@ -667,7 +667,7 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
         default: assert(false);
     }
     
-    putMessage(MSG_CONFIG);
+    messageQueue.putMessage(MSG_CONFIG);
     return true;
 }
 
@@ -711,7 +711,7 @@ Amiga::reset(bool hard)
     if (hard) resume();
 
     // Inform the GUI
-    putMessage(MSG_RESET);
+    messageQueue.putMessage(MSG_RESET);
 }
 
 void
@@ -768,7 +768,7 @@ Amiga::_powerOn()
     // Update the recorded debug information
     inspect();
 
-    putMessage(MSG_POWER_ON);
+    messageQueue.putMessage(MSG_POWER_ON);
 }
 
 void
@@ -795,7 +795,7 @@ Amiga::_powerOff()
     // Update the recorded debug information
     inspect();
     
-    putMessage(MSG_POWER_OFF);
+    messageQueue.putMessage(MSG_POWER_OFF);
 }
 
 void
@@ -823,7 +823,7 @@ Amiga::_run()
     pthread_create(&p, NULL, threadMain, (void *)this);
     
     // Inform the GUI
-    putMessage(MSG_RUN);
+    messageQueue.putMessage(MSG_RUN);
 }
 
 void
@@ -854,13 +854,13 @@ Amiga::_pause()
     inspect();
 
     // Inform the GUI
-    putMessage(MSG_PAUSE);
+    messageQueue.putMessage(MSG_PAUSE);
 }
 
 void
 Amiga::_ping()
 {
-    putMessage(warpMode ? MSG_WARP_ON : MSG_WARP_OFF);
+    messageQueue.putMessage(warpMode ? MSG_WARP_ON : MSG_WARP_OFF);
 }
 
 void
@@ -910,12 +910,12 @@ Amiga::_setWarp(bool enable)
 {
     if (enable) {
         
-        putMessage(MSG_WARP_ON);
+        messageQueue.putMessage(MSG_WARP_ON);
         
     } else {
         
         restartTimer();
-        putMessage(MSG_WARP_OFF);
+        messageQueue.putMessage(MSG_WARP_OFF);
     }
 }
 
@@ -1086,7 +1086,7 @@ Amiga::requestAutoSnapshot()
 
         // Take snapshot immediately
         autoSnapshot = Snapshot::makeWithAmiga(this);
-        putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+        messageQueue.putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
         
     } else {
 
@@ -1102,7 +1102,7 @@ Amiga::requestUserSnapshot()
         
         // Take snapshot immediately
         userSnapshot = Snapshot::makeWithAmiga(this);
-        putMessage(MSG_USER_SNAPSHOT_TAKEN);
+        messageQueue.putMessage(MSG_USER_SNAPSHOT_TAKEN);
         
     } else {
         
@@ -1227,13 +1227,13 @@ Amiga::runLoop()
             if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
                 autoSnapshot = Snapshot::makeWithAmiga(this);
-                putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+                messageQueue.putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_AUTO_SNAPSHOT);
             }
             if (runLoopCtrl & RL_USER_SNAPSHOT) {
                 debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
                 userSnapshot = Snapshot::makeWithAmiga(this);
-                putMessage(MSG_USER_SNAPSHOT_TAKEN);
+                messageQueue.putMessage(MSG_USER_SNAPSHOT_TAKEN);
                 clearControlFlags(RL_USER_SNAPSHOT);
             }
 
@@ -1247,7 +1247,7 @@ Amiga::runLoop()
             // Did we reach a breakpoint?
             if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
                 inspect();
-                putMessage(MSG_BREAKPOINT_REACHED);
+                messageQueue.putMessage(MSG_BREAKPOINT_REACHED);
                 debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_BREAKPOINT_REACHED);
                 break;
@@ -1256,7 +1256,7 @@ Amiga::runLoop()
             // Did we reach a watchpoint?
             if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
                 inspect();
-                putMessage(MSG_WATCHPOINT_REACHED);
+                messageQueue.putMessage(MSG_WATCHPOINT_REACHED);
                 debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
                 clearControlFlags(RL_WATCHPOINT_REACHED);
                 break;

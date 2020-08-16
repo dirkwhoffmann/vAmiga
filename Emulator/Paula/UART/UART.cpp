@@ -99,7 +99,7 @@ UART::copyToTransmitShiftRegister()
     assert(transmitBuffer != 0);
 
     // Inform the GUI about the outgoing data
-    amiga.putMessage(MSG_SER_OUT, transmitBuffer);
+    mqueue.putMessage(MSG_SER_OUT, transmitBuffer);
     debug(SER_DEBUG, "transmitBuffer: %X ('%c')\n", transmitBuffer & 0xFF, transmitBuffer & 0xFF);
 
     // Move the contents of the transmit buffer into the shift register
@@ -128,7 +128,7 @@ UART::copyFromReceiveShiftRegister()
     receiveShiftReg = 0;
 
     // Inform the GUI about the incoming data
-    amiga.putMessage(MSG_SER_IN, receiveBuffer);
+    mqueue.putMessage(MSG_SER_IN, receiveBuffer);
 
     // msg("receiveBuffer: %X ('%c')\n", receiveBuffer & 0xFF, receiveBuffer & 0xFF);
 

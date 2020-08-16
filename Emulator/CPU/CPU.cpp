@@ -84,7 +84,7 @@ CPU::signalTAS()
 void
 CPU::signalHalt()
 {
-    amiga.putMessage(MSG_CPU_HALT);
+    mqueue.putMessage(MSG_CPU_HALT);
 }
 
 void

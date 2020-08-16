@@ -39,7 +39,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        amiga.putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        mqueue.putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -125,12 +125,12 @@ DiskController::setState(DriveState oldState, DriveState newState)
             break;
             
         case DRIVE_DMA_WRITE:
-            amiga.putMessage(MSG_DRIVE_WRITE, selected);
+            mqueue.putMessage(MSG_DRIVE_WRITE, selected);
             break;
             
         default:
             if (oldState == DRIVE_DMA_WRITE)
-                amiga.putMessage(MSG_DRIVE_READ, selected);
+                mqueue.putMessage(MSG_DRIVE_READ, selected);
     }
 }
 
@@ -145,8 +145,8 @@ DiskController::setConnected(int df, bool value)
     // Plug the drive in our out and inform the GUI
     synchronized { config.connected[df] = value; }
 
-    amiga.putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    amiga.putMessage(MSG_CONFIG);
+    mqueue.putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    mqueue.putMessage(MSG_CONFIG);
 }
 
 void
@@ -299,7 +299,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     }
 
     // Inform the GUI
-    if (oldSelected != selected) amiga.putMessage(MSG_DRIVE_SELECT, selected);
+    if (oldSelected != selected) mqueue.putMessage(MSG_DRIVE_SELECT, selected);
 }
 
 void

@@ -691,13 +691,13 @@ void
 CIAA::_powerOn()
 {
     CIA::_powerOn();
-    amiga.putMessage(MSG_POWER_LED_DIM);
+    mqueue.putMessage(MSG_POWER_LED_DIM);
 }
 
 void
 CIAA::_powerOff()
 {
-    amiga.putMessage(MSG_POWER_LED_OFF);
+    mqueue.putMessage(MSG_POWER_LED_OFF);
 }
 
 void 
@@ -744,7 +744,7 @@ CIAA::updatePA()
 
     // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
-        amiga.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
+        mqueue.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
     // Check the OVL bot (Kickstart overlay)

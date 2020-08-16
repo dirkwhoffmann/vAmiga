@@ -77,7 +77,7 @@ PaulaAudio::setVolL(double val)
     config.volL = val;
 
     if (wasMuted != isMuted()) {
-        amiga.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+        mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
     }
 }
 
@@ -88,7 +88,7 @@ PaulaAudio::setVolR(double val)
     config.volR = val;
 
     if (wasMuted != isMuted()) {
-        amiga.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+        mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
     }
 }
 

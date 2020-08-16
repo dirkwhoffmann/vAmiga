@@ -57,7 +57,7 @@ Keyboard::pressKey(long keycode)
         
         // Check for reset key combination (CTRL + Amiga Left + Amiga Right)
         if (keyDown[0x63] && keyDown[0x66] && keyDown[0x67]) {
-            amiga.putMessage(MSG_CTRL_AMIGA_AMIGA);
+            mqueue.putMessage(MSG_CTRL_AMIGA_AMIGA);
         }
     }
 }

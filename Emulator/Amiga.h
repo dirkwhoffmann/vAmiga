@@ -43,28 +43,26 @@
 #include "ADFFile.h"
 #include "DMSFile.h"
 
-/* A complete virtual Amiga
- * This class is the most prominent one of all. To run the emulator, it is
- * sufficient to create a single object of this type. All subcomponents are
- * created automatically. The public API gives you control over the emulator's
- * behaviour such as running and pausing the emulation. Please note that most
- * subcomponents have their own public API. E.g., to query information from
- * Paula, you need to invoke a public method on amiga.paula.
+/* A complete virtual Amiga. This class is the most prominent one of all. To
+ * run the emulator, it is sufficient to create a single object of this type.
+ * All subcomponents are created automatically. The public API gives you control
+ * over the emulator's behaviour such as running and pausing the emulation.
+ * Please note that most subcomponents have their own public API. E.g., to query
+ * information from Paula, you need to invoke a public method on amiga.paula.
  */
 class Amiga : public HardwareComponent {
+
+    /* The inspection target. In order to update the GUI periodically, the
+     * emulator schedules this event in the inspector slot (INS_SLOT in the
+     * secondary table) on a periodic basis. If the event is EVENT_NONE, no
+     * action is taken. If an INS_xxx event is scheduled, inspect() is called
+     * on a certain Amiga component.
+     */
+    static EventID inspectionTarget;
 
     // Result of the latest inspection
     AmigaInfo info;
 
-public:
-
-    /* Inspection target
-     * To update the GUI periodically, the emulator schedules this event in the
-     * inspector slot (INS_SLOT in the secondary table) on a periodic basis.
-     * If the event is EVENT_NONE, no action is taken. If an INS_xxx event is
-     * scheduled, inspect() is called on a certain Amiga component.
-     */
-    static EventID inspectionTarget;
      
     //
     // Sub components
@@ -104,19 +102,28 @@ public:
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
     
+    //
+    // Message queue
+    //
+    
+    /* Communication channel to the GUI. Used to communicate with the graphical
+     * user interface. The GUI registers a listener and a callback function to
+     * retrieve messages.
+     */
+    MessageQueue messageQueue;
 
+    
     //
     // Emulator thread
     //
     
 private:
     
-    /* Run loop control
-     * This variable is checked at the end of each runloop iteration. Most of
-     * the time, the variable is 0 which causes the runloop to repeat. A value
-     * greater than 0 means that one or more runloop control flags are set.
-     * These flags are flags processed and the loop either repeats or
-     * terminates depending on the provided flags.
+    /* Run loop control. This variable is checked at the end of each runloop
+     * iteration. Most of the time, the variable is 0 which causes the runloop
+     * to repeat. A value greater than 0 means that one or more runloop control
+     * flags are set. These flags are flags processed and the loop either
+     * repeats or terminates depending on the provided flags.
      */
     u32 runLoopCtrl = 0;
     
@@ -143,8 +150,8 @@ private:
     
 private:
     
-    /* System timer information
-     * Used to match the emulation speed with the speed of a real Amiga.
+    /* System timer information. Used to match the emulation speed with the
+     * speed of a real Amiga.
      */
     mach_timebase_info_data_t tb;
     
@@ -155,18 +162,7 @@ private:
     Cycle clockBase = 0;
     u64 timeBase = 0;
 
-    
-    //
-    // Message queue
-    //
-    
-    /* Our communication channel to the GUI.
-     * Used to communicate with the graphical user interface. The GUI registers
-     * a listener and a callback function to retrieve messages.
-     */
-    MessageQueue queue;
-    
-    
+        
     //
     // Snapshot storage
     //
@@ -178,7 +174,7 @@ private:
 
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
@@ -186,6 +182,21 @@ public:
     Amiga();
     ~Amiga();
 
+    void prefix() override;
+
+    void reset(bool hard);
+    void hardReset() { reset(true); }
+    void softReset() { reset(false); }
+
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -200,11 +211,17 @@ public:
         & clockBase;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
 
     //
     // Configuring
     //
 
+public:
+    
     // Returns the current configuration
     AmigaConfiguration getConfig();
 
@@ -216,82 +233,66 @@ public:
     bool configure(ConfigOption option, long value);
     bool configureDrive(unsigned drive, ConfigOption option, long value);
 
-
+    
     //
-    // Methods from AmigaObject and HardwareComponent
+    // Analyzing
     //
-
+    
 public:
+    
+    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-    void prefix() override;
-    void reset(bool hard);
-    void hardReset() { reset(true); }
-    void softReset() { reset(false); }
-    void setWarp(bool enable);
+    void _inspect() override;
+    void _dump() override;
 
+    void setInspectionTarget(EventID id);
+    void clearInspectionTarget();
+
+    
+    //
+    // Changing state
+    //
+    
+public:
+    
     void powerOn();
     void powerOff();
     void run();
     void pause();
+    void setWarp(bool enable);
 
 private:
-
+    
     void _powerOn() override;
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     void _ping() override;
-    void _inspect() override;
-    void _dump() override;
     void _setWarp(bool enable) override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-public:
-
-    // Returns the result of the most recent call to inspect()
-    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     
     //
-    // Managing debug mode
-    //
-
-public:
-    
-    /* Sets the inspection target.
-     * If an inspection target is set (INS_xxx events), the emulator schedules
-     * periodic calls to inspect().
-     */
-    void setInspectionTarget(EventID id);
-
-    // Removed the currently set inspection target
-    void clearInspectionTarget();
-    
-    //
-    // Controlling the emulation thread
+    // Controlling the emulator thread
     //
     
 public:
     
-    /* Requests the emulator thread to stop and locks the threadLock.
-     * The function is called in all state changing methods to obtain ownership
+    /* Requests the emulator thread to stop and locks the threadLock. The
+     * function is called in all state changing methods to obtain ownership
      * of the emulator thread. After returning, the emulator is either powered
      * off (if it was powered off before) or paused (if it was running before).
      */
     void acquireThreadLock();
     
-    /* Returns true if a call to powerOn() will be successful.
-     * It returns false, e.g., if no Kickstart Rom or Boot Rom is installed.
+    /* Returns true if a call to powerOn() will be successful. It returns false,
+     * e.g., if no Kickstart Rom or Boot Rom is installed.
      */
     bool isReady(ErrorCode *error = NULL);
     
-    /* Pauses the emulation thread temporarily.
-     * Because the emulator is running in a separate thread, the GUI has to
-     * pause the emulator before changing it's internal state. This is done by
-     * embedding the code inside a suspend / resume block:
+    /* Pauses the emulation thread temporarily. Because the emulator is running
+     * in a separate thread, the GUI has to pause the emulator before changing
+     * it's internal state. This is done by embedding the code inside a
+     * suspend / resume block:
      *
      *            suspend();
      *            do something with the internal state;
@@ -302,9 +303,8 @@ public:
     void suspend();
     void resume();
     
-    /* Sets or clears a run loop control flag
-     * The functions are thread-safe and can be called from inside or outside
-     * the emulator thread.
+    /* Sets or clears a run loop control flag. The functions are thread-safe
+     * and can be called from inside or outside the emulator thread.
      */
     void setControlFlags(u32 flags);
     void clearControlFlags(u32 flags);
@@ -322,25 +322,20 @@ public:
     
 public:
     
-    // Registers a listener callback function.
-    //     void addListener(const void *sender, void(*func)(const void *, int, long) ) {
+    /*
     void addListener(const void *sender, Callback func) {
         queue.addListener(sender, func);
     }
-    
-    // Removes a listener callback function.
     void removeListener(const void *sender) {
-        debug("removeListener\n");
         queue.removeListener(sender);
     }
-    
-    // Reads a notification from message queue.
-    // Returns MSG_NONE if the queue is empty.
-    Message getMessage() { return queue.getMessage(); }
-    
-    // Writes a notification message into message queue
-    void putMessage(MessageType msg, u64 data = 0) { queue.putMessage(msg, data); }
-    
+    Message getMessage() {
+        return queue.getMessage();
+    }
+    void putMessage(MessageType msg, u64 data = 0) {
+        queue.putMessage(msg, data);
+    }
+    */
     
     //
     // Running the emulator

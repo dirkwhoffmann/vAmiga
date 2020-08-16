@@ -72,8 +72,6 @@
 | CIASerClk0)
 
 class CIA : public AmigaComponent {
-
-    // friend class TOD;
     
 protected:
 
@@ -269,6 +267,8 @@ public:
     // Serializing
     //
 
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {

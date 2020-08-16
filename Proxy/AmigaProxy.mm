@@ -1716,15 +1716,15 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {
-    wrapper->amiga->addListener(sender, func);
+    wrapper->amiga->messageQueue.addListener(sender, func);
 }
 - (void) removeListener:(const void *)sender
 {
-    wrapper->amiga->removeListener(sender);
+    wrapper->amiga->messageQueue.removeListener(sender);
 }
 - (Message)message
 {
-    return wrapper->amiga->getMessage();
+    return wrapper->amiga->messageQueue.get();
 }
 - (void) stopAndGo
 {

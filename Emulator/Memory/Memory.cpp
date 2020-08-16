@@ -521,7 +521,7 @@ Memory::updateMemSrcTable()
             memSrc[i] = memSrc[0xF8 + i];
     }
 
-    amiga.putMessage(MSG_MEM_LAYOUT);
+    mqueue.putMessage(MSG_MEM_LAYOUT);
 }
 
 template<> u8

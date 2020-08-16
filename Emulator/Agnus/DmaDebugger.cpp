@@ -68,11 +68,11 @@ DmaDebugger::setEnabled(bool value)
 {
     if (!enabled && value) {
         enabled = true;
-        amiga.putMessage(MSG_DMA_DEBUG_ON);
+        mqueue.putMessage(MSG_DMA_DEBUG_ON);
     }
     if (enabled && !value) {
         enabled = false;
-        amiga.putMessage(MSG_DMA_DEBUG_OFF);
+        mqueue.putMessage(MSG_DMA_DEBUG_OFF);
     }
 }
 
