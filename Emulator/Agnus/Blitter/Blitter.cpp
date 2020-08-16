@@ -46,17 +46,32 @@ Blitter::_initialize()
 }
 
 void
-Blitter::_powerOn()
-{
-}
-
-void
 Blitter::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 
     copycount = 0;
     linecount = 0;
+}
+
+long
+Blitter::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_BLITTER_ACCURACY: return config.accuracy;
+        default: assert(false);
+    }
+}
+
+void
+Blitter::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_BLITTER_ACCURACY: config.accuracy = value; return;
+        default: return;
+    }
 }
 
 void
@@ -89,8 +104,8 @@ Blitter::_inspect()
         info.dhold = dhold;
         info.bbusy = bbusy;
         info.bzero = bzero;
-        info.firstIteration = isFirstIteration();
-        info.lastIteration = isLastIteration();
+        info.firstWord = isFirstWord();
+        info.lastWord = isLastWord();
         info.fci = bltconFCI();
         info.fco = fillCarry;
         info.fillEnable = bltconFE();
@@ -467,7 +482,7 @@ Blitter::prepareBlit()
 }
 
 void
-Blitter::startBlit()
+Blitter::beginBlit()
 {
     int level = config.accuracy;
 
@@ -514,6 +529,42 @@ Blitter::startBlit()
 }
 
 void
+Blitter::beginLineBlit(int level)
+{
+    static bool verbose = true;
+
+    if (BLT_CHECKSUM && verbose) {
+        verbose = false;
+        msg("Performing level %d line blits.\n", level);
+    }
+
+    switch (level) {
+        case 0: beginFastLineBlit(); break;
+        case 1: beginFakeLineBlit(); break;
+        case 2: beginSlowLineBlit(); break;
+        defaut: assert(false);
+    }
+}
+
+void
+Blitter::beginCopyBlit(int level)
+{
+    static bool verbose = true;
+
+    if (BLT_CHECKSUM && verbose) {
+        verbose = false;
+        msg("Performing level %d copy blits.\n", level);
+    }
+
+    switch (level) {
+        case 0: beginFastCopyBlit(); break;
+        case 1: beginFakeCopyBlit(); break;
+        case 2: beginSlowCopyBlit(); break;
+        defaut: assert(false);
+    }
+}
+
+void
 Blitter::signalEnd()
 {
     plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
@@ -555,40 +606,4 @@ Blitter::endBlit()
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();
-}
-
-void
-Blitter::beginLineBlit(int level)
-{
-    static bool verbose = true;
-
-    if (BLT_CHECKSUM && verbose) {
-        verbose = false;
-        msg("Performing level %d line blits.\n", level);
-    }
-
-    switch (level) {
-        case 0: beginFastLineBlit(); break;
-        case 1: beginFakeLineBlit(); break;
-        case 2: beginSlowLineBlit(); break;
-        defaut: assert(false);
-    }
-}
-
-void
-Blitter::beginCopyBlit(int level)
-{
-    static bool verbose = true;
-
-    if (BLT_CHECKSUM && verbose) {
-        verbose = false;
-        msg("Performing level %d copy blits.\n", level);
-    }
-
-    switch (level) {
-        case 0: beginFastCopyBlit(); break;
-        case 1: beginFakeCopyBlit(); break;
-        case 2: beginSlowCopyBlit(); break;
-        defaut: assert(false);
-    }
 }

@@ -1213,10 +1213,10 @@ Blitter::setXCounter(u16 value)
     mask = 0xFFFF;
 
     // Apply the "first word mask" in the first iteration
-    if (isFirstIteration()) mask &= bltafwm;
+    if (isFirstWord()) mask &= bltafwm;
 
     // Apply the "last word mask" in the last iteration
-    if (isLastIteration()) mask &= bltalwm;
+    if (isLastWord()) mask &= bltalwm;
 }
 
 void

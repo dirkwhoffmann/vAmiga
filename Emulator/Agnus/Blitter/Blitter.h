@@ -129,16 +129,14 @@ class Blitter : public AmigaComponent
     // Flags
     //
 
-    /* Indicates if the Blitter is currently running.
-     * The flag is set to true when a Blitter operation starts and set to false
-     * when the operation ends.
+    /* Indicates if the Blitter is currently running. The flag is set to true
+     * when a Blitter operation starts and set to false when the operation ends.
      */
     bool running;
 
-    /* The Blitter busy flag
-     * This flag shows up in DMACON and has a similar meaning as variable
-     * 'running'. The only difference is that the busy flag is cleared a few
-     * cycles before the Blitter actually terminates.
+    /* The Blitter busy flag. This flag shows up in DMACON and has a similar
+     * meaning as variable 'running'. The only difference is that the busy flag
+     * is cleared a few cycles before the Blitter actually terminates.
      */
     bool bbusy;
 
@@ -171,8 +169,9 @@ public:
     // Experimental
     u8 memguard[KB(512)];
     
+ 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
@@ -182,6 +181,14 @@ public:
     void initFastBlitter();
     void initSlowBlitter();
 
+    void _initialize() override;
+    void _reset(bool hard) override;
+
+    
+    //
+    // Serializing
+    //
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -255,45 +262,30 @@ public:
         & remaining;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
     
     //
     // Configuring
     //
 
-    // Returns the current configuration
     BlitterConfig getConfig() { return config; }
+    
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
 
-    // Configures the emulation accuracy level
-    int getAccuracy() { return config.accuracy; }
-    void setAccuracy(int level) { config.accuracy = level; }
-
-
+    
     //
-    // Methods from HardwareComponent
+    // Analyzing
     //
     
-private:
-
-    void _initialize() override;
-    void _powerOn() override;
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dump() override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-public:
-
-    // Returns the result of the most recent call to inspect()
     BlitterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-
-    //
-    // Accessing properties
-    //
-    
-public:
+    // Methods from HardwareComponent
+    void _inspect() override;
+    void _dump() override;
 
     // Returns true if the Blitter is processing a blit
     bool isRunning() { return running; }
@@ -309,11 +301,12 @@ public:
     // Accessing registers
     //
     
-public:
-    
-    // OCS register 0x040 (w)
+    // BLTCON0
     void pokeBLTCON0(u16 value);
     void setBLTCON0(u16 value);
+    void pokeBLTCON0L(u16 value);
+    void setBLTCON0L(u16 value);
+    void setBLTCON0ASH(u16 ash);
 
     u16 bltconASH()   { return bltcon0 >> 12; }
     u16 bltconLF()    { return bltcon0 & 0xF; }
@@ -322,11 +315,11 @@ public:
     bool bltconUSEB() { return bltcon0 & (1 << 10); }
     bool bltconUSEC() { return bltcon0 & (1 << 9); }
     bool bltconUSED() { return bltcon0 & (1 << 8); }
-    void setBltconASH(u16 ash) { assert(ash <= 0xF); bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12); }
 
-    // OCS register 0x042 (w)
+    // BLTCON1
     void pokeBLTCON1(u16 value);
     void setBLTCON1(u16 value);
+    void setBLTCON1BSH(u16 bsh);
 
     u16 bltconBSH()   { return bltcon1 >> 12; }
     bool bltconEFE()  { return bltcon1 & (1 << 4); }
@@ -335,13 +328,13 @@ public:
     bool bltconFCI()  { return bltcon1 & (1 << 2); }
     bool bltconDESC() { return bltcon1 & (1 << 1); }
     bool bltconLINE() { return bltcon1 & (1 << 0); }
-    void setBltcon1BSH(u16 bsh) { assert(bsh <= 0xF); bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12); }
 
-    // OCS registers 0x044 and 0x046 (w)
+    // BLTAxWM
     void pokeBLTAFWM(u16 value);
     void pokeBLTALWM(u16 value);
     
-    // OCS registers 0x048 and 0x056 (w)
+    
+    // BLTxPTx
     void pokeBLTAPTH(u16 value);
     void pokeBLTAPTL(u16 value);
     void pokeBLTBPTH(u16 value);
@@ -351,35 +344,24 @@ public:
     void pokeBLTDPTH(u16 value);
     void pokeBLTDPTL(u16 value);
     
-    // OCS register 0x058 (w)
+    // BLITSIZE
     template <Accessor s> void pokeBLTSIZE(u16 value);
     void setBLTSIZE(u16 value);
-
-    // ECS register 0x05A (w)
-    void pokeBLTCON0L(u16 value);
-    void setBLTCON0L(u16 value);
-    
-    // ECS register 0x05C (w)
     void pokeBLTSIZV(u16 value);
     void setBLTSIZV(u16 value);
-
-    // ECS register 0x05E (w)
     void pokeBLTSIZH(u16 value);
 
-    // OCS registers 0x060 and 0x066 (w)
+    // BLTxMOD
     void pokeBLTAMOD(u16 value);
     void pokeBLTBMOD(u16 value);
     void pokeBLTCMOD(u16 value);
     void pokeBLTDMOD(u16 value);
     
-    // OCS registers 0x070 and 0x074 (w)
+    // BLTxDAT
     void pokeBLTADAT(u16 value);
     void pokeBLTBDAT(u16 value);
     void pokeBLTCDAT(u16 value);
     
-    bool isFirstWord() { return xCounter == bltsizeH; }
-    bool isLastWord() { return xCounter == 1; }
-
     
     //
     // Handling requests of other components
@@ -398,12 +380,9 @@ public:
     // Processes a Blitter event
     void serviceEvent(EventID id);
 
-    // Performs periodic per-frame actions
-    // void vsyncHandler();
-
 
     //
-    // Auxiliary functions
+    // Running the fill and minterm circuits
     //
 
     // Emulates the minterm logic circuit
@@ -413,21 +392,20 @@ public:
     // Emulates the fill logic circuit
     void doFill(u16 &data, bool &carry);
 
-    // Clears the busy flag and cancels the Blitter slot
-    // void kill();
-
 
     //
-    // Executing the Blitter (Entry points for all accuracy levels)
+    // Executing the Blitter
     //
 
 private:
 
-    // Prepares for a new Blitter operation
+    // Prepares for a new Blitter operation (called in state BLT_STRT1)
     void prepareBlit();
 
     // Starts a Blitter operation
-    void startBlit();
+    void beginBlit();
+    void beginLineBlit(int level);
+    void beginCopyBlit(int level);
 
     // Clears the BBUSY flag and triggers the Blitter interrupt
     void signalEnd();
@@ -435,17 +413,9 @@ private:
     // Concludes the current Blitter operation
     void endBlit();
 
-
+    
     //
-    //  Executing the Blitter
-    //
-
-    void beginLineBlit(int level);
-    void beginCopyBlit(int level);
-
-
-    //
-    //  Executing the Fast Blitter (Called for lower accuracy levels)
+    //  Executing the Fast Blitter
     //
 
     // Starts a level 0 blit
@@ -461,22 +431,24 @@ private:
 
 
     //
-    //  Executing the Slow Blitter (Called for higher accuracy levels)
+    //  Executing the Slow Blitter
     //
 
-    // Starts a level 1 or level 2 blit
-    void beginFakeLineBlit();
-    void beginSlowLineBlit();
+    // Starts a level 1 blit
     void beginFakeCopyBlit();
+    void beginFakeLineBlit();
+
+    // Starts a level 2 blit
+    void beginSlowLineBlit();
     void beginSlowCopyBlit();
 
     // Emulates a Blitter micro-instruction
     template <u16 instr> void exec();
     template <u16 instr> void fakeExec();
 
-    // Check iterations
-    bool isFirstIteration() { return xCounter == bltsizeH; }
-    bool isLastIteration() { return xCounter == 1; }
+    // Checks iterations
+    bool isFirstWord() { return xCounter == bltsizeH; }
+    bool isLastWord() { return xCounter == 1; }
 
     // Sets the x or y counter to a new value
     void setXCounter(u16 value);
@@ -486,7 +458,7 @@ private:
     void decXCounter() { setXCounter(xCounter - 1); }
     void decYCounter() { setYCounter(yCounter - 1); }
 
-    // Emulate the barrel shifter
+    // Emulates the barrel shifter
     void doBarrelShifterA();
     void doBarrelShifterB();
 };

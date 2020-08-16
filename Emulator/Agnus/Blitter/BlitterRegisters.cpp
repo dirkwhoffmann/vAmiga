@@ -26,6 +26,33 @@ Blitter::setBLTCON0(u16 value)
 }
 
 void
+Blitter::pokeBLTCON0L(u16 value)
+{
+    plaindebug(MAX(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
+
+    // ECS only register
+    if (agnus.isOCS()) return;
+
+    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0L, value);
+}
+
+void
+Blitter::setBLTCON0L(u16 value)
+{
+    debug(BLT_GUARD && running, "BLTCON0L written while Blitter is running\n");
+
+    bltcon0 = HI_LO(HI_BYTE(bltcon0), LO_BYTE(value));
+}
+
+void
+Blitter::setBLTCON0ASH(u16 ash)
+{
+    assert(ash <= 0xF);
+    
+    bltcon0 = (bltcon0 & 0x0FFF) | (ash << 12);
+}
+
+void
 Blitter::pokeBLTCON1(u16 value)
 {
     plaindebug(BLTREG_DEBUG, "pokeBLTCON1(%X)\n", value);
@@ -38,6 +65,14 @@ Blitter::setBLTCON1(u16 value)
     debug(BLT_GUARD && running, "BLTCON1 written while Blitter is running\n");
 
     bltcon1 = value;
+}
+
+void
+Blitter::setBLTCON1BSH(u16 bsh)
+{
+    assert(bsh <= 0xF);
+    
+    bltcon1 = (bltcon1 & 0x0FFF) | (bsh << 12);
 }
 
 void
@@ -175,25 +210,6 @@ Blitter::setBLTSIZE(u16 value)
     if (!bltsizeH) bltsizeH = 0x0040;
 
     agnus.scheduleRel<BLT_SLOT>(DMA_CYCLES(1), BLT_STRT1);
-}
-
-void
-Blitter::pokeBLTCON0L(u16 value)
-{
-    plaindebug(MAX(BLTREG_DEBUG, ECSREG_DEBUG), "pokeBLTCON0L(%X)\n", value);
-
-    // ECS only register
-    if (agnus.isOCS()) return;
-
-    agnus.recordRegisterChange(DMA_CYCLES(2), SET_BLTCON0L, value);
-}
-
-void
-Blitter::setBLTCON0L(u16 value)
-{
-    debug(BLT_GUARD && running, "BLTCON0L written while Blitter is running\n");
-
-    bltcon0 = HI_LO(HI_BYTE(bltcon0), LO_BYTE(value));
 }
 
 void

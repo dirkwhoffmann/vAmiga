@@ -44,7 +44,7 @@ Blitter::serviceEvent(EventID id)
             }
 
             // Proceed to the next state
-            startBlit();
+            beginBlit();
             break;
 
         case BLT_COPY_SLOW:

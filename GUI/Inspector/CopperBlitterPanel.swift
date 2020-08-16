@@ -110,8 +110,8 @@ extension Inspector {
         bltBold.integerValue = Int(blitterInfo.bold)
         bltAnew.integerValue = Int(blitterInfo.anew)
         bltBnew.integerValue = Int(blitterInfo.bnew)
-        bltFirstWord.state = blitterInfo.firstIteration ? .on : .off
-        bltLastWord.state  = blitterInfo.lastIteration ? .on : .off
+        bltFirstWord.state = blitterInfo.firstWord ? .on : .off
+        bltLastWord.state  = blitterInfo.lastWord ? .on : .off
     }
 
     func refreshCopperBlitter(count: Int, full: Bool) {

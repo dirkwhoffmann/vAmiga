@@ -337,7 +337,7 @@ Blitter::doFastLineBlit()
     bltcon = bltcon & 0x0FFFFFFBF;
     if (decision_is_signed) bltcon |= 0x00000040;
     
-    setBltconASH(blit_a_shift_local);
+    setBLTCON0ASH(blit_a_shift_local);
     bnew   = bltbdat_local;
     
     u32 chipRamMask = agnus.chipRamMask();

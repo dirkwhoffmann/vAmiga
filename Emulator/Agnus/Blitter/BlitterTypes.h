@@ -46,8 +46,8 @@ typedef struct
     u16 dhold;
     bool bbusy;
     bool bzero;
-    bool firstIteration;
-    bool lastIteration;
+    bool firstWord;
+    bool lastWord;
     bool fci;
     bool fco;
     bool fillEnable;

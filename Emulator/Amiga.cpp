@@ -204,13 +204,15 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
         case OPT_FILTER_TYPE: return paula.audioUnit.getFilterType();
         case OPT_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
-        case OPT_BLITTER_ACCURACY: return agnus.blitter.getAccuracy();
+        case OPT_BLITTER_ACCURACY:
+            return agnus.blitter.getConfigItem(option);
         case OPT_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
         case OPT_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
         case OPT_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
         case OPT_SERIAL_DEVICE: return serialPort.getDevice();
-        case OPT_TODBUG: return ciaA.getTodBug();
-        case OPT_ECLOCK_SYNCING: return ciaA.getEClockSyncing();
+        case OPT_TODBUG:
+        case OPT_ECLOCK_SYNCING:
+            return ciaA.getConfigItem(option);
         case OPT_ACCURATE_KEYBOARD: return keyboard.getAccurate();
 
         default: assert(false); return 0;
@@ -570,9 +572,11 @@ Amiga::configure(ConfigOption option, long value)
             paula.audioUnit.setFilterAlwaysOn(value);
             break;
             
+        /*
         case OPT_BLITTER_ACCURACY:
             agnus.blitter.setAccuracy(value);
             break;
+        */
             
         case OPT_ASYNC_FIFO:
             paula.diskController.setAsyncFifo(value);

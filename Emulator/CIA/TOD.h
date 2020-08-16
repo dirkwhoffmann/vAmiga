@@ -12,22 +12,16 @@
 
 #include "AmigaComponent.h"
 
-/* 24-bit counter
- * Each CIA chip contains a 24-bit counter with an alarm. When the alarm value
- * is reached, an interrupt is initiated.
- */
 class TOD : public AmigaComponent {
     
     friend CIA;
     
-private:
-    
-    // Result of the latest inspection
-    CounterInfo info;
-        
     // Reference to the connected CIA
     CIA *cia;
-    
+
+    // Result of the latest inspection
+    CounterInfo info;
+            
     // The 24 bit counter
     Counter24 tod;
     
@@ -37,34 +31,40 @@ private:
     // Alarm value
     Counter24 alarm;
     
-    /* Indicates if the TOD registers are frozen
-     * The CIA chip freezes the registers when the counter's high byte (bits
-     * 16 - 23) is read and reactivates them, when the low byte (bits 0 - 7)
-     * is read. Although the values stay constant, the internal clock continues
-     * to run.
+    /* Indicates if the TOD registers are frozen. The CIA chip freezes the
+     * registers when the counter's high byte (bits 16 - 23) is read and
+     * reactivates them, when the low byte (bits 0 - 7) is read. Although the
+     * values stay constant, the internal clock continues to run.
      */
     bool frozen;
     
-    /* Indicates if the TOD clock is halted.
-     * The CIA chip stops the TOD clock when the counter's high byte (bits
-     * 16 - 23) is written and restarts it, when the low byte (bits 0 - 7) is
-     * written.
+    /* Indicates if the TOD clock is halted. The CIA chip stops the TOD clock
+     * when the counter's high byte (bits 16 - 23) is written and restarts it,
+     * when the low byte (bits 0 - 7) is written.
      */
     bool stopped;
     
-    /* Indicates if tod time matches the alarm value
-     * This value is read in checkForInterrupt() for edge detection.
+    /* Indicates if tod time matches the alarm value. This value is read in
+     * checkForInterrupt() for edge detection.
      */
     bool matching;
     
+    
+    //
+    // Initializing
+    //
+
 public:
-    
-    //
-    // Creating and destructing
-    //
-    
+
     TOD(CIA *cia, Amiga& ref);
 
+    void _reset(bool hard) override;
+
+
+    //
+    // Serializing
+    //
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -83,32 +83,25 @@ public:
         & matching;
     }
     
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-    void _inspect() override;
-    void _dump() override;
-    void _reset(bool hard) override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    
-    //
-    // Configuring
-    //
-    
-public:
 
-    // Returns the result of the most recent call to inspect()
+    
+    //
+    // Analyzing
+    //
+    
     CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-
+    void _inspect() override;
+    void _dump() override;
+    
+    
     //
-    // Accessing properties
+    // Accessing
     //
-
+    
     // Returns the counter's high byte (bits 16 - 23).
     u8 getCounterHi();
 
@@ -147,7 +140,7 @@ public:
 
 
     //
-    // Running the component
+    // Executing
     //
     
 private:

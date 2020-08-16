@@ -16,6 +16,16 @@ TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+TOD::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS
+
+    stopped = true;
+    matching = true;
+    tod.hi = 0x1;
+}
+
+void
 TOD::_inspect()
 {
     synchronized {
@@ -35,16 +45,6 @@ TOD::_dump()
     msg("            Frozen : %s\n", frozen ? "yes" : "no");
     msg("           Stopped : %s\n", stopped ? "yes" : "no");
     msg("\n");
-}
-
-void
-TOD::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS
-
-    stopped = true;
-    matching = true;
-    tod.hi = 0x1;
 }
 
 u8

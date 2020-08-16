@@ -73,6 +73,8 @@
 
 class CIA : public AmigaComponent {
 
+    // friend class TOD;
+    
 protected:
 
     // Identification number (0 = CIA A, 1 = CIA B)
@@ -328,15 +330,13 @@ public:
 public:
     
     CIAConfig getConfig() { return config; }
+    
     long getConfigItem(ConfigOption option);
     void setConfigItem(ConfigOption option, long value) override;
     
-    bool getTodBug() { return config.todBug; }
-    void setTodBug(bool value) { config.todBug = value; }
-
     bool getEClockSyncing() { return config.eClockSyncing; }
-    void setEClockSyncing(bool value) { config.eClockSyncing = value; }
-    
+    bool getTodBug() { return config.todBug; }
+
     
     //
     // Analyzing
