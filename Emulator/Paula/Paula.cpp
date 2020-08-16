@@ -95,31 +95,6 @@ Paula::scheduleIrqRel(IrqSource src, Cycle trigger)
     scheduleIrqAbs(src, agnus.clock + trigger);
 }
 
-int
-Paula::interruptLevel()
-{
-    if (intena & 0x4000) {
-
-        u16 mask = intreq;
-
-        // if (ciaa.irqPin() == 0) SET_BIT(mask, 3);
-        // if (ciab.irqPin() == 0) SET_BIT(mask, 13);
-
-        mask &= intena;
-
-        // debug("INT: %d intena: %x intreq: %x mask: %x\n", ciaa.irqPin(), intena, intreq, mask);
-
-        if (mask & 0b0110000000000000) return 6;
-        if (mask & 0b0001100000000000) return 5;
-        if (mask & 0b0000011110000000) return 4;
-        if (mask & 0b0000000001110000) return 3;
-        if (mask & 0b0000000000001000) return 2;
-        if (mask & 0b0000000000000111) return 1;
-    }
-
-    return 0;
-}
-
 void
 Paula::checkInterrupt()
 {
@@ -130,4 +105,22 @@ Paula::checkInterrupt()
         iplPipe = (iplPipe & ~0xFF) | level;
         agnus.scheduleRel<IPL_SLOT>(0, IPL_CHANGE, 5);
     }
+}
+
+int
+Paula::interruptLevel()
+{
+    if (intena & 0x4000) {
+
+        u16 mask = intreq & intena;
+
+        if (mask & 0b0110000000000000) return 6;
+        if (mask & 0b0001100000000000) return 5;
+        if (mask & 0b0000011110000000) return 4;
+        if (mask & 0b0000000001110000) return 3;
+        if (mask & 0b0000000000001000) return 2;
+        if (mask & 0b0000000000000111) return 1;
+    }
+
+    return 0;
 }

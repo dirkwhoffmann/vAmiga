@@ -349,7 +349,7 @@ public:
 
     
     //
-    // Accessing the I/O register space
+    // Accessing registers
     //
     
 public:
@@ -365,7 +365,7 @@ public:
     
     
     //
-    // Accessing port registers
+    // Accessing the data ports
     //
     
 public:

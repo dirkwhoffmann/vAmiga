@@ -28,7 +28,7 @@ private:
     
 public:
 
-    // Sound chip
+    // Sound circuitry
     PaulaAudio audioUnit = PaulaAudio(amiga);
 
     // Disk controller
@@ -64,7 +64,7 @@ public:
     
     
     //
-    // Control port registers
+    // Control ports
     //
     
     // The pot control register
@@ -82,20 +82,27 @@ public:
     double chargeX1;
     double chargeY1;
 
-    // The Audio and Disk Control Register (ADKCON)
+    // The Audio and Disk Control Register
     u16 adkcon;
 
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Paula(Amiga& ref);
     
-    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
+    void _reset(bool hard) override;
 
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -123,20 +130,30 @@ public:
         & adkcon;
     }
 
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dump() override;
-    void _setWarp(bool enable) override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+
+ 
+    //
+    // Changing state
+    //
+    
+    void _setWarp(bool enable) override;
 
 
     //
@@ -145,34 +162,29 @@ private:
     
 public:
     
-    // OCS register 0x010 (r)
+    // ADKCONR and ADKCON
     u16 peekADKCONR() { return adkcon; }
+    void pokeADKCON(u16 value);
+
     bool UARTBRK() { return GET_BIT(adkcon, 11); }
 
-    // OCS register 0x01E (r)
+    // INTREQR and INTREQ
     u16 peekINTREQR();
-
-    // OCS register 0x09C (w)
     void pokeINTREQ(u16 value);
     void setINTREQ(bool setclr, u16 value);
     void setINTREQ(u16 value) { setINTREQ(value & 0x8000, value & 0x7FFF); }
 
-    // OCS register 0x01C (r)
+    // INTENAR and INTENA
     u16 peekINTENAR() { return intena; }
-    
-    // OCS register 0x09A (w)
     void pokeINTENA(u16 value);
     void setINTENA(bool setclr, u16 value);
     void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
 
-    // OCS register 0x09E (w)
-    void pokeADKCON(u16 value);
-
-    // OCS registers 0x012 and 0x014 (r)
+    // POTxDAT, POTGOR and POTGO
     template <int x> u16 peekPOTxDAT();
-
-    // OCS register 0x016 (r) (originally called POTINP)
+    
     u16 peekPOTGOR();
+    
     bool OUTRY() { return potgo & 0x8000; }
     bool DATRY() { return potgo & 0x4000; }
     bool OUTRX() { return potgo & 0x2000; }
@@ -181,8 +193,7 @@ public:
     bool DATLY() { return potgo & 0x0400; }
     bool OUTLX() { return potgo & 0x0200; }
     bool DATLX() { return potgo & 0x0100; }
-
-    // OCS register 0x030 (w)
+    
     void pokePOTGO(u16 value);
 
 
@@ -192,7 +203,14 @@ public:
     
 public:
 
+    // Charges or discharges a potentiometer capacitor
     void servicePotEvent(EventID id);
+
+    // Triggers all pending interrupts
+    void serviceIrqEvent();
+
+    // Changes the CPU interrupt priority lines
+    void serviceIplEvent();
 
     
     //
@@ -206,21 +224,13 @@ public:
     void scheduleIrqAbs(IrqSource src, Cycle trigger);
     void scheduleIrqRel(IrqSource src, Cycle trigger);
 
-    // Triggers all pending interrupts
-    void serviceIrqEvent();
+    // Checks intena and intreq and triggers an interrupt (if pending)
+    void checkInterrupt();
 
-    // Changes the CPU interrupt priority lines
-    void serviceIplEvent();
-    
 private:
     
     // Computes the interrupt level of a pending interrupt.
     int interruptLevel();
-
-public:
-    
-    // Checks intena and intreq and triggers an interrupt (if pending).
-    void checkInterrupt();
 };
 
 #endif
