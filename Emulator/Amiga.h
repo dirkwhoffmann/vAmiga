@@ -58,7 +58,7 @@ class Amiga : public HardwareComponent {
      * action is taken. If an INS_xxx event is scheduled, inspect() is called
      * on a certain Amiga component.
      */
-    static EventID inspectionTarget;
+    EventID inspectionTarget = INS_NONE;
 
     // Result of the latest inspection
     AmigaInfo info;
@@ -242,11 +242,11 @@ public:
     
     AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-    void _inspect() override;
-    void _dump() override;
-
     void setInspectionTarget(EventID id);
     void clearInspectionTarget();
+
+    void _inspect() override;
+    void _dump() override;
 
     
     //
@@ -315,28 +315,7 @@ public:
     void signalInspect() { setControlFlags(RL_INSPECT); }
     void signalStop() { setControlFlags(RL_STOP); }
 
-    
-    //
-    // Accessing the message queue
-    //
-    
-public:
-    
-    /*
-    void addListener(const void *sender, Callback func) {
-        queue.addListener(sender, func);
-    }
-    void removeListener(const void *sender) {
-        queue.removeListener(sender);
-    }
-    Message getMessage() {
-        return queue.getMessage();
-    }
-    void putMessage(MessageType msg, u64 data = 0) {
-        queue.putMessage(msg, data);
-    }
-    */
-    
+
     //
     // Running the emulator
     //
@@ -346,37 +325,35 @@ public:
     // Runs or pauses the emulator
     void stopAndGo();
     
-    /* Executes a single instruction
-     * This function is used for single-stepping through the code inside the
-     * debugger. It starts the execution thread and terminates it after the
-     * next instruction has been executed.
+    /* Executes a single instruction. This function is used for single-stepping
+     * through the code inside the debugger. It starts the execution thread and
+     * terminates it after the next instruction has been executed.
      */
     void stepInto();
     
-    /* Executes until the instruction following the current one is reached.
-     * This function is used for single-stepping through the code inside the
-     * debugger. It sets a soft breakpoint to PC+n where n is the length
-     * bytes of the current instruction and starts the emulator thread.
+    /* Runs the emulator until the instruction following the current one is
+     * reached. This function is used for single-stepping through the code
+     * inside the debugger. It sets a soft breakpoint to PC+n where n is the
+     * length bytes of the current instruction and starts the emulator thread.
      */
     void stepOver();
     
-    /* The thread enter function.
-     * This (private) method is invoked when the emulator thread launches. It
-     * has to be declared public to make it accessible by the emulator thread.
+    /* The thread enter function. This (private) method is invoked when the
+     * emulator thread launches. It has to be declared public to make it
+     * accessible by the emulator thread.
      */
     void threadWillStart();
     
-    /* The thread exit function.
-     * This (private) method is invoked when the emulator thread terminates. It
-     * has to be declared public to make it accessible by the emulator thread.
+    /* The thread exit function. This (private) method is invoked when the
+     * emulator thread terminates. It has to be declared public to make it
+     * accessible by the emulator thread.
      */
     void threadDidTerminate();
     
-    /* The Amiga run loop.
-     * This function is one of the most prominent ones. It implements the
-     * outermost loop of the emulator and therefore the place where emulation
-     * starts. If you want to understand how the emulator works, this function
-     * should be your starting point.
+    /* The Amiga run loop. This function is one of the most prominent ones. It
+     * implements the outermost loop of the emulator and therefore the place
+     * where emulation starts. If you want to understand how the emulator works,
+     * this function should be your starting point.
      */
     void runLoop();
 
@@ -387,32 +364,32 @@ public:
     
 public:
 
-    /* Restarts the synchronization timer.
-     * This function is invoked at launch time to initialize the timer and
-     * reinvoked when the synchronization timer got out of sync.
+    /* Restarts the synchronization timer. This function is invoked at launch
+     * time to initialize the timer and reinvoked when the synchronization timer
+     * got out of sync.
      */
     void restartTimer();
     
 private:
     
-    // Converts kernel time to nanoseconds.
+    // Converts kernel time to nanoseconds
     u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
     
-    // Converts nanoseconds to kernel time.
+    // Converts nanoseconds to kernel time
     u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
     
-    // Returns the current time in nanoseconds.
+    // Returns the current time in nanoseconds
     u64 time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
     
-    /* Returns the delay between two frames in nanoseconds.
-     * As long as we only emulate PAL machines, the frame rate is 50 Hz
-     * and this function returns a constant.
+    /* Returns the delay between two frames in nanoseconds. As long as we only
+     * emulate PAL machines, the frame rate is 50 Hz and this function returns
+     * a constant.
      */
     u64 frameDelay() { return u64(1000000000) / 50; }
     
 public:
     
-    // Puts the emulator thread to sleep.
+    // Puts the emulator thread to sleep
     void synchronizeTiming();
     
     
@@ -422,10 +399,10 @@ public:
     
 public:
     
-    /* Requests a snapshot to be taken
-     * Once the snapshot is ready, a message is written into the message queue.
-     * The snapshot can then be picked up by calling latestAutoSnapshot() or
-     * latestUserSnapshot(), depending on the requested snapshot type.
+    /* Requests a snapshot to be taken. Once the snapshot is ready, a message
+     * is written into the message queue. The snapshot can then be picked up by
+     * calling latestAutoSnapshot() or latestUserSnapshot(), depending on the
+     * requested snapshot type.
      */
     void requestAutoSnapshot();
     void requestUserSnapshot();
@@ -434,21 +411,13 @@ public:
     Snapshot *latestAutoSnapshot();
     Snapshot *latestUserSnapshot();
 
-    /* Loads the current state from a snapshot file
-     * There is an thread-unsafe and thread-safe version of this function. The
-     * first one can be unsed inside the emulator thread or from outside if the
-     * emulator is halted. The second one can be called any time.
+    /* Loads the current state from a snapshot file. There is an thread-unsafe
+     * and thread-safe version of this function. The first one can be unsed
+     * inside the emulator thread or from outside if the emulator is halted.
+     * The second one can be called any time.
      */
     void loadFromSnapshotUnsafe(Snapshot *snapshot);
     void loadFromSnapshotSafe(Snapshot *snapshot);
-    
-    
-    //
-    // Debugging the emulator
-    //
-    
-    void dumpClock();
-    
 };
 
 #endif

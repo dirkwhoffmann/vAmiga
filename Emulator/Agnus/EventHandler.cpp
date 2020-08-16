@@ -365,9 +365,7 @@ void
 Agnus::dumpEvents()
 {
     inspectEvents();
-    
-    amiga.dumpClock();
-    
+        
     msg("Events:\n");
     for (unsigned i = 0; i < SLOT_COUNT; i++) {
         

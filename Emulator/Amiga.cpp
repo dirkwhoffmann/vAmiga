@@ -10,13 +10,6 @@
 #include "Amiga.h"
 
 //
-// Static class variables
-//
-
-EventID Amiga::inspectionTarget = INS_NONE;
-
-
-//
 // Emulator thread
 //
 
@@ -120,37 +113,47 @@ Amiga::~Amiga()
     pthread_mutex_destroy(&stateChangeLock);
 }
 
-/*
 void
-Amiga::setDebugMode(bool enable)
+Amiga::prefix()
 {
-    if ((debugMode = enable)) {
-        
-        msg("Enabling debug mode\n");
-        cpu.debugger.enableLogging();
+    fprintf(stderr, "[%lld] (%3d,%3d) ",
+            agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
-    } else {
+    fprintf(stderr, "%06X ", cpu.getPC());
+    fprintf(stderr, "%2X ", cpu.getIPL());
 
-        msg("Disabling debug mode\n");
-        cpu.debugger.disableLogging();
+    u16 dmacon = agnus.dmacon;
+    bool dmaen = dmacon & DMAEN;
+    fprintf(stderr, "%c%c%c%c%c%c ",
+            (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
+            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
+            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
+            (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
+            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
+            (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
+
+    fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
+
+    if (agnus.copper.servicing) {
+        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC());
     }
 }
-*/
 
 void
-Amiga::setInspectionTarget(EventID id)
+Amiga::reset(bool hard)
 {
-    suspend();
-    inspectionTarget = id;
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
-    agnus.serviceINSEvent();
-    resume();
-}
+    if (hard) suspend();
+    
+    // If a disk change is in progress, finish it
+    paula.diskController.serviceDiskChangeEvent();
+    
+    // Execute the standard reset routine
+    HardwareComponent::reset(hard);
+    
+    if (hard) resume();
 
-void
-Amiga::clearInspectionTarget()
-{
-    setInspectionTarget(INS_NONE);
+    // Inform the GUI
+    messageQueue.putMessage(MSG_RESET);
 }
 
 AmigaConfiguration
@@ -167,7 +170,7 @@ Amiga::getConfig()
     config.denise = denise.getConfig();
     config.serialPort = serialPort.getConfig();
     config.keyboard = keyboard.getConfig();
-    config.blitter = agnus.blitter.getConfig(); 
+    config.blitter = agnus.blitter.getConfig();
     config.diskController = paula.diskController.getConfig();
     config.df0 = df0.getConfig();
     config.df1 = df1.getConfig();
@@ -672,54 +675,60 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
 }
 
 void
-Amiga::prefix()
+Amiga::setInspectionTarget(EventID id)
 {
-    fprintf(stderr, "[%lld] (%3d,%3d) ",
-            agnus.frame.nr, agnus.pos.v, agnus.pos.h);
+    suspend();
+    inspectionTarget = id;
+    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    agnus.serviceINSEvent();
+    resume();
+}
 
-    fprintf(stderr, "%06X ", cpu.getPC());
-    fprintf(stderr, "%2X ", cpu.getIPL());
+void
+Amiga::clearInspectionTarget()
+{
+    setInspectionTarget(INS_NONE);
+}
 
-    u16 dmacon = agnus.dmacon;
-    bool dmaen = dmacon & DMAEN;
-    fprintf(stderr, "%c%c%c%c%c%c ",
-            (dmacon & BPLEN) ? (dmaen ? 'B' : 'B') : '-',
-            (dmacon & COPEN) ? (dmaen ? 'C' : 'c') : '-',
-            (dmacon & BLTEN) ? (dmaen ? 'B' : 'b') : '-',
-            (dmacon & SPREN) ? (dmaen ? 'S' : 's') : '-',
-            (dmacon & DSKEN) ? (dmaen ? 'D' : 'd') : '-',
-            (dmacon & AUDEN) ? (dmaen ? 'A' : 'a') : '-');
-
-    fprintf(stderr, "%04X %04X ", paula.intena, paula.intreq);
-
-    if (agnus.copper.servicing) {
-        fprintf(stderr, "[%06X] ", agnus.copper.getCopPC());
+void
+Amiga::_inspect()
+{
+    synchronized {
+        
+        info.cpuClock = cpu.getMasterClock();
+        info.dmaClock = agnus.clock;
+        info.ciaAClock = ciaA.clock;
+        info.ciaBClock = ciaB.clock;
+        info.frame = agnus.frame.nr;
+        info.vpos = agnus.pos.v;
+        info.hpos = agnus.pos.h;
     }
 }
 
 void
-Amiga::reset(bool hard)
-{    
-    if (hard) suspend();
-    
-    // If a disk change is in progress, finish it
-    paula.diskController.serviceDiskChangeEvent();
-    
-    // Execute the standard reset routine
-    HardwareComponent::reset(hard);
-    
-    if (hard) resume();
-
-    // Inform the GUI
-    messageQueue.putMessage(MSG_RESET);
-}
-
-void
-Amiga::setWarp(bool enable)
+Amiga::_dump()
 {
-    suspend();
-    HardwareComponent::setWarp(enable);
-    resume();
+    AmigaConfiguration config = getConfig();
+    DiskControllerConfig dc = config.diskController;
+
+    msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
+    msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
+    msg("       paused: %s\n", isPaused() ? "yes" : "no");
+    msg("      running: %s\n", isRunning() ? "yes" : "no");
+    msg("\n");
+    msg("Current configuration:\n\n");
+    msg("          df0: %s %s\n",
+             dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
+    msg("          df1: %s %s\n",
+             dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
+    msg("          df2: %s %s\n",
+             dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
+    msg("          df3: %s %s\n",
+             dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
+
+    msg("\n");
+    msg("         warp: %d", warpMode);
+    msg("\n");
 }
 
 void
@@ -864,45 +873,11 @@ Amiga::_ping()
 }
 
 void
-Amiga::_inspect()
+Amiga::setWarp(bool enable)
 {
-    synchronized {
-        
-        info.cpuClock = cpu.getMasterClock();
-        info.dmaClock = agnus.clock;
-        info.ciaAClock = ciaA.clock;
-        info.ciaBClock = ciaB.clock;
-        info.frame = agnus.frame.nr;
-        info.vpos = agnus.pos.v;
-        info.hpos = agnus.pos.h;
-    }
-}
-
-void
-Amiga::_dump()
-{
-    AmigaConfiguration config = getConfig();
-    DiskControllerConfig dc = config.diskController;
-
-    dumpClock();
-    msg("    poweredOn: %s\n", isPoweredOn() ? "yes" : "no");
-    msg("   poweredOff: %s\n", isPoweredOff() ? "yes" : "no");
-    msg("       paused: %s\n", isPaused() ? "yes" : "no");
-    msg("      running: %s\n", isRunning() ? "yes" : "no");
-    msg("\n");
-    msg("Current configuration:\n\n");
-    msg("          df0: %s %s\n",
-             dc.connected[0] ? "yes" : "no", driveTypeName(config.df0.type));
-    msg("          df1: %s %s\n",
-             dc.connected[1] ? "yes" : "no", driveTypeName(config.df1.type));
-    msg("          df2: %s %s\n",
-             dc.connected[2] ? "yes" : "no", driveTypeName(config.df2.type));
-    msg("          df3: %s %s\n",
-             dc.connected[3] ? "yes" : "no", driveTypeName(config.df3.type));
-
-    msg("\n");
-    msg("         warp: %d", warpMode);
-    msg("\n");
+    suspend();
+    HardwareComponent::setWarp(enable);
+    resume();
 }
 
 void
@@ -917,40 +892,6 @@ Amiga::_setWarp(bool enable)
         restartTimer();
         messageQueue.putMessage(MSG_WARP_OFF);
     }
-}
-
-void
-Amiga::suspend()
-{
-    pthread_mutex_lock(&stateChangeLock);
-    
-    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
-    
-    if (suspendCounter || isRunning()) {
-        
-        acquireThreadLock();
-        assert(!isRunning()); // At this point, the emulator is already paused
-                
-        suspendCounter++;
-    }
-    
-    pthread_mutex_unlock(&stateChangeLock);
-}
-
-void
-Amiga::resume()
-{
-    pthread_mutex_lock(&stateChangeLock);
-    
-    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
-    
-    if (suspendCounter && --suspendCounter == 0) {
-        
-        acquireThreadLock();
-        HardwareComponent::run();
-    }
-    
-    pthread_mutex_unlock(&stateChangeLock);
 }
 
 void
@@ -1017,6 +958,40 @@ Amiga::isReady(ErrorCode *error)
 }
 
 void
+Amiga::suspend()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    debug(RUN_DEBUG, "Suspending (%d)...\n", suspendCounter);
+    
+    if (suspendCounter || isRunning()) {
+        
+        acquireThreadLock();
+        assert(!isRunning()); // At this point, the emulator is already paused
+                
+        suspendCounter++;
+    }
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
+Amiga::resume()
+{
+    pthread_mutex_lock(&stateChangeLock);
+    
+    debug(RUN_DEBUG, "Resuming (%d)...\n", suspendCounter);
+    
+    if (suspendCounter && --suspendCounter == 0) {
+        
+        acquireThreadLock();
+        HardwareComponent::run();
+    }
+    
+    pthread_mutex_unlock(&stateChangeLock);
+}
+
+void
 Amiga::setControlFlags(u32 flags)
 {
     synchronized { runLoopCtrl |= flags; }
@@ -1026,6 +1001,125 @@ void
 Amiga::clearControlFlags(u32 flags)
 {
     synchronized { runLoopCtrl &= ~flags; }
+}
+
+void
+Amiga::stopAndGo()
+{
+    isRunning() ? pause() : run();
+}
+
+void
+Amiga::stepInto()
+{
+    if (isRunning()) return;
+
+    cpu.debugger.stepInto();
+    run();
+}
+
+void
+Amiga::stepOver()
+{
+    if (isRunning()) return;
+    
+    cpu.debugger.stepOver();
+    run();
+}
+
+void
+Amiga::threadWillStart()
+{
+    debug(RUN_DEBUG, "Emulator thread started\n");
+}
+
+void
+Amiga::threadDidTerminate()
+{
+    debug(RUN_DEBUG, "Emulator thread terminated\n");
+
+    // Trash the thread pointer
+    p = NULL;
+    
+    // Pause all components
+    HardwareComponent::pause();
+        
+    // Release the thread lock
+    pthread_mutex_unlock(&threadLock);
+}
+
+void
+Amiga::runLoop()
+{
+    debug(RUN_DEBUG, "runLoop()\n");
+
+    // Prepare to run
+    restartTimer();
+    
+    // Enable or disable debugging features
+    if (debugMode) {
+        cpu.debugger.enableLogging();
+    } else {
+        cpu.debugger.disableLogging();
+    }
+    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
+    
+    // Enter the loop
+    while(1) {
+        
+        // Emulate the next CPU instruction
+        cpu.execute();
+
+        // Check if special action needs to be taken
+        if (runLoopCtrl) {
+            
+            // Are we requested to take a snapshot?
+            if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
+                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
+                autoSnapshot = Snapshot::makeWithAmiga(this);
+                messageQueue.putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
+                clearControlFlags(RL_AUTO_SNAPSHOT);
+            }
+            if (runLoopCtrl & RL_USER_SNAPSHOT) {
+                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
+                userSnapshot = Snapshot::makeWithAmiga(this);
+                messageQueue.putMessage(MSG_USER_SNAPSHOT_TAKEN);
+                clearControlFlags(RL_USER_SNAPSHOT);
+            }
+
+            // Are we requested to update the debugger info structs?
+            if (runLoopCtrl & RL_INSPECT) {
+                debug(RUN_DEBUG, "RL_INSPECT\n");
+                inspect();
+                clearControlFlags(RL_INSPECT);
+            }
+
+            // Did we reach a breakpoint?
+            if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
+                inspect();
+                messageQueue.putMessage(MSG_BREAKPOINT_REACHED);
+                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
+                clearControlFlags(RL_BREAKPOINT_REACHED);
+                break;
+            }
+
+            // Did we reach a watchpoint?
+            if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
+                inspect();
+                messageQueue.putMessage(MSG_WATCHPOINT_REACHED);
+                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
+                clearControlFlags(RL_WATCHPOINT_REACHED);
+                break;
+            }
+
+            // Are we requested to terminate the run loop?
+            if (runLoopCtrl & RL_STOP) {
+                clearControlFlags(RL_STOP);
+                debug(RUN_DEBUG, "RL_STOP\n");
+                break;
+            }
+        }
+    }
 }
 
 void
@@ -1146,153 +1240,4 @@ Amiga::loadFromSnapshotSafe(Snapshot *snapshot)
     suspend();
     loadFromSnapshotUnsafe(snapshot);
     resume();
-}
-
-
-//
-// The run loop
-//
-
-void
-Amiga::threadWillStart()
-{
-    debug(RUN_DEBUG, "Emulator thread started\n");
-}
-
-void
-Amiga::threadDidTerminate()
-{
-    debug(RUN_DEBUG, "Emulator thread terminated\n");
-
-    // Trash the thread pointer
-    p = NULL;
-    
-    // Pause all components
-    HardwareComponent::pause();
-        
-    // Release the thread lock
-    pthread_mutex_unlock(&threadLock);
-}
-
-void
-Amiga::stopAndGo()
-{
-    isRunning() ? pause() : run();
-}
-
-void
-Amiga::stepInto()
-{
-    if (isRunning()) return;
-
-    cpu.debugger.stepInto();
-    run();
-}
-
-void
-Amiga::stepOver()
-{
-    if (isRunning()) return;
-    
-    cpu.debugger.stepOver();
-    run();
-}
-
-void
-Amiga::runLoop()
-{
-    debug(RUN_DEBUG, "runLoop()\n");
-
-    // Prepare to run
-    restartTimer();
-    
-    // Enable or disable debugging features
-    if (debugMode) {
-        cpu.debugger.enableLogging();
-    } else {
-        cpu.debugger.disableLogging();
-    }
-    agnus.scheduleRel<INS_SLOT>(0, inspectionTarget);
-    
-    // Enter the loop
-    while(1) {
-        
-        // Emulate the next CPU instruction
-        cpu.execute();
-
-        // Check if special action needs to be taken
-        if (runLoopCtrl) {
-            
-            // Are we requested to take a snapshot?
-            if (runLoopCtrl & RL_AUTO_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_AUTO_SNAPSHOT\n");
-                autoSnapshot = Snapshot::makeWithAmiga(this);
-                messageQueue.putMessage(MSG_AUTO_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_AUTO_SNAPSHOT);
-            }
-            if (runLoopCtrl & RL_USER_SNAPSHOT) {
-                debug(RUN_DEBUG, "RL_USER_SNAPSHOT\n");
-                userSnapshot = Snapshot::makeWithAmiga(this);
-                messageQueue.putMessage(MSG_USER_SNAPSHOT_TAKEN);
-                clearControlFlags(RL_USER_SNAPSHOT);
-            }
-
-            // Are we requested to update the debugger info structs?
-            if (runLoopCtrl & RL_INSPECT) {
-                debug(RUN_DEBUG, "RL_INSPECT\n");
-                inspect();
-                clearControlFlags(RL_INSPECT);
-            }
-
-            // Did we reach a breakpoint?
-            if (runLoopCtrl & RL_BREAKPOINT_REACHED) {
-                inspect();
-                messageQueue.putMessage(MSG_BREAKPOINT_REACHED);
-                debug(RUN_DEBUG, "BREAKPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_BREAKPOINT_REACHED);
-                break;
-            }
-
-            // Did we reach a watchpoint?
-            if (runLoopCtrl & RL_WATCHPOINT_REACHED) {
-                inspect();
-                messageQueue.putMessage(MSG_WATCHPOINT_REACHED);
-                debug(RUN_DEBUG, "WATCHPOINT_REACHED pc: %x\n", cpu.getPC());
-                clearControlFlags(RL_WATCHPOINT_REACHED);
-                break;
-            }
-
-            // Are we requested to terminate the run loop?
-            if (runLoopCtrl & RL_STOP) {
-                clearControlFlags(RL_STOP);
-                debug(RUN_DEBUG, "RL_STOP\n");
-                break;
-            }
-        }
-    }
-}
-
-void
-Amiga::dumpClock()
-{
-    msg("               Master cycles     DMA cycles    CIA cycles\n");
-    msg("    CPU clock: %13lld %13lld %13lld\n",
-             cpu.getMasterClock(),
-             AS_DMA_CYCLES(cpu.getMasterClock()),
-             AS_CIA_CYCLES(cpu.getMasterClock()));
-    msg("    DMA clock: %13lld  %13lld %13lld %13lld\n",
-             agnus.clock,
-             AS_DMA_CYCLES(agnus.clock),
-             AS_CIA_CYCLES(agnus.clock));
-    msg("  CIA A clock: %13lld  %13lld %13lld %13lld\n",
-             ciaA.clock,
-             AS_DMA_CYCLES(ciaA.clock),
-             AS_CIA_CYCLES(ciaA.clock));
-    msg("  CIA B clock: %13lld  %13lld %13lld %13lld\n",
-             ciaB.clock,
-             AS_DMA_CYCLES(ciaB.clock),
-             AS_CIA_CYCLES(ciaB.clock));
-    msg("  Color clock: (%d,%d) hex: ($%X,$%X) Frame: %lld\n",
-             agnus.pos.v, agnus.pos.h, agnus.pos.v, agnus.pos.h, agnus.frame.nr);
-    msg("\n");
 }

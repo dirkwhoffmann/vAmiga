@@ -52,9 +52,7 @@ public:
     
 private:
     
-    /* Propagates a single message to all registered listeners
-     * Called by function putMessage(...)
-     */
+    // Propagates a single message to all registered listeners
     void propagate(Message *msg);
 };
 
