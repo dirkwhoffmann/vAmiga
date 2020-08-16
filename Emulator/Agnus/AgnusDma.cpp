@@ -455,10 +455,10 @@ Agnus::pokeSPRxCTL(u16 value)
 bool
 Agnus::dropWrite(BusOwner owner)
 {
-    // A write to a pointer register is dropped if the pointer was used one
-    // cycle before the pointer register would be updated.
-    
-    if (pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+    /* A write to a pointer register is dropped if the pointer was used one
+     * cycle before the pointer register would be updated.
+     */
+    if (DROP_PTR_WRITES && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
         debug(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;
     }

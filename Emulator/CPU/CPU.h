@@ -109,8 +109,6 @@ private:
     void signalTAS() override;
     
     void signalHalt() override;
-    void signalTracingOn() override;
-    void signalTracingOff() override;
     
     void signalAddressError(moira::AEStackFrame &frame) override;
     void signalLineAException(u16 opcode) override;

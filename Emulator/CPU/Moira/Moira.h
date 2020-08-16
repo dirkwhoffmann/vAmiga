@@ -225,8 +225,6 @@ protected:
 
     // State delegates
     virtual void signalHalt() { };
-    virtual void signalTracingOn() { };
-    virtual void signalTracingOff() { };
 
     // Exception delegates
     virtual void signalAddressError(AEStackFrame &frame) { };

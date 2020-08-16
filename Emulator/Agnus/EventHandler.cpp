@@ -388,11 +388,12 @@ Agnus::dumpEvents()
 bool
 Agnus::slowRamIsMirroredIn()
 {
-#ifdef MIRROR_SLOW_RAM
-    return isECS() && mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
-#else
-    return false;
-#endif
+
+    if (MIRROR_SLOW_RAM && isECS()) {
+        return mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
+    } else {
+        return false;
+    }
 }
 
 EventInfo

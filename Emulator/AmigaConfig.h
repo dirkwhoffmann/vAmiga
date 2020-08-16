@@ -25,17 +25,6 @@
 
 
 //
-// Compatibility settings
-//
-
-// Enable to emulate the Slow Ram mirroring feature of the ECS Agnus
-#define MIRROR_SLOW_RAM
-
-// Enable to initialize Ram with (pseudo)random numbers
-// #define RANDOM_RAM_PATTERN
-
-
-//
 // Configuration overrides
 //
 
@@ -50,10 +39,6 @@
 // #define FORCE_DRIVE_SPEED    -1
 // #define FORCE_ASYNC_FIFO     true
 
-
-//
-// Debug settings
-//
 
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xC0A008   // Jetsons
@@ -74,6 +59,19 @@
 
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
+
+
+//
+// Compatibility settings
+//
+
+static const int MIRROR_SLOW_RAM = 0; // Emulate ECS Agnus Slow Ram mirror
+static const int DROP_PTR_WRITES = 0; // Resolve CPU/DMA access collisions
+static const int RANDOMIZE_RAM   = 0; // Initialize Ram with random numbers
+
+//
+// Debug settings
+//
 
 // General
 static const int XFILES          = 0; // Report paranormal activity

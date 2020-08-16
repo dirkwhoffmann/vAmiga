@@ -266,9 +266,6 @@ Moira::setSR(u16 val)
     bool s = (val >> 13) & 1;
     u8 ipl = (val >>  8) & 7;
 
-    // Delegation call
-    if (reg.sr.t != t) t ? signalTracingOn() : signalTracingOff();
-
     reg.sr.ipl = ipl;
     flags |= CPU_CHECK_IRQ;
     t ? setTraceFlag() : clearTraceFlag();
