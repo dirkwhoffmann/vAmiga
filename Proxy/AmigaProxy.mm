@@ -767,35 +767,35 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
-- (double) vol:(NSInteger)nr
+- (long) vol:(NSInteger)nr
 {
     return wrapper->paula->audioUnit.getVol(nr);
 }
-- (void) setVol:(NSInteger)nr value:(double)value
+- (void) setVol:(NSInteger)nr value:(long)value
 {
     wrapper->paula->audioUnit.setVol(nr, value);
 }
-- (double) pan:(NSInteger)nr
+- (long) pan:(NSInteger)nr
 {
     return wrapper->paula->audioUnit.getPan(nr);
 }
-- (void) setPan:(NSInteger)nr value:(double)value
+- (void) setPan:(NSInteger)nr value:(long)value
 {
     wrapper->paula->audioUnit.setPan(nr, value);
 }
-- (double) volL
+- (long) volL
 {
     return wrapper->paula->audioUnit.getVolL();
 }
-- (void) setVolL:(double)value
+- (void) setVolL:(long)value
 {
     wrapper->paula->audioUnit.setVolL(value);
 }
-- (double) volR
+- (long) volR
 {
     return wrapper->paula->audioUnit.getVolR();
 }
-- (void) setVolR:(double)value
+- (void) setVolR:(long)value
 {
     wrapper->paula->audioUnit.setVolR(value);
 }

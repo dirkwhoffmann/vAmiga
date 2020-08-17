@@ -36,70 +36,70 @@ extension ConfigurationController {
     @IBAction func audVol0Action(_ sender: NSSlider!) {
 
         track()
-        config.vol0 = log2(sender.doubleValue / 100) * 0.0000025
+        config.vol0 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol1Action(_ sender: NSSlider!) {
 
         track()
-        config.vol1 = log2(sender.doubleValue / 100) * 0.0000025
+        config.vol1 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol2Action(_ sender: NSSlider!) {
 
         track()
-        config.vol2 = log2(sender.doubleValue / 100) * 0.0000025
+        config.vol2 = sender.integerValue
         refresh()
     }
     
     @IBAction func audVol3Action(_ sender: NSSlider!) {
 
         track()
-        config.vol3 = log2(sender.doubleValue / 100) * 0.0000025
+        config.vol3 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan0Action(_ sender: NSSlider!) {
         
         track()
-        config.pan0 = sender.doubleValue / 100.0
+        config.pan0 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan1Action(_ sender: NSSlider!) {
         
         track()
-        config.pan1 = sender.doubleValue / 100
+        config.pan1 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan2Action(_ sender: NSSlider!) {
         
         track()
-        config.pan2 = sender.doubleValue / 100
+        config.pan2 = sender.integerValue
         refresh()
     }
     
     @IBAction func audPan3Action(_ sender: NSSlider!) {
         
         track()
-        config.pan3 = sender.doubleValue / 100.0
+        config.pan3 = sender.integerValue
         refresh()
     }
 
     @IBAction func audVolLAction(_ sender: NSSlider!) {
         
         track()
-        config.volL = log2(sender.doubleValue / 100)
+        config.volL = sender.integerValue
         refresh()
     }
 
     @IBAction func audVolRAction(_ sender: NSSlider!) {
         
         track()
-        config.volR = log2(sender.doubleValue / 100)
+        config.volR = sender.integerValue
         refresh()
     }
 

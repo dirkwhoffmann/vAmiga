@@ -841,18 +841,18 @@ extension UserDefaults {
 extension Keys {
     
     // In
-    static let vol0               = "VAMIGA_AUD_Vol0"
-    static let vol1               = "VAMIGA_AUD_Vol1"
-    static let vol2               = "VAMIGA_AUD_Vol2"
-    static let vol3               = "VAMIGA_AUD_Vol3"
+    static let vol0               = "VAMIGA_AUD_Volume0"
+    static let vol1               = "VAMIGA_AUD_Volume1"
+    static let vol2               = "VAMIGA_AUD_Volume2"
+    static let vol3               = "VAMIGA_AUD_Volume3"
     static let pan0               = "VAMIGA_AUD_Pan0"
     static let pan1               = "VAMIGA_AUD_Pan1"
     static let pan2               = "VAMIGA_AUD_Pan2"
     static let pan3               = "VAMIGA_AUD_Pan3"
 
     // Out
-    static let volL               = "VAMIGA_AUD_VolL"
-    static let volR               = "VAMIGA_AUD_VolR"
+    static let volL               = "VAMIGA_AUD_VolumeL"
+    static let volR               = "VAMIGA_AUD_VolumeR"
     static let samplingMethod     = "VAMIGA_AUD_SamplingMethod"
     static let filterType         = "VAMIGA_AUD_FilterType"
     static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
@@ -861,18 +861,18 @@ extension Keys {
 struct AudioDefaults {
     
     // In
-    let vol0: Double
-    let vol1: Double
-    let vol2: Double
-    let vol3: Double
-    let pan0: Double
-    let pan1: Double
-    let pan2: Double
-    let pan3: Double
+    let vol0: Int
+    let vol1: Int
+    let vol2: Int
+    let vol3: Int
+    let pan0: Int
+    let pan1: Int
+    let pan2: Int
+    let pan3: Int
     
     // Out
-    let volL: Double
-    let volR: Double
+    let volL: Int
+    let volR: Int
     let samplingMethod: SamplingMethod
     let filterType: FilterType
     let filterAlwaysOn: Bool
@@ -883,17 +883,17 @@ struct AudioDefaults {
     
     static let std = AudioDefaults.init(
         
-        vol0: 0.0000025,
-        vol1: 0.0000025,
-        vol2: 0.0000025,
-        vol3: 0.0000025,
-        pan0: 0.7,
-        pan1: 0.3,
-        pan2: 0.3,
-        pan3: 0.7,
+        vol0: 400,
+        vol1: 400,
+        vol2: 400,
+        vol3: 400,
+        pan0: 70,
+        pan1: 30,
+        pan2: 30,
+        pan3: 70,
         
-        volL: 1.0,
-        volR: 1.0,
+        volL: 250,
+        volR: 250,
         samplingMethod: SMP_NONE,
         filterType: FILT_BUTTERWORTH,
         filterAlwaysOn: false

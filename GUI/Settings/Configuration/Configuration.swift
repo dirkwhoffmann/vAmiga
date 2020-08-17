@@ -189,43 +189,43 @@ class Configuration {
     // Audio settings
     //
 
-    var vol0: Double {
+    var vol0: Int {
         get { return amiga.paula.vol(0) }
         set { amiga.paula.setVol(0, value: newValue) }
     }
-    var vol1: Double {
+    var vol1: Int {
         get { return amiga.paula.vol(1) }
         set { amiga.paula.setVol(1, value: newValue) }
     }
-    var vol2: Double {
+    var vol2: Int {
         get { return amiga.paula.vol(2) }
         set { amiga.paula.setVol(2, value: newValue) }
     }
-    var vol3: Double {
+    var vol3: Int {
         get { return amiga.paula.vol(3) }
         set { amiga.paula.setVol(3, value: newValue) }
     }
-    var pan0: Double {
+    var pan0: Int {
         get { return amiga.paula.pan(0) }
         set { amiga.paula.setPan(0, value: newValue) }
     }
-    var pan1: Double {
+    var pan1: Int {
         get { return amiga.paula.pan(1) }
         set { amiga.paula.setPan(1, value: newValue) }
     }
-    var pan2: Double {
+    var pan2: Int {
         get { return amiga.paula.pan(2) }
         set { amiga.paula.setPan(2, value: newValue) }
     }
-    var pan3: Double {
+    var pan3: Int {
         get { return amiga.paula.pan(3) }
         set { amiga.paula.setPan(3, value: newValue) }
     }
-    var volL: Double {
+    var volL: Int {
         get { return amiga.paula.volL }
         set { amiga.paula.volL = newValue }
     }
-    var volR: Double {
+    var volR: Int {
         get { return amiga.paula.volR }
         set { amiga.paula.volR = newValue }
     }
@@ -585,17 +585,17 @@ class Configuration {
         
         amiga.suspend()
         
-        vol0 = defaults.double(forKey: Keys.vol0)
-        vol1 = defaults.double(forKey: Keys.vol1)
-        vol2 = defaults.double(forKey: Keys.vol2)
-        vol3 = defaults.double(forKey: Keys.vol3)
-        pan0 = defaults.double(forKey: Keys.pan0)
-        pan1 = defaults.double(forKey: Keys.pan1)
-        pan2 = defaults.double(forKey: Keys.pan2)
-        pan3 = defaults.double(forKey: Keys.pan3)
+        vol0 = defaults.integer(forKey: Keys.vol0)
+        vol1 = defaults.integer(forKey: Keys.vol1)
+        vol2 = defaults.integer(forKey: Keys.vol2)
+        vol3 = defaults.integer(forKey: Keys.vol3)
+        pan0 = defaults.integer(forKey: Keys.pan0)
+        pan1 = defaults.integer(forKey: Keys.pan1)
+        pan2 = defaults.integer(forKey: Keys.pan2)
+        pan3 = defaults.integer(forKey: Keys.pan3)
         
-        volL = defaults.double(forKey: Keys.volL)
-        volR = defaults.double(forKey: Keys.volR)
+        volL = defaults.integer(forKey: Keys.volL)
+        volR = defaults.integer(forKey: Keys.volR)
         samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
         filterType = defaults.integer(forKey: Keys.filterType)
         filterAlwaysOn = defaults.bool(forKey: Keys.filterAlwaysOn)

@@ -137,17 +137,17 @@ public:
     double getSampleRate() { return config.sampleRate; }
     void setSampleRate(double hz);
     
-    double getVol(unsigned nr) { assert(nr < 4); return config.vol[nr]; }
-    void setVol(unsigned nr, double val);
+    long getVol(unsigned nr);
+    void setVol(unsigned nr, long val);
 
-    double getPan(unsigned nr) { assert(nr < 4); return config.pan[nr]; }
-    void setPan(unsigned nr, double val);
+    long getPan(unsigned nr);
+    void setPan(unsigned nr, long val);
 
-    double getVolL() { return config.volL; }
-    void setVolL(double val);
+    long getVolL();
+    void setVolL(long val);
 
-    double getVolR() { return config.volR; }
-    void setVolR(double val);
+    long getVolR();
+    void setVolR(long val);
 
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
 

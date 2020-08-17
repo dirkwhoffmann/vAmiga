@@ -318,6 +318,7 @@ Agnus::pokeBPLxPTL(u16 value)
 template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
+    // if (x == 5) debug("setBPLxPTH(%d, %X)\n", x, value);
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     
     if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {

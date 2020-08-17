@@ -193,20 +193,6 @@ public:
     // Sets the speed acceleration factor for all connected drives
     void setSpeed(i32 value);
     
-    // Enables or disables asynchronous FIFO buffer emulation
-    /*
-    bool getAsyncFifo() { return config.asyncFifo; }
-    void setAsyncFifo(bool value);
-    */
-    
-    // Getters and setters for copy-protection related settings
-    /*
-    bool getLockDskSync() { return config.lockDskSync; }
-    void setLockDskSync(bool value);
-    bool getAutoDskSync() { return config.autoDskSync; }
-    void setAutoDskSync(bool value);
-    */
-    
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
 
