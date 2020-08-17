@@ -113,12 +113,50 @@ private:
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     PaulaAudio(Amiga& ref);
+    
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    AudioConfig getConfig() { return config; }
+
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
+    double getSampleRate() { return config.sampleRate; }
+    void setSampleRate(double hz);
+    
+    double getVol(unsigned nr) { assert(nr < 4); return config.vol[nr]; }
+    void setVol(unsigned nr, double val);
+
+    double getPan(unsigned nr) { assert(nr < 4); return config.pan[nr]; }
+    void setPan(unsigned nr, double val);
+
+    double getVolL() { return config.volL; }
+    void setVolL(double val);
+
+    double getVolR() { return config.volR; }
+    void setVolR(double val);
+
+    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+
+    
+    //
+    // Serializing
+    //
+    
+private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -142,69 +180,43 @@ public:
         & clock;
     }
 
-
-    //
-    // Configuring
-    //
-
-    AudioConfig getConfig() { return config; }
-
-    double getSampleRate() { return config.sampleRate; }
-    void setSampleRate(double hz);
-
-    SamplingMethod getSamplingMethod() { return config.samplingMethod; }
-    void setSamplingMethod(SamplingMethod  method);
-
-    FilterType getFilterType();
-    void setFilterType(FilterType type);
-
-    bool getFilterAlwaysOn() { return config.filterAlwaysOn; }
-    void setFilterAlwaysOn(bool val);
-
-    double getVol(unsigned nr) { assert(nr < 4); return config.vol[nr]; }
-    void setVol(unsigned nr, double val);
-
-    double getPan(unsigned nr) { assert(nr < 4); return config.pan[nr]; }
-    void setPan(unsigned nr, double val);
-
-    double getVolL() { return config.volL; }
-    void setVolL(double val);
-
-    double getVolR() { return config.volR; }
-    void setVolR(double val);
-
-    bool isMuted() { return config.volL == 0 && config.volR == 0; }
-    
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-    
-    void _powerOn() override;
-    void _run() override;
-    void _pause() override;
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(u8 *buffer) override;
 
+    
+    //
+    // Analyzing
+    //
+    
 public:
-
+    
     // Returns the result of the most recent call to inspect()
     AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-    // Returns statistical information about this device
+    void _inspect() override;
+    void _dump() override;
+
+    // Returns information about the current workload
     AudioStats getStats() { return stats; }
+    
+    
+    //
+    // Changing state
+    //
+    
+private:
+    
+    void _run() override;
+    void _pause() override;
 
 
     //
     // Accessing the state machines
     //
+    
+public:
     
     void pokeAUDxPER(int nr, u16 value);
     void pokeAUDxVOL(int nr, u16 value);
@@ -214,18 +226,17 @@ public:
     // Controlling the volume
     //
     
-    /* Sets the current volume
-     */
+    // Sets the current volume
     void setVolume(i32 vol) { volume = vol; }
     
-    /* Triggers volume ramp up phase
-     * Configures volume and targetVolume to simulate a smooth audio fade in
+    /* Triggers volume ramp up phase. Configures volume and targetVolume to
+     * simulate a smooth audio fade in.
      */
     void rampUp();
     void rampUpFromZero();
     
-    /* Triggers volume ramp down phase
-     * Configures volume and targetVolume to simulate a quick audio fade out
+    /* Triggers volume ramp down phase. Configures volume and targetVolume to
+     * simulate a quick audio fade out
      */
     void rampDown();
     

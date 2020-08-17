@@ -28,6 +28,65 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+PaulaAudio::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS
+    
+    clearRingbuffer();
+    
+    stats.bufferUnderflows = 0;
+    stats.bufferOverflows = 0;
+}
+
+long
+PaulaAudio::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_SAMPLING_METHOD:
+            return config.samplingMethod;
+            
+        case OPT_FILTER_TYPE:
+            assert(filterL.getFilterType() == config.filterType);
+            assert(filterR.getFilterType() == config.filterType);
+            return config.filterType;
+            
+        case OPT_FILTER_ALWAYS_ON:
+            return config.filterAlwaysOn;
+            
+        default: assert(false);
+    }
+}
+
+void
+PaulaAudio::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_SAMPLING_METHOD:
+            
+            assert(isSamplingMethod(value));
+            config.samplingMethod = (SamplingMethod)value;
+            return;
+            
+        case OPT_FILTER_TYPE:
+            
+            assert(isFilterType(value));
+            config.filterType = (FilterType)value;
+            filterL.setFilterType((FilterType)value);
+            filterR.setFilterType((FilterType)value);
+            return;
+            
+        case OPT_FILTER_ALWAYS_ON:
+            
+            config.filterAlwaysOn = value;
+            return;
+            
+        default: return;
+    }
+}
+
+void
 PaulaAudio::setSampleRate(double hz)
 {
     debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
@@ -37,23 +96,6 @@ PaulaAudio::setSampleRate(double hz)
 
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
-}
-
-void
-PaulaAudio::setSamplingMethod(SamplingMethod  method)
-{
-    debug(AUD_DEBUG, "setSamplingMethod(%d)\n", method);
-    assert(isSamplingMethod(method));
-
-    config.samplingMethod = method;
-}
-
-void
-PaulaAudio::setFilterAlwaysOn(bool value)
-{
-    debug(AUD_DEBUG, "setFilterAlwaysOn(%d)\n", value);
-
-    config.filterAlwaysOn = value;
 }
 
 void
@@ -92,29 +134,11 @@ PaulaAudio::setVolR(double val)
     }
 }
 
-FilterType
-PaulaAudio::getFilterType()
+size_t
+PaulaAudio::didLoadFromBuffer(u8 *buffer)
 {
-    assert(filterL.getFilterType() == config.filterType);
-    assert(filterR.getFilterType() == config.filterType);
-
-    return config.filterType;
-}
-
-void
-PaulaAudio::setFilterType(FilterType type)
-{
-    debug(AUD_DEBUG, "setFilterType(%d)\n", type);
-    assert(isFilterType(type));
-
-    config.filterType = type;
-    filterL.setFilterType(type);
-    filterR.setFilterType(type);
-}
-
-void
-PaulaAudio::_powerOn()
-{
+    clearRingbuffer();
+    return 0;
 }
 
 void
@@ -134,13 +158,6 @@ PaulaAudio::_dump()
 {
 }
 
-size_t
-PaulaAudio::didLoadFromBuffer(u8 *buffer)
-{
-    clearRingbuffer();
-    return 0;
-}
-
 void
 PaulaAudio::_run()
 {
@@ -151,17 +168,6 @@ void
 PaulaAudio::_pause()
 {
     clearRingbuffer();
-}
-
-void
-PaulaAudio::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS
-    
-    clearRingbuffer();
-    
-    stats.bufferUnderflows = 0;
-    stats.bufferOverflows = 0;
 }
 
 void
@@ -179,12 +185,6 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
-        /*
-        short left1  = channel0.interpolate<method>(clock);
-        short right1 = channel1.interpolate<method>(clock);
-        short right2 = channel2.interpolate<method>(clock);
-        short left2  = channel3.interpolate<method>(clock);
-        */
         double ch0 = channel0.interpolate<method>(clock) * config.vol[0];
         double ch1 = channel1.interpolate<method>(clock) * config.vol[1];
         double ch2 = channel2.interpolate<method>(clock) * config.vol[2];

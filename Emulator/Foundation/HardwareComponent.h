@@ -12,22 +12,21 @@
 
 #include "AmigaObject.h"
 
-/* This class defines the base functionality of all hardware components.
- * It comprises functions for powering up, powering down, resetting, and
- * serializing.
+/* This class defines the base functionality of all hardware components. It
+ * comprises functions for powering up, powering down, resetting, and
+ * serializing the emulator.
  */
 class HardwareComponent : public AmigaObject {
-
+    
 public:
-
-    // Sub components of this component
+    
+    // Sub components
     vector<HardwareComponent *> subComponents;
-
+    
 protected:
     
-    /* State model
-     * The virtual hardware components can be in three different states
-     * called 'Off', 'Paused', and 'Running'.
+    /* State model. The virtual hardware components can be in three different
+     * states called 'Off', 'Paused', and 'Running':
      *
      *        Off: The Amiga is turned off
      *     Paused: The Amiga is turned on, but there is no emulator thread
@@ -35,18 +34,18 @@ protected:
      */
     EmulatorState state = STATE_OFF;
     
-    /* Indicates if the emulator should be executed in warp mode.
-     * To speed up emulation (e.g., during disk accesses), the virtual hardware
-     * can be put into warp mode. In this mode, the emulation thread is no
-     * longer paused to match the target frequency and runs as fast as possible.
+    /* Indicates if the emulator should be executed in warp mode. To speed up
+     * emulation (e.g., during disk accesses), the virtual hardware may be put
+     * into warp mode. In this mode, the emulation thread is no longer paused
+     * to match the target frequency and runs as fast as possible.
      */
     bool warpMode = false;
-
-    /* Indicates if the emulator should be executed in debug mode.
-     * Debug mode is enabled when the GUI debugger is opend and disabled when
-     * the GUI debugger is closed. In debug mode, several time-consuming tasks
-     * are performed that are usually left out. E.g., the CPU checks for
-     * breakpoints and records the executed instruction in it's trace buffer.
+    
+    /* Indicates if the emulator should be executed in debug mode. Debug mode
+     * is enabled when the GUI debugger is opend and disabled when the GUI
+     * debugger is closed. In debug mode, several time-consuming tasks are
+     * performed that are usually left out. E.g., the CPU checks for breakpoints
+     * and records the executed instruction in it's trace buffer.
      */
     bool debugMode = false;
     
@@ -54,7 +53,7 @@ protected:
     //
     // Initializing
     //
-
+    
 public:
     
     virtual ~HardwareComponent();
@@ -70,41 +69,15 @@ public:
     
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:
-      *
-      *     hard: A hard reset restores the initial state.
-      *           It resets the Amiga from an emulator point of view.
-      *
-      *     soft: A soft reset emulates a reset inside the virtual Amiga. It
-      *           is used to emulate the CPU's RESET instruction.
-      */
-     void reset(bool hard);
-     virtual void _reset(bool hard) = 0;
-    
-    
-    //
-    // Serializing
-    //
-    
-    // Returns the size of the internal state in bytes
-    size_t size();
-    virtual size_t _size() = 0;
-
-    // Loads the internal state from a memory buffer
-    size_t load(u8 *buffer);
-    virtual size_t _load(u8 *buffer) = 0;
-
-    // Saves the internal state to a memory buffer
-    size_t save(u8 *buffer);
-    virtual size_t _save(u8 *buffer) = 0;
-
-    /* Delegation methods called inside load() or save(). Some components
-     * override these methods to add custom behavior if not all elements can be
-     * processed by the default implementation.
+     *
+     *     hard: A hard reset restores the initial state.
+     *           It resets the Amiga from an emulator point of view.
+     *
+     *     soft: A soft reset emulates a reset inside the virtual Amiga. It
+     *           is used to emulate the CPU's RESET instruction.
      */
-    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
-    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
-    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
-    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
+    void reset(bool hard);
+    virtual void _reset(bool hard) = 0;
     
     
     //
@@ -117,14 +90,40 @@ public:
      * e.g., because an invalid value has been passed.
      */
     bool configure(ConfigOption option, long value);
-
+    
     // Sets a single configuration item
     virtual void setConfigItem(ConfigOption option, long value) { };
-            
+    
     // Dumps debug information about the current configuration to the console
     void dumpConfig();
     virtual void _dumpConfig() { }
-
+    
+    
+    //
+    // Serializing
+    //
+    
+    // Returns the size of the internal state in bytes
+    size_t size();
+    virtual size_t _size() = 0;
+    
+    // Loads the internal state from a memory buffer
+    size_t load(u8 *buffer);
+    virtual size_t _load(u8 *buffer) = 0;
+    
+    // Saves the internal state to a memory buffer
+    size_t save(u8 *buffer);
+    virtual size_t _save(u8 *buffer) = 0;
+    
+    /* Delegation methods called inside load() or save(). Some components
+     * override these methods to add custom behavior if not all elements can be
+     * processed by the default implementation.
+     */
+    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
+    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
+    
     
     //
     // Analyzing
@@ -169,7 +168,7 @@ public:
      */
     void ping();
     virtual void _ping() { }
-
+    
     
     //
     // Changing state
@@ -250,14 +249,14 @@ protected:
     virtual void _pause() { };
     
 public:
-        
+    
     // Switches warp mode on or off
     void setWarp(bool enable);
     virtual void _setWarp(bool enable) { };
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }
     bool inWarpMode() { return warpMode; }
-
+    
     // Switches debug mode on or off
     void setDebug(bool enable);
     virtual void _setDebug(bool enable) { };

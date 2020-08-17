@@ -45,10 +45,11 @@
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To
  * run the emulator, it is sufficient to create a single object of this type.
- * All subcomponents are created automatically. The public API gives you control
- * over the emulator's behaviour such as running and pausing the emulation.
- * Please note that most subcomponents have their own public API. E.g., to query
- * information from Paula, you need to invoke a public method on amiga.paula.
+ * All subcomponents are created automatically. The public API gives you
+ * control over the emulator's behaviour such as running and pausing the
+ * emulation. Please note that most subcomponents have their own public API.
+ * E.g., to query information from Paula, you need to invoke a public method on
+ * amiga.paula.
  */
 class Amiga : public HardwareComponent {
 
@@ -192,6 +193,24 @@ public:
 
     
     //
+    // Configuring
+    //
+    
+public:
+    
+    // Returns the current configuration
+    AmigaConfiguration getConfig();
+    
+    // Gets a single configuration item
+    long getConfigItem(ConfigOption option);
+    long getDriveConfigItem(unsigned drive, ConfigOption option);
+    
+    // Sets a single configuration item
+    bool configure(ConfigOption option, long value);
+    bool configureDrive(unsigned drive, ConfigOption option, long value);
+
+    
+    //
     // Serializing
     //
     
@@ -214,24 +233,6 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-
-    //
-    // Configuring
-    //
-
-public:
-    
-    // Returns the current configuration
-    AmigaConfiguration getConfig();
-
-    // Gets a single configuration item
-    long getConfigItem(ConfigOption option);
-    long getDriveConfigItem(unsigned drive, ConfigOption option);
-
-    // Sets a single configuration item
-    bool configure(ConfigOption option, long value);
-    bool configureDrive(unsigned drive, ConfigOption option, long value);
 
     
     //
@@ -272,7 +273,7 @@ private:
 
     
     //
-    // Controlling the emulator thread
+    // Working with the emulator thread
     //
     
 public:

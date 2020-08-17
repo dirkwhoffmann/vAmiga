@@ -208,10 +208,12 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_CLX_SPR_SPR: return denise.getClxSprSpr();
         case OPT_CLX_SPR_PLF: return denise.getClxSprPlf();
         case OPT_CLX_PLF_PLF: return denise.getClxPlfPlf();
-        case OPT_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
-        case OPT_FILTER_TYPE: return paula.audioUnit.getFilterType();
-        case OPT_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
-
+            
+        case OPT_SAMPLING_METHOD:
+        case OPT_FILTER_TYPE:
+        case OPT_FILTER_ALWAYS_ON:
+            return paula.audioUnit.getConfigItem(option);
+            
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);
 
@@ -514,11 +516,6 @@ Amiga::configure(ConfigOption option, long value)
 
     switch (option) {
 
-        /*
-        case OPT_AGNUS_REVISION:
-            agnus.setRevision((AgnusRevision)value);
-            break;
-        */
         case OPT_DENISE_REVISION:
             denise.setRevision((DeniseRevision)value);
             break;
@@ -528,24 +525,6 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
 
-        /*
-        case OPT_CHIP_RAM:
-            mem.allocChip(KB(value));
-            break;
-    
-        case OPT_SLOW_RAM:
-            mem.allocSlow(KB(value));
-            break;
-        
-        case OPT_FAST_RAM:
-            mem.allocFast(KB(value));
-            break;
-
-        case OPT_EXT_START:
-            mem.setExtStart(value);
-            break;
-        */
-            
         case OPT_DRIVE_SPEED:
             paula.diskController.setSpeed(value);
             break;
@@ -573,24 +552,6 @@ Amiga::configure(ConfigOption option, long value)
         case OPT_CLX_PLF_PLF:
             denise.setClxPlfPlf(value);
             break;
-
-        case OPT_SAMPLING_METHOD:
-            paula.audioUnit.setSamplingMethod((SamplingMethod)value);
-            break;
-
-        case OPT_FILTER_TYPE:
-            paula.audioUnit.setFilterType((FilterType)value);
-            break;
-            
-        case OPT_FILTER_ALWAYS_ON:
-            paula.audioUnit.setFilterAlwaysOn(value);
-            break;
-            
-        /*
-        case OPT_BLITTER_ACCURACY:
-            agnus.blitter.setAccuracy(value);
-            break;
-        */
             
         case OPT_ASYNC_FIFO:
             paula.diskController.setAsyncFifo(value);
@@ -608,18 +569,6 @@ Amiga::configure(ConfigOption option, long value)
             serialPort.setDevice((SerialPortDevice)value);
             break;
 
-            /*
-        case OPT_TODBUG:
-            ciaA.setTodBug(value);
-            ciaB.setTodBug(value);
-            break;
-            
-        case OPT_ECLOCK_SYNCING:
-            ciaA.setEClockSyncing(value);
-            ciaB.setEClockSyncing(value);
-            break;
-             */
-            
         case OPT_ACCURATE_KEYBOARD:
             keyboard.setAccurate(value);
             break;

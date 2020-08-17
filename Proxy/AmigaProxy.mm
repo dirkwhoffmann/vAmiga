@@ -799,6 +799,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setVolR(value);
 }
+/*
 - (FilterType) filterType
 {
     return wrapper->paula->audioUnit.getFilterType();
@@ -815,6 +816,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setFilterAlwaysOn(value);
 }
+*/
 - (NSInteger) ringbufferSize
 {
     return wrapper->paula->audioUnit.ringbufferSize();
