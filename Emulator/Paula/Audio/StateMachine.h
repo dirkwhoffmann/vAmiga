@@ -76,15 +76,24 @@ public:
     bool enablePenlo = false;
     bool enablePenhi = false;
 
-
+    
     //
-    // Constructing and serializing
+    // Initializing
     //
 
 public:
 
     StateMachine(Amiga& ref);
 
+    void _reset(bool hard) override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -113,29 +122,23 @@ public:
         & enablePenhi;
     }
 
-
-    //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _dump() override;
-    void _reset(bool hard) override;
-    void _inspect() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
-    // Accessing properties
+    // Analyzing
     //
-
+    
 public:
-
-    // Returns the latest internal state recorded by inspect()
+    
     AudioChannelInfo getInfo() { return HardwareComponent::getInfo(info); }
+        
+private:
+
+    void _inspect() override;
+    void _dump() override;
 
     
     //
@@ -144,16 +147,9 @@ public:
 
 public:
 
-    // OCS registers 0xA4, 0xB4, 0xC4, 0xD4 (w)
     void pokeAUDxLEN(u16 value);
-
-    // OCS registers 0xA6, 0xB6, 0xB6, 0xD6 (w)
     void pokeAUDxPER(u16 value);
-
-    // OCS registers 0xA8, 0xB8, 0xC8, 0xD8 (w)
     void pokeAUDxVOL(u16 value);
-
-    // OCS registers 0xAA, 0xBA, 0xCA, 0xDA (w)
     void pokeAUDxDAT(u16 value);
 
     // Called when the DMA mode changes

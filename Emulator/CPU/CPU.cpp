@@ -238,11 +238,6 @@ CPU::_inspect(u32 dasmStart)
 }
 
 void
-CPU::_dumpConfig()
-{
-}
-
-void
 CPU::_dump()
 {
     _inspect();

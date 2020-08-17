@@ -25,13 +25,36 @@ class AudioFilter : public AmigaComponent {
     
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     AudioFilter(Amiga& ref);
 
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Configuring the device
+    //
+    
+public:
+    
+    // Filter type
+    FilterType getFilterType() { return type; }
+    void setFilterType(FilterType type);
+    
+    // Sample rate
+    void setSampleRate(double sampleRate);
+    
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -45,43 +68,22 @@ public:
     {
     }
     
-    
-    //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
-    // Configuring the device
+    // Running the filter
     //
-    
+
 public:
     
-    // Filter type
-    FilterType getFilterType() { return type; }
-    void setFilterType(FilterType type);
-
-    // Sample rate
-    void setSampleRate(double sampleRate);
-
-    
-    //
-    // Using the device
-    //
-
     // Initializes the filter pipeline with zero elements
     void clear();
 
     // Inserts a sample into the filter pipeline
     float apply(float sample);
-    
 };
     
 #endif

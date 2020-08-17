@@ -35,6 +35,32 @@ DiskController::_reset(bool hard)
     assert(diskToInsert == NULL);
 }
 
+long
+DiskController::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_ASYNC_FIFO:    return config.asyncFifo;
+        case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
+        case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
+        
+        default: assert(false);
+    }
+}
+
+void
+DiskController::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_ASYNC_FIFO:    config.asyncFifo = value; return;
+        case OPT_AUTO_DSKSYNC:  config.autoDskSync = value; return;
+        case OPT_LOCK_DSKSYNC:  config.lockDskSync = value; return;
+            
+        default: return;
+    }
+}
+
 void
 DiskController::_ping()
 {
@@ -162,6 +188,7 @@ DiskController::setSpeed(i32 value)
     amiga.resume();
 }
 
+/*
 void
 DiskController::setAsyncFifo(bool value)
 {
@@ -179,6 +206,7 @@ DiskController::setAutoDskSync(bool value)
 {
     synchronized { config.autoDskSync = value; }
 }
+*/
 
 Drive *
 DiskController::getSelectedDrive()

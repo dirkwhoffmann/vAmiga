@@ -20,13 +20,22 @@ class CPU : public AmigaComponent, public moira::Moira {
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
 
 public:
 
     CPU(Amiga& ref);
 
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -63,8 +72,27 @@ public:
         & exception;
     }
 
+    size_t _size() override;
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t didLoadFromBuffer(u8 *buffer) override;
+
+    
     //
-    // Methods from HardwareComponent
+    // Analyzing
+    //
+    
+public:
+    
+    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+    void _inspect() override;
+    void _inspect(u32 dasmStart);
+    void _dump() override;
+
+    
+    //
+    // Changing state
     //
     
 private:
@@ -72,25 +100,11 @@ private:
     void _powerOn() override;
     void _powerOff() override; 
     void _run() override;
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _inspect(u32 dasmStart);
-    void _dumpConfig() override;
-    void _dump() override;
     void _setDebug(bool enable) override;
-    size_t _size() override;
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
 
-public:
-    
-    // Returns the result of the most recent call to inspect()
-    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
-    
-    
+        
     //
-    // Methods from Moira
+    // Communicating with Moira
     //
 
 private:
@@ -124,6 +138,7 @@ private:
     void breakpointReached(u32 addr) override;
     void watchpointReached(u32 addr) override;
 
+    
     //
     // Working with the clock
     //

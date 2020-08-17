@@ -217,9 +217,11 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);
 
-        case OPT_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
-        case OPT_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
-        case OPT_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
+        case OPT_ASYNC_FIFO:
+        case OPT_LOCK_DSKSYNC:
+        case OPT_AUTO_DSKSYNC:
+            return paula.diskController.getConfigItem(option);
+            
         case OPT_SERIAL_DEVICE: return serialPort.getDevice();
 
         case OPT_TODBUG:
@@ -552,19 +554,7 @@ Amiga::configure(ConfigOption option, long value)
         case OPT_CLX_PLF_PLF:
             denise.setClxPlfPlf(value);
             break;
-            
-        case OPT_ASYNC_FIFO:
-            paula.diskController.setAsyncFifo(value);
-            break;
-
-        case OPT_LOCK_DSKSYNC:
-            paula.diskController.setLockDskSync(value);
-            break;
-            
-        case OPT_AUTO_DSKSYNC:
-            paula.diskController.setAutoDskSync(value);
-            break;
-
+        
         case OPT_SERIAL_DEVICE:
             serialPort.setDevice((SerialPortDevice)value);
             break;

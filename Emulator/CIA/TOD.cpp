@@ -156,7 +156,7 @@ TOD::increment()
         debug(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
               tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
-    if (cia->getTodBug()) checkForInterrupt();
+    if (cia->config.todBug) checkForInterrupt();
 
     if (!incHiNibble(tod.mid)) goto check;
     if (!incLoNibble(tod.hi))  goto check;

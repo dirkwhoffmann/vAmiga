@@ -395,7 +395,42 @@ private:
     void initDasEventTable();
 
     void _reset(bool hard) override;
-
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    AgnusConfig getConfig() { return config; }
+    
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
+    bool isOCS() { return config.revision == AGNUS_8367; }
+    bool isECS() { return config.revision != AGNUS_8367; }
+    
+    // Returns the maximum amout of Chip Ram in KB this Agnus can handle
+    long chipRamLimit();
+    
+    // Returns a bit mask for the memory locations this Agnus can address
+    u32 chipRamMask();
+    
+    // Returns the line in which the VERTB interrupt gets triggered
+    int vStrobeLine() { return isOCS() ? 1 : 0; }
+    
+    // Returns the connected bits in DDFSTRT / DDFSTOP
+    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
+    
+    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
+     * revision of Agnus has a special feature that makes Slow Ram accessible
+     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
+     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
+     * have this feature. It has access to Chip Ram, only.
+     */
+    bool slowRamIsMirroredIn();
+    
     
     //
     // Serializing
@@ -491,44 +526,11 @@ private:
 
     
     //
-    // Configuring
+    // Analyzing
     //
 
 public:
     
-    AgnusConfig getConfig() { return config; }
-
-    long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
-    
-    bool isOCS() { return config.revision == AGNUS_8367; }
-    bool isECS() { return config.revision != AGNUS_8367; }
-
-    // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    long chipRamLimit();
-
-    // Returns a bit mask for the memory locations this Agnus can address
-    u32 chipRamMask();
-
-    // Returns the line in which the VERTB interrupt gets triggered
-    int vStrobeLine() { return isOCS() ? 1 : 0; }
-
-    // Returns the connected bits in DDFSTRT / DDFSTOP
-    u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
-
-    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
-     * revision of Agnus has a special feature that makes Slow Ram accessible
-     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
-     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
-     * have this feature. It has access to Chip Ram, only.
-     */
-    bool slowRamIsMirroredIn();
-    
-    
-    //
-    // Analyzing
-    //
-
     AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);

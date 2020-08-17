@@ -14,17 +14,17 @@
 
 class DiskController : public AmigaComponent {
 
-    friend class Amiga;
-
-    // Bookkeeping
+    // Current configuration
     DiskControllerConfig config;
+
+    // Result of the latest inspection
     DiskControllerInfo info;
 
-    /* Indicates whether the FIFO buffer should be filled asynchronously
-     * At the beginning of each disk operation, this variable is assigned
-     * the value of the corresponding configuration option. Latching the value
+    /* Indicates whether the FIFO buffer should be filled asynchronously. At
+     * the beginning of each disk operation, this variable is assigned the
+     * value of the corresponding configuration option. Latching the value
      * enables the user to change the configuration in the middle of a disk
-      operation without causing any damage.
+     * operation without causing any damage.
      */
     bool asyncFifo;
 
@@ -44,11 +44,10 @@ class DiskController : public AmigaComponent {
     // Timestamp of the latest DSKSYNC match
     Cycle syncCycle;
 
-    /* Watchdog counter for SYNC marks
-     * This counter is incremented after each disk rotation and reset when
-     * a SYNC mark was found. It is used to implement the auto DSKSYNC feature
-     * which forces the DSKSYNC interrupt to trigger even if no SYNC mark
-     * is present.
+    /* Watchdog counter for SYNC marks. This counter is incremented after each
+     * disk rotation and reset when a SYNC mark was found. It is used to
+     * implement the auto DSKSYNC feature which forces the DSKSYNC interrupt to
+     * trigger even if no SYNC mark is present.
      */
     i16 syncCounter = 0;
     
@@ -60,10 +59,10 @@ class DiskController : public AmigaComponent {
     // The latest incoming byte (value shows up in DSKBYTER)
     u16 incoming;
         
-    /* The drive controller's FIFO buffer
-     * On each DSK_ROTATE event, a byte is read from the selected drive and
-     * put into this buffer. Each Disk DMA operation will read two bytes from
-     * the buffer and store them at the desired location.
+    /* The drive controller's FIFO buffer. On each DSK_ROTATE event, a byte is
+     * read from the selected drive and put into this buffer. Each Disk DMA
+     * operation will read two bytes from the buffer and store them at the
+     * desired location.
      */
     u64 fifo;
     
@@ -95,16 +94,34 @@ class DiskController : public AmigaComponent {
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     DiskController(Amiga& ref);
 
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Configuring
+    //
+    
     DiskControllerConfig getConfig() { return config; }
-    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
 
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+
+    void _dumpConfig() override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -135,18 +152,26 @@ public:
         & prb;
     }
 
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
 
+    void _inspect() override;
+    void _dump() override;
+
+    
     //
     // Methods from HardwareComponent
     //
     
 private:
     
-    void _reset(bool hard) override;
     void _ping() override;
-    void _inspect() override;
-    void _dumpConfig() override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
@@ -169,15 +194,19 @@ public:
     void setSpeed(i32 value);
     
     // Enables or disables asynchronous FIFO buffer emulation
+    /*
     bool getAsyncFifo() { return config.asyncFifo; }
     void setAsyncFifo(bool value);
-
+    */
+    
     // Getters and setters for copy-protection related settings
+    /*
     bool getLockDskSync() { return config.lockDskSync; }
     void setLockDskSync(bool value);
     bool getAutoDskSync() { return config.autoDskSync; }
     void setAutoDskSync(bool value);
-
+    */
+    
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
 
