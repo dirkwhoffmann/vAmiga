@@ -17,7 +17,7 @@
 // DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
 const u32 FAST_RAM_STRT = 0x200000;
 
-// Verifies the range of an address
+// Verifies address ranges
 #define ASSERT_CHIP_ADDR(x) \
 assert(chip != NULL); assert(((x) % config.chipSize) == ((x) & chipMask));
 #define ASSERT_FAST_ADDR(x) \
@@ -102,7 +102,7 @@ class Memory : public AmigaComponent {
 
 public:
 
-    /* About memory
+    /* About
      *
      * There are 6 types of dynamically allocated memory:
      *
@@ -159,17 +159,16 @@ public:
     u32 slowMask = 0;
     u32 fastMask = 0;
 
-    /* Indicates if the Kickstart Wom is writable.
-     * If an Amiga 1000 Boot Rom is installed, a Kickstart WOM (Write Once
-     * Memory) is added automatically. On startup, the WOM is unlocked which
-     * means that it is writable. During the boot process, the WOM gets locked.
+    /* Indicates if the Kickstart Wom is writable. If an Amiga 1000 Boot Rom is
+     * installed, a Kickstart WOM (Write Once Memory) is added automatically.
+     * On startup, the WOM is unlocked which means that it is writable. During
+     * the boot process, the WOM gets locked.
      */
     bool womIsLocked = false;
     
-    /* Memory is divided into 64KB banks.
-     * The Amiga has 24 address lines which means that memory is divided
-     * into 256 different banks. For each bank, this array indicates the type
-     * of memory seen by the Amiga.
+    /* Memory is divided into 64KB banks. The Amiga has 24 address lines which
+     * means that memory is divided into 256 different banks. For each bank,
+     * this array indicates the type of memory seen by the Amiga.
      * See also: updateMemSrcTable()
      */
     MemorySource memSrc[256];
@@ -182,15 +181,38 @@ public:
     
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Memory(Amiga& ref);
     ~Memory();
-    void dealloc();
 
+private:
+    
+    void dealloc();
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    MemoryConfig getConfig() { return config; }
+    
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -216,30 +238,6 @@ public:
         & dataBus;
     }
 
-
-    //
-    // Configuring
-    //
-
-public:
-
-    // Returns the current configuration
-    MemoryConfig getConfig() { return config; }
-
-    u32 getExtStart() { return config.extStart; }
-    void setExtStart(u32 page);
-
-
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _powerOn() override;
-    void _reset(bool hard) override;
-    void _dump() override;
-    
     size_t _size() override;
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
@@ -248,18 +246,32 @@ private:
 
 
     //
-    // Statistics
+    // Analyzing
+    //
+
+private:
+
+    void _dump() override;
+
+    
+    //
+    // Changing state
+    //
+    
+private:
+
+    void _powerOn() override;
+
+
+    //
+    // Profiling
     //
 
 public:
     
-    // Returns statistical information about the current activity
     MemoryStats getStats() { return stats; }
-
-    // Resets the collected statistical information
+    
     void clearStats() { memset(&stats, 0, sizeof(stats)); }
-
-    // Called in the vsync handler to compute the interpolated values
     void updateStats();
     
     
@@ -269,11 +281,8 @@ public:
     
 private:
     
-    /* Dynamically allocates Ram or Rom
-     *
-     * Side effects:
-     *    - Updates the memory lookup table
-     *    - Sends a memory layout messageto the GUI
+    /* Dynamically allocates Ram or Rom. As side effects, the memory table is
+     * updated and the GUI is informed about the changed memory layout.
      */
     bool alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask);
 

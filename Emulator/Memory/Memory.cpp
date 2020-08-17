@@ -38,30 +38,6 @@ Memory::dealloc()
 }
 
 void
-Memory::setExtStart(u32 page)
-{
-    assert(page == 0xE0 || page == 0xF0);
-
-    config.extStart = page;
-    updateMemSrcTable();
-}
-
-void
-Memory::_powerOn()
-{
-    // dump();
-    
-    // Erase WOM (if any)
-    if (hasWom()) eraseWom();
-
-    // Fill RAM with the proper startup pattern
-    fillRamWithStartupPattern();
-
-    // Set up the memory lookup table
-    updateMemSrcTable();
-}
-
-void
 Memory::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
@@ -73,34 +49,37 @@ Memory::_reset(bool hard)
     if (hard) fillRamWithStartupPattern();
 }
 
-void
-Memory::_dump()
+long
+Memory::getConfigItem(ConfigOption option)
 {
-    struct { u8 *addr; size_t size; const char *desc; } mem[7] = {
-        { rom, config.romSize, "Rom" },
-        { wom, config.womSize, "Wom" },
-        { ext, config.extSize, "Ext" },
-        { chip, config.chipSize, "Chip Ram" },
-        { slow, config.slowSize, "Slow Ram" },
-        { fast, config.fastSize, "Fast Ram" }
-    };
+    switch (option) {
+            
+        case OPT_CHIP_RAM:  return config.chipSize / KB(1);
+        case OPT_SLOW_RAM:  return config.slowSize / KB(1);
+        case OPT_FAST_RAM:  return config.fastSize / KB(1);
+        case OPT_EXT_START: return config.extStart;
 
-    // Print a summary of the installed memory
-    for (int i = 0; i < 6; i++) {
+        default: assert(false);
+    }
+}
 
-        size_t size = mem[i].size;
-        u8 *addr = mem[i].addr;
-
-        msg("     %s: ", mem[i].desc);
-        if (size == 0) {
-            assert(addr == 0);
-            msg("not present\n");
-        } else {
-            assert(addr != 0);
-            assert(size % KB(1) == 0);
-            u32 check = fnv_1a_32(addr, size);
-            msg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
-        }
+void
+Memory::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_CHIP_RAM:  mem.allocChip(KB(value)); return;
+        case OPT_SLOW_RAM:  mem.allocSlow(KB(value)); return;
+        case OPT_FAST_RAM:  mem.allocFast(KB(value)); return;
+            
+        case OPT_EXT_START:
+            
+            assert(value == 0xE0 || value == 0xF0);
+            config.extStart = value;
+            updateMemSrcTable();
+            return;
+                        
+        default: return;
     }
 }
 
@@ -188,6 +167,50 @@ Memory::didSaveToBuffer(u8 *buffer)
     writer.copy(fast, config.fastSize);
 
     return writer.ptr - buffer;
+}
+
+void
+Memory::_dump()
+{
+    struct { u8 *addr; size_t size; const char *desc; } mem[7] = {
+        { rom, config.romSize, "Rom" },
+        { wom, config.womSize, "Wom" },
+        { ext, config.extSize, "Ext" },
+        { chip, config.chipSize, "Chip Ram" },
+        { slow, config.slowSize, "Slow Ram" },
+        { fast, config.fastSize, "Fast Ram" }
+    };
+
+    // Print a summary of the installed memory
+    for (int i = 0; i < 6; i++) {
+
+        size_t size = mem[i].size;
+        u8 *addr = mem[i].addr;
+
+        msg("     %s: ", mem[i].desc);
+        if (size == 0) {
+            assert(addr == 0);
+            msg("not present\n");
+        } else {
+            assert(addr != 0);
+            assert(size % KB(1) == 0);
+            u32 check = fnv_1a_32(addr, size);
+            msg("%3d KB at: %p Checksum: %x\n", size >> 10, addr, check);
+        }
+    }
+}
+
+void
+Memory::_powerOn()
+{
+    // Erase WOM (if any)
+    if (hasWom()) eraseWom();
+
+    // Fill RAM with the proper startup pattern
+    fillRamWithStartupPattern();
+
+    // Set up the memory lookup table
+    updateMemSrcTable();
 }
 
 void

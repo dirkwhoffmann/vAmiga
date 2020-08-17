@@ -194,10 +194,13 @@ Amiga::getConfigItem(ConfigOption option)
             return agnus.getConfigItem(option);
         case OPT_DENISE_REVISION: return denise.getRevision();
         case OPT_RTC: return rtc.getModel();
-        case OPT_CHIP_RAM: return mem.chipRamSize() / KB(1);
-        case OPT_SLOW_RAM: return mem.slowRamSize() / KB(1);
-        case OPT_FAST_RAM: return mem.fastRamSize() / KB(1);
-        case OPT_EXT_START: return mem.getExtStart();
+
+        case OPT_CHIP_RAM:
+        case OPT_SLOW_RAM:
+        case OPT_FAST_RAM:
+        case OPT_EXT_START:
+            return mem.getConfigItem(option);
+
         case OPT_DRIVE_SPEED: return df0.getSpeed();
         case OPT_HIDDEN_SPRITES: return denise.getHiddenSprites();
         case OPT_HIDDEN_LAYERS: return denise.getHiddenLayers();
@@ -208,15 +211,19 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_SAMPLING_METHOD: return paula.audioUnit.getSamplingMethod();
         case OPT_FILTER_TYPE: return paula.audioUnit.getFilterType();
         case OPT_FILTER_ALWAYS_ON: return paula.audioUnit.getFilterAlwaysOn();
+
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);
+
         case OPT_ASYNC_FIFO: return paula.diskController.getAsyncFifo();
         case OPT_LOCK_DSKSYNC: return paula.diskController.getLockDskSync();
         case OPT_AUTO_DSKSYNC: return paula.diskController.getAutoDskSync();
         case OPT_SERIAL_DEVICE: return serialPort.getDevice();
+
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
             return ciaA.getConfigItem(option);
+
         case OPT_ACCURATE_KEYBOARD: return keyboard.getAccurate();
 
         default: assert(false); return 0;
@@ -521,6 +528,7 @@ Amiga::configure(ConfigOption option, long value)
             mem.updateMemSrcTable();
             break;
 
+        /*
         case OPT_CHIP_RAM:
             mem.allocChip(KB(value));
             break;
@@ -536,7 +544,8 @@ Amiga::configure(ConfigOption option, long value)
         case OPT_EXT_START:
             mem.setExtStart(value);
             break;
-
+        */
+            
         case OPT_DRIVE_SPEED:
             paula.diskController.setSpeed(value);
             break;

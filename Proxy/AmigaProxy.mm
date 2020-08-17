@@ -376,7 +376,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSInteger) extStart
 {
-    return wrapper->mem->getExtStart(); 
+    return wrapper->mem->getConfigItem(OPT_EXT_START);
 }
 - (BOOL) saveWom:(NSURL *)url
 {
