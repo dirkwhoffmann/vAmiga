@@ -20,57 +20,8 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
         &dmaDebugger
     };
 
-    setRevision(AGNUS_8372);
+    configure(OPT_AGNUS_REVISION, AGNUS_8372);
     initLookupTables();
-}
-
-void
-Agnus::setRevision(AgnusRevision revision)
-{
-    // debug("setRevision(%d)\n", revision);
-    
-    assert(isAgnusRevision(revision));
-    config.revision = revision;
-    
-    switch (config.revision) {
-            
-        case AGNUS_8367: ptrMask = 0x07FFFF; break;
-        case AGNUS_8372: ptrMask = 0x0FFFFF; break;
-        case AGNUS_8375: ptrMask = 0x1FFFFF; break;
-        default: assert(false);
-    }
-}
-
-long
-Agnus::chipRamLimit()
-{
-    switch (config.revision) {
-
-        case AGNUS_8375: return 2048;
-        case AGNUS_8372: return 1024;
-        default:         return 512;
-    }
-}
-
-u32
-Agnus::chipRamMask()
-{
-    u32 result;
-    
-    switch (config.revision) {
-
-        case AGNUS_8375: result = 0x1FFFFF; break;
-        case AGNUS_8372: result = 0x0FFFFF; break;
-        default:         result = 0x07FFFF;
-    }
-    
-    assert(result == ptrMask);
-    return result;
-}
-
-void
-Agnus::_powerOn()
-{
 }
 
 void Agnus::_reset(bool hard)
@@ -105,6 +56,77 @@ void Agnus::_reset(bool hard)
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
+}
+
+long
+Agnus::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_AGNUS_REVISION: return config.revision;
+        
+        default: assert(false);
+    }
+}
+
+void
+Agnus::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_AGNUS_REVISION:
+            
+            assert(isAgnusRevision(value));
+            config.revision = (AgnusRevision)value;
+            switch (config.revision) {
+                    
+                case AGNUS_8367: ptrMask = 0x07FFFF; break;
+                case AGNUS_8372: ptrMask = 0x0FFFFF; break;
+                case AGNUS_8375: ptrMask = 0x1FFFFF; break;
+                default: assert(false);
+            }
+            return;
+            
+        default: return;
+    }
+}
+
+long
+Agnus::chipRamLimit()
+{
+    switch (config.revision) {
+
+        case AGNUS_8375: return 2048;
+        case AGNUS_8372: return 1024;
+        default:         return 512;
+    }
+}
+
+u32
+Agnus::chipRamMask()
+{
+    u32 result;
+    
+    switch (config.revision) {
+
+        case AGNUS_8375: result = 0x1FFFFF; break;
+        case AGNUS_8372: result = 0x0FFFFF; break;
+        default:         result = 0x07FFFF;
+    }
+    
+    assert(result == ptrMask);
+    return result;
+}
+
+bool
+Agnus::slowRamIsMirroredIn()
+{
+
+    if (MIRROR_SLOW_RAM && isECS()) {
+        return mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
+    } else {
+        return false;
+    }
 }
 
 void

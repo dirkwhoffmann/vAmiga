@@ -190,7 +190,8 @@ Amiga::getConfigItem(ConfigOption option)
 {
     switch (option) {
 
-        case OPT_AGNUS_REVISION: return agnus.getRevision();
+        case OPT_AGNUS_REVISION:
+            return agnus.getConfigItem(option);
         case OPT_DENISE_REVISION: return denise.getRevision();
         case OPT_RTC: return rtc.getModel();
         case OPT_CHIP_RAM: return mem.chipRamSize() / KB(1);
@@ -506,10 +507,11 @@ Amiga::configure(ConfigOption option, long value)
 
     switch (option) {
 
+        /*
         case OPT_AGNUS_REVISION:
             agnus.setRevision((AgnusRevision)value);
             break;
-
+        */
         case OPT_DENISE_REVISION:
             denise.setRevision((DeniseRevision)value);
             break;

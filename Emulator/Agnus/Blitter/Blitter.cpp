@@ -158,14 +158,6 @@ Blitter::_dump()
     msg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
-/*
-void
-Blitter::vsyncHandler()
-{
-
-}
-*/
-
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm)
 {

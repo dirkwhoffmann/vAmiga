@@ -22,7 +22,7 @@ class PaulaAudio : public AmigaComponent {
     // Result of the latest inspection
     AudioInfo info;
 
-    // Collected statistical information
+    // Current workload
     AudioStats stats;
 
 

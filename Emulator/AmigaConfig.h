@@ -65,9 +65,9 @@
 // Compatibility settings
 //
 
-static const int MIRROR_SLOW_RAM = 0; // Emulate ECS Agnus Slow Ram mirror
-static const int DROP_PTR_WRITES = 0; // Resolve CPU/DMA access collisions
-static const int RANDOMIZE_RAM   = 0; // Initialize Ram with random numbers
+static const int MIRROR_SLOW_RAM = 1; // Emulate ECS Agnus Slow Ram mirror
+static const int DROP_PTR_WRITES = 1; // Resolve CPU/DMA access collisions
+static const int RANDOMIZE_RAM   = 1; // Initialize Ram with random numbers
 
 //
 // Debug settings

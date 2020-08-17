@@ -97,7 +97,7 @@ class Memory : public AmigaComponent {
     // Current configuration
     MemoryConfig config;
 
-    // Collected statistical information
+    // Current workload
     MemoryStats stats;
 
 public:

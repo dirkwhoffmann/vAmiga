@@ -540,12 +540,6 @@ extension MyController: NSMenuItemValidation {
         amiga.dump()
         amiga.resume()
     }
-    @IBAction func dumpEventsAction(_ sender: Any!) {
-        amiga.suspend()
-        amiga.agnus.dumpEvents()
-        amiga.resume()
-        track()
-    }
     @IBAction func dumpCPUAction(_ sender: Any!) {
         amiga.suspend()
         amiga.cpu.dump()

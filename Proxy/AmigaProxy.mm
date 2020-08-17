@@ -438,10 +438,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->agnus->dump();
 }
-- (void) dumpEvents
-{
-    wrapper->agnus->dumpEvents();
-}
 - (AgnusInfo) getInfo
 {
     return wrapper->agnus->getInfo();

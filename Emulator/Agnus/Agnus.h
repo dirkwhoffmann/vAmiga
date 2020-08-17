@@ -53,7 +53,7 @@ class Agnus : public AmigaComponent {
     AgnusInfo info;
     EventInfo eventInfo;
 
-    // Collected statistical information
+    // Current workload
     AgnusStats stats;
 
 
@@ -215,9 +215,8 @@ private:
     bool audxDR[4];
     bool audxDSR[4];
     
-    /* Blitter slow down
-     * The BLS signal indicates that the CPU's request to access the bus has
-     * been denied for three or more consecutive cycles.
+    /* Blitter slow down. The BLS signal indicates that the CPU's request to
+     * access the bus has been denied for three or more consecutive cycles.
      */
     bool bls;
 
@@ -348,13 +347,12 @@ public:
     i16 diwVstrt;
     i16 diwVstop;
 
-    /* Value of the DIW flipflops
-     * Variable vFlop stores the value of the vertical DIW flipflop. The value
-     * is updated at the beginning of each rasterline and cannot change
-     * thereafter. Variable hFlop stores the value of the horizontal DIW
-     * flipflop as it was at the beginning of the rasterline. To find out
-     * the value of the horizontal flipflop inside or at the end of a
-     * rasterline, hFlopOn and hFlopOff need to be evaluated.
+    /* Value of the DIW flipflops. Variable vFlop stores the value of the
+     * vertical DIW flipflop. The value is updated at the beginning of each
+     * rasterline and cannot change thereafter. Variable hFlop stores the value
+     * of the horizontal DIW flipflop as it was at the beginning of the
+     * rasterline. To find out the value of the horizontal flipflop inside or
+     * at the end of a rasterline, hFlopOn and hFlopOff need to be evaluated.
      */
     bool diwVFlop;
     bool diwHFlop;
@@ -371,9 +369,8 @@ public:
     // Sprites
     //
 
-    /* The vertical trigger positions of all 8 sprites
-     * Note: The horizontal trigger positions are stored inside Denise. Agnus
-     * knows nothing about them.
+    /* The vertical trigger positions of all 8 sprites. Note that Agnus knows
+     * nothing about the horizontal trigger positions (only Denise does).
      */
     i16 sprVStrt[8];
     i16 sprVStop[8];
@@ -383,18 +380,29 @@ public:
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Agnus(Amiga& ref);
 
+private:
+    
     void initLookupTables();
     void initBplEventTableLores();
     void initBplEventTableHires();
     void initDasEventTable();
 
+    void _reset(bool hard) override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -477,16 +485,22 @@ public:
         & sprDmaState;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+    
     //
     // Configuring
     //
 
+public:
+    
     AgnusConfig getConfig() { return config; }
 
-    AgnusRevision getRevision() { return config.revision; }
-    void setRevision(AgnusRevision type);
-
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
     bool isOCS() { return config.revision == AGNUS_8367; }
     bool isECS() { return config.revision != AGNUS_8367; }
 
@@ -502,48 +516,45 @@ public:
     // Returns the connected bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }
 
-    /* Returns true if Agnus is able to access to the Slow Ram area.
-     * The ECS Agnus has a special feature that makes Slow Ram accessible.
-     * In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow Ram is
-     * mapped into the second Chip Ram segment. The OCS Agnus does not have
-     * this feature. It has access to Chip Ram, only.
+    /* Returns true if Agnus is able to access to the Slow Ram area. The ECS
+     * revision of Agnus has a special feature that makes Slow Ram accessible
+     * for DMA. In the 512 MB Chip Ram + 512 Slow Ram configuration, the Slow
+     * Ram is mapped into the second Chip Ram segment. The OCS Agnus does not
+     * have this feature. It has access to Chip Ram, only.
      */
     bool slowRamIsMirroredIn();
     
+    
     //
-    // Analyzing and profiling
+    // Analyzing
     //
 
-    // Returns the result of the latest inspection
     AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
-    
     EventInfo getEventInfo();
     EventSlotInfo getEventSlotInfo(int nr);
-    AgnusStats getStats() { return stats; }
-    void clearStats();
-    void updateStats();
-
-
-    //
-    // Methods from HardwareComponent
-    //
     
 private:
-
-    void _powerOn() override;
-    void _reset(bool hard) override;
+    
     void _inspect() override;
     void _dump() override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     void inspectEvents();
     void inspectEventSlot(EventSlot nr);
+    void dumpEvents();
+
+    
+    //
+    // Profiling
+    //
 
 public:
-
-    void dumpEvents();
+    
+    AgnusStats getStats() { return stats; }
+    
+private:
+    
+    void clearStats();
+    void updateStats();
 
 
     //
@@ -603,23 +614,23 @@ public:
 
 
     //
-    // Working with beam positions
+    // Working with the beam position
     //
 
 public:
 
-    /* Translates a beam position to a master cycle.
-     * 'beam' must be a position inside the current frame.
+    /* Translates a beam position to a master cycle. The beam position must be
+     * a position inside the current frame.
      */
     Cycle beamToCycle(Beam beam);
 
-    /* Translates a master cycle to a beam position.
-     * 'cycle' must belong to the current frame for the function to work.
+    /* Translates a master cycle to a beam position. The beam position must
+     * belong to the current frame.
      */
     Beam cycleToBeam(Cycle cycle);
 
-    /* Advances a beam position by a given number of cycles.
-     * Note: Only the horizontal component is wrapped over.
+    /* Advances a beam position by a given number of cycles. Note that only
+     * the horizontal component is wrapped over.
      */
     Beam addToBeam(Beam beam, Cycle cycles);
 

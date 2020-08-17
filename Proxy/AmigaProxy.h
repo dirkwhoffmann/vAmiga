@@ -327,7 +327,6 @@ struct SerialPortWrapper;
 - (NSInteger) chipRamLimit;
 
 - (void) dump;
-- (void) dumpEvents;
 
 - (AgnusInfo) getInfo;
 - (EventSlotInfo) getEventSlotInfo:(NSInteger)slot;
