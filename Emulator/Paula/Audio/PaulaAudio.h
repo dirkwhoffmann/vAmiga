@@ -137,6 +137,7 @@ public:
     double getSampleRate() { return config.sampleRate; }
     void setSampleRate(double hz);
     
+    /*
     long getVol(unsigned nr);
     void setVol(unsigned nr, long val);
 
@@ -148,7 +149,8 @@ public:
 
     long getVolR();
     void setVolR(long val);
-
+    */
+    
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
 
     

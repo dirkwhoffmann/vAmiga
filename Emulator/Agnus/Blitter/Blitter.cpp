@@ -69,8 +69,14 @@ Blitter::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
-        case OPT_BLITTER_ACCURACY: config.accuracy = value; return;
-        default: return;
+        case OPT_BLITTER_ACCURACY:
+            amiga.suspend();
+            config.accuracy = value;
+            amiga.resume();
+            break;
+            
+        default:
+            break;
     }
 }
 

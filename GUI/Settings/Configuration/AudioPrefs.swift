@@ -11,7 +11,6 @@ extension ConfigurationController {
     
     func refreshAudioTab() {
         
-        track()
         let config = amiga.config.audio
         
         // In
@@ -98,7 +97,6 @@ extension ConfigurationController {
 
     @IBAction func audVolRAction(_ sender: NSSlider!) {
         
-        track()
         config.volR = sender.integerValue
         refresh()
     }

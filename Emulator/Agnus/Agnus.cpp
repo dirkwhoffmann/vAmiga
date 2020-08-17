@@ -77,6 +77,8 @@ Agnus::setConfigItem(ConfigOption option, long value)
         case OPT_AGNUS_REVISION:
             
             assert(isAgnusRevision(value));
+
+            amiga.suspend();
             config.revision = (AgnusRevision)value;
             switch (config.revision) {
                     
@@ -85,9 +87,10 @@ Agnus::setConfigItem(ConfigOption option, long value)
                 case AGNUS_8375: ptrMask = 0x1FFFFF; break;
                 default: assert(false);
             }
-            return;
+            amiga.resume();
+            break;
             
-        default: return;
+        default: break;
     }
 }
 

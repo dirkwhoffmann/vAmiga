@@ -53,11 +53,20 @@ DiskController::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
-        case OPT_ASYNC_FIFO:    config.asyncFifo = value; return;
-        case OPT_AUTO_DSKSYNC:  config.autoDskSync = value; return;
-        case OPT_LOCK_DSKSYNC:  config.lockDskSync = value; return;
+        case OPT_ASYNC_FIFO:
+            config.asyncFifo = value;
+            break;
             
-        default: return;
+        case OPT_AUTO_DSKSYNC:
+            config.autoDskSync = value;
+            break;
+            
+        case OPT_LOCK_DSKSYNC:
+            config.lockDskSync = value;
+            break;
+            
+        default:
+            break;
     }
 }
 

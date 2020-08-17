@@ -54,6 +54,36 @@ PaulaAudio::getConfigItem(ConfigOption option)
         case OPT_FILTER_ALWAYS_ON:
             return config.filterAlwaysOn;
             
+        case OPT_AUDVOLL:
+            return (long)(exp2(config.volL) * 100.0);
+
+        case OPT_AUDVOLR:
+            return (long)(exp2(config.volR) * 100.0);
+
+        case OPT_AUDVOL0:
+            return (long)(exp2(config.vol[0] / 0.0000025) * 100.0);
+
+        case OPT_AUDVOL1:
+            return (long)(exp2(config.vol[1] / 0.0000025) * 100.0);
+            
+        case OPT_AUDVOL2:
+            return (long)(exp2(config.vol[2] / 0.0000025) * 100.0);
+            
+        case OPT_AUDVOL3:
+            return (long)(exp2(config.vol[3] / 0.0000025) * 100.0);
+
+        case OPT_AUDPAN0:
+            return (long)(config.pan[0] * 100.0);
+            
+        case OPT_AUDPAN1:
+            return (long)(config.pan[1] * 100.0);
+            
+        case OPT_AUDPAN2:
+            return (long)(config.pan[2] * 100.0);
+            
+        case OPT_AUDPAN3:
+            return (long)(config.pan[3] * 100.0);
+
         default: assert(false);
     }
 }
@@ -61,28 +91,74 @@ PaulaAudio::getConfigItem(ConfigOption option)
 void
 PaulaAudio::setConfigItem(ConfigOption option, long value)
 {
+    bool wasMuted;
+    
     switch (option) {
             
         case OPT_SAMPLING_METHOD:
-            
             assert(isSamplingMethod(value));
             config.samplingMethod = (SamplingMethod)value;
-            return;
+            break;
             
         case OPT_FILTER_TYPE:
-            
             assert(isFilterType(value));
             config.filterType = (FilterType)value;
             filterL.setFilterType((FilterType)value);
             filterR.setFilterType((FilterType)value);
-            return;
+            break;
             
         case OPT_FILTER_ALWAYS_ON:
-            
             config.filterAlwaysOn = value;
-            return;
+            break;
             
-        default: return;
+        case OPT_AUDVOLL:
+            wasMuted = isMuted();
+            config.volL = log2((double)value / 100.0);
+            if (wasMuted != isMuted())
+                mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+            break;
+            
+        case OPT_AUDVOLR:
+            wasMuted = isMuted();
+            config.volR = log2((double)value / 100.0);
+            if (wasMuted != isMuted())
+                mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+            break;
+            
+        case OPT_AUDVOL0:
+            config.vol[0] = log2((double)value / 100.0) * 0.0000025;
+            break;
+            
+        case OPT_AUDVOL1:
+            config.vol[1] = log2((double)value / 100.0) * 0.0000025;
+            break;
+
+        case OPT_AUDVOL2:
+            config.vol[2] = log2((double)value / 100.0) * 0.0000025;
+            break;
+
+        case OPT_AUDVOL3:
+            config.vol[3] = log2((double)value / 100.0) * 0.0000025;
+            break;
+
+        case OPT_AUDPAN0:
+            config.pan[0] = MAX(0.0, MIN(value / 100.0, 1.0));
+            break;
+
+        case OPT_AUDPAN1:
+            config.pan[1] = MAX(0.0, MIN(value / 100.0, 1.0));
+            break;
+
+        case OPT_AUDPAN2:
+            config.pan[2] = MAX(0.0, MIN(value / 100.0, 1.0));
+            break;
+
+        case OPT_AUDPAN3:
+            config.pan[3] = MAX(0.0, MIN(value / 100.0, 1.0));
+            break;
+
+        default:
+            break;
     }
 }
 
@@ -98,6 +174,7 @@ PaulaAudio::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
+/*
 long
 PaulaAudio::getVol(unsigned nr)
 {
@@ -162,6 +239,7 @@ PaulaAudio::setVolR(long val)
         mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
     }
 }
+*/
 
 size_t
 PaulaAudio::didLoadFromBuffer(u8 *buffer)

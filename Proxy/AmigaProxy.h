@@ -455,6 +455,7 @@ struct SerialPortWrapper;
 - (u32) sampleRate;
 - (void) setSampleRate:(double)rate;
 
+/*
 - (long) vol:(NSInteger)nr;
 - (void) setVol:(NSInteger)nr value:(long)value;
 - (long) pan:(NSInteger)nr;
@@ -465,6 +466,7 @@ struct SerialPortWrapper;
 @property long volR;
 - (long) volR;
 - (void) setVolR:(long)value;
+*/
 
 @property (readonly) NSInteger ringbufferSize;
 - (double) ringbufferDataL:(NSInteger)offset;

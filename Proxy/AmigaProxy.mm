@@ -767,6 +767,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
+/*
 - (long) vol:(NSInteger)nr
 {
     return wrapper->paula->audioUnit.getVol(nr);
@@ -799,6 +800,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setVolR(value);
 }
+*/
 /*
 - (FilterType) filterType
 {
