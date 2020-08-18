@@ -56,6 +56,9 @@ void Agnus::_reset(bool hard)
     scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
     scheduleNextBplEvent();
     scheduleNextDasEvent();
+    
+    // Start with long frames by setting the LOF bit
+    pokeVPOS(0x8000);
 }
 
 long
