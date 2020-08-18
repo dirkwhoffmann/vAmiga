@@ -274,9 +274,10 @@ extension Renderer {
         let mc = (TextureSize.merged.width, TextureSize.merged.width)
         let uc = (TextureSize.upscaled.width, TextureSize.upscaled.width)
 
-        // Build the mergefilter
+        // Build the merge filters
         mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)
-
+        mergeBypassFilter = MergeBypassFilter.init(device: device, library: library, cutout: mc)
+        
         // Build low-res enhancers (first-pass, in-texture upscaling)
         enhancerGallery[0] = BypassFilter.init(device: device, library: library, cutout: mc)
         enhancerGallery[1] = InPlaceEpxScaler.init(device: device, library: library, cutout: mc)

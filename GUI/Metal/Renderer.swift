@@ -77,8 +77,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                             dotMaskHeight: 0,
                                             scanlineDistance: 0)
     
-    var mergeUniforms = MergeUniforms(interlace: 0,
-                                      longFrameScale: 1.0,
+    var mergeUniforms = MergeUniforms(longFrameScale: 1.0,
                                       shortFrameScale: 1.0)
 
     //
@@ -177,10 +176,10 @@ class Renderer: NSObject, MTKViewDelegate {
      */
     var dotMaskTexture: MTLTexture! = nil
         
-    /* An instance of the merge filter
-     */
+    // An instance of the merge filter and the merge bypass filter
     var mergeFilter: MergeFilter! = nil
-    
+    var mergeBypassFilter: MergeBypassFilter! = nil
+
     // Array holding all available lowres enhancers
     var enhancerGallery = [ComputeKernel?](repeating: nil, count: 3)
     
@@ -242,18 +241,15 @@ class Renderer: NSObject, MTKViewDelegate {
     var textureRect = CGRect.init()
 
     // Indicates whether the recently drawn frames were long or short frames
-    var prevLOF = true
     var currLOF = true
+    var prevLOF = true
 
     // Used to determine if the GPU texture needs to be updated
     var prevBuffer: ScreenBuffer?
     
     // Variable used to emulate interlace flickering
     var flickerCnt = 0
-    
-    // Indicates the type of the frame that is read next (DEPRECATED)
-    // var requestLongFrame = true
-    
+        
     // Is set to true when fullscreen mode is entered
     var fullscreen = false
     
@@ -483,7 +479,6 @@ class Renderer: NSObject, MTKViewDelegate {
             // Interlaced drawing: We merge the long frame with the short frame
             flickerCnt += 1
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
-            mergeUniforms.interlace = 1
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
 
@@ -494,18 +489,12 @@ class Renderer: NSObject, MTKViewDelegate {
         } else {
             
             // Non-interlaced drawing: We stretch the most recent frame
-            mergeUniforms.interlace = 0
-            mergeUniforms.longFrameScale = 1.0
-            mergeUniforms.shortFrameScale = 1.0
-            
             if currLOF {
-                mergeFilter.apply(commandBuffer: commandBuffer,
-                                  textures: [longFrameTexture, longFrameTexture, mergeTexture],
-                                  options: &mergeUniforms)
+                mergeBypassFilter.apply(commandBuffer: commandBuffer,
+                                        textures: [longFrameTexture, mergeTexture])
             } else {
-                mergeFilter.apply(commandBuffer: commandBuffer,
-                                  textures: [shortFrameTexture, shortFrameTexture, mergeTexture],
-                                  options: &mergeUniforms)
+                mergeBypassFilter.apply(commandBuffer: commandBuffer,
+                                        textures: [shortFrameTexture, mergeTexture])
             }
 
         }

@@ -55,7 +55,6 @@ struct ShaderOptions: Codable {
 
 struct MergeUniforms {
 
-    var interlace: Int32
     var longFrameScale: Float
     var shortFrameScale: Float
 }
@@ -172,13 +171,21 @@ class BypassFilter: ComputeKernel {
 }
 
 //
-// Texture merger
+// Mergers
 //
 
 class MergeFilter: ComputeKernel {
     
     convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
         self.init(name: "merge",
+                  device: device, library: library, cutout: cutout)
+    }
+}
+
+class MergeBypassFilter: ComputeKernel {
+    
+    convenience init?(device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
+        self.init(name: "bypassmerger",
                   device: device, library: library, cutout: cutout)
     }
 }

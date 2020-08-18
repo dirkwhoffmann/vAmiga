@@ -265,15 +265,6 @@ extension ConfigurationController {
     // Action methods (Misc)
     //
     
-    /*
-    @IBAction func vidFactorySettingsAction(_ sender: NSPopUpButton!) {
-
-        UserDefaults.resetVideoUserDefaults()
-        config.loadVideoUserDefaults()
-        refresh()
-    }
-    */
-    
     @IBAction func vidPresetAction(_ sender: NSPopUpButton!) {
         
         switch sender.selectedTag() {

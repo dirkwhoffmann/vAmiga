@@ -67,7 +67,6 @@ struct ShaderOptions {
 
 struct MergeUniforms {
 
-    uint interlace;
     float longFrameScale;
     float shortFrameScale;
 };
@@ -203,6 +202,14 @@ fragment half4 fragment_main(ProjectedVertex vert [[ stage_in ]],
 // Texture merger
 //
 
+kernel void bypassmerger(texture2d<half, access::read>  inTexture   [[ texture(0) ]],
+                         texture2d<half, access::write> outTexture  [[ texture(1) ]],
+                         uint2                          gid         [[ thread_position_in_grid ]])
+{
+    half4 result = inTexture.read(uint2(gid.x, gid.y / 2));
+    outTexture.write(result, gid);
+}
+    
 kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
                   texture2d<half, access::read>  shortFrame  [[ texture(1) ]],
                   texture2d<half, access::write> outTexture  [[ texture(2) ]],
@@ -212,7 +219,7 @@ kernel void merge(texture2d<half, access::read>  longFrame   [[ texture(0) ]],
     half4 result;
     float s;
     
-    if (!uniforms.interlace || gid.y % 2 == 0) {
+    if (gid.y % 2 == 0) {
         s = uniforms.longFrameScale;
         result = longFrame.read(uint2(gid.x, gid.y / 2));
     } else {
