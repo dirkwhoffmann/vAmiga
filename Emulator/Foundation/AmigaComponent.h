@@ -50,7 +50,7 @@ class AmigaComponent : public HardwareComponent {
 protected:
 
     Amiga &amiga;
-    MessageQueue &mqueue;
+    MessageQueue &messageQueue;
     CPU &cpu;
     CIAA &ciaa;
     CIAB &ciab;

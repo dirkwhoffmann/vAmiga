@@ -11,7 +11,7 @@
 
 AmigaComponent::AmigaComponent(Amiga& ref) :
 amiga(ref),
-mqueue(ref.messageQueue),
+messageQueue(ref.messageQueue),
 cpu(ref.cpu),
 ciaa(ref.ciaA),
 ciab(ref.ciaB),

@@ -33,13 +33,13 @@ MessageQueue::addListener(const void *listener, Callback *func)
         propagate(&msg);
     }
 
-    putMessage(MSG_REGISTER);
+    put(MSG_REGISTER);
 }
 
 void
 MessageQueue::removeListener(const void *listener)
 {
-    putMessage(MSG_UNREGISTER);
+    put(MSG_UNREGISTER);
 
     pthread_mutex_lock(&lock);
     listeners.erase(listener);
@@ -68,7 +68,7 @@ MessageQueue::get()
 }
 
 void
-MessageQueue::putMessage(MessageType type, u64 data)
+MessageQueue::put(MessageType type, u64 data)
 {
 	pthread_mutex_lock(&lock);
 		

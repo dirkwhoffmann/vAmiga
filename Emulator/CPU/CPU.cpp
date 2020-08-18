@@ -84,7 +84,7 @@ CPU::signalTAS()
 void
 CPU::signalHalt()
 {
-    mqueue.putMessage(MSG_CPU_HALT);
+    messageQueue.put(MSG_CPU_HALT);
 }
 
 void

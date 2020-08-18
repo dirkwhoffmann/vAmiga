@@ -115,14 +115,14 @@ PaulaAudio::setConfigItem(ConfigOption option, long value)
             wasMuted = isMuted();
             config.volL = log2((double)value / 100.0);
             if (wasMuted != isMuted())
-                mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+                messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             break;
             
         case OPT_AUDVOLR:
             wasMuted = isMuted();
             config.volR = log2((double)value / 100.0);
             if (wasMuted != isMuted())
-                mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+                messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
             break;
             
         case OPT_AUDVOL0:
@@ -219,7 +219,7 @@ PaulaAudio::setVolL(long val)
     config.volL = log2((double)val / 100.0);
 
     if (wasMuted != isMuted()) {
-        mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+        messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
     }
 }
 
@@ -236,7 +236,7 @@ PaulaAudio::setVolR(long val)
     config.volR = log2((double)val / 100.0);
 
     if (wasMuted != isMuted()) {
-        mqueue.putMessage(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
+        messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
     }
 }
 */

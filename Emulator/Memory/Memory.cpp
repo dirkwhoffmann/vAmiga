@@ -560,7 +560,7 @@ Memory::updateMemSrcTable()
             memSrc[i] = memSrc[0xF8 + i];
     }
 
-    mqueue.putMessage(MSG_MEM_LAYOUT);
+    messageQueue.put(MSG_MEM_LAYOUT);
 }
 
 template<> u8

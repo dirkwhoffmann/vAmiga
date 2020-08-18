@@ -74,7 +74,7 @@ void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
-        mqueue.putMessage(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+        messageQueue.put(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
     }
 }
 
@@ -160,12 +160,12 @@ DiskController::setState(DriveState oldState, DriveState newState)
             break;
             
         case DRIVE_DMA_WRITE:
-            mqueue.putMessage(MSG_DRIVE_WRITE, selected);
+            messageQueue.put(MSG_DRIVE_WRITE, selected);
             break;
             
         default:
             if (oldState == DRIVE_DMA_WRITE)
-                mqueue.putMessage(MSG_DRIVE_READ, selected);
+                messageQueue.put(MSG_DRIVE_READ, selected);
     }
 }
 
@@ -180,8 +180,8 @@ DiskController::setConnected(int df, bool value)
     // Plug the drive in our out and inform the GUI
     synchronized { config.connected[df] = value; }
 
-    mqueue.putMessage(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    mqueue.putMessage(MSG_CONFIG);
+    messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    messageQueue.put(MSG_CONFIG);
 }
 
 void
@@ -336,7 +336,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     }
 
     // Inform the GUI
-    if (oldSelected != selected) mqueue.putMessage(MSG_DRIVE_SELECT, selected);
+    if (oldSelected != selected) messageQueue.put(MSG_DRIVE_SELECT, selected);
 }
 
 void

@@ -68,11 +68,11 @@ DmaDebugger::setEnabled(bool value)
 {
     if (!enabled && value) {
         enabled = true;
-        mqueue.putMessage(MSG_DMA_DEBUG_ON);
+        messageQueue.put(MSG_DMA_DEBUG_ON);
     }
     if (enabled && !value) {
         enabled = false;
-        mqueue.putMessage(MSG_DMA_DEBUG_OFF);
+        messageQueue.put(MSG_DMA_DEBUG_OFF);
     }
 }
 

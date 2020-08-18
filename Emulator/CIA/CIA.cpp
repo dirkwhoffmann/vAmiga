@@ -701,13 +701,13 @@ void
 CIAA::_powerOn()
 {
     CIA::_powerOn();
-    mqueue.putMessage(MSG_POWER_LED_DIM);
+    messageQueue.put(MSG_POWER_LED_DIM);
 }
 
 void
 CIAA::_powerOff()
 {
-    mqueue.putMessage(MSG_POWER_LED_OFF);
+    messageQueue.put(MSG_POWER_LED_OFF);
 }
 
 void 
@@ -754,7 +754,7 @@ CIAA::updatePA()
 
     // Check the LED bit
     if ((oldPA ^ PA) & 0b00000010) {
-        mqueue.putMessage((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
+        messageQueue.put((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
     // Check the OVL bot (Kickstart overlay)
