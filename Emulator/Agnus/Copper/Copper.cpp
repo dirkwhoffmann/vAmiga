@@ -236,8 +236,6 @@ Copper::move(u32 addr, u16 value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        plaindebug(BLTTIM_DEBUG, "(%d,%d) COLOR%02d\n", agnus.pos.v, agnus.pos.h, addr - 0x180);
-
         // Color registers
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;

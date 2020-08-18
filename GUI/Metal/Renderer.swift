@@ -476,27 +476,27 @@ class Renderer: NSObject, MTKViewDelegate {
         // Compute the merge texture
         if currLOF != prevLOF {
             
-            // Interlaced drawing: We merge the long frame with the short frame
+            // Case 1: Interlace drawing
+            var weight = Float(1.0)
+            if shaderOptions.flicker > 0 { weight -= shaderOptions.flickerWeight }
             flickerCnt += 1
-            let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
             mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
 
             mergeFilter.apply(commandBuffer: commandBuffer,
                               textures: [longFrameTexture, shortFrameTexture, mergeTexture],
                               options: &mergeUniforms)
-
+            
+        } else if currLOF {
+            
+            // Case 2: Non-interlace drawing (two long frames in a row)
+            mergeBypassFilter.apply(commandBuffer: commandBuffer,
+                                    textures: [longFrameTexture, mergeTexture])
         } else {
             
-            // Non-interlaced drawing: We stretch the most recent frame
-            if currLOF {
-                mergeBypassFilter.apply(commandBuffer: commandBuffer,
-                                        textures: [longFrameTexture, mergeTexture])
-            } else {
-                mergeBypassFilter.apply(commandBuffer: commandBuffer,
-                                        textures: [shortFrameTexture, mergeTexture])
-            }
-
+            // Case 3: Non-interlace drawing (two short frames in a row)
+            mergeBypassFilter.apply(commandBuffer: commandBuffer,
+                                    textures: [shortFrameTexture, mergeTexture])
         }
         
         // Compute upscaled texture (first pass, in-texture upscaling)
