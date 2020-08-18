@@ -1027,9 +1027,9 @@ Denise::checkP2PCollisions()
 }
 
 void
-Denise::beginOfFrame(bool interlace)
+Denise::beginOfFrame()
 {
-    pixelEngine.beginOfFrame(interlace);
+    pixelEngine.beginOfFrame();
     
     if (amiga.inDebugMode()) {
         

@@ -590,7 +590,7 @@ private:
 public:
 
     // Called by Agnus at the beginning of each frame
-    void beginOfFrame(bool interlace);
+    void beginOfFrame();
 
     // Called by Agnus at the beginning of each rasterline
     void beginOfLine(int vpos);

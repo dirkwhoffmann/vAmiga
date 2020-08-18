@@ -984,7 +984,7 @@ Agnus::vsyncHandler()
             
     // Let other subcomponents do their own VSYNC stuff
     copper.vsyncHandler();
-    denise.beginOfFrame(frame.interlaced);
+    denise.beginOfFrame();
     joystick1.execute();
     joystick2.execute();
 

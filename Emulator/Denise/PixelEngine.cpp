@@ -251,7 +251,7 @@ PixelEngine::pixelAddr(int pixel)
 }
 
 void
-PixelEngine::beginOfFrame(bool interlace)
+PixelEngine::beginOfFrame()
 {
     // Switch the working buffer
     synchronized {

@@ -177,12 +177,6 @@ private:
     // Working with frame buffers
     //
 
-private:
-
-    // Return true if buffer points to a long or short frame screen buffer
-    // bool isLongFrame(ScreenBuffer *buf);
-    // bool isShortFrame(ScreenBuffer *buf);
-
 public:
 
     // Returns the stable frame buffer for long frames
@@ -198,7 +192,7 @@ public:
     void endOfVBlankLine();
 
     // Called after each frame to switch the frame buffers
-    void beginOfFrame(bool interlace);
+    void beginOfFrame();
 
 
     //

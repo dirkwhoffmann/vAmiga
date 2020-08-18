@@ -15,9 +15,6 @@ struct Frame
     // Frame count
     i64 nr;
     
-    // Indicates if this frame is drawn in interlace mode
-    bool interlaced;
-
     // The long frame flipflop
     bool lof;
     
@@ -30,12 +27,11 @@ struct Frame
         worker
 
         & nr
-        & interlaced
         & lof
         & prevlof;
     }
 
-    Frame() : nr(0), interlaced(false), lof(false) { }
+    Frame() : nr(0), lof(false) { }
     
     bool isLongFrame() { return lof; }
     bool isShortFrame() { return !lof; }
@@ -54,7 +50,7 @@ struct Frame
         prevlof = lof;
         
         // Toggle the long frame flipflop in interlace mode
-        if ((interlaced = laceBit)) { lof = !lof; }
+        if (laceBit) { lof = !lof; }
     }
 };
 

@@ -333,8 +333,6 @@ struct SerialPortWrapper;
 - (EventInfo) getEventInfo;
 - (AgnusStats) getStats;
 
-- (BOOL) interlaceMode;
-
 @end
 
 

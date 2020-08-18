@@ -454,10 +454,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->agnus->getStats();
 }
-- (BOOL) interlaceMode
-{
-    return wrapper->agnus->frame.interlaced;
-}
 
 @end
 

@@ -499,29 +499,6 @@ class Renderer: NSObject, MTKViewDelegate {
 
         }
         
-        // Set uniforms for the merge shader
-        
-        /*
-        if parent.amiga.agnus.interlaceMode() {
-
-            let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
-            mergeUniforms.interlace = 1
-            mergeUniforms.longFrameScale = requestLongFrame ? 1.0 : weight
-            mergeUniforms.shortFrameScale = requestLongFrame ? weight : 1.0
-        } else {
-            mergeUniforms.interlace = 0
-            mergeUniforms.longFrameScale = 1.0
-            mergeUniforms.shortFrameScale = 1.0
-        }
-        */
- 
-        // Compute the merge texture
-        /*
-        mergeFilter.apply(commandBuffer: commandBuffer,
-                          textures: [longFrameTexture, shortFrameTexture, mergeTexture],
-                          options: &mergeUniforms)
-        */
-        
         // Compute upscaled texture (first pass, in-texture upscaling)
         enhancer.apply(commandBuffer: commandBuffer,
                        source: mergeTexture,
