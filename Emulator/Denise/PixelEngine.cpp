@@ -286,7 +286,7 @@ PixelEngine::beginOfFrame(bool interlace)
             swap(workingLongFrame, stableLongFrame);
             
             // Select the next buffer to work on
-            frameBuffer = interlace ? workingShortFrame : workingLongFrame;
+            frameBuffer = agnus.frame.lof ? workingLongFrame : workingShortFrame;
             
         } else {
             

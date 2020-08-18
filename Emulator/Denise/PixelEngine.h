@@ -28,13 +28,13 @@ private:
     // Screen buffers
     //
 
-    /* We keep four frame buffers, two for storing long frames and
-     * another two for storing short frames. The short frame buffers are only
-     * used in interlace mode. At each point in time, one of the two buffers
-     * is the "working buffer" and the other one the "stable buffer". All
-     * drawing functions write to the working buffers, only. The GPU reads from
-     * the stable buffers, only. Once a frame has been completed, the working
-     * buffer and the stable buffer are switched.
+    /* We keep four frame buffers, two for storing long frames and another two
+     * for storing short frames. The short frame buffers are used in interlace
+     * mode, only. At each point in time, one of the two buffers is the
+     * "working buffer" and the other one the "stable buffer". All drawing
+     * functions write to the working buffers whereas the GPU reads from the
+     * stable buffers. Once a frame has been completed, the working buffer and
+     * the stable buffer are switched.
      */
     ScreenBuffer longFrame[2];
     ScreenBuffer shortFrame[2];

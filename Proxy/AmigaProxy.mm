@@ -767,58 +767,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
-/*
-- (long) vol:(NSInteger)nr
-{
-    return wrapper->paula->audioUnit.getVol(nr);
-}
-- (void) setVol:(NSInteger)nr value:(long)value
-{
-    wrapper->paula->audioUnit.setVol(nr, value);
-}
-- (long) pan:(NSInteger)nr
-{
-    return wrapper->paula->audioUnit.getPan(nr);
-}
-- (void) setPan:(NSInteger)nr value:(long)value
-{
-    wrapper->paula->audioUnit.setPan(nr, value);
-}
-- (long) volL
-{
-    return wrapper->paula->audioUnit.getVolL();
-}
-- (void) setVolL:(long)value
-{
-    wrapper->paula->audioUnit.setVolL(value);
-}
-- (long) volR
-{
-    return wrapper->paula->audioUnit.getVolR();
-}
-- (void) setVolR:(long)value
-{
-    wrapper->paula->audioUnit.setVolR(value);
-}
-*/
-/*
-- (FilterType) filterType
-{
-    return wrapper->paula->audioUnit.getFilterType();
-}
-- (void) setFilterType:(FilterType)type
-{
-    wrapper->paula->audioUnit.setFilterType(type);
-}
-- (BOOL) filterAlwaysOn
-{
-    return wrapper->paula->audioUnit.getFilterAlwaysOn();
-}
-- (void) setFilterAlwaysOn:(BOOL)value
-{
-    wrapper->paula->audioUnit.setFilterAlwaysOn(value);
-}
-*/
 - (NSInteger) ringbufferSize
 {
     return wrapper->paula->audioUnit.ringbufferSize();
