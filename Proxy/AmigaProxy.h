@@ -430,8 +430,7 @@ struct SerialPortWrapper;
 @property double saturation;
 @property double contrast;
 
-- (ScreenBuffer) stableLongFrame;
-- (ScreenBuffer) stableShortFrame;
+- (ScreenBuffer) stableBuffer;
 - (u32 *) noise;
 
 @end

@@ -63,7 +63,6 @@ typedef struct
 {
     u32 *data;
     bool longFrame;
-    bool interlace;
 }
 ScreenBuffer;
 

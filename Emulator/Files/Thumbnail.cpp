@@ -21,7 +21,7 @@ Thumbnail::makeWithAmiga(Amiga *amiga, int dx, int dy)
 void
 Thumbnail::take(Amiga *amiga, int dx, int dy)
 {
-    u32 *source = (u32 *)amiga->denise.pixelEngine.getStableLongFrame().data;
+    u32 *source = (u32 *)amiga->denise.pixelEngine.getStableBuffer().data;
     u32 *target = screen;
     
     int xStart = 4 * HBLANK_MAX + 1, xEnd = HPIXELS + 4 * HBLANK_MIN;

@@ -14,15 +14,9 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     setDescription("PixelEngine");
 
     // Allocate frame buffers
-    for (int i = 0; i < 2; i++) {
-
-        longFrame[i].data = new u32[PIXELS];
-        longFrame[i].longFrame = true;
-
-        shortFrame[i].data = new u32[PIXELS];
-        shortFrame[i].longFrame = false;
-    }
-
+    buffer[0].data = new u32[PIXELS]; buffer[0].longFrame = true;
+    buffer[1].data = new u32[PIXELS]; buffer[1].longFrame = true;
+    
     // Create random background noise pattern
     const size_t noiseSize = 2 * 512 * 512;
     noise = new u32[noiseSize];
@@ -43,12 +37,8 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 
 PixelEngine::~PixelEngine()
 {
-    for (int i = 0; i < 2; i++) {
-
-        delete[] longFrame[i].data;
-        delete[] shortFrame[i].data;
-    }
-
+    delete[] buffer[0].data;
+    delete[] buffer[1].data;
     delete[] noise;
 }
 
@@ -61,8 +51,8 @@ PixelEngine::_powerOn()
 
             int pos = line * HPIXELS + i;
             int col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
-            longFrame[0].data[pos] = longFrame[1].data[pos] = col;
-            shortFrame[0].data[pos] = shortFrame[1].data[pos] = col;
+            buffer[0].data[pos] = col;
+            buffer[1].data[pos] = col;
         }
     }
 }
@@ -72,12 +62,7 @@ PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 
-    // Initialize frame buffers
-    workingLongFrame = &longFrame[0];
-    workingShortFrame = &shortFrame[0];
-    stableLongFrame = &longFrame[1];
-    stableShortFrame = &shortFrame[1];
-    frameBuffer = &longFrame[0];
+    frameBuffer = & buffer[0];
 
     updateRGBA();
 }
@@ -225,35 +210,25 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     b = u8(newB);
 }
 
+/*
 bool
 PixelEngine::isLongFrame(ScreenBuffer *buf)
 {
-    bool result = (buf == &longFrame[0] || buf == &longFrame[1]);
-    assert(result == buf->longFrame);
-    return result;
+    return buf->longFrame;
 }
 
 bool
 PixelEngine::isShortFrame(ScreenBuffer *buf)
 {
-    bool result = (buf == &shortFrame[0] || buf == &shortFrame[1]);
-    assert(result == !buf->longFrame);
-    return result;
+    return !buf->longFrame;
 }
+*/
 
 ScreenBuffer
-PixelEngine::getStableLongFrame()
+PixelEngine::getStableBuffer()
 {
     ScreenBuffer result;
-    synchronized { result = *stableLongFrame; }
-    return result;
-}
-
-ScreenBuffer
-PixelEngine::getStableShortFrame()
-{
-    ScreenBuffer result;
-    synchronized { result = *stableShortFrame; }
+    synchronized { result = (frameBuffer == &buffer[0]) ? buffer[1] : buffer[0]; }
     return result;
 }
 
@@ -277,29 +252,11 @@ PixelEngine::pixelAddr(int pixel)
 
 void
 PixelEngine::beginOfFrame(bool interlace)
-{     
+{
+    // Switch the working buffer
     synchronized {
-        
-        if (isLongFrame(frameBuffer)) {
-            
-            // Declare the finished buffer stable
-            swap(workingLongFrame, stableLongFrame);
-            
-            // Select the next buffer to work on
-            frameBuffer = agnus.frame.lof ? workingLongFrame : workingShortFrame;
-            
-        } else {
-            
-            assert(isShortFrame(frameBuffer));
-            
-            // Declare the finished buffer stable
-            swap(workingShortFrame, stableShortFrame);
-            
-            // Select the next buffer to work on
-            frameBuffer = workingLongFrame;
-        }
-        
-        frameBuffer->interlace = interlace;
+        frameBuffer = (frameBuffer == &buffer[0]) ? &buffer[1] : &buffer[0];
+        frameBuffer->longFrame = agnus.frame.lof;
     }
     
     dmaDebugger.vSyncHandler();

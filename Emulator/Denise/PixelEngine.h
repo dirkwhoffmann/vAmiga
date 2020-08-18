@@ -28,29 +28,18 @@ private:
     // Screen buffers
     //
 
-    /* We keep four frame buffers, two for storing long frames and another two
-     * for storing short frames. The short frame buffers are used in interlace
-     * mode, only. At each point in time, one of the two buffers is the
-     * "working buffer" and the other one the "stable buffer". All drawing
-     * functions write to the working buffers whereas the GPU reads from the
-     * stable buffers. Once a frame has been completed, the working buffer and
-     * the stable buffer are switched.
+    /* The emulator uses double-buffering for storing the computed textures.
+     * At any time, one of the two buffers is the "working buffer" and the other
+     * one the "stable buffer". All drawing functions write to the working
+     * buffer whereas the GPU reads from the stable buffer. Once a frame has
+     * been completed, the working buffer and the stable buffer are switched.
      */
-    ScreenBuffer longFrame[2];
-    ScreenBuffer shortFrame[2];
+    ScreenBuffer buffer[2];
 
-    // Pointers to the working buffers
-    ScreenBuffer *workingLongFrame = &longFrame[0];
-    ScreenBuffer *workingShortFrame = &shortFrame[0];
+    // Pointer to the "working buffer"
+    ScreenBuffer *frameBuffer = &buffer[0];
 
-    // Pointers to the stable buffers
-    ScreenBuffer *stableLongFrame = &longFrame[0];
-    ScreenBuffer *stableShortFrame = &shortFrame[0];
-
-    // Pointer to the frame buffer Denise is currently working on
-    ScreenBuffer *frameBuffer = &longFrame[0];
-
-    // Buffer storing background noise (random black and white pixels)
+    // Buffer with background noise (random black and white pixels)
     u32 *noise;
 
     
@@ -190,19 +179,14 @@ private:
 
 private:
 
-    // Return true if buffer points to a long frame screen buffer
-    bool isLongFrame(ScreenBuffer *buf);
-
-    // Return true if buffer points to a short frame screen buffer
-    bool isShortFrame(ScreenBuffer *buf);
+    // Return true if buffer points to a long or short frame screen buffer
+    // bool isLongFrame(ScreenBuffer *buf);
+    // bool isShortFrame(ScreenBuffer *buf);
 
 public:
 
     // Returns the stable frame buffer for long frames
-    ScreenBuffer getStableLongFrame();
-
-    // Returns the stable frame buffer for short frames
-    ScreenBuffer getStableShortFrame();
+    ScreenBuffer getStableBuffer();
 
     // Returns a pointer to randon noise
     u32 *getNoise();

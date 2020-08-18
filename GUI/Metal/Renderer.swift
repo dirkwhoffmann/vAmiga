@@ -128,18 +128,12 @@ class Renderer: NSObject, MTKViewDelegate {
     // Texture to hold the pixel depth information
     var depthTexture: MTLTexture! = nil
     
-    /* Long frame texture (raw data from emulator, 1024 x 512)
+    /* Long and short frame textures (raw data from emulator, 1024 x 512)
      * This texture is filled with the screen buffer data from the emulator.
-     * The texture is updated in function updateLongFrameTexture() which is
-     * called periodically in drawRect().
+     * The texture is updated in function updateTexture() which is called
+     * periodically in drawRect().
      */
     var longFrameTexture: MTLTexture! = nil
-    
-    /* Short frame texture (raw data from emulator, 1024 x 512)
-     * This texture is filled with the screen buffer data from the emulator.
-     * The texture is updated in function updateShortFrameTexture() which is
-     * called periodically in drawRect().
-     */
     var shortFrameTexture: MTLTexture! = nil
     
     /* Merge texture (1024 x 1024)
@@ -247,8 +241,18 @@ class Renderer: NSObject, MTKViewDelegate {
     // Part of the texture that is currently visible
     var textureRect = CGRect.init()
 
-    // Indicates the type of the frame that is read next
-    var requestLongFrame = true
+    // Indicates whether the recently drawn frames were long or short frames
+    var prevLOF = true
+    var currLOF = true
+
+    // Used to determine if the GPU texture needs to be updated
+    var prevBuffer: ScreenBuffer?
+    
+    // Variable used to emulate interlace flickering
+    var flickerCnt = 0
+    
+    // Indicates the type of the frame that is read next (DEPRECATED)
+    // var requestLongFrame = true
     
     // Is set to true when fullscreen mode is entered
     var fullscreen = false
@@ -292,6 +296,7 @@ class Renderer: NSObject, MTKViewDelegate {
         bgTexture.replace(w: 512, h: 512, buffer: bytes)
     }
     
+    /*
     func updateTexture(bytes: UnsafeMutablePointer<UInt32>, longFrame: Bool) {
 
         let w = Int(HPIXELS)
@@ -304,24 +309,31 @@ class Renderer: NSObject, MTKViewDelegate {
             shortFrameTexture.replace(w: w, h: h, buffer: bytes + offset)
         }
     }
-
+    */
+    
     func updateTexture() {
+                
+        let buffer = parent.amiga.denise.stableBuffer()
+        
+        // Only proceed if the emulator delivers a new texture
+        if prevBuffer?.data == buffer.data { return }
+        prevBuffer = buffer
 
-        if requestLongFrame {
-
-            let buffer = parent.amiga.denise.stableLongFrame()
-            updateTexture(bytes: buffer.data, longFrame: true)
-
-            // If interlace mode is on, the next frame will be a short frame
-            if parent.amiga.agnus.interlaceMode() { requestLongFrame = false }
-            
+        // Determine if the new texture is a long frame or a short frame
+        prevLOF = currLOF
+        currLOF = buffer.longFrame
+        
+        // Update the GPU texture
+        if currLOF {
+            // track("Updating long frame texture")
+            longFrameTexture.replace(w: Int(HPIXELS),
+                                     h: longFrameTexture.height,
+                                     buffer: buffer.data + Int(HBLANK_MIN) * 4)
         } else {
-
-            let buffer = parent.amiga.denise.stableShortFrame()
-            updateTexture(bytes: buffer.data, longFrame: false)
-
-            // The next frame will be a long frame
-            requestLongFrame = true
+            // track("Updating short frame texture")
+            shortFrameTexture.replace(w: Int(HPIXELS),
+                                      h: shortFrameTexture.height,
+                                      buffer: buffer.data + Int(HBLANK_MIN) * 4)
         }
     }
     
@@ -465,27 +477,62 @@ class Renderer: NSObject, MTKViewDelegate {
         fragmentUniforms.dotMaskWidth = Int32(dotMaskTexture.width)
         fragmentUniforms.scanlineDistance = Int32(size.height / 256)
 
+        // Compute the merge texture
+        if currLOF != prevLOF {
+            
+            // Interlaced drawing: We merge the long frame with the short frame
+            flickerCnt += 1
+            let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
+            mergeUniforms.interlace = 1
+            mergeUniforms.longFrameScale = (flickerCnt % 4 >= 2) ? 1.0 : weight
+            mergeUniforms.shortFrameScale = (flickerCnt % 4 >= 2) ? weight : 1.0
+
+            mergeFilter.apply(commandBuffer: commandBuffer,
+                              textures: [longFrameTexture, shortFrameTexture, mergeTexture],
+                              options: &mergeUniforms)
+
+        } else {
+            
+            // Non-interlaced drawing: We stretch the most recent frame
+            mergeUniforms.interlace = 0
+            mergeUniforms.longFrameScale = 1.0
+            mergeUniforms.shortFrameScale = 1.0
+            
+            if currLOF {
+                mergeFilter.apply(commandBuffer: commandBuffer,
+                                  textures: [longFrameTexture, longFrameTexture, mergeTexture],
+                                  options: &mergeUniforms)
+            } else {
+                mergeFilter.apply(commandBuffer: commandBuffer,
+                                  textures: [shortFrameTexture, shortFrameTexture, mergeTexture],
+                                  options: &mergeUniforms)
+            }
+
+        }
+        
         // Set uniforms for the merge shader
+        
+        /*
         if parent.amiga.agnus.interlaceMode() {
 
             let weight = shaderOptions.flicker > 0 ? (1.0 - shaderOptions.flickerWeight) : Float(1.0)
             mergeUniforms.interlace = 1
-            // mergeUniforms.longFrameScale = (flickerToggle & 2) == 0 ? 1.0 : weight
-            // mergeUniforms.shortFrameScale = (flickerToggle & 2) == 0 ? weight : 1.0
             mergeUniforms.longFrameScale = requestLongFrame ? 1.0 : weight
             mergeUniforms.shortFrameScale = requestLongFrame ? weight : 1.0
-            // flickerToggle += 1
         } else {
             mergeUniforms.interlace = 0
             mergeUniforms.longFrameScale = 1.0
             mergeUniforms.shortFrameScale = 1.0
         }
-
+        */
+ 
         // Compute the merge texture
+        /*
         mergeFilter.apply(commandBuffer: commandBuffer,
                           textures: [longFrameTexture, shortFrameTexture, mergeTexture],
                           options: &mergeUniforms)
-
+        */
+        
         // Compute upscaled texture (first pass, in-texture upscaling)
         enhancer.apply(commandBuffer: commandBuffer,
                        source: mergeTexture,

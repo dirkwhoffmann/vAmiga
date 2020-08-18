@@ -703,13 +703,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->denise->pixelEngine.setContrast(value);
 }
-- (ScreenBuffer) stableLongFrame
+- (ScreenBuffer) stableBuffer
 {
-    return wrapper->denise->pixelEngine.getStableLongFrame();
-}
-- (ScreenBuffer) stableShortFrame
-{
-    return wrapper->denise->pixelEngine.getStableShortFrame();
+    return wrapper->denise->pixelEngine.getStableBuffer();
 }
 - (u32 *) noise
 {
