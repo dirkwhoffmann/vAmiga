@@ -32,13 +32,14 @@ class Denise : public AmigaComponent {
     SpriteInfo spriteInfo[8];
     u64 spriteData[8][VPOS_CNT];
     
+    
     //
     // Sub components
     //
     
 public:
     
-    // A color synthesizer for computing RGBA values
+    // Color synthesizer for computing RGBA values
     PixelEngine pixelEngine = PixelEngine(amiga);
 
 
@@ -46,7 +47,7 @@ public:
     // Counters
     //
     
-    // Denise has been executed up to this clock cycle.
+    // Denise has been executed up to this clock cycle
     Cycle clock = 0;
 
 
@@ -54,33 +55,28 @@ public:
     // Registers
     //
     
-    // The bitplane control registers
+    // Bitplane control registers
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
 
-    // The bitplane control registers at cycle 0 in the current rasterline
+    // Bitplane control registers at cycle 0 in the current rasterline
     u16 initialBplcon0;
     u16 initialBplcon1;
     u16 initialBplcon2;
 
-    // The 6 bitplane data registers
+    // Bitplane data registers
     u16 bpldat[6];
     
-    // Initial values of sprite data registers at cycle 0 in the current rasterline
-    // u16 initialSprdata[8];
-    // u16 initialSprdatb[8];
-
     // Sprite collision registers
     u16 clxdat;
     u16 clxcon;
 
-    /* The 6 bitplane parallel-to-serial shift registers
-     * Denise transfers the current values of the BPLDAT registers into the
-     * shift registers after BPLDAT1 is written to. This is emulated in
-     * function fillShiftRegister().
+    /* Parallel-to-serial shift registers. Denise transfers the current values
+     * of the BPLDAT registers into these shift registers after BPLDAT1 is
+     * written to. This is emulated in function fillShiftRegister().
      *
-     * The upper two array elements equal 0. We need these dummy elements in
+     * Note: The upper two array elements are dummy elements. We need them in
      * order to pass the array as parameter to function transposeSSE().
      */
     u16 __attribute__ ((aligned (64))) shiftReg[8];
@@ -122,23 +118,18 @@ public:
     u16 sprpos[8];
     u16 sprctl[8];
 
-    // The position and control registers at cycle 0 in the current rasterline
-    // DEPRECATED
-    // u16 initialSprpos[8];
-    // u16 initialSprctl[8];
-
-    // The serial shift registers of all 8 sprites.
+    // The serial shift registers of all 8 sprites
     u16 ssra[8];
     u16 ssrb[8];
     
-    /* Indicates which sprites are curently armed.
-     * An armed sprite is a sprite that will be drawn in this line.
+    /* Indicates which sprites are curently armed. An armed sprite is a sprite
+     * that will be drawn in this line.
      */
     u8 armed;
 
-    /* Remembers the sprites that were armed in the current rasterline.
-     * Note that a sprite can be armed and disarmed multiple times in a
-     * rasterline by manually modifying SPRxDATA and SPRxCTL, respectively.
+    /* Remembers the sprites that were armed in the current rasterline. Note
+     * that a sprite can be armed and disarmed multiple times in a rasterline
+     * by manually modifying SPRxDATA and SPRxCTL, respectively.
      */
     u8 wasArmed;
 
@@ -163,6 +154,7 @@ public:
     PixelPos spriteClipBegin;
     PixelPos spriteClipEnd;
 
+    
     //
     // Playfield priorities
     //
@@ -174,9 +166,6 @@ private:
 
     // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
     u16 prio2;
-
-    // Minimum of prio1 and prio2
-    // u16 prio12;
 
     
     //
@@ -267,22 +256,80 @@ private:
         return (z & Z_SP01234567) > (z & ~Z_SP01234567);
     }
     template <int nr> static bool isSpritePixel(u16 z) {
-        assert(nr < 8);
-        return (z & Z_SP[nr]) > (z & ~Z_SP[nr]);
+        assert(nr < 8); return (z & Z_SP[nr]) > (z & ~Z_SP[nr]);
     }
     static int upperPlayfield(u16 z) {
-        
         return ((z & Z_DUAL) == Z_DPF2 || (z & Z_DUAL) == Z_DPF21) ? 2 : 1;
     }
     
+    
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
 
     Denise(Amiga& ref);
 
+    void _reset(bool hard) override;
+
+    
+    //
+    // Configuring
+    //
+
+public:
+    
+    DeniseConfig getConfig() { return config; }
+
+    DeniseRevision getRevision() { return config.revision; }
+    void setRevision(DeniseRevision type);
+
+    u8 getHiddenSprites() { return config.hiddenSprites; }
+    void setHiddenSprites(u8 value);
+
+    u16 getHiddenLayers() { return config.hiddenLayers; }
+    void setHiddenLayers(u16 value);
+
+    u8 getHiddenLayerAlpha() { return config.hiddenLayerAlpha; }
+    void setHiddenLayerAlpha(u8 value);
+
+    bool getClxSprSpr() { return config.clxSprSpr; }
+    void setClxSprSpr(bool value) { config.clxSprSpr = value; }
+
+    bool getClxSprPlf() { return config.clxSprPlf; }
+    void setClxSprPlf(bool value) { config.clxSprPlf = value; }
+
+    bool getClxPlfPlf() { return config.clxPlfPlf; }
+    void setClxPlfPlf(bool value) { config.clxPlfPlf = value; }
+
+    void _dumpConfig() override;
+
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    DeniseInfo getInfo() { return HardwareComponent::getInfo(info); }
+    SpriteInfo getSpriteInfo(int nr);
+    u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }
+    u16 getSpriteColor(int nr, int reg) { return latchedSpriteInfo[nr].colors[reg]; }
+    u64 getSpriteData(int nr, int line) { return latchedSpriteData[nr][line]; }
+    
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -332,59 +379,20 @@ public:
         & prio2;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
     
     //
-    // Configuring
-    //
-
-    DeniseConfig getConfig() { return config; }
-
-    DeniseRevision getRevision() { return config.revision; }
-    void setRevision(DeniseRevision type);
-
-    u8 getHiddenSprites() { return config.hiddenSprites; }
-    void setHiddenSprites(u8 value);
-
-    u16 getHiddenLayers() { return config.hiddenLayers; }
-    void setHiddenLayers(u16 value);
-
-    u8 getHiddenLayerAlpha() { return config.hiddenLayerAlpha; }
-    void setHiddenLayerAlpha(u8 value);
-
-    bool getClxSprSpr() { return config.clxSprSpr; }
-    void setClxSprSpr(bool value) { config.clxSprSpr = value; }
-
-    bool getClxSprPlf() { return config.clxSprPlf; }
-    void setClxSprPlf(bool value) { config.clxSprPlf = value; }
-
-    bool getClxPlfPlf() { return config.clxPlfPlf; }
-    void setClxPlfPlf(bool value) { config.clxPlfPlf = value; }
-
-
-    //
-    // Methods from HardwareComponent
+    // Controlling
     //
     
 private:
 
     void _powerOn() override;
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dumpConfig() override;
-    void _dump() override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 public:
-
-    // Returns the result of the most recent call to inspect()
-    DeniseInfo getInfo() { return HardwareComponent::getInfo(info); }
-    SpriteInfo getSpriteInfo(int nr);
-    
-    u16 getSpriteHeight(int nr) { return latchedSpriteInfo[nr].height; }
-    u16 getSpriteColor(int nr, int reg) { return latchedSpriteInfo[nr].colors[reg]; }
-    u64 getSpriteData(int nr, int line) { return latchedSpriteData[nr][line]; }
 
 
     //
@@ -393,32 +401,15 @@ public:
     
 public:
 
-    // JOY0DATR:  $00A (r)
-    // JOY1DATR:  $00C (r)
-    // JOYTEST:   $036 (w)
-    //
-
+    // JOYxDATR, JOYTEST
     u16 peekJOY0DATR();
     u16 peekJOY1DATR();
     void pokeJOYTEST(u16 value);
 
-    // DENISEID: $07C (r) (ECS)
+    // DENISEID
     u16 peekDENISEID();
 
-    // BPLCON0:  $100 (w)
-
-    /*      15 : HIRES         High-resolution enable
-     * 14 - 12 : BPU2 - BPU0   Number of bit-planes used
-     *      11 : HOMOD         Hold-and-modify enable
-     *      10 : DBPLF         Dual-playfield enable
-     *       9 : COLOR         Color enable
-     *       8 : GAUD          Genlock audio enable
-     *   7 - 4 : ---
-     *       3 : LPEN          Light pen enable
-     *       2 : LACE          Interlace enable
-     *       1 : ERSY          External synchronization enable
-     *       0 : ---
-     */
+    // BPLCON0
     void pokeBPLCON0(u16 value);
     void setBPLCON0(u16 oldValue, u16 newValue);
     void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
@@ -434,22 +425,21 @@ public:
     static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
     bool ham() { return ham(bplcon0); }
 
-    /* Returns the Denise view of the BPU bits.
-     * The value determines how many shift registers are loaded with the values
-     * of their corresponding BPLxDAT registers at the end of a fetch unit.
-     * It is computed out of the three BPU bits stored in BPLCON0, but not
-     * identical with them. The value differs if the BPU bits reflect an invalid
-     * bit pattern.
+    /* Returns the Denise view of the BPU bits. The value determines how many
+     * shift registers are loaded with the values of their corresponding
+     * BPLxDAT registers at the end of a fetch unit. It is computed out of the
+     * three BPU bits stored in BPLCON0, but not identical with them. The value
+     * differs if the BPU bits reflect an invalid bit pattern.
      * Compare with Agnus::bpu() which returns the Agnus view of the BPU bits.
      */
     static int bpu(u16 v);
     int bpu() { return bpu(bplcon0); }
 
-    // BPLCON1:  $102 (w)
+    // BPLCON1
     void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 value);
 
-    // BPLCON2:  $104 (w)
+    // BPLCON2
     void pokeBPLCON2(u16 value);
     void setBPLCON2(u16 value);
     static int PF2PRI(u16 v) { return GET_BIT(v, 6); }
@@ -460,26 +450,28 @@ public:
     static u16 zPF1(u16 bplcon2) { return zPF(bplcon2 & 7); }
     static u16 zPF2(u16 bplcon2) { return zPF((bplcon2 >> 3) & 7); }
 
-    // CLXDAT:   $00E (r)
-    // CLXCON:   $098 (w)
+    // CLXDAT, CLXCON
     u16 peekCLXDAT();
     void pokeCLXCON(u16 value);
-
-    // BPLxDAT:  $110 - $11A (w)
+    template <int x> u16 getENSP() { return GET_BIT(clxcon, 12 + (x/2)); }
+    u16 getENBP1() { return (clxcon >> 6) & 0b010101; }
+    u16 getENBP2() { return (clxcon >> 6) & 0b101010; }
+    u16 getMVBP1() { return clxcon & 0b010101; }
+    u16 getMVBP2() { return clxcon & 0b101010; }
+    
+    // BPLxDAT
     template <int x, Accessor s> void pokeBPLxDAT(u16 value);
     template <int x> void setBPLxDAT(u16 value);
 
-    // SPRxPOS:  $140, $148 ... $170, $178 (w)
-    // SPRxCTL:  $142, $14A ... $172, $17A (w)
+    // SPRxPOS, SPRxCTL
     template <int x> void pokeSPRxPOS(u16 value);
     template <int x> void pokeSPRxCTL(u16 value);
 
-    // SPRxDATA: $144, $14C ... $174, $17C (w)
-    // SPRxDATB: $146, $14E ... $176, $17E (w)
+    // SPRxDATA, SPRxDATB
     template <int x> void pokeSPRxDATA(u16 value);
     template <int x> void pokeSPRxDATB(u16 value);
 
-    // COLORxx:  $180, $181 ... $1BC, $1BE (w)
+    // COLORxx
     template <Accessor s, int xx> void pokeCOLORxx(u16 value);
 
     
@@ -487,6 +479,8 @@ public:
     // Handling sprites
     //
 
+public:
+    
     // Returns the horizontal position of a sprite in sprite coordinates
     template <int x> i16 sprhpos() { return ((sprpos[x] & 0xFF) << 1) | (sprctl[x] & 0x01); }
 
@@ -501,6 +495,8 @@ public:
     // Handling bitplanes
     //
 
+public:
+    
     // Transfers the bitplane registers to the shift registers
     void fillShiftRegisters(bool odd = true, bool even = true);
 
@@ -511,7 +507,6 @@ public:
     
 public:
 
-    // Synthesizes pixels
     template <bool hiresMode> void drawOdd(int offset);
     template <bool hiresMode> void drawEven(int offset);
     template <bool hiresMode> void drawBoth(int offset);
@@ -546,6 +541,8 @@ public:
                                                  int strt1, int strt2,
                                                  bool armed1, bool armed2);
 
+private:
+    
     // Replays all recorded sprite register changes
     template <unsigned pair> void replaySpriteRegChanges();
 
@@ -553,11 +550,10 @@ public:
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);
 
-    /* Draws the left and the right border
-     * This method is called at the end of each rasterline.
-     */
+    // Draws the left and the right border
     void drawBorder(); 
 
+    
     //
     // Collision checking
     //
@@ -572,15 +568,6 @@ public:
 
     // Checks for playfield-playfield collisions in the current rasterline
     void checkP2PCollisions();
-
-private:
-
-    // Getter for CLXCON bits
-    template <int x> u16 getENSP() { return GET_BIT(clxcon, 12 + (x/2)); }
-    u16 getENBP1() { return (clxcon >> 6) & 0b010101; }
-    u16 getENBP2() { return (clxcon >> 6) & 0b101010; }
-    u16 getMVBP1() { return clxcon & 0b010101; }
-    u16 getMVBP2() { return clxcon & 0b101010; }
 
 
     //
@@ -603,9 +590,11 @@ public:
 
 
     //
-    // Debugging the component
+    // Debugging
     //
 
+public:
+    
     // Gathers the sprite data for the displayed sprite
     void recordSpriteData(unsigned x);
 
