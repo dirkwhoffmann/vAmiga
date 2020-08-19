@@ -313,9 +313,9 @@ extension Keys {
 struct DevicesDefaults {
     
     // Emulation keys
-    let joyKeyMap1: [MacKey: UInt32]
-    let joyKeyMap2: [MacKey: UInt32]
-    let mouseKeyMap: [MacKey: UInt32]
+    let joyKeyMap1: [MacKey: Int]
+    let joyKeyMap2: [MacKey: Int]
+    let mouseKeyMap: [MacKey: Int]
     let disconnectJoyKeys: Bool
     
     // Joysticks

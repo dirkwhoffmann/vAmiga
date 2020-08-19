@@ -47,7 +47,7 @@ inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;
 }
 
-typedef enum
+typedef enum : long
 {
     PULL_UP = 0,   // Pull the joystick up
     PULL_DOWN,     // Pull the joystick down
