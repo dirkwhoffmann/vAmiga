@@ -28,6 +28,76 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
+Denise::_reset(bool hard)
+{
+    RESET_SNAPSHOT_ITEMS
+
+    memset(bBuffer, 0, sizeof(bBuffer));
+    memset(iBuffer, 0, sizeof(iBuffer));
+    memset(mBuffer, 0, sizeof(mBuffer));
+    memset(zBuffer, 0, sizeof(zBuffer));
+}
+
+long
+Denise::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_DENISE_REVISION:     return config.revision;
+        case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
+        case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
+        case OPT_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
+        case OPT_CLX_SPR_SPR:         return config.clxSprSpr;
+        case OPT_CLX_SPR_PLF:         return config.clxSprPlf;
+        case OPT_CLX_PLF_PLF:         return config.clxPlfPlf;
+            
+        default: assert(false);
+    }
+}
+
+void
+Denise::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_DENISE_REVISION:
+            assert(isDeniseRevision(value));
+            config.revision = (DeniseRevision)value;
+            break;
+            
+        case OPT_HIDDEN_SPRITES:
+            msg("Changing hidden sprite mask to %x\n", value);
+            config.hiddenSprites = value;
+            break;
+            
+        case OPT_HIDDEN_LAYERS:
+            msg("Changing hidden layer mask to %x\n", value);
+            config.hiddenLayers = value;
+            break;
+            
+        case OPT_HIDDEN_LAYER_ALPHA:
+            config.hiddenLayerAlpha = value;
+            break;
+
+        case OPT_CLX_SPR_SPR:
+            config.clxSprSpr = value;
+            break;
+            
+        case OPT_CLX_SPR_PLF:
+            config.clxSprPlf = value;
+            break;
+            
+        case OPT_CLX_PLF_PLF:
+            config.clxPlfPlf = value;
+            break;
+
+        default:
+            break;
+    }
+}
+
+/*
+void
 Denise::setRevision(DeniseRevision revision)
 {
     debug("setRevision(%d)\n", revision);
@@ -53,25 +123,9 @@ Denise::setHiddenLayers(u16 value)
 void
 Denise::setHiddenLayerAlpha(u8 value)
 {
-    // msg("Changing layer alpha to %x\n", value);
     config.hiddenLayerAlpha = value;
 }
-
-void
-Denise::_powerOn()
-{
-}
-
-void
-Denise::_reset(bool hard)
-{
-    RESET_SNAPSHOT_ITEMS
-
-    memset(bBuffer, 0, sizeof(bBuffer));
-    memset(iBuffer, 0, sizeof(iBuffer));
-    memset(mBuffer, 0, sizeof(mBuffer));
-    memset(zBuffer, 0, sizeof(zBuffer));
-}
+*/
 
 void
 Denise::_inspect()

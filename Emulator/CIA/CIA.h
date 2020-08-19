@@ -277,7 +277,6 @@ public:
     void setConfigItem(ConfigOption option, long value) override;
     
     bool getEClockSyncing() { return config.eClockSyncing; }
-    // bool getTodBug() { return config.todBug; }
     
     
     //

@@ -192,7 +192,16 @@ Amiga::getConfigItem(ConfigOption option)
 
         case OPT_AGNUS_REVISION:
             return agnus.getConfigItem(option);
-        case OPT_DENISE_REVISION: return denise.getRevision();
+            
+        case OPT_DENISE_REVISION:
+        case OPT_HIDDEN_SPRITES:
+        case OPT_HIDDEN_LAYERS:
+        case OPT_HIDDEN_LAYER_ALPHA:
+        case OPT_CLX_SPR_SPR:
+        case OPT_CLX_SPR_PLF:
+        case OPT_CLX_PLF_PLF:
+            return denise.getConfigItem(option);
+            
         case OPT_RTC: return rtc.getModel();
 
         case OPT_CHIP_RAM:
@@ -202,29 +211,24 @@ Amiga::getConfigItem(ConfigOption option)
             return mem.getConfigItem(option);
 
         case OPT_DRIVE_SPEED: return df0.getSpeed();
-        case OPT_HIDDEN_SPRITES: return denise.getHiddenSprites();
-        case OPT_HIDDEN_LAYERS: return denise.getHiddenLayers();
-        case OPT_HIDDEN_LAYER_ALPHA: return denise.getHiddenLayerAlpha();
-        case OPT_CLX_SPR_SPR: return denise.getClxSprSpr();
-        case OPT_CLX_SPR_PLF: return denise.getClxSprPlf();
-        case OPT_CLX_PLF_PLF: return denise.getClxPlfPlf();
             
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ALWAYS_ON:
             return paula.audioUnit.getConfigItem(option);
             
-        case OPT_AUDVOLL: return paula.audioUnit.getConfigItem(OPT_AUDVOLL);
-        case OPT_AUDVOLR: return paula.audioUnit.getConfigItem(OPT_AUDVOLR);
-        case OPT_AUDVOL0: return paula.audioUnit.getConfigItem(OPT_AUDVOL0);
-        case OPT_AUDVOL1: return paula.audioUnit.getConfigItem(OPT_AUDVOL1);
-        case OPT_AUDVOL2: return paula.audioUnit.getConfigItem(OPT_AUDVOL2);
-        case OPT_AUDVOL3: return paula.audioUnit.getConfigItem(OPT_AUDVOL3);
-        case OPT_AUDPAN0: return paula.audioUnit.getConfigItem(OPT_AUDPAN0);
-        case OPT_AUDPAN1: return paula.audioUnit.getConfigItem(OPT_AUDPAN1);
-        case OPT_AUDPAN2: return paula.audioUnit.getConfigItem(OPT_AUDPAN2);
-        case OPT_AUDPAN3: return paula.audioUnit.getConfigItem(OPT_AUDPAN3);
-
+        case OPT_AUDVOLL:
+        case OPT_AUDVOLR:
+        case OPT_AUDVOL0:
+        case OPT_AUDVOL1:
+        case OPT_AUDVOL2:
+        case OPT_AUDVOL3:
+        case OPT_AUDPAN0:
+        case OPT_AUDPAN1:
+        case OPT_AUDPAN2:
+        case OPT_AUDPAN3:
+            return paula.audioUnit.getConfigItem(option);
+            
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);
 
@@ -553,12 +557,6 @@ Amiga::configure(ConfigOption option, long value)
 
     switch (option) {
 
-        case OPT_DENISE_REVISION:
-            suspend();
-            denise.setRevision((DeniseRevision)value);
-            resume();
-            break;
-
         case OPT_RTC:
             suspend();
             rtc.setModel((RTCModel)value);
@@ -572,42 +570,6 @@ Amiga::configure(ConfigOption option, long value)
             resume();
             break;
 
-        case OPT_HIDDEN_SPRITES:
-            suspend();
-            denise.setHiddenSprites(value);
-            resume();
-            break;
-
-        case OPT_HIDDEN_LAYERS:
-            suspend();
-            denise.setHiddenLayers(value);
-            resume();
-            break;
-            
-        case OPT_HIDDEN_LAYER_ALPHA:
-            suspend();
-            denise.setHiddenLayerAlpha(value);
-            resume();
-            break;
-            
-        case OPT_CLX_SPR_SPR:
-            suspend();
-            denise.setClxSprSpr(value);
-            resume();
-            break;
-
-        case OPT_CLX_SPR_PLF:
-            suspend();
-            denise.setClxSprPlf(value);
-            resume();
-            break;
-
-        case OPT_CLX_PLF_PLF:
-            suspend();
-            denise.setClxPlfPlf(value);
-            resume();
-            break;
-        
         case OPT_SERIAL_DEVICE:
             suspend();
             serialPort.setDevice((SerialPortDevice)value);
@@ -623,6 +585,7 @@ Amiga::configure(ConfigOption option, long value)
         default: break;
     }
     
+    // Propagate configuration request to all components
     HardwareComponent::configure(option, value);
     
     // Inform the GUI

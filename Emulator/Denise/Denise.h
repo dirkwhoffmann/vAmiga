@@ -161,10 +161,8 @@ public:
 
 private:
 
-    // Priority of playfield 1 (derived from bit PF1P2 - PF1P0 in BPLCON2)
+    // Playfield priorities (derived from BPLCON2)
     u16 prio1;
-
-    // Priority of playfield 2 (derived from bit PF2P2 - PF2P0 in BPLCON2)
     u16 prio2;
 
     
@@ -282,6 +280,11 @@ public:
     
     DeniseConfig getConfig() { return config; }
 
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+
+    
+    /*
     DeniseRevision getRevision() { return config.revision; }
     void setRevision(DeniseRevision type);
 
@@ -302,7 +305,8 @@ public:
 
     bool getClxPlfPlf() { return config.clxPlfPlf; }
     void setClxPlfPlf(bool value) { config.clxPlfPlf = value; }
-
+    */
+    
     void _dumpConfig() override;
 
     
@@ -384,17 +388,6 @@ private:
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
-    //
-    // Controlling
-    //
-    
-private:
-
-    void _powerOn() override;
-
-public:
-
-
     //
     // Accessing registers
     //
