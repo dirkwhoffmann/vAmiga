@@ -53,23 +53,23 @@ extension Inspector {
         // Create image data
         for x in 0...255 {
 
-            let src = memory.memSrc(x << 16).rawValue
+            let src = memory.memSrc(x << 16)
             var color: NSColor
 
             switch src {
-            case MEM_NONE_FAST.rawValue: color = MemColors.unmapped
-            case MEM_NONE_SLOW.rawValue: color = MemColors.unmapped
-            case MEM_CHIP.rawValue:      color = MemColors.chip
-            case MEM_FAST.rawValue:      color = MemColors.fast
-            case MEM_SLOW.rawValue:      color = MemColors.slow
-            case MEM_ROM.rawValue:       color = MemColors.rom
-            case MEM_WOM.rawValue:       color = MemColors.wom
-            case MEM_EXT.rawValue:       color = MemColors.ext
-            case MEM_CIA.rawValue:       color = MemColors.cia
-            case MEM_RTC.rawValue:       color = MemColors.rtc
-            case MEM_CUSTOM.rawValue:    color = MemColors.ocs
-            case MEM_AUTOCONF.rawValue:  color = MemColors.auto
-            default:                     fatalError()
+            case .MEM_NONE_FAST: color = MemColors.unmapped
+            case .MEM_NONE_SLOW: color = MemColors.unmapped
+            case .MEM_CHIP:      color = MemColors.chip
+            case .MEM_FAST:      color = MemColors.fast
+            case .MEM_SLOW:      color = MemColors.slow
+            case .MEM_ROM:       color = MemColors.rom
+            case .MEM_WOM:       color = MemColors.wom
+            case .MEM_EXT:       color = MemColors.ext
+            case .MEM_CIA:       color = MemColors.cia
+            case .MEM_RTC:       color = MemColors.rtc
+            case .MEM_CUSTOM:    color = MemColors.ocs
+            case .MEM_AUTOCONF:  color = MemColors.auto
+            default:             fatalError()
             }
             let ciColor = CIColor(color: color)!
 
@@ -157,7 +157,7 @@ extension Inspector {
         if nr >= 0 && nr <= 0xFF {
             
             displayedBank = nr
-            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? MEM_NONE_FAST
+            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? .MEM_NONE_FAST
             memLayoutSlider.integerValue = displayedBank
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(nr)
@@ -173,52 +173,52 @@ extension Inspector {
 
     @IBAction func memChipAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_CHIP)
+        jumpTo(source: .MEM_CHIP)
     }
 
     @IBAction func memFastRamAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_FAST)
+        jumpTo(source: .MEM_FAST)
     }
     
     @IBAction func memSlowRamAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_SLOW)
+        jumpTo(source: .MEM_SLOW)
     }
 
     @IBAction func memRomAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_ROM)
+        jumpTo(source: .MEM_ROM)
     }
 
     @IBAction func memWomAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_WOM)
+        jumpTo(source: .MEM_WOM)
     }
 
     @IBAction func memExtAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_EXT)
+        jumpTo(source: .MEM_EXT)
     }
 
     @IBAction func memCIAAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_CIA)
+        jumpTo(source: .MEM_CIA)
     }
  
     @IBAction func memRTCAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_RTC)
+        jumpTo(source: .MEM_RTC)
     }
 
     @IBAction func memOCSAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_CUSTOM)
+        jumpTo(source: .MEM_CUSTOM)
     }
 
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
 
-        jumpTo(source: MEM_AUTOCONF)
+        jumpTo(source: .MEM_AUTOCONF)
     }
 
     @IBAction func memSearchAction(_ sender: NSTextField!) {

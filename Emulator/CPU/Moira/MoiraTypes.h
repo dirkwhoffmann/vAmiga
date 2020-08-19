@@ -164,8 +164,8 @@ typedef enum
 }
 Instr;
 
-typedef enum {
-
+typedef enum
+{
     MODE_DN,   //  0         Dn : Data register direct
     MODE_AN,   //  1         An : Address register direct
     MODE_AI,   //  2       (An) : Register indirect

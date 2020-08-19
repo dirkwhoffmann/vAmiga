@@ -12,11 +12,11 @@
 #ifndef _MEMORY_TYPES_H
 #define _MEMORY_TYPES_H
 
-/* Memory source identifiers
- * The identifiers are used in the mem source lookup table to specify the
- * source and target of a peek or poke operation, respectively.
+/* Memory source identifiers. The identifiers are used in the mem source lookup
+ * table to specify the source and target of a peek or poke operation,
+ * respectively.
  */
-typedef enum
+typedef VA_ENUM(long, MemorySource)
 {
     MEM_NONE_FAST,
     MEM_NONE_SLOW,
@@ -30,8 +30,7 @@ typedef enum
     MEM_ROM,
     MEM_WOM,
     MEM_EXT
-}
-MemorySource;
+};
 
 static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXT; }
 
