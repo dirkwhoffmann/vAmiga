@@ -433,6 +433,35 @@ public:
     
     
     //
+    // Analyzing
+    //
+
+    public:
+        
+        AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
+        EventInfo getEventInfo();
+        EventSlotInfo getEventSlotInfo(int nr);
+        
+    private:
+        
+        void _inspect() override;
+        void _dump() override;
+
+        void inspectEvents();
+        void inspectEventSlot(EventSlot nr);
+        void dumpEvents();
+
+    public:
+        
+        AgnusStats getStats() { return stats; }
+        
+    private:
+        
+        void clearStats();
+        void updateStats();
+    
+    
+    //
     // Serializing
     //
     
@@ -524,40 +553,6 @@ private:
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Analyzing
-    //
-
-public:
-    
-    AgnusInfo getInfo() { return HardwareComponent::getInfo(info); }
-    EventInfo getEventInfo();
-    EventSlotInfo getEventSlotInfo(int nr);
-    
-private:
-    
-    void _inspect() override;
-    void _dump() override;
-
-    void inspectEvents();
-    void inspectEventSlot(EventSlot nr);
-    void dumpEvents();
-
-    
-    //
-    // Profiling
-    //
-
-public:
-    
-    AgnusStats getStats() { return stats; }
-    
-private:
-    
-    void clearStats();
-    void updateStats();
-
 
     //
     // Examining the current frame
@@ -565,15 +560,15 @@ private:
 
 public:
 
-    /* Returns the number of master cycles in the current frame.
-     * The result depends on the number of lines that are drawn. This values
-     * varies between long and short frames.
+    /* Returns the number of master cycles in the current frame. The result
+     * depends on the number of lines that are drawn. This values varies
+     * between long and short frames.
      */
     Cycle cyclesInFrame();
 
-    /* Returns the master cycle belonging to beam position (0,0)
-     * The first function treats (0,0) as the upper left position of the
-     * current frame. The second function referes to the next frame.
+    /* Returns the master cycle belonging to beam position (0,0). The first
+     * function treats (0,0) as the upper left position of the current frame.
+     * The second function referes to the next frame.
      */
     Cycle startOfFrame();
     Cycle startOfNextFrame();
@@ -593,10 +588,10 @@ public:
     // Indicates if the electron beam is inside the VBLANK area
     bool inVBlank() { return pos.v < 26; }
 
-    // Indicates if the electron beam is in the last rasterline
+    // Indicates if the current rasterline is the last line in this frame
     bool inLastRasterline() { return pos.v == frame.lastLine(); }
 
-    // Indicates if the electron beam is in a line where bitplane DMA is enabled
+    // Indicates if bitplane DMA is enabled in the current rasterline
     bool inBplDmaLine() { return inBplDmaLine(dmacon, bplcon0); }
     bool inBplDmaLine(u16 dmacon, u16 bplcon0);
 
