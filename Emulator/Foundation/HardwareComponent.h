@@ -44,8 +44,8 @@ protected:
     /* Indicates if the emulator should be executed in debug mode. Debug mode
      * is enabled when the GUI debugger is opend and disabled when the GUI
      * debugger is closed. In debug mode, several time-consuming tasks are
-     * performed that are usually left out. E.g., the CPU checks for breakpoints
-     * and records the executed instruction in it's trace buffer.
+     * performed that are usually left out. E.g., the CPU checks for
+     * breakpoints and records the executed instruction in it's trace buffer.
      */
     bool debugMode = false;
     
@@ -70,11 +70,11 @@ public:
     /* Resets the component and it's subcomponents. Two reset modes are
      * distinguished:
      *
-     *     hard: A hard reset restores the initial state.
-     *           It resets the Amiga from an emulator point of view.
+     *     hard: A hard reset restores the initial state. It resets the Amiga
+     *           from an emulator point of view.
      *
-     *     soft: A soft reset emulates a reset inside the virtual Amiga. It
-     *           is used to emulate the CPU's RESET instruction.
+     *     soft: A soft reset emulates a reset inside the virtual Amiga. It is
+     *           used to emulate the RESET instruction of the CPU.
      */
     void reset(bool hard);
     virtual void _reset(bool hard) = 0;
@@ -91,7 +91,10 @@ public:
      */
     bool configure(ConfigOption option, long value);
     
-    // Sets a single configuration item
+    /* Requests the change of a single configuration item. Each sub-component
+     * checks if it is responsible for the requested configuration item. If
+     * yes, it changes the internal state. If no, it ignores the request.
+     */
     virtual void setConfigItem(ConfigOption option, long value) { };
     
     // Dumps debug information about the current configuration to the console
@@ -100,37 +103,11 @@ public:
     
     
     //
-    // Serializing
-    //
-    
-    // Returns the size of the internal state in bytes
-    size_t size();
-    virtual size_t _size() = 0;
-    
-    // Loads the internal state from a memory buffer
-    size_t load(u8 *buffer);
-    virtual size_t _load(u8 *buffer) = 0;
-    
-    // Saves the internal state to a memory buffer
-    size_t save(u8 *buffer);
-    virtual size_t _save(u8 *buffer) = 0;
-    
-    /* Delegation methods called inside load() or save(). Some components
-     * override these methods to add custom behavior if not all elements can be
-     * processed by the default implementation.
-     */
-    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
-    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
-    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
-    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
-    
-    
-    //
     // Analyzing
     //
     
     /* Collects information about the component and it's subcomponents. Many
-     * components contains an info variable of a class specific type (e.g.,
+     * components contain an info variable of a class specific type (e.g.,
      * CPUInfo, MemoryInfo, ...). These variables contain the information shown
      * in the GUI's inspector window and are updated by calling this function.
      * Note: Because this function accesses the internal emulator state with
@@ -171,7 +148,33 @@ public:
     
     
     //
-    // Changing state
+    // Serializing
+    //
+    
+    // Returns the size of the internal state in bytes
+    size_t size();
+    virtual size_t _size() = 0;
+    
+    // Loads the internal state from a memory buffer
+    size_t load(u8 *buffer);
+    virtual size_t _load(u8 *buffer) = 0;
+    
+    // Saves the internal state to a memory buffer
+    size_t save(u8 *buffer);
+    virtual size_t _save(u8 *buffer) = 0;
+    
+    /* Delegation methods called inside load() or save(). Some components
+     * override these methods to add custom behavior if not all elements can be
+     * processed by the default implementation.
+     */
+    virtual size_t willLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t didLoadFromBuffer(u8 *buffer) { return 0; }
+    virtual size_t willSaveToBuffer(u8 *buffer) {return 0; }
+    virtual size_t didSaveToBuffer(u8 *buffer) { return 0; }
+    
+    
+    //
+    // Controlling
     //
     
 public:
@@ -207,7 +210,7 @@ protected:
     /* powerOn() powers the component on.
      *
      * current   | next      | action
-     * -------------------------------------------------------------------------
+     * ------------------------------------------------------------------------
      * off       | paused    | _powerOn() on each subcomponent
      * paused    | paused    | none
      * running   | running   | none
@@ -218,7 +221,7 @@ protected:
     /* powerOff() powers the component off.
      *
      * current   | next      | action
-     * -------------------------------------------------------------------------
+     * ------------------------------------------------------------------------
      * off       | off       | none
      * paused    | off       | _powerOff() on each subcomponent
      * running   | off       | pause(), _powerOff() on each subcomponent
@@ -229,7 +232,7 @@ protected:
     /* run() puts the component in 'running' state.
      *
      * current   | next      | action
-     * -------------------------------------------------------------------------
+     * ------------------------------------------------------------------------
      * off       | running   | powerOn(), _run() on each subcomponent
      * paused    | running   | _run() on each subcomponent
      * running   | running   | none
@@ -240,29 +243,21 @@ protected:
     /* pause() puts the component in 'paused' state.
      *
      * current   | next      | action
-     * -------------------------------------------------------------------------
+     * ------------------------------------------------------------------------
      * off       | off       | none
      * paused    | paused    | none
      * running   | paused    | _pause() on each subcomponent
      */
     void pause();
     virtual void _pause() { };
-    
-public:
-    
+        
     // Switches warp mode on or off
     void setWarp(bool enable);
     virtual void _setWarp(bool enable) { };
-    void enableWarpMode() { setWarp(true); }
-    void disableWarpMode() { setWarp(false); }
-    bool inWarpMode() { return warpMode; }
     
     // Switches debug mode on or off
     void setDebug(bool enable);
     virtual void _setDebug(bool enable) { };
-    void enableDebugMode() { setDebug(true); }
-    void disableDebugMode() { setDebug(false); }
-    bool inDebugMode() { return debugMode; }
 };
 
 //

@@ -25,12 +25,18 @@ template <class T, int capacity> struct RingBuffer
     // Read and write pointers
     int r, w;
 
-     //
-    // Constructing and serializing
+    //
+    // Initializing
     //
 
     RingBuffer() { clear(); }
+    
     void clear() { r = w = 0; }
+
+    
+    //
+    // Serializing
+    //
 
     template <class W>
     void applyToItems(W& worker)
@@ -38,6 +44,7 @@ template <class T, int capacity> struct RingBuffer
         worker & elements & r & w;
     }
 
+    
     //
     // Querying the fill status
     //
@@ -46,6 +53,7 @@ template <class T, int capacity> struct RingBuffer
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
 
+    
     //
     // Working with indices
     //
@@ -114,7 +122,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
          worker & this->elements & this->r & this->w & keys;
      }
     
-    // Inserts an element at the right position
+    // Inserts an element at the proper position
     void insert(i64 key, T element)
     {
         assert(!this->isFull());
@@ -140,6 +148,7 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         }
     }
 
+    /*
     void dump()
     {
         printf("%d elements (r = %d w = %d):\n", this->count(), this->r, this->w);
@@ -150,13 +159,15 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
         }
         printf("\n");
     }
+    */
 };
 
 
-/* Register change recorders
+/* Register change recorder
+ *
  * For certain registers, Agnus and Denise have to keep track about when a
- * value changes. This information is stored in sorted ring buffers called
- * register change recorders.
+ * value changes. This information is stored in a sorted ring buffers called
+ * a register change recorder.
  */
 struct RegChange
 {

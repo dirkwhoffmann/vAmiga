@@ -115,7 +115,7 @@ CPU::signalIllegalOpcodeException(u16 opcode)
 void
 CPU::signalTraceException()
 {
-    debug(XFILES, "XFILES (CPU): traceException\n");
+    // debug(XFILES, "XFILES (CPU): traceException\n");
 }
 
 void

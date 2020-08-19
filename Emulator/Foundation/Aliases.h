@@ -42,16 +42,20 @@ typedef i64 CPUCycle;         // CPU cycle units
 typedef i64 CIACycle;         // CIA cycle units
 typedef i64 DMACycle;         // DMA cycle units
 
-// Converts from a certain cycle unit to master cycles
-#define CPU_CYCLES(cycles)    ((cycles) << 2)
-#define CIA_CYCLES(cycles)    ((cycles) * 40)
-#define DMA_CYCLES(cycles)    ((cycles) << 3)
-
+// Converts a certain unit to master cycles
 #define USEC(delay)           ((delay) * 28)
 #define MSEC(delay)           ((delay) * 28000)
 #define SEC(delay)            ((delay) * 28000000)
 
-// Converts from master cycles to a certain cycle unit
+#define CPU_CYCLES(cycles)    ((cycles) << 2)
+#define CIA_CYCLES(cycles)    ((cycles) * 40)
+#define DMA_CYCLES(cycles)    ((cycles) << 3)
+
+// Converts master cycles to a certain unit
+#define AS_USEC(delay)        ((delay) / 28)
+#define AS_MSEC(delay)        ((delay) / 28000)
+#define AS_SEC(delay)         ((delay) / 28000000)
+
 #define AS_CPU_CYCLES(cycles) ((cycles) >> 2)
 #define AS_CIA_CYCLES(cycles) ((cycles) / 40)
 #define AS_DMA_CYCLES(cycles) ((cycles) >> 3)
@@ -60,9 +64,6 @@ typedef i64 DMACycle;         // DMA cycle units
 #define IS_CIA_CYCLE(cycles)  ((cycles) % 40 == 0)
 #define IS_DMA_CYCLE(cycles)  ((cycles) & 7 == 0)
 
-#define AS_USEC(delay)        ((delay) / 28)
-#define AS_MSEC(delay)        ((delay) / 28000)
-#define AS_SEC(delay)         ((delay) / 28000000)
 
 //
 // Positions
@@ -70,8 +71,9 @@ typedef i64 DMACycle;         // DMA cycle units
 
 typedef i16 PixelPos;
 
+
 //
-// Floppy disk
+// Floppy disks
 //
 
 typedef i16 Side;

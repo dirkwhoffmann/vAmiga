@@ -12,11 +12,11 @@
 
 #include "Utils.h"
 
-/* Transposes a 8 x 16 bit matrix using SSE3 extensions
+/* Transposes a 8 x 16 bit matrix using SSE3 extensions.
  *
- *     Input:   A pointer to an u16[8] array.
+ *     Input:   A pointer to a u16[8] array.
  *              Each array element stores a row of the matrix.
- *     Output:  A pointer to an u8[16] array.
+ *     Output:  A pointer to a u8[16] array.
  *              Array element at index i will contain the value on the i-column.
  *              The least significant bit comes from the first row.
  *

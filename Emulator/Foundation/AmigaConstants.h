@@ -311,10 +311,10 @@ static inline bool isHPos(i16 pos) { return pos >= 0 && pos < HPOS_CNT; }
 
 /* Screen buffer dimensions
  *
- * All values are measured in pixels.
- * One DMA cycle corresponds to 4 pixels. Hence, HPIXELS equals 4 * HPOS_CNT.
- * VPIXELS is one greater than VPOS_CNT, because of the misalignment offset
- * applied to the screen buffer start address (see below).
+ * All values are measured in pixels. One DMA cycle corresponds to 4 pixels.
+ * Hence, HPIXELS equals 4 * HPOS_CNT. VPIXELS is one greater than VPOS_CNT,
+ * because of the misalignment offset applied to the screen buffer start
+ * address (see below).
  */
 
 #define VPIXELS       314                    // VPOS_CNT + 1 line

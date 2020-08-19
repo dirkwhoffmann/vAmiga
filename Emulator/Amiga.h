@@ -208,7 +208,22 @@ public:
     // Sets a single configuration item
     bool configure(ConfigOption option, long value);
     bool configureDrive(unsigned drive, ConfigOption option, long value);
-
+    
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
+    void setInspectionTarget(EventID id);
+    void clearInspectionTarget();
+    
+    void _inspect() override;
+    void _dump() override;
+    
     
     //
     // Serializing
@@ -234,24 +249,9 @@ private:
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    AmigaInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-    void setInspectionTarget(EventID id);
-    void clearInspectionTarget();
-
-    void _inspect() override;
-    void _dump() override;
-
-    
     //
-    // Changing state
+    // Controlling
     //
     
 public:
@@ -261,6 +261,14 @@ public:
     void run();
     void pause();
     void setWarp(bool enable);
+    
+    bool inWarpMode() { return warpMode; }
+    void enableWarpMode() { setWarp(true); }
+    void disableWarpMode() { setWarp(false); }
+
+    void enableDebugMode() { setDebug(true); }
+    void disableDebugMode() { setDebug(false); }
+    bool inDebugMode() { return debugMode; }
 
 private:
     

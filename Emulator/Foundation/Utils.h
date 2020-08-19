@@ -64,13 +64,13 @@ bool releaseBuild();
 #define LO_WORD(x) (u16)((x) & 0xFFFF)
 #define HI_WORD(x) (u16)((x) >> 16)
 
-// Specifies a larger integer in little endian byte format
+// Constructs a larger integer in little endian byte format
 #define LO_HI(x,y) (u16)((y) << 8 | (x))
 #define LO_LO_HI(x,y,z) (u32)((z) << 16 | (y) << 8 | (x))
 #define LO_LO_HI_HI(x,y,z,w) (u32)((w) << 24 | (z) << 16 | (y) << 8 | (x))
 #define LO_W_HI_W(x,y) (u32)((y) << 16 | (x))
 
-// Specifies a larger integer in big endian byte format
+// Constructs a larger integer in big endian byte format
 #define HI_LO(x,y) (u16)((x) << 8 | (y))
 #define HI_HI_LO(x,y,z) (u32)((x) << 16 | (y) << 8 | (z))
 #define HI_HI_LO_LO(x,y,z,w) (u32)((x) << 24 | (y) << 16 | (z) << 8 | (w))
@@ -118,32 +118,32 @@ bool releaseBuild();
 // Handling files
 //
 
-/* Strips the filename from a path
+/* Strips the filename from a path.
  * Returns a newly created string. You need to delete it manually.
  */
 char *stripFilename(const char *path);
 
-/* Extracts the filename from a path
+/* Extracts the filename from a path.
+ * Returns a newly created string. You need to delete it manually.
+ */
+char *extractFilename(const char *path);
+
+/* Replaces a filename from a path.
  * Returns a newly created string. You need to delete it manually.
  */
 char *replaceFilename(const char *path, const char *name);
 
-/* Replaces a filename from a path
- * Returns a newly created string. You need to delete it manually.
- */
-char *stripFilename(const char *path);
-
-/* Extracts file suffix from a path
+/* Extracts file suffix from a path.
  * Returns a newly created string. You need to delete it manually.
  */
 char *extractSuffix(const char *path);
 
-/* Extracts filename from a path without its suffix
+/* Extracts filename from a path without its suffix.
  * Returns a newly created string. You need to delete it manually.
  */
 char *extractFilenameWithoutSuffix(const char *path);
 
-/* Compares the file suffix with a given string
+/* Compares the file suffix with a given string.
  * The function is used for determining the type of a file.
  */
 bool checkFileSuffix(const char *path, const char *suffix);
@@ -172,9 +172,9 @@ void sleepMicrosec(unsigned usec);
 
 /* Sleeps until the kernel timer reaches kernelTargetTime
  *
- * kernelEarlyWakeup: To increase timing precision, the function
- *                    wakes up the thread earlier by this amount and waits
- *                    actively in a delay loop until the deadline is reached.
+ * kernelEarlyWakeup: To increase timing precision, the function wakes up the
+ *                    thread earlier by this amount and waits actively in a
+ *                    delay loop until the deadline is reached.
  *
  * Returns the overshoot time (jitter), measured in kernel time units. Smaller
  * values are better, 0 is best.
