@@ -89,9 +89,9 @@ public extension MetalView {
         }
         
         if mouse2 == nil || event.deviceID != 0 {
-            mouse1!.processMouseEvents(events: [PRESS_LEFT])
+            mouse1!.processMouseEvents(events: [.PRESS_LEFT])
         } else {
-            mouse2!.processMouseEvents(events: [PRESS_LEFT])
+            mouse2!.processMouseEvents(events: [.PRESS_LEFT])
         }
     }
     
@@ -100,9 +100,9 @@ public extension MetalView {
         if !gotMouse { return }
 
         if mouse2 == nil || event.deviceID != 0 {
-            mouse1!.processMouseEvents(events: [RELEASE_LEFT])
+            mouse1!.processMouseEvents(events: [.RELEASE_LEFT])
         } else {
-            mouse2!.processMouseEvents(events: [RELEASE_LEFT])
+            mouse2!.processMouseEvents(events: [.RELEASE_LEFT])
         }
     }
     
@@ -111,9 +111,9 @@ public extension MetalView {
         if !gotMouse { return }
 
         if mouse2 == nil || event.deviceID != 0 {
-            mouse1!.processMouseEvents(events: [PRESS_RIGHT])
+            mouse1!.processMouseEvents(events: [.PRESS_RIGHT])
         } else {
-            mouse2!.processMouseEvents(events: [PRESS_RIGHT])
+            mouse2!.processMouseEvents(events: [.PRESS_RIGHT])
         }
     }
 
@@ -122,9 +122,9 @@ public extension MetalView {
         if !gotMouse { return }
         
         if mouse2 == nil || event.deviceID != 0 {
-            mouse1!.processMouseEvents(events: [RELEASE_RIGHT])
+            mouse1!.processMouseEvents(events: [.RELEASE_RIGHT])
         } else {
-            mouse2!.processMouseEvents(events: [RELEASE_RIGHT])
+            mouse2!.processMouseEvents(events: [.RELEASE_RIGHT])
         }
     }
     

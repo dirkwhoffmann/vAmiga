@@ -47,7 +47,7 @@ inline bool isControlPortDevice(long value) {
     return value >= 0 && value <= CPD_JOYSTICK;
 }
 
-typedef enum : long
+typedef VA_ENUM(long, GamePadAction)
 {
     PULL_UP = 0,   // Pull the joystick up
     PULL_DOWN,     // Pull the joystick down
@@ -62,8 +62,7 @@ typedef enum : long
     RELEASE_FIRE,  // Release the joystick button
     RELEASE_LEFT,  // Release the left mouse button
     RELEASE_RIGHT  // Release the right mouse button
-}
-GamePadAction;
+};
 
 inline bool isGamePadAction(long value) {
     return value >= 0 && value <= RELEASE_RIGHT;

@@ -338,19 +338,19 @@ struct DevicesDefaults {
     
     static let stdKeyMap1 = [
         
-        MacKey.init(keyCode: kVK_LeftArrow): PULL_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_RightArrow): PULL_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_UpArrow): PULL_UP.rawValue,
-        MacKey.init(keyCode: kVK_DownArrow): PULL_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_Space): PRESS_FIRE.rawValue
+        MacKey.init(keyCode: kVK_LeftArrow): GamePadAction.PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_RightArrow): GamePadAction.PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_UpArrow): GamePadAction.PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_DownArrow): GamePadAction.PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_Space): GamePadAction.PRESS_FIRE.rawValue
     ]
     static let stdKeyMap2 = [
         
-        MacKey.init(keyCode: kVK_ANSI_S): PULL_LEFT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_D): PULL_RIGHT.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_E): PULL_UP.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_X): PULL_DOWN.rawValue,
-        MacKey.init(keyCode: kVK_ANSI_C): PRESS_FIRE.rawValue
+        MacKey.init(keyCode: kVK_ANSI_S): GamePadAction.PULL_LEFT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_D): GamePadAction.PULL_RIGHT.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_E): GamePadAction.PULL_UP.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_X): GamePadAction.PULL_DOWN.rawValue,
+        MacKey.init(keyCode: kVK_ANSI_C): GamePadAction.PRESS_FIRE.rawValue
     ]
     
     static let std = DevicesDefaults.init(
