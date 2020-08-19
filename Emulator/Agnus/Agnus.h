@@ -765,10 +765,7 @@ public:
     void updateBplEvents(int first = 0, int last = HPOS_MAX) {
         updateBplEvents(dmacon, bplcon0, first, last); }
     void updateDrawingFlags(bool hires);
-    
-    // Checks the currently scheduled event
-    bool hasBPLxEvent(int x);
-    
+        
     // Removes all events from the DAS event table
     void clearDasEvents();
 

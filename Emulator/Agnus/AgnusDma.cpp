@@ -578,27 +578,6 @@ Agnus::updateDrawingFlags(bool hires)
     updateBplJumpTable();
 }
 
-bool
-Agnus::hasBPLxEvent(int x)
-{
-    EventID id = bplEvent[pos.h];
-    
-    // Remove drawing flags
-    id = (EventID)(id & ~0b11);
-    
-    switch (x) {
-        case 1: return id == BPL_L1 || id == BPL_H1;
-        case 2: return id == BPL_L2 || id == BPL_H2;
-        case 3: return id == BPL_L3 || id == BPL_H3;
-        case 4: return id == BPL_L4 || id == BPL_H4;
-        case 5: return id == BPL_L5;
-        case 6: return id == BPL_L6;
-        
-        default:
-            assert(false); return false;
-    }
-}
-
 void
 Agnus::clearDasEvents()
 {
