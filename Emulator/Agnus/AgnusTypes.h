@@ -181,20 +181,19 @@ static inline bool isBusOwner(long value)
     return value >= 0 && value < BUS_OWNER_COUNT;
 }
 
-typedef enum
+typedef VA_ENUM(long, DDFState)
 {
     DDF_OFF,
     DDF_READY,
     DDF_ON
-}
-DDFState;
+};
 
-typedef enum
+typedef VA_ENUM(long, SprDMAState)
 {
     SPR_DMA_IDLE,
     SPR_DMA_ACTIVE
-}
-SprDMAState;
+};
+
 
 //
 // Structures
