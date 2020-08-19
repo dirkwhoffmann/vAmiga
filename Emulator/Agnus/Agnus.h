@@ -771,6 +771,9 @@ public:
         updateBplEvents(dmacon, bplcon0, first, last); }
     void updateDrawingFlags(bool hires);
     
+    // Checks the currently scheduled event
+    bool hasBPLxEvent(int x);
+    
     // Removes all events from the DAS event table
     void clearDasEvents();
 
@@ -858,11 +861,11 @@ private:
     
 public:
 
-    /* Returns the Agnus view of the BPU bits.
-     * The value determines the number of enabled DMA channels. It is computed
-     * out of the three BPU bits stored in BPLCON0, but not identical with them.
-     * The value differs if the BPU bits reflect an invalid bit pattern.
-     * Compare with Denise::bpu() which returns the Denise view of the BPU bits.
+    /* Returns the Agnus view of the BPU bits. The value determines the number
+     * of enabled DMA channels. It is computed out of the three BPU bits stored
+     * in BPLCON0, but not identical with them. The value differs if the BPU
+     * bits reflect an invalid bit pattern. Compare with Denise::bpu() which
+     * returns the Denise view of the BPU bits.
      */
     static int bpu(u16 v);
     int bpu() { return bpu(bplcon0); }

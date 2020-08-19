@@ -74,7 +74,7 @@ static const int RANDOMIZE_RAM   = 1; // Initialize Ram with random numbers
 //
 
 // General
-static const int XFILES          = 1; // Report paranormal activity
+static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Runloop

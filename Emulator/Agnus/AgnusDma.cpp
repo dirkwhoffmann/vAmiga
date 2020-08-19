@@ -318,9 +318,16 @@ Agnus::pokeBPLxPTL(u16 value)
 template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
-    // if (x == 5) debug("setBPLxPTH(%d, %X)\n", x, value);
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     
+    // Check if the write collides with DMA
+    if (DROP_PTR_WRITES && hasBPLxEvent(x)) {
+        debug(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
+        bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
+        return;
+    }
+    
+    // Check if pointer was involded in DMA one cycle earlier
     if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
         bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
     }
@@ -331,6 +338,14 @@ Agnus::setBPLxPTL(u16 value)
 {
     debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
+    // Check if the write collides with DMA
+    if (DROP_PTR_WRITES && hasBPLxEvent(x)) {
+        debug(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
+        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFF);
+        return;
+    }
+
+    // Check if pointer was involded in DMA one cycle earlier
     if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
         bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], value & 0xFFFE);
     }
@@ -475,7 +490,7 @@ Agnus::peek(u32 addr)
     if (addr >= mem.chipRamSize()) {
         
         if (slowRamIsMirroredIn() && addr >= 0x80000) {
-            debug("Reading from Slow RAM mirror\n");
+            debug(XFILES, "Reading from Slow RAM mirror\n");
             return mem.peek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
         }
 
@@ -794,6 +809,27 @@ Agnus::updateDrawingFlags(bool hires)
             bplEvent[i] = (EventID)(bplEvent[i] | 2);
     }
     updateBplJumpTable();
+}
+
+bool
+Agnus::hasBPLxEvent(int x)
+{
+    EventID id = bplEvent[pos.h];
+    
+    // Remove drawing flags
+    id = (EventID)(id & ~0b11);
+    
+    switch (x) {
+        case 1: return id == BPL_L1 || id == BPL_H1;
+        case 2: return id == BPL_L2 || id == BPL_H2;
+        case 3: return id == BPL_L3 || id == BPL_H3;
+        case 4: return id == BPL_L4 || id == BPL_H4;
+        case 5: return id == BPL_L5;
+        case 6: return id == BPL_L6;
+        
+        default:
+            assert(false); return false;
+    }
 }
 
 void
