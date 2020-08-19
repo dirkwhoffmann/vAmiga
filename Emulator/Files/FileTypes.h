@@ -74,12 +74,11 @@ typedef VA_ENUM(long, RomIdentifier)
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
-typedef enum
+typedef VA_ENUM(long, DecryptionError)
 {
     DECRYPT_NOT_AN_ENCRYPTED_ROM,
     DECRYPT_MISSING_ROM_KEY_FILE,
     DECRYPT_INVALID_ROM_KEY_FILE
-}
-DecryptionError;
+};
 
 #endif

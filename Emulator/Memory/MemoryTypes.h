@@ -37,12 +37,11 @@ static inline bool isMemorySource(long value) { return value >= 0 && value <= ME
 /* Access identifiers
  * Some memory methods need to know who called them.
  */
-typedef enum
+typedef VA_ENUM(long, Accessor)
 {
     CPU_ACCESS,
     AGNUS_ACCESS
-}
-Accessor;
+};
 
 static inline bool isAccessor(long value) { return value >= 0 && value <= AGNUS_ACCESS; }
 

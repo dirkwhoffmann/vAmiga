@@ -26,12 +26,11 @@ inline bool isSerialPortDevice(long value) {
     return value >= 0 && value <= SPD_LOOPBACK;
 }
 
-typedef enum
+typedef VA_ENUM(long, PortNr)
 {
     PORT_1 = 1,
     PORT_2 = 2
-}
-PortNr;
+};
 
 inline bool isPortNr(long value) {
     return value == PORT_1 || value == PORT_2;

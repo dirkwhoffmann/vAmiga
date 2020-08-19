@@ -146,11 +146,11 @@ extension MyDocument {
         alert.addButton(withTitle: "OK")
         
         switch error {
-        case DECRYPT_MISSING_ROM_KEY_FILE:
+        case .DECRYPT_MISSING_ROM_KEY_FILE:
             alert.informativeText = "A rom.key file is required to decrypt the image."
             return alert.runModal()
             
-        case DECRYPT_INVALID_ROM_KEY_FILE:
+        case .DECRYPT_INVALID_ROM_KEY_FILE:
             alert.informativeText = "Decryption didn't produce a valid ROM."
             return alert.runModal()
             
