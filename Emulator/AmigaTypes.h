@@ -87,19 +87,18 @@ inline bool isConfigOption(long value)
     return value >= OPT_AGNUS_REVISION && value <= OPT_FILTER_ALWAYS_ON;
 }
 
-typedef enum
+typedef VA_ENUM(long, EmulatorState)
 {
     STATE_OFF,
     STATE_PAUSED,
     STATE_RUNNING
-}
-EmulatorState;
+};
 
 inline bool isEmulatorState(long value) {
     return value >= STATE_OFF && value <= STATE_RUNNING;
 }
 
-typedef enum
+typedef VA_ENUM(u32, RunLoopControlFlag)
 {
     RL_STOP               = 0b000001,
     RL_INSPECT            = 0b000010,
@@ -107,8 +106,7 @@ typedef enum
     RL_WATCHPOINT_REACHED = 0b001000,
     RL_AUTO_SNAPSHOT      = 0b010000,
     RL_USER_SNAPSHOT      = 0b100000
-}
-RunLoopControlFlag;
+};
 
 typedef VA_ENUM(long, ErrorCode)
 {

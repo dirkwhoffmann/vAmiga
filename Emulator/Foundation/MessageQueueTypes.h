@@ -12,7 +12,7 @@
 #ifndef _MESSAGE_QUEUE_TYPES_H
 #define _MESSAGE_QUEUE_TYPES_H
 
-typedef enum
+typedef VA_ENUM(long, MessageType)
 {
     MSG_NONE = 0,
     
@@ -77,8 +77,7 @@ typedef enum
     // Snapshots
     MSG_AUTO_SNAPSHOT_TAKEN,
     MSG_USER_SNAPSHOT_TAKEN
-}
-MessageType;
+};
 
 typedef struct
 {
@@ -88,6 +87,6 @@ typedef struct
 Message;
 
 // Callback function signature
-typedef void Callback(const void *, unsigned, long);
+typedef void Callback(const void *, long, long);
 
 #endif
