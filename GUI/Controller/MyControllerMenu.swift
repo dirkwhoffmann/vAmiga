@@ -310,7 +310,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func powerAction(_ sender: Any!) {
         
-        var error: ErrorCode = ERR_OK
+        var error: ErrorCode = .ERR_OK
 
         if amiga.isPoweredOn {
             amiga.powerOff()
@@ -516,7 +516,7 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func hideSpriteAction(_ sender: NSMenuItem!) {
 
-        var mask = amiga.getConfig(OPT_HIDDEN_SPRITES)
+        var mask = amiga.getConfig(.OPT_HIDDEN_SPRITES)
         
         sender.state = (sender.state == .off) ? .on : .off
         if sender.state == .on {
@@ -526,7 +526,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         amiga.suspend()
-        amiga.configure(OPT_HIDDEN_SPRITES, value: mask)
+        amiga.configure(.OPT_HIDDEN_SPRITES, value: mask)
         amiga.resume()
         
         track()

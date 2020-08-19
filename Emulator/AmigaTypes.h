@@ -35,7 +35,7 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, ConfigOption)
 {
     OPT_AGNUS_REVISION,
     OPT_DENISE_REVISION,
@@ -80,8 +80,7 @@ typedef enum : long
     OPT_AUDPAN1,
     OPT_AUDPAN2,
     OPT_AUDPAN3,
-}
-ConfigOption;
+};
 
 inline bool isConfigOption(long value)
 {
@@ -111,15 +110,14 @@ typedef enum
 }
 RunLoopControlFlag;
 
-typedef enum
+typedef VA_ENUM(long, ErrorCode)
 {
     ERR_OK,
     ERR_ROM_MISSING,
     ERR_AROS_NO_EXTROM,
     ERR_AROS_RAM_LIMIT,
     ERR_CHIP_RAM_LIMIT
-}
-ErrorCode;
+};
 
 //
 // Structures

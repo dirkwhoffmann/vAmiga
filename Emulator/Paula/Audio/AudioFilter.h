@@ -36,7 +36,7 @@ public:
     
     
     //
-    // Configuring the device
+    // Configuring
     //
     
 public:
@@ -74,7 +74,7 @@ private:
 
 
     //
-    // Running the filter
+    // Using
     //
 
 public:

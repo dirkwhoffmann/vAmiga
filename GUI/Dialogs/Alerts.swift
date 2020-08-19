@@ -115,13 +115,13 @@ extension MyDocument {
         var msg: String
 
         switch error {
-        case ERR_ROM_MISSING:
+        case .ERR_ROM_MISSING:
             msg = "A Kickstart Rom or Boot Rom is required to power up."
-        case ERR_CHIP_RAM_LIMIT:
+        case .ERR_CHIP_RAM_LIMIT:
             msg = "The selected Agnus revision does not support the selected amout of Chip Ram."
-        case ERR_AROS_RAM_LIMIT:
+        case .ERR_AROS_RAM_LIMIT:
             msg = "The Aros Kickstart replacement requires at least 1 MB of memory to boot."
-        case ERR_AROS_NO_EXTROM:
+        case .ERR_AROS_NO_EXTROM:
             msg = "The Aros Kickstart replacement requires an extension Rom."
         default:
             msg = ""
