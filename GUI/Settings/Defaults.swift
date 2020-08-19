@@ -894,8 +894,8 @@ struct AudioDefaults {
         
         volL: 250,
         volR: 250,
-        samplingMethod: SMP_NONE,
-        filterType: FILT_BUTTERWORTH,
+        samplingMethod: .SMP_NONE,
+        filterType: .FILT_BUTTERWORTH,
         filterAlwaysOn: false
     )
 }

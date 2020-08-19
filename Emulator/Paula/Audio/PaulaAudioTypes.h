@@ -16,23 +16,21 @@
 // Enumerations
 //
 
-typedef enum : long
+typedef VA_ENUM(long, SamplingMethod)
 {
     SMP_NONE,
     SMP_NEAREST,
     SMP_LINEAR
-}
-SamplingMethod;
+};
 
 static inline bool isSamplingMethod(long value) { return value >= 0 && value <= SMP_LINEAR; }
 
-typedef enum : long
+typedef VA_ENUM(long, FilterType)
 {
     FILT_NONE,
     FILT_BUTTERWORTH,
     FILT_COUNT
-}
-FilterType;
+};
 
 static inline bool isFilterType(long value) { return value >= 0 && value < FILT_COUNT; }
 
