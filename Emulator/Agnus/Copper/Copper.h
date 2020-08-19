@@ -22,9 +22,9 @@ class Copper : public AmigaComponent
     // The currently executed Copper list (1 or 2)
     u8 copList = 1;
 
-    /* Indicates if the next instruction should be skipped.
-     * This flag is usually false. It is set to true by the SKIP instruction
-     * if the skip condition holds.
+    /* Indicates if the next instruction should be skipped. This flag is
+     * usually false. It is set to true by the SKIP instruction if the skip
+     * condition holds.
      */
     bool skip = false;
      
@@ -34,8 +34,8 @@ class Copper : public AmigaComponent
 
     /* Address of the first and last executed instruction in each Copper list
      * These values are needed by the debugger to determine the end of the
-     * Copper lists. Note that these values cannot be computed directly.
-     * They are computed by observing the program counter.
+     * Copper lists. Note that these values cannot be computed directly. They
+     * are computed by observing the program counter.
      */
     u32 cop1end;
     u32 cop2end;
@@ -79,13 +79,37 @@ private:
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Copper(Amiga& ref);
 
+    void _reset(bool hard) override;
+
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
+    // Returns the result of the latest inspection
+    CopperInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+private:
+
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
+    // Serialization
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -109,43 +133,19 @@ public:
         & activeInThisFrame;
     }
 
-
-    //
-    // Analyzing and profiling
-    //
-
-    // Returns the result of the latest inspection
-    CopperInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _reset(bool hard) override;
-    void _inspect() override; 
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
+
+    //
+    // Accessing
+    //
+
 public:
-
-
-    //
-    // Accessing properties
-    //
-
-    // Returns the Copper program counter
+    
     u32 getCopPC() const { return coppc; }
-
-
-    //
-    // Accessing registers
-    //
-
+    
     void pokeCOPCON(u16 value);
     template <Accessor s> void pokeCOPJMP1();
     template <Accessor s> void pokeCOPJMP2();
@@ -169,9 +169,9 @@ private:
     // Switches the Copper list
     void switchToCopperList(int nr);
 
-    /* Searches for the next matching beam position.
-     * This function is called when a WAIT statement is processed. It is uses
-     * to compute where the Copper wakes up.
+    /* Searches for the next matching beam position. This function is called
+     * when a WAIT statement is processed. It is uses to compute where the
+     * Copper wakes up.
      *
      * Return values:
      *
@@ -226,10 +226,10 @@ private:
      *   2     RA2    DW2        HP3     HM3       HP3     HM3
      *   1     RA1    DW1        HP2     HM2       HP2     HM2
      *   0      0     DW0         1       0         1       1
-     */
-    /* Each functions comes in two variante. The first variant analyzes the
-     * instruction in the instructions register. The second variant analyzes
-     * the instruction at a certain location in memory.
+     *
+     * Each of the following functions exists in two variants. The first
+     * variant analyzes the instruction in the instructions register. The
+     * second variant analyzes the instruction at a certain location in memory.
      */
  
     bool isMoveCmd();
@@ -266,10 +266,10 @@ private:
     
 public:
     
-    // Returns true if the Copper has no access to this custom register.
+    // Returns true if the Copper has no access to this custom register
     bool isIllegalAddress(u32 addr);
     
-    // Returns true if the Copper instruction at addr is illegal.
+    // Returns true if the Copper instruction at addr is illegal
     bool isIllegalInstr(u32 addr);
     
  

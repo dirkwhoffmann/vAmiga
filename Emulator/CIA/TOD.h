@@ -62,6 +62,16 @@ public:
 
 
     //
+    // Analyzing
+    //
+    
+    CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
     // Serializing
     //
     
@@ -87,16 +97,6 @@ public:
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-    //
-    // Analyzing
-    //
-    
-    CounterInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-    void _inspect() override;
-    void _dump() override;
-    
     
     //
     // Accessing
@@ -162,9 +162,8 @@ private:
     bool incLoNibble(u8 &counter);
     bool incHiNibble(u8 &counter);
 
-    /* Updates variable 'matching'
-     * If a positive edge occurs, the connected CIA is requested to trigger
-     * an interrupt.
+    /* Updates variable 'matching'. If a positive edge occurs, the connected
+     * CIA is requested to trigger an interrupt.
      */
     void checkForInterrupt();
 };

@@ -33,13 +33,36 @@ class ControlPort : public AmigaComponent {
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     ControlPort(PortNr nr, Amiga& ref);
 
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Configuring
+    //
+
+public:
+    
+    ControlPortInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -56,41 +79,21 @@ public:
         & chargeDY;
     }
 
-
-    //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
-    void _inspect() override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
     
     //
-    // Reading the internal state
+    // Accessing
     //
 
 public:
-
-    // Returns the latest internal state recorded by inspect()
-    ControlPortInfo getInfo() { return HardwareComponent::getInfo(info); }
 
     // Getter for the delta charges
     i16 getChargeDX() { return chargeDX; }
     i16 getChargeDY() { return chargeDY; }
     
-
-    //
-    // Managing registers
-    //
-    
-    public:
-
     // Returns the control port bits showing up in the JOYxDAT register
     u16 joydat();
 

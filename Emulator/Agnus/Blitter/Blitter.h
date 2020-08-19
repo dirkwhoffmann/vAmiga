@@ -43,31 +43,31 @@ class Blitter : public AmigaComponent
     // Blitter registers
     //
     
-    // The Blitter Control Register
+    // Control registers
     u16 bltcon0;
     u16 bltcon1;
     
-    // The Blitter DMA pointers
+    // DMA pointers
     u32 bltapt;
     u32 bltbpt;
     u32 bltcpt;
     u32 bltdpt;
     
-    // Blitter A first and last word masks
+    // Word masks
     u16 bltafwm;
     u16 bltalwm;
     
-    // The Blitter size register
+    // Size register
     u16 bltsizeH;
     u16 bltsizeV;
 
-    // The Blitter modulo registers
+    // Modulo registers
     i16 bltamod;
     i16 bltbmod;
     i16 bltcmod;
     i16 bltdmod;
     
-    // The Blitter pipeline registers
+    // Pipeline registers
     u16 anew;
     u16 bnew;
     u16 aold;
@@ -79,6 +79,7 @@ class Blitter : public AmigaComponent
     u32 ashift;
     u32 bshift;
 
+    
     //
     // Fast Blitter
     //
@@ -100,6 +101,7 @@ class Blitter : public AmigaComponent
     // The program counter indexing the micro instruction to execute
     u16 bltpc;
 
+    // Blitter state
     int iteration;
     int incr;
     int ash;
@@ -119,9 +121,13 @@ class Blitter : public AmigaComponent
     i16 cntC;
     i16 cntD;
 
+    // The fill carry bit
     bool fillCarry;
+
+    // Channel A mask
     u16 mask;
 
+    // If true, the D register won't be written to memory
     bool lockD;
 
 
@@ -188,6 +194,8 @@ public:
     //
     // Serializing
     //
+    
+private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -271,6 +279,8 @@ public:
     // Configuring
     //
 
+public:
+    
     BlitterConfig getConfig() { return config; }
     
     long getConfigItem(ConfigOption option);
@@ -281,12 +291,23 @@ public:
     // Analyzing
     //
     
+public:
+    
     BlitterInfo getInfo() { return HardwareComponent::getInfo(info); }
 
+private:
+    
     // Methods from HardwareComponent
     void _inspect() override;
     void _dump() override;
 
+
+    //
+    // Accessing
+    //
+
+public:
+    
     // Returns true if the Blitter is processing a blit
     bool isRunning() { return running; }
 
@@ -296,11 +317,6 @@ public:
     // Returns the value of the zero flag
     bool isZero() { return bzero; }
 
-
-    //
-    // Accessing registers
-    //
-    
     // BLTCON0
     void pokeBLTCON0(u16 value);
     void setBLTCON0(u16 value);
@@ -367,6 +383,8 @@ public:
     // Handling requests of other components
     //
 
+public:
+    
     // Called by Agnus when DMACON is written to
     void pokeDMACON(u16 oldValue, u16 newValue);
 
@@ -385,6 +403,8 @@ public:
     // Running the fill and minterm circuits
     //
 
+private:
+    
     // Emulates the minterm logic circuit
     u16 doMintermLogic(u16 a, u16 b, u16 c, u8 minterm);
     u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm);
@@ -418,6 +438,8 @@ private:
     //  Executing the Fast Blitter
     //
 
+private:
+    
     // Starts a level 0 blit
     void beginFastLineBlit();
     void beginFastCopyBlit();
@@ -434,6 +456,8 @@ private:
     //  Executing the Slow Blitter
     //
 
+private:
+    
     // Starts a level 1 blit
     void beginFakeCopyBlit();
     void beginFakeLineBlit();

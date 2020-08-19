@@ -18,7 +18,7 @@ class CPU : public AmigaComponent, public moira::Moira {
     // Result of the latest inspection
     CPUInfo info;
 
-
+    
     //
     // Initializing
     //
@@ -29,6 +29,21 @@ public:
 
     void _reset(bool hard) override;
     
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
+private:
+    
+    void _inspect() override;
+    void _inspect(u32 dasmStart);
+    void _dump() override;
+
     
     //
     // Serializing
@@ -77,22 +92,9 @@ private:
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(u8 *buffer) override;
 
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    CPUInfo getInfo() { return HardwareComponent::getInfo(info); }
 
-    void _inspect() override;
-    void _inspect(u32 dasmStart);
-    void _dump() override;
-
-    
     //
-    // Changing state
+    // Controlling
     //
     
 private:
@@ -104,7 +106,7 @@ private:
 
         
     //
-    // Communicating with Moira
+    // Talking to Moira
     //
 
 private:

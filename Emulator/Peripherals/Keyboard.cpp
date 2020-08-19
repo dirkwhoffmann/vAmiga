@@ -26,6 +26,31 @@ Keyboard::_reset(bool hard)
     execute();
 }
 
+long
+Keyboard::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_ACCURATE_KEYBOARD:  return config.accurate;
+        
+        default: assert(false);
+    }
+}
+
+void
+Keyboard::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_ACCURATE_KEYBOARD:
+            config.accurate = value;
+            break;
+                        
+        default:
+            break;
+    }
+}
+
 void
 Keyboard::_dump()
 {

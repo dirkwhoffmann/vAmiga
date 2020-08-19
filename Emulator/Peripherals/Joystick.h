@@ -43,12 +43,32 @@ class Joystick : public AmigaComponent {
     
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Joystick(PortNr n, Amiga& ref);
+
+private:
+    
+    void _reset(bool hard) override;
+
+    
+    //
+    // Configuring
+    //
+    
+private:
+    
+    void _dump() override;
+
+    
+    //
+    // Serializing
+    //
+    
+private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -60,15 +80,6 @@ public:
     {
     }
 
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _reset(bool hard) override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
@@ -76,20 +87,20 @@ private:
     
     
     //
-    // Accessing properties
+    // Accessing
     //
     
 public:
     
-    // Auto-fire
+    // Configures autofire mode
     bool getAutofire() { return autofire; }
     void setAutofire(bool value);
     
-    // Number of bullets per gun volley (a negative value means infinite)
+    // Configures the bullets per gun volley (negative value = infinite)
     int getAutofireBullets() { return autofireBullets; }
     void setAutofireBullets(int value);
     
-    // Autofire frequency
+    // Configures the autofire frequency
     float getAutofireFrequency() { return autofireFrequency; }
     void setAutofireFrequency(float value) { autofireFrequency = value; }
 
@@ -97,11 +108,6 @@ private:
     
     // Updates variable nextAutofireFrame
     void scheduleNextShot();
-
-
-    //
-    // Managing registers
-    //
 
 public:
 
@@ -124,9 +130,8 @@ public:
     // Triggers a gamepad event
     void trigger(GamePadAction event);
 
-    /* Execution function for this control port
-     * This method needs to be invoked at the end of each frame to make the
-     * auto-fire mechanism work.
+    /* Execution function for this control port. This method needs to be
+     * invoked at the end of each frame to make the auto-fire mechanism work.
      */
     void execute();
 };

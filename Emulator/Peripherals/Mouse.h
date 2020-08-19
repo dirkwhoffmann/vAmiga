@@ -36,11 +36,10 @@ private:
     double oldMouseX;
     double oldMouseY;
 
-    /* The target mouse position
-     * In order to achieve a smooth mouse movement, a new mouse coordinate is
-     * not written directly into mouseX and mouseY. Instead, these variables
-     * are set. In execute(), mouseX and mouseY are shifted smoothly towards
-     * the target positions.
+    /* The target mouse position. In order to achieve a smooth mouse movement,
+     * a new mouse coordinate is not written directly into mouseX and mouseY.
+     * Instead, these variables are set. In execute(), mouseX and mouseY are
+     * shifted smoothly towards the target positions.
      */
     double targetX;
     double targetY;
@@ -55,13 +54,31 @@ private:
 
 
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     Mouse(PortNr n, Amiga& ref);
+    
+    void _reset(bool hard) override;
+    
+    
+    //
+    // Configuring
+    //
+    
+private:
+    
+    void _dump() override;
 
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -73,23 +90,13 @@ public:
     {
     }
 
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-    
-    void _powerOn() override;
-    void _reset(bool hard) override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
-    // Managing registers
+    // Accessing
     //
 
 public:
@@ -102,7 +109,7 @@ public:
 
     
     //
-    // Operating the mouse
+    // Using the mouse
     //
     
 public:

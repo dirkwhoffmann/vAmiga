@@ -23,15 +23,13 @@ class Keyboard : public AmigaComponent {
     // Shift register storing the transmission bits
     u8 shiftReg;
     
-    /* Time stamps recording an Amiga triggered change of the SP line.
-     * The SP line is driven by the Amiga to transmit a handshake.
+    /* Time stamps recording an Amiga triggered change of the SP line. The SP
+     * line is driven by the Amiga to transmit a handshake.
      */
     Cycle spLow;
     Cycle spHigh;
 
-    /* The keycode type-ahead buffer.
-     * The Amiga can hold up to 10 keycodes in this buffer.
-     */
+    // The keycode type-ahead buffer. The Amiga can hold up to 10 keycodes.
     static const size_t bufferSize = 10;
     u8 typeAheadBuffer[bufferSize];
     
@@ -43,12 +41,48 @@ class Keyboard : public AmigaComponent {
 
     
     //
-    // Constructing and serializing
+    // Initialization
     //
     
 public:
     
     Keyboard(Amiga& ref);
+    
+private:
+    
+    void _reset(bool hard) override;
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    KeyboardConfig getConfig() { return config; }
+
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+
+    /*
+    bool getAccurate() { return config.accurate; }
+    void setAccurate(bool value) { config.accurate = value; }
+    */
+    
+    //
+    // Analyzing
+    //
+    
+private:
+    
+    void _dump() override;
+
+    
+    //
+    // Serialization
+    //
+    
+private:
     
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -69,25 +103,13 @@ public:
         & bufferIndex;
     }
 
-
-    //
-    // Configuring
-    //
-
-    KeyboardConfig getConfig() { return config; }
-
-    bool getAccurate() { return config.accurate; }
-    void setAccurate(bool value) { config.accurate = value; }
-
     
     //
-    // Methods from HardwareComponent
+    // Controlling
     //
     
 private:
     
-    void _reset(bool hard) override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
@@ -127,10 +149,9 @@ private:
     
 public:
 
-    /* Emulates a change on the SP line.
-     * This function is called whenever the CIA switches the serial register
-     * from input mode to output mode or vice versa. The SP line is controlled
-     * by the Amiga to signal a handshake.
+    /* Emulates a change on the SP line. This function is called whenever the
+     * CIA switches the serial register from input mode to output mode or vice
+     * versa. The SP line is controlled by the Amiga to signal a handshake.
      */
     void setSPLine(bool value, Cycle cycle);
     

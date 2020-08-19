@@ -34,12 +34,14 @@ private:
 
 
     //
-    // Constructing
+    // Initializing
     //
 
 public:
 
     DmaDebugger(Amiga &ref);
+
+    void _reset(bool hard) override { }
 
 
     //
@@ -88,26 +90,32 @@ public:
 
     
     //
-    // Methods from HardwareComponent
+    // Analyzing
     //
-
-private:
-
-    void _reset(bool hard) override { }
-    size_t _size() override { return 0; }
-    size_t _load(u8 *buffer) override {return 0; }
-    size_t _save(u8 *buffer) override { return 0; }
     
 public:
 
     // Returns the result of the most recent call to inspect()
     DMADebuggerInfo getInfo();
 
+    
+    //
+    // Serializing
+    //
+
+private:
+
+    size_t _size() override { return 0; }
+    size_t _load(u8 *buffer) override {return 0; }
+    size_t _save(u8 *buffer) override { return 0; }
+    
 
     //
     // Running the debugger
     //
 
+public:
+    
     // Superimposes the debug output onto the current rasterline
     void computeOverlay();
 

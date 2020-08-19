@@ -17,11 +17,6 @@ Mouse::Mouse(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
     config.pullUpResistors = true;
 }
 
-void
-Mouse::_powerOn()
-{
-}
-
 void Mouse::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS

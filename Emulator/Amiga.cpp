@@ -243,7 +243,8 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_ECLOCK_SYNCING:
             return ciaA.getConfigItem(option);
 
-        case OPT_ACCURATE_KEYBOARD: return keyboard.getAccurate();
+        case OPT_ACCURATE_KEYBOARD:
+            return keyboard.getConfigItem(option);
 
         default: assert(false); return 0;
     }
@@ -573,12 +574,6 @@ Amiga::configure(ConfigOption option, long value)
         case OPT_SERIAL_DEVICE:
             suspend();
             serialPort.setDevice((SerialPortDevice)value);
-            resume();
-            break;
-
-        case OPT_ACCURATE_KEYBOARD:
-            suspend();
-            keyboard.setAccurate(value);
             resume();
             break;
             

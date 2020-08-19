@@ -208,6 +208,22 @@ public:
     
     
     //
+    // Analyzing
+    //
+    
+public:
+    
+    MemoryStats getStats() { return stats; }
+    
+    void clearStats() { memset(&stats, 0, sizeof(stats)); }
+    void updateStats();
+
+private:
+    
+    void _dump() override;
+
+    
+    //
     // Serializing
     //
     
@@ -244,15 +260,6 @@ private:
     size_t didLoadFromBuffer(u8 *buffer) override;
     size_t didSaveToBuffer(u8 *buffer) override;
 
-
-    //
-    // Analyzing
-    //
-
-private:
-
-    void _dump() override;
-
     
     //
     // Changing state
@@ -262,19 +269,7 @@ private:
 
     void _powerOn() override;
 
-
-    //
-    // Profiling
-    //
-
-public:
-    
-    MemoryStats getStats() { return stats; }
-    
-    void clearStats() { memset(&stats, 0, sizeof(stats)); }
-    void updateStats();
-    
-    
+        
     //
     // Allocating memory
     //
@@ -322,6 +317,8 @@ public:
     size_t fastRamSize() { return config.fastSize; }
     size_t ramSize() { return config.chipSize + config.slowSize + config.fastSize; }
 
+private:
+    
     void fillRamWithStartupPattern();
 
     
@@ -385,7 +382,7 @@ public:
 
     
     //
-    // Managing the memory source table
+    // Maintaining the memory source table
     //
     
 public:
@@ -420,7 +417,7 @@ public:
     
 
     //
-    // CIA space
+    // Accessing the CIA space
     //
     
     u8 peekCIA8(u32 addr);
@@ -434,7 +431,7 @@ public:
 
 
     //
-    // RTC space
+    // Accessing the RTC space
     //
     
     u8 peekRTC8(u32 addr);
@@ -448,7 +445,7 @@ public:
 
     
     //
-    // Custom chip space
+    // Accessing the custom chip space
     //
     
     u16 peekCustom16(u32 addr);
