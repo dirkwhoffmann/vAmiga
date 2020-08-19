@@ -523,7 +523,7 @@ Memory::updateMemSrcTable()
 
     // Real-time clock
     for (unsigned i = 0xDC; i <= 0xDC; i++)
-        memSrc[i] = rtc.getModel() != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
+        memSrc[i] = rtc.getConfigItem(OPT_RTC) != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
 
     // Reserved
     memSrc[0xDD] = MEM_NONE_FAST;

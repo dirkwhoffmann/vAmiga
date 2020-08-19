@@ -202,7 +202,8 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_CLX_PLF_PLF:
             return denise.getConfigItem(option);
             
-        case OPT_RTC: return rtc.getModel();
+        case OPT_RTC:
+            return rtc.getConfigItem(option);
 
         case OPT_CHIP_RAM:
         case OPT_SLOW_RAM:
@@ -557,13 +558,6 @@ Amiga::configure(ConfigOption option, long value)
     // Apply the change
 
     switch (option) {
-
-        case OPT_RTC:
-            suspend();
-            rtc.setModel((RTCModel)value);
-            mem.updateMemSrcTable();
-            resume();
-            break;
 
         case OPT_DRIVE_SPEED:
             suspend();

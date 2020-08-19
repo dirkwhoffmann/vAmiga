@@ -14,6 +14,36 @@ RTC::RTC(Amiga& ref) : AmigaComponent(ref)
     setDescription("RTC");
 }
 
+long
+RTC::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_RTC:  return (long)config.model;
+        
+        default: assert(false);
+    }
+}
+
+void
+RTC::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_RTC:
+            assert(isRTCModel(value));
+            amiga.suspend();
+            config.model = (RTCModel)value;
+            mem.updateMemSrcTable();
+            amiga.resume();
+            break;
+                        
+        default:
+            break;
+    }
+}
+
+/*
 void
 RTC::setModel(RTCModel model)
 {
@@ -22,12 +52,7 @@ RTC::setModel(RTCModel model)
     assert(isRTCModel(model));
     config.model = model;
 }
-
-void
-RTC::_powerOn()
-{
-
-}
+*/
 
 void
 RTC::_reset(bool hard)
