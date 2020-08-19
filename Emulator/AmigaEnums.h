@@ -12,7 +12,12 @@
 #ifndef _AMIGA_ENUMS_H
 #define _AMIGA_ENUMS_H
 
+// Replacement for VA_ENUM which is only available on macOS
+#define VA_ENUM(_type, _name) \
+enum __attribute__((enum_extensibility(open))) _name : _type _name; \
+enum _name : _type
 
+/*
 // Basic replacement for CF_ENUM and CF_OPTIONS for source trees that lack CoreFoundation.
 
 #ifndef __has_feature
@@ -54,4 +59,7 @@
 
 #define VA_ENUM(...) __VA_ENUM_GET_MACRO(__VA_ARGS__, __VA_NAMED_ENUM, __VA_ANON_ENUM, )(__VA_ARGS__)
 
-#endif /* AmigaEnums_h */
+#endif
+*/
+
+#endif

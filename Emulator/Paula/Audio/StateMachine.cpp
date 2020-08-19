@@ -23,14 +23,6 @@ StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 }
 
 template <int nr> void
-StateMachine<nr>::_dump()
-{
-    printf("   State: %d\n", state);
-    printf("  AUDxIP: %d\n", AUDxIP());
-    printf("  AUDxON: %d\n", AUDxON());
-}
-
-template <int nr> void
 StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
@@ -56,6 +48,14 @@ StateMachine<nr>::_inspect()
         info.audvol = audvol;
         info.auddat = auddat;
     }
+}
+
+template <int nr> void
+StateMachine<nr>::_dump()
+{
+    printf("   State: %d\n", state);
+    printf("  AUDxIP: %d\n", AUDxIP());
+    printf("  AUDxON: %d\n", AUDxON());
 }
 
 template <int nr> void
@@ -89,6 +89,113 @@ StateMachine<nr>::disableDMA()
             move_101_000();
             break;
     }
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxON()
+{
+    return agnus.auddma<nr>();
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxIP()
+{
+    return GET_BIT(paula.intreq, 7 + nr);
+}
+
+template <int nr> void
+StateMachine<nr>::AUDxIR()
+{
+    if (DISABLE_AUDIRQ) return;
+    
+    IrqSource source =
+    nr == 0 ? INT_AUD0 : nr == 1 ? INT_AUD1 : nr == 2 ? INT_AUD2 : INT_AUD3;
+    
+    paula.scheduleIrqRel(source, DMA_CYCLES(1));
+}
+
+template <int nr> void
+StateMachine<nr>::percntrld()
+{
+    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
+
+    
+    u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
+
+    agnus.scheduleRel<slot>(DMA_CYCLES(delay), CHX_PERFIN);
+}
+
+template <int nr> void
+StateMachine<nr>::pbufld1()
+{
+    if (AUDxAV()) {
+        // debug("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
+        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddat);
+        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddat);
+        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddat);
+    } else {
+        buffer = auddat;
+    }
+}
+
+template <int nr> void
+StateMachine<nr>::pbufld2()
+{
+    assert(AUDxAP());
+    if (nr < 3) {
+        // debug("Period modulation %d\n", auddat);
+        audioUnit.pokeAUDxPER(nr + 1, auddat);
+    }
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxAV()
+{
+    return (paula.adkcon >> nr) & 0x01;
+}
+
+template <int nr> bool
+StateMachine<nr>::AUDxAP()
+{
+    return (paula.adkcon >> nr) & 0x10;
+}
+
+template <int nr> void
+StateMachine<nr>::penhi()
+{
+    if (!enablePenhi) return;
+    
+    i8 sample = (i8)HI_BYTE(buffer);
+    i16 scaled = sample * audvol;
+    
+    debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
+    
+    if (!samples.isFull()) {
+        samples.insert(agnus.clock, scaled);
+    } else {
+        debug("penhi: Sample buffer is full\n");
+    }
+    
+    enablePenhi = false;
+}
+
+template <int nr> void
+StateMachine<nr>::penlo()
+{
+    if (!enablePenlo) return;
+
+    i8 sample = (i8)LO_BYTE(buffer);
+    i16 scaled = sample * audvol;
+
+    debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
+    
+    if (!samples.isFull()) {
+        samples.insert(agnus.clock, scaled);
+    } else {
+        debug("penlo: Sample buffer is full\n");
+    }
+    
+    enablePenlo = false;
 }
 
 template <int nr> void
@@ -247,113 +354,6 @@ StateMachine<nr>::move_011_010()
 
     state = 0b010;
     penhi();
-}
-
-template <int nr> bool
-StateMachine<nr>::AUDxON()
-{
-    return agnus.auddma<nr>();
-}
-
-template <int nr> void
-StateMachine<nr>::AUDxIR()
-{
-    if (DISABLE_AUDIRQ) return;
-    
-    IrqSource source =
-    nr == 0 ? INT_AUD0 : nr == 1 ? INT_AUD1 : nr == 2 ? INT_AUD2 : INT_AUD3;
-    
-    paula.scheduleIrqRel(source, DMA_CYCLES(1));
-}
-
-template <int nr> void
-StateMachine<nr>::percntrld()
-{
-    const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
-
-    
-    u64 delay = (audperLatch == 0) ? 0x10000 : audperLatch;
-
-    agnus.scheduleRel<slot>(DMA_CYCLES(delay), CHX_PERFIN);
-}
-
-template <int nr> bool
-StateMachine<nr>::AUDxIP()
-{
-    return GET_BIT(paula.intreq, 7 + nr);
-}
-
-template <int nr> void
-StateMachine<nr>::pbufld1()
-{
-    if (AUDxAV()) {
-        // debug("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
-        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddat);
-        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddat);
-        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddat);
-    } else {
-        buffer = auddat;
-    }
-}
-
-template <int nr> void
-StateMachine<nr>::pbufld2()
-{
-    assert(AUDxAP());
-    if (nr < 3) {
-        // debug("Period modulation %d\n", auddat);
-        audioUnit.pokeAUDxPER(nr + 1, auddat);
-    }
-}
-
-template <int nr> bool
-StateMachine<nr>::AUDxAV()
-{
-    return (paula.adkcon >> nr) & 0x01;
-}
-
-template <int nr> bool
-StateMachine<nr>::AUDxAP()
-{
-    return (paula.adkcon >> nr) & 0x10;
-}
-
-template <int nr> void
-StateMachine<nr>::penhi()
-{
-    if (!enablePenhi) return;
-    
-    i8 sample = (i8)HI_BYTE(buffer);
-    i16 scaled = sample * audvol;
-    
-    debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
-    
-    if (!samples.isFull()) {
-        samples.insert(agnus.clock, scaled);
-    } else {
-        debug("penhi: Sample buffer is full\n");
-    }
-    
-    enablePenhi = false;
-}
-
-template <int nr> void
-StateMachine<nr>::penlo()
-{
-    if (!enablePenlo) return;
-
-    i8 sample = (i8)LO_BYTE(buffer);
-    i16 scaled = sample * audvol;
-
-    debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
-    
-    if (!samples.isFull()) {
-        samples.insert(agnus.clock, scaled);
-    } else {
-        debug("penlo: Sample buffer is full\n");
-    }
-    
-    enablePenlo = false;
 }
 
 template <int nr> template <SamplingMethod method> i16

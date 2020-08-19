@@ -91,11 +91,27 @@ public:
     //
     
 public:
-    
+
     Paula(Amiga& ref);
     
+private:
+    
     void _reset(bool hard) override;
-
+    
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+    
     
     //
     // Serializing
@@ -134,24 +150,12 @@ private:
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     
-    
-    //
-    // Analyzing
-    //
-
-public:
-    
-    PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-private:
-    
-    void _inspect() override;
-    void _dump() override;
-
  
     //
     // Changing state
     //
+    
+private:
     
     void _setWarp(bool enable) override;
 
@@ -180,11 +184,11 @@ public:
     void setINTENA(bool setclr, u16 value);
     void setINTENA(u16 value) { setINTENA(value & 0x8000, value & 0x7FFF); }
 
-    // POTxDAT, POTGOR and POTGO
+    // POTxDAT
     template <int x> u16 peekPOTxDAT();
-    
+
+    // POTGOR and POTGO
     u16 peekPOTGOR();
-    
     bool OUTRY() { return potgo & 0x8000; }
     bool DATRY() { return potgo & 0x4000; }
     bool OUTRX() { return potgo & 0x2000; }
@@ -193,7 +197,6 @@ public:
     bool DATLY() { return potgo & 0x0400; }
     bool OUTLX() { return potgo & 0x0200; }
     bool DATLX() { return potgo & 0x0100; }
-    
     void pokePOTGO(u16 value);
 
 
@@ -203,14 +206,14 @@ public:
     
 public:
 
-    // Charges or discharges a potentiometer capacitor
-    void servicePotEvent(EventID id);
-
     // Triggers all pending interrupts
     void serviceIrqEvent();
 
     // Changes the CPU interrupt priority lines
     void serviceIplEvent();
+
+    // Charges or discharges a potentiometer capacitor
+    void servicePotEvent(EventID id);
 
     
     //

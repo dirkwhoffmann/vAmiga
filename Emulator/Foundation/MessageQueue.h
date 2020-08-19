@@ -34,14 +34,13 @@ private:
     
 public:
     
-    // Constructor and destructor
     MessageQueue();
     ~MessageQueue();
     
     // Registers a listener together with it's callback function
     void addListener(const void *listener, Callback *func);
     
-    // Unregisters a listener.
+    // Unregisters a listener
     void removeListener(const void *listener);
     
     // Returns the next pending message, or NULL if the queue is empty
@@ -52,7 +51,7 @@ public:
     
 private:
     
-    // Propagates a single message to all registered listeners
+    // Used by 'put' to propagates a single message to all registered listeners
     void propagate(Message *msg);
 };
 

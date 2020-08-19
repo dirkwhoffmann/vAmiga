@@ -9,6 +9,36 @@
 
 #include "Amiga.h"
 
+void
+Paula::pokeADKCON(u16 value)
+{
+    plaindebug(MAX(AUDREG_DEBUG, DSKREG_DEBUG), "pokeADKCON(%X)\n", value);
+
+    bool set = value & 0x8000;
+    bool clr = !set;
+    
+    // Report unusual values for debugging
+    if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
+        debug(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
+    }
+        if (clr && GET_BIT(value, 12)) {
+        debug(XFILES, "XFILES (ADKCON): MFMPREC cleared (GCR) (%x)\n", value);
+    }
+        if (set && GET_BIT(value, 9)) {
+        debug(XFILES, "XFILES (ADKCON): MSBSYNC set (GCR) (%x)\n", value);
+    }
+        if (clr && GET_BIT(value, 8)) {
+        debug(XFILES, "XFILES (ADKCON): FAST cleared (GCR) (%x)\n", value);
+    }
+        
+    if (set) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
+
+    // Take care of a possible change of the UARTBRK bit
+    uart.updateTXD();
+
+    if (adkcon & 0b1110111) debug(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
+}
+
 u16
 Paula::peekINTREQR()
 {
@@ -63,36 +93,6 @@ Paula::setINTENA(bool setclr, u16 value)
 
     if (setclr) intena |= value; else intena &= ~value;
     checkInterrupt();
-}
-
-void
-Paula::pokeADKCON(u16 value)
-{
-    plaindebug(MAX(AUDREG_DEBUG, DSKREG_DEBUG), "pokeADKCON(%X)\n", value);
-
-    bool set = value & 0x8000;
-    bool clr = !set;
-    
-    // Report unusual values for debugging
-    if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
-        debug(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
-    }
-        if (clr && GET_BIT(value, 12)) {
-        debug(XFILES, "XFILES (ADKCON): MFMPREC cleared (GCR) (%x)\n", value);
-    }
-        if (set && GET_BIT(value, 9)) {
-        debug(XFILES, "XFILES (ADKCON): MSBSYNC set (GCR) (%x)\n", value);
-    }
-        if (clr && GET_BIT(value, 8)) {
-        debug(XFILES, "XFILES (ADKCON): FAST cleared (GCR) (%x)\n", value);
-    }
-        
-    if (set) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
-
-    // Take care of a possible change of the UARTBRK bit
-    uart.updateTXD();
-
-    if (adkcon & 0b1110111) debug(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
 }
 
 template <int x> u16

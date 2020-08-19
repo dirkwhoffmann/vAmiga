@@ -57,58 +57,36 @@ private:
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
 
+    
+    //
+    // Sample buffers
+    //
+
 private:
-    
-    //
-    // Audio ringbuffer
-    //
-    
+
     // Number of sound samples stored in ringbuffer
     static constexpr size_t bufferSize = 16384;
     
-    /* The audio sample ringbuffer.
-     * This ringbuffer serves as the data interface between the emulation code
-     * and the audio API (CoreAudio on Mac OS X).
+    /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
+     * samples from the emulator to the sound device of the host machine.
      */
     float ringBufferL[bufferSize];
     float ringBufferR[bufferSize];
 
-    /* Scaling value for sound samples
-     * All sound samples produced by reSID are scaled by this value before they
-     * are written into the ringBuffer.
-     */
-    // static constexpr float scale = 0.000005f;
-    static constexpr float scale = 0.0000025f;
-    
-    /* Ring buffer read pointer
-     */
+    // Read and write pointer of the ringbuffer
     u32 readPtr = 0;
-    
-    /* Ring buffer write pointer
-     */
     u32 writePtr = 0;
     
-    /* Current volume
-     * A value of 0 or below silences the audio playback.
-     */
-    i32 volume = 0;
-    
-    /* Target volume
-     * Whenever an audio sample is written, the volume is increased or
-     * decreased by volumeDelta to make it reach the target volume eventually.
-     * This feature simulates a fading effect.
-     */
-    i32 targetVolume;
-    
-    /* Maximum volume
-     */
+    // Current volume (a value of 0 or below silences the audio playback)
     const static i32 maxVolume = 100000;
-    
-    /* Volume offset
-     * If the current volume does not match the target volume, it is increased
-     * or decreased by the specified amount. The increase or decrease takes
-     * place whenever an audio sample is generated.
+    i32 volume = maxVolume;
+
+    /* Target volume and delta steps. Whenever an audio sample is written into
+     * the buffer, the volume is increased or decreased by volumeDelta to make
+     * it reach the target volume eventually. This feature is used to eliminate
+     * cracks when the emulator is started or stopped.
      */
+    i32 targetVolume = maxVolume;
     i32 volumeDelta = 0;
 
 
@@ -136,22 +114,26 @@ public:
     
     double getSampleRate() { return config.sampleRate; }
     void setSampleRate(double hz);
-    
-    /*
-    long getVol(unsigned nr);
-    void setVol(unsigned nr, long val);
-
-    long getPan(unsigned nr);
-    void setPan(unsigned nr, long val);
-
-    long getVolL();
-    void setVolL(long val);
-
-    long getVolR();
-    void setVolR(long val);
-    */
-    
+        
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
+
+        
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    // Returns the result of the most recent call to inspect()
+    AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+    // Returns information about the current workload
+    AudioStats getStats() { return stats; }
+
+private:
+    
+    void _inspect() override;
+    void _dump() override;
 
     
     //
@@ -164,7 +146,7 @@ private:
     void applyToPersistentItems(T& worker)
     {
         worker
-
+        
         & config.samplingMethod
         & config.filterType
         & config.filterAlwaysOn
@@ -173,39 +155,23 @@ private:
         & config.volL
         & config.volR;
     }
-
+    
     template <class T>
     void applyToResetItems(T& worker)
     {
         worker
-
+        
         & clock;
     }
-
+    
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     size_t didLoadFromBuffer(u8 *buffer) override;
-
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    // Returns the result of the most recent call to inspect()
-    AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-    void _inspect() override;
-    void _dump() override;
-
-    // Returns information about the current workload
-    AudioStats getStats() { return stats; }
     
     
     //
-    // Changing state
+    // Controlling
     //
     
 private:
@@ -215,7 +181,7 @@ private:
 
 
     //
-    // Accessing the state machines
+    // Accessing registers
     //
     
 public:
@@ -227,6 +193,8 @@ public:
     //
     // Controlling the volume
     //
+    
+public:
     
     // Sets the current volume
     void setVolume(i32 vol) { volume = vol; }
@@ -246,6 +214,8 @@ public:
     //
     // Managing the ringbuffer
     //
+    
+public:
     
     // Returns the size of the ringbuffer
     size_t ringbufferSize() { return bufferSize; }
@@ -268,88 +238,84 @@ public:
     float ringbufferDataR(size_t offset);
     float ringbufferData(size_t offset);
     
-    /* Reads a certain amount of samples from ringbuffer
-     * Samples are stored in a single mono stream
-     */
+    // Reads samples from the ringbuffer (mono stream format)
     void readMonoSamples(float *target, size_t n);
     
-    /* Reads a certain amount of samples from ringbuffer
-     * Samples are stored in two seperate mono streams
-     */
+    // Reads samples from the ringbuffer (stereo stream format)
     void readStereoSamples(float *target1, float *target2, size_t n);
     
-    /* Reads a certain amount of samples from ringbuffer
-     * Samples are stored in an interleaved stereo stream
-     */
+    // Reads samples from the ringbuffer (interleaved stereo stream format)
     void readStereoSamplesInterleaved(float *target, size_t n);
     
-    /* Writes a stereo sample into the ringbuffer
-     */
+    // Writes a stereo sample into the ringbuffer
     void writeData(float left, float right);
     
-    /* Handles a buffer underflow condition.
-     * A buffer underflow occurs when the computer's audio device needs sound
-     * samples than SID hasn't produced, yet.
+    /* Handles a buffer underflow condition. A buffer underflow occurs if the
+     * audio device of the host needs more sound samples than Paula has
+     * produced yet.
      */
     void handleBufferUnderflow();
     
-    /* Handles a buffer overflow condition
-     * A buffer overflow occurs when SID is producing more samples than the
-     * computer's audio device is able to consume.
+    /* Handles a buffer overflow condition. A buffer overflow occurs if Paula
+     * has produced more samples than the audio device of the host is able to
+     * consume.
      */
     void handleBufferOverflow();
     
-    // Signals to ignore the next underflow or overflow condition.
+    // Signals to ignore the next underflow or overflow condition
     void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
     
     // Moves the read pointer forward
     void advanceReadPtr() { readPtr = (readPtr + 1) % bufferSize; }
-    void advanceReadPtr(int steps) { readPtr = (readPtr + bufferSize + steps) % bufferSize; }
+    void advanceReadPtr(int steps) {
+        readPtr = (readPtr + bufferSize + steps) % bufferSize; }
     
-    // Moves the write pointer forward.
+    // Moves the write pointer forward
     void advanceWritePtr() { writePtr = (writePtr + 1) % bufferSize; }
-    void advanceWritePtr(int steps) { writePtr = (writePtr + bufferSize + steps) % bufferSize; }
+    void advanceWritePtr(int steps) {
+        writePtr = (writePtr + bufferSize + steps) % bufferSize; }
     
-    // Returns number of stored samples in the ringbuffer.
-    unsigned samplesInBuffer() { return (writePtr + bufferSize - readPtr) % bufferSize; }
+    // Returns number of stored samples in the ringbuffer
+    unsigned samplesInBuffer() {
+        return (writePtr + bufferSize - readPtr) % bufferSize; }
     
-    // Returns the remaining storage capacity of the ringbuffer.
-    unsigned bufferCapacity() { return (readPtr + bufferSize - writePtr) % bufferSize; }
+    // Returns the remaining storage capacity of the ringbuffer
+    unsigned bufferCapacity() {
+        return (readPtr + bufferSize - writePtr) % bufferSize; }
     
-    // Returns the fill level as a percentage value.
-    double fillLevel() { return (double)samplesInBuffer() / (double)bufferSize; }
+    // Returns the fill level as a percentage value
+    double fillLevel() {
+        return (double)samplesInBuffer() / (double)bufferSize; }
     
-    /* Aligns the write pointer.
-     * This function puts the write pointer somewhat ahead of the read pointer.
-     * With a standard sample rate of 44100 Hz, 735 samples is 1/60 sec.
+    /* Aligns the write pointer. This function puts the write pointer somewhat
+     * ahead of the read pointer. With a standard sample rate of 44100 Hz,
+     * 735 samples is 1/60 sec.
      */
     const u32 samplesAhead = 8 * 735;
     void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
 
-    /* Plots a graphical representation of the waveform.
-     * Returns the highest amplitute that was found in the ringbuffer. To
-     * implement auto-scaling, pass the returned value as parameter
-     * highestAmplitude in the next call to this function.
+    /* Plots a graphical representation of the waveform. Returns the highest
+     * amplitute that was found in the ringbuffer. To implement auto-scaling,
+     * pass the returned value as parameter highestAmplitude in the next call
+     * to this function.
      */
     float drawWaveform(unsigned *buffer, int width, int height,
                        bool left, float highestAmplitude, unsigned color);
 
-    //
-    // Accessing the state machines
-    //
-
-    template <int channel> u8 getState();
-
     
     //
-    // Running the device
+    // Emulating the device
     //
 
 public:
     
-    // Executes the device until the given master clock cycle has been reached.
+    // Emulates the device until the given master clock cycle has been reached
     void executeUntil(Cycle targetClock);
     template <SamplingMethod method> void executeUntil(Cycle targetClock);
+
+    // Returns the current state of the state machine
+    template <int channel> u8 getState();
+
 };
 
 #endif

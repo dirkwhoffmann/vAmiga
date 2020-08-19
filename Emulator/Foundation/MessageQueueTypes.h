@@ -12,12 +12,11 @@
 #ifndef _MESSAGE_QUEUE_TYPES_H
 #define _MESSAGE_QUEUE_TYPES_H
 
-// List of all known message id's
 typedef enum
 {
     MSG_NONE = 0,
     
-    // Queue
+    // Message queue
     MSG_REGISTER,
     MSG_UNREGISTER,
     
@@ -81,10 +80,6 @@ typedef enum
 }
 MessageType;
 
-/* A single message
- * Only a very messages utilize the data file. E.g., the drive related message
- * use it to code the drive number (0 = df0 etc.).
- */
 typedef struct
 {
     MessageType type;

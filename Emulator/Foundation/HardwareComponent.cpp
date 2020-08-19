@@ -39,6 +39,59 @@ HardwareComponent::reset(bool hard)
     _reset(hard);
 }
 
+bool
+HardwareComponent::configure(ConfigOption option, long value)
+{
+    // Configure all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->configure(option, value);
+    }
+    
+    // Configure this component
+    setConfigItem(option, value);
+
+    return true;
+}
+
+void
+HardwareComponent::dumpConfig()
+{
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
+    _dumpConfig();
+}
+
+void
+HardwareComponent::inspect()
+{
+    // Inspect all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->inspect();
+    }
+    
+    // Inspect this component
+    _inspect();
+}
+
+void
+HardwareComponent::dump()
+{
+    msg("%s (memory location: %p)\n\n", getDescription(), this);
+    _dump();
+}
+
+void
+HardwareComponent::ping()
+{
+    // Ping all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->ping();
+    }
+    
+    // Ping this component
+    debug(RUN_DEBUG, "Ping [%p]\n", this);
+    _ping();
+}
+
 size_t
 HardwareComponent::size()
 {
@@ -106,59 +159,6 @@ HardwareComponent::save(u8 *buffer)
     // hexdump(buffer, MIN(ptr - buffer, 128));
 
     return ptr - buffer;
-}
-
-bool
-HardwareComponent::configure(ConfigOption option, long value)
-{
-    // Configure all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->configure(option, value);
-    }
-    
-    // Configure this component
-    setConfigItem(option, value);
-
-    return true;
-}
-
-void
-HardwareComponent::dumpConfig()
-{
-    msg("%s (memory location: %p)\n\n", getDescription(), this);
-    _dumpConfig();
-}
-
-void
-HardwareComponent::inspect()
-{
-    // Inspect all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->inspect();
-    }
-    
-    // Inspect this component
-    _inspect();
-}
-
-void
-HardwareComponent::dump()
-{
-    msg("%s (memory location: %p)\n\n", getDescription(), this);
-    _dump();
-}
-
-void
-HardwareComponent::ping()
-{
-    // Ping all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->ping();
-    }
-    
-    // Ping this component
-    debug(RUN_DEBUG, "Ping [%p]\n", this);
-    _ping();
 }
 
 void

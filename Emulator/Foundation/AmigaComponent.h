@@ -12,10 +12,6 @@
 
 #include "HardwareComponent.h"
 
-//
-// Forward declarations of all components
-//
-
 class Amiga;
 class MessageQueue;
 class CPU;
@@ -42,8 +38,8 @@ class Joystick;
 class Keyboard;
 class Drive;
 
-/* Base class for all sub components.
- * Exhibits references to all Amiga components.
+/* This class is the base class for all Amiga subcomponents. It extends class
+ * HardwareComponents with references to all other components.
  */
 class AmigaComponent : public HardwareComponent {
 

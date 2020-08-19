@@ -132,7 +132,6 @@
 		50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBECB24D3D4540037082D /* CopperEvents.cpp */; };
 		50AEBED124D3D61A0037082D /* PaulaEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED024D3D61A0037082D /* PaulaEvents.cpp */; };
 		50AEBED324D3D6D10037082D /* StateMachineEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */; };
-		50AEBED824D3D7420037082D /* PaulaAudioEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */; };
 		50AEBEDA24D3D78F0037082D /* DiskControllerEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */; };
 		50AEBEDC24D3D8170037082D /* UARTEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDB24D3D8170037082D /* UARTEvents.cpp */; };
 		50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */; };
@@ -375,7 +374,6 @@
 		50AEBECD24D3D4AD0037082D /* BlitterTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlitterTypes.h; sourceTree = "<group>"; };
 		50AEBED024D3D61A0037082D /* PaulaEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaEvents.cpp; sourceTree = "<group>"; };
 		50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachineEvents.cpp; sourceTree = "<group>"; };
-		50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PaulaAudioEvents.cpp; sourceTree = "<group>"; };
 		50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerEvents.cpp; sourceTree = "<group>"; };
 		50AEBEDB24D3D8170037082D /* UARTEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = UARTEvents.cpp; sourceTree = "<group>"; };
 		50AEBEDD24D3D8700037082D /* AgnusEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusEvents.cpp; sourceTree = "<group>"; };
@@ -944,7 +942,6 @@
 				5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */,
 				50EE993F21FF4D8E003BD74B /* PaulaAudio.h */,
 				50EE993E21FF4D8E003BD74B /* PaulaAudio.cpp */,
-				50AEBED724D3D7420037082D /* PaulaAudioEvents.cpp */,
 				507D7768228BE3EF001E97A9 /* StateMachine.h */,
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */,
@@ -1378,7 +1375,6 @@
 				50AEBEC724D3D39D0037082D /* BlitterEvents.cpp in Sources */,
 				50B0AF93222531C500EE3689 /* CopperTableView.swift in Sources */,
 				5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */,
-				50AEBED824D3D7420037082D /* PaulaAudioEvents.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

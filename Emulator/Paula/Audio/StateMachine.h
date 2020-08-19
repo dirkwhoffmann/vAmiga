@@ -85,8 +85,24 @@ public:
 
     StateMachine(Amiga& ref);
 
+private:
+    
     void _reset(bool hard) override;
 
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    AudioChannelInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+    
     
     //
     // Serializing
@@ -125,20 +141,6 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    AudioChannelInfo getInfo() { return HardwareComponent::getInfo(info); }
-        
-private:
-
-    void _inspect() override;
-    void _dump() override;
 
     
     //
@@ -248,6 +250,8 @@ public:
     // Synthesizing samples
     //
 
+public:
+    
     template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
 

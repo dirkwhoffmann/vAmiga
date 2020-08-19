@@ -22,9 +22,6 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
         &filterL,
         &filterR
     };
-    
-    volume = maxVolume;
-    targetVolume = maxVolume;
 }
 
 void
@@ -173,73 +170,6 @@ PaulaAudio::setSampleRate(double hz)
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
 }
-
-/*
-long
-PaulaAudio::getVol(unsigned nr)
-{
-    assert(nr < 4);
-    return (long)(exp2(config.vol[nr] / 0.0000025) * 100.0);
-}
-
-
-
-void
-PaulaAudio::setVol(unsigned nr, long val)
-{
-    assert(nr < 4);
-
-    config.vol[nr] = log2((double)val / 100.0) * 0.0000025;
-}
-
-long
-PaulaAudio::getPan(unsigned nr)
-{
-    assert(nr < 4);
-    return (long)(config.pan[nr] * 100.0);
-}
-
-void
-PaulaAudio::setPan(unsigned nr, long val)
-{
-    assert(nr < 4);
-    config.pan[nr] = MAX(0.0, MIN(val / 100.0, 1.0));
-}
-
-long
-PaulaAudio::getVolL()
-{
-    return (long)(exp2(config.volL) * 100.0);
-}
-
-void
-PaulaAudio::setVolL(long val)
-{
-    bool wasMuted = isMuted();
-    config.volL = log2((double)val / 100.0);
-
-    if (wasMuted != isMuted()) {
-        messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-    }
-}
-
-long
-PaulaAudio::getVolR()
-{
-    return (long)(exp2(config.volR) * 100.0);
-}
-
-void
-PaulaAudio::setVolR(long val)
-{
-    bool wasMuted = isMuted();
-    config.volR = log2((double)val / 100.0);
-
-    if (wasMuted != isMuted()) {
-        messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-    }
-}
-*/
 
 size_t
 PaulaAudio::didLoadFromBuffer(u8 *buffer)
