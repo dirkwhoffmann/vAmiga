@@ -17,11 +17,13 @@ class Drive : public AmigaComponent {
     
     friend class DiskController;
         
-    // This object emulates drive df<nr>
+    // Number of the emulated drive (0 = df0, 1 = df1, etc.)
     const int nr;
 
-    // Bookkeeping
+    // Current configuration
     DriveConfig config;
+
+    // Result of the latest inspection
     DriveInfo info;
 
     // Drive motor status (on or off)
@@ -42,12 +44,11 @@ class Drive : public AmigaComponent {
     // Records when the head started to step to another cylinder
     Cycle stepCycle;
     
-    /* Disk change status
-     * This variable controls the /CHNG bit in the CIA A PRA register. Note
-     * that the variable only changes its value under certain circumstances.
-     * If a head movement pulse is sent and no disk is inserted, the variable
-     * is set to false (which is also the reset value). It becomes true when
-     * a disk is ejected.
+    /* Disk change status. This variable controls the /CHNG bit in the CIA A
+     * PRA register. Note that the variable only changes its value under
+     * certain circumstances. If a head movement pulse is sent and no disk is
+     * inserted, the variable is set to false (which is also the reset value).
+     * It becomes true when a disk is ejected.
      */
     bool dskchange;
     
@@ -60,9 +61,9 @@ class Drive : public AmigaComponent {
     // The current drive head location
     DriveHead head;
     
-    /* History buffer storing the most recently visited tracks.
-     * The buffer is used to detect the polling head movements that are issued
-     * by track disc device to detect a newly inserted disk.
+    /* History buffer storing the most recently visited tracks. The buffer is
+     * used to detect the polling head movements that are issued by track disc
+     * device to detect a newly inserted disk.
      */
     u64 cylinderHistory;
 
@@ -73,15 +74,55 @@ public:
 
     
     //
-    // Methods
+    // Initializing
     //
 
 public:
 
     Drive(unsigned nr, Amiga& ref);
+    long getNr() { return nr; }
 
+private:
+    
+    void _reset(bool hard) override;
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
     DriveConfig getConfig() { return config; }
+    
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(unsigned dfn, ConfigOption option, long value) override;
+
+private:
+    
+    void _dumpConfig() override;
+
+    
+    //
+    // Analyzing
+    //
+
+public:
+    
     DriveInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+    void _ping() override;
+
+    
+    //
+    // Serializing
+    //
+
+private:
 
     template <class T>
     void applyToPersistentItems(T& worker)
@@ -115,34 +156,34 @@ public:
         & cylinderHistory;
     }
 
-private:
-
-    void _reset(bool hard) override;
-    void _ping() override;
-    void _inspect() override;
-    void _dumpConfig() override;
-    void _dump() override;
     size_t _size() override;
     size_t _load(u8 *buffer) override;
     size_t _save(u8 *buffer) override;
 
 
     //
-    // Getters and setters
+    // Accessing
     //
 
 public:
 
-    long getNr() { return nr; }
 
     // Drive type
+    /*
     DriveType getType() { return config.type; }
     void setType(DriveType t);
-
+    */
+    
     // Drive speed
+    /*
     i16 getSpeed() { return config.speed; }
     void setSpeed(i16 value);
+    */
+    
+    // Returns true if this drive is emulated accurately
     bool isOriginal() { return config.speed == 1; }
+
+    // Returns true if this drive is emulated in turbo mode
     bool isTurbo() { return config.speed < 0; }
 
     // Identification mode

@@ -58,7 +58,7 @@ HardwareComponent::configure(unsigned dfn, ConfigOption option, long value)
 {
     // Configure all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->configure(option, value);
+        c->configure(dfn, option, value);
     }
     
     // Configure this component

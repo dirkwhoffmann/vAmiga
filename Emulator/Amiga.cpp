@@ -210,8 +210,6 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_FAST_RAM:
         case OPT_EXT_START:
             return mem.getConfigItem(option);
-
-        case OPT_DRIVE_SPEED: return df0.getSpeed();
             
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
@@ -252,14 +250,18 @@ Amiga::getConfigItem(ConfigOption option)
 }
 
 long
-Amiga::getDriveConfigItem(unsigned drive, ConfigOption option)
+Amiga::getConfigItem(unsigned dfn, ConfigOption option)
 {
-    assert(drive < 4);
+    assert(dfn < 4);
             
     switch (option) {
             
-        case OPT_DRIVE_CONNECT: return paula.diskController.isConnected(drive);
-        case OPT_DRIVE_TYPE: return df[drive]->getType();
+        case OPT_DRIVE_CONNECT:
+            return paula.diskController.isConnected(dfn);
+            
+        case OPT_DRIVE_TYPE:
+        case OPT_DRIVE_SPEED:
+            return df[dfn]->getConfigItem(option);
             
         default: assert(false);
     }
@@ -368,20 +370,7 @@ Amiga::configure(ConfigOption option, long value)
                 return false;
             }
             break;
-            
-        case OPT_DRIVE_SPEED:
-            
-#ifdef FORCE_DRIVE_SPEED
-            value = FORCE_DRIVE_SPEED;
-            warn("Overriding drive speed: %d\n", value);
-#endif
-            
-            if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-            break;
-            
+                        
         case OPT_HIDDEN_SPRITES:
             
             if (current.denise.hiddenSprites == value) {
@@ -559,12 +548,6 @@ Amiga::configure(ConfigOption option, long value)
 
     switch (option) {
 
-        case OPT_DRIVE_SPEED:
-            suspend();
-            paula.diskController.setSpeed(value);
-            resume();
-            break;
-
         case OPT_SERIAL_DEVICE:
             suspend();
             serialPort.setDevice((SerialPortDevice)value);
@@ -580,17 +563,18 @@ Amiga::configure(ConfigOption option, long value)
     // Inform the GUI
     messageQueue.put(MSG_CONFIG);
 
-    resume();
     return true;
 }
 
 bool
-Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
+Amiga::configure(unsigned drive, ConfigOption option, long value)
 {
     if (drive >= 4) {
         warn("Invalid drive number: %d\n");
         return false;
     }
+    
+    // AmigaConfiguration current = getConfig();
     
     DriveConfig current =
     drive == 0 ? getConfig().df0 :
@@ -607,7 +591,6 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
             }
 
             if (getConfig().diskController.connected[drive] == value) return true;
-            paula.diskController.setConnected(drive, value);
             break;
             
         case OPT_DRIVE_TYPE:
@@ -623,13 +606,31 @@ Amiga::configureDrive(unsigned drive, ConfigOption option, long value)
             }
             
             if (current.type == value) return true;
-            df[drive]->setType((DriveType)value);
+            break;
+            
+        case OPT_DRIVE_SPEED:
+            
+#ifdef FORCE_DRIVE_SPEED
+            value = FORCE_DRIVE_SPEED;
+            warn("Overriding drive speed: %d\n", value);
+#endif
+            
+            if (!isValidDriveSpeed(value)) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+            if (current.speed == value) return true;
             break;
 
         default: assert(false);
     }
     
+    // Propagate configuration request to all components
+    HardwareComponent::configure(drive, option, value);
+    
+    // Inform the GUI
     messageQueue.put(MSG_CONFIG);
+
     return true;
 }
 

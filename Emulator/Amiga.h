@@ -203,11 +203,11 @@ public:
     
     // Gets a single configuration item
     long getConfigItem(ConfigOption option);
-    long getDriveConfigItem(unsigned drive, ConfigOption option);
+    long getConfigItem(unsigned dfn, ConfigOption option);
     
     // Sets a single configuration item
     bool configure(ConfigOption option, long value);
-    bool configureDrive(unsigned drive, ConfigOption option, long value);
+    bool configure(unsigned dfn, ConfigOption option, long value);
     
     
     //

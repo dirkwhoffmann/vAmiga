@@ -1099,12 +1099,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->drive->getNr();
 }
-/*
-- (DriveType) type
-{
-    return wrapper->drive->getType();
-}
-*/
 - (void) dump
 {
     wrapper->drive->dump();
@@ -1638,7 +1632,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSInteger) getConfig:(ConfigOption)opt drive:(NSInteger)nr
 {
-    return wrapper->amiga->getDriveConfigItem(nr, opt);
+    return wrapper->amiga->getConfigItem(nr, opt);
 }
 - (BOOL) configure:(ConfigOption)opt value:(NSInteger)val
 {
@@ -1650,11 +1644,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr value:(NSInteger)val
 {
-    return wrapper->amiga->configureDrive(nr, opt, val);
+    return wrapper->amiga->configure(nr, opt, val);
 }
 - (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val;
 {
-    return wrapper->amiga->configureDrive(nr, opt, val ? 1 : 0);
+    return wrapper->amiga->configure(nr, opt, val ? 1 : 0);
 }
 - (void) addListener:(const void *)sender function:(Callback *)func
 {

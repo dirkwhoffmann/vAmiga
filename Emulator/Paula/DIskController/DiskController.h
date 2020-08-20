@@ -112,6 +112,7 @@ public:
 
     long getConfigItem(ConfigOption option);
     void setConfigItem(ConfigOption option, long value) override;
+    void setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
     void _dumpConfig() override;
 
@@ -191,7 +192,7 @@ public:
     void disconnect(int df) { setConnected(df, false); }
     
     // Sets the speed acceleration factor for all connected drives
-    void setSpeed(i32 value);
+    // void setSpeed(i32 value);
     
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);

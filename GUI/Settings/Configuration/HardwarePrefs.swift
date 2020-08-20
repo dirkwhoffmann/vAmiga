@@ -11,7 +11,6 @@ extension ConfigurationController {
     
     func refreshHardwareTab() {
 
-        track()
         let poweredOff = amiga.isPoweredOff
 
         // Chipset

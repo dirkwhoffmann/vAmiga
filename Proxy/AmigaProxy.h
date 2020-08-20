@@ -602,8 +602,6 @@ struct SerialPortWrapper;
 
 - (DriveInfo) getInfo;
 @property (readonly) NSInteger nr;
-// @property (readonly) DriveType type;
-
 @property (readonly) BOOL hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;

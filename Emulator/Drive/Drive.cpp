@@ -30,6 +30,42 @@ Drive::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS
 }
 
+long
+Drive::getConfigItem(ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_DRIVE_TYPE:   return (long)config.type;
+        case OPT_DRIVE_SPEED:  return (long)config.speed;
+        
+        default: assert(false);
+    }
+}
+
+void
+Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
+{
+    if (dfn != nr) return;
+ 
+    switch (option) {
+                            
+        case OPT_DRIVE_TYPE:
+            assert(isDriveType(value));
+            config.type = (DriveType)value;
+            debug("Setting drive type to %s\n", driveTypeName(config.type));
+            break;
+            
+        case OPT_DRIVE_SPEED:
+            assert(isValidDriveSpeed(value));
+            config.speed = value;
+            debug("Setting acceleration factor to %d\n", config.speed);
+            break;
+            
+        default:
+            break;
+    }
+}
+
 void
 Drive::_ping()
 {
@@ -162,6 +198,7 @@ Drive::_save(u8 *buffer)
     return writer.ptr - buffer;
 }
 
+/*
 void
 Drive::setType(DriveType t)
 {
@@ -182,6 +219,7 @@ Drive::setSpeed(i16 value)
     config.speed = value;
     amiga.resume();
 }
+*/
 
 bool
 Drive::idMode()

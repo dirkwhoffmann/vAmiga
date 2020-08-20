@@ -71,6 +71,29 @@ DiskController::setConfigItem(ConfigOption option, long value)
 }
 
 void
+DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_DRIVE_CONNECT:
+            
+            // We don't allow the internal drive (Df0) to be disconnected
+            if (dfn == 0 && value == false) { return; }
+            
+            // Connect or disconnect the drive
+            synchronized { config.connected[dfn] = value; }
+            
+            // Inform the GUI
+            messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, dfn);
+            messageQueue.put(MSG_CONFIG);
+            break;
+            
+        default:
+            break;
+    }
+}
+
+void
 DiskController::_ping()
 {
     for (int df = 0; df < 4; df++) {
@@ -184,6 +207,7 @@ DiskController::setConnected(int df, bool value)
     messageQueue.put(MSG_CONFIG);
 }
 
+/*
 void
 DiskController::setSpeed(i32 value)
 {
@@ -196,6 +220,7 @@ DiskController::setSpeed(i32 value)
 
     amiga.resume();
 }
+*/
 
 /*
 void
