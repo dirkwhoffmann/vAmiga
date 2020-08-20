@@ -15,7 +15,7 @@
 
 class Disk : public AmigaObject {
     
-public:
+    friend class Drive;
     
     //
     // Constants
@@ -43,22 +43,19 @@ public:
      * A single sector consists of
      *    - A sector header build up from 64 MFM bytes.
      *    - 512 bytes of data (1024 MFM bytes).
-     *    Hence,
+     *
+     * Hence,
      *    - a sector consists of 64 + 2*512 = 1088 MFM bytes.
      *
      * A single track of a 3.5"DD disk consists
      *    - 11 * 1088 = 11.968 MFM bytes.
      *    - A track gap of about 700 MFM bytes (varies with drive speed).
-     *    Hence,
+     *
+     * Hence,
      *    - a track usually occupies 11.968 + 700 = 12.668 MFM bytes.
      *    - a cylinder usually occupies 25.328 MFM bytes.
      *    - a disk usually occupies 84 * 2 * 12.664 =  2.127.552 MFM bytes
      */
-
-    // static const long numCylinders = 84;
-    // static const long numTracks    = 2 * numCylinders;
-    // static const long numSectors   = 11 * numTracks;
-
     static const long sectorSize   = 1088;
     static const long trackGapSize = 700;
     static const long trackSize    = 11 * sectorSize + trackGapSize;
@@ -79,11 +76,15 @@ public:
         u8 track[168][trackSize];
     } data;
     
+    // Indicates if this disk is write protected
     bool writeProtected;
+    
+    // Indicates if the disk has been written to
     bool modified;
     
     // Checksum of this disk if it was created from an ADF file, 0 otherwise
     u64 fnv;
+    
     
     //
     // Class functions
@@ -106,7 +107,14 @@ public:
 
     static Disk *makeWithFile(ADFFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
+    
+    
+    //
+    // Serializing
+    //
 
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -121,7 +129,7 @@ public:
 
 
     //
-    // Getter and Setter
+    // Accessing
     //
 
 public:
@@ -135,6 +143,7 @@ public:
     void setModified(bool value) { modified = value; }
     
     u64 getFnv() { return fnv; }
+    
     
     //
     // Computed properties
@@ -176,7 +185,7 @@ private:
     
     
     //
-    // MFM Encoding
+    // MFM encoding
     //
     
 public:
@@ -200,7 +209,7 @@ private:
     
     
     //
-    // MFM Decoding
+    // MFM decoding
     //
     
 public:
