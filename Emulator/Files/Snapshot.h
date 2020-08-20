@@ -65,16 +65,14 @@ public:
     
     
     //
-    // Creating and destructing
+    // Initializing
     //
     
     Snapshot();
     Snapshot(size_t capacity);
     
-    // Allocates memory for storing the emulator state.
     bool setCapacity(size_t size);
     
-    // Factory methods
     static Snapshot *makeWithFile(const char *filename);
     static Snapshot *makeWithBuffer(const u8 *buffer, size_t size);
     static Snapshot *makeWithAmiga(Amiga *amiga);

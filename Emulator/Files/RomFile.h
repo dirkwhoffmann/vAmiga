@@ -47,7 +47,7 @@ public:
 
     
     //
-    // Creating and destructing
+    // Initializing
     //
     
     RomFile();

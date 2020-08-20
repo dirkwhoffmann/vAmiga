@@ -12,8 +12,8 @@
 
 #include "AmigaObject.h"
 
-/* Base class of all file readable types.
- * Provides the basic functionality for reading and writing files.
+/* Base class of all file readable types. It provides the basic functionality
+ * for reading and writing files.
  */
 class AmigaFile : public AmigaObject {
     
@@ -40,7 +40,7 @@ protected:
     
     
     //
-    // Creating and destructing objects
+    // Initializing
     //
     
 public:
@@ -48,10 +48,10 @@ public:
     AmigaFile();
     virtual ~AmigaFile();
     
-    // Allocates memory for storing the object data.
+    // Allocates memory for storing the object data
     virtual bool alloc(size_t capacity);
     
-    // Frees the allocated memory.
+    // Frees the allocated memory
     virtual void dealloc();
     
     
@@ -59,42 +59,36 @@ public:
     // Accessing file attributes
     //
     
-    // Returns the type of this file.
+    // Returns the type of this file
     virtual AmigaFileType fileType() { return FILETYPE_UKNOWN; }
     
-    // Returns a string representation of the file type, e.g., "ADF".
+    // Returns a string representation of the file type, e.g., "ADF"
     virtual const char *typeAsString() { return ""; }
     
-    // Returns the physical name of this file.
+    // Returns the physical name of this file
     const char *getPath() { return path ? path : ""; }
     
-    // Sets the physical name of this file.
+    // Sets the physical name of this file
     void setPath(const char *path);
     
-    // Returns a fingerprint (hash value) for the file's data.
+    // Returns a fingerprint (hash value) for the file's data
     u64 fingerprint() { return fnv_1a_64(data, size); }
+    
     
     //
     // Reading data from the file
     //
     
-    //  Returns the number of bytes in this file.
+    //  Returns the number of bytes in this file
     virtual size_t getSize() { return size; }
     
-    // Moves the file pointer to the specified offset.
+    // Moves the file pointer to the specified offset
     virtual void seek(long offset);
     
-    /*  Reads a byte.
-     *  Returns EOF (-1) if the end of file has been reached.
-     */
+    //  Reads a byte (returns -1 (EOF) if the end of file has been reached)
     virtual int read();
-    
-    /* Reads multiple bytes in form of a hex dump string.
-     * Number of bytes ranging from 1 to 85.
-     */
-    // const char *readHex(size_t num = 1);
-    
-    // Copies the whole file data into a buffer.
+        
+    // Copies the whole file data into a buffer
     virtual void flash(u8 *buffer, size_t offset = 0);
     
     
@@ -116,17 +110,17 @@ public:
      */
     virtual bool fileHasSameType(const char *path) { return false; }
     
-    /* Deserializes this object from a memory buffer.
-     * This function uses bufferHasSameType() to verify that the buffer
-     * contains a compatible binary representation.
+    /* Deserializes this object from a memory buffer. This function uses
+     * bufferHasSameType() to verify that the buffer contains a compatible
+     * binary representation.
      */
     virtual bool readFromBuffer(const u8 *buffer, size_t length);
     
-    /* Deserializes this object from a file.
-     * This function uses fileHasSameType() to verify that the file
-     * contains a compatible binary representation.
-     * This function requires no custom implementation. It first reads in the
-     * file contents in memory and invokes readFromBuffer afterwards.
+    /* Deserializes this object from a file. This function uses
+     * fileHasSameType() to verify that the file contains a compatible binary
+     * representation. This function requires no custom implementation. It
+     * first reads in the file contents in memory and invokes readFromBuffer
+     * afterwards.
      */
     bool readFromFile(const char *filename);
 
@@ -134,15 +128,15 @@ public:
      */
     bool readFromFile(FILE *file);
 
-    /* Writes the file contents into a memory buffer.
-     * If a NULL pointer is passed in, a test run is performed. Test runs can
-     * be performed to determine the size of the file on disk.
+    /* Writes the file contents into a memory buffer. If a NULL pointer is
+     * passed in, a test run is performed. Test runs can be performed to
+     * determine the size of the file on disk.
      */
     virtual size_t writeToBuffer(u8 *buffer);
     
-    /* Writes the file contents to a file.
-     * This function requires no custom implementation. It invokes writeToBuffer
-     * first and writes the data to disk afterwards.
+    /* Writes the file contents to a file. This function requires no custom
+     * implementation. It invokes writeToBuffer first and writes the data to
+     * disk afterwards.
      */
     bool writeToFile(const char *filename);
 };

@@ -31,12 +31,13 @@ public:
     
     
     //
-    // Creating and destructing
+    // Initializing
     //
+    
+public:
     
     DMSFile();
     
-    // Factory methods
     static DMSFile *makeWithBuffer(const u8 *buffer, size_t length);
     static DMSFile *makeWithFile(const char *path);
     

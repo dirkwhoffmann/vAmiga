@@ -34,12 +34,11 @@ public:
 
 
     //
-    // Creating and destructing
+    // Initializing
     //
 
     ExtFile();
 
-    // Factory methods
     static ExtFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ExtFile *makeWithFile(const char *path);
 

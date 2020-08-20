@@ -43,17 +43,12 @@ public:
 
     
     //
-    // Creating and destructing
+    // Initializing
     //
-    
-    ADFFile();
-    
-    
-    //
-    // Factory methods
-    //
-    
+
 public:
+
+    ADFFile();
     
     static ADFFile *makeWithDiskType(DiskType t);
     static ADFFile *makeWithBuffer(const u8 *buffer, size_t length);
