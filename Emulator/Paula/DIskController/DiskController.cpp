@@ -48,6 +48,17 @@ DiskController::getConfigItem(ConfigOption option)
     }
 }
 
+long
+DiskController::getConfigItem(unsigned dfn, ConfigOption option)
+{
+    switch (option) {
+            
+        case OPT_DRIVE_CONNECT:  return config.connected[dfn];
+        
+        default: assert(false);
+    }
+}
+
 void
 DiskController::setConfigItem(ConfigOption option, long value)
 {
@@ -94,11 +105,15 @@ DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
 }
 
 void
-DiskController::_ping()
+DiskController::_dumpConfig()
 {
-    for (int df = 0; df < 4; df++) {
-        messageQueue.put(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    }
+    msg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
+    msg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
+    msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
+    msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
+    msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
+    msg("  lockDskSync : %s\n", config.lockDskSync ? "yes" : "no");
+    msg("  autoDskSync : %s\n", config.autoDskSync ? "yes" : "no");
 }
 
 void
@@ -121,23 +136,10 @@ DiskController::_inspect()
 }
 
 void
-DiskController::_dumpConfig()
-{
-    msg("          df0 : %s\n", config.connected[0] ? "connected" : "not connected");
-    msg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
-    msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
-    msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
-    msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
-    msg("  lockDskSync : %s\n", config.lockDskSync ? "yes" : "no");
-    msg("  autoDskSync : %s\n", config.autoDskSync ? "yes" : "no");
-}
-
-void
 DiskController::_dump()
 {
     msg("     selected : %d\n", selected);
     msg("        state : %s\n", driveStateName(state));
-    msg("     syncFlag : %s\n", syncFlag ? "true" : "false");
     msg("    syncCycle : %lld\n", syncCycle);
     msg("     incoming : %02X\n", incoming);
     msg("         fifo : %llX (count = %d)\n", fifo, fifoCount);
@@ -147,6 +149,21 @@ DiskController::_dump()
     msg("          prb : %X\n", prb);
     msg("\n");
     msg("   spinning() : %d\n", spinning());
+}
+
+void
+DiskController::_ping()
+{
+    for (int df = 0; df < 4; df++) {
+        messageQueue.put(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
+    }
+}
+
+Drive *
+DiskController::getSelectedDrive()
+{
+    assert(selected < 4);
+    return selected < 0 ? NULL : df[selected];
 }
 
 bool
@@ -190,63 +207,6 @@ DiskController::setState(DriveState oldState, DriveState newState)
             if (oldState == DRIVE_DMA_WRITE)
                 messageQueue.put(MSG_DRIVE_READ, selected);
     }
-}
-
-void
-DiskController::setConnected(int df, bool value)
-{
-    assert(df < 4);
-    
-    // We don't allow the internal drive (Df0) to be disconnected
-    if (df == 0 && value == false) { return; }
-    
-    // Plug the drive in our out and inform the GUI
-    synchronized { config.connected[df] = value; }
-
-    messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    messageQueue.put(MSG_CONFIG);
-}
-
-/*
-void
-DiskController::setSpeed(i32 value)
-{
-    amiga.suspend();
-
-    df[0]->setSpeed(value);
-    df[1]->setSpeed(value);
-    df[2]->setSpeed(value);
-    df[3]->setSpeed(value);
-
-    amiga.resume();
-}
-*/
-
-/*
-void
-DiskController::setAsyncFifo(bool value)
-{
-    synchronized { config.asyncFifo = value; }
-}
-
-void
-DiskController::setLockDskSync(bool value)
-{
-    synchronized { config.lockDskSync = value; }
-}
-
-void
-DiskController::setAutoDskSync(bool value)
-{
-    synchronized { config.autoDskSync = value; }
-}
-*/
-
-Drive *
-DiskController::getSelectedDrive()
-{
-    assert(selected < 4);
-    return selected < 0 ? NULL : df[selected];
 }
 
 void
@@ -318,52 +278,6 @@ DiskController::setWriteProtection(int nr, bool value)
     df[nr]->setWriteProtection(value);
 }
 
-
-u8
-DiskController::driveStatusFlags()
-{
-    u8 result = 0xFF;
-    
-    if (config.connected[0]) result &= df[0]->driveStatusFlags();
-    if (config.connected[1]) result &= df[1]->driveStatusFlags();
-    if (config.connected[2]) result &= df[2]->driveStatusFlags();
-    if (config.connected[3]) result &= df[3]->driveStatusFlags();
-    
-    return result;
-}
-
-void
-DiskController::PRBdidChange(u8 oldValue, u8 newValue)
-{
-    // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
-
-    // Store a copy of the new value for reference.
-    prb = newValue;
-    
-    i8 oldSelected = selected;
-    selected = -1;
-    
-    // Iterate over all connected drives
-    for (unsigned i = 0; i < 4; i++) {
-        if (!config.connected[i]) continue;
-        
-        // Inform the drive and determine the selected one
-        df[i]->PRBdidChange(oldValue, newValue);
-        if (df[i]->isSelected()) selected = i;
-    }
-    
-    // Schedule the first rotation event if at least one drive is spinning
-    if (!spinning()) {
-        agnus.cancel<DSK_SLOT>();
-    }
-    else if (!agnus.hasEvent<DSK_SLOT>()) {
-        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
-    }
-
-    // Inform the GUI
-    if (oldSelected != selected) messageQueue.put(MSG_DRIVE_SELECT, selected);
-}
-
 void
 DiskController::clearFifo()
 {
@@ -432,7 +346,7 @@ DiskController::executeFifo()
             incoming |= 0x8000;
             
             // Check if we've reached a SYNC mark
-            if ((syncFlag = compareFifo(dsksync)) ||
+            if (compareFifo(dsksync) ||
                 (config.autoDskSync && syncCounter++ > 20000)) {
 
                 // Save time stamp

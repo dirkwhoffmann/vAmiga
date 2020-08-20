@@ -37,10 +37,6 @@ class DiskController : public AmigaComponent {
     // The current drive state (off, read, or write)
     DriveState state;
 
-    // Set to true if the currently read disk word matches the sync word
-    // DEPRECATED
-    bool syncFlag = false;
-
     // Timestamp of the latest DSKSYNC match
     Cycle syncCycle;
 
@@ -111,10 +107,27 @@ public:
     DiskControllerConfig getConfig() { return config; }
 
     long getConfigItem(ConfigOption option);
+    long getConfigItem(unsigned dfn, ConfigOption option);
+    
     void setConfigItem(ConfigOption option, long value) override;
     void setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
     void _dumpConfig() override;
+
+    
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
+    
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+    void _ping() override;
 
     
     //
@@ -142,7 +155,6 @@ private:
         & asyncFifo
         & selected
         & state
-        & syncFlag
         & syncCycle
         & syncCounter
         & incoming
@@ -153,89 +165,39 @@ private:
         & prb;
     }
 
-    
-    //
-    // Analyzing
-    //
-    
-public:
-    
-    DiskControllerInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-    void _inspect() override;
-    void _dump() override;
-
-    
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-    
-    void _ping() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
-    // Getter and setter
+    // Accessing
     //
 
 public:
     
-    // Connects or disconnect an external drive
-    bool isConnected(int df) { return config.connected[df]; }
-    bool isDisconnected(int df) { return !config.connected[df]; }
-    void setConnected(int df, bool value);
-    void connect(int df) { setConnected(df, true); }
-    void disconnect(int df) { setConnected(df, false); }
-    
-    // Sets the speed acceleration factor for all connected drives
-    // void setSpeed(i32 value);
-    
+    // Returns the number of the currently selected drive
+    i8 getSelected() { return selected; }
+
+    // Returns the currently selected (NULL if none is selected)
+    class Drive *getSelectedDrive();
+
     // Indicates if the motor of the specified drive is switched on
     bool spinning(unsigned driveNr);
 
     // Indicates if the motor of at least one drive is switched on
     bool spinning();
     
-    // Drive state
+    // Returns the current drive state
     DriveState getState() { return state; }
     
 private:
     
+    // Changes the current drive state
     void setState(DriveState s);
     void setState(DriveState oldState, DriveState newState);
 
     
-    //
-    // Getter and setter
-    //
-    
-public:
-    
-    // Returns the currently selected drive or NULL if no drive is selected.
-    i8 getSelected() { return selected; }
-    class Drive *getSelectedDrive();
-    
-
-    //
-    // Handling disks
-    //
-
-    // Ejects a disk from the specified drive
-    void ejectDisk(int nr, Cycle delay = 0);
-
-    // Inserts a disk into the specified drive
-    void insertDisk(class Disk *disk, int nr, Cycle delay = 0);
-    void insertDisk(class ADFFile *file, int nr, Cycle delay = 0);
-    void insertDisk(class DMSFile *file, int nr, Cycle delay = 0);
-
-    // Write protects or unprotects a disk
-    void setWriteProtection(int nr, bool value);
-
-
     //
     // Accessing registers
     //
@@ -267,7 +229,23 @@ public:
     
     
     //
-    // Event handlers
+    // Handling disks
+    //
+
+    // Ejects a disk from the specified drive
+    void ejectDisk(int nr, Cycle delay = 0);
+
+    // Inserts a disk into the specified drive
+    void insertDisk(class Disk *disk, int nr, Cycle delay = 0);
+    void insertDisk(class ADFFile *file, int nr, Cycle delay = 0);
+    void insertDisk(class DMSFile *file, int nr, Cycle delay = 0);
+
+    // Write protects or unprotects a disk
+    void setWriteProtection(int nr, bool value);
+
+        
+    //
+    // Serving events
     //
     
 public:
@@ -304,8 +282,8 @@ private:
     // Returns true if the next word to read matches the specified value
     bool compareFifo(u16 word);
 
-    /* Emulates a data transfert between the selected drive and the FIFO buffer.
-     * This function is executed periodically in serviceDiskEvent().
+    /* Emulates a data transfert between the selected drive and the FIFO
+     * buffer. This function is executed periodically in serviceDiskEvent().
      * The exact operation is dependent of the current DMA state. If DMA is
      * off, no action is taken. If a read mode is active, the FIFO is filled
      * with data from the drive. If a write mode is active, data from the FIFO
@@ -358,12 +336,12 @@ public:
 
      */
   
-    // 1. Standard DMA mode
+    // Performs DMA in standard mode
     void performDMA();
     void performDMARead(Drive *drive, u32 count);
     void performDMAWrite(Drive *drive, u32 count);
      
-    // 3. Turbo DMA mode
+    // Performs DMA in turbo mode
     void performTurboDMA(Drive *d);
     void performTurboRead(Drive *drive);
     void performTurboWrite(Drive *drive);

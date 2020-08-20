@@ -132,18 +132,6 @@ import Cocoa
             break
         }
     }
-    
-    //
-    // Hiding menus
-    //
-    
-    func hideOrShowDriveMenus(proxy: AmigaProxy) {
-        
-        df0Menu.isHidden = proxy.diskController.disconnected(0)
-        df1Menu.isHidden = proxy.diskController.disconnected(1)
-        df2Menu.isHidden = proxy.diskController.disconnected(2)
-        df3Menu.isHidden = proxy.diskController.disconnected(3)
-    }
 }
 
 //
@@ -181,7 +169,7 @@ extension MyAppDelegate {
                 }
                 
                 // Update the visibility of all drive menus
-                hideOrShowDriveMenus(proxy: c.amiga)
+                c.hideOrShowDriveMenus()
 
             } else {
                 

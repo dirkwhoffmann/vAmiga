@@ -113,6 +113,14 @@ extension MyController: NSMenuItemValidation {
         }
     }
     
+    func hideOrShowDriveMenus() {
+        
+        myAppDelegate.df0Menu.isHidden = !config.df0Connected
+        myAppDelegate.df1Menu.isHidden = !config.df1Connected
+        myAppDelegate.df2Menu.isHidden = !config.df2Connected
+        myAppDelegate.df3Menu.isHidden = !config.df3Connected
+    }
+    
     //
     // Action methods (App menu)
     //

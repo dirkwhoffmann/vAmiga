@@ -1041,6 +1041,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->controller->spinning();
 }
+/*
 - (BOOL) connected:(NSInteger)nr
 {
     return wrapper->controller->isConnected(nr);
@@ -1053,6 +1054,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->controller->setConnected(nr, value);
 }
+*/
 - (void) eject:(NSInteger)nr
 {
     wrapper->controller->ejectDisk(nr);

@@ -257,7 +257,7 @@ Amiga::getConfigItem(unsigned dfn, ConfigOption option)
     switch (option) {
             
         case OPT_DRIVE_CONNECT:
-            return paula.diskController.isConnected(dfn);
+            return paula.diskController.getConfigItem(dfn, option);
             
         case OPT_DRIVE_TYPE:
         case OPT_DRIVE_SPEED:
@@ -573,9 +573,7 @@ Amiga::configure(unsigned drive, ConfigOption option, long value)
         warn("Invalid drive number: %d\n");
         return false;
     }
-    
-    // AmigaConfiguration current = getConfig();
-    
+        
     DriveConfig current =
     drive == 0 ? getConfig().df0 :
     drive == 1 ? getConfig().df1 :

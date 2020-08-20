@@ -125,7 +125,6 @@ DiskController::computeDSKBYTR()
     if (dsklen & 0x4000) SET_BIT(result, 13);
     
     // WORDEQUAL
-    // if (syncFlag) SET_BIT(result, 12);
     assert(agnus.clock >= syncCycle);
     if (agnus.clock - syncCycle <= USEC(2)) SET_BIT(result, 12);
     
@@ -150,3 +149,47 @@ DiskController::pokeDSKSYNC(u16 value)
     dsksync = value;
 }
 
+u8
+DiskController::driveStatusFlags()
+{
+    u8 result = 0xFF;
+    
+    if (config.connected[0]) result &= df[0]->driveStatusFlags();
+    if (config.connected[1]) result &= df[1]->driveStatusFlags();
+    if (config.connected[2]) result &= df[2]->driveStatusFlags();
+    if (config.connected[3]) result &= df[3]->driveStatusFlags();
+    
+    return result;
+}
+
+void
+DiskController::PRBdidChange(u8 oldValue, u8 newValue)
+{
+    // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
+
+    // Store a copy of the new value for reference.
+    prb = newValue;
+    
+    i8 oldSelected = selected;
+    selected = -1;
+    
+    // Iterate over all connected drives
+    for (unsigned i = 0; i < 4; i++) {
+        if (!config.connected[i]) continue;
+        
+        // Inform the drive and determine the selected one
+        df[i]->PRBdidChange(oldValue, newValue);
+        if (df[i]->isSelected()) selected = i;
+    }
+    
+    // Schedule the first rotation event if at least one drive is spinning
+    if (!spinning()) {
+        agnus.cancel<DSK_SLOT>();
+    }
+    else if (!agnus.hasEvent<DSK_SLOT>()) {
+        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
+    }
+
+    // Inform the GUI
+    if (oldSelected != selected) messageQueue.put(MSG_DRIVE_SELECT, selected);
+}

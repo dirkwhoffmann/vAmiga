@@ -543,11 +543,11 @@ extension MyController {
             inspector?.fullRefresh()
 
         case .MSG_DRIVE_CONNECT:
-            myAppDelegate.hideOrShowDriveMenus(proxy: amiga)
+            hideOrShowDriveMenus()
             refreshStatusBar()
             
         case .MSG_DRIVE_DISCONNECT:
-            myAppDelegate.hideOrShowDriveMenus(proxy: amiga)
+            hideOrShowDriveMenus()
             refreshStatusBar()
 
             // Remove drop target status from the disconnect drive
