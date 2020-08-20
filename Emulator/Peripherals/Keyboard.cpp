@@ -43,6 +43,11 @@ Keyboard::setConfigItem(ConfigOption option, long value)
     switch (option) {
             
         case OPT_ACCURATE_KEYBOARD:
+            
+            if (config.accurate == value) {
+                return false;
+            }
+            
             config.accurate = value;
             return true;
                         

@@ -19,7 +19,7 @@ RTC::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
-        case OPT_RTC:  return (long)config.model;
+        case OPT_RTC_MODEL:  return (long)config.model;
         
         default: assert(false);
     }
@@ -30,14 +30,23 @@ RTC::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
-        case OPT_RTC:
+        case OPT_RTC_MODEL:
             
-            assert(isRTCModel(value));
+            #ifdef FORCE_RTC
+            value = FORCE_RTC;
+            warn("Overriding RTC model: %d KB\n", value);
+            #endif
             
-            amiga.suspend();
+            if (!isRTCModel(value)) {
+                warn("Invalid RTC model: %d\n", value);
+                return false;
+            }
+            if (config.model == value) {
+                return false;
+            }
+            
             config.model = (RTCModel)value;
             mem.updateMemSrcTable();
-            amiga.resume();
             
             return true;
                         

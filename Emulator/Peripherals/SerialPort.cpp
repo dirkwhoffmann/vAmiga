@@ -33,7 +33,15 @@ SerialPort::setConfigItem(ConfigOption option, long value)
     switch (option) {
             
         case OPT_SERIAL_DEVICE:
-            assert(isSerialPortDevice(value));
+            
+            if (!isSerialPortDevice(value)) {
+                warn("Invalid serial port device: %d\n", value);
+                return false;
+            }
+            if (config.device == value) {
+                return false;
+            }
+            
             config.device = (SerialPortDevice)value;
             return true;
                         

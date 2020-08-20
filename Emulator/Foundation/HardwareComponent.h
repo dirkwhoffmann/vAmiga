@@ -95,7 +95,7 @@ public:
     /* Requests the change of a single configuration item. Each sub-component
      * checks if it is responsible for the requested configuration item. If
      * yes, it changes the internal state. If no, it ignores the request.
-     * A component returns true iff it has processed the request successfully.
+     * The function returns true iff the current configuration has changed.
      */
     virtual bool setConfigItem(ConfigOption option, long value) { return false; }
     virtual bool setConfigItem(unsigned dfn, ConfigOption option, long value) { return false; }

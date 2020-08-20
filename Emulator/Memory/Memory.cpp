@@ -66,32 +66,68 @@ Memory::getConfigItem(ConfigOption option)
 bool
 Memory::setConfigItem(ConfigOption option, long value)
 {
+    assert(!amiga.isRunning());
+    
     switch (option) {
             
         case OPT_CHIP_RAM:
-            amiga.suspend();
+            
+            #ifdef FORCE_CHIP_RAM
+            value = FORCE_CHIP_RAM;
+            warn("Overriding Chip Ram size: %d KB\n", value);
+            #endif
+            
+            if (value != 256 && value != 512 && value != 1024 && value != 2048) {
+                warn("Invalid Chip Ram size: %d\n", value);
+                warn("         Valid values: 256KB, 512KB, 1024KB, 2048KB\n");
+                return false;
+            }
+            
             mem.allocChip(KB(value));
-            amiga.resume();
             return true;
             
         case OPT_SLOW_RAM:
-            amiga.suspend();
+            
+            #ifdef FORCE_SLOW_RAM
+            value = FORCE_SLOW_RAM;
+            warn("Overriding Slow Ram size: %d KB\n", value);
+            #endif
+            
+            if ((value % 256) != 0 || value > 512) {
+                warn("Invalid Slow Ram size: %d\n", value);
+                warn("         Valid values: 0KB, 256KB, 512KB\n");
+                return false;
+            }
+                        
             mem.allocSlow(KB(value));
-            amiga.resume();
             return true;
             
         case OPT_FAST_RAM:
-            amiga.suspend();
+            
+            #ifdef FORCE_FAST_RAM
+            value = FORCE_FAST_RAM;
+            warn("Overriding Fast Ram size: %d KB\n", value);
+            #endif
+            
+            if ((value % 64) != 0 || value > 8192) {
+                warn("Invalid Fast Ram size: %d\n", value);
+                warn("Valid values: 0KB, 64KB, 128KB, ..., 8192KB (8MB)\n");
+                return false;
+            }
+                        
             mem.allocFast(KB(value));
-            amiga.resume();
             return true;
             
         case OPT_EXT_START:
-            assert(value == 0xE0 || value == 0xF0);
-            amiga.suspend();
+            
+            if (value != 0xE0 && value != 0xF0) {
+                warn("Invalid Extended ROM start page: %x\n", value);
+                warn("Valid values: 0xE0, 0xF0\n");
+                return false;
+            }
+            
             config.extStart = value;
             updateMemSrcTable();
-            amiga.resume();
             return true;
                         
         default:
@@ -523,7 +559,7 @@ Memory::updateMemSrcTable()
 
     // Real-time clock
     for (unsigned i = 0xDC; i <= 0xDC; i++)
-        memSrc[i] = rtc.getConfigItem(OPT_RTC) != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
+        memSrc[i] = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
 
     // Reserved
     memSrc[0xDD] = MEM_NONE_FAST;

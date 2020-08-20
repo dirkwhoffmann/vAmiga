@@ -46,8 +46,8 @@ class Configuration {
         set { amiga.configure(.OPT_DENISE_REVISION, value: newValue) }
     }
     var rtClock: Int {
-        get { return amiga.getConfig(.OPT_RTC) }
-        set { amiga.configure(.OPT_RTC, value: newValue) }
+        get { return amiga.getConfig(.OPT_RTC_MODEL) }
+        set { amiga.configure(.OPT_RTC_MODEL, value: newValue) }
     }
     
     // Memory

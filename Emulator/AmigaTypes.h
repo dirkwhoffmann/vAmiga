@@ -39,7 +39,7 @@ typedef VA_ENUM(long, ConfigOption)
 {
     OPT_AGNUS_REVISION,
     OPT_DENISE_REVISION,
-    OPT_RTC,
+    OPT_RTC_MODEL,
     OPT_CHIP_RAM,
     OPT_SLOW_RAM,
     OPT_FAST_RAM,

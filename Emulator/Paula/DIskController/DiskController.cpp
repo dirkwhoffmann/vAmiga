@@ -65,14 +65,34 @@ DiskController::setConfigItem(ConfigOption option, long value)
     switch (option) {
             
         case OPT_ASYNC_FIFO:
+            
+            #ifdef FORCE_ASYNC_FIFO
+            value = FORCE_ASYNC_FIFO;
+            warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
+            #endif
+            
+            if (config.asyncFifo == value) {
+                return false;
+            }
+            
             config.asyncFifo = value;
             return true;
             
         case OPT_AUTO_DSKSYNC:
+
+            if (config.autoDskSync == value) {
+                return false;
+            }
+
             config.autoDskSync = value;
             return true;
             
         case OPT_LOCK_DSKSYNC:
+            
+            if (config.lockDskSync == value) {
+                return false;
+            }
+            
             config.lockDskSync = value;
             return true;
             

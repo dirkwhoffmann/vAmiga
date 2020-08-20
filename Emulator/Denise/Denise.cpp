@@ -61,33 +61,69 @@ Denise::setConfigItem(ConfigOption option, long value)
     switch (option) {
             
         case OPT_DENISE_REVISION:
-            assert(isDeniseRevision(value));
+            
+            if (!isDeniseRevision(value)) {
+                warn("Invalid Denise revision: %d\n", value);
+                return false;
+            }
+            if (config.revision == value) {
+                return false;
+            }
+            
             config.revision = (DeniseRevision)value;
             return true;
             
         case OPT_HIDDEN_SPRITES:
-            msg("Changing hidden sprite mask to %x\n", value);
+            
+            if (config.hiddenSprites == value) {
+                return false;
+            }
+            
             config.hiddenSprites = value;
             return true;
             
         case OPT_HIDDEN_LAYERS:
-            msg("Changing hidden layer mask to %x\n", value);
+            
+            if (config.hiddenLayers == value) {
+                return false;
+            }
+
             config.hiddenLayers = value;
             return true;
             
         case OPT_HIDDEN_LAYER_ALPHA:
+            
+            if (config.hiddenLayerAlpha == value) {
+                return false;
+            }
+            
             config.hiddenLayerAlpha = value;
             return true;
 
         case OPT_CLX_SPR_SPR:
+            
+            if (config.clxSprSpr == value) {
+                return false;
+            }
+
             config.clxSprSpr = value;
             return true;
             
         case OPT_CLX_SPR_PLF:
+            
+            if (config.clxSprPlf == value) {
+                return false;
+            }
+
             config.clxSprPlf = value;
             return true;
             
         case OPT_CLX_PLF_PLF:
+            
+            if (config.clxPlfPlf == value) {
+                return false;
+            }
+
             config.clxPlfPlf = value;
             return true;
 

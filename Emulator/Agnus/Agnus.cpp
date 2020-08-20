@@ -79,17 +79,30 @@ Agnus::setConfigItem(ConfigOption option, long value)
             
         case OPT_AGNUS_REVISION:
             
-            assert(isAgnusRevision(value));
-
+            #ifdef FORCE_AGNUS_REVISION
+            value = FORCE_AGNUS_REVISION;
+            warn("Overriding Agnus revision: %d\n", value);
+            #endif
+            
+            if (!isAgnusRevision(value)) {
+                warn("Invalid Agnus revision: %d\n", value);
+                return false;
+            }
+            
+            if (config.revision == value) {
+                return false;
+            }
+            
             amiga.suspend();
+            
             config.revision = (AgnusRevision)value;
             switch (config.revision) {
-                    
                 case AGNUS_8367: ptrMask = 0x07FFFF; break;
                 case AGNUS_8372: ptrMask = 0x0FFFFF; break;
                 case AGNUS_8375: ptrMask = 0x1FFFFF; break;
                 default: assert(false);
             }
+            
             amiga.resume();
             return true;
             

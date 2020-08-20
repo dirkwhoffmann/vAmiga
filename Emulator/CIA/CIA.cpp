@@ -63,15 +63,21 @@ CIA::setConfigItem(ConfigOption option, long value)
     switch (option) {
             
         case OPT_TODBUG:
-            amiga.suspend();
+            
+            if (config.todBug == value) {
+                return false;
+            }
+            
             config.todBug = value;
-            amiga.resume();
             return true;
             
         case OPT_ECLOCK_SYNCING:
-            amiga.suspend();
+            
+            if (config.eClockSyncing == value) {
+                return false;
+            }
+
             config.eClockSyncing = value;
-            amiga.resume();
             return true;
             
         default:
