@@ -41,13 +41,38 @@ class UART : public AmigaComponent {
 
 
     //
-    // Constructing and serializing
+    // Initializing
+    //
+
+public:
+    
+    UART(Amiga& ref);
+    
+private:
+    
+    void _reset(bool hard) override;
+
+    
+    //
+    // Analyzing
     //
 
 public:
 
-    UART(Amiga& ref);
+    UARTInfo getInfo() { return HardwareComponent::getInfo(info); }
 
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
+    // Serializing
+    //
+
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -68,47 +93,27 @@ public:
         & recCnt;
     }
 
-    
-    //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
 
     //
-    // Reading the internal state
-    //
-
-public:
-
-    // Returns the latest internal state recorded by inspect()
-    UARTInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-
-    //
-    // Accessing registers
+    // Accessing
     //
 
 public:
     
-    // OCS register $018(r) (Serial port data and status read)
+    // Serial port data and status read
     u16 peekSERDATR();
-
-    // OCS register $030(w) (Serial port data and stop bits write)
+    
+    // Serial port data and stop bits write
     void pokeSERDAT(u16 value);
 
-    // OCS register $032(w) (Serial port period and control)
+    // Serial port period and control
     void pokeSERPER(u16 value);
 
-    // Returns the baud rate converted to DMA cycles
+    // Returns the baud rate (converted to DMA cycles)
     int rate() { return DMA_CYCLES((serper & 0x7FFF) + 1); }
 
 private:

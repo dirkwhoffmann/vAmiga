@@ -34,13 +34,54 @@ class SerialPort : public AmigaComponent {
 
     
     //
-    // Constructing and serializing
+    // Initializing
     //
 
 public:
 
     SerialPort(Amiga& ref);
 
+private:
+    
+    void _reset(bool hard) override;
+
+    
+    //
+    // Configuring
+    //
+    
+public:
+
+    SerialPortConfig getConfig() { return config; }
+
+    long getConfigItem(ConfigOption option);
+    void setConfigItem(ConfigOption option, long value) override;
+    
+    /*
+    SerialPortDevice getDevice() { return config.device; }
+    void setDevice(SerialPortDevice device);
+     */
+        
+    //
+    // Analyzing
+    //
+    
+public:
+
+    SerialPortInfo getInfo() { return HardwareComponent::getInfo(info); }
+
+private:
+    
+    void _inspect() override;
+    void _dump() override;
+
+    
+    //
+    // Serializing
+    //
+
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -57,42 +98,13 @@ public:
         & port;
     }
 
-    //
-    // Configuring
-    //
-
-    SerialPortConfig getConfig() { return config; }
-
-    SerialPortDevice getDevice() { return config.device; }
-    void setDevice(SerialPortDevice device);
-
-
-    //
-    // Methods from HardwareComponent
-    //
-
-private:
-
-    void _reset(bool hard) override;
-    void _inspect() override;
-    void _dump() override;
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
     
 
     //
-    // Reading the internal state
-    //
-
-public:
-
-    // Returns the latest internal state recorded by inspect()
-    SerialPortInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-
-    //
-    // Transmitting and receiving data
+    // Accessing
     //
 
 public:

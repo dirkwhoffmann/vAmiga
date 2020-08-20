@@ -500,7 +500,7 @@ struct SerialPortWrapper;
 
 - (void) dump;
 - (SerialPortInfo) getInfo;
-- (void) setDevice:(SerialPortDevice)value;
+// - (void) setDevice:(SerialPortDevice)value;
 
 @end
 

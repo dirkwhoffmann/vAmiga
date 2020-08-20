@@ -189,6 +189,8 @@ public:
     void hardReset() { reset(true); }
     void softReset() { reset(false); }
 
+private:
+    
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
 
     
@@ -220,6 +222,8 @@ public:
     
     void setInspectionTarget(EventID id);
     void clearInspectionTarget();
+    
+private:
     
     void _inspect() override;
     void _dump() override;

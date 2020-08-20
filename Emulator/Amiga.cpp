@@ -236,7 +236,8 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_AUTO_DSKSYNC:
             return paula.diskController.getConfigItem(option);
             
-        case OPT_SERIAL_DEVICE: return serialPort.getDevice();
+        case OPT_SERIAL_DEVICE:
+            return serialPort.getConfigItem(option);
 
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
@@ -543,20 +544,6 @@ Amiga::configure(ConfigOption option, long value)
         default: assert(false);
     }
             
-
-    // Apply the change
-
-    switch (option) {
-
-        case OPT_SERIAL_DEVICE:
-            suspend();
-            serialPort.setDevice((SerialPortDevice)value);
-            resume();
-            break;
-            
-        default: break;
-    }
-    
     // Propagate configuration request to all components
     HardwareComponent::configure(option, value);
     
