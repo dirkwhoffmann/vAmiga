@@ -90,12 +90,14 @@ public:
      * e.g., because an invalid value has been passed.
      */
     bool configure(ConfigOption option, long value);
+    bool configure(unsigned dfn, ConfigOption option, long value);
     
     /* Requests the change of a single configuration item. Each sub-component
      * checks if it is responsible for the requested configuration item. If
      * yes, it changes the internal state. If no, it ignores the request.
      */
     virtual void setConfigItem(ConfigOption option, long value) { };
+    virtual void setConfigItem(unsigned dfn, ConfigOption option, long value) { };
     
     // Dumps debug information about the current configuration to the console
     void dumpConfig();

@@ -53,6 +53,20 @@ HardwareComponent::configure(ConfigOption option, long value)
     return true;
 }
 
+bool
+HardwareComponent::configure(unsigned dfn, ConfigOption option, long value)
+{
+    // Configure all subcomponents
+    for (HardwareComponent *c : subComponents) {
+        c->configure(option, value);
+    }
+    
+    // Configure this component
+    setConfigItem(dfn, option, value);
+
+    return true;
+}
+
 void
 HardwareComponent::dumpConfig()
 {

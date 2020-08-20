@@ -1099,10 +1099,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->drive->getNr();
 }
+/*
 - (DriveType) type
 {
     return wrapper->drive->getType();
 }
+*/
 - (void) dump
 {
     wrapper->drive->dump();

@@ -65,39 +65,55 @@ class Configuration {
     }
  
     // Floppy drives
+    func dfnConnected(_ n: Int) -> Bool {
+        precondition(0 <= n && n <= 3)
+        return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: n) != 0
+    }
+    func setDfnConnected(_ n: Int, connect: Bool) {
+        precondition(0 <= n && n <= 3)
+        amiga.configure(.OPT_DRIVE_CONNECT, drive: n, enable: connect)
+    }
+    func dfnType(_ n: Int) -> Int {
+        precondition(0 <= n && n <= 3)
+        return amiga.getConfig(.OPT_DRIVE_TYPE, drive: n)
+    }
+    func setDfnType(_ n: Int, type: Int) {
+        precondition(0 <= n && n <= 3)
+        amiga.configure(.OPT_DRIVE_TYPE, drive: n, value: type)
+    }
     var df0Connected: Bool {
-        get { return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: 0) != 0 }
-        set { amiga.configure(.OPT_DRIVE_CONNECT, drive: 0, enable: newValue) }
+        get { return dfnConnected(0) }
+        set { setDfnConnected(0, connect: newValue) }
     }
     var df0Type: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_TYPE, drive: 0) }
-        set { amiga.configure(.OPT_DRIVE_TYPE, drive: 0, value: newValue) }
+        get { return dfnType(0) }
+        set { setDfnType(0, type: newValue) }
     }
     var df1Connected: Bool {
-        get { return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: 1) != 0 }
-        set { amiga.configure(.OPT_DRIVE_CONNECT, drive: 1, enable: newValue) }
+        get { return dfnConnected(1) }
+        set { setDfnConnected(1, connect: newValue) }
     }
     var df1Type: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_TYPE, drive: 1) }
-        set { amiga.configure(.OPT_DRIVE_TYPE, drive: 1, value: newValue) }
+        get { return dfnType(1) }
+        set { setDfnType(1, type: newValue) }
     }
     var df2Connected: Bool {
-        get { return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: 2) != 0 }
-        set { amiga.configure(.OPT_DRIVE_CONNECT, drive: 2, enable: newValue) }
+        get { return dfnConnected(2) }
+        set { setDfnConnected(2, connect: newValue) }
     }
     var df2Type: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_TYPE, drive: 2) }
-        set { amiga.configure(.OPT_DRIVE_TYPE, drive: 2, value: newValue) }
+        get { return dfnType(2) }
+        set { setDfnType(2, type: newValue) }
     }
     var df3Connected: Bool {
-        get { return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: 3) != 0 }
-        set { amiga.configure(.OPT_DRIVE_CONNECT, drive: 3, enable: newValue) }
+        get { return dfnConnected(3) }
+        set { setDfnConnected(3, connect: newValue) }
     }
     var df3Type: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_TYPE, drive: 3) }
-        set { amiga.configure(.OPT_DRIVE_TYPE, drive: 3, value: newValue) }
+        get { return dfnType(3) }
+        set { setDfnType(3, type: newValue) }
     }
-
+    
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {

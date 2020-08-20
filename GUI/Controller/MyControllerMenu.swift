@@ -368,14 +368,13 @@ extension MyController: NSMenuItemValidation {
     @IBAction func newDiskAction(_ sender: NSMenuItem!) {
         
         track()
-        
-        let drive = amiga.df(sender)!
-        let model = drive.type
-        
-        var adf: ADFFileProxy
+
+        // Get drive type
+        let type = DriveType.init(rawValue: config.dfnType(sender.tag))
         
         // Create a blank disk
-        switch model {
+        var adf: ADFFileProxy
+        switch type {
         case .DRIVE_35_DD:  adf = ADFFileProxy.make(with: .DISK_35_DD)
         case .DRIVE_525_SD: adf = ADFFileProxy.make(with: .DISK_525_SD)
         default: fatalError()

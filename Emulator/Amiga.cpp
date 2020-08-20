@@ -260,7 +260,7 @@ Amiga::getDriveConfigItem(unsigned drive, ConfigOption option)
             
         case OPT_DRIVE_CONNECT: return paula.diskController.isConnected(drive);
         case OPT_DRIVE_TYPE: return df[drive]->getType();
-
+            
         default: assert(false);
     }
     
