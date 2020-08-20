@@ -231,8 +231,8 @@ struct SerialPortWrapper;
 - (NSString *) disassembleRecordedFlags:(NSInteger)i;
 - (NSString *) disassembleRecordedPC:(NSInteger)i;
 
-- (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len;
-- (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len;
+- (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len;
+- (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len;
 - (NSString *) disassembleAddr:(NSInteger)addr;
 
 @end

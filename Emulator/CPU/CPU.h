@@ -163,18 +163,18 @@ public:
     
     // Disassembles a recorded instruction from the log buffer
     const char *disassembleRecordedInstr(int i, long *len);
-    const char *disassembleRecordedBytes(int i, int len);
+    const char *disassembleRecordedWords(int i, int len);
     const char *disassembleRecordedFlags(int i);
     const char *disassembleRecordedPC(int i);
 
     // Disassembles the instruction at the specified address
     const char *disassembleInstr(u32 addr, long *len);
-    const char *disassembleBytes(u32 addr, int len);
+    const char *disassembleWords(u32 addr, int len);
     const char *disassembleAddr(u32 addr);
 
     // Disassembles the currently executed instruction
     const char *disassembleInstr(long *len);
-    const char *disassembleBytes(int len);
+    const char *disassembleWords(int len);
 };
 
 #endif

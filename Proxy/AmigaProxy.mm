@@ -160,7 +160,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSString *) disassembleRecordedBytes:(NSInteger)i length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleRecordedBytes((int)i, len);
+    const char *str = wrapper->cpu->disassembleRecordedWords((int)i, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleRecordedFlags:(NSInteger)i
@@ -173,14 +173,14 @@ struct SerialPortWrapper { SerialPort *port; };
     const char *str = wrapper->cpu->disassembleRecordedPC((int)i);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) disassembleInstruction:(NSInteger)addr length:(NSInteger *)len
+- (NSString *) disassembleInstr:(NSInteger)addr length:(NSInteger *)len
 {
     const char *str = wrapper->cpu->disassembleInstr(addr, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) disassembleDataBytes:(NSInteger)addr length:(NSInteger)len
+- (NSString *) disassembleWords:(NSInteger)addr length:(NSInteger)len
 {
-    const char *str = wrapper->cpu->disassembleBytes(addr, len);
+    const char *str = wrapper->cpu->disassembleWords(addr, len);
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 - (NSString *) disassembleAddr:(NSInteger)addr

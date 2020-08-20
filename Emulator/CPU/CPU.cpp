@@ -304,9 +304,9 @@ CPU::disassembleRecordedInstr(int i, long *len)
     return disassembleInstr(debugger.logEntryAbs(i).pc0, len);
 }
 const char *
-CPU::disassembleRecordedBytes(int i, int len)
+CPU::disassembleRecordedWords(int i, int len)
 {
-    return disassembleBytes(debugger.logEntryAbs(i).pc0, len);
+    return disassembleWords(debugger.logEntryAbs(i).pc0, len);
 }
 
 const char *
@@ -339,7 +339,7 @@ CPU::disassembleInstr(u32 addr, long *len)
 }
 
 const char *
-CPU::disassembleBytes(u32 addr, int len)
+CPU::disassembleWords(u32 addr, int len)
 {
     static char result[64];
 
@@ -362,8 +362,8 @@ CPU::disassembleInstr(long *len)
     return disassembleInstr(reg.pc0, len);
 }
 const char *
-CPU::disassembleBytes(int len)
+CPU::disassembleWords(int len)
 {
-    return disassembleBytes(reg.pc0, len);
+    return disassembleWords(reg.pc0, len);
     return "";
 }
