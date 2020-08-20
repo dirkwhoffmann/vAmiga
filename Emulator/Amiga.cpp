@@ -545,12 +545,12 @@ Amiga::configure(ConfigOption option, long value)
     }
             
     // Propagate configuration request to all components
-    HardwareComponent::configure(option, value);
+    if (HardwareComponent::configure(option, value)) {
+        messageQueue.put(MSG_CONFIG);
+        return true;
+    }
     
-    // Inform the GUI
-    messageQueue.put(MSG_CONFIG);
-
-    return true;
+    return false;
 }
 
 bool

@@ -204,7 +204,7 @@ public:
     MemoryConfig getConfig() { return config; }
     
     long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
     
     
     //

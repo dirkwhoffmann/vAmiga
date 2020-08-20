@@ -57,7 +57,7 @@ CIA::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 CIA::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -66,16 +66,16 @@ CIA::setConfigItem(ConfigOption option, long value)
             amiga.suspend();
             config.todBug = value;
             amiga.resume();
-            break;
+            return true;
             
         case OPT_ECLOCK_SYNCING:
             amiga.suspend();
             config.eClockSyncing = value;
             amiga.resume();
-            break;
+            return true;
             
         default:
-            break;
+            return false;
     }
 }
 

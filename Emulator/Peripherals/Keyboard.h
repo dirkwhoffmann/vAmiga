@@ -62,12 +62,8 @@ public:
     KeyboardConfig getConfig() { return config; }
 
     long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
 
-    /*
-    bool getAccurate() { return config.accurate; }
-    void setAccurate(bool value) { config.accurate = value; }
-    */
     
     //
     // Analyzing

@@ -95,9 +95,10 @@ public:
     /* Requests the change of a single configuration item. Each sub-component
      * checks if it is responsible for the requested configuration item. If
      * yes, it changes the internal state. If no, it ignores the request.
+     * A component returns true iff it has processed the request successfully.
      */
-    virtual void setConfigItem(ConfigOption option, long value) { };
-    virtual void setConfigItem(unsigned dfn, ConfigOption option, long value) { };
+    virtual bool setConfigItem(ConfigOption option, long value) { return false; }
+    virtual bool setConfigItem(unsigned dfn, ConfigOption option, long value) { return false; }
     
     // Dumps debug information about the current configuration to the console
     void dumpConfig();

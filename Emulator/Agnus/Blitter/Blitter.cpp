@@ -64,7 +64,7 @@ Blitter::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Blitter::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -73,10 +73,10 @@ Blitter::setConfigItem(ConfigOption option, long value)
             amiga.suspend();
             config.accuracy = value;
             amiga.resume();
-            break;
+            return true;
             
         default:
-            break;
+            return false;
     }
 }
 

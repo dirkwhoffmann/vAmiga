@@ -873,12 +873,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->port->getInfo();
 }
-/*
-- (void) setDevice:(SerialPortDevice)value
-{
-    wrapper->port->setDevice(value);
-}
-*/
 
 @end
 

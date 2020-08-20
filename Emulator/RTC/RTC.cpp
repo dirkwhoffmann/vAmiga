@@ -25,34 +25,26 @@ RTC::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 RTC::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
         case OPT_RTC:
+            
             assert(isRTCModel(value));
+            
             amiga.suspend();
             config.model = (RTCModel)value;
             mem.updateMemSrcTable();
             amiga.resume();
-            break;
+            
+            return true;
                         
         default:
-            break;
+            return false;
     }
 }
-
-/*
-void
-RTC::setModel(RTCModel model)
-{
-    debug("setModel(%d)\n", model);
-
-    assert(isRTCModel(model));
-    config.model = model;
-}
-*/
 
 void
 RTC::_reset(bool hard)

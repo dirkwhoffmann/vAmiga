@@ -16,34 +16,18 @@ SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
     config.device = SPD_LOOPBACK;
 }
 
-/*
-void
-SerialPort::setDevice(SerialPortDevice device)
-{
-    assert(isSerialPortDevice(device));
-
-    config.device = device;
-}
-*/
-
-void
-SerialPort::_reset(bool hard)
-{
-   RESET_SNAPSHOT_ITEMS
-}
-
 long
 SerialPort::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
-        case OPT_SERIAL_DEVICE:  return (long)config.device;
+        case OPT_SERIAL_DEVICE: return (long)config.device;
         
         default: assert(false);
     }
 }
 
-void
+bool
 SerialPort::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -51,10 +35,10 @@ SerialPort::setConfigItem(ConfigOption option, long value)
         case OPT_SERIAL_DEVICE:
             assert(isSerialPortDevice(value));
             config.device = (SerialPortDevice)value;
-            break;
+            return true;
                         
         default:
-            break;
+            return false;
     }
 }
 

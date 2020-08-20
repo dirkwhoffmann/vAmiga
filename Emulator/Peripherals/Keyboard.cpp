@@ -37,17 +37,17 @@ Keyboard::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Keyboard::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
         case OPT_ACCURATE_KEYBOARD:
             config.accurate = value;
-            break;
+            return true;
                         
         default:
-            break;
+            return false;
     }
 }
 

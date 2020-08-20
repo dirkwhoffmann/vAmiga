@@ -109,8 +109,8 @@ public:
     long getConfigItem(ConfigOption option);
     long getConfigItem(unsigned dfn, ConfigOption option);
     
-    void setConfigItem(ConfigOption option, long value) override;
-    void setConfigItem(unsigned dfn, ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
     void _dumpConfig() override;
 

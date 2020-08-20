@@ -59,29 +59,29 @@ DiskController::getConfigItem(unsigned dfn, ConfigOption option)
     }
 }
 
-void
+bool
 DiskController::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
         case OPT_ASYNC_FIFO:
             config.asyncFifo = value;
-            break;
+            return true;
             
         case OPT_AUTO_DSKSYNC:
             config.autoDskSync = value;
-            break;
+            return true;
             
         case OPT_LOCK_DSKSYNC:
             config.lockDskSync = value;
-            break;
+            return true;
             
         default:
-            break;
+            return false;
     }
 }
 
-void
+bool
 DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
 {
     switch (option) {
@@ -89,7 +89,7 @@ DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
         case OPT_DRIVE_CONNECT:
             
             // We don't allow the internal drive (Df0) to be disconnected
-            if (dfn == 0 && value == false) { return; }
+            if (dfn == 0 && value == false) return false;
             
             // Connect or disconnect the drive
             synchronized { config.connected[dfn] = value; }
@@ -97,10 +97,10 @@ DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
             // Inform the GUI
             messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, dfn);
             messageQueue.put(MSG_CONFIG);
-            break;
+            return true;
             
         default:
-            break;
+            return false;
     }
 }
 

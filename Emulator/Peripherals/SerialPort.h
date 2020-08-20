@@ -43,7 +43,7 @@ public:
 
 private:
     
-    void _reset(bool hard) override;
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS };
 
     
     //
@@ -55,12 +55,8 @@ public:
     SerialPortConfig getConfig() { return config; }
 
     long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
     
-    /*
-    SerialPortDevice getDevice() { return config.device; }
-    void setDevice(SerialPortDevice device);
-     */
         
     //
     // Analyzing

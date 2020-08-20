@@ -281,31 +281,9 @@ public:
     DeniseConfig getConfig() { return config; }
 
     long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
 
-    
-    /*
-    DeniseRevision getRevision() { return config.revision; }
-    void setRevision(DeniseRevision type);
-
-    u8 getHiddenSprites() { return config.hiddenSprites; }
-    void setHiddenSprites(u8 value);
-
-    u16 getHiddenLayers() { return config.hiddenLayers; }
-    void setHiddenLayers(u16 value);
-
-    u8 getHiddenLayerAlpha() { return config.hiddenLayerAlpha; }
-    void setHiddenLayerAlpha(u8 value);
-
-    bool getClxSprSpr() { return config.clxSprSpr; }
-    void setClxSprSpr(bool value) { config.clxSprSpr = value; }
-
-    bool getClxSprPlf() { return config.clxSprPlf; }
-    void setClxSprPlf(bool value) { config.clxSprPlf = value; }
-
-    bool getClxPlfPlf() { return config.clxPlfPlf; }
-    void setClxPlfPlf(bool value) { config.clxPlfPlf = value; }
-    */
+private:
     
     void _dumpConfig() override;
 

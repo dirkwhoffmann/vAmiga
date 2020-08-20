@@ -406,7 +406,7 @@ public:
     AgnusConfig getConfig() { return config; }
     
     long getConfigItem(ConfigOption option);
-    void setConfigItem(ConfigOption option, long value) override;
+    bool setConfigItem(ConfigOption option, long value) override;
     
     bool isOCS() { return config.revision == AGNUS_8367; }
     bool isECS() { return config.revision != AGNUS_8367; }

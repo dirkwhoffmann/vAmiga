@@ -42,10 +42,10 @@ Drive::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 {
-    if (dfn != nr) return;
+    if (dfn != nr) return false;
  
     switch (option) {
                             
@@ -53,16 +53,16 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
             assert(isDriveType(value));
             config.type = (DriveType)value;
             debug("Setting drive type to %s\n", driveTypeName(config.type));
-            break;
+            return true;
             
         case OPT_DRIVE_SPEED:
             assert(isValidDriveSpeed(value));
             config.speed = value;
             debug("Setting acceleration factor to %d\n", config.speed);
-            break;
+            return true;
             
         default:
-            break;
+            return false;
     }
 }
 

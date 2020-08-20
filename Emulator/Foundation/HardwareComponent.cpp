@@ -42,29 +42,33 @@ HardwareComponent::reset(bool hard)
 bool
 HardwareComponent::configure(ConfigOption option, long value)
 {
+    bool result = false;
+    
     // Configure all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->configure(option, value);
+        result |= c->configure(option, value);
     }
     
     // Configure this component
-    setConfigItem(option, value);
+    result |= setConfigItem(option, value);
 
-    return true;
+    return result;
 }
 
 bool
 HardwareComponent::configure(unsigned dfn, ConfigOption option, long value)
 {
+    bool result = false;
+    
     // Configure all subcomponents
     for (HardwareComponent *c : subComponents) {
-        c->configure(dfn, option, value);
+        result |= c->configure(dfn, option, value);
     }
     
     // Configure this component
-    setConfigItem(dfn, option, value);
+    result |= setConfigItem(dfn, option, value);
 
-    return true;
+    return result;
 }
 
 void

@@ -72,7 +72,7 @@ Agnus::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Agnus::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -91,9 +91,10 @@ Agnus::setConfigItem(ConfigOption option, long value)
                 default: assert(false);
             }
             amiga.resume();
-            break;
+            return true;
             
-        default: break;
+        default:
+            return false;
     }
 }
 

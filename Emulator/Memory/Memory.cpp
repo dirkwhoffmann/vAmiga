@@ -63,7 +63,7 @@ Memory::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Memory::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -72,19 +72,19 @@ Memory::setConfigItem(ConfigOption option, long value)
             amiga.suspend();
             mem.allocChip(KB(value));
             amiga.resume();
-            break;
+            return true;
             
         case OPT_SLOW_RAM:
             amiga.suspend();
             mem.allocSlow(KB(value));
             amiga.resume();
-            break;
+            return true;
             
         case OPT_FAST_RAM:
             amiga.suspend();
             mem.allocFast(KB(value));
             amiga.resume();
-            break;
+            return true;
             
         case OPT_EXT_START:
             assert(value == 0xE0 || value == 0xF0);
@@ -92,10 +92,10 @@ Memory::setConfigItem(ConfigOption option, long value)
             config.extStart = value;
             updateMemSrcTable();
             amiga.resume();
-            break;
+            return true;
                         
         default:
-            break;
+            return false;
     }
 }
 

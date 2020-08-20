@@ -55,7 +55,7 @@ Denise::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 Denise::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
@@ -63,69 +63,38 @@ Denise::setConfigItem(ConfigOption option, long value)
         case OPT_DENISE_REVISION:
             assert(isDeniseRevision(value));
             config.revision = (DeniseRevision)value;
-            break;
+            return true;
             
         case OPT_HIDDEN_SPRITES:
             msg("Changing hidden sprite mask to %x\n", value);
             config.hiddenSprites = value;
-            break;
+            return true;
             
         case OPT_HIDDEN_LAYERS:
             msg("Changing hidden layer mask to %x\n", value);
             config.hiddenLayers = value;
-            break;
+            return true;
             
         case OPT_HIDDEN_LAYER_ALPHA:
             config.hiddenLayerAlpha = value;
-            break;
+            return true;
 
         case OPT_CLX_SPR_SPR:
             config.clxSprSpr = value;
-            break;
+            return true;
             
         case OPT_CLX_SPR_PLF:
             config.clxSprPlf = value;
-            break;
+            return true;
             
         case OPT_CLX_PLF_PLF:
             config.clxPlfPlf = value;
-            break;
+            return true;
 
         default:
-            break;
+            return false;
     }
 }
-
-/*
-void
-Denise::setRevision(DeniseRevision revision)
-{
-    debug("setRevision(%d)\n", revision);
-
-    assert(isDeniseRevision(revision));
-    config.revision = revision;
-}
-
-void
-Denise::setHiddenSprites(u8 value)
-{
-    msg("Changing hidden sprite mask to %x\n", value);
-    config.hiddenSprites = value;
-}
-
-void
-Denise::setHiddenLayers(u16 value)
-{
-    msg("Changing hidden layer mask to %x\n", value);
-    config.hiddenLayers = value;
-}
-
-void
-Denise::setHiddenLayerAlpha(u8 value)
-{
-    config.hiddenLayerAlpha = value;
-}
-*/
 
 void
 Denise::_inspect()

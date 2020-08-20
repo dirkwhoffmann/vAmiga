@@ -85,7 +85,7 @@ PaulaAudio::getConfigItem(ConfigOption option)
     }
 }
 
-void
+bool
 PaulaAudio::setConfigItem(ConfigOption option, long value)
 {
     bool wasMuted;
@@ -95,67 +95,67 @@ PaulaAudio::setConfigItem(ConfigOption option, long value)
         case OPT_SAMPLING_METHOD:
             assert(isSamplingMethod(value));
             config.samplingMethod = (SamplingMethod)value;
-            break;
+            return true;
             
         case OPT_FILTER_TYPE:
             assert(isFilterType(value));
             config.filterType = (FilterType)value;
             filterL.setFilterType((FilterType)value);
             filterR.setFilterType((FilterType)value);
-            break;
+            return true;
             
         case OPT_FILTER_ALWAYS_ON:
             config.filterAlwaysOn = value;
-            break;
+            return true;
             
         case OPT_AUDVOLL:
             wasMuted = isMuted();
             config.volL = log2((double)value / 100.0);
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-            break;
+            return true;
             
         case OPT_AUDVOLR:
             wasMuted = isMuted();
             config.volR = log2((double)value / 100.0);
             if (wasMuted != isMuted())
                 messageQueue.put(isMuted() ? MSG_MUTE_ON : MSG_MUTE_OFF);
-            break;
+            return true;
             
         case OPT_AUDVOL0:
             config.vol[0] = log2((double)value / 100.0) * 0.0000025;
-            break;
+            return true;
             
         case OPT_AUDVOL1:
             config.vol[1] = log2((double)value / 100.0) * 0.0000025;
-            break;
+            return true;
 
         case OPT_AUDVOL2:
             config.vol[2] = log2((double)value / 100.0) * 0.0000025;
-            break;
+            return true;
 
         case OPT_AUDVOL3:
             config.vol[3] = log2((double)value / 100.0) * 0.0000025;
-            break;
+            return true;
 
         case OPT_AUDPAN0:
             config.pan[0] = MAX(0.0, MIN(value / 100.0, 1.0));
-            break;
+            return true;
 
         case OPT_AUDPAN1:
             config.pan[1] = MAX(0.0, MIN(value / 100.0, 1.0));
-            break;
+            return true;
 
         case OPT_AUDPAN2:
             config.pan[2] = MAX(0.0, MIN(value / 100.0, 1.0));
-            break;
+            return true;
 
         case OPT_AUDPAN3:
             config.pan[3] = MAX(0.0, MIN(value / 100.0, 1.0));
-            break;
+            return true;
 
         default:
-            break;
+            return false;
     }
 }
 
