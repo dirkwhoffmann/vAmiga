@@ -322,14 +322,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         }
         size = bytes;
         mask = bytes - 1;
-        memset(ptr, 0, allocSize);
-        
-        if (RANDOMIZE_RAM) {
-            srand(0);
-            for (int i = 0; i < allocSize; i++) {
-                ptr[i] = rand() & 0xFF;
-            }
-        }
+        fillRamWithStartupPattern();
     }
     updateMemSrcTable();
     return true;
@@ -338,9 +331,19 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 void
 Memory::fillRamWithStartupPattern()
 {
-    if (chip) memset(chip, 0x0, config.chipSize);
-    if (slow) memset(slow, 0x0, config.slowSize);
-    if (fast) memset(fast, 0x0, config.fastSize);
+    if (RANDOMIZE_RAM) {
+        
+        srand(0);
+        if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
+        if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
+        if (fast) for (int i = 0; i < config.fastSize; i++) fast[i] = rand();
+        
+    } else {
+        
+        if (chip) memset(chip, 0xFF, config.chipSize);
+        if (slow) memset(slow, 0xFF, config.slowSize);
+        if (fast) memset(fast, 0xFF, config.fastSize);
+    }
 }
 
 const char *
@@ -944,48 +947,70 @@ Memory::spypeek16 <MEM_EXT> (u32 addr)
 
 template<> u8
 Memory::peek8 <CPU_ACCESS> (u32 addr)
-{    
+{
+    u8 result;
+        
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: return peek8 <CPU_ACCESS, MEM_NONE_FAST> (addr);
-        case MEM_NONE_SLOW: return peek8 <CPU_ACCESS, MEM_NONE_SLOW> (addr);
-        case MEM_CHIP:      return peek8 <CPU_ACCESS, MEM_CHIP>      (addr);
-        case MEM_SLOW:      return peek8 <CPU_ACCESS, MEM_SLOW>      (addr);
-        case MEM_FAST:      return peek8 <CPU_ACCESS, MEM_FAST>      (addr);
-        case MEM_CIA:       return peek8 <CPU_ACCESS, MEM_CIA>       (addr);
-        case MEM_RTC:       return peek8 <CPU_ACCESS, MEM_RTC>       (addr);
-        case MEM_CUSTOM:    return peek8 <CPU_ACCESS, MEM_CUSTOM>    (addr);
-        case MEM_AUTOCONF:  return peek8 <CPU_ACCESS, MEM_AUTOCONF>  (addr);
-        case MEM_ROM:       return peek8 <CPU_ACCESS, MEM_ROM>       (addr);
-        case MEM_WOM:       return peek8 <CPU_ACCESS, MEM_WOM>       (addr);
-        case MEM_EXT:       return peek8 <CPU_ACCESS, MEM_EXT>       (addr);
+        case MEM_NONE_FAST: result = peek8 <CPU_ACCESS, MEM_NONE_FAST> (addr); break;
+        case MEM_NONE_SLOW: result = peek8 <CPU_ACCESS, MEM_NONE_SLOW> (addr); break;
+        case MEM_CHIP:      result = peek8 <CPU_ACCESS, MEM_CHIP>      (addr); break;
+        case MEM_SLOW:      result = peek8 <CPU_ACCESS, MEM_SLOW>      (addr); break;
+        case MEM_FAST:      result = peek8 <CPU_ACCESS, MEM_FAST>      (addr); break;
+        case MEM_CIA:       result = peek8 <CPU_ACCESS, MEM_CIA>       (addr); break;
+        case MEM_RTC:       result = peek8 <CPU_ACCESS, MEM_RTC>       (addr); break;
+        case MEM_CUSTOM:    result = peek8 <CPU_ACCESS, MEM_CUSTOM>    (addr); break;
+        case MEM_AUTOCONF:  result = peek8 <CPU_ACCESS, MEM_AUTOCONF>  (addr); break;
+        case MEM_ROM:       result = peek8 <CPU_ACCESS, MEM_ROM>       (addr); break;
+        case MEM_WOM:       result = peek8 <CPU_ACCESS, MEM_WOM>       (addr); break;
+        case MEM_EXT:       result = peek8 <CPU_ACCESS, MEM_EXT>       (addr); break;
             
         default: assert(false); return 0;
     }
+    
+    /*
+    if (addr >= 0xDC0000 && addr <= 0xDCFFFF) {
+        debug("peek8 <CPU_ACCESS> (%x) src = %d result = %x\n",
+              addr, memSrc[(addr & 0xFFFFFF) >> 16], result);
+    }
+    */
+    
+    return result;
 }
 
 template<> u16
 Memory::peek16 <CPU_ACCESS> (u32 addr)
 {
+    u16 result;
+    
     assert(IS_EVEN(addr));
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
-        case MEM_NONE_SLOW: return peek16 <CPU_ACCESS, MEM_NONE_SLOW> (addr);
-        case MEM_CHIP:      return peek16 <CPU_ACCESS, MEM_CHIP>      (addr);
-        case MEM_SLOW:      return peek16 <CPU_ACCESS, MEM_SLOW>      (addr);
-        case MEM_FAST:      return peek16 <CPU_ACCESS, MEM_FAST>      (addr);
-        case MEM_CIA:       return peek16 <CPU_ACCESS, MEM_CIA>       (addr);
-        case MEM_RTC:       return peek16 <CPU_ACCESS, MEM_RTC>       (addr);
-        case MEM_CUSTOM:    return peek16 <CPU_ACCESS, MEM_CUSTOM>    (addr);
-        case MEM_AUTOCONF:  return peek16 <CPU_ACCESS, MEM_AUTOCONF>  (addr);
-        case MEM_ROM:       return peek16 <CPU_ACCESS, MEM_ROM>       (addr);
-        case MEM_WOM:       return peek16 <CPU_ACCESS, MEM_WOM>       (addr);
-        case MEM_EXT:       return peek16 <CPU_ACCESS, MEM_EXT>       (addr);
+        case MEM_NONE_FAST: result = peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr); break;
+        case MEM_NONE_SLOW: result = peek16 <CPU_ACCESS, MEM_NONE_SLOW> (addr); break;
+        case MEM_CHIP:      result = peek16 <CPU_ACCESS, MEM_CHIP>      (addr); break;
+        case MEM_SLOW:      result = peek16 <CPU_ACCESS, MEM_SLOW>      (addr); break;
+        case MEM_FAST:      result = peek16 <CPU_ACCESS, MEM_FAST>      (addr); break;
+        case MEM_CIA:       result = peek16 <CPU_ACCESS, MEM_CIA>       (addr); break;
+        case MEM_RTC:       result = peek16 <CPU_ACCESS, MEM_RTC>       (addr); break;
+        case MEM_CUSTOM:    result = peek16 <CPU_ACCESS, MEM_CUSTOM>    (addr); break;
+        case MEM_AUTOCONF:  result = peek16 <CPU_ACCESS, MEM_AUTOCONF>  (addr); break;
+        case MEM_ROM:       result = peek16 <CPU_ACCESS, MEM_ROM>       (addr); break;
+        case MEM_WOM:       result = peek16 <CPU_ACCESS, MEM_WOM>       (addr); break;
+        case MEM_EXT:       result = peek16 <CPU_ACCESS, MEM_EXT>       (addr); break;
             
         default: assert(false); return 0;
     }
+    
+    /*
+    if (addr >= 0xDC0000 && addr <= 0xDCFFFF) {
+        debug("peek16 <CPU_ACCESS> (%x) src = %d result = %x\n",
+              addr, memSrc[(addr & 0xFFFFFF) >> 16], result);
+    }
+    */
+    
+    return result;
 }
 
 u16

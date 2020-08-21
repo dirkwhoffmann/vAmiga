@@ -347,6 +347,8 @@ public:
     
     CIAInfo getInfo() { return HardwareComponent::getInfo(info); }
 
+protected:
+    
     void _inspect() override;
     void _dump() override;
 

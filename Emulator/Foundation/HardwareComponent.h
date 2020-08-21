@@ -13,8 +13,8 @@
 #include "AmigaObject.h"
 
 /* This class defines the base functionality of all hardware components. It
- * comprises functions for powering up, powering down, resetting, and
- * serializing the emulator.
+ * comprises functions for initializing, configuring, and serializing the
+ * emulator, as well as functions for powering up and down, running and pausing.
  */
 class HardwareComponent : public AmigaObject {
     
@@ -86,8 +86,8 @@ public:
     
     /* Configures the component and it's subcomponents. This function
      * distributes a configuration request to all subcomponents by calling
-     * setConfigItem(). The function returns false if the configuration failed,
-     * e.g., because an invalid value has been passed.
+     * setConfigItem(). The function returns true iff the current configuration
+     * has changed.
      */
     bool configure(ConfigOption option, long value);
     bool configure(unsigned dfn, ConfigOption option, long value);

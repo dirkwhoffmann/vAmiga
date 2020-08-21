@@ -47,7 +47,8 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/consec.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/sysinfo_4.3.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/911Rescue.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/PP-Extension.adf"
@@ -67,7 +68,7 @@
 
 static const int MIRROR_SLOW_RAM = 1; // Emulate ECS Agnus Slow Ram mirror
 static const int DROP_PTR_WRITES = 1; // Resolve CPU/DMA access collisions
-static const int RANDOMIZE_RAM   = 1; // Initialize Ram with random numbers
+static const int RANDOMIZE_RAM   = 0; // Initialize Ram with random numbers
 
 //
 // Debug settings

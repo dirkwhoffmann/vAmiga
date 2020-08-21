@@ -20,7 +20,9 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
         &dmaDebugger
     };
 
-    configure(OPT_AGNUS_REVISION, AGNUS_8372);
+    config.revision = AGNUS_8372;
+    ptrMask = 0x0FFFFF;
+    
     initLookupTables();
 }
 
