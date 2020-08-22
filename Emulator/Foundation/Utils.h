@@ -24,8 +24,9 @@
 #include <unistd.h>
 
 #include "AmigaConfig.h"
-#include "AmigaTypes.h"
 #include "AmigaConstants.h"
+#include "AmigaTypes.h"
+#include "AmigaPrivateTypes.h"
 
 
 //

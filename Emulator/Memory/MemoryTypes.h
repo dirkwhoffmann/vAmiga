@@ -12,6 +12,8 @@
 #ifndef _MEMORY_TYPES_H
 #define _MEMORY_TYPES_H
 
+#include "VA_ENUM.h"
+
 /* Memory source identifiers. The identifiers are used in the mem source lookup
  * table to specify the source and target of a peek or poke operation,
  * respectively.

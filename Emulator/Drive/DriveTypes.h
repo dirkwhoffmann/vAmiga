@@ -12,6 +12,8 @@
 #ifndef _DRIVE_TYPES_H
 #define _DRIVE_TYPES_H
 
+#include "VA_ENUM.h"
+
 //
 // Enumerations
 //

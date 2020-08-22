@@ -7,15 +7,17 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
+// Replacement for the VA_ENUM macro which is only available on macOS
 
-#ifndef _AMIGA_ENUMS_H
-#define _AMIGA_ENUMS_H
+#ifndef _VA_ENUM_H
+#define _VA_ENUM_H
 
-// Replacement for VA_ENUM which is only available on macOS
 #define VA_ENUM(_type, _name) \
 enum __attribute__((enum_extensibility(open))) _name : _type _name; \
 enum _name : _type
+
+#endif
+
 
 /*
 // Basic replacement for CF_ENUM and CF_OPTIONS for source trees that lack CoreFoundation.
@@ -61,5 +63,3 @@ enum _name : _type
 
 #endif
 */
-
-#endif

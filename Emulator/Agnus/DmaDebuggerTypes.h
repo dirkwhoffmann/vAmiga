@@ -12,6 +12,8 @@
 #ifndef _DMA_DEBUGGER_TYPES_H
 #define _DMA_DEBUGGER_TYPES_H
 
+#include "VA_ENUM.h"
+
 typedef VA_ENUM(long, DmaDebuggerDisplayMode)
 {
     MODULATE_FG_LAYER,

@@ -10,6 +10,8 @@
 #ifndef VA_CONSTANTS_H
 #define VA_CONSTANTS_H
 
+#include "Aliases.h"
+
 //
 // Clock rates
 //

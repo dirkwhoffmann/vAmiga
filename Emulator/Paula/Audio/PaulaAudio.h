@@ -10,7 +10,6 @@
 #ifndef _PAULA_AUDIO_H
 #define _PAULA_AUDIO_H
 
-#include "AmigaComponent.h"
 #include "StateMachine.h"
 #include "AudioFilter.h"
 

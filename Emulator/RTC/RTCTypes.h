@@ -12,6 +12,8 @@
 #ifndef _RTC_TYPES_H
 #define _RTC_TYPES_H
 
+#include "VA_ENUM.h"
+
 //
 // Enumerations
 //

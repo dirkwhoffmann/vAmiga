@@ -12,6 +12,8 @@
 #ifndef _MESSAGE_QUEUE_TYPES_H
 #define _MESSAGE_QUEUE_TYPES_H
 
+#include "VA_ENUM.h"
+
 typedef VA_ENUM(long, MessageType)
 {
     MSG_NONE = 0,

@@ -12,6 +12,8 @@
 #ifndef _CIA_TYPES_H
 #define _CIA_TYPES_H
 
+#include "VA_ENUM.h"
+
 /* Emulated CIA model
  *
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)

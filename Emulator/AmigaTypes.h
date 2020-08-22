@@ -14,7 +14,6 @@
 
 #include "Aliases.h"
 
-#include "AmigaEnums.h"
 #include "AgnusTypes.h"
 #include "CPUTypes.h"
 #include "CIATypes.h"

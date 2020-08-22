@@ -12,7 +12,8 @@
 #ifndef _DENISE_TYPES_H
 #define _DENISE_TYPES_H
 
-#include "AmigaConstants.h"
+// #include "AmigaConstants.h"
+#include "VA_ENUM.h"
 
 //
 // Enumerations

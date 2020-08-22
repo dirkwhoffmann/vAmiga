@@ -248,6 +248,7 @@
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
 		504C48B324143AB4008ADAB3 /* AgnusDma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AgnusDma.cpp; sourceTree = "<group>"; };
 		504F9657220B2CEE005F8AB7 /* GuardTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuardTableView.swift; sourceTree = "<group>"; };
+		504FFC2524F0F15700B19DF6 /* AgnusPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusPrivateTypes.h; sourceTree = "<group>"; };
 		5051922722B61C1B0012C4BB /* FileTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FileTypes.h; sourceTree = "<group>"; };
 		5051922822B61C8A0012C4BB /* CPUTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CPUTypes.h; sourceTree = "<group>"; };
 		5051922922B61CEC0012C4BB /* CIATypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CIATypes.h; sourceTree = "<group>"; };
@@ -263,8 +264,11 @@
 		505AD259224A67CD0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStorage.swift; sourceTree = "<group>"; };
+		5063DD4724F0F43900DA209F /* KeyboardPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardPrivateTypes.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
+		506F423D24F0E97D005F80D9 /* PaulaPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaPrivateTypes.h; sourceTree = "<group>"; };
+		506F423E24F0ED75005F80D9 /* AmigaPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaPrivateTypes.h; sourceTree = "<group>"; };
 		5072CAF92456D1C800C8F606 /* AudioPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPrefs.swift; sourceTree = "<group>"; };
 		507653CA2216F91E001D26E9 /* AgnusPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgnusPanel.swift; sourceTree = "<group>"; };
 		507653CC2216F938001D26E9 /* DenisePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DenisePanel.swift; sourceTree = "<group>"; };
@@ -492,7 +496,7 @@
 		50F924FB2428B8CD00DD91AB /* DDF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DDF.cpp; sourceTree = "<group>"; };
 		50F924FC2428B8CD00DD91AB /* DDF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDF.h; sourceTree = "<group>"; };
 		50FFA7CF2440CB0300BEBA6B /* ActivityMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityMonitor.swift; sourceTree = "<group>"; };
-		55220E4924D1517B00A6736A /* AmigaEnums.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaEnums.h; sourceTree = "<group>"; };
+		55220E4924D1517B00A6736A /* VA_ENUM.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VA_ENUM.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -533,6 +537,7 @@
 				50F924FC2428B8CD00DD91AB /* DDF.h */,
 				50F924FB2428B8CD00DD91AB /* DDF.cpp */,
 				50DF2C9E2268CFC000795256 /* AgnusTypes.h */,
+				504FFC2524F0F15700B19DF6 /* AgnusPrivateTypes.h */,
 				5020B17C21EF121E00B9E80E /* Agnus.h */,
 				5020B17B21EF121E00B9E80E /* Agnus.cpp */,
 				50AE6EDE24D93EDD000AA367 /* AgnusRegisters.cpp */,
@@ -740,7 +745,8 @@
 			children = (
 				50B14C0921EB228E002E32A6 /* AmigaConfig.h */,
 				50D661862282BE1800D67D88 /* AmigaTypes.h */,
-				55220E4924D1517B00A6736A /* AmigaEnums.h */,
+				506F423E24F0ED75005F80D9 /* AmigaPrivateTypes.h */,
+				55220E4924D1517B00A6736A /* VA_ENUM.h */,
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
@@ -903,6 +909,7 @@
 				50D7CDC32286E968002689F0 /* Joystick.h */,
 				50D7CDC22286E968002689F0 /* Joystick.cpp */,
 				50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */,
+				5063DD4724F0F43900DA209F /* KeyboardPrivateTypes.h */,
 				5014DD1421F3625200BC14BA /* Keyboard.h */,
 				5014DD1321F3625200BC14BA /* Keyboard.cpp */,
 				50AEBEDF24D3D9080037082D /* KeyboardEvents.cpp */,
@@ -1059,6 +1066,7 @@
 			isa = PBXGroup;
 			children = (
 				509D4EF4228596A900E2C252 /* PaulaTypes.h */,
+				506F423D24F0E97D005F80D9 /* PaulaPrivateTypes.h */,
 				5030891021EFA74600FEAD12 /* Paula.h */,
 				5030890F21EFA74600FEAD12 /* Paula.cpp */,
 				50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */,

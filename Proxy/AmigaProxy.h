@@ -10,7 +10,8 @@
 #import <Cocoa/Cocoa.h>
 #import <MetalKit/MetalKit.h>
 
-#import "Utils.h"
+#include "AmigaConstants.h"
+#include "AmigaTypes.h"
 
 // Forward declarations
 @class ADFFileProxy;

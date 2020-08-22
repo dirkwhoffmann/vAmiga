@@ -12,6 +12,8 @@
 #ifndef _FILE_TYPES_H
 #define _FILE_TYPES_H
 
+#include "VA_ENUM.h"
+
 typedef VA_ENUM(long, AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,

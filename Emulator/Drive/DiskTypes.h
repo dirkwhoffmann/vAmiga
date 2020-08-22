@@ -12,6 +12,7 @@
 #ifndef _DISK_TYPES_H
 #define _DISK_TYPES_H
 
+#include "VA_ENUM.h"
 
 //
 // Enumerations

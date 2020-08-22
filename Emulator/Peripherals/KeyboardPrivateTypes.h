@@ -7,17 +7,20 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
+#ifndef _KEYBOARD_PRIVATE_TYPES_H
+#define _KEYBOARD_PRIVATE_TYPES_H
 
-#ifndef _KEYBOARD_TYPES_H
-#define _KEYBOARD_TYPES_H
-
-#include "VA_ENUM.h"
-
-typedef struct
+enum KeyboardState : long
 {
-    bool accurate;
+    KB_SELFTEST,
+    KB_SYNC,
+    KB_STRM_ON,
+    KB_STRM_OFF,
+    KB_SEND
+};
+
+inline bool isKeyboardState(long value) {
+    return value >= 0 && value <= KB_SEND;
 }
-KeyboardConfig;
 
 #endif
