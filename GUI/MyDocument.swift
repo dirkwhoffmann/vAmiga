@@ -15,17 +15,15 @@ class MyDocument: NSDocument {
     // The application delegate
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
-    /*
-     Emulator proxy object. This object is an Objective-C bridge between
-     the GUI (written in Swift) an the core emulator (written in C++).
+    /* Emulator proxy object. This object is an Objective-C bridge between
+     * the GUI (written in Swift) an the core emulator (written in C++).
      */
     var amiga: AmigaProxy!
 
-    /*
-     An otional media object attached to this document.
-     This variable is checked in mountAttachment() which is called in
-     windowDidLoad(). If an attachment is present, e.g., an ADF archive, it
-     is automatically attached to the emulator.
+    /* An otional media object attached to this document. This variable is
+     * checked in mountAttachment() which is called in windowDidLoad(). If an
+     * attachment is present, e.g., an ADF archive, it is automatically
+     * attached to the emulator.
      */
     var amigaAttachment: AmigaFileProxy?
     

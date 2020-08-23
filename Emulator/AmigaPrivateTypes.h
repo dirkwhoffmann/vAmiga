@@ -7,8 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-// This file must conform to standard ANSI-C to be compatible with Swift.
-
 #ifndef _AMIGA_PRIVATE_TYPES_H
 #define _AMIGA_PRIVATE_TYPES_H
 

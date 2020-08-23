@@ -8,14 +8,23 @@
 // -----------------------------------------------------------------------------
 
 extension MyController {
- 
+    
     //
     // Snapshots
     //
     
+    func load(snapshot: SnapshotProxy?) {
+        
+        if snapshot == nil { return }
+        
+        amiga.suspend()
+        amiga.load(fromSnapshot: snapshot)
+        amiga.resume()
+    }
+
     func takeAutoSnapshot() { amiga.requestAutoSnapshot() }
     func takeUserSnapshot() { amiga.requestUserSnapshot() }
-    
+        
     func restoreSnapshot(item: Int, auto: Bool) -> Bool {
         
         if auto {
@@ -29,7 +38,7 @@ extension MyController {
                 return true
             }
         }
-
+        
         return false
     }
     
@@ -53,7 +62,7 @@ extension MyController {
         let count = mydocument!.userSnapshots.count
         return count > 0 ? restoreUserSnapshot(item: count - 1) : false
     }
-
+    
     //
     // Screenshots
     //

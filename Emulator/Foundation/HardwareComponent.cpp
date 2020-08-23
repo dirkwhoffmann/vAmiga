@@ -127,8 +127,6 @@ HardwareComponent::load(u8 *buffer)
 {
     u8 *ptr = buffer;
 
-    // debug("Loading internal state ...\n");
-
     // Call delegation method
     ptr += willLoadFromBuffer(ptr);
 
@@ -146,7 +144,6 @@ HardwareComponent::load(u8 *buffer)
     // Verify that the number of written bytes matches the snapshot size
     debug(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
-    // panic("Loaded %d bytes (expected %d)\n", ptr - buffer, size());
 
     return ptr - buffer;
 }
@@ -173,8 +170,6 @@ HardwareComponent::save(u8 *buffer)
     // Verify that the number of written bytes matches the snapshot size
     debug(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
-    debug(SNP_DEBUG, "Checksum: %x\n", fnv_1a_64(buffer, ptr - buffer));
-    // hexdump(buffer, MIN(ptr - buffer, 128));
 
     return ptr - buffer;
 }

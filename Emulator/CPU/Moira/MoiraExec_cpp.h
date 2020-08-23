@@ -753,6 +753,13 @@ Moira::execJsr(u16 opcode)
     const int delay[] = { 0,0,0,0,0,2,4,2,0,2,4,0 };
     sync(delay[M]);
 
+    /*
+    if (M == 5) {
+        int x = (i16)queue.irc;
+        printf("JSR $%s%x(a%d) [a%d = %x] ea = %x\n", x<0?"-":"", x<0?-(unsigned)x:x, src, src, reg.a[src], ea);
+    }
+    */
+    
     // Check for address error in displacement modes
     if (isDspMode(M) && misaligned<Word>(ea)) {
         execAddressError(makeFrame(ea));

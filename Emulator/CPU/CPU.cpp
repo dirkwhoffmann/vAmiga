@@ -28,7 +28,15 @@ CPU::read8(u32 addr)
 u16
 CPU::read16(u32 addr)
 {
-     return mem.peek16 <CPU_ACCESS> (addr);
+    // static int counter = 0;
+    
+    u16 result = mem.peek16 <CPU_ACCESS> (addr);
+    /*
+    if (addr == 0xc001b0) {
+        printf("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
+    }
+    */
+    return result;
 }
 
 u16

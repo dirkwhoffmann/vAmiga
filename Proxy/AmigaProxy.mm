@@ -1620,6 +1620,11 @@ struct SerialPortWrapper { SerialPort *port; };
     Snapshot *snapshot = wrapper->amiga->latestUserSnapshot();
     return [SnapshotProxy make:snapshot];
 }
+- (void) loadFromSnapshot:(SnapshotProxy *)proxy
+{
+    Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
+    wrapper->amiga->loadFromSnapshotSafe(snapshot);
+}
 - (AmigaConfiguration) config
 {
     return wrapper->amiga->getConfig();
@@ -1683,11 +1688,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) warpOff
 {
     wrapper->amiga->setWarp(false);
-}
-- (void) loadFromSnapshot:(SnapshotProxy *)proxy
-{
-    Snapshot *snapshot = (Snapshot *)([proxy wrapper]->file);
-    wrapper->amiga->loadFromSnapshotSafe(snapshot);
 }
 
 @end

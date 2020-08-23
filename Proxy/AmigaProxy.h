@@ -142,9 +142,9 @@ struct SerialPortWrapper;
 @property (readonly, getter=isPoweredOff) BOOL poweredOff;
 @property (readonly, getter=isRunning) BOOL running;
 @property (readonly, getter=isPaused) BOOL paused;
+
 - (void) run;
 - (void) pause;
-
 - (void) suspend;
 - (void) resume;
 
@@ -152,6 +152,7 @@ struct SerialPortWrapper;
 - (void) requestUserSnapshot;
 @property (readonly) SnapshotProxy *latestAutoSnapshot;
 @property (readonly) SnapshotProxy *latestUserSnapshot;
+- (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
 @property (readonly) AmigaConfiguration config;
 - (NSInteger) getConfig:(ConfigOption)opt;
@@ -173,8 +174,6 @@ struct SerialPortWrapper;
 @property (readonly) BOOL warp;
 - (void) warpOn;
 - (void) warpOff;
-
-- (void) loadFromSnapshot:(SnapshotProxy *)proxy;
 
 @end
 

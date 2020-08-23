@@ -142,17 +142,7 @@ class MyController: NSWindowController, MessageReceiver {
         
         screenshotTimer?.invalidate()
     }
-    
-    // Loads a snapshot into the emulator
-    func load(snapshot: SnapshotProxy?) {
-        
-        if snapshot == nil { return }
-        
-        amiga.suspend()
-        amiga.load(fromSnapshot: snapshot)
-        amiga.resume()
-    }
-        
+            
     // Updates the warp status
     func updateWarp() {
         
@@ -617,11 +607,11 @@ extension MyController {
 
         case .MSG_AUTO_SNAPSHOT_TAKEN:
             track("MSG_AUTO_SNAPSHOT_TAKEN")
-            mydocument!.autoSnapshots.append(amiga.latestAutoSnapshot)
+            mydocument.autoSnapshots.append(amiga.latestAutoSnapshot)
 
         case .MSG_USER_SNAPSHOT_TAKEN:
             track("MSG_USER_SNAPSHOT_TAKEN")
-            mydocument!.userSnapshots.append(amiga.latestUserSnapshot)
+            mydocument.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
             
         default:

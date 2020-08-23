@@ -76,7 +76,7 @@ extension BankTableView: NSTableViewDataSource {
             }
 
         default:
-            return row
+            return String(format: "%02X", row)
         }
     }
 }
