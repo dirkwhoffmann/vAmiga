@@ -64,6 +64,8 @@ public:
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
 
+    bool isPresent() { return config.model != RTC_NONE; }
+    
     
     //
     // Analyzing

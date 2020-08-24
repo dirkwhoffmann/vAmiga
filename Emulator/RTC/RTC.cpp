@@ -152,9 +152,11 @@ void
 RTC::poke(unsigned nr, u8 value)
 {
     assert(nr < 16);
-    assert(config.model != RTC_NONE);
-    
+
     debug(RTC_DEBUG, "poke(%d, $%02X) [bank %d]\n", nr, value, bank());
+
+    // Ony proceed if a real-time clock is installed
+    if (rtc.isPresent()) return;
     
     switch (nr) {
             

@@ -65,9 +65,7 @@ Memory::getConfigItem(ConfigOption option)
 
 bool
 Memory::setConfigItem(ConfigOption option, long value)
-{
-    assert(!amiga.isRunning());
-    
+{    
     switch (option) {
             
         case OPT_CHIP_RAM:
@@ -536,7 +534,7 @@ Memory::updateMemSrcTable()
     assert(config.slowSize % 0x10000 == 0);
     assert(config.fastSize % 0x10000 == 0);
 
-    bool clk = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE;
+    // bool clk = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE;
     bool ovl = ciaa.getPA() & 1;
     
     // Start from scratch
@@ -562,8 +560,9 @@ Memory::updateMemSrcTable()
         memSrc[i] = (i - 0xCF) < slowRamPages ? MEM_SLOW : MEM_NONE_SLOW;
 
     // Real-time clock
-    memSrc[0xDC] = clk ? MEM_RTC : MEM_CUSTOM;
-
+    // memSrc[0xDC] = clk ? MEM_RTC : MEM_CUSTOM;
+    memSrc[0xDC] = MEM_RTC;
+    
     // Reserved
     memSrc[0xDD] = MEM_NONE_FAST;
 
@@ -1508,14 +1507,18 @@ u8
 Memory::peekRTC8(u32 addr)
 {
     /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
-     * Reg:   --   -0   --   -0   --   -1   --   -1   --   -2   --   -2
+     * Reg:   --        --        --        --        --        --
      */
     if (IS_EVEN(addr)) return HI_BYTE(dataBus);
     
-    /* Addr: 0001 0011 0101 0111 1001 1011
-     * Reg:   -0   -0   -1   -1   -2   -2
+    /* Addr: 0000 0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011
+     * Reg:        00        00        11        11        22        22
      */
-    return rtc.peek((addr >> 2) & 0b1111);
+    if (rtc.isPresent()) {
+        return rtc.peek((addr >> 2) & 0b1111);
+    } else {
+        return 0x40; // This is the value I've seen on my A500
+    }
 }
 
 u16
