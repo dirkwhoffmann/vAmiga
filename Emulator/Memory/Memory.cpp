@@ -571,9 +571,9 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xDE; i <= 0xDF; i++)
         memSrc[i] = MEM_CUSTOM;
 
-    // Reserved
+    // Rom mirror
     for (unsigned i = 0xE0; i <= 0xE7; i++)
-        memSrc[i] = MEM_NONE_FAST;
+        memSrc[i] = mem_wom;
     
     // Auto-config (Zorro II)
     for (unsigned i = 0xE8; i <= 0xEF; i++)
