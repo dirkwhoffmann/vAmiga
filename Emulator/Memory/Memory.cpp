@@ -611,7 +611,8 @@ template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
 {
     debug(MEM_DEBUG, "peek8(%x [NONE_FAST]) = %x\n", addr, dataBus);
-    return 0; // (u8)dataBus;
+    // return 0;
+    return (u8)dataBus;
 }
 
 template<> u8
@@ -620,14 +621,16 @@ Memory::peek8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
     agnus.executeUntilBusIsFree();
     
     debug(MEM_DEBUG, "peek8(%x [NONE_SLOW]) = %x\n", addr, dataBus);
-    return 0; // (u8)dataBus;
+    // return 0;
+    return (u8)dataBus;
 }
 
 template<> u16
 Memory::peek16 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
 {
     debug(MEM_DEBUG, "peek16(%x [NONE_FAST]) = %x\n", addr, dataBus);
-    return 0; // dataBus;
+    // return 0;
+    return dataBus;
 }
 
 template<> u16
@@ -636,7 +639,8 @@ Memory::peek16 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
     agnus.executeUntilBusIsFree();
     
     debug(MEM_DEBUG, "peek16(%x [NONE_SLOW]) = %x\n", addr, dataBus);
-    return 0; // dataBus;
+    // return 0;
+    return dataBus;
 }
 
 template<> u16
