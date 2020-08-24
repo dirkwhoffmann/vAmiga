@@ -35,8 +35,8 @@ ZorroManager::_dump()
 u8
 ZorroManager::peekFastRamDevice(u32 addr)
 {    
-    debug(FAS_DEBUG, "    peekFastRamDevice(%X)\n", addr & 0xFFFF);
-    debug(FAS_DEBUG, "    fastRamSize = %d\n", mem.fastRamSize());
+    debug(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    // debug(FAS_DEBUG, "fastRamSize = %d\n", mem.fastRamSize());
 
     if (fastRamConf || mem.fastRamSize() == 0) return 0xF; // Already configured
     
@@ -168,6 +168,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
             autoConfData = 0xF;
     }
     
+    debug(FAS_DEBUG, "autoConfData = %x\n", autoConfData);
     return autoConfData;
 }
 

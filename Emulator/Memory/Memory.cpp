@@ -536,8 +536,9 @@ Memory::updateMemSrcTable()
     assert(config.slowSize % 0x10000 == 0);
     assert(config.fastSize % 0x10000 == 0);
 
+    bool clk = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE;
     bool ovl = ciaa.getPA() & 1;
-        
+    
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
         memSrc[i] = MEM_NONE_FAST;
@@ -561,8 +562,7 @@ Memory::updateMemSrcTable()
         memSrc[i] = (i - 0xCF) < slowRamPages ? MEM_SLOW : MEM_NONE_SLOW;
 
     // Real-time clock
-    for (unsigned i = 0xDC; i <= 0xDC; i++)
-        memSrc[i] = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE ? MEM_RTC : MEM_CUSTOM;
+    memSrc[0xDC] = clk ? MEM_RTC : MEM_CUSTOM;
 
     // Reserved
     memSrc[0xDD] = MEM_NONE_FAST;
@@ -576,8 +576,13 @@ Memory::updateMemSrcTable()
         memSrc[i] = mem_wom;
     
     // Auto-config (Zorro II)
+    memSrc[0xE8] = MEM_AUTOCONF;
+    for (unsigned i = 0xE9; i <= 0xEF; i++)
+        memSrc[i] = MEM_NONE_FAST;
+    /*
     for (unsigned i = 0xE8; i <= 0xEF; i++)
         memSrc[i] = hasFastRam() ? MEM_AUTOCONF : MEM_NONE_FAST;
+    */
     
     // Extended Rom
     for (unsigned i = 0; i < extRomPages; i++)
@@ -843,10 +848,19 @@ template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
-    
+
+    // Experimental (values from FSUAE)
+    /*
+    if (config.fastSize == 0) {
+        dataBus = addr % 4 == 0 ? 0x02 : 0xe8;
+        debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
+        return dataBus;
+    }
+    */
     // agnus.executeUntilBusIsFree();
     
     dataBus = zorro.peekFastRamDevice(addr) << 4;         
+    debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
 }
 
@@ -861,6 +875,7 @@ Memory::peek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
     u8 lo = zorro.peekFastRamDevice(addr + 1) << 4;
     
     dataBus = HI_LO(hi,lo);
+    debug(FAS_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
 }
 

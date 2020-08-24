@@ -37,7 +37,8 @@ assert((x) >= 0xDC0000 && (x) <= 0xDEFFFF);
 #define ASSERT_CUSTOM_ADDR(x) \
 assert((x) >= 0xC00000 && (x) <= 0xDFFFFF);
 #define ASSERT_AUTO_ADDR(x) \
-assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
+assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
+//assert((x) >= 0xE80000 && (x) <= 0xEFFFFF);
 
 // Reads a value from memory in big endian format
 #define READ_8(x)  (*(u8 *)(x))
