@@ -43,7 +43,7 @@ typedef VA_ENUM(long, ConfigOption)
     OPT_SLOW_RAM,
     OPT_FAST_RAM,
     OPT_EXT_START,
-    
+
     OPT_DRIVE_CONNECT,
     OPT_DRIVE_TYPE,
     OPT_DRIVE_SPEED,

@@ -11,6 +11,7 @@
 #define _HARDWARE_COMPONENT_H
 
 #include "AmigaObject.h"
+#include "Serialization.h"
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the

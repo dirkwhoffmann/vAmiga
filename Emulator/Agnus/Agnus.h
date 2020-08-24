@@ -23,26 +23,26 @@
 
 /* Hsync handler action flags
  *
- *        HSYNC_PREDICT_DDF : Forces the hsync handler to recompute the
- *                            display data fetch window.
- *   HSYNC_UPDATE_BPL_TABLE : Forces the hsync handler to update the bitplane
- *                            DMA event table.
- *   HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
- *                            audio, sprite DMA event table.
+ *       HSYNC_PREDICT_DDF : Forces the hsync handler to recompute the
+ *                           display data fetch window.
+ *  HSYNC_UPDATE_BPL_TABLE : Forces the hsync handler to update the bitplane
+ *                           DMA event table.
+ *  HSYNC_UPDATE_DAS_TABLE : Forces the hsync handler to update the disk,
+ *                          audio, sprite DMA event table.
  */
-#define HSYNC_PREDICT_DDF        0b001
-#define HSYNC_UPDATE_BPL_TABLE   0b010
-#define HSYNC_UPDATE_DAS_TABLE   0b100
+#define HSYNC_PREDICT_DDF       0b001
+#define HSYNC_UPDATE_BPL_TABLE  0b010
+#define HSYNC_UPDATE_DAS_TABLE  0b100
 
 /* Bitplane event modifiers
  *
- *    DRAW_ODD : Starts the shift registers of the odd bitplanes
- *               to generate pixels.
- *   DRAW_EVEN : Starts the shift registers of the even bitplanes
- *               to generate pixels.
+ *                DRAW_ODD : Starts the shift registers of the odd bitplanes
+ *                           to generate pixels.
+ *               DRAW_EVEN : Starts the shift registers of the even bitplanes
+ *                           to generate pixels.
  */
-#define DRAW_ODD  0b001
-#define DRAW_EVEN 0b010
+#define DRAW_ODD                0b001
+#define DRAW_EVEN               0b010
 
 class Agnus : public AmigaComponent {
     
@@ -69,7 +69,7 @@ public:
 
     
     //
-    // Events slots
+    // Events
     //
     
 public:
@@ -88,8 +88,8 @@ private:
     //
     
     // Lookup tables
-    EventID bplDMA[2][7][HPOS_CNT];    // [Hires][No of bitplanes][DMA cycle]
-    EventID dasDMA[64][HPOS_CNT];      // [Bits 0 .. 5 of DMACON]
+    EventID bplDMA[2][7][HPOS_CNT];  // [Hires][No of bitplanes][DMA cycle]
+    EventID dasDMA[64][HPOS_CNT];    // [Bits 0 .. 5 of DMACON]
 
     // Currently scheduled events
     EventID bplEvent[HPOS_CNT];
@@ -165,23 +165,24 @@ public:
     // Derived values
     //
     
-    /* Values of BPLCON0 and DMACON at the DDFSTRT trigger cycle.
-     * Both variables are set at the beginning of each rasterline and updated
+    /* Values of BPLCON0 and DMACON at the DDFSTRT trigger cycle. Both
+     * variables are set at the beginning of each rasterline and updated
      * on-the-fly if BPLCON0 or DMACON changes before the trigger conditions
      * has been reached.
      */
     u16 bplcon0AtDDFStrt;
     u16 dmaconAtDDFStrt;
     
-    // This value is updated in the hsync handler with the lowest 6 bits of
-    // dmacon if the master enable bit is 1 or set to 0 if the master enable
-    // bit is 0. It is used as an offset into the DAS lookup tables.
+    /* This value is updated in the hsync handler with the lowest 6 bits of
+     * dmacon if the master enable bit is 1 or set to 0 if the master enable
+     * bit is 0. It is used as an offset into the DAS lookup tables.
+     */
     u16 dmaDAS;
 
-    /* Horizontal shift values derived from BPLCON1
-     * All four values are extracted in setBPLCON1() and utilized to emulate
-     * horizontal scrolling. They control at which DMA cycles the BPLDAT
-     * registers are transfered into the shift registers.
+    /* Horizontal shift values derived from BPLCON1. All four values are
+     * extracted in setBPLCON1() and utilized to emulate horizontal scrolling.
+     * They control at which DMA cycles the BPLDAT registers are transfered
+     * into the shift registers.
      */
     i8 scrollLoresOdd;
     i8 scrollLoresEven;

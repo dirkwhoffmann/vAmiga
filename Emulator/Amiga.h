@@ -264,8 +264,8 @@ public:
     void powerOff();
     void run();
     void pause();
-    void setWarp(bool enable);
     
+    void setWarp(bool enable);
     bool inWarpMode() { return warpMode; }
     void enableWarpMode() { setWarp(true); }
     void disableWarpMode() { setWarp(false); }

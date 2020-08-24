@@ -285,67 +285,15 @@ Amiga::configure(ConfigOption option, long value)
 bool
 Amiga::configure(unsigned drive, ConfigOption option, long value)
 {
-    if (drive >= 4) {
-        warn("Invalid drive number: %d\n");
-        return false;
-    }
-        
-    DriveConfig current =
-    drive == 0 ? getConfig().df0 :
-    drive == 1 ? getConfig().df1 :
-    drive == 2 ? getConfig().df2 : getConfig().df3;
-    
-    switch (option) {
-            
-        case OPT_DRIVE_CONNECT:
-            
-            if (drive == 0 && value == false) {
-                warn("Df0 cannot be disconnected. Ignoring.\n");
-                return false;
-            }
-
-            if (getConfig().diskController.connected[drive] == value) return true;
-            break;
-            
-        case OPT_DRIVE_TYPE:
-            
-            if (!isDriveType(value)) {
-                warn("Invalid drive type: %d\n", value);
-                return false;
-            }
-            
-            if (value != DRIVE_35_DD) {
-                warn("Unsupported drive type: %s\n", driveTypeName((DriveType)value));
-                return false;
-            }
-            
-            if (current.type == value) return true;
-            break;
-            
-        case OPT_DRIVE_SPEED:
-            
-#ifdef FORCE_DRIVE_SPEED
-            value = FORCE_DRIVE_SPEED;
-            warn("Overriding drive speed: %d\n", value);
-#endif
-            
-            if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-            if (current.speed == value) return true;
-            break;
-
-        default: assert(false);
-    }
+    assert(drive <= 3);
     
     // Propagate configuration request to all components
-    HardwareComponent::configure(drive, option, value);
+    bool changed = HardwareComponent::configure(drive, option, value);
     
-    // Inform the GUI
-    messageQueue.put(MSG_CONFIG);
-
-    return true;
+    // Inform the GUI if the configuration has changed
+    if (changed) messageQueue.put(MSG_CONFIG);
+    
+    return changed;
 }
 
 void

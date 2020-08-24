@@ -98,6 +98,9 @@ public:
     long getConfigItem(ConfigOption option);
     bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
+    bool isOriginal() { return config.speed == 1; }
+    bool isTurbo() { return config.speed < 0; }
+    
 private:
     
     void _dumpConfig() override;
@@ -180,11 +183,6 @@ public:
     void setSpeed(i16 value);
     */
     
-    // Returns true if this drive is emulated accurately
-    bool isOriginal() { return config.speed == 1; }
-
-    // Returns true if this drive is emulated in turbo mode
-    bool isTurbo() { return config.speed < 0; }
 
     // Identification mode
     bool idMode();

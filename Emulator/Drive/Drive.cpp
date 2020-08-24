@@ -50,13 +50,38 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
     switch (option) {
                             
         case OPT_DRIVE_TYPE:
-            assert(isDriveType(value));
+                  
+            if (!isDriveType(value)) {
+                 warn("Invalid drive type: %d\n", value);
+                 return false;
+             }
+             if (value != DRIVE_35_DD) {
+                 warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
+                 return false;
+             }
+            if (config.type == value) {
+                return false;
+            }
+                        
             config.type = (DriveType)value;
             debug("Setting drive type to %s\n", driveTypeName(config.type));
             return true;
             
         case OPT_DRIVE_SPEED:
-            assert(isValidDriveSpeed(value));
+            
+            #ifdef FORCE_DRIVE_SPEED
+            value = FORCE_DRIVE_SPEED;
+            warn("Overriding drive speed: %d\n", value);
+            #endif
+            
+            if (!isValidDriveSpeed(value)) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+            if (config.speed == value) {
+                return false;
+            }
+            
             config.speed = value;
             debug("Setting acceleration factor to %d\n", config.speed);
             return true;
