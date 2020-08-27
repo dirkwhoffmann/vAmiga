@@ -107,9 +107,8 @@ public:
     // Message queue
     //
     
-    /* Communication channel to the GUI. Used to communicate with the graphical
-     * user interface. The GUI registers a listener and a callback function to
-     * retrieve messages.
+    /* Communication channel to the GUI. The GUI registers a listener and a
+     * callback function to retrieve messages.
      */
     MessageQueue messageQueue;
 

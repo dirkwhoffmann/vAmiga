@@ -13,9 +13,7 @@
 #include "AmigaObject.h"
 
 class MessageQueue : public AmigaObject {
-    
-private:
-    
+        
     // Maximum number of queued messages
     const static size_t capacity = 64;
     
@@ -25,17 +23,13 @@ private:
     // The ring buffer's read and write pointers
     int r = 0;
     int w = 0;
-    
-    // Mutex for controlling parallel reads and writes
-    pthread_mutex_t lock;
-    
+        
     // List of all registered listeners
     map <const void *, Callback *> listeners;
     
 public:
     
     MessageQueue();
-    ~MessageQueue();
     
     // Registers a listener together with it's callback function
     void addListener(const void *listener, Callback *func);

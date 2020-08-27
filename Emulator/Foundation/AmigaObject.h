@@ -24,8 +24,7 @@ using std::swap;
 #define synchronized \
     for(std::unique_lock<std::recursive_mutex> _l(mutex); _l; _l.unlock())
 
-
-/* Base class for all vAmiga objects. This class contains a textual description
+/* Base class for all Amiga objects. This class contains a textual description
  * of the object and offers various functions for printing debug messages and
  * warnings.
  */
