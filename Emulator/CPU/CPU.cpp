@@ -28,14 +28,26 @@ CPU::read8(u32 addr)
 u16
 CPU::read16(u32 addr)
 {
-    // static int counter = 0;
-    
     u16 result = mem.peek16 <CPU_ACCESS> (addr);
+ 
     /*
+    static int counter = 0;
     if (addr == 0xc001b0) {
         printf("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
     }
+
+    if (addr >= 0xDC0000 && addr <= 0xDEFFFF) {
+        debug("read16(%x) = %x\n", addr, result);
+    }
+    
+    if (addr >= 0xD80000 && addr <= 0xD8FFFF) {
+        debug("read16(%x) = %x (%x,%x %x,%x %x,%x)\n", addr, result,
+              agnus.busOwner[agnus.pos.h-2], agnus.busValue[agnus.pos.h-2],
+              agnus.busOwner[agnus.pos.h-1], agnus.busValue[agnus.pos.h-1],
+              agnus.busOwner[agnus.pos.h-0], agnus.busValue[agnus.pos.h-0]);
+    }
     */
+    
     return result;
 }
 

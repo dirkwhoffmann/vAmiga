@@ -30,7 +30,7 @@
 
 // Uncomment to override a configuration setting
 
-// #define FORCE_AGNUS_REVISION AGNUS_8367
+// #define FORCE_AGNUS_REVISION AGNUS_OCS
 // #define FORCE_BLT_LEVEL      0
 // #define FORCE_CHIP_RAM       512
 // #define FORCE_SLOW_RAM       512
@@ -38,7 +38,7 @@
 // #define FORCE_RTC            RTC_NONE
 // #define FORCE_DRIVE_SPEED    -1
 // #define FORCE_ASYNC_FIFO     true
-
+// #define FORCE_RTC_REGISTER   0
 
 // Uncomment to set a breakpoint on startup
 // #define INITIAL_BREAKPOINT 0xC0A008   // Jetsons
