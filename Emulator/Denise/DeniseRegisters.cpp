@@ -56,7 +56,7 @@ Denise::peekDENISEID()
 {
     u16 result;
 
-    if (config.revision == DENISE_8373) {
+    if (config.revision == DENISE_ECS) {
         result = 0xFFFC;                           // ECS
     } else {
         result = mem.peekCustomFaulty16(0xDFF07C); // OCS

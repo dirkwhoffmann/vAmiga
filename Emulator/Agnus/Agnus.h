@@ -409,8 +409,8 @@ public:
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
     
-    bool isOCS() { return config.revision == AGNUS_8367; }
-    bool isECS() { return config.revision != AGNUS_8367; }
+    bool isOCS() { return config.revision == AGNUS_OCS; }
+    bool isECS() { return config.revision != AGNUS_OCS; }
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();

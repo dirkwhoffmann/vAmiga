@@ -436,9 +436,9 @@ Agnus::peekVPOSR()
     // Add identification bits
     switch (config.revision) {
             
-        case AGNUS_8367: id = 0x00; break;
-        case AGNUS_8372: id = 0x20; break;
-        case AGNUS_8375: id = 0x20; break; // TODO: CHECK ON REAL MACHINE
+        case AGNUS_OCS: id = 0x00; break;
+        case AGNUS_ECS_1MB: id = 0x20; break;
+        case AGNUS_ECS_2MB: id = 0x20; break; // TODO: CHECK ON REAL MACHINE
         default: assert(false);
     }
     result |= (id << 8);

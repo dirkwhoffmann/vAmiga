@@ -561,8 +561,8 @@ struct HardwareDefaults {
     
     static let A500 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_8372,
-        deniseRev: .DENISE_8362R8,
+        agnusRev: .AGNUS_ECS_1MB,
+        deniseRev: .DENISE_OCS,
         realTimeClock: .OKI,
         
         chipRam: 512,
@@ -579,8 +579,8 @@ struct HardwareDefaults {
     
     static let A1000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_8367,
-        deniseRev: .DENISE_8362R8,
+        agnusRev: .AGNUS_OCS,
+        deniseRev: .DENISE_OCS,
         realTimeClock: .NONE,
         
         chipRam: 256,
@@ -597,8 +597,8 @@ struct HardwareDefaults {
     
     static let A2000 = HardwareDefaults.init(
         
-        agnusRev: .AGNUS_8375,
-        deniseRev: .DENISE_8362R8,
+        agnusRev: .AGNUS_ECS_2MB,
+        deniseRev: .DENISE_OCS,
         realTimeClock: .OKI,
         
         chipRam: 512,

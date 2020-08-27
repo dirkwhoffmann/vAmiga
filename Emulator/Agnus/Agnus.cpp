@@ -20,7 +20,7 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
         &dmaDebugger
     };
 
-    config.revision = AGNUS_8372;
+    config.revision = AGNUS_ECS_1MB;
     ptrMask = 0x0FFFFF;
     
     initLookupTables();
@@ -99,9 +99,9 @@ Agnus::setConfigItem(ConfigOption option, long value)
             
             config.revision = (AgnusRevision)value;
             switch (config.revision) {
-                case AGNUS_8367: ptrMask = 0x07FFFF; break;
-                case AGNUS_8372: ptrMask = 0x0FFFFF; break;
-                case AGNUS_8375: ptrMask = 0x1FFFFF; break;
+                case AGNUS_OCS: ptrMask = 0x07FFFF; break;
+                case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
+                case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
                 default: assert(false);
             }
             
@@ -118,8 +118,8 @@ Agnus::chipRamLimit()
 {
     switch (config.revision) {
 
-        case AGNUS_8375: return 2048;
-        case AGNUS_8372: return 1024;
+        case AGNUS_ECS_2MB: return 2048;
+        case AGNUS_ECS_1MB: return 1024;
         default:         return 512;
     }
 }
@@ -131,8 +131,8 @@ Agnus::chipRamMask()
     
     switch (config.revision) {
 
-        case AGNUS_8375: result = 0x1FFFFF; break;
-        case AGNUS_8372: result = 0x0FFFFF; break;
+        case AGNUS_ECS_2MB: result = 0x1FFFFF; break;
+        case AGNUS_ECS_1MB: result = 0x0FFFFF; break;
         default:         result = 0x07FFFF;
     }
     

@@ -19,9 +19,9 @@
 
 typedef VA_ENUM(long, AgnusRevision)
 {
-    AGNUS_8367, // OCS Agnus
-    AGNUS_8372, // ECS Agnus (up to 1MB Chip Ram)
-    AGNUS_8375, // ECS Agnus (up to 2MB Chip Ram)
+    AGNUS_OCS,              // Revision 8367
+    AGNUS_ECS_1MB,          // Revision 8372
+    AGNUS_ECS_2MB,          // Revision 8375
     AGNUS_CNT
 };
 
@@ -35,10 +35,10 @@ inline const char *agnusRevisionName(AgnusRevision type)
     assert(isAgnusRevision(type));
 
     switch (type) {
-        case AGNUS_8367: return "AGNUS_8367";
-        case AGNUS_8372: return "AGNUS_8372";
-        case AGNUS_8375: return "AGNUS_8375";
-        default:         return "???";
+        case AGNUS_OCS:     return "AGNUS_OCS";
+        case AGNUS_ECS_1MB: return "AGNUS_ECS_1MB";
+        case AGNUS_ECS_2MB: return "AGNUS_ECS_2MB";
+        default:            return "???";
     }
 }
 

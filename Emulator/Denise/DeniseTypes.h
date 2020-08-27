@@ -21,13 +21,13 @@
 
 typedef VA_ENUM(long, DeniseRevision)
 {
-    DENISE_8362R8, // OCS
-    DENISE_8373    // ECS (not supported yet)
+    DENISE_OCS,  // Revision 8362R8
+    DENISE_ECS   // Revision 8373 (not supported yet)
 };
 
 inline bool isDeniseRevision(long value)
 {
-    return value >= 0 && value <= DENISE_8373;
+    return value >= 0 && value <= DENISE_ECS;
 }
 
 inline const char *deniseRevisionName(DeniseRevision type)
@@ -35,9 +35,9 @@ inline const char *deniseRevisionName(DeniseRevision type)
     assert(isDeniseRevision(type));
 
     switch (type) {
-        case DENISE_8362R8: return "DENISE_8362R8";
-        case DENISE_8373:   return "DENISE_8373";
-        default:            return "???";
+        case DENISE_OCS:  return "DENISE_OCS";
+        case DENISE_ECS:  return "DENISE_ECS";
+        default:          return "???";
     }
 }
 
