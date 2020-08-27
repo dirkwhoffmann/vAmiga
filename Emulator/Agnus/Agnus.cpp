@@ -69,7 +69,8 @@ Agnus::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_AGNUS_REVISION: return config.revision;
-        
+        case OPT_SLOW_RAM_MIRROR: return config.slowRamMirror;
+            
         default: assert(false);
     }
 }
@@ -108,6 +109,14 @@ Agnus::setConfigItem(ConfigOption option, long value)
             amiga.resume();
             return true;
             
+        case OPT_SLOW_RAM_MIRROR:
+            
+            if (config.slowRamMirror == value) {
+                return false;
+            }
+            config.slowRamMirror = value;
+            return true;
+            
         default:
             return false;
     }
@@ -144,7 +153,7 @@ bool
 Agnus::slowRamIsMirroredIn()
 {
 
-    if (MIRROR_SLOW_RAM && isECS()) {
+    if (config.slowRamMirror && isECS()) {
         return mem.chipRamSize() == KB(512) && mem.slowRamSize() == KB(512);
     } else {
         return false;

@@ -85,6 +85,18 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var hwPowerButton: NSButton!
 
     //
+    // Memory preferences
+    //
+
+    // Chipset features
+    @IBOutlet weak var memSlowRamMirror: NSButton!
+
+    // Lock
+    @IBOutlet weak var memLockImage: NSButton!
+    @IBOutlet weak var memLockText: NSTextField!
+    @IBOutlet weak var memLockSubText: NSTextField!
+    
+    //
     // Compatibility preferences
     //
 
@@ -221,6 +233,7 @@ class ConfigurationController: DialogController {
             switch id {
             case "Roms": refreshRomTab()
             case "Hardware": refreshHardwareTab()
+            case "Memory": refreshMemoryTab()
             case "Compatibility": refreshCompatibilityTab()
             case "Audio": refreshAudioTab()
             case "Video": refreshVideoTab()

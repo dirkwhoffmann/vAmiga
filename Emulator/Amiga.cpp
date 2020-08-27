@@ -191,6 +191,7 @@ Amiga::getConfigItem(ConfigOption option)
     switch (option) {
 
         case OPT_AGNUS_REVISION:
+        case OPT_SLOW_RAM_MIRROR:
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:

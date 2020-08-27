@@ -45,6 +45,7 @@ inline const char *agnusRevisionName(AgnusRevision type)
 typedef struct
 {
     AgnusRevision revision;
+    bool slowRamMirror;
 }
 AgnusConfig;
 

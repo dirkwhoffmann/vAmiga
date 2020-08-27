@@ -153,7 +153,16 @@ class Configuration {
     }
 
     //
-    // Compatibility settings
+    // Memory
+    //
+    
+    var slowRamMirror: Bool {
+        get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
+    }
+    
+    //
+    // Compatibility
     //
 
     var clxSprSpr: Bool {
@@ -501,6 +510,39 @@ class Configuration {
         defaults.set(gameDevice1, forKey: Keys.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.serialDevice)
+    }
+
+    //
+    // Memory
+    //
+    
+    func loadMemoryDefaults(_ defaults: MemoryDefaults) {
+        
+        amiga.suspend()
+        
+        slowRamMirror = defaults.slowRamMirror
+                
+        amiga.resume()
+    }
+    
+    func loadMemoryUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
+        
+        amiga.resume()
+    }
+    
+    func saveMemoryUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
     }
     
     //

@@ -79,6 +79,7 @@ extension MyController {
         pref.loadDevicesUserDefaults()
 
         config.loadRomUserDefaults()
+        config.loadMemoryUserDefaults()
         config.loadHardwareUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
@@ -678,6 +679,55 @@ extension UserDefaults {
 }
 
 //
+// User defaults (Memory)
+//
+
+extension Keys {
+
+    // Chipset features
+    static let slowRamMirror = "VAMIGA_MEM_SlowRamMirror"
+}
+
+struct MemoryDefaults {
+    
+    // Chipset features
+    let slowRamMirror: Bool
+    
+    //
+    // Schemes
+    //
+    
+    static let std = MemoryDefaults.init(
+        
+        slowRamMirror: true
+    )
+}
+
+extension UserDefaults {
+
+    static func registerMemoryUserDefaults() {
+
+        let defaults = MemoryDefaults.std
+        let dictionary: [String: Any] = [
+
+            Keys.slowRamMirror: defaults.slowRamMirror
+        ]
+
+        let userDefaults = UserDefaults.standard
+        userDefaults.register(defaults: dictionary)
+    }
+
+    static func resetMemoryUserDefaults() {
+
+        let userDefaults = UserDefaults.standard
+        
+        let keys = [ Keys.slowRamMirror ]
+
+        for key in keys { userDefaults.removeObject(forKey: key) }
+    }
+}
+
+//
 // User defaults (Compatibility)
 //
 
@@ -828,7 +878,7 @@ extension UserDefaults {
                      Keys.asyncFifo,
                      Keys.lockDskSync,
                      Keys.autoDskSync,
-                     Keys.accurateKeyboard]
+                     Keys.accurateKeyboard ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }
