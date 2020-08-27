@@ -18,6 +18,11 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
     setDescription("Memory");
 
     memset(&config, 0, sizeof(config));
+
+    config.slowRamDelay = true;
+    config.ramInitPattern = INIT_ALL_ZEROES;
+    config.unmappingType = UNMAPPED_FLOATING;
+    
     config.extStart = 0xE0;
 }
 
@@ -54,10 +59,13 @@ Memory::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
-        case OPT_CHIP_RAM:  return config.chipSize / KB(1);
-        case OPT_SLOW_RAM:  return config.slowSize / KB(1);
-        case OPT_FAST_RAM:  return config.fastSize / KB(1);
-        case OPT_EXT_START: return config.extStart;
+        case OPT_CHIP_RAM:          return config.chipSize / KB(1);
+        case OPT_SLOW_RAM:          return config.slowSize / KB(1);
+        case OPT_FAST_RAM:          return config.fastSize / KB(1);
+        case OPT_EXT_START:         return config.extStart;
+        case OPT_SLOW_RAM_DELAY:    return config.slowRamDelay;
+        case OPT_UNMAPPING_TYPE:    return config.unmappingType;
+        case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
         default: assert(false);
     }
@@ -127,7 +135,42 @@ Memory::setConfigItem(ConfigOption option, long value)
             config.extStart = value;
             updateMemSrcTable();
             return true;
+            
+        case OPT_SLOW_RAM_DELAY:
+            
+            if (config.slowRamDelay == value) {
+                return false;
+            }
+                
+            config.slowRamDelay = value;
+            return true;
                         
+        case OPT_UNMAPPING_TYPE:
+            
+            if (!isUnmappingType(value)) {
+                warn("Invalid unmapping type: %d\n", value);
+                return false;
+            }
+            if (config.unmappingType == value) {
+                return false;
+            }
+            
+            config.unmappingType = (UnmappingType)value;
+            return true;
+            
+        case OPT_RAM_INIT_PATTERN:
+            
+            if (!isRamInitPattern(value)) {
+                warn("Invalid RAM init pattern: %d\n", value);
+                return false;
+            }
+            if (config.ramInitPattern == value) {
+                return false;
+            }
+            
+            config.ramInitPattern = (RamInitPattern)value;
+            return true;
+            
         default:
             return false;
     }
@@ -329,18 +372,32 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
 void
 Memory::fillRamWithStartupPattern()
 {
-    if (RANDOMIZE_RAM) {
-        
-        srand(0);
-        if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
-        if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
-        if (fast) for (int i = 0; i < config.fastSize; i++) fast[i] = rand();
-        
-    } else {
-        
-        if (chip) memset(chip, 0xFF, config.chipSize);
-        if (slow) memset(slow, 0xFF, config.slowSize);
-        if (fast) memset(fast, 0xFF, config.fastSize);
+    switch (config.ramInitPattern) {
+            
+        case INIT_RANDOMIZED:
+            
+            srand(0);
+            if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
+            if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
+            if (fast) for (int i = 0; i < config.fastSize; i++) fast[i] = rand();
+            break;
+            
+        case INIT_ALL_ZEROES:
+            
+            if (chip) memset(chip, 0x00, config.chipSize);
+            if (slow) memset(slow, 0x00, config.slowSize);
+            if (fast) memset(fast, 0x00, config.fastSize);
+            break;
+            
+        case INIT_ALL_ONES:
+            
+            if (chip) memset(chip, 0xFF, config.chipSize);
+            if (slow) memset(slow, 0xFF, config.slowSize);
+            if (fast) memset(fast, 0xFF, config.fastSize);
+            break;
+            
+        default:
+            assert(false);
     }
 }
 
@@ -606,52 +663,49 @@ Memory::updateMemSrcTable()
     messageQueue.put(MSG_MEM_LAYOUT);
 }
 
-template<> u8
-Memory::peek8 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
-{
-    debug(MEM_DEBUG, "peek8(%x [NONE_FAST]) = %x\n", addr, dataBus);
-    // return 0;
-    return (u8)dataBus;
-}
-
-template<> u8
-Memory::peek8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
-{
-    agnus.executeUntilBusIsFree();
-    
-    debug(MEM_DEBUG, "peek8(%x [NONE_SLOW]) = %x\n", addr, dataBus);
-    // return 0;
-    return (u8)dataBus;
-}
-
 template<> u16
 Memory::peek16 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
 {
-    debug(MEM_DEBUG, "peek16(%x [NONE_FAST]) = %x\n", addr, dataBus);
-    // return 0;
-    return dataBus;
+    switch (config.unmappingType) {
+            
+        case UNMAPPED_FLOATING:   return dataBus;
+        case UNMAPPED_ALL_ONES:   return 0xFFFF;
+        case UNMAPPED_ALL_ZEROES: return 0x0000;
+
+        default: assert(false); return 0;
+    }
 }
 
 template<> u16
 Memory::peek16 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
 {
-    agnus.executeUntilBusIsFree();
-    
-    debug(MEM_DEBUG, "peek16(%x [NONE_SLOW]) = %x\n", addr, dataBus);
-    // return 0;
-    return dataBus;
+    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
+    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
+}
+
+template<> u8
+Memory::peek8 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
+{
+    return (u8)peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
+}
+
+template<> u8
+Memory::peek8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
+{
+    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
+    return (u8)peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
 }
 
 template<> u16
 Memory::spypeek16 <MEM_NONE_FAST> (u32 addr)
 {
-    return 0; // dataBus;
+    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
 }
 
 template<> u16
 Memory::spypeek16 <MEM_NONE_SLOW> (u32 addr)
 {
-    return 0; // dataBus;
+    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
 }
 
 template<> u8
@@ -1066,7 +1120,8 @@ template <> void
 Memory::poke8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr, u8 value)
 {
     debug(MEM_DEBUG, "poke8(%x [NONE_SLOW], %x)\n", addr, value);
-    agnus.executeUntilBusIsFree();
+
+    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
     dataBus = value;
 }
 
@@ -1081,7 +1136,8 @@ template <> void
 Memory::poke16 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr, u16 value)
 {
     debug(MEM_DEBUG, "poke16(%x [NONE_SLOW], %x)\n", addr, value);
-    agnus.executeUntilBusIsFree();
+    
+    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
     dataBus = value;
 }
 

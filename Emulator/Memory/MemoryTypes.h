@@ -36,8 +36,7 @@ typedef VA_ENUM(long, MemorySource)
 
 static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXT; }
 
-/* Access identifiers
- * Some memory methods need to know who called them.
+/* Access identifiers. Some memory methods need to know who called them.
  */
 typedef VA_ENUM(long, Accessor)
 {
@@ -46,6 +45,26 @@ typedef VA_ENUM(long, Accessor)
 };
 
 static inline bool isAccessor(long value) { return value >= 0 && value <= AGNUS_ACCESS; }
+
+// Configuration options for the initial RAM pattern
+typedef VA_ENUM(long, RamInitPattern)
+{
+    INIT_RANDOMIZED,
+    INIT_ALL_ZEROES,
+    INIT_ALL_ONES
+};
+
+static inline bool isRamInitPattern(long value) { return value >= 0 && value <= INIT_ALL_ONES; }
+
+// Configuration options for dealing with unmapped RAM
+typedef VA_ENUM(long, UnmappingType)
+{
+    UNMAPPED_FLOATING,
+    UNMAPPED_ALL_ZEROES,
+    UNMAPPED_ALL_ONES
+};
+
+static inline bool isUnmappingType(long value) { return value >= 0 && value <= UNMAPPED_ALL_ONES; }
 
 inline const char *AccessorName(Accessor accessor)
 {
@@ -66,6 +85,15 @@ typedef struct
     size_t womSize;
     size_t extSize;
 
+    // Indicates if SlowRam accesses need a free bus
+    bool slowRamDelay;
+    
+    // Startup behaviour
+    RamInitPattern ramInitPattern;
+    
+    // Specifies how to deal with unmapped memory
+    UnmappingType unmappingType;
+    
     // First memory page where the extended ROM is blended it
     u32 extStart;
 }

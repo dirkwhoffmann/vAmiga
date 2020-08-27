@@ -36,22 +36,37 @@
 
 typedef VA_ENUM(long, ConfigOption)
 {
+    // Agnus
     OPT_AGNUS_REVISION,
     OPT_SLOW_RAM_MIRROR,
     
+    // Denise
     OPT_DENISE_REVISION,
+
+    // Real-time clock
     OPT_RTC_MODEL,
+
+    // Memory
     OPT_CHIP_RAM,
     OPT_SLOW_RAM,
     OPT_FAST_RAM,
     OPT_EXT_START,
-
+    OPT_SLOW_RAM_DELAY,
+    OPT_UNMAPPING_TYPE,
+    OPT_RAM_INIT_PATTERN,
+    
+    // Disk controller
     OPT_DRIVE_CONNECT,
+    OPT_ASYNC_FIFO,
+
+    // Drives
     OPT_DRIVE_TYPE,
     OPT_DRIVE_SPEED,
     
+    // Ports
     OPT_SERIAL_DEVICE,
 
+    // Compatibility
     OPT_HIDDEN_SPRITES,
     OPT_HIDDEN_LAYERS,
     OPT_HIDDEN_LAYER_ALPHA,
@@ -59,15 +74,17 @@ typedef VA_ENUM(long, ConfigOption)
     OPT_CLX_SPR_PLF,
     OPT_CLX_PLF_PLF,
         
+    // Blitter
     OPT_BLITTER_ACCURACY,
-    OPT_ASYNC_FIFO,
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
     
+    // CIAs
     OPT_TODBUG,
     OPT_ECLOCK_SYNCING,
     OPT_ACCURATE_KEYBOARD,
     
+    // Paula audio
     OPT_SAMPLING_METHOD,
     OPT_FILTER_TYPE,
     OPT_FILTER_ALWAYS_ON,

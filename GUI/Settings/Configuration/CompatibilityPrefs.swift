@@ -26,7 +26,6 @@ extension ConfigurationController {
 
         // CIAs
         compTodBug.state = config.ciaA.todBug ? .on : .off
-        compEClockSyncing.state = config.ciaA.eClockSyncing ? .on : .off
         
         // Floppy drives
         let speed = config.df0.speed        
@@ -73,12 +72,6 @@ extension ConfigurationController {
     @IBAction func compTodBugAction(_ sender: NSButton!) {
 
         config.todBug = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func compEClockSyncingAction(_ sender: NSButton!) {
-
-        config.eClockSyncing = sender.state == .on
         refresh()
     }
 

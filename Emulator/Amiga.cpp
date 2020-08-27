@@ -210,6 +210,9 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_SLOW_RAM:
         case OPT_FAST_RAM:
         case OPT_EXT_START:
+        case OPT_SLOW_RAM_DELAY:
+        case OPT_UNMAPPING_TYPE:
+        case OPT_RAM_INIT_PATTERN:
             return mem.getConfigItem(option);
             
         case OPT_SAMPLING_METHOD:

@@ -155,7 +155,15 @@ class Configuration {
     //
     // Memory
     //
-    
+
+    var eClockSyncing: Bool {
+        get { return amiga.getConfig(.OPT_ECLOCK_SYNCING) != 0 }
+        set { amiga.configure(.OPT_ECLOCK_SYNCING, enable: newValue) }
+    }
+    var slowRamDelay: Bool {
+        get { return amiga.getConfig(.OPT_SLOW_RAM_DELAY) != 0 }
+        set { amiga.configure(.OPT_SLOW_RAM_DELAY, enable: newValue) }
+    }
     var slowRamMirror: Bool {
         get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
         set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
@@ -205,10 +213,6 @@ class Configuration {
     var todBug: Bool {
         get { return amiga.getConfig(.OPT_TODBUG) != 0 }
         set { amiga.configure(.OPT_TODBUG, enable: newValue) }
-    }
-    var eClockSyncing: Bool {
-        get { return amiga.getConfig(.OPT_ECLOCK_SYNCING) != 0 }
-        set { amiga.configure(.OPT_ECLOCK_SYNCING, enable: newValue) }
     }
     var accurateKeyboard: Bool {
         get { return amiga.getConfig(.OPT_ACCURATE_KEYBOARD) != 0 }
@@ -520,6 +524,8 @@ class Configuration {
         
         amiga.suspend()
         
+        eClockSyncing = defaults.eClockSyncing
+        slowRamDelay = defaults.slowRamDelay
         slowRamMirror = defaults.slowRamMirror
                 
         amiga.resume()
@@ -531,6 +537,8 @@ class Configuration {
         
         amiga.suspend()
         
+        eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
+        slowRamDelay = defaults.bool(forKey: Keys.slowRamDelay)
         slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
         
         amiga.resume()
@@ -542,6 +550,8 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
+        defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
+        defaults.set(slowRamDelay, forKey: Keys.slowRamDelay)
         defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
     }
     
@@ -560,7 +570,6 @@ class Configuration {
         blitterAccuracy = defaults.blitterAccuracy
 
         todBug = defaults.todBug
-        eClockSyncing = defaults.eClockSyncing
         
         driveSpeed = defaults.driveSpeed
         asyncFifo = defaults.asyncFifo

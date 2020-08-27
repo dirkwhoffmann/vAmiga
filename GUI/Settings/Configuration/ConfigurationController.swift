@@ -88,8 +88,22 @@ class ConfigurationController: DialogController {
     // Memory preferences
     //
 
+    // Timing
+    @IBOutlet weak var memEClockSyncing: NSButton!
+    @IBOutlet weak var memSlowRamDelay: NSButton!
+
     // Chipset features
     @IBOutlet weak var memSlowRamMirror: NSButton!
+
+    // Bank map
+    @IBOutlet weak var memBankD8DB: NSPopUpButton!
+    @IBOutlet weak var memBankDC: NSPopUpButton!
+    @IBOutlet weak var memBankE0E7: NSPopUpButton!
+    @IBOutlet weak var memBankF0F7: NSPopUpButton!
+
+    // Values
+    @IBOutlet weak var memUnmapped: NSPopUpButton!
+    @IBOutlet weak var memPattern: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var memLockImage: NSButton!
@@ -112,7 +126,6 @@ class ConfigurationController: DialogController {
 
     // CIAs
     @IBOutlet weak var compTodBug: NSButton!
-    @IBOutlet weak var compEClockSyncing: NSButton!
 
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!

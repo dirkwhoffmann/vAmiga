@@ -13,6 +13,10 @@ extension ConfigurationController {
 
         let poweredOff = amiga.isPoweredOff
 
+        // Timing
+        memEClockSyncing.state = config.eClockSyncing ? .on : .off
+        memSlowRamDelay.state = config.slowRamDelay ? .on : .off
+
         // Chipset features
         memSlowRamMirror.state = config.slowRamMirror ? .on : .off
 
@@ -22,9 +26,75 @@ extension ConfigurationController {
         memLockSubText.isHidden = poweredOff
     }
 
-    @IBAction func slowRamMirrorAction(_ sender: NSButton!) {
+    @IBAction func memEClockSyncingAction(_ sender: NSButton!) {
+
+        track()
+        
+        config.eClockSyncing = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func memSlowRamDelayAction(_ sender: NSButton!) {
+
+        track()
+
+        config.slowRamDelay = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func memSlowRamMirrorAction(_ sender: NSButton!) {
+
+        track()
 
         config.slowRamMirror = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func memBankD8DBAction(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
+        refresh()
+    }
+
+    @IBAction func memBankDCAction(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
+        refresh()
+    }
+
+    @IBAction func memBankE0E7Action(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
+        refresh()
+    }
+
+    @IBAction func memBankF0F7Action(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
+        refresh()
+    }
+
+    @IBAction func memUnmappedAction(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
+        refresh()
+    }
+
+    @IBAction func memPatternAction(_ sender: NSPopUpButton!) {
+
+        track()
+
+        // config. = sender.tag
         refresh()
     }
 

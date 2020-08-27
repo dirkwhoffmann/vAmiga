@@ -31,7 +31,6 @@
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
                 <outlet property="compDriveSpeed" destination="4Ny-q7-06h" id="TAF-pD-4dp"/>
-                <outlet property="compEClockSyncing" destination="DYo-L9-ZL7" id="FVd-hs-ARb"/>
                 <outlet property="compLockDskSync" destination="z9Z-9Z-AmZ" id="52g-mi-sUD"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compPowerButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
@@ -65,10 +64,18 @@
                 <outlet property="hwRealTimeClock" destination="3nw-g4-iBc" id="lAh-yb-bC7"/>
                 <outlet property="hwSerialDevice" destination="mIs-oj-bJf" id="T5v-aA-n7y"/>
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
+                <outlet property="memBankD8DB" destination="l8q-Yy-avg" id="xcM-3B-hdP"/>
+                <outlet property="memBankDC" destination="3ww-hf-sPl" id="gDt-sR-f28"/>
+                <outlet property="memBankE0E7" destination="kSJ-rc-swi" id="wed-fU-w4P"/>
+                <outlet property="memBankF0F7" destination="m5j-jI-Rcb" id="gHh-d8-jC3"/>
+                <outlet property="memEClockSyncing" destination="MlY-0k-MEW" id="mLk-V3-5go"/>
                 <outlet property="memLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
                 <outlet property="memLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
                 <outlet property="memLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
+                <outlet property="memPattern" destination="Kke-Vs-Flo" id="dRv-xL-77R"/>
+                <outlet property="memSlowRamDelay" destination="fjl-uT-o4f" id="waZ-Yu-GiM"/>
                 <outlet property="memSlowRamMirror" destination="H9L-Wc-Fqn" id="hHk-JS-HW6"/>
+                <outlet property="memUnmapped" destination="3Iz-dP-f4W" id="bXI-ZG-mlI"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
@@ -1110,6 +1117,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memBankD8DBAction:" target="-2" id="kYR-rX-Zer"/>
+                                            </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ww-hf-sPl">
                                             <rect key="frame" x="458" y="310" width="136" height="25"/>
@@ -1125,6 +1135,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memBankDCAction:" target="-2" id="ALp-Fp-OAe"/>
+                                            </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Iz-dP-f4W">
                                             <rect key="frame" x="458" y="175" width="136" height="25"/>
@@ -1140,6 +1153,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memUnmappedAction:" target="-2" id="8jA-CL-uu8"/>
+                                            </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kke-Vs-Flo">
                                             <rect key="frame" x="458" y="143" width="136" height="25"/>
@@ -1155,6 +1171,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memPatternAction:" target="-2" id="YME-0x-loa"/>
+                                            </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFm-jK-eXY">
                                             <rect key="frame" x="328" y="181" width="131" height="16"/>
@@ -1226,6 +1245,9 @@ DQ
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
+                                            <connections>
+                                                <action selector="memSlowRamDelayAction:" target="-2" id="Da0-L6-XLW"/>
+                                            </connections>
                                         </button>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kSJ-rc-swi">
                                             <rect key="frame" x="458" y="278" width="136" height="25"/>
@@ -1240,6 +1262,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memBankE0E7Action:" target="-2" id="gCZ-Rq-lKs"/>
+                                            </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5j-jI-Rcb">
                                             <rect key="frame" x="458" y="246" width="136" height="25"/>
@@ -1254,6 +1279,9 @@ DQ
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
+                                            <connections>
+                                                <action selector="memBankF0F7Action:" target="-2" id="EPY-eb-vBD"/>
+                                            </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zbJ-cm-NWh">
                                             <rect key="frame" x="323" y="284" width="134" height="16"/>
@@ -1281,7 +1309,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="compEClockSyncingAction:" target="-2" id="o7T-Pe-tJa"/>
+                                                <action selector="memEClockSyncingAction:" target="-2" id="gZu-fL-Eyx"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cEO-mA-0bd">
@@ -1301,7 +1329,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="slowRamMirrorAction:" target="-2" id="vfz-5R-Qm9"/>
+                                                <action selector="memSlowRamMirrorAction:" target="-2" id="vfz-5R-Qm9"/>
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="WWP-IY-djq">
@@ -1563,7 +1591,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9G2-KJ-ejc">
-                                            <rect key="frame" x="308" y="129" width="66" height="16"/>
+                                            <rect key="frame" x="308" y="155" width="66" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Keyboard:" id="GbN-Cg-XYG">
                                                 <font key="font" metaFont="system"/>
@@ -1605,7 +1633,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Nv2-YM-NLV">
-                                            <rect key="frame" x="378" y="128" width="193" height="18"/>
+                                            <rect key="frame" x="378" y="154" width="193" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Transmit keycodes bit by bit" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="vK9-9e-M55">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1613,17 +1641,6 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="compAccurateKeyboardAction:" target="-2" id="hHn-V2-6jh"/>
-                                            </connections>
-                                        </button>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DYo-L9-ZL7">
-                                            <rect key="frame" x="378" y="154" width="188" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Sync accesses with E clock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="SHk-7Y-h2r">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compEClockSyncingAction:" target="-2" id="rBe-nc-eeW"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="56p-by-mEB">

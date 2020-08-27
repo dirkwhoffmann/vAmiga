@@ -684,11 +684,19 @@ extension UserDefaults {
 
 extension Keys {
 
+    // Timing
+    static let eClockSyncing     = "VAMIGA_MEM_EClockSyncing"
+    static let slowRamDelay      = "VAMIGA_MEM_SlowRamDelay"
+    
     // Chipset features
-    static let slowRamMirror = "VAMIGA_MEM_SlowRamMirror"
+    static let slowRamMirror     = "VAMIGA_MEM_SlowRamMirror"
 }
 
 struct MemoryDefaults {
+    
+    // Timing
+    let eClockSyncing: Bool
+    let slowRamDelay: Bool
     
     // Chipset features
     let slowRamMirror: Bool
@@ -699,6 +707,8 @@ struct MemoryDefaults {
     
     static let std = MemoryDefaults.init(
         
+        eClockSyncing: true,
+        slowRamDelay: true,
         slowRamMirror: true
     )
 }
@@ -710,6 +720,8 @@ extension UserDefaults {
         let defaults = MemoryDefaults.std
         let dictionary: [String: Any] = [
 
+            Keys.eClockSyncing: defaults.eClockSyncing,
+            Keys.slowRamDelay: defaults.slowRamDelay,
             Keys.slowRamMirror: defaults.slowRamMirror
         ]
 
@@ -721,7 +733,9 @@ extension UserDefaults {
 
         let userDefaults = UserDefaults.standard
         
-        let keys = [ Keys.slowRamMirror ]
+        let keys = [ Keys.eClockSyncing,
+                     Keys.slowRamDelay,
+                     Keys.slowRamMirror ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }
@@ -743,7 +757,6 @@ extension Keys {
 
     // CIAs
     static let todBug            = "VAMIGA_COM_TodBug"
-    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
 
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
@@ -767,7 +780,6 @@ struct CompatibilityDefaults {
     
     // CIAs
     let todBug: Bool
-    let eClockSyncing: Bool
     
     // Floppy drives
     let driveSpeed: Int
@@ -791,7 +803,6 @@ struct CompatibilityDefaults {
          blitterAccuracy: 2,
 
          todBug: true,
-         eClockSyncing: true,
          
          driveSpeed: 1,
          asyncFifo: true,
@@ -810,7 +821,6 @@ struct CompatibilityDefaults {
         blitterAccuracy: 2,
         
         todBug: true,
-        eClockSyncing: true,
 
         driveSpeed: 1,
         asyncFifo: true,
@@ -829,7 +839,6 @@ struct CompatibilityDefaults {
         blitterAccuracy: 0,
         
         todBug: true,
-        eClockSyncing: false,
 
         driveSpeed: -1,
         asyncFifo: false,
@@ -852,7 +861,6 @@ extension UserDefaults {
             Keys.clxPlfPlf: defaults.clxPlfPlf,
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.todBug: defaults.todBug,
-            Keys.eClockSyncing: defaults.eClockSyncing,
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.asyncFifo: defaults.asyncFifo,
             Keys.lockDskSync: defaults.lockDskSync,
@@ -873,7 +881,6 @@ extension UserDefaults {
                      Keys.clxPlfPlf,
                      Keys.blitterAccuracy,
                      Keys.todBug,
-                     Keys.eClockSyncing,
                      Keys.driveSpeed,
                      Keys.asyncFifo,
                      Keys.lockDskSync,
