@@ -649,7 +649,7 @@ Memory::updateMemSrcTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE_FAST;
     MemorySource mem_ext = ext ? MEM_EXT : mem_rom;
-    MemorySource mem_wom = wom ? MEM_WOM : mem_ext;
+    MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
 
     int chipRamPages = hasChipRam() ? 32 : 0;
     int slowRamPages = config.slowSize / 0x10000;
@@ -681,8 +681,10 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xC0; i <= 0xD7; i++)
         memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM;
 
-    // Real-time clock
+    // Real-time clock (older Amigas)
     for (unsigned i = 0xD8; i <= 0xDB; i++) memSrc[i] = config.bankD8DB;
+
+    // Real-time clock (newer Amigas)
     memSrc[0xDC] = config.bankDC;
     
     // Reserved
@@ -692,9 +694,9 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xDE; i <= 0xDF; i++)
         memSrc[i] = MEM_CUSTOM;
 
-    // WOM, Extended Rom, Kickstart mirror, or unmapped
+    // Extended Rom, Kickstart mirror, or unmapped
     for (unsigned i = 0xE0; i <= 0xE7; i++)
-        memSrc[i] = config.bankE0E7 == MEM_EXT ? mem_wom : config.bankE0E7;
+        memSrc[i] = config.bankE0E7 == MEM_EXT ? mem_ext : config.bankE0E7;
     
     // Auto-config (Zorro II)
     memSrc[0xE8] = MEM_AUTOCONF;
@@ -840,7 +842,6 @@ Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (u32 addr)
 {
-    assert(false); // Can't reach (?!)
     return 0;
 }
 
