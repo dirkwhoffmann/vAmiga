@@ -30,6 +30,9 @@ extension ConfigurationController {
         audFilterType.selectItem(withTag: config.filterType.rawValue)
         audFilterAlwaysOn.state = config.filterAlwaysOn ? .on : .off
         audFilterAlwaysOn.isEnabled = config.filterType != .FILT_NONE
+
+        // Buttons
+        audPowerButton.isHidden = !bootable
     }
 
     @IBAction func audVol0Action(_ sender: NSSlider!) {

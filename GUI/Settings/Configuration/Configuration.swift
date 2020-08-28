@@ -416,8 +416,8 @@ class Configuration {
             amiga.mem.loadExt(fromFile: url)
         }
         
-        let defaults = UserDefaults.standard
-        extStart = defaults.integer(forKey: Keys.extStart)
+        // let defaults = UserDefaults.standard
+        // extStart = defaults.integer(forKey: Keys.extStart)
 
         amiga.resume()
     }
@@ -444,8 +444,8 @@ class Configuration {
             amiga.mem.saveExt(url)
         }
         
-        let defaults = UserDefaults.standard
-        defaults.set(extStart, forKey: Keys.extStart)
+        // let defaults = UserDefaults.standard
+        // defaults.set(extStart, forKey: Keys.extStart)
         
         amiga.resume()
     }

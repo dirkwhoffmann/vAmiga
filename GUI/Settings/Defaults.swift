@@ -437,6 +437,7 @@ extension UserDefaults {
 // User defaults (Roms)
 //
 
+/*
 extension Keys {
     
     static let extStart          = "VAMIGA_ROM_ExtStart"
@@ -451,6 +452,7 @@ struct RomDefaults {
         extStart: 0xE0
     )
 }
+*/
 
 extension UserDefaults {
     
@@ -470,6 +472,7 @@ extension UserDefaults {
 
     static func registerRomUserDefaults() {
         
+        /*
         let defaults = RomDefaults.std
         let dictionary: [String: Any] = [
             
@@ -478,15 +481,18 @@ extension UserDefaults {
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
+        */
     }
     
     static func resetRomUserDefaults() {
         
+        /*
         let defaults = UserDefaults.standard
 
         let keys = [ Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
+        */
         
         // Delete previously saved Rom files
         let fm = FileManager.default

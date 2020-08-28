@@ -41,7 +41,7 @@ extension ConfigurationController {
         // Keyboard
         compAccurateKeyboard.state = config.keyboard.accurate ? .on : .off
 
-        // Boot Button
+        // Buttons
         compPowerButton.isHidden = !bootable
     }
 

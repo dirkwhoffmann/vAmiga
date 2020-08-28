@@ -32,7 +32,6 @@ extension ConfigurationController {
         case .MEM_NONE_SLOW: memBankD8DB.selectItem(withTag: 2)
         default: track("Unknown D8DB: \(config.bankD8DB)")
         }
-        track("config.bankDC = \(config.bankDC)")
         switch MemorySource(rawValue: config.bankDC) {
         case .MEM_RTC : memBankDC.selectItem(withTag: 0)
         case .MEM_CUSTOM: memBankDC.selectItem(withTag: 1)
@@ -40,14 +39,12 @@ extension ConfigurationController {
         case .MEM_NONE_SLOW: memBankDC.selectItem(withTag: 2)
         default: fatalError()
         }
-        track("config.bankE0E7 = \(config.bankE0E7)")
         switch MemorySource(rawValue: config.bankE0E7) {
         case .MEM_EXT: memBankE0E7.selectItem(withTag: 0)
         case .MEM_NONE_FAST: memBankE0E7.selectItem(withTag: 1)
         case .MEM_NONE_SLOW: memBankE0E7.selectItem(withTag: 1)
         default: fatalError()
         }
-        track("config.bankF0F7 = \(config.bankF0F7)")
         switch MemorySource(rawValue: config.bankF0F7) {
         case .MEM_EXT: memBankF0F7.selectItem(withTag: 0)
         case .MEM_NONE_FAST: memBankF0F7.selectItem(withTag: 1)
@@ -61,11 +58,12 @@ extension ConfigurationController {
         memLockImage.isHidden = true // poweredOff
         memLockText.isHidden = true // poweredOff
         memLockSubText.isHidden = true // poweredOff
+        
+        // Buttons
+        memPowerButton.isHidden = !bootable
     }
 
     @IBAction func memEClockSyncingAction(_ sender: NSButton!) {
-
-        track()
         
         config.eClockSyncing = sender.state == .on
         refresh()
@@ -73,24 +71,18 @@ extension ConfigurationController {
 
     @IBAction func memSlowRamDelayAction(_ sender: NSButton!) {
 
-        track()
-
         config.slowRamDelay = sender.state == .on
         refresh()
     }
 
     @IBAction func memSlowRamMirrorAction(_ sender: NSButton!) {
 
-        track()
-
         config.slowRamMirror = sender.state == .on
         refresh()
     }
 
     @IBAction func memBankD8DBAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        
+                
         switch sender.selectedTag() {
         case 0: config.bankD8DB = MemorySource.MEM_RTC.rawValue
         case 1: config.bankD8DB = MemorySource.MEM_CUSTOM.rawValue
@@ -101,8 +93,6 @@ extension ConfigurationController {
     }
 
     @IBAction func memBankDCAction(_ sender: NSPopUpButton!) {
-
-        track()
         
         switch sender.selectedTag() {
         case 0: config.bankDC = MemorySource.MEM_RTC.rawValue
@@ -114,8 +104,6 @@ extension ConfigurationController {
     }
 
     @IBAction func memBankE0E7Action(_ sender: NSPopUpButton!) {
-
-        track()
         
         switch sender.selectedTag() {
         case 0: config.bankE0E7 = MemorySource.MEM_EXT.rawValue
@@ -127,8 +115,6 @@ extension ConfigurationController {
 
     @IBAction func memBankF0F7Action(_ sender: NSPopUpButton!) {
 
-        track()
-
         switch sender.selectedTag() {
         case 0: config.bankF0F7 = MemorySource.MEM_EXT.rawValue
         case 1: config.bankF0F7 = MemorySource.MEM_NONE_FAST.rawValue
@@ -139,15 +125,11 @@ extension ConfigurationController {
 
     @IBAction func memUnmappingTypeAction(_ sender: NSPopUpButton!) {
 
-        track("\(sender.selectedTag())")
-
         config.unmappingType = sender.selectedTag()
         refresh()
     }
 
     @IBAction func memRamInitPatternAction(_ sender: NSPopUpButton!) {
-
-        track("\(sender.selectedTag())")
 
         config.ramInitPattern = sender.selectedTag()
         refresh()

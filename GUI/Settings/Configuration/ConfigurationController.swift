@@ -23,16 +23,12 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var romSubtitle: NSTextField!
     @IBOutlet weak var romSubsubtitle: NSTextField!
     @IBOutlet weak var romDeleteButton: NSButton!
-    @IBOutlet weak var romMapText: NSTextField!
-    @IBOutlet weak var romMapAddr: NSPopUpButton!
 
     @IBOutlet weak var extDropView: ExtRomDropView!
     @IBOutlet weak var extTitle: NSTextField!
     @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extSubsubtitle: NSTextField!
     @IBOutlet weak var extDeleteButton: NSButton!
-    @IBOutlet weak var extMapText: NSTextField!
-    @IBOutlet weak var extMapAddr: NSPopUpButton!
 
     @IBOutlet weak var arosButton: NSButton!
 
@@ -110,6 +106,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var memLockText: NSTextField!
     @IBOutlet weak var memLockSubText: NSTextField!
     
+    // Buttons
+    @IBOutlet weak var memOKButton: NSButton!
+    @IBOutlet weak var memPowerButton: NSButton!
+
     //
     // Compatibility preferences
     //
@@ -164,6 +164,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var audSamplingMethod: NSPopUpButton!
     @IBOutlet weak var audFilterType: NSPopUpButton!
     @IBOutlet weak var audFilterAlwaysOn: NSButton!
+
+    // Buttons
+    @IBOutlet weak var audOKButton: NSButton!
+    @IBOutlet weak var audPowerButton: NSButton!
 
     //
     // Video preferences

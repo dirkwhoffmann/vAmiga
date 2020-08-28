@@ -10,10 +10,12 @@
             <connections>
                 <outlet property="audFilterAlwaysOn" destination="VH1-nb-Ddh" id="9we-WR-PQ4"/>
                 <outlet property="audFilterType" destination="xCH-PP-UHi" id="NFX-km-fvL"/>
+                <outlet property="audOKButton" destination="vfM-cG-XrA" id="c9l-Mp-Jpo"/>
                 <outlet property="audPan0" destination="8Fk-fj-DxW" id="3Lp-fP-dga"/>
                 <outlet property="audPan1" destination="ysl-BF-7tF" id="UDb-yJ-Cb7"/>
                 <outlet property="audPan2" destination="9EQ-fL-r94" id="bth-MM-dRm"/>
                 <outlet property="audPan3" destination="aRP-0C-dri" id="I8G-u6-RDl"/>
+                <outlet property="audPowerButton" destination="iui-fS-mFj" id="hTi-zg-cZ8"/>
                 <outlet property="audSamplingMethod" destination="txj-Ww-WLR" id="zpN-9X-g87"/>
                 <outlet property="audVol0" destination="GZ6-p3-gSo" id="tBN-no-gYb"/>
                 <outlet property="audVol1" destination="gmM-I9-4bY" id="4zG-BG-QQA"/>
@@ -37,8 +39,6 @@
                 <outlet property="compTodBug" destination="fD3-tY-14r" id="5nh-OO-E3U"/>
                 <outlet property="extDeleteButton" destination="N41-Es-BhJ" id="XfO-xN-5fP"/>
                 <outlet property="extDropView" destination="TLP-ux-x2T" id="EfY-MO-d6h"/>
-                <outlet property="extMapAddr" destination="KLA-U4-cfu" id="tFf-fn-uaY"/>
-                <outlet property="extMapText" destination="oUy-6a-TpI" id="4Tf-Hb-9GT"/>
                 <outlet property="extSubsubtitle" destination="WJx-uw-qXE" id="HAq-rJ-UMf"/>
                 <outlet property="extSubtitle" destination="c28-hS-Q9K" id="7yj-Lz-YZ1"/>
                 <outlet property="extTitle" destination="JWp-8A-LFh" id="tHC-Lo-79Z"/>
@@ -72,6 +72,8 @@
                 <outlet property="memLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
                 <outlet property="memLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
                 <outlet property="memLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
+                <outlet property="memOKButton" destination="070-Zr-CPb" id="izM-qM-PKn"/>
+                <outlet property="memPowerButton" destination="jt0-gY-j6u" id="MZ6-eL-pRY"/>
                 <outlet property="memSlowRamDelay" destination="fjl-uT-o4f" id="waZ-Yu-GiM"/>
                 <outlet property="memSlowRamMirror" destination="H9L-Wc-Fqn" id="hHk-JS-HW6"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
@@ -82,8 +84,6 @@
                 <outlet property="romLockImage" destination="mlY-fv-BuR" id="jKz-dJ-e1F"/>
                 <outlet property="romLockSubText" destination="3km-17-mf2" id="OZx-Ad-blJ"/>
                 <outlet property="romLockText" destination="Nzf-eB-9Nv" id="Cq6-Dg-jTr"/>
-                <outlet property="romMapAddr" destination="wNR-iB-FnF" id="n0z-Yh-U7L"/>
-                <outlet property="romMapText" destination="1s3-mF-457" id="BXd-oy-T0L"/>
                 <outlet property="romOKButton" destination="A4H-Al-xc0" id="3IV-bN-u66"/>
                 <outlet property="romPowerButton" destination="2k7-hF-2uo" id="SYO-o2-xvo"/>
                 <outlet property="romSubsubtitle" destination="QPv-hw-IeK" id="3ps-Wc-q0W"/>
@@ -273,63 +273,6 @@ DQ
                                                 <action selector="extDeleteAction:" target="-2" id="DWt-nA-D32"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oUy-6a-TpI">
-                                            <rect key="frame" x="373" y="136" width="61" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Location:" id="Z9H-xH-Cqn">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KLA-U4-cfu">
-                                            <rect key="frame" x="437" y="135" width="72" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="roundRect" title="$E00000" bezelStyle="roundedRect" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="224" inset="2" selectedItem="Dia-Ux-TVa" id="V9w-Px-8au">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="message" size="11"/>
-                                                <menu key="menu" id="ppc-Eh-N7K">
-                                                    <items>
-                                                        <menuItem title="$E00000" state="on" tag="224" id="Dia-Ux-TVa">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="$F00000" tag="240" id="6Uy-Lo-z2C">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="extMapAddrAction:" target="-2" id="6t1-Ja-HBS"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1s3-mF-457">
-                                            <rect key="frame" x="373" y="272" width="61" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="left" title="Location:" id="sa2-h6-b9L">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton hidden="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wNR-iB-FnF">
-                                            <rect key="frame" x="437" y="272" width="72" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="roundRect" title="$F80000" bezelStyle="roundedRect" alignment="left" controlSize="small" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" selectedItem="QiB-GV-dR8" id="PY7-dt-72x">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="message" size="11"/>
-                                                <menu key="menu" id="a0l-g7-v9y">
-                                                    <items>
-                                                        <menuItem title="$F80000" state="on" id="QiB-GV-dR8">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="romMapAddrAction:" target="-2" id="z8y-yg-Ias"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JWp-8A-LFh">
                                             <rect key="frame" x="374" y="239" width="219" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>

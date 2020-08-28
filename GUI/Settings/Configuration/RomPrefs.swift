@@ -65,24 +65,16 @@ extension ConfigurationController {
         extSubtitle.stringValue = amiga.mem.extVersion()
         extSubsubtitle.stringValue = amiga.mem.extReleased()
 
-        // Rom mapping addresses
-        extMapAddr.selectItem(withTag: amiga.mem.extStart())
-
         // Hide some controls
         romDeleteButton.isHidden = !hasRom
-        romMapText.isHidden = true
-        romMapAddr.isHidden = true
-
         extDeleteButton.isHidden = !hasExt
-        extMapText.isHidden = !hasExt
-        extMapAddr.isHidden = !hasExt
         
         // Lock symbol and explanation
         romLockImage.isHidden = poweredOff
         romLockText.isHidden = poweredOff
         romLockSubText.isHidden = poweredOff
 
-        // Boot button
+        // Buttons
         romPowerButton.isHidden = !bootable
     }
 
@@ -105,19 +97,6 @@ extension ConfigurationController {
         // config.extURL = URL(fileURLWithPath: "/")
         amiga.mem.deleteExt()
 
-        refresh()
-    }
-
-    @IBAction func romMapAddrAction(_ sender: NSPopUpButton!) {
-
-        // Nothing to do here at the moment.
-        // All supported Roms are mapped at $FE0000
-        refresh()
-    }
-
-    @IBAction func extMapAddrAction(_ sender: NSPopUpButton!) {
-
-        config.extStart = sender.selectedTag()
         refresh()
     }
 

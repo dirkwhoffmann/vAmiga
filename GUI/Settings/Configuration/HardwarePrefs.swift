@@ -60,7 +60,7 @@ extension ConfigurationController {
         hwLockText.isHidden = poweredOff
         hwLockSubText.isHidden = poweredOff
 
-        // Boot button
+        // Buttons
         hwPowerButton.isHidden = !bootable
     }
     
