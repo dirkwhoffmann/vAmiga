@@ -262,7 +262,7 @@ Agnus::peek(u32 addr)
         }
 
         debug(XFILES, "Reading from unmapped Chip Ram\n");
-        return mem.peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (addr);
+        return mem.peek16 <AGNUS_ACCESS, MEM_NONE> (addr);
     }
         
     return mem.peek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
@@ -279,7 +279,7 @@ Agnus::spypeek(u32 addr)
             return mem.spypeek16 <MEM_SLOW> (addr);
         }
 
-        return mem.spypeek16 <MEM_NONE_SLOW> (addr);
+        return mem.spypeek16 <MEM_NONE> (addr);
     }
     
     return mem.spypeek16 <MEM_CHIP> (addr);

@@ -20,8 +20,7 @@
  */
 typedef VA_ENUM(long, MemorySource)
 {
-    MEM_NONE_FAST,
-    MEM_NONE_SLOW,
+    MEM_NONE,
     MEM_CHIP,
     MEM_SLOW,
     MEM_FAST,

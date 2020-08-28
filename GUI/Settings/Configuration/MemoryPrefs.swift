@@ -28,27 +28,23 @@ extension ConfigurationController {
         switch MemorySource(rawValue: config.bankD8DB) {
         case .MEM_RTC: memBankD8DB.selectItem(withTag: 0)
         case .MEM_CUSTOM: memBankD8DB.selectItem(withTag: 1)
-        case .MEM_NONE_FAST: memBankD8DB.selectItem(withTag: 2)
-        case .MEM_NONE_SLOW: memBankD8DB.selectItem(withTag: 2)
-        default: track("Unknown D8DB: \(config.bankD8DB)")
+        case .MEM_NONE: memBankD8DB.selectItem(withTag: 2)
+        default: fatalError()
         }
         switch MemorySource(rawValue: config.bankDC) {
-        case .MEM_RTC : memBankDC.selectItem(withTag: 0)
+        case .MEM_RTC: memBankDC.selectItem(withTag: 0)
         case .MEM_CUSTOM: memBankDC.selectItem(withTag: 1)
-        case .MEM_NONE_FAST: memBankDC.selectItem(withTag: 2)
-        case .MEM_NONE_SLOW: memBankDC.selectItem(withTag: 2)
+        case .MEM_NONE: memBankDC.selectItem(withTag: 2)
         default: fatalError()
         }
         switch MemorySource(rawValue: config.bankE0E7) {
         case .MEM_EXT: memBankE0E7.selectItem(withTag: 0)
-        case .MEM_NONE_FAST: memBankE0E7.selectItem(withTag: 1)
-        case .MEM_NONE_SLOW: memBankE0E7.selectItem(withTag: 1)
+        case .MEM_NONE: memBankE0E7.selectItem(withTag: 1)
         default: fatalError()
         }
         switch MemorySource(rawValue: config.bankF0F7) {
         case .MEM_EXT: memBankF0F7.selectItem(withTag: 0)
-        case .MEM_NONE_FAST: memBankF0F7.selectItem(withTag: 1)
-        case .MEM_NONE_SLOW: memBankF0F7.selectItem(withTag: 1)
+        case .MEM_NONE: memBankF0F7.selectItem(withTag: 1)
         default: fatalError()
         }
         unmappingType.selectItem(withTag: config.unmappingType)
@@ -86,7 +82,7 @@ extension ConfigurationController {
         switch sender.selectedTag() {
         case 0: config.bankD8DB = MemorySource.MEM_RTC.rawValue
         case 1: config.bankD8DB = MemorySource.MEM_CUSTOM.rawValue
-        case 2: config.bankD8DB = MemorySource.MEM_NONE_SLOW.rawValue
+        case 2: config.bankD8DB = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
         refresh()
@@ -97,7 +93,7 @@ extension ConfigurationController {
         switch sender.selectedTag() {
         case 0: config.bankDC = MemorySource.MEM_RTC.rawValue
         case 1: config.bankDC = MemorySource.MEM_CUSTOM.rawValue
-        case 2: config.bankDC = MemorySource.MEM_NONE_SLOW.rawValue
+        case 2: config.bankDC = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
         refresh()
@@ -107,7 +103,7 @@ extension ConfigurationController {
         
         switch sender.selectedTag() {
         case 0: config.bankE0E7 = MemorySource.MEM_EXT.rawValue
-        case 1: config.bankE0E7 = MemorySource.MEM_NONE_FAST.rawValue
+        case 1: config.bankE0E7 = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
         refresh()
@@ -117,7 +113,7 @@ extension ConfigurationController {
 
         switch sender.selectedTag() {
         case 0: config.bankF0F7 = MemorySource.MEM_EXT.rawValue
-        case 1: config.bankF0F7 = MemorySource.MEM_NONE_FAST.rawValue
+        case 1: config.bankF0F7 = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
         refresh()

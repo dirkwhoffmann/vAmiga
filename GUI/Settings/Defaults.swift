@@ -736,7 +736,7 @@ struct MemoryDefaults {
         bankD8DB: MemorySource.MEM_CUSTOM.rawValue,
         bankDC: MemorySource.MEM_RTC.rawValue,
         bankE0E7: MemorySource.MEM_EXT.rawValue,
-        bankF0F7: MemorySource.MEM_NONE_FAST.rawValue,
+        bankF0F7: MemorySource.MEM_NONE.rawValue,
         unmappingType: 0,
         ramInitPattern: 1
     )
@@ -759,8 +759,6 @@ extension UserDefaults {
             Keys.unmappingType: defaults.unmappingType,
             Keys.ramInitPattern: defaults.ramInitPattern
         ]
-
-        track("register: \(dictionary)")
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)

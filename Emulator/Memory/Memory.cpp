@@ -22,10 +22,10 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
     config.slowRamDelay   = true;
     config.ramInitPattern = INIT_ALL_ZEROES;
     config.unmappingType  = UNMAPPED_FLOATING;
-    config.bankD8DB       = MEM_NONE_SLOW;
+    config.bankD8DB       = MEM_NONE;
     config.bankDC         = MEM_RTC;
     config.bankE0E7       = MEM_EXT;
-    config.bankF0F7       = MEM_NONE_FAST;
+    config.bankF0F7       = MEM_NONE;
 
     config.extStart = 0xE0;
 }
@@ -156,7 +156,12 @@ Memory::setConfigItem(ConfigOption option, long value)
             return true;
             
         case OPT_BANK_D8DB:
-
+                       
+            if (value != MEM_RTC && value != MEM_CUSTOM && value != MEM_NONE) {
+                warn("Invalid bank map (D8 .. DB): %x\n", value);
+                warn("Valid values: RTC, CUSTOM, NONE\n");
+                return false;
+            }
             if (config.bankD8DB == value) {
                 return false;
             }
@@ -169,6 +174,11 @@ Memory::setConfigItem(ConfigOption option, long value)
             
         case OPT_BANK_DC:
 
+            if (value != MEM_RTC && value != MEM_CUSTOM && value != MEM_NONE) {
+                warn("Invalid bank map (DC): %x\n", value);
+                warn("Valid values: RTC, CUSTOM, NONE\n");
+                return false;
+            }
             if (config.bankDC == value) {
                 return false;
             }
@@ -181,6 +191,11 @@ Memory::setConfigItem(ConfigOption option, long value)
 
         case OPT_BANK_E0E7:
             
+            if (value != MEM_EXT && value != MEM_NONE) {
+                warn("Invalid bank map (E0 .. E7): %x\n", value);
+                warn("Valid values: EXT, NONE\n");
+                return false;
+            }
             if (config.bankE0E7 == value) {
                 return false;
             }
@@ -192,7 +207,12 @@ Memory::setConfigItem(ConfigOption option, long value)
             return true;
 
         case OPT_BANK_F0F7:
-            
+
+            if (value != MEM_EXT && value != MEM_NONE) {
+                warn("Invalid bank map (F0 .. F7): %x\n", value);
+                warn("Valid values: EXT, NONE\n");
+                return false;
+            }
             if (config.bankF0F7 == value) {
                 return false;
             }
@@ -441,7 +461,6 @@ Memory::fillRamWithInitPattern()
             
         case INIT_RANDOMIZED:
 
-            debug("Filling Ram with random values\n");
             srand(0);
             if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
             if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
@@ -450,7 +469,6 @@ Memory::fillRamWithInitPattern()
             
         case INIT_ALL_ZEROES:
 
-            debug("Filling Ram with zeroes\n");
             if (chip) memset(chip, 0x00, config.chipSize);
             if (slow) memset(slow, 0x00, config.slowSize);
             if (fast) memset(fast, 0x00, config.fastSize);
@@ -458,7 +476,6 @@ Memory::fillRamWithInitPattern()
             
         case INIT_ALL_ONES:
             
-            debug("Filling Ram with ones\n");
             if (chip) memset(chip, 0xFF, config.chipSize);
             if (slow) memset(slow, 0xFF, config.slowSize);
             if (fast) memset(fast, 0xFF, config.fastSize);
@@ -647,7 +664,7 @@ Memory::saveExt(const char *path)
 void
 Memory::updateMemSrcTable()
 {
-    MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE_FAST;
+    MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE;
     MemorySource mem_ext = ext ? MEM_EXT : mem_rom;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
 
@@ -663,15 +680,15 @@ Memory::updateMemSrcTable()
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++)
-        memSrc[i] = MEM_NONE_FAST;
+        memSrc[i] = MEM_NONE;
 
     // Chip Ram
     for (unsigned i = 0x00; i <= 0x1F; i++)
-        memSrc[i] = i < chipRamPages ? MEM_CHIP : MEM_NONE_SLOW;
+        memSrc[i] = i < chipRamPages ? MEM_CHIP : MEM_NONE;
     
     // Fast Ram
     for (unsigned i = 0x20; i <= 0x9F; i++)
-        memSrc[i] = (i - 0x20) < fastRamPages ? MEM_FAST : MEM_NONE_FAST;
+        memSrc[i] = (i - 0x20) < fastRamPages ? MEM_FAST : MEM_NONE;
 
     // CIA range
     for (unsigned i = 0xA0; i <= 0xBF; i++)
@@ -688,7 +705,7 @@ Memory::updateMemSrcTable()
     memSrc[0xDC] = config.bankDC;
     
     // Reserved
-    memSrc[0xDD] = MEM_NONE_FAST;
+    memSrc[0xDD] = MEM_NONE;
 
     // Custom chip set
     for (unsigned i = 0xDE; i <= 0xDF; i++)
@@ -701,7 +718,7 @@ Memory::updateMemSrcTable()
     // Auto-config (Zorro II)
     memSrc[0xE8] = MEM_AUTOCONF;
     for (unsigned i = 0xE9; i <= 0xEF; i++)
-        memSrc[i] = MEM_NONE_FAST;
+        memSrc[i] = MEM_NONE;
     
     // Extended Rom, Kickstart mirror, or unmapped
     for (unsigned i = 0xF0; i <= 0xF7; i++)
@@ -719,7 +736,7 @@ Memory::updateMemSrcTable()
 
     // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
-        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_NONE_FAST; i++)
+        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_NONE; i++)
             memSrc[i] = memSrc[0xF8 + i];
     }
 
@@ -727,8 +744,10 @@ Memory::updateMemSrcTable()
 }
 
 template<> u16
-Memory::peek16 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
+Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
+    // if (config.slowRamDelay) agnus.executeUntilBusIsFree();
+
     switch (config.unmappingType) {
             
         case UNMAPPED_FLOATING:   return dataBus;
@@ -739,36 +758,16 @@ Memory::peek16 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
     }
 }
 
-template<> u16
-Memory::peek16 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
-{
-    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
-    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
-}
-
 template<> u8
-Memory::peek8 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr)
+Memory::peek8 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
-    return (u8)peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
-}
-
-template<> u8
-Memory::peek8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr)
-{
-    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
-    return (u8)peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
+    return (u8)peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u16
-Memory::spypeek16 <MEM_NONE_FAST> (u32 addr)
+Memory::spypeek16 <MEM_NONE> (u32 addr)
 {
-    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
-}
-
-template<> u16
-Memory::spypeek16 <MEM_NONE_SLOW> (u32 addr)
-{
-    return peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr);
+    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u8
@@ -840,7 +839,7 @@ Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (u32 addr)
+Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
     return 0;
 }
@@ -909,7 +908,7 @@ Memory::peek8 <CPU_ACCESS, MEM_RTC> (u32 addr)
 {
     ASSERT_RTC_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
     
     dataBus = peekRTC8(addr);
     return dataBus;
@@ -920,7 +919,7 @@ Memory::peek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 {
     ASSERT_RTC_ADDR(addr);
     
-    agnus.executeUntilBusIsFree();
+    // agnus.executeUntilBusIsFree();
 
     dataBus = peekRTC16(addr);
     return dataBus;
@@ -1087,18 +1086,17 @@ Memory::peek8 <CPU_ACCESS> (u32 addr)
         
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: result = peek8 <CPU_ACCESS, MEM_NONE_FAST> (addr); break;
-        case MEM_NONE_SLOW: result = peek8 <CPU_ACCESS, MEM_NONE_SLOW> (addr); break;
-        case MEM_CHIP:      result = peek8 <CPU_ACCESS, MEM_CHIP>      (addr); break;
-        case MEM_SLOW:      result = peek8 <CPU_ACCESS, MEM_SLOW>      (addr); break;
-        case MEM_FAST:      result = peek8 <CPU_ACCESS, MEM_FAST>      (addr); break;
-        case MEM_CIA:       result = peek8 <CPU_ACCESS, MEM_CIA>       (addr); break;
-        case MEM_RTC:       result = peek8 <CPU_ACCESS, MEM_RTC>       (addr); break;
-        case MEM_CUSTOM:    result = peek8 <CPU_ACCESS, MEM_CUSTOM>    (addr); break;
-        case MEM_AUTOCONF:  result = peek8 <CPU_ACCESS, MEM_AUTOCONF>  (addr); break;
-        case MEM_ROM:       result = peek8 <CPU_ACCESS, MEM_ROM>       (addr); break;
-        case MEM_WOM:       result = peek8 <CPU_ACCESS, MEM_WOM>       (addr); break;
-        case MEM_EXT:       result = peek8 <CPU_ACCESS, MEM_EXT>       (addr); break;
+        case MEM_NONE:     result = peek8 <CPU_ACCESS, MEM_NONE>     (addr); break;
+        case MEM_CHIP:     result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_SLOW:     result = peek8 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_FAST:     result = peek8 <CPU_ACCESS, MEM_FAST>     (addr); break;
+        case MEM_CIA:      result = peek8 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_RTC:      result = peek8 <CPU_ACCESS, MEM_RTC>      (addr); break;
+        case MEM_CUSTOM:   result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_AUTOCONF: result = peek8 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
+        case MEM_ROM:      result = peek8 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_WOM:      result = peek8 <CPU_ACCESS, MEM_WOM>      (addr); break;
+        case MEM_EXT:      result = peek8 <CPU_ACCESS, MEM_EXT>      (addr); break;
             
         default: assert(false); return 0;
     }
@@ -1122,18 +1120,17 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: result = peek16 <CPU_ACCESS, MEM_NONE_FAST> (addr); break;
-        case MEM_NONE_SLOW: result = peek16 <CPU_ACCESS, MEM_NONE_SLOW> (addr); break;
-        case MEM_CHIP:      result = peek16 <CPU_ACCESS, MEM_CHIP>      (addr); break;
-        case MEM_SLOW:      result = peek16 <CPU_ACCESS, MEM_SLOW>      (addr); break;
-        case MEM_FAST:      result = peek16 <CPU_ACCESS, MEM_FAST>      (addr); break;
-        case MEM_CIA:       result = peek16 <CPU_ACCESS, MEM_CIA>       (addr); break;
-        case MEM_RTC:       result = peek16 <CPU_ACCESS, MEM_RTC>       (addr); break;
-        case MEM_CUSTOM:    result = peek16 <CPU_ACCESS, MEM_CUSTOM>    (addr); break;
-        case MEM_AUTOCONF:  result = peek16 <CPU_ACCESS, MEM_AUTOCONF>  (addr); break;
-        case MEM_ROM:       result = peek16 <CPU_ACCESS, MEM_ROM>       (addr); break;
-        case MEM_WOM:       result = peek16 <CPU_ACCESS, MEM_WOM>       (addr); break;
-        case MEM_EXT:       result = peek16 <CPU_ACCESS, MEM_EXT>       (addr); break;
+        case MEM_NONE:     result = peek16 <CPU_ACCESS, MEM_NONE>     (addr); break;
+        case MEM_CHIP:     result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_SLOW:     result = peek16 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_FAST:     result = peek16 <CPU_ACCESS, MEM_FAST>     (addr); break;
+        case MEM_CIA:      result = peek16 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_RTC:      result = peek16 <CPU_ACCESS, MEM_RTC>      (addr); break;
+        case MEM_CUSTOM:   result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_AUTOCONF: result = peek16 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
+        case MEM_ROM:      result = peek16 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_WOM:      result = peek16 <CPU_ACCESS, MEM_WOM>      (addr); break;
+        case MEM_EXT:      result = peek16 <CPU_ACCESS, MEM_EXT>      (addr); break;
             
         default: assert(false); return 0;
     }
@@ -1155,52 +1152,33 @@ Memory::spypeek16 (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: return spypeek16 <MEM_NONE_FAST> (addr);
-        case MEM_NONE_SLOW: return spypeek16 <MEM_NONE_SLOW> (addr);
-        case MEM_CHIP:      return spypeek16 <MEM_CHIP>      (addr);
-        case MEM_SLOW:      return spypeek16 <MEM_SLOW>      (addr);
-        case MEM_FAST:      return spypeek16 <MEM_FAST>      (addr);
-        case MEM_CIA:       return spypeek16 <MEM_CIA>       (addr);
-        case MEM_RTC:       return spypeek16 <MEM_RTC>       (addr);
-        case MEM_CUSTOM:    return spypeek16 <MEM_CUSTOM>    (addr);
-        case MEM_AUTOCONF:  return spypeek16 <MEM_AUTOCONF>  (addr);
-        case MEM_ROM:       return spypeek16 <MEM_ROM>       (addr);
-        case MEM_WOM:       return spypeek16 <MEM_WOM>       (addr);
-        case MEM_EXT:       return spypeek16 <MEM_EXT>       (addr);
+        case MEM_NONE:     return spypeek16 <MEM_NONE>     (addr);
+        case MEM_CHIP:     return spypeek16 <MEM_CHIP>     (addr);
+        case MEM_SLOW:     return spypeek16 <MEM_SLOW>     (addr);
+        case MEM_FAST:     return spypeek16 <MEM_FAST>     (addr);
+        case MEM_CIA:      return spypeek16 <MEM_CIA>      (addr);
+        case MEM_RTC:      return spypeek16 <MEM_RTC>      (addr);
+        case MEM_CUSTOM:   return spypeek16 <MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF: return spypeek16 <MEM_AUTOCONF> (addr);
+        case MEM_ROM:      return spypeek16 <MEM_ROM>      (addr);
+        case MEM_WOM:      return spypeek16 <MEM_WOM>      (addr);
+        case MEM_EXT:      return spypeek16 <MEM_EXT>      (addr);
             
         default: assert(false); return 0;
     }
 }
 
 template <> void
-Memory::poke8 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr, u8 value)
+Memory::poke8 <CPU_ACCESS, MEM_NONE> (u32 addr, u8 value)
 {
-    debug(MEM_DEBUG, "poke8(%x [NONE_FAST], %x)\n", addr, value);
+    debug(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
-Memory::poke8 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr, u8 value)
+Memory::poke16 <CPU_ACCESS, MEM_NONE> (u32 addr, u16 value)
 {
-    debug(MEM_DEBUG, "poke8(%x [NONE_SLOW], %x)\n", addr, value);
-
-    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
-    dataBus = value;
-}
-
-template <> void
-Memory::poke16 <CPU_ACCESS, MEM_NONE_FAST> (u32 addr, u16 value)
-{
-    debug(MEM_DEBUG, "poke16(%x [NONE_FAST], %x)\n", addr, value);
-    dataBus = value;
-}
-
-template <> void
-Memory::poke16 <CPU_ACCESS, MEM_NONE_SLOW> (u32 addr, u16 value)
-{
-    debug(MEM_DEBUG, "poke16(%x [NONE_SLOW], %x)\n", addr, value);
-    
-    if (config.slowRamDelay) agnus.executeUntilBusIsFree();
+    debug(MEM_DEBUG, "poke16(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
@@ -1449,18 +1427,17 @@ Memory::poke8 <CPU_ACCESS> (u32 addr, u8 value)
 {
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: poke8 <CPU_ACCESS, MEM_NONE_FAST> (addr, value); return;
-        case MEM_NONE_SLOW: poke8 <CPU_ACCESS, MEM_NONE_SLOW> (addr, value); return;
-        case MEM_CHIP:      poke8 <CPU_ACCESS, MEM_CHIP>      (addr, value); return;
-        case MEM_SLOW:      poke8 <CPU_ACCESS, MEM_SLOW>      (addr, value); return;
-        case MEM_FAST:      poke8 <CPU_ACCESS, MEM_FAST>      (addr, value); return;
-        case MEM_CIA:       poke8 <CPU_ACCESS, MEM_CIA>       (addr, value); return;
-        case MEM_RTC:       poke8 <CPU_ACCESS, MEM_RTC>       (addr, value); return;
-        case MEM_CUSTOM:    poke8 <CPU_ACCESS, MEM_CUSTOM>    (addr, value); return;
-        case MEM_AUTOCONF:  poke8 <CPU_ACCESS, MEM_AUTOCONF>  (addr, value); return;
-        case MEM_ROM:       poke8 <CPU_ACCESS, MEM_ROM>       (addr, value); return;
-        case MEM_WOM:       poke8 <CPU_ACCESS, MEM_WOM>       (addr, value); return;
-        case MEM_EXT:       poke8 <CPU_ACCESS, MEM_EXT>       (addr, value); return;
+        case MEM_NONE:     poke8 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
+        case MEM_CHIP:     poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:     poke8 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:     poke8 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:      poke8 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:      poke8 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:   poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF: poke8 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:      poke8 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:      poke8 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:      poke8 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
             
         default: assert(false);
     }
@@ -1473,18 +1450,17 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE_FAST: poke16 <CPU_ACCESS, MEM_NONE_FAST> (addr, value); return;
-        case MEM_NONE_SLOW: poke16 <CPU_ACCESS, MEM_NONE_SLOW> (addr, value); return;
-        case MEM_CHIP:      poke16 <CPU_ACCESS, MEM_CHIP>      (addr, value); return;
-        case MEM_SLOW:      poke16 <CPU_ACCESS, MEM_SLOW>      (addr, value); return;
-        case MEM_FAST:      poke16 <CPU_ACCESS, MEM_FAST>      (addr, value); return;
-        case MEM_CIA:       poke16 <CPU_ACCESS, MEM_CIA>       (addr, value); return;
-        case MEM_RTC:       poke16 <CPU_ACCESS, MEM_RTC>       (addr, value); return;
-        case MEM_CUSTOM:    poke16 <CPU_ACCESS, MEM_CUSTOM>    (addr, value); return;
-        case MEM_AUTOCONF:  poke16 <CPU_ACCESS, MEM_AUTOCONF>  (addr, value); return;
-        case MEM_ROM:       poke16 <CPU_ACCESS, MEM_ROM>       (addr, value); return;
-        case MEM_WOM:       poke16 <CPU_ACCESS, MEM_WOM>       (addr, value); return;
-        case MEM_EXT:       poke16 <CPU_ACCESS, MEM_EXT>       (addr, value); return;
+        case MEM_NONE: poke16 <CPU_ACCESS, MEM_NONE>         (addr, value); return;
+        case MEM_CHIP:     poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:     poke16 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:     poke16 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:      poke16 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:      poke16 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:   poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF: poke16 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:      poke16 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:      poke16 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:      poke16 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
             
         default: assert(false);
     }

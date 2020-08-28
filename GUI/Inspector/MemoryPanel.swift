@@ -57,8 +57,7 @@ extension Inspector {
             var color: NSColor
 
             switch src {
-            case .MEM_NONE_FAST: color = MemColors.unmapped
-            case .MEM_NONE_SLOW: color = MemColors.unmapped
+            case .MEM_NONE:      color = MemColors.unmapped
             case .MEM_CHIP:      color = MemColors.chip
             case .MEM_FAST:      color = MemColors.fast
             case .MEM_SLOW:      color = MemColors.slow
@@ -157,7 +156,7 @@ extension Inspector {
         if nr >= 0 && nr <= 0xFF {
             
             displayedBank = nr
-            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? .MEM_NONE_FAST
+            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? .MEM_NONE
             memLayoutSlider.integerValue = displayedBank
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(nr)

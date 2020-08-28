@@ -60,8 +60,7 @@ extension BankTableView: NSTableViewDataSource {
 
             switch bankCache[row] {
                 
-            case .MEM_NONE_FAST: return "Unmapped"
-            case .MEM_NONE_SLOW: return "Unmapped"
+            case .MEM_NONE:      return "Unmapped"
             case .MEM_CHIP:      return "Chip Ram"
             case .MEM_FAST:      return "Fast Ram"
             case .MEM_SLOW:      return "Slow Ram"
@@ -87,7 +86,7 @@ extension BankTableView: NSTableViewDelegate {
         
         if let cell = cell as? NSTextFieldCell {
 
-            if bankCache[row] == .MEM_NONE_FAST || bankCache[row] == .MEM_NONE_SLOW {
+            if bankCache[row] == .MEM_NONE {
                 cell.textColor = .gray
             } else {
                 cell.textColor = .textColor
