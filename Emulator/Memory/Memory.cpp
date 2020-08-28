@@ -19,10 +19,14 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 
     memset(&config, 0, sizeof(config));
 
-    config.slowRamDelay = true;
+    config.slowRamDelay   = true;
     config.ramInitPattern = INIT_ALL_ZEROES;
-    config.unmappingType = UNMAPPED_FLOATING;
-    
+    config.unmappingType  = UNMAPPED_FLOATING;
+    config.bankD8DB       = MEM_NONE_SLOW;
+    config.bankDC         = MEM_RTC;
+    config.bankE0E7       = MEM_EXT;
+    config.bankF0F7       = MEM_NONE_FAST;
+
     config.extStart = 0xE0;
 }
 
@@ -51,7 +55,7 @@ Memory::_reset(bool hard)
     updateMemSrcTable();
     
     // In hard-reset mode, we also initialize RAM
-    if (hard) fillRamWithStartupPattern();
+    if (hard) fillRamWithInitPattern();
 }
 
 long
@@ -64,6 +68,10 @@ Memory::getConfigItem(ConfigOption option)
         case OPT_FAST_RAM:          return config.fastSize / KB(1);
         case OPT_EXT_START:         return config.extStart;
         case OPT_SLOW_RAM_DELAY:    return config.slowRamDelay;
+        case OPT_BANK_D8DB:         return config.bankD8DB;
+        case OPT_BANK_DC:           return config.bankDC;
+        case OPT_BANK_E0E7:         return config.bankE0E7;
+        case OPT_BANK_F0F7:         return config.bankF0F7;
         case OPT_UNMAPPING_TYPE:    return config.unmappingType;
         case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
@@ -141,10 +149,60 @@ Memory::setConfigItem(ConfigOption option, long value)
             if (config.slowRamDelay == value) {
                 return false;
             }
-                
+            
+            amiga.suspend();
             config.slowRamDelay = value;
+            amiga.resume();
             return true;
-                        
+            
+        case OPT_BANK_D8DB:
+
+            if (config.bankD8DB == value) {
+                return false;
+            }
+
+            amiga.suspend();
+            config.bankD8DB = (MemorySource)value;
+            updateMemSrcTable();
+            amiga.resume();
+            return true;
+            
+        case OPT_BANK_DC:
+
+            if (config.bankDC == value) {
+                return false;
+            }
+
+            amiga.suspend();
+            config.bankDC = (MemorySource)value;
+            updateMemSrcTable();
+            amiga.resume();
+            return true;
+
+        case OPT_BANK_E0E7:
+            
+            if (config.bankE0E7 == value) {
+                return false;
+            }
+
+            amiga.suspend();
+            config.bankE0E7 = (MemorySource)value;
+            updateMemSrcTable();
+            amiga.resume();
+            return true;
+
+        case OPT_BANK_F0F7:
+            
+            if (config.bankF0F7 == value) {
+                return false;
+            }
+            
+            amiga.suspend();
+            config.bankF0F7 = (MemorySource)value;
+            updateMemSrcTable();
+            amiga.resume();
+            return true;
+            
         case OPT_UNMAPPING_TYPE:
             
             if (!isUnmappingType(value)) {
@@ -155,7 +213,9 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
             
+            amiga.suspend();
             config.unmappingType = (UnmappingType)value;
+            amiga.resume();
             return true;
             
         case OPT_RAM_INIT_PATTERN:
@@ -167,8 +227,11 @@ Memory::setConfigItem(ConfigOption option, long value)
             if (config.ramInitPattern == value) {
                 return false;
             }
-            
+
+            amiga.suspend();
             config.ramInitPattern = (RamInitPattern)value;
+            amiga.resume();
+            if (isPoweredOff()) fillRamWithInitPattern();
             return true;
             
         default:
@@ -300,7 +363,7 @@ Memory::_powerOn()
     if (hasWom()) eraseWom();
 
     // Fill RAM with the proper startup pattern
-    fillRamWithStartupPattern();
+    fillRamWithInitPattern();
 
     // Set up the memory lookup table
     updateMemSrcTable();
@@ -363,19 +426,22 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         }
         size = bytes;
         mask = bytes - 1;
-        fillRamWithStartupPattern();
+        fillRamWithInitPattern();
     }
     updateMemSrcTable();
     return true;
 }
 
 void
-Memory::fillRamWithStartupPattern()
+Memory::fillRamWithInitPattern()
 {
+    assert(!isRunning());
+    
     switch (config.ramInitPattern) {
             
         case INIT_RANDOMIZED:
-            
+
+            debug("Filling Ram with random values\n");
             srand(0);
             if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
             if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
@@ -383,7 +449,8 @@ Memory::fillRamWithStartupPattern()
             break;
             
         case INIT_ALL_ZEROES:
-            
+
+            debug("Filling Ram with zeroes\n");
             if (chip) memset(chip, 0x00, config.chipSize);
             if (slow) memset(slow, 0x00, config.slowSize);
             if (fast) memset(fast, 0x00, config.fastSize);
@@ -391,6 +458,7 @@ Memory::fillRamWithStartupPattern()
             
         case INIT_ALL_ONES:
             
+            debug("Filling Ram with ones\n");
             if (chip) memset(chip, 0xFF, config.chipSize);
             if (slow) memset(slow, 0xFF, config.slowSize);
             if (fast) memset(fast, 0xFF, config.fastSize);
@@ -580,18 +648,17 @@ void
 Memory::updateMemSrcTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE_FAST;
-    MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
+    MemorySource mem_ext = ext ? MEM_EXT : mem_rom;
+    MemorySource mem_wom = wom ? MEM_WOM : mem_ext;
 
     int chipRamPages = hasChipRam() ? 32 : 0;
     int slowRamPages = config.slowSize / 0x10000;
     int fastRamPages = config.fastSize / 0x10000;
-    int extRomPages = hasExt() ? 8 : 0;
     
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
     assert(config.fastSize % 0x10000 == 0);
 
-    // bool clk = rtc.getConfigItem(OPT_RTC_MODEL) != RTC_NONE;
     bool ovl = ciaa.getPA() & 1;
     
     // Start from scratch
@@ -613,12 +680,10 @@ Memory::updateMemSrcTable()
     // Slow Ram
     for (unsigned i = 0xC0; i <= 0xD7; i++)
         memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM;
-    for (unsigned i = 0xD8; i <= 0xDB; i++)
-        memSrc[i] = (i - 0xCF) < slowRamPages ? MEM_SLOW : MEM_NONE_SLOW;
 
     // Real-time clock
-    // memSrc[0xDC] = clk ? MEM_RTC : MEM_CUSTOM;
-    memSrc[0xDC] = MEM_RTC;
+    for (unsigned i = 0xD8; i <= 0xDB; i++) memSrc[i] = config.bankD8DB;
+    memSrc[0xDC] = config.bankDC;
     
     // Reserved
     memSrc[0xDD] = MEM_NONE_FAST;
@@ -627,27 +692,23 @@ Memory::updateMemSrcTable()
     for (unsigned i = 0xDE; i <= 0xDF; i++)
         memSrc[i] = MEM_CUSTOM;
 
-    // Rom mirror
+    // WOM, Extended Rom, Kickstart mirror, or unmapped
     for (unsigned i = 0xE0; i <= 0xE7; i++)
-        memSrc[i] = mem_wom;
+        memSrc[i] = config.bankE0E7 == MEM_EXT ? mem_wom : config.bankE0E7;
     
     // Auto-config (Zorro II)
     memSrc[0xE8] = MEM_AUTOCONF;
     for (unsigned i = 0xE9; i <= 0xEF; i++)
         memSrc[i] = MEM_NONE_FAST;
-    /*
-    for (unsigned i = 0xE8; i <= 0xEF; i++)
-        memSrc[i] = hasFastRam() ? MEM_AUTOCONF : MEM_NONE_FAST;
-    */
     
-    // Extended Rom
-    for (unsigned i = 0; i < extRomPages; i++)
-        memSrc[config.extStart + i] = MEM_EXT;
-
+    // Extended Rom, Kickstart mirror, or unmapped
+    for (unsigned i = 0xF0; i <= 0xF7; i++)
+        memSrc[i] = config.bankF0F7 == MEM_EXT ? mem_ext : config.bankF0F7;
+    
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++)
         memSrc[i] = mem_wom;
-
+    
     // Blend in Boot Rom if a writeable Wom is present
     if (hasWom() && !womIsLocked) {
         for (unsigned i = 0xF8; i <= 0xFB; i++)
@@ -779,7 +840,8 @@ Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_NONE_SLOW> (u32 addr)
 {
-    return 0; // dataBus;
+    assert(false); // Can't reach (?!)
+    return 0;
 }
 
 template<> u16

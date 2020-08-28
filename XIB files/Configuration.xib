@@ -72,11 +72,10 @@
                 <outlet property="memLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
                 <outlet property="memLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
                 <outlet property="memLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
-                <outlet property="memPattern" destination="Kke-Vs-Flo" id="dRv-xL-77R"/>
                 <outlet property="memSlowRamDelay" destination="fjl-uT-o4f" id="waZ-Yu-GiM"/>
                 <outlet property="memSlowRamMirror" destination="H9L-Wc-Fqn" id="hHk-JS-HW6"/>
-                <outlet property="memUnmapped" destination="3Iz-dP-f4W" id="bXI-ZG-mlI"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
+                <outlet property="ramInitPattern" destination="Kke-Vs-Flo" id="dRv-xL-77R"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
                 <outlet property="romDropView" destination="Obf-WK-7zy" id="jaj-sU-4ca"/>
@@ -90,6 +89,7 @@
                 <outlet property="romSubsubtitle" destination="QPv-hw-IeK" id="3ps-Wc-q0W"/>
                 <outlet property="romSubtitle" destination="GYj-mu-CCZ" id="KUk-1J-bjf"/>
                 <outlet property="romTitle" destination="BMh-ue-CcQ" id="g3e-oT-SfR"/>
+                <outlet property="unmappingType" destination="3Iz-dP-f4W" id="bXI-ZG-mlI"/>
                 <outlet property="vidBloomBrightnessSlider" destination="4EX-PZ-tCT" id="tun-66-pa3"/>
                 <outlet property="vidBloomPopUp" destination="mWD-LU-1bb" id="Q3E-2W-pgu"/>
                 <outlet property="vidBloomRadiusSlider" destination="i1E-Oc-pI0" id="NfK-My-jlO"/>
@@ -1148,13 +1148,13 @@ DQ
                                                 <menu key="menu" id="qG8-xl-Bi8">
                                                     <items>
                                                         <menuItem title="Floating" state="on" id="1LD-uS-Re6"/>
-                                                        <menuItem title="All zeroes" tag="2" id="QbT-aM-phc"/>
-                                                        <menuItem title="All ones" tag="3" id="Hyo-l5-0CD"/>
+                                                        <menuItem title="All zeroes" tag="1" id="QbT-aM-phc"/>
+                                                        <menuItem title="All ones" tag="2" id="Hyo-l5-0CD"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="memUnmappedAction:" target="-2" id="8jA-CL-uu8"/>
+                                                <action selector="memUnmappingTypeAction:" target="-2" id="8jA-CL-uu8"/>
                                             </connections>
                                         </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Kke-Vs-Flo">
@@ -1166,13 +1166,13 @@ DQ
                                                 <menu key="menu" id="Pnj-h6-CaY">
                                                     <items>
                                                         <menuItem title="Randomized" state="on" id="hgN-dV-Cca"/>
-                                                        <menuItem title="All zeroes" tag="2" id="1hs-DJ-yFk"/>
-                                                        <menuItem title="All ones" tag="3" id="FR1-AH-ob3"/>
+                                                        <menuItem title="All zeroes" tag="1" id="1hs-DJ-yFk"/>
+                                                        <menuItem title="All ones" tag="2" id="FR1-AH-ob3"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="memPatternAction:" target="-2" id="YME-0x-loa"/>
+                                                <action selector="memRamInitPatternAction:" target="-2" id="YME-0x-loa"/>
                                             </connections>
                                         </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xFm-jK-eXY">

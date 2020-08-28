@@ -211,6 +211,10 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_FAST_RAM:
         case OPT_EXT_START:
         case OPT_SLOW_RAM_DELAY:
+        case OPT_BANK_D8DB:
+        case OPT_BANK_DC:
+        case OPT_BANK_E0E7:
+        case OPT_BANK_F0F7:
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
             return mem.getConfigItem(option);

@@ -11,7 +11,8 @@ extension ConfigurationController {
 
     func refreshMemoryTab() {
 
-        let poweredOff = amiga.isPoweredOff
+        let extIdentifier = amiga.mem.extIdentifier
+        let hasExt = extIdentifier != .ROM_MISSING
 
         // Timing
         memEClockSyncing.state = config.eClockSyncing ? .on : .off
@@ -20,10 +21,46 @@ extension ConfigurationController {
         // Chipset features
         memSlowRamMirror.state = config.slowRamMirror ? .on : .off
 
+        // Bank map
+        memBankE0E7.item(at: 0)?.title = hasExt ? "Extension Rom" : "Kickstart Rom"
+        memBankF0F7.item(at: 0)?.title = hasExt ? "Extension Rom" : "Kickstart Rom"
+
+        switch MemorySource(rawValue: config.bankD8DB) {
+        case .MEM_RTC: memBankD8DB.selectItem(withTag: 0)
+        case .MEM_CUSTOM: memBankD8DB.selectItem(withTag: 1)
+        case .MEM_NONE_FAST: memBankD8DB.selectItem(withTag: 2)
+        case .MEM_NONE_SLOW: memBankD8DB.selectItem(withTag: 2)
+        default: track("Unknown D8DB: \(config.bankD8DB)")
+        }
+        track("config.bankDC = \(config.bankDC)")
+        switch MemorySource(rawValue: config.bankDC) {
+        case .MEM_RTC : memBankDC.selectItem(withTag: 0)
+        case .MEM_CUSTOM: memBankDC.selectItem(withTag: 1)
+        case .MEM_NONE_FAST: memBankDC.selectItem(withTag: 2)
+        case .MEM_NONE_SLOW: memBankDC.selectItem(withTag: 2)
+        default: fatalError()
+        }
+        track("config.bankE0E7 = \(config.bankE0E7)")
+        switch MemorySource(rawValue: config.bankE0E7) {
+        case .MEM_EXT: memBankE0E7.selectItem(withTag: 0)
+        case .MEM_NONE_FAST: memBankE0E7.selectItem(withTag: 1)
+        case .MEM_NONE_SLOW: memBankE0E7.selectItem(withTag: 1)
+        default: fatalError()
+        }
+        track("config.bankF0F7 = \(config.bankF0F7)")
+        switch MemorySource(rawValue: config.bankF0F7) {
+        case .MEM_EXT: memBankF0F7.selectItem(withTag: 0)
+        case .MEM_NONE_FAST: memBankF0F7.selectItem(withTag: 1)
+        case .MEM_NONE_SLOW: memBankF0F7.selectItem(withTag: 1)
+        default: fatalError()
+        }
+        unmappingType.selectItem(withTag: config.unmappingType)
+        ramInitPattern.selectItem(withTag: config.ramInitPattern)
+
         // Lock symbol and explanation
-        memLockImage.isHidden = poweredOff
-        memLockText.isHidden = poweredOff
-        memLockSubText.isHidden = poweredOff
+        memLockImage.isHidden = true // poweredOff
+        memLockText.isHidden = true // poweredOff
+        memLockSubText.isHidden = true // poweredOff
     }
 
     @IBAction func memEClockSyncingAction(_ sender: NSButton!) {
@@ -51,26 +88,40 @@ extension ConfigurationController {
     }
 
     @IBAction func memBankD8DBAction(_ sender: NSPopUpButton!) {
-
+        
         track()
-
-        // config. = sender.tag
+        
+        switch sender.selectedTag() {
+        case 0: config.bankD8DB = MemorySource.MEM_RTC.rawValue
+        case 1: config.bankD8DB = MemorySource.MEM_CUSTOM.rawValue
+        case 2: config.bankD8DB = MemorySource.MEM_NONE_SLOW.rawValue
+        default: fatalError()
+        }
         refresh()
     }
 
     @IBAction func memBankDCAction(_ sender: NSPopUpButton!) {
 
         track()
-
-        // config. = sender.tag
+        
+        switch sender.selectedTag() {
+        case 0: config.bankDC = MemorySource.MEM_RTC.rawValue
+        case 1: config.bankDC = MemorySource.MEM_CUSTOM.rawValue
+        case 2: config.bankDC = MemorySource.MEM_NONE_SLOW.rawValue
+        default: fatalError()
+        }
         refresh()
     }
 
     @IBAction func memBankE0E7Action(_ sender: NSPopUpButton!) {
 
         track()
-
-        // config. = sender.tag
+        
+        switch sender.selectedTag() {
+        case 0: config.bankE0E7 = MemorySource.MEM_EXT.rawValue
+        case 1: config.bankE0E7 = MemorySource.MEM_NONE_FAST.rawValue
+        default: fatalError()
+        }
         refresh()
     }
 
@@ -78,23 +129,27 @@ extension ConfigurationController {
 
         track()
 
-        // config. = sender.tag
+        switch sender.selectedTag() {
+        case 0: config.bankF0F7 = MemorySource.MEM_EXT.rawValue
+        case 1: config.bankF0F7 = MemorySource.MEM_NONE_FAST.rawValue
+        default: fatalError()
+        }
         refresh()
     }
 
-    @IBAction func memUnmappedAction(_ sender: NSPopUpButton!) {
+    @IBAction func memUnmappingTypeAction(_ sender: NSPopUpButton!) {
 
-        track()
+        track("\(sender.selectedTag())")
 
-        // config. = sender.tag
+        config.unmappingType = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func memPatternAction(_ sender: NSPopUpButton!) {
+    @IBAction func memRamInitPatternAction(_ sender: NSPopUpButton!) {
 
-        track()
+        track("\(sender.selectedTag())")
 
-        // config. = sender.tag
+        config.ramInitPattern = sender.selectedTag()
         refresh()
     }
 

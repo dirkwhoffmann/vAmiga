@@ -61,6 +61,7 @@ extension UserDefaults {
 
         registerRomUserDefaults()
         registerHardwareUserDefaults()
+        registerMemoryUserDefaults()
         registerCompatibilityUserDefaults()
         registerAudioUserDefaults()
         registerVideoUserDefaults()
@@ -690,6 +691,14 @@ extension Keys {
     
     // Chipset features
     static let slowRamMirror     = "VAMIGA_MEM_SlowRamMirror"
+
+    // Bank map
+    static let bankD8DB          = "VAMIGA_MEM_BankD8DB"
+    static let bankDC            = "VAMIGA_MEM_BankDC"
+    static let bankE0E7          = "VAMIGA_MEM_BankE0E7"
+    static let bankF0F7          = "VAMIGA_MEM_BankF0F7"
+    static let unmappingType     = "VAMIGA_MEM_UnmappingType"
+    static let ramInitPattern    = "VAMIGA_MEM_RamInitPattern"
 }
 
 struct MemoryDefaults {
@@ -701,6 +710,14 @@ struct MemoryDefaults {
     // Chipset features
     let slowRamMirror: Bool
     
+    // Bank map
+    let bankD8DB: Int
+    let bankDC: Int
+    let bankE0E7: Int
+    let bankF0F7: Int
+    let unmappingType: Int
+    let ramInitPattern: Int
+    
     //
     // Schemes
     //
@@ -709,7 +726,13 @@ struct MemoryDefaults {
         
         eClockSyncing: true,
         slowRamDelay: true,
-        slowRamMirror: true
+        slowRamMirror: true,
+        bankD8DB: MemorySource.MEM_CUSTOM.rawValue,
+        bankDC: MemorySource.MEM_RTC.rawValue,
+        bankE0E7: MemorySource.MEM_EXT.rawValue,
+        bankF0F7: MemorySource.MEM_NONE_FAST.rawValue,
+        unmappingType: 0,
+        ramInitPattern: 1
     )
 }
 
@@ -719,12 +742,20 @@ extension UserDefaults {
 
         let defaults = MemoryDefaults.std
         let dictionary: [String: Any] = [
-
+            
             Keys.eClockSyncing: defaults.eClockSyncing,
             Keys.slowRamDelay: defaults.slowRamDelay,
-            Keys.slowRamMirror: defaults.slowRamMirror
+            Keys.slowRamMirror: defaults.slowRamMirror,
+            Keys.bankD8DB: defaults.bankD8DB,
+            Keys.bankDC: defaults.bankDC,
+            Keys.bankE0E7: defaults.bankE0E7,
+            Keys.bankF0F7: defaults.bankF0F7,
+            Keys.unmappingType: defaults.unmappingType,
+            Keys.ramInitPattern: defaults.ramInitPattern
         ]
 
+        track("register: \(dictionary)")
+        
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
     }
@@ -735,7 +766,14 @@ extension UserDefaults {
         
         let keys = [ Keys.eClockSyncing,
                      Keys.slowRamDelay,
-                     Keys.slowRamMirror ]
+                     Keys.slowRamMirror,
+                     Keys.bankD8DB,
+                     Keys.bankDC,
+                     Keys.bankE0E7,
+                     Keys.bankF0F7,
+                     Keys.unmappingType,
+                     Keys.ramInitPattern
+        ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }

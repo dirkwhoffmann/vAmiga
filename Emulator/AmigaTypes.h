@@ -52,6 +52,10 @@ typedef VA_ENUM(long, ConfigOption)
     OPT_FAST_RAM,
     OPT_EXT_START,
     OPT_SLOW_RAM_DELAY,
+    OPT_BANK_D8DB,
+    OPT_BANK_DC,
+    OPT_BANK_E0E7,
+    OPT_BANK_F0F7,
     OPT_UNMAPPING_TYPE,
     OPT_RAM_INIT_PATTERN,
     

@@ -320,7 +320,7 @@ public:
 
 private:
     
-    void fillRamWithStartupPattern();
+    void fillRamWithInitPattern();
 
     
     //

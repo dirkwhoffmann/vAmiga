@@ -85,15 +85,21 @@ typedef struct
     size_t womSize;
     size_t extSize;
 
-    // Indicates if SlowRam accesses need a free bus
+    // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
     
-    // Startup behaviour
+    // Ram contents on startup
     RamInitPattern ramInitPattern;
     
     // Specifies how to deal with unmapped memory
     UnmappingType unmappingType;
     
+    // Bank map properties
+    MemorySource bankD8DB;
+    MemorySource bankDC;
+    MemorySource bankE0E7;
+    MemorySource bankF0F7;
+
     // First memory page where the extended ROM is blended it
     u32 extStart;
 }

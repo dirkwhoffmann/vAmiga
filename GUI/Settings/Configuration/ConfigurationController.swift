@@ -102,8 +102,8 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var memBankF0F7: NSPopUpButton!
 
     // Values
-    @IBOutlet weak var memUnmapped: NSPopUpButton!
-    @IBOutlet weak var memPattern: NSPopUpButton!
+    @IBOutlet weak var unmappingType: NSPopUpButton!
+    @IBOutlet weak var ramInitPattern: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var memLockImage: NSButton!

@@ -168,7 +168,31 @@ class Configuration {
         get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
         set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
     }
-    
+    var bankD8DB: Int {
+        get { return amiga.getConfig(.OPT_BANK_D8DB) }
+        set { amiga.configure(.OPT_BANK_D8DB, value: newValue) }
+    }
+    var bankDC: Int {
+        get { return amiga.getConfig(.OPT_BANK_DC) }
+        set { amiga.configure(.OPT_BANK_DC, value: newValue) }
+    }
+    var bankE0E7: Int {
+        get { return amiga.getConfig(.OPT_BANK_E0E7) }
+        set { amiga.configure(.OPT_BANK_E0E7, value: newValue) }
+    }
+    var bankF0F7: Int {
+        get { return amiga.getConfig(.OPT_BANK_F0F7) }
+        set { amiga.configure(.OPT_BANK_F0F7, value: newValue) }
+    }
+    var ramInitPattern: Int {
+        get { return amiga.getConfig(.OPT_RAM_INIT_PATTERN) }
+        set { amiga.configure(.OPT_RAM_INIT_PATTERN, value: newValue) }
+    }
+    var unmappingType: Int {
+        get { return amiga.getConfig(.OPT_UNMAPPING_TYPE) }
+        set { amiga.configure(.OPT_UNMAPPING_TYPE, value: newValue) }
+    }
+
     //
     // Compatibility
     //
@@ -527,7 +551,16 @@ class Configuration {
         eClockSyncing = defaults.eClockSyncing
         slowRamDelay = defaults.slowRamDelay
         slowRamMirror = defaults.slowRamMirror
-                
+        bankD8DB = defaults.bankD8DB
+        bankDC = defaults.bankDC
+        bankE0E7 = defaults.bankE0E7
+        bankF0F7 = defaults.bankF0F7
+        unmappingType = defaults.unmappingType
+        ramInitPattern = defaults.ramInitPattern
+
+        track("\(defaults.bankD8DB)")
+        track("\(bankD8DB)")
+
         amiga.resume()
     }
     
@@ -540,7 +573,14 @@ class Configuration {
         eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
         slowRamDelay = defaults.bool(forKey: Keys.slowRamDelay)
         slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
-        
+        bankD8DB = defaults.integer(forKey: Keys.bankD8DB)
+        bankDC = defaults.integer(forKey: Keys.bankDC)
+        bankE0E7 = defaults.integer(forKey: Keys.bankE0E7)
+        bankF0F7 = defaults.integer(forKey: Keys.bankF0F7)
+        unmappingType = defaults.integer(forKey: Keys.unmappingType)
+        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
+
+        track("bankD8DB = \(defaults.integer(forKey: Keys.bankD8DB))")
         amiga.resume()
     }
     
@@ -553,6 +593,12 @@ class Configuration {
         defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
         defaults.set(slowRamDelay, forKey: Keys.slowRamDelay)
         defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
+        defaults.set(bankD8DB, forKey: Keys.bankD8DB)
+        defaults.set(bankDC, forKey: Keys.bankDC)
+        defaults.set(bankE0E7, forKey: Keys.bankE0E7)
+        defaults.set(bankF0F7, forKey: Keys.bankF0F7)
+        defaults.set(unmappingType, forKey: Keys.unmappingType)
+        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
     }
     
     //
