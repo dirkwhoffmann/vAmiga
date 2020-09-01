@@ -64,9 +64,7 @@ class MyController: NSWindowController, MessageReceiver {
     // Virtual keyboard
     var virtualKeyboard: VirtualKeyboardController?
     
-    // Loop timer
-    // The timer fires 60 times a second and executes all tasks that need to be
-    //  done perdiodically (e.g., updating the speedometer and the debug panels)
+    // Loop timer for scheduling periodic updates
     var timer: Timer?
     
     // Timer lock
@@ -74,7 +72,7 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Screenshot and snapshot timers
     var snapshotTimer: Timer?
-    var screenshotTimer: Timer?
+    var screenshotTimer: Timer? // DEPRECATED
     
     // Speedometer to measure clock frequence and frames per second
     var speedometer: Speedometer!
@@ -143,7 +141,6 @@ class MyController: NSWindowController, MessageReceiver {
         screenshotTimer?.invalidate()
     }
             
-    // Updates the warp status
     func updateWarp() {
         
         var warp: Bool
@@ -170,7 +167,6 @@ class MyController: NSWindowController, MessageReceiver {
 
     // Status bar
     @IBOutlet weak var powerLED: NSButton!
-
     @IBOutlet weak var df0LED: NSButton!
     @IBOutlet weak var df1LED: NSButton!
     @IBOutlet weak var df2LED: NSButton!
@@ -221,7 +217,7 @@ extension MyController {
     }
 
     //
-    // Initialization
+    // Initializing
     //
     
     override open func awakeFromNib() {
@@ -256,7 +252,7 @@ extension MyController {
         // Load user defaults
         loadUserDefaults()
         
-        // Register listener
+        // Enable message processing
         addListener()
 
         // Process attachment (if any)
@@ -265,10 +261,8 @@ extension MyController {
         // Check if the Amiga is ready to power on
         if amiga.isReady() {
 
-            // Power on the Amiga
+            // Switch on and launch the emulator thread
             amiga.powerOn()
-
-            // Launch the emulator thread
             amiga.run()
 
         } else {
@@ -355,12 +349,12 @@ extension MyController {
         // Animate the inspector
         if inspector?.window?.isVisible == true { inspector!.continuousRefresh() }
  
-        // Do less times...
+        // Do less frequently...
         if (animationCounter % 2) == 0 {
  
         }
         
-        // Do lesser times...
+        // Do even less frequently...
         if (animationCounter % 3) == 0 {
             
             updateSpeedometer()

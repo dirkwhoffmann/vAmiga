@@ -15,8 +15,8 @@ class MyDocument: NSDocument {
     // The application delegate
     var myAppDelegate: MyAppDelegate { return NSApp.delegate as! MyAppDelegate }
     
-    /* Emulator proxy object. This object is an Objective-C bridge between
-     * the GUI (written in Swift) an the core emulator (written in C++).
+    /* Emulator proxy. This object is an Objective-C bridge between the Swift
+     * GUI an the core emulator which is written in C++.
      */
     var amiga: AmigaProxy!
 
@@ -31,12 +31,11 @@ class MyDocument: NSDocument {
     private(set) var autoSnapshots = ManagedArray<SnapshotProxy>.init(capacity: 32)
     private(set) var userSnapshots = ManagedArray<SnapshotProxy>.init(capacity: Int.max)
 
-    // Screenshots
+    // Screenshots (DEPRECATED)
     private(set) var autoScreenshots = ManagedArray<Screenshot>.init(capacity: 32)
     private(set) var userScreenshots = ManagedArray<Screenshot>.init(capacity: Int.max)
 
-    // Fingerprint of the first disk inserted into df0 after a reset
-    // The value is used to determine the screenshot save folder
+    // Fingerprint of the first disk inserted into df0 after reset
     private var bootDiskID = UInt64(0)
         
     //
@@ -65,8 +64,6 @@ class MyDocument: NSDocument {
     deinit {
         
         track()
-        
-        // Shut down the emulator
         amiga.kill()
     }
     
@@ -95,14 +92,15 @@ class MyDocument: NSDocument {
         }
     }
     
+    fileprivate
     func createFileProxy(url: URL, allowedTypes: [AmigaFileType]) throws -> AmigaFileProxy? {
         
         track("Creating proxy object from URL: \(url.lastPathComponent)")
         
-        // If url points to compressed file, decompress it first
+        // If the provided URL points to compressed file, decompress it first
         let newUrl = url.unpacked
         
-        // Only proceed if the file type is allowed
+        // Only proceed if the file type is an allowed type
         let type = fileType(url: newUrl)
         if !allowedTypes.contains(type) { return nil }
         
@@ -171,7 +169,6 @@ class MyDocument: NSDocument {
         }
     }
     
-    // Creates an attachment from a URL
     func createAttachment(from url: URL) throws {
                 
         track("Creating attachment from URL: \(url.lastPathComponent)")

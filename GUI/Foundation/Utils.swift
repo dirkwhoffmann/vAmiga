@@ -148,9 +148,9 @@ extension URL {
             options: [.skipsHiddenFiles, .skipsSubdirectoryDescendants]
         )
         
-        track("contents: urls = \(urls)")
-        let filtered = urls.filter { allowedTypes?.contains($0.pathExtension) ?? true }
-        track("filtered = \(filtered)")
+        let filtered = urls.filter {
+            allowedTypes?.contains($0.pathExtension.uppercased()) ?? true
+        }
         return filtered
     }
     
@@ -240,7 +240,7 @@ extension URL {
         }
         
         // Collect all extracted URLs with a supported file type
-        let types = ["adf", "dms", "rom", "bin", "vAmiga"]
+        let types = ["ADF", "DMS", "ROM", "BIN", "VAMIGA"]
         let urls = try tmp.contents(allowedTypes: types)
         
         // Arrange the URLs in alphabetical order
