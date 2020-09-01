@@ -36,9 +36,7 @@ typedef VA_ENUM(long, MessageType)
     MSG_POWER_LED_ON,
     MSG_POWER_LED_DIM,
     MSG_POWER_LED_OFF,
-    MSG_DMA_DEBUG_ON,
-    MSG_DMA_DEBUG_OFF,
-    
+        
     // CPU
     MSG_BREAKPOINT_CONFIG,
     MSG_BREAKPOINT_REACHED,
@@ -62,12 +60,10 @@ typedef VA_ENUM(long, MessageType)
     MSG_DRIVE_HEAD_POLL,
     MSG_DISK_INSERT,
     MSG_DISK_EJECT,
-    MSG_DISK_INSERTED,
-    MSG_DISK_EJECTED,
     MSG_DISK_SAVED,
     MSG_DISK_UNSAVED,
-    MSG_DISK_PROTECTED,
-    MSG_DISK_UNPROTECTED,
+    MSG_DISK_PROTECT,
+    MSG_DISK_UNPROTECT,
 
     // Keyboard
     MSG_CTRL_AMIGA_AMIGA,
@@ -78,7 +74,11 @@ typedef VA_ENUM(long, MessageType)
 
     // Snapshots
     MSG_AUTO_SNAPSHOT_TAKEN,
-    MSG_USER_SNAPSHOT_TAKEN
+    MSG_USER_SNAPSHOT_TAKEN,
+
+    // Debugging
+    MSG_DMA_DEBUG_ON,
+    MSG_DMA_DEBUG_OFF
 };
 
 typedef struct

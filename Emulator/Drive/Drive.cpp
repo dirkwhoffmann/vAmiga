@@ -562,12 +562,12 @@ Drive::setWriteProtection(bool value)
         if (value && !disk->isWriteProtected()) {
             
             disk->setWriteProtection(true);
-            messageQueue.put(MSG_DISK_PROTECTED);
+            messageQueue.put(MSG_DISK_PROTECT);
         }
         if (!value && disk->isWriteProtected()) {
             
             disk->setWriteProtection(false);
-            messageQueue.put(MSG_DISK_UNPROTECTED);
+            messageQueue.put(MSG_DISK_UNPROTECT);
         }
     }
 }

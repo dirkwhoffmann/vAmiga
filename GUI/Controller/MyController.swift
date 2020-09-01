@@ -588,12 +588,10 @@ extension MyController {
             }
             refreshStatusBar()
             
-        case .MSG_DISK_INSERTED,
-             .MSG_DISK_EJECTED,
-             .MSG_DISK_UNSAVED,
+        case .MSG_DISK_UNSAVED,
              .MSG_DISK_SAVED,
-             .MSG_DISK_PROTECTED,
-             .MSG_DISK_UNPROTECTED:
+             .MSG_DISK_PROTECT,
+             .MSG_DISK_UNPROTECT:
             refreshStatusBar()
 
         case .MSG_CTRL_AMIGA_AMIGA:
