@@ -133,7 +133,6 @@ struct SerialPortWrapper;
 - (void) powerOff;
 - (void) hardReset;
 - (void) softReset;
-- (void) ping;
 - (void) dump;
 
 - (AmigaInfo) getInfo;

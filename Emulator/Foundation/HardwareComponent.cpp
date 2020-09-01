@@ -97,19 +97,6 @@ HardwareComponent::dump()
     _dump();
 }
 
-void
-HardwareComponent::ping()
-{
-    // Ping all subcomponents
-    for (HardwareComponent *c : subComponents) {
-        c->ping();
-    }
-    
-    // Ping this component
-    debug(RUN_DEBUG, "Ping [%p]\n", this);
-    _ping();
-}
-
 size_t
 HardwareComponent::size()
 {

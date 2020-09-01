@@ -171,14 +171,6 @@ DiskController::_dump()
     msg("   spinning() : %d\n", spinning());
 }
 
-void
-DiskController::_ping()
-{
-    for (int df = 0; df < 4; df++) {
-        messageQueue.put(config.connected[df] ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, df);
-    }
-}
-
 Drive *
 DiskController::getSelectedDrive()
 {

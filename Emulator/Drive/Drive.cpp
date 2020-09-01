@@ -92,17 +92,6 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 }
 
 void
-Drive::_ping()
-{
-    messageQueue.put(hasDisk() ?
-                     MSG_DISK_INSERTED : MSG_DISK_EJECTED, nr);
-    messageQueue.put(hasWriteProtectedDisk() ?
-                     MSG_DISK_PROTECTED : MSG_DISK_UNPROTECTED, nr);
-    messageQueue.put(hasModifiedDisk() ?
-                     MSG_DISK_UNSAVED : MSG_DISK_SAVED, nr);
-}
-
-void
 Drive::_inspect()
 {
     synchronized {

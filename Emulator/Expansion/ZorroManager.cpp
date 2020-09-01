@@ -14,24 +14,6 @@ ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
     setDescription("ZorroManager");
 }
 
-void
-ZorroManager::_powerOff()
-{
-    
-}
-
-void
-ZorroManager::_ping()
-{
-    
-}
-
-void
-ZorroManager::_dump()
-{
-    
-}
-
 u8
 ZorroManager::peekFastRamDevice(u32 addr)
 {    

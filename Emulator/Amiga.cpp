@@ -497,12 +497,6 @@ Amiga::_pause()
 }
 
 void
-Amiga::_ping()
-{
-    messageQueue.put(warpMode ? MSG_WARP_ON : MSG_WARP_OFF);
-}
-
-void
 Amiga::setWarp(bool enable)
 {
     suspend();
@@ -858,7 +852,6 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
-        ping();
     }
 }
 

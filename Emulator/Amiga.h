@@ -279,7 +279,6 @@ private:
     void _powerOff() override;
     void _run() override;
     void _pause() override;
-    void _ping() override;
     void _setWarp(bool enable) override;
 
     

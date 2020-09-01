@@ -32,13 +32,24 @@ class ZorroManager : public AmigaComponent {
     
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
     
     ZorroManager(Amiga& ref);
 
+private:
+    
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+
+    
+    //
+    // Serializing
+    //
+
+public:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -54,36 +65,19 @@ public:
         & fastRamBaseAddr;
     }
 
-
-    //
-    // Methods from HardwareComponent
-    //
-    
-private:
-
-    void _powerOff() override;
-    void _ping() override;
-    void _dump() override;
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
 
-    
-public:
-    
-    //
-    // Getter and setter
-    //
-    
-    
+        
     //
     // Emulating Fast Ram
     //
     
+public:
+    
     u8 peekFastRamDevice(u32 addr);
     u8 spypeekFastRamDevice(u32 addr);
-    
     void pokeFastRamDevice(u32 addr, u8 value);
 };
 

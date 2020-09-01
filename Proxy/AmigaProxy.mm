@@ -1558,10 +1558,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->amiga->reset(false);
 }
-- (void) ping
-{
-    wrapper->amiga->ping();
-}
 - (void) dump
 {
     wrapper->amiga->dump();
