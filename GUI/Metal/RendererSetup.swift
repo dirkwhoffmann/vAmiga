@@ -10,10 +10,11 @@
 import simd
 
 struct TextureSize {
-    
-    static let original = MTLSizeMake(1024, 320, 0)
-    static let merged   = MTLSizeMake(1024, 640, 0)
-    static let upscaled = MTLSizeMake(2048, 1280, 0)
+
+    static let background = MTLSizeMake(512, 512, 0)
+    static let original   = MTLSizeMake(1024, 320, 0)
+    static let merged     = MTLSizeMake(1024, 640, 0)
+    static let upscaled   = MTLSizeMake(2048, 1280, 0)
 }
 
 extension Renderer {
@@ -190,13 +191,13 @@ extension Renderer {
         let rwtp: MTLTextureUsage = [ .shaderRead, .shaderWrite, .renderTarget, .pixelFormatView ]
 
         // Background texture used in window mode
-        bgTexture = device.makeTexture(w: 512, h: 512)
+        bgTexture = device.makeTexture(size: TextureSize.background, usage: r)
         assert(bgTexture != nil, "Failed to create bgTexture")
         
         // Background texture used in fullscreen mode
         let c1 = (0x00, 0x00, 0x00, 0xFF)
         let c2 = (0x44, 0x44, 0x44, 0xFF)
-        bgFullscreenTexture = device.makeTexture(w: 512, h: 512, gradient: [c1, c2], usage: r)
+        bgFullscreenTexture = device.makeTexture(size: TextureSize.background, gradient: [c1, c2], usage: r)
         assert(bgFullscreenTexture != nil, "Failed to create bgFullscreenTexture")
 
         // Emulator texture (long frames)
@@ -271,8 +272,8 @@ extension Renderer {
             disalignmentV: config.disalignmentV
         )
         
-        let mc = (TextureSize.merged.width, TextureSize.merged.width)
-        let uc = (TextureSize.upscaled.width, TextureSize.upscaled.width)
+        let mc = (TextureSize.merged.width, TextureSize.merged.height)
+        let uc = (TextureSize.upscaled.width, TextureSize.upscaled.height)
 
         // Build the merge filters
         mergeFilter = MergeFilter.init(device: device, library: library, cutout: mc)

@@ -20,15 +20,15 @@ class Renderer: NSObject, MTKViewDelegate {
     var prefs: Preferences { return parent.pref }
     var config: Configuration { return parent.config }
     
-    /* Number of drawn frames since power up
-     * Used to determine the fps value shown in the emulator's bottom bar.
+    /* Number of drawn frames since power up. This value is used to determine
+     * the fps value shown in the emulator's bottom bar.
      */
     var frames: Int64 = 0
     
-    /* Synchronization semaphore
-     * The semaphore is locked in function draw() and released in function
-     * endFrame(). It's puprpose is to prevent a new frame from being drawn
-     * if the previous isn't finished yet. Not sure if we really need it.
+    /* Synchronization semaphore. The semaphore is locked in function draw()
+     * and released in function endFrame(). It's puprpose is to prevent a new
+     * frame from being drawn if the previous isn't finished yet. Not sure if
+     * we really need it.
      */
     var semaphore = DispatchSemaphore(value: 1)
 

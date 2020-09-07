@@ -165,7 +165,7 @@ class VirtualKeyboardController: DialogController, NSWindowDelegate {
         
     @IBAction func pressVirtualKey(_ sender: NSButton!) {
         
-        // not used at the moment
+        // Not used at the moment
     }
     
     override func mouseDown(with event: NSEvent) {

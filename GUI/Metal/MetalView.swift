@@ -10,11 +10,11 @@
 public class MetalView: MTKView {
     
     @IBOutlet weak var parent: MyController!
+    
     var prefs: Preferences { return parent.pref }
     
-    /* Tracking area for trapping the mouse
-     * We use a tracking area to determine when the mouse is moved into or
-     * out of the emulator window.
+    /* Tracking area for trapping the mouse. The tracking area is utilized to
+     * determine when the mouse is moved into or out of the emulator window.
      */
     var trackingArea: NSTrackingArea?
     

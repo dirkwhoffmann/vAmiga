@@ -45,7 +45,7 @@ PixelEngine::~PixelEngine()
 void
 PixelEngine::_powerOn()
 {
-    // Initialize frame buffers with a checkerboard debug pattern
+    // Initialize frame buffers with a checkerboard pattern (for debugging)
     for (unsigned line = 0; line < VPIXELS; line++) {
         for (unsigned i = 0; i < HPIXELS; i++) {
 

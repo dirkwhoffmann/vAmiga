@@ -80,7 +80,7 @@ class ComputeKernel: NSObject {
     var device: MTLDevice!
     var kernel: MTLComputePipelineState!
 
-    // Texture cutout (defines the rectangle the compute kernel is applied to)
+    // The rectangle the compute kernel is applied to
     var cutout = (256, 256)
     
     convenience init?(name: String, device: MTLDevice, library: MTLLibrary, cutout: (Int, Int)) {
