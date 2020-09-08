@@ -1873,9 +1873,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x098 >> 1:  // CLXCON
             denise.pokeCLXCON(value); return;
         case 0x09A >> 1: // INTENA
-            paula.pokeINTENA(value); return;
+            paula.pokeINTENA<s>(value); return;
         case 0x09C >> 1: // INTREQ
-            paula.pokeINTREQ(value); return;
+            paula.pokeINTREQ<s>(value); return;
         case 0x09E >> 1: // ADKCON
             paula.pokeADKCON(value); return;
         case 0x0A0 >> 1: // AUD0LCH

@@ -41,8 +41,9 @@ Paula::serviceIplEvent()
     u8 iplValue = ipl.delayed();
     assert(iplValue == ((iplPipe >> 32) & 0xFF));
 
-    cpu.setIPL((iplPipe >> 32) & 0xFF);
-    debug(CPU_DEBUG, "New IPL value: %d\n", (iplPipe >> 32) & 0xFF);
+    cpu.setIPL((iplPipe >> 24) & 0xFF);
+    // cpu.setIPL((iplPipe >> 32) & 0xFF);
+    // debug(CPU_DEBUG, "New IPL value: %d\n", (iplPipe >> 32) & 0xFF);
     
     iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
 
