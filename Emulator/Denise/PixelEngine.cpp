@@ -427,9 +427,9 @@ PixelEngine::hide(int line, u16 layers, u8 alpha)
 
         double scale = alpha / 255.0;
         u8 bg = (line / 4) % 2 == (i / 8) % 2 ? 0x22 : 0x44;
-        u8 newr = r * (1 - scale) + bg * scale;
-        u8 newg = g * (1 - scale) + bg * scale;
-        u8 newb = b * (1 - scale) + bg * scale;
+        u8 newr = (u8)(r * (1 - scale) + bg * scale);
+        u8 newg = (u8)(g * (1 - scale) + bg * scale);
+        u8 newb = (u8)(b * (1 - scale) + bg * scale);
         
         p[i] = 0xFF000000 | newb << 16 | newg << 8 | newr;
     }

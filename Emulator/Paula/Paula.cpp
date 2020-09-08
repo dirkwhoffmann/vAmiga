@@ -19,6 +19,8 @@ Paula::Paula(Amiga& ref) : AmigaComponent(ref)
         &diskController,
         &uart
     };
+    
+    ipl.setClock(&agnus.clock); 
 }
 
 void
@@ -99,10 +101,15 @@ void
 Paula::checkInterrupt()
 {
     int level = interruptLevel();
-    
-    if ((iplPipe & 0xFF) != level) {
         
+    if ((iplPipe & 0xFF) != level) {
+    
+        ipl.write((u8)level);
         iplPipe = (iplPipe & ~0xFF) | level;
+                
+        u8 iplValue = ipl.delayed();
+        assert(iplValue == ((iplPipe >> 32) & 0xFF));
+            
         agnus.scheduleRel<IPL_SLOT>(0, IPL_CHANGE, 5);
     }
 }

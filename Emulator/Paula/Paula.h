@@ -13,6 +13,7 @@
 #include "PaulaAudio.h"
 #include "DiskController.h"
 #include "UART.h"
+#include "TimeDelayed.h"
 
 class Paula : public AmigaComponent {
     
@@ -59,9 +60,11 @@ public:
     // Trigger cycle for setting a bit in INTREQ
     Cycle setIntreq[16];
 
-    // Value pipe for emulating the four cycle delay on the IPL pins
+    // Value pipe for emulating the four cycle delay on the IPL pins (DEPRECATED)
     u64 iplPipe;
     
+    // Interrupt priority line (IPL)
+    TimeDelayed <u8,4> ipl = TimeDelayed <u8,4> ();
     
     //
     // Control ports

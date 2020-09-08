@@ -56,7 +56,7 @@ class Monitor: DialogController {
     @IBOutlet weak var monLayout: NSPopUpButton!
     @IBOutlet weak var monSlider: NSSlider!
 
-    // Pixel synthesis
+    // Stencils
     @IBOutlet weak var synEnable: NSButton!
     @IBOutlet weak var synSprite0: NSButton!
     @IBOutlet weak var synSprite1: NSButton!

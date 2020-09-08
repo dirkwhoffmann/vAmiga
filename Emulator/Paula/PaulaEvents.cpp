@@ -38,9 +38,12 @@ Paula::serviceIplEvent()
 {
     assert(agnus.slot[IPL_SLOT].id == IPL_CHANGE);
     
+    u8 iplValue = ipl.delayed();
+    assert(iplValue == ((iplPipe >> 32) & 0xFF));
+
     cpu.setIPL((iplPipe >> 32) & 0xFF);
     iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
-    
+        
     // Reschedule event until the pipe has been shifted through entirely
     i64 repeat = agnus.slot[IPL_SLOT].data;
     if (repeat) {
