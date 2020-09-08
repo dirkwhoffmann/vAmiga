@@ -1383,11 +1383,12 @@ Memory::poke8 <CPU_ACCESS, MEM_ROM> (u32 addr, u8 value)
         updateMemSrcTable();
     }
         
-#ifndef RELEASEBUILD
-    if (addr == 0xFFFFFF && value == 42) {
-        amiga.signalStop();
+    if (!releaseBuild()) {
+        if (addr == 0xFFFFFF && value == 42) {
+            debug("DEBUG STOP\n");
+            amiga.signalStop();
+        }
     }
-#endif
 }
 
 template <> void

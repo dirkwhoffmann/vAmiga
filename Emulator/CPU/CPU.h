@@ -99,9 +99,6 @@ private:
     
 private:
 
-    void _powerOn() override;
-    void _powerOff() override; 
-    void _run() override;
     void _setDebug(bool enable) override;
 
         

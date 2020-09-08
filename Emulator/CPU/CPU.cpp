@@ -191,24 +191,6 @@ CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 }
 
 void
-CPU::_powerOn()
-{
-    debug(CPU_DEBUG, "CPU::_powerOn()\n");
-}
-
-void
-CPU::_powerOff()
-{
-
-}
-
-void
-CPU::_run()
-{
-    debug(CPU_DEBUG, "CPU::_run()\n");
-}
-
-void
 CPU::_reset(bool hard)
 {
     debug(CPU_DEBUG, "CPU::_reset(%d)\n", hard);

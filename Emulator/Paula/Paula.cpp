@@ -29,6 +29,7 @@ Paula::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS
 
     for (int i = 0; i < 16; i++) setIntreq[i] = NEVER;
+    ipl.clear();
 }
 
 void
@@ -107,6 +108,8 @@ Paula::checkInterrupt()
         ipl.write((u8)level);
         iplPipe = (iplPipe & ~0xFF) | level;
                 
+        debug(CPU_DEBUG, "iplPipe: %016x\n", iplPipe);
+        
         u8 iplValue = ipl.delayed();
         assert(iplValue == ((iplPipe >> 32) & 0xFF));
             

@@ -1510,8 +1510,7 @@ Moira::execNegEa(u16 opcode)
 template<Instr I, Mode M, Size S> void
 Moira::execNop(u16 opcode)
 {
-    prefetch();
-    pollIrq();
+    prefetch<POLLIPL>();
 }
 
 template<Instr I, Mode M, Size S> void
