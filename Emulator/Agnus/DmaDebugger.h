@@ -30,7 +30,7 @@ private:
     double opacity = 0.5;
 
     // Currently selected display mode
-    DmaDebuggerDisplayMode displayMode = MODULATE_FG_LAYER;
+    DmaDisplayMode displayMode = MODULATE_FG_LAYER;
 
 
     //
@@ -71,8 +71,8 @@ public:
     void setOpacity(double value);
 
     // Gets or sets the display mode
-    DmaDebuggerDisplayMode getDisplayMode() { return displayMode; }
-    void setDisplayMode(DmaDebuggerDisplayMode mode) { displayMode = mode; }
+    DmaDisplayMode getDisplayMode() { return displayMode; }
+    void setDisplayMode(DmaDisplayMode mode) { displayMode = mode; }
 
     // Gets or sets a debug color
     RgbColor getColor(BusOwner owner);

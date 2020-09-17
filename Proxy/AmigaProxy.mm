@@ -592,7 +592,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) setDisplayMode:(NSInteger)mode
 {
-    wrapper->dmaDebugger->setDisplayMode((DmaDebuggerDisplayMode)mode);
+    wrapper->dmaDebugger->setDisplayMode((DmaDisplayMode)mode);
 }
 - (void) setCopperColor:(double)r g:(double)g b:(double)b
 {

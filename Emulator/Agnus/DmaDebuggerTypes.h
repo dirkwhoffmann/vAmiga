@@ -14,7 +14,7 @@
 
 #include "VA_ENUM.h"
 
-typedef VA_ENUM(long, DmaDebuggerDisplayMode)
+typedef VA_ENUM(long, DmaDisplayMode)
 {
     MODULATE_FG_LAYER,
     MODULATE_BG_LAYER,
@@ -34,7 +34,7 @@ typedef struct
     bool visualizeCpu;
     bool visualizeRefresh;
 
-    DmaDebuggerDisplayMode displayMode;
+    DmaDisplayMode displayMode;
     double opacity;
     
     double copperColor[3];

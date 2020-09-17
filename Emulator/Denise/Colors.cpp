@@ -94,9 +94,9 @@ AmigaColor::AmigaColor(const GpuColor &c)
 
 AmigaColor::AmigaColor(const struct RgbColor &c)
 {
-    u8 r = c.r * 0xF;
-    u8 g = c.g * 0xF;
-    u8 b = c.b * 0xF;
+    u8 r = (u8)(c.r * 0xF);
+    u8 g = (u8)(c.g * 0xF);
+    u8 b = (u8)(c.b * 0xF);
 
     rawValue = (r << 8) | (g << 4) | b;
 }
@@ -127,9 +127,9 @@ GpuColor::GpuColor(const AmigaColor &c)
 GpuColor::GpuColor(const RgbColor &c)
 {
     u8 a = 255;
-    u8 r = c.r * 255;
-    u8 g = c.g * 255;
-    u8 b = c.b * 255;
+    u8 r = (u8)(c.r * 255);
+    u8 g = (u8)(c.g * 255);
+    u8 b = (u8)(c.b * 255);
 
     rawValue = (a << 24) | (b << 16) | (g << 8) | r;
 }

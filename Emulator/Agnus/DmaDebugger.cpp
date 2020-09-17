@@ -79,7 +79,8 @@ DmaDebugger::setEnabled(bool value)
 bool
 DmaDebugger::isVisualized(BusOwner owner)
 {
-    return true;
+    assert(isBusOwner(owner));
+    return visualize[owner];
 }
 
 void
