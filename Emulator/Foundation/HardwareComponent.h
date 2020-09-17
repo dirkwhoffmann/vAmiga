@@ -265,23 +265,28 @@ applyToResetItems(counter); \
 return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
+{ \
 SerResetter resetter; \
-if (hard) { applyToResetItems(resetter); } \
-else { applyToResetItems(resetter); } \
-debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft");
+applyToResetItems(resetter); \
+debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
+}
 
 #define LOAD_SNAPSHOT_ITEMS \
+{ \
 SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToResetItems(reader); \
 debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
-return reader.ptr - buffer;
+return reader.ptr - buffer; \
+}
 
 #define SAVE_SNAPSHOT_ITEMS \
+{ \
 SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
-return writer.ptr - buffer;
+return writer.ptr - buffer; \
+}
 
 #endif
