@@ -26,13 +26,15 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 void
 DiskController::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    prb = 0xFF;
-    selected = -1;
-    dsksync = 0x4489;
-    
-    assert(diskToInsert == NULL);
+    if (hard) {
+        RESET_SNAPSHOT_ITEMS(hard)
+        
+        prb = 0xFF;
+        selected = -1;
+        dsksync = 0x4489;
+        
+        assert(diskToInsert == NULL);
+    }
 }
 
 long

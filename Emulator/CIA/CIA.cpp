@@ -28,21 +28,37 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 void
 CIA::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
+    if (hard) {
+        
+        RESET_SNAPSHOT_ITEMS(hard)
+        
+        CNT = true;
+        INT = 1;
+        
+        counterA = 0xFFFF;
+        counterB = 0xFFFF;
+        latchA = 0xFFFF;
+        latchB = 0xFFFF;
+        
+        updatePA();
+        updatePB();
+        
+        // The OVL bit influences the memory layout. Hence, we need to update it.
+        mem.updateMemSrcTable();
 
-    CNT = true;
-    INT = 1;
-
-    counterA = 0xFFFF;
-    counterB = 0xFFFF;
-    latchA = 0xFFFF;
-    latchB = 0xFFFF;
-
-    updatePA();
-    updatePB();
-
-    // The OVL bit influences the memory layout. Hence, we need to update it.
-    mem.updateMemSrcTable();
+    } else {
+            
+        PRA = 0;
+        PRB = 0;
+        DDRA = 0;
+        DDRB = 0;
+        
+        updatePA();
+        updatePB();
+        
+        // The OVL bit influences the memory layout. Hence, we need to update it.
+        mem.updateMemSrcTable();
+    }
 }
 
 long

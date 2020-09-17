@@ -26,7 +26,7 @@ Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 void
 Paula::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
+    if (hard) { RESET_SNAPSHOT_ITEMS(hard) }
 
     for (int i = 0; i < 16; i++) setIntreq[i] = NEVER;
     ipl.clear();

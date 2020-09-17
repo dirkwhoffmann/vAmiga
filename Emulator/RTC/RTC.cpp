@@ -58,19 +58,21 @@ RTC::setConfigItem(ConfigOption option, long value)
 void
 RTC::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    if (config.model == RTC_RICOH) {
+    if (hard) {
+        RESET_SNAPSHOT_ITEMS(hard)
         
-        reg[0][0xD] = 0b1000;
-        reg[0][0xE] = 0b0000;
-        reg[0][0xF] = 0b0000;
-    }
-    if (config.model == RTC_OKI) {
-        
-        reg[0][0xD] = 0b0001;
-        reg[0][0xE] = 0b0000;
-        reg[0][0xF] = 0b0100;
+        if (config.model == RTC_RICOH) {
+            
+            reg[0][0xD] = 0b1000;
+            reg[0][0xE] = 0b0000;
+            reg[0][0xF] = 0b0000;
+        }
+        if (config.model == RTC_OKI) {
+            
+            reg[0][0xD] = 0b0001;
+            reg[0][0xE] = 0b0000;
+            reg[0][0xF] = 0b0100;
+        }
     }
 }
 

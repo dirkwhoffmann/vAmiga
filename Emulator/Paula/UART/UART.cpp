@@ -17,8 +17,10 @@ UART::UART(Amiga& ref) : AmigaComponent(ref)
 void
 UART::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    outBit = 1;
+    if (hard) {
+        RESET_SNAPSHOT_ITEMS(hard)
+        outBit = 1;
+    }
 }
 
 void

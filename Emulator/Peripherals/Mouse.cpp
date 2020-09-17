@@ -19,16 +19,18 @@ Mouse::Mouse(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
 
 void Mouse::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
-    leftButton = false;
-    rightButton = false;
-    mouseX = 0;
-    mouseY = 0;
-    oldMouseX = 0;
-    oldMouseY = 0;
-    targetX = 0;
-    targetY = 0;
+    if (hard) {
+        RESET_SNAPSHOT_ITEMS(hard)
+        
+        leftButton = false;
+        rightButton = false;
+        mouseX = 0;
+        mouseY = 0;
+        oldMouseX = 0;
+        oldMouseY = 0;
+        targetX = 0;
+        targetY = 0;
+    }
 }
 
 void

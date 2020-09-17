@@ -19,7 +19,7 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
         &blitter,
         &dmaDebugger
     };
-
+    
     config.revision = AGNUS_ECS_1MB;
     ptrMask = 0x0FFFFF;
     
@@ -28,39 +28,41 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 
 void Agnus::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-
-    // Start with a long frame
-    frame = Frame();
-
-    // Initialize statistical counters
-    clearStats();
-
-    // Initialize event tables
-    for (int i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
-    for (int i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
-    updateBplJumpTable();
-    updateDasJumpTable();
-
-    // Initialize the event slots
-    for (unsigned i = 0; i < SLOT_COUNT; i++) {
-        slot[i].triggerCycle = NEVER;
-        slot[i].id = (EventID)0;
-        slot[i].data = 0;
+    if (hard) {
+        RESET_SNAPSHOT_ITEMS(hard)
+        
+        // Start with a long frame
+        frame = Frame();
+        
+        // Initialize statistical counters
+        clearStats();
+        
+        // Initialize event tables
+        for (int i = pos.h; i < HPOS_CNT; i++) bplEvent[i] = bplDMA[0][0][i];
+        for (int i = pos.h; i < HPOS_CNT; i++) dasEvent[i] = dasDMA[0][i];
+        updateBplJumpTable();
+        updateDasJumpTable();
+        
+        // Initialize the event slots
+        for (unsigned i = 0; i < SLOT_COUNT; i++) {
+            slot[i].triggerCycle = NEVER;
+            slot[i].id = (EventID)0;
+            slot[i].data = 0;
+        }
+        
+        // Schedule initial events
+        scheduleAbs<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
+        scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+        scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
+        scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
+        scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
+        scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
+        scheduleNextBplEvent();
+        scheduleNextDasEvent();
+        
+        // Start with long frames by setting the LOF bit
+        pokeVPOS(0x8000);
     }
-
-    // Schedule initial events
-    scheduleAbs<RAS_SLOT>(DMA_CYCLES(HPOS_CNT), RAS_HSYNC);
-    scheduleAbs<CIAA_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-    scheduleAbs<CIAB_SLOT>(CIA_CYCLES(1), CIA_EXECUTE);
-    scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
-    scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
-    scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
-    scheduleNextBplEvent();
-    scheduleNextDasEvent();
-    
-    // Start with long frames by setting the LOF bit
-    pokeVPOS(0x8000);
 }
 
 long
