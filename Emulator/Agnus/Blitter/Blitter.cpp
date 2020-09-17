@@ -555,7 +555,7 @@ Blitter::beginLineBlit(int level)
         case 0: beginFastLineBlit(); break;
         case 1: beginFakeLineBlit(); break;
         case 2: beginSlowLineBlit(); break;
-        defaut: assert(false);
+        default: assert(false);
     }
 }
 
@@ -573,7 +573,7 @@ Blitter::beginCopyBlit(int level)
         case 0: beginFastCopyBlit(); break;
         case 1: beginFakeCopyBlit(); break;
         case 2: beginSlowCopyBlit(); break;
-        defaut: assert(false);
+        default: assert(false);
     }
 }
 

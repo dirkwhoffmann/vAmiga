@@ -259,7 +259,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
 
         // Make sure there is enough time between ejecting and inserting.
         // Otherwise, the Amiga might not detect the change.
-        delay = MAX(SEC(1.5), delay);
+        delay = MAX((Cycle)SEC(1.5), delay);
     }
 
     diskToInsert = disk;

@@ -758,8 +758,8 @@ Amiga::synchronizeTiming()
 {
     u64 now          = time_in_nanos();
     Cycle clockDelta = agnus.clock - clockBase;
-    i64 elapsedTime  = (clockDelta * 1000) / masterClockFrequency;
-    i64 targetTime   = timeBase + elapsedTime;
+    u64 elapsedTime  = (u64)(clockDelta * 1000 / masterClockFrequency);
+    u64 targetTime   = timeBase + elapsedTime;
     
     /*
      debug("now         = %lld\n", now);

@@ -14,8 +14,8 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     setDescription("PixelEngine");
 
     // Allocate frame buffers
-    buffer[0].data = new u32[PIXELS]; buffer[0].longFrame = true;
-    buffer[1].data = new u32[PIXELS]; buffer[1].longFrame = true;
+    emuTexture[0].data = new u32[PIXELS]; emuTexture[0].longFrame = true;
+    emuTexture[1].data = new u32[PIXELS]; emuTexture[1].longFrame = true;
     
     // Create random background noise pattern
     const size_t noiseSize = 2 * 512 * 512;
@@ -37,8 +37,8 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 
 PixelEngine::~PixelEngine()
 {
-    delete[] buffer[0].data;
-    delete[] buffer[1].data;
+    delete[] emuTexture[0].data;
+    delete[] emuTexture[1].data;
     delete[] noise;
 }
 
@@ -51,8 +51,8 @@ PixelEngine::_powerOn()
 
             int pos = line * HPIXELS + i;
             int col = (line / 4) % 2 == (i / 8) % 2 ? 0xFF222222 : 0xFF444444;
-            buffer[0].data[pos] = col;
-            buffer[1].data[pos] = col;
+            emuTexture[0].data[pos] = col;
+            emuTexture[1].data[pos] = col;
         }
     }
 }
@@ -62,7 +62,7 @@ PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS
 
-    frameBuffer = & buffer[0];
+    frameBuffer = & emuTexture[0];
 
     updateRGBA();
 }
@@ -228,7 +228,7 @@ ScreenBuffer
 PixelEngine::getStableBuffer()
 {
     ScreenBuffer result;
-    synchronized { result = (frameBuffer == &buffer[0]) ? buffer[1] : buffer[0]; }
+    synchronized { result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0]; }
     return result;
 }
 
@@ -255,7 +255,7 @@ PixelEngine::beginOfFrame()
 {
     // Switch the working buffer
     synchronized {
-        frameBuffer = (frameBuffer == &buffer[0]) ? &buffer[1] : &buffer[0];
+        frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
         frameBuffer->longFrame = agnus.frame.lof;
     }
     

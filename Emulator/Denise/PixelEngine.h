@@ -34,10 +34,10 @@ private:
      * buffer whereas the GPU reads from the stable buffer. Once a frame has
      * been completed, the working buffer and the stable buffer are switched.
      */
-    ScreenBuffer buffer[2];
+    ScreenBuffer emuTexture[2];
 
     // Pointer to the "working buffer"
-    ScreenBuffer *frameBuffer = &buffer[0];
+    ScreenBuffer *frameBuffer = &emuTexture[0];
 
     // Buffer with background noise (random black and white pixels)
     u32 *noise;

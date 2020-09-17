@@ -291,10 +291,10 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
-        double ch0 = channel0.interpolate<method>(clock) * config.vol[0];
-        double ch1 = channel1.interpolate<method>(clock) * config.vol[1];
-        double ch2 = channel2.interpolate<method>(clock) * config.vol[2];
-        double ch3 = channel3.interpolate<method>(clock) * config.vol[3];
+        double ch0 = channel0.interpolate<method>((Cycle)clock) * config.vol[0];
+        double ch1 = channel1.interpolate<method>((Cycle)clock) * config.vol[1];
+        double ch2 = channel2.interpolate<method>((Cycle)clock) * config.vol[2];
+        double ch3 = channel3.interpolate<method>((Cycle)clock) * config.vol[3];
         
         double l =
         ch0 * config.pan[0] + ch1 * config.pan[1] +
@@ -586,7 +586,7 @@ PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
             if (sample > newHighestAmplitude) newHighestAmplitude = sample;
             
             // Scale the sample
-            int scaled = sample * height / highestAmplitude;
+            int scaled = int(sample * height / highestAmplitude);
             if (scaled > height) scaled = height;
             
             // Draw vertical line

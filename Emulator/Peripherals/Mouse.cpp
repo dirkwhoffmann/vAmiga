@@ -77,7 +77,7 @@ Mouse::getDeltaX()
 {
     execute();
 
-    i64 result = mouseX - oldMouseX;
+    i64 result = (i16)(mouseX - oldMouseX);
     oldMouseX = mouseX;
 
     return result;
@@ -88,7 +88,7 @@ Mouse::getDeltaY()
 {
     execute();
 
-    i64 result = mouseY - oldMouseY;
+    i64 result = (i16)(mouseY - oldMouseY);
     oldMouseY = mouseY;
 
     return result;

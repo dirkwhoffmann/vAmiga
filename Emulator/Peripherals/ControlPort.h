@@ -91,8 +91,8 @@ private:
 public:
 
     // Getter for the delta charges
-    i16 getChargeDX() { return chargeDX; }
-    i16 getChargeDY() { return chargeDY; }
+    i16 getChargeDX() { return (i16)chargeDX; }
+    i16 getChargeDY() { return (i16)chargeDY; }
     
     // Returns the control port bits showing up in the JOYxDAT register
     u16 joydat();

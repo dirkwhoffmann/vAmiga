@@ -103,10 +103,10 @@ Paula::servicePotEvent(EventID id)
             double dx1 = controlPort2.getChargeDX();
 
             // Charge capacitors
-            if (dy0 && chargeY0 < 1.0 && !OUTLY()) { chargeX0 += dy0; cont = true; }
-            if (dx0 && chargeX0 < 1.0 && !OUTLX()) { chargeX0 += dx0; cont = true; }
-            if (dy1 && chargeY1 < 1.0 && !OUTRY()) { chargeX0 += dy1; cont = true; }
-            if (dx1 && chargeX1 < 1.0 && !OUTRX()) { chargeX0 += dx1; cont = true; }
+            if (dy0 > 0 && chargeY0 < 1.0 && !OUTLY()) { chargeX0 += dy0; cont = true; }
+            if (dx0 > 0 && chargeX0 < 1.0 && !OUTLX()) { chargeX0 += dx0; cont = true; }
+            if (dy1 > 0 && chargeY1 < 1.0 && !OUTRY()) { chargeX0 += dy1; cont = true; }
+            if (dx1 > 0 && chargeX1 < 1.0 && !OUTRX()) { chargeX0 += dx1; cont = true; }
 
             // Schedule next event
             if (cont) {

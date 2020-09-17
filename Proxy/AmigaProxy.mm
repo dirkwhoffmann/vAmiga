@@ -753,7 +753,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (u32) sampleRate
 {
-    return wrapper->paula->audioUnit.getSampleRate();
+    return (u32)wrapper->paula->audioUnit.getSampleRate();
 }
 - (void) setSampleRate:(double)rate
 {
@@ -805,7 +805,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
-    return [self drawWaveformL:buffer w:size.width h:size.height scale:s color:c];
+    return [self drawWaveformL:buffer
+                             w:(NSInteger)size.width
+                             h:(NSInteger)size.height
+                         scale:s
+                         color:c];
 }
 - (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
@@ -813,7 +817,11 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
-    return [self drawWaveformR:buffer w:size.width h:size.height scale:s color:c];
+    return [self drawWaveformR:buffer
+                             w:(NSInteger)size.width
+                             h:(NSInteger)size.height
+                         scale:s
+                         color:c];
 }
 
 @end
@@ -1645,7 +1653,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->amiga->configure(nr, opt, val);
 }
-- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val;
+- (BOOL) configure:(ConfigOption)opt drive:(NSInteger)nr  enable:(BOOL)val
 {
     return wrapper->amiga->configure(nr, opt, val ? 1 : 0);
 }
