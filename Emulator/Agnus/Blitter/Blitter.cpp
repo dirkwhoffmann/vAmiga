@@ -48,7 +48,7 @@ Blitter::_initialize()
 void
 Blitter::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS
+    RESET_SNAPSHOT_ITEMS(hard)
 
     copycount = 0;
     linecount = 0;
@@ -506,9 +506,10 @@ Blitter::beginBlit()
         if (BLT_CHECKSUM) {
             linecount++;
             check1 = check2 = fnv_1a_init32();
-            plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d) (%d %d %d %d) %x %x %x %x\n",
+            plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                        linecount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
+                       bltcon0 & 0xFF,
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt & agnus.ptrMask,
                        bltbpt & agnus.ptrMask,

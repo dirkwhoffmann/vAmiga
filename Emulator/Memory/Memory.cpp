@@ -49,7 +49,7 @@ Memory::dealloc()
 void
 Memory::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS
+    RESET_SNAPSHOT_ITEMS(hard)
     
     // Set up the memory lookup table
     updateMemSrcTable();

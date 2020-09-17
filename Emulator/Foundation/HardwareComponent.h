@@ -264,10 +264,11 @@ applyToPersistentItems(counter); \
 applyToResetItems(counter); \
 return counter.count;
 
-#define RESET_SNAPSHOT_ITEMS \
+#define RESET_SNAPSHOT_ITEMS(hard) \
 SerResetter resetter; \
-applyToResetItems(resetter); \
-debug(SNP_DEBUG, "Resetted\n");
+if (hard) { applyToResetItems(resetter); } \
+else { applyToResetItems(resetter); } \
+debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft");
 
 #define LOAD_SNAPSHOT_ITEMS \
 SerReader reader(buffer); \

@@ -40,7 +40,7 @@ public:
     
     ControlPort(PortNr nr, Amiga& ref);
 
-    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS }
+    void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 
     
     //

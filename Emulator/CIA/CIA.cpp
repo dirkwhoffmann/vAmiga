@@ -28,7 +28,7 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 void
 CIA::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS
+    RESET_SNAPSHOT_ITEMS(hard)
 
     CNT = true;
     INT = 1;

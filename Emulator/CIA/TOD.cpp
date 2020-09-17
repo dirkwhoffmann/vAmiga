@@ -18,7 +18,7 @@ TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 void
 TOD::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS
+    RESET_SNAPSHOT_ITEMS(hard)
 
     stopped = true;
     matching = true;

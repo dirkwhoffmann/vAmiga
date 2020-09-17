@@ -60,7 +60,7 @@ PixelEngine::_powerOn()
 void
 PixelEngine::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS
+    RESET_SNAPSHOT_ITEMS(hard)
 
     frameBuffer = & emuTexture[0];
 

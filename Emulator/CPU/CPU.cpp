@@ -197,7 +197,7 @@ CPU::_reset(bool hard)
     
     if (hard) {
         
-        RESET_SNAPSHOT_ITEMS
+        RESET_SNAPSHOT_ITEMS(hard)
         
         // Reset the Moira core
         Moira::reset();
@@ -207,12 +207,15 @@ CPU::_reset(bool hard)
         
     } else {
         
-        /* A soft reset doesn't affect the CPU inside a real Amiga.
-         * Hence, we only need to reset the clock to resync with the rest of
-         * the system.
-         */
-        clock = 0;
-    }    
+        /* "The RESET instruction causes the processor to assert RESET for 124
+         *  clock periods toreset the external devices of the system. The
+         *  internal state of the processor is notaffected. Neither the status
+         *  register nor any of the internal registers is affected by an
+         *  internal reset operation. All external devices in the system should
+         *  be reset at the completion of the RESET instruction."
+         *      [Motorola M68000 User Manual]
+         */            
+    }
 }
 
 void
