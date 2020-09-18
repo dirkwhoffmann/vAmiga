@@ -342,7 +342,7 @@ DiskController::compareFifo(u16 word)
 void
 DiskController::executeFifo()
 {
-    // Only proceed if a drive is selected.
+    // Only proceed if a drive is selected
     Drive *drive = getSelectedDrive();
     if (drive == NULL) return;
 
@@ -541,9 +541,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
 void
 DiskController::performTurboDMA(Drive *drive)
 {
-    assert(drive != NULL);
-
-    // Only proceed if there is anything to read
+    // Only proceed if there is anything to read or write
     if ((dsklen & 0x3FFF) == 0) return;
 
     // Perform action depending on DMA state
@@ -556,13 +554,13 @@ DiskController::performTurboDMA(Drive *drive)
 
         case DRIVE_DMA_READ:
             
-            performTurboRead(drive);
-            paula.raiseIrq(INT_DSKSYN);
+            if (drive) performTurboRead(drive);
+            if (drive) paula.raiseIrq(INT_DSKSYN);
             break;
             
         case DRIVE_DMA_WRITE:
             
-            performTurboWrite(drive);
+            if (drive) performTurboWrite(drive);
             break;
             
         default:

@@ -47,7 +47,8 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/at.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/EmulatorDisk.adf"
+// #define BOOT_DISK "/Users/hoff/Desktop/Testing/read3.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
 // #define BOOT_DISK "/Users/hoff/Desktop/Testing/911Rescue.adf"

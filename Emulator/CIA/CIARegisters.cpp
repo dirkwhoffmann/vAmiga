@@ -234,16 +234,20 @@ CIA::poke(u16 addr, u8 value)
         case 0x02: // CIA_DATA_DIRECTION_A
         
             // plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
-            // debug(DSKREG_DEBUG, " DDRA = %X\n", DDRA);
+            if (isCIAA()) {
+                debug(XFILES && value != 0x03, "XFILES: DDRA = %x\n", value);
+            } else {
+                debug(XFILES && value != 0xC0, "XFILES: DDRA = %x\n", value);
+            }
             pokeDDRA(value);
-            // DDRA = value;
-            // updatePA();
             return;
             
         case 0x03: // CIA_DATA_DIRECTION_B
         
             // plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
-            // debug(DSKREG_DEBUG, " DDRB = %X\n", DDRB);
+            if (isCIAB()) {
+                debug(XFILES && value != 0xFF, "XFILES: DDRB = %x\n", value);
+            }
             DDRB = value;
             updatePB();
             return;

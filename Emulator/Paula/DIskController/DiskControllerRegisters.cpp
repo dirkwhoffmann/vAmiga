@@ -54,9 +54,9 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
 
         // In debug mode, reset head position to generate reproducable results
-        if (ALIGN_HEAD) drive->head.offset = 0;
+        if (ALIGN_HEAD && drive) drive->head.offset = 0;
 
-        // Check if the WRITE bit (bit 14) also has been written twice.
+        // Check if the WRITE bit (bit 14) also has been written twice
         if (oldValue & newValue & 0x4000) {
             
             setState(DRIVE_DMA_WRITE);
@@ -79,9 +79,9 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
             }
         }
     }
-    
+        
     // If the selected drive is a turbo drive, perform DMA immediately
-    if (drive && drive->isTurbo()) performTurboDMA(drive);
+    if (drive == NULL || drive->isTurbo()) performTurboDMA(drive);
 }
 
 void
