@@ -302,12 +302,21 @@ DiskController::clearFifo()
 u8
 DiskController::readFifo()
 {
-    // Don't call this function on an empty buffer.
-    assert(fifoCount > 0);
+    assert(fifoCount >= 1);
     
-    // Remove and return the oldest byte.
-    fifoCount--;
+    // Remove and return the oldest byte
+    fifoCount -= 1;
     return (fifo >> (8 * fifoCount)) & 0xFF;
+}
+
+u16
+DiskController::readFifo16()
+{
+    assert(fifoCount >= 2);
+    
+    // Remove and return the oldest word
+    fifoCount -= 2;
+    return (fifo >> (8 * fifoCount)) & 0xFFFF;
 }
 
 void
@@ -321,16 +330,6 @@ DiskController::writeFifo(u8 byte)
     // Add the new byte
     fifo = (fifo << 8) | byte;
     fifoCount++;
-}
-
-u16
-DiskController::readFifo16()
-{
-    assert(fifoHasWord());
-    
-    // Remove and return the oldest word.
-    fifoCount -= 2;
-    return (fifo >> (8 * fifoCount)) & 0xFFFF;
 }
 
 bool
@@ -353,7 +352,7 @@ DiskController::executeFifo()
         case DRIVE_DMA_READ:
             
             // Read a byte from the drive
-            incoming = drive->readHead();
+            incoming = drive->readByteAndRotate();
             
             // Write byte into the FIFO buffer
             writeFifo(incoming);
@@ -397,7 +396,7 @@ DiskController::executeFifo()
                 u8 outgoing = readFifo();
                 
                 // Write byte to disk
-                drive->writeHead(outgoing);
+                drive->writeByteAndRotate(outgoing);
             }
             break;
     }
@@ -518,7 +517,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
              * Hence, we play safe here and flush the FIFO immediately.
              */
             while (!fifoIsEmpty()) {
-                drive->writeHead(readFifo());
+                drive->writeByteAndRotate(readFifo());
             }
             setState(DRIVE_DMA_OFF);
 
@@ -578,7 +577,7 @@ DiskController::performTurboRead(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from disk
-        u16 word = drive->readHead16();
+        u16 word = drive->readWordAndRotate();
         
         // Write word into memory
         agnus.poke(agnus.dskpt, word);
@@ -611,7 +610,7 @@ DiskController::performTurboWrite(Drive *drive)
         }
 
         // Write word to disk
-        drive->writeHead16(word);
+        drive->writeWordAndRotate(word);
     }
 
     if (DSK_CHECKSUM) {

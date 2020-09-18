@@ -271,12 +271,13 @@ private:
     // Clears the FIFO buffer
     void clearFifo();
     
-    // Reads or writes a byte from or to the FIFO
+    // Reads a byte or word from the FIFO buffer
     u8 readFifo();
+    u16 readFifo16();
+
+    // Writes a word into the FIFO buffer
     void writeFifo(u8 byte);
 
-    // Reads a word from the FIFO buffer. DEPRECATED
-    u16 readFifo16();
     
     // Returns true if the next word to read matches the specified value
     bool compareFifo(u16 word);

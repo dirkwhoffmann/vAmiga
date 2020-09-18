@@ -373,57 +373,55 @@ Drive::selectSide(int side)
 }
 
 u8
-Drive::readHead()
+Drive::readByte()
 {
-    static int skipped = 0;
-    
-    u8 result;
-    
-    // Only proceed if a disk in inserted
-    if (!disk) {
-        result = 0xFF;
-        goto exit;
-    }
+    // Case 1: No disk is inserted
+    if (!disk) return 0xFF;
 
-    // Only proceed if no step operation is in progress
-    if (emulateMechanics() && (agnus.clock - stepCycle) < config.stepDelay) {
-        result = 0xFF;
-        // debug("Skipping %d\n", ++skipped);
-        goto exit;
-    }
+    // Case 2: A step operation is in progress
+    if (emulateMechanics() && (agnus.clock - stepCycle) < config.stepDelay) return 0xFF;
     
-    // Read byte from disk
-    skipped = 0; 
-    result = disk->readByte(head.cylinder, head.side, head.offset);
+    // Case 3: Normal operation
+    return disk->readByte(head.cylinder, head.side, head.offset);
+}
 
-exit:
+u8
+Drive::readByteAndRotate()
+{
+    u8 result = readByte();
     rotate();
     return result;
 }
 
 u16
-Drive::readHead16()
+Drive::readWordAndRotate()
 {
-    u8 byte1 = readHead();
-    u8 byte2 = readHead();
+    u8 byte1 = readByteAndRotate();
+    u8 byte2 = readByteAndRotate();
     
     return HI_LO(byte1, byte2);
 }
 
 void
-Drive::writeHead(u8 value)
+Drive::writeByte(u8 value)
 {
     if (disk) {
         disk->writeByte(value, head.cylinder, head.side, head.offset);
     }
+}
+
+void
+Drive::writeByteAndRotate(u8 value)
+{
+    writeByte(value);
     rotate();
 }
 
 void
-Drive::writeHead16(u16 value)
+Drive::writeWordAndRotate(u16 value)
 {
-    writeHead(HI_BYTE(value));
-    writeHead(LO_BYTE(value));
+    writeByteAndRotate(HI_BYTE(value));
+    writeByteAndRotate(LO_BYTE(value));
 }
 
 void
@@ -448,8 +446,8 @@ Drive::findSyncMark()
 {
     for (unsigned i = 0; i < disk->trackSize; i++) {
         
-        if (readHead() != 0x44) continue;
-        if (readHead() != 0x89) continue;
+        if (readByteAndRotate() != 0x44) continue;
+        if (readByteAndRotate() != 0x89) continue;
         break;
     }
 
