@@ -81,7 +81,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     }
         
     // If the selected drive is a turbo drive, perform DMA immediately
-    if (drive == NULL || drive->isTurbo()) performTurboDMA(drive);
+    if (drive && drive->isTurbo()) performTurboDMA(drive);
 }
 
 void
@@ -183,13 +183,15 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     }
     
     // Schedule the first rotation event if at least one drive is spinning
+    /*
     if (!spinning()) {
         agnus.cancel<DSK_SLOT>();
     }
     else if (!agnus.hasEvent<DSK_SLOT>()) {
         agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
     }
-
+    */
+    
     // Inform the GUI
     if (oldSelected != selected) messageQueue.put(MSG_DRIVE_SELECT, selected);
 }

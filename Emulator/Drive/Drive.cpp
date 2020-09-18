@@ -389,7 +389,7 @@ u8
 Drive::readByteAndRotate()
 {
     u8 result = readByte();
-    rotate();
+    if (motor) rotate();
     return result;
 }
 
@@ -414,7 +414,7 @@ void
 Drive::writeByteAndRotate(u8 value)
 {
     writeByte(value);
-    rotate();
+    if (motor) rotate();
 }
 
 void

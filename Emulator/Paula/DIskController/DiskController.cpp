@@ -343,7 +343,6 @@ DiskController::executeFifo()
 {
     // Only proceed if a drive is selected
     Drive *drive = getSelectedDrive();
-    if (drive == NULL) return;
 
     switch (state) {
             
@@ -352,7 +351,7 @@ DiskController::executeFifo()
         case DRIVE_DMA_READ:
             
             // Read a byte from the drive
-            incoming = drive->readByteAndRotate();
+            incoming = drive ? drive->readByteAndRotate() : 0;
             
             // Write byte into the FIFO buffer
             writeFifo(incoming);
@@ -396,7 +395,7 @@ DiskController::executeFifo()
                 u8 outgoing = readFifo();
                 
                 // Write byte to disk
-                drive->writeByteAndRotate(outgoing);
+                if (drive) drive->writeByteAndRotate(outgoing);
             }
             break;
     }
@@ -405,6 +404,8 @@ DiskController::executeFifo()
 void
 DiskController::performDMA()
 {
+    Drive *drive = getSelectedDrive();
+
     // Emulate the FIFO buffer if asynchronous mode is disabled
     if (!asyncFifo) { executeFifo(); executeFifo(); }
     
@@ -414,12 +415,8 @@ DiskController::performDMA()
     // Only proceed if DMA is enabled
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
 
-    // Only proceed if a drive is selected
-    Drive *drive = getSelectedDrive();
-    if (drive == NULL) return;
-
     // How many words shall we read in?
-    u32 count = drive->config.speed;
+    u32 count = drive ? drive->config.speed : 1;
 
     // Perform DMA
     switch (state) {
@@ -439,8 +436,6 @@ DiskController::performDMA()
 void
 DiskController::performDMARead(Drive *drive, u32 remaining)
 {
-    assert(drive != NULL);
-
     // Only proceed if the FIFO contains enough data
     if (!fifoHasWord()) return;
 
@@ -480,8 +475,6 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
 void
 DiskController::performDMAWrite(Drive *drive, u32 remaining)
 {
-    assert(drive != NULL);
-
     // Only proceed if the FIFO has enough free space
     if (!fifoCanStoreWord()) return;
 
@@ -517,7 +510,8 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
              * Hence, we play safe here and flush the FIFO immediately.
              */
             while (!fifoIsEmpty()) {
-                drive->writeByteAndRotate(readFifo());
+                u8 value = readFifo();
+                if (drive) drive->writeByteAndRotate(value);
             }
             setState(DRIVE_DMA_OFF);
 

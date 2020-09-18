@@ -57,6 +57,7 @@ void Agnus::_reset(bool hard)
         scheduleAbs<SEC_SLOT>(NEVER, SEC_TRIGGER);
         scheduleAbs<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
         scheduleAbs<IRQ_SLOT>(NEVER, IRQ_CHECK);
+        scheduleAbs<DSK_SLOT>(DMA_CYCLES(56), DSK_ROTATE);
         scheduleNextBplEvent();
         scheduleNextDasEvent();
         
