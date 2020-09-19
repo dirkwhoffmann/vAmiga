@@ -84,9 +84,11 @@ class MyDocument: NSDocument {
     func fileType(url: URL) -> AmigaFileType {
         
         switch url.pathExtension.uppercased() {
-            
+        
         case "VAMIGA": return .FILETYPE_SNAPSHOT
         case "ADF":    return .FILETYPE_ADF
+        case "IMG":    return .FILETYPE_IMG
+        case "IMA":    return .FILETYPE_IMG
         case "DMS":    return .FILETYPE_DMS
         default:       return .FILETYPE_UKNOWN
         }

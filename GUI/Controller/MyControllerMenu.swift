@@ -409,7 +409,7 @@ extension MyController: NSMenuItemValidation {
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Insert"
-        openPanel.allowedFileTypes = ["adf", "dms", "adz", "zip", "gz"]
+        openPanel.allowedFileTypes = ["adf", "dms", "img", "ima", "adz", "zip", "gz"]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {

@@ -31,6 +31,49 @@ class DiskMountDialog: DialogController {
     var lastItem: Int { return numItems - 1 }
     var empty: Bool { return numItems == 0 }
     
+    var diskIconImage: NSImage? {
+        
+        switch type {
+        
+        case .FILETYPE_ADF, .FILETYPE_DMS:
+            return NSImage.init(named: writeProtect ? "adf_protected" : "adf")
+        case .FILETYPE_IMG:
+            return NSImage.init(named: writeProtect ? "dos_protected" : "dos")
+        default:
+            return nil
+        }
+    }
+
+    var titleText: String {
+        
+        switch type {
+        
+        case .FILETYPE_ADF:
+            return "Amiga Disk File (ADF)"
+        case .FILETYPE_DMS:
+            return "Disk Masher System (DMS)"
+        case .FILETYPE_IMG:
+            return "PC Disk Image"
+        default:
+            return "???"
+        }
+    }
+
+    var subtitleText: String {
+        
+        switch type {
+        
+        case .FILETYPE_ADF:
+            return "A byte-accurate image of a 3.5\" DD Amiga diskette"
+        case .FILETYPE_DMS:
+            return "A byte-accurate image of a 3.5\" DD PC diskette"
+        case .FILETYPE_IMG:
+            return "A byte-accurate image of a 3.5\" DD PC diskette"
+        default:
+            return "???"
+        }
+    }
+
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
     
         track()
@@ -38,13 +81,16 @@ class DiskMountDialog: DialogController {
         type = myDocument.amigaAttachment?.type
 
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
-            // title.stringValue = "Amiga Disk File (ADF)"
             disk = attachment
         }
         if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
-            // title.stringValue = "Disk Masher System (DMS)"
             disk = attachment.adf()
         }
+        /*
+        if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
+            disk = attachment
+        }
+        */
         
         if disk != nil {
             
@@ -57,22 +103,6 @@ class DiskMountDialog: DialogController {
             
             super.showSheet(completionHandler: handler)
         }
-        
-        /*
-        if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
-            
-            disk = attachment
-            
-            // Load screenshots (if any)
-            for url in Screenshot.collectFiles(forDisk: disk.fnv()) {
-                if let screenshot = Screenshot.init(fromUrl: url) {
-                    screenshots.append(screenshot)
-                }
-            }
-        
-            super.showSheet(completionHandler: handler)
-        }
-        */
     }
     
     override public func awakeFromNib() {
@@ -87,6 +117,7 @@ class DiskMountDialog: DialogController {
     
     override func windowDidLoad() {
 
+        /*
         switch type {
             
         case .FILETYPE_ADF:
@@ -96,6 +127,7 @@ class DiskMountDialog: DialogController {
         default:
             title.stringValue = "???"
         }
+        */
         
         if empty {
 
@@ -123,19 +155,11 @@ class DiskMountDialog: DialogController {
 
     func update() {
         
-        // Update disk icon
-        diskIcon.image = NSImage.init(named: writeProtect ? "adf_protected" : "adf")
+        // Update icon and text fields
+        diskIcon.image = diskIconImage
+        title.stringValue = titleText
+        subtitle.stringValue = subtitleText
         
-        // Update text fields
-        let typeName = [
-            DiskType.DISK_35_DD: "3.5\"DD Amiga",
-            DiskType.DISK_35_DD_PC: "3.5\"DD PC",
-            DiskType.DISK_35_HD: "3.5\"HD Amiga",
-            DiskType.DISK_35_HD_PC: "3.5\"HD PC",
-            DiskType.DISK_525_SD: "5.25\"SD PC"
-        ]
-        let str = typeName[disk!.diskType]!
-        subtitle.stringValue = "A byte-accurate image of a \(str) diskette."
         let compatible = disk!.diskType == .DISK_35_DD
         warning.isHidden = compatible
                 

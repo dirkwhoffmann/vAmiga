@@ -28,6 +28,7 @@
 @class DMSFileProxy;
 @class DriveProxy;
 @class GuardsProxy;
+@class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
 @class MemProxy;
@@ -710,5 +711,27 @@ struct SerialPortWrapper;
 + (instancetype)makeWithFile:(NSString *)path;
 
 - (ADFFileProxy *)adf;
+
+@end
+
+
+//
+// IMGFile
+//
+
+@interface IMGFileProxy : AmigaFileProxy {
+}
+
++ (BOOL)isIMGFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
+
+@property (readonly) DiskType diskType;
+@property (readonly) NSInteger numCylinders;
+@property (readonly) NSInteger numHeads;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numSectorsPerTrack;
+@property (readonly) u64 fnv;
 
 @end

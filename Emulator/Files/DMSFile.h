@@ -23,10 +23,10 @@ public:
     // Class methods
     //
     
-    // Returns true iff the provided buffer contains a DMS file.
+    // Returns true iff the provided buffer contains a DMS file
     static bool isDMSBuffer(const u8 *buffer, size_t length);
     
-    // Returns true iff if the provided path points to a DMS file.
+    // Returns true iff if the provided path points to a DMS file
     static bool isDMSFile(const char *path);
     
     

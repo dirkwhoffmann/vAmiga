@@ -240,7 +240,7 @@ extension URL {
         }
         
         // Collect all extracted URLs with a supported file type
-        let types = ["ADF", "DMS", "ROM", "BIN", "VAMIGA"]
+        let types = ["ADF", "DMS", "IMG", "IMA", "ROM", "BIN", "VAMIGA"]
         let urls = try tmp.contents(allowedTypes: types)
         
         // Arrange the URLs in alphabetical order

@@ -1435,6 +1435,63 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
+// IMG File
+//
+
+@implementation IMGFileProxy
+
++ (BOOL)isIMGFile:(NSString *)path
+{
+    return IMGFile::isIMGFile([path fileSystemRepresentation]);
+}
++ (instancetype) make:(IMGFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    IMGFile *archive = IMGFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    IMGFile *archive = IMGFile::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
+- (DiskType)diskType
+{
+    return ((IMGFile *)wrapper->file)->getDiskType();
+}
+- (NSInteger)numCylinders
+{
+    return ((IMGFile *)wrapper->file)->numCyclinders();
+}
+- (NSInteger)numHeads
+{
+    return 2;
+}
+- (NSInteger)numTracks
+{
+    return ((IMGFile *)wrapper->file)->numTracks();
+}
+- (NSInteger)numSectors
+{
+    return ((IMGFile *)wrapper->file)->numSectorsTotal();
+}
+- (NSInteger)numSectorsPerTrack
+{
+    return ((IMGFile *)wrapper->file)->numSectorsPerTrack();
+}
+- (u64) fnv
+{
+    return ((IMGFile *)wrapper->file)->fnv();
+}
+
+@end
+
+
+//
 // Amiga
 //
 

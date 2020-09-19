@@ -32,13 +32,13 @@ public:
     // Class methods
     //
     
-    // Returns true iff the provided buffer contains an ADF file.
+    // Returns true iff the provided buffer contains an ADF file
     static bool isADFBuffer(const u8 *buffer, size_t length);
     
-    // Returns true iff if the provided path points to an ADF file.
+    // Returns true iff if the provided path points to an ADF file
     static bool isADFFile(const char *path);
     
-    // Returns the size of an ADF file of a given disk type in bytes.
+    // Returns the size of an ADF file of a given disk type in bytes
     static size_t fileSize(DiskType t);
 
     
@@ -75,10 +75,10 @@ public:
     // Properties
     //
     
-    // Returns the disk type (3.5"DD, 3.5"DD (PC), 5.25"SD, etc.)
+    // Returns the type of this disk
     DiskType getDiskType();
 
-    // Returns a checksum for this file
+    // Returns a unique fingerprint for this file
     const char *sha();
     u64 fnv();
     
@@ -88,7 +88,7 @@ public:
     long numTracks() { return size / (512 * numSectorsPerTrack()); }
     long numCyclinders() { return numTracks() / 2; }
 
-    // Returns the location of the root and bitmap block.
+    // Returns the location of the root and bitmap block
     long rootBlockNr();
     long bitmapBlockNr() { return rootBlockNr() + 1; }
 

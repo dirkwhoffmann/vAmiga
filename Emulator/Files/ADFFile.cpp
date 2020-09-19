@@ -17,7 +17,7 @@ ADFFile::ADFFile()
 bool
 ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 {
-    // There are no magic bytes. We can only check the buffer size.
+    // There are no magic bytes. We can only check the buffer size
     return
     length == ADFSIZE_35_DD ||
     length == ADFSIZE_35_DD_81 ||
@@ -33,7 +33,7 @@ ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 bool
 ADFFile::isADFFile(const char *path)
 {
-    // There are no magic bytes. We can only check the file size.
+    // There are no magic bytes. We can only check the file size
     return
     checkFileSize(path, ADFSIZE_35_DD) ||
     checkFileSize(path, ADFSIZE_35_DD_81) ||
