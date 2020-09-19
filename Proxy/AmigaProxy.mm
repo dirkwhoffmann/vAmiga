@@ -1195,6 +1195,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->file->sizeOnDisk();
 }
+- (u64) fnv
+{
+    return wrapper->file->fnv();
+}
 - (void) seek:(NSInteger)offset
 {
     wrapper->file->seek(offset);
@@ -1387,6 +1391,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     ((ADFFile *)wrapper->file)->formatDisk(fs);
 }
+/*
 - (void)seekTrack:(NSInteger)nr
 {
     ((ADFFile *)wrapper->file)->seekTrack(nr);
@@ -1395,6 +1400,7 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     ((ADFFile *)wrapper->file)->seekSector(nr);
 }
+*/
 
 @end
 

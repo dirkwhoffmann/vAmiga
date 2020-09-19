@@ -12,7 +12,7 @@
 
 #include "ADFFile.h"
 
-class DMSFile : public AmigaFile {
+class DMSFile : public DiskFile {
     
 public:
     
@@ -34,8 +34,6 @@ public:
     // Initializing
     //
     
-public:
-    
     DMSFile();
     
     static DMSFile *makeWithBuffer(const u8 *buffer, size_t length);
@@ -52,6 +50,18 @@ public:
         return isDMSBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isDMSFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
+    
+    
+    //
+    // Methods from DiskFile
+    //
+    
+    DiskType getDiskType() { return adf->getDiskType(); }
+    long numSides() override { return adf->numSides(); }
+    long numCyclinders() override { return adf->numCyclinders(); }
+    long numSectorsPerTrack() override { return adf->numSectorsPerTrack(); }
+    void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
+    void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }
 };
 
 #endif

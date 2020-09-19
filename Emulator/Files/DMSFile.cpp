@@ -101,3 +101,4 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
     
     return adf != NULL;
 }
+

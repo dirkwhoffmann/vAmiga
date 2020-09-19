@@ -638,6 +638,7 @@ struct SerialPortWrapper;
 @property (readonly) AmigaFileType type;
 - (void)setPath:(NSString *)path;
 @property (readonly) NSInteger sizeOnDisk;
+@property (readonly) u64 fnv;
 
 - (void)seek:(NSInteger)offset;
 - (NSInteger)read;
@@ -690,11 +691,11 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numSectorsPerTrack;
-@property (readonly) u64 fnv;
+// @property (readonly) u64 fnv;
 
 - (void)formatDisk:(FileSystemType)fs;
-- (void)seekTrack:(NSInteger)nr;
-- (void)seekSector:(NSInteger)nr;
+// - (void)seekTrack:(NSInteger)nr;
+// - (void)seekSector:(NSInteger)nr;
 
 @end
 

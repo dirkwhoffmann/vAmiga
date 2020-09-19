@@ -10,7 +10,7 @@
 #ifndef _ADF_H
 #define _ADF_H
 
-#include "AmigaFile.h"
+#include "DiskFile.h"
 
 #define ADFSIZE_35_DD     901120  //  880 KB
 #define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
@@ -21,7 +21,7 @@
 
 class Disk;
 
-class ADFFile : public AmigaFile {
+class ADFFile : public DiskFile {
     
 public:
     
@@ -69,40 +69,29 @@ public:
     
     
     //
-    // Properties
+    // Methods from DiskFile
     //
     
-    // Returns the type of this disk
-    DiskType getDiskType();
-
-    // Returns a unique fingerprint for this file
-    const char *sha();
-    u64 fnv();
+public:
     
-    // Cylinder, track, and sector counts
-    long numSectorsPerTrack();
-    long numSectorsTotal() { return size / 512; }
-    long numTracks() { return size / (512 * numSectorsPerTrack()); }
-    long numCyclinders() { return numTracks() / 2; }
-
-    // Returns the location of the root and bitmap block
-    long rootBlockNr();
-    long bitmapBlockNr() { return rootBlockNr() + 1; }
-
-    // Consistency checking
-    bool isCylinderNr(long nr) { return nr >= 0 && nr < numCyclinders(); }
-    bool isTrackNr(long nr)    { return nr >= 0 && nr < numTracks(); }
-    bool isSectorNr(long nr)   { return nr >= 0 && nr < numSectorsTotal(); }
+    DiskType getDiskType();
+    long numSides() override;
+    long numCyclinders() override;
+    long numSectorsPerTrack() override;
     
     
     //
     // Formatting
     //
  
+public:
+    
     bool formatDisk(FileSystemType fs);
     
 private:
-    
+
+    long rootBlockNr();
+    long bitmapBlockNr() { return rootBlockNr() + 1; }
     void writeBootBlock(FileSystemType fs);
     void writeRootBlock(const char *label);
     void writeBitmapBlock();
@@ -121,22 +110,19 @@ public:
      * Use read() to read from the selected track. Returns EOF when the whole
      * track has been read in.
      */
-    void seekTrack(long t);
+    // void seekTrack(long t);
     
     /* Prepares to read a sector.
      * Use read() to read from the selected sector. Returns EOF when the whole
      * sector has been read in.
      */
-    void seekSector(long s);
+    // void seekSector(long s);
 
     /* Prepares to read a sector.
      * Use read() to read from the selected track. Returns EOF when the whole
      * track has been read in.
      */
-    void seekTrackAndSector(long t, long s) { seekSector(numSectorsPerTrack() * t + s); }
-    
-    // Fills a buffer with the data of a single sector
-    void readSector(u8 *target, long t, long s);
+    // void seekTrackAndSector(long t, long s) { seekSector(numSectorsPerTrack() * t + s); }    
 };
 
 #endif

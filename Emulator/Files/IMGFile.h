@@ -10,11 +10,11 @@
 #ifndef _IMG_H
 #define _IMG_H
 
-#include "AmigaFile.h"
+#include "DiskFile.h"
 
 #define IMGSIZE_35_DD     737280  //  720 KB PC formatted disk
 
-class IMGFile : public AmigaFile {
+class IMGFile : public DiskFile {
     
 public:
     
@@ -62,34 +62,12 @@ public:
     //
       
     // Returns the type of this disk
-    DiskType getDiskType() { return DISK_35_DD; }
-
-    // Returns a unique fingerprint for this file
-    u64 fnv();
+    DiskType getDiskType();
 
     // Cylinder, track, and sector counts
-    long numSectorsPerTrack() { return 9; };
-    long numSectorsTotal() { return 1440; }
-    long numTracks() { return 160; }
-    long numCyclinders() { return 80; }
-
-    // Returns the location of the root and bitmap block
-    long rootBlockNr();
-    long bitmapBlockNr() { return rootBlockNr() + 1; }
-
-    // Consistency checking
-    bool isCylinderNr(long nr) { return nr >= 0 && nr < numCyclinders(); }
-    bool isTrackNr(long nr)    { return nr >= 0 && nr < numTracks(); }
-    bool isSectorNr(long nr)   { return nr >= 0 && nr < numSectorsTotal(); }
-    
-    //
-    // Seeking tracks and sectors
-    //
-    
-public:
-        
-    // Fills the provided buffer with the data of a single sector
-    void readSector(u8 *buffer, long t, long s);
+    long numSides() override;
+    long numCyclinders() override;
+    long numSectorsPerTrack() override;    
 };
 
 #endif

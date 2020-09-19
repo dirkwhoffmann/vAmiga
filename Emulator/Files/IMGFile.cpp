@@ -88,23 +88,26 @@ IMGFile::readFromBuffer(const u8 *buffer, size_t length)
     return isIMGBuffer(buffer, length);
 }
 
-u64
-IMGFile::fnv()
+DiskType
+IMGFile::getDiskType()
 {
-    return fnv_1a_64(data, size);
+    return DISK_35_DD;
 }
 
-void
-IMGFile::readSector(u8 *dst, long t, long s)
+long
+IMGFile::numSides()
 {
-    assert(dst != NULL);
-    assert(isTrackNr(t));
-    assert(isSectorNr(s));
+    return 2;
+}
 
-    long offset = 512 * (9 * t + s);
-    assert(offset + 512 <= size);
+long
+IMGFile::numCyclinders()
+{
+    return 80;
+}
 
-    for (unsigned i = 0; i < 512; i++) {
-        dst[i] = data[offset + i];
-    }
+long
+IMGFile::numSectorsPerTrack()
+{
+    return 9;
 }

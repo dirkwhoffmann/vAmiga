@@ -153,6 +153,7 @@ ADFFile::getDiskType()
     return (DiskType)0;
 }
 
+/*
 const char *
 ADFFile::sha()
 {
@@ -173,15 +174,43 @@ ADFFile::fnv()
 {
     return fnv_1a_64(data, size);
 }
+*/
+
+long
+ADFFile::numSides()
+{
+    return 2;
+}
+
+long
+ADFFile::numCyclinders()
+{
+    switch(size) {
+            
+        case ADFSIZE_35_DD:    return 80;
+        case ADFSIZE_35_DD_81: return 81;
+        case ADFSIZE_35_DD_82: return 82;
+        case ADFSIZE_35_DD_83: return 83;
+        case ADFSIZE_35_DD_84: return 84;
+        case ADFSIZE_35_HD:    return 80;
+            
+        default:
+            assert(false);
+            return 0;
+    }
+}
 
 long
 ADFFile::numSectorsPerTrack()
 {
     switch (getDiskType()) {
-        
+            
         case DISK_35_DD: return 11;
         case DISK_35_HD: return 22;
-        default:         assert(false); return 0;
+            
+        default:
+            assert(false);
+            return 0;
     }
 }
 
@@ -370,7 +399,7 @@ ADFFile::writeDate(u8 *dst, time_t date)
 u32
 ADFFile::sectorChecksum(int sector)
 {
-    assert(isSectorNr(sector));
+    assert(isAbsSectorNr(sector));
 
     u32 result = 0;
 
@@ -382,6 +411,7 @@ ADFFile::sectorChecksum(int sector)
     return ~result + 1;
 }
 
+/*
 void
 ADFFile::seekTrack(long nr)
 {
@@ -399,7 +429,9 @@ ADFFile::seekSector(long nr)
     fp = nr * 512;
     eof = (nr + 1) * 512;
 }
+*/
 
+/*
 void
 ADFFile::readSector(u8 *target, long t, long s)
 {
@@ -412,3 +444,4 @@ ADFFile::readSector(u8 *target, long t, long s)
         target[i] = read();
     assert(read() == EOF);
 }
+*/

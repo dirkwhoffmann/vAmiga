@@ -11,9 +11,26 @@
 #define _SNAPSHOT_H
 
 #include "AmigaFile.h"
-#include "Thumbnail.h"
 
 class Amiga;
+
+struct Thumbnail {
+    
+    // Image size
+    u16 width, height;
+    
+    // Raw texture data
+    u32 screen[(HPIXELS / 2) * (VPIXELS / 1)];
+    
+    // Date and time of screenshot creation
+    time_t timestamp;
+    
+    // Factory methods
+    static Thumbnail *makeWithAmiga(Amiga *amiga, int dx = 2, int dy = 1);
+    
+    // Takes a screenshot from a given Amiga
+    void take(Amiga *amiga, int dx = 2, int dy = 1);
+};
 
 struct SnapshotHeader {
     

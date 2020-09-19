@@ -71,8 +71,8 @@ public:
     // Sets the physical name of this file
     void setPath(const char *path);
     
-    // Returns a fingerprint (hash value) for the file's data
-    u64 fingerprint() { return fnv_1a_64(data, size); }
+    // Returns a fingerprint (hash value) for this file
+    u64 fnv() { return fnv_1a_64(data, size); }
     
     
     //
