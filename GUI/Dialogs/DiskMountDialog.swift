@@ -19,7 +19,7 @@ class DiskMountDialog: DialogController {
     @IBOutlet weak var df3Button: NSButton!
     @IBOutlet weak var carousel: iCarousel!
     
-    var disk: ADFFileProxy?
+    var disk: DiskFileProxy?
     var type: AmigaFileType?
     var writeProtect = false
     var screenshots: [Screenshot] = []
@@ -198,11 +198,23 @@ class DiskMountDialog: DialogController {
     @IBAction func insertDiskAction(_ sender: NSButton!) {
         
         track("insertDiskAction df\(sender.tag)")
-                
-        amiga.diskController.insert(sender.tag, adf: disk)
-        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)
-        // parent.renderer.rotateDown()
-     
+        
+        switch disk {
+        
+        case _ as ADFFileProxy:
+            
+            amiga.diskController.insert(sender.tag, adf: disk as? ADFFileProxy)
+            
+        case _ as IMGFileProxy:
+            
+            // amiga.diskController.insert(sender.tag, img: disk as? ImgFileProxy)
+            break
+            
+        default:
+            break
+        }
+
+        amiga.diskController.setWriteProtection(sender.tag, value: writeProtect)     
         hideSheet()
     }
     

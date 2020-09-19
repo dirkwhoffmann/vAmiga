@@ -1073,6 +1073,11 @@ struct SerialPortWrapper { SerialPort *port; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((DMSFile *)(fileWrapper->file), nr);
 }
+- (void) insert:(NSInteger)nr img:(ADFFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((IMGFile *)(fileWrapper->file), nr);
+}
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
     wrapper->controller->setWriteProtection(nr, value);
@@ -1331,27 +1336,27 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (DiskType)diskType
 {
-    return ((ADFFile *)wrapper->file)->getDiskType();
+    return ((DiskFile *)wrapper->file)->getDiskType();
 }
 - (NSInteger)numSides
 {
-    return ((ADFFile *)wrapper->file)->numSides();
+    return ((DiskFile *)wrapper->file)->numSides();
 }
 - (NSInteger)numCylinders
 {
-    return ((ADFFile *)wrapper->file)->numCyclinders();
+    return ((DiskFile *)wrapper->file)->numCyclinders();
 }
 - (NSInteger)numTracks
 {
-    return ((ADFFile *)wrapper->file)->numTracks();
+    return ((DiskFile *)wrapper->file)->numTracks();
 }
 - (NSInteger)numSectorsPerTrack
 {
-    return ((ADFFile *)wrapper->file)->numSectorsPerTrack();
+    return ((DiskFile *)wrapper->file)->numSectorsPerTrack();
 }
 - (NSInteger)numSectorsTotal
 {
-    return ((ADFFile *)wrapper->file)->numSectorsTotal();
+    return ((DiskFile *)wrapper->file)->numSectorsTotal();
 }
 
 @end

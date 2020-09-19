@@ -273,7 +273,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
 void
 DiskController::insertDisk(class ADFFile *file, int nr, Cycle delay)
 {
-    if (Disk *disk = Disk::makeWithFile(file)) {
+    if (Disk *disk = Disk::makeWithADFFile(file)) {
         insertDisk(disk, nr, delay);
     }
 }
@@ -281,8 +281,17 @@ DiskController::insertDisk(class ADFFile *file, int nr, Cycle delay)
 void
 DiskController::insertDisk(class DMSFile *file, int nr, Cycle delay)
 {
-    debug("IMPLEMENTATION MISSING\n");
-    assert(false);
+    if (Disk *disk = Disk::makeWithDMSFile(file)) {
+        insertDisk(disk, nr, delay);
+    }
+}
+
+void
+DiskController::insertDisk(class IMGFile *file, int nr, Cycle delay)
+{
+    if (Disk *disk = Disk::makeWithIMGFile(file)) {
+        insertDisk(disk, nr, delay);
+    }
 }
 
 void

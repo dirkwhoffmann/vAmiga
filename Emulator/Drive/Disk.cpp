@@ -64,11 +64,32 @@ Disk::numSectorsTotal(DiskType type)
 }
 
 Disk *
-Disk::makeWithFile(ADFFile *file)
+Disk::makeWithADFFile(ADFFile *file)
 {
     Disk *disk = new Disk(file->getDiskType());
     
     if (!disk->encodeAmigaDisk(file)) {
+        delete disk;
+        return NULL;
+    }
+    
+    disk->fnv = file->fnv();
+    
+    return disk;
+}
+
+Disk *
+Disk::makeWithDMSFile(DMSFile *file)
+{
+    return makeWithADFFile(file->adf);
+}
+
+Disk *
+Disk::makeWithIMGFile(IMGFile *file)
+{
+    Disk *disk = new Disk(file->getDiskType());
+    
+    if (!disk->encodeDosDisk(file)) {
         delete disk;
         return NULL;
     }
@@ -340,6 +361,26 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
     
     // Decode sector data
     decodeOddEven(dst, src, 512);
+}
+
+bool
+Disk::encodeDosDisk(IMGFile *img)
+{
+    assert(false);
+    return false;
+}
+
+bool
+Disk::encodeDosTrack(IMGFile *img, Track t, long smax)
+{
+    assert(false);
+    return false;
+}
+
+bool encodeDosSector(IMGFile *img, Track t, Sector s)
+{
+    assert(false);
+    return false;
 }
 
 void

@@ -11,7 +11,11 @@
 #define _AMIGA_DISK_H
 
 #include "HardwareComponent.h"
+/*
 #include "ADFFile.h"
+#include "DMSFile.h"
+#include "IMGFile.h"
+*/
 
 class Disk : public AmigaObject {
     
@@ -105,7 +109,9 @@ public:
     
     Disk(DiskType type);
 
-    static Disk *makeWithFile(ADFFile *file);
+    static Disk *makeWithADFFile(class ADFFile *file);
+    static Disk *makeWithDMSFile(class DMSFile *file);
+    static Disk *makeWithIMGFile(class IMGFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
     
     
@@ -214,6 +220,22 @@ private:
     bool decodeAmigaTrack(u8 *dst, Track t, long smax);
     void decodeAmigaSector(u8 *dst, u8 *src);
     
+    
+    //
+    // Encoding and decoding DOS disks
+    //
+    
+public:
+    
+    // Encodes a disk in DOS format
+    bool encodeDosDisk(IMGFile *img);
+    
+private:
+    
+    // Encodes a single track or sector in DOS format
+    bool encodeDosTrack(IMGFile *img, Track t, long smax);
+    bool encodeDosSector(IMGFile *img, Track t, Sector s);
+
     
     //
     // Handling MFM encoded data

@@ -727,7 +727,7 @@ struct SerialPortWrapper;
 // IMGFile
 //
 
-@interface IMGFileProxy : AmigaFileProxy {
+@interface IMGFileProxy : DiskFileProxy {
 }
 
 + (BOOL)isIMGFile:(NSString *)path;
