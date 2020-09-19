@@ -575,14 +575,10 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
-/*
-- (BOOL) connected:(NSInteger)nr;
-- (BOOL) disconnected:(NSInteger)nr;
-- (void) setConnected:(NSInteger)nr value:(BOOL)value;
-*/
  - (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
+- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy;
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
 @end
@@ -711,7 +707,7 @@ struct SerialPortWrapper;
 // DMSFileProxy
 //
 
-@interface DMSFileProxy : AmigaFileProxy {
+@interface DMSFileProxy : DiskFileProxy {
 }
 
 + (BOOL)isDMSFile:(NSString *)path;

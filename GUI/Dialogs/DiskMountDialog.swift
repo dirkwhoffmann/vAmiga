@@ -63,17 +63,17 @@ class DiskMountDialog: DialogController {
         
         let t = disk?.numTracks ?? 0
         let s = disk?.numSectorsPerTrack ?? 0
-        let h = disk?.numSides == 1 ? "Single" : "Double"
+        let n = disk?.numSides == 1 ? "Single" : "Double"
         
         var d: String
         switch disk?.diskType {
-        case .DISK_35_DD: d = "Double"
-        case .DISK_35_HD: d = "High"
-        case .DISK_525_SD: d = "Single"
+        case .DISK_35_DD: d = "double"
+        case .DISK_35_HD: d = "high"
+        case .DISK_525_SD: d = "single"
         default: d = "???"
         }
         
-        return "\(h) sided, \(d) density, \(t) tracks with \(s) sectors each"
+        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
     }
 
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
@@ -86,7 +86,7 @@ class DiskMountDialog: DialogController {
             disk = attachment
         }
         if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
-            disk = attachment.adf()
+            disk = attachment
         }
         if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
             disk = attachment
@@ -116,18 +116,6 @@ class DiskMountDialog: DialogController {
     }
     
     override func windowDidLoad() {
-
-        /*
-        switch type {
-            
-        case .FILETYPE_ADF:
-            title.stringValue = "Amiga Disk File (ADF)"
-        case .FILETYPE_DMS:
-            title.stringValue = "Disk Masher System (DMS)"
-        default:
-            title.stringValue = "???"
-        }
-        */
         
         if empty {
 
@@ -202,13 +190,13 @@ class DiskMountDialog: DialogController {
         switch disk {
         
         case _ as ADFFileProxy:
-            
             amiga.diskController.insert(sender.tag, adf: disk as? ADFFileProxy)
-            
+
+        case _ as DMSFileProxy:
+            amiga.diskController.insert(sender.tag, dms: disk as? DMSFileProxy)
+
         case _ as IMGFileProxy:
-            
-            // amiga.diskController.insert(sender.tag, img: disk as? ImgFileProxy)
-            break
+            amiga.diskController.insert(sender.tag, img: disk as? IMGFileProxy)
             
         default:
             break

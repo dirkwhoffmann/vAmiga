@@ -130,21 +130,20 @@ class MyDocument: NSDocument {
         switch type {
             
         case .FILETYPE_SNAPSHOT:
-            
-            // Check for outdated snapshot formats
             if SnapshotProxy.isUnsupportedSnapshot(buffer, length: length) {
                 throw NSError.snapshotVersionError(filename: name)
             }
             result = SnapshotProxy.make(withBuffer: buffer, length: length)
             
         case .FILETYPE_ADF:
-
             result = ADFFileProxy.make(withBuffer: buffer, length: length)
             
         case .FILETYPE_DMS:
-            
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
-            
+
+        case .FILETYPE_IMG:
+            result = IMGFileProxy.make(withBuffer: buffer, length: length)
+
         default:
             fatalError()
         }
@@ -153,6 +152,7 @@ class MyDocument: NSDocument {
             throw NSError.corruptedFileError(filename: name)
         }
         result!.setPath(name)
+        track("Attachment created successfully")
         return result
     }
     
@@ -176,7 +176,9 @@ class MyDocument: NSDocument {
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
         // Create file proxy
-        let types = [ AmigaFileType.FILETYPE_SNAPSHOT, AmigaFileType.FILETYPE_ADF, AmigaFileType.FILETYPE_DMS ]
+        let types: [AmigaFileType] =
+            [ .FILETYPE_SNAPSHOT, .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_IMG ]
+        
         amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
         // Remember the URL
@@ -208,6 +210,14 @@ class MyDocument: NSDocument {
             
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
+            } else {
+                runDiskMountDialog()
+            }
+
+        case _ as IMGFileProxy:
+            
+            if let df = parent.dragAndDropDrive?.nr {
+                amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
             } else {
                 runDiskMountDialog()
             }
