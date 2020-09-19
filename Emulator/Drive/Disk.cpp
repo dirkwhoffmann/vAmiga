@@ -32,9 +32,7 @@ Disk::numCylinders(DiskType type)
     
     switch (type) {
         case DISK_35_DD:    return 84;
-        case DISK_35_DD_PC: return 84;
         case DISK_35_HD:    return 84;
-        case DISK_35_HD_PC: return 84;
         case DISK_525_SD:   return 40;
         default:            return 0;
     }
@@ -53,9 +51,7 @@ Disk::numSectorsPerTrack(DiskType type)
     
     switch (type) {
         case DISK_35_DD:    return 11;
-        case DISK_35_DD_PC: return 9;
         case DISK_35_HD:    return 22;
-        case DISK_35_HD_PC: return 18;
         case DISK_525_SD:   return 9;
         default:            return 0;
     }

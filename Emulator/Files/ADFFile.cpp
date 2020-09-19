@@ -17,33 +17,27 @@ ADFFile::ADFFile()
 bool
 ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 {
-    // There are no magic bytes. We can only check the buffer size
+    // There are no magic bytes. Hence, we only check the file size.
     return
     length == ADFSIZE_35_DD ||
     length == ADFSIZE_35_DD_81 ||
     length == ADFSIZE_35_DD_82 ||
     length == ADFSIZE_35_DD_83 ||
     length == ADFSIZE_35_DD_84 ||
-    length == ADFSIZE_35_DD_PC ||
-    length == ADFSIZE_35_HD ||
-    length == ADFSIZE_35_HD_PC ||
-    length == ADFSIZE_525_SD;
+    length == ADFSIZE_35_HD;
 }
 
 bool
 ADFFile::isADFFile(const char *path)
 {
-    // There are no magic bytes. We can only check the file size
+    // There are no magic bytes. Hence, we only check the file size.
     return
     checkFileSize(path, ADFSIZE_35_DD) ||
     checkFileSize(path, ADFSIZE_35_DD_81) ||
     checkFileSize(path, ADFSIZE_35_DD_82) ||
     checkFileSize(path, ADFSIZE_35_DD_83) ||
     checkFileSize(path, ADFSIZE_35_DD_84) ||
-    checkFileSize(path, ADFSIZE_35_DD_PC) ||
-    checkFileSize(path, ADFSIZE_35_HD) ||
-    checkFileSize(path, ADFSIZE_35_HD_PC) ||
-    checkFileSize(path, ADFSIZE_525_SD);
+    checkFileSize(path, ADFSIZE_35_HD);
 }
 
 size_t
@@ -54,10 +48,7 @@ ADFFile::fileSize(DiskType t)
     switch(t) {
             
         case DISK_35_DD:    return ADFSIZE_35_DD;
-        case DISK_35_DD_PC: return ADFSIZE_35_DD_PC;
         case DISK_35_HD:    return ADFSIZE_35_HD;
-        case DISK_35_HD_PC: return ADFSIZE_35_HD_PC;
-        case DISK_525_SD:   return ADFSIZE_525_SD;
         default:            assert(false); return 0;
     }
 }
@@ -151,15 +142,12 @@ ADFFile::getDiskType()
 {
     switch(size) {
         
-        case ADFSIZE_35_DD:    return DISK_35_DD;
-        case ADFSIZE_35_DD_81: return DISK_35_DD;
-        case ADFSIZE_35_DD_82: return DISK_35_DD;
-        case ADFSIZE_35_DD_83: return DISK_35_DD;
+        case ADFSIZE_35_DD:
+        case ADFSIZE_35_DD_81:
+        case ADFSIZE_35_DD_82:
+        case ADFSIZE_35_DD_83:
         case ADFSIZE_35_DD_84: return DISK_35_DD;
-        case ADFSIZE_35_DD_PC: return DISK_35_DD_PC;
         case ADFSIZE_35_HD:    return DISK_35_HD;
-        case ADFSIZE_35_HD_PC: return DISK_35_HD_PC;
-        case ADFSIZE_525_SD:   return DISK_525_SD;
     }
     assert(false);
     return (DiskType)0;
@@ -191,14 +179,9 @@ ADFFile::numSectorsPerTrack()
 {
     switch (getDiskType()) {
         
-        case DISK_35_DD:
-        case DISK_35_HD:
-        return 11;
-        
-        case DISK_35_DD_PC:
-        case DISK_35_HD_PC:
-        case DISK_525_SD:
-        return 9;
+        case DISK_35_DD: return 11;
+        case DISK_35_HD: return 22;
+        default:         assert(false); return 0;
     }
 }
 
