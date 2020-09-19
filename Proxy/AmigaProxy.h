@@ -673,10 +673,27 @@ struct SerialPortWrapper;
 
 
 //
-// ADFFile
+// DiskFileProxy
 //
 
-@interface ADFFileProxy : AmigaFileProxy {
+@interface DiskFileProxy : AmigaFileProxy {
+}
+
+@property (readonly) DiskType diskType;
+@property (readonly) NSInteger numSides;
+@property (readonly) NSInteger numCylinders;
+@property (readonly) NSInteger numTracks;
+@property (readonly) NSInteger numSectorsPerTrack;
+@property (readonly) NSInteger numSectorsTotal;
+
+@end
+
+
+//
+// ADFFileProxy
+//
+
+@interface ADFFileProxy : DiskFileProxy {
 }
 
 + (BOOL)isADFFile:(NSString *)path;
@@ -685,23 +702,13 @@ struct SerialPortWrapper;
 + (instancetype)makeWithDiskType:(DiskType)type;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
-@property (readonly) DiskType diskType;
-@property (readonly) NSInteger numCylinders;
-@property (readonly) NSInteger numHeads;
-@property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectors;
-@property (readonly) NSInteger numSectorsPerTrack;
-// @property (readonly) u64 fnv;
-
 - (void)formatDisk:(FileSystemType)fs;
-// - (void)seekTrack:(NSInteger)nr;
-// - (void)seekSector:(NSInteger)nr;
 
 @end
 
 
 //
-// DMSFile
+// DMSFileProxy
 //
 
 @interface DMSFileProxy : AmigaFileProxy {

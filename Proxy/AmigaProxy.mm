@@ -1324,7 +1324,41 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// ADF File
+// DiskFileProxy
+//
+
+@implementation DiskFileProxy
+
+- (DiskType)diskType
+{
+    return ((ADFFile *)wrapper->file)->getDiskType();
+}
+- (NSInteger)numSides
+{
+    return ((ADFFile *)wrapper->file)->numSides();
+}
+- (NSInteger)numCylinders
+{
+    return ((ADFFile *)wrapper->file)->numCyclinders();
+}
+- (NSInteger)numTracks
+{
+    return ((ADFFile *)wrapper->file)->numTracks();
+}
+- (NSInteger)numSectorsPerTrack
+{
+    return ((ADFFile *)wrapper->file)->numSectorsPerTrack();
+}
+- (NSInteger)numSectorsTotal
+{
+    return ((ADFFile *)wrapper->file)->numSectorsTotal();
+}
+
+@end
+
+
+//
+// ADFFileProxy
 //
 
 @implementation ADFFileProxy
@@ -1359,54 +1393,16 @@ struct SerialPortWrapper { SerialPort *port; };
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
-- (DiskType)diskType
-{
-    return ((ADFFile *)wrapper->file)->getDiskType();
-}
-- (NSInteger)numCylinders
-{
-    return ((ADFFile *)wrapper->file)->numCyclinders();
-}
-- (NSInteger)numHeads
-{
-    return 2;
-}
-- (NSInteger)numTracks
-{
-    return ((ADFFile *)wrapper->file)->numTracks();
-}
-- (NSInteger)numSectors
-{
-    return ((ADFFile *)wrapper->file)->numSectorsTotal();
-}
-- (NSInteger)numSectorsPerTrack
-{
-    return ((ADFFile *)wrapper->file)->numSectorsPerTrack();
-}
-- (u64) fnv
-{
-    return ((ADFFile *)wrapper->file)->fnv();
-}
 - (void)formatDisk:(FileSystemType)fs
 {
     ((ADFFile *)wrapper->file)->formatDisk(fs);
 }
-/*
-- (void)seekTrack:(NSInteger)nr
-{
-    ((ADFFile *)wrapper->file)->seekTrack(nr);
-}
-- (void)seekSector:(NSInteger)nr
-{
-    ((ADFFile *)wrapper->file)->seekSector(nr);
-}
-*/
 
 @end
 
 
 //
-// DMS File
+// DMSFileProxy
 //
 
 @implementation DMSFileProxy
