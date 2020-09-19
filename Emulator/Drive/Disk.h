@@ -175,21 +175,11 @@ public:
 
     
     //
-    // Handling MFM encoded data
-    //
-    
-private:
-    
-    // Adds the clock bits to a byte
-    u8 addClockBits(u8 value, u8 previous);
-    
-    
-    //
-    // MFM encoding
+    // Erasing disks
     //
     
 public:
-    
+
     // Initializes the disk with random data
     void clearDisk();
 
@@ -197,32 +187,46 @@ public:
     void clearTrack(Track t);
     void clearTrack(Track t, u8 value);
 
-    // Encodes the whole disk
-    bool encodeDisk(ADFFile *adf);
-    
-private:
-    
-    // Work horses
-    bool encodeTrack(ADFFile *adf, Track t, long smax);
-    bool encodeSector(ADFFile *adf, Track t, Sector s);
-    void encodeOddEven(u8 *target, u8 *source, size_t count);
-    
     
     //
-    // MFM decoding
+    // Encoding and decoding Amiga disks
     //
     
 public:
     
-    // Decodes the whole disk
-    bool decodeDisk(u8 *dst, int tracks, int sectors);
+    // Encodes a disk in Amiga format
+    bool encodeAmigaDisk(ADFFile *adf);
     
 private:
     
-    // Work horses
-    bool decodeTrack(u8 *dst, Track t, long smax);
-    void decodeSector(u8 *dst, u8 *src);
+    // Encodes a single track or sector in Amiga format
+    bool encodeAmigaTrack(ADFFile *adf, Track t, long smax);
+    bool encodeAmigaSector(ADFFile *adf, Track t, Sector s);
+        
+public:
+    
+    // Decodes a disk in Amiga format
+    bool decodeAmigaDisk(u8 *dst, int tracks, int sectors);
+    
+private:
+    
+    // Decodes a single track or sector in Amiga format
+    bool decodeAmigaTrack(u8 *dst, Track t, long smax);
+    void decodeAmigaSector(u8 *dst, u8 *src);
+    
+    
+    //
+    // Handling MFM encoded data
+    //
+    
+private:
+
+    // Encodes or decodes a byte in odd / even bit format (used on Amiga disks)
+    void encodeOddEven(u8 *dst, u8 *src, size_t count);
     void decodeOddEven(u8 *dst, u8 *src, size_t count);
+
+    // Adds the MFM clock bits to a byte
+    u8 addClockBits(u8 value, u8 previous);
 };
 
 #endif

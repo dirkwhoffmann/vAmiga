@@ -128,7 +128,7 @@ ADFFile::makeWithDisk(Disk *disk)
     ADFFile *adf = makeWithDiskType(DISK_35_DD);
     
     if (adf) {
-        if (!disk->decodeDisk(adf->data, 160, 11)) {
+        if (!disk->decodeAmigaDisk(adf->data, 160, 11)) {
             delete adf;
             return NULL;
         }

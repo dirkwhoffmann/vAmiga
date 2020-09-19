@@ -72,7 +72,7 @@ Disk::makeWithFile(ADFFile *file)
 {
     Disk *disk = new Disk(file->getDiskType());
     
-    if (!disk->encodeDisk(file)) {
+    if (!disk->encodeAmigaDisk(file)) {
         delete disk;
         return NULL;
     }
@@ -109,24 +109,6 @@ Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
     assert(offset < trackSize);
     
     data.cyclinder[cylinder][side][offset] = value;
-}
-
-u8
-Disk::addClockBits(u8 value, u8 previous)
-{
-    // Clear all previously set clock bits
-    value &= 0x55;
-
-    // Compute clock bits (clock bit values are inverted)
-    u8 lShifted = (value << 1);
-    u8 rShifted = (value >> 1) | (previous << 7);
-    u8 cBitsInv = lShifted | rShifted;
-
-    // Reverse the computed clock bits
-    u64 cBits = cBitsInv ^ 0xAA;
-    
-    // Return original value with the clock bits added
-    return value | cBits;
 }
 
 void
@@ -170,7 +152,7 @@ Disk::clearTrack(Track t, u8 value)
 }
 
 bool
-Disk::encodeDisk(ADFFile *adf)
+Disk::encodeAmigaDisk(ADFFile *adf)
 {
     assert(adf != NULL);
     assert(adf->getDiskType() == getType());
@@ -187,13 +169,13 @@ Disk::encodeDisk(ADFFile *adf)
 
     // Encode all tracks
     bool result = true;
-    for (Track t = 0; t < tracks; t++) result &= encodeTrack(adf, t, sectors);
+    for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(adf, t, sectors);
 
     return result;
 }
 
 bool
-Disk::encodeTrack(ADFFile *adf, Track t, long smax)
+Disk::encodeAmigaTrack(ADFFile *adf, Track t, long smax)
 {
     assert(isValidTrack(t));
 
@@ -204,7 +186,7 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < smax; s++) result &= encodeSector(adf, t, s);
+    for (Sector s = 0; s < smax; s++) result &= encodeAmigaSector(adf, t, s);
     
     // Get the clock bit right at offset position 0
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
@@ -223,7 +205,7 @@ Disk::encodeTrack(ADFFile *adf, Track t, long smax)
 }
 
 bool
-Disk::encodeSector(ADFFile *adf, Track t, Sector s)
+Disk::encodeAmigaSector(ADFFile *adf, Track t, Sector s)
 {
     assert(isValidTrack(t));
     assert(isValidSector(s));
@@ -289,34 +271,22 @@ Disk::encodeSector(ADFFile *adf, Track t, Sector s)
     encodeOddEven(&p[56], dcheck, sizeof(bcheck));
     
     // Add clock bits
-    for(unsigned i = 8; i < 1088; i ++) {
+    for(unsigned i = 8; i < 1088; i++) {
         p[i] = addClockBits(p[i], p[i-1]);
     }
     
     return true;
 }
 
-void
-Disk::encodeOddEven(u8 *target, u8 *source, size_t count)
-{
-    // Encode odd bits
-    for(size_t i = 0; i < count; i++)
-        target[i] = (source[i] >> 1) & 0x55;
-    
-    // Encode even bits
-    for(size_t i = 0; i < count; i++)
-        target[i + count] = source[i] & 0x55;
-}
-
 bool
-Disk::decodeDisk(u8 *dst, int tracks, int sectors)
+Disk::decodeAmigaDisk(u8 *dst, int tracks, int sectors)
 {
     bool result = true;
         
     debug("Decoding disk (%d tracks, %d sectors each)...\n", tracks, sectors);
     
     for (Track t = 0; t < tracks; t++) {
-        result &= decodeTrack(dst, t, sectors);
+        result &= decodeAmigaTrack(dst, t, sectors);
         dst += sectors * 512;
     
     }
@@ -325,7 +295,7 @@ Disk::decodeDisk(u8 *dst, int tracks, int sectors)
 }
 
 bool
-Disk::decodeTrack(u8 *dst, Track t, long smax)
+Disk::decodeAmigaTrack(u8 *dst, Track t, long smax)
 {
     assert(isValidTrack(t));
         
@@ -356,7 +326,7 @@ Disk::decodeTrack(u8 *dst, Track t, long smax)
     
     // Encode all sectors
     for (Sector s = 0; s < smax; s++) {
-        decodeSector(dst, local + sectorStart[s]);
+        decodeAmigaSector(dst, local + sectorStart[s]);
         dst += 512;
     }
     
@@ -364,7 +334,7 @@ Disk::decodeTrack(u8 *dst, Track t, long smax)
 }
 
 void
-Disk::decodeSector(u8 *dst, u8 *src)
+Disk::decodeAmigaSector(u8 *dst, u8 *src)
 {
     assert(dst != NULL);
     assert(src != NULL);
@@ -377,6 +347,18 @@ Disk::decodeSector(u8 *dst, u8 *src)
 }
 
 void
+Disk::encodeOddEven(u8 *dst, u8 *src, size_t count)
+{
+    // Encode odd bits
+    for(size_t i = 0; i < count; i++)
+        dst[i] = (src[i] >> 1) & 0x55;
+    
+    // Encode even bits
+    for(size_t i = 0; i < count; i++)
+        dst[i + count] = src[i] & 0x55;
+}
+
+void
 Disk::decodeOddEven(u8 *dst, u8 *src, size_t count)
 {
     // Decode odd bits
@@ -386,4 +368,22 @@ Disk::decodeOddEven(u8 *dst, u8 *src, size_t count)
     // Decode even bits
     for(size_t i = 0; i < count; i++)
         dst[i] |= src[i + count] & 0x55;
+}
+
+u8
+Disk::addClockBits(u8 value, u8 previous)
+{
+    // Clear all previously set clock bits
+    value &= 0x55;
+
+    // Compute clock bits (clock bit values are inverted)
+    u8 lShifted = (value << 1);
+    u8 rShifted = (value >> 1) | (previous << 7);
+    u8 cBitsInv = lShifted | rShifted;
+
+    // Reverse the computed clock bits
+    u64 cBits = cBitsInv ^ 0xAA;
+    
+    // Return original value with the clock bits added
+    return value | cBits;
 }
