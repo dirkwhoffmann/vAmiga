@@ -56,7 +56,7 @@ public:
     // Methods from DiskFile
     //
     
-    DiskType getDiskType() { return adf->getDiskType(); }
+    DiskType getDiskType() override { return adf->getDiskType(); }
     long numSides() override { return adf->numSides(); }
     long numCyclinders() override { return adf->numCyclinders(); }
     long numSectorsPerTrack() override { return adf->numSectorsPerTrack(); }

@@ -74,7 +74,7 @@ public:
     
 public:
     
-    DiskType getDiskType();
+    DiskType getDiskType() override;
     long numSides() override;
     long numCyclinders() override;
     long numSectorsPerTrack() override;

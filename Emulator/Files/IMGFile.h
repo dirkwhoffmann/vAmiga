@@ -58,11 +58,11 @@ public:
     
     
     //
-    // Properties
+    // Propertiesb
     //
       
     // Returns the type of this disk
-    DiskType getDiskType();
+    DiskType getDiskType() override;
 
     // Cylinder, track, and sector counts
     long numSides() override;

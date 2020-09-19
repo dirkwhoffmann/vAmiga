@@ -22,7 +22,7 @@ class DiskFile : public AmigaFile {
 public:
     
     // Returns the type of this disk
-    DiskType getDiskType();
+    virtual DiskType getDiskType() = 0;
     
     // Returns the layout parameters for this disk
     virtual long numSides() = 0;
