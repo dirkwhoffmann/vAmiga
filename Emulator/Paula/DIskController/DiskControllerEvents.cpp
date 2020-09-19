@@ -18,7 +18,7 @@ DiskController::serviceDiskEvent()
         executeFifo();
     
         // Schedule next event
-        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(57), DSK_ROTATE);
+        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(55), DSK_ROTATE);
     }
 }
 

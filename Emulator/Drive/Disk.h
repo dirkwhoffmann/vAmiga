@@ -11,11 +11,6 @@
 #define _AMIGA_DISK_H
 
 #include "HardwareComponent.h"
-/*
-#include "ADFFile.h"
-#include "DMSFile.h"
-#include "IMGFile.h"
-*/
 
 class Disk : public AmigaObject {
     

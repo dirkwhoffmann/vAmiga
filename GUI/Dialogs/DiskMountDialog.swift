@@ -61,17 +61,19 @@ class DiskMountDialog: DialogController {
 
     var subtitleText: String {
         
-        switch type {
+        let t = disk?.numTracks ?? 0
+        let s = disk?.numSectorsPerTrack ?? 0
+        let h = disk?.numSides == 1 ? "Single" : "Double"
         
-        case .FILETYPE_ADF:
-            return "A byte-accurate image of a 3.5\" DD Amiga diskette"
-        case .FILETYPE_DMS:
-            return "A byte-accurate image of a 3.5\" DD PC diskette"
-        case .FILETYPE_IMG:
-            return "A byte-accurate image of a 3.5\" DD PC diskette"
-        default:
-            return "???"
+        var d: String
+        switch disk?.diskType {
+        case .DISK_35_DD: d = "Double"
+        case .DISK_35_HD: d = "High"
+        case .DISK_525_SD: d = "Single"
+        default: d = "???"
         }
+        
+        return "\(h) sided, \(d) density, \(t) tracks with \(s) sectors each"
     }
 
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {
@@ -86,11 +88,9 @@ class DiskMountDialog: DialogController {
         if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
             disk = attachment.adf()
         }
-        /*
         if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
             disk = attachment
         }
-        */
         
         if disk != nil {
             
