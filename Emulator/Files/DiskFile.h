@@ -16,6 +16,15 @@
 class DiskFile : public AmigaFile {
 
     //
+    // Initializing
+    //
+
+public:
+
+    static DiskFile *makeWithFile(const char *path);
+    
+    
+    //
     // Querying disk properties
     //
     

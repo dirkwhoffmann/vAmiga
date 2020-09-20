@@ -9,6 +9,21 @@
 
 #include "Amiga.h"
 
+DiskFile *
+DiskFile::makeWithFile(const char *path)
+{
+    ADFFile *adf = ADFFile::makeWithFile(path);
+    if (adf) return adf;
+    
+    DMSFile *dms = DMSFile::makeWithFile(path);
+    if (dms) return dms;
+
+    IMGFile *img = IMGFile::makeWithFile(path);
+    if (img) return img;
+
+    return NULL;
+}
+
 void
 DiskFile::readSector(u8 *dst, long t, long s)
 {

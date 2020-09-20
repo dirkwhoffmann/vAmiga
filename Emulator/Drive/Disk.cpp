@@ -123,6 +123,8 @@ Disk::encodeAmigaDisk(DiskFile *df)
     
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);
+
+    plaindebug(MFM_DEBUG, "Amiga disk fully encoded (success = %d)\n", result);
     return result;
 }
 
@@ -235,6 +237,8 @@ Disk::encodeDosDisk(DiskFile *df)
     
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeDosTrack(df, t);
+
+    plaindebug(MFM_DEBUG, "DOS disk fully encoded (success = %d)\n", result);
     return result;
 }
 
@@ -273,7 +277,7 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     
     // Rectify the first clock bit (where buffer wraps over)
     // SHOULD NOT BE NEEDED
-    if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
+    // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
 
     // Compute a checksum for debugging
     if (MFM_DEBUG) {

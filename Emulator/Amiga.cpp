@@ -366,23 +366,29 @@ Amiga::powerOn()
 {
     debug(RUN_DEBUG, "powerOn()\n");
     
-    #ifdef BOOT_DISK
-        
-        ADFFile *adf = ADFFile::makeWithFile(BOOT_DISK);
-        if (adf) {
-            Disk *disk = Disk::makeWithFile(adf);
+    #ifdef DF0_DISK
+        DiskFile *df0file = DiskFile::makeWithFile(DF0_DISK);
+        if (df0file) {
+            Disk *disk = Disk::makeWithFile(df0file);
             df0.ejectDisk();
             df0.insertDisk(disk);
             df0.setWriteProtection(false);
         }
-        
     #endif
-        
+
+    #ifdef DF1_DISK
+        DiskFile *df1file = DiskFile::makeWithFile(DF1_DISK);
+        if (df1file) {
+            Disk *disk = Disk::makeWithFile(df1file);
+            df1.ejectDisk();
+            df1.insertDisk(disk);
+            df1.setWriteProtection(false);
+        }
+    #endif
+    
     #ifdef INITIAL_BREAKPOINT
-        
         debugMode = true;
         cpu.debugger.breakpoints.addAt(INITIAL_BREAKPOINT);
-        
     #endif
     
     pthread_mutex_lock(&stateChangeLock);

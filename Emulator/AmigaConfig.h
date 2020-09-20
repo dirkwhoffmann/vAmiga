@@ -47,17 +47,11 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/EmulatorDisk.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/read3.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/911Rescue.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/PP-Extension.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/dmaaud1.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/blast.adf"
-// #define BOOT_DISK "/Users/hoff/Desktop/Testing/Jetsons1.adf"
-// #define BOOT_DISK "/Users/hoff/Dropbox/Amiga/Games/Pinball.adf"
-// #define BOOT_DISK "/Users/hoff/Downloads/Jetsons1.adf"
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
+// #define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/EmulatorDisk.adf"
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
+// #define DF0_DISK "/Users/hoff/Downloads/Jetsons1.adf"
 
 // Uncomment to colorize certain rasterlines
 // #define LINE_DEBUG (agnus.pos.v == 260 || agnus.pos.v == 300)
