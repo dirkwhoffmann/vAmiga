@@ -197,16 +197,25 @@ private:
     
     
     //
-    // Handling MFM encoded data
+    // Encoding and decoding MFM data
     //
     
 private:
 
-    // Encodes or decodes a byte in odd / even bit format (used on Amiga disks)
+    // Returns the offset position of a sector (DOS disks)
+    // int sectorOffset(int sector) { return 1024 * sector + 194; }
+    
+    // Returns the offset position of the IAM or IMDAM blocks (DOS disks)
+    // int startIAM() { return 106; }
+    // int startIDAM(int sector) { return sectorStart(sector) + 24; }
+    
+    void encodeMFM(u8 *dst, u8 *src, size_t count);
+
     void encodeOddEven(u8 *dst, u8 *src, size_t count);
     void decodeOddEven(u8 *dst, u8 *src, size_t count);
 
-    // Adds the MFM clock bits to a byte
+    // Adds the MFM clock bits
+    void addClockBits(u8 *dst, size_t count);
     u8 addClockBits(u8 value, u8 previous);
 };
 

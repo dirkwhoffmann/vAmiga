@@ -73,7 +73,7 @@ class DiskMountDialog: DialogController {
         default: d = "???"
         }
         
-        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors"
     }
 
     override func showSheet(completionHandler handler:(() -> Void)? = nil) {

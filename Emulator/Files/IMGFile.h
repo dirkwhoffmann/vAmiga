@@ -58,7 +58,7 @@ public:
     
     
     //
-    // Propertiesb
+    // Properties
     //
       
     // Returns the type of this disk
@@ -67,7 +67,7 @@ public:
     // Cylinder, track, and sector counts
     long numSides() override;
     long numCyclinders() override;
-    long numSectorsPerTrack() override;    
+    long numSectorsPerTrack() override;
 };
 
 #endif

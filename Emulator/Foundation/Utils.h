@@ -199,7 +199,8 @@ inline u64 fnv_1a_it64(u64 prv, u64 val) { return (prv ^ val) * 0x100000001b3; }
 u32 fnv_1a_32(const u8 *addr, size_t size);
 u64 fnv_1a_64(const u8 *addr, size_t size);
 
-// Computes a CRC-32 checksum for a given buffer
+// Computes a CRC checksum for a given buffer
+u16 crc16(const u8 *addr, size_t size);
 u32 crc32(const u8 *addr, size_t size);
 u32 crc32forByte(u32 r);
 
