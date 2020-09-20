@@ -171,12 +171,12 @@ private:
     
     // Encodes a disk, track, or sector in Amiga format
     bool encodeAmigaDisk(class DiskFile *df);
-    bool encodeAmigaTrack(class DiskFile *df, Track t, long smax);
+    bool encodeAmigaTrack(class DiskFile *df, Track t);
     bool encodeAmigaSector(class DiskFile *df, Track t, Sector s);
 
     // Encodes a disk, track, or sector in DOS format
     bool encodeDosDisk(class DiskFile *df);
-    bool encodeDosTrack(class DiskFile *df, Track t, long smax);
+    bool encodeDosTrack(class DiskFile *df, Track t);
     bool encodeDosSector(class DiskFile *df, Track t, Sector s);
 
     

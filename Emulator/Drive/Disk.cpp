@@ -108,58 +108,48 @@ Disk::encodeDisk(DiskFile *df)
     assert(df != NULL);
     assert(df->getDiskType() == getType());
 
-    long tracks = df->numTracks();
-    long sectors = df->numSectorsPerTrack();
-    
-    debug("Encoding disk (%d tracks, %d sectors)\n", tracks, sectors);
-
     // Start with an unformatted disk
     clearDisk();
 
-    // Call the Amiga or DOS encoder
+    // Call the proper encoder for this disk
     return df->isAmigaDisk() ? encodeAmigaDisk(df) : encodeDosDisk(df);
 }
 
 bool
 Disk::encodeAmigaDisk(DiskFile *df)
 {
-    debug("Encoding Amiga disk\n");
-    
     long tracks = df->numTracks();
-    long sectors = df->numSectorsPerTrack();
     
-    // Encode all tracks
+    debug("Encoding Amiga disk (%d tracks)\n", tracks);
+    
     bool result = true;
-    for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t, sectors);
-
+    for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);
     return result;
 }
 
 bool
-Disk::encodeAmigaTrack(DiskFile *df, Track t, long smax)
+Disk::encodeAmigaTrack(DiskFile *df, Track t)
 {
     assert(t < 168);
 
-    debug(MFM_DEBUG, "Encoding track %d\n", t);
+    long sectors = df->numSectorsPerTrack();
+    
+    debug(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
 
     // Format track
     clearTrack(t, 0xAA);
 
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < smax; s++) result &= encodeAmigaSector(df, t, s);
+    for (Sector s = 0; s < sectors; s++) result &= encodeAmigaSector(df, t, s);
     
     // Get the clock bit right at offset position 0
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
 
     // Compute a debugging checksum
-    u8 *p = data.track[t] + (0 * sectorSize);
-    if (DSK_CHECKSUM) {
-        u32 check = fnv_1a_init32();
-        for (unsigned i = 0; i < trackSize / 2; i+=2) {
-            check = fnv_1a_it32(check, HI_LO(p[i],p[i+1]));
-        }
-        plaindebug(MFM_DEBUG, "Track %d checksum = %X\n", t, check);
+    if (MFM_DEBUG) {
+        u64 check = fnv_1a_32(data.track[t], trackSize);
+        plaindebug("Track %d checksum = %x\n", t, check);
     }
 
     return result;
@@ -240,6 +230,36 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
 }
 
 bool
+Disk::encodeDosDisk(DiskFile *df)
+{
+    long tracks = df->numTracks();
+    
+    debug(MFM_DEBUG, "Encoding DOS disk (%d tracks)\n", tracks);
+    
+    bool result = true;
+    for (Track t = 0; t < tracks; t++) result &= encodeDosTrack(df, t);
+    return result;
+}
+
+bool
+Disk::encodeDosTrack(DiskFile *df, Track t)
+{
+    long sectors = df->numSectorsPerTrack();
+
+    debug(MFM_DEBUG, "Encoding DOS track %d (%d sectors)\n", t, sectors);
+
+    assert(false);
+    return false;
+}
+
+bool
+Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
+{
+    assert(false);
+    return false;
+}
+
+bool
 Disk::decodeAmigaDisk(u8 *dst, int tracks, int sectors)
 {
     bool result = true;
@@ -305,26 +325,6 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
     
     // Decode sector data
     decodeOddEven(dst, src, 512);
-}
-
-bool
-Disk::encodeDosDisk(DiskFile *df)
-{
-    assert(false);
-    return false;
-}
-
-bool
-Disk::encodeDosTrack(DiskFile *df, Track t, long smax)
-{
-    assert(false);
-    return false;
-}
-
-bool encodeDosSector(DiskFile *df, Track t, Sector s)
-{
-    assert(false);
-    return false;
 }
 
 void
