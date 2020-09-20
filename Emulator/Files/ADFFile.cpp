@@ -399,49 +399,17 @@ ADFFile::writeDate(u8 *dst, time_t date)
 u32
 ADFFile::sectorChecksum(int sector)
 {
-    assert(isAbsSectorNr(sector));
+    long sectorSize = 512;
+    long offset = sector * sectorSize;
+
+    assert(offset + sectorSize <= size);
 
     u32 result = 0;
 
-    u8 *p = data + sector * 512;
+    u8 *p = data + offset;
     for (unsigned i = 0; i < 512; i += 4, p += 4) {
         result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
     }
     
     return ~result + 1;
 }
-
-/*
-void
-ADFFile::seekTrack(long nr)
-{
-    assert(isTrackNr(nr));
-    
-    fp = nr * (11 * 512);
-    eof = (nr + 1) + (11 * 512);
-}
-
-void
-ADFFile::seekSector(long nr)
-{
-    assert(isSectorNr(nr));
-    
-    fp = nr * 512;
-    eof = (nr + 1) * 512;
-}
-*/
-
-/*
-void
-ADFFile::readSector(u8 *target, long t, long s)
-{
-    assert(target != NULL);
-    assert(isTrackNr(t));
-    assert(isSectorNr(s));
-
-    seekTrackAndSector(t, s);
-    for (unsigned i = 0; i < 512; i++)
-        target[i] = read();
-    assert(read() == EOF);
-}
-*/

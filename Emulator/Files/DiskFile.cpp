@@ -18,11 +18,10 @@ DiskFile::readSector(u8 *dst, long t, long s)
 void
 DiskFile::readSector(u8 *dst, long s)
 {
-    assert(dst != NULL);
-    assert(isAbsSectorNr(s));
-
     long sectorSize = 512;
     long offset = s * sectorSize;
+
+    assert(dst != NULL);
     assert(offset + sectorSize <= size);
 
     for (unsigned i = 0; i < 512; i++) {

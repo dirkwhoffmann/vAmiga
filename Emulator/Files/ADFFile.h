@@ -98,31 +98,6 @@ private:
     void writeDate(u8 *dst, time_t date);
 
     u32 sectorChecksum(int sector);
-
-    
-    //
-    // Seeking tracks and sectors
-    //
-    
-public:
-    
-    /* Prepares to read a track.
-     * Use read() to read from the selected track. Returns EOF when the whole
-     * track has been read in.
-     */
-    // void seekTrack(long t);
-    
-    /* Prepares to read a sector.
-     * Use read() to read from the selected sector. Returns EOF when the whole
-     * sector has been read in.
-     */
-    // void seekSector(long s);
-
-    /* Prepares to read a sector.
-     * Use read() to read from the selected track. Returns EOF when the whole
-     * track has been read in.
-     */
-    // void seekTrackAndSector(long t, long s) { seekSector(numSectorsPerTrack() * t + s); }    
 };
 
 #endif

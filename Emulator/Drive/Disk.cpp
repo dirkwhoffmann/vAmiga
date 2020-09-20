@@ -19,50 +19,6 @@ Disk::Disk(DiskType type)
     clearDisk();
 }
 
-long
-Disk::numSides(DiskType type)
-{
-    return 2;
-}
-
-long
-Disk::numCylinders(DiskType type)
-{
-    assert(isDiskType(type));
-    
-    switch (type) {
-        case DISK_35_DD:    return 84;
-        case DISK_35_HD:    return 84;
-        case DISK_525_SD:   return 40;
-        default:            return 0;
-    }
-}
-
-long
-Disk::numTracks(DiskType type)
-{
-    return numSides(type) * numCylinders(type);
-}
-
-long
-Disk::numSectorsPerTrack(DiskType type)
-{
-    assert(isDiskType(type));
-    
-    switch (type) {
-        case DISK_35_DD:    return 11;
-        case DISK_35_HD:    return 22;
-        case DISK_525_SD:   return 9;
-        default:            return 0;
-    }
-}
-
-long
-Disk::numSectorsTotal(DiskType type)
-{
-    return numTracks(type) * numSectorsPerTrack(type);
-}
-
 Disk *
 Disk::makeWithFile(DiskFile *file)
 {
@@ -78,44 +34,6 @@ Disk::makeWithFile(DiskFile *file)
     return disk;
 }
 
-/*
-Disk *
-Disk::makeWithADFFile(ADFFile *file)
-{
-    Disk *disk = new Disk(file->getDiskType());
-    
-    if (!disk->encodeAmigaDisk(file)) {
-        delete disk;
-        return NULL;
-    }
-    
-    disk->fnv = file->fnv();
-    
-    return disk;
-}
-
-Disk *
-Disk::makeWithDMSFile(DMSFile *file)
-{
-    return makeWithADFFile(file->adf);
-}
-
-Disk *
-Disk::makeWithIMGFile(IMGFile *file)
-{
-    Disk *disk = new Disk(file->getDiskType());
-    
-    if (!disk->encodeDosDisk(file)) {
-        delete disk;
-        return NULL;
-    }
-    
-    disk->fnv = file->fnv();
-    
-    return disk;
-}
-*/
-
 Disk *
 Disk::makeWithReader(SerReader &reader, DiskType diskType)
 {
@@ -128,8 +46,8 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
 u8
 Disk::readByte(Cylinder cylinder, Side side, u16 offset)
 {
-    assert(isValidCylinderNr(cylinder));
-    assert(isValidSideNr(side));
+    assert(cylinder < 84);
+    assert(side < 2);
     assert(offset < trackSize);
 
     return data.cyclinder[cylinder][side][offset];
@@ -138,10 +56,10 @@ Disk::readByte(Cylinder cylinder, Side side, u16 offset)
 void
 Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
 {
-    assert(isValidCylinderNr(cylinder));
-    assert(isValidSideNr(side));
+    assert(cylinder < 84);
+    assert(side < 2);
     assert(offset < trackSize);
-    
+
     data.cyclinder[cylinder][side][offset] = value;
 }
 
@@ -169,7 +87,7 @@ Disk::clearDisk()
 void
 Disk::clearTrack(Track t)
 {
-    assert(isValidTrack(t));
+    assert(t < 168);
 
     srand(0);
     for (int i = 0; i < sizeof(data.track[t]); i++)
@@ -179,7 +97,7 @@ Disk::clearTrack(Track t)
 void
 Disk::clearTrack(Track t, u8 value)
 {
-    assert(isValidTrack(t));
+    assert(t < 168);
 
     memset(data.track[t], value, trackSize);
 }
@@ -193,9 +111,6 @@ Disk::encodeDisk(DiskFile *df)
     long tracks = df->numTracks();
     long sectors = df->numSectorsPerTrack();
     
-    assert(tracks <= numTracks());
-    assert(sectors == numSectorsPerTrack());
-
     debug("Encoding disk (%d tracks, %d sectors)\n", tracks, sectors);
 
     // Start with an unformatted disk
@@ -208,7 +123,7 @@ Disk::encodeDisk(DiskFile *df)
 bool
 Disk::encodeAmigaDisk(DiskFile *df)
 {
-    debug("Encoding Amiga disk...\n");
+    debug("Encoding Amiga disk\n");
     
     long tracks = df->numTracks();
     long sectors = df->numSectorsPerTrack();
@@ -223,7 +138,7 @@ Disk::encodeAmigaDisk(DiskFile *df)
 bool
 Disk::encodeAmigaTrack(DiskFile *df, Track t, long smax)
 {
-    assert(isValidTrack(t));
+    assert(t < 168);
 
     debug(MFM_DEBUG, "Encoding track %d\n", t);
 
@@ -253,8 +168,8 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t, long smax)
 bool
 Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
 {
-    assert(isValidTrack(t));
-    assert(isValidSector(s));
+    assert(t < 168);
+    assert(s < 11);
     
     debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
@@ -343,7 +258,7 @@ Disk::decodeAmigaDisk(u8 *dst, int tracks, int sectors)
 bool
 Disk::decodeAmigaTrack(u8 *dst, Track t, long smax)
 {
-    assert(isValidTrack(t));
+    assert(t < 168);
         
     debug(MFM_DEBUG, "Decoding track %d\n", t);
     
