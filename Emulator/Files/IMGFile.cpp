@@ -31,6 +31,22 @@ IMGFile::isIMGFile(const char *path)
 }
 
 IMGFile *
+IMGFile::makeWithDiskType(DiskType t)
+{
+    assert(t == DISK_35_DD);
+    
+    IMGFile *img = new IMGFile();
+    
+    if (!img->alloc(9 * 160 * 512)) {
+        delete img;
+        return NULL;
+    }
+    
+    memset(img->data, 0, img->size);
+    return img;
+}
+
+IMGFile *
 IMGFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
     IMGFile *img = new IMGFile();
@@ -74,9 +90,20 @@ IMGFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
     
-    // IMPLEMENTATION MISSING
-    assert(false);
-    return NULL;
+    // We only support 3.5"DD disks at the moment
+    if (disk->getType() != DISK_35_DD) { return NULL; }
+    
+    IMGFile *img = makeWithDiskType(DISK_35_DD);
+    
+    if (img) {
+        if (!disk->decodeDOSDisk(img->data, 160, 9)) {
+            printf("Failed to decode DOS disk\n");
+            delete img;
+            return NULL;
+        }
+    }
+    
+    return img;
 }
 
 bool

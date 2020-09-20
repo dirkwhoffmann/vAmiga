@@ -186,30 +186,25 @@ private:
 
 public:
     
-    // Decodes a disk in Amiga format
-    bool decodeAmigaDisk(u8 *dst, int tracks, int sectors);
-    
-private:
-    
-    // Decodes a single track or sector in Amiga format
-    bool decodeAmigaTrack(u8 *dst, Track t, long smax);
+    // Decodes a disk, track, or sector in Amiga format
+    bool decodeAmigaDisk(u8 *dst, long numTracks, long numSectors);
+    bool decodeAmigaTrack(u8 *dst, Track t, long numSectors);
     void decodeAmigaSector(u8 *dst, u8 *src);
-    
+
+    // Decodes a disk, track, or sector in Amiga format
+    bool decodeDOSDisk(u8 *dst, long numTracks, long numSectors);
+    bool decodeDOSTrack(u8 *dst, Track t, long numSectors);
+    void decodeDOSSector(u8 *dst, u8 *src);
+
     
     //
     // Encoding and decoding MFM data
     //
     
 private:
-
-    // Returns the offset position of a sector (DOS disks)
-    // int sectorOffset(int sector) { return 1024 * sector + 194; }
-    
-    // Returns the offset position of the IAM or IMDAM blocks (DOS disks)
-    // int startIAM() { return 106; }
-    // int startIDAM(int sector) { return sectorStart(sector) + 24; }
     
     void encodeMFM(u8 *dst, u8 *src, size_t count);
+    void decodeMFM(u8 *dst, u8 *src, size_t count);
 
     void encodeOddEven(u8 *dst, u8 *src, size_t count);
     void decodeOddEven(u8 *dst, u8 *src, size_t count);

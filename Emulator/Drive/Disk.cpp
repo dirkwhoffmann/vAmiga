@@ -124,7 +124,16 @@ Disk::encodeAmigaDisk(DiskFile *df)
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);
 
-    plaindebug(MFM_DEBUG, "Amiga disk fully encoded (success = %d)\n", result);
+    // Run the decoder in debug mode
+    if (MFM_DEBUG) {
+        plaindebug("Amiga disk fully encoded (success = %d)\n", result);
+        ADFFile *tmp = ADFFile::makeWithDisk(this);
+        if (tmp) {
+            msg("Decoded image written to /tmp/debug.img");
+            tmp->writeToFile("/tmp/tmp.img");
+        }
+    }
+
     return result;
 }
 
@@ -237,8 +246,17 @@ Disk::encodeDosDisk(DiskFile *df)
     
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeDosTrack(df, t);
+    
+    // Run the decoder in debug mode
+    if (MFM_DEBUG) {
+        plaindebug("DOS disk fully encoded (success = %d)\n", result);
+        IMGFile *tmp = IMGFile::makeWithDisk(this);
+        if (tmp) {
+            msg("Decoded image written to /tmp/debug.img");
+            tmp->writeToFile("/tmp/tmp.img");
+        }
+    }
 
-    plaindebug(MFM_DEBUG, "DOS disk fully encoded (success = %d)\n", result);
     return result;
 }
 
@@ -254,52 +272,27 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     // Clear track
     for (int i = 0; i < trackSize; i += 2) { p[i] = 0x92; p[i+1] = 0x54; }
 
-    // GAP
-    p += 82;
-
-    // SYNC
-    for (int i = 0; i < 24; i++) { p[i] = 0xAA; }
+    // Encode track header
+    p += 82;                                        // GAP
+    for (int i = 0; i < 24; i++) { p[i] = 0xAA; }   // SYNC
     p += 24;
-
-    // IAM
-    p[0] = 0x52; p[1] = 0x24;
+    p[0] = 0x52; p[1] = 0x24;                       // IAM
     p[2] = 0x52; p[3] = 0x24;
     p[4] = 0x52; p[5] = 0x24;
     p[6] = 0x55; p[7] = 0x52;
     p += 8;
-    
-    // GAP
-    p += 80;
+    p += 80;                                        // GAP
         
     // Encode all sectors
     bool result = true;
     for (Sector s = 0; s < sectors; s++) result &= encodeDosSector(df, t, s);
     
-    // Rectify the first clock bit (where buffer wraps over)
-    // SHOULD NOT BE NEEDED
-    // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
-
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
         u64 check = fnv_1a_32(data.track[t], trackSize);
         plaindebug("Track %d checksum = %x\n", t, check);
     }
 
-    /*
-    printf("MFM result:\n");
-    u8 *ptr = data.track[0];
-    for (int j = 0; j < 2048; j++, ptr += 2) {
-        if (j % 8 == 0) printf("\n %02d: ", j / 8);
-        u16 data = HI_LO(ptr[0], ptr[1]);
-        printf("%04x ", data);
-    }
-    printf("\n");
-    
-    printf("CRC0: %x\n", crc16(data.track[0], 16));
-    printf("CRC1: %x\n", crc16(data.track[0], 2048));
-    printf("CRC2: %x\n", crc16(data.track[0], 8192));
-    */
-    
     return result;
 }
 
@@ -364,7 +357,8 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
     p[2*12+1] &= 0xDF;
     p[2*13+1] &= 0xDF;
     p[2*14+1] &= 0xDF;
-
+    printf("IDAM t: %d s: %d index: %d\n", t, s, 194 + s * 1300 + 2*12+1);
+    
     // Remove certain clock bits in DATA AM block
     p[2*56+1] &= 0xDF;
     p[2*57+1] &= 0xDF;
@@ -374,15 +368,15 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 }
 
 bool
-Disk::decodeAmigaDisk(u8 *dst, int tracks, int sectors)
+Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)
 {
     bool result = true;
         
-    debug("Decoding disk (%d tracks, %d sectors each)...\n", tracks, sectors);
+    debug("Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
-    for (Track t = 0; t < tracks; t++) {
-        result &= decodeAmigaTrack(dst, t, sectors);
-        dst += sectors * 512;
+    for (Track t = 0; t < numTracks; t++) {
+        result &= decodeAmigaTrack(dst, t, numSectors);
+        dst += numSectors * 512;
     
     }
     
@@ -390,7 +384,7 @@ Disk::decodeAmigaDisk(u8 *dst, int tracks, int sectors)
 }
 
 bool
-Disk::decodeAmigaTrack(u8 *dst, Track t, long smax)
+Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
 {
     assert(t < 168);
         
@@ -402,8 +396,8 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long smax)
     memcpy(local + trackSize, data.track[t], trackSize);
     
     // Seek all sync marks
-    int sectorStart[smax], index = 0, nr = 0;
-    while (index < trackSize + sectorSize && nr < smax) {
+    int sectorStart[numSectors], index = 0, nr = 0;
+    while (index < trackSize + sectorSize && nr < numSectors) {
 
         if (local[index++] != 0x44) continue;
         if (local[index++] != 0x89) continue;
@@ -411,16 +405,15 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long smax)
         if (local[index++] != 0x89) continue;
         
         sectorStart[nr++] = index;
-        // debug("   Sector %d starts at index %d\n", nr-1, sectorStart[nr-1]);
     }
     
-    if (nr != smax) {
-        warn("Track %d: Found %d sectors, expected %d. Aborting.\n", t, nr, smax);
+    if (nr != numSectors) {
+        warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
         return false;
     }
     
     // Encode all sectors
-    for (Sector s = 0; s < smax; s++) {
+    for (Sector s = 0; s < numSectors; s++) {
         decodeAmigaSector(dst, local + sectorStart[s]);
         dst += 512;
     }
@@ -441,6 +434,98 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
     decodeOddEven(dst, src, 512);
 }
 
+bool
+Disk::decodeDOSDisk(u8 *dst, long numTracks, long numSectors)
+{
+    bool result = true;
+        
+    debug("Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    
+    for (Track t = 0; t < numTracks; t++) {
+        result &= decodeDOSTrack(dst, t, numSectors);
+        dst += numSectors * 512;
+    
+    }
+    
+    return result;
+}
+
+bool
+Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
+{
+    assert(t < 168);
+        
+    debug(MFM_DEBUG, "Decoding DOS track %d\n", t);
+    
+    // Create a local (double) copy of the track to simply the analysis
+    u8 local[2 * trackSize];
+    memcpy(local, data.track[t], trackSize);
+    memcpy(local + trackSize, data.track[t], trackSize);
+    
+    // Determine the start of all sectors contained in this track
+    int sectorStart[numSectors];
+    for (int i = 0; i < numSectors; i++) {
+        sectorStart[i] = 0;
+    }
+    int cnt = 0;
+    for (int i = 0; i < 1.5 * trackSize;) {
+        
+        // Seek IDAM block
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x55) continue;
+        if (local[i++] != 0x54) continue;
+
+        // Decode CHRN block
+        struct { u8 c; u8 h; u8 r; u8 n; } chrn;
+        decodeMFM((u8 *)&chrn, &local[i], 4);
+        debug(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
+        
+        if (chrn.r >= 1 && chrn.r <= numSectors) {
+            
+            // Break the loop once we see the same sector twice
+            if (sectorStart[chrn.r - 1] != 0) {
+                break;
+            }
+            sectorStart[chrn.r - 1] = i + 88;
+            cnt++;
+
+        } else {
+            warn("Invalid sector number %d. Aborting", chrn.r);
+            return false;
+        }
+    }
+
+    if (cnt != numSectors) {
+        warn("Found %d sectors, expected %d. Aborting", cnt, numSectors);
+        return false;
+    }
+        
+    // Do some consistency checking
+    for (int i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
+    
+    // Encode all sectors
+    for (Sector s = 0; s < numSectors; s++) {
+        decodeDOSSector(dst, local + sectorStart[s]);
+        dst += 512;
+    }
+    
+    return true;
+}
+
+void
+Disk::decodeDOSSector(u8 *dst, u8 *src)
+{
+    assert(dst != NULL);
+    assert(src != NULL);
+
+    decodeMFM(dst, src, 512);
+}
+
 void
 Disk::encodeMFM(u8 *dst, u8 *src, size_t count)
 {
@@ -458,6 +543,24 @@ Disk::encodeMFM(u8 *dst, u8 *src, size_t count)
         
         dst[2*i+0] = HI_BYTE(mfm);
         dst[2*i+1] = LO_BYTE(mfm);
+    }
+}
+
+void
+Disk::decodeMFM(u8 *dst, u8 *src, size_t count)
+{
+    for(size_t i = 0; i < count; i++) {
+        
+        u16 mfm = HI_LO(src[2*i], src[2*i+1]);
+        dst[i] =
+        ((mfm & 0b0100000000000000) >> 7) |
+        ((mfm & 0b0001000000000000) >> 6) |
+        ((mfm & 0b0000010000000000) >> 5) |
+        ((mfm & 0b0000000100000000) >> 4) |
+        ((mfm & 0b0000000001000000) >> 3) |
+        ((mfm & 0b0000000000010000) >> 2) |
+        ((mfm & 0b0000000000000100) >> 1) |
+        ((mfm & 0b0000000000000001) >> 0);
     }
 }
 
