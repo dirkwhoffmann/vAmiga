@@ -104,9 +104,12 @@ public:
     
     Disk(DiskType type);
 
+    static Disk *makeWithFile(class DiskFile *file);
+    /*
     static Disk *makeWithADFFile(class ADFFile *file);
     static Disk *makeWithDMSFile(class DMSFile *file);
     static Disk *makeWithIMGFile(class IMGFile *file);
+    */
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
     
     
@@ -190,20 +193,31 @@ public:
 
     
     //
-    // Encoding and decoding Amiga disks
+    // Encoding
     //
     
 public:
     
-    // Encodes a disk in Amiga format
-    bool encodeAmigaDisk(ADFFile *adf);
+    // Encodes a disk
+    bool encodeDisk(class DiskFile *df);
     
 private:
     
-    // Encodes a single track or sector in Amiga format
-    bool encodeAmigaTrack(ADFFile *adf, Track t, long smax);
-    bool encodeAmigaSector(ADFFile *adf, Track t, Sector s);
-        
+    // Encodes a disk, track, or sector in Amiga format
+    bool encodeAmigaDisk(class DiskFile *df);
+    bool encodeAmigaTrack(class DiskFile *df, Track t, long smax);
+    bool encodeAmigaSector(class DiskFile *df, Track t, Sector s);
+
+    // Encodes a disk, track, or sector in DOS format
+    bool encodeDosDisk(class DiskFile *df);
+    bool encodeDosTrack(class DiskFile *df, Track t, long smax);
+    bool encodeDosSector(class DiskFile *df, Track t, Sector s);
+
+    
+    //
+    // Decoding
+    //
+
 public:
     
     // Decodes a disk in Amiga format
@@ -215,22 +229,6 @@ private:
     bool decodeAmigaTrack(u8 *dst, Track t, long smax);
     void decodeAmigaSector(u8 *dst, u8 *src);
     
-    
-    //
-    // Encoding and decoding DOS disks
-    //
-    
-public:
-    
-    // Encodes a disk in DOS format
-    bool encodeDosDisk(IMGFile *img);
-    
-private:
-    
-    // Encodes a single track or sector in DOS format
-    bool encodeDosTrack(IMGFile *img, Track t, long smax);
-    bool encodeDosSector(IMGFile *img, Track t, Sector s);
-
     
     //
     // Handling MFM encoded data

@@ -64,6 +64,22 @@ Disk::numSectorsTotal(DiskType type)
 }
 
 Disk *
+Disk::makeWithFile(DiskFile *file)
+{
+    Disk *disk = new Disk(file->getDiskType());
+    
+    if (!disk->encodeDisk(file)) {
+        delete disk;
+        return NULL;
+    }
+    
+    disk->fnv = file->fnv();
+    
+    return disk;
+}
+
+/*
+Disk *
 Disk::makeWithADFFile(ADFFile *file)
 {
     Disk *disk = new Disk(file->getDiskType());
@@ -98,6 +114,7 @@ Disk::makeWithIMGFile(IMGFile *file)
     
     return disk;
 }
+*/
 
 Disk *
 Disk::makeWithReader(SerReader &reader, DiskType diskType)
@@ -137,9 +154,8 @@ Disk::clearDisk()
     for (int i = 0; i < sizeof(data); i++)
         data.raw[i] = rand() & 0xFF;
     
-    /* We are allowed to place random data here.
-     * In order to make some copy protected game titles work, we place
-     * add some magic values.
+    /* We are allowed to place random data here. In order to make some copy
+     * protected game titles work, we smuggle in some magic values.
      * Crunch factory: Looks for 0x44A2 on cylinder 80
      */
     for (int t = 0; t < 2*84; t++) {
@@ -169,30 +185,43 @@ Disk::clearTrack(Track t, u8 value)
 }
 
 bool
-Disk::encodeAmigaDisk(ADFFile *adf)
+Disk::encodeDisk(DiskFile *df)
 {
-    assert(adf != NULL);
-    assert(adf->getDiskType() == getType());
+    assert(df != NULL);
+    assert(df->getDiskType() == getType());
 
-    long tracks = adf->numTracks();
-    long sectors = adf->numSectorsPerTrack();
-
-    debug("Encoding disk (%d tracks, %d sectors each)...\n", tracks, sectors);
+    long tracks = df->numTracks();
+    long sectors = df->numSectorsPerTrack();
+    
     assert(tracks <= numTracks());
     assert(sectors == numSectorsPerTrack());
 
-    // Initialize disk with random data
+    debug("Encoding disk (%d tracks, %d sectors)\n", tracks, sectors);
+
+    // Start with an unformatted disk
     clearDisk();
 
+    // Call the Amiga or DOS encoder
+    return df->isAmigaDisk() ? encodeAmigaDisk(df) : encodeDosDisk(df);
+}
+
+bool
+Disk::encodeAmigaDisk(DiskFile *df)
+{
+    debug("Encoding Amiga disk...\n");
+    
+    long tracks = df->numTracks();
+    long sectors = df->numSectorsPerTrack();
+    
     // Encode all tracks
     bool result = true;
-    for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(adf, t, sectors);
+    for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t, sectors);
 
     return result;
 }
 
 bool
-Disk::encodeAmigaTrack(ADFFile *adf, Track t, long smax)
+Disk::encodeAmigaTrack(DiskFile *df, Track t, long smax)
 {
     assert(isValidTrack(t));
 
@@ -203,7 +232,7 @@ Disk::encodeAmigaTrack(ADFFile *adf, Track t, long smax)
 
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < smax; s++) result &= encodeAmigaSector(adf, t, s);
+    for (Sector s = 0; s < smax; s++) result &= encodeAmigaSector(df, t, s);
     
     // Get the clock bit right at offset position 0
     if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
@@ -222,7 +251,7 @@ Disk::encodeAmigaTrack(ADFFile *adf, Track t, long smax)
 }
 
 bool
-Disk::encodeAmigaSector(ADFFile *adf, Track t, Sector s)
+Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
 {
     assert(isValidTrack(t));
     assert(isValidSector(s));
@@ -264,7 +293,7 @@ Disk::encodeAmigaSector(ADFFile *adf, Track t, Sector s)
     
     // Data
     u8 bytes[512];
-    adf->readSector(bytes, t, s);
+    df->readSector(bytes, t, s);
     encodeOddEven(&p[64], bytes, sizeof(bytes));
     
     // Block checksum
@@ -364,20 +393,20 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
 }
 
 bool
-Disk::encodeDosDisk(IMGFile *img)
+Disk::encodeDosDisk(DiskFile *df)
 {
     assert(false);
     return false;
 }
 
 bool
-Disk::encodeDosTrack(IMGFile *img, Track t, long smax)
+Disk::encodeDosTrack(DiskFile *df, Track t, long smax)
 {
     assert(false);
     return false;
 }
 
-bool encodeDosSector(IMGFile *img, Track t, Sector s)
+bool encodeDosSector(DiskFile *df, Track t, Sector s)
 {
     assert(false);
     return false;

@@ -36,7 +36,11 @@ public:
     bool isTrackNr(long nr)     { return nr >= 0 && nr < numTracks(); }
     bool isRelSectorNr(long nr) { return nr >= 0 && nr < numSectorsPerTrack(); }
     bool isAbsSectorNr(long nr) { return nr >= 0 && nr < numSectorsTotal(); }
-    
+
+    // Reports whether this disk is an Amiga disk or a DOS disk
+    bool isDosDisk() { return numSectorsPerTrack() == 9; }
+    bool isAmigaDisk() { return !isDosDisk(); }
+
     
     //
     // Reading data
