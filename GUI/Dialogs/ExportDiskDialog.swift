@@ -39,7 +39,14 @@ class ExportDiskDialog: DialogController {
     
     @IBAction func selectADF(_ sender: Any!) {
         track()
-        savePanel.allowedFileTypes = ["adf"]
+        savePanel.allowedFileTypes = ["adf", "ADF"]
         type = .FILETYPE_ADF
     }
+
+    @IBAction func selectIMG(_ sender: Any!) {
+        track()
+        savePanel.allowedFileTypes = ["img", "IMG", "ima", "IMA"]
+        type = .FILETYPE_IMG
+    }
+
 }

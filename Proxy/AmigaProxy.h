@@ -720,7 +720,7 @@ struct SerialPortWrapper;
 
 
 //
-// IMGFile
+// IMGFileProxy
 //
 
 @interface IMGFileProxy : DiskFileProxy {
@@ -729,6 +729,7 @@ struct SerialPortWrapper;
 + (BOOL)isIMGFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 @property (readonly) DiskType diskType;
 @property (readonly) NSInteger numCylinders;

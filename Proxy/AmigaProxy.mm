@@ -1442,7 +1442,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// IMG File
+// IMGFileProxy
 //
 
 @implementation IMGFileProxy
@@ -1465,6 +1465,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     IMGFile *archive = IMGFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
+}
++ (instancetype) makeWithDrive:(DriveProxy *)drive
+{
+    Drive *d = [drive wrapper]->drive;
+    IMGFile *archive = IMGFile::makeWithDisk(d->disk);
+    return archive ? [self make: archive] : nil;
 }
 - (DiskType)diskType
 {

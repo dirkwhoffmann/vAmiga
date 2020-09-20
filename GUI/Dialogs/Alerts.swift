@@ -98,13 +98,57 @@ extension MyDocument {
                                                    amiga.df3 ])
     }
 
+    func showExportADFDecoderAlert(url: URL) {
+        
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.icon = NSImage.init(named: "adf")
+        alert.messageText = "Failed to export disk."
+        alert.informativeText = "The MFM data stream appears to be corrupt."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showExportDOSDecoderAlert(url: URL) {
+        
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.icon = NSImage.init(named: "dos")
+        alert.messageText = "Failed to export disk."
+        alert.informativeText = "The MFM data stream appears to be corrupt."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showExportNoADFAlert(url: URL) {
+        
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.icon = NSImage.init(named: "dos")
+        alert.messageText = "Failed to export disk in ADF format."
+        alert.informativeText = "The drive contains a DOS formatted disk."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showExportNoDOSAlert(url: URL) {
+        
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.icon = NSImage.init(named: "adf")
+        alert.messageText = "Failed to export disk in DOS format."
+        alert.informativeText = "The drive contains an Amiga formatted disk."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
     func showExportErrorAlert(url: URL) {
         
         let path = url.path
         let alert = NSAlert()
         alert.alertStyle = .critical
         alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "Failed to export disk to file"
+        alert.messageText = "Failed to export disk."
         alert.informativeText = "\(path)."
         alert.addButton(withTitle: "OK")
         alert.runModal()

@@ -273,21 +273,48 @@ class MyDocument: NSDocument {
     //
     
     func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
-        
-        // track("url = \(url) typeName = \(typeName)")
-        assert(["ADF"].contains(typeName))
-        
+                        
         let drive = amiga.df(nr)!
+        var df: DiskFileProxy!
+
+        switch typeName {
         
-        // Convert disk to ADF format
-        guard let adf = ADFFileProxy.make(withDrive: drive) else {
-            track("ADF conversion failed")
+        case "ADF":
+            df = ADFFileProxy.make(withDrive: drive)
+            if df == nil {
+                df = IMGFileProxy.make(withDrive: drive)
+                if df == nil {
+                    showExportADFDecoderAlert(url: url)
+                } else {
+                    showExportNoADFAlert(url: url)
+                }
+                return false
+            }
+            
+        case "IMG", "IMA":
+            df = IMGFileProxy.make(withDrive: drive)
+            if df == nil {
+                df = ADFFileProxy.make(withDrive: drive)
+                if df == nil {
+                    showExportDOSDecoderAlert(url: url)
+                } else {
+                    showExportNoDOSAlert(url: url)
+                }
+                return false
+            }
+
+        default:
+            fatalError()
+        }
+
+        if df == nil {
+            track("Unable to create DiskFileProxy for url \(url)")
             return false
         }
 
         // Serialize data
-        let data = NSMutableData.init(length: adf.sizeOnDisk)!
-        adf.write(toBuffer: data.mutableBytes)
+        let data = NSMutableData.init(length: df.sizeOnDisk)!
+        df.write(toBuffer: data.mutableBytes)
         
         // Write to file
         if !data.write(to: url, atomically: true) {
