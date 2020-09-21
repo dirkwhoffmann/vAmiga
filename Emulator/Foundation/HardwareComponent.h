@@ -261,12 +261,14 @@ protected:
 #define COMPUTE_SNAPSHOT_SIZE \
 SerCounter counter; \
 applyToPersistentItems(counter); \
+applyToHardResetItems(counter); \
 applyToResetItems(counter); \
 return counter.count;
 
 #define RESET_SNAPSHOT_ITEMS(hard) \
 { \
 SerResetter resetter; \
+applyToHardResetItems(resetter); \
 applyToResetItems(resetter); \
 debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 }
@@ -275,6 +277,7 @@ debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 { \
 SerReader reader(buffer); \
 applyToPersistentItems(reader); \
+applyToHardResetItems(reader); \
 applyToResetItems(reader); \
 debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
 return reader.ptr - buffer; \
@@ -284,6 +287,7 @@ return reader.ptr - buffer; \
 { \
 SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
+applyToHardResetItems(writer); \
 applyToResetItems(writer); \
 debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer; \

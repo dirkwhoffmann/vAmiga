@@ -116,7 +116,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void applyToHardResetItems(T& worker)
     {
         worker
 
@@ -131,6 +131,11 @@ private:
         & cop2ins
         & coppc
         & activeInThisFrame;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

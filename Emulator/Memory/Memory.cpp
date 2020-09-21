@@ -265,6 +265,7 @@ Memory::_size()
     SerCounter counter;
 
     applyToPersistentItems(counter);
+    applyToHardResetItems(counter);
     applyToResetItems(counter);
 
     counter.count += sizeof(config.romSize) + config.romSize;

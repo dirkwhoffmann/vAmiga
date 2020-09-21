@@ -478,7 +478,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void applyToHardResetItems(T& worker)
     {
         worker
 
@@ -548,6 +548,11 @@ private:
         & sprVStrt
         & sprVStop
         & sprDmaState;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

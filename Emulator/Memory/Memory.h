@@ -246,13 +246,18 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void applyToHardResetItems(T& worker)
     {
         worker
 
         & womIsLocked
         & memSrc
         & dataBus;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     size_t _size() override;

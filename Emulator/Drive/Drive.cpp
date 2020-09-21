@@ -144,6 +144,7 @@ Drive::_size()
     SerCounter counter;
 
     applyToPersistentItems(counter);
+    applyToHardResetItems(counter);
     applyToResetItems(counter);
 
     // Add the size of the boolean indicating whether a disk is inserted
@@ -166,6 +167,7 @@ Drive::_load(u8 *buffer)
 
     // Read own state
     applyToPersistentItems(reader);
+    applyToHardResetItems(reader);
     applyToResetItems(reader);
 
     // Delete the current disk
@@ -196,6 +198,7 @@ Drive::_save(u8 *buffer)
 
     // Write own state
     applyToPersistentItems(writer);
+    applyToHardResetItems(writer);
     applyToResetItems(writer);
 
     // Indicate whether this drive has a disk is inserted

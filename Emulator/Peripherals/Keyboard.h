@@ -87,7 +87,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void applyToHardResetItems(T& worker)
     {
         worker
 
@@ -97,6 +97,11 @@ private:
         & spHigh
         & typeAheadBuffer
         & bufferIndex;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     

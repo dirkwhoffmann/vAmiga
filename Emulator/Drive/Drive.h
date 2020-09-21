@@ -139,7 +139,7 @@ private:
     }
 
     template <class T>
-    void applyToResetItems(T& worker)
+    void applyToHardResetItems(T& worker)
     {
         worker
 
@@ -156,6 +156,11 @@ private:
         & head.cylinder
         & head.offset
         & cylinderHistory;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     size_t _size() override;

@@ -280,17 +280,6 @@ CPU::_setDebug(bool enable)
 }
 
 size_t
-CPU::_size()
-{
-    SerCounter counter;
-
-    applyToPersistentItems(counter);
-    applyToResetItems(counter);
-
-    return counter.count;
-}
-
-size_t
 CPU::didLoadFromBuffer(u8 *buffer)
 {
     /* Because we don't save breakpoints and watchpoints in a snapshot, the
