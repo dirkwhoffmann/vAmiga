@@ -193,10 +193,10 @@ CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 void
 CPU::_reset(bool hard)
 {    
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        
-        RESET_SNAPSHOT_ITEMS(hard)
-        
+                
         // Reset the Moira core
         Moira::reset();
         

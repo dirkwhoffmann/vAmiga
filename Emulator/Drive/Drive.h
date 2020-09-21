@@ -141,19 +141,12 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
         worker
 
         & motor
-        & switchCycle
         & switchSpeed
         & idCount
         & idBit
-        & stepCycle
         & dskchange
         & dsklen
         & prb
@@ -161,6 +154,15 @@ private:
         & head.cylinder
         & head.offset
         & cylinderHistory;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+        
+        & switchCycle
+        & stepCycle;
     }
 
     size_t _size() override;

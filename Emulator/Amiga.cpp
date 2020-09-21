@@ -153,7 +153,7 @@ Amiga::reset(bool hard)
     if (hard) resume();
 
     // Inform the GUI
-    messageQueue.put(MSG_RESET);
+    if (hard) messageQueue.put(MSG_RESET);
 }
 
 AmigaConfiguration
