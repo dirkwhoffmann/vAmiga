@@ -300,7 +300,14 @@ private:
     {
         worker
 
-        & clock
+        & clock;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+        
         & idleCycles
         & counterA
         & counterB
@@ -332,11 +339,6 @@ private:
         & sleeping
         & sleepCycle
         & wakeUpCycle;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

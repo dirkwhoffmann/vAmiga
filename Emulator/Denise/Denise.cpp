@@ -30,8 +30,9 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
 void
 Denise::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         memset(bBuffer, 0, sizeof(bBuffer));
         memset(iBuffer, 0, sizeof(iBuffer));

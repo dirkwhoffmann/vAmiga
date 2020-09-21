@@ -58,8 +58,9 @@ RTC::setConfigItem(ConfigOption option, long value)
 void
 RTC::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         if (config.model == RTC_RICOH) {
             

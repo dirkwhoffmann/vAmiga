@@ -28,8 +28,9 @@ Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 
 void Agnus::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         // Start with a long frame
         frame = Frame();

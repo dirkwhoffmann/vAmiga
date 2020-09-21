@@ -26,8 +26,9 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 void
 DiskController::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         prb = 0xFF;
         selected = -1;

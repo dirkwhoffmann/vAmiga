@@ -268,7 +268,7 @@ return counter.count;
 #define RESET_SNAPSHOT_ITEMS(hard) \
 { \
 SerResetter resetter; \
-applyToHardResetItems(resetter); \
+if (hard) applyToHardResetItems(resetter); \
 applyToResetItems(resetter); \
 debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 }

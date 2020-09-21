@@ -27,11 +27,11 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
 void
 PaulaAudio::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+    
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         clearRingbuffer();
-        
         stats.bufferUnderflows = 0;
         stats.bufferOverflows = 0;
     }

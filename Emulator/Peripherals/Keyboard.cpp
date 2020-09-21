@@ -18,11 +18,11 @@ Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 void
 Keyboard::_reset(bool hard)
 {
+    RESET_SNAPSHOT_ITEMS(hard)
+
     if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
         
         memset(keyDown, 0, sizeof(keyDown));
-        
         state = KB_SELFTEST;
         execute();
     }

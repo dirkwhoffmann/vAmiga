@@ -48,9 +48,9 @@ Blitter::_initialize()
 void
 Blitter::_reset(bool hard)
 {
-    if (hard) {
-        RESET_SNAPSHOT_ITEMS(hard)
-        
+    RESET_SNAPSHOT_ITEMS(hard)
+
+    if (hard) {        
         copycount = 0;
         linecount = 0;
     }

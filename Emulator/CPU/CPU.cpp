@@ -192,9 +192,7 @@ CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 
 void
 CPU::_reset(bool hard)
-{
-    debug(CPU_DEBUG, "CPU::_reset(%d)\n", hard);
-    
+{    
     if (hard) {
         
         RESET_SNAPSHOT_ITEMS(hard)
