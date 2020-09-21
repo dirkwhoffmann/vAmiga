@@ -58,16 +58,16 @@ public:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        worker
-
-        & autoConfData
-        & fastRamConf
-        & fastRamBaseAddr;
     }
 
     template <class T>
     void applyToResetItems(T& worker)
     {
+        worker
+
+        & autoConfData
+        & fastRamConf
+        & fastRamBaseAddr;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
