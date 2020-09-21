@@ -28,8 +28,11 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 void
 CIA::_reset(bool hard)
 {
-    if (hard) {
-        
+    Cycle backup = clock;
+    
+    // if (hard)
+    {
+    
         RESET_SNAPSHOT_ITEMS(hard)
         
         CNT = true;
@@ -43,10 +46,12 @@ CIA::_reset(bool hard)
         updatePA();
         updatePB();
         
-        // The OVL bit influences the memory layout. Hence, we need to update it.
+        // Update the memory layout because the OVL bit may have changed
         mem.updateMemSrcTable();
 
-    } else {
+    }
+    /*
+    else {
             
         PRA = 0;
         PRB = 0;
@@ -56,8 +61,17 @@ CIA::_reset(bool hard)
         updatePA();
         updatePB();
         
-        // The OVL bit influences the memory layout. Hence, we need to update it.
+        // Update the memory layout because the OVL bit may have changed
         mem.updateMemSrcTable();
+    }
+    */
+
+    if (!hard) {
+        
+        agnus.scheduleRel<CIAA_SLOT>(CIA_CYCLES(0), CIA_EXECUTE);
+        agnus.scheduleRel<CIAB_SLOT>(CIA_CYCLES(0), CIA_EXECUTE);
+
+        clock = backup;
     }
 }
 
