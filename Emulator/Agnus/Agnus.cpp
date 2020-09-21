@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Agnus::Agnus(A/Users/hoff/vAmiga/Emulator/AmigaConfig.hmiga& ref) : AmigaComponent(ref)
+Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Agnus");
     
@@ -65,11 +65,7 @@ void Agnus::_reset(bool hard)
         // Start with long frames by setting the LOF bit
         pokeVPOS(0x8000);
 
-    } else {
-        
-        cancel<BLT_SLOT>();
-        cancel<COP_SLOT>();
-    }
+    } 
 }
 
 long

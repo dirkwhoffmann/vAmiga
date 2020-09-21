@@ -30,6 +30,9 @@ Paula::_reset(bool hard)
 
     for (int i = 0; i < 16; i++) setIntreq[i] = NEVER;
     ipl.clear();
+    agnus.cancel<IPL_SLOT>();
+    agnus.cancel<IRQ_SLOT>();
+    cpu.setIPL(0);
 }
 
 void
