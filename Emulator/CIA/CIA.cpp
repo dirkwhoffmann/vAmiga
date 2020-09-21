@@ -28,6 +28,8 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
 void
 CIA::_reset(bool hard)
 {
+    if (!hard) wakeUp();
+
     RESET_SNAPSHOT_ITEMS(hard)
     
     CNT = true;
@@ -43,11 +45,6 @@ CIA::_reset(bool hard)
     
     // Update the memory layout because the OVL bit may have changed
     mem.updateMemSrcTable();
-    
-    if (!hard) {
-        agnus.scheduleRel<CIAA_SLOT>(CIA_CYCLES(0), CIA_EXECUTE);
-        agnus.scheduleRel<CIAB_SLOT>(CIA_CYCLES(0), CIA_EXECUTE);
-    }
 }
 
 long

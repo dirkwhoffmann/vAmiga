@@ -300,7 +300,12 @@ private:
     {
         worker
 
-        & clock;
+        & clock
+        & idleCycles
+        & tiredness
+        & sleeping
+        & sleepCycle
+        & wakeUpCycle;
     }
 
     template <class T>
@@ -308,7 +313,6 @@ private:
     {
         worker
         
-        & idleCycles
         & counterA
         & counterB
         & latchA
@@ -334,11 +338,7 @@ private:
         & serCounter
         & SP
         & CNT
-        & INT
-        & tiredness
-        & sleeping
-        & sleepCycle
-        & wakeUpCycle;
+        & INT;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

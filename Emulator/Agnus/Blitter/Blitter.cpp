@@ -50,7 +50,7 @@ Blitter::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
-    if (hard) {        
+    if (hard) {
         copycount = 0;
         linecount = 0;
     }
