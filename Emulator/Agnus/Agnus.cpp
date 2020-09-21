@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
+Agnus::Agnus(A/Users/hoff/vAmiga/Emulator/AmigaConfig.hmiga& ref) : AmigaComponent(ref)
 {
     setDescription("Agnus");
     
@@ -68,6 +68,7 @@ void Agnus::_reset(bool hard)
     } else {
         
         cancel<BLT_SLOT>();
+        cancel<COP_SLOT>();
     }
 }
 
