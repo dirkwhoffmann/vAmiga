@@ -27,13 +27,12 @@ void
 DiskController::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
+    
+    prb = 0xFF;
+    selected = -1;
+    dsksync = 0x4489;
+    
     if (hard) {
-        
-        prb = 0xFF;
-        selected = -1;
-        dsksync = 0x4489;
-        
         assert(diskToInsert == NULL);
     }
 }
