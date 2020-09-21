@@ -62,7 +62,7 @@ private:
         worker
 
         & flags
-        // & clock
+        & clock
 
         & reg.pc
         & reg.pc0
@@ -90,9 +90,6 @@ private:
     template <class T>
     void applyToResetItems(T& worker)
     {
-        worker
-        
-        & clock;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

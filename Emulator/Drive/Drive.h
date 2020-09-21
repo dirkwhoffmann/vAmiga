@@ -144,9 +144,11 @@ private:
         worker
 
         & motor
+        & switchCycle
         & switchSpeed
         & idCount
         & idBit
+        & stepCycle
         & dskchange
         & dsklen
         & prb
@@ -159,10 +161,6 @@ private:
     template <class T>
     void applyToResetItems(T& worker)
     {
-        worker
-        
-        & switchCycle
-        & stepCycle;
     }
 
     size_t _size() override;

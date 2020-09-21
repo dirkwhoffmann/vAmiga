@@ -326,18 +326,10 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        // worker
-
-        // & clock
-    
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
         worker
 
         & clock
+        
         & bplcon0
         & bplcon1
         & bplcon2
@@ -367,6 +359,11 @@ private:
         & spriteClipEnd
         & prio1
         & prio2;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

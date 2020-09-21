@@ -243,12 +243,12 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        worker & clockBase;
     }
 
     template <class T>
     void applyToResetItems(T& worker)
     {
-        worker & clockBase;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
