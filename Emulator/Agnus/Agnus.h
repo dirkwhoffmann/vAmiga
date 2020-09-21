@@ -482,6 +482,14 @@ private:
     {
         worker
 
+        & clock;
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
+        worker
+        
         & slot
         & nextTrigger
 
@@ -493,7 +501,6 @@ private:
         & hsyncActions
         & changeRecorder
 
-        & clock
         & pos
         & frame
 
@@ -548,11 +555,6 @@ private:
         & sprVStrt
         & sprVStop
         & sprDmaState;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
