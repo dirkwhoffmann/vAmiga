@@ -99,16 +99,16 @@ public:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        worker
-
-        & colChanges
-        & colreg
-        & hamMode;
     }
 
     template <class T>
     void applyToResetItems(T& worker)
     {
+        worker
+
+        & colChanges
+        & colreg
+        & hamMode;
     }
 
 

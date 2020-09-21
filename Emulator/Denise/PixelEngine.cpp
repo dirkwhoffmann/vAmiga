@@ -61,11 +61,9 @@ void
 PixelEngine::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
-    if (hard) {
-        frameBuffer = & emuTexture[0];
-        updateRGBA();
-    }
+    
+    frameBuffer = & emuTexture[0];
+    updateRGBA();
 }
 
 void

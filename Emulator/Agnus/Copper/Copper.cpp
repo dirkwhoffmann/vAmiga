@@ -17,7 +17,6 @@ Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 void
 Copper::_reset(bool hard)
 {
-    // agnus.cancel<COP_SLOT>();
     RESET_SNAPSHOT_ITEMS(hard)
 }
 

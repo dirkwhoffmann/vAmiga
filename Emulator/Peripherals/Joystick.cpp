@@ -19,13 +19,10 @@ void
 Joystick::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
-    if (hard) {
-        
-        button = false;
-        axisX = 0;
-        axisY = 0;
-    }
+    
+    button = false;
+    axisX = 0;
+    axisY = 0;
 }
 
 void

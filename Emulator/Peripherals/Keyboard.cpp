@@ -19,13 +19,10 @@ void
 Keyboard::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
-    if (hard) {
-        
-        memset(keyDown, 0, sizeof(keyDown));
-        state = KB_SELFTEST;
-        execute();
-    }
+    
+    memset(keyDown, 0, sizeof(keyDown));
+    state = KB_SELFTEST;
+    execute();
 }
 
 long
