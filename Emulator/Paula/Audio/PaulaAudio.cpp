@@ -29,12 +29,9 @@ PaulaAudio::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    if (hard) {
-        
-        clearRingbuffer();
-        stats.bufferUnderflows = 0;
-        stats.bufferOverflows = 0;
-    }
+    clearRingbuffer();
+    stats.bufferUnderflows = 0;
+    stats.bufferOverflows = 0;
 }
 
 long

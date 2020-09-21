@@ -47,8 +47,8 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
-// #define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
-// #define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
+#define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
+#define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/EmulatorDisk.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
 // #define DF0_DISK "/Users/hoff/Downloads/Jetsons1.adf"

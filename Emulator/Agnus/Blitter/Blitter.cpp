@@ -48,7 +48,7 @@ Blitter::_initialize()
 void
 Blitter::_reset(bool hard)
 {
-    agnus.cancel<BLT_SLOT>();
+    // agnus.cancel<BLT_SLOT>();
     RESET_SNAPSHOT_ITEMS(hard)
 
     if (hard) {

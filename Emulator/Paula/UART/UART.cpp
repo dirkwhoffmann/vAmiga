@@ -18,10 +18,7 @@ void
 UART::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-
-    if (hard) {
-        outBit = 1;
-    }
+    outBit = 1;
 }
 
 void

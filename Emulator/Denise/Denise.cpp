@@ -33,7 +33,6 @@ Denise::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
 
     if (hard) {
-        
         memset(bBuffer, 0, sizeof(bBuffer));
         memset(iBuffer, 0, sizeof(iBuffer));
         memset(mBuffer, 0, sizeof(mBuffer));
