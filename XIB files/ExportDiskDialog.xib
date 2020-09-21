@@ -41,12 +41,17 @@
                                 <items>
                                     <menuItem title="ADF" state="on" id="HRF-WS-Myd" userLabel="P00 Format">
                                         <connections>
-                                            <action selector="selectADF:" target="-2" id="UDB-du-v8r"/>
+                                            <action selector="selectFormatAction:" target="-2" id="WVq-2K-FJl"/>
                                         </connections>
                                     </menuItem>
                                     <menuItem title="IMG" tag="1" id="Tqe-gp-DNf" userLabel="P00 Format">
                                         <connections>
-                                            <action selector="selectIMG:" target="-2" id="yI9-FD-HnR"/>
+                                            <action selector="selectFormatAction:" target="-2" id="kqy-ph-8rF"/>
+                                        </connections>
+                                    </menuItem>
+                                    <menuItem title="IMA" tag="2" id="o6r-Uw-0R8" userLabel="P00 Format">
+                                        <connections>
+                                            <action selector="selectFormatAction:" target="-2" id="LC6-jA-qVW"/>
                                         </connections>
                                     </menuItem>
                                 </items>

@@ -129,8 +129,8 @@ Disk::encodeAmigaDisk(DiskFile *df)
         plaindebug("Amiga disk fully encoded (success = %d)\n", result);
         ADFFile *tmp = ADFFile::makeWithDisk(this);
         if (tmp) {
-            msg("Decoded image written to /tmp/debug.img");
-            tmp->writeToFile("/tmp/tmp.img");
+            msg("Decoded image written to /tmp/debug.adf\n");
+            tmp->writeToFile("/tmp/tmp.adf");
         }
     }
 
@@ -252,7 +252,7 @@ Disk::encodeDosDisk(DiskFile *df)
         plaindebug("DOS disk fully encoded (success = %d)\n", result);
         IMGFile *tmp = IMGFile::makeWithDisk(this);
         if (tmp) {
-            msg("Decoded image written to /tmp/debug.img");
+            msg("Decoded image written to /tmp/debug.img\n");
             tmp->writeToFile("/tmp/tmp.img");
         }
     }
@@ -357,7 +357,6 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
     p[2*12+1] &= 0xDF;
     p[2*13+1] &= 0xDF;
     p[2*14+1] &= 0xDF;
-    printf("IDAM t: %d s: %d index: %d\n", t, s, 194 + s * 1300 + 2*12+1);
     
     // Remove certain clock bits in DATA AM block
     p[2*56+1] &= 0xDF;
@@ -370,17 +369,14 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 bool
 Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)
 {
-    bool result = true;
-        
-    debug("Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    debug(MFM_DEBUG,
+          "Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
-    for (Track t = 0; t < numTracks; t++) {
-        result &= decodeAmigaTrack(dst, t, numSectors);
-        dst += numSectors * 512;
-    
+    for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
+        if (!decodeAmigaTrack(dst, t, numSectors)) return false;
     }
     
-    return result;
+    return true;
 }
 
 bool
@@ -399,14 +395,19 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
     int sectorStart[numSectors], index = 0, nr = 0;
     while (index < trackSize + sectorSize && nr < numSectors) {
 
+        // Scan MFM stream for $4489 $4489
         if (local[index++] != 0x44) continue;
         if (local[index++] != 0x89) continue;
         if (local[index++] != 0x44) continue;
         if (local[index++] != 0x89) continue;
-        
+
+        // Make sure it's not a DOS track
+        if (local[index + 1] == 0x89) continue;
+
         sectorStart[nr++] = index;
     }
     
+    debug("Found %d sectors, expected %d\n", nr, numSectors); 
     if (nr != numSectors) {
         warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
         return false;
@@ -437,17 +438,14 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
 bool
 Disk::decodeDOSDisk(u8 *dst, long numTracks, long numSectors)
 {
-    bool result = true;
-        
-    debug("Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    debug(MFM_DEBUG,
+          "Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
-    for (Track t = 0; t < numTracks; t++) {
-        result &= decodeDOSTrack(dst, t, numSectors);
-        dst += numSectors * 512;
-    
+    for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
+        if (!decodeDOSTrack(dst, t, numSectors)) return false;
     }
     
-    return result;
+    return true;
 }
 
 bool

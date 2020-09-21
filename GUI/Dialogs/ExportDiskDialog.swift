@@ -10,43 +10,72 @@
 class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
-    
-    var type: AmigaFileType = .FILETYPE_ADF
+
+    var df: DiskFileProxy?
     var savePanel: NSSavePanel!
-    var selectedURL: URL?
-    
+
     func showSheet(forDrive nr: Int) {
         
-        assert(nr >= 0 && nr <= 3)
+        let proxy = amiga.df(nr)!
         
         // Create save panel
         savePanel = NSSavePanel()
-        savePanel.allowedFileTypes = ["adf"]
         savePanel.prompt = "Export"
         savePanel.title = "Export"
         savePanel.nameFieldLabel = "Export As:"
         savePanel.accessoryView = window?.contentView
 
+        // Try to decode the disk with the ADF decoder
+        if df == nil {
+            df = ADFFileProxy.make(withDrive: proxy)
+            if df != nil { selectFormat(0) }
+        }
+        // Try to decode the disk with the DOS decoder if the ADF decoder failed
+        if df == nil {
+            df = IMGFileProxy.make(withDrive: proxy)
+            if df != nil { selectFormat(1) }
+        }
+
+        // Abort if both decoders failed
+        if df == nil {
+            parent.mydocument.showExportDecodingAlert(driveNr: nr)
+            return
+        }
+
         // Run panel as sheet
         if let win = parent.window {
             savePanel.beginSheetModal(for: win, completionHandler: { result in
                 if result == .OK {
-                    self.parent.mydocument.export(drive: nr, to: self.savePanel.url)
+                    if let url = self.savePanel.url {
+                        track("url = \(url)")
+                        self.parent.mydocument.export(drive: nr,
+                                                      to: url,
+                                                      diskFileProxy: self.df!)
+                    }
                 }
             })
         }
     }
     
-    @IBAction func selectADF(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["adf", "ADF"]
-        type = .FILETYPE_ADF
+    @IBAction func selectFormatAction(_ sender: NSMenuItem!) {
+        
+        selectFormat(sender.tag)
     }
-
-    @IBAction func selectIMG(_ sender: Any!) {
-        track()
-        savePanel.allowedFileTypes = ["img", "IMG", "ima", "IMA"]
-        type = .FILETYPE_IMG
+    
+    func selectFormat(_ tag: Int) {
+        
+        track("tag = \(tag)")
+        button.selectItem(withTag: tag)
+        button.autoenablesItems = false
+        button.item(at: 0)!.isEnabled = tag == 0
+        button.item(at: 1)!.isEnabled = tag == 1 || tag == 2
+        button.item(at: 2)!.isEnabled = tag == 1 || tag == 2
+        button.needsDisplay = true
+        switch tag {
+        case 0: savePanel.allowedFileTypes = ["adf", "ADF"]
+        case 1: savePanel.allowedFileTypes = ["img", "IMG"]
+        case 2: savePanel.allowedFileTypes = ["ima", "IMA"]
+        default: fatalError()
+        }
     }
-
 }

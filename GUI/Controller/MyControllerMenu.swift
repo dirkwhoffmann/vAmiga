@@ -85,9 +85,9 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.exportRecentDiskAction(_:)):
             switch item.tag {
             case 0: return validateURLlist(myAppDelegate.recentlyExportedDisk0URLs, image: smallDisk)
-            case 1: return validateURLlist(myAppDelegate.recentlyExportedDisk1URLs, image: smallDisk)
-            case 2: return validateURLlist(myAppDelegate.recentlyExportedDisk2URLs, image: smallDisk)
-            case 3: return validateURLlist(myAppDelegate.recentlyExportedDisk3URLs, image: smallDisk)
+            case 10: return validateURLlist(myAppDelegate.recentlyExportedDisk1URLs, image: smallDisk)
+            case 20: return validateURLlist(myAppDelegate.recentlyExportedDisk2URLs, image: smallDisk)
+            case 30: return validateURLlist(myAppDelegate.recentlyExportedDisk3URLs, image: smallDisk)
             default: fatalError()
             }
             

@@ -66,6 +66,7 @@ import Cocoa
     
     func noteRecentlyUsedURL(_ url: URL, to list: inout [URL], size: Int) {
         if !list.contains(url) {
+            track()
             if list.count == size {
                 list.remove(at: size - 1)
             }
@@ -86,7 +87,7 @@ import Cocoa
     }
     
     func noteNewRecentlyExportedDiskURL(_ url: URL, drive nr: Int) {
-        
+                
         switch nr {
             
         case 0: noteRecentlyUsedURL(url, to: &recentlyExportedDisk0URLs, size: 1)

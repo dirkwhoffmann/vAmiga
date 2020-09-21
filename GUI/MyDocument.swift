@@ -272,72 +272,50 @@ class MyDocument: NSDocument {
     // Exporting disks
     //
     
-    func export(drive nr: Int, to url: URL, ofType typeName: String) -> Bool {
-                        
-        let drive = amiga.df(nr)!
-        var df: DiskFileProxy!
-
-        switch typeName {
-        
-        case "ADF":
-            df = ADFFileProxy.make(withDrive: drive)
-            if df == nil {
-                df = IMGFileProxy.make(withDrive: drive)
-                if df == nil {
-                    showExportADFDecoderAlert(url: url)
-                } else {
-                    showExportNoADFAlert(url: url)
-                }
-                return false
-            }
-            
-        case "IMG", "IMA":
-            df = IMGFileProxy.make(withDrive: drive)
-            if df == nil {
-                df = ADFFileProxy.make(withDrive: drive)
-                if df == nil {
-                    showExportDOSDecoderAlert(url: url)
-                } else {
-                    showExportNoDOSAlert(url: url)
-                }
-                return false
-            }
-
+    @discardableResult
+    func export(drive nr: Int, to url: URL) -> Bool {
+                
+        var df: DiskFileProxy?
+        switch url.pathExtension {
+        case "adf", "ADF":
+            df = ADFFileProxy.make(withDrive: amiga.df(nr)!)
+        case "img", "IMG", "ima", "IMA":
+            df = IMGFileProxy.make(withDrive: amiga.df(nr)!)
         default:
-            fatalError()
+            break
         }
-
-        if df == nil {
-            track("Unable to create DiskFileProxy for url \(url)")
+        
+        if df != nil {
+            return export(drive: nr, to: url, diskFileProxy: df!)
+        } else {
+            showExportDecodingAlert(driveNr: nr)
             return false
         }
-
+    }
+    
+    @discardableResult
+    func export(drive nr: Int, to url: URL, diskFileProxy df: DiskFileProxy) -> Bool {
+                        
+        track("Exporting disk to \(url)")
+        
         // Serialize data
         let data = NSMutableData.init(length: df.sizeOnDisk)!
         df.write(toBuffer: data.mutableBytes)
         
         // Write to file
         if !data.write(to: url, atomically: true) {
-            showExportErrorAlert(url: url)
+            showExportAlert(url: url)
             return false
         }
 
         // Mark disk as "not modified"
-        drive.isModifiedDisk = false
+        amiga.df(nr)!.isModifiedDisk = false
         
         // Remember export URL
         myAppDelegate.noteNewRecentlyExportedDiskURL(url, drive: nr)
+
+        track("Export complete")
         return true
-    }
-    
-    @discardableResult
-    func export(drive nr: Int, to url: URL?) -> Bool {
-        
-        if let suffix = url?.pathExtension {
-            return export(drive: nr, to: url!, ofType: suffix.uppercased())
-        } else {
-            return false
-        }
     }
     
     //
