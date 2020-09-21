@@ -89,14 +89,14 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        worker
-
-        & port;
     }
 
     template <class T>
     void applyToResetItems(T& worker)
     {
+        worker
+
+        & port;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

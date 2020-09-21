@@ -71,17 +71,17 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+    }
+
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
         worker
 
         & mouseCounterX
         & mouseCounterY
         & chargeDX
         & chargeDY;
-    }
-
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
