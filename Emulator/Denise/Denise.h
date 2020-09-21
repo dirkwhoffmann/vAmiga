@@ -328,7 +328,7 @@ private:
     {
         worker
 
-        & clock
+        // & clock
         
         & bplcon0
         & bplcon1
@@ -364,6 +364,9 @@ private:
     template <class T>
     void applyToResetItems(T& worker)
     {
+        worker
+
+        & clock;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

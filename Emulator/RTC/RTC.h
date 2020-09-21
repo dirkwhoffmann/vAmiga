@@ -93,6 +93,11 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+    }
+    
+    template <class T>
+    void applyToResetItems(T& worker)
+    {
         worker
 
         & timeDiff
@@ -100,11 +105,6 @@ private:
         & lastCall
         & lastMeasure
         & lastMeasuredValue;
-    }
-    
-    template <class T>
-    void applyToResetItems(T& worker)
-    {
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }

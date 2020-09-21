@@ -298,6 +298,7 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        /*
         worker
 
         & clock
@@ -306,6 +307,7 @@ private:
         & sleeping
         & sleepCycle
         & wakeUpCycle;
+        */
     }
 
     template <class T>
@@ -313,6 +315,13 @@ private:
     {
         worker
         
+        & clock
+        & idleCycles
+        & tiredness
+        & sleeping
+        & sleepCycle
+        & wakeUpCycle
+
         & counterA
         & counterB
         & latchA

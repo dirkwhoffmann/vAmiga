@@ -130,9 +130,11 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        /*
         worker
 
         & clock;
+        */
     }
 
     template <class T>
@@ -140,6 +142,7 @@ private:
     {
         worker
         
+        & clock
         & intreq
         & intena
         & setIntreq
