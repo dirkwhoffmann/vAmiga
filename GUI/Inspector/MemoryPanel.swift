@@ -60,18 +60,19 @@ extension Inspector {
             switch src {
             case .MEM_NONE:          color = MemColors.unmapped
             case .MEM_CHIP:          color = MemColors.chip
-            case .MEM_CHIP_MIRROR:   color = MemColors.chip; mirror = true
+            case .MEM_CHIP_MIRROR:   color = MemColors.chip;     mirror = true
             case .MEM_FAST:          color = MemColors.fast
             case .MEM_SLOW:          color = MemColors.slow
-            case .MEM_SLOW_MIRROR:   color = MemColors.slow; mirror = true
+            case .MEM_SLOW_MIRROR:   color = MemColors.slow;     mirror = true
             case .MEM_ROM:           color = MemColors.rom
-            case .MEM_ROM_MIRROR:    color = MemColors.rom; mirror = true
+            case .MEM_ROM_MIRROR:    color = MemColors.rom;      mirror = true
             case .MEM_WOM:           color = MemColors.wom
             case .MEM_EXT:           color = MemColors.ext
             case .MEM_CIA:           color = MemColors.cia
+            case .MEM_CIA_MIRROR:    color = MemColors.cia;      mirror = true
             case .MEM_RTC:           color = MemColors.rtc
             case .MEM_CUSTOM:        color = MemColors.custom
-            case .MEM_CUSTOM_MIRROR: color = MemColors.custom; mirror = true
+            case .MEM_CUSTOM_MIRROR: color = MemColors.custom;   mirror = true
             case .MEM_AUTOCONF:      color = MemColors.auto
             default:                 fatalError()
             }

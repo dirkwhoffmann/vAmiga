@@ -67,6 +67,7 @@ extension BankTableView: NSTableViewDataSource {
             case .MEM_SLOW:          return "Slow Ram"
             case .MEM_SLOW_MIRROR:   return "Slow Ram Mirror"
             case .MEM_CIA:           return "CIA"
+            case .MEM_CIA_MIRROR:    return "CIA Mirror"
             case .MEM_RTC:           return "Real-time Clock"
             case .MEM_CUSTOM:        return "Chipset"
             case .MEM_CUSTOM_MIRROR: return "Chipset Mirror"

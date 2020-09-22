@@ -702,15 +702,20 @@ Memory::updateCpuMemTable()
     }
     
     // CIA range
-    for (unsigned i = 0xA0; i <= 0xBF; i++)
-        memSrc[i] = MEM_CIA;
-
+    for (unsigned i = 0xA0; i <= 0xBE; i++) {
+        memSrc[i] = MEM_CIA_MIRROR;
+    }
+    memSrc[0xBF] = MEM_CIA;
+    
     // Slow Ram
-    for (unsigned i = 0xC0; i <= 0xD7; i++)
+    for (unsigned i = 0xC0; i <= 0xD7; i++) {
         memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
-
+    }
+    
     // Real-time clock (older Amigas)
-    for (unsigned i = 0xD8; i <= 0xDB; i++) memSrc[i] = config.bankD8DB;
+    for (unsigned i = 0xD8; i <= 0xDB; i++) {
+        memSrc[i] = config.bankD8DB;
+    }
 
     // Real-time clock (newer Amigas)
     memSrc[0xDC] = config.bankDC;
@@ -719,25 +724,30 @@ Memory::updateCpuMemTable()
     memSrc[0xDD] = MEM_NONE;
 
     // Custom chip set
-    for (unsigned i = 0xDE; i <= 0xDF; i++)
+    for (unsigned i = 0xDE; i <= 0xDF; i++) {
         memSrc[i] = MEM_CUSTOM;
-
+    }
+    
     // Extended Rom, Kickstart mirror, or unmapped
-    for (unsigned i = 0xE0; i <= 0xE7; i++)
+    for (unsigned i = 0xE0; i <= 0xE7; i++) {
         memSrc[i] = config.bankE0E7 == MEM_EXT ? mem_ext : config.bankE0E7;
+    }
     
     // Auto-config (Zorro II)
     memSrc[0xE8] = MEM_AUTOCONF;
-    for (unsigned i = 0xE9; i <= 0xEF; i++)
+    for (unsigned i = 0xE9; i <= 0xEF; i++) {
         memSrc[i] = MEM_NONE;
+    }
     
     // Extended Rom, Kickstart mirror, or unmapped
-    for (unsigned i = 0xF0; i <= 0xF7; i++)
+    for (unsigned i = 0xF0; i <= 0xF7; i++) {
         memSrc[i] = config.bankF0F7 == MEM_EXT ? mem_ext : config.bankF0F7;
+    }
     
     // Kickstart Wom or Kickstart Rom
-    for (unsigned i = 0xF8; i <= 0xFF; i++)
+    for (unsigned i = 0xF8; i <= 0xFF; i++) {
         memSrc[i] = mem_wom;
+    }
     
     // Blend in Boot Rom if a writeable Wom is present
     if (hasWom() && !womIsLocked) {

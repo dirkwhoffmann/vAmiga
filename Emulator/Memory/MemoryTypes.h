@@ -27,6 +27,7 @@ typedef VA_ENUM(long, MemorySource)
     MEM_SLOW_MIRROR,
     MEM_FAST,
     MEM_CIA,
+    MEM_CIA_MIRROR,
     MEM_RTC,
     MEM_CUSTOM,
     MEM_CUSTOM_MIRROR,
