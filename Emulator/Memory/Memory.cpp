@@ -798,8 +798,8 @@ Memory::updateCpuMemSrcTable()
 void
 Memory::updateAgnusMemSrcTable()
 {
-    int chipBanks = agnus.chipRamLimit() / 64;
-    assert(chipBanks == 8 || chipBanks == 16 || chipBanks == 32);
+    int banks = config.chipSize / 0x10000;
+    assert(banks == 0 || banks == 8 || banks == 16 || banks == 32);
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++) {
@@ -807,7 +807,7 @@ Memory::updateAgnusMemSrcTable()
     }
     
     // Chip Ram banks
-    for (unsigned i = 0x0; i < chipBanks; i++) {
+    for (unsigned i = 0x0; i < banks; i++) {
         agnusMemSrc[i] = MEM_CHIP;
     }
     

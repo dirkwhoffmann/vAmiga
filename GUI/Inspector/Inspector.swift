@@ -64,6 +64,7 @@ class Inspector: DialogController {
     @IBOutlet weak var cpuTraceClearButton: NSButton!
 
     // Memory panel
+    @IBOutlet weak var memBankMap: NSPopUpButton!
     @IBOutlet weak var memSearchField: NSSearchField!
     @IBOutlet weak var memBankTableView: BankTableView!
     @IBOutlet weak var memTableView: MemTableView!

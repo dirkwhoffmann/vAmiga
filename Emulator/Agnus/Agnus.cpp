@@ -101,11 +101,12 @@ Agnus::setConfigItem(ConfigOption option, long value)
             
             config.revision = (AgnusRevision)value;
             switch (config.revision) {
-                case AGNUS_OCS: ptrMask = 0x07FFFF; break;
+                case AGNUS_OCS:     ptrMask = 0x07FFFF; break;
                 case AGNUS_ECS_1MB: ptrMask = 0x0FFFFF; break;
                 case AGNUS_ECS_2MB: ptrMask = 0x1FFFFF; break;
                 default: assert(false);
             }
+            mem.updateMemSrcTables();
             
             amiga.resume();
             return true;

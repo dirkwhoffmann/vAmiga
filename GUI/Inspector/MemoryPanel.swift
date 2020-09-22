@@ -21,14 +21,19 @@ struct MemColors {
 
     static let cia = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
     static let rtc = NSColor.init(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
-    static let custom = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+    static let cust = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
     static let auto = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
 }
 
 extension Inspector {
     
     func memSrc(bank: Int) -> MemorySource {
-        return parent.amiga.mem.memSrc(.CPU_ACCESS, addr: bank << 16)
+        
+        if memBankMap.selectedTag() == 0 {
+            return parent.amiga.mem.memSrc(.CPU_ACCESS, addr: bank << 16)
+        } else {
+            return parent.amiga.mem.memSrc(.AGNUS_ACCESS, addr: bank << 16)
+        }
     }
     
     var memLayoutImage: NSImage? {
@@ -59,8 +64,8 @@ extension Inspector {
             case .MEM_CIA:           color = MemColors.cia
             case .MEM_CIA_MIRROR:    color = MemColors.cia;      mirror = true
             case .MEM_RTC:           color = MemColors.rtc
-            case .MEM_CUSTOM:        color = MemColors.custom
-            case .MEM_CUSTOM_MIRROR: color = MemColors.custom;   mirror = true
+            case .MEM_CUSTOM:        color = MemColors.cust
+            case .MEM_CUSTOM_MIRROR: color = MemColors.cust;     mirror = true
             case .MEM_AUTOCONF:      color = MemColors.auto
             default:                 fatalError()
             }
@@ -107,7 +112,7 @@ extension Inspector {
         memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
         memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
         memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
-        memOCSButton.image      = NSImage.init(color: MemColors.custom, size: size)
+        memOCSButton.image      = NSImage.init(color: MemColors.cust, size: size)
         memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
 
         let chipKB = config.mem.chipSize / 1024
@@ -222,6 +227,11 @@ extension Inspector {
     @IBAction func memAutoConfAction(_ sender: NSButton!) {
 
         jumpTo(source: .MEM_AUTOCONF)
+    }
+
+    @IBAction func memBankMapAction(_ sender: NSPopUpButton!) {
+
+        fullRefresh()
     }
 
     @IBAction func memSearchAction(_ sender: NSTextField!) {
