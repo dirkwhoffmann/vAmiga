@@ -57,18 +57,19 @@ extension Inspector {
             var color: NSColor
 
             switch src {
-            case .MEM_NONE:      color = MemColors.unmapped
-            case .MEM_CHIP:      color = MemColors.chip
-            case .MEM_FAST:      color = MemColors.fast
-            case .MEM_SLOW:      color = MemColors.slow
-            case .MEM_ROM:       color = MemColors.rom
-            case .MEM_WOM:       color = MemColors.wom
-            case .MEM_EXT:       color = MemColors.ext
-            case .MEM_CIA:       color = MemColors.cia
-            case .MEM_RTC:       color = MemColors.rtc
-            case .MEM_CUSTOM:    color = MemColors.ocs
-            case .MEM_AUTOCONF:  color = MemColors.auto
-            default:             fatalError()
+            case .MEM_NONE:        color = MemColors.unmapped
+            case .MEM_CHIP:        color = MemColors.chip
+            case .MEM_CHIP_MIRROR: color = MemColors.chip
+            case .MEM_FAST:        color = MemColors.fast
+            case .MEM_SLOW:        color = MemColors.slow
+            case .MEM_ROM:         color = MemColors.rom
+            case .MEM_WOM:         color = MemColors.wom
+            case .MEM_EXT:         color = MemColors.ext
+            case .MEM_CIA:         color = MemColors.cia
+            case .MEM_RTC:         color = MemColors.rtc
+            case .MEM_CUSTOM:      color = MemColors.ocs
+            case .MEM_AUTOCONF:    color = MemColors.auto
+            default:               fatalError()
             }
             let ciColor = CIColor(color: color)!
 

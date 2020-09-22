@@ -22,6 +22,7 @@ typedef VA_ENUM(long, MemorySource)
 {
     MEM_NONE,
     MEM_CHIP,
+    MEM_CHIP_MIRROR,
     MEM_SLOW,
     MEM_FAST,
     MEM_CIA,
