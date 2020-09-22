@@ -60,19 +60,22 @@ extension BankTableView: NSTableViewDataSource {
 
             switch bankCache[row] {
                 
-            case .MEM_NONE:        return "Unmapped"
-            case .MEM_CHIP:        return "Chip Ram"
-            case .MEM_CHIP_MIRROR: return "Chip Ram Mirror"
-            case .MEM_FAST:        return "Fast Ram"
-            case .MEM_SLOW:        return "Slow Ram"
-            case .MEM_CIA:         return "CIA"
-            case .MEM_RTC:         return "Clock"
-            case .MEM_CUSTOM:      return "Chipset"
-            case .MEM_AUTOCONF:    return "Autoconf"
-            case .MEM_ROM:         return "Rom"
-            case .MEM_WOM:         return "Wom"
-            case .MEM_EXT:         return "Extended Rom"
-            default:               return "???"
+            case .MEM_NONE:          return "Unmapped"
+            case .MEM_CHIP:          return "Chip Ram"
+            case .MEM_CHIP_MIRROR:   return "Chip Ram Mirror"
+            case .MEM_FAST:          return "Fast Ram"
+            case .MEM_SLOW:          return "Slow Ram"
+            case .MEM_SLOW_MIRROR:   return "Slow Ram Mirror"
+            case .MEM_CIA:           return "CIA"
+            case .MEM_RTC:           return "Real-time Clock"
+            case .MEM_CUSTOM:        return "Chipset"
+            case .MEM_CUSTOM_MIRROR: return "Chipset Mirror"
+            case .MEM_AUTOCONF:      return "Autoconf"
+            case .MEM_ROM:           return "Rom"
+            case .MEM_ROM_MIRROR:    return "Rom Mirror"
+            case .MEM_WOM:           return "Wom"
+            case .MEM_EXT:           return "Extended Rom"
+            default:                 fatalError()
             }
 
         default:

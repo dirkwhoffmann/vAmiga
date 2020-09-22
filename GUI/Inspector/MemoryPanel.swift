@@ -34,7 +34,7 @@ struct MemColors {
 
     static let cia = NSColor.init(r: 0x66, g: 0xB2, b: 0xFF, a: 0xFF)
     static let rtc = NSColor.init(r: 0xB2, g: 0x66, b: 0xFF, a: 0xFF)
-    static let ocs = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
+    static let custom = NSColor.init(r: 0xFF, g: 0xFF, b: 0x66, a: 0xFF)
     static let auto = NSColor.init(r: 0xFF, g: 0x66, b: 0xB2, a: 0xFF)
 }
 
@@ -55,31 +55,45 @@ extension Inspector {
 
             let src = memory.memSrc(x << 16)
             var color: NSColor
-
+            var mirror = false
+            
             switch src {
-            case .MEM_NONE:        color = MemColors.unmapped
-            case .MEM_CHIP:        color = MemColors.chip
-            case .MEM_CHIP_MIRROR: color = MemColors.chip
-            case .MEM_FAST:        color = MemColors.fast
-            case .MEM_SLOW:        color = MemColors.slow
-            case .MEM_ROM:         color = MemColors.rom
-            case .MEM_WOM:         color = MemColors.wom
-            case .MEM_EXT:         color = MemColors.ext
-            case .MEM_CIA:         color = MemColors.cia
-            case .MEM_RTC:         color = MemColors.rtc
-            case .MEM_CUSTOM:      color = MemColors.ocs
-            case .MEM_AUTOCONF:    color = MemColors.auto
-            default:               fatalError()
+            case .MEM_NONE:          color = MemColors.unmapped
+            case .MEM_CHIP:          color = MemColors.chip
+            case .MEM_CHIP_MIRROR:   color = MemColors.chip; mirror = true
+            case .MEM_FAST:          color = MemColors.fast
+            case .MEM_SLOW:          color = MemColors.slow
+            case .MEM_SLOW_MIRROR:   color = MemColors.slow; mirror = true
+            case .MEM_ROM:           color = MemColors.rom
+            case .MEM_ROM_MIRROR:    color = MemColors.rom; mirror = true
+            case .MEM_WOM:           color = MemColors.wom
+            case .MEM_EXT:           color = MemColors.ext
+            case .MEM_CIA:           color = MemColors.cia
+            case .MEM_RTC:           color = MemColors.rtc
+            case .MEM_CUSTOM:        color = MemColors.custom
+            case .MEM_CUSTOM_MIRROR: color = MemColors.custom; mirror = true
+            case .MEM_AUTOCONF:      color = MemColors.auto
+            default:                 fatalError()
             }
+            let ciBgColor = CIColor(color: MemColors.unmapped)!
             let ciColor = CIColor(color: color)!
-
+            
             for y in 0...15 {
+                
                 let c = 2
-                let r = Int(ciColor.red * CGFloat(255 - y*c))
-                let g = Int(ciColor.green * CGFloat(255 - y*c))
-                let b = Int(ciColor.blue * CGFloat(255 - y*c))
-                let a = Int(ciColor.alpha)
-
+                var r, g, b, a: Int
+                
+                if mirror && (y % 4) == (x % 4) {
+                    r = Int(ciBgColor.red * CGFloat(255 - y*c))
+                    g = Int(ciBgColor.green * CGFloat(255 - y*c))
+                    b = Int(ciBgColor.blue * CGFloat(255 - y*c))
+                    a = Int(ciBgColor.alpha)
+                } else {
+                    r = Int(ciColor.red * CGFloat(255 - y*c))
+                    g = Int(ciColor.green * CGFloat(255 - y*c))
+                    b = Int(ciColor.blue * CGFloat(255 - y*c))
+                    a = Int(ciColor.alpha)
+                }
                 ptr[x + 256*y] = UInt32(r | g << 8 | b << 16 | a << 24)
             }
         }
@@ -104,7 +118,7 @@ extension Inspector {
         memExtButton.image      = NSImage.init(color: MemColors.ext, size: size)
         memCIAButton.image      = NSImage.init(color: MemColors.cia, size: size)
         memRTCButton.image      = NSImage.init(color: MemColors.rtc, size: size)
-        memOCSButton.image      = NSImage.init(color: MemColors.ocs, size: size)
+        memOCSButton.image      = NSImage.init(color: MemColors.custom, size: size)
         memAutoConfButton.image = NSImage.init(color: MemColors.auto, size: size)
 
         let chipKB = config.mem.chipSize / 1024

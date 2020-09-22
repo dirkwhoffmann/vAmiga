@@ -52,7 +52,7 @@ Memory::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Set up the memory lookup table
-    updateMemSrcTable();
+    updateCpuMemTable();
     
     // In hard-reset mode, we also initialize RAM
     if (hard) fillRamWithInitPattern();
@@ -141,7 +141,7 @@ Memory::setConfigItem(ConfigOption option, long value)
             }
             
             config.extStart = value;
-            updateMemSrcTable();
+            updateCpuMemTable();
             return true;
             
         case OPT_SLOW_RAM_DELAY:
@@ -168,7 +168,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankD8DB = (MemorySource)value;
-            updateMemSrcTable();
+            updateCpuMemTable();
             amiga.resume();
             return true;
             
@@ -185,7 +185,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankDC = (MemorySource)value;
-            updateMemSrcTable();
+            updateCpuMemTable();
             amiga.resume();
             return true;
 
@@ -202,7 +202,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankE0E7 = (MemorySource)value;
-            updateMemSrcTable();
+            updateCpuMemTable();
             amiga.resume();
             return true;
 
@@ -219,7 +219,7 @@ Memory::setConfigItem(ConfigOption option, long value)
             
             amiga.suspend();
             config.bankF0F7 = (MemorySource)value;
-            updateMemSrcTable();
+            updateCpuMemTable();
             amiga.resume();
             return true;
             
@@ -387,7 +387,7 @@ Memory::_powerOn()
     fillRamWithInitPattern();
 
     // Set up the memory lookup table
-    updateMemSrcTable();
+    updateCpuMemTable();
 }
 
 void
@@ -449,7 +449,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         mask = bytes - 1;
         fillRamWithInitPattern();
     }
-    updateMemSrcTable();
+    updateCpuMemTable();
     return true;
 }
 
@@ -663,10 +663,10 @@ Memory::saveExt(const char *path)
 }
 
 void
-Memory::updateMemSrcTable()
+Memory::updateCpuMemTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE;
-    MemorySource mem_ext = ext ? MEM_EXT : mem_rom;
+    MemorySource mem_ext = ext ? MEM_EXT : rom ? MEM_ROM_MIRROR : MEM_NONE;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
 
     int chipRamPages = config.chipSize / 0x10000;
@@ -697,16 +697,17 @@ Memory::updateMemSrcTable()
     
     
     // Fast Ram
-    for (unsigned i = 0x20; i <= 0x9F; i++)
-        memSrc[i] = (i - 0x20) < fastRamPages ? MEM_FAST : MEM_NONE;
-
+    for (unsigned i = 0x20; i < 0x20 + fastRamPages; i++) {
+        memSrc[i] = MEM_FAST;
+    }
+    
     // CIA range
     for (unsigned i = 0xA0; i <= 0xBF; i++)
         memSrc[i] = MEM_CIA;
 
     // Slow Ram
     for (unsigned i = 0xC0; i <= 0xD7; i++)
-        memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM;
+        memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
 
     // Real-time clock (older Amigas)
     for (unsigned i = 0xD8; i <= 0xDB; i++) memSrc[i] = config.bankD8DB;
@@ -1096,18 +1097,21 @@ Memory::peek8 <CPU_ACCESS> (u32 addr)
         
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        result = peek8 <CPU_ACCESS, MEM_NONE>     (addr); break;
-        case MEM_CHIP:        result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
-        case MEM_CHIP_MIRROR: result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
-        case MEM_SLOW:        result = peek8 <CPU_ACCESS, MEM_SLOW>     (addr); break;
-        case MEM_FAST:        result = peek8 <CPU_ACCESS, MEM_FAST>     (addr); break;
-        case MEM_CIA:         result = peek8 <CPU_ACCESS, MEM_CIA>      (addr); break;
-        case MEM_RTC:         result = peek8 <CPU_ACCESS, MEM_RTC>      (addr); break;
-        case MEM_CUSTOM:      result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
-        case MEM_AUTOCONF:    result = peek8 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
-        case MEM_ROM:         result = peek8 <CPU_ACCESS, MEM_ROM>      (addr); break;
-        case MEM_WOM:         result = peek8 <CPU_ACCESS, MEM_WOM>      (addr); break;
-        case MEM_EXT:         result = peek8 <CPU_ACCESS, MEM_EXT>      (addr); break;
+        case MEM_NONE:          result = peek8 <CPU_ACCESS, MEM_NONE>     (addr); break;
+        case MEM_CHIP:          result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_CHIP_MIRROR:   result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_SLOW:          result = peek8 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_SLOW_MIRROR:   result = peek8 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_FAST:          result = peek8 <CPU_ACCESS, MEM_FAST>     (addr); break;
+        case MEM_CIA:           result = peek8 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_RTC:           result = peek8 <CPU_ACCESS, MEM_RTC>      (addr); break;
+        case MEM_CUSTOM:        result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_CUSTOM_MIRROR: result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_AUTOCONF:      result = peek8 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
+        case MEM_ROM:           result = peek8 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_ROM_MIRROR:    result = peek8 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_WOM:           result = peek8 <CPU_ACCESS, MEM_WOM>      (addr); break;
+        case MEM_EXT:           result = peek8 <CPU_ACCESS, MEM_EXT>      (addr); break;
             
         default: assert(false); return 0;
     }
@@ -1124,18 +1128,21 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        result = peek16 <CPU_ACCESS, MEM_NONE>     (addr); break;
-        case MEM_CHIP:        result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
-        case MEM_CHIP_MIRROR: result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
-        case MEM_SLOW:        result = peek16 <CPU_ACCESS, MEM_SLOW>     (addr); break;
-        case MEM_FAST:        result = peek16 <CPU_ACCESS, MEM_FAST>     (addr); break;
-        case MEM_CIA:         result = peek16 <CPU_ACCESS, MEM_CIA>      (addr); break;
-        case MEM_RTC:         result = peek16 <CPU_ACCESS, MEM_RTC>      (addr); break;
-        case MEM_CUSTOM:      result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
-        case MEM_AUTOCONF:    result = peek16 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
-        case MEM_ROM:         result = peek16 <CPU_ACCESS, MEM_ROM>      (addr); break;
-        case MEM_WOM:         result = peek16 <CPU_ACCESS, MEM_WOM>      (addr); break;
-        case MEM_EXT:         result = peek16 <CPU_ACCESS, MEM_EXT>      (addr); break;
+        case MEM_NONE:          result = peek16 <CPU_ACCESS, MEM_NONE>     (addr); break;
+        case MEM_CHIP:          result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_CHIP_MIRROR:   result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
+        case MEM_SLOW:          result = peek16 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_SLOW_MIRROR:   result = peek16 <CPU_ACCESS, MEM_SLOW>     (addr); break;
+        case MEM_FAST:          result = peek16 <CPU_ACCESS, MEM_FAST>     (addr); break;
+        case MEM_CIA:           result = peek16 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_RTC:           result = peek16 <CPU_ACCESS, MEM_RTC>      (addr); break;
+        case MEM_CUSTOM:        result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_CUSTOM_MIRROR: result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
+        case MEM_AUTOCONF:      result = peek16 <CPU_ACCESS, MEM_AUTOCONF> (addr); break;
+        case MEM_ROM:           result = peek16 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_ROM_MIRROR:    result = peek16 <CPU_ACCESS, MEM_ROM>      (addr); break;
+        case MEM_WOM:           result = peek16 <CPU_ACCESS, MEM_WOM>      (addr); break;
+        case MEM_EXT:           result = peek16 <CPU_ACCESS, MEM_EXT>      (addr); break;
             
         default: assert(false); return 0;
     }
@@ -1150,18 +1157,21 @@ Memory::spypeek16 (u32 addr)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        return spypeek16 <MEM_NONE>     (addr);
-        case MEM_CHIP:        return spypeek16 <MEM_CHIP>     (addr);
-        case MEM_CHIP_MIRROR: return spypeek16 <MEM_CHIP>     (addr);
-        case MEM_SLOW:        return spypeek16 <MEM_SLOW>     (addr);
-        case MEM_FAST:        return spypeek16 <MEM_FAST>     (addr);
-        case MEM_CIA:         return spypeek16 <MEM_CIA>      (addr);
-        case MEM_RTC:         return spypeek16 <MEM_RTC>      (addr);
-        case MEM_CUSTOM:      return spypeek16 <MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF:    return spypeek16 <MEM_AUTOCONF> (addr);
-        case MEM_ROM:         return spypeek16 <MEM_ROM>      (addr);
-        case MEM_WOM:         return spypeek16 <MEM_WOM>      (addr);
-        case MEM_EXT:         return spypeek16 <MEM_EXT>      (addr);
+        case MEM_NONE:          return spypeek16 <MEM_NONE>     (addr);
+        case MEM_CHIP:          return spypeek16 <MEM_CHIP>     (addr);
+        case MEM_CHIP_MIRROR:   return spypeek16 <MEM_CHIP>     (addr);
+        case MEM_SLOW:          return spypeek16 <MEM_SLOW>     (addr);
+        case MEM_SLOW_MIRROR:   return spypeek16 <MEM_SLOW>     (addr);
+        case MEM_FAST:          return spypeek16 <MEM_FAST>     (addr);
+        case MEM_CIA:           return spypeek16 <MEM_CIA>      (addr);
+        case MEM_RTC:           return spypeek16 <MEM_RTC>      (addr);
+        case MEM_CUSTOM:        return spypeek16 <MEM_CUSTOM>   (addr);
+        case MEM_CUSTOM_MIRROR: return spypeek16 <MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF:      return spypeek16 <MEM_AUTOCONF> (addr);
+        case MEM_ROM:           return spypeek16 <MEM_ROM>      (addr);
+        case MEM_ROM_MIRROR:    return spypeek16 <MEM_ROM>      (addr);
+        case MEM_WOM:           return spypeek16 <MEM_WOM>      (addr);
+        case MEM_EXT:           return spypeek16 <MEM_EXT>      (addr);
             
         default: assert(false); return 0;
     }
@@ -1379,7 +1389,7 @@ Memory::poke8 <CPU_ACCESS, MEM_ROM> (u32 addr, u8 value)
     if (hasWom() && !womIsLocked) {
         debug("Locking WOM\n");
         womIsLocked = true;
-        updateMemSrcTable();
+        updateCpuMemTable();
     }
         
     if (!releaseBuild()) {
@@ -1433,18 +1443,21 @@ Memory::poke8 <CPU_ACCESS> (u32 addr, u8 value)
 {
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        poke8 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
-        case MEM_CHIP:        poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
-        case MEM_CHIP_MIRROR: poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:        poke8 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:        poke8 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:         poke8 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:         poke8 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:      poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF:    poke8 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ROM:         poke8 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:         poke8 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:         poke8 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
+        case MEM_NONE:          poke8 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
+        case MEM_CHIP:          poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_CHIP_MIRROR:   poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:          poke8 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_SLOW_MIRROR:   poke8 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:          poke8 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:           poke8 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:           poke8 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:        poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_CUSTOM_MIRROR: poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF:      poke8 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:           poke8 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_ROM_MIRROR:    poke8 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:           poke8 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:           poke8 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
             
         default: assert(false);
     }
@@ -1457,18 +1470,21 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
     
     switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        poke16 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
-        case MEM_CHIP:        poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
-        case MEM_CHIP_MIRROR: poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
-        case MEM_SLOW:        poke16 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
-        case MEM_FAST:        poke16 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
-        case MEM_CIA:         poke16 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
-        case MEM_RTC:         poke16 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
-        case MEM_CUSTOM:      poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
-        case MEM_AUTOCONF:    poke16 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
-        case MEM_ROM:         poke16 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
-        case MEM_WOM:         poke16 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
-        case MEM_EXT:         poke16 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
+        case MEM_NONE:          poke16 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
+        case MEM_CHIP:          poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_CHIP_MIRROR:   poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
+        case MEM_SLOW:          poke16 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_SLOW_MIRROR:   poke16 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
+        case MEM_FAST:          poke16 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
+        case MEM_CIA:           poke16 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_RTC:           poke16 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
+        case MEM_CUSTOM:        poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_CUSTOM_MIRROR: poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
+        case MEM_AUTOCONF:      poke16 <CPU_ACCESS, MEM_AUTOCONF> (addr, value); return;
+        case MEM_ROM:           poke16 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_ROM_MIRROR:    poke16 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
+        case MEM_WOM:           poke16 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
+        case MEM_EXT:           poke16 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
             
         default: assert(false);
     }

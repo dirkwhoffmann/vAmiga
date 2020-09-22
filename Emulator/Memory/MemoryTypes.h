@@ -24,12 +24,15 @@ typedef VA_ENUM(long, MemorySource)
     MEM_CHIP,
     MEM_CHIP_MIRROR,
     MEM_SLOW,
+    MEM_SLOW_MIRROR,
     MEM_FAST,
     MEM_CIA,
     MEM_RTC,
     MEM_CUSTOM,
+    MEM_CUSTOM_MIRROR,
     MEM_AUTOCONF,
     MEM_ROM,
+    MEM_ROM_MIRROR,
     MEM_WOM,
     MEM_EXT
 };

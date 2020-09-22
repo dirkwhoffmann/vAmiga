@@ -81,7 +81,7 @@ extension ConfigurationController {
                 
         switch sender.selectedTag() {
         case 0: config.bankD8DB = MemorySource.MEM_RTC.rawValue
-        case 1: config.bankD8DB = MemorySource.MEM_CUSTOM.rawValue
+        case 1: config.bankD8DB = MemorySource.MEM_CUSTOM_MIRROR.rawValue
         case 2: config.bankD8DB = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
@@ -92,7 +92,7 @@ extension ConfigurationController {
         
         switch sender.selectedTag() {
         case 0: config.bankDC = MemorySource.MEM_RTC.rawValue
-        case 1: config.bankDC = MemorySource.MEM_CUSTOM.rawValue
+        case 1: config.bankDC = MemorySource.MEM_CUSTOM_MIRROR.rawValue
         case 2: config.bankDC = MemorySource.MEM_NONE.rawValue
         default: fatalError()
         }
