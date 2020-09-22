@@ -119,7 +119,7 @@ Amiga::prefix()
     fprintf(stderr, "[%lld] (%3d,%3d) ",
             agnus.frame.nr, agnus.pos.v, agnus.pos.h);
 
-    fprintf(stderr, "%06X ", cpu.getPC());
+    fprintf(stderr, "%06X ", cpu.getPC0());
     fprintf(stderr, "%2X ", cpu.getIPL());
 
     u16 dmacon = agnus.dmacon;

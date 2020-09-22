@@ -153,7 +153,7 @@ void
 CPU::signalInterrupt(u8 level)
 {
     if (INT_DEBUG) {
-        debug("*** INTERRUPT %d ***\n", level);
+        plaindebug("Executing level %d IRQ\n", level);
     }
     
     /*

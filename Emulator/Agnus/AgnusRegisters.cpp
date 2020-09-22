@@ -12,7 +12,7 @@
 void
 Agnus::pokeDSKPTH(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKPTH(%X)\n", value);
+    plaindebug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
@@ -23,14 +23,14 @@ Agnus::pokeDSKPTH(u16 value)
 void
 Agnus::pokeDSKPTL(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKPTL(%X)\n", value);
+    plaindebug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 }
 
 template <int x> void
 Agnus::pokeAUDxLCH(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
+    plaindebug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
 
      audlc[x] = REPLACE_HI_WORD(audlc[x], value);
 }

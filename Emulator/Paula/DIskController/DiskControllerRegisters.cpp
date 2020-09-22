@@ -12,6 +12,9 @@
 u16
 DiskController::peekDSKDATR()
 {
+    // TODO: Add Accessor as template parameter.
+    // TODO: Use this method to read from the FIFO buffer if Accessor == AGNUS.
+
     // DSKDAT is a strobe register that cannot be accessed by the CPU
     return 0;
 }
@@ -27,6 +30,8 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
+    // plaindebug(DSKREG_DEBUG, "setDSKLEN: %x -> %x\n", oldValue, newValue);
+
     Drive *drive = getSelectedDrive();
 
     dsklen = newValue;
@@ -91,9 +96,10 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 void
 DiskController::pokeDSKDAT(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKDAT\n");
+    plaindebug(DSKREG_DEBUG, "pokeDSKDAT\n");
 
-    // DSKDAT is a strobe register that cannot be accessed by the CPU.
+    // TODO: Add Accessor as template parameter.
+    // TODO: Use this method to fill the FIFO buffer if Accessor == AGNUS.
 }
 
 u16
@@ -101,7 +107,7 @@ DiskController::peekDSKBYTR()
 {
     u16 result = computeDSKBYTR();
     
-    debug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
+    plaindebug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
     return result;
 }
 
@@ -138,14 +144,14 @@ DiskController::computeDSKBYTR()
 void
 DiskController::pokeDSKSYNC(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKSYNC(%X)\n", value);
+    plaindebug(DSKREG_DEBUG, "pokeDSKSYNC(%x)\n", value);
     
     if (value != 0x4489) {
         
         debug(XFILES, "XFILES (DSKSYNC): Unusual sync mark $%04X\n", value);
         
         if (config.lockDskSync) {
-            debug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);
+            plaindebug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);
             return;
         }
     }
@@ -171,7 +177,7 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
 {
     // debug("PRBdidChange: %X -> %X\n", oldValue, newValue);
 
-    // Store a copy of the new value for reference.
+    // Store a copy of the new value for reference
     prb = newValue;
     
     i8 oldSelected = selected;
@@ -183,7 +189,9 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
         
         // Inform the drive and determine the selected one
         df[i]->PRBdidChange(oldValue, newValue);
-        if (df[i]->isSelected()) selected = i;
+        if (df[i]->isSelected()) {
+            selected = i;
+        }
     }
     
     // Schedule the first rotation event if at least one drive is spinning
@@ -197,5 +205,12 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     */
     
     // Inform the GUI
-    if (oldSelected != selected) messageQueue.put(MSG_DRIVE_SELECT, selected);
+    if (oldSelected != selected) {
+        if (selected == -1) {
+            // plaindebug(DSKREG_DEBUG, "Deselecting df%d\n", oldSelected);
+        } else {
+            // plaindebug(DSKREG_DEBUG, "Selecting df%d\n", selected);
+        }
+        if (selected != -1) messageQueue.put(MSG_DRIVE_SELECT, selected);
+    }
 }

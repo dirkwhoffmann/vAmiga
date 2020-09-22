@@ -30,18 +30,18 @@
 
 // Uncomment to override a configuration setting
 
-#define FORCE_AGNUS_REVISION AGNUS_OCS
-#define FORCE_BLT_LEVEL      0
-#define FORCE_CHIP_RAM       512
-#define FORCE_SLOW_RAM       512
-#define FORCE_FAST_RAM       0
+// #define FORCE_AGNUS_REVISION AGNUS_OCS
+// #define FORCE_BLT_LEVEL      0
+// #define FORCE_CHIP_RAM       512
+// #define FORCE_SLOW_RAM       512
+// #define FORCE_FAST_RAM       0
 // #define FORCE_RTC            RTC_NONE
-#define FORCE_DRIVE_SPEED    -1
+// #define FORCE_DRIVE_SPEED    -1
 // #define FORCE_ASYNC_FIFO     true
 // #define FORCE_RTC_REGISTER   0
 
 // Uncomment to set a breakpoint on startup
-// #define INITIAL_BREAKPOINT 0xC0A008   // Jetsons
+// #define INITIAL_BREAKPOINT 0xFC1354
 
 // Uncomment to fallback to a simpler Agnus execution function
 // #define AGNUS_EXEC_DEBUG
@@ -49,7 +49,7 @@
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
 // #define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
-#define DF0_DISK "/Users/hoff/Desktop/Testing/JetsonsCracked.adf"
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/JetsonsCracked.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
 // #define DF0_DISK "/Users/hoff/Downloads/Jetsons1.adf"
 

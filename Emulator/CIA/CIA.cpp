@@ -723,7 +723,6 @@ CIAA::pullDownInterruptLine()
 {
     debug(CIA_DEBUG, "Pulling down IRQ line\n");
     paula.raiseIrq(INT_PORTS);
-    // paula->setINTREQ(0x8000 | (1 << 3));
 }
 
 void 
@@ -765,7 +764,7 @@ CIAA::updatePA()
         messageQueue.put((PA & 0b00000010) ? MSG_POWER_LED_DIM : MSG_POWER_LED_ON);
     }
 
-    // Check the OVL bot (Kickstart overlay)
+    // Check the OVL bit which controls the Kickstart ROM overlay
     if ((oldPA ^ PA) & 0b00000001) {
         mem.updateMemSrcTable();
     }

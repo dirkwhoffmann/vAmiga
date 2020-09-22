@@ -270,6 +270,8 @@ Drive::getDriveId()
 u8
 Drive::driveStatusFlags()
 {
+    // if (nr == 0) plaindebug("driveStatusFlags() %d %d %d %d\n", isSelected(), idMode(), motorAtFullSpeed(), motorSlowingDown());
+
     u8 result = 0xFF;
     
     if (isSelected()) {
@@ -303,9 +305,7 @@ double
 Drive::motorSpeed()
 {
     // Quick exit if mechanics is not emulated
-    // if (!emulateMechanics()) return motor ? 100.0 : 0.0;
-    if (config.startDelay == 0 && motor) return 100.0;
-    if (config.stopDelay == 0 && !motor) return   0.0;
+    if (!emulateMechanics()) return motor ? 100.0 : 0.0;
     
     // Determine the elapsed cycles since the last motor change
     Cycle elapsed = agnus.clock - switchCycle;
@@ -313,8 +313,10 @@ Drive::motorSpeed()
     
     // Compute the current speed
     if (motor) {
+        if (config.startDelay == 0) return 100.0;
         return MIN(switchSpeed + 100.0 * (elapsed / config.startDelay), 100.0);
     } else {
+        if (config.stopDelay == 0) return 0.0;
         return MAX(switchSpeed - 100.0 * (elapsed / config.stopDelay), 0.0);
     }
 }
@@ -337,7 +339,7 @@ Drive::setMotor(bool value)
     messageQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
     messageQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
     
-    debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
+    plaindebug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
 bool

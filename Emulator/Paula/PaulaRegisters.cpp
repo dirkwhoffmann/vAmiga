@@ -12,7 +12,8 @@
 void
 Paula::pokeADKCON(u16 value)
 {
-    plaindebug(MAX(AUDREG_DEBUG, DSKREG_DEBUG), "pokeADKCON(%X)\n", value);
+    plaindebug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
+    plaindebug(DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
 
     bool set = value & 0x8000;
     bool clr = !set;
@@ -52,7 +53,7 @@ Paula::peekINTREQR()
 template <Accessor s> void
 Paula::pokeINTREQ(u16 value)
 {
-    debug(INTREG_DEBUG, "pokeINTREQ(%X)\n", value);
+    debug(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
     // Add a one cycle delay if Copper writes
     if (s == CPU_ACCESS) {
@@ -84,7 +85,7 @@ Paula::setINTREQ(bool setclr, u16 value)
 template <Accessor s> void
 Paula::pokeINTENA(u16 value)
 {
-    debug(INTREG_DEBUG, "pokeINTENA(%X)\n", value);
+    debug(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
     // Add a one cycle delay if Copper writes
     if (s == CPU_ACCESS) {
