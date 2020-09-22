@@ -155,7 +155,7 @@ void Blitter::doFastCopyBlit()
 
                 if (BLT_CHECKSUM) {
                     check1 = fnv_1a_it32(check1, dhold);
-                    check2 = fnv_1a_it32(check2, dpt);
+                    check2 = fnv_1a_it32(check2, dpt & agnus.ptrMask);
                 }
                 debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
 

@@ -43,6 +43,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Reads a value from memory in big endian format
 #define READ_8(x)  (*(u8 *)(x))
 #define READ_16(x) (ntohs(*(u16 *)(x)))
+// #define READ_16(x) HI_LO(*(u8 *)(x), *(u8 *)((x)+1))
 
 // Reads a value from Chip RAM in big endian format
 #define READ_CHIP_8(x)  READ_8 (chip + ((x) & chipMask))
@@ -71,6 +72,7 @@ assert((x) >= 0xE80000 && (x) <= 0xE8FFFF);
 // Writes a value into memory in big endian format
 #define WRITE_8(x,y)  (*(u8 *)(x) = y)
 #define WRITE_16(x,y) (*(u16 *)(x) = htons(y))
+// #define WRITE_16(x,y) *(u8 *)(x) = HI_BYTE(y); *(u8 *)((x)+1) = LO_BYTE(y)
 
 // Writes a value into Chip RAM in big endian format
 #define WRITE_CHIP_8(x,y)  WRITE_8 (chip + ((x) & chipMask), (y))
@@ -290,7 +292,7 @@ private:
 public:
 
     bool allocChip(size_t bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
-    bool allocSlow(size_t bytes) { return alloc(bytes, slow, config.slowSize, slowMask); }
+    bool allocSlow(size_t bytes) { bool result = alloc(bytes, slow, config.slowSize, slowMask); plaindebug("slowMask = %x\n", slowMask); return result; }
     bool allocFast(size_t bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
 
     void deleteChip() { allocChip(0); }
