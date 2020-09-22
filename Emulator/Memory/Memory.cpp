@@ -52,7 +52,7 @@ Memory::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     // Set up the memory lookup table
-    updateCpuMemTable();
+    updateMemSrcTables();
     
     // In hard-reset mode, we also initialize RAM
     if (hard) fillRamWithInitPattern();
@@ -141,7 +141,7 @@ Memory::setConfigItem(ConfigOption option, long value)
             }
             
             config.extStart = value;
-            updateCpuMemTable();
+            updateMemSrcTables();
             return true;
             
         case OPT_SLOW_RAM_DELAY:
@@ -168,7 +168,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankD8DB = (MemorySource)value;
-            updateCpuMemTable();
+            updateMemSrcTables();
             amiga.resume();
             return true;
             
@@ -185,7 +185,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankDC = (MemorySource)value;
-            updateCpuMemTable();
+            updateMemSrcTables();
             amiga.resume();
             return true;
 
@@ -202,7 +202,7 @@ Memory::setConfigItem(ConfigOption option, long value)
 
             amiga.suspend();
             config.bankE0E7 = (MemorySource)value;
-            updateCpuMemTable();
+            updateMemSrcTables();
             amiga.resume();
             return true;
 
@@ -219,7 +219,7 @@ Memory::setConfigItem(ConfigOption option, long value)
             
             amiga.suspend();
             config.bankF0F7 = (MemorySource)value;
-            updateCpuMemTable();
+            updateMemSrcTables();
             amiga.resume();
             return true;
             
@@ -387,7 +387,7 @@ Memory::_powerOn()
     fillRamWithInitPattern();
 
     // Set up the memory lookup table
-    updateCpuMemTable();
+    updateMemSrcTables();
 }
 
 void
@@ -449,7 +449,7 @@ Memory::alloc(size_t bytes, u8 *&ptr, size_t &size, u32 &mask)
         mask = bytes - 1;
         fillRamWithInitPattern();
     }
-    updateCpuMemTable();
+    updateMemSrcTables();
     return true;
 }
 
@@ -662,8 +662,38 @@ Memory::saveExt(const char *path)
     return file && file->writeToFile(path);
 }
 
+template <> MemorySource
+Memory::getMemSrc <CPU_ACCESS> (u32 addr)
+{
+    return cpuMemSrc[(addr >> 16) & 0xFF];
+}
+
+template <> MemorySource
+Memory::getMemSrc <AGNUS_ACCESS> (u32 addr)
+{
+    return agnusMemSrc[(addr >> 16) & 0xFF];
+}
+
+MemorySource
+Memory::getMemSource(Accessor accessor, u32 addr)
+{
+    switch (accessor) {
+        case CPU_ACCESS: return getMemSrc <CPU_ACCESS> (addr);
+        case AGNUS_ACCESS: return getMemSrc <AGNUS_ACCESS> (addr);
+    }
+    assert(0);
+    return MEM_NONE;
+}
+
 void
-Memory::updateCpuMemTable()
+Memory::updateMemSrcTables()
+{
+    updateCpuMemSrcTable();
+    updateAgnusMemSrcTable();
+}
+
+void
+Memory::updateCpuMemSrcTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE;
     MemorySource mem_ext = ext ? MEM_EXT : rom ? MEM_ROM_MIRROR : MEM_NONE;
@@ -680,16 +710,17 @@ Memory::updateCpuMemTable()
     bool ovl = ciaa.getPA() & 1;
     
     // Start from scratch
-    for (unsigned i = 0x00; i <= 0xFF; i++)
-        memSrc[i] = MEM_NONE;
+    for (unsigned i = 0x00; i <= 0xFF; i++) {
+        cpuMemSrc[i] = MEM_NONE;
+    }
     
     // Chip Ram
     if (chipRamPages) {
         for (unsigned i = 0x00; i < chipRamPages; i++) {
-            memSrc[i] = MEM_CHIP;
+            cpuMemSrc[i] = MEM_CHIP;
         }
         for (unsigned i = chipRamPages; i <= 0x1F; i++) {
-            memSrc[i] = MEM_CHIP_MIRROR;
+            cpuMemSrc[i] = MEM_CHIP_MIRROR;
         }
     }
     
@@ -698,70 +729,94 @@ Memory::updateCpuMemTable()
     
     // Fast Ram
     for (unsigned i = 0x20; i < 0x20 + fastRamPages; i++) {
-        memSrc[i] = MEM_FAST;
+        cpuMemSrc[i] = MEM_FAST;
     }
     
     // CIA range
     for (unsigned i = 0xA0; i <= 0xBE; i++) {
-        memSrc[i] = MEM_CIA_MIRROR;
+        cpuMemSrc[i] = MEM_CIA_MIRROR;
     }
-    memSrc[0xBF] = MEM_CIA;
+    cpuMemSrc[0xBF] = MEM_CIA;
     
     // Slow Ram
     for (unsigned i = 0xC0; i <= 0xD7; i++) {
-        memSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
+        cpuMemSrc[i] = (i - 0xC0) < slowRamPages ? MEM_SLOW : MEM_CUSTOM_MIRROR;
     }
     
     // Real-time clock (older Amigas)
     for (unsigned i = 0xD8; i <= 0xDB; i++) {
-        memSrc[i] = config.bankD8DB;
+        cpuMemSrc[i] = config.bankD8DB;
     }
 
     // Real-time clock (newer Amigas)
-    memSrc[0xDC] = config.bankDC;
+    cpuMemSrc[0xDC] = config.bankDC;
     
     // Reserved
-    memSrc[0xDD] = MEM_NONE;
+    cpuMemSrc[0xDD] = MEM_NONE;
 
     // Custom chip set
     for (unsigned i = 0xDE; i <= 0xDF; i++) {
-        memSrc[i] = MEM_CUSTOM;
+        cpuMemSrc[i] = MEM_CUSTOM;
     }
     
     // Extended Rom, Kickstart mirror, or unmapped
     for (unsigned i = 0xE0; i <= 0xE7; i++) {
-        memSrc[i] = config.bankE0E7 == MEM_EXT ? mem_ext : config.bankE0E7;
+        cpuMemSrc[i] = config.bankE0E7 == MEM_EXT ? mem_ext : config.bankE0E7;
     }
     
     // Auto-config (Zorro II)
-    memSrc[0xE8] = MEM_AUTOCONF;
+    cpuMemSrc[0xE8] = MEM_AUTOCONF;
     for (unsigned i = 0xE9; i <= 0xEF; i++) {
-        memSrc[i] = MEM_NONE;
+        cpuMemSrc[i] = MEM_NONE;
     }
     
     // Extended Rom, Kickstart mirror, or unmapped
     for (unsigned i = 0xF0; i <= 0xF7; i++) {
-        memSrc[i] = config.bankF0F7 == MEM_EXT ? mem_ext : config.bankF0F7;
+        cpuMemSrc[i] = config.bankF0F7 == MEM_EXT ? mem_ext : config.bankF0F7;
     }
     
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++) {
-        memSrc[i] = mem_wom;
+        cpuMemSrc[i] = mem_wom;
     }
     
     // Blend in Boot Rom if a writeable Wom is present
     if (hasWom() && !womIsLocked) {
         for (unsigned i = 0xF8; i <= 0xFB; i++)
-            memSrc[i] = mem_rom;
+            cpuMemSrc[i] = mem_rom;
     }
 
     // Blend in Rom in lower memory area if the overlay line (OVL) is high
     if (ovl) {
-        for (unsigned i = 0; i < 8 && memSrc[0xF8 + i] != MEM_NONE; i++)
-            memSrc[i] = memSrc[0xF8 + i];
+        for (unsigned i = 0; i < 8 && cpuMemSrc[0xF8 + i] != MEM_NONE; i++)
+            cpuMemSrc[i] = cpuMemSrc[0xF8 + i];
     }
 
     messageQueue.put(MSG_MEM_LAYOUT);
+}
+
+void
+Memory::updateAgnusMemSrcTable()
+{
+    int chipBanks = agnus.chipRamLimit() / 64;
+    assert(chipBanks == 8 || chipBanks == 16 || chipBanks == 32);
+    
+    // Start from scratch
+    for (unsigned i = 0x00; i <= 0xFF; i++) {
+        agnusMemSrc[i] = MEM_NONE;
+    }
+    
+    // Chip Ram banks
+    for (unsigned i = 0x0; i < chipBanks; i++) {
+        agnusMemSrc[i] = MEM_CHIP;
+    }
+    
+    // Slow Ram mirror
+    if (agnus.slowRamIsMirroredIn()) {
+        for (unsigned i = 0x8; i <= 0xF; i++) {
+            agnusMemSrc[i] = MEM_SLOW_MIRROR;
+        }
+    }
 }
 
 template<> u16
@@ -1105,7 +1160,7 @@ Memory::peek8 <CPU_ACCESS> (u32 addr)
 {
     u8 result;
         
-    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          result = peek8 <CPU_ACCESS, MEM_NONE>     (addr); break;
         case MEM_CHIP:          result = peek8 <CPU_ACCESS, MEM_CHIP>     (addr); break;
@@ -1136,7 +1191,7 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
     
     assert(IS_EVEN(addr));
     
-    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          result = peek16 <CPU_ACCESS, MEM_NONE>     (addr); break;
         case MEM_CHIP:          result = peek16 <CPU_ACCESS, MEM_CHIP>     (addr); break;
@@ -1165,7 +1220,7 @@ Memory::spypeek16 (u32 addr)
 {
     assert(IS_EVEN(addr));
     
-    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          return spypeek16 <MEM_NONE>     (addr);
         case MEM_CHIP:          return spypeek16 <MEM_CHIP>     (addr);
@@ -1399,7 +1454,7 @@ Memory::poke8 <CPU_ACCESS, MEM_ROM> (u32 addr, u8 value)
     if (hasWom() && !womIsLocked) {
         debug("Locking WOM\n");
         womIsLocked = true;
-        updateCpuMemTable();
+        updateMemSrcTables();
     }
         
     if (!releaseBuild()) {
@@ -1451,7 +1506,7 @@ Memory::poke16 <CPU_ACCESS, MEM_EXT> (u32 addr, u16 value)
 template<> void
 Memory::poke8 <CPU_ACCESS> (u32 addr, u8 value)
 {
-    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          poke8 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
         case MEM_CHIP:          poke8 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;
@@ -1478,7 +1533,7 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
 {
     assert(IS_EVEN(addr));
     
-    switch (memSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
         case MEM_NONE:          poke16 <CPU_ACCESS, MEM_NONE>     (addr, value); return;
         case MEM_CHIP:          poke16 <CPU_ACCESS, MEM_CHIP>     (addr, value); return;

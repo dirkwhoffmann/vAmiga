@@ -7,19 +7,6 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-/*
-extension NSColor {
-    
-    convenience init(r: Int, g: Int, b: Int, a: Int) {
-        
-        self.init(red: CGFloat(r) / 0xFF,
-                  green: CGFloat(g) / 0xFF,
-                  blue: CGFloat(b) / 0xFF,
-                  alpha: CGFloat(a) / 0xFF)
-    }
-}
-*/
-
 struct MemColors {
 
     static let unmapped = NSColor.gray
@@ -39,10 +26,12 @@ struct MemColors {
 }
 
 extension Inspector {
-
+    
+    func memSrc(bank: Int) -> MemorySource {
+        return parent.amiga.mem.memSrc(.CPU_ACCESS, addr: bank << 16)
+    }
+    
     var memLayoutImage: NSImage? {
-
-        guard let memory = parent?.amiga.mem else { return nil }
 
         // Create image representation in memory
         let size = CGSize.init(width: 256, height: 16)
@@ -53,11 +42,10 @@ extension Inspector {
         // Create image data
         for x in 0...255 {
 
-            let src = memory.memSrc(x << 16)
             var color: NSColor
             var mirror = false
             
-            switch src {
+            switch memSrc(bank: x) {
             case .MEM_NONE:          color = MemColors.unmapped
             case .MEM_CHIP:          color = MemColors.chip
             case .MEM_CHIP_MIRROR:   color = MemColors.chip;     mirror = true
@@ -160,7 +148,7 @@ extension Inspector {
 
         for bank in 0...255 {
 
-            if parent?.amiga.mem.memSrc(bank << 16) == source {
+            if memSrc(bank: bank) == source {
                 jumpTo(bank: bank)
                 return
             }
@@ -172,7 +160,7 @@ extension Inspector {
         if nr >= 0 && nr <= 0xFF {
             
             displayedBank = nr
-            displayedBankType = parent?.amiga.mem.memSrc(displayedBank << 16) ?? .MEM_NONE
+            displayedBankType = memSrc(bank: nr) //  ?? .MEM_NONE
             memLayoutSlider.integerValue = displayedBank
             memTableView.scrollRowToVisible(0)
             memBankTableView.scrollRowToVisible(nr)

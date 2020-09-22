@@ -44,7 +44,7 @@ CIA::_reset(bool hard)
     updatePB();
     
     // Update the memory layout because the OVL bit may have changed
-    mem.updateCpuMemTable();
+    mem.updateMemSrcTables();
 }
 
 long
@@ -766,7 +766,7 @@ CIAA::updatePA()
 
     // Check the OVL bit which controls the Kickstart ROM overlay
     if ((oldPA ^ PA) & 0b00000001) {
-        mem.updateCpuMemTable();
+        mem.updateMemSrcTables();
     }
     
     /*

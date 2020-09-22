@@ -390,13 +390,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->mem->saveExt([url fileSystemRepresentation]);
 }
-- (MemorySource *) getMemSrcTable
+- (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
-    return wrapper->mem->getMemSrcTable();
-}
-- (MemorySource) memSrc:(NSInteger)addr
-{
-    return wrapper->mem->getMemSrc((u32)addr);
+    return wrapper->mem->getMemSource(accessor, addr);
 }
 - (NSInteger) spypeek16:(NSInteger)addr
 {

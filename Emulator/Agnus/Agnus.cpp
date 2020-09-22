@@ -130,7 +130,7 @@ Agnus::chipRamLimit()
 
         case AGNUS_ECS_2MB: return 2048;
         case AGNUS_ECS_1MB: return 1024;
-        default:         return 512;
+        default:            return 512;
     }
 }
 

@@ -169,12 +169,13 @@ public:
      */
     bool womIsLocked = false;
     
-    /* Memory is divided into 64KB banks. The Amiga has 24 address lines which
-     * means that memory is divided into 256 different banks. For each bank,
-     * this array indicates the type of memory seen by the Amiga.
-     * See also: updateCpuMemTable()
+    /* The Amiga memory is divided into 256 banks of size 64KB. The following
+     * tables indicate which memory type is seen in each bank by the CPU and
+     * Agnus, respectively.
+     * See also: updateMemSrcTables()
      */
-    MemorySource memSrc[256];
+    MemorySource cpuMemSrc[256];
+    MemorySource agnusMemSrc[256];
 
     // The last value on the data bus
     u16 dataBus;
@@ -258,7 +259,7 @@ private:
         worker
 
         & womIsLocked
-        & memSrc
+        & cpuMemSrc
         & dataBus;
     }
 
@@ -394,16 +395,19 @@ public:
     //
     
 public:
-    
-    // Returns the memory source lookup table
-    MemorySource *getMemSrcTable() { return memSrc; }
-    
+        
     // Returns the memory source for a given address
-    MemorySource getMemSrc(u32 addr) { return memSrc[(addr >> 16) & 0xFF]; }
+    template <Accessor A> MemorySource getMemSrc(u32 addr);
+    MemorySource getMemSource(Accessor accessor, u32 addr);
     
-    // Updates the memory source lookup table
-    void updateCpuMemTable();
+    // Updates both memory source lookup tables
+    void updateMemSrcTables();
     
+private:
+
+    void updateCpuMemSrcTable();
+    void updateAgnusMemSrcTable();
+
     
     //
     // Accessing memory

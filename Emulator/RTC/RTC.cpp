@@ -46,7 +46,7 @@ RTC::setConfigItem(ConfigOption option, long value)
             }
             
             config.model = (RTCModel)value;
-            mem.updateCpuMemTable();
+            mem.updateMemSrcTables();
             
             return true;
                         

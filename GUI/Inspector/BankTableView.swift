@@ -30,7 +30,7 @@ class BankTableView: NSTableView {
     func cache() {
 
         for i in 0 ..< 256 {
-            bankCache[i] = amiga.mem.memSrc(i << 16)
+            bankCache[i] = amiga.mem.memSrc(.CPU_ACCESS, addr: i << 16)
         }
     }
 

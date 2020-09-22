@@ -305,8 +305,7 @@ struct SerialPortWrapper;
 - (BOOL) saveRom:(NSURL *)url;
 - (BOOL) saveExt:(NSURL *)url;
 
-- (MemorySource *) getMemSrcTable; 
-- (MemorySource) memSrc:(NSInteger)addr;
+- (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr;
 - (NSInteger) spypeek16:(NSInteger)addr;
 
 - (NSString *) ascii:(NSInteger)addr;
