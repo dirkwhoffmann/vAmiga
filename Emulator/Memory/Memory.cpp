@@ -674,19 +674,6 @@ Memory::getMemSrc <AGNUS_ACCESS> (u32 addr)
     return agnusMemSrc[(addr >> 16) & 0xFF];
 }
 
-/*
-MemorySource
-Memory::getMemSource(Accessor accessor, u32 addr)
-{
-    switch (accessor) {
-        case CPU_ACCESS: return getMemSrc <CPU_ACCESS> (addr);
-        case AGNUS_ACCESS: return getMemSrc <AGNUS_ACCESS> (addr);
-    }
-    assert(0);
-    return MEM_NONE;
-}
-*/
-
 void
 Memory::updateMemSrcTables()
 {
@@ -838,7 +825,8 @@ template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
-
+    debug(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
+    
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
@@ -851,13 +839,17 @@ Memory::peek8 <CPU_ACCESS, MEM_NONE> (u32 addr)
 template<> u16
 Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
+    assert((addr & agnus.ptrMask) == addr);
+    
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
-    return config.unmappingType == UNMAPPED_ALL_ONES ? 0xFFFF : 0x0000;
+    assert((addr & agnus.ptrMask) == addr);
+    
+    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u8
@@ -885,7 +877,7 @@ Memory::peek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
 template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
 {
-    ASSERT_CHIP_ADDR(addr);
+    assert((addr & agnus.ptrMask) == addr);
     
     dataBus = READ_CHIP_16(addr);
     return dataBus;
@@ -900,6 +892,8 @@ Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
 template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
 {
+    assert((addr & agnus.ptrMask) == addr);
+    
     return READ_CHIP_16(addr);
 }
 
@@ -929,6 +923,7 @@ template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
+    debug(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
     
     dataBus = READ_SLOW_16(addr & 0x7FFFF);
     return dataBus;
@@ -943,6 +938,8 @@ Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
 template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
+    assert((addr & agnus.ptrMask) == addr);
+    
     return READ_SLOW_16(addr);
 }
 
@@ -1234,9 +1231,9 @@ Memory::peek16 <AGNUS_ACCESS> (u32 addr)
     
     switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:        result = peek16 <CPU_ACCESS, MEM_NONE> (addr); break;
-        case MEM_CHIP:        result = peek16 <CPU_ACCESS, MEM_CHIP> (addr); break;
-        case MEM_SLOW_MIRROR: result = peek16 <CPU_ACCESS, MEM_SLOW> (addr); break;
+        case MEM_NONE:        result = peek16 <AGNUS_ACCESS, MEM_NONE> (addr); break;
+        case MEM_CHIP:        result = peek16 <AGNUS_ACCESS, MEM_CHIP> (addr); break;
+        case MEM_SLOW_MIRROR: result = peek16 <AGNUS_ACCESS, MEM_SLOW> (addr); break;
             
         default: assert(false); return 0;
     }
@@ -1275,6 +1272,7 @@ template<> u16
 Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
 {
     assert(IS_EVEN(addr));
+    addr &= agnus.ptrMask;
     
     switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
@@ -1296,7 +1294,15 @@ Memory::poke8 <CPU_ACCESS, MEM_NONE> (u32 addr, u8 value)
 template <> void
 Memory::poke16 <CPU_ACCESS, MEM_NONE> (u32 addr, u16 value)
 {
-    debug(MEM_DEBUG, "poke16(%x [NONE], %x)\n", addr, value);
+    debug(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
+    dataBus = value;
+}
+
+template <> void
+Memory::poke16 <AGNUS_ACCESS, MEM_NONE> (u32 addr, u16 value)
+{
+    debug(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
+    debug(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
     dataBus = value;
 }
 
@@ -1335,8 +1341,8 @@ Memory::poke16 <CPU_ACCESS, MEM_CHIP> (u32 addr, u16 value)
 template <> void
 Memory::poke16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr, u16 value)
 {
-    ASSERT_CHIP_ADDR(addr);
- 
+    assert((addr & agnus.ptrMask) == addr);
+
     if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
         debug("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
@@ -1373,6 +1379,7 @@ template <> void
 Memory::poke16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
+    debug(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
 
     dataBus = value;
     WRITE_SLOW_16(addr, value);
@@ -1594,6 +1601,21 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
         case MEM_ROM_MIRROR:    poke16 <CPU_ACCESS, MEM_ROM>      (addr, value); return;
         case MEM_WOM:           poke16 <CPU_ACCESS, MEM_WOM>      (addr, value); return;
         case MEM_EXT:           poke16 <CPU_ACCESS, MEM_EXT>      (addr, value); return;
+            
+        default: assert(false);
+    }
+}
+
+template<> void
+Memory::poke16 <AGNUS_ACCESS> (u32 addr, u16 value)
+{
+    assert(IS_EVEN(addr));
+    
+    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_NONE:          poke16 <AGNUS_ACCESS, MEM_NONE> (addr, value); return;
+        case MEM_CHIP:          poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value); return;
+        case MEM_SLOW_MIRROR:   poke16 <AGNUS_ACCESS, MEM_SLOW> (addr, value); return;
             
         default: assert(false);
     }

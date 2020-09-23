@@ -252,6 +252,8 @@ Agnus::disableBplDmaECS()
 u16
 Agnus::peek(u32 addr)
 {
+    return mem.peek16 <AGNUS_ACCESS> (addr & ptrMask);
+    /*
     addr &= ptrMask;
     
     if (addr >= mem.chipRamSize()) {
@@ -266,11 +268,15 @@ Agnus::peek(u32 addr)
     }
         
     return mem.peek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
+    */
 }
 
 u16
 Agnus::spypeek(u32 addr)
 {
+    return mem.spypeek16 <AGNUS_ACCESS> (addr & ptrMask);
+
+    /*
     addr &= ptrMask;
     
     if (addr >= mem.chipRamSize()) {
@@ -283,11 +289,15 @@ Agnus::spypeek(u32 addr)
     }
     
     return mem.spypeek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
+    */
 }
 
 void
 Agnus::poke(u32 addr, u16 value)
 {
+    mem.poke16 <AGNUS_ACCESS> (addr & ptrMask, value);
+    
+    /*
     addr &= ptrMask;
     
     if (addr >= mem.chipRamSize()) {
@@ -303,6 +313,7 @@ Agnus::poke(u32 addr, u16 value)
     }
     
     mem.poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value);
+    */
 }
 
 template <BusOwner owner> bool
