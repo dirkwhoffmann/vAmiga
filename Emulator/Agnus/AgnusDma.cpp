@@ -252,68 +252,19 @@ Agnus::disableBplDmaECS()
 u16
 Agnus::peek(u32 addr)
 {
-    return mem.peek16 <AGNUS_ACCESS> (addr & ptrMask);
-    /*
-    addr &= ptrMask;
-    
-    if (addr >= mem.chipRamSize()) {
-        
-        if (slowRamIsMirroredIn() && addr >= 0x80000) {
-            debug(XFILES, "Reading from Slow RAM mirror\n");
-            return mem.peek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
-        }
-
-        debug(XFILES, "Reading from unmapped Chip Ram\n");
-        return mem.peek16 <AGNUS_ACCESS, MEM_NONE> (addr);
-    }
-        
-    return mem.peek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
-    */
+    return mem.peek16 <AGNUS_ACCESS> (addr);
 }
 
 u16
 Agnus::spypeek(u32 addr)
 {
-    return mem.spypeek16 <AGNUS_ACCESS> (addr & ptrMask);
-
-    /*
-    addr &= ptrMask;
-    
-    if (addr >= mem.chipRamSize()) {
-        
-        if (slowRamIsMirroredIn() && addr >= 0x80000) {
-            return mem.spypeek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
-        }
-
-        return mem.spypeek16 <AGNUS_ACCESS, MEM_NONE> (addr);
-    }
-    
-    return mem.spypeek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
-    */
+    return mem.spypeek16 <AGNUS_ACCESS> (addr);
 }
 
 void
 Agnus::poke(u32 addr, u16 value)
 {
-    mem.poke16 <AGNUS_ACCESS> (addr & ptrMask, value);
-    
-    /*
-    addr &= ptrMask;
-    
-    if (addr >= mem.chipRamSize()) {
-        
-        if (slowRamIsMirroredIn() && addr >= 0x80000) {
-            debug(XFILES, "Writing to Slow RAM mirror\n");
-            mem.poke16 <AGNUS_ACCESS, MEM_SLOW> (addr, value);
-            return;
-        }
-        
-        debug(XFILES, "Writing to unmapped Chip Ram\n");
-        return;
-    }
-    
-    mem.poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value);
-    */
+    mem.poke16 <AGNUS_ACCESS> (addr, value);
 }
 
 template <BusOwner owner> bool

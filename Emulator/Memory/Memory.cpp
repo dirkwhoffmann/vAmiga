@@ -1228,8 +1228,9 @@ Memory::peek16 <AGNUS_ACCESS> (u32 addr)
     u16 result;
     
     assert(IS_EVEN(addr));
-    
-    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    addr &= agnus.ptrMask;
+
+    switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:        result = peek16 <AGNUS_ACCESS, MEM_NONE> (addr); break;
         case MEM_CHIP:        result = peek16 <AGNUS_ACCESS, MEM_CHIP> (addr); break;
@@ -1274,7 +1275,7 @@ Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
     assert(IS_EVEN(addr));
     addr &= agnus.ptrMask;
     
-    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:        return spypeek16 <AGNUS_ACCESS, MEM_NONE> (addr);
         case MEM_CHIP:        return spypeek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
@@ -1610,8 +1611,9 @@ template<> void
 Memory::poke16 <AGNUS_ACCESS> (u32 addr, u16 value)
 {
     assert(IS_EVEN(addr));
+    addr &= agnus.ptrMask;
     
-    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+    switch (agnusMemSrc[addr >> 16]) {
             
         case MEM_NONE:          poke16 <AGNUS_ACCESS, MEM_NONE> (addr, value); return;
         case MEM_CHIP:          poke16 <AGNUS_ACCESS, MEM_CHIP> (addr, value); return;
