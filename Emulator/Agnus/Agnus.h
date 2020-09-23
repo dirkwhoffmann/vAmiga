@@ -719,14 +719,7 @@ private:
     //
 
 public:
-    
-    // Reads a word from memory
-    u16 peek(u32 addr); // DEPRECATED
-    u16 spypeek(u32 addr); // DEPRECATED
-    
-    // Write a word to memory
-    void poke(u32 addr, u16 value); // DEPRECATED
-    
+        
     /* Checks if the bus is currently available for the specified resource.
      */
     template <BusOwner owner> bool busIsFree();

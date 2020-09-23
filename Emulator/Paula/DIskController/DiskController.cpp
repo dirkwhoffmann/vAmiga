@@ -593,7 +593,7 @@ DiskController::performTurboRead(Drive *drive)
             check1 = fnv_1a_it32(check1, word);
             check2 = fnv_1a_it32(check2, agnus.dskpt & agnus.ptrMask);
         }
-        agnus.poke(agnus.dskpt, word);
+        mem.poke16 <AGNUS_ACCESS> (agnus.dskpt, word);
         agnus.dskpt += 2;
     }
 
@@ -608,7 +608,7 @@ DiskController::performTurboWrite(Drive *drive)
     for (unsigned i = 0; i < (dsklen & 0x3FFF); i++) {
         
         // Read word from memory
-        u16 word = agnus.peek(agnus.dskpt);
+        u16 word = mem.peek16 <AGNUS_ACCESS> (agnus.dskpt);
         
         if (DSK_CHECKSUM) {
             checkcnt++;

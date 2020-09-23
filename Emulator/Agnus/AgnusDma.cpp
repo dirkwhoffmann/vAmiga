@@ -249,24 +249,6 @@ Agnus::disableBplDmaECS()
     updateBplEvent();
 }
 
-u16
-Agnus::peek(u32 addr)
-{
-    return mem.peek16 <AGNUS_ACCESS> (addr);
-}
-
-u16
-Agnus::spypeek(u32 addr)
-{
-    return mem.spypeek16 <AGNUS_ACCESS> (addr);
-}
-
-void
-Agnus::poke(u32 addr, u16 value)
-{
-    mem.poke16 <AGNUS_ACCESS> (addr, value);
-}
-
 template <BusOwner owner> bool
 Agnus::busIsFree()
 {
@@ -335,7 +317,7 @@ Agnus::allocateBus()
 u16
 Agnus::doDiskDMA()
 {
-    u16 result = peek(dskpt);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (dskpt);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -349,7 +331,7 @@ Agnus::doDiskDMA()
 template <int channel> u16
 Agnus::doAudioDMA()
 {
-    u16 result = peek(audpt[channel]);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (audpt[channel]);
     audpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -366,7 +348,7 @@ Agnus::doBitplaneDMA()
     assert(bitplane >= 0 && bitplane <= 5);
     const BusOwner owner = BusOwner(BUS_BPL1 + bitplane);
     
-    u16 result = peek(bplpt[bitplane]);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (bplpt[bitplane]);
     bplpt[bitplane] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -383,7 +365,7 @@ Agnus::doSpriteDMA()
     assert(channel >= 0 && channel <= 7);
     const BusOwner owner = BusOwner(BUS_SPRITE0 + channel);
 
-    u16 result = peek(sprpt[channel]);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (sprpt[channel]);
     sprpt[channel] += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -397,7 +379,7 @@ Agnus::doSpriteDMA()
 u16
 Agnus::doCopperDMA(u32 addr)
 {
-    u16 result = peek(addr);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_COPPER;
@@ -413,7 +395,7 @@ Agnus::doBlitterDMA(u32 addr)
     // Assure that the Blitter owns the bus when this function is called
     assert(busOwner[pos.h] == BUS_BLITTER);
 
-    u16 result = peek(addr);
+    u16 result = mem.peek16 <AGNUS_ACCESS> (addr);
 
     assert(pos.h < HPOS_CNT);
     busOwner[pos.h] = BUS_BLITTER;
@@ -426,7 +408,7 @@ Agnus::doBlitterDMA(u32 addr)
 void
 Agnus::doDiskDMA(u16 value)
 {
-    poke(dskpt, value);
+    mem.poke16 <AGNUS_ACCESS> (dskpt, value);
     dskpt += 2;
 
     assert(pos.h < HPOS_CNT);
@@ -449,7 +431,7 @@ Agnus::doCopperDMA(u32 addr, u16 value)
 void
 Agnus::doBlitterDMA(u32 addr, u16 value)
 {
-    poke(addr, value);
+    mem.poke16 <AGNUS_ACCESS> (addr, value);
     
     assert(pos.h < HPOS_CNT);
     assert(busOwner[pos.h] == BUS_BLITTER); // Bus is already allocated
