@@ -822,8 +822,6 @@ Memory::updateAgnusMemSrcTable()
 template<> u16
 Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
-    // if (config.slowRamDelay) agnus.executeUntilBusIsFree();
-
     switch (config.unmappingType) {
             
         case UNMAPPED_FLOATING:   return dataBus;
@@ -834,6 +832,12 @@ Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
     }
 }
 
+template<> u16
+Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
+{
+    return peek16 <CPU_ACCESS, MEM_NONE> (addr);
+}
+
 template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
@@ -841,9 +845,15 @@ Memory::peek8 <CPU_ACCESS, MEM_NONE> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_NONE> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 {
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
+{
+    return peek16 <AGNUS_ACCESS, MEM_NONE> (addr);
 }
 
 template<> u8
@@ -878,7 +888,13 @@ Memory::peek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_CHIP> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_CHIP> (u32 addr)
+{
+    return READ_CHIP_16(addr);
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr)
 {
     return READ_CHIP_16(addr);
 }
@@ -915,13 +931,13 @@ Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 }
 
 template<> u16
-Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
 {
-    return 0;
+    return READ_SLOW_16(addr);
 }
 
 template<> u16
-Memory::spypeek16 <MEM_SLOW> (u32 addr)
+Memory::spypeek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
     return READ_SLOW_16(addr);
 }
@@ -945,7 +961,7 @@ Memory::peek16 <CPU_ACCESS, MEM_FAST> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_FAST> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_FAST> (u32 addr)
 {
     return READ_FAST_16(addr);
 }
@@ -974,7 +990,7 @@ Memory::peek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_CIA> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
 {
     return spypeekCIA16(addr);
 }
@@ -1002,7 +1018,7 @@ Memory::peek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_RTC> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_RTC> (u32 addr)
 {
     return spypeekRTC16(addr);
 }
@@ -1034,7 +1050,7 @@ Memory::peek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_CUSTOM> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_CUSTOM> (u32 addr)
 {
     return spypeekCustom16(addr);
 }
@@ -1043,16 +1059,6 @@ template<> u8
 Memory::peek8 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
-
-    // Experimental (values from FSUAE)
-    /*
-    if (config.fastSize == 0) {
-        dataBus = addr % 4 == 0 ? 0x02 : 0xe8;
-        debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
-        return dataBus;
-    }
-    */
-    // agnus.executeUntilBusIsFree();
     
     dataBus = zorro.peekFastRamDevice(addr) << 4;         
     debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
@@ -1075,7 +1081,7 @@ Memory::peek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_AUTOCONF> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 {
     u8 hi = zorro.spypeekFastRamDevice(addr) << 4;
     u8 lo = zorro.spypeekFastRamDevice(addr + 1) << 4;
@@ -1102,7 +1108,7 @@ Memory::peek16 <CPU_ACCESS, MEM_ROM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_ROM> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_ROM> (u32 addr)
 {
     return READ_ROM_16(addr);
 }
@@ -1126,7 +1132,7 @@ Memory::peek16 <CPU_ACCESS, MEM_WOM> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_WOM> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_WOM> (u32 addr)
 {
     return READ_WOM_16(addr);
 }
@@ -1150,7 +1156,7 @@ Memory::peek16 <CPU_ACCESS, MEM_EXT> (u32 addr)
 }
 
 template<> u16
-Memory::spypeek16 <MEM_EXT> (u32 addr)
+Memory::spypeek16 <CPU_ACCESS, MEM_EXT> (u32 addr)
 {
     return READ_EXT_16(addr);
 }
@@ -1222,21 +1228,21 @@ Memory::spypeek16 (u32 addr)
     
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             
-        case MEM_NONE:          return spypeek16 <MEM_NONE>     (addr);
-        case MEM_CHIP:          return spypeek16 <MEM_CHIP>     (addr);
-        case MEM_CHIP_MIRROR:   return spypeek16 <MEM_CHIP>     (addr);
-        case MEM_SLOW:          return spypeek16 <MEM_SLOW>     (addr);
-        case MEM_SLOW_MIRROR:   return spypeek16 <MEM_SLOW>     (addr);
-        case MEM_FAST:          return spypeek16 <MEM_FAST>     (addr);
-        case MEM_CIA:           return spypeek16 <MEM_CIA>      (addr);
-        case MEM_RTC:           return spypeek16 <MEM_RTC>      (addr);
-        case MEM_CUSTOM:        return spypeek16 <MEM_CUSTOM>   (addr);
-        case MEM_CUSTOM_MIRROR: return spypeek16 <MEM_CUSTOM>   (addr);
-        case MEM_AUTOCONF:      return spypeek16 <MEM_AUTOCONF> (addr);
-        case MEM_ROM:           return spypeek16 <MEM_ROM>      (addr);
-        case MEM_ROM_MIRROR:    return spypeek16 <MEM_ROM>      (addr);
-        case MEM_WOM:           return spypeek16 <MEM_WOM>      (addr);
-        case MEM_EXT:           return spypeek16 <MEM_EXT>      (addr);
+        case MEM_NONE:          return spypeek16 <CPU_ACCESS, MEM_NONE>     (addr);
+        case MEM_CHIP:          return spypeek16 <CPU_ACCESS, MEM_CHIP>     (addr);
+        case MEM_CHIP_MIRROR:   return spypeek16 <CPU_ACCESS, MEM_CHIP>     (addr);
+        case MEM_SLOW:          return spypeek16 <CPU_ACCESS, MEM_SLOW>     (addr);
+        case MEM_SLOW_MIRROR:   return spypeek16 <CPU_ACCESS, MEM_SLOW>     (addr);
+        case MEM_FAST:          return spypeek16 <CPU_ACCESS, MEM_FAST>     (addr);
+        case MEM_CIA:           return spypeek16 <CPU_ACCESS, MEM_CIA>      (addr);
+        case MEM_RTC:           return spypeek16 <CPU_ACCESS, MEM_RTC>      (addr);
+        case MEM_CUSTOM:        return spypeek16 <CPU_ACCESS, MEM_CUSTOM>   (addr);
+        case MEM_CUSTOM_MIRROR: return spypeek16 <CPU_ACCESS, MEM_CUSTOM>   (addr);
+        case MEM_AUTOCONF:      return spypeek16 <CPU_ACCESS, MEM_AUTOCONF> (addr);
+        case MEM_ROM:           return spypeek16 <CPU_ACCESS, MEM_ROM>      (addr);
+        case MEM_ROM_MIRROR:    return spypeek16 <CPU_ACCESS, MEM_ROM>      (addr);
+        case MEM_WOM:           return spypeek16 <CPU_ACCESS, MEM_WOM>      (addr);
+        case MEM_EXT:           return spypeek16 <CPU_ACCESS, MEM_EXT>      (addr);
             
         default: assert(false); return 0;
     }

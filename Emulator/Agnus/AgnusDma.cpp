@@ -276,13 +276,13 @@ Agnus::spypeek(u32 addr)
     if (addr >= mem.chipRamSize()) {
         
         if (slowRamIsMirroredIn() && addr >= 0x80000) {
-            return mem.spypeek16 <MEM_SLOW> (addr);
+            return mem.spypeek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
         }
 
-        return mem.spypeek16 <MEM_NONE> (addr);
+        return mem.spypeek16 <AGNUS_ACCESS, MEM_NONE> (addr);
     }
     
-    return mem.spypeek16 <MEM_CHIP> (addr);
+    return mem.spypeek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
 }
 
 void
