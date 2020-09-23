@@ -26,14 +26,13 @@ struct MemColors {
 }
 
 extension Inspector {
+
+    var accessor: Accessor {
+        return memBankMap.selectedTag() == 0 ? .CPU_ACCESS : .AGNUS_ACCESS
+    }
     
-    func memSrc(bank: Int) -> MemorySource {
-        
-        if memBankMap.selectedTag() == 0 {
-            return parent.amiga.mem.memSrc(.CPU_ACCESS, addr: bank << 16)
-        } else {
-            return parent.amiga.mem.memSrc(.AGNUS_ACCESS, addr: bank << 16)
-        }
+    func memSrc(bank: Int) -> MemorySource {        
+        return parent.amiga.mem.memSrc(accessor, addr: bank << 16)
     }
     
     var memLayoutImage: NSImage? {

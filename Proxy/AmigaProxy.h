@@ -306,10 +306,10 @@ struct SerialPortWrapper;
 - (BOOL) saveExt:(NSURL *)url;
 
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr;
-- (NSInteger) spypeek16:(NSInteger)addr;
+- (NSInteger) spypeek16:(Accessor)accessor addr:(NSInteger)addr;
 
-- (NSString *) ascii:(NSInteger)addr;
-- (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes;
+- (NSString *) ascii:(Accessor)accessor addr:(NSInteger)addr;
+- (NSString *) hex:(Accessor)accessor addr:(NSInteger)addr bytes:(NSInteger)bytes;
 
 @end
 

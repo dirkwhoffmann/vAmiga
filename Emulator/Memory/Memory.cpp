@@ -674,6 +674,7 @@ Memory::getMemSrc <AGNUS_ACCESS> (u32 addr)
     return agnusMemSrc[(addr >> 16) & 0xFF];
 }
 
+/*
 MemorySource
 Memory::getMemSource(Accessor accessor, u32 addr)
 {
@@ -684,6 +685,7 @@ Memory::getMemSource(Accessor accessor, u32 addr)
     assert(0);
     return MEM_NONE;
 }
+*/
 
 void
 Memory::updateMemSrcTables()
@@ -835,6 +837,8 @@ Memory::peek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
+    assert((addr & agnus.ptrMask) == addr);
+
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
 
@@ -853,7 +857,7 @@ Memory::spypeek16 <CPU_ACCESS, MEM_NONE> (u32 addr)
 template<> u16
 Memory::spypeek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
-    return peek16 <AGNUS_ACCESS, MEM_NONE> (addr);
+    return config.unmappingType == UNMAPPED_ALL_ONES ? 0xFFFF : 0x0000;
 }
 
 template<> u8
@@ -924,9 +928,9 @@ Memory::peek16 <CPU_ACCESS, MEM_SLOW> (u32 addr)
 template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
-    ASSERT_SLOW_ADDR(addr);
+    assert((addr & agnus.ptrMask) == addr);
     
-    dataBus = READ_SLOW_16(addr);
+    dataBus = READ_SLOW_16(addr & 0x7FFFF);
     return dataBus;
 }
 
@@ -1221,8 +1225,27 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
     return result;
 }
 
-u16
-Memory::spypeek16 (u32 addr)
+template<> u16
+Memory::peek16 <AGNUS_ACCESS> (u32 addr)
+{
+    u16 result;
+    
+    assert(IS_EVEN(addr));
+    
+    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_NONE:        result = peek16 <CPU_ACCESS, MEM_NONE> (addr); break;
+        case MEM_CHIP:        result = peek16 <CPU_ACCESS, MEM_CHIP> (addr); break;
+        case MEM_SLOW_MIRROR: result = peek16 <CPU_ACCESS, MEM_SLOW> (addr); break;
+            
+        default: assert(false); return 0;
+    }
+        
+    return result;
+}
+
+template<> u16
+Memory::spypeek16 <CPU_ACCESS> (u32 addr)
 {
     assert(IS_EVEN(addr));
     
@@ -1243,6 +1266,21 @@ Memory::spypeek16 (u32 addr)
         case MEM_ROM_MIRROR:    return spypeek16 <CPU_ACCESS, MEM_ROM>      (addr);
         case MEM_WOM:           return spypeek16 <CPU_ACCESS, MEM_WOM>      (addr);
         case MEM_EXT:           return spypeek16 <CPU_ACCESS, MEM_EXT>      (addr);
+            
+        default: assert(false); return 0;
+    }
+}
+
+template<> u16
+Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
+{
+    assert(IS_EVEN(addr));
+    
+    switch (agnusMemSrc[(addr & 0xFFFFFF) >> 16]) {
+            
+        case MEM_NONE:        return spypeek16 <AGNUS_ACCESS, MEM_NONE> (addr);
+        case MEM_CHIP:        return spypeek16 <AGNUS_ACCESS, MEM_CHIP> (addr);
+        case MEM_SLOW_MIRROR: return spypeek16 <AGNUS_ACCESS, MEM_SLOW> (addr);
             
         default: assert(false); return 0;
     }
@@ -1334,8 +1372,8 @@ Memory::poke16 <CPU_ACCESS, MEM_SLOW> (u32 addr, u16 value)
 template <> void
 Memory::poke16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr, u16 value)
 {
-    ASSERT_SLOW_ADDR(addr);
-    
+    assert((addr & agnus.ptrMask) == addr);
+
     dataBus = value;
     WRITE_SLOW_16(addr, value);
 }
@@ -2294,11 +2332,11 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
 }
 
-const char *
+template <Accessor A> const char *
 Memory::ascii(u32 addr)
 {
-    for (unsigned i = 0; i < 16; i += 2) {
-        u16 word = spypeek16(addr + i);
+    for (int i = 0; i < 16; i += 2) {
+        u16 word = spypeek16 <A> (addr + i);
         str[i] = isprint(HI_BYTE(word)) ? HI_BYTE(word) : '.';
         str[i+1] = isprint(LO_BYTE(word)) ? LO_BYTE(word) : '.';
     }
@@ -2306,12 +2344,36 @@ Memory::ascii(u32 addr)
     return str;
 }
 
-const char *
+template <Accessor A> const char *
 Memory::hex(u32 addr, size_t bytes)
 {
-    cpu.disassembleMemory(addr, bytes / 2, str);
+    assert(bytes % 2 == 0);
+    char *p = str;
+    
+    for (int i = 0; i < bytes / 2; i += 2, p += 5) {
+
+        u16 word = spypeek16 <A> (addr + i);
+        
+        u8 digit1 = (word >> 12) & 0xF;
+        u8 digit2 = (word >> 8) & 0xF;
+        u8 digit3 = (word >> 4) & 0xF;
+        u8 digit4 = (word >> 0) & 0xF;
+        
+        p[0] = digit1 < 10 ? '0' + digit1 : 'A' + digit1 - 10;
+        p[1] = digit2 < 10 ? '0' + digit2 : 'A' + digit2 - 10;
+        p[2] = digit3 < 10 ? '0' + digit3 : 'A' + digit3 - 10;
+        p[3] = digit4 < 10 ? '0' + digit4 : 'A' + digit4 - 10;
+        p[4] = i == bytes - 2 ? '0' : ' ';
+    }
+
     return str;
 }
 
-template void Memory::pokeCustom16<CPU_ACCESS>(u32 addr, u16 value);
-template void Memory::pokeCustom16<AGNUS_ACCESS>(u32 addr, u16 value);
+template void Memory::pokeCustom16 <CPU_ACCESS> (u32 addr, u16 value);
+template void Memory::pokeCustom16 <AGNUS_ACCESS> (u32 addr, u16 value);
+
+template const char *Memory::ascii <CPU_ACCESS> (u32 addr);
+template const char *Memory::ascii <AGNUS_ACCESS> (u32 addr);
+
+template const char *Memory::hex <CPU_ACCESS> (u32 addr, size_t bytes);
+template const char *Memory::hex <AGNUS_ACCESS> (u32 addr, size_t bytes);

@@ -54,7 +54,7 @@ CPU::read16(u32 addr)
 u16
 CPU::read16Dasm(u32 addr)
 {
-    return mem.spypeek16(addr);
+    return mem.spypeek16 <CPU_ACCESS> (addr);
 }
 
 u16

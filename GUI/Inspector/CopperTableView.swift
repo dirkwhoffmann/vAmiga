@@ -10,7 +10,8 @@
 class CopperTableView: NSTableView {
 
     @IBOutlet weak var inspector: Inspector!
-    var amiga: AmigaProxy!
+    
+    var amiga: AmigaProxy { return inspector.amiga }
 
     // Copper list (1 or 2)
     var nr = 1
@@ -25,7 +26,6 @@ class CopperTableView: NSTableView {
 
     override func awakeFromNib() {
 
-        amiga = inspector.amiga
         delegate = self
         dataSource = self
         target = self
@@ -48,8 +48,8 @@ class CopperTableView: NSTableView {
         for i in 0 ..< count {
 
             addrInRow[i] = addr
-            data1InRow[i] = amiga.mem.spypeek16(addr)
-            data2InRow[i] = amiga.mem.spypeek16(addr + 2)
+            data1InRow[i] = amiga.mem.spypeek16(.AGNUS_ACCESS, addr: addr)
+            data2InRow[i] = amiga.mem.spypeek16(.AGNUS_ACCESS, addr: addr + 2)
             instrInRow[i] = amiga.copper.disassemble(addr)
             illegalInRow[i] = amiga.copper.isIllegalInstr(addr)
 

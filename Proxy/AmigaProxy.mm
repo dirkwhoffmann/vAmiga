@@ -392,20 +392,48 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (MemorySource) memSrc:(Accessor)accessor addr:(NSInteger)addr
 {
-    return wrapper->mem->getMemSource(accessor, addr);
+    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    
+    if (accessor == CPU_ACCESS) {
+        return wrapper->mem->getMemSrc <CPU_ACCESS> ((u32)addr);
+    } else {
+        return wrapper->mem->getMemSrc <AGNUS_ACCESS> ((u32)addr);
+    }
 }
-- (NSInteger) spypeek16:(NSInteger)addr
+- (NSInteger) spypeek16:(Accessor)accessor addr:(NSInteger)addr
 {
-    return wrapper->mem->spypeek16((u32)addr);
+    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    
+    if (accessor == CPU_ACCESS) {
+        return wrapper->mem->spypeek16 <CPU_ACCESS> ((u32)addr);
+    } else {
+        return wrapper->mem->spypeek16 <AGNUS_ACCESS> ((u32)addr);
+    }
 }
-- (NSString *) ascii:(NSInteger)addr
+- (NSString *) ascii:(Accessor)accessor addr:(NSInteger)addr
 {
-    const char *str = wrapper->mem->ascii((u32)addr);
+    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    const char *str;
+
+    if (accessor == CPU_ACCESS) {
+        str = wrapper->mem->ascii <CPU_ACCESS> ((u32)addr);
+    } else {
+        str = wrapper->mem->ascii <AGNUS_ACCESS> ((u32)addr);
+    }
+    
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
-- (NSString *) hex:(NSInteger)addr bytes:(NSInteger)bytes
+- (NSString *) hex:(Accessor)accessor addr: (NSInteger)addr bytes:(NSInteger)bytes
 {
-    const char *str = wrapper->mem->hex((u32)addr, bytes);
+    assert(accessor == CPU_ACCESS || accessor == AGNUS_ACCESS);
+    const char *str;
+
+    if (accessor == CPU_ACCESS) {
+        str = wrapper->mem->hex <CPU_ACCESS> ((u32)addr, bytes);
+    } else {
+        str = wrapper->mem->hex <AGNUS_ACCESS> ((u32)addr, bytes);
+    }
+    
     return str ? [NSString stringWithUTF8String:str] : NULL;
 }
 

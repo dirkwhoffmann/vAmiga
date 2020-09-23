@@ -398,7 +398,7 @@ public:
         
     // Returns the memory source for a given address
     template <Accessor A> MemorySource getMemSrc(u32 addr);
-    MemorySource getMemSource(Accessor accessor, u32 addr);
+    // MemorySource getMemSource(Accessor accessor, u32 addr);
     
     // Updates both memory source lookup tables
     void updateMemSrcTables();
@@ -420,7 +420,7 @@ public:
     template <Accessor acc, MemorySource src> u16 spypeek16(u32 addr);
     template <Accessor acc> u8 peek8(u32 addr);
     template <Accessor acc> u16 peek16(u32 addr);
-    u16 spypeek16(u32 addr);
+    template <Accessor acc> u16 spypeek16(u32 addr);
 
     template <Accessor acc, MemorySource src> void poke8(u32 addr, u8 value);
     template <Accessor acc, MemorySource src> void poke16(u32 addr, u16 value);
@@ -475,10 +475,10 @@ public:
 public:
     
     // Returns 16 bytes of memory as an ASCII string
-    const char *ascii(u32 addr);
+    template <Accessor A> const char *ascii(u32 addr);
     
     // Returns a certain amount of bytes as a string containing hex words
-    const char *hex(u32 addr, size_t bytes);
+    template <Accessor A> const char *hex(u32 addr, size_t bytes);
 };
 
 #endif
