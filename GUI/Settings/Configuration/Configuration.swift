@@ -81,6 +81,14 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         amiga.configure(.OPT_DRIVE_TYPE, drive: n, value: type)
     }
+    func dfnMechanics(_ n: Int) -> Bool {
+        precondition(0 <= n && n <= 3)
+        return amiga.getConfig(.OPT_EMULATE_MECHANICS, drive: n) != 0
+    }
+    func setDfnMechanics(_ n: Int, enable: Bool) {
+        precondition(0 <= n && n <= 3)
+        amiga.configure(.OPT_EMULATE_MECHANICS, drive: n, enable: enable)
+    }
     var df0Connected: Bool {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }
@@ -88,6 +96,10 @@ class Configuration {
     var df0Type: Int {
         get { return dfnType(0) }
         set { setDfnType(0, type: newValue) }
+    }
+    var df0Mechanics: Bool {
+        get { return dfnMechanics(0) }
+        set { setDfnMechanics(0, enable: newValue) }
     }
     var df1Connected: Bool {
         get { return dfnConnected(1) }
@@ -97,6 +109,10 @@ class Configuration {
         get { return dfnType(1) }
         set { setDfnType(1, type: newValue) }
     }
+    var df1Mechanics: Bool {
+        get { return dfnMechanics(1) }
+        set { setDfnMechanics(1, enable: newValue) }
+    }
     var df2Connected: Bool {
         get { return dfnConnected(2) }
         set { setDfnConnected(2, connect: newValue) }
@@ -104,6 +120,10 @@ class Configuration {
     var df2Type: Int {
         get { return dfnType(2) }
         set { setDfnType(2, type: newValue) }
+    }
+    var df2Mechanics: Bool {
+        get { return dfnMechanics(2) }
+        set { setDfnMechanics(2, enable: newValue) }
     }
     var df3Connected: Bool {
         get { return dfnConnected(3) }
@@ -113,7 +133,11 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    
+    var df3Mechanics: Bool {
+        get { return dfnMechanics(3) }
+        set { setDfnMechanics(3, enable: newValue) }
+    }
+        
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
@@ -214,7 +238,7 @@ class Configuration {
         set { amiga.configure(.OPT_BLITTER_ACCURACY, value: newValue) }
     }
     var driveSpeed: Int {
-        get { return amiga.getConfig(.OPT_DRIVE_SPEED, drive: 0) }
+        get { return amiga.getConfig(.OPT_DRIVE_SPEED) }
         set { amiga.configure(.OPT_DRIVE_SPEED, value: newValue) }
     }
     var asyncFifo: Bool {

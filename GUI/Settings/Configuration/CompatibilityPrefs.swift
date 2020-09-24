@@ -74,7 +74,15 @@ extension ConfigurationController {
 
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
-        config.driveSpeed = sender.selectedTag()
+        let speed = sender.selectedTag()
+        config.driveSpeed = speed
+
+        let emulateMechanics = config.driveSpeed == 1
+        config.df0Mechanics = emulateMechanics
+        config.df1Mechanics = emulateMechanics
+        config.df2Mechanics = emulateMechanics
+        config.df3Mechanics = emulateMechanics
+
         refresh()
     }
 

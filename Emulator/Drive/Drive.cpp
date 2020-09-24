@@ -34,12 +34,14 @@ Drive::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
-        case OPT_DRIVE_TYPE:   return (long)config.type;
-        
+        case OPT_DRIVE_TYPE:        return (long)config.type;
+        case OPT_EMULATE_MECHANICS: return (long)config.emulateMechanics;
+            
         default: assert(false);
     }
 }
 
+/*
 bool
 Drive::setConfigItem(ConfigOption option, long value)
 {
@@ -62,6 +64,7 @@ Drive::setConfigItem(ConfigOption option, long value)
             return false;
     }
 }
+*/
 
 bool
 Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
@@ -71,23 +74,33 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
     switch (option) {
                             
         case OPT_DRIVE_TYPE:
-        
+            
             if (!isDriveType(value)) {
-                 warn("Invalid drive type: %d\n", value);
-                 return false;
-             }
-             if (value != DRIVE_35_DD) {
-                 warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
-                 return false;
-             }
+                warn("Invalid drive type: %d\n", value);
+                return false;
+            }
+            if (value != DRIVE_35_DD) {
+                warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
+                return false;
+            }
             if (config.type == value) {
                 return false;
             }
-                        
+            
             config.type = (DriveType)value;
-            debug("Setting drive type to %s\n", driveTypeName(config.type));
+            debug("Setting type to %s\n", driveTypeName(config.type));
             return true;
+
+        case OPT_EMULATE_MECHANICS:
         
+            if (config.emulateMechanics == value) {
+                return false;
+            }
+                        
+            config.emulateMechanics = value;
+            debug("Setting emulateMechanics to %d\n", config.emulateMechanics);
+            return true;
+
         default:
             return false;
     }

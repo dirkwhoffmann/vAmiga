@@ -270,6 +270,7 @@ Amiga::getConfigItem(unsigned dfn, ConfigOption option)
             return paula.diskController.getConfigItem(dfn, option);
             
         case OPT_DRIVE_TYPE:
+        case OPT_EMULATE_MECHANICS:
             return df[dfn]->getConfigItem(option);
             
         default: assert(false);

@@ -68,6 +68,7 @@ typedef VA_ENUM(long, ConfigOption)
 
     // Drives
     OPT_DRIVE_TYPE,
+    OPT_EMULATE_MECHANICS,
     
     // Ports
     OPT_SERIAL_DEVICE,
