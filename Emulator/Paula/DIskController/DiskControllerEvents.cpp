@@ -11,14 +11,21 @@
 
 void
 DiskController::serviceDiskEvent()
-{
-    if (asyncFifo) {
-        
-        // Receive next byte from the selected drive
-        executeFifo();
+{        
+    // Receive next byte from the selected drive
+    executeFifo();
     
-        // Schedule next event
+    // Schedule next event
+    scheduleNextDiskEvent();
+}
+
+void
+DiskController::scheduleNextDiskEvent()
+{
+    if (config.asyncFifo) {
         agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(55), DSK_ROTATE);
+    } else {
+        agnus.cancel<DSK_SLOT>();
     }
 }
 

@@ -258,9 +258,12 @@ public:
     //
     
 public:
-    
+
     // Services an event in the disk controller slot
     void serviceDiskEvent();
+
+    // Schedules the next event in the disk controller slot
+    void scheduleNextDiskEvent();
 
     // Services an event in the disk change slot
     void serviceDiskChangeEvent();

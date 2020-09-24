@@ -847,7 +847,7 @@ struct CompatibilityDefaults {
          todBug: true,
          
          driveSpeed: 1,
-         asyncFifo: true,
+         asyncFifo: false,
          lockDskSync: false,
          autoDskSync: false,
 

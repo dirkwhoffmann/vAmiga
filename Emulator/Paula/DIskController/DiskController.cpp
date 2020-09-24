@@ -19,7 +19,7 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
     config.connected[2] = false;
     config.connected[3] = false;
     config.speed = 1;
-    config.asyncFifo = true;
+    config.asyncFifo = false;
     config.lockDskSync = false;
     config.autoDskSync = false;
 }
@@ -93,12 +93,14 @@ DiskController::setConfigItem(ConfigOption option, long value)
             value = FORCE_ASYNC_FIFO;
             warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
             #endif
-            
+
+            debug("OPT_ASYNC_FIFO %d\n", value);
             if (config.asyncFifo == value) {
                 return false;
             }
             
             config.asyncFifo = value;
+            scheduleNextDiskEvent();
             return true;
             
         case OPT_AUTO_DSKSYNC:
