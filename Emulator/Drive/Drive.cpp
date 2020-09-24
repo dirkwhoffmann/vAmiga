@@ -17,10 +17,11 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
                    nr == 1 ? "Df1" :
                    nr == 2 ? "Df2" : "Df3");
 
-    config.type =       DRIVE_35_DD;
+    config.type = DRIVE_35_DD;
+    config.mechanicalDelays = true;
     config.startDelay = MSEC(380);
-    config.stopDelay =  MSEC(80);
-    config.stepDelay =  USEC(2000);
+    config.stopDelay = MSEC(80);
+    config.stepDelay = USEC(2000);
 }
 
 void
@@ -35,7 +36,7 @@ Drive::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_DRIVE_TYPE:        return (long)config.type;
-        case OPT_EMULATE_MECHANICS: return (long)config.emulateMechanics;
+        case OPT_EMULATE_MECHANICS: return (long)config.mechanicalDelays;
             
         default: assert(false);
     }
@@ -68,12 +69,12 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 
         case OPT_EMULATE_MECHANICS:
         
-            if (config.emulateMechanics == value) {
+            if (config.mechanicalDelays == value) {
                 return false;
             }
                         
-            config.emulateMechanics = value;
-            debug("Setting emulateMechanics to %d\n", config.emulateMechanics);
+            config.mechanicalDelays = value;
+            debug("Setting emulateMechanics to %d\n", config.mechanicalDelays);
             return true;
 
         default:
@@ -96,7 +97,7 @@ void
 Drive::_dumpConfig()
 {
     msg("              Type : %s\n", driveTypeName(config.type));
-    msg(" Emulate mechanics : %s\n", config.emulateMechanics ? "yes" : "no");
+    msg(" Emulate mechanics : %s\n", config.mechanicalDelays ? "yes" : "no");
     msg("       Start delay : %d\n", config.startDelay);
     msg("        Stop delay : %d\n", config.stopDelay);
     msg("        Step delay : %d\n", config.stepDelay);
@@ -270,7 +271,7 @@ double
 Drive::motorSpeed()
 {
     // Quick exit if mechanics is not emulated
-    if (!config.emulateMechanics) return motor ? 100.0 : 0.0;
+    if (!config.mechanicalDelays) return motor ? 100.0 : 0.0;
     
     // Determine the elapsed cycles since the last motor change
     Cycle elapsed = agnus.clock - switchCycle;
@@ -349,7 +350,7 @@ Drive::readByte()
     }
 
     // Case 2: A step operation is in progress
-    if (config.emulateMechanics && (agnus.clock - stepCycle) < config.stepDelay) {
+    if (config.mechanicalDelays && (agnus.clock - stepCycle) < config.stepDelay) {
       return 0xFF;
     }
     
@@ -429,8 +430,11 @@ Drive::findSyncMark()
 bool
 Drive::readyToStep()
 {
-    Cycle delay = agnus.clock - stepCycle;
-    return config.emulateMechanics ? delay > 1060 : true;
+    if (config.mechanicalDelays) {
+        return agnus.clock - stepCycle > 1060;
+    } else {
+        return true;
+    }
 }
 
 void

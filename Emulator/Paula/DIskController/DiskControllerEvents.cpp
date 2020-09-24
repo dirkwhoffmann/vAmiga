@@ -20,8 +20,21 @@ DiskController::serviceDiskEvent()
 }
 
 void
+DiskController::scheduleFirstDiskEvent()
+{
+    dskEventDelay = 0.0;
+    
+    if (config.asyncFifo) {
+        agnus.scheduleImm<DSK_SLOT>(DSK_ROTATE);
+    } else {
+        agnus.cancel<DSK_SLOT>();
+    }
+
+}
+
+void
 DiskController::scheduleNextDiskEvent()
-{    
+{
     /* Advance the delay counter to achieve a disk rotation speed of 300rpm.
      * Rotation speed can be measured with AmigaTestKit.adf which calculates
      * the delay between consecutive index pulses. 300rpm corresponds to a

@@ -30,6 +30,7 @@ extension ConfigurationController {
         // Floppy drives
         let speed = config.diskController.speed
         compDriveSpeed.selectItem(withTag: Int(speed))
+        compMechanicalDelays.state = config.df0.mechanicalDelays ? .on : .off
         compAsyncFifo.isHidden = speed == -1
         compAsyncFifo.state = config.diskController.asyncFifo ? .on : .off
         compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
@@ -74,15 +75,13 @@ extension ConfigurationController {
 
     @IBAction func compDriveSpeedAction(_ sender: NSPopUpButton!) {
 
-        let speed = sender.selectedTag()
-        config.driveSpeed = speed
+        config.driveSpeed = sender.selectedTag()
+        refresh()
+    }
 
-        let emulateMechanics = config.driveSpeed == 1
-        config.df0Mechanics = emulateMechanics
-        config.df1Mechanics = emulateMechanics
-        config.df2Mechanics = emulateMechanics
-        config.df3Mechanics = emulateMechanics
+    @IBAction func compMechanicalDelaysAction(_ sender: NSButton!) {
 
+        config.mechanicalDelays = sender.state == .on
         refresh()
     }
 

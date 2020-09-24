@@ -62,13 +62,15 @@ typedef struct
 {
      DriveType type;
         
+    // Indicates whether mechanical delays should be emulated
+    bool mechanicalDelays;
+
     /* Mechanical delays. The start and stop delays specify the number of
      * cycles that pass between switching the drive motor on or off until the
      * drive motor runs at full speed or came to rest, respectively. The step
      * delay specifies the number of cycle needed by the drive head to move to
      * another cylinder. During this time, the FIFO is filled with garbage data.
      */
-    bool emulateMechanics;
     Cycle startDelay;
     Cycle stopDelay;
     Cycle stepDelay;

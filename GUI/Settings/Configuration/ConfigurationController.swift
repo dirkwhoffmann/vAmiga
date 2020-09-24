@@ -129,6 +129,7 @@ class ConfigurationController: DialogController {
 
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!
+    @IBOutlet weak var compMechanicalDelays: NSButton!
     @IBOutlet weak var compAsyncFifo: NSButton!
     @IBOutlet weak var compLockDskSync: NSButton!
     @IBOutlet weak var compAutoDskSync: NSButton!

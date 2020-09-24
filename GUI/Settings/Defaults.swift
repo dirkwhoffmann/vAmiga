@@ -802,6 +802,7 @@ extension Keys {
 
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
+    static let mechanicalDelays  = "VAMIGA_COM_MechanicalDelays"
     static let asyncFifo         = "VAMIGA_COM_AsyncFifo"
     static let lockDskSync       = "VAMIGA_COM_LockDskSync"
     static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
@@ -825,6 +826,7 @@ struct CompatibilityDefaults {
     
     // Floppy drives
     let driveSpeed: Int
+    let mechanicalDelays: Bool
     let asyncFifo: Bool
     let lockDskSync: Bool
     let autoDskSync: Bool
@@ -847,6 +849,7 @@ struct CompatibilityDefaults {
          todBug: true,
          
          driveSpeed: 1,
+         mechanicalDelays: true,
          asyncFifo: false,
          lockDskSync: false,
          autoDskSync: false,
@@ -865,6 +868,7 @@ struct CompatibilityDefaults {
         todBug: true,
 
         driveSpeed: 1,
+        mechanicalDelays: true,
         asyncFifo: true,
         lockDskSync: false,
         autoDskSync: false,
@@ -883,6 +887,7 @@ struct CompatibilityDefaults {
         todBug: true,
 
         driveSpeed: -1,
+        mechanicalDelays: false,
         asyncFifo: false,
         lockDskSync: false,
         autoDskSync: false,
@@ -904,6 +909,7 @@ extension UserDefaults {
             Keys.blitterAccuracy: defaults.blitterAccuracy,
             Keys.todBug: defaults.todBug,
             Keys.driveSpeed: defaults.driveSpeed,
+            Keys.mechanicalDelays: defaults.mechanicalDelays,
             Keys.asyncFifo: defaults.asyncFifo,
             Keys.lockDskSync: defaults.lockDskSync,
             Keys.autoDskSync: defaults.autoDskSync,
@@ -924,6 +930,7 @@ extension UserDefaults {
                      Keys.blitterAccuracy,
                      Keys.todBug,
                      Keys.driveSpeed,
+                     Keys.mechanicalDelays,
                      Keys.asyncFifo,
                      Keys.lockDskSync,
                      Keys.autoDskSync,

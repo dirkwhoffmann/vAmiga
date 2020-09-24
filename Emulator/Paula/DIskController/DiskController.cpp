@@ -100,7 +100,7 @@ DiskController::setConfigItem(ConfigOption option, long value)
             }
             
             config.asyncFifo = value;
-            scheduleNextDiskEvent();
+            scheduleFirstDiskEvent();
             return true;
             
         case OPT_AUTO_DSKSYNC:

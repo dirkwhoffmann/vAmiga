@@ -81,14 +81,18 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         amiga.configure(.OPT_DRIVE_TYPE, drive: n, value: type)
     }
+    /*
     func dfnMechanics(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
         return amiga.getConfig(.OPT_EMULATE_MECHANICS, drive: n) != 0
     }
+    */
+    /*
     func setDfnMechanics(_ n: Int, enable: Bool) {
         precondition(0 <= n && n <= 3)
         amiga.configure(.OPT_EMULATE_MECHANICS, drive: n, enable: enable)
     }
+    */
     var df0Connected: Bool {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }
@@ -97,10 +101,12 @@ class Configuration {
         get { return dfnType(0) }
         set { setDfnType(0, type: newValue) }
     }
+    /*
     var df0Mechanics: Bool {
         get { return dfnMechanics(0) }
         set { setDfnMechanics(0, enable: newValue) }
     }
+    */
     var df1Connected: Bool {
         get { return dfnConnected(1) }
         set { setDfnConnected(1, connect: newValue) }
@@ -109,10 +115,12 @@ class Configuration {
         get { return dfnType(1) }
         set { setDfnType(1, type: newValue) }
     }
+    /*
     var df1Mechanics: Bool {
         get { return dfnMechanics(1) }
         set { setDfnMechanics(1, enable: newValue) }
     }
+    */
     var df2Connected: Bool {
         get { return dfnConnected(2) }
         set { setDfnConnected(2, connect: newValue) }
@@ -121,10 +129,12 @@ class Configuration {
         get { return dfnType(2) }
         set { setDfnType(2, type: newValue) }
     }
+    /*
     var df2Mechanics: Bool {
         get { return dfnMechanics(2) }
         set { setDfnMechanics(2, enable: newValue) }
     }
+    */
     var df3Connected: Bool {
         get { return dfnConnected(3) }
         set { setDfnConnected(3, connect: newValue) }
@@ -133,11 +143,13 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
+    /*
     var df3Mechanics: Bool {
         get { return dfnMechanics(3) }
         set { setDfnMechanics(3, enable: newValue) }
     }
-        
+    */
+    
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
@@ -240,6 +252,15 @@ class Configuration {
     var driveSpeed: Int {
         get { return amiga.getConfig(.OPT_DRIVE_SPEED) }
         set { amiga.configure(.OPT_DRIVE_SPEED, value: newValue) }
+    }
+    var mechanicalDelays: Bool {
+        get { return amiga.getConfig(.OPT_EMULATE_MECHANICS, drive: 0) != 0 }
+        set {
+            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 0, enable: newValue)
+            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 1, enable: newValue)
+            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 2, enable: newValue)
+            amiga.configure(.OPT_EMULATE_MECHANICS, drive: 3, enable: newValue)
+        }
     }
     var asyncFifo: Bool {
         get { return amiga.getConfig(.OPT_ASYNC_FIFO) != 0 }
@@ -435,9 +456,6 @@ class Configuration {
             amiga.mem.loadExt(fromFile: url)
         }
         
-        // let defaults = UserDefaults.standard
-        // extStart = defaults.integer(forKey: Keys.extStart)
-
         amiga.resume()
     }
     
@@ -637,6 +655,7 @@ class Configuration {
         todBug = defaults.todBug
         
         driveSpeed = defaults.driveSpeed
+        mechanicalDelays = defaults.mechanicalDelays
         asyncFifo = defaults.asyncFifo
         lockDskSync = defaults.lockDskSync
         autoDskSync = defaults.autoDskSync
@@ -662,6 +681,7 @@ class Configuration {
         eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
         
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
+        mechanicalDelays = defaults.bool(forKey: Keys.mechanicalDelays)
         asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
         autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
@@ -670,25 +690,26 @@ class Configuration {
 
         amiga.resume()
      }
-
-     func saveCompatibilityUserDefaults() {
-
-         track()
-         
-         let defaults = UserDefaults.standard
-
-         defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
-         defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
-         defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
-         defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
-         defaults.set(todBug, forKey: Keys.todBug)
-         defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
-         defaults.set(driveSpeed, forKey: Keys.driveSpeed)
-         defaults.set(asyncFifo, forKey: Keys.asyncFifo)
-         defaults.set(lockDskSync, forKey: Keys.lockDskSync)
-         defaults.set(autoDskSync, forKey: Keys.autoDskSync)
-         defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)
-     }
+    
+    func saveCompatibilityUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+        
+        defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
+        defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
+        defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
+        defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+        defaults.set(todBug, forKey: Keys.todBug)
+        defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
+        defaults.set(driveSpeed, forKey: Keys.driveSpeed)
+        defaults.set(mechanicalDelays, forKey: Keys.mechanicalDelays)
+        defaults.set(asyncFifo, forKey: Keys.asyncFifo)
+        defaults.set(lockDskSync, forKey: Keys.lockDskSync)
+        defaults.set(autoDskSync, forKey: Keys.autoDskSync)
+        defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)
+    }
     
     //
     // Audio

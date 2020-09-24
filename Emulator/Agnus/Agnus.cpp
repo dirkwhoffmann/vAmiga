@@ -56,7 +56,7 @@ void Agnus::_reset(bool hard)
     scheduleRel<SEC_SLOT>(NEVER, SEC_TRIGGER);
     scheduleRel<VBL_SLOT>(DMA_CYCLES(HPOS_CNT * vStrobeLine()), VBL_STROBE0);
     scheduleRel<IRQ_SLOT>(NEVER, IRQ_CHECK);
-    diskController.scheduleNextDiskEvent();
+    diskController.scheduleFirstDiskEvent();
     scheduleNextBplEvent();
     scheduleNextDasEvent();
     
