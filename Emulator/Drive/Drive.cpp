@@ -41,31 +41,6 @@ Drive::getConfigItem(ConfigOption option)
     }
 }
 
-/*
-bool
-Drive::setConfigItem(ConfigOption option, long value)
-{
-    switch (option) {
-            
-        case OPT_DRIVE_SPEED:
-        {
-            bool emulateMechanics = value == 1;
-                        
-            if (config.emulateMechanics == emulateMechanics) {
-                return false;
-            }
-            
-            config.emulateMechanics = emulateMechanics;
-            debug("Setting emulateMechanics to %d\n", config.emulateMechanics);
-            return true;
-        }
-            
-        default:
-            return false;
-    }
-}
-*/
-
 bool
 Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 {
