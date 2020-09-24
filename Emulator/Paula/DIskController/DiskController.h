@@ -49,6 +49,9 @@ class DiskController : public AmigaComponent {
      */
     i16 syncCounter = 0;
     
+    // Used to synchronize the schedulign of the DSK_ROTATE event
+    double dskEventDelay = 0;
+    
     
     //
     // Data buffers
@@ -166,6 +169,7 @@ private:
         & state
         & syncCycle
         & syncCounter
+        & dskEventDelay
         & incoming
         & fifo
         & fifoCount
