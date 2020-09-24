@@ -38,18 +38,20 @@ extension Inspector {
     var memLayoutImage: NSImage? {
 
         // Create image representation in memory
-        let size = CGSize.init(width: 256, height: 16)
+        let width = 512
+        let height = 16
+        let size = CGSize.init(width: width, height: height)
         let cap = Int(size.width) * Int(size.height)
         let mask = calloc(cap, MemoryLayout<UInt32>.size)!
         let ptr = mask.bindMemory(to: UInt32.self, capacity: cap)
 
         // Create image data
-        for x in 0...255 {
+        for bank in 0..<256 {
 
             var color: NSColor
             var mirror = false
             
-            switch memSrc(bank: x) {
+            switch memSrc(bank: bank) {
             case .MEM_NONE:          color = MemColors.unmapped
             case .MEM_CHIP:          color = MemColors.chip
             case .MEM_CHIP_MIRROR:   color = MemColors.chip;     mirror = true
@@ -71,30 +73,35 @@ extension Inspector {
             let ciBgColor = CIColor(color: MemColors.unmapped)!
             let ciColor = CIColor(color: color)!
             
-            for y in 0...15 {
-                
-                let c = 2
-                var r, g, b, a: Int
-                
-                if mirror && (y % 4) == (x % 4) {
-                    r = Int(ciBgColor.red * CGFloat(255 - y*c))
-                    g = Int(ciBgColor.green * CGFloat(255 - y*c))
-                    b = Int(ciBgColor.blue * CGFloat(255 - y*c))
-                    a = Int(ciBgColor.alpha)
-                } else {
-                    r = Int(ciColor.red * CGFloat(255 - y*c))
-                    g = Int(ciColor.green * CGFloat(255 - y*c))
-                    b = Int(ciColor.blue * CGFloat(255 - y*c))
-                    a = Int(ciColor.alpha)
+            for x in 0...1 {
+                for y in 0...height-1 {
+                    
+                    let dx = 2*bank+x
+                    let c = 2
+                    var r, g, b, a: Int
+                    
+                    if mirror && (((dx - y) % 8) < 3) {
+                        r = Int(ciBgColor.red * CGFloat(255 - y*c))
+                        g = Int(ciBgColor.green * CGFloat(255 - y*c))
+                        b = Int(ciBgColor.blue * CGFloat(255 - y*c))
+                        a = Int(ciBgColor.alpha)
+                    } else {
+                        r = Int(ciColor.red * CGFloat(255 - y*c))
+                        g = Int(ciColor.green * CGFloat(255 - y*c))
+                        b = Int(ciColor.blue * CGFloat(255 - y*c))
+                        a = Int(ciColor.alpha)
+                    }
+                    let abgr = UInt32(r | g << 8 | b << 16 | a << 24)
+                    ptr[y*width + dx] = abgr
                 }
-                ptr[x + 256*y] = UInt32(r | g << 8 | b << 16 | a << 24)
             }
         }
 
         // Create image
         let image = NSImage.make(data: mask, rect: size)
-        let resizedImage = image?.resizeSharp(width: 512, height: 16)
+        let resizedImage = image?.resizeSharp(width: CGFloat(width), height: CGFloat(height))
         return resizedImage
+        // return image
     }
 
     private func refreshMemoryLayout() {
