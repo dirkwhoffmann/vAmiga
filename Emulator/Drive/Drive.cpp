@@ -18,7 +18,6 @@ Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
                    nr == 2 ? "Df2" : "Df3");
 
     config.type =       DRIVE_35_DD;
-    config.speed =      1;
     config.startDelay = MSEC(380);
     config.stopDelay =  MSEC(80);
     config.stepDelay =  USEC(2000);
@@ -36,7 +35,6 @@ Drive::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_DRIVE_TYPE:   return (long)config.type;
-        case OPT_DRIVE_SPEED:  return (long)config.speed;
         
         default: assert(false);
     }
@@ -66,29 +64,20 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
             config.type = (DriveType)value;
             debug("Setting drive type to %s\n", driveTypeName(config.type));
             return true;
-            
-        case OPT_DRIVE_SPEED:
-            
-            #ifdef FORCE_DRIVE_SPEED
-            value = FORCE_DRIVE_SPEED;
-            warn("Overriding drive speed: %d\n", value);
-            #endif
-            
-            if (!isValidDriveSpeed(value)) {
-                warn("Invalid drive speed: %d\n", value);
-                return false;
-            }
-            if (config.speed == value) {
-                return false;
-            }
-            
-            config.speed = value;
-            debug("Setting acceleration factor to %d\n", config.speed);
-            return true;
-            
+                        
         default:
             return false;
     }
+}
+
+bool
+Drive::isOriginal() {
+    return diskController.config.speed == 1;
+}
+
+bool
+Drive::isTurbo() {
+    return diskController.config.speed < 0;
 }
 
 void
@@ -106,7 +95,6 @@ void
 Drive::_dumpConfig()
 {
     msg("           Type: %s\n", driveTypeName(config.type));
-    msg("          Speed: %d\n", config.speed);
     msg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
     msg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
     msg("    Start delay: %d\n", config.startDelay);
@@ -214,29 +202,6 @@ Drive::_save(u8 *buffer)
     debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
     return writer.ptr - buffer;
 }
-
-/*
-void
-Drive::setType(DriveType t)
-{
-    assert(isDriveType(t));
-    
-    config.type = t;
- 
-    debug("Setting drive type to %s\n", driveTypeName(config.type));
-}
-
-void
-Drive::setSpeed(i16 value)
-{
-    assert(isValidDriveSpeed(value));
-    debug(DSK_DEBUG, "Setting acceleration factor to %d\n", value);
-
-    amiga.suspend();
-    config.speed = value;
-    amiga.resume();
-}
-*/
 
 bool
 Drive::idMode()

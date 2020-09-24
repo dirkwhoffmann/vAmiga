@@ -53,11 +53,28 @@ inline const char *driveStateName(DriveState state)
 typedef struct
 {
     bool connected[4];
+    
+    /* Acceleration factor. This value equals the number of words that get
+     * transfered into memory during a single disk DMA cycle. This value must
+     * be 1 to emulate a real Amiga. If it set to, e.g., 2, the drive loads
+     * twice as fast. A value of -1 indicates a turbo drive. In this case,
+     * the exact value of the acceleration factor has no meaning.
+     */
+    long speed;
+
     bool asyncFifo;
     bool lockDskSync;
     bool autoDskSync;
 }
 DiskControllerConfig;
+
+inline bool isValidDriveSpeed(i16 speed)
+{
+    switch (speed) {
+        case -1: case 1: case 2: case 4: case 8: return true;
+    }
+    return false;
+}
 
 typedef struct
 {

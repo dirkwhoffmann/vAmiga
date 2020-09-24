@@ -98,8 +98,8 @@ public:
     long getConfigItem(ConfigOption option);
     bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
-    bool isOriginal() { return config.speed == 1; }
-    bool isTurbo() { return config.speed < 0; }
+    bool isOriginal();
+    bool isTurbo();
     
 private:
     
@@ -132,7 +132,6 @@ private:
         worker
 
         & config.type
-        & config.speed
         & config.startDelay
         & config.stopDelay
         & config.stepDelay;
@@ -173,20 +172,6 @@ private:
     //
 
 public:
-
-
-    // Drive type
-    /*
-    DriveType getType() { return config.type; }
-    void setType(DriveType t);
-    */
-    
-    // Drive speed
-    /*
-    i16 getSpeed() { return config.speed; }
-    void setSpeed(i16 value);
-    */
-    
 
     // Identification mode
     bool idMode();

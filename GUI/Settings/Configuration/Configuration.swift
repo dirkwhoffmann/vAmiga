@@ -215,12 +215,7 @@ class Configuration {
     }
     var driveSpeed: Int {
         get { return amiga.getConfig(.OPT_DRIVE_SPEED, drive: 0) }
-        set {
-            amiga.configure(.OPT_DRIVE_SPEED, drive: 0, value: newValue)
-            amiga.configure(.OPT_DRIVE_SPEED, drive: 1, value: newValue)
-            amiga.configure(.OPT_DRIVE_SPEED, drive: 2, value: newValue)
-            amiga.configure(.OPT_DRIVE_SPEED, drive: 3, value: newValue)
-        }
+        set { amiga.configure(.OPT_DRIVE_SPEED, value: newValue) }
     }
     var asyncFifo: Bool {
         get { return amiga.getConfig(.OPT_ASYNC_FIFO) != 0 }

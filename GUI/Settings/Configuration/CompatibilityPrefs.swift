@@ -28,10 +28,7 @@ extension ConfigurationController {
         compTodBug.state = config.ciaA.todBug ? .on : .off
         
         // Floppy drives
-        let speed = config.df0.speed        
-        assert(speed == config.df1.speed)
-        assert(speed == config.df2.speed)
-        assert(speed == config.df3.speed)
+        let speed = config.diskController.speed
         compDriveSpeed.selectItem(withTag: Int(speed))
         compAsyncFifo.isHidden = speed == -1
         compAsyncFifo.state = config.diskController.asyncFifo ? .on : .off

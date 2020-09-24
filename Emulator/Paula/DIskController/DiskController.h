@@ -14,6 +14,8 @@
 
 class DiskController : public AmigaComponent {
 
+    friend class Drive;
+    
     // Current configuration
     DiskControllerConfig config;
 
@@ -142,6 +144,7 @@ private:
         worker
 
         & config.connected
+        & config.speed
         & config.asyncFifo
         & config.lockDskSync
         & config.autoDskSync;

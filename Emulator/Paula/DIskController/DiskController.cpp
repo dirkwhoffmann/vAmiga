@@ -18,6 +18,7 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
     config.connected[1] = false;
     config.connected[2] = false;
     config.connected[3] = false;
+    config.speed = 1;
     config.asyncFifo = true;
     config.lockDskSync = false;
     config.autoDskSync = false;
@@ -42,6 +43,7 @@ DiskController::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
+        case OPT_DRIVE_SPEED:   return config.speed;
         case OPT_ASYNC_FIFO:    return config.asyncFifo;
         case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
         case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
@@ -65,6 +67,25 @@ bool
 DiskController::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
+            
+        case OPT_DRIVE_SPEED:
+            
+            #ifdef FORCE_DRIVE_SPEED
+            value = FORCE_DRIVE_SPEED;
+            warn("Overriding drive speed: %d\n", value);
+            #endif
+            
+            if (!isValidDriveSpeed(value)) {
+                warn("Invalid drive speed: %d\n", value);
+                return false;
+            }
+            if (config.speed == value) {
+                return false;
+            }
+            
+            config.speed = value;
+            debug("Setting acceleration factor to %d\n", config.speed);
+            return true;
             
         case OPT_ASYNC_FIFO:
             
@@ -133,6 +154,7 @@ DiskController::_dumpConfig()
     msg("          df1 : %s\n", config.connected[1] ? "connected" : "not connected");
     msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
+    msg("        Speed : %d\n", config.speed);
     msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
     msg("  lockDskSync : %s\n", config.lockDskSync ? "yes" : "no");
     msg("  autoDskSync : %s\n", config.autoDskSync ? "yes" : "no");
@@ -425,7 +447,7 @@ DiskController::performDMA()
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
 
     // How many words shall we read in?
-    u32 count = drive ? drive->config.speed : 1;
+    u32 count = drive ? config.speed : 1;
 
     // Perform DMA
     switch (state) {
