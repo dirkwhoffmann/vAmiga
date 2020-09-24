@@ -96,10 +96,8 @@ public:
     DriveConfig getConfig() { return config; }
     
     long getConfigItem(ConfigOption option);
+    bool setConfigItem(ConfigOption option, long value) override;
     bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
-
-    bool isOriginal();
-    bool isTurbo();
     
 private:
     
@@ -194,10 +192,7 @@ public:
     //
     // Operating the drive
     //
-    
-    // Returns true if this drive emulates mechanical delays
-    bool emulateMechanics() { return !isTurbo(); }
-    
+        
     // Returns the current motor speed in percent
     double motorSpeed();
 

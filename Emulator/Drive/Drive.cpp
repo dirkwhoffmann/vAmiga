@@ -41,6 +41,29 @@ Drive::getConfigItem(ConfigOption option)
 }
 
 bool
+Drive::setConfigItem(ConfigOption option, long value)
+{
+    switch (option) {
+            
+        case OPT_DRIVE_SPEED:
+        {
+            bool emulateMechanics = value == 1;
+                        
+            if (config.emulateMechanics == emulateMechanics) {
+                return false;
+            }
+            
+            config.emulateMechanics = emulateMechanics;
+            debug("Setting emulateMechanics to %d\n", config.emulateMechanics);
+            return true;
+        }
+            
+        default:
+            return false;
+    }
+}
+
+bool
 Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 {
     if (dfn != nr) return false;
@@ -48,7 +71,7 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
     switch (option) {
                             
         case OPT_DRIVE_TYPE:
-                  
+        
             if (!isDriveType(value)) {
                  warn("Invalid drive type: %d\n", value);
                  return false;
@@ -64,20 +87,10 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
             config.type = (DriveType)value;
             debug("Setting drive type to %s\n", driveTypeName(config.type));
             return true;
-                        
+        
         default:
             return false;
     }
-}
-
-bool
-Drive::isOriginal() {
-    return diskController.config.speed == 1;
-}
-
-bool
-Drive::isTurbo() {
-    return diskController.config.speed < 0;
 }
 
 void
@@ -94,12 +107,11 @@ Drive::_inspect()
 void
 Drive::_dumpConfig()
 {
-    msg("           Type: %s\n", driveTypeName(config.type));
-    msg(" Original drive: %s\n", isOriginal() ? "yes" : "no");
-    msg("    Turbo drive: %s\n", isTurbo() ? "yes" : "no");
-    msg("    Start delay: %d\n", config.startDelay);
-    msg("     Stop delay: %d\n", config.stopDelay);
-    msg("     Step delay: %d\n", config.stepDelay);
+    msg("              Type : %s\n", driveTypeName(config.type));
+    msg(" Emulate mechanics : %s\n", config.emulateMechanics ? "yes" : "no");
+    msg("       Start delay : %d\n", config.startDelay);
+    msg("        Stop delay : %d\n", config.stopDelay);
+    msg("        Step delay : %d\n", config.stepDelay);
 }
 
 void
@@ -270,7 +282,7 @@ double
 Drive::motorSpeed()
 {
     // Quick exit if mechanics is not emulated
-    if (!emulateMechanics()) return motor ? 100.0 : 0.0;
+    if (!config.emulateMechanics) return motor ? 100.0 : 0.0;
     
     // Determine the elapsed cycles since the last motor change
     Cycle elapsed = agnus.clock - switchCycle;
@@ -344,10 +356,14 @@ u8
 Drive::readByte()
 {
     // Case 1: No disk is inserted
-    if (!disk) return 0xFF;
+    if (!disk) {
+        return 0xFF;
+    }
 
     // Case 2: A step operation is in progress
-    if (emulateMechanics() && (agnus.clock - stepCycle) < config.stepDelay) return 0xFF;
+    if (config.emulateMechanics && (agnus.clock - stepCycle) < config.stepDelay) {
+      return 0xFF;
+    }
     
     // Case 3: Normal operation
     return disk->readByte(head.cylinder, head.side, head.offset);
@@ -426,7 +442,7 @@ bool
 Drive::readyToStep()
 {
     Cycle delay = agnus.clock - stepCycle;
-    return emulateMechanics() ? delay > 1060 : true;
+    return config.emulateMechanics ? delay > 1060 : true;
 }
 
 void

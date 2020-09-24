@@ -89,8 +89,8 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         }
     }
         
-    // If the selected drive is a turbo drive, perform DMA immediately
-    if (drive && drive->isTurbo()) performTurboDMA(drive);
+    // If turbo drives are emulated, perform DMA immediately
+    if (turboMode()) performTurboDMA(drive);
 }
 
 void
