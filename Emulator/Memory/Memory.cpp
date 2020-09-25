@@ -1176,6 +1176,7 @@ Memory::peek8 <CPU_ACCESS> (u32 addr)
         case MEM_SLOW_MIRROR:   result = peek8 <CPU_ACCESS, MEM_SLOW>     (addr); break;
         case MEM_FAST:          result = peek8 <CPU_ACCESS, MEM_FAST>     (addr); break;
         case MEM_CIA:           result = peek8 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_CIA_MIRROR:    result = peek8 <CPU_ACCESS, MEM_CIA>      (addr); break;
         case MEM_RTC:           result = peek8 <CPU_ACCESS, MEM_RTC>      (addr); break;
         case MEM_CUSTOM:        result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
         case MEM_CUSTOM_MIRROR: result = peek8 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
@@ -1207,6 +1208,7 @@ Memory::peek16 <CPU_ACCESS> (u32 addr)
         case MEM_SLOW_MIRROR:   result = peek16 <CPU_ACCESS, MEM_SLOW>     (addr); break;
         case MEM_FAST:          result = peek16 <CPU_ACCESS, MEM_FAST>     (addr); break;
         case MEM_CIA:           result = peek16 <CPU_ACCESS, MEM_CIA>      (addr); break;
+        case MEM_CIA_MIRROR:    result = peek16 <CPU_ACCESS, MEM_CIA>      (addr); break;
         case MEM_RTC:           result = peek16 <CPU_ACCESS, MEM_RTC>      (addr); break;
         case MEM_CUSTOM:        result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
         case MEM_CUSTOM_MIRROR: result = peek16 <CPU_ACCESS, MEM_CUSTOM>   (addr); break;
@@ -1256,6 +1258,7 @@ Memory::spypeek16 <CPU_ACCESS> (u32 addr)
         case MEM_SLOW_MIRROR:   return spypeek16 <CPU_ACCESS, MEM_SLOW>     (addr);
         case MEM_FAST:          return spypeek16 <CPU_ACCESS, MEM_FAST>     (addr);
         case MEM_CIA:           return spypeek16 <CPU_ACCESS, MEM_CIA>      (addr);
+        case MEM_CIA_MIRROR:    return spypeek16 <CPU_ACCESS, MEM_CIA>      (addr);
         case MEM_RTC:           return spypeek16 <CPU_ACCESS, MEM_RTC>      (addr);
         case MEM_CUSTOM:        return spypeek16 <CPU_ACCESS, MEM_CUSTOM>   (addr);
         case MEM_CUSTOM_MIRROR: return spypeek16 <CPU_ACCESS, MEM_CUSTOM>   (addr);
@@ -1567,6 +1570,7 @@ Memory::poke8 <CPU_ACCESS> (u32 addr, u8 value)
         case MEM_SLOW_MIRROR:   poke8 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
         case MEM_FAST:          poke8 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
         case MEM_CIA:           poke8 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_CIA_MIRROR:    poke8 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
         case MEM_RTC:           poke8 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
         case MEM_CUSTOM:        poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
         case MEM_CUSTOM_MIRROR: poke8 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
@@ -1594,6 +1598,7 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
         case MEM_SLOW_MIRROR:   poke16 <CPU_ACCESS, MEM_SLOW>     (addr, value); return;
         case MEM_FAST:          poke16 <CPU_ACCESS, MEM_FAST>     (addr, value); return;
         case MEM_CIA:           poke16 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
+        case MEM_CIA_MIRROR:    poke16 <CPU_ACCESS, MEM_CIA>      (addr, value); return;
         case MEM_RTC:           poke16 <CPU_ACCESS, MEM_RTC>      (addr, value); return;
         case MEM_CUSTOM:        poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
         case MEM_CUSTOM_MIRROR: poke16 <CPU_ACCESS, MEM_CUSTOM>   (addr, value); return;
