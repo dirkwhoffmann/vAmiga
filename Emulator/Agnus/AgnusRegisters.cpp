@@ -100,8 +100,8 @@ Agnus::setBPLxPTL(u16 value)
     
     // Check if the write collides with DMA
     if (DROP_PTR_WRITES && isBplxEvent(bplEvent[pos.h], x)) {
-        debug(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
-        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFF);
+        debug(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
+        bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
         return;
     }
 
