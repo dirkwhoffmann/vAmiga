@@ -78,6 +78,7 @@ RomFile::identifier(u32 fingerprint)
 
         case 0x4C4B5C05: return ROM_DIAG11;
         case 0x771CD0EA: return ROM_DIAG12;
+        case 0x850209CD: return ROM_DIAG121;
         case 0x8484F426: return ROM_LOGICA20;
 
         default: return ROM_UNKNOWN;
@@ -117,6 +118,7 @@ RomFile::isDiagRom(RomIdentifier rev)
 
         case ROM_DIAG11:
         case ROM_DIAG12:
+        case ROM_DIAG121:
         case ROM_LOGICA20: return true;
 
         default: return false;
@@ -196,7 +198,8 @@ RomFile::title(RomIdentifier rev)
         case ROM_AROS_55696_EXT:   return "AROS Kickstart extension";
 
         case ROM_DIAG11:
-        case ROM_DIAG12:           return "Amiga DiagROM";
+        case ROM_DIAG12:
+        case ROM_DIAG121:          return "Amiga DiagROM";
         case ROM_LOGICA20:         return "Logica Diagnostic";
 
         default:                 return "";
@@ -235,6 +238,7 @@ RomFile::version(RomIdentifier rev)
 
         case ROM_DIAG11:            return "Version 1.1";
         case ROM_DIAG12:            return "Version 1.2";
+        case ROM_DIAG121:           return "Version 1.2.1";
         case ROM_LOGICA20:          return "Version 2.0";
 
         default:                    return "";
@@ -273,6 +277,7 @@ RomFile::released(RomIdentifier rev)
 
         case ROM_DIAG11:            return "October 2018";
         case ROM_DIAG12:            return "August 2019";
+        case ROM_DIAG121:           return "July 2020";
         case ROM_LOGICA20:          return "";
 
         default:                    return "";

@@ -66,7 +66,7 @@ CPU::read16OnReset(u32 addr)
 void
 CPU::write8(u32 addr, u8 val)
 {
-    if (XFILES && addr - reg.pc < 8) debug("XFILES: write8 close to PC %x\n", reg.pc);
+    if (XFILES && addr - reg.pc < 5) debug("XFILES: write8 close to PC %x\n", reg.pc);
 
     mem.poke8 <CPU_ACCESS> (addr, val);
 }
@@ -74,7 +74,7 @@ CPU::write8(u32 addr, u8 val)
 void
 CPU::write16 (u32 addr, u16 val)
 {
-    if (XFILES && addr - reg.pc < 8) debug("XFILES: write16 close to PC %x\n", reg.pc);
+    if (XFILES && addr - reg.pc < 5) debug("XFILES: write16 close to PC %x\n", reg.pc);
 
     mem.poke16 <CPU_ACCESS> (addr, val);
 }

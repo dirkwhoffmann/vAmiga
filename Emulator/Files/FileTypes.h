@@ -70,6 +70,7 @@ typedef VA_ENUM(long, RomIdentifier)
     // Diagnostic cartridges
     ROM_DIAG11,
     ROM_DIAG12,
+    ROM_DIAG121,
     ROM_LOGICA20,
 
     ROM_CNT

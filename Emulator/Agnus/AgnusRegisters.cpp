@@ -90,6 +90,8 @@ Agnus::setBPLxPTH(u16 value)
     // Check if pointer was involded in DMA one cycle earlier
     if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
         bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
+    } else {
+        // plaindebug("BPLxPTH lost (%d)\n", x - 1);
     }
 }
 

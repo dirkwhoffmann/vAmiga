@@ -47,6 +47,7 @@
 // #define AGNUS_EXEC_DEBUG
 
 // Uncomment to lauch the emulator with a disk in df0
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
 // #define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/JetsonsCracked.adf"
