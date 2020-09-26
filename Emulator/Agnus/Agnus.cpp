@@ -60,8 +60,11 @@ void Agnus::_reset(bool hard)
     scheduleNextBplEvent();
     scheduleNextDasEvent();
     
+    /*
     // Start with long frames by setting the LOF bit
     pokeVPOS(0x8000);
+    */
+    pokeVPOS(0);
 }
 
 long

@@ -30,13 +30,13 @@
 
 // Uncomment to override a configuration setting
 
-// #define FORCE_AGNUS_REVISION AGNUS_OCS
-// #define FORCE_BLT_LEVEL      0
+#define FORCE_AGNUS_REVISION AGNUS_OCS
+#define FORCE_BLT_LEVEL      0
 // #define FORCE_CHIP_RAM       512
-// #define FORCE_SLOW_RAM       512
+#define FORCE_SLOW_RAM       0
 // #define FORCE_FAST_RAM       0
 // #define FORCE_RTC            RTC_NONE
-// #define FORCE_DRIVE_SPEED    -1
+#define FORCE_DRIVE_SPEED    -1
 // #define FORCE_ASYNC_FIFO     true
 // #define FORCE_RTC_REGISTER   0
 
@@ -141,7 +141,7 @@ static const int AUDBUF_DEBUG    = 0; // Audio buffers
 static const int DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 
 // Ports
-static const int POSREG_DEBUG    = 0; // POSxxx registers
+static const int POSREG_DEBUG    = 1; // POSxxx registers
 static const int JOYREG_DEBUG    = 0; // JOYxxx registers
 static const int PORT_DEBUG      = 0; // Control ports and connected devices
 static const int SER_DEBUG       = 0; // Serial interface
