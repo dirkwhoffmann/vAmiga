@@ -928,6 +928,10 @@ CIAB::updatePA()
     u8 oldPA = PA;
     PA = (internal & DDRA) | (external & ~DDRA);
 
+    // Drive serial pins if they are configured as output
+    if (GET_BIT(DDRA, 6)) serialPort.setRTS(!GET_BIT(internal, 6));
+    if (GET_BIT(DDRA, 7)) serialPort.setDTR(!GET_BIT(internal, 7));
+    
     // PLCC CIAs always return the PRA contents for output bits
     // We ignore PLCC emulation until the A600 is supported
     // if (config.type == CIA_8520_PLCC) PA = (PA & ~DDRA) | (PRA & DDRA);
