@@ -422,6 +422,13 @@ void
 Agnus::pokeVHPOS(u16 value)
 {
     debug(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
+    
+    int v7v0 = HI_BYTE(value);
+    int h8h1 = LO_BYTE(value);
+    
+    debug(XFILES, "XFILES (VHPOS): %x (%d,%d)\n", value, v7v0, h8h1);
+
+    
     // Don't know what to do here ...
 }
 
@@ -452,7 +459,6 @@ Agnus::peekVPOSR()
 void
 Agnus::pokeVPOS(u16 value)
 {
-    debug(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
     debug(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
     
     // I don't really know what exactly we are supposed to do here.
@@ -460,10 +466,14 @@ Agnus::pokeVPOS(u16 value)
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
+    debug(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
+
     // If a long frame gets changed to a short frame, we only proceed if
     // Agnus is not in the last rasterline. Otherwise, we would corrupt the
     // emulators internal state (we would be in a line that is unreachable).
     if (!newlof && inLastRasterline()) return;
+
+    debug(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
     // Reschedule a pending VBL_STROBE event with a trigger cycle that is
