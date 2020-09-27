@@ -30,12 +30,14 @@ CPU::read16(u32 addr)
 {
     u16 result = mem.peek16 <CPU_ACCESS> (addr);
  
+    
     /*
     static int counter = 0;
     if (addr == 0xc001b0) {
         printf("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
     }
-
+    */
+    /*
     if (addr >= 0xDC0000 && addr <= 0xDEFFFF) {
         debug("read16(%x) = %x\n", addr, result);
     }

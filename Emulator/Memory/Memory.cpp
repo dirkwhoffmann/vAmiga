@@ -1878,8 +1878,16 @@ Memory::peekCustomFaulty16(u32 addr)
      *   - 0xFFFF or some some ANDed old data otherwise.
      */
     
-    debug(INVREG_DEBUG, "Reading a non-readable chipset register\n");
-    
+    if (INVREG_DEBUG) {
+        if (cpu.getPC0() != 0xFCB312 && cpu.getPC0() != 0xFCB316 &&
+            cpu.getPC0() != 0xFCABC0 && cpu.getPC0() != 0xFE2FE2 &&
+            cpu.getPC0() != 0xC07CF2 && cpu.getPC0() != 0xC07CF8 &&
+            cpu.getPC0() != 0xC07E30 && cpu.getPC0() != 0xC07E36) {
+            debug("Reading from write-only register %x (%s) Writing: %x\n",
+                  addr, regName(addr), dataBus);
+        }
+    }
+        
     pokeCustom16<CPU_ACCESS>(addr, dataBus);
     
     return dataBus;

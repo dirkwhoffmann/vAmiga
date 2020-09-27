@@ -254,6 +254,7 @@ Agnus::peekDMACONR()
     if (blitter.isBusy()) result |= (1 << 14);
     if (blitter.isZero()) result |= (1 << 13);
     
+    // plaindebug("peekDMACONR() = %x\n", result);
     return result;
 }
 

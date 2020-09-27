@@ -204,6 +204,10 @@ a_shift--; \
 void
 Blitter::doFastLineBlit()
 {
+    bltapt &= agnus.ptrMask;
+    bltcpt &= agnus.ptrMask;
+    bltdpt &= agnus.ptrMask;
+
     //
     // Adapted from WinFellow
     //
@@ -340,11 +344,10 @@ Blitter::doFastLineBlit()
     setBLTCON0ASH(blit_a_shift_local);
     bnew   = bltbdat_local;
     
-    u32 chipRamMask = agnus.chipRamMask();
-    bltapt = decision_variable & chipRamMask;
-    bltcpt = bltcpt_local & chipRamMask;
-    bltdpt = bltdpt_local & chipRamMask;
-    bzero  = bzero_local & chipRamMask;
+    bltapt = decision_variable & agnus.ptrMask;
+    bltcpt = bltcpt_local & agnus.ptrMask;
+    bltdpt = bltdpt_local & agnus.ptrMask;
+    bzero  = bzero_local == 0;
 }
     /*
      void blitterLineMode(void)

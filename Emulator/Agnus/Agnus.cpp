@@ -138,22 +138,6 @@ Agnus::chipRamLimit()
     }
 }
 
-u32
-Agnus::chipRamMask()
-{
-    u32 result;
-    
-    switch (config.revision) {
-
-        case AGNUS_ECS_2MB: result = 0x1FFFFF; break;
-        case AGNUS_ECS_1MB: result = 0x0FFFFF; break;
-        default:         result = 0x07FFFF;
-    }
-    
-    assert(result == ptrMask);
-    return result;
-}
-
 bool
 Agnus::slowRamIsMirroredIn()
 {

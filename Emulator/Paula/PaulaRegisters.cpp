@@ -112,7 +112,7 @@ Paula::peekPOTxDAT()
     assert(x == 0 || x == 1);
 
     u16 result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
-    debug(POT_DEBUG, "peekPOT%dDAT() = %X\n", x, result);
+    debug(POTREG_DEBUG, "peekPOT%dDAT() = %x\n", x, result);
 
     return result;
 }
@@ -133,14 +133,14 @@ Paula::peekPOTGOR()
     controlPort1.changePotgo(result);
     controlPort2.changePotgo(result);
 
-    debug(POT_DEBUG, "peekPOTGOR = %X (potgo = %x)\n", result, potgo);
+    debug(POTREG_DEBUG, "peekPOTGOR() = %x (potgo = %x)\n", result, potgo);
     return result;
 }
 
 void
 Paula::pokePOTGO(u16 value)
 {
-    debug(POT_DEBUG, "pokePOTGO(%X)\n", value);
+    debug(POTREG_DEBUG, "pokePOTGO(%x)\n", value);
 
     potgo = value;
 

@@ -414,10 +414,7 @@ public:
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
-    
-    // Returns a bit mask for the memory locations this Agnus can address
-    u32 chipRamMask();
-    
+        
     // Returns the line in which the VERTB interrupt gets triggered
     int vStrobeLine() { return isOCS() ? 1 : 0; }
     
