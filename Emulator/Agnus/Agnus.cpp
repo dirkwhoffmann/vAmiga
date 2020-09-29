@@ -127,6 +127,17 @@ Agnus::setConfigItem(ConfigOption option, long value)
     }
 }
 
+i16
+Agnus::idBits()
+{
+    switch (config.revision) {
+            
+        case AGNUS_ECS_2MB: return 0x2000; // TODO: CHECK ON REAL MACHINE
+        case AGNUS_ECS_1MB: return 0x2000;
+        default:            return 0x0000;
+    }
+}
+
 long
 Agnus::chipRamLimit()
 {

@@ -12,8 +12,13 @@
 
 struct Beam
 {
+    // Counters for the vertical and horizontal beam position
     i16 v;
     i16 h;
+    
+    // Latches counter values (recorded when BPLCON0::ERSY is set)
+    i16 vLatched;
+    i16 hLatched;
 
     template <class T>
     void applyToItems(T& worker)
@@ -21,7 +26,9 @@ struct Beam
         worker
 
         & v
-        & h;
+        & h
+        & vLatched
+        & hLatched;
     }
 
     Beam(i16 v, i16 h) : v(v), h(h) { }

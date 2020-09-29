@@ -234,6 +234,8 @@ Copper::move(u32 addr, u16 value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
+        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
+
         // Color registers
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
@@ -512,8 +514,8 @@ Copper::vsyncHandler()
     if (COP_CHECKSUM) {
         
         if (checkcnt) plaindebug("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x num = %d\n",
-                                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc, copList - 1);
-
+                                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc, copList);
+        
         checkcnt = 0;
         checksum = fnv_1a_init32();
     }

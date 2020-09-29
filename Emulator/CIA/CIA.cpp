@@ -40,6 +40,9 @@ CIA::_reset(bool hard)
     latchA = 0xFFFF;
     latchB = 0xFFFF;
     
+    // UAE initializes CRB with 4 (which I think is wrong)
+    if (MIMIC_UAE) CRB = 0x4;
+
     updatePA();
     updatePB();
     
@@ -845,7 +848,7 @@ CIAA::portBexternal()
 void
 CIAA::setKeyCode(u8 keyCode)
 {
-    debug(CIA_DEBUG, "setKeyCode: %X\n", keyCode);
+    debug(KBD_DEBUG, "setKeyCode: %x\n", keyCode);
     
     // Put the key code into the serial data register
     sdr = keyCode;

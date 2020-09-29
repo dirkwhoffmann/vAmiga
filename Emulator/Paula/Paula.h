@@ -177,7 +177,7 @@ private:
 public:
     
     // ADKCONR and ADKCON
-    u16 peekADKCONR() { return adkcon; }
+    u16 peekADKCONR();
     void pokeADKCON(u16 value);
 
     bool UARTBRK() { return GET_BIT(adkcon, 11); }

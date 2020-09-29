@@ -24,18 +24,14 @@ CIA::peek(u16 addr)
         case 0x00: // CIA_DATA_PORT_A
 
             updatePA();
-            //plaindebug("%s Peek %d (hex: %02X) = %d (DDRA = %X)\n",
-            //           getDescription(), addr, addr, PA, DDRA);
-            // if (isCIAA()) plaindebug(DSKREG_DEBUG, "CIA A: PA = %x\n", PA);
-            return PA;
+            result = PA;
+            break;
 
         case 0x01: // CIA_DATA_PORT_B
 
             updatePB();
-            // plaindebug("%s Peek %d (hex: %02X) = %d (DDRB = %X)\n",
-            //            getDescription(), addr, addr, PB, DDRB);
-            // if (isCIAB()) plaindebug(DSKREG_DEBUG, "CIA B: PB = %x\n", PB);
-            return PB;
+            result = PB;
+            break;
 
         case 0x02: // CIA_DATA_DIRECTION_A
 

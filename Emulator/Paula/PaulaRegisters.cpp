@@ -9,6 +9,15 @@
 
 #include "Amiga.h"
 
+u16
+Paula::peekADKCONR()
+{
+    plaindebug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    plaindebug(DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    
+    return adkcon;
+}
+
 void
 Paula::pokeADKCON(u16 value)
 {
@@ -45,7 +54,7 @@ Paula::peekINTREQR()
 {
     u16 result = intreq;
 
-    debug(INTREG_DEBUG, "peekINTREQR(): %x\n", result);
+    debug(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", result, intena);
 
     return result;
 }

@@ -278,7 +278,7 @@ Blitter::doFastLineBlit()
 
             if (BLT_CHECKSUM) {
                 check1 = fnv_1a_it32(check1, bltddat_local);
-                check2 = fnv_1a_it32(check2, bltdpt_local);
+                check2 = fnv_1a_it32(check2, bltdpt_local & agnus.ptrMask);
             }
         }
         

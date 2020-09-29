@@ -511,7 +511,7 @@ Blitter::beginBlit()
             plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                        linecount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                       bltcon0 & 0xFF,
+                       bltcon0,
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt & agnus.ptrMask,
                        bltbpt & agnus.ptrMask,
@@ -531,7 +531,7 @@ Blitter::beginBlit()
                        copycount,
                        bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
-                       bltcon0 & 0xFF,
+                       bltcon0,
                        bltamod, bltbmod, bltcmod, bltdmod,
                        bltapt & agnus.ptrMask,
                        bltbpt & agnus.ptrMask,
@@ -615,10 +615,6 @@ Blitter::endBlit()
                    fnv_1a_32(mem.slow, mem.slowRamSize()));
         */
     }
-
-    /*
-    if (copycount == 1495) { debug("Enabling debug output\n"); OCSREG_DEBUG = 1; }
-    */
     
     // Let the Copper know about the termination
     copper.blitterDidTerminate();

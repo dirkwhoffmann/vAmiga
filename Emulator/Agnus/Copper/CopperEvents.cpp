@@ -105,6 +105,8 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
+            if (COP_CHECKSUM) checksum = fnv_1a_it32(checksum, cop2ins);
+
             // Extract register number from the first instruction word
             reg = (cop1ins & 0x1FE);
 
@@ -134,7 +136,7 @@ Copper::serviceEvent(EventID id)
             
         case COP_WAIT_OR_SKIP:
 
-            if (verbose) debug("COP_WAIT_OR_SKIP\n");
+            // debug(COP_DEBUG, "COP_WAIT_OR_SKIP: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -143,12 +145,16 @@ Copper::serviceEvent(EventID id)
             cop2ins = agnus.doCopperDMA(coppc);
             advancePC();
 
+            if (COP_CHECKSUM) checksum = fnv_1a_it32(checksum, cop2ins);
+
             // Fork execution depending on the instruction type
             schedule(isWaitCmd() ? COP_WAIT1 : COP_SKIP1);
             break;
 
         case COP_WAIT1:
             
+            debug(COP_DEBUG, "COP_WAIT1: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
+
             if (verbose) debug("COP_WAIT1\n");
 
             // Wait for the next possible DMA cycle
@@ -159,6 +165,8 @@ Copper::serviceEvent(EventID id)
             break;
 
         case COP_WAIT2:
+
+            // debug(COP_DEBUG, "COP_WAIT2: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
 
             if (verbose) debug("COP_WAIT2\n");
 
@@ -183,6 +191,8 @@ Copper::serviceEvent(EventID id)
 
         case COP_WAIT_BLIT:
             
+            debug(COP_DEBUG, "COP_WAIT_BLIT: %X wait %x (%d)\n", coppc, cop1ins, cop1ins);
+
             if (verbose) debug("COP_WAIT_BLIT\n");
             
             // Wait for the next free cycle
@@ -233,7 +243,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_JMP1:
 
-            if (verbose) debug("COP_JMP1\n");
+            // debug("COP_JMP1\n");
 
             // The bus is not needed in this cycle, but still allocated
             (void)agnus.allocateBus<BUS_COPPER>();
@@ -249,7 +259,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_JMP2:
 
-            if (verbose) debug("COP_JMP2\n");
+            // debug("COP_JMP2\n");
 
             // Wait for the next possible DMA cycle
             if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
@@ -260,7 +270,7 @@ Copper::serviceEvent(EventID id)
 
         case COP_VBLANK:
 
-            if (verbose) debug("COP_VBLANK\n");
+            // debug("COP_VBLANK\n");
             // debug("agnus.copdma = %d\n", agnus.copdma());
             
             // Allocate the bus

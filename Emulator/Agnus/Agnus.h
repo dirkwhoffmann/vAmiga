@@ -412,6 +412,9 @@ public:
     bool isOCS() { return config.revision == AGNUS_OCS; }
     bool isECS() { return config.revision != AGNUS_OCS; }
     
+    // Returns the chip identification bits of this Agnus (shows up in VPOSR)
+    i16 idBits();
+    
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
     long chipRamLimit();
         
@@ -825,7 +828,8 @@ public:
     void setBPLCON0(u16 newValue) { setBPLCON0(bplcon0, newValue); }
     bool hires() { return GET_BIT(bplcon0, 15); }
     bool lores() { return GET_BIT(bplcon0, 10); }
-    
+    bool ersy() { return GET_BIT(bplcon0, 1); }
+
     void pokeBPLCON1(u16 value);
     void setBPLCON1(u16 oldValue, u16 newValue);
     void setBPLCON1(u16 newValue) { setBPLCON1(bplcon1, newValue); }

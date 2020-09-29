@@ -1061,6 +1061,12 @@ Memory::peek8 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
 {
     ASSERT_AUTO_ADDR(addr);
     
+    // Experimental code to match UAE output (for debugging)
+    if (MIMIC_UAE && fastRamSize() == 0) {
+        dataBus = (addr & 0b10) ? 0xE8 : 0x02;
+        return dataBus;
+    }
+    
     dataBus = zorro.peekFastRamDevice(addr) << 4;         
     debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
@@ -1588,6 +1594,23 @@ template<> void
 Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
 {
     assert(IS_EVEN(addr));
+
+    /*
+    if (addr == 0xC01EC2) {
+        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        // if (value == 0x302) amiga.signalStop();
+    }
+
+    if (addr == 0xC05CF0) { // WRITTEN AT FD1724
+        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        if (value == 0x302) amiga.signalStop();
+    }
+
+    if (addr == 0x010124 - 2) {
+        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        if (value == 0x302) amiga.signalStop();
+    }
+    */
     
     switch (cpuMemSrc[(addr & 0xFFFFFF) >> 16]) {
             

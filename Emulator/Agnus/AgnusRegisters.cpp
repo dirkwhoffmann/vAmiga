@@ -397,6 +397,9 @@ Agnus::peekVHPOSR()
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // V7 V6 V5 V4 V3 V2 V1 V0 H8 H7 H6 H5 H4 H3 H2 H1
     
+    // Return the latched position if the counters are frozen
+    if (ersy()) return HI_LO(pos.vLatched & 0xFF, pos.hLatched);
+                     
     i16 posh = pos.h + 4;
     i16 posv = pos.v;
     
@@ -436,22 +439,17 @@ Agnus::pokeVHPOS(u16 value)
 u16
 Agnus::peekVPOSR()
 {
-    u16 id;
-    
     // 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // LF I6 I5 I4 I3 I2 I1 I0 -- -- -- -- -- -- -- V8
-    u16 result = (pos.v >> 8) | (frame.isLongFrame() ? 0x8000 : 0);
-    assert((result & 0x7FFE) == 0);
-    
-    // Add identification bits
-    switch (config.revision) {
-            
-        case AGNUS_OCS: id = 0x00; break;
-        case AGNUS_ECS_1MB: id = 0x20; break;
-        case AGNUS_ECS_2MB: id = 0x20; break; // TODO: CHECK ON REAL MACHINE
-        default: assert(false);
-    }
-    result |= (id << 8);
+ 
+    // I5 I4 I3 I2 I1 I0 (Chip Identification)
+    u16 result = idBits();
+
+    // LF (Long frame bit)
+    if (frame.isLongFrame()) result |= 0x8000;
+
+    // V8 (Vertical position MSB)
+    result |= (ersy() ? pos.vLatched : pos.v) >> 8;
     
     debug(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
@@ -753,6 +751,12 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
         scheduleBplEventForCycle(pos.h);
     }
     
+    // Latch the position counters if the ERSY bit is set
+    if ((newValue & 0b10) && !(oldValue & 0b10)) {
+        pos.vLatched = pos.v;
+        pos.hLatched = pos.h;
+    }
+
     bplcon0 = newValue;
 }
 

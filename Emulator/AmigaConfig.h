@@ -72,7 +72,7 @@ static const int DROP_PTR_WRITES = 0; // Resolve CPU/DMA access collisions
 // General
 static const int XFILES          = 0; // Report paranormal activity
 static const int NO_SSE          = 0; // Don't use SSE extensions
-
+static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
@@ -109,10 +109,11 @@ static const int BPLREG_DEBUG    = 0; // Bitplane registers
 static const int BPLDAT_DEBUG    = 0; // BPLxDAT registers
 static const int SPRREG_DEBUG    = 0; // Sprite registers
 static const int COLREG_DEBUG    = 0; // Color registers
+static const int CLXREG_DEBUG    = 0; // Collision detection registers
 static const int BPL_DEBUG       = 0; // Bitplane DMA
 static const int DIW_DEBUG       = 0; // Display window
 static const int SPR_DEBUG       = 0; // Sprites
-static const int CLX_DEBUG       = 0; // Collision detection (CLXDAT, CLXCON)
+static const int CLX_DEBUG       = 0; // Collision detection
 static const int BORDER_DEBUG    = 0; // Draw the border in debug colors
 
 // Paula

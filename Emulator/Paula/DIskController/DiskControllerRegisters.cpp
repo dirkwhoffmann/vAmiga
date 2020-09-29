@@ -107,7 +107,7 @@ DiskController::peekDSKBYTR()
 {
     u16 result = computeDSKBYTR();
     
-    plaindebug(DSKREG_DEBUG, "peekDSKBYTR() = %X\n", result);
+    plaindebug(DSKREG_DEBUG, "peekDSKBYTR() = %x\n", result);
     return result;
 }
 

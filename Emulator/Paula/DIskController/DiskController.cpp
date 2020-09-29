@@ -599,7 +599,9 @@ DiskController::performTurboDMA(Drive *drive)
     }
     
     // Trigger disk interrupt with some delay
-    paula.scheduleIrqRel(INT_DSKBLK, DMA_CYCLES(512));
+    Cycle delay = MIMIC_UAE ? 2 * HPOS_CNT - agnus.pos.h + 30 : 512;
+    paula.scheduleIrqRel(INT_DSKBLK, DMA_CYCLES(delay));
+
     setState(DRIVE_DMA_OFF);
 }
 

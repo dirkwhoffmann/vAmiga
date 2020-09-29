@@ -102,14 +102,14 @@ Denise::peekCLXDAT()
     u16 result = clxdat | 0x8000;
     clxdat = 0;
     
-    debug(CLX_DEBUG, "peekCLXDAT() = %x\n", result);
+    debug(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
     return result;
 }
 
 void
 Denise::pokeCLXCON(u16 value)
 {
-    debug(CLX_DEBUG, "pokeCLXCON(%x)\n", value);
+    debug(CLXREG_DEBUG, "pokeCLXCON(%x)\n", value);
     clxcon = value;
 }
 

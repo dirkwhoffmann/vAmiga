@@ -65,7 +65,7 @@ UART::peekSERDATR()
     REPLACE_BIT(result, 12, transmitShiftReg == 0);
     REPLACE_BIT(result, 11, serialPort.getRXD());
 
-    // debug(SER_DEBUG, "peekSERDATR() = %X\n", result);
+    debug(SER_DEBUG, "peekSERDATR() = %x\n", result);
 
     return result;
 }
