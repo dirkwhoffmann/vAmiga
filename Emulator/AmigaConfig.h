@@ -17,7 +17,7 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 11
+#define V_SUBMINOR 12
 
 // Uncomment these settings in a release build
 // #define RELEASEBUILD
@@ -71,8 +71,9 @@ static const int DROP_PTR_WRITES = 0; // Resolve CPU/DMA access collisions
 
 // General
 static const int XFILES          = 0; // Report paranormal activity
-static const int NO_SSE          = 0; // Don't use SSE extensions
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
+static const int NO_SSE          = 0; // Don't use SSE extensions
+
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
 static const int SNP_DEBUG       = 0; // Serialization (snapshots)
