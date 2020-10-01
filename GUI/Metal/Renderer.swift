@@ -238,7 +238,7 @@ class Renderer: NSObject, MTKViewDelegate {
     var cutoutY2 = AnimatedFloat.init()
 
     // Part of the texture that is currently visible
-    var textureRect = CGRect.init()
+    var textureRect = CGRect.init() { didSet { buildVertexBuffer() } }
 
     // Indicates whether the recently drawn frames were long or short frames
     var currLOF = true
@@ -264,7 +264,6 @@ class Renderer: NSObject, MTKViewDelegate {
         self.parent = controller
         super.init()
 
-        textureRect = computeTextureRect()
         setupMetal()
 
         mtkView.delegate = self
@@ -332,54 +331,7 @@ class Renderer: NSObject, MTKViewDelegate {
                                       buffer: buffer.data + Int(HBLANK_MIN) * 4)
         }
     }
-    
-    func computeTextureRect() -> CGRect {
         
-        /*
-         *       aw <--------- maxWidth --------> dw
-         *    ah |-----|---------------------|-----|
-         *     ^ |     bw                   cw     |
-         *     | -  bh *<----- width  ------>*     -
-         *     | |     ^                     ^     |
-         *     | |     |                     |     |
-         *     | |   height                height  |
-         *     | |     |                     |     |
-         *     | |     v                     v     |
-         *     | -  ch *<----- width  ------>*     -
-         *     v |                                 |
-         *    dh |-----|---------------------|-----|
-         *
-         *      aw/ah - dw/dh = largest posible texture cutout
-         *      bw/bh - cw/ch = currently used texture cutout
-         */
-        let aw = Float(HBLANK_CNT) * 4
-        let dw = Float(HPOS_CNT) * 4
-        let ah = Float(VBLANK_CNT)
-        let dh = Float(VPOS_CNT)
-        
-        let maxWidth = dw - aw
-        let maxHeight = dh - ah
-        
-        let width = (1 - config.hZoom) * maxWidth
-        let bw = aw + config.hCenter * (maxWidth - width)
-        let height = (1 - config.vZoom) * maxHeight
-        let bh = ah + config.vCenter * (maxHeight - height)
-                
-        let texW = CGFloat(TextureSize.original.width)
-        let texH = CGFloat(TextureSize.original.height)
-        return CGRect.init(x: CGFloat(bw) / texW,
-                           y: CGFloat(bh) / texH,
-                           width: CGFloat(width) / texW,
-                           height: CGFloat(height) / texH)
-    }
-    
-    // DEPRECATED (?)
-    func updateTextureRect() {
-        
-        textureRect = computeTextureRect()
-        buildVertexBuffer()
-    }
-    
     //
     // Managing kernels
     //

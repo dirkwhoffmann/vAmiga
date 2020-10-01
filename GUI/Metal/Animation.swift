@@ -110,12 +110,13 @@ extension Renderer {
             cutoutY2.move()
             cont = cutoutX1.animates() || cutoutY1.animates() || cutoutX2.animates() || cutoutY2.animates()
 
+            let x = CGFloat(cutoutX1.current)
+            let y = CGFloat(cutoutY1.current)
+            let w = CGFloat(cutoutX2.current - cutoutX1.current)
+            let h = CGFloat(cutoutY2.current - cutoutY1.current)
+
             // Update texture cutout
-            textureRect = CGRect.init(x: CGFloat(cutoutX1.current),
-                                      y: CGFloat(cutoutY1.current),
-                                      width: CGFloat(cutoutX2.current - cutoutX1.current),
-                                      height: CGFloat(cutoutY2.current - cutoutY1.current))
-            buildVertexBuffer()
+            textureRect = CGRect.init(x: x, y: y, width: w, height: h)
 
             // Check if animation has terminated
             if !cont {
@@ -147,12 +148,12 @@ extension Renderer {
 
         track("Zooming texture in...")
 
-        let targetRect = computeTextureRect()
+        let target = visibleNormalized
         
-        cutoutX1.target = Float(targetRect.minX)
-        cutoutY1.target = Float(targetRect.minY)
-        cutoutX2.target = Float(targetRect.maxX)
-        cutoutY2.target = Float(targetRect.maxY)
+        cutoutX1.target = Float(target.minX)
+        cutoutY1.target = Float(target.minY)
+        cutoutX2.target = Float(target.maxX)
+        cutoutY2.target = Float(target.maxY)
 
         cutoutX1.steps = steps
         cutoutY1.steps = steps
@@ -166,15 +167,18 @@ extension Renderer {
 
         track("Zooming texture out...")
         
-        cutoutX1.current = Float(textureRect.minX)
-        cutoutY1.current = Float(textureRect.minY)
-        cutoutX2.current = Float(textureRect.maxX)
-        cutoutY2.current = Float(textureRect.maxY)
+        let current = textureRect
+        let target = entireNormalized
+        
+        cutoutX1.current = Float(current.minX)
+        cutoutY1.current = Float(current.minY)
+        cutoutX2.current = Float(current.maxX)
+        cutoutY2.current = Float(current.maxY)
 
-        cutoutX1.target = 0.0
-        cutoutY1.target = 0.0
-        cutoutX2.target = Float(HPIXELS) / Float(TextureSize.original.width)
-        cutoutY2.target = Float(VPIXELS) / Float(TextureSize.original.height)
+        cutoutX1.target = Float(target.minX)
+        cutoutY1.target = Float(target.minY)
+        cutoutX2.target = Float(target.maxX)
+        cutoutY2.target = Float(target.maxY)
 
         cutoutX1.steps = steps
         cutoutY1.steps = steps
