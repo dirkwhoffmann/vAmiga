@@ -82,8 +82,8 @@ public:
     RegChangeRecorder<128> colChanges;
 
 
-     //
-    // Constructing and serializing
+    //
+    // Initializing
     //
     
 public:
@@ -91,6 +91,32 @@ public:
     PixelEngine(Amiga& ref);
     ~PixelEngine();
 
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    Palette getPalette() { return palette; }
+    void setPalette(Palette p);
+    
+    double getBrightness() { return brightness; }
+    void setBrightness(double value);
+    
+    double getSaturation() { return saturation; }
+    void setSaturation(double value);
+    
+    double getContrast() { return contrast; }
+    void setContrast(double value);
+    
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
     template <class T>
     void applyToPersistentItems(T& worker)
     {
@@ -111,37 +137,19 @@ public:
         & hamMode;
     }
 
+    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
+    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
+    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+
 
     //
-    // Methods from HardwareComponent
+    // Controlling
     //
     
 private:
 
     void _powerOn() override;
     void _reset(bool hard) override;
-    size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
-    size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
-    size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-
-    
-    //
-    // Configuring the color palette
-    //
-    
-public:
-    
-    Palette getPalette() { return palette; }
-    void setPalette(Palette p);
-    
-    double getBrightness() { return brightness; }
-    void setBrightness(double value);
-    
-    double getSaturation() { return saturation; }
-    void setSaturation(double value);
-    
-    double getContrast() { return contrast; }
-    void setContrast(double value);
 
 
     //

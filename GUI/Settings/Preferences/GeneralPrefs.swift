@@ -31,17 +31,7 @@ extension PreferencesController {
         // Fullscreen
         emuAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
         emuExitOnEscButton.state = pref.exitOnEsc ? .on : .off
-        
-        // Snapshots and Screenshots
-        emuAutoSnapshots.state = pref.autoSnapshots ? .on : .off
-        emuSnapshotInterval.integerValue = pref.snapshotInterval
-        emuSnapshotInterval.isEnabled = pref.autoSnapshots
-        emuAutoScreenshots.state = pref.autoScreenshots ? .on : .off
-        emuScreenshotInterval.integerValue = pref.screenshotInterval
-        emuScreenshotInterval.isEnabled = pref.autoScreenshots
-        emuScreenshotSourcePopup.selectItem(withTag: pref.screenshotSource)
-        emuScreenshotTargetPopup.selectItem(withTag: pref.screenshotTargetIntValue)
-        
+                
         // Drive
         emuWarpMode.selectItem(withTag: pref.warpModeIntValue)
 
@@ -115,50 +105,6 @@ extension PreferencesController {
     }
 
     //
-    // Action methods (Snapshots and screenshots)
-    //
-    
-    @IBAction func emuAutoSnapshotAction(_ sender: NSButton!) {
-        
-        pref.autoSnapshots = sender.state == .on
-        refresh()
-    }
-    
-    @IBAction func emuSnapshotIntervalAction(_ sender: NSTextField!) {
-        
-        if sender.integerValue > 0 {
-            pref.snapshotInterval = sender.integerValue
-        }
-        refresh()
-    }
-    
-    @IBAction func emuAutoScreenshotAction(_ sender: NSButton!) {
-        
-        pref.autoScreenshots = sender.state == .on
-        refresh()
-    }
-    
-    @IBAction func emuScreenshotIntervalAction(_ sender: NSTextField!) {
-        
-        if sender.integerValue > 0 {
-            pref.screenshotInterval = sender.integerValue
-        }
-        refresh()
-    }
-    
-    @IBAction func emuScreenshotSourceAction(_ sender: NSPopUpButton!) {
-        
-        pref.screenshotSource = sender.selectedTag()
-        refresh()
-    }
-    
-    @IBAction func emuScreenshotTargetAction(_ sender: NSPopUpButton!) {
-        
-        pref.screenshotTargetIntValue = sender.selectedTag()
-        refresh()
-    }
-
-    //
     // Action methods (Warp mode)
     //
 
@@ -203,7 +149,7 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
 
         UserDefaults.resetGeneralUserDefaults()
-        pref.loadEmulatorUserDefaults()
+        pref.loadGeneralUserDefaults()
         refresh()
     }
 }

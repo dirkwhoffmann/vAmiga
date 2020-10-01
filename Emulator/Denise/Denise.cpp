@@ -1089,6 +1089,7 @@ void
 Denise::beginOfFrame()
 {
     pixelEngine.beginOfFrame();
+    recorder.vsyncHandler();
     
     if (amiga.inDebugMode()) {
         

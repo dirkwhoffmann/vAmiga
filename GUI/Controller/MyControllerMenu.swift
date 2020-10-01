@@ -274,6 +274,18 @@ extension MyController: NSMenuItemValidation {
         screenshotBrowser?.showSheet()
     }
     
+    @IBAction func captureScreenAction(_ sender: Any!) {
+        
+        track()
+        
+        if amiga.screenRecorder.recording {
+            amiga.screenRecorder.stopRecording()
+        } else {
+            let rect = NSRect.init(x: 0, y: 0, width: 800, height: 600)
+            amiga.screenRecorder.startRecording(rect)
+        }
+    }
+
     //
     // Action methods (Edit menu)
     //

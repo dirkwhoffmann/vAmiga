@@ -42,6 +42,7 @@ extension MyController {
 
         let running = amiga.isRunning
         let debug = amiga.debugMode
+        let recording = amiga.screenRecorder.recording
         let halted = amiga.cpu.halted
         let warp = amiga.warp
 
@@ -89,6 +90,7 @@ extension MyController {
             df2DMA: motor2,
             df3DMA: motor3,
 
+            recordIcon: recording,
             haltIcon: halted,
             cmdLock: myAppDelegate.mapCommandKeys,
             debugIcon: debug,

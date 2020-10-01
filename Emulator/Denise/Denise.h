@@ -13,6 +13,7 @@
 #include "AmigaComponent.h"
 #include "Colors.h"
 #include "PixelEngine.h"
+#include "ScreenRecorder.h"
 
 class Denise : public AmigaComponent {
 
@@ -41,6 +42,9 @@ public:
     
     // Color synthesizer for computing RGBA values
     PixelEngine pixelEngine = PixelEngine(amiga);
+
+    // A screen recorder for creating video streams
+    ScreenRecorder recorder = ScreenRecorder(amiga);
 
 
     //

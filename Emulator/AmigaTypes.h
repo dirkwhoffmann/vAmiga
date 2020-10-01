@@ -42,7 +42,14 @@ typedef VA_ENUM(long, ConfigOption)
     
     // Denise
     OPT_DENISE_REVISION,
-
+    OPT_REC_XMIN,
+    OPT_REC_YMIN,
+    OPT_REC_WIDTH,
+    OPT_REC_HEIGHT,
+    OPT_REC_CODEC,
+    OPT_REC_BITRATE,
+    OPT_REC_FILENAME,
+    
     // Real-time clock
     OPT_RTC_MODEL,
 

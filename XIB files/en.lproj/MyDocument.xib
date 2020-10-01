@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16097.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -32,6 +32,7 @@
                 <outlet property="metal" destination="DD4-5B-w9h" id="rGV-rL-MLo"/>
                 <outlet property="muteIcon" destination="iho-fa-H5O" id="k5F-Wk-R5B"/>
                 <outlet property="powerLED" destination="1208" id="hey-Hi-zTq"/>
+                <outlet property="recordIcon" destination="dUT-hZ-49w" id="qpL-un-2RO"/>
                 <outlet property="toolbar" destination="1845" id="JVx-NQ-tw7"/>
                 <outlet property="warpIcon" destination="1052" id="QGs-ln-NvN"/>
                 <outlet property="window" destination="5" id="2164"/>
@@ -301,7 +302,7 @@
                             <font key="font" metaFont="system"/>
                         </buttonCell>
                     </button>
-                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="46l-A8-v8C" userLabel="Cmd Lock">
+                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="46l-A8-v8C" userLabel="Halt">
                         <rect key="frame" x="512" y="4" width="16" height="16"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="16" id="7oV-Xa-E8H"/>
@@ -313,6 +314,20 @@
                         </buttonCell>
                         <connections>
                             <action selector="mapCmdKeysAction:" target="-2" id="4rP-jE-apn"/>
+                        </connections>
+                    </button>
+                    <button tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="dUT-hZ-49w" userLabel="Recording">
+                        <rect key="frame" x="488" y="4" width="16" height="16"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="16" id="AhU-iW-CfU"/>
+                            <constraint firstAttribute="height" constant="16" id="CnH-Zd-9FY"/>
+                        </constraints>
+                        <buttonCell key="cell" type="bevel" bezelStyle="regularSquare" image="recording" imagePosition="only" alignment="right" imageScaling="proportionallyUpOrDown" id="nFq-vn-yo7">
+                            <behavior key="behavior" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="mapCmdKeysAction:" target="-2" id="Xr7-S1-OZw"/>
                         </connections>
                     </button>
                 </subviews>
@@ -354,6 +369,8 @@
                     <constraint firstItem="70n-GV-8LP" firstAttribute="leading" secondItem="46l-A8-v8C" secondAttribute="trailing" constant="8" symbolic="YES" id="abU-bK-Tnf"/>
                     <constraint firstAttribute="bottom" secondItem="f19-16-42W" secondAttribute="bottom" constant="5" id="auB-jf-bUb"/>
                     <constraint firstAttribute="bottom" secondItem="gkQ-Nr-aDz" secondAttribute="bottom" constant="4" id="exj-M2-b7S"/>
+                    <constraint firstAttribute="bottom" secondItem="dUT-hZ-49w" secondAttribute="bottom" constant="4" id="kRy-pY-btH"/>
+                    <constraint firstItem="46l-A8-v8C" firstAttribute="leading" secondItem="dUT-hZ-49w" secondAttribute="trailing" constant="8" symbolic="YES" id="lir-5W-bkx"/>
                     <constraint firstItem="Lc0-yC-JdI" firstAttribute="leading" secondItem="BLY-CO-Zam" secondAttribute="trailing" constant="8" symbolic="YES" id="lkf-LH-ulx"/>
                     <constraint firstItem="P62-wC-T1P" firstAttribute="leading" secondItem="Pjc-SJ-rsn" secondAttribute="trailing" constant="8" symbolic="YES" id="mjR-ff-st2"/>
                     <constraint firstItem="xzf-hU-AKK" firstAttribute="leading" secondItem="D1i-Ep-fTN" secondAttribute="trailing" constant="8" symbolic="YES" id="pOf-Vf-WHh"/>
@@ -432,7 +449,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
                             <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" autoenablesItems="NO" selectedItem="VD3-Wr-Ufe" id="Oxd-8A-P5o" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="zHf-yH-YTM">
                                     <items>
                                         <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="VD3-Wr-Ufe"/>
@@ -460,9 +477,9 @@
                         <popUpButton key="view" tag="11" id="4MP-rV-xX2" userLabel="Port 2">
                             <rect key="frame" x="0.0" y="14" width="48" height="23"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES"/>
-                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
+                            <popUpButtonCell key="cell" type="roundTextured" title="None" bezelStyle="texturedRounded" image="devNoneTemplate" imagePosition="only" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyDown" inset="2" autoenablesItems="NO" selectedItem="xyt-eC-0im" id="skK-6M-sib" userLabel="PopupButtonCell">
                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                <font key="font" metaFont="system"/>
+                                <font key="font" metaFont="menu"/>
                                 <menu key="menu" autoenablesItems="NO" id="L3K-on-eyR">
                                     <items>
                                         <menuItem title="None" state="on" image="devNoneTemplate" tag="-1" id="xyt-eC-0im"/>
@@ -630,6 +647,7 @@
         <image name="powerTemplate" width="241" height="240"/>
         <image name="prefTemplate" width="241" height="240"/>
         <image name="pushTemplate" width="37" height="37"/>
+        <image name="recording" width="65" height="65"/>
         <image name="resetTemplate" width="241" height="240"/>
         <image name="timeMachineTemplate" width="37" height="37"/>
     </resources>

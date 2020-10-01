@@ -184,6 +184,7 @@ class MyController: NSWindowController, MessageReceiver {
     @IBOutlet weak var df2DMA: NSProgressIndicator!
     @IBOutlet weak var df3DMA: NSProgressIndicator!
 
+    @IBOutlet weak var recordIcon: NSButton!
     @IBOutlet weak var haltIcon: NSButton!
     @IBOutlet weak var cmdLock: NSButton!
     @IBOutlet weak var debugIcon: NSButton!
@@ -605,6 +606,10 @@ extension MyController {
             track("MSG_USER_SNAPSHOT_TAKEN")
             mydocument.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
+            
+        case .MSG_RECORDING_STARTED,
+             .MSG_RECORDING_STOPPED:
+            refreshStatusBar()
             
         default:
             track("Unknown message: \(msg)")

@@ -162,7 +162,7 @@ private:
     
  
     //
-    // Changing state
+    // Controlling
     //
     
 private:

@@ -25,41 +25,25 @@ class Preferences {
     //
         
     // Floppy
-    var driveBlankDiskFormat = EmulatorDefaults.std.driveBlankDiskFormat
+    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
     var driveBlankDiskFormatIntValue: Int {
         get { return Int(driveBlankDiskFormat.rawValue) }
         set { driveBlankDiskFormat = FileSystemType.init(rawValue: newValue)! }
     }
-    var ejectWithoutAsking = EmulatorDefaults.std.ejectWithoutAsking
-    var driveSounds = EmulatorDefaults.std.driveSounds
-    var driveSoundPan = EmulatorDefaults.std.driveSoundPan
-    var driveInsertSound = EmulatorDefaults.std.driveInsertSound
-    var driveEjectSound = EmulatorDefaults.std.driveEjectSound
-    var driveHeadSound = EmulatorDefaults.std.driveHeadSound
-    var drivePollSound = EmulatorDefaults.std.drivePollSound
+    var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
+    var driveSounds = GeneralDefaults.std.driveSounds
+    var driveSoundPan = GeneralDefaults.std.driveSoundPan
+    var driveInsertSound = GeneralDefaults.std.driveInsertSound
+    var driveEjectSound = GeneralDefaults.std.driveEjectSound
+    var driveHeadSound = GeneralDefaults.std.driveHeadSound
+    var drivePollSound = GeneralDefaults.std.drivePollSound
     
     // Fullscreen
-    var keepAspectRatio = EmulatorDefaults.std.keepAspectRatio
-    var exitOnEsc = EmulatorDefaults.std.exitOnEsc
-        
-    // Snapshots and screenshots
-    var autoSnapshots = EmulatorDefaults.std.autoSnapshots
-    var snapshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
-    }
-    var autoScreenshots = EmulatorDefaults.std.autoScreenshots
-    var screenshotInterval = 0 {
-        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
-    }
-    var screenshotSource = EmulatorDefaults.std.screenshotSource
-    var screenshotTarget = EmulatorDefaults.std.screenshotTarget
-    var screenshotTargetIntValue: Int {
-        get { return Int(screenshotTarget.rawValue) }
-        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
-    }
-    
+    var keepAspectRatio = GeneralDefaults.std.keepAspectRatio
+    var exitOnEsc = GeneralDefaults.std.exitOnEsc
+            
     // Warp mode
-    var warpMode = EmulatorDefaults.std.warpMode {
+    var warpMode = GeneralDefaults.std.warpMode {
         didSet { for c in myAppDelegate.controllers { c.updateWarp() } }
     }
     var warpModeIntValue: Int {
@@ -68,11 +52,11 @@ class Preferences {
     }
     
     // Misc
-    var closeWithoutAsking = EmulatorDefaults.std.closeWithoutAsking
-    var pauseInBackground = EmulatorDefaults.std.pauseInBackground
+    var closeWithoutAsking = GeneralDefaults.std.closeWithoutAsking
+    var pauseInBackground = GeneralDefaults.std.pauseInBackground
 
     //
-    // Devices preferences
+    // Devices
     //
     
     // Emulation keys
@@ -117,10 +101,39 @@ class Preferences {
     var releaseMouseByShaking = DevicesDefaults.std.releaseMouseByShaking
      
     //
-    // Emulator
+    // Captures
     //
     
-    func loadEmulatorDefaults(_ defaults: EmulatorDefaults) {
+    // Screenshots
+    var autoScreenshots = CaptureDefaults.std.autoScreenshots
+    var screenshotInterval = 0 {
+        didSet { for c in myAppDelegate.controllers { c.startScreenshotTimer() } }
+    }
+    var screenshotSource = CaptureDefaults.std.screenshotSource
+    var screenshotTarget = CaptureDefaults.std.screenshotTarget
+    var screenshotTargetIntValue: Int {
+        get { return Int(screenshotTarget.rawValue) }
+        set { screenshotTarget = NSBitmapImageRep.FileType(rawValue: UInt(newValue))! }
+    }
+
+    // Snapshots
+    var autoSnapshots = CaptureDefaults.std.autoSnapshots
+    var snapshotInterval = 0 {
+        didSet { for c in myAppDelegate.controllers { c.startSnapshotTimer() } }
+    }
+
+    // Screen captures
+    var captureFile = ""
+    var captureSource = CaptureDefaults.std.captureSource
+    var audioCodec = 0
+    var videoCodec = 0
+    var bitRate = 0
+    
+    //
+    // General
+    //
+    
+    func loadGeneralDefaults(_ defaults: GeneralDefaults) {
         
         // Floppy
         driveBlankDiskFormat = defaults.driveBlankDiskFormat
@@ -135,14 +148,6 @@ class Preferences {
         // Fullscreen
         keepAspectRatio = defaults.keepAspectRatio
         exitOnEsc = defaults.exitOnEsc
-
-        // Snapshots and screenshots
-        autoSnapshots = defaults.autoSnapshots
-        snapshotInterval = defaults.autoSnapshotInterval
-        autoScreenshots = defaults.autoScreenshots
-        screenshotInterval = defaults.autoScreenshotInterval
-        screenshotSource = defaults.screenshotSource
-        screenshotTarget = defaults.screenshotTarget
         
         // Warp mode
         warpMode = defaults.warpMode
@@ -152,7 +157,7 @@ class Preferences {
         closeWithoutAsking = defaults.closeWithoutAsking
     }
     
-    func loadEmulatorUserDefaults() {
+    func loadGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
            
@@ -169,14 +174,6 @@ class Preferences {
         // Fullscreen
         keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
         exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
-
-        // Snapshots and screenshots
-        autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
-        snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
-        autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
-        screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
-        screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
-        screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
     
         // Warp mode
         warpModeIntValue = defaults.integer(forKey: Keys.warpMode)
@@ -186,12 +183,11 @@ class Preferences {
         closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
     }
     
-    func saveEmulatorUserDefaults() {
+    func saveGeneralUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         // Floppy
-        defaults.set(screenshotTargetIntValue, forKey: Keys.screenshotTarget)
         defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
@@ -204,13 +200,6 @@ class Preferences {
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.keepAspectRatio)
         defaults.set(exitOnEsc, forKey: Keys.exitOnEsc)
-
-        // Snapshots and screenshots
-        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
-        defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
-        defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
-        defaults.set(screenshotSource, forKey: Keys.screenshotSource)
         
         // Warp mode
         defaults.set(warpModeIntValue, forKey: Keys.warpMode)
@@ -295,5 +284,74 @@ class Preferences {
         defaults.set(releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
         defaults.set(releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
         defaults.set(releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
+    }
+    
+    //
+    // Captures
+    //
+    
+    func loadCaptureDefaults(_ defaults: CaptureDefaults) {
+        
+        // Screenshots
+        autoScreenshots = defaults.autoScreenshots
+        screenshotInterval = defaults.autoScreenshotInterval
+        screenshotSource = defaults.screenshotSource
+        screenshotTarget = defaults.screenshotTarget
+
+        // Snapshots
+        autoSnapshots = defaults.autoSnapshots
+        snapshotInterval = defaults.autoSnapshotInterval
+
+        // Captures
+        captureFile = defaults.captureFile
+        captureSource = defaults.captureSource
+        audioCodec = defaults.audioCodec
+        videoCodec = defaults.videoCodec
+        bitRate = defaults.bitRate
+    }
+    
+    func loadCaptureUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+           
+        // Screenshots
+        autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
+        screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
+        screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
+        screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
+
+        // Snapshots
+        autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
+        snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
+
+        // Captures
+        captureFile = defaults.string(forKey: Keys.captureFile) ?? ""
+        captureSource = defaults.integer(forKey: Keys.captureSource)
+        audioCodec = defaults.integer(forKey: Keys.audioCodec)
+        videoCodec = defaults.integer(forKey: Keys.videoCodec)
+        bitRate = defaults.integer(forKey: Keys.bitRate)
+    }
+    
+    func saveCaptureUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        // Screenshots
+        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
+        defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
+        defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
+        defaults.set(screenshotSource, forKey: Keys.screenshotSource)
+
+        // Snapshots
+        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
+
+        // Captures
+        defaults.set(captureFile, forKey: Keys.captureFile)
+        defaults.set(captureSource, forKey: Keys.captureSource)
+        defaults.set(audioCodec, forKey: Keys.audioCodec)
+        defaults.set(videoCodec, forKey: Keys.videoCodec)
+        defaults.set(bitRate, forKey: Keys.bitRate)
     }
 }

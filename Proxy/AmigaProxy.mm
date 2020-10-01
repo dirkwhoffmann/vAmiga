@@ -31,6 +31,7 @@ struct KeyboardWrapper { Keyboard *keyboard; };
 struct MemWrapper { Memory *mem; };
 struct MouseWrapper { Mouse *mouse; };
 struct PaulaWrapper { Paula *paula; };
+struct ScreenRecorderWrapper { ScreenRecorder *screenRecorder; };
 struct SerialPortWrapper { SerialPort *port; };
 
 
@@ -730,6 +731,45 @@ struct SerialPortWrapper { SerialPort *port; };
 - (u32 *) noise
 {
     return wrapper->denise->pixelEngine.getNoise(); 
+}
+
+@end
+
+
+//
+// ScreenRecorder
+//
+
+@implementation ScreenRecorderProxy
+
+- (instancetype) initWithScreenRecorder:(ScreenRecorder *)screenRecorder
+{
+    if (self = [super init]) {
+        wrapper = new ScreenRecorderWrapper();
+        wrapper->screenRecorder = screenRecorder;
+    }
+    return self;
+}
+- (BOOL) ffmpegInstalled
+{
+    return wrapper->screenRecorder->isFFmpegInstalled();
+}
+- (BOOL) recording
+{
+    return wrapper->screenRecorder->isRecording();
+}
+- (NSInteger) startRecording:(NSRect)rect
+{
+    int x1 = (int)rect.origin.x;
+    int y1 = (int)rect.origin.y;
+    int x2 = x1 + (int)rect.size.width;
+    int y2 = y1 + (int)rect.size.height;
+
+    return wrapper->screenRecorder->startRecording(x1, x2, y1, y2);
+}
+- (void) stopRecording
+{
+    wrapper->screenRecorder->stopRecording();
 }
 
 @end
@@ -1559,6 +1599,7 @@ struct SerialPortWrapper { SerialPort *port; };
 @synthesize mouse2;
 @synthesize paula;
 @synthesize serialPort;
+@synthesize screenRecorder;
 @synthesize watchpoints;
 
 - (instancetype) init
@@ -1596,6 +1637,7 @@ struct SerialPortWrapper { SerialPort *port; };
     mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
     mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
+    screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.recorder];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.watchpoints];
 

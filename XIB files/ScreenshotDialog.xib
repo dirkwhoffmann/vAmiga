@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="16096" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="17156" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="16096"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17156"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -79,7 +79,7 @@
                             <action selector="actionAction:" target="-2" id="TM7-fa-eCH"/>
                         </connections>
                     </button>
-                    <customView hidden="YES" canDrawConcurrently="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GAd-J3-YSP" customClass="iCarousel">
+                    <customView hidden="YES" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="GAd-J3-YSP" customClass="iCarousel">
                         <rect key="frame" x="20" y="81" width="553" height="205"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <connections>
@@ -155,7 +155,7 @@ Gw
     </objects>
     <resources>
         <image name="backTemplate" width="234" height="214"/>
-        <image name="folderTemplate" width="144" height="145"/>
+        <image name="folderTemplate" width="37" height="37"/>
         <image name="frontTemplate" width="234" height="214"/>
         <image name="trashTemplate" width="174" height="214"/>
     </resources>

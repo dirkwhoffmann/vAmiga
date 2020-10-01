@@ -190,6 +190,10 @@
                                     <action selector="browseScreenshotsAction:" target="-1" id="3HP-fd-Hqk"/>
                                 </connections>
                             </menuItem>
+                            <menuItem isSeparatorItem="YES" id="ESe-zb-coU"/>
+                            <menuItem title="Start screen recording" id="qjO-Fj-con">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

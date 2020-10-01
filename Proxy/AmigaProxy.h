@@ -34,6 +34,7 @@
 @class MemProxy;
 @class MouseProxy;
 @class PaulaProxy;
+@class ScreenRecorderProxy;
 @class SerialPortProxy;
 @class SnapshotProxy;
 
@@ -56,6 +57,7 @@ struct GuardsWrapper;
 struct KeyboardWrapper;
 struct MemWrapper;
 struct PaulaWrapper;
+struct ScreenRecorderWrapper;
 struct SerialPortWrapper;
 
 //
@@ -89,6 +91,7 @@ struct SerialPortWrapper;
     MouseProxy *mouse1;
     MouseProxy *mouse2;
     PaulaProxy *paula;
+    ScreenRecorderProxy *screenRecorder;
     SerialPortProxy *serialPort;
 }
 
@@ -117,6 +120,7 @@ struct SerialPortWrapper;
 @property (readonly, strong) MouseProxy *mouse1;
 @property (readonly, strong) MouseProxy *mouse2;
 @property (readonly, strong) PaulaProxy *paula;
+@property (readonly, strong) ScreenRecorderProxy *screenRecorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
 
 - (void) kill;
@@ -429,6 +433,24 @@ struct SerialPortWrapper;
 
 - (ScreenBuffer) stableBuffer;
 - (u32 *) noise;
+
+@end
+
+
+//
+// ScreenRecorder
+//
+
+@interface ScreenRecorderProxy : NSObject {
+    
+    struct ScreenRecorderWrapper *wrapper;
+}
+
+@property (readonly) BOOL ffmpegInstalled;
+@property (readonly) BOOL recording;
+
+- (NSInteger) startRecording:(NSRect)rect;
+- (void) stopRecording;
 
 @end
 

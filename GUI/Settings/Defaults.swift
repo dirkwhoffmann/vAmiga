@@ -76,8 +76,9 @@ extension MyController {
         
         amiga.suspend()
         
-        pref.loadEmulatorUserDefaults()
+        pref.loadGeneralUserDefaults()
         pref.loadDevicesUserDefaults()
+        pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
         config.loadMemoryUserDefaults()
@@ -131,14 +132,6 @@ struct Keys {
     static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
     static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
     static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
-
-    // Snapshots and screenshots
-    static let autoSnapshots          = "VAMIGA_GEN_AutoSnapshots"
-    static let autoSnapshotInterval   = "VAMIGA_GEN_ScreenshotInterval"
-    static let autoScreenshots        = "VAMIGA_GEN_AutoScreenshots"
-    static let autoScreenshotInterval = "VAMIGA_GEN_SnapshotInterval"
-    static let screenshotSource       = "VAMIGA_GEN_ScreenshotSource"
-    static let screenshotTarget       = "VAMIGA_GEN_ScreenshotTarget"
     
     // Fullscreen
     static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
@@ -154,7 +147,7 @@ struct Keys {
     static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
 }
 
-struct EmulatorDefaults {
+struct GeneralDefaults {
     
     // Drives
     let driveBlankDiskFormat: FileSystemType
@@ -165,15 +158,7 @@ struct EmulatorDefaults {
     let driveEjectSound: Bool
     let driveHeadSound: Bool
     let drivePollSound: Bool
-    
-    // Snapshots and Screenshots
-    let autoSnapshots: Bool
-    let autoSnapshotInterval: Int
-    let autoScreenshots: Bool
-    let autoScreenshotInterval: Int
-    let screenshotSource: Int
-    let screenshotTarget: NSBitmapImageRep.FileType
-    
+        
     // Fullscreen
     let keepAspectRatio: Bool
     let exitOnEsc: Bool
@@ -189,7 +174,7 @@ struct EmulatorDefaults {
     // Schemes
     //
     
-    static let std = EmulatorDefaults.init(
+    static let std = GeneralDefaults.init(
         
         driveBlankDiskFormat: .FS_OFS,
         ejectWithoutAsking: false,
@@ -199,14 +184,7 @@ struct EmulatorDefaults {
         driveEjectSound: true,
         driveHeadSound: true,
         drivePollSound: false,
-        
-        autoSnapshots: false,
-        autoSnapshotInterval: 20,
-        autoScreenshots: false,
-        autoScreenshotInterval: 10,
-        screenshotSource: 0,
-        screenshotTarget: .png,
-        
+                
         keepAspectRatio: false,
         exitOnEsc: true,
         
@@ -221,7 +199,7 @@ extension UserDefaults {
     
     static func registerGeneralUserDefaults() {
     
-        let defaults = EmulatorDefaults.std
+        let defaults = GeneralDefaults.std
         let dictionary: [String: Any] = [
             
             Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),
@@ -232,13 +210,6 @@ extension UserDefaults {
             Keys.driveEjectSound: defaults.driveEjectSound,
             Keys.driveHeadSound: defaults.driveHeadSound,
             Keys.drivePollSound: defaults.drivePollSound,
-
-            Keys.autoSnapshots: defaults.autoSnapshots,
-            Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
-            Keys.autoScreenshots: defaults.autoScreenshots,
-            Keys.autoScreenshotInterval: defaults.autoScreenshotInterval,
-            Keys.screenshotSource: defaults.screenshotSource,
-            Keys.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
 
             Keys.keepAspectRatio: defaults.keepAspectRatio,
             Keys.exitOnEsc: defaults.exitOnEsc,
@@ -266,14 +237,7 @@ extension UserDefaults {
                      Keys.driveEjectSound,
                      Keys.driveHeadSound,
                      Keys.drivePollSound,
-                     
-                     Keys.autoSnapshots,
-                     Keys.autoSnapshotInterval,
-                     Keys.autoScreenshots,
-                     Keys.autoScreenshotInterval,
-                     Keys.screenshotSource,
-                     Keys.screenshotTarget,
-                     
+                                          
                      Keys.keepAspectRatio,
                      Keys.exitOnEsc,
                      
@@ -288,7 +252,7 @@ extension UserDefaults {
 }
 
 //
-// User defaults (Input Devices)
+// User defaults (Devices)
 //
 
 extension Keys {
@@ -428,6 +392,121 @@ extension UserDefaults {
                      Keys.releaseMouseKeyComb,
                      Keys.releaseMouseWithKeys,
                      Keys.releaseMouseByShaking ]
+
+        for key in keys { defaults.removeObject(forKey: key) }
+    }
+}
+
+//
+// User defaults (Captures)
+//
+
+extension Keys {
+    
+    // Screenshots
+    static let autoScreenshots        = "VAMIGA_CAP_AutoScreenshots"
+    static let autoScreenshotInterval = "VAMIGA_CAP_SnapshotInterval"
+    static let screenshotSource       = "VAMIGA_CAP_ScreenshotSource"
+    static let screenshotTarget       = "VAMIGA_CAP_ScreenshotTarget"
+
+    // Snapshots
+    static let autoSnapshots          = "VAMIGA_CAP_AutoSnapshots"
+    static let autoSnapshotInterval   = "VAMIGA_CAP_ScreenshotInterval"
+
+    // Screen captures
+    static let captureFile            = "VAMIGA_CAP_File"
+    static let captureSource          = "VAMIGA_CAP_Source"
+    static let audioCodec             = "VAMIGA_CAP_AudioCodec"
+    static let videoCodec             = "VAMIGA_CAP_VideoCodec"
+    static let bitRate                = "VAMIGA_CAP_BitRate"
+}
+
+struct CaptureDefaults {
+
+    // Screenshots
+    let autoScreenshots: Bool
+    let autoScreenshotInterval: Int
+    let screenshotSource: Int
+    let screenshotTarget: NSBitmapImageRep.FileType
+
+    // Snapshots
+    let autoSnapshots: Bool
+    let autoSnapshotInterval: Int
+    
+    // Captures
+    let captureFile: String
+    let captureSource: Int
+    let audioCodec: Int
+    let videoCodec: Int
+    let bitRate: Int
+
+    //
+    // Schemes
+    //
+    
+    static let std = CaptureDefaults.init(
+                
+        autoScreenshots: false,
+        autoScreenshotInterval: 10,
+        screenshotSource: 0,
+        screenshotTarget: .png,
+
+        autoSnapshots: false,
+        autoSnapshotInterval: 20,
+
+        captureFile: "/tmp/vAMiga.mp4",
+        captureSource: 0,
+        audioCodec: 1,
+        videoCodec: 1,
+        bitRate: 64
+    )
+}
+
+extension UserDefaults {
+    
+    static func registerCaptureUserDefaults() {
+    
+        let defaults = CaptureDefaults.std
+        let dictionary: [String: Any] = [
+            
+            Keys.autoScreenshots: defaults.autoScreenshots,
+            Keys.autoScreenshotInterval: defaults.autoScreenshotInterval,
+            Keys.screenshotSource: defaults.screenshotSource,
+            Keys.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
+
+            Keys.autoSnapshots: defaults.autoSnapshots,
+            Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
+
+            Keys.captureFile: defaults.captureFile,
+            Keys.captureSource: defaults.captureSource,
+            Keys.audioCodec: defaults.audioCodec,
+            Keys.videoCodec: defaults.videoCodec,
+            Keys.bitRate: defaults.bitRate
+        ]
+        
+        let userDefaults = UserDefaults.standard
+        
+        userDefaults.register(defaults: dictionary)
+    }
+    
+    static func resetCaptureUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        let keys = [ Keys.autoScreenshots,
+                     Keys.autoScreenshotInterval,
+                     Keys.screenshotSource,
+                     Keys.screenshotTarget,
+                     
+                     Keys.autoSnapshots,
+                     Keys.autoSnapshotInterval,
+                     
+                     Keys.captureFile,
+                     Keys.captureSource,
+                     Keys.audioCodec,
+                     Keys.videoCodec,
+                     Keys.bitRate
+        ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }

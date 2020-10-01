@@ -76,6 +76,10 @@ typedef VA_ENUM(long, MessageType)
     MSG_AUTO_SNAPSHOT_TAKEN,
     MSG_USER_SNAPSHOT_TAKEN,
 
+    // Screen recording
+    MSG_RECORDING_STARTED,
+    MSG_RECORDING_STOPPED,
+    
     // Debugging
     MSG_DMA_DEBUG_ON,
     MSG_DMA_DEBUG_OFF

@@ -32,14 +32,6 @@ class PreferencesController: DialogController {
     // Fullscreen
     @IBOutlet weak var emuAspectRatioButton: NSButton!
     @IBOutlet weak var emuExitOnEscButton: NSButton!
-
-    // Snapshots and Screenshots
-    @IBOutlet weak var emuAutoSnapshots: NSButton!
-    @IBOutlet weak var emuSnapshotInterval: NSTextField!
-    @IBOutlet weak var emuAutoScreenshots: NSButton!
-    @IBOutlet weak var emuScreenshotInterval: NSTextField!
-    @IBOutlet weak var emuScreenshotSourcePopup: NSPopUpButton!
-    @IBOutlet weak var emuScreenshotTargetPopup: NSPopUpButton!
         
     // Warp mode
     @IBOutlet weak var emuWarpMode: NSPopUpButton!
@@ -104,6 +96,33 @@ class PreferencesController: DialogController {
     @IBOutlet weak var devAutofireBullets: NSTextField!
     @IBOutlet weak var devAutofireFrequency: NSSlider!
     
+    //
+    // Capture preferences
+    //
+    
+    // Screenshots
+    @IBOutlet weak var capAutoScreenshots: NSButton!
+    @IBOutlet weak var capScreenshotInterval: NSTextField!
+    @IBOutlet weak var capScreenshotSourcePopup: NSPopUpButton!
+    @IBOutlet weak var capScreenshotTargetPopup: NSPopUpButton!
+
+    // Snapshots
+    @IBOutlet weak var capAutoSnapshots: NSButton!
+    @IBOutlet weak var capSnapshotInterval: NSTextField!
+
+    // Screen captures
+    @IBOutlet weak var capText: NSTextField!
+    @IBOutlet weak var capSubText: NSTextField!
+    @IBOutlet weak var capFFmpegText: NSTextField!
+    @IBOutlet weak var capFFmpegIcon1: NSButton!
+    @IBOutlet weak var capFFmpegIcon2: NSImageView!
+    @IBOutlet weak var capFile: NSTextField!
+    @IBOutlet weak var capFileIcon: NSButton!
+    @IBOutlet weak var capSource: NSPopUpButton!
+    @IBOutlet weak var capAudioCodec: NSPopUpButton!
+    @IBOutlet weak var capVideoCodec: NSPopUpButton!
+    @IBOutlet weak var capBitRate: NSPopUpButton!
+    
     // The tab to open first
     var firstTab: String?
 
@@ -133,6 +152,7 @@ class PreferencesController: DialogController {
             switch id {
             case "General": refreshGeneralTab()
             case "Devices": refreshDevicesTab()
+            case "Captures": refreshCaptureTab()
             default: fatalError()
             }
         }
@@ -153,8 +173,10 @@ class PreferencesController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
                 
-        pref.saveEmulatorUserDefaults()
+        pref.saveGeneralUserDefaults()
         pref.saveDevicesUserDefaults()
+        pref.saveCaptureUserDefaults()
+        
         hideSheet()
     }
 }
@@ -179,10 +201,10 @@ extension PreferencesController: NSTextFieldDelegate {
             
             switch view {
                 
-            case emuSnapshotInterval:
+            case capSnapshotInterval:
                 
                 if formatter?.number(from: view.stringValue) != nil {
-                    emuSnapshotIntervalAction(view)
+                    capSnapshotIntervalAction(view)
                 }
                 
             case devAutofireBullets:
