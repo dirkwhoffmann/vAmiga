@@ -449,7 +449,10 @@ struct SerialPortWrapper;
 @property (readonly) BOOL ffmpegInstalled;
 @property (readonly) BOOL recording;
 
-- (NSInteger) startRecording:(NSRect)rect;
+- (NSInteger) startRecording:(NSRect)rect
+                     bitRate:(NSInteger)rate
+                  videoCodec:(NSInteger)videoCodec
+                  audioCodec:(NSInteger)audioCodec;
 - (void) stopRecording;
 
 @end

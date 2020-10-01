@@ -1044,7 +1044,7 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="s12-cf-eSX">
                                             <rect key="frame" x="303" y="387" width="231" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" title="Screen captures" id="dZe-Um-laB">
+                                            <textFieldCell key="cell" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" title="Screen capturing" id="dZe-Um-laB">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1278,7 +1278,6 @@ DQ
                                                 <menu key="menu" id="izo-UW-nM5">
                                                     <items>
                                                         <menuItem title="MP4" state="on" id="QXY-l2-xC6"/>
-                                                        <menuItem title="H264" id="0zq-bC-PlX"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1304,7 +1303,6 @@ DQ
                                                 <menu key="menu" id="sfn-9U-IHS">
                                                     <items>
                                                         <menuItem title="None" state="on" id="9dw-B4-nkm"/>
-                                                        <menuItem title="PCM" hidden="YES" id="h9L-50-afx"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1342,13 +1340,14 @@ DQ
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pQ1-Q8-7gR">
                                             <rect key="frame" x="454" y="249" width="133" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="64k" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="3ld-Md-isd" id="KiM-qV-Ght">
+                                            <popUpButtonCell key="cell" type="push" title="256k" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="256" imageScaling="proportionallyDown" inset="2" selectedItem="3ld-Md-isd" id="KiM-qV-Ght">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="hGt-Dp-gBn">
                                                     <items>
-                                                        <menuItem title="64k" state="on" id="3ld-Md-isd"/>
-                                                        <menuItem title="128k" id="4Zo-Gu-HXR"/>
+                                                        <menuItem title="256k" state="on" tag="256" id="3ld-Md-isd"/>
+                                                        <menuItem title="512k" tag="512" id="gYC-FJ-o7U"/>
+                                                        <menuItem title="1024k" tag="1024" id="4Zo-Gu-HXR"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -1377,7 +1376,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MYe-j8-A0i">
-                                            <rect key="frame" x="40" y="80" width="436" height="16"/>
+                                            <rect key="frame" x="95" y="109" width="436" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="center" title="To enable screen capturing, FFmpeg must be installed in /usr/local/bin/" id="6Hl-x0-NXA">
                                                 <font key="font" metaFont="system"/>
@@ -1386,7 +1385,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button toolTip="https://ffmpeg.org" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HTv-r7-bMk">
-                                            <rect key="frame" x="11" y="73" width="25" height="25"/>
+                                            <rect key="frame" x="66" y="102" width="25" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="help" bezelStyle="helpButton" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="WF9-tx-8zL">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1397,7 +1396,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Lq-cQ-D9a">
-                                            <rect key="frame" x="449" y="188" width="75" height="14"/>
+                                            <rect key="frame" x="449" y="192" width="75" height="14"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Powered by" id="uzg-Xj-lQ6">
                                                 <font key="font" metaFont="smallSystem"/>
@@ -1406,12 +1405,12 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jxS-tI-jWk">
-                                            <rect key="frame" x="449" y="150" width="91" height="48"/>
+                                            <rect key="frame" x="449" y="154" width="91" height="48"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="ffmpegLogoTemplate" id="iKj-vt-kme"/>
                                         </imageView>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x4m-R0-bSg">
-                                            <rect key="frame" x="395" y="159" width="50" height="45"/>
+                                            <rect key="frame" x="395" y="163" width="50" height="45"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="square" bezelStyle="shadowlessSquare" image="FFmpegIcon" imagePosition="only" alignment="center" imageScaling="proportionallyUpOrDown" inset="2" id="Bws-cS-gxF">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>

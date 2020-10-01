@@ -127,7 +127,7 @@ class Preferences {
     var captureSource = CaptureDefaults.std.captureSource
     var audioCodec = 0
     var videoCodec = 0
-    var bitRate = 0
+    var bitRate = 512
     
     //
     // General

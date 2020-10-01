@@ -93,6 +93,8 @@ extension PreferencesController {
     @IBAction func capFileAction(_ sender: NSButton!) {
         
         track()
+
+        pref.captureFile = "/tmp/vAmiga.mp4"
         refresh()
     }
 
@@ -105,18 +107,24 @@ extension PreferencesController {
     @IBAction func capAudioCodecAction(_ sender: NSPopUpButton!) {
         
         track()
+        
+        pref.audioCodec = sender.selectedTag()
         refresh()
     }
 
     @IBAction func capVideoCodecAction(_ sender: NSPopUpButton!) {
         
         track()
+
+        pref.videoCodec = sender.selectedTag()
         refresh()
     }
     
     @IBAction func capBitrateAction(_ sender: NSPopUpButton!) {
         
         track()
+
+        pref.bitRate = sender.selectedTag()
         refresh()
     }
     

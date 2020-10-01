@@ -193,6 +193,9 @@
                             <menuItem isSeparatorItem="YES" id="ESe-zb-coU"/>
                             <menuItem title="Start screen recording" id="qjO-Fj-con">
                                 <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="captureScreenAction:" target="-1" id="osx-i1-0U1"/>
+                                </connections>
                             </menuItem>
                         </items>
                     </menu>

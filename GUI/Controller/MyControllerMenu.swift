@@ -14,6 +14,7 @@ extension MyController: NSMenuItemValidation {
         let powered = amiga.isPoweredOn
         let running = amiga.isRunning
         let paused = amiga.isPaused
+        let recording = amiga.screenRecorder.recording
         
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
@@ -36,12 +37,16 @@ extension MyController: NSMenuItemValidation {
         
         switch item.action {
             
-        // File menu
+        // Machine menu
         case #selector(MyController.importConfigAction(_:)),
              #selector(MyController.exportConfigAction(_:)),
              #selector(MyController.resetConfigAction(_:)):
             return !powered
-            
+
+        case #selector(MyController.captureScreenAction(_:)):
+            item.title = recording ? "Stop screen recording" : "Start screen recording"
+            return true
+
         // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
             item.title = running ? "Pause" : "Continue"
@@ -283,7 +288,10 @@ extension MyController: NSMenuItemValidation {
             amiga.screenRecorder.stopRecording()
         } else {
             let rect = NSRect.init(x: 0, y: 0, width: 800, height: 600)
-            amiga.screenRecorder.startRecording(rect)
+            amiga.screenRecorder.startRecording(rect,
+                                                bitRate: pref.bitRate,
+                                                videoCodec: pref.videoCodec,
+                                                audioCodec: pref.audioCodec)
         }
     }
 
