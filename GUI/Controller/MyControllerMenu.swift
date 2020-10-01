@@ -130,9 +130,10 @@ extension MyController: NSMenuItemValidation {
         if myAppDelegate.prefController == nil {
             myAppDelegate.prefController =
                 PreferencesController.make(parent: self,
-                                           nibName: NSNib.Name("Preferences"))
+                                           nibName: NSNib.Name("NewPreferences"))
         }
-        myAppDelegate.prefController?.showWindow(self)
+        myAppDelegate.prefController!.showWindow(self)
+        myAppDelegate.prefController!.refresh()
     }
     
     func importPrefs(_ prefixes: [String]) {

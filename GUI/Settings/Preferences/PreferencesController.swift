@@ -20,25 +20,25 @@ class PreferencesController: DialogController {
     //
     
     // Drive
-    @IBOutlet weak var emuDriveBlankDiskFormat: NSPopUpButton!
-    @IBOutlet weak var emuEjectWithoutAskingButton: NSButton!
-    @IBOutlet weak var emuDriveSounds: NSButton!
-    @IBOutlet weak var emuDriveSoundPan: NSPopUpButton!
-    @IBOutlet weak var emuDriveInsertSound: NSButton!
-    @IBOutlet weak var emuDriveEjectSound: NSButton!
-    @IBOutlet weak var emuDriveHeadSound: NSButton!
-    @IBOutlet weak var emuDrivePollSound: NSButton!
+    @IBOutlet weak var genDriveBlankDiskFormat: NSPopUpButton!
+    @IBOutlet weak var genEjectWithoutAskingButton: NSButton!
+    @IBOutlet weak var genDriveSounds: NSButton!
+    @IBOutlet weak var genDriveSoundPan: NSPopUpButton!
+    @IBOutlet weak var genDriveInsertSound: NSButton!
+    @IBOutlet weak var genDriveEjectSound: NSButton!
+    @IBOutlet weak var genDriveHeadSound: NSButton!
+    @IBOutlet weak var genDrivePollSound: NSButton!
 
     // Fullscreen
-    @IBOutlet weak var emuAspectRatioButton: NSButton!
-    @IBOutlet weak var emuExitOnEscButton: NSButton!
+    @IBOutlet weak var genAspectRatioButton: NSButton!
+    @IBOutlet weak var genExitOnEscButton: NSButton!
         
     // Warp mode
-    @IBOutlet weak var emuWarpMode: NSPopUpButton!
+    @IBOutlet weak var genWarpMode: NSPopUpButton!
 
     // Misc
-    @IBOutlet weak var emuPauseInBackground: NSButton!
-    @IBOutlet weak var emuCloseWithoutAskingButton: NSButton!
+    @IBOutlet weak var genPauseInBackground: NSButton!
+    @IBOutlet weak var genCloseWithoutAskingButton: NSButton!
 
     //
     // Devices preferences
@@ -112,7 +112,7 @@ class PreferencesController: DialogController {
 
     // Screen captures
     @IBOutlet weak var capText: NSTextField!
-    @IBOutlet weak var capSubText: NSTextField!
+    @IBOutlet weak var capInstructions: NSButton!
     @IBOutlet weak var capFFmpegText: NSTextField!
     @IBOutlet weak var capFFmpegIcon1: NSButton!
     @IBOutlet weak var capFFmpegIcon2: NSImageView!
@@ -127,7 +127,7 @@ class PreferencesController: DialogController {
     var firstTab: String?
 
     func showSheet(tab: String) {
-
+        
         firstTab = tab
         showSheet()
     }
@@ -147,6 +147,8 @@ class PreferencesController: DialogController {
 
     func refresh() {
         
+        track("refresh()")
+
         if let id = tabView?.selectedTabViewItem?.identifier as? String {
             
             switch id {

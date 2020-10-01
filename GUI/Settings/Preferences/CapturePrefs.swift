@@ -29,15 +29,7 @@ extension PreferencesController {
         capFFmpegIcon1.isHidden = !hasFFmpeg
         capFFmpegIcon2.isHidden = !hasFFmpeg
         capText.isHidden = hasFFmpeg
-        capSubText.isHidden = hasFFmpeg
-
-        let attributes: [NSAttributedString.Key: Any] = [
-            NSAttributedString.Key.foregroundColor: NSColor.linkColor,
-            NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue as AnyObject
-        ]
-        let str = NSAttributedString(string: capSubText.stringValue,
-                                     attributes: attributes)
-        capSubText.attributedStringValue = str
+        capInstructions.isHidden = hasFFmpeg
         
         capFile.stringValue = pref.captureFile
         capSource.selectItem(withTag: pref.captureSource)
@@ -128,6 +120,12 @@ extension PreferencesController {
         refresh()
     }
     
+    @IBAction func capInstructionsAction(_ sender: NSButton!) {
+        
+        let url = URL(string: "https://ffmpeg.org")!
+        NSWorkspace.shared.open(url)
+    }
+
     //
     // Action methods (Misc)
     //

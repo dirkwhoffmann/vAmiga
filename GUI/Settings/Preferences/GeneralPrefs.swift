@@ -14,74 +14,74 @@ extension PreferencesController {
         track()
 
         // Drive
-        emuDriveBlankDiskFormat.selectItem(withTag: pref.driveBlankDiskFormatIntValue)
-        emuEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
-        emuDriveSounds.state = pref.driveSounds ? .on : .off
-        emuDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))
-        emuDriveInsertSound.state = pref.driveInsertSound ? .on : .off
-        emuDriveEjectSound.state = pref.driveEjectSound ? .on : .off
-        emuDriveHeadSound.state = pref.driveHeadSound ? .on : .off
-        emuDrivePollSound.state = pref.drivePollSound ? .on : .off
-        emuDriveSoundPan.isEnabled = pref.driveSounds
-        emuDriveInsertSound.isEnabled = pref.driveSounds
-        emuDriveEjectSound.isEnabled = pref.driveSounds
-        emuDriveHeadSound.isEnabled = pref.driveSounds
-        emuDrivePollSound.isEnabled = pref.driveSounds
+        genDriveBlankDiskFormat.selectItem(withTag: pref.driveBlankDiskFormatIntValue)
+        genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
+        genDriveSounds.state = pref.driveSounds ? .on : .off
+        genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))
+        genDriveInsertSound.state = pref.driveInsertSound ? .on : .off
+        genDriveEjectSound.state = pref.driveEjectSound ? .on : .off
+        genDriveHeadSound.state = pref.driveHeadSound ? .on : .off
+        genDrivePollSound.state = pref.drivePollSound ? .on : .off
+        genDriveSoundPan.isEnabled = pref.driveSounds
+        genDriveInsertSound.isEnabled = pref.driveSounds
+        genDriveEjectSound.isEnabled = pref.driveSounds
+        genDriveHeadSound.isEnabled = pref.driveSounds
+        genDrivePollSound.isEnabled = pref.driveSounds
 
         // Fullscreen
-        emuAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
-        emuExitOnEscButton.state = pref.exitOnEsc ? .on : .off
+        genAspectRatioButton.state = pref.keepAspectRatio ? .on : .off
+        genExitOnEscButton.state = pref.exitOnEsc ? .on : .off
                 
         // Drive
-        emuWarpMode.selectItem(withTag: pref.warpModeIntValue)
+        genWarpMode.selectItem(withTag: pref.warpModeIntValue)
 
         // Miscellaneous
-        emuPauseInBackground.state = pref.pauseInBackground ? .on : .off
-        emuCloseWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
+        genPauseInBackground.state = pref.pauseInBackground ? .on : .off
+        genCloseWithoutAskingButton.state = pref.closeWithoutAsking ? .on : .off
     }
 
     //
     // Action methods (Drive)
     //
         
-    @IBAction func emuDriveSoundsAction(_ sender: NSButton!) {
+    @IBAction func genDriveSoundsAction(_ sender: NSButton!) {
         
         pref.driveSounds = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuDriveSoundPanAction(_ sender: NSPopUpButton!) {
+    @IBAction func genDriveSoundPanAction(_ sender: NSPopUpButton!) {
         
         pref.driveSoundPan = Double(sender.selectedTag())
         refresh()
     }
 
-    @IBAction func emuDriveInsertSoundAction(_ sender: NSButton!) {
+    @IBAction func genDriveInsertSoundAction(_ sender: NSButton!) {
         
         pref.driveInsertSound = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuDriveEjectSoundAction(_ sender: NSButton!) {
+    @IBAction func genDriveEjectSoundAction(_ sender: NSButton!) {
         
         pref.driveEjectSound = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuDriveHeadSoundAction(_ sender: NSButton!) {
+    @IBAction func genDriveHeadSoundAction(_ sender: NSButton!) {
         
         pref.driveHeadSound = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuDrivePollSoundAction(_ sender: NSButton!) {
+    @IBAction func genDrivePollSoundAction(_ sender: NSButton!) {
         
         track()
         pref.drivePollSound = sender.state == .on
         refresh()
     }
 
-    @IBAction func emuBlankDiskFormatAction(_ sender: NSPopUpButton!) {
+    @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
         pref.driveBlankDiskFormat = FileSystemType(rawValue: tag)!
@@ -92,13 +92,13 @@ extension PreferencesController {
     // Action methods (Fullscreen)
     //
     
-    @IBAction func emuAspectRatioAction(_ sender: NSButton!) {
+    @IBAction func genAspectRatioAction(_ sender: NSButton!) {
         
         pref.keepAspectRatio = (sender.state == .on)
         refresh()
     }
 
-    @IBAction func emuExitOnEscAction(_ sender: NSButton!) {
+    @IBAction func genExitOnEscAction(_ sender: NSButton!) {
         
         pref.exitOnEsc = (sender.state == .on)
         refresh()
@@ -108,7 +108,7 @@ extension PreferencesController {
     // Action methods (Warp mode)
     //
 
-    @IBAction func emuWarpModeAction(_ sender: NSPopUpButton!) {
+    @IBAction func genWarpModeAction(_ sender: NSPopUpButton!) {
         
         pref.warpMode = WarpMode(rawValue: sender.selectedTag())!
         refresh()
@@ -118,13 +118,13 @@ extension PreferencesController {
     // Action methods (Miscellaneous)
     //
     
-    @IBAction func emuPauseInBackgroundAction(_ sender: NSButton!) {
+    @IBAction func genPauseInBackgroundAction(_ sender: NSButton!) {
         
         pref.pauseInBackground = (sender.state == .on)
         refresh()
     }
     
-    @IBAction func emuCloseWithoutAskingAction(_ sender: NSButton!) {
+    @IBAction func genCloseWithoutAskingAction(_ sender: NSButton!) {
         
         pref.closeWithoutAsking = (sender.state == .on)
         for c in myAppDelegate.controllers {
@@ -133,7 +133,7 @@ extension PreferencesController {
         refresh()
     }
     
-    @IBAction func emuEjectWithoutAskingAction(_ sender: NSButton!) {
+    @IBAction func genEjectWithoutAskingAction(_ sender: NSButton!) {
         
         pref.ejectWithoutAsking = (sender.state == .on)
         refresh()

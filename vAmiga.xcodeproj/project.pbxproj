@@ -64,7 +64,6 @@
 		508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */; };
 		508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFB821EA1FF10043D0E9 /* A500ISO.xib */; };
 		508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */; };
-		508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 508FDFBB21EA1FF10043D0E9 /* Preferences.xib */; };
 		508FDFD521EA20510043D0E9 /* Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCD21EA20510043D0E9 /* Animation.swift */; };
 		508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */; };
 		508FDFD721EA20510043D0E9 /* MetalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FDFCF21EA20510043D0E9 /* MetalView.swift */; };
@@ -164,6 +163,7 @@
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */; };
+		50DD1EE22525E3E1000180F6 /* NewPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* NewPreferences.xib */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -306,7 +306,6 @@
 		508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ExportDiskDialog.xib; sourceTree = "<group>"; };
 		508FDFB821EA1FF10043D0E9 /* A500ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ISO.xib; sourceTree = "<group>"; };
 		508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DiskMountDialog.xib; sourceTree = "<group>"; };
-		508FDFBB21EA1FF10043D0E9 /* Preferences.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		508FDFCD21EA20510043D0E9 /* Animation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Animation.swift; sourceTree = "<group>"; };
 		508FDFCE21EA20510043D0E9 /* DragAndDrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DragAndDrop.swift; sourceTree = "<group>"; };
 		508FDFCF21EA20510043D0E9 /* MetalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetalView.swift; sourceTree = "<group>"; };
@@ -429,6 +428,7 @@
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		50D7CDC52286EA48002689F0 /* PortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PortTypes.h; sourceTree = "<group>"; };
 		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
+		50DD1EE12525E3E1000180F6 /* NewPreferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewPreferences.xib; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -668,13 +668,13 @@
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
-				508FDFBB21EA1FF10043D0E9 /* Preferences.xib */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
 				50D263CB21F6377600FA167F /* A500ANSI.xib */,
 				508FDFB821EA1FF10043D0E9 /* A500ISO.xib */,
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
 				50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */,
+				50DD1EE12525E3E1000180F6 /* NewPreferences.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1190,7 +1190,6 @@
 			files = (
 				500A4EAD2447364E002A4DE1 /* eject.aiff in Resources */,
 				50BBE08B21F5EB9B0099BBBB /* A1000ANSI.xib in Resources */,
-				508FDFC821EA1FF10043D0E9 /* Preferences.xib in Resources */,
 				50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */,
 				508FDFC421EA1FF10043D0E9 /* ExportDiskDialog.xib in Resources */,
 				50B14C1F21EB8445002E32A6 /* drive_click.aiff in Resources */,
@@ -1214,6 +1213,7 @@
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
+				50DD1EE22525E3E1000180F6 /* NewPreferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
