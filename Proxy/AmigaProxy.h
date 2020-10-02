@@ -447,7 +447,10 @@ struct SerialPortWrapper;
 }
 
 @property (readonly) BOOL ffmpegInstalled;
+@property (readonly) BOOL ready;
 @property (readonly) BOOL recording;
+
+- (BOOL)setPath:(NSString *)path;
 
 - (NSInteger) startRecording:(NSRect)rect
                      bitRate:(NSInteger)rate

@@ -120,7 +120,7 @@ extension MyDocument {
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
-
+        
     func showConfigurationAltert(_ error: ErrorCode) {
 
         var msg: String
@@ -185,5 +185,28 @@ extension MyController {
 
     func proceedWithUnexportedDisk() -> Bool {
         return mydocument.proceedWithUnexportedDisk()
+    }
+
+    func showMissingFFmpegAlert() {
+
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.messageText = "Screen recording requires FFmpeg to be installed in /usr/local/bin."
+        alert.informativeText = "Visit FFmpeg.org for installation instructions."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
+    func showScreenRecorderAlert(url: URL) {
+
+        let alert = NSAlert()
+        alert.alertStyle = .critical
+        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.messageText = "\"\(url.lastPathComponent)\" cannot be opened."
+        alert.informativeText = "The screen recorder failed to open this file for output."
+        alert.addButton(withTitle: "OK")
+        
+        alert.beginSheetModal(for: self.window!) { (_: NSApplication.ModalResponse) -> Void in }
     }
 }

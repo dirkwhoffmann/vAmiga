@@ -754,9 +754,17 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->screenRecorder->isFFmpegInstalled();
 }
+- (BOOL) ready
+{
+    return wrapper->screenRecorder->isReady();
+}
 - (BOOL) recording
 {
     return wrapper->screenRecorder->isRecording();
+}
+- (BOOL)setPath:(NSString *)path
+{
+    return wrapper->screenRecorder->setPath([path fileSystemRepresentation]);
 }
 - (NSInteger) startRecording:(NSRect)rect
                      bitRate:(NSInteger)rate

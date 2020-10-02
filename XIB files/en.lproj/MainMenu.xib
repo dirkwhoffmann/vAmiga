@@ -191,10 +191,10 @@
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="ESe-zb-coU"/>
-                            <menuItem title="Start screen recording" id="qjO-Fj-con">
+                            <menuItem title="Capture Screen" id="RH5-Pm-o1U">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <connections>
-                                    <action selector="captureScreenAction:" target="-1" id="osx-i1-0U1"/>
+                                    <action selector="captureScreenAction:" target="-1" id="1Q3-p1-pur"/>
                                 </connections>
                             </menuItem>
                         </items>

@@ -26,6 +26,33 @@ ScreenRecorder::_reset(bool hard)
 }
 
 bool
+ScreenRecorder::setPath(const char *path)
+{
+    if (path == NULL) return false;
+    
+    // Check if we have write permissions for this file
+    FILE *file = fopen(path, "w");
+    
+    if (file) {
+        
+        plaindebug("New screen capture target: %s\n", path);
+        fclose(file);
+        if (outfile) delete(outfile);
+        outfile = strdup(path);
+        return true;
+    }
+
+    warn("Failed to open file %s\n", path);
+    return false;
+}
+
+bool
+ScreenRecorder::isReady()
+{
+    return ffmpegInstalled; 
+}
+
+bool
 ScreenRecorder::isRecording()
 {
     bool result = false;
@@ -33,18 +60,26 @@ ScreenRecorder::isRecording()
     return result;
 }
     
-int
+bool
 ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                                long bitRate,
                                long videoCodec,
                                long audioCodec)
 {
-    if (isRecording()) return 0;
-    int error = 0;
+    // Only proceed if the recorder doesn't running
+    if (isRecording()) return false;
+    
+    // Only proceed if the screen recorder is configured
+    if (!isReady()) return false;
+    
+    int aspectX = 117;
+    int aspectY = 256;
 
     synchronized {
 
-        char cmd[256];
+        // Make sure the width and height of the texture cutout are even numbers
+        if ((x2 - x1) % 2) x2--;
+        if ((y2 - y1) % 2) y2--;
 
         cutout.x1 = x1;
         cutout.x2 = x2;
@@ -53,50 +88,62 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                 
         plaindebug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
         
-        // Check if the output file can be written
-        // TODO
-        
         // Assemble the command line arguments for FFmpeg
-        sprintf(cmd,
-                " %s"             // Path to the FFmpeg executable
-                " -y"
-                " -f %s"          // Input file format
-                " -pix_fmt %s"    // Pixel format
-                " -s %dx%d"       // Width and height
-                " -r %d"          // Frames per second
-                " -i -"           // Read from stdin
-                " -profile:v %s"
-                " -level:v %d"    // Log verbosity level
-                " -b:v %ldk"       // Bitrate
-                // " -aspect 256:117"
-                " -bsf:v \"h264_metadata=sample_aspect_ratio=117/256\""
-                " -an %s",        // Output file
-                
-                ffmpegPath,
-                "rawvideo",
-                "rgba",
-                x2 - x1,
-                y2 - y1,
-                50,
-                "high444",
-                3,
-                bitRate,
-                "/tmp/amiga.mp4"); // TODO: READ FROM config
+        char cmd[256]; char *ptr = cmd;
+
+        // Path to the FFmpeg executable
+        ptr += sprintf(ptr, " %s", ffmpegPath);
+
+        //
+        // Input stream parameters
+        //
+
+        // Format of the input stream
+        ptr += sprintf(ptr, " -f rawvideo -pixel_format rgba");
         
+        // Frame size (width x height)
+        ptr += sprintf(ptr, " -s %dx%d", x2 - x1, y2 - y1);
+        
+        // Frame rate
+        ptr += sprintf(ptr, " -r 50");
+
+        // Tell FFmpeg to read from stdin
+        ptr += sprintf(ptr, " -i -");
+
+        //
+        // Output stream parameters
+        //
+
+        // Format of the output stream
+        // cmd += sprintf(cmd, " -f mp4 -vcodec libx264 -pix_fmt yuv420p");
+        ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
+
+        // Bit rate
+        ptr += sprintf(ptr, " -b:v %ld", bitRate);
+
+        // Aspect ratio
+        ptr += sprintf(ptr, " -bsf:v ");
+        ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
+        ptr += sprintf(ptr, "%d/%d\"", aspectX, aspectY);
+
+        // Overwrite output files without asking
+        ptr += sprintf(ptr, " -y");
+        
+        // Output file
+        ptr += sprintf(ptr, " %s", outfile);
+        msg("%s\n", cmd);
+
         // Launch FFmpeg
-        msg("Executing %s\n", cmd);
-        if (!(ffmpeg = popen(cmd, "w"))) {
-            error = 1;
-        }
+        ffmpeg = popen(cmd, "w");
     }
     
-    if (error == 0) {
+    if (ffmpeg) {
         messageQueue.put(MSG_RECORDING_STARTED);
+        return true;
     } else {
         msg("Failed to launch FFmpeg\n");
+        return false;
     }
-    
-    return error;
 }
 
 void

@@ -15,7 +15,7 @@ extension MyController: NSMenuItemValidation {
         let running = amiga.isRunning
         let paused = amiga.isPaused
         let recording = amiga.screenRecorder.recording
-        
+
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
@@ -44,7 +44,7 @@ extension MyController: NSMenuItemValidation {
             return !powered
 
         case #selector(MyController.captureScreenAction(_:)):
-            item.title = recording ? "Stop screen recording" : "Start screen recording"
+            item.title = recording ? "Stop Screen Recorder" : "Start Screen Recorder"
             return true
 
         // Edit menu
@@ -284,11 +284,42 @@ extension MyController: NSMenuItemValidation {
         
         track()
         
+        // Stop recording if the recorder is active
         if amiga.screenRecorder.recording {
             amiga.screenRecorder.stopRecording()
             return
         }
-            
+        
+        // Check if the recorder is ready
+        if !amiga.screenRecorder.ready {
+            showMissingFFmpegAlert()
+            return
+        }
+        
+        // Open file dialog
+        let panel = NSSavePanel()
+        panel.prompt = "Record"
+        panel.allowedFileTypes = ["mp4"]
+        
+        panel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = panel.url {
+                    track()
+                    self.captureScreenAction(url: url)
+                }
+            }
+        })
+    }
+    
+    func captureScreenAction(url: URL) {
+        
+        track("URL = \(url) path = \(url.path)")
+        
+        if !amiga.screenRecorder.setPath(url.path) {
+            showScreenRecorderAlert(url: url)
+            return
+        }
+                
         var rect: CGRect
         if pref.captureSource == 0 {
             rect = renderer.largestVisible
@@ -305,6 +336,13 @@ extension MyController: NSMenuItemValidation {
                                             audioCodec: pref.audioCodec)
     }
 
+    @IBAction func configureRecorderAction(_ sender: Any!) {
+        
+        track()
+        preferencesAction(sender)
+        myAppDelegate.prefController!.selectTab("Captures")
+    }
+    
     //
     // Action methods (Edit menu)
     //

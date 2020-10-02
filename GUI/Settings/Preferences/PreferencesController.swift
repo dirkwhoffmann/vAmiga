@@ -160,6 +160,18 @@ class PreferencesController: DialogController {
         }
     }
     
+    func selectTab(_ id: String) {
+        
+        track("selectTab(\(id))")
+        
+        switch id {
+        case "General": tabView.selectTabViewItem(at: 0)
+        case "Devices": tabView.selectTabViewItem(at: 1)
+        case "Captures": tabView.selectTabViewItem(at: 2)
+        default: fatalError()
+        }
+    }
+
     @discardableResult
     func keyDown(with key: MacKey) -> Bool {
         

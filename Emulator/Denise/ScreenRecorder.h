@@ -23,6 +23,9 @@ class ScreenRecorder : public AmigaComponent {
     // File handle to access the FFmpeg encoder
     FILE *ffmpeg = NULL;
 
+    // Path of the output file
+    char *outfile = NULL;
+
     // The texture cutout that is going to be recorded
     struct { int x1; int y1; int x2; int y2; } cutout;
 
@@ -76,19 +79,32 @@ private:
 
     
     //
+    // Preparing to record a video stream
+    //
+    
+public:
+    
+    // Sets the target file name
+    bool setPath(const char *path);
+    
+    
+    //
     // Recording a video stream
     //
     
 public:
     
+    // Checks whether the screen recorder is fully functional
+    bool isReady();
+    
     // Checks whether the screen is currently recorded
     bool isRecording();
     
     // Start or stop the screen recorder
-    int startRecording(int x1, int y1, int x2, int y2,
-                       long bitRate,
-                       long audioCodec,
-                       long videoCodec);
+    bool startRecording(int x1, int y1, int x2, int y2,
+                        long bitRate,
+                        long audioCodec,
+                        long videoCodec);
     void stopRecording();
     
     
