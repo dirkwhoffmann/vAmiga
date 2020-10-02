@@ -34,7 +34,7 @@ class ScreenRecorder : public AmigaComponent {
     long videoCodec = 0;
     
     // Temporary buffer (experimental)
-    u32 pixels[600][800];
+    u32 pixels[PIXELS];
     
     
     //

@@ -286,13 +286,23 @@ extension MyController: NSMenuItemValidation {
         
         if amiga.screenRecorder.recording {
             amiga.screenRecorder.stopRecording()
-        } else {
-            let rect = NSRect.init(x: 0, y: 0, width: 800, height: 600)
-            amiga.screenRecorder.startRecording(rect,
-                                                bitRate: pref.bitRate,
-                                                videoCodec: pref.videoCodec,
-                                                audioCodec: pref.audioCodec)
+            return
         }
+            
+        var rect: CGRect
+        if pref.captureSource == 0 {
+            rect = renderer.largestVisible
+        } else {
+            rect = renderer.visible
+        }
+        
+        track("Cature source = \(pref.captureSource)")
+        track("(\(rect.minX),\(rect.minY)) - (\(rect.maxX),\(rect.maxY))")
+        
+        amiga.screenRecorder.startRecording(rect,
+                                            bitRate: pref.bitRate,
+                                            videoCodec: pref.videoCodec,
+                                            audioCodec: pref.audioCodec)
     }
 
     //

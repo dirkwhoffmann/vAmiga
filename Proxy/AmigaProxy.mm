@@ -768,7 +768,7 @@ struct SerialPortWrapper { SerialPort *port; };
     int x2 = x1 + (int)rect.size.width;
     int y2 = y1 + (int)rect.size.height;
 
-    return wrapper->screenRecorder->startRecording(x1, x2, y1, y2,
+    return wrapper->screenRecorder->startRecording(x1, y1, x2, y2,
                                                    rate,
                                                    videoCodec,
                                                    audioCodec);

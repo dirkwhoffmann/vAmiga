@@ -50,13 +50,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         cutout.x2 = x2;
         cutout.y1 = y1;
         cutout.y2 = y2;
-        
-        // REMOVE ASAP
-        x1 = 0;
-        x2 = 800;
-        y1 = 0;
-        y2 = 600;
-        
+                
         plaindebug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
         
         // Check if the output file can be written
@@ -73,7 +67,9 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                 " -i -"           // Read from stdin
                 " -profile:v %s"
                 " -level:v %d"    // Log verbosity level
-                " -b:v %ldk"        // Bitrate
+                " -b:v %ldk"       // Bitrate
+                // " -aspect 256:117"
+                " -bsf:v \"h264_metadata=sample_aspect_ratio=117/256\""
                 " -an %s",        // Output file
                 
                 ffmpegPath,
@@ -128,14 +124,18 @@ ScreenRecorder::vsyncHandler()
         static int frameCounter = 0;
         ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
         
+        int width = cutout.x2 - cutout.x1;
+        int height = cutout.y2 - cutout.y1;
+        int offset = cutout.x1 + HBLANK_MIN * 4;
+        
         // Experimental
-        for (int y = 0; y < 600; y++) {
-            for (int x = 0; x < 800; x++) {
-                pixels[y][x] = buffer.data[y * HPIXELS + x];
+        for (int y = 0, i = 0; y < height; y++) {
+            for (int x = 0; x < width; x++, i++) {
+                pixels[i] = buffer.data[(cutout.y1 + y) * HPIXELS + x + offset];
             }
         }
         
-        fwrite(pixels, sizeof(u32), 800*600, ffmpeg);
+        fwrite(pixels, sizeof(u32), width * height, ffmpeg);
         frameCounter++;
         
         if (frameCounter == 1000) {
