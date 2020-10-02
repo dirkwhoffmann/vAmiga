@@ -414,11 +414,10 @@ extension Keys {
     static let autoSnapshotInterval   = "VAMIGA_CAP_ScreenshotInterval"
 
     // Screen captures
-    static let captureFile            = "VAMIGA_CAP_File"
     static let captureSource          = "VAMIGA_CAP_Source"
-    static let audioCodec             = "VAMIGA_CAP_AudioCodec"
-    static let videoCodec             = "VAMIGA_CAP_VideoCodec"
     static let bitRate                = "VAMIGA_CAP_BitRate"
+    static let aspectX                = "VAMIGA_CAP_AspectX"
+    static let aspectY                = "VAMIGA_CAP_AspectY"
 }
 
 struct CaptureDefaults {
@@ -434,12 +433,11 @@ struct CaptureDefaults {
     let autoSnapshotInterval: Int
     
     // Captures
-    let captureFile: String
     let captureSource: Int
-    let audioCodec: Int
-    let videoCodec: Int
     let bitRate: Int
-
+    let aspectX: Int
+    let aspectY: Int
+    
     //
     // Schemes
     //
@@ -454,11 +452,10 @@ struct CaptureDefaults {
         autoSnapshots: false,
         autoSnapshotInterval: 20,
 
-        captureFile: "/tmp/vAMiga.mp4",
         captureSource: 0,
-        audioCodec: 1,
-        videoCodec: 1,
-        bitRate: 64
+        bitRate: 64,
+        aspectX: 768,
+        aspectY: 702
     )
 }
 
@@ -477,11 +474,10 @@ extension UserDefaults {
             Keys.autoSnapshots: defaults.autoSnapshots,
             Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
 
-            Keys.captureFile: defaults.captureFile,
             Keys.captureSource: defaults.captureSource,
-            Keys.audioCodec: defaults.audioCodec,
-            Keys.videoCodec: defaults.videoCodec,
-            Keys.bitRate: defaults.bitRate
+            Keys.bitRate: defaults.bitRate,
+            Keys.aspectX: defaults.aspectX,
+            Keys.aspectY: defaults.aspectY
         ]
         
         let userDefaults = UserDefaults.standard
@@ -501,11 +497,10 @@ extension UserDefaults {
                      Keys.autoSnapshots,
                      Keys.autoSnapshotInterval,
                      
-                     Keys.captureFile,
                      Keys.captureSource,
-                     Keys.audioCodec,
-                     Keys.videoCodec,
-                     Keys.bitRate
+                     Keys.bitRate,
+                     Keys.aspectX,
+                     Keys.aspectY
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }

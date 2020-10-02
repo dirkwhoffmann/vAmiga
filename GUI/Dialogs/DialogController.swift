@@ -11,7 +11,9 @@ class DialogWindow: NSWindow {
 
     // Delegation method for ESC and Cmd+.
     override func cancelOperation(_ sender: Any?) {
-                
+              
+        track()
+        
         if let controller = delegate as? DialogController {
             controller.cancelAction(sender)
         }
@@ -106,12 +108,14 @@ class DialogController: NSWindowController, DialogControllerDelegate {
     // Default action method for the OK button
     @IBAction func okAction(_ sender: Any!) {
         
+        track()
         hideSheet()
     }
     
     // Default action method for the Cancel button
     @IBAction func cancelAction(_ sender: Any!) {
         
+        track()
         hideSheet()
     }
 }

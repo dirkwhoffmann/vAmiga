@@ -111,16 +111,12 @@ class PreferencesController: DialogController {
     @IBOutlet weak var capSnapshotInterval: NSTextField!
 
     // Screen captures
-    @IBOutlet weak var capText: NSTextField!
-    @IBOutlet weak var capInstructions: NSButton!
     @IBOutlet weak var capFFmpegText: NSTextField!
     @IBOutlet weak var capFFmpegIcon1: NSButton!
     @IBOutlet weak var capFFmpegIcon2: NSImageView!
-    @IBOutlet weak var capFile: NSTextField!
-    @IBOutlet weak var capFileIcon: NSButton!
     @IBOutlet weak var capSource: NSPopUpButton!
-    @IBOutlet weak var capAudioCodec: NSPopUpButton!
-    @IBOutlet weak var capVideoCodec: NSPopUpButton!
+    @IBOutlet weak var capAspectX: NSTextField!
+    @IBOutlet weak var capAspectY: NSTextField!
     @IBOutlet weak var capBitRate: NSPopUpButton!
     
     // The tab to open first
@@ -175,6 +171,8 @@ class PreferencesController: DialogController {
     @discardableResult
     func keyDown(with key: MacKey) -> Bool {
         
+        track()
+        
         if let id = tabView.selectedTabViewItem?.identifier as? String {
             
             switch id {
@@ -187,6 +185,8 @@ class PreferencesController: DialogController {
     
     @IBAction override func okAction(_ sender: Any!) {
                 
+        track()
+        
         pref.saveGeneralUserDefaults()
         pref.saveDevicesUserDefaults()
         pref.saveCaptureUserDefaults()

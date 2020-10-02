@@ -768,8 +768,8 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSInteger) startRecording:(NSRect)rect
                      bitRate:(NSInteger)rate
-                  videoCodec:(NSInteger)videoCodec
-                  audioCodec:(NSInteger)audioCodec
+                     aspectX:(NSInteger)aspectX
+                     aspectY:(NSInteger)aspectY
 {
     int x1 = (int)rect.origin.x;
     int y1 = (int)rect.origin.y;
@@ -778,8 +778,8 @@ struct SerialPortWrapper { SerialPort *port; };
 
     return wrapper->screenRecorder->startRecording(x1, y1, x2, y2,
                                                    rate,
-                                                   videoCodec,
-                                                   audioCodec);
+                                                   aspectX,
+                                                   aspectY);
 }
 - (void) stopRecording
 {

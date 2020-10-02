@@ -28,14 +28,11 @@ extension PreferencesController {
         capFFmpegText.isHidden = !hasFFmpeg
         capFFmpegIcon1.isHidden = !hasFFmpeg
         capFFmpegIcon2.isHidden = !hasFFmpeg
-        capText.isHidden = hasFFmpeg
-        capInstructions.isHidden = hasFFmpeg
         
-        capFile.stringValue = pref.captureFile
         capSource.selectItem(withTag: pref.captureSource)
-        capAudioCodec.selectItem(withTag: pref.audioCodec)
-        capVideoCodec.selectItem(withTag: pref.videoCodec)
         capBitRate.selectItem(withTag: pref.bitRate)
+        capAspectX.integerValue = pref.aspectX
+        capAspectY.integerValue = pref.aspectY
     }
     
     //
@@ -90,50 +87,34 @@ extension PreferencesController {
     // Action methods (Screen captures)
     //
 
-    @IBAction func capFileAction(_ sender: NSButton!) {
-        
-        track()
-
-        pref.captureFile = "/tmp/vAmiga.mp4"
-        refresh()
-    }
-
     @IBAction func capSourceAction(_ sender: NSPopUpButton!) {
         
-        track()
+        track("tag = \(sender.selectedTag())")
+        pref.captureSource = sender.selectedTag()
         refresh()
     }
 
-    @IBAction func capAudioCodecAction(_ sender: NSPopUpButton!) {
-        
-        track()
-        
-        pref.audioCodec = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func capVideoCodecAction(_ sender: NSPopUpButton!) {
-        
-        track()
-
-        pref.videoCodec = sender.selectedTag()
-        refresh()
-    }
-    
     @IBAction func capBitrateAction(_ sender: NSPopUpButton!) {
         
-        track()
-
+        track("tag = \(sender.selectedTag())")
         pref.bitRate = sender.selectedTag()
         refresh()
     }
-    
-    @IBAction func capInstructionsAction(_ sender: NSButton!) {
+
+    @IBAction func capAspectXAction(_ sender: NSTextField!) {
         
-        let url = URL(string: "https://ffmpeg.org")!
-        NSWorkspace.shared.open(url)
+        track("value = \(sender.integerValue)")
+        pref.aspectX = sender.integerValue
+        refresh()
     }
 
+    @IBAction func capAspectYAction(_ sender: NSTextField!) {
+        
+        track("value = \(sender.integerValue)")
+        pref.aspectY = sender.integerValue
+        refresh()
+    }
+    
     //
     // Action methods (Misc)
     //
@@ -144,7 +125,7 @@ extension PreferencesController {
         assert(sender.selectedTag() == 0)
         
         UserDefaults.resetCaptureUserDefaults()
-        pref.loadCaptureUserDefaults()
+        pref.loadCaptureDefaults(CaptureDefaults.std)
         refresh()
     }
 }

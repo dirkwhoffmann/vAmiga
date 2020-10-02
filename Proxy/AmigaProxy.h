@@ -454,8 +454,8 @@ struct SerialPortWrapper;
 
 - (NSInteger) startRecording:(NSRect)rect
                      bitRate:(NSInteger)rate
-                  videoCodec:(NSInteger)videoCodec
-                  audioCodec:(NSInteger)audioCodec;
+                     aspectX:(NSInteger)aspectX
+                     aspectY:(NSInteger)aspectY;
 - (void) stopRecording;
 
 @end

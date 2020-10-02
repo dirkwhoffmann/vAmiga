@@ -164,7 +164,7 @@
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
 		50D7CDC42286E968002689F0 /* Joystick.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D7CDC22286E968002689F0 /* Joystick.cpp */; };
 		50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */; };
-		50DD1EE22525E3E1000180F6 /* NewPreferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* NewPreferences.xib */; };
+		50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DD1EE12525E3E1000180F6 /* Preferences.xib */; };
 		50DED6AF2202EBA200B8195F /* Inspector.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50DED6AE2202EBA200B8195F /* Inspector.xib */; };
 		50DED6B12202EC3100B8195F /* Inspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DED6B02202EC3100B8195F /* Inspector.swift */; };
 		50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50DF2C9F2269135800795256 /* SpriteTableView.swift */; };
@@ -430,7 +430,7 @@
 		50D7CDC32286E968002689F0 /* Joystick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Joystick.h; sourceTree = "<group>"; };
 		50D7CDC52286EA48002689F0 /* PortTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PortTypes.h; sourceTree = "<group>"; };
 		50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DmaDebugDialog.xib; sourceTree = "<group>"; };
-		50DD1EE12525E3E1000180F6 /* NewPreferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewPreferences.xib; sourceTree = "<group>"; };
+		50DD1EE12525E3E1000180F6 /* Preferences.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Preferences.xib; sourceTree = "<group>"; };
 		50DED6AE2202EBA200B8195F /* Inspector.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Inspector.xib; sourceTree = "<group>"; };
 		50DED6B02202EC3100B8195F /* Inspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Inspector.swift; sourceTree = "<group>"; };
 		50DF2C9E2268CFC000795256 /* AgnusTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgnusTypes.h; sourceTree = "<group>"; };
@@ -676,7 +676,7 @@
 				50BBE08A21F5EB9B0099BBBB /* A1000ANSI.xib */,
 				50D263CD21F6378000FA167F /* A1000ISO.xib */,
 				50D9CD9A236AF89A00503B4D /* DmaDebugDialog.xib */,
-				50DD1EE12525E3E1000180F6 /* NewPreferences.xib */,
+				50DD1EE12525E3E1000180F6 /* Preferences.xib */,
 			);
 			path = "XIB files";
 			sourceTree = "<group>";
@@ -1216,7 +1216,7 @@
 				50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */,
 				500217B82449CF7000E1A096 /* Configuration.xib in Resources */,
 				500A4EAE2447364E002A4DE1 /* insert.aiff in Resources */,
-				50DD1EE22525E3E1000180F6 /* NewPreferences.xib in Resources */,
+				50DD1EE22525E3E1000180F6 /* Preferences.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

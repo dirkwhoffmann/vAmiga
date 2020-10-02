@@ -63,31 +63,26 @@ ScreenRecorder::isRecording()
 bool
 ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                                long bitRate,
-                               long videoCodec,
-                               long audioCodec)
+                               long aspectX,
+                               long aspectY)
 {
-    // Only proceed if the recorder doesn't running
+    // Only proceed if the screen recorder is available
+    if (!isReady()) return false;
+
+    // Only proceed if the recorder doesn't run
     if (isRecording()) return false;
     
-    // Only proceed if the screen recorder is configured
-    if (!isReady()) return false;
-    
-    int aspectX = 117;
-    int aspectY = 256;
-
     synchronized {
 
-        // Make sure the width and height of the texture cutout are even numbers
+        // Make sure the screen dimensions are even
         if ((x2 - x1) % 2) x2--;
         if ((y2 - y1) % 2) y2--;
-
         cutout.x1 = x1;
         cutout.x2 = x2;
         cutout.y1 = y1;
         cutout.y2 = y2;
-                
         plaindebug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
-        
+                
         // Assemble the command line arguments for FFmpeg
         char cmd[256]; char *ptr = cmd;
 
@@ -119,12 +114,12 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
 
         // Bit rate
-        ptr += sprintf(ptr, " -b:v %ld", bitRate);
+        ptr += sprintf(ptr, " -b:v %ldk", bitRate);
 
         // Aspect ratio
         ptr += sprintf(ptr, " -bsf:v ");
         ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
-        ptr += sprintf(ptr, "%d/%d\"", aspectX, aspectY);
+        ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
 
         // Overwrite output files without asking
         ptr += sprintf(ptr, " -y");
@@ -168,7 +163,6 @@ ScreenRecorder::vsyncHandler()
 
     synchronized {
                 
-        static int frameCounter = 0;
         ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
         
         int width = cutout.x2 - cutout.x1;
@@ -183,13 +177,6 @@ ScreenRecorder::vsyncHandler()
         }
         
         fwrite(pixels, sizeof(u32), width * height, ffmpeg);
-        frameCounter++;
-        
-        if (frameCounter == 1000) {
-            plaindebug("Recording finished\n");
-            pclose(ffmpeg);
-            ffmpeg = NULL;
-        }
     }
 }
 

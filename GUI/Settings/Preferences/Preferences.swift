@@ -123,11 +123,20 @@ class Preferences {
     }
 
     // Screen captures
-    var captureFile = ""
     var captureSource = CaptureDefaults.std.captureSource
-    var audioCodec = 0
-    var videoCodec = 0
     var bitRate = 512
+    var aspectX = 768 {
+        didSet {
+            if aspectX < 0 { aspectX = 1 }
+            if aspectX > 1000 { aspectX = 1000 }
+        }
+    }
+    var aspectY = 702 {
+        didSet {
+            if aspectY < 0 { aspectY = 1 }
+            if aspectY > 1000 { aspectY = 1000 }
+        }
+    }
     
     //
     // General
@@ -303,11 +312,10 @@ class Preferences {
         snapshotInterval = defaults.autoSnapshotInterval
 
         // Captures
-        captureFile = defaults.captureFile
         captureSource = defaults.captureSource
-        audioCodec = defaults.audioCodec
-        videoCodec = defaults.videoCodec
         bitRate = defaults.bitRate
+        aspectX = defaults.aspectX
+        aspectY = defaults.aspectY
     }
     
     func loadCaptureUserDefaults() {
@@ -325,11 +333,10 @@ class Preferences {
         snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
 
         // Captures
-        captureFile = defaults.string(forKey: Keys.captureFile) ?? ""
         captureSource = defaults.integer(forKey: Keys.captureSource)
-        audioCodec = defaults.integer(forKey: Keys.audioCodec)
-        videoCodec = defaults.integer(forKey: Keys.videoCodec)
         bitRate = defaults.integer(forKey: Keys.bitRate)
+        aspectX = defaults.integer(forKey: Keys.aspectX)
+        aspectY = defaults.integer(forKey: Keys.aspectY)
     }
     
     func saveCaptureUserDefaults() {
@@ -348,10 +355,9 @@ class Preferences {
         defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
 
         // Captures
-        defaults.set(captureFile, forKey: Keys.captureFile)
         defaults.set(captureSource, forKey: Keys.captureSource)
-        defaults.set(audioCodec, forKey: Keys.audioCodec)
-        defaults.set(videoCodec, forKey: Keys.videoCodec)
         defaults.set(bitRate, forKey: Keys.bitRate)
+        defaults.set(aspectX, forKey: Keys.aspectX)
+        defaults.set(aspectY, forKey: Keys.aspectY)
     }
 }

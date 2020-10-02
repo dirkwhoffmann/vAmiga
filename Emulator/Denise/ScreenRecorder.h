@@ -32,12 +32,12 @@ class ScreenRecorder : public AmigaComponent {
     // Bitrate passed to FFmpeg
     long bitRate = 0;
     
-    // Selected audio and video codecs
-    long audioCodec = 0;
-    long videoCodec = 0;
+    // Pixel aspect ratio
+    long aspectX;
+    long aspectY;
     
     // Temporary buffer (experimental)
-    u32 pixels[PIXELS];
+    u32 pixels[1024*320];
     
     
     //
@@ -103,8 +103,8 @@ public:
     // Start or stop the screen recorder
     bool startRecording(int x1, int y1, int x2, int y2,
                         long bitRate,
-                        long audioCodec,
-                        long videoCodec);
+                        long aspectX,
+                        long aspectY);
     void stopRecording();
     
     

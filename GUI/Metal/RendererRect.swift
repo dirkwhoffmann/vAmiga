@@ -19,11 +19,11 @@ extension Renderer {
                            width: rect.width / texW,
                            height: rect.height / texH)
     }
-    
+
     // Returns the used texture area (including HBLANK and VBLANK)
     var entire: CGRect {
         
-        return CGRect.init(x: 0, y: 0, width: texW, height: texH)
+        return CGRect.init(x: 0, y: 0, width: 4 * Int(HPOS_CNT), height: Int(VPOS_CNT))
     }
     
     var entireNormalized: CGRect {
@@ -86,5 +86,13 @@ extension Renderer {
     func updateTextureRect() {
         
         textureRect = visibleNormalized
+    }
+    
+    var textureRectAbs: CGRect {
+        
+        return CGRect.init(x: textureRect.origin.x * texW,
+                           y: textureRect.origin.y * texH,
+                           width: textureRect.width * texW,
+                           height: textureRect.height * texH)
     }
 }

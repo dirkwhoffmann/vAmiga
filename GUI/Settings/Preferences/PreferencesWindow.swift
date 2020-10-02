@@ -27,6 +27,8 @@ class PreferencesWindow: DialogWindow {
     
     override func keyDown(with event: NSEvent) {
                 
+        track()
+        
         if let parent = delegate as? PreferencesController {
             if parent.keyDown(with: MacKey.init(event: event)) {
                 return
@@ -40,6 +42,7 @@ class PreferencesWindow: DialogWindow {
     override func flagsChanged(with event: NSEvent) {
 
         track()
+        
         let controller = delegate as? PreferencesController
         
         switch Int(event.keyCode) {

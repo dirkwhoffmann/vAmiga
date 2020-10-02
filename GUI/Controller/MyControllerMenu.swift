@@ -135,7 +135,7 @@ extension MyController: NSMenuItemValidation {
         if myAppDelegate.prefController == nil {
             myAppDelegate.prefController =
                 PreferencesController.make(parent: self,
-                                           nibName: NSNib.Name("NewPreferences"))
+                                           nibName: NSNib.Name("Preferences"))
         }
         myAppDelegate.prefController!.showWindow(self)
         myAppDelegate.prefController!.refresh()
@@ -322,9 +322,9 @@ extension MyController: NSMenuItemValidation {
                 
         var rect: CGRect
         if pref.captureSource == 0 {
-            rect = renderer.largestVisible
+            rect = renderer.textureRectAbs
         } else {
-            rect = renderer.visible
+            rect = renderer.entire
         }
         
         track("Cature source = \(pref.captureSource)")
@@ -332,8 +332,8 @@ extension MyController: NSMenuItemValidation {
         
         amiga.screenRecorder.startRecording(rect,
                                             bitRate: pref.bitRate,
-                                            videoCodec: pref.videoCodec,
-                                            audioCodec: pref.audioCodec)
+                                            aspectX: pref.aspectX,
+                                            aspectY: pref.aspectY)
     }
 
     @IBAction func configureRecorderAction(_ sender: Any!) {
