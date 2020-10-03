@@ -492,6 +492,9 @@ PaulaAudio::writeData(float left, float right)
     ringBufferL[writePtr] = left;
     ringBufferR[writePtr] = right;
     advanceWritePtr();
+    
+    // Report samples to the screen recorder
+    denise.recorder.addSample(left, right);
 }
 
 void

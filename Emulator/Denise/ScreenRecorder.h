@@ -14,14 +14,25 @@
 
 class ScreenRecorder : public AmigaComponent {
 
-    // Path to the FFmpef executable
+    // Path to the FFmpeg executable
     static const char *ffmpegPath;
 
+    // Path to the pipes where FFmpeg reads the input from
+    static const char *audioPipePath;
+    static const char *videoPipePath;
+    
     // Indicates whether FFmpeg is installed on this machine
     static bool ffmpegInstalled;
+
+    // Audio sample frequency in the output stream
+    static const int sampleRate = 48000;
     
     // File handle to access the FFmpeg encoder
     FILE *ffmpeg = NULL;
+
+    // File handles to the data pipes
+    int audioPipe = -1;
+    int videoPipe = -1;
 
     // Path of the output file
     char *outfile = NULL;
@@ -36,8 +47,12 @@ class ScreenRecorder : public AmigaComponent {
     long aspectX;
     long aspectY;
     
-    // Temporary buffer (experimental)
+    // Temporary pixel storage
     u32 pixels[1024*320];
+    
+    // Temporary aUdio storage
+    float samples[sampleRate + 100][2];
+    int samplesCnt = 0;
     
     
     //
@@ -89,7 +104,7 @@ public:
     
     
     //
-    // Recording a video stream
+    // Starting and stopping a video stream
     //
     
 public:
@@ -107,6 +122,28 @@ public:
                         long aspectY);
     void stopRecording();
     
+private:
+    
+    // Creates the video and audio pipe (FFmpeg reads from them)
+    bool createsPipes();
+    
+    // Opens or closes the video and audio pipe
+    bool openPipes();
+    void closePipes();
+
+    // Start or stops FFmpeg
+    bool startFFmpeg(const char *cmd);
+    void stopFFmpeg();
+        
+    
+    //
+    // Recording a video stream
+    //
+
+public:
+    
+    // Writes an audio sample to the temporary buffer
+    void addSample(float left, float right);
     
     // Records a single frame
     void vsyncHandler();

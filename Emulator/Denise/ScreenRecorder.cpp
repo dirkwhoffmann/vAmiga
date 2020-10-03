@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
+#include <fcntl.h>
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
@@ -102,8 +103,8 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Frame rate
         ptr += sprintf(ptr, " -r 50");
 
-        // Tell FFmpeg to read from stdin
-        ptr += sprintf(ptr, " -i -");
+        // Tell FFmpeg to read from a pipe
+        ptr += sprintf(ptr, " -i %s", videoPipePath);
 
         //
         // Output stream parameters
@@ -126,33 +127,131 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         
         // Output file
         ptr += sprintf(ptr, " %s", outfile);
-        msg("%s\n", cmd);
 
+        //
+        // EXPERIMENTAL (AUDIO)
+        //
+
+        /*
+        sprintf(cmd, "%s -y -f f32le -sample_rate %d -channels 2 -i %s %s",
+                ffmpegPath, sampleRate, audioPipePath, outfile);
+        */
+        
+        //
         // Launch FFmpeg
-        ffmpeg = popen(cmd, "w");
+        //
+        
+        if (createsPipes() && startFFmpeg(cmd) && openPipes()) {
+            msg("Success\n");
+        } else {
+            closePipes();
+            stopFFmpeg();
+            msg("Failed to launch FFmpeg\n");
+        }
     }
     
-    if (ffmpeg) {
+    if (isRecording()) {
         messageQueue.put(MSG_RECORDING_STARTED);
         return true;
-    } else {
-        msg("Failed to launch FFmpeg\n");
-        return false;
     }
+    
+    return false;
 }
 
 void
 ScreenRecorder::stopRecording()
 {
     if (!isRecording()) return;
+    
+    stopFFmpeg();
+    messageQueue.put(MSG_RECORDING_STOPPED);
+}
 
-    synchronized {
+bool
+ScreenRecorder::createsPipes()
+{
+    // Remove old pipes if they still exist
+    unlink(audioPipePath);
+    unlink(videoPipePath);
+    
+    // Create pipes
+    if (mkfifo(videoPipePath, 0666) != -1) {
+        if (mkfifo(audioPipePath, 0666) != -1) {
+            msg("Input pipes successfully created\n");
+            return true;
+        }
+    }
+    
+    // In case of an error, clean up the mess
+    warn("Failed to create input pipes\n");
+    unlink(audioPipePath);
+    unlink(videoPipePath);
+    return false;
+}
+
+bool
+ScreenRecorder::openPipes()
+{
+    videoPipe = open(videoPipePath, O_WRONLY);
+    // audioPipe = open(audioPipePath, O_WRONLY);
+    
+    if (videoPipe != -1) { // } && audioPipe != -1) {
+        msg("Input pipes are open\n");
+    } else {
+        msg("Failed to open input pipes\n");
+        closePipes();
+    }
+
+    return videoPipe != -1; // && audioPipe != -1;
+}
+
+void
+ScreenRecorder::closePipes()
+{
+    if (videoPipe != 1) {
+        close(videoPipe);
+        videoPipe = -1;
+        msg("Video pipe closed\n");
+    }
+    if (audioPipe != 1) {
+        close(audioPipe);
+        audioPipe = -1;
+        msg("Audio pipe closed\n");
+    }
+}
+
+bool
+ScreenRecorder::startFFmpeg(const char *cmd)
+{
+    if (!ffmpeg) {
         
+        msg("Starting FFmpeg with options:\n%s", cmd);
+        ffmpeg = popen(cmd, "w");
+    }
+
+    return ffmpeg != NULL;
+}
+
+void
+ScreenRecorder::stopFFmpeg()
+{
+    if (ffmpeg) {
+        
+        msg("Stopping FFmpeg\n");
+        closePipes();
         pclose(ffmpeg);
         ffmpeg = NULL;
     }
-    
-    messageQueue.put(MSG_RECORDING_STOPPED);
+}
+
+void
+ScreenRecorder::addSample(float left, float right)
+{
+    if (samplesCnt < sizeof(samples) / (2 * sizeof(float))) {
+        samples[samplesCnt][0] = left * 4;
+        samples[samplesCnt][1] = right * 4;
+        samplesCnt++;
+    }
 }
 
 void
@@ -162,23 +261,48 @@ ScreenRecorder::vsyncHandler()
     assert(ffmpeg != NULL);
 
     synchronized {
-                
+        
+        //
+        // Video
+        //
+        
         ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
         
         int width = cutout.x2 - cutout.x1;
         int height = cutout.y2 - cutout.y1;
         int offset = cutout.x1 + HBLANK_MIN * 4;
         
-        // Experimental
+        /* Experimental code. The pixels of the texture rect are first written
+         * to a temporary pixel buffer. Afterwards, the buffer is handed over
+         * to FFmpeg with a single write command. Another approach would be
+         * to use a single write for each rasterline contained in the texture
+         * rect. TODO: Figure out which variant is faster
+         */
         for (int y = 0, i = 0; y < height; y++) {
             for (int x = 0; x < width; x++, i++) {
                 pixels[i] = buffer.data[(cutout.y1 + y) * HPIXELS + x + offset];
             }
         }
         
-        fwrite(pixels, sizeof(u32), width * height, ffmpeg);
+        write(videoPipe, pixels, sizeof(u32) * width * height);
+        // fwrite(pixels, sizeof(u32), width * height, ffmpeg);
+        
+        //
+        // Audio
+        //
+        
+        /*
+        if (samplesCnt != sampleRate / 50) {
+            debug("Got %d audio samples, expected %d (%f)\n",
+                   samplesCnt, sampleRate / 50, audioUnit.getSampleRate());
+        }
+        write(audioPipe, samples, 2 * sizeof(float) * (sampleRate / 50));
+        samplesCnt = 0;
+        */
     }
 }
 
 const char *ScreenRecorder::ffmpegPath = "/usr/local/bin/ffmpeg";
+const char *ScreenRecorder::audioPipePath = "/tmp/audioPipe";
+const char *ScreenRecorder::videoPipePath = "/tmp/videoPipe";
 bool ScreenRecorder::ffmpegInstalled = false;
