@@ -13,7 +13,7 @@
 #include "AmigaComponent.h"
 
 class BufferedPipe {
-
+    
     // Name of this pipe
     const char *path = NULL;
     
@@ -48,6 +48,11 @@ public:
     
     // Closes the pipe
     void terminate();
+    
+private:
+    
+    // Tries to open the pipe for writing
+    bool tryOpen();
 };
 
 

@@ -63,20 +63,10 @@ BufferedPipe::append(u8 *data, long size)
 void
 BufferedPipe::flush()
 {
-    // Check if the pipe can opened if it is not open already
-    if (pipe == -1) {
-        if ((pipe = open(path, O_WRONLY|O_NONBLOCK)) != -1)
-            printf("Opening pipe %s\n", path);
-    }
-    
-    // If the pipe is open, flush the buffer
-    if (pipe != -1) {
-        // printf("Flushing %d bytes\n", used);
+    if (tryOpen()) {
         write(pipe, buffer, used);
         used = 0;
     }
-
-    used = 0; // REMOVE ASAP
 }
 
 void
@@ -85,6 +75,26 @@ BufferedPipe::terminate()
     close(pipe);
     pipe = -1;
     printf("Closing pipe %s\n", path);
+}
+
+bool
+BufferedPipe::tryOpen()
+{
+    // Only proceed if the pipe is not open already
+    if (pipe != -1) return true;
+    
+    // Check if a reader is connected. We do this by opening the pipe in
+    // non-blocking mode. If no reader is connected, -1 is returned. Note: If
+    // we omit O_NONBLOCK here, open() would block if no reade is connected.
+    if ((pipe = open(path, O_WRONLY|O_NONBLOCK)) == -1) return false;
+
+    // The pipe is now open in non-blocking mode which means that a call to
+    // write() is also non-blocking. This is not what we want to have. In
+    // order to let a call to write() block, we reopen the pipe.
+    close(pipe);
+    pipe = open(path, O_WRONLY);
+
+    return true;
 }
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
