@@ -10,6 +10,83 @@
 #include "Amiga.h"
 #include <fcntl.h>
 
+BufferedPipe *
+BufferedPipe::make(const char *path)
+{
+    assert(path != NULL);
+    
+    // Remove old pipe (if any)
+    unlink(path);
+    
+    // Create pipe
+    if (mkfifo(path, 0666) == -1) { return NULL; }
+    
+    // Create object
+    BufferedPipe *pipe = new BufferedPipe();
+    pipe->path = path;
+    return pipe;
+}
+
+void
+BufferedPipe::resize(long newCapacity)
+{
+    u8 *newBuffer = new u8[newCapacity];
+    
+    // Copy over the old contents if the buffer grows. Otherwise, clear it.
+    if (newCapacity > capacity) {
+        printf("Buffer grows from %ld to %ld\n", capacity, newCapacity);
+        memcpy(newBuffer, buffer, used);
+    } else {
+        printf("Buffer shrinks from %ld to %ld\n", capacity, newCapacity);
+        used = 0;
+    }
+    
+    // Assign the new buffer and adjust the capacity
+    delete[] buffer;
+    buffer = newBuffer;
+    capacity = newCapacity;
+}
+          
+void
+BufferedPipe::append(u8 *data, long size)
+{
+    // Resize the buffer if it is too small
+    if (used + size > capacity) { resize(MAX(used + size, capacity * 2)); }
+
+    // Copy the new data over
+    for (long i = 0; i < size; i++) { buffer[used + i] = data[i]; }
+
+    used += size;
+    assert(used <= capacity);
+}
+
+void
+BufferedPipe::flush()
+{
+    // Check if the pipe can opened if it is not open already
+    if (pipe == -1) {
+        if ((pipe = open(path, O_WRONLY|O_NONBLOCK)) != -1)
+            printf("Opening pipe %s\n", path);
+    }
+    
+    // If the pipe is open, flush the buffer
+    if (pipe != -1) {
+        // printf("Flushing %d bytes\n", used);
+        write(pipe, buffer, used);
+        used = 0;
+    }
+
+    used = 0; // REMOVE ASAP
+}
+
+void
+BufferedPipe::terminate()
+{
+    close(pipe);
+    pipe = -1;
+    printf("Closing pipe %s\n", path);
+}
+
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("ScreenRecorder");
@@ -18,6 +95,8 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
     ffmpegInstalled = getSizeOfFile(ffmpegPath) > 0;
 
     msg("%s:%s installed\n", ffmpegPath, ffmpegInstalled ? "" : " not");
+    msg("Video pipe:%s created\n", videoPipe ? "" : " not");
+    msg("Audio pipe:%s created\n", videoPipe ? "" : " not");
 }
 
 void
@@ -50,7 +129,7 @@ ScreenRecorder::setPath(const char *path)
 bool
 ScreenRecorder::isReady()
 {
-    return ffmpegInstalled; 
+    return ffmpegInstalled && videoPipe != NULL && audioPipe != NULL;
 }
 
 bool
@@ -67,11 +146,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                                long aspectX,
                                long aspectY)
 {
-    // Only proceed if the screen recorder is available
-    if (!isReady()) return false;
-
-    // Only proceed if the recorder doesn't run
-    if (isRecording()) return false;
+    if (!isReady() || isRecording()) return false;
     
     synchronized {
 
@@ -85,13 +160,13 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         plaindebug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
                 
         // Assemble the command line arguments for FFmpeg
-        char cmd[256]; char *ptr = cmd;
+        char cmd[512]; char *ptr = cmd;
 
         // Path to the FFmpeg executable
-        ptr += sprintf(ptr, " %s", ffmpegPath);
+        ptr += sprintf(ptr, "%s", ffmpegPath);
 
         //
-        // Input stream parameters
+        // Video input stream settings
         //
 
         // Format of the input stream
@@ -103,11 +178,24 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Frame rate
         ptr += sprintf(ptr, " -r 50");
 
-        // Tell FFmpeg to read from a pipe
-        ptr += sprintf(ptr, " -i %s", videoPipePath);
-
+        // Video input source (named pipe)
+        ptr += sprintf(ptr, " -i %s", videoPipe->getPath());
+        
         //
-        // Output stream parameters
+        // Audio input stream settings
+        //
+        /*
+        // Audio format and number of channels
+        ptr += sprintf(ptr, " -f f32le -channels 2");
+
+        // Sampling rate
+        ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
+
+        // Audio input source (named pipe)
+        ptr += sprintf(ptr, " -i %s", audioPipe->getPath());
+        */
+        //
+        // Output stream settings
         //
 
         // Format of the output stream
@@ -127,27 +215,17 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         
         // Output file
         ptr += sprintf(ptr, " %s", outfile);
-
-        //
-        // EXPERIMENTAL (AUDIO)
-        //
-
-        /*
-        sprintf(cmd, "%s -y -f f32le -sample_rate %d -channels 2 -i %s %s",
-                ffmpegPath, sampleRate, audioPipePath, outfile);
-        */
         
         //
         // Launch FFmpeg
         //
+            
+        msg("\nStarting FFmpeg with options:\n%s\n", cmd);
+
+        assert(ffmpeg == NULL);
+        ffmpeg = popen(cmd, "w");
         
-        if (createsPipes() && startFFmpeg(cmd) && openPipes()) {
-            msg("Success\n");
-        } else {
-            closePipes();
-            stopFFmpeg();
-            msg("Failed to launch FFmpeg\n");
-        }
+        msg(ffmpeg ? "Success\n" : "Failed to launch\n");
     }
     
     if (isRecording()) {
@@ -158,90 +236,21 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
     return false;
 }
 
+int stop = 0;
+
 void
 ScreenRecorder::stopRecording()
 {
-    if (!isRecording()) return;
+    if (!isReady() || !isRecording()) return;
     
-    stopFFmpeg();
+    stop = 1;
+    msg("Stopping FFmpeg\n");
+    videoPipe->terminate();
+    audioPipe->terminate();
+    pclose(ffmpeg);
+    ffmpeg = NULL;
+    
     messageQueue.put(MSG_RECORDING_STOPPED);
-}
-
-bool
-ScreenRecorder::createsPipes()
-{
-    // Remove old pipes if they still exist
-    unlink(audioPipePath);
-    unlink(videoPipePath);
-    
-    // Create pipes
-    if (mkfifo(videoPipePath, 0666) != -1) {
-        if (mkfifo(audioPipePath, 0666) != -1) {
-            msg("Input pipes successfully created\n");
-            return true;
-        }
-    }
-    
-    // In case of an error, clean up the mess
-    warn("Failed to create input pipes\n");
-    unlink(audioPipePath);
-    unlink(videoPipePath);
-    return false;
-}
-
-bool
-ScreenRecorder::openPipes()
-{
-    videoPipe = open(videoPipePath, O_WRONLY);
-    // audioPipe = open(audioPipePath, O_WRONLY);
-    
-    if (videoPipe != -1) { // } && audioPipe != -1) {
-        msg("Input pipes are open\n");
-    } else {
-        msg("Failed to open input pipes\n");
-        closePipes();
-    }
-
-    return videoPipe != -1; // && audioPipe != -1;
-}
-
-void
-ScreenRecorder::closePipes()
-{
-    if (videoPipe != 1) {
-        close(videoPipe);
-        videoPipe = -1;
-        msg("Video pipe closed\n");
-    }
-    if (audioPipe != 1) {
-        close(audioPipe);
-        audioPipe = -1;
-        msg("Audio pipe closed\n");
-    }
-}
-
-bool
-ScreenRecorder::startFFmpeg(const char *cmd)
-{
-    if (!ffmpeg) {
-        
-        msg("Starting FFmpeg with options:\n%s", cmd);
-        ffmpeg = popen(cmd, "w");
-    }
-
-    return ffmpeg != NULL;
-}
-
-void
-ScreenRecorder::stopFFmpeg()
-{
-    if (ffmpeg) {
-        
-        msg("Stopping FFmpeg\n");
-        closePipes();
-        pclose(ffmpeg);
-        ffmpeg = NULL;
-    }
 }
 
 void
@@ -257,52 +266,41 @@ ScreenRecorder::addSample(float left, float right)
 void
 ScreenRecorder::vsyncHandler()
 {
+    if(stop) return;
     if (!isRecording()) return;
     assert(ffmpeg != NULL);
-
+            
     synchronized {
-        
-        //
-        // Video
-        //
-        
-        ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
-        
-        int width = cutout.x2 - cutout.x1;
-        int height = cutout.y2 - cutout.y1;
-        int offset = cutout.x1 + HBLANK_MIN * 4;
-        
-        /* Experimental code. The pixels of the texture rect are first written
-         * to a temporary pixel buffer. Afterwards, the buffer is handed over
-         * to FFmpeg with a single write command. Another approach would be
-         * to use a single write for each rasterline contained in the texture
-         * rect. TODO: Figure out which variant is faster
-         */
-        for (int y = 0, i = 0; y < height; y++) {
-            for (int x = 0; x < width; x++, i++) {
-                pixels[i] = buffer.data[(cutout.y1 + y) * HPIXELS + x + offset];
-            }
-        }
-        
-        write(videoPipe, pixels, sizeof(u32) * width * height);
-        // fwrite(pixels, sizeof(u32), width * height, ffmpeg);
         
         //
         // Audio
         //
         
-        /*
-        if (samplesCnt != sampleRate / 50) {
-            debug("Got %d audio samples, expected %d (%f)\n",
-                   samplesCnt, sampleRate / 50, audioUnit.getSampleRate());
+        int samplesPerFrame = sampleRate / 50;
+        if (samplesCnt != samplesPerFrame) {
+            // debug("Got %d audio samples, expected %d (%f)\n",
+            //        samplesCnt, sampleRate / 50, audioUnit.getSampleRate());
         }
-        write(audioPipe, samples, 2 * sizeof(float) * (sampleRate / 50));
+        // audioPipe->append((u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
         samplesCnt = 0;
-        */
+
+        
+        //
+        // Video
+        //
+                        
+        ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
+        
+        int width = sizeof(u32) * (cutout.x2 - cutout.x1);
+        int height = cutout.y2 - cutout.y1;
+        int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
+        
+        for (int y = 0; y < height; y++, offset += HPIXELS) {
+            videoPipe->append((u8 *)(buffer.data + offset), width);
+        }
+        videoPipe->flush();
     }
 }
 
 const char *ScreenRecorder::ffmpegPath = "/usr/local/bin/ffmpeg";
-const char *ScreenRecorder::audioPipePath = "/tmp/audioPipe";
-const char *ScreenRecorder::videoPipePath = "/tmp/videoPipe";
 bool ScreenRecorder::ffmpegInstalled = false;

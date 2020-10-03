@@ -12,14 +12,49 @@
 
 #include "AmigaComponent.h"
 
+class BufferedPipe {
+
+    // Name of this pipe
+    const char *path = NULL;
+    
+    // Pipe identification
+    int pipe = -1;
+
+    // Buffer capacity
+    long capacity = 128;
+    
+    // Data
+    u8 *buffer = new u8[128];
+    
+    // Number of bytes in buffer
+    long used = 0;
+        
+public:
+    
+    // Factory method
+    static BufferedPipe *make(const char *path);
+
+    // Returns the path to the connected pipe
+    const char *getPath() { return path; }
+    
+    // Resizes the buffer
+    void resize (long newCapacity);
+              
+    // Append a chunk of bytes to the buffer end
+    void append(u8 *data, long size);
+    
+    // Flushes the buffer
+    void flush();
+    
+    // Closes the pipe
+    void terminate();
+};
+
+
 class ScreenRecorder : public AmigaComponent {
 
     // Path to the FFmpeg executable
     static const char *ffmpegPath;
-
-    // Path to the pipes where FFmpeg reads the input from
-    static const char *audioPipePath;
-    static const char *videoPipePath;
     
     // Indicates whether FFmpeg is installed on this machine
     static bool ffmpegInstalled;
@@ -30,9 +65,9 @@ class ScreenRecorder : public AmigaComponent {
     // File handle to access the FFmpeg encoder
     FILE *ffmpeg = NULL;
 
-    // File handles to the data pipes
-    int audioPipe = -1;
-    int videoPipe = -1;
+    // Video and audio pipe
+    BufferedPipe *videoPipe = BufferedPipe::make("/tmp/videoPipe");
+    BufferedPipe *audioPipe = BufferedPipe::make("/tmp/audioPipe");
 
     // Path of the output file
     char *outfile = NULL;
@@ -121,20 +156,7 @@ public:
                         long aspectX,
                         long aspectY);
     void stopRecording();
-    
-private:
-    
-    // Creates the video and audio pipe (FFmpeg reads from them)
-    bool createsPipes();
-    
-    // Opens or closes the video and audio pipe
-    bool openPipes();
-    void closePipes();
 
-    // Start or stops FFmpeg
-    bool startFFmpeg(const char *cmd);
-    void stopFFmpeg();
-        
     
     //
     // Recording a video stream

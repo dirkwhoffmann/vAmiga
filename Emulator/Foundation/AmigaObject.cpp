@@ -11,7 +11,7 @@
 #include <cstdlib>
 
 #define VAOBJ_PARSE \
-char buf[256]; \
+char buf[512]; \
 va_list ap; \
 va_start(ap, fmt); \
 vsnprintf(buf, sizeof(buf), fmt, ap); \
