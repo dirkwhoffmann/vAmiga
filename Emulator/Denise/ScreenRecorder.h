@@ -12,12 +12,48 @@
 
 #include "AmigaComponent.h"
 
-class BufferedPipe {
+struct DataChunk { u8 *data; size_t size; };
+
+class BufferedPipe: AmigaObject {
+   
+private:
     
     // Name of this pipe
     const char *path = NULL;
     
-    // Pipe identification
+    // Pipe file identifier
+    int pipe = -1;
+    
+    // First-in-first-out buffer
+    std::queue<DataChunk> fifo;
+    
+    // The worker thread
+    std::thread t;
+    std::mutex m;
+        
+public:
+    
+    // Initializing
+    BufferedPipe(); 
+    static BufferedPipe *make(const char *path);
+    const char *getPath() { return path; }
+    
+    // Writes a new data chunk into the FIFO
+    void add(DataChunk chunk);
+
+    void worker();
+    
+    // Closes the pipe
+    void done();
+};
+
+/*
+class OldBufferedPipe {
+    
+    // Name of this pipe
+    const char *path = NULL;
+    
+    // Pipe file identifier
     int pipe = -1;
 
     // Buffer capacity
@@ -32,7 +68,7 @@ class BufferedPipe {
 public:
     
     // Factory method
-    static BufferedPipe *make(const char *path);
+    static OldBufferedPipe *make(const char *path);
 
     // Returns the path to the connected pipe
     const char *getPath() { return path; }
@@ -54,6 +90,7 @@ private:
     // Tries to open the pipe for writing
     bool tryOpen();
 };
+*/
 
 
 class ScreenRecorder : public AmigaComponent {

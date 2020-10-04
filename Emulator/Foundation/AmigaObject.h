@@ -15,6 +15,8 @@
 #include <vector>
 #include <map>
 #include <mutex>
+#include <queue>
+#include <thread>
 
 using std::vector;
 using std::map;
