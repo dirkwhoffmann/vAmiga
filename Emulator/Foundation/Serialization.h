@@ -16,6 +16,7 @@
 #include "DDF.h"
 #include "Event.h"
 #include "Frame.h"
+#include "TaggedSampleBuffer.h"
 
 //
 // Basic memory buffer I/O
@@ -150,6 +151,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
+    STRUCT(TaggedSample)
+    STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -227,6 +230,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
+    STRUCT(TaggedSample)
+    STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -310,6 +315,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
+    STRUCT(TaggedSample)
+    STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 
@@ -382,6 +389,8 @@ public:
     STRUCT(Event)
     STRUCT(Frame)
     STRUCT(RegChange)
+    STRUCT(TaggedSample)
+    STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
 

@@ -20,6 +20,22 @@
  * information, each sample is tagged by the cycle it was produced.
  */
 
+struct TaggedSample
+{
+    Cycle tag;
+    i16   sample;
+
+    template <class T>
+    void applyToItems(T& worker)
+    {
+        worker
+
+        & tag
+        & sample;
+    }
+};
+
+
 // struct TaggedSampleBuffer : RingBuffer <TaggedSample, 0x20000> {
 struct TaggedSampleBuffer : RingBuffer <TaggedSample, 256> {
 

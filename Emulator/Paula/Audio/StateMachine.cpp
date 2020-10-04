@@ -28,12 +28,10 @@ StateMachine<nr>::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     taggedSamples.clear();
     
-    /* Some methods assume that the sample buffer is never empty.
-     * We assert this by initializing the buffer with a dummy element.
+    /* Some methods assume that the sample buffer is never empty. We assure
+     * this by initializing the buffer with a dummy element.
      */
-    assert(samples.isEmpty());
     assert(taggedSamples.isEmpty());
-    samples.insert(0,0);
     taggedSamples.write( TaggedSample { 0, 0 } );
 }
 
@@ -174,9 +172,7 @@ StateMachine<nr>::penhi()
     
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
     
-    assert(taggedSamples.count() == samples.count());
-    if (!samples.isFull()) {
-        samples.insert(agnus.clock, scaled);
+    if (!taggedSamples.isFull()) {
         taggedSamples.write( TaggedSample { agnus.clock, scaled } );
     } else {
         debug("penhi: Sample buffer is full\n");
@@ -195,9 +191,7 @@ StateMachine<nr>::penlo()
 
     debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    assert(taggedSamples.count() == samples.count());
-    if (!samples.isFull()) {
-        samples.insert(agnus.clock, scaled);
+    if (!taggedSamples.isFull()) {
         taggedSamples.write( TaggedSample { agnus.clock, scaled } );
     } else {
         debug("penlo: Sample buffer is full\n");
@@ -367,37 +361,29 @@ StateMachine<nr>::move_011_010()
 template <int nr> template <SamplingMethod method> i16
 StateMachine<nr>::interpolate(Cycle clock)
 {
-    assert(samples.r == taggedSamples.r);
-    assert(samples.w == taggedSamples.w);
-    int w  = samples.w;
-    int r1 = samples.r;
-    int r2 = samples.next(r1);
+    int w  = taggedSamples.w;
+    int r1 = taggedSamples.r;
+    int r2 = taggedSamples.next(r1);
 
-    assert(!samples.isEmpty());
+    assert(!taggedSamples.isEmpty());
 
     // Remove all outdated entries
-    while (r2 != w && samples.keys[r2] <= clock) {
-        (void)samples.read();
+    while (r2 != w && taggedSamples.elements[r2].tag <= clock) {
         (void)taggedSamples.read();
         r1 = r2;
-        r2 = samples.next(r1);
+        r2 = taggedSamples.next(r1);
     }
 
     // If the buffer contains a single element only, return that element
     if (r2 == w) {
-        assert(samples.elements[r1] == taggedSamples.elements[r1].sample);
-        return samples.elements[r1];
+        return taggedSamples.elements[r1].sample;
     }
 
     // Interpolate between position r1 and p2
-    Cycle c1 = samples.keys[r1];
-    Cycle c2 = samples.keys[r2];
-    i16 s1 = samples.elements[r1];
-    i16 s2 = samples.elements[r2];
-    assert(c1 == taggedSamples.elements[r1].tag);
-    assert(c2 == taggedSamples.elements[r2].tag);
-    assert(s1 == taggedSamples.elements[r1].sample);
-    assert(s2 == taggedSamples.elements[r2].sample);
+    Cycle c1 = taggedSamples.elements[r1].tag;
+    Cycle c2 = taggedSamples.elements[r2].tag;
+    i16 s1 = taggedSamples.elements[r1].sample;
+    i16 s2 = taggedSamples.elements[r2].sample;
     assert(clock >= c1 && clock < c2);
 
     switch (method) {

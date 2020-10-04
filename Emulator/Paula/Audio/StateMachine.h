@@ -56,9 +56,6 @@ public:
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
-    // Ringbuffer storing the synthesized samples (DEPRECATED)
-    SortedRingBuffer<short, 256> samples;
-
     // Ringbuffer storing the synthesized samples
     TaggedSampleBuffer taggedSamples; 
 
@@ -144,7 +141,7 @@ private:
         & audlcLatch
         & audDR
         & intreq2
-        & samples
+        & taggedSamples
         & enablePenlo
         & enablePenhi;
     }
