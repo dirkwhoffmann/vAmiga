@@ -11,6 +11,7 @@
 #define _PAULA_H
 
 #include "PaulaAudio.h"
+#include "AudioStream.h"
 #include "DiskController.h"
 #include "UART.h"
 #include "TimeDelayed.h"
@@ -143,6 +144,7 @@ private:
         & intreq
         & intena
         & setIntreq
+        & ipl
         & iplPipe
         & potgo
         & potCntX0

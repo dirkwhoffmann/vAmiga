@@ -66,6 +66,7 @@ private:
     
     /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
      * samples from the emulator to the sound device of the host machine.
+     * DEPRECATED. REPLACE BY AUDIO STREAM
      */
     RingBuffer <SamplePair, 16384> ringBuffer;
         

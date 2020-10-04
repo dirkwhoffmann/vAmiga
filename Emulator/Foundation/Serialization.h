@@ -16,6 +16,7 @@
 #include "DDF.h"
 #include "Event.h"
 #include "Frame.h"
+#include "TimeDelayed.h"
 #include "TaggedSampleBuffer.h"
 
 //
@@ -155,6 +156,7 @@ public:
     STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, size_t N>
     SerCounter& operator&(T (&v)[N])
@@ -234,6 +236,7 @@ public:
     STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, size_t N>
     SerReader& operator&(T (&v)[N])
@@ -319,6 +322,7 @@ public:
     STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, size_t N>
     SerWriter& operator&(T (&v)[N])
@@ -393,6 +397,7 @@ public:
     STRUCT(TaggedSampleBuffer)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
+    template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
 
     template <class T, size_t N>
     SerResetter& operator&(T (&v)[N])
