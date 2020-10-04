@@ -290,10 +290,10 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
-        double ch0 = channel0.interpolate<method>((Cycle)clock) * config.vol[0];
-        double ch1 = channel1.interpolate<method>((Cycle)clock) * config.vol[1];
-        double ch2 = channel2.interpolate<method>((Cycle)clock) * config.vol[2];
-        double ch3 = channel3.interpolate<method>((Cycle)clock) * config.vol[3];
+        double ch0 = channel0.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[0];
+        double ch1 = channel1.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[1];
+        double ch2 = channel2.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[2];
+        double ch3 = channel3.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[3];
         
         double l =
         ch0 * config.pan[0] + ch1 * config.pan[1] +

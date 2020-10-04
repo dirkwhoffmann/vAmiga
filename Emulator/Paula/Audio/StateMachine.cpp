@@ -358,61 +358,6 @@ StateMachine<nr>::move_011_010()
     penhi();
 }
 
-template <int nr> template <SamplingMethod method> i16
-StateMachine<nr>::interpolate(Cycle clock)
-{
-    int w  = taggedSamples.w;
-    int r1 = taggedSamples.r;
-    int r2 = taggedSamples.next(r1);
-
-    assert(!taggedSamples.isEmpty());
-
-    // Remove all outdated entries
-    while (r2 != w && taggedSamples.elements[r2].tag <= clock) {
-        (void)taggedSamples.read();
-        r1 = r2;
-        r2 = taggedSamples.next(r1);
-    }
-
-    // If the buffer contains a single element only, return that element
-    if (r2 == w) {
-        return taggedSamples.elements[r1].sample;
-    }
-
-    // Interpolate between position r1 and p2
-    Cycle c1 = taggedSamples.elements[r1].tag;
-    Cycle c2 = taggedSamples.elements[r2].tag;
-    i16 s1 = taggedSamples.elements[r1].sample;
-    i16 s2 = taggedSamples.elements[r2].sample;
-    assert(clock >= c1 && clock < c2);
-
-    switch (method) {
-
-        case SMP_NONE:
-        {
-            return s1;
-        }
-        case SMP_NEAREST:
-        {
-            if (clock - c1 < c2 - clock) {
-                return s1;
-            } else {
-                return s2;
-            }
-        }
-        case SMP_LINEAR:
-        {
-            double dx = (double)(c2 - c1);
-            double dy = (double)(s2 - s1);
-            double weight = (double)(clock - c1) / dx;
-            return (i16)(s1 + weight * dy);
-        }
-        default:
-            assert(false);
-            return 0;
-    }
-}
-
 template StateMachine<0>::StateMachine(Amiga &ref);
 template StateMachine<1>::StateMachine(Amiga &ref);
 template StateMachine<2>::StateMachine(Amiga &ref);
@@ -472,18 +417,3 @@ template void StateMachine<0>::move_011_010();
 template void StateMachine<1>::move_011_010();
 template void StateMachine<2>::move_011_010();
 template void StateMachine<3>::move_011_010();
-
-template i16 StateMachine<0>::interpolate<SMP_NONE>(Cycle clock);
-template i16 StateMachine<1>::interpolate<SMP_NONE>(Cycle clock);
-template i16 StateMachine<2>::interpolate<SMP_NONE>(Cycle clock);
-template i16 StateMachine<3>::interpolate<SMP_NONE>(Cycle clock);
-
-template i16 StateMachine<0>::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 StateMachine<1>::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 StateMachine<2>::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 StateMachine<3>::interpolate<SMP_NEAREST>(Cycle clock);
-
-template i16 StateMachine<0>::interpolate<SMP_LINEAR>(Cycle clock);
-template i16 StateMachine<1>::interpolate<SMP_LINEAR>(Cycle clock);
-template i16 StateMachine<2>::interpolate<SMP_LINEAR>(Cycle clock);
-template i16 StateMachine<3>::interpolate<SMP_LINEAR>(Cycle clock);

@@ -252,15 +252,6 @@ private:
 public:
 
     void serviceEvent();
-    
-    
-    //
-    // Synthesizing samples
-    //
-
-public:
-    
-    template <SamplingMethod method> i16 interpolate(Cycle clock);
 };
 
 #endif
