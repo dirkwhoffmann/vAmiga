@@ -10,12 +10,37 @@
 #include "Amiga.h"
 #include <fcntl.h>
 
-BufferedPipe::BufferedPipe()
+void
+BufferedPipe::worker()
 {
-    debug("Creating thread...\n");
-    m.lock();
-    t = std::thread(&BufferedPipe::worker, this);
-    debug("Done...\n");
+    // Open the pipe
+    pipe = open(path, O_WRONLY);
+    
+    while (1) {
+        
+        // Check if the thread has been requested to terminate
+        if (!running && fifo.empty()) break;
+        
+        // Wait until the FIFO has been filled with at least one element
+        m.lock(); m.unlock();
+        
+        // Remove the oldest element
+        DataChunk chunk;
+        synchronized {
+            chunk = fifo.front();
+            fifo.pop();
+            if (fifo.empty()) m.lock();
+        }
+        
+        // Write data to the pipe
+        write(pipe, chunk.data, chunk.size);
+        delete(chunk.data);
+    }
+    
+    // Close the pipe
+    assert(running == false);
+    close(pipe);
+    plaindebug("Worker thread has stopped\n");
 }
 
 BufferedPipe *
@@ -26,167 +51,49 @@ BufferedPipe::make(const char *path)
     // Remove old pipe (if any)
     unlink(path);
     
-    // Create pipe
-    if (mkfifo(path, 0666) == -1) { return NULL; }
-    
-    // Create buffered pipe
-    BufferedPipe *pipe = new BufferedPipe();
-    pipe->setDescription("BufferedPipe");
-    pipe->path = path;
-    return pipe;
-}
-
-void
-BufferedPipe::add(DataChunk chunk)
-{
-    synchronized {
-        // plaindebug("Adding data chunk (%p, %ld bytes)\n", chunk.data, chunk.size);
-        fifo.push(chunk);
-        m.unlock();
-    }
-}
-
-void
-BufferedPipe::worker()
-{
-    DataChunk chunk;
-    
-    // Open the pipe
-    assert(pipe == -1);
-    plaindebug("Opening pipe...\n");
-    pipe = open(path, O_WRONLY);
-    assert(pipe != -1);
-    plaindebug("Pipe has been opened\n");
-    
-    while (1) {
-        
-        // Wait until the FIFO has been filled with at least one element
-        // plaindebug("Waiting at barrier...\n");
-        m.lock();
-        m.unlock();
-        // plaindebug("Passed (%d elements pending)\n", fifo.size());
-        assert(!fifo.empty());
-        
-        // Remove the oldest element
-        synchronized {
-            chunk = fifo.front();
-            fifo.pop();
-            if (fifo.empty()) m.lock();
-        }
-        
-        // Write data to the pipe
-        // debug("Writing data chunk (%p, %ld bytes)\n", chunk.data, chunk.size);
-        write(pipe, chunk.data, chunk.size);
-        delete(chunk.data);
-    }
-}
-
-void
-BufferedPipe::done()
-{
-    plaindebug("Closing pipe %s\n", path);
-    close(pipe);
-    pipe = -1;
-}
-
-//
-// OLD
-//
-
-/*
-OldBufferedPipe *
-OldBufferedPipe::make(const char *path)
-{
-    assert(path != NULL);
-    
-    // Remove old pipe (if any)
-    unlink(path);
-    
-    // Create pipe
+    // Create a new pipe
     if (mkfifo(path, 0666) == -1) { return NULL; }
     
     // Create object
-    OldBufferedPipe *pipe = new OldBufferedPipe();
+    BufferedPipe *pipe = new BufferedPipe();
+    pipe->setDescription("BufferedPipe");
     pipe->path = path;
+
     return pipe;
 }
 
 void
-OldBufferedPipe::resize(long newCapacity)
+BufferedPipe::send(u8 *data, size_t size)
 {
-    u8 *newBuffer = new u8[newCapacity];
+    startWorker();
     
-    // Copy over the old contents if the buffer grows. Otherwise, clear it.
-    if (newCapacity > capacity) {
-        printf("Buffer grows from %ld to %ld\n", capacity, newCapacity);
-        memcpy(newBuffer, buffer, used);
-    } else {
-        printf("Buffer shrinks from %ld to %ld\n", capacity, newCapacity);
-        used = 0;
-    }
-    
-    // Assign the new buffer and adjust the capacity
-    delete[] buffer;
-    buffer = newBuffer;
-    capacity = newCapacity;
-}
-          
-void
-OldBufferedPipe::append(u8 *data, long size)
-{
-    // Resize the buffer if it is too small
-    if (used + size > capacity) { resize(MAX(used + size, capacity * 2)); }
-
-    // Copy the new data over
-    for (long i = 0; i < size; i++) { buffer[used + i] = data[i]; }
-
-    used += size;
-    assert(used <= capacity);
-}
-
-void
-OldBufferedPipe::flush()
-{
-    if (tryOpen()) {
-        printf("Pipe is open\n");
-        write(pipe, buffer, used);
-        printf("Flushing %ld bytes to %s\n", used, path);
-        used = 0;
-    } else {
-        printf("Can't open pipe %s yet\n", path);
+    // Push the data packet into the FIFO buffer
+    synchronized {
+        fifo.push(DataChunk { data, size });
+        m.unlock();
     }
 }
 
 void
-OldBufferedPipe::terminate()
+BufferedPipe::startWorker()
 {
-    close(pipe);
-    pipe = -1;
-    printf("Closing pipe %s\n", path);
+    synchronized {
+        
+        if (!running) {
+            running = true;
+            m.lock();
+            t = std::thread(&BufferedPipe::worker, this);
+            plaindebug("Worker thread started");
+        }
+    }
 }
 
-bool
-OldBufferedPipe::tryOpen()
+void
+BufferedPipe::stopWorker()
 {
-    // Only proceed if the pipe is not open already
-    if (pipe != -1) return true;
-    
-    // Check if a reader is connected. We do this by opening the pipe in
-    // non-blocking mode. If no reader is connected, -1 is returned. Note: If
-    // we omit O_NONBLOCK here, open() would block if no reade is connected.
-    if ((pipe = open(path, O_WRONLY|O_NONBLOCK)) == -1) return false;
-
-    printf("(1)\n");
-    // The pipe is now open in non-blocking mode which means that a call to
-    // write() is also non-blocking. This is not what we want to have. In
-    // order to let a call to write() block, we reopen the pipe.
-    close(pipe);
-    pipe = open(path, O_WRONLY);
-    printf("(2)\n");
-
-    return true;
+    plaindebug("Stopping worker thread...\n");
+    running = false;
 }
-*/
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
@@ -236,9 +143,7 @@ ScreenRecorder::isReady()
 bool
 ScreenRecorder::isRecording()
 {
-    bool result = false;
-    synchronized { result = ffmpeg != NULL; }
-    return result;
+    return recording;
 }
     
 bool
@@ -248,8 +153,10 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                                long aspectY)
 {
     if (!isReady() || isRecording()) return false;
-    
+        
     synchronized {
+
+        recording = true;
 
         // Make sure the screen dimensions are even
         if ((x2 - x1) % 2) x2--;
@@ -280,7 +187,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -r 50");
 
         // Video input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", videoPipe->getPath());
+        ptr += sprintf(ptr, " -i %s", videoPipe->path);
 
         //
         // Audio input stream settings
@@ -293,7 +200,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
 
         // Audio input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", audioPipe->getPath());
+        ptr += sprintf(ptr, " -i %s", audioPipe->path);
         
         //
         // Output stream settings
@@ -328,7 +235,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         
         msg(ffmpeg ? "Success\n" : "Failed to launch\n");
     }
-    
+
     if (isRecording()) {
         messageQueue.put(MSG_RECORDING_STARTED);
         return true;
@@ -337,20 +244,28 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
     return false;
 }
 
-int stop = 0;
-
 void
 ScreenRecorder::stopRecording()
 {
     if (!isReady() || !isRecording()) return;
     
-    stop = 1;
-    msg("Stopping FFmpeg\n");
-    videoPipe->done();
-    audioPipe->done();
+    recording = false;
+
+    // Ask both buffered pipes to terminate
+    plaindebug("Stopping pipes..\n");
+    videoPipe->cancel();
+    audioPipe->cancel();
+    
+    // Wait until both pipes have terminated
+    plaindebug("Wating for pipes to stop...\n");
+    videoPipe->join();
+    audioPipe->join();
+    
+    // Shut down FFmpeg
     pclose(ffmpeg);
     ffmpeg = NULL;
-    
+
+    plaindebug("Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
 }
 
@@ -367,7 +282,6 @@ ScreenRecorder::addSample(float left, float right)
 void
 ScreenRecorder::vsyncHandler()
 {
-    if(stop) return;
     if (!isRecording()) return;
     assert(ffmpeg != NULL);
             
@@ -385,10 +299,8 @@ ScreenRecorder::vsyncHandler()
         size_t audioSize = (size_t)(2 * sizeof(float) * samplesPerFrame);
         u8 *audio = new u8[audioSize];
         memcpy(audio, (u8 *)samples, audioSize);
-        DataChunk chunk2 { audio, audioSize };
-        audioPipe->add(chunk2);
-        // audioPipe->append((u8 *)samples, 2 * sizeof(float) * samplesPerFrame);
-        // audioPipe->flush();
+        // DataChunk chunk2 { audio, audioSize };
+        audioPipe->send(audio, audioSize);
         samplesCnt = 0;
 
         
@@ -407,8 +319,8 @@ ScreenRecorder::vsyncHandler()
         for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
             memcpy(dst, src, width);
         }
-        DataChunk chunk { data, (size_t)(width * height) };
-        videoPipe->add(chunk);
+        // DataChunk chunk { data, (size_t)(width * height) };
+        videoPipe->send(data, (size_t)(width * height));
     }
 }
 

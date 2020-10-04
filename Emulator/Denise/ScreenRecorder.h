@@ -12,86 +12,58 @@
 
 #include "AmigaComponent.h"
 
-struct DataChunk { u8 *data; size_t size; };
-
-class BufferedPipe: AmigaObject {
-   
-private:
-    
+/* BufferedPipe is wrapper around a classical POSIX pipe which is utilized to
+ * feed video and audio data into FFmpeg. The class maintains a FIFO of data
+ * chunks and a worker thread that gets active whenever the FIFO has at least
+ * one element. The thread waits for the receiver to accept data and dumps
+ * all buffered data chunks into the pipe until the FIFO is emptied.
+ */
+struct BufferedPipe: AmigaObject {
+       
     // Name of this pipe
     const char *path = NULL;
     
-    // Pipe file identifier
+private:
+
+    // Pipe identifier
     int pipe = -1;
     
-    // First-in-first-out buffer
+    // Data buffer
+    struct DataChunk { u8 *data; size_t size; };
     std::queue<DataChunk> fifo;
     
-    // The worker thread
+    // Worker thread
     std::thread t;
+    
+    // Mutex used to block the thread while the FIFO is empty
     std::mutex m;
         
-public:
+    // Indicates if the thread is running. Set to false to terminate
+    bool running = false;
     
-    // Initializing
-    BufferedPipe(); 
+    // The worker thread's execution function
+    void worker();
+
+public:
+        
+    // Factory method
     static BufferedPipe *make(const char *path);
-    const char *getPath() { return path; }
     
     // Writes a new data chunk into the FIFO
-    void add(DataChunk chunk);
-
-    void worker();
+    void send(u8 *data, size_t size);
     
-    // Closes the pipe
-    void done();
-};
-
-/*
-class OldBufferedPipe {
+    // Tell the thread to terminate
+    void cancel() { stopWorker(); }
     
-    // Name of this pipe
-    const char *path = NULL;
-    
-    // Pipe file identifier
-    int pipe = -1;
-
-    // Buffer capacity
-    long capacity = 128;
-    
-    // Data
-    u8 *buffer = new u8[128];
-    
-    // Number of bytes in buffer
-    long used = 0;
-        
-public:
-    
-    // Factory method
-    static OldBufferedPipe *make(const char *path);
-
-    // Returns the path to the connected pipe
-    const char *getPath() { return path; }
-    
-    // Resizes the buffer
-    void resize (long newCapacity);
-              
-    // Append a chunk of bytes to the buffer end
-    void append(u8 *data, long size);
-    
-    // Flushes the buffer
-    void flush();
-    
-    // Closes the pipe
-    void terminate();
+    // Wait until the thread has terminated
+    void join() { t.join(); }
     
 private:
     
-    // Tries to open the pipe for writing
-    bool tryOpen();
+    // Starts or stops the worker thread
+    void startWorker();
+    void stopWorker();
 };
-*/
-
 
 class ScreenRecorder : public AmigaComponent {
 
@@ -111,6 +83,9 @@ class ScreenRecorder : public AmigaComponent {
     BufferedPipe *videoPipe = BufferedPipe::make("/tmp/videoPipe");
     BufferedPipe *audioPipe = BufferedPipe::make("/tmp/audioPipe");
 
+    // Indicates if the recorder is active
+    bool recording = false;
+    
     // Path of the output file
     char *outfile = NULL;
 
@@ -125,7 +100,7 @@ class ScreenRecorder : public AmigaComponent {
     long aspectY;
     
     // Temporary pixel storage
-    u32 pixels[1024*320];
+    // u32 pixels[1024*320];
     
     // Temporary aUdio storage
     float samples[sampleRate + 100][2];
