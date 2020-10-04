@@ -837,18 +837,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
-- (NSInteger) ringbufferSize
-{
-    return wrapper->paula->audioUnit.ringbufferSize();
-}
-- (double) ringbufferDataL:(NSInteger)offset
-{
-    return (double)wrapper->paula->audioUnit.ringbufferDataL(offset);
-}
-- (double) ringbufferDataR:(NSInteger)offset
-{
-    return wrapper->paula->audioUnit.ringbufferDataR(offset);
-}
 - (double) fillLevel
 {
     return wrapper->paula->audioUnit.fillLevel();

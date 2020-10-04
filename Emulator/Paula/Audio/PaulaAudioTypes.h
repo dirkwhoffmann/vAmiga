@@ -90,4 +90,11 @@ typedef struct
 }
 AudioStats;
 
+typedef struct
+{
+    float left;
+    float right;
+}
+SamplePair;
+
 #endif

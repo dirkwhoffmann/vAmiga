@@ -69,9 +69,12 @@ private:
     /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
      * samples from the emulator to the sound device of the host machine.
      */
+    /*
     float ringBufferL[bufferSize];
     float ringBufferR[bufferSize];
-
+    */
+    SamplePair ringBuffer[bufferSize];
+    
     // Read and write pointer of the ringbuffer
     u32 readPtr = 0;
     u32 writePtr = 0;
@@ -220,27 +223,13 @@ public:
     //
     
 public:
-    
-    // Returns the size of the ringbuffer
-    size_t ringbufferSize() { return bufferSize; }
-    
-    // Returns the position of the read pointer
-    u32 getReadPtr() { return readPtr; }
-    
-    // Returns the position of the write pointer
-    u32 getWritePtr() { return writePtr; }
-    
+            
     // Clears the ringbuffer and resets the read and write pointer
     void clearRingbuffer();
 
     // Reads sound samples from the sample buffers
     void readMonoSample(float *mono);
     void readStereoSample(float *left, float *right);
-
-    // Reads a single audio sample without moving the read pointer
-    float ringbufferDataL(size_t offset);
-    float ringbufferDataR(size_t offset);
-    float ringbufferData(size_t offset);
     
     // Reads samples from the ringbuffer (mono stream format)
     void readMonoSamples(float *target, size_t n);
