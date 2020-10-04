@@ -11,6 +11,7 @@
 #define _STATE_MACHINE_H
 
 #include "AmigaComponent.h"
+#include "TaggedSampleBuffer.h"
 
 template <int nr>
 class StateMachine : public AmigaComponent {
@@ -55,9 +56,12 @@ public:
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
-    // Ringbuffer storing the synthesized samples
+    // Ringbuffer storing the synthesized samples (DEPRECATED)
     SortedRingBuffer<short, 256> samples;
-    
+
+    // Ringbuffer storing the synthesized samples
+    TaggedSampleBuffer taggedSamples; 
+
     /* Two locks regulating the access to the sample buffer.
      *
      * "The minimum period is 124 color clocks. This means that the smallest

@@ -366,13 +366,6 @@ PaulaAudio::clearRingbuffer()
     
     // Wipe out the ringbuffer
     ringBuffer.clear(SamplePair {0, 0});
-
-    /*
-    for (unsigned i = 0; i < bufferSize; i++) {
-        // ringBufferL[i] = ringBufferR[i] = 0.0;
-        // ringBuffer[i] = SamplePair { 0, 0 };
-    }
-    */
     
     // Wipe out the filter buffers
     filterL.clear();
@@ -394,12 +387,10 @@ PaulaAudio::readMonoSample(float *mono)
 void
 PaulaAudio::readStereoSample(float *left, float *right)
 {
-    // Read sound samples
-    // float l = ringBufferL[readPtr];
-    // float r = ringBufferR[readPtr];
+    // Read sample
     SamplePair pair = ringBuffer.read();
-    
-    // Modify volume
+ 
+    // Adjust volume
     if (volume != targetVolume) {
         if (volume < targetVolume) {
             volume += MIN(volumeDelta, targetVolume - volume);
@@ -408,19 +399,14 @@ PaulaAudio::readStereoSample(float *left, float *right)
         }
     }
 
-    // Apply volume
+    // Scale by the new volume
     float divider = 10000.0f;
     if (volume > 0) {
         pair.left *= (float)volume / divider;
         pair.right *= (float)volume / divider;
     } else {
         pair = SamplePair { 0, 0 };
-        // l = 0.0;
-        // r = 0.0;
     }
-
-    // Advance read pointer
-    // advanceReadPtr();
 
     // Write result
     *left = pair.left;
@@ -461,7 +447,6 @@ void
 PaulaAudio::writeData(float left, float right)
 {
     // Check for buffer overflow
-    // if (bufferCapacity() == 0) handleBufferOverflow();
     if (ringBuffer.isFull()) handleBufferOverflow();
     
     // Apply audio filter if applicable
@@ -472,9 +457,6 @@ PaulaAudio::writeData(float left, float right)
 
     // Write sample into ringbuffer
     ringBuffer.write( SamplePair { left, right } );
-    // ringBufferL[writePtr] = left;
-    // ringBufferR[writePtr] = right;
-    // advanceWritePtr();
     
     // Report sample to the screen recorder
     denise.recorder.addSample(left, right);
@@ -544,7 +526,6 @@ PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
 {
     int dw = ringBuffer.cap() / width;
     float newHighestAmplitude = 0.001;
-    // float *ringBuffer = left ? ringBufferL : ringBufferR;
     
     // Clear buffer
     for (int i = 0; i < width * height; i++) {
@@ -556,8 +537,7 @@ PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
         
         // Read samples from ringbuffer
         SamplePair pair = ringBuffer.current(w * dw);
-        // float sample = abs(ringBuffer[(readPtr + w * dw) % bufferSize]);
-        float sample = left ? abs(pair.left) : abs(pair.right); 
+        float sample = left ? abs(pair.left) : abs(pair.right);
         
         if (sample == 0) {
             

@@ -63,24 +63,12 @@ private:
     //
 
 private:
-
-    // Number of sound samples stored in ringbuffer
-    // static constexpr size_t bufferSize = 16384;
     
     /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
      * samples from the emulator to the sound device of the host machine.
      */
-    /*
-    float ringBufferL[bufferSize];
-    float ringBufferR[bufferSize];
-    */
-    // SamplePair ringBuffer[bufferSize];
     RingBuffer <SamplePair, 16384> ringBuffer;
-    
-    // Read and write pointer of the ringbuffer
-    // u32 readPtr = 0;
-    // u32 writePtr = 0;
-    
+        
     // Current volume (a value of 0 or below silences the audio playback)
     const static i32 maxVolume = 100000;
     i32 volume = maxVolume;
@@ -260,39 +248,11 @@ public:
     // Signals to ignore the next underflow or overflow condition
     void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
     
-    // Moves the read pointer forward
-    /*
-    void advanceReadPtr() { readPtr = (readPtr + 1) % bufferSize; }
-    void advanceReadPtr(int steps) {
-        readPtr = (readPtr + bufferSize + steps) % bufferSize; }
-    */
-    // Moves the write pointer forward
-    /*
-    void advanceWritePtr() { writePtr = (writePtr + 1) % bufferSize; }
-    void advanceWritePtr(int steps) {
-        writePtr = (writePtr + bufferSize + steps) % bufferSize; }
-    */
-    // Returns number of stored samples in the ringbuffer
-    /*
-    unsigned samplesInBuffer() {
-        return (writePtr + bufferSize - readPtr) % bufferSize; }
-    */
-    // Returns the remaining storage capacity of the ringbuffer
-    /*
-    unsigned bufferCapacity() {
-        return (readPtr + bufferSize - writePtr) % bufferSize; }
-    */
-    // Returns the fill level as a percentage value
-    /*
-    double fillLevel() {
-        return (double)samplesInBuffer() / (double)bufferSize; }
-    */
     /* Aligns the write pointer. This function puts the write pointer somewhat
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
      * 735 samples is 1/60 sec.
      */
     const u32 samplesAhead = 8 * 735;
-    // void alignWritePtr() { writePtr = (readPtr  + samplesAhead) % bufferSize; }
     void alignWritePtr() { ringBuffer.align(samplesAhead); }
     
     /* Plots a graphical representation of the waveform. Returns the highest

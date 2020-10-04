@@ -92,6 +92,13 @@ AudioStats;
 
 typedef struct
 {
+    Cycle tag;
+    i16   sample;
+}
+TaggedSample;
+
+typedef struct
+{
     float left;
     float right;
 }
