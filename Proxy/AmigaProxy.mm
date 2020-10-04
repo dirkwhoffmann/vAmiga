@@ -837,10 +837,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
+/*
 - (double) fillLevel
 {
     return wrapper->paula->audioUnit.fillLevel();
 }
+*/
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
     wrapper->paula->audioUnit.readMonoSamples(target, n);

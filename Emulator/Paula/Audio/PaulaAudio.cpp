@@ -364,12 +364,16 @@ PaulaAudio::clearRingbuffer()
 {
     debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
     
-    // Wipe out the ringbuffers
+    // Wipe out the ringbuffer
+    ringBuffer.clear(SamplePair {0, 0});
+
+    /*
     for (unsigned i = 0; i < bufferSize; i++) {
         // ringBufferL[i] = ringBufferR[i] = 0.0;
-        ringBuffer[i] = SamplePair { 0, 0 };
+        // ringBuffer[i] = SamplePair { 0, 0 };
     }
-
+    */
+    
     // Wipe out the filter buffers
     filterL.clear();
     filterR.clear();
@@ -393,7 +397,7 @@ PaulaAudio::readStereoSample(float *left, float *right)
     // Read sound samples
     // float l = ringBufferL[readPtr];
     // float r = ringBufferR[readPtr];
-    SamplePair pair = ringBuffer[readPtr];
+    SamplePair pair = ringBuffer.read();
     
     // Modify volume
     if (volume != targetVolume) {
@@ -416,7 +420,7 @@ PaulaAudio::readStereoSample(float *left, float *right)
     }
 
     // Advance read pointer
-    advanceReadPtr();
+    // advanceReadPtr();
 
     // Write result
     *left = pair.left;
@@ -427,59 +431,52 @@ void
 PaulaAudio::readMonoSamples(float *target, size_t n)
 {
     // Check for a buffer underflow
-    if (samplesInBuffer() < n) {
-        handleBufferUnderflow();
-    }
+    if (ringBuffer.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    for (size_t i = 0; i < n; i++) {
-        readMonoSample(target + i);
-    }
+    for (size_t i = 0; i < n; i++) readMonoSample(target + i);
 }
 
 void
 PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
 {
     // Check for a buffer underflow
-    if (samplesInBuffer() < n)
-        handleBufferUnderflow();
+    if (ringBuffer.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    for (unsigned i = 0; i < n; i++)
-        readStereoSample(target1 + i, target2 + i);
+    for (size_t i = 0; i < n; i++) readStereoSample(target1 + i, target2 + i);
 }
 
 void
 PaulaAudio::readStereoSamplesInterleaved(float *target, size_t n)
 {
     // Check for a buffer underflow
-    if (samplesInBuffer() < n)
-        handleBufferUnderflow();
+    if (ringBuffer.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    for (unsigned i = 0; i < n; i++)
-        readStereoSample(target + 2*i, target + 2*i + 1);
+    for (size_t i = 0; i < n; i++) readStereoSample(target + 2*i, target + 2*i + 1);
 }
 
 void
 PaulaAudio::writeData(float left, float right)
 {
     // Check for buffer overflow
-    if (bufferCapacity() == 0) handleBufferOverflow();
-
+    // if (bufferCapacity() == 0) handleBufferOverflow();
+    if (ringBuffer.isFull()) handleBufferOverflow();
+    
     // Apply audio filter if applicable
     if (ciaa.powerLED() || config.filterAlwaysOn) {
         left = filterL.apply(left);
         right = filterR.apply(right);
     }
 
-    // Write samples into ringbuffer
-    ringBuffer[writePtr] = SamplePair { left, right };
+    // Write sample into ringbuffer
+    ringBuffer.write( SamplePair { left, right } );
     // ringBufferL[writePtr] = left;
     // ringBufferR[writePtr] = right;
-    advanceWritePtr();
+    // advanceWritePtr();
     
-    // Report samples to the screen recorder
+    // Report sample to the screen recorder
     denise.recorder.addSample(left, right);
 }
 
@@ -491,19 +488,19 @@ PaulaAudio::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer.
     // (2) The producer is halted or not startet yet.
     
-    debug(AUDBUF_DEBUG, "SID RINGBUFFER UNDERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
+    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", ringBuffer.r, ringBuffer.r);
     
-    // Determine the elapsed seconds since the last pointer adjustment.
+    // Determine the elapsed seconds since the last pointer adjustment
     u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     
-    // Adjust the sample rate, if condition (1) holds.
+    // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
 
         stats.bufferUnderflows++;
         
-        // Increase the sample rate based on what we've measured.
+        // Increase the sample rate based on what we've measured
         int offPerSecond = (int)(samplesAhead / elapsedTime);
         setSampleRate(getSampleRate() + offPerSecond);
     }
@@ -520,7 +517,7 @@ PaulaAudio::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer.
     // (2) The consumer is halted or not startet yet.
     
-    debug(AUDBUF_DEBUG, "SID RINGBUFFER OVERFLOW (r: %ld w: %ld)\n", readPtr, writePtr);
+    debug(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", ringBuffer.r, ringBuffer.w);
     
     // Determine the elapsed seconds since the last pointer adjustment.
     u64 now = mach_absolute_time();
@@ -545,7 +542,7 @@ float
 PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
                         bool left, float highestAmplitude, unsigned color)
 {
-    int dw = bufferSize / width;
+    int dw = ringBuffer.cap() / width;
     float newHighestAmplitude = 0.001;
     // float *ringBuffer = left ? ringBufferL : ringBufferR;
     
@@ -558,7 +555,7 @@ PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
     for (int w = 0; w < width; w++) {
         
         // Read samples from ringbuffer
-        SamplePair pair = ringBuffer[(readPtr + w * dw) % bufferSize];
+        SamplePair pair = ringBuffer.current(w * dw);
         // float sample = abs(ringBuffer[(readPtr + w * dw) % bufferSize]);
         float sample = left ? abs(pair.left) : abs(pair.right); 
         

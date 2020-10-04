@@ -32,8 +32,9 @@ template <class T, int capacity> struct RingBuffer
     RingBuffer() { clear(); }
     
     void clear() { r = w = 0; }
+    void clear(T t) { for (int i = 0; i < capacity; i++) elements[i] = t; clear(); }
+    void align(int offset) { w = (r + offset) % capacity; }
 
-    
     //
     // Serializing
     //
@@ -49,7 +50,9 @@ template <class T, int capacity> struct RingBuffer
     // Querying the fill status
     //
 
+    int cap() { return capacity; }
     int count() const { return (capacity + w - r) % capacity; }
+    double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }
 
@@ -73,6 +76,11 @@ template <class T, int capacity> struct RingBuffer
         return elements[r];
     }
 
+    T& current(int offset)
+    {
+        return elements[(r + offset) % capacity];
+    }
+    
     T& read()
     {
         assert(!isEmpty());
@@ -90,24 +98,11 @@ template <class T, int capacity> struct RingBuffer
         w = next(w);
         elements[oldw] = element;
     }
-
-
+    
     //
-    // Debugging
+    // Examining the element storage
     //
 
-    /*
-    void dump()
-     {
-         printf("%d elements (r = %d w = %d):\n", count(), r, w);
-         for (int i = r; i != w; i = next(i)) {
-             assert(i < capacity);
-             printf("%2i: ", i);
-             elements[i].print();
-         }
-         printf("\n");
-     }
-     */
 };
 
 template <class T, int capacity>
