@@ -17,7 +17,7 @@ class AudioStream : public RingBuffer <SamplePair, 16384> {
 public:
     
     // Clears the ringbuffer and resets the read and write pointer
-    void clearRingbuffer();
+    void erase();
         
     /* Aligns the write pointer. This function puts the write pointer somewhat
      * ahead of the read pointer. With a standard sample rate of 44100 Hz,
@@ -26,14 +26,6 @@ public:
     const u32 samplesAhead = 8 * 735;
     void alignWritePtr() { align(samplesAhead); }
     
-    /* Plots a graphical representation of the waveform. Returns the highest
-     * amplitute that was found in the ringbuffer. To implement auto-scaling,
-     * pass the returned value as parameter highestAmplitude in the next call
-     * to this function.
-     */
-    float drawWaveform(unsigned *buffer, int width, int height,
-                       bool left, float highestAmplitude, unsigned color);
-
     
     //
     // Copying data
@@ -57,6 +49,19 @@ public:
     void copyMono(float *buffer, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta,
                   AudioFilter &filterL, AudioFilter &filterR);
+
+    
+    //
+    // Visualizing the waveform
+    //
+    
+    /* Plots a graphical representation of the waveform. Returns the highest
+     * amplitute that was found in the ringbuffer. To implement auto-scaling,
+     * pass the returned value as parameter highestAmplitude in the next call
+     * to this function.
+     */
+    float drawWaveform(unsigned *buffer, int width, int height,
+                       bool left, float highestAmplitude, unsigned color);
 };
 
 #endif

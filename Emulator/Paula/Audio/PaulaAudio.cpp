@@ -366,7 +366,7 @@ PaulaAudio::clearRingbuffer()
     
     // Wipe out the ringbuffer
     // ringBuffer.clear(SamplePair {0, 0});
-    outStream.clearRingbuffer();
+    outStream.erase();
     
     // Wipe out the filter buffers
     filterL.clear();
@@ -423,7 +423,6 @@ PaulaAudio::readMonoSamples(float *target, size_t n)
     if (outStream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    // for (size_t i = 0; i < n; i++) readMonoSample(target + i);
     outStream.copyMono(target, n, volume, targetVolume, volumeDelta);
 }
 
@@ -434,7 +433,6 @@ PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
     if (outStream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    // for (size_t i = 0; i < n; i++) readStereoSample(target1 + i, target2 + i);
     outStream.copy(target1, target2, n, volume, targetVolume, volumeDelta);
 }
 
@@ -451,7 +449,6 @@ PaulaAudio::writeData(float left, float right)
     }
 
     // Write sample into ringbuffer
-    // ringBuffer.write( SamplePair { left, right } );
     outStream.write( SamplePair { left, right } );
     
     // Report sample to the screen recorder
@@ -518,52 +515,7 @@ PaulaAudio::handleBufferOverflow()
     outStream.alignWritePtr();
 }
 
-float
-PaulaAudio::drawWaveform(unsigned *buffer, int width, int height,
-                        bool left, float highestAmplitude, unsigned color)
-{
-    int dw = outStream.cap() / width;
-    float newHighestAmplitude = 0.001;
-    
-    // Clear buffer
-    for (int i = 0; i < width * height; i++) {
-        buffer[i] = color & 0xFFFFFF;
-    }
-    
-    // Draw waveform
-    for (int w = 0; w < width; w++) {
-        
-        // Read samples from ringbuffer
-        SamplePair pair = outStream.current(w * dw);
-        float sample = left ? abs(pair.left) : abs(pair.right);
-        
-        if (sample == 0) {
-            
-            // Draw some noise to make it look sexy
-            unsigned *ptr = buffer + width * height / 2 + w;
-            *ptr = color;
-            if (rand() % 2) *(ptr + width) = color;
-            if (rand() % 2) *(ptr - width) = color;
-            
-        } else {
-            
-            // Remember the highest amplitude
-            if (sample > newHighestAmplitude) newHighestAmplitude = sample;
-            
-            // Scale the sample
-            int scaled = int(sample * height / highestAmplitude);
-            if (scaled > height) scaled = height;
-            
-            // Draw vertical line
-            unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;
-            for (int j = 0; j < scaled; j++, ptr += width) *ptr = color;
-        }
-    }
-    return newHighestAmplitude;
-}
-
 template<> u8 PaulaAudio::getState<0>() { return channel0.state; }
 template<> u8 PaulaAudio::getState<1>() { return channel1.state; }
 template<> u8 PaulaAudio::getState<2>() { return channel2.state; }
 template<> u8 PaulaAudio::getState<3>() { return channel3.state; }
-

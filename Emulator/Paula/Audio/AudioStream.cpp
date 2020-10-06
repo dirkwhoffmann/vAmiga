@@ -10,7 +10,7 @@
 #include "Amiga.h"
 
 void
-AudioStream::clearRingbuffer()
+AudioStream::erase()
 {
     // Wipe out the ringbuffer
     clear(SamplePair {0, 0});
@@ -163,4 +163,48 @@ AudioStream::copyMono(float *buffer, size_t n,
             *buffer++ = (filterL.apply(pair.left) + filterR.apply(pair.right)) * scale;
         }
     }
+}
+
+float
+AudioStream::drawWaveform(unsigned *buffer, int width, int height,
+                          bool left, float highestAmplitude, unsigned color)
+{
+    int dw = cap() / width;
+    float newHighestAmplitude = 0.001;
+    
+    // Clear buffer
+    for (int i = 0; i < width * height; i++) {
+        buffer[i] = color & 0xFFFFFF;
+    }
+    
+    // Draw waveform
+    for (int w = 0; w < width; w++) {
+        
+        // Read samples from ringbuffer
+        SamplePair pair = current(w * dw);
+        float sample = left ? abs(pair.left) : abs(pair.right);
+        
+        if (sample == 0) {
+            
+            // Draw some noise to make it look sexy
+            unsigned *ptr = buffer + width * height / 2 + w;
+            *ptr = color;
+            if (rand() % 2) *(ptr + width) = color;
+            if (rand() % 2) *(ptr - width) = color;
+            
+        } else {
+            
+            // Remember the highest amplitude
+            if (sample > newHighestAmplitude) newHighestAmplitude = sample;
+            
+            // Scale the sample
+            int scaled = int(sample * height / highestAmplitude);
+            if (scaled > height) scaled = height;
+            
+            // Draw vertical line
+            unsigned *ptr = buffer + width * ((height - scaled) / 2) + w;
+            for (int j = 0; j < scaled; j++, ptr += width) *ptr = color;
+        }
+    }
+    return newHighestAmplitude;
 }

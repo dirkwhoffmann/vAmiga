@@ -221,10 +221,6 @@ public:
             
     // Clears the ringbuffer and resets the read and write pointer
     void clearRingbuffer();
-
-    // Reads sound samples from the sample buffers
-    // void readMonoSample(float *mono);
-    // void readStereoSample(float *left, float *right);
     
     // Reads samples from the ringbuffer (mono stream format)
     void readMonoSamples(float *target, size_t n);
@@ -257,14 +253,7 @@ public:
     const u32 samplesAhead = 8 * 735;
     // void alignWritePtr() { ringBuffer.align(samplesAhead); }
     
-    /* Plots a graphical representation of the waveform. Returns the highest
-     * amplitute that was found in the ringbuffer. To implement auto-scaling,
-     * pass the returned value as parameter highestAmplitude in the next call
-     * to this function.
-     */
-    float drawWaveform(unsigned *buffer, int width, int height,
-                       bool left, float highestAmplitude, unsigned color);
-
+ 
     
     //
     // Emulating the device
