@@ -365,56 +365,13 @@ PaulaAudio::clearRingbuffer()
     debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
     
     // Wipe out the ringbuffer
-    // ringBuffer.clear(SamplePair {0, 0});
-    outStream.erase();
+    outStream.clear(SamplePair {0, 0});
+    outStream.align(samplesAhead);
     
     // Wipe out the filter buffers
     filterL.clear();
     filterR.clear();
-
-    // Put the write pointer ahead of the read pointer
-    // alignWritePtr();
 }
-
-/*
-void
-PaulaAudio::readMonoSample(float *mono)
-{
-    float left, right;
-
-    readStereoSample(&left, &right);
-    *mono = left + right;
-}
-
-void
-PaulaAudio::readStereoSample(float *left, float *right)
-{
-    // Read sample
-    SamplePair pair = ringBuffer.read();
- 
-    // Adjust volume
-    if (volume != targetVolume) {
-        if (volume < targetVolume) {
-            volume += MIN(volumeDelta, targetVolume - volume);
-        } else {
-            volume -= MIN(volumeDelta, volume - targetVolume);
-        }
-    }
-
-    // Scale by the new volume
-    float divider = 10000.0f;
-    if (volume > 0) {
-        pair.left *= (float)volume / divider;
-        pair.right *= (float)volume / divider;
-    } else {
-        pair = SamplePair { 0, 0 };
-    }
-
-    // Write result
-    *left = pair.left;
-    *right = pair.right;
-}
-*/
 
 void
 PaulaAudio::readMonoSamples(float *target, size_t n)
@@ -481,8 +438,7 @@ PaulaAudio::handleBufferUnderflow()
     }
     
     // Reset the write pointer
-    // alignWritePtr();
-    outStream.alignWritePtr();
+    outStream.align(samplesAhead);
 }
 
 void
@@ -511,8 +467,7 @@ PaulaAudio::handleBufferOverflow()
     }
     
     // Reset the write pointer
-    // alignWritePtr();
-    outStream.alignWritePtr();
+    outStream.align(samplesAhead);
 }
 
 template<> u8 PaulaAudio::getState<0>() { return channel0.state; }

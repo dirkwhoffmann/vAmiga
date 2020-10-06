@@ -10,16 +10,6 @@
 #include "Amiga.h"
 
 void
-AudioStream::erase()
-{
-    // Wipe out the ringbuffer
-    clear(SamplePair {0, 0});
-    
-    // Put the write pointer ahead of the read pointer
-    alignWritePtr();
-}
-
-void
 AudioStream::copy(float *left, float *right, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
@@ -166,7 +156,7 @@ AudioStream::copyMono(float *buffer, size_t n,
 }
 
 float
-AudioStream::drawWaveform(unsigned *buffer, int width, int height,
+AudioStream::draw(unsigned *buffer, int width, int height,
                           bool left, float highestAmplitude, unsigned color)
 {
     int dw = cap() / width;

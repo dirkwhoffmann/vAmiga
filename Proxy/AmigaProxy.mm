@@ -859,7 +859,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->audioUnit.outStream.drawWaveform(buffer, w, h, true, s, c);
+    return wrapper->paula->audioUnit.outStream.draw(buffer, w, h, true, s, c);
 }
 - (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
@@ -871,7 +871,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->audioUnit.outStream.drawWaveform(buffer, w, h, false, s, c);
+    return wrapper->paula->audioUnit.outStream.draw(buffer, w, h, false, s, c);
 }
 - (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {

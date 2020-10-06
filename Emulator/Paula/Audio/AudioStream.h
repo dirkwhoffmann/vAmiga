@@ -16,17 +16,6 @@ class AudioStream : public RingBuffer <SamplePair, 16384> {
 
 public:
     
-    // Clears the ringbuffer and resets the read and write pointer
-    void erase();
-        
-    /* Aligns the write pointer. This function puts the write pointer somewhat
-     * ahead of the read pointer. With a standard sample rate of 44100 Hz,
-     * 735 samples is 1/60 sec.
-     */
-    const u32 samplesAhead = 8 * 735;
-    void alignWritePtr() { align(samplesAhead); }
-    
-    
     //
     // Copying data
     //
@@ -60,8 +49,8 @@ public:
      * pass the returned value as parameter highestAmplitude in the next call
      * to this function.
      */
-    float drawWaveform(unsigned *buffer, int width, int height,
-                       bool left, float highestAmplitude, unsigned color);
+    float draw(unsigned *buffer, int width, int height,
+               bool left, float highestAmplitude, unsigned color);
 };
 
 #endif
