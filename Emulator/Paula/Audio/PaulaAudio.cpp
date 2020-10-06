@@ -30,6 +30,7 @@ PaulaAudio::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     clearRingbuffer();
+    outStream.clearRingbuffer();
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
 }
@@ -243,6 +244,7 @@ size_t
 PaulaAudio::didLoadFromBuffer(u8 *buffer)
 {
     clearRingbuffer();
+    outStream.clearRingbuffer();
     return 0;
 }
 
@@ -267,12 +269,14 @@ void
 PaulaAudio::_run()
 {
     clearRingbuffer();
+    outStream.clearRingbuffer();
 }
 
 void
 PaulaAudio::_pause()
 {
     clearRingbuffer();
+    outStream.clearRingbuffer();
 }
 
 void
@@ -416,31 +420,31 @@ PaulaAudio::readStereoSample(float *left, float *right)
 void
 PaulaAudio::readMonoSamples(float *target, size_t n)
 {
+    assert(ringBuffer.count() == outStream.count());
+
     // Check for a buffer underflow
     if (ringBuffer.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    for (size_t i = 0; i < n; i++) readMonoSample(target + i);
+    // for (size_t i = 0; i < n; i++) readMonoSample(target + i);
+    outStream.copyMono(target, n, volume, targetVolume, volumeDelta);
 }
 
 void
 PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
 {
+    if (ringBuffer.count() != outStream.count()) {
+        printf("%d %d\n", ringBuffer.count(), outStream.count());
+    }
+    assert(ringBuffer.count() == outStream.count());
+    
     // Check for a buffer underflow
     if (ringBuffer.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    for (size_t i = 0; i < n; i++) readStereoSample(target1 + i, target2 + i);
-}
-
-void
-PaulaAudio::readStereoSamplesInterleaved(float *target, size_t n)
-{
-    // Check for a buffer underflow
-    if (ringBuffer.count() < n) handleBufferUnderflow();
-    
-    // Read sound samples
-    for (size_t i = 0; i < n; i++) readStereoSample(target + 2*i, target + 2*i + 1);
+    // for (size_t i = 0; i < n; i++) readStereoSample(target1 + i, target2 + i);
+    for (size_t i = 0; i < n; i++) ringBuffer.read();
+    outStream.copy(target1, target2, n, volume, targetVolume, volumeDelta);
 }
 
 void
@@ -457,6 +461,7 @@ PaulaAudio::writeData(float left, float right)
 
     // Write sample into ringbuffer
     ringBuffer.write( SamplePair { left, right } );
+    outStream.write( SamplePair { left, right } );
     
     // Report sample to the screen recorder
     denise.recorder.addSample(left, right);
@@ -489,6 +494,7 @@ PaulaAudio::handleBufferUnderflow()
     
     // Reset the write pointer
     alignWritePtr();
+    outStream.alignWritePtr();
 }
 
 void
@@ -518,6 +524,7 @@ PaulaAudio::handleBufferOverflow()
     
     // Reset the write pointer
     alignWritePtr();
+    outStream.alignWritePtr();
 }
 
 float

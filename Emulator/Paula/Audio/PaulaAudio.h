@@ -12,6 +12,7 @@
 
 #include "StateMachine.h"
 #include "AudioFilter.h"
+#include "AudioStream.h"
 #include "Buffers.h"
 
 class PaulaAudio : public AmigaComponent {
@@ -48,7 +49,7 @@ public:
     
 private:
 
-    // The component has been executed up to this clock cycle.
+    // The component has been executed up to this clock cycle
     double clock = 0;
 
     // Master clock cycles per audio sample, set in setSampleRate()
@@ -69,7 +70,8 @@ private:
      * DEPRECATED. REPLACE BY AUDIO STREAM
      */
     RingBuffer <SamplePair, 16384> ringBuffer;
-        
+    AudioStream outStream;
+    
     // Current volume (a value of 0 or below silences the audio playback)
     const static i32 maxVolume = 100000;
     i32 volume = maxVolume;
@@ -227,10 +229,7 @@ public:
     
     // Reads samples from the ringbuffer (stereo stream format)
     void readStereoSamples(float *target1, float *target2, size_t n);
-    
-    // Reads samples from the ringbuffer (interleaved stereo stream format)
-    void readStereoSamplesInterleaved(float *target, size_t n);
-    
+        
     // Writes a stereo sample into the ringbuffer
     void writeData(float left, float right);
     

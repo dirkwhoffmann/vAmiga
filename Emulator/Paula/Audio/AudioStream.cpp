@@ -10,11 +10,21 @@
 #include "Amiga.h"
 
 void
+AudioStream::clearRingbuffer()
+{
+    // Wipe out the ringbuffer
+    clear(SamplePair {0, 0});
+    
+    // Put the write pointer ahead of the read pointer
+    alignWritePtr();
+}
+
+void
 AudioStream::copy(float *left, float *right, size_t n,
-                  float &volume, float targetVolume, float volumeDelta)
+                  i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(samples.count() < n);
+    assert(count() >= n);
 
     if (volume == targetVolume) {
         
@@ -22,7 +32,7 @@ AudioStream::copy(float *left, float *right, size_t n,
         
         for (size_t i = 0; i < n; i++) {
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *left++ = pair.left * scale;
             *right++ = pair.right * scale;
         }
@@ -39,7 +49,7 @@ AudioStream::copy(float *left, float *right, size_t n,
 
             float scale = volume / 10000.0f;
 
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *left++ = pair.left * scale;
             *right++ = pair.right * scale;
         }
@@ -48,11 +58,11 @@ AudioStream::copy(float *left, float *right, size_t n,
 
 void
 AudioStream::copy(float *left, float *right, size_t n,
-                  float &volume, float targetVolume, float volumeDelta,
+                  i32 &volume, i32 targetVolume, i32 volumeDelta,
                   AudioFilter &filterL, AudioFilter &filterR)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(samples.count() < n);
+    assert(count() >= n);
     
     if (volume == targetVolume) {
         
@@ -60,7 +70,7 @@ AudioStream::copy(float *left, float *right, size_t n,
         
         for (size_t i = 0; i < n; i++) {
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *left++ = filterL.apply(pair.left) * scale;
             *right++ = filterR.apply(pair.right) * scale;
         }
@@ -77,7 +87,7 @@ AudioStream::copy(float *left, float *right, size_t n,
             
             float scale = volume / 10000.0f;
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *left++ = filterL.apply(pair.left) * scale;
             *right++ = filterR.apply(pair.right) * scale;
         }
@@ -86,10 +96,10 @@ AudioStream::copy(float *left, float *right, size_t n,
 
 void
 AudioStream::copyMono(float *buffer, size_t n,
-                      float &volume, float targetVolume, float volumeDelta)
+                      i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(samples.count() < n);
+    assert(count() >= n);
 
     if (volume == targetVolume) {
         
@@ -97,7 +107,7 @@ AudioStream::copyMono(float *buffer, size_t n,
         
         for (size_t i = 0; i < n; i++) {
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *buffer++ = (pair.left + pair.right) * scale;
         }
 
@@ -113,7 +123,7 @@ AudioStream::copyMono(float *buffer, size_t n,
 
             float scale = volume / 10000.0f;
 
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *buffer++ = (pair.left + pair.right) * scale;
         }
     }
@@ -121,11 +131,11 @@ AudioStream::copyMono(float *buffer, size_t n,
 
 void
 AudioStream::copyMono(float *buffer, size_t n,
-                      float &volume, float targetVolume, float volumeDelta,
+                      i32 &volume, i32 targetVolume, i32 volumeDelta,
                       AudioFilter &filterL, AudioFilter &filterR)
 {
     // The caller has to ensure that no buffer underflows occurs
-    assert(samples.count() < n);
+    assert(count() >= n);
     
     if (volume == targetVolume) {
         
@@ -133,7 +143,7 @@ AudioStream::copyMono(float *buffer, size_t n,
         
         for (size_t i = 0; i < n; i++) {
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *buffer++ = (filterL.apply(pair.left) + filterR.apply(pair.right)) * scale;
         }
         
@@ -149,7 +159,7 @@ AudioStream::copyMono(float *buffer, size_t n,
             
             float scale = volume / 10000.0f;
             
-            SamplePair pair = samples.read();
+            SamplePair pair = read();
             *buffer++ = (filterL.apply(pair.left) + filterR.apply(pair.right)) * scale;
         }
     }

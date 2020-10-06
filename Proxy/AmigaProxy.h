@@ -479,12 +479,8 @@ struct SerialPortWrapper;
 - (u32) sampleRate;
 - (void) setSampleRate:(double)rate;
 
-// @property (readonly) NSInteger ringbufferSize;
-// - (double) fillLevel;
-
 - (void) readMonoSamples:(float *)target size:(NSInteger)n;
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n;
-- (void) readStereoSamplesInterleaved:(float *)target size:(NSInteger)n;
 
 - (void) rampUp;
 - (void) rampUpFromZero;

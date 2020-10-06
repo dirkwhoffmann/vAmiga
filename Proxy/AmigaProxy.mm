@@ -837,12 +837,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->paula->audioUnit.setSampleRate(rate);
 }
-/*
-- (double) fillLevel
-{
-    return wrapper->paula->audioUnit.fillLevel();
-}
-*/
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
     wrapper->paula->audioUnit.readMonoSamples(target, n);
@@ -850,10 +844,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
     wrapper->paula->audioUnit.readStereoSamples(target1, target2, n);
-}
-- (void) readStereoSamplesInterleaved:(float *)target size:(NSInteger)n
-{
-    wrapper->paula->audioUnit.readStereoSamplesInterleaved(target, n);
 }
 - (void) rampUp
 {
