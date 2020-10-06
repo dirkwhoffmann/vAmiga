@@ -63,7 +63,8 @@ Paula::_setWarp(bool enable)
     } else {
         
         audioUnit.rampUp();
-        audioUnit.alignWritePtr();
+        audioUnit.outStream.alignWritePtr();
+        // audioUnit.alignWritePtr();
     }
 }
 

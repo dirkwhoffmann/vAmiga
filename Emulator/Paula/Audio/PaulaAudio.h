@@ -63,15 +63,17 @@ private:
     // Sample buffers
     //
 
-private:
+public:
     
     /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
      * samples from the emulator to the sound device of the host machine.
      * DEPRECATED. REPLACE BY AUDIO STREAM
      */
-    RingBuffer <SamplePair, 16384> ringBuffer;
+    // RingBuffer <SamplePair, 16384> ringBuffer;
     AudioStream outStream;
-    
+
+private:
+
     // Current volume (a value of 0 or below silences the audio playback)
     const static i32 maxVolume = 100000;
     i32 volume = maxVolume;
@@ -221,15 +223,15 @@ public:
     void clearRingbuffer();
 
     // Reads sound samples from the sample buffers
-    void readMonoSample(float *mono);
-    void readStereoSample(float *left, float *right);
+    // void readMonoSample(float *mono);
+    // void readStereoSample(float *left, float *right);
     
     // Reads samples from the ringbuffer (mono stream format)
     void readMonoSamples(float *target, size_t n);
     
     // Reads samples from the ringbuffer (stereo stream format)
     void readStereoSamples(float *target1, float *target2, size_t n);
-        
+    
     // Writes a stereo sample into the ringbuffer
     void writeData(float left, float right);
     
@@ -253,7 +255,7 @@ public:
      * 735 samples is 1/60 sec.
      */
     const u32 samplesAhead = 8 * 735;
-    void alignWritePtr() { ringBuffer.align(samplesAhead); }
+    // void alignWritePtr() { ringBuffer.align(samplesAhead); }
     
     /* Plots a graphical representation of the waveform. Returns the highest
      * amplitute that was found in the ringbuffer. To implement auto-scaling,
