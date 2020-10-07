@@ -19,6 +19,7 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
         &channel1,
         &channel2,
         &channel3,
+        &muxer,
         &filterL,
         &filterR
     };
@@ -290,11 +291,17 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
+        /*
         double ch0 = channel0.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[0];
         double ch1 = channel1.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[1];
         double ch2 = channel2.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[2];
         double ch3 = channel3.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[3];
-        
+        */
+        double ch0 = muxer.sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
+        double ch1 = muxer.sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
+        double ch2 = muxer.sampler[2].interpolate<method>((Cycle)clock) * config.vol[2];
+        double ch3 = muxer.sampler[3].interpolate<method>((Cycle)clock) * config.vol[3];
+
         double l =
         ch0 * config.pan[0] + ch1 * config.pan[1] +
         ch2 * config.pan[2] + ch3 * config.pan[3];

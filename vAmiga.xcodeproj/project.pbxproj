@@ -153,6 +153,7 @@
 		50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */ = {isa = PBXBuildFile; fileRef = 50B14C2721EB97EC002E32A6 /* AmigaProxy.mm */; };
 		50B35B6222B2382E001A9C17 /* SerialPort.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B35B6022B2382E001A9C17 /* SerialPort.cpp */; };
 		50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B5C07D241107F200F124DC /* AmigaConstants.cpp */; };
+		50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B70CAB252CE0BF006B5191 /* Muxer.cpp */; };
 		50B81E0824E6BCCA004384C9 /* DiskControllerRegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */; };
 		50B81E0A24E6BEA5004384C9 /* CIARegisters.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50B81E0924E6BEA5004384C9 /* CIARegisters.cpp */; };
 		50B9354924347EF9000C78B8 /* SnapshotDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50B9354824347EF9000C78B8 /* SnapshotDialog.xib */; };
@@ -417,6 +418,8 @@
 		50B35B6022B2382E001A9C17 /* SerialPort.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SerialPort.cpp; sourceTree = "<group>"; };
 		50B35B6122B2382E001A9C17 /* SerialPort.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SerialPort.h; sourceTree = "<group>"; };
 		50B5C07D241107F200F124DC /* AmigaConstants.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaConstants.cpp; sourceTree = "<group>"; };
+		50B70CAB252CE0BF006B5191 /* Muxer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Muxer.cpp; sourceTree = "<group>"; };
+		50B70CAC252CE0BF006B5191 /* Muxer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Muxer.h; sourceTree = "<group>"; };
 		50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskControllerRegisters.cpp; sourceTree = "<group>"; };
 		50B81E0924E6BEA5004384C9 /* CIARegisters.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIARegisters.cpp; sourceTree = "<group>"; };
 		50B9354824347EF9000C78B8 /* SnapshotDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SnapshotDialog.xib; sourceTree = "<group>"; };
@@ -985,6 +988,8 @@
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
 				5030C2DF252A2E8400107E00 /* AudioStream.h */,
 				5030C2DE252A2E8400107E00 /* AudioStream.cpp */,
+				50B70CAC252CE0BF006B5191 /* Muxer.h */,
+				50B70CAB252CE0BF006B5191 /* Muxer.cpp */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1365,6 +1370,7 @@
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
+				50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */,
 				508FE04F21EA22CC0043D0E9 /* GeneralPrefs.swift in Sources */,
 				50F5A84E2214112F00AD5611 /* PaulaPanel.swift in Sources */,
 				50F54B2B24B5D31D0078FDC9 /* maketbl.c in Sources */,

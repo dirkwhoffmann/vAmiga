@@ -26,13 +26,15 @@ template <int nr> void
 StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-    taggedSamples.clear();
     
+    
+    // taggedSamples.clear();
+
     /* Some methods assume that the sample buffer is never empty. We assure
      * this by initializing the buffer with a dummy element.
      */
-    assert(taggedSamples.isEmpty());
-    taggedSamples.write( TaggedSample { 0, 0 } );
+    // assert(taggedSamples.isEmpty());
+    // taggedSamples.write( TaggedSample { 0, 0 } );
 }
 
 template <int nr> void
@@ -166,14 +168,19 @@ template <int nr> void
 StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
-    
+ 
+    TaggedSampleBuffer &sampler = audioUnit.muxer.sampler[nr];
+
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
     
-    if (!taggedSamples.isFull()) {
-        taggedSamples.write( TaggedSample { agnus.clock, scaled } );
+    // if (!taggedSamples.isFull()) {
+    //     taggedSamples.write( TaggedSample { agnus.clock, scaled } );
+            
+    if (!sampler.isFull()) {
+        sampler.write( TaggedSample { agnus.clock, scaled } );
     } else {
         debug("penhi: Sample buffer is full\n");
     }
@@ -186,13 +193,15 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
+    TaggedSampleBuffer &sampler = audioUnit.muxer.sampler[nr];
+    
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
 
     debug(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    if (!taggedSamples.isFull()) {
-        taggedSamples.write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler.isFull()) {
+        sampler.write( TaggedSample { agnus.clock, scaled } );
     } else {
         debug("penlo: Sample buffer is full\n");
     }

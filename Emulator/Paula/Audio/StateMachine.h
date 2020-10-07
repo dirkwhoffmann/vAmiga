@@ -57,7 +57,7 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    TaggedSampleBuffer taggedSamples; 
+    // TaggedSampleBuffer taggedSamples;
 
     /* Two locks regulating the access to the sample buffer.
      *
@@ -141,7 +141,7 @@ private:
         & audlcLatch
         & audDR
         & intreq2
-        & taggedSamples
+        // & taggedSamples
         & enablePenlo
         & enablePenhi;
     }

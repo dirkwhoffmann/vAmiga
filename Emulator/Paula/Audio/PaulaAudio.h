@@ -12,6 +12,7 @@
 
 #include "StateMachine.h"
 #include "AudioFilter.h"
+#include "Muxer.h"
 #include "AudioStream.h"
 #include "Buffers.h"
 
@@ -38,6 +39,9 @@ public:
     StateMachine<2> channel2 = StateMachine<2>(amiga);
     StateMachine<3> channel3 = StateMachine<3>(amiga);
 
+    // Muxer
+    Muxer muxer = Muxer(amiga);
+    
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
     AudioFilter filterR = AudioFilter(amiga);
