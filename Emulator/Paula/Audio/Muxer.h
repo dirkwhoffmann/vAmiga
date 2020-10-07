@@ -101,27 +101,7 @@ public:
     double getSampleRate() { return sampleRate; }
     void setSampleRate(double hz);
     
-    
-    //
-    // Configuring
-    //
-    
-public:
 
-    /*
-    AudioConfig getConfig() { return config; }
-
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
-    */
-
-private:
-    
-    /*
-    void _inspect() override;
-    void _dump() override;
-    */
-    
     //
     // Serializing
     //
@@ -168,14 +148,29 @@ public:
 private:
     
     template <SamplingMethod method> double synthesize(size_t count, double clock);
-    // template <SamplingMethod method> double synthesize(double clock, Cycle target);
-
+    
     // Handles a buffer underflow or overflow condition
     void handleBufferUnderflow();
     void handleBufferOverflow();
     
+public:
+    
     // Signals to ignore the next underflow or overflow condition
     void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
+
+
+    //
+    // Copying data
+    //
+    
+public:
+    
+    void copy(float *left, float *right, size_t n,
+              i32 &volume, i32 targetVolume, i32 volumeDelta);
+    
+    void copyMono(float *buffer, size_t n,
+                  i32 &volume, i32 targetVolume, i32 volumeDelta);
+    
 };
 
 #endif

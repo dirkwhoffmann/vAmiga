@@ -30,7 +30,7 @@ PaulaAudio::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    clearRingbuffer();
+    muxer.clear();
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
 }
@@ -243,7 +243,7 @@ PaulaAudio::setSampleRate(double hz)
 size_t
 PaulaAudio::didLoadFromBuffer(u8 *buffer)
 {
-    clearRingbuffer();
+    muxer.clear();
     return 0;
 }
 
@@ -267,54 +267,20 @@ PaulaAudio::_dump()
 void
 PaulaAudio::_run()
 {
-    clearRingbuffer();
+    muxer.clear();
 }
 
 void
 PaulaAudio::_pause()
 {
-    clearRingbuffer();
+    muxer.clear();
 }
 
 void
 PaulaAudio::executeUntil(Cycle target)
 {
     if (target > 0) clock = muxer.synthesize(clock, target);
-    /*
-    switch (config.samplingMethod) {
-        case SMP_NONE:    executeUntil<SMP_NONE>   (target); return;
-        case SMP_NEAREST: executeUntil<SMP_NEAREST>(target); return;
-        case SMP_LINEAR:  executeUntil<SMP_LINEAR> (target); return;
-    }
-    */
 }
-
-/*
-
-template <SamplingMethod method> void
-PaulaAudio::executeUntil(Cycle targetClock)
-{
-    while (clock < targetClock) {
-
-        double ch0 = muxer.sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
-        double ch1 = muxer.sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
-        double ch2 = muxer.sampler[2].interpolate<method>((Cycle)clock) * config.vol[2];
-        double ch3 = muxer.sampler[3].interpolate<method>((Cycle)clock) * config.vol[3];
-
-        double l =
-        ch0 * config.pan[0] + ch1 * config.pan[1] +
-        ch2 * config.pan[2] + ch3 * config.pan[3];
-        
-        double r =
-        ch0 * (1 - config.pan[0]) + ch1 * (1 - config.pan[1]) +
-        ch2 * (1 - config.pan[2]) + ch3 * (1 - config.pan[3]);
-        
-        writeData((float)(l * config.volL), (float)(r * config.volR));
-
-        clock += cyclesPerSample;
-    }
-}
- */
 
 void
 PaulaAudio::pokeAUDxPER(int nr, u16 value)
@@ -348,7 +314,7 @@ PaulaAudio::rampUp()
     
     targetVolume = maxVolume;
     volumeDelta = 3;
-    ignoreNextUnderOrOverflow();
+    muxer.ignoreNextUnderOrOverflow();
 }
 
 void
@@ -363,122 +329,19 @@ PaulaAudio::rampDown()
 {    
     targetVolume = 0;
     volumeDelta = 50;
-    ignoreNextUnderOrOverflow();
+    muxer.ignoreNextUnderOrOverflow();
 }
 
 void
-PaulaAudio::clearRingbuffer()
+PaulaAudio::readMonoSamples(float *buffer, size_t n)
 {
-    debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
-    
-    muxer.clear();
-    
-    // Wipe out the ringbuffer
-    outStream.clear(SamplePair {0, 0});
-    outStream.align(samplesAhead);
-    
-    // Wipe out the filter buffers
-    filterL.clear();
-    filterR.clear();
+    muxer.copyMono(buffer, n, volume, targetVolume, volumeDelta);
 }
 
 void
-PaulaAudio::readMonoSamples(float *target, size_t n)
+PaulaAudio::readStereoSamples(float *left, float *right, size_t n)
 {
-    // Check for a buffer underflow
-    if (outStream.count() < n) handleBufferUnderflow();
-    
-    // Read sound samples
-    muxer.stream.copyMono(target, n, volume, targetVolume, volumeDelta);
-}
-
-void
-PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
-{
-    // Check for a buffer underflow
-    if (outStream.count() < n) handleBufferUnderflow();
-    
-    // Read sound samples
-    muxer.stream.copy(target1, target2, n, volume, targetVolume, volumeDelta);
-}
-
-void
-PaulaAudio::writeData(float left, float right)
-{
-    assert(false);
-    
-    // Check for buffer overflow
-    if (outStream.isFull()) handleBufferOverflow();
-    
-    // Apply audio filter if applicable
-    if (ciaa.powerLED() || config.filterAlwaysOn) {
-        left = filterL.apply(left);
-        right = filterR.apply(right);
-    }
-
-    // Write sample into ringbuffer
-    outStream.write( SamplePair { left, right } );
-    
-    // Report sample to the screen recorder
-    denise.recorder.addSample(left, right);
-}
-
-void
-PaulaAudio::handleBufferUnderflow()
-{
-    // There are two common scenarios in which buffer underflows occur:
-    //
-    // (1) The consumer runs slightly faster than the producer
-    // (2) The producer is halted or not startet yet
-    
-    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", outStream.r, outStream.w);
-    
-    // Determine the elapsed seconds since the last pointer adjustment
-    u64 now = mach_absolute_time();
-    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
-    lastAlignment = now;
-    
-    // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime > 10.0) {
-
-        stats.bufferUnderflows++;
-        
-        // Increase the sample rate based on what we've measured
-        int offPerSecond = (int)(samplesAhead / elapsedTime);
-        setSampleRate(getSampleRate() + offPerSecond);
-    }
-    
-    // Reset the write pointer
-    outStream.align(samplesAhead);
-}
-
-void
-PaulaAudio::handleBufferOverflow()
-{
-    // There are two common scenarios in which buffer overflows occur:
-    //
-    // (1) The consumer runs slightly slower than the producer
-    // (2) The consumer is halted or not startet yet
-    
-    debug(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", outStream.r, outStream.w);
-    
-    // Determine the elapsed seconds since the last pointer adjustment
-    u64 now = mach_absolute_time();
-    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
-    lastAlignment = now;
-    
-    // Adjust the sample rate, if condition (1) holds
-    if (elapsedTime > 10.0) {
-        
-        stats.bufferOverflows++;
-        
-        // Decrease the sample rate based on what we've measured
-        int offPerSecond = (int)(samplesAhead / elapsedTime);
-        setSampleRate(getSampleRate() - offPerSecond);
-    }
-    
-    // Reset the write pointer
-    outStream.align(samplesAhead);
+    muxer.copy(left, right, n, volume, targetVolume, volumeDelta);
 }
 
 template<> u8 PaulaAudio::getState<0>() { return channel0.state; }

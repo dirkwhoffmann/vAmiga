@@ -63,7 +63,7 @@ Paula::_setWarp(bool enable)
     } else {
         
         audioUnit.rampUp();
-        audioUnit.clearRingbuffer();
+        audioUnit.muxer.clear();
     }
 }
 

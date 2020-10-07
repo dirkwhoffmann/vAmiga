@@ -39,18 +39,10 @@ public:
      */
     void copy(float *left, float *right, size_t n,
               i32 &volume, i32 targetVolume, i32 volumeDelta);
-
-    void copy(float *left, float *right, size_t n,
-              i32 &volume, i32 targetVolume, i32 volumeDelta,
-              AudioFilter &filterL, AudioFilter &filterR);
     
     void copyMono(float *buffer, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta);
     
-    void copyMono(float *buffer, size_t n,
-                  i32 &volume, i32 targetVolume, i32 volumeDelta,
-                  AudioFilter &filterL, AudioFilter &filterR);
-
     
     //
     // Visualizing the waveform

@@ -74,7 +74,7 @@ public:
      * DEPRECATED. REPLACE BY AUDIO STREAM
      */
     // RingBuffer <SamplePair, 16384> ringBuffer;
-    AudioStream outStream;
+    // AudioStream outStream;
 
 private:
 
@@ -206,7 +206,7 @@ public:
     void setVolume(i32 vol) { volume = vol; }
     
     /* Triggers volume ramp up phase. Configures volume and targetVolume to
-     * simulate a smooth audio fade in.
+     * simulate a smooth audio fade in
      */
     void rampUp();
     void rampUpFromZero();
@@ -222,43 +222,14 @@ public:
     //
     
 public:
-            
-    // Clears the ringbuffer and resets the read and write pointer
-    void clearRingbuffer();
-    
+                
     // Reads samples from the ringbuffer (mono stream format)
-    void readMonoSamples(float *target, size_t n);
+    void readMonoSamples(float *buffer, size_t n);
     
     // Reads samples from the ringbuffer (stereo stream format)
-    void readStereoSamples(float *target1, float *target2, size_t n);
+    void readStereoSamples(float *left, float *right, size_t n);
     
-    // Writes a stereo sample into the ringbuffer
-    void writeData(float left, float right);
-    
-    /* Handles a buffer underflow condition. A buffer underflow occurs if the
-     * audio device of the host needs more sound samples than Paula has
-     * produced yet.
-     */
-    void handleBufferUnderflow();
-    
-    /* Handles a buffer overflow condition. A buffer overflow occurs if Paula
-     * has produced more samples than the audio device of the host is able to
-     * consume.
-     */
-    void handleBufferOverflow();
-    
-    // Signals to ignore the next underflow or overflow condition
-    void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
-    
-    /* Aligns the write pointer. This function puts the write pointer somewhat
-     * ahead of the read pointer. With a standard sample rate of 44100 Hz,
-     * 735 samples is 1/60 sec.
-     */
-    const u32 samplesAhead = 8 * 735;
-    // void alignWritePtr() { ringBuffer.align(samplesAhead); }
-    
- 
-    
+
     //
     // Emulating the device
     //
@@ -271,7 +242,6 @@ public:
 
     // Returns the current state of the state machine
     template <int channel> u8 getState();
-
 };
 
 #endif

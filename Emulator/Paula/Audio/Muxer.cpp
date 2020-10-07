@@ -368,3 +368,25 @@ Muxer::handleBufferOverflow()
         setSampleRate(getSampleRate() - offPerSecond);
     }
 }
+
+void
+Muxer::copy(float *left, float *right, size_t n,
+            i32 &volume, i32 targetVolume, i32 volumeDelta)
+{
+    // Check for a buffer underflow
+    if (stream.count() < n) handleBufferUnderflow();
+    
+    // Read sound samples
+    stream.copy(left, right, n, volume, targetVolume, volumeDelta);
+}
+
+void
+Muxer::copyMono(float *buffer, size_t n,
+                i32 &volume, i32 targetVolume, i32 volumeDelta)
+{
+    // Check for a buffer underflow
+    if (stream.count() < n) handleBufferUnderflow();
+    
+    // Read sound samples
+    stream.copyMono(buffer, n, volume, targetVolume, volumeDelta);
+}
