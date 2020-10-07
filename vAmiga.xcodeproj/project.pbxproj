@@ -51,7 +51,7 @@
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
 		507653CD2216F938001D26E9 /* DenisePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CC2216F938001D26E9 /* DenisePanel.swift */; };
 		507727EE242F2CE4009D01DA /* iCarousel.m in Sources */ = {isa = PBXBuildFile; fileRef = 507727ED242F2CE3009D01DA /* iCarousel.m */; };
-		5078A5D52529E7FA00FCE384 /* TaggedSampleBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* TaggedSampleBuffer.cpp */; };
+		5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5078A5D32529E7FA00FCE384 /* Sampler.cpp */; };
 		507957AC244AD25B007B8B8D /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507957AB244AD25B007B8B8D /* Configuration.swift */; };
 		507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 507D7767228BE3EF001E97A9 /* StateMachine.cpp */; };
 		5085FE5721FB3BAE009753EF /* EventHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5085FE5521FB3BAE009753EF /* EventHandler.cpp */; };
@@ -286,8 +286,8 @@
 		50769B8B24BD7B01006FE743 /* DmaDebuggerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DmaDebuggerTypes.h; sourceTree = "<group>"; };
 		507727EC242F2CE3009D01DA /* iCarousel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iCarousel.h; sourceTree = "<group>"; };
 		507727ED242F2CE3009D01DA /* iCarousel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iCarousel.m; sourceTree = "<group>"; };
-		5078A5D32529E7FA00FCE384 /* TaggedSampleBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = TaggedSampleBuffer.cpp; sourceTree = "<group>"; };
-		5078A5D42529E7FA00FCE384 /* TaggedSampleBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TaggedSampleBuffer.h; sourceTree = "<group>"; };
+		5078A5D32529E7FA00FCE384 /* Sampler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Sampler.cpp; sourceTree = "<group>"; };
+		5078A5D42529E7FA00FCE384 /* Sampler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sampler.h; sourceTree = "<group>"; };
 		507957AB244AD25B007B8B8D /* Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
 		507D7767228BE3EF001E97A9 /* StateMachine.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = StateMachine.cpp; sourceTree = "<group>"; };
 		507D7768228BE3EF001E97A9 /* StateMachine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StateMachine.h; sourceTree = "<group>"; };
@@ -982,14 +982,14 @@
 				507D7767228BE3EF001E97A9 /* StateMachine.cpp */,
 				50AE6EE624D9B2C7000AA367 /* StateMachineRegisters.cpp */,
 				50AEBED224D3D6D10037082D /* StateMachineEvents.cpp */,
-				5078A5D42529E7FA00FCE384 /* TaggedSampleBuffer.h */,
-				5078A5D32529E7FA00FCE384 /* TaggedSampleBuffer.cpp */,
+				5078A5D42529E7FA00FCE384 /* Sampler.h */,
+				5078A5D32529E7FA00FCE384 /* Sampler.cpp */,
 				505A214F22869FF10016EA21 /* AudioFilter.h */,
 				505A214E22869FF10016EA21 /* AudioFilter.cpp */,
-				5030C2DF252A2E8400107E00 /* AudioStream.h */,
-				5030C2DE252A2E8400107E00 /* AudioStream.cpp */,
 				50B70CAC252CE0BF006B5191 /* Muxer.h */,
 				50B70CAB252CE0BF006B5191 /* Muxer.cpp */,
+				5030C2DF252A2E8400107E00 /* AudioStream.h */,
+				5030C2DE252A2E8400107E00 /* AudioStream.cpp */,
 			);
 			path = Audio;
 			sourceTree = "<group>";
@@ -1360,7 +1360,7 @@
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
 				50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */,
-				5078A5D52529E7FA00FCE384 /* TaggedSampleBuffer.cpp in Sources */,
+				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
 				50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */,
 				50E204EA2295A3F20082B63D /* DmaDebugger.cpp in Sources */,

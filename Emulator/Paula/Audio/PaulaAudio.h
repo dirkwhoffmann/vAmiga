@@ -40,7 +40,7 @@ public:
     StateMachine<3> channel3 = StateMachine<3>(amiga);
 
     // Muxer
-    Muxer muxer = Muxer(amiga);
+    Muxer<256> muxer = Muxer<256>(amiga);
     
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);

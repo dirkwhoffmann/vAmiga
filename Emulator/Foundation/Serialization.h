@@ -17,7 +17,7 @@
 #include "Event.h"
 #include "Frame.h"
 #include "TimeDelayed.h"
-#include "TaggedSampleBuffer.h"
+#include "Sampler.h"
 
 //
 // Basic memory buffer I/O
@@ -153,7 +153,7 @@ public:
     STRUCT(Frame)
     STRUCT(RegChange)
     STRUCT(TaggedSample)
-    STRUCT(TaggedSampleBuffer)
+    STRUCT(Sampler<256>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -233,7 +233,7 @@ public:
     STRUCT(Frame)
     STRUCT(RegChange)
     STRUCT(TaggedSample)
-    STRUCT(TaggedSampleBuffer)
+    STRUCT(Sampler<256>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -319,7 +319,7 @@ public:
     STRUCT(Frame)
     STRUCT(RegChange)
     STRUCT(TaggedSample)
-    STRUCT(TaggedSampleBuffer)
+    STRUCT(Sampler<256>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -394,7 +394,7 @@ public:
     STRUCT(Frame)
     STRUCT(RegChange)
     STRUCT(TaggedSample)
-    STRUCT(TaggedSampleBuffer)
+    STRUCT(Sampler<256>)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)

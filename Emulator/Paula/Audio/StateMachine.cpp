@@ -169,7 +169,7 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    TaggedSampleBuffer &sampler = audioUnit.muxer.sampler[nr];
+    Sampler<256> &sampler = audioUnit.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
@@ -193,7 +193,7 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    TaggedSampleBuffer &sampler = audioUnit.muxer.sampler[nr];
+    Sampler<256> &sampler = audioUnit.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;

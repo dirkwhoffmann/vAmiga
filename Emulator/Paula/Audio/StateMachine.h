@@ -11,7 +11,7 @@
 #define _STATE_MACHINE_H
 
 #include "AmigaComponent.h"
-#include "TaggedSampleBuffer.h"
+#include "Sampler.h"
 
 template <int nr>
 class StateMachine : public AmigaComponent {
@@ -57,7 +57,7 @@ public:
     bool intreq2;
 
     // Ringbuffer storing the synthesized samples
-    // TaggedSampleBuffer taggedSamples;
+    // Sampler taggedSamples;
 
     /* Two locks regulating the access to the sample buffer.
      *

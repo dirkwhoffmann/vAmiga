@@ -36,8 +36,8 @@ struct TaggedSample
 };
 
 
-// struct TaggedSampleBuffer : RingBuffer <TaggedSample, 0x20000> {
-struct TaggedSampleBuffer : RingBuffer <TaggedSample, 256> {
+template <int capacity>
+struct Sampler : RingBuffer <TaggedSample, 256> {
     
     /* Interpolates a sound sample for the specified target cycle. Two major
      * steps are involved. In the first step, the function computes index

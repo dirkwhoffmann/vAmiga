@@ -7,10 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "TaggedSampleBuffer.h"
+#include "Sampler.h"
 
-template <SamplingMethod method> i16
-TaggedSampleBuffer::interpolate(Cycle clock)
+template <int capacity> template <SamplingMethod method> i16
+Sampler<capacity>::interpolate(Cycle clock)
 {
     assert(!isEmpty());
 
@@ -63,6 +63,6 @@ TaggedSampleBuffer::interpolate(Cycle clock)
     }
 }
 
-template i16 TaggedSampleBuffer::interpolate<SMP_NONE>(Cycle clock);
-template i16 TaggedSampleBuffer::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 TaggedSampleBuffer::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 Sampler<256>::interpolate<SMP_NONE>(Cycle clock);
+template i16 Sampler<256>::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 Sampler<256>::interpolate<SMP_LINEAR>(Cycle clock);

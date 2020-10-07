@@ -9,13 +9,14 @@
 
 #include "Amiga.h"
 
-Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
+template <int capacity>
+Muxer<capacity>::Muxer(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Muxer");
 }
     
-void
-Muxer::_reset(bool hard)
+template <int capacity> void
+Muxer<capacity>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
@@ -30,3 +31,5 @@ Muxer::_reset(bool hard)
         sampler[i].write( TaggedSample { 0, 0 } );
     }
 }
+
+template Muxer<256>::Muxer(Amiga &ref);

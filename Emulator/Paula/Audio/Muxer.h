@@ -15,30 +15,31 @@
 /* Architecture of the audio pipeline
  *
  *           Mux class
- *           --------------------------------------------------------
- *  State   |   ---------                                            |
- * machine -|->| Sampler |-> volume ->|                              |
- *    0     |   ---------             |                              |
- *          |                         |                              |
- *  State   |   ---------             |                              |
- * machine -|->| Sampler |-> volume ->|                              |
- *    1     |   ---------             |    panL      --------------  |
- *          |                         |-> volume -->| Audio Stream |-|-> GUI
- *  State   |   ---------             |    panR      --------------  |
- * machine -|->| Sampler |-> volume ->|                              |
- *    2     |   ---------             |                              |
- *          |                         |                              |
- *  State   |   ---------             |                              |
- * machine -|->| Sampler |-> volume ->|                              |
- *    3     |   ---------                                            |
- *           --------------------------------------------------------
+ *           -----------------------------------------------------
+ *  State   |   ---------                                         |
+ * machine -|->| Sampler |-> vol ->|                              |
+ *    0     |   ---------          |                              |
+ *          |                      |                              |
+ *  State   |   ---------          |                              |
+ * machine -|->| Sampler |-> vol ->|                              |
+ *    1     |   ---------          |     pan     --------------   |
+ *          |                      |--> l vol ->| Audio Stream |--|-> GUI
+ *  State   |   ---------          |    r vol    --------------   |
+ * machine -|->| Sampler |-> vol ->|                              |
+ *    2     |   ---------          |                              |
+ *          |                      |                              |
+ *  State   |   ---------          |                              |
+ * machine -|->| Sampler |-> vol ->|                              |
+ *    3     |   ---------                                         |
+ *           -----------------------------------------------------
  */
 
+template <int capacity>
 class Muxer : public AmigaComponent {
 
 public:
     
-    TaggedSampleBuffer sampler[4];
+    Sampler<capacity> sampler[4];
     
     
     //
