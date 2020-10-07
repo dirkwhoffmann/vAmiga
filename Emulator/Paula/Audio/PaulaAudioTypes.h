@@ -85,13 +85,6 @@ AudioInfo;
 
 typedef struct
 {
-    long bufferUnderflows;
-    long bufferOverflows;
-}
-AudioStats;
-
-typedef struct
-{
     float left;
     float right;
 }
@@ -120,5 +113,12 @@ typedef struct
     double volR;
 }
 MuxerConfig;
+
+typedef struct
+{
+    long bufferUnderflows;
+    long bufferOverflows;
+}
+MuxerStats;
 
 #endif

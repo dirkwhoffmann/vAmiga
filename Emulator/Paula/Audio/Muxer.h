@@ -40,6 +40,9 @@ class Muxer : public AmigaComponent {
     // Current configuration
     MuxerConfig config;
     
+    // Underflow and overflow counters
+    MuxerStats stats;
+
     // Sample rate in Hz
     double sampleRate = 0;
     
@@ -48,11 +51,7 @@ class Muxer : public AmigaComponent {
 
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
-    
-    // Number of buffer underflows and overflows
-    long bufferUnderflows = 0;
-    long bufferOverflows = 0;
-    
+        
     
     //
     // Sub components
@@ -102,6 +101,16 @@ public:
     void setSampleRate(double hz);
     
 
+    //
+    // Analyzing
+    //
+    
+public:
+    
+    // Returns information about the gathered statistical information
+    MuxerStats getStats() { return stats; }
+    
+    
     //
     // Serializing
     //

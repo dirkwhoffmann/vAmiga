@@ -24,9 +24,6 @@ class PaulaAudio : public AmigaComponent {
     // Result of the latest inspection
     AudioInfo info;
 
-    // Current workload
-    AudioStats stats;
-
 
     // Sub components
     //
@@ -127,9 +124,6 @@ public:
     
     // Returns the result of the most recent call to inspect()
     AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
-
-    // Returns information about the current workload
-    AudioStats getStats() { return stats; }
 
 private:
     

@@ -25,16 +25,19 @@ Muxer::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
     
-    for (int i = 0; i < 4; i++) {
-        
-        sampler[i].clear();
-        
-        /* Some methods assume that the sample buffer is never empty. We assure
-         * this by initializing the buffer with a dummy element.
-         */
-        assert(sampler[i].isEmpty());
-        sampler[i].write( TaggedSample { 0, 0 } );
-    }
+    stats.bufferUnderflows = 0;
+    stats.bufferOverflows = 0;
+
+    sampler[0].clear();
+    sampler[1].clear();
+    sampler[2].clear();
+    sampler[3].clear();
+
+    // Add dummy elements, because some methods assume the buffer is never empty
+    sampler[0].write( TaggedSample { 0, 0 } );
+    sampler[1].write( TaggedSample { 0, 0 } );
+    sampler[2].write( TaggedSample { 0, 0 } );
+    sampler[3].write( TaggedSample { 0, 0 } );
 }
 
 void
@@ -332,7 +335,7 @@ Muxer::handleBufferUnderflow()
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
 
-        bufferUnderflows++;
+        stats.bufferUnderflows++;
         
         // Increase the sample rate based on what we've measured
         int offPerSecond = (int)(stream.count() / elapsedTime);
@@ -361,7 +364,7 @@ Muxer::handleBufferOverflow()
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
         
-        bufferOverflows++;
+        stats.bufferOverflows++;
         
         // Decrease the sample rate based on what we've measured
         int offPerSecond = (int)(stream.count() / elapsedTime);

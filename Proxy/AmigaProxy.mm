@@ -811,9 +811,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->paula->audioUnit.getInfo();
 }
-- (AudioStats) getAudioStats
+- (MuxerStats) getMuxerStats
 {
-    return wrapper->paula->audioUnit.getStats();
+    return wrapper->paula->audioUnit.muxer.getStats();
 }
 - (UARTInfo) getUARTInfo
 {

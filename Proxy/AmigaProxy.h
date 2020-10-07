@@ -473,7 +473,7 @@ struct SerialPortWrapper;
 - (void) dump;
 - (PaulaInfo) getInfo;
 - (AudioInfo) getAudioInfo;
-- (AudioStats) getAudioStats;
+- (MuxerStats) getMuxerStats;
 - (UARTInfo) getUARTInfo;
 
 - (u32) sampleRate;

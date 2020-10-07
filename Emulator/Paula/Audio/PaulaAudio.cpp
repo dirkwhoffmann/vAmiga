@@ -31,8 +31,6 @@ PaulaAudio::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)
     
     muxer.clear();
-    stats.bufferUnderflows = 0;
-    stats.bufferOverflows = 0;
 }
 
 long
