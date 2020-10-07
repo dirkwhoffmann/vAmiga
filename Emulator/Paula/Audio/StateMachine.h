@@ -56,10 +56,7 @@ public:
     // Set to true if the next 011->010 transition should trigger an interrupt
     bool intreq2;
 
-    // Ringbuffer storing the synthesized samples
-    // Sampler taggedSamples;
-
-    /* Two locks regulating the access to the sample buffer.
+    /* Two locks regulate the access to the sample buffer.
      *
      * "The minimum period is 124 color clocks. This means that the smallest
      *  number that should be placed in this register [AUDxPER] is 124 decimal.
@@ -141,7 +138,6 @@ private:
         & audlcLatch
         & audDR
         & intreq2
-        // & taggedSamples
         & enablePenlo
         & enablePenhi;
     }

@@ -34,13 +34,31 @@
  *           -----------------------------------------------------
  */
 
-template <int capacity>
 class Muxer : public AmigaComponent {
 
+    // Current configuration
+    MuxerConfig config;
+    
+    // Sample rate in Hz
+    double sampleRate = 0;
+    
+    // Master clock cycles per audio sample
+    double cyclesPerSample = 0;
+
+    
+    //
+    // Sub components
+    //
+    
 public:
-    
-    Sampler<capacity> sampler[4];
-    
+
+    // Input sampler
+    Sampler sampler[4];
+
+    // Audio filters
+    AudioFilter filterL = AudioFilter(amiga);
+    AudioFilter filterR = AudioFilter(amiga);
+        
     
     //
     // Initializing
@@ -51,6 +69,23 @@ public:
     Muxer(Amiga& ref);
     
     void _reset(bool hard) override;
+    
+    
+    //
+    // Configuring
+    //
+    
+public:
+    
+    MuxerConfig getConfig() { return config; }
+
+    long getConfigItem(ConfigOption option);
+    bool setConfigItem(ConfigOption option, long value) override;
+            
+    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+
+    double getSampleRate() { return sampleRate; }
+    void setSampleRate(double hz);
     
     
     //
@@ -108,6 +143,14 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    
+    
+    //
+    // Generating audio streams
+    //
+    
+    template <SamplingMethod method>
+    double synthesize(double clock, Cycle targetClock);
 };
 
 #endif

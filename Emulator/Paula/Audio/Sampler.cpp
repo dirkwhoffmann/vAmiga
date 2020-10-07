@@ -9,8 +9,8 @@
 
 #include "Sampler.h"
 
-template <int capacity> template <SamplingMethod method> i16
-Sampler<capacity>::interpolate(Cycle clock)
+template <SamplingMethod method> i16
+Sampler::interpolate(Cycle clock)
 {
     assert(!isEmpty());
 
@@ -63,6 +63,6 @@ Sampler<capacity>::interpolate(Cycle clock)
     }
 }
 
-template i16 Sampler<256>::interpolate<SMP_NONE>(Cycle clock);
-template i16 Sampler<256>::interpolate<SMP_NEAREST>(Cycle clock);
-template i16 Sampler<256>::interpolate<SMP_LINEAR>(Cycle clock);
+template i16 Sampler::interpolate<SMP_NONE>(Cycle clock);
+template i16 Sampler::interpolate<SMP_NEAREST>(Cycle clock);
+template i16 Sampler::interpolate<SMP_LINEAR>(Cycle clock);

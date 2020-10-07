@@ -97,4 +97,25 @@ typedef struct
 }
 SamplePair;
 
+typedef struct
+{
+    // The target frequency in Hz
+    double sampleRate;
+
+    // Selects how the audio buffer is resampled to match the target frequency
+    SamplingMethod samplingMethod;
+
+    // The selected audio filter
+    FilterType filterType;
+
+    // Input channel volumes and pan settings
+    double vol[4];
+    double pan[4];
+    
+    // Output channel volumes
+    double volL;
+    double volR;
+}
+MuxerConfig;
+
 #endif

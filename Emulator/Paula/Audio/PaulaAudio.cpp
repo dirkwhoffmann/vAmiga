@@ -291,12 +291,6 @@ PaulaAudio::executeUntil(Cycle targetClock)
 {
     while (clock < targetClock) {
 
-        /*
-        double ch0 = channel0.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[0];
-        double ch1 = channel1.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[1];
-        double ch2 = channel2.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[2];
-        double ch3 = channel3.taggedSamples.interpolate<method>((Cycle)clock) * config.vol[3];
-        */
         double ch0 = muxer.sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
         double ch1 = muxer.sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
         double ch2 = muxer.sampler[2].interpolate<method>((Cycle)clock) * config.vol[2];
@@ -424,8 +418,8 @@ PaulaAudio::handleBufferUnderflow()
 {
     // There are two common scenarios in which buffer underflows occur:
     //
-    // (1) The consumer runs slightly faster than the producer.
-    // (2) The producer is halted or not startet yet.
+    // (1) The consumer runs slightly faster than the producer
+    // (2) The producer is halted or not startet yet
     
     debug(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", outStream.r, outStream.w);
     
@@ -453,22 +447,22 @@ PaulaAudio::handleBufferOverflow()
 {
     // There are two common scenarios in which buffer overflows occur:
     //
-    // (1) The consumer runs slightly slower than the producer.
-    // (2) The consumer is halted or not startet yet.
+    // (1) The consumer runs slightly slower than the producer
+    // (2) The consumer is halted or not startet yet
     
     debug(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", outStream.r, outStream.w);
     
-    // Determine the elapsed seconds since the last pointer adjustment.
+    // Determine the elapsed seconds since the last pointer adjustment
     u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     
-    // Adjust the sample rate, if condition (1) holds.
+    // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
         
         stats.bufferOverflows++;
         
-        // Decrease the sample rate based on what we've measured.
+        // Decrease the sample rate based on what we've measured
         int offPerSecond = (int)(samplesAhead / elapsedTime);
         setSampleRate(getSampleRate() - offPerSecond);
     }

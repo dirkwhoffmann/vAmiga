@@ -12,7 +12,6 @@
 template <int nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 {
-    // Set description
     switch (nr) {
         case 0: setDescription("StateMachine 0"); break;
         case 1: setDescription("StateMachine 1"); break;
@@ -26,15 +25,6 @@ template <int nr> void
 StateMachine<nr>::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
-    
-    
-    // taggedSamples.clear();
-
-    /* Some methods assume that the sample buffer is never empty. We assure
-     * this by initializing the buffer with a dummy element.
-     */
-    // assert(taggedSamples.isEmpty());
-    // taggedSamples.write( TaggedSample { 0, 0 } );
 }
 
 template <int nr> void
@@ -169,16 +159,13 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    Sampler<256> &sampler = audioUnit.muxer.sampler[nr];
+    Sampler &sampler = audioUnit.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
     debug(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
-    
-    // if (!taggedSamples.isFull()) {
-    //     taggedSamples.write( TaggedSample { agnus.clock, scaled } );
-            
+                
     if (!sampler.isFull()) {
         sampler.write( TaggedSample { agnus.clock, scaled } );
     } else {
@@ -193,7 +180,7 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler<256> &sampler = audioUnit.muxer.sampler[nr];
+    Sampler &sampler = audioUnit.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
