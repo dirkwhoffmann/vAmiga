@@ -156,7 +156,7 @@ private:
 public:
     
     void synthesize(Cycle clock, Cycle target, long count);
-    void synthesize(Cycle clock, Cycle target, double cyclesPerSample);
+    void synthesize(Cycle clock, Cycle target);
 
 private:
 

@@ -276,7 +276,7 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
 }
 
 void
-Muxer::synthesize(Cycle clock, Cycle target, double cyclesPerSample)
+Muxer::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
     assert(cyclesPerSample > 0);
