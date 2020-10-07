@@ -269,10 +269,9 @@ Muxer::synthesize(double clock, Cycle target)
           "Buffer: r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
 
     // Determine how many samples we need to produce
-    size_t count = (int)((target - clock) / cyclesPerSample);
+    long count = (int)((target - clock) / cyclesPerSample);
     
     // Check for a buffer overflow
-    // printf("%d %lld %d\n", stream.count(), count, stream.cap());
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
     
     switch (config.samplingMethod) {
@@ -283,7 +282,7 @@ Muxer::synthesize(double clock, Cycle target)
 }
 
 template <SamplingMethod method> double
-Muxer::synthesize(size_t count, double clock)
+Muxer::synthesize(long count, double clock)
 {
     assert(count > 0);
     

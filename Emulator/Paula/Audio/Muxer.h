@@ -156,7 +156,7 @@ public:
     
 private:
     
-    template <SamplingMethod method> double synthesize(size_t count, double clock);
+    template <SamplingMethod method> double synthesize(long count, double clock);
     
     // Handles a buffer underflow or overflow condition
     void handleBufferUnderflow();

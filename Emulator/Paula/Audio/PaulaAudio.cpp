@@ -277,7 +277,7 @@ PaulaAudio::_pause()
 void
 PaulaAudio::executeUntil(Cycle target)
 {
-    if (target > 0) clock = muxer.synthesize(clock, target);
+    clock = muxer.synthesize(clock, target);
 }
 
 void
