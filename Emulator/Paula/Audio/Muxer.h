@@ -11,6 +11,7 @@
 #define _MUXER_H
 
 #include "AmigaComponent.h"
+#include "AudioStream.h"
 
 /* Architecture of the audio pipeline
  *
@@ -45,6 +46,13 @@ class Muxer : public AmigaComponent {
     // Master clock cycles per audio sample
     double cyclesPerSample = 0;
 
+    // Time stamp of the last write pointer alignment
+    Cycle lastAlignment = 0;
+    
+    // Number of buffer underflows and overflows
+    long bufferUnderflows = 0;
+    long bufferOverflows = 0;
+    
     
     //
     // Sub components
@@ -52,9 +60,12 @@ class Muxer : public AmigaComponent {
     
 public:
 
-    // Input sampler
+    // Inputs
     Sampler sampler[4];
 
+    // Output
+    AudioStream stream;
+    
     // Audio filters
     AudioFilter filterL = AudioFilter(amiga);
     AudioFilter filterR = AudioFilter(amiga);
@@ -70,6 +81,9 @@ public:
     
     void _reset(bool hard) override;
     
+    // Resets the output buffer and the two audio filters
+    void clear();
+
     
     //
     // Configuring
@@ -117,7 +131,6 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        /*
         worker
         
         & config.samplingMethod
@@ -127,7 +140,6 @@ private:
         & config.pan
         & config.volL
         & config.volR;
-        */
     }
     
     template <class T>
@@ -155,7 +167,15 @@ public:
     
 private:
     
-    template <SamplingMethod method> double synthesize(double clock, Cycle target);
+    template <SamplingMethod method> double synthesize(size_t count, double clock);
+    // template <SamplingMethod method> double synthesize(double clock, Cycle target);
+
+    // Handles a buffer underflow or overflow condition
+    void handleBufferUnderflow();
+    void handleBufferOverflow();
+    
+    // Signals to ignore the next underflow or overflow condition
+    void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
 };
 
 #endif

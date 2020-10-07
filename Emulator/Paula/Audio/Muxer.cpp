@@ -37,6 +37,20 @@ Muxer::_reset(bool hard)
     }
 }
 
+void
+Muxer::clear()
+{
+    debug(AUDBUF_DEBUG, "clear()\n");
+    
+    // Wipe out the ringbuffer
+    stream.clear(SamplePair {0, 0});
+    stream.alignWritePtr();
+    
+    // Wipe out the filter buffers
+    filterL.clear();
+    filterR.clear();
+}
+
 long
 Muxer::getConfigItem(ConfigOption option)
 {
@@ -50,6 +64,9 @@ Muxer::getConfigItem(ConfigOption option)
             assert(filterR.getFilterType() == config.filterType);
             return config.filterType;
                         
+        case OPT_FILTER_ALWAYS_ON:
+            return config.filterAlwaysOn;
+
         case OPT_AUDVOLL:
             return (long)(exp2(config.volL) * 100.0);
 
@@ -108,6 +125,15 @@ Muxer::setConfigItem(ConfigOption option, long value)
             }
             break;
             
+        case OPT_FILTER_ALWAYS_ON:
+            
+            if (config.filterAlwaysOn == value) {
+                return false;
+            }
+            
+            config.filterAlwaysOn = value;
+            return true;
+
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_AUDVOL0:
@@ -233,38 +259,112 @@ Muxer::setSampleRate(double hz)
 double
 Muxer::synthesize(double clock, Cycle target)
 {
+    assert(sampleRate > 0);
+    assert(cyclesPerSample > 0);
+
+    // Determine how many samples we need to produce
+    size_t count = (int)((target - clock) / cyclesPerSample);
+    
+    // Check for a buffer overflow
+    // printf("%d %lld %d\n", stream.count(), count, stream.cap());
+    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
+    
     switch (config.samplingMethod) {
-        case SMP_NONE:    return synthesize<SMP_NONE>   (clock, target);
-        case SMP_NEAREST: return synthesize<SMP_NEAREST>(clock, target);
-        case SMP_LINEAR:  return synthesize<SMP_LINEAR> (clock, target);
+        case SMP_NONE:    return synthesize<SMP_NONE>   (count, clock);
+        case SMP_NEAREST: return synthesize<SMP_NEAREST>(count, clock);
+        case SMP_LINEAR:  return synthesize<SMP_LINEAR> (count, clock);
     }
 }
 
 template <SamplingMethod method> double
-Muxer::synthesize(double clock, Cycle target)
+Muxer::synthesize(size_t count, double clock)
 {
-    assert(sampleRate > 0);
-    assert(cyclesPerSample > 0);
+    assert(count > 0);
     
-    while (clock < target) {
+    bool filter = ciaa.powerLED() || config.filterAlwaysOn;
+
+    for (size_t i = 0; i < count; i++) {
 
         double ch0 = sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
         double ch1 = sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
         double ch2 = sampler[2].interpolate<method>((Cycle)clock) * config.vol[2];
         double ch3 = sampler[3].interpolate<method>((Cycle)clock) * config.vol[3];
 
-        double l =
+        // Compute left channel output
+        float l =
         ch0 * config.pan[0] + ch1 * config.pan[1] +
         ch2 * config.pan[2] + ch3 * config.pan[3];
-        
-        double r =
+
+        // Compute right channel output
+        float r =
         ch0 * (1 - config.pan[0]) + ch1 * (1 - config.pan[1]) +
         ch2 * (1 - config.pan[2]) + ch3 * (1 - config.pan[3]);
         
-        audioUnit.writeData((float)(l * config.volL), (float)(r * config.volR));
+        // Apply audio filter
+        if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
 
+        // Write sample into ringbuffer
+        stream.write( SamplePair { l, r } );
+        
         clock += cyclesPerSample;
     }
-    
     return clock; 
+}
+
+void
+Muxer::handleBufferUnderflow()
+{
+    // There are two common scenarios in which buffer underflows occur:
+    //
+    // (1) The consumer runs slightly faster than the producer
+    // (2) The producer is halted or not startet yet
+    
+    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", stream.r, stream.w);
+    
+    // Reset the write pointer
+    stream.alignWritePtr();
+
+    // Determine the elapsed seconds since the last pointer adjustment
+    u64 now = mach_absolute_time();
+    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
+    lastAlignment = now;
+    
+    // Adjust the sample rate, if condition (1) holds
+    if (elapsedTime > 10.0) {
+
+        bufferUnderflows++;
+        
+        // Increase the sample rate based on what we've measured
+        int offPerSecond = (int)(stream.count() / elapsedTime);
+        setSampleRate(getSampleRate() + offPerSecond);
+    }
+}
+
+void
+Muxer::handleBufferOverflow()
+{
+    // There are two common scenarios in which buffer overflows occur:
+    //
+    // (1) The consumer runs slightly slower than the producer
+    // (2) The consumer is halted or not startet yet
+    
+    debug(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", stream.r, stream.w);
+    
+    // Reset the write pointer
+    stream.alignWritePtr();
+
+    // Determine the number of elapsed seconds since the last adjustment
+    u64 now = mach_absolute_time();
+    double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
+    lastAlignment = now;
+    
+    // Adjust the sample rate, if condition (1) holds
+    if (elapsedTime > 10.0) {
+        
+        bufferOverflows++;
+        
+        // Decrease the sample rate based on what we've measured
+        int offPerSecond = (int)(stream.count() / elapsedTime);
+        setSampleRate(getSampleRate() - offPerSecond);
+    }
 }

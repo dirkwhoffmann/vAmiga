@@ -279,7 +279,7 @@ PaulaAudio::_pause()
 void
 PaulaAudio::executeUntil(Cycle target)
 {
-    clock = muxer.synthesize(clock, target);
+    if (target > 0) clock = muxer.synthesize(clock, target);
     /*
     switch (config.samplingMethod) {
         case SMP_NONE:    executeUntil<SMP_NONE>   (target); return;
@@ -371,6 +371,8 @@ PaulaAudio::clearRingbuffer()
 {
     debug(AUDBUF_DEBUG, "Clearing ringbuffer\n");
     
+    muxer.clear();
+    
     // Wipe out the ringbuffer
     outStream.clear(SamplePair {0, 0});
     outStream.align(samplesAhead);
@@ -387,7 +389,7 @@ PaulaAudio::readMonoSamples(float *target, size_t n)
     if (outStream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    outStream.copyMono(target, n, volume, targetVolume, volumeDelta);
+    muxer.stream.copyMono(target, n, volume, targetVolume, volumeDelta);
 }
 
 void
@@ -397,12 +399,14 @@ PaulaAudio::readStereoSamples(float *target1, float *target2, size_t n)
     if (outStream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    outStream.copy(target1, target2, n, volume, targetVolume, volumeDelta);
+    muxer.stream.copy(target1, target2, n, volume, targetVolume, volumeDelta);
 }
 
 void
 PaulaAudio::writeData(float left, float right)
 {
+    assert(false);
+    
     // Check for buffer overflow
     if (outStream.isFull()) handleBufferOverflow();
     

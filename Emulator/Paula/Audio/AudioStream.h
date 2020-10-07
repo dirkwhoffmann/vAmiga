@@ -17,6 +17,18 @@ class AudioStream : public RingBuffer <SamplePair, 16384> {
 public:
     
     //
+    // Initializing
+    //
+    
+    /* Aligns the write pointer. This function puts the write pointer somewhat
+     * ahead of the read pointer. With a standard sample rate of 44100 Hz,
+     * 735 samples is 1/60 sec.
+     */
+    static u32 samplesAhead() { return 8 * 735; }
+    void alignWritePtr() { align(samplesAhead()); }
+    
+    
+    //
     // Copying data
     //
     

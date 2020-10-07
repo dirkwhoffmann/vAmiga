@@ -108,6 +108,9 @@ typedef struct
     // The selected audio filter
     FilterType filterType;
 
+    // If set to true, the Amiga can't deactivate the filter
+    bool filterAlwaysOn;
+
     // Input channel volumes and pan settings
     double vol[4];
     double pan[4];
