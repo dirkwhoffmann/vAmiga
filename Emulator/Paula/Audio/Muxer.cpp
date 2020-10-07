@@ -260,37 +260,52 @@ Muxer::setSampleRate(double hz)
 }
 
 void
-Muxer::synthesize(Cycle clock, Cycle target)
+Muxer::synthesize(Cycle clock, Cycle target, long count)
 {
-    assert(sampleRate > 0);
-    assert(cyclesPerSample > 0);
+    assert(target > clock);
+    assert(count > 0);
 
-    debug(AUDBUF_DEBUG,
-          "Buffer: r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
+    // Determine the number of elapsed cycles per audio sample
+    double cyclesPerSample = (double)(target - clock) / (double)count;
+            
+    switch (config.samplingMethod) {
+        case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
+        case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
+        case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
+    }
+}
+
+void
+Muxer::synthesize(Cycle clock, Cycle target, double cyclesPerSample)
+{
+    assert(target > clock);
+    assert(cyclesPerSample > 0);
 
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cyclesPerSample + fraction;
     long count = (long)exact;
     fraction = exact - (double)count;
-        
-    // Check for a buffer overflow
-    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
-    
+            
     switch (config.samplingMethod) {
-        case SMP_NONE:    synthesize<SMP_NONE>   (count, clock); break;
-        case SMP_NEAREST: synthesize<SMP_NEAREST>(count, clock); break;
-        case SMP_LINEAR:  synthesize<SMP_LINEAR> (count, clock); break;
+        case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
+        case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
+        case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
     }
 }
 
 template <SamplingMethod method> void
-Muxer::synthesize(long count, Cycle clock)
+Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
-    
-    double cycle = clock;
+
+    debug(AUDBUF_DEBUG, "r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
+
     bool filter = ciaa.powerLED() || config.filterAlwaysOn;
 
+    // Check for a buffer overflow
+    if (stream.count() + count >= stream.cap()) handleBufferOverflow();
+
+    double cycle = clock;
     for (size_t i = 0; i < count; i++) {
 
         double ch0 = sampler[0].interpolate<method>((Cycle)cycle) * config.vol[0];

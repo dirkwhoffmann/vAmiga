@@ -155,11 +155,13 @@ private:
     
 public:
     
-    void synthesize(Cycle clock, Cycle target);
-    
+    void synthesize(Cycle clock, Cycle target, long count);
+    void synthesize(Cycle clock, Cycle target, double cyclesPerSample);
+
 private:
-    
-    template <SamplingMethod method> void synthesize(long count, Cycle clock);
+
+    template <SamplingMethod method>
+    void synthesize(Cycle clock, long count, double cyclesPerSample);
     
     // Handles a buffer underflow or overflow condition
     void handleBufferUnderflow();
