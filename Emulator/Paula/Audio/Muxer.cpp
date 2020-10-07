@@ -265,6 +265,9 @@ Muxer::synthesize(double clock, Cycle target)
     assert(sampleRate > 0);
     assert(cyclesPerSample > 0);
 
+    debug(AUDBUF_DEBUG,
+          "Buffer: r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
+
     // Determine how many samples we need to produce
     size_t count = (int)((target - clock) / cyclesPerSample);
     

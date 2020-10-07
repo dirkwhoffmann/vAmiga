@@ -872,7 +872,7 @@ Agnus::hsyncHandler()
     denise.endOfLine(pos.v);
 
     // Synthesize sound samples
-    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    // audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 
     // Update pot counters
     if (paula.chargeX0 < 1.0) paula.potCntX0++;
@@ -997,6 +997,9 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
+    // Synthesize sound samples
+    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+
     // Advance to the next frame
     frame.next(denise.lace());
 
