@@ -51,7 +51,7 @@ public:
 private:
 
     // The component has been executed up to this clock cycle
-    double clock = 0;
+    Cycle clock = 0;
 
     // Master clock cycles per audio sample, set in setSampleRate()
     double cyclesPerSample = 0;

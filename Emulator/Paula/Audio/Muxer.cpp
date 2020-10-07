@@ -259,8 +259,8 @@ Muxer::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
-double
-Muxer::synthesize(double clock, Cycle target)
+void
+Muxer::synthesize(Cycle clock, Cycle target)
 {
     assert(sampleRate > 0);
     assert(cyclesPerSample > 0);
@@ -269,31 +269,34 @@ Muxer::synthesize(double clock, Cycle target)
           "Buffer: r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
 
     // Determine how many samples we need to produce
-    long count = (int)((target - clock) / cyclesPerSample);
-    
+    double exact = (double)(target - clock) / cyclesPerSample + fraction;
+    long count = (long)exact;
+    fraction = exact - (double)count;
+        
     // Check for a buffer overflow
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
     
     switch (config.samplingMethod) {
-        case SMP_NONE:    return synthesize<SMP_NONE>   (count, clock);
-        case SMP_NEAREST: return synthesize<SMP_NEAREST>(count, clock);
-        case SMP_LINEAR:  return synthesize<SMP_LINEAR> (count, clock);
+        case SMP_NONE:    synthesize<SMP_NONE>   (count, clock); break;
+        case SMP_NEAREST: synthesize<SMP_NEAREST>(count, clock); break;
+        case SMP_LINEAR:  synthesize<SMP_LINEAR> (count, clock); break;
     }
 }
 
-template <SamplingMethod method> double
-Muxer::synthesize(long count, double clock)
+template <SamplingMethod method> void
+Muxer::synthesize(long count, Cycle clock)
 {
     assert(count > 0);
     
+    double cycle = clock;
     bool filter = ciaa.powerLED() || config.filterAlwaysOn;
 
     for (size_t i = 0; i < count; i++) {
 
-        double ch0 = sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
-        double ch1 = sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
-        double ch2 = sampler[2].interpolate<method>((Cycle)clock) * config.vol[2];
-        double ch3 = sampler[3].interpolate<method>((Cycle)clock) * config.vol[3];
+        double ch0 = sampler[0].interpolate<method>((Cycle)cycle) * config.vol[0];
+        double ch1 = sampler[1].interpolate<method>((Cycle)cycle) * config.vol[1];
+        double ch2 = sampler[2].interpolate<method>((Cycle)cycle) * config.vol[2];
+        double ch3 = sampler[3].interpolate<method>((Cycle)cycle) * config.vol[3];
 
         // Compute left channel output
         float l =
@@ -311,9 +314,8 @@ Muxer::synthesize(long count, double clock)
         // Write sample into ringbuffer
         stream.write( SamplePair { l, r } );
         
-        clock += cyclesPerSample;
+        cycle += cyclesPerSample;
     }
-    return clock; 
 }
 
 void

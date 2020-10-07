@@ -49,9 +49,12 @@ class Muxer : public AmigaComponent {
     // Master clock cycles per audio sample
     double cyclesPerSample = 0;
 
+    // Fraction of a sample that hadn't been generated in synthesize
+    double fraction;
+
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
-        
+
     
     //
     // Sub components
@@ -152,11 +155,11 @@ private:
     
 public:
     
-    double synthesize(double clock, Cycle target);
+    void synthesize(Cycle clock, Cycle target);
     
 private:
     
-    template <SamplingMethod method> double synthesize(long count, double clock);
+    template <SamplingMethod method> void synthesize(long count, Cycle clock);
     
     // Handles a buffer underflow or overflow condition
     void handleBufferUnderflow();
