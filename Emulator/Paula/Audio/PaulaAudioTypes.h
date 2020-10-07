@@ -100,7 +100,7 @@ SamplePair;
 typedef struct
 {
     // The target frequency in Hz
-    double sampleRate;
+    // double sampleRate;
 
     // Selects how the audio buffer is resampled to match the target frequency
     SamplingMethod samplingMethod;

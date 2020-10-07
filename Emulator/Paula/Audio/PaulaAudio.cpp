@@ -277,14 +277,19 @@ PaulaAudio::_pause()
 }
 
 void
-PaulaAudio::executeUntil(Cycle targetClock)
+PaulaAudio::executeUntil(Cycle target)
 {
+    clock = muxer.synthesize(clock, target);
+    /*
     switch (config.samplingMethod) {
-        case SMP_NONE:    executeUntil<SMP_NONE>   (targetClock); return;
-        case SMP_NEAREST: executeUntil<SMP_NEAREST>(targetClock); return;
-        case SMP_LINEAR:  executeUntil<SMP_LINEAR> (targetClock); return;
+        case SMP_NONE:    executeUntil<SMP_NONE>   (target); return;
+        case SMP_NEAREST: executeUntil<SMP_NEAREST>(target); return;
+        case SMP_LINEAR:  executeUntil<SMP_LINEAR> (target); return;
     }
+    */
 }
+
+/*
 
 template <SamplingMethod method> void
 PaulaAudio::executeUntil(Cycle targetClock)
@@ -309,6 +314,7 @@ PaulaAudio::executeUntil(Cycle targetClock)
         clock += cyclesPerSample;
     }
 }
+ */
 
 void
 PaulaAudio::pokeAUDxPER(int nr, u16 value)

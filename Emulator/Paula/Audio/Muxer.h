@@ -149,8 +149,13 @@ private:
     // Generating audio streams
     //
     
-    template <SamplingMethod method>
-    double synthesize(double clock, Cycle targetClock);
+public:
+    
+    double synthesize(double clock, Cycle target);
+    
+private:
+    
+    template <SamplingMethod method> double synthesize(double clock, Cycle target);
 };
 
 #endif

@@ -223,17 +223,30 @@ Muxer::setSampleRate(double hz)
 {
     debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
-    config.sampleRate = hz;
+    sampleRate = hz;
     cyclesPerSample = MHz(masterClockFrequency) / hz;
 
     filterL.setSampleRate(hz);
     filterR.setSampleRate(hz);
 }
 
-template <SamplingMethod method> double
-Muxer::synthesize(double clock, Cycle targetClock)
+double
+Muxer::synthesize(double clock, Cycle target)
 {
-    while (clock < targetClock) {
+    switch (config.samplingMethod) {
+        case SMP_NONE:    return synthesize<SMP_NONE>   (clock, target);
+        case SMP_NEAREST: return synthesize<SMP_NEAREST>(clock, target);
+        case SMP_LINEAR:  return synthesize<SMP_LINEAR> (clock, target);
+    }
+}
+
+template <SamplingMethod method> double
+Muxer::synthesize(double clock, Cycle target)
+{
+    assert(sampleRate > 0);
+    assert(cyclesPerSample > 0);
+    
+    while (clock < target) {
 
         double ch0 = sampler[0].interpolate<method>((Cycle)clock) * config.vol[0];
         double ch1 = sampler[1].interpolate<method>((Cycle)clock) * config.vol[1];
