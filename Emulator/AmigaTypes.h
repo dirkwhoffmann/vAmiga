@@ -150,7 +150,7 @@ typedef struct
     CIAConfig ciaA;
     CIAConfig ciaB;
     RTCConfig rtc;
-    AudioConfig audio;
+    MuxerConfig audio;
     MemoryConfig mem;
     AgnusConfig agnus;
     DeniseConfig denise;

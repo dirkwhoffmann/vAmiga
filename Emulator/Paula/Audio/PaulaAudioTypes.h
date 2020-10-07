@@ -39,6 +39,7 @@ static inline bool isFilterType(long value) { return value >= 0 && value < FILT_
 // Structures
 //
 
+/*
 typedef struct
 {
     // The target frequency in Hz
@@ -62,6 +63,7 @@ typedef struct
     double volR;
 }
 AudioConfig;
+*/
 
 typedef struct
 {

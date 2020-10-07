@@ -164,7 +164,7 @@ Amiga::getConfig()
     config.ciaA = ciaA.getConfig();
     config.ciaB = ciaB.getConfig();
     config.rtc = rtc.getConfig();
-    config.audio = paula.audioUnit.getConfig();
+    config.audio = paula.audioUnit.muxer.getConfig();
     config.mem = mem.getConfig();
     config.agnus = agnus.getConfig();
     config.denise = denise.getConfig();
@@ -222,8 +222,6 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_SAMPLING_METHOD:
         case OPT_FILTER_TYPE:
         case OPT_FILTER_ALWAYS_ON:
-            return paula.audioUnit.getConfigItem(option);
-            
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_AUDVOL0:
@@ -234,8 +232,8 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_AUDPAN1:
         case OPT_AUDPAN2:
         case OPT_AUDPAN3:
-            return paula.audioUnit.getConfigItem(option);
-            
+            return paula.audioUnit.muxer.getConfigItem(option);
+
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);
 

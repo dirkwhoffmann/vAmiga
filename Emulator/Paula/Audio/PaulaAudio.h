@@ -18,13 +18,11 @@
 
 class PaulaAudio : public AmigaComponent {
 
-    // Current configuration
-    AudioConfig config;
-
     // Result of the latest inspection
     AudioInfo info;
 
-
+    
+    //
     // Sub components
     //
     
@@ -64,15 +62,6 @@ private:
     // Sample buffers
     //
 
-public:
-    
-    /* The audio sample ringbuffer. This ringbuffer is used to transfer sound
-     * samples from the emulator to the sound device of the host machine.
-     * DEPRECATED. REPLACE BY AUDIO STREAM
-     */
-    // RingBuffer <SamplePair, 16384> ringBuffer;
-    // AudioStream outStream;
-
 private:
 
     // Current volume (a value of 0 or below silences the audio playback)
@@ -104,16 +93,8 @@ public:
     //
     
 public:
-    
-    AudioConfig getConfig() { return config; }
-
-    long getConfigItem(ConfigOption option);
-    bool setConfigItem(ConfigOption option, long value) override;
-    
-    double getSampleRate() { return config.sampleRate; }
-    void setSampleRate(double hz);
-        
-    bool isMuted() { return config.volL == 0 && config.volR == 0; }
+            
+    bool isMuted() { return muxer.isMuted(); }
 
         
     //
@@ -140,15 +121,6 @@ private:
     template <class T>
     void applyToPersistentItems(T& worker)
     {
-        worker
-        
-        & config.samplingMethod
-        & config.filterType
-        & config.filterAlwaysOn
-        & config.vol
-        & config.pan
-        & config.volL
-        & config.volR;
     }
     
     template <class T>

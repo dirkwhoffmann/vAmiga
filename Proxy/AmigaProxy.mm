@@ -831,13 +831,10 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (u32) sampleRate
 {
-    assert(wrapper->paula->audioUnit.muxer.getSampleRate() == wrapper->paula->audioUnit.getSampleRate());
     return (u32)wrapper->paula->audioUnit.muxer.getSampleRate();
-    // return (u32)wrapper->paula->audioUnit.getSampleRate();
 }
 - (void) setSampleRate:(double)rate
 {
-    wrapper->paula->audioUnit.setSampleRate(rate);
     wrapper->paula->audioUnit.muxer.setSampleRate(rate);
 }
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
