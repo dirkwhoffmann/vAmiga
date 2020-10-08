@@ -819,15 +819,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->paula->uart.getInfo();
 }
-
-
-//
-// Paula audio
-//
-
 - (void) dump
 {
-    wrapper->paula->audioUnit.dump();
+    wrapper->paula->muxer.dump();
 }
 - (u32) sampleRate
 {

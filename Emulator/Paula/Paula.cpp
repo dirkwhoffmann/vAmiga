@@ -20,7 +20,6 @@ Paula::Paula(Amiga& ref) : AmigaComponent(ref)
         &channel2,
         &channel3,
         &muxer,
-        &audioUnit,
         &diskController,
         &uart
     };

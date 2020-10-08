@@ -10,8 +10,11 @@
 #ifndef _PAULA_H
 #define _PAULA_H
 
-#include "PaulaAudio.h"
+#include "StateMachine.h"
+#include "AudioFilter.h"
+#include "Muxer.h"
 #include "AudioStream.h"
+#include "Buffers.h"
 #include "DiskController.h"
 #include "UART.h"
 #include "TimeDelayed.h"
@@ -30,9 +33,6 @@ private:
     //
     
 public:
-
-    // Sound circuitry
-    PaulaAudio audioUnit = PaulaAudio(amiga);
 
     // Audio state machines
     StateMachine<0> channel0 = StateMachine<0>(amiga);
