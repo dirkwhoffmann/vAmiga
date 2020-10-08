@@ -466,28 +466,28 @@ Agnus::serviceDASEvent()
         case DAS_A0:
             if (audxDR[0]) {
                 audxDR[0] = false;
-                audioUnit.channel0.pokeAUDxDAT(doAudioDMA<0>());
+                paula.channel0.pokeAUDxDAT(doAudioDMA<0>());
             }
             break;
 
         case DAS_A1:
             if (audxDR[1]) {
                 audxDR[1] = false;
-                audioUnit.channel1.pokeAUDxDAT(doAudioDMA<1>());
+                paula.channel1.pokeAUDxDAT(doAudioDMA<1>());
             }
             break;
 
         case DAS_A2:
             if (audxDR[2]) {
                 audxDR[2] = false;
-                audioUnit.channel2.pokeAUDxDAT(doAudioDMA<2>());
+                paula.channel2.pokeAUDxDAT(doAudioDMA<2>());
             }
             break;
 
         case DAS_A3:
             if (audxDR[3]) {
                 audxDR[3] = false;
-                audioUnit.channel3.pokeAUDxDAT(doAudioDMA<3>());
+                paula.channel3.pokeAUDxDAT(doAudioDMA<3>());
             }
             break;
 

@@ -881,10 +881,10 @@ Agnus::hsyncHandler()
     if (paula.chargeY1 < 1.0) paula.potCntY1++;
 
     // Transfer DMA requests from Paula to Agnus
-    paula.audioUnit.channel0.requestDMA();
-    paula.audioUnit.channel1.requestDMA();
-    paula.audioUnit.channel2.requestDMA();
-    paula.audioUnit.channel3.requestDMA();
+    paula.channel0.requestDMA();
+    paula.channel1.requestDMA();
+    paula.channel2.requestDMA();
+    paula.channel3.requestDMA();
 
     // Reset the horizontal counter
     pos.h = 0;
@@ -998,7 +998,7 @@ void
 Agnus::vsyncHandler()
 {
     // Synthesize sound samples
-    audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
+    paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 
     // Advance to the next frame
     frame.next(denise.lace());

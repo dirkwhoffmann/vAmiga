@@ -17,23 +17,7 @@
 #include "Buffers.h"
 
 class PaulaAudio : public AmigaComponent {
-    
-    //
-    // Sub components
-    //
-    
-public:
-
-    // State machines
-    StateMachine<0> channel0 = StateMachine<0>(amiga);
-    StateMachine<1> channel1 = StateMachine<1>(amiga);
-    StateMachine<2> channel2 = StateMachine<2>(amiga);
-    StateMachine<3> channel3 = StateMachine<3>(amiga);
-
-    // Muxer
-    Muxer muxer = Muxer(amiga);
-    
-    
+ 
     //
     // Properties
     //
@@ -41,7 +25,7 @@ public:
 private:
 
     // The component has been executed up to this clock cycle
-    Cycle clock = 0;
+    // Cycle clock = 0;
 
 
     //
@@ -69,9 +53,6 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        worker
-        
-        & clock;
     }
     
     template <class T>
@@ -91,10 +72,10 @@ private:
 public:
                 
     // Reads samples from the ringbuffer (mono stream format)
-    void readMonoSamples(float *buffer, size_t n);
+    // void readMonoSamples(float *buffer, size_t n);
     
     // Reads samples from the ringbuffer (stereo stream format)
-    void readStereoSamples(float *left, float *right, size_t n);
+    // void readStereoSamples(float *left, float *right, size_t n);
     
 
     //
@@ -104,7 +85,7 @@ public:
 public:
     
     // Emulates the device until the given master clock cycle has been reached
-    void executeUntil(Cycle targetClock);
+    // void executeUntil(Cycle targetClock);
 };
 
 #endif

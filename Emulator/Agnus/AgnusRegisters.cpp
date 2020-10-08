@@ -378,16 +378,16 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     
     // Audio DMA
     if (oldAUD0EN ^ newAUD0EN) {
-        newAUD0EN ? audioUnit.channel0.enableDMA() : audioUnit.channel0.disableDMA();
+        newAUD0EN ? paula.channel0.enableDMA() : paula.channel0.disableDMA();
     }
     if (oldAUD1EN ^ newAUD1EN) {
-        newAUD1EN ? audioUnit.channel1.enableDMA() : audioUnit.channel1.disableDMA();
+        newAUD1EN ? paula.channel1.enableDMA() : paula.channel1.disableDMA();
     }
     if (oldAUD2EN ^ newAUD2EN) {
-        newAUD2EN ? audioUnit.channel2.enableDMA() : audioUnit.channel2.disableDMA();
+        newAUD2EN ? paula.channel2.enableDMA() : paula.channel2.disableDMA();
     }
     if (oldAUD3EN ^ newAUD3EN) {
-        newAUD3EN ? audioUnit.channel3.enableDMA() : audioUnit.channel3.disableDMA();
+        newAUD3EN ? paula.channel3.enableDMA() : paula.channel3.disableDMA();
     }
 }
 

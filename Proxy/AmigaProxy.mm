@@ -813,7 +813,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (MuxerStats) getMuxerStats
 {
-    return wrapper->paula->audioUnit.muxer.getStats();
+    return wrapper->paula->muxer.getStats();
 }
 - (UARTInfo) getUARTInfo
 {
@@ -831,35 +831,35 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (u32) sampleRate
 {
-    return (u32)wrapper->paula->audioUnit.muxer.getSampleRate();
+    return (u32)wrapper->paula->muxer.getSampleRate();
 }
 - (void) setSampleRate:(double)rate
 {
-    wrapper->paula->audioUnit.muxer.setSampleRate(rate);
+    wrapper->paula->muxer.setSampleRate(rate);
 }
 - (void) readMonoSamples:(float *)target size:(NSInteger)n
 {
-    wrapper->paula->audioUnit.readMonoSamples(target, n);
+    wrapper->paula->muxer.copyMono(target, n);
 }
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    wrapper->paula->audioUnit.readStereoSamples(target1, target2, n);
+    wrapper->paula->muxer.copy(target1, target2, n);
 }
 - (void) rampUp
 {
-    wrapper->paula->audioUnit.muxer.rampUp();
+    wrapper->paula->muxer.rampUp();
 }
 - (void) rampUpFromZero
 {
-    wrapper->paula->audioUnit.muxer.rampUpFromZero();
+    wrapper->paula->muxer.rampUpFromZero();
 }
 - (void) rampDown
 {
-    wrapper->paula->audioUnit.muxer.rampDown();
+    wrapper->paula->muxer.rampDown();
 }
 - (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->audioUnit.muxer.stream.draw(buffer, w, h, true, s, c);
+    return wrapper->paula->muxer.stream.draw(buffer, w, h, true, s, c);
 }
 - (float) drawWaveformL:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {
@@ -871,7 +871,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (float) drawWaveformR:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {
-    return wrapper->paula->audioUnit.muxer.stream.draw(buffer, w, h, false, s, c);
+    return wrapper->paula->muxer.stream.draw(buffer, w, h, false, s, c);
 }
 - (float) drawWaveformR:(unsigned *)buffer size:(NSSize)size scale:(float)s color:(unsigned)c
 {

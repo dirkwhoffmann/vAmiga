@@ -502,16 +502,16 @@ Agnus::executeEventsUntil(Cycle cycle) {
         //
 
         if (isDue<CH0_SLOT>(cycle)) {
-            audioUnit.channel0.serviceEvent();
+            paula.channel0.serviceEvent();
         }
         if (isDue<CH1_SLOT>(cycle)) {
-            audioUnit.channel1.serviceEvent();
+            paula.channel1.serviceEvent();
         }
         if (isDue<CH2_SLOT>(cycle)) {
-            audioUnit.channel2.serviceEvent();
+            paula.channel2.serviceEvent();
         }
         if (isDue<CH3_SLOT>(cycle)) {
-            audioUnit.channel3.serviceEvent();
+            paula.channel3.serviceEvent();
         }
         if (isDue<DSK_SLOT>(cycle)) {
             paula.diskController.serviceDiskEvent();

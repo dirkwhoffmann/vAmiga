@@ -12,15 +12,6 @@
 PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("AudioUnit");
-    
-    subComponents = vector<HardwareComponent *> {
-
-        &channel0,
-        &channel1,
-        &channel2,
-        &channel3,
-        &muxer
-    };
 }
 
 void
@@ -29,6 +20,7 @@ PaulaAudio::_reset(bool hard)
     RESET_SNAPSHOT_ITEMS(hard)    
 }
 
+/*
 void
 PaulaAudio::executeUntil(Cycle target)
 {
@@ -47,3 +39,4 @@ PaulaAudio::readStereoSamples(float *left, float *right, size_t n)
 {
     muxer.copy(left, right, n);
 }
+*/

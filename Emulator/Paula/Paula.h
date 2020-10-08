@@ -34,6 +34,15 @@ public:
     // Sound circuitry
     PaulaAudio audioUnit = PaulaAudio(amiga);
 
+    // Audio state machines
+    StateMachine<0> channel0 = StateMachine<0>(amiga);
+    StateMachine<1> channel1 = StateMachine<1>(amiga);
+    StateMachine<2> channel2 = StateMachine<2>(amiga);
+    StateMachine<3> channel3 = StateMachine<3>(amiga);
+
+    // Audio muxer
+    Muxer muxer = Muxer(amiga);
+
     // Disk controller
     DiskController diskController = DiskController(amiga);
 
@@ -45,8 +54,8 @@ public:
     // Counters
     //
     
-    // Paula has been executed up to this clock cycle
-    // Cycle clock = 0;
+    // Paula's audio unit has been executed up to this clock cycle
+    Cycle audioClock = 0;
     
     
     //
@@ -134,11 +143,9 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
-        /*
         worker
 
-        & clock;
-        */
+        & audioClock;
     }
 
     template <class T>
@@ -220,6 +227,13 @@ public:
     void pokePOTGO(u16 value);
 
 
+    //
+    // Running the audio unit
+    //
+    
+    void executeUntil(Cycle target);
+
+    
     //
     // Serving events
     //

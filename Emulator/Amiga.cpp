@@ -164,7 +164,7 @@ Amiga::getConfig()
     config.ciaA = ciaA.getConfig();
     config.ciaB = ciaB.getConfig();
     config.rtc = rtc.getConfig();
-    config.audio = paula.audioUnit.muxer.getConfig();
+    config.audio = paula.muxer.getConfig();
     config.mem = mem.getConfig();
     config.agnus = agnus.getConfig();
     config.denise = denise.getConfig();
@@ -232,7 +232,7 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_AUDPAN1:
         case OPT_AUDPAN2:
         case OPT_AUDPAN3:
-            return paula.audioUnit.muxer.getConfigItem(option);
+            return paula.muxer.getConfigItem(option);
 
         case OPT_BLITTER_ACCURACY:
             return agnus.blitter.getConfigItem(option);

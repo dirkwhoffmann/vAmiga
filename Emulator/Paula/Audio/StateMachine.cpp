@@ -122,13 +122,14 @@ StateMachine<nr>::percntrld()
 template <int nr> void
 StateMachine<nr>::pbufld1()
 {
-    if (AUDxAV()) {
-        // debug("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
-        if (nr == 0) audioUnit.channel1.pokeAUDxVOL(auddat);
-        if (nr == 1) audioUnit.channel2.pokeAUDxVOL(auddat);
-        if (nr == 2) audioUnit.channel3.pokeAUDxVOL(auddat);
-    } else {
-        buffer = auddat;
+    if (!AUDxAV()) { buffer = auddat; return; }
+    
+    // debug("Volume modulation %d (%d)\n", auddat & 0x7F, (i16)auddat);
+    switch (nr) {
+        case 0: paula.channel1.pokeAUDxVOL(auddat); break;
+        case 1: paula.channel2.pokeAUDxVOL(auddat); break;
+        case 2: paula.channel3.pokeAUDxVOL(auddat); break;
+        case 3: break;
     }
 }
 
@@ -138,9 +139,9 @@ StateMachine<nr>::pbufld2()
     assert(AUDxAP());
     
     switch (nr) {
-        case 0: paula.audioUnit.channel1.pokeAUDxPER(auddat);
-        case 1: paula.audioUnit.channel2.pokeAUDxPER(auddat);
-        case 2: paula.audioUnit.channel3.pokeAUDxPER(auddat);
+        case 0: paula.channel1.pokeAUDxPER(auddat); break;
+        case 1: paula.channel2.pokeAUDxPER(auddat); break;
+        case 2: paula.channel3.pokeAUDxPER(auddat); break;
         case 3: break;
     }
     /*
@@ -168,7 +169,7 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    Sampler &sampler = audioUnit.muxer.sampler[nr];
+    Sampler &sampler = paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
@@ -189,7 +190,7 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler &sampler = audioUnit.muxer.sampler[nr];
+    Sampler &sampler = paula.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;

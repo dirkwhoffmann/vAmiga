@@ -2069,13 +2069,13 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0A2 >> 1: // AUD0LCL
             agnus.pokeAUDxLCL<0>(value); return;
         case 0x0A4 >> 1: // AUD0LEN
-            audioUnit.channel0.pokeAUDxLEN(value); return;
+            paula.channel0.pokeAUDxLEN(value); return;
         case 0x0A6 >> 1: // AUD0PER
-            audioUnit.channel0.pokeAUDxPER(value); return;
+            paula.channel0.pokeAUDxPER(value); return;
         case 0x0A8 >> 1: // AUD0VOL
-            audioUnit.channel0.pokeAUDxVOL(value); return;
+            paula.channel0.pokeAUDxVOL(value); return;
         case 0x0AA >> 1: // AUD0DAT
-            audioUnit.channel0.pokeAUDxDAT(value); return;
+            paula.channel0.pokeAUDxDAT(value); return;
         case 0x0AC >> 1: // Unused
         case 0x0AE >> 1: // Unused
             break;
@@ -2084,13 +2084,13 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0B2 >> 1: // AUD1LCL
             agnus.pokeAUDxLCL<1>(value); return;
         case 0x0B4 >> 1: // AUD1LEN
-            audioUnit.channel1.pokeAUDxLEN(value); return;
+            paula.channel1.pokeAUDxLEN(value); return;
         case 0x0B6 >> 1: // AUD1PER
-            audioUnit.channel1.pokeAUDxPER(value); return;
+            paula.channel1.pokeAUDxPER(value); return;
         case 0x0B8 >> 1: // AUD1VOL
-            audioUnit.channel1.pokeAUDxVOL(value); return;
+            paula.channel1.pokeAUDxVOL(value); return;
         case 0x0BA >> 1: // AUD1DAT
-            audioUnit.channel1.pokeAUDxDAT(value); return;
+            paula.channel1.pokeAUDxDAT(value); return;
         case 0x0BC >> 1: // Unused
         case 0x0BE >> 1: // Unused
             break;
@@ -2099,13 +2099,13 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0C2 >> 1: // AUD2LCL
             agnus.pokeAUDxLCL<2>(value); return;
         case 0x0C4 >> 1: // AUD2LEN
-            audioUnit.channel2.pokeAUDxLEN(value); return;
+            paula.channel2.pokeAUDxLEN(value); return;
         case 0x0C6 >> 1: // AUD2PER
-            audioUnit.channel2.pokeAUDxPER(value); return;
+            paula.channel2.pokeAUDxPER(value); return;
         case 0x0C8 >> 1: // AUD2VOL
-            audioUnit.channel2.pokeAUDxVOL(value); return;
+            paula.channel2.pokeAUDxVOL(value); return;
         case 0x0CA >> 1: // AUD2DAT
-            audioUnit.channel2.pokeAUDxDAT(value); return;
+            paula.channel2.pokeAUDxDAT(value); return;
         case 0x0CC >> 1: // Unused
         case 0x0CE >> 1: // Unused
             break;
@@ -2114,13 +2114,13 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x0D2 >> 1: // AUD3LCL
             agnus.pokeAUDxLCL<3>(value); return;
         case 0x0D4 >> 1: // AUD3LEN
-            audioUnit.channel3.pokeAUDxLEN(value); return;
+            paula.channel3.pokeAUDxLEN(value); return;
         case 0x0D6 >> 1: // AUD3PER
-            audioUnit.channel3.pokeAUDxPER(value); return;
+            paula.channel3.pokeAUDxPER(value); return;
         case 0x0D8 >> 1: // AUD3VOL
-            audioUnit.channel3.pokeAUDxVOL(value); return;
+            paula.channel3.pokeAUDxVOL(value); return;
         case 0x0DA >> 1: // AUD3DAT
-            audioUnit.channel3.pokeAUDxDAT(value); return;
+            paula.channel3.pokeAUDxDAT(value); return;
         case 0x0DC >> 1: // Unused
         case 0x0DE >> 1: // Unused
             break;

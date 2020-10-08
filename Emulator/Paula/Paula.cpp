@@ -15,6 +15,11 @@ Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 
     subComponents = vector<HardwareComponent *> {
         
+        &channel0,
+        &channel1,
+        &channel2,
+        &channel3,
+        &muxer,
         &audioUnit,
         &diskController,
         &uart
@@ -34,7 +39,7 @@ Paula::_reset(bool hard)
     cpu.setIPL(0);
     
     // Audio
-    audioUnit.muxer.clear();
+    muxer.clear();
 }
 
 void
@@ -46,10 +51,10 @@ Paula::_inspect()
         info.intena = intena;
         info.adkcon = adkcon;
         
-        audioInfo.channel[0] = audioUnit.channel0.getInfo();
-        audioInfo.channel[1] = audioUnit.channel1.getInfo();
-        audioInfo.channel[2] = audioUnit.channel2.getInfo();
-        audioInfo.channel[3] = audioUnit.channel3.getInfo();
+        audioInfo.channel[0] = channel0.getInfo();
+        audioInfo.channel[1] = channel1.getInfo();
+        audioInfo.channel[2] = channel2.getInfo();
+        audioInfo.channel[3] = channel3.getInfo();
     }
 }
 
@@ -62,20 +67,20 @@ Paula::_dump()
 size_t
 Paula::didLoadFromBuffer(u8 *buffer)
 {
-    audioUnit.muxer.clear();
+    muxer.clear();
     return 0;
 }
 
 void
 Paula::_run()
 {
-    audioUnit.muxer.clear();
+    muxer.clear();
 }
 
 void
 Paula::_pause()
 {
-    audioUnit.muxer.clear();
+    muxer.clear();
 }
 
 void
@@ -86,14 +91,22 @@ Paula::_setWarp(bool enable)
         // Warping has the unavoidable drawback that audio playback gets out of
         // sync. To cope with this issue, we ramp down the volume when warping
         // is switched on and fade in smoothly when it is switched off.
-        audioUnit.muxer.rampDown();
+        muxer.rampDown();
         
     } else {
         
-        audioUnit.muxer.rampUp();
-        audioUnit.muxer.clear();
+        muxer.rampUp();
+        muxer.clear();
     }
 }
+
+void
+Paula::executeUntil(Cycle target)
+{
+    muxer.synthesize(audioClock, target);
+    audioClock = target;
+}
+
 
 void
 Paula::raiseIrq(IrqSource src)
