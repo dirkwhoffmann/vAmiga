@@ -17,12 +17,6 @@
 #include "Buffers.h"
 
 class PaulaAudio : public AmigaComponent {
-
-public:
-    
-    // Result of the latest inspection
-    AudioInfo info;
-
     
     //
     // Sub components
@@ -60,15 +54,6 @@ public:
     
     void _reset(bool hard) override;
     
-            
-    //
-    // Analyzing
-    //
-    
-private:
-    
-    void _inspect() override;
-
     
     //
     // Serializing

@@ -30,18 +30,6 @@ PaulaAudio::_reset(bool hard)
 }
 
 void
-PaulaAudio::_inspect()
-{
-    synchronized {
-        
-        info.channel[0] = channel0.getInfo();
-        info.channel[1] = channel1.getInfo();
-        info.channel[2] = channel2.getInfo();
-        info.channel[3] = channel3.getInfo();
-    }
-}
-
-void
 PaulaAudio::executeUntil(Cycle target)
 {
     muxer.synthesize(clock, target);

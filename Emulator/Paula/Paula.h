@@ -22,7 +22,8 @@ private:
 
     // Result of the latest inspection
     PaulaInfo info;
-    
+    AudioInfo audioInfo;
+
     
     //
     // Sub components
@@ -110,7 +111,7 @@ private:
 public:
     
     PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
-    AudioInfo getAudioInfo() { return HardwareComponent::getInfo(audioUnit.info); }
+    AudioInfo getAudioInfo() { return HardwareComponent::getInfo(audioInfo); }
 
     
 private:

@@ -45,6 +45,11 @@ Paula::_inspect()
         info.intreq = intreq;
         info.intena = intena;
         info.adkcon = adkcon;
+        
+        audioInfo.channel[0] = audioUnit.channel0.getInfo();
+        audioInfo.channel[1] = audioUnit.channel1.getInfo();
+        audioInfo.channel[2] = audioUnit.channel2.getInfo();
+        audioInfo.channel[3] = audioUnit.channel3.getInfo();
     }
 }
 
