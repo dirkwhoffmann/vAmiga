@@ -45,7 +45,7 @@ public:
     //
     
     // Paula has been executed up to this clock cycle
-    Cycle clock = 0;
+    // Cycle clock = 0;
     
     
     //
@@ -110,6 +110,8 @@ private:
 public:
     
     PaulaInfo getInfo() { return HardwareComponent::getInfo(info); }
+    AudioInfo getAudioInfo() { return HardwareComponent::getInfo(audioUnit.info); }
+
     
 private:
     
@@ -131,9 +133,11 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        /*
         worker
 
         & clock;
+        */
     }
 
     template <class T>
@@ -169,6 +173,8 @@ private:
     
 private:
     
+    void _run() override;
+    void _pause() override;
     void _setWarp(bool enable) override;
 
 

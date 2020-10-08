@@ -18,6 +18,8 @@
 
 class PaulaAudio : public AmigaComponent {
 
+public:
+    
     // Result of the latest inspection
     AudioInfo info;
 
@@ -47,31 +49,6 @@ private:
     // The component has been executed up to this clock cycle
     Cycle clock = 0;
 
-    // Master clock cycles per audio sample, set in setSampleRate()
-    double cyclesPerSample = 0;
-
-    // Time stamp of the last write pointer alignment
-    Cycle lastAlignment = 0;
-
-    
-    //
-    // Sample buffers
-    //
-
-private:
-
-    // Current volume (a value of 0 or below silences the audio playback)
-    const static i32 maxVolume = 100000;
-    i32 volume = maxVolume;
-
-    /* Target volume and delta steps. Whenever an audio sample is written into
-     * the buffer, the volume is increased or decreased by volumeDelta to make
-     * it reach the target volume eventually. This feature is used to eliminate
-     * cracks when the emulator is started or stopped.
-     */
-    i32 targetVolume = maxVolume;
-    i32 volumeDelta = 0;
-
 
     //
     // Initializing
@@ -83,16 +60,7 @@ public:
     
     void _reset(bool hard) override;
     
-    
-    //
-    // Configuring
-    //
-    
-public:
             
-    bool isMuted() { return muxer.isMuted(); }
-
-        
     //
     // Analyzing
     //
@@ -100,12 +68,12 @@ public:
 public:
     
     // Returns the result of the most recent call to inspect()
-    AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
+    // AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
 
 private:
     
     void _inspect() override;
-    void _dump() override;
+    // void _dump() override;
 
     
     //
@@ -144,8 +112,8 @@ private:
     
 private:
     
-    void _run() override;
-    void _pause() override;
+    // void _run() override;
+    // void _pause() override;
 
 
     //
@@ -158,27 +126,6 @@ public:
     void pokeAUDxVOL(int nr, u16 value);
 
 
-    //
-    // Controlling the volume
-    //
-    
-public:
-    
-    // Sets the current volume
-    void setVolume(i32 vol) { volume = vol; }
-    
-    /* Triggers volume ramp up phase. Configures volume and targetVolume to
-     * simulate a smooth audio fade in
-     */
-    void rampUp();
-    void rampUpFromZero();
-    
-    /* Triggers volume ramp down phase. Configures volume and targetVolume to
-     * simulate a quick audio fade out
-     */
-    void rampDown();
-    
-    
     //
     // Managing the ringbuffer
     //
@@ -200,10 +147,6 @@ public:
     
     // Emulates the device until the given master clock cycle has been reached
     void executeUntil(Cycle targetClock);
-    template <SamplingMethod method> void executeUntil(Cycle targetClock);
-
-    // Returns the current state of the state machine
-    template <int channel> u8 getState();
 };
 
 #endif

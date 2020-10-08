@@ -51,6 +51,18 @@ Paula::_dump()
 }
 
 void
+Paula::_run()
+{
+    audioUnit.muxer.clear();
+}
+
+void
+Paula::_pause()
+{
+    audioUnit.muxer.clear();
+}
+
+void
 Paula::_setWarp(bool enable)
 {
     if (enable) {
@@ -58,11 +70,11 @@ Paula::_setWarp(bool enable)
         // Warping has the unavoidable drawback that audio playback gets out of
         // sync. To cope with this issue, we ramp down the volume when warping
         // is switched on and fade in smoothly when it is switched off.
-        audioUnit.rampDown();
+        audioUnit.muxer.rampDown();
         
     } else {
         
-        audioUnit.rampUp();
+        audioUnit.muxer.rampUp();
         audioUnit.muxer.clear();
     }
 }

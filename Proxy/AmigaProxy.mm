@@ -809,7 +809,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (AudioInfo) getAudioInfo
 {
-    return wrapper->paula->audioUnit.getInfo();
+    return wrapper->paula->getAudioInfo();
 }
 - (MuxerStats) getMuxerStats
 {
@@ -847,15 +847,15 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) rampUp
 {
-    wrapper->paula->audioUnit.rampUp();
+    wrapper->paula->audioUnit.muxer.rampUp();
 }
 - (void) rampUpFromZero
 {
-    wrapper->paula->audioUnit.rampUpFromZero();
+    wrapper->paula->audioUnit.muxer.rampUpFromZero();
 }
 - (void) rampDown
 {
-    wrapper->paula->audioUnit.rampDown();
+    wrapper->paula->audioUnit.muxer.rampDown();
 }
 - (float) drawWaveformL:(unsigned *)buffer w:(NSInteger)w h:(NSInteger)h scale:(float)s color:(unsigned)c
 {

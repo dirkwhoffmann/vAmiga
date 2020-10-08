@@ -50,11 +50,7 @@ PaulaAudio::_inspect()
     }
 }
 
-void
-PaulaAudio::_dump()
-{
-}
-
+/*
 void
 PaulaAudio::_run()
 {
@@ -66,6 +62,7 @@ PaulaAudio::_pause()
 {
     muxer.clear();
 }
+*/
 
 void
 PaulaAudio::executeUntil(Cycle target)
@@ -99,32 +96,6 @@ PaulaAudio::pokeAUDxVOL(int nr, u16 value)
 }
 
 void
-PaulaAudio::rampUp()
-{
-    // Only proceed if the emulator is not running in warp mode
-    if (warpMode) return;
-    
-    targetVolume = maxVolume;
-    volumeDelta = 3;
-    muxer.ignoreNextUnderOrOverflow();
-}
-
-void
-PaulaAudio::rampUpFromZero()
-{
-    volume = 0;
-    rampUp();
-}
- 
-void
-PaulaAudio::rampDown()
-{    
-    targetVolume = 0;
-    volumeDelta = 50;
-    muxer.ignoreNextUnderOrOverflow();
-}
-
-void
 PaulaAudio::readMonoSamples(float *buffer, size_t n)
 {
     muxer.copyMono(buffer, n);
@@ -135,8 +106,3 @@ PaulaAudio::readStereoSamples(float *left, float *right, size_t n)
 {
     muxer.copy(left, right, n);
 }
-
-template<> u8 PaulaAudio::getState<0>() { return channel0.state; }
-template<> u8 PaulaAudio::getState<1>() { return channel1.state; }
-template<> u8 PaulaAudio::getState<2>() { return channel2.state; }
-template<> u8 PaulaAudio::getState<3>() { return channel3.state; }
