@@ -183,7 +183,7 @@ private:
     //
     
 public:
-    
+        
     // ADKCONR and ADKCON
     u16 peekADKCONR();
     void pokeADKCON(u16 value);

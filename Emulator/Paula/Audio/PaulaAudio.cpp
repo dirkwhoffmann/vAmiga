@@ -50,49 +50,11 @@ PaulaAudio::_inspect()
     }
 }
 
-/*
-void
-PaulaAudio::_run()
-{
-    muxer.clear();
-}
-
-void
-PaulaAudio::_pause()
-{
-    muxer.clear();
-}
-*/
-
 void
 PaulaAudio::executeUntil(Cycle target)
 {
     muxer.synthesize(clock, target);
     clock = target;
-}
-
-void
-PaulaAudio::pokeAUDxPER(int nr, u16 value)
-{
-    switch (nr) {
-        case 0: channel0.pokeAUDxPER(value); return;
-        case 1: channel1.pokeAUDxPER(value); return;
-        case 2: channel2.pokeAUDxPER(value); return;
-        case 3: channel3.pokeAUDxPER(value); return;
-    }
-    assert(false);
-}
-
-void
-PaulaAudio::pokeAUDxVOL(int nr, u16 value)
-{
-    switch (nr) {
-         case 0: channel0.pokeAUDxVOL(value); return;
-         case 1: channel1.pokeAUDxVOL(value); return;
-         case 2: channel2.pokeAUDxVOL(value); return;
-         case 3: channel3.pokeAUDxVOL(value); return;
-     }
-     assert(false);
 }
 
 void

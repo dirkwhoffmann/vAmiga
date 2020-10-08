@@ -136,10 +136,19 @@ template <int nr> void
 StateMachine<nr>::pbufld2()
 {
     assert(AUDxAP());
+    
+    switch (nr) {
+        case 0: paula.audioUnit.channel1.pokeAUDxPER(auddat);
+        case 1: paula.audioUnit.channel2.pokeAUDxPER(auddat);
+        case 2: paula.audioUnit.channel3.pokeAUDxPER(auddat);
+        case 3: break;
+    }
+    /*
     if (nr < 3) {
         // debug("Period modulation %d\n", auddat);
         audioUnit.pokeAUDxPER(nr + 1, auddat);
     }
+    */
 }
 
 template <int nr> bool

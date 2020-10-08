@@ -107,26 +107,6 @@ private:
     
     
     //
-    // Controlling
-    //
-    
-private:
-    
-    // void _run() override;
-    // void _pause() override;
-
-
-    //
-    // Accessing registers
-    //
-    
-public:
-    
-    void pokeAUDxPER(int nr, u16 value);
-    void pokeAUDxVOL(int nr, u16 value);
-
-
-    //
     // Managing the ringbuffer
     //
     
