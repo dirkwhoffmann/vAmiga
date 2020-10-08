@@ -65,15 +65,9 @@ public:
     // Analyzing
     //
     
-public:
-    
-    // Returns the result of the most recent call to inspect()
-    // AudioInfo getInfo() { return HardwareComponent::getInfo(info); }
-
 private:
     
     void _inspect() override;
-    // void _dump() override;
 
     
     //
@@ -103,7 +97,6 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
-    size_t didLoadFromBuffer(u8 *buffer) override;
     
     
     //

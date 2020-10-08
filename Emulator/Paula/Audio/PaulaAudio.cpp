@@ -26,16 +26,7 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
 void
 PaulaAudio::_reset(bool hard)
 {
-    RESET_SNAPSHOT_ITEMS(hard)
-    
-    muxer.clear();
-}
-
-size_t
-PaulaAudio::didLoadFromBuffer(u8 *buffer)
-{
-    muxer.clear();
-    return 0;
+    RESET_SNAPSHOT_ITEMS(hard)    
 }
 
 void

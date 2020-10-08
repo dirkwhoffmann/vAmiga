@@ -28,9 +28,13 @@ Paula::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
 
+    // Interrupts
     for (int i = 0; i < 16; i++) setIntreq[i] = NEVER;
     ipl.clear();
     cpu.setIPL(0);
+    
+    // Audio
+    audioUnit.muxer.clear();
 }
 
 void
@@ -48,6 +52,13 @@ void
 Paula::_dump()
 {
     
+}
+
+size_t
+Paula::didLoadFromBuffer(u8 *buffer)
+{
+    audioUnit.muxer.clear();
+    return 0;
 }
 
 void
