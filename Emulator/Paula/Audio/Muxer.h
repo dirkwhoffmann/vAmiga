@@ -35,6 +35,30 @@
  *           -----------------------------------------------------
  */
 
+struct Volume {
+
+    // Maximum volume
+    const static i32 maxVolume = 100000;
+
+    // Current volume (will eventually reach the target volume)
+    i32 current = maxVolume;
+
+    // Target volume
+    i32 target = maxVolume;
+
+    // Delta steps (added to volume until the target volume is reached)
+    i32 delta = 0;
+
+    // Shifts the current volume towards the target volume
+    void shift() {
+        if (current < target) {
+            current += MIN(delta, target - current);
+        } else {
+            current -= MIN(delta, current - target);
+        }
+    }
+};
+
 class Muxer : public AmigaComponent {
 
     // Current configuration
@@ -55,6 +79,9 @@ class Muxer : public AmigaComponent {
     // Time stamp of the last write pointer alignment
     Cycle lastAlignment = 0;
 
+    // Volume control
+    Volume volume;
+        
     
     //
     // Sub components
@@ -150,6 +177,27 @@ private:
     
     
     //
+    // Controlling the volume
+    //
+    
+public:
+    
+    // Sets the current volume
+    // void setVolume(i32 vol) { volume = vol; }
+    
+    /* Starts to ramp up the volume. This function configures variables volume
+     * and targetVolume to simulate a smooth audio fade in.
+     */
+    void rampUp();
+    void rampUpFromZero();
+    
+    /* Starts to ramp down the volume. This function configures variables
+     * volume and targetVolume to simulate a quick audio fade out.
+     */
+    void rampDown();
+    
+    
+    //
     // Generating audio streams
     //
     
@@ -179,12 +227,9 @@ public:
     
 public:
     
-    void copy(float *left, float *right, size_t n,
-              i32 &volume, i32 targetVolume, i32 volumeDelta);
+    void copy(float *left, float *right, size_t n);
     
-    void copyMono(float *buffer, size_t n,
-                  i32 &volume, i32 targetVolume, i32 volumeDelta);
-    
+    void copyMono(float *buffer, size_t n);
 };
 
 #endif

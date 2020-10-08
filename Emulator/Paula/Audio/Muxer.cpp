@@ -260,6 +260,32 @@ Muxer::setSampleRate(double hz)
 }
 
 void
+Muxer::rampUp()
+{
+    // Only proceed if the emulator is not running in warp mode
+    if (warpMode) return;
+    
+    volume.target = Volume::maxVolume;
+    volume.delta = 3;
+    ignoreNextUnderOrOverflow();
+}
+
+void
+Muxer::rampUpFromZero()
+{
+    volume.current = 0;
+    rampUp();
+}
+ 
+void
+Muxer::rampDown()
+{
+    volume.target = 0;
+    volume.delta = 50;
+    ignoreNextUnderOrOverflow();
+}
+
+void
 Muxer::synthesize(Cycle clock, Cycle target, long count)
 {
     assert(target > clock);
@@ -392,23 +418,21 @@ Muxer::handleBufferOverflow()
 }
 
 void
-Muxer::copy(float *left, float *right, size_t n,
-            i32 &volume, i32 targetVolume, i32 volumeDelta)
+Muxer::copy(float *left, float *right, size_t n)
 {
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    stream.copy(left, right, n, volume, targetVolume, volumeDelta);
+    stream.copy(left, right, n, volume.current, volume.target, volume.delta);
 }
 
 void
-Muxer::copyMono(float *buffer, size_t n,
-                i32 &volume, i32 targetVolume, i32 volumeDelta)
+Muxer::copyMono(float *buffer, size_t n)
 {
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    stream.copyMono(buffer, n, volume, targetVolume, volumeDelta);
+    stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
 }

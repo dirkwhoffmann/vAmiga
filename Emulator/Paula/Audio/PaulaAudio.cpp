@@ -19,9 +19,7 @@ PaulaAudio::PaulaAudio(Amiga& ref) : AmigaComponent(ref)
         &channel1,
         &channel2,
         &channel3,
-        &muxer,
-        &filterL,
-        &filterR
+        &muxer
     };
 }
 
@@ -129,13 +127,13 @@ PaulaAudio::rampDown()
 void
 PaulaAudio::readMonoSamples(float *buffer, size_t n)
 {
-    muxer.copyMono(buffer, n, volume, targetVolume, volumeDelta);
+    muxer.copyMono(buffer, n);
 }
 
 void
 PaulaAudio::readStereoSamples(float *left, float *right, size_t n)
 {
-    muxer.copy(left, right, n, volume, targetVolume, volumeDelta);
+    muxer.copy(left, right, n);
 }
 
 template<> u8 PaulaAudio::getState<0>() { return channel0.state; }

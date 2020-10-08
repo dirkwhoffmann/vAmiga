@@ -37,10 +37,6 @@ public:
     // Muxer
     Muxer muxer = Muxer(amiga);
     
-    // Audio filters (DEPRECATED. WILL BE PART OF THE MUXER)
-    AudioFilter filterL = AudioFilter(amiga);
-    AudioFilter filterR = AudioFilter(amiga);
-
     
     //
     // Properties
