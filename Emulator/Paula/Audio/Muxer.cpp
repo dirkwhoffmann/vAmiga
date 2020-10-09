@@ -18,6 +18,8 @@ Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
         &filterL,
         &filterR
     };
+    
+    setSampleRate(44100);
 }
     
 void
@@ -248,6 +250,19 @@ Muxer::setConfigItem(ConfigOption option, long value)
 }
 
 void
+Muxer::_dumpConfig()
+{
+    msg("samplingMethod : %d\n", config.samplingMethod);
+    msg("    filtertype : %d\n", config.filterType);
+    msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
+    msg("   vol0 / pan0 : %f %f\n", config.vol[0], config.pan[0]);
+    msg("   vol1 / pan1 : %f %f\n", config.vol[1], config.pan[1]);
+    msg("   vol2 / pan2 : %f %f\n", config.vol[2], config.pan[2]);
+    msg("   vol3 / pan3 : %f %f\n", config.vol[3], config.pan[3]);
+    msg("     volL volR : %f %f\n", config.volL, config.volR);
+}
+
+void
 Muxer::setSampleRate(double hz)
 {
     debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
@@ -294,6 +309,8 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
     // Determine the number of elapsed cycles per audio sample
     double cyclesPerSample = (double)(target - clock) / (double)count;
             
+    printf("clock: %lld target: %lld count: %ld\n", clock, target, count);
+    
     switch (config.samplingMethod) {
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
         case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
@@ -306,7 +323,7 @@ Muxer::synthesize(Cycle clock, Cycle target)
 {
     assert(target > clock);
     assert(cyclesPerSample > 0);
-
+    
     // Determine how many samples we need to produce
     double exact = (double)(target - clock) / cyclesPerSample + fraction;
     long count = (long)exact;
@@ -323,9 +340,7 @@ template <SamplingMethod method> void
 Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
 {
     assert(count > 0);
-
-    debug(AUDBUF_DEBUG, "r = %d w = %d (%f\%)\n", stream.r, stream.w, stream.fillLevel());
-
+    
     bool filter = ciaa.powerLED() || config.filterAlwaysOn;
 
     // Check for a buffer overflow
@@ -339,6 +354,14 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         double ch2 = sampler[2].interpolate<method>((Cycle)cycle) * config.vol[2];
         double ch3 = sampler[3].interpolate<method>((Cycle)cycle) * config.vol[3];
 
+        /*
+        if (this == &denise.screenRecorder.muxer)
+        {
+            dumpConfig();
+            debug("ch0: %f ch1: %f ch2: %f ch3: %f\n", ch0, ch1, ch2, ch3);
+        }
+        */
+        
         // Compute left channel output
         float l =
         ch0 * config.pan[0] + ch1 * config.pan[1] +
@@ -351,7 +374,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
         
         // Apply audio filter
         if (filter) { l = filterL.apply(l); r = filterR.apply(r); }
-
+        
         // Write sample into ringbuffer
         stream.write( SamplePair { l, r } );
         
@@ -418,7 +441,17 @@ Muxer::handleBufferOverflow()
 }
 
 void
-Muxer::copy(float *left, float *right, size_t n)
+Muxer::copyMono(float *buffer, size_t n)
+{
+    // Check for a buffer underflow
+    if (stream.count() < n) handleBufferUnderflow();
+    
+    // Read sound samples
+    stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
+}
+
+void
+Muxer::copyStereo(float *left, float *right, size_t n)
 {
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
@@ -428,11 +461,11 @@ Muxer::copy(float *left, float *right, size_t n)
 }
 
 void
-Muxer::copyMono(float *buffer, size_t n)
+Muxer::copyInterleaved(float *buffer, size_t n)
 {
     // Check for a buffer underflow
     if (stream.count() < n) handleBufferUnderflow();
     
     // Read sound samples
-    stream.copyMono(buffer, n, volume.current, volume.target, volume.delta);
+    stream.copyInterleaved(buffer, n, volume.current, volume.target, volume.delta);
 }

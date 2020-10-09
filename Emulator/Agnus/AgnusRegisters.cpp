@@ -81,7 +81,7 @@ Agnus::setBPLxPTH(u16 value)
     debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     
     // Check if the write collides with DMA
-    if (DROP_PTR_WRITES && isBplxEvent(bplEvent[pos.h], x)) {
+    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
         debug(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
         bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
         return;
@@ -101,7 +101,7 @@ Agnus::setBPLxPTL(u16 value)
     debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
     // Check if the write collides with DMA
-    if (DROP_PTR_WRITES && isBplxEvent(bplEvent[pos.h], x)) {
+    if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
         debug(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
         bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
         return;
@@ -236,7 +236,7 @@ Agnus::dropWrite(BusOwner owner)
     /* A write to a pointer register is dropped if the pointer was used one
      * cycle before the pointer register would be updated.
      */
-    if (DROP_PTR_WRITES && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
+    if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
         debug(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;
     }

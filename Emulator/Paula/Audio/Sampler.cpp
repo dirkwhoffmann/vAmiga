@@ -29,11 +29,19 @@ Sampler::interpolate(Cycle clock)
         return elements[r1].sample;
     }
 
-    // Interpolate between position r1 and p2
+    // Interpolate between position r1 and r2
     Cycle c1 = elements[r1].tag;
     Cycle c2 = elements[r2].tag;
     i16 s1 = elements[r1].sample;
     i16 s2 = elements[r2].sample;
+    
+    /*
+    if (!(clock >= c1 && clock < c2)) {
+        printf("WARNING: clock: %lld count: %d r: %d w: %d r1: %d r2: %d c1: %lld c2: %lld\n", clock, count(), r, w, r1, r2, c1, c2);
+        return 0;
+        
+    }
+    */
     assert(clock >= c1 && clock < c2);
 
     switch (method) {

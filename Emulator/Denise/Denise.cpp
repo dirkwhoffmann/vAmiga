@@ -17,6 +17,7 @@ Denise::Denise(Amiga& ref) : AmigaComponent(ref)
     subComponents = vector<HardwareComponent *> {
         
         &pixelEngine,
+        &screenRecorder
     };
 
     config.hiddenSprites = 0;
@@ -1086,10 +1087,9 @@ Denise::checkP2PCollisions()
 }
 
 void
-Denise::beginOfFrame()
+Denise::vsyncHandler()
 {
     pixelEngine.beginOfFrame();
-    recorder.vsyncHandler();
     
     if (amiga.inDebugMode()) {
         

@@ -10,6 +10,41 @@
 #include "Amiga.h"
 
 void
+AudioStream::copyMono(float *buffer, size_t n,
+                      i32 &volume, i32 targetVolume, i32 volumeDelta)
+{
+    // The caller has to ensure that no buffer underflows occurs
+    assert(count() >= n);
+
+    if (volume == targetVolume) {
+        
+        float scale = volume / 10000.0f;
+        
+        for (size_t i = 0; i < n; i++) {
+            
+            SamplePair pair = read();
+            *buffer++ = (pair.left + pair.right) * scale;
+        }
+
+    } else {
+        
+        for (size_t i = 0; i < n; i++) {
+                            
+            if (volume < targetVolume) {
+                volume += MIN(volumeDelta, targetVolume - volume);
+            } else {
+                volume -= MIN(volumeDelta, volume - targetVolume);
+            }
+
+            float scale = volume / 10000.0f;
+
+            SamplePair pair = read();
+            *buffer++ = (pair.left + pair.right) * scale;
+        }
+    }
+}
+
+void
 AudioStream::copy(float *left, float *right, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
@@ -47,8 +82,8 @@ AudioStream::copy(float *left, float *right, size_t n,
 }
 
 void
-AudioStream::copyMono(float *buffer, size_t n,
-                      i32 &volume, i32 targetVolume, i32 volumeDelta)
+AudioStream::copyInterleaved(float *buffer, size_t n,
+                             i32 &volume, i32 targetVolume, i32 volumeDelta)
 {
     // The caller has to ensure that no buffer underflows occurs
     assert(count() >= n);
@@ -60,7 +95,8 @@ AudioStream::copyMono(float *buffer, size_t n,
         for (size_t i = 0; i < n; i++) {
             
             SamplePair pair = read();
-            *buffer++ = (pair.left + pair.right) * scale;
+            *buffer++ = pair.left * scale;
+            *buffer++ = pair.right * scale;
         }
 
     } else {
@@ -76,7 +112,8 @@ AudioStream::copyMono(float *buffer, size_t n,
             float scale = volume / 10000.0f;
 
             SamplePair pair = read();
-            *buffer++ = (pair.left + pair.right) * scale;
+            *buffer++ = pair.left * scale;
+            *buffer++ = pair.right * scale;
         }
     }
 }

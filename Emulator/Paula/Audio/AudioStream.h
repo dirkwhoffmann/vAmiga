@@ -37,11 +37,14 @@ public:
      * sound samples into the buffers of the native sound device. In additon
      * to copying, the volume is modulated and audio filters can be applied.
      */
-    void copy(float *left, float *right, size_t n,
-              i32 &volume, i32 targetVolume, i32 volumeDelta);
-    
     void copyMono(float *buffer, size_t n,
                   i32 &volume, i32 targetVolume, i32 volumeDelta);
+    
+    void copy(float *left, float *right, size_t n,
+                    i32 &volume, i32 targetVolume, i32 volumeDelta);
+    
+    void copyInterleaved(float *buffer, size_t n,
+                         i32 &volume, i32 targetVolume, i32 volumeDelta);
     
     
     //

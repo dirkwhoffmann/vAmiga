@@ -837,7 +837,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (void) readStereoSamples:(float *)target1 buffer2:(float *)target2 size:(NSInteger)n
 {
-    wrapper->paula->muxer.copy(target1, target2, n);
+    wrapper->paula->muxer.copyStereo(target1, target2, n);
 }
 - (void) rampUp
 {
@@ -1625,7 +1625,7 @@ struct SerialPortWrapper { SerialPort *port; };
     mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
     mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
-    screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.recorder];
+    screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];
     watchpoints = [[GuardsProxy alloc] initWithGuards:&amiga->cpu.debugger.watchpoints];
 

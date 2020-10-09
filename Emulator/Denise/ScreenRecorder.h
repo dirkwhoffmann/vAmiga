@@ -11,6 +11,7 @@
 #define _SCREEN_RECORDER_H
 
 #include "AmigaComponent.h"
+#include "Muxer.h"
 
 /* BufferedPipe is wrapper around a classical POSIX pipe which is utilized to
  * feed video and audio data into FFmpeg. The class maintains a FIFO of data
@@ -67,6 +68,14 @@ private:
 
 class ScreenRecorder : public AmigaComponent {
 
+    //
+    // Sub components
+    //
+    
+    // Audio muxer for synthesizing the audio track
+    Muxer muxer = Muxer(amiga);
+
+    
     // Path to the FFmpeg executable
     static const char *ffmpegPath;
     
@@ -74,17 +83,22 @@ class ScreenRecorder : public AmigaComponent {
     static bool ffmpegInstalled;
 
     // Audio sample frequency in the output stream
-    static const int sampleRate = 48000;
-    
+    static const int frameRate = 50;
+    static const int sampleRate = 44100;
+    static const int samplesPerFrame = sampleRate / frameRate;
+
     // File handle to access the FFmpeg encoder
     FILE *ffmpeg = NULL;
-
+        
     // Video and audio pipe
     BufferedPipe *videoPipe = BufferedPipe::make("/tmp/videoPipe");
     BufferedPipe *audioPipe = BufferedPipe::make("/tmp/audioPipe");
 
     // Indicates if the recorder is active
     bool recording = false;
+    
+    // Time stamp recorded in the vSync handler
+    Cycle audioClock = 0;
     
     // Path of the output file
     char *outfile = NULL;
@@ -98,14 +112,7 @@ class ScreenRecorder : public AmigaComponent {
     // Pixel aspect ratio
     long aspectX;
     long aspectY;
-    
-    // Temporary pixel storage
-    // u32 pixels[1024*320];
-    
-    // Temporary aUdio storage
-    float samples[sampleRate + 100][2];
-    int samplesCnt = 0;
-    
+            
     
     //
     // Initializing
@@ -118,6 +125,15 @@ public:
     
     void _reset(bool hard) override;
 
+    
+    //
+    // Analyzing
+    //
+
+private:
+    
+    void _dump() override;
+    
     
     //
     // Serializing
@@ -182,10 +198,10 @@ public:
 public:
     
     // Writes an audio sample to the temporary buffer
-    void addSample(float left, float right);
+    // void addSample(float left, float right);
     
     // Records a single frame
-    void vsyncHandler();
+    void vsyncHandler(Cycle target);
 };
 
 #endif

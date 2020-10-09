@@ -62,7 +62,6 @@
 // Compatibility settings
 //
 
-static const int DROP_PTR_WRITES = 0; // Resolve CPU/DMA access collisions
 
 
 //
@@ -91,6 +90,7 @@ static const int FAS_DEBUG       = 0; // Fast RAM
 // Agnus
 static const int DMA_DEBUG       = 0; // DMA registers
 static const int DDF_DEBUG       = 0; // Display data fetch
+static const int NO_PTR_DROPS    = 0; // Never drop a pointer register write
 
 // Copper
 static const int COP_CHECKSUM    = 0; // Compute Copper checksums
@@ -139,7 +139,7 @@ static const int MFM_DEBUG       = 0; // Disk encoder / decoder
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers
 static const int AUD_DEBUG       = 0; // Audio execution
-static const int AUDBUF_DEBUG    = 0; // Audio buffers
+static const int AUDBUF_DEBUG    = 1; // Audio buffers
 static const int DISABLE_AUDIRQ  = 0; // Disable audio interrupts
 
 // Ports
@@ -155,5 +155,6 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
+static const int REC_DEBUG       = 0; // Screen recorder
 
 #endif

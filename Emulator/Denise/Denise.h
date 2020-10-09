@@ -44,7 +44,7 @@ public:
     PixelEngine pixelEngine = PixelEngine(amiga);
 
     // A screen recorder for creating video streams
-    ScreenRecorder recorder = ScreenRecorder(amiga);
+    ScreenRecorder screenRecorder = ScreenRecorder(amiga);
 
 
     //
@@ -558,7 +558,7 @@ public:
 public:
 
     // Called by Agnus at the beginning of each frame
-    void beginOfFrame();
+    void vsyncHandler();
 
     // Called by Agnus at the beginning of each rasterline
     void beginOfLine(int vpos);

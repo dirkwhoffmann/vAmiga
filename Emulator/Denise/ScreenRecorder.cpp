@@ -67,6 +67,8 @@ BufferedPipe::send(u8 *data, size_t size)
 {
     startWorker();
     
+    plaindebug(REC_DEBUG, "Sending %d bytes\n", size);
+
     // Push the data packet into the FIFO buffer
     synchronized {
         fifo.push(DataChunk { data, size });
@@ -83,7 +85,7 @@ BufferedPipe::startWorker()
             running = true;
             m.lock();
             t = std::thread(&BufferedPipe::worker, this);
-            plaindebug("Worker thread started");
+            plaindebug(REC_DEBUG, "Worker thread started");
         }
     }
 }
@@ -91,26 +93,35 @@ BufferedPipe::startWorker()
 void
 BufferedPipe::stopWorker()
 {
-    plaindebug("Stopping worker thread...\n");
+    plaindebug(REC_DEBUG, "Stopping worker thread...\n");
     running = false;
 }
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("ScreenRecorder");
-    
+
+    subComponents = vector<HardwareComponent *> {
+        
+        &muxer
+    };
+
     // Check if FFmpeg is installed on this machine
     ffmpegInstalled = getSizeOfFile(ffmpegPath) > 0;
-
-    msg("%s:%s installed\n", ffmpegPath, ffmpegInstalled ? "" : " not");
-    msg("Video pipe:%s created\n", videoPipe ? "" : " not");
-    msg("Audio pipe:%s created\n", videoPipe ? "" : " not");
 }
 
 void
 ScreenRecorder::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
+}
+
+void
+ScreenRecorder::_dump()
+{
+    msg("%s:%s installed\n", ffmpegPath, ffmpegInstalled ? "" : " not");
+    msg("Video pipe:%s created\n", videoPipe ? "" : " not");
+    msg("Audio pipe:%s created\n", videoPipe ? "" : " not");
 }
 
 bool
@@ -154,9 +165,9 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
 {
     if (!isReady() || isRecording()) return false;
         
+    dump();
+    
     synchronized {
-
-        recording = true;
 
         // Make sure the screen dimensions are even
         if ((x2 - x1) % 2) x2--;
@@ -178,14 +189,11 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
 
         // Format of the input stream
-        ptr += sprintf(ptr, " -f rawvideo -pixel_format rgba");
+        ptr += sprintf(ptr, " -f rawvideo -pixel_format rgba -thread_queue_size 1024");
         
         // Frame size (width x height)
         ptr += sprintf(ptr, " -s %dx%d", x2 - x1, y2 - y1);
         
-        // Frame rate
-        ptr += sprintf(ptr, " -r 50");
-
         // Video input source (named pipe)
         ptr += sprintf(ptr, " -i %s", videoPipe->path);
 
@@ -194,7 +202,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
         
         // Audio format and number of channels
-        ptr += sprintf(ptr, " -f f32le -channels 2");
+        ptr += sprintf(ptr, " -f f32le -channels 2 -thread_queue_size 1024");
 
         // Sampling rate
         ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
@@ -209,6 +217,9 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Format of the output stream
         // cmd += sprintf(cmd, " -f mp4 -vcodec libx264 -pix_fmt yuv420p");
         ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
+
+        // Frame rate
+        ptr += sprintf(ptr, " -r %d", frameRate);
 
         // Bit rate
         ptr += sprintf(ptr, " -b:v %ldk", bitRate);
@@ -234,6 +245,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ffmpeg = popen(cmd, "w");
         
         msg(ffmpeg ? "Success\n" : "Failed to launch\n");
+        recording = ffmpeg != NULL;        
     }
 
     if (isRecording()) {
@@ -247,17 +259,19 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
 void
 ScreenRecorder::stopRecording()
 {
+    plaindebug(REC_DEBUG, "stopRecording()\n");
+    
     if (!isReady() || !isRecording()) return;
     
     recording = false;
 
     // Ask both buffered pipes to terminate
-    plaindebug("Stopping pipes..\n");
+    plaindebug(REC_DEBUG, "Stopping pipes..\n");
     videoPipe->cancel();
     audioPipe->cancel();
     
     // Wait until both pipes have terminated
-    plaindebug("Wating for pipes to stop...\n");
+    plaindebug(REC_DEBUG, "Wating for pipes to stop...\n");
     videoPipe->join();
     audioPipe->join();
     
@@ -265,24 +279,16 @@ ScreenRecorder::stopRecording()
     pclose(ffmpeg);
     ffmpeg = NULL;
 
-    plaindebug("Recording has stopped\n");
+    plaindebug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
 }
 
 void
-ScreenRecorder::addSample(float left, float right)
-{
-    if (samplesCnt < sizeof(samples) / (2 * sizeof(float))) {
-        samples[samplesCnt][0] = left * 4;
-        samples[samplesCnt][1] = right * 4;
-        samplesCnt++;
-    }
-}
-
-void
-ScreenRecorder::vsyncHandler()
+ScreenRecorder::vsyncHandler(Cycle target)
 {
     if (!isRecording()) return;
+    
+    debug(REC_DEBUG, "vsyncHandler\n");
     assert(ffmpeg != NULL);
             
     synchronized {
@@ -291,19 +297,29 @@ ScreenRecorder::vsyncHandler()
         // Audio
         //
         
-        int samplesPerFrame = sampleRate / 50;
-        if (samplesCnt != samplesPerFrame) {
-            // debug("Got %d audio samples, expected %d (%f)\n",
-            //        samplesCnt, sampleRate / 50, audioUnit.getSampleRate());
-        }
-        size_t audioSize = (size_t)(2 * sizeof(float) * samplesPerFrame);
-        u8 *audio = new u8[audioSize];
-        memcpy(audio, (u8 *)samples, audioSize);
-        // DataChunk chunk2 { audio, audioSize };
-        audioPipe->send(audio, audioSize);
-        samplesCnt = 0;
+        // Clone Paula's muxer contents
+        muxer.sampler[0] = paula.muxer.sampler[0];
+        muxer.sampler[1] = paula.muxer.sampler[1];
+        muxer.sampler[2] = paula.muxer.sampler[2];
+        muxer.sampler[3] = paula.muxer.sampler[3];
+        assert(muxer.sampler[0].r == paula.muxer.sampler[0].r);
+        assert(muxer.sampler[0].w == paula.muxer.sampler[0].w);
 
+        // Synthesize audio samples for this frame
+        if (audioClock == 0) audioClock = target-1;
+        muxer.synthesize(audioClock, target, samplesPerFrame);
+        audioClock = target;
         
+        // Copy samples to buffer
+        float *samples = new float[2 * samplesPerFrame];
+        muxer.copyInterleaved(samples, samplesPerFrame);
+        
+        // for (int i = 0; i < 100; i++) { printf("%f ", samples[i]); }
+        // printf("\n\n");
+        
+        // Feed buffer contents into the audio pipe
+        audioPipe->send((u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
+
         //
         // Video
         //
@@ -319,7 +335,7 @@ ScreenRecorder::vsyncHandler()
         for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
             memcpy(dst, src, width);
         }
-        // DataChunk chunk { data, (size_t)(width * height) };
+
         videoPipe->send(data, (size_t)(width * height));
     }
 }

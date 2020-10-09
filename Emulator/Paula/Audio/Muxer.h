@@ -12,6 +12,7 @@
 
 #include "AmigaComponent.h"
 #include "AudioStream.h"
+#include "AudioFilter.h"
 
 /* Architecture of the audio pipeline
  *
@@ -113,6 +114,9 @@ public:
     // Resets the output buffer and the two audio filters
     void clear();
 
+    // Replaces the audio stream by a stream from a different muxer
+    // void cloneStream(AudioStream &other) { stream = other; }
+    
     
     //
     // Configuring
@@ -124,12 +128,15 @@ public:
 
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
-            
+
+    void _dumpConfig() override;
+
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
 
     double getSampleRate() { return sampleRate; }
     void setSampleRate(double hz);
     
+
 
     //
     // Analyzing
@@ -227,9 +234,9 @@ public:
     
 public:
     
-    void copy(float *left, float *right, size_t n);
-    
     void copyMono(float *buffer, size_t n);
+    void copyStereo(float *left, float *right, size_t n);
+    void copyInterleaved(float *buffer, size_t n);
 };
 
 #endif

@@ -997,6 +997,9 @@ Agnus::hsyncHandler()
 void
 Agnus::vsyncHandler()
 {
+    // Run the screen recorder
+    denise.screenRecorder.vsyncHandler(clock - 50 * DMA_CYCLES(HPOS_CNT));
+
     // Synthesize sound samples
     paula.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 
@@ -1012,7 +1015,7 @@ Agnus::vsyncHandler()
             
     // Let other subcomponents do their own VSYNC stuff
     copper.vsyncHandler();
-    denise.beginOfFrame();
+    denise.vsyncHandler();
     joystick1.execute();
     joystick2.execute();
 

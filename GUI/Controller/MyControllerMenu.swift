@@ -282,10 +282,11 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func captureScreenAction(_ sender: Any!) {
         
-        track()
+        track("Recording = \(amiga.screenRecorder.recording)")
         
         // Stop recording if the recorder is active
         if amiga.screenRecorder.recording {
+            track()
             amiga.screenRecorder.stopRecording()
             return
         }
