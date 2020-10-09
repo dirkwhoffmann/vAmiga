@@ -308,9 +308,7 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
 
     // Determine the number of elapsed cycles per audio sample
     double cyclesPerSample = (double)(target - clock) / (double)count;
-            
-    // printf("clock: %lld target: %lld count: %ld\n", clock, target, count);
-    
+                
     switch (config.samplingMethod) {
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
         case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
@@ -328,7 +326,7 @@ Muxer::synthesize(Cycle clock, Cycle target)
     double exact = (double)(target - clock) / cyclesPerSample + fraction;
     long count = (long)exact;
     fraction = exact - (double)count;
-            
+             
     switch (config.samplingMethod) {
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
         case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
@@ -428,6 +426,7 @@ Muxer::handleBufferOverflow()
     u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
+    debug(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime);
     
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
@@ -436,7 +435,10 @@ Muxer::handleBufferOverflow()
         
         // Decrease the sample rate based on what we've measured
         int offPerSecond = (int)(stream.count() / elapsedTime);
-        setSampleRate(getSampleRate() - offPerSecond);
+        double newSampleRate = getSampleRate() - offPerSecond;
+
+        debug(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
+        setSampleRate(newSampleRate);
     }
 }
 

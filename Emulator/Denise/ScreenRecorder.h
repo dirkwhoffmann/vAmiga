@@ -13,42 +13,20 @@
 #include "AmigaComponent.h"
 #include "Muxer.h"
 
-struct Pipe: AmigaObject {
-       
-    // Name of this pipe
-    const char *path = NULL;
-    
-    // Pipe identifier
-    int pipe = -1;
-    
-    // Factory method
-    static Pipe *make(const char *path);
-    
-    // Writes a chunk of data
-    void send(u8 *data, size_t size);
-    
-    // Closes the pipe
-    void cancel() { close(pipe); }
-    
-private:
-    
-    // Starts or stops the worker thread
-    void startWorker();
-};
-
 class ScreenRecorder : public AmigaComponent {
 
     //
-    // Sub components
+    // Constants
     //
-    
-    // Audio muxer for synthesizing the audio track
-    Muxer muxer = Muxer(amiga);
     
     // Path to the FFmpeg executable
     static const char *ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
 
-    // Path to the temporary video stream and audio stream files
+    // Path to the two named input pipes
+    static const char *videoPipePath() { return "/tmp/videoPipe"; }
+    static const char *audioPipePath() { return "/tmp/audioPipe"; }
+
+    // Path to the two temporary output files
     static const char *videoStreamPath() { return "/tmp/video.mp4"; }
     static const char *audioStreamPath() { return "/tmp/audio.mp4"; }
 
@@ -57,23 +35,49 @@ class ScreenRecorder : public AmigaComponent {
     static const int sampleRate = 44100;
     static const int samplesPerFrame = sampleRate / frameRate;
 
+    // Log level passed to FFmpef
+    static const char *loglevel() { return REC_DEBUG ? "verbose" : "warning"; }
+    
+    
+    //
+    // Sub components
+    //
+    
+    // Audio muxer for synthesizing the audio track
+    Muxer muxer = Muxer(amiga);
+    
+
+    //
+    // Handles
+    //
+    
     // File handles to access FFmpeg
     FILE *videoFFmpeg = NULL;
     FILE *audioFFmpeg = NULL;
 
     // Video and audio pipe
-    Pipe *videoPipe = NULL; // Pipe::make("/tmp/videoPipe");
-    Pipe *audioPipe = NULL; // Pipe::make("/tmp/audioPipe");
+    int videoPipe = -1;
+    int audioPipe = -1;
 
-    // Indicates if the recorder is active
+    
+    //
+    // Recording status
+    //
+    
+    // Indicates if a video is being recorded
     bool recording = false;
-    
-    // Time stamp recorded in the vSync handler
-    Cycle audioClock = 0;
-    
-    // Path of the output file
-    // char *outfile = NULL;
 
+    // Number of records that have been made
+    long recordCounter = 0;
+    
+    // Audio has been recorded up to this cycle
+    Cycle audioClock = 0;
+
+    
+    //
+    // Recording parameters
+    //
+    
     // The texture cutout that is going to be recorded
     struct { int x1; int y1; int x2; int y2; } cutout;
 
@@ -150,7 +154,10 @@ public:
 public:
         
     // Checks whether the screen is currently recorded
-    bool isRecording();
+    bool isRecording() { return recording; }
+    
+    // Returns the record counter
+    long getRecordCounter() { return recordCounter; }
     
     // Starts the screen recorder
     bool startRecording(int x1, int y1, int x2, int y2,
@@ -163,7 +170,7 @@ public:
 
     // Exports the recorded video
     bool exportAs(const char *path);
-
+    
     
     //
     // Recording a video stream

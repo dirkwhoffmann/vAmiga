@@ -447,8 +447,8 @@ struct SerialPortWrapper;
 }
 
 @property (readonly) BOOL hasFFmpeg;
-// @property (readonly) BOOL ready;
 @property (readonly) BOOL recording;
+@property (readonly) NSInteger recordCounter;
 
 // - (BOOL)setPath:(NSString *)path;
 

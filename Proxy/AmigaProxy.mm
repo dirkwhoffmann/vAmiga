@@ -754,22 +754,14 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->screenRecorder->hasFFmpeg();
 }
-/*
-- (BOOL) ready
-{
-    return wrapper->screenRecorder->isReady();
-}
-*/
 - (BOOL) recording
 {
     return wrapper->screenRecorder->isRecording();
 }
-/*
-- (BOOL)setPath:(NSString *)path
+- (NSInteger) recordCounter
 {
-    return wrapper->screenRecorder->setPath([path fileSystemRepresentation]);
+    return wrapper->screenRecorder->getRecordCounter();
 }
-*/
 - (BOOL) startRecording:(NSRect)rect
                 bitRate:(NSInteger)rate
                 aspectX:(NSInteger)aspectX

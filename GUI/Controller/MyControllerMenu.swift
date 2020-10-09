@@ -15,7 +15,8 @@ extension MyController: NSMenuItemValidation {
         let running = amiga.isRunning
         let paused = amiga.isPaused
         let recording = amiga.screenRecorder.recording
-
+        let counter = amiga.screenRecorder.recordCounter
+        
         var dfn: DriveProxy { return amiga.df(item.tag)! }
         
         func validateURLlist(_ list: [URL], image: NSImage) -> Bool {
@@ -46,6 +47,9 @@ extension MyController: NSMenuItemValidation {
         case #selector(MyController.captureScreenAction(_:)):
             item.title = recording ? "Stop Screen Recorder" : "Start Screen Recorder"
             return true
+
+        case #selector(MyController.exportVideoAction(_:)):
+            return counter > 0
 
         // Edit menu
         case #selector(MyController.stopAndGoAction(_:)):
@@ -316,70 +320,10 @@ extension MyController: NSMenuItemValidation {
         }
         
     }
-
-            // Open file dialog
-            /*
-            let panel = NSSavePanel()
-            panel.prompt = "Record"
-            panel.allowedFileTypes = ["mp4"]
-            
-            panel.beginSheetModal(for: window!, completionHandler: { result in
-                if result == .OK {
-                    if let url = panel.url {
-                        track()
-                        self.captureScreenAction(url: url)
-                    }
-                }
-            })
-            */
-    
-    /*
-    func captureScreenAction(url: URL) {
-        
-        track("URL = \(url) path = \(url.path)")
-        
-        if !amiga.screenRecorder.setPath(url.path) {
-            showScreenRecorderAlert(url: url)
-            return
-        }
-                
-        var rect: CGRect
-        if pref.captureSource == 0 {
-            rect = renderer.textureRectAbs
-        } else {
-            rect = renderer.entire
-        }
-        
-        track("Cature source = \(pref.captureSource)")
-        track("(\(rect.minX),\(rect.minY)) - (\(rect.maxX),\(rect.maxY))")
-        
-        amiga.screenRecorder.startRecording(rect,
-                                            bitRate: pref.bitRate,
-                                            aspectX: pref.aspectX,
-                                            aspectY: pref.aspectY)
-    }
-     */
     
     @IBAction func exportVideoAction(_ sender: Any!) {
         
         track()
-        
-        // Show save panel
-        /*
-        var panel = NSSavePanel()
-        panel.prompt = "Export"
-        panel.title = "Export"
-        panel.allowedFileTypes = ["mp4"]
-        
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = self.panel.url {
-                    track("url = \(url)")
-                    self.export(to: url)
-                }
-            }
-        })
-        */
         
         let name = NSNib.Name("ExportVideoDialog")
         let exporter = ExportVideoDialog.make(parent: self, nibName: name)

@@ -10,70 +10,6 @@
 #include "Amiga.h"
 #include <fcntl.h>
 
-/*
-void
-BufferedPipe::worker()
-{
-    // Open the pipe
-    pipe = open(path, O_WRONLY);
-    
-    while (1) {
-        
-        // Check if the thread has been requested to terminate
-        if (!running && fifo.empty()) break;
-        
-        // Wait until the FIFO has been filled with at least one element
-        m.lock(); m.unlock();
-        
-        // Remove the oldest element
-        DataChunk chunk;
-        synchronized {
-            chunk = fifo.front();
-            fifo.pop();
-            if (fifo.empty()) m.lock();
-        }
-        
-        // Write data to the pipe
-        write(pipe, chunk.data, chunk.size);
-        delete(chunk.data);
-    }
-    
-    // Close the pipe
-    assert(running == false);
-    close(pipe);
-    plaindebug("Worker thread has stopped\n");
-}
-*/
-
-Pipe *
-Pipe::make(const char *path)
-{
-    assert(path != NULL);
-    
-    // Remove old pipe (if any)
-    unlink(path);
-    
-    // Create a new pipe
-    int id = mkfifo(path, 0666);
-    if (id == -1) { return NULL; }
-    
-    // Create object
-    Pipe *pipe = new Pipe();
-    pipe->setDescription("BufferedPipe");
-    pipe->path = path;
-    
-    return pipe;
-}
-
-void
-Pipe::send(u8 *data, size_t size)
-{
-    // Open the pipe (blocking)
-    if (pipe == -1) pipe = open(path, O_WRONLY);
-
-    write(pipe, data, size);    
-}
-
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("ScreenRecorder");
@@ -82,6 +18,8 @@ ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
         
         &muxer
     };
+    
+    muxer.setDescription("RecMuxer");
 }
 
 bool
@@ -100,45 +38,8 @@ void
 ScreenRecorder::_dump()
 {
     msg("%s:%s installed\n", ffmpegPath(), hasFFmpeg() ? "" : " not");
-    msg("Video pipe:%s created\n", videoPipe ? "" : " not");
-    msg("Audio pipe:%s created\n", videoPipe ? "" : " not");
-}
-
-/*
-bool
-ScreenRecorder::setPath(const char *path)
-{
-    if (path == NULL) return false;
-    
-    // Check if we have write permissions for this file
-    FILE *file = fopen(path, "w");
-    
-    if (file) {
-        
-        plaindebug("New screen capture target: %s\n", path);
-        fclose(file);
-        if (outfile) delete(outfile);
-        outfile = strdup(path);
-        return true;
-    }
-
-    warn("Failed to open file %s\n", path);
-    return false;
-}
-*/
-
-/*
-bool
-ScreenRecorder::isReady()
-{
-    return ffmpegInstalled && videoPipe != NULL && audioPipe != NULL;
-}
-*/
-
-bool
-ScreenRecorder::isRecording()
-{
-    return recording;
+    msg("Video pipe:%s created\n", videoPipe != -1 ? "" : " not");
+    msg("Audio pipe:%s created\n", audioPipe != -1 ? "" : " not");
 }
     
 bool
@@ -147,14 +48,17 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
                                long aspectX,
                                long aspectY)
 {
-    videoPipe = Pipe::make("/tmp/videoPipe");
-    audioPipe = Pipe::make("/tmp/audioPipe");
-
-    debug("videoPipe = %p\n", videoPipe);
-    debug("audioPipe = %p\n", audioPipe);
-
     if (isRecording()) return false;
+
+    // Create pipes
+    plaindebug(REC_DEBUG, "Creating pipes...\n");
+
+    unlink(videoPipePath());
+    unlink(audioPipePath());
+    if (mkfifo(videoPipePath(), 0666) == -1) return false;
+    if (mkfifo(audioPipePath(), 0666) == -1) return false;
         
+    plaindebug(REC_DEBUG, "Pipes created\n");
     dump();
     
     synchronized {
@@ -177,6 +81,9 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Path to the FFmpeg executable
         ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
 
+        // Verbosity
+        ptr += sprintf(ptr, " -loglevel %s", loglevel());
+
         // Input stream format
         ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
         
@@ -187,7 +94,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
         
         // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", videoPipe->path);
+        ptr += sprintf(ptr, " -i %s", videoPipePath());
 
         // Output stream format
         ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
@@ -213,6 +120,9 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         // Path to the FFmpeg executable
         ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
         
+        // Verbosity
+        ptr += sprintf(ptr, " -loglevel %s", loglevel());
+
         // Audio format and number of channels
         ptr += sprintf(ptr, " -f:a f32le -ac 2");
 
@@ -220,7 +130,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
 
         // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", audioPipe->path);
+        ptr += sprintf(ptr, " -i %s", audioPipePath());
         
         // Output stream format
         ptr += sprintf(ptr, " -f mp4");
@@ -239,11 +149,15 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         videoFFmpeg = popen(cmd1, "w");
         msg(videoFFmpeg ? "Success\n" : "Failed to launch\n");
 
-        msg("\nStarting audio encoder with options:\n%s\n", cmd1);
+        msg("\nStarting audio encoder with options:\n%s\n", cmd2);
         audioFFmpeg = popen(cmd2, "w");
         msg(audioFFmpeg ? "Success\n" : "Failed to launch\n");
+        
+        // Open pipes
+        videoPipe = open(videoPipePath(), O_WRONLY);
+        audioPipe = open(audioPipePath(), O_WRONLY);
 
-        recording = videoFFmpeg != NULL && audioFFmpeg != NULL;
+        recording = videoFFmpeg && audioFFmpeg && videoPipe != -1 && audioPipe != -1;
     }
 
     if (isRecording()) {
@@ -261,11 +175,16 @@ ScreenRecorder::stopRecording()
     
     if (!isRecording()) return;
     
-    synchronized { recording = false; }
+    synchronized {
+        recording = false;
+        recordCounter++;
+    }
 
     // Close pipes
-    videoPipe->cancel();
-    audioPipe->cancel();
+    close(videoPipe);
+    close(audioPipe);
+    videoPipe = -1;
+    audioPipe = -1;
      
     // Shut down encoders
     pclose(videoFFmpeg);
@@ -291,6 +210,9 @@ ScreenRecorder::exportAs(const char *path)
     // Path to the FFmpeg executable
     ptr += sprintf(ptr, "%s", ffmpegPath());
     
+    // Verbosity
+    ptr += sprintf(ptr, " -loglevel %s", loglevel());
+
     // Input streams
     ptr += sprintf(ptr, " -i %s", videoStreamPath());
     ptr += sprintf(ptr, " -i %s", audioStreamPath());
@@ -346,7 +268,9 @@ ScreenRecorder::vsyncHandler(Cycle target)
             memcpy(dst, src, width);
         }
 
-        videoPipe->send(data, (size_t)(width * height));
+        // Feed the video pipe
+        assert(videoPipe != -1);
+        write(videoPipe, data, (size_t)(width * height));
         
         //
         // Audio
@@ -369,7 +293,8 @@ ScreenRecorder::vsyncHandler(Cycle target)
         float *samples = new float[2 * samplesPerFrame];
         muxer.copyInterleaved(samples, samplesPerFrame);
                 
-        // Feed buffer contents into the audio pipe
-        audioPipe->send((u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
+        // Feed the audio pipe
+        assert(audioPipe != -1);
+        write(audioPipe, (u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
     }
 }

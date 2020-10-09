@@ -204,7 +204,7 @@ extension MyController {
         alert.alertStyle = .warning
         alert.icon = NSImage.init(named: "FFmpegIcon")
         alert.messageText = "Failed to launch the screen recorder."
-        alert.informativeText = "No contents will be recorded."
+        alert.informativeText = "No content will be recorded."
         alert.addButton(withTitle: "OK")
         alert.runModal()
     }
