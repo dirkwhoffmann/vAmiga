@@ -309,7 +309,7 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
     // Determine the number of elapsed cycles per audio sample
     double cyclesPerSample = (double)(target - clock) / (double)count;
             
-    printf("clock: %lld target: %lld count: %ld\n", clock, target, count);
+    // printf("clock: %lld target: %lld count: %ld\n", clock, target, count);
     
     switch (config.samplingMethod) {
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;

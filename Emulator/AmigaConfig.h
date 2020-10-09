@@ -155,6 +155,6 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
-static const int REC_DEBUG       = 0; // Screen recorder
+static const int REC_DEBUG       = 1; // Screen recorder
 
 #endif

@@ -67,7 +67,7 @@ BufferedPipe::send(u8 *data, size_t size)
 {
     startWorker();
     
-    plaindebug(REC_DEBUG, "Sending %d bytes\n", size);
+    // plaindebug("Sending %d bytes\n", size);
 
     // Push the data packet into the FIFO buffer
     synchronized {
@@ -182,17 +182,17 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         char cmd[512]; char *ptr = cmd;
 
         // Path to the FFmpeg executable
-        ptr += sprintf(ptr, "%s", ffmpegPath);
+        ptr += sprintf(ptr, "%s -nostdin", ffmpegPath);
 
         //
         // Video input stream settings
         //
 
         // Format of the input stream
-        ptr += sprintf(ptr, " -f rawvideo -pixel_format rgba -thread_queue_size 1024");
+        ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
         
         // Frame size (width x height)
-        ptr += sprintf(ptr, " -s %dx%d", x2 - x1, y2 - y1);
+        ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
         
         // Video input source (named pipe)
         ptr += sprintf(ptr, " -i %s", videoPipe->path);
@@ -202,7 +202,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         //
         
         // Audio format and number of channels
-        ptr += sprintf(ptr, " -f f32le -channels 2 -thread_queue_size 1024");
+        ptr += sprintf(ptr, " -f:a f32le -channels 2");
 
         // Sampling rate
         ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
@@ -265,6 +265,10 @@ ScreenRecorder::stopRecording()
     
     recording = false;
 
+    // Shut down FFmpeg
+    pclose(ffmpeg);
+    ffmpeg = NULL;
+
     // Ask both buffered pipes to terminate
     plaindebug(REC_DEBUG, "Stopping pipes..\n");
     videoPipe->cancel();
@@ -275,10 +279,6 @@ ScreenRecorder::stopRecording()
     videoPipe->join();
     audioPipe->join();
     
-    // Shut down FFmpeg
-    pclose(ffmpeg);
-    ffmpeg = NULL;
-
     plaindebug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
 }
@@ -288,10 +288,29 @@ ScreenRecorder::vsyncHandler(Cycle target)
 {
     if (!isRecording()) return;
     
-    debug(REC_DEBUG, "vsyncHandler\n");
+    // debug("vsyncHandler\n");
     assert(ffmpeg != NULL);
             
     synchronized {
+        
+        //
+        // Video
+        //
+                        
+        ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
+        
+        int width = sizeof(u32) * (cutout.x2 - cutout.x1);
+        int height = cutout.y2 - cutout.y1;
+        int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
+        u8 *data = new u8[width * height];
+        u8 *src = (u8 *)(buffer.data + offset);
+        u8 *dst = data;
+        for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
+            memcpy(dst, src, width);
+        }
+
+        videoPipe->send(data, (size_t)(width * height));
+        // audioPipe->send(data, (size_t)(width * height));
         
         //
         // Audio
@@ -313,30 +332,9 @@ ScreenRecorder::vsyncHandler(Cycle target)
         // Copy samples to buffer
         float *samples = new float[2 * samplesPerFrame];
         muxer.copyInterleaved(samples, samplesPerFrame);
-        
-        // for (int i = 0; i < 100; i++) { printf("%f ", samples[i]); }
-        // printf("\n\n");
-        
+                
         // Feed buffer contents into the audio pipe
         audioPipe->send((u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
-
-        //
-        // Video
-        //
-                        
-        ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
-        
-        int width = sizeof(u32) * (cutout.x2 - cutout.x1);
-        int height = cutout.y2 - cutout.y1;
-        int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
-        u8 *data = new u8[width * height];
-        u8 *src = (u8 *)(buffer.data + offset);
-        u8 *dst = data;
-        for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
-            memcpy(dst, src, width);
-        }
-
-        videoPipe->send(data, (size_t)(width * height));
     }
 }
 
