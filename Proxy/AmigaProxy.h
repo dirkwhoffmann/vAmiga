@@ -446,16 +446,16 @@ struct SerialPortWrapper;
     struct ScreenRecorderWrapper *wrapper;
 }
 
-@property (readonly) BOOL ffmpegInstalled;
-@property (readonly) BOOL ready;
+@property (readonly) BOOL hasFFmpeg;
+// @property (readonly) BOOL ready;
 @property (readonly) BOOL recording;
 
 - (BOOL)setPath:(NSString *)path;
 
-- (NSInteger) startRecording:(NSRect)rect
-                     bitRate:(NSInteger)rate
-                     aspectX:(NSInteger)aspectX
-                     aspectY:(NSInteger)aspectY;
+- (BOOL) startRecording:(NSRect)rect
+                bitRate:(NSInteger)rate
+                aspectX:(NSInteger)aspectX
+                aspectY:(NSInteger)aspectY;
 - (void) stopRecording;
 
 @end

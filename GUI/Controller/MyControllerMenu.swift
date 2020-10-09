@@ -284,33 +284,54 @@ extension MyController: NSMenuItemValidation {
         
         track("Recording = \(amiga.screenRecorder.recording)")
         
-        // Stop recording if the recorder is active
         if amiga.screenRecorder.recording {
-            track()
+            
             amiga.screenRecorder.stopRecording()
             return
         }
         
-        // Check if the recorder is ready
-        if !amiga.screenRecorder.ready {
+        if !amiga.screenRecorder.hasFFmpeg {
             showMissingFFmpegAlert()
             return
         }
         
-        // Open file dialog
-        let panel = NSSavePanel()
-        panel.prompt = "Record"
-        panel.allowedFileTypes = ["mp4"]
+        var rect: CGRect
+        if pref.captureSource == 0 {
+            rect = renderer.textureRectAbs
+        } else {
+            rect = renderer.entire
+        }
         
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let url = panel.url {
-                    track()
-                    self.captureScreenAction(url: url)
-                }
-            }
-        })
+        track("Cature source = \(pref.captureSource)")
+        track("(\(rect.minX),\(rect.minY)) - (\(rect.maxX),\(rect.maxY))")
+        
+        let success = amiga.screenRecorder.startRecording(rect,
+                                                          bitRate: pref.bitRate,
+                                                          aspectX: pref.aspectX,
+                                                          aspectY: pref.aspectY)
+        
+        if !success {
+            showFailedToLaunchFFmpegAlert()
+            return
+        }
+        
     }
+
+            // Open file dialog
+            /*
+            let panel = NSSavePanel()
+            panel.prompt = "Record"
+            panel.allowedFileTypes = ["mp4"]
+            
+            panel.beginSheetModal(for: window!, completionHandler: { result in
+                if result == .OK {
+                    if let url = panel.url {
+                        track()
+                        self.captureScreenAction(url: url)
+                    }
+                }
+            })
+            */
     
     func captureScreenAction(url: URL) {
         

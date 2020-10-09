@@ -13,57 +13,27 @@
 #include "AmigaComponent.h"
 #include "Muxer.h"
 
-/* BufferedPipe is wrapper around a classical POSIX pipe which is utilized to
- * feed video and audio data into FFmpeg. The class maintains a FIFO of data
- * chunks and a worker thread that gets active whenever the FIFO has at least
- * one element. The thread waits for the receiver to accept data and dumps
- * all buffered data chunks into the pipe until the FIFO is emptied.
- */
-struct BufferedPipe: AmigaObject {
+struct Pipe: AmigaObject {
        
     // Name of this pipe
     const char *path = NULL;
     
-private:
-
     // Pipe identifier
     int pipe = -1;
     
-    // Data buffer
-    struct DataChunk { u8 *data; size_t size; };
-    std::queue<DataChunk> fifo;
-    
-    // Worker thread
-    std::thread t;
-    
-    // Mutex used to block the thread while the FIFO is empty
-    std::mutex m;
-        
-    // Indicates if the thread is running. Set to false to terminate
-    bool running = false;
-    
-    // The worker thread's execution function
-    void worker();
-
-public:
-        
     // Factory method
-    static BufferedPipe *make(const char *path);
+    static Pipe *make(const char *path);
     
-    // Writes a new data chunk into the FIFO
+    // Writes a chunk of data
     void send(u8 *data, size_t size);
     
-    // Tell the thread to terminate
-    void cancel() { stopWorker(); }
-    
-    // Wait until the thread has terminated
-    void join() { t.join(); }
+    // Closes the pipe
+    void cancel() { close(pipe); }
     
 private:
     
     // Starts or stops the worker thread
     void startWorker();
-    void stopWorker();
 };
 
 class ScreenRecorder : public AmigaComponent {
@@ -74,25 +44,22 @@ class ScreenRecorder : public AmigaComponent {
     
     // Audio muxer for synthesizing the audio track
     Muxer muxer = Muxer(amiga);
-
     
     // Path to the FFmpeg executable
-    static const char *ffmpegPath;
+    static const char *ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
     
-    // Indicates whether FFmpeg is installed on this machine
-    static bool ffmpegInstalled;
-
     // Audio sample frequency in the output stream
     static const int frameRate = 50;
     static const int sampleRate = 44100;
     static const int samplesPerFrame = sampleRate / frameRate;
 
-    // File handle to access the FFmpeg encoder
-    FILE *ffmpeg = NULL;
-        
+    // File handles to access FFmpeg
+    FILE *videoFFmpeg = NULL;
+    FILE *audioFFmpeg = NULL;
+
     // Video and audio pipe
-    BufferedPipe *videoPipe = BufferedPipe::make("/tmp/videoPipe");
-    BufferedPipe *audioPipe = BufferedPipe::make("/tmp/audioPipe");
+    Pipe *videoPipe = NULL; // Pipe::make("/tmp/videoPipe");
+    Pipe *audioPipe = NULL; // Pipe::make("/tmp/audioPipe");
 
     // Indicates if the recorder is active
     bool recording = false;
@@ -121,7 +88,8 @@ class ScreenRecorder : public AmigaComponent {
 public:
     
     ScreenRecorder(Amiga& ref);
-    bool isFFmpegInstalled() { return ffmpegInstalled; }
+    
+    bool hasFFmpeg();
     
     void _reset(bool hard) override;
 
@@ -178,7 +146,7 @@ public:
 public:
     
     // Checks whether the screen recorder is fully functional
-    bool isReady();
+    // bool isReady();
     
     // Checks whether the screen is currently recorded
     bool isRecording();

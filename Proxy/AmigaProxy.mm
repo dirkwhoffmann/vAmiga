@@ -750,14 +750,16 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
-- (BOOL) ffmpegInstalled
+- (BOOL) hasFFmpeg
 {
-    return wrapper->screenRecorder->isFFmpegInstalled();
+    return wrapper->screenRecorder->hasFFmpeg();
 }
+/*
 - (BOOL) ready
 {
     return wrapper->screenRecorder->isReady();
 }
+*/
 - (BOOL) recording
 {
     return wrapper->screenRecorder->isRecording();
@@ -766,10 +768,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->screenRecorder->setPath([path fileSystemRepresentation]);
 }
-- (NSInteger) startRecording:(NSRect)rect
-                     bitRate:(NSInteger)rate
-                     aspectX:(NSInteger)aspectX
-                     aspectY:(NSInteger)aspectY
+- (BOOL) startRecording:(NSRect)rect
+                bitRate:(NSInteger)rate
+                aspectX:(NSInteger)aspectX
+                aspectY:(NSInteger)aspectY
 {
     int x1 = (int)rect.origin.x;
     int y1 = (int)rect.origin.y;

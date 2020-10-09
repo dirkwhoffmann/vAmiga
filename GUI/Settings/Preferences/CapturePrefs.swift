@@ -24,7 +24,7 @@ extension PreferencesController {
         capSnapshotInterval.integerValue = pref.snapshotInterval
         
         // Screen captures
-        let hasFFmpeg = amiga.screenRecorder.ffmpegInstalled
+        let hasFFmpeg = amiga.screenRecorder.hasFFmpeg
         capFFmpegText.isHidden = !hasFFmpeg
         capFFmpegIcon1.isHidden = !hasFFmpeg
         capFFmpegIcon2.isHidden = !hasFFmpeg

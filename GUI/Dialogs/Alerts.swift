@@ -198,6 +198,17 @@ extension MyController {
         alert.runModal()
     }
 
+    func showFailedToLaunchFFmpegAlert() {
+
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.icon = NSImage.init(named: "FFmpegIcon")
+        alert.messageText = "Failed to launch the screen recorder."
+        alert.informativeText = "No contents will be recorded."
+        alert.addButton(withTitle: "OK")
+        alert.runModal()
+    }
+
     func showScreenRecorderAlert(url: URL) {
 
         let alert = NSAlert()
