@@ -1035,7 +1035,7 @@ Denise::checkS2PCollisions(int start, int end)
         //     x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
-        if ((bBuffer[pos] & enabled2) == compare2) {
+        if (enabled2 && (bBuffer[pos] & enabled2) == compare2) {
             debug(CLX_DEBUG, "S%d collides with PF2\n", x);
             SET_BIT(clxdat, 5 + (x / 2));
             SET_BIT(clxdat, 1 + (x / 2));
@@ -1048,7 +1048,7 @@ Denise::checkS2PCollisions(int start, int end)
         }
 
         // Check for a collision with playfield 1
-        if ((bBuffer[pos] & enabled1) == compare1) {
+        if (enabled1 && (bBuffer[pos] & enabled1) == compare1) {
             debug(CLX_DEBUG, "S%d collides with PF1\n", x);
             SET_BIT(clxdat, 1 + (x / 2));
         }

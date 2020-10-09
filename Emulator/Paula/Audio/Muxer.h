@@ -171,6 +171,10 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        worker
+        
+        & sampler
+        & stream;
     }
     
     template <class T>

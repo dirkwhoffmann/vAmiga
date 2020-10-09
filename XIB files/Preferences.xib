@@ -1267,6 +1267,7 @@
                                                         <menuItem title="256k" state="on" tag="256" id="QXY-l2-xC6"/>
                                                         <menuItem title="512k" tag="512" id="Sja-RL-I4k"/>
                                                         <menuItem title="1024k" tag="1024" id="uHb-KB-e7u"/>
+                                                        <menuItem title="2048k" tag="2048" id="P51-wd-VBH"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

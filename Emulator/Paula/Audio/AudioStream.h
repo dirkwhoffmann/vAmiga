@@ -12,6 +12,23 @@
 
 #include "HardwareComponent.h"
 
+typedef struct
+{
+    float left;
+    float right;
+    
+    template <class T>
+    void applyToItems(T& worker)
+    {
+        worker
+
+        & left
+        & right;
+    }
+
+}
+SamplePair;
+
 class AudioStream : public RingBuffer <SamplePair, 16384> {
 
 public:

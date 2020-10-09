@@ -42,6 +42,13 @@ PixelEngine::~PixelEngine()
     delete[] noise;
 }
 
+size_t
+PixelEngine::didLoadFromBuffer(u8 *buffer)
+{
+    updateRGBA();
+    return 0;
+}
+
 void
 PixelEngine::_powerOn()
 {

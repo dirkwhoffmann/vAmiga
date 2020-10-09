@@ -48,7 +48,7 @@
 
 // Uncomment to lauch the emulator with a disk in df0
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/Planet_Rocklobster_Oxyron.adf"
-// #define DF0_DISK "/Users/hoff/Desktop/Testing/at.adf"
+// #define DF0_DISK "/Users/hoff/Desktop/Testing/Ruffntumble.adf"
 // #define DF1_DISK "/Users/hoff/Dropbox/Amiga/DOSDisks/Disk1.img"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/JetsonsCracked.adf"
 // #define DF0_DISK "/Users/hoff/Desktop/Testing/A2000WB1.2D.adf"
@@ -155,6 +155,6 @@ static const int HOLD_MOUSE_R    = 0; // Hold down the right mouse button
 // Other components
 static const int RTC_DEBUG       = 0; // Real-time clock
 static const int KBD_DEBUG       = 0; // Keyboard
-static const int REC_DEBUG       = 1; // Screen recorder
+static const int REC_DEBUG       = 0; // Screen recorder
 
 #endif

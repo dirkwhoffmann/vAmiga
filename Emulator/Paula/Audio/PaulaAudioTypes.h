@@ -39,32 +39,6 @@ static inline bool isFilterType(long value) { return value >= 0 && value < FILT_
 // Structures
 //
 
-/*
-typedef struct
-{
-    // The target frequency in Hz
-    double sampleRate;
-
-    // Selects how the audio buffer is resampled to match the target frequency
-    SamplingMethod samplingMethod;
-
-    // The selected audio filter
-    FilterType filterType;
-
-    // If set to true, the Amiga can't deactivate the filter
-    bool filterAlwaysOn;
-
-    // Input channel volumes and pan settings
-    double vol[4];
-    double pan[4];
-    
-    // Output channel volumes
-    double volL;
-    double volR;
-}
-AudioConfig;
-*/
-
 typedef struct
 {
     i8 state;
@@ -84,13 +58,6 @@ typedef struct
     AudioChannelInfo channel[4];
 }
 AudioInfo;
-
-typedef struct
-{
-    float left;
-    float right;
-}
-SamplePair;
 
 typedef struct
 {
