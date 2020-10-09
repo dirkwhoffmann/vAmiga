@@ -1259,12 +1259,12 @@
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RmM-gv-XmO">
                                             <rect key="frame" x="390" y="316" width="197" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="256k" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="borderAndBezel" tag="256" imageScaling="proportionallyDown" inset="2" selectedItem="QXY-l2-xC6" id="TbT-Ad-Jx6">
+                                            <popUpButtonCell key="cell" type="push" title="256k" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="256" imageScaling="proportionallyDown" inset="2" selectedItem="QXY-l2-xC6" id="TbT-Ad-Jx6">
                                                 <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="izo-UW-nM5">
                                                     <items>
-                                                        <menuItem title="256k" tag="256" id="QXY-l2-xC6"/>
+                                                        <menuItem title="256k" state="on" tag="256" id="QXY-l2-xC6"/>
                                                         <menuItem title="512k" tag="512" id="Sja-RL-I4k"/>
                                                         <menuItem title="1024k" tag="1024" id="uHb-KB-e7u"/>
                                                     </items>

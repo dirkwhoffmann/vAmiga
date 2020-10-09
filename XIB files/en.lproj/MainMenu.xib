@@ -197,6 +197,12 @@
                                     <action selector="captureScreenAction:" target="-1" id="1Q3-p1-pur"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Export Video..." id="XhS-wP-JCe">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <connections>
+                                    <action selector="exportVideoAction:" target="-1" id="pXV-AU-iaf"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>

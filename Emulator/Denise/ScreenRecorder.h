@@ -47,7 +47,11 @@ class ScreenRecorder : public AmigaComponent {
     
     // Path to the FFmpeg executable
     static const char *ffmpegPath() { return "/usr/local/bin/ffmpeg"; }
-    
+
+    // Path to the temporary video stream and audio stream files
+    static const char *videoStreamPath() { return "/tmp/video.mp4"; }
+    static const char *audioStreamPath() { return "/tmp/audio.mp4"; }
+
     // Audio sample frequency in the output stream
     static const int frameRate = 50;
     static const int sampleRate = 44100;
@@ -68,7 +72,7 @@ class ScreenRecorder : public AmigaComponent {
     Cycle audioClock = 0;
     
     // Path of the output file
-    char *outfile = NULL;
+    // char *outfile = NULL;
 
     // The texture cutout that is going to be recorded
     struct { int x1; int y1; int x2; int y2; } cutout;
@@ -144,19 +148,21 @@ public:
     //
     
 public:
-    
-    // Checks whether the screen recorder is fully functional
-    // bool isReady();
-    
+        
     // Checks whether the screen is currently recorded
     bool isRecording();
     
-    // Start or stop the screen recorder
+    // Starts the screen recorder
     bool startRecording(int x1, int y1, int x2, int y2,
                         long bitRate,
                         long aspectX,
                         long aspectY);
+
+    // Stops the screen recorder
     void stopRecording();
+
+    // Exports the recorded video
+    bool exportAs(const char *path);
 
     
     //

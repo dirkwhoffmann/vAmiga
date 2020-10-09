@@ -333,6 +333,7 @@ extension MyController: NSMenuItemValidation {
             })
             */
     
+    /*
     func captureScreenAction(url: URL) {
         
         track("URL = \(url) path = \(url.path)")
@@ -357,12 +358,33 @@ extension MyController: NSMenuItemValidation {
                                             aspectX: pref.aspectX,
                                             aspectY: pref.aspectY)
     }
-
-    @IBAction func configureRecorderAction(_ sender: Any!) {
+     */
+    
+    @IBAction func exportVideoAction(_ sender: Any!) {
         
         track()
-        preferencesAction(sender)
-        myAppDelegate.prefController!.selectTab("Captures")
+        
+        // Show save panel
+        /*
+        var panel = NSSavePanel()
+        panel.prompt = "Export"
+        panel.title = "Export"
+        panel.allowedFileTypes = ["mp4"]
+        
+        panel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = self.panel.url {
+                    track("url = \(url)")
+                    self.export(to: url)
+                }
+            }
+        })
+        */
+        
+        let name = NSNib.Name("ExportVideoDialog")
+        let exporter = ExportVideoDialog.make(parent: self, nibName: name)
+        
+        exporter?.showSheet()
     }
     
     //

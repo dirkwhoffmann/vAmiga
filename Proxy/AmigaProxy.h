@@ -450,13 +450,14 @@ struct SerialPortWrapper;
 // @property (readonly) BOOL ready;
 @property (readonly) BOOL recording;
 
-- (BOOL)setPath:(NSString *)path;
+// - (BOOL)setPath:(NSString *)path;
 
 - (BOOL) startRecording:(NSRect)rect
                 bitRate:(NSInteger)rate
                 aspectX:(NSInteger)aspectX
                 aspectY:(NSInteger)aspectY;
 - (void) stopRecording;
+- (BOOL) exportAs:(NSString *)path;
 
 @end
 

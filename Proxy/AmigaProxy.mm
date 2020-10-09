@@ -764,10 +764,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->screenRecorder->isRecording();
 }
+/*
 - (BOOL)setPath:(NSString *)path
 {
     return wrapper->screenRecorder->setPath([path fileSystemRepresentation]);
 }
+*/
 - (BOOL) startRecording:(NSRect)rect
                 bitRate:(NSInteger)rate
                 aspectX:(NSInteger)aspectX
@@ -786,6 +788,10 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) stopRecording
 {
     wrapper->screenRecorder->stopRecording();
+}
+- (BOOL) exportAs:(NSString *)path
+{
+    return wrapper->screenRecorder->exportAs([path fileSystemRepresentation]);
 }
 
 @end

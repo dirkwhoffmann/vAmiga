@@ -177,6 +177,8 @@
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E5754024C01AFA00309084 /* EncryptedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
+		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
+		50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtFile.cpp */; };
 		50F0BD2622AF883C001F4616 /* UART.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50F0BD2422AF883C001F4616 /* UART.cpp */; };
 		50F31C292409322F008A54D8 /* CopperBlitterPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50F31C282409322F008A54D8 /* CopperBlitterPanel.swift */; };
@@ -468,6 +470,8 @@
 		50E5753F24C01AFA00309084 /* EncryptedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncryptedRomFile.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
+		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
+		50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportVideoDialog.swift; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtFile.cpp; sourceTree = "<group>"; };
 		50ECF98522B153FB007B3DE7 /* ExtFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ExtFile.h; sourceTree = "<group>"; };
 		50EFC7DF22E840870036A3DF /* Serialization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialization.h; sourceTree = "<group>"; };
@@ -674,6 +678,7 @@
 				5019605A231257270051B669 /* Monitor.xib */,
 				50B9354824347EF9000C78B8 /* SnapshotDialog.xib */,
 				509F41E7243B078200AD0FE4 /* ScreenshotDialog.xib */,
+				50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */,
 				508FDFB721EA1FF10043D0E9 /* ExportDiskDialog.xib */,
 				508FDFBA21EA1FF10043D0E9 /* DiskMountDialog.xib */,
 				500217B72449CF7000E1A096 /* Configuration.xib */,
@@ -745,6 +750,7 @@
 				508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */,
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
+				50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */,
 				508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
@@ -1212,6 +1218,7 @@
 				508FDFC721EA1FF10043D0E9 /* DiskMountDialog.xib in Resources */,
 				500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */,
 				509F41E8243B078200AD0FE4 /* ScreenshotDialog.xib in Resources */,
+				50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */,
 				508FDFBE21EA1FF10043D0E9 /* MyDocument.xib in Resources */,
 				508FDFC521EA1FF10043D0E9 /* A500ISO.xib in Resources */,
 				50D9CD9B236AF89A00503B4D /* DmaDebugDialog.xib in Resources */,
@@ -1349,6 +1356,7 @@
 				508FE02421EA227B0043D0E9 /* GamePadManager.swift in Sources */,
 				50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */,
 				507727EE242F2CE4009D01DA /* iCarousel.m in Sources */,
+				50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */,
 				50B14C0721EB218E002E32A6 /* AmigaObject.cpp in Sources */,
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,

@@ -104,6 +104,7 @@ ScreenRecorder::_dump()
     msg("Audio pipe:%s created\n", videoPipe ? "" : " not");
 }
 
+/*
 bool
 ScreenRecorder::setPath(const char *path)
 {
@@ -124,6 +125,7 @@ ScreenRecorder::setPath(const char *path)
     warn("Failed to open file %s\n", path);
     return false;
 }
+*/
 
 /*
 bool
@@ -199,9 +201,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
         
         // Output file
-        ptr += sprintf(ptr, " -y %s", "/tmp/video.mp4");
-
-        // ptr += sprintf(ptr, " < %s", videoPipe->path);
+        ptr += sprintf(ptr, " -y %s", videoStreamPath());
 
         
         //
@@ -214,7 +214,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
         
         // Audio format and number of channels
-        ptr += sprintf(ptr, " -f:a f32le -channels 2");
+        ptr += sprintf(ptr, " -f:a f32le -ac 2");
 
         // Sampling rate
         ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
@@ -226,7 +226,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         ptr += sprintf(ptr, " -f mp4");
 
         // Output file
-        ptr += sprintf(ptr, " -y %s", "/tmp/audio.mp4");
+        ptr += sprintf(ptr, " -y %s", audioStreamPath());
         
         //
         // Launch FFmpeg instances
@@ -264,23 +264,59 @@ ScreenRecorder::stopRecording()
     synchronized { recording = false; }
 
     // Close pipes
-    plaindebug(REC_DEBUG, "Stopping video pipe...\n");
     videoPipe->cancel();
-    plaindebug(REC_DEBUG, "Stopping audio pipe...\n");
     audioPipe->cancel();
-
      
     // Shut down encoders
-    plaindebug(REC_DEBUG, "Shutting down encoders...\n");
     pclose(videoFFmpeg);
-    plaindebug(REC_DEBUG, "Video encoder shut down\n");
     pclose(audioFFmpeg);
-    plaindebug(REC_DEBUG, "Audio encoder shut down\n");
     videoFFmpeg = NULL;
     audioFFmpeg = NULL;
 
     plaindebug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
+}
+
+bool
+ScreenRecorder::exportAs(const char *path)
+{
+    if (isRecording()) return false;
+    
+    //
+    // Assemble the command line arguments for the video encoder
+    //
+    
+    char cmd[512]; char *ptr = cmd;
+    
+    // Path to the FFmpeg executable
+    ptr += sprintf(ptr, "%s", ffmpegPath());
+    
+    // Input streams
+    ptr += sprintf(ptr, " -i %s", videoStreamPath());
+    ptr += sprintf(ptr, " -i %s", audioStreamPath());
+
+    // Don't reencode
+    ptr += sprintf(ptr, " -c:v copy -c:a copy");
+    
+    // Output file
+    ptr += sprintf(ptr, " -y %s", path);
+    
+    //
+    // Launch FFmpeg
+    //
+    
+    msg("\nMerging video and audio stream with options:\n%s\n", cmd);
+    FILE *ffmpeg = popen(cmd, "w");
+
+    if (!ffmpeg) {
+        msg("Failed to launch\n");
+        return false;
+    }
+    
+    // Wait for FFmpeg to finish
+    fclose(ffmpeg);
+    
+    return true;
 }
 
 void
