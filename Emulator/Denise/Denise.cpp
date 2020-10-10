@@ -612,7 +612,7 @@ Denise::translateDPF(int from, int to)
 void
 Denise::drawSprites(bool vblank)
 {
-    if (wasArmed && !vblank) {
+    if (wasArmed) {
         
         if (wasArmed & 0b11000000) drawSpritePair<3>();
         if (wasArmed & 0b00110000) drawSpritePair<2>();
@@ -791,6 +791,9 @@ template <unsigned pair> void
 Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, bool armed2)
 {
     assert(pair < 4);
+    
+    // Only proceeed if we are outside the VBLANK area
+    if (agnus.pos.v < 26) return;
     
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
@@ -1160,6 +1163,11 @@ Denise::endOfLine(int vpos)
         drawSpritesVBlank();
         pixelEngine.endOfVBlankLine();
     }
+
+    assert(sprChanges[0].isEmpty());
+    assert(sprChanges[1].isEmpty());
+    assert(sprChanges[2].isEmpty());
+    assert(sprChanges[3].isEmpty());
 
     // Invoke the DMA debugger
     dmaDebugger.computeOverlay();
