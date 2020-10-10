@@ -998,7 +998,7 @@ Denise::checkS2SCollisions(int start, int end)
 template <int x> void
 Denise::checkS2PCollisions(int start, int end)
 {
-    debug(CLX_DEBUG, "checkS2PCollisions<%d>(%d, %d)\n", x, start, end);
+    // debug(CLX_DEBUG, "checkS2PCollisions<%d>(%d, %d)\n", x, start, end);
     
     // For the odd sprites, only proceed if collision detection is enabled
     if (IS_ODD(x) && !getENSP<x>()) return;
@@ -1035,20 +1035,19 @@ Denise::checkS2PCollisions(int start, int end)
         //     x, pos, bBuffer[pos], enabled1, enabled2, compare1, compare2);
 
         // Check for a collision with playfield 2
-        if (enabled2 && (bBuffer[pos] & enabled2) == compare2) {
+        if ((bBuffer[pos] & enabled2) == compare2) {
             debug(CLX_DEBUG, "S%d collides with PF2\n", x);
             SET_BIT(clxdat, 5 + (x / 2));
-            SET_BIT(clxdat, 1 + (x / 2));
 
         } else {
             // There is a hardware oddity in single-playfield mode. If PF2
             // doesn't match, PF1 doesn't match either. No matter what.
             // See http://eab.abime.net/showpost.php?p=965074&postcount=2
-            if (zBuffer[pos] & Z_DUAL) continue;
+            if (!(zBuffer[pos] & Z_DPF)) continue;
         }
 
         // Check for a collision with playfield 1
-        if (enabled1 && (bBuffer[pos] & enabled1) == compare1) {
+        if ((bBuffer[pos] & enabled1) == compare1) {
             debug(CLX_DEBUG, "S%d collides with PF1\n", x);
             SET_BIT(clxdat, 1 + (x / 2));
         }
