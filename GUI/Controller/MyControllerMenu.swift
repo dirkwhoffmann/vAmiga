@@ -45,7 +45,7 @@ extension MyController: NSMenuItemValidation {
             return !powered
 
         case #selector(MyController.captureScreenAction(_:)):
-            item.title = recording ? "Stop Screen Recorder" : "Start Screen Recorder"
+            item.title = recording ? "Stop Recording" : "Record Screen"
             return true
 
         case #selector(MyController.exportVideoAction(_:)):

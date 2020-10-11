@@ -117,7 +117,7 @@ class PreferencesController: DialogController {
     @IBOutlet weak var capSource: NSPopUpButton!
     @IBOutlet weak var capAspectX: NSTextField!
     @IBOutlet weak var capAspectY: NSTextField!
-    @IBOutlet weak var capBitRate: NSPopUpButton!
+    @IBOutlet weak var capBitRate: NSComboBox!
     
     // The tab to open first
     var firstTab: String?

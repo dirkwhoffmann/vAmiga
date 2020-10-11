@@ -124,17 +124,22 @@ class Preferences {
 
     // Screen captures
     var captureSource = CaptureDefaults.std.captureSource
-    var bitRate = 512
+    var bitRate = 512 {
+        didSet {
+            if bitRate < 64 { bitRate = 64 }
+            if bitRate > 16384 { bitRate = 16384 }
+        }
+    }
     var aspectX = 768 {
         didSet {
-            if aspectX < 0 { aspectX = 1 }
-            if aspectX > 1000 { aspectX = 1000 }
+            if aspectX < 1 { aspectX = 1 }
+            if aspectX > 999 { aspectX = 999 }
         }
     }
     var aspectY = 702 {
         didSet {
-            if aspectY < 0 { aspectY = 1 }
-            if aspectY > 1000 { aspectY = 1000 }
+            if aspectY < 1 { aspectY = 1 }
+            if aspectY > 999 { aspectY = 999 }
         }
     }
     

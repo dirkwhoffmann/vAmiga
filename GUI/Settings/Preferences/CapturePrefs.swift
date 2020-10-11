@@ -30,7 +30,7 @@ extension PreferencesController {
         capFFmpegIcon2.isHidden = !hasFFmpeg
         
         capSource.selectItem(withTag: pref.captureSource)
-        capBitRate.selectItem(withTag: pref.bitRate)
+        capBitRate.integerValue = pref.bitRate
         capAspectX.integerValue = pref.aspectX
         capAspectY.integerValue = pref.aspectY
     }
@@ -94,10 +94,10 @@ extension PreferencesController {
         refresh()
     }
 
-    @IBAction func capBitrateAction(_ sender: NSPopUpButton!) {
+    @IBAction func capBitrateAction(_ sender: NSComboBox!) {
         
-        track("tag = \(sender.selectedTag())")
-        pref.bitRate = sender.selectedTag()
+        track("value = \(sender.integerValue)")
+        pref.bitRate = sender.integerValue
         refresh()
     }
 

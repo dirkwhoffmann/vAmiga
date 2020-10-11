@@ -12,7 +12,7 @@
                 <outlet property="capAspectY" destination="7ZM-uV-qlY" id="ljg-fc-v0K"/>
                 <outlet property="capAutoScreenshots" destination="n0F-zs-BoD" id="qM7-KZ-CdE"/>
                 <outlet property="capAutoSnapshots" destination="VfB-b1-SeK" id="hoM-yS-PAX"/>
-                <outlet property="capBitRate" destination="RmM-gv-XmO" id="RFn-rT-4CS"/>
+                <outlet property="capBitRate" destination="oc2-Ad-ZDe" id="bIu-Tj-19d"/>
                 <outlet property="capFFmpegIcon1" destination="x4m-R0-bSg" id="bcb-rt-ZaN"/>
                 <outlet property="capFFmpegIcon2" destination="jxS-tI-jWk" id="p2Y-qa-Wtm"/>
                 <outlet property="capFFmpegText" destination="3Lq-cQ-D9a" id="a1N-8T-kEi"/>
@@ -1256,25 +1256,6 @@
                                                 <action selector="capPresetAction:" target="-2" id="w3e-iB-OUR"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RmM-gv-XmO">
-                                            <rect key="frame" x="390" y="316" width="197" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="256k" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" tag="256" imageScaling="proportionallyDown" inset="2" selectedItem="QXY-l2-xC6" id="TbT-Ad-Jx6">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="izo-UW-nM5">
-                                                    <items>
-                                                        <menuItem title="256k" state="on" tag="256" id="QXY-l2-xC6"/>
-                                                        <menuItem title="512k" tag="512" id="Sja-RL-I4k"/>
-                                                        <menuItem title="1024k" tag="1024" id="uHb-KB-e7u"/>
-                                                        <menuItem title="2048k" tag="2048" id="P51-wd-VBH"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="capBitrateAction:" target="-2" id="NoC-Dl-Rsk"/>
-                                            </connections>
-                                        </popUpButton>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="p0U-ag-y5C">
                                             <rect key="frame" x="317" y="289" width="71" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1294,9 +1275,9 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lfO-nd-2Om">
-                                            <rect key="frame" x="392" y="287" width="48" height="21"/>
+                                            <rect key="frame" x="392" y="287" width="33" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="R7S-JA-Pap">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="999" drawsBackground="YES" id="R7S-JA-Pap">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="lan-xP-QgR"/>
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1307,7 +1288,7 @@
                                             </connections>
                                         </textField>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jyi-9n-j8O">
-                                            <rect key="frame" x="441" y="291" width="15" height="16"/>
+                                            <rect key="frame" x="427" y="291" width="15" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" title=" : " id="SRH-Jq-2Mo">
                                                 <font key="font" usesAppearanceFont="YES"/>
@@ -1316,9 +1297,9 @@
                                             </textFieldCell>
                                         </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7ZM-uV-qlY">
-                                            <rect key="frame" x="457" y="287" width="48" height="21"/>
+                                            <rect key="frame" x="444" y="287" width="33" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="6sE-13-x63">
+                                            <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="999" drawsBackground="YES" id="6sE-13-x63">
                                                 <numberFormatter key="formatter" formatterBehavior="default10_4" usesGroupingSeparator="NO" formatWidth="-1" groupingSize="0" minimumIntegerDigits="1" maximumIntegerDigits="42" id="Ofq-7l-qif"/>
                                                 <font key="font" usesAppearanceFont="YES"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -1350,6 +1331,33 @@
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                         </button>
+                                        <comboBox verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oc2-Ad-ZDe">
+                                            <rect key="frame" x="392" y="317" width="88" height="25"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="4" id="Pa2-kM-hut">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                                <objectValues>
+                                                    <string>512</string>
+                                                    <string>1.024</string>
+                                                    <string>2.048</string>
+                                                    <string>4.096</string>
+                                                </objectValues>
+                                            </comboBoxCell>
+                                            <connections>
+                                                <action selector="capBitrateAction:" target="-2" id="ex0-yT-akx"/>
+                                            </connections>
+                                        </comboBox>
+                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DxG-S7-g5v">
+                                            <rect key="frame" x="482" y="322" width="28" height="16"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" lineBreakMode="clipping" title="kBit" id="BFK-Te-d3J">
+                                                <font key="font" usesAppearanceFont="YES"/>
+                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
                                     </subviews>
                                 </view>
                             </tabViewItem>

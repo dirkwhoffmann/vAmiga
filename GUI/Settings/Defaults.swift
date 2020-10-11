@@ -453,7 +453,7 @@ struct CaptureDefaults {
         autoSnapshotInterval: 20,
 
         captureSource: 0,
-        bitRate: 64,
+        bitRate: 2048,
         aspectX: 768,
         aspectY: 702
     )
