@@ -9,6 +9,8 @@
 
 #include "SSEUtils.h"
 
+#if defined(__i386__) || defined(__x86_64__)
+
 #include <x86intrin.h>
 
 void transposeSSE(u16 *source, u8* target)
@@ -40,3 +42,12 @@ void transposeSSE(u16 *source, u8* target)
     // Read the result back from the SSE registers
     _mm_store_si128((__m128i *)target, shuffled);
 }
+
+#else
+
+void transposeSSE(u16 *source, u8* target)
+{
+    assert(false);
+}
+
+#endif

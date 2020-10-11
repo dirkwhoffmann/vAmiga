@@ -287,8 +287,6 @@ Denise::fillShiftRegisters(bool odd, bool even)
         
     } else {
         
-        assert(false);
-        
         u32 mask = 0x8000;
         for (int i = 0; i < 16; i++, mask >>= 1) {
             
