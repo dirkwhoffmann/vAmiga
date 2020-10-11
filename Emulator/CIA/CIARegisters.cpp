@@ -129,8 +129,8 @@ CIA::peek(u16 addr)
             break;
             
         default:
+            assert(false);
             result = 0;
-            panic("Unknown CIA address %04X\n", addr);
             break;
     }
     
@@ -529,6 +529,6 @@ CIA::poke(u16 addr, u8 value)
         }
             
         default:
-            panic("PANIC: Unknown CIA address (poke) %04X\n", addr);
+            assert(false);
     }
 }

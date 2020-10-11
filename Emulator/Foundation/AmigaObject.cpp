@@ -17,61 +17,46 @@ va_start(ap, fmt); \
 vsnprintf(buf, sizeof(buf), fmt, ap); \
 va_end(ap);
 
-#define VAPRINTPLAIN(trailer) \
-fprintf(stderr, "%s%s", trailer, buf);
-
-#define VAPRINT(trailer) \
-prefix(); \
-fprintf(stderr, "%s: %s%s", getDescription(), trailer, buf);
-
 void
 AmigaObject::msg(const char *fmt, ...)
 {
     VAOBJ_PARSE
-    VAPRINTPLAIN("")
+    fprintf(stderr, "%s", buf);
+}
+
+void
+AmigaObject::msg(int verbose, const char *fmt, ...)
+{
+    if (verbose == 0) return;
+    
+    VAOBJ_PARSE
+    fprintf(stderr, "%s", buf);
 }
 
 void
 AmigaObject::warn(const char *fmt, ...)
 {
     VAOBJ_PARSE;
-    VAPRINT("WARNING: ")
+    fprintf(stderr, "WARNING: %s", buf);
 }
 
 void
-AmigaObject::panic(const char *fmt, ...)
+AmigaObject::warn(int verbose, const char *fmt, ...)
 {
+    if (verbose == 0) return;
+    
     VAOBJ_PARSE;
-    VAPRINT("PANIC: ")
-    std::abort();
-}
-
-void
-AmigaObject::debug(const char *fmt, ...)
-{
-#ifndef NDEBUG
-    VAOBJ_PARSE
-    VAPRINT("")
-#endif
-}
-
-void
-AmigaObject::debug(int verbose, const char *fmt, ...)
-{
-#ifndef NDEBUG
-    if (verbose) {
-        VAOBJ_PARSE
-        VAPRINT("")
-    }
-#endif
+    fprintf(stderr, "WARNING: %s", buf);
 }
 
 void
 AmigaObject::plaindebug(const char *fmt, ...)
 {
 #ifndef NDEBUG
+    
     VAOBJ_PARSE
-    VAPRINTPLAIN("")
+    fprintf(stderr, "%s: %s", getDescription(), buf);
+    
 #endif
 }
 
@@ -79,9 +64,37 @@ void
 AmigaObject::plaindebug(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG
-    if (verbose) {
-        VAOBJ_PARSE
-        VAPRINTPLAIN("")
-    }
+    
+    if (verbose == 0) return;
+    
+    VAOBJ_PARSE
+    fprintf(stderr, "%s: %s", getDescription(), buf);
+    
+#endif
+}
+
+void
+AmigaObject::debug(const char *fmt, ...)
+{
+#ifndef NDEBUG
+    
+    VAOBJ_PARSE
+    prefix();
+    fprintf(stderr, "%s: %s", getDescription(), buf);
+    
+#endif
+}
+
+void
+AmigaObject::debug(int verbose, const char *fmt, ...)
+{
+#ifndef NDEBUG
+    
+    if (verbose == 0) return;
+    
+    VAOBJ_PARSE
+    prefix();
+    fprintf(stderr, "%s: %s", getDescription(), buf);
+    
 #endif
 }
