@@ -12,8 +12,8 @@
 u16
 Paula::peekADKCONR()
 {
-    plaindebug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
-    plaindebug(DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    debug(AUDREG_DEBUG, "peekADKCON() = %x\n", adkcon);
+    debug(DSKREG_DEBUG, "peekADKCON() = %x\n", adkcon);
     
     return adkcon;
 }
@@ -21,8 +21,8 @@ Paula::peekADKCONR()
 void
 Paula::pokeADKCON(u16 value)
 {
-    plaindebug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
-    plaindebug(DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
+    debug(AUDREG_DEBUG, "pokeADKCON(%x)\n", value);
+    debug(DSKREG_DEBUG, "pokeADKCON(%x)\n", value);
 
     bool set = value & 0x8000;
     bool clr = !set;

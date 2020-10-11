@@ -37,12 +37,12 @@ CPU::read16(u32 addr)
             amiga.signalStop();
             // COPREG_DEBUG = 1;
         }
-        plaindebug("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
+        debug("%d: exec::allocMem(%x,%x)\n", counter++, reg.d[0], reg.d[1]);
     }
     */
     /*
     if (addr >= 0xE80000 && addr <= 0xE8FFFF) {
-        plaindebug("get_word: Zorro(%x)  = %x\n", addr, result);
+        debug("get_word: Zorro(%x)  = %x\n", addr, result);
     }
     */
     /*
@@ -163,7 +163,7 @@ void
 CPU::signalInterrupt(u8 level)
 {
     if (INT_DEBUG) {
-        plaindebug("Executing level %d IRQ\n", level);
+        debug("Executing level %d IRQ\n", level);
     }
     
     /*

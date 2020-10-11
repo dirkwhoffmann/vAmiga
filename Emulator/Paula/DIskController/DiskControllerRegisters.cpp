@@ -30,7 +30,7 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    // plaindebug(DSKREG_DEBUG, "setDSKLEN: %x -> %x\n", oldValue, newValue);
+    // debug(DSKREG_DEBUG, "setDSKLEN: %x -> %x\n", oldValue, newValue);
 
     Drive *drive = getSelectedDrive();
 
@@ -96,7 +96,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 void
 DiskController::pokeDSKDAT(u16 value)
 {
-    plaindebug(DSKREG_DEBUG, "pokeDSKDAT\n");
+    debug(DSKREG_DEBUG, "pokeDSKDAT\n");
 
     // TODO: Add Accessor as template parameter.
     // TODO: Use this method to fill the FIFO buffer if Accessor == AGNUS.
@@ -107,7 +107,7 @@ DiskController::peekDSKBYTR()
 {
     u16 result = computeDSKBYTR();
     
-    plaindebug(DSKREG_DEBUG, "peekDSKBYTR() = %x\n", result);
+    debug(DSKREG_DEBUG, "peekDSKBYTR() = %x\n", result);
     return result;
 }
 
@@ -144,14 +144,14 @@ DiskController::computeDSKBYTR()
 void
 DiskController::pokeDSKSYNC(u16 value)
 {
-    plaindebug(DSKREG_DEBUG, "pokeDSKSYNC(%x)\n", value);
+    debug(DSKREG_DEBUG, "pokeDSKSYNC(%x)\n", value);
     
     if (value != 0x4489) {
         
         trace(XFILES, "XFILES (DSKSYNC): Unusual sync mark $%04X\n", value);
         
         if (config.lockDskSync) {
-            plaindebug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);
+            debug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);
             return;
         }
     }
@@ -207,9 +207,9 @@ DiskController::PRBdidChange(u8 oldValue, u8 newValue)
     // Inform the GUI
     if (oldSelected != selected) {
         if (selected == -1) {
-            // plaindebug(DSKREG_DEBUG, "Deselecting df%d\n", oldSelected);
+            // debug(DSKREG_DEBUG, "Deselecting df%d\n", oldSelected);
         } else {
-            // plaindebug(DSKREG_DEBUG, "Selecting df%d\n", selected);
+            // debug(DSKREG_DEBUG, "Selecting df%d\n", selected);
         }
         if (selected != -1) messageQueue.put(MSG_DRIVE_SELECT, selected);
     }

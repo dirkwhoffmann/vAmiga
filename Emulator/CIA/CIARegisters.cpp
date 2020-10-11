@@ -216,7 +216,7 @@ CIA::poke(u16 addr, u8 value)
         
         case 0x00: // CIA_DATA_PORT_A
 
-            // plaindebug("%s poke(0, %X)\n", getDescription(), value);
+            // debug("%s poke(0, %X)\n", getDescription(), value);
             pokePA(value);
             return;
             
@@ -229,7 +229,7 @@ CIA::poke(u16 addr, u8 value)
             
         case 0x02: // CIA_DATA_DIRECTION_A
         
-            // plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
+            // debug("%s poke(DDRA, %X)\n", getDescription(), value);
             if ((isCIAA() && value != 0x03) || (isCIAB() && value != 0xC0)) {
                 trace(XFILES, "XFILES (DDRA) Setting unusual value %x\n", value);
             }
@@ -238,7 +238,7 @@ CIA::poke(u16 addr, u8 value)
             
         case 0x03: // CIA_DATA_DIRECTION_B
         
-            // plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
+            // debug("%s poke(DDRB, %X)\n", getDescription(), value);
             if (isCIAB() && value != 0xFF) {
                 trace(XFILES, "XFILES (DDRB) Setting unusual value %x\n", value);
             }

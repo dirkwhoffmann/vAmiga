@@ -92,8 +92,8 @@ protected:
     void warn(const char *fmt, ...);
     void warn(int verbose, const char *fmt, ...);
 
-    void plaindebug(const char *fmt, ...);
-    void plaindebug(int verbose, const char *fmt, ...);
+    void debug(const char *fmt, ...);
+    void debug(int verbose, const char *fmt, ...);
 
     void trace(const char *fmt, ...);
     void trace(int verbose, const char *fmt, ...);

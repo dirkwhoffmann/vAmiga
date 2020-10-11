@@ -51,14 +51,14 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
     if (isRecording()) return false;
 
     // Create pipes
-    plaindebug(REC_DEBUG, "Creating pipes...\n");
+    debug(REC_DEBUG, "Creating pipes...\n");
 
     unlink(videoPipePath());
     unlink(audioPipePath());
     if (mkfifo(videoPipePath(), 0666) == -1) return false;
     if (mkfifo(audioPipePath(), 0666) == -1) return false;
         
-    plaindebug(REC_DEBUG, "Pipes created\n");
+    debug(REC_DEBUG, "Pipes created\n");
     dump();
     
     synchronized {
@@ -70,7 +70,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
         cutout.x2 = x2;
         cutout.y1 = y1;
         cutout.y2 = y2;
-        plaindebug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
+        debug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
           
         //
         // Assemble the command line arguments for the video encoder
@@ -171,7 +171,7 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
 void
 ScreenRecorder::stopRecording()
 {
-    plaindebug(REC_DEBUG, "stopRecording()\n");
+    debug(REC_DEBUG, "stopRecording()\n");
     
     if (!isRecording()) return;
     
@@ -192,7 +192,7 @@ ScreenRecorder::stopRecording()
     videoFFmpeg = NULL;
     audioFFmpeg = NULL;
 
-    plaindebug(REC_DEBUG, "Recording has stopped\n");
+    debug(REC_DEBUG, "Recording has stopped\n");
     messageQueue.put(MSG_RECORDING_STOPPED);
 }
 

@@ -12,7 +12,7 @@
 void
 Agnus::pokeDSKPTH(u16 value)
 {
-    plaindebug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
+    debug(DSKREG_DEBUG, "pokeDSKPTH(%x)\n", value);
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
@@ -23,14 +23,14 @@ Agnus::pokeDSKPTH(u16 value)
 void
 Agnus::pokeDSKPTL(u16 value)
 {
-    plaindebug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
+    debug(DSKREG_DEBUG, "pokeDSKPTL(%x)\n", value);
     dskpt = REPLACE_LO_WORD(dskpt, value & 0xFFFE);
 }
 
 template <int x> void
 Agnus::pokeAUDxLCH(u16 value)
 {
-    plaindebug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
+    debug(AUDREG_DEBUG, "pokeAUD%dLCH(%X)\n", x, value);
 
      audlc[x] = REPLACE_HI_WORD(audlc[x], value);
 }
@@ -91,7 +91,7 @@ Agnus::setBPLxPTH(u16 value)
     if (!dropWrite((BusOwner)(BUS_BPL1 + x - 1))) {
         bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], value);
     } else {
-        // plaindebug("BPLxPTH lost (%d)\n", x - 1);
+        // debug("BPLxPTH lost (%d)\n", x - 1);
     }
 }
 
@@ -254,7 +254,7 @@ Agnus::peekDMACONR()
     if (blitter.isBusy()) result |= (1 << 14);
     if (blitter.isZero()) result |= (1 << 13);
     
-    // plaindebug("peekDMACONR() = %x\n", result);
+    // debug("peekDMACONR() = %x\n", result);
     return result;
 }
 

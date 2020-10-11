@@ -126,7 +126,7 @@ Disk::encodeAmigaDisk(DiskFile *df)
 
     // Run the decoder in debug mode
     if (MFM_DEBUG) {
-        plaindebug("Amiga disk fully encoded (success = %d)\n", result);
+        debug("Amiga disk fully encoded (success = %d)\n", result);
         ADFFile *tmp = ADFFile::makeWithDisk(this);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.adf\n");
@@ -157,7 +157,7 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t)
     // Compute a debugging checksum
     if (MFM_DEBUG) {
         u64 check = fnv_1a_32(data.track[t], trackSize);
-        plaindebug("Track %d checksum = %x\n", t, check);
+        debug("Track %d checksum = %x\n", t, check);
     }
 
     return result;
@@ -169,7 +169,7 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
     assert(t < 168);
     assert(s < 11);
     
-    plaindebug(MFM_DEBUG, "Encoding sector %d\n", s);
+    debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
     /* Block header layout:
      *                     Start  Size   Value
@@ -242,14 +242,14 @@ Disk::encodeDosDisk(DiskFile *df)
 {
     long tracks = df->numTracks();
     
-    plaindebug(MFM_DEBUG, "Encoding DOS disk (%d tracks)\n", tracks);
+    debug(MFM_DEBUG, "Encoding DOS disk (%d tracks)\n", tracks);
     
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeDosTrack(df, t);
     
     // Run the decoder in debug mode
     if (MFM_DEBUG) {
-        plaindebug("DOS disk fully encoded (success = %d)\n", result);
+        debug("DOS disk fully encoded (success = %d)\n", result);
         IMGFile *tmp = IMGFile::makeWithDisk(this);
         if (tmp) {
             msg("Decoded image written to /tmp/debug.img\n");
@@ -265,7 +265,7 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
 {
     long sectors = df->numSectorsPerTrack();
 
-    plaindebug(MFM_DEBUG, "Encoding DOS track %d (%d sectors)\n", t, sectors);
+    debug(MFM_DEBUG, "Encoding DOS track %d (%d sectors)\n", t, sectors);
 
     u8 *p = data.track[t];
 
@@ -290,7 +290,7 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
         u64 check = fnv_1a_32(data.track[t], trackSize);
-        plaindebug("Track %d checksum = %x\n", t, check);
+        debug("Track %d checksum = %x\n", t, check);
     }
 
     return result;
@@ -301,7 +301,7 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
-    plaindebug(MFM_DEBUG, "  Encoding DOS sector %d\n", s);
+    debug(MFM_DEBUG, "  Encoding DOS sector %d\n", s);
     
     // Write SYNC
     for (int i = 0; i < 12; i++) { buf[i] = 0x00; }

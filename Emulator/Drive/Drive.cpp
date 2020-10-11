@@ -236,7 +236,7 @@ Drive::getDriveId()
 u8
 Drive::driveStatusFlags()
 {
-    // if (nr == 0) plaindebug("driveStatusFlags() %d %d %d %d\n", isSelected(), idMode(), motorAtFullSpeed(), motorSlowingDown());
+    // if (nr == 0) debug("driveStatusFlags() %d %d %d %d\n", isSelected(), idMode(), motorAtFullSpeed(), motorSlowingDown());
 
     u8 result = 0xFF;
     
@@ -305,7 +305,7 @@ Drive::setMotor(bool value)
     messageQueue.put(value ? MSG_DRIVE_LED_ON : MSG_DRIVE_LED_OFF, nr);
     messageQueue.put(value ? MSG_DRIVE_MOTOR_ON : MSG_DRIVE_MOTOR_OFF, nr);
     
-    plaindebug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
+    debug(DSK_DEBUG, "Motor %s [%d]\n", motor ? "on" : "off", idCount);
 }
 
 bool
@@ -454,7 +454,7 @@ Drive::step(int dir)
             recordCylinder(head.cylinder);
         }
         if (DSK_CHECKSUM)
-            plaindebug("Stepping down to cylinder %d\n", head.cylinder);
+            debug("Stepping down to cylinder %d\n", head.cylinder);
 
     } else {
         
@@ -464,7 +464,7 @@ Drive::step(int dir)
             recordCylinder(head.cylinder);
         }
         if (DSK_CHECKSUM)
-            plaindebug("Stepping up to cylinder %d\n", head.cylinder);
+            debug("Stepping up to cylinder %d\n", head.cylinder);
     }
     
     // Push drive head forward
@@ -635,7 +635,7 @@ Drive::PRBdidChange(u8 oldValue, u8 newValue)
             switchMotorOff();
         }
         
-        // plaindebug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
+        // debug("disk.select() sel df%d ($%08X) [$%08x, bit #%02d: %d]\n",
         //       nr, getDriveId(), getDriveId() << idCount, 31 - idCount, idBit);
     }
     

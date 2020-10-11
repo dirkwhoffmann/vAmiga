@@ -293,7 +293,7 @@ private:
 public:
 
     bool allocChip(size_t bytes) { return alloc(bytes, chip, config.chipSize, chipMask); }
-    bool allocSlow(size_t bytes) { bool result = alloc(bytes, slow, config.slowSize, slowMask); plaindebug("slowMask = %x\n", slowMask); return result; }
+    bool allocSlow(size_t bytes) { bool result = alloc(bytes, slow, config.slowSize, slowMask); debug("slowMask = %x\n", slowMask); return result; }
     bool allocFast(size_t bytes) { return alloc(bytes, fast, config.fastSize, fastMask); }
 
     void deleteChip() { allocChip(0); }

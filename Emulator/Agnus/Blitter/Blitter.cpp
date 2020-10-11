@@ -508,7 +508,7 @@ Blitter::beginBlit()
         if (BLT_CHECKSUM) {
             linecount++;
             check1 = check2 = fnv_1a_init32();
-            plaindebug("BLITTER Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            debug("BLITTER Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                        linecount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltcon0,
@@ -527,7 +527,7 @@ Blitter::beginBlit()
             copycount++;
             check1 = check2 = fnv_1a_init32();
             
-            plaindebug("BLITTER Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            debug("BLITTER Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount,
                        bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -583,7 +583,7 @@ Blitter::beginCopyBlit(int level)
 void
 Blitter::signalEnd()
 {
-    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
+    debug(BLTTIM_DEBUG, "(%d,%d) Blitter bbusy\n", agnus.pos.v, agnus.pos.h);
 
     // Clear the Blitter busy flag
     bbusy = false;
@@ -592,7 +592,7 @@ Blitter::signalEnd()
 void
 Blitter::endBlit()
 {
-    plaindebug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
+    debug(BLTTIM_DEBUG, "(%d,%d) Blitter terminates\n", agnus.pos.v, agnus.pos.h);
     
     running = false;
     
@@ -603,14 +603,14 @@ Blitter::endBlit()
 
     // Dump checksums if requested
     if (BLT_CHECKSUM) {
-        plaindebug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
+        debug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2,
                    bltapt & agnus.ptrMask,
                    bltbpt & agnus.ptrMask,
                    bltcpt & agnus.ptrMask,
                    bltdpt & agnus.ptrMask);
         /*
-        plaindebug("Memory: %x (%x)\n",
+        debug("Memory: %x (%x)\n",
                    fnv_1a_32(mem.chip, mem.chipRamSize()),
                    fnv_1a_32(mem.slow, mem.slowRamSize()));
         */

@@ -491,7 +491,7 @@ DiskController::performDMARead(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                plaindebug("read: cnt = %d check1 = %x check2 = %x\n",
+                debug("read: cnt = %d check1 = %x check2 = %x\n",
                            checkcnt, check1, check2);
 
             return;
@@ -553,7 +553,7 @@ DiskController::performDMAWrite(Drive *drive, u32 remaining)
             setState(DRIVE_DMA_OFF);
 
             if (DSK_CHECKSUM)
-                plaindebug("write: cnt = %d check1 = %x check2 = %x\n",
+                debug("write: cnt = %d check1 = %x check2 = %x\n",
                            checkcnt, check1, check2);
 
             return;
@@ -624,7 +624,7 @@ DiskController::performTurboRead(Drive *drive)
     }
 
     if (DSK_CHECKSUM) {
-        plaindebug("Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d check1 = %x check2 = %x\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, check1, check2);
+        debug("Turbo read %s: cyl: %d side: %d offset: %d checkcnt = %d check1 = %x check2 = %x\n", drive->getDescription(), drive->head.cylinder, drive->head.side, drive->head.offset, checkcnt, check1, check2);
     }
 }
 
@@ -649,7 +649,7 @@ DiskController::performTurboWrite(Drive *drive)
     }
 
     if (DSK_CHECKSUM) {
-        plaindebug("Turbo write %s: checkcnt = %d check1 = %x check2 = %x\n",
+        debug("Turbo write %s: checkcnt = %d check1 = %x check2 = %x\n",
                    drive->getDescription(), checkcnt, check1, check2);
     }
 }

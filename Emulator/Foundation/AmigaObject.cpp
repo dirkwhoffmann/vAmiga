@@ -50,7 +50,7 @@ AmigaObject::warn(int verbose, const char *fmt, ...)
 }
 
 void
-AmigaObject::plaindebug(const char *fmt, ...)
+AmigaObject::debug(const char *fmt, ...)
 {
 #ifndef NDEBUG
     
@@ -61,7 +61,7 @@ AmigaObject::plaindebug(const char *fmt, ...)
 }
 
 void
-AmigaObject::plaindebug(int verbose, const char *fmt, ...)
+AmigaObject::debug(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG
     
