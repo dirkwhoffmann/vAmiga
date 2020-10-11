@@ -71,7 +71,11 @@
 // General
 static const int XFILES          = 0; // Report paranormal activity
 static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
+#if defined(__i386__) || defined(__x86_64__)
 static const int NO_SSE          = 0; // Don't use SSE extensions
+#else
+static const int NO_SSE          = 1; // Don't use SSE extensions
+#endif
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
