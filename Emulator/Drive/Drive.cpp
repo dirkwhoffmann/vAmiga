@@ -64,7 +64,7 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
             }
             
             config.type = (DriveType)value;
-            debug("Setting type to %s\n", driveTypeName(config.type));
+            trace("Setting type to %s\n", driveTypeName(config.type));
             return true;
 
         case OPT_EMULATE_MECHANICS:
@@ -74,7 +74,7 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
             }
                         
             config.mechanicalDelays = value;
-            debug("Setting emulateMechanics to %d\n", config.mechanicalDelays);
+            trace("Setting emulateMechanics to %d\n", config.mechanicalDelays);
             return true;
 
         default:
@@ -174,7 +174,7 @@ Drive::_load(u8 *buffer)
         disk = Disk::makeWithReader(reader, diskType);
     }
 
-    debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
+    trace(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
     return reader.ptr - buffer;
 }
 
@@ -200,7 +200,7 @@ Drive::_save(u8 *buffer)
         disk->applyToPersistentItems(writer);
     }
 
-    debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
+    trace(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
     return writer.ptr - buffer;
 }
 
@@ -336,7 +336,7 @@ void
 Drive::selectSide(int side)
 {
     assert(side < 2);
-    if (head.side != side) debug("*** Select side %d\n", side);
+    if (head.side != side) trace("*** Select side %d\n", side);
 
     head.side = side;
 }
@@ -424,7 +424,7 @@ Drive::findSyncMark()
         break;
     }
 
-    debug(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
+    trace(DSK_DEBUG, "Moving to SYNC mark at offset %d\n", head.offset);
 }
 
 bool
@@ -559,7 +559,7 @@ Drive::toggleWriteProtection()
 void
 Drive::ejectDisk()
 {
-    debug(DSK_DEBUG, "ejectDisk()\n");
+    trace(DSK_DEBUG, "ejectDisk()\n");
 
     if (disk) {
         
@@ -578,7 +578,7 @@ Drive::ejectDisk()
 void
 Drive::insertDisk(Disk *disk)
 {
-    debug(DSK_DEBUG, "insertDisk(%p)", disk);
+    trace(DSK_DEBUG, "insertDisk(%p)", disk);
 
     if (disk) {
 

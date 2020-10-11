@@ -270,7 +270,7 @@ return counter.count;
 SerResetter resetter; \
 if (hard) applyToHardResetItems(resetter); \
 applyToResetItems(resetter); \
-debug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
+plaindebug(SNP_DEBUG, "Resetted (%s)\n", hard ? "hard" : "soft"); \
 }
 
 #define LOAD_SNAPSHOT_ITEMS \
@@ -279,7 +279,7 @@ SerReader reader(buffer); \
 applyToPersistentItems(reader); \
 applyToHardResetItems(reader); \
 applyToResetItems(reader); \
-debug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
+plaindebug(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer); \
 return reader.ptr - buffer; \
 }
 
@@ -289,7 +289,7 @@ SerWriter writer(buffer); \
 applyToPersistentItems(writer); \
 applyToHardResetItems(writer); \
 applyToResetItems(writer); \
-debug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
+plaindebug(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer); \
 return writer.ptr - buffer; \
 }
 

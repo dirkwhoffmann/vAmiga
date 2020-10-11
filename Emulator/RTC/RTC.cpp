@@ -151,7 +151,7 @@ RTC::peek(unsigned nr)
     result = FORCE_RTC_REGISTER;
     #endif
     
-    debug(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", result, bank());
+    trace(RTC_DEBUG, "peek(%d) = $%X [bank %d]\n", result, bank());
     return result;
 }
 
@@ -160,7 +160,7 @@ RTC::poke(unsigned nr, u8 value)
 {
     assert(nr < 16);
 
-    debug(RTC_DEBUG, "poke(%d, $%02X) [bank %d]\n", nr, value, bank());
+    trace(RTC_DEBUG, "poke(%d, $%02X) [bank %d]\n", nr, value, bank());
 
     // Ony proceed if a real-time clock is installed
     if (rtc.isPresent()) return;

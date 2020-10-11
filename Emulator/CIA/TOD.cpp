@@ -52,7 +52,7 @@ TOD::getCounterHi()
 {
     u8 result = frozen ? latch.hi : tod.hi;
 
-    debug(TOD_DEBUG, "getCounterHi: %02x\n", result);
+    trace(TOD_DEBUG, "getCounterHi: %02x\n", result);
     return result;
 }
 
@@ -61,7 +61,7 @@ TOD::getCounterMid()
 {
     u8 result = frozen ? latch.mid : tod.mid;
     
-    debug(TOD_DEBUG, "getCounterMid: %02x\n", result);
+    trace(TOD_DEBUG, "getCounterMid: %02x\n", result);
     return result;
 }
 
@@ -70,35 +70,35 @@ TOD::getCounterLo()
 {
     u8 result = frozen ? latch.lo : tod.lo;
 
-    debug(TOD_DEBUG, "getCounterLo: %02x\n", result);
+    trace(TOD_DEBUG, "getCounterLo: %02x\n", result);
     return result;
 }
 
 u8
 TOD::getAlarmHi()
 {
-    debug(TOD_DEBUG, "getAlarmHi: %02x\n", alarm.hi);
+    trace(TOD_DEBUG, "getAlarmHi: %02x\n", alarm.hi);
     return alarm.hi;
 }
 
 u8
 TOD::getAlarmMid()
 {
-    debug(TOD_DEBUG, "getAlarmMid: %02x\n", alarm.mid);
+    trace(TOD_DEBUG, "getAlarmMid: %02x\n", alarm.mid);
     return alarm.mid;
 }
 
 u8
 TOD::getAlarmLo()
 {
-    debug(TOD_DEBUG, "getAlarmLo: %02x\n", alarm.lo);
+    trace(TOD_DEBUG, "getAlarmLo: %02x\n", alarm.lo);
     return alarm.lo;
 }
 
 void
 TOD::setCounterHi(u8 value)
 {
-    debug(TOD_DEBUG, "setCounterHi(%x)\n", value);
+    trace(TOD_DEBUG, "setCounterHi(%x)\n", value);
     tod.hi = value;
     checkForInterrupt();
 }
@@ -106,7 +106,7 @@ TOD::setCounterHi(u8 value)
 void
 TOD::setCounterMid(u8 value)
 {
-    debug(TOD_DEBUG, "setCounterMid(%x)\n", value);
+    trace(TOD_DEBUG, "setCounterMid(%x)\n", value);
     tod.mid = value;
     checkForInterrupt();
 }
@@ -114,7 +114,7 @@ TOD::setCounterMid(u8 value)
 void
 TOD::setCounterLo(u8 value)
 {
-    debug(TOD_DEBUG, "setCounterLo(%x)\n", value);
+    trace(TOD_DEBUG, "setCounterLo(%x)\n", value);
     tod.lo = value;
     checkForInterrupt();
 }
@@ -122,7 +122,7 @@ TOD::setCounterLo(u8 value)
 void
 TOD::setAlarmHi(u8 value)
 {
-    debug(TOD_DEBUG, "setAlarmHi(%x)\n", value);
+    trace(TOD_DEBUG, "setAlarmHi(%x)\n", value);
     alarm.hi = value;
     checkForInterrupt();
 }
@@ -130,7 +130,7 @@ TOD::setAlarmHi(u8 value)
 void
 TOD::setAlarmMid(u8 value)
 {
-    debug(TOD_DEBUG, "setAlarmMid(%x)\n", value);
+    trace(TOD_DEBUG, "setAlarmMid(%x)\n", value);
     alarm.mid = value;
     checkForInterrupt();
 }
@@ -138,7 +138,7 @@ TOD::setAlarmMid(u8 value)
 void
 TOD::setAlarmLo(u8 value)
 {
-    debug(TOD_DEBUG, "setAlarmLo(%x)\n", value);
+    trace(TOD_DEBUG, "setAlarmLo(%x)\n", value);
     alarm.lo = value;
     checkForInterrupt();
 }
@@ -153,7 +153,7 @@ TOD::increment()
     if (!incLoNibble(tod.mid)) goto check;
 
     if (tod.value == alarm.value) {
-        debug(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
+        trace(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
               tod.hi, tod.mid, tod.lo, frozen, stopped);
     }
     if (cia->config.todBug) checkForInterrupt();
@@ -190,7 +190,7 @@ void
 TOD::checkForInterrupt()
 {
     if (!matching && tod.value == alarm.value) {
-        debug(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
+        trace(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
         cia->todInterrupt();
     }
     matching = (tod.value == alarm.value);

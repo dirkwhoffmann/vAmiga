@@ -119,7 +119,7 @@ Disk::encodeAmigaDisk(DiskFile *df)
 {
     long tracks = df->numTracks();
     
-    debug("Encoding Amiga disk (%d tracks)\n", tracks);
+    trace("Encoding Amiga disk (%d tracks)\n", tracks);
     
     bool result = true;
     for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);
@@ -142,7 +142,7 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t)
 {
     long sectors = df->numSectorsPerTrack();
     
-    debug(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
+    trace(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
 
     // Format track
     clearTrack(t, 0xAA);
@@ -369,7 +369,7 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 bool
 Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)
 {
-    debug(MFM_DEBUG,
+    trace(MFM_DEBUG,
           "Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
     for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
@@ -384,7 +384,7 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
 {
     assert(t < 168);
         
-    debug(MFM_DEBUG, "Decoding track %d\n", t);
+    trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];
@@ -407,7 +407,7 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
         sectorStart[nr++] = index;
     }
     
-    debug("Found %d sectors, expected %d\n", nr, numSectors); 
+    trace("Found %d sectors, expected %d\n", nr, numSectors); 
     if (nr != numSectors) {
         warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
         return false;
@@ -438,7 +438,7 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
 bool
 Disk::decodeDOSDisk(u8 *dst, long numTracks, long numSectors)
 {
-    debug(MFM_DEBUG,
+    trace(MFM_DEBUG,
           "Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
     for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
@@ -453,7 +453,7 @@ Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
 {
     assert(t < 168);
         
-    debug(MFM_DEBUG, "Decoding DOS track %d\n", t);
+    trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];
@@ -481,7 +481,7 @@ Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
         decodeMFM((u8 *)&chrn, &local[i], 4);
-        debug(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
+        trace(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
         
         if (chrn.r >= 1 && chrn.r <= numSectors) {
             

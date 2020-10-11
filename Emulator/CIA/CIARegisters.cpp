@@ -14,7 +14,7 @@ CIA::peek(u16 addr)
 {
     u8 result;
 
-    debug(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, ciaRegName(addr));
+    trace(CIAREG_DEBUG, "Peek(%d [%s])\n", addr, ciaRegName(addr));
 
     wakeUp();
 
@@ -208,7 +208,7 @@ CIA::spypeek(u16 addr)
 void
 CIA::poke(u16 addr, u8 value)
 {
-    debug(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, ciaRegName(addr), value);
+    trace(CIAREG_DEBUG, "Poke(%d [%s],$%X)\n", addr, ciaRegName(addr), value);
     
     wakeUp();
     
@@ -231,7 +231,7 @@ CIA::poke(u16 addr, u8 value)
         
             // plaindebug("%s poke(DDRA, %X)\n", getDescription(), value);
             if ((isCIAA() && value != 0x03) || (isCIAB() && value != 0xC0)) {
-                debug(XFILES, "XFILES (DDRA) Setting unusual value %x\n", value);
+                trace(XFILES, "XFILES (DDRA) Setting unusual value %x\n", value);
             }
             pokeDDRA(value);
             return;
@@ -240,7 +240,7 @@ CIA::poke(u16 addr, u8 value)
         
             // plaindebug("%s poke(DDRB, %X)\n", getDescription(), value);
             if (isCIAB() && value != 0xFF) {
-                debug(XFILES, "XFILES (DDRB) Setting unusual value %x\n", value);
+                trace(XFILES, "XFILES (DDRB) Setting unusual value %x\n", value);
             }
             DDRB = value;
             updatePB();
@@ -440,7 +440,7 @@ CIA::poke(u16 addr, u8 value)
             if ((value ^ CRA) & 0x40) {
 
                 // Serial direction changing
-                debug(CIASER_DEBUG, "Serial register: %s\n", (value & 0x40) ? "output" : "input");
+                trace(CIASER_DEBUG, "Serial register: %s\n", (value & 0x40) ? "output" : "input");
 
                 // Inform the keyboard if this CIA is connected to it
                 if (isCIAA()) keyboard.setSPLine(!(value & 0x40), clock);

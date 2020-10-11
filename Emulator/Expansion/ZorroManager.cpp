@@ -17,7 +17,7 @@ ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 u8
 ZorroManager::peekFastRamDevice(u32 addr)
 {    
-    debug(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
+    trace(FAS_DEBUG, "peekFastRamDevice(%X)\n", addr & 0xFFFF);
     // debug(FAS_DEBUG, "fastRamSize = %d\n", mem.fastRamSize());
 
     if (fastRamConf || mem.fastRamSize() == 0) return 0xF; // Already configured
@@ -150,7 +150,7 @@ ZorroManager::peekFastRamDevice(u32 addr)
             autoConfData = 0xF;
     }
     
-    debug(FAS_DEBUG, "autoConfData = %x\n", autoConfData);
+    trace(FAS_DEBUG, "autoConfData = %x\n", autoConfData);
     return autoConfData;
 }
 
@@ -177,7 +177,7 @@ ZorroManager::pokeFastRamDevice(u32 addr, u8 value)
             
         case 0x48: // ec_BaseAddress (A23 - A20, 0x--X-0000)
             fastRamBaseAddr |= (value & 0xF0) << 16;
-            debug(FAS_DEBUG, "Zorro II card mapped to $%x\n", fastRamBaseAddr);
+            trace(FAS_DEBUG, "Zorro II card mapped to $%x\n", fastRamBaseAddr);
             
             /* "Note that writing to register 48 actually configures the board for
              *  both Zorro II and Zorro III boards in the Zorro II configuration

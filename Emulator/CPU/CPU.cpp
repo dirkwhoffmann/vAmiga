@@ -76,7 +76,7 @@ CPU::read16OnReset(u32 addr)
 void
 CPU::write8(u32 addr, u8 val)
 {
-    if (XFILES && addr - reg.pc < 5) debug("XFILES: write8 close to PC %x\n", reg.pc);
+    if (XFILES && addr - reg.pc < 5) trace("XFILES: write8 close to PC %x\n", reg.pc);
 
     mem.poke8 <CPU_ACCESS> (addr, val);
 }
@@ -84,7 +84,7 @@ CPU::write8(u32 addr, u8 val)
 void
 CPU::write16 (u32 addr, u16 val)
 {
-    if (XFILES && addr - reg.pc < 5) debug("XFILES: write16 close to PC %x\n", reg.pc);
+    if (XFILES && addr - reg.pc < 5) trace("XFILES: write16 close to PC %x\n", reg.pc);
 
     mem.poke16 <CPU_ACCESS> (addr, val);
 }
@@ -92,23 +92,23 @@ CPU::write16 (u32 addr, u16 val)
 void
 CPU::signalReset()
 {
-    debug(XFILES, "XFILES (CPU): RESET instruction\n");
+    trace(XFILES, "XFILES (CPU): RESET instruction\n");
     amiga.softReset();
-    debug("Reset done\n");
+    trace("Reset done\n");
 }
 
 void
 CPU::signalStop(u16 op)
 {
     if (!(op & 0x2000)) {
-        debug(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
+        trace(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
     }
 }
 
 void
 CPU::signalTAS()
 {
-    debug(XFILES, "XFILES (CPU): TAS instruction\n");
+    trace(XFILES, "XFILES (CPU): TAS instruction\n");
 }
 
 void
@@ -120,26 +120,26 @@ CPU::signalHalt()
 void
 CPU::signalAddressError(moira::AEStackFrame &frame)
 {
-    debug(XFILES, "XFILES (CPU): Address error exception %x %x %x %x %x\n",
+    trace(XFILES, "XFILES (CPU): Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
 CPU::signalLineAException(u16 opcode)
 {
-    debug(XFILES, "XFILES (CPU): lineAException(%x)\n", opcode);
+    trace(XFILES, "XFILES (CPU): lineAException(%x)\n", opcode);
 }
 
 void
 CPU::signalLineFException(u16 opcode)
 {
-    debug(XFILES, "XFILES (CPU): lineFException(%x)\n", opcode);
+    trace(XFILES, "XFILES (CPU): lineFException(%x)\n", opcode);
 }
 
 void
 CPU::signalIllegalOpcodeException(u16 opcode)
 {
-    debug(XFILES, "XFILES (CPU): illegalOpcodeException(%x)\n", opcode);
+    trace(XFILES, "XFILES (CPU): illegalOpcodeException(%x)\n", opcode);
 }
 
 void
@@ -151,7 +151,7 @@ CPU::signalTraceException()
 void
 CPU::signalTrapException()
 {
-    debug(XFILES, "XFILES (CPU): trapException\n");
+    trace(XFILES, "XFILES (CPU): trapException\n");
 }
 
 void
@@ -179,7 +179,7 @@ CPU::signalJumpToVector(int nr, u32 addr)
     bool isIrqException = nr >= 24 && nr <= 31;
 
     if (isIrqException) {
-        debug(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
+        trace(INT_DEBUG, "Exception %d: Changing PC to %x\n", nr, addr);
     }
 }
 

@@ -825,7 +825,7 @@ template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_NONE> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
-    debug(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
+    trace(XFILES, "XFILES (AGNUS): Reading from unmapped RAM\n");
     
     return peek16 <CPU_ACCESS, MEM_NONE> (addr);
 }
@@ -923,7 +923,7 @@ template<> u16
 Memory::peek16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr)
 {
     assert((addr & agnus.ptrMask) == addr);
-    debug(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
+    trace(XFILES, "XFILES (AGNUS): Reading from Slow RAM mirror\n");
     
     dataBus = READ_SLOW_16(addr & 0x7FFFF);
     return dataBus;
@@ -982,7 +982,7 @@ template<> u16
 Memory::peek16 <CPU_ACCESS, MEM_CIA> (u32 addr)
 {
     ASSERT_CIA_ADDR(addr);
-    debug(XFILES, "XFILES (CIA): Reading a WORD from %x\n", addr);
+    trace(XFILES, "XFILES (CIA): Reading a WORD from %x\n", addr);
 
     agnus.executeUntilBusIsFreeForCIA();
     
@@ -1068,7 +1068,7 @@ Memory::peek8 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
     }
     
     dataBus = zorro.peekFastRamDevice(addr) << 4;         
-    debug(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
+    trace(FAS_DEBUG, "peek8<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
 }
 
@@ -1083,7 +1083,7 @@ Memory::peek16 <CPU_ACCESS, MEM_AUTOCONF> (u32 addr)
     u8 lo = zorro.peekFastRamDevice(addr + 1) << 4;
     
     dataBus = HI_LO(hi,lo);
-    debug(FAS_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
+    trace(FAS_DEBUG, "peek16<AUTOCONF>(%x) = %x\n", addr, dataBus);
     return dataBus;
 }
 
@@ -1297,22 +1297,22 @@ Memory::spypeek16 <AGNUS_ACCESS> (u32 addr)
 template <> void
 Memory::poke8 <CPU_ACCESS, MEM_NONE> (u32 addr, u8 value)
 {
-    debug(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
+    trace(MEM_DEBUG, "poke8(%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
 Memory::poke16 <CPU_ACCESS, MEM_NONE> (u32 addr, u16 value)
 {
-    debug(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
+    trace(MEM_DEBUG, "poke16 <CPU> (%x [NONE], %x)\n", addr, value);
     dataBus = value;
 }
 
 template <> void
 Memory::poke16 <AGNUS_ACCESS, MEM_NONE> (u32 addr, u16 value)
 {
-    debug(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
-    debug(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
+    trace(MEM_DEBUG, "poke16 <AGNUS> (%x [NONE], %x)\n", addr, value);
+    trace(XFILES, "XFILES (AGNUS): Writing to unmapped RAM\n");
     dataBus = value;
 }
 
@@ -1322,7 +1322,7 @@ Memory::poke8 <CPU_ACCESS, MEM_CHIP> (u32 addr, u8 value)
     ASSERT_CHIP_ADDR(addr);
     
     if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        debug("CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
+        trace("CPU(8) OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
 
     agnus.executeUntilBusIsFree();
@@ -1338,7 +1338,7 @@ Memory::poke16 <CPU_ACCESS, MEM_CHIP> (u32 addr, u16 value)
     ASSERT_CHIP_ADDR(addr);
     
     if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        debug("CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
+        trace("CPU OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
     
     agnus.executeUntilBusIsFree();
@@ -1354,7 +1354,7 @@ Memory::poke16 <AGNUS_ACCESS, MEM_CHIP> (u32 addr, u16 value)
     assert((addr & agnus.ptrMask) == addr);
 
     if (BLT_GUARD && blitter.memguard[addr & mem.chipMask]) {
-        debug("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
+        trace("AGNUS OVERWRITES BLITTER AT ADDR %x\n", addr);
     }
 
     dataBus = value;
@@ -1389,7 +1389,7 @@ template <> void
 Memory::poke16 <AGNUS_ACCESS, MEM_SLOW> (u32 addr, u16 value)
 {
     assert((addr & agnus.ptrMask) == addr);
-    debug(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
+    trace(XFILES, "XFILES (AGNUS): Writing to Slow RAM mirror\n");
 
     dataBus = value;
     WRITE_SLOW_16(addr, value);
@@ -1428,7 +1428,7 @@ template <> void
 Memory::poke16 <CPU_ACCESS, MEM_CIA> (u32 addr, u16 value)
 {
     ASSERT_CIA_ADDR(addr);
-    debug(XFILES, "XFILES (CIA): Writing a WORD into %x\n", addr);
+    trace(XFILES, "XFILES (CIA): Writing a WORD into %x\n", addr);
 
     agnus.executeUntilBusIsFreeForCIA();
     
@@ -1513,14 +1513,14 @@ Memory::poke8 <CPU_ACCESS, MEM_ROM> (u32 addr, u8 value)
     
     // On Amigas with a WOM, writing into ROM space locks the WOM
     if (hasWom() && !womIsLocked) {
-        debug("Locking WOM\n");
+        trace("Locking WOM\n");
         womIsLocked = true;
         updateMemSrcTables();
     }
         
     if (!releaseBuild()) {
         if (addr == 0xFFFFFF && value == 42) {
-            debug("DEBUG STOP\n");
+            trace("DEBUG STOP\n");
             amiga.signalStop();
         }
     }
@@ -1597,17 +1597,17 @@ Memory::poke16 <CPU_ACCESS> (u32 addr, u16 value)
 
     /*
     if (addr == 0xC01EC2) {
-        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        trace("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
         // if (value == 0x302) amiga.signalStop();
     }
 
     if (addr == 0xC05CF0) { // WRITTEN AT FD1724
-        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        trace("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
         if (value == 0x302) amiga.signalStop();
     }
 
     if (addr == 0x010124 - 2) {
-        debug("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
+        trace("poke16 <CPU_ACCESS> (%x,%x)\n", addr, value);
         if (value == 0x302) amiga.signalStop();
     }
     */
@@ -1654,7 +1654,7 @@ Memory::poke16 <AGNUS_ACCESS> (u32 addr, u16 value)
 u8
 Memory::peekCIA8(u32 addr)
 {
-    // debug("peekCIA8(%6X)\n", addr);
+    // trace("peekCIA8(%6X)\n", addr);
     
     u32 reg = (addr >> 8)  & 0b1111;
     u32 sel = (addr >> 12) & 0b11;
@@ -1681,7 +1681,7 @@ Memory::peekCIA8(u32 addr)
 u16
 Memory::peekCIA16(u32 addr)
 {
-    // debug(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
+    // trace(CIA_DEBUG, "peekCIA16(%6X)\n", addr);
     
     u32 reg = (addr >> 8)  & 0b1111;
     u32 sel = (addr >> 12) & 0b11;
@@ -1758,7 +1758,7 @@ Memory::spypeekCIA16(u32 addr)
 void
 Memory::pokeCIA8(u32 addr, u8 value)
 {
-    // debug(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
+    // trace(CIA_DEBUG, "pokeCIA8(%6X, %X)\n", addr, value);
     
     u32 reg = (addr >> 8) & 0b1111;
     u32 selA = (addr & 0x1000) == 0;
@@ -1771,7 +1771,7 @@ Memory::pokeCIA8(u32 addr, u8 value)
 void
 Memory::pokeCIA16(u32 addr, u16 value)
 {
-    // debug(CIA_DEBUG, "pokeCIA16(%6X, %X)\n", addr, value);
+    // trace(CIA_DEBUG, "pokeCIA16(%6X, %X)\n", addr, value);
     
     assert(IS_EVEN(addr));
     
@@ -1876,7 +1876,7 @@ Memory::peekCustom16(u32 addr)
 
     }
 
-    debug(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, regName(addr), result);
+    trace(OCSREG_DEBUG, "peekCustom16(%X [%s]) = %X\n", addr, regName(addr), result);
 
     dataBus = result;
     return result;
@@ -1906,7 +1906,7 @@ Memory::peekCustomFaulty16(u32 addr)
             cpu.getPC0() != 0xFCABC0 && cpu.getPC0() != 0xFE2FE2 &&
             cpu.getPC0() != 0xC07CF2 && cpu.getPC0() != 0xC07CF8 &&
             cpu.getPC0() != 0xC07E30 && cpu.getPC0() != 0xC07E36) {
-            debug("Reading from write-only register %x (%s) Writing: %x\n",
+            trace("Reading from write-only register %x (%s) Writing: %x\n",
                   addr, regName(addr), dataBus);
         }
     }
@@ -1933,9 +1933,9 @@ Memory::pokeCustom16(u32 addr, u16 value)
 {
 
     if ((addr & 0xFFF) == 0x30) {
-        debug(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
+        trace(OCSREG_DEBUG, "pokeCustom16(SERDAT, '%c')\n", (char)value);
     } else {
-        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
+        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
     }
 
     assert(IS_EVEN(addr));
@@ -1972,7 +1972,7 @@ Memory::pokeCustom16(u32 addr, u16 value)
         case 0x03A >> 1: // STRVBL
         case 0x03C >> 1: // STRHOR
         case 0x03E >> 1: // STRLONG
-            debug(XFILES, "XFILES (STROBE): %x\n", addr);
+            trace(XFILES, "XFILES (STROBE): %x\n", addr);
             return; // ignore
         case 0x040 >> 1: // BLTCON0
             blitter.pokeBLTCON0(value); return;
@@ -2384,10 +2384,10 @@ Memory::pokeCustom16(u32 addr, u16 value)
     }
     
     if (addr <= 0x1E) {
-        debug(INVREG_DEBUG,
+        trace(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): READ-ONLY\n", addr, regName(addr));
     } else {
-        debug(INVREG_DEBUG,
+        trace(INVREG_DEBUG,
               "pokeCustom16(%X [%s]): NON-OCS\n", addr, regName(addr));
     }
 }

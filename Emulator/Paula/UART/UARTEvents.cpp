@@ -22,7 +22,7 @@ UART::serviceTxdEvent(EventID id)
             assert(!shiftRegEmpty());
 
             // Shift out bit and let it appear on the TXD line
-            debug(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
+            trace(SER_DEBUG, "Transmitting bit %d\n", transmitShiftReg & 1);
             outBit = transmitShiftReg & 1;
             transmitShiftReg >>= 1;
             updateTXD();
@@ -40,7 +40,7 @@ UART::serviceTxdEvent(EventID id)
                 } else {
 
                     // Abort the transmission
-                    debug(SER_DEBUG, "End of transmission\n");
+                    trace(SER_DEBUG, "End of transmission\n");
                     agnus.cancel<TXD_SLOT>();
                     break;
                 }
@@ -71,7 +71,7 @@ UART::serviceRxdEvent(EventID id)
 
         // Copy shift register contents into the receive buffer
         copyFromReceiveShiftRegister();
-        debug(SER_DEBUG, "Received packet %X\n", receiveBuffer);
+        trace(SER_DEBUG, "Received packet %X\n", receiveBuffer);
 
         // Stop receiving if the last bit was a stop bit
         if (rxd) {

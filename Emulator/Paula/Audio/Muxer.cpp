@@ -45,7 +45,7 @@ Muxer::_reset(bool hard)
 void
 Muxer::clear()
 {
-    debug(AUDBUF_DEBUG, "clear()\n");
+    trace(AUDBUF_DEBUG, "clear()\n");
     
     // Wipe out the ringbuffer
     stream.clear(SamplePair {0, 0});
@@ -265,7 +265,7 @@ Muxer::_dumpConfig()
 void
 Muxer::setSampleRate(double hz)
 {
-    debug(AUD_DEBUG, "setSampleRate(%f)\n", hz);
+    trace(AUD_DEBUG, "setSampleRate(%f)\n", hz);
 
     sampleRate = hz;
     cyclesPerSample = MHz(masterClockFrequency) / hz;
@@ -388,7 +388,7 @@ Muxer::handleBufferUnderflow()
     // (1) The consumer runs slightly faster than the producer
     // (2) The producer is halted or not startet yet
     
-    debug(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", stream.r, stream.w);
+    trace(AUDBUF_DEBUG, "UNDERFLOW (r: %d w: %d)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();
@@ -417,7 +417,7 @@ Muxer::handleBufferOverflow()
     // (1) The consumer runs slightly slower than the producer
     // (2) The consumer is halted or not startet yet
     
-    debug(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", stream.r, stream.w);
+    trace(AUDBUF_DEBUG, "OVERFLOW (r: %d w: %d)\n", stream.r, stream.w);
     
     // Reset the write pointer
     stream.alignWritePtr();
@@ -426,7 +426,7 @@ Muxer::handleBufferOverflow()
     u64 now = mach_absolute_time();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
-    debug(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime);
+    trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime);
     
     // Adjust the sample rate, if condition (1) holds
     if (elapsedTime > 10.0) {
@@ -437,7 +437,7 @@ Muxer::handleBufferOverflow()
         int offPerSecond = (int)(stream.count() / elapsedTime);
         double newSampleRate = getSampleRate() - offPerSecond;
 
-        debug(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
+        trace(AUDBUF_DEBUG, "Changing sample rate to %f\n", newSampleRate);
         setSampleRate(newSampleRate);
     }
 }

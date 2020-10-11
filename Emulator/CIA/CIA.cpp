@@ -193,7 +193,7 @@ CIA::emulateFallingEdgeOnFlagPin()
 void
 CIA::emulateRisingEdgeOnCntPin()
 {
-    debug(CIASER_DEBUG, "emulateRisingEdgeOnCntPin\n");
+    trace(CIASER_DEBUG, "emulateRisingEdgeOnCntPin\n");
     
     wakeUp();
     CNT = 1;
@@ -209,7 +209,7 @@ CIA::emulateRisingEdgeOnCntPin()
         
         // debug("rising CNT: serCounter %d\n", serCounter);
         if (serCounter == 0) serCounter = 8;
-        debug(CIASER_DEBUG, "Clocking in bit %d [%d]\n", SP, serCounter);
+        trace(CIASER_DEBUG, "Clocking in bit %d [%d]\n", SP, serCounter);
         
         // Shift in a bit from the SP line
         ssr = ssr << 1 | SP;
@@ -218,7 +218,7 @@ CIA::emulateRisingEdgeOnCntPin()
         if (--serCounter == 0) {
             
             // Load the data register (SDR) with the shift register (SSR)
-            debug(CIASER_DEBUG, "Loading %x into sdr\n", sdr);
+            trace(CIASER_DEBUG, "Loading %x into sdr\n", sdr);
             delay |= CIASsrToSdr0; // sdr = ssr;
             
             // Trigger interrupt
@@ -231,7 +231,7 @@ CIA::emulateRisingEdgeOnCntPin()
 void
 CIA::emulateFallingEdgeOnCntPin()
 {
-    debug(CIASER_DEBUG, "emulateFallingEdgeOnCntPin\n");
+    trace(CIASER_DEBUG, "emulateFallingEdgeOnCntPin\n");
 
     wakeUp();
     CNT = 0;
@@ -258,7 +258,7 @@ CIA::reloadTimerB()
 void
 CIA::triggerTimerIrq()
 {
-    debug(CIA_DEBUG, "triggerTimerIrq()\n");
+    trace(CIA_DEBUG, "triggerTimerIrq()\n");
     delay |= (delay & CIAReadIcr0) ? CIASetInt0 : CIASetInt1;
     delay |= (delay & CIAReadIcr0) ? CIASetIcr0 : CIASetIcr1;
 }
@@ -266,7 +266,7 @@ CIA::triggerTimerIrq()
 void
 CIA::triggerTodIrq()
 {
-    debug(CIA_DEBUG, "triggerTodIrq()\n");
+    trace(CIA_DEBUG, "triggerTodIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -274,7 +274,7 @@ CIA::triggerTodIrq()
 void
 CIA::triggerFlagPinIrq()
 {
-    debug(CIA_DEBUG, "triggerFlagPinIrq()\n");
+    trace(CIA_DEBUG, "triggerFlagPinIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -282,7 +282,7 @@ CIA::triggerFlagPinIrq()
 void
 CIA::triggerSerialIrq()
 {
-    debug(CIA_DEBUG, "triggerSerialIrq()\n");
+    trace(CIA_DEBUG, "triggerSerialIrq()\n");
     delay |= CIASetInt0;
     delay |= CIASetIcr0;
 }
@@ -363,7 +363,7 @@ CIA::executeOneCycle()
 	
 	if (timerAOutput) {
         
-        debug(CIA_DEBUG, "Timer A underflow\n");
+        trace(CIA_DEBUG, "Timer A underflow\n");
         
         icrAck &= ~0x01;
         
@@ -724,14 +724,14 @@ CIAA::_powerOff()
 void 
 CIAA::pullDownInterruptLine()
 {
-    debug(CIA_DEBUG, "Pulling down IRQ line\n");
+    trace(CIA_DEBUG, "Pulling down IRQ line\n");
     paula.raiseIrq(INT_PORTS);
 }
 
 void 
 CIAA::releaseInterruptLine()
 {
-    debug(CIA_DEBUG, "Releasing IRQ line\n");
+    trace(CIA_DEBUG, "Releasing IRQ line\n");
 }
 
 //              -------
@@ -848,7 +848,7 @@ CIAA::portBexternal()
 void
 CIAA::setKeyCode(u8 keyCode)
 {
-    debug(KBD_DEBUG, "setKeyCode: %x\n", keyCode);
+    trace(KBD_DEBUG, "setKeyCode: %x\n", keyCode);
     
     // Put the key code into the serial data register
     sdr = keyCode;
@@ -872,14 +872,14 @@ CIAB::CIAB(Amiga& ref) : CIA(1, ref)
 void 
 CIAB::pullDownInterruptLine()
 {
-    debug(CIA_DEBUG, "Pulling down IRQ line\n");
+    trace(CIA_DEBUG, "Pulling down IRQ line\n");
     paula.raiseIrq(INT_EXTER);
 }
 
 void 
 CIAB::releaseInterruptLine()
 {
-    debug(CIA_DEBUG, "Releasing IRQ line\n");
+    trace(CIA_DEBUG, "Releasing IRQ line\n");
 }
 
 //                                 -------

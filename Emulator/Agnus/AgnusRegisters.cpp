@@ -16,7 +16,7 @@ Agnus::pokeDSKPTH(u16 value)
     dskpt = REPLACE_HI_WORD(dskpt, value);
     
     if (dskpt & ~agnus.ptrMask) {
-        debug(XFILES, "DSKPT out of range: %x\n", dskpt);
+        trace(XFILES, "DSKPT out of range: %x\n", dskpt);
     }
 }
 
@@ -38,7 +38,7 @@ Agnus::pokeAUDxLCH(u16 value)
 template <int x> void
 Agnus::pokeAUDxLCL(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
+    trace(AUDREG_DEBUG, "pokeAUD%dLCL(%X)\n", x, value);
 
     audlc[x] = REPLACE_LO_WORD(audlc[x], value & 0xFFFE);
 }
@@ -46,7 +46,7 @@ Agnus::pokeAUDxLCL(u16 value)
 template <int x> void
 Agnus::pokeBPLxPTH(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
+    trace(BPLREG_DEBUG, "pokeBPL%dPTH($%d) (%X)\n", x, value, value);
 
     // Schedule the register updated
     switch (x) {
@@ -62,7 +62,7 @@ Agnus::pokeBPLxPTH(u16 value)
 template <int x> void
 Agnus::pokeBPLxPTL(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
+    trace(BPLREG_DEBUG, "pokeBPL%dPTL(%d) ($%X)\n", x, value, value);
 
     // Schedule the register updated
     switch (x) {
@@ -78,11 +78,11 @@ Agnus::pokeBPLxPTL(u16 value)
 template <int x> void
 Agnus::setBPLxPTH(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
+    trace(BPLREG_DEBUG, "setBPLxPTH(%d, %X)\n", x, value);
     
     // Check if the write collides with DMA
     if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        debug(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
+        trace(XFILES, "XFILES: Trashing BPL%dPTH\n", x);
         bplpt[x - 1] = REPLACE_HI_WORD(bplpt[x - 1], 0xFFFF);
         return;
     }
@@ -98,11 +98,11 @@ Agnus::setBPLxPTH(u16 value)
 template <int x> void
 Agnus::setBPLxPTL(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
+    trace(BPLREG_DEBUG, "setBPLxPTL(%d, %X)\n", x, value);
     
     // Check if the write collides with DMA
     if (!NO_PTR_DROPS && isBplxEvent(bplEvent[pos.h], x)) {
-        debug(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
+        trace(XFILES, "XFILES: Trashing BPL%dPTL\n", x);
         bplpt[x - 1] = REPLACE_LO_WORD(bplpt[x - 1], 0xFFFE);
         return;
     }
@@ -116,35 +116,35 @@ Agnus::setBPLxPTL(u16 value)
 void
 Agnus::pokeBPL1MOD(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
+    trace(BPLREG_DEBUG, "pokeBPL1MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL1MOD, value);
 }
 
 void
 Agnus::setBPL1MOD(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPL1MOD(%X)\n", value);
     bpl1mod = (i16)(value & 0xFFFE);
 }
 
 void
 Agnus::pokeBPL2MOD(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
+    trace(BPLREG_DEBUG, "pokeBPL2MOD(%X)\n", value);
     recordRegisterChange(DMA_CYCLES(2), SET_BPL2MOD, value);
 }
 
 void
 Agnus::setBPL2MOD(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPL2MOD(%X)\n", value);
     bpl2mod = (i16)(value & 0xFFFE);
 }
 
 template <int x> void
 Agnus::pokeSPRxPTH(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPTH(%X)\n", x, value);
 
     switch (x) {
         case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTH, value); break;
@@ -162,7 +162,7 @@ Agnus::pokeSPRxPTH(u16 value)
 template <int x> void
 Agnus::setSPRxPTH(u16 value)
 {
-    debug(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "setSPR%dPTH(%X)\n", x, value);
     
     if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
         sprpt[x] = REPLACE_HI_WORD(sprpt[x], value);
@@ -172,7 +172,7 @@ Agnus::setSPRxPTH(u16 value)
 template <int x> void
 Agnus::pokeSPRxPTL(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
 
     switch (x) {
         case 0: recordRegisterChange(DMA_CYCLES(2), SET_SPR0PTL, value); break;
@@ -190,7 +190,7 @@ Agnus::pokeSPRxPTL(u16 value)
 template <int x> void
 Agnus::setSPRxPTL(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPTL(%X)\n", x, value);
 
     if (!dropWrite((BusOwner)(BUS_SPRITE0 + x))) {
         sprpt[x] = REPLACE_LO_WORD(sprpt[x], value & 0xFFFE);
@@ -200,7 +200,7 @@ Agnus::setSPRxPTL(u16 value)
 template <int x> void
 Agnus::pokeSPRxPOS(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
@@ -216,7 +216,7 @@ Agnus::pokeSPRxPOS(u16 value)
 template <int x> void
 Agnus::pokeSPRxCTL(u16 value)
 {
-    debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
     // Compute the value of the vertical counter that is seen here
     i16 v = (pos.h < 0xDF) ? pos.v : (pos.v + 1);
@@ -237,7 +237,7 @@ Agnus::dropWrite(BusOwner owner)
      * cycle before the pointer register would be updated.
      */
     if (!NO_PTR_DROPS && pos.h >= 1 && busOwner[pos.h - 1] == owner) {
-        debug(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
+        trace(XFILES, "XFILES: Dropping pointer register write (%d)\n", owner);
         return true;
     }
     
@@ -261,7 +261,7 @@ Agnus::peekDMACONR()
 void
 Agnus::pokeDMACON(u16 value)
 {
-    debug(DMA_DEBUG, "pokeDMACON(%X)\n", value);
+    trace(DMA_DEBUG, "pokeDMACON(%X)\n", value);
     
     // Record the change
     // recordRegisterChange(DMA_CYCLES(2), SET_DMACON, value);
@@ -271,7 +271,7 @@ Agnus::pokeDMACON(u16 value)
 void
 Agnus::setDMACON(u16 oldValue, u16 value)
 {
-    debug(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
+    trace(DMA_DEBUG, "setDMACON(%x, %x)\n", oldValue, value);
     
     // Compute new value
     u16 newValue;
@@ -346,9 +346,9 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     if (toggleDSKEN || toggleSPREN) {
         
         if (toggleSPREN)
-            debug(DMA_DEBUG, "Sprite DMA %s\n", newSPREN ? "on" : "off");
+            trace(DMA_DEBUG, "Sprite DMA %s\n", newSPREN ? "on" : "off");
         if (toggleDSKEN)
-            debug(DMA_DEBUG, "Disk DMA %s\n", newDSKEN ? "on" : "off");
+            trace(DMA_DEBUG, "Disk DMA %s\n", newDSKEN ? "on" : "off");
         
         u16 newDAS = newDMAEN ? (newValue & 0x3F) : 0;
         
@@ -367,13 +367,13 @@ Agnus::setDMACON(u16 oldValue, u16 value)
     
     // Copper DMA
     if (toggleCOPEN) {
-        debug(DMA_DEBUG, "Copper DMA %s\n", newCOPEN ? "on" : "off");
+        trace(DMA_DEBUG, "Copper DMA %s\n", newCOPEN ? "on" : "off");
         if (newCOPEN) copper.activeInThisFrame = true;
     }
     
     // Blitter DMA
     if (toggleBLTEN) {
-        debug(DMA_DEBUG, "Blitter DMA %s\n", newBLTEN ? "on" : "off");
+        trace(DMA_DEBUG, "Blitter DMA %s\n", newBLTEN ? "on" : "off");
     }
     
     // Audio DMA
@@ -425,12 +425,12 @@ Agnus::peekVHPOSR()
 void
 Agnus::pokeVHPOS(u16 value)
 {
-    debug(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
+    trace(POSREG_DEBUG, "pokeVHPOS(%X)\n", value);
     
     int v7v0 = HI_BYTE(value);
     int h8h1 = LO_BYTE(value);
     
-    debug(XFILES, "XFILES (VHPOS): %x (%d,%d)\n", value, v7v0, h8h1);
+    trace(XFILES, "XFILES (VHPOS): %x (%d,%d)\n", value, v7v0, h8h1);
 
     
     // Don't know what to do here ...
@@ -451,28 +451,28 @@ Agnus::peekVPOSR()
     // V8 (Vertical position MSB)
     result |= (ersy() ? pos.vLatched : pos.v) >> 8;
     
-    debug(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
+    trace(POSREG_DEBUG, "peekVPOSR() = %X\n", result);
     return result;
 }
 
 void
 Agnus::pokeVPOS(u16 value)
 {
-    debug(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
+    trace(POSREG_DEBUG, "pokeVPOS(%x) (%d,%d)\n", value, pos.v, frame.lof);
     
     // I don't really know what exactly we are supposed to do here.
     // For the time being, I only take care of the LOF bit.
     bool newlof = value & 0x8000;
     if (frame.lof == newlof) return;
     
-    debug(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
+    trace(XFILES, "XFILES (VPOS): %x (%d,%d)\n", value, pos.v, frame.lof);
 
     // If a long frame gets changed to a short frame, we only proceed if
     // Agnus is not in the last rasterline. Otherwise, we would corrupt the
     // emulators internal state (we would be in a line that is unreachable).
     if (!newlof && inLastRasterline()) return;
 
-    debug(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
+    trace(XFILES, "XFILES (VPOS): Making a %s frame\n", newlof ? "long" : "short");
     frame.lof = newlof;
     
     // Reschedule a pending VBL_STROBE event with a trigger cycle that is
@@ -488,21 +488,21 @@ Agnus::pokeVPOS(u16 value)
 template <Accessor s> void
 Agnus::pokeDIWSTRT(u16 value)
 {
-    debug(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorName(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTRT<%s>(%X)\n", AccessorName(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTRT, value);
 }
 
 template <Accessor s> void
 Agnus::pokeDIWSTOP(u16 value)
 {
-    debug(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorName(s), value);
+    trace(DIW_DEBUG, "pokeDIWSTOP<%s>(%X)\n", AccessorName(s), value);
     recordRegisterChange(DMA_CYCLES(2), SET_DIWSTOP, value);
 }
 
 void
 Agnus::setDIWSTRT(u16 value)
 {
-    debug(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTRT(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 0, V8 = 0
@@ -513,11 +513,11 @@ Agnus::setDIWSTRT(u16 value)
     i16 newDiwVstrt = HI_BYTE(value);
     i16 newDiwHstrt = LO_BYTE(value);
     
-    debug(DIW_DEBUG, "newDiwVstrt = %d newDiwHstrt = %d\n", newDiwVstrt, newDiwHstrt);
+    trace(DIW_DEBUG, "newDiwVstrt = %d newDiwHstrt = %d\n", newDiwVstrt, newDiwHstrt);
     
     // Invalidate the horizontal coordinate if it is out of range
     if (newDiwHstrt < 2) {
-        debug(DIW_DEBUG, "newDiwHstrt is too small\n");
+        trace(DIW_DEBUG, "newDiwHstrt is too small\n");
         newDiwHstrt = -1;
     }
     
@@ -542,14 +542,14 @@ Agnus::setDIWSTRT(u16 value)
     // (1) and (2)
     if (cur < diwHstrt && cur < newDiwHstrt) {
         
-        debug(DIW_DEBUG, "Updating DIW hflop immediately at %d\n", cur);
+        trace(DIW_DEBUG, "Updating DIW hflop immediately at %d\n", cur);
         diwHFlopOn = newDiwHstrt;
     }
     
     // (3)
     if (newDiwHstrt < cur && cur < diwHstrt) {
         
-        debug(DIW_DEBUG, "DIW hflop not switched on in current line\n");
+        trace(DIW_DEBUG, "DIW hflop not switched on in current line\n");
         diwHFlopOn = -1;
     }
     
@@ -570,7 +570,7 @@ Agnus::setDIWSTRT(u16 value)
 void
 Agnus::setDIWSTOP(u16 value)
 {
-    debug(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
+    trace(DIW_DEBUG, "setDIWSTOP(%X)\n", value);
     
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // V7 V6 V5 V4 V3 V2 V1 V0 H7 H6 H5 H4 H3 H2 H1 H0  and  H8 = 1, V8 = !V7
@@ -581,11 +581,11 @@ Agnus::setDIWSTOP(u16 value)
     i16 newDiwVstop = HI_BYTE(value) | ((value & 0x8000) ? 0 : 0x100);
     i16 newDiwHstop = LO_BYTE(value) | 0x100;
     
-    debug(DIW_DEBUG, "newDiwVstop = %d newDiwHstop = %d\n", newDiwVstop, newDiwHstop);
+    trace(DIW_DEBUG, "newDiwVstop = %d newDiwHstop = %d\n", newDiwVstop, newDiwHstop);
     
     // Invalidate the coordinate if it is out of range
     if (newDiwHstop > 0x1C7) {
-        debug(DIW_DEBUG, "newDiwHstop is too large\n");
+        trace(DIW_DEBUG, "newDiwHstop is too large\n");
         newDiwHstop = -1;
     }
     
@@ -595,14 +595,14 @@ Agnus::setDIWSTOP(u16 value)
     // (1) and (2) (see setDIWSTRT)
     if (cur < diwHstop && cur < newDiwHstop) {
         
-        debug(DIW_DEBUG, "Updating hFlopOff immediately at %d\n", cur);
+        trace(DIW_DEBUG, "Updating hFlopOff immediately at %d\n", cur);
         diwHFlopOff = newDiwHstop;
     }
     
     // (3) (see setDIWSTRT)
     if (newDiwHstop < cur && cur < diwHstop) {
         
-        debug(DIW_DEBUG, "hFlop not switched off in current line\n");
+        trace(DIW_DEBUG, "hFlop not switched off in current line\n");
         diwHFlopOff = -1;
     }
     
@@ -619,7 +619,7 @@ Agnus::setDIWSTOP(u16 value)
 void
 Agnus::pokeDDFSTRT(u16 value)
 {
-    debug(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
+    trace(DDF_DEBUG, "pokeDDFSTRT(%X)\n", value);
     
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -632,7 +632,7 @@ Agnus::pokeDDFSTRT(u16 value)
 void
 Agnus::pokeDDFSTOP(u16 value)
 {
-    debug(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
+    trace(DDF_DEBUG, "pokeDDFSTOP(%X)\n", value);
     
     //      15 13 12 11 10 09 08 07 06 05 04 03 02 01 00
     // OCS: -- -- -- -- -- -- -- H8 H7 H6 H5 H4 H3 -- --
@@ -645,7 +645,7 @@ Agnus::pokeDDFSTOP(u16 value)
 void
 Agnus::setDDFSTRT(u16 old, u16 value)
 {
-    debug(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTRT(%X, %X)\n", old, value);
     
     ddfstrt = value;
     
@@ -677,7 +677,7 @@ Agnus::setDDFSTRT(u16 old, u16 value)
 void
 Agnus::setDDFSTOP(u16 old, u16 value)
 {
-    debug(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
+    trace(DDF_DEBUG, "setDDFSTOP(%X, %X)\n", old, value);
     
     ddfstop = value;
     
@@ -709,7 +709,7 @@ Agnus::setDDFSTOP(u16 old, u16 value)
 void
 Agnus::pokeBPLCON0(u16 value)
 {
-    debug(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
+    trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
     
     if (bplcon0 != value) {
         recordRegisterChange(DMA_CYCLES(4), SET_AGNUS_BPLCON0, value);
@@ -721,7 +721,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
     
-    debug(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
     
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet
     if (pos.h < ddfstrtReached) bplcon0AtDDFStrt = newValue;
@@ -763,7 +763,7 @@ Agnus::setBPLCON0(u16 oldValue, u16 newValue)
 void
 Agnus::pokeBPLCON1(u16 value)
 {
-    debug(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
+    trace(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
     
     if (bplcon1 != value) {
         recordRegisterChange(DMA_CYCLES(1), SET_AGNUS_BPLCON1, value);
@@ -774,7 +774,7 @@ void
 Agnus::setBPLCON1(u16 oldValue, u16 newValue)
 {
     assert(oldValue != newValue);
-    debug(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
+    trace(DMA_DEBUG, "setBPLCON1(%X,%X)\n", oldValue, newValue);
     
     bplcon1 = newValue & 0xFF;
     

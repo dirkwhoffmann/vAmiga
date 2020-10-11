@@ -466,7 +466,7 @@ Blitter::doFill(u16 &data, bool &carry)
 {
     assert(carry == 0 || carry == 1);
 
-    debug(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
+    trace(BLT_DEBUG, "data = %X carry = %X\n", data, carry);
     
     u8 dataHi = HI_BYTE(data);
     u8 dataLo = LO_BYTE(data);

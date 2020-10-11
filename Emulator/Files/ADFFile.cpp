@@ -244,8 +244,8 @@ ADFFile::formatDisk(FileSystemType fs)
     }
     
     // Format the disk
-    debug("Formatting a %d sector disk...\n", numSectorsTotal());
-    debug("Sector %d is the root block.\n", rootBlockNr());
+    trace("Formatting a %d sector disk...\n", numSectorsTotal());
+    trace("Sector %d is the root block.\n", rootBlockNr());
     
     // Wipe out all existing data
     memset(data, 0, size);

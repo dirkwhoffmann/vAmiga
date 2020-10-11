@@ -84,7 +84,7 @@ DiskController::setConfigItem(ConfigOption option, long value)
             }
             
             config.speed = value;
-            debug("Setting acceleration factor to %d\n", config.speed);
+            trace("Setting acceleration factor to %d\n", config.speed);
             return true;
             
         case OPT_ASYNC_FIFO:
@@ -94,7 +94,7 @@ DiskController::setConfigItem(ConfigOption option, long value)
             warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
             #endif
 
-            debug("OPT_ASYNC_FIFO %d\n", value);
+            trace("OPT_ASYNC_FIFO %d\n", value);
             if (config.asyncFifo == value) {
                 return false;
             }
@@ -226,7 +226,7 @@ DiskController::setState(DriveState newState)
 void
 DiskController::setState(DriveState oldState, DriveState newState)
 {
-    debug(DSK_DEBUG, "%s -> %s\n",
+    trace(DSK_DEBUG, "%s -> %s\n",
           driveStateName(oldState), driveStateName(newState));
     
     state = newState;
@@ -252,7 +252,7 @@ DiskController::ejectDisk(int nr, Cycle delay)
 {
     assert(nr >= 0 && nr <= 3);
 
-    debug("ejectDisk(%d, %d)\n", nr, delay);
+    trace("ejectDisk(%d, %d)\n", nr, delay);
 
     amiga.suspend();
     agnus.scheduleRel<DCH_SLOT>(delay, DCH_EJECT, nr);
@@ -265,7 +265,7 @@ DiskController::insertDisk(class Disk *disk, int nr, Cycle delay)
     assert(disk != NULL);
     assert(nr >= 0 && nr <= 3);
 
-    debug(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
+    trace(DSK_DEBUG, "insertDisk(%p, %d, %d)\n", disk, nr, delay);
 
     // The easy case: The emulator is not running
     if (!amiga.isRunning()) {
@@ -398,7 +398,7 @@ DiskController::executeFifo()
                 syncCycle = agnus.clock;
 
                 // Trigger a word SYNC interrupt
-                debug(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
+                trace(DSK_DEBUG, "SYNC IRQ (dsklen = %d)\n", dsklen);
                 paula.raiseIrq(INT_DSKSYN);
 
                 // Enable DMA if the controller was waiting for it

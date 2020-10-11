@@ -47,7 +47,7 @@ Paula::serviceIplEvent()
     
     iplPipe = (iplPipe << 8) | (iplPipe & 0xFF);
 
-    debug(CPU_DEBUG, "iplPipe shifted: %016x\n", iplPipe);
+    trace(CPU_DEBUG, "iplPipe shifted: %016x\n", iplPipe);
     
     // Reschedule event until the pipe has been shifted through entirely
     i64 repeat = agnus.slot[IPL_SLOT].data;
@@ -61,7 +61,7 @@ Paula::serviceIplEvent()
 void
 Paula::servicePotEvent(EventID id)
 {
-    debug(POT_DEBUG, "servicePotEvent(%d)\n", id);
+    trace(POT_DEBUG, "servicePotEvent(%d)\n", id);
 
     switch (id) {
 

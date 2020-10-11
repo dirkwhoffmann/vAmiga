@@ -22,7 +22,7 @@ DiskController::peekDSKDATR()
 void
 DiskController::pokeDSKLEN(u16 value)
 {
-    debug(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", value);
+    trace(DSKREG_DEBUG, "pokeDSKLEN(%X)\n", value);
 
     setDSKLEN(dsklen, value);
 }
@@ -57,7 +57,7 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     else if (oldValue & newValue & 0x8000) {
         
         if (XFILES && state != DRIVE_DMA_OFF)
-            debug("XFILES (DSKLEN): Written in DMA state %d\n", state);
+            trace("XFILES (DSKLEN): Written in DMA state %d\n", state);
 
         // Only proceed if there are bytes to process
         if ((dsklen & 0x3FFF) == 0) { paula.raiseIrq(INT_DSKBLK); return; }
@@ -148,7 +148,7 @@ DiskController::pokeDSKSYNC(u16 value)
     
     if (value != 0x4489) {
         
-        debug(XFILES, "XFILES (DSKSYNC): Unusual sync mark $%04X\n", value);
+        trace(XFILES, "XFILES (DSKSYNC): Unusual sync mark $%04X\n", value);
         
         if (config.lockDskSync) {
             plaindebug(DSKREG_DEBUG, "Write to DSKSYNC blocked (%x)\n", value);

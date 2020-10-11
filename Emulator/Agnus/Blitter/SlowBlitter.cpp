@@ -999,7 +999,7 @@ Blitter::exec()
                 check1 = fnv_1a_it32(check1, dhold);
                 check2 = fnv_1a_it32(check2, bltdpt);
             }
-            debug(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
+            trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
                 
             bltdpt += incr;
             if (--cntD == 0) {
@@ -1012,11 +1012,11 @@ Blitter::exec()
 
     if (instr & FETCH_A) {
 
-        debug(BLT_DEBUG, "FETCH_A\n");
+        trace(BLT_DEBUG, "FETCH_A\n");
 
         anew = agnus.doBlitterDMA(bltapt);
-        debug(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
-        debug(BLT_DEBUG, "    After fetch: A = %X\n", anew);
+        trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
+        trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         bltapt += incr;
         if (--cntA == 0) {
             bltapt += amod;
@@ -1026,11 +1026,11 @@ Blitter::exec()
 
     if (instr & FETCH_B) {
 
-        debug(BLT_DEBUG, "FETCH_B\n");
+        trace(BLT_DEBUG, "FETCH_B\n");
 
         bnew = agnus.doBlitterDMA(bltbpt);
-        debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
-        debug(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
+        trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
+        trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         bltbpt += incr;
         if (--cntB == 0) {
             bltbpt += bmod;
@@ -1040,11 +1040,11 @@ Blitter::exec()
 
     if (instr & FETCH_C) {
 
-        debug(BLT_DEBUG, "FETCH_C\n");
+        trace(BLT_DEBUG, "FETCH_C\n");
 
         chold = agnus.doBlitterDMA(bltcpt);
-        debug(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
-        debug(BLT_DEBUG, "    After fetch: C = %X\n", chold);
+        trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
+        trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         bltcpt += incr;
         if (--cntC == 0) {
             bltcpt += cmod;
@@ -1054,42 +1054,42 @@ Blitter::exec()
 
     if (instr & HOLD_A) {
 
-        debug(BLT_DEBUG, "HOLD_A\n");
+        trace(BLT_DEBUG, "HOLD_A\n");
 
-        debug(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+        trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
 
         // Run the barrel shifters on data path A
-        debug(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
+        trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (bltconDESC()) {
             ahold = HI_W_LO_W(anew & mask, aold) >> ash;
         } else {
             ahold = HI_W_LO_W(aold, anew & mask) >> ash;
         }
         aold = anew & mask;
-        debug(BLT_DEBUG, "    After shifting A (%d) A = %x\n", ash, ahold);
+        trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", ash, ahold);
     }
 
     if (instr & HOLD_B) {
 
-        debug(BLT_DEBUG, "HOLD_B\n");
+        trace(BLT_DEBUG, "HOLD_B\n");
 
         // Run the barrel shifters on data path B
-        debug(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
+        trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (bltconDESC()) {
             bhold = HI_W_LO_W(bnew, bold) >> bsh;
         } else {
             bhold = HI_W_LO_W(bold, bnew) >> bsh;
         }
         bold = bnew;
-        debug(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bsh, bhold);
+        trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bsh, bhold);
     }
 
     if (instr & HOLD_D) {
 
-        debug(BLT_DEBUG, "HOLD_D\n");
+        trace(BLT_DEBUG, "HOLD_D\n");
 
         // Run the minterm logic circuit
-        debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+        trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
         dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
         assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
@@ -1108,7 +1108,7 @@ Blitter::exec()
 
         u16 newpc = 0;
 
-        debug(BLT_DEBUG, "REPEAT\n");
+        trace(BLT_DEBUG, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1131,7 +1131,7 @@ Blitter::exec()
 
     if (instr & BLTDONE) {
 
-        debug(BLT_DEBUG, "BLTDONE\n");
+        trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
 }
@@ -1176,7 +1176,7 @@ Blitter::fakeExec()
 
         u16 newpc = 0;
 
-        debug(BLT_DEBUG, "REPEAT\n");
+        trace(BLT_DEBUG, "REPEAT\n");
         iteration++;
         lockD = false;
 
@@ -1199,7 +1199,7 @@ Blitter::fakeExec()
 
     if (instr & BLTDONE) {
 
-        debug(BLT_DEBUG, "BLTDONE\n");
+        trace(BLT_DEBUG, "BLTDONE\n");
         endBlit();
     }
 }

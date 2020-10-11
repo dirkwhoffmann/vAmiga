@@ -121,14 +121,14 @@ Mouse::setDeltaXY(double dx, double dy)
 void
 Mouse::setLeftButton(bool value)
 {
-    debug(PORT_DEBUG, "setLeftButton(%d)\n", value);
+    trace(PORT_DEBUG, "setLeftButton(%d)\n", value);
     leftButton = value;
 }
 
 void
 Mouse::setRightButton(bool value)
 {
-    debug(PORT_DEBUG, "setRightButton(%d)\n", value);
+    trace(PORT_DEBUG, "setRightButton(%d)\n", value);
     rightButton = value;
 }
 
@@ -137,7 +137,7 @@ Mouse::trigger(GamePadAction event)
 {
     assert(isGamePadAction(event));
 
-    debug(PORT_DEBUG, "trigger(%d)\n", event);
+    trace(PORT_DEBUG, "trigger(%d)\n", event);
 
     switch (event) {
 

@@ -12,7 +12,7 @@
 void
 Copper::pokeCOPCON(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeCOPCON(%04X)\n", value);
     
     /* "This is a 1-bit register that when set true, allows the Copper to
      *  access the blitter hardware. This bit is cleared by power-on reset, so
@@ -24,7 +24,7 @@ Copper::pokeCOPCON(u16 value)
 template <Accessor s> void
 Copper::pokeCOPJMP1()
 {
-    debug(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
+    trace(COPREG_DEBUG, "pokeCOPJMP1: Jumping to %X\n", cop1lc);
 
     if (s == AGNUS_ACCESS) {
 
@@ -34,7 +34,7 @@ Copper::pokeCOPJMP1()
     if (s == CPU_ACCESS) {
 
         if (blitter.isRunning()) {
-            debug(XFILES, "pokeCOPJMP1: Blitter is running\n");
+            trace(XFILES, "pokeCOPJMP1: Blitter is running\n");
         }
         switchToCopperList(1);
     }
@@ -43,7 +43,7 @@ Copper::pokeCOPJMP1()
 template <Accessor s> void
 Copper::pokeCOPJMP2()
 {
-    debug(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
+    trace(COPREG_DEBUG, "pokeCOPJMP2(): Jumping to %X\n", cop2lc);
 
     if (s == AGNUS_ACCESS) {
 
@@ -53,7 +53,7 @@ Copper::pokeCOPJMP2()
     if (s == CPU_ACCESS) {
 
         if (blitter.isRunning()) {
-            debug(XFILES, "pokeCOPJMP2: Blitter is running\n");
+            trace(XFILES, "pokeCOPJMP2: Blitter is running\n");
         }
         switchToCopperList(2);
     }
@@ -62,12 +62,12 @@ Copper::pokeCOPJMP2()
 void
 Copper::pokeCOPINS(u16 value)
 {
-    debug(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
+    trace(COPREG_DEBUG, "COPPC: %X pokeCOPINS(%04X)\n", coppc, value);
 
     /* COPINS is a dummy address that can be used to write the first or
      * the second instruction register, depending on the current state.
      */
-    debug(XFILES, "Write to COPINS (%x)\n", value); 
+    trace(XFILES, "Write to COPINS (%x)\n", value); 
     
     // TODO: The following is certainly wrong...
     /* if (state == COP_MOVE || state == COP_WAIT_OR_SKIP) {
@@ -82,7 +82,7 @@ Copper::pokeCOPINS(u16 value)
 void
 Copper::pokeCOP1LCH(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeCOP1LCH(%04X)\n", value);
 
     if (HI_WORD(cop1lc) != value) {
         cop1lc = REPLACE_HI_WORD(cop1lc, value);
@@ -97,7 +97,7 @@ Copper::pokeCOP1LCH(u16 value)
 void
 Copper::pokeCOP1LCL(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeCOP1LCL(%04X)\n", value);
 
     value &= 0xFFFE;
 
@@ -114,7 +114,7 @@ Copper::pokeCOP1LCL(u16 value)
 void
 Copper::pokeCOP2LCH(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeCOP2LCH(%04X)\n", value);
 
     if (HI_WORD(cop2lc) != value) {
         cop2lc = REPLACE_HI_WORD(cop2lc, value);
@@ -129,7 +129,7 @@ Copper::pokeCOP2LCH(u16 value)
 void
 Copper::pokeCOP2LCL(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeCOP2LCL(%04X)\n", value);
 
     value &= 0xFFFE;
 
@@ -146,7 +146,7 @@ Copper::pokeCOP2LCL(u16 value)
 void
 Copper::pokeNOOP(u16 value)
 {
-    debug(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
+    trace(COPREG_DEBUG, "pokeNOOP(%04X)\n", value);
 }
 
 template void Copper::pokeCOPJMP1<CPU_ACCESS>();

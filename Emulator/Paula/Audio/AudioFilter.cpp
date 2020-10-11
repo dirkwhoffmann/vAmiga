@@ -26,7 +26,7 @@ AudioFilter::setFilterType(FilterType type)
 void
 AudioFilter::setSampleRate(double sampleRate)
 {
-    debug(AUD_DEBUG, "Setting sample rate to %f Hz\n", sampleRate);
+    trace(AUD_DEBUG, "Setting sample rate to %f Hz\n", sampleRate);
     
     // Compute butterworth filter coefficients based on
     // https://stackoverflow.com/questions/

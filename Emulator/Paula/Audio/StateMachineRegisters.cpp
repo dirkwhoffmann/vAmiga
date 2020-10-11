@@ -12,7 +12,7 @@
 template <int nr> void
 StateMachine<nr>::pokeAUDxLEN(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
+    trace(AUDREG_DEBUG, "pokeAUD%dLEN(%X)\n", nr, value);
 
     audlenLatch = value;
 }
@@ -20,7 +20,7 @@ StateMachine<nr>::pokeAUDxLEN(u16 value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxPER(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
+    trace(AUDREG_DEBUG, "pokeAUD%dPER(%X)\n", nr, value);
     
     audperLatch = value;
 }
@@ -28,7 +28,7 @@ StateMachine<nr>::pokeAUDxPER(u16 value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxVOL(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
+    trace(AUDREG_DEBUG, "pokeAUD%dVOL(%X)\n", nr, value);
 
     // 1. Only the lowest 7 bits are evaluated
     // 2. All values greater than 64 are treated as 64 (max volume)
@@ -38,7 +38,7 @@ StateMachine<nr>::pokeAUDxVOL(u16 value)
 template <int nr> void
 StateMachine<nr>::pokeAUDxDAT(u16 value)
 {
-    debug(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
+    trace(AUDREG_DEBUG, "pokeAUD%dDAT(%X)\n", nr, value);
     
     auddat = value;
     enablePenlo = enablePenhi = true;

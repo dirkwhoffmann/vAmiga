@@ -79,7 +79,7 @@ Keyboard::pressKey(long keycode)
 
     if (!keyDown[keycode] && !bufferIsFull()) {
 
-        debug(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
+        trace(KBD_DEBUG, "Pressing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = true;
         writeToBuffer(keycode);
@@ -98,7 +98,7 @@ Keyboard::releaseKey(long keycode)
 
     if (keyDown[keycode] && !bufferIsFull()) {
 
-        debug(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
+        trace(KBD_DEBUG, "Releasing Amiga key %02X\n", keycode);
 
         keyDown[keycode] = false;
         writeToBuffer(keycode | 0x80);
@@ -138,7 +138,7 @@ Keyboard::writeToBuffer(u8 keycode)
 
     // Wake up the keyboard if it has gone idle
     if (!agnus.hasEvent<KBD_SLOT>()) {
-        debug(KBD_DEBUG, "Wake up\n");
+        trace(KBD_DEBUG, "Wake up\n");
         state = KB_SEND;
         execute();
     }
@@ -147,7 +147,7 @@ Keyboard::writeToBuffer(u8 keycode)
 void
 Keyboard::setSPLine(bool value, Cycle cycle)
 {
-    debug(KBD_DEBUG, "setSPLine(%d)\n", value);
+    trace(KBD_DEBUG, "setSPLine(%d)\n", value);
 
     if (value) {
         if (spHigh <= spLow) spHigh = cycle;
@@ -171,13 +171,13 @@ Keyboard::setSPLine(bool value, Cycle cycle)
 
     if (accept) {
 
-        debug(KBD_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
+        trace(KBD_DEBUG, "Accepting handshake (SP low for %d usec)\n", diff);
         processHandshake();
     }
 
     if (reject) {
 
-        debug(KBD_DEBUG, "REJECTING handshake (SP low for %d usec)\n", diff);
+        trace(KBD_DEBUG, "REJECTING handshake (SP low for %d usec)\n", diff);
     }
 }
 
@@ -204,7 +204,7 @@ Keyboard::execute()
             
         case KB_SELFTEST:
             
-            debug(KBD_DEBUG, "KB_SELFTEST\n");
+            trace(KBD_DEBUG, "KB_SELFTEST\n");
             
             // Await a handshake within the next second
             agnus.scheduleRel<KBD_SLOT>(SEC(1), KBD_TIMEOUT);
@@ -212,13 +212,13 @@ Keyboard::execute()
             
         case KB_SYNC:
             
-            debug(KBD_DEBUG, "KB_SYNC\n");
+            trace(KBD_DEBUG, "KB_SYNC\n");
             sendSyncPulse();
             break;
             
         case KB_STRM_ON:
             
-            debug(KBD_DEBUG, "KB_STRM_ON\n");
+            trace(KBD_DEBUG, "KB_STRM_ON\n");
             
             // Send the "Initiate power-up key stream" code ($FD)
             sendKeyCode(0xFD);
@@ -226,7 +226,7 @@ Keyboard::execute()
             
         case KB_STRM_OFF:
             
-            debug(KBD_DEBUG, "KB_STRM_OFF\n");
+            trace(KBD_DEBUG, "KB_STRM_OFF\n");
             
             // Send the "Terminate key stream" code ($FE)
             sendKeyCode(0xFE);
@@ -234,7 +234,7 @@ Keyboard::execute()
             
         case KB_SEND:
             
-            debug(KBD_DEBUG, "KB_SEND\n");
+            trace(KBD_DEBUG, "KB_SEND\n");
             
             // Send a key code if the buffer is filled
             if (!bufferIsEmpty()) {
@@ -249,7 +249,7 @@ Keyboard::execute()
 void
 Keyboard::sendKeyCode(u8 code)
 {
-    debug(KBD_DEBUG, "sendKeyCode(%d)\n", code);
+    trace(KBD_DEBUG, "sendKeyCode(%d)\n", code);
 
     // Reorder and invert the key code bits (6-5-4-3-2-1-0-7)
     shiftReg = ~((code << 1) | (code >> 7)) & 0xFF;
@@ -288,7 +288,7 @@ Keyboard::sendSyncPulse()
      *  1 and waits again. This process will continue until a handshake pulse
      *  arrives."
      */
-    debug(KBD_DEBUG, "sendSyncPulse\n");
+    trace(KBD_DEBUG, "sendSyncPulse\n");
     
     if (config.accurate) {
          

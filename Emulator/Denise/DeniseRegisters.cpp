@@ -15,12 +15,12 @@ Denise::pokeDMACON(u16 oldValue, u16 newValue)
     if (Agnus::bpldma(newValue)) {
 
         // Bitplane DMA on
-        debug(DMA_DEBUG, "Bitplane DMA switched on\n");
+        trace(DMA_DEBUG, "Bitplane DMA switched on\n");
 
     } else {
 
         // Bitplane DMA off
-        debug(DMA_DEBUG, "Bitplane DMA switched off\n");
+        trace(DMA_DEBUG, "Bitplane DMA switched off\n");
     }
 }
 
@@ -28,7 +28,7 @@ u16
 Denise::peekJOY0DATR()
 {
     u16 result = amiga.controlPort1.joydat();
-    debug(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
+    trace(JOYREG_DEBUG, "peekJOY0DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -37,7 +37,7 @@ u16
 Denise::peekJOY1DATR()
 {
     u16 result = amiga.controlPort2.joydat();
-    debug(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
+    trace(JOYREG_DEBUG, "peekJOY1DATR() = $%04X (%d)\n", result, result);
 
     return result;
 }
@@ -45,7 +45,7 @@ Denise::peekJOY1DATR()
 void
 Denise::pokeJOYTEST(u16 value)
 {
-    debug(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
+    trace(JOYREG_DEBUG, "pokeJOYTEST(%04X)\n", value);
 
     amiga.controlPort1.pokeJOYTEST(value);
     amiga.controlPort2.pokeJOYTEST(value);
@@ -62,14 +62,14 @@ Denise::peekDENISEID()
         result = mem.peekCustomFaulty16(0xDFF07C); // OCS
     }
 
-    debug(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
+    trace(ECSREG_DEBUG, "peekDENISEID() = $%04X (%d)\n", result, result);
     return result;
 }
 
 void
 Denise::pokeBPLCON0(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
+    trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON0, value);
 }
@@ -77,7 +77,7 @@ Denise::pokeBPLCON0(u16 value)
 void
 Denise::setBPLCON0(u16 oldValue, u16 newValue)
 {
-    debug(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
+    trace(BPLREG_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
 
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
@@ -92,7 +92,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     
     // Report a suspicious BPU value
     if (((bplcon0 >> 12) & 0b111) > (hires(bplcon0) ? 5 : 7)) {
-        debug(XFILES, "XFILES (BPLCON0): BPU = %d\n", (bplcon0 >> 12) & 0b111);
+        trace(XFILES, "XFILES (BPLCON0): BPU = %d\n", (bplcon0 >> 12) & 0b111);
     }
 }
 
@@ -102,14 +102,14 @@ Denise::peekCLXDAT()
     u16 result = clxdat | 0x8000;
     clxdat = 0;
     
-    debug(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
+    trace(CLXREG_DEBUG, "peekCLXDAT() = %x\n", result);
     return result;
 }
 
 void
 Denise::pokeCLXCON(u16 value)
 {
-    debug(CLXREG_DEBUG, "pokeCLXCON(%x)\n", value);
+    trace(CLXREG_DEBUG, "pokeCLXCON(%x)\n", value);
     clxcon = value;
 }
 
@@ -117,7 +117,7 @@ template <int x, Accessor s> void
 Denise::pokeBPLxDAT(u16 value)
 {
     assert(x < 6);
-    debug(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
+    trace(BPLREG_DEBUG, "pokeBPL%dDAT(%X)\n", x + 1, value);
 
     if (s == AGNUS_ACCESS) {
         /*
@@ -132,7 +132,7 @@ template <int x> void
 Denise::setBPLxDAT(u16 value)
 {
     assert(x < 6);
-    debug(BPLDAT_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
+    trace(BPLDAT_DEBUG, "setBPL%dDAT(%X)\n", x + 1, value);
         
     bpldat[x] = value;
 
@@ -151,7 +151,7 @@ template <int x> void
 Denise::pokeSPRxPOS(u16 value)
 {
     assert(x < 8);
-    debug(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dPOS(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0  (Ex = VSTART)
     // E7 E6 E5 E4 E3 E2 E1 E0 H8 H7 H6 H5 H4 H3 H2 H1  (Hx = HSTART)
@@ -165,7 +165,7 @@ template <int x> void
 Denise::pokeSPRxCTL(u16 value)
 {
     assert(x < 8);
-    debug(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dCTL(%X)\n", x, value);
 
     // 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
     // L7 L6 L5 L4 L3 L2 L1 L0 AT  -  -  -  - E8 L8 H0  (Lx = VSTOP)
@@ -182,7 +182,7 @@ template <int x> void
 Denise::pokeSPRxDATA(u16 value)
 {
     assert(x < 8);
-    debug(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dDATA(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -199,7 +199,7 @@ template <int x> void
 Denise::pokeSPRxDATB(u16 value)
 {
     assert(x < 8);
-    debug(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
+    trace(SPRREG_DEBUG, "pokeSPR%dDATB(%X)\n", x, value);
     
     // If requested, let this sprite disappear by making it transparent
     if (GET_BIT(config.hiddenSprites, x)) value = 0;
@@ -212,7 +212,7 @@ Denise::pokeSPRxDATB(u16 value)
 template <Accessor s, int xx> void
 Denise::pokeCOLORxx(u16 value)
 {
-    debug(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
+    trace(COLREG_DEBUG, "pokeCOLOR%02d(%X)\n", xx, value);
 
     u32 reg = 0x180 + 2*xx;
     i16 pos = agnus.pos.h;

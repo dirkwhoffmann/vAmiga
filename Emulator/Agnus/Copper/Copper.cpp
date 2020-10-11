@@ -142,7 +142,7 @@ Copper::findHorizontalMatch(i16 hStrt, i16 hComp, i16 hMask, i16 &result)
 {
     i16 hStop = HPOS_CNT;
 
-    debug("findHorizontalMatch(%X,%X,%X)\n", hStrt, hComp, hMask);
+    trace("findHorizontalMatch(%X,%X,%X)\n", hStrt, hComp, hMask);
 
     // Iterate through all horizontal positions
     for (int h = hStrt; h < hStop; h++) {
@@ -224,7 +224,7 @@ Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 void
 Copper::move(u32 addr, u16 value)
 {
-    debug(COP_DEBUG,
+    trace(COP_DEBUG,
           "COPPC: %X move(%s, $%X) (%d)\n", coppc, regName(addr), value, value);
 
     assert(IS_EVEN(addr));
@@ -234,7 +234,7 @@ Copper::move(u32 addr, u16 value)
 
     if (addr >= 0x180 && addr <= 0x1BE) {
 
-        debug(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
+        trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
 
         // Color registers
         pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
@@ -291,7 +291,7 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask)
     u8 vWaitpos = HI_BYTE(waitpos);
     u8 vMask = HI_BYTE(mask) | 0x80;
 
-    if (verbose) debug(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
+    if (verbose) trace(" * vBeam = %X vWaitpos = %X vMask = %X\n", vBeam, vWaitpos, vMask);
 
     // Compare vertical positions
     if ((vBeam & vMask) < (vWaitpos & vMask)) {
@@ -308,7 +308,7 @@ Copper::comparator(Beam beam, u16 waitpos, u16 mask)
     u8 hWaitpos = LO_BYTE(waitpos) & 0xFE;
     u8 hMask = LO_BYTE(mask) & 0xFE;
 
-    if (verbose) debug(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
+    if (verbose) trace(" * hBeam = %X hWaitpos = %X hMask = %X\n", hBeam, hWaitpos, hMask);
     /*
      debug("Comparing horizontal position waitpos = %d vWait = %d hWait = %d \n", waitpos, vWaitpos, hWaitpos);
      debug("hBeam = %d ($x) hMask = %X\n", hBeam, hBeam, hMask);
@@ -342,7 +342,7 @@ Copper::scheduleWaitWakeup(bool bfd)
         // In how many cycles do we get there?
         int delay = trigger - agnus.pos;
 
-        if (verbose) debug("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
+        if (verbose) trace("(%d,%d) matches in %d cycles\n", trigger.v, trigger.h, delay);
 
         if (delay == 0) {
 
@@ -367,7 +367,7 @@ Copper::scheduleWaitWakeup(bool bfd)
 
     } else {
 
-        if (verbose) debug("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
+        if (verbose) trace("(%d,%d) does not match in this frame\n", trigger.v, trigger.h);
         agnus.scheduleAbs<COP_SLOT>(NEVER, COP_REQ_DMA);
     }
 }

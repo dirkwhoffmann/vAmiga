@@ -14,7 +14,7 @@ StateMachine<nr>::serviceEvent()
 {
     const EventSlot slot = (EventSlot)(CH0_SLOT+nr);
 
-    debug(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
+    trace(AUD_DEBUG, "CHX_PERFIN state = %d\n", state);
     assert(agnus.slot[slot].id == CHX_PERFIN);
 
     switch (state) {

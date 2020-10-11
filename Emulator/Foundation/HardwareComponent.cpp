@@ -11,7 +11,7 @@
 
 HardwareComponent::~HardwareComponent()
 {
-    debug(RUN_DEBUG, "Terminated\n");
+    trace(RUN_DEBUG, "Terminated\n");
 }
 
 void
@@ -35,7 +35,7 @@ HardwareComponent::reset(bool hard)
     }
     
     // Reset this component
-    debug(RUN_DEBUG, "Reset [%p]\n", this);
+    trace(RUN_DEBUG, "Reset [%p]\n", this);
     _reset(hard);
 }
 
@@ -129,7 +129,7 @@ HardwareComponent::load(u8 *buffer)
     ptr += didLoadFromBuffer(ptr);
 
     // Verify that the number of written bytes matches the snapshot size
-    debug(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
+    trace(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
 
     return ptr - buffer;
@@ -155,7 +155,7 @@ HardwareComponent::save(u8 *buffer)
     ptr += didSaveToBuffer(ptr);
 
     // Verify that the number of written bytes matches the snapshot size
-    debug(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
+    trace(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
     assert(ptr - buffer == size());
 
     return ptr - buffer;
@@ -177,7 +177,7 @@ HardwareComponent::powerOn()
         _reset(true);
 
         // Power this component on
-        debug(RUN_DEBUG, "Powering on\n");
+        trace(RUN_DEBUG, "Powering on\n");
         state = STATE_PAUSED;
         _powerOn();
     }
@@ -192,7 +192,7 @@ HardwareComponent::powerOff()
         pause();
         
         // Power off this component
-        debug(RUN_DEBUG, "Powering off\n");
+        trace(RUN_DEBUG, "Powering off\n");
         state = STATE_OFF;
         _powerOff();
 
@@ -217,7 +217,7 @@ HardwareComponent::run()
         }
         
         // Start this component
-        debug(RUN_DEBUG, "Run\n");
+        trace(RUN_DEBUG, "Run\n");
         state = STATE_RUNNING;
         _run();
     }
@@ -229,7 +229,7 @@ HardwareComponent::pause()
     if (isRunning()) {
         
         // Pause this component
-        debug(RUN_DEBUG, "Pause\n");
+        trace(RUN_DEBUG, "Pause\n");
         state = STATE_PAUSED;
         _pause();
 

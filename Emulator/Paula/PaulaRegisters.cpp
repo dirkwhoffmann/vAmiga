@@ -29,16 +29,16 @@ Paula::pokeADKCON(u16 value)
     
     // Report unusual values for debugging
     if (set && (GET_BIT(value, 13) || GET_BIT(value, 14))) {
-        debug(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
+        trace(XFILES, "XFILES (ADKCON): PRECOMP set (%x)\n", value);
     }
         if (clr && GET_BIT(value, 12)) {
-        debug(XFILES, "XFILES (ADKCON): MFMPREC cleared (GCR) (%x)\n", value);
+        trace(XFILES, "XFILES (ADKCON): MFMPREC cleared (GCR) (%x)\n", value);
     }
         if (set && GET_BIT(value, 9)) {
-        debug(XFILES, "XFILES (ADKCON): MSBSYNC set (GCR) (%x)\n", value);
+        trace(XFILES, "XFILES (ADKCON): MSBSYNC set (GCR) (%x)\n", value);
     }
         if (clr && GET_BIT(value, 8)) {
-        debug(XFILES, "XFILES (ADKCON): FAST cleared (GCR) (%x)\n", value);
+        trace(XFILES, "XFILES (ADKCON): FAST cleared (GCR) (%x)\n", value);
     }
         
     if (set) adkcon |= (value & 0x7FFF); else adkcon &= ~value;
@@ -46,7 +46,7 @@ Paula::pokeADKCON(u16 value)
     // Take care of a possible change of the UARTBRK bit
     uart.updateTXD();
 
-    if (adkcon & 0b1110111) debug(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
+    if (adkcon & 0b1110111) trace(AUDREG_DEBUG, "ADKCON MODULATION: %x\n", adkcon);
 }
 
 u16
@@ -54,7 +54,7 @@ Paula::peekINTREQR()
 {
     u16 result = intreq;
 
-    debug(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", result, intena);
+    trace(INTREG_DEBUG, "peekINTREQR(): %x (INTENA = %x)\n", result, intena);
 
     return result;
 }
@@ -62,7 +62,7 @@ Paula::peekINTREQR()
 template <Accessor s> void
 Paula::pokeINTREQ(u16 value)
 {
-    debug(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
+    trace(INTREG_DEBUG, "pokeINTREQ(%x) (INTENA = %x INTREQ = %x)\n", value, intena, intreq);
 
     // Add a one cycle delay if Copper writes
     if (s == CPU_ACCESS) {
@@ -77,7 +77,7 @@ Paula::setINTREQ(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
-    debug(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
+    trace(INTREG_DEBUG, "setINTREQ(%d,%x)\n", setclr, value);
 
     if (setclr) {
         intreq |= value;
@@ -94,7 +94,7 @@ Paula::setINTREQ(bool setclr, u16 value)
 template <Accessor s> void
 Paula::pokeINTENA(u16 value)
 {
-    debug(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
+    trace(INTREG_DEBUG, "pokeINTENA(%x)\n", value);
 
     // Add a one cycle delay if Copper writes
     if (s == CPU_ACCESS) {
@@ -109,7 +109,7 @@ Paula::setINTENA(bool setclr, u16 value)
 {
     assert(!(value & 0x8000));
 
-    debug(INTREG_DEBUG, "setINTENA(%d,%x)\n", setclr, value);
+    trace(INTREG_DEBUG, "setINTENA(%d,%x)\n", setclr, value);
 
     if (setclr) intena |= value; else intena &= ~value;
     checkInterrupt();
@@ -121,7 +121,7 @@ Paula::peekPOTxDAT()
     assert(x == 0 || x == 1);
 
     u16 result = x ? HI_LO(potCntY1, potCntX1) : HI_LO(potCntY0, potCntX0);
-    debug(POTREG_DEBUG, "peekPOT%dDAT() = %x\n", x, result);
+    trace(POTREG_DEBUG, "peekPOT%dDAT() = %x\n", x, result);
 
     return result;
 }
@@ -136,20 +136,20 @@ Paula::peekPOTGOR()
     REPLACE_BIT(result, 10, chargeY0 >= 1.0);
     REPLACE_BIT(result,  8, chargeX0 >= 1.0);
 
-    debug(POT_DEBUG, "charges: %f %f %f %f\n", chargeY1, chargeX1, chargeY0, chargeX0);
+    trace(POT_DEBUG, "charges: %f %f %f %f\n", chargeY1, chargeX1, chargeY0, chargeX0);
     
     // A connected device may force the output level to a specific value
     controlPort1.changePotgo(result);
     controlPort2.changePotgo(result);
 
-    debug(POTREG_DEBUG, "peekPOTGOR() = %x (potgo = %x)\n", result, potgo);
+    trace(POTREG_DEBUG, "peekPOTGOR() = %x (potgo = %x)\n", result, potgo);
     return result;
 }
 
 void
 Paula::pokePOTGO(u16 value)
 {
-    debug(POTREG_DEBUG, "pokePOTGO(%x)\n", value);
+    trace(POTREG_DEBUG, "pokePOTGO(%x)\n", value);
 
     potgo = value;
 
@@ -162,7 +162,7 @@ Paula::pokePOTGO(u16 value)
     // Check the START bit
     if (GET_BIT(value, 0)) {
 
-        debug(POT_DEBUG, "Starting potentiometer scan procedure\n");
+        trace(POT_DEBUG, "Starting potentiometer scan procedure\n");
 
         // Clear potentiometer counters
         potCntX0 = 0;

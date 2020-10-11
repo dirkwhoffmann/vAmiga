@@ -63,7 +63,7 @@ DiskController::serviceDiskChangeEvent()
 
         case DCH_INSERT:
 
-            debug(DSK_DEBUG, "DCH_INSERT (df%d)\n", n);
+            trace(DSK_DEBUG, "DCH_INSERT (df%d)\n", n);
 
             assert(diskToInsert != NULL);
             df[n]->insertDisk(diskToInsert);
@@ -72,7 +72,7 @@ DiskController::serviceDiskChangeEvent()
 
         case DCH_EJECT:
 
-            debug(DSK_DEBUG, "DCH_EJECT (df%d)\n", n);
+            trace(DSK_DEBUG, "DCH_EJECT (df%d)\n", n);
 
             df[n]->ejectDisk();
             break;

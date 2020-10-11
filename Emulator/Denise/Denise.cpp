@@ -206,7 +206,7 @@ Denise::bpu(u16 v)
 void
 Denise::pokeBPLCON1(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
+    trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
 
     // Record the register change
     agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON1, value);
@@ -215,7 +215,7 @@ Denise::pokeBPLCON1(u16 value)
 void
 Denise::setBPLCON1(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
 
     bplcon1 = value & 0xFF;
 
@@ -226,7 +226,7 @@ Denise::setBPLCON1(u16 value)
 void
 Denise::pokeBPLCON2(u16 value)
 {
-    debug(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
+    trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
 
     agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON2, value);
 }
@@ -234,7 +234,7 @@ Denise::pokeBPLCON2(u16 value)
 void
 Denise::setBPLCON2(u16 value)
 {
-    debug(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
 
     bplcon2 = value;
 
@@ -988,12 +988,12 @@ Denise::checkS2SCollisions(int start, int end)
         if ((z & comp01) && (z & comp23)) SET_BIT(clxdat, 9);
 
         if (CLX_DEBUG) {
-            if ((z & comp45) && (z & comp67)) debug("Collision between 45 and 67\n");
-            if ((z & comp23) && (z & comp67)) debug("Collision between 23 and 67\n");
-            if ((z & comp23) && (z & comp45)) debug("Collision between 23 and 45\n");
-            if ((z & comp01) && (z & comp67)) debug("Collision between 01 and 67\n");
-            if ((z & comp01) && (z & comp45)) debug("Collision between 01 and 45\n");
-            if ((z & comp01) && (z & comp23)) debug("Collision between 01 and 23\n");
+            if ((z & comp45) && (z & comp67)) trace("Collision between 45 and 67\n");
+            if ((z & comp23) && (z & comp67)) trace("Collision between 23 and 67\n");
+            if ((z & comp23) && (z & comp45)) trace("Collision between 23 and 45\n");
+            if ((z & comp01) && (z & comp67)) trace("Collision between 01 and 67\n");
+            if ((z & comp01) && (z & comp45)) trace("Collision between 01 and 45\n");
+            if ((z & comp01) && (z & comp23)) trace("Collision between 01 and 23\n");
         }
     }
 }
@@ -1039,7 +1039,7 @@ Denise::checkS2PCollisions(int start, int end)
 
         // Check for a collision with playfield 2
         if ((bBuffer[pos] & enabled2) == compare2) {
-            debug(CLX_DEBUG, "S%d collides with PF2\n", x);
+            trace(CLX_DEBUG, "S%d collides with PF2\n", x);
             SET_BIT(clxdat, 5 + (x / 2));
 
         } else {
@@ -1051,7 +1051,7 @@ Denise::checkS2PCollisions(int start, int end)
 
         // Check for a collision with playfield 1
         if ((bBuffer[pos] & enabled1) == compare1) {
-            debug(CLX_DEBUG, "S%d collides with PF1\n", x);
+            trace(CLX_DEBUG, "S%d collides with PF1\n", x);
             SET_BIT(clxdat, 1 + (x / 2));
         }
     }

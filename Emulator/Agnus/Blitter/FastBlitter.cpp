@@ -104,29 +104,29 @@ void Blitter::doFastCopyBlit()
             // Fetch A
             if (useA) {
                 anew = mem.peek16 <AGNUS_ACCESS> (apt);
-                debug(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
+                trace(BLT_DEBUG, "    A = peek(%X) = %X\n", apt, anew);
                 apt += incr;
             }
 
             // Fetch B
             if (useB) {
                 bnew = mem.peek16 <AGNUS_ACCESS> (bpt);
-                debug(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
+                trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bpt, bnew);
                 bpt += incr;
             }
 
             // Fetch C
             if (useC) {
                 chold = mem.peek16 <AGNUS_ACCESS> (cpt);
-                debug(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
+                trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
                 cpt += incr;
             }
-            debug(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
+            trace(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
 
-            debug(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+            trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
 
             // Run the barrel shifters on data path A and B
-            debug(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
+            trace(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
             if (desc) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
@@ -136,10 +136,10 @@ void Blitter::doFastCopyBlit()
             }
             aold = anew & mask;
             bold = bnew;
-            debug(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
+            trace(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
 
             // Run the minterm logic circuit
-            debug(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
+            trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);
             assert(releaseBuild() || dhold == doMintermLogic(ahold, bhold, chold, bltcon0 & 0xFF));
 
@@ -157,7 +157,7 @@ void Blitter::doFastCopyBlit()
                     check1 = fnv_1a_it32(check1, dhold);
                     check2 = fnv_1a_it32(check2, dpt & agnus.ptrMask);
                 }
-                debug(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
+                trace(BLT_DEBUG, "D: poke(%X), %X  (check: %X %X)\n", dpt, dhold, check1, check2);
 
                 dpt += incr;
             }

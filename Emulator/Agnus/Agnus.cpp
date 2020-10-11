@@ -369,8 +369,8 @@ Agnus::predictDDF()
         hsyncActions |= HSYNC_PREDICT_DDF;      // Call this function again
     }
     
-    debug(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfLores.strtOdd, ddfLores.stopOdd);
-    debug(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfHires.strtOdd, ddfHires.stopOdd);
+    trace(DDF_DEBUG, "predictDDF LORES: %d %d\n", ddfLores.strtOdd, ddfLores.stopOdd);
+    trace(DDF_DEBUG, "predictDDF HIRES: %d %d\n", ddfHires.strtOdd, ddfHires.stopOdd);
 }
 
 void
@@ -462,9 +462,9 @@ Agnus::computeDDFWindowOCS()
             break;
     }
 
-    debug(DDF_DEBUG, "DDF Window Odd (OCS):  (%d,%d) (%d,%d)\n",
+    trace(DDF_DEBUG, "DDF Window Odd (OCS):  (%d,%d) (%d,%d)\n",
           ddfLores.strtOdd, ddfHires.strtOdd, ddfLores.stopOdd, ddfHires.stopOdd);
-    debug(DDF_DEBUG, "DDF Window Even (OCS): (%d,%d) (%d,%d)\n",
+    trace(DDF_DEBUG, "DDF Window Even (OCS): (%d,%d) (%d,%d)\n",
           ddfLores.strtEven, ddfHires.strtEven, ddfLores.stopEven, ddfHires.stopEven);
 
     return;
@@ -551,9 +551,9 @@ Agnus::computeDDFWindowECS()
     }
     ddfState = table[index].state;
 
-    debug(DDF_DEBUG, "DDF Window Odd (ECS):  (%d,%d) (%d,%d)\n",
+    trace(DDF_DEBUG, "DDF Window Odd (ECS):  (%d,%d) (%d,%d)\n",
           ddfLores.strtOdd, ddfHires.strtOdd, ddfLores.stopOdd, ddfHires.stopOdd);
-    debug(DDF_DEBUG, "DDF Window Even (ECS): (%d,%d) (%d,%d)\n",
+    trace(DDF_DEBUG, "DDF Window Even (ECS): (%d,%d) (%d,%d)\n",
           ddfLores.strtEven, ddfHires.strtEven, ddfLores.stopEven, ddfHires.stopEven);
 
     return;
@@ -784,7 +784,7 @@ Agnus::updateRegisters()
 template <int nr> void
 Agnus::executeFirstSpriteCycle()
 {
-    debug(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
+    trace(SPR_DEBUG, "executeFirstSpriteCycle<%d>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 
@@ -812,7 +812,7 @@ Agnus::executeFirstSpriteCycle()
 template <int nr> void
 Agnus::executeSecondSpriteCycle()
 {
-    debug(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
+    trace(SPR_DEBUG, "executeSecondSpriteCycle<%d>\n", nr);
 
     if (pos.v == sprVStop[nr]) {
 
@@ -903,11 +903,11 @@ Agnus::hsyncHandler()
 
     if (pos.v == diwVstrt && !diwVFlop) {
         diwVFlop = true;
-        debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
+        trace(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
     }
     if (pos.v == diwVstop && diwVFlop) {
         diwVFlop = false;
-        debug(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
+        trace(DIW_DEBUG, "diwVFlop = %d\n", diwVFlop);
     }
 
     // Horizontal DIW flipflop

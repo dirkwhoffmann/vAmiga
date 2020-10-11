@@ -113,7 +113,7 @@ Joystick::trigger(GamePadAction event)
 {
     assert(isGamePadAction(event));
 
-    debug(PORT_DEBUG, "trigger(%d)\n", event);
+    trace(PORT_DEBUG, "trigger(%d)\n", event);
      
     switch (event) {
             

@@ -74,7 +74,7 @@ AmigaObject::plaindebug(int verbose, const char *fmt, ...)
 }
 
 void
-AmigaObject::debug(const char *fmt, ...)
+AmigaObject::trace(const char *fmt, ...)
 {
 #ifndef NDEBUG
     
@@ -86,7 +86,7 @@ AmigaObject::debug(const char *fmt, ...)
 }
 
 void
-AmigaObject::debug(int verbose, const char *fmt, ...)
+AmigaObject::trace(int verbose, const char *fmt, ...)
 {
 #ifndef NDEBUG
     
