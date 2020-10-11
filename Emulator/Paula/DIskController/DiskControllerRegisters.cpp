@@ -30,7 +30,8 @@ DiskController::pokeDSKLEN(u16 value)
 void
 DiskController::setDSKLEN(u16 oldValue, u16 newValue)
 {
-    // debug(DSKREG_DEBUG, "setDSKLEN: %x -> %x\n", oldValue, newValue);
+    trace(DSKREG_DEBUG, "setDSKLEN(%x) [%d,%d,%d]\n",
+          newValue, df0.head.cylinder, df0.head.side, df0.head.offset);
 
     Drive *drive = getSelectedDrive();
 
@@ -47,14 +48,14 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
     asyncFifo = config.asyncFifo;
     
     // Disable DMA if bit 15 (DMAEN) is zero
-    if (!(oldValue & 0x8000)) {
+    if (!(newValue & 0x8000)) {
 
         setState(DRIVE_DMA_OFF);
         clearFifo();
     }
     
     // Enable DMA if bit 15 (DMAEN) has been written twice
-    else if (oldValue & newValue & 0x8000) {
+    if (oldValue & newValue & 0x8000) {
         
         if (XFILES && state != DRIVE_DMA_OFF)
             trace("XFILES (DSKLEN): Written in DMA state %d\n", state);

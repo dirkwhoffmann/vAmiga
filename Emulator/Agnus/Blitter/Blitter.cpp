@@ -508,7 +508,7 @@ Blitter::beginBlit()
         if (BLT_CHECKSUM) {
             linecount++;
             check1 = check2 = fnv_1a_init32();
-            debug("BLITTER Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
+            debug("Line %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x\n",
                        linecount, bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
                        bltcon0,
@@ -527,7 +527,7 @@ Blitter::beginBlit()
             copycount++;
             check1 = check2 = fnv_1a_init32();
             
-            debug("BLITTER Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
+            debug("Blit %d (%d,%d) (%d%d%d%d)[%x] (%d %d %d %d) %x %x %x %x %s%s\n",
                        copycount,
                        bltsizeH, bltsizeV,
                        bltconUSEA(), bltconUSEB(), bltconUSEC(), bltconUSED(),
@@ -603,7 +603,7 @@ Blitter::endBlit()
 
     // Dump checksums if requested
     if (BLT_CHECKSUM) {
-        debug("BLITTER check1: %x check2: %x ABCD: %x %x %x %x\n",
+        debug("check1: %x check2: %x ABCD: %x %x %x %x\n",
                    check1, check2,
                    bltapt & agnus.ptrMask,
                    bltbpt & agnus.ptrMask,
