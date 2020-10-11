@@ -1649,6 +1649,12 @@ DQ
                                                         <menuItem title="Standard Settings" id="JcM-tc-ojI">
                                                             <attributedString key="attributedTitle"/>
                                                         </menuItem>
+                                                        <menuItem title="Stereo Settings" tag="1" id="ghe-hu-74t">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
+                                                        <menuItem title="Mono Settings" tag="2" id="QBo-46-alg">
+                                                            <attributedString key="attributedTitle"/>
+                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -2889,6 +2895,9 @@ DQ
             <modifierMask key="keyEquivalentModifierMask"/>
         </menuItem>
         <menuItem title="TFT Monitor Defaults" id="TsP-Kr-5Vo">
+            <attributedString key="attributedTitle"/>
+        </menuItem>
+        <menuItem title="Standard Settings" id="zuL-Zv-IWH">
             <attributedString key="attributedTitle"/>
         </menuItem>
     </objects>

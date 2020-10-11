@@ -610,7 +610,7 @@ Denise::translateDPF(int from, int to)
 }
 
 void
-Denise::drawSprites(bool vblank)
+Denise::drawSprites()
 {
     if (wasArmed) {
         
@@ -1160,7 +1160,7 @@ Denise::endOfLine(int vpos)
         }
     } else {
         
-        drawSpritesVBlank();
+        drawSprites();
         pixelEngine.endOfVBlankLine();
     }
 

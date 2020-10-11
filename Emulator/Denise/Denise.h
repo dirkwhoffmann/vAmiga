@@ -513,8 +513,7 @@ private:
 public:
 
     // Draws all sprites
-    void drawSprites(bool blank = false);
-    void drawSpritesVBlank() { drawSprites(true); }
+    void drawSprites();
     
     // Draws an sprite pair. Called by drawSprites()
     template <unsigned pair> void drawSpritePair();

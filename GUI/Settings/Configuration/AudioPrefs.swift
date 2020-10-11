@@ -128,6 +128,8 @@ extension ConfigurationController {
         
         switch sender.selectedTag() {
         case 0: config.loadAudioDefaults(AudioDefaults.std)
+        case 1: config.loadAudioDefaults(AudioDefaults.stereo)
+        case 2: config.loadAudioDefaults(AudioDefaults.mono)
         default: fatalError()
         }
         refresh()
