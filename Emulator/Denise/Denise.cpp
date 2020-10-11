@@ -281,23 +281,27 @@ Denise::fillShiftRegisters(bool odd, bool even)
         case 1: shiftReg[0] = bpldat[0];
     }
     
+    // On Intel machines, call the optimized SSE code
+    #if defined(__i386__) || defined(__x86_64__)
+    
     if (!NO_SSE) {
-        
         transposeSSE(shiftReg, slice);
+        return;
+    }
+    
+    #endif
+    
+    // On all other machines, fallback to the slower standard implementation
+    u32 mask = 0x8000;
+    for (int i = 0; i < 16; i++, mask >>= 1) {
         
-    } else {
-        
-        u32 mask = 0x8000;
-        for (int i = 0; i < 16; i++, mask >>= 1) {
-            
-            slice[i] =
-            (!!(shiftReg[0] & mask) << 0) |
-            (!!(shiftReg[1] & mask) << 1) |
-            (!!(shiftReg[2] & mask) << 2) |
-            (!!(shiftReg[3] & mask) << 3) |
-            (!!(shiftReg[4] & mask) << 4) |
-            (!!(shiftReg[5] & mask) << 5);
-        }
+        slice[i] =
+        (!!(shiftReg[0] & mask) << 0) |
+        (!!(shiftReg[1] & mask) << 1) |
+        (!!(shiftReg[2] & mask) << 2) |
+        (!!(shiftReg[3] & mask) << 3) |
+        (!!(shiftReg[4] & mask) << 4) |
+        (!!(shiftReg[5] & mask) << 5);
     }
 }
 
