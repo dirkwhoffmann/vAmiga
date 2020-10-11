@@ -82,3 +82,10 @@ typedef i16 Track;
 typedef i16 Sector;
 
 #endif
+
+// Replacement for the VA_ENUM macro which is only available on macOS
+#ifndef VA_ENUM
+#define VA_ENUM(_type, _name) \
+enum __attribute__((enum_extensibility(open))) _name : _type _name; \
+enum _name : _type
+#endif

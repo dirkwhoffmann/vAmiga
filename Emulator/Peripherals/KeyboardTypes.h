@@ -12,7 +12,7 @@
 #ifndef _KEYBOARD_TYPES_H
 #define _KEYBOARD_TYPES_H
 
-#include "VA_ENUM.h"
+#include "Aliases.h"
 
 typedef struct
 {

@@ -15,8 +15,6 @@
 #include "BlitterTypes.h"
 #include "CopperTypes.h"
 
-#include "VA_ENUM.h"
-
 typedef VA_ENUM(long, AgnusRevision)
 {
     AGNUS_OCS,              // Revision 8367

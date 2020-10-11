@@ -12,7 +12,7 @@
 #ifndef _EVENT_TYPES_H
 #define _EVENT_TYPES_H
 
-#include "VA_ENUM.h"
+#include "Aliases.h"
 
 // Time stamp used for messages that never trigger
 #define NEVER INT64_MAX

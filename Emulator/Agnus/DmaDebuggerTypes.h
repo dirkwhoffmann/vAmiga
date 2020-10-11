@@ -12,7 +12,7 @@
 #ifndef _DMA_DEBUGGER_TYPES_H
 #define _DMA_DEBUGGER_TYPES_H
 
-#include "VA_ENUM.h"
+#include "Aliases.h"
 
 typedef VA_ENUM(long, DmaDisplayMode)
 {

@@ -12,7 +12,7 @@
 #ifndef _PORT_TYPES_H
 #define _PORT_TYPES_H
 
-#include "VA_ENUM.h"
+#include "Aliases.h"
 
 //
 // Enumerations

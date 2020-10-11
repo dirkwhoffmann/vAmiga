@@ -12,7 +12,7 @@
 #ifndef _CIA_TYPES_H
 #define _CIA_TYPES_H
 
-#include "VA_ENUM.h"
+#include "Aliases.h"
 
 /* Emulated CIA model
  *

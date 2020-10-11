@@ -15,8 +15,6 @@
 #include "PaulaAudioTypes.h"
 #include "DiskControllerTypes.h"
 
-#include "VA_ENUM.h"
-
 typedef struct
 {
     u16 intreq;
