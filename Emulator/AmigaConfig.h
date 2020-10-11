@@ -17,7 +17,7 @@
 // Snapshot version number
 #define V_MAJOR 0
 #define V_MINOR 9
-#define V_SUBMINOR 12
+#define V_SUBMINOR 13
 
 // Uncomment these settings in a release build
 // #define RELEASEBUILD
@@ -81,7 +81,7 @@ static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 static const int CPU_DEBUG       = 0; // CPU
 
 // Memory access
-extern int OCSREG_DEBUG; // General OCS register debugging
+static const int OCSREG_DEBUG    = 0; // General OCS register debugging
 static const int ECSREG_DEBUG    = 0; // Special ECS register debugging
 static const int INVREG_DEBUG    = 0; // Invalid register accesses
 static const int MEM_DEBUG       = 0; // Memory oddities
@@ -123,7 +123,7 @@ static const int INT_DEBUG       = 0; // Interrupt logic
 
 // CIAs
 static const int CIA_ON_STEROIDS = 0; // Keep the CIAs awake all the time
-extern int CIAREG_DEBUG; // CIA registers
+static const int CIAREG_DEBUG    = 0; // CIA registers
 static const int CIASER_DEBUG    = 0; // CIA serial register
 static const int CIAA_DEBUG      = 0; // CIA A execution
 static const int CIAB_DEBUG      = 0; // CIA B execution
