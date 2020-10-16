@@ -710,17 +710,13 @@ void
 Agnus::pokeBPLCON0(u16 value)
 {
     trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
-    
-    if (bplcon0 != value) {
-        recordRegisterChange(DMA_CYCLES(4), SET_AGNUS_BPLCON0, value);
-    }
+
+    recordRegisterChange(DMA_CYCLES(4), SET_AGNUS_BPLCON0, value);
 }
 
 void
 Agnus::setBPLCON0(u16 oldValue, u16 newValue)
-{
-    assert(oldValue != newValue);
-    
+{    
     trace(DMA_DEBUG, "setBPLCON0(%X,%X)\n", oldValue, newValue);
     
     // Update variable bplcon0AtDDFStrt if DDFSTRT has not been reached yet

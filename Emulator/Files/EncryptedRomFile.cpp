@@ -27,7 +27,7 @@ EncryptedRomFile::EncryptedRomFile()
 bool
 EncryptedRomFile::isEncryptedRomBuffer(const u8 *buffer, size_t length)
 {
-    if (length == KB(256) + 11) {
+    if (length == KB(256)+11 || length == KB(512)+11) {
 
         int len = sizeof(headers[0]);
         int cnt = sizeof(headers) / len;
@@ -44,7 +44,7 @@ EncryptedRomFile::isEncryptedRomBuffer(const u8 *buffer, size_t length)
 bool
 EncryptedRomFile::isEncryptedRomFile(const char *path)
 {
-     if (checkFileSize(path, KB(256) + 11)) {
+     if (checkFileSize(path, KB(256)+11) || checkFileSize(path, KB(512)+11)) {
 
          int len = sizeof(headers[0]);
          int cnt = sizeof(headers) / len;
