@@ -12,6 +12,18 @@
 
 #include "AmigaComponent.h"
 
+typedef union
+{
+    struct
+    {
+        u8 lo;
+        u8 mid;
+        u8 hi;
+    };
+    u32 value;
+}
+Counter24;
+
 class TOD : public AmigaComponent {
     
     friend CIA;
@@ -24,6 +36,9 @@ class TOD : public AmigaComponent {
             
     // The 24 bit counter
     Counter24 tod;
+    
+    // Result of a call to increment()
+    Counter24 incrementedTod;
     
     // The counter latch
     Counter24 latch;
@@ -91,6 +106,7 @@ public:
         worker
 
         & tod.value
+        & incrementedTod.value
         & latch.value
         & alarm.value
         & frozen
@@ -147,9 +163,25 @@ public:
     //
     // Executing
     //
+
+public:
+    
+    // Increments the counter (value is written to incrementedTod)
+    void increment();
+
+    // Makes the result of increment() visible
+    void finishIncrement() { tod.value = incrementedTod.value; }
     
 private:
-    
+
+    bool incLoNibble(u8 &counter);
+    bool incHiNibble(u8 &counter);
+
+    /* Updates variable 'matching'. If a positive edge occurs, the connected
+     * CIA is requested to trigger an interrupt.
+     */
+    void checkForInterrupt(Counter24 tod);
+
     // Freezes the counter
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }
     
@@ -161,16 +193,6 @@ private:
     
     // Starts the counter
     void cont() { stopped = false; }
-
-    // Increments the counter
-    void increment();
-    bool incLoNibble(u8 &counter);
-    bool incHiNibble(u8 &counter);
-
-    /* Updates variable 'matching'. If a positive edge occurs, the connected
-     * CIA is requested to trigger an interrupt.
-     */
-    void checkForInterrupt();
 };
 
 #endif

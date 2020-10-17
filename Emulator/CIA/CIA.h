@@ -90,6 +90,8 @@ protected:
     //
     // Sub components
     //
+
+public:
     
     TOD tod = TOD(this, amiga);
 
@@ -97,8 +99,6 @@ protected:
     //
     // Internals
     //
-
-public:
     
     // The CIA has been executed up to this master clock cycle
     Cycle clock;
@@ -486,7 +486,7 @@ public:
 public:
     
     // Advances the 24-bit counter by one tick
-    void incrementTOD();
+    // void incrementTOD();
     
     // Executes the CIA for one CIA cycle
     void executeOneCycle();

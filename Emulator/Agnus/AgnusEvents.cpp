@@ -23,29 +23,28 @@ Agnus::serviceVblEvent()
             paula.raiseIrq(INT_VERTB);
             
             // Schedule next event
-            scheduleRel<VBL_SLOT>(1, VBL_STROBE1);
+            schedulePos<VBL_SLOT>(5, 84, VBL_STROBE1);
             break;
 
         case VBL_STROBE1:
             
-            assert(pos.v == 0 || pos.v == 1);
-            assert(pos.h == 1);
+            assert(pos.v == 5);
+            assert(pos.h == 84);
             
-            // This cycle is unused at the moment. Until v0.9.9, the VERTB
-            // interrupt was triggered here which turned out to be wrong.
-            // It can be deleted once the new code stands the test of time.
+            // Increment the TOD counter of CIA A
+            amiga.ciaA.tod.increment();
             
             // Schedule next event
-            schedulePos<VBL_SLOT>(5, 209, VBL_END);
+            schedulePos<VBL_SLOT>(5, 178, VBL_END);
             break;
             
         case VBL_END:
             
             assert(pos.v == 5);
-            assert(pos.h == 209);
+            assert(pos.h == 178);
             
-            // Increment the TOD counter of CIA A
-            amiga.ciaA.incrementTOD();
+            // Make the incremented value visible
+            amiga.ciaA.tod.finishIncrement();
             
             // Schedule the next VBL_STROBE event
             schedulePos<VBL_SLOT>(frame.numLines() + vStrobeLine(), 0, VBL_STROBE0);
@@ -560,7 +559,8 @@ Agnus::serviceDASEvent()
             break;
 
         case DAS_TICK:
-            ciab.incrementTOD();
+            ciab.tod.increment();
+            ciab.tod.finishIncrement(); 
             break;
             
         default:

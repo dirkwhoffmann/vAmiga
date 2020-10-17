@@ -295,12 +295,6 @@ CIA::todInterrupt()
 }
 
 void
-CIA::incrementTOD()
-{
-    tod.increment();
-}
-
-void
 CIA::executeOneCycle()
 {
     clock += CIA_CYCLES(1);

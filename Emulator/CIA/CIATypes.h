@@ -51,23 +51,11 @@ typedef struct
 }
 CIAConfig;
 
-typedef union
-{
-    struct
-    {
-        u8 lo;
-        u8 mid;
-        u8 hi;
-    };
-    u32 value;
-}
-Counter24;
-
 typedef struct
 {
-    Counter24 value;
-    Counter24 latch;
-    Counter24 alarm;
+    long value;
+    long latch;
+    long alarm;
 }
 CounterInfo;
 

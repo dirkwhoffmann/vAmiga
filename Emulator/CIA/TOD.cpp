@@ -30,9 +30,9 @@ TOD::_inspect()
 {
     synchronized {
         
-        info.value = tod;
-        info.latch = latch;
-        info.alarm = alarm;
+        info.value = tod.value;
+        info.latch = latch.value;
+        info.alarm = alarm.value;
     }
 }
 
@@ -100,7 +100,7 @@ TOD::setCounterHi(u8 value)
 {
     trace(TOD_DEBUG, "setCounterHi(%x)\n", value);
     tod.hi = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -108,7 +108,7 @@ TOD::setCounterMid(u8 value)
 {
     trace(TOD_DEBUG, "setCounterMid(%x)\n", value);
     tod.mid = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -116,7 +116,7 @@ TOD::setCounterLo(u8 value)
 {
     trace(TOD_DEBUG, "setCounterLo(%x)\n", value);
     tod.lo = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -124,7 +124,7 @@ TOD::setAlarmHi(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmHi(%x)\n", value);
     alarm.hi = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -132,7 +132,7 @@ TOD::setAlarmMid(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmMid(%x)\n", value);
     alarm.mid = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -140,7 +140,7 @@ TOD::setAlarmLo(u8 value)
 {
     trace(TOD_DEBUG, "setAlarmLo(%x)\n", value);
     alarm.lo = value;
-    checkForInterrupt();
+    checkForInterrupt(tod);
 }
 
 void
@@ -148,22 +148,24 @@ TOD::increment()
 {
     if (stopped) return;
 
-    if (!incLoNibble(tod.lo))  goto check;
-    if (!incHiNibble(tod.lo))  goto check;
-    if (!incLoNibble(tod.mid)) goto check;
+    incrementedTod.value = tod.value;
+    
+    if (!incLoNibble(incrementedTod.lo))  goto check;
+    if (!incHiNibble(incrementedTod.lo))  goto check;
+    if (!incLoNibble(incrementedTod.mid)) goto check;
 
-    if (tod.value == alarm.value) {
+    if (incrementedTod.value == alarm.value) {
         trace(TOD_DEBUG, "TOD bug hits: %x:%x:%x (%d,%d)\n",
-              tod.hi, tod.mid, tod.lo, frozen, stopped);
+              incrementedTod.hi, incrementedTod.mid, incrementedTod.lo, frozen, stopped);
     }
-    if (cia->config.todBug) checkForInterrupt();
+    if (cia->config.todBug) checkForInterrupt(incrementedTod);
 
-    if (!incHiNibble(tod.mid)) goto check;
-    if (!incLoNibble(tod.hi))  goto check;
-    incHiNibble(tod.hi);
+    if (!incHiNibble(incrementedTod.mid)) goto check;
+    if (!incLoNibble(incrementedTod.hi))  goto check;
+    incHiNibble(incrementedTod.hi);
 
 check:
-    checkForInterrupt();
+    checkForInterrupt(incrementedTod);
 }
 
 bool
@@ -187,11 +189,11 @@ TOD::incHiNibble(u8 &counter)
 }
 
 void
-TOD::checkForInterrupt()
+TOD::checkForInterrupt(Counter24 t)
 {
-    if (!matching && tod.value == alarm.value) {
-        trace(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", tod.hi, tod.mid, tod.lo);
+    if (!matching && t.value == alarm.value) {
+        trace(TOD_DEBUG, "TOD IRQ (%02x:%02x:%02x)\n", t.hi, t.mid, t.lo);
         cia->todInterrupt();
     }
-    matching = (tod.value == alarm.value);
+    matching = (t.value == alarm.value);
 }
