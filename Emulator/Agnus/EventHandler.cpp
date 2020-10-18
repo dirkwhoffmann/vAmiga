@@ -173,6 +173,7 @@ Agnus::inspectEventSlot(EventSlot nr)
                 case DAS_S7_2:      i->eventName = "DAS_S7_2"; break;
                 case DAS_SDMA:      i->eventName = "DAS_SDMA"; break;
                 case DAS_TICK:      i->eventName = "DAS_TICK"; break;
+                case DAS_TICK2:     i->eventName = "DAS_TICK2"; break;
                 default:            i->eventName = "*** INVALID ***"; break;
             }
             break;

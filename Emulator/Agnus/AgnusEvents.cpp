@@ -560,9 +560,12 @@ Agnus::serviceDASEvent()
 
         case DAS_TICK:
             ciab.tod.increment();
-            ciab.tod.finishIncrement(); 
             break;
-            
+
+        case DAS_TICK2:
+            ciab.tod.finishIncrement();
+            break;
+
         default:
             assert(false);
     }

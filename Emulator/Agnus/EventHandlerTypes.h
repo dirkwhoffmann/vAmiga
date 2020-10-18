@@ -151,6 +151,7 @@ typedef VA_ENUM(long, EventID)
     DAS_S7_2,
     DAS_SDMA,
     DAS_TICK,
+    DAS_TICK2,
     DAS_EVENT_COUNT,
 
     // Copper slot
