@@ -888,7 +888,7 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(palette, forKey: Keys.palette)
+        defaults.set(palette.rawValue, forKey: Keys.palette)
         defaults.set(brightness, forKey: Keys.brightness)
         defaults.set(contrast, forKey: Keys.contrast)
         defaults.set(saturation, forKey: Keys.saturation)
