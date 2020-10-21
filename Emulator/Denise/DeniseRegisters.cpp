@@ -71,7 +71,7 @@ Denise::pokeBPLCON0(u16 value)
 {
     trace(BPLREG_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON0, value);
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON0_DENISE, value);
 }
 
 void
@@ -81,7 +81,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
 
     // Record the register change
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
-    conChanges.insert(pixel, RegChange { SET_DENISE_BPLCON0, newValue });
+    conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
     if (ham(oldValue) ^ ham(newValue)) {
         pixelEngine.colChanges.insert(pixel, RegChange { BPLCON0, newValue } );
@@ -90,10 +90,71 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     // Update value
     bplcon0 = newValue;
     
+    // Update border color index, because the ECSENA bit might have changed
+    updateBorderColor();
+    
     // Report a suspicious BPU value
     if (((bplcon0 >> 12) & 0b111) > (hires(bplcon0) ? 5 : 7)) {
         trace(XFILES, "XFILES (BPLCON0): BPU = %d\n", (bplcon0 >> 12) & 0b111);
     }
+}
+
+void
+Denise::pokeBPLCON1(u16 value)
+{
+    trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
+
+    // Record the register change
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_DENISE, value);
+}
+
+void
+Denise::setBPLCON1(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
+
+    bplcon1 = value & 0xFF;
+
+    pixelOffsetOdd  = (bplcon1 & 0b00000001) << 1;
+    pixelOffsetEven = (bplcon1 & 0b00010000) >> 3;
+}
+
+void
+Denise::pokeBPLCON2(u16 value)
+{
+    trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
+
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON2, value);
+}
+
+void
+Denise::setBPLCON2(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
+
+    bplcon2 = value;
+
+    // Record the pixel coordinate where the change takes place
+    conChanges.insert(4 * agnus.pos.h + 4, RegChange { SET_BPLCON2, value });
+}
+
+void
+Denise::pokeBPLCON3(u16 value)
+{
+    trace(BPLREG_DEBUG, "pokeBPLCON3(%X)\n", value);
+
+    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON3, value);
+}
+
+void
+Denise::setBPLCON3(u16 value)
+{
+    trace(BPLREG_DEBUG, "setBPLCON3(%X)\n", value);
+
+    bplcon3 = value;
+    
+    // Update border color index, because the BRDRBLNK bit might have changed
+    updateBorderColor();
 }
 
 u16

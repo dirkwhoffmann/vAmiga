@@ -439,14 +439,14 @@ DiskController::performDMA()
 {
     Drive *drive = getSelectedDrive();
     
+    // Emulate the FIFO buffer if asynchronous mode is disabled
+    if (!asyncFifo) { executeFifo(); executeFifo(); }
+
     // Only proceed if there are remaining bytes to process
     if ((dsklen & 0x3FFF) == 0) return;
 
     // Only proceed if DMA is enabled
     if (state != DRIVE_DMA_READ && state != DRIVE_DMA_WRITE) return;
-
-    // Emulate the FIFO buffer if asynchronous mode is disabled
-    if (!asyncFifo) { executeFifo(); executeFifo(); }
 
     // How many words shall we read in?
     u32 count = drive ? config.speed : 1;

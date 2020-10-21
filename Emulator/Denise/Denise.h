@@ -63,12 +63,16 @@ public:
     u16 bplcon0;
     u16 bplcon1;
     u16 bplcon2;
+    u16 bplcon3;
 
     // Bitplane control registers at cycle 0 in the current rasterline
     u16 initialBplcon0;
     u16 initialBplcon1;
     u16 initialBplcon2;
 
+    // Color register index for the border color (0 = background color)
+    u8 borderColor;
+    
     // Bitplane data registers
     u16 bpldat[6];
     
@@ -187,7 +191,7 @@ private:
      * At the end of each rasterline, Denise translates the fetched bitplane
      * data to color register indices. In single-playfield mode, this is a
      * one-to-one-mapping. In dual-playfield mode, the bitplane data has to
-     * be split into two color indices. Only one of the is kept depending on
+     * be split into two color indices. Only one of them is kept depending on
      * the playfield priority bit.
      *
      * mBuffer: The multiplexed color index buffer
@@ -197,8 +201,8 @@ private:
      *
      * zBuffer: The pixel depth buffer
      *
-     * During the translating of the bBuffer into the iBuffer, a depth buffer
-     * is build. This buffer serves multiple purposes.
+     * When the bBuffer is translated into the iBuffer, a depth buffer is build.
+     * This buffer serves multiple purposes.
      *
      * 1. The depth buffer it is used to implement the display priority. For
      *    example, it is used to decide whether to draw a sprite pixel in front
@@ -343,9 +347,11 @@ private:
         & bplcon0
         & bplcon1
         & bplcon2
+        & bplcon3
         & initialBplcon0
         & initialBplcon1
         & initialBplcon2
+        & borderColor
         & bpldat
         & clxdat
         & clxcon
@@ -405,6 +411,8 @@ public:
     bool lace() { return lace(bplcon0); }
     static bool ham(u16 v) { return (v & 0x8800) == 0x0800; }
     bool ham() { return ham(bplcon0); }
+    static bool ecsena(u16 v) { return GET_BIT(v, 0); }
+    bool ecsena() { return ecsena(bplcon0); }
 
     /* Returns the Denise view of the BPU bits. The value determines how many
      * shift registers are loaded with the values of their corresponding
@@ -430,6 +438,12 @@ public:
     static u16 zPF(u16 priorityBits);
     static u16 zPF1(u16 bplcon2) { return zPF(bplcon2 & 7); }
     static u16 zPF2(u16 bplcon2) { return zPF((bplcon2 >> 3) & 7); }
+
+    // BPLCON3
+    void pokeBPLCON3(u16 value);
+    void setBPLCON3(u16 value);
+    static int BRDRBLNK(u16 v) { return GET_BIT(v, 5); }
+    bool BRDRBLNK() { return BRDRBLNK(bplcon3); }
 
     // CLXDAT, CLXCON
     u16 peekCLXDAT();
@@ -530,9 +544,12 @@ private:
     template <int x> void drawSpritePixel(int hpos);
     template <int x> void drawAttachedSpritePixelPair(int hpos);
 
+    // Determines the color register index for drawing the border
+    void updateBorderColor();
+
     // Draws the left and the right border
     void drawBorder(); 
-
+    
     
     //
     // Collision checking

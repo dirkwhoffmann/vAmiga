@@ -24,8 +24,10 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
         noise[i] = rand() % 2 ? 0xFF000000 : 0xFFFFFFFF;
     }
 
+    // Setup ECS BRDRBLNK color
+    indexedRgba[64] = GpuColor(0x00, 0x00, 0x00).rawValue;
+    
     // Setup some debug colors
-    indexedRgba[64] = GpuColor(0xFF, 0x00, 0x00).rawValue;
     indexedRgba[65] = GpuColor(0xD0, 0x00, 0x00).rawValue;
     indexedRgba[66] = GpuColor(0xA0, 0x00, 0x00).rawValue;
     indexedRgba[67] = GpuColor(0x90, 0x00, 0x00).rawValue;
@@ -33,6 +35,7 @@ PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
     indexedRgba[69] = GpuColor(0x00, 0xD0, 0xD0).rawValue;
     indexedRgba[70] = GpuColor(0x00, 0xA0, 0xA0).rawValue;
     indexedRgba[71] = GpuColor(0x00, 0x90, 0x90).rawValue;
+    indexedRgba[72] = GpuColor(0xFF, 0x00, 0x00).rawValue;
 }
 
 PixelEngine::~PixelEngine()

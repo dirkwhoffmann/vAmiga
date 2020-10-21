@@ -711,7 +711,7 @@ Agnus::pokeBPLCON0(u16 value)
 {
     trace(DMA_DEBUG, "pokeBPLCON0(%X)\n", value);
 
-    recordRegisterChange(DMA_CYCLES(4), SET_AGNUS_BPLCON0, value);
+    recordRegisterChange(DMA_CYCLES(4), SET_BPLCON0_AGNUS, value);
 }
 
 void
@@ -762,7 +762,7 @@ Agnus::pokeBPLCON1(u16 value)
     trace(DMA_DEBUG, "pokeBPLCON1(%X)\n", value);
     
     if (bplcon1 != value) {
-        recordRegisterChange(DMA_CYCLES(1), SET_AGNUS_BPLCON1, value);
+        recordRegisterChange(DMA_CYCLES(1), SET_BPLCON1_AGNUS, value);
     }
 }
 

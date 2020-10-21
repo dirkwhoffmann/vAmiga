@@ -203,45 +203,6 @@ Denise::bpu(u16 v)
     }
 }
 
-void
-Denise::pokeBPLCON1(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPLCON1(%X)\n", value);
-
-    // Record the register change
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_DENISE_BPLCON1, value);
-}
-
-void
-Denise::setBPLCON1(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPLCON1(%X)\n", value);
-
-    bplcon1 = value & 0xFF;
-
-    pixelOffsetOdd  = (bplcon1 & 0b00000001) << 1;
-    pixelOffsetEven = (bplcon1 & 0b00010000) >> 3;
-}
-
-void
-Denise::pokeBPLCON2(u16 value)
-{
-    trace(BPLREG_DEBUG, "pokeBPLCON2(%X)\n", value);
-
-    agnus.recordRegisterChange(DMA_CYCLES(1), SET_BPLCON2, value);
-}
-
-void
-Denise::setBPLCON2(u16 value)
-{
-    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
-
-    bplcon2 = value;
-
-    // Record the pixel coordinate where the change takes place
-    conChanges.insert(4 * agnus.pos.h + 4, RegChange { SET_BPLCON2, value });
-}
-
 u16
 Denise::zPF(u16 priorityBits)
 {
@@ -502,7 +463,7 @@ Denise::translate()
         // Apply the register change
         switch (change.addr) {
 
-            case SET_DENISE_BPLCON0:
+            case SET_BPLCON0_DENISE:
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
                 break;
@@ -905,18 +866,22 @@ Denise::drawAttachedSpritePixelPair(int hpos)
 }
 
 void
+Denise::updateBorderColor()
+{
+    if (config.revision == DENISE_OCS_BRDRBLNK && ecsena() && BRDRBLNK()) {
+        borderColor = 64; // Pure black
+    } else {
+        borderColor = 0;  // Background color
+    }
+    
+#ifdef BORDER_DEBUG
+    borderColor = 65;    // Debug color
+#endif
+}
+
+void
 Denise::drawBorder()
 {
-    int borderL = 0;
-    int borderR = 0;
-    int borderV = 0;
-
-#ifdef BORDER_DEBUG
-    borderL = 64;
-    borderR = 65;
-    borderV = 66;
-#endif
-
     // Check if the horizontal flipflop was set somewhere in this rasterline
     bool hFlopWasSet = agnus.diwHFlop || agnus.diwHFlopOn != -1;
 
@@ -927,7 +892,7 @@ Denise::drawBorder()
     if (lineIsBlank) {
 
         for (int i = 0; i <= LAST_PIXEL; i++) {
-            iBuffer[i] = mBuffer[i] = borderV;
+            iBuffer[i] = mBuffer[i] = borderColor;
         }
 
     } else {
@@ -936,7 +901,7 @@ Denise::drawBorder()
         if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
             for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
                 assert(i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderL;
+                iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
 
@@ -944,7 +909,7 @@ Denise::drawBorder()
         if (agnus.diwHFlopOff != -1) {
             for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
                 assert(i < sizeof(iBuffer));
-                iBuffer[i] = mBuffer[i] = borderR;
+                iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
     }

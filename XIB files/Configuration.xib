@@ -420,7 +420,8 @@ DQ
                                                 <menu key="menu" id="3v0-HJ-QLg">
                                                     <items>
                                                         <menuItem title="OCS (8362 R8)" state="on" id="6ZC-38-juZ"/>
-                                                        <menuItem title="ECS (8373)" tag="1" hidden="YES" id="hkK-wB-gUe"/>
+                                                        <menuItem title="OCS + BRDRBLNK" tag="1" id="VJs-xh-Ndn"/>
+                                                        <menuItem title="ECS (8373)" tag="2" hidden="YES" id="hkK-wB-gUe"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>

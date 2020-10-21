@@ -55,11 +55,12 @@ private:
 
     /* The color register values translated to RGBA
      * Note that the number of elements exceeds the number of color registers:
-     *  0 .. 31: RGBA values of the 32 color registers.
-     * 32 .. 63: RGBA values of the 32 color registers in halfbright mode.
-     * 64 .. 71: Additional colors used for debugging
+     *  0 .. 31 : RGBA values of the 32 color registers
+     * 32 .. 63 : RGBA values of the 32 color registers in halfbright mode
+     *       64 : Pure black (used if the ECS BRDRBLNK bit is set)
+     * 65 .. 72 : Additional colors used for debugging
      */
-    static const int rgbaIndexCnt = 32 + 32 + 8;
+    static const int rgbaIndexCnt = 32 + 32 + 1 + 8;
     u32 indexedRgba[rgbaIndexCnt];
 
     // Color adjustment parameters
