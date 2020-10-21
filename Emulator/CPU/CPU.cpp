@@ -165,12 +165,6 @@ CPU::signalInterrupt(u8 level)
     if (INT_DEBUG) {
         debug("Executing level %d IRQ\n", level);
     }
-    
-    /*
-    if (level == 3) {
-        debug("IRQ level %d [%x%04x]\n", level, mem.spypeek16(0x6C), mem.spypeek16(0x6E));
-    }
-    */
 }
 
 void

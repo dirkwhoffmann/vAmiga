@@ -513,8 +513,8 @@ Copper::vsyncHandler()
     
     if (COP_CHECKSUM) {
         
-        if (checkcnt) debug("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x num = %d\n",
-                                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc, copList);
+        if (checkcnt) debug("[%lld] Checksum: %x (%lld) lc1 = %x lc2 = %x\n",
+                                 agnus.frame.nr, checksum, checkcnt, cop1lc, cop2lc);
         
         checkcnt = 0;
         checksum = fnv_1a_init32();

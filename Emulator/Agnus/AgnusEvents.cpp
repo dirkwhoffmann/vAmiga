@@ -23,24 +23,28 @@ Agnus::serviceVblEvent()
             paula.raiseIrq(INT_VERTB);
             
             // Schedule next event
-            schedulePos<VBL_SLOT>(5, 84, VBL_STROBE1);
+            // schedulePos<VBL_SLOT>(5, 84, VBL_STROBE1);
+            schedulePos<VBL_SLOT>(4, 84, VBL_STROBE1);
             break;
 
         case VBL_STROBE1:
             
-            assert(pos.v == 5);
+            // assert(pos.v == 5);
+            assert(pos.v == 4);
             assert(pos.h == 84);
             
             // Increment the TOD counter of CIA A
             amiga.ciaA.tod.increment();
             
             // Schedule next event
-            schedulePos<VBL_SLOT>(5, 178, VBL_END);
+            // schedulePos<VBL_SLOT>(5, 178, VBL_END);
+            schedulePos<VBL_SLOT>(4, 178, VBL_END);
             break;
             
         case VBL_END:
             
-            assert(pos.v == 5);
+            // assert(pos.v == 5);
+            assert(pos.v == 4);
             assert(pos.h == 178);
             
             // Make the incremented value visible
@@ -561,10 +565,11 @@ Agnus::serviceDASEvent()
 
         case DAS_TICK:
             ciab.tod.increment();
+            ciab.tod.finishIncrement();
             break;
 
         case DAS_TICK2:
-            ciab.tod.finishIncrement();
+            // ciab.tod.finishIncrement();
             break;
 
         default:

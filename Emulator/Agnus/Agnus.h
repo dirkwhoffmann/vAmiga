@@ -419,7 +419,7 @@ public:
     long chipRamLimit();
         
     // Returns the line in which the VERTB interrupt gets triggered
-    int vStrobeLine() { return isOCS() ? 1 : 0; }
+    int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }
     
     // Returns the connected bits in DDFSTRT / DDFSTOP
     u16 ddfMask() { return isOCS() ? 0xFC : 0xFE; }

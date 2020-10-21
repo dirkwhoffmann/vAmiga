@@ -551,7 +551,7 @@ public:
     // Indicates if the power LED is currently on or off
     bool powerLED() { return (PA & 0x2) == 0; }
 
-    // Emulates the receiption of a keycode from the keyboard
+    // Emulates the reception of a keycode from the keyboard
     void setKeyCode(u8 keyCode);
 };
 
