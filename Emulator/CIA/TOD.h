@@ -37,9 +37,12 @@ class TOD : public AmigaComponent {
     // The 24 bit counter
     Counter24 tod;
     
-    // Result of a call to increment()
-    Counter24 incrementedTod;
+    // Counter value before the latest increment
+    Counter24 preTod;
     
+    // Time stamp of the last increment
+    Cycle lastInc;
+        
     // The counter latch
     Counter24 latch;
     
@@ -106,7 +109,8 @@ public:
         worker
 
         & tod.value
-        & incrementedTod.value
+        & preTod.value
+        & lastInc
         & latch.value
         & alarm.value
         & frozen
@@ -124,13 +128,13 @@ public:
     //
     
     // Returns the counter's high byte (bits 16 - 23).
-    u8 getCounterHi();
+    u8 getCounterHi(Cycle timeStamp = INT64_MAX);
 
     // Returns the counter's intermediate byte (bits 8 - 15).
-    u8 getCounterMid();
-
+    u8 getCounterMid(Cycle timeStamp = INT64_MAX);
+    
     // Returns the counter's low byte (bits 0 - 7).
-    u8 getCounterLo();
+    u8 getCounterLo(Cycle timeStamp = INT64_MAX);
 
     // Returns the alarm value's high byte (bits 16 - 23).
     u8 getAlarmHi();
@@ -166,11 +170,8 @@ public:
 
 public:
     
-    // Increments the counter (value is written to incrementedTod)
+    // Increments the counter
     void increment();
-
-    // Makes the result of increment() visible
-    void finishIncrement() { tod.value = incrementedTod.value; }
     
 private:
 
@@ -180,7 +181,7 @@ private:
     /* Updates variable 'matching'. If a positive edge occurs, the connected
      * CIA is requested to trigger an interrupt.
      */
-    void checkForInterrupt(Counter24 tod);
+    void checkForInterrupt();
 
     // Freezes the counter
     void freeze() { if (!frozen) { latch.value = tod.value; frozen = true; } }

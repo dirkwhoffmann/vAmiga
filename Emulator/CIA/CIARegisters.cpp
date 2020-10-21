@@ -66,19 +66,19 @@ CIA::peek(u16 addr)
             
         case 0x08: // EVENT_0_7
 
-            result = tod.getCounterLo();
+            result = tod.getCounterLo(clock - DMA_CYCLES(isCIAA() ? 95 : 210));
             tod.defreeze();
             break;
         
         case 0x09: // EVENT_8_15
 
-            result = tod.getCounterMid();
+            result = tod.getCounterMid(clock - DMA_CYCLES(isCIAA() ? 95 : 210));
             break;
             
         case 0x0A: // EVENT_16_23
 
             if (!(CRB & 0x80)) tod.freeze();
-            result = tod.getCounterHi();
+            result = tod.getCounterHi(clock - DMA_CYCLES(isCIAA() ? 95 : 210));
             break;
             
         case 0x0B: // UNUSED
