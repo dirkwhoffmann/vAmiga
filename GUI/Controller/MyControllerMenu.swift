@@ -426,6 +426,29 @@ extension MyController: NSMenuItemValidation {
         amiga.keyboard.releaseAllKeys()
     }
     
+    @IBAction func delKeyAction(_ sender: Any!) {
+        
+        track()
+        type(keyCode: AmigaKeycode.delete)
+    }
+
+    @IBAction func helpKeyAction(_ sender: Any!) {
+        
+        track()
+        type(keyCode: AmigaKeycode.help)
+    }
+    
+    func type(keyCode: Int, completion: (() -> Void)? = nil) {
+        
+        DispatchQueue.global().async {
+            
+            self.amiga.keyboard.pressKey(keyCode)
+            usleep(useconds_t(20000))
+            self.amiga.keyboard.releaseKey(keyCode)
+            completion?()
+        }
+    }
+    
     //
     // Action methods (Disk menu)
     //

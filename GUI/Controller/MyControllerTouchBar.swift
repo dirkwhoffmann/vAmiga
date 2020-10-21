@@ -16,6 +16,9 @@ extension NSTouchBarItem.Identifier {
 
     static let click = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.click")
     static let gallery = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.gallery")
+    
+    static let del = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.del")
+    static let help = NSTouchBarItem.Identifier("com.vAmiga.TouchBarItem.help")
 }
 
 @available(OSX 10.12.2, *)
@@ -35,7 +38,7 @@ extension MyController: NSTouchBarDelegate {
         // Make touchbar customizable
         touchBar.customizationIdentifier = NSTouchBar.CustomizationIdentifier("com.vAmiga.touchbar")
         touchBar.customizationAllowedItemIdentifiers =
-            [ .save, .load, .restore, . click, .gallery ]
+            [ .save, .load, .restore, . click, .gallery, .del, .help ]
         
         return touchBar
     }
@@ -87,6 +90,22 @@ extension MyController: NSTouchBarDelegate {
             item.view = NSButton(image: icon,
                                  target: self,
                                  action: #selector(browseScreenshotsAction(_:)))
+            return item
+
+        case NSTouchBarItem.Identifier.del:
+            let item = NSCustomTouchBarItem(identifier: identifier)
+            item.customizationLabel = "Delete Key"
+            item.view = NSButton(title: "Del",
+                                 target: self,
+                                 action: #selector(delKeyAction(_:)))
+            return item
+
+        case NSTouchBarItem.Identifier.help:
+            let item = NSCustomTouchBarItem(identifier: identifier)
+            item.customizationLabel = "Help Key"
+            item.view = NSButton(title: "Help",
+                                 target: self,
+                                 action: #selector(helpKeyAction(_:)))
             return item
 
         default:
