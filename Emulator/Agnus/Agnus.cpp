@@ -587,17 +587,11 @@ Agnus::execute()
     // Advance the internal clock and the horizontal counter
     clock += DMA_CYCLES(1);
 
-    // pos.h++;
     assert(pos.h <= HPOS_MAX);
     pos.h = pos.h < HPOS_MAX ? pos.h + 1 : 0; // (pos.h + 1) % HPOS_CNT;
 
     // If this assertion hits, the HSYNC event hasn't been served
-    /*
-    if (pos.h > HPOS_CNT) {
-        dump();
-        dumpBplEventTable();
-    }
-    */
+    // if (pos.h > HPOS_CNT) { dump(); dumpBplEventTable(); }
     assert(pos.h <= HPOS_CNT);
 }
 
@@ -870,9 +864,6 @@ Agnus::hsyncHandler()
 
     // Call the hsync handlers of Denise
     denise.endOfLine(pos.v);
-
-    // Synthesize sound samples
-    // audioUnit.executeUntil(clock - 50 * DMA_CYCLES(HPOS_CNT));
 
     // Update pot counters
     if (paula.chargeX0 < 1.0) paula.potCntX0++;
