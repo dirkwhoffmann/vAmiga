@@ -238,7 +238,6 @@ Amiga::getConfigItem(ConfigOption option)
             return agnus.blitter.getConfigItem(option);
 
         case OPT_DRIVE_SPEED:
-        case OPT_ASYNC_FIFO:
         case OPT_LOCK_DSKSYNC:
         case OPT_AUTO_DSKSYNC:
             return paula.diskController.getConfigItem(option);

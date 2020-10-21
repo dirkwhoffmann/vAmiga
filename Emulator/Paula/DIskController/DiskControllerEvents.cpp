@@ -24,12 +24,11 @@ DiskController::scheduleFirstDiskEvent()
 {
     dskEventDelay = 0.0;
     
-    if (config.asyncFifo) {
-        agnus.scheduleImm<DSK_SLOT>(DSK_ROTATE);
-    } else {
+    if (turboMode()) {
         agnus.cancel<DSK_SLOT>();
+    } else {
+        agnus.scheduleImm<DSK_SLOT>(DSK_ROTATE);
     }
-
 }
 
 void
@@ -44,10 +43,10 @@ DiskController::scheduleNextDiskEvent()
     DMACycle rounded = DMACycle(round(dskEventDelay));
     dskEventDelay -= rounded;
     
-    if (config.asyncFifo) {
-        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(rounded), DSK_ROTATE);
-    } else {
+    if (turboMode()) {
         agnus.cancel<DSK_SLOT>();
+    } else {
+        agnus.scheduleRel<DSK_SLOT>(DMA_CYCLES(rounded), DSK_ROTATE);
     }
 }
 

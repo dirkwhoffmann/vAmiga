@@ -19,7 +19,6 @@ DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
     config.connected[2] = false;
     config.connected[3] = false;
     config.speed = 1;
-    config.asyncFifo = false;
     config.lockDskSync = false;
     config.autoDskSync = false;
 }
@@ -44,7 +43,6 @@ DiskController::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_DRIVE_SPEED:   return config.speed;
-        case OPT_ASYNC_FIFO:    return config.asyncFifo;
         case OPT_AUTO_DSKSYNC:  return config.autoDskSync;
         case OPT_LOCK_DSKSYNC:  return config.lockDskSync;
         
@@ -85,24 +83,9 @@ DiskController::setConfigItem(ConfigOption option, long value)
             
             config.speed = value;
             trace("Setting acceleration factor to %d\n", config.speed);
-            return true;
-            
-        case OPT_ASYNC_FIFO:
-            
-            #ifdef FORCE_ASYNC_FIFO
-            value = FORCE_ASYNC_FIFO;
-            warn("Overriding asyncFifo: %s\n", value ? "yes" : "no");
-            #endif
-
-            trace("OPT_ASYNC_FIFO %d\n", value);
-            if (config.asyncFifo == value) {
-                return false;
-            }
-            
-            config.asyncFifo = value;
             scheduleFirstDiskEvent();
             return true;
-            
+                        
         case OPT_AUTO_DSKSYNC:
 
             if (config.autoDskSync == value) {
@@ -157,7 +140,6 @@ DiskController::_dumpConfig()
     msg("          df2 : %s\n", config.connected[2] ? "connected" : "not connected");
     msg("          df3 : %s\n", config.connected[3] ? "connected" : "not connected");
     msg("        Speed : %d\n", config.speed);
-    msg("    asyncFifo : %s\n", config.asyncFifo ? "yes" : "no");
     msg("  lockDskSync : %s\n", config.lockDskSync ? "yes" : "no");
     msg("  autoDskSync : %s\n", config.autoDskSync ? "yes" : "no");
 }
@@ -439,9 +421,6 @@ DiskController::performDMA()
 {
     Drive *drive = getSelectedDrive();
     
-    // Emulate the FIFO buffer if asynchronous mode is disabled
-    if (!asyncFifo) { executeFifo(); executeFifo(); }
-
     // Only proceed if there are remaining bytes to process
     if ((dsklen & 0x3FFF) == 0) return;
 

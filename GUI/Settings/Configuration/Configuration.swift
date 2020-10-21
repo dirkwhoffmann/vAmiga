@@ -262,10 +262,6 @@ class Configuration {
             amiga.configure(.OPT_EMULATE_MECHANICS, drive: 3, enable: newValue)
         }
     }
-    var asyncFifo: Bool {
-        get { return amiga.getConfig(.OPT_ASYNC_FIFO) != 0 }
-        set { amiga.configure(.OPT_ASYNC_FIFO, enable: newValue) }
-    }
     var lockDskSync: Bool {
         get { return amiga.getConfig(.OPT_LOCK_DSKSYNC) != 0 }
         set { amiga.configure(.OPT_LOCK_DSKSYNC, enable: newValue) }
@@ -656,7 +652,6 @@ class Configuration {
         
         driveSpeed = defaults.driveSpeed
         mechanicalDelays = defaults.mechanicalDelays
-        asyncFifo = defaults.asyncFifo
         lockDskSync = defaults.lockDskSync
         autoDskSync = defaults.autoDskSync
         
@@ -682,7 +677,6 @@ class Configuration {
         
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         mechanicalDelays = defaults.bool(forKey: Keys.mechanicalDelays)
-        asyncFifo = defaults.bool(forKey: Keys.asyncFifo)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
         autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
         
@@ -705,7 +699,6 @@ class Configuration {
         defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
         defaults.set(driveSpeed, forKey: Keys.driveSpeed)
         defaults.set(mechanicalDelays, forKey: Keys.mechanicalDelays)
-        defaults.set(asyncFifo, forKey: Keys.asyncFifo)
         defaults.set(lockDskSync, forKey: Keys.lockDskSync)
         defaults.set(autoDskSync, forKey: Keys.autoDskSync)
         defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)

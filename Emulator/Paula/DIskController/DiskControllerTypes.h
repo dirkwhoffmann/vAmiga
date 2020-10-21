@@ -62,7 +62,6 @@ typedef struct
      */
     long speed;
 
-    bool asyncFifo;
     bool lockDskSync;
     bool autoDskSync;
 }

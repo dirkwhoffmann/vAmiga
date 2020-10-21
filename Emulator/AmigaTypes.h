@@ -62,7 +62,6 @@ typedef VA_ENUM(long, ConfigOption)
     // Disk controller
     OPT_DRIVE_CONNECT,
     OPT_DRIVE_SPEED,
-    OPT_ASYNC_FIFO,
     OPT_LOCK_DSKSYNC,
     OPT_AUTO_DSKSYNC,
 

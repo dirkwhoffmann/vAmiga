@@ -24,7 +24,6 @@
                 <outlet property="audVolL" destination="jvz-D4-oTo" id="zvg-Xz-1jz"/>
                 <outlet property="audVolR" destination="8nv-hz-sKL" id="0Eq-fU-Xjl"/>
                 <outlet property="compAccurateKeyboard" destination="Nv2-YM-NLV" id="NPb-hA-xQz"/>
-                <outlet property="compAsyncFifo" destination="Ps4-Oa-QV1" id="RaA-Nc-4td"/>
                 <outlet property="compAutoDskSync" destination="7qA-QS-ZCZ" id="uwn-En-oTm"/>
                 <outlet property="compBltAccuracy" destination="cev-0G-bBM" id="NxU-Mf-yeG"/>
                 <outlet property="compBltLevel1" destination="6br-Nl-Ztc" id="nMu-vk-ygR"/>
@@ -1477,17 +1476,6 @@ DQ
                                                 <action selector="compPresetAction:" target="-2" id="qsd-c1-vgL"/>
                                             </connections>
                                         </popUpButton>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ps4-Oa-QV1">
-                                            <rect key="frame" x="378" y="307" width="195" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate asynchronous FIFO " bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="dZJ-X3-GIS">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="compAsyncFifoAction:" target="-2" id="ysq-wL-cG1"/>
-                                            </connections>
-                                        </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gyp-kk-PwN">
                                             <rect key="frame" x="379" y="331" width="186" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1580,7 +1568,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="q5s-Yu-dF3">
-                                            <rect key="frame" x="326" y="272" width="46" height="16"/>
+                                            <rect key="frame" x="326" y="286" width="46" height="16"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" lineBreakMode="clipping" alignment="right" title="Piracy:" id="Y6s-k8-73C">
                                                 <font key="font" metaFont="system"/>
@@ -1589,7 +1577,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="z9Z-9Z-AmZ">
-                                            <rect key="frame" x="378" y="271" width="182" height="18"/>
+                                            <rect key="frame" x="378" y="285" width="182" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Ignore writes to DSKSYNC" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Liy-0q-UA3">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -1600,7 +1588,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7qA-QS-ZCZ">
-                                            <rect key="frame" x="378" y="245" width="175" height="18"/>
+                                            <rect key="frame" x="378" y="259" width="175" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Always find a SYNC mark" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="1lz-IK-YuB">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

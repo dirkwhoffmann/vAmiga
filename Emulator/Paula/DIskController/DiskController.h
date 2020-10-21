@@ -22,14 +22,6 @@ class DiskController : public AmigaComponent {
     // Result of the latest inspection
     DiskControllerInfo info;
 
-    /* Indicates whether the FIFO buffer should be filled asynchronously. At
-     * the beginning of each disk operation, this variable is assigned the
-     * value of the corresponding configuration option. Latching the value
-     * enables the user to change the configuration in the middle of a disk
-     * operation without causing any damage.
-     */
-    bool asyncFifo;
-
     // Temorary storage for a disk waiting to be inserted
     class Disk *diskToInsert = NULL;
 
@@ -149,7 +141,6 @@ private:
 
         & config.connected
         & config.speed
-        & config.asyncFifo
         & config.lockDskSync
         & config.autoDskSync;
     }
@@ -164,7 +155,6 @@ private:
     {
         worker
 
-        & asyncFifo
         & selected
         & state
         & syncCycle

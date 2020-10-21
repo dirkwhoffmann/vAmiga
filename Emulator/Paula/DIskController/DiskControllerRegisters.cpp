@@ -43,9 +43,6 @@ DiskController::setDSKLEN(u16 oldValue, u16 newValue)
         check1 = fnv_1a_init32();
         check2 = fnv_1a_init32();
     }
-
-    // Determine if a FIFO buffer should be emulated
-    asyncFifo = config.asyncFifo;
     
     // Disable DMA if bit 15 (DMAEN) is zero
     if (!(newValue & 0x8000)) {

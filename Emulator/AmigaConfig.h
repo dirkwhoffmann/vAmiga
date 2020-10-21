@@ -37,7 +37,6 @@
 // #define FORCE_FAST_RAM       0
 // #define FORCE_RTC            RTC_NONE
 // #define FORCE_DRIVE_SPEED    -1
-// #define FORCE_ASYNC_FIFO     true
 // #define FORCE_RTC_REGISTER   0
 
 // Uncomment to set a breakpoint on startup

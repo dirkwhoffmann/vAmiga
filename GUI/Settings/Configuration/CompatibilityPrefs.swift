@@ -31,8 +31,6 @@ extension ConfigurationController {
         let speed = config.diskController.speed
         compDriveSpeed.selectItem(withTag: Int(speed))
         compMechanicalDelays.state = config.df0.mechanicalDelays ? .on : .off
-        compAsyncFifo.isHidden = speed == -1
-        compAsyncFifo.state = config.diskController.asyncFifo ? .on : .off
         compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
         compAutoDskSync.state = config.diskController.autoDskSync ? .on : .off
 
@@ -82,12 +80,6 @@ extension ConfigurationController {
     @IBAction func compMechanicalDelaysAction(_ sender: NSButton!) {
 
         config.mechanicalDelays = sender.state == .on
-        refresh()
-    }
-
-    @IBAction func compAsyncFifoAction(_ sender: NSButton!) {
-
-        config.asyncFifo = sender.state == .on
         refresh()
     }
 
