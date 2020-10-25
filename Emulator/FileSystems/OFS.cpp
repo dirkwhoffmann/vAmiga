@@ -106,13 +106,22 @@ OFS::removeBlock(long nr)
 long
 OFS::freeBlock()
 {
-    for (long i = 2; i < capacity; i++) {
-        
+    for (long i = 882; i < capacity; i++) {
+
         if (blocks[i] == nullptr) {
             assert(!bitmapBlock()->isAllocated(i));
             return i;
         }
     }
+
+    for (long i = 879; i > 1; i--) {
+
+        if (blocks[i] == nullptr) {
+            assert(!bitmapBlock()->isAllocated(i));
+            return i;
+        }
+    }
+    
     return -1;
 }
 
@@ -139,6 +148,7 @@ OFS::addTopLevelDir(const char *name)
     addBlock(nr, block);
     
     // Link the new block with the root block
+    block->parent = rootBlock();
     rootBlock()->hashTable.link(block);
     return true;
 }

@@ -86,9 +86,12 @@ RootBlock::write(u8 *p)
     // Type
     p[3] = 0x02;
     
-    // Hashtable size (equals blocksize - 56)
+    // Hashtable size
     p[15] = 0x48;
-        
+    
+    // Hashtable entries
+    hashTable.write(p + 24);
+    
     // BM flag (true if bitmap on disk is valid)
     p[312] = p[313] = p[314] = p[315] = 0xFF;
     
@@ -199,6 +202,7 @@ UserDirBlock::write(u8 *p)
     p[3] = 0x02;
     
     // Block pointer to itself
+    printf("nr = %ld\n", nr);
     p[4] = BYTE3(nr);
     p[5] = BYTE2(nr);
     p[6] = BYTE1(nr);
@@ -219,12 +223,21 @@ UserDirBlock::write(u8 *p)
     
     // Next block with same hash
     if (next) {
+        printf("next = %ld\n", next->nr);
         p[496] = BYTE3(next->nr);
         p[497] = BYTE2(next->nr);
         p[498] = BYTE1(next->nr);
         p[499] = BYTE0(next->nr);
     }
 
+    // Block pointer to parent directory
+    assert(parent != NULL);
+    printf("parent->nr = %ld\n", parent->nr);
+    p[500] = BYTE3(parent->nr);
+    p[501] = BYTE2(parent->nr);
+    p[502] = BYTE1(parent->nr);
+    p[503] = BYTE0(parent->nr);
+    
     // Subtype
     p[508] = 2;
         

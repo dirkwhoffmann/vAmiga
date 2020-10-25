@@ -75,6 +75,7 @@ typedef VA_ENUM(long, MessageType)
     // Snapshots
     MSG_AUTO_SNAPSHOT_TAKEN,
     MSG_USER_SNAPSHOT_TAKEN,
+    MSG_SNAPSHOT_RESTORED,
 
     // Screen recording
     MSG_RECORDING_STARTED,

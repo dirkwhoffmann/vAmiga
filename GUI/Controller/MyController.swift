@@ -603,6 +603,9 @@ extension MyController {
             mydocument.userSnapshots.append(amiga.latestUserSnapshot)
             renderer.blendIn(steps: 20)
             
+        case .MSG_SNAPSHOT_RESTORED:
+            hideOrShowDriveMenus()
+            
         case .MSG_RECORDING_STARTED:
             
             window?.backgroundColor = .red

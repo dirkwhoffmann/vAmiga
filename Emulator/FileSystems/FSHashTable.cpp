@@ -17,6 +17,22 @@ FSHashTable::FSHashTable()
 }
 
 void
+FSHashTable::write(u8 *ptr)
+{
+    for (long i = 0; i < 72; i++) {
+        
+        if (hashTable[i] == nullptr) continue;
+        
+        printf("hashValue[%d] = %d\n", i, hashTable[i]->nr);
+        
+        ptr[4 * i + 0] = BYTE3(hashTable[i]->nr);
+        ptr[4 * i + 1] = BYTE2(hashTable[i]->nr);
+        ptr[4 * i + 2] = BYTE1(hashTable[i]->nr);
+        ptr[4 * i + 3] = BYTE0(hashTable[i]->nr);
+    }
+}
+
+void
 FSHashTable::link(HashableBlock *block)
 {
     assert(block != nullptr);

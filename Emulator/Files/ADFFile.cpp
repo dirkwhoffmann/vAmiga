@@ -261,7 +261,7 @@ ADFFile::formatDisk(FileSystemType fs)
     if (fs == FS_FFS_BOOTABLE) ofs.installFFSBootBlock();
 
     // DEBUGGING: Add some directories
-    // ofs.addTopLevelDir("Holla");
+    ofs.addTopLevelDir("H");
     // ofs.addTopLevelDir("die");
     // ofs.addTopLevelDir("Waldfee");
 

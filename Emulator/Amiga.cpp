@@ -856,6 +856,7 @@ Amiga::loadFromSnapshotUnsafe(Snapshot *snapshot)
     
     if (snapshot && (ptr = snapshot->getData())) {
         load(ptr);
+        messageQueue.put(MSG_SNAPSHOT_RESTORED);
     }
 }
 

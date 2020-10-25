@@ -20,8 +20,7 @@ public:
 
     FSHashTable();
     
-    void write(u8 *ptr);
-    
+    void write(u8 *ptr);    
     void link(HashableBlock *block);
 };
 

@@ -107,6 +107,8 @@ struct UserDirBlock : HashableBlock {
     FSName name = FSName("");
     FSTimeStamp date = FSTimeStamp();
         
+    Block *parent = nullptr;
+    
     UserDirBlock(FSName name);
     
     virtual bool isUserDirBlock() override { return true; }
