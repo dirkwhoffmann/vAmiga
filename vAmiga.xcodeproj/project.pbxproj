@@ -42,6 +42,11 @@
 		504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* RendererRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
+		5056506C25440FFB00A79D27 /* OFS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* OFS.cpp */; };
+		50565072254573E100A79D27 /* FSBlocks.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlocks.cpp */; };
+		505650762545747500A79D27 /* FSTimeStamp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505650742545747500A79D27 /* FSTimeStamp.cpp */; };
+		5056507C25459C8800A79D27 /* FSName.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSName.cpp */; };
+		5056508025459CF600A79D27 /* FSHashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507E25459CF600A79D27 /* FSHashTable.cpp */; };
 		5057E4C5243DF10A004005EB /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057E4C4243DF10A004005EB /* Primitives.swift */; };
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
@@ -267,6 +272,16 @@
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
+		5056506A25440FFB00A79D27 /* OFS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = OFS.cpp; sourceTree = "<group>"; };
+		5056506B25440FFB00A79D27 /* OFS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OFS.h; sourceTree = "<group>"; };
+		50565070254573E100A79D27 /* FSBlocks.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBlocks.cpp; sourceTree = "<group>"; };
+		50565071254573E100A79D27 /* FSBlocks.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBlocks.h; sourceTree = "<group>"; };
+		505650742545747500A79D27 /* FSTimeStamp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSTimeStamp.cpp; sourceTree = "<group>"; };
+		505650752545747500A79D27 /* FSTimeStamp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSTimeStamp.h; sourceTree = "<group>"; };
+		5056507A25459C8800A79D27 /* FSName.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSName.cpp; sourceTree = "<group>"; };
+		5056507B25459C8800A79D27 /* FSName.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSName.h; sourceTree = "<group>"; };
+		5056507E25459CF600A79D27 /* FSHashTable.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSHashTable.cpp; sourceTree = "<group>"; };
+		5056507F25459CF600A79D27 /* FSHashTable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSHashTable.h; sourceTree = "<group>"; };
 		5057E4C4243DF10A004005EB /* Primitives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Primitives.swift; sourceTree = "<group>"; };
 		505A214E22869FF10016EA21 /* AudioFilter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AudioFilter.cpp; sourceTree = "<group>"; };
 		505A214F22869FF10016EA21 /* AudioFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AudioFilter.h; sourceTree = "<group>"; };
@@ -579,6 +594,23 @@
 			path = Agnus;
 			sourceTree = "<group>";
 		};
+		5056506925440FDE00A79D27 /* FileSystems */ = {
+			isa = PBXGroup;
+			children = (
+				5056507B25459C8800A79D27 /* FSName.h */,
+				5056507A25459C8800A79D27 /* FSName.cpp */,
+				505650752545747500A79D27 /* FSTimeStamp.h */,
+				505650742545747500A79D27 /* FSTimeStamp.cpp */,
+				5056507F25459CF600A79D27 /* FSHashTable.h */,
+				5056507E25459CF600A79D27 /* FSHashTable.cpp */,
+				50565071254573E100A79D27 /* FSBlocks.h */,
+				50565070254573E100A79D27 /* FSBlocks.cpp */,
+				5056506B25440FFB00A79D27 /* OFS.h */,
+				5056506A25440FFB00A79D27 /* OFS.cpp */,
+			);
+			path = FileSystems;
+			sourceTree = "<group>";
+		};
 		505B801C23FE626E002407FE /* Memory */ = {
 			isa = PBXGroup;
 			children = (
@@ -787,6 +819,7 @@
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* Files */,
+				5056506925440FDE00A79D27 /* FileSystems */,
 				50F54B0B24B5D31D0078FDC9 /* xdms */,
 			);
 			path = Emulator;
@@ -1275,6 +1308,7 @@
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
+				50565072254573E100A79D27 /* FSBlocks.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
@@ -1344,6 +1378,7 @@
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
+				5056506C25440FFB00A79D27 /* OFS.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,
@@ -1359,6 +1394,7 @@
 				508E7F952206CDBD00F7D88C /* CPU.cpp in Sources */,
 				50F0BD2622AF883C001F4616 /* UART.cpp in Sources */,
 				50357BB6239123B2007E7563 /* Renderer.swift in Sources */,
+				505650762545747500A79D27 /* FSTimeStamp.cpp in Sources */,
 				50B5C07E241107F200F124DC /* AmigaConstants.cpp in Sources */,
 				5078A5D52529E7FA00FCE384 /* Sampler.cpp in Sources */,
 				508FE02F21EA227B0043D0E9 /* MacAudio.swift in Sources */,
@@ -1367,6 +1403,7 @@
 				507D7769228BE3EF001E97A9 /* StateMachine.cpp in Sources */,
 				5085FE5921FB6856009753EF /* ProxyExtensions.swift in Sources */,
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
+				5056508025459CF600A79D27 /* FSHashTable.cpp in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
@@ -1401,6 +1438,7 @@
 				508FE02221EA227B0043D0E9 /* MacKey.swift in Sources */,
 				50F54B2E24B5D31D0078FDC9 /* u_rle.c in Sources */,
 				50F6EEBE21F4F61F0091155D /* Drive.cpp in Sources */,
+				5056507C25459C8800A79D27 /* FSName.cpp in Sources */,
 				50F6EEB821F4F5C60091155D /* Disk.cpp in Sources */,
 				50E1E5D22242B9DA008EF4B0 /* FastBlitter.cpp in Sources */,
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,

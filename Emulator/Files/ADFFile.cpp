@@ -153,29 +153,6 @@ ADFFile::getDiskType()
     return (DiskType)0;
 }
 
-/*
-const char *
-ADFFile::sha()
-{
-    static char result[41];
-
-    int error = sha_1(NULL, result, data, size);
-    
-    if (error) {
-        warn("sha_1 returned with error code %d\n", error);
-        result[0] = 0;
-    }
-
-    return result;
-}
-
-u64
-ADFFile::fnv()
-{
-    return fnv_1a_64(data, size);
-}
-*/
-
 long
 ADFFile::numSides()
 {
@@ -214,6 +191,7 @@ ADFFile::numSectorsPerTrack()
     }
 }
 
+/*
 long
 ADFFile::rootBlockNr()
 {
@@ -226,7 +204,9 @@ ADFFile::rootBlockNr()
     assert(false);
     return 0;
 }
+*/
 
+/*
 bool
 ADFFile::formatDisk(FileSystemType fs)
 {
@@ -256,7 +236,42 @@ ADFFile::formatDisk(FileSystemType fs)
     writeBitmapBlock();
     return true;
 }
+*/
 
+bool
+ADFFile::formatDisk(FileSystemType fs)
+{
+    assert(isFileSystemType(fs));
+    
+    // Only proceed if a file system is given
+    if (fs == FS_NONE) return false;
+    
+    // Right now, only 3.5" DD disks can be formatted
+    if (getDiskType() != DISK_35_DD) {
+        warn("Cannot format a disk of type %s with file system %s.\n",
+             diskTypeName(getDiskType()), fileSystemTypeName(fs));
+        return false;
+    }
+    
+    // Create an empty file system
+    OFS ofs = OFS("MyDisk");
+    
+    // Add a boot block if requested
+    if (fs == FS_OFS_BOOTABLE) ofs.installOFSBootBlock();
+    if (fs == FS_FFS_BOOTABLE) ofs.installFFSBootBlock();
+
+    // DEBUGGING: Add some directories
+    // ofs.addTopLevelDir("Holla");
+    // ofs.addTopLevelDir("die");
+    // ofs.addTopLevelDir("Waldfee");
+
+    // Write file system to disk
+    ofs.writeAsDisk(data, size);
+        
+    return true;
+}
+
+/*
 void
 ADFFile::writeBootBlock(FileSystemType fs)
 {
@@ -362,13 +377,6 @@ ADFFile::writeBitmapBlock()
 void
 ADFFile::writeDate(u8 *dst, time_t date)
 {
-    /* Format used by the Amiga:
-     *
-     * Days  : Days since Jan 1, 1978
-     * Mins  : Minutes since midnight
-     * Ticks : Ticks past minute @ 50Hz
-     */
-    
     const u32 secPerDay = 24 * 60 * 60;
     
     // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
@@ -413,3 +421,4 @@ ADFFile::sectorChecksum(int sector)
     
     return ~result + 1;
 }
+*/

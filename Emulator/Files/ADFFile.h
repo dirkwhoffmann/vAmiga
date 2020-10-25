@@ -90,6 +90,7 @@ public:
     
 private:
 
+    /*
     long rootBlockNr();
     long bitmapBlockNr() { return rootBlockNr() + 1; }
     void writeBootBlock(FileSystemType fs);
@@ -98,6 +99,7 @@ private:
     void writeDate(u8 *dst, time_t date);
 
     u32 sectorChecksum(int sector);
+    */
 };
 
 #endif
