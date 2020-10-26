@@ -7,32 +7,45 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSUserDirBlock.h"
+#include "FSFileHeaderBlock.h"
+
+FileHeaderBlock::FileHeaderBlock(const char *str) : name(FSName(str))
+{
+    memset(dataBlocks, 0, sizeof(dataBlocks));
+}
 
 void
-UserDirBlock::dump()
+FileHeaderBlock::dump()
 {
     
 }
 
 void
-UserDirBlock::write(u8 *p)
+FileHeaderBlock::write(u8 *p)
 {
     // Start from scratch
     memset(p, 0, 512);
     
     // Type
-    p[3] = 0x02;
+    write32(p, 2);
     
     // Block pointer to itself
     write32(p + 4, nr);
     
-    // Hashtable
-    hashTable.write(p + 24);
+    // Number of blocks in file header
+    write32(p + 8, numBlocks);
 
+    // First data block
+    if (dataBlocks[0]) write32(p + 16, dataBlocks[0]->nr);
+    
+    // Data block list
+    for (int i = 0; i < numBlocks; i++) write32(p+308-4*i, dataBlocks[i]->nr);
+    
     // Protection status bits
-    u32 protection = 0;
-    write32(p + 320, protection);
+    write32(p + 320, 0);
+    
+    // File size
+    write32(p + 324, fileSize);
     
     // Comment as BCPL string
     comment.write(p + 328);
@@ -51,7 +64,7 @@ UserDirBlock::write(u8 *p)
     write32(p + 500, parent->nr);
     
     // Subtype
-    p[508] = 2;
+    p[508] = -3;
         
     // Checksum
     write32(p + 20, Block::checksum(p));

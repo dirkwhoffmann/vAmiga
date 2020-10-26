@@ -14,7 +14,7 @@
 
 class FSName {
     
-    char name[31];
+    char name[30 + 1];
     
 public:
 
@@ -25,7 +25,17 @@ public:
     u32 hashValue();
     
     void write(u8 *ptr);
-        
+};
+
+class FSComment {
+    
+    char name[91 + 1];
+    
+public:
+
+    FSComment(const char *str);
+    
+    void write(u8 *ptr);
 };
 
 #endif

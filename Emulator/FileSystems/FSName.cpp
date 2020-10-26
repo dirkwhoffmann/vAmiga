@@ -61,7 +61,29 @@ void
 FSName::write(u8 *p)
 {
     assert(p != nullptr);
-    assert(strlen(name) <= 30);
+    assert(strlen(name) < sizeof(name));
+
+    // Write name as BCPL string (first byte is string length)
+    p[0] = strlen(name);
+    strncpy((char *)(p + 1), name, strlen(name));
+}
+
+FSComment::FSComment(const char *str)
+{
+    assert(str != nullptr);
+    
+    // Comments are limited to 91 characters
+    strncpy(name, str, 91);
+        
+    // Make sure the string terminates
+    name[30] = 0;
+}
+
+void
+FSComment::write(u8 *p)
+{
+    assert(p != nullptr);
+    assert(strlen(name) < sizeof(name));
     
     // Write name as BCPL string (first byte is string length)
     p[0] = strlen(name);

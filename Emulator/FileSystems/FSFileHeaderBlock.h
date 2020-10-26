@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_USERDIR_BLOCK_H
-#define _FS_USERDIR_BLOCK_H
+#ifndef _FS_FILEHEADER_BLOCK_H
+#define _FS_FILEHEADER_BLOCK_H
 
 #include "FSBlock.h"
 
-struct UserDirBlock : HashableBlock {
+struct FileHeaderBlock : HashableBlock {
             
     // Name
     FSName name = FSName("");
@@ -23,9 +23,15 @@ struct UserDirBlock : HashableBlock {
     // Creation date
     FSTimeStamp created = FSTimeStamp();
 
-    // Hash table storing references to other blocks
-    FSHashTable hashTable = FSHashTable();
-
+    // Number of blocks
+    u32 numBlocks = 0;
+    
+    // The data block list
+    Block *dataBlocks[71];
+    
+    // File size in bytes
+    u32 fileSize = 0;
+    
     // Reference to the parent block
     Block *parent = nullptr;
     
@@ -33,12 +39,12 @@ struct UserDirBlock : HashableBlock {
     // Methods
     //
     
-    UserDirBlock(const char *str) : name(FSName(str)) { };
+    FileHeaderBlock(const char *str);
     
     // Methods from Block class
-    FSBlockType type() override { return FS_USERDIR_BLOCK; }
+    FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
     virtual void dump() override;
-    void write(u8 *dst) override;
+    void write(u8 *p) override;
 
     // Methods from HashableBlock class
     virtual u32 hashValue() override { return name.hashValue(); }

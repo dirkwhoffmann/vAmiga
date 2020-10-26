@@ -15,6 +15,7 @@
 #include "FSRootBlock.h"
 #include "FSBitmapBlock.h"
 #include "FSUserDirBlock.h"
+#include "FSFileHeaderBlock.h"
 #include "ADFFile.h"
 
 /* This class provides the basic functionality of the Amiga's Original File
