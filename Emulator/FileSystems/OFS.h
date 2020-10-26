@@ -10,7 +10,11 @@
 #ifndef _OFS_H
 #define _OFS_H
 
-#include "FSBlocks.h"
+#include "FSBlock.h"
+#include "FSBootBlock.h"
+#include "FSRootBlock.h"
+#include "FSBitmapBlock.h"
+#include "FSUserDirBlock.h"
 #include "ADFFile.h"
 
 /* This class provides the basic functionality of the Amiga's Original File
@@ -66,7 +70,8 @@ public:
     //
     
     bool addTopLevelDir(const char *name);
-
+    bool addSubDir(const char *name, UserDirBlock *dir);
+    UserDirBlock *seekDirectory(const char *path);
     
     //
     // Exporting

@@ -26,15 +26,32 @@ FSName::FSName(const char *str)
     name[30] = 0;
 }
 
+char
+FSName::capital(char c)
+{
+    return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
+}
+
+bool
+FSName::operator== (FSName &rhs)
+{
+    int n = 0;
+    
+    while (name[n] != 0 || rhs.name[n] != 0) {
+        if (capital(name[n]) != capital(rhs.name[n])) return false;
+        n++;
+    }
+    return true;
+}
+
 u32
-FSName::hash()
+FSName::hashValue()
 {
     size_t length = strlen(name);
     u32 result = (u32)length;
     
     for (size_t i = 0; i < length; i++) {
-        char c = name[i];
-        if (c >= 'a' && c <= 'z') c -= 'a' - 'A';
+        char c = capital(name[i]);
         result = (result * 13 + (u32)c) & 0x7FF;
     }
     return result % 72;

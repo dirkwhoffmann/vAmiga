@@ -7,25 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_NAME_H
-#define _FS_NAME_H
+#ifndef _FS_BOOT_BLOCK_H
+#define _FS_BOOT_BLOCK_H
 
-#include "Aliases.h"
+#include "FSBlock.h"
 
-class FSName {
+struct BootBlock : Block {
+  
+    bool ffs;
     
-    char name[31];
+    BootBlock(bool ffs = false) { this->ffs = ffs; }
     
-public:
-
-    FSName(const char *str);
-
-    char capital(char c);
-    bool operator== (FSName &rhs);
-    u32 hashValue();
-    
-    void write(u8 *ptr);
-        
+    FSBlockType type() override { return FS_BOOT_BLOCK; }
+    void write(u8 *dst) override;
 };
 
 #endif

@@ -20,6 +20,27 @@ releaseBuild()
 }
 
 char *
+extractFirstPathComponent(const char *path)
+{
+    assert(path != NULL);
+    
+    const char *pos = strchr(path, '/');
+    return pos ? strdup(pos + 1) : strdup(path);
+}
+
+char *
+extractPathComponent(const char *path, unsigned n)
+{
+    assert(path != NULL);
+
+    // Seek the n-th occurance of '/'
+    while (n--) if ((path = strchr(path, '/')) == nullptr) return nullptr;
+
+    // Return the first path component
+    return extractFirstPathComponent(path);
+}
+
+char *
 stripFilename(const char *path)
 {
     assert(path != NULL);

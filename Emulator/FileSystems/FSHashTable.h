@@ -11,17 +11,28 @@
 #define _FS_HASHTABLE_H
 
 #include "Aliases.h"
+#include "FSName.h"
 
-class FSHashTable {
-        
-    class HashableBlock *hashTable[72];
+struct FSHashTable {
+
+    static const int hasTableSize = 72;
+    class HashableBlock *hashTable[hasTableSize];
     
-public:
-
+    //
+    // Methods
+    //
+    
     FSHashTable();
     
-    void write(u8 *ptr);    
+    // Adds a new reference to the hash table
     void link(HashableBlock *block);
+
+    // Seeks for a match inside the hash table
+    HashableBlock *seek(FSName name);
+    HashableBlock *seek(FSName name, u32 hash);
+
+    // Exports the block in AmigaDOS format
+    void write(u8 *ptr);    
 };
 
 #endif

@@ -11,6 +11,7 @@
 #define _ALIASES_H
 
 #include <stdint.h>
+#include <assert.h>
 
 //
 // Basic types

@@ -38,17 +38,9 @@ OFS::dump()
         
         if (blocks[i] == nullptr) continue;
         
-        msg("%d: %ld (", i, blocks[i]->nr);
-        
-        if (blocks[i]->isBootBlock()) msg("Boot block");
-        else if (blocks[i]->isRootBlock()) msg("Root block");
-        else if (blocks[i]->isBitmapBlock()) msg("Bitmap block");
-        else if (blocks[i]->isFileHeaderBlock()) msg("File header block");
-        else if (blocks[i]->isFileListBlock()) msg("File list block");
-        else if (blocks[i]->isDataBlock()) msg("Data block");
-        else msg("???");
-        msg(")\n");
-        
+        msg("%d: %ld", i, blocks[i]->nr);
+        msg(" (%s)\n", fsBlockTypeName(blocks[i]->type()));
+                
         blocks[i]->dump(); 
     }
 }
@@ -57,17 +49,13 @@ RootBlock *
 OFS::rootBlock()
 {
     assert(blocks[880] != nullptr);
-    assert(blocks[880]->isRootBlock());
-    
     return (RootBlock *)blocks[880];
 }
 
 BitmapBlock *
 OFS::bitmapBlock()
 {
-    assert(blocks[881] != nullptr);
-    assert(blocks[881]->isBitmapBlock());
-    
+    assert(blocks[881] != nullptr);    
     return (BitmapBlock *)blocks[881];
 }
 
@@ -141,7 +129,7 @@ OFS::addTopLevelDir(const char *name)
     if (nr == -1) return false;
 
     // Create block
-    UserDirBlock *block = new UserDirBlock(FSName(name));
+    UserDirBlock *block = new UserDirBlock(name);
     debug("block = %p nr = %d\n", block, nr);
     
     // Add block at the free location
@@ -152,6 +140,41 @@ OFS::addTopLevelDir(const char *name)
     rootBlock()->hashTable.link(block);
     return true;
 }
+
+bool
+OFS::addSubDir(const char *name, UserDirBlock *dir)
+{
+    assert(name != nullptr);
+    
+    // Get a free block number
+    long nr = freeBlock();
+    if (nr == -1) return false;
+
+    // Create block
+    UserDirBlock *block = new UserDirBlock(name);
+    debug("block = %p nr = %d\n", block, nr);
+    
+    // Add block at the free location
+    addBlock(nr, block);
+    
+    // Link the new block with the root block
+    block->parent = dir;
+    dir->hashTable.link(block);
+    return true;
+}
+
+/*
+UserDirBlock *
+OFS::seekDirectory(FSHashTable &hashTable, const char *name)
+{
+    
+}
+ 
+ currentDir = nullptr (top level)
+ 
+ changeDir(const char *dir) Cases: 'foo' '/' '..'
+ 
+ */
 
 void
 OFS::writeAsDisk(u8 *dst, size_t length)
