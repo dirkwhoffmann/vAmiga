@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSUserDirBlock.h"
+#include "FSVolume.h"
 
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref) : FSBlock(ref)
 {
@@ -54,7 +54,7 @@ FSUserDirBlock::write(u8 *p)
     name.write(p + 432);
     
     // Next block with same hash
-    if (next) write32(p + 496, next->nr);
+    write32(p + 496, next);
 
     // Block pointer to parent directory
     assert(parent != NULL);
@@ -68,11 +68,14 @@ FSUserDirBlock::write(u8 *p)
 }
 
 void
-FSUserDirBlock::link(FSBlock *block)
+FSUserDirBlock::link(u32 ref)
 {
+    // Only proceed if a valid block number is given
+    if (!volume.isBlockNumber(ref)) return;
+    
     if (next) {
-        ((FSUserDirBlock *)next)->link(block);
+        volume.block(next)->link(ref);
     } else {
-        next = block;
+        next = ref;
     }
 }

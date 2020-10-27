@@ -36,7 +36,7 @@ struct FSFileHeaderBlock : FSBlock {
     FSBlock *parent = nullptr;
     
     // Reference to the next block with the same hash
-    FSBlock *next = nullptr;
+    u32 next = 0;
 
     
     //
@@ -52,8 +52,8 @@ struct FSFileHeaderBlock : FSBlock {
     virtual u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
 
-    void link(FSBlock *block) override;
-    FSBlock *nextBlock() override { return next; }
+    void link(u32 ref) override;
+    u32 nextBlock() override { return next; }
 };
 
 #endif

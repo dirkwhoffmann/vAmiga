@@ -22,7 +22,7 @@ struct FSRootBlock : FSBlock {
     FSTimeStamp lastModified = FSTimeStamp();
 
     // Hash table storing references to other blocks
-    FSHashTable hashTable = FSHashTable();
+    FSHashTable hashTable = FSHashTable(volume);
     
     //
     // Methods

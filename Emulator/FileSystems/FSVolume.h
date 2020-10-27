@@ -70,11 +70,15 @@ public:
     // Working with blocks
     //
     
+    // Checks if the block with the given number is part of the volume
+    bool isBlockNumber(u32 nr) { return nr < capacity; }
+    
     // Returns the location of the root block and the bitmap block
     u32 rootBlockNr() { return 880; }
     u32 bitmapBlockNr() { return 881; }
     
     // Queries a pointer to a block of a certain type (may return nullptr)
+    FSBlock *block(u32 nr);
     FSBootBlock *bootBlock(u32 nr);
     FSRootBlock *rootBlock(u32 nr);
     FSRootBlock *rootBlock() { return rootBlock(rootBlockNr()); }
@@ -89,7 +93,7 @@ public:
     // Adds ot removes a block (DEPRECATED)
     void addBlock(long nr, FSBlock *block);
     void removeBlock(long nr);
-    
+        
     // Returns the number of a free block (or -1 if no free blocks exist)
     long freeBlock();
     

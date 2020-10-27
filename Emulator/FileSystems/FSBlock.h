@@ -62,10 +62,10 @@ struct FSBlock {
     //
     
     // Links this block with another block with the same hash
-    virtual void link(FSBlock *block) { };
+    virtual void link(u32 other) { };
 
     // Returns the next element in the linked list
-    virtual FSBlock *nextBlock() { return nullptr; }
+    virtual u32 nextBlock() { return 0; }
     
     
     //

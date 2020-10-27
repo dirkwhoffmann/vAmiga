@@ -48,44 +48,65 @@ FSVolume::dump()
     }
 }
 
+FSBlock *
+FSVolume::block(u32 nr)
+{
+    if (nr < capacity) {
+        return blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
 FSBootBlock *
 FSVolume::bootBlock(u32 nr)
 {
-    assert(nr < capacity);
-    if (blocks[nr]->type() != FS_BOOT_BLOCK) return nullptr;
-    return (FSBootBlock *)blocks[nr];
+    if (nr < capacity && blocks[nr]->type() != FS_BOOT_BLOCK)
+    {
+        return (FSBootBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
 }
 
 FSRootBlock *
 FSVolume::rootBlock(u32 nr)
 {
-    assert(nr < capacity);
-    if (blocks[nr]->type() != FS_BOOT_BLOCK) return nullptr;
-    return (FSRootBlock *)blocks[nr];
+    if (nr < capacity && blocks[nr]->type() == FS_BOOT_BLOCK) {
+        return (FSRootBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
 }
 
 FSBitmapBlock *
 FSVolume::bitmapBlock(u32 nr)
 {
-    assert(nr < capacity);
-    if (blocks[nr]->type() != FS_BITMAP_BLOCK) return nullptr;
-    return (FSBitmapBlock *)blocks[nr];
+    if (nr < capacity && blocks[nr]->type() == FS_BITMAP_BLOCK) {
+        return (FSBitmapBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
 }
 
 FSUserDirBlock *
 FSVolume::userDirBlock(u32 nr)
 {
-    assert(nr < capacity);
-    if (blocks[nr]->type() != FS_USERDIR_BLOCK) return nullptr;
-    return (FSUserDirBlock *)blocks[nr];
+    if (nr < capacity && blocks[nr]->type() == FS_USERDIR_BLOCK) {
+        return (FSUserDirBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
 }
 
 FSFileHeaderBlock *
 FSVolume::fileHeaderBlock(u32 nr)
 {
-    assert(nr < capacity);
-    if (blocks[nr]->type() != FS_FILEHEADER_BLOCK) return nullptr;
-    return (FSFileHeaderBlock *)blocks[nr];
+    if (nr < capacity && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
+        return (FSFileHeaderBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
 }
 
 void
@@ -176,7 +197,7 @@ FSVolume::addTopLevelDir(const char *name)
     
     // Link the new block with the root block
     block->parent = rootBlock();
-    rootBlock()->hashTable.link(block);
+    rootBlock()->hashTable.link(nr);
     return true;
 }
 
@@ -198,7 +219,7 @@ FSVolume::addSubDir(const char *name, FSUserDirBlock *dir)
     
     // Link the new block with the root block
     block->parent = dir;
-    dir->hashTable.link(block);
+    dir->hashTable.link(nr);
     return true;
 }
 

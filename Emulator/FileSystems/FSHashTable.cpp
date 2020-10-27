@@ -9,25 +9,27 @@
 
 #include "FSVolume.h"
 
-FSHashTable::FSHashTable()
+FSHashTable::FSHashTable(FSVolume &ref) : volume(ref)
 {
     memset(hashTable, 0, sizeof(hashTable));
 }
 
 void
-FSHashTable::link(FSBlock *block)
+FSHashTable::link(u32 ref)
 {
-    assert(block != nullptr);
+    FSBlock *block = volume.block(ref);
     
-    // Determine hash value
-    u32 hashValue = block->hashValue();
-    assert(hashValue < 72);
-    
-    // Add reference
-    if (hashTable[hashValue] != nullptr) {
-        hashTable[hashValue]->link(block);
-    } else {
-        hashTable[hashValue] = block;
+    if (block) {
+        
+        // Compute the hash value for the new block
+        u32 hashValue = volume.block(ref)->hashValue();
+        
+        // Add reference
+        if (hashTable[hashValue] == 0) {
+            hashTable[hashValue] = ref;
+        } else {
+            volume.block(hashTable[hashValue])->link(ref);
+        }
     }
 }
 
@@ -42,15 +44,17 @@ FSHashTable::seek(FSName name, u32 hash)
 {
     assert(hash < hasTableSize);
     
-    FSBlock *block = hashTable[hash];
+    u32 ref = hashTable[hash];
     
-    while (block) {
+    while (ref && volume.isBlockNumber(ref)) {
 
+        FSBlock *block = volume.block(ref);
+        
         // Return immediately if the item has been found
         if (block->matches(name)) return block;
 
         // If not, check the next item in the linked list
-        block = block->nextBlock();
+        ref = block->nextBlock();
     }
         
     return nullptr;
@@ -61,11 +65,9 @@ FSHashTable::write(u8 *ptr)
 {
     for (long i = 0; i < 72; i++) {
         
-        if (hashTable[i] == nullptr) continue;
-                
-        ptr[4 * i + 0] = BYTE3(hashTable[i]->nr);
-        ptr[4 * i + 1] = BYTE2(hashTable[i]->nr);
-        ptr[4 * i + 2] = BYTE1(hashTable[i]->nr);
-        ptr[4 * i + 3] = BYTE0(hashTable[i]->nr);
+        ptr[4 * i + 0] = BYTE3(hashTable[i]);
+        ptr[4 * i + 1] = BYTE2(hashTable[i]);
+        ptr[4 * i + 2] = BYTE1(hashTable[i]);
+        ptr[4 * i + 3] = BYTE0(hashTable[i]);
     }
 }
