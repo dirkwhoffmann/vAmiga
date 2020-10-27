@@ -9,19 +9,19 @@
 
 #include "FSFileHeaderBlock.h"
 
-FileHeaderBlock::FileHeaderBlock(FSVolume &ref) : HashableBlock(ref)
+FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref) : HashableBlock(ref)
 {
     memset(dataBlocks, 0, sizeof(dataBlocks));
 }
 
 void
-FileHeaderBlock::dump()
+FSFileHeaderBlock::dump()
 {
     
 }
 
 void
-FileHeaderBlock::write(u8 *p)
+FSFileHeaderBlock::write(u8 *p)
 {
     // Start from scratch
     memset(p, 0, 512);
@@ -67,5 +67,5 @@ FileHeaderBlock::write(u8 *p)
     p[508] = -3;
         
     // Checksum
-    write32(p + 20, Block::checksum(p));
+    write32(p + 20, FSBlock::checksum(p));
 }

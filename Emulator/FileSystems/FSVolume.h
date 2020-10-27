@@ -30,7 +30,7 @@ class FSVolume : AmigaObject {
     
 protected:
     
-    friend class Block;
+    friend class FSBlock;
     
     // The type of this volume (only OFS is supported, yet)
     FSVolumeType type = OFS;
@@ -70,12 +70,24 @@ public:
     // Working with blocks
     //
     
-    // Returns a pointer to one of the special blocks
-    RootBlock *rootBlock();
-    BitmapBlock *bitmapBlock();
+    // Returns the location of the root block and the bitmap block
+    u32 rootBlockNr() { return 880; }
+    u32 bitmapBlockNr() { return 881; }
     
-    // Adds ot removes a block
-    void addBlock(long nr, Block *block);
+    // Queries a pointer to a block of a certain type (may return nullptr)
+    FSBootBlock *bootBlock(u32 nr);
+    FSRootBlock *rootBlock(u32 nr);
+    FSRootBlock *rootBlock() { return rootBlock(rootBlockNr()); }
+    FSBitmapBlock *bitmapBlock(u32 nr);
+    FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
+    FSUserDirBlock *userDirBlock(u32 nr);
+    FSFileHeaderBlock *fileHeaderBlock(u32 nr);
+
+    // Replaces a block
+    void replaceBlock(long nr, FSBlock *block);
+
+    // Adds ot removes a block (DEPRECATED)
+    void addBlock(long nr, FSBlock *block);
     void removeBlock(long nr);
     
     // Returns the number of a free block (or -1 if no free blocks exist)
@@ -90,8 +102,8 @@ public:
     //
     
     bool addTopLevelDir(const char *name);
-    bool addSubDir(const char *name, UserDirBlock *dir);
-    UserDirBlock *seekDirectory(const char *path);
+    bool addSubDir(const char *name, FSUserDirBlock *dir);
+    FSUserDirBlock *seekDirectory(const char *path);
     
     //
     // Exporting

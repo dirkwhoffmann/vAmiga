@@ -10,7 +10,7 @@
 
 #include "FSBlock.h"
 
-struct RootBlock : Block {
+struct FSRootBlock : FSBlock {
   
     // Name
     FSName name = FSName("");
@@ -27,8 +27,8 @@ struct RootBlock : Block {
     //
     // Methods
     //
-    RootBlock(FSVolume &ref);
-    RootBlock(FSVolume &ref, const char *name);
+    FSRootBlock(FSVolume &ref);
+    FSRootBlock(FSVolume &ref, const char *name);
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }

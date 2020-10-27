@@ -9,24 +9,24 @@
 
 #include "FSUserDirBlock.h"
 
-UserDirBlock::UserDirBlock(FSVolume &ref) : HashableBlock(ref)
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref) : HashableBlock(ref)
 {
     
 }
 
-UserDirBlock::UserDirBlock(FSVolume &ref, const char *name) : HashableBlock(ref)
-{
-    
-}
-
-void
-UserDirBlock::dump()
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref, const char *name) : HashableBlock(ref)
 {
     
 }
 
 void
-UserDirBlock::write(u8 *p)
+FSUserDirBlock::dump()
+{
+    
+}
+
+void
+FSUserDirBlock::write(u8 *p)
 {
     // Start from scratch
     memset(p, 0, 512);
@@ -64,5 +64,5 @@ UserDirBlock::write(u8 *p)
     p[508] = 2;
         
     // Checksum
-    write32(p + 20, Block::checksum(p));
+    write32(p + 20, FSBlock::checksum(p));
 }

@@ -9,13 +9,13 @@
 
 #include "FSVolume.h"
 
-Block::Block(FSVolume &ref) : volume(ref)
+FSBlock::FSBlock(FSVolume &ref) : volume(ref)
 {
 
 }
 
 u32
-Block::checksum(u8 *p)
+FSBlock::checksum(u8 *p)
 {
     assert(p != nullptr);
     
@@ -29,7 +29,13 @@ Block::checksum(u8 *p)
 }
 
 void
-Block::write32(u8 *p, u32 value)
+FSBlock::write(u8 *p)
+{
+    memset(p, 0, volume.bsize);
+}
+
+void
+FSBlock::write32(u8 *p, u32 value)
 {
     p[0] = BYTE3(value);
     p[1] = BYTE2(value);

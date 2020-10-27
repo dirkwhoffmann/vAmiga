@@ -12,7 +12,7 @@
 
 #include "FSBlock.h"
 
-struct BitmapBlock : Block {
+struct FSBitmapBlock : FSBlock {
     
     // Total number of blocks
     long capacity = 0;
@@ -20,7 +20,7 @@ struct BitmapBlock : Block {
     // The allocation map
     bool *allocated = nullptr;
         
-    BitmapBlock(FSVolume &ref, long cap);
+    FSBitmapBlock(FSVolume &ref, long cap);
     
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     virtual void dump() override;

@@ -10,7 +10,7 @@
 #include "FSVolume.h"
 
 void
-BootBlock::write(u8 *dst)
+FSBootBlock::write(u8 *dst)
 {
     assert(dst != NULL);
  

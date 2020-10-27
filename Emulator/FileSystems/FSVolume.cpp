@@ -15,11 +15,12 @@ FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
     setDescription("Volume");
         
     // Initialize block storage
-    blocks = new BlockPtr[capacity]();
+    blocks = new BlockPtr[capacity];
+    for (u32 i = 0; i < capacity; i++) blocks[i] = new FSBlock(*this, i);
     
-    // Add a root block and a bitmap block
-    addBlock(881, new BitmapBlock(*this, capacity));
-    addBlock(880, new RootBlock(*this, name));
+    // Install a root block and a bitmap block
+    replaceBlock(rootBlockNr(), new FSRootBlock(*this, name));
+    replaceBlock(bitmapBlockNr(), new FSBitmapBlock(*this, capacity));
     
     debug("Volume created\n");
 }
@@ -38,7 +39,7 @@ FSVolume::dump()
     
     for (size_t i = 0; i < capacity; i++)  {
         
-        if (blocks[i] == nullptr) continue;
+        if (blocks[i]->type() == FS_BLOCK) continue;
         
         msg("%d: %ld", i, blocks[i]->nr);
         msg(" (%s)\n", fsBlockTypeName(blocks[i]->type()));
@@ -47,27 +48,63 @@ FSVolume::dump()
     }
 }
 
-RootBlock *
-FSVolume::rootBlock()
+FSBootBlock *
+FSVolume::bootBlock(u32 nr)
 {
-    assert(blocks[880] != nullptr);
-    return (RootBlock *)blocks[880];
+    assert(nr < capacity);
+    if (blocks[nr]->type() != FS_BOOT_BLOCK) return nullptr;
+    return (FSBootBlock *)blocks[nr];
 }
 
-BitmapBlock *
-FSVolume::bitmapBlock()
+FSRootBlock *
+FSVolume::rootBlock(u32 nr)
 {
-    assert(blocks[881] != nullptr);    
-    return (BitmapBlock *)blocks[881];
+    assert(nr < capacity);
+    if (blocks[nr]->type() != FS_BOOT_BLOCK) return nullptr;
+    return (FSRootBlock *)blocks[nr];
+}
+
+FSBitmapBlock *
+FSVolume::bitmapBlock(u32 nr)
+{
+    assert(nr < capacity);
+    if (blocks[nr]->type() != FS_BITMAP_BLOCK) return nullptr;
+    return (FSBitmapBlock *)blocks[nr];
+}
+
+FSUserDirBlock *
+FSVolume::userDirBlock(u32 nr)
+{
+    assert(nr < capacity);
+    if (blocks[nr]->type() != FS_USERDIR_BLOCK) return nullptr;
+    return (FSUserDirBlock *)blocks[nr];
+}
+
+FSFileHeaderBlock *
+FSVolume::fileHeaderBlock(u32 nr)
+{
+    assert(nr < capacity);
+    if (blocks[nr]->type() != FS_FILEHEADER_BLOCK) return nullptr;
+    return (FSFileHeaderBlock *)blocks[nr];
 }
 
 void
-FSVolume::addBlock(long nr, Block *block)
+FSVolume::replaceBlock(long nr, FSBlock *block)
+{
+    assert(nr < capacity);
+    assert(blocks[nr] != nullptr);
+    
+    delete blocks[nr];
+    blocks[nr] = block;
+    blocks[nr]->nr = nr;
+}
+
+void
+FSVolume::addBlock(long nr, FSBlock *block)
 {
     assert(nr < capacity);
     
-    // Remove old block if present
-    assert(blocks[nr] == nullptr); 
+    // Remove old block
     removeBlock(nr);
     
     // Add new block
@@ -82,8 +119,7 @@ void
 FSVolume::removeBlock(long nr)
 {
     assert(nr < capacity);
-    
-    if (blocks[nr] == nullptr) return;
+    assert(blocks[nr] != nullptr);
     
     // Delete block
     delete blocks[nr];
@@ -119,7 +155,7 @@ void
 FSVolume::installBootBlock()
 {
     debug("installBootBlock()");
-    addBlock(0, new BootBlock(*this));
+    addBlock(0, new FSBootBlock(*this));
 }
 
 bool
@@ -132,7 +168,7 @@ FSVolume::addTopLevelDir(const char *name)
     if (nr == -1) return false;
 
     // Create block
-    UserDirBlock *block = new UserDirBlock(*this, name);
+    FSUserDirBlock *block = new FSUserDirBlock(*this, name);
     debug("block = %p nr = %d\n", block, nr);
     
     // Add block at the free location
@@ -145,7 +181,7 @@ FSVolume::addTopLevelDir(const char *name)
 }
 
 bool
-FSVolume::addSubDir(const char *name, UserDirBlock *dir)
+FSVolume::addSubDir(const char *name, FSUserDirBlock *dir)
 {
     assert(name != nullptr);
     
@@ -154,7 +190,7 @@ FSVolume::addSubDir(const char *name, UserDirBlock *dir)
     if (nr == -1) return false;
 
     // Create block
-    UserDirBlock *block = new UserDirBlock(*this, name);
+    FSUserDirBlock *block = new FSUserDirBlock(*this, name);
     debug("block = %p nr = %d\n", block, nr);
     
     // Add block at the free location
@@ -208,7 +244,7 @@ FSVolume::writeAsDisk(u8 *dst, size_t length)
         }
         
         
-        printf("Exporting block %ld\n", i);
+        if (blocks[i]->type() != FS_BLOCK) printf("Exporting block %ld\n", i);
         assert(blocks[i]->nr == i);
         blocks[i]->write(sector);
     }

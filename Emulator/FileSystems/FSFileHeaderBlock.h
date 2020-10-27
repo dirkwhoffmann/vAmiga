@@ -12,7 +12,7 @@
 
 #include "FSBlock.h"
 
-struct FileHeaderBlock : HashableBlock {
+struct FSFileHeaderBlock : HashableBlock {
             
     // Name
     FSName name = FSName("");
@@ -27,19 +27,19 @@ struct FileHeaderBlock : HashableBlock {
     u32 numBlocks = 0;
     
     // The data block list
-    Block *dataBlocks[71];
+    FSBlock *dataBlocks[71];
     
     // File size in bytes
     u32 fileSize = 0;
     
     // Reference to the parent block
-    Block *parent = nullptr;
+    FSBlock *parent = nullptr;
     
     //
     // Methods
     //
     
-    FileHeaderBlock(FSVolume &ref);
+    FSFileHeaderBlock(FSVolume &ref);
     
     // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }

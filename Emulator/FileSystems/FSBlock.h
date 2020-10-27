@@ -16,7 +16,7 @@
 #include "FSTimeStamp.h"
 #include "FSHashTable.h"
 
-struct Block {
+struct FSBlock {
     
     // The volume this block belongs to
     class FSVolume &volume;
@@ -35,8 +35,10 @@ struct Block {
     // Methods
     //
     
-    Block(FSVolume &ref); 
-    virtual ~Block() { printf("~Block()\n"); }
+    FSBlock(FSVolume &ref); 
+    FSBlock(FSVolume &ref, u32 nr) : FSBlock(ref) { this->nr = nr; }
+    
+    virtual ~FSBlock() { }
 
     // Returns the type of this block
     virtual FSBlockType type() { return FS_BLOCK; }
@@ -48,7 +50,7 @@ struct Block {
     virtual bool check() { return true; }
     
     // Exports this block in AmigaDOS format (512 bytes are written)
-    virtual void write(u8 *p) { };
+    virtual void write(u8 *p);
     
 protected:
     
@@ -56,10 +58,10 @@ protected:
     void write32(u8 *p, u32 value);
 };
 
-typedef Block* BlockPtr;
+typedef FSBlock* BlockPtr;
 
 
-struct HashableBlock : Block {
+struct HashableBlock : FSBlock {
 
     // Reference to the next block with the same hash
     HashableBlock *next = nullptr;
@@ -68,7 +70,7 @@ struct HashableBlock : Block {
     // Methods
     //
     
-    HashableBlock(FSVolume &ref) : Block(ref) { }
+    HashableBlock(FSVolume &ref) : FSBlock(ref) { }
     
     // Return a hash value for this block
     virtual u32 hashValue() { return 0; }

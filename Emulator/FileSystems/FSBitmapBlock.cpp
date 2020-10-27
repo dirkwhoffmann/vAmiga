@@ -9,7 +9,7 @@
 
 #include "FSBitmapBlock.h"
 
-BitmapBlock::BitmapBlock(FSVolume &ref, long cap) : Block(ref), capacity(cap)
+FSBitmapBlock::FSBitmapBlock(FSVolume &ref, long cap) : FSBlock(ref), capacity(cap)
 {
     allocated = new bool[capacity]();
     
@@ -19,7 +19,7 @@ BitmapBlock::BitmapBlock(FSVolume &ref, long cap) : Block(ref), capacity(cap)
 }
 
 void
-BitmapBlock::dump()
+FSBitmapBlock::dump()
 {
     for (int i = 0; i < capacity; i++) {
         printf("%c", allocated[i] ? '1' : '0');
@@ -28,7 +28,7 @@ BitmapBlock::dump()
 }
 
 void
-BitmapBlock::write(u8 *p)
+FSBitmapBlock::write(u8 *p)
 {
     // Start from scratch
     memset(p, 0, 512);
@@ -59,7 +59,7 @@ BitmapBlock::write(u8 *p)
     }
         
     // Compute checksum
-    write32(p, Block::checksum(p));
+    write32(p, FSBlock::checksum(p));
     /*
     u32 checksum = Block::checksum(p);
     p[0] = BYTE3(checksum);

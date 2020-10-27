@@ -9,18 +9,18 @@
 
 #include "FSRootBlock.h"
 
-RootBlock::RootBlock(FSVolume &ref) : Block(ref)
+FSRootBlock::FSRootBlock(FSVolume &ref) : FSBlock(ref)
 {
     
 }
 
-RootBlock::RootBlock(FSVolume &ref, const char *name) : RootBlock(ref)
+FSRootBlock::FSRootBlock(FSVolume &ref, const char *name) : FSRootBlock(ref)
 {
     this->name = FSName(name);
 }
 
 void
-RootBlock::write(u8 *p)
+FSRootBlock::write(u8 *p)
 {
     // Start from scratch
     memset(p, 0, 512);
@@ -54,5 +54,5 @@ RootBlock::write(u8 *p)
     p[511] = 0x01;
     
     // Compute checksum
-    write32(p + 20, Block::checksum(p));
+    write32(p + 20, FSBlock::checksum(p));
 }

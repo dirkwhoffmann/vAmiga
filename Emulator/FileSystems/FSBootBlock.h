@@ -12,9 +12,9 @@
 
 #include "FSBlock.h"
 
-struct BootBlock : Block {
+struct FSBootBlock : FSBlock {
       
-    BootBlock(FSVolume &ref) : Block(ref) { }
+    FSBootBlock(FSVolume &ref) : FSBlock(ref) { }
     
     FSBlockType type() override { return FS_BOOT_BLOCK; }
     void write(u8 *dst) override;
