@@ -79,6 +79,15 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         return NULL;
     }
     
+    // REMOVE ASAP
+    u8 *p = adf->data + 882*512;
+    for (int y = 0; y < 16; y++) {
+        for (int x = 0; x < 32; x++) {
+            printf("%02X ", *p++);
+        }
+        printf("\n");
+    }
+    
     return adf;
 }
 
@@ -254,20 +263,25 @@ ADFFile::formatDisk(FileSystemType fs)
     }
     
     // Create an empty file system
-    OFS ofs = OFS("MyDisk");
-    
-    // Add a boot block if requested
-    if (fs == FS_OFS_BOOTABLE) ofs.installOFSBootBlock();
-    if (fs == FS_FFS_BOOTABLE) ofs.installFFSBootBlock();
+    if (fs == FS_FFS || fs == FS_FFS_BOOTABLE) {
 
-    // DEBUGGING: Add some directories
-    ofs.addTopLevelDir("H");
-    // ofs.addTopLevelDir("die");
-    // ofs.addTopLevelDir("Waldfee");
+        FFSVolume vol = FFSVolume("MyDisk");
+        if (fs == FS_FFS_BOOTABLE) vol.installBootBlock();
+        vol.writeAsDisk(data, size);
 
-    // Write file system to disk
-    ofs.writeAsDisk(data, size);
-        
+    } else {
+
+        OFSVolume vol = OFSVolume("MyDisk");
+        if (fs == FS_OFS_BOOTABLE) vol.installBootBlock();
+
+        // DEBUGGING: Add some directories
+        vol.addTopLevelDir("H");
+        // ofs.addTopLevelDir("die");
+        // ofs.addTopLevelDir("Waldfee");
+
+        vol.writeAsDisk(data, size);
+    }
+                
     return true;
 }
 

@@ -9,7 +9,7 @@
 
 #include "FSBitmapBlock.h"
 
-BitmapBlock::BitmapBlock(long cap) : capacity(cap)
+BitmapBlock::BitmapBlock(FSVolume &ref, long cap) : Block(ref), capacity(cap)
 {
     allocated = new bool[capacity]();
     

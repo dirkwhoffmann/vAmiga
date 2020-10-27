@@ -27,7 +27,8 @@ struct RootBlock : Block {
     //
     // Methods
     //
-    RootBlock(const char *str) : name(FSName(str)) { }
+    RootBlock(FSVolume &ref);
+    RootBlock(FSVolume &ref, const char *name);
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }

@@ -39,7 +39,7 @@ struct FileHeaderBlock : HashableBlock {
     // Methods
     //
     
-    FileHeaderBlock(const char *str);
+    FileHeaderBlock(FSVolume &ref);
     
     // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }

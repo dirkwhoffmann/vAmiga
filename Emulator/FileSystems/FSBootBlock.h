@@ -13,10 +13,8 @@
 #include "FSBlock.h"
 
 struct BootBlock : Block {
-  
-    bool ffs;
-    
-    BootBlock(bool ffs = false) { this->ffs = ffs; }
+      
+    BootBlock(FSVolume &ref) : Block(ref) { }
     
     FSBlockType type() override { return FS_BOOT_BLOCK; }
     void write(u8 *dst) override;

@@ -7,31 +7,33 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "OFS.h"
+#include "FSVolume.h"
 #include "Utils.h"
 
-OFS::OFS(const char *name, long cap) : capacity(cap)
+FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
 {
-    setDescription("OFS");
-    
+    setDescription("Volume");
+        
     // Initialize block storage
-    blocks = new BlockPtr[cap]();
+    blocks = new BlockPtr[capacity]();
     
     // Add a root block and a bitmap block
-    addBlock(881, new BitmapBlock(capacity));
-    addBlock(880, new RootBlock(name));
+    addBlock(881, new BitmapBlock(*this, capacity));
+    addBlock(880, new RootBlock(*this, name));
     
-    debug("File system created (OFS)\n");
+    debug("Volume created\n");
 }
 
-OFS::~OFS()
+FSVolume::~FSVolume()
 {
     delete [] blocks;
 }
 
 void
-OFS::dump()
+FSVolume::dump()
 {
+    debug("Volume: (%s)\n", type == OFS ? "OFS" : "FFS");
+    
     debug("Block list:\n");
     
     for (size_t i = 0; i < capacity; i++)  {
@@ -46,21 +48,21 @@ OFS::dump()
 }
 
 RootBlock *
-OFS::rootBlock()
+FSVolume::rootBlock()
 {
     assert(blocks[880] != nullptr);
     return (RootBlock *)blocks[880];
 }
 
 BitmapBlock *
-OFS::bitmapBlock()
+FSVolume::bitmapBlock()
 {
     assert(blocks[881] != nullptr);    
     return (BitmapBlock *)blocks[881];
 }
 
 void
-OFS::addBlock(long nr, Block *block)
+FSVolume::addBlock(long nr, Block *block)
 {
     assert(nr < capacity);
     
@@ -77,7 +79,7 @@ OFS::addBlock(long nr, Block *block)
 }
 
 void
-OFS::removeBlock(long nr)
+FSVolume::removeBlock(long nr)
 {
     assert(nr < capacity);
     
@@ -92,7 +94,7 @@ OFS::removeBlock(long nr)
 }
 
 long
-OFS::freeBlock()
+FSVolume::freeBlock()
 {
     for (long i = 882; i < capacity; i++) {
 
@@ -114,13 +116,14 @@ OFS::freeBlock()
 }
 
 void
-OFS::installBootBlock(bool ffs)
+FSVolume::installBootBlock()
 {
-    addBlock(0, new BootBlock(ffs));
+    debug("installBootBlock()");
+    addBlock(0, new BootBlock(*this));
 }
 
 bool
-OFS::addTopLevelDir(const char *name)
+FSVolume::addTopLevelDir(const char *name)
 {
     assert(name != nullptr);
     
@@ -129,7 +132,7 @@ OFS::addTopLevelDir(const char *name)
     if (nr == -1) return false;
 
     // Create block
-    UserDirBlock *block = new UserDirBlock(name);
+    UserDirBlock *block = new UserDirBlock(*this, name);
     debug("block = %p nr = %d\n", block, nr);
     
     // Add block at the free location
@@ -142,7 +145,7 @@ OFS::addTopLevelDir(const char *name)
 }
 
 bool
-OFS::addSubDir(const char *name, UserDirBlock *dir)
+FSVolume::addSubDir(const char *name, UserDirBlock *dir)
 {
     assert(name != nullptr);
     
@@ -151,7 +154,7 @@ OFS::addSubDir(const char *name, UserDirBlock *dir)
     if (nr == -1) return false;
 
     // Create block
-    UserDirBlock *block = new UserDirBlock(name);
+    UserDirBlock *block = new UserDirBlock(*this, name);
     debug("block = %p nr = %d\n", block, nr);
     
     // Add block at the free location
@@ -177,7 +180,7 @@ OFS::seekDirectory(FSHashTable &hashTable, const char *name)
  */
 
 void
-OFS::writeAsDisk(u8 *dst, size_t length)
+FSVolume::writeAsDisk(u8 *dst, size_t length)
 {
     assert(dst != nullptr);
     assert(length % 512 == 0);
@@ -211,4 +214,14 @@ OFS::writeAsDisk(u8 *dst, size_t length)
     }
     
     debug("writeAsDisk() DONE\n");
+}
+
+OFSVolume::OFSVolume(const char *name) : FSVolume(name, 2*880, 512)
+{
+    type = OFS;
+}
+
+FFSVolume::FFSVolume(const char *name) : FSVolume(name, 2*880, 512)
+{
+    type = FFS;
 }

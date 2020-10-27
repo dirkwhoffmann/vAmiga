@@ -18,6 +18,9 @@
 
 struct Block {
     
+    // The volume this block belongs to
+    class FSVolume &volume;
+    
     // The sector number of this block
     u32 nr;
 
@@ -32,6 +35,7 @@ struct Block {
     // Methods
     //
     
+    Block(FSVolume &ref); 
     virtual ~Block() { printf("~Block()\n"); }
 
     // Returns the type of this block
@@ -63,6 +67,8 @@ struct HashableBlock : Block {
     //
     // Methods
     //
+    
+    HashableBlock(FSVolume &ref) : Block(ref) { }
     
     // Return a hash value for this block
     virtual u32 hashValue() { return 0; }

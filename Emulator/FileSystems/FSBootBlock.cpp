@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSBootBlock.h"
+#include "FSVolume.h"
 
 void
 BootBlock::write(u8 *dst)
@@ -41,12 +41,13 @@ BootBlock::write(u8 *dst)
     dst[0] = 'D';
     dst[1] = 'O';
     dst[2] = 'S';
-    dst[3] = ffs ? 1 : 0;
     
-    // Write data
-    if (ffs) {
-        memcpy(dst + 4, ffsData, sizeof(ffsData));
-    } else {
+    // Write header extension byte and data
+    if (volume.isOFS()) {
+        dst[3] = 0;
         memcpy(dst + 4, ofsData, sizeof(ofsData));
+    } else {
+        dst[3] = 1;
+        memcpy(dst + 4, ffsData, sizeof(ffsData));
     }
 }

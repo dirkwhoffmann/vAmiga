@@ -33,8 +33,9 @@ struct UserDirBlock : HashableBlock {
     // Methods
     //
     
-    UserDirBlock(const char *str) : name(FSName(str)) { };
-    
+    UserDirBlock(FSVolume &ref);
+    UserDirBlock(FSVolume &ref, const char *name);
+
     // Methods from Block class
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
     virtual void dump() override;

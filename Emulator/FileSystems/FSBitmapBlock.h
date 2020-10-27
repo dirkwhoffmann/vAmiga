@@ -20,7 +20,7 @@ struct BitmapBlock : Block {
     // The allocation map
     bool *allocated = nullptr;
         
-    BitmapBlock(long cap);
+    BitmapBlock(FSVolume &ref, long cap);
     
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     virtual void dump() override;

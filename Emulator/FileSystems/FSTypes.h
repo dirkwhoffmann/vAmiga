@@ -14,6 +14,13 @@
 
 typedef enum
 {
+    OFS,
+    FFS
+}
+FSVolumeType;
+
+typedef enum
+{
     FS_BLOCK,
     FS_BOOT_BLOCK,
     FS_ROOT_BLOCK,

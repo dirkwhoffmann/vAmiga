@@ -7,7 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSBlock.h"
+#include "FSVolume.h"
+
+Block::Block(FSVolume &ref) : volume(ref)
+{
+
+}
 
 u32
 Block::checksum(u8 *p)

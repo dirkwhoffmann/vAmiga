@@ -19,30 +19,51 @@
 #include "ADFFile.h"
 
 /* This class provides the basic functionality of the Amiga's Original File
- * System (OFS). Starting from an empty file system, files can be added or
- * removed, and boot blocks can be installed. Furthermore, functionality is
- * provided to import and export the file system from and to ADF files.
+ * System (OFS). Starting from an empty volume, files can be added or removed,
+ * and boot blocks can be installed. Furthermore, functionality is provided to
+ * import and export the file system from and to ADF files.
  */
 
 // THIS IS EXPERIMENTAL CODE AND NOT FULLY FUNCTIONAL YET. STAY TUNED...
 
-class OFS : AmigaObject {
-            
-    // Number of available blocks in this file system
-    long capacity;
+class FSVolume : AmigaObject {
     
+protected:
+    
+    friend class Block;
+    
+    // The type of this volume (only OFS is supported, yet)
+    FSVolumeType type = OFS;
+
+    // Total number of blocks in this volume
+    u32 capacity;
+    
+    // Size of a single block in bytes
+    u32 bsize = 512;
+        
     // The block storage
     BlockPtr *blocks;
     
 public:
 
     // Constructing and destructing
-    OFS(const char *name, long cap);
-    OFS(const char *name) : OFS(name, 2 * 880) { };
-    ~OFS();
+    FSVolume(const char *name, u32 capacity, u32 bsize);
+    FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
+    ~FSVolume();
     
     // Prints debug information
     void dump();
+    
+    
+    //
+    // Querying file system properties
+    //
+    
+    FSVolumeType getType() { return type; }
+    bool isOFS() { return type == OFS; }
+    bool isFFF() { return type == FFS; }
+    u32 getCapacity() { return capacity; }
+    u32 getBSize() { return bsize; }
     
     
     //
@@ -61,9 +82,7 @@ public:
     long freeBlock();
     
     // Installs a boot block
-    void installBootBlock(bool ffs);
-    void installOFSBootBlock() { installBootBlock(false); }
-    void installFFSBootBlock() { installBootBlock(true); }
+    void installBootBlock();
 
     
     //
@@ -80,6 +99,20 @@ public:
     
     // Write files system to a disk
     void writeAsDisk(u8 *dst, size_t length);
+};
+
+class OFSVolume : public FSVolume {
+    
+public:
+    
+    OFSVolume(const char *name);
+};
+
+class FFSVolume : public FSVolume {
+
+public:
+    
+    FFSVolume(const char *name);
 };
 
 #endif

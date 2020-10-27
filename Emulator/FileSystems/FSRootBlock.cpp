@@ -9,6 +9,16 @@
 
 #include "FSRootBlock.h"
 
+RootBlock::RootBlock(FSVolume &ref) : Block(ref)
+{
+    
+}
+
+RootBlock::RootBlock(FSVolume &ref, const char *name) : RootBlock(ref)
+{
+    this->name = FSName(name);
+}
+
 void
 RootBlock::write(u8 *p)
 {

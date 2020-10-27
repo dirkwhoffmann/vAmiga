@@ -9,7 +9,7 @@
 
 #include "FSFileHeaderBlock.h"
 
-FileHeaderBlock::FileHeaderBlock(const char *str) : name(FSName(str))
+FileHeaderBlock::FileHeaderBlock(FSVolume &ref) : HashableBlock(ref)
 {
     memset(dataBlocks, 0, sizeof(dataBlocks));
 }

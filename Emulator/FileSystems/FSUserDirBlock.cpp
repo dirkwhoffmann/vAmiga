@@ -9,6 +9,16 @@
 
 #include "FSUserDirBlock.h"
 
+UserDirBlock::UserDirBlock(FSVolume &ref) : HashableBlock(ref)
+{
+    
+}
+
+UserDirBlock::UserDirBlock(FSVolume &ref, const char *name) : HashableBlock(ref)
+{
+    
+}
+
 void
 UserDirBlock::dump()
 {
