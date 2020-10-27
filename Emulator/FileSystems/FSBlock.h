@@ -23,6 +23,7 @@ struct FSBlock {
     
     // The sector number of this block
     u32 nr;
+    
 
     //
     // Static methods
@@ -31,8 +32,9 @@ struct FSBlock {
     // Computes a checksum for the sector in the provided buffer
     static u32 checksum(u8 *p);
     
+    
     //
-    // Methods
+    // Initializing
     //
     
     FSBlock(FSVolume &ref); 
@@ -43,11 +45,43 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() { return FS_BLOCK; }
 
+    
+    //
+    // Working with hash values
+    //
+    
+    // Return a hash value for this block
+    virtual u32 hashValue() { return 0; }
+
+    // Return true if the name of this block matches the given name
+    virtual bool matches(FSName &otherName) { return false; }
+
+    
+    //
+    // Managing linked lists
+    //
+    
+    // Links this block with another block with the same hash
+    virtual void link(FSBlock *block) { };
+
+    // Returns the next element in the linked list
+    virtual FSBlock *nextBlock() { return nullptr; }
+    
+    
+    //
+    // Debugging
+    //
+    
     // Prints debug information
     virtual void dump() { };
 
     // Checks the integrity of this block
     virtual bool check() { return true; }
+    
+    
+    //
+    // Exporting
+    //
     
     // Exports this block in AmigaDOS format (512 bytes are written)
     virtual void write(u8 *p);
@@ -60,28 +94,5 @@ protected:
 
 typedef FSBlock* BlockPtr;
 
-
-struct HashableBlock : FSBlock {
-
-    // Reference to the next block with the same hash
-    HashableBlock *next = nullptr;
-
-    //
-    // Methods
-    //
     
-    HashableBlock(FSVolume &ref) : FSBlock(ref) { }
-    
-    // Return a hash value for this block
-    virtual u32 hashValue() { return 0; }
-
-    // Links this block with another block with the same hash
-    virtual void link(HashableBlock *block);
-
-    // Return true if the name of this block matches the given name
-    virtual bool matches(FSName &otherName) { return false; }
-};
-    
-typedef HashableBlock* HashableBlockPtr;
-
 #endif

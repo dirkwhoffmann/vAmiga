@@ -9,12 +9,12 @@
 
 #include "FSUserDirBlock.h"
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref) : HashableBlock(ref)
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref) : FSBlock(ref)
 {
     
 }
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref, const char *name) : HashableBlock(ref)
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref, const char *name) : FSBlock(ref)
 {
     
 }
@@ -65,4 +65,14 @@ FSUserDirBlock::write(u8 *p)
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+void
+FSUserDirBlock::link(FSBlock *block)
+{
+    if (next) {
+        ((FSUserDirBlock *)next)->link(block);
+    } else {
+        next = block;
+    }
 }

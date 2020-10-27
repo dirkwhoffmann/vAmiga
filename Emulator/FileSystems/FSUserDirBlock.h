@@ -12,7 +12,7 @@
 
 #include "FSBlock.h"
 
-struct FSUserDirBlock : HashableBlock {
+struct FSUserDirBlock : FSBlock {
             
     // Name
     FSName name = FSName("");
@@ -28,6 +28,10 @@ struct FSUserDirBlock : HashableBlock {
 
     // Reference to the parent block
     FSBlock *parent = nullptr;
+
+    // Reference to the next block with the same hash
+    FSBlock *next = nullptr;
+
     
     //
     // Methods
@@ -40,10 +44,12 @@ struct FSUserDirBlock : HashableBlock {
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
     virtual void dump() override;
     void write(u8 *dst) override;
-
-    // Methods from HashableBlock class
     virtual u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
+
+    void link(FSBlock *block) override;
+    FSBlock *nextBlock() override { return next; }
+
 };
 
 #endif

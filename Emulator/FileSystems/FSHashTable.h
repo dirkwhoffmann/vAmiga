@@ -16,7 +16,7 @@
 struct FSHashTable {
 
     static const int hasTableSize = 72;
-    class HashableBlock *hashTable[hasTableSize];
+    class FSBlock *hashTable[hasTableSize];
     
     //
     // Methods
@@ -25,11 +25,11 @@ struct FSHashTable {
     FSHashTable();
     
     // Adds a new reference to the hash table
-    void link(HashableBlock *block);
+    void link(class FSBlock *block);
 
     // Seeks for a match inside the hash table
-    HashableBlock *seek(FSName name);
-    HashableBlock *seek(FSName name, u32 hash);
+    FSBlock *seek(FSName name);
+    FSBlock *seek(FSName name, u32 hash);
 
     // Exports the block in AmigaDOS format
     void write(u8 *ptr);    

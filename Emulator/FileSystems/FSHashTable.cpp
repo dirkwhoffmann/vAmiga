@@ -7,9 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSHashTable.h"
-#include "FSBlock.h"
-#include "Utils.h"
+#include "FSVolume.h"
 
 FSHashTable::FSHashTable()
 {
@@ -17,7 +15,7 @@ FSHashTable::FSHashTable()
 }
 
 void
-FSHashTable::link(HashableBlock *block)
+FSHashTable::link(FSBlock *block)
 {
     assert(block != nullptr);
     
@@ -33,18 +31,18 @@ FSHashTable::link(HashableBlock *block)
     }
 }
 
-HashableBlock *
+FSBlock *
 FSHashTable::seek(FSName name)
 {
     return seek(name, name.hashValue());
 }
 
-HashableBlock *
+FSBlock *
 FSHashTable::seek(FSName name, u32 hash)
 {
     assert(hash < hasTableSize);
     
-    HashableBlock *block = hashTable[hash];
+    FSBlock *block = hashTable[hash];
     
     while (block) {
 
@@ -52,7 +50,7 @@ FSHashTable::seek(FSName name, u32 hash)
         if (block->matches(name)) return block;
 
         // If not, check the next item in the linked list
-        block = block->next;
+        block = block->nextBlock();
     }
         
     return nullptr;

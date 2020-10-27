@@ -42,15 +42,3 @@ FSBlock::write32(u8 *p, u32 value)
     p[2] = BYTE1(value);
     p[3] = BYTE0(value);
 }
-
-void
-HashableBlock::link(HashableBlock *block)
-{
-    assert(block != nullptr);
-    
-    if (next) {
-        next->link(block);
-    } else {
-        next = block;
-    }
-}

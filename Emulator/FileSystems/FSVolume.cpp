@@ -236,15 +236,8 @@ FSVolume::writeAsDisk(u8 *dst, size_t length)
             printf("Skipping block %ld (>= %zu)\n", i, sectorCnt);
             continue;
         }
-
-        // If the sector is unused, wipe it out
-        if (blocks[i] == nullptr) {
-            memset(sector, 0, 512);
-            continue;
-        }
         
-        
-        if (blocks[i]->type() != FS_BLOCK) printf("Exporting block %ld\n", i);
+        if (blocks[i]->type() != FS_BLOCK) debug("Exporting block %ld\n", i);
         assert(blocks[i]->nr == i);
         blocks[i]->write(sector);
     }

@@ -9,7 +9,7 @@
 
 #include "FSFileHeaderBlock.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref) : HashableBlock(ref)
+FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref) : FSBlock(ref)
 {
     memset(dataBlocks, 0, sizeof(dataBlocks));
 }
@@ -68,4 +68,14 @@ FSFileHeaderBlock::write(u8 *p)
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+void
+FSFileHeaderBlock::link(FSBlock *block)
+{
+    if (next) {
+        ((FSFileHeaderBlock *)next)->link(block);
+    } else {
+        next = block;
+    }
 }
