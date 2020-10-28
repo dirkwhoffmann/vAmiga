@@ -12,12 +12,10 @@
 
 #include "Aliases.h"
 
-class FSName {
+struct FSName {
     
     char name[30 + 1];
     
-public:
-
     FSName(const char *str);
 
     char capital(char c);

@@ -26,7 +26,7 @@ class FSTimeStamp {
 public:
 
     FSTimeStamp(time_t date);
-    FSTimeStamp() { FSTimeStamp(time(NULL)); }
+    FSTimeStamp() : FSTimeStamp(time(NULL)) {  }
     
     void write(u8 *ptr);
 };

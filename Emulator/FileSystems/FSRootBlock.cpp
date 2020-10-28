@@ -9,14 +9,26 @@
 
 #include "FSRootBlock.h"
 
-FSRootBlock::FSRootBlock(FSVolume &ref) : FSBlock(ref)
+FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     
 }
 
-FSRootBlock::FSRootBlock(FSVolume &ref, const char *name) : FSRootBlock(ref)
+FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
 {
     this->name = FSName(name);
+}
+
+void
+FSRootBlock::dump()
+{
+    
+}
+
+bool
+FSRootBlock::check()
+{
+    return hashTable.check();
 }
 
 void
@@ -51,8 +63,14 @@ FSRootBlock::write(u8 *p)
     name.write(p + 432);
     
     // Secondary block type
-    p[511] = 0x01;
+    write32(p + 508, 1);
     
     // Compute checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+void
+FSRootBlock::printPath()
+{
+    printf("/");
 }

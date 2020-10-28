@@ -17,10 +17,25 @@ FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
     // Initialize block storage
     blocks = new BlockPtr[capacity];
     for (u32 i = 0; i < capacity; i++) blocks[i] = new FSBlock(*this, i);
-    
-    // Install a root block and a bitmap block
-    replaceBlock(rootBlockNr(), new FSRootBlock(*this, name));
-    replaceBlock(bitmapBlockNr(), new FSBitmapBlock(*this, capacity));
+        
+    // Install the bitmap block
+    u32 bitmap = bitmapBlockNr();
+    assert(bitmap < capacity);
+    delete blocks[bitmap];
+    blocks[bitmap] = new FSBitmapBlock(*this, bitmap);
+    assert(bitmapBlock() == blocks[bitmap]);
+    bitmapBlock()->alloc(bitmap);
+
+    // Install the root block
+    u32 root = rootBlockNr();
+    assert(root < capacity);
+    delete blocks[root];
+    blocks[root] = new FSRootBlock(*this, root, name);
+    assert(rootBlock() == blocks[root]);
+    bitmapBlock()->alloc(root);
+
+    // Set the current directory to '/'
+    currentDir = rootBlockNr();
     
     debug("Volume created\n");
 }
@@ -39,7 +54,7 @@ FSVolume::dump()
     
     for (size_t i = 0; i < capacity; i++)  {
         
-        if (blocks[i]->type() == FS_BLOCK) continue;
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
         msg("%d: %ld", i, blocks[i]->nr);
         msg(" (%s)\n", fsBlockTypeName(blocks[i]->type()));
@@ -72,7 +87,7 @@ FSVolume::bootBlock(u32 nr)
 FSRootBlock *
 FSVolume::rootBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_BOOT_BLOCK) {
+    if (nr < capacity && blocks[nr]->type() == FS_ROOT_BLOCK) {
         return (FSRootBlock *)blocks[nr];
     } else {
         return nullptr;
@@ -109,6 +124,56 @@ FSVolume::fileHeaderBlock(u32 nr)
     }
 }
 
+u32
+FSVolume::allocateBlock()
+{
+    u32 result;
+    
+    // Search for a free block above the root block
+    if ((result = allocateAbove(rootBlockNr()))) { return result; }
+
+    // Search for a free block below the root block
+    if ((result = allocateBelow(rootBlockNr()))) { return result; }
+    
+    return 0;
+}
+
+u32
+FSVolume::allocateBlock(u32 start, int incr)
+{
+    for (long i = start; i > 0 && i < capacity; i += incr) {
+
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
+            assert(!bitmapBlock()->isAllocated(i));
+            bitmapBlock()->alloc(i);
+            return i;
+        }
+    }
+    return 0;
+}
+
+FSUserDirBlock *
+FSVolume::newUserDirBlock(const char *name)
+{
+    u32 ref = allocateBlock();
+    if (!ref) return nullptr;
+    
+    blocks[ref] = new FSUserDirBlock(*this, ref, name);
+    return (FSUserDirBlock *)blocks[ref];
+}
+
+FSFileHeaderBlock *
+FSVolume::newFileHeaderBlock(const char *name)
+{
+
+    u32 ref = allocateBlock();
+    if (!ref) return nullptr;
+    
+    blocks[ref] = new FSFileHeaderBlock(*this, ref, name);
+    return (FSFileHeaderBlock *)blocks[ref];
+}
+
+/*
 void
 FSVolume::replaceBlock(long nr, FSBlock *block)
 {
@@ -119,7 +184,9 @@ FSVolume::replaceBlock(long nr, FSBlock *block)
     blocks[nr] = block;
     blocks[nr]->nr = nr;
 }
+*/
 
+/*
 void
 FSVolume::addBlock(long nr, FSBlock *block)
 {
@@ -135,7 +202,9 @@ FSVolume::addBlock(long nr, FSBlock *block)
     // Mark block as used
     bitmapBlock()->alloc(nr);
 }
+*/
 
+/*
 void
 FSVolume::removeBlock(long nr)
 {
@@ -149,21 +218,25 @@ FSVolume::removeBlock(long nr)
     // Mark block as free
     bitmapBlock()->dealloc(nr);
 }
+*/
 
+/*
 long
 FSVolume::freeBlock()
 {
-    for (long i = 882; i < capacity; i++) {
+    // Search for a free block above the root block
+    for (long i = rootBlockNr() + 2; i < capacity; i++) {
 
-        if (blocks[i] == nullptr) {
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             assert(!bitmapBlock()->isAllocated(i));
             return i;
         }
     }
 
-    for (long i = 879; i > 1; i--) {
+    // Search for a free block below the root block
+    for (long i = rootBlockNr() - 1; i > 1; i--) {
 
-        if (blocks[i] == nullptr) {
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             assert(!bitmapBlock()->isAllocated(i));
             return i;
         }
@@ -171,56 +244,87 @@ FSVolume::freeBlock()
     
     return -1;
 }
+*/
 
 void
 FSVolume::installBootBlock()
 {
     debug("installBootBlock()");
-    addBlock(0, new FSBootBlock(*this));
+    delete blocks[0];
+    blocks[0] = new FSBootBlock(*this, 0);
+}
+
+FSBlock *
+FSVolume::currentDirBlock()
+{
+    FSBlock *cdb = block(currentDir);
+    
+    if (cdb) {
+        if (cdb->type() == FS_ROOT_BLOCK || cdb->type() == FS_USERDIR_BLOCK) {
+            return cdb;
+        }
+    }
+    
+    // The block reference is invalid. Switch back to the root directory
+    currentDir = rootBlockNr();
+    return rootBlock(); 
 }
 
 bool
-FSVolume::addTopLevelDir(const char *name)
+FSVolume::changeDir(const char *name)
 {
     assert(name != nullptr);
-    
-    // Get a free block number
-    long nr = freeBlock();
-    if (nr == -1) return false;
 
-    // Create block
-    FSUserDirBlock *block = new FSUserDirBlock(*this, name);
-    debug("block = %p nr = %d\n", block, nr);
+    FSBlock *cdb = currentDirBlock();
     
-    // Add block at the free location
-    addBlock(nr, block);
+    if (strcmp(name, "..") == 0) {
+        
+        u32 parent = cdb->getParent();
+        if (parent == 0) return false;
+        
+        // Go one level up
+        currentDir = parent;
+        return true;
+    }
     
-    // Link the new block with the root block
-    block->parent = rootBlock();
-    rootBlock()->hashTable.link(nr);
+    FSBlock *subdir = cdb->seek(name);
+    if (!subdir) {
+        printf("Unable to find subdirectory %s\n", name);
+        return false;
+    }
+    
+    // Go one level down
+    currentDir = subdir->nr;
+    
+    printf("New current directory (%d %d %d): ", currentDir, currentDirBlock()->nr, currentDirBlock()->type());
+    currentDirBlock()->printPath();
+    printf("\n");
+    
     return true;
 }
 
-bool
-FSVolume::addSubDir(const char *name, FSUserDirBlock *dir)
+FSUserDirBlock *
+FSVolume::makeDir(const char *name)
 {
-    assert(name != nullptr);
+    debug("makeDir(%s)\n", name);
     
-    // Get a free block number
-    long nr = freeBlock();
-    if (nr == -1) return false;
+    FSBlock *cdb = currentDirBlock();
+    FSUserDirBlock *block = newUserDirBlock(name);
+    block->setParent(cdb->nr);
 
-    // Create block
-    FSUserDirBlock *block = new FSUserDirBlock(*this, name);
-    debug("block = %p nr = %d\n", block, nr);
+    return cdb->addHashBlock(block) ? block : nullptr;
+}
+
+FSFileHeaderBlock *
+FSVolume::makeFile(const char *name)
+{
+    debug("makeFile(%s)\n", name);
+
+    FSBlock *cdb = currentDirBlock();
+    FSFileHeaderBlock *block = newFileHeaderBlock(name);
+    block->setParent(cdb->nr);
     
-    // Add block at the free location
-    addBlock(nr, block);
-    
-    // Link the new block with the root block
-    block->parent = dir;
-    dir->hashTable.link(nr);
-    return true;
+    return cdb->addHashBlock(block) ? block : nullptr;
 }
 
 /*
@@ -236,6 +340,30 @@ OFS::seekDirectory(FSHashTable &hashTable, const char *name)
  
  */
 
+bool
+FSVolume::check()
+{
+    bool result = true;
+    
+    printf("Checking the volume for errors...\n");
+    
+    for (u32 i = 0; i < capacity; i++) {
+                
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
+
+        printf("Inspecting block %d (%s)\n", i, fsBlockTypeName(blocks[i]->type()));
+
+        if (i != blocks[i]->nr) {
+            printf("Block %i contains a wrong id (%d)\n", i, blocks[i]->nr);
+        }
+
+        result &= blocks[i]->check();
+    }
+    
+    printf("This volume is %s.\n", result ? "sound" : "corrupted");
+    return result;
+}
+
 void
 FSVolume::writeAsDisk(u8 *dst, size_t length)
 {
@@ -248,17 +376,17 @@ FSVolume::writeAsDisk(u8 *dst, size_t length)
     debug("writeAsDisk(%x, %d) sectors: %d\n", dst, length, sectorCnt);
     dump();
         
-    for (long i = 0; i < capacity; i++) {
+    for (int i = 0; i < capacity; i++) {
 
         u8 *sector = dst + i * 512;
         
         // Only proceed if the disk has space for this block
         if (i >= sectorCnt) {
-            printf("Skipping block %ld (>= %zu)\n", i, sectorCnt);
+            printf("Skipping block %d (>= %zu)\n", i, sectorCnt);
             continue;
         }
         
-        if (blocks[i]->type() != FS_BLOCK) debug("Exporting block %ld\n", i);
+        if (blocks[i]->type() != FS_EMPTY_BLOCK) debug("Exporting block %ld\n", i);
         assert(blocks[i]->nr == i);
         blocks[i]->write(sector);
     }

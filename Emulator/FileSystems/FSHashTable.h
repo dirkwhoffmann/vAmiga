@@ -15,14 +15,14 @@
 
 struct FSHashTable {
 
-    // The volume this block belongs to
+    // The volume this table belongs to
     class FSVolume &volume;
 
     // Hash table size
-    static const int hasTableSize = 72;
+    static const size_t hashTableSize = 72;
 
     // Hash table entries
-    u32 hashTable[hasTableSize];
+    u32 hashTable[hashTableSize];
     
     
     //
@@ -32,12 +32,16 @@ struct FSHashTable {
     FSHashTable(FSVolume &ref);
     
     // Adds a new reference to the hash table
-    void link(u32 ref);
+    bool link(u32 ref);
+    bool link(class FSBlock *block);
+    bool link(u32 ref, u32 hashValue);
 
     // Seeks for a match inside the hash table
     class FSBlock *seek(FSName name);
-    class FSBlock *seek(FSName name, u32 hash);
 
+    // Verifies the integrity of the hash table
+    bool check();
+    
     // Exports the block in AmigaDOS format
     void write(u8 *ptr);    
 };

@@ -14,7 +14,7 @@
 
 struct FSBootBlock : FSBlock {
       
-    FSBootBlock(FSVolume &ref) : FSBlock(ref) { }
+    FSBootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr) { }
     
     FSBlockType type() override { return FS_BOOT_BLOCK; }
     void write(u8 *dst) override;

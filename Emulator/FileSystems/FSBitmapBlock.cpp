@@ -7,24 +7,47 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSBitmapBlock.h"
+#include "FSVolume.h"
 
-FSBitmapBlock::FSBitmapBlock(FSVolume &ref, long cap) : FSBlock(ref), capacity(cap)
+FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    allocated = new bool[capacity]();
+    allocated = new bool[volume.capacity]();
     
     // The first two blocks are always allocated
     allocated[0] = true;
-    allocated[1] = true;
+    allocated[1] = true;    
 }
 
 void
 FSBitmapBlock::dump()
 {
-    for (int i = 0; i < capacity; i++) {
-        printf("%c", allocated[i] ? '1' : '0');
+    /*
+    for (int i = 0; i < volume.capacity; i++) {
+        printf("%d(%c)", i, allocated[i] ? '1' : '0');
     }
     printf("\n");
+    */
+}
+
+bool
+FSBitmapBlock::check()
+{
+    bool result = true;
+    
+    for (u32 i = 2; i < volume.capacity; i++) {
+                
+        FSBlockType type = volume.blocks[i]->type();
+
+        if (type == FS_EMPTY_BLOCK && isAllocated(i)) {
+            printf("Empty block %d is marked as allocated.\n", i);
+            result = false;
+        }
+        if (type != FS_EMPTY_BLOCK && !isAllocated(i)) {
+            printf("Non-empty block %d is marked as free.\n", i);
+            result = false;
+        }
+    }
+    return result;
 }
 
 void
@@ -34,7 +57,7 @@ FSBitmapBlock::write(u8 *p)
     memset(p, 0, 512);
 
     // Write allocation map
-    for (long i = 2; i < capacity; i++) {
+    for (long i = 2; i < volume.capacity; i++) {
 
         if (allocated[i]) continue;
         
@@ -60,16 +83,33 @@ FSBitmapBlock::write(u8 *p)
         
     // Compute checksum
     write32(p, FSBlock::checksum(p));
-    /*
-    u32 checksum = Block::checksum(p);
-    p[0] = BYTE3(checksum);
-    p[1] = BYTE2(checksum);
-    p[2] = BYTE1(checksum);
-    p[3] = BYTE0(checksum);
-    */
     
+    /*
     for (unsigned i = 0; i < 256; i++) {
         printf("%d:%x ", i, p[i]);
     }
     printf("\n");
+     */
+}
+
+bool
+FSBitmapBlock::isAllocated(u32 block)
+{
+    if (!volume.isBlockNumber(block)) return true;
+    
+    return allocated[block];
+}
+
+void
+FSBitmapBlock::alloc(u32 block, bool value)
+{
+    if (!volume.isBlockNumber(block)) return;
+
+    allocated[block] = value;
+}
+
+void
+FSBitmapBlock::dealloc()
+{
+    memset(allocated, 0, sizeof(bool) * volume.capacity);
 }

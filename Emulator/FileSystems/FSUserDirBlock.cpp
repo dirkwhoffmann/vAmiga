@@ -9,20 +9,25 @@
 
 #include "FSVolume.h"
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref) : FSBlock(ref)
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    
 }
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref, const char *name) : FSBlock(ref)
+FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
 {
-    
+    this->name = FSName(name);
 }
 
 void
 FSUserDirBlock::dump()
 {
     
+}
+
+bool
+FSUserDirBlock::check()
+{
+    return hashTable.check();
 }
 
 void
@@ -51,17 +56,17 @@ FSUserDirBlock::write(u8 *p)
     created.write(p + 420);
     
     // Directory name as BCPL string
+    printf("Name = %s\n", name.name);
     name.write(p + 432);
     
     // Next block with same hash
     write32(p + 496, next);
 
     // Block pointer to parent directory
-    assert(parent != NULL);
-    write32(p + 500, parent->nr);
+    write32(p + 500, parent);
     
     // Subtype
-    p[508] = 2;
+    write32(p + 508, 2);
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
@@ -78,4 +83,33 @@ FSUserDirBlock::link(u32 ref)
     } else {
         next = ref;
     }
+}
+
+void
+FSUserDirBlock::setParent(u32 ref)
+{
+    if (volume.isBlockNumber(ref)) parent = ref;
+}
+
+void
+FSUserDirBlock::printPath()
+{
+    FSBlock *ref = volume.block(getParent());
+    if (ref) ref->printPath();
+    printf("%s/", name.name);
+}
+
+void
+FSUserDirBlock::addItem(FSBlock *block)
+{
+    printf("addItem(%p)\n", block);
+
+    // Only proceed if a block is given
+    if (block == nullptr) return;
+            
+    // Add the block to the hash table
+    hashTable.link(block);
+
+    // Set the reference to the parent directory
+    block->setParent(this->nr);
 }

@@ -31,27 +31,45 @@ class FSVolume : AmigaObject {
 protected:
     
     friend class FSBlock;
+    friend class FSBitmapBlock;
     
-    // The type of this volume (only OFS is supported, yet)
+    // The type of this volume
     FSVolumeType type = OFS;
 
-    // Total number of blocks in this volume
+    // Total capacity of this volume in blocks
     u32 capacity;
     
     // Size of a single block in bytes
     u32 bsize = 512;
         
-    // The block storage
+    // Block storage
     BlockPtr *blocks;
+    
+    // The directory where new files and subdirectories are added
+    u32 currentDir = 0;
+
+    
+    //
+    // Class methods
+    //
+    
+public:
+    
+    // Checks if the block with the given number is part of the volume
+    bool isBlockNumber(u32 nr) { return nr < capacity; }
+
+    
+    //
+    // Initializing
+    //
     
 public:
 
-    // Constructing and destructing
     FSVolume(const char *name, u32 capacity, u32 bsize);
     FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
     ~FSVolume();
     
-    // Prints debug information
+    // Dumps a summary of the file system to the console (for debugging, only)
     void dump();
     
     
@@ -67,12 +85,9 @@ public:
     
     
     //
-    // Working with blocks
+    // Accessing blocks
     //
-    
-    // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < capacity; }
-    
+        
     // Returns the location of the root block and the bitmap block
     u32 rootBlockNr() { return 880; }
     u32 bitmapBlockNr() { return 881; }
@@ -87,33 +102,77 @@ public:
     FSUserDirBlock *userDirBlock(u32 nr);
     FSFileHeaderBlock *fileHeaderBlock(u32 nr);
 
+    
+    //
+    // Creating new blocks
+    //
+
+    // DEPRECATED
+    long freeBlock();
+
+    // Allocates a new block (returns 0 if the volume is full)
+    u32 allocateBlock();
+    u32 allocateBlock(u32 start, int increment);
+    u32 allocateAbove(u32 ref) { return allocateBlock(ref, 1); }
+    u32 allocateBelow(u32 ref) { return allocateBlock(ref, -1); }
+
+    // Creates a new user directory or file header block
+    FSUserDirBlock *newUserDirBlock(const char *name);
+    FSFileHeaderBlock *newFileHeaderBlock(const char *name);
+        
     // Replaces a block
-    void replaceBlock(long nr, FSBlock *block);
+    // void replaceBlock(long nr, FSBlock *block);
 
     // Adds ot removes a block (DEPRECATED)
-    void addBlock(long nr, FSBlock *block);
-    void removeBlock(long nr);
-        
-    // Returns the number of a free block (or -1 if no free blocks exist)
-    long freeBlock();
-    
+    // void addBlock(long nr, FSBlock *block);
+    // void removeBlock(long nr);
+            
     // Installs a boot block
     void installBootBlock();
 
     
     //
-    // Managing directories
+    // Managing directories and files
     //
     
-    bool addTopLevelDir(const char *name);
-    bool addSubDir(const char *name, FSUserDirBlock *dir);
+    // Returns the block representing the current directory
+    FSBlock *currentDirBlock();
+    
+    // Changes the current directory
+    bool changeDir(const char *name);
+    
+    // Creates a new directory entry
+    FSUserDirBlock *makeDir(const char *name);
+    FSFileHeaderBlock *makeFile(const char *name);
+    FSBlock *makeEntry(FSBlock *entry);
+
+    
+    
+    
+    // Appends a new data block to a given file
+    // bool appendDataBlock(FSFileHeaderBlock *block) { return false; }
+    // bool appendDataBlock(FSDataBlock *block);
+
+    // Appends a chunk of data to a given file
+    // bool appendData(FSFileHeaderBlock *block);
+    
+    
+    // DEPRECATED
     FSUserDirBlock *seekDirectory(const char *path);
+    
+    
+    // Verifying
+    //
+
+    // Checks the integrity of the entire volume
+    bool check();
+
     
     //
     // Exporting
     //
     
-    // Write files system to a disk
+    // Exports the volume into a buffer compatible with the ADF format
     void writeAsDisk(u8 *dst, size_t length);
 };
 

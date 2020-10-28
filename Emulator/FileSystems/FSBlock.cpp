@@ -9,11 +9,6 @@
 
 #include "FSVolume.h"
 
-FSBlock::FSBlock(FSVolume &ref) : volume(ref)
-{
-
-}
-
 u32
 FSBlock::checksum(u8 *p)
 {

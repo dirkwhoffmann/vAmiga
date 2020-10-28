@@ -13,24 +13,27 @@
 #include "FSBlock.h"
 
 struct FSBitmapBlock : FSBlock {
-    
-    // Total number of blocks
-    long capacity = 0;
-        
+            
     // The allocation map
     bool *allocated = nullptr;
         
-    FSBitmapBlock(FSVolume &ref, long cap);
+    FSBitmapBlock(FSVolume &ref, u32 nr);
     
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
-    virtual void dump() override;
+    void dump() override;
+
+    // Verifying
+    bool check() override;
+    
+    // Exporting
     void write(u8 *dst) override;
 
     // Allocates or deallocates a single block
-    bool isAllocated(int block) { return block >= capacity || allocated[block]; }
-    void alloc(int block) { if (block < capacity) allocated[block] = true; }
-    void dealloc(int block) { if (block < capacity) allocated[block] = false; }
-    void dealloc() { memset(allocated, 0, sizeof(bool) * capacity); }
+    bool isAllocated(u32 block);
+    void alloc(u32 block, bool value);
+    void alloc(u32 block) { alloc(block, true); }
+    void dealloc(u32 block) { alloc(block, false); }
+    void dealloc();
 };
 
 #endif

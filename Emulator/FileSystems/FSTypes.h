@@ -21,7 +21,7 @@ FSVolumeType;
 
 typedef enum
 {
-    FS_BLOCK,
+    FS_EMPTY_BLOCK,
     FS_BOOT_BLOCK,
     FS_ROOT_BLOCK,
     FS_BITMAP_BLOCK,
@@ -35,7 +35,7 @@ FSBlockType;
 inline bool
 isFSBlockType(long value)
 {
-    return value >= FS_BLOCK && value <= FS_DATA_BLOCK;
+    return value >= FS_EMPTY_BLOCK && value <= FS_DATA_BLOCK;
 }
 
 inline const char *
@@ -44,7 +44,7 @@ fsBlockTypeName(FSBlockType type)
     assert(isFSBlockType(type));
 
     switch (type) {
-        case FS_BLOCK:            return "FS_BLOCK";
+        case FS_EMPTY_BLOCK:      return "FS_EMPTY_BLOCK";
         case FS_BOOT_BLOCK:       return "FS_BOOT_BLOCK";
         case FS_ROOT_BLOCK:       return "FS_ROOT_BLOCK";
         case FS_BITMAP_BLOCK:     return "FS_BITMAP_BLOCK";

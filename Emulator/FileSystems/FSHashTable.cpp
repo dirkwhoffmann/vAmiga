@@ -14,37 +14,47 @@ FSHashTable::FSHashTable(FSVolume &ref) : volume(ref)
     memset(hashTable, 0, sizeof(hashTable));
 }
 
-void
+bool
 FSHashTable::link(u32 ref)
 {
     FSBlock *block = volume.block(ref);
-    
-    if (block) {
-        
-        // Compute the hash value for the new block
-        u32 hashValue = volume.block(ref)->hashValue();
-        
-        // Add reference
-        if (hashTable[hashValue] == 0) {
-            hashTable[hashValue] = ref;
-        } else {
-            volume.block(hashTable[hashValue])->link(ref);
-        }
-    }
+
+    return block ? link(ref, volume.block(ref)->hashValue()) : false;
 }
 
+bool
+FSHashTable::link(FSBlock *block)
+{
+    return block ? link(block->nr, block->hashValue()) : false;
+}
+
+bool
+FSHashTable::link(u32 ref, u32 hashValue)
+{
+    assert(hashValue < hashTableSize);
+    
+    if (!volume.isBlockNumber(ref)) return false;
+    
+    if (hashTable[hashValue] == 0) {
+        hashTable[hashValue] = ref;
+    } else {
+        volume.block(hashTable[hashValue])->link(ref);
+    }
+    return true;
+}
+
+/*
 FSBlock *
 FSHashTable::seek(FSName name)
 {
     return seek(name, name.hashValue());
 }
+*/
 
 FSBlock *
-FSHashTable::seek(FSName name, u32 hash)
+FSHashTable::seek(FSName name)
 {
-    assert(hash < hasTableSize);
-    
-    u32 ref = hashTable[hash];
+    u32 ref = hashTable[name.hashValue()];
     
     while (ref && volume.isBlockNumber(ref)) {
 
@@ -58,6 +68,35 @@ FSHashTable::seek(FSName name, u32 hash)
     }
         
     return nullptr;
+}
+
+bool
+FSHashTable::check()
+{
+    bool result = true;
+    
+    for (int i = 0; i < hashTableSize; i++) {
+
+        if (hashTable[i] == 0) continue;
+        
+        FSBlock *block = volume.block(hashTable[i]);
+        
+        if (block) {
+            
+            FSBlockType type = block->type();
+            if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) {
+
+                printf("Hash table [%d]: Referenced block has invalid type %d\n", i, type);
+                result = false;
+            }
+
+        } else {
+            
+            printf("Hash table [%d]: Entry is not a block reference\n", i);
+        }
+    }
+    
+    return result;
 }
 
 void
