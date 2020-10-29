@@ -9,9 +9,8 @@
 
 #include "FSVolume.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
 {
-    memset(dataBlocks, 0, sizeof(dataBlocks));
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
@@ -21,40 +20,38 @@ FSFileHeaderBlock(ref, nr)
 }
 
 void
+FSFileHeaderBlock::printName()
+{
+    printf("%s", name.name);
+}
+
+void
+FSFileHeaderBlock::printPath()
+{
+    FSBlock *ref = volume.block(getParent());
+    if (ref) ref->printPath();
+    printf("/");
+    printName();
+}
+
+void
 FSFileHeaderBlock::dump()
 {
+    FSFileBlock::dump();
     
+    printf("        Name: "); printName(); printf("\n");
+    printf("        Path: "); printPath(); printf("\n");
+    printf("     Comment: "); comment.dump(); printf("\n");
+    printf("     Created: "); created.dump(); printf("\n");
+    printf("   File size: %d\n", fileSize);
 }
 
 bool
-FSFileHeaderBlock::check()
+FSFileHeaderBlock::check(bool verbose)
 {
-    bool result = true;
-    FSBlock *block;
-    FSBlockType type;
-    
-    if (!parent) {
-        printf("Reference to parent block is missing.\n");
-        result = false;
-        goto exit;
-    }
-    
-    block = volume.block(parent);
-    if (block == nullptr) {
-        printf("Reference to parent block is invalid (%d).\n", parent);
-        result = false;
-        goto exit;
-    }
-    
-    type = block->type();
-    if (type != FS_ROOT_BLOCK && type != FS_USERDIR_BLOCK) {
-        printf("Parent block %d has invalid type %d.\n", parent, type);
-        result = false;
-        goto exit;
-    }
-    
-exit:
-    
+    printf("FSFileHeaderBlock::check(%d)", verbose);
+
+    bool result = FSFileBlock::check(verbose);
     return result;
 }
 
@@ -71,13 +68,13 @@ FSFileHeaderBlock::write(u8 *p)
     write32(p + 4, nr);
     
     // Number of blocks in file header
-    write32(p + 8, numBlocks);
+    write32(p + 8, numDataBlocks);
 
     // First data block
     if (dataBlocks[0]) write32(p + 16, dataBlocks[0]);
     
     // Data block list
-    for (int i = 0; i < numBlocks; i++) write32(p+308-4*i, dataBlocks[i]);
+    for (int i = 0; i < numDataBlocks; i++) write32(p+308-4*i, dataBlocks[i]);
     
     // Protection status bits
     write32(p + 320, 0);
@@ -95,7 +92,7 @@ FSFileHeaderBlock::write(u8 *p)
     name.write(p + 432);
     
     // Next block with same hash
-    write32(p + 496, next);
+    write32(p + 496, nextTableBlock);
 
     // Block pointer to parent directory
     write32(p + 500, parent);
@@ -107,29 +104,32 @@ FSFileHeaderBlock::write(u8 *p)
     write32(p + 20, FSBlock::checksum(p));
 }
 
-void
-FSFileHeaderBlock::link(u32 ref)
+bool
+FSFileHeaderBlock::append(u8 byte)
 {
-    // Only proceed if a valid block number is given
-    if (!volume.isBlockNumber(ref)) return;
+    FSDataBlock *block = volume.dataBlock(firstDataBlock);
     
-    if (next) {
-        volume.block(next)->link(ref);
-    } else {
-        next = ref;
+    // If a data block already exist, append it there
+    if (block) return block->append(byte);
+    
+    // Create the first data block
+    block = volume.newDataBlock();
+    if (block == nullptr) return false;
+    
+    // Link this block
+    block->fileHeaderBlock = nr;
+    firstDataBlock = block->nr;
+    
+    // Append data
+    return block->append(byte);
+}
+
+bool
+FSFileHeaderBlock::append(u8 *buffer, size_t size)
+{
+    for (size_t i = 0; i < size; i++) {
+        if (!append(buffer[i])) return false;
     }
-}
-
-void
-FSFileHeaderBlock::setParent(u32 ref)
-{
-    if (volume.isBlockNumber(ref)) parent = ref;
-}
-
-void
-FSFileHeaderBlock::printPath()
-{
-    FSBlock *ref = volume.block(getParent());
-    if (ref) ref->printPath();
-    printf("%s", name.name);
+    
+    return true;
 }

@@ -7,29 +7,18 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_TIME_STAMP_H
-#define _FS_TIME_STAMP_H
+#ifndef _FS_FILELIST_BLOCK_H
+#define _FS_FILELIST_BLOCK_H
 
-#include "Utils.h"
+#include "FSFileBlock.h"
 
-class FSTimeStamp {
+struct FSFileListBlock : FSFileBlock {
         
-    // Days since Jan 1, 1978
-    u32 days;
+    FSFileListBlock(FSVolume &ref, u32 nr);
 
-    // Minutes since midnight
-    u32 mins;
-
-    // Ticks past minute @ 50Hz
-    u32 ticks;
-    
-public:
-
-    FSTimeStamp(time_t date);
-    FSTimeStamp() : FSTimeStamp(time(NULL)) {  }
-    
-    void dump();
-    void write(u8 *ptr);
+    void dump() override;
+    bool check(bool verbose) override;
+    void write(u8 *dst) override;
 };
 
 #endif

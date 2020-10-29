@@ -23,10 +23,14 @@ FSTimeStamp::FSTimeStamp(time_t date)
 }
 
 void
-FSTimeStamp::write(u8 *p)
+FSTimeStamp::dump()
 {
-    printf("FSTimeStamp::write %x %x %x\n", days, mins, ticks);
-    
+    printf("%d:%d:%d", days, mins, ticks);
+}
+
+void
+FSTimeStamp::write(u8 *p)
+{    
     p[0x0] = BYTE3(days);
     p[0x1] = BYTE2(days);
     p[0x2] = BYTE1(days);

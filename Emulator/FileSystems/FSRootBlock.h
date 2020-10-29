@@ -19,7 +19,7 @@ struct FSRootBlock : FSBlock {
     FSTimeStamp created = FSTimeStamp();
     
     // Most recent change
-    FSTimeStamp lastModified = FSTimeStamp();
+    FSTimeStamp modified = FSTimeStamp();
 
     // Hash table storing references to other blocks
     FSHashTable hashTable = FSHashTable(volume);
@@ -34,20 +34,15 @@ struct FSRootBlock : FSBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
+    void printName() override;
+    void printPath() override;
     void dump() override;
-    bool check() override;
-
-    // Hash tables
+    bool check(bool verbose) override;
+    void write(u8 *dst) override;
+    
     FSHashTable *getHashTable() override { return &hashTable; }
     bool addHashBlock(FSBlock *block) override { return hashTable.link(block); }
-    
     FSBlock *seek(FSName name) override { return hashTable.seek(name); }
-    
-    // Exporting
-    void write(u8 *dst) override;
-
-    // Debugging
-    void printPath() override;
 };
 
 #endif

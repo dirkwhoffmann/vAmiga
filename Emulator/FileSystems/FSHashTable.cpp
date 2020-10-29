@@ -14,6 +14,14 @@ FSHashTable::FSHashTable(FSVolume &ref) : volume(ref)
     memset(hashTable, 0, sizeof(hashTable));
 }
 
+void
+FSHashTable::dump()
+{
+    for (int i = 0; i < hashTableSize; i++) {
+        if (hashTable[i]) printf("%d:%d ", i, hashTable[i]);
+    }
+}
+
 bool
 FSHashTable::link(u32 ref)
 {
@@ -38,18 +46,10 @@ FSHashTable::link(u32 ref, u32 hashValue)
     if (hashTable[hashValue] == 0) {
         hashTable[hashValue] = ref;
     } else {
-        volume.block(hashTable[hashValue])->link(ref);
+        volume.block(hashTable[hashValue])->setNext(ref);
     }
     return true;
 }
-
-/*
-FSBlock *
-FSHashTable::seek(FSName name)
-{
-    return seek(name, name.hashValue());
-}
-*/
 
 FSBlock *
 FSHashTable::seek(FSName name)
@@ -60,43 +60,14 @@ FSHashTable::seek(FSName name)
 
         FSBlock *block = volume.block(ref);
         
-        // Return immediately if the item has been found
+        // Return the block reference if the item has been found
         if (block->matches(name)) return block;
 
         // If not, check the next item in the linked list
-        ref = block->nextBlock();
+        ref = block->getNext();
     }
         
     return nullptr;
-}
-
-bool
-FSHashTable::check()
-{
-    bool result = true;
-    
-    for (int i = 0; i < hashTableSize; i++) {
-
-        if (hashTable[i] == 0) continue;
-        
-        FSBlock *block = volume.block(hashTable[i]);
-        
-        if (block) {
-            
-            FSBlockType type = block->type();
-            if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) {
-
-                printf("Hash table [%d]: Referenced block has invalid type %d\n", i, type);
-                result = false;
-            }
-
-        } else {
-            
-            printf("Hash table [%d]: Entry is not a block reference\n", i);
-        }
-    }
-    
-    return result;
 }
 
 void

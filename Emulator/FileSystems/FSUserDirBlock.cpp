@@ -19,15 +19,47 @@ FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUser
 }
 
 void
+FSUserDirBlock::printName()
+{
+    printf("%s", name.name);
+}
+
+void
+FSUserDirBlock::printPath()
+{
+    FSBlock *ref = volume.block(getParent());
+    if (ref) ref->printPath();
+    printf("/");
+    printName();
+}
+
+void
 FSUserDirBlock::dump()
 {
-    
+    printf("        Name: "); printName(); printf("\n");
+    printf("        Path: "); printPath(); printf("\n");
+    printf("     Comment: "); comment.dump(); printf("\n");
+    printf("     Created: "); created.dump(); printf("\n");
+    printf("  Hash table: "); hashTable.dump(); printf("\n");
+    printf("      Parent: %d\n", parent);
+    printf("        Next: %d\n", next);
 }
 
 bool
-FSUserDirBlock::check()
+FSUserDirBlock::check(bool verbose)
 {
-    return hashTable.check();
+    bool result = FSBlock::check(verbose);
+
+    for (int i = 0; i < hashTable.hashTableSize; i++) {
+       
+        u32 ref = hashTable.hashTable[i];
+        if (ref == 0) continue;
+        
+        result &= assertInRange(ref, verbose);
+        result &= assertHasType(ref, FS_USERDIR_BLOCK, FS_FILEHEADER_BLOCK);
+    }
+
+    return result;
 }
 
 void
@@ -73,13 +105,13 @@ FSUserDirBlock::write(u8 *p)
 }
 
 void
-FSUserDirBlock::link(u32 ref)
+FSUserDirBlock::setNext(u32 ref)
 {
     // Only proceed if a valid block number is given
     if (!volume.isBlockNumber(ref)) return;
     
     if (next) {
-        volume.block(next)->link(ref);
+        volume.block(next)->setNext(ref);
     } else {
         next = ref;
     }
@@ -89,14 +121,6 @@ void
 FSUserDirBlock::setParent(u32 ref)
 {
     if (volume.isBlockNumber(ref)) parent = ref;
-}
-
-void
-FSUserDirBlock::printPath()
-{
-    FSBlock *ref = volume.block(getParent());
-    if (ref) ref->printPath();
-    printf("%s/", name.name);
 }
 
 void

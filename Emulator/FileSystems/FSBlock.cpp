@@ -24,16 +24,97 @@ FSBlock::checksum(u8 *p)
 }
 
 void
+FSBlock::write32(u8 *p, u32 value)
+{
+    p[0] = (value >> 24) & 0xFF;
+    p[1] = (value >> 16) & 0xFF;
+    p[2] = (value >>  8) & 0xFF;
+    p[3] = (value >>  0) & 0xFF;
+}
+
+void
 FSBlock::write(u8 *p)
 {
     memset(p, 0, volume.bsize);
 }
 
-void
-FSBlock::write32(u8 *p, u32 value)
+bool
+FSBlock::assertNotNull(u32 ref, bool verbose)
 {
-    p[0] = BYTE3(value);
-    p[1] = BYTE2(value);
-    p[2] = BYTE1(value);
-    p[3] = BYTE0(value);
+    if (ref != 0) return true;
+    
+    if (verbose) fprintf(stderr, "Block reference is missing.\n");
+    return false;
+}
+
+bool
+FSBlock::assertInRange(u32 ref, bool verbose)
+{
+    if (volume.isBlockNumber(ref)) return true;
+
+    if (verbose) fprintf(stderr, "Block reference %d is invalid\n", ref);
+    return false;
+}
+
+bool
+FSBlock::assertHasType(u32 ref, FSBlockType type, bool verbose)
+{
+    return assertHasType(ref, type, type, verbose);
+}
+
+bool
+FSBlock::assertHasType(u32 ref, FSBlockType type1, FSBlockType type2, bool verbose)
+{
+    assert(isFSBlockType(type1));
+    assert(isFSBlockType(type2));
+
+    FSBlock *block = volume.block(ref);
+    FSBlockType type = block ? block->type() : FS_EMPTY_BLOCK;
+    
+    if (!isFSBlockType(type)) {
+        if (verbose) fprintf(stderr, "Block type %d is not a known type.\n", type);
+        return false;
+    }
+    
+    if (block && (type == type1 || type == type2)) return true;
+    
+    if (verbose && type1 == type2) {
+        fprintf(stderr, "Block %d has type %s. Expected %s.\n",
+                ref,
+                fsBlockTypeName(type),
+                fsBlockTypeName(type1));
+    }
+    
+    if (verbose && type1 != type2) {
+        fprintf(stderr, "Block %d has type %s. Expected %s or %s.\n",
+                ref,
+                fsBlockTypeName(type),
+                fsBlockTypeName(type1),
+                fsBlockTypeName(type2));
+    }
+
+    return false;
+}
+
+bool
+FSBlock::assertSelfRef(u32 ref, bool verbose)
+{
+    if (ref == nr && volume.block(ref) == this) return true;
+
+    if (ref != nr && verbose) {
+        fprintf(stderr, "%d is not a self-reference.\n", ref);
+    }
+    
+    if (volume.block(ref) != this && verbose) {
+        fprintf(stderr, "Array element %d references an invalid block\n", ref);
+    }
+    
+    return false;
+}
+
+bool
+FSBlock::check(bool verbose)
+{
+    printf("FSBlock::check(%d)\n", verbose);
+    return assertSelfRef(nr, verbose);
 }

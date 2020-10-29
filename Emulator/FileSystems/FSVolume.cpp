@@ -56,11 +56,46 @@ FSVolume::dump()
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
-        msg("%d: %ld", i, blocks[i]->nr);
-        msg(" (%s)\n", fsBlockTypeName(blocks[i]->type()));
+        msg("Block %d (%d):", i, blocks[i]->nr);
+        msg(" %s\n", fsBlockTypeName(blocks[i]->type()));
                 
         blocks[i]->dump(); 
     }
+}
+
+bool
+FSVolume::check(bool verbose)
+{
+    bool result = true;
+    
+    if (verbose) fprintf(stderr, "Checking volume...\n");
+    
+    for (u32 i = 0; i < capacity; i++) {
+                
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
+
+        if (verbose) {
+            fprintf(stderr, "Inspecting block %d (%s) ...\n",
+                    i, fsBlockTypeName(blocks[i]->type()));
+        }
+
+        result &= blocks[i]->check(verbose);
+    }
+    
+    printf("The volume is %s.\n", result ? "sound" : "corrupted");
+    return result;
+}
+
+u32
+FSVolume::freeBlocks()
+{
+    u32 result = 0;
+    
+    for (size_t i = 0; i < capacity; i++)  {
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) result++;
+    }
+    
+    return result;
 }
 
 FSBlock *
@@ -124,6 +159,26 @@ FSVolume::fileHeaderBlock(u32 nr)
     }
 }
 
+FSFileListBlock *
+FSVolume::fileListBlock(u32 nr)
+{
+    if (nr < capacity && blocks[nr]->type() == FS_FILELIST_BLOCK) {
+        return (FSFileListBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
+FSDataBlock *
+FSVolume::dataBlock(u32 nr)
+{
+    if (nr < capacity && blocks[nr]->type() == FS_DATA_BLOCK) {
+        return (FSDataBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
 u32
 FSVolume::allocateBlock()
 {
@@ -152,6 +207,18 @@ FSVolume::allocateBlock(u32 start, int incr)
     return 0;
 }
 
+void
+FSVolume::deallocateBlock(u32 ref)
+{
+    FSBlock *b = block(ref);
+    if (b == nullptr) return;
+    
+    if (b->type() != FS_EMPTY_BLOCK) {
+        delete b;
+        blocks[ref] = new FSBlock(*this, ref);
+    }
+}
+
 FSUserDirBlock *
 FSVolume::newUserDirBlock(const char *name)
 {
@@ -171,6 +238,26 @@ FSVolume::newFileHeaderBlock(const char *name)
     
     blocks[ref] = new FSFileHeaderBlock(*this, ref, name);
     return (FSFileHeaderBlock *)blocks[ref];
+}
+
+FSFileListBlock *
+FSVolume::newFileListBlock()
+{
+    u32 ref = allocateBlock();
+    if (!ref) return nullptr;
+    
+    blocks[ref] = new FSFileListBlock(*this, ref);
+    return (FSFileListBlock *)blocks[ref];
+}
+
+FSDataBlock *
+FSVolume::newDataBlock()
+{
+    u32 ref = allocateBlock();
+    if (!ref) return nullptr;
+    
+    blocks[ref] = new FSDataBlock(*this, ref);
+    return (FSDataBlock *)blocks[ref];
 }
 
 /*
@@ -327,41 +414,33 @@ FSVolume::makeFile(const char *name)
     return cdb->addHashBlock(block) ? block : nullptr;
 }
 
-/*
-UserDirBlock *
-OFS::seekDirectory(FSHashTable &hashTable, const char *name)
+FSBlock *
+FSVolume::seek(const char *name)
 {
+    debug("seekItem(%s)\n", name);
     
+    FSBlock *cdb = currentDirBlock();
+    return cdb->seek(name);
 }
- 
- currentDir = nullptr (top level)
- 
- changeDir(const char *dir) Cases: 'foo' '/' '..'
- 
- */
 
-bool
-FSVolume::check()
+FSUserDirBlock *
+FSVolume::seekDir(const char *name)
 {
-    bool result = true;
-    
-    printf("Checking the volume for errors...\n");
-    
-    for (u32 i = 0; i < capacity; i++) {
-                
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
+    FSBlock *block = seek(name);
 
-        printf("Inspecting block %d (%s)\n", i, fsBlockTypeName(blocks[i]->type()));
-
-        if (i != blocks[i]->nr) {
-            printf("Block %i contains a wrong id (%d)\n", i, blocks[i]->nr);
-        }
-
-        result &= blocks[i]->check();
-    }
+    if (!block || block->type() != FS_USERDIR_BLOCK) return nullptr;
     
-    printf("This volume is %s.\n", result ? "sound" : "corrupted");
-    return result;
+    return (FSUserDirBlock *)block;
+}
+
+FSFileHeaderBlock *
+FSVolume::seekFile(const char *name)
+{
+    FSBlock *block = seek(name);
+
+    if (!block || block->type() != FS_FILEHEADER_BLOCK) return nullptr;
+
+    return (FSFileHeaderBlock *)block;
 }
 
 void

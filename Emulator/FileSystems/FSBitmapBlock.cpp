@@ -21,32 +21,34 @@ FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 void
 FSBitmapBlock::dump()
 {
-    /*
+    printf("   Allocated: ");
+
     for (int i = 0; i < volume.capacity; i++) {
-        printf("%d(%c)", i, allocated[i] ? '1' : '0');
+        if (allocated[i]) printf("%d ", i);
     }
+    
     printf("\n");
-    */
 }
 
 bool
-FSBitmapBlock::check()
+FSBitmapBlock::check(bool verbose)
 {
-    bool result = true;
+    bool result = FSBlock::check(verbose);
     
     for (u32 i = 2; i < volume.capacity; i++) {
                 
         FSBlockType type = volume.blocks[i]->type();
 
         if (type == FS_EMPTY_BLOCK && isAllocated(i)) {
-            printf("Empty block %d is marked as allocated.\n", i);
+            if (verbose) printf("Empty block %d is marked as allocated.\n", i);
             result = false;
         }
         if (type != FS_EMPTY_BLOCK && !isAllocated(i)) {
-            printf("Non-empty block %d is marked as free.\n", i);
+            if (verbose) printf("Non-empty block %d is marked as free.\n", i);
             result = false;
         }
     }
+
     return result;
 }
 

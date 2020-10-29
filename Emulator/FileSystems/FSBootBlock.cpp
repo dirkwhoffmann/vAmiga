@@ -10,6 +10,17 @@
 #include "FSVolume.h"
 
 void
+FSBootBlock::dump()
+{
+}
+
+bool
+FSBootBlock::check(bool verbose)
+{
+    return FSBlock::check(verbose);
+}
+
+void
 FSBootBlock::write(u8 *dst)
 {
     assert(dst != NULL);

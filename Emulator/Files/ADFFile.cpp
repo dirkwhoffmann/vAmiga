@@ -247,6 +247,10 @@ ADFFile::formatDisk(FileSystemType fs)
         debug("Adding some example entries...\n");
         vol.makeDir("Holla");
         vol.makeFile("ABC");
+        FSFileHeaderBlock *block = vol.seekFile("ABC");
+        assert(block);
+        char test[] = "test";
+        block->append((u8 *)test, 4);
         vol.makeFile("Waldfee");
         vol.changeDir("Holla");
         vol.makeDir("die");
@@ -258,7 +262,7 @@ ADFFile::formatDisk(FileSystemType fs)
         debug("Done\n");
 
         // Perform a file system check
-        vol.check();
+        vol.check(true);
         
         vol.writeAsDisk(data, size);
         

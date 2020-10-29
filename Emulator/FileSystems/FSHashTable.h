@@ -31,16 +31,15 @@ struct FSHashTable {
     
     FSHashTable(FSVolume &ref);
     
+    void dump();
+    
     // Adds a new reference to the hash table
     bool link(u32 ref);
     bool link(class FSBlock *block);
     bool link(u32 ref, u32 hashValue);
 
-    // Seeks for a match inside the hash table
+    // Looks for a matching item inside the hash table
     class FSBlock *seek(FSName name);
-
-    // Verifies the integrity of the hash table
-    bool check();
     
     // Exports the block in AmigaDOS format
     void write(u8 *ptr);    

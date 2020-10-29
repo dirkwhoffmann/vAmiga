@@ -21,7 +21,8 @@ struct FSName {
     char capital(char c);
     bool operator== (FSName &rhs);
     u32 hashValue();
-    
+  
+    void dump() {};
     void write(u8 *ptr);
 };
 
@@ -33,6 +34,7 @@ public:
 
     FSComment(const char *str);
     
+    void dump() {};
     void write(u8 *ptr);
 };
 

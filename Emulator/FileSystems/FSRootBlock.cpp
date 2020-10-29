@@ -20,15 +20,41 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(
 }
 
 void
+FSRootBlock::printName()
+{
+    printf("%s", name.name);
+}
+
+void
+FSRootBlock::printPath()
+{
+    printf("%s::", name.name);
+}
+
+void
 FSRootBlock::dump()
 {
-    
+    printf("        Name: "); name.dump(); printf("\n");
+    printf("     Created: "); created.dump(); printf("\n");
+    printf("    Modified: "); modified.dump(); printf("\n");
+    printf("  Hash table: "); hashTable.dump(); printf("\n");
 }
 
 bool
-FSRootBlock::check()
+FSRootBlock::check(bool verbose)
 {
-    return hashTable.check();
+    bool result = FSBlock::check(verbose);
+        
+    for (int i = 0; i < hashTable.hashTableSize; i++) {
+        
+        u32 ref = hashTable.hashTable[i];
+        if (ref == 0) continue;
+
+        result &= assertInRange(ref, verbose);
+        result &= assertHasType(ref, FS_USERDIR_BLOCK, FS_FILEHEADER_BLOCK);
+    }
+        
+    return result;
 }
 
 void
@@ -54,7 +80,7 @@ FSRootBlock::write(u8 *p)
     p[319] = LO_BYTE(881);
     
     // Last recent change of the root directory of this volume
-    lastModified.write(p + 420);
+    modified.write(p + 420);
     
     // Date and time when this volume was formatted
     created.write(p + 484);
@@ -67,10 +93,4 @@ FSRootBlock::write(u8 *p)
     
     // Compute checksum
     write32(p + 20, FSBlock::checksum(p));
-}
-
-void
-FSRootBlock::printPath()
-{
-    printf("/");
 }

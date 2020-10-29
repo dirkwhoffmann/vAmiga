@@ -32,18 +32,33 @@ struct FSBlock {
     // Computes a checksum for the sector in the provided buffer
     static u32 checksum(u8 *p);
     
+    // Writes a long word into a buffer in Big Endian format
+    static void write32(u8 *p, u32 value);
+
     
     //
-    // Initializing
+    // Methods
     //
     
     FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }
-    
     virtual ~FSBlock() { }
 
     // Returns the type of this block
     virtual FSBlockType type() { return FS_EMPTY_BLOCK; }
 
+    // Prints the name or path of this block
+    virtual void printName() { };
+    virtual void printPath() { };
+
+    // Prints a debug summary for this block
+    virtual void dump() { };
+    
+    // Checks the integrity of this block
+    virtual bool check(bool verbose);
+
+    // Exports this block in AmigaDOS format
+    virtual void write(u8 *p);
+    
     
     //
     // Method section 1: Implemented by blocks that maintain a hash table
@@ -54,6 +69,9 @@ struct FSBlock {
 
     // Adds a new item to the hash table
     virtual bool addHashBlock(FSBlock *block) { return false; }
+
+    // Looks for a matching item inside the hash table
+    virtual FSBlock *seek(FSName name) { return nullptr; }
 
     
     //
@@ -72,14 +90,12 @@ struct FSBlock {
     //
 
     // Links this block with another block with the same hash
-    virtual void link(u32 other) { };
+    virtual u32 getNext() { return 0; }
+    virtual void setNext(u32 next) { }
 
-    // Returns the next element in the linked list or 0
-    virtual u32 nextBlock() { return 0; }
-    
     
     //
-    // Method section 4: Implemented by blocks that are part of a hierachy
+    // Method section 4: Implemented by blocks that are vertically grouped
     //
 
     virtual u32 getParent() { return 0; }
@@ -87,44 +103,24 @@ struct FSBlock {
 
     
     //
-    // Seeking files
+    // Method section 5: Implemented by blocks that maintain a data block list
     //
 
-    // Seeks for a reference to a named file inside this block
-    virtual FSBlock *seek(FSName name) { return nullptr; }
+    virtual u32 blockListCapacity() { return 0; }
+    virtual u32 blockListSize() { return 0; }
+    virtual bool addDataBlockRef(u32 ref) { return false; }
+    virtual void deleteDataBlockRefs() { }
 
-
-    //
-    // Verifying
-    //
-
-    // Checks the integrity of this block
-    virtual bool check() { return true; }
+protected:
     
-        
-    //
-    // Exporting
-    //
-    
-    // Exports this block in AmigaDOS format (512 bytes are written)
-    virtual void write(u8 *p);
-    
-    // Writes a long word into a buffer in Big Endian format
-    void write32(u8 *p, u32 value);
-
-    
-    //
-    // Debugging
-    //
-    
-    // Prints debug information
-    virtual void dump() { };
-    
-    // Prints the path if this block represents a file system item
-    virtual void printPath() { };
+    // Performs a certain integrity check on a block reference
+    bool assertNotNull(u32 ref, bool verbose);
+    bool assertInRange(u32 ref, bool verbose);
+    bool assertHasType(u32 ref, FSBlockType type, bool verbose);
+    bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
+    bool assertSelfRef(u32 ref, bool verbose);
 };
 
 typedef FSBlock* BlockPtr;
 
-    
 #endif

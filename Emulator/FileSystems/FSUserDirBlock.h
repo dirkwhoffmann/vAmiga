@@ -45,28 +45,25 @@ struct FSUserDirBlock : FSBlock {
     //
     
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
-    virtual void dump() override;
-    bool check() override;
-
-
+    void printName() override;
+    void printPath() override;
+    void dump() override;
+    bool check(bool verbose) override;
     void write(u8 *dst) override;
-    
+
     FSHashTable *getHashTable() override { return &hashTable; }
     bool addHashBlock(FSBlock *block) override { return hashTable.link(block); }
+    FSBlock *seek(FSName name) override { return hashTable.seek(name); }
 
     virtual u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
 
-    void link(u32 ref) override;
-    u32 nextBlock() override { return next; }
+    void setNext(u32 ref) override;
+    u32 getNext() override { return next; }
 
     u32 getParent() override { return parent; }
     void setParent(u32 ref) override;
-
-    FSBlock *seek(FSName name) override { return hashTable.seek(name); }
     
-    // Debugging
-    void printPath() override;
     
     //
     // Managing directory entries

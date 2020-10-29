@@ -21,11 +21,7 @@ struct FSBitmapBlock : FSBlock {
     
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     void dump() override;
-
-    // Verifying
-    bool check() override;
-    
-    // Exporting
+    bool check(bool verbose) override;
     void write(u8 *dst) override;
 
     // Allocates or deallocates a single block
