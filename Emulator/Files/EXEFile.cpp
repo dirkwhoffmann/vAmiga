@@ -76,20 +76,23 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
         
     // Create a new file system
     FSVolume volume = FSVolume("Disk");
-    // if (volume == nullptr) return false;
+    
+    // Make the volume bootable
+    volume.installBootBlock();
     
     // Add the exe file
     FSBlock *file = volume.makeFile("demo");
     if (file) success = file->append(buffer, length);
-    
+
     // Add a script directory
     volume.makeDir("s");
     volume.changeDir("s");
-
+    volume.currentDirBlock()->printPath();
+    
     // Add a startup sequence
     file = volume.makeFile("startup-sequence");
     if (success && file) success = file->append("demo", 4);
-        
+    
     // Convert the volume into an ADF
     assert(adf == nullptr);
     if (success) adf = ADFFile::makeWithVolume(volume);

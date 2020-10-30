@@ -42,6 +42,7 @@
 #include "Snapshot.h"
 #include "ADFFile.h"
 #include "DMSFile.h"
+#include "EXEFile.h"
 #include "IMGFile.h"
 #include "FSVolume.h"
 

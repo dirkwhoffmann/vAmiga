@@ -150,3 +150,9 @@ FSFileHeaderBlock::append(const u8 *buffer, size_t size)
     
     return true;
 }
+
+bool
+FSFileHeaderBlock::append(const char *buffer, size_t size)
+{
+    return append((u8 *)buffer, size);
+}

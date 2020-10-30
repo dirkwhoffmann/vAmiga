@@ -242,6 +242,7 @@ public:
     void insertDisk(class Disk *disk, int nr, Cycle delay = 0);
     void insertDisk(class ADFFile *file, int nr, Cycle delay = 0);
     void insertDisk(class DMSFile *file, int nr, Cycle delay = 0);
+    void insertDisk(class EXEFile *file, int nr, Cycle delay = 0);
     void insertDisk(class IMGFile *file, int nr, Cycle delay = 0);
 
     // Write protects or unprotects a disk

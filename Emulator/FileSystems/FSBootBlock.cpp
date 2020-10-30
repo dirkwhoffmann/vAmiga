@@ -18,7 +18,14 @@ FSBootBlock::dump()
 bool
 FSBootBlock::check(bool verbose)
 {
-    return FSBlock::check(verbose);
+    bool result = FSBlock::check(verbose);
+    
+    if (nr > 1 && verbose) {
+        fprintf(stderr, "Block %d must not be a boot block.\n", nr);
+        result = false;
+    }
+    
+    return result;
 }
 
 void
@@ -49,18 +56,21 @@ FSBootBlock::exportBlock(u8 *p, size_t bsize)
         0x65, 0x78, 0x70, 0x61, 0x6E, 0x73, 0x69, 0x6F, 0x6E, 0x2E, 0x6C, 0x69,
         0x62, 0x72, 0x61, 0x72, 0x79, 0x00, 0x00, 0x00
     };
-        
-    // Write header
-    p[0] = 'D';
-    p[1] = 'O';
-    p[2] = 'S';
     
-    // Write header extension byte and data
-    if (volume.isOFS()) {
-        p[3] = 0;
-        memcpy(p + 4, ofsData, sizeof(ofsData));
-    } else {
-        p[3] = 1;
-        memcpy(p + 4, ffsData, sizeof(ffsData));
+    if (nr == 0) {
+        
+        // Write header
+        p[0] = 'D';
+        p[1] = 'O';
+        p[2] = 'S';
+        
+        // Write header extension byte and data
+        if (volume.isOFS()) {
+            p[3] = 0;
+            memcpy(p + 4, ofsData, sizeof(ofsData));
+        } else {
+            p[3] = 1;
+            memcpy(p + 4, ffsData, sizeof(ffsData));
+        }
     }
 }

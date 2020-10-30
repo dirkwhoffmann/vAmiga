@@ -1097,20 +1097,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->controller->spinning();
 }
-/*
-- (BOOL) connected:(NSInteger)nr
-{
-    return wrapper->controller->isConnected(nr);
-}
-- (BOOL) disconnected:(NSInteger)nr
-{
-    return wrapper->controller->isDisconnected(nr);
-}
-- (void) setConnected:(NSInteger)nr value:(BOOL)value;
-{
-    wrapper->controller->setConnected(nr, value);
-}
-*/
 - (void) eject:(NSInteger)nr
 {
     wrapper->controller->ejectDisk(nr);
@@ -1120,12 +1106,17 @@ struct SerialPortWrapper { SerialPort *port; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((ADFFile *)(fileWrapper->file), nr);
 }
-- (void) insert:(NSInteger)nr dms:(ADFFileProxy *)fileProxy
+- (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((DMSFile *)(fileWrapper->file), nr);
 }
-- (void) insert:(NSInteger)nr img:(ADFFileProxy *)fileProxy
+- (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((EXEFile *)(fileWrapper->file), nr);
+}
+- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((IMGFile *)(fileWrapper->file), nr);
@@ -1487,6 +1478,41 @@ struct SerialPortWrapper { SerialPort *port; };
 - (ADFFileProxy *)adf
 {
     DMSFile *archive = (DMSFile *)wrapper->file;
+    return [ADFFileProxy make:archive->adf];
+}
+
+@end
+
+
+//
+// EXEFileProxy
+//
+
+@implementation EXEFileProxy
+
++ (BOOL)isEXEFile:(NSString *)path
+{
+    return EXEFile::isEXEFile([path fileSystemRepresentation]);
+}
++ (instancetype) make:(EXEFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    EXEFile *archive = EXEFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    EXEFile *archive = EXEFile::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
+
+- (ADFFileProxy *)adf
+{
+    EXEFile *archive = (EXEFile *)wrapper->file;
     return [ADFFileProxy make:archive->adf];
 }
 

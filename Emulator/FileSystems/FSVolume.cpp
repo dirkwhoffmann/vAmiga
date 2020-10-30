@@ -194,7 +194,7 @@ FSVolume::allocateBlock()
 u32
 FSVolume::allocateBlock(u32 start, int incr)
 {
-    for (long i = start; i > 0 && i < capacity; i += incr) {
+    for (long i = start; i >= 2 && i < capacity; i += incr) {
 
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             assert(!bitmapBlock()->isAllocated(i));
@@ -202,6 +202,7 @@ FSVolume::allocateBlock(u32 start, int incr)
             return i;
         }
     }
+
     return 0;
 }
 
@@ -214,6 +215,7 @@ FSVolume::deallocateBlock(u32 ref)
     if (b->type() != FS_EMPTY_BLOCK) {
         delete b;
         blocks[ref] = new FSBlock(*this, ref);
+        bitmapBlock()->dealloc(ref);
     }
 }
 
@@ -230,7 +232,8 @@ FSVolume::newUserDirBlock(const char *name)
 FSFileHeaderBlock *
 FSVolume::newFileHeaderBlock(const char *name)
 {
-
+    bitmapBlock()->dump();
+    
     u32 ref = allocateBlock();
     if (!ref) return nullptr;
     
@@ -262,8 +265,12 @@ void
 FSVolume::installBootBlock()
 {
     debug("installBootBlock()\n");
+
     delete blocks[0];
+    delete blocks[1];
+
     blocks[0] = new FSBootBlock(*this, 0);
+    blocks[1] = new FSBootBlock(*this, 1);
 }
 
 FSBlock *
@@ -307,32 +314,28 @@ FSVolume::changeDir(const char *name)
 FSBlock *
 FSVolume::makeDir(const char *name)
 {
-    debug("makeDir(%s)\n", name);
-    
     FSBlock *cdb = currentDirBlock();
     FSUserDirBlock *block = newUserDirBlock(name);
+    if (block == nullptr) return nullptr;
+    
     block->setParent(cdb->nr);
-
     return cdb->addHashBlock(block) ? block : nullptr;
 }
 
 FSBlock *
 FSVolume::makeFile(const char *name)
 {
-    debug("makeFile(%s)\n", name);
-
     FSBlock *cdb = currentDirBlock();
     FSFileHeaderBlock *block = newFileHeaderBlock(name);
-    block->setParent(cdb->nr);
+    if (block == nullptr) return nullptr;
     
+    block->setParent(cdb->nr);
     return cdb->addHashBlock(block) ? block : nullptr;
 }
 
 FSBlock *
 FSVolume::seek(const char *name)
 {
-    debug("seekItem(%s)\n", name);
-    
     FSBlock *cdb = currentDirBlock();
     return cdb->seek(name);
 }
@@ -373,16 +376,15 @@ FSVolume::exportVolume(u8 *dst, size_t size)
         
         // Only proceed if the disk has space for this block
         if (i >= sectorCnt) {
-            printf("Skipping block %d (>= %zu)\n", i, sectorCnt);
+            warn("Skipping block %d (>= %zu)\n", i, sectorCnt);
             continue;
         }
         
-        if (blocks[i]->type() != FS_EMPTY_BLOCK) debug("Exporting block %ld\n", i);
         assert(blocks[i]->nr == i);
         blocks[i]->exportBlock(sector, bsize);
     }
     
-    debug("writeAsDisk() DONE\n");
+    debug("Volume exported\n");
 }
 
 OFSVolume::OFSVolume(const char *name) : FSVolume(name, 2*880, 512)

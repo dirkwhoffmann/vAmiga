@@ -35,7 +35,7 @@ class DiskMountDialog: DialogController {
         
         switch type {
         
-        case .FILETYPE_ADF, .FILETYPE_DMS:
+        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE:
             return NSImage.init(named: writeProtect ? "adf_protected" : "adf")
         case .FILETYPE_IMG:
             return NSImage.init(named: writeProtect ? "dos_protected" : "dos")
@@ -50,10 +50,12 @@ class DiskMountDialog: DialogController {
         
         case .FILETYPE_ADF:
             return "Amiga Disk File (ADF)"
-        case .FILETYPE_DMS:
-            return "Disk Masher System (DMS)"
         case .FILETYPE_IMG:
             return "PC Disk Image"
+        case .FILETYPE_DMS:
+            return "Disk Masher System (DMS)"
+        case .FILETYPE_EXE:
+            return "Amiga executable"
         default:
             return "???"
         }
@@ -85,10 +87,13 @@ class DiskMountDialog: DialogController {
         if let attachment = myDocument.amigaAttachment as? ADFFileProxy {
             disk = attachment
         }
+        if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
+            disk = attachment
+        }
         if let attachment = myDocument.amigaAttachment as? DMSFileProxy {
             disk = attachment
         }
-        if let attachment = myDocument.amigaAttachment as? IMGFileProxy {
+        if let attachment = myDocument.amigaAttachment as? EXEFileProxy {
             disk = attachment
         }
         
@@ -192,11 +197,14 @@ class DiskMountDialog: DialogController {
         case _ as ADFFileProxy:
             amiga.diskController.insert(sender.tag, adf: disk as? ADFFileProxy)
 
+        case _ as IMGFileProxy:
+            amiga.diskController.insert(sender.tag, img: disk as? IMGFileProxy)
+
         case _ as DMSFileProxy:
             amiga.diskController.insert(sender.tag, dms: disk as? DMSFileProxy)
 
-        case _ as IMGFileProxy:
-            amiga.diskController.insert(sender.tag, img: disk as? IMGFileProxy)
+        case _ as EXEFileProxy:
+            amiga.diskController.insert(sender.tag, exe: disk as? EXEFileProxy)
             
         default:
             break

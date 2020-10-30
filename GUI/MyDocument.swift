@@ -90,6 +90,7 @@ class MyDocument: NSDocument {
         case "IMG":    return .FILETYPE_IMG
         case "IMA":    return .FILETYPE_IMG
         case "DMS":    return .FILETYPE_DMS
+        case "EXE":    return .FILETYPE_EXE
         default:       return .FILETYPE_UKNOWN
         }
     }
@@ -141,6 +142,9 @@ class MyDocument: NSDocument {
         case .FILETYPE_DMS:
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
 
+        case .FILETYPE_EXE:
+            result = EXEFileProxy.make(withBuffer: buffer, length: length)
+
         case .FILETYPE_IMG:
             result = IMGFileProxy.make(withBuffer: buffer, length: length)
 
@@ -167,6 +171,7 @@ class MyDocument: NSDocument {
             
         case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
         case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
+        case _ as EXEFileProxy: return (proxy as! EXEFileProxy).adf()
         default: fatalError()
         }
     }
@@ -176,8 +181,12 @@ class MyDocument: NSDocument {
         track("Creating attachment from URL: \(url.lastPathComponent)")
         
         // Create file proxy
-        let types: [AmigaFileType] =
-            [ .FILETYPE_SNAPSHOT, .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_IMG ]
+        let types: [AmigaFileType] = [
+            .FILETYPE_SNAPSHOT,
+            .FILETYPE_ADF,
+            .FILETYPE_IMG,
+            .FILETYPE_DMS,
+            .FILETYPE_EXE]
         
         amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         
@@ -210,6 +219,14 @@ class MyDocument: NSDocument {
             
             if let df = parent.dragAndDropDrive?.nr {
                 amiga.diskController.insert(df, dms: amigaAttachment as? DMSFileProxy)
+            } else {
+                runDiskMountDialog()
+            }
+
+        case _ as EXEFileProxy:
+            
+            if let df = parent.dragAndDropDrive?.nr {
+                amiga.diskController.insert(df, exe: amigaAttachment as? EXEFileProxy)
             } else {
                 runDiskMountDialog()
             }

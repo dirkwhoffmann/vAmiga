@@ -97,19 +97,32 @@ FSDataBlock::append(u8 byte)
     FSFileHeaderBlock *fhb = volume.fileHeaderBlock(fileHeaderBlock);
     if (fhb == nullptr) return false;
     
+    // Append at the end
+    if (next) {
+        FSBlock *nextBlock = volume.block(next);
+        if (nextBlock) {
+            assert(numDataBytes == maxDataBytes);
+            return nextBlock->append(byte);
+        }
+    }
+    
     // If there is space for another byte, add it
     if (numDataBytes < maxDataBytes) {
+        
+        printf("Adding byte to block %d (%d, %d)\n", nr, numDataBytes, maxDataBytes);
         
         data[numDataBytes] = byte;
         numDataBytes++;
         fhb->fileSize++;
         return true;
     }
-    
+
+    printf("create a new data block (%d, %d, %d)\n", nr, numDataBytes, maxDataBytes);
+
     // Otherwise, create a new data block
     FSDataBlock *block = fhb->addDataBlock();
     if (block == nullptr) return false;
-
+    
     // Connect the new block
     next = block->nr;
     block->fileHeaderBlock = fileHeaderBlock;
