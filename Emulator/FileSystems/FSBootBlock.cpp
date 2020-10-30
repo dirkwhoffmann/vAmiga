@@ -12,6 +12,7 @@
 void
 FSBootBlock::dump()
 {
+    
 }
 
 bool
@@ -21,12 +22,13 @@ FSBootBlock::check(bool verbose)
 }
 
 void
-FSBootBlock::write(u8 *dst)
+FSBootBlock::exportBlock(u8 *p, size_t bsize)
 {
-    assert(dst != NULL);
- 
+    assert(p);
+    assert(volume.bsize == bsize);
+    
     // Start from scratch
-    memset(dst, 0, 512);
+    memset(p, 0, bsize);
         
     u8 ofsData[] = {
         
@@ -49,16 +51,16 @@ FSBootBlock::write(u8 *dst)
     };
         
     // Write header
-    dst[0] = 'D';
-    dst[1] = 'O';
-    dst[2] = 'S';
+    p[0] = 'D';
+    p[1] = 'O';
+    p[2] = 'S';
     
     // Write header extension byte and data
     if (volume.isOFS()) {
-        dst[3] = 0;
-        memcpy(dst + 4, ofsData, sizeof(ofsData));
+        p[3] = 0;
+        memcpy(p + 4, ofsData, sizeof(ofsData));
     } else {
-        dst[3] = 1;
-        memcpy(dst + 4, ffsData, sizeof(ffsData));
+        p[3] = 1;
+        memcpy(p + 4, ffsData, sizeof(ffsData));
     }
 }

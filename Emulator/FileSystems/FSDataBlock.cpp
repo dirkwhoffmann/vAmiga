@@ -11,7 +11,9 @@
 
 FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    maxDataBytes = volume.isOFS() ? 488 : 512;
+    numHeaderBytes = volume.isOFS() ? 24 : 0;
+    maxDataBytes = volume.bsize - numHeaderBytes;
+    
     data = new u8[maxDataBytes]();
 }
 
@@ -50,12 +52,42 @@ FSDataBlock::check(bool verbose)
 }
 
 void
-FSDataBlock::write(u8 *p)
+FSDataBlock::exportBlock(u8 *p, size_t bsize)
 {
-    // Start from scratch
-    memset(p, 0, 512);
+    assert(p);
+    assert(volume.bsize == bsize);
 
-    // TODO
+    // Start from scratch
+    memset(p, 0, bsize);
+        
+    if (numHeaderBytes) {
+        
+        // Type
+        write32(p, 8);
+        
+        // Reference to file header block
+        write32(p + 4, fileHeaderBlock);
+        
+        // Number of the data block
+        write32(p + 8, blockNumber);
+        
+        // Number of data bytes in this block
+        write32(p + 12, numDataBytes);
+        
+        // Number of data bytes in this block
+        write32(p + 16, next);
+
+        // Data bytes
+        for (int i = 0; i < numDataBytes; i++) p[numHeaderBytes + i] = data[i];
+        
+        // Checksum
+        write32(p + 20, FSBlock::checksum(p));
+        
+    } else {
+        
+        // Data bytes
+        for (int i = 0; i < numDataBytes; i++) p[i] = data[i];
+    }
 }
 
 bool
@@ -70,20 +102,16 @@ FSDataBlock::append(u8 byte)
         
         data[numDataBytes] = byte;
         numDataBytes++;
+        fhb->fileSize++;
         return true;
     }
     
     // Otherwise, create a new data block
-    FSDataBlock *block = volume.newDataBlock();
+    FSDataBlock *block = fhb->addDataBlock();
     if (block == nullptr) return false;
-    
-    // Add a reference of this block to the file header block
-    if (!fhb->addDataBlockRef(block->nr)) {
-        volume.deallocateBlock(block->nr);
-        return false;
-    }
+
     // Connect the new block
-    block->next = block->nr;
+    next = block->nr;
     block->fileHeaderBlock = fileHeaderBlock;
     block->blockNumber = blockNumber + 1;
     
@@ -91,11 +119,17 @@ FSDataBlock::append(u8 byte)
 }
 
 bool
-FSDataBlock::append(u8 *buffer, size_t size)
+FSDataBlock::append(const u8 *buffer, size_t size)
 {
     for (size_t i = 0; i < size; i++) {
         if (!append(buffer[i])) return false;
     }
     
     return true;
+}
+
+bool
+FSDataBlock::append(const char *buffer, size_t size)
+{
+    return append((u8 *)buffer, size);
 }

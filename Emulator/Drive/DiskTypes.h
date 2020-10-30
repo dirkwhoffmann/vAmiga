@@ -42,29 +42,29 @@ inline const char *diskTypeName(DiskType type)
     }
 }
 
-typedef VA_ENUM(long, FileSystemType)
+typedef VA_ENUM(long, EmptyDiskFormat)
 {
-    FS_NONE,
-    FS_OFS,
-    FS_OFS_BOOTABLE,
-    FS_FFS,
-    FS_FFS_BOOTABLE
+    FS_EMPTY,
+    FS_EMPTY_OFS,
+    FS_EMPTY_OFS_BOOTABLE,
+    FS_EMPTY_FFS,
+    FS_EMPTY_FFS_BOOTABLE
 };
 
-inline bool isFileSystemType(FileSystemType type)
+inline bool isEmptyDiskFormat(EmptyDiskFormat type)
 {
-    return type >= FS_NONE && type <= FS_FFS_BOOTABLE;
+    return type >= FS_EMPTY && type <= FS_EMPTY_FFS_BOOTABLE;
 }
 
-inline const char *fileSystemTypeName(FileSystemType type)
+inline const char *emptyDiskFormatName(EmptyDiskFormat type)
 {
     switch (type) {
-        case FS_NONE:         return "None";
-        case FS_OFS:          return "OFS";
-        case FS_OFS_BOOTABLE: return "OFS (bootable)";
-        case FS_FFS:          return "FFS";
-        case FS_FFS_BOOTABLE: return "FFS (bootable)";
-        default:              return "???";
+        case FS_EMPTY:              return "None";
+        case FS_EMPTY_OFS:          return "OFS";
+        case FS_EMPTY_OFS_BOOTABLE: return "OFS (bootable)";
+        case FS_EMPTY_FFS:          return "FFS";
+        case FS_EMPTY_FFS_BOOTABLE: return "FFS (bootable)";
+        default:                    return "???";
     }
 }
 

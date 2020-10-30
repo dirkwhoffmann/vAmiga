@@ -19,10 +19,10 @@ struct FSHashTable {
     class FSVolume &volume;
 
     // Hash table size
-    static const size_t hashTableSize = 72;
+    u32 hashTableSize = 0;
 
     // Hash table entries
-    u32 hashTable[hashTableSize];
+    u32 *hashTable = nullptr;
     
     
     //
@@ -30,7 +30,8 @@ struct FSHashTable {
     //
     
     FSHashTable(FSVolume &ref);
-    
+    ~FSHashTable();
+
     void dump();
     
     // Adds a new reference to the hash table

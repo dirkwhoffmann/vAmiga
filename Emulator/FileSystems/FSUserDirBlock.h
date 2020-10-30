@@ -24,8 +24,11 @@ struct FSUserDirBlock : FSBlock {
     FSTimeStamp created = FSTimeStamp();
 
     // Hash table storing references to other blocks
-    FSHashTable hashTable = FSHashTable(volume);
+    FSHashTable *hashTable;
 
+    // Protection status bits
+    u32 protection = 0;
+    
     // Reference to the parent block
     u32 parent = 0;
 
@@ -39,7 +42,9 @@ struct FSUserDirBlock : FSBlock {
     
     FSUserDirBlock(FSVolume &ref, u32 nr);
     FSUserDirBlock(FSVolume &ref, u32 nr, const char *name);
+    ~FSUserDirBlock();
 
+    
     //
     // Methods from Block class
     //
@@ -49,11 +54,11 @@ struct FSUserDirBlock : FSBlock {
     void printPath() override;
     void dump() override;
     bool check(bool verbose) override;
-    void write(u8 *dst) override;
+    void exportBlock(u8 *p, size_t size) override;
 
-    FSHashTable *getHashTable() override { return &hashTable; }
-    bool addHashBlock(FSBlock *block) override { return hashTable.link(block); }
-    FSBlock *seek(FSName name) override { return hashTable.seek(name); }
+    FSHashTable *getHashTable() override { return hashTable; }
+    bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
+    FSBlock *seek(FSName name) override { return hashTable->seek(name); }
 
     virtual u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
@@ -63,14 +68,6 @@ struct FSUserDirBlock : FSBlock {
 
     u32 getParent() override { return parent; }
     void setParent(u32 ref) override;
-    
-    
-    //
-    // Managing directory entries
-    //
-    
-    // Adds a new directory item
-    void addItem(FSBlock *entry);
 };
 
 #endif

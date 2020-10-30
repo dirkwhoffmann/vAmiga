@@ -37,71 +37,88 @@ FSFileHeaderBlock::printPath()
 void
 FSFileHeaderBlock::dump()
 {
-    FSFileBlock::dump();
-    
     printf("        Name: "); printName(); printf("\n");
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
     printf("     Created: "); created.dump(); printf("\n");
     printf("   File size: %d\n", fileSize);
+
+    FSFileBlock::dump();
 }
 
 bool
 FSFileHeaderBlock::check(bool verbose)
 {
-    printf("FSFileHeaderBlock::check(%d)", verbose);
-
     bool result = FSFileBlock::check(verbose);
     return result;
 }
 
 void
-FSFileHeaderBlock::write(u8 *p)
+FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
 {
+    assert(p);
+    assert(volume.bsize == bsize);
+
     // Start from scratch
-    memset(p, 0, 512);
-    
+    memset(p, 0, bsize);
+
     // Type
     write32(p, 2);
-    
+        
     // Block pointer to itself
     write32(p + 4, nr);
-    
-    // Number of blocks in file header
-    write32(p + 8, numDataBlocks);
+
+    // Number of stored data block references
+    write32(p + 4, numDataBlocks);
 
     // First data block
-    if (dataBlocks[0]) write32(p + 16, dataBlocks[0]);
+    write32(p + 16, firstDataBlock);
     
     // Data block list
-    for (int i = 0; i < numDataBlocks; i++) write32(p+308-4*i, dataBlocks[i]);
-    
+    u8 *end = p + bsize - 51 * 4;
+    for (int i = 0; i < numDataBlocks; i++) write32(end - 4 * i, dataBlocks[i]);
+
     // Protection status bits
-    write32(p + 320, 0);
+    write32(p + bsize - 48 * 4, protection);
     
     // File size
-    write32(p + 324, fileSize);
+    write32(p + bsize - 47 * 4, fileSize);
     
     // Comment as BCPL string
-    comment.write(p + 328);
+    comment.write(p + bsize - 46 * 4);
     
     // Creation date
-    created.write(p + 420);
+    created.write(p + bsize - 23 * 4);
     
-    // Directory name as BCPL string
-    name.write(p + 432);
+    // Name as BCPL string
+    name.write(p + bsize - 20 * 4);
     
     // Next block with same hash
-    write32(p + 496, nextTableBlock);
+    write32(p + bsize - 4 * 4, next);
 
     // Block pointer to parent directory
-    write32(p + 500, parent);
-    
+    write32(p + bsize - 3 * 4, parent);
+
+    // Block pointer to first extension block
+    write32(p + bsize - 2 * 4, nextTableBlock);
+
     // Subtype
-    write32(p + 508, (u32)-3);
+    write32(p + bsize - 1 * 4, (u32)-3);
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+void
+FSFileHeaderBlock::setNext(u32 ref)
+{
+    if (!volume.isBlockNumber(ref)) return;
+    
+    if (next) {
+        volume.block(next)->setNext(ref);
+    } else {
+        next = ref;
+    }
 }
 
 bool
@@ -112,20 +129,20 @@ FSFileHeaderBlock::append(u8 byte)
     // If a data block already exist, append it there
     if (block) return block->append(byte);
     
-    // Create the first data block
-    block = volume.newDataBlock();
+    // Otherwise, create the first data block
+    block = addDataBlock();
     if (block == nullptr) return false;
-    
-    // Link this block
-    block->fileHeaderBlock = nr;
+
+    // Connect the new block
     firstDataBlock = block->nr;
+    block->fileHeaderBlock = nr;
     
     // Append data
     return block->append(byte);
 }
 
 bool
-FSFileHeaderBlock::append(u8 *buffer, size_t size)
+FSFileHeaderBlock::append(const u8 *buffer, size_t size)
 {
     for (size_t i = 0; i < size; i++) {
         if (!append(buffer[i])) return false;

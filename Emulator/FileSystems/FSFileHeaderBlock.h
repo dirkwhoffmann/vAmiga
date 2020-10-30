@@ -23,9 +23,15 @@ struct FSFileHeaderBlock : FSFileBlock {
     // Creation date
     FSTimeStamp created = FSTimeStamp();
     
+    // Protection status bits
+    u32 protection = 0;
+
     // File size in bytes
     u32 fileSize = 0;
     
+    // Reference to the next block with the same hash
+    u32 next = 0;
+
     
     //
     // Methods
@@ -38,16 +44,19 @@ struct FSFileHeaderBlock : FSFileBlock {
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
     void printName() override;
     void printPath() override;
-    virtual void dump() override;
+    void dump() override;
     bool check(bool verbose) override;
-    void write(u8 *dst) override;
+    void exportBlock(u8 *p, size_t size) override;
 
-    virtual u32 hashValue() override { return name.hashValue(); }
+    void setNext(u32 ref) override;
+    u32 getNext() override { return next; }
+
+    u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
     
     // Append data bytes
-    bool append(u8 byte);
-    bool append(u8 *buffer, size_t size);
+    bool append(u8 byte) override;
+    bool append(const u8 *buffer, size_t size) override;
 };
 
 #endif

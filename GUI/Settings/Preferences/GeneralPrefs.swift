@@ -84,7 +84,7 @@ extension PreferencesController {
     @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        pref.driveBlankDiskFormat = FileSystemType(rawValue: tag)!
+        pref.driveBlankDiskFormat = EmptyDiskFormat(rawValue: tag)!
         refresh()
     }
 

@@ -11,6 +11,7 @@
 #define _ADF_H
 
 #include "DiskFile.h"
+#include "FSVolume.h"
 
 #define ADFSIZE_35_DD     901120  //  880 KB
 #define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
@@ -52,7 +53,8 @@ public:
     static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithFile(FILE *file);
     static ADFFile *makeWithDisk(Disk *disk);
-  
+    static ADFFile *makeWithVolume(FSVolume &volume);
+
     
     //
     // Methods from AmigaFile
@@ -86,20 +88,7 @@ public:
  
 public:
     
-    bool formatDisk(FileSystemType fs);
-    
-private:
-
-    /*
-    long rootBlockNr();
-    long bitmapBlockNr() { return rootBlockNr() + 1; }
-    void writeBootBlock(FileSystemType fs);
-    void writeRootBlock(const char *label);
-    void writeBitmapBlock();
-    void writeDate(u8 *dst, time_t date);
-
-    u32 sectorChecksum(int sector);
-    */
+    bool formatDisk(EmptyDiskFormat fs); 
 };
 
 #endif

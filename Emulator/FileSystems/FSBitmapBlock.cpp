@@ -53,10 +53,13 @@ FSBitmapBlock::check(bool verbose)
 }
 
 void
-FSBitmapBlock::write(u8 *p)
+FSBitmapBlock::exportBlock(u8 *p, size_t bsize)
 {
+    assert(p);
+    assert(volume.bsize == bsize);
+
     // Start from scratch
-    memset(p, 0, 512);
+    memset(p, 0, bsize);
 
     // Write allocation map
     for (long i = 2; i < volume.capacity; i++) {
@@ -85,13 +88,6 @@ FSBitmapBlock::write(u8 *p)
         
     // Compute checksum
     write32(p, FSBlock::checksum(p));
-    
-    /*
-    for (unsigned i = 0; i < 256; i++) {
-        printf("%d:%x ", i, p[i]);
-    }
-    printf("\n");
-     */
 }
 
 bool

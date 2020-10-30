@@ -33,9 +33,10 @@ FSBlock::write32(u8 *p, u32 value)
 }
 
 void
-FSBlock::write(u8 *p)
+FSBlock::exportBlock(u8 *p, size_t bsize)
 {
-    memset(p, 0, volume.bsize);
+    assert(bsize == volume.bsize);
+    memset(p, 0, bsize);
 }
 
 bool
@@ -115,6 +116,5 @@ FSBlock::assertSelfRef(u32 ref, bool verbose)
 bool
 FSBlock::check(bool verbose)
 {
-    printf("FSBlock::check(%d)\n", verbose);
     return assertSelfRef(nr, verbose);
 }

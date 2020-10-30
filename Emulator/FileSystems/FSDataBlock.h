@@ -19,15 +19,18 @@ struct FSDataBlock : FSBlock {
     
     // Reference to the file header block
     u32 fileHeaderBlock = 0;
-    
+
+    // Number of header bytes stored in this block
+    u32 numHeaderBytes = 0;
+
     // Maximum number of data bytes stored in this block
     u32 maxDataBytes = 0;
 
     // Number of data bytes stored in this block
     u32 numDataBytes = 0;
-    
+
     // Reference to the next data block
-    u32 next;
+    u32 next = 0;
     
     // Data bytes
     u8 *data;
@@ -41,17 +44,17 @@ struct FSDataBlock : FSBlock {
     ~FSDataBlock();
 
     // Methods from Block class
-    FSBlockType type() override { return FS_FILELIST_BLOCK; }
+    FSBlockType type() override { return FS_DATA_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    void write(u8 *dst) override;
+    void exportBlock(u8 *p, size_t size) override;
 
     u32 getNext() override { return next; }
     void setNext(u32 next) override { this->next = next; }
-    
-    // Append data bytes
-    bool append(u8 byte);
-    bool append(u8 *buffer, size_t size);
+
+    bool append(u8 byte) override;
+    bool append(const u8 *buffer, size_t size) override;
+    bool append(const char *buffer, size_t size) override;
 };
 
 #endif

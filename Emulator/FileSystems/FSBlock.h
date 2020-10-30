@@ -56,13 +56,24 @@ struct FSBlock {
     // Checks the integrity of this block
     virtual bool check(bool verbose);
 
-    // Exports this block in AmigaDOS format
-    virtual void write(u8 *p);
+    // Exports this block to a buffer
+    virtual void exportBlock(u8 *p, size_t bsize);
     
+protected:
+    
+    // Performs a certain integrity check on a block reference
+    bool assertNotNull(u32 ref, bool verbose);
+    bool assertInRange(u32 ref, bool verbose);
+    bool assertHasType(u32 ref, FSBlockType type, bool verbose);
+    bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
+    bool assertSelfRef(u32 ref, bool verbose);
+
     
     //
-    // Method section 1: Implemented by blocks that maintain a hash table
+    // Method stubs for blocks maintaining a hash table
     //
+    
+public:
     
     // Returns a reference to the hash table
     virtual FSHashTable *getHashTable() { return nullptr; }
@@ -75,9 +86,11 @@ struct FSBlock {
 
     
     //
-    // Method section 2: Implemented by blocks that are hashable
+    // Method stubs for hashable blocks
     //
-
+    
+public:
+    
     // Return a hash value for this block
     virtual u32 hashValue() { return 0; }
 
@@ -86,8 +99,10 @@ struct FSBlock {
 
     
     //
-    // Method section 3: Implemented by blocks that maintain a linked list
+    // Method stubs for blocks maintaining a linked list
     //
+
+public:
 
     // Links this block with another block with the same hash
     virtual u32 getNext() { return 0; }
@@ -95,30 +110,37 @@ struct FSBlock {
 
     
     //
-    // Method section 4: Implemented by blocks that are vertically grouped
+    // Method stubs for blocks that are vertically grouped
     //
+
+public:
 
     virtual u32 getParent() { return 0; }
     virtual void setParent(u32 parent) { }
 
     
     //
-    // Method section 5: Implemented by blocks that maintain a data block list
+    // Method stubs for blocks maintaining a data block list
     //
+
+public:
 
     virtual u32 blockListCapacity() { return 0; }
     virtual u32 blockListSize() { return 0; }
     virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
-protected:
     
-    // Performs a certain integrity check on a block reference
-    bool assertNotNull(u32 ref, bool verbose);
-    bool assertInRange(u32 ref, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
-    bool assertSelfRef(u32 ref, bool verbose);
+    //
+    // Method stubs for blocks representing files
+    //
+
+public:
+
+    // Appends data bytes to a file
+    virtual bool append(u8 byte) { return false; }
+    virtual bool append(const u8 *buffer, size_t size) { return false; }
+    virtual bool append(const char *buffer, size_t size) { return false; }
 };
 
 typedef FSBlock* BlockPtr;

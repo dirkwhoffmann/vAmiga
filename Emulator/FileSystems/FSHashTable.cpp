@@ -11,7 +11,14 @@
 
 FSHashTable::FSHashTable(FSVolume &ref) : volume(ref)
 {
-    memset(hashTable, 0, sizeof(hashTable));
+    hashTableSize = (volume.bsize / sizeof(u32)) - 56;
+    
+    hashTable = new u32[hashTableSize]();
+}
+
+FSHashTable::~FSHashTable()
+{
+    delete [] hashTable;
 }
 
 void

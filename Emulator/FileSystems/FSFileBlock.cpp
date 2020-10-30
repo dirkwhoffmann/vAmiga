@@ -50,6 +50,22 @@ FSFileBlock::check(bool verbose)
     return result;
 }
 
+FSDataBlock *
+FSFileBlock::addDataBlock()
+{
+    // Create a new data block
+    FSDataBlock *block = volume.newDataBlock();
+    if (block == nullptr) return nullptr;
+    
+    // Add a reference to this block
+    if (!addDataBlockRef(block->nr)) {
+        volume.deallocateBlock(block->nr);
+        return nullptr;
+    }
+
+    return block;
+}
+
 bool
 FSFileBlock::addDataBlockRef(u32 ref)
 {

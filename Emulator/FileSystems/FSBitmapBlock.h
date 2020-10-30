@@ -22,7 +22,7 @@ struct FSBitmapBlock : FSBlock {
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    void write(u8 *dst) override;
+    void exportBlock(u8 *p, size_t size) override;
 
     // Allocates or deallocates a single block
     bool isAllocated(u32 block);

@@ -30,11 +30,18 @@
 
 class FSVolume : AmigaObject {
     
-protected:
-    
     friend class FSBlock;
+    friend class FSBootBlock;
+    friend class FSRootBlock;
     friend class FSBitmapBlock;
-    
+    friend class FSUserDirBlock;
+    friend class FSFileHeaderBlock;
+    friend class FSFileListBlock;
+    friend class FSDataBlock;
+    friend class FSHashTable;
+
+protected:
+        
     // The type of this volume
     FSVolumeType type = OFS;
 
@@ -78,7 +85,7 @@ public:
     virtual bool check(bool verbose);
     
     // Exports the volume into a buffer compatible with the ADF format
-    void writeAsDisk(u8 *dst, size_t length);
+    void exportVolume(u8 *dst, size_t size);
 
     
     //
@@ -89,7 +96,7 @@ public:
     bool isOFS() { return type == OFS; }
     bool isFFF() { return type == FFS; }
     u32 getCapacity() { return capacity; }
-    u32 getBSize() { return bsize; }
+    u32 getBlockSize() { return bsize; }
     u32 bytesInDataBlock() { return bsize - (isOFS() ? 24 : 0); }
     u32 freeBlocks();
 
@@ -132,13 +139,6 @@ public:
     FSFileHeaderBlock *newFileHeaderBlock(const char *name);
     FSFileListBlock *newFileListBlock();
     FSDataBlock *newDataBlock();
-
-    // Replaces a block
-    // void replaceBlock(long nr, FSBlock *block);
-
-    // Adds ot removes a block (DEPRECATED)
-    // void addBlock(long nr, FSBlock *block);
-    // void removeBlock(long nr);
             
     // Installs a boot block
     void installBootBlock();
@@ -152,16 +152,16 @@ public:
     FSBlock *currentDirBlock();
     
     // Changes the current directory
-    bool changeDir(const char *name);
+    FSBlock *changeDir(const char *name);
     
     // Creates a new directory entry
-    FSUserDirBlock *makeDir(const char *name);
-    FSFileHeaderBlock *makeFile(const char *name);
+    FSBlock *makeDir(const char *name);
+    FSBlock *makeFile(const char *name);
     
     // Seeks an item inside the current directory
     FSBlock *seek(const char *name);
-    FSUserDirBlock *seekDir(const char *name);
-    FSFileHeaderBlock *seekFile(const char *name);
+    FSBlock *seekDir(const char *name);
+    FSBlock *seekFile(const char *name);
 };
 
 class OFSVolume : public FSVolume {

@@ -22,7 +22,7 @@ struct FSRootBlock : FSBlock {
     FSTimeStamp modified = FSTimeStamp();
 
     // Hash table storing references to other blocks
-    FSHashTable hashTable = FSHashTable(volume);
+    FSHashTable *hashTable;
     
     
     //
@@ -31,6 +31,7 @@ struct FSRootBlock : FSBlock {
     
     FSRootBlock(FSVolume &ref, u32 nr);
     FSRootBlock(FSVolume &ref, u32 nr, const char *name);
+    ~FSRootBlock();
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
@@ -38,11 +39,11 @@ struct FSRootBlock : FSBlock {
     void printPath() override;
     void dump() override;
     bool check(bool verbose) override;
-    void write(u8 *dst) override;
-    
-    FSHashTable *getHashTable() override { return &hashTable; }
-    bool addHashBlock(FSBlock *block) override { return hashTable.link(block); }
-    FSBlock *seek(FSName name) override { return hashTable.seek(name); }
+    void exportBlock(u8 *p, size_t size) override;
+
+    FSHashTable *getHashTable() override { return hashTable; }
+    bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
+    FSBlock *seek(FSName name) override { return hashTable->seek(name); }
 };
 
 #endif

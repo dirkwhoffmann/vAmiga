@@ -80,6 +80,7 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
     }
     
     // REMOVE ASAP
+    /*
     int sector = 880;
     int cols = 32;
     u8 *p = adf->data + 512*sector;
@@ -92,18 +93,8 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         printf("\n");
     }
     printf("\n");
-
-
-/*
-    u8 *p = adf->data + 882*512;
-    for (int y = 0; y < 16; y++) {
-        for (int x = 0; x < 32; x++) {
-            printf("%02X ", *p++);
-        }
-        printf("\n");
-    }
-*/
-
+    */
+    
     return adf;
 }
 
@@ -150,6 +141,18 @@ ADFFile::makeWithDisk(Disk *disk)
         }
     }
     
+    return adf;
+}
+
+ADFFile *
+ADFFile::makeWithVolume(FSVolume &volume)
+{
+    assert(volume.getBlockSize() == 512);
+    assert(volume.getCapacity() <= 2 * 880);
+    
+    ADFFile *adf = makeWithDiskType(DISK_35_DD);
+    volume.exportVolume(adf->data, adf->size);
+        
     return adf;
 }
 
@@ -217,37 +220,37 @@ ADFFile::numSectorsPerTrack()
 }
 
 bool
-ADFFile::formatDisk(FileSystemType fs)
+ADFFile::formatDisk(EmptyDiskFormat fs)
 {
-    assert(isFileSystemType(fs));
+    assert(isEmptyDiskFormat(fs));
     
     // Only proceed if a file system is given
-    if (fs == FS_NONE) return false;
+    if (fs == FS_EMPTY) return false;
     
     // Right now, only 3.5" DD disks can be formatted
     if (getDiskType() != DISK_35_DD) {
         warn("Cannot format a disk of type %s with file system %s.\n",
-             diskTypeName(getDiskType()), fileSystemTypeName(fs));
+             diskTypeName(getDiskType()), emptyDiskFormatName(fs));
         return false;
     }
     
     // Create an empty file system
-    if (fs == FS_FFS || fs == FS_FFS_BOOTABLE) {
+    if (fs == FS_EMPTY_FFS || fs == FS_EMPTY_FFS_BOOTABLE) {
 
         FFSVolume vol = FFSVolume("MyDisk");
-        if (fs == FS_FFS_BOOTABLE) vol.installBootBlock();
-        vol.writeAsDisk(data, size);
+        if (fs == FS_EMPTY_FFS_BOOTABLE) vol.installBootBlock();
+        vol.exportVolume(data, size);
 
     } else {
 
         OFSVolume vol = OFSVolume("MyDisk");
-        if (fs == FS_OFS_BOOTABLE) vol.installBootBlock();
+        if (fs == FS_EMPTY_OFS_BOOTABLE) vol.installBootBlock();
 
         // DEBUGGING: Add some directories
         debug("Adding some example entries...\n");
         vol.makeDir("Holla");
         vol.makeFile("ABC");
-        FSFileHeaderBlock *block = vol.seekFile("ABC");
+        FSBlock *block = vol.seekFile("ABC");
         assert(block);
         char test[] = "test";
         block->append((u8 *)test, 4);
@@ -264,9 +267,9 @@ ADFFile::formatDisk(FileSystemType fs)
         // Perform a file system check
         vol.check(true);
         
-        vol.writeAsDisk(data, size);
+        vol.exportVolume(data, size);
         
-        int sector = 880; // 882;
+        int sector = 880;
         int cols = 32;
         u8 *p = data + 512*sector;
         msg("Sector %d\n", sector);

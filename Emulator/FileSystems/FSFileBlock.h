@@ -41,13 +41,14 @@ struct FSFileBlock : FSBlock {
 
     void dump() override;
     bool check(bool verbose) override;
-
+    
     u32 getParent() override { return parent; }
     void setParent(u32 parent) override { this->parent = parent; }
 
     u32 blockListCapacity() override { return maxDataBlocks; }
     u32 blockListSize() override { return numDataBlocks; }
         
+    class FSDataBlock *addDataBlock(); 
     bool addDataBlockRef(u32 ref) override;
     void deleteDataBlockRefs() override;    
 };
