@@ -89,6 +89,15 @@ public:
 public:
     
     bool formatDisk(EmptyDiskFormat fs); 
+
+
+    //
+    // Debugging
+    //
+ 
+public:
+    
+    void dumpSector(int num);
 };
 
 #endif

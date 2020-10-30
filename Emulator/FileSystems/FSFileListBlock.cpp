@@ -43,8 +43,8 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     // Block pointer to itself
     write32(p + 4, nr);
     
-    // Number of stored data block references
-    write32(p + 4, numDataBlocks);
+    // Number of data block references
+    write32(p + 8, numDataBlocks);
     
     // First data block
     write32(p + 16, firstDataBlock);

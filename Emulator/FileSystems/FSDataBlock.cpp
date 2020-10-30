@@ -109,15 +109,14 @@ FSDataBlock::append(u8 byte)
     // If there is space for another byte, add it
     if (numDataBytes < maxDataBytes) {
         
-        printf("Adding byte to block %d (%d, %d)\n", nr, numDataBytes, maxDataBytes);
+        // printf("Adding byte to block %d (%d, %d)\n", nr, numDataBytes, maxDataBytes);
         
-        data[numDataBytes] = byte;
-        numDataBytes++;
+        data[numDataBytes++] = byte;
         fhb->fileSize++;
         return true;
     }
 
-    printf("create a new data block (%d, %d, %d)\n", nr, numDataBytes, maxDataBytes);
+    // printf("create a new data block (%d, %d, %d)\n", nr, numDataBytes, maxDataBytes);
 
     // Otherwise, create a new data block
     FSDataBlock *block = fhb->addDataBlock();
@@ -128,7 +127,7 @@ FSDataBlock::append(u8 byte)
     block->fileHeaderBlock = fileHeaderBlock;
     block->blockNumber = blockNumber + 1;
     
-    return true;
+    return block->append(byte);
 }
 
 bool
@@ -142,7 +141,7 @@ FSDataBlock::append(const u8 *buffer, size_t size)
 }
 
 bool
-FSDataBlock::append(const char *buffer, size_t size)
+FSDataBlock::append(const char *string)
 {
-    return append((u8 *)buffer, size);
+    return append((u8 *)string, strlen(string));
 }

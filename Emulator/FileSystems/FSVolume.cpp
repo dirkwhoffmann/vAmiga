@@ -80,7 +80,7 @@ FSVolume::check(bool verbose)
         result &= blocks[i]->check(verbose);
     }
     
-    printf("The volume is %s.\n", result ? "sound" : "corrupted");
+    printf("The volume is %s.\n", result ? "OK" : "corrupted");
     return result;
 }
 

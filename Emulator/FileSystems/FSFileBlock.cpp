@@ -23,19 +23,18 @@ FSFileBlock::~FSFileBlock()
 void
 FSFileBlock::dump()
 {
-    printf(" Data blocks: ");
-    for (int i = 0; i < numDataBlocks; i++) printf("%d ", dataBlocks[i]);
     printf("\n");
+    printf(" Block count: %d / %d\n", numDataBlocks, maxDataBlocks);
     printf("       First: %d\n", firstDataBlock);
     printf("      Parent: %d\n", parent);
-    printf("        Next: %d\n", nextTableBlock);
+    printf("   Extension: %d\n", nextTableBlock);
+    printf(" Data blocks: ");
+    for (int i = 0; i < numDataBlocks; i++) printf("%d ", dataBlocks[i]);
 }
 
 bool
 FSFileBlock::check(bool verbose)
-{
-    printf("FSRefTableBlock::check(%d)", verbose);
-    
+{    
     bool result = FSBlock::check(verbose);
     
     result &= assertNotNull(parent, verbose);
@@ -69,21 +68,25 @@ FSFileBlock::addDataBlock()
 bool
 FSFileBlock::addDataBlockRef(u32 ref)
 {
-    // If there is space for another reference, add it
+    // If there is an extension block, add it there
+    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
+    if (extension) return extension->addDataBlockRef(ref);
+    
+    // Otherwise, try to add the reference in this block
     if (numDataBlocks < maxDataBlocks) {
 
-        dataBlocks[numDataBlocks] = ref;
-        numDataBlocks++;
+        dataBlocks[numDataBlocks++] = ref;
         return true;
     }
     
-    // Otherwise, create a new FileListBlock
+    // If this block is full, create a new FileListBlock
     FSFileListBlock *block = volume.newFileListBlock();
     if (block == nullptr) return false;
-    
-    // Connect the new block
+
+    // Connect the block
     block->firstDataBlock = firstDataBlock;
     block->parent = parent;
+    nextTableBlock = block->nr;
     
     // Add the reference to the new block
     return block->addDataBlockRef(ref);

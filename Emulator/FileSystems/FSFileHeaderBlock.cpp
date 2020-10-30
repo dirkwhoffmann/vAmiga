@@ -41,6 +41,7 @@ FSFileHeaderBlock::dump()
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
     printf("     Created: "); created.dump(); printf("\n");
+    printf("        Next: %d\n", next);
     printf("   File size: %d\n", fileSize);
 
     FSFileBlock::dump();
@@ -68,8 +69,8 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     // Block pointer to itself
     write32(p + 4, nr);
 
-    // Number of stored data block references
-    write32(p + 4, numDataBlocks);
+    // Number of data block references
+    write32(p + 8, numDataBlocks);
 
     // First data block
     write32(p + 16, firstDataBlock);
@@ -152,7 +153,7 @@ FSFileHeaderBlock::append(const u8 *buffer, size_t size)
 }
 
 bool
-FSFileHeaderBlock::append(const char *buffer, size_t size)
+FSFileHeaderBlock::append(const char *string)
 {
-    return append((u8 *)buffer, size);
+    return append((u8 *)string, strlen(string));
 }

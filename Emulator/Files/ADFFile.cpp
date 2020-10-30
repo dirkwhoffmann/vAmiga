@@ -78,23 +78,11 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         delete adf;
         return NULL;
     }
-    
-    // REMOVE ASAP
-    /*
-    int sector = 880;
-    int cols = 32;
-    u8 *p = adf->data + 512*sector;
-    printf("Sector %d\n", sector);
-    for (int y = 0; y < 512 / cols; y++) {
-        for (int x = 0; x < cols; x++) {
-            if (x == cols / 2) printf(" ");
-            printf("%02X ", p[y*cols + x]);
-        }
-        printf("\n");
-    }
-    printf("\n");
-    */
-    
+        
+    adf->dumpSector(880);
+    adf->dumpSector(882);
+    adf->dumpSector(883);
+
     return adf;
 }
 
@@ -284,4 +272,21 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
     }
                 
     return true;
+}
+
+void
+ADFFile::dumpSector(int num)
+{
+    u8 *p = data + 512 * num;
+    int cols = 32;
+
+    printf("Sector %d\n", num);
+    for (int y = 0; y < 512 / cols; y++) {
+        for (int x = 0; x < cols; x++) {
+            printf("%02X ", p[y*cols + x]);
+            if ((x % 4) == 3) printf(" ");
+        }
+        printf("\n");
+    }
+    printf("\n");
 }

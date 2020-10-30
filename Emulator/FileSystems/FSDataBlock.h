@@ -54,7 +54,7 @@ struct FSDataBlock : FSBlock {
 
     bool append(u8 byte) override;
     bool append(const u8 *buffer, size_t size) override;
-    bool append(const char *buffer, size_t size) override;
+    bool append(const char *string) override;
 };
 
 #endif

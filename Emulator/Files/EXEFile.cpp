@@ -64,7 +64,7 @@ EXEFile::makeWithFile(const char *path)
 bool
 EXEFile::readFromBuffer(const u8 *buffer, size_t length)
 {
-    debug("readFromBuffer()\n");
+    debug("readFromBuffer(%p, %lld)\n", buffer, length);
     
     bool success = false;
     
@@ -81,7 +81,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume.installBootBlock();
     
     // Add the exe file
-    FSBlock *file = volume.makeFile("demo");
+    FSBlock *file = volume.makeFile("file");
     if (file) success = file->append(buffer, length);
 
     // Add a script directory
@@ -91,13 +91,15 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Add a startup sequence
     file = volume.makeFile("startup-sequence");
-    if (success && file) success = file->append("demo", 4);
+    if (success && file) success = file->append("file");
     
     // Convert the volume into an ADF
     assert(adf == nullptr);
     if (success) adf = ADFFile::makeWithVolume(volume);
 
     debug("adf = %p\n", adf); 
-
+    volume.check(true);
+    volume.dump();
+    
     return adf != nullptr;
 }
