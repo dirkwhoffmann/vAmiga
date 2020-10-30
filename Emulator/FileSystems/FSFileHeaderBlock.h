@@ -55,7 +55,6 @@ struct FSFileHeaderBlock : FSFileBlock {
     bool matches(FSName &otherName) override { return name == otherName; }
     
     // Append data bytes
-    bool append(u8 byte) override;
     bool append(const u8 *buffer, size_t size) override;
     bool append(const char *string) override;
 };

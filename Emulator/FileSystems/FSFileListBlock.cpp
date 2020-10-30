@@ -23,8 +23,6 @@ FSFileListBlock::dump()
 bool
 FSFileListBlock::check(bool verbose)
 {
-    printf("FSFileListBlock::check(%d)", verbose);
-
     return FSFileBlock::check(verbose);
 }
 

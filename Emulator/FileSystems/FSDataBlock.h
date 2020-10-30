@@ -52,9 +52,12 @@ struct FSDataBlock : FSBlock {
     u32 getNext() override { return next; }
     void setNext(u32 next) override { this->next = next; }
 
-    bool append(u8 byte) override;
     bool append(const u8 *buffer, size_t size) override;
     bool append(const char *string) override;
+
+private:
+
+    size_t fillUp(const u8 *buffer, size_t size);
 };
 
 #endif

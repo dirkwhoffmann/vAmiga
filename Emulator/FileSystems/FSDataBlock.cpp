@@ -91,52 +91,42 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
 }
 
 bool
-FSDataBlock::append(u8 byte)
+FSDataBlock::append(const u8 *buffer, size_t size)
 {
+    size_t n = 0;
+    
     // Get a reference to the file header block
     FSFileHeaderBlock *fhb = volume.fileHeaderBlock(fileHeaderBlock);
     if (fhb == nullptr) return false;
     
-    // Append at the end
-    if (next) {
-        FSBlock *nextBlock = volume.block(next);
-        if (nextBlock) {
-            assert(numDataBytes == maxDataBytes);
-            return nextBlock->append(byte);
+    // Seek the last data block
+    FSDataBlock *dataBlock = this;
+    while (dataBlock->next) dataBlock = volume.dataBlock(dataBlock->next);
+    if (dataBlock == nullptr) return false;
+    
+    printf("Last data block is %p\n", dataBlock);
+    
+    while (n < size) {
+        
+        // Fill the data block up
+        size_t written = dataBlock->fillUp(buffer + n, size - n);
+        n += written;
+        fhb->fileSize += written;
+        
+        // Create a new data block if there are bytes remaining
+        if (n < size) {
+            
+            FSDataBlock *newDataBlock = fhb->addDataBlock();
+            if (newDataBlock == nullptr) return false;
+            
+            // Connect the new block
+            dataBlock->next = newDataBlock->nr;
+            newDataBlock->fileHeaderBlock = fileHeaderBlock;
+            newDataBlock->blockNumber = dataBlock->blockNumber + 1;
+            dataBlock = newDataBlock;
         }
     }
-    
-    // If there is space for another byte, add it
-    if (numDataBytes < maxDataBytes) {
-        
-        // printf("Adding byte to block %d (%d, %d)\n", nr, numDataBytes, maxDataBytes);
-        
-        data[numDataBytes++] = byte;
-        fhb->fileSize++;
-        return true;
-    }
 
-    // printf("create a new data block (%d, %d, %d)\n", nr, numDataBytes, maxDataBytes);
-
-    // Otherwise, create a new data block
-    FSDataBlock *block = fhb->addDataBlock();
-    if (block == nullptr) return false;
-    
-    // Connect the new block
-    next = block->nr;
-    block->fileHeaderBlock = fileHeaderBlock;
-    block->blockNumber = blockNumber + 1;
-    
-    return block->append(byte);
-}
-
-bool
-FSDataBlock::append(const u8 *buffer, size_t size)
-{
-    for (size_t i = 0; i < size; i++) {
-        if (!append(buffer[i])) return false;
-    }
-    
     return true;
 }
 
@@ -144,4 +134,17 @@ bool
 FSDataBlock::append(const char *string)
 {
     return append((u8 *)string, strlen(string));
+}
+
+size_t
+FSDataBlock::fillUp(const u8 *buffer, size_t size)
+{
+    size_t freeSpace = maxDataBytes - numDataBytes;
+    size_t count = MIN(size, freeSpace);
+
+    // Copy bytes
+    printf("Copying %zu bytes\n", count);
+    for (int i = 0; i < count; i++) data[numDataBytes++] = buffer[i];
+
+    return count;
 }
