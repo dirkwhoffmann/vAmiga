@@ -14,6 +14,7 @@
 #include "FSVolume.h"
 
 #define ADFSIZE_35_DD     901120  //  880 KB
+// #define ADFSIZE_35_DDb    901121  //  880 KB
 #define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
 #define ADFSIZE_35_DD_82  923648  //  902 KB (2 extra cylinders)
 #define ADFSIZE_35_DD_83  934912  //  913 KB (3 extra cylinders)

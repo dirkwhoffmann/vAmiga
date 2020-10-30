@@ -17,7 +17,10 @@ ADFFile::ADFFile()
 bool
 ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 {
-    // There are no magic bytes. Hence, we only check the file size.
+    // Some ADFs contain an additional byte at the end. Ignore it
+    length &= ~1;
+    
+    // There are no magic bytes. Hence, we only check the file size
     return
     length == ADFSIZE_35_DD ||
     length == ADFSIZE_35_DD_81 ||
@@ -30,14 +33,21 @@ ADFFile::isADFBuffer(const u8 *buffer, size_t length)
 bool
 ADFFile::isADFFile(const char *path)
 {
-    // There are no magic bytes. Hence, we only check the file size.
+    // There are no magic bytes. Hence, we only check the file size
     return
     checkFileSize(path, ADFSIZE_35_DD) ||
     checkFileSize(path, ADFSIZE_35_DD_81) ||
     checkFileSize(path, ADFSIZE_35_DD_82) ||
     checkFileSize(path, ADFSIZE_35_DD_83) ||
     checkFileSize(path, ADFSIZE_35_DD_84) ||
-    checkFileSize(path, ADFSIZE_35_HD);
+    checkFileSize(path, ADFSIZE_35_HD) ||
+    
+    checkFileSize(path, ADFSIZE_35_DD+1) ||
+    checkFileSize(path, ADFSIZE_35_DD_81+1) ||
+    checkFileSize(path, ADFSIZE_35_DD_82+1) ||
+    checkFileSize(path, ADFSIZE_35_DD_83+1) ||
+    checkFileSize(path, ADFSIZE_35_DD_84+1) ||
+    checkFileSize(path, ADFSIZE_35_HD+1);
 }
 
 size_t
@@ -156,7 +166,7 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 DiskType
 ADFFile::getDiskType()
 {
-    switch(size) {
+    switch(size & ~1) {
         
         case ADFSIZE_35_DD:
         case ADFSIZE_35_DD_81:
@@ -178,7 +188,7 @@ ADFFile::numSides()
 long
 ADFFile::numCyclinders()
 {
-    switch(size) {
+    switch(size & ~1) {
             
         case ADFSIZE_35_DD:    return 80;
         case ADFSIZE_35_DD_81: return 81;
@@ -233,44 +243,9 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
 
         OFSVolume vol = OFSVolume("MyDisk");
         if (fs == FS_EMPTY_OFS_BOOTABLE) vol.installBootBlock();
-
-        // DEBUGGING: Add some directories
-        debug("Adding some example entries...\n");
-        vol.makeDir("Holla");
-        vol.makeFile("ABC");
-        FSBlock *block = vol.seekFile("ABC");
-        assert(block);
-        char test[] = "test";
-        block->append((u8 *)test, 4);
-        vol.makeFile("Waldfee");
-        vol.changeDir("Holla");
-        vol.makeDir("die");
-        vol.changeDir("die");
-        vol.makeFile("file");
-        vol.makeDir("Waldfee");
-        vol.changeDir("Waldfee");
-        
-        debug("Done\n");
-
-        // Perform a file system check
-        vol.check(true);
-        
         vol.exportVolume(data, size);
-        
-        int sector = 880;
-        int cols = 32;
-        u8 *p = data + 512*sector;
-        msg("Sector %d\n", sector);
-        for (int y = 0; y < 512 / cols; y++) {
-            for (int x = 0; x < cols; x++) {
-                if (x == cols / 2) msg(" ");
-                msg("%02X ", p[y*cols + x]);
-            }
-            msg("\n");
-        }
-        msg("\n");
     }
-                
+
     return true;
 }
 
