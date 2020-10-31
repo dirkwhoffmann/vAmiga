@@ -24,6 +24,7 @@
 @class CPUProxy;
 @class DeniseProxy;
 @class DiskControllerProxy;
+@class DiskFileProxy;
 @class DmaDebuggerProxy;
 @class DMSFileProxy;
 @class DriveProxy;
@@ -598,7 +599,7 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger selectedDrive;
 @property (readonly) DriveState state;
 @property (readonly, getter=isSpinning) BOOL spinning;
- - (void) eject:(NSInteger)nr;
+- (void) eject:(NSInteger)nr;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy;
@@ -609,7 +610,7 @@ struct SerialPortWrapper;
 
 
 //
-// AmigaDrive
+// Drive
 //
 
 @interface DriveProxy : NSObject {
@@ -620,19 +621,17 @@ struct SerialPortWrapper;
 @property (readonly) struct DriveWrapper *wrapper;
 
 - (void) dump;
-
 - (DriveInfo) getInfo;
+
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL hasDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
 - (void) toggleWriteProtection;
-
+- (BOOL) isInsertable:(DiskType)type;
 @property (getter=isModifiedDisk) BOOL modifiedDisk;
-
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
-
 @property (readonly) u64 fnv;
 
 - (ADFFileProxy *)convertDisk;

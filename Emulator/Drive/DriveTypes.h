@@ -21,9 +21,7 @@
 typedef VA_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
-    DRIVE_35_DD_PC,
     DRIVE_35_HD,
-    DRIVE_35_HD_PC,
     DRIVE_525_SD
 };
 
@@ -38,9 +36,7 @@ inline const char *driveTypeName(DriveType type)
     
     switch (type) {
         case DRIVE_35_DD:    return "Drive 3.5\" DD";
-        case DRIVE_35_DD_PC: return "Drive 3.5\" DD (PC)";
         case DRIVE_35_HD:    return "Drive 3.5\" HD";
-        case DRIVE_35_HD_PC: return "Drive 3.5\" HD (PC)";
         case DRIVE_525_SD:   return "Drive 5.25\" SD";
         default:             return "???";
     }
@@ -60,8 +56,8 @@ DriveHead;
 
 typedef struct
 {
-     DriveType type;
-        
+    DriveType type;
+    
     // Indicates whether mechanical delays should be emulated
     bool mechanicalDelays;
 

@@ -42,6 +42,30 @@ inline const char *diskTypeName(DiskType type)
     }
 }
 
+typedef VA_ENUM(long, DiskDensity)
+{
+    DENSITY_SD,
+    DENSITY_DD,
+    DENSITY_HD,
+};
+
+inline bool isDiskDensity(DiskDensity density)
+{
+    return density >= DENSITY_SD && density <= DENSITY_HD;
+}
+
+inline const char *diskDensityName(DiskDensity density)
+{
+    assert(isDiskDensity(density));
+    
+    switch (density) {
+        case DENSITY_SD:   return "SD";
+        case DENSITY_DD:   return "DD";
+        case DENSITY_HD:   return "HD";
+        default:           return "???";
+    }
+}
+
 typedef VA_ENUM(long, EmptyDiskFormat)
 {
     FS_EMPTY,

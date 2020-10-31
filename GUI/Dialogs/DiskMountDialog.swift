@@ -152,21 +152,28 @@ class DiskMountDialog: DialogController {
         diskIcon.image = diskIconImage
         title.stringValue = titleText
         subtitle.stringValue = subtitleText
-        
-        let compatible = disk!.diskType == .DISK_35_DD
-        warning.isHidden = compatible
-                
-        // Check for available drives
-        let dc = amiga.diskController.getConfig()
 
+        // Check drive connection status
+        let dc = amiga.diskController.getConfig()
         let connected0 = dc.connected.0
         let connected1 = dc.connected.1
         let connected2 = dc.connected.2
         let connected3 = dc.connected.3
-        df0Button.isEnabled = compatible && connected0
-        df1Button.isEnabled = compatible && connected1
-        df2Button.isEnabled = compatible && connected2
-        df3Button.isEnabled = compatible && connected3
+
+        // Check drive compatibility
+        let comp0 = amiga.df0.isInsertable(disk!.diskType)
+        let comp1 = amiga.df1.isInsertable(disk!.diskType)
+        let comp2 = amiga.df2.isInsertable(disk!.diskType)
+        let comp3 = amiga.df3.isInsertable(disk!.diskType)
+                
+        // Check for available drives
+        df0Button.isEnabled = comp0 && connected0
+        df1Button.isEnabled = comp1 && connected1
+        df2Button.isEnabled = comp2 && connected2
+        df3Button.isEnabled = comp3 && connected3
+        
+        // show warning message if no compatible drives are available
+        warning.isHidden = comp0 || comp1 || comp2 || comp3
     }
     
     func updateCarousel(goto item: Int = -1, animated: Bool = false) {

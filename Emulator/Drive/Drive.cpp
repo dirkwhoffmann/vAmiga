@@ -55,7 +55,7 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
                 warn("Invalid drive type: %d\n", value);
                 return false;
             }
-            if (value != DRIVE_35_DD) {
+            if (value != DRIVE_35_DD && value != DRIVE_35_HD) {
                 warn("Unsupported type: %s\n", driveTypeName((DriveType)value));
                 return false;
             }
@@ -213,24 +213,31 @@ Drive::idMode()
 u32
 Drive::getDriveId()
 {
-    /* External floopy drives identify themselve with the following codes:
-     *
-     *   3.5" DD :  0xFFFFFFFF
-     *   3.5" HD :  0xAAAAAAAA  if an HD disk is inserted
-     *              0xFFFFFFFF  if no disk or a DD disk is inserted
-     *   5.25"SD :  0x55555555
-     *
-     * An unconnected drive corresponds to ID 0x00000000. The internal drive
-     * does not identify itself. Its ID is also read as 0x00000000.
-     */
-    
-    assert(config.type == DRIVE_35_DD);
-
-    if (nr == 0) {
-        return 0x00000000;
-    } else {
-        return 0xFFFFFFFF;
+    if (nr > 0) {
+        
+        // External floopy drives identify themselve as follows:
+        //
+        //     3.5" DD: 0xFFFFFFFF
+        //     3.5" HD: 0xAAAAAAAA if an HD disk is inserted
+        //              0xFFFFFFFF if no disk or a DD disk is inserted
+        //     5.25"SD: 0x55555555
+        
+        switch(config.type) {
+                
+            case DRIVE_35_DD:
+                return 0xFFFFFFFF;
+                
+            case DRIVE_35_HD:
+                if (disk && disk->getDensity() == DENSITY_HD) return 0xAAAAAAAA;
+                return 0xFFFFFFFF;
+                
+            case DRIVE_525_SD:
+                return 0x55555555;
+        }
     }
+    
+    // The internal floppy drive identifies itself as 0x00000000
+    return 0x00000000;
 }
 
 u8
@@ -575,12 +582,43 @@ Drive::ejectDisk()
     }
 }
 
-void
+bool
+Drive::isInsertable(DiskType type)
+{
+    debug(DSK_DEBUG, "isInsertable(%s)\n", diskTypeName(type));
+    
+    switch (config.type) {
+            
+        case DRIVE_35_DD:  return type == DISK_35_DD;
+        case DRIVE_35_HD:  return type == DISK_35_DD || type == DISK_35_HD;
+        case DRIVE_525_SD: return type == DISK_525_SD;
+            
+        default:
+            assert(false);
+    }
+    return false;
+}
+
+bool
+Drive::isInsertable(DiskFile *file)
+{
+    debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", file);
+    return file ? isInsertable(file->getDiskType()) :  false;
+}
+
+bool
+Drive::isInsertable(Disk *disk)
+{
+    debug(DSK_DEBUG, "isInsertable(Disk %p)\n", disk);
+    return disk ? isInsertable(disk->type) : false;
+}
+
+bool
 Drive::insertDisk(Disk *disk)
 {
     trace(DSK_DEBUG, "insertDisk(%p)", disk);
 
-    if (disk) {
+    if (isInsertable(disk)) {
 
         // Don't insert a disk if there is already one
         assert(!hasDisk());
@@ -588,7 +626,11 @@ Drive::insertDisk(Disk *disk)
         // Insert the disk and inform the GUI
         this->disk = disk;
         messageQueue.put(MSG_DISK_INSERT, nr);
+        
+        return true;
     }
+    
+    return false;
 }
 
 u64

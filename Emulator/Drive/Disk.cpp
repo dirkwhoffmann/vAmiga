@@ -43,6 +43,20 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
     return disk;
 }
 
+DiskDensity
+Disk::getDensity()
+{
+    switch (type) {
+        case DISK_35_DD:    return DENSITY_DD;
+        case DISK_35_HD:    return DENSITY_HD;
+        case DISK_525_SD:   return DENSITY_SD;
+
+        default:
+            assert(false);
+    }
+    return (DiskDensity)0;
+}
+
 u8
 Disk::readByte(Cylinder cylinder, Side side, u16 offset)
 {

@@ -615,9 +615,6 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="81a-Pc-Ymw">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="CuP-hU-b7K">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -636,7 +633,10 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="Vpf-Pw-FVz">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="gDc-D5-Meh">
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="gDc-D5-Meh">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="SRk-xi-Daa">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -668,7 +668,10 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="bjH-wH-qKY">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="zaC-uJ-E64">
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="zaC-uJ-E64" userLabel="3.5&quot; HD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="5cM-1Z-ZpG">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -700,7 +703,10 @@ DQ
                                                         <menuItem title="3.5&quot; DD" state="on" id="0W9-3L-14L">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="1" hidden="YES" id="C3O-1V-XsS">
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="C3O-1V-XsS">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="3ky-Vx-pCg">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

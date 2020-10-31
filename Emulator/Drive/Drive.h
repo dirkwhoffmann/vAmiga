@@ -259,8 +259,12 @@ public:
     void setWriteProtection(bool value); 
     void toggleWriteProtection();
     
+    bool isInsertable(DiskType type);
+    bool isInsertable(DiskFile *file);
+    bool isInsertable(Disk *disk);
+
     void ejectDisk();
-    void insertDisk(Disk *disk);
+    bool insertDisk(Disk *disk);
     
     u64 fnv();
     

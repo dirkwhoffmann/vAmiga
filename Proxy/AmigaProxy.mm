@@ -1173,6 +1173,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->drive->toggleWriteProtection();
 }
+- (BOOL) isInsertable:(DiskType)type
+{
+    return wrapper->drive->isInsertable(type);
+}
 - (BOOL) isModifiedDisk
 {
     return wrapper->drive->hasModifiedDisk();
