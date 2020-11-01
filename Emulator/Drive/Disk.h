@@ -37,11 +37,14 @@ class Disk : public AmigaObject {
     DiskGeometry geometry;
     
     // MFM encoded disk data
+    u8 *data = nullptr;
+    /*
     union {
         u8 raw[diskSize];
         u8 cyclinder[84][2][trackSize];
         u8 track[168][trackSize];
     } data;
+    */
     
     // Indicates if this disk is write protected
     bool writeProtected = false;
@@ -60,6 +63,7 @@ class Disk : public AmigaObject {
 public:
     
     Disk(DiskType type);
+    ~Disk();
 
     static Disk *makeWithFile(class DiskFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
@@ -79,7 +83,7 @@ private:
         worker
 
         & type
-        & data.raw
+        // & data.raw
         & writeProtected
         & modified
         & fnv;

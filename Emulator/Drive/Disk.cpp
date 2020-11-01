@@ -13,8 +13,14 @@ Disk::Disk(DiskType type) : geometry(type)
 {
     setDescription("Disk");
     
+    data = new u8[geometry.diskSize];
     this->type = type;
     clearDisk();
+}
+
+Disk::~Disk()
+{
+    delete [] data;
 }
 
 Disk *
@@ -37,6 +43,7 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
 {
     Disk *disk = new Disk(diskType);
     disk->applyToPersistentItems(reader);
+    reader.copy(disk->data, disk->geometry.diskSize);
     
     return disk;
 }
@@ -77,7 +84,7 @@ Disk::readByte(Track track, u16 offset)
     assert(track < geometry.tracks);
     assert(offset < geometry.trackSize);
 
-    return data.raw[track * geometry.trackSize + offset];
+    return data[track * geometry.trackSize + offset];
 }
 
 u8
@@ -87,8 +94,11 @@ Disk::readByte(Cylinder cylinder, Side side, u16 offset)
     assert(side < geometry.sides);
     assert(offset < geometry.trackSize);
 
+    return data[(2 * cylinder + side) * geometry.trackSize + offset];
+    /*
     assert(data.raw[(2 * cylinder + side) * geometry.trackSize + offset] == data.cyclinder[cylinder][side][offset]);
     return data.cyclinder[cylinder][side][offset];
+    */
 }
 
 void
@@ -97,7 +107,7 @@ Disk::writeByte(u8 value, Track track, u16 offset)
     assert(track < geometry.tracks);
     assert(offset < geometry.trackSize);
 
-    data.raw[track * geometry.trackSize + offset] = value;
+    data[track * geometry.trackSize + offset] = value;
 }
 
 void
@@ -107,14 +117,14 @@ Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
     assert(side < geometry.sides);
     assert(offset < geometry.trackSize);
 
-    data.cyclinder[cylinder][side][offset] = value;
-    assert(data.raw[(2 * cylinder + side) * geometry.trackSize + offset] == value);
+    // data.cyclinder[cylinder][side][offset] = value;
+    data[(2 * cylinder + side) * geometry.trackSize + offset] = value;
 }
 
 u8 *
 Disk::ptr(Track track)
 {
-    return data.raw + geometry.trackSize * track;
+    return data + geometry.trackSize * track;
 }
 
 u8 *
@@ -126,15 +136,12 @@ Disk::ptr(Track track, Sector sector)
 void
 Disk::clearDisk()
 {
-    assert(sizeof(data) == sizeof(data.raw));
-
     fnv = 0;
 
     // Initialize with random data
     srand(0);
-    assert(geometry.diskSize == sizeof(data));
     for (int i = 0; i < geometry.diskSize; i++) {
-        data.raw[i] = rand() & 0xFF;
+        data[i] = rand() & 0xFF;
     }
     
     /* In order to make some copy protected game titles work, we smuggle in
@@ -157,7 +164,7 @@ Disk::clearTrack(Track t)
     assert(t < geometry.tracks);
 
     srand(0);
-    for (int i = 0; i < sizeof(data.track[t]); i++) {
+    for (int i = 0; i < geometry.trackSize; i++) {
         writeByte(rand() & 0xFF, t, i);
         // data.track[t][i] = rand() & 0xFF;
     }
@@ -168,7 +175,7 @@ Disk::clearTrack(Track t, u8 value)
 {
     assert(t < geometry.tracks);
 
-    for (int i = 0; i < sizeof(data.track[t]); i++) {
+    for (int i = 0; i < geometry.trackSize; i++) {
         writeByte(value, t, i);
     }
     // memset(data.track[t], value, trackSize);
@@ -228,10 +235,6 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t)
     // Rectify the first clock bit (where buffer wraps over)
     u8 *strt = ptr(t);
     u8 *stop = ptr(t) + geometry.trackSize - 1;
-    
-    assert(strt == &data.track[t][0]);
-    assert(stop == &data.track[t][trackSize - 1]);
-
     if (*stop & 0x01) *strt &= 0x7F;
     // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
 
@@ -263,7 +266,6 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
      */
     
     u8 *p = ptr(t, s);
-    assert(p == data.track[t] + (s * sectorSize) + trackGapSize);
     // u8 *p = data.track[t] + (s * sectorSize) + trackGapSize;
     
     // Bytes before SYNC
@@ -352,7 +354,6 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     debug(MFM_DEBUG, "Encoding DOS track %d with %d sectors\n", t, sectors);
 
     u8 *p = ptr(t);
-    assert(p == data.track[t]);
     // u8 *p = data.track[t];
 
     // Clear track
@@ -375,7 +376,7 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(data.track[t], trackSize);
+        u64 check = fnv_1a_32(ptr(t), geometry.trackSize);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -434,7 +435,6 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 
     // Determine the start of this sector inside the current track
     u8 *p = ptr(t, s);
-    assert(p == data.track[t] + 194 + s * 1300);
     // u8 *p = data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
@@ -476,7 +476,6 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];
-    assert(ptr(t) == data.track[t]);
     assert(trackSize == geometry.trackSize);
     memcpy(local, ptr(t), geometry.trackSize);
     memcpy(local + trackSize, ptr(t), geometry.trackSize);
@@ -547,7 +546,6 @@ Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
     
     // Create a local (double) copy of the track to simply the analysis
     assert(trackSize == geometry.trackSize);
-    assert(ptr(t) == data.track[t]);
     u8 local[2 * geometry.trackSize];
     memcpy(local, ptr(t), geometry.trackSize);
     memcpy(local + geometry.trackSize, ptr(t), geometry.trackSize);
