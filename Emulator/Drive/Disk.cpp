@@ -151,9 +151,7 @@ Disk::clearDisk()
         
         for (int t = 0; t < geometry.tracks; t++) {
             writeByte(0x44, t, 0);
-            writeByte(0x44, t, 1);
-            // data.track[t][0] = 0x44;
-            // data.track[t][1] = 0xA2;
+            writeByte(0xA2, t, 1);
         }
     }
 }
@@ -178,7 +176,18 @@ Disk::clearTrack(Track t, u8 value)
     for (int i = 0; i < geometry.trackSize; i++) {
         writeByte(value, t, i);
     }
-    // memset(data.track[t], value, trackSize);
+}
+
+void
+Disk::clearTrack(Track t, u8 value1, u8 value2)
+{
+    assert(t < geometry.tracks);
+    assert(geometry.trackSize % 2 == 0);
+
+    for (int i = 0; i < geometry.trackSize; i += 2) {
+        writeByte(value1, t, i);
+        writeByte(value2, t, i + 1);
+    }
 }
 
 bool
@@ -357,7 +366,8 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
     // u8 *p = data.track[t];
 
     // Clear track
-    for (int i = 0; i < trackSize; i += 2) { p[i] = 0x92; p[i+1] = 0x54; }
+    clearTrack(t, 0x92, 0x54);
+    // for (int i = 0; i < trackSize; i += 2) { p[i] = 0x92; p[i+1] = 0x54; }
 
     // Encode track header
     p += 82;                                        // GAP
@@ -475,14 +485,12 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
-    u8 local[2 * trackSize];
-    assert(trackSize == geometry.trackSize);
+    u8 local[2 * geometry.trackSize];
     memcpy(local, ptr(t), geometry.trackSize);
-    memcpy(local + trackSize, ptr(t), geometry.trackSize);
+    memcpy(local + geometry.trackSize, ptr(t), geometry.trackSize);
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;
-    assert(sectorSize == geometry.sectorSize);
     while (index < geometry.trackSize + geometry.sectorSize && nr < numSectors) {
 
         // Scan MFM stream for $4489 $4489
@@ -545,7 +553,6 @@ Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
-    assert(trackSize == geometry.trackSize);
     u8 local[2 * geometry.trackSize];
     memcpy(local, ptr(t), geometry.trackSize);
     memcpy(local + geometry.trackSize, ptr(t), geometry.trackSize);
@@ -556,7 +563,7 @@ Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
         sectorStart[i] = 0;
     }
     int cnt = 0;
-    for (int i = 0; i < 1.5 * trackSize;) {
+    for (int i = 0; i < 1.5 * geometry.trackSize;) {
         
         // Seek IDAM block
         if (local[i++] != 0x44) continue;

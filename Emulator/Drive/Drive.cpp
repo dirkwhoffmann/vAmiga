@@ -411,7 +411,7 @@ Drive::writeWordAndRotate(u16 value)
 void
 Drive::rotate()
 {
-    if (++head.offset == disk->trackSize) {
+    if (++head.offset == disk->geometry.trackSize) {
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;
@@ -422,13 +422,13 @@ Drive::rotate()
         if (isSelected()) ciab.emulateFallingEdgeOnFlagPin();
     }
 
-    assert(head.offset < Disk::trackSize);
+    assert(head.offset < disk->geometry.trackSize);
 }
 
 void
 Drive::findSyncMark()
 {
-    for (unsigned i = 0; i < disk->trackSize; i++) {
+    for (unsigned i = 0; i < disk->geometry.trackSize; i++) {
         
         if (readByteAndRotate() != 0x44) continue;
         if (readByteAndRotate() != 0x89) continue;

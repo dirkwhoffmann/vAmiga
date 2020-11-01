@@ -17,34 +17,14 @@ class Disk : public AmigaObject {
     
     friend class Drive;
     
-    //
-    // Constants
-    //
-    static const long sectorSize   = 1088;
-    static const long trackGapSize = 700;
-    static const long trackSize    = 11 * sectorSize + trackGapSize;
-    static const long cylinderSize = 2 * trackSize;
-    static const long diskSize     = 84 * cylinderSize;
-
-    static_assert(trackSize == 12668);
-    static_assert(cylinderSize == 25336);
-    static_assert(diskSize == 2128224);
-
     // The type of this disk
     DiskType type;
     
     // The geometry of this disk (derived from the disk type in the constructor)
     DiskGeometry geometry;
     
-    // MFM encoded disk data
+    // The MFM encoded disk data
     u8 *data = nullptr;
-    /*
-    union {
-        u8 raw[diskSize];
-        u8 cyclinder[84][2][trackSize];
-        u8 track[168][trackSize];
-    } data;
-    */
     
     // Indicates if this disk is write protected
     bool writeProtected = false;
@@ -83,7 +63,6 @@ private:
         worker
 
         & type
-        // & data.raw
         & writeProtected
         & modified
         & fnv;
@@ -139,6 +118,7 @@ public:
     // Initializes a single track with random data or a specific value
     void clearTrack(Track t);
     void clearTrack(Track t, u8 value);
+    void clearTrack(Track t, u8 value1, u8 value2);
 
     
     //
