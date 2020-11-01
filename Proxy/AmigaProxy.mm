@@ -1389,10 +1389,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->numSides();
 }
-- (NSInteger)numCylinders
-{
-    return ((DiskFile *)wrapper->file)->numCyclinders();
-}
 - (NSInteger)numTracks
 {
     return ((DiskFile *)wrapper->file)->numTracks();
@@ -1400,10 +1396,6 @@ struct SerialPortWrapper { SerialPort *port; };
 - (NSInteger)numSectorsPerTrack
 {
     return ((DiskFile *)wrapper->file)->numSectorsPerTrack();
-}
-- (NSInteger)numSectorsTotal
-{
-    return ((DiskFile *)wrapper->file)->numSectorsTotal();
 }
 
 @end
@@ -1553,34 +1545,6 @@ struct SerialPortWrapper { SerialPort *port; };
     Drive *d = [drive wrapper]->drive;
     IMGFile *archive = IMGFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
-}
-- (DiskType)diskType
-{
-    return ((IMGFile *)wrapper->file)->getDiskType();
-}
-- (NSInteger)numCylinders
-{
-    return ((IMGFile *)wrapper->file)->numCyclinders();
-}
-- (NSInteger)numHeads
-{
-    return 2;
-}
-- (NSInteger)numTracks
-{
-    return ((IMGFile *)wrapper->file)->numTracks();
-}
-- (NSInteger)numSectors
-{
-    return ((IMGFile *)wrapper->file)->numSectorsTotal();
-}
-- (NSInteger)numSectorsPerTrack
-{
-    return ((IMGFile *)wrapper->file)->numSectorsPerTrack();
-}
-- (u64) fnv
-{
-    return ((IMGFile *)wrapper->file)->fnv();
 }
 
 @end

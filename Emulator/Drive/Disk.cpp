@@ -64,20 +64,6 @@ Disk::dump()
     msg("          diskSize: %ld\n", geometry.diskSize);
 }
 
-DiskDensity
-Disk::getDensity()
-{
-    switch (type) {
-        case DISK_35_DD:    return DENSITY_DD;
-        case DISK_35_HD:    return DENSITY_HD;
-        case DISK_525_DD:   return DENSITY_DD;
-
-        default:
-            assert(false);
-    }
-    return (DiskDensity)0;
-}
-
 u8
 Disk::readByte(Track track, u16 offset)
 {
@@ -200,7 +186,7 @@ Disk::encodeDisk(DiskFile *df)
     clearDisk();
 
     // Call the proper encoder for this disk
-    return df->isAmigaDisk() ? encodeAmigaDisk(df) : encodeDosDisk(df);
+    return isAmigaDiskType(getType()) ? encodeAmigaDisk(df) : encodeDosDisk(df);
 }
 
 bool

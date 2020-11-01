@@ -28,9 +28,14 @@ typedef VA_ENUM(long, DiskType)
     DISK_525_DD_PC
 };
 
-inline bool isDiskType(DiskType model)
+inline bool isDiskType(DiskType type)
 {
-    return model >= DISK_35_DD && model <= DISK_525_DD_PC;
+    return type >= DISK_35_DD && type <= DISK_525_DD_PC;
+}
+
+inline bool isAmigaDiskType(DiskType type)
+{
+    return type == DISK_35_DD || type == DISK_35_HD || type == DISK_525_DD;
 }
 
 inline const char *diskTypeName(DiskType type)
@@ -45,29 +50,6 @@ inline const char *diskTypeName(DiskType type)
         case DISK_525_DD:    return "5.25\" DD";
         case DISK_525_DD_PC: return "5.25\" DD (PC)";
         default:             return "???";
-    }
-}
-
-// DEPRECATED
-typedef VA_ENUM(long, DiskDensity)
-{
-    DENSITY_DD,
-    DENSITY_HD,
-};
-
-inline bool isDiskDensity(DiskDensity density)
-{
-    return density >= DENSITY_DD && density <= DENSITY_HD;
-}
-
-inline const char *diskDensityName(DiskDensity density)
-{
-    assert(isDiskDensity(density));
-    
-    switch (density) {
-        case DENSITY_DD:   return "DD";
-        case DENSITY_HD:   return "HD";
-        default:           return "???";
     }
 }
 

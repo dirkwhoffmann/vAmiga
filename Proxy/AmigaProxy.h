@@ -700,10 +700,8 @@ struct SerialPortWrapper;
 
 @property (readonly) DiskType diskType;
 @property (readonly) NSInteger numSides;
-@property (readonly) NSInteger numCylinders;
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectorsPerTrack;
-@property (readonly) NSInteger numSectorsTotal;
 
 @end
 
@@ -769,13 +767,5 @@ struct SerialPortWrapper;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
-
-@property (readonly) DiskType diskType;
-@property (readonly) NSInteger numCylinders;
-@property (readonly) NSInteger numHeads;
-@property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectors;
-@property (readonly) NSInteger numSectorsPerTrack;
-@property (readonly) u64 fnv;
 
 @end

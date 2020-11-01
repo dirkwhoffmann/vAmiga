@@ -76,7 +76,6 @@ private:
 public:
 
     DiskType getType() { return type; }
-    DiskDensity getDensity();
     
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
