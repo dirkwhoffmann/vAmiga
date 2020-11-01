@@ -41,6 +41,22 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
     return disk;
 }
 
+void
+Disk::dump()
+{
+    msg("\nDisk:\n");
+    msg("         cylinders: %ld\n", geometry.cylinders);
+    msg("             sides: %ld\n", geometry.sides);
+    msg("           sectors: %ld\n", geometry.sectors);
+    msg("            tracks: %ld\n", geometry.tracks);
+    msg("        leadingGap: %ld\n", geometry.leadingGap);
+    msg("       trailingGap: %ld\n", geometry.trailingGap);
+    msg("        sectorSize: %ld\n", geometry.sectorSize);
+    msg("         trackSize: %ld\n", geometry.trackSize);
+    msg("      cylinderSize: %ld\n", geometry.cylinderSize);
+    msg("          diskSize: %ld\n", geometry.diskSize);
+}
+
 DiskDensity
 Disk::getDensity()
 {
@@ -56,23 +72,55 @@ Disk::getDensity()
 }
 
 u8
+Disk::readByte(Track track, u16 offset)
+{
+    assert(track < geometry.tracks);
+    assert(offset < geometry.trackSize);
+
+    return data.raw[track * geometry.trackSize + offset];
+}
+
+u8
 Disk::readByte(Cylinder cylinder, Side side, u16 offset)
 {
-    assert(cylinder < 84);
-    assert(side < 2);
-    assert(offset < trackSize);
+    assert(cylinder < geometry.cylinders);
+    assert(side < geometry.sides);
+    assert(offset < geometry.trackSize);
 
+    assert(data.raw[(2 * cylinder + side) * geometry.trackSize + offset] == data.cyclinder[cylinder][side][offset]);
     return data.cyclinder[cylinder][side][offset];
+}
+
+void
+Disk::writeByte(u8 value, Track track, u16 offset)
+{
+    assert(track < geometry.tracks);
+    assert(offset < geometry.trackSize);
+
+    data.raw[track * geometry.trackSize + offset] = value;
 }
 
 void
 Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
 {
-    assert(cylinder < 84);
-    assert(side < 2);
-    assert(offset < trackSize);
+    assert(cylinder < geometry.cylinders);
+    assert(side < geometry.sides);
+    assert(offset < geometry.trackSize);
 
     data.cyclinder[cylinder][side][offset] = value;
+    assert(data.raw[(2 * cylinder + side) * geometry.trackSize + offset] == value);
+}
+
+u8 *
+Disk::ptr(Track track)
+{
+    return data.raw + geometry.trackSize * track;
+}
+
+u8 *
+Disk::ptr(Track track, Sector sector)
+{
+    return ptr(track) + geometry.leadingGap + sector * geometry.sectorSize;
 }
 
 void
@@ -80,37 +128,50 @@ Disk::clearDisk()
 {
     assert(sizeof(data) == sizeof(data.raw));
 
+    fnv = 0;
+
+    // Initialize with random data
     srand(0);
-    for (int i = 0; i < sizeof(data); i++)
+    assert(geometry.diskSize == sizeof(data));
+    for (int i = 0; i < geometry.diskSize; i++) {
         data.raw[i] = rand() & 0xFF;
-    
-    /* We are allowed to place random data here. In order to make some copy
-     * protected game titles work, we smuggle in some magic values.
-     * Crunch factory: Looks for 0x44A2 on cylinder 80
-     */
-    for (int t = 0; t < 2*84; t++) {
-        data.track[t][0] = 0x44;
-        data.track[t][1] = 0xA2;
     }
     
-    fnv = 0;
+    /* In order to make some copy protected game titles work, we smuggle in
+     * some magic values. E.g., Crunch factory expects 0x44A2 on cylinder 80.
+     */
+    if (type == DISK_35_DD) {
+        
+        for (int t = 0; t < geometry.tracks; t++) {
+            writeByte(0x44, t, 0);
+            writeByte(0x44, t, 1);
+            // data.track[t][0] = 0x44;
+            // data.track[t][1] = 0xA2;
+        }
+    }
 }
 
 void
 Disk::clearTrack(Track t)
 {
-    assert(t < 168);
+    assert(t < geometry.tracks);
 
     srand(0);
-    for (int i = 0; i < sizeof(data.track[t]); i++)
-        data.track[t][i] = rand() & 0xFF;
+    for (int i = 0; i < sizeof(data.track[t]); i++) {
+        writeByte(rand() & 0xFF, t, i);
+        // data.track[t][i] = rand() & 0xFF;
+    }
 }
 
 void
 Disk::clearTrack(Track t, u8 value)
 {
-    assert(t < 168);
-    memset(data.track[t], value, trackSize);
+    assert(t < geometry.tracks);
+
+    for (int i = 0; i < sizeof(data.track[t]); i++) {
+        writeByte(value, t, i);
+    }
+    // memset(data.track[t], value, trackSize);
 }
 
 bool
@@ -129,14 +190,15 @@ Disk::encodeDisk(DiskFile *df)
 bool
 Disk::encodeAmigaDisk(DiskFile *df)
 {
+    bool result = true;
     long tracks = df->numTracks();
     
-    trace("Encoding Amiga disk (%d tracks)\n", tracks);
-    
-    bool result = true;
+    trace("Encoding Amiga disk with %d tracks\n", tracks);
+
+    // Encode all tracks
     for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);
 
-    // Run the decoder in debug mode
+    // In debug mode, also run the decoder
     if (MFM_DEBUG) {
         debug("Amiga disk fully encoded (success = %d)\n", result);
         ADFFile *tmp = ADFFile::makeWithDisk(this);
@@ -164,11 +226,18 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t)
     for (Sector s = 0; s < sectors; s++) result &= encodeAmigaSector(df, t, s);
     
     // Rectify the first clock bit (where buffer wraps over)
-    if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
+    u8 *strt = ptr(t);
+    u8 *stop = ptr(t) + geometry.trackSize - 1;
+    
+    assert(strt == &data.track[t][0]);
+    assert(stop == &data.track[t][trackSize - 1]);
 
-    // Compute a debugging checksum
+    if (*stop & 0x01) *strt &= 0x7F;
+    // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
+
+    // Compute a debug checksum
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(data.track[t], trackSize);
+        u64 check = fnv_1a_32(ptr(t), geometry.trackSize);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -178,8 +247,8 @@ Disk::encodeAmigaTrack(DiskFile *df, Track t)
 bool
 Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
 {
-    assert(t < 168);
-    assert(s < 11);
+    assert(t < geometry.tracks);
+    assert(s < geometry.sectors);
     
     debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
@@ -193,7 +262,9 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
      * Data checksum       56      8     Odd/Even encoded
      */
     
-    u8 *p = data.track[t] + (s * sectorSize) + trackGapSize;
+    u8 *p = ptr(t, s);
+    assert(p == data.track[t] + (s * sectorSize) + trackGapSize);
+    // u8 *p = data.track[t] + (s * sectorSize) + trackGapSize;
     
     // Bytes before SYNC
     p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
@@ -252,14 +323,15 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
 bool
 Disk::encodeDosDisk(DiskFile *df)
 {
+    bool result = true;
     long tracks = df->numTracks();
     
-    debug(MFM_DEBUG, "Encoding DOS disk (%d tracks)\n", tracks);
+    debug(MFM_DEBUG, "Encoding DOS disk with %d tracks\n", tracks);
     
-    bool result = true;
+    // Encode all tracks
     for (Track t = 0; t < tracks; t++) result &= encodeDosTrack(df, t);
     
-    // Run the decoder in debug mode
+    // In debug mode, also run the decoder
     if (MFM_DEBUG) {
         debug("DOS disk fully encoded (success = %d)\n", result);
         IMGFile *tmp = IMGFile::makeWithDisk(this);
@@ -277,9 +349,11 @@ Disk::encodeDosTrack(DiskFile *df, Track t)
 {
     long sectors = df->numSectorsPerTrack();
 
-    debug(MFM_DEBUG, "Encoding DOS track %d (%d sectors)\n", t, sectors);
+    debug(MFM_DEBUG, "Encoding DOS track %d with %d sectors\n", t, sectors);
 
-    u8 *p = data.track[t];
+    u8 *p = ptr(t);
+    assert(p == data.track[t]);
+    // u8 *p = data.track[t];
 
     // Clear track
     for (int i = 0; i < trackSize; i += 2) { p[i] = 0x92; p[i+1] = 0x54; }
@@ -359,7 +433,9 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
     for (int i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
 
     // Determine the start of this sector inside the current track
-    u8 *p = data.track[t] + 194 + s * 1300;
+    u8 *p = ptr(t, s);
+    assert(p == data.track[t] + 194 + s * 1300);
+    // u8 *p = data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
     encodeMFM(p, buf, sizeof(buf));
@@ -394,18 +470,21 @@ Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)
 bool
 Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
 {
-    assert(t < 168);
+    assert(t < geometry.tracks);
         
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * trackSize];
-    memcpy(local, data.track[t], trackSize);
-    memcpy(local + trackSize, data.track[t], trackSize);
+    assert(ptr(t) == data.track[t]);
+    assert(trackSize == geometry.trackSize);
+    memcpy(local, ptr(t), geometry.trackSize);
+    memcpy(local + trackSize, ptr(t), geometry.trackSize);
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;
-    while (index < trackSize + sectorSize && nr < numSectors) {
+    assert(sectorSize == geometry.sectorSize);
+    while (index < geometry.trackSize + geometry.sectorSize && nr < numSectors) {
 
         // Scan MFM stream for $4489 $4489
         if (local[index++] != 0x44) continue;
@@ -462,14 +541,16 @@ Disk::decodeDOSDisk(u8 *dst, long numTracks, long numSectors)
 bool
 Disk::decodeDOSTrack(u8 *dst, Track t, long numSectors)
 {
-    assert(t < 168);
+    assert(t < geometry.tracks);
         
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
-    u8 local[2 * trackSize];
-    memcpy(local, data.track[t], trackSize);
-    memcpy(local + trackSize, data.track[t], trackSize);
+    assert(trackSize == geometry.trackSize);
+    assert(ptr(t) == data.track[t]);
+    u8 local[2 * geometry.trackSize];
+    memcpy(local, ptr(t), geometry.trackSize);
+    memcpy(local + geometry.trackSize, ptr(t), geometry.trackSize);
     
     // Determine the start of all sectors contained in this track
     int sectorStart[numSectors];

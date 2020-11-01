@@ -123,6 +123,8 @@ Drive::_dump()
     msg("            Offset: %d\n", head.offset);
     msg("   cylinderHistory: %X\n", cylinderHistory);
     msg("              Disk: %s\n", disk ? "yes" : "no");
+    
+    if (disk) disk->dump();
 }
 
 size_t

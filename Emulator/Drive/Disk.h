@@ -54,7 +54,7 @@ class Disk : public AmigaObject {
     
     
     //
-    // Constructing and serializing
+    // Initializing
     //
     
 public:
@@ -63,6 +63,8 @@ public:
 
     static Disk *makeWithFile(class DiskFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType diskType);
+        
+    void dump();
     
     
     //
@@ -107,11 +109,19 @@ public:
     //
     
     // Reads a byte from disk
+    u8 readByte(Track track, u16 offset);
     u8 readByte(Cylinder cylinder, Side side, u16 offset);
 
     // Writes a byte to disk
+    void writeByte(u8 value, Track track, u16 offset);
     void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
 
+private:
+    
+    // Returns a pointer into the raw data array
+    u8 *ptr(Track track);
+    u8 *ptr(Track track, Sector sector);
+    
     
     //
     // Erasing disks

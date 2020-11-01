@@ -55,22 +55,28 @@ struct DiskGeometry {
     long sides;
     long sectors;
     
-    // Constants
-    static const long sectorSize = 1088;
-    static const long trackGapSize = 700;
-
     // Derived parameters
+    long tracks;
+    long leadingGap;
+    long trailingGap;
+    long sectorSize;
     long trackSize;
     long cylinderSize;
     long diskSize;
     
     void init(long cylinders, long sides, long sectors) {
         
+        bool dos = sectors == 9;
+        
         this->cylinders = cylinders;
         this->sides = sides;
         this->sectors = sectors;
         
-        trackSize = sectors * sectorSize + trackGapSize;
+        tracks = cylinders * sides;
+        sectorSize = dos ? 1300 : 1088;
+        leadingGap = dos ? 194 : 700;
+        trailingGap = dos ? 774 : 0;
+        trackSize = leadingGap + sectors * sectorSize + trailingGap;
         cylinderSize = sides * trackSize;
         diskSize = cylinders * cylinderSize;
     }
@@ -92,37 +98,37 @@ struct DiskGeometry {
                 
             case DISK_35_DD_PC: init(84, 2, 9);
                 
-                assert(trackSize == 10492);
-                assert(cylinderSize == 20984);
-                assert(diskSize == 1762656);
+                assert(trackSize == 12668);
+                assert(cylinderSize == 25336);
+                assert(diskSize == 2128224);
                 break;
                 
             case DISK_35_HD: init(84, 2, 22);
                 
-                assert(trackSize == 25336);
-                assert(cylinderSize == 50672);
-                assert(diskSize == 4256448);
+                assert(trackSize == 24636);
+                assert(cylinderSize == 49272);
+                assert(diskSize == 4138848);
                 break;
                 
             case DISK_35_HD_PC: init(84, 2, 18);
                 
-                assert(trackSize == 20984);
-                assert(cylinderSize == 41968);
-                assert(diskSize == 3525312);
+                assert(trackSize == 24368);
+                assert(cylinderSize == 48736);
+                assert(diskSize == 4093824);
                 break;
                 
             case DISK_525_DD: init(42, 2, 11);
                 
-                assert(trackSize == 6334);
-                assert(cylinderSize == 12668);
+                assert(trackSize == 12668);
+                assert(cylinderSize == 25336);
                 assert(diskSize == 1064112);
                 break;
                 
             case DISK_525_DD_PC: init(42, 2, 9);
                 
-                assert(trackSize == 5246);
-                assert(cylinderSize == 10492);
-                assert(diskSize == 881328);
+                assert(trackSize == 24368);
+                assert(cylinderSize == 48736);
+                assert(diskSize == 2046912);
                 break;
                 
             default:
