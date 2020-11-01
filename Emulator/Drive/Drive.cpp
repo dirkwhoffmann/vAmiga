@@ -598,6 +598,7 @@ Drive::isInsertable(DiskType type)
             return config.type == DRIVE_35_HD;
             
         case DISK_525_DD:
+        case DISK_525_DD_PC:
             return config.type == DRIVE_525_DD;
             
         default:

@@ -9,13 +9,11 @@
 
 #include "Amiga.h"
 
-Disk::Disk(DiskType type)
+Disk::Disk(DiskType type) : geometry(type)
 {
     setDescription("Disk");
     
     this->type = type;
-    writeProtected = false;
-    modified = false;
     clearDisk();
 }
 

@@ -128,6 +128,7 @@
 		508FE05C21EA22CC0043D0E9 /* DiskMountDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */; };
 		508FE05F21EA22CC0043D0E9 /* ExportDiskDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
+		508FF14D254EA222006AD994 /* DiskGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FF14B254EA222006AD994 /* DiskGeometry.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50912FF72525A1190049805B /* CapturePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50912FF62525A1190049805B /* CapturePrefs.swift */; };
 		50912FFD2525B7AD0049805B /* ScreenRecorder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */; };
@@ -408,6 +409,8 @@
 		508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskDialog.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
+		508FF14B254EA222006AD994 /* DiskGeometry.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = DiskGeometry.cpp; sourceTree = "<group>"; };
+		508FF14C254EA222006AD994 /* DiskGeometry.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskGeometry.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
 		50912FF62525A1190049805B /* CapturePrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CapturePrefs.swift; sourceTree = "<group>"; };
 		50912FFB2525B7AD0049805B /* ScreenRecorder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ScreenRecorder.cpp; sourceTree = "<group>"; };
@@ -1000,6 +1003,8 @@
 				50F6EEBD21F4F61F0091155D /* Drive.h */,
 				50F6EEBC21F4F61F0091155D /* Drive.cpp */,
 				50D52442227878E900F8959D /* DiskTypes.h */,
+				508FF14C254EA222006AD994 /* DiskGeometry.h */,
+				508FF14B254EA222006AD994 /* DiskGeometry.cpp */,
 				50F6EEB721F4F5C60091155D /* Disk.h */,
 				50F6EEB621F4F5C60091155D /* Disk.cpp */,
 			);
@@ -1353,6 +1358,7 @@
 				508FE01221EA227B0043D0E9 /* CIAPanel.swift in Sources */,
 				50AEBECC24D3D4540037082D /* CopperEvents.cpp in Sources */,
 				5030891121EFA74600FEAD12 /* Paula.cpp in Sources */,
+				508FF14D254EA222006AD994 /* DiskGeometry.cpp in Sources */,
 				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
