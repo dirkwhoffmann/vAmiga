@@ -411,7 +411,8 @@ Drive::writeWordAndRotate(u16 value)
 void
 Drive::rotate()
 {
-    if (++head.offset == disk->geometry.trackSize) {
+    long last = disk ? disk->geometry.trackSize : 2128224;
+    if (++head.offset >= last) {
         
         // Start over at the beginning of the current cyclinder
         head.offset = 0;
@@ -421,8 +422,6 @@ Drive::rotate()
         // corresponding enable bit is set.
         if (isSelected()) ciab.emulateFallingEdgeOnFlagPin();
     }
-
-    assert(head.offset < disk->geometry.trackSize);
 }
 
 void

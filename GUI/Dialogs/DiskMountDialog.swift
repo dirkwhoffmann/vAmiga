@@ -69,11 +69,12 @@ class DiskMountDialog: DialogController {
         
         var d: String
         switch disk?.diskType {
-        case .DISK_35_DD:    d = "double"
-        case .DISK_35_DD_PC: d = "double"
-        case .DISK_35_HD:    d = "high"
-        case .DISK_525_DD:   d = "double"
-        default: d = "???"
+        case .DISK_35_DD, .DISK_35_DD_PC, .DISK_525_DD, .DISK_525_DD_PC:
+            d = "double"
+        case .DISK_35_HD, .DISK_35_HD_PC:
+            d = "high"
+        default:
+            d = "???"
         }
         
         return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
@@ -154,27 +155,19 @@ class DiskMountDialog: DialogController {
         title.stringValue = titleText
         subtitle.stringValue = subtitleText
 
-        // Check drive connection status
+        // Determine enabled drives
         let dc = amiga.diskController.getConfig()
-        let connected0 = dc.connected.0
-        let connected1 = dc.connected.1
-        let connected2 = dc.connected.2
-        let connected3 = dc.connected.3
-
-        // Check drive compatibility
-        let comp0 = amiga.df0.isInsertable(disk!.diskType)
-        let comp1 = amiga.df1.isInsertable(disk!.diskType)
-        let comp2 = amiga.df2.isInsertable(disk!.diskType)
-        let comp3 = amiga.df3.isInsertable(disk!.diskType)
-                
-        // Check for available drives
-        df0Button.isEnabled = comp0 && connected0
-        df1Button.isEnabled = comp1 && connected1
-        df2Button.isEnabled = comp2 && connected2
-        df3Button.isEnabled = comp3 && connected3
+        let df0 = dc.connected.0 && amiga.df0.isInsertable(disk!.diskType)
+        let df1 = dc.connected.1 && amiga.df1.isInsertable(disk!.diskType)
+        let df2 = dc.connected.2 && amiga.df2.isInsertable(disk!.diskType)
+        let df3 = dc.connected.3 && amiga.df3.isInsertable(disk!.diskType)
+        df0Button.isEnabled = df0
+        df1Button.isEnabled = df1
+        df2Button.isEnabled = df2
+        df3Button.isEnabled = df3
         
-        // show warning message if no compatible drives are available
-        warning.isHidden = comp0 || comp1 || comp2 || comp3
+        // Show warning message if no compatible drives are available
+        warning.isHidden = df0 || df1 || df2 || df3
     }
     
     func updateCarousel(goto item: Int = -1, animated: Bool = false) {

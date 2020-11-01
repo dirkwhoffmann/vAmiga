@@ -128,10 +128,10 @@ extension ConfigurationController {
     @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
         
         switch sender.tag {
-        case 0: config.df0Type = sender.tag
-        case 1: config.df1Type = sender.tag
-        case 2: config.df2Type = sender.tag
-        case 3: config.df3Type = sender.tag
+        case 0: config.df0Type = sender.selectedTag()
+        case 1: config.df1Type = sender.selectedTag()
+        case 2: config.df2Type = sender.selectedTag()
+        case 3: config.df3Type = sender.selectedTag()
         default: fatalError()
         }
         refresh()
