@@ -49,7 +49,7 @@ Disk::getDensity()
     switch (type) {
         case DISK_35_DD:    return DENSITY_DD;
         case DISK_35_HD:    return DENSITY_HD;
-        case DISK_525_SD:   return DENSITY_SD;
+        case DISK_525_DD:   return DENSITY_DD;
 
         default:
             assert(false);

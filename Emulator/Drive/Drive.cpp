@@ -228,10 +228,10 @@ Drive::getDriveId()
                 return 0xFFFFFFFF;
                 
             case DRIVE_35_HD:
-                if (disk && disk->getDensity() == DENSITY_HD) return 0xAAAAAAAA;
+                if (disk && disk->getType() == DISK_35_HD) return 0xAAAAAAAA;
                 return 0xFFFFFFFF;
                 
-            case DRIVE_525_SD:
+            case DRIVE_525_DD:
                 return 0x55555555;
         }
     }
@@ -587,11 +587,18 @@ Drive::isInsertable(DiskType type)
 {
     debug(DSK_DEBUG, "isInsertable(%s)\n", diskTypeName(type));
     
-    switch (config.type) {
+    switch (type) {
             
-        case DRIVE_35_DD:  return type == DISK_35_DD;
-        case DRIVE_35_HD:  return type == DISK_35_DD || type == DISK_35_HD;
-        case DRIVE_525_SD: return type == DISK_525_SD;
+        case DISK_35_DD:
+        case DISK_35_DD_PC:
+            return config.type == DRIVE_35_DD || config.type == DRIVE_35_HD;
+            
+        case DISK_35_HD:
+        case DISK_35_HD_PC:
+            return config.type == DRIVE_35_HD;
+            
+        case DISK_525_DD:
+            return config.type == DRIVE_525_DD;
             
         default:
             assert(false);

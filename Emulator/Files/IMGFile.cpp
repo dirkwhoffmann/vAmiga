@@ -118,7 +118,7 @@ IMGFile::readFromBuffer(const u8 *buffer, size_t length)
 DiskType
 IMGFile::getDiskType()
 {
-    return DISK_35_DD;
+    return DISK_35_DD_PC;
 }
 
 long

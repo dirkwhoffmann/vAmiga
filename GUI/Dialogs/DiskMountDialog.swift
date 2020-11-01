@@ -69,9 +69,10 @@ class DiskMountDialog: DialogController {
         
         var d: String
         switch disk?.diskType {
-        case .DISK_35_DD: d = "double"
-        case .DISK_35_HD: d = "high"
-        case .DISK_525_SD: d = "single"
+        case .DISK_35_DD:    d = "double"
+        case .DISK_35_DD_PC: d = "double"
+        case .DISK_35_HD:    d = "high"
+        case .DISK_525_DD:   d = "double"
         default: d = "???"
         }
         

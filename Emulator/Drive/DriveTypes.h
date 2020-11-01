@@ -22,12 +22,12 @@ typedef VA_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_HD,
-    DRIVE_525_SD
+    DRIVE_525_DD
 };
 
 inline bool isDriveType(long value)
 {
-    return value >= DRIVE_35_DD && value <= DRIVE_525_SD;
+    return value >= DRIVE_35_DD && value <= DRIVE_525_DD;
 }
 
 inline const char *driveTypeName(DriveType type)
@@ -37,7 +37,7 @@ inline const char *driveTypeName(DriveType type)
     switch (type) {
         case DRIVE_35_DD:    return "Drive 3.5\" DD";
         case DRIVE_35_HD:    return "Drive 3.5\" HD";
-        case DRIVE_525_SD:   return "Drive 5.25\" SD";
+        case DRIVE_525_DD:   return "Drive 5.25\" DD";
         default:             return "???";
     }
 }
