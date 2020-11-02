@@ -195,7 +195,7 @@ Disk::encodeAmigaDisk(DiskFile *df)
     bool result = true;
     long tracks = df->numTracks();
     
-    trace("Encoding Amiga disk with %d tracks\n", tracks);
+    debug(MFM_DEBUG, "Encoding Amiga disk with %d tracks\n", tracks);
 
     // Encode all tracks
     for (Track t = 0; t < tracks; t++) result &= encodeAmigaTrack(df, t);

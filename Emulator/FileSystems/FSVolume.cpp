@@ -12,6 +12,8 @@
 
 FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
 {
+    assert(capacity == 2 * 880 || capacity == 4 * 880);
+
     setDescription("Volume");
         
     // Initialize block storage
@@ -35,9 +37,7 @@ FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
     bitmapBlock()->alloc(root);
 
     // Set the current directory to '/'
-    currentDir = rootBlockNr();
-    
-    debug("Volume created\n");
+    currentDir = rootBlockNr();    
 }
 
 FSVolume::~FSVolume()
@@ -80,7 +80,9 @@ FSVolume::check(bool verbose)
         result &= blocks[i]->check(verbose);
     }
     
-    printf("The volume is %s.\n", result ? "OK" : "corrupted");
+    if (verbose) {
+        fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
+    }
     return result;
 }
 
@@ -232,8 +234,6 @@ FSVolume::newUserDirBlock(const char *name)
 FSFileHeaderBlock *
 FSVolume::newFileHeaderBlock(const char *name)
 {
-    bitmapBlock()->dump();
-    
     u32 ref = allocateBlock();
     if (!ref) return nullptr;
     
@@ -264,8 +264,6 @@ FSVolume::newDataBlock()
 void
 FSVolume::installBootBlock()
 {
-    debug("installBootBlock()\n");
-
     delete blocks[0];
     delete blocks[1];
 
@@ -358,41 +356,36 @@ FSVolume::seekFile(const char *name)
     return block;
 }
 
-void
+bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
-    size_t sectorCnt = size / bsize;
-
     assert(dst != nullptr);
     assert(size % bsize == 0);
-    assert(sectorCnt <= capacity);
 
-    debug("exportVolume(%x, %d) sectors: %d\n", dst, size, sectorCnt);
-    dump();
-        
-    for (int i = 0; i < capacity; i++) {
+    debug("Exporting file system with %d blocks\n", capacity);
 
-        u8 *sector = dst + i * 512;
-        
-        // Only proceed if the disk has space for this block
-        if (i >= sectorCnt) {
-            warn("Skipping block %d (>= %zu)\n", i, sectorCnt);
-            continue;
-        }
-        
-        assert(blocks[i]->nr == i);
-        blocks[i]->exportBlock(sector, bsize);
+    // Only proceed if the buffer is large enough
+    if (size / bsize < capacity) {
+        debug("Buffer is too small (%d blocks)\n", bsize < capacity);
+        return false;
     }
+        
+    // Wipe out the target buffer
+    memset(dst, 0, size);
     
-    debug("Volume exported\n");
+    // Export all blocks
+    for (int i = 0; i < capacity; i++) {
+        blocks[i]->exportBlock(dst + i * bsize, bsize);
+    }
+    return true;
 }
 
-OFSVolume::OFSVolume(const char *name) : FSVolume(name, 2*880, 512)
+OFSVolume::OFSVolume(const char *name, u32 capacity) : FSVolume(name, capacity)
 {
     type = OFS;
 }
 
-FFSVolume::FFSVolume(const char *name) : FSVolume(name, 2*880, 512)
+FFSVolume::FFSVolume(const char *name, u32 capacity) : FSVolume(name, capacity)
 {
     type = FFS;
 }

@@ -145,12 +145,24 @@ ADFFile::makeWithDisk(Disk *disk)
 ADFFile *
 ADFFile::makeWithVolume(FSVolume &volume)
 {
+    ADFFile *adf = nullptr;
     assert(volume.getBlockSize() == 512);
-    assert(volume.getCapacity() <= 2 * 880);
     
-    ADFFile *adf = makeWithDiskType(DISK_35_DD);
+    switch (volume.getCapacity()) {
+            
+        case 2 * 880:
+            adf = makeWithDiskType(DISK_35_DD);
+            break;
+            
+        case 4 * 880:
+            adf = makeWithDiskType(DISK_35_HD);
+            break;
+            
+        default:
+            assert(false);
+    }
+
     volume.exportVolume(adf->data, adf->size);
-        
     return adf;
 }
 

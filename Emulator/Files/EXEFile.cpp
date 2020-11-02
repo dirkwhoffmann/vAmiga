@@ -22,6 +22,9 @@ EXEFile::isEXEBuffer(const u8 *buffer, size_t length)
                                                                                             
     assert(buffer != nullptr);
     
+    // Only accept the file if it fits onto a HD disk
+    if (length > 1710000) return false;
+
     return matchingBufferHeader(buffer, signature, sizeof(signature));
 }
 
@@ -63,43 +66,44 @@ EXEFile::makeWithFile(const char *path)
 
 bool
 EXEFile::readFromBuffer(const u8 *buffer, size_t length)
-{
-    debug("readFromBuffer(%p, %lld)\n", buffer, length);
-    
+{    
     bool success = false;
     
     if (!isEXEBuffer(buffer, length))
         return false;
-        
+    
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;
         
-    // Create a new file system
-    FSVolume volume = FSVolume("Disk");
+    // Check if this file requires an HD disk
+    bool hd = length > 853000;
+    
+    // Create a new file system 
+    OFSVolume volume = OFSVolume("Disk", hd ? 4 * 880 : 2 * 880);
     
     // Make the volume bootable
     volume.installBootBlock();
     
-    // Add the exe file
+    // Add the executable
     FSBlock *file = volume.makeFile("file");
     if (file) success = file->append(buffer, length);
 
     // Add a script directory
     volume.makeDir("s");
     volume.changeDir("s");
-    volume.currentDirBlock()->printPath();
     
     // Add a startup sequence
     file = volume.makeFile("startup-sequence");
     if (success && file) success = file->append("file");
-    
+
+    // Check for file system errors
+    if (!volume.check(MFM_DEBUG)) {
+        warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
+        // volume.dump();
+    }
+
     // Convert the volume into an ADF
     assert(adf == nullptr);
     if (success) adf = ADFFile::makeWithVolume(volume);
-
-    debug("adf = %p\n", adf); 
-    volume.check(true);
-    volume.dump();
-    
     return adf != nullptr;
 }

@@ -103,9 +103,7 @@ FSDataBlock::append(const u8 *buffer, size_t size)
     FSDataBlock *dataBlock = this;
     while (dataBlock->next) dataBlock = volume.dataBlock(dataBlock->next);
     if (dataBlock == nullptr) return false;
-    
-    printf("Last data block is %p\n", dataBlock);
-    
+        
     while (n < size) {
         
         // Fill the data block up
@@ -143,7 +141,6 @@ FSDataBlock::fillUp(const u8 *buffer, size_t size)
     size_t count = MIN(size, freeSpace);
 
     // Copy bytes
-    printf("Copying %zu bytes\n", count);
     for (int i = 0; i < count; i++) data[numDataBytes++] = buffer[i];
 
     return count;

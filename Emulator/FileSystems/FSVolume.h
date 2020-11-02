@@ -20,13 +20,11 @@
 #include "FSDataBlock.h"
 #include "ADFFile.h"
 
-/* This class provides the basic functionality of the Amiga's Original File
- * System (OFS). Starting from an empty volume, files can be added or removed,
+/* This class provides the basic functionality of the Amiga File Systems OFS
+ * and FFS. Starting from an empty volume, files can be added or removed,
  * and boot blocks can be installed. Furthermore, functionality is provided to
  * import and export the file system from and to ADF files.
  */
-
-// THIS IS EXPERIMENTAL CODE AND NOT FULLY FUNCTIONAL YET. STAY TUNED...
 
 class FSVolume : AmigaObject {
     
@@ -49,7 +47,7 @@ protected:
     u32 capacity;
     
     // Size of a single block in bytes
-    u32 bsize = 512;
+    u32 bsize;
         
     // Block storage
     BlockPtr *blocks;
@@ -74,8 +72,8 @@ public:
     
 public:
 
-    FSVolume(const char *name, u32 capacity, u32 bsize);
-    FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
+    FSVolume(const char *name, u32 capacity, u32 bsize = 512);
+    // FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
     ~FSVolume();
 
     // Prints a debug summary for this volume
@@ -85,7 +83,7 @@ public:
     virtual bool check(bool verbose);
     
     // Exports the volume into a buffer compatible with the ADF format
-    void exportVolume(u8 *dst, size_t size);
+    bool exportVolume(u8 *dst, size_t size);
 
     
     //
@@ -106,8 +104,8 @@ public:
     //
         
     // Returns the location of the root block and the bitmap block
-    u32 rootBlockNr() { return 880; }
-    u32 bitmapBlockNr() { return 881; }
+    u32 rootBlockNr() { return capacity / 2; }
+    u32 bitmapBlockNr() { return capacity / 2 + 1; }
     
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *block(u32 nr);
@@ -167,15 +165,13 @@ public:
 class OFSVolume : public FSVolume {
     
 public:
-    
-    OFSVolume(const char *name);
+    OFSVolume(const char *name, u32 capacity = 2 * 880);
 };
 
 class FFSVolume : public FSVolume {
-
-public:
     
-    FFSVolume(const char *name);
+public:
+    FFSVolume(const char *name, u32 capacity = 2 * 880);
 };
 
 #endif

@@ -82,14 +82,10 @@ struct DiskGeometry {
     }
     
     DiskGeometry(DiskType type) {
-        
-        printf("DiskGeometry(%ld)\n", type);
-        
+                
         switch (type) {
                 
             case DISK_35_DD: init(84, 2, 11);
-
-                printf("DISK_35_DD\n");
 
                 assert(trackSize == 12668);
                 assert(cylinderSize == 25336);
