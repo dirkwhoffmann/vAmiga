@@ -115,6 +115,19 @@ checkFileSuffix(const char *path, const char *suffix)
         return false;
 }
 
+bool isDirectory(const char *path)
+{
+    struct stat fileProperties;
+    
+    if (path == NULL)
+        return -1;
+        
+    if (stat(path, &fileProperties) != 0)
+        return -1;
+    
+    return S_ISDIR(fileProperties.st_mode);
+}
+
 long
 getSizeOfFile(const char *path)
 {

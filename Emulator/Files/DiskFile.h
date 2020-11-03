@@ -39,10 +39,6 @@ public:
     virtual long numTracks() { return numSides() * numCyclinders(); }
     virtual long numSectorsPerTrack() = 0;
     
-    // Reports whether this disk is an Amiga disk or a DOS disk
-    // bool isDosDisk() { return numSectorsPerTrack() == 9; }
-    // bool isAmigaDisk() { return !isDosDisk(); }
-
     
     //
     // Reading data

@@ -64,7 +64,6 @@ class ExportDiskDialog: DialogController {
     
     func selectFormat(_ tag: Int) {
         
-        track("tag = \(tag)")
         button.selectItem(withTag: tag)
         button.autoenablesItems = false
         button.item(at: 0)!.isEnabled = tag == 0

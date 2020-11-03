@@ -491,6 +491,8 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
         sectorStart[nr++] = index;
     }
     
+    trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, numSectors);
+
     if (nr != numSectors) {
         warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
         return false;

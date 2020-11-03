@@ -159,6 +159,9 @@ char *extractFilenameWithoutSuffix(const char *path);
  */
 bool checkFileSuffix(const char *path, const char *suffix);
 
+// Checks if a path points to a directory
+bool isDirectory(const char *path);
+
 // Returns the size of a file in bytes
 long getSizeOfFile(const char *path);
 

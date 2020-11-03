@@ -41,9 +41,10 @@
 #include "ExtFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"
-#include "IMGFile.h"
+#include "DIRFile.h"
 #include "FSVolume.h"
 
 /* A complete virtual Amiga. This class is the most prominent one of all. To

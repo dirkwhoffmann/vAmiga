@@ -83,6 +83,12 @@ class MyDocument: NSDocument {
     
     func fileType(url: URL) -> AmigaFileType {
         
+        track()
+        
+        // Check if the URL points to a directory
+        if url.hasDirectoryPath { return .FILETYPE_DIR }
+        
+        // If not, check the file extension
         switch url.pathExtension.uppercased() {
         
         case "VAMIGA": return .FILETYPE_SNAPSHOT
@@ -107,6 +113,12 @@ class MyDocument: NSDocument {
         let type = fileType(url: newUrl)
         if !allowedTypes.contains(type) { return nil }
         
+        // Intercept if the provided URL points to a directory
+        if type == .FILETYPE_DIR {
+            let result = DIRFileProxy.make(withFile: url.path)
+            return result
+        }
+        
         // Get the file wrapper and create the proxy with it
         let wrapper = try FileWrapper.init(url: newUrl)
         return try createFileProxy(wrapper: wrapper, type: type)
@@ -115,6 +127,8 @@ class MyDocument: NSDocument {
     fileprivate
     func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
                 
+        track("type = \(type)")
+        
         guard let name = wrapper.filename else {
             throw NSError.fileAccessError()
         }
@@ -164,7 +178,11 @@ class MyDocument: NSDocument {
         
         track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
                 
-        let types = [ AmigaFileType.FILETYPE_ADF, AmigaFileType.FILETYPE_DMS ]
+        let types = [ AmigaFileType.FILETYPE_ADF,
+                      AmigaFileType.FILETYPE_DMS,
+                      AmigaFileType.FILETYPE_EXE,
+                      AmigaFileType.FILETYPE_DIR ]
+        
         let proxy = try createFileProxy(url: url, allowedTypes: types)
         
         switch proxy {
@@ -172,6 +190,7 @@ class MyDocument: NSDocument {
         case _ as ADFFileProxy: return (proxy as! ADFFileProxy)
         case _ as DMSFileProxy: return (proxy as! DMSFileProxy).adf()
         case _ as EXEFileProxy: return (proxy as! EXEFileProxy).adf()
+        case _ as DIRFileProxy: return (proxy as! DIRFileProxy).adf()
         default: fatalError()
         }
     }
@@ -186,7 +205,8 @@ class MyDocument: NSDocument {
             .FILETYPE_ADF,
             .FILETYPE_IMG,
             .FILETYPE_DMS,
-            .FILETYPE_EXE]
+            .FILETYPE_EXE,
+            .FILETYPE_DIR ]
         
         amigaAttachment = try createFileProxy(url: url, allowedTypes: types)
         

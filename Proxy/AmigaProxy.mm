@@ -1106,6 +1106,11 @@ struct SerialPortWrapper { SerialPort *port; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((ADFFile *)(fileWrapper->file), nr);
 }
+- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy
+{
+    AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
+    wrapper->controller->insertDisk((IMGFile *)(fileWrapper->file), nr);
+}
 - (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
@@ -1116,10 +1121,10 @@ struct SerialPortWrapper { SerialPort *port; };
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
     wrapper->controller->insertDisk((EXEFile *)(fileWrapper->file), nr);
 }
-- (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy
+- (void) insert:(NSInteger)nr dir:(DIRFileProxy *)fileProxy
 {
     AmigaFileWrapper *fileWrapper = [fileProxy wrapper];
-    wrapper->controller->insertDisk((IMGFile *)(fileWrapper->file), nr);
+    wrapper->controller->insertDisk((DIRFile *)(fileWrapper->file), nr);
 }
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value
 {
@@ -1446,6 +1451,41 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
+// IMGFileProxy
+//
+
+@implementation IMGFileProxy
+
++ (BOOL)isIMGFile:(NSString *)path
+{
+    return IMGFile::isIMGFile([path fileSystemRepresentation]);
+}
++ (instancetype) make:(IMGFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    IMGFile *archive = IMGFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    IMGFile *archive = IMGFile::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
++ (instancetype) makeWithDrive:(DriveProxy *)drive
+{
+    Drive *d = [drive wrapper]->drive;
+    IMGFile *archive = IMGFile::makeWithDisk(d->disk);
+    return archive ? [self make: archive] : nil;
+}
+
+@end
+
+
+//
 // DMSFileProxy
 //
 
@@ -1516,35 +1556,37 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// IMGFileProxy
+// DIRFileProxy
 //
 
-@implementation IMGFileProxy
+@implementation DIRFileProxy
 
-+ (BOOL)isIMGFile:(NSString *)path
++ (BOOL)isDIRFile:(NSString *)path
 {
-    return IMGFile::isIMGFile([path fileSystemRepresentation]);
+    return DIRFile::isDIRFile([path fileSystemRepresentation]);
 }
-+ (instancetype) make:(IMGFile *)archive
++ (instancetype) make:(DIRFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
+/*
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    IMGFile *archive = IMGFile::makeWithBuffer((const u8 *)buffer, length);
+    DIRFile *archive = DIRFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
+*/
 + (instancetype) makeWithFile:(NSString *)path
 {
-    IMGFile *archive = IMGFile::makeWithFile([path fileSystemRepresentation]);
+    DIRFile *archive = DIRFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
-+ (instancetype) makeWithDrive:(DriveProxy *)drive
+
+- (ADFFileProxy *)adf
 {
-    Drive *d = [drive wrapper]->drive;
-    IMGFile *archive = IMGFile::makeWithDisk(d->disk);
-    return archive ? [self make: archive] : nil;
+    DIRFile *archive = (DIRFile *)wrapper->file;
+    return [ADFFileProxy make:archive->adf];
 }
 
 @end

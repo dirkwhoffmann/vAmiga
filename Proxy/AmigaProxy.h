@@ -26,6 +26,7 @@
 @class DiskControllerProxy;
 @class DiskFileProxy;
 @class DmaDebuggerProxy;
+@class DIRFileProxy;
 @class DMSFileProxy;
 @class DriveProxy;
 @class EXEFileProxy;
@@ -603,6 +604,7 @@ struct SerialPortWrapper;
 - (void) insert:(NSInteger)nr adf:(ADFFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr dms:(DMSFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr exe:(EXEFileProxy *)fileProxy;
+- (void) insert:(NSInteger)nr dir:(DIRFileProxy *)fileProxy;
 - (void) insert:(NSInteger)nr img:(IMGFileProxy *)fileProxy;
 - (void) setWriteProtection:(NSInteger)nr value:(BOOL)value;
 
@@ -725,6 +727,21 @@ struct SerialPortWrapper;
 
 
 //
+// IMGFileProxy
+//
+
+@interface IMGFileProxy : DiskFileProxy {
+}
+
++ (BOOL)isIMGFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
++ (instancetype)makeWithDrive:(DriveProxy *)drive;
+
+@end
+
+
+//
 // DMSFileProxy
 //
 
@@ -757,15 +774,16 @@ struct SerialPortWrapper;
 
 
 //
-// IMGFileProxy
+// DIRFileProxy
 //
 
-@interface IMGFileProxy : DiskFileProxy {
+@interface DIRFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isIMGFile:(NSString *)path;
-+ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (BOOL)isDIRFile:(NSString *)path;
+// + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithDrive:(DriveProxy *)drive;
+
+- (ADFFileProxy *)adf;
 
 @end
