@@ -906,9 +906,9 @@ Blitter::beginSlowCopyBlit()
     // Setup parameters
     if (bltconDESC()) {
         incr = -2;
+        /*
         ash  = 16 - bltconASH();
         bsh  = 16 - bltconBSH();
-        /*
         amod = -bltamod;
         bmod = -bltbmod;
         cmod = -bltcmod;
@@ -916,9 +916,9 @@ Blitter::beginSlowCopyBlit()
         */
     } else {
         incr = 2;
+        /*
         ash  = bltconASH();
         bsh  = bltconBSH();
-        /*
         amod = bltamod;
         bmod = bltbmod;
         cmod = bltcmod;
@@ -1065,12 +1065,12 @@ Blitter::exec()
         // Run the barrel shifters on data path A
         trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
         if (bltconDESC()) {
-            ahold = HI_W_LO_W(anew & mask, aold) >> ash;
+            ahold = HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH());
         } else {
-            ahold = HI_W_LO_W(aold, anew & mask) >> ash;
+            ahold = HI_W_LO_W(aold, anew & mask) >> bltconASH();
         }
         aold = anew & mask;
-        trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", ash, ahold);
+        trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", bltconASH(), ahold);
     }
 
     if (instr & HOLD_B) {
@@ -1080,12 +1080,12 @@ Blitter::exec()
         // Run the barrel shifters on data path B
         trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
         if (bltconDESC()) {
-            bhold = HI_W_LO_W(bnew, bold) >> bsh;
+            bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
         } else {
-            bhold = HI_W_LO_W(bold, bnew) >> bsh;
+            bhold = HI_W_LO_W(bold, bnew) >> bltconBSH();
         }
         bold = bnew;
-        trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bsh, bhold);
+        trace(BLT_DEBUG, "    After shifting B (%d) B = %x\n", bltconBSH(), bhold);
     }
 
     if (instr & HOLD_D) {
