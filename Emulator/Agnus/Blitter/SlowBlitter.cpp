@@ -908,18 +908,22 @@ Blitter::beginSlowCopyBlit()
         incr = -2;
         ash  = 16 - bltconASH();
         bsh  = 16 - bltconBSH();
+        /*
         amod = -bltamod;
         bmod = -bltbmod;
         cmod = -bltcmod;
         dmod = -bltdmod;
+        */
     } else {
         incr = 2;
         ash  = bltconASH();
         bsh  = bltconBSH();
+        /*
         amod = bltamod;
         bmod = bltbmod;
         cmod = bltcmod;
         dmod = bltdmod;
+        */
     }
 
     // Set width and height counters
@@ -1003,7 +1007,7 @@ Blitter::exec()
                 
             bltdpt += incr;
             if (--cntD == 0) {
-                bltdpt += dmod;
+                bltdpt += bltconDESC() ? -bltdmod : bltdmod;
                 cntD = bltsizeH;
                 fillCarry = !!bltconFCI();
             }
@@ -1019,7 +1023,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
         bltapt += incr;
         if (--cntA == 0) {
-            bltapt += amod;
+            bltapt += bltconDESC() ? -bltamod : bltamod;
             cntA = bltsizeH;
         }
     }
@@ -1033,7 +1037,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
         bltbpt += incr;
         if (--cntB == 0) {
-            bltbpt += bmod;
+            bltbpt += bltconDESC() ? -bltbmod : bltbmod;
             cntB = bltsizeH;
         }
     }
@@ -1047,7 +1051,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
         bltcpt += incr;
         if (--cntC == 0) {
-            bltcpt += cmod;
+            bltcpt += bltconDESC() ? -bltcmod : bltcmod;
             cntC = bltsizeH;
         }
     }
