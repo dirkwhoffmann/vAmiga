@@ -173,8 +173,9 @@ bool checkFileSizeRange(const char *path, long min, long max);
 bool matchingFileHeader(const char *path, const u8 *header, size_t length);
 bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
 
-// Loada a file from disk
+// Loads a file from disk
 bool loadFile(const char *path, u8 **buffer, long *size);
+bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
 
 
 //

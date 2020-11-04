@@ -151,7 +151,7 @@ public:
     // Decodes a disk, track, or sector in Amiga format
     bool decodeAmigaDisk(u8 *dst, long numTracks, long numSectors);
     bool decodeAmigaTrack(u8 *dst, Track t, long numSectors);
-    void decodeAmigaSector(u8 *dst, u8 *src);
+    bool decodeAmigaSector(u8 *dst, u8 *src);
 
     // Decodes a disk, track, or sector in Amiga format
     bool decodeDOSDisk(u8 *dst, long numTracks, long numSectors);

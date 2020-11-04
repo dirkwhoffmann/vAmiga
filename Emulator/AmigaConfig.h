@@ -133,7 +133,7 @@ static const int ALIGN_HEAD      = 0; // Make head movement deterministic
 static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
-static const int MFM_DEBUG       = 0; // Disk encoder / decoder
+static const int MFM_DEBUG       = 1; // Disk encoder / decoder
 
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers

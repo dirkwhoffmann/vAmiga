@@ -499,25 +499,34 @@ Disk::decodeAmigaTrack(u8 *dst, Track t, long numSectors)
     }
     
     // Encode all sectors
+    bool result = true;
     for (Sector s = 0; s < numSectors; s++) {
-        decodeAmigaSector(dst, local + sectorStart[s]);
-        dst += 512;
+        result &= decodeAmigaSector(dst, local + sectorStart[s]);
     }
     
-    return true;
+    return result;
 }
 
-void
+bool
 Disk::decodeAmigaSector(u8 *dst, u8 *src)
 {
     assert(dst != NULL);
     assert(src != NULL);
-
+    
+    // Decode sector info
+    u8 info[4];
+    decodeOddEven(info, src, 4);
+    
+    // Only proceed if the sector number is valid
+    u8 sector = info[2];
+    if (sector >= geometry.sectors) return false;
+    
     // Skip sector header
     src += 56;
     
     // Decode sector data
-    decodeOddEven(dst, src, 512);
+    decodeOddEven(dst + sector * 512, src, 512);
+    return true;
 }
 
 bool

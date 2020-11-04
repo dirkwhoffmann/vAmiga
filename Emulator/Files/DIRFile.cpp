@@ -111,7 +111,7 @@ DIRFile::traverseDir(const char *dir, FSVolume &vol) {
         // Skip '.', '..', and all hidden files
         if (dirp->d_name[0] == '.') continue;
 
-        msg("%s/%s\n", dir, dirp->d_name);
+        // msg("%s/%s\n", dir, dirp->d_name);
 
         if (dirp->d_type == DT_DIR) {
             
@@ -129,14 +129,19 @@ DIRFile::traverseDir(const char *dir, FSVolume &vol) {
             continue;
         }
         
-        // Add file to volume
-        FSBlock *file = vol.makeFile(dirp->d_name);
-        if (file) {
-            // file->append(buffer, length);
-            // TODO: APPEND
-            
-        } else {
-            result = false;
+        // Load file from disk
+        u8 *buffer; long size;
+        if (loadFile(dir, dirp->d_name, &buffer, &size)) {
+
+            // Add file to volume
+            FSBlock *file = vol.makeFile(dirp->d_name);
+            if (file) {
+                result &= file->append(buffer, size);
+            } else {
+                result = false;
+            }
+
+            delete(buffer);
         }
     }
     

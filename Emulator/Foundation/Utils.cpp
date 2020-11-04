@@ -22,7 +22,7 @@ releaseBuild()
 char *
 extractFirstPathComponent(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     const char *pos = strchr(path, '/');
     return pos ? strdup(pos + 1) : strdup(path);
@@ -31,7 +31,7 @@ extractFirstPathComponent(const char *path)
 char *
 extractPathComponent(const char *path, unsigned n)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
 
     // Seek the n-th occurance of '/'
     while (n--) if ((path = strchr(path, '/')) == nullptr) return nullptr;
@@ -43,7 +43,7 @@ extractPathComponent(const char *path, unsigned n)
 char *
 stripFilename(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     const char *pos = strrchr(path, '/');
     return pos ? strndup(path, pos + 1 - path) : strdup("");
@@ -52,7 +52,7 @@ stripFilename(const char *path)
 char *
 extractFilename(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     const char *pos = strrchr(path, '/');
     return pos ? strdup(pos + 1) : strdup(path);
@@ -74,7 +74,7 @@ replaceFilename(const char *path, const char *name)
 char *
 extractSuffix(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     const char *pos = strrchr(path, '.');
     return pos ? strdup(pos + 1) : strdup("");
@@ -83,7 +83,7 @@ extractSuffix(const char *path)
 char *
 extractFilenameWithoutSuffix(const char *path)
 {
-    assert(path != NULL);
+    assert(path != nullptr);
     
     char *result;
     char *filename = extractFilename(path);
@@ -102,8 +102,8 @@ extractFilenameWithoutSuffix(const char *path)
 bool
 checkFileSuffix(const char *path, const char *suffix)
 {
-    assert(path != NULL);
-    assert(suffix != NULL);
+    assert(path != nullptr);
+    assert(suffix != nullptr);
     
     if (strlen(suffix) > strlen(path))
         return false;
@@ -119,7 +119,7 @@ bool isDirectory(const char *path)
 {
     struct stat fileProperties;
     
-    if (path == NULL)
+    if (path == nullptr)
         return -1;
         
     if (stat(path, &fileProperties) != 0)
@@ -133,7 +133,7 @@ getSizeOfFile(const char *path)
 {
     struct stat fileProperties;
     
-    if (path == NULL)
+    if (path == nullptr)
         return -1;
     
     if (stat(path, &fileProperties) != 0)
@@ -168,13 +168,13 @@ checkFileSizeRange(const char *path, long min, long max)
 bool
 matchingFileHeader(const char *path, const u8 *header, size_t length)
 {
-    assert(path != NULL);
-    assert(header != NULL);
+    assert(path != nullptr);
+    assert(header != nullptr);
     
     bool result = true;
     FILE *file;
     
-    if ((file = fopen(path, "r")) == NULL)
+    if ((file = fopen(path, "r")) == nullptr)
         return false;
     
     for (unsigned i = 0; i < length; i++) {
@@ -189,12 +189,11 @@ matchingFileHeader(const char *path, const u8 *header, size_t length)
     return result;
 }
 
-
 bool
 matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
 {
-    assert(buffer != NULL);
-    assert(header != NULL);
+    assert(buffer != nullptr);
+    assert(header != nullptr);
     
     for (unsigned i = 0; i < length; i++) {
         if (header[i] != buffer[i])
@@ -207,7 +206,11 @@ matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length)
 bool
 loadFile(const char *path, u8 **buffer, long *size)
 {
-    *buffer = NULL;
+    assert(path != nullptr);
+    assert(buffer != nullptr);
+    assert(size != nullptr);
+
+    *buffer = nullptr;
     *size = 0;
     
     // Get file size
@@ -216,11 +219,11 @@ loadFile(const char *path, u8 **buffer, long *size)
     
     // Open file
     FILE *file = fopen(path, "r");
-    if (file == NULL) return false;
+    if (file == nullptr) return false;
      
     // Allocate memory
     u8 *data = new u8[bytes];
-    if (data == NULL) { fclose(file); return false; }
+    if (data == nullptr) { fclose(file); return false; }
     
     // Read data
     for (unsigned i = 0; i < bytes; i++) {
@@ -233,6 +236,20 @@ loadFile(const char *path, u8 **buffer, long *size)
     *buffer = data;
     *size = bytes;
     return true;
+}
+
+bool
+loadFile(const char *path, const char *name, u8 **buffer, long *size)
+{
+    assert(path != nullptr);
+    assert(name != nullptr);
+
+    char *fullpath = new char[strlen(path) + strlen(name) + 2];
+    strcpy(fullpath, path);
+    strcat(fullpath, "/");
+    strcat(fullpath, name);
+    
+    return loadFile(fullpath, buffer, size);
 }
 
 void
@@ -272,7 +289,7 @@ sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup)
 u32
 fnv_1a_32(const u8 *addr, size_t size)
 {
-    if (addr == NULL || size == 0) return 0;
+    if (addr == nullptr || size == 0) return 0;
 
     u32 hash = fnv_1a_init32();
 
@@ -286,7 +303,7 @@ fnv_1a_32(const u8 *addr, size_t size)
 u64
 fnv_1a_64(const u8 *addr, size_t size)
 {
-    if (addr == NULL || size == 0) return 0;
+    if (addr == nullptr || size == 0) return 0;
     
     u64 hash = fnv_1a_init64();
     
@@ -313,7 +330,7 @@ u16 crc16(const u8 *addr, size_t size)
 u32
 crc32(const u8 *addr, size_t size)
 {
-    if (addr == NULL || size == 0) return 0;
+    if (addr == nullptr || size == 0) return 0;
 
     u32 result = 0;
 
