@@ -126,17 +126,20 @@ ADFFile *
 ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
+
+
+    // Create empty ADF
+    ADFFile *adf = nullptr;
+    if (disk->getType() == DISK_35_DD) adf = makeWithDiskType(DISK_35_DD);
+    if (disk->getType() == DISK_35_HD) adf = makeWithDiskType(DISK_35_HD);
+    if (!adf) return nullptr;
     
-    // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35_DD) { return NULL; }
-    
-    ADFFile *adf = makeWithDiskType(DISK_35_DD);
-    
-    if (adf) {
-        if (!disk->decodeAmigaDisk(adf->data, 160, 11)) {
-            delete adf;
-            return NULL;
-        }
+    // Export disk
+    assert(adf->numTracks() == 160);
+    assert(adf->numSectorsPerTrack() == 11 || adf->numSectorsPerTrack() == 22);
+    if (!disk->decodeAmigaDisk(adf->data, adf->numTracks(), adf->numSectorsPerTrack())) {
+        delete adf;
+        return nullptr;
     }
     
     return adf;
