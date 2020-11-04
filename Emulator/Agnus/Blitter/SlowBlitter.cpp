@@ -904,27 +904,25 @@ Blitter::beginSlowCopyBlit()
     }
 
     // Setup parameters
+    /*
     if (bltconDESC()) {
         incr = -2;
-        /*
         ash  = 16 - bltconASH();
         bsh  = 16 - bltconBSH();
         amod = -bltamod;
         bmod = -bltbmod;
         cmod = -bltcmod;
         dmod = -bltdmod;
-        */
     } else {
         incr = 2;
-        /*
         ash  = bltconASH();
         bsh  = bltconBSH();
         amod = bltamod;
         bmod = bltbmod;
         cmod = bltcmod;
         dmod = bltdmod;
-        */
     }
+    */
 
     // Set width and height counters
     resetXCounter();
@@ -963,7 +961,8 @@ template <u16 instr> void
 Blitter::exec()
 {
     bool bus, busidle;
-
+    bool desc = bltconDESC();
+    
     // Determine if we need the bus
     if (instr & WRITE_D) {
         bus     = !lockD;
@@ -1005,9 +1004,9 @@ Blitter::exec()
             }
             trace(BLT_DEBUG, "D: poke(%X), %X (check: %X %X)\n", bltdpt, dhold, check1, check2);
                 
-            bltdpt += incr;
+            bltdpt += desc ? -2 : 2;
             if (--cntD == 0) {
-                bltdpt += bltconDESC() ? -bltdmod : bltdmod;
+                bltdpt += desc ? -bltdmod : bltdmod;
                 cntD = bltsizeH;
                 fillCarry = !!bltconFCI();
             }
@@ -1021,9 +1020,9 @@ Blitter::exec()
         anew = agnus.doBlitterDMA(bltapt);
         trace(BLT_DEBUG, "    A = peek(%X) = %X\n", bltapt, anew);
         trace(BLT_DEBUG, "    After fetch: A = %X\n", anew);
-        bltapt += incr;
+        bltapt += desc ? -2 : 2;
         if (--cntA == 0) {
-            bltapt += bltconDESC() ? -bltamod : bltamod;
+            bltapt += desc ? -bltamod : bltamod;
             cntA = bltsizeH;
         }
     }
@@ -1035,9 +1034,9 @@ Blitter::exec()
         bnew = agnus.doBlitterDMA(bltbpt);
         trace(BLT_DEBUG, "    B = peek(%X) = %X\n", bltbpt, bnew);
         trace(BLT_DEBUG, "    After fetch: B = %X\n", bnew);
-        bltbpt += incr;
+        bltbpt += desc ? -2 : 2;
         if (--cntB == 0) {
-            bltbpt += bltconDESC() ? -bltbmod : bltbmod;
+            bltbpt += desc ? -bltbmod : bltbmod;
             cntB = bltsizeH;
         }
     }
@@ -1049,9 +1048,9 @@ Blitter::exec()
         chold = agnus.doBlitterDMA(bltcpt);
         trace(BLT_DEBUG, "    C = peek(%X) = %X\n", bltcpt, chold);
         trace(BLT_DEBUG, "    After fetch: C = %X\n", chold);
-        bltcpt += incr;
+        bltcpt += desc ? -2 : 2;
         if (--cntC == 0) {
-            bltcpt += bltconDESC() ? -bltcmod : bltcmod;
+            bltcpt += desc ? -bltcmod : bltcmod;
             cntC = bltsizeH;
         }
     }
@@ -1064,7 +1063,7 @@ Blitter::exec()
 
         // Run the barrel shifters on data path A
         trace(BLT_DEBUG, "    ash = %d mask = %X\n", bltconASH(), mask);
-        if (bltconDESC()) {
+        if (desc) {
             ahold = HI_W_LO_W(anew & mask, aold) >> (16 - bltconASH());
         } else {
             ahold = HI_W_LO_W(aold, anew & mask) >> bltconASH();
@@ -1079,7 +1078,7 @@ Blitter::exec()
 
         // Run the barrel shifters on data path B
         trace(BLT_DEBUG, "    bsh = %d\n", bltconBSH());
-        if (bltconDESC()) {
+        if (desc) {
             bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
         } else {
             bhold = HI_W_LO_W(bold, bnew) >> bltconBSH();

@@ -103,8 +103,8 @@ class Blitter : public AmigaComponent
 
     // Blitter state
     int iteration;
-    int incr;
     /*
+    int incr;
     int ash;
     int bsh;
     i32 amod;
@@ -250,8 +250,8 @@ private:
         & bltpc
 
         & iteration
-        & incr
         /*
+        & incr
         & ash
         & bsh
         & amod
