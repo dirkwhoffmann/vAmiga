@@ -75,8 +75,11 @@ public:
     FSVolume(const char *name, u32 capacity, u32 bsize = 512);
     // FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
     ~FSVolume();
-
-    // Prints a debug summary for this volume
+    
+    // Prints information about this volume
+    void info();
+    
+    // Prints debug information about this volume
     virtual void dump();
     
     // Checks the integrity of this volume
@@ -93,10 +96,19 @@ public:
     FSVolumeType getType() { return type; }
     bool isOFS() { return type == OFS; }
     bool isFFF() { return type == FFS; }
-    u32 getCapacity() { return capacity; }
+    const char *getName() { return rootBlock()->name.name; }
     u32 getBlockSize() { return bsize; }
     u32 bytesInDataBlock() { return bsize - (isOFS() ? 24 : 0); }
+
+    u32 getCapacity() { return capacity; }
+
+    // Reports information about the capacity and usage of this volume
+    u32 totalBlocks() { return capacity; }
     u32 freeBlocks();
+    u32 usedBlocks() { return totalBlocks() - freeBlocks(); }
+    u32 totalBytes() { return totalBlocks() * bsize; }
+    u32 freeBytes() { return freeBlocks() * bsize; }
+    u32 usedBytes() { return usedBlocks() *bsize; }
 
     
     //
