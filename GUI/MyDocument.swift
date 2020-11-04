@@ -235,6 +235,14 @@ class MyDocument: NSDocument {
                 runDiskMountDialog()
             }
             
+        case _ as IMGFileProxy:
+            
+            if let df = parent.dragAndDropDrive?.nr {
+                amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
+            } else {
+                runDiskMountDialog()
+            }
+
         case _ as DMSFileProxy:
             
             if let df = parent.dragAndDropDrive?.nr {
@@ -251,10 +259,10 @@ class MyDocument: NSDocument {
                 runDiskMountDialog()
             }
 
-        case _ as IMGFileProxy:
+        case _ as DIRFileProxy:
             
             if let df = parent.dragAndDropDrive?.nr {
-                amiga.diskController.insert(df, img: amigaAttachment as? IMGFileProxy)
+                amiga.diskController.insert(df, dir: amigaAttachment as? DIRFileProxy)
             } else {
                 runDiskMountDialog()
             }

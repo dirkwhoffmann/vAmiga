@@ -72,8 +72,8 @@ DIRFile::readFromFile(const char *filename)
     volume.installBootBlock();
     
     // Crawl through the given directory and add all files
-    bool result = traverseDir(filename, volume);
-    debug("traverseDir result = %d\n", result);
+    success = traverseDir(filename, volume);
+    debug("traverseDir result = %d\n", success);
     
     // Check for file system errors
     if (!volume.check(MFM_DEBUG)) {
@@ -84,6 +84,7 @@ DIRFile::readFromFile(const char *filename)
     // Convert the volume into an ADF
     assert(adf == nullptr);
     if (success) adf = ADFFile::makeWithVolume(volume);
+    debug("adf = %p\n", adf); 
     return adf != nullptr;
 }
 
@@ -103,14 +104,18 @@ DIRFile::traverseDir(const char *dir, FSVolume &vol) {
 
     while ((dirp = readdir(dp))) {
 
-        // Skip '.', '..' and all hidden files
+        // Skip '.', '..', and all hidden files
         if (dirp->d_name[0] == '.') continue;
 
         msg("%s/%s\n", dir, dirp->d_name);
 
-        // Recursively process subdirectories
         if (dirp->d_type == DT_DIR) {
             
+            // Add subdirectory to volume
+            if (vol.makeDir(dirp->d_name) == nullptr) result = false;
+            vol.changeDir(dirp->d_name);
+
+            // Recursively process the subdirectory
             char *subdir = new char [strlen(dir) + strlen(dirp->d_name) + 2];
             strcpy(subdir, dir);
             strcat(subdir, "/");
@@ -120,7 +125,15 @@ DIRFile::traverseDir(const char *dir, FSVolume &vol) {
             continue;
         }
         
-        // Process file
+        // Add file to volume
+        FSBlock *file = vol.makeFile(dirp->d_name);
+        if (file) {
+            // file->append(buffer, length);
+            // TODO: APPEND
+            
+        } else {
+            result = false;
+        }
     }
     
     closedir(dp);

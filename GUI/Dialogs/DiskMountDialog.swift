@@ -98,7 +98,10 @@ class DiskMountDialog: DialogController {
         if let attachment = myDocument.amigaAttachment as? EXEFileProxy {
             disk = attachment
         }
-        
+        if let attachment = myDocument.amigaAttachment as? DIRFileProxy {
+            disk = attachment
+        }
+
         if disk != nil {
             
             // Load screenshots (if any)
@@ -206,7 +209,10 @@ class DiskMountDialog: DialogController {
 
         case _ as EXEFileProxy:
             amiga.diskController.insert(sender.tag, exe: disk as? EXEFileProxy)
-            
+
+        case _ as DIRFileProxy:
+            amiga.diskController.insert(sender.tag, dir: disk as? DIRFileProxy)
+
         default:
             break
         }

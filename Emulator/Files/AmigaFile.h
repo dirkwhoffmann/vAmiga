@@ -72,7 +72,7 @@ public:
     void setPath(const char *path);
     
     // Returns a fingerprint (hash value) for this file
-    u64 fnv() { return fnv_1a_64(data, size); }
+    virtual u64 fnv() { return fnv_1a_64(data, size); }
     
     
     //
