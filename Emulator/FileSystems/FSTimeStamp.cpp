@@ -9,17 +9,29 @@
 
 #include "FSTimeStamp.h"
 
-FSTimeStamp::FSTimeStamp(time_t date)
+FSTimeStamp::FSTimeStamp(time_t t)
 {
     const u32 secPerDay = 24 * 60 * 60;
     
     // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
-    date -= (8 * 365 + 2) * secPerDay;
+    t -= (8 * 365 + 2) * secPerDay - 60 * 60;
     
     // Extract components
-    days = date / secPerDay;
-    mins = (date % secPerDay) / 60;
-    ticks = (date % secPerDay % 60) * 5 / 6;
+    days = t / secPerDay;
+    mins = (t % secPerDay) / 60;
+    ticks = (t % secPerDay % 60) * 50;
+}
+
+time_t
+FSTimeStamp::get()
+{
+    const u32 secPerDay = 24 * 60 * 60;
+    time_t t = days * secPerDay + mins * 60 + ticks / 50;
+    
+    // Shift reference point from  Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
+    t += (8 * 365 + 2) * secPerDay - 60 * 60;
+    
+    return t;
 }
 
 void

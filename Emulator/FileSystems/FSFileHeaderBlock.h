@@ -53,7 +53,10 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
-    
+    char *getName() override { return name.name; }
+    u32 getSize() override { return fileSize; }
+    time_t getCreationDate() override { return created.get(); }
+
     // Append data bytes
     bool append(const u8 *buffer, size_t size) override;
     bool append(const char *string) override;

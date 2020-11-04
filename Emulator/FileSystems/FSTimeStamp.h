@@ -25,8 +25,10 @@ class FSTimeStamp {
     
 public:
 
-    FSTimeStamp(time_t date);
+    FSTimeStamp(time_t t);
     FSTimeStamp() : FSTimeStamp(time(NULL)) {  }
+    
+    time_t get();
     
     void dump();
     void write(u8 *ptr);

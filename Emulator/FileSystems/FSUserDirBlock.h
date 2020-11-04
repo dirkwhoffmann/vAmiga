@@ -60,8 +60,10 @@ struct FSUserDirBlock : FSBlock {
     bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
     FSBlock *seek(FSName name) override { return hashTable->seek(name); }
 
-    virtual u32 hashValue() override { return name.hashValue(); }
+    u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
+    char *getName() override { return name.name; }
+    time_t getCreationDate() override { return created.get(); }
 
     void setNext(u32 ref) override;
     u32 getNext() override { return next; }

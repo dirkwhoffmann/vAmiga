@@ -76,6 +76,10 @@ DIRFile::readFromFile(const char *filename)
     debug("traverseDir result = %d\n", success);
     
     // Check for file system errors
+    volume.changeDir("/");
+    volume.info();
+    volume.walk(true);
+
     if (!volume.check(MFM_DEBUG)) {
         warn("DIRFile::readFromFile: Files system is corrupted.\n");
         // volume.dump();

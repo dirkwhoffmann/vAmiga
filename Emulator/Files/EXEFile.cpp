@@ -97,7 +97,10 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     if (success && file) success = file->append("file");
 
     // Check for file system errors
+    volume.changeDir("/");
     volume.info();
+    volume.walk(true);
+    
     if (!volume.check(MFM_DEBUG)) {
         warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
         // volume.dump();

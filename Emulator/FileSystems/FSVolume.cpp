@@ -305,7 +305,14 @@ FSVolume::changeDir(const char *name)
     assert(name != nullptr);
 
     FSBlock *cdb = currentDirBlock();
-    
+
+    if (strcmp(name, "/") == 0) {
+                
+        // Move to top level
+        currentDir = rootBlockNr();
+        return currentDirBlock();
+    }
+
     if (strcmp(name, "..") == 0) {
                 
         // Move one level up
@@ -366,6 +373,64 @@ FSVolume::seekFile(const char *name)
 
     if (!block || block->type() != FS_FILEHEADER_BLOCK) return nullptr;
     return block;
+}
+
+int
+FSVolume::walk(bool recursive)
+{
+    return walk(currentDirBlock(), &FSVolume::listWalker, 0, recursive);
+}
+
+int
+FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive)
+{
+    assert(dir != nullptr);
+        
+    FSHashTable *hashTable = dir->getHashTable();
+    if (hashTable) {
+        
+        for (int i = 0; i < hashTable->hashTableSize; i++) {
+            
+            FSBlock *item = block(hashTable->hashTable[i]);
+            while (item) {
+
+                if (item->type() == FS_USERDIR_BLOCK) {
+
+                    value = (this->*walker)(item, value);
+                    if (recursive) value = walk(item, walker, value, recursive);
+                }
+                if (item->type() == FS_FILEHEADER_BLOCK) {
+
+                    value = (this->*walker)(item, value);
+                }
+                
+                item = item->getNext() ? block(item->getNext()) : nullptr;
+            }
+        }
+    }
+    return value;
+}
+
+int
+FSVolume::listWalker(FSBlock *block, int value)
+{
+    if (block->type() == FS_USERDIR_BLOCK) {
+        msg("%6s  ", "(DIR)");
+    } else {
+        msg("%6d  ", block->getSize());
+    }
+    
+    // Convert the internally stored time diff to an absolute time_t value
+    time_t time = block->getCreationDate();
+    tm *t = localtime(&time);
+
+    msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
+    msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
+    // msg("%s ", block->getName());
+    block->printPath();
+    msg("\n");
+
+    return value + 1;
 }
 
 bool
