@@ -103,15 +103,6 @@ class Blitter : public AmigaComponent
 
     // Blitter state
     int iteration;
-    /*
-    int incr;
-    int ash;
-    int bsh;
-    i32 amod;
-    i32 bmod;
-    i32 cmod;
-    i32 dmod;
-    */
     
     // Counters tracking the coordinate of the blit window
     u16 xCounter;
@@ -248,17 +239,7 @@ private:
         & bshift
 
         & bltpc
-
         & iteration
-        /*
-        & incr
-        & ash
-        & bsh
-        & amod
-        & bmod
-        & cmod
-        & dmod
-        */
         
         & xCounter
         & yCounter

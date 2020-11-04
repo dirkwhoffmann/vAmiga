@@ -903,27 +903,6 @@ Blitter::beginSlowCopyBlit()
         msg("Using the slow copy Blitter\n");
     }
 
-    // Setup parameters
-    /*
-    if (bltconDESC()) {
-        incr = -2;
-        ash  = 16 - bltconASH();
-        bsh  = 16 - bltconBSH();
-        amod = -bltamod;
-        bmod = -bltbmod;
-        cmod = -bltcmod;
-        dmod = -bltdmod;
-    } else {
-        incr = 2;
-        ash  = bltconASH();
-        bsh  = bltconBSH();
-        amod = bltamod;
-        bmod = bltbmod;
-        cmod = bltcmod;
-        dmod = bltdmod;
-    }
-    */
-
     // Set width and height counters
     resetXCounter();
     resetYCounter();
