@@ -92,12 +92,6 @@ public:
     SerialPort serialPort = SerialPort(*this);
 
     // Peripherals
-    /*
-    Mouse mouse1 = Mouse(PORT_1, *this);
-    Mouse mouse2 = Mouse(PORT_2, *this);
-    Joystick joystick1 = Joystick(PORT_1, *this);
-    Joystick joystick2 = Joystick(PORT_2, *this);
-     */
     Keyboard keyboard = Keyboard(*this);
 
     // Floppy drives

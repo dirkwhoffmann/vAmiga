@@ -66,10 +66,6 @@ protected:
     ControlPort &controlPort1;
     ControlPort &controlPort2;
     SerialPort &serialPort;
-    // Mouse &mouse1;
-    // Mouse &mouse2;
-    // Joystick &joystick1;
-    // Joystick &joystick2;
     Keyboard &keyboard;
     Drive &df0;
     Drive &df1;

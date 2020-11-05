@@ -31,12 +31,6 @@ zorro(ref.zorro),
 controlPort1(ref.controlPort1),
 controlPort2(ref.controlPort2),
 serialPort(ref.serialPort),
-/*
-mouse1(ref.mouse1),
-mouse2(ref.mouse2),
-joystick1(ref.joystick1),
-joystick2(ref.joystick2),
-*/
 keyboard(ref.keyboard),
 df0(ref.df0),
 df1(ref.df1),
