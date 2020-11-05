@@ -117,7 +117,7 @@ class Configuration {
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
-             
+                         
             // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice1, port: 1)
             gamePadManager.listDevices()
@@ -127,17 +127,7 @@ class Configuration {
                 track("Resolving double mapping conflict with second port")
                 gameDevice2 = -1
             }
-
-            // Read back the real connection status
-            /*
-            let device1 = gamePadManager.getSlot(port: 1)
-            let device2 = gamePadManager.getSlot(port: 2)
-            if gameDevice1 != device1 { gameDevice1 = device1 }
-            if gameDevice2 != device2 { gameDevice2 = device2 }
-            */
             
-            amiga.controlPort1.dump()
-            amiga.controlPort2.dump()
             parent.toolbar.validateVisibleItems()
         }
     }
@@ -153,17 +143,7 @@ class Configuration {
                 track("Resolving double mapping conflict with first port")
                 gameDevice1 = -1
             }
-
-            // Read back the real connection status
-            /*
-            let device1 = gamePadManager.getSlot(port: 1)
-            let device2 = gamePadManager.getSlot(port: 2)
-            if gameDevice1 != device1 { gameDevice1 = device1 }
-            if gameDevice2 != device2 { gameDevice2 = device2 }
-            */
             
-            amiga.controlPort1.dump()
-            amiga.controlPort2.dump()
             parent.toolbar.validateVisibleItems()
         }
     }

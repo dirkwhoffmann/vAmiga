@@ -140,7 +140,7 @@ class GamePadManager {
         for (_, pad) in gamePads where pad.port == port { pad.port = 0 }
         
         // Bind the new device
-        gamePads[slot]?.port = port        
+        gamePads[slot]?.port = port
     }
 
     func getName(slot: Int) -> String {
@@ -240,6 +240,10 @@ class GamePadManager {
             addJoystick(slot: slot, device: device,
                         vendorID: vendorID, productID: productID, locationID: locationID)
         }
+        
+        // Reconnect devices (assignments trigger side effects)
+        parent.config.gameDevice1 = parent.config.gameDevice1
+        parent.config.gameDevice2 = parent.config.gameDevice2
         
         // Update to toolbar
         parent.toolbar.validateVisibleItems()
