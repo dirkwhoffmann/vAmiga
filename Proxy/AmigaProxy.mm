@@ -991,10 +991,6 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->port->getInfo();
 }
-- (void) connectDevice:(ControlPortDevice)value
-{
-    wrapper->port->connectDevice(value);
-}
 
 @end
 

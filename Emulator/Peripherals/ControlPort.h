@@ -16,6 +16,9 @@
 
 class ControlPort : public AmigaComponent {
 
+    friend class Mouse;
+    friend class Joystick;
+    
     // Represented control port
     PortNr nr;
 
@@ -39,8 +42,8 @@ class ControlPort : public AmigaComponent {
     
 public:
     
-    Mouse mouse = Mouse(nr, amiga);
-    Joystick joystick = Joystick(nr, amiga);
+    Mouse mouse = Mouse(*this, amiga);
+    Joystick joystick = Joystick(*this, amiga);
 
 
     //
@@ -120,17 +123,7 @@ public:
     void changePotgo(u16 &potgo);
 
     // Modifies the PRA bits of CIA A according to the connected device
-    void changePra(u8 &pra);
-
-    
-    //
-    // Connecting peripherals
-    //
-    
-public:
-    
-    // Connects or disconnects a device
-    void connectDevice(ControlPortDevice device);
+    void changePra(u8 &pra);    
 };
 
 #endif

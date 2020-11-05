@@ -13,12 +13,15 @@
 #include "AmigaComponent.h"
 
 class Mouse : public AmigaComponent {
+
+    // Reference to control port this device belongs to
+    ControlPort &port;
     
     // Current configuration
     MouseConfig config;
 
     // The control port this device is connected to
-    const PortNr nr;
+    // PortNr nr;
 
 public:
     
@@ -59,7 +62,7 @@ private:
     
 public:
     
-    Mouse(PortNr n, Amiga& ref);
+    Mouse(ControlPort& pref, Amiga& ref);
     
     void _reset(bool hard) override;
     

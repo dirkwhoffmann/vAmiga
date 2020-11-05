@@ -140,14 +140,7 @@ class GamePadManager {
         for (_, pad) in gamePads where pad.port == port { pad.port = 0 }
         
         // Bind the new device
-        gamePads[slot]?.port = port
-        
-        // Update the device type on the Amiga side
-        parent.amiga.suspend()
-        let deviceType = gamePads[slot]?.type ?? .CPD_NONE
-        if port == 1 { parent.amiga.controlPort1.connect(deviceType) }
-        if port == 2 { parent.amiga.controlPort2.connect(deviceType) }
-        parent.amiga.resume()
+        gamePads[slot]?.port = port        
     }
 
     func getName(slot: Int) -> String {

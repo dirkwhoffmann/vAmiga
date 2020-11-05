@@ -9,10 +9,9 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
+Joystick::Joystick(ControlPort& pref, Amiga& ref) : port(pref), AmigaComponent(ref)
 {
-    assert(isPortNr(n));
-    setDescription(n == PORT_1 ? "Joystick1" : "Joystick2");
+    setDescription(port.nr == PORT_1 ? "Joystick1" : "Joystick2");
 }
 
 void
@@ -71,7 +70,7 @@ Joystick::scheduleNextShot()
 void
 Joystick::changePra(u8 &pra)
 {
-    u16 mask = (nr == 1) ? 0x40 : 0x80;
+    u16 mask = (port.nr == 1) ? 0x40 : 0x80;
 
     if (button) pra &= ~mask;
 }
@@ -104,8 +103,7 @@ Joystick::joydat()
 u8
 Joystick::ciapa()
 {
-    // debug("ciapa\n");
-    return button ? (nr == 1 ? 0xBF : 0x7F) : 0xFF;
+    return button ? (port.nr == 1 ? 0xBF : 0x7F) : 0xFF;
 }
 
 void
@@ -154,6 +152,7 @@ Joystick::trigger(GamePadAction event)
         default:
             break;
     }
+    port.device = CPD_JOYSTICK;
 }
 
 void

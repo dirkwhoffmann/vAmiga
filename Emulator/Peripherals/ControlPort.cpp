@@ -108,9 +108,3 @@ ControlPort::changePra(u8 &pra)
         return;
     }
 }
-
-void
-ControlPort::connectDevice(ControlPortDevice device)
-{
-    if (isControlPortDevice(device)) this->device = device;
-}

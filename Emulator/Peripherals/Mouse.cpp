@@ -9,10 +9,9 @@
 
 #include "Amiga.h"
 
-Mouse::Mouse(PortNr n, Amiga& ref) : nr(n), AmigaComponent(ref)
+Mouse::Mouse(ControlPort& pref, Amiga& ref) : port(pref), AmigaComponent(ref)
 {
-    assert(isPortNr(n));
-    setDescription(n == PORT_1 ? "Mouse1" : "Mouse2");
+    setDescription(port.nr == PORT_1 ? "Mouse1" : "Mouse2");
 
     config.pullUpResistors = true;
 }
@@ -51,7 +50,7 @@ Mouse::_dump()
 void
 Mouse::changePotgo(u16 &potgo)
 {
-    u16 mask = nr == 1 ? 0x0400 : 0x4000;
+    u16 mask = port.nr == 1 ? 0x0400 : 0x4000;
 
     if (rightButton || HOLD_MOUSE_R) {
         potgo &= ~mask;
@@ -63,7 +62,7 @@ Mouse::changePotgo(u16 &potgo)
 void
 Mouse::changePra(u8 &pra)
 {
-    u16 mask = nr == 1 ? 0x0040 : 0x0080;
+    u16 mask = port.nr == 1 ? 0x0040 : 0x0080;
 
     if (leftButton || HOLD_MOUSE_L) {
         pra &= ~mask;
@@ -109,6 +108,7 @@ Mouse::setXY(double x, double y)
 {
     targetX = x / dividerX;
     targetY = y / dividerY;
+    port.device = CPD_MOUSE;
 }
 
 void
@@ -116,20 +116,25 @@ Mouse::setDeltaXY(double dx, double dy)
 {
     targetX += dx / dividerX;
     targetY += dy / dividerY;
+    port.device = CPD_MOUSE;
 }
 
 void
 Mouse::setLeftButton(bool value)
 {
     trace(PORT_DEBUG, "setLeftButton(%d)\n", value);
+    
     leftButton = value;
+    port.device = CPD_MOUSE;
 }
 
 void
 Mouse::setRightButton(bool value)
 {
     trace(PORT_DEBUG, "setRightButton(%d)\n", value);
+    
     rightButton = value;
+    port.device = CPD_MOUSE;
 }
 
 void

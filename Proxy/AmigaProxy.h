@@ -504,7 +504,6 @@ struct SerialPortWrapper;
 
 - (void) dump;
 - (ControlPortInfo) getInfo;
-- (void) connectDevice:(ControlPortDevice)value;
 
 @end
 

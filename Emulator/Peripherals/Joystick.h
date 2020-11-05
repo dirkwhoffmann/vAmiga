@@ -14,8 +14,8 @@
 
 class Joystick : public AmigaComponent {
 
-    // The control port this device is connected to
-    const PortNr nr;
+    // Reference to control port this device belongs to
+    ControlPort &port;
 
     // Button state
     bool button = false;
@@ -48,7 +48,7 @@ class Joystick : public AmigaComponent {
     
 public:
     
-    Joystick(PortNr n, Amiga& ref);
+    Joystick(ControlPort& pref, Amiga& ref);
 
 private:
     
