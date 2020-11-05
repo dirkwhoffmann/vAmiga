@@ -372,8 +372,8 @@ extension GamePad {
         
         let amiga = manager.parent.amiga!
         
-        if port == 1 { for event in events { amiga.joystick1.trigger(event) } }
-        if port == 2 { for event in events { amiga.joystick2.trigger(event) } }
+        if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
+        if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         
         return events != []
     }
@@ -383,8 +383,8 @@ extension GamePad {
         
         let amiga = manager.parent.amiga!
         
-        if port == 1 { for event in events { amiga.mouse1.trigger(event) } }
-        if port == 2 { for event in events { amiga.mouse2.trigger(event) } }
+        if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }
+        if port == 2 { for e in events { amiga.controlPort2.mouse.trigger(e) } }
         
         return events != []
     }
@@ -393,8 +393,8 @@ extension GamePad {
         
         let amiga = manager.parent.amiga!
         
-        if port == 1 { amiga.mouse1.setDeltaXY(delta) }
-        if port == 2 { amiga.mouse2.setDeltaXY(delta) }
+        if port == 1 { amiga.controlPort1.mouse.setDeltaXY(delta) }
+        if port == 2 { amiga.controlPort2.mouse.setDeltaXY(delta) }
     }
     
     func processKeyDownEvent(macKey: MacKey) -> Bool {
@@ -430,11 +430,11 @@ extension GamePad {
         let amiga = manager.parent.amiga!
         
         if isMouse {
-            if port == 1 { for event in events { amiga.mouse1.trigger(event) } }
-            if port == 2 { for event in events { amiga.mouse2.trigger(event) } }
+            if port == 1 { for e in events { amiga.controlPort1.mouse.trigger(e) } }
+            if port == 2 { for e in events { amiga.controlPort2.mouse.trigger(e) } }
         } else {
-            if port == 1 { for event in events { amiga.joystick1.trigger(event) } }
-            if port == 2 { for event in events { amiga.joystick2.trigger(event) } }
+            if port == 1 { for e in events { amiga.controlPort1.joystick.trigger(e) } }
+            if port == 2 { for e in events { amiga.controlPort2.joystick.trigger(e) } }
         }
     }
 }

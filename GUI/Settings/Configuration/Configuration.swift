@@ -81,18 +81,6 @@ class Configuration {
         precondition(0 <= n && n <= 3)
         amiga.configure(.OPT_DRIVE_TYPE, drive: n, value: type)
     }
-    /*
-    func dfnMechanics(_ n: Int) -> Bool {
-        precondition(0 <= n && n <= 3)
-        return amiga.getConfig(.OPT_EMULATE_MECHANICS, drive: n) != 0
-    }
-    */
-    /*
-    func setDfnMechanics(_ n: Int, enable: Bool) {
-        precondition(0 <= n && n <= 3)
-        amiga.configure(.OPT_EMULATE_MECHANICS, drive: n, enable: enable)
-    }
-    */
     var df0Connected: Bool {
         get { return dfnConnected(0) }
         set { setDfnConnected(0, connect: newValue) }
@@ -101,12 +89,6 @@ class Configuration {
         get { return dfnType(0) }
         set { setDfnType(0, type: newValue) }
     }
-    /*
-    var df0Mechanics: Bool {
-        get { return dfnMechanics(0) }
-        set { setDfnMechanics(0, enable: newValue) }
-    }
-    */
     var df1Connected: Bool {
         get { return dfnConnected(1) }
         set { setDfnConnected(1, connect: newValue) }
@@ -115,12 +97,6 @@ class Configuration {
         get { return dfnType(1) }
         set { setDfnType(1, type: newValue) }
     }
-    /*
-    var df1Mechanics: Bool {
-        get { return dfnMechanics(1) }
-        set { setDfnMechanics(1, enable: newValue) }
-    }
-    */
     var df2Connected: Bool {
         get { return dfnConnected(2) }
         set { setDfnConnected(2, connect: newValue) }
@@ -129,12 +105,6 @@ class Configuration {
         get { return dfnType(2) }
         set { setDfnType(2, type: newValue) }
     }
-    /*
-    var df2Mechanics: Bool {
-        get { return dfnMechanics(2) }
-        set { setDfnMechanics(2, enable: newValue) }
-    }
-    */
     var df3Connected: Bool {
         get { return dfnConnected(3) }
         set { setDfnConnected(3, connect: newValue) }
@@ -143,43 +113,57 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    /*
-    var df3Mechanics: Bool {
-        get { return dfnMechanics(3) }
-        set { setDfnMechanics(3, enable: newValue) }
-    }
-    */
     
     // Ports
     var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
         didSet {
              
-            // Try to connect the device
+            // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice1, port: 1)
             gamePadManager.listDevices()
 
+            // Avoid double mappings
+            if gameDevice1 != -1 && gameDevice1 == gameDevice2 {
+                track("Resolving double mapping conflict with second port")
+                gameDevice2 = -1
+            }
+
             // Read back the real connection status
+            /*
             let device1 = gamePadManager.getSlot(port: 1)
             let device2 = gamePadManager.getSlot(port: 2)
             if gameDevice1 != device1 { gameDevice1 = device1 }
             if gameDevice2 != device2 { gameDevice2 = device2 }
-
+            */
+            
+            amiga.controlPort1.dump()
+            amiga.controlPort2.dump()
             parent.toolbar.validateVisibleItems()
         }
     }
     var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
         didSet {
  
-            // Try to connect the device
+            // Try to connect the device (may disconnect the other device)
             gamePadManager.connect(slot: gameDevice2, port: 2)
             gamePadManager.listDevices()
 
+            // Avoid double mappings
+            if gameDevice2 != -1 && gameDevice2 == gameDevice1 {
+                track("Resolving double mapping conflict with first port")
+                gameDevice1 = -1
+            }
+
             // Read back the real connection status
+            /*
             let device1 = gamePadManager.getSlot(port: 1)
             let device2 = gamePadManager.getSlot(port: 2)
             if gameDevice1 != device1 { gameDevice1 = device1 }
             if gameDevice2 != device2 { gameDevice2 = device2 }
-
+            */
+            
+            amiga.controlPort1.dump()
+            amiga.controlPort2.dump()
             parent.toolbar.validateVisibleItems()
         }
     }
@@ -476,10 +460,7 @@ class Configuration {
             try? fm.removeItem(at: url)
             amiga.mem.saveExt(url)
         }
-        
-        // let defaults = UserDefaults.standard
-        // defaults.set(extStart, forKey: Keys.extStart)
-        
+                
         amiga.resume()
     }
 

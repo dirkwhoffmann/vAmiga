@@ -880,64 +880,6 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// Control port
-//
-
-@implementation ControlPortProxy
-
-- (instancetype) initWithControlPort:(ControlPort *)port
-{
-    if (self = [super init]) {
-        wrapper = new ControlPortWrapper();
-        wrapper->port = port;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->port->dump();
-}
-- (ControlPortInfo) getInfo
-{
-    return wrapper->port->getInfo();
-}
-- (void) connectDevice:(ControlPortDevice)value
-{
-    wrapper->port->connectDevice(value);
-}
-
-@end
-
-
-//
-// Serial port
-//
-
-@implementation SerialPortProxy
-
-- (instancetype) initWithSerialPort:(SerialPort *)port
-{
-    if (self = [super init]) {
-        wrapper = new SerialPortWrapper();
-        wrapper->port = port;
-    }
-    return self;
-}
-
-- (void) dump
-{
-    wrapper->port->dump();
-}
-- (SerialPortInfo) getInfo
-{
-    return wrapper->port->getInfo();
-}
-
-@end
-
-
-//
 // Mouse
 //
 
@@ -1016,6 +958,69 @@ struct SerialPortWrapper { SerialPort *port; };
 - (void) setAutofireFrequency:(float)value
 {
     wrapper->joystick->setAutofireFrequency(value);
+}
+
+@end
+
+
+//
+// Control port
+//
+
+@implementation ControlPortProxy
+
+@synthesize mouse;
+@synthesize joystick;
+
+- (instancetype) initWithControlPort:(ControlPort *)port
+{
+    if (self = [super init]) {
+        wrapper = new ControlPortWrapper();
+        wrapper->port = port;
+        joystick = [[JoystickProxy alloc] initWithJoystick:&port->joystick];
+        mouse = [[MouseProxy alloc] initWithMouse:&port->mouse];
+    }
+    return self;
+}
+
+- (void) dump
+{
+    wrapper->port->dump();
+}
+- (ControlPortInfo) getInfo
+{
+    return wrapper->port->getInfo();
+}
+- (void) connectDevice:(ControlPortDevice)value
+{
+    wrapper->port->connectDevice(value);
+}
+
+@end
+
+
+//
+// Serial port
+//
+
+@implementation SerialPortProxy
+
+- (instancetype) initWithSerialPort:(SerialPort *)port
+{
+    if (self = [super init]) {
+        wrapper = new SerialPortWrapper();
+        wrapper->port = port;
+    }
+    return self;
+}
+
+- (void) dump
+{
+    wrapper->port->dump();
+}
+- (SerialPortInfo) getInfo
+{
+    return wrapper->port->getInfo();
 }
 
 @end
@@ -1615,12 +1620,12 @@ struct SerialPortWrapper { SerialPort *port; };
 @synthesize df3;
 @synthesize diskController;
 @synthesize dmaDebugger;
-@synthesize joystick1;
-@synthesize joystick2;
+// @synthesize joystick1;
+// @synthesize joystick2;
 @synthesize keyboard;
 @synthesize mem;
-@synthesize mouse1;
-@synthesize mouse2;
+// @synthesize mouse1;
+// @synthesize mouse2;
 @synthesize paula;
 @synthesize serialPort;
 @synthesize screenRecorder;
@@ -1654,12 +1659,12 @@ struct SerialPortWrapper { SerialPort *port; };
     df3 = [[DriveProxy alloc] initWithDrive:&amiga->df3];
     diskController = [[DiskControllerProxy alloc] initWithDiskController:&amiga->paula.diskController];
     dmaDebugger = [[DmaDebuggerProxy alloc] initWithDmaDebugger:&amiga->agnus.dmaDebugger];
-    joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
-    joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
+    // joystick1 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick1];
+    // joystick2 = [[JoystickProxy alloc] initWithJoystick:&amiga->joystick2];
     keyboard = [[KeyboardProxy alloc] initWithKeyboard:&amiga->keyboard];
     mem = [[MemProxy alloc] initWithMemory:&amiga->mem];
-    mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
-    mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
+    // mouse1 = [[MouseProxy alloc] initWithMouse:&amiga->mouse1];
+    // mouse2 = [[MouseProxy alloc] initWithMouse:&amiga->mouse2];
     paula = [[PaulaProxy alloc] initWithPaula:&amiga->paula];
     screenRecorder = [[ScreenRecorderProxy alloc] initWithScreenRecorder:&amiga->denise.screenRecorder];
     serialPort = [[SerialPortProxy alloc] initWithSerialPort:&amiga->serialPort];

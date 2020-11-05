@@ -87,12 +87,12 @@ struct SerialPortWrapper;
     DriveProxy *df3;
     GuardsProxy *breakpoints;
     GuardsProxy *watchpoints;
-    JoystickProxy *joystick1;
-    JoystickProxy *joystick2;
+    // JoystickProxy *joystick1;
+    // JoystickProxy *joystick2;
     KeyboardProxy *keyboard;
     MemProxy *mem;
-    MouseProxy *mouse1;
-    MouseProxy *mouse2;
+    // MouseProxy *mouse1;
+    // MouseProxy *mouse2;
     PaulaProxy *paula;
     ScreenRecorderProxy *screenRecorder;
     SerialPortProxy *serialPort;
@@ -116,12 +116,12 @@ struct SerialPortWrapper;
 @property (readonly, strong) DriveProxy *df3;
 @property (readonly, strong) GuardsProxy *breakpoints;
 @property (readonly, strong) GuardsProxy *watchpoints;
-@property (readonly, strong) JoystickProxy *joystick1;
-@property (readonly, strong) JoystickProxy *joystick2;
+// @property (readonly, strong) JoystickProxy *joystick1;
+// @property (readonly, strong) JoystickProxy *joystick2;
 @property (readonly, strong) KeyboardProxy *keyboard;
 @property (readonly, strong) MemProxy *mem;
-@property (readonly, strong) MouseProxy *mouse1;
-@property (readonly, strong) MouseProxy *mouse2;
+// @property (readonly, strong) MouseProxy *mouse1;
+// @property (readonly, strong) MouseProxy *mouse2;
 @property (readonly, strong) PaulaProxy *paula;
 @property (readonly, strong) ScreenRecorderProxy *screenRecorder;
 @property (readonly, strong) SerialPortProxy *serialPort;
@@ -288,7 +288,6 @@ struct SerialPortWrapper;
 - (BOOL) isEncryptedRom:(NSURL *)url;
 - (BOOL) loadRomFromBuffer:(NSData *)buffer;
 - (BOOL) loadRomFromFile:(NSURL *)url;
-// - (BOOL) loadEncryptedRomFromFile:(NSURL *)url;
 - (BOOL) loadEncryptedRomFromFile:(NSURL *)url error:(DecryptionError *)error;
 - (u64) romFingerprint;
 - (RomIdentifier) romIdentifier;
@@ -453,8 +452,6 @@ struct SerialPortWrapper;
 @property (readonly) BOOL recording;
 @property (readonly) NSInteger recordCounter;
 
-// - (BOOL)setPath:(NSString *)path;
-
 - (BOOL) startRecording:(NSRect)rect
                 bitRate:(NSInteger)rate
                 aspectX:(NSInteger)aspectX
@@ -505,7 +502,13 @@ struct SerialPortWrapper;
 @interface ControlPortProxy : NSObject {
     
     struct ControlPortWrapper *wrapper;
+    
+    MouseProxy *mouse;
+    JoystickProxy *joystick;
 }
+
+@property (readonly, strong) MouseProxy *mouse;
+@property (readonly, strong) JoystickProxy *joystick;
 
 - (void) dump;
 - (ControlPortInfo) getInfo;

@@ -9,12 +9,13 @@
 
 #include "Amiga.h"
 
-ControlPort::ControlPort(PortNr nr, Amiga& ref) : AmigaComponent(ref)
+ControlPort::ControlPort(PortNr portNr, Amiga& ref) : nr(portNr), AmigaComponent(ref)
 {
     assert(isPortNr(nr));
     
-    this->nr = nr;
     setDescription(nr == PORT_1 ? "ControlPort1" : "ControlPort2");
+
+    subComponents = vector<HardwareComponent *> { &mouse, &joystick };
 }
 
 void
@@ -60,8 +61,8 @@ ControlPort::joydat()
 
     // Update the mouse counters first if a mouse is connected
     if (device == CPD_MOUSE) {
-        mouseCounterX += nr == 1 ? mouse1.getDeltaX() : mouse2.getDeltaX();
-        mouseCounterY += nr == 1 ? mouse1.getDeltaY() : mouse2.getDeltaY();
+        mouseCounterX += mouse.getDeltaX();
+        mouseCounterY += mouse.getDeltaY();
     }
     
     // Compose the register bits
@@ -72,7 +73,7 @@ ControlPort::joydat()
         ______xx______xx = HI_LO(mouseCounterY & 0x03, mouseCounterX & 0x03);
 
     if (device == CPD_JOYSTICK)
-        ______xx______xx = nr == 1 ? joystick1.joydat() : joystick2.joydat();
+        ______xx______xx = joystick.joydat();
 
     return xxxxxx__xxxxxx__ | ______xx______xx;
 }
@@ -91,7 +92,7 @@ void
 ControlPort::changePotgo(u16 &potgo)
 {
     if (device == CPD_MOUSE) {
-        nr == 1 ? mouse1.changePotgo(potgo) : mouse2.changePotgo(potgo);
+        mouse.changePotgo(potgo);
     }
 }
 
@@ -99,11 +100,11 @@ void
 ControlPort::changePra(u8 &pra)
 {
     if (device == CPD_MOUSE) {
-        nr == 1 ? mouse1.changePra(pra) : mouse2.changePra(pra);
+        mouse.changePra(pra);
         return;
     }
     if (device == CPD_JOYSTICK) {
-        nr == 1 ? joystick1.changePra(pra) : joystick2.changePra(pra);
+        joystick.changePra(pra);
         return;
     }
 }

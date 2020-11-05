@@ -11,6 +11,8 @@
 #define _CONTROL_PORT_H
 
 #include "AmigaComponent.h"
+#include "Mouse.h"
+#include "Joystick.h"
 
 class ControlPort : public AmigaComponent {
 
@@ -19,7 +21,7 @@ class ControlPort : public AmigaComponent {
 
     // Result of the latest inspection
     ControlPortInfo info;
-
+    
     // Connected device
     ControlPortDevice device = CPD_NONE;
     
@@ -30,6 +32,15 @@ class ControlPort : public AmigaComponent {
     // Resistances on the potentiometer lines (specified as a delta charge)
     double chargeDX;
     double chargeDY;
+
+    //
+    // Input sources
+    //
+    
+public:
+    
+    Mouse mouse = Mouse(nr, amiga);
+    Joystick joystick = Joystick(nr, amiga);
 
 
     //

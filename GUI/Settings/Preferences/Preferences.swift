@@ -69,24 +69,24 @@ class Preferences {
     var autofire = DevicesDefaults.std.autofire {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.autofire = autofire
-                amiga.joystick2.autofire = autofire
+                amiga.controlPort1.joystick.autofire = autofire
+                amiga.controlPort2.joystick.autofire = autofire
             }
         }
     }
     var autofireBullets = DevicesDefaults.std.autofireBullets {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.autofireBullets = autofireBullets
-                amiga.joystick2.autofireBullets = autofireBullets
+                amiga.controlPort1.joystick.autofireBullets = autofireBullets
+                amiga.controlPort2.joystick.autofireBullets = autofireBullets
             }
         }
     }
     var autofireFrequency = DevicesDefaults.std.autofireFrequency {
         didSet {
             for amiga in myAppDelegate.proxies {
-                amiga.joystick1.autofireFrequency = autofireFrequency
-                amiga.joystick2.autofireFrequency = autofireFrequency
+                amiga.controlPort1.joystick.autofireFrequency = autofireFrequency
+                amiga.controlPort2.joystick.autofireFrequency = autofireFrequency
             }
         }
     }

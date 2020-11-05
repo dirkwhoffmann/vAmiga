@@ -1007,8 +1007,8 @@ Agnus::vsyncHandler()
     // Let other subcomponents do their own VSYNC stuff
     copper.vsyncHandler();
     denise.vsyncHandler();
-    joystick1.execute();
-    joystick2.execute();
+    controlPort1.joystick.execute();
+    controlPort2.joystick.execute();
 
     // Update statistics
     updateStats();

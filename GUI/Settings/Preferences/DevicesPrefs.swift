@@ -11,8 +11,8 @@ extension PreferencesController {
     
     func refreshDevicesTab() {
 
-        let joystick1  = amiga.joystick1!
-        let joystick2  = amiga.joystick2!
+        let joystick1 = amiga.controlPort1.joystick!
+        let joystick2 = amiga.controlPort2.joystick!
 
         func refreshKey(map: Int, dir: GamePadAction, button: NSButton, txt: NSTextField) {
 
