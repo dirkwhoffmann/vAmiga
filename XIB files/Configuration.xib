@@ -50,17 +50,8 @@
                 <outlet property="hwBankMap" destination="1GK-uL-Jcd" id="Q7K-Cf-0C0"/>
                 <outlet property="hwChipRamPopup" destination="kPl-Wj-a9T" id="RZv-ib-fCE"/>
                 <outlet property="hwDeniseRevisionPopup" destination="M5c-fi-zMW" id="fS7-GD-0aF"/>
-                <outlet property="hwDf0Type" destination="6be-dT-F0g" id="xOn-Ik-VvV"/>
-                <outlet property="hwDf1Connect" destination="IxQ-Lg-DaD" id="Rcf-xZ-sSi"/>
-                <outlet property="hwDf1Type" destination="fzi-c6-z3g" id="rlK-ba-uW0"/>
-                <outlet property="hwDf2Connect" destination="Si5-5h-5wd" id="wNT-pw-Kcq"/>
-                <outlet property="hwDf2Type" destination="Xv5-mL-jH9" id="bvs-s9-Q6C"/>
-                <outlet property="hwDf3Connect" destination="iRW-DK-apM" id="8g0-G4-lft"/>
-                <outlet property="hwDf3Type" destination="QB1-YY-C4v" id="sCa-Q5-Vwc"/>
                 <outlet property="hwFactorySettingsPopup" destination="uR2-36-afT" id="Grf-w6-zUu"/>
                 <outlet property="hwFastRamPopup" destination="iWk-tj-yn8" id="N1b-mT-Uz5"/>
-                <outlet property="hwGameDevice1" destination="2x8-wH-ffw" id="dfW-gb-x8X"/>
-                <outlet property="hwGameDevice2" destination="ghO-Tp-9AX" id="2UC-sN-iSo"/>
                 <outlet property="hwLockImage" destination="nxr-43-cIJ" id="0Zz-Tf-muE"/>
                 <outlet property="hwLockSubText" destination="aVX-Vl-HNT" id="gPr-Mw-Ujx"/>
                 <outlet property="hwLockText" destination="M7q-Kn-Sca" id="GR6-SH-pNA"/>
@@ -68,15 +59,25 @@
                 <outlet property="hwPowerButton" destination="A9W-ux-mNv" id="b37-Qm-5eT"/>
                 <outlet property="hwRamInitPattern" destination="fDY-yo-4SA" id="0A4-ap-3dD"/>
                 <outlet property="hwRealTimeClock" destination="3nw-g4-iBc" id="lAh-yb-bC7"/>
-                <outlet property="hwSerialDevice" destination="mIs-oj-bJf" id="T5v-aA-n7y"/>
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
                 <outlet property="hwUnmappingType" destination="I6a-cE-hWP" id="bc6-Ed-kwj"/>
                 <outlet property="memSlowRamMirror" destination="H9L-Wc-Fqn" id="hHk-JS-HW6"/>
+                <outlet property="perDf0Type" destination="X5q-Hi-a2g" id="Qog-PT-ROB"/>
+                <outlet property="perDf1Connect" destination="tD2-QB-Kdc" id="pL4-wp-Pb4"/>
+                <outlet property="perDf1Type" destination="TI9-qi-cME" id="28n-hS-72b"/>
+                <outlet property="perDf2Connect" destination="n4C-Su-UQM" id="RVJ-F6-Ulo"/>
+                <outlet property="perDf2Type" destination="V0u-IE-VRg" id="mZW-XU-dfg"/>
+                <outlet property="perDf3Connect" destination="5dd-PL-lVh" id="Bju-KA-Dlj"/>
+                <outlet property="perDf3Type" destination="S32-51-0lU" id="4bb-KR-fH7"/>
+                <outlet property="perFactorySettingsPopup" destination="G0k-PK-03W" id="4OD-Nf-i9i"/>
+                <outlet property="perGameDevice1" destination="O2O-2C-ZMa" id="VTz-nM-x7G"/>
+                <outlet property="perGameDevice2" destination="TAX-DK-yR4" id="h3h-zN-6fs"/>
                 <outlet property="perLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
                 <outlet property="perLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
                 <outlet property="perLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
                 <outlet property="perOKButton" destination="070-Zr-CPb" id="izM-qM-PKn"/>
                 <outlet property="perPowerButton" destination="jt0-gY-j6u" id="MZ6-eL-pRY"/>
+                <outlet property="perSerialDevice" destination="hb9-76-uXV" id="zhS-D1-ziQ"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
@@ -660,129 +661,6 @@ DQ
                                                 <action selector="hwChipRamAction:" target="-2" id="S0O-iM-49g"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6be-dT-F0g">
-                                            <rect key="frame" x="94" y="244" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="81a-Pc-Ymw" id="PkL-CP-iOE">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="YGT-UZ-Um2">
-                                                    <items>
-                                                        <menuItem title="3.5&quot; DD" state="on" id="81a-Pc-Ymw">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwDriveTypeAction:" target="-2" id="p20-Ji-q6B"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="fzi-c6-z3g">
-                                            <rect key="frame" x="94" y="214" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Vpf-Pw-FVz" id="HOp-jN-vNn">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="Em5-va-3xC">
-                                                    <items>
-                                                        <menuItem title="3.5&quot; DD" state="on" id="Vpf-Pw-FVz">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="3.5&quot; HD" tag="1" id="gDc-D5-Meh">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="SRk-xi-Daa">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwDriveTypeAction:" target="-2" id="nh6-NM-abw"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="IxQ-Lg-DaD">
-                                            <rect key="frame" x="39" y="219" width="49" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="ppr-l1-d8w">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwDriveConnectAction:" target="-2" id="R7E-VI-0bc"/>
-                                            </connections>
-                                        </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Xv5-mL-jH9">
-                                            <rect key="frame" x="94" y="184" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="bjH-wH-qKY" id="1DQ-jh-Aow">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="aM1-Cn-P2d">
-                                                    <items>
-                                                        <menuItem title="3.5&quot; DD" state="on" id="bjH-wH-qKY">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="3.5&quot; HD" tag="1" id="zaC-uJ-E64" userLabel="3.5&quot; HD">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="5cM-1Z-ZpG">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwDriveTypeAction:" target="-2" id="9xT-Ke-2HO"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="Si5-5h-5wd">
-                                            <rect key="frame" x="39" y="189" width="51" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="7m9-cb-HJm">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwDriveConnectAction:" target="-2" id="8tT-g4-u4z"/>
-                                            </connections>
-                                        </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="QB1-YY-C4v">
-                                            <rect key="frame" x="94" y="154" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="0W9-3L-14L" id="OIk-D7-aiR">
-                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="5Zh-hD-M9P">
-                                                    <items>
-                                                        <menuItem title="3.5&quot; DD" state="on" id="0W9-3L-14L">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="3.5&quot; HD" tag="1" id="C3O-1V-XsS">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="3ky-Vx-pCg">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwDriveTypeAction:" target="-2" id="6BU-CG-V3R"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="iRW-DK-apM">
-                                            <rect key="frame" x="39" y="159" width="51" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="DF3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="3nz-L5-9pJ">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="hwDriveConnectAction:" target="-2" id="HBT-z1-JfH"/>
-                                            </connections>
-                                        </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M7q-Kn-Sca">
                                             <rect key="frame" x="140" y="98" width="406" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -812,24 +690,6 @@ DQ
                                                 <action selector="unlockAction:" target="-2" id="NtB-eb-Tqa"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5fK-Wo-jr1">
-                                            <rect key="frame" x="27" y="247" width="61" height="19"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="DF0:" id="KyX-2c-a6e">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lXx-jM-b9h">
-                                            <rect key="frame" x="6" y="277" width="114" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Floppy Drives" id="Ysc-fj-gNU">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HaP-3N-GOn">
                                             <rect key="frame" x="16" y="334" width="75" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -888,129 +748,6 @@ DQ
                                                 <action selector="powerAction:" target="-2" id="SCy-yG-ptN"/>
                                             </connections>
                                         </button>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iYI-jP-YaF">
-                                            <rect key="frame" x="294" y="172" width="114" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Ports" id="VuU-qH-aeD">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mIs-oj-bJf">
-                                            <rect key="frame" x="412" y="120" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="hwG-B8-9bP" id="34p-Y7-TMz">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="vdg-dz-irq">
-                                                    <items>
-                                                        <menuItem title="No device" state="on" image="devNoneTemplate" id="hwG-B8-9bP">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Loopback cable" image="devLoopbackTemplate" tag="1" id="615-u3-OFN">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwSerialDeviceAction:" target="-2" id="Uqq-ag-OLx"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="YzV-ZO-Y0q">
-                                            <rect key="frame" x="366" y="127" width="42" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Serial:" id="zoI-n3-oxv">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="2x8-wH-ffw">
-                                            <rect key="frame" x="412" y="179" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="LRW-mw-96o" id="cFE-yj-hlJ">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="Twx-Bf-T5w">
-                                                    <items>
-                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="LRW-mw-96o">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Mouse" image="devMouseTemplate" id="saA-RB-kKV">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="nbM-KT-7ss">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="Mtw-em-2mr">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="USB Device" image="devGamepad1Template" tag="3" id="OVK-HJ-QmL">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="USB Device" image="devGamepad2Template" tag="4" id="5zr-Fs-pnK">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwGameDeviceAction:" target="-2" id="KID-tD-b9q"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ieC-Of-W9M">
-                                            <rect key="frame" x="313" y="185" width="95" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 1:" id="bte-a8-06Q">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AtN-fc-Jrg">
-                                            <rect key="frame" x="313" y="153" width="95" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 2:" id="hkE-74-Unt">
-                                                <font key="font" metaFont="system"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="ghO-Tp-9AX">
-                                            <rect key="frame" x="412" y="150" width="182" height="26"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="trailing" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Ajv-a7-SDD" id="mKX-HL-yoM">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" title="OtherViews" id="X3b-zg-7ej">
-                                                    <items>
-                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="Ajv-a7-SDD">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Mouse" image="devMouseTemplate" id="JPN-e3-rl8">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="POT-6v-Mrh">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="aO2-K1-t8i">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="ZRE-wm-66r">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="OBj-dd-n3Y">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="hwGameDeviceAction:" target="-2" id="6cC-of-MEK"/>
-                                            </connections>
-                                        </popUpButton>
                                         <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I6a-cE-hWP">
                                             <rect key="frame" x="412" y="244" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1137,7 +874,7 @@ DQ
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
                                             <connections>
-                                                <action selector="memDefaultsAction:" target="-2" id="xyO-Tu-ucm"/>
+                                                <action selector="perDefaultsAction:" target="-2" id="xyO-Tu-ucm"/>
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jt0-gY-j6u">
@@ -1169,7 +906,7 @@ DQ
                                                 </menu>
                                             </popUpButtonCell>
                                             <connections>
-                                                <action selector="memPresetAction:" target="-2" id="hn5-Ab-aL8"/>
+                                                <action selector="perPresetAction:" target="-2" id="hn5-Ab-aL8"/>
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cEO-mA-0bd">
@@ -1199,6 +936,270 @@ DQ
                                                 <font key="font" metaFont="message" size="11"/>
                                                 <color key="textColor" name="secondaryLabelColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X5q-Hi-a2g">
+                                            <rect key="frame" x="103" y="353" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Ef9-8x-p7X" id="0r9-Uk-hMp">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="J9m-bR-FxS">
+                                                    <items>
+                                                        <menuItem title="3.5&quot; DD" state="on" id="Ef9-8x-p7X">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perDriveTypeAction:" target="-2" id="L5M-5b-LnE"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="TI9-qi-cME">
+                                            <rect key="frame" x="103" y="323" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="CMh-vG-3cz" id="aSu-Ar-nTk">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="NMk-pE-K0e">
+                                                    <items>
+                                                        <menuItem title="3.5&quot; DD" state="on" id="CMh-vG-3cz">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="mQ3-EE-epx">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="K9F-AI-2l8">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perDriveTypeAction:" target="-2" id="UUg-YV-atk"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="tD2-QB-Kdc">
+                                            <rect key="frame" x="48" y="328" width="49" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="DF1:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="cQH-Uk-hNH">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="perDriveConnectAction:" target="-2" id="L6t-CS-TtB"/>
+                                            </connections>
+                                        </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="V0u-IE-VRg">
+                                            <rect key="frame" x="103" y="293" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="yVH-t2-BX9" id="cTU-9a-xU9">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="gf8-f6-DaN">
+                                                    <items>
+                                                        <menuItem title="3.5&quot; DD" state="on" id="yVH-t2-BX9">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="GT9-5G-y4f" userLabel="3.5&quot; HD">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="w9z-f9-vmk">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perDriveTypeAction:" target="-2" id="1YK-9q-f7Q"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="n4C-Su-UQM">
+                                            <rect key="frame" x="48" y="298" width="51" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="DF2:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="lJN-DR-Wt6">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="perDriveConnectAction:" target="-2" id="OhV-9a-Vf0"/>
+                                            </connections>
+                                        </button>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="S32-51-0lU">
+                                            <rect key="frame" x="103" y="263" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="3.5&quot; DD" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="qhQ-Cc-DkS" id="zBN-vm-21y">
+                                                <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="Pim-wa-hw3">
+                                                    <items>
+                                                        <menuItem title="3.5&quot; DD" state="on" id="qhQ-Cc-DkS">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="3.5&quot; HD" tag="1" id="L13-gX-2xf">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="5.25&quot; SD" tag="2" hidden="YES" id="xTR-cI-U3p">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perDriveTypeAction:" target="-2" id="fmJ-cd-NBU"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <button fixedFrame="YES" tag="3" translatesAutoresizingMaskIntoConstraints="NO" id="5dd-PL-lVh">
+                                            <rect key="frame" x="48" y="268" width="51" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="DF3:" bezelStyle="regularSquare" imagePosition="left" alignment="left" state="on" inset="2" id="EF8-Id-xLv">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="perDriveConnectAction:" target="-2" id="wq7-Jg-xXb"/>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="044-OJ-hj0">
+                                            <rect key="frame" x="36" y="356" width="61" height="19"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="DF0:" id="94m-TY-X3v">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fIw-k0-Xjf">
+                                            <rect key="frame" x="15" y="386" width="114" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Floppy Drives" id="ISa-WB-Eqa">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hb9-76-uXV">
+                                            <rect key="frame" x="409" y="293" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Vq0-6e-aaE" id="hgd-MD-5Xr">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="Kbd-Qb-Nyr">
+                                                    <items>
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" id="Vq0-6e-aaE">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Loopback cable" image="devLoopbackTemplate" tag="1" id="LEF-Dx-kUM">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perSerialDeviceAction:" target="-2" id="Vqr-mz-Obi"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uKW-7e-fz8">
+                                            <rect key="frame" x="363" y="298" width="42" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Serial:" id="KFD-kN-LG4">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="1" translatesAutoresizingMaskIntoConstraints="NO" id="O2O-2C-ZMa">
+                                            <rect key="frame" x="409" y="353" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="Ofd-Kt-muY" id="Daj-hR-zEw">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="BI7-tW-AxF">
+                                                    <items>
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="Ofd-Kt-muY">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Mouse" image="devMouseTemplate" id="bfT-cw-rai">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="yQZ-Mi-9qF">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="q1n-uy-S88">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device" image="devGamepad1Template" tag="3" id="SSd-tY-Yc0">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device" image="devGamepad2Template" tag="4" id="Q9K-Fv-psl">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perGameDeviceAction:" target="-2" id="Yyv-OE-fgb"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nyi-RK-Yy2">
+                                            <rect key="frame" x="310" y="356" width="95" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 1:" id="aTT-Yz-AcB">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FuZ-uy-DG1">
+                                            <rect key="frame" x="310" y="328" width="95" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Game 2:" id="Tpn-XN-NJA">
+                                                <font key="font" metaFont="system"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" tag="2" translatesAutoresizingMaskIntoConstraints="NO" id="TAX-DK-yR4">
+                                            <rect key="frame" x="409" y="323" width="182" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                                            <popUpButtonCell key="cell" type="push" title="No device" bezelStyle="rounded" imagePosition="right" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" tag="-1" imageScaling="proportionallyUpOrDown" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="PNP-ut-z5R" id="XiY-0N-RIF">
+                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
+                                                <font key="font" metaFont="menu"/>
+                                                <menu key="menu" title="OtherViews" id="nAC-fR-IU9">
+                                                    <items>
+                                                        <menuItem title="No device" state="on" image="devNoneTemplate" tag="-1" id="PNP-ut-z5R">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Mouse" image="devMouseTemplate" id="tO7-5U-FdK">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 1" image="devKeys1Template" tag="1" id="UbC-b3-wvi">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="Joystick Keyset 2" image="devKeys2Template" tag="2" id="dHL-lW-xmm">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 1" image="devGamepad1Template" tag="3" id="31d-fl-Cxd">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                        <menuItem title="USB Device 2" image="devGamepad2Template" tag="4" id="lqy-6f-2Mr">
+                                                            <modifierMask key="keyEquivalentModifierMask"/>
+                                                        </menuItem>
+                                                    </items>
+                                                </menu>
+                                            </popUpButtonCell>
+                                            <connections>
+                                                <action selector="perGameDeviceAction:" target="-2" id="C35-GE-fwm"/>
+                                            </connections>
+                                        </popUpButton>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OZj-uA-CV9">
+                                            <rect key="frame" x="312" y="384" width="114" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Ports" id="p5f-uj-P4v">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
                                     </subviews>

@@ -26,22 +26,6 @@ extension ConfigurationController {
         hwUnmappingType.selectItem(withTag: config.unmappingType)
         hwRamInitPattern.selectItem(withTag: config.ramInitPattern)
 
-        // Drive
-        hwDf1Connect.state = config.df1Connected ? .on : .off
-        hwDf2Connect.state = config.df2Connected ? .on : .off
-        hwDf3Connect.state = config.df3Connected ? .on : .off
-        hwDf0Type.selectItem(withTag: config.df0Type)
-        hwDf1Type.selectItem(withTag: config.df1Type)
-        hwDf2Type.selectItem(withTag: config.df2Type)
-        hwDf3Type.selectItem(withTag: config.df3Type)
-
-        // Ports
-        parent.gamePadManager.refresh(popup: hwGameDevice1, hide: true)
-        parent.gamePadManager.refresh(popup: hwGameDevice2, hide: true)
-        hwGameDevice1.selectItem(withTag: config.gameDevice1)
-        hwGameDevice2.selectItem(withTag: config.gameDevice2)
-        hwSerialDevice.selectItem(withTag: Int(config.serialDevice))
-
         // Lock controls if emulator is powered on
         hwAgnusRevisionPopup.isEnabled = poweredOff
         hwDeniseRevisionPopup.isEnabled = poweredOff
@@ -49,13 +33,6 @@ extension ConfigurationController {
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
-        hwDf1Connect.isEnabled = poweredOff
-        hwDf2Connect.isEnabled = poweredOff && hwDf1Connect.state == .on
-        hwDf3Connect.isEnabled = poweredOff && hwDf2Connect.state == .on
-        hwDf0Type.isEnabled = poweredOff
-        hwDf1Type.isEnabled = poweredOff && config.df1Connected
-        hwDf2Type.isEnabled = poweredOff && config.df2Connected
-        hwDf3Type.isEnabled = poweredOff && config.df3Connected
         hwFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -126,53 +103,6 @@ extension ConfigurationController {
     @IBAction func hwRamInitPatternAction(_ sender: NSPopUpButton!) {
 
         config.ramInitPattern = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func hwDriveConnectAction(_ sender: NSButton!) {
-        
-        switch sender.tag {
-        case 0: config.df0Connected = sender.state == .on
-        case 1: config.df1Connected = sender.state == .on
-        case 2: config.df2Connected = sender.state == .on
-        case 3: config.df3Connected = sender.state == .on
-        default: fatalError()
-        }
-        
-        // Disconnect df(n+1) if dfn is disconnected
-        if !config.df1Connected { config.df2Connected = false }
-        if !config.df2Connected { config.df3Connected = false }
-
-        refresh()
-    }
-    
-    @IBAction func hwDriveTypeAction(_ sender: NSPopUpButton!) {
-        
-        switch sender.tag {
-        case 0: config.df0Type = sender.selectedTag()
-        case 1: config.df1Type = sender.selectedTag()
-        case 2: config.df2Type = sender.selectedTag()
-        case 3: config.df3Type = sender.selectedTag()
-        default: fatalError()
-        }
-        refresh()
-    }
-
-    @IBAction func hwGameDeviceAction(_ sender: NSPopUpButton!) {
-
-        track("port: \(sender.tag) device: \(sender.selectedTag())")
-        
-        switch sender.tag {
-        case 1: config.gameDevice1 = sender.selectedTag()
-        case 2: config.gameDevice2 = sender.selectedTag()
-        default: fatalError()
-        }
-        refresh()
-    }
-
-    @IBAction func hwSerialDeviceAction(_ sender: NSPopUpButton!) {
-
-        config.serialDevice = sender.selectedTag()
         refresh()
     }
 

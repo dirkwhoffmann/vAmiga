@@ -62,20 +62,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var hwUnmappingType: NSPopUpButton!
     @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
 
-    // Drive
-    @IBOutlet weak var hwDf0Type: NSPopUpButton!
-    @IBOutlet weak var hwDf1Connect: NSButton!
-    @IBOutlet weak var hwDf1Type: NSPopUpButton!
-    @IBOutlet weak var hwDf2Connect: NSButton!
-    @IBOutlet weak var hwDf2Type: NSPopUpButton!
-    @IBOutlet weak var hwDf3Connect: NSButton!
-    @IBOutlet weak var hwDf3Type: NSPopUpButton!
-
-    // Ports
-    @IBOutlet weak var hwGameDevice1: NSPopUpButton!
-    @IBOutlet weak var hwGameDevice2: NSPopUpButton!
-    @IBOutlet weak var hwSerialDevice: NSPopUpButton!
-
     // Lock
     @IBOutlet weak var hwLockImage: NSButton!
     @IBOutlet weak var hwLockText: NSTextField!
@@ -93,12 +79,27 @@ class ConfigurationController: DialogController {
     // Chipset features
     @IBOutlet weak var memSlowRamMirror: NSButton!
 
+    // Drive
+    @IBOutlet weak var perDf0Type: NSPopUpButton!
+    @IBOutlet weak var perDf1Connect: NSButton!
+    @IBOutlet weak var perDf1Type: NSPopUpButton!
+    @IBOutlet weak var perDf2Connect: NSButton!
+    @IBOutlet weak var perDf2Type: NSPopUpButton!
+    @IBOutlet weak var perDf3Connect: NSButton!
+    @IBOutlet weak var perDf3Type: NSPopUpButton!
+
+    // Ports
+    @IBOutlet weak var perGameDevice1: NSPopUpButton!
+    @IBOutlet weak var perGameDevice2: NSPopUpButton!
+    @IBOutlet weak var perSerialDevice: NSPopUpButton!
+
     // Lock
     @IBOutlet weak var perLockImage: NSButton!
     @IBOutlet weak var perLockText: NSTextField!
     @IBOutlet weak var perLockSubText: NSTextField!
     
     // Buttons
+    @IBOutlet weak var perFactorySettingsPopup: NSPopUpButton!
     @IBOutlet weak var perOKButton: NSButton!
     @IBOutlet weak var perPowerButton: NSButton!
 
