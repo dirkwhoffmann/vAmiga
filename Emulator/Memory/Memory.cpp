@@ -753,7 +753,6 @@ void
 Memory::updateAgnusMemSrcTable()
 {
     int banks = config.chipSize / 0x10000;
-    assert(banks == 0 || banks == 8 || banks == 16 || banks == 32);
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++) {

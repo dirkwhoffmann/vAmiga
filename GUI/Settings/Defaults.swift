@@ -58,7 +58,8 @@ extension UserDefaults {
         
         registerGeneralUserDefaults()
         registerDevicesUserDefaults()
-
+        registerCaptureUserDefaults()
+        
         registerRomUserDefaults()
         registerHardwareUserDefaults()
         registerPeripheralsUserDefaults()
@@ -81,8 +82,8 @@ extension MyController {
         pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
-        config.loadPeripheralsUserDefaults()
         config.loadHardwareUserDefaults()
+        config.loadPeripheralsUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
         config.loadVideoUserDefaults()
@@ -136,15 +137,13 @@ struct Keys {
     // Fullscreen
     static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
     static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
-
-    // User dialogs
-    static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
     
     // Warp mode
     static let warpMode               = "VAMIGA_GEN_WarpMode"
 
     // Miscellaneous
     static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
+    static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
 }
 
 struct GeneralDefaults {
@@ -257,11 +256,13 @@ extension UserDefaults {
 
 extension Keys {
             
-    // Joysticks
+    // Emulation keys
     static let joyKeyMap1            = "VAMIGA_DEV_JoyKeyMap1"
     static let joyKeyMap2            = "VAMIGA_DEV_JoyKeyMap2"
     static let mouseKeyMap           = "VAMIGA_DEV_MouseKeyMap"
     static let disconnectJoyKeys     = "VAMIGA_DEV_DisconnectKeys"
+
+    // Joysticks
     static let autofire              = "VAMIGA_DEV_Autofire"
     static let autofireBullets       = "VAMIGA_DEV_AutofireBullets"
     static let autofireFrequency     = "VAMIGA_DEV_AutofireFrequency"
@@ -379,8 +380,8 @@ extension UserDefaults {
         let keys = [ Keys.joyKeyMap1,
                      Keys.joyKeyMap2,
                      Keys.mouseKeyMap,
-                     
                      Keys.disconnectJoyKeys,
+                     
                      Keys.autofire,
                      Keys.autofireBullets,
                      Keys.autofireFrequency,
@@ -590,37 +591,40 @@ extension Keys {
         
     // Chipset
     static let agnusRev           = "VAMIGA_HW_AgnusRev"
+    static let slowRamMirror      = "VAMIGA_HW_SlowRamMirror"
     static let deniseRev          = "VAMIGA_HW_DeniseRev"
+    static let borderBlank        = "VAMIGA_HW_BorderBlank"
+    static let ciaRev             = "VAMIGA_HW_CiaRev"
+    static let todBug             = "VAMIGA_COM_TodBug"
     static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
-
-    // Chipset features
-    static let slowRamMirror     = "VAMIGA_HW_SlowRamMirror"
 
     // Memory
     static let chipRam            = "VAMIGA_HW_ChipRam"
     static let slowRam            = "VAMIGA_HW_SlowRam"
     static let fastRam            = "VAMIGA_HW_FastRam"
-    
+    static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
+
     static let bankMap            = "VAMIGA_HW_BankMap"
     static let unmappingType      = "VAMIGA_HW_UnmappingType"
-    static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
 }
 
 struct HardwareDefaults {
     
     var agnusRev: AgnusRevision
+    let slowRamMirror: Bool
     var deniseRev: DeniseRevision
+    var borderBlank: Bool
+    var ciaRev: CIARevision
+    var todBug: Bool
     var realTimeClock: RTCModel
     
-    let slowRamMirror: Bool
-
     var chipRam: Int
     var slowRam: Int
     var fastRam: Int
-    
+    var ramInitPattern: RamInitPattern
+
     var bankMap: BankMap
     var unmappingType: UnmappingType
-    var ramInitPattern: RamInitPattern
     
     //
     // Schemes
@@ -629,52 +633,58 @@ struct HardwareDefaults {
     static let A500 = HardwareDefaults.init(
         
         agnusRev: .AGNUS_ECS_1MB,
-        deniseRev: .DENISE_OCS,
-        realTimeClock: .OKI,
-
         slowRamMirror: true,
+        deniseRev: .DENISE_OCS,
+        borderBlank: false,
+        ciaRev: ._8520_DIP,
+        todBug: true,
+        realTimeClock: .OKI,
 
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
+        ramInitPattern: .INIT_ALL_ZEROES,
 
         bankMap: .BMAP_A500,
-        unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES
+        unmappingType: .UNMAPPED_FLOATING
     )
     
     static let A1000 = HardwareDefaults.init(
         
         agnusRev: .AGNUS_OCS,
+        slowRamMirror: true,
         deniseRev: .DENISE_OCS,
+        borderBlank: false,
+        ciaRev: ._8520_DIP,
+        todBug: true,
         realTimeClock: .NONE,
         
-        slowRamMirror: true,
-
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
-        
+        ramInitPattern: .INIT_ALL_ZEROES,
+
         bankMap: .BMAP_A1000,
-        unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES
+        unmappingType: .UNMAPPED_FLOATING
     )
     
     static let A2000 = HardwareDefaults.init(
         
         agnusRev: .AGNUS_ECS_2MB,
+        slowRamMirror: true,
         deniseRev: .DENISE_OCS,
+        borderBlank: false,
+        ciaRev: ._8520_DIP,
+        todBug: true,
         realTimeClock: .OKI,
         
-        slowRamMirror: true,
-
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        
+        ramInitPattern: .INIT_ALL_ZEROES,
+
         bankMap: .BMAP_A2000B,
-        unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES
+        unmappingType: .UNMAPPED_FLOATING
     )
 }
 
@@ -686,18 +696,20 @@ extension UserDefaults {
         let dictionary: [String: Any] = [
             
             Keys.agnusRev: defaults.agnusRev.rawValue,
+            Keys.slowRamMirror: defaults.slowRamMirror,
             Keys.deniseRev: defaults.deniseRev.rawValue,
+            Keys.borderBlank: defaults.borderBlank,
+            Keys.ciaRev: defaults.ciaRev.rawValue,
+            Keys.todBug: defaults.todBug,
             Keys.realTimeClock: defaults.realTimeClock.rawValue,
 
             Keys.chipRam: defaults.chipRam,
             Keys.slowRam: defaults.slowRam,
             Keys.fastRam: defaults.fastRam,
-            
-            Keys.bankMap: defaults.bankMap.rawValue,
-            Keys.unmappingType: defaults.unmappingType.rawValue,
             Keys.ramInitPattern: defaults.ramInitPattern.rawValue,
-            
-            Keys.slowRamMirror: defaults.slowRamMirror
+
+            Keys.bankMap: defaults.bankMap.rawValue,
+            Keys.unmappingType: defaults.unmappingType.rawValue
         ]
         
         let userDefaults = UserDefaults.standard
@@ -709,16 +721,20 @@ extension UserDefaults {
         let defaults = UserDefaults.standard
 
         let keys = [Keys.agnusRev,
+                    Keys.slowRamMirror,
                     Keys.deniseRev,
+                    Keys.borderBlank,
+                    Keys.ciaRev,
+                    Keys.todBug,
                     Keys.realTimeClock,
 
                     Keys.chipRam,
                     Keys.slowRam,
                     Keys.fastRam,
-                    
+                    Keys.ramInitPattern,
+
                     Keys.bankMap,
-                    Keys.unmappingType,
-                    Keys.ramInitPattern
+                    Keys.unmappingType
                 ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -733,12 +749,12 @@ extension Keys {
  
     // Drives
     static let df0Connect         = "VAMIGA_PER_DF0Connect"
-    static let df0Type            = "VAMIGA_PER_DF0Type"
     static let df1Connect         = "VAMIGA_PER_DF1Connect"
-    static let df1Type            = "VAMIGA_PER_DF1Type"
     static let df2Connect         = "VAMIGA_PER_DF2Connect"
-    static let df2Type            = "VAMIGA_PER_DF2Type"
     static let df3Connect         = "VAMIGA_PER_DF3Connect"
+    static let df0Type            = "VAMIGA_PER_DF0Type"
+    static let df1Type            = "VAMIGA_PER_DF1Type"
+    static let df2Type            = "VAMIGA_PER_DF2Type"
     static let df3Type            = "VAMIGA_PER_DF3Type"
 
     // Ports
@@ -779,12 +795,12 @@ extension UserDefaults {
         let dictionary: [String: Any] = [
             
             Keys.df0Connect: defaults.driveConnect[0],
-            Keys.df0Type: defaults.driveType[0].rawValue,
             Keys.df1Connect: defaults.driveConnect[1],
-            Keys.df1Type: defaults.driveType[1].rawValue,
             Keys.df2Connect: defaults.driveConnect[2],
-            Keys.df2Type: defaults.driveType[2].rawValue,
             Keys.df3Connect: defaults.driveConnect[3],
+            Keys.df0Type: defaults.driveType[0].rawValue,
+            Keys.df1Type: defaults.driveType[1].rawValue,
+            Keys.df2Type: defaults.driveType[2].rawValue,
             Keys.df3Type: defaults.driveType[3].rawValue,
 
             Keys.gameDevice1: defaults.gameDevice1,
@@ -801,12 +817,12 @@ extension UserDefaults {
         let userDefaults = UserDefaults.standard
         
         let keys = [ Keys.df0Connect,
-                     Keys.df0Type,
                      Keys.df1Connect,
-                     Keys.df1Type,
                      Keys.df2Connect,
-                     Keys.df2Type,
                      Keys.df3Connect,
+                     Keys.df0Type,
+                     Keys.df1Type,
+                     Keys.df2Type,
                      Keys.df3Type,
                      
                      Keys.gameDevice1,
@@ -824,16 +840,17 @@ extension UserDefaults {
 
 extension Keys {
     
+    // Blitter
+    static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
+
+    // Timing
+    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
+    static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
+
     // Graphics
     static let clxSprSpr         = "VAMIGA_COM_ClxSprSpr"
     static let clxSprPlf         = "VAMIGA_COM_ClxSprPlf"
     static let clxPlfPlf         = "VAMIGA_COM_ClxPlfPlf"
-
-    // Blitter
-    static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
-
-    // CIAs
-    static let todBug            = "VAMIGA_COM_TodBug"
 
     // Floppy drives
     static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
@@ -841,38 +858,26 @@ extension Keys {
     static let lockDskSync       = "VAMIGA_COM_LockDskSync"
     static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
 
-    // Timing
-    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
-    static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
-
     // Keyboard
     static let accurateKeyboard  = "VAMIGA_COM_AccurateKeyboard"
 }
 
 struct CompatibilityDefaults {
     
-    // Graphics
+    let blitterAccuracy: Int
+    
+    let eClockSyncing: Bool
+    let slowRamDelay: Bool
+    
     let clxSprSpr: Bool
     let clxSprPlf: Bool
     let clxPlfPlf: Bool
     
-    // Blitter
-    let blitterAccuracy: Int
-    
-    // CIAs
-    let todBug: Bool
-    
-    // Floppy drives
     let driveSpeed: Int
     let mechanicalDelays: Bool
     let lockDskSync: Bool
     let autoDskSync: Bool
     
-    // Timing
-    let eClockSyncing: Bool
-    let slowRamDelay: Bool
-
-    // Keyboard
     let accurateKeyboard: Bool
 
     //
@@ -880,65 +885,59 @@ struct CompatibilityDefaults {
     //
     
     static let std = CompatibilityDefaults.init(
-         
-         clxSprSpr: false,
-         clxSprPlf: false,
-         clxPlfPlf: false,
-                  
-         blitterAccuracy: 2,
-
-         todBug: true,
-         
-         driveSpeed: 1,
-         mechanicalDelays: true,
-         lockDskSync: false,
-         autoDskSync: false,
-
-         eClockSyncing: true,
-         slowRamDelay: true,
-
-         accurateKeyboard: true
-     )
-    
-    static let accurate = CompatibilityDefaults.init(
         
-        clxSprSpr: true,
-        clxSprPlf: true,
-        clxPlfPlf: true,
-                
         blitterAccuracy: 2,
         
-        todBug: true,
-
+        eClockSyncing: true,
+        slowRamDelay: true,
+        
+        clxSprSpr: false,
+        clxSprPlf: false,
+        clxPlfPlf: false,
+        
         driveSpeed: 1,
         mechanicalDelays: true,
         lockDskSync: false,
         autoDskSync: false,
         
+        accurateKeyboard: true
+     )
+    
+    static let accurate = CompatibilityDefaults.init(
+        
+        blitterAccuracy: 2,
+
         eClockSyncing: true,
         slowRamDelay: true,
 
+        clxSprSpr: true,
+        clxSprPlf: true,
+        clxPlfPlf: true,
+                        
+        driveSpeed: 1,
+        mechanicalDelays: true,
+        lockDskSync: false,
+        autoDskSync: false,
+        
         accurateKeyboard: true
     )
 
     static let accelerated = CompatibilityDefaults.init(
         
+        blitterAccuracy: 0,
+
+        eClockSyncing: false,
+        slowRamDelay: false,
+
         clxSprSpr: false,
         clxSprPlf: false,
         clxPlfPlf: false,
                 
-        blitterAccuracy: 0,
-        
-        todBug: true,
-
         driveSpeed: -1,
         mechanicalDelays: false,
         lockDskSync: false,
         autoDskSync: false,
         
-        eClockSyncing: false,
-        slowRamDelay: false,
-
         accurateKeyboard: false
     )
 }
@@ -950,22 +949,20 @@ extension UserDefaults {
         let defaults = CompatibilityDefaults.std
         let dictionary: [String: Any] = [
 
+            Keys.blitterAccuracy: defaults.blitterAccuracy,
+
+            Keys.eClockSyncing: defaults.eClockSyncing,
+            Keys.slowRamDelay: defaults.slowRamDelay,
+
             Keys.clxSprSpr: defaults.clxSprSpr,
             Keys.clxSprPlf: defaults.clxSprPlf,
             Keys.clxPlfPlf: defaults.clxPlfPlf,
-            
-            Keys.blitterAccuracy: defaults.blitterAccuracy,
-            
-            Keys.todBug: defaults.todBug,
-            
+                                    
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.mechanicalDelays: defaults.mechanicalDelays,
             Keys.lockDskSync: defaults.lockDskSync,
             Keys.autoDskSync: defaults.autoDskSync,
             
-            Keys.eClockSyncing: defaults.eClockSyncing,
-            Keys.slowRamDelay: defaults.slowRamDelay,
-
             Keys.accurateKeyboard: defaults.accurateKeyboard
         ]
 
@@ -977,15 +974,20 @@ extension UserDefaults {
 
         let userDefaults = UserDefaults.standard
 
-        let keys = [ Keys.clxSprSpr,
+        let keys = [ Keys.blitterAccuracy,
+                     
+                     Keys.eClockSyncing,
+                     Keys.slowRamDelay,
+
+                     Keys.clxSprSpr,
                      Keys.clxSprPlf,
                      Keys.clxPlfPlf,
-                     Keys.blitterAccuracy,
-                     Keys.todBug,
+                     
                      Keys.driveSpeed,
                      Keys.mechanicalDelays,
                      Keys.lockDskSync,
                      Keys.autoDskSync,
+                     
                      Keys.accurateKeyboard ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }

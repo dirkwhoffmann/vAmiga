@@ -447,18 +447,20 @@ class Configuration {
         amiga.suspend()
         
         agnusRev = defaults.agnusRev.rawValue
+        slowRamMirror = defaults.slowRamMirror
         deniseRev = defaults.deniseRev.rawValue
+        borderBlank = defaults.borderBlank
+        ciaRev = defaults.ciaRev.rawValue
+        todBug = defaults.todBug
         rtClock = defaults.realTimeClock.rawValue
         
-        slowRamMirror = defaults.slowRamMirror
-
         chipRam = defaults.chipRam
         slowRam = defaults.slowRam
         fastRam = defaults.fastRam
-        
+        ramInitPattern = defaults.ramInitPattern.rawValue
+
         bankMap = defaults.bankMap.rawValue
         unmappingType = defaults.unmappingType.rawValue
-        ramInitPattern = defaults.ramInitPattern.rawValue
         
         amiga.resume()
     }
@@ -470,18 +472,20 @@ class Configuration {
         amiga.suspend()
         
         agnusRev = defaults.integer(forKey: Keys.agnusRev)
-        deniseRev = defaults.integer(forKey: Keys.deniseRev)
-        rtClock = defaults.integer(forKey: Keys.realTimeClock)
-
         slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
+        deniseRev = defaults.integer(forKey: Keys.deniseRev)
+        borderBlank = defaults.bool(forKey: Keys.borderBlank)
+        ciaRev = defaults.integer(forKey: Keys.ciaRev)
+        todBug = defaults.bool(forKey: Keys.todBug)
+        rtClock = defaults.integer(forKey: Keys.realTimeClock)
 
         chipRam = defaults.integer(forKey: Keys.chipRam)
         slowRam = defaults.integer(forKey: Keys.slowRam)
         fastRam = defaults.integer(forKey: Keys.fastRam)
-        
+        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
+
         bankMap = defaults.integer(forKey: Keys.bankMap)
         unmappingType = defaults.integer(forKey: Keys.unmappingType)
-        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
 
         amiga.resume()
     }
@@ -493,18 +497,20 @@ class Configuration {
         let defaults = UserDefaults.standard
 
         defaults.set(agnusRev, forKey: Keys.agnusRev)
-        defaults.set(deniseRev, forKey: Keys.deniseRev)
-        defaults.set(rtClock, forKey: Keys.realTimeClock)
-
         defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
+        defaults.set(deniseRev, forKey: Keys.deniseRev)
+        defaults.set(borderBlank, forKey: Keys.borderBlank)
+        defaults.set(ciaRev, forKey: Keys.ciaRev)
+        defaults.set(todBug, forKey: Keys.todBug)
+        defaults.set(rtClock, forKey: Keys.realTimeClock)
 
         defaults.set(chipRam, forKey: Keys.chipRam)
         defaults.set(slowRam, forKey: Keys.slowRam)
         defaults.set(fastRam, forKey: Keys.fastRam)
-        
+        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
+
         defaults.set(bankMap, forKey: Keys.bankMap)
         defaults.set(unmappingType, forKey: Keys.unmappingType)
-        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
     }
 
     //
@@ -582,22 +588,20 @@ class Configuration {
          
         amiga.suspend()
         
+        blitterAccuracy = defaults.blitterAccuracy
+
+        eClockSyncing = defaults.eClockSyncing
+        slowRamDelay = defaults.slowRamDelay
+
         clxSprSpr = defaults.clxSprSpr
         clxSprPlf = defaults.clxSprPlf
         clxPlfPlf = defaults.clxPlfPlf
-                
-        blitterAccuracy = defaults.blitterAccuracy
-
-        todBug = defaults.todBug
-        
+                        
         driveSpeed = defaults.driveSpeed
         mechanicalDelays = defaults.mechanicalDelays
         lockDskSync = defaults.lockDskSync
         autoDskSync = defaults.autoDskSync
         
-        eClockSyncing = defaults.eClockSyncing
-        slowRamDelay = defaults.slowRamDelay
-
         accurateKeyboard = defaults.accurateKeyboard
 
         amiga.resume()
@@ -609,21 +613,19 @@ class Configuration {
         
         amiga.suspend()
         
+        blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+
+        eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
+        slowRamDelay = defaults.bool(forKey: Keys.slowRamDelay)
+
         clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
         clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
         clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
-        
-        blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
-        
-        todBug = defaults.bool(forKey: Keys.todBug)
-        
+                
         driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
         mechanicalDelays = defaults.bool(forKey: Keys.mechanicalDelays)
         lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
         autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
-        
-        eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
-        slowRamDelay = defaults.bool(forKey: Keys.slowRamDelay)
 
         accurateKeyboard = defaults.bool(forKey: Keys.accurateKeyboard)
 
@@ -636,22 +638,20 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
+        defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+
+        defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
+        defaults.set(slowRamDelay, forKey: Keys.slowRamDelay)
+
         defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
         defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
         defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
-        
-        defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
-        
-        defaults.set(todBug, forKey: Keys.todBug)
-        
+                
         defaults.set(driveSpeed, forKey: Keys.driveSpeed)
         defaults.set(mechanicalDelays, forKey: Keys.mechanicalDelays)
         defaults.set(lockDskSync, forKey: Keys.lockDskSync)
         defaults.set(autoDskSync, forKey: Keys.autoDskSync)
         
-        defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
-        defaults.set(slowRamDelay, forKey: Keys.slowRamDelay)
-
         defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)
     }
     
