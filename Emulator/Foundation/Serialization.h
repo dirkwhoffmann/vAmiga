@@ -156,7 +156,7 @@ public:
     COUNT(const DriveState)
     COUNT(const RTCModel)
     COUNT(const DiskType)
-    COUNT(const CIAType)
+    COUNT(const CIARevision)
     COUNT(const AgnusRevision)
     COUNT(const DeniseRevision)
 
@@ -239,7 +239,7 @@ public:
     DESERIALIZE32(DriveState)
     DESERIALIZE64(RTCModel)
     DESERIALIZE64(DiskType)
-    DESERIALIZE64(CIAType)
+    DESERIALIZE64(CIARevision)
     DESERIALIZE64(AgnusRevision)
     DESERIALIZE64(DeniseRevision)
 
@@ -328,7 +328,7 @@ public:
     SERIALIZE32(const DriveState)
     SERIALIZE64(const RTCModel)
     SERIALIZE64(const DiskType)
-    SERIALIZE64(const CIAType)
+    SERIALIZE64(const CIARevision)
     SERIALIZE64(const AgnusRevision)
     SERIALIZE64(const DeniseRevision)
 

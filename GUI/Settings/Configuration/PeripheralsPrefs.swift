@@ -30,7 +30,7 @@ extension ConfigurationController {
         perSerialDevice.selectItem(withTag: config.serialDevice)
         
         // Chipset features
-        memSlowRamMirror.state = config.slowRamMirror ? .on : .off
+        hwSlowRamMirror.state = config.slowRamMirror ? .on : .off
 
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff
@@ -49,12 +49,6 @@ extension ConfigurationController {
         
         // Buttons
         perPowerButton.isHidden = !bootable
-    }
-
-    @IBAction func memSlowRamMirrorAction(_ sender: NSButton!) {
-
-        config.slowRamMirror = sender.state == .on
-        refresh()
     }
 
     @IBAction func perDriveConnectAction(_ sender: NSButton!) {

@@ -45,6 +45,7 @@ Denise::getConfigItem(ConfigOption option)
     switch (option) {
             
         case OPT_DENISE_REVISION:     return config.revision;
+        case OPT_BRDRBLNK:            return config.borderblank;
         case OPT_HIDDEN_SPRITES:      return config.hiddenSprites;
         case OPT_HIDDEN_LAYERS:       return config.hiddenLayers;
         case OPT_HIDDEN_LAYER_ALPHA:  return config.hiddenLayerAlpha;
@@ -72,6 +73,15 @@ Denise::setConfigItem(ConfigOption option, long value)
             }
             
             config.revision = (DeniseRevision)value;
+            return true;
+            
+        case OPT_BRDRBLNK:
+
+            if (config.borderblank == value) {
+                return false;
+            }
+            
+            config.borderblank = value;
             return true;
             
         case OPT_HIDDEN_SPRITES:
@@ -134,6 +144,19 @@ Denise::setConfigItem(ConfigOption option, long value)
 }
 
 void
+Denise::_dumpConfig()
+{
+    msg("          revision : %s\n", sDeniseRevision(config.revision));
+    msg("       borderblank : %s\n", config.borderblank ? "yes" : "no");
+    msg("     hiddenSprites : %02X\n", config.hiddenSprites);
+    msg("      hiddenLayers : %04X\n", config.hiddenLayers);
+    msg("  hiddenLayerAlpha : %d\n", config.hiddenLayerAlpha);
+    msg("         clxSprSpr : %s\n", config.clxSprSpr ? "yes" : "no");
+    msg("         clxSprPlf : %s\n", config.clxSprPlf ? "yes" : "no");
+    msg("         clxPlfPlf : %s\n", config.clxPlfPlf ? "yes" : "no");
+}
+
+void
 Denise::_inspect()
 {
     synchronized {
@@ -162,17 +185,6 @@ Denise::_inspect()
             info.color[i] = pixelEngine.getRGBA(i);
         }
     }
-}
-
-void
-Denise::_dumpConfig()
-{
-    msg("   hiddenSprites : %02x\n", config.hiddenSprites);
-    msg("    hiddenLayers : %04x\n", config.hiddenLayers);
-    msg("hiddenLayerAlpha : %d\n", config.hiddenLayerAlpha);
-    msg("       clxSprSpr : %s\n", config.clxSprSpr ? "yes" : "no");
-    msg("       clxSprPlf : %s\n", config.clxSprPlf ? "yes" : "no");
-    msg("       clxPlfPlf : %s\n", config.clxPlfPlf ? "yes" : "no");
 }
 
 void
@@ -868,7 +880,7 @@ Denise::drawAttachedSpritePixelPair(int hpos)
 void
 Denise::updateBorderColor()
 {
-    if (config.revision == DENISE_OCS_BRDRBLNK && ecsena() && BRDRBLNK()) {
+    if (config.borderblank && ecsena() && BRDRBLNK()) {
         borderColor = 64; // Pure black
     } else {
         borderColor = 0;  // Background color

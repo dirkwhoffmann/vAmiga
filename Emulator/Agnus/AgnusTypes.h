@@ -68,12 +68,12 @@ typedef VA_ENUM(i8, BusOwner)
     BUS_SPRITE7,
     BUS_COPPER,
     BUS_BLITTER,
-    BUS_OWNER_COUNT
+    BUS_COUNT
 };
 
 static inline bool isBusOwner(long value)
 {
-    return value >= 0 && value < BUS_OWNER_COUNT;
+    return value >= 0 && value < BUS_COUNT;
 }
 
 typedef VA_ENUM(long, DDFState)
@@ -129,7 +129,7 @@ AgnusInfo;
 
 typedef struct
 {
-    long usage[BUS_OWNER_COUNT];
+    long usage[BUS_COUNT];
     
     double copperActivity;
     double blitterActivity;

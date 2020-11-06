@@ -64,7 +64,7 @@ private:
     u32 indexedRgba[rgbaIndexCnt];
 
     // Color adjustment parameters
-    Palette palette = COLOR_PALETTE;
+    Palette palette = PALETTE_COLOR;
     double brightness = 50.0;
     double contrast = 100.0;
     double saturation = 1.25;

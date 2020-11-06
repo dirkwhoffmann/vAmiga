@@ -174,7 +174,7 @@ Amiga::getConfig()
     config.df3 = df3.getConfig();
 
     // Assure both CIAs are configured equally
-    assert(config.ciaA.type == config.ciaB.type);
+    assert(config.ciaA.revision == config.ciaB.revision);
     assert(config.ciaA.todBug == config.ciaB.todBug);
     assert(config.ciaA.eClockSyncing == config.ciaB.eClockSyncing);
 
@@ -191,6 +191,7 @@ Amiga::getConfigItem(ConfigOption option)
             return agnus.getConfigItem(option);
             
         case OPT_DENISE_REVISION:
+        case OPT_BRDRBLNK:
         case OPT_HIDDEN_SPRITES:
         case OPT_HIDDEN_LAYERS:
         case OPT_HIDDEN_LAYER_ALPHA:
@@ -238,6 +239,7 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_SERIAL_DEVICE:
             return serialPort.getConfigItem(option);
 
+        case OPT_CIA_REVISION: 
         case OPT_TODBUG:
         case OPT_ECLOCK_SYNCING:
             return ciaA.getConfigItem(option);

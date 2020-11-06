@@ -42,6 +42,7 @@ typedef VA_ENUM(long, ConfigOption)
     
     // Denise
     OPT_DENISE_REVISION,
+    OPT_BRDRBLNK,
     
     // Real-time clock
     OPT_RTC_MODEL,
@@ -81,6 +82,7 @@ typedef VA_ENUM(long, ConfigOption)
     OPT_BLITTER_ACCURACY,
     
     // CIAs
+    OPT_CIA_REVISION,
     OPT_TODBUG,
     OPT_ECLOCK_SYNCING,
     OPT_ACCURATE_KEYBOARD,

@@ -22,18 +22,17 @@ typedef VA_ENUM(long, RTCModel)
 {
     RTC_NONE,
     RTC_OKI,
-    RTC_RICOH
+    RTC_RICOH,
+    RTC_COUNT
 };
 
 inline bool isRTCModel(long value)
 {
-    return value >= RTC_NONE && value <= RTC_RICOH;
+    return value >= RTC_NONE && value <= RTC_COUNT;
 }
 
-inline const char *RTCModelName(RTCModel model)
+inline const char *sRTCModel(RTCModel model)
 {
-    assert(isRTCModel(model));
-
     switch (model) {
         case RTC_NONE:   return "RTC_NONE";
         case RTC_OKI:    return "RTC_OKI";

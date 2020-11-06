@@ -127,6 +127,13 @@ Agnus::setConfigItem(ConfigOption option, long value)
     }
 }
 
+void
+Agnus::_dumpConfig()
+{
+    msg("      revision : %s\n", sAgnusRevision(config.revision));
+    msg(" slowRamMirror : %s\n", config.slowRamMirror ? "yes" : "no");
+}
+
 i16
 Agnus::idBits()
 {
@@ -226,7 +233,7 @@ Agnus::_dump()
 void
 Agnus::clearStats()
 {
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) stats.usage[i] = 0;
+    for (int i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
     
     stats.copperActivity = 0;
     stats.blitterActivity = 0;
@@ -271,7 +278,7 @@ Agnus::updateStats()
     stats.spriteActivity = w * stats.spriteActivity + (1 - w) * sprite;
     stats.bitplaneActivity = w * stats.bitplaneActivity + (1 - w) * bitplane;
     
-    for (int i = 0; i < BUS_OWNER_COUNT; i++) stats.usage[i] = 0;
+    for (int i = 0; i < BUS_COUNT; i++) stats.usage[i] = 0;
 }
 
 Cycle

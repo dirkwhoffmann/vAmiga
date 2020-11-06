@@ -56,6 +56,12 @@ RTC::setConfigItem(ConfigOption option, long value)
 }
 
 void
+RTC::_dumpConfig()
+{
+    msg("  Model : %s\n", sRTCModel(config.model));
+}
+
+void
 RTC::_reset(bool hard)
 {
     RESET_SNAPSHOT_ITEMS(hard)
@@ -80,7 +86,6 @@ RTC::_reset(bool hard)
 void
 RTC::_dump()
 {
-    msg("Model: %s\n", RTCModelName(config.model));
     for (unsigned i = 0; i < 16; i++) msg("i: %X ", reg[i]);
     msg("\n");
 }

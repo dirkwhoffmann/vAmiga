@@ -25,7 +25,7 @@ extension ConfigurationController {
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
 
         // CIAs
-        compTodBug.state = config.ciaA.todBug ? .on : .off
+        hwTodBug.state = config.ciaA.todBug ? .on : .off
         
         // Floppy drives
         let speed = config.diskController.speed
@@ -66,12 +66,6 @@ extension ConfigurationController {
     @IBAction func compBltAccuracyAction(_ sender: NSSlider!) {
 
         config.blitterAccuracy = sender.integerValue
-        refresh()
-    }
-
-    @IBAction func compTodBugAction(_ sender: NSButton!) {
-
-        config.todBug = sender.state == .on
         refresh()
     }
 

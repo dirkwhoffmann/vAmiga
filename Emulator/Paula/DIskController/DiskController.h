@@ -102,6 +102,8 @@ public:
     // Configuring
     //
     
+public:
+    
     DiskControllerConfig getConfig() { return config; }
     bool turboMode() { return config.speed == -1; }
 
@@ -111,6 +113,8 @@ public:
     bool setConfigItem(ConfigOption option, long value) override;
     bool setConfigItem(unsigned dfn, ConfigOption option, long value) override;
 
+private:
+    
     void _dumpConfig() override;
 
         

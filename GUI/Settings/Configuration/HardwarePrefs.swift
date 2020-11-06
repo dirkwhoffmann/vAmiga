@@ -22,17 +22,19 @@ extension ConfigurationController {
         hwChipRamPopup.selectItem(withTag: config.chipRam)
         hwSlowRamPopup.selectItem(withTag: config.slowRam)
         hwFastRamPopup.selectItem(withTag: config.fastRam)
+        hwRamInitPattern.selectItem(withTag: config.ramInitPattern)
         hwBankMap.selectItem(withTag: config.bankMap)
         hwUnmappingType.selectItem(withTag: config.unmappingType)
-        hwRamInitPattern.selectItem(withTag: config.ramInitPattern)
 
-        // Lock controls if emulator is powered on
+        // Lock some controls if emulator is powered on
         hwAgnusRevisionPopup.isEnabled = poweredOff
         hwDeniseRevisionPopup.isEnabled = poweredOff
+        hwCiaRevisionPopup.isEnabled = poweredOff
         hwRealTimeClock.isEnabled = poweredOff
         hwChipRamPopup.isEnabled = poweredOff
         hwSlowRamPopup.isEnabled = poweredOff
         hwFastRamPopup.isEnabled = poweredOff
+        hwRamInitPattern.isEnabled = poweredOff
         hwFactorySettingsPopup.isEnabled = poweredOff
 
         // Lock symbol and explanation
@@ -50,9 +52,33 @@ extension ConfigurationController {
         refresh()
     }
 
+    @IBAction func hwSlowRamMirrorAction(_ sender: NSButton!) {
+
+        config.slowRamMirror = sender.state == .on
+        refresh()
+    }
+
     @IBAction func hwDeniseRevAction(_ sender: NSPopUpButton!) {
 
         config.deniseRev = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func hwBorderBlankAction(_ sender: NSButton!) {
+
+        config.borderBlank = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func hwCiaRevAction(_ sender: NSPopUpButton!) {
+
+        config.ciaRev = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func hwTodBugAction(_ sender: NSButton!) {
+
+        config.todBug = sender.state == .on
         refresh()
     }
 

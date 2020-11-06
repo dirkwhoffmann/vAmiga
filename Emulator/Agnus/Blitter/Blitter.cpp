@@ -98,6 +98,12 @@ Blitter::setConfigItem(ConfigOption option, long value)
 }
 
 void
+Blitter::_dumpConfig()
+{
+    msg("      accuracy : %d\n", config.accuracy);
+}
+
+void
 Blitter::_inspect()
 {
     synchronized {

@@ -14,7 +14,7 @@ DmaDebugger::DmaDebugger(Amiga &ref) : AmigaComponent(ref)
     setDescription("DmaDebugger");
 
     // By default all DMA channels are visualized, except the CPU channel
-    for (unsigned i = 0; i < BUS_OWNER_COUNT; i++) {
+    for (unsigned i = 0; i < BUS_COUNT; i++) {
         visualize[i] = (i != BUS_NONE) && (i != BUS_CPU);
     }
 

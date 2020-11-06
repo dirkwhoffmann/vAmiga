@@ -432,6 +432,10 @@ public:
      */
     bool slowRamIsMirroredIn();
     
+private:
+    
+    void _dumpConfig() override;
+
     
     //
     // Analyzing

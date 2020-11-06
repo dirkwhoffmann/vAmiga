@@ -21,21 +21,20 @@
 typedef VA_ENUM(long, DeniseRevision)
 {
     DENISE_OCS,          // Revision 8362R8
-    DENISE_OCS_BRDRBLNK, // Revision 8362R8 + Border Blank feature
-    DENISE_ECS           // Revision 8373 (not supported yet)
+    // DENISE_OCS_BRDRBLNK, // Revision 8362R8 + Border Blank feature
+    DENISE_ECS,          // Revision 8373 (not supported yet)
+    DENISE_COUNT
     
 };
 
 inline bool isDeniseRevision(long value)
 {
-    return value >= 0 && value <= DENISE_ECS;
+    return value >= 0 && value < DENISE_COUNT;
 }
 
-inline const char *deniseRevisionName(DeniseRevision type)
+inline const char *sDeniseRevision(DeniseRevision value)
 {
-    assert(isDeniseRevision(type));
-
-    switch (type) {
+    switch (value) {
         case DENISE_OCS:  return "DENISE_OCS";
         case DENISE_ECS:  return "DENISE_ECS";
         default:          return "???";
@@ -44,16 +43,18 @@ inline const char *deniseRevisionName(DeniseRevision type)
 
 typedef VA_ENUM(long, Palette)
 {
-    COLOR_PALETTE = 0,
-    BLACK_WHITE_PALETTE,
-    PAPER_WHITE_PALETTE,
-    GREEN_PALETTE,
-    AMBER_PALETTE,
-    SEPIA_PALETTE
+    PALETTE_COLOR = 0,
+    PALETTE_BLACK_WHITE,
+    PALETTE_PAPER_WHITE,
+    PALETTE_GREEN,
+    PALETTE_AMBER,
+    PALETTE_SEPIA,
+    PALETTE_COUNT
 };
 
-inline bool isPalette(long value) {
-    return value >= COLOR_PALETTE && value <= SEPIA_PALETTE;
+inline bool isPalette(long value)
+{
+    return value >= PALETTE_COLOR && value < PALETTE_COUNT;
 }
 
 
@@ -89,6 +90,9 @@ typedef struct
     // Emulated chip model
     DeniseRevision revision;
 
+    // Borderblank feature (was introduced with ECS chipset)
+    bool borderblank;
+    
     // Hides certain sprites
     u8 hiddenSprites;
 

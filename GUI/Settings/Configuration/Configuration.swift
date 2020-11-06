@@ -36,21 +36,34 @@ class Configuration {
     // Hardware
     //
     
-    // Chips
     var agnusRev: Int {
         get { return amiga.getConfig(.OPT_AGNUS_REVISION) }
         set { amiga.configure(.OPT_AGNUS_REVISION, value: newValue) }
+    }
+    var slowRamMirror: Bool {
+        get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
+        set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
     }
     var deniseRev: Int {
         get { return amiga.getConfig(.OPT_DENISE_REVISION) }
         set { amiga.configure(.OPT_DENISE_REVISION, value: newValue) }
     }
+    var borderBlank: Bool {
+        get { return amiga.getConfig(.OPT_BRDRBLNK) != 0 }
+        set { amiga.configure(.OPT_BRDRBLNK, enable: newValue) }
+    }
+    var ciaRev: Int {
+        get { return amiga.getConfig(.OPT_CIA_REVISION) }
+        set { amiga.configure(.OPT_CIA_REVISION, value: newValue) }
+    }
+    var todBug: Bool {
+        get { return amiga.getConfig(.OPT_TODBUG) != 0 }
+        set { amiga.configure(.OPT_TODBUG, enable: newValue) }
+    }
     var rtClock: Int {
         get { return amiga.getConfig(.OPT_RTC_MODEL) }
         set { amiga.configure(.OPT_RTC_MODEL, value: newValue) }
     }
-    
-    // Memory
     var chipRam: Int {
         get { return amiga.getConfig(.OPT_CHIP_RAM) }
         set { amiga.configure(.OPT_CHIP_RAM, value: newValue) }
@@ -76,7 +89,10 @@ class Configuration {
         set { amiga.configure(.OPT_UNMAPPING_TYPE, value: newValue) }
     }
 
-    // Floppy drives
+    //
+    // Peripherals
+    //
+
     func dfnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
         return amiga.getConfig(.OPT_DRIVE_CONNECT, drive: n) != 0
@@ -125,9 +141,7 @@ class Configuration {
         get { return dfnType(3) }
         set { setDfnType(3, type: newValue) }
     }
-    
-    // Ports
-    var gameDevice1 = HardwareDefaults.A500.gameDevice1 {
+    var gameDevice1 = PeripheralsDefaults.std.gameDevice1 {
         didSet {
                          
             // Try to connect the device (may disconnect the other device)
@@ -142,7 +156,7 @@ class Configuration {
             parent.toolbar.validateVisibleItems()
         }
     }
-    var gameDevice2 = HardwareDefaults.A500.gameDevice2 {
+    var gameDevice2 = PeripheralsDefaults.std.gameDevice2 {
         didSet {
  
             // Try to connect the device (may disconnect the other device)
@@ -163,9 +177,13 @@ class Configuration {
     }
 
     //
-    // Peripherals
+    // Compatibility
     //
 
+    var blitterAccuracy: Int {
+        get { return amiga.getConfig(.OPT_BLITTER_ACCURACY) }
+        set { amiga.configure(.OPT_BLITTER_ACCURACY, value: newValue) }
+    }
     var eClockSyncing: Bool {
         get { return amiga.getConfig(.OPT_ECLOCK_SYNCING) != 0 }
         set { amiga.configure(.OPT_ECLOCK_SYNCING, enable: newValue) }
@@ -174,15 +192,6 @@ class Configuration {
         get { return amiga.getConfig(.OPT_SLOW_RAM_DELAY) != 0 }
         set { amiga.configure(.OPT_SLOW_RAM_DELAY, enable: newValue) }
     }
-    var slowRamMirror: Bool {
-        get { return amiga.getConfig(.OPT_SLOW_RAM_MIRROR) != 0 }
-        set { amiga.configure(.OPT_SLOW_RAM_MIRROR, enable: newValue) }
-    }
-
-    //
-    // Compatibility
-    //
-
     var clxSprSpr: Bool {
         get { return amiga.getConfig(.OPT_CLX_SPR_SPR) != 0 }
         set { amiga.configure(.OPT_CLX_SPR_SPR, enable: newValue) }
@@ -194,10 +203,6 @@ class Configuration {
     var clxPlfPlf: Bool {
         get { return amiga.getConfig(.OPT_CLX_PLF_PLF) != 0 }
         set { amiga.configure(.OPT_CLX_PLF_PLF, enable: newValue) }
-    }
-    var blitterAccuracy: Int {
-        get { return amiga.getConfig(.OPT_BLITTER_ACCURACY) }
-        set { amiga.configure(.OPT_BLITTER_ACCURACY, value: newValue) }
     }
     var driveSpeed: Int {
         get { return amiga.getConfig(.OPT_DRIVE_SPEED) }
@@ -219,10 +224,6 @@ class Configuration {
     var autoDskSync: Bool {
         get { return amiga.getConfig(.OPT_AUTO_DSKSYNC) != 0 }
         set { amiga.configure(.OPT_AUTO_DSKSYNC, enable: newValue) }
-    }
-    var todBug: Bool {
-        get { return amiga.getConfig(.OPT_TODBUG) != 0 }
-        set { amiga.configure(.OPT_TODBUG, enable: newValue) }
     }
     var accurateKeyboard: Bool {
         get { return amiga.getConfig(.OPT_ACCURATE_KEYBOARD) != 0 }
@@ -449,6 +450,8 @@ class Configuration {
         deniseRev = defaults.deniseRev.rawValue
         rtClock = defaults.realTimeClock.rawValue
         
+        slowRamMirror = defaults.slowRamMirror
+
         chipRam = defaults.chipRam
         slowRam = defaults.slowRam
         fastRam = defaults.fastRam
@@ -456,7 +459,62 @@ class Configuration {
         bankMap = defaults.bankMap.rawValue
         unmappingType = defaults.unmappingType.rawValue
         ramInitPattern = defaults.ramInitPattern.rawValue
+        
+        amiga.resume()
+    }
+    
+    func loadHardwareUserDefaults() {
+        
+        let defaults = UserDefaults.standard
+        
+        amiga.suspend()
+        
+        agnusRev = defaults.integer(forKey: Keys.agnusRev)
+        deniseRev = defaults.integer(forKey: Keys.deniseRev)
+        rtClock = defaults.integer(forKey: Keys.realTimeClock)
 
+        slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
+
+        chipRam = defaults.integer(forKey: Keys.chipRam)
+        slowRam = defaults.integer(forKey: Keys.slowRam)
+        fastRam = defaults.integer(forKey: Keys.fastRam)
+        
+        bankMap = defaults.integer(forKey: Keys.bankMap)
+        unmappingType = defaults.integer(forKey: Keys.unmappingType)
+        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
+
+        amiga.resume()
+    }
+    
+    func saveHardwareUserDefaults() {
+        
+        track()
+        
+        let defaults = UserDefaults.standard
+
+        defaults.set(agnusRev, forKey: Keys.agnusRev)
+        defaults.set(deniseRev, forKey: Keys.deniseRev)
+        defaults.set(rtClock, forKey: Keys.realTimeClock)
+
+        defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
+
+        defaults.set(chipRam, forKey: Keys.chipRam)
+        defaults.set(slowRam, forKey: Keys.slowRam)
+        defaults.set(fastRam, forKey: Keys.fastRam)
+        
+        defaults.set(bankMap, forKey: Keys.bankMap)
+        defaults.set(unmappingType, forKey: Keys.unmappingType)
+        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
+    }
+
+    //
+    // Peripherals
+    //
+    
+    func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
+        
+        amiga.suspend()
+        
         df0Connected = defaults.driveConnect[0]
         df1Connected = defaults.driveConnect[1]
         df2Connected = defaults.driveConnect[2]
@@ -473,23 +531,12 @@ class Configuration {
         amiga.resume()
     }
     
-    func loadHardwareUserDefaults() {
+    func loadPeripheralsUserDefaults() {
         
         let defaults = UserDefaults.standard
         
         amiga.suspend()
         
-        agnusRev = defaults.integer(forKey: Keys.agnusRev)
-        deniseRev = defaults.integer(forKey: Keys.deniseRev)
-        rtClock = defaults.integer(forKey: Keys.realTimeClock)
-
-        chipRam = defaults.integer(forKey: Keys.chipRam)
-        slowRam = defaults.integer(forKey: Keys.slowRam)
-        fastRam = defaults.integer(forKey: Keys.fastRam)
-        bankMap = defaults.integer(forKey: Keys.bankMap)
-        unmappingType = defaults.integer(forKey: Keys.unmappingType)
-        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
-
         df0Connected = defaults.bool(forKey: Keys.df0Connect)
         df1Connected = defaults.bool(forKey: Keys.df1Connect)
         df2Connected = defaults.bool(forKey: Keys.df2Connect)
@@ -502,27 +549,16 @@ class Configuration {
         gameDevice1 = defaults.integer(forKey: Keys.gameDevice1)
         gameDevice2 = defaults.integer(forKey: Keys.gameDevice2)
         serialDevice = defaults.integer(forKey: Keys.serialDevice)
-
+        
         amiga.resume()
     }
     
-    func saveHardwareUserDefaults() {
+    func savePeripheralsUserDefaults() {
         
         track()
         
         let defaults = UserDefaults.standard
-
-        defaults.set(agnusRev, forKey: Keys.agnusRev)
-        defaults.set(deniseRev, forKey: Keys.deniseRev)
-        defaults.set(rtClock, forKey: Keys.realTimeClock)
-
-        defaults.set(chipRam, forKey: Keys.chipRam)
-        defaults.set(slowRam, forKey: Keys.slowRam)
-        defaults.set(fastRam, forKey: Keys.fastRam)
-        defaults.set(bankMap, forKey: Keys.bankMap)
-        defaults.set(unmappingType, forKey: Keys.unmappingType)
-        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
-
+        
         defaults.set(df0Connected, forKey: Keys.df0Connect)
         defaults.set(df1Connected, forKey: Keys.df1Connect)
         defaults.set(df2Connected, forKey: Keys.df2Connect)
@@ -535,39 +571,7 @@ class Configuration {
         defaults.set(gameDevice1, forKey: Keys.gameDevice1)
         defaults.set(gameDevice2, forKey: Keys.gameDevice2)
         defaults.set(serialDevice, forKey: Keys.serialDevice)
-    }
 
-    //
-    // Peripherals
-    //
-    
-    func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
-        
-        amiga.suspend()
-        
-        slowRamMirror = defaults.slowRamMirror
-
-        amiga.resume()
-    }
-    
-    func loadPeripheralsUserDefaults() {
-        
-        let defaults = UserDefaults.standard
-        
-        amiga.suspend()
-        
-        slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
-
-        amiga.resume()
-    }
-    
-    func savePeripheralsUserDefaults() {
-        
-        track()
-        
-        let defaults = UserDefaults.standard
-        
-        defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
     }
     
     //
@@ -788,7 +792,7 @@ class Configuration {
         
         amiga.suspend()
         
-        palette = Palette(rawValue: defaults.integer(forKey: Keys.palette)) ?? .COLOR_PALETTE
+        palette = Palette(rawValue: defaults.integer(forKey: Keys.palette)) ?? .PALETTE_COLOR
         brightness = defaults.double(forKey: Keys.brightness)
         contrast = defaults.double(forKey: Keys.contrast)
         saturation = defaults.double(forKey: Keys.saturation)

@@ -50,17 +50,21 @@ class ConfigurationController: DialogController {
     
     // Chipset
     @IBOutlet weak var hwAgnusRevisionPopup: NSPopUpButton!
+    @IBOutlet weak var hwSlowRamMirror: NSButton!
     @IBOutlet weak var hwDeniseRevisionPopup: NSPopUpButton!
+    @IBOutlet weak var hwBorderBlank: NSButton!
+    @IBOutlet weak var hwCiaRevisionPopup: NSPopUpButton!
+    @IBOutlet weak var hwTodBug: NSButton!
     @IBOutlet weak var hwRealTimeClock: NSPopUpButton!
 
     // Memory
     @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
     @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
     @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
+    @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
 
     @IBOutlet weak var hwBankMap: NSPopUpButton!
     @IBOutlet weak var hwUnmappingType: NSPopUpButton!
-    @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var hwLockImage: NSButton!
@@ -75,9 +79,6 @@ class ConfigurationController: DialogController {
     //
     // Peripherals preferences
     //
-
-    // Chipset features
-    @IBOutlet weak var memSlowRamMirror: NSButton!
 
     // Drive
     @IBOutlet weak var perDf0Type: NSPopUpButton!
@@ -116,9 +117,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compBltAccuracy: NSSlider!
     @IBOutlet weak var compBltLevel2: NSTextField!
     @IBOutlet weak var compBltLevel1: NSTextField!
-
-    // CIAs
-    @IBOutlet weak var compTodBug: NSButton!
 
     // Disk controller
     @IBOutlet weak var compDriveSpeed: NSPopUpButton!

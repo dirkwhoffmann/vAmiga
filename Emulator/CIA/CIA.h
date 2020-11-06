@@ -275,10 +275,13 @@ public:
     
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
-    void _dumpConfig() override;
     
     bool getEClockSyncing() { return config.eClockSyncing; }
+
+private:
     
+    void _dumpConfig() override;
+
     
     //
     // Serializing
@@ -291,7 +294,7 @@ private:
     {
         worker
         
-        & config.type
+        & config.revision
         & config.todBug
         & config.eClockSyncing;
     }

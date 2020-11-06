@@ -593,6 +593,9 @@ extension Keys {
     static let deniseRev          = "VAMIGA_HW_DeniseRev"
     static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
 
+    // Chipset features
+    static let slowRamMirror     = "VAMIGA_HW_SlowRamMirror"
+
     // Memory
     static let chipRam            = "VAMIGA_HW_ChipRam"
     static let slowRam            = "VAMIGA_HW_SlowRam"
@@ -601,21 +604,6 @@ extension Keys {
     static let bankMap            = "VAMIGA_HW_BankMap"
     static let unmappingType      = "VAMIGA_HW_UnmappingType"
     static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
-
-    // Drives
-    static let df0Connect         = "VAMIGA_HW_DF0Connect"
-    static let df0Type            = "VAMIGA_HW_DF0Type"
-    static let df1Connect         = "VAMIGA_HW_DF1Connect"
-    static let df1Type            = "VAMIGA_HW_DF1Type"
-    static let df2Connect         = "VAMIGA_HW_DF2Connect"
-    static let df2Type            = "VAMIGA_HW_DF2Type"
-    static let df3Connect         = "VAMIGA_HW_DF3Connect"
-    static let df3Type            = "VAMIGA_HW_DF3Type"
-
-    // Ports
-    static let gameDevice1        = "VAMIGA_HW_GameDevice1"
-    static let gameDevice2        = "VAMIGA_HW_GameDevice2"
-    static let serialDevice       = "VAMIGA_HW_SerialDevice"
 }
 
 struct HardwareDefaults {
@@ -624,6 +612,8 @@ struct HardwareDefaults {
     var deniseRev: DeniseRevision
     var realTimeClock: RTCModel
     
+    let slowRamMirror: Bool
+
     var chipRam: Int
     var slowRam: Int
     var fastRam: Int
@@ -631,13 +621,6 @@ struct HardwareDefaults {
     var bankMap: BankMap
     var unmappingType: UnmappingType
     var ramInitPattern: RamInitPattern
-
-    var driveConnect: [Bool]
-    var driveType: [DriveType]
-    
-    var gameDevice1: Int
-    var gameDevice2: Int
-    var serialDevice: SerialPortDevice
     
     //
     // Schemes
@@ -648,21 +631,16 @@ struct HardwareDefaults {
         agnusRev: .AGNUS_ECS_1MB,
         deniseRev: .DENISE_OCS,
         realTimeClock: .OKI,
-        
+
+        slowRamMirror: true,
+
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
 
         bankMap: .BMAP_A500,
         unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES,
-
-        driveConnect: [true, false, false, false],
-        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
-        
-        gameDevice1: 0,
-        gameDevice2: -1,
-        serialDevice: .SPD_NONE
+        ramInitPattern: .INIT_ALL_ZEROES
     )
     
     static let A1000 = HardwareDefaults.init(
@@ -671,20 +649,15 @@ struct HardwareDefaults {
         deniseRev: .DENISE_OCS,
         realTimeClock: .NONE,
         
+        slowRamMirror: true,
+
         chipRam: 256,
         slowRam: 0,
         fastRam: 0,
         
         bankMap: .BMAP_A1000,
         unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES,
-
-        driveConnect: [true, false, false, false],
-        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
-        
-        gameDevice1: 0,
-        gameDevice2: -1,
-        serialDevice: .SPD_NONE
+        ramInitPattern: .INIT_ALL_ZEROES
     )
     
     static let A2000 = HardwareDefaults.init(
@@ -693,20 +666,15 @@ struct HardwareDefaults {
         deniseRev: .DENISE_OCS,
         realTimeClock: .OKI,
         
+        slowRamMirror: true,
+
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
         
         bankMap: .BMAP_A2000B,
         unmappingType: .UNMAPPED_FLOATING,
-        ramInitPattern: .INIT_ALL_ZEROES,
-
-        driveConnect: [true, true, false, false],
-        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
-        
-        gameDevice1: 0,
-        gameDevice2: -1,
-        serialDevice: .SPD_NONE
+        ramInitPattern: .INIT_ALL_ZEROES
     )
 }
 
@@ -728,19 +696,8 @@ extension UserDefaults {
             Keys.bankMap: defaults.bankMap.rawValue,
             Keys.unmappingType: defaults.unmappingType.rawValue,
             Keys.ramInitPattern: defaults.ramInitPattern.rawValue,
-
-            Keys.df0Connect: defaults.driveConnect[0],
-            Keys.df0Type: defaults.driveType[0].rawValue,
-            Keys.df1Connect: defaults.driveConnect[1],
-            Keys.df1Type: defaults.driveType[1].rawValue,
-            Keys.df2Connect: defaults.driveConnect[2],
-            Keys.df2Type: defaults.driveType[2].rawValue,
-            Keys.df3Connect: defaults.driveConnect[3],
-            Keys.df3Type: defaults.driveType[3].rawValue,
-
-            Keys.gameDevice1: defaults.gameDevice1,
-            Keys.gameDevice2: defaults.gameDevice2,
-            Keys.serialDevice: defaults.serialDevice.rawValue
+            
+            Keys.slowRamMirror: defaults.slowRamMirror
         ]
         
         let userDefaults = UserDefaults.standard
@@ -761,21 +718,8 @@ extension UserDefaults {
                     
                     Keys.bankMap,
                     Keys.unmappingType,
-                    Keys.ramInitPattern,
-
-                    Keys.driveSpeed,
-                    Keys.df0Connect,
-                    Keys.df0Type,
-                    Keys.df1Connect,
-                    Keys.df1Type,
-                    Keys.df2Connect,
-                    Keys.df2Type,
-                    Keys.df3Connect,
-                    Keys.df3Type,
-
-                    Keys.gameDevice1,
-                    Keys.gameDevice2,
-                    Keys.serialDevice ]
+                    Keys.ramInitPattern
+                ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
@@ -786,39 +730,44 @@ extension UserDefaults {
 //
 
 extension Keys {
-    
-    // Chipset features
-    static let slowRamMirror     = "VAMIGA_MEM_SlowRamMirror"
+ 
+    // Drives
+    static let df0Connect         = "VAMIGA_PER_DF0Connect"
+    static let df0Type            = "VAMIGA_PER_DF0Type"
+    static let df1Connect         = "VAMIGA_PER_DF1Connect"
+    static let df1Type            = "VAMIGA_PER_DF1Type"
+    static let df2Connect         = "VAMIGA_PER_DF2Connect"
+    static let df2Type            = "VAMIGA_PER_DF2Type"
+    static let df3Connect         = "VAMIGA_PER_DF3Connect"
+    static let df3Type            = "VAMIGA_PER_DF3Type"
 
-    // Bank map
-    static let bankD8DB          = "VAMIGA_MEM_BankD8DB"
-    static let bankDC            = "VAMIGA_MEM_BankDC"
-    static let bankE0E7          = "VAMIGA_MEM_BankE0E7"
-    static let bankF0F7          = "VAMIGA_MEM_BankF0F7"
+    // Ports
+    static let gameDevice1        = "VAMIGA_PER_GameDevice1"
+    static let gameDevice2        = "VAMIGA_PER_GameDevice2"
+    static let serialDevice       = "VAMIGA_PER_SerialDevice"
 }
 
 struct PeripheralsDefaults {
         
-    // Chipset features
-    let slowRamMirror: Bool
-    
-    // Bank map
-    let bankD8DB: Int
-    let bankDC: Int
-    let bankE0E7: Int
-    let bankF0F7: Int
-    
+    var driveConnect: [Bool]
+    var driveType: [DriveType]
+
+    var gameDevice1: Int
+    var gameDevice2: Int
+    var serialDevice: SerialPortDevice
+        
     //
     // Schemes
     //
     
     static let std = PeripheralsDefaults.init(
         
-        slowRamMirror: true,
-        bankD8DB: MemorySource.MEM_CUSTOM.rawValue,
-        bankDC: MemorySource.MEM_RTC.rawValue,
-        bankE0E7: MemorySource.MEM_EXT.rawValue,
-        bankF0F7: MemorySource.MEM_NONE.rawValue
+        driveConnect: [true, false, false, false],
+        driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
+        
+        gameDevice1: 0,
+        gameDevice2: -1,
+        serialDevice: .SPD_NONE
     )
 }
 
@@ -829,31 +778,40 @@ extension UserDefaults {
         let defaults = PeripheralsDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.slowRamMirror: defaults.slowRamMirror,
-            Keys.bankD8DB: defaults.bankD8DB,
-            Keys.bankDC: defaults.bankDC,
-            Keys.bankE0E7: defaults.bankE0E7,
-            Keys.bankF0F7: defaults.bankF0F7
+            Keys.df0Connect: defaults.driveConnect[0],
+            Keys.df0Type: defaults.driveType[0].rawValue,
+            Keys.df1Connect: defaults.driveConnect[1],
+            Keys.df1Type: defaults.driveType[1].rawValue,
+            Keys.df2Connect: defaults.driveConnect[2],
+            Keys.df2Type: defaults.driveType[2].rawValue,
+            Keys.df3Connect: defaults.driveConnect[3],
+            Keys.df3Type: defaults.driveType[3].rawValue,
+
+            Keys.gameDevice1: defaults.gameDevice1,
+            Keys.gameDevice2: defaults.gameDevice2,
+            Keys.serialDevice: defaults.serialDevice.rawValue
         ]
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
     }
 
-    static func resetMemoryUserDefaults() {
+    static func resetPeripheralsUserDefaults() {
 
         let userDefaults = UserDefaults.standard
         
-        let keys = [ Keys.eClockSyncing,
-                     Keys.slowRamDelay,
-                     Keys.slowRamMirror,
-                     Keys.bankD8DB,
-                     Keys.bankDC,
-                     Keys.bankE0E7,
-                     Keys.bankF0F7,
-                     Keys.bankMap,
-                     Keys.unmappingType,
-                     Keys.ramInitPattern
+        let keys = [ Keys.df0Connect,
+                     Keys.df0Type,
+                     Keys.df1Connect,
+                     Keys.df1Type,
+                     Keys.df2Connect,
+                     Keys.df2Type,
+                     Keys.df3Connect,
+                     Keys.df3Type,
+                     
+                     Keys.gameDevice1,
+                     Keys.gameDevice2,
+                     Keys.serialDevice
         ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
@@ -1270,7 +1228,7 @@ struct VideoDefaults {
     // TFT monitor appearance with a texture cutout similar to UAE
     static let tft = VideoDefaults.init(
         
-        palette: Palette.COLOR_PALETTE,
+        palette: Palette.PALETTE_COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,
@@ -1304,7 +1262,7 @@ struct VideoDefaults {
     // CRT monitor appearance with a texture-cutout closer to the center
     static let crt = VideoDefaults.init(
         
-        palette: Palette.COLOR_PALETTE,
+        palette: Palette.PALETTE_COLOR,
         brightness: 50.0,
         contrast: 100.0,
         saturation: 50.0,

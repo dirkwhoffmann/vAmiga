@@ -19,18 +19,19 @@
  *   CIA_8520_DIP  mimics option "[ ] 391078-01" in UAE (default)
  *   CIA_8520_PLCC mimics option "[X] 391078-01" in UAE (A600)
  */
-typedef VA_ENUM(long, CIAType)
+typedef VA_ENUM(long, CIARevision)
 {
     CIA_8520_DIP,
-    CIA_8520_PLCC
+    CIA_8520_PLCC,
+    CIA_COUNT
 };
 
-static inline bool isCIAType(long value)
+static inline bool isCIARevision(long value)
 {
-    return value >= CIA_8520_DIP && value <= CIA_8520_PLCC;
+    return value >= 0 && value < CIA_COUNT;
 }
 
-static inline const char *sCIAType(CIAType value)
+static inline const char *sCIARevision(CIARevision value)
 {
     switch (value) {
         case CIA_8520_DIP:   return "CIA_8520_DIP";
@@ -41,9 +42,9 @@ static inline const char *sCIAType(CIAType value)
 
 typedef struct
 {
-    CIAType type;
-    bool    todBug;
-    bool    eClockSyncing;
+    CIARevision revision;
+    bool todBug;
+    bool eClockSyncing;
 }
 CIAConfig;
 

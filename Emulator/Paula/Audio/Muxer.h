@@ -129,13 +129,14 @@ public:
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
 
-    void _dumpConfig() override;
-
     bool isMuted() { return config.volL == 0 && config.volR == 0; }
 
     double getSampleRate() { return sampleRate; }
     void setSampleRate(double hz);
+
+private:
     
+    void _dumpConfig() override;
 
 
     //

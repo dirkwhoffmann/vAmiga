@@ -17,7 +17,7 @@ CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
     
     subComponents = vector<HardwareComponent *> { &tod };
     
-    config.type = CIA_8520_DIP;
+    config.revision = CIA_8520_DIP;
     config.todBug = true;
     config.eClockSyncing = true;
     
@@ -55,6 +55,7 @@ CIA::getConfigItem(ConfigOption option)
 {
     switch (option) {
             
+        case OPT_CIA_REVISION:   return config.revision;
         case OPT_TODBUG:         return config.todBug;
         case OPT_ECLOCK_SYNCING: return config.eClockSyncing;
         
@@ -67,6 +68,19 @@ CIA::setConfigItem(ConfigOption option, long value)
 {
     switch (option) {
             
+        case OPT_CIA_REVISION:
+            
+            if (!isCIARevision(value)) {
+                warn("Invalid CIA revision: %d\n", value);
+                return false;
+            }
+            if (config.revision == value) {
+                return false;
+            }
+            
+            config.revision = (CIARevision)value;
+            return true;
+
         case OPT_TODBUG:
             
             if (config.todBug == value) {
@@ -93,7 +107,7 @@ CIA::setConfigItem(ConfigOption option, long value)
 void
 CIA::_dumpConfig()
 {
-    msg("          type : %s\n", sCIAType(config.type));
+    msg("      revision : %s\n", sCIARevision(config.revision));
     msg("        todBug : %s\n", config.todBug ? "yes" : "no");
     msg(" eClockSyncing : %s\n", config.eClockSyncing ? "yes" : "no");
 }

@@ -21,10 +21,10 @@ private:
     bool enabled = false;
 
     // Indicates if a certain DMA channel should be visualized
-    bool visualize[BUS_OWNER_COUNT]; 
+    bool visualize[BUS_COUNT]; 
 
     // DMA debugging colors
-    RgbColor debugColor[BUS_OWNER_COUNT][5];
+    RgbColor debugColor[BUS_COUNT][5];
 
     // Opacity of DMA pixels
     double opacity = 0.5;
