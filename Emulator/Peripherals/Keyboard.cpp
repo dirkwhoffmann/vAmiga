@@ -56,6 +56,12 @@ Keyboard::setConfigItem(ConfigOption option, long value)
 }
 
 void
+Keyboard::_dumpConfig()
+{
+    msg("      accurate : %d\n", config.accurate);
+}
+
+void
 Keyboard::_dump()
 {
     msg("Type ahead buffer: ");

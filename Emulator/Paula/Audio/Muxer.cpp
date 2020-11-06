@@ -252,8 +252,8 @@ Muxer::setConfigItem(ConfigOption option, long value)
 void
 Muxer::_dumpConfig()
 {
-    msg("samplingMethod : %d\n", config.samplingMethod);
-    msg("    filtertype : %d\n", config.filterType);
+    msg("samplingMethod : %s\n", sSamplingMethod(config.samplingMethod));
+    msg("    filtertype : %s\n", sFilterType(config.filterType));
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
     msg("    vol0, pan0 : %f, %f\n", config.vol[0], config.pan[0]);
     msg("    vol1, pan1 : %f, %f\n", config.vol[1], config.pan[1]);
