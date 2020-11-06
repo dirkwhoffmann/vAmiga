@@ -33,15 +33,21 @@ class DiskMountDialog: DialogController {
     
     var diskIconImage: NSImage? {
         
-        switch type {
+        let diskType = disk?.diskType
+        let hd = diskType == .DISK_35_HD || diskType == .DISK_35_HD_PC
         
+        var name: String
+        switch type {
         case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE:
-            return NSImage.init(named: writeProtect ? "adf_protected" : "adf")
+            name = hd ? "adfhd" : "adf"
         case .FILETYPE_IMG:
-            return NSImage.init(named: writeProtect ? "dos_protected" : "dos")
+            name = "dos"
         default:
-            return nil
+            name = ""
         }
+        
+        if writeProtect { name += "_protected" }
+        return NSImage.init(named: name)
     }
 
     var titleText: String {

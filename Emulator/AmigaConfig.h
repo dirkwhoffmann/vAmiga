@@ -73,7 +73,7 @@ static const int MIMIC_UAE       = 0; // Enable to compare debug logs with UAE
 static const int NO_SSE          = 0; // Don't use SSE extensions
 
 // Configuration
-static const int OPT_DEBUG       = 1; // Configuration options
+static const int OPT_DEBUG       = 0; // Configuration options
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
