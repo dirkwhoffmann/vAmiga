@@ -63,7 +63,19 @@ class Configuration {
         get { return amiga.getConfig(.OPT_FAST_RAM) }
         set { amiga.configure(.OPT_FAST_RAM, value: newValue) }
     }
- 
+    var bankMap: Int {
+        get { return amiga.getConfig(.OPT_BANKMAP) }
+        set { amiga.configure(.OPT_BANKMAP, value: newValue) }
+    }
+    var ramInitPattern: Int {
+        get { return amiga.getConfig(.OPT_RAM_INIT_PATTERN) }
+        set { amiga.configure(.OPT_RAM_INIT_PATTERN, value: newValue) }
+    }
+    var unmappingType: Int {
+        get { return amiga.getConfig(.OPT_UNMAPPING_TYPE) }
+        set { amiga.configure(.OPT_UNMAPPING_TYPE, value: newValue) }
+    }
+
     // Floppy drives
     func dfnConnected(_ n: Int) -> Bool {
         precondition(0 <= n && n <= 3)
@@ -124,7 +136,6 @@ class Configuration {
 
             // Avoid double mappings
             if gameDevice1 != -1 && gameDevice1 == gameDevice2 {
-                track("Resolving double mapping conflict with second port")
                 gameDevice2 = -1
             }
             
@@ -140,7 +151,6 @@ class Configuration {
 
             // Avoid double mappings
             if gameDevice2 != -1 && gameDevice2 == gameDevice1 {
-                track("Resolving double mapping conflict with first port")
                 gameDevice1 = -1
             }
             
@@ -153,7 +163,7 @@ class Configuration {
     }
 
     //
-    // Memory
+    // Peripherals
     //
 
     var eClockSyncing: Bool {
@@ -183,14 +193,6 @@ class Configuration {
     var bankF0F7: Int {
         get { return amiga.getConfig(.OPT_BANK_F0F7) }
         set { amiga.configure(.OPT_BANK_F0F7, value: newValue) }
-    }
-    var ramInitPattern: Int {
-        get { return amiga.getConfig(.OPT_RAM_INIT_PATTERN) }
-        set { amiga.configure(.OPT_RAM_INIT_PATTERN, value: newValue) }
-    }
-    var unmappingType: Int {
-        get { return amiga.getConfig(.OPT_UNMAPPING_TYPE) }
-        set { amiga.configure(.OPT_UNMAPPING_TYPE, value: newValue) }
     }
 
     //
@@ -401,7 +403,11 @@ class Configuration {
     
     func loadRomUserDefaults() {
 
+        let defaults = UserDefaults.standard
+        
         amiga.suspend()
+
+        extStart = defaults.integer(forKey: Keys.extStart)
         
         if let url = UserDefaults.womUrl {
             track("Seeking Wom")
@@ -422,9 +428,12 @@ class Configuration {
     func saveRomUserDefaults() {
         
         let fm = FileManager.default
-        
+        let defaults = UserDefaults.standard
+
         amiga.suspend()
                 
+        defaults.set(extStart, forKey: Keys.extStart)
+        
         if let url = UserDefaults.womUrl {
             track("Saving Wom")
             try? fm.removeItem(at: url)
@@ -460,6 +469,10 @@ class Configuration {
         slowRam = defaults.slowRam
         fastRam = defaults.fastRam
         
+        bankMap = defaults.bankMap.rawValue
+        unmappingType = defaults.unmappingType.rawValue
+        ramInitPattern = defaults.ramInitPattern.rawValue
+
         df0Connected = defaults.driveConnect[0]
         df1Connected = defaults.driveConnect[1]
         df2Connected = defaults.driveConnect[2]
@@ -489,7 +502,10 @@ class Configuration {
         chipRam = defaults.integer(forKey: Keys.chipRam)
         slowRam = defaults.integer(forKey: Keys.slowRam)
         fastRam = defaults.integer(forKey: Keys.fastRam)
-        
+        bankMap = defaults.integer(forKey: Keys.bankMap)
+        unmappingType = defaults.integer(forKey: Keys.unmappingType)
+        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
+
         df0Connected = defaults.bool(forKey: Keys.df0Connect)
         df1Connected = defaults.bool(forKey: Keys.df1Connect)
         df2Connected = defaults.bool(forKey: Keys.df2Connect)
@@ -519,6 +535,9 @@ class Configuration {
         defaults.set(chipRam, forKey: Keys.chipRam)
         defaults.set(slowRam, forKey: Keys.slowRam)
         defaults.set(fastRam, forKey: Keys.fastRam)
+        defaults.set(bankMap, forKey: Keys.bankMap)
+        defaults.set(unmappingType, forKey: Keys.unmappingType)
+        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
 
         defaults.set(df0Connected, forKey: Keys.df0Connect)
         defaults.set(df1Connected, forKey: Keys.df1Connect)
@@ -535,10 +554,10 @@ class Configuration {
     }
 
     //
-    // Memory
+    // Peripherals
     //
     
-    func loadMemoryDefaults(_ defaults: MemoryDefaults) {
+    func loadPeripheralsDefaults(_ defaults: PeripheralsDefaults) {
         
         amiga.suspend()
         
@@ -549,16 +568,11 @@ class Configuration {
         bankDC = defaults.bankDC
         bankE0E7 = defaults.bankE0E7
         bankF0F7 = defaults.bankF0F7
-        unmappingType = defaults.unmappingType
-        ramInitPattern = defaults.ramInitPattern
-
-        track("\(defaults.bankD8DB)")
-        track("\(bankD8DB)")
 
         amiga.resume()
     }
     
-    func loadMemoryUserDefaults() {
+    func loadPeripheralsUserDefaults() {
         
         let defaults = UserDefaults.standard
         
@@ -571,14 +585,11 @@ class Configuration {
         bankDC = defaults.integer(forKey: Keys.bankDC)
         bankE0E7 = defaults.integer(forKey: Keys.bankE0E7)
         bankF0F7 = defaults.integer(forKey: Keys.bankF0F7)
-        unmappingType = defaults.integer(forKey: Keys.unmappingType)
-        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
 
-        track("bankD8DB = \(defaults.integer(forKey: Keys.bankD8DB))")
         amiga.resume()
     }
     
-    func saveMemoryUserDefaults() {
+    func savePeripheralsUserDefaults() {
         
         track()
         
@@ -591,8 +602,6 @@ class Configuration {
         defaults.set(bankDC, forKey: Keys.bankDC)
         defaults.set(bankE0E7, forKey: Keys.bankE0E7)
         defaults.set(bankF0F7, forKey: Keys.bankF0F7)
-        defaults.set(unmappingType, forKey: Keys.unmappingType)
-        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
     }
     
     //

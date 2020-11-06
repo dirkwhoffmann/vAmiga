@@ -29,6 +29,8 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var extSubtitle: NSTextField!
     @IBOutlet weak var extSubsubtitle: NSTextField!
     @IBOutlet weak var extDeleteButton: NSButton!
+    @IBOutlet weak var extMapText: NSTextField!
+    @IBOutlet weak var extMapAddr: NSPopUpButton!
 
     @IBOutlet weak var arosButton: NSButton!
 
@@ -55,6 +57,10 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var hwChipRamPopup: NSPopUpButton!
     @IBOutlet weak var hwSlowRamPopup: NSPopUpButton!
     @IBOutlet weak var hwFastRamPopup: NSPopUpButton!
+
+    @IBOutlet weak var hwBankMap: NSPopUpButton!
+    @IBOutlet weak var hwUnmappingType: NSPopUpButton!
+    @IBOutlet weak var hwRamInitPattern: NSPopUpButton!
 
     // Drive
     @IBOutlet weak var hwDf0Type: NSPopUpButton!
@@ -96,10 +102,6 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var memBankDC: NSPopUpButton!
     @IBOutlet weak var memBankE0E7: NSPopUpButton!
     @IBOutlet weak var memBankF0F7: NSPopUpButton!
-
-    // Values
-    @IBOutlet weak var unmappingType: NSPopUpButton!
-    @IBOutlet weak var ramInitPattern: NSPopUpButton!
 
     // Lock
     @IBOutlet weak var memLockImage: NSButton!
@@ -250,7 +252,7 @@ class ConfigurationController: DialogController {
             switch id {
             case "Roms": refreshRomTab()
             case "Hardware": refreshHardwareTab()
-            case "Memory": refreshMemoryTab()
+            case "Peripherals": refreshPeripheralsTab()
             case "Compatibility": refreshCompatibilityTab()
             case "Audio": refreshAudioTab()
             case "Video": refreshVideoTab()

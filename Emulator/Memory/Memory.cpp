@@ -20,6 +20,7 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
     memset(&config, 0, sizeof(config));
 
     config.slowRamDelay   = true;
+    config.bankMap        = BMAP_A500;
     config.ramInitPattern = INIT_ALL_ZEROES;
     config.unmappingType  = UNMAPPED_FLOATING;
     config.bankD8DB       = MEM_NONE;
@@ -72,6 +73,7 @@ Memory::getConfigItem(ConfigOption option)
         case OPT_BANK_DC:           return config.bankDC;
         case OPT_BANK_E0E7:         return config.bankE0E7;
         case OPT_BANK_F0F7:         return config.bankF0F7;
+        case OPT_BANKMAP:           return config.bankMap;
         case OPT_UNMAPPING_TYPE:    return config.unmappingType;
         case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
 
@@ -222,7 +224,24 @@ Memory::setConfigItem(ConfigOption option, long value)
             updateMemSrcTables();
             amiga.resume();
             return true;
+
+        case OPT_BANKMAP:
             
+            if (!isBankMap(value)) {
+                warn("Invalid bank map: %d\n", value);
+                return false;
+            }
+            if (config.bankMap == value) {
+                return false;
+            }
+            
+            debug("bankMap = %d\n", value);
+            amiga.suspend();
+            config.bankMap = (BankMap)value;
+            updateMemSrcTables();
+            amiga.resume();
+            return true;
+
         case OPT_UNMAPPING_TYPE:
             
             if (!isUnmappingType(value)) {
@@ -233,6 +252,7 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
             
+            debug("unmappingType = %d\n", value);
             amiga.suspend();
             config.unmappingType = (UnmappingType)value;
             amiga.resume();
@@ -248,6 +268,7 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
 
+            debug("ramInitPattern = %d\n", value);
             amiga.suspend();
             config.ramInitPattern = (RamInitPattern)value;
             amiga.resume();
@@ -685,8 +706,8 @@ void
 Memory::updateCpuMemSrcTable()
 {
     MemorySource mem_rom = rom ? MEM_ROM : MEM_NONE;
-    MemorySource mem_ext = ext ? MEM_EXT : rom ? MEM_ROM_MIRROR : MEM_NONE;
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
+    MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
 
     int chipRamPages = config.chipSize / 0x10000;
     int slowRamPages = config.slowSize / 0x10000;
@@ -697,7 +718,8 @@ Memory::updateCpuMemSrcTable()
     assert(config.fastSize % 0x10000 == 0);
 
     bool ovl = ciaa.getPA() & 1;
-    
+    bool old = config.bankMap == BMAP_A1000 || config.bankMap == BMAP_A2000A;
+
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++) {
         cpuMemSrc[i] = MEM_NONE;
@@ -712,16 +734,13 @@ Memory::updateCpuMemSrcTable()
             cpuMemSrc[i] = MEM_CHIP_MIRROR;
         }
     }
-    
-    // Chip Ram mirror
-    
-    
+        
     // Fast Ram
     for (unsigned i = 0x20; i < 0x20 + fastRamPages; i++) {
         cpuMemSrc[i] = MEM_FAST;
     }
     
-    // CIA range
+    // CIAs
     for (unsigned i = 0xA0; i <= 0xBE; i++) {
         cpuMemSrc[i] = MEM_CIA_MIRROR;
     }
@@ -734,11 +753,12 @@ Memory::updateCpuMemSrcTable()
     
     // Real-time clock (older Amigas)
     for (unsigned i = 0xD8; i <= 0xDB; i++) {
-        cpuMemSrc[i] = config.bankD8DB;
+        cpuMemSrc[i] = old ? MEM_RTC : MEM_CUSTOM;
     }
 
     // Real-time clock (newer Amigas)
-    cpuMemSrc[0xDC] = config.bankDC;
+    cpuMemSrc[0xDC] = old ? MEM_CUSTOM : MEM_RTC;
+    
     
     // Reserved
     cpuMemSrc[0xDD] = MEM_NONE;
@@ -748,22 +768,31 @@ Memory::updateCpuMemSrcTable()
         cpuMemSrc[i] = MEM_CUSTOM;
     }
     
-    // Extended Rom, Kickstart mirror, or unmapped
-    for (unsigned i = 0xE0; i <= 0xE7; i++) {
-        cpuMemSrc[i] = config.bankE0E7 == MEM_EXT ? mem_ext : config.bankE0E7;
+    // Kickstart mirror, unmapped, or Extended Rom
+    if (config.bankMap != BMAP_A1000) {
+        for (unsigned i = 0xE0; i <= 0xE7; i++) {
+            cpuMemSrc[i] = mem_rom_mirror;
+        }
     }
-    
+    if (ext && config.extStart == 0xE0) {
+        for (unsigned i = 0xE0; i <= 0xE7; i++) {
+            cpuMemSrc[i] = MEM_EXT;
+        }
+    }
+
     // Auto-config (Zorro II)
     cpuMemSrc[0xE8] = MEM_AUTOCONF;
     for (unsigned i = 0xE9; i <= 0xEF; i++) {
-        cpuMemSrc[i] = MEM_NONE;
+        assert(cpuMemSrc[i] == MEM_NONE);
     }
     
-    // Extended Rom, Kickstart mirror, or unmapped
-    for (unsigned i = 0xF0; i <= 0xF7; i++) {
-        cpuMemSrc[i] = config.bankF0F7 == MEM_EXT ? mem_ext : config.bankF0F7;
+    // Unmapped or Extended Rom
+    if (ext && config.extStart == 0xF0) {
+        for (unsigned i = 0xF0; i <= 0xF7; i++) {
+            cpuMemSrc[i] = MEM_EXT;
+        }
     }
-    
+
     // Kickstart Wom or Kickstart Rom
     for (unsigned i = 0xF8; i <= 0xFF; i++) {
         cpuMemSrc[i] = mem_wom;

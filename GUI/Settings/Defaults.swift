@@ -81,7 +81,7 @@ extension MyController {
         pref.loadCaptureUserDefaults()
 
         config.loadRomUserDefaults()
-        config.loadMemoryUserDefaults()
+        config.loadPeripheralsUserDefaults()
         config.loadHardwareUserDefaults()
         config.loadCompatibilityUserDefaults()
         config.loadAudioUserDefaults()
@@ -511,7 +511,6 @@ extension UserDefaults {
 // User defaults (Roms)
 //
 
-/*
 extension Keys {
     
     static let extStart          = "VAMIGA_ROM_ExtStart"
@@ -526,7 +525,6 @@ struct RomDefaults {
         extStart: 0xE0
     )
 }
-*/
 
 extension UserDefaults {
     
@@ -546,7 +544,6 @@ extension UserDefaults {
 
     static func registerRomUserDefaults() {
         
-        /*
         let defaults = RomDefaults.std
         let dictionary: [String: Any] = [
             
@@ -555,18 +552,15 @@ extension UserDefaults {
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
-        */
     }
     
     static func resetRomUserDefaults() {
         
-        /*
         let defaults = UserDefaults.standard
 
         let keys = [ Keys.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
-        */
         
         // Delete previously saved Rom files
         let fm = FileManager.default
@@ -603,6 +597,10 @@ extension Keys {
     static let chipRam            = "VAMIGA_HW_ChipRam"
     static let slowRam            = "VAMIGA_HW_SlowRam"
     static let fastRam            = "VAMIGA_HW_FastRam"
+    
+    static let bankMap            = "VAMIGA_HW_BankMap"
+    static let unmappingType      = "VAMIGA_HW_UnmappingType"
+    static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
 
     // Drives
     static let df0Connect         = "VAMIGA_HW_DF0Connect"
@@ -630,6 +628,10 @@ struct HardwareDefaults {
     var slowRam: Int
     var fastRam: Int
     
+    var bankMap: BankMap
+    var unmappingType: UnmappingType
+    var ramInitPattern: RamInitPattern
+
     var driveConnect: [Bool]
     var driveType: [DriveType]
     
@@ -650,7 +652,11 @@ struct HardwareDefaults {
         chipRam: 512,
         slowRam: 512,
         fastRam: 0,
-        
+
+        bankMap: .BMAP_A500,
+        unmappingType: .UNMAPPED_FLOATING,
+        ramInitPattern: .INIT_ALL_ZEROES,
+
         driveConnect: [true, false, false, false],
         driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
@@ -669,6 +675,10 @@ struct HardwareDefaults {
         slowRam: 0,
         fastRam: 0,
         
+        bankMap: .BMAP_A1000,
+        unmappingType: .UNMAPPED_FLOATING,
+        ramInitPattern: .INIT_ALL_ZEROES,
+
         driveConnect: [true, false, false, false],
         driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
@@ -687,6 +697,10 @@ struct HardwareDefaults {
         slowRam: 512,
         fastRam: 0,
         
+        bankMap: .BMAP_A2000B,
+        unmappingType: .UNMAPPED_FLOATING,
+        ramInitPattern: .INIT_ALL_ZEROES,
+
         driveConnect: [true, true, false, false],
         driveType: [.DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD, .DRIVE_35_DD],
         
@@ -710,6 +724,10 @@ extension UserDefaults {
             Keys.chipRam: defaults.chipRam,
             Keys.slowRam: defaults.slowRam,
             Keys.fastRam: defaults.fastRam,
+            
+            Keys.bankMap: defaults.bankMap.rawValue,
+            Keys.unmappingType: defaults.unmappingType.rawValue,
+            Keys.ramInitPattern: defaults.ramInitPattern.rawValue,
 
             Keys.df0Connect: defaults.driveConnect[0],
             Keys.df0Type: defaults.driveType[0].rawValue,
@@ -740,6 +758,10 @@ extension UserDefaults {
                     Keys.chipRam,
                     Keys.slowRam,
                     Keys.fastRam,
+                    
+                    Keys.bankMap,
+                    Keys.unmappingType,
+                    Keys.ramInitPattern,
 
                     Keys.driveSpeed,
                     Keys.df0Connect,
@@ -777,11 +799,9 @@ extension Keys {
     static let bankDC            = "VAMIGA_MEM_BankDC"
     static let bankE0E7          = "VAMIGA_MEM_BankE0E7"
     static let bankF0F7          = "VAMIGA_MEM_BankF0F7"
-    static let unmappingType     = "VAMIGA_MEM_UnmappingType"
-    static let ramInitPattern    = "VAMIGA_MEM_RamInitPattern"
 }
 
-struct MemoryDefaults {
+struct PeripheralsDefaults {
     
     // Timing
     let eClockSyncing: Bool
@@ -795,14 +815,12 @@ struct MemoryDefaults {
     let bankDC: Int
     let bankE0E7: Int
     let bankF0F7: Int
-    let unmappingType: Int
-    let ramInitPattern: Int
     
     //
     // Schemes
     //
     
-    static let std = MemoryDefaults.init(
+    static let std = PeripheralsDefaults.init(
         
         eClockSyncing: true,
         slowRamDelay: true,
@@ -810,9 +828,7 @@ struct MemoryDefaults {
         bankD8DB: MemorySource.MEM_CUSTOM.rawValue,
         bankDC: MemorySource.MEM_RTC.rawValue,
         bankE0E7: MemorySource.MEM_EXT.rawValue,
-        bankF0F7: MemorySource.MEM_NONE.rawValue,
-        unmappingType: 0,
-        ramInitPattern: 1
+        bankF0F7: MemorySource.MEM_NONE.rawValue
     )
 }
 
@@ -820,7 +836,7 @@ extension UserDefaults {
 
     static func registerMemoryUserDefaults() {
 
-        let defaults = MemoryDefaults.std
+        let defaults = PeripheralsDefaults.std
         let dictionary: [String: Any] = [
             
             Keys.eClockSyncing: defaults.eClockSyncing,
@@ -829,9 +845,7 @@ extension UserDefaults {
             Keys.bankD8DB: defaults.bankD8DB,
             Keys.bankDC: defaults.bankDC,
             Keys.bankE0E7: defaults.bankE0E7,
-            Keys.bankF0F7: defaults.bankF0F7,
-            Keys.unmappingType: defaults.unmappingType,
-            Keys.ramInitPattern: defaults.ramInitPattern
+            Keys.bankF0F7: defaults.bankF0F7
         ]
         
         let userDefaults = UserDefaults.standard
@@ -849,6 +863,7 @@ extension UserDefaults {
                      Keys.bankDC,
                      Keys.bankE0E7,
                      Keys.bankF0F7,
+                     Keys.bankMap,
                      Keys.unmappingType,
                      Keys.ramInitPattern
         ]

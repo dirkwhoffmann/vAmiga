@@ -56,6 +56,7 @@ typedef VA_ENUM(long, ConfigOption)
     OPT_BANK_DC,
     OPT_BANK_E0E7,
     OPT_BANK_F0F7,
+    OPT_BANKMAP,
     OPT_UNMAPPING_TYPE,
     OPT_RAM_INIT_PATTERN,
     

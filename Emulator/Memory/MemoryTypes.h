@@ -40,8 +40,7 @@ typedef VA_ENUM(long, MemorySource)
 
 static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXT; }
 
-/* Access identifiers. Some memory methods need to know who called them.
- */
+// Access identifiers. Some memory methods need to know who called them.
 typedef VA_ENUM(long, Accessor)
 {
     CPU_ACCESS,
@@ -49,6 +48,16 @@ typedef VA_ENUM(long, Accessor)
 };
 
 static inline bool isAccessor(long value) { return value >= 0 && value <= AGNUS_ACCESS; }
+
+typedef VA_ENUM(long, BankMap)
+{
+    BMAP_A500,
+    BMAP_A1000,
+    BMAP_A2000A,
+    BMAP_A2000B
+};
+
+static inline bool isBankMap(long value) { return value >= 0 && value <= BMAP_A2000B; }
 
 // Configuration options for the initial RAM pattern
 typedef VA_ENUM(long, RamInitPattern)
@@ -91,6 +100,9 @@ typedef struct
 
     // Indicates if slow Ram accesses need a free bus
     bool slowRamDelay;
+    
+    // Memory layout
+    BankMap bankMap;
     
     // Ram contents on startup
     RamInitPattern ramInitPattern;

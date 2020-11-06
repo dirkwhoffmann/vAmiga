@@ -9,7 +9,7 @@
 
 extension ConfigurationController {
 
-    func refreshMemoryTab() {
+    func refreshPeripheralsTab() {
 
         let extIdentifier = amiga.mem.extIdentifier
         let hasExt = extIdentifier != .ROM_MISSING
@@ -47,8 +47,6 @@ extension ConfigurationController {
         case .MEM_NONE: memBankF0F7.selectItem(withTag: 1)
         default: fatalError()
         }
-        unmappingType.selectItem(withTag: config.unmappingType)
-        ramInitPattern.selectItem(withTag: config.ramInitPattern)
 
         // Lock symbol and explanation
         memLockImage.isHidden = true // poweredOff
@@ -119,22 +117,10 @@ extension ConfigurationController {
         refresh()
     }
 
-    @IBAction func memUnmappingTypeAction(_ sender: NSPopUpButton!) {
-
-        config.unmappingType = sender.selectedTag()
-        refresh()
-    }
-
-    @IBAction func memRamInitPatternAction(_ sender: NSPopUpButton!) {
-
-        config.ramInitPattern = sender.selectedTag()
-        refresh()
-    }
-
     @IBAction func memPresetAction(_ sender: NSPopUpButton!) {
          
          switch sender.selectedTag() {
-         case 0: config.loadMemoryDefaults(MemoryDefaults.std)
+         case 0: config.loadPeripheralsDefaults(PeripheralsDefaults.std)
          default: fatalError()
          }
          refresh()
@@ -142,6 +128,6 @@ extension ConfigurationController {
 
      @IBAction func memDefaultsAction(_ sender: NSButton!) {
          
-         config.saveMemoryUserDefaults()
+         config.savePeripheralsUserDefaults()
      }
 }

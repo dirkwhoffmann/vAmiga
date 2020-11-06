@@ -211,6 +211,7 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_BANK_DC:
         case OPT_BANK_E0E7:
         case OPT_BANK_F0F7:
+        case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
             return mem.getConfigItem(option);

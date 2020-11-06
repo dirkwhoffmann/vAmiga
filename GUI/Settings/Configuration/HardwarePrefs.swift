@@ -22,6 +22,9 @@ extension ConfigurationController {
         hwChipRamPopup.selectItem(withTag: config.chipRam)
         hwSlowRamPopup.selectItem(withTag: config.slowRam)
         hwFastRamPopup.selectItem(withTag: config.fastRam)
+        hwBankMap.selectItem(withTag: config.bankMap)
+        hwUnmappingType.selectItem(withTag: config.unmappingType)
+        hwRamInitPattern.selectItem(withTag: config.ramInitPattern)
 
         // Drive
         hwDf1Connect.state = config.df1Connected ? .on : .off
@@ -105,6 +108,24 @@ extension ConfigurationController {
     @IBAction func hwFastRamAction(_ sender: NSPopUpButton!) {
         
         config.fastRam = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func hwBankMapAction(_ sender: NSPopUpButton!) {
+
+        config.bankMap = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func hwUnmappingTypeAction(_ sender: NSPopUpButton!) {
+
+        config.unmappingType = sender.selectedTag()
+        refresh()
+    }
+
+    @IBAction func hwRamInitPatternAction(_ sender: NSPopUpButton!) {
+
+        config.ramInitPattern = sender.selectedTag()
         refresh()
     }
 
