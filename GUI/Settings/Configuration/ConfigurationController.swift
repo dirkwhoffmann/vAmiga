@@ -87,30 +87,20 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var hwPowerButton: NSButton!
 
     //
-    // Memory preferences
+    // Peripherals preferences
     //
-
-    // Timing
-    @IBOutlet weak var memEClockSyncing: NSButton!
-    @IBOutlet weak var memSlowRamDelay: NSButton!
 
     // Chipset features
     @IBOutlet weak var memSlowRamMirror: NSButton!
 
-    // Bank map
-    @IBOutlet weak var memBankD8DB: NSPopUpButton!
-    @IBOutlet weak var memBankDC: NSPopUpButton!
-    @IBOutlet weak var memBankE0E7: NSPopUpButton!
-    @IBOutlet weak var memBankF0F7: NSPopUpButton!
-
     // Lock
-    @IBOutlet weak var memLockImage: NSButton!
-    @IBOutlet weak var memLockText: NSTextField!
-    @IBOutlet weak var memLockSubText: NSTextField!
+    @IBOutlet weak var perLockImage: NSButton!
+    @IBOutlet weak var perLockText: NSTextField!
+    @IBOutlet weak var perLockSubText: NSTextField!
     
     // Buttons
-    @IBOutlet weak var memOKButton: NSButton!
-    @IBOutlet weak var memPowerButton: NSButton!
+    @IBOutlet weak var perOKButton: NSButton!
+    @IBOutlet weak var perPowerButton: NSButton!
 
     //
     // Compatibility preferences
@@ -135,7 +125,11 @@ class ConfigurationController: DialogController {
     @IBOutlet weak var compLockDskSync: NSButton!
     @IBOutlet weak var compAutoDskSync: NSButton!
     
-    // CIAs
+    // Timing
+    @IBOutlet weak var compEClockSyncing: NSButton!
+    @IBOutlet weak var compSlowRamDelay: NSButton!
+
+    // Keyboard
     @IBOutlet weak var compAccurateKeyboard: NSButton!
 
     // Lock

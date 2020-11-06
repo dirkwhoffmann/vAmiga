@@ -34,6 +34,10 @@ extension ConfigurationController {
         compLockDskSync.state = config.diskController.lockDskSync ? .on : .off
         compAutoDskSync.state = config.diskController.autoDskSync ? .on : .off
 
+        // Timing
+        compEClockSyncing.state = config.ciaA.eClockSyncing ? .on : .off
+        compSlowRamDelay.state = config.mem.slowRamDelay ? .on : .off
+
         // Keyboard
         compAccurateKeyboard.state = config.keyboard.accurate ? .on : .off
 
@@ -92,6 +96,18 @@ extension ConfigurationController {
     @IBAction func compAutoDskSyncAction(_ sender: NSButton!) {
         
         config.autoDskSync = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func compEClockSyncingAction(_ sender: NSButton!) {
+        
+        config.eClockSyncing = sender.state == .on
+        refresh()
+    }
+
+    @IBAction func compSlowRamDelayAction(_ sender: NSButton!) {
+
+        config.slowRamDelay = sender.state == .on
         refresh()
     }
 

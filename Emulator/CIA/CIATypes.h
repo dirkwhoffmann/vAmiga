@@ -25,18 +25,14 @@ typedef VA_ENUM(long, CIAType)
     CIA_8520_PLCC
 };
 
-inline bool
-isCIAType(long value)
+static inline bool isCIAType(long value)
 {
     return value >= CIA_8520_DIP && value <= CIA_8520_PLCC;
 }
 
-inline const char *
-ciaTypeName(CIAType type)
+static inline const char *sCIAType(CIAType value)
 {
-    assert(isCIAType(type));
-
-    switch (type) {
+    switch (value) {
         case CIA_8520_DIP:   return "CIA_8520_DIP";
         case CIA_8520_PLCC:  return "CIA_8520_PLCC";
         default:             return "???";

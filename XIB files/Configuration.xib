@@ -32,10 +32,12 @@
                 <outlet property="compClxSprPlf" destination="FOL-32-9CM" id="6n1-ZB-KkS"/>
                 <outlet property="compClxSprSpr" destination="feq-t4-YJF" id="vRB-Vw-UPR"/>
                 <outlet property="compDriveSpeed" destination="4Ny-q7-06h" id="TAF-pD-4dp"/>
+                <outlet property="compEClockSyncing" destination="TR3-l4-fWR" id="1FH-oB-0HJ"/>
                 <outlet property="compLockDskSync" destination="z9Z-9Z-AmZ" id="52g-mi-sUD"/>
                 <outlet property="compMechanicalDelays" destination="gyp-kk-PwN" id="YvX-xg-lxM"/>
                 <outlet property="compOKButton" destination="XEX-Bs-kpl" id="NgB-R0-ldR"/>
                 <outlet property="compPowerButton" destination="56p-by-mEB" id="HVb-hA-04o"/>
+                <outlet property="compSlowRamDelay" destination="cUo-6R-FwH" id="YdT-cm-oUd"/>
                 <outlet property="compTodBug" destination="fD3-tY-14r" id="5nh-OO-E3U"/>
                 <outlet property="extDeleteButton" destination="N41-Es-BhJ" id="XfO-xN-5fP"/>
                 <outlet property="extDropView" destination="TLP-ux-x2T" id="EfY-MO-d6h"/>
@@ -69,18 +71,12 @@
                 <outlet property="hwSerialDevice" destination="mIs-oj-bJf" id="T5v-aA-n7y"/>
                 <outlet property="hwSlowRamPopup" destination="ajN-Bo-Qf0" id="lzS-Rm-sVY"/>
                 <outlet property="hwUnmappingType" destination="I6a-cE-hWP" id="bc6-Ed-kwj"/>
-                <outlet property="memBankD8DB" destination="l8q-Yy-avg" id="xcM-3B-hdP"/>
-                <outlet property="memBankDC" destination="3ww-hf-sPl" id="gDt-sR-f28"/>
-                <outlet property="memBankE0E7" destination="kSJ-rc-swi" id="wed-fU-w4P"/>
-                <outlet property="memBankF0F7" destination="m5j-jI-Rcb" id="gHh-d8-jC3"/>
-                <outlet property="memEClockSyncing" destination="MlY-0k-MEW" id="mLk-V3-5go"/>
-                <outlet property="memLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
-                <outlet property="memLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
-                <outlet property="memLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
-                <outlet property="memOKButton" destination="070-Zr-CPb" id="izM-qM-PKn"/>
-                <outlet property="memPowerButton" destination="jt0-gY-j6u" id="MZ6-eL-pRY"/>
-                <outlet property="memSlowRamDelay" destination="fjl-uT-o4f" id="waZ-Yu-GiM"/>
                 <outlet property="memSlowRamMirror" destination="H9L-Wc-Fqn" id="hHk-JS-HW6"/>
+                <outlet property="perLockImage" destination="X8g-DW-pEz" id="5gN-ay-wCz"/>
+                <outlet property="perLockSubText" destination="Nb4-bX-VGV" id="ycj-LQ-DSB"/>
+                <outlet property="perLockText" destination="X4R-cP-YJ4" id="REP-0c-BRY"/>
+                <outlet property="perOKButton" destination="070-Zr-CPb" id="izM-qM-PKn"/>
+                <outlet property="perPowerButton" destination="jt0-gY-j6u" id="MZ6-eL-pRY"/>
                 <outlet property="prefTabView" destination="IOZ-5e-6pS" id="tBY-5n-qBt"/>
                 <outlet property="romArosButton" destination="Bae-L4-jQm" id="HTJ-dm-Jkg"/>
                 <outlet property="romDeleteButton" destination="YJW-vW-GDB" id="8dx-Bc-q9m"/>
@@ -1176,152 +1172,6 @@ DQ
                                                 <action selector="memPresetAction:" target="-2" id="hn5-Ab-aL8"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="l8q-Yy-avg">
-                                            <rect key="frame" x="458" y="342" width="136" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Real-time clock" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="Cjb-Tu-9fQ" id="mu3-6g-Egj">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="R9h-ed-Mqr">
-                                                    <items>
-                                                        <menuItem title="Real-time clock" state="on" id="Cjb-Tu-9fQ"/>
-                                                        <menuItem title="Custom chips" tag="1" id="Gnd-AP-guW"/>
-                                                        <menuItem title="Unmapped" tag="2" id="eHh-vl-xhj"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="memBankD8DBAction:" target="-2" id="kYR-rX-Zer"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3ww-hf-sPl">
-                                            <rect key="frame" x="458" y="310" width="136" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Real-time clock" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="9d4-00-b0o" id="y1g-Se-QuJ">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="dRr-Mf-Qpa">
-                                                    <items>
-                                                        <menuItem title="Real-time clock" state="on" id="9d4-00-b0o"/>
-                                                        <menuItem title="Custom Chips" tag="1" id="NdY-QW-sOS"/>
-                                                        <menuItem title="Unmapped" tag="2" id="lMt-FO-4c0"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="memBankDCAction:" target="-2" id="ALp-Fp-OAe"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="du7-Nd-YI7">
-                                            <rect key="frame" x="322" y="348" width="136" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="$D80000 - $DBFFFF:" id="xna-vX-Cwz">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="N0a-6P-1ZM">
-                                            <rect key="frame" x="320" y="315" width="137" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="$DC0000 - $DCFFFF:" id="aff-gZ-9mg">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CGw-nu-M8p">
-                                            <rect key="frame" x="306" y="377" width="213" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Bank map" id="cJZ-4w-1o6">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EQe-di-DUO">
-                                            <rect key="frame" x="15" y="377" width="194" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Timing" id="bh6-Hk-tnB">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fjl-uT-o4f">
-                                            <rect key="frame" x="41" y="322" width="202" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate Slow Ram bus delays" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="bck-re-azg">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="memSlowRamDelayAction:" target="-2" id="Da0-L6-XLW"/>
-                                            </connections>
-                                        </button>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kSJ-rc-swi">
-                                            <rect key="frame" x="458" y="278" width="136" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Extended Rom" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="ZTj-MR-OsK" id="Usa-5O-pcd">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="iRS-hi-xo7">
-                                                    <items>
-                                                        <menuItem title="Extended Rom" state="on" id="ZTj-MR-OsK"/>
-                                                        <menuItem title="Unmapped" tag="1" id="enP-VQ-uel"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="memBankE0E7Action:" target="-2" id="gCZ-Rq-lKs"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="m5j-jI-Rcb">
-                                            <rect key="frame" x="458" y="247" width="136" height="25"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="Extended Rom" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="MFK-hT-ruU" id="vKy-x4-nwg">
-                                                <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
-                                                <font key="font" metaFont="menu"/>
-                                                <menu key="menu" id="gu7-Gp-XDU">
-                                                    <items>
-                                                        <menuItem title="Extended Rom" state="on" id="MFK-hT-ruU"/>
-                                                        <menuItem title="Unmapped" tag="1" id="nwd-Hz-2TP"/>
-                                                    </items>
-                                                </menu>
-                                            </popUpButtonCell>
-                                            <connections>
-                                                <action selector="memBankF0F7Action:" target="-2" id="EPY-eb-vBD"/>
-                                            </connections>
-                                        </popUpButton>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zbJ-cm-NWh">
-                                            <rect key="frame" x="323" y="284" width="134" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="$E00000 - $E70000:" id="zS7-L5-T7a">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ean-sx-RfI">
-                                            <rect key="frame" x="323" y="252" width="133" height="16"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" lineBreakMode="clipping" title="$F00000 - $F70000:" id="Af6-Pp-bSg">
-                                                <font key="font" usesAppearanceFont="YES"/>
-                                                <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
-                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MlY-0k-MEW">
-                                            <rect key="frame" x="41" y="348" width="216" height="18"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Sync CIA accesses with E-clock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="IcZ-mH-12P">
-                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
-                                                <font key="font" metaFont="system"/>
-                                            </buttonCell>
-                                            <connections>
-                                                <action selector="memEClockSyncingAction:" target="-2" id="gZu-fL-Eyx"/>
-                                            </connections>
-                                        </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cEO-mA-0bd">
                                             <rect key="frame" x="286" y="217" width="194" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -1502,7 +1352,7 @@ DQ
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g1O-fP-8gK">
                                             <rect key="frame" x="307" y="204" width="145" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Miscellaneous" id="60N-zm-MK7">
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Keyboard" id="60N-zm-MK7">
                                                 <font key="font" metaFont="systemBold"/>
                                                 <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1662,6 +1512,37 @@ DQ
                                             </buttonCell>
                                             <connections>
                                                 <action selector="compAutoDskSyncAction:" target="-2" id="SvZ-rx-Dib"/>
+                                            </connections>
+                                        </button>
+                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ezx-ob-U1C">
+                                            <rect key="frame" x="307" y="119" width="194" height="17"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Timing" id="3H7-8h-eQx">
+                                                <font key="font" metaFont="systemBold"/>
+                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
+                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                            </textFieldCell>
+                                        </textField>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cUo-6R-FwH">
+                                            <rect key="frame" x="333" y="64" width="202" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Emulate Slow Ram bus delays" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Ntj-ap-Jlt">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compSlowRamDelayAction:" target="-2" id="Gsv-vp-WCY"/>
+                                            </connections>
+                                        </button>
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TR3-l4-fWR">
+                                            <rect key="frame" x="333" y="90" width="216" height="18"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                            <buttonCell key="cell" type="check" title="Sync CIA accesses with E-clock" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="JeW-BN-sXB">
+                                                <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                                                <font key="font" metaFont="system"/>
+                                            </buttonCell>
+                                            <connections>
+                                                <action selector="compEClockSyncingAction:" target="-2" id="2q9-Ib-tmY"/>
                                             </connections>
                                         </button>
                                     </subviews>

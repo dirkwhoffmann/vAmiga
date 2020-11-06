@@ -116,7 +116,7 @@ Muxer::setConfigItem(ConfigOption option, long value)
         case OPT_SAMPLING_METHOD:
             
             if (!isSamplingMethod(value)) {
-                warn("Invalid filter activation: %d\n", value);
+                warn("Invalid sampling method: %d\n", value);
                 return false;
             }
             break;
@@ -130,15 +130,6 @@ Muxer::setConfigItem(ConfigOption option, long value)
             }
             break;
             
-        case OPT_FILTER_ALWAYS_ON:
-            
-            if (config.filterAlwaysOn == value) {
-                return false;
-            }
-            
-            config.filterAlwaysOn = value;
-            return true;
-
         case OPT_AUDVOLL:
         case OPT_AUDVOLR:
         case OPT_AUDVOL0:
@@ -191,6 +182,15 @@ Muxer::setConfigItem(ConfigOption option, long value)
             filterR.setFilterType((FilterType)value);
             return true;
                         
+        case OPT_FILTER_ALWAYS_ON:
+            
+            if (config.filterAlwaysOn == value) {
+                return false;
+            }
+            
+            config.filterAlwaysOn = value;
+            return true;
+
         case OPT_AUDVOLL:
             
             config.volL = log2((double)value / 100.0);
@@ -255,11 +255,11 @@ Muxer::_dumpConfig()
     msg("samplingMethod : %d\n", config.samplingMethod);
     msg("    filtertype : %d\n", config.filterType);
     msg("filterAlwaysOn : %d\n", config.filterAlwaysOn);
-    msg("   vol0 / pan0 : %f %f\n", config.vol[0], config.pan[0]);
-    msg("   vol1 / pan1 : %f %f\n", config.vol[1], config.pan[1]);
-    msg("   vol2 / pan2 : %f %f\n", config.vol[2], config.pan[2]);
-    msg("   vol3 / pan3 : %f %f\n", config.vol[3], config.pan[3]);
-    msg("     volL volR : %f %f\n", config.volL, config.volR);
+    msg("    vol0, pan0 : %f, %f\n", config.vol[0], config.pan[0]);
+    msg("    vol1, pan1 : %f, %f\n", config.vol[1], config.pan[1]);
+    msg("    vol2, pan2 : %f, %f\n", config.vol[2], config.pan[2]);
+    msg("    vol3, pan3 : %f, %f\n", config.vol[3], config.pan[3]);
+    msg("    volL, volR : %f, %f\n", config.volL, config.volR);
 }
 
 void
@@ -310,9 +310,11 @@ Muxer::synthesize(Cycle clock, Cycle target, long count)
     double cyclesPerSample = (double)(target - clock) / (double)count;
                 
     switch (config.samplingMethod) {
+            
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
         case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
         case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
+        default:          assert(false);
     }
 }
 
@@ -331,6 +333,8 @@ Muxer::synthesize(Cycle clock, Cycle target)
         case SMP_NONE:    synthesize<SMP_NONE>   (clock, count, cyclesPerSample); break;
         case SMP_NEAREST: synthesize<SMP_NEAREST>(clock, count, cyclesPerSample); break;
         case SMP_LINEAR:  synthesize<SMP_LINEAR> (clock, count, cyclesPerSample); break;
+        default:          assert(false);
+
     }
 }
 

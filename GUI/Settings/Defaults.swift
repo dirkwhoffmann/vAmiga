@@ -61,7 +61,7 @@ extension UserDefaults {
 
         registerRomUserDefaults()
         registerHardwareUserDefaults()
-        registerMemoryUserDefaults()
+        registerPeripheralsUserDefaults()
         registerCompatibilityUserDefaults()
         registerAudioUserDefaults()
         registerVideoUserDefaults()
@@ -782,14 +782,10 @@ extension UserDefaults {
 }
 
 //
-// User defaults (Memory)
+// User defaults (Peripherals)
 //
 
 extension Keys {
-
-    // Timing
-    static let eClockSyncing     = "VAMIGA_MEM_EClockSyncing"
-    static let slowRamDelay      = "VAMIGA_MEM_SlowRamDelay"
     
     // Chipset features
     static let slowRamMirror     = "VAMIGA_MEM_SlowRamMirror"
@@ -802,11 +798,7 @@ extension Keys {
 }
 
 struct PeripheralsDefaults {
-    
-    // Timing
-    let eClockSyncing: Bool
-    let slowRamDelay: Bool
-    
+        
     // Chipset features
     let slowRamMirror: Bool
     
@@ -822,8 +814,6 @@ struct PeripheralsDefaults {
     
     static let std = PeripheralsDefaults.init(
         
-        eClockSyncing: true,
-        slowRamDelay: true,
         slowRamMirror: true,
         bankD8DB: MemorySource.MEM_CUSTOM.rawValue,
         bankDC: MemorySource.MEM_RTC.rawValue,
@@ -834,13 +824,11 @@ struct PeripheralsDefaults {
 
 extension UserDefaults {
 
-    static func registerMemoryUserDefaults() {
+    static func registerPeripheralsUserDefaults() {
 
         let defaults = PeripheralsDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.eClockSyncing: defaults.eClockSyncing,
-            Keys.slowRamDelay: defaults.slowRamDelay,
             Keys.slowRamMirror: defaults.slowRamMirror,
             Keys.bankD8DB: defaults.bankD8DB,
             Keys.bankDC: defaults.bankDC,
@@ -895,6 +883,10 @@ extension Keys {
     static let lockDskSync       = "VAMIGA_COM_LockDskSync"
     static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
 
+    // Timing
+    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
+    static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
+
     // Keyboard
     static let accurateKeyboard  = "VAMIGA_COM_AccurateKeyboard"
 }
@@ -918,6 +910,10 @@ struct CompatibilityDefaults {
     let lockDskSync: Bool
     let autoDskSync: Bool
     
+    // Timing
+    let eClockSyncing: Bool
+    let slowRamDelay: Bool
+
     // Keyboard
     let accurateKeyboard: Bool
 
@@ -940,6 +936,9 @@ struct CompatibilityDefaults {
          lockDskSync: false,
          autoDskSync: false,
 
+         eClockSyncing: true,
+         slowRamDelay: true,
+
          accurateKeyboard: true
      )
     
@@ -958,6 +957,9 @@ struct CompatibilityDefaults {
         lockDskSync: false,
         autoDskSync: false,
         
+        eClockSyncing: true,
+        slowRamDelay: true,
+
         accurateKeyboard: true
     )
 
@@ -976,6 +978,9 @@ struct CompatibilityDefaults {
         lockDskSync: false,
         autoDskSync: false,
         
+        eClockSyncing: false,
+        slowRamDelay: false,
+
         accurateKeyboard: false
     )
 }
@@ -990,12 +995,19 @@ extension UserDefaults {
             Keys.clxSprSpr: defaults.clxSprSpr,
             Keys.clxSprPlf: defaults.clxSprPlf,
             Keys.clxPlfPlf: defaults.clxPlfPlf,
+            
             Keys.blitterAccuracy: defaults.blitterAccuracy,
+            
             Keys.todBug: defaults.todBug,
+            
             Keys.driveSpeed: defaults.driveSpeed,
             Keys.mechanicalDelays: defaults.mechanicalDelays,
             Keys.lockDskSync: defaults.lockDskSync,
             Keys.autoDskSync: defaults.autoDskSync,
+            
+            Keys.eClockSyncing: defaults.eClockSyncing,
+            Keys.slowRamDelay: defaults.slowRamDelay,
+
             Keys.accurateKeyboard: defaults.accurateKeyboard
         ]
 

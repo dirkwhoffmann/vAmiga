@@ -91,6 +91,14 @@ CIA::setConfigItem(ConfigOption option, long value)
 }
 
 void
+CIA::_dumpConfig()
+{
+    msg("          type : %s\n", sCIAType(config.type));
+    msg("        todBug : %s\n", config.todBug ? "yes" : "no");
+    msg(" eClockSyncing : %s\n", config.eClockSyncing ? "yes" : "no");
+}
+
+void
 CIA::_inspect()
 {
     synchronized {

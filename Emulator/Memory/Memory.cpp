@@ -23,12 +23,7 @@ Memory::Memory(Amiga& ref) : AmigaComponent(ref)
     config.bankMap        = BMAP_A500;
     config.ramInitPattern = INIT_ALL_ZEROES;
     config.unmappingType  = UNMAPPED_FLOATING;
-    config.bankD8DB       = MEM_NONE;
-    config.bankDC         = MEM_RTC;
-    config.bankE0E7       = MEM_EXT;
-    config.bankF0F7       = MEM_NONE;
-
-    config.extStart = 0xE0;
+    config.extStart       = 0xE0;
 }
 
 Memory::~Memory()
@@ -69,10 +64,6 @@ Memory::getConfigItem(ConfigOption option)
         case OPT_FAST_RAM:          return config.fastSize / KB(1);
         case OPT_EXT_START:         return config.extStart;
         case OPT_SLOW_RAM_DELAY:    return config.slowRamDelay;
-        case OPT_BANK_D8DB:         return config.bankD8DB;
-        case OPT_BANK_DC:           return config.bankDC;
-        case OPT_BANK_E0E7:         return config.bankE0E7;
-        case OPT_BANK_F0F7:         return config.bankF0F7;
         case OPT_BANKMAP:           return config.bankMap;
         case OPT_UNMAPPING_TYPE:    return config.unmappingType;
         case OPT_RAM_INIT_PATTERN:  return config.ramInitPattern;
@@ -157,74 +148,6 @@ Memory::setConfigItem(ConfigOption option, long value)
             amiga.resume();
             return true;
             
-        case OPT_BANK_D8DB:
-                       
-            if (value != MEM_RTC && value != MEM_CUSTOM && value != MEM_NONE) {
-                warn("Invalid bank map (D8 .. DB): %x\n", value);
-                warn("Valid values: RTC, CUSTOM, NONE\n");
-                return false;
-            }
-            if (config.bankD8DB == value) {
-                return false;
-            }
-
-            amiga.suspend();
-            config.bankD8DB = (MemorySource)value;
-            updateMemSrcTables();
-            amiga.resume();
-            return true;
-            
-        case OPT_BANK_DC:
-
-            if (value != MEM_RTC && value != MEM_CUSTOM && value != MEM_NONE) {
-                warn("Invalid bank map (DC): %x\n", value);
-                warn("Valid values: RTC, CUSTOM, NONE\n");
-                return false;
-            }
-            if (config.bankDC == value) {
-                return false;
-            }
-
-            amiga.suspend();
-            config.bankDC = (MemorySource)value;
-            updateMemSrcTables();
-            amiga.resume();
-            return true;
-
-        case OPT_BANK_E0E7:
-            
-            if (value != MEM_EXT && value != MEM_NONE) {
-                warn("Invalid bank map (E0 .. E7): %x\n", value);
-                warn("Valid values: EXT, NONE\n");
-                return false;
-            }
-            if (config.bankE0E7 == value) {
-                return false;
-            }
-
-            amiga.suspend();
-            config.bankE0E7 = (MemorySource)value;
-            updateMemSrcTables();
-            amiga.resume();
-            return true;
-
-        case OPT_BANK_F0F7:
-
-            if (value != MEM_EXT && value != MEM_NONE) {
-                warn("Invalid bank map (F0 .. F7): %x\n", value);
-                warn("Valid values: EXT, NONE\n");
-                return false;
-            }
-            if (config.bankF0F7 == value) {
-                return false;
-            }
-            
-            amiga.suspend();
-            config.bankF0F7 = (MemorySource)value;
-            updateMemSrcTables();
-            amiga.resume();
-            return true;
-
         case OPT_BANKMAP:
             
             if (!isBankMap(value)) {
@@ -235,7 +158,6 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
             
-            debug("bankMap = %d\n", value);
             amiga.suspend();
             config.bankMap = (BankMap)value;
             updateMemSrcTables();
@@ -252,7 +174,6 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
             
-            debug("unmappingType = %d\n", value);
             amiga.suspend();
             config.unmappingType = (UnmappingType)value;
             amiga.resume();
@@ -268,7 +189,6 @@ Memory::setConfigItem(ConfigOption option, long value)
                 return false;
             }
 
-            debug("ramInitPattern = %d\n", value);
             amiga.suspend();
             config.ramInitPattern = (RamInitPattern)value;
             amiga.resume();
@@ -278,6 +198,22 @@ Memory::setConfigItem(ConfigOption option, long value)
         default:
             return false;
     }
+}
+
+void
+Memory::_dumpConfig()
+{
+    msg("       chipSize : %d\n", config.chipSize);
+    msg("       slowSize : %d\n", config.slowSize);
+    msg("       fastSize : %d\n", config.fastSize);
+    msg("        romSize : %d\n", config.romSize);
+    msg("        womSize : %d\n", config.womSize);
+    msg("        extSize : %d\n", config.extSize);
+    msg("   slowRamDelay : %s\n", config.slowRamDelay ? "yes" : "no");
+    msg("        bankMap : %s\n", sBankMap(config.bankMap));
+    msg(" ramInitPattern : %s\n", sRamInitPattern(config.ramInitPattern));
+    msg("  unmappingType : %s\n", sUnmappingType(config.unmappingType));
+    msg("       extStart : %02x\n", config.extStart);
 }
 
 size_t

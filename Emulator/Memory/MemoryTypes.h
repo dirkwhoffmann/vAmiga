@@ -38,7 +38,10 @@ typedef VA_ENUM(long, MemorySource)
     MEM_EXT
 };
 
-static inline bool isMemorySource(long value) { return value >= 0 && value <= MEM_EXT; }
+static inline bool isMemorySource(long value)
+{
+    return value >= 0 && value <= MEM_EXT;
+}
 
 // Access identifiers. Some memory methods need to know who called them.
 typedef VA_ENUM(long, Accessor)
@@ -47,7 +50,19 @@ typedef VA_ENUM(long, Accessor)
     AGNUS_ACCESS
 };
 
-static inline bool isAccessor(long value) { return value >= 0 && value <= AGNUS_ACCESS; }
+static inline bool isAccessor(long value)
+{
+    return value >= 0 && value <= AGNUS_ACCESS;
+}
+
+static inline const char *sAccessor(Accessor value)
+{
+    switch (value) {
+        case CPU_ACCESS:    return "CPU_ACCESS";
+        case AGNUS_ACCESS:  return "AGNUS_ACCESS";
+        default:            return "???";
+    }
+}
 
 typedef VA_ENUM(long, BankMap)
 {
@@ -57,7 +72,21 @@ typedef VA_ENUM(long, BankMap)
     BMAP_A2000B
 };
 
-static inline bool isBankMap(long value) { return value >= 0 && value <= BMAP_A2000B; }
+static inline bool isBankMap(long value)
+{
+    return value >= 0 && value <= BMAP_A2000B;
+}
+
+static inline const char *sBankMap(BankMap value)
+{
+    switch (value) {
+        case BMAP_A500:    return "BMAP_A500";
+        case BMAP_A1000:   return "BMAP_A1000";
+        case BMAP_A2000A:  return "BMAP_A2000A";
+        case BMAP_A2000B:  return "BMAP_A2000B";
+        default:           return "???";
+    }
+}
 
 // Configuration options for the initial RAM pattern
 typedef VA_ENUM(long, RamInitPattern)
@@ -67,7 +96,20 @@ typedef VA_ENUM(long, RamInitPattern)
     INIT_ALL_ONES
 };
 
-static inline bool isRamInitPattern(long value) { return value >= 0 && value <= INIT_ALL_ONES; }
+static inline bool isRamInitPattern(long value)
+{
+    return value >= 0 && value <= INIT_ALL_ONES;
+}
+
+static inline const char *sRamInitPattern(RamInitPattern value)
+{
+    switch (value) {
+        case INIT_RANDOMIZED:  return "INIT_RANDOMIZED";
+        case INIT_ALL_ZEROES:  return "INIT_ALL_ZEROES";
+        case INIT_ALL_ONES:    return "INIT_ALL_ONES";
+        default:               return "???";
+    }
+}
 
 // Configuration options for dealing with unmapped RAM
 typedef VA_ENUM(long, UnmappingType)
@@ -77,13 +119,19 @@ typedef VA_ENUM(long, UnmappingType)
     UNMAPPED_ALL_ONES
 };
 
-static inline bool isUnmappingType(long value) { return value >= 0 && value <= UNMAPPED_ALL_ONES; }
-
-inline const char *AccessorName(Accessor accessor)
+static inline bool isUnmappingType(long value)
 {
-    return
-    accessor == CPU_ACCESS ? "CPU" :
-    accessor == AGNUS_ACCESS ? "Agnus" : "???";
+    return value >= 0 && value <= UNMAPPED_ALL_ONES;
+}
+
+static inline const char *sUnmappingType(UnmappingType value)
+{
+    switch (value) {
+        case UNMAPPED_FLOATING:    return "UNMAPPED_FLOATING";
+        case UNMAPPED_ALL_ZEROES:  return "UNMAPPED_ALL_ZEROES";
+        case UNMAPPED_ALL_ONES:    return "UNMAPPED_ALL_ONES";
+        default:                   return "???";
+    }
 }
 
 typedef struct
@@ -110,12 +158,6 @@ typedef struct
     // Specifies how to deal with unmapped memory
     UnmappingType unmappingType;
     
-    // Bank map properties
-    MemorySource bankD8DB;
-    MemorySource bankDC;
-    MemorySource bankE0E7;
-    MemorySource bankF0F7;
-
     // First memory page where the extended ROM is blended it
     u32 extStart;
 }

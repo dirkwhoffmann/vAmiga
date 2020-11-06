@@ -209,7 +209,8 @@ public:
     
     long getConfigItem(ConfigOption option);
     bool setConfigItem(ConfigOption option, long value) override;
-    
+    void _dumpConfig() override;
+
     
     //
     // Analyzing

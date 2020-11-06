@@ -20,10 +20,24 @@ typedef VA_ENUM(long, SamplingMethod)
 {
     SMP_NONE,
     SMP_NEAREST,
-    SMP_LINEAR
+    SMP_LINEAR,
+    SMP_COUNT
 };
 
-static inline bool isSamplingMethod(long value) { return value >= 0 && value <= SMP_LINEAR; }
+static inline bool isSamplingMethod(long value)
+{
+    return value >= 0 && value < SMP_COUNT;
+}
+
+static inline const char *sSamplingMethod(SamplingMethod value)
+{
+    switch (value) {
+        case SMP_NONE:     return "SMP_NONE";
+        case SMP_NEAREST:  return "SMP_NEAREST";
+        case SMP_LINEAR:   return "SMP_LINEAR";
+        default:           return "???";
+    }
+}
 
 typedef VA_ENUM(long, FilterType)
 {
@@ -32,7 +46,19 @@ typedef VA_ENUM(long, FilterType)
     FILT_COUNT
 };
 
-static inline bool isFilterType(long value) { return value >= 0 && value < FILT_COUNT; }
+static inline bool isFilterType(long value)
+{
+    return value >= 0 && value < FILT_COUNT;
+}
+
+static inline const char *sFilterType(FilterType value)
+{
+    switch (value) {
+        case FILT_NONE:         return "FILT_NONE";
+        case FILT_BUTTERWORTH:  return "FILT_BUTTERWORTH";
+        default:                return "???";
+    }
+}
 
 
 //

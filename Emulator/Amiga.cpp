@@ -207,10 +207,6 @@ Amiga::getConfigItem(ConfigOption option)
         case OPT_FAST_RAM:
         case OPT_EXT_START:
         case OPT_SLOW_RAM_DELAY:
-        case OPT_BANK_D8DB:
-        case OPT_BANK_DC:
-        case OPT_BANK_E0E7:
-        case OPT_BANK_F0F7:
         case OPT_BANKMAP:
         case OPT_UNMAPPING_TYPE:
         case OPT_RAM_INIT_PATTERN:
@@ -282,6 +278,9 @@ Amiga::configure(ConfigOption option, long value)
     // Inform the GUI if the configuration has changed
     if (changed) messageQueue.put(MSG_CONFIG);
     
+    // Dump the current configuration in debugging mode
+    if (changed && OPT_DEBUG) dumpConfig();
+
     return changed;
 }
 
@@ -296,6 +295,9 @@ Amiga::configure(unsigned drive, ConfigOption option, long value)
     // Inform the GUI if the configuration has changed
     if (changed) messageQueue.put(MSG_CONFIG);
     
+    // Dump the current configuration in debugging mode
+    if (changed && OPT_DEBUG) dumpConfig();
+        
     return changed;
 }
 

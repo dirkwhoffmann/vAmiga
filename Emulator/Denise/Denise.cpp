@@ -167,12 +167,12 @@ Denise::_inspect()
 void
 Denise::_dumpConfig()
 {
-    msg("   hiddenSprites: $%x\n", config.hiddenSprites);
-    msg("    hiddenLayers: $%x\n", config.hiddenLayers);
-    msg("hiddenLayerAlpha: %d\n", config.hiddenLayerAlpha);
-    msg("       clxSprSpr: $%x\n", config.clxSprSpr);
-    msg("       clxSprPlf: $%x\n", config.clxSprPlf);
-    msg("       clxPlfPlf: $%x\n", config.clxPlfPlf);
+    msg("   hiddenSprites : %02x\n", config.hiddenSprites);
+    msg("    hiddenLayers : %04x\n", config.hiddenLayers);
+    msg("hiddenLayerAlpha : %d\n", config.hiddenLayerAlpha);
+    msg("       clxSprSpr : %s\n", config.clxSprSpr ? "yes" : "no");
+    msg("       clxSprPlf : %s\n", config.clxSprPlf ? "yes" : "no");
+    msg("       clxPlfPlf : %s\n", config.clxPlfPlf ? "yes" : "no");
 }
 
 void

@@ -28,11 +28,9 @@ inline bool isAgnusRevision(long value)
     return value >= 0 && value < AGNUS_CNT;
 }
 
-inline const char *agnusRevisionName(AgnusRevision type)
+inline const char *sAgnusRevision(AgnusRevision value)
 {
-    assert(isAgnusRevision(type));
-
-    switch (type) {
+    switch (value) {
         case AGNUS_OCS:     return "AGNUS_OCS";
         case AGNUS_ECS_1MB: return "AGNUS_ECS_1MB";
         case AGNUS_ECS_2MB: return "AGNUS_ECS_2MB";

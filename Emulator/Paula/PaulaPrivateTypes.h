@@ -29,6 +29,9 @@ enum IrqSource : long
     INT_COUNT
 };
 
-static inline bool isIrqSource(long value) { return value >= 0 && value < INT_COUNT; }
+static inline bool isIrqSource(long value)
+{
+    return value >= 0 && value < INT_COUNT;
+}
 
 #endif
