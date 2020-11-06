@@ -543,18 +543,18 @@ class Configuration {
         
         amiga.suspend()
         
-        df0Connected = defaults.bool(forKey: Keys.df0Connect)
-        df1Connected = defaults.bool(forKey: Keys.df1Connect)
-        df2Connected = defaults.bool(forKey: Keys.df2Connect)
-        df3Connected = defaults.bool(forKey: Keys.df3Connect)
-        df0Type = defaults.integer(forKey: Keys.df0Type)
-        df1Type = defaults.integer(forKey: Keys.df1Type)
-        df2Type = defaults.integer(forKey: Keys.df2Type)
-        df3Type = defaults.integer(forKey: Keys.df3Type)
+        df0Connected = defaults.bool(forKey: Keys.Per.df0Connect)
+        df1Connected = defaults.bool(forKey: Keys.Per.df1Connect)
+        df2Connected = defaults.bool(forKey: Keys.Per.df2Connect)
+        df3Connected = defaults.bool(forKey: Keys.Per.df3Connect)
+        df0Type = defaults.integer(forKey: Keys.Per.df0Type)
+        df1Type = defaults.integer(forKey: Keys.Per.df1Type)
+        df2Type = defaults.integer(forKey: Keys.Per.df2Type)
+        df3Type = defaults.integer(forKey: Keys.Per.df3Type)
 
-        gameDevice1 = defaults.integer(forKey: Keys.gameDevice1)
-        gameDevice2 = defaults.integer(forKey: Keys.gameDevice2)
-        serialDevice = defaults.integer(forKey: Keys.serialDevice)
+        gameDevice1 = defaults.integer(forKey: Keys.Per.gameDevice1)
+        gameDevice2 = defaults.integer(forKey: Keys.Per.gameDevice2)
+        serialDevice = defaults.integer(forKey: Keys.Per.serialDevice)
         
         amiga.resume()
     }
@@ -565,18 +565,18 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(df0Connected, forKey: Keys.df0Connect)
-        defaults.set(df1Connected, forKey: Keys.df1Connect)
-        defaults.set(df2Connected, forKey: Keys.df2Connect)
-        defaults.set(df3Connected, forKey: Keys.df3Connect)
-        defaults.set(df0Type, forKey: Keys.df0Type)
-        defaults.set(df1Type, forKey: Keys.df1Type)
-        defaults.set(df2Type, forKey: Keys.df2Type)
-        defaults.set(df3Type, forKey: Keys.df3Type)
+        defaults.set(df0Connected, forKey: Keys.Per.df0Connect)
+        defaults.set(df1Connected, forKey: Keys.Per.df1Connect)
+        defaults.set(df2Connected, forKey: Keys.Per.df2Connect)
+        defaults.set(df3Connected, forKey: Keys.Per.df3Connect)
+        defaults.set(df0Type, forKey: Keys.Per.df0Type)
+        defaults.set(df1Type, forKey: Keys.Per.df1Type)
+        defaults.set(df2Type, forKey: Keys.Per.df2Type)
+        defaults.set(df3Type, forKey: Keys.Per.df3Type)
 
-        defaults.set(gameDevice1, forKey: Keys.gameDevice1)
-        defaults.set(gameDevice2, forKey: Keys.gameDevice2)
-        defaults.set(serialDevice, forKey: Keys.serialDevice)
+        defaults.set(gameDevice1, forKey: Keys.Per.gameDevice1)
+        defaults.set(gameDevice2, forKey: Keys.Per.gameDevice2)
+        defaults.set(serialDevice, forKey: Keys.Per.serialDevice)
 
     }
     
@@ -613,21 +613,21 @@ class Configuration {
         
         amiga.suspend()
         
-        blitterAccuracy = defaults.integer(forKey: Keys.blitterAccuracy)
+        blitterAccuracy = defaults.integer(forKey: Keys.Com.blitterAccuracy)
 
-        eClockSyncing = defaults.bool(forKey: Keys.eClockSyncing)
-        slowRamDelay = defaults.bool(forKey: Keys.slowRamDelay)
+        eClockSyncing = defaults.bool(forKey: Keys.Com.eClockSyncing)
+        slowRamDelay = defaults.bool(forKey: Keys.Com.slowRamDelay)
 
-        clxSprSpr = defaults.bool(forKey: Keys.clxSprSpr)
-        clxSprPlf = defaults.bool(forKey: Keys.clxSprPlf)
-        clxPlfPlf = defaults.bool(forKey: Keys.clxPlfPlf)
+        clxSprSpr = defaults.bool(forKey: Keys.Com.clxSprSpr)
+        clxSprPlf = defaults.bool(forKey: Keys.Com.clxSprPlf)
+        clxPlfPlf = defaults.bool(forKey: Keys.Com.clxPlfPlf)
                 
-        driveSpeed = defaults.integer(forKey: Keys.driveSpeed)
-        mechanicalDelays = defaults.bool(forKey: Keys.mechanicalDelays)
-        lockDskSync = defaults.bool(forKey: Keys.lockDskSync)
-        autoDskSync = defaults.bool(forKey: Keys.autoDskSync)
+        driveSpeed = defaults.integer(forKey: Keys.Com.driveSpeed)
+        mechanicalDelays = defaults.bool(forKey: Keys.Com.mechanicalDelays)
+        lockDskSync = defaults.bool(forKey: Keys.Com.lockDskSync)
+        autoDskSync = defaults.bool(forKey: Keys.Com.autoDskSync)
 
-        accurateKeyboard = defaults.bool(forKey: Keys.accurateKeyboard)
+        accurateKeyboard = defaults.bool(forKey: Keys.Com.accurateKeyboard)
 
         amiga.resume()
      }
@@ -638,21 +638,21 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(blitterAccuracy, forKey: Keys.blitterAccuracy)
+        defaults.set(blitterAccuracy, forKey: Keys.Com.blitterAccuracy)
 
-        defaults.set(eClockSyncing, forKey: Keys.eClockSyncing)
-        defaults.set(slowRamDelay, forKey: Keys.slowRamDelay)
+        defaults.set(eClockSyncing, forKey: Keys.Com.eClockSyncing)
+        defaults.set(slowRamDelay, forKey: Keys.Com.slowRamDelay)
 
-        defaults.set(clxSprSpr, forKey: Keys.clxSprSpr)
-        defaults.set(clxSprPlf, forKey: Keys.clxSprPlf)
-        defaults.set(clxPlfPlf, forKey: Keys.clxPlfPlf)
+        defaults.set(clxSprSpr, forKey: Keys.Com.clxSprSpr)
+        defaults.set(clxSprPlf, forKey: Keys.Com.clxSprPlf)
+        defaults.set(clxPlfPlf, forKey: Keys.Com.clxPlfPlf)
                 
-        defaults.set(driveSpeed, forKey: Keys.driveSpeed)
-        defaults.set(mechanicalDelays, forKey: Keys.mechanicalDelays)
-        defaults.set(lockDskSync, forKey: Keys.lockDskSync)
-        defaults.set(autoDskSync, forKey: Keys.autoDskSync)
+        defaults.set(driveSpeed, forKey: Keys.Com.driveSpeed)
+        defaults.set(mechanicalDelays, forKey: Keys.Com.mechanicalDelays)
+        defaults.set(lockDskSync, forKey: Keys.Com.lockDskSync)
+        defaults.set(autoDskSync, forKey: Keys.Com.autoDskSync)
         
-        defaults.set(accurateKeyboard, forKey: Keys.accurateKeyboard)
+        defaults.set(accurateKeyboard, forKey: Keys.Com.accurateKeyboard)
     }
     
     //
@@ -687,20 +687,20 @@ class Configuration {
         
         amiga.suspend()
         
-        vol0 = defaults.integer(forKey: Keys.vol0)
-        vol1 = defaults.integer(forKey: Keys.vol1)
-        vol2 = defaults.integer(forKey: Keys.vol2)
-        vol3 = defaults.integer(forKey: Keys.vol3)
-        pan0 = defaults.integer(forKey: Keys.pan0)
-        pan1 = defaults.integer(forKey: Keys.pan1)
-        pan2 = defaults.integer(forKey: Keys.pan2)
-        pan3 = defaults.integer(forKey: Keys.pan3)
+        vol0 = defaults.integer(forKey: Keys.Aud.vol0)
+        vol1 = defaults.integer(forKey: Keys.Aud.vol1)
+        vol2 = defaults.integer(forKey: Keys.Aud.vol2)
+        vol3 = defaults.integer(forKey: Keys.Aud.vol3)
+        pan0 = defaults.integer(forKey: Keys.Aud.pan0)
+        pan1 = defaults.integer(forKey: Keys.Aud.pan1)
+        pan2 = defaults.integer(forKey: Keys.Aud.pan2)
+        pan3 = defaults.integer(forKey: Keys.Aud.pan3)
         
-        volL = defaults.integer(forKey: Keys.volL)
-        volR = defaults.integer(forKey: Keys.volR)
-        samplingMethod = defaults.integer(forKey: Keys.samplingMethod)
-        filterType = defaults.integer(forKey: Keys.filterType)
-        filterAlwaysOn = defaults.bool(forKey: Keys.filterAlwaysOn)
+        volL = defaults.integer(forKey: Keys.Aud.volL)
+        volR = defaults.integer(forKey: Keys.Aud.volR)
+        samplingMethod = defaults.integer(forKey: Keys.Aud.samplingMethod)
+        filterType = defaults.integer(forKey: Keys.Aud.filterType)
+        filterAlwaysOn = defaults.bool(forKey: Keys.Aud.filterAlwaysOn)
         
         amiga.resume()
     }
@@ -711,20 +711,20 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(vol0, forKey: Keys.vol0)
-        defaults.set(vol1, forKey: Keys.vol1)
-        defaults.set(vol2, forKey: Keys.vol2)
-        defaults.set(vol3, forKey: Keys.vol3)
-        defaults.set(pan0, forKey: Keys.pan0)
-        defaults.set(pan1, forKey: Keys.pan1)
-        defaults.set(pan2, forKey: Keys.pan2)
-        defaults.set(pan3, forKey: Keys.pan3)
+        defaults.set(vol0, forKey: Keys.Aud.vol0)
+        defaults.set(vol1, forKey: Keys.Aud.vol1)
+        defaults.set(vol2, forKey: Keys.Aud.vol2)
+        defaults.set(vol3, forKey: Keys.Aud.vol3)
+        defaults.set(pan0, forKey: Keys.Aud.pan0)
+        defaults.set(pan1, forKey: Keys.Aud.pan1)
+        defaults.set(pan2, forKey: Keys.Aud.pan2)
+        defaults.set(pan3, forKey: Keys.Aud.pan3)
         
-        defaults.set(volL, forKey: Keys.volL)
-        defaults.set(volR, forKey: Keys.volR)
-        defaults.set(samplingMethod, forKey: Keys.samplingMethod)
-        defaults.set(filterType, forKey: Keys.filterType)
-        defaults.set(filterAlwaysOn, forKey: Keys.filterAlwaysOn)
+        defaults.set(volL, forKey: Keys.Aud.volL)
+        defaults.set(volR, forKey: Keys.Aud.volR)
+        defaults.set(samplingMethod, forKey: Keys.Aud.samplingMethod)
+        defaults.set(filterType, forKey: Keys.Aud.filterType)
+        defaults.set(filterAlwaysOn, forKey: Keys.Aud.filterAlwaysOn)
     }
     
     //
@@ -792,33 +792,34 @@ class Configuration {
         
         amiga.suspend()
         
-        palette = Palette(rawValue: defaults.integer(forKey: Keys.palette)) ?? .PALETTE_COLOR
-        brightness = defaults.double(forKey: Keys.brightness)
-        contrast = defaults.double(forKey: Keys.contrast)
-        saturation = defaults.double(forKey: Keys.saturation)
+        let paletteKey = defaults.integer(forKey: Keys.Vid.palette)
+        palette = Palette(rawValue: paletteKey) ?? .PALETTE_COLOR
+        brightness = defaults.double(forKey: Keys.Vid.brightness)
+        contrast = defaults.double(forKey: Keys.Vid.contrast)
+        saturation = defaults.double(forKey: Keys.Vid.saturation)
 
-        hCenter = defaults.float(forKey: Keys.hCenter)
-        vCenter = defaults.float(forKey: Keys.vCenter)
-        hZoom = defaults.float(forKey: Keys.hZoom)
-        vZoom = defaults.float(forKey: Keys.vZoom)
+        hCenter = defaults.float(forKey: Keys.Vid.hCenter)
+        vCenter = defaults.float(forKey: Keys.Vid.vCenter)
+        hZoom = defaults.float(forKey: Keys.Vid.hZoom)
+        vZoom = defaults.float(forKey: Keys.Vid.vZoom)
 
-        enhancer = defaults.integer(forKey: Keys.enhancer)
-        upscaler = defaults.integer(forKey: Keys.upscaler)
+        enhancer = defaults.integer(forKey: Keys.Vid.enhancer)
+        upscaler = defaults.integer(forKey: Keys.Vid.upscaler)
         
-        bloom = Int32(defaults.integer(forKey: Keys.bloom))
-        bloomRadius = defaults.float(forKey: Keys.bloomRadius)
-        bloomBrightness = defaults.float(forKey: Keys.bloomBrightness)
-        bloomWeight = defaults.float(forKey: Keys.bloomWeight)
-        flicker = Int32(defaults.integer(forKey: Keys.flicker))
-        flickerWeight = defaults.float(forKey: Keys.flickerWeight)
-        dotMask = Int32(defaults.integer(forKey: Keys.dotMask))
-        dotMaskBrightness = defaults.float(forKey: Keys.dotMaskBrightness)
-        scanlines = Int32(defaults.integer(forKey: Keys.scanlines))
-        scanlineBrightness = defaults.float(forKey: Keys.scanlineBrightness)
-        scanlineWeight = defaults.float(forKey: Keys.scanlineWeight)
-        disalignment = Int32(defaults.integer(forKey: Keys.disalignment))
-        disalignmentH = defaults.float(forKey: Keys.disalignmentH)
-        disalignmentV = defaults.float(forKey: Keys.disalignmentV)
+        bloom = Int32(defaults.integer(forKey: Keys.Vid.bloom))
+        bloomRadius = defaults.float(forKey: Keys.Vid.bloomRadius)
+        bloomBrightness = defaults.float(forKey: Keys.Vid.bloomBrightness)
+        bloomWeight = defaults.float(forKey: Keys.Vid.bloomWeight)
+        flicker = Int32(defaults.integer(forKey: Keys.Vid.flicker))
+        flickerWeight = defaults.float(forKey: Keys.Vid.flickerWeight)
+        dotMask = Int32(defaults.integer(forKey: Keys.Vid.dotMask))
+        dotMaskBrightness = defaults.float(forKey: Keys.Vid.dotMaskBrightness)
+        scanlines = Int32(defaults.integer(forKey: Keys.Vid.scanlines))
+        scanlineBrightness = defaults.float(forKey: Keys.Vid.scanlineBrightness)
+        scanlineWeight = defaults.float(forKey: Keys.Vid.scanlineWeight)
+        disalignment = Int32(defaults.integer(forKey: Keys.Vid.disalignment))
+        disalignmentH = defaults.float(forKey: Keys.Vid.disalignmentH)
+        disalignmentV = defaults.float(forKey: Keys.Vid.disalignmentV)
         
         renderer.updateTextureRect()
         renderer.buildDotMasks()
@@ -832,32 +833,32 @@ class Configuration {
         
         let defaults = UserDefaults.standard
         
-        defaults.set(palette.rawValue, forKey: Keys.palette)
-        defaults.set(brightness, forKey: Keys.brightness)
-        defaults.set(contrast, forKey: Keys.contrast)
-        defaults.set(saturation, forKey: Keys.saturation)
+        defaults.set(palette.rawValue, forKey: Keys.Vid.palette)
+        defaults.set(brightness, forKey: Keys.Vid.brightness)
+        defaults.set(contrast, forKey: Keys.Vid.contrast)
+        defaults.set(saturation, forKey: Keys.Vid.saturation)
 
-        defaults.set(hCenter, forKey: Keys.hCenter)
-        defaults.set(vCenter, forKey: Keys.vCenter)
-        defaults.set(hZoom, forKey: Keys.hZoom)
-        defaults.set(vZoom, forKey: Keys.vZoom)
+        defaults.set(hCenter, forKey: Keys.Vid.hCenter)
+        defaults.set(vCenter, forKey: Keys.Vid.vCenter)
+        defaults.set(hZoom, forKey: Keys.Vid.hZoom)
+        defaults.set(vZoom, forKey: Keys.Vid.vZoom)
 
-        defaults.set(enhancer, forKey: Keys.enhancer)
-        defaults.set(upscaler, forKey: Keys.upscaler)
+        defaults.set(enhancer, forKey: Keys.Vid.enhancer)
+        defaults.set(upscaler, forKey: Keys.Vid.upscaler)
         
-        defaults.set(bloom, forKey: Keys.bloom)
-        defaults.set(bloomRadius, forKey: Keys.bloomRadius)
-        defaults.set(bloomBrightness, forKey: Keys.bloomBrightness)
-        defaults.set(bloomWeight, forKey: Keys.bloomWeight)
-        defaults.set(flicker, forKey: Keys.flicker)
-        defaults.set(flickerWeight, forKey: Keys.flickerWeight)
-        defaults.set(dotMask, forKey: Keys.dotMask)
-        defaults.set(dotMaskBrightness, forKey: Keys.dotMaskBrightness)
-        defaults.set(scanlines, forKey: Keys.scanlines)
-        defaults.set(scanlineBrightness, forKey: Keys.scanlineBrightness)
-        defaults.set(scanlineWeight, forKey: Keys.scanlineWeight)
-        defaults.set(disalignment, forKey: Keys.disalignment)
-        defaults.set(disalignmentH, forKey: Keys.disalignmentH)
-        defaults.set(disalignmentV, forKey: Keys.disalignmentV)
+        defaults.set(bloom, forKey: Keys.Vid.bloom)
+        defaults.set(bloomRadius, forKey: Keys.Vid.bloomRadius)
+        defaults.set(bloomBrightness, forKey: Keys.Vid.bloomBrightness)
+        defaults.set(bloomWeight, forKey: Keys.Vid.bloomWeight)
+        defaults.set(flicker, forKey: Keys.Vid.flicker)
+        defaults.set(flickerWeight, forKey: Keys.Vid.flickerWeight)
+        defaults.set(dotMask, forKey: Keys.Vid.dotMask)
+        defaults.set(dotMaskBrightness, forKey: Keys.Vid.dotMaskBrightness)
+        defaults.set(scanlines, forKey: Keys.Vid.scanlines)
+        defaults.set(scanlineBrightness, forKey: Keys.Vid.scanlineBrightness)
+        defaults.set(scanlineWeight, forKey: Keys.Vid.scanlineWeight)
+        defaults.set(disalignment, forKey: Keys.Vid.disalignment)
+        defaults.set(disalignmentH, forKey: Keys.Vid.disalignmentH)
+        defaults.set(disalignmentV, forKey: Keys.Vid.disalignmentV)
     }
 }

@@ -124,32 +124,35 @@ extension MyController {
 
 struct Keys {
     
-    // Drives
-    static let driveBlankDiskFormat   = "VAMIGA_GEN_DriveBlankDiskFormat"
-    static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
-    static let driveSounds            = "VAMIGA_GEN_DriveSounds"
-    static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
-    static let driveInsertSound       = "VAMIGA_GEN_DriveInsertSound"
-    static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
-    static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
-    static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
-    
-    // Fullscreen
-    static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
-    static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
-    
-    // Warp mode
-    static let warpMode               = "VAMIGA_GEN_WarpMode"
-
-    // Miscellaneous
-    static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
-    static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
+    struct Gen {
+        
+        // Drives
+        static let blankDiskFormat        = "VAMIGA_GEN_BlankDiskFormat"
+        static let ejectWithoutAsking     = "VAMIGA_GEN_EjectWithoutAsking"
+        static let driveSounds            = "VAMIGA_GEN_DriveSounds"
+        static let driveSoundPan          = "VAMIGA_GEN_DriveSoundPan"
+        static let driveInsertSound       = "VAMIGA_GEN_DriveInsertSound"
+        static let driveEjectSound        = "VAMIGA_GEN_DriveEjectSound"
+        static let driveHeadSound         = "VAMIGA_GEN_DriveHeadSound"
+        static let drivePollSound         = "VAMIGA_GEN_DrivePollSound"
+        
+        // Fullscreen
+        static let keepAspectRatio        = "VAMIGA_GEN_FullscreenKeepAspectRatio"
+        static let exitOnEsc              = "VAMIGA_GEN_FullscreenExitOnEsc"
+        
+        // Warp mode
+        static let warpMode               = "VAMIGA_GEN_WarpMode"
+        
+        // Miscellaneous
+        static let pauseInBackground      = "VAMIGA_GEN_PauseInBackground"
+        static let closeWithoutAsking     = "VAMIGA_GEN_CloseWithoutAsking"
+    }
 }
 
 struct GeneralDefaults {
     
     // Drives
-    let driveBlankDiskFormat: EmptyDiskFormat
+    let blankDiskFormat: EmptyDiskFormat
     let ejectWithoutAsking: Bool
     let driveSounds: Bool
     let driveSoundPan: Double
@@ -175,7 +178,7 @@ struct GeneralDefaults {
     
     static let std = GeneralDefaults.init(
         
-        driveBlankDiskFormat: .FS_EMPTY_OFS,
+        blankDiskFormat: .FS_EMPTY_OFS,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,
@@ -201,22 +204,22 @@ extension UserDefaults {
         let defaults = GeneralDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.driveBlankDiskFormat: Int(defaults.driveBlankDiskFormat.rawValue),
-            Keys.ejectWithoutAsking: defaults.ejectWithoutAsking,
-            Keys.driveSounds: defaults.driveSounds,
-            Keys.driveSoundPan: defaults.driveSoundPan,
-            Keys.driveInsertSound: defaults.driveInsertSound,
-            Keys.driveEjectSound: defaults.driveEjectSound,
-            Keys.driveHeadSound: defaults.driveHeadSound,
-            Keys.drivePollSound: defaults.drivePollSound,
+            Keys.Gen.blankDiskFormat: Int(defaults.blankDiskFormat.rawValue),
+            Keys.Gen.ejectWithoutAsking: defaults.ejectWithoutAsking,
+            Keys.Gen.driveSounds: defaults.driveSounds,
+            Keys.Gen.driveSoundPan: defaults.driveSoundPan,
+            Keys.Gen.driveInsertSound: defaults.driveInsertSound,
+            Keys.Gen.driveEjectSound: defaults.driveEjectSound,
+            Keys.Gen.driveHeadSound: defaults.driveHeadSound,
+            Keys.Gen.drivePollSound: defaults.drivePollSound,
 
-            Keys.keepAspectRatio: defaults.keepAspectRatio,
-            Keys.exitOnEsc: defaults.exitOnEsc,
+            Keys.Gen.keepAspectRatio: defaults.keepAspectRatio,
+            Keys.Gen.exitOnEsc: defaults.exitOnEsc,
             
-            Keys.warpMode: Int(defaults.warpMode.rawValue),
+            Keys.Gen.warpMode: Int(defaults.warpMode.rawValue),
 
-            Keys.pauseInBackground: defaults.pauseInBackground,
-            Keys.closeWithoutAsking: defaults.closeWithoutAsking
+            Keys.Gen.pauseInBackground: defaults.pauseInBackground,
+            Keys.Gen.closeWithoutAsking: defaults.closeWithoutAsking
         ]
         
         let userDefaults = UserDefaults.standard
@@ -228,22 +231,22 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
         
-        let keys = [ Keys.driveBlankDiskFormat,
-                     Keys.ejectWithoutAsking,
-                     Keys.driveSounds,
-                     Keys.driveSoundPan,
-                     Keys.driveInsertSound,
-                     Keys.driveEjectSound,
-                     Keys.driveHeadSound,
-                     Keys.drivePollSound,
+        let keys = [ Keys.Gen.blankDiskFormat,
+                     Keys.Gen.ejectWithoutAsking,
+                     Keys.Gen.driveSounds,
+                     Keys.Gen.driveSoundPan,
+                     Keys.Gen.driveInsertSound,
+                     Keys.Gen.driveEjectSound,
+                     Keys.Gen.driveHeadSound,
+                     Keys.Gen.drivePollSound,
                                           
-                     Keys.keepAspectRatio,
-                     Keys.exitOnEsc,
+                     Keys.Gen.keepAspectRatio,
+                     Keys.Gen.exitOnEsc,
                      
-                     Keys.warpMode,
+                     Keys.Gen.warpMode,
                      
-                     Keys.pauseInBackground,
-                     Keys.closeWithoutAsking
+                     Keys.Gen.pauseInBackground,
+                     Keys.Gen.closeWithoutAsking
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -758,21 +761,24 @@ extension UserDefaults {
 //
 
 extension Keys {
- 
-    // Drives
-    static let df0Connect         = "VAMIGA_PER_DF0Connect"
-    static let df1Connect         = "VAMIGA_PER_DF1Connect"
-    static let df2Connect         = "VAMIGA_PER_DF2Connect"
-    static let df3Connect         = "VAMIGA_PER_DF3Connect"
-    static let df0Type            = "VAMIGA_PER_DF0Type"
-    static let df1Type            = "VAMIGA_PER_DF1Type"
-    static let df2Type            = "VAMIGA_PER_DF2Type"
-    static let df3Type            = "VAMIGA_PER_DF3Type"
-
-    // Ports
-    static let gameDevice1        = "VAMIGA_PER_GameDevice1"
-    static let gameDevice2        = "VAMIGA_PER_GameDevice2"
-    static let serialDevice       = "VAMIGA_PER_SerialDevice"
+    
+    struct Per {
+        
+        // Drives
+        static let df0Connect         = "VAMIGA_PER_DF0Connect"
+        static let df1Connect         = "VAMIGA_PER_DF1Connect"
+        static let df2Connect         = "VAMIGA_PER_DF2Connect"
+        static let df3Connect         = "VAMIGA_PER_DF3Connect"
+        static let df0Type            = "VAMIGA_PER_DF0Type"
+        static let df1Type            = "VAMIGA_PER_DF1Type"
+        static let df2Type            = "VAMIGA_PER_DF2Type"
+        static let df3Type            = "VAMIGA_PER_DF3Type"
+        
+        // Ports
+        static let gameDevice1        = "VAMIGA_PER_GameDevice1"
+        static let gameDevice2        = "VAMIGA_PER_GameDevice2"
+        static let serialDevice       = "VAMIGA_PER_SerialDevice"
+    }
 }
 
 struct PeripheralsDefaults {
@@ -806,18 +812,18 @@ extension UserDefaults {
         let defaults = PeripheralsDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.df0Connect: defaults.driveConnect[0],
-            Keys.df1Connect: defaults.driveConnect[1],
-            Keys.df2Connect: defaults.driveConnect[2],
-            Keys.df3Connect: defaults.driveConnect[3],
-            Keys.df0Type: defaults.driveType[0].rawValue,
-            Keys.df1Type: defaults.driveType[1].rawValue,
-            Keys.df2Type: defaults.driveType[2].rawValue,
-            Keys.df3Type: defaults.driveType[3].rawValue,
+            Keys.Per.df0Connect: defaults.driveConnect[0],
+            Keys.Per.df1Connect: defaults.driveConnect[1],
+            Keys.Per.df2Connect: defaults.driveConnect[2],
+            Keys.Per.df3Connect: defaults.driveConnect[3],
+            Keys.Per.df0Type: defaults.driveType[0].rawValue,
+            Keys.Per.df1Type: defaults.driveType[1].rawValue,
+            Keys.Per.df2Type: defaults.driveType[2].rawValue,
+            Keys.Per.df3Type: defaults.driveType[3].rawValue,
 
-            Keys.gameDevice1: defaults.gameDevice1,
-            Keys.gameDevice2: defaults.gameDevice2,
-            Keys.serialDevice: defaults.serialDevice.rawValue
+            Keys.Per.gameDevice1: defaults.gameDevice1,
+            Keys.Per.gameDevice2: defaults.gameDevice2,
+            Keys.Per.serialDevice: defaults.serialDevice.rawValue
         ]
         
         let userDefaults = UserDefaults.standard
@@ -828,18 +834,18 @@ extension UserDefaults {
 
         let userDefaults = UserDefaults.standard
         
-        let keys = [ Keys.df0Connect,
-                     Keys.df1Connect,
-                     Keys.df2Connect,
-                     Keys.df3Connect,
-                     Keys.df0Type,
-                     Keys.df1Type,
-                     Keys.df2Type,
-                     Keys.df3Type,
+        let keys = [ Keys.Per.df0Connect,
+                     Keys.Per.df1Connect,
+                     Keys.Per.df2Connect,
+                     Keys.Per.df3Connect,
+                     Keys.Per.df0Type,
+                     Keys.Per.df1Type,
+                     Keys.Per.df2Type,
+                     Keys.Per.df3Type,
                      
-                     Keys.gameDevice1,
-                     Keys.gameDevice2,
-                     Keys.serialDevice
+                     Keys.Per.gameDevice1,
+                     Keys.Per.gameDevice2,
+                     Keys.Per.serialDevice
         ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
@@ -852,26 +858,29 @@ extension UserDefaults {
 
 extension Keys {
     
-    // Blitter
-    static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
-
-    // Timing
-    static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
-    static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
-
-    // Graphics
-    static let clxSprSpr         = "VAMIGA_COM_ClxSprSpr"
-    static let clxSprPlf         = "VAMIGA_COM_ClxSprPlf"
-    static let clxPlfPlf         = "VAMIGA_COM_ClxPlfPlf"
-
-    // Floppy drives
-    static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
-    static let mechanicalDelays  = "VAMIGA_COM_MechanicalDelays"
-    static let lockDskSync       = "VAMIGA_COM_LockDskSync"
-    static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
-
-    // Keyboard
-    static let accurateKeyboard  = "VAMIGA_COM_AccurateKeyboard"
+    struct Com {
+        
+        // Blitter
+        static let blitterAccuracy   = "VAMIGA_COM_BlitterAccuracy"
+        
+        // Timing
+        static let eClockSyncing     = "VAMIGA_COM_EClockSyncing"
+        static let slowRamDelay      = "VAMIGA_COM_SlowRamDelay"
+        
+        // Graphics
+        static let clxSprSpr         = "VAMIGA_COM_ClxSprSpr"
+        static let clxSprPlf         = "VAMIGA_COM_ClxSprPlf"
+        static let clxPlfPlf         = "VAMIGA_COM_ClxPlfPlf"
+        
+        // Floppy drives
+        static let driveSpeed        = "VAMIGA_COM_DriveSpeed"
+        static let mechanicalDelays  = "VAMIGA_COM_MechanicalDelays"
+        static let lockDskSync       = "VAMIGA_COM_LockDskSync"
+        static let autoDskSync       = "VAMIGA_COM_AutoDskSync"
+        
+        // Keyboard
+        static let accurateKeyboard  = "VAMIGA_COM_AccurateKeyboard"
+    }
 }
 
 struct CompatibilityDefaults {
@@ -961,21 +970,21 @@ extension UserDefaults {
         let defaults = CompatibilityDefaults.std
         let dictionary: [String: Any] = [
 
-            Keys.blitterAccuracy: defaults.blitterAccuracy,
+            Keys.Com.blitterAccuracy: defaults.blitterAccuracy,
 
-            Keys.eClockSyncing: defaults.eClockSyncing,
-            Keys.slowRamDelay: defaults.slowRamDelay,
+            Keys.Com.eClockSyncing: defaults.eClockSyncing,
+            Keys.Com.slowRamDelay: defaults.slowRamDelay,
 
-            Keys.clxSprSpr: defaults.clxSprSpr,
-            Keys.clxSprPlf: defaults.clxSprPlf,
-            Keys.clxPlfPlf: defaults.clxPlfPlf,
+            Keys.Com.clxSprSpr: defaults.clxSprSpr,
+            Keys.Com.clxSprPlf: defaults.clxSprPlf,
+            Keys.Com.clxPlfPlf: defaults.clxPlfPlf,
                                     
-            Keys.driveSpeed: defaults.driveSpeed,
-            Keys.mechanicalDelays: defaults.mechanicalDelays,
-            Keys.lockDskSync: defaults.lockDskSync,
-            Keys.autoDskSync: defaults.autoDskSync,
+            Keys.Com.driveSpeed: defaults.driveSpeed,
+            Keys.Com.mechanicalDelays: defaults.mechanicalDelays,
+            Keys.Com.lockDskSync: defaults.lockDskSync,
+            Keys.Com.autoDskSync: defaults.autoDskSync,
             
-            Keys.accurateKeyboard: defaults.accurateKeyboard
+            Keys.Com.accurateKeyboard: defaults.accurateKeyboard
         ]
 
         let userDefaults = UserDefaults.standard
@@ -986,21 +995,21 @@ extension UserDefaults {
 
         let userDefaults = UserDefaults.standard
 
-        let keys = [ Keys.blitterAccuracy,
+        let keys = [ Keys.Com.blitterAccuracy,
                      
-                     Keys.eClockSyncing,
-                     Keys.slowRamDelay,
+                     Keys.Com.eClockSyncing,
+                     Keys.Com.slowRamDelay,
 
-                     Keys.clxSprSpr,
-                     Keys.clxSprPlf,
-                     Keys.clxPlfPlf,
+                     Keys.Com.clxSprSpr,
+                     Keys.Com.clxSprPlf,
+                     Keys.Com.clxPlfPlf,
                      
-                     Keys.driveSpeed,
-                     Keys.mechanicalDelays,
-                     Keys.lockDskSync,
-                     Keys.autoDskSync,
+                     Keys.Com.driveSpeed,
+                     Keys.Com.mechanicalDelays,
+                     Keys.Com.lockDskSync,
+                     Keys.Com.autoDskSync,
                      
-                     Keys.accurateKeyboard ]
+                     Keys.Com.accurateKeyboard ]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }
@@ -1012,22 +1021,25 @@ extension UserDefaults {
 
 extension Keys {
     
-    // In
-    static let vol0               = "VAMIGA_AUD_Volume0"
-    static let vol1               = "VAMIGA_AUD_Volume1"
-    static let vol2               = "VAMIGA_AUD_Volume2"
-    static let vol3               = "VAMIGA_AUD_Volume3"
-    static let pan0               = "VAMIGA_AUD_Pan0"
-    static let pan1               = "VAMIGA_AUD_Pan1"
-    static let pan2               = "VAMIGA_AUD_Pan2"
-    static let pan3               = "VAMIGA_AUD_Pan3"
-
-    // Out
-    static let volL               = "VAMIGA_AUD_VolumeL"
-    static let volR               = "VAMIGA_AUD_VolumeR"
-    static let samplingMethod     = "VAMIGA_AUD_SamplingMethod"
-    static let filterType         = "VAMIGA_AUD_FilterType"
-    static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
+    struct Aud {
+        
+        // In
+        static let vol0               = "VAMIGA_AUD_Volume0"
+        static let vol1               = "VAMIGA_AUD_Volume1"
+        static let vol2               = "VAMIGA_AUD_Volume2"
+        static let vol3               = "VAMIGA_AUD_Volume3"
+        static let pan0               = "VAMIGA_AUD_Pan0"
+        static let pan1               = "VAMIGA_AUD_Pan1"
+        static let pan2               = "VAMIGA_AUD_Pan2"
+        static let pan3               = "VAMIGA_AUD_Pan3"
+        
+        // Out
+        static let volL               = "VAMIGA_AUD_VolumeL"
+        static let volR               = "VAMIGA_AUD_VolumeR"
+        static let samplingMethod     = "VAMIGA_AUD_SamplingMethod"
+        static let filterType         = "VAMIGA_AUD_FilterType"
+        static let filterAlwaysOn     = "VAMIGA_AUD_FilterAlwaysOn"
+    }
 }
 
 struct AudioDefaults {
@@ -1115,20 +1127,20 @@ extension UserDefaults {
         let defaults = AudioDefaults.std
         let dictionary: [String: Any] = [
 
-            Keys.vol0: defaults.vol0,
-            Keys.vol1: defaults.vol1,
-            Keys.vol2: defaults.vol2,
-            Keys.vol3: defaults.vol3,
-            Keys.pan0: defaults.pan0,
-            Keys.pan1: defaults.pan1,
-            Keys.pan2: defaults.pan2,
-            Keys.pan3: defaults.pan3,
+            Keys.Aud.vol0: defaults.vol0,
+            Keys.Aud.vol1: defaults.vol1,
+            Keys.Aud.vol2: defaults.vol2,
+            Keys.Aud.vol3: defaults.vol3,
+            Keys.Aud.pan0: defaults.pan0,
+            Keys.Aud.pan1: defaults.pan1,
+            Keys.Aud.pan2: defaults.pan2,
+            Keys.Aud.pan3: defaults.pan3,
             
-            Keys.volL: defaults.volL,
-            Keys.volR: defaults.volR,
-            Keys.samplingMethod: Int(defaults.samplingMethod.rawValue),
-            Keys.filterType: Int(defaults.filterType.rawValue),
-            Keys.filterAlwaysOn: defaults.filterAlwaysOn
+            Keys.Aud.volL: defaults.volL,
+            Keys.Aud.volR: defaults.volR,
+            Keys.Aud.samplingMethod: Int(defaults.samplingMethod.rawValue),
+            Keys.Aud.filterType: Int(defaults.filterType.rawValue),
+            Keys.Aud.filterAlwaysOn: defaults.filterAlwaysOn
         ]
 
         let userDefaults = UserDefaults.standard
@@ -1139,20 +1151,20 @@ extension UserDefaults {
 
         let userDefaults = UserDefaults.standard
         
-        let keys = [ Keys.vol0,
-                     Keys.vol1,
-                     Keys.vol2,
-                     Keys.vol3,
-                     Keys.pan0,
-                     Keys.pan1,
-                     Keys.pan2,
-                     Keys.pan3,
+        let keys = [ Keys.Aud.vol0,
+                     Keys.Aud.vol1,
+                     Keys.Aud.vol2,
+                     Keys.Aud.vol3,
+                     Keys.Aud.pan0,
+                     Keys.Aud.pan1,
+                     Keys.Aud.pan2,
+                     Keys.Aud.pan3,
                      
-                     Keys.volL,
-                     Keys.volR,
-                     Keys.samplingMethod,
-                     Keys.filterType,
-                     Keys.filterAlwaysOn]
+                     Keys.Aud.volL,
+                     Keys.Aud.volR,
+                     Keys.Aud.samplingMethod,
+                     Keys.Aud.filterType,
+                     Keys.Aud.filterAlwaysOn]
 
         for key in keys { userDefaults.removeObject(forKey: key) }
     }
@@ -1164,39 +1176,42 @@ extension UserDefaults {
 
 extension Keys {
     
-    // Colors
-    static let palette            = "VAMIGA_VID_Palette"
-    static let brightness         = "VAMIGA_VID_Brightness"
-    static let contrast           = "VAMIGA_VID_Contrast"
-    static let saturation         = "VAMIGA_VID_Saturation"
-
-    // Geometry
-    static let hCenter            = "VAMIGA_VID_HCenter"
-    static let vCenter            = "VAMIGA_VID_VCenter"
-    static let hZoom              = "VAMIGA_VID_HZoom"
-    static let vZoom              = "VAMIGA_VID_VZoom"
-
-    // Upscalers
-    static let enhancer           = "VVAMIG_VID_Enhancer"
-    static let upscaler           = "VAMIGA_VID_Upscaler"
-
-    // Shader options
-    static let blur               = "VAMIGA_VID_Blur"
-    static let blurRadius         = "VAMIGA_VID_BlurRadius"
-    static let bloom              = "VAMIGA_VID_Bloom"
-    static let bloomRadius        = "VAMIGA_VID_BloonRadius"
-    static let bloomBrightness    = "VAMIGA_VID_BloomBrightness"
-    static let bloomWeight        = "VAMIGA_VID_BloomWeight"
-    static let flicker            = "VAMIGA_VID_Flicker"
-    static let flickerWeight      = "VAMIGA_VID_FlickerWeight"
-    static let dotMask            = "VAMIGA_VID_DotMask"
-    static let dotMaskBrightness  = "VAMIGA_VID_DotMaskBrightness"
-    static let scanlines          = "VAMIGA_VID_Scanlines"
-    static let scanlineBrightness = "VAMIGA_VID_ScanlineBrightness"
-    static let scanlineWeight     = "VAMIGA_VID_ScanlineWeight"
-    static let disalignment       = "VAMIGA_VID_Disalignment"
-    static let disalignmentH      = "VAMIGA_VID_DisalignmentH"
-    static let disalignmentV      = "VAMIGA_VID_DisalignmentV"
+    struct Vid {
+        
+        // Colors
+        static let palette            = "VAMIGA_VID_Palette"
+        static let brightness         = "VAMIGA_VID_Brightness"
+        static let contrast           = "VAMIGA_VID_Contrast"
+        static let saturation         = "VAMIGA_VID_Saturation"
+        
+        // Geometry
+        static let hCenter            = "VAMIGA_VID_HCenter"
+        static let vCenter            = "VAMIGA_VID_VCenter"
+        static let hZoom              = "VAMIGA_VID_HZoom"
+        static let vZoom              = "VAMIGA_VID_VZoom"
+        
+        // Upscalers
+        static let enhancer           = "VVAMIG_VID_Enhancer"
+        static let upscaler           = "VAMIGA_VID_Upscaler"
+        
+        // Shader options
+        static let blur               = "VAMIGA_VID_Blur"
+        static let blurRadius         = "VAMIGA_VID_BlurRadius"
+        static let bloom              = "VAMIGA_VID_Bloom"
+        static let bloomRadius        = "VAMIGA_VID_BloonRadius"
+        static let bloomBrightness    = "VAMIGA_VID_BloomBrightness"
+        static let bloomWeight        = "VAMIGA_VID_BloomWeight"
+        static let flicker            = "VAMIGA_VID_Flicker"
+        static let flickerWeight      = "VAMIGA_VID_FlickerWeight"
+        static let dotMask            = "VAMIGA_VID_DotMask"
+        static let dotMaskBrightness  = "VAMIGA_VID_DotMaskBrightness"
+        static let scanlines          = "VAMIGA_VID_Scanlines"
+        static let scanlineBrightness = "VAMIGA_VID_ScanlineBrightness"
+        static let scanlineWeight     = "VAMIGA_VID_ScanlineWeight"
+        static let disalignment       = "VAMIGA_VID_Disalignment"
+        static let disalignmentH      = "VAMIGA_VID_DisalignmentH"
+        static let disalignmentV      = "VAMIGA_VID_DisalignmentV"
+    }
 }
 
 struct VideoDefaults {
@@ -1315,35 +1330,35 @@ extension UserDefaults {
         let defaults = VideoDefaults.tft
         let dictionary: [String: Any] = [
             
-            Keys.palette: Int(defaults.palette.rawValue),
-            Keys.brightness: defaults.brightness,
-            Keys.contrast: defaults.contrast,
-            Keys.saturation: defaults.saturation,
+            Keys.Vid.palette: Int(defaults.palette.rawValue),
+            Keys.Vid.brightness: defaults.brightness,
+            Keys.Vid.contrast: defaults.contrast,
+            Keys.Vid.saturation: defaults.saturation,
 
-            Keys.hCenter: defaults.hCenter,
-            Keys.vCenter: defaults.vCenter,
-            Keys.hZoom: defaults.hZoom,
-            Keys.vZoom: defaults.vZoom,
+            Keys.Vid.hCenter: defaults.hCenter,
+            Keys.Vid.vCenter: defaults.vCenter,
+            Keys.Vid.hZoom: defaults.hZoom,
+            Keys.Vid.vZoom: defaults.vZoom,
 
-            Keys.enhancer: defaults.enhancer,
-            Keys.upscaler: defaults.upscaler,
+            Keys.Vid.enhancer: defaults.enhancer,
+            Keys.Vid.upscaler: defaults.upscaler,
             
-            Keys.blur: defaults.blur,
-            Keys.blurRadius: defaults.blurRadius,
-            Keys.bloom: defaults.bloom,
-            Keys.bloomRadius: defaults.bloomRadius,
-            Keys.bloomBrightness: defaults.bloomBrightness,
-            Keys.bloomWeight: defaults.bloomWeight,
-            Keys.flicker: defaults.flicker,
-            Keys.flickerWeight: defaults.flickerWeight,
-            Keys.dotMask: defaults.dotMask,
-            Keys.dotMaskBrightness: defaults.dotMaskBrightness,
-            Keys.scanlines: defaults.scanlines,
-            Keys.scanlineBrightness: defaults.scanlineBrightness,
-            Keys.scanlineWeight: defaults.scanlineWeight,
-            Keys.disalignment: defaults.disalignment,
-            Keys.disalignmentH: defaults.disalignmentH,
-            Keys.disalignmentV: defaults.disalignmentV
+            Keys.Vid.blur: defaults.blur,
+            Keys.Vid.blurRadius: defaults.blurRadius,
+            Keys.Vid.bloom: defaults.bloom,
+            Keys.Vid.bloomRadius: defaults.bloomRadius,
+            Keys.Vid.bloomBrightness: defaults.bloomBrightness,
+            Keys.Vid.bloomWeight: defaults.bloomWeight,
+            Keys.Vid.flicker: defaults.flicker,
+            Keys.Vid.flickerWeight: defaults.flickerWeight,
+            Keys.Vid.dotMask: defaults.dotMask,
+            Keys.Vid.dotMaskBrightness: defaults.dotMaskBrightness,
+            Keys.Vid.scanlines: defaults.scanlines,
+            Keys.Vid.scanlineBrightness: defaults.scanlineBrightness,
+            Keys.Vid.scanlineWeight: defaults.scanlineWeight,
+            Keys.Vid.disalignment: defaults.disalignment,
+            Keys.Vid.disalignmentH: defaults.disalignmentH,
+            Keys.Vid.disalignmentV: defaults.disalignmentV
         ]
         
         let userDefaults = UserDefaults.standard
@@ -1354,35 +1369,35 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.palette,
-                     Keys.brightness,
-                     Keys.contrast,
-                     Keys.saturation,
+        let keys = [ Keys.Vid.palette,
+                     Keys.Vid.brightness,
+                     Keys.Vid.contrast,
+                     Keys.Vid.saturation,
                      
-                     Keys.hCenter,
-                     Keys.vCenter,
-                     Keys.hZoom,
-                     Keys.vZoom,
+                     Keys.Vid.hCenter,
+                     Keys.Vid.vCenter,
+                     Keys.Vid.hZoom,
+                     Keys.Vid.vZoom,
 
-                     Keys.enhancer,
-                     Keys.upscaler,
+                     Keys.Vid.enhancer,
+                     Keys.Vid.upscaler,
 
-                     Keys.blur,
-                     Keys.blurRadius,
-                     Keys.bloom,
-                     Keys.bloomRadius,
-                     Keys.bloomBrightness,
-                     Keys.bloomWeight,
-                     Keys.flicker,
-                     Keys.flickerWeight,
-                     Keys.dotMask,
-                     Keys.dotMaskBrightness,
-                     Keys.scanlines,
-                     Keys.scanlineBrightness,
-                     Keys.scanlineWeight,
-                     Keys.disalignment,
-                     Keys.disalignmentH,
-                     Keys.disalignmentV
+                     Keys.Vid.blur,
+                     Keys.Vid.blurRadius,
+                     Keys.Vid.bloom,
+                     Keys.Vid.bloomRadius,
+                     Keys.Vid.bloomBrightness,
+                     Keys.Vid.bloomWeight,
+                     Keys.Vid.flicker,
+                     Keys.Vid.flickerWeight,
+                     Keys.Vid.dotMask,
+                     Keys.Vid.dotMaskBrightness,
+                     Keys.Vid.scanlines,
+                     Keys.Vid.scanlineBrightness,
+                     Keys.Vid.scanlineWeight,
+                     Keys.Vid.disalignment,
+                     Keys.Vid.disalignmentH,
+                     Keys.Vid.disalignmentV
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }

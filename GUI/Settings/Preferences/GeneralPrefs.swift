@@ -14,7 +14,7 @@ extension PreferencesController {
         track()
 
         // Drive
-        genDriveBlankDiskFormat.selectItem(withTag: pref.driveBlankDiskFormatIntValue)
+        genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDriveSounds.state = pref.driveSounds ? .on : .off
         genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))
@@ -84,7 +84,7 @@ extension PreferencesController {
     @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        pref.driveBlankDiskFormat = EmptyDiskFormat(rawValue: tag)!
+        pref.blankDiskFormat = EmptyDiskFormat(rawValue: tag)!
         refresh()
     }
 

@@ -25,10 +25,10 @@ class Preferences {
     //
         
     // Floppy
-    var driveBlankDiskFormat = GeneralDefaults.std.driveBlankDiskFormat
-    var driveBlankDiskFormatIntValue: Int {
-        get { return Int(driveBlankDiskFormat.rawValue) }
-        set { driveBlankDiskFormat = EmptyDiskFormat.init(rawValue: newValue)! }
+    var blankDiskFormat = GeneralDefaults.std.blankDiskFormat
+    var blankDiskFormatIntValue: Int {
+        get { return Int(blankDiskFormat.rawValue) }
+        set { blankDiskFormat = EmptyDiskFormat.init(rawValue: newValue)! }
     }
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
@@ -150,7 +150,7 @@ class Preferences {
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
         
         // Floppy
-        driveBlankDiskFormat = defaults.driveBlankDiskFormat
+        blankDiskFormat = defaults.blankDiskFormat
         ejectWithoutAsking = defaults.ejectWithoutAsking
         driveSounds = defaults.driveSounds
         driveSoundPan = defaults.driveSoundPan
@@ -176,25 +176,25 @@ class Preferences {
         let defaults = UserDefaults.standard
            
         // Floppy
-        driveBlankDiskFormatIntValue = defaults.integer(forKey: Keys.driveBlankDiskFormat)
-        ejectWithoutAsking = defaults.bool(forKey: Keys.ejectWithoutAsking)
-        driveSounds = defaults.bool(forKey: Keys.driveSounds)
-        driveSoundPan = defaults.double(forKey: Keys.driveSoundPan)
-        driveInsertSound = defaults.bool(forKey: Keys.driveInsertSound)
-        driveEjectSound = defaults.bool(forKey: Keys.driveEjectSound)
-        driveHeadSound = defaults.bool(forKey: Keys.driveHeadSound)
-        drivePollSound = defaults.bool(forKey: Keys.drivePollSound)
+        blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
+        ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
+        driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
+        driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
+        driveInsertSound = defaults.bool(forKey: Keys.Gen.driveInsertSound)
+        driveEjectSound = defaults.bool(forKey: Keys.Gen.driveEjectSound)
+        driveHeadSound = defaults.bool(forKey: Keys.Gen.driveHeadSound)
+        drivePollSound = defaults.bool(forKey: Keys.Gen.drivePollSound)
         
         // Fullscreen
-        keepAspectRatio = defaults.bool(forKey: Keys.keepAspectRatio)
-        exitOnEsc = defaults.bool(forKey: Keys.exitOnEsc)
+        keepAspectRatio = defaults.bool(forKey: Keys.Gen.keepAspectRatio)
+        exitOnEsc = defaults.bool(forKey: Keys.Gen.exitOnEsc)
     
         // Warp mode
-        warpModeIntValue = defaults.integer(forKey: Keys.warpMode)
+        warpModeIntValue = defaults.integer(forKey: Keys.Gen.warpMode)
 
         // Misc
-        pauseInBackground = defaults.bool(forKey: Keys.pauseInBackground)
-        closeWithoutAsking = defaults.bool(forKey: Keys.closeWithoutAsking)
+        pauseInBackground = defaults.bool(forKey: Keys.Gen.pauseInBackground)
+        closeWithoutAsking = defaults.bool(forKey: Keys.Gen.closeWithoutAsking)
     }
     
     func saveGeneralUserDefaults() {
@@ -202,25 +202,25 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Floppy
-        defaults.set(ejectWithoutAsking, forKey: Keys.ejectWithoutAsking)
-        defaults.set(driveSounds, forKey: Keys.driveSounds)
-        defaults.set(driveSoundPan, forKey: Keys.driveSoundPan)
-        defaults.set(driveInsertSound, forKey: Keys.driveInsertSound)
-        defaults.set(driveEjectSound, forKey: Keys.driveEjectSound)
-        defaults.set(driveHeadSound, forKey: Keys.driveHeadSound)
-        defaults.set(drivePollSound, forKey: Keys.drivePollSound)
-        defaults.set(driveBlankDiskFormatIntValue, forKey: Keys.driveBlankDiskFormat)
+        defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
+        defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
+        defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)
+        defaults.set(driveInsertSound, forKey: Keys.Gen.driveInsertSound)
+        defaults.set(driveEjectSound, forKey: Keys.Gen.driveEjectSound)
+        defaults.set(driveHeadSound, forKey: Keys.Gen.driveHeadSound)
+        defaults.set(drivePollSound, forKey: Keys.Gen.drivePollSound)
+        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
         
         // Fullscreen
-        defaults.set(keepAspectRatio, forKey: Keys.keepAspectRatio)
-        defaults.set(exitOnEsc, forKey: Keys.exitOnEsc)
+        defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)
+        defaults.set(exitOnEsc, forKey: Keys.Gen.exitOnEsc)
         
         // Warp mode
-        defaults.set(warpModeIntValue, forKey: Keys.warpMode)
+        defaults.set(warpModeIntValue, forKey: Keys.Gen.warpMode)
 
         // Misc
-        defaults.set(pauseInBackground, forKey: Keys.pauseInBackground)
-        defaults.set(closeWithoutAsking, forKey: Keys.closeWithoutAsking)
+        defaults.set(pauseInBackground, forKey: Keys.Gen.pauseInBackground)
+        defaults.set(closeWithoutAsking, forKey: Keys.Gen.closeWithoutAsking)
     }
     
     //

@@ -469,7 +469,7 @@ extension MyController: NSMenuItemValidation {
         }
         
         // Write file system
-        adf.formatDisk(pref.driveBlankDiskFormat)
+        adf.formatDisk(pref.blankDiskFormat)
         
         // Insert disk into drive
         amiga.diskController.insert(sender.tag, adf: adf)
