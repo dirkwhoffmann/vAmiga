@@ -392,7 +392,7 @@ class Configuration {
         
         amiga.suspend()
 
-        extStart = defaults.integer(forKey: Keys.extStart)
+        extStart = defaults.integer(forKey: Keys.Rom.extStart)
         
         if let url = UserDefaults.womUrl {
             track("Seeking Wom")
@@ -417,7 +417,7 @@ class Configuration {
 
         amiga.suspend()
                 
-        defaults.set(extStart, forKey: Keys.extStart)
+        defaults.set(extStart, forKey: Keys.Rom.extStart)
         
         if let url = UserDefaults.womUrl {
             track("Saving Wom")
@@ -471,21 +471,21 @@ class Configuration {
         
         amiga.suspend()
         
-        agnusRev = defaults.integer(forKey: Keys.agnusRev)
-        slowRamMirror = defaults.bool(forKey: Keys.slowRamMirror)
-        deniseRev = defaults.integer(forKey: Keys.deniseRev)
-        borderBlank = defaults.bool(forKey: Keys.borderBlank)
-        ciaRev = defaults.integer(forKey: Keys.ciaRev)
-        todBug = defaults.bool(forKey: Keys.todBug)
-        rtClock = defaults.integer(forKey: Keys.realTimeClock)
+        agnusRev = defaults.integer(forKey: Keys.Hrw.agnusRev)
+        slowRamMirror = defaults.bool(forKey: Keys.Hrw.slowRamMirror)
+        deniseRev = defaults.integer(forKey: Keys.Hrw.deniseRev)
+        borderBlank = defaults.bool(forKey: Keys.Hrw.borderBlank)
+        ciaRev = defaults.integer(forKey: Keys.Hrw.ciaRev)
+        todBug = defaults.bool(forKey: Keys.Hrw.todBug)
+        rtClock = defaults.integer(forKey: Keys.Hrw.realTimeClock)
 
-        chipRam = defaults.integer(forKey: Keys.chipRam)
-        slowRam = defaults.integer(forKey: Keys.slowRam)
-        fastRam = defaults.integer(forKey: Keys.fastRam)
-        ramInitPattern = defaults.integer(forKey: Keys.ramInitPattern)
+        chipRam = defaults.integer(forKey: Keys.Hrw.chipRam)
+        slowRam = defaults.integer(forKey: Keys.Hrw.slowRam)
+        fastRam = defaults.integer(forKey: Keys.Hrw.fastRam)
+        ramInitPattern = defaults.integer(forKey: Keys.Hrw.ramInitPattern)
 
-        bankMap = defaults.integer(forKey: Keys.bankMap)
-        unmappingType = defaults.integer(forKey: Keys.unmappingType)
+        bankMap = defaults.integer(forKey: Keys.Hrw.bankMap)
+        unmappingType = defaults.integer(forKey: Keys.Hrw.unmappingType)
 
         amiga.resume()
     }
@@ -496,21 +496,21 @@ class Configuration {
         
         let defaults = UserDefaults.standard
 
-        defaults.set(agnusRev, forKey: Keys.agnusRev)
-        defaults.set(slowRamMirror, forKey: Keys.slowRamMirror)
-        defaults.set(deniseRev, forKey: Keys.deniseRev)
-        defaults.set(borderBlank, forKey: Keys.borderBlank)
-        defaults.set(ciaRev, forKey: Keys.ciaRev)
-        defaults.set(todBug, forKey: Keys.todBug)
-        defaults.set(rtClock, forKey: Keys.realTimeClock)
+        defaults.set(agnusRev, forKey: Keys.Hrw.agnusRev)
+        defaults.set(slowRamMirror, forKey: Keys.Hrw.slowRamMirror)
+        defaults.set(deniseRev, forKey: Keys.Hrw.deniseRev)
+        defaults.set(borderBlank, forKey: Keys.Hrw.borderBlank)
+        defaults.set(ciaRev, forKey: Keys.Hrw.ciaRev)
+        defaults.set(todBug, forKey: Keys.Hrw.todBug)
+        defaults.set(rtClock, forKey: Keys.Hrw.realTimeClock)
 
-        defaults.set(chipRam, forKey: Keys.chipRam)
-        defaults.set(slowRam, forKey: Keys.slowRam)
-        defaults.set(fastRam, forKey: Keys.fastRam)
-        defaults.set(ramInitPattern, forKey: Keys.ramInitPattern)
+        defaults.set(chipRam, forKey: Keys.Hrw.chipRam)
+        defaults.set(slowRam, forKey: Keys.Hrw.slowRam)
+        defaults.set(fastRam, forKey: Keys.Hrw.fastRam)
+        defaults.set(ramInitPattern, forKey: Keys.Hrw.ramInitPattern)
 
-        defaults.set(bankMap, forKey: Keys.bankMap)
-        defaults.set(unmappingType, forKey: Keys.unmappingType)
+        defaults.set(bankMap, forKey: Keys.Hrw.bankMap)
+        defaults.set(unmappingType, forKey: Keys.Hrw.unmappingType)
     }
 
     //

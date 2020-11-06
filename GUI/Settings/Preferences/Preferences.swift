@@ -255,24 +255,24 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.decode(&keyMaps[0], forKey: Keys.mouseKeyMap)
-        defaults.decode(&keyMaps[1], forKey: Keys.joyKeyMap1)
-        defaults.decode(&keyMaps[2], forKey: Keys.joyKeyMap2)
-        disconnectJoyKeys = defaults.bool(forKey: Keys.disconnectJoyKeys)
+        defaults.decode(&keyMaps[0], forKey: Keys.Dev.mouseKeyMap)
+        defaults.decode(&keyMaps[1], forKey: Keys.Dev.joyKeyMap1)
+        defaults.decode(&keyMaps[2], forKey: Keys.Dev.joyKeyMap2)
+        disconnectJoyKeys = defaults.bool(forKey: Keys.Dev.disconnectJoyKeys)
         
         // Joysticks
-        autofire = defaults.bool(forKey: Keys.autofire)
-        autofireBullets = defaults.integer(forKey: Keys.autofireBullets)
-        autofireFrequency = defaults.float(forKey: Keys.autofireFrequency)
+        autofire = defaults.bool(forKey: Keys.Dev.autofire)
+        autofireBullets = defaults.integer(forKey: Keys.Dev.autofireBullets)
+        autofireFrequency = defaults.float(forKey: Keys.Dev.autofireFrequency)
         
         // Mouse
-        retainMouseKeyComb = defaults.integer(forKey: Keys.retainMouseKeyComb)
-        retainMouseWithKeys = defaults.bool(forKey: Keys.retainMouseWithKeys)
-        retainMouseByClick = defaults.bool(forKey: Keys.retainMouseByClick)
-        retainMouseByEntering = defaults.bool(forKey: Keys.retainMouseByEntering)
-        releaseMouseKeyComb = defaults.integer(forKey: Keys.releaseMouseKeyComb)
-        releaseMouseWithKeys = defaults.bool(forKey: Keys.releaseMouseWithKeys)
-        releaseMouseByShaking = defaults.bool(forKey: Keys.releaseMouseByShaking)
+        retainMouseKeyComb = defaults.integer(forKey: Keys.Dev.retainMouseKeyComb)
+        retainMouseWithKeys = defaults.bool(forKey: Keys.Dev.retainMouseWithKeys)
+        retainMouseByClick = defaults.bool(forKey: Keys.Dev.retainMouseByClick)
+        retainMouseByEntering = defaults.bool(forKey: Keys.Dev.retainMouseByEntering)
+        releaseMouseKeyComb = defaults.integer(forKey: Keys.Dev.releaseMouseKeyComb)
+        releaseMouseWithKeys = defaults.bool(forKey: Keys.Dev.releaseMouseWithKeys)
+        releaseMouseByShaking = defaults.bool(forKey: Keys.Dev.releaseMouseByShaking)
     }
     
     func saveDevicesUserDefaults() {
@@ -280,24 +280,24 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Emulation keys
-        defaults.encode(keyMaps[0], forKey: Keys.mouseKeyMap)
-        defaults.encode(keyMaps[1], forKey: Keys.joyKeyMap1)
-        defaults.encode(keyMaps[2], forKey: Keys.joyKeyMap2)
-        defaults.set(disconnectJoyKeys, forKey: Keys.disconnectJoyKeys)
+        defaults.encode(keyMaps[0], forKey: Keys.Dev.mouseKeyMap)
+        defaults.encode(keyMaps[1], forKey: Keys.Dev.joyKeyMap1)
+        defaults.encode(keyMaps[2], forKey: Keys.Dev.joyKeyMap2)
+        defaults.set(disconnectJoyKeys, forKey: Keys.Dev.disconnectJoyKeys)
         
         // Joysticks
-        defaults.set(autofire, forKey: Keys.autofire)
-        defaults.set(autofireBullets, forKey: Keys.autofireBullets)
-        defaults.set(autofireFrequency, forKey: Keys.autofireFrequency)
+        defaults.set(autofire, forKey: Keys.Dev.autofire)
+        defaults.set(autofireBullets, forKey: Keys.Dev.autofireBullets)
+        defaults.set(autofireFrequency, forKey: Keys.Dev.autofireFrequency)
         
         // Mouse
-        defaults.set(retainMouseKeyComb, forKey: Keys.retainMouseKeyComb)
-        defaults.set(retainMouseWithKeys, forKey: Keys.retainMouseWithKeys)
-        defaults.set(retainMouseByClick, forKey: Keys.retainMouseByClick)
-        defaults.set(retainMouseByEntering, forKey: Keys.retainMouseByEntering)
-        defaults.set(releaseMouseKeyComb, forKey: Keys.releaseMouseKeyComb)
-        defaults.set(releaseMouseWithKeys, forKey: Keys.releaseMouseWithKeys)
-        defaults.set(releaseMouseByShaking, forKey: Keys.releaseMouseByShaking)
+        defaults.set(retainMouseKeyComb, forKey: Keys.Dev.retainMouseKeyComb)
+        defaults.set(retainMouseWithKeys, forKey: Keys.Dev.retainMouseWithKeys)
+        defaults.set(retainMouseByClick, forKey: Keys.Dev.retainMouseByClick)
+        defaults.set(retainMouseByEntering, forKey: Keys.Dev.retainMouseByEntering)
+        defaults.set(releaseMouseKeyComb, forKey: Keys.Dev.releaseMouseKeyComb)
+        defaults.set(releaseMouseWithKeys, forKey: Keys.Dev.releaseMouseWithKeys)
+        defaults.set(releaseMouseByShaking, forKey: Keys.Dev.releaseMouseByShaking)
     }
     
     //
@@ -328,20 +328,20 @@ class Preferences {
         let defaults = UserDefaults.standard
            
         // Screenshots
-        autoScreenshots = defaults.bool(forKey: Keys.autoScreenshots)
-        screenshotInterval = defaults.integer(forKey: Keys.autoScreenshotInterval)
-        screenshotSource = defaults.integer(forKey: Keys.screenshotSource)
-        screenshotTargetIntValue = defaults.integer(forKey: Keys.screenshotTarget)
+        autoScreenshots = defaults.bool(forKey: Keys.Cap.autoScreenshots)
+        screenshotInterval = defaults.integer(forKey: Keys.Cap.autoScreenshotInterval)
+        screenshotSource = defaults.integer(forKey: Keys.Cap.screenshotSource)
+        screenshotTargetIntValue = defaults.integer(forKey: Keys.Cap.screenshotTarget)
 
         // Snapshots
-        autoSnapshots = defaults.bool(forKey: Keys.autoSnapshots)
-        snapshotInterval = defaults.integer(forKey: Keys.autoSnapshotInterval)
+        autoSnapshots = defaults.bool(forKey: Keys.Cap.autoSnapshots)
+        snapshotInterval = defaults.integer(forKey: Keys.Cap.autoSnapshotInterval)
 
         // Captures
-        captureSource = defaults.integer(forKey: Keys.captureSource)
-        bitRate = defaults.integer(forKey: Keys.bitRate)
-        aspectX = defaults.integer(forKey: Keys.aspectX)
-        aspectY = defaults.integer(forKey: Keys.aspectY)
+        captureSource = defaults.integer(forKey: Keys.Cap.captureSource)
+        bitRate = defaults.integer(forKey: Keys.Cap.bitRate)
+        aspectX = defaults.integer(forKey: Keys.Cap.aspectX)
+        aspectY = defaults.integer(forKey: Keys.Cap.aspectY)
     }
     
     func saveCaptureUserDefaults() {
@@ -349,20 +349,20 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Screenshots
-        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
-        defaults.set(autoScreenshots, forKey: Keys.autoScreenshots)
-        defaults.set(screenshotInterval, forKey: Keys.autoScreenshotInterval)
-        defaults.set(screenshotSource, forKey: Keys.screenshotSource)
+        defaults.set(autoSnapshots, forKey: Keys.Cap.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.Cap.autoSnapshotInterval)
+        defaults.set(autoScreenshots, forKey: Keys.Cap.autoScreenshots)
+        defaults.set(screenshotInterval, forKey: Keys.Cap.autoScreenshotInterval)
+        defaults.set(screenshotSource, forKey: Keys.Cap.screenshotSource)
 
         // Snapshots
-        defaults.set(autoSnapshots, forKey: Keys.autoSnapshots)
-        defaults.set(snapshotInterval, forKey: Keys.autoSnapshotInterval)
+        defaults.set(autoSnapshots, forKey: Keys.Cap.autoSnapshots)
+        defaults.set(snapshotInterval, forKey: Keys.Cap.autoSnapshotInterval)
 
         // Captures
-        defaults.set(captureSource, forKey: Keys.captureSource)
-        defaults.set(bitRate, forKey: Keys.bitRate)
-        defaults.set(aspectX, forKey: Keys.aspectX)
-        defaults.set(aspectY, forKey: Keys.aspectY)
+        defaults.set(captureSource, forKey: Keys.Cap.captureSource)
+        defaults.set(bitRate, forKey: Keys.Cap.bitRate)
+        defaults.set(aspectX, forKey: Keys.Cap.aspectX)
+        defaults.set(aspectY, forKey: Keys.Cap.aspectY)
     }
 }

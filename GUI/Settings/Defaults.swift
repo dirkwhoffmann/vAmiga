@@ -255,26 +255,29 @@ extension UserDefaults {
 //
 
 extension Keys {
-            
-    // Emulation keys
-    static let joyKeyMap1            = "VAMIGA_DEV_JoyKeyMap1"
-    static let joyKeyMap2            = "VAMIGA_DEV_JoyKeyMap2"
-    static let mouseKeyMap           = "VAMIGA_DEV_MouseKeyMap"
-    static let disconnectJoyKeys     = "VAMIGA_DEV_DisconnectKeys"
-
-    // Joysticks
-    static let autofire              = "VAMIGA_DEV_Autofire"
-    static let autofireBullets       = "VAMIGA_DEV_AutofireBullets"
-    static let autofireFrequency     = "VAMIGA_DEV_AutofireFrequency"
     
-    // Mouse
-    static let retainMouseKeyComb    = "VAMIGA_DEV_RetainMouseKeyComb"
-    static let retainMouseWithKeys   = "VAMIGA_DEV_RetainMouseWithKeys"
-    static let retainMouseByClick    = "VAMIGA_DEV_RetainMouseByClick"
-    static let retainMouseByEntering = "VAMIGA_DEV_RetainMouseByEntering"
-    static let releaseMouseKeyComb   = "VAMIGA_DEV_ReleaseMouseKeyComb"
-    static let releaseMouseWithKeys  = "VAMIGA_DEV_ReleaseMouseWithKeys"
-    static let releaseMouseByShaking = "VAMIGA_DEV_ReleaseMouseByShaking"
+    struct Dev {
+        
+        // Emulation keys
+        static let joyKeyMap1            = "VAMIGA_DEV_JoyKeyMap1"
+        static let joyKeyMap2            = "VAMIGA_DEV_JoyKeyMap2"
+        static let mouseKeyMap           = "VAMIGA_DEV_MouseKeyMap"
+        static let disconnectJoyKeys     = "VAMIGA_DEV_DisconnectKeys"
+        
+        // Joysticks
+        static let autofire              = "VAMIGA_DEV_Autofire"
+        static let autofireBullets       = "VAMIGA_DEV_AutofireBullets"
+        static let autofireFrequency     = "VAMIGA_DEV_AutofireFrequency"
+        
+        // Mouse
+        static let retainMouseKeyComb    = "VAMIGA_DEV_RetainMouseKeyComb"
+        static let retainMouseWithKeys   = "VAMIGA_DEV_RetainMouseWithKeys"
+        static let retainMouseByClick    = "VAMIGA_DEV_RetainMouseByClick"
+        static let retainMouseByEntering = "VAMIGA_DEV_RetainMouseByEntering"
+        static let releaseMouseKeyComb   = "VAMIGA_DEV_ReleaseMouseKeyComb"
+        static let releaseMouseWithKeys  = "VAMIGA_DEV_ReleaseMouseWithKeys"
+        static let releaseMouseByShaking = "VAMIGA_DEV_ReleaseMouseByShaking"
+    }
 }
 
 struct DevicesDefaults {
@@ -349,50 +352,50 @@ extension UserDefaults {
         let dictionary: [String: Any] = [
 
             // Emulation keys
-            Keys.disconnectJoyKeys: defaults.disconnectJoyKeys,
+            Keys.Dev.disconnectJoyKeys: defaults.disconnectJoyKeys,
 
             // Joysticks
-            Keys.autofire: defaults.autofire,
-            Keys.autofireBullets: defaults.autofireBullets,
-            Keys.autofireFrequency: defaults.autofireFrequency,
+            Keys.Dev.autofire: defaults.autofire,
+            Keys.Dev.autofireBullets: defaults.autofireBullets,
+            Keys.Dev.autofireFrequency: defaults.autofireFrequency,
             
             // Mouse
-            Keys.retainMouseKeyComb: defaults.retainMouseKeyComb,
-            Keys.retainMouseWithKeys: defaults.retainMouseWithKeys,
-            Keys.retainMouseByClick: defaults.retainMouseByClick,
-            Keys.retainMouseByEntering: defaults.retainMouseByEntering,
-            Keys.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
-            Keys.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
-            Keys.releaseMouseByShaking: defaults.releaseMouseByShaking
+            Keys.Dev.retainMouseKeyComb: defaults.retainMouseKeyComb,
+            Keys.Dev.retainMouseWithKeys: defaults.retainMouseWithKeys,
+            Keys.Dev.retainMouseByClick: defaults.retainMouseByClick,
+            Keys.Dev.retainMouseByEntering: defaults.retainMouseByEntering,
+            Keys.Dev.releaseMouseKeyComb: defaults.releaseMouseKeyComb,
+            Keys.Dev.releaseMouseWithKeys: defaults.releaseMouseWithKeys,
+            Keys.Dev.releaseMouseByShaking: defaults.releaseMouseByShaking
         ]
         
         let userDefaults = UserDefaults.standard
         userDefaults.register(defaults: dictionary)
-        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.joyKeyMap1)
-        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.joyKeyMap2)
-        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.mouseKeyMap)
+        userDefaults.register(encodableItem: defaults.joyKeyMap1, forKey: Keys.Dev.joyKeyMap1)
+        userDefaults.register(encodableItem: defaults.joyKeyMap2, forKey: Keys.Dev.joyKeyMap2)
+        userDefaults.register(encodableItem: defaults.mouseKeyMap, forKey: Keys.Dev.mouseKeyMap)
     }
     
     static func resetDevicesUserDefaults() {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.joyKeyMap1,
-                     Keys.joyKeyMap2,
-                     Keys.mouseKeyMap,
-                     Keys.disconnectJoyKeys,
+        let keys = [ Keys.Dev.joyKeyMap1,
+                     Keys.Dev.joyKeyMap2,
+                     Keys.Dev.mouseKeyMap,
+                     Keys.Dev.disconnectJoyKeys,
                      
-                     Keys.autofire,
-                     Keys.autofireBullets,
-                     Keys.autofireFrequency,
+                     Keys.Dev.autofire,
+                     Keys.Dev.autofireBullets,
+                     Keys.Dev.autofireFrequency,
                      
-                     Keys.retainMouseKeyComb,
-                     Keys.retainMouseWithKeys,
-                     Keys.retainMouseByClick,
-                     Keys.retainMouseByEntering,
-                     Keys.releaseMouseKeyComb,
-                     Keys.releaseMouseWithKeys,
-                     Keys.releaseMouseByShaking ]
+                     Keys.Dev.retainMouseKeyComb,
+                     Keys.Dev.retainMouseWithKeys,
+                     Keys.Dev.retainMouseByClick,
+                     Keys.Dev.retainMouseByEntering,
+                     Keys.Dev.releaseMouseKeyComb,
+                     Keys.Dev.releaseMouseWithKeys,
+                     Keys.Dev.releaseMouseByShaking ]
 
         for key in keys { defaults.removeObject(forKey: key) }
     }
@@ -404,21 +407,24 @@ extension UserDefaults {
 
 extension Keys {
     
-    // Screenshots
-    static let autoScreenshots        = "VAMIGA_CAP_AutoScreenshots"
-    static let autoScreenshotInterval = "VAMIGA_CAP_SnapshotInterval"
-    static let screenshotSource       = "VAMIGA_CAP_ScreenshotSource"
-    static let screenshotTarget       = "VAMIGA_CAP_ScreenshotTarget"
-
-    // Snapshots
-    static let autoSnapshots          = "VAMIGA_CAP_AutoSnapshots"
-    static let autoSnapshotInterval   = "VAMIGA_CAP_ScreenshotInterval"
-
-    // Screen captures
-    static let captureSource          = "VAMIGA_CAP_Source"
-    static let bitRate                = "VAMIGA_CAP_BitRate"
-    static let aspectX                = "VAMIGA_CAP_AspectX"
-    static let aspectY                = "VAMIGA_CAP_AspectY"
+    struct Cap {
+        
+        // Screenshots
+        static let autoScreenshots        = "VAMIGA_CAP_AutoScreenshots"
+        static let autoScreenshotInterval = "VAMIGA_CAP_SnapshotInterval"
+        static let screenshotSource       = "VAMIGA_CAP_ScreenshotSource"
+        static let screenshotTarget       = "VAMIGA_CAP_ScreenshotTarget"
+        
+        // Snapshots
+        static let autoSnapshots          = "VAMIGA_CAP_AutoSnapshots"
+        static let autoSnapshotInterval   = "VAMIGA_CAP_ScreenshotInterval"
+        
+        // Screen captures
+        static let captureSource          = "VAMIGA_CAP_Source"
+        static let bitRate                = "VAMIGA_CAP_BitRate"
+        static let aspectX                = "VAMIGA_CAP_AspectX"
+        static let aspectY                = "VAMIGA_CAP_AspectY"
+    }
 }
 
 struct CaptureDefaults {
@@ -467,18 +473,18 @@ extension UserDefaults {
         let defaults = CaptureDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.autoScreenshots: defaults.autoScreenshots,
-            Keys.autoScreenshotInterval: defaults.autoScreenshotInterval,
-            Keys.screenshotSource: defaults.screenshotSource,
-            Keys.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
+            Keys.Cap.autoScreenshots: defaults.autoScreenshots,
+            Keys.Cap.autoScreenshotInterval: defaults.autoScreenshotInterval,
+            Keys.Cap.screenshotSource: defaults.screenshotSource,
+            Keys.Cap.screenshotTarget: Int(defaults.screenshotTarget.rawValue),
 
-            Keys.autoSnapshots: defaults.autoSnapshots,
-            Keys.autoSnapshotInterval: defaults.autoSnapshotInterval,
+            Keys.Cap.autoSnapshots: defaults.autoSnapshots,
+            Keys.Cap.autoSnapshotInterval: defaults.autoSnapshotInterval,
 
-            Keys.captureSource: defaults.captureSource,
-            Keys.bitRate: defaults.bitRate,
-            Keys.aspectX: defaults.aspectX,
-            Keys.aspectY: defaults.aspectY
+            Keys.Cap.captureSource: defaults.captureSource,
+            Keys.Cap.bitRate: defaults.bitRate,
+            Keys.Cap.aspectX: defaults.aspectX,
+            Keys.Cap.aspectY: defaults.aspectY
         ]
         
         let userDefaults = UserDefaults.standard
@@ -490,18 +496,18 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
         
-        let keys = [ Keys.autoScreenshots,
-                     Keys.autoScreenshotInterval,
-                     Keys.screenshotSource,
-                     Keys.screenshotTarget,
+        let keys = [ Keys.Cap.autoScreenshots,
+                     Keys.Cap.autoScreenshotInterval,
+                     Keys.Cap.screenshotSource,
+                     Keys.Cap.screenshotTarget,
                      
-                     Keys.autoSnapshots,
-                     Keys.autoSnapshotInterval,
+                     Keys.Cap.autoSnapshots,
+                     Keys.Cap.autoSnapshotInterval,
                      
-                     Keys.captureSource,
-                     Keys.bitRate,
-                     Keys.aspectX,
-                     Keys.aspectY
+                     Keys.Cap.captureSource,
+                     Keys.Cap.bitRate,
+                     Keys.Cap.aspectX,
+                     Keys.Cap.aspectY
         ]
 
         for key in keys { defaults.removeObject(forKey: key) }
@@ -513,8 +519,11 @@ extension UserDefaults {
 //
 
 extension Keys {
-    
-    static let extStart          = "VAMIGA_ROM_ExtStart"
+
+    struct Rom {
+        
+        static let extStart          = "VAMIGA_ROM_ExtStart"
+    }
 }
 
 struct RomDefaults {
@@ -548,7 +557,7 @@ extension UserDefaults {
         let defaults = RomDefaults.std
         let dictionary: [String: Any] = [
             
-            Keys.extStart: defaults.extStart
+            Keys.Rom.extStart: defaults.extStart
         ]
         
         let userDefaults = UserDefaults.standard
@@ -559,7 +568,7 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
 
-        let keys = [ Keys.extStart ]
+        let keys = [ Keys.Rom.extStart ]
 
         for key in keys { defaults.removeObject(forKey: key) }
         
@@ -588,24 +597,27 @@ extension UserDefaults {
 //
 
 extension Keys {
+    
+    struct Hrw {
         
-    // Chipset
-    static let agnusRev           = "VAMIGA_HW_AgnusRev"
-    static let slowRamMirror      = "VAMIGA_HW_SlowRamMirror"
-    static let deniseRev          = "VAMIGA_HW_DeniseRev"
-    static let borderBlank        = "VAMIGA_HW_BorderBlank"
-    static let ciaRev             = "VAMIGA_HW_CiaRev"
-    static let todBug             = "VAMIGA_COM_TodBug"
-    static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
-
-    // Memory
-    static let chipRam            = "VAMIGA_HW_ChipRam"
-    static let slowRam            = "VAMIGA_HW_SlowRam"
-    static let fastRam            = "VAMIGA_HW_FastRam"
-    static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
-
-    static let bankMap            = "VAMIGA_HW_BankMap"
-    static let unmappingType      = "VAMIGA_HW_UnmappingType"
+        // Chipset
+        static let agnusRev           = "VAMIGA_HW_AgnusRev"
+        static let slowRamMirror      = "VAMIGA_HW_SlowRamMirror"
+        static let deniseRev          = "VAMIGA_HW_DeniseRev"
+        static let borderBlank        = "VAMIGA_HW_BorderBlank"
+        static let ciaRev             = "VAMIGA_HW_CiaRev"
+        static let todBug             = "VAMIGA_COM_TodBug"
+        static let realTimeClock      = "VAMIGA_HW_RealTimeClock"
+        
+        // Memory
+        static let chipRam            = "VAMIGA_HW_ChipRam"
+        static let slowRam            = "VAMIGA_HW_SlowRam"
+        static let fastRam            = "VAMIGA_HW_FastRam"
+        static let ramInitPattern     = "VAMIGA_HW_RamInitPattern"
+        
+        static let bankMap            = "VAMIGA_HW_BankMap"
+        static let unmappingType      = "VAMIGA_HW_UnmappingType"
+    }
 }
 
 struct HardwareDefaults {
@@ -695,21 +707,21 @@ extension UserDefaults {
         let defaults = HardwareDefaults.A500
         let dictionary: [String: Any] = [
             
-            Keys.agnusRev: defaults.agnusRev.rawValue,
-            Keys.slowRamMirror: defaults.slowRamMirror,
-            Keys.deniseRev: defaults.deniseRev.rawValue,
-            Keys.borderBlank: defaults.borderBlank,
-            Keys.ciaRev: defaults.ciaRev.rawValue,
-            Keys.todBug: defaults.todBug,
-            Keys.realTimeClock: defaults.realTimeClock.rawValue,
+            Keys.Hrw.agnusRev: defaults.agnusRev.rawValue,
+            Keys.Hrw.slowRamMirror: defaults.slowRamMirror,
+            Keys.Hrw.deniseRev: defaults.deniseRev.rawValue,
+            Keys.Hrw.borderBlank: defaults.borderBlank,
+            Keys.Hrw.ciaRev: defaults.ciaRev.rawValue,
+            Keys.Hrw.todBug: defaults.todBug,
+            Keys.Hrw.realTimeClock: defaults.realTimeClock.rawValue,
 
-            Keys.chipRam: defaults.chipRam,
-            Keys.slowRam: defaults.slowRam,
-            Keys.fastRam: defaults.fastRam,
-            Keys.ramInitPattern: defaults.ramInitPattern.rawValue,
+            Keys.Hrw.chipRam: defaults.chipRam,
+            Keys.Hrw.slowRam: defaults.slowRam,
+            Keys.Hrw.fastRam: defaults.fastRam,
+            Keys.Hrw.ramInitPattern: defaults.ramInitPattern.rawValue,
 
-            Keys.bankMap: defaults.bankMap.rawValue,
-            Keys.unmappingType: defaults.unmappingType.rawValue
+            Keys.Hrw.bankMap: defaults.bankMap.rawValue,
+            Keys.Hrw.unmappingType: defaults.unmappingType.rawValue
         ]
         
         let userDefaults = UserDefaults.standard
@@ -720,21 +732,21 @@ extension UserDefaults {
         
         let defaults = UserDefaults.standard
 
-        let keys = [Keys.agnusRev,
-                    Keys.slowRamMirror,
-                    Keys.deniseRev,
-                    Keys.borderBlank,
-                    Keys.ciaRev,
-                    Keys.todBug,
-                    Keys.realTimeClock,
+        let keys = [Keys.Hrw.agnusRev,
+                    Keys.Hrw.slowRamMirror,
+                    Keys.Hrw.deniseRev,
+                    Keys.Hrw.borderBlank,
+                    Keys.Hrw.ciaRev,
+                    Keys.Hrw.todBug,
+                    Keys.Hrw.realTimeClock,
 
-                    Keys.chipRam,
-                    Keys.slowRam,
-                    Keys.fastRam,
-                    Keys.ramInitPattern,
+                    Keys.Hrw.chipRam,
+                    Keys.Hrw.slowRam,
+                    Keys.Hrw.fastRam,
+                    Keys.Hrw.ramInitPattern,
 
-                    Keys.bankMap,
-                    Keys.unmappingType
+                    Keys.Hrw.bankMap,
+                    Keys.Hrw.unmappingType
                 ]
 
         for key in keys { defaults.removeObject(forKey: key) }
