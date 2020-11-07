@@ -40,17 +40,13 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_EXE; }
+    AmigaFileType fileType() override { return FILETYPE_DIR; }
     const char *typeAsString() override { return "DIR"; }
     u64 fnv() override { return adf->fnv(); }
     bool bufferHasSameType(const u8 *buffer, size_t length) override;
     bool fileHasSameType(const char *path) override { return isDIRFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
     bool readFromFile(const char *filename) override;
-    
-private:
-    
-    // bool traverseDir(const char *dir, FSVolume &vol);
     
     
     //

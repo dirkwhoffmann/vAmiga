@@ -252,13 +252,13 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
     // Create an empty file system
     if (fs == FS_EMPTY_FFS || fs == FS_EMPTY_FFS_BOOTABLE) {
 
-        FFSVolume vol = FFSVolume("MyDisk");
+        FSVolume vol = FSVolume(FFS, "MyDisk", 2 * 880);
         if (fs == FS_EMPTY_FFS_BOOTABLE) vol.installBootBlock();
         vol.exportVolume(data, size);
 
     } else {
 
-        OFSVolume vol = OFSVolume("MyDisk");
+        FSVolume vol = FSVolume(OFS, "MyDisk", 2 * 880);
         if (fs == FS_EMPTY_OFS_BOOTABLE) vol.installBootBlock();
         vol.exportVolume(data, size);
     }

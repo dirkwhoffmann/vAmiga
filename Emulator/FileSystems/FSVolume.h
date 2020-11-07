@@ -43,7 +43,7 @@ class FSVolume : AmigaObject {
 protected:
         
     // The type of this volume
-    FSVolumeType type = OFS;
+    FSVolumeType type;
 
     // Total capacity of this volume in blocks
     u32 capacity;
@@ -67,6 +67,15 @@ public:
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < capacity; }
 
+
+    //
+    // Factory methods
+    //
+    
+    // Creates a file system with the contents of a host file system directory
+    static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
+    static FSVolume *make(FSVolumeType type, const char *name, const char *path);
+
     
     //
     // Initializing
@@ -74,8 +83,7 @@ public:
     
 public:
 
-    FSVolume(const char *name, u32 capacity, u32 bsize = 512);
-    // FSVolume(const char *name) : FSVolume(name, 2 * 880, 512) { };
+    FSVolume(FSVolumeType type, const char *name, u32 capacity, u32 bsize = 512);
     ~FSVolume();
     
     // Prints information about this volume
@@ -197,16 +205,20 @@ public:
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 };
 
+/*
 class OFSVolume : public FSVolume {
     
 public:
+    
     OFSVolume(const char *name, u32 capacity = 2 * 880);
 };
 
 class FFSVolume : public FSVolume {
     
 public:
+    
     FFSVolume(const char *name, u32 capacity = 2 * 880);
 };
+*/
 
 #endif

@@ -10,7 +10,34 @@
 #include "Utils.h"
 #include "FSVolume.h"
 
-FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
+FSVolume *
+FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
+{
+    FSVolume *volume = new FSVolume(type, name, capacity);
+
+    // Try to import directory
+    if (!volume->importDirectory(path)) { delete volume; return nullptr; }
+    
+    // Change to root directory and return
+    volume->changeDir("/");
+    return volume;
+}
+
+FSVolume *
+FSVolume::make(FSVolumeType type, const char *name, const char *path)
+{
+    FSVolume *volume;
+    
+    // Try to fit the directory into files system with DD disk capacity
+    if ((volume = make(type, name, path, 2 * 880))) return volume;
+
+    // Try to fit the directory into files system with HD disk capacity
+    if ((volume = make(type, name, path, 4 * 880))) return volume;
+
+    return nullptr;
+}
+
+FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
     assert(capacity == 2 * 880 || capacity == 4 * 880);
 
@@ -522,12 +549,12 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
     return result;
 }
 
-OFSVolume::OFSVolume(const char *name, u32 capacity) : FSVolume(name, capacity)
+/*
+OFSVolume::OFSVolume(const char *name, u32 capacity) : FSVolume(OFS, name, capacity)
 {
-    type = OFS;
 }
 
-FFSVolume::FFSVolume(const char *name, u32 capacity) : FSVolume(name, capacity)
+FFSVolume::FFSVolume(const char *name, u32 capacity) : FSVolume(FFS, name, capacity)
 {
-    type = FFS;
 }
+*/

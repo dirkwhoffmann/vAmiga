@@ -38,7 +38,7 @@ class DiskMountDialog: DialogController {
         
         var name: String
         switch type {
-        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE:
+        case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
             name = hd ? "adfhd" : "adf"
         case .FILETYPE_IMG:
             name = "dos"
@@ -61,7 +61,9 @@ class DiskMountDialog: DialogController {
         case .FILETYPE_DMS:
             return "Disk Masher System (DMS)"
         case .FILETYPE_EXE:
-            return "Amiga executable"
+            return "ADF containing a single Amiga executable"
+        case .FILETYPE_DIR:
+            return "ADF (created from a directory)"
         default:
             return "???"
         }
