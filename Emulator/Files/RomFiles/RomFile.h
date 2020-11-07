@@ -61,7 +61,7 @@ public:
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_KICK_ROM; }
+    AmigaFileType fileType() override { return FILETYPE_ROM; }
     const char *typeAsString() override { return "Kickstart Rom"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
         return isRomBuffer(buffer, length); }

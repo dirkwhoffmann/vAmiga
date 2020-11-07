@@ -340,7 +340,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (BOOL) isExt:(NSURL *)url
 {
-    return ExtFile::isExtFile([url fileSystemRepresentation]);
+    return ExtendedRomFile::isExtendedRomFile([url fileSystemRepresentation]);
 }
 - (BOOL) loadExtFromBuffer:(NSData *)data
 {

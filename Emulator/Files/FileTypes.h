@@ -23,14 +23,15 @@ typedef VA_ENUM(long, AmigaFileType)
     FILETYPE_DMS,
     FILETYPE_EXE,
     FILETYPE_DIR,
-    FILETYPE_BOOT_ROM,
-    FILETYPE_KICK_ROM,
-    FILETYPE_ENCRYPTED_KICK_ROM,
-    FILETYPE_EXT_ROM
+    FILETYPE_ROM,
+    FILETYPE_ENCRYPTED_ROM,
+    FILETYPE_EXTENDED_ROM,
+    FILETYPE_COUNT
 };
 
-inline bool isAmigaFileType(long value) {
-    return value >= FILETYPE_UKNOWN && value <= FILETYPE_EXT_ROM;
+inline bool isAmigaFileType(long value)
+{
+    return value >= 0 && value < FILETYPE_COUNT;
 }
 
 typedef VA_ENUM(long, RomIdentifier)

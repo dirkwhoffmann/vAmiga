@@ -7,19 +7,19 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "ExtFile.h"
+#include "ExtendedRomFile.h"
 
 // AROS Extended ROM
-const u8 ExtFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
-const u8 ExtFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const u8 ExtendedRomFile::magicBytes1[] = { 0x11, 0x14, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
+const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 0x00, 0x02 };
 
-ExtFile::ExtFile()
+ExtendedRomFile::ExtendedRomFile()
 {
     setDescription("ExtRom");
 }
 
 bool
-ExtFile::isExtBuffer(const u8 *buffer, size_t length)
+ExtendedRomFile::isExtendedRomBuffer(const u8 *buffer, size_t length)
 {
     if (length != KB(512)) return false;
 
@@ -29,7 +29,7 @@ ExtFile::isExtBuffer(const u8 *buffer, size_t length)
 }
 
 bool
-ExtFile::isExtFile(const char *path)
+ExtendedRomFile::isExtendedRomFile(const char *path)
 {
     if (!checkFileSize(path, KB(512))) return false;
 
@@ -38,10 +38,10 @@ ExtFile::isExtFile(const char *path)
     matchingFileHeader(path, magicBytes2, sizeof(magicBytes2));
 }
 
-ExtFile *
-ExtFile::makeWithBuffer(const u8 *buffer, size_t length)
+ExtendedRomFile *
+ExtendedRomFile::makeWithBuffer(const u8 *buffer, size_t length)
 {
-    ExtFile *rom = new ExtFile();
+    ExtendedRomFile *rom = new ExtendedRomFile();
 
     if (!rom->readFromBuffer(buffer, length)) {
         delete rom;
@@ -51,10 +51,10 @@ ExtFile::makeWithBuffer(const u8 *buffer, size_t length)
     return rom;
 }
 
-ExtFile *
-ExtFile::makeWithFile(const char *path)
+ExtendedRomFile *
+ExtendedRomFile::makeWithFile(const char *path)
 {
-    ExtFile *rom = new ExtFile();
+    ExtendedRomFile *rom = new ExtendedRomFile();
 
     if (!rom->readFromFile(path)) {
         delete rom;
@@ -65,10 +65,10 @@ ExtFile::makeWithFile(const char *path)
 }
 
 bool
-ExtFile::readFromBuffer(const u8 *buffer, size_t length)
+ExtendedRomFile::readFromBuffer(const u8 *buffer, size_t length)
 {
     if (!AmigaFile::readFromBuffer(buffer, length))
         return false;
 
-    return isExtBuffer(buffer, length);
+    return isExtendedRomBuffer(buffer, length);
 }

@@ -533,7 +533,7 @@ Memory::loadEncryptedRomFromFile(const char *path, DecryptionError *error)
 }
 
 bool
-Memory::loadExt(ExtFile *file)
+Memory::loadExt(ExtendedRomFile *file)
 {
     assert(file != NULL);
 
@@ -549,7 +549,7 @@ Memory::loadExtFromBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != NULL);
 
-    ExtFile *file = ExtFile::makeWithBuffer(buffer, length);
+    ExtendedRomFile *file = ExtendedRomFile::makeWithBuffer(buffer, length);
 
     if (!file) {
         msg("Failed to read Extended Rom from buffer at %p\n", buffer);
@@ -564,7 +564,7 @@ Memory::loadExtFromFile(const char *path)
 {
     assert(path != NULL);
 
-    ExtFile *file = ExtFile::makeWithFile(path);
+    ExtendedRomFile *file = ExtendedRomFile::makeWithFile(path);
 
     if (!file) {
         msg("Failed to read Extended Rom from file %s\n", path);

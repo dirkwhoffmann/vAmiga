@@ -7,12 +7,12 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXT_H
-#define _EXT_H
+#ifndef _EXTENDED_ROM_H
+#define _EXTENDED_ROM_H
 
 #include "AmigaFile.h"
 
-class ExtFile : public AmigaFile {
+class ExtendedRomFile : public AmigaFile {
 
 private:
 
@@ -27,31 +27,31 @@ public:
     //
 
     // Returns true iff buffer contains an Extended Rom image
-    static bool isExtBuffer(const u8 *buffer, size_t length);
+    static bool isExtendedRomBuffer(const u8 *buffer, size_t length);
 
     // Returns true iff path points to a Extended Rom file
-    static bool isExtFile(const char *path);
+    static bool isExtendedRomFile(const char *path);
 
 
     //
     // Initializing
     //
 
-    ExtFile();
+    ExtendedRomFile();
 
-    static ExtFile *makeWithBuffer(const u8 *buffer, size_t length);
-    static ExtFile *makeWithFile(const char *path);
+    static ExtendedRomFile *makeWithBuffer(const u8 *buffer, size_t length);
+    static ExtendedRomFile *makeWithFile(const char *path);
 
 
     //
     // Methods from AmigaFile
     //
 
-    AmigaFileType fileType() override { return FILETYPE_KICK_ROM; }
+    AmigaFileType fileType() override { return FILETYPE_EXTENDED_ROM; }
     const char *typeAsString() override { return "Extended Rom"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
-        return isExtBuffer(buffer, length); }
-    bool fileHasSameType(const char *path) override { return isExtFile(path); }
+        return isExtendedRomBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isExtendedRomFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
 
 };

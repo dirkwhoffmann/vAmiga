@@ -12,7 +12,7 @@
 
 #include "AmigaComponent.h"
 #include "RomFile.h"
-#include "ExtFile.h"
+#include "ExtendedRomFile.h"
 
 // DEPRECATED. TODO: GET VALUE FROM ZORRO CARD MANANGER
 const u32 FAST_RAM_STRT = 0x200000;
@@ -376,7 +376,7 @@ public:
     bool loadRomFromFile(const char *path);
     bool loadEncryptedRomFromFile(const char *path, DecryptionError *error);
 
-    bool loadExt(ExtFile *rom);
+    bool loadExt(ExtendedRomFile *rom);
     bool loadExtFromBuffer(const u8 *buffer, size_t length);
     bool loadExtFromFile(const char *path);
     
