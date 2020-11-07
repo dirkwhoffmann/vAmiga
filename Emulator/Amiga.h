@@ -41,6 +41,7 @@
 #include "ExtendedRomFile.h"
 #include "Snapshot.h"
 #include "ADFFile.h"
+#include "EXT1File.h"
 #include "IMGFile.h"
 #include "DMSFile.h"
 #include "EXEFile.h"

@@ -82,9 +82,7 @@ class MyDocument: NSDocument {
     //
     
     func fileType(url: URL) -> AmigaFileType {
-        
-        track()
-        
+                
         // Check if the URL points to a directory
         if url.hasDirectoryPath { return .FILETYPE_DIR }
         
@@ -127,7 +125,7 @@ class MyDocument: NSDocument {
     fileprivate
     func createFileProxy(wrapper: FileWrapper, type: AmigaFileType) throws -> AmigaFileProxy? {
                 
-        track("type = \(type)")
+        track("type = \(type.rawValue)")
         
         guard let name = wrapper.filename else {
             throw NSError.fileAccessError()
@@ -152,7 +150,10 @@ class MyDocument: NSDocument {
             
         case .FILETYPE_ADF:
             result = ADFFileProxy.make(withBuffer: buffer, length: length)
-            
+            if result == nil {
+                result = EXT1FileProxy.make(withBuffer: buffer, length: length)
+            }
+
         case .FILETYPE_DMS:
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
 
@@ -203,6 +204,7 @@ class MyDocument: NSDocument {
         let types: [AmigaFileType] = [
             .FILETYPE_SNAPSHOT,
             .FILETYPE_ADF,
+            .FILETYPE_EXT1,
             .FILETYPE_IMG,
             .FILETYPE_DMS,
             .FILETYPE_EXE,

@@ -721,6 +721,20 @@ struct SerialPortWrapper;
 
 
 //
+// EXT1FileProxy
+//
+
+@interface EXT1FileProxy : DiskFileProxy {
+}
+
++ (BOOL)isEXT1File:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
+
+@end
+
+
+//
 // IMGFileProxy
 //
 

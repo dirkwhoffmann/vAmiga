@@ -1452,6 +1452,35 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
+// EXT1FileProxy
+//
+
+@implementation EXT1FileProxy
+
++ (BOOL)isEXT1File:(NSString *)path
+{
+    return EXT1File::isEXT1File([path fileSystemRepresentation]);
+}
++ (instancetype) make:(EXT1File *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    EXT1File *archive = EXT1File::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    EXT1File *archive = EXT1File::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
+
+@end
+
+
+//
 // IMGFileProxy
 //
 

@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _DMS_H
-#define _DMS_H
+#ifndef _DMS_FILE_H
+#define _DMS_FILE_H
 
 #include "ADFFile.h"
 

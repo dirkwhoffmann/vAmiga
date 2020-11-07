@@ -23,8 +23,7 @@ DMSFile::isDMSBuffer(const u8 *buffer, size_t length)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
                                                                                             
-    assert(buffer != NULL);
-    
+    assert(buffer != nullptr);
     return matchingBufferHeader(buffer, signature, sizeof(signature));
 }
 
@@ -33,8 +32,7 @@ DMSFile::isDMSFile(const char *path)
 {
     u8 signature[] = { 'D', 'M', 'S', '!' };
     
-    assert(path != NULL);
-    
+    assert(path != nullptr);
     return matchingFileHeader(path, signature, sizeof(signature));
 }
 
@@ -45,7 +43,7 @@ DMSFile::makeWithBuffer(const u8 *buffer, size_t length)
     
     if (!dms->readFromBuffer(buffer, length)) {
         delete dms;
-        return NULL;
+        return nullptr;
     }
     
     return dms;
@@ -58,7 +56,7 @@ DMSFile::makeWithFile(const char *path)
     
     if (!dms->readFromFile(path)) {
         delete dms;
-        return NULL;
+        return nullptr;
     }
     
     return dms;
@@ -99,6 +97,6 @@ DMSFile::readFromBuffer(const u8 *buffer, size_t length)
     adf = ADFFile::makeWithFile(fpo);
     fclose(fpo);
     
-    return adf != NULL;
+    return adf != nullptr;
 }
 
