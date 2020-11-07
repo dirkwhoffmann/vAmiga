@@ -9,6 +9,37 @@
 
 #include "FSVolume.h"
 
+char *
+FSBlock::assemblePath()
+{
+    FSBlock *parent = getParent() ? volume.block(getParent()) : nullptr;
+    if (!parent) return strdup("");
+    
+    char *prefix = parent->assemblePath();
+    char *result = new char [strlen(prefix) + strlen(getName()) + 2];
+
+    strcpy(result, prefix);
+    strcat(result, "/");
+    strcat(result, getName());
+
+    delete [] prefix;
+    return result;
+}
+
+void
+FSBlock::printName()
+{
+    printf("%s", getName());
+}
+
+void
+FSBlock::printPath()
+{
+    char *path = assemblePath();
+    printf("%s", path);
+    delete [] path;
+}
+
 u32
 FSBlock::checksum(u8 *p)
 {
@@ -118,3 +149,4 @@ FSBlock::check(bool verbose)
 {
     return assertSelfRef(nr, verbose);
 }
+

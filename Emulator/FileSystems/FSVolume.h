@@ -7,8 +7,10 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _OFS_H
-#define _OFS_H
+#ifndef _FSVOLUME_H
+#define _FSVOLUME_H
+
+#include <dirent.h>
 
 #include "FSBlock.h"
 #include "FSBootBlock.h"
@@ -135,6 +137,7 @@ public:
     //
     // Creating and deleting blocks
     //
+    
     // Allocates a new block (returns 0 if the volume is full)
     u32 allocateBlock();
     u32 allocateBlock(u32 start, int increment);
@@ -173,11 +176,25 @@ public:
     FSBlock *seekDir(const char *name);
     FSBlock *seekFile(const char *name);
     
+    
+    //
+    // Crawling through the file system
+    //
+
     // Walks through all files in the current directory or a given directory
     int walk(bool recursive);
     int walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive);
 
+    // Walker callbacks
     int listWalker(FSBlock *block, int value);
+    
+    
+    //
+    // Importing files and directories
+    //
+    
+    bool importDirectory(const char *path, bool recursive = true);
+    bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 };
 
 class OFSVolume : public FSVolume {

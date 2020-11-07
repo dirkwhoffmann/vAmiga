@@ -20,21 +20,6 @@ FSFileHeaderBlock(ref, nr)
 }
 
 void
-FSFileHeaderBlock::printName()
-{
-    printf("%s", name.name);
-}
-
-void
-FSFileHeaderBlock::printPath()
-{
-    FSBlock *ref = volume.block(getParent());
-    if (ref) ref->printPath();
-    printf("/");
-    printName();
-}
-
-void
 FSFileHeaderBlock::dump()
 {
     printf("        Name: "); printName(); printf("\n");

@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include <dirent.h>
+// #include <dirent.h>
 #include "DIRFile.h"
 #include "FSVolume.h"
 
@@ -72,9 +72,9 @@ DIRFile::readFromFile(const char *filename)
     volume.installBootBlock();
     
     // Crawl through the given directory and add all files
-    success = traverseDir(filename, volume);
-    debug("traverseDir result = %d\n", success);
-    
+    success = volume.importDirectory(filename);
+    debug("importDirectory result = %d\n", success);
+
     // Check for file system errors
     volume.changeDir("/");
     volume.info();
@@ -82,7 +82,6 @@ DIRFile::readFromFile(const char *filename)
 
     if (!volume.check(MFM_DEBUG)) {
         warn("DIRFile::readFromFile: Files system is corrupted.\n");
-        // volume.dump();
     }
 
     // Convert the volume into an ADF
@@ -92,6 +91,7 @@ DIRFile::readFromFile(const char *filename)
     return adf != nullptr;
 }
 
+/*
 bool 
 DIRFile::traverseDir(const char *dir, FSVolume &vol) {
     
@@ -148,3 +148,4 @@ DIRFile::traverseDir(const char *dir, FSVolume &vol) {
     closedir(dp);
     return result;
 }
+*/

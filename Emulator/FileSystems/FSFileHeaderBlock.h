@@ -42,8 +42,7 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
-    void printName() override;
-    void printPath() override;
+    const char *getName() override { return name.name; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
@@ -53,7 +52,6 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
-    char *getName() override { return name.name; }
     u32 getSize() override { return fileSize; }
     time_t getCreationDate() override { return created.get(); }
 

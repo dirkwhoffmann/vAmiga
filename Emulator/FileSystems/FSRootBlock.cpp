@@ -25,18 +25,6 @@ FSRootBlock::~FSRootBlock()
 }
 
 void
-FSRootBlock::printName()
-{
-    printf("%s", name.name);
-}
-
-void
-FSRootBlock::printPath()
-{
-    printf("%s:", name.name);
-}
-
-void
 FSRootBlock::dump()
 {
     printf("        Name: "); name.dump(); printf("\n");

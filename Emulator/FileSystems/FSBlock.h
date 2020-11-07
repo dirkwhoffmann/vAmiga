@@ -46,9 +46,13 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() { return FS_EMPTY_BLOCK; }
 
+    // Returns the name or path of this block
+    virtual const char *getName() { return ""; }
+    char *assemblePath();
+
     // Prints the name or path of this block
-    virtual void printName() { };
-    virtual void printPath() { };
+    void printName();
+    void printPath();
 
     // Prints a debug summary for this block
     virtual void dump() { };
@@ -96,11 +100,8 @@ public:
 
     // Return true if the name of this block matches the given name
     virtual bool matches(FSName &otherName) { return false; }
-    
-    // Returns the name of this block
-    virtual const char *getName() { return nullptr; }
-
-    // Returns the name of this block
+        
+    // Returns the size of this block
     virtual u32 getSize() { return 0; }
 
     // Returns the creation date of this block

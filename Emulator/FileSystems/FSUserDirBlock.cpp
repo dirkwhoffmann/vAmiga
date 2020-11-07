@@ -25,21 +25,6 @@ FSUserDirBlock::~FSUserDirBlock()
 }
 
 void
-FSUserDirBlock::printName()
-{
-    printf("%s", name.name);
-}
-
-void
-FSUserDirBlock::printPath()
-{
-    FSBlock *ref = volume.block(getParent());
-    if (ref) ref->printPath();
-    printf("/");
-    printName();
-}
-
-void
 FSUserDirBlock::dump()
 {
     printf("        Name: "); printName(); printf("\n");

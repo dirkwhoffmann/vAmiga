@@ -50,8 +50,7 @@ struct FSUserDirBlock : FSBlock {
     //
     
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
-    void printName() override;
-    void printPath() override;
+    const char *getName() override { return name.name; };
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
@@ -62,7 +61,6 @@ struct FSUserDirBlock : FSBlock {
 
     u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
-    char *getName() override { return name.name; }
     time_t getCreationDate() override { return created.get(); }
 
     void setNext(u32 ref) override;

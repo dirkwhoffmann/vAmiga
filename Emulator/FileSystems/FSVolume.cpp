@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
 #include "Utils.h"
+#include "FSVolume.h"
 
 FSVolume::FSVolume(const char *name, u32 c, u32 s) : capacity(c), bsize(s)
 {
@@ -455,6 +455,71 @@ FSVolume::exportVolume(u8 *dst, size_t size)
         blocks[i]->exportBlock(dst + i * bsize, bsize);
     }
     return true;
+}
+
+bool
+FSVolume::importDirectory(const char *path, bool recursive)
+{
+    assert(path != nullptr);
+
+    DIR *dir;
+    
+    if ((dir = opendir(path))) {
+        
+        bool result = importDirectory(path, dir, recursive);
+        closedir(dir);
+        return result;
+    }
+
+    warn("Error opening directory %s\n", path);
+    return false;
+}
+
+bool
+FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
+{
+    assert(dir != nullptr);
+    
+    struct dirent *item;
+    bool result = true;
+    
+    while ((item = readdir(dir))) {
+
+        // Skip '.', '..' and all hidden files
+        if (item->d_name[0] == '.') continue;
+
+        // Assemble file name
+        char *name = new char [strlen(path) + strlen(item->d_name) + 2];
+        strcpy(name, path);
+        strcat(name, "/");
+        strcat(name, item->d_name);
+
+        msg("importDirectory: Processing %s\n", name);
+        
+        if (item->d_type == DT_DIR) {
+            
+            // Add directory
+            result &= makeDir(item->d_name) != nullptr;
+            if (recursive && result) {
+                changeDir(item->d_name);
+                result &= importDirectory(name, recursive);
+            }
+            
+        } else {
+            
+            // Add file
+            u8 *buffer; long size;
+            if (loadFile(name, &buffer, &size)) {
+                FSBlock *file = makeFile(item->d_name);
+                result &= file ? (file->append(buffer, size)) : false;
+                delete(buffer);
+            }
+        }
+        
+        delete [] name;
+    }
+
+    return result;
 }
 
 OFSVolume::OFSVolume(const char *name, u32 capacity) : FSVolume(name, capacity)

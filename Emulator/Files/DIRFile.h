@@ -50,7 +50,7 @@ public:
     
 private:
     
-    bool traverseDir(const char *dir, FSVolume &vol);
+    // bool traverseDir(const char *dir, FSVolume &vol);
     
     
     //

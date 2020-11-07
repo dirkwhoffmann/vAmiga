@@ -35,8 +35,7 @@ struct FSRootBlock : FSBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
-    void printName() override;
-    void printPath() override;
+    const char *getName() override { return name.name; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
