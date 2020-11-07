@@ -631,7 +631,7 @@ struct HardwareDefaults {
     var borderBlank: Bool
     var ciaRev: CIARevision
     var todBug: Bool
-    var realTimeClock: RTCModel
+    var realTimeClock: RTCRevision
     
     var chipRam: Int
     var slowRam: Int

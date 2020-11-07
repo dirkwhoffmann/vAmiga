@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, RTCModel)
+typedef VA_ENUM(long, RTCRevision)
 {
     RTC_NONE,
     RTC_OKI,
@@ -26,12 +26,12 @@ typedef VA_ENUM(long, RTCModel)
     RTC_COUNT
 };
 
-inline bool isRTCModel(long value)
+inline bool isRTCRevision(long value)
 {
     return value >= RTC_NONE && value <= RTC_COUNT;
 }
 
-inline const char *sRTCModel(RTCModel model)
+inline const char *sRTCRevision(RTCRevision model)
 {
     switch (model) {
         case RTC_NONE:   return "RTC_NONE";
@@ -43,7 +43,7 @@ inline const char *sRTCModel(RTCModel model)
 
 typedef struct
 {
-    RTCModel model;
+    RTCRevision model;
 }
 RTCConfig;
 

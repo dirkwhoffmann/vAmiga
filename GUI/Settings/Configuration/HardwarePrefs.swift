@@ -12,10 +12,16 @@ extension ConfigurationController {
     func refreshHardwareTab() {
 
         let poweredOff = amiga.isPoweredOff
-
+        let ocsAgnus = config.agnusRev == AgnusRevision.AGNUS_OCS.rawValue
+        
         // Chipset
         hwAgnusRevisionPopup.selectItem(withTag: config.agnusRev)
+        hwSlowRamMirror.state = config.slowRamMirror ? .on : .off
+        hwSlowRamMirror.isEnabled = !ocsAgnus
         hwDeniseRevisionPopup.selectItem(withTag: config.deniseRev)
+        hwBorderBlank.state = config.borderBlank ? .on : .off
+        hwCiaRevisionPopup.selectItem(withTag: config.ciaRev)
+        hwTodBug.state = config.todBug ? .on : .off
         hwRealTimeClock.selectItem(withTag: config.rtClock)
 
         // Memory

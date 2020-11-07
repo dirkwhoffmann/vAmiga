@@ -23,9 +23,6 @@ extension ConfigurationController {
         compBltAccuracy.intValue = a
         compBltLevel1.textColor = (a >= 1) ? .labelColor : .tertiaryLabelColor
         compBltLevel2.textColor = (a >= 2) ? .labelColor : .tertiaryLabelColor
-
-        // CIAs
-        hwTodBug.state = config.ciaA.todBug ? .on : .off
         
         // Floppy drives
         let speed = config.diskController.speed

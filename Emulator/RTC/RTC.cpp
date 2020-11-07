@@ -34,18 +34,18 @@ RTC::setConfigItem(ConfigOption option, long value)
             
             #ifdef FORCE_RTC
             value = FORCE_RTC;
-            warn("Overriding RTC model: %d KB\n", value);
+            warn("Overriding RTC revision: %d KB\n", value);
             #endif
             
-            if (!isRTCModel(value)) {
-                warn("Invalid RTC model: %d\n", value);
+            if (!isRTCRevision(value)) {
+                warn("Invalid RTC revision: %d\n", value);
                 return false;
             }
             if (config.model == value) {
                 return false;
             }
             
-            config.model = (RTCModel)value;
+            config.model = (RTCRevision)value;
             mem.updateMemSrcTables();
             
             return true;
@@ -58,7 +58,7 @@ RTC::setConfigItem(ConfigOption option, long value)
 void
 RTC::_dumpConfig()
 {
-    msg("  Model : %s\n", sRTCModel(config.model));
+    msg("  Revision : %s\n", sRTCRevision(config.model));
 }
 
 void

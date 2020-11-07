@@ -412,7 +412,7 @@ DQ
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2Xx-5T-MXQ">
-                                            <rect key="frame" x="11" y="352" width="79" height="20"/>
+                                            <rect key="frame" x="7" y="352" width="74" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Agnus:" id="xGF-vv-u3O">
                                                 <font key="font" metaFont="system"/>
@@ -421,18 +421,18 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dyR-Jf-UoN" userLabel="System">
-                                            <rect key="frame" x="94" y="350" width="182" height="25"/>
+                                            <rect key="frame" x="85" y="350" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="OCS (8367)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1vX-aH-r8M" id="0Rz-Gs-GNL" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="MOS 8367 (OCS)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="1vX-aH-r8M" id="0Rz-Gs-GNL" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="18D-pR-SwS">
                                                     <items>
-                                                        <menuItem title="OCS (8367)" state="on" id="1vX-aH-r8M"/>
-                                                        <menuItem title="ECS 1 MB (8372A) " tag="1" id="GI4-WV-Bdc">
+                                                        <menuItem title="MOS 8367 (OCS)" id="1vX-aH-r8M"/>
+                                                        <menuItem title="MOS 8372A (ECS 1 MB) " state="on" tag="1" id="GI4-WV-Bdc">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="ECS 2 MB (8375)" tag="2" id="XSH-Rl-Lt0">
+                                                        <menuItem title="MOS 8375 (ECS 2 MB)" tag="2" id="XSH-Rl-Lt0">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>
@@ -443,14 +443,14 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-fi-zMW" userLabel="System">
-                                            <rect key="frame" x="94" y="290" width="182" height="25"/>
+                                            <rect key="frame" x="85" y="290" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="OCS (8362 R8)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="6ZC-38-juZ" id="mxV-ez-x7L" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="MOS 8362R8 (OCS)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="6ZC-38-juZ" id="mxV-ez-x7L" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="3v0-HJ-QLg">
                                                     <items>
-                                                        <menuItem title="OCS (8362 R8)" state="on" id="6ZC-38-juZ"/>
+                                                        <menuItem title="MOS 8362R8 (OCS)" state="on" id="6ZC-38-juZ"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -691,7 +691,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HaP-3N-GOn">
-                                            <rect key="frame" x="16" y="292" width="75" height="20"/>
+                                            <rect key="frame" x="10" y="292" width="72" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denise:" id="xAA-bv-3yA">
                                                 <font key="font" metaFont="system"/>
@@ -700,7 +700,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nw-g4-iBc" userLabel="System">
-                                            <rect key="frame" x="95" y="170" width="181" height="25"/>
+                                            <rect key="frame" x="86" y="170" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="aJJ-Yq-h7E" id="HpG-tg-azQ" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -708,8 +708,8 @@ DQ
                                                 <menu key="menu" id="uIa-JY-1iE">
                                                     <items>
                                                         <menuItem title="None" state="on" id="aJJ-Yq-h7E"/>
-                                                        <menuItem title="Oki (MSM6242B)" tag="1" id="eMB-9L-d48"/>
-                                                        <menuItem title="Ricoh (RF5C01A)" tag="2" id="r2Q-33-9vh"/>
+                                                        <menuItem title="MSM6242B (Oki)" tag="1" id="eMB-9L-d48"/>
+                                                        <menuItem title=" RF5C01A (Ricoh)" tag="2" id="r2Q-33-9vh"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -718,7 +718,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jch-oP-6FK">
-                                            <rect key="frame" x="19" y="172" width="71" height="20"/>
+                                            <rect key="frame" x="7" y="172" width="74" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="RT Clock:" id="EIP-0k-sMo">
                                                 <font key="font" metaFont="system"/>
@@ -727,14 +727,14 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jPQ-4k-CcG" userLabel="System">
-                                            <rect key="frame" x="95" y="230" width="181" height="25"/>
+                                            <rect key="frame" x="86" y="230" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                                            <popUpButtonCell key="cell" type="push" title="DIP (8520)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="wbu-fM-hZz" id="DjN-H6-9zb" userLabel="System">
+                                            <popUpButtonCell key="cell" type="push" title="MOS 8520 (DIP)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="wbu-fM-hZz" id="DjN-H6-9zb" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                                                 <font key="font" metaFont="menu"/>
                                                 <menu key="menu" id="RAc-dz-Ljd">
                                                     <items>
-                                                        <menuItem title="DIP (8520)" state="on" id="wbu-fM-hZz"/>
+                                                        <menuItem title="MOS 8520 (DIP)" state="on" id="wbu-fM-hZz"/>
                                                     </items>
                                                 </menu>
                                             </popUpButtonCell>
@@ -743,7 +743,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X4l-T7-3c8">
-                                            <rect key="frame" x="19" y="232" width="71" height="20"/>
+                                            <rect key="frame" x="7" y="232" width="74" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="CIA:" id="isW-in-FL7">
                                                 <font key="font" metaFont="system"/>
@@ -846,9 +846,9 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UZg-eb-OfY">
-                                            <rect key="frame" x="95" y="325" width="203" height="18"/>
+                                            <rect key="frame" x="88" y="325" width="174" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate ECS Slow Ram mirror" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sgk-bZ-bQ6">
+                                            <buttonCell key="cell" type="check" title="Emulate Slow Ram mirror" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sgk-bZ-bQ6">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -857,7 +857,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bHb-59-XaU">
-                                            <rect key="frame" x="95" y="265" width="143" height="18"/>
+                                            <rect key="frame" x="88" y="265" width="143" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate BRDRBLNK" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Rco-25-pXg">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -868,7 +868,7 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JP5-jg-aDy">
-                                            <rect key="frame" x="95" y="205" width="129" height="18"/>
+                                            <rect key="frame" x="88" y="205" width="129" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="check" title="Emulate TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="r1i-3e-LRf">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>

@@ -29,9 +29,6 @@ extension ConfigurationController {
         perGameDevice2.selectItem(withTag: config.gameDevice2)
         perSerialDevice.selectItem(withTag: config.serialDevice)
         
-        // Chipset features
-        hwSlowRamMirror.state = config.slowRamMirror ? .on : .off
-
         // Lock controls if emulator is powered on
         perDf1Connect.isEnabled = poweredOff
         perDf2Connect.isEnabled = poweredOff && perDf1Connect.state == .on
