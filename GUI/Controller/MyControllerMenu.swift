@@ -485,11 +485,11 @@ extension MyController: NSMenuItemValidation {
         // Show the OpenPanel
         let openPanel = NSOpenPanel()
         openPanel.allowsMultipleSelection = false
-        openPanel.canChooseDirectories = false
+        openPanel.canChooseDirectories = true
         openPanel.canCreateDirectories = false
         openPanel.canChooseFiles = true
         openPanel.prompt = "Insert"
-        openPanel.allowedFileTypes = ["adf", "dms", "img", "ima", "adz", "zip", "gz"]
+        openPanel.allowedFileTypes = ["adf", "img", "ima", "dms", "exe", "adz", "zip", "gz"]
         openPanel.beginSheetModal(for: window!, completionHandler: { result in
 
             if result == .OK, let url = openPanel.url {
@@ -514,6 +514,8 @@ extension MyController: NSMenuItemValidation {
     }
     
     func insertDiskAction(from url: URL, drive: Int) {
+        
+        track("insertDiskAction \(url) drive \(drive)")
         
         do {
             // Try to create the ADF proxy object

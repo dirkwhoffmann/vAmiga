@@ -63,7 +63,7 @@ class DiskMountDialog: DialogController {
         case .FILETYPE_EXE:
             return "ADF containing a single Amiga executable"
         case .FILETYPE_DIR:
-            return "ADF (created from a directory)"
+            return "ADF (converted host directory)"
         default:
             return "???"
         }
