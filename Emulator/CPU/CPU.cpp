@@ -92,7 +92,7 @@ CPU::write16 (u32 addr, u16 val)
 void
 CPU::signalReset()
 {
-    trace(XFILES, "XFILES (CPU): RESET instruction\n");
+    trace(XFILES, "XFILES: RESET instruction\n");
     amiga.softReset();
     trace("Reset done\n");
 }
@@ -101,14 +101,14 @@ void
 CPU::signalStop(u16 op)
 {
     if (!(op & 0x2000)) {
-        trace(XFILES, "XFILES (CPU): STOP instruction (%x)\n", op);
+        trace(XFILES, "XFILES: STOP instruction (%x)\n", op);
     }
 }
 
 void
 CPU::signalTAS()
 {
-    trace(XFILES, "XFILES (CPU): TAS instruction\n");
+    trace(XFILES, "XFILES: TAS instruction\n");
 }
 
 void
@@ -120,38 +120,38 @@ CPU::signalHalt()
 void
 CPU::signalAddressError(moira::AEStackFrame &frame)
 {
-    trace(XFILES, "XFILES (CPU): Address error exception %x %x %x %x %x\n",
+    trace(XFILES, "XFILES: Address error exception %x %x %x %x %x\n",
           frame.code, frame.addr, frame.ird, frame.sr, frame.pc);
 }
 
 void
 CPU::signalLineAException(u16 opcode)
 {
-    trace(XFILES, "XFILES (CPU): lineAException(%x)\n", opcode);
+    trace(XFILES, "XFILES: lineAException(%x)\n", opcode);
 }
 
 void
 CPU::signalLineFException(u16 opcode)
 {
-    trace(XFILES, "XFILES (CPU): lineFException(%x)\n", opcode);
+    trace(XFILES, "XFILES: lineFException(%x)\n", opcode);
 }
 
 void
 CPU::signalIllegalOpcodeException(u16 opcode)
 {
-    trace(XFILES, "XFILES (CPU): illegalOpcodeException(%x)\n", opcode);
+    trace(XFILES, "XFILES: illegalOpcodeException(%x)\n", opcode);
 }
 
 void
 CPU::signalTraceException()
 {
-    // debug(XFILES, "XFILES (CPU): traceException\n");
+    // debug(XFILES, "XFILES: traceException\n");
 }
 
 void
 CPU::signalTrapException()
 {
-    trace(XFILES, "XFILES (CPU): trapException\n");
+    trace(XFILES, "XFILES: trapException\n");
 }
 
 void

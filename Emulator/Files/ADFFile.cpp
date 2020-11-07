@@ -88,11 +88,13 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         delete adf;
         return NULL;
     }
-        
+    
+    /*
     adf->dumpSector(880);
     adf->dumpSector(882);
     adf->dumpSector(883);
-
+    */
+    
     return adf;
 }
 
