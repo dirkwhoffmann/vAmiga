@@ -38,6 +38,12 @@ extension NSError {
             [NSLocalizedDescriptionKey: "The document could not be opened.",
                 NSLocalizedRecoverySuggestionErrorKey: "Unable to access file."])
     }
+
+    static func extendedAdfError() -> NSError {
+        return NSError(domain: "vAmiga", code: 0, userInfo:
+            [NSLocalizedDescriptionKey: "The document could not be opened.",
+                NSLocalizedRecoverySuggestionErrorKey: "The file is encoded in extended ADF format which is not supported by the emulator."])
+    }
 }
 
 extension MyDocument {

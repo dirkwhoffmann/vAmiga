@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		500217B82449CF7000E1A096 /* Configuration.xib in Resources */ = {isa = PBXBuildFile; fileRef = 500217B72449CF7000E1A096 /* Configuration.xib */; };
 		500217BA2449CFF500E1A096 /* ConfigurationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 500217B92449CFF500E1A096 /* ConfigurationController.swift */; };
-		5009B7FC2557051A0037288E /* EXT1File.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXT1File.cpp */; };
+		5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5009B7FA2557051A0037288E /* EXTFile.cpp */; };
 		500A4E9F24470713002A4DE1 /* disk_eject.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9D24470713002A4DE1 /* disk_eject.aiff */; };
 		500A4EA024470713002A4DE1 /* disk_insert.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4E9E24470713002A4DE1 /* disk_insert.aiff */; };
 		500A4EA824472B4F002A4DE1 /* door_open.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 500A4EA724472B4F002A4DE1 /* door_open.aiff */; };
@@ -227,8 +227,8 @@
 		500217B92449CFF500E1A096 /* ConfigurationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigurationController.swift; sourceTree = "<group>"; };
 		50045A5C2371D1A8008A2AB0 /* KeyboardTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardTypes.h; sourceTree = "<group>"; };
 		500770C1227C9FF3003A5F76 /* DriveTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DriveTypes.h; sourceTree = "<group>"; };
-		5009B7FA2557051A0037288E /* EXT1File.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXT1File.cpp; sourceTree = "<group>"; };
-		5009B7FB2557051A0037288E /* EXT1File.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXT1File.h; sourceTree = "<group>"; };
+		5009B7FA2557051A0037288E /* EXTFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = EXTFile.cpp; sourceTree = "<group>"; };
+		5009B7FB2557051A0037288E /* EXTFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EXTFile.h; sourceTree = "<group>"; };
 		500A4E9D24470713002A4DE1 /* disk_eject.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_eject.aiff; sourceTree = "<group>"; };
 		500A4E9E24470713002A4DE1 /* disk_insert.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = disk_insert.aiff; sourceTree = "<group>"; };
 		500A4EA724472B4F002A4DE1 /* door_open.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = door_open.aiff; sourceTree = "<group>"; };
@@ -607,8 +607,8 @@
 				50FAC77325160BBF00E47421 /* DiskFile.cpp */,
 				508833ED21F0D21B009890EA /* ADFFile.h */,
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
-				5009B7FB2557051A0037288E /* EXT1File.h */,
-				5009B7FA2557051A0037288E /* EXT1File.cpp */,
+				5009B7FB2557051A0037288E /* EXTFile.h */,
+				5009B7FA2557051A0037288E /* EXTFile.cpp */,
 				50FAC76F2515EBED00E47421 /* IMGFile.h */,
 				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
 				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
@@ -1456,7 +1456,7 @@
 				508FE02B21EA227B0043D0E9 /* WindowDelegate.swift in Sources */,
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
-				5009B7FC2557051A0037288E /* EXT1File.cpp in Sources */,
+				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,
 				5056506C25440FFB00A79D27 /* FSVolume.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,

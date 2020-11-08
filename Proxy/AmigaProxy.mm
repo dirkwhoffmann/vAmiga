@@ -1456,28 +1456,28 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// EXT1FileProxy
+// EXTFileProxy
 //
 
-@implementation EXT1FileProxy
+@implementation EXTFileProxy
 
-+ (BOOL)isEXT1File:(NSString *)path
++ (BOOL)isEXTFile:(NSString *)path
 {
-    return EXT1File::isEXT1File([path fileSystemRepresentation]);
+    return EXTFile::isEXTFile([path fileSystemRepresentation]);
 }
-+ (instancetype) make:(EXT1File *)archive
++ (instancetype) make:(EXTFile *)archive
 {
     if (archive == NULL) return nil;
     return [[self alloc] initWithFile:archive];
 }
 + (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
 {
-    EXT1File *archive = EXT1File::makeWithBuffer((const u8 *)buffer, length);
+    EXTFile *archive = EXTFile::makeWithBuffer((const u8 *)buffer, length);
     return [self make: archive];
 }
 + (instancetype) makeWithFile:(NSString *)path
 {
-    EXT1File *archive = EXT1File::makeWithFile([path fileSystemRepresentation]);
+    EXTFile *archive = EXTFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
 

@@ -722,13 +722,13 @@ struct SerialPortWrapper;
 
 
 //
-// EXT1FileProxy
+// EXTFileProxy
 //
 
-@interface EXT1FileProxy : DiskFileProxy {
+@interface EXTFileProxy : DiskFileProxy {
 }
 
-+ (BOOL)isEXT1File:(NSString *)path;
++ (BOOL)isEXTFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
 

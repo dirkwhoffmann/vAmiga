@@ -150,8 +150,12 @@ class MyDocument: NSDocument {
             
         case .FILETYPE_ADF:
             result = ADFFileProxy.make(withBuffer: buffer, length: length)
+            
+            // Check if this file is in extended ADF format
             if result == nil {
-                result = EXT1FileProxy.make(withBuffer: buffer, length: length)
+                if EXTFileProxy.make(withBuffer: buffer, length: length) != nil {
+                    throw NSError.extendedAdfError()
+                }
             }
 
         case .FILETYPE_DMS:
@@ -204,7 +208,7 @@ class MyDocument: NSDocument {
         let types: [AmigaFileType] = [
             .FILETYPE_SNAPSHOT,
             .FILETYPE_ADF,
-            .FILETYPE_EXT1,
+            .FILETYPE_EXT,
             .FILETYPE_IMG,
             .FILETYPE_DMS,
             .FILETYPE_EXE,

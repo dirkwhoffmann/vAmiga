@@ -7,17 +7,21 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _EXT1_FILE_H
-#define _EXT1_FILE_H
+#ifndef _EXT_FILE_H
+#define _EXT_FILE_H
 
 #include "ADFFile.h"
 
-// THIS CLASS CONTAINS EXPERIMENTAL CODE FOR EXTENDED ADFs OF TYPE EXT1.
-// THE CLASS IS NOT FUNCTIONAL YET.
+/* This class is a dummy class for detecting extended ADFs. Once the emulator
+ * detects such a file, it tells the user that this format is not supported.
+ */
 
-class EXT1File : public DiskFile {
+class EXTFile : public DiskFile {
     
     static const int HEADER_SIZE = 160 * 4 + 8;
+    
+    // Accepted header signatures
+    static const u8 extAdfHeaders[2][8];
     
 public:
         
@@ -25,33 +29,33 @@ public:
     // Class methods
     //
     
-    // Returns true iff buffer contains an extended ADF in EXT1 format
-    static bool isEXT1Buffer(const u8 *buffer, size_t length);
+    // Returns true iff buffer contains an extended ADF
+    static bool isEXTBuffer(const u8 *buffer, size_t length);
     
-    // Returns true iff if path points to an extended ADF in EXT1 format
-    static bool isEXT1File(const char *path);
+    // Returns true iff if path points to an extended ADF
+    static bool isEXTFile(const char *path);
     
     
     //
     // Initializing
     //
     
-    EXT1File();
+    EXTFile();
     
-    static EXT1File *makeWithBuffer(const u8 *buffer, size_t length);
-    static EXT1File *makeWithFile(const char *path);
-    static EXT1File *makeWithFile(FILE *file);
+    static EXTFile *makeWithBuffer(const u8 *buffer, size_t length);
+    static EXTFile *makeWithFile(const char *path);
+    static EXTFile *makeWithFile(FILE *file);
 
     
     //
     // Methods from AmigaFile
     //
     
-    AmigaFileType fileType() override { return FILETYPE_EXT1; }
-    const char *typeAsString() override { return "EXT1"; }
+    AmigaFileType fileType() override { return FILETYPE_EXT; }
+    const char *typeAsString() override { return "EXT"; }
     bool bufferHasSameType(const u8 *buffer, size_t length) override {
-        return isEXT1Buffer(buffer, length); }
-    bool fileHasSameType(const char *path) override { return isEXT1File(path); }
+        return isEXTBuffer(buffer, length); }
+    bool fileHasSameType(const char *path) override { return isEXTFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
     
     
@@ -66,13 +70,6 @@ public:
     long numSectorsPerTrack() override { return 11; }
     void readSector(u8 *target, long s) override { assert(false); }
     void readSector(u8 *target, long t, long s) override { assert(false); }
-    
-    
-    //
-    // Debugging
-    //
-    
-    void dumpHeader();
 };
 
 #endif
