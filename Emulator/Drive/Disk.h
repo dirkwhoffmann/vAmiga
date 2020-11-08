@@ -11,7 +11,41 @@
 #define _AMIGA_DISK_H
 
 #include "HardwareComponent.h"
-#include "DiskGeometry.h"
+
+/* MFM encoded disk data of a standard 3.5" DD disk:
+ *
+ *    Cylinder  Track     Head      Sectors
+ *    ---------------------------------------
+ *    0         0         0          0 - 10
+ *    0         1         1         11 - 21
+ *    1         2         0         22 - 32
+ *    1         3         1         33 - 43
+ *                   ...
+ *    79        158       0       1738 - 1748
+ *    79        159       1       1749 - 1759
+ *
+ *    80        160       0       1760 - 1770   <--- beyond spec
+ *    80        161       1       1771 - 1781
+ *                   ...
+ *    83        166       0       1826 - 1836
+ *    83        167       1       1837 - 1847
+ *
+ * A single sector consists of
+ *    - A sector header build up from 64 MFM bytes.
+ *    - 512 bytes of data (1024 MFM bytes).
+ *
+ * Hence,
+ *    - a sector consists of 64 + 2*512 = 1088 MFM bytes.
+ *
+ * A single track of a 3.5"DD disk consists
+ *    - 11 * 1088 = 11.968 MFM bytes.
+ *    - A track gap of about 700 MFM bytes (varies with drive speed).
+ *
+ * Hence,
+ *    - a track usually occupies 11.968 + 700 = 12.668 MFM bytes.
+ *    - a cylinder usually occupies 25.328 MFM bytes.
+ *    - a disk usually occupies 84 * 2 * 12.664 =  2.127.552 MFM bytes
+ */
 
 class Disk : public AmigaObject {
     
@@ -21,13 +55,12 @@ class Disk : public AmigaObject {
     
 public:
     
-    // The type of this disk
+    // The form factor of this disk
     DiskType type;
+    
+    // The density of this disk
     DiskDensity density;
-    
-    // The geometry of this disk (derived from the disk type in the constructor)
-    DiskGeometry geometry;
-    
+        
 private:
     
     // The MFM encoded disk data
@@ -37,6 +70,13 @@ private:
         u8 track[168][32768];
     } data;
         
+    // Length of each track in bytes
+    union {
+        u32 cylinder[84][2];
+        u32 track[168];
+    } length;
+
+    
     // Indicates if this disk is write protected
     bool writeProtected = false;
     
@@ -75,7 +115,6 @@ private:
 
         & type
         & density
-        & geometry
         & data.raw
         & writeProtected
         & modified
@@ -92,8 +131,11 @@ public:
     DiskType getType() { return type; }
     DiskDensity getDensity() { return density; }
 
-    long trackLength(Track t) { return geometry.length.track[t]; }
-    long trackLength(Cylinder c, Side s) { return geometry.length.cylinder[c][s]; }
+    long numCylinders() { return type == DISK_525 ? 42 : 84; }
+    long numSides() { return 2; }
+    long numTracks() { return type == DISK_525 ? 84 : 168; }
+    // long trackLength(Track t) { return length.track[t]; }
+    // long trackLength(Cylinder c, Side s) { return length.cylinder[c][s]; }
 
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }

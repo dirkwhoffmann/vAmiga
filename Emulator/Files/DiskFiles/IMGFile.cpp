@@ -200,7 +200,7 @@ IMGFile::encodeTrack(Disk *disk, Track t)
     
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->trackLength(t));
+        u64 check = fnv_1a_32(disk->data.track[t], disk->length.track[t]);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -308,7 +308,7 @@ IMGFile::decodeDisk(Disk *disk)
 bool
 IMGFile::decodeTrack(Disk *disk, Track t)
 {
-    assert(t < disk->geometry.numTracks());
+    assert(t < disk->numTracks());
         
     long numSectors = 9;
     u8 *src = disk->data.track[t];
@@ -329,7 +329,7 @@ IMGFile::decodeTrack(Disk *disk, Track t)
         sectorStart[i] = 0;
     }
     int cnt = 0;
-    for (int i = 0; i < 1.5 * disk->trackLength(t);) {
+    for (int i = 0; i < sizeof(disk->data.track[t]) - 16;) {
         
         // Seek IDAM block
         if (src[i++] != 0x44) continue;

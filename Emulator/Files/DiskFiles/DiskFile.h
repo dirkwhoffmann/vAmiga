@@ -11,7 +11,6 @@
 #define _DISK_FILE_H
 
 #include "AmigaFile.h"
-#include "DiskGeometry.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {

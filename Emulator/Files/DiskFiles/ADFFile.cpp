@@ -315,13 +315,13 @@ ADFFile::encodeTrack(Disk *disk, Track t)
     for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
     
     // Rectify the first clock bit (where buffer wraps over)
-    if (disk->data.track[t][disk->trackLength(t) - 1] & 1) {
+    if (disk->data.track[t][disk->length.track[t] - 1] & 1) {
         disk->data.track[t][0] &= 0x7F;
     }
 
     // Compute a debug checksum
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.length.track[t]);
+        u64 check = fnv_1a_32(disk->data.track[t], disk->length.track[t]);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -331,7 +331,7 @@ ADFFile::encodeTrack(Disk *disk, Track t)
 bool
 ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 {
-    assert(t < disk->geometry.numTracks());
+    assert(t < disk->numTracks());
     
     debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
