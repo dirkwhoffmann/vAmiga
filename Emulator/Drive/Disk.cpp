@@ -438,6 +438,7 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 }
 */
 
+/*
 bool
 Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)
 {
@@ -516,7 +517,9 @@ Disk::decodeAmigaSector(u8 *dst, u8 *src)
     decodeOddEven(dst + sector * 512, src, 512);
     return true;
 }
+*/
 
+/*
 bool
 Disk::decodeDOSDisk(u8 *dst, long numTracks, long numSectors)
 {
@@ -605,6 +608,7 @@ Disk::decodeDOSSector(u8 *dst, u8 *src)
 
     decodeMFM(dst, src, 512);
 }
+*/
 
 void
 Disk::encodeMFM(u8 *dst, u8 *src, size_t count)

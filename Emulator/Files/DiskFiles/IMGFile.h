@@ -70,14 +70,16 @@ public:
     
     
     //
-    // Encoding
+    // Encoding and decoding
     //
      
 private:
     
-    // Encodes a single track, or sector
     bool encodeMFM(class Disk *disk, Track t);
     bool encodeMFM(class Disk *disk, Track t, Sector s);
+
+    bool decodeMFM(class Disk *disk, long numTracks, long numSectors);
+    bool decodeTrack(class Disk *disk, Track t, long numSectors);
 };
 
 #endif

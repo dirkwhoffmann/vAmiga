@@ -57,8 +57,8 @@ public:
  
 public:
     
-    // Encodes a disk
     virtual bool encodeMFM(class Disk *disk);
+    // virtual bool decodeMFM(class Disk *disk);
 };
 
 #endif

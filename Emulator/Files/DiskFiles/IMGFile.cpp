@@ -33,7 +33,7 @@ IMGFile::isIMGFile(const char *path)
 IMGFile *
 IMGFile::makeWithDiskType(DiskType t)
 {
-    assert(t == DISK_35_DD);
+    assert(t == DISK_35_DD_PC);
     
     IMGFile *img = new IMGFile();
     
@@ -89,14 +89,14 @@ IMGFile *
 IMGFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
-    
+        
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35_DD) { return NULL; }
+    if (disk->getType() != DISK_35_DD_PC) { return NULL; }
     
-    IMGFile *img = makeWithDiskType(DISK_35_DD);
+    IMGFile *img = makeWithDiskType(DISK_35_DD_PC);
     
     if (img) {
-        if (!disk->decodeDOSDisk(img->data, 160, 9)) {
+        if (!img->decodeMFM(disk, 160, 9)) {
             printf("Failed to decode DOS disk\n");
             delete img;
             return NULL;
@@ -268,5 +268,89 @@ IMGFile::encodeMFM(Disk *disk, Track t, Sector s)
     p[2*57+1] &= 0xDF;
     p[2*58+1] &= 0xDF;
 
+    return true;
+}
+
+bool
+IMGFile::decodeMFM(Disk *disk, long numTracks, long numSectors)
+{
+    trace(MFM_DEBUG,
+          "Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    
+    // for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
+    for (Track t = 0; t < numTracks; t++) {
+        if (!decodeTrack(disk, t, numSectors)) return false;
+    }
+    
+    return true;
+}
+
+bool
+IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
+{
+    assert(t < disk->geometry.tracks);
+        
+    u8 *dst = data + t * numSectors * 512;
+    
+    trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
+    
+    // Create a local (double) copy of the track to simply the analysis
+    u8 local[2 * disk->geometry.trackSize];
+    memcpy(local, disk->ptr(t), disk->geometry.trackSize);
+    memcpy(local + disk->geometry.trackSize, disk->ptr(t), disk->geometry.trackSize);
+    
+    // Determine the start of all sectors contained in this track
+    int sectorStart[numSectors];
+    for (int i = 0; i < numSectors; i++) {
+        sectorStart[i] = 0;
+    }
+    int cnt = 0;
+    for (int i = 0; i < 1.5 * disk->geometry.trackSize;) {
+        
+        // Seek IDAM block
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x44) continue;
+        if (local[i++] != 0x89) continue;
+        if (local[i++] != 0x55) continue;
+        if (local[i++] != 0x54) continue;
+
+        // Decode CHRN block
+        struct { u8 c; u8 h; u8 r; u8 n; } chrn;
+        disk->decodeMFM((u8 *)&chrn, &local[i], 4);
+        trace(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
+        
+        if (chrn.r >= 1 && chrn.r <= numSectors) {
+            
+            // Break the loop once we see the same sector twice
+            if (sectorStart[chrn.r - 1] != 0) {
+                break;
+            }
+            sectorStart[chrn.r - 1] = i + 88;
+            cnt++;
+
+        } else {
+            warn("Invalid sector number %d. Aborting", chrn.r);
+            return false;
+        }
+    }
+
+    if (cnt != numSectors) {
+        warn("Found %d sectors, expected %d. Aborting", cnt, numSectors);
+        return false;
+    }
+        
+    // Do some consistency checking
+    for (int i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
+    
+    // Encode all sectors
+    for (Sector s = 0; s < numSectors; s++) {
+        disk->decodeMFM(dst, local + sectorStart[s], 512);
+        // decodeDOSSector(dst, local + sectorStart[s]);
+        dst += 512;
+    }
+    
     return true;
 }

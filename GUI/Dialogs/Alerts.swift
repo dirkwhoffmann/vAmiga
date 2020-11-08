@@ -103,7 +103,7 @@ extension MyDocument {
         let alert = NSAlert()
         alert.alertStyle = .warning
         alert.icon = NSImage.init(named: "adf")
-        alert.messageText = "This disk in df\(driveNr) cannot be exported."
+        alert.messageText = "The disk in df\(driveNr) cannot be exported."
         alert.informativeText = "The MFM data stream appears to be corrupt."
         alert.addButton(withTitle: "OK")
         alert.runModal()

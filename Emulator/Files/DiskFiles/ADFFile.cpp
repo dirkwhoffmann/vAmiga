@@ -139,7 +139,7 @@ ADFFile::makeWithDisk(Disk *disk)
     // Export disk
     assert(adf->numTracks() == 160);
     assert(adf->numSectorsPerTrack() == 11 || adf->numSectorsPerTrack() == 22);
-    if (!disk->decodeAmigaDisk(adf->data, adf->numTracks(), adf->numSectorsPerTrack())) {
+    if (!adf->decodeDisk(disk, adf->numTracks(), adf->numSectorsPerTrack())) {
         delete adf;
         return nullptr;
     }
@@ -416,4 +416,85 @@ ADFFile::dumpSector(int num)
         printf("\n");
     }
     printf("\n");
+}
+
+bool
+ADFFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
+{
+    trace(MFM_DEBUG,
+          "Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    
+    for (Track t = 0; t < numTracks; t++) {
+        if (!decodeTrack(disk, t, numSectors)) return false;
+    }
+    
+    return true;
+}
+
+bool
+ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
+{
+    assert(t < disk->geometry.tracks);
+    
+    trace(MFM_DEBUG, "Decoding track %d\n", t);
+    
+    u8 *dst = data + t * numSectors * 512;
+
+    // Create a local (double) copy of the track to simply the analysis
+    u8 local[2 * disk->geometry.trackSize];
+    memcpy(local, disk->ptr(t), disk->geometry.trackSize);
+    memcpy(local + disk->geometry.trackSize, disk->ptr(t), disk->geometry.trackSize);
+    
+    // Seek all sync marks
+    int sectorStart[numSectors], index = 0, nr = 0;
+    while (index < disk->geometry.trackSize + disk->geometry.sectorSize && nr < numSectors) {
+
+        // Scan MFM stream for $4489 $4489
+        if (local[index++] != 0x44) continue;
+        if (local[index++] != 0x89) continue;
+        if (local[index++] != 0x44) continue;
+        if (local[index++] != 0x89) continue;
+
+        // Make sure it's not a DOS track
+        if (local[index + 1] == 0x89) continue;
+
+        sectorStart[nr++] = index;
+    }
+    
+    trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, numSectors);
+
+    if (nr != numSectors) {
+        warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
+        return false;
+    }
+    
+    // Encode all sectors
+    bool result = true;
+    for (Sector s = 0; s < numSectors; s++) {
+        result &= decodeSector(disk, dst, local + sectorStart[s]);
+    }
+    
+    return result;
+}
+
+bool
+ADFFile::decodeSector(Disk *disk, u8 *dst, u8 *src)
+{
+    assert(dst != NULL);
+    assert(src != NULL);
+    
+    // Decode sector info
+    u8 info[4];
+    disk->decodeOddEven(info, src, 4);
+    
+    // Only proceed if the sector number is valid
+    u8 sector = info[2];
+    if (sector >= disk->geometry.sectors) return false;
+    
+    // Skip sector header
+    src += 56;
+    
+    // Decode sector data
+    disk->decodeOddEven(dst + sector * 512, src, 512);
+    return true;
 }
