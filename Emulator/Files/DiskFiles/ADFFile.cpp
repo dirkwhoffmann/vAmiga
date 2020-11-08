@@ -313,14 +313,18 @@ ADFFile::encodeMFM(Disk *disk, Track t)
     for (Sector s = 0; s < sectors; s++) result &= encodeMFM(disk, t, s);
     
     // Rectify the first clock bit (where buffer wraps over)
+    /*
     u8 *strt = disk->ptr(t);
     u8 *stop = disk->ptr(t) + disk->geometry.trackSize - 1;
     if (*stop & 0x01) *strt &= 0x7F;
-    // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
+     */
+    if (disk->data.track[t][disk->geometry.trackSize - 1] & 1) {
+        disk->data.track[t][0] &= 0x7F;
+    }
 
     // Compute a debug checksum
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->ptr(t), disk->geometry.trackSize);
+        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.trackSize);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -345,7 +349,9 @@ ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
     //     Block checksum      48      8     Odd/Even encoded
     //     Data checksum       56      8     Odd/Even encoded
     
-    u8 *p = disk->ptr(t, s);
+    // Determine the start of this sector
+    u8 *p = disk->data.track[t] + 700 + (s * 1088);
+    // u8 *p = disk->ptr(t, s);
     
     // Bytes before SYNC
     p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
@@ -362,7 +368,7 @@ ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
     
     // Track and sector information
     u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
-    disk->encodeOddEven(&p[8], info, sizeof(info));
+    Disk::encodeOddEven(&p[8], info, sizeof(info));
     
     // Unused area
     for (unsigned i = 16; i < 48; i++)
@@ -371,7 +377,7 @@ ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
     // Data
     u8 bytes[512];
     readSector(bytes, t, s);
-    disk->encodeOddEven(&p[64], bytes, sizeof(bytes));
+    Disk::encodeOddEven(&p[64], bytes, sizeof(bytes));
     
     // Block checksum
     u8 bcheck[4] = { 0, 0, 0, 0 };
@@ -381,7 +387,7 @@ ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
         bcheck[2] ^= p[i+2];
         bcheck[3] ^= p[i+3];
     }
-    disk->encodeOddEven(&p[48], bcheck, sizeof(bcheck));
+    Disk::encodeOddEven(&p[48], bcheck, sizeof(bcheck));
     
     // Data checksum
     u8 dcheck[4] = { 0, 0, 0, 0 };
@@ -391,11 +397,11 @@ ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
         dcheck[2] ^= p[i+2];
         dcheck[3] ^= p[i+3];
     }
-    disk->encodeOddEven(&p[56], dcheck, sizeof(bcheck));
+    Disk::encodeOddEven(&p[56], dcheck, sizeof(bcheck));
     
     // Add clock bits
     for(unsigned i = 8; i < 1088; i++) {
-        p[i] = disk->addClockBits(p[i], p[i-1]);
+        p[i] = Disk::addClockBits(p[i], p[i-1]);
     }
     
     return true;
@@ -440,10 +446,10 @@ ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
     
     u8 *dst = data + t * numSectors * 512;
 
-    // Create a local (double) copy of the track to simply the analysis
+    // Create a local (double) copy of the track to simplify the analysis
     u8 local[2 * disk->geometry.trackSize];
-    memcpy(local, disk->ptr(t), disk->geometry.trackSize);
-    memcpy(local + disk->geometry.trackSize, disk->ptr(t), disk->geometry.trackSize);
+    memcpy(local, disk->data.track[t], disk->geometry.trackSize);
+    memcpy(local + disk->geometry.trackSize, disk->data.track[t], disk->geometry.trackSize);
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;

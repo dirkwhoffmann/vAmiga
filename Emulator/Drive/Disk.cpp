@@ -106,19 +106,22 @@ Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
     // oldData[(2 * cylinder + side) * geometry.trackSize + offset] = value;
 }
 
+/*
 u8 *
 Disk::ptr(Track track)
 {
     return data.track[track];
     // return oldData + geometry.trackSize * track;
 }
-
+*/
+/*
 u8 *
 Disk::ptr(Track track, Sector sector)
 {
     return data.track[track] + geometry.leadingGap + sector * geometry.sectorSize;
     // return ptr(track) + geometry.leadingGap + sector * geometry.sectorSize;
 }
+*/
 
 void
 Disk::clearDisk()

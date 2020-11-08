@@ -170,8 +170,7 @@ IMGFile::encodeMFM(Disk *disk, Track t)
 
     debug(MFM_DEBUG, "Encoding DOS track %d with %d sectors\n", t, sectors);
 
-    u8 *p = disk->ptr(t);
-    // u8 *p = data.track[t];
+    u8 *p = disk->data.track[t];
 
     // Clear track
     disk->clearTrack(t, 0x92, 0x54);
@@ -193,7 +192,7 @@ IMGFile::encodeMFM(Disk *disk, Track t)
     
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->ptr(t), disk->geometry.trackSize);
+        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.trackSize);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -250,13 +249,12 @@ IMGFile::encodeMFM(Disk *disk, Track t, Sector s)
     // Write GAP
     for (int i = 574; i < sizeof(buf); i++) { buf[i] = 0x4E; }
 
-    // Determine the start of this sector inside the current track
-    u8 *p = disk->ptr(t, s);
-    // u8 *p = data.track[t] + 194 + s * 1300;
+    // Determine the start of this sector
+    u8 *p = disk->data.track[t] + 194 + s * 1300;
 
     // Create the MFM data stream
-    disk->encodeMFM(p, buf, sizeof(buf));
-    disk->addClockBits(p, 2 * sizeof(buf));
+    Disk::encodeMFM(p, buf, sizeof(buf));
+    Disk::addClockBits(p, 2 * sizeof(buf));
     
     // Remove certain clock bits in IDAM block
     p[2*12+1] &= 0xDF;
@@ -296,8 +294,8 @@ IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
     
     // Create a local (double) copy of the track to simply the analysis
     u8 local[2 * disk->geometry.trackSize];
-    memcpy(local, disk->ptr(t), disk->geometry.trackSize);
-    memcpy(local + disk->geometry.trackSize, disk->ptr(t), disk->geometry.trackSize);
+    memcpy(local, disk->data.track[t], disk->geometry.trackSize);
+    memcpy(local + disk->geometry.trackSize, disk->data.track[t], disk->geometry.trackSize);
     
     // Determine the start of all sectors contained in this track
     int sectorStart[numSectors];

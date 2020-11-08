@@ -16,7 +16,9 @@
 class Disk : public AmigaObject {
     
     friend class Drive;
-
+    friend class ADFFile;
+    friend class IMGFile;
+    
 public:
     
     // The type of this disk
@@ -112,8 +114,8 @@ public:
     void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
     
     // Returns a pointer into the raw data array (DEPRECATED)
-    u8 *ptr(Track track);
-    u8 *ptr(Track track, Sector sector);
+    // u8 *ptr(Track track);
+    // u8 *ptr(Track track, Sector sector);
     
     
     //
@@ -182,15 +184,15 @@ public:
     
 public:
     
-    void encodeMFM(u8 *dst, u8 *src, size_t count);
-    void decodeMFM(u8 *dst, u8 *src, size_t count);
+    static void encodeMFM(u8 *dst, u8 *src, size_t count);
+    static void decodeMFM(u8 *dst, u8 *src, size_t count);
 
-    void encodeOddEven(u8 *dst, u8 *src, size_t count);
-    void decodeOddEven(u8 *dst, u8 *src, size_t count);
+    static void encodeOddEven(u8 *dst, u8 *src, size_t count);
+    static void decodeOddEven(u8 *dst, u8 *src, size_t count);
 
     // Adds the MFM clock bits
-    void addClockBits(u8 *dst, size_t count);
-    u8 addClockBits(u8 value, u8 previous);
+    static void addClockBits(u8 *dst, size_t count);
+    static u8 addClockBits(u8 value, u8 previous);
 };
 
 #endif
