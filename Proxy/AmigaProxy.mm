@@ -1179,9 +1179,9 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     wrapper->drive->toggleWriteProtection();
 }
-- (BOOL) isInsertable:(DiskType)type
+- (BOOL) isInsertable:(DiskType)type density:(DiskDensity)density
 {
-    return wrapper->drive->isInsertable(type);
+    return wrapper->drive->isInsertable(type, density);
 }
 - (BOOL) isModifiedDisk
 {
@@ -1391,6 +1391,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->getDiskType();
 }
+- (DiskDensity)diskDensity
+{
+    return ((DiskFile *)wrapper->file)->getDiskDensity();
+}
 - (NSInteger)numSides
 {
     return ((DiskFile *)wrapper->file)->numSides();
@@ -1432,9 +1436,9 @@ struct SerialPortWrapper { SerialPort *port; };
     ADFFile *archive = ADFFile::makeWithFile([path fileSystemRepresentation]);
     return [self make: archive];
 }
-+ (instancetype) makeWithDiskType:(DiskType)type
++ (instancetype) makeWithDiskType:(DiskType)type density:(DiskDensity)density
 {
-    ADFFile *archive = ADFFile::makeWithDiskType(type);
+    ADFFile *archive = ADFFile::makeWithDiskType(type, density);
     return [self make: archive];
 }
 + (instancetype) makeWithDrive:(DriveProxy *)drive

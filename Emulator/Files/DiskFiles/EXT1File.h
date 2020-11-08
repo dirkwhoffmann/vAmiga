@@ -59,7 +59,7 @@ public:
     // Methods from DiskFile
     //
     
-    DiskType getDiskType() override { return DISK_35_DD; }
+    DiskType getDiskType() override { return DISK_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override { return 2; }
     long numCyclinders() override { return 80; }

@@ -234,7 +234,7 @@ Drive::getDriveId()
                 return 0xFFFFFFFF;
                 
             case DRIVE_35_HD:
-                if (disk && disk->getType() == DISK_35_HD) return 0xAAAAAAAA;
+                if (disk && disk->getDensity() == DISK_HD) return 0xAAAAAAAA;
                 return 0xFFFFFFFF;
                 
             case DRIVE_525_DD:
@@ -589,21 +589,21 @@ Drive::ejectDisk()
 }
 
 bool
-Drive::isInsertable(DiskType type)
+Drive::isInsertable(DiskType t, DiskDensity d)
 {
-    debug(DSK_DEBUG, "isInsertable(%s)\n", sTypeName(type));
+    debug(DSK_DEBUG, "isInsertable(%s, %s)\n", sDiskType(t), sDiskDensity(d));
     
-    switch (type) {
+    switch (config.type) {
             
-        case DISK_35_DD:
-            return config.type == DRIVE_35_DD || config.type == DRIVE_35_HD;
+        case DRIVE_35_DD:
+            return t == DISK_35 && d == DISK_DD;
             
-        case DISK_35_HD:
-            return config.type == DRIVE_35_HD;
+        case DRIVE_35_HD:
+            return t == DISK_35;
             
-        case DISK_525_DD:
-            return config.type == DRIVE_525_DD;
-            
+        case DRIVE_525_DD:
+            return t == DISK_525 && d == DISK_DD;
+                        
         default:
             assert(false);
     }
@@ -614,14 +614,20 @@ bool
 Drive::isInsertable(DiskFile *file)
 {
     debug(DSK_DEBUG, "isInsertable(DiskFile %p)\n", file);
-    return file ? isInsertable(file->getDiskType()) :  false;
+   
+    if (!file) return false;
+    
+    return isInsertable(file->getDiskType(), file->getDiskDensity());
 }
 
 bool
 Drive::isInsertable(Disk *disk)
 {
     debug(DSK_DEBUG, "isInsertable(Disk %p)\n", disk);
-    return disk ? isInsertable(disk->type) : false;
+    
+    if (!disk) return false;
+
+    return isInsertable(disk->type, disk->density);
 }
 
 bool

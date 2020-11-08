@@ -624,7 +624,7 @@ struct SerialPortWrapper;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
 - (void) toggleWriteProtection;
-- (BOOL) isInsertable:(DiskType)type;
+- (BOOL) isInsertable:(DiskType)type density:(DiskDensity)density;
 @property (getter=isModifiedDisk) BOOL modifiedDisk;
 @property (readonly) BOOL motor;
 @property (readonly) NSInteger cylinder;
@@ -695,6 +695,7 @@ struct SerialPortWrapper;
 }
 
 @property (readonly) DiskType diskType;
+@property (readonly) DiskDensity diskDensity;
 @property (readonly) NSInteger numSides;
 @property (readonly) NSInteger numTracks;
 @property (readonly) NSInteger numSectorsPerTrack;
@@ -712,7 +713,7 @@ struct SerialPortWrapper;
 + (BOOL)isADFFile:(NSString *)path;
 + (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
 + (instancetype)makeWithFile:(NSString *)path;
-+ (instancetype)makeWithDiskType:(DiskType)type;
++ (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
 - (void)formatDisk:(EmptyDiskFormat)fs;

@@ -36,10 +36,7 @@ private:
         u8 cylinder[84][2][32768];
         u8 track[168][32768];
     } data;
-    
-    // The MFM encoded disk data (DEPRECATED)
-    // u8 *oldData = nullptr;
-    
+        
     // Indicates if this disk is write protected
     bool writeProtected = false;
     
@@ -192,9 +189,11 @@ public:
     static void encodeOddEven(u8 *dst, u8 *src, size_t count);
     static void decodeOddEven(u8 *dst, u8 *src, size_t count);
 
-    // Adds the MFM clock bits
     static void addClockBits(u8 *dst, size_t count);
     static u8 addClockBits(u8 value, u8 previous);
+
+    // Repeats the MFM data inside the track buffer to ease decoding
+    void repeatTracks(); 
 };
 
 #endif

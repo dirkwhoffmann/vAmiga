@@ -259,7 +259,7 @@ public:
     void setWriteProtection(bool value); 
     void toggleWriteProtection();
     
-    bool isInsertable(DiskType type);
+    bool isInsertable(DiskType t, DiskDensity d);
     bool isInsertable(DiskFile *file);
     bool isInsertable(Disk *disk);
 

@@ -11,20 +11,17 @@
 
 DiskGeometry::DiskGeometry(DiskType t, DiskDensity d)
 {
-    if (t == DISK_35_DD) {
-        assert(d == DISK_DD);
+    if (t == DISK_35 && d == DISK_DD) {
         init(t, d, 84, 2, 12668);
         return;
     }
     
-    if (t == DISK_35_HD) {
-        assert(d == DISK_HD);
+    if (t == DISK_35 && d == DISK_HD) {
         init(t, d, 84, 2, 24636);
         return;
     }
     
-    if (t == DISK_525_DD) {
-        assert(d == DISK_HD);
+    if (t == DISK_525 && d == DISK_HD) {
         init(t, d, 42, 2, 12668);
         return;
     }

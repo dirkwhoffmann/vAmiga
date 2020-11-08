@@ -31,9 +31,10 @@ IMGFile::isIMGFile(const char *path)
 }
 
 IMGFile *
-IMGFile::makeWithDiskType(DiskType t)
+IMGFile::makeWithDiskType(DiskType t, DiskDensity d)
 {
-    assert(t == DISK_35_DD);
+    assert(t == DISK_35);
+    assert(d == DISK_DD);
     
     IMGFile *img = new IMGFile();
     
@@ -91,12 +92,12 @@ IMGFile::makeWithDisk(Disk *disk)
     assert(disk != NULL);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35_DD) { return NULL; }
+    if (disk->getType() != DISK_35 || disk->getDensity() != DISK_DD) { return NULL; }
     
-    IMGFile *img = makeWithDiskType(DISK_35_DD);
+    IMGFile *img = makeWithDiskType(DISK_35, DISK_DD);
     
     if (img) {
-        if (!img->decodeMFM(disk, 160, 9)) {
+        if (!img->decodeDisk(disk, 160, 9)) {
             printf("Failed to decode DOS disk\n");
             delete img;
             return NULL;
@@ -264,12 +265,14 @@ IMGFile::encodeMFM(Disk *disk, Track t, Sector s)
 }
 
 bool
-IMGFile::decodeMFM(Disk *disk, long numTracks, long numSectors)
+IMGFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
 {
     trace(MFM_DEBUG,
           "Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
-    // for (Track t = 0; t < numTracks; t++, dst += numSectors * 512) {
+    // Make the MFM stream scannable beyond the track end
+    disk->repeatTracks();
+
     for (Track t = 0; t < numTracks; t++) {
         if (!decodeTrack(disk, t, numSectors)) return false;
     }
@@ -282,14 +285,17 @@ IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
 {
     assert(t < disk->geometry.numTracks());
         
+    u8 *src = disk->data.track[t];
     u8 *dst = data + t * numSectors * 512;
     
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
+    /*
     u8 local[2 * disk->trackLength(t)];
     memcpy(local, disk->data.track[t], disk->trackLength(t));
     memcpy(local + disk->trackLength(t), disk->data.track[t], disk->trackLength(t));
+    */
     
     // Determine the start of all sectors contained in this track
     int sectorStart[numSectors];
@@ -300,18 +306,18 @@ IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
     for (int i = 0; i < 1.5 * disk->trackLength(t);) {
         
         // Seek IDAM block
-        if (local[i++] != 0x44) continue;
-        if (local[i++] != 0x89) continue;
-        if (local[i++] != 0x44) continue;
-        if (local[i++] != 0x89) continue;
-        if (local[i++] != 0x44) continue;
-        if (local[i++] != 0x89) continue;
-        if (local[i++] != 0x55) continue;
-        if (local[i++] != 0x54) continue;
+        if (src[i++] != 0x44) continue;
+        if (src[i++] != 0x89) continue;
+        if (src[i++] != 0x44) continue;
+        if (src[i++] != 0x89) continue;
+        if (src[i++] != 0x44) continue;
+        if (src[i++] != 0x89) continue;
+        if (src[i++] != 0x55) continue;
+        if (src[i++] != 0x54) continue;
 
         // Decode CHRN block
         struct { u8 c; u8 h; u8 r; u8 n; } chrn;
-        disk->decodeMFM((u8 *)&chrn, &local[i], 4);
+        Disk::decodeMFM((u8 *)&chrn, &src[i], 4);
         trace(MFM_DEBUG, "c: %d h: %d r: %d n: %d\n", chrn.c, chrn.h, chrn.r, chrn.n);
         
         if (chrn.r >= 1 && chrn.r <= numSectors) {
@@ -338,11 +344,18 @@ IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
     for (int i = 0; i < numSectors; i++) assert(sectorStart[i] != 0);
     
     // Encode all sectors
+    bool result = true;
     for (Sector s = 0; s < numSectors; s++) {
-        disk->decodeMFM(dst, local + sectorStart[s], 512);
-        // decodeDOSSector(dst, local + sectorStart[s]);
+        result &= decodeSector(dst, src + sectorStart[s]);
         dst += 512;
     }
     
+    return result;
+}
+
+bool
+IMGFile::decodeSector(u8 *dst, u8 *src)
+{
+    Disk::decodeMFM(dst, src, 512);
     return true;
 }

@@ -51,26 +51,24 @@ ADFFile::isADFFile(const char *path)
 }
 
 size_t
-ADFFile::fileSize(DiskType t)
+ADFFile::fileSize(DiskType t, DiskDensity d)
 {
     assert(isDiskType(t));
     
-    switch(t) {
-            
-        case DISK_35_DD:    return ADFSIZE_35_DD;
-        case DISK_35_HD:    return ADFSIZE_35_HD;
-        default:            assert(false); return 0;
-    }
+    if (t == DISK_35 && d == DISK_DD) return ADFSIZE_35_DD;
+    if (t == DISK_35 && d == DISK_HD) return ADFSIZE_35_HD;
+
+    assert(false);
 }
 
 ADFFile *
-ADFFile::makeWithDiskType(DiskType t)
+ADFFile::makeWithDiskType(DiskType t, DiskDensity d)
 {
     assert(isDiskType(t));
     
     ADFFile *adf = new ADFFile();
     
-    if (!adf->alloc(fileSize(t))) {
+    if (!adf->alloc(fileSize(t, d))) {
         delete adf;
         return NULL;
     }
@@ -129,11 +127,11 @@ ADFFile::makeWithDisk(Disk *disk)
 {
     assert(disk != NULL);
 
+    DiskType type = disk->getType();
+    DiskDensity density = disk->getDensity();
 
     // Create empty ADF
-    ADFFile *adf = nullptr;
-    if (disk->getType() == DISK_35_DD) adf = makeWithDiskType(DISK_35_DD);
-    if (disk->getType() == DISK_35_HD) adf = makeWithDiskType(DISK_35_HD);
+    ADFFile *adf = makeWithDiskType(type, density);
     if (!adf) return nullptr;
     
     // Export disk
@@ -156,11 +154,11 @@ ADFFile::makeWithVolume(FSVolume &volume)
     switch (volume.getCapacity()) {
             
         case 2 * 880:
-            adf = makeWithDiskType(DISK_35_DD);
+            adf = makeWithDiskType(DISK_35, DISK_DD);
             break;
             
         case 4 * 880:
-            adf = makeWithDiskType(DISK_35_HD);
+            adf = makeWithDiskType(DISK_35, DISK_HD);
             break;
             
         default:
@@ -183,7 +181,7 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 DiskType
 ADFFile::getDiskType()
 {
-    return (size & ~1) == ADFSIZE_35_HD ? DISK_35_HD : DISK_35_DD;
+    return DISK_35;
 }
 
 DiskDensity
@@ -219,10 +217,10 @@ ADFFile::numCyclinders()
 long
 ADFFile::numSectorsPerTrack()
 {
-    switch (getDiskType()) {
+    switch (getDiskDensity()) {
             
-        case DISK_35_DD: return 11;
-        case DISK_35_HD: return 22;
+        case DISK_DD: return 11;
+        case DISK_HD: return 22;
             
         default:
             assert(false);
@@ -239,9 +237,9 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
     if (fs == FS_EMPTY) return false;
     
     // Right now, only 3.5" DD disks can be formatted
-    if (getDiskType() != DISK_35_DD) {
+    if (getDiskType() != DISK_35 || getDiskDensity() != DISK_DD) {
         warn("Cannot format a disk of type %s with file system %s.\n",
-             sTypeName(getDiskType()), sDiskFormat(fs));
+             sDiskType(getDiskType()), sDiskDensity(getDiskDensity()), sDiskFormat(fs));
         return false;
     }
     
@@ -425,6 +423,9 @@ ADFFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
     trace(MFM_DEBUG,
           "Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
     
+    // Make the MFM stream scannable beyond the track end
+    disk->repeatTracks();
+    
     for (Track t = 0; t < numTracks; t++) {
         if (!decodeTrack(disk, t, numSectors)) return false;
     }
@@ -439,25 +440,21 @@ ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
     
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
+    u8 *src = disk->data.track[t];
     u8 *dst = data + t * numSectors * 512;
-
-    // Create a local (double) copy of the track to simplify the analysis
-    u8 local[2 * disk->geometry.length.track[t]];
-    memcpy(local, disk->data.track[t], disk->geometry.length.track[t]);
-    memcpy(local + disk->geometry.length.track[t], disk->data.track[t], disk->geometry.length.track[t]);
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;
     while (index < sizeof(disk->data.track[t]) && nr < numSectors) {
 
         // Scan MFM stream for $4489 $4489
-        if (local[index++] != 0x44) continue;
-        if (local[index++] != 0x89) continue;
-        if (local[index++] != 0x44) continue;
-        if (local[index++] != 0x89) continue;
+        if (src[index++] != 0x44) continue;
+        if (src[index++] != 0x89) continue;
+        if (src[index++] != 0x44) continue;
+        if (src[index++] != 0x89) continue;
 
         // Make sure it's not a DOS track
-        if (local[index + 1] == 0x89) continue;
+        if (src[index + 1] == 0x89) continue;
 
         sectorStart[nr++] = index;
     }
@@ -472,21 +469,21 @@ ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
     // Encode all sectors
     bool result = true;
     for (Sector s = 0; s < numSectors; s++) {
-        result &= decodeSector(disk, dst, local + sectorStart[s]);
+        result &= decodeSector(dst, src + sectorStart[s]);
     }
     
     return result;
 }
 
 bool
-ADFFile::decodeSector(Disk *disk, u8 *dst, u8 *src)
+ADFFile::decodeSector(u8 *dst, u8 *src)
 {
     assert(dst != NULL);
     assert(src != NULL);
     
     // Decode sector info
     u8 info[4];
-    disk->decodeOddEven(info, src, 4);
+    Disk::decodeOddEven(info, src, 4);
     
     // Only proceed if the sector number is valid
     u8 sector = info[2];
@@ -496,6 +493,6 @@ ADFFile::decodeSector(Disk *disk, u8 *dst, u8 *src)
     src += 56;
     
     // Decode sector data
-    disk->decodeOddEven(dst + sector * 512, src, 512);
+    Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
 }

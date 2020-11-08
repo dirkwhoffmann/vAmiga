@@ -13,8 +13,9 @@ Disk::Disk(DiskType type, DiskDensity density) : geometry(type, density)
 {
     setDescription("Disk");
     
-    // oldData = new u8[geometry.diskSize];
     this->type = type;
+    this->density = density;
+    
     clearDisk();
 }
 
@@ -103,13 +104,12 @@ Disk::clearDisk()
     srand(0);
     for (int i = 0; i < sizeof(data.raw); i++) {
         data.raw[i] = rand() & 0xFF;
-        // oldData[i] = rand() & 0xFF;
     }
     
     /* In order to make some copy protected game titles work, we smuggle in
      * some magic values. E.g., Crunch factory expects 0x44A2 on cylinder 80.
      */
-    if (type == DISK_35_DD) {
+    if (type == DISK_35 && density == DISK_DD) {
         
         for (int t = 0; t < geometry.numTracks(); t++) {
             writeByte(0x44, t, 0);
@@ -673,4 +673,16 @@ Disk::addClockBits(u8 value, u8 previous)
     
     // Return original value with the clock bits added
     return value | cBits;
+}
+
+void
+Disk::repeatTracks()
+{
+    for (Track t = 0; t < 168; t++) {
+        
+        long length = geometry.length.track[t];
+        for (int i = length, j = 0; i < sizeof(data.track[t]); i++, j++) {
+            data.track[t][i] = data.track[t][j];
+        }
+    }
 }

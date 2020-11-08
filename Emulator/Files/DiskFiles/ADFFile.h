@@ -37,7 +37,7 @@ public:
     static bool isADFFile(const char *path);
     
     // Returns the size of an ADF file of a given disk type in bytes
-    static size_t fileSize(DiskType t);
+    static size_t fileSize(DiskType t, DiskDensity d);
 
     
     //
@@ -48,7 +48,7 @@ public:
 
     ADFFile();
     
-    static ADFFile *makeWithDiskType(DiskType t);
+    static ADFFile *makeWithDiskType(DiskType t, DiskDensity d);
     static ADFFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithFile(FILE *file);
@@ -103,7 +103,7 @@ private:
 
     bool decodeDisk(class Disk *disk, long numTracks, long numSectors);
     bool decodeTrack(class Disk *disk, Track t, long numSectors);
-    bool decodeSector(class Disk *disk, u8 *dst, u8 *src);
+    bool decodeSector(u8 *dst, u8 *src);
 
     //
     // Debugging

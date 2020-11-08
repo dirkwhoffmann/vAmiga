@@ -20,30 +20,30 @@
 
 typedef VA_ENUM(long, DiskType)
 {
-    DISK_35_DD,
-    DISK_35_HD,
-    DISK_525_DD,
+    DISK_35,
+    DISK_525
 };
 
 inline bool isDiskType(DiskType value)
 {
-    return value >= 0 && value <= DISK_525_DD;
+    return value >= 0 && value <= DISK_525;
 }
 
+/*
 inline bool isAmigaDiskType(DiskType value)
 {
     return value == DISK_35_DD || value == DISK_35_HD || value == DISK_525_DD;
 }
+*/
 
-inline const char *sTypeName(DiskType type)
+inline const char *sDiskType(DiskType value)
 {
-    assert(isDiskType(type));
+    assert(isDiskType(value));
     
-    switch (type) {
-        case DISK_35_DD:   return "3.5\" DD";
-        case DISK_35_HD:   return "3.5\" HD";
-        case DISK_525_DD:  return "5.25\" DD";
-        default:           return "???";
+    switch (value) {
+        case DISK_35:   return "3.5\"";
+        case DISK_525:  return "5.25\"";
+        default:        return "???";
     }
 }
 

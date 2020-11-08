@@ -37,7 +37,7 @@ public:
 
     IMGFile();
     
-    static IMGFile *makeWithDiskType(DiskType t);
+    static IMGFile *makeWithDiskType(DiskType t, DiskDensity d);
     static IMGFile *makeWithBuffer(const u8 *buffer, size_t length);
     static IMGFile *makeWithFile(const char *path);
     static IMGFile *makeWithFile(FILE *file);
@@ -62,7 +62,7 @@ public:
     // Methods from DiskFile
     //
       
-    DiskType getDiskType() override { return DISK_35_DD; }
+    DiskType getDiskType() override { return DISK_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override;
     long numCyclinders() override;
@@ -79,8 +79,9 @@ private:
     bool encodeMFM(class Disk *disk, Track t);
     bool encodeMFM(class Disk *disk, Track t, Sector s);
 
-    bool decodeMFM(class Disk *disk, long numTracks, long numSectors);
+    bool decodeDisk(class Disk *disk, long numTracks, long numSectors);
     bool decodeTrack(class Disk *disk, Track t, long numSectors);
+    bool decodeSector(u8 *dst, u8 *src);
 };
 
 #endif

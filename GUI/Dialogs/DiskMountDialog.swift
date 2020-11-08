@@ -33,13 +33,12 @@ class DiskMountDialog: DialogController {
     
     var diskIconImage: NSImage? {
         
-        let diskType = disk?.diskType
-        let hd = diskType == .DISK_35_HD
-        
+        let density = disk?.diskDensity
+                
         var name: String
         switch type {
         case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = hd ? "adfhd" : "adf"
+            name = density == .DISK_HD ? "adfhd" : "adf"
         case .FILETYPE_IMG:
             name = "dos"
         default:
@@ -70,21 +69,14 @@ class DiskMountDialog: DialogController {
     }
 
     var subtitleText: String {
-        
+                
         let t = disk?.numTracks ?? 0
         let s = disk?.numSectorsPerTrack ?? 0
         let n = disk?.numSides == 1 ? "Single" : "Double"
-        
-        var d: String
-        switch disk?.diskType {
-        case .DISK_35_DD, .DISK_525_DD:
-            d = "double"
-        case .DISK_35_HD:
-            d = "high"
-        default:
-            d = "???"
-        }
-        
+
+        let den = disk?.diskDensity
+        let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
+
         return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
     }
 
@@ -165,13 +157,15 @@ class DiskMountDialog: DialogController {
         diskIcon.image = diskIconImage
         title.stringValue = titleText
         subtitle.stringValue = subtitleText
-
+        
         // Determine enabled drives
+        let t = disk!.diskType
+        let d = disk!.diskDensity
         let dc = amiga.diskController.getConfig()
-        let df0 = dc.connected.0 && amiga.df0.isInsertable(disk!.diskType)
-        let df1 = dc.connected.1 && amiga.df1.isInsertable(disk!.diskType)
-        let df2 = dc.connected.2 && amiga.df2.isInsertable(disk!.diskType)
-        let df3 = dc.connected.3 && amiga.df3.isInsertable(disk!.diskType)
+        let df0 = dc.connected.0 && amiga.df0.isInsertable(t, density: d)
+        let df1 = dc.connected.1 && amiga.df1.isInsertable(t, density: d)
+        let df2 = dc.connected.2 && amiga.df2.isInsertable(t, density: d)
+        let df3 = dc.connected.3 && amiga.df3.isInsertable(t, density: d)
         df0Button.isEnabled = df0
         df1Button.isEnabled = df1
         df2Button.isEnabled = df2
