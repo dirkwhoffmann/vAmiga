@@ -81,6 +81,24 @@ struct DiskGeometry {
         diskSize = cylinders * cylinderSize;
     }
     
+    template <class T>
+    void applyToItems(T& worker)
+    {
+        worker
+
+        & cylinders
+        & sides
+        & sectors
+        
+        & tracks
+        & leadingGap
+        & trailingGap
+        & sectorSize
+        & trackSize
+        & cylinderSize
+        & diskSize;
+    }
+    
     DiskGeometry(DiskType type) {
                 
         switch (type) {

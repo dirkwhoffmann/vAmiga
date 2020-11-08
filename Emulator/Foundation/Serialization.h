@@ -19,6 +19,8 @@
 #include "TimeDelayed.h"
 #include "Sampler.h"
 #include "AudioStream.h"
+#include "DiskGeometry.h"
+
 
 //
 // Basic memory buffer I/O
@@ -169,6 +171,7 @@ public:
     STRUCT(TaggedSample)
     STRUCT(SamplePair)
     STRUCT(Sampler)
+    STRUCT(DiskGeometry)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -252,6 +255,7 @@ public:
     STRUCT(TaggedSample)
     STRUCT(SamplePair)
     STRUCT(Sampler)
+    STRUCT(DiskGeometry)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -341,6 +345,7 @@ public:
     STRUCT(TaggedSample)
     STRUCT(SamplePair)
     STRUCT(Sampler)
+    STRUCT(DiskGeometry)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)
@@ -418,6 +423,7 @@ public:
     STRUCT(TaggedSample)
     STRUCT(SamplePair)
     STRUCT(Sampler)
+    STRUCT(DiskGeometry)
     template <class T, int capacity> STRUCT(RingBuffer<T __ capacity>)
     template <class T, int capacity> STRUCT(SortedRingBuffer<T __ capacity>)
     template <class T, int delay> STRUCT(TimeDelayed<T __ delay>)

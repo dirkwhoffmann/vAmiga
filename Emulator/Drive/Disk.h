@@ -28,7 +28,14 @@ public:
 private:
     
     // The MFM encoded disk data
-    u8 *data = nullptr;
+    union {
+        u8 raw[168*32768];
+        u8 cylinder[84][2][32768];
+        u8 track[168][32768];
+    } data;
+    
+    // The MFM encoded disk data (DEPRECATED)
+    // u8 *oldData = nullptr;
     
     // Indicates if this disk is write protected
     bool writeProtected = false;
@@ -67,6 +74,8 @@ private:
         worker
 
         & type
+        & geometry
+        & data.raw
         & writeProtected
         & modified
         & fnv;
@@ -102,7 +111,7 @@ public:
     void writeByte(u8 value, Track track, u16 offset);
     void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
     
-    // Returns a pointer into the raw data array
+    // Returns a pointer into the raw data array (DEPRECATED)
     u8 *ptr(Track track);
     u8 *ptr(Track track, Sector sector);
     

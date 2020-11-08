@@ -13,14 +13,14 @@ Disk::Disk(DiskType type) : geometry(type)
 {
     setDescription("Disk");
     
-    data = new u8[geometry.diskSize];
+    // oldData = new u8[geometry.diskSize];
     this->type = type;
     clearDisk();
 }
 
 Disk::~Disk()
 {
-    delete [] data;
+    // delete [] oldData;
 }
 
 Disk *
@@ -43,7 +43,7 @@ Disk::makeWithReader(SerReader &reader, DiskType diskType)
 {
     Disk *disk = new Disk(diskType);
     disk->applyToPersistentItems(reader);
-    reader.copy(disk->data, disk->geometry.diskSize);
+    // reader.copy(disk->oldData, disk->geometry.diskSize);
     
     return disk;
 }
@@ -70,7 +70,8 @@ Disk::readByte(Track track, u16 offset)
     assert(track < geometry.tracks);
     assert(offset < geometry.trackSize);
 
-    return data[track * geometry.trackSize + offset];
+    return data.track[track][offset];
+    // return oldData[track * geometry.trackSize + offset];
 }
 
 u8
@@ -80,7 +81,8 @@ Disk::readByte(Cylinder cylinder, Side side, u16 offset)
     assert(side < geometry.sides);
     assert(offset < geometry.trackSize);
 
-    return data[(2 * cylinder + side) * geometry.trackSize + offset];
+    return data.cylinder[cylinder][side][offset];
+    // return oldData[(2 * cylinder + side) * geometry.trackSize + offset];
 }
 
 void
@@ -89,7 +91,8 @@ Disk::writeByte(u8 value, Track track, u16 offset)
     assert(track < geometry.tracks);
     assert(offset < geometry.trackSize);
 
-    data[track * geometry.trackSize + offset] = value;
+    data.track[track][offset] = value;
+    // oldData[track * geometry.trackSize + offset] = value;
 }
 
 void
@@ -99,20 +102,22 @@ Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
     assert(side < geometry.sides);
     assert(offset < geometry.trackSize);
 
-    // data.cyclinder[cylinder][side][offset] = value;
-    data[(2 * cylinder + side) * geometry.trackSize + offset] = value;
+    data.cylinder[cylinder][side][offset] = value;
+    // oldData[(2 * cylinder + side) * geometry.trackSize + offset] = value;
 }
 
 u8 *
 Disk::ptr(Track track)
 {
-    return data + geometry.trackSize * track;
+    return data.track[track];
+    // return oldData + geometry.trackSize * track;
 }
 
 u8 *
 Disk::ptr(Track track, Sector sector)
 {
-    return ptr(track) + geometry.leadingGap + sector * geometry.sectorSize;
+    return data.track[track] + geometry.leadingGap + sector * geometry.sectorSize;
+    // return ptr(track) + geometry.leadingGap + sector * geometry.sectorSize;
 }
 
 void
@@ -122,8 +127,9 @@ Disk::clearDisk()
 
     // Initialize with random data
     srand(0);
-    for (int i = 0; i < geometry.diskSize; i++) {
-        data[i] = rand() & 0xFF;
+    for (int i = 0; i < sizeof(data.raw); i++) {
+        data.raw[i] = rand() & 0xFF;
+        // oldData[i] = rand() & 0xFF;
     }
     
     /* In order to make some copy protected game titles work, we smuggle in

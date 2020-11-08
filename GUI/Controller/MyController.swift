@@ -604,6 +604,7 @@ extension MyController {
             renderer.blendIn(steps: 20)
             
         case .MSG_SNAPSHOT_RESTORED:
+            renderer.blendIn(steps: 20)
             hideOrShowDriveMenus()
             
         case .MSG_RECORDING_STARTED:

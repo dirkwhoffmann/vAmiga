@@ -144,7 +144,7 @@ Drive::_size()
         // Add the disk type and disk state
         counter & disk->getType();
         disk->applyToPersistentItems(counter);
-        counter.count += disk->geometry.diskSize;
+        // counter.count += disk->geometry.diskSize;
     }
 
     return counter.count;
@@ -201,7 +201,7 @@ Drive::_save(u8 *buffer)
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
-        writer.copy(disk->data, disk->geometry.diskSize);
+        // writer.copy(disk->oldData, disk->geometry.diskSize);
     }
 
     trace(SNP_DEBUG, "Serialized to %d bytes\n", writer.ptr - buffer);
