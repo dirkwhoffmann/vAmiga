@@ -81,7 +81,17 @@ public:
     long numSides() override;
     long numCyclinders() override;
     long numSectorsPerTrack() override;
-    bool encodeMFM(class Disk *disk) override;
+    bool encodeDisk(class Disk *disk) override;
+    bool decodeDisk(class Disk *disk) override;
+
+private:
+    
+    bool encodeTrack(class Disk *disk, Track t);
+    bool encodeSector(class Disk *disk, Track t, Sector s);
+
+    bool decodeTrack(class Disk *disk, Track t);
+    bool decodeSector(u8 *dst, u8 *src);
+
     
     //
     // Formatting
@@ -92,19 +102,6 @@ public:
     bool formatDisk(EmptyDiskFormat fs); 
 
     
-    //
-    // Encoding and decoding
-    //
-     
-private:
-    
-    bool encodeMFM(class Disk *disk, Track t);
-    bool encodeMFM(class Disk *disk, Track t, Sector s);
-
-    bool decodeDisk(class Disk *disk, long numTracks, long numSectors);
-    bool decodeTrack(class Disk *disk, Track t, long numSectors);
-    bool decodeSector(u8 *dst, u8 *src);
-
     //
     // Debugging
     //

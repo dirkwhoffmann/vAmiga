@@ -11,6 +11,7 @@
 #define _DISK_FILE_H
 
 #include "AmigaFile.h"
+#include "DiskGeometry.h"
 
 // Base class of all file types encoding a disk
 class DiskFile : public AmigaFile {
@@ -29,12 +30,10 @@ public:
     //
     
 public:
-    
-    // Returns the form factor and the density of this disk
+
+    // Returns the layout parameters for this disk
     virtual DiskType getDiskType() = 0;
     virtual DiskDensity getDiskDensity() = 0;
-    
-    // Returns the layout parameters for this disk
     virtual long numSides() = 0;
     virtual long numCyclinders() = 0;
     virtual long numTracks() { return numSides() * numCyclinders(); }
@@ -58,8 +57,8 @@ public:
  
 public:
     
-    virtual bool encodeMFM(class Disk *disk);
-    // virtual bool decodeMFM(class Disk *disk);
+    virtual bool encodeDisk(class Disk *disk);
+    virtual bool decodeDisk(class Disk *disk);
 };
 
 #endif

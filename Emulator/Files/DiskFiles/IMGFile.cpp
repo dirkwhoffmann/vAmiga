@@ -97,7 +97,7 @@ IMGFile::makeWithDisk(Disk *disk)
     IMGFile *img = makeWithDiskType(DISK_35, DISK_DD);
     
     if (img) {
-        if (!img->decodeDisk(disk, 160, 9)) {
+        if (!img->decodeDisk(disk)) {
             printf("Failed to decode DOS disk\n");
             delete img;
             return NULL;
@@ -135,15 +135,28 @@ IMGFile::numSectorsPerTrack()
 }
 
 bool
-IMGFile::encodeMFM(Disk *disk)
+IMGFile::encodeDisk(Disk *disk)
 {
-    bool result = true;
     long tracks = numTracks();
     
     debug(MFM_DEBUG, "Encoding DOS disk with %d tracks\n", tracks);
+
+    if (disk->getType() != getDiskType()) {
+        warn("Incompatible disk types: %s %s\n",
+             sDiskType(disk->getType()), sDiskType(getDiskType()));
+        return false;
+    }
+    if (disk->getDensity() != getDiskDensity()) {
+        warn("Incompatible disk densities: %s %s\n",
+             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+        return false;
+    }
     
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) result &= encodeMFM(disk, t);
+    bool result = true;
+    for (Track t = 0; t < tracks; t++) {
+        result &= encodeTrack(disk, t);
+    }
     
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
@@ -159,7 +172,7 @@ IMGFile::encodeMFM(Disk *disk)
 }
 
 bool
-IMGFile::encodeMFM(Disk *disk, Track t)
+IMGFile::encodeTrack(Disk *disk, Track t)
 {
     long sectors = numSectorsPerTrack();
 
@@ -183,7 +196,7 @@ IMGFile::encodeMFM(Disk *disk, Track t)
         
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < sectors; s++) result &= encodeMFM(disk, t, s);
+    for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
     
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
@@ -195,7 +208,7 @@ IMGFile::encodeMFM(Disk *disk, Track t)
 }
 
 bool
-IMGFile::encodeMFM(Disk *disk, Track t, Sector s)
+IMGFile::encodeSector(Disk *disk, Track t, Sector s)
 {
     u8 buf[60 + 512 + 2 + 109]; // Header + Data + CRC + Gap
         
@@ -265,26 +278,39 @@ IMGFile::encodeMFM(Disk *disk, Track t, Sector s)
 }
 
 bool
-IMGFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
+IMGFile::decodeDisk(Disk *disk)
 {
-    trace(MFM_DEBUG,
-          "Decoding DOS disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    long tracks = numTracks();
+    
+    trace(MFM_DEBUG, "Decoding DOS disk (%d tracks)\n", tracks);
+    
+    if (disk->getType() != getDiskType()) {
+        warn("Incompatible disk types: %s %s\n",
+             sDiskType(disk->getType()), sDiskType(getDiskType()));
+        return false;
+    }
+    if (disk->getDensity() != getDiskDensity()) {
+        warn("Incompatible disk densities: %s %s\n",
+             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+        return false;
+    }
     
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
 
-    for (Track t = 0; t < numTracks; t++) {
-        if (!decodeTrack(disk, t, numSectors)) return false;
+    for (Track t = 0; t < tracks; t++) {
+        if (!decodeTrack(disk, t)) return false;
     }
     
     return true;
 }
 
 bool
-IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
+IMGFile::decodeTrack(Disk *disk, Track t)
 {
     assert(t < disk->geometry.numTracks());
         
+    long numSectors = 9;
     u8 *src = disk->data.track[t];
     u8 *dst = data + t * numSectors * 512;
     

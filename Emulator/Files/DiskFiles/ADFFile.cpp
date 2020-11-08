@@ -137,7 +137,7 @@ ADFFile::makeWithDisk(Disk *disk)
     // Export disk
     assert(adf->numTracks() == 160);
     assert(adf->numSectorsPerTrack() == 11 || adf->numSectorsPerTrack() == 22);
-    if (!adf->decodeDisk(disk, adf->numTracks(), adf->numSectorsPerTrack())) {
+    if (!adf->decodeDisk(disk)) {
         delete adf;
         return nullptr;
     }
@@ -261,22 +261,30 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
 }
 
 bool
-ADFFile::encodeMFM(Disk *disk)
+ADFFile::encodeDisk(Disk *disk)
 {
     assert(disk != NULL);
-    assert(disk->getType() == getDiskType());
+    
+    if (disk->getType() != getDiskType()) {
+        warn("Incompatible disk types: %s %s\n",
+             sDiskType(disk->getType()), sDiskType(getDiskType()));
+        return false;
+    }
+    if (disk->getDensity() != getDiskDensity()) {
+        warn("Incompatible disk densities: %s %s\n",
+             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+        return false;
+    }
+
+    long tracks = numTracks();
+    debug(MFM_DEBUG, "Encoding %d tracks\n", tracks);
 
     // Start with an unformatted disk
     disk->clearDisk();
 
-    // Start the encoding process
-    bool result = true;
-    long tracks = numTracks();
-    
-    debug(MFM_DEBUG, "Encoding Amiga disk with %d tracks\n", tracks);
-
     // Encode all tracks
-    for (Track t = 0; t < tracks; t++) result &= encodeMFM(disk, t);
+    bool result = true;
+    for (Track t = 0; t < tracks; t++) result &= encodeTrack(disk, t);
 
     // In debug mode, also run the decoder
     if (MFM_DEBUG) {
@@ -292,7 +300,7 @@ ADFFile::encodeMFM(Disk *disk)
 }
 
 bool
-ADFFile::encodeMFM(Disk *disk, Track t)
+ADFFile::encodeTrack(Disk *disk, Track t)
 {
     long sectors = numSectorsPerTrack();
     // assert(disk->geometry.sectors == sectors);
@@ -304,14 +312,9 @@ ADFFile::encodeMFM(Disk *disk, Track t)
 
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < sectors; s++) result &= encodeMFM(disk, t, s);
+    for (Sector s = 0; s < sectors; s++) result &= encodeSector(disk, t, s);
     
     // Rectify the first clock bit (where buffer wraps over)
-    /*
-    u8 *strt = disk->ptr(t);
-    u8 *stop = disk->ptr(t) + disk->geometry.trackSize - 1;
-    if (*stop & 0x01) *strt &= 0x7F;
-     */
     if (disk->data.track[t][disk->trackLength(t) - 1] & 1) {
         disk->data.track[t][0] &= 0x7F;
     }
@@ -326,7 +329,7 @@ ADFFile::encodeMFM(Disk *disk, Track t)
 }
 
 bool
-ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
+ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 {
     assert(t < disk->geometry.numTracks());
     
@@ -418,26 +421,38 @@ ADFFile::dumpSector(int num)
 }
 
 bool
-ADFFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
+ADFFile::decodeDisk(Disk *disk)
 {
-    trace(MFM_DEBUG,
-          "Decoding Amiga disk (%d tracks, %d sectors)\n", numTracks, numSectors);
+    long tracks = numTracks();
     
+    debug(MFM_DEBUG, "Decoding Amiga disk with %d tracks\n", tracks);
+    
+    if (disk->getType() != getDiskType()) {
+        warn("Incompatible disk types: %s %s\n",
+             sDiskType(disk->getType()), sDiskType(getDiskType()));
+        return false;
+    }
+    if (disk->getDensity() != getDiskDensity()) {
+        warn("Incompatible disk densities: %s %s\n",
+             sDiskDensity(disk->getDensity()), sDiskDensity(getDiskDensity()));
+        return false;
+    }
+        
     // Make the MFM stream scannable beyond the track end
     disk->repeatTracks();
-    
-    for (Track t = 0; t < numTracks; t++) {
-        if (!decodeTrack(disk, t, numSectors)) return false;
+
+    for (Track t = 0; t < tracks; t++) {
+        if (!decodeTrack(disk, t)) return false;
     }
     
     return true;
 }
 
 bool
-ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
-{
-    assert(t < disk->geometry.numTracks());
-    
+ADFFile::decodeTrack(Disk *disk, Track t)
+{ 
+    long numSectors = numSectorsPerTrack();
+
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     u8 *src = disk->data.track[t];

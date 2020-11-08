@@ -159,7 +159,7 @@ Disk::encodeDisk(DiskFile *df)
     clearDisk();
 
     // Call the MFM encoder
-    return df->encodeMFM(this);
+    return df->encodeDisk(this);
 }
 
 /*

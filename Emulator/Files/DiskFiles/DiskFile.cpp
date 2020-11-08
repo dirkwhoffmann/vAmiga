@@ -45,7 +45,14 @@ DiskFile::readSector(u8 *dst, long s)
 }
 
 bool
-DiskFile::encodeMFM(class Disk *disk)
+DiskFile::encodeDisk(class Disk *disk)
+{
+    assert(false);
+    return false;
+}
+
+bool
+DiskFile::decodeDisk(class Disk *disk)
 {
     assert(false);
     return false;
