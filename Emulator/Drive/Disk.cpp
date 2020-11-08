@@ -81,10 +81,6 @@ Disk::readByte(Cylinder cylinder, Side side, u16 offset)
     assert(offset < geometry.trackSize);
 
     return data[(2 * cylinder + side) * geometry.trackSize + offset];
-    /*
-    assert(data.raw[(2 * cylinder + side) * geometry.trackSize + offset] == data.cyclinder[cylinder][side][offset]);
-    return data.cyclinder[cylinder][side][offset];
-    */
 }
 
 void
@@ -185,10 +181,11 @@ Disk::encodeDisk(DiskFile *df)
     // Start with an unformatted disk
     clearDisk();
 
-    // Call the proper encoder for this disk
-    return isAmigaDiskType(getType()) ? encodeAmigaDisk(df) : encodeDosDisk(df);
+    // Call the MFM encoder
+    return df->encodeMFM(this);
 }
 
+/*
 bool
 Disk::encodeAmigaDisk(DiskFile *df)
 {
@@ -249,17 +246,7 @@ Disk::encodeAmigaSector(DiskFile *df, Track t, Sector s)
     assert(s < geometry.sectors);
     
     debug(MFM_DEBUG, "Encoding sector %d\n", s);
-    
-    /* Block header layout:
-     *                     Start  Size   Value
-     * Bytes before SYNC   00      4     0xAA 0xAA 0xAA 0xAA
-     * SYNC mark           04      4     0x44 0x89 0x44 0x89
-     * Track & sector info 08      8     Odd/Even encoded
-     * Unused area         16     32     0xAA
-     * Block checksum      48      8     Odd/Even encoded
-     * Data checksum       56      8     Odd/Even encoded
-     */
-    
+        
     u8 *p = ptr(t, s);
     // u8 *p = data.track[t] + (s * sectorSize) + trackGapSize;
     
@@ -449,6 +436,7 @@ Disk::encodeDosSector(DiskFile *df, Track t, Sector s)
 
     return true;
 }
+*/
 
 bool
 Disk::decodeAmigaDisk(u8 *dst, long numTracks, long numSectors)

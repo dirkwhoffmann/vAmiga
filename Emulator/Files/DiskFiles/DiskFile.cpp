@@ -43,3 +43,10 @@ DiskFile::readSector(u8 *dst, long s)
         dst[i] = data[offset + i];
     }
 }
+
+bool
+DiskFile::encodeMFM(class Disk *disk)
+{
+    assert(false);
+    return false;
+}

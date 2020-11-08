@@ -80,7 +80,7 @@ public:
     long numSides() override;
     long numCyclinders() override;
     long numSectorsPerTrack() override;
-    
+    bool encodeMFM(class Disk *disk) override;
     
     //
     // Formatting
@@ -90,6 +90,17 @@ public:
     
     bool formatDisk(EmptyDiskFormat fs); 
 
+    
+    //
+    // Encoding
+    //
+     
+private:
+    
+    // Encodes a single track, or sector
+    bool encodeMFM(class Disk *disk, Track t);
+    bool encodeMFM(class Disk *disk, Track t, Sector s);
+    
 
     //
     // Debugging

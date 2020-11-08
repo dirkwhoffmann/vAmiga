@@ -266,6 +266,141 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
     return true;
 }
 
+bool
+ADFFile::encodeMFM(Disk *disk)
+{
+    assert(disk != NULL);
+    assert(disk->getType() == getDiskType());
+
+    // Start with an unformatted disk
+    disk->clearDisk();
+
+    // Start the encoding process
+    bool result = true;
+    long tracks = numTracks();
+    
+    debug(MFM_DEBUG, "Encoding Amiga disk with %d tracks\n", tracks);
+
+    // Encode all tracks
+    for (Track t = 0; t < tracks; t++) result &= encodeMFM(disk, t);
+
+    // In debug mode, also run the decoder
+    if (MFM_DEBUG) {
+        debug("Amiga disk fully encoded (success = %d)\n", result);
+        ADFFile *tmp = ADFFile::makeWithDisk(disk);
+        if (tmp) {
+            msg("Decoded image written to /tmp/debug.adf\n");
+            tmp->writeToFile("/tmp/tmp.adf");
+        }
+    }
+
+    return result;
+}
+
+bool
+ADFFile::encodeMFM(Disk *disk, Track t)
+{
+    long sectors = numSectorsPerTrack();
+    assert(disk->geometry.sectors == sectors);
+    
+    trace(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
+
+    // Format track
+    disk->clearTrack(t, 0xAA);
+
+    // Encode all sectors
+    bool result = true;
+    for (Sector s = 0; s < sectors; s++) result &= encodeMFM(disk, t, s);
+    
+    // Rectify the first clock bit (where buffer wraps over)
+    u8 *strt = disk->ptr(t);
+    u8 *stop = disk->ptr(t) + disk->geometry.trackSize - 1;
+    if (*stop & 0x01) *strt &= 0x7F;
+    // if (data.track[t][trackSize - 1] & 1) data.track[t][0] &= 0x7F;
+
+    // Compute a debug checksum
+    if (MFM_DEBUG) {
+        u64 check = fnv_1a_32(disk->ptr(t), disk->geometry.trackSize);
+        debug("Track %d checksum = %x\n", t, check);
+    }
+
+    return result;
+}
+
+bool
+ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
+{
+    assert(t < disk->geometry.tracks);
+    assert(s < disk->geometry.sectors);
+    
+    debug(MFM_DEBUG, "Encoding sector %d\n", s);
+    
+    // Block header layout:
+    //
+    //                         Start  Size   Value
+    //     Bytes before SYNC   00      4     0xAA 0xAA 0xAA 0xAA
+    //     SYNC mark           04      4     0x44 0x89 0x44 0x89
+    //     Track & sector info 08      8     Odd/Even encoded
+    //     Unused area         16     32     0xAA
+    //     Block checksum      48      8     Odd/Even encoded
+    //     Data checksum       56      8     Odd/Even encoded
+    
+    u8 *p = disk->ptr(t, s);
+    
+    // Bytes before SYNC
+    p[0] = (p[-1] & 1) ? 0x2A : 0xAA;
+    p[1] = 0xAA;
+    p[2] = 0xAA;
+    p[3] = 0xAA;
+    
+    // SYNC mark
+    u16 sync = 0x4489;
+    p[4] = HI_BYTE(sync);
+    p[5] = LO_BYTE(sync);
+    p[6] = HI_BYTE(sync);
+    p[7] = LO_BYTE(sync);
+    
+    // Track and sector information
+    u8 info[4] = { 0xFF, (u8)t, (u8)s, (u8)(11 - s) };
+    disk->encodeOddEven(&p[8], info, sizeof(info));
+    
+    // Unused area
+    for (unsigned i = 16; i < 48; i++)
+    p[i] = 0xAA;
+    
+    // Data
+    u8 bytes[512];
+    readSector(bytes, t, s);
+    disk->encodeOddEven(&p[64], bytes, sizeof(bytes));
+    
+    // Block checksum
+    u8 bcheck[4] = { 0, 0, 0, 0 };
+    for(unsigned i = 8; i < 48; i += 4) {
+        bcheck[0] ^= p[i];
+        bcheck[1] ^= p[i+1];
+        bcheck[2] ^= p[i+2];
+        bcheck[3] ^= p[i+3];
+    }
+    disk->encodeOddEven(&p[48], bcheck, sizeof(bcheck));
+    
+    // Data checksum
+    u8 dcheck[4] = { 0, 0, 0, 0 };
+    for(unsigned i = 64; i < 1088; i += 4) {
+        dcheck[0] ^= p[i];
+        dcheck[1] ^= p[i+1];
+        dcheck[2] ^= p[i+2];
+        dcheck[3] ^= p[i+3];
+    }
+    disk->encodeOddEven(&p[56], dcheck, sizeof(bcheck));
+    
+    // Add clock bits
+    for(unsigned i = 8; i < 1088; i++) {
+        p[i] = disk->addClockBits(p[i], p[i-1]);
+    }
+    
+    return true;
+}
+
 void
 ADFFile::dumpSector(int num)
 {

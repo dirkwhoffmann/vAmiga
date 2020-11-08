@@ -411,7 +411,7 @@ Drive::writeWordAndRotate(u16 value)
 void
 Drive::rotate()
 {
-    long last = disk ? disk->geometry.trackSize : 2128224;
+    long last = disk ? disk->geometry.trackSize : 12668;
     if (++head.offset >= last) {
         
         // Start over at the beginning of the current cyclinder
@@ -636,6 +636,7 @@ Drive::insertDisk(Disk *disk)
 
         // Insert the disk and inform the GUI
         this->disk = disk;
+        head.offset = 0;
         messageQueue.put(MSG_DISK_INSERT, nr);
         
         return true;

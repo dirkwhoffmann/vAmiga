@@ -59,16 +59,25 @@ public:
     
     
     //
-    // Properties
+    // Methods from DiskFile
     //
       
-    // Returns the type of this disk
     DiskType getDiskType() override;
-
-    // Cylinder, track, and sector counts
     long numSides() override;
     long numCyclinders() override;
     long numSectorsPerTrack() override;
+    bool encodeMFM(class Disk *disk) override;
+    
+    
+    //
+    // Encoding
+    //
+     
+private:
+    
+    // Encodes a single track, or sector
+    bool encodeMFM(class Disk *disk, Track t);
+    bool encodeMFM(class Disk *disk, Track t, Sector s);
 };
 
 #endif

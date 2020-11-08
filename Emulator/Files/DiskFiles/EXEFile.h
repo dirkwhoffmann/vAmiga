@@ -63,6 +63,7 @@ public:
     long numSectorsPerTrack() override { return adf->numSectorsPerTrack(); }
     void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
     void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }
+    bool encodeMFM(class Disk *disk) override { return adf->encodeMFM(disk); }
 };
 
 #endif

@@ -49,6 +49,16 @@ public:
     // Fills a buffer with the data of a single sector
     virtual void readSector(u8 *target, long s);
     virtual void readSector(u8 *target, long t, long s);
+    
+    
+    //
+    // Encoding
+    //
+ 
+public:
+    
+    // Encodes a disk
+    virtual bool encodeMFM(class Disk *disk);
 };
 
 #endif

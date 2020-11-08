@@ -16,12 +16,16 @@
 class Disk : public AmigaObject {
     
     friend class Drive;
+
+public:
     
     // The type of this disk
     DiskType type;
     
     // The geometry of this disk (derived from the disk type in the constructor)
     DiskGeometry geometry;
+    
+private:
     
     // The MFM encoded disk data
     u8 *data = nullptr;
@@ -97,8 +101,6 @@ public:
     // Writes a byte to disk
     void writeByte(u8 value, Track track, u16 offset);
     void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
-
-private:
     
     // Returns a pointer into the raw data array
     u8 *ptr(Track track);
@@ -132,15 +134,18 @@ public:
 private:
     
     // Encodes a disk, track, or sector in Amiga format
+    /*
     bool encodeAmigaDisk(class DiskFile *df);
     bool encodeAmigaTrack(class DiskFile *df, Track t);
     bool encodeAmigaSector(class DiskFile *df, Track t, Sector s);
-
+    */
+    
     // Encodes a disk, track, or sector in DOS format
+    /*
     bool encodeDosDisk(class DiskFile *df);
     bool encodeDosTrack(class DiskFile *df, Track t);
     bool encodeDosSector(class DiskFile *df, Track t, Sector s);
-
+    */
     
     //
     // Decoding
@@ -160,10 +165,10 @@ public:
 
     
     //
-    // Encoding and decoding MFM data
+    // Working with MFM encoded data streams
     //
     
-private:
+public:
     
     void encodeMFM(u8 *dst, u8 *src, size_t count);
     void decodeMFM(u8 *dst, u8 *src, size_t count);
