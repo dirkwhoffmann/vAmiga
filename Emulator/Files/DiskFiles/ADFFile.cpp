@@ -453,7 +453,7 @@ ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;
-    while (index < disk->geometry.trackSize + disk->geometry.sectorSize && nr < numSectors) {
+    while (index < sizeof(disk->data.track[t]) && nr < numSectors) {
 
         // Scan MFM stream for $4489 $4489
         if (local[index++] != 0x44) continue;

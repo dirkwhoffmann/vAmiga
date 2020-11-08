@@ -56,12 +56,7 @@ Disk::dump()
     msg("             sides: %ld\n", geometry.sides);
     msg("           sectors: %ld\n", geometry.sectors);
     msg("            tracks: %ld\n", geometry.tracks);
-    msg("        leadingGap: %ld\n", geometry.leadingGap);
-    msg("       trailingGap: %ld\n", geometry.trailingGap);
-    msg("        sectorSize: %ld\n", geometry.sectorSize);
     msg("         trackSize: %ld\n", geometry.trackSize);
-    msg("      cylinderSize: %ld\n", geometry.cylinderSize);
-    msg("          diskSize: %ld\n", geometry.diskSize);
 }
 
 u8
