@@ -52,71 +52,49 @@ void
 Disk::dump()
 {
     msg("\nDisk:\n");
-    msg("         cylinders: %ld\n", geometry.cylinders);
-    msg("             sides: %ld\n", geometry.sides);
-    msg("           sectors: %ld\n", geometry.sectors);
-    msg("            tracks: %ld\n", geometry.tracks);
-    msg("         trackSize: %ld\n", geometry.trackSize);
+    msg("       cylinders : %ld\n", geometry.cylinders);
+    msg("           sides : %ld\n", geometry.sides);
+    msg("          tracks : %ld\n", geometry.numTracks());
+    msg("  track 0 length : %ld\n", geometry.length.track[0]);
 }
 
 u8
-Disk::readByte(Track track, u16 offset)
+Disk::readByte(Track t, u16 offset)
 {
-    assert(track < geometry.tracks);
-    assert(offset < geometry.trackSize);
+    assert(t < geometry.numTracks());
+    assert(offset < trackLength(t));
 
-    return data.track[track][offset];
-    // return oldData[track * geometry.trackSize + offset];
+    return data.track[t][offset];
 }
 
 u8
-Disk::readByte(Cylinder cylinder, Side side, u16 offset)
+Disk::readByte(Cylinder c, Side s, u16 offset)
 {
-    assert(cylinder < geometry.cylinders);
-    assert(side < geometry.sides);
-    assert(offset < geometry.trackSize);
+    assert(c < geometry.cylinders);
+    assert(s < geometry.sides);
+    assert(offset < geometry.length.cylinder[c][s]);
 
-    return data.cylinder[cylinder][side][offset];
-    // return oldData[(2 * cylinder + side) * geometry.trackSize + offset];
+    return data.cylinder[c][s][offset];
 }
 
 void
-Disk::writeByte(u8 value, Track track, u16 offset)
+Disk::writeByte(u8 value, Track t, u16 offset)
 {
-    assert(track < geometry.tracks);
-    assert(offset < geometry.trackSize);
+    assert(t < geometry.numTracks());
+    assert(offset < geometry.length.track[t]);
 
-    data.track[track][offset] = value;
-    // oldData[track * geometry.trackSize + offset] = value;
+    data.track[t][offset] = value;
 }
 
 void
-Disk::writeByte(u8 value, Cylinder cylinder, Side side, u16 offset)
+Disk::writeByte(u8 value, Cylinder c, Side s, u16 offset)
 {
-    assert(cylinder < geometry.cylinders);
-    assert(side < geometry.sides);
-    assert(offset < geometry.trackSize);
+    assert(c < geometry.cylinders);
+    assert(s < geometry.sides);
+    assert(offset < geometry.length.cylinder[c][s]);
 
-    data.cylinder[cylinder][side][offset] = value;
-    // oldData[(2 * cylinder + side) * geometry.trackSize + offset] = value;
+    data.cylinder[c][s][offset] = value;
 }
-
-/*
-u8 *
-Disk::ptr(Track track)
-{
-    return data.track[track];
-    // return oldData + geometry.trackSize * track;
-}
-*/
-/*
-u8 *
-Disk::ptr(Track track, Sector sector)
-{
-    return data.track[track] + geometry.leadingGap + sector * geometry.sectorSize;
-    // return ptr(track) + geometry.leadingGap + sector * geometry.sectorSize;
-}
-*/
 
 void
 Disk::clearDisk()
@@ -135,7 +113,7 @@ Disk::clearDisk()
      */
     if (type == DISK_35_DD) {
         
-        for (int t = 0; t < geometry.tracks; t++) {
+        for (int t = 0; t < geometry.numTracks(); t++) {
             writeByte(0x44, t, 0);
             writeByte(0xA2, t, 1);
         }
@@ -145,34 +123,31 @@ Disk::clearDisk()
 void
 Disk::clearTrack(Track t)
 {
-    assert(t < geometry.tracks);
+    assert(t < geometry.numTracks());
 
     srand(0);
-    for (int i = 0; i < geometry.trackSize; i++) {
-        writeByte(rand() & 0xFF, t, i);
-        // data.track[t][i] = rand() & 0xFF;
+    for (int i = 0; i < trackLength(t); i++) {
+        data.track[t][i] = rand() & 0xFF;
     }
 }
 
 void
 Disk::clearTrack(Track t, u8 value)
 {
-    assert(t < geometry.tracks);
+    assert(t < geometry.numTracks());
 
-    for (int i = 0; i < geometry.trackSize; i++) {
-        writeByte(value, t, i);
+    for (int i = 0; i < sizeof(data.track[t]); i++) {
+        data.track[t][i] = value;
     }
 }
 
 void
 Disk::clearTrack(Track t, u8 value1, u8 value2)
 {
-    assert(t < geometry.tracks);
-    assert(geometry.trackSize % 2 == 0);
+    assert(t < geometry.numTracks());
 
-    for (int i = 0; i < geometry.trackSize; i += 2) {
-        writeByte(value1, t, i);
-        writeByte(value2, t, i + 1);
+    for (int i = 0; i < trackLength(t); i++) {
+        data.track[t][i] = (i % 2) ? value2 : value1;
     }
 }
 

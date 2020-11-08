@@ -411,7 +411,7 @@ Drive::writeWordAndRotate(u16 value)
 void
 Drive::rotate()
 {
-    long last = disk ? disk->geometry.trackSize : 12668;
+    long last = disk ? disk->trackLength(head.cylinder, head.side) : 12668;
     if (++head.offset >= last) {
         
         // Start over at the beginning of the current cyclinder
@@ -427,7 +427,8 @@ Drive::rotate()
 void
 Drive::findSyncMark()
 {
-    for (unsigned i = 0; i < disk->geometry.trackSize; i++) {
+    long length = disk->trackLength(head.cylinder, head.side);
+    for (unsigned i = 0; i < length; i++) {
         
         if (readByteAndRotate() != 0x44) continue;
         if (readByteAndRotate() != 0x89) continue;

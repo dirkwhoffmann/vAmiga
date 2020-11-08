@@ -85,13 +85,16 @@ private:
 
 
     //
-    // Accessing
+    // Accessing disk parameters
     //
 
 public:
 
     DiskType getType() { return type; }
     
+    long trackLength(Track t) { return geometry.length.track[t]; }
+    long trackLength(Cylinder c, Side s) { return geometry.length.cylinder[c][s]; }
+
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
     
@@ -112,11 +115,7 @@ public:
     // Writes a byte to disk
     void writeByte(u8 value, Track track, u16 offset);
     void writeByte(u8 value, Cylinder cylinder, Side side, u16 offset);
-    
-    // Returns a pointer into the raw data array (DEPRECATED)
-    // u8 *ptr(Track track);
-    // u8 *ptr(Track track, Sector sector);
-    
+        
     
     //
     // Erasing disks

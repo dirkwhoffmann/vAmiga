@@ -301,7 +301,7 @@ bool
 ADFFile::encodeMFM(Disk *disk, Track t)
 {
     long sectors = numSectorsPerTrack();
-    assert(disk->geometry.sectors == sectors);
+    // assert(disk->geometry.sectors == sectors);
     
     trace(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
 
@@ -318,13 +318,13 @@ ADFFile::encodeMFM(Disk *disk, Track t)
     u8 *stop = disk->ptr(t) + disk->geometry.trackSize - 1;
     if (*stop & 0x01) *strt &= 0x7F;
      */
-    if (disk->data.track[t][disk->geometry.trackSize - 1] & 1) {
+    if (disk->data.track[t][disk->trackLength(t) - 1] & 1) {
         disk->data.track[t][0] &= 0x7F;
     }
 
     // Compute a debug checksum
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.trackSize);
+        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.length.track[t]);
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -334,8 +334,7 @@ ADFFile::encodeMFM(Disk *disk, Track t)
 bool
 ADFFile::encodeMFM(Disk *disk, Track t, Sector s)
 {
-    assert(t < disk->geometry.tracks);
-    assert(s < disk->geometry.sectors);
+    assert(t < disk->geometry.numTracks());
     
     debug(MFM_DEBUG, "Encoding sector %d\n", s);
     
@@ -440,16 +439,16 @@ ADFFile::decodeDisk(Disk *disk, long numTracks, long numSectors)
 bool
 ADFFile::decodeTrack(Disk *disk, Track t, long numSectors)
 {
-    assert(t < disk->geometry.tracks);
+    assert(t < disk->geometry.numTracks());
     
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     u8 *dst = data + t * numSectors * 512;
 
     // Create a local (double) copy of the track to simplify the analysis
-    u8 local[2 * disk->geometry.trackSize];
-    memcpy(local, disk->data.track[t], disk->geometry.trackSize);
-    memcpy(local + disk->geometry.trackSize, disk->data.track[t], disk->geometry.trackSize);
+    u8 local[2 * disk->geometry.length.track[t]];
+    memcpy(local, disk->data.track[t], disk->geometry.length.track[t]);
+    memcpy(local + disk->geometry.length.track[t], disk->data.track[t], disk->geometry.length.track[t]);
     
     // Seek all sync marks
     int sectorStart[numSectors], index = 0, nr = 0;
@@ -495,7 +494,7 @@ ADFFile::decodeSector(Disk *disk, u8 *dst, u8 *src)
     
     // Only proceed if the sector number is valid
     u8 sector = info[2];
-    if (sector >= disk->geometry.sectors) return false;
+    if (sector >= numSectorsPerTrack()) return false;
     
     // Skip sector header
     src += 56;

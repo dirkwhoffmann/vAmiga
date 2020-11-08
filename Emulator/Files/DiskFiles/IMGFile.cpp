@@ -192,7 +192,7 @@ IMGFile::encodeMFM(Disk *disk, Track t)
     
     // Compute a checksum for debugging
     if (MFM_DEBUG) {
-        u64 check = fnv_1a_32(disk->data.track[t], disk->geometry.trackSize);
+        u64 check = fnv_1a_32(disk->data.track[t], disk->trackLength(t));
         debug("Track %d checksum = %x\n", t, check);
     }
 
@@ -286,16 +286,16 @@ IMGFile::decodeMFM(Disk *disk, long numTracks, long numSectors)
 bool
 IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
 {
-    assert(t < disk->geometry.tracks);
+    assert(t < disk->geometry.numTracks());
         
     u8 *dst = data + t * numSectors * 512;
     
     trace(MFM_DEBUG, "Decoding DOS track %d\n", t);
     
     // Create a local (double) copy of the track to simply the analysis
-    u8 local[2 * disk->geometry.trackSize];
-    memcpy(local, disk->data.track[t], disk->geometry.trackSize);
-    memcpy(local + disk->geometry.trackSize, disk->data.track[t], disk->geometry.trackSize);
+    u8 local[2 * disk->trackLength(t)];
+    memcpy(local, disk->data.track[t], disk->trackLength(t));
+    memcpy(local + disk->trackLength(t), disk->data.track[t], disk->trackLength(t));
     
     // Determine the start of all sectors contained in this track
     int sectorStart[numSectors];
@@ -303,7 +303,7 @@ IMGFile::decodeTrack(Disk *disk, Track t, long numSectors)
         sectorStart[i] = 0;
     }
     int cnt = 0;
-    for (int i = 0; i < 1.5 * disk->geometry.trackSize;) {
+    for (int i = 0; i < 1.5 * disk->trackLength(t);) {
         
         // Seek IDAM block
         if (local[i++] != 0x44) continue;
