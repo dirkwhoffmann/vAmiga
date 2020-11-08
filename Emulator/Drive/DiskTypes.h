@@ -21,35 +21,51 @@
 typedef VA_ENUM(long, DiskType)
 {
     DISK_35_DD,
-    DISK_35_DD_PC,
     DISK_35_HD,
-    DISK_35_HD_PC,
     DISK_525_DD,
-    DISK_525_DD_PC
 };
 
-inline bool isDiskType(DiskType type)
+inline bool isDiskType(DiskType value)
 {
-    return type >= DISK_35_DD && type <= DISK_525_DD_PC;
+    return value >= 0 && value <= DISK_525_DD;
 }
 
-inline bool isAmigaDiskType(DiskType type)
+inline bool isAmigaDiskType(DiskType value)
 {
-    return type == DISK_35_DD || type == DISK_35_HD || type == DISK_525_DD;
+    return value == DISK_35_DD || value == DISK_35_HD || value == DISK_525_DD;
 }
 
-inline const char *diskTypeName(DiskType type)
+inline const char *sTypeName(DiskType type)
 {
     assert(isDiskType(type));
     
     switch (type) {
-        case DISK_35_DD:     return "3.5\" DD";
-        case DISK_35_DD_PC:  return "3.5\" DD (PC)";
-        case DISK_35_HD:     return "3.5\" HD";
-        case DISK_35_HD_PC:  return "3.5\" HD (PC)";
-        case DISK_525_DD:    return "5.25\" DD";
-        case DISK_525_DD_PC: return "5.25\" DD (PC)";
-        default:             return "???";
+        case DISK_35_DD:   return "3.5\" DD";
+        case DISK_35_HD:   return "3.5\" HD";
+        case DISK_525_DD:  return "5.25\" DD";
+        default:           return "???";
+    }
+}
+
+typedef VA_ENUM(long, DiskDensity)
+{
+    DISK_SD,
+    DISK_DD,
+    DISK_HD
+};
+
+inline bool isDiskDensity(DiskDensity value)
+{
+    return value >= 0 && value <= DISK_HD;
+}
+
+inline const char *sDiskDensity(DiskDensity value)
+{
+    switch (value) {
+        case DISK_SD:  return "SD";
+        case DISK_DD:  return "DD";
+        case DISK_HD:  return "HD";
+        default:       return "???";
     }
 }
 
@@ -67,7 +83,7 @@ inline bool isEmptyDiskFormat(EmptyDiskFormat type)
     return type >= FS_EMPTY && type <= FS_EMPTY_FFS_BOOTABLE;
 }
 
-inline const char *emptyDiskFormatName(EmptyDiskFormat type)
+inline const char *sDiskFormat(EmptyDiskFormat type)
 {
     switch (type) {
         case FS_EMPTY:              return "None";

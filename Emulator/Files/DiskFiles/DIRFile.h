@@ -56,6 +56,7 @@ public:
 public:
     
     DiskType getDiskType() override { return adf->getDiskType(); }
+    DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }
     long numCyclinders() override { return adf->numCyclinders(); }
     long numSectorsPerTrack() override { return adf->numSectorsPerTrack(); }

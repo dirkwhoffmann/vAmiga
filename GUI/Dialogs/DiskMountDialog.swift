@@ -34,7 +34,7 @@ class DiskMountDialog: DialogController {
     var diskIconImage: NSImage? {
         
         let diskType = disk?.diskType
-        let hd = diskType == .DISK_35_HD || diskType == .DISK_35_HD_PC
+        let hd = diskType == .DISK_35_HD
         
         var name: String
         switch type {
@@ -77,9 +77,9 @@ class DiskMountDialog: DialogController {
         
         var d: String
         switch disk?.diskType {
-        case .DISK_35_DD, .DISK_35_DD_PC, .DISK_525_DD, .DISK_525_DD_PC:
+        case .DISK_35_DD, .DISK_525_DD:
             d = "double"
-        case .DISK_35_HD, .DISK_35_HD_PC:
+        case .DISK_35_HD:
             d = "high"
         default:
             d = "???"

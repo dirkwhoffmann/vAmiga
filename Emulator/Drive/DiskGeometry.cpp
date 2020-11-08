@@ -1,36 +1,33 @@
+// -----------------------------------------------------------------------------
+// This file is part of vAmiga
 //
-//  DiskGeometry.cpp
-//  vAmiga
+// Copyright (C) Dirk W. Hoffmann. www.dirkwhoffmann.de
+// Licensed under the GNU General Public License v3
 //
-//  Created by Dirk Hoffmann on 01.11.20.
-//  Copyright © 2020 Dirk Hoffmann. All rights reserved.
-//
+// See https://www.gnu.org for license information
+// -----------------------------------------------------------------------------
 
 #include "DiskGeometry.h"
 
-DiskGeometry::DiskGeometry(DiskType type)
+DiskGeometry::DiskGeometry(DiskType t, DiskDensity d)
 {
-    switch (type) {
-            
-        case DISK_35_DD:
-        case DISK_35_DD_PC:
-            
-            init(84, 2, 12668);
-            break;
-            
-        case DISK_35_HD:
-        case DISK_35_HD_PC:
-            
-            init(84, 2, 24636);
-            break;
-            
-        case DISK_525_DD:
-        case DISK_525_DD_PC:
-            
-            init(42, 2, 12668);
-            break;
-            
-        default:
-            assert(false);
+    if (t == DISK_35_DD) {
+        assert(d == DISK_DD);
+        init(t, d, 84, 2, 12668);
+        return;
     }
+    
+    if (t == DISK_35_HD) {
+        assert(d == DISK_HD);
+        init(t, d, 84, 2, 24636);
+        return;
+    }
+    
+    if (t == DISK_525_DD) {
+        assert(d == DISK_HD);
+        init(t, d, 42, 2, 12668);
+        return;
+    }
+
+    assert(false);
 }

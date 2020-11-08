@@ -23,6 +23,7 @@ public:
     
     // The type of this disk
     DiskType type;
+    DiskDensity density;
     
     // The geometry of this disk (derived from the disk type in the constructor)
     DiskGeometry geometry;
@@ -55,11 +56,11 @@ private:
     
 public:
     
-    Disk(DiskType type);
+    Disk(DiskType type, DiskDensity density);
     ~Disk();
 
     static Disk *makeWithFile(class DiskFile *file);
-    static Disk *makeWithReader(SerReader &reader, DiskType diskType);
+    static Disk *makeWithReader(SerReader &reader, DiskType type, DiskDensity density);
         
     void dump();
     
@@ -76,6 +77,7 @@ private:
         worker
 
         & type
+        & density
         & geometry
         & data.raw
         & writeProtected
@@ -91,7 +93,8 @@ private:
 public:
 
     DiskType getType() { return type; }
-    
+    DiskDensity getDensity() { return density; }
+
     long trackLength(Track t) { return geometry.length.track[t]; }
     long trackLength(Cylinder c, Side s) { return geometry.length.cylinder[c][s]; }
 

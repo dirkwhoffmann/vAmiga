@@ -30,8 +30,9 @@ public:
     
 public:
     
-    // Returns the type of this disk
+    // Returns the form factor and the density of this disk
     virtual DiskType getDiskType() = 0;
+    virtual DiskDensity getDiskDensity() = 0;
     
     // Returns the layout parameters for this disk
     virtual long numSides() = 0;

@@ -142,7 +142,7 @@ Drive::_size()
     if (hasDisk()) {
 
         // Add the disk type and disk state
-        counter & disk->getType();
+        counter & disk->getType() & disk->getDensity();
         disk->applyToPersistentItems(counter);
         // counter.count += disk->geometry.diskSize;
     }
@@ -172,9 +172,11 @@ Drive::_load(u8 *buffer)
 
     // If yes, create recreate the disk
     if (diskInSnapshot) {
-        DiskType diskType;
-        reader & diskType;
-        disk = Disk::makeWithReader(reader, diskType);
+        DiskType type;
+        DiskDensity density;
+        reader & type & density;
+        
+        disk = Disk::makeWithReader(reader, type, density);
     }
 
     trace(SNP_DEBUG, "Recreated from %d bytes\n", reader.ptr - buffer);
@@ -197,7 +199,7 @@ Drive::_save(u8 *buffer)
     if (hasDisk()) {
 
         // Write the disk type
-        writer & disk->getType();
+        writer & disk->getType() & disk->getDensity();
 
         // Write the disk's state
         disk->applyToPersistentItems(writer);
@@ -589,20 +591,17 @@ Drive::ejectDisk()
 bool
 Drive::isInsertable(DiskType type)
 {
-    debug(DSK_DEBUG, "isInsertable(%s)\n", diskTypeName(type));
+    debug(DSK_DEBUG, "isInsertable(%s)\n", sTypeName(type));
     
     switch (type) {
             
         case DISK_35_DD:
-        case DISK_35_DD_PC:
             return config.type == DRIVE_35_DD || config.type == DRIVE_35_HD;
             
         case DISK_35_HD:
-        case DISK_35_HD_PC:
             return config.type == DRIVE_35_HD;
             
         case DISK_525_DD:
-        case DISK_525_DD_PC:
             return config.type == DRIVE_525_DD;
             
         default:

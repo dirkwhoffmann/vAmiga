@@ -183,17 +183,13 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
 DiskType
 ADFFile::getDiskType()
 {
-    switch(size & ~1) {
-        
-        case ADFSIZE_35_DD:
-        case ADFSIZE_35_DD_81:
-        case ADFSIZE_35_DD_82:
-        case ADFSIZE_35_DD_83:
-        case ADFSIZE_35_DD_84: return DISK_35_DD;
-        case ADFSIZE_35_HD:    return DISK_35_HD;
-    }
-    assert(false);
-    return (DiskType)0;
+    return (size & ~1) == ADFSIZE_35_HD ? DISK_35_HD : DISK_35_DD;
+}
+
+DiskDensity
+ADFFile::getDiskDensity()
+{
+    return (size & ~1) == ADFSIZE_35_HD ? DISK_HD : DISK_DD;
 }
 
 long
@@ -245,7 +241,7 @@ ADFFile::formatDisk(EmptyDiskFormat fs)
     // Right now, only 3.5" DD disks can be formatted
     if (getDiskType() != DISK_35_DD) {
         warn("Cannot format a disk of type %s with file system %s.\n",
-             diskTypeName(getDiskType()), emptyDiskFormatName(fs));
+             sTypeName(getDiskType()), sDiskFormat(fs));
         return false;
     }
     

@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Disk::Disk(DiskType type) : geometry(type)
+Disk::Disk(DiskType type, DiskDensity density) : geometry(type, density)
 {
     setDescription("Disk");
     
@@ -20,13 +20,12 @@ Disk::Disk(DiskType type) : geometry(type)
 
 Disk::~Disk()
 {
-    // delete [] oldData;
 }
 
 Disk *
 Disk::makeWithFile(DiskFile *file)
 {
-    Disk *disk = new Disk(file->getDiskType());
+    Disk *disk = new Disk(file->getDiskType(), file->getDiskDensity());
     
     if (!disk->encodeDisk(file)) {
         delete disk;
@@ -39,11 +38,10 @@ Disk::makeWithFile(DiskFile *file)
 }
 
 Disk *
-Disk::makeWithReader(SerReader &reader, DiskType diskType)
+Disk::makeWithReader(SerReader &reader, DiskType type, DiskDensity density)
 {
-    Disk *disk = new Disk(diskType);
+    Disk *disk = new Disk(type, density);
     disk->applyToPersistentItems(reader);
-    // reader.copy(disk->oldData, disk->geometry.diskSize);
     
     return disk;
 }

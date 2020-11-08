@@ -60,6 +60,7 @@ public:
     //
     
     DiskType getDiskType() override { return DISK_35_DD; }
+    DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override { return 2; }
     long numCyclinders() override { return 80; }
     long numSectorsPerTrack() override { return 11; }

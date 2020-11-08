@@ -33,7 +33,7 @@ IMGFile::isIMGFile(const char *path)
 IMGFile *
 IMGFile::makeWithDiskType(DiskType t)
 {
-    assert(t == DISK_35_DD_PC);
+    assert(t == DISK_35_DD);
     
     IMGFile *img = new IMGFile();
     
@@ -91,9 +91,9 @@ IMGFile::makeWithDisk(Disk *disk)
     assert(disk != NULL);
         
     // We only support 3.5"DD disks at the moment
-    if (disk->getType() != DISK_35_DD_PC) { return NULL; }
+    if (disk->getType() != DISK_35_DD) { return NULL; }
     
-    IMGFile *img = makeWithDiskType(DISK_35_DD_PC);
+    IMGFile *img = makeWithDiskType(DISK_35_DD);
     
     if (img) {
         if (!img->decodeMFM(disk, 160, 9)) {
@@ -113,12 +113,6 @@ IMGFile::readFromBuffer(const u8 *buffer, size_t length)
         return false;
     
     return isIMGBuffer(buffer, length);
-}
-
-DiskType
-IMGFile::getDiskType()
-{
-    return DISK_35_DD_PC;
 }
 
 long

@@ -50,6 +50,9 @@
 
 struct DiskGeometry {
     
+    DiskType type;
+    DiskDensity density;
+    
     long cylinders;
     long sides;
 
@@ -59,7 +62,10 @@ struct DiskGeometry {
         u64 track[168];
     } length;
     
-    void init(long cylinders, long sides, long len) {
+    void init(DiskType t, DiskDensity d, long cylinders, long sides, long len) {
+        
+        type = t;
+        density = d;
         
         for (int i = 0; i < 168; i++) {
             length.track[i] = len;
@@ -79,7 +85,7 @@ struct DiskGeometry {
         & length.track;
     }
     
-    DiskGeometry(DiskType type);
+    DiskGeometry(DiskType t, DiskDensity d);
     
     long numTracks() { return cylinders * sides; }
 };
