@@ -95,9 +95,6 @@ public:
     // Checks the integrity of this volume
     virtual bool check(bool verbose);
     
-    // Exports the volume into a buffer compatible with the ADF format
-    bool exportVolume(u8 *dst, size_t size);
-
     
     //
     // Querying file system properties
@@ -198,27 +195,18 @@ public:
     
     
     //
-    // Importing files and directories
+    // Importing and exporting
     //
     
+    // Exports the volume to a buffer compatible with the ADF format
+    bool importVolume(u8 *dst, size_t size);
+
+    // Imports the volume from a buffer compatible with the ADF format
+    bool exportVolume(u8 *dst, size_t size);
+
+    // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 };
-
-/*
-class OFSVolume : public FSVolume {
-    
-public:
-    
-    OFSVolume(const char *name, u32 capacity = 2 * 880);
-};
-
-class FFSVolume : public FSVolume {
-    
-public:
-    
-    FFSVolume(const char *name, u32 capacity = 2 * 880);
-};
-*/
 
 #endif

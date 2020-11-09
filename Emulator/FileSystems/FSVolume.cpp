@@ -137,6 +137,24 @@ FSVolume::freeBlocks()
     return result;
 }
 
+/*
+FSBlockType
+FSVolume::bufferType(u8 *p)
+{
+    u32 type = FSBlock::read32(p);
+    u32 subtype = FSBlock::read32(p + bsize - 4);
+
+    if (type ==  2 && subtype ==  1) return FS_ROOT_BLOCK;
+    if (type ==  2 && subtype ==  2) return FS_USERDIR_BLOCK;
+    if (type ==  2 && subtype == -3) return FS_FILEHEADER_BLOCK;
+    if (type ==  2 && subtype == -3) return FS_FILEHEADER_BLOCK;
+    if (type == 16 && subtype == -3) return FS_FILELIST_BLOCK;
+    if (type ==  8)                  return FS_DATA_BLOCK;
+    
+    return FS_UNKNOWN_BLOCK;
+}
+*/
+
 FSBlock *
 FSVolume::block(u32 nr)
 {
@@ -462,6 +480,29 @@ FSVolume::listWalker(FSBlock *block, int value)
 }
 
 bool
+FSVolume::importVolume(u8 *dst, size_t size)
+{
+    assert(dst != nullptr);
+
+    debug("Importing file system with %d blocks\n", capacity);
+
+    // Only proceed if the targer buffer has the correct size
+    if (capacity * bsize != size) {
+        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
+        return false;
+    }
+
+    // Import all blocks
+    for (int i = 0; i < capacity; i++) {
+
+        // TODO
+        assert(false);
+    }
+    
+    return true;
+}
+    
+bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
     assert(dst != nullptr);
@@ -548,13 +589,3 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
 
     return result;
 }
-
-/*
-OFSVolume::OFSVolume(const char *name, u32 capacity) : FSVolume(OFS, name, capacity)
-{
-}
-
-FFSVolume::FFSVolume(const char *name, u32 capacity) : FSVolume(FFS, name, capacity)
-{
-}
-*/

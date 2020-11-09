@@ -36,6 +36,7 @@ inline const char *sFSType(FSVolumeType value)
 
 typedef VA_ENUM(long, FSBlockType)
 {
+    FS_UNKNOWN_BLOCK,
     FS_EMPTY_BLOCK,
     FS_BOOT_BLOCK,
     FS_ROOT_BLOCK,

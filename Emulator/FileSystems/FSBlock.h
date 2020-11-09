@@ -32,9 +32,10 @@ struct FSBlock {
     // Computes a checksum for the sector in the provided buffer
     static u32 checksum(u8 *p);
     
-    // Writes a long word into a buffer in Big Endian format
+    // Reads or writes a long word in Big Endian format
+    static u32 read32(u8 *p);
     static void write32(u8 *p, u32 value);
-
+    
     
     //
     // Constructing and destructing

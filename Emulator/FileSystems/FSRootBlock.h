@@ -26,9 +26,9 @@ struct FSRootBlock : FSBlock {
     
     
     //
-    // Methods
+    // Constructing and destructing
     //
-    
+        
     FSRootBlock(FSVolume &ref, u32 nr);
     FSRootBlock(FSVolume &ref, u32 nr, const char *name);
     ~FSRootBlock();
