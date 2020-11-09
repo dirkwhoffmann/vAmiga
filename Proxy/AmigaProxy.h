@@ -716,7 +716,7 @@ struct SerialPortWrapper;
 + (instancetype)makeWithDiskType:(DiskType)type density:(DiskDensity)density;
 + (instancetype)makeWithDrive:(DriveProxy *)drive;
 
-- (void)formatDisk:(EmptyDiskFormat)fs;
+- (void)formatDisk:(FSVolumeType)fs;
 
 @end
 

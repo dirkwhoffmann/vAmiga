@@ -104,8 +104,8 @@ public:
     //
     
     FSVolumeType getType() { return type; }
-    bool isOFS() { return type == OFS; }
-    bool isFFF() { return type == FFS; }
+    bool isOFS() { return type == FS_OFS; }
+    bool isFFF() { return type == FS_FFS; }
     const char *getName() { return rootBlock()->name.name; }
     u32 getBlockSize() { return bsize; }
     u32 bytesInDataBlock() { return bsize - (isOFS() ? 24 : 0); }

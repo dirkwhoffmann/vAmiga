@@ -1405,7 +1405,7 @@ struct SerialPortWrapper { SerialPort *port; };
 }
 - (NSInteger)numSectorsPerTrack
 {
-    return ((DiskFile *)wrapper->file)->numSectorsPerTrack();
+    return ((DiskFile *)wrapper->file)->numSectors();
 }
 
 @end
@@ -1447,7 +1447,7 @@ struct SerialPortWrapper { SerialPort *port; };
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
-- (void)formatDisk:(EmptyDiskFormat)fs
+- (void)formatDisk:(FSVolumeType)fs
 {
     ((ADFFile *)wrapper->file)->formatDisk(fs);
 }

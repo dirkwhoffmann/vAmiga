@@ -143,8 +143,6 @@ class PreferencesController: DialogController {
 
     func refresh() {
         
-        track("refresh()")
-
         if let id = tabView?.selectedTabViewItem?.identifier as? String {
             
             switch id {
@@ -184,9 +182,7 @@ class PreferencesController: DialogController {
     }
     
     @IBAction override func okAction(_ sender: Any!) {
-                
-        track()
-        
+                        
         pref.saveGeneralUserDefaults()
         pref.saveDevicesUserDefaults()
         pref.saveCaptureUserDefaults()

@@ -9,6 +9,29 @@
 
 #include "FSVolume.h"
 
+u32
+FSBlock::checksum(u8 *p)
+{
+    assert(p != nullptr);
+    
+    u32 result = 0;
+
+    for (int i = 0; i < 512; i += 4, p += 4) {
+        result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
+    }
+    
+    return ~result + 1;
+}
+
+void
+FSBlock::write32(u8 *p, u32 value)
+{
+    p[0] = (value >> 24) & 0xFF;
+    p[1] = (value >> 16) & 0xFF;
+    p[2] = (value >>  8) & 0xFF;
+    p[3] = (value >>  0) & 0xFF;
+}
+
 char *
 FSBlock::assemblePath()
 {
@@ -40,40 +63,10 @@ FSBlock::printPath()
     delete [] path;
 }
 
-u32
-FSBlock::checksum(u8 *p)
+bool
+FSBlock::check(bool verbose)
 {
-    assert(p != nullptr);
-    
-    u32 result = 0;
-
-    for (int i = 0; i < 512; i += 4, p += 4) {
-        result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
-    }
-    
-    return ~result + 1;
-}
-
-void
-FSBlock::write32(u8 *p, u32 value)
-{
-    p[0] = (value >> 24) & 0xFF;
-    p[1] = (value >> 16) & 0xFF;
-    p[2] = (value >>  8) & 0xFF;
-    p[3] = (value >>  0) & 0xFF;
-}
-
-void
-FSBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(bsize == volume.bsize);
-    memset(p, 0, bsize);
-    
-    // Write header
-    p[0] = 'D';
-    p[1] = 'O';
-    p[2] = 'S';
-    p[3] = volume.isOFS() ? 0 : 1;    
+    return assertSelfRef(nr, verbose);
 }
 
 bool
@@ -110,7 +103,7 @@ FSBlock::assertHasType(u32 ref, FSBlockType type1, FSBlockType type2, bool verbo
     FSBlockType type = block ? block->type() : FS_EMPTY_BLOCK;
     
     if (!isFSBlockType(type)) {
-        if (verbose) fprintf(stderr, "Block type %d is not a known type.\n", type);
+        if (verbose) fprintf(stderr, "Block type %ld is not a known type.\n", type);
         return false;
     }
     
@@ -150,9 +143,21 @@ FSBlock::assertSelfRef(u32 ref, bool verbose)
     return false;
 }
 
-bool
-FSBlock::check(bool verbose)
+void
+FSBlock::importBlock(u8 *p, size_t bsize)
 {
-    return assertSelfRef(nr, verbose);
+    assert(bsize == volume.bsize);
 }
 
+void
+FSBlock::exportBlock(u8 *p, size_t bsize)
+{
+    assert(bsize == volume.bsize);
+    memset(p, 0, bsize);
+    
+    // Write header
+    p[0] = 'D';
+    p[1] = 'O';
+    p[2] = 'S';
+    p[3] = volume.isOFS() ? 0 : 1;
+}

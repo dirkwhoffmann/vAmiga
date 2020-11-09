@@ -12,14 +12,29 @@
 
 #include "Aliases.h"
 
-typedef enum
+typedef VA_ENUM(long, FSVolumeType)
 {
-    OFS,
-    FFS
-}
-FSVolumeType;
+    FS_NONE,
+    FS_OFS,
+    FS_FFS
+};
 
-typedef enum
+inline bool isFSType(FSVolumeType value)
+{
+    return value >= 0 && value <= FS_FFS;
+}
+
+inline const char *sFSType(FSVolumeType value)
+{
+    switch (value) {
+        case FS_NONE:  return "None";
+        case FS_OFS:   return "OFS";
+        case FS_FFS:   return "FFS";
+        default:       return "???";
+    }
+}
+
+typedef VA_ENUM(long, FSBlockType)
 {
     FS_EMPTY_BLOCK,
     FS_BOOT_BLOCK,
@@ -29,13 +44,12 @@ typedef enum
     FS_FILEHEADER_BLOCK,
     FS_FILELIST_BLOCK,
     FS_DATA_BLOCK
-}
-FSBlockType;
+};
 
 inline bool
 isFSBlockType(long value)
 {
-    return value >= FS_EMPTY_BLOCK && value <= FS_DATA_BLOCK;
+    return value >= 0 && value <= FS_DATA_BLOCK;
 }
 
 inline const char *

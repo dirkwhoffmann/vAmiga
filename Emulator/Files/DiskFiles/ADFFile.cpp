@@ -136,7 +136,7 @@ ADFFile::makeWithDisk(Disk *disk)
     
     // Export disk
     assert(adf->numTracks() == 160);
-    assert(adf->numSectorsPerTrack() == 11 || adf->numSectorsPerTrack() == 22);
+    assert(adf->numSectors() == 11 || adf->numSectors() == 22);
     if (!adf->decodeDisk(disk)) {
         delete adf;
         return nullptr;
@@ -215,7 +215,7 @@ ADFFile::numCyclinders()
 }
 
 long
-ADFFile::numSectorsPerTrack()
+ADFFile::numSectors()
 {
     switch (getDiskDensity()) {
             
@@ -228,34 +228,25 @@ ADFFile::numSectorsPerTrack()
     }
 }
 
+// TODO: Replace by makeWith(EmptyDiskFormat ...)
+//       Add DiskFile::numBlocks()
+//
+//
 bool
-ADFFile::formatDisk(EmptyDiskFormat fs)
+ADFFile::formatDisk(FSVolumeType fs)
 {
-    assert(isEmptyDiskFormat(fs));
-    
+    assert(isFSType(fs));
+
+    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSType(fs));
+
     // Only proceed if a file system is given
-    if (fs == FS_EMPTY) return false;
-    
-    // Right now, only 3.5" DD disks can be formatted
-    if (getDiskType() != DISK_35 || getDiskDensity() != DISK_DD) {
-        warn("Cannot format a disk of type %s with file system %s.\n",
-             sDiskType(getDiskType()), sDiskDensity(getDiskDensity()), sDiskFormat(fs));
-        return false;
-    }
+    if (fs == FS_NONE) return false;
     
     // Create an empty file system
-    if (fs == FS_EMPTY_FFS || fs == FS_EMPTY_FFS_BOOTABLE) {
-
-        FSVolume vol = FSVolume(FFS, "MyDisk", 2 * 880);
-        if (fs == FS_EMPTY_FFS_BOOTABLE) vol.installBootBlock();
-        vol.exportVolume(data, size);
-
-    } else {
-
-        FSVolume vol = FSVolume(OFS, "MyDisk", 2 * 880);
-        if (fs == FS_EMPTY_OFS_BOOTABLE) vol.installBootBlock();
-        vol.exportVolume(data, size);
-    }
+    FSVolume vol = FSVolume(fs, "MyDisk", numBlocks());
+    
+    // Export the volume to the ADF
+    return vol.exportVolume(data, size);
 
     return true;
 }
@@ -302,7 +293,7 @@ ADFFile::encodeDisk(Disk *disk)
 bool
 ADFFile::encodeTrack(Disk *disk, Track t)
 {
-    long sectors = numSectorsPerTrack();
+    long sectors = numSectors();
     // assert(disk->geometry.sectors == sectors);
     
     trace(MFM_DEBUG, "Encoding Amiga track %d (%d sectors)\n", t, sectors);
@@ -451,16 +442,16 @@ ADFFile::decodeDisk(Disk *disk)
 bool
 ADFFile::decodeTrack(Disk *disk, Track t)
 { 
-    long numSectors = numSectorsPerTrack();
+    long sectors = numSectors();
 
     trace(MFM_DEBUG, "Decoding track %d\n", t);
     
     u8 *src = disk->data.track[t];
-    u8 *dst = data + t * numSectors * 512;
+    u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    int sectorStart[numSectors], index = 0, nr = 0;
-    while (index < sizeof(disk->data.track[t]) && nr < numSectors) {
+    int sectorStart[sectors], index = 0, nr = 0;
+    while (index < sizeof(disk->data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489
         if (src[index++] != 0x44) continue;
@@ -474,16 +465,16 @@ ADFFile::decodeTrack(Disk *disk, Track t)
         sectorStart[nr++] = index;
     }
     
-    trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, numSectors);
+    trace(MFM_DEBUG, "Found %d sectors (expected %d)\n", nr, sectors);
 
-    if (nr != numSectors) {
-        warn("Found %d sectors, expected %d. Aborting.\n", nr, numSectors);
+    if (nr != sectors) {
+        warn("Found %d sectors, expected %d. Aborting.\n", nr, sectors);
         return false;
     }
     
     // Encode all sectors
     bool result = true;
-    for (Sector s = 0; s < numSectors; s++) {
+    for (Sector s = 0; s < sectors; s++) {
         result &= decodeSector(dst, src + sectorStart[s]);
     }
     
@@ -502,7 +493,7 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     
     // Only proceed if the sector number is valid
     u8 sector = info[2];
-    if (sector >= numSectorsPerTrack()) return false;
+    if (sector >= numSectors()) return false;
     
     // Skip sector header
     src += 56;

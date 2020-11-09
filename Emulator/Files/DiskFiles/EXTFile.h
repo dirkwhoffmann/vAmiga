@@ -67,7 +67,7 @@ public:
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override { return 2; }
     long numCyclinders() override { return 80; }
-    long numSectorsPerTrack() override { return 11; }
+    long numSectors() override { return 11; }
     void readSector(u8 *target, long s) override { assert(false); }
     void readSector(u8 *target, long t, long s) override { assert(false); }
 };

@@ -443,7 +443,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="M5c-fi-zMW" userLabel="System">
-                                            <rect key="frame" x="85" y="320" width="182" height="25"/>
+                                            <rect key="frame" x="86" y="288" width="182" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="MOS 8362R8 (OCS)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="6ZC-38-juZ" id="mxV-ez-x7L" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -595,15 +595,6 @@ DQ
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xv8-4H-dnI">
-                                            <rect key="frame" x="6" y="235" width="114" height="17"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <textFieldCell key="cell" sendsActionOnEndEditing="YES" title="Chipset features" id="4ha-br-csD">
-                                                <font key="font" metaFont="systemBold"/>
-                                                <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                                                <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                                            </textFieldCell>
-                                        </textField>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RAl-Xp-A1M">
                                             <rect key="frame" x="325" y="324" width="83" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -700,7 +691,7 @@ DQ
                                             </connections>
                                         </button>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HaP-3N-GOn">
-                                            <rect key="frame" x="10" y="323" width="72" height="20"/>
+                                            <rect key="frame" x="11" y="291" width="72" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Denise:" id="xAA-bv-3yA">
                                                 <font key="font" metaFont="system"/>
@@ -709,7 +700,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3nw-g4-iBc" userLabel="System">
-                                            <rect key="frame" x="85" y="260" width="181" height="25"/>
+                                            <rect key="frame" x="87" y="171" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="aJJ-Yq-h7E" id="HpG-tg-azQ" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -727,7 +718,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Jch-oP-6FK">
-                                            <rect key="frame" x="6" y="262" width="74" height="20"/>
+                                            <rect key="frame" x="8" y="173" width="74" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="RT Clock:" id="EIP-0k-sMo">
                                                 <font key="font" metaFont="system"/>
@@ -736,7 +727,7 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <popUpButton fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jPQ-4k-CcG" userLabel="System">
-                                            <rect key="frame" x="85" y="290" width="181" height="25"/>
+                                            <rect key="frame" x="87" y="228" width="181" height="25"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="MOS 8520 (DIP)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="border" inset="2" arrowPosition="arrowAtCenter" preferredEdge="maxY" selectedItem="wbu-fM-hZz" id="DjN-H6-9zb" userLabel="System">
                                                 <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -752,7 +743,7 @@ DQ
                                             </connections>
                                         </popUpButton>
                                         <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="X4l-T7-3c8">
-                                            <rect key="frame" x="6" y="292" width="74" height="20"/>
+                                            <rect key="frame" x="8" y="230" width="74" height="20"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="CIAs:" id="isW-in-FL7">
                                                 <font key="font" metaFont="system"/>
@@ -855,9 +846,9 @@ DQ
                                             </textFieldCell>
                                         </textField>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="UZg-eb-OfY">
-                                            <rect key="frame" x="48" y="205" width="203" height="18"/>
+                                            <rect key="frame" x="87" y="325" width="174" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate ECS Slow Ram mirror" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sgk-bZ-bQ6">
+                                            <buttonCell key="cell" type="check" title="Emulate Slow Ram mirror" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="sgk-bZ-bQ6">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -866,9 +857,9 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bHb-59-XaU">
-                                            <rect key="frame" x="48" y="175" width="218" height="18"/>
+                                            <rect key="frame" x="87" y="264" width="190" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate ECS BRDRBLNK feature" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Rco-25-pXg">
+                                            <buttonCell key="cell" type="check" title="Emulate BRDRBLNK feature" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Rco-25-pXg">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>
@@ -877,9 +868,9 @@ DQ
                                             </connections>
                                         </button>
                                         <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JP5-jg-aDy">
-                                            <rect key="frame" x="48" y="145" width="154" height="18"/>
+                                            <rect key="frame" x="87" y="205" width="129" height="18"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                                            <buttonCell key="cell" type="check" title="Emulate CIA TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="r1i-3e-LRf">
+                                            <buttonCell key="cell" type="check" title="Emulate TOD bug" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="r1i-3e-LRf">
                                                 <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                                                 <font key="font" metaFont="system"/>
                                             </buttonCell>

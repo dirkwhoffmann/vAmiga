@@ -37,11 +37,16 @@ struct FSBlock {
 
     
     //
-    // Methods
+    // Constructing and destructing
     //
     
     FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }
     virtual ~FSBlock() { }
+
+    
+    //
+    // Accessing block properties
+    //
 
     // Returns the type of this block
     virtual FSBlockType type() { return FS_EMPTY_BLOCK; }
@@ -50,6 +55,11 @@ struct FSBlock {
     virtual const char *getName() { return ""; }
     char *assemblePath();
 
+    
+    //
+    // Debugging
+    //
+    
     // Prints the name or path of this block
     void printName();
     void printPath();
@@ -57,12 +67,14 @@ struct FSBlock {
     // Prints a debug summary for this block
     virtual void dump() { };
     
+    
+    //
+    // Verifying
+    //
+    
     // Checks the integrity of this block
     virtual bool check(bool verbose);
 
-    // Exports this block to a buffer
-    virtual void exportBlock(u8 *p, size_t bsize);
-    
 protected:
     
     // Performs a certain integrity check on a block reference
@@ -71,6 +83,19 @@ protected:
     bool assertHasType(u32 ref, FSBlockType type, bool verbose);
     bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
     bool assertSelfRef(u32 ref, bool verbose);
+
+    
+    //
+    // Importing and exporting
+    //
+    
+public:
+    
+    // Imports this block from a buffer (bsize must match the volume block size)
+    virtual void importBlock(u8 *p, size_t bsize);
+
+    // Exports this block to a buffer (bsize must match the volume block size)
+    virtual void exportBlock(u8 *p, size_t bsize);
 
     
     //

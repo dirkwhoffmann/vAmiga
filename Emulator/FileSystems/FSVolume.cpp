@@ -76,7 +76,7 @@ void
 FSVolume::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    msg("DOS%d  ", type == OFS ? 0 : 1);
+    msg("DOS%d  ", type == FS_OFS ? 0 : 1);
     msg("%5d (x %3d) ", totalBlocks(), bsize);
     msg("%5d  ", usedBlocks());
     msg("%5d   ", freeBlocks());
@@ -87,7 +87,7 @@ FSVolume::info()
 void
 FSVolume::dump()
 {
-    msg("Volume: (%s)\n", type == OFS ? "OFS" : "FFS");
+    msg("Volume: (%s)\n", type == FS_OFS ? "OFS" : "FFS");
     
     for (size_t i = 0; i < capacity; i++)  {
         
@@ -441,19 +441,20 @@ FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, 
 int
 FSVolume::listWalker(FSBlock *block, int value)
 {
+    // Display directory tag or file size
     if (block->type() == FS_USERDIR_BLOCK) {
         msg("%6s  ", "(DIR)");
     } else {
         msg("%6d  ", block->getSize());
     }
     
-    // Convert the internally stored time diff to an absolute time_t value
+    // Display date and time
     time_t time = block->getCreationDate();
     tm *t = localtime(&time);
-
     msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
     msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
-    // msg("%s ", block->getName());
+
+    // Display the file or directory name
     block->printPath();
     msg("\n");
 
@@ -464,13 +465,12 @@ bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
     assert(dst != nullptr);
-    assert(size % bsize == 0);
 
     debug("Exporting file system with %d blocks\n", capacity);
 
-    // Only proceed if the buffer is large enough
-    if (size / bsize < capacity) {
-        debug("Buffer is too small (%d blocks)\n", bsize < capacity);
+    // Only proceed if the targer buffer has the correct size
+    if (capacity * bsize != size) {
+        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
         return false;
     }
         

@@ -172,16 +172,10 @@
                                                         <menuItem title="Unformatted" state="on" id="VDp-dE-Q9j">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="OFS" tag="1" id="wME-DM-Z1V">
+                                                        <menuItem title="DOS0 (OFS)" tag="1" id="wME-DM-Z1V">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
-                                                        <menuItem title="OFS bootable" tag="2" id="EjK-kb-o89">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="FFS" tag="3" id="Swg-st-fNf">
-                                                            <modifierMask key="keyEquivalentModifierMask"/>
-                                                        </menuItem>
-                                                        <menuItem title="FFS bootable" tag="4" id="Xp8-AO-3uA">
+                                                        <menuItem title="DOS1 (FFS)" tag="2" id="Swg-st-fNf">
                                                             <modifierMask key="keyEquivalentModifierMask"/>
                                                         </menuItem>
                                                     </items>

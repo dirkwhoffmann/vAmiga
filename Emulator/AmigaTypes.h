@@ -23,6 +23,7 @@
 #include "DriveTypes.h"
 #include "EventHandlerTypes.h"
 #include "FileTypes.h"
+#include "FSTypes.h"
 #include "KeyboardTypes.h"
 #include "MemoryTypes.h"
 #include "MessageQueueTypes.h"

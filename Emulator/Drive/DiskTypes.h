@@ -69,6 +69,7 @@ inline const char *sDiskDensity(DiskDensity value)
     }
 }
 
+/*
 typedef VA_ENUM(long, EmptyDiskFormat)
 {
     FS_EMPTY,
@@ -83,7 +84,7 @@ inline bool isEmptyDiskFormat(EmptyDiskFormat type)
     return type >= FS_EMPTY && type <= FS_EMPTY_FFS_BOOTABLE;
 }
 
-inline const char *sDiskFormat(EmptyDiskFormat type)
+inline const char *sEmptyDiskFormat(EmptyDiskFormat type)
 {
     switch (type) {
         case FS_EMPTY:              return "None";
@@ -94,5 +95,6 @@ inline const char *sDiskFormat(EmptyDiskFormat type)
         default:                    return "???";
     }
 }
+*/
 
 #endif

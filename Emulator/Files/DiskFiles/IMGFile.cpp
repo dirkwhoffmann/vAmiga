@@ -129,7 +129,7 @@ IMGFile::numCyclinders()
 }
 
 long
-IMGFile::numSectorsPerTrack()
+IMGFile::numSectors()
 {
     return 9;
 }
@@ -174,7 +174,7 @@ IMGFile::encodeDisk(Disk *disk)
 bool
 IMGFile::encodeTrack(Disk *disk, Track t)
 {
-    long sectors = numSectorsPerTrack();
+    long sectors = numSectors();
 
     debug(MFM_DEBUG, "Encoding DOS track %d with %d sectors\n", t, sectors);
 

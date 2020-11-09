@@ -152,7 +152,7 @@ struct Keys {
 struct GeneralDefaults {
     
     // Drives
-    let blankDiskFormat: EmptyDiskFormat
+    let blankDiskFormat: FSVolumeType
     let ejectWithoutAsking: Bool
     let driveSounds: Bool
     let driveSoundPan: Double
@@ -178,7 +178,7 @@ struct GeneralDefaults {
     
     static let std = GeneralDefaults.init(
         
-        blankDiskFormat: .FS_EMPTY_OFS,
+        blankDiskFormat: .OFS,
         ejectWithoutAsking: false,
         driveSounds: true,
         driveSoundPan: 1.0,

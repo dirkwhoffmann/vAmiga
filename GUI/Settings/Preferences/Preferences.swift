@@ -28,7 +28,7 @@ class Preferences {
     var blankDiskFormat = GeneralDefaults.std.blankDiskFormat
     var blankDiskFormatIntValue: Int {
         get { return Int(blankDiskFormat.rawValue) }
-        set { blankDiskFormat = EmptyDiskFormat.init(rawValue: newValue)! }
+        set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds

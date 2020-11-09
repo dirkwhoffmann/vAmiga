@@ -27,7 +27,7 @@ DiskFile::makeWithFile(const char *path)
 void
 DiskFile::readSector(u8 *dst, long t, long s)
 {
-    readSector(dst, t * numSectorsPerTrack() + s);
+    readSector(dst, t * numSectors() + s);
 }
 
 void
