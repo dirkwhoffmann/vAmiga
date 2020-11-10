@@ -78,12 +78,8 @@ FSFileBlock::addDataBlockDeprecated()
 bool
 FSFileBlock::addDataBlockRef(u32 ref)
 {
-    printf("FSFileBlock::addDataBlockRef(%d)\n", ref);
-
     // Otherwise, try to add the reference in this block
     if (numDataBlocks < maxDataBlocks) {
-
-        printf("Adding block ref %d at %d\n", ref, numDataBlocks);
 
         dataBlocks[numDataBlocks++] = ref;
         return true;

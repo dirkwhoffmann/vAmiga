@@ -169,7 +169,6 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         printf("Created DataBlock %d\n", ref);
 
         // Add references to the new data block
-        if (i == 1) firstDataBlock = ref;
         addDataBlockRef(ref);
         
         // Add data

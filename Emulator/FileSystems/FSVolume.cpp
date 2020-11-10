@@ -309,7 +309,7 @@ FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
     blocks[ref] = newBlock;
     newBlock->setParent(head);
     newBlock->blockNumber = count; 
-    prevBlock->setNext(ref);
+    prevBlock->setNextDataBlock(ref);
     
     return ref;
 }
@@ -608,8 +608,9 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
             // Add file
             u8 *buffer; long size;
             if (loadFile(name, &buffer, &size)) {
-                FSBlock *file = makeFile(item->d_name);
-                result &= file ? (file->append(buffer, size)) : false;
+                FSBlock *file = makeFile(item->d_name, buffer, size);
+                // result &= file ? (file->append(buffer, size)) : false;
+                result &= file != nullptr;
                 delete(buffer);
             }
         }

@@ -48,12 +48,11 @@ struct FSDataBlock : FSBlock {
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
-
-    u32 getNext() override { return next; }
-    void setNext(u32 next) override { this->next = next; }
-
+    
     u32 getParent() override { return fileHeaderBlock; }
     void setParent(u32 ref) override { fileHeaderBlock = ref; }
+
+    void setNextDataBlock(u32 ref) override { next = ref; }
 
     bool append(const u8 *buffer, size_t size) override;
     bool append(const char *string) override;

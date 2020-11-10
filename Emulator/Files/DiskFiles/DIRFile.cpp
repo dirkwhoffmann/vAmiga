@@ -77,7 +77,7 @@ DIRFile::readFromFile(const char *filename)
     if (!volume->check(MFM_DEBUG)) {
         warn("DIRFile::readFromFile: Files system is corrupted.\n");
     }
-
+    
     // Convert the file system into an ADF
     assert(adf == nullptr);
     adf = ADFFile::makeWithVolume(*volume);

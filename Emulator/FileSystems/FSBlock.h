@@ -172,6 +172,13 @@ public:
 
     
     //
+    // Chaining data blocks
+    //
+    
+    virtual void setNextDataBlock(u32 ref) { }
+
+    
+    //
     // Method stubs for blocks representing files
     //
 
