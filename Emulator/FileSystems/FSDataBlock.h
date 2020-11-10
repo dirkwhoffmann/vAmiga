@@ -54,14 +54,7 @@ struct FSDataBlock : FSBlock {
 
     void setNextDataBlock(u32 ref) override { next = ref; }
 
-    bool append(const u8 *buffer, size_t size) override;
-    bool append(const char *string) override;
     size_t addData(const u8 *buffer, size_t size) override;
-
-
-private:
-
-    size_t fillUp(const u8 *buffer, size_t size);
 };
 
 #endif

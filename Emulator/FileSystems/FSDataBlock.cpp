@@ -92,50 +92,6 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     }
 }
 
-bool
-FSDataBlock::append(const u8 *buffer, size_t size)
-{
-    size_t n = 0;
-    
-    // Get a reference to the file header block
-    FSFileHeaderBlock *fhb = volume.fileHeaderBlock(fileHeaderBlock);
-    if (fhb == nullptr) return false;
-    
-    // Seek the last data block
-    FSDataBlock *dataBlock = this;
-    while (dataBlock->next) dataBlock = volume.dataBlock(dataBlock->next);
-    if (dataBlock == nullptr) return false;
-        
-    while (n < size) {
-        
-        // Fill the data block up
-        size_t written = dataBlock->fillUp(buffer + n, size - n);
-        n += written;
-        fhb->fileSize += written;
-        
-        // Create a new data block if there are bytes remaining
-        if (n < size) {
-            
-            FSDataBlock *newDataBlock = fhb->addDataBlockDeprecated();
-            if (newDataBlock == nullptr) return false;
-            
-            // Connect the new block
-            dataBlock->next = newDataBlock->nr;
-            newDataBlock->fileHeaderBlock = fileHeaderBlock;
-            newDataBlock->blockNumber = dataBlock->blockNumber + 1;
-            dataBlock = newDataBlock;
-        }
-    }
-
-    return true;
-}
-
-bool
-FSDataBlock::append(const char *string)
-{
-    return append((u8 *)string, strlen(string));
-}
-
 size_t
 FSDataBlock::addData(const u8 *buffer, size_t size)
 {
@@ -147,16 +103,3 @@ FSDataBlock::addData(const u8 *buffer, size_t size)
 
     return count;
 }
-
-size_t
-FSDataBlock::fillUp(const u8 *buffer, size_t size)
-{
-    size_t freeSpace = maxDataBytes - numDataBytes;
-    size_t count = MIN(size, freeSpace);
-
-    // Copy bytes
-    for (int i = 0; i < count; i++) dataBytes[numDataBytes++] = buffer[i];
-
-    return count;
-}
-
