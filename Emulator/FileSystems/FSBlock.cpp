@@ -166,12 +166,16 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
         memset(p, 0, bsize);
         
         // Write header
+        /*
         p[0] = 'D';
         p[1] = 'O';
         p[2] = 'S';
         p[3] = volume.isOFS() ? 0 : 1;
+        */
     
     } else {
-        // memcpy(p, data, bsize);
+        
+        printf("Exporting block %d (%zu bytes) (generic code)\n", nr, bsize);
+        memcpy(p, data, bsize);
     }
 }

@@ -50,7 +50,7 @@ struct FSFileBlock : FSBlock {
         
     class FSDataBlock *addDataBlock(); 
     bool addDataBlockRef(u32 ref) override;
-    void deleteDataBlockRefs() override;    
+    void deleteDataBlockRefs() override;
 };
 
 #endif

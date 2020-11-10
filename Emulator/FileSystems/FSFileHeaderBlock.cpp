@@ -108,28 +108,6 @@ FSFileHeaderBlock::setNext(u32 ref)
     }
 }
 
-/*
-bool
-FSFileHeaderBlock::append(u8 byte)
-{
-    FSDataBlock *block = volume.dataBlock(firstDataBlock);
-    
-    // If a data block already exist, append it there
-    if (block) return block->append(byte);
-    
-    // Otherwise, create the first data block
-    block = addDataBlock();
-    if (block == nullptr) return false;
-
-    // Connect the new block
-    firstDataBlock = block->nr;
-    block->fileHeaderBlock = nr;
-    
-    // Append data
-    return block->append(byte);
-}
-*/
-
 bool
 FSFileHeaderBlock::append(const u8 *buffer, size_t size)
 {

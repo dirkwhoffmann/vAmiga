@@ -39,13 +39,17 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path)
 
 FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
-    assert(capacity == 2 * 880 || capacity == 4 * 880);
-
     setDescription("Volume");
-        
-    // Initialize block storage
+
+    assert(capacity == 2 * 880 || capacity == 4 * 880);
     blocks = new BlockPtr[capacity];
-    for (u32 i = 0; i < capacity; i++) blocks[i] = new FSEmptyBlock(*this, i);
+
+    // Install boot blocks
+    blocks[0] = new FSBootBlock(*this, 0);
+    blocks[1] = new FSBootBlock(*this, 1);
+
+    // Add empty dummy blocks
+    for (u32 i = 2; i < capacity; i++) blocks[i] = new FSEmptyBlock(*this, i);
         
     // Install the bitmap block
     u32 bitmap = bitmapBlockNr();
@@ -139,24 +143,6 @@ FSVolume::freeBlocks()
     
     return result;
 }
-
-/*
-FSBlockType
-FSVolume::bufferType(u8 *p)
-{
-    u32 type = FSBlock::read32(p);
-    u32 subtype = FSBlock::read32(p + bsize - 4);
-
-    if (type ==  2 && subtype ==  1) return FS_ROOT_BLOCK;
-    if (type ==  2 && subtype ==  2) return FS_USERDIR_BLOCK;
-    if (type ==  2 && subtype == -3) return FS_FILEHEADER_BLOCK;
-    if (type ==  2 && subtype == -3) return FS_FILEHEADER_BLOCK;
-    if (type == 16 && subtype == -3) return FS_FILELIST_BLOCK;
-    if (type ==  8)                  return FS_DATA_BLOCK;
-    
-    return FS_UNKNOWN_BLOCK;
-}
-*/
 
 FSBlock *
 FSVolume::block(u32 nr)
@@ -324,11 +310,10 @@ FSVolume::newDataBlock()
 void
 FSVolume::installBootBlock()
 {
-    delete blocks[0];
-    delete blocks[1];
-
-    blocks[0] = new FSBootBlock(*this, 0);
-    blocks[1] = new FSBootBlock(*this, 1);
+    assert(blocks[0]->type() == FS_BOOT_BLOCK);
+    assert(blocks[1]->type() == FS_BOOT_BLOCK);
+    ((FSBootBlock *)blocks[0])->writeBootCode();
+    ((FSBootBlock *)blocks[1])->writeBootCode();
 }
 
 FSBlock *
