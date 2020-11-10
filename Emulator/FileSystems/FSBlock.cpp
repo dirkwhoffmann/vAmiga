@@ -159,11 +159,19 @@ void
 FSBlock::exportBlock(u8 *p, size_t bsize)
 {
     assert(bsize == volume.bsize);
-    memset(p, 0, bsize);
     
-    // Write header
-    p[0] = 'D';
-    p[1] = 'O';
-    p[2] = 'S';
-    p[3] = volume.isOFS() ? 0 : 1;
+    if (!data) {
+        assert(type() == FS_EMPTY_BLOCK);
+        
+        memset(p, 0, bsize);
+        
+        // Write header
+        p[0] = 'D';
+        p[1] = 'O';
+        p[2] = 'S';
+        p[3] = volume.isOFS() ? 0 : 1;
+    
+    } else {
+        // memcpy(p, data, bsize);
+    }
 }

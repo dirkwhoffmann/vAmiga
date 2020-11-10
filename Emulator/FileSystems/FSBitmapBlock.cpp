@@ -11,11 +11,18 @@
 
 FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
+    data = new u8[ref.bsize]();
+    
     allocated = new bool[volume.capacity]();
     
     // The first two blocks are always allocated
     allocated[0] = true;
     allocated[1] = true;    
+}
+
+FSBitmapBlock::~FSBitmapBlock()
+{
+    delete [] data;
 }
 
 void

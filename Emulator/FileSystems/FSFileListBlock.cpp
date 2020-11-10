@@ -11,7 +11,12 @@
 
 FSFileListBlock::FSFileListBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
 {
-    
+    data = new u8[ref.bsize]();
+}
+
+FSFileListBlock::~FSFileListBlock()
+{
+    delete [] data;
 }
 
 void

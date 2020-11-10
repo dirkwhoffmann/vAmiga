@@ -18,7 +18,8 @@ struct FSBitmapBlock : FSBlock {
     bool *allocated = nullptr;
         
     FSBitmapBlock(FSVolume &ref, u32 nr);
-    
+    ~FSBitmapBlock();
+     
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;

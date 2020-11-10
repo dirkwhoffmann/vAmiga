@@ -13,6 +13,7 @@
 #include <dirent.h>
 
 #include "FSBlock.h"
+#include "FSEmptyBlock.h"
 #include "FSBootBlock.h"
 #include "FSRootBlock.h"
 #include "FSBitmapBlock.h"
@@ -31,6 +32,7 @@
 class FSVolume : AmigaObject {
     
     friend class FSBlock;
+    friend class FSEmptyBlock;
     friend class FSBootBlock;
     friend class FSRootBlock;
     friend class FSBitmapBlock;

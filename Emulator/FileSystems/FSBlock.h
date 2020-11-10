@@ -23,8 +23,11 @@ struct FSBlock {
     
     // The sector number of this block
     u32 nr;
-    
 
+    // The block data
+    u8 *data = nullptr;
+
+    
     //
     // Static methods
     //
@@ -50,7 +53,7 @@ struct FSBlock {
     //
 
     // Returns the type of this block
-    virtual FSBlockType type() { return FS_EMPTY_BLOCK; }
+    virtual FSBlockType type() = 0; 
 
     // Returns the name or path of this block
     virtual const char *getName() { return ""; }

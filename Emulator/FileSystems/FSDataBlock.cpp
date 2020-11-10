@@ -14,12 +14,14 @@ FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     numHeaderBytes = volume.isOFS() ? 24 : 0;
     maxDataBytes = volume.bsize - numHeaderBytes;
     
-    data = new u8[maxDataBytes]();
+    data = new u8[ref.bsize]();
+    dataBytes = new u8[maxDataBytes]();
 }
 
 FSDataBlock::~FSDataBlock()
 {
     delete [] data;
+    delete [] dataBytes;
 }
 
 void
@@ -78,7 +80,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
         write32(p + 16, next);
 
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[numHeaderBytes + i] = data[i];
+        for (int i = 0; i < numDataBytes; i++) p[numHeaderBytes + i] = dataBytes[i];
         
         // Checksum
         write32(p + 20, FSBlock::checksum(p));
@@ -86,7 +88,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     } else {
         
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[i] = data[i];
+        for (int i = 0; i < numDataBytes; i++) p[i] = dataBytes[i];
     }
 }
 
@@ -141,7 +143,7 @@ FSDataBlock::fillUp(const u8 *buffer, size_t size)
     size_t count = MIN(size, freeSpace);
 
     // Copy bytes
-    for (int i = 0; i < count; i++) data[numDataBytes++] = buffer[i];
+    for (int i = 0; i < count; i++) dataBytes[numDataBytes++] = buffer[i];
 
     return count;
 }

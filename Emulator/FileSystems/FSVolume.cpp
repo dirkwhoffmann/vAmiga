@@ -45,7 +45,7 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
         
     // Initialize block storage
     blocks = new BlockPtr[capacity];
-    for (u32 i = 0; i < capacity; i++) blocks[i] = new FSBlock(*this, i);
+    for (u32 i = 0; i < capacity; i++) blocks[i] = new FSEmptyBlock(*this, i);
         
     // Install the bitmap block
     u32 bitmap = bitmapBlockNr();
@@ -69,6 +69,9 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
 
 FSVolume::~FSVolume()
 {
+    for (u32 i = 0; i < capacity; i++) {
+        delete blocks[i];
+    }
     delete [] blocks;
 }
 
@@ -273,7 +276,7 @@ FSVolume::deallocateBlock(u32 ref)
     
     if (b->type() != FS_EMPTY_BLOCK) {
         delete b;
-        blocks[ref] = new FSBlock(*this, ref);
+        blocks[ref] = new FSEmptyBlock(*this, ref);
         bitmapBlock()->dealloc(ref);
     }
 }

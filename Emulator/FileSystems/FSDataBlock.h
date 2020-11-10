@@ -33,7 +33,7 @@ struct FSDataBlock : FSBlock {
     u32 next = 0;
     
     // Data bytes
-    u8 *data;
+    u8 *dataBytes;
     
     
     //

@@ -53,6 +53,7 @@
 		505A215022869FF10016EA21 /* AudioFilter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A214E22869FF10016EA21 /* AudioFilter.cpp */; };
 		505A3A3A21F4996400132020 /* SSEUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505A3A3821F4996400132020 /* SSEUtils.cpp */; };
 		5062DB1224370FE400ACEEE2 /* MyControllerStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */; };
+		5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */; };
 		5064851121EC7A1700FC4AC3 /* Memory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5064850F21EC7A1700FC4AC3 /* Memory.cpp */; };
 		5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5072CAF92456D1C800C8F606 /* AudioPrefs.swift */; };
 		507653CB2216F91E001D26E9 /* AgnusPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507653CA2216F91E001D26E9 /* AgnusPanel.swift */; };
@@ -307,6 +308,8 @@
 		505AD25A224A67CE0052A014 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MyDocument.xib; sourceTree = "<group>"; };
 		5062DB1124370FE400ACEEE2 /* MyControllerStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStorage.swift; sourceTree = "<group>"; };
 		5063DD4724F0F43900DA209F /* KeyboardPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KeyboardPrivateTypes.h; sourceTree = "<group>"; };
+		5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSEmptyBlock.cpp; sourceTree = "<group>"; };
+		5063F229255A8EBD007182DC /* FSEmptyBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSEmptyBlock.h; sourceTree = "<group>"; };
 		5064850F21EC7A1700FC4AC3 /* Memory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Memory.cpp; sourceTree = "<group>"; };
 		5064851021EC7A1700FC4AC3 /* Memory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Memory.h; sourceTree = "<group>"; };
 		506F423D24F0E97D005F80D9 /* PaulaPrivateTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaPrivateTypes.h; sourceTree = "<group>"; };
@@ -674,6 +677,8 @@
 				5056507E25459CF600A79D27 /* FSHashTable.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
+				5063F229255A8EBD007182DC /* FSEmptyBlock.h */,
+				5063F228255A8EBD007182DC /* FSEmptyBlock.cpp */,
 				5083CF5A2546AB1C00A28EF8 /* FSBootBlock.h */,
 				5083CF592546AB1C00A28EF8 /* FSBootBlock.cpp */,
 				5083CF5F2546BCB200A28EF8 /* FSRootBlock.h */,
@@ -1382,6 +1387,7 @@
 				50AE6EE324D9B08C000AA367 /* PaulaRegisters.cpp in Sources */,
 				508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */,
 				50565072254573E100A79D27 /* FSBlock.cpp in Sources */,
+				5063F22A255A8EBD007182DC /* FSEmptyBlock.cpp in Sources */,
 				5083CF6A2546C0D700A28EF8 /* FSUserDirBlock.cpp in Sources */,
 				502F7DD42221E52200AEEC65 /* PixelEngine.cpp in Sources */,
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,

@@ -11,6 +11,7 @@
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
 {
+    data = new u8[ref.bsize]();
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :

@@ -11,6 +11,8 @@
 
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
+    data = new u8[ref.bsize]();
+    
     hashTable = new FSHashTable(volume);
 }
 
@@ -21,6 +23,7 @@ FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUser
 
 FSUserDirBlock::~FSUserDirBlock()
 {
+    delete [] data;
     delete hashTable;
 }
 

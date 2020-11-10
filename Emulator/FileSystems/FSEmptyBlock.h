@@ -7,20 +7,17 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_BOOT_BLOCK_H
-#define _FS_BOOT_BLOCK_H
+#ifndef _FS_EMPTY_BLOCK_H
+#define _FS_EMPTY_BLOCK_H
 
 #include "FSBlock.h"
 
-struct FSBootBlock : FSBlock {
-      
-    FSBootBlock(FSVolume &ref, u32 nr);
-    ~FSBootBlock();
+struct FSEmptyBlock : FSBlock {
     
-    FSBlockType type() override { return FS_BOOT_BLOCK; }
-    void dump() override;
-    bool check(bool verbose) override;    
-    void exportBlock(u8 *p, size_t bsize) override;
+    FSEmptyBlock(FSVolume &ref, u32 nr);
+    ~FSEmptyBlock();
+     
+    FSBlockType type() override { return FS_EMPTY_BLOCK; }
 };
 
 #endif

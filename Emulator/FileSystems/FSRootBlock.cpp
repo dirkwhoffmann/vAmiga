@@ -11,6 +11,7 @@
 
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
+    data = new u8[ref.bsize]();
     hashTable = new FSHashTable(volume);
 }
 
@@ -21,6 +22,7 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(
 
 FSRootBlock::~FSRootBlock()
 {
+    delete [] data;
     delete hashTable;
 }
 

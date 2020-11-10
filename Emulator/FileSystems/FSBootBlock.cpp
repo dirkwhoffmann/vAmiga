@@ -9,6 +9,16 @@
 
 #include "FSVolume.h"
 
+FSBootBlock::FSBootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+{
+    data = new u8[ref.bsize]();
+}
+
+FSBootBlock::~FSBootBlock()
+{
+    delete [] data;
+}
+
 void
 FSBootBlock::dump()
 {
