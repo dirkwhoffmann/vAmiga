@@ -13,18 +13,18 @@
 #include "FSBlock.h"
 
 struct FSDataBlock : FSBlock {
-  
-    // Block number (first is 1)
-    u32 blockNumber = 1;
-    
+      
     // Reference to the file header block
     u32 fileHeaderBlock = 0;
 
     // Number of data bytes stored in this block
-    u32 numDataBytes = 0;
+    // u32 numDataBytes = 0;
     
 private:
-    
+  
+    // Block number (first is 1)
+    u32 blockNumber = 1;
+
     // Reference to the next data block
     u32 next = 0;
 
@@ -47,6 +47,7 @@ public:
     u32 getParent() override { return fileHeaderBlock; }
     void setParent(u32 ref) override { fileHeaderBlock = ref; }
 
+    void setDataBlockNr(u32 nr) override;
     void setNextDataBlock(u32 ref) override;
     size_t addData(const u8 *buffer, size_t size) override;
 };

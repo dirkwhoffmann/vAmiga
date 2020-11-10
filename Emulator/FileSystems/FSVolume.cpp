@@ -310,7 +310,7 @@ FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
     FSDataBlock *newBlock = new FSDataBlock(*this, ref);
     blocks[ref] = newBlock;
     newBlock->setParent(head);
-    newBlock->blockNumber = count; 
+    newBlock->setDataBlockNr(count);
     prevBlock->setNextDataBlock(ref);
     
     return ref;

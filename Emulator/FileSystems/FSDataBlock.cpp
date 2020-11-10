@@ -24,7 +24,6 @@ FSDataBlock::dump()
 {    
     printf("   Block index: %d\n", blockNumber);
     printf("  Header block: %d\n", fileHeaderBlock);
-    printf("    Bytes used: %d\n", numDataBytes);
     printf("          Next: %d\n", next);
 }
 
@@ -68,13 +67,14 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
         write32(p + 8, blockNumber);
         
         // Number of data bytes in this block
-        write32(p + 12, numDataBytes);
+        // write32(p + 12, numDataBytes);
+        for (int i = 12; i < 16; i++) p[i] = data[i];
         
         // Number of data bytes in this block
         write32(p + 16, next);
 
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[24 + i] = data[24 + i];
+        for (int i = 24; i < volume.bsize; i++) p[i] = data[i];
         
         // Checksum
         write32(p + 20, FSBlock::checksum(p));
@@ -82,7 +82,19 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     } else {
         
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[i] = data[i];
+        for (int i = 0; i < volume.bsize; i++) p[i] = data[i];
+    }
+}
+
+void
+FSDataBlock::setDataBlockNr(u32 nr)
+{
+    assert(nr >= 1);
+    
+    blockNumber = nr;
+
+    if (volume.isOFS()) {
+        write32(data + 8, nr);
     }
 }
 
@@ -101,7 +113,10 @@ FSDataBlock::addData(const u8 *buffer, size_t size)
     size_t offset = volume.isOFS() ? 24 : 0;
     
     // Copy bytes
-    for (int i = 0; i < count; i++) data[offset + numDataBytes++] = buffer[i];
+    for (int i = 0; i < count; i++) data[offset + i] = buffer[i];
 
+    // Note number of written bytes in the header (OFS only)
+    if (volume.isOFS()) write32(data + 12, count);
+    
     return count;
 }

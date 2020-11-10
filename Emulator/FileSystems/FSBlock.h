@@ -175,9 +175,12 @@ public:
     // Data blocks and file data
     //
     
-    // Adds a reference to the next data block
-    virtual void setNextDataBlock(u32 ref) { }
+    // Sets the data block number (first block is numbered 1)
+    virtual void setDataBlockNr(u32 nr) { }
 
+    // Sets a reference to the next data block
+    virtual void setNextDataBlock(u32 ref) { }
+    
     // Adds raw file data to this block
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
