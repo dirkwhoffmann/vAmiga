@@ -46,11 +46,21 @@ FSFileBlock::check(bool verbose)
         result &= assertInRange(dataBlocks[i], verbose);
     }
     
+    if (numDataBlocks > 0 && firstDataBlock == 0) {
+        if (verbose) fprintf(stderr, "Missing reference to first data block\n");
+        return false;
+    }
+    
+    if (numDataBlocks < maxDataBlocks && nextTableBlock != 0) {
+        if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
+        return false;
+    }
+    
     return result;
 }
 
 FSDataBlock *
-FSFileBlock::addDataBlock()
+FSFileBlock::addDataBlockDeprecated()
 {
     // Create a new data block
     FSDataBlock *block = volume.newDataBlock();
@@ -68,19 +78,27 @@ FSFileBlock::addDataBlock()
 bool
 FSFileBlock::addDataBlockRef(u32 ref)
 {
-    // If there is an extension block, add it there
-    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
-    if (extension) return extension->addDataBlockRef(ref);
-    
+    printf("FSFileBlock::addDataBlockRef(%d)\n", ref);
+
     // Otherwise, try to add the reference in this block
     if (numDataBlocks < maxDataBlocks) {
+
+        printf("Adding block ref %d at %d\n", ref, numDataBlocks);
 
         dataBlocks[numDataBlocks++] = ref;
         return true;
     }
+
+    // If there is an extension block, add it there
+    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
+    if (extension) return extension->addDataBlockRef(ref);
+    
+    assert(false);
+    // TODO: RETURN false HERE. THE NEW CODE WILL CREATE THE NECESSARY AMOUNT
+    // TODO: OF NEW EXTENSION BLOCKS BEFORE CALLING THIS FUNCTION
     
     // If this block is full, create a new FileListBlock
-    u32 newRef = volume.newFileListBlock(parent, nr);
+    u32 newRef = volume.addFileListBlock(parent, nr);
     FSFileListBlock *block = volume.fileListBlock(newRef);
     if (block == nullptr) return false;
 

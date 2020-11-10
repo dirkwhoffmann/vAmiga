@@ -85,17 +85,19 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume.installBootBlock();
     
     // Add the executable
-    FSBlock *file = volume.makeFile("file");
-    if (file) success = file->append(buffer, length);
-
+    FSBlock *file = volume.makeFile("file", buffer, length);
+    // if (file) success = file->append(buffer, length);
+    success = file != nullptr;
+    
     // Add a script directory
     volume.makeDir("s");
     volume.changeDir("s");
     
     // Add a startup sequence
-    file = volume.makeFile("startup-sequence");
-    if (success && file) success = file->append("file");
-
+    file = volume.makeFile("startup-sequence", "file");
+    // if (success && file) success = file->append("file");
+    success &= file != nullptr; 
+    
     // Check for file system errors
     volume.changeDir("/");
     volume.info();
@@ -105,7 +107,8 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
         warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
         // volume.dump();
     }
-
+    volume.dump();
+    
     // Convert the volume into an ADF
     assert(adf == nullptr);
     if (success) adf = ADFFile::makeWithVolume(volume);

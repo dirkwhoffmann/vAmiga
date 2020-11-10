@@ -116,7 +116,7 @@ FSFileHeaderBlock::append(const u8 *buffer, size_t size)
     if (block) return block->append(buffer, size);
     
     // Otherwise, create the first data block
-    block = addDataBlock();
+    block = addDataBlockDeprecated();
     if (block == nullptr) return false;
 
     // Connect the new block
@@ -133,11 +133,16 @@ FSFileHeaderBlock::append(const char *string)
     return append((u8 *)string, strlen(string));
 }
 
-bool
-FSFileHeaderBlock::addData(const u8 *buffer, long size)
+size_t
+FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
+    printf("addData(%p,%zu)\n", buffer, size);
+
+    assert(fileSize == 0);
+    
     // Compute the required number of DataBlocks
-    u32 numDataBlocks = 1; // size / ...
+    u32 bytes = volume.bytesInDataBlock();
+    u32 numDataBlocks = (size + bytes - 1) / bytes;
 
     // Compute the required number of FileListBlocks
     u32 numDataListBlocks = 0;
@@ -150,13 +155,33 @@ FSFileHeaderBlock::addData(const u8 *buffer, long size)
     
     // Check if the volume has enough free space
     
-    // Create FileListBlocks
-    for (u32 prev = nr, i = 0; i < numDataListBlocks; i++) {
-        prev = volume.newFileListBlock(nr, prev);
+    for (u32 ref = nr, i = 0; i < numDataListBlocks; i++) {
+
+        // Add a new file list block
+        ref = volume.addFileListBlock(nr, ref);
+        printf("Created DataListBlock %d\n", ref);
     }
     
-    // Create DataBlocks
-    
-    
-    return true;
+    for (u32 ref = nr, i = 1; i <= numDataBlocks; i++) {
+
+        // Add a new data block
+        ref = volume.addDataBlock(i, nr, ref);
+        printf("Created DataBlock %d\n", ref);
+
+        // Add references to the new data block
+        if (i == 1) firstDataBlock = ref;
+        addDataBlockRef(ref);
+        
+        // Add data
+        FSBlock *block = volume.block(ref);
+        if (block) {
+            size_t written = block->addData(buffer, size);
+            fileSize += written;
+            buffer += written;
+            size -= written;
+        }
+    }
+
+    printf("%u written\n", fileSize);
+    return fileSize;
 }

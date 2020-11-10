@@ -50,7 +50,7 @@ struct FSFileBlock : FSBlock {
         
     void setNextFileListBlock(u32 next) override { this->nextTableBlock = next; }
     
-    class FSDataBlock *addDataBlock(); 
+    class FSDataBlock *addDataBlockDeprecated(); 
     bool addDataBlockRef(u32 ref) override;
     void deleteDataBlockRefs() override;
 };

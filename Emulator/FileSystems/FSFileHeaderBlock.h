@@ -60,7 +60,7 @@ struct FSFileHeaderBlock : FSFileBlock {
     bool append(const char *string) override;
     
     // EXPERIMENTAL
-    bool addData(const u8 *buffer, long size);
+    size_t addData(const u8 *buffer, size_t size) override;
 };
 
 #endif

@@ -145,19 +145,19 @@ public:
     // Creating and deleting blocks
     //
     
-    // Allocates a new block (returns 0 if the volume is full)
+    // Seeks and free block and marks it as allocated
     u32 allocateBlock();
-    u32 allocateBlock(u32 start, int increment);
-    u32 allocateAbove(u32 ref) { return allocateBlock(ref, 1); }
-    u32 allocateBelow(u32 ref) { return allocateBlock(ref, -1); }
 
     // Deallocates a block
     void deallocateBlock(u32 ref);
+
+    // Adds a new block of a certain kind
+    u32 addFileListBlock(u32 head, u32 prev);
+    u32 addDataBlock(u32 count, u32 head, u32 prev);
     
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const char *name);
     FSFileHeaderBlock *newFileHeaderBlock(const char *name);
-    u32 newFileListBlock(u32 head, u32 prev);
     FSDataBlock *newDataBlock();
             
     // Installs a boot block
@@ -174,14 +174,19 @@ public:
     // Changes the current directory
     FSBlock *changeDir(const char *name);
 
-    // Creates a new directory entry
-    FSBlock *makeDir(const char *name);
-    FSBlock *makeFile(const char *name);
-    
     // Seeks an item inside the current directory
     FSBlock *seek(const char *name);
     FSBlock *seekDir(const char *name);
     FSBlock *seekFile(const char *name);
+
+    // Creates a new directory entry
+    FSBlock *makeDir(const char *name);
+    FSBlock *makeFile(const char *name);
+    FSBlock *makeFile(const char *name, const u8 *buffer, size_t size);
+    FSBlock *makeFile(const char *name, const char *str);
+
+    // Adds data to an empty file in the current directory
+    // bool addData(const char *name);
     
     
     //

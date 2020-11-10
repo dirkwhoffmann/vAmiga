@@ -52,8 +52,13 @@ struct FSDataBlock : FSBlock {
     u32 getNext() override { return next; }
     void setNext(u32 next) override { this->next = next; }
 
+    u32 getParent() override { return fileHeaderBlock; }
+    void setParent(u32 ref) override { fileHeaderBlock = ref; }
+
     bool append(const u8 *buffer, size_t size) override;
     bool append(const char *string) override;
+    size_t addData(const u8 *buffer, size_t size) override;
+
 
 private:
 

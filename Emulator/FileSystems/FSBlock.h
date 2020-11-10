@@ -180,6 +180,7 @@ public:
     // Appends data bytes to a file
     virtual bool append(const u8 *buffer, size_t size) { return false; }
     virtual bool append(const char *string) { return false; }
+    virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 
 typedef FSBlock* BlockPtr;

@@ -228,24 +228,17 @@ FSVolume::dataBlock(u32 nr)
 u32
 FSVolume::allocateBlock()
 {
-    u32 result;
-    
     // Search for a free block above the root block
-    if ((result = allocateAbove(rootBlockNr()))) { return result; }
+    for (long i = rootBlockNr() + 1; i < capacity; i++) {
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) {
+            bitmapBlock()->alloc(i);
+            return i;
+        }
+    }
 
     // Search for a free block below the root block
-    if ((result = allocateBelow(rootBlockNr()))) { return result; }
-    
-    return 0;
-}
-
-u32
-FSVolume::allocateBlock(u32 start, int incr)
-{
-    for (long i = start; i >= 2 && i < capacity; i += incr) {
-
+    for (long i = rootBlockNr() - 1; i >= 2; i--) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
-            assert(!bitmapBlock()->isAllocated(i));
             bitmapBlock()->alloc(i);
             return i;
         }
@@ -288,7 +281,7 @@ FSVolume::newFileHeaderBlock(const char *name)
 }
 
 u32
-FSVolume::newFileListBlock(u32 head, u32 prev)
+FSVolume::addFileListBlock(u32 head, u32 prev)
 {
     FSBlock *prevBlock = block(prev);
     if (!prevBlock) return 0;
@@ -299,6 +292,24 @@ FSVolume::newFileListBlock(u32 head, u32 prev)
     blocks[ref] = new FSFileListBlock(*this, ref);
     blocks[ref]->setParent(head);
     prevBlock->setNextFileListBlock(ref);
+    
+    return ref;
+}
+
+u32
+FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
+{
+    FSBlock *prevBlock = block(prev);
+    if (!prevBlock) return 0;
+
+    u32 ref = allocateBlock();
+    if (!ref) return 0;
+
+    FSDataBlock *newBlock = new FSDataBlock(*this, ref);
+    blocks[ref] = newBlock;
+    newBlock->setParent(head);
+    newBlock->blockNumber = count; 
+    prevBlock->setNext(ref);
     
     return ref;
 }
@@ -381,12 +392,37 @@ FSVolume::makeDir(const char *name)
 FSBlock *
 FSVolume::makeFile(const char *name)
 {
+    assert(name != nullptr);
+ 
     FSBlock *cdb = currentDirBlock();
     FSFileHeaderBlock *block = newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
     block->setParent(cdb->nr);
     return cdb->addHashBlock(block) ? block : nullptr;
+}
+
+FSBlock *
+FSVolume::makeFile(const char *name, const u8 *buffer, size_t size)
+{
+    assert(buffer != nullptr);
+
+    FSBlock *block = makeFile(name);
+    
+    if (block) {
+        assert(block->type() == FS_FILEHEADER_BLOCK);
+        ((FSFileHeaderBlock *)block)->addData(buffer, size);
+    }
+    
+    return block;
+}
+
+FSBlock *
+FSVolume::makeFile(const char *name, const char *str)
+{
+    assert(str != nullptr);
+    
+    return makeFile(name, (const u8 *)str, strlen(str));
 }
 
 FSBlock *

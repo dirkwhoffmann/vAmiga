@@ -116,7 +116,7 @@ FSDataBlock::append(const u8 *buffer, size_t size)
         // Create a new data block if there are bytes remaining
         if (n < size) {
             
-            FSDataBlock *newDataBlock = fhb->addDataBlock();
+            FSDataBlock *newDataBlock = fhb->addDataBlockDeprecated();
             if (newDataBlock == nullptr) return false;
             
             // Connect the new block
@@ -137,6 +137,18 @@ FSDataBlock::append(const char *string)
 }
 
 size_t
+FSDataBlock::addData(const u8 *buffer, size_t size)
+{
+    size_t count = MIN(maxDataBytes, size);
+    
+    // Copy bytes
+    assert(numDataBytes == 0);
+    for (int i = 0; i < count; i++) dataBytes[numDataBytes++] = buffer[i];
+
+    return count;
+}
+
+size_t
 FSDataBlock::fillUp(const u8 *buffer, size_t size)
 {
     size_t freeSpace = maxDataBytes - numDataBytes;
@@ -147,3 +159,4 @@ FSDataBlock::fillUp(const u8 *buffer, size_t size)
 
     return count;
 }
+
