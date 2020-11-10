@@ -161,7 +161,6 @@ public:
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const char *name);
     FSFileHeaderBlock *newFileHeaderBlock(const char *name);
-    // FSDataBlock *newDataBlock();
             
     // Installs a boot block
     void installBootBlock();
@@ -188,10 +187,7 @@ public:
     FSBlock *makeFile(const char *name, const u8 *buffer, size_t size);
     FSBlock *makeFile(const char *name, const char *str);
 
-    // Adds data to an empty file in the current directory
-    // bool addData(const char *name);
-    
-    
+        
     //
     // Crawling through the file system
     //
