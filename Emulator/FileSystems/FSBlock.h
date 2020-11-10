@@ -166,6 +166,7 @@ public:
 
     virtual u32 blockListCapacity() { return 0; }
     virtual u32 blockListSize() { return 0; }
+    virtual void setNextFileListBlock(u32 next) { }
     virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 

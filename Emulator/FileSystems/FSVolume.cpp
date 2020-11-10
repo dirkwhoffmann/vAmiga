@@ -287,14 +287,20 @@ FSVolume::newFileHeaderBlock(const char *name)
     return (FSFileHeaderBlock *)blocks[ref];
 }
 
-FSFileListBlock *
-FSVolume::newFileListBlock()
+u32
+FSVolume::newFileListBlock(u32 head, u32 prev)
 {
+    FSBlock *prevBlock = block(prev);
+    if (!prevBlock) return 0;
+    
     u32 ref = allocateBlock();
-    if (!ref) return nullptr;
+    if (!ref) return 0;
     
     blocks[ref] = new FSFileListBlock(*this, ref);
-    return (FSFileListBlock *)blocks[ref];
+    blocks[ref]->setParent(head);
+    prevBlock->setNextFileListBlock(ref);
+    
+    return ref;
 }
 
 FSDataBlock *

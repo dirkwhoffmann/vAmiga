@@ -132,3 +132,31 @@ FSFileHeaderBlock::append(const char *string)
 {
     return append((u8 *)string, strlen(string));
 }
+
+bool
+FSFileHeaderBlock::addData(const u8 *buffer, long size)
+{
+    // Compute the required number of DataBlocks
+    u32 numDataBlocks = 1; // size / ...
+
+    // Compute the required number of FileListBlocks
+    u32 numDataListBlocks = 0;
+    if (numDataBlocks > maxDataBlocks) {
+        numDataListBlocks = 1 + (numDataBlocks - maxDataBlocks) / maxDataBlocks;
+    }
+
+    printf("Required DataBlocks: %d\n", numDataBlocks);
+    printf("Required DataListBlocks: %d\n", numDataListBlocks);
+    
+    // Check if the volume has enough free space
+    
+    // Create FileListBlocks
+    for (u32 prev = nr, i = 0; i < numDataListBlocks; i++) {
+        prev = volume.newFileListBlock(nr, prev);
+    }
+    
+    // Create DataBlocks
+    
+    
+    return true;
+}

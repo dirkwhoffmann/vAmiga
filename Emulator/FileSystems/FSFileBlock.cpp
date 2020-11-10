@@ -80,13 +80,12 @@ FSFileBlock::addDataBlockRef(u32 ref)
     }
     
     // If this block is full, create a new FileListBlock
-    FSFileListBlock *block = volume.newFileListBlock();
+    u32 newRef = volume.newFileListBlock(parent, nr);
+    FSFileListBlock *block = volume.fileListBlock(newRef);
     if (block == nullptr) return false;
 
     // Connect the block
     block->firstDataBlock = firstDataBlock;
-    block->parent = parent;
-    nextTableBlock = block->nr;
     
     // Add the reference to the new block
     return block->addDataBlockRef(ref);
