@@ -55,8 +55,7 @@ struct FSFileHeaderBlock : FSFileBlock {
     u32 getSize() override { return fileSize; }
     time_t getCreationDate() override { return created.get(); }
 
-    void setNextDataBlock(u32 ref) override { firstDataBlock = ref; }
-    
+    void setNextDataBlock(u32 ref) override;
     size_t addData(const u8 *buffer, size_t size) override;
 };
 

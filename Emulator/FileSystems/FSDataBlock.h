@@ -20,26 +20,21 @@ struct FSDataBlock : FSBlock {
     // Reference to the file header block
     u32 fileHeaderBlock = 0;
 
-    // Number of header bytes stored in this block
-    // u32 numHeaderBytes = 0;
-
-    // Maximum number of data bytes stored in this block
-    // u32 maxDataBytes = 0;
-
     // Number of data bytes stored in this block
     u32 numDataBytes = 0;
-
+    
+private:
+    
     // Reference to the next data block
     u32 next = 0;
-    
-    // Data bytes
-    u8 *dataBytes;
-    
+
     
     //
     // Methods
     //
     
+public:
+
     FSDataBlock(FSVolume &ref, u32 nr);
     ~FSDataBlock();
 
@@ -52,8 +47,7 @@ struct FSDataBlock : FSBlock {
     u32 getParent() override { return fileHeaderBlock; }
     void setParent(u32 ref) override { fileHeaderBlock = ref; }
 
-    void setNextDataBlock(u32 ref) override { next = ref; }
-
+    void setNextDataBlock(u32 ref) override;
     size_t addData(const u8 *buffer, size_t size) override;
 };
 

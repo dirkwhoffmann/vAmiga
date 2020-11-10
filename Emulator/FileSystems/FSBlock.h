@@ -172,19 +172,13 @@ public:
 
     
     //
-    // Chaining data blocks
+    // Data blocks and file data
     //
     
+    // Adds a reference to the next data block
     virtual void setNextDataBlock(u32 ref) { }
 
-    
-    //
-    // Method stubs for blocks representing files
-    //
-
-public:
-
-    // Appends data bytes to a file
+    // Adds raw file data to this block
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 

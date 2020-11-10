@@ -108,6 +108,12 @@ FSFileHeaderBlock::setNext(u32 ref)
     }
 }
 
+void
+FSFileHeaderBlock::setNextDataBlock(u32 ref)
+{
+    firstDataBlock = ref;
+}
+
 size_t
 FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {

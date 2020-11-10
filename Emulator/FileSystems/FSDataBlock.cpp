@@ -11,18 +11,12 @@
 
 FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    // numHeaderBytes = volume.isOFS() ? 24 : 0;
-    // maxDataBytes = volume.bsize - numHeaderBytes;
-    // assert(maxDataBytes == volume.dsize);
-    
     data = new u8[ref.bsize]();
-    dataBytes = new u8[volume.dsize]();
 }
 
 FSDataBlock::~FSDataBlock()
 {
     delete [] data;
-    delete [] dataBytes;
 }
 
 void
@@ -80,7 +74,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
         write32(p + 16, next);
 
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[24 + i] = dataBytes[i];
+        for (int i = 0; i < numDataBytes; i++) p[24 + i] = data[24 + i];
         
         // Checksum
         write32(p + 20, FSBlock::checksum(p));
@@ -88,7 +82,15 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     } else {
         
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[i] = dataBytes[i];
+        for (int i = 0; i < numDataBytes; i++) p[i] = data[i];
+    }
+}
+
+void
+FSDataBlock::setNextDataBlock(u32 ref)
+{
+    if (volume.isOFS()) {
+        next = ref;
     }
 }
 
@@ -96,10 +98,10 @@ size_t
 FSDataBlock::addData(const u8 *buffer, size_t size)
 {
     size_t count = MIN(volume.dsize, size);
+    size_t offset = volume.isOFS() ? 24 : 0;
     
     // Copy bytes
-    assert(numDataBytes == 0);
-    for (int i = 0; i < count; i++) dataBytes[numDataBytes++] = buffer[i];
+    for (int i = 0; i < count; i++) data[offset + numDataBytes++] = buffer[i];
 
     return count;
 }
