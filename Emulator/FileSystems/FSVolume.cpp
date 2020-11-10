@@ -44,6 +44,8 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
     assert(capacity == 2 * 880 || capacity == 4 * 880);
     blocks = new BlockPtr[capacity];
 
+    dsize = isOFS() ? bsize - 24 : bsize;
+
     // Install boot blocks
     blocks[0] = new FSBootBlock(*this, 0);
     blocks[1] = new FSBootBlock(*this, 1);

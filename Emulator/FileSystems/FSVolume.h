@@ -53,6 +53,9 @@ protected:
     // Size of a single block in bytes
     u32 bsize;
         
+    // Number of data bytes in a single data block
+    u32 dsize;
+    
     // Block storage
     BlockPtr *blocks;
     

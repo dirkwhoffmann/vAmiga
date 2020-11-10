@@ -21,10 +21,10 @@ struct FSDataBlock : FSBlock {
     u32 fileHeaderBlock = 0;
 
     // Number of header bytes stored in this block
-    u32 numHeaderBytes = 0;
+    // u32 numHeaderBytes = 0;
 
     // Maximum number of data bytes stored in this block
-    u32 maxDataBytes = 0;
+    // u32 maxDataBytes = 0;
 
     // Number of data bytes stored in this block
     u32 numDataBytes = 0;

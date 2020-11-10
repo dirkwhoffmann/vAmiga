@@ -11,11 +11,12 @@
 
 FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    numHeaderBytes = volume.isOFS() ? 24 : 0;
-    maxDataBytes = volume.bsize - numHeaderBytes;
+    // numHeaderBytes = volume.isOFS() ? 24 : 0;
+    // maxDataBytes = volume.bsize - numHeaderBytes;
+    // assert(maxDataBytes == volume.dsize);
     
     data = new u8[ref.bsize]();
-    dataBytes = new u8[maxDataBytes]();
+    dataBytes = new u8[volume.dsize]();
 }
 
 FSDataBlock::~FSDataBlock()
@@ -29,7 +30,6 @@ FSDataBlock::dump()
 {    
     printf("   Block index: %d\n", blockNumber);
     printf("  Header block: %d\n", fileHeaderBlock);
-    printf(" Byte capacity: %d\n", maxDataBytes);
     printf("    Bytes used: %d\n", numDataBytes);
     printf("          Next: %d\n", next);
 }
@@ -62,7 +62,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     // Start from scratch
     memset(p, 0, bsize);
         
-    if (numHeaderBytes) {
+    if (volume.isOFS()) {
         
         // Type
         write32(p, 8);
@@ -80,7 +80,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
         write32(p + 16, next);
 
         // Data bytes
-        for (int i = 0; i < numDataBytes; i++) p[numHeaderBytes + i] = dataBytes[i];
+        for (int i = 0; i < numDataBytes; i++) p[24 + i] = dataBytes[i];
         
         // Checksum
         write32(p + 20, FSBlock::checksum(p));
@@ -95,7 +95,7 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
 size_t
 FSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(maxDataBytes, size);
+    size_t count = MIN(volume.dsize, size);
     
     // Copy bytes
     assert(numDataBytes == 0);
