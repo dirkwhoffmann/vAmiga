@@ -170,16 +170,23 @@ public:
     virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
+    //
+    // Chaining blocks
+    //
+    
+    // Adds a reference to a file header block
+    virtual void setFileHeaderRef(u32 ref) { }
+
+    // Adds a reference to the next data block
+    virtual void setNextDataBlockRef(u32 ref) { }
+
     
     //
     // Data blocks and file data
     //
     
     // Sets the data block number (first block is numbered 1)
-    virtual void setDataBlockNr(u32 nr) { }
-
-    // Sets a reference to the next data block
-    virtual void setNextDataBlock(u32 ref) { }
+    // virtual void setDataBlockNr(u32 nr) { }
     
     // Adds raw file data to this block
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }

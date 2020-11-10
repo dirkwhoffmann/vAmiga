@@ -59,6 +59,7 @@ FSFileBlock::check(bool verbose)
     return result;
 }
 
+/*
 FSDataBlock *
 FSFileBlock::addDataBlockDeprecated()
 {
@@ -74,6 +75,7 @@ FSFileBlock::addDataBlockDeprecated()
 
     return block;
 }
+*/
 
 bool
 FSFileBlock::addDataBlockRef(u32 ref)

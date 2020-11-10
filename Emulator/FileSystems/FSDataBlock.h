@@ -15,7 +15,7 @@
 struct FSDataBlock : FSBlock {
       
     // Reference to the file header block
-    u32 fileHeaderBlock = 0;
+    // u32 fileHeaderBlock = 0;
 
     // Number of data bytes stored in this block
     // u32 numDataBytes = 0;
@@ -35,7 +35,7 @@ private:
     
 public:
 
-    FSDataBlock(FSVolume &ref, u32 nr);
+    FSDataBlock(FSVolume &ref, u32 nr, u32 cnt);
     ~FSDataBlock();
 
     // Methods from Block class
@@ -44,11 +44,10 @@ public:
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     
-    u32 getParent() override { return fileHeaderBlock; }
-    void setParent(u32 ref) override { fileHeaderBlock = ref; }
+    void setFileHeaderRef(u32 ref) override;
+    void setNextDataBlockRef(u32 ref) override;
 
-    void setDataBlockNr(u32 nr) override;
-    void setNextDataBlock(u32 ref) override;
+    // void setDataBlockNr(u32 nr) override;
     size_t addData(const u8 *buffer, size_t size) override;
 };
 

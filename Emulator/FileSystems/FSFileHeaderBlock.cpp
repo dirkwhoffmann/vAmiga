@@ -109,7 +109,7 @@ FSFileHeaderBlock::setNext(u32 ref)
 }
 
 void
-FSFileHeaderBlock::setNextDataBlock(u32 ref)
+FSFileHeaderBlock::setNextDataBlockRef(u32 ref)
 {
     firstDataBlock = ref;
 }

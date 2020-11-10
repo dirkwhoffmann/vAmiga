@@ -161,7 +161,7 @@ public:
     // Creates a new block of a certain kind
     FSUserDirBlock *newUserDirBlock(const char *name);
     FSFileHeaderBlock *newFileHeaderBlock(const char *name);
-    FSDataBlock *newDataBlock();
+    // FSDataBlock *newDataBlock();
             
     // Installs a boot block
     void installBootBlock();

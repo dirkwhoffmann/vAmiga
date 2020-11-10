@@ -307,15 +307,16 @@ FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
     u32 ref = allocateBlock();
     if (!ref) return 0;
 
-    FSDataBlock *newBlock = new FSDataBlock(*this, ref);
+    FSDataBlock *newBlock = new FSDataBlock(*this, ref, count);
     blocks[ref] = newBlock;
-    newBlock->setParent(head);
-    newBlock->setDataBlockNr(count);
-    prevBlock->setNextDataBlock(ref);
+    newBlock->setFileHeaderRef(head);
+    // newBlock->setDataBlockNr(count);
+    prevBlock->setNextDataBlockRef(ref);
     
     return ref;
 }
 
+/*
 FSDataBlock *
 FSVolume::newDataBlock()
 {
@@ -325,6 +326,7 @@ FSVolume::newDataBlock()
     blocks[ref] = new FSDataBlock(*this, ref);
     return (FSDataBlock *)blocks[ref];
 }
+*/
 
 void
 FSVolume::installBootBlock()
