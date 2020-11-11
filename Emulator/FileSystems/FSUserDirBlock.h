@@ -24,7 +24,7 @@ struct FSUserDirBlock : FSBlock {
     u32 protection = 0;
     
     // Reference to the parent block
-    u32 parent = 0;
+    // u32 parent = 0;
 
     // Reference to the next block with the same hash
     u32 next = 0;
@@ -64,8 +64,8 @@ struct FSUserDirBlock : FSBlock {
     void setNext(u32 ref) override;
     u32 getNext() override { return next; }
 
-    u32 getParent() override { return parent; }
-    void setParent(u32 ref) override;
+    // u32 getParent() override { return parent; }
+    // void setParent(u32 ref) override;
 
     u32 hashTableSize() override { return 72; }
     u32 hashValue() override { return name.hashValue(); }

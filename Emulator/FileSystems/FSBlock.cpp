@@ -82,7 +82,7 @@ FSBlock::bsize()
 char *
 FSBlock::assemblePath()
 {
-    FSBlock *parent = getParent() ? volume.block(getParent()) : nullptr;
+    FSBlock *parent = getParentBlock();
     if (!parent) return strdup("");
     
     FSName name = getName();
@@ -223,6 +223,13 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
         printf("Exporting block %d (%zu bytes) (generic code)\n", nr, bsize);
         memcpy(p, data, bsize);
     }
+}
+
+FSBlock *
+FSBlock::getParentBlock()
+{
+    u32 ref = getParentRef();
+    return ref ? volume.block(ref) : nullptr;
 }
 
 FSBlock *

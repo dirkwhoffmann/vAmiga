@@ -81,7 +81,7 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
 
     // Block pointer to parent directory
     // write32(p + bsize - 3 * 4, parent);
-    assert(read32(p + bsize - 3 * 4) == parent);
+    // assert(read32(p + bsize - 3 * 4) == parent);
     
     // Subtype
     write32(p + bsize - 1 * 4, 2);
@@ -138,8 +138,10 @@ FSUserDirBlock::setNext(u32 ref)
     }
 }
 
+/*
 void
 FSUserDirBlock::setParent(u32 ref)
 {
     if (volume.isBlockNumber(ref)) parent = ref;
 }
+*/

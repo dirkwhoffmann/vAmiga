@@ -64,7 +64,6 @@ struct FSBlock {
     u32 bsize();
     
     // Returns the name or path of this block
-    // virtual const char *getNameDeprecated() { return ""; }
     char *assemblePath();
 
     
@@ -72,8 +71,7 @@ struct FSBlock {
     // Debugging
     //
     
-    // Prints the name or path of this block
-    // void printName();
+    // Prints the full path of this block
     void printPath();
 
     // Prints a debug summary for this block
@@ -122,9 +120,6 @@ public:
     // Returns the size of this block
     virtual u32 getSize() { return 0; }
 
-    // Returns the creation date of this block
-    // virtual time_t getCreationDate() { return 0; }
-
     
     //
     // Method stubs for blocks maintaining a linked list
@@ -135,17 +130,7 @@ public:
     // Links this block with another block with the same hash
     virtual u32 getNext() { return 0; }
     virtual void setNext(u32 next) { }
-
     
-    //
-    // Method stubs for blocks that are vertically grouped
-    //
-
-public:
-
-    virtual u32 getParent() { return 0; }
-    virtual void setParent(u32 parent) { }
-
     
     //
     // Method stubs for blocks maintaining a data block list
@@ -155,7 +140,6 @@ public:
 
     virtual u32 blockListCapacity() { return 0; }
     virtual u32 blockListSize() { return 0; }
-    // virtual void setNextFileListBlock(u32 next) { }
     virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
@@ -215,7 +199,8 @@ public:
     // Adds a reference to a the parent directory block
     virtual u32 getParentRef() { return 0; }
     virtual void setParentRef(u32 ref) { }
-
+    FSBlock *getParentBlock();
+    
     // Adds a reference to a file header block
     virtual u32 getFileHeaderRef() { return 0; }
     virtual void setFileHeaderRef(u32 ref) { }

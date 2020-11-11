@@ -359,7 +359,7 @@ FSVolume::changeDir(const char *name)
     if (strcmp(name, "..") == 0) {
                 
         // Move one level up
-        currentDir = cdb->getParent();
+        currentDir = cdb->getParentRef();
         return currentDirBlock();
     }
     
@@ -378,7 +378,6 @@ FSVolume::makeDir(const char *name)
     FSUserDirBlock *block = newUserDirBlock(name);
     if (block == nullptr) return nullptr;
     
-    block->setParent(cdb->nr);
     block->setParentRef(cdb->nr);
     cdb->addToHashTable(block->nr);
     return block;
@@ -393,7 +392,6 @@ FSVolume::makeFile(const char *name)
     FSFileHeaderBlock *block = newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
-    block->setParent(cdb->nr);
     block->setParentRef(cdb->nr);
     cdb->addToHashTable(block->nr);
 
