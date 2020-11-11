@@ -192,6 +192,12 @@ FSBlock::getNextHashBlock()
     return getNextHashRef() ? volume.block(getNextHashRef()) : nullptr;
 }
 
+u32
+FSBlock::lookup(int nr)
+{
+    return (nr < hashTableSize()) ? read32(data + 24 + 4 * nr) : 0;
+}
+
 FSBlock *
 FSBlock::lookup(FSName name)
 {
@@ -204,6 +210,7 @@ FSBlock::lookup(FSName name)
     
     // Read the entry
     u32 blockRef = read32(tableEntry);
+    assert(lookup(hash) == blockRef);
     FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
     
     // Traverse the linked list until the item has been found
@@ -247,6 +254,21 @@ FSBlock::addToHashTable(u32 ref)
     }
 }
 
+bool
+FSBlock::checkHashTable(bool verbose)
+{
+    bool result = true;
+    
+    for (int i = 0; i < hashTableSize(); i++) {
+        
+        if (u32 ref = read32(data + 24 + 4 * i)) {
+            result &= assertInRange(ref, verbose);
+            result &= assertHasType(ref, FS_USERDIR_BLOCK, FS_FILEHEADER_BLOCK, verbose);
+        }
+    }
+    return result;
+}
+
 void
 FSBlock::dumpHashTable()
 {
@@ -257,5 +279,4 @@ FSBlock::dumpHashTable()
             printf("%d: %d ", i, value);
         }
     }
-    printf("\n");
 }

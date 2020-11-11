@@ -23,9 +23,6 @@ struct FSUserDirBlock : FSBlock {
     // Creation date
     FSTimeStamp created = FSTimeStamp();
 
-    // Hash table storing references to other blocks
-    FSHashTable *hashTable;
-
     // Protection status bits
     u32 protection = 0;
     
@@ -54,10 +51,6 @@ struct FSUserDirBlock : FSBlock {
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
-
-    FSHashTable *getHashTable() override { return hashTable; }
-    bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
-    // FSBlock *seek(FSName name) override { return hashTable->seek(name); }
     
     bool matches(FSName &otherName) override { return name == otherName; }
     time_t getCreationDate() override { return created.get(); }

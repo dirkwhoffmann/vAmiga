@@ -12,7 +12,7 @@
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    hashTable = new FSHashTable(volume);
+    // hashTable = new FSHashTable(volume);
     
     // Initialize constant values
     
@@ -34,7 +34,7 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(
 FSRootBlock::~FSRootBlock()
 {
     delete [] data;
-    delete hashTable;
+    // delete hashTable;
 }
 
 void
@@ -43,23 +43,14 @@ FSRootBlock::dump()
     printf("        Name: "); name.dump(); printf("\n");
     printf("     Created: "); created.dump(); printf("\n");
     printf("    Modified: "); modified.dump(); printf("\n");
-    printf("  Hash table: "); hashTable->dump(); printf("\n");
+    printf("  Hash table: "); dumpHashTable(); printf("\n");
 }
 
 bool
 FSRootBlock::check(bool verbose)
 {
     bool result = FSBlock::check(verbose);
-        
-    for (int i = 0; i < hashTable->hashTableSize; i++) {
-        
-        u32 ref = hashTable->hashTable[i];
-        if (ref == 0) continue;
-
-        result &= assertInRange(ref, verbose);
-        result &= assertHasType(ref, FS_USERDIR_BLOCK, FS_FILEHEADER_BLOCK, verbose);
-    }
-        
+    result &= checkHashTable(verbose);
     return result;
 }
 
@@ -80,10 +71,9 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     
     // Hashtable size
     // write32(p + 12, hashTable->hashTableSize);
-    assert(read32(p + 12) == hashTable->hashTableSize);
     
     // Hashtable
-    hashTable->write(p + 24);
+    // hashTable->write(p + 24);
     
     // BM flag (true if bitmap on disk is valid)
     write32(p + bsize - 50 * 4, 0xFFFFFFFF);

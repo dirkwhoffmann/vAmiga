@@ -14,7 +14,6 @@
 #include "FSTypes.h"
 #include "FSName.h"
 #include "FSTimeStamp.h"
-#include "FSHashTable.h"
 
 struct FSBlock {
     
@@ -115,10 +114,10 @@ public:
 public:
     
     // Returns a reference to the hash table
-    virtual FSHashTable *getHashTable() { return nullptr; }
+    // virtual FSHashTable *getHashTable() { return nullptr; }
 
     // Adds a new item to the hash table
-    virtual bool addHashBlock(FSBlock *block) { return false; }
+    // virtual bool addHashBlock(FSBlock *block) { return false; }
 
     // Looks for a matching item inside the hash table
     // virtual FSBlock *seek(FSName name) { return nullptr; }
@@ -184,13 +183,17 @@ public:
     virtual u32 hashValue() { return 0; }
 
     // Looks up an item in the hash table
-    virtual FSBlock *lookup(FSName name);
-    
+    u32 lookup(int nr);
+    FSBlock *lookup(FSName name);
+
     // Adds a reference to the hash table
-    virtual void addToHashTable(u32 ref);
+    void addToHashTable(u32 ref);
+    
+    // Checks the integrity of the hash table
+    bool checkHashTable(bool verbose);
     
     // Dumps the contents of the hash table for debugging
-    virtual void dumpHashTable();
+    void dumpHashTable();
 
     
     //

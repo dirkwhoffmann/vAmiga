@@ -379,8 +379,7 @@ FSVolume::makeDir(const char *name)
     
     block->setParent(cdb->nr);
     cdb->addToHashTable(block->nr);
-    cdb->dumpHashTable();
-    return cdb->addHashBlock(block) ? block : nullptr;
+    return block;
 }
 
 FSBlock *
@@ -394,8 +393,8 @@ FSVolume::makeFile(const char *name)
     
     block->setParent(cdb->nr);
     cdb->addToHashTable(block->nr);
-    cdb->dumpHashTable();
-    return cdb->addHashBlock(block) ? block : nullptr;
+
+    return block;
 }
 
 FSBlock *
@@ -427,11 +426,6 @@ FSVolume::seek(const char *name)
     FSBlock *cdb = currentDirBlock();
     
     return cdb->lookup(FSName(name));
-    /*
-    FSBlock *result = cdb->seek(name);
-    assert(result == cdb->lookup(FSName(name)));
-    return result;
-    */
 }
 
 FSBlock *
@@ -462,22 +456,21 @@ int
 FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive)
 {
     assert(dir != nullptr);
+    
+    for (int i = 0; i < dir->hashTableSize(); i++) {
         
-    FSHashTable *hashTable = dir->getHashTable();
-    if (hashTable) {
-        
-        for (int i = 0; i < hashTable->hashTableSize; i++) {
+        if (u32 ref = dir->lookup(i)) {
             
-            FSBlock *item = block(hashTable->hashTable[i]);
+            FSBlock *item = block(ref);
             while (item) {
-
+                
                 if (item->type() == FS_USERDIR_BLOCK) {
-
+                    
                     value = (this->*walker)(item, value);
                     if (recursive) value = walk(item, walker, value, recursive);
                 }
                 if (item->type() == FS_FILEHEADER_BLOCK) {
-
+                    
                     value = (this->*walker)(item, value);
                 }
                 

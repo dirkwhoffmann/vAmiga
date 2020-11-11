@@ -20,9 +20,6 @@ struct FSRootBlock : FSBlock {
     
     // Most recent change
     FSTimeStamp modified = FSTimeStamp();
-
-    // Hash table storing references to other blocks
-    FSHashTable *hashTable;
     
     
     //
@@ -39,10 +36,6 @@ struct FSRootBlock : FSBlock {
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
-
-    FSHashTable *getHashTable() override { return hashTable; }
-    bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
-    // FSBlock *seek(FSName name) override { return hashTable->seek(name); }
     
     u32 hashTableSize() override { return 72; }
 };
