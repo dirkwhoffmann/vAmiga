@@ -10,9 +10,9 @@
 #ifndef _FS_FILEHEADER_BLOCK_H
 #define _FS_FILEHEADER_BLOCK_H
 
-#include "FSFileBlock.h"
+#include "FSBlock.h"
 
-struct FSFileHeaderBlock : FSFileBlock {
+struct FSFileHeaderBlock : FSBlock {
             
     // Name
     FSName name = FSName("");
@@ -69,6 +69,13 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     u32 getNextExtensionBlockRef() override { return read32(data + bsize() - 8); }
     void setNextExtensionBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
+
+    u32 getDataBlockRef(int nr) { return read32(data + bsize() - (51 + nr) * 4); }
+    void setDataBlockRef(int nr, u32 ref) { write32(data + bsize() - (51 + nr) * 4, ref); }
+
+    u32 numDataBlockRefs() override { return read32(data + 8); }
+    u32 maxDataBlockRefs() override { return bsize() / 4 - 56; }
+    void incDataBlockRefs() override { write32(data + 8, read32(data + 8) + 1); }
 
     bool addDataBlockRef(u32 ref) override;
     bool addDataBlockRef(u32 first, u32 ref) override;

@@ -9,7 +9,7 @@
 
 #include "FSVolume.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
@@ -45,7 +45,7 @@ FSFileHeaderBlock::dump()
     printf("  Parent dir : %d\n", getParentRef());
     printf("   Extension : %d\n", getNextExtensionBlockRef());
     printf(" Data blocks : ");
-    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
+    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
 
@@ -60,7 +60,7 @@ FSFileHeaderBlock::check(bool verbose)
     result &= assertInRange(getNextExtensionBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlockRefs(); i++) {
-        result &= assertInRange(dataBlocks[i], verbose);
+        result &= assertInRange(getDataBlockRef(i), verbose);
     }
     
     if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
@@ -98,8 +98,9 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
-    for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
-
+    for (int i = 0; i < numDataBlockRefs(); i++) {
+        write32(end - 4 * i, getDataBlockRef(i));
+    }
     // Protection status bits
     // write32(p + bsize - 48 * 4, protection);
     
@@ -236,7 +237,7 @@ FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
     if (numDataBlockRefs() < maxDataBlockRefs()) {
 
         if (numDataBlockRefs() == 0) setFirstDataBlockRef(ref);
-        dataBlocks[numDataBlockRefs()] = ref;
+        setDataBlockRef(numDataBlockRefs(), ref);
         incDataBlockRefs();
         return true;
     }

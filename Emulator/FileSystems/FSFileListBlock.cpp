@@ -9,7 +9,7 @@
 
 #include "FSVolume.h"
 
-FSFileListBlock::FSFileListBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
+FSFileListBlock::FSFileListBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
 }
@@ -27,14 +27,35 @@ FSFileListBlock::dump()
     printf("Header block : %d\n", getFileHeaderRef());
     printf("   Extension : %d\n", getNextExtensionBlockRef());
     printf(" Data blocks : ");
-    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
+    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
 
 bool
 FSFileListBlock::check(bool verbose)
 {
-    return FSFileBlock::check(verbose);
+    bool result = FSBlock::check(verbose);
+    
+    result &= assertNotNull(getFileHeaderRef(), verbose);
+    result &= assertInRange(getFileHeaderRef(), verbose);
+    result &= assertInRange(getFirstDataBlockRef(), verbose);
+    result &= assertInRange(getNextExtensionBlockRef(), verbose);
+
+    for (int i = 0; i < maxDataBlockRefs(); i++) {
+        result &= assertInRange(getDataBlockRef(i), verbose);
+    }
+    
+    if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
+        if (verbose) fprintf(stderr, "Missing reference to first data block\n");
+        return false;
+    }
+    
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtensionBlockRef() != 0) {
+        if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
+        return false;
+    }
+    
+    return result;
 }
 
 void
@@ -59,8 +80,10 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
-    for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
-            
+    for (int i = 0; i < numDataBlockRefs(); i++) {
+        write32(end - 4 * i, getDataBlockRef(i));
+    }
+    
     // Block pointer to parent directory
     // write32(p + bsize - 3 * 4, parent);
     
@@ -80,7 +103,8 @@ FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
     if (numDataBlockRefs() < maxDataBlockRefs()) {
 
         setFirstDataBlockRef(first);
-        dataBlocks[numDataBlockRefs()] = ref;
+        setDataBlockRef(numDataBlockRefs(), ref);
+        // dataBlocks[numDataBlockRefs()] = ref;
         incDataBlockRefs();
         return true;
     }
