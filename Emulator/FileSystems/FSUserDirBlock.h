@@ -44,13 +44,19 @@ struct FSUserDirBlock : FSBlock {
     //
     
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
-    const char *getName() override { return name.name; };
+    const char *getNameDeprecated() override { return name.name; };
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     
     bool matches(FSName &otherName) override { return name == otherName; }
     // time_t getCreationDate() override { return created.get(); }
+
+    FSName getName() override;
+    void setName(FSName name) override;
+
+    FSName getComment() override;
+    void setComment(FSName name) override;
 
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;

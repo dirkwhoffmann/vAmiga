@@ -26,11 +26,14 @@ struct FSRootBlock : FSBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
-    const char *getName() override { return name.name; }
+    const char *getNameDeprecated() override { return name.name; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     
+    FSName getName() override;
+    void setName(FSName name) override;
+
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
 

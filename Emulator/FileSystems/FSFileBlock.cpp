@@ -77,36 +77,6 @@ FSFileBlock::addDataBlockDeprecated()
 }
 */
 
-bool
-FSFileBlock::addDataBlockRef(u32 ref)
-{
-    // Otherwise, try to add the reference in this block
-    if (numDataBlocks < maxDataBlocks) {
-
-        dataBlocks[numDataBlocks++] = ref;
-        return true;
-    }
-
-    // If there is an extension block, add it there
-    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
-    if (extension) return extension->addDataBlockRef(ref);
-    
-    assert(false);
-    // TODO: RETURN false HERE. THE NEW CODE WILL CREATE THE NECESSARY AMOUNT
-    // TODO: OF NEW EXTENSION BLOCKS BEFORE CALLING THIS FUNCTION
-    
-    // If this block is full, create a new FileListBlock
-    u32 newRef = volume.addFileListBlock(parent, nr);
-    FSFileListBlock *block = volume.fileListBlock(newRef);
-    if (block == nullptr) return false;
-
-    // Connect the block
-    block->firstDataBlock = firstDataBlock;
-    
-    // Add the reference to the new block
-    return block->addDataBlockRef(ref);
-}
-
 void
 FSFileBlock::deleteDataBlockRefs()
 {

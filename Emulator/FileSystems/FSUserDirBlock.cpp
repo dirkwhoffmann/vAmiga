@@ -19,6 +19,7 @@ FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
 {
     this->name = FSName(name);
+    setName(FSName(name));
 }
 
 FSUserDirBlock::~FSUserDirBlock()
@@ -86,6 +87,30 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+FSName
+FSUserDirBlock::getName()
+{
+    return FSName(data + bsize() - 20 * 4);
+}
+
+void
+FSUserDirBlock::setName(FSName name)
+{
+    // name.write(data + bsize() - 20 * 4);
+}
+
+FSName
+FSUserDirBlock::getComment()
+{
+    return FSName(data + bsize() - 46 * 4);
+}
+
+void
+FSUserDirBlock::setComment(FSName name)
+{
+    name.write(data + bsize() - 46 * 4);
 }
 
 time_t

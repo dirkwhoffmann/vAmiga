@@ -18,7 +18,7 @@ struct FSFileHeaderBlock : FSFileBlock {
     FSName name = FSName("");
     
     // Comment
-    FSName comment = FSName("");
+    // FSName comment = FSName("");
         
     // Protection status bits
     u32 protection = 0;
@@ -39,7 +39,7 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
-    const char *getName() override { return name.name; }
+    const char *getNameDeprecated() override { return name.name; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
@@ -49,7 +49,12 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     bool matches(FSName &otherName) override { return name == otherName; }
     u32 getSize() override { return fileSize; }
-    // time_t getCreationDate() override { return created.get(); }
+
+    FSName getName() override;
+    void setName(FSName name) override;
+
+    FSName getComment() override;
+    void setComment(FSName name) override;
 
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
@@ -59,6 +64,13 @@ struct FSFileHeaderBlock : FSFileBlock {
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }
     void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
 
+    void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }
+
+    u32 getNextExtensionBlockRef() override { return read32(data + bsize() - 8); }
+    void setNextExtensionBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
+
+    bool addDataBlockRef(u32 ref) override;
+    
     size_t addData(const u8 *buffer, size_t size) override;
 
     u32 hashValue() override { return name.hashValue(); }

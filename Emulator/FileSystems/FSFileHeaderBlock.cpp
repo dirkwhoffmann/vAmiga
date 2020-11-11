@@ -20,14 +20,16 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
 FSFileHeaderBlock(ref, nr)
 {
     this->name = FSName(name);
+    setName(FSName(name));
 }
 
 void
 FSFileHeaderBlock::dump()
 {
-    printf("        Name: "); printName(); printf("\n");
+    printf("  Name (old): "); printName(); printf("\n");
+    printf("        Name: %s\n", getName().name);
     printf("        Path: "); printPath(); printf("\n");
-    printf("     Comment: "); comment.dump(); printf("\n");
+    printf("     Comment: %s\n", getComment().name);
     printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
     printf("        Next: %d\n", next);
     printf("   File size: %d\n", fileSize);
@@ -74,7 +76,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 47 * 4, fileSize);
     
     // Comment as BCPL string
-    comment.write(p + bsize - 46 * 4);
+    // comment.write(p + bsize - 46 * 4);
     
     // Creation date
     // created.write(p + bsize - 23 * 4);
@@ -108,6 +110,30 @@ FSFileHeaderBlock::setNext(u32 ref)
     } else {
         next = ref;
     }
+}
+
+FSName
+FSFileHeaderBlock::getName()
+{
+    return FSName(data + bsize() - 20 * 4);
+}
+
+void
+FSFileHeaderBlock::setName(FSName name)
+{
+    // name.write(data + bsize() - 20 * 4);
+}
+
+FSName
+FSFileHeaderBlock::getComment()
+{
+    return FSName(data + bsize() - 46 * 4);
+}
+
+void
+FSFileHeaderBlock::setComment(FSName name)
+{
+    name.write(data + bsize() - 46 * 4);
 }
 
 time_t
@@ -148,7 +174,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     printf("Required DataBlocks: %d\n", numDataBlocks);
     printf("Required DataListBlocks: %d\n", numDataListBlocks);
     
-    // Check if the volume has enough free space
+    // TODO: Check if the volume has enough free space
     
     for (u32 ref = nr, i = 0; i < numDataListBlocks; i++) {
 
@@ -176,4 +202,51 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     }
 
     return fileSize;
+}
+
+bool
+FSFileHeaderBlock::addDataBlockRef(u32 ref)
+{
+    // If this block has space for more references, add it here
+    if (numDataBlocks < maxDataBlocks) {
+
+        dataBlocks[numDataBlocks++] = ref;
+        return true;
+    }
+
+    // Otherwise, add it to the last extension block
+    if (auto item = volume.block(nextTableBlock)) {
+        
+        for (int i = 0; i < searchLimit; i++) {
+            
+            if (item->getNextExtensionBlock() == nullptr) {
+                item->setFirstDataBlockRef(firstDataBlock);
+                return item->addDataBlockRef(ref);
+            }
+            
+            item = item->getNextExtensionBlock();
+        }
+    }
+    
+    assert(false);
+
+    
+    // If there is an extension block, add it there
+    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
+    if (extension) return extension->addDataBlockRef(ref);
+    
+    assert(false);
+    // TODO: RETURN false HERE. THE NEW CODE WILL CREATE THE NECESSARY AMOUNT
+    // TODO: OF NEW EXTENSION BLOCKS BEFORE CALLING THIS FUNCTION
+    
+    // If this block is full, create a new FileListBlock
+    u32 newRef = volume.addFileListBlock(parent, nr);
+    FSFileListBlock *block = volume.fileListBlock(newRef);
+    if (block == nullptr) return false;
+
+    // Connect the block
+    block->firstDataBlock = firstDataBlock;
+    
+    // Add the reference to the new block
+    return block->addDataBlockRef(ref);
 }

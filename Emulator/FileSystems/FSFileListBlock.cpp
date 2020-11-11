@@ -68,3 +68,15 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
 }
+
+bool
+FSFileListBlock::addDataBlockRef(u32 ref)
+{
+    if (numDataBlocks < maxDataBlocks) {
+
+        dataBlocks[numDataBlocks++] = ref;
+        return true;
+    }
+
+    return false;
+}

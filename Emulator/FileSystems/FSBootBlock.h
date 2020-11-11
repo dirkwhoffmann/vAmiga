@@ -20,7 +20,8 @@ struct FSBootBlock : FSBlock {
     FSBlockType type() override { return FS_BOOT_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;    
-    // void exportBlock(u8 *p, size_t bsize) override;
+    
+    void exportBlock(u8 *p, size_t bsize) override;
     
     void writeBootCode();
 };

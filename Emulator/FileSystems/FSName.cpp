@@ -26,6 +26,20 @@ FSName::FSName(const char *str)
     name[30] = 0;
 }
 
+FSName::FSName(const u8 *bcplStr)
+{
+    assert(bcplStr != nullptr);
+    
+    // First entry is string length
+    u8 len = *(bcplStr++);
+    
+    // Amiga file and volume names are limited to 30 characters
+    if (len <= 30) strncpy(name, (const char *)bcplStr, len);
+    
+    // Make sure the string terminates
+    name[30] = 0;
+}
+
 char
 FSName::capital(char c)
 {

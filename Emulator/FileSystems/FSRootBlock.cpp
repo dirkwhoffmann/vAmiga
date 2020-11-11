@@ -29,6 +29,7 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
 {
     this->name = FSName(name);
+    setName(FSName(name));
 }
 
 FSRootBlock::~FSRootBlock()
@@ -96,6 +97,18 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     
     // Compute checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+FSName
+FSRootBlock::getName()
+{
+    return FSName(data + bsize() - 20 * 4);
+}
+
+void
+FSRootBlock::setName(FSName name)
+{
+    // name.write(data + bsize() - 20 * 4);
 }
 
 time_t

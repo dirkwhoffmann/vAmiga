@@ -17,7 +17,8 @@ struct FSName {
     char name[30 + 1];
     
     FSName(const char *str);
-
+    FSName(const u8 *bcplStr);
+    
     char capital(char c);
     bool operator== (FSName &rhs);
     u32 hashValue();

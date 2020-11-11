@@ -86,11 +86,11 @@ FSBlock::assemblePath()
     if (!parent) return strdup("");
     
     char *prefix = parent->assemblePath();
-    char *result = new char [strlen(prefix) + strlen(getName()) + 2];
+    char *result = new char [strlen(prefix) + strlen(getNameDeprecated()) + 2];
 
     strcpy(result, prefix);
     strcat(result, "/");
-    strcat(result, getName());
+    strcat(result, getNameDeprecated());
 
     delete [] prefix;
     return result;
@@ -99,7 +99,7 @@ FSBlock::assemblePath()
 void
 FSBlock::printName()
 {
-    printf("%s", getName());
+    printf("%s", getNameDeprecated());
 }
 
 void
@@ -224,7 +224,15 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
 FSBlock *
 FSBlock::getNextHashBlock()
 {
-    return getNextHashRef() ? volume.block(getNextHashRef()) : nullptr;
+    u32 ref = getNextHashRef();
+    return ref ? volume.block(ref) : nullptr;
+}
+
+FSBlock *
+FSBlock::getNextExtensionBlock()
+{
+    u32 ref = getNextExtensionBlockRef();
+    return ref ? volume.block(ref) : nullptr;
 }
 
 void

@@ -64,7 +64,7 @@ struct FSBlock {
     u32 bsize();
     
     // Returns the name or path of this block
-    virtual const char *getName() { return ""; }
+    virtual const char *getNameDeprecated() { return ""; }
     char *assemblePath();
 
     
@@ -108,22 +108,6 @@ public:
 
     // Exports this block to a buffer (bsize must match the volume block size)
     virtual void exportBlock(u8 *p, size_t bsize);
-
-    
-    //
-    // Method stubs for blocks maintaining a hash table
-    //
-    
-public:
-    
-    // Returns a reference to the hash table
-    // virtual FSHashTable *getHashTable() { return nullptr; }
-
-    // Adds a new item to the hash table
-    // virtual bool addHashBlock(FSBlock *block) { return false; }
-
-    // Looks for a matching item inside the hash table
-    // virtual FSBlock *seek(FSName name) { return nullptr; }
 
     
     //
@@ -176,7 +160,18 @@ public:
     virtual void deleteDataBlockRefs() { }
 
     //
-    // Managing date and time
+    // Working with names and comments
+    //
+    
+    virtual FSName getName() { return FSName(""); }
+    virtual void setName(FSName name) { }
+
+    virtual FSName getComment() { return FSName(""); }
+    virtual void setComment(FSName name) { }
+
+    
+    //
+    // Working with date and time
     //
     
     virtual time_t getCreationDate() { return 0; }
@@ -222,12 +217,22 @@ public:
     // Adds a reference to the next data block
     virtual void setNextDataBlockRef(u32 ref) { }
 
-    // Returns a reference to the next block with the same hash
+    // Returns a reference or a pointer to the next block with the same hash
     virtual u32 getNextHashRef() { return 0; }
     virtual FSBlock *getNextHashBlock();
-    
+
     // Adds a reference to the next block with the same hash
     virtual void setNextHashRef(u32 ref) { }
+
+    // Adds a reference to the first data block
+    virtual void setFirstDataBlockRef(u32 ref) { }
+
+    // Returns a reference or a pointer to the next extension block
+    virtual u32 getNextExtensionBlockRef() { return 0; }
+    FSBlock *getNextExtensionBlock();
+
+    // Adds a reference to the next extension block
+    virtual void setNextExtensionBlockRef(u32 ref) { }
 
     
     //
