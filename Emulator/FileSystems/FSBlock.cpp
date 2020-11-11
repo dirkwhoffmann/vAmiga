@@ -38,6 +38,12 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+u32
+FSBlock::bsize()
+{
+    return volume.bsize;
+}
+
 char *
 FSBlock::assemblePath()
 {
@@ -178,4 +184,78 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
         printf("Exporting block %d (%zu bytes) (generic code)\n", nr, bsize);
         memcpy(p, data, bsize);
     }
+}
+
+FSBlock *
+FSBlock::getNextHashBlock()
+{
+    return getNextHashRef() ? volume.block(getNextHashRef()) : nullptr;
+}
+
+FSBlock *
+FSBlock::lookup(FSName name)
+{
+    // Don't call this function if no hash table is present
+    assert(hashTableSize() != 0);
+
+    // Compute hash value and table position
+    u32 hash = name.hashValue();
+    u8 *tableEntry = data + 24 + 4 * hash;
+    
+    // Read the entry
+    u32 blockRef = read32(tableEntry);
+    FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
+    
+    // Traverse the linked list until the item has been found
+    for (int i = 0; block && i < searchLimit; i++) {
+
+        if (block->matches(name)) return block;
+        block = block->getNextHashBlock();
+    }
+
+    return nullptr;
+}
+
+void
+FSBlock::addToHashTable(u32 ref)
+{
+    FSBlock *block = volume.block(ref);
+    if (block == nullptr) return;
+    
+    // Don't call this function if no hash table is present
+    assert(hashTableSize() != 0);
+        
+    // Compute hash value and table position
+    u32 hash = block->hashValue() % hashTableSize();
+    u8 *tableEntry = data + 24 + 4 * hash;
+    
+    // If the hash table slot is empty, put the reference there
+    if (read32(tableEntry) == 0) { write32(tableEntry, ref); return; }
+    
+    // Otherwise, add the reference at the end of the linked list
+    if (auto item = volume.block(read32(tableEntry))) {
+        
+        for (int i = 0; i < searchLimit; i++) {
+            
+            if (item->getNextHashBlock() == nullptr) {
+                item->setNextHashRef(ref);
+                return;
+            }
+            
+            item = item->getNextHashBlock();
+        }
+    }
+}
+
+void
+FSBlock::dumpHashTable()
+{
+    for (int i = 0; i < hashTableSize(); i++) {
+        
+        u32 value = read32(data + 24 + 4 * i);
+        if (value) {
+            printf("%d: %d ", i, value);
+        }
+    }
+    printf("\n");
 }

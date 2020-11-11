@@ -57,9 +57,8 @@ struct FSUserDirBlock : FSBlock {
 
     FSHashTable *getHashTable() override { return hashTable; }
     bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
-    FSBlock *seek(FSName name) override { return hashTable->seek(name); }
-
-    u32 hashValue() override { return name.hashValue(); }
+    // FSBlock *seek(FSName name) override { return hashTable->seek(name); }
+    
     bool matches(FSName &otherName) override { return name == otherName; }
     time_t getCreationDate() override { return created.get(); }
 
@@ -68,6 +67,12 @@ struct FSUserDirBlock : FSBlock {
 
     u32 getParent() override { return parent; }
     void setParent(u32 ref) override;
+
+    u32 hashTableSize() override { return 72; }
+    u32 hashValue() override { return name.hashValue(); }
+
+    u32 getNextHashRef() override { return read32(data + bsize() - 16); }
+    void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
 };
 
 #endif

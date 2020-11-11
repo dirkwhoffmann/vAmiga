@@ -51,13 +51,16 @@ FSHashTable::link(u32 ref, u32 hashValue)
     if (!volume.isBlockNumber(ref)) return false;
     
     if (hashTable[hashValue] == 0) {
+        printf("Linking %d to slot %d\n", ref, hashValue);
         hashTable[hashValue] = ref;
     } else {
         volume.block(hashTable[hashValue])->setNext(ref);
     }
+    dump();
     return true;
 }
 
+/*
 FSBlock *
 FSHashTable::seek(FSName name)
 {
@@ -76,15 +79,30 @@ FSHashTable::seek(FSName name)
         
     return nullptr;
 }
+*/
 
 void
 FSHashTable::write(u8 *ptr)
 {
     for (long i = 0; i < 72; i++) {
         
+        u32 x = HI_HI_LO_LO(ptr[4*i + 0], ptr[4*i + 1], ptr[4*i + 2], ptr[4*i + 3]);
+        
+        if (x != hashTable[i]) {
+            printf("Hash table mismatch at index %ld:\n", i);
+            dump();
+            printf("\n");
+            for (int i = 0; i < 72; i++) {
+                u32 x = HI_HI_LO_LO(ptr[4*i + 0], ptr[4*i + 1], ptr[4*i + 2], ptr[4*i + 3]);
+                printf("%d: %d\n", i, x);
+            }
+            assert(false); 
+        }
+        /*
         ptr[4 * i + 0] = BYTE3(hashTable[i]);
         ptr[4 * i + 1] = BYTE2(hashTable[i]);
         ptr[4 * i + 2] = BYTE1(hashTable[i]);
         ptr[4 * i + 3] = BYTE0(hashTable[i]);
+        */
     }
 }

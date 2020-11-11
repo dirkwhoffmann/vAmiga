@@ -50,13 +50,18 @@ struct FSFileHeaderBlock : FSFileBlock {
     void setNext(u32 ref) override;
     u32 getNext() override { return next; }
 
-    u32 hashValue() override { return name.hashValue(); }
     bool matches(FSName &otherName) override { return name == otherName; }
     u32 getSize() override { return fileSize; }
     time_t getCreationDate() override { return created.get(); }
 
     void setNextDataBlockRef(u32 ref) override;
+
+    u32 getNextHashRef() override { return read32(data + bsize() - 16); }
+    void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
+
     size_t addData(const u8 *buffer, size_t size) override;
+
+    u32 hashValue() override { return name.hashValue(); }
 };
 
 #endif

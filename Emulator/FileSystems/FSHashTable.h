@@ -40,7 +40,7 @@ struct FSHashTable {
     bool link(u32 ref, u32 hashValue);
 
     // Looks for a matching item inside the hash table
-    class FSBlock *seek(FSName name);
+    // class FSBlock *seek(FSName name);
     
     // Exports the block in AmigaDOS format
     void write(u8 *ptr);    

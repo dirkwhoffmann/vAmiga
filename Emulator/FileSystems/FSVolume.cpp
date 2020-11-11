@@ -362,7 +362,7 @@ FSVolume::changeDir(const char *name)
         return currentDirBlock();
     }
     
-    FSBlock *subdir = cdb->seek(name);
+    FSBlock *subdir = cdb->lookup(name);
     if (!subdir) return cdb;
     
     // Move one level down
@@ -378,6 +378,8 @@ FSVolume::makeDir(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParent(cdb->nr);
+    cdb->addToHashTable(block->nr);
+    cdb->dumpHashTable();
     return cdb->addHashBlock(block) ? block : nullptr;
 }
 
@@ -391,6 +393,8 @@ FSVolume::makeFile(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParent(cdb->nr);
+    cdb->addToHashTable(block->nr);
+    cdb->dumpHashTable();
     return cdb->addHashBlock(block) ? block : nullptr;
 }
 
@@ -421,14 +425,20 @@ FSBlock *
 FSVolume::seek(const char *name)
 {
     FSBlock *cdb = currentDirBlock();
-    return cdb->seek(name);
+    
+    return cdb->lookup(FSName(name));
+    /*
+    FSBlock *result = cdb->seek(name);
+    assert(result == cdb->lookup(FSName(name)));
+    return result;
+    */
 }
 
 FSBlock *
 FSVolume::seekDir(const char *name)
 {
     FSBlock *block = seek(name);
-
+    
     if (!block || block->type() != FS_USERDIR_BLOCK) return nullptr;
     return block;
 }

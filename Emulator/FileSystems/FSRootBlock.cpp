@@ -13,6 +13,17 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     hashTable = new FSHashTable(volume);
+    
+    // Initialize constant values
+    
+    // Type
+    write32(data, 2);
+    
+    // Hash table size
+    write32(data + 12, (volume.bsize / sizeof(u32)) - 56);
+    
+    // Subtype
+    write32(data + volume.bsize - 4, 1);
 }
 
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
@@ -58,14 +69,18 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
+    memcpy(p, data, bsize);
+
     // Start from scratch
-    memset(p, 0, bsize);
+    // memset(p, 0, bsize);
 
     // Type
-    write32(p, 2);
+    // write32(p, 2);
+    assert(read32(p) == 2);
     
     // Hashtable size
-    write32(p + 12, hashTable->hashTableSize);
+    // write32(p + 12, hashTable->hashTableSize);
+    assert(read32(p + 12) == hashTable->hashTableSize);
     
     // Hashtable
     hashTable->write(p + 24);
@@ -86,7 +101,8 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     created.write(p + bsize - 7 * 4);
         
     // Secondary block type
-    write32(p + bsize - 1 * 4, 1);
+    // write32(p + bsize - 1 * 4, 1);
+    assert(read32(p + bsize - 1 * 4) == 1);
     
     // Compute checksum
     write32(p + 20, FSBlock::checksum(p));

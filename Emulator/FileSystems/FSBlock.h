@@ -26,12 +26,15 @@ struct FSBlock {
 
     // The block data
     u8 *data = nullptr;
-
+    
     
     //
-    // Static methods
+    // Static variables and methods
     //
 
+    // Search limit for avoiding infinite loops in list walks
+    static const long searchLimit = 255;
+    
     // Computes a checksum for the sector in the provided buffer
     static u32 checksum(u8 *p);
     
@@ -55,6 +58,9 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
 
+    // Returns the size of this block
+    u32 bsize();
+    
     // Returns the name or path of this block
     virtual const char *getName() { return ""; }
     char *assemblePath();
@@ -115,7 +121,7 @@ public:
     virtual bool addHashBlock(FSBlock *block) { return false; }
 
     // Looks for a matching item inside the hash table
-    virtual FSBlock *seek(FSName name) { return nullptr; }
+    // virtual FSBlock *seek(FSName name) { return nullptr; }
 
     
     //
@@ -124,9 +130,6 @@ public:
     
 public:
     
-    // Return a hash value for this block
-    virtual u32 hashValue() { return 0; }
-
     // Return true if the name of this block matches the given name
     virtual bool matches(FSName &otherName) { return false; }
         
@@ -171,6 +174,26 @@ public:
     virtual void deleteDataBlockRefs() { }
 
     //
+    // Working with hash tables
+    //
+    
+    // Returns the hash table size
+    virtual u32 hashTableSize() { return 0; }
+
+    // Returns a hash value for this block
+    virtual u32 hashValue() { return 0; }
+
+    // Looks up an item in the hash table
+    virtual FSBlock *lookup(FSName name);
+    
+    // Adds a reference to the hash table
+    virtual void addToHashTable(u32 ref);
+    
+    // Dumps the contents of the hash table for debugging
+    virtual void dumpHashTable();
+
+    
+    //
     // Chaining blocks
     //
     
@@ -179,6 +202,13 @@ public:
 
     // Adds a reference to the next data block
     virtual void setNextDataBlockRef(u32 ref) { }
+
+    // Returns a reference to the next block with the same hash
+    virtual u32 getNextHashRef() { return 0; }
+    virtual FSBlock *getNextHashBlock();
+    
+    // Adds a reference to the next block with the same hash
+    virtual void setNextHashRef(u32 ref) { }
 
     
     //

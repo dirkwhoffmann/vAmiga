@@ -42,7 +42,9 @@ struct FSRootBlock : FSBlock {
 
     FSHashTable *getHashTable() override { return hashTable; }
     bool addHashBlock(FSBlock *block) override { return hashTable->link(block); }
-    FSBlock *seek(FSName name) override { return hashTable->seek(name); }
+    // FSBlock *seek(FSName name) override { return hashTable->seek(name); }
+    
+    u32 hashTableSize() override { return 72; }
 };
 
 #endif

@@ -62,8 +62,10 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
+    memcpy(p, data, bsize);
+
     // Start from scratch
-    memset(p, 0, bsize);
+    // memset(p, 0, bsize);
     
     // Type
     write32(p, 2);

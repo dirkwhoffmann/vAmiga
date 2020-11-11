@@ -147,7 +147,6 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 
         // Add a new data block
         ref = volume.addDataBlock(i, nr, ref);
-        printf("Created DataBlock %d\n", ref);
 
         // Add references to the new data block
         addDataBlockRef(ref);
@@ -162,6 +161,5 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         }
     }
 
-    printf("%u written\n", fileSize);
     return fileSize;
 }
