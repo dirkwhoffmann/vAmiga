@@ -241,6 +241,15 @@ public:
     // Data blocks and file data
     //
     
+    // Returns the number of data block references in this block
+    virtual u32 numDataBlockRefs() { return 0; }
+
+    // Returns the maximum number of storable data block references
+    virtual u32 maxDataBlockRefs() { return 0; }
+    
+    // Returns the maximum number of storable data block references
+    virtual void incDataBlockRefs() { }
+
     // Sets the data block number (first block is numbered 1)
     // virtual void setDataBlockNr(u32 nr) { }
     

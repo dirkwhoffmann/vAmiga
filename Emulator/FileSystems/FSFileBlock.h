@@ -14,12 +14,16 @@
 
 struct FSFileBlock : FSBlock {
 
+private:
+    
     // Maximum number of references stored in this block
-    u32 maxDataBlocks = 0;
+    // u32 maxDataBlocks = 0;
 
     // Number of references stored in this block
     u32 numDataBlocks = 0;
 
+public:
+    
     // Reference to the very first data block
     u32 firstDataBlock = 0;
 
@@ -45,14 +49,10 @@ struct FSFileBlock : FSBlock {
     u32 getParent() override { return parent; }
     void setParent(u32 parent) override { this->parent = parent; }
 
-    u32 blockListCapacity() override { return maxDataBlocks; }
-    u32 blockListSize() override { return numDataBlocks; }
-        
-    // void setNextFileListBlock(u32 next) override { this->nextTableBlock = next; }
-        
-    // class FSDataBlock *addDataBlockDeprecated(); 
-    // bool addDataBlockRef(u32 ref) override;
-    void deleteDataBlockRefs() override;
+    u32 numDataBlockRefs() override { return numDataBlocks; }
+    u32 maxDataBlockRefs() override { return bsize() / 4 - 56; }
+    void incDataBlockRefs() override { numDataBlocks++; }
+
 };
 
 #endif

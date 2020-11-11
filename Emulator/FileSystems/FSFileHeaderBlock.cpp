@@ -59,14 +59,14 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + 4, nr);
 
     // Number of data block references
-    write32(p + 8, numDataBlocks);
+    write32(p + 8, numDataBlockRefs());
 
     // First data block
     write32(p + 16, firstDataBlock);
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
-    for (int i = 0; i < numDataBlocks; i++) write32(end - 4 * i, dataBlocks[i]);
+    for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
 
     // Protection status bits
     write32(p + bsize - 48 * 4, protection);
@@ -166,8 +166,8 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 
     // Compute the required number of FileListBlocks
     u32 numDataListBlocks = 0;
-    if (numDataBlocks > maxDataBlocks) {
-        numDataListBlocks = 1 + (numDataBlocks - maxDataBlocks) / maxDataBlocks;
+    if (numDataBlocks > maxDataBlockRefs()) {
+        numDataListBlocks = 1 + (numDataBlocks - maxDataBlockRefs()) / maxDataBlockRefs();
     }
 
     printf("Required DataBlocks: %d\n", numDataBlocks);
@@ -214,10 +214,11 @@ bool
 FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
 {
     // If this block has space for more references, add it here
-    if (numDataBlocks < maxDataBlocks) {
+    if (numDataBlockRefs() < maxDataBlockRefs()) {
 
-        if (numDataBlocks == 0) setFirstDataBlockRef(ref);
-        dataBlocks[numDataBlocks++] = ref;
+        if (numDataBlockRefs() == 0) setFirstDataBlockRef(ref);
+        dataBlocks[numDataBlockRefs()] = ref;
+        incDataBlockRefs();
         return true;
     }
 

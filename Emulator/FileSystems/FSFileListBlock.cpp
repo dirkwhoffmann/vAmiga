@@ -46,14 +46,14 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + 4, nr);
     
     // Number of data block references
-    write32(p + 8, numDataBlocks);
+    write32(p + 8, numDataBlockRefs());
     
     // First data block
     write32(p + 16, firstDataBlock);
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
-    for (int i = 0; i < numDataBlocks; i++) write32(end - 4 * i, dataBlocks[i]);
+    for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
             
     // Block pointer to parent directory
     write32(p + bsize - 3 * 4, parent);
@@ -71,11 +71,12 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
 bool
 FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
 {
-    if (numDataBlocks < maxDataBlocks) {
+    if (numDataBlockRefs() < maxDataBlockRefs()) {
 
         firstDataBlock = first;
         setFirstDataBlockRef(first);
-        dataBlocks[numDataBlocks++] = ref;
+        dataBlocks[numDataBlockRefs()] = ref;
+        incDataBlockRefs();
         return true;
     }
 

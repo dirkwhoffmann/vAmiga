@@ -11,8 +11,7 @@
 
 FSFileBlock::FSFileBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    maxDataBlocks = 72;
-    dataBlocks = new u32[maxDataBlocks]();
+    dataBlocks = new u32[maxDataBlockRefs()]();
 }
 
 FSFileBlock::~FSFileBlock()
@@ -24,7 +23,7 @@ void
 FSFileBlock::dump()
 {
     printf("\n");
-    printf(" Block count: %d / %d\n", numDataBlocks, maxDataBlocks);
+    printf(" Block count: %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
     printf("       First: %d\n", firstDataBlock);
     printf("      Parent: %d\n", parent);
     printf("   Extension: %d\n", getNextExtensionBlockRef());
@@ -44,16 +43,16 @@ FSFileBlock::check(bool verbose)
     result &= assertInRange(firstDataBlock, verbose);
     result &= assertInRange(getNextExtensionBlockRef(), verbose);
 
-    for (int i = 0; i < maxDataBlocks; i++) {
+    for (int i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(dataBlocks[i], verbose);
     }
     
-    if (numDataBlocks > 0 && firstDataBlock == 0) {
+    if (numDataBlockRefs() > 0 && firstDataBlock == 0) {
         if (verbose) fprintf(stderr, "Missing reference to first data block\n");
         return false;
     }
     
-    if (numDataBlocks < maxDataBlocks && getNextExtensionBlockRef() != 0) {
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtensionBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }
@@ -78,10 +77,11 @@ FSFileBlock::addDataBlockDeprecated()
     return block;
 }
 */
-
+/*
 void
 FSFileBlock::deleteDataBlockRefs()
 {
     numDataBlocks = 0;
     for (int i = 0; i < maxDataBlocks; i++) dataBlocks[i] = 0;
 }
+*/
