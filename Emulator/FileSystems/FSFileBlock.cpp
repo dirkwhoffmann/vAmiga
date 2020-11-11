@@ -19,35 +19,21 @@ FSFileBlock::~FSFileBlock()
     delete [] dataBlocks;
 }
 
-void
-FSFileBlock::dump()
-{
-    printf("\n");
-    printf(" Block count: %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
-    printf("       First: %d\n", firstDataBlock);
-    printf("      Parent: %d\n", parent);
-    printf("   Extension: %d\n", getNextExtensionBlockRef());
-    printf(" Data blocks: ");
-    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
-}
-
 bool
 FSFileBlock::check(bool verbose)
 {    
     bool result = FSBlock::check(verbose);
     
-    assert(firstDataBlock == getFirstDataBlockRef());
-
-    result &= assertNotNull(parent, verbose);
-    result &= assertInRange(parent, verbose);
-    result &= assertInRange(firstDataBlock, verbose);
+    result &= assertNotNull(getParentRef(), verbose);
+    result &= assertInRange(getParentRef(), verbose);
+    result &= assertInRange(getFirstDataBlockRef(), verbose);
     result &= assertInRange(getNextExtensionBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(dataBlocks[i], verbose);
     }
     
-    if (numDataBlockRefs() > 0 && firstDataBlock == 0) {
+    if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
         if (verbose) fprintf(stderr, "Missing reference to first data block\n");
         return false;
     }

@@ -23,10 +23,11 @@ struct FSFileListBlock : FSFileBlock {
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     
-    void setFileHeaderRef(u32 ref) override { parent = ref; }
+    u32 getFileHeaderRef() override { return read32(data + bsize() - 12); }
+    void setFileHeaderRef(u32 ref) override { write32(data + bsize() - 12, ref); }
     
     u32 getFirstDataBlockRef() override { return read32(data + 16); }
-    void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); firstDataBlock = ref; }
+    void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }
 
     bool addDataBlockRef(u32 first, u32 ref) override;
 

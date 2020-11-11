@@ -24,6 +24,8 @@ struct FSDataBlock : FSBlock {
     void exportBlock(u8 *p, size_t size) override;
     
     void setFileHeaderRef(u32 ref) override;
+
+    u32 getNextDataBlockRef() override; 
     void setNextDataBlockRef(u32 ref) override;
 
     size_t addData(const u8 *buffer, size_t size) override;

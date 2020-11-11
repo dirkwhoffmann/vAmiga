@@ -78,13 +78,17 @@ FSDataBlock::setFileHeaderRef(u32 ref)
     if (volume.isOFS()) write32(data + 4, ref);
 }
 
+
+u32
+FSDataBlock::getNextDataBlockRef()
+{
+    return volume.isOFS() ? read32(data + 16) : 0;
+}
+
 void
 FSDataBlock::setNextDataBlockRef(u32 ref)
 {
-    assert(volume.dataBlock(ref) != nullptr);
-    
-    // Write value into the OFS header
-    if (volume.isOFS()) write32(data + 16, ref);    
+    if (volume.isOFS()) write32(data + 16, ref);
 }
 
 size_t

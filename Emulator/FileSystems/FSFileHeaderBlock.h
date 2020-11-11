@@ -59,8 +59,6 @@ struct FSFileHeaderBlock : FSFileBlock {
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
     
-    void setNextDataBlockRef(u32 ref) override;
-
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }
     void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
 

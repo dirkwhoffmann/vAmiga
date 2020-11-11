@@ -22,7 +22,13 @@ FSFileListBlock::~FSFileListBlock()
 void
 FSFileListBlock::dump()
 {
-    FSFileBlock::dump();
+    printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
+    printf("       First : %d\n", getFirstDataBlockRef());
+    printf("Header block : %d\n", getFileHeaderRef());
+    printf("   Extension : %d\n", getNextExtensionBlockRef());
+    printf(" Data blocks : ");
+    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
+    printf("\n");
 }
 
 bool
@@ -49,14 +55,14 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + 8, numDataBlockRefs());
     
     // First data block
-    write32(p + 16, firstDataBlock);
+    // write32(p + 16, firstDataBlock);
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
     for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
             
     // Block pointer to parent directory
-    write32(p + bsize - 3 * 4, parent);
+    // write32(p + bsize - 3 * 4, parent);
     
     // Block pointer to first extension block
     // write32(p + bsize - 2 * 4, nextTableBlock);
@@ -73,7 +79,6 @@ FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
 {
     if (numDataBlockRefs() < maxDataBlockRefs()) {
 
-        firstDataBlock = first;
         setFirstDataBlockRef(first);
         dataBlocks[numDataBlockRefs()] = ref;
         incDataBlockRefs();

@@ -217,9 +217,11 @@ public:
     virtual void setParentRef(u32 ref) { }
 
     // Adds a reference to a file header block
+    virtual u32 getFileHeaderRef() { return 0; }
     virtual void setFileHeaderRef(u32 ref) { }
 
     // Adds a reference to the next data block
+    virtual u32 getNextDataBlockRef() { return 0; }
     virtual void setNextDataBlockRef(u32 ref) { }
 
     // Returns a reference or a pointer to the next block with the same hash

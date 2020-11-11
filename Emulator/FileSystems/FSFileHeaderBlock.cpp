@@ -13,6 +13,13 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, n
 {
     data = new u8[ref.bsize]();
     
+    // Type
+    write32(data, 2);
+        
+    // Block pointer to itself
+    write32(data + 4, nr);
+
+    // Creation date
     setCreationDate(time(NULL));
 }
 
@@ -26,15 +33,21 @@ FSFileHeaderBlock(ref, nr)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("  Name (old): "); printName(); printf("\n");
-    printf("        Name: %s\n", getName().name);
-    printf("        Path: "); printPath(); printf("\n");
-    printf("     Comment: %s\n", getComment().name);
-    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
-    printf("        Next: %d\n", next);
-    printf("   File size: %d\n", fileSize);
+    printf("  Name (old) : "); printName(); printf("\n");
+    printf("        Name : %s\n", getName().name);
+    printf("        Path : "); printPath(); printf("\n");
+    printf("     Comment : %s\n", getComment().name);
+    printf("     Created : "); dumpDate(getCreationDate()); printf("\n");
+    printf("        Next : %d\n", next);
+    printf("   File size : %d\n", fileSize);
 
-    FSFileBlock::dump();
+    printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
+    printf("       First : %d\n", getFirstDataBlockRef());
+    printf("  Parent dir : %d\n", getParentRef());
+    printf("   Extension : %d\n", getNextExtensionBlockRef());
+    printf(" Data blocks : ");
+    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
+    printf("\n");
 }
 
 bool
@@ -53,23 +66,23 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     memcpy(p, data, bsize);
 
     // Type
-    write32(p, 2);
+    // write32(p, 2);
         
     // Block pointer to itself
-    write32(p + 4, nr);
+    // write32(p + 4, nr);
 
     // Number of data block references
     // write32(p + 8, numDataBlockRefs());
 
     // First data block
-    write32(p + 16, firstDataBlock);
+    // write32(p + 16, firstDataBlock);
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
     for (int i = 0; i < numDataBlockRefs(); i++) write32(end - 4 * i, dataBlocks[i]);
 
     // Protection status bits
-    write32(p + bsize - 48 * 4, protection);
+    // write32(p + bsize - 48 * 4, protection);
     
     // File size
     write32(p + bsize - 47 * 4, fileSize);
@@ -81,7 +94,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 4 * 4, next);
 
     // Block pointer to parent directory
-    write32(p + bsize - 3 * 4, parent);
+    // write32(p + bsize - 3 * 4, parent);
 
     // Block pointer to first extension block
     // write32(p + bsize - 2 * 4, nextTableBlock);
@@ -139,12 +152,6 @@ void
 FSFileHeaderBlock::setCreationDate(time_t t)
 {
     writeTimeStamp(data + bsize() - 23 * 4, t);
-}
-
-void
-FSFileHeaderBlock::setNextDataBlockRef(u32 ref)
-{
-    firstDataBlock = ref;
 }
 
 size_t
