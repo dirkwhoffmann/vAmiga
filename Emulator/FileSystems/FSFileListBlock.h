@@ -17,7 +17,6 @@ struct FSFileListBlock : FSBlock {
     FSFileListBlock(FSVolume &ref, u32 nr);
     ~FSFileListBlock();
 
-    // Methods from Block class
     FSBlockType type() override { return FS_FILELIST_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;

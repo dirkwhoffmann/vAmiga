@@ -12,6 +12,15 @@
 FSFileListBlock::FSFileListBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
+
+    // Type
+    write32(data, 16);
+    
+    // Block pointer to itself
+    write32(data + 4, nr);
+    
+    // Subtype
+    write32(data + ref.bsize - 1 * 4, (u32)-3);
 }
 
 FSFileListBlock::~FSFileListBlock()
@@ -65,46 +74,17 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     assert(volume.bsize == bsize);
 
     memcpy(p, data, bsize);
-    
-    // Type
-    write32(p, 16);
-    
-    // Block pointer to itself
-    write32(p + 4, nr);
-    
-    // Number of data block references
-    write32(p + 8, numDataBlockRefs());
-    
-    // First data block
-    // write32(p + 16, firstDataBlock);
-    
-    // Data block list
-    u8 *end = p + bsize - 51 * 4;
-    for (int i = 0; i < numDataBlockRefs(); i++) {
-        write32(end - 4 * i, getDataBlockRef(i));
-    }
-    
-    // Block pointer to parent directory
-    // write32(p + bsize - 3 * 4, parent);
-    
-    // Block pointer to first extension block
-    // write32(p + bsize - 2 * 4, nextTableBlock);
-    
-    // Subtype
-    write32(p + bsize - 1 * 4, (u32)-3);
-    
-    // Checksum
     write32(p + 20, FSBlock::checksum(p));
 }
 
 bool
 FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
 {
+    // The caller has to ensure that this block contains free slots
     if (numDataBlockRefs() < maxDataBlockRefs()) {
 
         setFirstDataBlockRef(first);
         setDataBlockRef(numDataBlockRefs(), ref);
-        // dataBlocks[numDataBlockRefs()] = ref;
         incDataBlockRefs();
         return true;
     }
