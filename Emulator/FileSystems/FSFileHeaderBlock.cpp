@@ -33,9 +33,9 @@ FSFileHeaderBlock(ref, nr)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("        Name : %s\n", getName().name);
+    printf("        Name : %s\n", getName().cStr);
     printf("        Path : "); printPath(); printf("\n");
-    printf("     Comment : %s\n", getComment().name);
+    printf("     Comment : %s\n", getComment().cStr);
     printf("     Created : "); dumpDate(getCreationDate()); printf("\n");
     printf("        Next : %d\n", next);
     printf("   File size : %d\n", fileSize);

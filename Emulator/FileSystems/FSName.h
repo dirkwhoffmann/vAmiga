@@ -12,30 +12,39 @@
 
 #include "Aliases.h"
 
-struct FSName {
+struct FSString {
     
-    char name[30 + 1];
+    // File system identifier stored as a C string
+    char cStr[92];
     
-    FSName(const char *str);
-    FSName(const u8 *bcplStr);
+    // Maximum number of permitted characters
+    size_t limit;
     
-    char capital(char c);
-    bool operator== (FSName &rhs);
+
+    FSString(const char *cString, size_t limit);
+    FSString(const u8 *bcplString, size_t limit);
+
+    static char capital(char c);
+    
+    bool operator== (FSString &rhs);
     u32 hashValue();
-  
-    void dump() {};
-    void write(u8 *ptr);
+    
+    void write(u8 *p);
 };
 
-struct FSComment {
+struct FSName : FSString {
     
-    char name[91 + 1];
-    
-    FSComment(const char *str);
-    FSComment(const u8 *bcplStr);
+    FSName(const char *cString) : FSString(cString, 30) {rectify(); }
+    FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
 
-    void dump() {};
-    void write(u8 *ptr);
+    // Scans the given name and replaces invalid characters by dummy symbols
+    void rectify();
+};
+
+struct FSComment : FSString {
+    
+    FSComment(const char *cString) : FSString(cString, 91) { }
+    FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
 };
 
 #endif

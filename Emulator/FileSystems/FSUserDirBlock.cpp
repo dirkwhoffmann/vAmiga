@@ -31,9 +31,9 @@ FSUserDirBlock::~FSUserDirBlock()
 void
 FSUserDirBlock::dump()
 {
-    printf("        Name: %s\n", getName().name);
+    printf("        Name: %s\n", getName().cStr);
     printf("        Path: "); printPath(); printf("\n");
-    printf("     Comment: "); comment.dump(); printf("\n");
+    printf("     Comment: %s\n", getComment().cStr);
     printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
     printf("      Parent: %d\n", getParentRef());
     printf("        Next: %d\n", next);

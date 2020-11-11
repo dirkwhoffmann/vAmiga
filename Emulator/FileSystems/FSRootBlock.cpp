@@ -41,7 +41,7 @@ FSRootBlock::~FSRootBlock()
 void
 FSRootBlock::dump()
 {
-    printf("        Name: "); name.dump(); printf("\n");
+    printf("        Name: %s\n", getName().cStr);
     printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
     printf("    Modified: "); dumpDate(getModificationDate()); printf("\n");
     printf("  Hash table: "); dumpHashTable(); printf("\n");

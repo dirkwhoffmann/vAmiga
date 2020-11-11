@@ -88,11 +88,11 @@ FSBlock::assemblePath()
     FSName name = getName();
     
     char *prefix = parent->assemblePath();
-    char *result = new char [strlen(prefix) + strlen(name.name) + 2];
+    char *result = new char [strlen(prefix) + strlen(name.cStr) + 2];
 
     strcpy(result, prefix);
     strcat(result, "/");
-    strcat(result, name.name);
+    strcat(result, name.cStr);
 
     delete [] prefix;
     return result;
@@ -272,7 +272,7 @@ FSBlock::lookup(FSName name)
     assert(hashTableSize() != 0);
 
     // Compute hash value and table position
-    u32 hash = name.hashValue();
+    u32 hash = name.hashValue() % hashTableSize();
     u8 *tableEntry = data + 24 + 4 * hash;
     
     // Read the entry
