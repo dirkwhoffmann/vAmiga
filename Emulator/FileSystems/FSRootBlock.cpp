@@ -108,7 +108,7 @@ FSRootBlock::getName()
 void
 FSRootBlock::setName(FSName name)
 {
-    // name.write(data + bsize() - 20 * 4);
+    name.write(data + bsize() - 20 * 4);
 }
 
 time_t

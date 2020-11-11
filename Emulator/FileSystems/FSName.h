@@ -27,14 +27,13 @@ struct FSName {
     void write(u8 *ptr);
 };
 
-class FSComment {
+struct FSComment {
     
     char name[91 + 1];
     
-public:
-
     FSComment(const char *str);
-    
+    FSComment(const u8 *bcplStr);
+
     void dump() {};
     void write(u8 *ptr);
 };

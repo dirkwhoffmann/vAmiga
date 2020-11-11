@@ -34,7 +34,7 @@ FSName::FSName(const u8 *bcplStr)
     u8 len = *(bcplStr++);
     
     // Amiga file and volume names are limited to 30 characters
-    if (len <= 30) strncpy(name, (const char *)bcplStr, len);
+    if (len <= 30) strncpy(name, (const char *)bcplStr, 30);
     
     // Make sure the string terminates
     name[30] = 0;
@@ -90,7 +90,21 @@ FSComment::FSComment(const char *str)
     strncpy(name, str, 91);
         
     // Make sure the string terminates
-    name[30] = 0;
+    name[90] = 0;
+}
+
+FSComment::FSComment(const u8 *bcplStr)
+{
+    assert(bcplStr != nullptr);
+    
+    // First entry is string length
+    u8 len = *(bcplStr++);
+    
+    // Amiga file and volume names are limited to 91 characters
+    if (len <= 91) strncpy(name, (const char *)bcplStr, 91);
+    
+    // Make sure the string terminates
+    name[91] = 0;
 }
 
 void

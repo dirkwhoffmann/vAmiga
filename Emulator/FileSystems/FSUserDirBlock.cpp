@@ -31,7 +31,7 @@ FSUserDirBlock::~FSUserDirBlock()
 void
 FSUserDirBlock::dump()
 {
-    printf("        Name: "); printName(); printf("\n");
+    printf("        Name: %s\n", getName().name);
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
     printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
@@ -99,17 +99,17 @@ FSUserDirBlock::getName()
 void
 FSUserDirBlock::setName(FSName name)
 {
-    // name.write(data + bsize() - 20 * 4);
+    name.write(data + bsize() - 20 * 4);
 }
 
-FSName
+FSComment
 FSUserDirBlock::getComment()
 {
-    return FSName(data + bsize() - 46 * 4);
+    return FSComment(data + bsize() - 46 * 4);
 }
 
 void
-FSUserDirBlock::setComment(FSName name)
+FSUserDirBlock::setComment(FSComment name)
 {
     name.write(data + bsize() - 46 * 4);
 }

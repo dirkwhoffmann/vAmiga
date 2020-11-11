@@ -85,22 +85,26 @@ FSBlock::assemblePath()
     FSBlock *parent = getParent() ? volume.block(getParent()) : nullptr;
     if (!parent) return strdup("");
     
+    FSName name = getName();
+    
     char *prefix = parent->assemblePath();
-    char *result = new char [strlen(prefix) + strlen(getNameDeprecated()) + 2];
+    char *result = new char [strlen(prefix) + strlen(name.name) + 2];
 
     strcpy(result, prefix);
     strcat(result, "/");
-    strcat(result, getNameDeprecated());
+    strcat(result, name.name);
 
     delete [] prefix;
     return result;
 }
 
+/*
 void
 FSBlock::printName()
 {
     printf("%s", getNameDeprecated());
 }
+*/
 
 void
 FSBlock::printPath()

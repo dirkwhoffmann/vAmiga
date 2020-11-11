@@ -394,6 +394,7 @@ FSVolume::makeFile(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParent(cdb->nr);
+    block->setParentRef(cdb->nr);
     cdb->addToHashTable(block->nr);
 
     return block;

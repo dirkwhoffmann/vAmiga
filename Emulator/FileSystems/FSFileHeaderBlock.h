@@ -39,7 +39,6 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
-    const char *getNameDeprecated() override { return name.name; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
@@ -53,14 +52,17 @@ struct FSFileHeaderBlock : FSFileBlock {
     FSName getName() override;
     void setName(FSName name) override;
 
-    FSName getComment() override;
-    void setComment(FSName name) override;
+    FSComment getComment() override;
+    void setComment(FSComment name) override;
 
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
     
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }
     void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
+
+    u32 getParentRef() override { return read32(data + bsize() - 12); }
+    void setParentRef(u32 ref) override { write32(data + bsize() - 12, ref); }
 
     u32 getFirstDataBlockRef() override { return read32(data + 16); }
     void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }

@@ -64,7 +64,7 @@ struct FSBlock {
     u32 bsize();
     
     // Returns the name or path of this block
-    virtual const char *getNameDeprecated() { return ""; }
+    // virtual const char *getNameDeprecated() { return ""; }
     char *assemblePath();
 
     
@@ -73,7 +73,7 @@ struct FSBlock {
     //
     
     // Prints the name or path of this block
-    void printName();
+    // void printName();
     void printPath();
 
     // Prints a debug summary for this block
@@ -167,8 +167,8 @@ public:
     virtual FSName getName() { return FSName(""); }
     virtual void setName(FSName name) { }
 
-    virtual FSName getComment() { return FSName(""); }
-    virtual void setComment(FSName name) { }
+    virtual FSComment getComment() { return FSComment(""); }
+    virtual void setComment(FSComment name) { }
 
     
     //

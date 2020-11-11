@@ -33,7 +33,6 @@ FSFileHeaderBlock(ref, nr)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("  Name (old) : "); printName(); printf("\n");
     printf("        Name : %s\n", getName().name);
     printf("        Path : "); printPath(); printf("\n");
     printf("     Comment : %s\n", getComment().name);
@@ -53,7 +52,27 @@ FSFileHeaderBlock::dump()
 bool
 FSFileHeaderBlock::check(bool verbose)
 {
-    bool result = FSFileBlock::check(verbose);
+    bool result = FSBlock::check(verbose);
+    
+    result &= assertNotNull(getParentRef(), verbose);
+    result &= assertInRange(getParentRef(), verbose);
+    result &= assertInRange(getFirstDataBlockRef(), verbose);
+    result &= assertInRange(getNextExtensionBlockRef(), verbose);
+
+    for (int i = 0; i < maxDataBlockRefs(); i++) {
+        result &= assertInRange(dataBlocks[i], verbose);
+    }
+    
+    if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
+        if (verbose) fprintf(stderr, "Missing reference to first data block\n");
+        return false;
+    }
+    
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtensionBlockRef() != 0) {
+        if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
+        return false;
+    }
+    
     return result;
 }
 
@@ -127,17 +146,17 @@ FSFileHeaderBlock::getName()
 void
 FSFileHeaderBlock::setName(FSName name)
 {
-    // name.write(data + bsize() - 20 * 4);
+    name.write(data + bsize() - 20 * 4);
 }
 
-FSName
+FSComment
 FSFileHeaderBlock::getComment()
 {
-    return FSName(data + bsize() - 46 * 4);
+    return FSComment(data + bsize() - 46 * 4);
 }
 
 void
-FSFileHeaderBlock::setComment(FSName name)
+FSFileHeaderBlock::setComment(FSComment name)
 {
     name.write(data + bsize() - 46 * 4);
 }
