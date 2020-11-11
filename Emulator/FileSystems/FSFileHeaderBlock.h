@@ -19,10 +19,7 @@ struct FSFileHeaderBlock : FSFileBlock {
     
     // Comment
     FSName comment = FSName("");
-    
-    // Creation date
-    FSTimeStamp created = FSTimeStamp();
-    
+        
     // Protection status bits
     u32 protection = 0;
 
@@ -52,8 +49,11 @@ struct FSFileHeaderBlock : FSFileBlock {
 
     bool matches(FSName &otherName) override { return name == otherName; }
     u32 getSize() override { return fileSize; }
-    time_t getCreationDate() override { return created.get(); }
+    // time_t getCreationDate() override { return created.get(); }
 
+    time_t getCreationDate() override;
+    void setCreationDate(time_t t) override;
+    
     void setNextDataBlockRef(u32 ref) override;
 
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }

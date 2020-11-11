@@ -15,13 +15,7 @@ struct FSRootBlock : FSBlock {
     // Name
     FSName name = FSName("Empty");
     
-    // Creation date
-    FSTimeStamp created = FSTimeStamp();
-    
-    // Most recent change
-    FSTimeStamp modified = FSTimeStamp();
-    
-    
+
     //
     // Constructing and destructing
     //
@@ -37,6 +31,12 @@ struct FSRootBlock : FSBlock {
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     
+    time_t getCreationDate() override;
+    void setCreationDate(time_t t) override;
+
+    time_t getModificationDate() override;
+    void setModificationDate(time_t t) override;
+
     u32 hashTableSize() override { return 72; }
 };
 

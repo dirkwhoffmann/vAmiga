@@ -13,7 +13,7 @@ FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
-    // hashTable = new FSHashTable(volume);
+    setCreationDate(time(NULL));
 }
 
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
@@ -33,7 +33,7 @@ FSUserDirBlock::dump()
     printf("        Name: "); printName(); printf("\n");
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
-    printf("     Created: "); created.dump(); printf("\n");
+    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
     printf("      Parent: %d\n", parent);
     printf("        Next: %d\n", next);
 }
@@ -70,7 +70,7 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
     comment.write(p + bsize - 46 * 4);
     
     // Creation date
-    created.write(p + bsize - 23 * 4);
+    // created.write(p + bsize - 23 * 4);
     
     // Directory name as BCPL string
     name.write(p + bsize - 20 * 4);
@@ -86,6 +86,18 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+time_t
+FSUserDirBlock::getCreationDate()
+{
+    return readTimeStamp(data + bsize() - 23 * 4);
+}
+
+void
+FSUserDirBlock::setCreationDate(time_t t)
+{
+    writeTimeStamp(data + bsize() - 23 * 4, t);
 }
 
 void

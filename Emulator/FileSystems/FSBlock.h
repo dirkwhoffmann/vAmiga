@@ -10,10 +10,9 @@
 #ifndef _FS_BLOCKS_H
 #define _FS_BLOCKS_H
 
-#include <stdio.h>
+#include "Utils.h"
 #include "FSTypes.h"
 #include "FSName.h"
-#include "FSTimeStamp.h"
 
 struct FSBlock {
     
@@ -40,6 +39,10 @@ struct FSBlock {
     // Reads or writes a long word in Big Endian format
     static u32 read32(u8 *p);
     static void write32(u8 *p, u32 value);
+    
+    // Reads or writes a time stamp
+    static time_t readTimeStamp(u8 *p);
+    static void writeTimeStamp(u8 *p, time_t t);
     
     
     //
@@ -136,7 +139,7 @@ public:
     virtual u32 getSize() { return 0; }
 
     // Returns the creation date of this block
-    virtual time_t getCreationDate() { return 0; }
+    // virtual time_t getCreationDate() { return 0; }
 
     
     //
@@ -172,6 +175,19 @@ public:
     virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
+    //
+    // Managing date and time
+    //
+    
+    virtual time_t getCreationDate() { return 0; }
+    virtual void setCreationDate(time_t t) { }
+
+    virtual time_t getModificationDate() { return 0; }
+    virtual void setModificationDate(time_t t) { }
+
+    void dumpDate(time_t t);
+    
+    
     //
     // Working with hash tables
     //

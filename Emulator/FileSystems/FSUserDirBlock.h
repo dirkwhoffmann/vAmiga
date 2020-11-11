@@ -20,9 +20,6 @@ struct FSUserDirBlock : FSBlock {
     // Comment
     FSName comment = FSName("");
     
-    // Creation date
-    FSTimeStamp created = FSTimeStamp();
-
     // Protection status bits
     u32 protection = 0;
     
@@ -53,8 +50,12 @@ struct FSUserDirBlock : FSBlock {
     void exportBlock(u8 *p, size_t size) override;
     
     bool matches(FSName &otherName) override { return name == otherName; }
-    time_t getCreationDate() override { return created.get(); }
+    // time_t getCreationDate() override { return created.get(); }
 
+    time_t getCreationDate() override;
+    void setCreationDate(time_t t) override;
+
+    
     void setNext(u32 ref) override;
     u32 getNext() override { return next; }
 

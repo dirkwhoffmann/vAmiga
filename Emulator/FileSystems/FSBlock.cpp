@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+#include "Utils.h"
 #include "FSVolume.h"
 
 u32
@@ -36,6 +37,40 @@ FSBlock::write32(u8 *p, u32 value)
     p[1] = (value >> 16) & 0xFF;
     p[2] = (value >>  8) & 0xFF;
     p[3] = (value >>  0) & 0xFF;
+}
+
+time_t
+FSBlock::readTimeStamp(u8 *p)
+{
+    const u32 secPerDay = 24 * 60 * 60;
+
+    u32 days = read32(p + 0);
+    u32 mins = read32(p + 4);
+    u32 ticks = read32(p + 8);
+    
+    time_t t = days * secPerDay + mins * 60 + ticks / 50;
+    
+    // Shift reference point from  Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
+    t += (8 * 365 + 2) * secPerDay - 60 * 60;
+    
+    return t;
+}
+
+void
+FSBlock::writeTimeStamp(u8 *p, time_t t)
+{
+    const u32 secPerDay = 24 * 60 * 60;
+    
+    // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
+    t -= (8 * 365 + 2) * secPerDay - 60 * 60;
+    
+    u32 days = t / secPerDay;
+    u32 mins = (t % secPerDay) / 60;
+    u32 ticks = (t % secPerDay % 60) * 50;
+
+    write32(p + 0, days);
+    write32(p + 4, mins);
+    write32(p + 8, ticks);
 }
 
 u32
@@ -190,6 +225,19 @@ FSBlock *
 FSBlock::getNextHashBlock()
 {
     return getNextHashRef() ? volume.block(getNextHashRef()) : nullptr;
+}
+
+void
+FSBlock::dumpDate(time_t t)
+{
+    tm *local = localtime(&t);
+    
+    int year  = local->tm_year + 1900;
+    int month = local->tm_mon + 1;
+    int day   = local->tm_mday;
+    
+    printf("%04d-%02d-%02d ", year, month, day);
+    printf("%02d:%02d:%02d ", local->tm_hour, local->tm_min, local->tm_sec);
 }
 
 u32

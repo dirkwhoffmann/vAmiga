@@ -12,6 +12,8 @@
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSFileBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
+    
+    setCreationDate(time(NULL));
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
@@ -26,7 +28,7 @@ FSFileHeaderBlock::dump()
     printf("        Name: "); printName(); printf("\n");
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
-    printf("     Created: "); created.dump(); printf("\n");
+    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
     printf("        Next: %d\n", next);
     printf("   File size: %d\n", fileSize);
 
@@ -75,7 +77,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     comment.write(p + bsize - 46 * 4);
     
     // Creation date
-    created.write(p + bsize - 23 * 4);
+    // created.write(p + bsize - 23 * 4);
     
     // Name as BCPL string
     name.write(p + bsize - 20 * 4);
@@ -106,6 +108,18 @@ FSFileHeaderBlock::setNext(u32 ref)
     } else {
         next = ref;
     }
+}
+
+time_t
+FSFileHeaderBlock::getCreationDate()
+{
+    return readTimeStamp(data + bsize() - 23 * 4);
+}
+
+void
+FSFileHeaderBlock::setCreationDate(time_t t)
+{
+    writeTimeStamp(data + bsize() - 23 * 4, t);
 }
 
 void

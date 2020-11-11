@@ -12,9 +12,9 @@
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    // hashTable = new FSHashTable(volume);
-    
-    // Initialize constant values
+
+    setCreationDate(time(NULL));
+    setModificationDate(time(NULL));
     
     // Type
     write32(data, 2);
@@ -41,8 +41,8 @@ void
 FSRootBlock::dump()
 {
     printf("        Name: "); name.dump(); printf("\n");
-    printf("     Created: "); created.dump(); printf("\n");
-    printf("    Modified: "); modified.dump(); printf("\n");
+    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
+    printf("    Modified: "); dumpDate(getModificationDate()); printf("\n");
     printf("  Hash table: "); dumpHashTable(); printf("\n");
 }
 
@@ -82,13 +82,13 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 49 * 4, 881);
     
     // Last recent change of the root directory of this volume
-    modified.write(p + bsize - 23 * 4);
+    // modified.write(p + bsize - 23 * 4);
     
     // Volume name
     name.write(p + bsize - 20 * 4);
 
     // Date and time when this volume was formatted
-    created.write(p + bsize - 7 * 4);
+    // created.write(p + bsize - 7 * 4);
         
     // Secondary block type
     // write32(p + bsize - 1 * 4, 1);
@@ -96,4 +96,28 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     
     // Compute checksum
     write32(p + 20, FSBlock::checksum(p));
+}
+
+time_t
+FSRootBlock::getCreationDate()
+{
+    return readTimeStamp(data + bsize() - 7 * 4);
+}
+
+void
+FSRootBlock::setCreationDate(time_t t)
+{
+    writeTimeStamp(data + bsize() - 7 * 4, t);
+}
+
+time_t
+FSRootBlock::getModificationDate()
+{
+    return readTimeStamp(data + bsize() - 23 * 4);
+}
+
+void
+FSRootBlock::setModificationDate(time_t t)
+{
+    writeTimeStamp(data + bsize() - 23 * 4, t);
 }
