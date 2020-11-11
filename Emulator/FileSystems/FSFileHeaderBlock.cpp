@@ -59,7 +59,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + 4, nr);
 
     // Number of data block references
-    write32(p + 8, numDataBlockRefs());
+    // write32(p + 8, numDataBlockRefs());
 
     // First data block
     write32(p + 16, firstDataBlock);
@@ -73,13 +73,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     
     // File size
     write32(p + bsize - 47 * 4, fileSize);
-    
-    // Comment as BCPL string
-    // comment.write(p + bsize - 46 * 4);
-    
-    // Creation date
-    // created.write(p + bsize - 23 * 4);
-    
+        
     // Name as BCPL string
     name.write(p + bsize - 20 * 4);
     
@@ -179,7 +173,6 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 
         // Add a new file list block
         ref = volume.addFileListBlock(nr, ref);
-        // if (i == 0) setNextExtensionBlockRef(ref);
     }
     
     for (u32 ref = nr, i = 1; i <= numDataBlocks; i++) {

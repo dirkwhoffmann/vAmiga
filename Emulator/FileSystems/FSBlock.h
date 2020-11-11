@@ -211,7 +211,11 @@ public:
     //
     // Chaining blocks
     //
-    
+
+    // Adds a reference to a the parent directory block
+    virtual u32 getParentRef() { return 0; }
+    virtual void setParentRef(u32 ref) { }
+
     // Adds a reference to a file header block
     virtual void setFileHeaderRef(u32 ref) { }
 

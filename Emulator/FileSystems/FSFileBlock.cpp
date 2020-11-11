@@ -28,7 +28,7 @@ FSFileBlock::dump()
     printf("      Parent: %d\n", parent);
     printf("   Extension: %d\n", getNextExtensionBlockRef());
     printf(" Data blocks: ");
-    for (int i = 0; i < numDataBlocks; i++) printf("%d ", dataBlocks[i]);
+    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", dataBlocks[i]);
 }
 
 bool
@@ -59,29 +59,3 @@ FSFileBlock::check(bool verbose)
     
     return result;
 }
-
-/*
-FSDataBlock *
-FSFileBlock::addDataBlockDeprecated()
-{
-    // Create a new data block
-    FSDataBlock *block = volume.newDataBlock();
-    if (block == nullptr) return nullptr;
-    
-    // Add a reference to this block
-    if (!addDataBlockRef(block->nr)) {
-        volume.deallocateBlock(block->nr);
-        return nullptr;
-    }
-
-    return block;
-}
-*/
-/*
-void
-FSFileBlock::deleteDataBlockRefs()
-{
-    numDataBlocks = 0;
-    for (int i = 0; i < maxDataBlocks; i++) dataBlocks[i] = 0;
-}
-*/

@@ -16,11 +16,8 @@ struct FSFileBlock : FSBlock {
 
 private:
     
-    // Maximum number of references stored in this block
-    // u32 maxDataBlocks = 0;
-
     // Number of references stored in this block
-    u32 numDataBlocks = 0;
+    // u32 numDataBlocks = 0;
 
 public:
     
@@ -49,9 +46,9 @@ public:
     u32 getParent() override { return parent; }
     void setParent(u32 parent) override { this->parent = parent; }
 
-    u32 numDataBlockRefs() override { return numDataBlocks; }
+    u32 numDataBlockRefs() override { return read32(data + 8); }
     u32 maxDataBlockRefs() override { return bsize() / 4 - 56; }
-    void incDataBlockRefs() override { numDataBlocks++; }
+    void incDataBlockRefs() override { write32(data + 8, read32(data + 8) + 1); }
 
 };
 

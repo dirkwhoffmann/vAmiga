@@ -35,7 +35,7 @@ FSUserDirBlock::dump()
     printf("        Path: "); printPath(); printf("\n");
     printf("     Comment: "); comment.dump(); printf("\n");
     printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
-    printf("      Parent: %d\n", parent);
+    printf("      Parent: %d\n", getParentRef());
     printf("        Next: %d\n", next);
 }
 
@@ -80,7 +80,8 @@ FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 4 * 4, next);
 
     // Block pointer to parent directory
-    write32(p + bsize - 3 * 4, parent);
+    // write32(p + bsize - 3 * 4, parent);
+    assert(read32(p + bsize - 3 * 4) == parent);
     
     // Subtype
     write32(p + bsize - 1 * 4, 2);
