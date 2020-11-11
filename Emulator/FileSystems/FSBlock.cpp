@@ -228,11 +228,11 @@ FSBlock::getNextHashBlock()
     return ref ? volume.block(ref) : nullptr;
 }
 
-FSBlock *
+FSFileListBlock *
 FSBlock::getNextExtensionBlock()
 {
     u32 ref = getNextExtensionBlockRef();
-    return ref ? volume.block(ref) : nullptr;
+    return ref ? volume.fileListBlock(ref) : nullptr;
 }
 
 void

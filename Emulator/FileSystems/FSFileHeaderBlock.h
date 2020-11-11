@@ -64,13 +64,15 @@ struct FSFileHeaderBlock : FSFileBlock {
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }
     void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
 
+    u32 getFirstDataBlockRef() override { return read32(data + 16); }
     void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }
 
     u32 getNextExtensionBlockRef() override { return read32(data + bsize() - 8); }
     void setNextExtensionBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
 
     bool addDataBlockRef(u32 ref) override;
-    
+    bool addDataBlockRef(u32 first, u32 ref) override;
+
     size_t addData(const u8 *buffer, size_t size) override;
 
     u32 hashValue() override { return name.hashValue(); }

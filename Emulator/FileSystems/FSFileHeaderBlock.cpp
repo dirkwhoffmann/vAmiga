@@ -50,8 +50,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
-    // Start from scratch
-    memset(p, 0, bsize);
+    memcpy(p, data, bsize);
 
     // Type
     write32(p, 2);
@@ -91,7 +90,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 3 * 4, parent);
 
     // Block pointer to first extension block
-    write32(p + bsize - 2 * 4, nextTableBlock);
+    // write32(p + bsize - 2 * 4, nextTableBlock);
 
     // Subtype
     write32(p + bsize - 1 * 4, (u32)-3);
@@ -180,7 +179,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 
         // Add a new file list block
         ref = volume.addFileListBlock(nr, ref);
-        printf("Created DataListBlock %d\n", ref);
+        // if (i == 0) setNextExtensionBlockRef(ref);
     }
     
     for (u32 ref = nr, i = 1; i <= numDataBlocks; i++) {
@@ -204,49 +203,33 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     return fileSize;
 }
 
+
 bool
 FSFileHeaderBlock::addDataBlockRef(u32 ref)
+{
+    return addDataBlockRef(nr, ref);
+}
+
+bool
+FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
 {
     // If this block has space for more references, add it here
     if (numDataBlocks < maxDataBlocks) {
 
+        if (numDataBlocks == 0) setFirstDataBlockRef(ref);
         dataBlocks[numDataBlocks++] = ref;
         return true;
     }
 
-    // Otherwise, add it to the last extension block
-    if (auto item = volume.block(nextTableBlock)) {
+    // Otherwise, add it to an extension block
+    FSFileListBlock *item = getNextExtensionBlock();
+    
+    for (int i = 0; item && i < searchLimit; i++) {
         
-        for (int i = 0; i < searchLimit; i++) {
-            
-            if (item->getNextExtensionBlock() == nullptr) {
-                item->setFirstDataBlockRef(firstDataBlock);
-                return item->addDataBlockRef(ref);
-            }
-            
-            item = item->getNextExtensionBlock();
-        }
+        if (item->addDataBlockRef(first, ref)) return true;
+        item = item->getNextExtensionBlock();
     }
     
     assert(false);
-
-    
-    // If there is an extension block, add it there
-    FSFileBlock *extension = volume.fileListBlock(nextTableBlock);
-    if (extension) return extension->addDataBlockRef(ref);
-    
-    assert(false);
-    // TODO: RETURN false HERE. THE NEW CODE WILL CREATE THE NECESSARY AMOUNT
-    // TODO: OF NEW EXTENSION BLOCKS BEFORE CALLING THIS FUNCTION
-    
-    // If this block is full, create a new FileListBlock
-    u32 newRef = volume.addFileListBlock(parent, nr);
-    FSFileListBlock *block = volume.fileListBlock(newRef);
-    if (block == nullptr) return false;
-
-    // Connect the block
-    block->firstDataBlock = firstDataBlock;
-    
-    // Add the reference to the new block
-    return block->addDataBlockRef(ref);
+    return false;
 }

@@ -27,7 +27,7 @@ FSFileBlock::dump()
     printf(" Block count: %d / %d\n", numDataBlocks, maxDataBlocks);
     printf("       First: %d\n", firstDataBlock);
     printf("      Parent: %d\n", parent);
-    printf("   Extension: %d\n", nextTableBlock);
+    printf("   Extension: %d\n", getNextExtensionBlockRef());
     printf(" Data blocks: ");
     for (int i = 0; i < numDataBlocks; i++) printf("%d ", dataBlocks[i]);
 }
@@ -37,10 +37,12 @@ FSFileBlock::check(bool verbose)
 {    
     bool result = FSBlock::check(verbose);
     
+    assert(firstDataBlock == getFirstDataBlockRef());
+
     result &= assertNotNull(parent, verbose);
     result &= assertInRange(parent, verbose);
     result &= assertInRange(firstDataBlock, verbose);
-    result &= assertInRange(nextTableBlock, verbose);
+    result &= assertInRange(getNextExtensionBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlocks; i++) {
         result &= assertInRange(dataBlocks[i], verbose);
@@ -51,7 +53,7 @@ FSFileBlock::check(bool verbose)
         return false;
     }
     
-    if (numDataBlocks < maxDataBlocks && nextTableBlock != 0) {
+    if (numDataBlocks < maxDataBlocks && getNextExtensionBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }

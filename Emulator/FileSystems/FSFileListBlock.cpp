@@ -37,8 +37,7 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
-    // Start from scratch
-    memset(p, 0, bsize);
+    memcpy(p, data, bsize);
     
     // Type
     write32(p, 16);
@@ -60,7 +59,7 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
     write32(p + bsize - 3 * 4, parent);
     
     // Block pointer to first extension block
-    write32(p + bsize - 2 * 4, nextTableBlock);
+    // write32(p + bsize - 2 * 4, nextTableBlock);
     
     // Subtype
     write32(p + bsize - 1 * 4, (u32)-3);
@@ -70,10 +69,12 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
 }
 
 bool
-FSFileListBlock::addDataBlockRef(u32 ref)
+FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
 {
     if (numDataBlocks < maxDataBlocks) {
 
+        firstDataBlock = first;
+        setFirstDataBlockRef(first);
         dataBlocks[numDataBlocks++] = ref;
         return true;
     }

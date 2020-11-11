@@ -30,7 +30,7 @@ struct FSFileBlock : FSBlock {
     u32 *dataBlocks = nullptr;
 
     // Reference to the next ref table block
-    u32 nextTableBlock = 0;
+    // u32 nextTableBlock = 0;
 
     //
     // Initializing
@@ -48,7 +48,7 @@ struct FSFileBlock : FSBlock {
     u32 blockListCapacity() override { return maxDataBlocks; }
     u32 blockListSize() override { return numDataBlocks; }
         
-    void setNextFileListBlock(u32 next) override { this->nextTableBlock = next; }
+    // void setNextFileListBlock(u32 next) override { this->nextTableBlock = next; }
         
     // class FSDataBlock *addDataBlockDeprecated(); 
     // bool addDataBlockRef(u32 ref) override;

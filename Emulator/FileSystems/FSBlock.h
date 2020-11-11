@@ -155,8 +155,9 @@ public:
 
     virtual u32 blockListCapacity() { return 0; }
     virtual u32 blockListSize() { return 0; }
-    virtual void setNextFileListBlock(u32 next) { }
+    // virtual void setNextFileListBlock(u32 next) { }
     virtual bool addDataBlockRef(u32 ref) { return false; }
+    virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
     //
@@ -225,11 +226,12 @@ public:
     virtual void setNextHashRef(u32 ref) { }
 
     // Adds a reference to the first data block
+    virtual u32 getFirstDataBlockRef() { return 0; }
     virtual void setFirstDataBlockRef(u32 ref) { }
 
     // Returns a reference or a pointer to the next extension block
     virtual u32 getNextExtensionBlockRef() { return 0; }
-    FSBlock *getNextExtensionBlock();
+    class FSFileListBlock *getNextExtensionBlock();
 
     // Adds a reference to the next extension block
     virtual void setNextExtensionBlockRef(u32 ref) { }
