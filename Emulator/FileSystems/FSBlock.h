@@ -128,9 +128,6 @@ public:
     // Return true if the name of this block matches the given name
     virtual bool matches(FSName &otherName) { return false; }
         
-    // Returns the size of this block
-    virtual u32 getSize() { return 0; }
-
     
     //
     // Method stubs for blocks maintaining a linked list
@@ -184,7 +181,10 @@ public:
     //
     
     virtual u32 getProtectionBits() { return 0; }
-    virtual void setProtectionBits(u32 value) { }
+    virtual void setProtectionBits(u32 val) { }
+
+    virtual u32 getFileSize() { return 0; }
+    virtual void setFileSize(u32 val) { }
 
     
     //

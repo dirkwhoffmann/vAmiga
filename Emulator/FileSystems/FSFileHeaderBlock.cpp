@@ -25,7 +25,6 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
 FSFileHeaderBlock(ref, nr)
 {
-    this->name = FSName(name);
     setName(FSName(name));
 }
 
@@ -37,7 +36,7 @@ FSFileHeaderBlock::dump()
     printf("     Comment : %s\n", getComment().cStr);
     printf("     Created : "); dumpDate(getCreationDate()); printf("\n");
     printf("        Next : %d\n", next);
-    printf("   File size : %d\n", fileSize);
+    printf("   File size : %d\n", getFileSize());
 
     printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
     printf("       First : %d\n", getFirstDataBlockRef());
@@ -84,7 +83,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     memcpy(p, data, bsize);
 
     // File size
-    write32(p + bsize - 47 * 4, fileSize);
+    // write32(p + bsize - 47 * 4, fileSize);
         
     // Name as BCPL string
     // name.write(p + bsize - 20 * 4);
@@ -149,7 +148,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
     printf("addData(%p,%zu)\n", buffer, size);
 
-    assert(fileSize == 0);
+    assert(getFileSize() == 0);
     
     // Compute the required number of DataBlocks
     u32 bytes = volume.bytesInDataBlock();
@@ -184,13 +183,13 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         FSBlock *block = volume.block(ref);
         if (block) {
             size_t written = block->addData(buffer, size);
-            fileSize += written;
+            setFileSize(getFileSize() + written);
             buffer += written;
             size -= written;
         }
     }
 
-    return fileSize;
+    return getFileSize();
 }
 
 

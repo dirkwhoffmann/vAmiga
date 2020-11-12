@@ -488,7 +488,7 @@ FSVolume::listWalker(FSBlock *block, int value)
     if (block->type() == FS_USERDIR_BLOCK) {
         msg("%6s  ", "(DIR)");
     } else {
-        msg("%6d  ", block->getSize());
+        msg("%6d  ", block->getFileSize());
     }
     
     // Display date and time

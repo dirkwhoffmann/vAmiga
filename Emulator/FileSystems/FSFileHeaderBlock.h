@@ -15,7 +15,7 @@
 struct FSFileHeaderBlock : FSBlock {
             
     // Name
-    FSName name = FSName("");
+    // FSName name = FSName("");
     
     // Comment
     // FSName comment = FSName("");
@@ -24,7 +24,7 @@ struct FSFileHeaderBlock : FSBlock {
     // u32 protection = 0;
 
     // File size in bytes
-    u32 fileSize = 0;
+    // u32 fileSize = 0;
     
     // Reference to the next block with the same hash
     u32 next = 0;
@@ -47,7 +47,6 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getNext() override { return next; }
 
     bool matches(FSName &otherName) override { return getName() == otherName; }
-    u32 getSize() override { return fileSize; }
 
     FSName getName() override;
     void setName(FSName name) override;
@@ -71,6 +70,9 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getProtectionBits() override            { return get32(-48     );    }
     void setProtectionBits(u32 val) override    {        set32(-48, val);    }
 
+    u32 getFileSize() override                  { return get32(-47     );    }
+    void setFileSize(u32 val) override          {        set32(-47, val);    }
+
     u32 getNextHashRef() override               { return get32(-4     );     }
     void setNextHashRef(u32 ref) override       {        set32(-4, ref);     }
 
@@ -85,7 +87,7 @@ struct FSFileHeaderBlock : FSBlock {
 
     size_t addData(const u8 *buffer, size_t size) override;
 
-    u32 hashValue() override { return name.hashValue(); }
+    u32 hashValue() override { return getName().hashValue(); }
 };
 
 #endif
