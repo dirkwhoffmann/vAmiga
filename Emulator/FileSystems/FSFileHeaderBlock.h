@@ -42,10 +42,9 @@ struct FSFileHeaderBlock : FSBlock {
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
+    void updateChecksum() override;
 
-    void setNext(u32 ref) override;
-    u32 getNext() override { return next; }
-
+    
     bool matches(FSName &otherName) override { return getName() == otherName; }
 
     FSName getName() override;

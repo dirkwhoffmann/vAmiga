@@ -80,31 +80,18 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
-    memcpy(p, data, bsize);
-
-    // File size
-    // write32(p + bsize - 47 * 4, fileSize);
-        
-    // Name as BCPL string
-    // name.write(p + bsize - 20 * 4);
+    // Rectify the checksum for this block
+    updateChecksum();
     
-    // Next block with same hash
-    write32(p + bsize - 4 * 4, next);
-        
-    // Checksum
-    write32(p + 20, FSBlock::checksum(p));
+    // Export data
+    memcpy(p, data, bsize);
 }
 
 void
-FSFileHeaderBlock::setNext(u32 ref)
+FSFileHeaderBlock::updateChecksum()
 {
-    if (!volume.isBlockNumber(ref)) return;
-    
-    if (next) {
-        volume.block(next)->setNext(ref);
-    } else {
-        next = ref;
-    }
+    set32(5, 0);
+    set32(5, checksum(data));
 }
 
 FSName

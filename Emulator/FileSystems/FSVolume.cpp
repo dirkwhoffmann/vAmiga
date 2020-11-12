@@ -474,7 +474,7 @@ FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, 
                     value = (this->*walker)(item, value);
                 }
                 
-                item = item->getNext() ? block(item->getNext()) : nullptr;
+                item = item->getNextHashBlock();
             }
         }
     }
