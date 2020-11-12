@@ -107,7 +107,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
         warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
         // volume.dump();
     }
-    // volume.dump();
+    volume.dump();
     
     // Convert the volume into an ADF
     assert(adf == nullptr);

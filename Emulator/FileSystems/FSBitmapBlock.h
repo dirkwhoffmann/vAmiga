@@ -13,24 +13,24 @@
 #include "FSBlock.h"
 
 struct FSBitmapBlock : FSBlock {
-            
-    // The allocation map
-    bool *allocated = nullptr;
-        
+                    
     FSBitmapBlock(FSVolume &ref, u32 nr);
     ~FSBitmapBlock();
      
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    void exportBlock(u8 *p, size_t size) override;
+    // void exportBlock(u8 *p, size_t size) override;
+    void updateChecksum() override;
 
     // Computes location of the allocation bit for a certain block
     void locateBlockBit(u32 nr, int *byte, int *bit);
     
-    // Allocates or deallocates a single block
+    // Checks whether a block is allocated
     bool isAllocated(u32 block);
-    void alloc(u32 block, bool value);
+
+    // Allocates or deallocates a single block
+    void alloc(u32 block, bool allocate);
     void alloc(u32 block) { alloc(block, true); }
     void dealloc(u32 block) { alloc(block, false); }
     void dealloc();

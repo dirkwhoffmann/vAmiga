@@ -12,15 +12,7 @@
 FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    
-    allocated = new bool[volume.capacity]();
-    
-    // Mark all blocks except the first two as free
-    for (int i = 2; i < volume.capacity; i++) alloc(i);
-    
-    // The first two blocks are always allocated
-    allocated[0] = true;
-    allocated[1] = true;    
+    dealloc();
 }
 
 FSBitmapBlock::~FSBitmapBlock()
@@ -34,7 +26,7 @@ FSBitmapBlock::dump()
     printf("   Allocated: ");
 
     for (int i = 0; i < volume.capacity; i++) {
-        if (allocated[i]) printf("%d ", i);
+        if (isAllocated(i)) printf("%d ", i);
     }
     
     printf("\n");
@@ -80,48 +72,16 @@ FSBitmapBlock::locateBlockBit(u32 nr, int *byte, int *bit)
         case 2: *byte -= 1; break;
         case 3: *byte -= 3; break;
     }
+
+    assert(*byte <= bsize() - 4);
+    assert(*bit < 8);
 }
 
 void
-FSBitmapBlock::exportBlock(u8 *p, size_t bsize)
+FSBitmapBlock::updateChecksum()
 {
-    assert(p);
-    assert(volume.bsize == bsize);
-
-    // Start from scratch
-    memset(p, 0, bsize);
-
-    // Write allocation map
-    for (long i = 2; i < volume.capacity; i++) {
-
-        if (allocated[i]) continue;
-        
-        // Determine bit position for this block inside the bitmap. Layout:
-        //
-        //     Position: p[00] p[01] p[02] ... p[31] p[32] p[33] ... p[63]
-        //       Sector:   29    28    27         2    61    60        34
-        //
-        // Remember: The first two sectors are always allocated and not part
-        // the map.
-
-        long bit = (i - 2) % 8;
-        long byte = (i - 2) / 8;
-        switch (byte % 4) {
-            case 0: byte += 3; break;
-            case 1: byte += 1; break;
-            case 2: byte -= 1; break;
-            case 3: byte -= 3; break;
-        }
-        
-        SET_BIT(p[4 + byte], bit);
-    }
-    
-    for (int i = 0; i < bsize; i++) {
-        assert(p[i] == data[i]);
-    }
-    
-    // Compute checksum
-    write32(p, FSBlock::checksum(p));
+    set32(0, 0);
+    set32(0, checksum(data));
 }
 
 bool
@@ -133,17 +93,16 @@ FSBitmapBlock::isAllocated(u32 block)
     // Consider non-existing blocks as allocated, too
     if (!volume.isBlockNumber(block)) return true;
 
+    // Get the location of the allocation bit
     int byte, bit;
     locateBlockBit(block, &byte, &bit);
-    assert(byte <= bsize() - 4);
-    assert(bit <= 7);
 
-    assert(GET_BIT(data[byte + 4], bit) != allocated[block]);
-    return allocated[block];
+    // The block is allocated if the allocation bit is cleared
+    return GET_BIT(data[byte + 4], bit) == 0;
 }
 
 void
-FSBitmapBlock::alloc(u32 block, bool value)
+FSBitmapBlock::alloc(u32 block, bool allocate)
 {
     if (!volume.isBlockNumber(block)) return;
 
@@ -153,13 +112,12 @@ FSBitmapBlock::alloc(u32 block, bool value)
     assert(bit <= 7);
     
     // 0 = allocated, 1 = not allocated
-    value ? CLR_BIT(data[4 + byte], bit) : SET_BIT(data[4 + byte], bit);
-    
-    allocated[block] = value;
+    allocate ? CLR_BIT(data[4 + byte], bit) : SET_BIT(data[4 + byte], bit);
 }
 
 void
 FSBitmapBlock::dealloc()
 {
-    memset(allocated, 0, sizeof(bool) * volume.capacity);
+    // Mark all blocks except the first two as free
+    for (int i = 2; i < volume.capacity; i++) dealloc(i);
 }
