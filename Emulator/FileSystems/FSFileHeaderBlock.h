@@ -46,7 +46,7 @@ struct FSFileHeaderBlock : FSBlock {
     void setNext(u32 ref) override;
     u32 getNext() override { return next; }
 
-    bool matches(FSName &otherName) override { assert(getName() == name); return name == otherName; }
+    bool matches(FSName &otherName) override { return getName() == otherName; }
     u32 getSize() override { return fileSize; }
 
     FSName getName() override;

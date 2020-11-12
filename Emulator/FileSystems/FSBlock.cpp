@@ -59,7 +59,7 @@ FSBlock::set32(i32 n, u32 value)
     // If the value is negative, we write relatively to the end
     if (n < 0) n += volume.bsize;
     
-    assert(n >= 0 && n < volume.bsize - 4);
+    assert(n >= 0 && n <= volume.bsize - 4);
     data[n+0] = (value >> 24) & 0xFF;
     data[n+1] = (value >> 16) & 0xFF;
     data[n+2] = (value >>  8) & 0xFF;

@@ -12,15 +12,14 @@
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
+   
+    // Setup constant values
     
-    // Type
-    write32(data, 2);
-        
-    // Block pointer to itself
-    write32(data + 4, nr);
+    set32(0, 2);                   // Type
+    set32(1, nr);                  // Block pointer to itself
+    setCreationDate(time(NULL));   // Creation date
+    set32(-1, (u32)-3);            // Sub type
 
-    // Creation date
-    setCreationDate(time(NULL));
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
@@ -84,44 +83,14 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
 
     memcpy(p, data, bsize);
 
-    // Type
-    // write32(p, 2);
-        
-    // Block pointer to itself
-    // write32(p + 4, nr);
-
-    // Number of data block references
-    // write32(p + 8, numDataBlockRefs());
-
-    // First data block
-    // write32(p + 16, firstDataBlock);
-    
-    // Data block list
-    u8 *end = p + bsize - 51 * 4;
-    printf("Writing %d data block refs\n", numDataBlockRefs());
-    for (int i = 0; i < numDataBlockRefs(); i++) {
-        write32(end - 4 * i, getDataBlockRef(i));
-    }
-    // Protection status bits
-    // write32(p + bsize - 48 * 4, protection);
-    
     // File size
     write32(p + bsize - 47 * 4, fileSize);
         
     // Name as BCPL string
-    name.write(p + bsize - 20 * 4);
+    // name.write(p + bsize - 20 * 4);
     
     // Next block with same hash
     write32(p + bsize - 4 * 4, next);
-
-    // Block pointer to parent directory
-    // write32(p + bsize - 3 * 4, parent);
-
-    // Block pointer to first extension block
-    // write32(p + bsize - 2 * 4, nextTableBlock);
-
-    // Subtype
-    write32(p + bsize - 1 * 4, (u32)-3);
         
     // Checksum
     write32(p + 20, FSBlock::checksum(p));
