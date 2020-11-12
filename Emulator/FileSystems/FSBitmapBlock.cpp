@@ -81,7 +81,7 @@ void
 FSBitmapBlock::updateChecksum()
 {
     set32(0, 0);
-    set32(0, checksum(data));
+    set32(0, checksum());
 }
 
 bool

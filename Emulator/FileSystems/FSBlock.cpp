@@ -10,20 +10,6 @@
 #include "Utils.h"
 #include "FSVolume.h"
 
-u32
-FSBlock::checksum(u8 *p)
-{
-    assert(p != nullptr);
-    
-    u32 result = 0;
-
-    for (int i = 0; i < 512; i += 4, p += 4) {
-        result += HI_HI_LO_LO(p[0], p[1], p[2], p[3]);
-    }
-    
-    return ~result + 1;
-}
-
 u8 *
 FSBlock::addr(int nr)
 {
@@ -77,6 +63,19 @@ FSBlock::writeTimeStamp(u8 *p, time_t t)
     write32(p + 0, days);
     write32(p + 4, mins);
     write32(p + 8, ticks);
+}
+
+u32
+FSBlock::checksum()
+{
+    u32 result = 0;
+    u32 numLongWords = volume.bsize / 4;
+    
+    for (int i = 0; i < numLongWords; i++) {
+        result += get32(i);
+    }
+    
+    return ~result + 1;
 }
 
 u32

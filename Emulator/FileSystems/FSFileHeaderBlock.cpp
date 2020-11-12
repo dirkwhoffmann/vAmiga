@@ -78,7 +78,7 @@ void
 FSFileHeaderBlock::updateChecksum()
 {
     set32(5, 0);
-    set32(5, checksum(data));
+    set32(5, checksum());
 }
 
 FSName

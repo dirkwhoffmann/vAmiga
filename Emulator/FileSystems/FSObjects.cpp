@@ -7,7 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSName.h"
+#include "FSObjects.h"
 #include "Utils.h"
 
 FSString::FSString(const char *cStr, size_t l) : limit(l)

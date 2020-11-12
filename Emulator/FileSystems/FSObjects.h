@@ -7,8 +7,8 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#ifndef _FS_NAME_H
-#define _FS_NAME_H
+#ifndef _FS_OBJECTS_H
+#define _FS_OBJECTS_H
 
 #include "Aliases.h"
 

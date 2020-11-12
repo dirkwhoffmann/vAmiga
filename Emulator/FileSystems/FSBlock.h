@@ -12,7 +12,7 @@
 
 #include "Utils.h"
 #include "FSTypes.h"
-#include "FSName.h"
+#include "FSObjects.h"
 
 struct FSBlock {
     
@@ -27,15 +27,12 @@ struct FSBlock {
     
     
     //
-    // Static variables and methods
+    // Constants and static methods
     //
 
     // Search limit for avoiding infinite loops in list walks
     static const long searchLimit = 255;
-    
-    // Computes a checksum for the sector in the provided buffer
-    static u32 checksum(u8 *p);
-    
+        
     // Reads or writes a long word in Big Endian format
     static  u32 read32(u8 *p);
     static void write32(u8 *p, u32 value);
@@ -81,6 +78,9 @@ struct FSBlock {
     // Reads or writes a time stamp
     static time_t readTimeStamp(u8 *p);
     static void writeTimeStamp(u8 *p, time_t t);
+
+    // Computes a checksum for this block
+    u32 checksum();
 
     
     //
