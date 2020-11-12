@@ -20,7 +20,6 @@ struct FSRootBlock : FSBlock {
     FSBlockType type() override { return FS_ROOT_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    // void exportBlock(u8 *p, size_t size) override;
     void updateChecksum() override;
 
     FSName getName() override;

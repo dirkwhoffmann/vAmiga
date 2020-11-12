@@ -17,10 +17,10 @@ FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSBlock(ref, nr)
     if (volume.isOFS()) {
     
         // Block type
-        write32(data, 8);
+        set32(0, 8);
 
-        // Ordinal number (first block of a file = 1)
-        write32(data + 8, cnt);
+        // Position in block sequence (numbering starts with 1)
+        set32(2, cnt);
     }
 }
 
@@ -56,6 +56,7 @@ FSDataBlock::check(bool verbose)
     return result;
 }
 
+/*
 void
 FSDataBlock::exportBlock(u8 *p, size_t bsize)
 {
@@ -67,6 +68,17 @@ FSDataBlock::exportBlock(u8 *p, size_t bsize)
     
     // Compute checksum
     if (volume.isOFS()) write32(p + 20, FSBlock::checksum(p));
+}
+*/
+
+void
+FSDataBlock::updateChecksum()
+{
+    // Only OFS data blocks store a checksum
+    if (!volume.isOFS()) return;
+    
+    set32(5, 0);
+    set32(5, checksum(data));
 }
 
 void

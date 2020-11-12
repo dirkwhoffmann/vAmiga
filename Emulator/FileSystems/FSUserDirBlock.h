@@ -14,17 +14,9 @@
 
 struct FSUserDirBlock : FSBlock {
             
-    // Name
-    FSName name = FSName("");
-    
-    // Comment
-    FSName comment = FSName("");
-    
-    // Protection status bits
-    u32 protection = 0;
     
     // Reference to the next block with the same hash
-    u32 next = 0;
+    // u32 next = 0;
 
     
     //
@@ -43,10 +35,9 @@ struct FSUserDirBlock : FSBlock {
     FSBlockType type() override { return FS_USERDIR_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    void exportBlock(u8 *p, size_t size) override;
-    
-    bool matches(FSName &otherName) override { return name == otherName; }
-    // time_t getCreationDate() override { return created.get(); }
+    void updateChecksum() override;
+
+    bool matches(FSName &otherName) override { return getName() == otherName; }
 
     FSName getName() override;
     void setName(FSName name) override;
@@ -57,21 +48,17 @@ struct FSUserDirBlock : FSBlock {
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
 
-    
-    void setNext(u32 ref) override;
-    u32 getNext() override { return next; }
-
-    // u32 getParent() override { return parent; }
-    // void setParent(u32 ref) override;
-
     u32 hashTableSize() override { return 72; }
-    u32 hashValue() override { return name.hashValue(); }
+    u32 hashValue() override { return getName().hashValue(); }
 
-    u32 getParentDirRef() override { return read32(data + bsize() - 12); }
-    void setParentDirRef(u32 ref) override { write32(data + bsize() - 12, ref); }
+    u32 getProtectionBits() override            { return get32(-48     );    }
+    void setProtectionBits(u32 val) override    {        set32(-48, val);    }
 
-    u32 getNextHashRef() override { return read32(data + bsize() - 16); }
-    void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
+    u32 getParentDirRef() override              { return get32(-3      );    }
+    void setParentDirRef(u32 ref) override      {        set32(-3,  ref);    }
+
+    u32 getNextHashRef() override               { return get32(-4     );     }
+    void setNextHashRef(u32 ref) override       {        set32(-4, ref);     }
 };
 
 #endif

@@ -14,7 +14,7 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     data = new u8[ref.bsize]();
     
     //
-    // Setup constant values
+    // Setup constants
     //
     
     assert(hashTableSize() == 72);
@@ -54,21 +54,6 @@ FSRootBlock::check(bool verbose)
     result &= checkHashTable(verbose);
     return result;
 }
-
-/*
-void
-FSRootBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(p);
-    assert(volume.bsize == bsize);
-    
-    // Rectify the checksum
-    updateChecksum();
-
-    // Export the block
-    memcpy(p, data, bsize);
-}
-*/
 
 void
 FSRootBlock::updateChecksum()

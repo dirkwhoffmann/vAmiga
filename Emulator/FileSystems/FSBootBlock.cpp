@@ -45,21 +45,6 @@ FSBootBlock::check(bool verbose)
     return result;
 }
 
-/*
-void
-FSBootBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(p != nullptr);
-    assert(volume.bsize == bsize);
-    
-    // Rectify the checksum
-    updateChecksum();
-
-    // Export the block
-    memcpy(p, data, bsize);
-}
-*/
-
 void
 FSBootBlock::writeBootCode()
 {

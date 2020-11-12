@@ -135,17 +135,6 @@ public:
         
     
     //
-    // Method stubs for blocks maintaining a linked list
-    //
-
-public:
-
-    // Links this block with another block with the same hash
-    virtual u32 getNext() { return 0; }
-    virtual void setNext(u32 next) { }
-    
-    
-    //
     // Method stubs for blocks maintaining a data block list
     //
 

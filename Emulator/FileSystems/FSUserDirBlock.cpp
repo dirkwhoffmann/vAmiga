@@ -12,31 +12,36 @@
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    
-    setCreationDate(time(NULL));
+
+    //
+    // Setup constants
+    //
+        
+    set32(0, 2);                         // Type
+    set32(1, nr);                        // Block pointer to itself
+    setCreationDate(time(NULL));         // Creation date
+    set32(-1, 2);                        // Sub type
 }
 
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
 {
-    this->name = FSName(name);
     setName(FSName(name));
 }
 
 FSUserDirBlock::~FSUserDirBlock()
 {
     delete [] data;
-    // delete hashTable;
 }
 
 void
 FSUserDirBlock::dump()
 {
     printf("        Name: %s\n", getName().cStr);
-    printf("        Path: "); printPath(); printf("\n");
+    printf("        Path: ");    printPath(); printf("\n");
     printf("     Comment: %s\n", getComment().cStr);
-    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
+    printf("     Created: ");    dumpDate(getCreationDate()); printf("\n");
     printf("      Parent: %d\n", getParentDirRef());
-    printf("        Next: %d\n", next);
+    printf("        Next: %d\n", getNextHashRef());
 }
 
 bool
@@ -48,46 +53,10 @@ FSUserDirBlock::check(bool verbose)
 }
 
 void
-FSUserDirBlock::exportBlock(u8 *p, size_t bsize)
+FSUserDirBlock::updateChecksum()
 {
-    assert(p);
-    assert(volume.bsize == bsize);
-
-    memcpy(p, data, bsize);
-
-    // Start from scratch
-    // memset(p, 0, bsize);
-    
-    // Type
-    write32(p, 2);
-    
-    // Block pointer to itself
-    write32(p + 4, nr);
-    
-    // Protection status bits
-    write32(p + bsize - 48 * 4, protection);
-    
-    // Comment as BCPL string
-    comment.write(p + bsize - 46 * 4);
-    
-    // Creation date
-    // created.write(p + bsize - 23 * 4);
-    
-    // Directory name as BCPL string
-    name.write(p + bsize - 20 * 4);
-    
-    // Next block with same hash
-    write32(p + bsize - 4 * 4, next);
-
-    // Block pointer to parent directory
-    // write32(p + bsize - 3 * 4, parent);
-    // assert(read32(p + bsize - 3 * 4) == parent);
-    
-    // Subtype
-    write32(p + bsize - 1 * 4, 2);
-        
-    // Checksum
-    write32(p + 20, FSBlock::checksum(p));
+    set32(5, 0);
+    set32(5, checksum(data));
 }
 
 FSName
@@ -125,23 +94,3 @@ FSUserDirBlock::setCreationDate(time_t t)
 {
     writeTimeStamp(data + bsize() - 23 * 4, t);
 }
-
-void
-FSUserDirBlock::setNext(u32 ref)
-{
-    if (!volume.isBlockNumber(ref)) return;
-    
-    if (next) {
-        volume.block(next)->setNext(ref);
-    } else {
-        next = ref;
-    }
-}
-
-/*
-void
-FSUserDirBlock::setParent(u32 ref)
-{
-    if (volume.isBlockNumber(ref)) parent = ref;
-}
-*/
