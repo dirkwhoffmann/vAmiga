@@ -11,15 +11,7 @@
 #include "FSBlock.h"
 
 struct FSRootBlock : FSBlock {
-  
-    // Name
-    // FSName name = FSName("Empty");
-    
-
-    //
-    // Constructing and destructing
-    //
-        
+          
     FSRootBlock(FSVolume &ref, u32 nr);
     FSRootBlock(FSVolume &ref, u32 nr, const char *name);
     ~FSRootBlock();

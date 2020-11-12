@@ -19,12 +19,13 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     
     assert(hashTableSize() == 72);
     
-    set32(0, 2);                     // Type
-    set32(3, hashTableSize());       // Hash table size
-    set32(-50, 0xFFFFFFFF);          // Bitmap validity
-    setCreationDate(time(NULL));     // Creation date
-    setModificationDate(time(NULL)); // Modification date
-    set32(-1, 1);                    // Sub type
+    set32(0, 2);                         // Type
+    set32(3, hashTableSize());           // Hash table size
+    set32(-49, volume.bitmapBlockNr());  // Location of the bitmap block
+    set32(-50, 0xFFFFFFFF);              // Bitmap validity
+    setCreationDate(time(NULL));         // Creation date
+    setModificationDate(time(NULL));     // Modification date
+    set32(-1, 1);                        // Sub type
 }
 
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
@@ -59,20 +60,6 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
 {
     assert(p);
     assert(volume.bsize == bsize);
-
-    
-    // BM flag (true if bitmap on disk is valid)
-    assert(read32(data + bsize - 50 * 4) == 0xFFFFFFFF);
-    write32(data + bsize - 50 * 4, 0xFFFFFFFF);
-    
-    // BM pages (indicates the blocks containing the bitmap)
-    write32(data + bsize - 49 * 4, 881);
-    
-    // Volume name
-    // name.write(data + bsize - 20 * 4);
-
-    
-    
     
     // Rectify the checksum
     updateChecksum();

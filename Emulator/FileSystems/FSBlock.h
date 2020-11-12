@@ -118,7 +118,7 @@ public:
     // Exports this block to a buffer (bsize must match the volume block size)
     virtual void exportBlock(u8 *p, size_t bsize);
 
-private:
+// private:
     
     // Updates the checksum for this block (called prior to exporting)
     virtual void updateChecksum() { }
