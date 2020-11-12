@@ -12,10 +12,6 @@
 FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-
-    //
-    // Setup constants
-    //
         
     set32(0, 2);                         // Type
     set32(1, nr);                        // Block pointer to itself

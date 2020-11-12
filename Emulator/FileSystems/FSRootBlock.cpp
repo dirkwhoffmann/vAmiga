@@ -13,10 +13,6 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
-    //
-    // Setup constants
-    //
-    
     assert(hashTableSize() == 72);
     
     set32(0, 2);                         // Type

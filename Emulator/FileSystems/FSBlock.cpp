@@ -230,15 +230,13 @@ FSBlock::importBlock(u8 *p, size_t bsize)
 void
 FSBlock::exportBlock(u8 *p, size_t bsize)
 {
-    assert(p != nullptr);
-    assert(data != nullptr);
     assert(bsize == volume.bsize);
-    assert(type() != FS_EMPTY_BLOCK);
             
     // Rectify the checksum
     updateChecksum();
 
     // Export the block
+    assert(p && data);
     memcpy(p, data, bsize);
 }
 

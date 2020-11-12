@@ -13,20 +13,10 @@
 #include "FSBlock.h"
 
 struct FSUserDirBlock : FSBlock {
-            
-    
-    // Reference to the next block with the same hash
-    // u32 next = 0;
-
-    
-    //
-    // Methods
-    //
-    
+                
     FSUserDirBlock(FSVolume &ref, u32 nr);
     FSUserDirBlock(FSVolume &ref, u32 nr, const char *name);
     ~FSUserDirBlock();
-
     
     //
     // Methods from Block class

@@ -74,21 +74,6 @@ FSFileHeaderBlock::check(bool verbose)
     return result;
 }
 
-/*
-void
-FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(p);
-    assert(volume.bsize == bsize);
-
-    // Rectify the checksum
-    updateChecksum();
-    
-    // Export the block
-    memcpy(p, data, bsize);
-}
-*/
-
 void
 FSFileHeaderBlock::updateChecksum()
 {

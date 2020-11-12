@@ -56,21 +56,6 @@ FSDataBlock::check(bool verbose)
     return result;
 }
 
-/*
-void
-FSDataBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(p);
-    assert(volume.bsize == bsize);
-
-    // Write block data
-    for (int i = 0; i < bsize; i++) p[i] = data[i];
-    
-    // Compute checksum
-    if (volume.isOFS()) write32(p + 20, FSBlock::checksum(p));
-}
-*/
-
 void
 FSDataBlock::updateChecksum()
 {

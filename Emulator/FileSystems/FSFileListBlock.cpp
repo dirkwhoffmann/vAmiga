@@ -13,14 +13,9 @@ FSFileListBlock::FSFileListBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
 
-    // Type
-    write32(data, 16);
-    
-    // Block pointer to itself
-    write32(data + 4, nr);
-    
-    // Subtype
-    write32(data + ref.bsize - 1 * 4, (u32)-3);
+    set32(0, 16);                         // Type
+    set32(1, nr);                         // Block pointer to itself
+    set32(-1, (u32)-3);                   // Sub type
 }
 
 FSFileListBlock::~FSFileListBlock()
@@ -66,18 +61,6 @@ FSFileListBlock::check(bool verbose)
     
     return result;
 }
-
-/*
-void
-FSFileListBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(p);
-    assert(volume.bsize == bsize);
-
-    memcpy(p, data, bsize);
-    write32(p + 20, FSBlock::checksum(p));
-}
-*/
 
 void
 FSFileListBlock::updateChecksum()

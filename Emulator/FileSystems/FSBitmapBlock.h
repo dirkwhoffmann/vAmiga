@@ -25,6 +25,9 @@ struct FSBitmapBlock : FSBlock {
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
 
+    // Computes location of the allocation bit for a certain block
+    void locateBlockBit(u32 nr, int *byte, int *bit);
+    
     // Allocates or deallocates a single block
     bool isAllocated(u32 block);
     void alloc(u32 block, bool value);

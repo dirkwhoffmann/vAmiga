@@ -21,7 +21,6 @@ struct FSDataBlock : FSBlock {
     FSBlockType type() override { return FS_DATA_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    // void exportBlock(u8 *p, size_t size) override;
     void updateChecksum() override;
 
     void setFileHeaderRef(u32 ref) override;

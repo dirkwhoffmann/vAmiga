@@ -20,7 +20,6 @@ struct FSFileHeaderBlock : FSBlock {
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    // void exportBlock(u8 *p, size_t size) override;
     void updateChecksum() override;
 
     bool matches(FSName &otherName) override { return getName() == otherName; }

@@ -15,6 +15,9 @@ FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     
     allocated = new bool[volume.capacity]();
     
+    // Mark all blocks except the first two as free
+    for (int i = 2; i < volume.capacity; i++) alloc(i);
+    
     // The first two blocks are always allocated
     allocated[0] = true;
     allocated[1] = true;    
@@ -60,6 +63,26 @@ FSBitmapBlock::check(bool verbose)
 }
 
 void
+FSBitmapBlock::locateBlockBit(u32 nr, int *byte, int *bit)
+{
+    // The first two blocks are not part the map (they are always allocated)
+    assert(nr >= 2);
+    nr -= 2;
+    
+    // Compute the location (the long word ordering of 'byte' is inversed)
+    *bit = nr % 8;
+    *byte = nr / 8;
+
+    // Rectifiy the ordering
+    switch (*byte % 4) {
+        case 0: *byte += 3; break;
+        case 1: *byte += 1; break;
+        case 2: *byte -= 1; break;
+        case 3: *byte -= 3; break;
+    }
+}
+
+void
 FSBitmapBlock::exportBlock(u8 *p, size_t bsize)
 {
     assert(p);
@@ -92,7 +115,11 @@ FSBitmapBlock::exportBlock(u8 *p, size_t bsize)
         
         SET_BIT(p[4 + byte], bit);
     }
-        
+    
+    for (int i = 0; i < bsize; i++) {
+        assert(p[i] == data[i]);
+    }
+    
     // Compute checksum
     write32(p, FSBlock::checksum(p));
 }
@@ -100,8 +127,18 @@ FSBitmapBlock::exportBlock(u8 *p, size_t bsize)
 bool
 FSBitmapBlock::isAllocated(u32 block)
 {
-    if (!volume.isBlockNumber(block)) return true;
+    // The first two blocks are always allocated
+    if (block < 2) return true;
     
+    // Consider non-existing blocks as allocated, too
+    if (!volume.isBlockNumber(block)) return true;
+
+    int byte, bit;
+    locateBlockBit(block, &byte, &bit);
+    assert(byte <= bsize() - 4);
+    assert(bit <= 7);
+
+    assert(GET_BIT(data[byte + 4], bit) != allocated[block]);
     return allocated[block];
 }
 
@@ -110,6 +147,14 @@ FSBitmapBlock::alloc(u32 block, bool value)
 {
     if (!volume.isBlockNumber(block)) return;
 
+    int byte, bit;
+    locateBlockBit(block, &byte, &bit);
+    assert(byte <= bsize() - 4);
+    assert(bit <= 7);
+    
+    // 0 = allocated, 1 = not allocated
+    value ? CLR_BIT(data[4 + byte], bit) : SET_BIT(data[4 + byte], bit);
+    
     allocated[block] = value;
 }
 

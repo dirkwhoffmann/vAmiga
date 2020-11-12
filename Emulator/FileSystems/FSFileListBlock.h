@@ -20,7 +20,6 @@ struct FSFileListBlock : FSBlock {
     FSBlockType type() override { return FS_FILELIST_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
-    // void exportBlock(u8 *p, size_t size) override;
     void updateChecksum() override;
 
     u32 getFileHeaderRef() override { return read32(data + bsize() - 12); }

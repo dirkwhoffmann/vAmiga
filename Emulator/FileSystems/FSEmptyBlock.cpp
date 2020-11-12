@@ -21,5 +21,6 @@ void
 FSEmptyBlock::exportBlock(u8 *p, size_t bsize)
 {
     assert(bsize == volume.bsize);
+    assert(p);
     memset(p, 0, bsize);
 }
