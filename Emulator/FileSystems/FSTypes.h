@@ -21,7 +21,7 @@ typedef VA_ENUM(long, FSVolumeType)
 
 inline bool isFSType(FSVolumeType value)
 {
-    return value >= 0 && value <= FS_FFS;
+    return value >= FS_NONE && value <= FS_FFS;
 }
 
 inline const char *sFSType(FSVolumeType value)
@@ -50,7 +50,7 @@ typedef VA_ENUM(long, FSBlockType)
 inline bool
 isFSBlockType(long value)
 {
-    return value >= 0 && value <= FS_DATA_BLOCK;
+    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK;
 }
 
 inline const char *

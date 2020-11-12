@@ -24,6 +24,12 @@ FSBlock::checksum(u8 *p)
     return ~result + 1;
 }
 
+u8 *
+FSBlock::addr(int nr)
+{
+    return (data + 4 * nr) + (nr < 0 ? volume.bsize : 0);
+}
+
 u32
 FSBlock::read32(u8 *p)
 {
@@ -37,33 +43,6 @@ FSBlock::write32(u8 *p, u32 value)
     p[1] = (value >> 16) & 0xFF;
     p[2] = (value >>  8) & 0xFF;
     p[3] = (value >>  0) & 0xFF;
-}
-
-u32
-FSBlock::get32(i32 n)
-{
-    n *= 4;
-    
-    // If the value is negative, we read relatively to the end
-    if (n < 0) n += volume.bsize;
-    
-    assert(n >= 0 && n < volume.bsize - 4);
-    return data[n] << 24 | data[n+1] << 16 | data[n+2] << 8 | data[n+3];
-}
-
-void
-FSBlock::set32(i32 n, u32 value)
-{
-    n *= 4;
-    
-    // If the value is negative, we write relatively to the end
-    if (n < 0) n += volume.bsize;
-    
-    assert(n >= 0 && n <= volume.bsize - 4);
-    data[n+0] = (value >> 24) & 0xFF;
-    data[n+1] = (value >> 16) & 0xFF;
-    data[n+2] = (value >>  8) & 0xFF;
-    data[n+3] = (value >>  0) & 0xFF;
 }
 
 time_t
@@ -124,14 +103,6 @@ FSBlock::assemblePath()
     delete [] prefix;
     return result;
 }
-
-/*
-void
-FSBlock::printName()
-{
-    printf("%s", getNameDeprecated());
-}
-*/
 
 void
 FSBlock::printPath()

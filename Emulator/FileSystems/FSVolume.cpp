@@ -307,10 +307,15 @@ FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
     u32 ref = allocateBlock();
     if (!ref) return 0;
 
-    FSDataBlock *newBlock = new FSDataBlock(*this, ref, count);
+    FSDataBlock *newBlock;
+    if (isOFS()) {
+        newBlock = new OFSDataBlock(*this, ref, count);
+    } else {
+        newBlock = new FFSDataBlock(*this, ref, count);
+    }
+    
     blocks[ref] = newBlock;
     newBlock->setFileHeaderRef(head);
-    // newBlock->setDataBlockNr(count);
     prevBlock->setNextDataBlockRef(ref);
     
     return ref;

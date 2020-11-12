@@ -14,19 +14,34 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSVolume &ref, u32 nr, u32 cnt);
+    FSDataBlock(FSVolume &ref, u32 nr);
     ~FSDataBlock();
-
-    // Methods from Block class
+    
     FSBlockType type() override { return FS_DATA_BLOCK; }
+};
+
+struct OFSDataBlock : FSDataBlock {
+      
+    OFSDataBlock(FSVolume &ref, u32 nr, u32 cnt);
+
     void dump() override;
     bool check(bool verbose) override;
     void updateChecksum() override;
 
-    void setFileHeaderRef(u32 ref) override;
+    void setFileHeaderRef(u32 ref) override     { write32(data + 4, ref);   }
 
-    u32 getNextDataBlockRef() override; 
-    void setNextDataBlockRef(u32 ref) override;
+    u32 getNextDataBlockRef() override          { return read32(data + 16); }
+    void setNextDataBlockRef(u32 ref) override  { write32(data + 16, ref);  }
+
+    size_t addData(const u8 *buffer, size_t size) override;
+};
+
+struct FFSDataBlock : FSDataBlock {
+      
+    FFSDataBlock(FSVolume &ref, u32 nr, u32 cnt);
+
+    void dump() override;
+    bool check(bool verbose) override;
 
     size_t addData(const u8 *buffer, size_t size) override;
 };

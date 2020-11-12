@@ -37,9 +37,11 @@ struct FSBlock {
     static u32 checksum(u8 *p);
     
     // Reads or writes a long word in Big Endian format
-    static u32 read32(u8 *p);
+    static  u32 read32(u8 *p);
     static void write32(u8 *p, u32 value);
-    
+    static void inc32(u8 *p) { write32(p, read32(p) + 1); }
+    static void dec32(u8 *p) { write32(p, read32(p) - 1); }
+
         
     //
     // Constructing and destructing
@@ -66,12 +68,15 @@ struct FSBlock {
     //
     // Reading and writing block data
     //
+
+    // Computes the address of a long word inside the block
+    u8 *addr(int nr); 
     
     // Reads, writes, or modifies the n-th long word
-    u32 get32(i32 n);
-    void set32(i32 n, u32 value);
-    void inc32(i32 n) { set32(n, get32(n) + 1); }
-    void dec32(i32 n) { set32(n, get32(n) - 1); }
+    u32  get32(i32 n) { return read32(addr(n)); }
+    void set32(i32 n, u32 val) { write32(addr(n), val); }
+    void inc32(i32 n) { inc32(addr(n)); }
+    void dec32(i32 n) { dec32(addr(n)); }
 
     // Reads or writes a time stamp
     static time_t readTimeStamp(u8 *p);

@@ -40,6 +40,8 @@ class FSVolume : AmigaObject {
     friend class FSFileHeaderBlock;
     friend class FSFileListBlock;
     friend class FSDataBlock;
+    friend class OFSDataBlock;
+    friend class FFSDataBlock;
     friend class FSHashTable;
 
 protected:

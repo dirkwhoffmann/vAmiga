@@ -9,19 +9,9 @@
 
 #include "FSVolume.h"
 
-FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSBlock(ref, nr)
+FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    
-    // Initialize header (OFS only)
-    if (volume.isOFS()) {
-    
-        // Block type
-        set32(0, 8);
-
-        // Position in block sequence (numbering starts with 1)
-        set32(2, cnt);
-    }
 }
 
 FSDataBlock::~FSDataBlock()
@@ -29,13 +19,26 @@ FSDataBlock::~FSDataBlock()
     delete [] data;
 }
 
+
+//
+// Original File System (OFS)
+//
+
+OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSDataBlock(ref, nr)
+{
+    data = new u8[ref.bsize]();
+    
+    set32(0, 8);    // Block type
+    set32(2, cnt);  // Position in block sequence (numbering starts with 1)
+}
+
 void
-FSDataBlock::dump()
+OFSDataBlock::dump()
 {    
 }
 
 bool
-FSDataBlock::check(bool verbose)
+OFSDataBlock::check(bool verbose)
 {
     bool result = FSBlock::check(verbose);
     
@@ -57,48 +60,51 @@ FSDataBlock::check(bool verbose)
 }
 
 void
-FSDataBlock::updateChecksum()
+OFSDataBlock::updateChecksum()
 {
-    // Only OFS data blocks store a checksum
-    if (!volume.isOFS()) return;
-    
     set32(5, 0);
     set32(5, checksum(data));
 }
 
-void
-FSDataBlock::setFileHeaderRef(u32 ref)
+size_t
+OFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    assert(volume.fileHeaderBlock(ref) != nullptr);
+    size_t headerSize = 24;
+    size_t count = MIN(volume.bsize - headerSize, size);
+
+    memcpy(data + headerSize, buffer, count);
+
+    // Store the number of written bytes in the block header
+    write32(data + 12, count);
     
-    // Write value into the OFS header
-    if (volume.isOFS()) write32(data + 4, ref);
+    return count;
 }
 
 
-u32
-FSDataBlock::getNextDataBlockRef()
+//
+// Fast File System (FFS)
+//
+
+FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSDataBlock(ref, nr)
 {
-    return volume.isOFS() ? read32(data + 16) : 0;
 }
 
 void
-FSDataBlock::setNextDataBlockRef(u32 ref)
+FFSDataBlock::dump()
 {
-    if (volume.isOFS()) write32(data + 16, ref);
+}
+
+bool
+FFSDataBlock::check(bool verbose)
+{
+    bool result = FSBlock::check(verbose);
+    return result;
 }
 
 size_t
-FSDataBlock::addData(const u8 *buffer, size_t size)
+FFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(volume.dsize, size);
-    size_t offset = volume.isOFS() ? 24 : 0;
-    
-    // Copy bytes
-    for (int i = 0; i < count; i++) data[offset + i] = buffer[i];
-
-    // Note number of written bytes in the header (OFS only)
-    if (volume.isOFS()) write32(data + 12, count);
-    
+    size_t count = MIN(volume.bsize, size);
+    memcpy(data, buffer, count);
     return count;
 }
