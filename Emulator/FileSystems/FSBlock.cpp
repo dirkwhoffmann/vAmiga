@@ -39,6 +39,33 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+u32
+FSBlock::get32(i32 n)
+{
+    n *= 4;
+    
+    // If the value is negative, we read relatively to the end
+    if (n < 0) n += volume.bsize;
+    
+    assert(n >= 0 && n < volume.bsize - 4);
+    return data[n] << 24 | data[n+1] << 16 | data[n+2] << 8 | data[n+3];
+}
+
+void
+FSBlock::set32(i32 n, u32 value)
+{
+    n *= 4;
+    
+    // If the value is negative, we write relatively to the end
+    if (n < 0) n += volume.bsize;
+    
+    assert(n >= 0 && n < volume.bsize - 4);
+    data[n+0] = (value >> 24) & 0xFF;
+    data[n+1] = (value >> 16) & 0xFF;
+    data[n+2] = (value >>  8) & 0xFF;
+    data[n+3] = (value >>  0) & 0xFF;
+}
+
 time_t
 FSBlock::readTimeStamp(u8 *p)
 {
@@ -228,7 +255,7 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
 FSBlock *
 FSBlock::getParentBlock()
 {
-    u32 ref = getParentRef();
+    u32 ref = getParentDirRef();
     return ref ? volume.block(ref) : nullptr;
 }
 
@@ -242,7 +269,7 @@ FSBlock::getNextHashBlock()
 FSFileListBlock *
 FSBlock::getNextExtensionBlock()
 {
-    u32 ref = getNextExtensionBlockRef();
+    u32 ref = getNextExtBlockRef();
     return ref ? volume.fileListBlock(ref) : nullptr;
 }
 

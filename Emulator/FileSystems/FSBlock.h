@@ -40,11 +40,7 @@ struct FSBlock {
     static u32 read32(u8 *p);
     static void write32(u8 *p, u32 value);
     
-    // Reads or writes a time stamp
-    static time_t readTimeStamp(u8 *p);
-    static void writeTimeStamp(u8 *p, time_t t);
-    
-    
+        
     //
     // Constructing and destructing
     //
@@ -54,7 +50,7 @@ struct FSBlock {
 
     
     //
-    // Accessing block properties
+    // Accessing block parameters
     //
 
     // Returns the type of this block
@@ -65,6 +61,21 @@ struct FSBlock {
     
     // Returns the name or path of this block
     char *assemblePath();
+
+    
+    //
+    // Reading and writing block data
+    //
+    
+    // Reads, writes, or modifies the n-th long word
+    u32 get32(i32 n);
+    void set32(i32 n, u32 value);
+    void inc32(i32 n) { set32(n, get32(n) + 1); }
+    void dec32(i32 n) { set32(n, get32(n) - 1); }
+
+    // Reads or writes a time stamp
+    static time_t readTimeStamp(u8 *p);
+    static void writeTimeStamp(u8 *p, time_t t);
 
     
     //
@@ -169,6 +180,14 @@ public:
     
     
     //
+    // Working with protection status-bits
+    //
+    
+    virtual u32 getProtectionBits() { return 0; }
+    virtual void setProtectionBits(u32 value) { }
+
+    
+    //
     // Working with hash tables
     //
     
@@ -197,8 +216,8 @@ public:
     //
 
     // Adds a reference to a the parent directory block
-    virtual u32 getParentRef() { return 0; }
-    virtual void setParentRef(u32 ref) { }
+    virtual u32 getParentDirRef() { return 0; }
+    virtual void setParentDirRef(u32 ref) { }
     FSBlock *getParentBlock();
     
     // Adds a reference to a file header block
@@ -221,11 +240,11 @@ public:
     virtual void setFirstDataBlockRef(u32 ref) { }
 
     // Returns a reference or a pointer to the next extension block
-    virtual u32 getNextExtensionBlockRef() { return 0; }
+    virtual u32 getNextExtBlockRef() { return 0; }
     class FSFileListBlock *getNextExtensionBlock();
 
     // Adds a reference to the next extension block
-    virtual void setNextExtensionBlockRef(u32 ref) { }
+    virtual void setNextExtBlockRef(u32 ref) { }
 
     
     //

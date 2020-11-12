@@ -37,8 +37,8 @@ struct FSFileListBlock : FSBlock {
 
     bool addDataBlockRef(u32 first, u32 ref) override;
 
-    u32 getNextExtensionBlockRef() override { return read32(data + bsize() - 8); }
-    void setNextExtensionBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
+    u32 getNextExtBlockRef() override { return read32(data + bsize() - 8); }
+    void setNextExtBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
 };
 
 #endif

@@ -21,7 +21,7 @@ struct FSFileHeaderBlock : FSBlock {
     // FSName comment = FSName("");
         
     // Protection status bits
-    u32 protection = 0;
+    // u32 protection = 0;
 
     // File size in bytes
     u32 fileSize = 0;
@@ -57,25 +57,28 @@ struct FSFileHeaderBlock : FSBlock {
 
     time_t getCreationDate() override;
     void setCreationDate(time_t t) override;
-    
-    u32 getNextHashRef() override { return read32(data + bsize() - 16); }
-    void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }
 
-    u32 getParentRef() override { return read32(data + bsize() - 12); }
-    void setParentRef(u32 ref) override { write32(data + bsize() - 12, ref); }
+    u32 maxDataBlockRefs() override             { return bsize() / 4 - 56;   }
+    u32 numDataBlockRefs() override             { return get32(2);           }
+    void incDataBlockRefs() override            {        inc32(2);           }
 
-    u32 getFirstDataBlockRef() override { return read32(data + 16); }
-    void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }
+    u32 getFirstDataBlockRef() override         { return get32(4     );      }
+    void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);      }
 
-    u32 getNextExtensionBlockRef() override { return read32(data + bsize() - 8); }
-    void setNextExtensionBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
+    u32 getDataBlockRef(int nr)                 { return get32(-51-nr     ); }
+    void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref); }
 
-    u32 getDataBlockRef(int nr) { return read32(data + bsize() - (51 + nr) * 4); }
-    void setDataBlockRef(int nr, u32 ref) { write32(data + bsize() - (51 + nr) * 4, ref); }
+    u32 getProtectionBits() override            { return get32(-48     );    }
+    void setProtectionBits(u32 val) override    {        set32(-48, val);    }
 
-    u32 numDataBlockRefs() override { return read32(data + 8); }
-    u32 maxDataBlockRefs() override { return bsize() / 4 - 56; }
-    void incDataBlockRefs() override { write32(data + 8, read32(data + 8) + 1); }
+    u32 getNextHashRef() override               { return get32(-4     );     }
+    void setNextHashRef(u32 ref) override       {        set32(-4, ref);     }
+
+    u32 getParentDirRef() override              { return get32(-3     );     }
+    void setParentDirRef(u32 ref) override      {        set32(-3, ref);     }
+
+    u32 getNextExtBlockRef() override           { return get32(-2     );     }
+    void setNextExtBlockRef(u32 ref) override   {        set32(-2, ref);     }
 
     bool addDataBlockRef(u32 ref) override;
     bool addDataBlockRef(u32 first, u32 ref) override;

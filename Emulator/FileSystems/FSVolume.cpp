@@ -293,8 +293,7 @@ FSVolume::addFileListBlock(u32 head, u32 prev)
     
     blocks[ref] = new FSFileListBlock(*this, ref);
     blocks[ref]->setFileHeaderRef(head);
-    // prevBlock->setNextFileListBlock(ref);
-    prevBlock->setNextExtensionBlockRef(ref);
+    prevBlock->setNextExtBlockRef(ref);
     
     return ref;
 }
@@ -359,7 +358,7 @@ FSVolume::changeDir(const char *name)
     if (strcmp(name, "..") == 0) {
                 
         // Move one level up
-        currentDir = cdb->getParentRef();
+        currentDir = cdb->getParentDirRef();
         return currentDirBlock();
     }
     
@@ -378,7 +377,7 @@ FSVolume::makeDir(const char *name)
     FSUserDirBlock *block = newUserDirBlock(name);
     if (block == nullptr) return nullptr;
     
-    block->setParentRef(cdb->nr);
+    block->setParentDirRef(cdb->nr);
     cdb->addToHashTable(block->nr);
     return block;
 }
@@ -392,7 +391,7 @@ FSVolume::makeFile(const char *name)
     FSFileHeaderBlock *block = newFileHeaderBlock(name);
     if (block == nullptr) return nullptr;
     
-    block->setParentRef(cdb->nr);
+    block->setParentDirRef(cdb->nr);
     cdb->addToHashTable(block->nr);
 
     return block;

@@ -70,8 +70,8 @@ struct FSUserDirBlock : FSBlock {
     u32 hashTableSize() override { return 72; }
     u32 hashValue() override { return name.hashValue(); }
 
-    u32 getParentRef() override { return read32(data + bsize() - 12); }
-    void setParentRef(u32 ref) override { write32(data + bsize() - 12, ref); }
+    u32 getParentDirRef() override { return read32(data + bsize() - 12); }
+    void setParentDirRef(u32 ref) override { write32(data + bsize() - 12, ref); }
 
     u32 getNextHashRef() override { return read32(data + bsize() - 16); }
     void setNextHashRef(u32 ref) override { write32(data + bsize() - 16, ref); }

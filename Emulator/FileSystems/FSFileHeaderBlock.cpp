@@ -42,8 +42,8 @@ FSFileHeaderBlock::dump()
 
     printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
     printf("       First : %d\n", getFirstDataBlockRef());
-    printf("  Parent dir : %d\n", getParentRef());
-    printf("   Extension : %d\n", getNextExtensionBlockRef());
+    printf("  Parent dir : %d\n", getParentDirRef());
+    printf("   Extension : %d\n", getNextExtBlockRef());
     printf(" Data blocks : ");
     for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
@@ -54,10 +54,10 @@ FSFileHeaderBlock::check(bool verbose)
 {
     bool result = FSBlock::check(verbose);
     
-    result &= assertNotNull(getParentRef(), verbose);
-    result &= assertInRange(getParentRef(), verbose);
+    result &= assertNotNull(getParentDirRef(), verbose);
+    result &= assertInRange(getParentDirRef(), verbose);
     result &= assertInRange(getFirstDataBlockRef(), verbose);
-    result &= assertInRange(getNextExtensionBlockRef(), verbose);
+    result &= assertInRange(getNextExtBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
@@ -68,7 +68,7 @@ FSFileHeaderBlock::check(bool verbose)
         return false;
     }
     
-    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtensionBlockRef() != 0) {
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }
@@ -98,6 +98,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     
     // Data block list
     u8 *end = p + bsize - 51 * 4;
+    printf("Writing %d data block refs\n", numDataBlockRefs());
     for (int i = 0; i < numDataBlockRefs(); i++) {
         write32(end - 4 * i, getDataBlockRef(i));
     }
