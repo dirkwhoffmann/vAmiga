@@ -19,7 +19,6 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     set32(1, nr);                  // Block pointer to itself
     setCreationDate(time(NULL));   // Creation date
     set32(-1, (u32)-3);            // Sub type
-
 }
 
 FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
@@ -32,16 +31,17 @@ void
 FSFileHeaderBlock::dump()
 {
     printf("        Name : %s\n", getName().cStr);
-    printf("        Path : "); printPath(); printf("\n");
+    printf("        Path : ");    printPath(); printf("\n");
     printf("     Comment : %s\n", getComment().cStr);
-    printf("     Created : "); dumpDate(getCreationDate()); printf("\n");
-    printf("        Next : %d\n", next);
+    printf("     Created : ");    dumpDate(getCreationDate()); printf("\n");
+    printf("        Next : %d\n", getNextHashRef());
     printf("   File size : %d\n", getFileSize());
 
     printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
     printf("       First : %d\n", getFirstDataBlockRef());
     printf("  Parent dir : %d\n", getParentDirRef());
     printf("   Extension : %d\n", getNextExtBlockRef());
+    
     printf(" Data blocks : ");
     for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
@@ -80,10 +80,10 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
-    // Rectify the checksum for this block
+    // Rectify the checksum
     updateChecksum();
     
-    // Export data
+    // Export the block
     memcpy(p, data, bsize);
 }
 

@@ -12,30 +12,29 @@
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-
-    setCreationDate(time(NULL));
-    setModificationDate(time(NULL));
     
-    // Type
-    write32(data, 2);
+    //
+    // Setup constant values
+    //
     
-    // Hash table size
-    write32(data + 12, (volume.bsize / sizeof(u32)) - 56);
+    assert(hashTableSize() == 72);
     
-    // Subtype
-    write32(data + volume.bsize - 4, 1);
+    set32(0, 2);                     // Type
+    set32(3, hashTableSize());       // Hash table size
+    set32(-50, 0xFFFFFFFF);          // Bitmap validity
+    setCreationDate(time(NULL));     // Creation date
+    setModificationDate(time(NULL)); // Modification date
+    set32(-1, 1);                    // Sub type
 }
 
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
 {
-    this->name = FSName(name);
     setName(FSName(name));
 }
 
 FSRootBlock::~FSRootBlock()
 {
     delete [] data;
-    // delete hashTable;
 }
 
 void
@@ -61,42 +60,33 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     assert(p);
     assert(volume.bsize == bsize);
 
-    memcpy(p, data, bsize);
-
-    // Start from scratch
-    // memset(p, 0, bsize);
-
-    // Type
-    // write32(p, 2);
-    assert(read32(p) == 2);
-    
-    // Hashtable size
-    // write32(p + 12, hashTable->hashTableSize);
-    
-    // Hashtable
-    // hashTable->write(p + 24);
     
     // BM flag (true if bitmap on disk is valid)
-    write32(p + bsize - 50 * 4, 0xFFFFFFFF);
+    assert(read32(data + bsize - 50 * 4) == 0xFFFFFFFF);
+    write32(data + bsize - 50 * 4, 0xFFFFFFFF);
     
     // BM pages (indicates the blocks containing the bitmap)
-    write32(p + bsize - 49 * 4, 881);
-    
-    // Last recent change of the root directory of this volume
-    // modified.write(p + bsize - 23 * 4);
+    write32(data + bsize - 49 * 4, 881);
     
     // Volume name
-    name.write(p + bsize - 20 * 4);
+    // name.write(data + bsize - 20 * 4);
 
-    // Date and time when this volume was formatted
-    // created.write(p + bsize - 7 * 4);
-        
-    // Secondary block type
-    // write32(p + bsize - 1 * 4, 1);
-    assert(read32(p + bsize - 1 * 4) == 1);
     
-    // Compute checksum
-    write32(p + 20, FSBlock::checksum(p));
+    
+    
+    // Rectify the checksum
+    updateChecksum();
+
+    // Export the block
+    memcpy(p, data, bsize);
+}
+
+void
+FSRootBlock::updateChecksum()
+{
+    printf("Updating checksum\n"); 
+    set32(5, 0);
+    set32(5, checksum(data));
 }
 
 FSName

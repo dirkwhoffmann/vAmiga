@@ -13,40 +13,22 @@
 #include "FSBlock.h"
 
 struct FSFileHeaderBlock : FSBlock {
-            
-    // Name
-    // FSName name = FSName("");
-    
-    // Comment
-    // FSName comment = FSName("");
-        
-    // Protection status bits
-    // u32 protection = 0;
-
-    // File size in bytes
-    // u32 fileSize = 0;
-    
-    // Reference to the next block with the same hash
-    u32 next = 0;
-
-    
-    //
-    // Methods
-    //
-    
+                
     FSFileHeaderBlock(FSVolume &ref, u32 nr);
     FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name);
 
-    // Methods from Block class
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
     void updateChecksum() override;
 
-    
     bool matches(FSName &otherName) override { return getName() == otherName; }
 
+    //
+    // Block items
+    //
+    
     FSName getName() override;
     void setName(FSName name) override;
 

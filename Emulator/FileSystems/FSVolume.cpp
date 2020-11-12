@@ -85,12 +85,12 @@ void
 FSVolume::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    msg("DOS%d  ", type == FS_OFS ? 0 : 1);
+    msg("DOS%d  ",      type == FS_OFS ? 0 : 1);
     msg("%5d (x %3d) ", totalBlocks(), bsize);
-    msg("%5d  ", usedBlocks());
-    msg("%5d   ", freeBlocks());
-    msg("%3d%%   ", (int)(100.0 * usedBlocks() / freeBlocks()));
-    msg("%s\n", getName());
+    msg("%5d  ",        usedBlocks());
+    msg("%5d   ",       freeBlocks());
+    msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
+    msg("%s\n",         getName().cStr);
 }
 
 void
@@ -128,7 +128,7 @@ FSVolume::check(bool verbose)
         result &= blocks[i]->check(verbose);
     }
     
-    if (verbose) {
+    if (true) {
         fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
     }
     return result;

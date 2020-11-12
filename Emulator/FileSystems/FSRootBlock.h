@@ -13,7 +13,7 @@
 struct FSRootBlock : FSBlock {
   
     // Name
-    FSName name = FSName("Empty");
+    // FSName name = FSName("Empty");
     
 
     //
@@ -29,7 +29,8 @@ struct FSRootBlock : FSBlock {
     void dump() override;
     bool check(bool verbose) override;
     void exportBlock(u8 *p, size_t size) override;
-    
+    void updateChecksum() override;
+
     FSName getName() override;
     void setName(FSName name) override;
 

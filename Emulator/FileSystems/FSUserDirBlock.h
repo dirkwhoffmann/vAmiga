@@ -23,9 +23,6 @@ struct FSUserDirBlock : FSBlock {
     // Protection status bits
     u32 protection = 0;
     
-    // Reference to the parent block
-    // u32 parent = 0;
-
     // Reference to the next block with the same hash
     u32 next = 0;
 
