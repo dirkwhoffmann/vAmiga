@@ -18,6 +18,8 @@ struct FSEmptyBlock : FSBlock {
     ~FSEmptyBlock();
      
     FSBlockType type() override { return FS_EMPTY_BLOCK; }
+
+    void exportBlock(u8 *p, size_t bsize) override;
 };
 
 #endif

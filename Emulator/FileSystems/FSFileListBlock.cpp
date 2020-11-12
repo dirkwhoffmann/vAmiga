@@ -67,6 +67,7 @@ FSFileListBlock::check(bool verbose)
     return result;
 }
 
+/*
 void
 FSFileListBlock::exportBlock(u8 *p, size_t bsize)
 {
@@ -75,6 +76,14 @@ FSFileListBlock::exportBlock(u8 *p, size_t bsize)
 
     memcpy(p, data, bsize);
     write32(p + 20, FSBlock::checksum(p));
+}
+*/
+
+void
+FSFileListBlock::updateChecksum()
+{
+    set32(5, 0);
+    set32(5, checksum(data));
 }
 
 bool

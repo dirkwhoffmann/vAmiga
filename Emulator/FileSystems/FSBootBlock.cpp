@@ -45,6 +45,7 @@ FSBootBlock::check(bool verbose)
     return result;
 }
 
+/*
 void
 FSBootBlock::exportBlock(u8 *p, size_t bsize)
 {
@@ -57,6 +58,7 @@ FSBootBlock::exportBlock(u8 *p, size_t bsize)
     // Export the block
     memcpy(p, data, bsize);
 }
+*/
 
 void
 FSBootBlock::writeBootCode()

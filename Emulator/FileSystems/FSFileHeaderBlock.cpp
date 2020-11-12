@@ -74,6 +74,7 @@ FSFileHeaderBlock::check(bool verbose)
     return result;
 }
 
+/*
 void
 FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
 {
@@ -86,6 +87,7 @@ FSFileHeaderBlock::exportBlock(u8 *p, size_t bsize)
     // Export the block
     memcpy(p, data, bsize);
 }
+*/
 
 void
 FSFileHeaderBlock::updateChecksum()

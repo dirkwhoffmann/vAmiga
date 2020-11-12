@@ -16,3 +16,10 @@ FSEmptyBlock::FSEmptyBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 FSEmptyBlock::~FSEmptyBlock()
 {
 }
+
+void
+FSEmptyBlock::exportBlock(u8 *p, size_t bsize)
+{
+    assert(bsize == volume.bsize);
+    memset(p, 0, bsize);
+}

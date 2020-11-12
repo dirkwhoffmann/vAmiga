@@ -230,26 +230,16 @@ FSBlock::importBlock(u8 *p, size_t bsize)
 void
 FSBlock::exportBlock(u8 *p, size_t bsize)
 {
+    assert(p != nullptr);
+    assert(data != nullptr);
     assert(bsize == volume.bsize);
-    
-    if (!data) {
-        assert(type() == FS_EMPTY_BLOCK);
-        
-        memset(p, 0, bsize);
-        
-        // Write header
-        /*
-        p[0] = 'D';
-        p[1] = 'O';
-        p[2] = 'S';
-        p[3] = volume.isOFS() ? 0 : 1;
-        */
-    
-    } else {
-        
-        printf("Exporting block %d (%zu bytes) (generic code)\n", nr, bsize);
-        memcpy(p, data, bsize);
-    }
+    assert(type() != FS_EMPTY_BLOCK);
+            
+    // Rectify the checksum
+    updateChecksum();
+
+    // Export the block
+    memcpy(p, data, bsize);
 }
 
 FSBlock *

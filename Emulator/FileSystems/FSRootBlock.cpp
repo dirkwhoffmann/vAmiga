@@ -55,6 +55,7 @@ FSRootBlock::check(bool verbose)
     return result;
 }
 
+/*
 void
 FSRootBlock::exportBlock(u8 *p, size_t bsize)
 {
@@ -67,11 +68,11 @@ FSRootBlock::exportBlock(u8 *p, size_t bsize)
     // Export the block
     memcpy(p, data, bsize);
 }
+*/
 
 void
 FSRootBlock::updateChecksum()
 {
-    printf("Updating checksum\n"); 
     set32(5, 0);
     set32(5, checksum(data));
 }
