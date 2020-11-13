@@ -22,23 +22,24 @@ struct FSFileListBlock : FSBlock {
     bool check(bool verbose) override;
     void updateChecksum() override;
 
-    u32 getFileHeaderRef() override { return read32(data + bsize() - 12); }
-    void setFileHeaderRef(u32 ref) override { write32(data + bsize() - 12, ref); }
+    u32 getFileHeaderRef() override             { return get32(-3);           }
+    void setFileHeaderRef(u32 ref) override     {        set32(-3, ref);      }
     
-    u32 getFirstDataBlockRef() override { return read32(data + 16); }
-    void setFirstDataBlockRef(u32 ref) override { write32(data + 16, ref); }
+    u32 getFirstDataBlockRef() override         { return get32(4);            }
+    void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
 
-    u32 getDataBlockRef(int nr) { return read32(data + bsize() - (51 + nr) * 4); }
-    void setDataBlockRef(int nr, u32 ref) { write32(data + bsize() - (51 + nr) * 4, ref); }
+    u32 getDataBlockRef(int nr)                 { return get32(-51-nr);       }
+    void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
 
-    u32 numDataBlockRefs() override { return read32(data + 8); }
+    u32 numDataBlockRefs() override             { return get32(2);            }
+
     u32 maxDataBlockRefs() override { return bsize() / 4 - 56; }
-    void incDataBlockRefs() override { write32(data + 8, read32(data + 8) + 1); }
+    void incDataBlockRefs() override { set32(2, get32(2) + 1); }
 
     bool addDataBlockRef(u32 first, u32 ref) override;
 
-    u32 getNextExtBlockRef() override { return read32(data + bsize() - 8); }
-    void setNextExtBlockRef(u32 ref) override { write32(data + bsize() - 8, ref); }
+    u32 getNextListBlockRef() override          { return get32(-2);           }
+    void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
 };
 
 #endif

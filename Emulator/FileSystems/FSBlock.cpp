@@ -219,6 +219,27 @@ FSBlock::getParentBlock()
     return ref ? volume.block(ref) : nullptr;
 }
 
+FSFileHeaderBlock *
+FSBlock::getFileHeaderBlock()
+{
+    u32 ref = getFileHeaderRef();
+    return ref ? volume.fileHeaderBlock(ref) : nullptr;
+}
+
+FSDataBlock *
+FSBlock::getFirstDataBlock()
+{
+    u32 ref = getFirstDataBlockRef();
+    return ref ? volume.dataBlock(ref) : nullptr;
+}
+
+FSDataBlock *
+FSBlock::getNextDataBlock()
+{
+    u32 ref = getNextDataBlockRef();
+    return ref ? volume.dataBlock(ref) : nullptr;
+}
+
 FSBlock *
 FSBlock::getNextHashBlock()
 {
@@ -229,21 +250,8 @@ FSBlock::getNextHashBlock()
 FSFileListBlock *
 FSBlock::getNextExtensionBlock()
 {
-    u32 ref = getNextExtBlockRef();
+    u32 ref = getNextListBlockRef();
     return ref ? volume.fileListBlock(ref) : nullptr;
-}
-
-void
-FSBlock::dumpDate(time_t t)
-{
-    tm *local = localtime(&t);
-    
-    int year  = local->tm_year + 1900;
-    int month = local->tm_mon + 1;
-    int day   = local->tm_mday;
-    
-    printf("%04d-%02d-%02d ", year, month, day);
-    printf("%02d:%02d:%02d ", local->tm_hour, local->tm_min, local->tm_sec);
 }
 
 u32

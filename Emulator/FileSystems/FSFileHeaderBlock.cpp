@@ -30,19 +30,19 @@ FSFileHeaderBlock(ref, nr)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("        Name : %s\n", getName().cStr);
-    printf("        Path : ");    printPath(); printf("\n");
-    printf("     Comment : %s\n", getComment().cStr);
-    printf("     Created : ");    getCreationDate().print(); printf("\n");
-    printf("        Next : %d\n", getNextHashRef());
-    printf("   File size : %d\n", getFileSize());
+    printf("           Name : %s\n", getName().cStr);
+    printf("           Path : ");    printPath(); printf("\n");
+    printf("        Comment : %s\n", getComment().cStr);
+    printf("        Created : ");    getCreationDate().print(); printf("\n");
+    printf("           Next : %d\n", getNextHashRef());
+    printf("      File size : %d\n", getFileSize());
 
-    printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
-    printf("       First : %d\n", getFirstDataBlockRef());
-    printf("  Parent dir : %d\n", getParentDirRef());
-    printf("   Extension : %d\n", getNextExtBlockRef());
+    printf("    Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
+    printf("          First : %d\n", getFirstDataBlockRef());
+    printf("     Parent dir : %d\n", getParentDirRef());
+    printf(" FileList block : %d\n", getNextListBlockRef());
     
-    printf(" Data blocks : ");
+    printf("    Data blocks : ");
     for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
@@ -55,7 +55,7 @@ FSFileHeaderBlock::check(bool verbose)
     result &= assertNotNull(getParentDirRef(), verbose);
     result &= assertInRange(getParentDirRef(), verbose);
     result &= assertInRange(getFirstDataBlockRef(), verbose);
-    result &= assertInRange(getNextExtBlockRef(), verbose);
+    result &= assertInRange(getNextListBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
@@ -66,7 +66,7 @@ FSFileHeaderBlock::check(bool verbose)
         return false;
     }
     
-    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtBlockRef() != 0) {
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextListBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }

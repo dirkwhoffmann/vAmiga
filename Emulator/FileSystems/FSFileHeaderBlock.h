@@ -59,8 +59,8 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getParentDirRef() override              { return get32(-3     );     }
     void setParentDirRef(u32 ref) override      {        set32(-3, ref);     }
 
-    u32 getNextExtBlockRef() override           { return get32(-2     );     }
-    void setNextExtBlockRef(u32 ref) override   {        set32(-2, ref);     }
+    u32 getNextListBlockRef() override          { return get32(-2     );     }
+    void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);     }
 
     bool addDataBlockRef(u32 ref) override;
     bool addDataBlockRef(u32 first, u32 ref) override;

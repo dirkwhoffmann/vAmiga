@@ -29,7 +29,7 @@ FSFileListBlock::dump()
     printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
     printf("       First : %d\n", getFirstDataBlockRef());
     printf("Header block : %d\n", getFileHeaderRef());
-    printf("   Extension : %d\n", getNextExtBlockRef());
+    printf("   Extension : %d\n", getNextListBlockRef());
     printf(" Data blocks : ");
     for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
@@ -43,7 +43,7 @@ FSFileListBlock::check(bool verbose)
     result &= assertNotNull(getFileHeaderRef(), verbose);
     result &= assertInRange(getFileHeaderRef(), verbose);
     result &= assertInRange(getFirstDataBlockRef(), verbose);
-    result &= assertInRange(getNextExtBlockRef(), verbose);
+    result &= assertInRange(getNextListBlockRef(), verbose);
 
     for (int i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
@@ -54,7 +54,7 @@ FSFileListBlock::check(bool verbose)
         return false;
     }
     
-    if (numDataBlockRefs() < maxDataBlockRefs() && getNextExtBlockRef() != 0) {
+    if (numDataBlockRefs() < maxDataBlockRefs() && getNextListBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }

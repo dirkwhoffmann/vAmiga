@@ -293,7 +293,7 @@ FSVolume::addFileListBlock(u32 head, u32 prev)
     
     blocks[ref] = new FSFileListBlock(*this, ref);
     blocks[ref]->setFileHeaderRef(head);
-    prevBlock->setNextExtBlockRef(ref);
+    prevBlock->setNextListBlockRef(ref);
     
     return ref;
 }
