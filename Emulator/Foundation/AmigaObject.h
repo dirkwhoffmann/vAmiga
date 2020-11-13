@@ -10,8 +10,9 @@
 #ifndef _AMIGA_OBJECT_H
 #define _AMIGA_OBJECT_H
 
-#include "Utils.h"
 #include "AmigaTypes.h"
+#include "Utils.h"
+#include "Concurrency.h"
 
 #include <vector>
 #include <map>
@@ -24,8 +25,10 @@ using std::map;
 using std::pair;
 using std::swap;
 
+// #define synchronized \
+//     for(std::unique_lock<std::recursive_mutex> _l(mutex); _l; _l.unlock())
 #define synchronized \
-    for(std::unique_lock<std::recursive_mutex> _l(mutex); _l; _l.unlock())
+    for(int _sync = (mutex.lock(), 1); _sync; _sync = (mutex.unlock(), 0))
 
 /* Base class for all Amiga objects. This class contains a textual description
  * of the object and offers various functions for printing debug messages and
@@ -50,7 +53,8 @@ protected:
      * to prevent multiple threads to enter the same code block. It mimics the
      * behaviour of the well known Java construct 'synchronized(this) { }'.
      */
-    std::recursive_mutex mutex;
+    // std::recursive_mutex mutex;
+    Mutex mutex;
     
     
     //
