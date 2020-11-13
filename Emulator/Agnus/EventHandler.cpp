@@ -12,20 +12,21 @@
 void
 Agnus::inspectEvents()
 {
-    synchronized {
-        
-        eventInfo.cpuClock = cpu.getMasterClock();
-        eventInfo.cpuCycles = cpu.getCpuClock();
-        eventInfo.dmaClock = clock;
-        eventInfo.ciaAClock = ciaa.clock;
-        eventInfo.ciaBClock  = ciab.clock;
-        eventInfo.frame = frame.nr;
-        eventInfo.vpos = pos.v;
-        eventInfo.hpos = pos.h;
-        
-        // Inspect all slots
-        for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
-    }
+    lock();
+    
+    eventInfo.cpuClock = cpu.getMasterClock();
+    eventInfo.cpuCycles = cpu.getCpuClock();
+    eventInfo.dmaClock = clock;
+    eventInfo.ciaAClock = ciaa.clock;
+    eventInfo.ciaBClock  = ciab.clock;
+    eventInfo.frame = frame.nr;
+    eventInfo.vpos = pos.v;
+    eventInfo.hpos = pos.h;
+    
+    // Inspect all slots
+    for (int i = 0; i < SLOT_COUNT; i++) inspectEventSlot((EventSlot)i);
+    
+    unlock();
 }
 
 void
@@ -388,7 +389,11 @@ EventInfo
 Agnus::getEventInfo()
 {
     EventInfo result;
-    synchronized { result = eventInfo; }
+    
+    lock();
+    result = eventInfo;
+    unlock();
+    
     return result;
 }
 
@@ -398,7 +403,11 @@ Agnus::getEventSlotInfo(int nr)
     assert(isEventSlot(nr));
 
     EventSlotInfo result;
-    synchronized { result = eventInfo.slotInfo[nr]; }
+    
+    lock();
+    result = eventInfo.slotInfo[nr];
+    unlock();
+    
     return result;
 }
 

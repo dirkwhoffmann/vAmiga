@@ -44,17 +44,18 @@ Paula::_reset(bool hard)
 void
 Paula::_inspect()
 {
-    synchronized {
-        
-        info.intreq = intreq;
-        info.intena = intena;
-        info.adkcon = adkcon;
-        
-        audioInfo.channel[0] = channel0.getInfo();
-        audioInfo.channel[1] = channel1.getInfo();
-        audioInfo.channel[2] = channel2.getInfo();
-        audioInfo.channel[3] = channel3.getInfo();
-    }
+    lock();
+    
+    info.intreq = intreq;
+    info.intena = intena;
+    info.adkcon = adkcon;
+    
+    audioInfo.channel[0] = channel0.getInfo();
+    audioInfo.channel[1] = channel1.getInfo();
+    audioInfo.channel[2] = channel2.getInfo();
+    audioInfo.channel[3] = channel3.getInfo();
+    
+    unlock();
 }
 
 void

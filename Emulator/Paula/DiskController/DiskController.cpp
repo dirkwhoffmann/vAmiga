@@ -120,7 +120,7 @@ DiskController::setConfigItem(unsigned dfn, ConfigOption option, long value)
             if (dfn == 0 && value == false) return false;
             
             // Connect or disconnect the drive
-            synchronized { config.connected[dfn] = value; }
+            config.connected[dfn] = value;
             
             // Inform the GUI
             messageQueue.put(value ? MSG_DRIVE_CONNECT : MSG_DRIVE_DISCONNECT, dfn);
@@ -147,20 +147,21 @@ DiskController::_dumpConfig()
 void
 DiskController::_inspect()
 {
-    synchronized {
-        
-        info.selectedDrive = selected;
-        info.state = state;
-        info.fifoCount = fifoCount;
-        info.dsklen = dsklen;
-        info.dskbytr =  computeDSKBYTR();
-        info.dsksync = dsksync;
-        info.prb = prb;
-        
-        for (unsigned i = 0; i < 6; i++) {
-            info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
-        }
+    lock();
+    
+    info.selectedDrive = selected;
+    info.state = state;
+    info.fifoCount = fifoCount;
+    info.dsklen = dsklen;
+    info.dskbytr =  computeDSKBYTR();
+    info.dsksync = dsksync;
+    info.prb = prb;
+    
+    for (unsigned i = 0; i < 6; i++) {
+        info.fifo[i] = (fifo >> (8 * i)) & 0xFF;
     }
+    
+    unlock();
 }
 
 void

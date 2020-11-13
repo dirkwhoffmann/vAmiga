@@ -27,8 +27,9 @@ using std::swap;
 
 // #define synchronized \
 //     for(std::unique_lock<std::recursive_mutex> _l(mutex); _l; _l.unlock())
-#define synchronized \
-    for(int _sync = (mutex.lock(), 1); _sync; _sync = (mutex.unlock(), 0))
+// #define synchronized \
+//     for(int _sync = (mutex.lock(), 1); _sync; _sync = (mutex.unlock(), 0))
+
 
 /* Base class for all Amiga objects. This class contains a textual description
  * of the object and offers various functions for printing debug messages and
@@ -66,6 +67,14 @@ public:
     const char *getDescription() const { return description ? description : ""; }
     void setDescription(const char *str) { description = strdup(str); }
     
+    
+    //
+    // Synchronizing
+    //
+    
+    void lock() { mutex.lock(); }
+    void unlock() { mutex.unlock(); }
+
     
     //
     // Debugging the component

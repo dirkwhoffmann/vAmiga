@@ -17,9 +17,9 @@ MessageQueue::MessageQueue()
 void
 MessageQueue::addListener(const void *listener, Callback *func)
 {
-    synchronized {
-        listeners.insert(pair <const void *, Callback *> (listener, func));
-    }
+    lock();
+    listeners.insert(pair <const void *, Callback *> (listener, func));
+    unlock();
     
     // Distribute all pending messages
     Message msg;
@@ -35,9 +35,9 @@ MessageQueue::removeListener(const void *listener)
 {
     put(MSG_UNREGISTER);
 
-    synchronized {
-        listeners.erase(listener);
-    }
+    lock();
+    listeners.erase(listener);
+    unlock();
 }
 
 Message
@@ -45,17 +45,17 @@ MessageQueue::get()
 { 
 	Message result;
 
-    synchronized {
-        
-        // Read message
-        if (r == w) {
-            result.type = MSG_NONE; // Queue is empty
-            result.data = 0;
-        } else {
-            result = queue[r];
-            r = (r + 1) % capacity;
-        }
+    lock();
+    
+    if (r == w) {
+        result.type = MSG_NONE; // Queue is empty
+        result.data = 0;
+    } else {
+        result = queue[r];
+        r = (r + 1) % capacity;
     }
+    
+    unlock();
     
 	return result; 
 }
@@ -63,25 +63,26 @@ MessageQueue::get()
 void
 MessageQueue::put(MessageType type, u64 data)
 {
-    synchronized {
-        
-        // Write data
-        Message msg;
-        msg.type = type;
-        msg.data = data;
-        queue[w] = msg;
-        
-        // Move write pointer to next location
-        w = (w + 1) % capacity;
-        
-        if (w == r) {
-            // warn("Queue overflow. Oldest message is lost.\n");
-            r = (r + 1) % capacity;
-        }
-        
-        // Serve registered callbacks
-        propagate(&msg);
+    lock();
+    
+    // Write data
+    Message msg;
+    msg.type = type;
+    msg.data = data;
+    queue[w] = msg;
+    
+    // Move write pointer to next location
+    w = (w + 1) % capacity;
+    
+    if (w == r) {
+        // warn("Queue overflow. Oldest message is lost.\n");
+        r = (r + 1) % capacity;
     }
+    
+    // Serve registered callbacks
+    propagate(&msg);
+    
+    unlock();
 }
 
 void

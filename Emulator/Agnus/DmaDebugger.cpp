@@ -34,31 +34,32 @@ DmaDebugger::getInfo()
 {
     DMADebuggerInfo result;
     
-    synchronized {
-        
-        result.enabled = enabled;
-        
-        result.visualizeCopper = visualize[BUS_COPPER];
-        result.visualizeBlitter = visualize[BUS_BLITTER];
-        result.visualizeDisk = visualize[BUS_DISK];
-        result.visualizeAudio = visualize[BUS_AUDIO];
-        result.visualizeSprites = visualize[BUS_SPRITE0];
-        result.visualizeBitplanes = visualize[BUS_BPL1];
-        result.visualizeCpu = visualize[BUS_CPU];
-        result.visualizeRefresh = visualize[BUS_REFRESH];
+    lock();
+    
+    result.enabled = enabled;
+    
+    result.visualizeCopper = visualize[BUS_COPPER];
+    result.visualizeBlitter = visualize[BUS_BLITTER];
+    result.visualizeDisk = visualize[BUS_DISK];
+    result.visualizeAudio = visualize[BUS_AUDIO];
+    result.visualizeSprites = visualize[BUS_SPRITE0];
+    result.visualizeBitplanes = visualize[BUS_BPL1];
+    result.visualizeCpu = visualize[BUS_CPU];
+    result.visualizeRefresh = visualize[BUS_REFRESH];
+    
+    result.displayMode = displayMode;
+    result.opacity = opacity;
+    
+    getColor(BUS_COPPER, result.copperColor);
+    getColor(BUS_BLITTER, result.blitterColor);
+    getColor(BUS_DISK, result.diskColor);
+    getColor(BUS_AUDIO, result.audioColor);
+    getColor(BUS_SPRITE0, result.spriteColor);
+    getColor(BUS_BPL1, result.bitplaneColor);
+    getColor(BUS_CPU, result.cpuColor);
+    getColor(BUS_REFRESH, result.refreshColor);
 
-        result.displayMode = displayMode;
-        result.opacity = opacity;
-
-        getColor(BUS_COPPER, result.copperColor);
-        getColor(BUS_BLITTER, result.blitterColor);
-        getColor(BUS_DISK, result.diskColor);
-        getColor(BUS_AUDIO, result.audioColor);
-        getColor(BUS_SPRITE0, result.spriteColor);
-        getColor(BUS_BPL1, result.bitplaneColor);
-        getColor(BUS_CPU, result.cpuColor);
-        getColor(BUS_REFRESH, result.refreshColor);
-    }
+    unlock();
 
     return result;
 }

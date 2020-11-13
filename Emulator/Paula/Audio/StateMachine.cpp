@@ -30,18 +30,19 @@ StateMachine<nr>::_reset(bool hard)
 template <int nr> void
 StateMachine<nr>::_inspect()
 {
-    synchronized {
-        
-        info.state = state;
-        info.dma = AUDxON();
-        info.audlenLatch = audlenLatch;
-        info.audlen = audlen;
-        info.audperLatch = audperLatch;
-        info.audper = audper;
-        info.audvolLatch = audvolLatch;
-        info.audvol = audvol;
-        info.auddat = auddat;
-    }
+    lock();
+    
+    info.state = state;
+    info.dma = AUDxON();
+    info.audlenLatch = audlenLatch;
+    info.audlen = audlen;
+    info.audperLatch = audperLatch;
+    info.audper = audper;
+    info.audvolLatch = audvolLatch;
+    info.audvol = audvol;
+    info.auddat = auddat;
+    
+    unlock();
 }
 
 template <int nr> void

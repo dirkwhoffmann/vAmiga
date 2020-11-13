@@ -23,19 +23,20 @@ Copper::_reset(bool hard)
 void
 Copper::_inspect()
 {    
-    synchronized {
-        
-        info.copList = copList;
-        info.active  = agnus.isPending<COP_SLOT>();
-        info.cdang   = cdang;
-        info.coppc   = coppc & agnus.ptrMask;
-        info.cop1lc  = cop1lc & agnus.ptrMask;
-        info.cop2lc  = cop2lc & agnus.ptrMask;
-        info.cop1ins = cop1ins;
-        info.cop2ins = cop2ins;
-        info.length1 = (cop1end - cop1lc) / 4;
-        info.length2 = (cop2end - cop2lc) / 4;
-    }
+    lock();
+    
+    info.copList = copList;
+    info.active  = agnus.isPending<COP_SLOT>();
+    info.cdang   = cdang;
+    info.coppc   = coppc & agnus.ptrMask;
+    info.cop1lc  = cop1lc & agnus.ptrMask;
+    info.cop2lc  = cop2lc & agnus.ptrMask;
+    info.cop1ins = cop1ins;
+    info.cop2ins = cop2ins;
+    info.length1 = (cop1end - cop1lc) / 4;
+    info.length2 = (cop2end - cop2lc) / 4;
+    
+    unlock();
 }
 
 void

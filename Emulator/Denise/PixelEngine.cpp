@@ -237,7 +237,11 @@ ScreenBuffer
 PixelEngine::getStableBuffer()
 {
     ScreenBuffer result;
-    synchronized { result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0]; }
+    
+    lock();
+    result = (frameBuffer == &emuTexture[0]) ? emuTexture[1] : emuTexture[0];
+    unlock();
+    
     return result;
 }
 
@@ -263,10 +267,10 @@ void
 PixelEngine::beginOfFrame()
 {
     // Switch the working buffer
-    synchronized {
-        frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
-        frameBuffer->longFrame = agnus.frame.lof;
-    }
+    lock();
+    frameBuffer = (frameBuffer == &emuTexture[0]) ? &emuTexture[1] : &emuTexture[0];
+    frameBuffer->longFrame = agnus.frame.lof;
+    unlock();
     
     dmaDebugger.vSyncHandler();
 }

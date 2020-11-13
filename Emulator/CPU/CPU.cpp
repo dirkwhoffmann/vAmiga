@@ -229,19 +229,20 @@ CPU::_inspect()
 void
 CPU::_inspect(u32 dasmStart)
 {
-    synchronized {
-                
-        // Registers
-        info.pc0 = getPC0() & 0xFFFFFF;
-        
-        for (int i = 0; i < 8; i++) {
-            info.d[i] = getD(i);
-            info.a[i] = getA(i);
-        }
-        info.usp = getUSP();
-        info.ssp = getSSP();
-        info.sr = getSR();
+    lock();
+    
+    // Registers
+    info.pc0 = getPC0() & 0xFFFFFF;
+    
+    for (int i = 0; i < 8; i++) {
+        info.d[i] = getD(i);
+        info.a[i] = getA(i);
     }
+    info.usp = getUSP();
+    info.ssp = getSSP();
+    info.sr = getSR();
+    
+    unlock();
 }
 
 void

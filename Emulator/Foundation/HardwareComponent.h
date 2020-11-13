@@ -132,7 +132,11 @@ public:
         if (!isRunning()) inspect();
         
         T result;
-        synchronized { result = cachedValues; }
+        
+        lock();
+        result = cachedValues;
+        unlock();
+        
         return result;
     }
     

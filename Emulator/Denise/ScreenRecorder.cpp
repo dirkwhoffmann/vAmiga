@@ -61,104 +61,105 @@ ScreenRecorder::startRecording(int x1, int y1, int x2, int y2,
     debug(REC_DEBUG, "Pipes created\n");
     dump();
     
-    synchronized {
+    lock();
+    
+    // Make sure the screen dimensions are even
+    if ((x2 - x1) % 2) x2--;
+    if ((y2 - y1) % 2) y2--;
+    cutout.x1 = x1;
+    cutout.x2 = x2;
+    cutout.y1 = y1;
+    cutout.y2 = y2;
+    debug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
+    
+    //
+    // Assemble the command line arguments for the video encoder
+    //
+    
+    char cmd1[512]; char *ptr = cmd1;
+    
+    // Path to the FFmpeg executable
+    ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
+    
+    // Verbosity
+    ptr += sprintf(ptr, " -loglevel %s", loglevel());
+    
+    // Input stream format
+    ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
+    
+    // Frame rate
+    ptr += sprintf(ptr, " -r %d", frameRate);
+    
+    // Frame size (width x height)
+    ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
+    
+    // Input source (named pipe)
+    ptr += sprintf(ptr, " -i %s", videoPipePath());
+    
+    // Output stream format
+    ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
+    
+    // Bit rate
+    ptr += sprintf(ptr, " -b:v %ldk", bitRate);
+    
+    // Aspect ratio
+    ptr += sprintf(ptr, " -bsf:v ");
+    ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
+    ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
+    
+    // Output file
+    ptr += sprintf(ptr, " -y %s", videoStreamPath());
+    
+    
+    //
+    // Assemble the command line arguments for the audio encoder
+    //
+    
+    char cmd2[512]; ptr = cmd2;
+    
+    // Path to the FFmpeg executable
+    ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
+    
+    // Verbosity
+    ptr += sprintf(ptr, " -loglevel %s", loglevel());
+    
+    // Audio format and number of channels
+    ptr += sprintf(ptr, " -f:a f32le -ac 2");
+    
+    // Sampling rate
+    ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
+    
+    // Input source (named pipe)
+    ptr += sprintf(ptr, " -i %s", audioPipePath());
+    
+    // Output stream format
+    ptr += sprintf(ptr, " -f mp4");
+    
+    // Output file
+    ptr += sprintf(ptr, " -y %s", audioStreamPath());
+    
+    //
+    // Launch FFmpeg instances
+    //
+    
+    assert(videoFFmpeg == NULL);
+    assert(audioFFmpeg == NULL);
+    
+    msg("\nStarting video encoder with options:\n%s\n", cmd1);
+    videoFFmpeg = popen(cmd1, "w");
+    msg(videoFFmpeg ? "Success\n" : "Failed to launch\n");
+    
+    msg("\nStarting audio encoder with options:\n%s\n", cmd2);
+    audioFFmpeg = popen(cmd2, "w");
+    msg(audioFFmpeg ? "Success\n" : "Failed to launch\n");
+    
+    // Open pipes
+    videoPipe = open(videoPipePath(), O_WRONLY);
+    audioPipe = open(audioPipePath(), O_WRONLY);
+    
+    recording = videoFFmpeg && audioFFmpeg && videoPipe != -1 && audioPipe != -1;
 
-        // Make sure the screen dimensions are even
-        if ((x2 - x1) % 2) x2--;
-        if ((y2 - y1) % 2) y2--;
-        cutout.x1 = x1;
-        cutout.x2 = x2;
-        cutout.y1 = y1;
-        cutout.y2 = y2;
-        debug("Recorded area: (%d,%d) - (%d,%d)\n", x1, y1, x2, y2);
-          
-        //
-        // Assemble the command line arguments for the video encoder
-        //
-        
-        char cmd1[512]; char *ptr = cmd1;
-
-        // Path to the FFmpeg executable
-        ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
-
-        // Verbosity
-        ptr += sprintf(ptr, " -loglevel %s", loglevel());
-
-        // Input stream format
-        ptr += sprintf(ptr, " -f:v rawvideo -pixel_format rgba");
-        
-        // Frame rate
-        ptr += sprintf(ptr, " -r %d", frameRate);
-
-        // Frame size (width x height)
-        ptr += sprintf(ptr, " -s:v %dx%d", x2 - x1, y2 - y1);
-        
-        // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", videoPipePath());
-
-        // Output stream format
-        ptr += sprintf(ptr, " -f mp4 -pix_fmt yuv420p");
-
-        // Bit rate
-        ptr += sprintf(ptr, " -b:v %ldk", bitRate);
-
-        // Aspect ratio
-        ptr += sprintf(ptr, " -bsf:v ");
-        ptr += sprintf(ptr, "\"h264_metadata=sample_aspect_ratio=");
-        ptr += sprintf(ptr, "%ld/%ld\"", aspectX, 2*aspectY);
-        
-        // Output file
-        ptr += sprintf(ptr, " -y %s", videoStreamPath());
-
-        
-        //
-        // Assemble the command line arguments for the audio encoder
-        //
-        
-        char cmd2[512]; ptr = cmd2;
-
-        // Path to the FFmpeg executable
-        ptr += sprintf(ptr, "%s -nostdin", ffmpegPath());
-        
-        // Verbosity
-        ptr += sprintf(ptr, " -loglevel %s", loglevel());
-
-        // Audio format and number of channels
-        ptr += sprintf(ptr, " -f:a f32le -ac 2");
-
-        // Sampling rate
-        ptr += sprintf(ptr, " -sample_rate %d", sampleRate);
-
-        // Input source (named pipe)
-        ptr += sprintf(ptr, " -i %s", audioPipePath());
-        
-        // Output stream format
-        ptr += sprintf(ptr, " -f mp4");
-
-        // Output file
-        ptr += sprintf(ptr, " -y %s", audioStreamPath());
-        
-        //
-        // Launch FFmpeg instances
-        //
-            
-        assert(videoFFmpeg == NULL);
-        assert(audioFFmpeg == NULL);
-
-        msg("\nStarting video encoder with options:\n%s\n", cmd1);
-        videoFFmpeg = popen(cmd1, "w");
-        msg(videoFFmpeg ? "Success\n" : "Failed to launch\n");
-
-        msg("\nStarting audio encoder with options:\n%s\n", cmd2);
-        audioFFmpeg = popen(cmd2, "w");
-        msg(audioFFmpeg ? "Success\n" : "Failed to launch\n");
-        
-        // Open pipes
-        videoPipe = open(videoPipePath(), O_WRONLY);
-        audioPipe = open(audioPipePath(), O_WRONLY);
-
-        recording = videoFFmpeg && audioFFmpeg && videoPipe != -1 && audioPipe != -1;
-    }
+    unlock();
 
     if (isRecording()) {
         messageQueue.put(MSG_RECORDING_STARTED);
@@ -175,10 +176,10 @@ ScreenRecorder::stopRecording()
     
     if (!isRecording()) return;
     
-    synchronized {
-        recording = false;
-        recordCounter++;
-    }
+    lock();
+    recording = false;
+    recordCounter++;
+    unlock();
 
     // Close pipes
     close(videoPipe);
@@ -250,51 +251,52 @@ ScreenRecorder::vsyncHandler(Cycle target)
     assert(videoFFmpeg != NULL);
     assert(audioFFmpeg != NULL);
 
-    synchronized {
-        
-        //
-        // Video
-        //
-                        
-        ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
-        
-        int width = sizeof(u32) * (cutout.x2 - cutout.x1);
-        int height = cutout.y2 - cutout.y1;
-        int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
-        u8 *data = new u8[width * height];
-        u8 *src = (u8 *)(buffer.data + offset);
-        u8 *dst = data;
-        for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
-            memcpy(dst, src, width);
-        }
-
-        // Feed the video pipe
-        assert(videoPipe != -1);
-        write(videoPipe, data, (size_t)(width * height));
-        
-        //
-        // Audio
-        //
-        
-        // Clone Paula's muxer contents
-        muxer.sampler[0] = paula.muxer.sampler[0];
-        muxer.sampler[1] = paula.muxer.sampler[1];
-        muxer.sampler[2] = paula.muxer.sampler[2];
-        muxer.sampler[3] = paula.muxer.sampler[3];
-        assert(muxer.sampler[0].r == paula.muxer.sampler[0].r);
-        assert(muxer.sampler[0].w == paula.muxer.sampler[0].w);
-
-        // Synthesize audio samples for this frame
-        if (audioClock == 0) audioClock = target-1;
-        muxer.synthesize(audioClock, target, samplesPerFrame);
-        audioClock = target;
-        
-        // Copy samples to buffer
-        float *samples = new float[2 * samplesPerFrame];
-        muxer.copyInterleaved(samples, samplesPerFrame);
-                
-        // Feed the audio pipe
-        assert(audioPipe != -1);
-        write(audioPipe, (u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
+    lock();
+    
+    //
+    // Video
+    //
+    
+    ScreenBuffer buffer = denise.pixelEngine.getStableBuffer();
+    
+    int width = sizeof(u32) * (cutout.x2 - cutout.x1);
+    int height = cutout.y2 - cutout.y1;
+    int offset = cutout.y1 * HPIXELS + cutout.x1 + HBLANK_MIN * 4;
+    u8 *data = new u8[width * height];
+    u8 *src = (u8 *)(buffer.data + offset);
+    u8 *dst = data;
+    for (int y = 0; y < height; y++, src += 4 * HPIXELS, dst += width) {
+        memcpy(dst, src, width);
     }
+    
+    // Feed the video pipe
+    assert(videoPipe != -1);
+    write(videoPipe, data, (size_t)(width * height));
+    
+    //
+    // Audio
+    //
+    
+    // Clone Paula's muxer contents
+    muxer.sampler[0] = paula.muxer.sampler[0];
+    muxer.sampler[1] = paula.muxer.sampler[1];
+    muxer.sampler[2] = paula.muxer.sampler[2];
+    muxer.sampler[3] = paula.muxer.sampler[3];
+    assert(muxer.sampler[0].r == paula.muxer.sampler[0].r);
+    assert(muxer.sampler[0].w == paula.muxer.sampler[0].w);
+    
+    // Synthesize audio samples for this frame
+    if (audioClock == 0) audioClock = target-1;
+    muxer.synthesize(audioClock, target, samplesPerFrame);
+    audioClock = target;
+    
+    // Copy samples to buffer
+    float *samples = new float[2 * samplesPerFrame];
+    muxer.copyInterleaved(samples, samplesPerFrame);
+    
+    // Feed the audio pipe
+    assert(audioPipe != -1);
+    write(audioPipe, (u8 *)samples, (size_t)(2 * sizeof(float) * samplesPerFrame));
+
+    unlock();
 }

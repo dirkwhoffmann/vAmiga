@@ -28,12 +28,13 @@ TOD::_reset(bool hard)
 void
 TOD::_inspect()
 {
-    synchronized {
-        
-        info.value = tod.value;
-        info.latch = latch.value;
-        info.alarm = alarm.value;
-    }
+    lock();
+    
+    info.value = tod.value;
+    info.latch = latch.value;
+    info.alarm = alarm.value;
+    
+    unlock();
 }
 
 void 
