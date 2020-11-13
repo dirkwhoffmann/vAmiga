@@ -24,10 +24,10 @@ Copper::serviceEvent(EventID id)
             if (verbose) trace("COP_REQ_DMA\n");
             
             // Wait for the next possible DMA cycle
-            if (!agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
+            if (!amiga.agnus.busIsFree<BUS_COPPER>()) { reschedule(); break; }
 
             // Don't wake up in an odd cycle
-            if (agnus.pos.h % 2) { reschedule(); break; }
+            if (amiga.agnus.pos.h % 2) { reschedule(); break; }
 
             // Continue with fetching the first instruction word
             schedule(COP_FETCH);
@@ -235,7 +235,7 @@ Copper::serviceEvent(EventID id)
             skip = comparator(beam);
 
             // If the BFD flag is cleared, we also need to check the Blitter
-            if (!getBFD()) skip &= !blitter.isRunning();
+            if (!getBFD()) skip &= !agnus.blitter.isRunning();
             
             // Continue with the next command
             schedule(COP_FETCH);
