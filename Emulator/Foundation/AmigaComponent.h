@@ -12,31 +12,32 @@
 
 #include "HardwareComponent.h"
 
+class Agnus;
 class Amiga;
-class MessageQueue;
+class Blitter;
 class CPU;
 class CIA;
 class CIAA;
 class CIAB;
-class RTC;
-class Memory;
-class Agnus;
+class ControlPort;
 class Copper;
-class Blitter;
-class DmaDebugger;
 class Denise;
+class DiskController;
+class DmaDebugger;
+class Drive;
+class Joystick;
+class Keyboard;
+class Memory;
+class MessageQueue;
+class Mouse;
+class Oscillator;
 class PixelEngine;
 class Paula;
 class PaulaAudio;
-class DiskController;
+class RTC;
+class SerialPort;
 class UART;
 class ZorroManager;
-class ControlPort;
-class SerialPort;
-class Mouse;
-class Joystick;
-class Keyboard;
-class Drive;
 
 /* This class is the base class for all Amiga subcomponents. It extends class
  * HardwareComponents with references to all other components.
@@ -45,32 +46,33 @@ class AmigaComponent : public HardwareComponent {
 
 protected:
 
+    Agnus &agnus;
     Amiga &amiga;
-    MessageQueue &messageQueue;
+    Blitter &blitter;
     CPU &cpu;
     CIAA &ciaa;
     CIAB &ciab;
-    RTC &rtc;
-    Memory &mem;
-    Agnus &agnus;
-    Copper &copper;
-    Blitter &blitter;
-    DmaDebugger &dmaDebugger;
-    Denise &denise;
-    PixelEngine &pixelEngine;
-    Paula &paula;
-    PaulaAudio &audioUnit;
-    DiskController &diskController;
-    UART &uart;
-    ZorroManager &zorro;
     ControlPort &controlPort1;
     ControlPort &controlPort2;
-    SerialPort &serialPort;
-    Keyboard &keyboard;
+    Copper &copper;
+    Denise &denise;
+    DiskController &diskController;
+    DmaDebugger &dmaDebugger;
     Drive &df0;
     Drive &df1;
     Drive &df2;
     Drive &df3;
+    Keyboard &keyboard;
+    Memory &mem;
+    MessageQueue &messageQueue;
+    Oscillator &oscillator;
+    Paula &paula;
+    PaulaAudio &audioUnit;
+    PixelEngine &pixelEngine;
+    RTC &rtc;
+    SerialPort &serialPort;
+    UART &uart;
+    ZorroManager &zorro;
 
     Drive *df[4] = { &df0, &df1, &df2, &df3 };
 

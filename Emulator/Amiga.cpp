@@ -69,6 +69,7 @@ Amiga::Amiga()
 
     subComponents = vector<HardwareComponent *> {
 
+        &oscillator,
         &agnus,
         &rtc,
         &denise,
@@ -93,7 +94,7 @@ Amiga::Amiga()
     hardReset();
 
     // Initialize the mach timer info
-    mach_timebase_info(&tb);
+    // mach_timebase_info(&tb);
     
     // Initialize mutex
     pthread_mutex_init(&threadLock, NULL);
@@ -518,7 +519,8 @@ Amiga::_setWarp(bool enable)
         
     } else {
         
-        restartTimer();
+        oscillator.restart();
+        // restartTimer();
         messageQueue.put(MSG_WARP_OFF);
     }
 }
@@ -683,7 +685,8 @@ Amiga::runLoop()
     trace(RUN_DEBUG, "runLoop()\n");
 
     // Prepare to run
-    restartTimer();
+    oscillator.restart();
+    // restartTimer();
     
     // Enable or disable debugging features
     if (debugMode) {
@@ -751,13 +754,15 @@ Amiga::runLoop()
     }
 }
 
+/*
 void
 Amiga::restartTimer()
 {
     timeBase = time_in_nanos();
     clockBase = agnus.clock;
 }
-
+*/
+/*
 void
 Amiga::synchronizeTiming()
 {
@@ -765,15 +770,7 @@ Amiga::synchronizeTiming()
     Cycle clockDelta = agnus.clock - clockBase;
     u64 elapsedTime  = (u64)(clockDelta * 1000 / masterClockFrequency);
     u64 targetTime   = timeBase + elapsedTime;
-    
-    /*
-     debug("now         = %lld\n", now);
-     debug("clockDelta  = %lld\n", clockDelta);
-     debug("elapsedTime = %lld\n", elapsedTime);
-     debug("targetTime  = %lld\n", targetTime);
-     debug("\n");
-     */
-    
+        
     // Check if we're running too slow ...
     if (now > targetTime) {
         
@@ -801,6 +798,7 @@ Amiga::synchronizeTiming()
         mach_wait_until(targetTime);
     }
 }
+*/
 
 void
 Amiga::requestAutoSnapshot()

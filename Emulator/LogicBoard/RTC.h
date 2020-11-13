@@ -10,7 +10,7 @@
 #ifndef _RTC_H
 #define _RTC_H
 
-#include "HardwareComponent.h"
+#include "AmigaComponent.h"
 
 class RTC : public AmigaComponent {
 

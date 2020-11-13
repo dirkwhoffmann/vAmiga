@@ -1022,9 +1022,12 @@ Agnus::vsyncHandler()
     mem.updateStats();
     
     // Count some sheep (zzzzzz) ...
+    oscillator.synchronize();
+    /*
     if (!amiga.inWarpMode()) {
         amiga.synchronizeTiming();
     }
+    */
 }
 
 //

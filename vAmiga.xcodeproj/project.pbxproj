@@ -39,6 +39,7 @@
 		50357BB6239123B2007E7563 /* Renderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB5239123B2007E7563 /* Renderer.swift */; };
 		50357BB823912929007E7563 /* RendererSetup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50357BB723912929007E7563 /* RendererSetup.swift */; };
 		50384C8621FC6B66006E7748 /* Snapshot.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50384C8421FC6B66006E7748 /* Snapshot.cpp */; };
+		503DECAE255E6180005FFA0B /* Oscillator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 503DECAC255E6180005FFA0B /* Oscillator.cpp */; };
 		5043F6C5221972F90047CC30 /* MyToolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5043F6C4221972F90047CC30 /* MyToolbar.swift */; };
 		504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 504C48B324143AB4008ADAB3 /* AgnusDma.cpp */; };
 		504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* RendererRect.swift */; };
@@ -272,6 +273,8 @@
 		50384C8421FC6B66006E7748 /* Snapshot.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Snapshot.cpp; sourceTree = "<group>"; };
 		50384C8521FC6B66006E7748 /* Snapshot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Snapshot.h; sourceTree = "<group>"; };
 		503990C522D8CCB600035783 /* Beam.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Beam.h; sourceTree = "<group>"; };
+		503DECAC255E6180005FFA0B /* Oscillator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Oscillator.cpp; sourceTree = "<group>"; };
+		503DECAD255E6180005FFA0B /* Oscillator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Oscillator.h; sourceTree = "<group>"; };
 		5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DiskControllerTypes.h; sourceTree = "<group>"; };
 		5042FD7E23FFF0D200B315B2 /* PaulaAudioTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaulaAudioTypes.h; sourceTree = "<group>"; };
 		5043F6C4221972F90047CC30 /* MyToolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyToolbar.swift; sourceTree = "<group>"; };
@@ -699,6 +702,8 @@
 		505B801D23FE628F002407FE /* LogicBoard */ = {
 			isa = PBXGroup;
 			children = (
+				503DECAD255E6180005FFA0B /* Oscillator.h */,
+				503DECAC255E6180005FFA0B /* Oscillator.cpp */,
 				50A493832374560D003ECD2C /* RTCTypes.h */,
 				501B821C2262FFB200042871 /* RTC.h */,
 				501B821B2262FFB200042871 /* RTC.cpp */,
@@ -1466,6 +1471,7 @@
 				5057E4C5243DF10A004005EB /* Primitives.swift in Sources */,
 				507957AC244AD25B007B8B8D /* Configuration.swift in Sources */,
 				50F54B3024B5D31D0078FDC9 /* u_quick.c in Sources */,
+				503DECAE255E6180005FFA0B /* Oscillator.cpp in Sources */,
 				50950ED822881B7A0073F755 /* ZorroManager.cpp in Sources */,
 				50B70CAD252CE0BF006B5191 /* Muxer.cpp in Sources */,
 				509C66792551577D0028D497 /* DIRFile.cpp in Sources */,

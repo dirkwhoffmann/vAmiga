@@ -13,7 +13,7 @@
 #include "Aliases.h"
 
 //
-// Clock rates
+// Clock rates (TODO: MOVE TO Oscillator class)
 //
 
 // Clock rate of the master clock in MHz (PAL Amiga)
@@ -24,6 +24,7 @@ static const double cpuClockFrequency = masterClockFrequency / 4.0;
 
 // Clock rate of the DMA bus (3.546895 MHz)
 static const double dmaClockFrequency = masterClockFrequency / 8.0;
+
 
 //
 // Custom registers
