@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Copper::Copper(Amiga& ref) : amiga(ref), agnus(ref.agnus), HardwareComponent()
+Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
     setDescription("Copper");
 }
@@ -237,7 +237,7 @@ Copper::move(u32 addr, u16 value)
         trace(OCSREG_DEBUG, "pokeCustom16(%X [%s], %X)\n", addr, regName(addr), value);
 
         // Color registers
-        amiga.denise.pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
+        pixelEngine.colChanges.insert(4 * agnus.pos.h, RegChange { addr, value} );
         return;
     }
 
@@ -382,7 +382,7 @@ bool Copper::isMoveCmd(u32 addr)
 {
     assert(IS_EVEN(addr));
 
-    u16 hiword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
 
     return IS_EVEN(hiword);
 }
@@ -396,8 +396,8 @@ bool Copper::isWaitCmd(u32 addr)
 {
     assert(IS_EVEN(addr));
 
-    u16 hiword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr);
-    u16 loword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 loword = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
 
     return IS_ODD(hiword) && IS_EVEN(loword);
 }
@@ -413,8 +413,8 @@ Copper::isSkipCmd(u32 addr)
 {
     assert(IS_EVEN(addr));
 
-    u16 hiword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr);
-    u16 loword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 loword = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
 
     return IS_ODD(hiword) && IS_ODD(loword);
 }
@@ -428,7 +428,7 @@ Copper::getRA()
 u16
 Copper::getRA(u32 addr)
 {
-    u16 hiword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 hiword = mem.spypeek16 <AGNUS_ACCESS> (addr);
     return hiword & 0x1FE;
 }
 
@@ -441,7 +441,7 @@ Copper::getDW()
 u16
 Copper::getDW(u32 addr)
 {
-    u16 loword = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 loword = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
     return loword;
 }
 
@@ -454,7 +454,7 @@ Copper::getBFD()
 bool
 Copper::getBFD(u32 addr)
 {
-    u16 instr = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
     return (instr & 0x8000) != 0;
 }
 
@@ -467,7 +467,7 @@ Copper::getVPHP()
 u16
 Copper::getVPHP(u32 addr)
 {
-    u16 instr = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr);
+    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr);
     return instr & 0xFFFE;
 }
 
@@ -480,7 +480,7 @@ Copper::getVMHM()
 u16
 Copper::getVMHM(u32 addr)
 {
-    u16 instr = amiga.mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
+    u16 instr = mem.spypeek16 <AGNUS_ACCESS> (addr + 2);
     return (instr & 0x7FFE) | 0x8001;
 }
 

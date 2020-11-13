@@ -12,12 +12,9 @@
 
 #include "Beam.h"
 
-class Copper : public HardwareComponent
+class Copper : public AmigaComponent
 {
     friend class Agnus;
-    
-    Amiga &amiga;
-    Agnus &agnus;
     
     // Result of the latest inspection
     CopperInfo info;
