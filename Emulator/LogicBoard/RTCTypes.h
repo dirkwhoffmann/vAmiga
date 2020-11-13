@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, RTCRevision)
+VAMIGA_ENUM(long, RTCRevision)
 {
     RTC_NONE,
     RTC_OKI,

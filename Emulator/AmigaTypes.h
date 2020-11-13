@@ -35,7 +35,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, ConfigOption)
+VAMIGA_ENUM(long, ConfigOption)
 {
     // Agnus
     OPT_AGNUS_REVISION,
@@ -109,7 +109,7 @@ inline bool isConfigOption(long value)
     return value >= OPT_AGNUS_REVISION && value <= OPT_FILTER_ALWAYS_ON;
 }
 
-typedef VA_ENUM(long, EmulatorState)
+VAMIGA_ENUM(long, EmulatorState)
 {
     STATE_OFF,
     STATE_PAUSED,
@@ -120,7 +120,7 @@ inline bool isEmulatorState(long value) {
     return value >= STATE_OFF && value <= STATE_RUNNING;
 }
 
-typedef VA_ENUM(u32, RunLoopControlFlag)
+VAMIGA_ENUM(u32, RunLoopControlFlag)
 {
     RL_STOP               = 0b000001,
     RL_INSPECT            = 0b000010,
@@ -130,7 +130,7 @@ typedef VA_ENUM(u32, RunLoopControlFlag)
     RL_USER_SNAPSHOT      = 0b100000
 };
 
-typedef VA_ENUM(long, ErrorCode)
+VAMIGA_ENUM(long, ErrorCode)
 {
     ERR_OK,
     ERR_ROM_MISSING,

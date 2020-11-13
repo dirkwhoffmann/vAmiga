@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, DiskType)
+VAMIGA_ENUM(long, DiskType)
 {
     DISK_35,
     DISK_525
@@ -47,7 +47,7 @@ inline const char *sDiskType(DiskType value)
     }
 }
 
-typedef VA_ENUM(long, DiskDensity)
+VAMIGA_ENUM(long, DiskDensity)
 {
     DISK_SD,
     DISK_DD,
@@ -70,7 +70,7 @@ inline const char *sDiskDensity(DiskDensity value)
 }
 
 /*
-typedef VA_ENUM(long, EmptyDiskFormat)
+VAMIGA_ENUM(long, EmptyDiskFormat)
 {
     FS_EMPTY,
     FS_EMPTY_OFS,

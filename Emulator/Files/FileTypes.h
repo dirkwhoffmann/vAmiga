@@ -14,7 +14,7 @@
 
 #include "Aliases.h"
 
-typedef VA_ENUM(long, AmigaFileType)
+VAMIGA_ENUM(long, AmigaFileType)
 {
     FILETYPE_UKNOWN = 0,
     FILETYPE_SNAPSHOT,
@@ -35,7 +35,7 @@ inline bool isAmigaFileType(long value)
     return value >= 0 && value < FILETYPE_COUNT;
 }
 
-typedef VA_ENUM(long, RomIdentifier)
+VAMIGA_ENUM(long, RomIdentifier)
 {
     ROM_MISSING,
     ROM_UNKNOWN,
@@ -82,7 +82,7 @@ typedef VA_ENUM(long, RomIdentifier)
 
 static inline bool isRomRevision(long value) { return value >= 0 && value <= ROM_CNT; }
 
-typedef VA_ENUM(long, DecryptionError)
+VAMIGA_ENUM(long, DecryptionError)
 {
     DECRYPT_NOT_AN_ENCRYPTED_ROM,
     DECRYPT_MISSING_ROM_KEY_FILE,

@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(int, DriveState)
+VAMIGA_ENUM(int, DriveState)
 {
     DRIVE_DMA_OFF,     // Drive is idle
 

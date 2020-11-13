@@ -12,7 +12,7 @@
 
 #include "Aliases.h"
 
-typedef VA_ENUM(long, FSVolumeType)
+VAMIGA_ENUM(long, FSVolumeType)
 {
     FS_NONE,
     FS_OFS,
@@ -34,7 +34,7 @@ inline const char *sFSType(FSVolumeType value)
     }
 }
 
-typedef VA_ENUM(long, FSBlockType)
+VAMIGA_ENUM(long, FSBlockType)
 {
     FS_UNKNOWN_BLOCK,
     FS_EMPTY_BLOCK,

@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, DeniseRevision)
+VAMIGA_ENUM(long, DeniseRevision)
 {
     DENISE_OCS,          // Revision 8362R8
     // DENISE_OCS_BRDRBLNK, // Revision 8362R8 + Border Blank feature
@@ -41,7 +41,7 @@ inline const char *sDeniseRevision(DeniseRevision value)
     }
 }
 
-typedef VA_ENUM(long, Palette)
+VAMIGA_ENUM(long, Palette)
 {
     PALETTE_COLOR = 0,
     PALETTE_BLACK_WHITE,

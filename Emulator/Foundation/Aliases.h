@@ -82,11 +82,26 @@ typedef i16 Cylinder;
 typedef i16 Track;
 typedef i16 Sector;
 
+/* All enumeration types are declared via VAMIGA_ENUM.
+ * We don't use standard C style to make the enumerations easily accessible in
+ * Swift.
+ */
+
+// Definition for macOS
+#ifdef VA_ENUM
+#define VAMIGA_ENUM(_type, _name) \
+typedef VA_ENUM(_type, _name)
+
+// Definition for Linux (clang)
+#elif defined(__clang__)
+#define VAMIGA_ENUM(_type, _name) \
+typedef enum __attribute__((enum_extensibility(open))) _name : _type _name; \
+enum _name : _type
+
+// Definition for Linux (gcc)
+#else
+#define VAMIGA_ENUM(_type, _name) \
+enum _name : _type;
 #endif
 
-// Replacement for the VA_ENUM macro which is only available on macOS
-#ifndef VA_ENUM
-#define VA_ENUM(_type, _name) \
-enum __attribute__((enum_extensibility(open))) _name : _type _name; \
-enum _name : _type
 #endif

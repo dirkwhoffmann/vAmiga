@@ -18,7 +18,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, DriveType)
+VAMIGA_ENUM(long, DriveType)
 {
     DRIVE_35_DD,
     DRIVE_35_HD,

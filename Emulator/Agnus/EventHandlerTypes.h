@@ -21,7 +21,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, EventSlot)
+VAMIGA_ENUM(long, EventSlot)
 {
     // Primary slots
     REG_SLOT = 0,                   // Register changes
@@ -91,7 +91,7 @@ inline const char *slotName(EventSlot nr)
     }
 }
 
-typedef VA_ENUM(long, EventID)
+VAMIGA_ENUM(long, EventID)
 {
     EVENT_NONE = 0,
     

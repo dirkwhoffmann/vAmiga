@@ -18,7 +18,7 @@
  * table to specify the source and target of a peek or poke operation,
  * respectively.
  */
-typedef VA_ENUM(long, MemorySource)
+VAMIGA_ENUM(long, MemorySource)
 {
     MEM_NONE,
     MEM_CHIP,
@@ -44,7 +44,7 @@ static inline bool isMemorySource(long value)
 }
 
 // Access identifiers. Some memory methods need to know who called them.
-typedef VA_ENUM(long, Accessor)
+VAMIGA_ENUM(long, Accessor)
 {
     CPU_ACCESS,
     AGNUS_ACCESS
@@ -64,7 +64,7 @@ static inline const char *sAccessor(Accessor value)
     }
 }
 
-typedef VA_ENUM(long, BankMap)
+VAMIGA_ENUM(long, BankMap)
 {
     BMAP_A500,
     BMAP_A1000,
@@ -89,7 +89,7 @@ static inline const char *sBankMap(BankMap value)
 }
 
 // Configuration options for the initial RAM pattern
-typedef VA_ENUM(long, RamInitPattern)
+VAMIGA_ENUM(long, RamInitPattern)
 {
     INIT_RANDOMIZED,
     INIT_ALL_ZEROES,
@@ -112,7 +112,7 @@ static inline const char *sRamInitPattern(RamInitPattern value)
 }
 
 // Configuration options for dealing with unmapped RAM
-typedef VA_ENUM(long, UnmappingType)
+VAMIGA_ENUM(long, UnmappingType)
 {
     UNMAPPED_FLOATING,
     UNMAPPED_ALL_ZEROES,

@@ -14,7 +14,7 @@
 
 #include "Aliases.h"
 
-typedef VA_ENUM(long, DmaDisplayMode)
+VAMIGA_ENUM(long, DmaDisplayMode)
 {
     MODULATE_FG_LAYER,
     MODULATE_BG_LAYER,

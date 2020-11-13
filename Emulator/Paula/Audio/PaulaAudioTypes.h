@@ -16,7 +16,7 @@
 // Enumerations
 //
 
-typedef VA_ENUM(long, SamplingMethod)
+VAMIGA_ENUM(long, SamplingMethod)
 {
     SMP_NONE,
     SMP_NEAREST,
@@ -39,7 +39,7 @@ static inline const char *sSamplingMethod(SamplingMethod value)
     }
 }
 
-typedef VA_ENUM(long, FilterType)
+VAMIGA_ENUM(long, FilterType)
 {
     FILT_NONE,
     FILT_BUTTERWORTH,
