@@ -696,14 +696,16 @@
 			path = Memory;
 			sourceTree = "<group>";
 		};
-		505B801D23FE628F002407FE /* RTC */ = {
+		505B801D23FE628F002407FE /* LogicBoard */ = {
 			isa = PBXGroup;
 			children = (
 				50A493832374560D003ECD2C /* RTCTypes.h */,
 				501B821C2262FFB200042871 /* RTC.h */,
 				501B821B2262FFB200042871 /* RTC.cpp */,
+				50950ED722881B7A0073F755 /* ZorroManager.h */,
+				50950ED622881B7A0073F755 /* ZorroManager.cpp */,
 			);
-			path = RTC;
+			path = LogicBoard;
 			sourceTree = "<group>";
 		};
 		505B801E23FE6582002407FE /* Foundation */ = {
@@ -883,14 +885,13 @@
 				50B14C0F21EB410B002E32A6 /* Amiga.h */,
 				50B14C0E21EB410B002E32A6 /* Amiga.cpp */,
 				50B14C0421EB212E002E32A6 /* Foundation */,
+				505B801D23FE628F002407FE /* LogicBoard */,
 				50EE993D21FF4D42003BD74B /* Paula */,
 				502F7DCF2221709700AEEC65 /* Denise */,
 				502F7DD0222170AE00AEEC65 /* Agnus */,
 				508FDF5621EA1FBC0043D0E9 /* CIA */,
 				508E7F962206CDC600F7D88C /* CPU */,
-				505B801D23FE628F002407FE /* RTC */,
 				505B801C23FE626E002407FE /* Memory */,
-				50950ED522881B3C0073F755 /* Expansion */,
 				50A2953C21FF12C20046BAA0 /* Peripherals */,
 				50A2953B21FF12170046BAA0 /* Drive */,
 				508FE06621EA31E50043D0E9 /* Files */,
@@ -912,15 +913,6 @@
 				5009B7F7255702D40037288E /* DiskFiles */,
 			);
 			path = Files;
-			sourceTree = "<group>";
-		};
-		50950ED522881B3C0073F755 /* Expansion */ = {
-			isa = PBXGroup;
-			children = (
-				50950ED722881B7A0073F755 /* ZorroManager.h */,
-				50950ED622881B7A0073F755 /* ZorroManager.cpp */,
-			);
-			path = Expansion;
 			sourceTree = "<group>";
 		};
 		5099123C24BA46E10007CAB6 /* Preferences */ = {

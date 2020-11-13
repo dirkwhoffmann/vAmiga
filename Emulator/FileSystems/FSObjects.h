@@ -10,6 +10,7 @@
 #ifndef _FS_OBJECTS_H
 #define _FS_OBJECTS_H
 
+#include <time.h>
 #include "Aliases.h"
 
 struct FSString {
@@ -45,6 +46,20 @@ struct FSComment : FSString {
     
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
+};
+
+struct FSTime {
+    
+    u32 days;
+    u32 mins;
+    u32 ticks;
+    
+    FSTime(time_t t);
+    FSTime(const u8 *p);
+
+    time_t time();
+    void write(u8 *p);
+    void print();
 };
 
 #endif

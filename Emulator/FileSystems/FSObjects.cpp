@@ -7,8 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSObjects.h"
-#include "Utils.h"
+#include "FSBlock.h"
 
 FSString::FSString(const char *cStr, size_t l) : limit(l)
 {
@@ -82,98 +81,55 @@ FSName::rectify()
     }
 }
 
-
-/*
-
-FSName::FSName(const u8 *bcplStr)
+FSTime::FSTime(time_t t)
 {
-    assert(bcplStr != nullptr);
+    const u32 secPerDay = 24 * 60 * 60;
     
-    // First entry is string length
-    u8 len = *(bcplStr++);
+    // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
+    t -= (8 * 365 + 2) * secPerDay - 60 * 60;
     
-    // Amiga file and volume names are limited to 30 characters
-    if (len <= 30) strncpy(name, (const char *)bcplStr, 30);
-    
-    // Make sure the string terminates
-    name[30] = 0;
+    days = t / secPerDay;
+    mins = (t % secPerDay) / 60;
+    ticks = (t % secPerDay % 60) * 50;
 }
 
-char
-FSName::capital(char c)
+FSTime::FSTime(const u8 *p)
 {
-    return (c >= 'a' && c <= 'z') ? c - ('a' - 'A') : c;
+    assert(p != nullptr);
+    
+    days = FSBlock::read32(p);
+    mins = FSBlock::read32(p + 4);
+    ticks = FSBlock::read32(p + 8);
 }
 
-bool
-FSName::operator== (FSName &rhs)
+time_t
+FSTime::time()
 {
-    int n = 0;
+    const u32 secPerDay = 24 * 60 * 60;
+    time_t t = days * secPerDay + mins * 60 + ticks / 50;
     
-    while (name[n] != 0 || rhs.name[n] != 0) {
-        if (capital(name[n]) != capital(rhs.name[n])) return false;
-        n++;
-    }
-    return true;
-}
-
-u32
-FSName::hashValue()
-{
-    size_t length = strlen(name);
-    u32 result = (u32)length;
+    // Shift reference point from  Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
+    t += (8 * 365 + 2) * secPerDay - 60 * 60;
     
-    for (size_t i = 0; i < length; i++) {
-        char c = capital(name[i]);
-        result = (result * 13 + (u32)c) & 0x7FF;
-    }
-    return result % 72;
+    return t;
 }
 
 void
-FSName::write(u8 *p)
+FSTime::write(u8 *p)
 {
     assert(p != nullptr);
-    assert(strlen(name) < sizeof(name));
-
-    // Write name as BCPL string (first byte is string length)
-    p[0] = strlen(name);
-    strncpy((char *)(p + 1), name, strlen(name));
-}
-
-FSComment::FSComment(const char *str)
-{
-    assert(str != nullptr);
     
-    // Comments are limited to 91 characters
-    strncpy(name, str, 91);
-        
-    // Make sure the string terminates
-    name[90] = 0;
-}
-
-FSComment::FSComment(const u8 *bcplStr)
-{
-    assert(bcplStr != nullptr);
-    
-    // First entry is string length
-    u8 len = *(bcplStr++);
-    
-    // Amiga file and volume names are limited to 91 characters
-    if (len <= 91) strncpy(name, (const char *)bcplStr, 91);
-    
-    // Make sure the string terminates
-    name[91] = 0;
+    FSBlock::write32(p + 0, days);
+    FSBlock::write32(p + 4, mins);
+    FSBlock::write32(p + 8, ticks);
 }
 
 void
-FSComment::write(u8 *p)
+FSTime::print()
 {
-    assert(p != nullptr);
-    assert(strlen(name) < sizeof(name));
+    time_t tt = time();
+    tm *t = localtime(&tt);
     
-    // Write name as BCPL string (first byte is string length)
-    p[0] = strlen(name);
-    strncpy((char *)(p + 1), name, strlen(name));
+    printf("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
+    printf("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
 }
-*/

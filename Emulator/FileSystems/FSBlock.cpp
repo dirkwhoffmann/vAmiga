@@ -17,7 +17,7 @@ FSBlock::addr(int nr)
 }
 
 u32
-FSBlock::read32(u8 *p)
+FSBlock::read32(const u8 *p)
 {
     return p[0] << 24 | p[1] << 16 | p[2] << 8 | p[3];
 }

@@ -34,7 +34,7 @@ struct FSBlock {
     static const long searchLimit = 255;
         
     // Reads or writes a long word in Big Endian format
-    static  u32 read32(u8 *p);
+    static  u32 read32(const u8 *p);
     static void write32(u8 *p, u32 value);
     static void inc32(u8 *p) { write32(p, read32(p) + 1); }
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
