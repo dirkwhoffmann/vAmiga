@@ -17,6 +17,8 @@
 #ifndef _BUFFERS_H
 #define _BUFFERS_H
 
+#include "AmigaTypes.h"
+
 template <class T, int capacity> struct RingBuffer
 {
     // Element storage

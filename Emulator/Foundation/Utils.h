@@ -24,8 +24,6 @@
 
 #include "AmigaConfig.h"
 #include "AmigaConstants.h"
-#include "AmigaTypes.h"
-#include "AmigaPrivateTypes.h"
 
 
 //

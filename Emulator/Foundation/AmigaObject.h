@@ -11,6 +11,7 @@
 #define _AMIGA_OBJECT_H
 
 #include "Utils.h"
+#include "AmigaTypes.h"
 
 #include <vector>
 #include <map>

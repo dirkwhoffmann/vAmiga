@@ -11,6 +11,7 @@
 #define _SERIALIZATION_H
 
 #include "AmigaTypes.h"
+#include "AmigaPrivateTypes.h"
 #include "Beam.h"
 #include "Buffers.h"
 #include "DDF.h"

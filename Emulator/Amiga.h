@@ -136,7 +136,7 @@ private:
     unsigned suspendCounter = 0;
     
     // The emulator thread
-    pthread_t p = NULL;
+    pthread_t p = 0;
     
     /* Mutex to coordinate the ownership of the emulator thread.
      *
