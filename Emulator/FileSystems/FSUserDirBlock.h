@@ -29,26 +29,26 @@ struct FSUserDirBlock : FSBlock {
 
     bool matches(FSName &otherName) override { return getName() == otherName; }
 
-    FSName getName() override;
-    void setName(FSName name) override;
+    FSName getName() override                  { return FSName(addr(-20));    }
+    void setName(FSName name) override         { name.write(addr(-20));       }
 
-    FSComment getComment() override;
-    void setComment(FSComment name) override;
+    FSComment getComment() override            { return FSComment(addr(-46)); }
+    void setComment(FSComment name) override   { name.write(addr(-46));       }
 
-    time_t getCreationDate() override;
-    void setCreationDate(time_t t) override;
+    FSTime getCreationDate() override          { return FSTime(addr(-23));    }
+    void setCreationDate(FSTime t) override    { t.write(addr(-23));          }
 
     u32 hashTableSize() override { return 72; }
     u32 hashValue() override { return getName().hashValue(); }
 
-    u32 getProtectionBits() override            { return get32(-48     );    }
-    void setProtectionBits(u32 val) override    {        set32(-48, val);    }
+    u32 getProtectionBits() override           { return get32(-48     );     }
+    void setProtectionBits(u32 val) override   {        set32(-48, val);     }
 
-    u32 getParentDirRef() override              { return get32(-3      );    }
-    void setParentDirRef(u32 ref) override      {        set32(-3,  ref);    }
+    u32 getParentDirRef() override             { return get32(-3      );     }
+    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);     }
 
-    u32 getNextHashRef() override               { return get32(-4     );     }
-    void setNextHashRef(u32 ref) override       {        set32(-4, ref);     }
+    u32 getNextHashRef() override              { return get32(-4     );      }
+    void setNextHashRef(u32 ref) override      {        set32(-4, ref);      }
 };
 
 #endif

@@ -76,8 +76,8 @@ struct FSBlock {
     void dec32(i32 n) { dec32(addr(n)); }
 
     // Reads or writes a time stamp
-    static time_t readTimeStamp(u8 *p);
-    static void writeTimeStamp(u8 *p, time_t t);
+    // static time_t readTimeStamp(u8 *p);
+    // static void writeTimeStamp(u8 *p, time_t t);
 
     // Computes a checksum for this block
     u32 checksum();
@@ -166,11 +166,11 @@ public:
     // Working with date and time
     //
     
-    virtual time_t getCreationDate() { return 0; }
-    virtual void setCreationDate(time_t t) { }
+    virtual FSTime getCreationDate() { return FSTime((time_t)0); }
+    virtual void setCreationDate(FSTime t) { }
 
-    virtual time_t getModificationDate() { return 0; }
-    virtual void setModificationDate(time_t t) { }
+    virtual FSTime getModificationDate() { return FSTime((time_t)0); }
+    virtual void setModificationDate(FSTime t) { }
 
     void dumpDate(time_t t);
     

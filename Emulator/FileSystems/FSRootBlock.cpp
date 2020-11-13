@@ -38,8 +38,8 @@ void
 FSRootBlock::dump()
 {
     printf("        Name: %s\n", getName().cStr);
-    printf("     Created: "); dumpDate(getCreationDate()); printf("\n");
-    printf("    Modified: "); dumpDate(getModificationDate()); printf("\n");
+    printf("     Created: "); getCreationDate().print(); printf("\n");
+    printf("    Modified: "); getModificationDate().print(); printf("\n");
     printf("  Hash table: "); dumpHashTable(); printf("\n");
 }
 
@@ -56,40 +56,4 @@ FSRootBlock::updateChecksum()
 {
     set32(5, 0);
     set32(5, checksum());
-}
-
-FSName
-FSRootBlock::getName()
-{
-    return FSName(data + bsize() - 20 * 4);
-}
-
-void
-FSRootBlock::setName(FSName name)
-{
-    name.write(data + bsize() - 20 * 4);
-}
-
-time_t
-FSRootBlock::getCreationDate()
-{
-    return readTimeStamp(data + bsize() - 7 * 4);
-}
-
-void
-FSRootBlock::setCreationDate(time_t t)
-{
-    writeTimeStamp(data + bsize() - 7 * 4, t);
-}
-
-time_t
-FSRootBlock::getModificationDate()
-{
-    return readTimeStamp(data + bsize() - 23 * 4);
-}
-
-void
-FSRootBlock::setModificationDate(time_t t)
-{
-    writeTimeStamp(data + bsize() - 23 * 4, t);
 }

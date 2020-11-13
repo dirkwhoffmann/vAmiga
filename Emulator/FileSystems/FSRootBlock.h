@@ -22,14 +22,14 @@ struct FSRootBlock : FSBlock {
     bool check(bool verbose) override;
     void updateChecksum() override;
 
-    FSName getName() override;
-    void setName(FSName name) override;
+    FSName getName() override                    { return FSName(addr(-20)); }
+    void setName(FSName name) override           { name.write(addr(-20));    }
 
-    time_t getCreationDate() override;
-    void setCreationDate(time_t t) override;
+    FSTime getCreationDate() override            { return FSTime(addr(-7));  }
+    void setCreationDate(FSTime t) override      { t.write(addr(-7));        }
 
-    time_t getModificationDate() override;
-    void setModificationDate(time_t t) override;
+    FSTime getModificationDate() override        { return FSTime(addr(-23)); }
+    void setModificationDate(FSTime t) override  { t.write(addr(-23));       }
 
     u32 hashTableSize() override { return 72; }
 };

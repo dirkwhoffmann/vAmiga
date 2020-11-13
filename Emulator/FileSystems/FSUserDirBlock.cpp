@@ -35,7 +35,7 @@ FSUserDirBlock::dump()
     printf("        Name: %s\n", getName().cStr);
     printf("        Path: ");    printPath(); printf("\n");
     printf("     Comment: %s\n", getComment().cStr);
-    printf("     Created: ");    dumpDate(getCreationDate()); printf("\n");
+    printf("     Created: ");    getCreationDate().print(); printf("\n");
     printf("      Parent: %d\n", getParentDirRef());
     printf("        Next: %d\n", getNextHashRef());
 }
@@ -53,40 +53,4 @@ FSUserDirBlock::updateChecksum()
 {
     set32(5, 0);
     set32(5, checksum());
-}
-
-FSName
-FSUserDirBlock::getName()
-{
-    return FSName(data + bsize() - 20 * 4);
-}
-
-void
-FSUserDirBlock::setName(FSName name)
-{
-    name.write(data + bsize() - 20 * 4);
-}
-
-FSComment
-FSUserDirBlock::getComment()
-{
-    return FSComment(data + bsize() - 46 * 4);
-}
-
-void
-FSUserDirBlock::setComment(FSComment name)
-{
-    name.write(data + bsize() - 46 * 4);
-}
-
-time_t
-FSUserDirBlock::getCreationDate()
-{
-    return readTimeStamp(data + bsize() - 23 * 4);
-}
-
-void
-FSUserDirBlock::setCreationDate(time_t t)
-{
-    writeTimeStamp(data + bsize() - 23 * 4, t);
 }

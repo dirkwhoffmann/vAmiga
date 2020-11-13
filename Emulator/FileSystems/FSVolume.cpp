@@ -497,10 +497,7 @@ FSVolume::listWalker(FSBlock *block, int value)
     }
     
     // Display date and time
-    time_t time = block->getCreationDate();
-    tm *t = localtime(&time);
-    msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
-    msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
+    block->getCreationDate().print();
 
     // Display the file or directory name
     block->printPath();

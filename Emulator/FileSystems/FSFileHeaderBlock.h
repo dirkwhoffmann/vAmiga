@@ -34,8 +34,8 @@ struct FSFileHeaderBlock : FSBlock {
     FSComment getComment() override;
     void setComment(FSComment name) override;
 
-    time_t getCreationDate() override;
-    void setCreationDate(time_t t) override;
+    FSTime getCreationDate() override           { return FSTime(addr(-23));  }
+    void setCreationDate(FSTime t) override     { t.write(addr(-23));        }
 
     u32 maxDataBlockRefs() override             { return bsize() / 4 - 56;   }
     u32 numDataBlockRefs() override             { return get32(2);           }

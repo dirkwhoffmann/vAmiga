@@ -33,7 +33,7 @@ FSFileHeaderBlock::dump()
     printf("        Name : %s\n", getName().cStr);
     printf("        Path : ");    printPath(); printf("\n");
     printf("     Comment : %s\n", getComment().cStr);
-    printf("     Created : ");    dumpDate(getCreationDate()); printf("\n");
+    printf("     Created : ");    getCreationDate().print(); printf("\n");
     printf("        Next : %d\n", getNextHashRef());
     printf("   File size : %d\n", getFileSize());
 
@@ -103,18 +103,6 @@ void
 FSFileHeaderBlock::setComment(FSComment name)
 {
     name.write(data + bsize() - 46 * 4);
-}
-
-time_t
-FSFileHeaderBlock::getCreationDate()
-{
-    return readTimeStamp(data + bsize() - 23 * 4);
-}
-
-void
-FSFileHeaderBlock::setCreationDate(time_t t)
-{
-    writeTimeStamp(data + bsize() - 23 * 4, t);
 }
 
 size_t

@@ -31,6 +31,7 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+/*
 time_t
 FSBlock::readTimeStamp(u8 *p)
 {
@@ -64,6 +65,7 @@ FSBlock::writeTimeStamp(u8 *p, time_t t)
     write32(p + 4, mins);
     write32(p + 8, ticks);
 }
+*/
 
 u32
 FSBlock::checksum()
