@@ -86,7 +86,7 @@ public:
     Denise denise = Denise(*this);
     Paula paula = Paula(*this);
     
-    //Logic board
+    // Logic board
     Oscillator oscillator = Oscillator(*this);
     RTC rtc = RTC(*this);
     ZorroManager zorro = ZorroManager(*this);
@@ -149,25 +149,6 @@ private:
     pthread_mutex_t stateChangeLock;
     
     
-    //
-    // Emulation speed
-    //
-    
-private:
-    
-    /* System timer information. Used to match the emulation speed with the
-     * speed of a real Amiga.
-     */
-    // mach_timebase_info_data_t tb;
-    
-    /* Inside restartTimer(), the current time and the DMA clock cylce
-     * are recorded in these variables. They are used in sychronizeTiming()
-     * to determine how long the thread has to sleep.
-     */
-    // Cycle clockBase = 0;
-    // u64 timeBase = 0;
-
-        
     //
     // Snapshot storage
     //
@@ -375,41 +356,6 @@ public:
      */
     void runLoop();
 
-    
-    //
-    // Managing emulation speed
-    //
-    
-public:
-
-    /* Restarts the synchronization timer. This function is invoked at launch
-     * time to initialize the timer and reinvoked when the synchronization timer
-     * got out of sync.
-     */
-    // void restartTimer();
-    
-private:
-    
-    // Converts kernel time to nanoseconds
-    // u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
-    
-    // Converts nanoseconds to kernel time
-    // u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
-    
-    // Returns the current time in nanoseconds
-    // u64 time_in_nanos() { return abs_to_nanos(mach_absolute_time()); }
-    
-    /* Returns the delay between two frames in nanoseconds. As long as we only
-     * emulate PAL machines, the frame rate is 50 Hz and this function returns
-     * a constant.
-     */
-    u64 frameDelay() { return u64(1000000000) / 50; }
-    
-public:
-    
-    // Puts the emulator thread to sleep
-    // void synchronizeTiming();
-    
     
     //
     // Handling snapshots

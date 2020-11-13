@@ -252,40 +252,6 @@ loadFile(const char *path, const char *name, u8 **buffer, long *size)
     return loadFile(fullpath, buffer, size);
 }
 
-void
-sleepMicrosec(unsigned usec)
-{
-    if (usec > 0 && usec < 1000000) {
-        usleep(usec);
-    }
-}
-
-i64
-sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup)
-{
-    u64 now = mach_absolute_time();
-    i64 jitter;
-    
-    if (now > kernelTargetTime) {
-        printf("Too slow\n");
-        return 0;
-    }
-    
-    // Sleep
-    // printf("Sleeping for %lld\n", kernelTargetTime - kernelEarlyWakeup);
-    mach_wait_until(kernelTargetTime - kernelEarlyWakeup);
-    
-    // Count some sheep to increase precision
-    unsigned sheep = 0;
-    do {
-        jitter = mach_absolute_time() - kernelTargetTime;
-        sheep++;
-    } while (jitter < 0);
-    // printf("Counted %d sheep (%lld)\n", sheep, jitter);
-    
-    return jitter;
-}
-
 u32
 fnv_1a_32(const u8 *addr, size_t size)
 {

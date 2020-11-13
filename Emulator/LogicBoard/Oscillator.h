@@ -89,6 +89,8 @@ private:
     // Reading the system clock
     //
     
+public:
+
     // Returns the current kernel time the nano seconds
     u64 nanos();
     
@@ -96,9 +98,7 @@ private:
     //
     // Managing emulation speed
     //
-    
-public:
-    
+        
     // Restarts the synchronization timer
     void restart();
 

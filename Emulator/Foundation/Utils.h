@@ -12,7 +12,7 @@
 
 #include <assert.h>
 #include <limits.h>
-#include <mach/mach_time.h>
+// #include <mach/mach_time.h>
 #include <pthread.h>
 #include <stdarg.h>
 #include <stdint.h>
@@ -183,7 +183,7 @@ bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
 //
 
 // Puts the current thread to sleep for a given amout of micro seconds
-void sleepMicrosec(unsigned usec);
+// void sleepMicrosec(unsigned usec);
 
 /* Sleeps until the kernel timer reaches kernelTargetTime
  *
@@ -194,7 +194,7 @@ void sleepMicrosec(unsigned usec);
  * Returns the overshoot time (jitter), measured in kernel time units. Smaller
  * values are better, 0 is best.
  */
-i64 sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
+// i64 sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
 
 
 //

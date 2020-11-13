@@ -447,6 +447,12 @@ Muxer::handleBufferOverflow()
 }
 
 void
+Muxer::ignoreNextUnderOrOverflow()
+{
+    lastAlignment = oscillator.nanos();
+}
+
+void
 Muxer::copyMono(float *buffer, size_t n)
 {
     // Check for a buffer underflow

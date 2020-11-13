@@ -230,7 +230,7 @@ private:
 public:
     
     // Signals to ignore the next underflow or overflow condition
-    void ignoreNextUnderOrOverflow() { lastAlignment = mach_absolute_time(); }
+    void ignoreNextUnderOrOverflow();
 
 
     //
