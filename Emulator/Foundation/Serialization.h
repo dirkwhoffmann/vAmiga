@@ -20,6 +20,7 @@
 #include "Sampler.h"
 #include "AudioStream.h"
 
+#include <arpa/inet.h>
 
 //
 // Basic memory buffer I/O

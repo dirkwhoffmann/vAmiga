@@ -654,10 +654,12 @@ public:
 
     // Returns true if a certain DMA channel is enabled
     template <int x> static bool auddma(u16 v);
+    /*
     template <> bool auddma<0>(u16 v) { return (v & DMAEN) && (v & AUD0EN); }
     template <> bool auddma<1>(u16 v) { return (v & DMAEN) && (v & AUD1EN); }
     template <> bool auddma<2>(u16 v) { return (v & DMAEN) && (v & AUD2EN); }
     template <> bool auddma<3>(u16 v) { return (v & DMAEN) && (v & AUD3EN); }
+    */
     static bool bpldma(u16 v) { return (v & DMAEN) && (v & BPLEN); }
     static bool copdma(u16 v) { return (v & DMAEN) && (v & COPEN); }
     static bool bltdma(u16 v) { return (v & DMAEN) && (v & BLTEN); }
