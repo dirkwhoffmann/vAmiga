@@ -1086,7 +1086,7 @@
 			path = Audio;
 			sourceTree = "<group>";
 		};
-		50AEBED524D3D7160037082D /* DiskControllerRenamed */ = {
+		50AEBED524D3D7160037082D /* DiskController */ = {
 			isa = PBXGroup;
 			children = (
 				5042FD7D23FFF08500B315B2 /* DiskControllerTypes.h */,
@@ -1095,7 +1095,7 @@
 				50B81E0724E6BCCA004384C9 /* DiskControllerRegisters.cpp */,
 				50AEBED924D3D78F0037082D /* DiskControllerEvents.cpp */,
 			);
-			path = DiskControllerRenamed;
+			path = DiskController;
 			sourceTree = "<group>";
 		};
 		50AEBED624D3D7270037082D /* UART */ = {
@@ -1200,7 +1200,7 @@
 				50AE6EE224D9B08C000AA367 /* PaulaRegisters.cpp */,
 				50AEBED024D3D61A0037082D /* PaulaEvents.cpp */,
 				50AEBED424D3D7050037082D /* Audio */,
-				50AEBED524D3D7160037082D /* DiskControllerRenamed */,
+				50AEBED524D3D7160037082D /* DiskController */,
 				50AEBED624D3D7270037082D /* UART */,
 			);
 			path = Paula;
