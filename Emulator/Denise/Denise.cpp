@@ -986,6 +986,7 @@ Denise::checkS2PCollisions(int start, int end)
     if (IS_ODD(x) && !getENSP<x>()) return;
 
     // Set up the sprite comparison mask
+    /*
     u16 sprMask;
     switch(x) {
         case 0:
@@ -999,7 +1000,8 @@ Denise::checkS2PCollisions(int start, int end)
 
         default: sprMask = 0; assert(false);
     }
-
+    */
+    
     u8 enabled1 = getENBP1();
     u8 enabled2 = getENBP2();
     u8 compare1 = getMVBP1() & enabled1;

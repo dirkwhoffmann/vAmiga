@@ -24,27 +24,27 @@ struct DDF
     i16 stopOdd;
     i16 stopEven;
 
-    DDF() : strtEven(0), strtOdd(0), stopEven(0), stopOdd(0) { }
+    DDF() : strtOdd(0), strtEven(0), stopOdd(0), stopEven(0) { }
 
     template <class T> void applyToItems(T& worker) {
         
         worker
         
-        & strtEven
         & strtOdd
-        & stopEven
-        & stopOdd;
+        & strtEven
+        & stopOdd
+        & stopEven;
     }
     
-    void clear() { strtEven = strtOdd = stopEven = stopOdd = 0; }
+    void clear() { strtOdd = strtEven = stopOdd = stopEven = 0; }
     
     bool operator==(const DDF& ddf) const
     {
         return
-        strtEven == ddf.strtEven &&
-        stopEven == ddf.stopEven &&
         strtOdd == ddf.strtOdd &&
-        stopOdd == ddf.stopOdd;
+        strtEven == ddf.strtEven &&
+        stopOdd == ddf.stopOdd &&
+        stopEven == ddf.stopEven;
     }
 
     bool operator!=(const DDF& ddf) const

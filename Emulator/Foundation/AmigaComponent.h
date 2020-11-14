@@ -50,12 +50,12 @@ protected:
     Amiga &amiga;
     PaulaAudio &audioUnit;
     Blitter &blitter;
-    CPU &cpu;
     CIAA &ciaa;
     CIAB &ciab;
     ControlPort &controlPort1;
     ControlPort &controlPort2;
     Copper &copper;
+    CPU &cpu;
     Denise &denise;
     DiskController &diskController;
     DmaDebugger &dmaDebugger;
