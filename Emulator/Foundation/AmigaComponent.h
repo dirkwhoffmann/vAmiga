@@ -48,6 +48,7 @@ protected:
 
     Agnus &agnus;
     Amiga &amiga;
+    PaulaAudio &audioUnit;
     Blitter &blitter;
     CPU &cpu;
     CIAA &ciaa;
@@ -67,7 +68,6 @@ protected:
     MessageQueue &messageQueue;
     Oscillator &oscillator;
     Paula &paula;
-    PaulaAudio &audioUnit;
     PixelEngine &pixelEngine;
     RTC &rtc;
     SerialPort &serialPort;

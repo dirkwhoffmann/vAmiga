@@ -49,6 +49,9 @@
 #include "DIRFile.h"
 #include "FSVolume.h"
 
+void threadTerminated(void *thisAmiga);
+void *threadMain(void *thisAmiga);
+
 /* A complete virtual Amiga. This class is the most prominent one of all. To
  * run the emulator, it is sufficient to create a single object of this type.
  * All subcomponents are created automatically. The public API gives you

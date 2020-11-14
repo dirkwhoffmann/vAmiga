@@ -14,7 +14,7 @@
 //
 
 void
-threadTerminated(void* thisAmiga)
+threadTerminated(void *thisAmiga)
 {
     assert(thisAmiga != NULL);
     

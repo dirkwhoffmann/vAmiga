@@ -119,12 +119,12 @@ bool releaseBuild();
 /* Extracts the first path component.
  * Returns a newly created string. You need to delete it manually.
  */
-char *stripFirstPathComponent(const char *path);
+char *extractFirstPathComponent(const char *path);
 
 /* Extracts the n-th path component.
  * Returns a newly created string. You need to delete it manually.
  */
-char *stripPathComponent(const char *path, int n);
+char *extractPathComponent(const char *path, unsigned n);
 
 /* Strips the filename from a path.
  * Returns a newly created string. You need to delete it manually.
