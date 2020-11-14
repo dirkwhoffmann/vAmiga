@@ -90,9 +90,9 @@ bool releaseBuild();
 
 // Replaces bits, bytes, and words
 #define REPLACE_BIT(x,nr,v) ((v) ? SET_BIT(x, nr) : CLR_BIT(x, nr))
-#define REPLACE_LO(x,y) (((x) & ~0x00FF) | y)
+#define REPLACE_LO(x,y) (((x) & ~0x00FF) | (y))
 #define REPLACE_HI(x,y) (((x) & ~0xFF00) | ((y) << 8))
-#define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | y)
+#define REPLACE_LO_WORD(x,y) (((x) & ~0xFFFF) | (y))
 #define REPLACE_HI_WORD(x,y) (((x) & ~0xFFFF0000) | ((y) << 16))
 
 // Checks for a rising or a falling edge

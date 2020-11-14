@@ -10,8 +10,6 @@
 #include "DIRFile.h"
 #include "FSVolume.h"
 
-namespace fs = std::filesystem;
-
 DIRFile::DIRFile()
 {
     setDescription("DIRFile");
