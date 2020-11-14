@@ -28,9 +28,11 @@ public:
 class AutoMutex
 {
     Mutex &mutex;
-    
+
 public:
-    
+
+    bool active = true;
+
     AutoMutex(Mutex &ref) : mutex(ref) { mutex.lock(); }
     ~AutoMutex() { mutex.unlock(); }
 };

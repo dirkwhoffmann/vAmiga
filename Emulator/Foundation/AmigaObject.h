@@ -25,7 +25,8 @@ using std::map;
 using std::pair;
 using std::swap;
 
-#define synchronized  { AutoMutex _autoMutex(mutex); }
+#define synchronized \
+for (AutoMutex _am(mutex); _am.active; _am.active = false)
 
 /* Base class for all Amiga objects. This class contains a textual description
  * of the object and offers various functions for printing debug messages and
