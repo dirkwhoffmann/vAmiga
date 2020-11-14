@@ -493,7 +493,7 @@ Amiga::_pause()
     trace(RUN_DEBUG, "_pause()\n");
     
     // When we reach this line, the emulator thread is already gone
-    assert(!p);
+    assert(p == (pthread_t)0);
     
     // Update the recorded debug information
     inspect();
@@ -531,7 +531,7 @@ Amiga::acquireThreadLock()
     if (state == STATE_RUNNING) {
         
         // Assure the emulator thread exists
-        assert(p);
+        assert(p != (pthread_t)0);
         
         // Free the thread lock by terminating the thread
         signalStop();
@@ -539,7 +539,7 @@ Amiga::acquireThreadLock()
     } else {
         
         // There must be no emulator thread
-        assert(!p);
+        assert(p == (pthread_t)0);
         
         // It's save to free the lock immediately
         pthread_mutex_unlock(&threadLock);

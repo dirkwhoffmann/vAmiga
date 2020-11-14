@@ -255,7 +255,7 @@ Denise::fillShiftRegisters(bool odd, bool even)
     }
     
     // On Intel machines, call the optimized SSE code
-    #if defined(__i386__) || defined(__x86_64__)
+    #if (defined(__i386__) || defined(__x86_64__)) && defined(__MACH__)
     
     if (!NO_SSE) {
         transposeSSE(shiftReg, slice);
