@@ -17,9 +17,9 @@ MessageQueue::MessageQueue()
 void
 MessageQueue::addListener(const void *listener, Callback *func)
 {
-    lock();
-    listeners.insert(pair <const void *, Callback *> (listener, func));
-    unlock();
+    synchronized {
+        listeners.insert(pair <const void *, Callback *> (listener, func));
+    }
     
     // Distribute all pending messages
     Message msg;
@@ -35,27 +35,24 @@ MessageQueue::removeListener(const void *listener)
 {
     put(MSG_UNREGISTER);
 
-    lock();
-    listeners.erase(listener);
-    unlock();
+    synchronized { listeners.erase(listener); }
 }
 
 Message
 MessageQueue::get()
 { 
 	Message result;
-
-    lock();
     
-    if (r == w) {
-        result.type = MSG_NONE; // Queue is empty
-        result.data = 0;
-    } else {
-        result = queue[r];
-        r = (r + 1) % capacity;
+    synchronized {
+        
+        if (r == w) {
+            result.type = MSG_NONE; // Queue is empty
+            result.data = 0;
+        } else {
+            result = queue[r];
+            r = (r + 1) % capacity;
+        }
     }
-    
-    unlock();
     
 	return result; 
 }
@@ -63,26 +60,25 @@ MessageQueue::get()
 void
 MessageQueue::put(MessageType type, u64 data)
 {
-    lock();
-    
-    // Write data
-    Message msg;
-    msg.type = type;
-    msg.data = data;
-    queue[w] = msg;
-    
-    // Move write pointer to next location
-    w = (w + 1) % capacity;
-    
-    if (w == r) {
-        // warn("Queue overflow. Oldest message is lost.\n");
-        r = (r + 1) % capacity;
+    synchronized {
+        
+        // Write data
+        Message msg;
+        msg.type = type;
+        msg.data = data;
+        queue[w] = msg;
+        
+        // Move write pointer to next location
+        w = (w + 1) % capacity;
+        
+        if (w == r) {
+            // warn("Queue overflow. Oldest message is lost.\n");
+            r = (r + 1) % capacity;
+        }
+        
+        // Serve registered callbacks
+        propagate(&msg);
     }
-    
-    // Serve registered callbacks
-    propagate(&msg);
-    
-    unlock();
 }
 
 void

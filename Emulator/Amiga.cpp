@@ -323,17 +323,16 @@ Amiga::clearInspectionTarget()
 void
 Amiga::_inspect()
 {
-    lock();
-    
-    info.cpuClock = cpu.getMasterClock();
-    info.dmaClock = agnus.clock;
-    info.ciaAClock = ciaA.clock;
-    info.ciaBClock = ciaB.clock;
-    info.frame = agnus.frame.nr;
-    info.vpos = agnus.pos.v;
-    info.hpos = agnus.pos.h;
-    
-    unlock();
+    synchronized {
+        
+        info.cpuClock = cpu.getMasterClock();
+        info.dmaClock = agnus.clock;
+        info.ciaAClock = ciaA.clock;
+        info.ciaBClock = ciaB.clock;
+        info.frame = agnus.frame.nr;
+        info.vpos = agnus.pos.v;
+        info.hpos = agnus.pos.h;
+    }
 }
 
 void
@@ -626,17 +625,13 @@ Amiga::resume()
 void
 Amiga::setControlFlags(u32 flags)
 {
-    lock();
-    runLoopCtrl |= flags;
-    unlock();
+    synchronized { runLoopCtrl |= flags; }
 }
 
 void
 Amiga::clearControlFlags(u32 flags)
 {
-    lock();
-    runLoopCtrl &= ~flags;
-    unlock();
+    synchronized { runLoopCtrl &= ~flags; }
 }
 
 void

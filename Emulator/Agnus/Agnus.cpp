@@ -170,40 +170,39 @@ Agnus::slowRamIsMirroredIn()
 void
 Agnus::_inspect()
 {
-    lock();
-    
-    info.vpos     = pos.v;
-    info.hpos     = pos.h;
-    
-    info.dmacon   = dmacon;
-    info.bplcon0  = bplcon0;
-    info.bpu      = bpu();
-    info.ddfstrt  = ddfstrt;
-    info.ddfstop  = ddfstop;
-    info.diwstrt  = diwstrt;
-    info.diwstop  = diwstop;
-    
-    info.bpl1mod  = bpl1mod;
-    info.bpl2mod  = bpl2mod;
-    info.bltamod  = blitter.bltamod;
-    info.bltbmod  = blitter.bltbmod;
-    info.bltcmod  = blitter.bltcmod;
-    info.bltdmod  = blitter.bltdmod;
-    info.bltcon0  = blitter.bltcon0;
-    info.bls      = bls;
-    
-    info.coppc    = copper.coppc & ptrMask;
-    info.dskpt    = dskpt & ptrMask;
-    info.bltpt[0] = blitter.bltapt & ptrMask;
-    info.bltpt[1] = blitter.bltbpt & ptrMask;
-    info.bltpt[2] = blitter.bltcpt & ptrMask;
-    info.bltpt[3] = blitter.bltdpt & ptrMask;
-    for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
-    for (unsigned i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
-    for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
-    for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
-
-    unlock();
+    synchronized {
+        
+        info.vpos     = pos.v;
+        info.hpos     = pos.h;
+        
+        info.dmacon   = dmacon;
+        info.bplcon0  = bplcon0;
+        info.bpu      = bpu();
+        info.ddfstrt  = ddfstrt;
+        info.ddfstop  = ddfstop;
+        info.diwstrt  = diwstrt;
+        info.diwstop  = diwstop;
+        
+        info.bpl1mod  = bpl1mod;
+        info.bpl2mod  = bpl2mod;
+        info.bltamod  = blitter.bltamod;
+        info.bltbmod  = blitter.bltbmod;
+        info.bltcmod  = blitter.bltcmod;
+        info.bltdmod  = blitter.bltdmod;
+        info.bltcon0  = blitter.bltcon0;
+        info.bls      = bls;
+        
+        info.coppc    = copper.coppc & ptrMask;
+        info.dskpt    = dskpt & ptrMask;
+        info.bltpt[0] = blitter.bltapt & ptrMask;
+        info.bltpt[1] = blitter.bltbpt & ptrMask;
+        info.bltpt[2] = blitter.bltcpt & ptrMask;
+        info.bltpt[3] = blitter.bltdpt & ptrMask;
+        for (unsigned i = 0; i < 6; i++) info.bplpt[i] = bplpt[i] & ptrMask;
+        for (unsigned i = 0; i < 4; i++) info.audpt[i] = audpt[i] & ptrMask;
+        for (unsigned i = 0; i < 4; i++) info.audlc[i] = audlc[i] & ptrMask;
+        for (unsigned i = 0; i < 8; i++) info.sprpt[i] = sprpt[i] & ptrMask;
+    }
 }
 
 void

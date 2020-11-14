@@ -49,7 +49,7 @@ protected:
      * breakpoints and records the executed instruction in it's trace buffer.
      */
     bool debugMode = false;
-    
+        
     
     //
     // Initializing
@@ -132,11 +132,7 @@ public:
         if (!isRunning()) inspect();
         
         T result;
-        
-        lock();
-        result = cachedValues;
-        unlock();
-        
+        synchronized { result = cachedValues; }
         return result;
     }
     

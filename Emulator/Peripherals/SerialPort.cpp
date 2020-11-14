@@ -53,18 +53,17 @@ SerialPort::setConfigItem(ConfigOption option, long value)
 void
 SerialPort::_inspect()
 {
-    lock();
-    
-    info.port = port;
-    info.txd = getTXD();
-    info.rxd = getRXD();
-    info.rts = getRTS();
-    info.cts = getCTS();
-    info.dsr = getDSR();
-    info.cd = getCD();
-    info.dtr = getDTR();
-    
-    unlock();
+    synchronized {
+        
+        info.port = port;
+        info.txd = getTXD();
+        info.rxd = getRXD();
+        info.rts = getRTS();
+        info.cts = getCTS();
+        info.dsr = getDSR();
+        info.cd = getCD();
+        info.dtr = getDTR();
+    }
 }
 
 void

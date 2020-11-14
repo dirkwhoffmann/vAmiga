@@ -85,13 +85,12 @@ Drive::setConfigItem(unsigned dfn, ConfigOption option, long value)
 void
 Drive::_inspect()
 {
-    lock();
-    
-    info.head = head;
-    info.hasDisk = hasDisk();
-    info.motor = getMotor();
-    
-    unlock();
+    synchronized {
+        
+        info.head = head;
+        info.hasDisk = hasDisk();
+        info.motor = getMotor();
+    }
 }
 
 void

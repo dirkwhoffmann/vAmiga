@@ -25,4 +25,14 @@ public:
     int unlock();
 };
 
+class AutoMutex
+{
+    Mutex &mutex;
+    
+public:
+    
+    AutoMutex(Mutex &ref) : mutex(ref) { mutex.lock(); }
+    ~AutoMutex() { mutex.unlock(); }
+};
+
 #endif
