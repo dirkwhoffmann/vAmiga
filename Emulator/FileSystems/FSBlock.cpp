@@ -73,7 +73,7 @@ FSBlock::checksum()
     u32 result = 0;
     u32 numLongWords = volume.bsize / 4;
     
-    for (int i = 0; i < numLongWords; i++) {
+    for (u32 i = 0; i < numLongWords; i++) {
         result += get32(i);
     }
     

@@ -462,7 +462,7 @@ FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, 
 {
     assert(dir != nullptr);
     
-    for (int i = 0; i < dir->hashTableSize(); i++) {
+    for (u32 i = 0; i < dir->hashTableSize(); i++) {
         
         if (u32 ref = dir->lookup(i)) {
             
@@ -520,7 +520,7 @@ FSVolume::importVolume(u8 *dst, size_t size)
     }
 
     // Import all blocks
-    for (int i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < capacity; i++) {
 
         // TODO
         assert(false);
@@ -546,7 +546,7 @@ FSVolume::exportVolume(u8 *dst, size_t size)
     memset(dst, 0, size);
     
     // Export all blocks
-    for (int i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < capacity; i++) {
         blocks[i]->exportBlock(dst + i * bsize, bsize);
     }
     return true;

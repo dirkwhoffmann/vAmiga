@@ -31,7 +31,7 @@ FSFileListBlock::dump()
     printf("Header block : %d\n", getFileHeaderRef());
     printf("   Extension : %d\n", getNextListBlockRef());
     printf(" Data blocks : ");
-    for (int i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
+    for (u32 i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
 
@@ -45,7 +45,7 @@ FSFileListBlock::check(bool verbose)
     result &= assertInRange(getFirstDataBlockRef(), verbose);
     result &= assertInRange(getNextListBlockRef(), verbose);
 
-    for (int i = 0; i < maxDataBlockRefs(); i++) {
+    for (u32 i = 0; i < maxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
     }
     

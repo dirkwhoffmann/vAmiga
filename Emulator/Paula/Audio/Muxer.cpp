@@ -349,7 +349,7 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     if (stream.count() + count >= stream.cap()) handleBufferOverflow();
 
     double cycle = clock;
-    for (size_t i = 0; i < count; i++) {
+    for (long i = 0; i < count; i++) {
 
         double ch0 = sampler[0].interpolate<method>((Cycle)cycle) * config.vol[0];
         double ch1 = sampler[1].interpolate<method>((Cycle)cycle) * config.vol[1];

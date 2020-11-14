@@ -19,7 +19,7 @@
 
 #include "AmigaTypes.h"
 
-template <class T, int capacity> struct RingBuffer
+template <class T, size_t capacity> struct RingBuffer
 {
     // Element storage
     T elements[capacity];
@@ -34,7 +34,7 @@ template <class T, int capacity> struct RingBuffer
     RingBuffer() { clear(); }
     
     void clear() { r = w = 0; }
-    void clear(T t) { for (int i = 0; i < capacity; i++) elements[i] = t; clear(); }
+    void clear(T t) { for (size_t i = 0; i < capacity; i++) elements[i] = t; clear(); }
     void align(int offset) { w = (r + offset) % capacity; }
 
     //
@@ -52,8 +52,8 @@ template <class T, int capacity> struct RingBuffer
     // Querying the fill status
     //
 
-    int cap() { return capacity; }
-    int count() const { return (capacity + w - r) % capacity; }
+    size_t cap() { return capacity; }
+    size_t count() const { return (capacity + w - r) % capacity; }
     double fillLevel() const { return (double)count() / capacity; }
     bool isEmpty() const { return r == w; }
     bool isFull() const { return count() == capacity - 1; }

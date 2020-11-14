@@ -73,7 +73,7 @@ AmigaFile::read()
 {
     int result;
     
-    assert(eof <= size);
+    assert(eof <= (long)size);
     
     if (fp < 0)
         return -1;

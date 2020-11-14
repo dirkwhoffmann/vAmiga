@@ -119,5 +119,5 @@ void
 FSBitmapBlock::dealloc()
 {
     // Mark all blocks except the first two as free
-    for (int i = 2; i < volume.capacity; i++) dealloc(i);
+    for (u32 i = 2; i < volume.capacity; i++) dealloc(i);
 }

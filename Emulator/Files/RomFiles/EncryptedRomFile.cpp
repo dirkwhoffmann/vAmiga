@@ -97,7 +97,7 @@ EncryptedRomFile::readFromBuffer(const u8 *buffer, size_t length)
 RomFile *
 EncryptedRomFile::decrypt(DecryptionError *error)
 {
-    const int headerSize = 11;
+    const size_t headerSize = 11;
 
     RomFile *rom = NULL;
     u8 *encryptedData = NULL;
