@@ -142,7 +142,7 @@ Paula::scheduleIrqRel(IrqSource src, Cycle trigger)
 void
 Paula::checkInterrupt()
 {
-    int level = interruptLevel();
+    unsigned level = interruptLevel();
         
     if ((iplPipe & 0xFF) != level) {
     
