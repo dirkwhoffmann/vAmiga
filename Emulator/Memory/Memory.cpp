@@ -420,9 +420,9 @@ Memory::fillRamWithInitPattern()
         case INIT_RANDOMIZED:
 
             srand(0);
-            if (chip) for (int i = 0; i < config.chipSize; i++) chip[i] = rand();
-            if (slow) for (int i = 0; i < config.slowSize; i++) slow[i] = rand();
-            if (fast) for (int i = 0; i < config.fastSize; i++) fast[i] = rand();
+            if (chip) for (size_t i = 0; i < config.chipSize; i++) chip[i] = rand();
+            if (slow) for (size_t i = 0; i < config.slowSize; i++) slow[i] = rand();
+            if (fast) for (size_t i = 0; i < config.fastSize; i++) fast[i] = rand();
             break;
             
         case INIT_ALL_ZEROES:
@@ -645,9 +645,9 @@ Memory::updateCpuMemSrcTable()
     MemorySource mem_wom = wom ? MEM_WOM : mem_rom;
     MemorySource mem_rom_mirror = rom ? MEM_ROM_MIRROR : MEM_NONE;
 
-    int chipRamPages = config.chipSize / 0x10000;
-    int slowRamPages = config.slowSize / 0x10000;
-    int fastRamPages = config.fastSize / 0x10000;
+    unsigned chipRamPages = config.chipSize / 0x10000;
+    unsigned slowRamPages = config.slowSize / 0x10000;
+    unsigned fastRamPages = config.fastSize / 0x10000;
     
     assert(config.chipSize % 0x10000 == 0);
     assert(config.slowSize % 0x10000 == 0);
@@ -752,7 +752,7 @@ Memory::updateCpuMemSrcTable()
 void
 Memory::updateAgnusMemSrcTable()
 {
-    int banks = config.chipSize / 0x10000;
+    unsigned banks = config.chipSize / 0x10000;
     
     // Start from scratch
     for (unsigned i = 0x00; i <= 0xFF; i++) {
@@ -2375,7 +2375,7 @@ Memory::hex(u32 addr, size_t bytes)
     assert(bytes % 2 == 0);
     char *p = str;
     
-    for (int i = 0; i < bytes / 2; i += 2, p += 5) {
+    for (size_t i = 0; i < bytes / 2; i += 2, p += 5) {
 
         u16 word = spypeek16 <A> (addr + i);
         

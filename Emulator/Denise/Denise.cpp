@@ -309,14 +309,14 @@ Denise::drawOdd(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert(currentPixel < sizeof(bBuffer));
+            assert((size_t)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             
         } else {
             
             // Synthesize two lores pixels
-            assert(currentPixel + 1 < sizeof(bBuffer));
+            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b101010) | index;
@@ -355,14 +355,14 @@ Denise::drawEven(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert(currentPixel < sizeof(bBuffer));
+            assert((size_t)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
 
         } else {
             
             // Synthesize two lores pixels
-            assert(currentPixel + 1 < sizeof(bBuffer));
+            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
             currentPixel++;
             bBuffer[currentPixel] = (bBuffer[currentPixel] & 0b010101) | index;
@@ -1191,8 +1191,8 @@ Denise::dumpBuffer(u8 *buffer, size_t length)
 {
     const size_t cols = 16;
 
-    for (int i = 0; i < (length + cols - 1) / cols; i++) {
-        for (int j =0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
+    for (size_t i = 0; i < (length + cols - 1) / cols; i++) {
+        for (size_t j = 0; j < cols; j++) msg("%2d ", buffer[i * cols + j]);
         msg("\n");
     }
 }

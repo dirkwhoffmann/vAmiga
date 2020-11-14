@@ -25,12 +25,12 @@ EXTFile::isEXTBuffer(const u8 *buffer, size_t length)
 {
     assert(buffer != nullptr);
     
-    int len = sizeof(extAdfHeaders[0]);
-    int cnt = sizeof(extAdfHeaders) / len;
+    size_t len = sizeof(extAdfHeaders[0]);
+    size_t cnt = sizeof(extAdfHeaders) / len;
 
     if (length < len) return false;
     
-    for (int i = 0; i < cnt; i++) {
+    for (size_t i = 0; i < cnt; i++) {
         if (matchingBufferHeader(buffer, extAdfHeaders[i], len)) return true;
     }
     return false;

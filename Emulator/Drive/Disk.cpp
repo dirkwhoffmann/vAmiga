@@ -115,7 +115,7 @@ Disk::clearDisk()
 
     // Initialize with random data
     srand(0);
-    for (int i = 0; i < sizeof(data.raw); i++) {
+    for (size_t i = 0; i < sizeof(data.raw); i++) {
         data.raw[i] = rand() & 0xFF;
     }
     
@@ -137,7 +137,7 @@ Disk::clearTrack(Track t)
     assert(t < numTracks());
 
     srand(0);
-    for (int i = 0; i < length.track[t]; i++) {
+    for (size_t i = 0; i < length.track[t]; i++) {
         data.track[t][i] = rand() & 0xFF;
     }
 }
@@ -147,7 +147,7 @@ Disk::clearTrack(Track t, u8 value)
 {
     assert(t < numTracks());
 
-    for (int i = 0; i < sizeof(data.track[t]); i++) {
+    for (size_t i = 0; i < sizeof(data.track[t]); i++) {
         data.track[t][i] = value;
     }
 }
@@ -157,7 +157,7 @@ Disk::clearTrack(Track t, u8 value1, u8 value2)
 {
     assert(t < numTracks());
 
-    for (int i = 0; i < length.track[t]; i++) {
+    for (size_t i = 0; i < length.track[t]; i++) {
         data.track[t][i] = (i % 2) ? value2 : value1;
     }
 }
@@ -269,7 +269,7 @@ Disk::repeatTracks()
     for (Track t = 0; t < 168; t++) {
         
         long end = length.track[t];        
-        for (int i = end, j = 0; i < sizeof(data.track[t]); i++, j++) {
+        for (size_t i = end, j = 0; i < sizeof(data.track[t]); i++, j++) {
             data.track[t][i] = data.track[t][j];
         }
     }

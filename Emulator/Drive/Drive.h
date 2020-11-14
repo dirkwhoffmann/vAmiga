@@ -18,7 +18,7 @@ class Drive : public AmigaComponent {
     friend class DiskController;
         
     // Number of the emulated drive (0 = df0, 1 = df1, etc.)
-    const int nr;
+    const unsigned nr;
 
     // Current configuration
     DriveConfig config;
