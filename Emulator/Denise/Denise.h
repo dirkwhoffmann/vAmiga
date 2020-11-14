@@ -431,14 +431,18 @@ public:
     // BPLCON2
     void pokeBPLCON2(u16 value);
     void setBPLCON2(u16 value);
-    static int PF2PRI(u16 v) { return GET_BIT(v, 6); }
+    static int PF2PRI(u16 value) { return GET_BIT(value, 6); }
+    static u16 PF1Px(u16 bplcon2) { return (bplcon2 & 7); }
+    static u16 PF2Px(u16 bplcon2) { return (bplcon2 >> 3) & 7; }
     bool PF2PRI() { return PF2PRI(bplcon2); }
+    u16 PF1Px() { return PF1Px(bplcon2); }
+    u16 PF2Px() { return PF2Px(bplcon2); }
 
     // Computes the z buffer depth for playfield 1 or 2
     static u16 zPF(u16 priorityBits);
-    static u16 zPF1(u16 bplcon2) { return zPF(bplcon2 & 7); }
-    static u16 zPF2(u16 bplcon2) { return zPF((bplcon2 >> 3) & 7); }
-
+    static u16 zPF1(u16 bplcon2) { return zPF(PF1Px(bplcon2)); }
+    static u16 zPF2(u16 bplcon2) { return zPF(PF2Px(bplcon2)); }
+    
     // BPLCON3
     void pokeBPLCON3(u16 value);
     void setBPLCON3(u16 value);

@@ -133,7 +133,12 @@ Denise::setBPLCON2(u16 value)
     trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
 
     bplcon2 = value;
-
+    
+    if (XFILES) {
+        debug(zPF1(bplcon2) == 0, "XFILES (BPLCON2): PF1P = %d\n", PF1Px());
+        debug(zPF2(bplcon2) == 0, "XFILES (BPLCON2): PF2P = %d\n", PF2Px());
+    }
+    
     // Record the pixel coordinate where the change takes place
     conChanges.insert(4 * agnus.pos.h + 4, RegChange { SET_BPLCON2, value });
 }

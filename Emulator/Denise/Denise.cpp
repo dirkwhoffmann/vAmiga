@@ -511,7 +511,7 @@ Denise::translateSPF(int from, int to)
             zBuffer[i] = s ? prio2 : 0;
         }
 
-    // The unusual case: prio2 is ivalid
+    // The unusual case: prio2 is invalid
     } else {
 
         for (int i = from; i < to; i++) {
