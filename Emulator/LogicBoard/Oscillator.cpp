@@ -99,6 +99,24 @@ Oscillator::synchronize()
         }
         
         // See you soon...
-        mach_wait_until(targetTime);
+        oscillator.waitUntil(targetTime);
+        // mach_wait_until(targetTime);
     }
 }
+
+void
+Oscillator::waitUntil(u64 deadline)
+{
+#ifdef __MACH__
+    
+    mach_wait_until(deadline);
+    
+#else
+
+    assert(false);
+    // TODO: MISSING IMPLEMENTATION
+    
+#endif
+}
+
+mach_timebase_info_data_t Oscillator::tb;

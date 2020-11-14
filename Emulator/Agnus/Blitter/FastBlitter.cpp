@@ -260,7 +260,7 @@ Blitter::doFastLineBlit()
                 if (single_dot) {
                     bltadat_local = 0;
                 } else {
-                    single_dot = TRUE;
+                    single_dot = true;
                 }
             }
         }

@@ -398,7 +398,7 @@ Muxer::handleBufferUnderflow()
     stream.alignWritePtr();
 
     // Determine the elapsed seconds since the last pointer adjustment
-    u64 now = mach_absolute_time();
+    u64 now = Oscillator::nanos();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     
@@ -427,7 +427,7 @@ Muxer::handleBufferOverflow()
     stream.alignWritePtr();
 
     // Determine the number of elapsed seconds since the last adjustment
-    u64 now = mach_absolute_time();
+    u64 now = Oscillator::nanos();
     double elapsedTime = (double)(now - lastAlignment) / 1000000000.0;
     lastAlignment = now;
     trace(AUDBUF_DEBUG, "elapsedTime: %f\n", elapsedTime);

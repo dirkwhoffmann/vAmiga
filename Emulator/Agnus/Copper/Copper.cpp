@@ -575,7 +575,7 @@ Copper::disassemble(u32 addr)
     sprintf(pos, "($%02X,$%02X)", getVP(addr), getHP(addr));
     
     if (getVM(addr) == 0xFF && getHM(addr) == 0xFF) {
-        sprintf(mask, "");
+        // sprintf(mask, "");
     } else {
         sprintf(mask, ", ($%02X,$%02X)", getHM(addr), getVM(addr));
     }

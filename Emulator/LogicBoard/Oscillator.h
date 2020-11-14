@@ -21,13 +21,13 @@ class Oscillator : public AmigaComponent {
 #ifdef __MACH__
 
     // Information about the Mach system timer
-    mach_timebase_info_data_t tb;
+    static mach_timebase_info_data_t tb;
 
     // Converts kernel time to nanoseconds
-    u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
+    static u64 abs_to_nanos(u64 abs) { return abs * tb.numer / tb.denom; }
     
     // Converts nanoseconds to kernel time
-    u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
+    static u64 nanos_to_abs(u64 nanos) { return nanos * tb.denom / tb.numer; }
 
 #endif
     
@@ -92,7 +92,7 @@ private:
 public:
 
     // Returns the current kernel time the nano seconds
-    u64 nanos();
+    static u64 nanos();
     
     
     //
@@ -104,6 +104,11 @@ public:
 
     // Puts the emulator thread to rest
     void synchronize();
+    
+private:
+    
+    // Puts the thread to rest until the target time has been reached
+    void waitUntil(u64 deadline);
 };
 
 #endif
