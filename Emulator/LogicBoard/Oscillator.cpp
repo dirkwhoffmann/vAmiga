@@ -119,4 +119,6 @@ Oscillator::waitUntil(u64 deadline)
 #endif
 }
 
+#ifdef __MACH__
 mach_timebase_info_data_t Oscillator::tb;
+#endif

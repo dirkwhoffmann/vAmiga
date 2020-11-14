@@ -158,7 +158,7 @@ Paula::checkInterrupt()
     }
 }
 
-int
+unsigned
 Paula::interruptLevel()
 {
     if (intena & 0x4000) {

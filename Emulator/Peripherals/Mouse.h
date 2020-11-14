@@ -62,7 +62,7 @@ private:
     
 public:
     
-    Mouse(ControlPort& pref, Amiga& ref);
+    Mouse(Amiga& ref, ControlPort& pref);
     
     void _reset(bool hard) override;
     

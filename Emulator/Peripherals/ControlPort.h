@@ -42,8 +42,8 @@ class ControlPort : public AmigaComponent {
     
 public:
     
-    Mouse mouse = Mouse(*this, amiga);
-    Joystick joystick = Joystick(*this, amiga);
+    Mouse mouse = Mouse(amiga, *this);
+    Joystick joystick = Joystick(amiga, *this);
 
 
     //
@@ -52,7 +52,7 @@ public:
     
 public:
     
-    ControlPort(PortNr nr, Amiga& ref);
+    ControlPort(Amiga& ref, PortNr nr);
 
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
 

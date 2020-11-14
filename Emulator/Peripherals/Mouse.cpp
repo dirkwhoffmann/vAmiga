@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Mouse::Mouse(ControlPort& pref, Amiga& ref) : port(pref), AmigaComponent(ref)
+Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
     setDescription(port.nr == PORT_1 ? "Mouse1" : "Mouse2");
 

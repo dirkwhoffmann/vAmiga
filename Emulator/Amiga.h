@@ -95,18 +95,18 @@ public:
     ZorroManager zorro = ZorroManager(*this);
     
     // Ports
-    ControlPort controlPort1 = ControlPort(PORT_1, *this);
-    ControlPort controlPort2 = ControlPort(PORT_2, *this);
+    ControlPort controlPort1 = ControlPort(*this, PORT_1);
+    ControlPort controlPort2 = ControlPort(*this, PORT_2);
     SerialPort serialPort = SerialPort(*this);
 
     // Peripherals
     Keyboard keyboard = Keyboard(*this);
 
     // Floppy drives
-    Drive df0 = Drive(0, *this);
-    Drive df1 = Drive(1, *this);
-    Drive df2 = Drive(2, *this);
-    Drive df3 = Drive(3, *this);
+    Drive df0 = Drive(*this, 0);
+    Drive df1 = Drive(*this, 1);
+    Drive df2 = Drive(*this, 2);
+    Drive df3 = Drive(*this, 3);
     
     // Shortcuts to all four drives
     Drive *df[4] = { &df0, &df1, &df2, &df3 };

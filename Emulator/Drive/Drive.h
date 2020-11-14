@@ -79,7 +79,7 @@ public:
 
 public:
 
-    Drive(unsigned nr, Amiga& ref);
+    Drive(Amiga& ref, unsigned nr);
     long getNr() { return nr; }
 
 private:

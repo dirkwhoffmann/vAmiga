@@ -267,7 +267,7 @@ public:
 private:
     
     // Computes the interrupt level of a pending interrupt.
-    int interruptLevel();
+    unsigned interruptLevel();
 };
 
 #endif

@@ -48,7 +48,7 @@ class Joystick : public AmigaComponent {
     
 public:
     
-    Joystick(ControlPort& pref, Amiga& ref);
+    Joystick(Amiga& ref, ControlPort& pref);
 
 private:
     

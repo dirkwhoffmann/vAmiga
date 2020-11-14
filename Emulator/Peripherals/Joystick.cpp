@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Joystick::Joystick(ControlPort& pref, Amiga& ref) : port(pref), AmigaComponent(ref)
+Joystick::Joystick(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
     setDescription(port.nr == PORT_1 ? "Joystick1" : "Joystick2");
 }
