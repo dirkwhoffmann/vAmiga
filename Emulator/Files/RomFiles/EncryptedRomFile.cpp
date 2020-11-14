@@ -122,7 +122,7 @@ EncryptedRomFile::decrypt(DecryptionError *error)
     decryptedData = new u8[size - headerSize];
         
     // Decrypt
-    for (long i = 0; i < size - headerSize; i++) {
+    for (size_t i = 0; i < size - headerSize; i++) {
         decryptedData[i] = encryptedData[i] ^ romKeyData[i % romKeySize];
     }
     

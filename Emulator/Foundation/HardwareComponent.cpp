@@ -137,7 +137,7 @@ HardwareComponent::load(u8 *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Loaded %d bytes (expected %d)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
+    assert((size_t)(ptr - buffer) == size());
 
     return ptr - buffer;
 }
@@ -163,7 +163,7 @@ HardwareComponent::save(u8 *buffer)
 
     // Verify that the number of written bytes matches the snapshot size
     trace(SNP_DEBUG, "Saved %d bytes (expected %d)\n", ptr - buffer, size());
-    assert(ptr - buffer == size());
+    assert((size_t)(ptr - buffer) == size());
 
     return ptr - buffer;
 }

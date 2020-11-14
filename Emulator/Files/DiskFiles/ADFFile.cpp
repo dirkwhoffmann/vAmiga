@@ -450,7 +450,7 @@ ADFFile::decodeTrack(Disk *disk, Track t)
     u8 *dst = data + t * sectors * 512;
     
     // Seek all sync marks
-    int sectorStart[sectors], index = 0, nr = 0;
+    int sectorStart[sectors], nr = 0; size_t index = 0;
     while (index < sizeof(disk->data.track[t]) && nr < sectors) {
 
         // Scan MFM stream for $4489 $4489

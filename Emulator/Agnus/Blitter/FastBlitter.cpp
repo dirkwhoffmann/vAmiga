@@ -236,7 +236,6 @@ Blitter::doFastLineBlit()
     u32 bltdpt_local = bltdpt;
     u32 blit_a_shift_local = bltconASH();
     u32 bzero_local = 0;
-    u32 i;
     
     u32 sulsudaul = (bltcon >> 2) & 0x7;
     bool x_independent = (sulsudaul & 4);
@@ -245,7 +244,7 @@ Blitter::doFastLineBlit()
     bool single_dot = false;
     u8 minterm = (u8)(bltcon >> 16);
     
-    for (i = 0; i < height; ++i)
+    for (int i = 0; i < height; ++i)
     {
         // Read C-data from memory if the C-channel is enabled
         if (c_enabled) {

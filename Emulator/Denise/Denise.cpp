@@ -398,13 +398,13 @@ Denise::drawBoth(int offset)
         if (hiresMode) {
             
             // Synthesize one hires pixel
-            assert(currentPixel < sizeof(bBuffer));
+            assert((size_t)currentPixel < sizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             
         } else {
             
             // Synthesize two lores pixels
-            assert(currentPixel + 1 < sizeof(bBuffer));
+            assert((size_t)(currentPixel + 1) < sizeof(bBuffer));
             bBuffer[currentPixel++] = index;
             bBuffer[currentPixel++] = index;
         }
@@ -778,8 +778,8 @@ Denise::drawSpritePair(int hstrt, int hstop, int strt1, int strt2, bool armed1, 
     const unsigned sprite1 = 2 * pair;
     const unsigned sprite2 = 2 * pair + 1;
 
-    assert(hstrt >= 0 && hstrt <= sizeof(mBuffer));
-    assert(hstop >= 0 && hstop <= sizeof(mBuffer));
+    assert((size_t)hstrt <= sizeof(mBuffer));
+    assert((size_t)hstop <= sizeof(mBuffer));
 
     assert(armed1 == !!GET_BIT(armed, sprite1));
     assert(armed2 == !!GET_BIT(armed, sprite2));
@@ -917,7 +917,7 @@ Denise::drawBorder()
         // Draw left border
         if (!agnus.diwHFlop && agnus.diwHFlopOn != -1) {
             for (int i = 0; i < 2 * agnus.diwHFlopOn; i++) {
-                assert(i < sizeof(iBuffer));
+                assert((size_t)i < sizeof(iBuffer));
                 iBuffer[i] = mBuffer[i] = borderColor;
             }
         }
@@ -925,7 +925,7 @@ Denise::drawBorder()
         // Draw right border
         if (agnus.diwHFlopOff != -1) {
             for (int i = 2 * agnus.diwHFlopOff; i <= LAST_PIXEL; i++) {
-                assert(i < sizeof(iBuffer));
+                assert((size_t)i < sizeof(iBuffer));
                 iBuffer[i] = mBuffer[i] = borderColor;
             }
         }

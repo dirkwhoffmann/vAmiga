@@ -416,7 +416,7 @@ public:
     i16 idBits();
     
     // Returns the maximum amout of Chip Ram in KB this Agnus can handle
-    long chipRamLimit();
+    size_t chipRamLimit();
         
     // Returns the line in which the VERTB interrupt gets triggered
     int vStrobeLine() { return isECS() || MIMIC_UAE ? 0 : 1; }

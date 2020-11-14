@@ -145,7 +145,7 @@ Agnus::idBits()
     }
 }
 
-long
+size_t
 Agnus::chipRamLimit()
 {
     switch (config.revision) {

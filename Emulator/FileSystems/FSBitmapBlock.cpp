@@ -25,7 +25,7 @@ FSBitmapBlock::dump()
 {
     printf("   Allocated: ");
 
-    for (int i = 0; i < volume.capacity; i++) {
+    for (u32 i = 0; i < volume.capacity; i++) {
         if (isAllocated(i)) printf("%d ", i);
     }
     
@@ -55,7 +55,7 @@ FSBitmapBlock::check(bool verbose)
 }
 
 void
-FSBitmapBlock::locateBlockBit(u32 nr, int *byte, int *bit)
+FSBitmapBlock::locateBlockBit(u32 nr, u32 *byte, u32 *bit)
 {
     // The first two blocks are not part the map (they are always allocated)
     assert(nr >= 2);
@@ -94,7 +94,7 @@ FSBitmapBlock::isAllocated(u32 block)
     if (!volume.isBlockNumber(block)) return true;
 
     // Get the location of the allocation bit
-    int byte, bit;
+    u32 byte, bit;
     locateBlockBit(block, &byte, &bit);
 
     // The block is allocated if the allocation bit is cleared
@@ -106,7 +106,7 @@ FSBitmapBlock::alloc(u32 block, bool allocate)
 {
     if (!volume.isBlockNumber(block)) return;
 
-    int byte, bit;
+    u32 byte, bit;
     locateBlockBit(block, &byte, &bit);
     assert(byte <= bsize() - 4);
     assert(bit <= 7);

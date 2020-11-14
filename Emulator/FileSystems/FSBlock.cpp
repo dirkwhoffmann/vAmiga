@@ -255,7 +255,7 @@ FSBlock::getNextExtensionBlock()
 }
 
 u32
-FSBlock::lookup(int nr)
+FSBlock::lookup(u32 nr)
 {
     return (nr < hashTableSize()) ? read32(data + 24 + 4 * nr) : 0;
 }
@@ -321,7 +321,7 @@ FSBlock::checkHashTable(bool verbose)
 {
     bool result = true;
     
-    for (int i = 0; i < hashTableSize(); i++) {
+    for (u32 i = 0; i < hashTableSize(); i++) {
         
         if (u32 ref = read32(data + 24 + 4 * i)) {
             result &= assertInRange(ref, verbose);
@@ -334,7 +334,7 @@ FSBlock::checkHashTable(bool verbose)
 void
 FSBlock::dumpHashTable()
 {
-    for (int i = 0; i < hashTableSize(); i++) {
+    for (u32 i = 0; i < hashTableSize(); i++) {
         
         u32 value = read32(data + 24 + 4 * i);
         if (value) {

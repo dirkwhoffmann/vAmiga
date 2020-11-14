@@ -168,7 +168,7 @@ Copper::findMatchNew(Beam &match)
     u32 mask = getVMHM();
 
     // Iterate through all lines starting from the current position
-    int numLines = agnus.frame.numLines();
+    u32 numLines = agnus.frame.numLines();
     while ((beam >> 8) < numLines) {
 
         // Check if the vertical components are equal
@@ -205,10 +205,8 @@ Copper::findMatchNew(Beam &match)
 bool
 Copper::findHorizontalMatchNew(u32 &match, u32 comp, u32 mask)
 {
-    i16 hStop = HPOS_CNT;
-
     // Iterate through all horizontal positions
-    for (u32 beam = match; (beam & 0xFF) < hStop; beam++) {
+    for (u32 beam = match; (beam & 0xFF) < HPOS_CNT; beam++) {
 
         // Check if the comparator triggers at this position
         if ((beam & mask) >= (comp & mask)) {

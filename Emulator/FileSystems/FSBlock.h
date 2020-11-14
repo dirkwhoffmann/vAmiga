@@ -226,7 +226,7 @@ public:
     virtual u32 hashValue() { return 0; }
 
     // Looks up an item in the hash table
-    u32 lookup(int nr);
+    u32 lookup(u32 nr);
     FSBlock *lookup(FSName name);
 
     // Adds a reference to the hash table
