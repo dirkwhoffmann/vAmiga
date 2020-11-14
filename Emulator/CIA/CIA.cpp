@@ -11,7 +11,7 @@
 
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
-CIA::CIA(int n, Amiga& ref) : nr(n), AmigaComponent(ref)
+CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
 {
     setDescription("CIA");
     

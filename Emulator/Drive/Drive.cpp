@@ -9,7 +9,7 @@
 
 #include "Amiga.h"
 
-Drive::Drive(unsigned n, Amiga& ref) : nr(n), AmigaComponent(ref)
+Drive::Drive(unsigned n, Amiga& ref) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
 

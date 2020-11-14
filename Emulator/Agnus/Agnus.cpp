@@ -361,9 +361,9 @@ Agnus::addToBeam(Beam beam, Cycle cycles)
 void
 Agnus::predictDDF()
 {
-    DDF oldLores = ddfLores;
-    DDF oldHires = ddfHires;
-    DDFState oldState = ddfState;
+    auto oldLores = ddfLores;
+    auto oldHires = ddfHires;
+    auto oldState = ddfState;
     
     ddfstrtReached = ddfstrt < HPOS_CNT ? ddfstrt : -1;
     ddfstopReached = ddfstop < HPOS_CNT ? ddfstop : -1;
