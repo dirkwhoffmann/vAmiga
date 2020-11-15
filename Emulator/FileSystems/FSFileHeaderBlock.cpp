@@ -37,13 +37,13 @@ FSFileHeaderBlock::dump()
     printf("           Next : %d\n", getNextHashRef());
     printf("      File size : %d\n", getFileSize());
 
-    printf("    Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
+    printf("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     printf("          First : %d\n", getFirstDataBlockRef());
     printf("     Parent dir : %d\n", getParentDirRef());
     printf(" FileList block : %d\n", getNextListBlockRef());
     
     printf("    Data blocks : ");
-    for (u32 i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
+    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
 
@@ -57,16 +57,16 @@ FSFileHeaderBlock::check(bool verbose)
     result &= assertInRange(getFirstDataBlockRef(), verbose);
     result &= assertInRange(getNextListBlockRef(), verbose);
 
-    for (u32 i = 0; i < maxDataBlockRefs(); i++) {
+    for (u32 i = 0; i < getMaxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
     }
     
-    if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
+    if (getNumDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
         if (verbose) fprintf(stderr, "Missing reference to first data block\n");
         return false;
     }
     
-    if (numDataBlockRefs() < maxDataBlockRefs() && getNextListBlockRef() != 0) {
+    if (getNumDataBlockRefs() < getMaxDataBlockRefs() && getNextListBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }
@@ -94,8 +94,9 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 
     // Compute the required number of FileListBlocks
     u32 numDataListBlocks = 0;
-    if (numDataBlocks > maxDataBlockRefs()) {
-        numDataListBlocks = 1 + (numDataBlocks - maxDataBlockRefs()) / maxDataBlockRefs();
+    u32 max = getMaxDataBlockRefs();
+    if (numDataBlocks > max) {
+        numDataListBlocks = 1 + (numDataBlocks - max) / max;
     }
 
     printf("Required DataBlocks: %d\n", numDataBlocks);
@@ -141,11 +142,11 @@ bool
 FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
 {
     // If this block has space for more references, add it here
-    if (numDataBlockRefs() < maxDataBlockRefs()) {
+    if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
 
-        if (numDataBlockRefs() == 0) setFirstDataBlockRef(ref);
-        setDataBlockRef(numDataBlockRefs(), ref);
-        incDataBlockRefs();
+        if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(ref);
+        setDataBlockRef(getNumDataBlockRefs(), ref);
+        incNumDataBlockRefs();
         return true;
     }
 

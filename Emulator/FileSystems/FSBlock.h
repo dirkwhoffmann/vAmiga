@@ -134,18 +134,18 @@ public:
 
     virtual u32 blockListCapacity() { return 0; }
     virtual u32 blockListSize() { return 0; }
-    virtual bool addDataBlockRef(u32 ref) { return false; }
+    // virtual bool addDataBlockRef(u32 ref) { return false; }
     virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
 
     //
-    // Geting and setting names or comments
+    // Geting and setting names and comments
     //
     
     virtual FSName getName() { return FSName(""); }
     virtual void setName(FSName name) { }
-    virtual bool matches(FSName &other) { return false; }
+    virtual bool isNamed(FSName &other) { return false; }
 
     virtual FSComment getComment() { return FSComment(""); }
     virtual void setComment(FSComment name) { }
@@ -163,7 +163,7 @@ public:
     
     
     //
-    // Getting and setting protection bits
+    // Getting and setting file properties
     //
     
     virtual u32 getProtectionBits() { return 0; }
@@ -177,35 +177,35 @@ public:
     // Chaining blocks
     //
 
-    // Gets or sets a reference to a the parent directory block
+    // Link to the parent directory block
     virtual u32 getParentDirRef() { return 0; }
     virtual void setParentDirRef(u32 ref) { }
     FSBlock *getParentBlock();
     
-    // Gets or sets a reference to a file header block
+    // Link to the file header block
     virtual u32 getFileHeaderRef() { return 0; }
     virtual void setFileHeaderRef(u32 ref) { }
     struct FSFileHeaderBlock *getFileHeaderBlock();
 
-    // Gets or sets a reference to the first data block
-    virtual u32 getFirstDataBlockRef() { return 0; }
-    virtual void setFirstDataBlockRef(u32 ref) { }
-    struct FSDataBlock *getFirstDataBlock();
-
-    // Gets or sets a reference to the next data block
-    virtual u32 getNextDataBlockRef() { return 0; }
-    virtual void setNextDataBlockRef(u32 ref) { }
-    struct FSDataBlock *getNextDataBlock();
-
-    // Gets or sets a reference to the next block with the same hash
+    // Link to the next block with the same hash
     virtual u32 getNextHashRef() { return 0; }
     virtual void setNextHashRef(u32 ref) { }
     FSBlock *getNextHashBlock();
 
-    // Returns a reference or a pointer to the next extension block
+    // Link to the next extension block
     virtual u32 getNextListBlockRef() { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
     struct FSFileListBlock *getNextExtensionBlock();
+
+    // Link to the first data block
+    virtual u32 getFirstDataBlockRef() { return 0; }
+    virtual void setFirstDataBlockRef(u32 ref) { }
+    struct FSDataBlock *getFirstDataBlock();
+
+    // Link to the next data block
+    virtual u32 getNextDataBlockRef() { return 0; }
+    virtual void setNextDataBlockRef(u32 ref) { }
+    struct FSDataBlock *getNextDataBlock();
 
     
     //
@@ -233,21 +233,17 @@ public:
 
     
     //
-    // Working with data blocks and file data
+    // Working with data blocks
     //
     
-    // Returns the number of data block references in this block
-    virtual u32 numDataBlockRefs() { return 0; }
-
     // Returns the maximum number of storable data block references
-    virtual u32 maxDataBlockRefs() { return 0; }
-    
-    // Returns the maximum number of storable data block references
-    virtual void incDataBlockRefs() { }
+    u32 getMaxDataBlockRefs();
 
-    // Sets the data block number (first block is numbered 1)
-    // virtual void setDataBlockNr(u32 nr) { }
-    
+    // Gets or sets the number of data block references in this block
+    virtual u32 getNumDataBlockRefs() { return 0; }
+    virtual void setNumDataBlockRefs(u32 val) { }
+    virtual void incNumDataBlockRefs() { }
+
     // Adds raw file data to this block
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };

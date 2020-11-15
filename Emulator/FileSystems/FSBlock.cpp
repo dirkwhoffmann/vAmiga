@@ -278,7 +278,7 @@ FSBlock::lookup(FSName name)
     // Traverse the linked list until the item has been found
     for (int i = 0; block && i < searchLimit; i++) {
 
-        if (block->matches(name)) return block;
+        if (block->isNamed(name)) return block;
         block = block->getNextHashBlock();
     }
 
@@ -341,4 +341,10 @@ FSBlock::dumpHashTable()
             printf("%d: %d ", i, value);
         }
     }
+}
+
+u32
+FSBlock::getMaxDataBlockRefs()
+{
+    return volume.bsize / 4 - 56;
 }

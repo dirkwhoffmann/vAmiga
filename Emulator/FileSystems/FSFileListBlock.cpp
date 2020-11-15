@@ -26,12 +26,12 @@ FSFileListBlock::~FSFileListBlock()
 void
 FSFileListBlock::dump()
 {
-    printf(" Block count : %d / %d\n", numDataBlockRefs(), maxDataBlockRefs());
+    printf(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
     printf("       First : %d\n", getFirstDataBlockRef());
     printf("Header block : %d\n", getFileHeaderRef());
     printf("   Extension : %d\n", getNextListBlockRef());
     printf(" Data blocks : ");
-    for (u32 i = 0; i < numDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
+    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
 }
 
@@ -45,16 +45,16 @@ FSFileListBlock::check(bool verbose)
     result &= assertInRange(getFirstDataBlockRef(), verbose);
     result &= assertInRange(getNextListBlockRef(), verbose);
 
-    for (u32 i = 0; i < maxDataBlockRefs(); i++) {
+    for (u32 i = 0; i < getMaxDataBlockRefs(); i++) {
         result &= assertInRange(getDataBlockRef(i), verbose);
     }
     
-    if (numDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
+    if (getNumDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
         if (verbose) fprintf(stderr, "Missing reference to first data block\n");
         return false;
     }
     
-    if (numDataBlockRefs() < maxDataBlockRefs() && getNextListBlockRef() != 0) {
+    if (getNumDataBlockRefs() < getMaxDataBlockRefs() && getNextListBlockRef() != 0) {
         if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
         return false;
     }
@@ -73,11 +73,11 @@ bool
 FSFileListBlock::addDataBlockRef(u32 first, u32 ref)
 {
     // The caller has to ensure that this block contains free slots
-    if (numDataBlockRefs() < maxDataBlockRefs()) {
+    if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
 
         setFirstDataBlockRef(first);
-        setDataBlockRef(numDataBlockRefs(), ref);
-        incDataBlockRefs();
+        setDataBlockRef(getNumDataBlockRefs(), ref);
+        incNumDataBlockRefs();
         return true;
     }
 

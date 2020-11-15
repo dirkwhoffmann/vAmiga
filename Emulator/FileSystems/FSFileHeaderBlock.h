@@ -29,7 +29,7 @@ struct FSFileHeaderBlock : FSBlock {
     
     FSName getName() override                   { return FSName(addr(-20));   }
     void setName(FSName name) override          { name.write(addr(-20));      }
-    bool matches(FSName &other) override        { return getName() == other;  }
+    bool isNamed(FSName &other) override        { return getName() == other;  }
 
     FSComment getComment() override             { return FSComment(addr(-46));}
     void setComment(FSComment name) override    { name.write(addr(-46));      }
@@ -37,9 +37,9 @@ struct FSFileHeaderBlock : FSBlock {
     FSTime getCreationDate() override           { return FSTime(addr(-23));   }
     void setCreationDate(FSTime t) override     { t.write(addr(-23));         }
 
-    u32 maxDataBlockRefs() override             { return bsize() / 4 - 56;    }
-    u32 numDataBlockRefs() override             { return get32(2);            }
-    void incDataBlockRefs() override            {        inc32(2);            }
+    u32 getNumDataBlockRefs() override          { return get32(2);            }
+    void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
+    void incNumDataBlockRefs() override         {        inc32(2);            }
 
     u32 getFirstDataBlockRef() override         { return get32(4     );       }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
@@ -62,7 +62,7 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getNextListBlockRef() override          { return get32(-2     );      }
     void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
 
-    bool addDataBlockRef(u32 ref) override;
+    bool addDataBlockRef(u32 ref);
     bool addDataBlockRef(u32 first, u32 ref) override;
 
     size_t addData(const u8 *buffer, size_t size) override;

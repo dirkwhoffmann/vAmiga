@@ -30,7 +30,7 @@ struct FSUserDirBlock : FSBlock {
 
     FSName getName() override                  { return FSName(addr(-20));    }
     void setName(FSName name) override         { name.write(addr(-20));       }
-    bool matches(FSName &other) override       { return getName() == other;   }
+    bool isNamed(FSName &other) override       { return getName() == other;   }
 
     FSComment getComment() override            { return FSComment(addr(-46)); }
     void setComment(FSComment name) override   { name.write(addr(-46));       }
