@@ -170,9 +170,8 @@ public:
 private:
 
     // Playfield priorities (derived from BPLCON2)
-    // TODO: These variables are only used locally. Move them into function
-    u16 prio1;
-    u16 prio2;
+    // u16 prio1;
+    // u16 prio2;
 
     
     //
@@ -373,9 +372,7 @@ private:
         & armed
         & wasArmed
         & spriteClipBegin
-        & spriteClipEnd
-        & prio1
-        & prio2;
+        & spriteClipEnd;
     }
 
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
@@ -531,7 +528,7 @@ private:
     void translateSPF(int from, int to, PFState &state);
 
     // Called by translate() in dual-playfield mode
-    void translateDPF(bool pf2pri, int from, int to, PFState &state);
+    void translateDPF(int from, int to, PFState &state);
     template <bool pf2pri> void translateDPF(int from, int to, PFState &state);
 
 public:

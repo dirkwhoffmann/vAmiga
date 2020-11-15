@@ -447,21 +447,14 @@ Denise::translate()
 {
     int pixel = 0;
 
-    u16 bplcon0 = initialBplcon0;
-    bool dual = dbplf(bplcon0);
-
-    u16 bplcon2 = initialBplcon2;
-    bool pri = PF2PRI(bplcon2);
-    prio1 = zPF1(bplcon2);
-    prio2 = zPF2(bplcon2);
-
-    // Setup state (current playfield properties)
+    // Start with the playfield state as it was at the beginning of the line
     PFState state;
     state.pf2pri = PF2PRI(initialBplcon2);
     state.ham    = ham(initialBplcon0);
     state.prio1  = zPF1(initialBplcon2);
     state.prio2  = zPF2(initialBplcon2);
-    
+    bool dual    = dbplf(initialBplcon0);
+
     // Add a dummy register change to ensure we draw until the line ends
     conChanges.insert(sizeof(bBuffer), RegChange { SET_NONE, 0 });
 
@@ -473,7 +466,7 @@ Denise::translate()
 
         // Translate a chunk of bitplane data
         if (dual) {
-            translateDPF(pri, pixel, trigger, state);
+            translateDPF(pixel, trigger, state);
         } else {
             translateSPF(pixel, trigger, state);
         }
@@ -483,18 +476,13 @@ Denise::translate()
         switch (change.addr) {
 
             case SET_BPLCON0_DENISE:
-                bplcon0 = change.value;
+                // bplcon0 = change.value;
                 dual = dbplf(bplcon0);
-                prio1 = zPF1(bplcon2); // DEPRECATED
-                prio2 = zPF2(bplcon2); // DEPRECATED
                 state.ham = ham(change.value);
                 break;
 
             case SET_BPLCON2:
-                bplcon2 = change.value;
-                pri = PF2PRI(bplcon2); // DEPRECATED
-                prio1 = zPF1(bplcon2); // DEPRECATED
-                prio2 = zPF2(bplcon2); // DEPRECATED
+                // bplcon2 = change.value;
                 state.pf2pri = PF2PRI(change.value);
                 state.prio1 = zPF1(change.value);
                 state.prio2 = zPF2(change.value);
@@ -513,8 +501,6 @@ Denise::translate()
 void
 Denise::translateSPF(int from, int to, PFState &state)
 {
-    assert(state.prio1 == prio1);
-    assert(state.prio2 == prio2);
     // The usual case: prio2 is a valid value
     if (state.prio2) {
         for (int i = from; i < to; i++) {
@@ -523,7 +509,7 @@ Denise::translateSPF(int from, int to, PFState &state)
 
             assert(PixelEngine::isRgbaIndex(s));
             iBuffer[i] = mBuffer[i] = s;
-            zBuffer[i] = s ? prio2 : 0;
+            zBuffer[i] = s ? state.prio2 : 0;
         }
 
     // The unusual case: prio2 is invalid
@@ -540,10 +526,8 @@ Denise::translateSPF(int from, int to, PFState &state)
 }
 
 void
-Denise::translateDPF(bool pf2pri, int from, int to, PFState &state)
+Denise::translateDPF(int from, int to, PFState &state)
 {
-    assert(pf2pri == state.pf2pri);
-    
     if (state.pf2pri) {
         translateDPF<true>(from, to, state);
     } else {
@@ -554,14 +538,11 @@ Denise::translateDPF(bool pf2pri, int from, int to, PFState &state)
 template <bool pf2pri> void
 Denise::translateDPF(int from, int to, PFState &state)
 {
-    assert(state.prio1 == prio1);
-    assert(state.prio2 == prio2);
-    
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
      */
-    u8 mask1 = prio1 ? 0b1111 : 0b0000;
-    u8 mask2 = prio2 ? 0b1111 : 0b0000;
+    u8 mask1 = state.prio1 ? 0b1111 : 0b0000;
+    u8 mask2 = state.prio2 ? 0b1111 : 0b0000;
 
     for (int i = from; i < to; i++) {
 
@@ -577,17 +558,17 @@ Denise::translateDPF(int from, int to, PFState &state)
                 // PF1 is solid, PF2 is solid
                 if (pf2pri) {
                     iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                    zBuffer[i] = prio2 | Z_DPF21;
+                    zBuffer[i] = state.prio2 | Z_DPF21;
                 } else {
                     iBuffer[i] = mBuffer[i] = index1 & mask1;
-                    zBuffer[i] = prio1 | Z_DPF12;
+                    zBuffer[i] = state.prio1 | Z_DPF12;
                 }
 
             } else {
 
                 // PF1 is solid, PF2 is transparent
                 iBuffer[i] = mBuffer[i] = index1 & mask1;
-                zBuffer[i] = prio1 | Z_DPF1;
+                zBuffer[i] = state.prio1 | Z_DPF1;
             }
 
         } else {
@@ -595,7 +576,7 @@ Denise::translateDPF(int from, int to, PFState &state)
 
                 // PF1 is transparent, PF2 is solid
                 iBuffer[i] = mBuffer[i] = (index2 | 0b1000) & mask2;
-                zBuffer[i] = prio2 | Z_DPF2;
+                zBuffer[i] = state.prio2 | Z_DPF2;
 
             } else {
 
