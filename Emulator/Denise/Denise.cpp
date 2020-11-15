@@ -476,13 +476,11 @@ Denise::translate()
         switch (change.addr) {
 
             case SET_BPLCON0_DENISE:
-                // bplcon0 = change.value;
                 dual = dbplf(bplcon0);
                 state.ham = ham(change.value);
                 break;
 
             case SET_BPLCON2:
-                // bplcon2 = change.value;
                 state.pf2pri = PF2PRI(change.value);
                 state.prio1 = zPF1(change.value);
                 state.prio2 = zPF2(change.value);
@@ -501,19 +499,18 @@ Denise::translate()
 void
 Denise::translateSPF(int from, int to, PFState &state)
 {
-    // The usual case: prio2 is a valid value
-    if (state.prio2) {
-        for (int i = from; i < to; i++) {
-
-            u8 s = bBuffer[i];
-
-            assert(PixelEngine::isRgbaIndex(s));
-            iBuffer[i] = mBuffer[i] = s;
-            zBuffer[i] = s ? state.prio2 : 0;
-        }
-
-    // The unusual case: prio2 is invalid
-    } else {
+    /* Check for invalid bitplane modes.
+     * If the priority of the second bitplane is set to an invalid value (> 4),
+     * Denise ignores the data from the first four bitplanes whereever the fifth
+     * bitplane is set to 1. Some demos such as "Planet Rocklobster" (Oxyron)
+     * show that this kind of bitplane elimination does not happen in HAM mode.
+     *
+     * Relevant tests in the vAmigaTS test suite:
+     * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio4
+     */
+    
+    if (unlikely(!state.prio2 && !state.ham)) {
+        
         for (int i = from; i < to; i++) {
 
              u8 s = bBuffer[i];
@@ -522,6 +519,17 @@ Denise::translateSPF(int from, int to, PFState &state)
              iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
              zBuffer[i] = 0;
          }
+        return;
+    }
+    
+    // Translate the normal way
+    for (int i = from; i < to; i++) {
+        
+        u8 s = bBuffer[i];
+        
+        assert(PixelEngine::isRgbaIndex(s));
+        iBuffer[i] = mBuffer[i] = s;
+        zBuffer[i] = s ? state.prio2 : 0;
     }
 }
 
