@@ -99,6 +99,24 @@ Amiga::Amiga()
     // Initialize mutex
     pthread_mutex_init(&threadLock, NULL);
     pthread_mutex_init(&stateChangeLock, NULL);
+    
+    // Print some debug information
+    if (SNP_DEBUG) {
+        
+        printf("       Agnus : %lu bytes\n", sizeof(Agnus));
+        printf("         CIA : %lu bytes\n", sizeof(CIA));
+        printf(" ControlPort : %lu bytes\n", sizeof(ControlPort));
+        printf("         CPU : %lu bytes\n", sizeof(CPU));
+        printf("      Denise : %lu bytes\n", sizeof(Denise));
+        printf("       Drive : %lu bytes\n", sizeof(Drive));
+        printf("    Keyboard : %lu bytes\n", sizeof(Keyboard));
+        printf("      Memory : %lu bytes\n", sizeof(Memory));
+        printf("  Oscillator : %lu bytes\n", sizeof(Oscillator));
+        printf("       Paula : %lu bytes\n", sizeof(Paula));
+        printf("         RTC : %lu bytes\n", sizeof(RTC));
+        printf("  SerialPort : %lu bytes\n", sizeof(SerialPort));
+        printf("       Zorro : %lu bytes\n", sizeof(ZorroManager));
+    }
 }
 
 Amiga::~Amiga()

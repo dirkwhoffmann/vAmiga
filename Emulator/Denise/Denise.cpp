@@ -216,9 +216,9 @@ Denise::bpu(u16 v)
 }
 
 u16
-Denise::zPF(u16 priorityBits)
+Denise::zPF(u16 prioBits)
 {
-    switch (priorityBits) {
+    switch (prioBits) {
 
         case 0: return Z_0;
         case 1: return Z_1;
@@ -478,6 +478,8 @@ Denise::translate()
             case SET_BPLCON0_DENISE:
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
+                prio1 = zPF1(bplcon2); // TODO: CHECK IF THIS IS STILL NEEDED
+                prio2 = zPF2(bplcon2); // TODO: CHECK IF THIS IS STILL NEEDED
                 break;
 
             case SET_BPLCON2:
@@ -513,13 +515,12 @@ Denise::translateSPF(int from, int to)
 
     // The unusual case: prio2 is invalid
     } else {
-
         for (int i = from; i < to; i++) {
 
              u8 s = bBuffer[i];
 
              assert(PixelEngine::isRgbaIndex(s));
-             iBuffer[i] = mBuffer[i] = (s & 16) ? 16 : s;
+             iBuffer[i] = mBuffer[i] = (s & 0x10) ? (s & 0x30) : s;
              zBuffer[i] = 0;
          }
     }

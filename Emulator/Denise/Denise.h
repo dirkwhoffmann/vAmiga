@@ -413,6 +413,8 @@ public:
     bool ham() { return ham(bplcon0); }
     static bool ecsena(u16 v) { return GET_BIT(v, 0); }
     bool ecsena() { return ecsena(bplcon0); }
+    static bool invBPU(u16 v) { return ((v >> 12) & 0b111) > (hires(v) ? 4 : 6); }
+    bool invBPU() { return invBPU(bplcon0); }
 
     /* Returns the Denise view of the BPU bits. The value determines how many
      * shift registers are loaded with the values of their corresponding
@@ -439,7 +441,7 @@ public:
     u16 PF2Px() { return PF2Px(bplcon2); }
 
     // Computes the z buffer depth for playfield 1 or 2
-    static u16 zPF(u16 priorityBits);
+    static u16 zPF(u16 prioBits);
     static u16 zPF1(u16 bplcon2) { return zPF(PF1Px(bplcon2)); }
     static u16 zPF2(u16 bplcon2) { return zPF(PF2Px(bplcon2)); }
     

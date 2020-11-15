@@ -83,6 +83,7 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     i64 pixel = MAX(4 * agnus.pos.h - 4, 0);
     conChanges.insert(pixel, RegChange { SET_BPLCON0_DENISE, newValue });
     
+    // Check if the HAM bit has changed
     if (ham(oldValue) ^ ham(newValue)) {
         pixelEngine.colChanges.insert(pixel, RegChange { BPLCON0, newValue } );
     }
@@ -93,9 +94,17 @@ Denise::setBPLCON0(u16 oldValue, u16 newValue)
     // Update border color index, because the ECSENA bit might have changed
     updateBorderColor();
     
+    // Check if the BPU bits have changed
+    u16 oldBpuBits = (oldValue >> 12) & 0b111;
+    u16 newBpuBits = (newValue >> 12) & 0b111;
+
+    if (oldBpuBits != newBpuBits) {
+        // trace("Changing BPU bits from %d to %d\n", oldBpuBits, newBpuBits);
+    }
+    
     // Report a suspicious BPU value
-    if (((bplcon0 >> 12) & 0b111) > (hires(bplcon0) ? 5 : 7)) {
-        trace(XFILES, "XFILES (BPLCON0): BPU = %d\n", (bplcon0 >> 12) & 0b111);
+    if (XFILES && newBpuBits > (hires(bplcon0) ? 4 : 6)) {
+        trace("XFILES (BPLCON0): BPU = %d\n", newBpuBits);
     }
 }
 
@@ -128,19 +137,18 @@ Denise::pokeBPLCON2(u16 value)
 }
 
 void
-Denise::setBPLCON2(u16 value)
+Denise::setBPLCON2(u16 newValue)
 {
-    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", value);
+    trace(BPLREG_DEBUG, "setBPLCON2(%X)\n", newValue);
 
-    bplcon2 = value;
+    bplcon2 = newValue;
     
-    if (XFILES) {
-        debug(zPF1(bplcon2) == 0, "XFILES (BPLCON2): PF1P = %d\n", PF1Px());
-        debug(zPF2(bplcon2) == 0, "XFILES (BPLCON2): PF2P = %d\n", PF2Px());
-    }
+    debug(XFILES && PF1Px() > 4, "XFILES (BPLCON2): PF1P = %d\n", PF1Px());
+    debug(XFILES && PF2Px() > 4, "XFILES (BPLCON2): PF2P = %d\n", PF2Px());
     
-    // Record the pixel coordinate where the change takes place
-    conChanges.insert(4 * agnus.pos.h + 4, RegChange { SET_BPLCON2, value });
+    // Record the register change
+    i64 pixel = 4 * agnus.pos.h + 4;
+    conChanges.insert(pixel, RegChange { SET_BPLCON2, newValue });    
 }
 
 void

@@ -219,20 +219,6 @@ PixelEngine::adjustRGB(u8 &r, u8 &g, u8 &b)
     b = u8(newB);
 }
 
-/*
-bool
-PixelEngine::isLongFrame(ScreenBuffer *buf)
-{
-    return buf->longFrame;
-}
-
-bool
-PixelEngine::isShortFrame(ScreenBuffer *buf)
-{
-    return !buf->longFrame;
-}
-*/
-
 ScreenBuffer
 PixelEngine::getStableBuffer()
 {
