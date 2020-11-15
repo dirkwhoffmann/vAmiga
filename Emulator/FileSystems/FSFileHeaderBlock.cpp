@@ -84,12 +84,10 @@ FSFileHeaderBlock::updateChecksum()
 size_t
 FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
-    printf("addData(%p,%zu)\n", buffer, size);
-
     assert(getFileSize() == 0);
     
     // Compute the required number of DataBlocks
-    u32 bytes = volume.bytesInDataBlock();
+    u32 bytes = volume.getDataBlockCapacity();
     u32 numDataBlocks = (size + bytes - 1) / bytes;
 
     // Compute the required number of FileListBlocks
@@ -99,10 +97,14 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         numDataListBlocks = 1 + (numDataBlocks - max) / max;
     }
 
-    printf("Required DataBlocks: %d\n", numDataBlocks);
-    printf("Required DataListBlocks: %d\n", numDataListBlocks);
+    printf("Required data blocks : %d\n", numDataBlocks);
+    printf("Required list blocks : %d\n", numDataListBlocks);
+    printf("         Free blocks : %d out of %d\n", volume.freeBlocks(), volume.numBlocks());
     
-    // TODO: Check if the volume has enough free space
+    if (volume.freeBlocks() < numDataBlocks + numDataListBlocks) {
+        printf("Not enough free blocks\n");
+        return 0;
+    }
     
     for (u32 ref = nr, i = 0; i < numDataListBlocks; i++) {
 

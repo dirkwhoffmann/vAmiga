@@ -29,7 +29,9 @@ FSBootBlock::~FSBootBlock()
 void
 FSBootBlock::dump()
 {
-    
+    printf("     Header : ");
+    for (int i = 0; i < 8; i++) printf("%02X ", data[i]);
+    printf("\n");
 }
 
 bool
@@ -37,8 +39,8 @@ FSBootBlock::check(bool verbose)
 {
     bool result = FSBlock::check(verbose);
     
-    if (nr > 1 && verbose) {
-        fprintf(stderr, "Block %d must not be a boot block.\n", nr);
+    if (nr > 1) {
+        if (verbose) fprintf(stderr, "Found ID %d. Expected 0 or 1.\n", nr);
         result = false;
     }
     

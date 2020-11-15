@@ -14,8 +14,7 @@
 
 struct FSEmptyBlock : FSBlock {
     
-    FSEmptyBlock(FSVolume &ref, u32 nr);
-    ~FSEmptyBlock();
+    FSEmptyBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr) { }
      
     FSBlockType type() override { return FS_EMPTY_BLOCK; }
 

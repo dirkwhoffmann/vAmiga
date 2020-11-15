@@ -49,9 +49,6 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
 
-    // Returns the size of this block
-    u32 bsize();
-
     // Returns the name or path of this block
     char *assemblePath();
 
@@ -125,23 +122,11 @@ private:
     virtual void updateChecksum() { }
     
                 
-    
-    //
-    // Method stubs for blocks maintaining a data block list
-    //
-
-public:
-
-    virtual u32 blockListCapacity() { return 0; }
-    virtual u32 blockListSize() { return 0; }
-    // virtual bool addDataBlockRef(u32 ref) { return false; }
-    virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
-    virtual void deleteDataBlockRefs() { }
-
-
     //
     // Geting and setting names and comments
     //
+    
+public:
     
     virtual FSName getName() { return FSName(""); }
     virtual void setName(FSName name) { }
@@ -219,8 +204,8 @@ public:
     virtual u32 hashValue() { return 0; }
 
     // Looks up an item in the hash table
-    u32 lookup(u32 nr);
-    FSBlock *lookup(FSName name);
+    u32 hashLookup(u32 nr);
+    FSBlock *hashLookup(FSName name);
 
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);
@@ -244,7 +229,10 @@ public:
     virtual void setNumDataBlockRefs(u32 val) { }
     virtual void incNumDataBlockRefs() { }
 
-    // Adds raw file data to this block
+    // Adds a data block reference to this block
+    virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
+
+    // Adds data bytes to this block
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 

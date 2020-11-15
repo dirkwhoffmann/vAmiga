@@ -80,12 +80,6 @@ FSBlock::checksum()
     return ~result + 1;
 }
 
-u32
-FSBlock::bsize()
-{
-    return volume.bsize;
-}
-
 char *
 FSBlock::assemblePath()
 {
@@ -255,24 +249,22 @@ FSBlock::getNextExtensionBlock()
 }
 
 u32
-FSBlock::lookup(u32 nr)
+FSBlock::hashLookup(u32 nr)
 {
-    return (nr < hashTableSize()) ? read32(data + 24 + 4 * nr) : 0;
+    return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
 
 FSBlock *
-FSBlock::lookup(FSName name)
+FSBlock::hashLookup(FSName name)
 {
     // Don't call this function if no hash table is present
     assert(hashTableSize() != 0);
 
     // Compute hash value and table position
     u32 hash = name.hashValue() % hashTableSize();
-    u8 *tableEntry = data + 24 + 4 * hash;
     
     // Read the entry
-    u32 blockRef = read32(tableEntry);
-    assert(lookup(hash) == blockRef);
+    u32 blockRef = hashLookup(hash);
     FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
     
     // Traverse the linked list until the item has been found

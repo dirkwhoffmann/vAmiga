@@ -27,23 +27,13 @@ struct FSFileHeaderBlock : FSBlock {
     // Block items
     //
     
-    FSName getName() override                   { return FSName(addr(-20));   }
-    void setName(FSName name) override          { name.write(addr(-20));      }
-    bool isNamed(FSName &other) override        { return getName() == other;  }
-
-    FSComment getComment() override             { return FSComment(addr(-46));}
-    void setComment(FSComment name) override    { name.write(addr(-46));      }
-    
-    FSTime getCreationDate() override           { return FSTime(addr(-23));   }
-    void setCreationDate(FSTime t) override     { t.write(addr(-23));         }
-
     u32 getNumDataBlockRefs() override          { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
     void incNumDataBlockRefs() override         {        inc32(2);            }
 
     u32 getFirstDataBlockRef() override         { return get32(4     );       }
     void setFirstDataBlockRef(u32 ref) override {        set32(4, ref);       }
-
+    
     u32 getDataBlockRef(int nr)                 { return get32(-51-nr     );  }
     void setDataBlockRef(int nr, u32 ref)       {        set32(-51-nr, ref);  }
 
@@ -52,6 +42,16 @@ struct FSFileHeaderBlock : FSBlock {
 
     u32 getFileSize() override                  { return get32(-47     );     }
     void setFileSize(u32 val) override          {        set32(-47, val);     }
+
+    FSComment getComment() override             { return FSComment(addr(-46));}
+    void setComment(FSComment name) override    { name.write(addr(-46));      }
+
+    FSTime getCreationDate() override           { return FSTime(addr(-23));   }
+    void setCreationDate(FSTime t) override     { t.write(addr(-23));         }
+
+    FSName getName() override                   { return FSName(addr(-20));   }
+    void setName(FSName name) override          { name.write(addr(-20));      }
+    bool isNamed(FSName &other) override        { return getName() == other;  }
 
     u32 getNextHashRef() override               { return get32(-4     );      }
     void setNextHashRef(u32 ref) override       {        set32(-4, ref);      }
@@ -64,7 +64,6 @@ struct FSFileHeaderBlock : FSBlock {
 
     bool addDataBlockRef(u32 ref);
     bool addDataBlockRef(u32 first, u32 ref) override;
-
     size_t addData(const u8 *buffer, size_t size) override;
 
     u32 hashValue() override { return getName().hashValue(); }

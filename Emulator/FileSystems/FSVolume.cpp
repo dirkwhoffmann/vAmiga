@@ -86,7 +86,7 @@ FSVolume::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
     msg("DOS%d  ",      type == FS_OFS ? 0 : 1);
-    msg("%5d (x %3d) ", totalBlocks(), bsize);
+    msg("%5d (x %3d) ", numBlocks(), bsize);
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
@@ -132,6 +132,16 @@ FSVolume::check(bool verbose)
         fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
     }
     return result;
+}
+
+u32
+FSVolume::getDataBlockCapacity()
+{
+    if (isOFS()) {
+        return bsize - OFSDataBlock::headerSize();
+    } else {
+        return bsize - FFSDataBlock::headerSize();
+    }
 }
 
 u32
@@ -368,7 +378,7 @@ FSVolume::changeDir(const char *name)
         return currentDirBlock();
     }
     
-    FSBlock *subdir = cdb->lookup(name);
+    FSBlock *subdir = cdb->hashLookup(name);
     if (!subdir) return cdb;
     
     // Move one level down
@@ -431,7 +441,7 @@ FSVolume::seek(const char *name)
 {
     FSBlock *cdb = currentDirBlock();
     
-    return cdb->lookup(FSName(name));
+    return cdb->hashLookup(FSName(name));
 }
 
 FSBlock *
@@ -465,7 +475,7 @@ FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, 
     
     for (u32 i = 0; i < dir->hashTableSize(); i++) {
         
-        if (u32 ref = dir->lookup(i)) {
+        if (u32 ref = dir->hashLookup(i)) {
             
             FSBlock *item = block(ref);
             while (item) {

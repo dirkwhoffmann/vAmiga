@@ -107,22 +107,27 @@ public:
     // Querying file system properties
     //
     
+    FSName getName() { return rootBlock()->getName(); }
     FSVolumeType getType() { return type; }
     bool isOFS() { return type == FS_OFS; }
     bool isFFF() { return type == FS_FFS; }
-    FSName getName() { return rootBlock()->getName(); }
-    u32 getBlockSize() { return bsize; }
-    u32 bytesInDataBlock() { return bsize - (isOFS() ? 24 : 0); }
-
+    
+    // Returns the volume size in blocks
     u32 getCapacity() { return capacity; }
 
-    // Reports information about the capacity and usage of this volume
-    u32 totalBlocks() { return capacity; }
+    // Returns the block size in bytes
+    u32 getBlockSize() { return bsize; }
+
+    // Returns the number of bytes that can be stored in a single data block
+    u32 getDataBlockCapacity();
+    
+    // Reports usage information
+    u32 numBlocks() { return getCapacity(); }
     u32 freeBlocks();
-    u32 usedBlocks() { return totalBlocks() - freeBlocks(); }
-    u32 totalBytes() { return totalBlocks() * bsize; }
+    u32 usedBlocks() { return numBlocks() - freeBlocks(); }
+    u32 totalBytes() { return numBlocks() * bsize; }
     u32 freeBytes() { return freeBlocks() * bsize; }
-    u32 usedBytes() { return usedBlocks() *bsize; }
+    u32 usedBytes() { return usedBlocks() * bsize; }
 
     
     //

@@ -73,7 +73,7 @@ FSBitmapBlock::locateBlockBit(u32 nr, u32 *byte, u32 *bit)
         case 3: *byte -= 3; break;
     }
 
-    assert(*byte <= bsize() - 4);
+    assert(*byte <= volume.bsize - 4);
     assert(*bit < 8);
 }
 
@@ -108,7 +108,7 @@ FSBitmapBlock::alloc(u32 block, bool allocate)
 
     u32 byte, bit;
     locateBlockBit(block, &byte, &bit);
-    assert(byte <= bsize() - 4);
+    assert(byte <= volume.bsize - 4);
     assert(bit <= 7);
     
     // 0 = allocated, 1 = not allocated

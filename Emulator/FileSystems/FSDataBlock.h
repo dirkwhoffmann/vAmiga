@@ -30,6 +30,8 @@ struct OFSDataBlock : FSDataBlock {
       
     OFSDataBlock(FSVolume &ref, u32 nr);
 
+    static u32 headerSize() { return 24; }
+
     void dump() override;
     bool check(bool verbose) override;
     void updateChecksum() override;
@@ -53,6 +55,8 @@ struct FFSDataBlock : FSDataBlock {
       
     FFSDataBlock(FSVolume &ref, u32 nr);
 
+    static u32 headerSize() { return 0; }
+    
     void dump() override;
     bool check(bool verbose) override;
 

@@ -37,10 +37,10 @@ FSRootBlock::~FSRootBlock()
 void
 FSRootBlock::dump()
 {
-    printf("        Name: %s\n", getName().cStr);
-    printf("     Created: "); getCreationDate().print(); printf("\n");
-    printf("    Modified: "); getModificationDate().print(); printf("\n");
-    printf("  Hash table: "); dumpHashTable(); printf("\n");
+    printf("        Name : %s\n", getName().cStr);
+    printf("     Created : "); getCreationDate().print(); printf("\n");
+    printf("    Modified : "); getModificationDate().print(); printf("\n");
+    printf("  Hash table : "); dumpHashTable(); printf("\n");
 }
 
 bool

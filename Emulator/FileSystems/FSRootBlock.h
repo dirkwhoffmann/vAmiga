@@ -22,11 +22,11 @@ struct FSRootBlock : FSBlock {
     bool check(bool verbose) override;
     void updateChecksum() override;
 
-    FSName getName() override                    { return FSName(addr(-20)); }
-    void setName(FSName name) override           { name.write(addr(-20));    }
-
     FSTime getCreationDate() override            { return FSTime(addr(-7));  }
     void setCreationDate(FSTime t) override      { t.write(addr(-7));        }
+
+    FSName getName() override                    { return FSName(addr(-20)); }
+    void setName(FSName name) override           { name.write(addr(-20));    }
 
     FSTime getModificationDate() override        { return FSTime(addr(-23)); }
     void setModificationDate(FSTime t) override  { t.write(addr(-23));       }
