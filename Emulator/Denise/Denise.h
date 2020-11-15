@@ -170,6 +170,7 @@ public:
 private:
 
     // Playfield priorities (derived from BPLCON2)
+    // TODO: These variables are only used locally. Move them into function
     u16 prio1;
     u16 prio2;
 
@@ -520,15 +521,18 @@ public:
 
 private:
 
+    // Data type used by the translation functions
+    typedef struct { u16 prio1; u16 prio2; bool pf2pri; bool ham; } PFState;
+
     // Translate bitplane data to color register indices
     void translate();
 
     // Called by translate() in single-playfield mode
-    void translateSPF(int from, int to);
+    void translateSPF(int from, int to, PFState &state);
 
     // Called by translate() in dual-playfield mode
-    void translateDPF(bool pf2pri, int from, int to);
-    template <bool pf2pri> void translateDPF(int from, int to);
+    void translateDPF(bool pf2pri, int from, int to, PFState &state);
+    template <bool pf2pri> void translateDPF(int from, int to, PFState &state);
 
 public:
 

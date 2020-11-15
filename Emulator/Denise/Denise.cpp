@@ -455,6 +455,13 @@ Denise::translate()
     prio1 = zPF1(bplcon2);
     prio2 = zPF2(bplcon2);
 
+    // Setup state (current playfield properties)
+    PFState state;
+    state.pf2pri = PF2PRI(initialBplcon2);
+    state.ham    = ham(initialBplcon0);
+    state.prio1  = zPF1(initialBplcon2);
+    state.prio2  = zPF2(initialBplcon2);
+    
     // Add a dummy register change to ensure we draw until the line ends
     conChanges.insert(sizeof(bBuffer), RegChange { SET_NONE, 0 });
 
@@ -466,9 +473,9 @@ Denise::translate()
 
         // Translate a chunk of bitplane data
         if (dual) {
-            translateDPF(pri, pixel, trigger);
+            translateDPF(pri, pixel, trigger, state);
         } else {
-            translateSPF(pixel, trigger);
+            translateSPF(pixel, trigger, state);
         }
         pixel = trigger;
 
@@ -478,15 +485,19 @@ Denise::translate()
             case SET_BPLCON0_DENISE:
                 bplcon0 = change.value;
                 dual = dbplf(bplcon0);
-                prio1 = zPF1(bplcon2); // TODO: CHECK IF THIS IS STILL NEEDED
-                prio2 = zPF2(bplcon2); // TODO: CHECK IF THIS IS STILL NEEDED
+                prio1 = zPF1(bplcon2); // DEPRECATED
+                prio2 = zPF2(bplcon2); // DEPRECATED
+                state.ham = ham(change.value);
                 break;
 
             case SET_BPLCON2:
                 bplcon2 = change.value;
-                pri = PF2PRI(bplcon2);
-                prio1 = zPF1(bplcon2);
-                prio2 = zPF2(bplcon2);
+                pri = PF2PRI(bplcon2); // DEPRECATED
+                prio1 = zPF1(bplcon2); // DEPRECATED
+                prio2 = zPF2(bplcon2); // DEPRECATED
+                state.pf2pri = PF2PRI(change.value);
+                state.prio1 = zPF1(change.value);
+                state.prio2 = zPF2(change.value);
                 break;
 
             default:
@@ -500,10 +511,12 @@ Denise::translate()
 }
 
 void
-Denise::translateSPF(int from, int to)
+Denise::translateSPF(int from, int to, PFState &state)
 {
+    assert(state.prio1 == prio1);
+    assert(state.prio2 == prio2);
     // The usual case: prio2 is a valid value
-    if (prio2) {
+    if (state.prio2) {
         for (int i = from; i < to; i++) {
 
             u8 s = bBuffer[i];
@@ -527,14 +540,23 @@ Denise::translateSPF(int from, int to)
 }
 
 void
-Denise::translateDPF(bool pf2pri, int from, int to)
+Denise::translateDPF(bool pf2pri, int from, int to, PFState &state)
 {
-    pf2pri ? translateDPF<true>(from, to) : translateDPF<false>(from, to);
+    assert(pf2pri == state.pf2pri);
+    
+    if (state.pf2pri) {
+        translateDPF<true>(from, to, state);
+    } else {
+        translateDPF<false>(from, to, state);
+    }
 }
 
 template <bool pf2pri> void
-Denise::translateDPF(int from, int to)
+Denise::translateDPF(int from, int to, PFState &state)
 {
+    assert(state.prio1 == prio1);
+    assert(state.prio2 == prio2);
+    
     /* If the priority of a playfield is set to an illegal value (prio1 or
      * prio2 will be 0 in that case), all pixels are drawn transparent.
      */
@@ -1200,5 +1222,5 @@ template void Denise::drawOdd<true>(int offset);
 template void Denise::drawEven<false>(int offset);
 template void Denise::drawEven<true>(int offset);
 
-template void Denise::translateDPF<true>(int from, int to);
-template void Denise::translateDPF<false>(int from, int to);
+template void Denise::translateDPF<true>(int from, int to, PFState &state);
+template void Denise::translateDPF<false>(int from, int to, PFState &state);
