@@ -22,7 +22,7 @@ struct FSBlock {
     // The sector number of this block
     u32 nr;
 
-    // The block data
+    // The actual block data
     u8 *data = nullptr;
     
     
@@ -30,15 +30,9 @@ struct FSBlock {
     // Constants and static methods
     //
 
-    // Search limit for avoiding infinite loops in list walks
+    // Search limit to avoid infinite list walks
     static const long searchLimit = 255;
         
-    // Reads or writes a long word in Big Endian format
-    static  u32 read32(const u8 *p);
-    static void write32(u8 *p, u32 value);
-    static void inc32(u8 *p) { write32(p, read32(p) + 1); }
-    static void dec32(u8 *p) { write32(p, read32(p) - 1); }
-
         
     //
     // Constructing and destructing
@@ -49,7 +43,7 @@ struct FSBlock {
 
     
     //
-    // Accessing block parameters
+    // Accessing block properties
     //
 
     // Returns the type of this block
@@ -57,7 +51,7 @@ struct FSBlock {
 
     // Returns the size of this block
     u32 bsize();
-    
+
     // Returns the name or path of this block
     char *assemblePath();
 
@@ -65,6 +59,12 @@ struct FSBlock {
     //
     // Reading and writing block data
     //
+
+    // Reads or writes a long word in Big Endian format
+    static u32 read32(const u8 *p);
+    static void write32(u8 *p, u32 value);
+    static void inc32(u8 *p) { write32(p, read32(p) + 1); }
+    static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
     u8 *addr(int nr); 
@@ -86,7 +86,7 @@ struct FSBlock {
     // Prints the full path of this block
     void printPath();
 
-    // Prints a debug summary for this block
+    // Prints some debug information for this block
     virtual void dump() { };
     
     
@@ -124,16 +124,7 @@ private:
     // Updates the checksum for this block (called prior to exporting)
     virtual void updateChecksum() { }
     
-    
-    //
-    // Method stubs for blocks representing file items
-    //
-    
-public:
-    
-    // Return true if the name of this block matches the given name
-    virtual bool matches(FSName &otherName) { return false; }
-        
+                
     
     //
     // Method stubs for blocks maintaining a data block list
@@ -147,12 +138,14 @@ public:
     virtual bool addDataBlockRef(u32 first, u32 ref) { return false; }
     virtual void deleteDataBlockRefs() { }
 
+
     //
-    // Getting and setting names and comments
+    // Geting and setting names or comments
     //
     
     virtual FSName getName() { return FSName(""); }
     virtual void setName(FSName name) { }
+    virtual bool matches(FSName &other) { return false; }
 
     virtual FSComment getComment() { return FSComment(""); }
     virtual void setComment(FSComment name) { }

@@ -24,12 +24,11 @@ FSDataBlock::~FSDataBlock()
 // Original File System (OFS)
 //
 
-OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSDataBlock(ref, nr)
+OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
     set32(0, 8);    // Block type
-    set32(2, cnt);  // Position in block sequence (numbering starts with 1)
 }
 
 void
@@ -42,19 +41,15 @@ OFSDataBlock::check(bool verbose)
 {
     bool result = FSBlock::check(verbose);
     
-    /*
-    if (blockNumber < 1) {
+    if (getDataBlockNr() < 1) {
         
-        if (verbose) fprintf(stderr, "Block index %d is smaller than 1\n", blockNumber);
+        if (verbose) fprintf(stderr, "Invalid data block nr %d\n", getDataBlockNr());
         return false;
     }
-    */
-    /*
-    result &= assertNotNull(fileHeaderBlock, verbose);
-    result &= assertInRange(fileHeaderBlock, verbose);
-    result &= assertInRange(blockNumber, verbose);
-    result &= assertInRange(next, verbose);
-    */
+    
+    result &= assertNotNull(getFileHeaderRef(), verbose);
+    result &= assertInRange(getFileHeaderRef(), verbose);
+    result &= assertInRange(getNextDataBlockRef(), verbose);
     
     return result;
 }
@@ -73,9 +68,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
     size_t count = MIN(volume.bsize - headerSize, size);
 
     memcpy(data + headerSize, buffer, count);
-
-    // Store the number of written bytes in the block header
-    write32(data + 12, count);
+    setDataBytesInBlock(count);
     
     return count;
 }
@@ -85,7 +78,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr, u32 cnt) : FSDataBlock(ref, nr)
+FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
 {
 }
 

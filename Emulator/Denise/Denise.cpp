@@ -506,7 +506,7 @@ Denise::translateSPF(int from, int to, PFState &state)
      * show that this kind of bitplane elimination does not happen in HAM mode.
      *
      * Relevant tests in the vAmigaTS test suite:
-     * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio4
+     * Denise/BPLCON0/invprio0 to Denise/BPLCON0/invprio3
      */
     
     if (unlikely(!state.prio2 && !state.ham)) {

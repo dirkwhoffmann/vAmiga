@@ -22,15 +22,15 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType type() override { return FS_USERDIR_BLOCK; }
+    FSBlockType type() override                { return FS_USERDIR_BLOCK;     }
     void dump() override;
     bool check(bool verbose) override;
     void updateChecksum() override;
 
-    bool matches(FSName &otherName) override { return getName() == otherName; }
 
     FSName getName() override                  { return FSName(addr(-20));    }
     void setName(FSName name) override         { name.write(addr(-20));       }
+    bool matches(FSName &other) override       { return getName() == other;   }
 
     FSComment getComment() override            { return FSComment(addr(-46)); }
     void setComment(FSComment name) override   { name.write(addr(-46));       }

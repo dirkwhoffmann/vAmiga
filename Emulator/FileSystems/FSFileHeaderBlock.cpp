@@ -81,30 +81,6 @@ FSFileHeaderBlock::updateChecksum()
     set32(5, checksum());
 }
 
-FSName
-FSFileHeaderBlock::getName()
-{
-    return FSName(data + bsize() - 20 * 4);
-}
-
-void
-FSFileHeaderBlock::setName(FSName name)
-{
-    name.write(data + bsize() - 20 * 4);
-}
-
-FSComment
-FSFileHeaderBlock::getComment()
-{
-    return FSComment(data + bsize() - 46 * 4);
-}
-
-void
-FSFileHeaderBlock::setComment(FSComment name)
-{
-    name.write(data + bsize() - 46 * 4);
-}
-
 size_t
 FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
