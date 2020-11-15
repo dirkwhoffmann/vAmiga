@@ -54,7 +54,7 @@ isFSBlockType(long value)
 }
 
 inline const char *
-fsBlockTypeName(FSBlockType type)
+sFSBlockType(FSBlockType type)
 {
     assert(isFSBlockType(type));
 

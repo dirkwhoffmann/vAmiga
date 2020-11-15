@@ -41,6 +41,8 @@ struct FSBlock {
     FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }
     virtual ~FSBlock() { }
 
+    static FSBlock *makeWithType(FSVolume &ref, u32 nr, FSBlockType type);
+    
     
     //
     // Accessing block properties
@@ -74,7 +76,7 @@ struct FSBlock {
 
     // Computes a checksum for this block
     u32 checksum();
-
+    
     
     //
     // Debugging
@@ -111,10 +113,10 @@ protected:
 public:
     
     // Imports this block from a buffer (bsize must match the volume block size)
-    virtual void importBlock(u8 *p, size_t bsize);
+    virtual void importBlock(const u8 *src, size_t bsize);
 
     // Exports this block to a buffer (bsize must match the volume block size)
-    virtual void exportBlock(u8 *p, size_t bsize);
+    virtual void exportBlock(u8 *dst, size_t bsize);
 
 private:
     

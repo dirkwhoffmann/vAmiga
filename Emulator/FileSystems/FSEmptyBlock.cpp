@@ -10,6 +10,12 @@
 #include "FSVolume.h"
 
 void
+FSEmptyBlock::importBlock(const u8 *p, size_t bsize)
+{
+    assert(bsize == volume.bsize);
+}
+
+void
 FSEmptyBlock::exportBlock(u8 *p, size_t bsize)
 {
     assert(bsize == volume.bsize);

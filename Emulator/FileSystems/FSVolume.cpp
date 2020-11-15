@@ -11,6 +11,27 @@
 #include "FSVolume.h"
 
 FSVolume *
+FSVolume::make(const u8 *buffer, size_t size, size_t bsize)
+{
+    assert(buffer != nullptr);
+    assert(size % bsize == 0);
+    
+    unsigned numBlocks = size / bsize;
+    printf("Creating file system from buffer with %d blocks\n", numBlocks);
+    
+    // TODO: Determine file system type from buffer.
+    // TODO: Right now, we always import as OFS which is wrong, of course.
+    FSVolume *volume = new FSVolume(FS_OFS, "Disk", numBlocks, bsize);
+    
+    if (!volume->importVolume(buffer, size)) {
+        delete volume;
+        return nullptr;
+    }
+    
+    return volume;
+}
+
+FSVolume *
 FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
 {
     FSVolume *volume = new FSVolume(type, name, capacity);
@@ -103,7 +124,7 @@ FSVolume::dump()
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
         msg("\nBlock %d (%d):", i, blocks[i]->nr);
-        msg(" %s\n", fsBlockTypeName(blocks[i]->type()));
+        msg(" %s\n", sFSBlockType(blocks[i]->type()));
                 
         blocks[i]->dump(); 
     }
@@ -122,7 +143,7 @@ FSVolume::check(bool verbose)
 
         if (verbose) {
             fprintf(stderr, "Inspecting block %d (%s) ...\n",
-                    i, fsBlockTypeName(blocks[i]->type()));
+                    i, sFSBlockType(blocks[i]->type()));
         }
 
         result &= blocks[i]->check(verbose);
@@ -132,6 +153,34 @@ FSVolume::check(bool verbose)
         fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
     }
     return result;
+}
+
+FSBlockType
+FSVolume::guessBlockType(u32 nr, const u8 *buffer)
+{
+    assert(buffer != nullptr);
+
+    // Take care of blocks that can be identified by number
+    if (nr <= 1) return FS_BOOT_BLOCK;
+    if (nr == rootBlockNr()) return FS_ROOT_BLOCK;
+    if (nr == bitmapBlockNr()) return FS_BITMAP_BLOCK;
+    
+    // For all other blocks, check the type and subtype fields
+    u32 type = FSBlock::read32(buffer);
+    u32 subtype = FSBlock::read32(buffer + bsize - 4);
+    
+    if (type == 2 && subtype == 2) return FS_USERDIR_BLOCK;
+    if (type == 2 && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
+    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
+
+    // Check if this block is a data block
+    if (isOFS()) {
+        if (type == 8) return FS_DATA_BLOCK;
+    } else {
+        for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK;
+    }
+    
+    return FS_EMPTY_BLOCK;
 }
 
 u32
@@ -518,9 +567,9 @@ FSVolume::listWalker(FSBlock *block, int value)
 }
 
 bool
-FSVolume::importVolume(u8 *dst, size_t size)
+FSVolume::importVolume(const u8 *src, size_t size)
 {
-    assert(dst != nullptr);
+    assert(src != nullptr);
 
     debug("Importing file system with %d blocks\n", capacity);
 
@@ -532,9 +581,24 @@ FSVolume::importVolume(u8 *dst, size_t size)
 
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
+        
+        // Determine the type of the new block
+        FSBlockType type = guessBlockType(i, src + i * bsize);
 
-        // TODO
-        assert(false);
+        printf("Block %d has guessed type %s\n", i, sFSBlockType(type));
+        
+        // Create the new block
+        FSBlock *newBlock = FSBlock::makeWithType(*this, i, type);
+        if (newBlock == nullptr) return false;
+
+        // Import the block data
+        const u8 *p = src + bsize * 4;
+        newBlock->importBlock(p, bsize);
+
+        // Replace the existing block
+        assert(blocks[i] != nullptr);
+        delete blocks[i];
+        blocks[i] = newBlock;
     }
     
     return true;

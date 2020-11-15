@@ -64,20 +64,15 @@ protected:
     // The directory where new files and subdirectories are added
     u32 currentDir = 0;
 
-    
-    //
-    // Class methods
-    //
-    
-public:
-    
-    // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < capacity; }
-
 
     //
     // Factory methods
     //
+    
+public:
+    
+    // Creates a file system from a buffer (usually the data of an ADF)
+    static FSVolume *make(const u8 *buffer, size_t size, size_t bsize);
     
     // Creates a file system with the contents of a host file system directory
     static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
@@ -102,6 +97,12 @@ public:
     // Checks the integrity of this volume
     virtual bool check(bool verbose);
     
+    // Checks if the block with the given number is part of the volume
+    bool isBlockNumber(u32 nr) { return nr < capacity; }
+
+    // Guesses the type of a block by analyzing its number and data
+    FSBlockType guessBlockType(u32 nr, const u8 *buffer);
+
     
     //
     // Querying file system properties
@@ -212,7 +213,7 @@ public:
     //
     
     // Exports the volume to a buffer compatible with the ADF format
-    bool importVolume(u8 *dst, size_t size);
+    bool importVolume(const u8 *src, size_t size);
 
     // Imports the volume from a buffer compatible with the ADF format
     bool exportVolume(u8 *dst, size_t size);

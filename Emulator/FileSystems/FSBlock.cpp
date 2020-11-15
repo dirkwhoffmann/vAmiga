@@ -10,6 +10,24 @@
 #include "Utils.h"
 #include "FSVolume.h"
 
+FSBlock *
+FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
+{
+    switch (type) {
+
+        case FS_EMPTY_BLOCK: return new FSEmptyBlock(ref, nr);
+        case FS_BOOT_BLOCK: return new FSBootBlock(ref, nr);
+        case FS_ROOT_BLOCK: return new FSRootBlock(ref, nr);
+        case FS_BITMAP_BLOCK: return new FSBitmapBlock(ref, nr);
+        case FS_USERDIR_BLOCK: return new FSUserDirBlock(ref, nr);
+        case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(ref, nr);
+        case FS_FILELIST_BLOCK: return new FSFileListBlock(ref, nr);
+        case FS_DATA_BLOCK: return new FSDataBlock(ref, nr);
+
+        default: return nullptr;
+    }
+}
+
 u8 *
 FSBlock::addr(int nr)
 {
@@ -29,55 +47,6 @@ FSBlock::write32(u8 *p, u32 value)
     p[1] = (value >> 16) & 0xFF;
     p[2] = (value >>  8) & 0xFF;
     p[3] = (value >>  0) & 0xFF;
-}
-
-/*
-time_t
-FSBlock::readTimeStamp(u8 *p)
-{
-    const u32 secPerDay = 24 * 60 * 60;
-
-    u32 days = read32(p + 0);
-    u32 mins = read32(p + 4);
-    u32 ticks = read32(p + 8);
-    
-    time_t t = days * secPerDay + mins * 60 + ticks / 50;
-    
-    // Shift reference point from  Jan 1, 1978 (Amiga) to Jan 1, 1970 (Unix)
-    t += (8 * 365 + 2) * secPerDay - 60 * 60;
-    
-    return t;
-}
-
-void
-FSBlock::writeTimeStamp(u8 *p, time_t t)
-{
-    const u32 secPerDay = 24 * 60 * 60;
-    
-    // Shift reference point from Jan 1, 1970 (Unix) to Jan 1, 1978 (Amiga)
-    t -= (8 * 365 + 2) * secPerDay - 60 * 60;
-    
-    u32 days = t / secPerDay;
-    u32 mins = (t % secPerDay) / 60;
-    u32 ticks = (t % secPerDay % 60) * 50;
-
-    write32(p + 0, days);
-    write32(p + 4, mins);
-    write32(p + 8, ticks);
-}
-*/
-
-u32
-FSBlock::checksum()
-{
-    u32 result = 0;
-    u32 numLongWords = volume.bsize / 4;
-    
-    for (u32 i = 0; i < numLongWords; i++) {
-        result += get32(i);
-    }
-    
-    return ~result + 1;
 }
 
 char *
@@ -105,6 +74,19 @@ FSBlock::printPath()
     char *path = assemblePath();
     printf("%s", path);
     delete [] path;
+}
+
+u32
+FSBlock::checksum()
+{
+    u32 result = 0;
+    u32 numLongWords = volume.bsize / 4;
+    
+    for (u32 i = 0; i < numLongWords; i++) {
+        result += get32(i);
+    }
+    
+    return ~result + 1;
 }
 
 bool
@@ -156,16 +138,16 @@ FSBlock::assertHasType(u32 ref, FSBlockType type1, FSBlockType type2, bool verbo
     if (verbose && type1 == type2) {
         fprintf(stderr, "Block %d has type %s. Expected %s.\n",
                 ref,
-                fsBlockTypeName(type),
-                fsBlockTypeName(type1));
+                sFSBlockType(type),
+                sFSBlockType(type1));
     }
     
     if (verbose && type1 != type2) {
         fprintf(stderr, "Block %d has type %s. Expected %s or %s.\n",
                 ref,
-                fsBlockTypeName(type),
-                fsBlockTypeName(type1),
-                fsBlockTypeName(type2));
+                sFSBlockType(type),
+                sFSBlockType(type1),
+                sFSBlockType(type2));
     }
 
     return false;
@@ -188,13 +170,16 @@ FSBlock::assertSelfRef(u32 ref, bool verbose)
 }
 
 void
-FSBlock::importBlock(u8 *p, size_t bsize)
+FSBlock::importBlock(const u8 *src, size_t bsize)
 {
     assert(bsize == volume.bsize);
+    assert(src != nullptr);
+    assert(data != nullptr);
+    memcpy(data, src, bsize);
 }
 
 void
-FSBlock::exportBlock(u8 *p, size_t bsize)
+FSBlock::exportBlock(u8 *dst, size_t bsize)
 {
     assert(bsize == volume.bsize);
             
@@ -202,8 +187,9 @@ FSBlock::exportBlock(u8 *p, size_t bsize)
     updateChecksum();
 
     // Export the block
-    assert(p && data);
-    memcpy(p, data, bsize);
+    assert(dst != nullptr);
+    assert(data != nullptr);
+    memcpy(dst, data, bsize);
 }
 
 FSBlock *

@@ -87,10 +87,15 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         return NULL;
     }
     
+    // TEST CODE (TODO: REMOVE ASAP)
     /*
-    adf->dumpSector(880);
-    adf->dumpSector(882);
-    adf->dumpSector(883);
+    printf("Extracting File system from ADF\n");
+    FSVolume *vol = FSVolume::make(buffer, length, 512);
+    printf("%s\n", vol ? "Success" : "FAILED");
+    if (vol) {
+        vol->info();
+        vol->dump();
+    }
     */
     
     return adf;
