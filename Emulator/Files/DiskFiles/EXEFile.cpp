@@ -66,7 +66,7 @@ EXEFile::makeWithFile(const char *path)
 
 bool
 EXEFile::readFromBuffer(const u8 *buffer, size_t length)
-{    
+{
     bool success = false;
     
     if (!isEXEBuffer(buffer, length))
@@ -104,13 +104,20 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume.walk(true);
     
     if (!volume.check(MFM_DEBUG)) {
-        warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
+        warn("readFromBuffer: Files system is corrupted\n");
         // volume.dump();
     }
     // volume.dump();
     
     // Convert the volume into an ADF
-    assert(adf == nullptr);
-    if (success) adf = ADFFile::makeWithVolume(volume);
+    if (success) {
+        FSError error;
+        assert(adf == nullptr);
+        adf = ADFFile::makeWithVolume(volume, &error);
+        if (error != FS_OK) {
+            warn("readFromBuffer: Cannot export volume (%s)", sFSError(error));
+        }
+    }
+    
     return adf != nullptr;
 }

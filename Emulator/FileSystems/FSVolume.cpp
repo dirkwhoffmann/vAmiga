@@ -11,7 +11,7 @@
 #include "FSVolume.h"
 
 FSVolume *
-FSVolume::make(const u8 *buffer, size_t size, size_t bsize)
+FSVolume::make(const u8 *buffer, size_t size, size_t bsize, FSError *error)
 {
     assert(buffer != nullptr);
     assert(size % bsize == 0);
@@ -23,7 +23,7 @@ FSVolume::make(const u8 *buffer, size_t size, size_t bsize)
     // TODO: Right now, we always import as OFS which is wrong, of course.
     FSVolume *volume = new FSVolume(FS_OFS, "Disk", numBlocks, bsize);
     
-    if (!volume->importVolume(buffer, size)) {
+    if (!volume->importVolume(buffer, size, error)) {
         delete volume;
         return nullptr;
     }
@@ -569,15 +569,25 @@ FSVolume::listWalker(FSBlock *block, int value)
 bool
 FSVolume::importVolume(const u8 *src, size_t size)
 {
+    FSError error;
+    bool result = importVolume(src, size, &error);
+    
+    assert(result == (error == FS_OK));
+    return result;
+}
+
+bool
+FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
+{
     assert(src != nullptr);
 
-    debug("Importing file system with %d blocks\n", capacity);
+    debug(FS_DEBUG, "Importing file system...\n");
 
-    // Only proceed if the targer buffer has the correct size
-    if (capacity * bsize != size) {
-        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
-        return false;
-    }
+    // Only proceed if the (predicted) block size matches
+    if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
+
+    // Only proceed if the source buffer contains the right amount of data
+    if (capacity * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
 
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
@@ -601,29 +611,43 @@ FSVolume::importVolume(const u8 *src, size_t size)
         blocks[i] = newBlock;
     }
     
+    *error = FS_OK;
     return true;
 }
-    
+
 bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
+    FSError error;
+    bool result = exportVolume(dst, size, &error);
+    
+    assert(result == (error == FS_OK));
+    return result;
+}
+
+bool
+FSVolume::exportVolume(u8 *dst, size_t size, FSError *error)
+{
     assert(dst != nullptr);
 
-    debug("Exporting file system with %d blocks\n", capacity);
+    debug(FS_DEBUG, "Exporting file system...\n");
 
-    // Only proceed if the targer buffer has the correct size
-    if (capacity * bsize != size) {
-        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
-        return false;
-    }
+    // Only proceed if the (predicted) block size matches
+    if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
+
+    // Only proceed if the source buffer contains the right amount of data
+    if (capacity * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
         
     // Wipe out the target buffer
     memset(dst, 0, size);
     
     // Export all blocks
     for (u32 i = 0; i < capacity; i++) {
+        
         blocks[i]->exportBlock(dst + i * bsize, bsize);
     }
+
+    *error = FS_OK;
     return true;
 }
 

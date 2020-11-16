@@ -151,7 +151,7 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSVolume &volume)
+ADFFile::makeWithVolume(FSVolume &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
     assert(volume.getBlockSize() == 512);
@@ -170,7 +170,7 @@ ADFFile::makeWithVolume(FSVolume &volume)
             assert(false);
     }
 
-    volume.exportVolume(adf->data, adf->size);
+    volume.exportVolume(adf->data, adf->size, error);
     return adf;
 }
 
@@ -251,9 +251,10 @@ ADFFile::formatDisk(FSVolumeType fs)
     FSVolume vol = FSVolume(fs, "MyDisk", numBlocks());
     
     // Export the volume to the ADF
-    return vol.exportVolume(data, size);
+    FSError error;
+    return vol.exportVolume(data, size, &error);
 
-    return true;
+    return error == FS_OK;
 }
 
 bool

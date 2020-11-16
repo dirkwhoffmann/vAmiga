@@ -72,7 +72,7 @@ protected:
 public:
     
     // Creates a file system from a buffer (usually the data of an ADF)
-    static FSVolume *make(const u8 *buffer, size_t size, size_t bsize);
+    static FSVolume *make(const u8 *buffer, size_t size, size_t bsize, FSError *error);
     
     // Creates a file system with the contents of a host file system directory
     static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
@@ -214,9 +214,11 @@ public:
     
     // Exports the volume to a buffer compatible with the ADF format
     bool importVolume(const u8 *src, size_t size);
+    bool importVolume(const u8 *src, size_t size, FSError *error);
 
     // Imports the volume from a buffer compatible with the ADF format
     bool exportVolume(u8 *dst, size_t size);
+    bool exportVolume(u8 *dst, size_t size, FSError *error);
 
     // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
