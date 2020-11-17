@@ -115,7 +115,7 @@ public:
     SnapshotHeader *getHeader() { return (SnapshotHeader *)data; }
     
     // Returns pointer to core data
-    u8 *getData() { return data + sizeof(SnapshotHeader); }
+    u8 *getData() override { return data + sizeof(SnapshotHeader); }
     
     // Returns the timestamp
     // GET DIRECTLY FROM SCREENSHOT

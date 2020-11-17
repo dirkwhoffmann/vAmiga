@@ -250,7 +250,9 @@ public:
     // Handling disks
     //
 
-    bool hasDisk() { return disk != NULL; }
+    bool hasDisk() { return disk != nullptr; }
+    bool hasDDDisk() { return disk ? disk->density == DISK_DD : false; }
+    bool hasHDDisk() { return disk ? disk->density == DISK_HD : false; }
     bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
     

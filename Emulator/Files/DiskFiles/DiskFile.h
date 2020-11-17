@@ -47,9 +47,13 @@ public:
 public:
     
     // Fills a buffer with the data of a single sector
-    virtual void readSector(u8 *target, long s);
-    virtual void readSector(u8 *target, long t, long s);
-    
+    virtual void readSector(u8 *dst, long s);
+    virtual void readSector(u8 *dst, long t, long s);
+
+    // Writes a string representation into the provided buffer
+    virtual void readSectorHex(char *dst, long s, size_t count);
+    virtual void readSectorHex(char *dst, long t, long s, size_t count);
+
     
     //
     // Encoding

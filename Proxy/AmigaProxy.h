@@ -621,6 +621,8 @@ struct SerialPortWrapper;
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL hasDisk;
+@property (readonly) BOOL hasDDDisk;
+@property (readonly) BOOL hasHDDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
 - (void) toggleWriteProtection;
@@ -631,6 +633,22 @@ struct SerialPortWrapper;
 @property (readonly) u64 fnv;
 
 - (ADFFileProxy *)convertDisk;
+
+@end
+
+
+//
+// FSVolume
+//
+
+@interface FSVolumeProxy : NSObject {
+    
+    struct FSVolumeWrapper *wrapper;
+}
+
++ (instancetype)makeWithADF:(ADFFileProxy *)adf;
+
+- (void) dump;
 
 @end
 
@@ -696,9 +714,14 @@ struct SerialPortWrapper;
 
 @property (readonly) DiskType diskType;
 @property (readonly) DiskDensity diskDensity;
+@property (readonly) NSInteger numCylinders;
 @property (readonly) NSInteger numSides;
 @property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectorsPerTrack;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numBlocks;
+
+- (void)readSector:(unsigned char *)dst block:(NSInteger)block;
+- (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count;
 
 @end
 

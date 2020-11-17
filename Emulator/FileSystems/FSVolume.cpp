@@ -11,6 +11,27 @@
 #include "FSVolume.h"
 
 FSVolume *
+FSVolume::makeWithADF(ADFFile *adf, FSError *error)
+{
+    assert(adf != nullptr);
+
+    // TODO: Determine file system type from ADF
+    FSVolumeType type = FS_OFS;
+    
+    // Create volume
+    FSVolume *volume = new FSVolume(type, adf->numBlocks(), 512);
+
+    // Import file system from ADF
+    if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
+        delete volume;
+        return nullptr;
+    }
+    
+    return volume;
+}
+
+/*
+FSVolume *
 FSVolume::make(const u8 *buffer, size_t size, size_t bsize, FSError *error)
 {
     assert(buffer != nullptr);
@@ -21,7 +42,7 @@ FSVolume::make(const u8 *buffer, size_t size, size_t bsize, FSError *error)
     
     // TODO: Determine file system type from buffer.
     // TODO: Right now, we always import as OFS which is wrong, of course.
-    FSVolume *volume = new FSVolume(FS_OFS, "Disk", numBlocks, bsize);
+    FSVolume *volume = new FSVolume(FS_OFS, numBlocks, bsize);
     
     if (!volume->importVolume(buffer, size, error)) {
         delete volume;
@@ -30,6 +51,7 @@ FSVolume::make(const u8 *buffer, size_t size, size_t bsize, FSError *error)
     
     return volume;
 }
+*/
 
 FSVolume *
 FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
@@ -92,6 +114,11 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
 
     // Set the current directory to '/'
     currentDir = rootBlockNr();    
+}
+
+FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) : FSVolume(t, "", c, s)
+{
+    
 }
 
 FSVolume::~FSVolume()
@@ -612,6 +639,7 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     }
     
     *error = FS_OK;
+    debug(FS_DEBUG, "Success\n");
     return true;
 }
 
@@ -648,6 +676,7 @@ FSVolume::exportVolume(u8 *dst, size_t size, FSError *error)
     }
 
     *error = FS_OK;
+    debug(FS_DEBUG, "Success\n");
     return true;
 }
 

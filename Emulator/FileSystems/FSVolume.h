@@ -70,9 +70,12 @@ protected:
     //
     
 public:
-    
+
     // Creates a file system from a buffer (usually the data of an ADF)
-    static FSVolume *make(const u8 *buffer, size_t size, size_t bsize, FSError *error);
+    static FSVolume *makeWithADF(class ADFFile *adf, FSError *error);
+
+    // Creates a file system from a buffer (DEPRECATED)
+    // static FSVolume *make(const u8 *buffer, size_t size, size_t bsize, FSError *error);
     
     // Creates a file system with the contents of a host file system directory
     static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
@@ -86,6 +89,7 @@ public:
 public:
 
     FSVolume(FSVolumeType type, const char *name, u32 capacity, u32 bsize = 512);
+    FSVolume(FSVolumeType type, u32 capacity, u32 bsize = 512);
     ~FSVolume();
     
     // Prints information about this volume

@@ -134,8 +134,6 @@ public:
     long numCylinders() { return type == DISK_525 ? 42 : 84; }
     long numSides() { return 2; }
     long numTracks() { return type == DISK_525 ? 84 : 168; }
-    // long trackLength(Track t) { return length.track[t]; }
-    // long trackLength(Cylinder c, Side s) { return length.cylinder[c][s]; }
 
     bool isWriteProtected() { return writeProtected; }
     void setWriteProtection(bool value) { writeProtected = value; }
@@ -183,41 +181,6 @@ public:
     // Encodes a disk
     bool encodeDisk(class DiskFile *df);
     
-private:
-    
-    // Encodes a disk, track, or sector in Amiga format
-    /*
-    bool encodeAmigaDisk(class DiskFile *df);
-    bool encodeAmigaTrack(class DiskFile *df, Track t);
-    bool encodeAmigaSector(class DiskFile *df, Track t, Sector s);
-    */
-    
-    // Encodes a disk, track, or sector in DOS format
-    /*
-    bool encodeDosDisk(class DiskFile *df);
-    bool encodeDosTrack(class DiskFile *df, Track t);
-    bool encodeDosSector(class DiskFile *df, Track t, Sector s);
-    */
-    
-    //
-    // Decoding
-    //
-
-public:
-    
-    // Decodes a disk, track, or sector in Amiga format
-    /*
-    bool decodeAmigaDisk(u8 *dst, long numTracks, long numSectors);
-    bool decodeAmigaTrack(u8 *dst, Track t, long numSectors);
-    bool decodeAmigaSector(u8 *dst, u8 *src);
-    */
-    
-    // Decodes a disk, track, or sector in Amiga format
-    /*
-    bool decodeDOSDisk(u8 *dst, long numTracks, long numSectors);
-    bool decodeDOSTrack(u8 *dst, Track t, long numSectors);
-    void decodeDOSSector(u8 *dst, u8 *src);
-    */
     
     //
     // Working with MFM encoded data streams
