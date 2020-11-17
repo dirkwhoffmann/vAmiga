@@ -206,6 +206,9 @@ class ExporterDialog: DialogController {
         
         sectorData = Array(repeating: "", count: 512 / bytesPerRow)
 
+        // doubleAction = #selector(doubleClickAction(_:))
+        previewTable.action = #selector(clickAction(_:))
+
         // Start with a shrinked window
         var rect = window!.contentRect(forFrameRect: window!.frame)
         rect.size = CGSize(width: 606, height: shrinkedHeight)
@@ -435,6 +438,12 @@ class ExporterDialog: DialogController {
         
         shrinked ? expand() : shrink()
     }
+    
+    @IBAction func clickAction(_ sender: NSTableView!) {
+
+        track("row = \(sender.clickedRow) col = \(sender.clickedColumn)")
+    }
+
     @IBAction func exportAction(_ sender: NSButton!) {
         
         track("selected item = \(formatPopup.indexOfSelectedItem)")
@@ -514,10 +523,50 @@ extension ExporterDialog: NSTableViewDataSource {
     func tableView(_ tableView: NSTableView,
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if (tableColumn?.identifier)!.rawValue == "data" {
-            return row < sectorData.count ? sectorData[row] : ""
+        if let id = tableColumn?.identifier.rawValue {
+
+            var offset = 16 * row
+            switch id {
+            case "0": offset += 0
+            case "1": offset += 1
+            case "2": offset += 2
+            case "3": offset += 3
+            case "4": offset += 4
+            case "5": offset += 5
+            case "6": offset += 6
+            case "7": offset += 7
+            case "8": offset += 8
+            case "9": offset += 9
+            case "10": offset += 10
+            case "11": offset += 11
+            case "12": offset += 12
+            case "13": offset += 13
+            case "14": offset += 14
+            case "15": offset += 15
+            case "16": offset += 16
+            default: fatalError()
+            }
+            
+            assert(offset < 512)
+            if let byte = disk?.readByte(_block, offset: row * 16 + offset) {
+                return String(format: "%02X", byte)
+            }
         }
+        return ""
+    }
+}
+
+extension ExporterDialog: NSTableViewDelegate {
+    
+    func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        return "???"
+        let cell = cell as? NSTextFieldCell
+
+        // REMOVE ASAP
+        if (row == 4) {
+            cell?.textColor = NSColor.systemRed
+        } else {
+            cell?.textColor = NSColor.labelColor
+        }
     }
 }
