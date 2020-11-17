@@ -7,6 +7,7 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
+/*
 class ExportDiskDialog: DialogController {
 
     @IBOutlet weak var button: NSPopUpButton!
@@ -74,24 +75,6 @@ class ExportDiskDialog: DialogController {
         button.item(at: 2)!.isEnabled = img != nil
         button.item(at: 3)!.isEnabled = vol != nil
 
-        /*
-        if df == nil {
-            df = ADFFileProxy.make(withDrive: proxy)
-            if df != nil { selectFormat(0) }
-        }
-        // Try to decode the disk with the DOS decoder if the ADF decoder failed
-        if df == nil {
-            df = IMGFileProxy.make(withDrive: proxy)
-            if df != nil { selectFormat(1) }
-        }
-
-        // Abort if both decoders failed
-        if df == nil {
-            parent.mydocument.showExportDecodingAlert(driveNr: nr)
-            return
-        }
-        */
-        
         // Run panel as sheet
         if let win = parent.window {
             savePanel.beginSheetModal(for: win, completionHandler: { result in
@@ -135,3 +118,4 @@ class ExportDiskDialog: DialogController {
         }
     }
 }
+*/

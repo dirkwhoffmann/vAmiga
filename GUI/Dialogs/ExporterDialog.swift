@@ -36,7 +36,8 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
-    var panel = NSSavePanel()
+    var savePanel: NSSavePanel!  // Used to export to files
+    var openPanel: NSOpenPanel!  // Used to export to directories
 
     let shrinkedHeight = CGFloat(176)
     let expandedHeight = CGFloat(446)
@@ -143,21 +144,26 @@ class ExporterDialog: DialogController {
         if disk?.type == .FILETYPE_ADF { return "Amiga Disk" }
         if disk?.type == .FILETYPE_IMG { return "PC Disk" }
 
-        return "???"
+        return "This disk contains an unrecognized MFM stream"
     }
 
     var subtitleText: String {
-                
-        let t = numTracks
-        let s = numSectors
-        let n = numSides == 1 ? "Single" : "Double"
+        
+        if disk != nil {
+            
+            let t = numTracks
+            let s = numSectors
+            let n = numSides == 1 ? "Single" : "Double"
+            
+            let den = disk!.diskDensity
+            let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
+            
+            return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+        }
 
-        let den = disk?.diskDensity
-        let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
-
-        return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+        return "None of the supported formats is able to store this disk"
     }
-
+    
     var warningText: String {
         
         if disk?.type == .FILETYPE_ADF {
@@ -181,73 +187,14 @@ class ExporterDialog: DialogController {
         // Try to decode the disk with the ADF decoder
         disk = ADFFileProxy.make(withDrive: drive)
         
-        // It it's an ADF, try to extract the file system
+        // It it is an ADF, try to extract the file system
         if disk != nil {
             volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy)
         }
-        // If it's not an ADF, try the DOS decoder
+        // If it is not an ADF, try the DOS decoder
         if disk == nil {
             disk = IMGFileProxy.make(withDrive: drive)
         }
-        
-        // Update text labels
-        /*
-        if adf != nil {
-            selectFormat(0)
-            text1.stringValue = "This disk has been identified as an Amiga disk."
-            if vol != nil {
-                text2.stringValue = "The File System has been parsed successfully."
-            } else {
-                text2.stringValue = "An unsupported or corrupted File System has been detected."
-                text2.textColor = .red
-            }
-        }
-        if img != nil {
-            selectFormat(1)
-            text1.stringValue = "This disk has been identifies as a DOS disk."
-            text2.stringValue = ""
-        }
-        if adf == nil && img == nil {
-            text1.stringValue = "This disk cannot be exported."
-            text2.stringValue = "The MFM stream doesn't comply to the Amiga or MS-DOS format."
-            text1.textColor = .red
-            text2.textColor = .red
-        }
-        */
-                
-        /*
-        if df == nil {
-            df = ADFFileProxy.make(withDrive: proxy)
-            if df != nil { selectFormat(0) }
-        }
-        // Try to decode the disk with the DOS decoder if the ADF decoder failed
-        if df == nil {
-            df = IMGFileProxy.make(withDrive: proxy)
-            if df != nil { selectFormat(1) }
-        }
-
-        // Abort if both decoders failed
-        if df == nil {
-            parent.mydocument.showExportDecodingAlert(driveNr: nr)
-            return
-        }
-        */
-        
-        // Run panel as sheet
-        /*
-        if let win = parent.window {
-            savePanel.beginSheetModal(for: win, completionHandler: { result in
-                if result == .OK {
-                    if let url = self.savePanel.url {
-                        track("url = \(url)")
-                        self.parent.mydocument.export(drive: nr,
-                                                      to: url,
-                                                      diskFileProxy: self.df!)
-                    }
-                }
-            })
-        }
-        */
         
         super.showSheet()
     }
@@ -270,16 +217,20 @@ class ExporterDialog: DialogController {
     
     override func windowDidLoad() {
         
-        // Disable unsupported formats in the format selector popup
+        let adf = disk?.type == .FILETYPE_ADF
+        let dos = disk?.type == .FILETYPE_IMG
+            
+        // Enable compatible file formats in the format selector popup
         formatPopup.autoenablesItems = false
-        /*
-        formatPopup.item(at: 0)!.isEnabled = adf != nil
-        formatPopup.item(at: 1)!.isEnabled = img != nil
-        formatPopup.item(at: 2)!.isEnabled = img != nil
-        formatPopup.item(at: 3)!.isEnabled = vol != nil
-        */
+        formatPopup.item(at: 0)!.isEnabled = adf
+        formatPopup.item(at: 1)!.isEnabled = dos
+        formatPopup.item(at: 2)!.isEnabled = dos
+        formatPopup.item(at: 3)!.isEnabled = volume != nil
+        
+        // Preselect a suitable export format
+        if adf { formatPopup.selectItem(at: 0) }
+        if dos { formatPopup.selectItem(at: 1) }
 
-        // shrink()
     }
     
     override func sheetDidShow() {
@@ -297,7 +248,6 @@ class ExporterDialog: DialogController {
 
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
-        // r.origin.x = 20
         r.origin.y = 61
         previewScrollView.frame = r
 
@@ -353,6 +303,70 @@ class ExporterDialog: DialogController {
         previewTable.reloadData()
     }
     
+    //
+    // Export functions
+    //
+    
+    func exportToFile(allowedTypes: [String]) {
+     
+        savePanel = NSSavePanel()
+        savePanel.prompt = "Export"
+        savePanel.title = "Export"
+        savePanel.nameFieldLabel = "Export As:"
+        savePanel.canCreateDirectories = true
+        
+        savePanel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = self.savePanel.url {
+                    track("url = \(url)")
+                    self.exportToFile(url: url)
+                }
+            }
+        })
+    }
+
+    func exportToFile(url: URL) {
+
+        track("url = \(url)")
+        parent.mydocument.export(drive: driveNr, to: url, diskFileProxy: disk!)
+        hideSheet()
+    }
+
+    func exportToDirectory() {
+
+        openPanel = NSOpenPanel()
+        openPanel.prompt = "Export"
+        openPanel.title = "Export"
+        openPanel.nameFieldLabel = "Export As:"
+        openPanel.canChooseDirectories = true
+        openPanel.canCreateDirectories = true
+        
+        openPanel.beginSheetModal(for: window!, completionHandler: { result in
+            if result == .OK {
+                if let url = self.openPanel.url {
+                    track("url = \(url)")
+                    self.exportToDirectory(url: url)
+                }
+            }
+        })
+
+    }
+    
+    func exportToDirectory(url: URL) {
+        
+        track("url = \(url)")
+        track("IMPLEMENTATION MISSING")
+        hideSheet()
+    }
+
+    func export(url: URL) {
+    
+        track("url = \(url)")
+        parent.mydocument.export(drive: driveNr, to: url, diskFileProxy: disk!)
+
+        hideSheet()
+    }
+
     //
     // Action methods
     //
@@ -423,35 +437,17 @@ class ExporterDialog: DialogController {
     }
     @IBAction func exportAction(_ sender: NSButton!) {
         
-        track()
+        track("selected item = \(formatPopup.indexOfSelectedItem)")
         
-        // Configure panel
-        // panel = NSOpenPanel()
-        panel.prompt = "Export"
-        panel.title = "Export"
-        panel.nameFieldLabel = "Export As:"
-        // panel.canChooseDirectories = true
-        panel.canCreateDirectories = true
+        switch formatPopup.indexOfSelectedItem {
+        case 0: exportToFile(allowedTypes: ["adf", "ADF"])
+        case 1: exportToFile(allowedTypes: ["img", "IMG"])
+        case 2: exportToFile(allowedTypes: ["ima", "IMA"])
+        case 3: exportToDirectory()
+        default: fatalError()
+        }
+    }
         
-        // Open panel as a sheet
-        panel.beginSheetModal(for: window!, completionHandler: { result in
-            if result == .OK {
-                if let u = self.panel.url {
-                    track("url = \(u)")
-                    self.export(url: u)
-                }
-            }
-        })
-    }
-    
-    func export(url: URL) {
-    
-        track("url = \(url)")
-        parent.mydocument.export(drive: driveNr, to: url, diskFileProxy: disk!)
-
-        hideSheet()
-    }
-    
     @IBAction override func cancelAction(_ sender: Any!) {
          
          track()
@@ -479,28 +475,6 @@ extension ExporterDialog: NSWindowDelegate {
 
 extension ExporterDialog: NSTableViewDataSource {
     
-    /*
-    func buildHex(count: Int) -> String {
-        
-        let hexDigits = Array(("0123456789ABCDEF ").utf16)
-        var chars: [unichar] = []
-        chars.reserveCapacity(3 * count)
-        
-        for _ in 1 ... count {
-            
-            if let byte = disk?.read() {
-                chars.append(hexDigits[Int(byte / 16)])
-                chars.append(hexDigits[Int(byte % 16)])
-            } else {
-                chars.append(hexDigits[16])
-                chars.append(hexDigits[16])
-            }
-            chars.append(hexDigits[16])
-        }
-        
-        return String(utf16CodeUnits: chars, count: chars.count)
-    }
-    */
     func buildHex(p: UnsafeMutablePointer<UInt8>, count: Int) -> String {
         
         let hexDigits = Array(("0123456789ABCDEF ").utf16)
@@ -541,9 +515,7 @@ extension ExporterDialog: NSTableViewDataSource {
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
         if (tableColumn?.identifier)!.rawValue == "data" {
-            
             return row < sectorData.count ? sectorData[row] : ""
-            // return sectorData[row]
         }
         
         return "???"
