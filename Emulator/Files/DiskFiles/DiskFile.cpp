@@ -24,6 +24,19 @@ DiskFile::makeWithFile(const char *path)
     return NULL;
 }
 
+u8
+DiskFile::readByte(long t, long s, long offset)
+{
+    return readByte(t * numSectors() + s, offset);
+}
+
+u8
+DiskFile::readByte(long b, long offset)
+{
+    assert(offset < 512);
+    return data[b * 512 + offset];
+}
+
 void
 DiskFile::readSector(u8 *dst, long t, long s)
 {

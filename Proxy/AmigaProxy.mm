@@ -1462,6 +1462,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->numBlocks();
 }
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
+{
+    return ((DiskFile *)wrapper->file)->readByte(block, offset);
+}
 - (void)readSector:(unsigned char *)dst block:(NSInteger)nr
 {
     ((DiskFile *)wrapper->file)->readSector(dst, nr);

@@ -720,6 +720,7 @@ struct SerialPortWrapper;
 @property (readonly) NSInteger numSectors;
 @property (readonly) NSInteger numBlocks;
 
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
 - (void)readSector:(unsigned char *)dst block:(NSInteger)block;
 - (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count;
 
