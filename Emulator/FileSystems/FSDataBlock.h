@@ -33,7 +33,7 @@ struct OFSDataBlock : FSDataBlock {
     static u32 headerSize() { return 24; }
 
     void dump() override;
-    bool check(bool verbose) override;
+    FSError check(u32 pos) override;
     void updateChecksum() override;
 
     u32  getFileHeaderRef() override                { return get32(1);        }

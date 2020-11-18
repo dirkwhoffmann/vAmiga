@@ -167,32 +167,41 @@ FSVolume::check(u32 blockNr)
     return result;
 }
 
-/*
 bool
-FSVolume::check(bool verbose)
+FSVolume::nextErrorLocation(long *blockNr, long *offset)
 {
-    bool result = true;
+    long b = *blockNr;
+    long o = *offset;
     
-    if (verbose) fprintf(stderr, "Checking volume...\n");
-    
-    for (u32 i = 0; i < capacity; i++) {
-                
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
-
-        if (verbose) {
-            fprintf(stderr, "Inspecting block %d (%s) ...\n",
-                    i, sFSBlockType(blocks[i]->type()));
+    for (; b < (long)capacity; b++, o = 0) {
+        for (; o < bsize; o++) {
+            if (blocks[b]->check(offset) != FS_OK) {
+                *blockNr = b;
+                *offset = o;
+                return true;
+            }
         }
-
-        result &= blocks[i]->check(verbose);
     }
-    
-    if (true) {
-        fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
-    }
-    return result;
+    return false;
 }
-*/
+
+bool
+FSVolume::prevErrorLocation(long *blockNr, long *offset)
+{
+    long b = *blockNr;
+    long o = *offset;
+    
+    for (; b >= 0; b--, o = bsize - 1) {
+        for (; o > 0; o--) {
+            if (blocks[b]->check(offset) != FS_OK) {
+                *blockNr = b;
+                *offset = o;
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 FSBlockType
 FSVolume::guessBlockType(u32 nr, const u8 *buffer)

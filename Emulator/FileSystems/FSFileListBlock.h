@@ -18,8 +18,8 @@ struct FSFileListBlock : FSBlock {
     ~FSFileListBlock();
 
     FSBlockType type() override                 { return FS_FILELIST_BLOCK;   }
+    FSError check(u32 pos) override;
     void dump() override;
-    bool check(bool verbose) override;
     void updateChecksum() override;
 
     u32 getNumDataBlockRefs() override          { return get32(2);            }

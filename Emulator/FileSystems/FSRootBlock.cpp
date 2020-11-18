@@ -59,6 +59,9 @@ FSRootBlock::check(u32 pos)
             return value == 2 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
         case 1:
         case 2:
+            return value == 0 ? FS_OK : FS_EXPECTED_00;
+        case 3:
+            return value == 72 ? FS_OK : FS_BLOCK_HASHTABLE_SIZE_MISMATCH;
         case 4:
             return value == 0 ? FS_OK : FS_EXPECTED_00;
         case 5:
@@ -79,14 +82,6 @@ FSRootBlock::check(u32 pos)
     }
     
     return FS_OK;
-}
-
-bool
-FSRootBlock::check(bool verbose)
-{
-    bool result = FSBlock::check(verbose);
-    result &= checkHashTable(verbose);
-    return result;
 }
 
 void

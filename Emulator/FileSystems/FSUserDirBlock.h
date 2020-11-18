@@ -23,8 +23,8 @@ struct FSUserDirBlock : FSBlock {
     //
     
     FSBlockType type() override                { return FS_USERDIR_BLOCK;     }
+    FSError check(u32 pos) override;
     void dump() override;
-    bool check(bool verbose) override;
     void updateChecksum() override;
 
     u32 getProtectionBits() override           { return get32(-48     );     }

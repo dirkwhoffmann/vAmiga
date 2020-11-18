@@ -34,17 +34,18 @@ FSBootBlock::dump()
     printf("\n");
 }
 
-bool
-FSBootBlock::check(bool verbose)
+FSError
+FSBootBlock::check(u32 pos)
 {
-    bool result = FSBlock::check(verbose);
-    
-    if (nr > 1) {
-        if (verbose) fprintf(stderr, "Found ID %d. Expected 0 or 1.\n", nr);
-        result = false;
+    if (pos == 0) {
+        if (data[0] != 'D' || data[1] != 'O' || data[2] != 'S') {
+            return FS_BLOCK_EXPECTED_DOS_HEADER;
+        }
+        if (!isFSVolumeType(data[3])) {
+            return FS_BLOCK_INVALID_DOS_VERSION;
+        }
     }
-    
-    return result;
+    return FS_OK;
 }
 
 void

@@ -143,6 +143,10 @@ public:
     FSErrorReport check();
     FSErrorReport check(u32 blockNr);
 
+    // Takes a location and computes the location of the next or previous error
+    bool nextErrorLocation(long *blockNr, long *offset);
+    bool prevErrorLocation(long *blockNr, long *offset);
+    
     // Checks the integrity of this volume (DEPRECATED)
     // virtual bool check(bool verbose);
 

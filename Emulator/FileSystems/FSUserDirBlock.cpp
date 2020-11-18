@@ -40,12 +40,49 @@ FSUserDirBlock::dump()
     printf("        Next: %d\n", getNextHashRef());
 }
 
-bool
-FSUserDirBlock::check(bool verbose)
+FSError
+FSUserDirBlock::check(u32 pos)
 {
-    bool result = FSBlock::check(verbose);
-    result &= checkHashTable(verbose);
-    return result;
+    // Make sure 'pos' points to the beginning of a long word
+    assert(pos % 4 == 0);
+
+    // Translate 'pos' to a long word index
+    i32 word = (pos <= 24 ? (i32)pos : (i32)pos - volume.bsize) / 4;
+
+    u32 value = get32(word);
+    
+    switch (word) {
+        case 0:
+            return value == 2 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
+        case 1:
+            return value != nr ? FS_OK : FS_BLOCK_MISSING_SELFREF;
+        case 2:
+        case 3:
+        case 4:
+            return value == 0 ? FS_OK : FS_EXPECTED_00;
+        case 5:
+            return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+        case -4:
+            return volume.block(value) ? FS_OK : FS_BLOCK_REF_OUT_OF_RANGE;
+        case -3:
+            if (value == 0) return FS_BLOCK_REF_MISSING;
+            if (!volume.userDirBlock(value) &&
+                !volume.rootBlock(value)) return FS_BLOCK_REF_TYPE_MISMATCH;
+            return FS_OK;
+        case -2:
+            return value == 0 ? FS_OK : FS_EXPECTED_00;
+        case -1:
+            return value == 2 ? FS_OK : FS_BLOCK_SUBTYPE_ID_MISMATCH;
+        default:
+            break;
+    }
+        
+    // Check all hash table entries
+    if (word >= 6 && word < 6 + (i32)hashTableSize()) {
+        return checkHashTableItem(word - 6);
+    }
+    
+    return FS_OK;
 }
 
 void

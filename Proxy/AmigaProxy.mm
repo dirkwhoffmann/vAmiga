@@ -1261,6 +1261,14 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->check(blockNr, pos);
 }
+- (BOOL) nextErrorLocation:(long *)blockNr pos:(long *)pos
+{
+    return wrapper->volume->nextErrorLocation(blockNr, pos);
+}
+- (BOOL) prevErrorLocation:(long *)blockNr pos:(long *)pos
+{
+    return wrapper->volume->prevErrorLocation(blockNr, pos);
+}
 - (void) dump
 {
     wrapper->volume->dump();

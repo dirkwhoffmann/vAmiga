@@ -18,8 +18,8 @@ struct FSFileHeaderBlock : FSBlock {
     FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name);
 
     FSBlockType type() override                 { return FS_FILEHEADER_BLOCK; }
+    FSError check(u32 pos) override;
     void dump() override;
-    bool check(bool verbose) override;
     void updateChecksum() override;
 
 

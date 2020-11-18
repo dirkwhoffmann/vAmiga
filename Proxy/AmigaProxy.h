@@ -652,7 +652,8 @@ struct SerialPortWrapper;
 
 - (FSErrorReport) check;
 - (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos;
-
+- (BOOL) nextErrorLocation:(long *)blockNr pos:(long *)pos;
+- (BOOL) prevErrorLocation:(long *)blockNr pos:(long *)pos;
 - (void) dump;
 
 @end

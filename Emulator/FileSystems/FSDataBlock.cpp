@@ -36,22 +36,35 @@ OFSDataBlock::dump()
 {    
 }
 
-bool
-OFSDataBlock::check(bool verbose)
+FSError
+OFSDataBlock::check(u32 pos)
 {
-    bool result = FSBlock::check(verbose);
+    // Make sure 'pos' points to the beginning of a long word
+    assert(pos % 4 == 0);
+
+    // Translate 'pos' to a long word index
+    i32 word = pos / 4;
+
+    u32 value = get32(word);
     
-    if (getDataBlockNr() < 1) {
-        
-        if (verbose) fprintf(stderr, "Invalid data block nr %d\n", getDataBlockNr());
-        return false;
+    switch (word) {
+        case 0:
+            return value == 8 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
+        case 1:
+            return volume.fileHeaderBlock(value) ? FS_OK : FS_BLOCK_MISSING_FILEHEADER_REF;
+        case 2:
+            return value > 0 ? FS_OK : FS_BLOCK_MISSING_DATABLOCK_NUMBER;
+        case 3:
+            return value <= volume.dsize ? FS_OK : FS_BLOCK_VALUE_TOO_LARGE;
+        case 4:
+            if (value && !volume.dataBlock(value)) return FS_BLOCK_NO_DATABLOCK_REF;
+        case 5:
+            return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+        default:
+            break;
     }
-    
-    result &= assertNotNull(getFileHeaderRef(), verbose);
-    result &= assertInRange(getFileHeaderRef(), verbose);
-    result &= assertInRange(getNextDataBlockRef(), verbose);
-    
-    return result;
+        
+    return FS_OK;
 }
 
 void

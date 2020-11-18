@@ -32,6 +32,25 @@ FSBitmapBlock::dump()
     printf("\n");
 }
 
+FSError
+FSBitmapBlock::check(u32 pos)
+{
+    // Make sure 'pos' points to the beginning of a long word
+    assert(pos % 4 == 0);
+
+    // Translate 'pos' to a long word index
+    i32 word = pos / 4;
+    
+    u32 value = get32(word);
+
+    if (word == 0) {
+        return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+    }
+    
+    return FS_OK;
+}
+
+/*
 bool
 FSBitmapBlock::check(bool verbose)
 {
@@ -53,6 +72,7 @@ FSBitmapBlock::check(bool verbose)
 
     return result;
 }
+*/
 
 void
 FSBitmapBlock::locateBlockBit(u32 nr, u32 *byte, u32 *bit)

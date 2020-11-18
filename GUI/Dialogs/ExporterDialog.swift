@@ -35,10 +35,13 @@ class ExporterDialog: DialogController {
 
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
-    
+    @IBOutlet weak var prevButton: NSButton!
+    @IBOutlet weak var nextButton: NSButton!
+
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
+    var errorReport: FSErrorReport?
     var selectedRow = 0
     var selectedCol = 0
     
@@ -251,10 +254,11 @@ class ExporterDialog: DialogController {
         if dos { formatPopup.selectItem(at: 1) }
         
         // Run a file system check
-        if let report = volume?.check() {
-            
-            let errors = report.numErrors
-            let blocks = report.numErroneousBlocks
+        errorReport = volume?.check()
+        if errorReport != nil {
+                    
+            let errors = errorReport!.numErrors
+            let blocks = errorReport!.numErroneousBlocks
             
             if errors == 0 {
                 info1.stringValue = "The integrity of this volume has been verified successfully."
@@ -313,19 +317,25 @@ class ExporterDialog: DialogController {
 
         // Hide some elements if window is shrinked
         let items: [NSView] = [
-            
             previewScrollView,
             cylinderText, cylinderField, cylinderStepper,
             headText, headField, headStepper,
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
-            blockText, blockField, blockStepper
+            blockText, blockField, blockStepper,
+            prevButton, nextButton
         ]
         for item in items { item.isHidden = shrinked }
-        
-        // Only proceed if window is expanded
+                
+        // Only proceed if the window is expanded
         if shrinked { return }
-            
+        
+        // Hide the prev / next button if no errors are present
+        if errorReport?.numErrors == 0 {
+            prevButton.isHidden = true
+            nextButton.isHidden = true
+        }
+
         // Update all elements
         cylinderField.integerValue   = _cylinder
         cylinderStepper.integerValue = _cylinder
@@ -470,6 +480,30 @@ class ExporterDialog: DialogController {
         update()
     }
     
+    @IBAction func prevButtonAction(_ sender: NSButton!) {
+        
+        var row = selectedRow
+        var col = selectedCol
+        
+        if volume?.prevErrorLocation(&row, pos: &col) == true {
+            track("row = \(row) col = \(col)")
+        }
+        
+        track()
+    }
+
+    @IBAction func nextButtonAction(_ sender: NSButton!) {
+
+        var row = selectedRow
+        var col = selectedCol
+        
+        if volume?.nextErrorLocation(&row, pos: &col) == true {
+            track("row = \(row) col = \(col)")
+        }
+
+        track()
+    }
+    
     @IBAction func disclosureAction(_ sender: NSButton!) {
         
         shrinked ? expand() : shrink()
@@ -574,6 +608,8 @@ extension ExporterDialog: NSTableViewDataSource {
             if let byte = disk?.readByte(_block, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }
+        } else {
+            return String(format: "%X", row)
         }
         
         return ""
@@ -583,10 +619,11 @@ extension ExporterDialog: NSTableViewDataSource {
 extension ExporterDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
-        
+
+        let cell = cell as? NSTextFieldCell
+
         if let col = columnNr(tableColumn) {
             
-            let cell = cell as? NSTextFieldCell
             let error = volume?.check(_block, pos: 16 * row + col) ?? .OK
             
             if row == selectedRow && col == selectedCol {
@@ -596,6 +633,8 @@ extension ExporterDialog: NSTableViewDelegate {
                 cell?.backgroundColor = NSColor.controlAlternatingRowBackgroundColors[row % 2]
                 cell?.textColor = .labelColor
             }
+        } else {
+            cell?.backgroundColor = NSColor.unemphasizedSelectedContentBackgroundColor
         }
     }
     

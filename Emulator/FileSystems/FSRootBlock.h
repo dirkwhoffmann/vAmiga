@@ -21,7 +21,6 @@ struct FSRootBlock : FSBlock {
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
     FSError check(u32 pos) override;
-    bool check(bool verbose) override; // DEPRECATED
     void updateChecksum() override;
 
     FSTime getCreationDate() override            { return FSTime(addr(-7));  }

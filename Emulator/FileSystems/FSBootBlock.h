@@ -18,8 +18,8 @@ struct FSBootBlock : FSBlock {
     ~FSBootBlock();
     
     FSBlockType type() override { return FS_BOOT_BLOCK; }
+    FSError check(u32 pos) override;
     void dump() override;
-    bool check(bool verbose) override;    
         
     void writeBootCode();
 };
