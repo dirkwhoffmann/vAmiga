@@ -648,6 +648,8 @@ struct SerialPortWrapper;
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
 
+@property (readonly) FSVolumeType type;
+
 - (FSErrorReport) check;
 - (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos;
 

@@ -1233,7 +1233,6 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
-
 + (instancetype) make:(FSVolume *)volume
 {
     if (volume == NULL) { return nil; }
@@ -1241,7 +1240,6 @@ struct SerialPortWrapper { SerialPort *port; };
     FSVolumeProxy *proxy = [[self alloc] initWithVolume: volume];
     return proxy;
 }
-
 + (instancetype) makeWithADF:(ADFFileProxy *)fileProxy
 {
     FSError error;
@@ -1249,6 +1247,11 @@ struct SerialPortWrapper { SerialPort *port; };
 
     FSVolume *volume = FSVolume::makeWithADF((ADFFile *)(adf->file), &error);
     return [self make:volume];
+}
+
+- (FSVolumeType) type
+{
+    return wrapper->volume->getType();
 }
 - (FSErrorReport) check
 {

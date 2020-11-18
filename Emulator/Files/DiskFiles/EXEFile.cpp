@@ -103,9 +103,11 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume.info();
     volume.walk(true);
     
-    if (!volume.check(MFM_DEBUG)) {
-        warn("readFromBuffer: Files system is corrupted\n");
-        // volume.dump();
+    // Check the file system for consistency
+    FSErrorReport report = volume.check();
+    if (report.numErrors > 0) {
+        warn("File system contains %ld errors in %ld blocks\n",
+             report.numErrors, report.numErroneousBlocks);
     }
     // volume.dump();
     

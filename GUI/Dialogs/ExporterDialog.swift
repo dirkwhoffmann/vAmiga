@@ -173,9 +173,19 @@ class ExporterDialog: DialogController {
     var warningText: String {
         
         if disk?.type == .FILETYPE_ADF {
+            
             if volume != nil {
-                // let ofs = volume.
-                return "OFS or FFS formatted"
+                switch volume!.type {
+                case .OFS:      return "Original File System (OFS)"
+                case .OFS_INTL: return "Original File System (OFS-INTL)"
+                case .OFS_DC:   return "Original File System (OFS-DC)"
+                case .OFS_LNFS: return "Original File System (OFS-LNFS)"
+                case .FFS:      return "Original File System (FFS)"
+                case .FFS_INTL: return "Original File System (FFS-INTL)"
+                case .FFS_DC:   return "Original File System (FFS-DC)"
+                case .FFS_LNFS: return "Original File System (FFS-LNFS)"
+                default: return "Unknown file system"
+                }
             } else {
                 return "No compatible file system detected"
             }

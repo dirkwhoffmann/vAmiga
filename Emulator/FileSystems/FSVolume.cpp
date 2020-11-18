@@ -30,29 +30,6 @@ FSVolume::makeWithADF(ADFFile *adf, FSError *error)
     return volume;
 }
 
-/*
-FSVolume *
-FSVolume::make(const u8 *buffer, size_t size, size_t bsize, FSError *error)
-{
-    assert(buffer != nullptr);
-    assert(size % bsize == 0);
-    
-    unsigned numBlocks = size / bsize;
-    printf("Creating file system from buffer with %d blocks\n", numBlocks);
-    
-    // TODO: Determine file system type from buffer.
-    // TODO: Right now, we always import as OFS which is wrong, of course.
-    FSVolume *volume = new FSVolume(FS_OFS, numBlocks, bsize);
-    
-    if (!volume->importVolume(buffer, size, error)) {
-        delete volume;
-        return nullptr;
-    }
-    
-    return volume;
-}
-*/
-
 FSVolume *
 FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
 {
@@ -166,21 +143,31 @@ FSVolume::check(u32 blockNr, u32 pos)
 FSErrorReport
 FSVolume::check()
 {
-    FSErrorReport result;
+    FSErrorReport result = check(0);
     
-    long errorCnt = 0, totalErrorCnt = 0, blockCnt = 0;
-    
-    for (u32 i = 0; i < capacity; i++) {
-            
-        if (!blocks[i]->check(&errorCnt)) blockCnt++;
-        totalErrorCnt += errorCnt;
+    for (u32 i = 1; i < capacity; i++) {
+        
+        FSErrorReport blockResult = check(i);
+        
+        result.numErrors += blockResult.numErrors;
+        result.numErroneousBlocks += blockResult.numErroneousBlocks;
     }
-    
-    result.numErrors = errorCnt;
-    result.numErroneousBlocks = blockCnt;
     return result;
 }
 
+FSErrorReport
+FSVolume::check(u32 blockNr)
+{
+    assert(isBlockNumber(blockNr));
+
+    FSErrorReport result;
+    blocks[blockNr]->check(&result.numErrors);
+    result.numErroneousBlocks = result.numErrors != 0;
+    
+    return result;
+}
+
+/*
 bool
 FSVolume::check(bool verbose)
 {
@@ -205,6 +192,7 @@ FSVolume::check(bool verbose)
     }
     return result;
 }
+*/
 
 FSBlockType
 FSVolume::guessBlockType(u32 nr, const u8 *buffer)
@@ -234,42 +222,25 @@ FSVolume::guessBlockType(u32 nr, const u8 *buffer)
     return FS_EMPTY_BLOCK;
 }
 
-/*
-FSType
-FSVolume::getType()
-{
-    FSBootBlock *boot = bootBlock(0);
-    assert(boot != nullptr);
-    
-    if (boot->data[0] != 'D' || boot->data[1] != 'O' || boot->data[2] != 'S') {
-        return FS_NONE;
-    }
-
-    if (boot->data[3] > 7) {
-        return FS_NONE;
-    }
-    return (FSType)boot->data[3];
-}
-
 bool
 FSVolume::isOFS()
 {
-    switch (getType()) {
-        case FS_OFS:
-        case FS_OFS_INTL:
-        case FS_OFS_DC:
-        case FS_OFS_LNFS:
-            return true;
-        default:
-            return false;
-    }
+    return
+    type == FS_OFS ||
+    type == FS_OFS_INTL ||
+    type == FS_OFS_DC ||
+    type == FS_OFS_LNFS;
 }
+
 bool
 FSVolume::isFFS()
 {
-    return !isOFS();
+    return
+    type == FS_FFS ||
+    type == FS_FFS_INTL ||
+    type == FS_FFS_DC ||
+    type == FS_FFS_LNFS;
 }
-*/
 
 u32
 FSVolume::getDataBlockCapacity()
@@ -672,11 +643,25 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     debug(FS_DEBUG, "Importing file system...\n");
 
     // Only proceed if the (predicted) block size matches
-    if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
-
+    if (size % bsize != 0) {
+        *error = FS_WRONG_BSIZE; return false;
+    }
     // Only proceed if the source buffer contains the right amount of data
-    if (capacity * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
-
+    if (capacity * bsize != size) {
+        *error = FS_WRONG_CAPACITY; return false;
+    }
+    // Only proceed if the buffer contains a file system
+    if (src[0] != 'D' || src[1] != 'O' || src[2] != 'S') {
+        *error = FS_UNKNOWN; return false;
+    }
+    // Only proceed if the provided file system is supported
+    if (src[3] >= 1) {
+        *error = FS_UNSUPPORTED; return false;
+    }
+    
+    // Set the version number
+    type = (FSVolumeType)src[3];
+    
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
         

@@ -111,8 +111,8 @@ public:
     
     FSName getName() { return rootBlock()->getName(); }
     FSVolumeType getType() { return type; }
-    bool isOFS() { return type == FS_OFS; }
-    bool isFFF() { return type == FS_FFS; }
+    bool isOFS();
+    bool isFFS();
     
     // Returns the volume size in blocks
     u32 getCapacity() { return capacity; }
@@ -139,11 +139,12 @@ public:
     // Checks a single long word entry in a certain block
     FSError check(u32 blockNr, u32 pos);
 
-    // Checks all blocks in this volume
+    // Checks all blocks in this volume, or a single block only
     FSErrorReport check();
+    FSErrorReport check(u32 blockNr);
 
     // Checks the integrity of this volume (DEPRECATED)
-    virtual bool check(bool verbose);
+    // virtual bool check(bool verbose);
 
     
     

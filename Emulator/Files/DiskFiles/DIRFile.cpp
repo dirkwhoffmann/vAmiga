@@ -72,10 +72,13 @@ DIRFile::readFromFile(const char *filename)
     volume->info();
     volume->walk(true);
 
-    if (!volume->check(MFM_DEBUG)) {
-        warn("DIRFile::readFromFile: Files system is corrupted.\n");
+    // Check the file system for consistency
+    FSErrorReport report = volume->check();
+    if (report.numErrors > 0) {
+        warn("File system contains %ld errors in %ld blocks\n",
+             report.numErrors, report.numErroneousBlocks);
     }
-    volume->dump();
+    // volume->dump();
     
     // Convert the file system into an ADF
     FSError error;
