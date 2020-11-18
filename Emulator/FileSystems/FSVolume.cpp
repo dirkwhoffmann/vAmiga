@@ -157,6 +157,24 @@ FSVolume::dump()
     }
 }
 
+FSErrorReport
+FSVolume::check()
+{
+    FSErrorReport result { 0, 0};
+    
+    long errorCnt = 0, totalErrorCnt = 0, blockCnt = 0;
+    
+    for (u32 i = 0; i < capacity; i++) {
+            
+        if (!blocks[i]->check(&errorCnt)) blockCnt++;
+        totalErrorCnt += errorCnt;
+    }
+    
+    result.numErrors = errorCnt;
+    result.numErroneousBlocks = blockCnt;
+    return result;
+}
+
 bool
 FSVolume::check(bool verbose)
 {

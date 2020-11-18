@@ -34,38 +34,6 @@ inline const char *sFSType(FSVolumeType value)
     }
 }
 
-VAMIGA_ENUM(long, FSError)
-{
-    FS_OK,
-    FS_UNKNOWN,
-    FS_UNSUPPORTED,
-    FS_WRONG_BSIZE,
-    FS_WRONG_CAPACITY,
-    FS_WRONG_BLOCK_TYPE,
-    FS_WRONG_CHECKSUM,
-    FS_CORRUPTED
-};
-
-inline bool isFSError(FSError value)
-{
-    return value >= FS_OK && value <= FS_CORRUPTED;
-}
-
-inline const char *sFSError(FSError value)
-{
-    switch (value) {
-        case FS_OK:               return "FS_OK";
-        case FS_UNKNOWN:          return "FS_UNKNOWN";
-        case FS_UNSUPPORTED:      return "FS_UNSUPPORTED";
-        case FS_WRONG_BSIZE:      return "FS_WRONG_BSIZE";
-        case FS_WRONG_CAPACITY:   return "FS_WRONG_CAPACITY";
-        case FS_WRONG_BLOCK_TYPE: return "FS_WRONG_BLOCK_TYPE";
-        case FS_WRONG_CHECKSUM:   return "FS_WRONG_CHECKSUM";
-        case FS_CORRUPTED:        return "FS_CORRUPTED";
-        default:                  return "???";
-    }
-}
-
 VAMIGA_ENUM(long, FSBlockType)
 {
     FS_UNKNOWN_BLOCK,
@@ -102,5 +70,44 @@ sFSBlockType(FSBlockType type)
         default:                  return "???";
     }
 }
+
+VAMIGA_ENUM(long, FSError)
+{
+    FS_OK,
+    FS_UNKNOWN,
+    FS_UNSUPPORTED,
+    FS_WRONG_BSIZE,
+    FS_WRONG_CAPACITY,
+    FS_WRONG_BLOCK_TYPE,
+    FS_WRONG_CHECKSUM,
+    FS_CORRUPTED
+};
+
+inline bool isFSError(FSError value)
+{
+    return value >= FS_OK && value <= FS_CORRUPTED;
+}
+
+inline const char *sFSError(FSError value)
+{
+    switch (value) {
+        case FS_OK:               return "FS_OK";
+        case FS_UNKNOWN:          return "FS_UNKNOWN";
+        case FS_UNSUPPORTED:      return "FS_UNSUPPORTED";
+        case FS_WRONG_BSIZE:      return "FS_WRONG_BSIZE";
+        case FS_WRONG_CAPACITY:   return "FS_WRONG_CAPACITY";
+        case FS_WRONG_BLOCK_TYPE: return "FS_WRONG_BLOCK_TYPE";
+        case FS_WRONG_CHECKSUM:   return "FS_WRONG_CHECKSUM";
+        case FS_CORRUPTED:        return "FS_CORRUPTED";
+        default:                  return "???";
+    }
+}
+
+typedef struct
+{
+    long numErrors;
+    long numErroneousBlocks;
+}
+FSErrorReport;
 
 #endif

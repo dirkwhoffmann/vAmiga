@@ -97,10 +97,7 @@ public:
     
     // Prints debug information about this volume
     virtual void dump();
-    
-    // Checks the integrity of this volume
-    virtual bool check(bool verbose);
-    
+        
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < capacity; }
 
@@ -134,6 +131,18 @@ public:
     u32 freeBytes() { return freeBlocks() * bsize; }
     u32 usedBytes() { return usedBlocks() * bsize; }
 
+    
+    //
+    // Integrity checking
+    //
+
+    // Checks all blocks in this volume
+    FSErrorReport check();
+
+    // Checks the integrity of this volume (DEPRECATED)
+    virtual bool check(bool verbose);
+
+    
     
     //
     // Accessing blocks

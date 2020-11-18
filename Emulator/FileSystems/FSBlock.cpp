@@ -28,6 +28,19 @@ FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
     }
 }
 
+bool
+FSBlock::check(long *numErrors)
+{
+    long errors = 0;
+    
+    for (u32 i = 0; i < volume.bsize; i++) {
+        if (check(i) != FS_OK) errors++;
+    }
+    
+    if (numErrors) *numErrors = errors;
+    return errors == 0;
+}
+
 u8 *
 FSBlock::addr(int nr)
 {

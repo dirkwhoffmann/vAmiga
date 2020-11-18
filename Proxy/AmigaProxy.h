@@ -648,6 +648,7 @@ struct SerialPortWrapper;
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
 
+- (FSErrorReport) check;
 - (void) dump;
 
 @end

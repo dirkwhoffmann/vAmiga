@@ -1250,7 +1250,10 @@ struct SerialPortWrapper { SerialPort *port; };
     FSVolume *volume = FSVolume::makeWithADF((ADFFile *)(adf->file), &error);
     return [self make:volume];
 }
-
+- (FSErrorReport) check
+{
+    return wrapper->volume->check();
+}
 - (void) dump
 {
     wrapper->volume->dump();

@@ -45,7 +45,7 @@ struct FSBlock {
     
     
     //
-    // Accessing block properties
+    // Querying block properties
     //
 
     // Returns the type of this block
@@ -53,6 +53,17 @@ struct FSBlock {
 
     // Returns the name or path of this block
     char *assemblePath();
+
+    
+    //
+    // Integrity checking
+    //
+
+    // Checks the integrity of a certain byte in this block
+    virtual FSError check(u32 pos) { return FS_OK; }
+    
+    // Scans all bytes in this block
+    bool check(long *numErrors = nullptr);
 
     
     //
