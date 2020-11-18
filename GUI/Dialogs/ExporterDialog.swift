@@ -39,6 +39,9 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
+    var selectedRow = 0
+    var selectedCol = 0
+    
     var savePanel: NSSavePanel!  // Used to export to files
     var openPanel: NSOpenPanel!  // Used to export to directories
 
@@ -465,6 +468,11 @@ class ExporterDialog: DialogController {
     @IBAction func clickAction(_ sender: NSTableView!) {
 
         track("row = \(sender.clickedRow) col = \(sender.clickedColumn)")
+        
+        selectedRow = sender.clickedRow
+        selectedCol = sender.clickedColumn
+        
+        previewTable.reloadData()
     }
 
     @IBAction func exportAction(_ sender: NSButton!) {
@@ -507,6 +515,11 @@ extension ExporterDialog: NSWindowDelegate {
 
 extension ExporterDialog: NSTableViewDataSource {
     
+    func columnNr(_ column: NSTableColumn?) -> Int? {
+        
+        return column == nil ? nil : Int(column!.identifier.rawValue)
+    }
+    
     func buildHex(p: UnsafeMutablePointer<UInt8>, count: Int) -> String {
         
         let hexDigits = Array(("0123456789ABCDEF ").utf16)
@@ -546,35 +559,13 @@ extension ExporterDialog: NSTableViewDataSource {
     func tableView(_ tableView: NSTableView,
                    objectValueFor tableColumn: NSTableColumn?, row: Int) -> Any? {
         
-        if let id = tableColumn?.identifier.rawValue {
+        if let col = columnNr(tableColumn) {
 
-            var offset = 16 * row
-            switch id {
-            case "0": offset += 0
-            case "1": offset += 1
-            case "2": offset += 2
-            case "3": offset += 3
-            case "4": offset += 4
-            case "5": offset += 5
-            case "6": offset += 6
-            case "7": offset += 7
-            case "8": offset += 8
-            case "9": offset += 9
-            case "10": offset += 10
-            case "11": offset += 11
-            case "12": offset += 12
-            case "13": offset += 13
-            case "14": offset += 14
-            case "15": offset += 15
-            case "16": offset += 16
-            default: fatalError()
-            }
-            
-            assert(offset < 512)
-            if let byte = disk?.readByte(_block, offset: row * 16 + offset) {
+            if let byte = disk?.readByte(_block, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }
         }
+        
         return ""
     }
 }
@@ -583,13 +574,18 @@ extension ExporterDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
         
-        let cell = cell as? NSTextFieldCell
-
-        // REMOVE ASAP
-        if (row == 4) {
-            cell?.textColor = NSColor.systemRed
-        } else {
-            cell?.textColor = NSColor.labelColor
+        if let col = columnNr(tableColumn) {
+            
+            let cell = cell as? NSTextFieldCell
+            let error = volume?.check(_block, pos: 16 * row + col) ?? .OK
+            
+            if row == selectedRow && col == selectedCol {
+                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
+                cell?.textColor = .white
+            } else {
+                cell?.backgroundColor = NSColor.controlAlternatingRowBackgroundColors[row % 2]
+                cell?.textColor = .labelColor
+            }
         }
     }
     

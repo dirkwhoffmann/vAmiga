@@ -99,7 +99,7 @@ private:
  
 public:
     
-    bool formatDisk(FSVolumeType fs); 
+    bool formatDisk(FSVolumeType fs);
 
     
     //

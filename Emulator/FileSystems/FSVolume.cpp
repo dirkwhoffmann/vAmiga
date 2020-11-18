@@ -133,7 +133,7 @@ void
 FSVolume::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    msg("DOS%d  ",      type == FS_OFS ? 0 : 1);
+    msg("DOS%ld  ",     getType());
     msg("%5d (x %3d) ", numBlocks(), bsize);
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
@@ -144,7 +144,7 @@ FSVolume::info()
 void
 FSVolume::dump()
 {
-    msg("Volume: (%s)\n", type == FS_OFS ? "OFS" : "FFS");
+    msg("Volume: DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
     
     for (size_t i = 0; i < capacity; i++)  {
         
@@ -155,6 +155,12 @@ FSVolume::dump()
                 
         blocks[i]->dump(); 
     }
+}
+
+FSError
+FSVolume::check(u32 blockNr, u32 pos)
+{
+    return blocks[blockNr]->check(pos & ~0b11);
 }
 
 FSErrorReport
@@ -227,6 +233,43 @@ FSVolume::guessBlockType(u32 nr, const u8 *buffer)
     
     return FS_EMPTY_BLOCK;
 }
+
+/*
+FSType
+FSVolume::getType()
+{
+    FSBootBlock *boot = bootBlock(0);
+    assert(boot != nullptr);
+    
+    if (boot->data[0] != 'D' || boot->data[1] != 'O' || boot->data[2] != 'S') {
+        return FS_NONE;
+    }
+
+    if (boot->data[3] > 7) {
+        return FS_NONE;
+    }
+    return (FSType)boot->data[3];
+}
+
+bool
+FSVolume::isOFS()
+{
+    switch (getType()) {
+        case FS_OFS:
+        case FS_OFS_INTL:
+        case FS_OFS_DC:
+        case FS_OFS_LNFS:
+            return true;
+        default:
+            return false;
+    }
+}
+bool
+FSVolume::isFFS()
+{
+    return !isOFS();
+}
+*/
 
 u32
 FSVolume::getDataBlockCapacity()

@@ -136,6 +136,9 @@ public:
     // Integrity checking
     //
 
+    // Checks a single long word entry in a certain block
+    FSError check(u32 blockNr, u32 pos);
+
     // Checks all blocks in this volume
     FSErrorReport check();
 

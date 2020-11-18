@@ -649,6 +649,8 @@ struct SerialPortWrapper;
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
 
 - (FSErrorReport) check;
+- (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos;
+
 - (void) dump;
 
 @end

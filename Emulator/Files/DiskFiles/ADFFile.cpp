@@ -240,9 +240,9 @@ ADFFile::numSectors()
 bool
 ADFFile::formatDisk(FSVolumeType fs)
 {
-    assert(isFSType(fs));
+    assert(isFSVolumeType(fs));
 
-    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSType(fs));
+    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NONE) return false;

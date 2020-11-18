@@ -1254,6 +1254,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->check();
 }
+- (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos
+{
+    return wrapper->volume->check(blockNr, pos);
+}
 - (void) dump
 {
     wrapper->volume->dump();

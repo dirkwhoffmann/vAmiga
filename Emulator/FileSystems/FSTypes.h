@@ -14,23 +14,35 @@
 
 VAMIGA_ENUM(long, FSVolumeType)
 {
-    FS_NONE,
-    FS_OFS,
-    FS_FFS
+    FS_NONE = -1,
+    FS_OFS = 0,         // Original File System
+    FS_FFS = 1,         // Fast File System
+    FS_OFS_INTL = 2,    // "International" (not supported)
+    FS_FFS_INTL = 3,    // "International" (not supported)
+    FS_OFS_DC = 4,      // "Directory Cache" (not supported)
+    FS_FFS_DC = 5,      // "Directory Cache" (not supported)
+    FS_OFS_LNFS = 6,    // "Long Filenames" (not supported)
+    FS_FFS_LNFS = 7     // "Long Filenames" (not supported)
 };
 
-inline bool isFSType(FSVolumeType value)
+inline bool isFSVolumeType(long value)
 {
-    return value >= FS_NONE && value <= FS_FFS;
+    return value >= FS_NONE && value <= FS_FFS_LNFS;
 }
 
-inline const char *sFSType(FSVolumeType value)
+inline const char *sFSVolumeType(FSVolumeType value)
 {
     switch (value) {
-        case FS_NONE:  return "None";
-        case FS_OFS:   return "OFS";
-        case FS_FFS:   return "FFS";
-        default:       return "???";
+        case FS_NONE:     return "None";
+        case FS_OFS:      return "OFS";
+        case FS_FFS:      return "FFS";
+        case FS_OFS_INTL: return "OFS_INTL";
+        case FS_FFS_INTL: return "FFS_INTL";
+        case FS_OFS_DC:   return "OFS_DC";
+        case FS_FFS_DC:   return "FFS_DC";
+        case FS_OFS_LNFS: return "OFS_LNFS";
+        case FS_FFS_LNFS: return "FFS_LNFS";
+        default:          return "???";
     }
 }
 
