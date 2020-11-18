@@ -32,6 +32,9 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
+
+    @IBOutlet weak var info1: NSTextField!
+    @IBOutlet weak var info2: NSTextField!
     
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
@@ -233,7 +236,27 @@ class ExporterDialog: DialogController {
         // Preselect a suitable export format
         if adf { formatPopup.selectItem(at: 0) }
         if dos { formatPopup.selectItem(at: 1) }
+        
+        // Run a file system check
+        if let report = volume?.check() {
+            
+            let errors = report.numErrors
+            let blocks = report.numErroneousBlocks
+            
+            if errors == 0 {
+                info1.stringValue = "The integrity of this volume has been verified successfully."
+                info2.stringValue = "No errors found."
+            } else {
+                info1.stringValue = "The file system on this volume appears to be corrupt."
+                info2.stringValue = "\(errors) errors in \(blocks) blocks"
+                info1.textColor = .red
+                info2.textColor = .red
+            }
 
+        } else {
+            info1.stringValue = "No file system check has been performed."
+            info2.stringValue = ""
+        }
     }
     
     override func sheetDidShow() {
@@ -251,7 +274,7 @@ class ExporterDialog: DialogController {
 
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
-        r.origin.y = 61
+        r.origin.y = 81
         previewScrollView.frame = r
 
         update()
@@ -568,5 +591,9 @@ extension ExporterDialog: NSTableViewDelegate {
         } else {
             cell?.textColor = NSColor.labelColor
         }
+    }
+    
+    func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
+        return false
     }
 }

@@ -51,6 +51,10 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
 
+    // Returns the type and subtype identifiers of this block
+    virtual u32 typeID();
+    virtual u32 subtypeID();
+
     // Returns the name or path of this block
     char *assemblePath();
 
@@ -105,11 +109,11 @@ struct FSBlock {
     //
     
     // Checks the integrity of this block
-    virtual bool check(bool verbose);
+    virtual bool check(bool verbose); // DEPRECATED
 
 protected:
     
-    // Performs a certain integrity check on a block reference
+    // Performs a certain integrity check on a block reference DEPRECATED
     bool assertNotNull(u32 ref, bool verbose);
     bool assertInRange(u32 ref, bool verbose);
     bool assertHasType(u32 ref, FSBlockType type, bool verbose);
@@ -223,9 +227,12 @@ public:
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);
     
-    // Checks the integrity of the hash table
+    // Checks the integrity of the hash table (DEPRECATED)
     bool checkHashTable(bool verbose);
-    
+
+    // Checks the integrity of a hash table entry
+    FSError checkHashTableItem(u32 item);
+
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();
 

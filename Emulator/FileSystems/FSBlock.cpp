@@ -28,12 +28,24 @@ FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
     }
 }
 
+u32
+FSBlock::typeID()
+{
+    return get32(0);
+}
+
+u32
+FSBlock::subtypeID()
+{
+    return get32((volume.bsize / 4) - 1);
+}
+
 bool
 FSBlock::check(long *numErrors)
 {
     long errors = 0;
     
-    for (u32 i = 0; i < volume.bsize; i++) {
+    for (u32 i = 0; i < volume.bsize / 4; i += 4) {
         if (check(i) != FS_OK) errors++;
     }
     
@@ -92,6 +104,7 @@ FSBlock::printPath()
 u32
 FSBlock::checksum()
 {
+    // TODO: Skip fields storing the actual checksum
     u32 result = 0;
     u32 numLongWords = volume.bsize / 4;
     
@@ -320,6 +333,22 @@ FSBlock::checkHashTable(bool verbose)
         }
     }
     return result;
+}
+
+FSError
+FSBlock::checkHashTableItem(u32 item)
+{
+    if (u32 ref = get32(6 + item)) {
+    
+        if (!volume.block(ref)) {
+            return FS_BLOCK_REF_OUT_OF_RANGE;
+        }
+        if (!volume.fileHeaderBlock(ref) && !volume.userDirBlock(ref)) {
+            return FS_BLOCK_REF_TYPE_MISMATCH;
+        }
+    }
+    
+    return FS_OK;
 }
 
 void

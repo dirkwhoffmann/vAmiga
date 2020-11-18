@@ -74,13 +74,25 @@ sFSBlockType(FSBlockType type)
 VAMIGA_ENUM(long, FSError)
 {
     FS_OK,
+    
+    // File system errors
     FS_UNKNOWN,
     FS_UNSUPPORTED,
     FS_WRONG_BSIZE,
     FS_WRONG_CAPACITY,
-    FS_WRONG_BLOCK_TYPE,
-    FS_WRONG_CHECKSUM,
-    FS_CORRUPTED
+    FS_CORRUPTED,
+    
+    // Block errros
+    FS_BLOCK_TYPE_ERROR,
+    FS_BLOCK_TYPE_ID_MISMATCH,
+    FS_BLOCK_SUBTYPE_ID_MISMATCH,
+    FS_BLOCK_REF_MISSING,
+    FS_BLOCK_REF_OUT_OF_RANGE,
+    FS_BLOCK_REF_TYPE_MISMATCH,
+    FS_EXPECTED_00,
+    FS_EXPECTED_FF,
+    FS_BLOCK_CHECKSUM_ERROR,
+
 };
 
 inline bool isFSError(FSError value)
@@ -91,15 +103,20 @@ inline bool isFSError(FSError value)
 inline const char *sFSError(FSError value)
 {
     switch (value) {
-        case FS_OK:               return "FS_OK";
-        case FS_UNKNOWN:          return "FS_UNKNOWN";
-        case FS_UNSUPPORTED:      return "FS_UNSUPPORTED";
-        case FS_WRONG_BSIZE:      return "FS_WRONG_BSIZE";
-        case FS_WRONG_CAPACITY:   return "FS_WRONG_CAPACITY";
-        case FS_WRONG_BLOCK_TYPE: return "FS_WRONG_BLOCK_TYPE";
-        case FS_WRONG_CHECKSUM:   return "FS_WRONG_CHECKSUM";
-        case FS_CORRUPTED:        return "FS_CORRUPTED";
-        default:                  return "???";
+            
+        case FS_OK:                     return "FS_OK";
+            
+        case FS_UNKNOWN:                return "FS_UNKNOWN";
+        case FS_UNSUPPORTED:            return "FS_UNSUPPORTED";
+        case FS_WRONG_BSIZE:            return "FS_WRONG_BSIZE";
+        case FS_WRONG_CAPACITY:         return "FS_WRONG_CAPACITY";
+            
+        case FS_BLOCK_TYPE_ERROR:       return "FS_BLOCK_TYPE_ERROR";
+        // TODO: COMPLETE
+        case FS_BLOCK_CHECKSUM_ERROR:   return "FS_BLOCK_CHECKSUM_ERROR";
+        case FS_CORRUPTED:              return "FS_CORRUPTED";
+            
+        default:                        return "???";
     }
 }
 

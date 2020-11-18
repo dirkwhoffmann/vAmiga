@@ -16,10 +16,12 @@ struct FSRootBlock : FSBlock {
     FSRootBlock(FSVolume &ref, u32 nr, const char *name);
     ~FSRootBlock();
 
+    void dump() override;
+
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
-    void dump() override;
-    bool check(bool verbose) override;
+    FSError check(u32 pos) override;
+    bool check(bool verbose) override; // DEPRECATED
     void updateChecksum() override;
 
     FSTime getCreationDate() override            { return FSTime(addr(-7));  }

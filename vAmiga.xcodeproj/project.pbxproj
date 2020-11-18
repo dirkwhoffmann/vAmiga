@@ -128,7 +128,6 @@
 		508FE05921EA22CC0043D0E9 /* VirtualKeyboardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */; };
 		508FE05A21EA22CC0043D0E9 /* DialogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04721EA22CC0043D0E9 /* DialogController.swift */; };
 		508FE05C21EA22CC0043D0E9 /* DiskMountDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */; };
-		508FE05F21EA22CC0043D0E9 /* ExportDiskDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */; };
 		508FE06521EA318D0043D0E9 /* AmigaFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 508FE06321EA318D0043D0E9 /* AmigaFile.cpp */; };
 		509047B6230575E6009CEC1C /* SlowBlitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 509047B5230575E6009CEC1C /* SlowBlitter.cpp */; };
 		50912FF72525A1190049805B /* CapturePrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50912FF62525A1190049805B /* CapturePrefs.swift */; };
@@ -411,7 +410,6 @@
 		508FE04621EA22CC0043D0E9 /* VirtualKeyboardController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VirtualKeyboardController.swift; sourceTree = "<group>"; };
 		508FE04721EA22CC0043D0E9 /* DialogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DialogController.swift; sourceTree = "<group>"; };
 		508FE04A21EA22CC0043D0E9 /* DiskMountDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiskMountDialog.swift; sourceTree = "<group>"; };
-		508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExportDiskDialog.swift; sourceTree = "<group>"; };
 		508FE06321EA318D0043D0E9 /* AmigaFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaFile.cpp; sourceTree = "<group>"; };
 		508FE06421EA318D0043D0E9 /* AmigaFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AmigaFile.h; sourceTree = "<group>"; };
 		509047B5230575E6009CEC1C /* SlowBlitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SlowBlitter.cpp; sourceTree = "<group>"; };
@@ -870,7 +868,6 @@
 				50B9354A243481AB000C78B8 /* SnapshotDialog.swift */,
 				509F41E9243B0FF700AD0FE4 /* ScreenshotDialog.swift */,
 				50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */,
-				508FE04D21EA22CC0043D0E9 /* ExportDiskDialog.swift */,
 				507727EC242F2CE3009D01DA /* iCarousel.h */,
 				507727ED242F2CE3009D01DA /* iCarousel.m */,
 			);
@@ -1441,7 +1438,6 @@
 				508FE01121EA227B0043D0E9 /* MyControllerToolbar.swift in Sources */,
 				508FE05221EA22CC0043D0E9 /* RomDropView.swift in Sources */,
 				508FDFD621EA20510043D0E9 /* DragAndDrop.swift in Sources */,
-				508FE05F21EA22CC0043D0E9 /* ExportDiskDialog.swift in Sources */,
 				508FE01821EA227B0043D0E9 /* MyController.swift in Sources */,
 				5019605D23125E680051B669 /* Monitor.swift in Sources */,
 				5014DD1521F3625200BC14BA /* Keyboard.cpp in Sources */,

@@ -160,7 +160,7 @@ FSVolume::dump()
 FSErrorReport
 FSVolume::check()
 {
-    FSErrorReport result { 0, 0};
+    FSErrorReport result;
     
     long errorCnt = 0, totalErrorCnt = 0, blockCnt = 0;
     
