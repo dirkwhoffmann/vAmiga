@@ -30,12 +30,12 @@
                 <outlet property="sectorField" destination="O0X-QE-8Xw" id="5rK-bo-5h6"/>
                 <outlet property="sectorStepper" destination="kjN-TB-Bh4" id="tle-6f-rav"/>
                 <outlet property="sectorText" destination="5fZ-6V-iLd" id="WNl-87-RUs"/>
-                <outlet property="subtitle" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
                 <outlet property="title" destination="tXt-ZO-VKK" id="yKw-Bc-jdJ"/>
                 <outlet property="trackField" destination="5mA-IW-Lcv" id="G8K-4W-vHE"/>
+                <outlet property="trackInfo" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
                 <outlet property="trackStepper" destination="JCB-vD-1ff" id="UgQ-pP-NEg"/>
                 <outlet property="trackText" destination="RFN-QD-W4P" id="uBN-e3-BY8"/>
-                <outlet property="warning" destination="Hg0-1l-VFJ" id="Tl1-TK-NcC"/>
+                <outlet property="volumeInfo" destination="Hg0-1l-VFJ" id="Tl1-TK-NcC"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="88U-4F-aC0"/>
             </connections>
         </customObject>

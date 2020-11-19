@@ -11,8 +11,8 @@ class ExporterDialog: DialogController {
         
     @IBOutlet weak var diskIcon: NSImageView!
     @IBOutlet weak var title: NSTextField!
-    @IBOutlet weak var subtitle: NSTextField!
-    @IBOutlet weak var warning: NSTextField!
+    @IBOutlet weak var trackInfo: NSTextField!
+    @IBOutlet weak var volumeInfo: NSTextField!
 
     @IBOutlet weak var disclosureButton: NSButton!
     @IBOutlet weak var previewScrollView: NSScrollView!
@@ -64,6 +64,8 @@ class ExporterDialog: DialogController {
     var numTracks: Int { return disk?.numTracks ?? 0 }
     var numSectors: Int { return disk?.numSectors ?? 0 }
     var numBlocks: Int { return disk?.numBlocks ?? 0 }
+    var isDD: Bool { return disk?.diskDensity == .DISK_DD }
+    var isHD: Bool { return disk?.diskDensity == .DISK_HD }
 
     // var type: AmigaFileType?
     var volume: FSVolumeProxy?
@@ -156,44 +158,65 @@ class ExporterDialog: DialogController {
         return "This disk contains an unrecognized MFM stream"
     }
 
-    var subtitleText: String {
+    func updateTrackInfo() {
+        
+        var text = "This disk contains un unknown track and sector format."
         
         if disk != nil {
             
-            let t = numTracks
-            let s = numSectors
             let n = numSides == 1 ? "Single" : "Double"
+            let d = isHD ? "high" : isDD ? "double" : "single"
             
-            let den = disk!.diskDensity
-            let d = den == .DISK_SD ? "single" : den == .DISK_DD ? "double" : "high"
-            
-            return "\(n) sided, \(d) density disk, \(t) tracks with \(s) sectors each"
+            text = "\(n) sided, "
+            text += "\(d) density disk, "
+            text += "\(numTracks) tracks with \(numSectors) sectors each"
+        } else {
+            trackInfo.textColor = .systemRed
         }
 
-        return "None of the supported formats is able to store this disk"
+        trackInfo.stringValue = text
     }
     
-    var warningText: String {
+    func updateVolumeInfo() {
+        
+        var text = "No compatible file system has been detected."
         
         if disk?.type == .FILETYPE_ADF {
             
             if volume != nil {
+                
                 switch volume!.type {
-                case .OFS:      return "Original File System (OFS)"
-                case .OFS_INTL: return "Original File System (OFS-INTL)"
-                case .OFS_DC:   return "Original File System (OFS-DC)"
-                case .OFS_LNFS: return "Original File System (OFS-LNFS)"
-                case .FFS:      return "Original File System (FFS)"
-                case .FFS_INTL: return "Original File System (FFS-INTL)"
-                case .FFS_DC:   return "Original File System (FFS-DC)"
-                case .FFS_LNFS: return "Original File System (FFS-LNFS)"
-                default: return "Unknown file system"
+                case .OFS:      text = "Original File System (OFS)"
+                case .OFS_INTL: text = "Original File System (OFS-INTL)"
+                case .OFS_DC:   text = "Original File System (OFS-DC)"
+                case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
+                case .FFS:      text = "Original File System (FFS)"
+                case .FFS_INTL: text = "Original File System (FFS-INTL)"
+                case .FFS_DC:   text = "Original File System (FFS-DC)"
+                case .FFS_LNFS: text = "Original File System (FFS-LNFS)"
+                default:        text = "Unknown file system"
                 }
-            } else {
-                return "No compatible file system detected"
+
+                if let errors = errorReport?.numErrors, errors > 0 {
+                    
+                    let blocks = errorReport!.numErroneousBlocks
+                    let text2 = " with \(errors) errors in \(blocks) blocks"
+                    volumeInfo.stringValue = "Corrupted " + text + text2
+                    volumeInfo.textColor = .systemRed
+                    return
+                }
             }
         }
-        return ""
+
+        /*
+        let attr1 = [NSAttributedString.Key.foregroundColor: NSColor.textColor]
+        let attr2 = [NSAttributedString.Key.foregroundColor: NSColor.systemRed]
+        let str1 = NSMutableAttributedString(string: text1, attributes: attr1)
+        let str2 = NSMutableAttributedString(string: text2, attributes: attr2)
+        str1.append(str2)
+        */
+        
+        volumeInfo.stringValue = text
     }
     
     func showSheet(forDrive nr: Int) {
@@ -274,6 +297,8 @@ class ExporterDialog: DialogController {
             info1.stringValue = "No file system check has been performed."
             info2.stringValue = ""
         }
+        
+        update()
     }
     
     override func sheetDidShow() {
@@ -305,9 +330,9 @@ class ExporterDialog: DialogController {
         // Update icon and text fields
         diskIcon.image = diskIconImage
         title.stringValue = titleText
-        subtitle.stringValue = subtitleText
-        warning.stringValue = warningText
-        if volume == nil { warning.textColor = .red }
+        updateTrackInfo()
+        updateVolumeInfo()
+        if volume == nil { volumeInfo.textColor = .red }
 
         // Disable the export button if no export is possible
         exportButton.isEnabled = disk != nil
