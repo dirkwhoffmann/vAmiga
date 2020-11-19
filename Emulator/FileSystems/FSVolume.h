@@ -142,18 +142,18 @@ public:
     // Checks all blocks in this volume
     FSErrorReport check();
 
-    // Takes a location and computes the location of the next or previous error
-    // DEPRECATED
-    bool nextErrorLocation(long *blockNr, long *offset);
-    bool prevErrorLocation(long *blockNr, long *offset);
-
     // Takes a block number and returns the next or pevious corrupted block
-    u32 nextCorruptedBlock(u32 block);
-    u32 prevCorruptedBlock(u32 block);
+    // u32 nextCorruptedBlock(u32 block); // DEPRECATED
+    // u32 prevCorruptedBlock(u32 block); // DEPRECATED
 
-    // Checks the integrity of this volume (DEPRECATED)
-    // virtual bool check(bool verbose);
+    // Checks if a certain block is corrupted
+    bool isCorrupted(u32 block);
 
+    // Checks if a certain block is the n-th corrupted block
+    bool isCorrupted(u32 block, u32 n);
+
+    // Returns the number of the the n-th corrupted block
+    u32 seekCorruptedBlock(u32 n);
     
     
     //

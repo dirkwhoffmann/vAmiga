@@ -34,13 +34,45 @@ FSRootBlock::~FSRootBlock()
     delete [] data;
 }
 
-void
-FSRootBlock::dump()
+FSItemType
+FSRootBlock::itemType(u32 pos)
 {
-    printf("        Name : %s\n", getName().cStr);
-    printf("     Created : "); getCreationDate().print(); printf("\n");
-    printf("    Modified : "); getModificationDate().print(); printf("\n");
-    printf("  Hash table : "); dumpHashTable(); printf("\n");
+    // Intercept some special locations
+    if (pos == 432) return FSI_BCPL_STRING_LENGTH;
+
+    // Translate 'pos' to a long word index
+    i32 word = (i32)(pos & ~0b11) / 4;
+    if (word >= 6) word -= volume.bsize / 4;
+
+    printf("pos = %d word = %d\n", pos, word);
+    
+    switch (word) {
+        case 0:   return FSI_TYPE_ID;
+        case 1:
+        case 2:   return FSI_UNUSED;
+        case 3:   return FSI_HASHTABLE_SIZE;
+        case 4:   return FSI_UNUSED;
+        case 5:   return FSI_CHECKSUM;
+        case -50: return FSI_BITMAP_VALIDITY;
+        case -49: return FSI_BITMAP_BLOCK_REF;
+        case -23: return FSI_MODIFIED_DAY;
+        case -22: return FSI_MODIFIED_MIN;
+        case -21: return FSI_MODIFIED_TICKS;
+        case -7:  return FSI_CREATED_DAY;
+        case -6:  return FSI_CREATED_MIN;
+        case -5:  return FSI_CREATED_TICKS;
+        case -4:
+        case -3:
+        case -2:  return FSI_UNUSED;
+        case -1:  return FSI_SUBTYPE_ID;
+    }
+    
+    if (word <= -51)                return FSI_HASH_REF;
+    if (word >= -49 && word <= -24) return FSI_BITMAP_BLOCK_REF;
+    if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
+
+    assert(false);
+    return FSI_UNKNOWN;
 }
 
 FSError
@@ -82,6 +114,15 @@ FSRootBlock::check(u32 pos)
     }
     
     return FS_OK;
+}
+
+void
+FSRootBlock::dump()
+{
+    printf("        Name : %s\n", getName().cStr);
+    printf("     Created : "); getCreationDate().print(); printf("\n");
+    printf("    Modified : "); getModificationDate().print(); printf("\n");
+    printf("  Hash table : "); dumpHashTable(); printf("\n");
 }
 
 void

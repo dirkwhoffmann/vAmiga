@@ -149,10 +149,11 @@ FSVolume::check()
     for (u32 i = 0; i < capacity; i++) {
         
         if (blocks[i]->check() > 0) {
-            debug("Block %d is corrupted\n", i);
-            total++;
             min = MIN(min, i);
             max = MAX(max, i);
+            blocks[i]->corrupted = ++total;
+        } else {
+            blocks[i]->corrupted = 0;
         }
     }
 
@@ -234,6 +235,7 @@ FSVolume::prevErrorLocation(long *blockNr, long *offset)
     return false;
 }
 */
+/*
 u32
 FSVolume::nextCorruptedBlock(u32 block)
 {
@@ -241,19 +243,52 @@ FSVolume::nextCorruptedBlock(u32 block)
         if (blocks[i]->check() > 0) return i;
     }
 
-    // If we don't find a block, returns the given number
+    // If we don't find a block, return the given number
     return block;
 }
 
 u32
 FSVolume::prevCorruptedBlock(u32 block)
-{    
+{
     for (u32 i = block > 0 ? block - 1 : 0; i >= 0; i--) {
         if (blocks[i]->check() > 0) return i;
     }
     
-    // If we don't find a block, returns the given number
+    // If we don't find a block, return the given number
     return block;
+}
+*/
+
+bool
+FSVolume::isCorrupted(u32 blockNr)
+{
+    return block(blockNr) ? blocks[blockNr]->corrupted > 0 : false;
+}
+
+bool
+FSVolume::isCorrupted(u32 blockNr, u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+        
+        if (isCorrupted(i)) {
+            cnt++;
+            if (blockNr == i) return cnt == n;
+        }
+    }
+    return false;
+}
+
+u32
+FSVolume::seekCorruptedBlock(u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+
+        if (isCorrupted(i)) {
+            cnt++;
+            if (cnt == n) return i;
+        }
+    }
+    return (u32)-1;
 }
 
 FSBlockType

@@ -32,11 +32,12 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var blockText: NSTextField!
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
+    @IBOutlet weak var corruptionText: NSTextField!
+    @IBOutlet weak var corruptionField: NSTextField!
+    @IBOutlet weak var corruptionStepper: NSStepper!
 
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
-    @IBOutlet weak var errorInfo: NSTextField!
-    @IBOutlet weak var errorStepper: NSStepper!
 
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
@@ -77,8 +78,10 @@ class ExporterDialog: DialogController {
     var _track = 0
     var _sector = 0
     var _block = 0
+    var _corruption = 0
+    
     var sectorData: [String] = []
-    let bytesPerRow = 32
+    let bytesPerRow = 16
     
     func setCylinder(_ newValue: Int) {
 
@@ -137,6 +140,23 @@ class ExporterDialog: DialogController {
             _sector   = _block % numSectors
             _cylinder = _track / 2
             _side     = _track % 2
+            
+            update()
+        }
+    }
+
+    func setCorruptedBlock(_ newValue: Int) {
+        
+        guard let blockNr = volume?.seekCorruptedBlock(newValue) else { return }
+        
+        if blockNr >= 0 && blockNr < numBlocks {
+                        
+            _corruption = newValue
+            _block      = blockNr
+            _track      = _block / numSectors
+            _sector     = _block % numSectors
+            _cylinder   = _track / 2
+            _side       = _track % 2
             
             update()
         }
@@ -214,7 +234,6 @@ class ExporterDialog: DialogController {
                     let text2 = " with \(errors) corrupted \(blocks)"
                     volumeInfo.stringValue = text + text2
                     volumeInfo.textColor = .systemRed
-                    errorInfo.stringValue = "\(errors) corrupted \(blocks)"
                     return
                 }
             }
@@ -280,57 +299,75 @@ class ExporterDialog: DialogController {
         case .FSI_UNUSED:
             text = "Unused"
         case .FSI_DOS_HEADER:
-            text = "AmigaDOS header signature"
+            text = "AmigaDOS Header Signature"
         case .FSI_DOS_VERSION:
-            text = "AmigaDOS version number"
+            text = "AmigaDOS Version Number"
         case .FSI_BOOTCODE:
-            text = "Boot code instruction"
+            text = "Boot Code Instruction"
         case .FSI_TYPE_ID:
-            text = "Type identifier"
+            text = "Type Identifier"
         case .FSI_SUBTYPE_ID:
-            text = "Subtype identifier"
+            text = "Subtype Identifier"
         case .FSI_SELF_REF:
-            text = "Block reference to itself"
+            text = "Block Reference to itself"
         case .FSI_CHECKSUM:
             text = "Checksum"
         case .FSI_HASHTABLE_SIZE:
-            text = "Hashtable size"
+            text = "Hashtable Size"
         case .FSI_HASH_REF:
-            text = "Hashtable reference"
+            text = "Hashtable Entry"
         case .FSI_PROT_BITS:
-            text = "Protection status bits"
-        case .FSI_NAME:
-            text = "Part of the name string"
-        case .FSI_COMMENT:
-            text = "Part of the comment string"
-        case .FSI_CREATED:
-            text = "Part of the creation date"
-        case .FSI_MODIFIED:
-            text = "Part of th modification date"
+            text = "Protection Status Bits"
+        case .FSI_BCPL_STRING_LENGTH:
+            text = "BCPL String Length"
+        case .FSI_BCPL_DISK_NAME:
+            text = "Disk Name (BCPL Character)"
+        case .FSI_BCPL_DIR_NAME:
+            text = "Directory Name (BCPL Character)"
+        case .FSI_BCPL_FILE_NAME:
+            text = "File Name (BCPL Character)"
+        case .FSI_BCPL_COMMENT:
+            text = "Comment (BCPL Character)"
+        case .FSI_CREATED_DAY:
+            text = "Creation Date (Days)"
+        case .FSI_CREATED_MIN:
+            text = "Creation date (Minutes)"
+        case .FSI_CREATED_TICKS:
+            text = "Creation Date (Ticks)"
+        case .FSI_MODIFIED_DAY:
+            text = "Modification Date (Day)"
+        case .FSI_MODIFIED_MIN:
+            text = "Modification Date (Minutes)"
+        case .FSI_MODIFIED_TICKS:
+            text = "Modification Date (Ticks)"
         case .FSI_NEXT_HASH_REF:
-            text = "Reference to the next block with the same hash"
+            text = "Reference to the next Block with the same Hash"
         case .FSI_PARENT_DIR_REF:
-            text = "Reference to the parent directory"
+            text = "Reference to the Parent Directory"
         case .FSI_FILEHEADER_REF:
-            text = "Reference to the file header block"
+            text = "Reference to the File Header Block"
         case .FSI_EXTBLOCK_REF:
-            text = "Reference to the next extension block"
+            text = "Reference to the Next Extension Block"
+        case .FSI_BITMAP_BLOCK_REF:
+            text = "Reference to a Bitmap Block"
+        case .FSI_BITMAP_VALIDITY:
+            text = "Bitmap Validity Bits"
         case .FSI_BLOCK_COUNT:
-            text = "Number of entries in the block reference table"
+            text = "Number of Entries in the Block Reference Table"
         case .FSI_FILESIZE_COUNT:
-            text = "File size"
+            text = "File Size"
         case .FSI_DATA_BLOCK_NUMBER:
-            text = "Position in the data block chain"
+            text = "Position in the File's Data Block Chain"
         case .FSI_DATA_BLOCK_REF:
-            text = "Reference to a data block"
+            text = "Reference to a Data Block"
         case .FSI_FIRST_DATABLOCK_REF:
-            text = "Reference to the first data block of this file"
+            text = "Reference to the First Data Block of this File"
         case .FSI_DATA_COUNT:
-            text = "Number of bytes stored in this data block"
+            text = "Number of Bytes stored in this Data Block"
         case .FSI_DATA:
-            text = "Data byte"
+            text = "Data Byte"
         case .FSI_BITMAP:
-            text = "Block allocation bits"
+            text = "Block Allocation Table"
         default:
             fatalError()
         }
@@ -428,7 +465,7 @@ class ExporterDialog: DialogController {
 
         // doubleAction = #selector(doubleClickAction(_:))
         previewTable.action = #selector(clickAction(_:))
-
+        
         // Start with a shrinked window
         var rect = window!.contentRect(forFrameRect: window!.frame)
         rect.size = CGSize(width: 606, height: shrinkedHeight)
@@ -457,7 +494,14 @@ class ExporterDialog: DialogController {
         // Run a file system check
         errorReport = volume?.check()
         
-        update()
+        // Jump to the first error block if an error was found
+        if let errors = errorReport?.numErroneousBlocks, errors > 0 {
+            corruptionStepper.minValue = Double(1)
+            corruptionStepper.maxValue = Double(errorReport!.numErroneousBlocks)
+            setCorruptedBlock(2)
+        } else {
+            update()
+        }
     }
     
     override func sheetDidShow() {
@@ -507,7 +551,7 @@ class ExporterDialog: DialogController {
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
             blockText, blockField, blockStepper,
-            errorInfo, errorStepper
+            corruptionText, corruptionField, corruptionStepper
         ]
         for item in items { item.isHidden = shrinked }
                 
@@ -516,22 +560,24 @@ class ExporterDialog: DialogController {
         
         // Hide more elements if no errors are present
         if errorReport?.numErroneousBlocks == 0 {
-            errorInfo.isHidden = true
-            errorStepper.isHidden = true
+            corruptionText.isHidden = true
+            corruptionField.isHidden = true
+            corruptionStepper.isHidden = true
         }
 
         // Update all elements
-        cylinderField.integerValue   = _cylinder
-        cylinderStepper.integerValue = _cylinder
-        headField.integerValue       = _side
-        headStepper.integerValue     = _side
-        trackField.integerValue      = _track
-        trackStepper.integerValue    = _track
-        sectorField.integerValue     = _sector
-        sectorStepper.integerValue   = _sector
-        blockField.integerValue      = _block
-        blockStepper.integerValue    = _block
-        errorStepper.integerValue    = _block
+        cylinderField.integerValue     = _cylinder
+        cylinderStepper.integerValue   = _cylinder
+        headField.integerValue         = _side
+        headStepper.integerValue       = _side
+        trackField.integerValue        = _track
+        trackStepper.integerValue      = _track
+        sectorField.integerValue       = _sector
+        sectorStepper.integerValue     = _sector
+        blockField.integerValue        = _block
+        blockStepper.integerValue      = _block
+        corruptionField.integerValue   = _corruption
+        corruptionStepper.integerValue = _corruption
 
         updateBlockInfo()
         buildStrings()
@@ -656,21 +702,16 @@ class ExporterDialog: DialogController {
         setBlock(sender.integerValue)
     }
     
-    @IBAction func errorStepperAction(_ sender: NSStepper!) {
+    @IBAction func corruptedBlockAction(_ sender: NSTextField!) {
         
-        track()
-        
-        let newBlock =
-            sender.integerValue < _block ?
-            volume!.prevCorruptedBlock(_block) :
-            volume!.nextCorruptedBlock(_block)
-
-        track("block = \(_block) \(sender.integerValue) newBlock \(newBlock)")
-        
-        if _block == newBlock { NSSound.beep() }
-        setBlock(newBlock)
+        setCorruptedBlock(sender.integerValue)
     }
     
+    @IBAction func corruptedBlockStepperAction(_ sender: NSStepper!) {
+        
+        setCorruptedBlock(sender.integerValue)
+    }
+
     @IBAction func disclosureAction(_ sender: NSButton!) {
         
         shrinked ? expand() : shrink()

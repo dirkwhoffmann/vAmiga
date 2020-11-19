@@ -21,10 +21,13 @@ struct FSBlock {
     
     // The sector number of this block
     u32 nr;
-
+    
+    // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
+    u32 corrupted = 0;
+    
     // The actual block data
     u8 *data = nullptr;
-    
+
     
     //
     // Constants and static methods

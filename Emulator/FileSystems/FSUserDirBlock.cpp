@@ -29,15 +29,41 @@ FSUserDirBlock::~FSUserDirBlock()
     delete [] data;
 }
 
-void
-FSUserDirBlock::dump()
+FSItemType
+FSUserDirBlock::itemType(u32 pos)
 {
-    printf("        Name: %s\n", getName().cStr);
-    printf("        Path: ");    printPath(); printf("\n");
-    printf("     Comment: %s\n", getComment().cStr);
-    printf("     Created: ");    getCreationDate().print(); printf("\n");
-    printf("      Parent: %d\n", getParentDirRef());
-    printf("        Next: %d\n", getNextHashRef());
+    // Intercept some special locations
+    if (pos == 328) return FSI_BCPL_STRING_LENGTH;
+    if (pos == 432) return FSI_BCPL_STRING_LENGTH;
+
+    // Translate 'pos' to a long word index
+    i32 word = (i32)(pos & ~0b11) / 4;
+    if (word >= 6) word -= volume.bsize / 4;
+    
+    switch (word) {
+        case 0:   return FSI_TYPE_ID;
+        case 1:   return FSI_SELF_REF;
+        case 2:
+        case 3:
+        case 4:   return FSI_UNUSED;
+        case 5:   return FSI_CHECKSUM;
+        case -50:
+        case -49: return FSI_UNUSED;
+        case -23: return FSI_CREATED_DAY;
+        case -22: return FSI_CREATED_MIN;
+        case -21: return FSI_CREATED_TICKS;
+        case -4:  return FSI_NEXT_HASH_REF;
+        case -3:  return FSI_PARENT_DIR_REF;
+        case -2:  return FSI_UNUSED;
+        case -1:  return FSI_SUBTYPE_ID;
+    }
+    
+    if (word <= -51)                return FSI_HASH_REF;
+    if (word >= -46 && word <= -24) return FSI_BCPL_COMMENT;
+    if (word >= -20 && word <= -5)  return FSI_BCPL_DIR_NAME;
+
+    assert(false);
+    return FSI_UNKNOWN;
 }
 
 FSError
@@ -83,6 +109,17 @@ FSUserDirBlock::check(u32 pos)
     }
     
     return FS_OK;
+}
+
+void
+FSUserDirBlock::dump()
+{
+    printf("        Name: %s\n", getName().cStr);
+    printf("        Path: ");    printPath(); printf("\n");
+    printf("     Comment: %s\n", getComment().cStr);
+    printf("     Created: ");    getCreationDate().print(); printf("\n");
+    printf("      Parent: %d\n", getParentDirRef());
+    printf("        Next: %d\n", getNextHashRef());
 }
 
 void

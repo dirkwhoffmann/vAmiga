@@ -654,8 +654,9 @@ struct SerialPortWrapper;
 - (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos;
 - (FSErrorReport) check;
 - (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos;
-- (NSInteger) nextCorruptedBlock:(NSInteger)blockNr;
-- (NSInteger) prevCorruptedBlock:(NSInteger)blockNr;
+- (BOOL) isCorrupted:(NSInteger)blockNr;
+- (BOOL) isCorrupted:(NSInteger)blockNr n:(NSInteger)n;
+- (NSInteger) seekCorruptedBlock:(NSInteger)n;
 - (void) dump;
 
 @end

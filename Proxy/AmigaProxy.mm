@@ -1269,13 +1269,17 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->check(blockNr, pos);
 }
-- (NSInteger) nextCorruptedBlock:(NSInteger)blockNr
+- (BOOL) isCorrupted:(NSInteger)blockNr
 {
-    return wrapper->volume->nextCorruptedBlock(blockNr);
+    return wrapper->volume->isCorrupted(blockNr);
 }
-- (NSInteger) prevCorruptedBlock:(NSInteger)blockNr
+- (BOOL) isCorrupted:(NSInteger)blockNr n:(NSInteger)n
 {
-    return wrapper->volume->prevCorruptedBlock(blockNr);
+    return wrapper->volume->isCorrupted(blockNr, n);
+}
+- (NSInteger) seekCorruptedBlock:(NSInteger)n
+{
+    return wrapper->volume->seekCorruptedBlock(n);
 }
 - (void) dump
 {
