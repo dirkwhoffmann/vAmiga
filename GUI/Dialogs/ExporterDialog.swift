@@ -87,6 +87,8 @@ class ExporterDialog: DialogController {
             _cylinder = newValue
             _track    = _cylinder * 2 + _side
             _block    = _track * numSectors + _sector
+            
+            update()
         }
     }
     
@@ -97,6 +99,8 @@ class ExporterDialog: DialogController {
             _side     = newValue
             _track    = _cylinder * 2 + _side
             _block    = _track * numSectors + _sector
+            
+            update()
         }
     }
     
@@ -108,6 +112,8 @@ class ExporterDialog: DialogController {
             _cylinder = _track / 2
             _side     = _track % 2
             _block    = _track * numSectors + _sector
+
+            update()
         }
     }
 
@@ -117,6 +123,8 @@ class ExporterDialog: DialogController {
                         
             _sector   = newValue
             _block    = _track * numSectors + _sector
+            
+            update()
         }
     }
 
@@ -129,6 +137,8 @@ class ExporterDialog: DialogController {
             _sector   = _block % numSectors
             _cylinder = _track / 2
             _side     = _track % 2
+            
+            update()
         }
     }
 
@@ -521,6 +531,7 @@ class ExporterDialog: DialogController {
         sectorStepper.integerValue   = _sector
         blockField.integerValue      = _block
         blockStepper.integerValue    = _block
+        errorStepper.integerValue    = _block
 
         updateBlockInfo()
         buildStrings()
@@ -598,75 +609,66 @@ class ExporterDialog: DialogController {
     @IBAction func cylinderAction(_ sender: NSTextField!) {
         
         setCylinder(sender.integerValue)
-        update()
     }
     
     @IBAction func cylinderStepperAction(_ sender: NSStepper!) {
         
         setCylinder(sender.integerValue)
-        update()
     }
     
     @IBAction func headAction(_ sender: NSTextField!) {
         
         setHead(sender.integerValue)
-        update()
     }
     
     @IBAction func headStepperAction(_ sender: NSStepper!) {
         
         setHead(sender.integerValue)
-        update()
     }
     
     @IBAction func trackAction(_ sender: NSTextField!) {
         
         setTrack(sender.integerValue)
-        update()
     }
     
     @IBAction func trackStepperAction(_ sender: NSStepper!) {
         
         setTrack(sender.integerValue)
-        update()
     }
     
     @IBAction func sectorAction(_ sender: NSTextField!) {
         
         setSector(sender.integerValue)
-        update()
     }
     
     @IBAction func sectorStepperAction(_ sender: NSStepper!) {
         
         setSector(sender.integerValue)
-        update()
     }
     
     @IBAction func blockAction(_ sender: NSTextField!) {
         
         setBlock(sender.integerValue)
-        update()
     }
     
     @IBAction func blockStepperAction(_ sender: NSStepper!) {
         
         setBlock(sender.integerValue)
-        update()
     }
     
     @IBAction func errorStepperAction(_ sender: NSStepper!) {
-
-        if selection == nil { return }
-
-        var row = selectedRow!
-        var col = selectedCol!
-        
-        if volume?.prevErrorLocation(&row, pos: &col) == true {
-            track("row = \(row) col = \(col)")
-        }
         
         track()
+        
+        let newBlock =
+            sender.integerValue < _block ?
+            volume!.prevCorruptedBlock(_block) :
+            volume!.nextCorruptedBlock(_block)
+
+        track("block = \(_block) \(sender.integerValue) newBlock \(newBlock)")
+        
+        if _block == newBlock { NSSound.beep() }
+        setBlock(newBlock)
     }
     
     @IBAction func disclosureAction(_ sender: NSButton!) {

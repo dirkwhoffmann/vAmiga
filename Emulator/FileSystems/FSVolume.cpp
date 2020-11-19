@@ -196,6 +196,7 @@ FSVolume::check(u32 blockNr)
 }
 */
 
+/*
 bool
 FSVolume::nextErrorLocation(long *blockNr, long *offset)
 {
@@ -213,7 +214,8 @@ FSVolume::nextErrorLocation(long *blockNr, long *offset)
     }
     return false;
 }
-
+*/
+/*
 bool
 FSVolume::prevErrorLocation(long *blockNr, long *offset)
 {
@@ -230,6 +232,28 @@ FSVolume::prevErrorLocation(long *blockNr, long *offset)
         }
     }
     return false;
+}
+*/
+u32
+FSVolume::nextCorruptedBlock(u32 block)
+{
+    for (u32 i = block + 1; i < capacity; i++) {
+        if (blocks[i]->check() > 0) return i;
+    }
+
+    // If we don't find a block, returns the given number
+    return block;
+}
+
+u32
+FSVolume::prevCorruptedBlock(u32 block)
+{    
+    for (u32 i = block > 0 ? block - 1 : 0; i >= 0; i--) {
+        if (blocks[i]->check() > 0) return i;
+    }
+    
+    // If we don't find a block, returns the given number
+    return block;
 }
 
 FSBlockType

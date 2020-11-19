@@ -564,7 +564,7 @@ Gw
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C6j-0G-lEV">
                         <rect key="frame" x="568" y="59" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="6y4-b9-9B6"/>
+                        <stepperCell key="cell" continuous="YES" alignment="left" minValue="-999999" maxValue="999999" id="6y4-b9-9B6"/>
                         <connections>
                             <action selector="errorStepperAction:" target="-2" id="vfY-dh-NKB"/>
                         </connections>
