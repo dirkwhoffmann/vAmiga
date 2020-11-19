@@ -40,17 +40,16 @@ FSBlock::subtypeID()
     return get32((volume.bsize / 4) - 1);
 }
 
-bool
-FSBlock::check(long *numErrors)
+unsigned
+FSBlock::check()
 {
-    long errors = 0;
+    unsigned errors = 0;
     
-    for (u32 i = 0; i < volume.bsize / 4; i += 4) {
+    for (u32 i = 0; i < volume.bsize; i++) {
         if (check(i) != FS_OK) errors++;
     }
-    
-    if (numErrors) *numErrors = errors;
-    return errors == 0;
+
+    return errors;
 }
 
 u8 *

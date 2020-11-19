@@ -38,14 +38,30 @@ FSBootBlock::itemType(u32 byte)
 FSError
 FSBootBlock::check(u32 pos)
 {
-    if (pos == 0) {
-        if (data[0] != 'D' || data[1] != 'O' || data[2] != 'S') {
-            return FS_BLOCK_EXPECTED_DOS_HEADER;
-        }
-        if (!isFSVolumeType(data[3])) {
-            return FS_BLOCK_INVALID_DOS_VERSION;
-        }
+    if (nr > 0) return FS_OK;
+    
+    switch (pos) {
+            
+        case 0:
+            if (data[0] != 'D') return FS_EXPECTED_D;
+            break;
+            
+        case 1:
+            if (data[1] != 'O') return FS_EXPECTED_O;
+            break;
+            
+        case 2:
+            if (data[1] != 'S') return FS_EXPECTED_S;
+            break;
+            
+        case 3:
+            if (!isFSVolumeType(data[3])) return FS_BLOCK_INVALID_DOS_VERSION;
+            break;
+            
+        default:
+            break;
     }
+    
     return FS_OK;
 }
 

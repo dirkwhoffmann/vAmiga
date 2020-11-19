@@ -66,12 +66,12 @@ struct FSBlock {
     // Integrity checking
     //
 
+    // Scans all long words in this block and returns the number of errors
+    unsigned check();
+
     // Checks the integrity of a certain byte in this block
     virtual FSError check(u32 pos) { return FS_OK; }
-    
-    // Scans all bytes in this block
-    bool check(long *numErrors = nullptr);
-
+        
     
     //
     // Reading and writing block data

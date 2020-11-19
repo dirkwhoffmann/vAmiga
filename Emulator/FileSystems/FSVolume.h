@@ -136,12 +136,11 @@ public:
     // Integrity checking
     //
 
-    // Checks a single long word entry in a certain block
+    // Checks a single byte in a certain block
     FSError check(u32 blockNr, u32 pos);
 
-    // Checks all blocks in this volume, or a single block only
+    // Checks all blocks in this volume
     FSErrorReport check();
-    FSErrorReport check(u32 blockNr);
 
     // Takes a location and computes the location of the next or previous error
     bool nextErrorLocation(long *blockNr, long *offset);

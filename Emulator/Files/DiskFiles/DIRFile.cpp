@@ -74,9 +74,8 @@ DIRFile::readFromFile(const char *filename)
 
     // Check the file system for consistency
     FSErrorReport report = volume->check();
-    if (report.numErrors > 0) {
-        warn("File system contains %ld errors in %ld blocks\n",
-             report.numErrors, report.numErroneousBlocks);
+    if (report.numErroneousBlocks > 0) {
+        warn("Found %ld corrupted blocks\n", report.numErroneousBlocks);
     }
     // volume->dump();
     

@@ -135,7 +135,15 @@ VAMIGA_ENUM(long, FSError)
     // Block errros
     FS_BLOCK_TYPE_ID_MISMATCH,
     FS_BLOCK_SUBTYPE_ID_MISMATCH,
-    FS_BLOCK_EXPECTED_DOS_HEADER,
+    FS_EXPECTED_D,
+    FS_EXPECTED_O,
+    FS_EXPECTED_S,
+    FS_EXPECTED_00,
+    FS_EXPECTED_01,
+    FS_EXPECTED_02,
+    FS_EXPECTED_03,
+    FS_EXPECTED_FD,
+    FS_EXPECTED_FF,
     FS_BLOCK_INVALID_DOS_VERSION,
     FS_BLOCK_MISSING_SELFREF,
     FS_BLOCK_MISSING_FILEHEADER_REF,
@@ -147,8 +155,6 @@ VAMIGA_ENUM(long, FSError)
     FS_BLOCK_REF_OUT_OF_RANGE,
     FS_BLOCK_REF_TYPE_MISMATCH,
     FS_BLOCK_VALUE_TOO_LARGE,
-    FS_EXPECTED_00,
-    FS_EXPECTED_FF,
     FS_BLOCK_CHECKSUM_ERROR,
 };
 
@@ -178,8 +184,10 @@ inline const char *sFSError(FSError value)
 
 typedef struct
 {
-    long numErrors;
+    // long numErrors;
     long numErroneousBlocks;
+    long firstErrorBlock;
+    long lastErrorBlock;
 }
 FSErrorReport;
 

@@ -38,8 +38,8 @@ FSFileListBlock::dump()
 FSError
 FSFileListBlock::check(u32 pos)
 {
-    // Make sure 'pos' points to the beginning of a long word
-    assert(pos % 4 == 0);
+    // Align pos to the long word raster
+    pos &= ~0b11;
 
     // Translate 'pos' to a long word index
     i32 word = (pos <= 24 ? (i32)pos : (i32)pos - volume.bsize) / 4;

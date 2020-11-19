@@ -198,13 +198,13 @@ class ExporterDialog: DialogController {
                 default:        text = "Unknown file system"
                 }
 
-                if let errors = errorReport?.numErrors, errors > 0 {
+                if let errors = errorReport?.numErroneousBlocks, errors > 0 {
                     
-                    let blocks = errorReport!.numErroneousBlocks
-                    let text2 = " with \(errors) errors in \(blocks) blocks"
-                    volumeInfo.stringValue = "Corrupted " + text + text2
+                    let blocks = errors == 1 ? "block" : "blocks"
+                    let text2 = " with \(errors) corrupted \(blocks)"
+                    volumeInfo.stringValue = text + text2
                     volumeInfo.textColor = .systemRed
-                    errorInfo.stringValue = "\(blocks) corrupted blocks"
+                    errorInfo.stringValue = "\(errors) corrupted \(blocks)"
                     return
                 }
             }
@@ -231,6 +231,7 @@ class ExporterDialog: DialogController {
         
         if selection == nil {
             updateBlockInfoUnselected()
+            updateErrorInfoUnselected()
         } else {
             updateBlockInfoSelected()
             updateErrorInfoSelected()
@@ -243,19 +244,19 @@ class ExporterDialog: DialogController {
         var text: String
         
         switch type {
-        case .UNKNOWN_BLOCK:    text = "has an unknown block type"
-        case .EMPTY_BLOCK:      text = "is empty"
-        case .BOOT_BLOCK:       text = "is a Boot Block"
-        case .ROOT_BLOCK:       text = "is a Root Block"
-        case .BITMAP_BLOCK:     text = "is a Bitmap Block"
-        case .USERDIR_BLOCK:    text = "is a User Directory Block"
-        case .FILEHEADER_BLOCK: text = "is a File Header Block"
-        case .FILELIST_BLOCK:   text = "is a File List Block"
-        case .DATA_BLOCK:       text = "is a Data Block"
+        case .UNKNOWN_BLOCK:    text = "Unknown block type"
+        case .EMPTY_BLOCK:      text = "Empty Block"
+        case .BOOT_BLOCK:       text = "Boot Block"
+        case .ROOT_BLOCK:       text = "Root Block"
+        case .BITMAP_BLOCK:     text = "Bitmap Block"
+        case .USERDIR_BLOCK:    text = "User Directory Block"
+        case .FILEHEADER_BLOCK: text = "File Header Block"
+        case .FILELIST_BLOCK:   text = "File List Block"
+        case .DATA_BLOCK:       text = "Data Block"
         default: fatalError()
         }
         
-        info1.stringValue = "This block " + text
+        info1.stringValue = text
     }
     
     func updateBlockInfoSelected() {
@@ -326,7 +327,12 @@ class ExporterDialog: DialogController {
         
         info1.stringValue = text
     }
-    
+
+    func updateErrorInfoUnselected() {
+
+        info2.stringValue = ""
+    }
+
     func updateErrorInfoSelected() {
         
         let error = volume!.check(_block, pos: selection!)
@@ -340,10 +346,14 @@ class ExporterDialog: DialogController {
             text = "Invalid block type"
         case .BLOCK_SUBTYPE_ID_MISMATCH:
             text = "Invalid type indentifer"
-        case .BLOCK_EXPECTED_DOS_HEADER:
-            text = "The signature doesn't match 'DOS'"
+        case .EXPECTED_D:
+            text = "Expected 'D'"
+        case .EXPECTED_O:
+            text = "Expected 'O'"
+        case .EXPECTED_S:
+            text = "Expected 'S'"
         case .BLOCK_INVALID_DOS_VERSION:
-            text = "\(value) is not a valid DOS version number"
+            text = "\(value) is not a valid AmigaDOS version number"
         case .BLOCK_MISSING_SELFREF:
             text = "Expected a self-reference"
         case .BLOCK_MISSING_FILEHEADER_REF:
@@ -436,27 +446,6 @@ class ExporterDialog: DialogController {
         
         // Run a file system check
         errorReport = volume?.check()
-        /*
-        if errorReport != nil {
-                    
-            let errors = errorReport!.numErrors
-            let blocks = errorReport!.numErroneousBlocks
-            
-            if errors == 0 {
-                info1.stringValue = "The integrity of this volume has been verified successfully."
-                info2.stringValue = "No errors found."
-            } else {
-                info1.stringValue = "The file system on this volume appears to be corrupt."
-                info2.stringValue = "\(errors) errors in \(blocks) blocks"
-                info1.textColor = .red
-                info2.textColor = .red
-            }
-
-        } else {
-            info1.stringValue = "No file system check has been performed."
-            info2.stringValue = ""
-        }
-        */
         
         update()
     }
@@ -516,7 +505,7 @@ class ExporterDialog: DialogController {
         if shrinked { return }
         
         // Hide more elements if no errors are present
-        if errorReport?.numErrors == 0 {
+        if errorReport?.numErroneousBlocks == 0 {
             errorInfo.isHidden = true
             errorStepper.isHidden = true
         }

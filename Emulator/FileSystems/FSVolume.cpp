@@ -137,35 +137,64 @@ FSVolume::dump()
 FSError
 FSVolume::check(u32 blockNr, u32 pos)
 {
-    return blocks[blockNr]->check(pos & ~0b11);
+    return blocks[blockNr]->check(pos);
 }
 
 FSErrorReport
 FSVolume::check()
 {
-    FSErrorReport result = check(0);
+    long total = 0, min = LONG_MAX, max = 0;
     
-    for (u32 i = 1; i < capacity; i++) {
+    // Analyze all blocks
+    for (u32 i = 0; i < capacity; i++) {
         
-        FSErrorReport blockResult = check(i);
-        
-        result.numErrors += blockResult.numErrors;
-        result.numErroneousBlocks += blockResult.numErroneousBlocks;
+        if (blocks[i]->check() > 0) {
+            debug("Block %d is corrupted\n", i);
+            total++;
+            min = MIN(min, i);
+            max = MAX(max, i);
+        }
     }
+
+    // Record findings
+    FSErrorReport result;
+    if (total) {
+        result.numErroneousBlocks = total;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
+    } else {
+        result.numErroneousBlocks = 0;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
+    }
+    
     return result;
 }
 
+/*
 FSErrorReport
 FSVolume::check(u32 blockNr)
 {
     assert(isBlockNumber(blockNr));
 
     FSErrorReport result;
-    blocks[blockNr]->check(&result.numErrors);
-    result.numErroneousBlocks = result.numErrors != 0;
+    long errors;
+    
+    blocks[blockNr]->check(&errors);
+
+    if (errors) {
+        result.numErroneousBlocks = 1;
+        result.firstErrorBlock = blockNr;
+        result.lastErrorBlock = blockNr;
+    } else {
+        result.numErroneousBlocks = 0;
+        result.firstErrorBlock = -1;
+        result.lastErrorBlock = -1;
+    }
     
     return result;
 }
+*/
 
 bool
 FSVolume::nextErrorLocation(long *blockNr, long *offset)
@@ -688,8 +717,6 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
         
         // Determine the type of the new block
         FSBlockType type = guessBlockType(i, src + i * bsize);
-
-        printf("Block %d has guessed type %s\n", i, sFSBlockType(type));
         
         // Create the new block
         FSBlock *newBlock = FSBlock::makeWithType(*this, i, type);
