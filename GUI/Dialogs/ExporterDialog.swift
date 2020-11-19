@@ -158,6 +158,7 @@ class ExporterDialog: DialogController {
             _cylinder   = _track / 2
             _side       = _track % 2
             
+            corruptionField.textColor = .labelColor
             update()
         }
     }
@@ -346,21 +347,21 @@ class ExporterDialog: DialogController {
             text = "Reference to the Parent Directory"
         case .FSI_FILEHEADER_REF:
             text = "Reference to the File Header Block"
-        case .FSI_EXTBLOCK_REF:
+        case .FSI_EXT_BLOCK_REF:
             text = "Reference to the Next Extension Block"
         case .FSI_BITMAP_BLOCK_REF:
             text = "Reference to a Bitmap Block"
         case .FSI_BITMAP_VALIDITY:
             text = "Bitmap Validity Bits"
-        case .FSI_BLOCK_COUNT:
-            text = "Number of Entries in the Block Reference Table"
-        case .FSI_FILESIZE_COUNT:
+        case .FSI_DATA_BLOCK_REF_COUNT:
+            text = "Number of Stored Data Block References"
+        case .FSI_FILESIZE:
             text = "File Size"
         case .FSI_DATA_BLOCK_NUMBER:
             text = "Position in the File's Data Block Chain"
         case .FSI_DATA_BLOCK_REF:
             text = "Reference to a Data Block"
-        case .FSI_FIRST_DATABLOCK_REF:
+        case .FSI_FIRST_DATA_BLOCK_REF:
             text = "Reference to the First Data Block of this File"
         case .FSI_DATA_COUNT:
             text = "Number of Bytes stored in this Data Block"
@@ -579,6 +580,12 @@ class ExporterDialog: DialogController {
         corruptionField.integerValue   = _corruption
         corruptionStepper.integerValue = _corruption
 
+        if volume?.seekCorruptedBlock(_corruption) == _block {
+            corruptionField.textColor = .labelColor
+        } else {
+            corruptionField.textColor = .tertiaryLabelColor
+        }
+        
         updateBlockInfo()
         buildStrings()
         previewTable.reloadData()

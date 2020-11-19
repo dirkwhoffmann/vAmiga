@@ -22,7 +22,7 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType type() override                { return FS_USERDIR_BLOCK;     }
+    FSBlockType type() override  { return FS_USERDIR_BLOCK; }
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos) override;
     void dump() override;

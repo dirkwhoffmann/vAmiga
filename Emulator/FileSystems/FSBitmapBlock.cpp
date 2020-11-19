@@ -20,16 +20,10 @@ FSBitmapBlock::~FSBitmapBlock()
     delete [] data;
 }
 
-void
-FSBitmapBlock::dump()
+FSItemType
+FSBitmapBlock::itemType(u32 pos)
 {
-    printf("   Allocated: ");
-
-    for (u32 i = 0; i < volume.capacity; i++) {
-        if (isAllocated(i)) printf("%d ", i);
-    }
-    
-    printf("\n");
+    return pos < 4 ? FSI_CHECKSUM : FSI_BITMAP;
 }
 
 FSError
@@ -48,6 +42,18 @@ FSBitmapBlock::check(u32 pos)
     }
     
     return FS_OK;
+}
+
+void
+FSBitmapBlock::dump()
+{
+    printf("   Allocated: ");
+
+    for (u32 i = 0; i < volume.capacity; i++) {
+        if (isAllocated(i)) printf("%d ", i);
+    }
+    
+    printf("\n");
 }
 
 /*

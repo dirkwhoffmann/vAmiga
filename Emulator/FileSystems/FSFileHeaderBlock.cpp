@@ -27,24 +27,43 @@ FSFileHeaderBlock(ref, nr)
     setName(FSName(name));
 }
 
-void
-FSFileHeaderBlock::dump()
+FSItemType
+FSFileHeaderBlock::itemType(u32 pos)
 {
-    printf("           Name : %s\n", getName().cStr);
-    printf("           Path : ");    printPath(); printf("\n");
-    printf("        Comment : %s\n", getComment().cStr);
-    printf("        Created : ");    getCreationDate().print(); printf("\n");
-    printf("           Next : %d\n", getNextHashRef());
-    printf("      File size : %d\n", getFileSize());
+    // Intercept some special locations
+    if (pos == 328) return FSI_BCPL_STRING_LENGTH;
+    if (pos == 432) return FSI_BCPL_STRING_LENGTH;
 
-    printf("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
-    printf("          First : %d\n", getFirstDataBlockRef());
-    printf("     Parent dir : %d\n", getParentDirRef());
-    printf(" FileList block : %d\n", getNextListBlockRef());
+    // Translate 'pos' to a long word index
+    i32 word = (i32)(pos & ~0b11) / 4;
+    if (word >= 6) word -= volume.bsize / 4;
     
-    printf("    Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
-    printf("\n");
+    switch (word) {
+        case 0:   return FSI_TYPE_ID;
+        case 1:   return FSI_SELF_REF;
+        case 2:   return FSI_DATA_BLOCK_REF_COUNT;
+        case 3:   return FSI_UNUSED;
+        case 4:   return FSI_FIRST_DATA_BLOCK_REF;
+        case 5:   return FSI_CHECKSUM;
+        case -50:
+        case -49: return FSI_UNUSED;
+        case -48: return FSI_PROT_BITS;
+        case -47: return FSI_FILESIZE;
+        case -23: return FSI_CREATED_DAY;
+        case -22: return FSI_CREATED_MIN;
+        case -21: return FSI_CREATED_TICKS;
+        case -4:  return FSI_NEXT_HASH_REF;
+        case -3:  return FSI_PARENT_DIR_REF;
+        case -2:  return FSI_EXT_BLOCK_REF;
+        case -1:  return FSI_SUBTYPE_ID;
+    }
+    
+    if (word <= -51)                return FSI_DATA_BLOCK_REF;
+    if (word >= -46 && word <= -24) return FSI_BCPL_COMMENT;
+    if (word >= -20 && word <= -5)  return FSI_BCPL_FILE_NAME;
+
+    assert(false);
+    return FSI_UNKNOWN;
 }
 
 FSError
@@ -108,34 +127,25 @@ FSFileHeaderBlock::check(u32 pos)
     return FS_OK;
 }
 
-/*
-bool
-FSFileHeaderBlock::check(bool verbose)
+void
+FSFileHeaderBlock::dump()
 {
-    bool result = FSBlock::check(verbose);
-    
-    result &= assertNotNull(getParentDirRef(), verbose);
-    result &= assertInRange(getParentDirRef(), verbose);
-    result &= assertInRange(getFirstDataBlockRef(), verbose);
-    result &= assertInRange(getNextListBlockRef(), verbose);
+    printf("           Name : %s\n", getName().cStr);
+    printf("           Path : ");    printPath(); printf("\n");
+    printf("        Comment : %s\n", getComment().cStr);
+    printf("        Created : ");    getCreationDate().print(); printf("\n");
+    printf("           Next : %d\n", getNextHashRef());
+    printf("      File size : %d\n", getFileSize());
 
-    for (u32 i = 0; i < getMaxDataBlockRefs(); i++) {
-        result &= assertInRange(getDataBlockRef(i), verbose);
-    }
+    printf("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+    printf("          First : %d\n", getFirstDataBlockRef());
+    printf("     Parent dir : %d\n", getParentDirRef());
+    printf(" FileList block : %d\n", getNextListBlockRef());
     
-    if (getNumDataBlockRefs() > 0 && getFirstDataBlockRef() == 0) {
-        if (verbose) fprintf(stderr, "Missing reference to first data block\n");
-        return false;
-    }
-    
-    if (getNumDataBlockRefs() < getMaxDataBlockRefs() && getNextListBlockRef() != 0) {
-        if (verbose) fprintf(stderr, "Unexpectedly found an extension block\n");
-        return false;
-    }
-    
-    return result;
+    printf("    Data blocks : ");
+    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
+    printf("\n");
 }
-*/
 
 void
 FSFileHeaderBlock::updateChecksum()
