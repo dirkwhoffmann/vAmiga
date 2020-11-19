@@ -279,6 +279,12 @@ FSVolume::blockType(u32 nr)
     return block(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
 }
 
+FSItemType
+FSVolume::itemType(u32 nr, u32 pos)
+{
+    return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
+}
+
 FSBlock *
 FSVolume::block(u32 nr)
 {

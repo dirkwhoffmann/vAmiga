@@ -17,6 +17,7 @@ struct FSEmptyBlock : FSBlock {
     FSEmptyBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr) { }
      
     FSBlockType type() override { return FS_EMPTY_BLOCK; }
+    FSItemType itemType(u32 byte) override; 
     u32 typeID() override { return 0; }
     u32 subtypeID() override { return 0; }
 

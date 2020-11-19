@@ -26,12 +26,13 @@ FSBootBlock::~FSBootBlock()
     delete [] data;
 }
 
-void
-FSBootBlock::dump()
+FSItemType
+FSBootBlock::itemType(u32 byte)
 {
-    printf("     Header : ");
-    for (int i = 0; i < 8; i++) printf("%02X ", data[i]);
-    printf("\n");
+    if (nr == 0 && byte <= 2) return FSI_DOS_HEADER;
+    if (nr == 0 && byte == 3) return FSI_DOS_VERSION;
+    
+    return FSI_BOOTCODE;
 }
 
 FSError
@@ -46,6 +47,14 @@ FSBootBlock::check(u32 pos)
         }
     }
     return FS_OK;
+}
+
+void
+FSBootBlock::dump()
+{
+    printf("     Header : ");
+    for (int i = 0; i < 8; i++) printf("%02X ", data[i]);
+    printf("\n");
 }
 
 void

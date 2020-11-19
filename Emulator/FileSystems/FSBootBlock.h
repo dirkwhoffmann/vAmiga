@@ -18,6 +18,7 @@ struct FSBootBlock : FSBlock {
     ~FSBootBlock();
     
     FSBlockType type() override { return FS_BOOT_BLOCK; }
+    FSItemType itemType(u32 byte) override;
     FSError check(u32 pos) override;
     void dump() override;
         

@@ -83,6 +83,44 @@ sFSBlockType(FSBlockType type)
     }
 }
 
+VAMIGA_ENUM(long, FSItemType)
+{
+    FSI_UNKNOWN,
+    FSI_UNUSED,
+    FSI_DOS_HEADER,
+    FSI_DOS_VERSION,
+    FSI_BOOTCODE,
+    FSI_TYPE_ID,
+    FSI_SUBTYPE_ID,
+    FSI_SELF_REF,
+    FSI_CHECKSUM,
+    FSI_HASHTABLE_SIZE,
+    FSI_HASH_REF,
+    FSI_PROT_BITS,
+    FSI_NAME,
+    FSI_COMMENT,
+    FSI_CREATED,
+    FSI_MODIFIED,
+    FSI_NEXT_HASH_REF,
+    FSI_PARENT_DIR_REF,
+    FSI_FILEHEADER_REF,
+    FSI_EXTBLOCK_REF,
+    FSI_BLOCK_COUNT,
+    FSI_FILESIZE_COUNT,
+    FSI_DATA_BLOCK_NUMBER,
+    FSI_DATA_BLOCK_REF,
+    FSI_FIRST_DATABLOCK_REF,
+    FSI_DATA_COUNT,
+    FSI_DATA,
+    FSI_BITMAP,
+};
+
+inline bool
+isFSBlockItem(long value)
+{
+    return value >= 0 && value <= FSI_BITMAP;
+}
+
 VAMIGA_ENUM(long, FSError)
 {
     FS_OK,
@@ -95,11 +133,10 @@ VAMIGA_ENUM(long, FSError)
     FS_CORRUPTED,
     
     // Block errros
-    FS_BLOCK_TYPE_ERROR,
     FS_BLOCK_TYPE_ID_MISMATCH,
+    FS_BLOCK_SUBTYPE_ID_MISMATCH,
     FS_BLOCK_EXPECTED_DOS_HEADER,
     FS_BLOCK_INVALID_DOS_VERSION,
-    FS_BLOCK_SUBTYPE_ID_MISMATCH,
     FS_BLOCK_MISSING_SELFREF,
     FS_BLOCK_MISSING_FILEHEADER_REF,
     FS_BLOCK_NO_DATABLOCK_REF,
@@ -113,7 +150,6 @@ VAMIGA_ENUM(long, FSError)
     FS_EXPECTED_00,
     FS_EXPECTED_FF,
     FS_BLOCK_CHECKSUM_ERROR,
-
 };
 
 inline bool isFSError(FSError value)
@@ -132,7 +168,6 @@ inline const char *sFSError(FSError value)
         case FS_WRONG_BSIZE:            return "FS_WRONG_BSIZE";
         case FS_WRONG_CAPACITY:         return "FS_WRONG_CAPACITY";
             
-        case FS_BLOCK_TYPE_ERROR:       return "FS_BLOCK_TYPE_ERROR";
         // TODO: COMPLETE
         case FS_BLOCK_CHECKSUM_ERROR:   return "FS_BLOCK_CHECKSUM_ERROR";
         case FS_CORRUPTED:              return "FS_CORRUPTED";

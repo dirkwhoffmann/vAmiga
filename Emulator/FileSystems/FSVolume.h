@@ -158,6 +158,9 @@ public:
     
     // Returns the type of a certain block
     FSBlockType blockType(u32 nr);
+
+    // Returns the usage type of a certain byte in a certain block
+    FSItemType itemType(u32 nr, u32 pos);
     
     // Returns the location of the root block and the bitmap block
     u32 rootBlockNr() { return capacity / 2; }

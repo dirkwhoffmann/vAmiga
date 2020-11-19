@@ -9,6 +9,12 @@
 
 #include "FSVolume.h"
 
+FSItemType
+FSEmptyBlock::itemType(u32 byte)
+{
+    return FSI_UNUSED;
+}
+
 void
 FSEmptyBlock::importBlock(const u8 *p, size_t bsize)
 {

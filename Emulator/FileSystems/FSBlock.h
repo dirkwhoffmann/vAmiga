@@ -51,6 +51,9 @@ struct FSBlock {
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
 
+    // Returns the role of a certain byte in this block
+    virtual FSItemType itemType(u32 byte) { return FSI_UNKNOWN; }
+    
     // Returns the type and subtype identifiers of this block
     virtual u32 typeID();
     virtual u32 subtypeID();

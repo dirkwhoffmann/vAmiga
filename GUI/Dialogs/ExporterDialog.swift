@@ -42,8 +42,9 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var exportButton: NSButton!
     
     var errorReport: FSErrorReport?
-    var selectedRow = 0
-    var selectedCol = 0
+    var selection: Int?
+    var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
+    var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     
     var savePanel: NSSavePanel!  // Used to export to files
     var openPanel: NSOpenPanel!  // Used to export to directories
@@ -222,25 +223,160 @@ class ExporterDialog: DialogController {
     
     func updateBlockInfo() {
         
-        let type = volume?.blockType(_block)
+        if volume == nil {
+            info1.stringValue = ""
+            info2.stringValue = ""
+            return
+        }
+        
+        if selection == nil {
+            updateBlockInfoUnselected()
+        } else {
+            updateBlockInfoSelected()
+            updateErrorInfoSelected()
+        }
+    }
+    
+    func updateBlockInfoUnselected() {
+        
+        let type = volume!.blockType(_block)
         var text: String
         
         switch type {
-        case .UNKNOWN_BLOCK:    text = "This block has an unknown block type"
-        case .EMPTY_BLOCK:      text = "Empty Block"
-        case .BOOT_BLOCK:       text = "Boot Block"
-        case .ROOT_BLOCK:       text = "Root Block"
-        case .BITMAP_BLOCK:     text = "Bitmap Block"
-        case .USERDIR_BLOCK:    text = "User Directory Block"
-        case .FILEHEADER_BLOCK: text = "File Header Block"
-        case .FILELIST_BLOCK:   text = "File List Block"
-        case .DATA_BLOCK:       text = "Data Block"
+        case .UNKNOWN_BLOCK:    text = "has an unknown block type"
+        case .EMPTY_BLOCK:      text = "is empty"
+        case .BOOT_BLOCK:       text = "is a Boot Block"
+        case .ROOT_BLOCK:       text = "is a Root Block"
+        case .BITMAP_BLOCK:     text = "is a Bitmap Block"
+        case .USERDIR_BLOCK:    text = "is a User Directory Block"
+        case .FILEHEADER_BLOCK: text = "is a File Header Block"
+        case .FILELIST_BLOCK:   text = "is a File List Block"
+        case .DATA_BLOCK:       text = "is a Data Block"
         default: fatalError()
+        }
+        
+        info1.stringValue = "This block " + text
+    }
+    
+    func updateBlockInfoSelected() {
+        
+        let usage = volume!.itemType(_block, pos: selection!)
+        var text: String
+        
+        switch usage {
+        case .FSI_UNKNOWN:
+            text = "Unknown"
+        case .FSI_UNUSED:
+            text = "Unused"
+        case .FSI_DOS_HEADER:
+            text = "AmigaDOS header signature"
+        case .FSI_DOS_VERSION:
+            text = "AmigaDOS version number"
+        case .FSI_BOOTCODE:
+            text = "Boot code instruction"
+        case .FSI_TYPE_ID:
+            text = "Type identifier"
+        case .FSI_SUBTYPE_ID:
+            text = "Subtype identifier"
+        case .FSI_SELF_REF:
+            text = "Block reference to itself"
+        case .FSI_CHECKSUM:
+            text = "Checksum"
+        case .FSI_HASHTABLE_SIZE:
+            text = "Hashtable size"
+        case .FSI_HASH_REF:
+            text = "Hashtable reference"
+        case .FSI_PROT_BITS:
+            text = "Protection status bits"
+        case .FSI_NAME:
+            text = "Part of the name string"
+        case .FSI_COMMENT:
+            text = "Part of the comment string"
+        case .FSI_CREATED:
+            text = "Part of the creation date"
+        case .FSI_MODIFIED:
+            text = "Part of th modification date"
+        case .FSI_NEXT_HASH_REF:
+            text = "Reference to the next block with the same hash"
+        case .FSI_PARENT_DIR_REF:
+            text = "Reference to the parent directory"
+        case .FSI_FILEHEADER_REF:
+            text = "Reference to the file header block"
+        case .FSI_EXTBLOCK_REF:
+            text = "Reference to the next extension block"
+        case .FSI_BLOCK_COUNT:
+            text = "Number of entries in the block reference table"
+        case .FSI_FILESIZE_COUNT:
+            text = "File size"
+        case .FSI_DATA_BLOCK_NUMBER:
+            text = "Position in the data block chain"
+        case .FSI_DATA_BLOCK_REF:
+            text = "Reference to a data block"
+        case .FSI_FIRST_DATABLOCK_REF:
+            text = "Reference to the first data block of this file"
+        case .FSI_DATA_COUNT:
+            text = "Number of bytes stored in this data block"
+        case .FSI_DATA:
+            text = "Data byte"
+        case .FSI_BITMAP:
+            text = "Block allocation bits"
+        default:
+            fatalError()
         }
         
         info1.stringValue = text
     }
     
+    func updateErrorInfoSelected() {
+        
+        let error = volume!.check(_block, pos: selection!)
+        let value = disk!.readByte(_block, offset: selection!)
+        var text: String
+
+        switch error {
+        case .OK:
+            text = ""
+        case .BLOCK_TYPE_ID_MISMATCH:
+            text = "Invalid block type"
+        case .BLOCK_SUBTYPE_ID_MISMATCH:
+            text = "Invalid type indentifer"
+        case .BLOCK_EXPECTED_DOS_HEADER:
+            text = "The signature doesn't match 'DOS'"
+        case .BLOCK_INVALID_DOS_VERSION:
+            text = "\(value) is not a valid DOS version number"
+        case .BLOCK_MISSING_SELFREF:
+            text = "Expected a self-reference"
+        case .BLOCK_MISSING_FILEHEADER_REF:
+            text = "Expected a reference to a file header block"
+        case .BLOCK_NO_DATABLOCK_REF:
+            text = "Expected a reference to a data block"
+        case .BLOCK_MISSING_DATABLOCK_NUMBER:
+            text = "This is not a valid data block number"
+        case .BLOCK_HASHTABLE_SIZE_MISMATCH:
+            text = "Invalid size"
+        case .BLOCK_REF_MISSING:
+            text = "Expected a block reference"
+        case .BLOCK_UNEXPECTED_REF:
+            text = "Unexpected block reference"
+        case .BLOCK_REF_OUT_OF_RANGE:
+            text = "Block reference is out of range"
+        case .BLOCK_REF_TYPE_MISMATCH:
+            text = "The referenced block has an invalid type"
+        case .BLOCK_VALUE_TOO_LARGE:
+            text = "Value is too large"
+        case .EXPECTED_00:
+            text = "Expected $00"
+        case .EXPECTED_FF:
+            text = "Expected $FF"
+        case .BLOCK_CHECKSUM_ERROR:
+            text = "Invalid block checksum"
+        default:
+            fatalError()
+        }
+        
+        info2.stringValue = text
+    }
+        
     func showSheet(forDrive nr: Int) {
         
         track()
@@ -532,25 +668,15 @@ class ExporterDialog: DialogController {
     
     @IBAction func errorStepperAction(_ sender: NSStepper!) {
 
-        var row = selectedRow
-        var col = selectedCol
+        if selection == nil { return }
+
+        var row = selectedRow!
+        var col = selectedCol!
         
         if volume?.prevErrorLocation(&row, pos: &col) == true {
             track("row = \(row) col = \(col)")
         }
         
-        track()
-    }
-
-    @IBAction func nextButtonAction(_ sender: NSButton!) {
-
-        var row = selectedRow
-        var col = selectedCol
-        
-        if volume?.nextErrorLocation(&row, pos: &col) == true {
-            track("row = \(row) col = \(col)")
-        }
-
         track()
     }
     
@@ -563,9 +689,9 @@ class ExporterDialog: DialogController {
         
         if sender.clickedColumn > 0 {
             
-            selectedRow = sender.clickedRow
-            selectedCol = sender.clickedColumn - 1
-            previewTable.reloadData()
+            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
+            selection = selection != newValue ? newValue : nil
+            update()
         }
     }
 
