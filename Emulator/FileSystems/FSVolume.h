@@ -155,7 +155,10 @@ public:
     //
     // Accessing blocks
     //
-        
+    
+    // Returns the type of a certain block
+    FSBlockType blockType(u32 nr);
+    
     // Returns the location of the root block and the bitmap block
     u32 rootBlockNr() { return capacity / 2; }
     u32 bitmapBlockNr() { return capacity / 2 + 1; }

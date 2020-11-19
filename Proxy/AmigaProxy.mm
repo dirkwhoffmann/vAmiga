@@ -1253,6 +1253,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->getType();
 }
+- (FSBlockType) blockType:(NSInteger)blockNr
+{
+    return wrapper->volume->blockType(blockNr);
+}
 - (FSErrorReport) check
 {
     return wrapper->volume->check();

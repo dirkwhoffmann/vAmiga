@@ -273,6 +273,12 @@ FSVolume::freeBlocks()
     return result;
 }
 
+FSBlockType
+FSVolume::blockType(u32 nr)
+{
+    return block(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+}
+
 FSBlock *
 FSVolume::block(u32 nr)
 {

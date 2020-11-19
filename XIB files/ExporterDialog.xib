@@ -16,6 +16,8 @@
                 <outlet property="cylinderText" destination="5Re-Zr-hdG" id="HdR-lw-HQp"/>
                 <outlet property="disclosureButton" destination="PmB-G5-Smv" id="Tor-wo-ONk"/>
                 <outlet property="diskIcon" destination="RFN-KV-keR" id="1Sj-nw-dxP"/>
+                <outlet property="errorInfo" destination="LFF-2e-m21" id="ZHw-fb-9aZ"/>
+                <outlet property="errorStepper" destination="C6j-0G-lEV" id="wsw-Yg-lcW"/>
                 <outlet property="exportButton" destination="aF3-d5-sKL" id="0zo-PO-3VZ"/>
                 <outlet property="formatPopup" destination="0DY-M6-gkS" id="ueQ-UY-Nc7"/>
                 <outlet property="headField" destination="F6v-l6-Ohg" id="S9G-ya-cbd"/>
@@ -23,8 +25,6 @@
                 <outlet property="headText" destination="Iu6-pw-Luw" id="PXV-AM-k25"/>
                 <outlet property="info1" destination="G7d-0d-Bi5" id="DJN-A1-q7h"/>
                 <outlet property="info2" destination="6mo-sI-0VL" id="a6e-Nd-0fV"/>
-                <outlet property="nextButton" destination="5vY-Tb-9s4" id="u8y-jF-qjB"/>
-                <outlet property="prevButton" destination="hfL-F6-pa1" id="UrK-fP-eps"/>
                 <outlet property="previewScrollView" destination="mPU-ST-UZK" id="iWY-ED-HYc"/>
                 <outlet property="previewTable" destination="X99-rT-f2a" id="dkD-KZ-3XP"/>
                 <outlet property="sectorField" destination="O0X-QE-8Xw" id="5rK-bo-5h6"/>
@@ -544,7 +544,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G7d-0d-Bi5">
-                        <rect key="frame" x="21" y="65" width="353" height="14"/>
+                        <rect key="frame" x="20" y="66" width="391" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr sadipscing" id="rJW-wK-rXK">
                             <font key="font" metaFont="smallSystem"/>
@@ -553,7 +553,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6mo-sI-0VL">
-                        <rect key="frame" x="21" y="49" width="353" height="14"/>
+                        <rect key="frame" x="20" y="50" width="391" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum  dolor dolor" id="RK9-i7-xI6">
                             <font key="font" metaFont="smallSystem"/>
@@ -561,28 +561,23 @@ Gw
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5vY-Tb-9s4">
-                        <rect key="frame" x="562" y="54" width="22" height="22"/>
+                    <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C6j-0G-lEV">
+                        <rect key="frame" x="568" y="59" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarGoForwardTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XEf-Qk-Gpg">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
+                        <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="6y4-b9-9B6"/>
                         <connections>
-                            <action selector="nextButtonAction:" target="-2" id="FK1-mZ-AGR"/>
+                            <action selector="errorStepperAction:" target="-2" id="vfY-dh-NKB"/>
                         </connections>
-                    </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hfL-F6-pa1">
-                        <rect key="frame" x="534" y="54" width="22" height="22"/>
+                    </stepper>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LFF-2e-m21">
+                        <rect key="frame" x="430" y="66" width="138" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="smallSquare" bezelStyle="smallSquare" image="NSTouchBarGoBackTemplate" imagePosition="overlaps" alignment="center" lineBreakMode="truncatingTail" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="fZk-zv-uq3">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="prevButtonAction:" target="-2" id="gHR-Gt-WyM"/>
-                        </connections>
-                    </button>
+                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="right" title="9999 erroneous blocks" id="adS-Uo-ccT">
+                            <font key="font" metaFont="smallSystem"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
@@ -592,8 +587,6 @@ Gw
         </window>
     </objects>
     <resources>
-        <image name="NSTouchBarGoBackTemplate" width="10" height="30"/>
-        <image name="NSTouchBarGoForwardTemplate" width="10" height="30"/>
         <image name="dd_adf" width="257" height="257"/>
     </resources>
 </document>

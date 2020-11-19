@@ -35,8 +35,8 @@ class ExporterDialog: DialogController {
 
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
-    @IBOutlet weak var prevButton: NSButton!
-    @IBOutlet weak var nextButton: NSButton!
+    @IBOutlet weak var errorInfo: NSTextField!
+    @IBOutlet weak var errorStepper: NSStepper!
 
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
@@ -49,7 +49,7 @@ class ExporterDialog: DialogController {
     var openPanel: NSOpenPanel!  // Used to export to directories
 
     let shrinkedHeight = CGFloat(176)
-    let expandedHeight = CGFloat(446)
+    let expandedHeight = CGFloat(450)
     
     var myDocument: MyDocument { return parent.mydocument! }
     var size: CGSize { return window!.frame.size }
@@ -158,7 +158,7 @@ class ExporterDialog: DialogController {
         return "This disk contains an unrecognized MFM stream"
     }
 
-    func updateTrackInfo() {
+    func updateTrackAndSectorInfo() {
         
         var text = "This disk contains un unknown track and sector format."
         
@@ -203,6 +203,7 @@ class ExporterDialog: DialogController {
                     let text2 = " with \(errors) errors in \(blocks) blocks"
                     volumeInfo.stringValue = "Corrupted " + text + text2
                     volumeInfo.textColor = .systemRed
+                    errorInfo.stringValue = "\(blocks) corrupted blocks"
                     return
                 }
             }
@@ -217,6 +218,27 @@ class ExporterDialog: DialogController {
         */
         
         volumeInfo.stringValue = text
+    }
+    
+    func updateBlockInfo() {
+        
+        let type = volume?.blockType(_block)
+        var text: String
+        
+        switch type {
+        case .UNKNOWN_BLOCK:    text = "This block has an unknown block type"
+        case .EMPTY_BLOCK:      text = "Empty Block"
+        case .BOOT_BLOCK:       text = "Boot Block"
+        case .ROOT_BLOCK:       text = "Root Block"
+        case .BITMAP_BLOCK:     text = "Bitmap Block"
+        case .USERDIR_BLOCK:    text = "User Directory Block"
+        case .FILEHEADER_BLOCK: text = "File Header Block"
+        case .FILELIST_BLOCK:   text = "File List Block"
+        case .DATA_BLOCK:       text = "Data Block"
+        default: fatalError()
+        }
+        
+        info1.stringValue = text
     }
     
     func showSheet(forDrive nr: Int) {
@@ -278,6 +300,7 @@ class ExporterDialog: DialogController {
         
         // Run a file system check
         errorReport = volume?.check()
+        /*
         if errorReport != nil {
                     
             let errors = errorReport!.numErrors
@@ -297,6 +320,7 @@ class ExporterDialog: DialogController {
             info1.stringValue = "No file system check has been performed."
             info2.stringValue = ""
         }
+        */
         
         update()
     }
@@ -316,7 +340,7 @@ class ExporterDialog: DialogController {
 
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
-        r.origin.y = 81
+        r.origin.y = 87
         previewScrollView.frame = r
 
         update()
@@ -330,7 +354,7 @@ class ExporterDialog: DialogController {
         // Update icon and text fields
         diskIcon.image = diskIconImage
         title.stringValue = titleText
-        updateTrackInfo()
+        updateTrackAndSectorInfo()
         updateVolumeInfo()
         if volume == nil { volumeInfo.textColor = .red }
 
@@ -348,17 +372,17 @@ class ExporterDialog: DialogController {
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
             blockText, blockField, blockStepper,
-            prevButton, nextButton
+            errorInfo, errorStepper
         ]
         for item in items { item.isHidden = shrinked }
                 
         // Only proceed if the window is expanded
         if shrinked { return }
         
-        // Hide the prev / next button if no errors are present
+        // Hide more elements if no errors are present
         if errorReport?.numErrors == 0 {
-            prevButton.isHidden = true
-            nextButton.isHidden = true
+            errorInfo.isHidden = true
+            errorStepper.isHidden = true
         }
 
         // Update all elements
@@ -373,6 +397,7 @@ class ExporterDialog: DialogController {
         blockField.integerValue      = _block
         blockStepper.integerValue    = _block
 
+        updateBlockInfo()
         buildStrings()
         previewTable.reloadData()
     }
@@ -505,8 +530,8 @@ class ExporterDialog: DialogController {
         update()
     }
     
-    @IBAction func prevButtonAction(_ sender: NSButton!) {
-        
+    @IBAction func errorStepperAction(_ sender: NSStepper!) {
+
         var row = selectedRow
         var col = selectedCol
         
@@ -535,13 +560,13 @@ class ExporterDialog: DialogController {
     }
     
     @IBAction func clickAction(_ sender: NSTableView!) {
-
-        track("row = \(sender.clickedRow) col = \(sender.clickedColumn)")
         
-        selectedRow = sender.clickedRow
-        selectedCol = sender.clickedColumn
-        
-        previewTable.reloadData()
+        if sender.clickedColumn > 0 {
+            
+            selectedRow = sender.clickedRow
+            selectedCol = sender.clickedColumn - 1
+            previewTable.reloadData()
+        }
     }
 
     @IBAction func exportAction(_ sender: NSButton!) {
@@ -656,10 +681,10 @@ extension ExporterDialog: NSTableViewDelegate {
                 cell?.textColor = .white
             } else {
                 cell?.backgroundColor = NSColor.controlAlternatingRowBackgroundColors[row % 2]
-                cell?.textColor = .labelColor
+                cell?.textColor = error == .OK ? .labelColor : .systemRed
             }
         } else {
-            cell?.backgroundColor = NSColor.unemphasizedSelectedContentBackgroundColor
+            cell?.backgroundColor = NSColor.windowBackgroundColor
         }
     }
     
