@@ -525,11 +525,13 @@ class ExporterDialog: DialogController {
         rect.size.height = newHeight
         
         window!.setFrame(rect, display: true)
-
+        
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
         r.origin.y = 91
         previewScrollView.frame = r
+
+        exportButton.keyEquivalent = shrinked ? "\r" : ""
 
         update()
     }
@@ -743,7 +745,7 @@ class ExporterDialog: DialogController {
     }
 
     @IBAction func exportAction(_ sender: NSButton!) {
-        
+
         track("selected item = \(formatPopup.indexOfSelectedItem)")
         
         switch formatPopup.indexOfSelectedItem {

@@ -298,13 +298,13 @@ FSVolume::guessBlockType(u32 nr, const u8 *buffer)
 
     // Take care of blocks that can be identified by number
     if (nr <= 1) return FS_BOOT_BLOCK;
-    if (nr == rootBlockNr()) return FS_ROOT_BLOCK;
     if (nr == bitmapBlockNr()) return FS_BITMAP_BLOCK;
     
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
     u32 subtype = FSBlock::read32(buffer + bsize - 4);
-    
+
+    if (type == 2 && subtype == 1) return FS_ROOT_BLOCK;
     if (type == 2 && subtype == 2) return FS_USERDIR_BLOCK;
     if (type == 2 && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
     if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;

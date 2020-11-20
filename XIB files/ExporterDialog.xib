@@ -82,7 +82,7 @@
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="aF3-d5-sKL">
                         <rect key="frame" x="498" y="13" width="92" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" borderStyle="border" inset="2" id="IfR-kh-SV2">
+                        <buttonCell key="cell" type="push" title="Export" bezelStyle="rounded" alignment="center" refusesFirstResponder="YES" borderStyle="border" inset="2" id="IfR-kh-SV2">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                             <string key="keyEquivalent" base64-UTF8="YES">
@@ -410,6 +410,7 @@ Gw
                         </textFieldCell>
                         <connections>
                             <action selector="cylinderAction:" target="-2" id="PVW-sV-W2T"/>
+                            <outlet property="delegate" destination="-2" id="3ab-cZ-82W"/>
                         </connections>
                     </textField>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DXv-Bl-lGI">

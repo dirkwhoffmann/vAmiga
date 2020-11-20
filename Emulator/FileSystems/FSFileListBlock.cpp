@@ -76,7 +76,7 @@ FSFileListBlock::check(u32 byte)
         case 0:   EXPECT_00000010(value, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;
         case 3:   EXPECT_00(value); break;
-        case 4:   EXPECT_DATABLOCK_REF(value); break;
+        case 4:   EXPECT_OPTIONAL_DATABLOCK_REF(value); break;
         case 5:   EXPECT_CHECKSUM(value); break;
         case -50:
         case -4:  EXPECT_00(value); break;

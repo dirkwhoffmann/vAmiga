@@ -48,6 +48,8 @@ FSUserDirBlock::itemType(u32 byte)
         case 5:   return FSI_CHECKSUM;
         case -50:
         case -49: return FSI_UNUSED;
+        case -48: return FSI_PROT_BITS;
+        case -47: return FSI_UNUSED;
         case -23: return FSI_CREATED_DAY;
         case -22: return FSI_CREATED_MIN;
         case -21: return FSI_CREATED_TICKS;
