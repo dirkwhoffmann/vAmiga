@@ -85,55 +85,59 @@ class ExporterDialog: DialogController {
     
     func setCylinder(_ newValue: Int) {
 
-        if newValue >= 0 && newValue < numCylinders {
+        if newValue != _cylinder && newValue >= 0 && newValue < numCylinders {
                         
             _cylinder = newValue
             _track    = _cylinder * 2 + _side
             _block    = _track * numSectors + _sector
             
+            selection = nil
             update()
         }
     }
     
     func setHead(_ newValue: Int) {
         
-        if newValue >= 0 && newValue < numSides {
+        if newValue != _side && newValue >= 0 && newValue < numSides {
                         
             _side     = newValue
             _track    = _cylinder * 2 + _side
             _block    = _track * numSectors + _sector
             
+            selection = nil
             update()
         }
     }
     
     func setTrack(_ newValue: Int) {
         
-        if newValue >= 0 && newValue < numTracks {
+        if newValue != _track && newValue >= 0 && newValue < numTracks {
                         
             _track    = newValue
             _cylinder = _track / 2
             _side     = _track % 2
             _block    = _track * numSectors + _sector
 
+            selection = nil
             update()
         }
     }
 
     func setSector(_ newValue: Int) {
         
-        if newValue >= 0 && newValue < numSectors {
+        if newValue != _sector && newValue >= 0 && newValue < numSectors {
                         
             _sector   = newValue
             _block    = _track * numSectors + _sector
             
+            selection = nil
             update()
         }
     }
 
     func setBlock(_ newValue: Int) {
         
-        if newValue >= 0 && newValue < numBlocks {
+        if newValue != _block && newValue >= 0 && newValue < numBlocks {
                         
             _block    = newValue
             _track    = _block / numSectors
@@ -141,6 +145,7 @@ class ExporterDialog: DialogController {
             _cylinder = _track / 2
             _side     = _track % 2
             
+            selection = nil
             update()
         }
     }
@@ -149,7 +154,7 @@ class ExporterDialog: DialogController {
         
         guard let blockNr = volume?.seekCorruptedBlock(newValue) else { return }
         
-        if blockNr >= 0 && blockNr < numBlocks {
+        if newValue != _corruption && blockNr >= 0 && blockNr < numBlocks {
                         
             _corruption = newValue
             _block      = blockNr
@@ -158,7 +163,7 @@ class ExporterDialog: DialogController {
             _cylinder   = _track / 2
             _side       = _track % 2
             
-            corruptionField.textColor = .labelColor
+            selection = nil
             update()
         }
     }
@@ -334,15 +339,15 @@ class ExporterDialog: DialogController {
         case .FSI_MODIFIED_TICKS:
             text = "Modification Date (Ticks)"
         case .FSI_NEXT_HASH_REF:
-            text = "Reference to the next Block with the same Hash"
+            text = "Hash Block Reference"
         case .FSI_PARENT_DIR_REF:
-            text = "Reference to the Parent Directory"
+            text = "Parent Directory Block Reference"
         case .FSI_FILEHEADER_REF:
-            text = "Reference to the File Header Block"
+            text = "File Header Block Reference"
         case .FSI_EXT_BLOCK_REF:
-            text = "Reference to the Next Extension Block"
+            text = "Next Extension Block Reference"
         case .FSI_BITMAP_BLOCK_REF:
-            text = "Reference to a Bitmap Block"
+            text = "Bitmap Block Reference"
         case .FSI_BITMAP_VALIDITY:
             text = "Bitmap Validity Bits"
         case .FSI_DATA_BLOCK_REF_COUNT:
@@ -350,15 +355,15 @@ class ExporterDialog: DialogController {
         case .FSI_FILESIZE:
             text = "File Size"
         case .FSI_DATA_BLOCK_NUMBER:
-            text = "Position in the File's Data Block Chain"
+            text = "Position in the Data Block Chain"
         case .FSI_DATA_BLOCK_REF:
-            text = "Reference to a Data Block"
+            text = "Data Block Reference"
         case .FSI_FIRST_DATA_BLOCK_REF:
-            text = "Reference to the First Element in the Data Block Chain"
+            text = "Reference to First Element in the Data Block Chain"
         case .FSI_NEXT_DATA_BLOCK_REF:
-            text = "Reference to the Next Element in the Data Block Chain"
+            text = "Reference to Next Element in the Data Block Chain"
         case .FSI_DATA_COUNT:
-            text = "Number of Bytes stored in this Data Block"
+            text = "Number of Stored Data Bytes"
         case .FSI_DATA:
             text = "Data Byte"
         case .FSI_BITMAP:
@@ -842,14 +847,17 @@ extension ExporterDialog: NSTableViewDelegate {
 
         if let col = columnNr(tableColumn) {
             
-            let error = volume?.check(_block, pos: 16 * row + col) ?? .OK
+            let offset = 16 * row + col
+            let error = volume?.check(_block, pos: offset) ?? .OK
+            let type = volume?.itemType(_block, pos: offset) ?? .FSI_UNKNOWN
             
             if row == selectedRow && col == selectedCol {
-                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
                 cell?.textColor = .white
+                cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
             } else {
-                cell?.backgroundColor = NSColor.controlAlternatingRowBackgroundColors[row % 2]
-                cell?.textColor = error == .OK ? .labelColor : .systemRed
+                let (fgColor, bgColor) = colors(type: type, row: row)
+                cell?.textColor = error == .OK ? fgColor : .systemRed
+                cell?.backgroundColor = bgColor
             }
         } else {
             cell?.backgroundColor = NSColor.windowBackgroundColor
@@ -858,5 +866,71 @@ extension ExporterDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         return false
+    }
+    
+    func colors(type: FSItemType, row: Int) -> (NSColor, NSColor) {
+    
+        return (.textColor, NSColor.alternatingContentBackgroundColors[row % 2])
+        /*
+        switch type {
+        
+        case .FSI_DOS_HEADER,
+             .FSI_DOS_VERSION,
+             .FSI_TYPE_ID,
+             .FSI_DATA_BLOCK_NUMBER,
+             .FSI_SUBTYPE_ID:
+            
+            return (.black, NSColor.init(r: 0xCC, g: 0xFF, b: 0xCC))
+
+        case .FSI_SELF_REF,
+             .FSI_NEXT_HASH_REF,
+             .FSI_PARENT_DIR_REF,
+             .FSI_FILEHEADER_REF,
+             .FSI_EXT_BLOCK_REF,
+             .FSI_BITMAP_BLOCK_REF,
+             .FSI_FIRST_DATA_BLOCK_REF,
+             .FSI_NEXT_DATA_BLOCK_REF,
+             .FSI_HASH_REF,
+             .FSI_DATA_BLOCK_REF:
+            
+            return (.black, NSColor.init(r: 0xCC, g: 0xE5, b: 0xFF))
+
+        case .FSI_CHECKSUM:
+            
+            return (.black, NSColor.init(r: 0xE5, g: 0xCC, b: 0xFF))
+
+        case .FSI_BCPL_DISK_NAME,
+             .FSI_BCPL_DIR_NAME,
+             .FSI_BCPL_FILE_NAME,
+             .FSI_BCPL_COMMENT:
+            
+            return (.black, NSColor.init(r: 0xE5, g: 0xFF, b: 0xCC))
+            
+        case .FSI_CREATED_DAY,
+             .FSI_CREATED_MIN,
+             .FSI_CREATED_TICKS,
+             .FSI_MODIFIED_DAY,
+             .FSI_MODIFIED_MIN,
+             .FSI_MODIFIED_TICKS:
+            
+            return (.black, NSColor.init(r: 0xFF, g: 0xFF, b: 0xCC))
+
+        case .FSI_HASHTABLE_SIZE,
+             .FSI_BCPL_STRING_LENGTH,
+             .FSI_FILESIZE,
+             .FSI_DATA_BLOCK_REF_COUNT,
+             .FSI_DATA_COUNT:
+            
+            return (.black, NSColor.init(r: 0xCC, g: 0xFF, b: 0xFF))
+            
+        case .FSI_PROT_BITS,
+             .FSI_BITMAP_VALIDITY,
+             .FSI_BITMAP:
+            
+            return (.black, NSColor.init(r: 0xFF, g: 0xCC, b: 0xCC))
+            
+        default: return (.textColor, .textBackgroundColor)
+        }
+        */
     }
 }
