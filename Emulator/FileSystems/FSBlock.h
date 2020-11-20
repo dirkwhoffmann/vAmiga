@@ -234,10 +234,10 @@ public:
     void addToHashTable(u32 ref);
     
     // Checks the integrity of the hash table (DEPRECATED)
-    bool checkHashTable(bool verbose);
+    // bool checkHashTable(bool verbose);
 
     // Checks the integrity of a hash table entry
-    FSError checkHashTableItem(u32 item);
+    // FSError checkHashTableItem(u32 item);
 
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();
@@ -262,6 +262,64 @@ public:
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 
+//
+// Convenience macros used inside the check() methods
+//
+
 typedef FSBlock* BlockPtr;
+
+#define EXPECT_D(val) \
+if ((val) != 'D') return FS_EXPECTED_D;
+#define EXPECT_O(val) \
+if ((val) != 'O') return FS_EXPECTED_O;
+#define EXPECT_S(val) \
+if ((val) != 'S') return FS_EXPECTED_S;
+#define EXPECT_00(val) \
+if ((val) != 0x00) return FS_EXPECTED_00;
+#define EXPECT_01(val) \
+if ((val) != 0x01) return FS_EXPECTED_01;
+#define EXPECT_02(val) \
+if ((val) != 0x02) return FS_EXPECTED_02;
+#define EXPECT_03(val) \
+if ((val) != 0x03) return FS_EXPECTED_03;
+#define EXPECT_08(val) \
+if ((val) != 0x08) return FS_EXPECTED_08;
+#define EXPECT_10(val) \
+if ((val) != 0x10) return FS_EXPECTED_10;
+#define EXPECT_FD(val) \
+if ((val) != 0xFD) return FS_EXPECTED_FD;
+#define EXPECT_FF(val) \
+if ((val) != 0xFF) return FS_EXPECTED_FF;
+#define EXPECT_DOS_REVISION(val) \
+if (!isFSVolumeType(val)) return FS_EXPECTED_DOS_REVISION;
+
+#define EXPECT_TYPE_ID(val,id) \
+if ((val) != (id)) return FS_BLOCK_TYPE_ID_MISMATCH;
+#define EXPECT_SUBTYPE_ID(val,id) \
+if ((val) != (id)) return FS_BLOCK_SUBTYPE_ID_MISMATCH;
+#define EXPECT_REF(val) \
+if (!volume.block(val)) return FS_EXPECTED_REF;
+#define EXPECT_SELFREF(val) \
+if ((val) != nr) return FS_EXPECTED_SELFREF;
+#define EXPECT_FILE_HEADER_REF(val) \
+if (!volume.fileHeaderBlock(val)) return FS_EXPECTED_FILEHEADER_REF;
+#define EXPECT_DATA_FILE_HEADER_REF(val) \
+if (!volume.fileHeaderBlock(val)) return FS_BLOCK_MISSING_FILE_HEADER_REF;
+#define EXPECT_HASH_REF(val) \
+if (!volume.fileHeaderBlock(val) && !volume.userDirBlock(val)) return FS_EXPECTED_HASH_REF;
+#define EXPECT_PARENT_DIR_REF(val) \
+if (!volume.fileHeaderBlock(val) && !volume.rootBlock(val)) return FS_EXPECTED_PARENTDIR_REF;
+#define EXPECT_FILE_LIST_BLOCK_REF(val) \
+if (!volume.fileListBlock(val)) return FS_EXPECTED_FILELIST_REF;
+#define EXPECT_DATA_BLOCK_REF(value) \
+if (!volume.dataBlock(value)) return FS_EXPECTED_DATABLOCK_REF;
+#define EXPECT_DATA_BLOCK_NUMBER(value) \
+if ((value) == 0) return FS_EXPECTED_DATABLOCK_NUMBER;
+#define EXPECT_HASHTABLE_SIZE(value) \
+if ((value) != 72) return FS_INVALID_HASHTABLE_SIZE;
+#define EXPECT_CHECKSUM(value) \
+if ((value) != checksum()) return FS_INVALID_CHECKSUM;
+#define EXPECT_RANGE(value,min,max) \
+if ((value) < min || (value) > max) return FS_OUT_OF_RANGE;
 
 #endif

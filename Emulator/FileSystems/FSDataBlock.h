@@ -17,21 +17,21 @@ struct FSDataBlock : FSBlock {
     FSDataBlock(FSVolume &ref, u32 nr);
     ~FSDataBlock();
     
-    FSBlockType type() override                     { return FS_DATA_BLOCK;   }
+    FSBlockType type() override { return FS_DATA_BLOCK;   }
     
     virtual u32 getDataBlockNr() { return 0; }
     virtual void setDataBlockNr(u32 val) { }
 
-    virtual u32  getDataByteInBlock() { return 0; }
+    virtual u32  getDataBytesInBlock() { return 0; }
     virtual void setDataBytesInBlock(u32 val) { }
 };
 
 struct OFSDataBlock : FSDataBlock {
-      
-    OFSDataBlock(FSVolume &ref, u32 nr);
 
     static u32 headerSize() { return 24; }
 
+    OFSDataBlock(FSVolume &ref, u32 nr);
+    FSItemType itemType(u32 byte) override;
     void dump() override;
     FSError check(u32 pos) override;
     void updateChecksum() override;
@@ -42,7 +42,7 @@ struct OFSDataBlock : FSDataBlock {
     u32  getDataBlockNr() override                  { return get32(2);        }
     void setDataBlockNr(u32 val) override           {        set32(2, val);   }
 
-    u32  getDataByteInBlock() override              { return get32(3);        }
+    u32  getDataBytesInBlock() override             { return get32(3);        }
     void setDataBytesInBlock(u32 val) override      {        set32(3, val);   }
 
     u32  getNextDataBlockRef() override             { return get32(4);        }
@@ -53,10 +53,10 @@ struct OFSDataBlock : FSDataBlock {
 
 struct FFSDataBlock : FSDataBlock {
       
-    FFSDataBlock(FSVolume &ref, u32 nr);
-
     static u32 headerSize() { return 0; }
-    
+
+    FFSDataBlock(FSVolume &ref, u32 nr);
+    FSItemType itemType(u32 byte) override;
     void dump() override;
     bool check(bool verbose) override;
 

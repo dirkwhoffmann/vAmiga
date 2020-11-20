@@ -35,60 +35,64 @@ FSFileListBlock::dump()
     printf("\n");
 }
 
-FSError
-FSFileListBlock::check(u32 pos)
+FSItemType
+FSFileListBlock::itemType(u32 byte)
 {
-    // Align pos to the long word raster
-    pos &= ~0b11;
+    // Intercept some special locations
+    if (byte == 328) return FSI_BCPL_STRING_LENGTH;
+    if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
-    // Translate 'pos' to a long word index
-    i32 word = (pos <= 24 ? (i32)pos : (i32)pos - volume.bsize) / 4;
+    // Translate 'pos' to a (signed) long word index
+    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
 
-    u32 value = get32(word);
-    
     switch (word) {
-        case 0:
-            return value == 16 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
-        case 1:
-            return value != nr ? FS_OK : FS_BLOCK_MISSING_SELFREF;
-        case 3:
-            return value == 0 ? FS_OK : FS_EXPECTED_00;
-        case 4:
-            if (value) {
-                if (!volume.block(value)) return FS_BLOCK_REF_OUT_OF_RANGE;
-                if (!volume.dataBlock(value)) return FS_BLOCK_REF_TYPE_MISMATCH;
-            }
-            return FS_OK;
-        case 5:
-            return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+            
+        case 0:   return FSI_TYPE_ID;
+        case 1:   return FSI_SELF_REF;
+        case 2:   return FSI_DATA_BLOCK_REF_COUNT;
+        case 3:   return FSI_UNUSED;
+        case 4:   return FSI_FIRST_DATA_BLOCK_REF;
+        case 5:   return FSI_CHECKSUM;
         case -50:
-        case -4:
-            return value == 0 ? FS_OK : FS_EXPECTED_00;
-        case -3:
-            if (value == 0) return FS_BLOCK_REF_MISSING;
-            if (!volume.userDirBlock(value) &&
-                !volume.rootBlock(value)) return FS_BLOCK_REF_TYPE_MISMATCH;
-            return FS_OK;
-        case -2:
-            if (value == 0) return FS_OK;
-            if (!volume.fileListBlock(value)) return FS_BLOCK_REF_TYPE_MISMATCH;
-            return FS_OK;
-        case -1:
-            return value == (u32)-3 ? FS_OK : FS_BLOCK_SUBTYPE_ID_MISMATCH;
-        default:
-            break;
+        case -49:
+        case -4:  return FSI_UNUSED;
+        case -3:  return FSI_FILEHEADER_REF;
+        case -2:  return FSI_EXT_BLOCK_REF;
+        case -1:  return FSI_SUBTYPE_ID;
     }
-        
-    // Data block reference area
-    if (word >= -51 && word <= 6 && value) {
-        if (!volume.dataBlock(word)) return FS_BLOCK_REF_TYPE_MISMATCH;
+    
+    return word <= -51 ? FSI_DATA_BLOCK_REF : FSI_UNUSED;
+}
+
+FSError
+FSFileListBlock::check(u32 byte)
+{
+    // Translate 'pos' to a (signed) long word index
+    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    u32 value = get32(word);
+
+    switch (word) {
+            
+        case 0:   EXPECT_10(value); break;
+        case 1:   EXPECT_SELFREF(value); break;
+        case 3:   EXPECT_00(value); break;
+        case 4:   EXPECT_DATA_BLOCK_REF(value); break;
+        case 5:   EXPECT_CHECKSUM(value); break;
+        case -50:
+        case -4:  EXPECT_00(value); break;
+        case -3:  EXPECT_PARENT_DIR_REF(value); break;
+        case -2:  EXPECT_FILE_LIST_BLOCK_REF(value); break;
+        case -1:  EXPECT_FD(value); break;
     }
+    
+    // Data block references
+    if (word <= -51 && value) EXPECT_DATA_BLOCK_REF(value);
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
-            return FS_BLOCK_REF_MISSING;
+            return FS_EXPECTED_REF;
         }
         if (value != 0 && getNumDataBlockRefs() == 0) {
-            return FS_BLOCK_UNEXPECTED_REF;
+            return FS_EXPECTED_NO_REF;
         }
     }
     

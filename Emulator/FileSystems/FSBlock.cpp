@@ -319,6 +319,7 @@ FSBlock::addToHashTable(u32 ref)
     }
 }
 
+/*
 bool
 FSBlock::checkHashTable(bool verbose)
 {
@@ -333,22 +334,15 @@ FSBlock::checkHashTable(bool verbose)
     }
     return result;
 }
-
+*/
+/*
 FSError
 FSBlock::checkHashTableItem(u32 item)
 {
-    if (u32 ref = get32(6 + item)) {
-    
-        if (!volume.block(ref)) {
-            return FS_BLOCK_REF_OUT_OF_RANGE;
-        }
-        if (!volume.fileHeaderBlock(ref) && !volume.userDirBlock(ref)) {
-            return FS_BLOCK_REF_TYPE_MISMATCH;
-        }
-    }
-    
+    if (u32 ref = get32(6 + item)) EXPECT_HASH_REF(ref);
     return FS_OK;
 }
+*/
 
 void
 FSBlock::dumpHashTable()

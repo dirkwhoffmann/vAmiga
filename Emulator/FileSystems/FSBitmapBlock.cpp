@@ -38,7 +38,7 @@ FSBitmapBlock::check(u32 pos)
     u32 value = get32(word);
 
     if (word == 0) {
-        return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+        return value == checksum() ? FS_OK : FS_INVALID_CHECKSUM;
     }
     
     return FS_OK;

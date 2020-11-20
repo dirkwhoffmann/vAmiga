@@ -118,6 +118,7 @@ VAMIGA_ENUM(long, FSItemType)
     FSI_DATA_BLOCK_NUMBER,
     FSI_DATA_BLOCK_REF_COUNT,
     FSI_FIRST_DATA_BLOCK_REF,
+    FSI_NEXT_DATA_BLOCK_REF,
     FSI_DATA_BLOCK_REF,
     FSI_DATA_COUNT,
     FSI_DATA,
@@ -142,8 +143,6 @@ VAMIGA_ENUM(long, FSError)
     FS_CORRUPTED,
     
     // Block errros
-    FS_BLOCK_TYPE_ID_MISMATCH,
-    FS_BLOCK_SUBTYPE_ID_MISMATCH,
     FS_EXPECTED_D,
     FS_EXPECTED_O,
     FS_EXPECTED_S,
@@ -151,20 +150,23 @@ VAMIGA_ENUM(long, FSError)
     FS_EXPECTED_01,
     FS_EXPECTED_02,
     FS_EXPECTED_03,
+    FS_EXPECTED_08,
+    FS_EXPECTED_10,
     FS_EXPECTED_FD,
     FS_EXPECTED_FF,
-    FS_BLOCK_INVALID_DOS_VERSION,
-    FS_BLOCK_MISSING_SELFREF,
-    FS_BLOCK_MISSING_FILEHEADER_REF,
-    FS_BLOCK_NO_DATABLOCK_REF,
-    FS_BLOCK_MISSING_DATABLOCK_NUMBER,
-    FS_BLOCK_HASHTABLE_SIZE_MISMATCH,
-    FS_BLOCK_REF_MISSING,
-    FS_BLOCK_UNEXPECTED_REF,
-    FS_BLOCK_REF_OUT_OF_RANGE,
-    FS_BLOCK_REF_TYPE_MISMATCH,
-    FS_BLOCK_VALUE_TOO_LARGE,
-    FS_BLOCK_CHECKSUM_ERROR,
+    FS_EXPECTED_DOS_REVISION,
+    FS_EXPECTED_NO_REF,
+    FS_EXPECTED_REF,
+    FS_EXPECTED_SELFREF,
+    FS_EXPECTED_FILEHEADER_REF,
+    FS_EXPECTED_FILELIST_REF,
+    FS_EXPECTED_DATABLOCK_REF,
+    FS_EXPECTED_HASH_REF,
+    FS_EXPECTED_PARENTDIR_REF,
+    FS_EXPECTED_DATABLOCK_NUMBER,
+    FS_INVALID_HASHTABLE_SIZE,
+    FS_INVALID_CHECKSUM,
+    FS_OUT_OF_RANGE,
 };
 
 inline bool isFSError(FSError value)
@@ -176,25 +178,21 @@ inline const char *sFSError(FSError value)
 {
     switch (value) {
             
-        case FS_OK:                     return "FS_OK";
-            
-        case FS_UNKNOWN:                return "FS_UNKNOWN";
-        case FS_UNSUPPORTED:            return "FS_UNSUPPORTED";
-        case FS_WRONG_BSIZE:            return "FS_WRONG_BSIZE";
-        case FS_WRONG_CAPACITY:         return "FS_WRONG_CAPACITY";
-            
-        // TODO: COMPLETE
-        case FS_BLOCK_CHECKSUM_ERROR:   return "FS_BLOCK_CHECKSUM_ERROR";
-        case FS_CORRUPTED:              return "FS_CORRUPTED";
-            
-        default:                        return "???";
+        case FS_OK:                   return "FS_OK";
+        case FS_UNKNOWN:              return "FS_UNKNOWN";
+        case FS_UNSUPPORTED:          return "FS_UNSUPPORTED";
+        case FS_WRONG_BSIZE:          return "FS_WRONG_BSIZE";
+        case FS_WRONG_CAPACITY:       return "FS_WRONG_CAPACITY";
+        case FS_CORRUPTED:            return "FS_CORRUPTED";
+
+        default:
+            return isFSError(value) ? "<other>" : "???";
     }
 }
 
 typedef struct
 {
-    // long numErrors;
-    long numErroneousBlocks;
+    long corruptedBlocks;
     long firstErrorBlock;
     long lastErrorBlock;
 }

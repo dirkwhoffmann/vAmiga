@@ -160,11 +160,11 @@ FSVolume::check()
     // Record findings
     FSErrorReport result;
     if (total) {
-        result.numErroneousBlocks = total;
+        result.corruptedBlocks = total;
         result.firstErrorBlock = min;
         result.lastErrorBlock = max;
     } else {
-        result.numErroneousBlocks = 0;
+        result.corruptedBlocks = 0;
         result.firstErrorBlock = min;
         result.lastErrorBlock = max;
     }
@@ -184,11 +184,11 @@ FSVolume::check(u32 blockNr)
     blocks[blockNr]->check(&errors);
 
     if (errors) {
-        result.numErroneousBlocks = 1;
+        result.corruptedBlocks = 1;
         result.firstErrorBlock = blockNr;
         result.lastErrorBlock = blockNr;
     } else {
-        result.numErroneousBlocks = 0;
+        result.corruptedBlocks = 0;
         result.firstErrorBlock = -1;
         result.lastErrorBlock = -1;
     }

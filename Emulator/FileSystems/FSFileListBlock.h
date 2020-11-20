@@ -17,11 +17,16 @@ struct FSFileListBlock : FSBlock {
     FSFileListBlock(FSVolume &ref, u32 nr);
     ~FSFileListBlock();
 
-    FSBlockType type() override                 { return FS_FILELIST_BLOCK;   }
+    FSBlockType type() override { return FS_FILELIST_BLOCK;   }
+    FSItemType itemType(u32 byte) override;
     FSError check(u32 pos) override;
     void dump() override;
     void updateChecksum() override;
 
+    //
+    // Accessing block items
+    //
+    
     u32 getNumDataBlockRefs() override          { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {           set32(2, val);    }
     void incNumDataBlockRefs() override         {        inc32(2);            }

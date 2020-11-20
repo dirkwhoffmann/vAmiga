@@ -29,37 +29,31 @@ FSBootBlock::~FSBootBlock()
 FSItemType
 FSBootBlock::itemType(u32 byte)
 {
-    if (nr == 0 && byte <= 2) return FSI_DOS_HEADER;
-    if (nr == 0 && byte == 3) return FSI_DOS_VERSION;
+    if (byte <= 3 && nr == 0) {
+        
+        if (byte <= 2) return FSI_DOS_HEADER;
+        if (byte == 3) return FSI_DOS_VERSION;
+    }
     
     return FSI_BOOTCODE;
 }
 
 FSError
-FSBootBlock::check(u32 pos)
+FSBootBlock::check(u32 byte)
 {
-    if (nr > 0) return FS_OK;
-    
-    switch (pos) {
-            
-        case 0:
-            if (data[0] != 'D') return FS_EXPECTED_D;
-            break;
-            
-        case 1:
-            if (data[1] != 'O') return FS_EXPECTED_O;
-            break;
-            
-        case 2:
-            if (data[1] != 'S') return FS_EXPECTED_S;
-            break;
-            
-        case 3:
-            if (!isFSVolumeType(data[3])) return FS_BLOCK_INVALID_DOS_VERSION;
-            break;
-            
-        default:
-            break;
+    if (byte <= 3 && nr == 0) {
+
+        switch(byte) {
+            case 0: EXPECT_D(data[byte]); break;
+            case 1: EXPECT_O(data[byte]); break;
+            case 2: EXPECT_S(data[byte]); break;
+                
+            case 3: EXPECT_O(data[byte]); break;
+        }
+        if (byte == 0 && data[byte] != 'D') return FS_EXPECTED_D;
+        if (byte == 1 && data[byte] != 'O') return FS_EXPECTED_O;
+        if (byte == 2 && data[byte] != 'S') return FS_EXPECTED_S;
+        if (byte == 3 && !isFSVolumeType(data[byte])) return FS_EXPECTED_DOS_REVISION;
     }
     
     return FS_OK;

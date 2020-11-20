@@ -24,6 +24,10 @@ struct FSRootBlock : FSBlock {
     FSError check(u32 pos) override;
     void updateChecksum() override;
 
+    //
+    // Accessing block items
+    //
+
     FSTime getCreationDate() override            { return FSTime(addr(-7));  }
     void setCreationDate(FSTime t) override      { t.write(addr(-7));        }
 

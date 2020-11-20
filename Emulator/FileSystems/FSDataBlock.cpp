@@ -28,42 +28,59 @@ OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
-    set32(0, 8);    // Block type
+    set32(0, 8); // Block type
 }
 
 void
 OFSDataBlock::dump()
-{    
+{
+    printf("File header block : %d\n", getFileHeaderRef());
+    printf("     Chain number : %d\n", getDataBlockNr());
+    printf("       Data bytes : %d\n", getDataBytesInBlock());
+    printf("  Next data block : %d\n", getNextDataBlockRef());
+    printf("\n");
+}
+
+FSItemType
+OFSDataBlock::itemType(u32 pos)
+{
+    if (pos < 24) {
+        
+        i32 word = pos / 4;
+        
+        switch (word) {
+                
+            case 0: return FSI_TYPE_ID;
+            case 1: return FSI_FILEHEADER_REF;
+            case 2: return FSI_DATA_BLOCK_NUMBER;
+            case 3: return FSI_DATA_COUNT;
+            case 4: return FSI_NEXT_DATA_BLOCK_REF;
+            case 5: return FSI_CHECKSUM;
+        }
+    }
+    
+    return FSI_DATA;
 }
 
 FSError
 OFSDataBlock::check(u32 pos)
 {
-    // Align pos to the long word raster
-    pos &= ~0b11;
-
-    // Translate 'pos' to a long word index
-    i32 word = pos / 4;
-
-    u32 value = get32(word);
-    
-    switch (word) {
-        case 0:
-            return value == 8 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
-        case 1:
-            return volume.fileHeaderBlock(value) ? FS_OK : FS_BLOCK_MISSING_FILEHEADER_REF;
-        case 2:
-            return value > 0 ? FS_OK : FS_BLOCK_MISSING_DATABLOCK_NUMBER;
-        case 3:
-            return value <= volume.dsize ? FS_OK : FS_BLOCK_VALUE_TOO_LARGE;
-        case 4:
-            if (value && !volume.dataBlock(value)) return FS_BLOCK_NO_DATABLOCK_REF;
-        case 5:
-            return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
-        default:
-            break;
-    }
+    if (pos < 24) {
         
+        i32 word = pos / 4;
+        u32 value = get32(word);
+        
+        switch (word) {
+                
+            case 0: EXPECT_08(value); break;
+            case 1: EXPECT_FILE_HEADER_REF(value); break;
+            case 2: EXPECT_DATA_BLOCK_NUMBER(value); break;
+            case 3: EXPECT_RANGE(value,0,volume.dsize); break;
+            case 4: EXPECT_DATA_BLOCK_REF(value); break;
+            case 5: EXPECT_CHECKSUM(value); break;
+        }
+    }
+    
     return FS_OK;
 }
 
@@ -77,10 +94,9 @@ OFSDataBlock::updateChecksum()
 size_t
 OFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t headerSize = 24;
-    size_t count = MIN(volume.bsize - headerSize, size);
+    size_t count = MIN(volume.bsize - headerSize(), size);
 
-    memcpy(data + headerSize, buffer, count);
+    memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock(count);
     
     return count;
@@ -91,8 +107,12 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
+FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr) { }
+
+FSItemType
+FFSDataBlock::itemType(u32 byte)
 {
+    return FSI_DATA;
 }
 
 void

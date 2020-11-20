@@ -23,11 +23,10 @@ struct FSFileHeaderBlock : FSBlock {
     void dump() override;
     void updateChecksum() override;
 
+    //
+    // Accessing block items
+    //
 
-    //
-    // Block items
-    //
-    
     u32 getNumDataBlockRefs() override          { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
     void incNumDataBlockRefs() override         {        inc32(2);            }

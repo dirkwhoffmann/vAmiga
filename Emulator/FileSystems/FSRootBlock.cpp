@@ -35,16 +35,13 @@ FSRootBlock::~FSRootBlock()
 }
 
 FSItemType
-FSRootBlock::itemType(u32 pos)
+FSRootBlock::itemType(u32 byte)
 {
     // Intercept some special locations
-    if (pos == 432) return FSI_BCPL_STRING_LENGTH;
+    if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
-    // Translate 'pos' to a long word index
-    i32 word = (i32)(pos & ~0b11) / 4;
-    if (word >= 6) word -= volume.bsize / 4;
-
-    printf("pos = %d word = %d\n", pos, word);
+    // Translate the byte index to a (signed) long word index
+    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     
     switch (word) {
         case 0:   return FSI_TYPE_ID;
@@ -76,42 +73,25 @@ FSRootBlock::itemType(u32 pos)
 }
 
 FSError
-FSRootBlock::check(u32 pos)
+FSRootBlock::check(u32 byte)
 {
-    // Align pos to the long word raster
-    pos &= ~0b11;
-
-    // Translate 'pos' to a long word index
-    i32 word = (pos <= 24 ? (i32)pos : (i32)pos - volume.bsize) / 4;
-
+    // Translate the byte index to a (signed) long word index
+    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     u32 value = get32(word);
     
     switch (word) {
-        case 0:
-            return value == 2 ? FS_OK : FS_BLOCK_TYPE_ID_MISMATCH;
+        case 0:  EXPECT_02(value); break;
         case 1:
-        case 2:
-            return value == 0 ? FS_OK : FS_EXPECTED_00;
-        case 3:
-            return value == 72 ? FS_OK : FS_BLOCK_HASHTABLE_SIZE_MISMATCH;
-        case 4:
-            return value == 0 ? FS_OK : FS_EXPECTED_00;
-        case 5:
-            return value == checksum() ? FS_OK : FS_BLOCK_CHECKSUM_ERROR;
+        case 2:  EXPECT_00(value); break;
+        case 3:  EXPECT_HASHTABLE_SIZE(value); break;
+        case 4:  EXPECT_00(value); break;
+        case 5:  EXPECT_CHECKSUM(value); break;
         case -4:
         case -3:
-        case -2:
-            return value == 0 ? FS_OK : FS_EXPECTED_00;
-        case -1:
-            return value == 1 ? FS_OK : FS_BLOCK_SUBTYPE_ID_MISMATCH;
-        default:
-            break;
+        case -2: EXPECT_00(value); break;
+        case -1: EXPECT_01(value); break;
     }
-        
-    // Check all hash table entries
-    if (word >= 6 && word < 6 + (i32)hashTableSize()) {
-        return checkHashTableItem(word - 6);
-    }
+    if (word <= -51) EXPECT_HASH_REF(value);
     
     return FS_OK;
 }

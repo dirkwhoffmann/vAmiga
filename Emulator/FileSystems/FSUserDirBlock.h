@@ -28,6 +28,10 @@ struct FSUserDirBlock : FSBlock {
     void dump() override;
     void updateChecksum() override;
 
+    //
+    // Accessing block items
+    //
+
     u32 getProtectionBits() override           { return get32(-48     );     }
     void setProtectionBits(u32 val) override   {        set32(-48, val);     }
 

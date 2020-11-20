@@ -229,7 +229,7 @@ class ExporterDialog: DialogController {
                 default:        text = "Unknown file system"
                 }
 
-                if let errors = errorReport?.numErroneousBlocks, errors > 0 {
+                if let errors = errorReport?.corruptedBlocks, errors > 0 {
                     
                     let blocks = errors == 1 ? "block" : "blocks"
                     let text2 = " with \(errors) corrupted \(blocks)"
@@ -362,7 +362,9 @@ class ExporterDialog: DialogController {
         case .FSI_DATA_BLOCK_REF:
             text = "Reference to a Data Block"
         case .FSI_FIRST_DATA_BLOCK_REF:
-            text = "Reference to the First Data Block of this File"
+            text = "Reference to the First Element in the Data Block Chain"
+        case .FSI_NEXT_DATA_BLOCK_REF:
+            text = "Reference to the Next Element in the Data Block Chain"
         case .FSI_DATA_COUNT:
             text = "Number of Bytes stored in this Data Block"
         case .FSI_DATA:
@@ -384,50 +386,59 @@ class ExporterDialog: DialogController {
     func updateErrorInfoSelected() {
         
         let error = volume!.check(_block, pos: selection!)
-        let value = disk!.readByte(_block, offset: selection!)
         var text: String
 
         switch error {
         case .OK:
             text = ""
-        case .BLOCK_TYPE_ID_MISMATCH:
-            text = "Invalid block type"
-        case .BLOCK_SUBTYPE_ID_MISMATCH:
-            text = "Invalid type indentifer"
         case .EXPECTED_D:
             text = "Expected 'D'"
         case .EXPECTED_O:
             text = "Expected 'O'"
         case .EXPECTED_S:
             text = "Expected 'S'"
-        case .BLOCK_INVALID_DOS_VERSION:
-            text = "\(value) is not a valid AmigaDOS version number"
-        case .BLOCK_MISSING_SELFREF:
-            text = "Expected a self-reference"
-        case .BLOCK_MISSING_FILEHEADER_REF:
-            text = "Expected a reference to a file header block"
-        case .BLOCK_NO_DATABLOCK_REF:
-            text = "Expected a reference to a data block"
-        case .BLOCK_MISSING_DATABLOCK_NUMBER:
-            text = "This is not a valid data block number"
-        case .BLOCK_HASHTABLE_SIZE_MISMATCH:
-            text = "Invalid size"
-        case .BLOCK_REF_MISSING:
-            text = "Expected a block reference"
-        case .BLOCK_UNEXPECTED_REF:
-            text = "Unexpected block reference"
-        case .BLOCK_REF_OUT_OF_RANGE:
-            text = "Block reference is out of range"
-        case .BLOCK_REF_TYPE_MISMATCH:
-            text = "The referenced block has an invalid type"
-        case .BLOCK_VALUE_TOO_LARGE:
-            text = "Value is too large"
         case .EXPECTED_00:
             text = "Expected $00"
+        case .EXPECTED_01:
+            text = "Expected $01"
+        case .EXPECTED_02:
+            text = "Expected $02"
+        case .EXPECTED_03:
+            text = "Expected $03"
+        case .EXPECTED_08:
+            text = "Expected $08"
+        case .EXPECTED_10:
+            text = "Expected $10"
+        case .EXPECTED_FD:
+            text = "Expected $FD"
         case .EXPECTED_FF:
             text = "Expected $FF"
-        case .BLOCK_CHECKSUM_ERROR:
+        case .EXPECTED_DOS_REVISION:
+            text = "Expected a value between 0 and 7"
+        case .EXPECTED_NO_REF:
+            text = "Did not expect a block reference here"
+        case .EXPECTED_REF:
+            text = "Expected a block reference"
+        case .EXPECTED_SELFREF:
+            text = "Expected a self-reference"
+        case .EXPECTED_FILEHEADER_REF:
+            text = "Expected a reference to a file header block"
+        case .EXPECTED_FILELIST_REF:
+            text = "Expected a reference to a file list block"
+        case .EXPECTED_DATABLOCK_REF:
+            text = "Expected a reference to a data block"
+        case .EXPECTED_HASH_REF:
+            text = "Expected a reference to a hashable block"
+        case .EXPECTED_PARENTDIR_REF:
+            text = "Expected a reference to the parent directory"
+        case .EXPECTED_DATABLOCK_NUMBER:
+            text = "Invalid data block position number"
+        case .INVALID_HASHTABLE_SIZE:
+            text = "Expected $48 (72 hash table entries)"
+        case .INVALID_CHECKSUM:
             text = "Invalid block checksum"
+        case .OUT_OF_RANGE:
+            text = "Value is out of range"
         default:
             fatalError()
         }
@@ -496,10 +507,10 @@ class ExporterDialog: DialogController {
         errorReport = volume?.check()
         
         // Jump to the first error block if an error was found
-        if let errors = errorReport?.numErroneousBlocks, errors > 0 {
+        if let errors = errorReport?.corruptedBlocks, errors > 0 {
             corruptionStepper.minValue = Double(1)
-            corruptionStepper.maxValue = Double(errorReport!.numErroneousBlocks)
-            setCorruptedBlock(2)
+            corruptionStepper.maxValue = Double(errors)
+            setCorruptedBlock(1)
         } else {
             update()
         }
@@ -520,7 +531,7 @@ class ExporterDialog: DialogController {
 
         // Force the preview table to appear at the correct vertical position
         var r = previewScrollView.frame
-        r.origin.y = 87
+        r.origin.y = 91
         previewScrollView.frame = r
 
         update()
@@ -560,7 +571,7 @@ class ExporterDialog: DialogController {
         if shrinked { return }
         
         // Hide more elements if no errors are present
-        if errorReport?.numErroneousBlocks == 0 {
+        if errorReport?.corruptedBlocks == 0 {
             corruptionText.isHidden = true
             corruptionField.isHidden = true
             corruptionStepper.isHidden = true
