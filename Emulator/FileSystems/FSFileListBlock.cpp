@@ -73,7 +73,7 @@ FSFileListBlock::check(u32 byte)
 
     switch (word) {
             
-        case 0:   EXPECT_10(value); break;
+        case 0:   EXPECT_00000010(value, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;
         case 3:   EXPECT_00(value); break;
         case 4:   EXPECT_DATA_BLOCK_REF(value); break;
@@ -82,7 +82,7 @@ FSFileListBlock::check(u32 byte)
         case -4:  EXPECT_00(value); break;
         case -3:  EXPECT_PARENT_DIR_REF(value); break;
         case -2:  EXPECT_FILE_LIST_BLOCK_REF(value); break;
-        case -1:  EXPECT_FD(value); break;
+        case -1:  EXPECT_FFFFFFFD(value, byte % 4); break;
     }
     
     // Data block references
@@ -97,13 +97,6 @@ FSFileListBlock::check(u32 byte)
     }
     
     return FS_OK;
-}
-
-void
-FSFileListBlock::updateChecksum()
-{
-    set32(5, 0);
-    set32(5, checksum());
 }
 
 bool

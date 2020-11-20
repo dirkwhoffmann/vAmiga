@@ -63,32 +63,25 @@ OFSDataBlock::itemType(u32 pos)
 }
 
 FSError
-OFSDataBlock::check(u32 pos)
+OFSDataBlock::check(u32 byte)
 {
-    if (pos < 24) {
+    if (byte < 24) {
         
-        i32 word = pos / 4;
+        i32 word = byte / 4;
         u32 value = get32(word);
         
         switch (word) {
                 
-            case 0: EXPECT_08(value); break;
+            case 0: EXPECT_00000008(value, byte % 4); break;
             case 1: EXPECT_FILE_HEADER_REF(value); break;
             case 2: EXPECT_DATA_BLOCK_NUMBER(value); break;
-            case 3: EXPECT_RANGE(value,0,volume.dsize); break;
+            case 3: EXPECT_RANGE(value, 0, volume.dsize); break;
             case 4: EXPECT_DATA_BLOCK_REF(value); break;
             case 5: EXPECT_CHECKSUM(value); break;
         }
     }
     
     return FS_OK;
-}
-
-void
-OFSDataBlock::updateChecksum()
-{
-    set32(5, 0);
-    set32(5, checksum());
 }
 
 size_t

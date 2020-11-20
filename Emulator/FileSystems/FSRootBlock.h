@@ -23,8 +23,8 @@ struct FSRootBlock : FSBlock {
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos) override;
     u32 checksumLocation() override { return 5; }
-    void updateChecksum() override;
 
+    
     //
     // Accessing block items
     //

@@ -73,7 +73,7 @@ FSFileHeaderBlock::check(u32 byte)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:   EXPECT_02(value); break;
+        case 0:   EXPECT_00000002(value, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;
         case 3:   EXPECT_00(value); break;
         case 4:   EXPECT_DATA_BLOCK_REF(value); break;
@@ -82,7 +82,7 @@ FSFileHeaderBlock::check(u32 byte)
         case -4:  EXPECT_REF(value); break;
         case -3:  EXPECT_PARENT_DIR_REF(value); break;
         case -2:  EXPECT_FILE_LIST_BLOCK_REF(value); break;
-        case -1:  EXPECT_FD(value); break;
+        case -1:  EXPECT_FFFFFFFD(value, byte % 4); break;
     }
         
     // Data block reference area
@@ -117,13 +117,6 @@ FSFileHeaderBlock::dump()
     printf("    Data blocks : ");
     for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
-}
-
-void
-FSFileHeaderBlock::updateChecksum()
-{
-    set32(5, 0);
-    set32(5, checksum());
 }
 
 size_t

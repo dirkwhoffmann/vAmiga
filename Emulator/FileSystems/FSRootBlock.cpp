@@ -80,7 +80,7 @@ FSRootBlock::check(u32 byte)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_02(value); break;
+        case 0:  EXPECT_00000002(value, byte % 4); break;
         case 1:
         case 2:  EXPECT_00(value); break;
         case 3:  EXPECT_HASHTABLE_SIZE(value); break;
@@ -89,7 +89,7 @@ FSRootBlock::check(u32 byte)
         case -4:
         case -3:
         case -2: EXPECT_00(value); break;
-        case -1: EXPECT_01(value); break;
+        case -1: EXPECT_00000001(value, byte % 4); break;
     }
     if (word <= -51 && value) EXPECT_HASH_REF(value);
     
@@ -103,11 +103,4 @@ FSRootBlock::dump()
     printf("     Created : "); getCreationDate().print(); printf("\n");
     printf("    Modified : "); getModificationDate().print(); printf("\n");
     printf("  Hash table : "); dumpHashTable(); printf("\n");
-}
-
-void
-FSRootBlock::updateChecksum()
-{
-    set32(5, 0);
-    set32(5, checksum());
 }

@@ -73,7 +73,7 @@ FSUserDirBlock::check(u32 byte)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_02(value); break;
+        case 0:  EXPECT_00000002(value, byte % 4); break;
         case 1:  EXPECT_SELFREF(value); break;
         case 2:
         case 3:
@@ -82,7 +82,7 @@ FSUserDirBlock::check(u32 byte)
         case -4: EXPECT_REF(value); break;
         case -3: EXPECT_PARENT_DIR_REF(value); break;
         case -2: EXPECT_00(value); break;
-        case -1: EXPECT_02(value); break;
+        case -1: EXPECT_00000002(value, byte % 4); break;
     }
     if (word <= -51 && value) EXPECT_HASH_REF(value);
     
@@ -98,11 +98,4 @@ FSUserDirBlock::dump()
     printf("     Created: ");    getCreationDate().print(); printf("\n");
     printf("      Parent: %d\n", getParentDirRef());
     printf("        Next: %d\n", getNextHashRef());
-}
-
-void
-FSUserDirBlock::updateChecksum()
-{
-    set32(5, 0);
-    set32(5, checksum());
 }

@@ -97,9 +97,13 @@ struct FSBlock {
 
     // Returns the location of the checksum inside this block
     virtual u32 checksumLocation() { return (u32)-1; }
-
+    // bool hasChecksum() { return checksumLocation() != (u32)-1; }
+    
     // Computes a checksum for this block
     u32 checksum();
+    
+    // Updates the checksum in this block
+    void updateChecksum();
     
     
     //
@@ -146,7 +150,7 @@ public:
 private:
     
     // Updates the checksum for this block (called prior to exporting)
-    virtual void updateChecksum() { }
+    // virtual void updateChecksum() { }
     
                 
     //
@@ -296,11 +300,6 @@ if ((val) != 0xFD) return FS_EXPECTED_FD;
 if ((val) != 0xFF) return FS_EXPECTED_FF;
 #define EXPECT_DOS_REVISION(val) \
 if (!isFSVolumeType(val)) return FS_EXPECTED_DOS_REVISION;
-
-#define EXPECT_TYPE_ID(val,id) \
-if ((val) != (id)) return FS_BLOCK_TYPE_ID_MISMATCH;
-#define EXPECT_SUBTYPE_ID(val,id) \
-if ((val) != (id)) return FS_BLOCK_SUBTYPE_ID_MISMATCH;
 #define EXPECT_REF(val) \
 if (!volume.block(val)) return FS_EXPECTED_REF;
 #define EXPECT_SELFREF(val) \
@@ -315,15 +314,45 @@ if (!volume.fileHeaderBlock(val) && !volume.userDirBlock(val)) return FS_EXPECTE
 if (!volume.fileHeaderBlock(val) && !volume.rootBlock(val)) return FS_EXPECTED_PARENTDIR_REF;
 #define EXPECT_FILE_LIST_BLOCK_REF(val) \
 if (!volume.fileListBlock(val)) return FS_EXPECTED_FILELIST_REF;
-#define EXPECT_DATA_BLOCK_REF(value) \
-if (!volume.dataBlock(value)) return FS_EXPECTED_DATABLOCK_REF;
-#define EXPECT_DATA_BLOCK_NUMBER(value) \
-if ((value) == 0) return FS_EXPECTED_DATABLOCK_NUMBER;
-#define EXPECT_HASHTABLE_SIZE(value) \
-if ((value) != 72) return FS_INVALID_HASHTABLE_SIZE;
-#define EXPECT_CHECKSUM(value) \
-if ((value) != checksum()) return FS_INVALID_CHECKSUM;
-#define EXPECT_RANGE(value,min,max) \
-if ((value) < min || (value) > max) return FS_OUT_OF_RANGE;
+#define EXPECT_DATA_BLOCK_REF(val) \
+if (!volume.dataBlock(val)) return FS_EXPECTED_DATABLOCK_REF;
+#define EXPECT_DATA_BLOCK_NUMBER(val) \
+if ((val) == 0) return FS_EXPECTED_DATABLOCK_NUMBER;
+#define EXPECT_HASHTABLE_SIZE(val) \
+if ((val) != 72) return FS_INVALID_HASHTABLE_SIZE;
+#define EXPECT_CHECKSUM(val) \
+if ((val) != checksum()) return FS_INVALID_CHECKSUM;
+#define EXPECT_RANGE(val,min,max) \
+if ((val) < min || (val) > max) return FS_OUT_OF_RANGE;
+
+#define EXPECT_00000001(val,offset) \
+if (offset == 0 && BYTE3(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 1 && BYTE2(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 2 && BYTE1(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 3 && BYTE0(val) != 0x01) return FS_EXPECTED_01;
+
+#define EXPECT_00000002(val,offset) \
+if (offset == 0 && BYTE3(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 1 && BYTE2(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 2 && BYTE1(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 3 && BYTE0(val) != 0x02) return FS_EXPECTED_02;
+
+#define EXPECT_00000008(val,offset) \
+if (offset == 0 && BYTE3(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 1 && BYTE2(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 2 && BYTE1(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 3 && BYTE0(val) != 0x08) return FS_EXPECTED_08;
+
+#define EXPECT_00000010(val,offset) \
+if (offset == 0 && BYTE3(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 1 && BYTE2(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 2 && BYTE1(val) != 0x00) return FS_EXPECTED_00; \
+if (offset == 3 && BYTE0(val) != 0x10) return FS_EXPECTED_10;
+
+#define EXPECT_FFFFFFFD(val,offset) \
+if (offset == 0 && BYTE3(val) != 0xFF) return FS_EXPECTED_FF; \
+if (offset == 1 && BYTE2(val) != 0xFF) return FS_EXPECTED_FF; \
+if (offset == 2 && BYTE1(val) != 0xFF) return FS_EXPECTED_FF; \
+if (offset == 3 && BYTE0(val) != 0xFD) return FS_EXPECTED_FD;
 
 #endif

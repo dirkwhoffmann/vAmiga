@@ -22,7 +22,6 @@ struct FSBitmapBlock : FSBlock {
     FSError check(u32 pos) override;
     void dump() override;
     u32 checksumLocation() override { return 0; }
-    void updateChecksum() override;
 
     // Computes location of the allocation bit for a certain block
     void locateBlockBit(u32 nr, u32 *byte, u32 *bit);

@@ -137,6 +137,13 @@ FSBlock::checksum()
     return result;
 }
 
+void
+FSBlock::updateChecksum()
+{
+    u32 ref = checksumLocation();
+    if (ref < volume.bsize / 4) set32(ref, checksum());
+}
+
 bool
 FSBlock::check(bool verbose)
 {
