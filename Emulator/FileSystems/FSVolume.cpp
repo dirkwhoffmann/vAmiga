@@ -147,7 +147,7 @@ FSVolume::check()
     
     // Analyze all blocks
     for (u32 i = 0; i < capacity; i++) {
-        
+         
         if (blocks[i]->check() > 0) {
             min = MIN(min, i);
             max = MAX(max, i);
@@ -554,8 +554,17 @@ FSVolume::installBootBlock()
 {
     assert(blocks[0]->type() == FS_BOOT_BLOCK);
     assert(blocks[1]->type() == FS_BOOT_BLOCK);
+
     ((FSBootBlock *)blocks[0])->writeBootCode();
     ((FSBootBlock *)blocks[1])->writeBootCode();
+}
+
+void
+FSVolume::updateChecksums()
+{
+    for (u32 i = 0; i < capacity; i++) {
+        blocks[i]->updateChecksum();
+    }
 }
 
 FSBlock *

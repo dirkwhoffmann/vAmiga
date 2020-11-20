@@ -79,12 +79,12 @@ FSUserDirBlock::check(u32 byte)
         case 3:
         case 4:  EXPECT_00(value); break;
         case 5:  EXPECT_CHECKSUM(value); break;
-        case -4: EXPECT_REF(value); break;
+        case -4: EXPECT_OPTIONAL_HASH_REF(value); break;
         case -3: EXPECT_PARENT_DIR_REF(value); break;
         case -2: EXPECT_00(value); break;
         case -1: EXPECT_00000002(value, byte % 4); break;
     }
-    if (word <= -51 && value) EXPECT_HASH_REF(value);
+    if (word <= -51) EXPECT_OPTIONAL_HASH_REF(value);
     
     return FS_OK;
 }

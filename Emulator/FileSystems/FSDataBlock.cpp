@@ -73,10 +73,10 @@ OFSDataBlock::check(u32 byte)
         switch (word) {
                 
             case 0: EXPECT_00000008(value, byte % 4); break;
-            case 1: EXPECT_FILE_HEADER_REF(value); break;
-            case 2: EXPECT_DATA_BLOCK_NUMBER(value); break;
+            case 1: EXPECT_FILEHEADER_REF(value); break;
+            case 2: EXPECT_DATABLOCK_NUMBER(value); break;
             case 3: EXPECT_RANGE(value, 0, volume.dsize); break;
-            case 4: EXPECT_DATA_BLOCK_REF(value); break;
+            case 4: EXPECT_OPTIONAL_DATABLOCK_REF(value); break;
             case 5: EXPECT_CHECKSUM(value); break;
         }
     }
@@ -102,15 +102,15 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 
 FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr) { }
 
-FSItemType
-FFSDataBlock::itemType(u32 byte)
-{
-    return FSI_DATA;
-}
-
 void
 FFSDataBlock::dump()
 {
+}
+
+FSItemType
+FFSDataBlock::itemType(u32 pos)
+{
+    return FSI_DATA;
 }
 
 bool

@@ -163,7 +163,7 @@ VAMIGA_ENUM(long, FSError)
     FS_EXPECTED_DATABLOCK_REF,
     FS_EXPECTED_HASH_REF,
     FS_EXPECTED_PARENTDIR_REF,
-    FS_EXPECTED_DATABLOCK_NUMBER,
+    FS_EXPECTED_DATABLOCK_NR,
     FS_INVALID_HASHTABLE_SIZE,
     FS_INVALID_CHECKSUM,
     FS_OUT_OF_RANGE,
@@ -178,13 +178,37 @@ inline const char *sFSError(FSError value)
 {
     switch (value) {
             
-        case FS_OK:                   return "FS_OK";
-        case FS_UNKNOWN:              return "FS_UNKNOWN";
-        case FS_UNSUPPORTED:          return "FS_UNSUPPORTED";
-        case FS_WRONG_BSIZE:          return "FS_WRONG_BSIZE";
-        case FS_WRONG_CAPACITY:       return "FS_WRONG_CAPACITY";
-        case FS_CORRUPTED:            return "FS_CORRUPTED";
-
+        case FS_OK:                      return "FS_OK";
+        case FS_UNKNOWN:                 return "FS_UNKNOWN";
+        case FS_UNSUPPORTED:             return "FS_UNSUPPORTED";
+        case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
+        case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
+        case FS_CORRUPTED:               return "FS_CORRUPTED";
+        case FS_EXPECTED_D:              return "FS_EXPECTED_D";
+        case FS_EXPECTED_O:              return "FS_EXPECTED_O";
+        case FS_EXPECTED_S:              return "FS_EXPECTED_S";
+        case FS_EXPECTED_00:             return "FS_EXPECTED_00";
+        case FS_EXPECTED_01:             return "FS_EXPECTED_01";
+        case FS_EXPECTED_02:             return "FS_EXPECTED_02";
+        case FS_EXPECTED_03:             return "FS_EXPECTED_03";
+        case FS_EXPECTED_08:             return "FS_EXPECTED_08";
+        case FS_EXPECTED_10:             return "FS_EXPECTED_10";
+        case FS_EXPECTED_FD:             return "FS_EXPECTED_FD";
+        case FS_EXPECTED_FF:             return "FS_EXPECTED_FF";
+        case FS_EXPECTED_DOS_REVISION:   return "FS_EXPECTED_DOS_REVISION";
+        case FS_EXPECTED_NO_REF:         return "FS_EXPECTED_NO_REF";
+        case FS_EXPECTED_REF:            return "FS_EXPECTED_REF";
+        case FS_EXPECTED_SELFREF:        return "FS_EXPECTED_SELFREF";
+        case FS_EXPECTED_FILEHEADER_REF: return "FS_EXPECTED_FILEHEADER_REF";
+        case FS_EXPECTED_FILELIST_REF:   return "FS_EXPECTED_FILELIST_REF";
+        case FS_EXPECTED_DATABLOCK_REF:  return "FS_EXPECTED_DATABLOCK_REF";
+        case FS_EXPECTED_HASH_REF:       return "FS_EXPECTED_HASH_REF";
+        case FS_EXPECTED_PARENTDIR_REF:  return "FS_EXPECTED_PARENTDIR_REF";
+        case FS_EXPECTED_DATABLOCK_NR:   return "FS_EXPECTED_DATABLOCK_NR";
+        case FS_INVALID_HASHTABLE_SIZE:  return "FS_INVALID_HASHTABLE_SIZE";
+        case FS_INVALID_CHECKSUM:        return "FS_INVALID_CHECKSUM";
+        case FS_OUT_OF_RANGE:            return "FS_OUT_OF_RANGE";
+        
         default:
             return isFSError(value) ? "<other>" : "???";
     }

@@ -91,7 +91,7 @@ FSRootBlock::check(u32 byte)
         case -2: EXPECT_00(value); break;
         case -1: EXPECT_00000001(value, byte % 4); break;
     }
-    if (word <= -51 && value) EXPECT_HASH_REF(value);
+    if (word <= -51) EXPECT_OPTIONAL_HASH_REF(value);
     
     return FS_OK;
 }

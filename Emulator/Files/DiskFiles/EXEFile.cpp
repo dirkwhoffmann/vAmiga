@@ -86,7 +86,6 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Add the executable
     FSBlock *file = volume.makeFile("file", buffer, length);
-    // if (file) success = file->append(buffer, length);
     success = file != nullptr;
     
     // Add a script directory
@@ -95,8 +94,10 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Add a startup sequence
     file = volume.makeFile("startup-sequence", "file");
-    // if (success && file) success = file->append("file");
-    success &= file != nullptr; 
+    success &= file != nullptr;
+    
+    // Finalize
+    volume.updateChecksums();
     
     // Check for file system errors
     volume.changeDir("/");
@@ -107,8 +108,8 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     FSErrorReport report = volume.check();
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+        volume.dump();
     }
-    // volume.dump();
     
     // Convert the volume into an ADF
     if (success) {

@@ -204,6 +204,9 @@ public:
     // Installs a boot block
     void installBootBlock();
 
+    // Updates the checksums in all blocks
+    void updateChecksums();
+    
     
     //
     // Managing directories and files

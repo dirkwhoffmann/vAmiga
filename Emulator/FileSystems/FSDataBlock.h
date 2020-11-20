@@ -17,13 +17,12 @@ struct FSDataBlock : FSBlock {
     FSDataBlock(FSVolume &ref, u32 nr);
     ~FSDataBlock();
     
-    FSBlockType type() override { return FS_DATA_BLOCK;   }
-    
-    virtual u32 getDataBlockNr() { return 0; }
-    virtual void setDataBlockNr(u32 val) { }
+    FSBlockType type() override { return FS_DATA_BLOCK; }
+    virtual u32 getDataBlockNr() = 0;
+    virtual void setDataBlockNr(u32 val) = 0;
 
-    virtual u32  getDataBytesInBlock() { return 0; }
-    virtual void setDataBytesInBlock(u32 val) { }
+    virtual u32  getDataBytesInBlock() = 0;
+    virtual void setDataBytesInBlock(u32 val) = 0;
 };
 
 struct OFSDataBlock : FSDataBlock {
@@ -59,6 +58,12 @@ struct FFSDataBlock : FSDataBlock {
     FSItemType itemType(u32 byte) override;
     void dump() override;
     bool check(bool verbose) override;
+
+    u32 getDataBlockNr() override { return 0; }
+    void setDataBlockNr(u32 val) override { }
+
+    u32  getDataBytesInBlock() override { return 0; }
+    void setDataBytesInBlock(u32 val) override { };
 
     size_t addData(const u8 *buffer, size_t size) override;
 };

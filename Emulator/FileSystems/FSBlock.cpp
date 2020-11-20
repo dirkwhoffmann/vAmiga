@@ -22,7 +22,13 @@ FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
         case FS_USERDIR_BLOCK: return new FSUserDirBlock(ref, nr);
         case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(ref, nr);
         case FS_FILELIST_BLOCK: return new FSFileListBlock(ref, nr);
-        case FS_DATA_BLOCK: return new FSDataBlock(ref, nr);
+        
+        case FS_DATA_BLOCK:
+            if (ref.isOFS()) {
+                return new OFSDataBlock(ref, nr);
+            } else {
+                return new FFSDataBlock(ref, nr);
+            }
 
         default: return nullptr;
     }
@@ -43,13 +49,18 @@ FSBlock::subtypeID()
 unsigned
 FSBlock::check()
 {
-    unsigned errors = 0;
+    FSError error;
+    unsigned count = 0;
     
     for (u32 i = 0; i < volume.bsize; i++) {
-        if (check(i) != FS_OK) errors++;
+
+        if ((error = check(i)) != FS_OK) {
+            count++;
+            if (FS_DEBUG) printf("Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+        }
     }
 
-    return errors;
+    return count;
 }
 
 u8 *

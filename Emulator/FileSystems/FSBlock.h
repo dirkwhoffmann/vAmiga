@@ -304,20 +304,24 @@ if (!isFSVolumeType(val)) return FS_EXPECTED_DOS_REVISION;
 if (!volume.block(val)) return FS_EXPECTED_REF;
 #define EXPECT_SELFREF(val) \
 if ((val) != nr) return FS_EXPECTED_SELFREF;
-#define EXPECT_FILE_HEADER_REF(val) \
+#define EXPECT_FILEHEADER_REF(val) \
 if (!volume.fileHeaderBlock(val)) return FS_EXPECTED_FILEHEADER_REF;
-#define EXPECT_DATA_FILE_HEADER_REF(val) \
-if (!volume.fileHeaderBlock(val)) return FS_BLOCK_MISSING_FILE_HEADER_REF;
 #define EXPECT_HASH_REF(val) \
 if (!volume.fileHeaderBlock(val) && !volume.userDirBlock(val)) return FS_EXPECTED_HASH_REF;
+#define EXPECT_OPTIONAL_HASH_REF(val) \
+if (val) { EXPECT_HASH_REF(val) }
 #define EXPECT_PARENT_DIR_REF(val) \
-if (!volume.fileHeaderBlock(val) && !volume.rootBlock(val)) return FS_EXPECTED_PARENTDIR_REF;
-#define EXPECT_FILE_LIST_BLOCK_REF(val) \
+if (!volume.userDirBlock(val) && !volume.rootBlock(val)) return FS_EXPECTED_PARENTDIR_REF;
+#define EXPECT_FILELIST_REF(val) \
 if (!volume.fileListBlock(val)) return FS_EXPECTED_FILELIST_REF;
-#define EXPECT_DATA_BLOCK_REF(val) \
+#define EXPECT_OPTIONAL_FILELIST_REF(val) \
+if (val) { EXPECT_FILELIST_REF(val) }
+#define EXPECT_DATABLOCK_REF(val) \
 if (!volume.dataBlock(val)) return FS_EXPECTED_DATABLOCK_REF;
-#define EXPECT_DATA_BLOCK_NUMBER(val) \
-if ((val) == 0) return FS_EXPECTED_DATABLOCK_NUMBER;
+#define EXPECT_OPTIONAL_DATABLOCK_REF(val) \
+if (val) { EXPECT_DATABLOCK_REF(val) }
+#define EXPECT_DATABLOCK_NUMBER(val) \
+if ((val) == 0) return FS_EXPECTED_DATABLOCK_NR;
 #define EXPECT_HASHTABLE_SIZE(val) \
 if ((val) != 72) return FS_INVALID_HASHTABLE_SIZE;
 #define EXPECT_CHECKSUM(val) \

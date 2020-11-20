@@ -76,17 +76,17 @@ FSFileHeaderBlock::check(u32 byte)
         case 0:   EXPECT_00000002(value, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;
         case 3:   EXPECT_00(value); break;
-        case 4:   EXPECT_DATA_BLOCK_REF(value); break;
+        case 4:   EXPECT_DATABLOCK_REF(value); break;
         case 5:   EXPECT_CHECKSUM(value); break;
         case -50: EXPECT_00(value); break;
-        case -4:  EXPECT_REF(value); break;
+        case -4:  EXPECT_OPTIONAL_HASH_REF(value); break;
         case -3:  EXPECT_PARENT_DIR_REF(value); break;
-        case -2:  EXPECT_FILE_LIST_BLOCK_REF(value); break;
+        case -2:  EXPECT_OPTIONAL_FILELIST_REF(value); break;
         case -1:  EXPECT_FFFFFFFD(value, byte % 4); break;
     }
         
     // Data block reference area
-    if (word <= -51 && value) EXPECT_DATA_BLOCK_REF(value);
+    if (word <= -51 && value) EXPECT_DATABLOCK_REF(value);
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
             return FS_EXPECTED_REF;
@@ -175,7 +175,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 bool
 FSFileHeaderBlock::addDataBlockRef(u32 ref)
 {
-    return addDataBlockRef(nr, ref);
+    return addDataBlockRef(ref, ref);
 }
 
 bool
@@ -184,7 +184,7 @@ FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
     // If this block has space for more references, add it here
     if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
 
-        if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(ref);
+        if (getNumDataBlockRefs() == 0) setFirstDataBlockRef(first);
         setDataBlockRef(getNumDataBlockRefs(), ref);
         incNumDataBlockRefs();
         return true;

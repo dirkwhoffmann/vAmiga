@@ -427,8 +427,8 @@ class ExporterDialog: DialogController {
         case .EXPECTED_HASH_REF:
             text = "Expected a reference to a hashable block"
         case .EXPECTED_PARENTDIR_REF:
-            text = "Expected a reference to the parent directory"
-        case .EXPECTED_DATABLOCK_NUMBER:
+            text = "Expected a reference to a user directory or file header block"
+        case .EXPECTED_DATABLOCK_NR:
             text = "Invalid data block position number"
         case .INVALID_HASHTABLE_SIZE:
             text = "Expected $48 (72 hash table entries)"
