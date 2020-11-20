@@ -100,6 +100,22 @@ FSBlock::printPath()
     delete [] path;
 }
 
+void
+FSBlock::dumpData()
+{
+    int cols = 32;
+
+    printf("Block %d\n", nr);
+    for (int y = 0; y < 512 / cols; y++) {
+        for (int x = 0; x < cols; x++) {
+            printf("%02X ", data[y*cols + x]);
+            if ((x % 4) == 3) printf(" ");
+        }
+        printf("\n");
+    }
+    printf("\n");
+}
+
 u32
 FSBlock::checksum()
 {
@@ -196,11 +212,13 @@ FSBlock::assertSelfRef(u32 ref, bool verbose)
 
 void
 FSBlock::importBlock(const u8 *src, size_t bsize)
-{
+{    
     assert(bsize == volume.bsize);
     assert(src != nullptr);
     assert(data != nullptr);
+        
     memcpy(data, src, bsize);
+    if (nr == 0) dumpData();
 }
 
 void
@@ -318,31 +336,6 @@ FSBlock::addToHashTable(u32 ref)
         }
     }
 }
-
-/*
-bool
-FSBlock::checkHashTable(bool verbose)
-{
-    bool result = true;
-    
-    for (u32 i = 0; i < hashTableSize(); i++) {
-        
-        if (u32 ref = read32(data + 24 + 4 * i)) {
-            result &= assertInRange(ref, verbose);
-            result &= assertHasType(ref, FS_USERDIR_BLOCK, FS_FILEHEADER_BLOCK, verbose);
-        }
-    }
-    return result;
-}
-*/
-/*
-FSError
-FSBlock::checkHashTableItem(u32 item)
-{
-    if (u32 ref = get32(6 + item)) EXPECT_HASH_REF(ref);
-    return FS_OK;
-}
-*/
 
 void
 FSBlock::dumpHashTable()

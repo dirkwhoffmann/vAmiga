@@ -576,10 +576,10 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6mo-sI-0VL">
-                        <rect key="frame" x="20" y="52" width="391" height="14"/>
+                        <rect key="frame" x="20" y="49" width="391" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum  dolor dolor" id="RK9-i7-xI6">
-                            <font key="font" metaFont="smallSystem"/>
+                        <textFieldCell key="cell" lineBreakMode="clipping" alignment="left" title="Lorem ipsum  dolor dolor" id="RK9-i7-xI6">
+                            <font key="font" metaFont="system"/>
                             <color key="textColor" name="systemRedColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>

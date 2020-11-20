@@ -86,18 +86,7 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         delete adf;
         return NULL;
     }
-    
-    // TEST CODE (TODO: REMOVE ASAP)
-    /*
-    printf("Extracting File system from ADF\n");
-    FSVolume *vol = FSVolume::make(buffer, length, 512);
-    printf("%s\n", vol ? "Success" : "FAILED");
-    if (vol) {
-        vol->info();
-        vol->dump();
-    }
-    */
-    
+        
     return adf;
 }
 
@@ -171,6 +160,10 @@ ADFFile::makeWithVolume(FSVolume &volume, FSError *error)
     }
 
     volume.exportVolume(adf->data, adf->size, error);
+    
+    // REMOVE ASAP
+    // adf->dumpSector(0);
+
     return adf;
 }
 
@@ -252,8 +245,11 @@ ADFFile::formatDisk(FSVolumeType fs)
     
     // Export the volume to the ADF
     FSError error;
-    return vol.exportVolume(data, size, &error);
+    vol.exportVolume(data, size, &error);
 
+    // REMOVE ASAP
+    // dumpSector(0);
+    
     return error == FS_OK;
 }
 

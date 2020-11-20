@@ -239,14 +239,6 @@ class ExporterDialog: DialogController {
                 }
             }
         }
-
-        /*
-        let attr1 = [NSAttributedString.Key.foregroundColor: NSColor.textColor]
-        let attr2 = [NSAttributedString.Key.foregroundColor: NSColor.systemRed]
-        let str1 = NSMutableAttributedString(string: text1, attributes: attr1)
-        let str2 = NSMutableAttributedString(string: text2, attributes: attr2)
-        str1.append(str2)
-        */
         
         volumeInfo.stringValue = text
     }
@@ -737,7 +729,7 @@ class ExporterDialog: DialogController {
     
     @IBAction func clickAction(_ sender: NSTableView!) {
         
-        if sender.clickedColumn > 0 {
+        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
             
             let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
             selection = selection != newValue ? newValue : nil

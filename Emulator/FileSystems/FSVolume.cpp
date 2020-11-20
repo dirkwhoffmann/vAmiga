@@ -764,7 +764,7 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
         *error = FS_UNKNOWN; return false;
     }
     // Only proceed if the provided file system is supported
-    if (src[3] >= 1) {
+    if (src[3] > 1) {
         *error = FS_UNSUPPORTED; return false;
     }
     
@@ -782,7 +782,7 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
         if (newBlock == nullptr) return false;
 
         // Import the block data
-        const u8 *p = src + bsize * 4;
+        const u8 *p = src + i * bsize;
         newBlock->importBlock(p, bsize);
 
         // Replace the existing block

@@ -20,6 +20,7 @@ struct FSEmptyBlock : FSBlock {
     FSItemType itemType(u32 byte) override; 
     u32 typeID() override { return 0; }
     u32 subtypeID() override { return 0; }
+    void dumpData() override { };
 
     void importBlock(const u8 *src, size_t bsize) override;
     void exportBlock(u8 *dst, size_t bsize) override;

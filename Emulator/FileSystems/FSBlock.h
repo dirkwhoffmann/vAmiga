@@ -108,7 +108,8 @@ struct FSBlock {
 
     // Prints some debug information for this block
     virtual void dump() { };
-    
+    virtual void dumpData();
+
     
     //
     // Verifying
