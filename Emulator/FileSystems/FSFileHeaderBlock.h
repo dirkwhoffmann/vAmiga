@@ -21,6 +21,7 @@ struct FSFileHeaderBlock : FSBlock {
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos) override;
     void dump() override;
+    u32 checksumLocation() override { return 5; }
     void updateChecksum() override;
 
     //

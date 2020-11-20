@@ -95,6 +95,9 @@ struct FSBlock {
     void inc32(i32 n) { inc32(addr(n)); }
     void dec32(i32 n) { dec32(addr(n)); }
 
+    // Returns the location of the checksum inside this block
+    virtual u32 checksumLocation() { return (u32)-1; }
+
     // Computes a checksum for this block
     u32 checksum();
     

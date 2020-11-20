@@ -119,15 +119,22 @@ FSBlock::dumpData()
 u32
 FSBlock::checksum()
 {
-    // TODO: Skip fields storing the actual checksum
+    u32 loc = checksumLocation();
+    assert(loc <= 5);
+    
+    // Wipe out the old checksum
+    u32 old = get32(loc);
+    set32(loc, 0);
+    
+    // Compute the new checksum
     u32 result = 0;
-    u32 numLongWords = volume.bsize / 4;
+    for (u32 i = 0; i < volume.bsize / 4; i++) result += get32(i);
+    result = ~result + 1;
     
-    for (u32 i = 0; i < numLongWords; i++) {
-        result += get32(i);
-    }
+    // Rectify the buffer
+    set32(loc, old);
     
-    return ~result + 1;
+    return result;
 }
 
 bool

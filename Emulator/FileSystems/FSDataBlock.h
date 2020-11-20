@@ -34,6 +34,7 @@ struct OFSDataBlock : FSDataBlock {
     FSItemType itemType(u32 byte) override;
     void dump() override;
     FSError check(u32 pos) override;
+    u32 checksumLocation() override { return 5; }
     void updateChecksum() override;
 
     u32  getFileHeaderRef() override                { return get32(1);        }
