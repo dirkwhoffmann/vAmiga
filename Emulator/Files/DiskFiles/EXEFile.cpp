@@ -102,8 +102,8 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     // Check for file system errors
     volume.changeDir("/");
     volume.info();
-    volume.walk(true);
-    
+    volume.printDirectory(true);
+
     // Check the file system for consistency
     FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
@@ -120,6 +120,12 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
             warn("readFromBuffer: Cannot export volume (%s)", sFSError(error));
         }
     }
+    
+    // REMOVE ASAP
+    const char *path = "/tmp/test";
+    msg("Doing a test export to %s\n", path);
+    
+    volume.exportDirectory(path);
     
     return adf != nullptr;
 }

@@ -236,18 +236,22 @@ public:
     FSBlock *makeFile(const char *name, const u8 *buffer, size_t size);
     FSBlock *makeFile(const char *name, const char *str);
 
+    // Prints a directory listing
+    void printDirectory(bool recursive);
         
+    
     //
     // Crawling through the file system
     //
 
     // Walks through all files in the current directory or a given directory
-    int walk(bool recursive);
+    // int walk(bool recursive);
     int walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive);
 
     // Walker callbacks
     int listWalker(FSBlock *block, int value);
-    
+    int exportWalker(FSBlock *block, int value);
+
     
     //
     // Importing and exporting
@@ -264,6 +268,9 @@ public:
     // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
+
+    // Exports the volume to a directory of the host file system
+    FSError exportDirectory(const char *path, bool recursive = true);
 };
 
 #endif

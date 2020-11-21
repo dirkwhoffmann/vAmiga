@@ -70,7 +70,7 @@ DIRFile::readFromFile(const char *filename)
     
     // Check the file system for errors
     volume->info();
-    volume->walk(true);
+    volume->printDirectory(true);
 
     // Check the file system for consistency
     FSErrorReport report = volume->check(true);

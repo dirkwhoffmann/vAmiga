@@ -647,11 +647,13 @@ FSVolume::seekFile(const char *name)
     return block;
 }
 
-int
-FSVolume::walk(bool recursive)
+void
+FSVolume::printDirectory(bool recursive)
 {
-    return walk(currentDirBlock(), &FSVolume::listWalker, 0, recursive);
+    int num = walk(currentDirBlock(), &FSVolume::listWalker, 0, recursive);
+    msg("%d items\n", num);
 }
+
 
 int
 FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive)
@@ -700,6 +702,19 @@ FSVolume::listWalker(FSBlock *block, int value)
     msg("\n");
 
     return value + 1;
+}
+
+int
+FSVolume::exportWalker(FSBlock *block, int value)
+{
+    if (block->type() == FS_USERDIR_BLOCK) {
+        msg("Directory");
+    }
+    if (block->type() == FS_FILEHEADER_BLOCK) {
+        msg("File");
+    }
+    
+    return 0;
 }
 
 bool
@@ -865,4 +880,21 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
     }
 
     return result;
+}
+
+FSError
+FSVolume::exportDirectory(const char *path, bool recursive)
+{
+    assert(path != nullptr);
+    
+    // Only proceed if path points to an empty directory
+    long numItems = numDirectoryItems(path);
+    
+    msg("Directory %s contains %d items\n", path, numItems);
+    if (numItems != 0) {
+        warn("Export aborted. Directory is not empty");
+        return FS_DIRECTORY_NOT_EMPTY;
+    }
+    
+    return FS_OK;
 }

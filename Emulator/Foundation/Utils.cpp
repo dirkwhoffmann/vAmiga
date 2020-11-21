@@ -128,6 +128,21 @@ bool isDirectory(const char *path)
     return S_ISDIR(fileProperties.st_mode);
 }
 
+long numDirectoryItems(const char *path)
+{
+    long count = 0;
+    
+    if (DIR *dir = opendir(path)) {
+        
+        struct dirent *dp;
+        while ((dp = readdir(dir))) {
+            if (dp->d_name[0] != '.') count++;
+        }
+    }
+    
+    return count;
+}
+
 long
 getSizeOfFile(const char *path)
 {

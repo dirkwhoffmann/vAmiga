@@ -1233,6 +1233,7 @@ struct SerialPortWrapper { SerialPort *port; };
     }
     return self;
 }
+
 + (instancetype) make:(FSVolume *)volume
 {
     if (volume == NULL) { return nil; }
@@ -1240,6 +1241,7 @@ struct SerialPortWrapper { SerialPort *port; };
     FSVolumeProxy *proxy = [[self alloc] initWithVolume: volume];
     return proxy;
 }
+
 + (instancetype) makeWithADF:(ADFFileProxy *)fileProxy
 {
     FSError error;
@@ -1253,18 +1255,22 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->getType();
 }
+
 - (FSBlockType) blockType:(NSInteger)blockNr
 {
     return wrapper->volume->blockType(blockNr);
 }
+
 - (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos
 {
     return wrapper->volume->itemType(blockNr, pos);
 }
+
 - (FSErrorReport) check:(BOOL)strict
 {
     return wrapper->volume->check(strict);
 }
+
 - (FSError) check:(NSInteger)nr
               pos:(NSInteger)pos
          expected:(unsigned char *)exp
@@ -1272,37 +1278,37 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->check(nr, pos, exp, strict);
 }
+
 - (BOOL) isCorrupted:(NSInteger)blockNr
 {
     return wrapper->volume->isCorrupted(blockNr);
 }
-- (BOOL) isCorrupted:(NSInteger)blockNr n:(NSInteger)n
-{
-    return wrapper->volume->isCorrupted(blockNr, n);
-}
+
 - (NSInteger) getCorrupted:(NSInteger)blockNr
 {
     return wrapper->volume->getCorrupted(blockNr);
 }
+
 - (NSInteger) nextCorrupted:(NSInteger)blockNr
 {
     return wrapper->volume->nextCorrupted(blockNr);
 }
+
 - (NSInteger) prevCorrupted:(NSInteger)blockNr
 {
     return wrapper->volume->prevCorrupted(blockNr);
 }
-- (NSInteger) seekCorruptedBlock:(NSInteger)n
+
+- (FSError) export:(NSString *)path
 {
-    return wrapper->volume->seekCorruptedBlock(n);
+    return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
 }
+
 - (void) dump
 {
     wrapper->volume->dump();
 }
-
 @end
-
 
 //
 // AmigaFile

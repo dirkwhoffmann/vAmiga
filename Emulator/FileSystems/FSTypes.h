@@ -142,6 +142,9 @@ VAMIGA_ENUM(long, FSError)
     FS_WRONG_CAPACITY,
     FS_CORRUPTED,
     
+    // Export errors
+    FS_DIRECTORY_NOT_EMPTY,
+    
     // Block errros
     FS_EXPECTED_VALUE,
     FS_EXPECTED_SMALLER_VALUE,

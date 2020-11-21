@@ -117,16 +117,16 @@ Gw
                         </connections>
                     </button>
                     <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0DY-M6-gkS">
-                        <rect key="frame" x="321" y="16" width="170" height="26"/>
+                        <rect key="frame" x="356" y="16" width="135" height="26"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                        <popUpButtonCell key="cell" type="push" title="ADF (Amiga Disk File)" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="hvY-Y5-M6i" id="Lh3-gv-DZt">
+                        <popUpButtonCell key="cell" type="push" title="ADF" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="hvY-Y5-M6i" id="Lh3-gv-DZt">
                             <behavior key="behavior" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="menu"/>
                             <menu key="menu" id="25G-Nw-27W">
                                 <items>
-                                    <menuItem title="ADF (Amiga Disk File)" state="on" id="hvY-Y5-M6i" userLabel="P00 Format"/>
-                                    <menuItem title="IMG (DOS Image)" tag="1" id="H70-Ts-DTM" userLabel="P00 Format"/>
-                                    <menuItem title="IMA (DOS Image)" tag="2" id="3pB-Ur-tcG" userLabel="P00 Format"/>
+                                    <menuItem title="ADF" state="on" id="hvY-Y5-M6i" userLabel="P00 Format"/>
+                                    <menuItem title="IMG" tag="1" id="H70-Ts-DTM" userLabel="P00 Format"/>
+                                    <menuItem title="IMA " tag="2" id="3pB-Ur-tcG" userLabel="P00 Format"/>
                                     <menuItem title="Directory" tag="3" id="S1a-eM-rc0" userLabel="P00 Format"/>
                                 </items>
                             </menu>
@@ -517,6 +517,15 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wTa-j7-Ngp">
+                        <rect key="frame" x="353" y="68" width="215" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Corrupted Block 1000 out of 1000" id="ZoQ-IT-WBT">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mIP-Nx-JCb">
                         <rect key="frame" x="528" y="289" width="41" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -538,7 +547,7 @@ Gw
                         </connections>
                     </stepper>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qFf-qn-Auf">
-                        <rect key="frame" x="273" y="22" width="52" height="17"/>
+                        <rect key="frame" x="302" y="21" width="52" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Format:" id="p9E-DL-TB9">
                             <font key="font" metaFont="system"/>
@@ -573,7 +582,7 @@ Gw
                         </connections>
                     </stepper>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8I-Vh-3VH">
-                        <rect key="frame" x="131" y="22" width="114" height="18"/>
+                        <rect key="frame" x="143" y="21" width="114" height="18"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <buttonCell key="cell" type="check" title="Strict checking" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Bnh-id-ngO">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
@@ -583,15 +592,6 @@ Gw
                             <action selector="strictAction:" target="-2" id="8o7-Db-5In"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wTa-j7-Ngp">
-                        <rect key="frame" x="353" y="68" width="215" height="16"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Corrupted Block 1000 out of 1000" id="ZoQ-IT-WBT">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                 </subviews>
             </view>
             <connections>

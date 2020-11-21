@@ -657,6 +657,7 @@ class ExporterDialog: DialogController {
             if result == .OK {
                 if let url = self.openPanel.url {
                     track("url = \(url)")
+                    self.openPanel.close()
                     self.exportToDirectory(url: url)
                 }
             }
@@ -667,8 +668,21 @@ class ExporterDialog: DialogController {
     func exportToDirectory(url: URL) {
         
         track("url = \(url)")
-        track("IMPLEMENTATION MISSING")
-        hideSheet()
+        
+        let error = volume!.export(url.path)
+
+        switch error {
+
+        case .DIRECTORY_NOT_EMPTY:
+            
+            parent.critical("The destination directory is not empty.",
+                            "To prevent accidental exports, the disk exporter " +
+                            "refuses to work on non-empty directories.")
+            
+        default:
+
+            hideSheet()
+        }
     }
 
     func export(url: URL) {

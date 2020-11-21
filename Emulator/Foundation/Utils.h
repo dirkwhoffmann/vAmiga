@@ -21,6 +21,7 @@
 #include <sys/param.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <dirent.h>
 
 #include "AmigaConfig.h"
 #include "AmigaConstants.h"
@@ -159,6 +160,9 @@ bool checkFileSuffix(const char *path, const char *suffix);
 // Checks if a path points to a directory
 bool isDirectory(const char *path);
 
+// Returns the number of files in a directory
+long numDirectoryItems(const char *path);
+
 // Returns the size of a file in bytes
 long getSizeOfFile(const char *path);
 
@@ -173,25 +177,6 @@ bool matchingBufferHeader(const u8 *buffer, const u8 *header, size_t length);
 // Loads a file from disk
 bool loadFile(const char *path, u8 **buffer, long *size);
 bool loadFile(const char *path, const char *name, u8 **buffer, long *size);
-
-
-//
-// Controlling time
-//
-
-// Puts the current thread to sleep for a given amout of micro seconds
-// void sleepMicrosec(unsigned usec);
-
-/* Sleeps until the kernel timer reaches kernelTargetTime
- *
- * kernelEarlyWakeup: To increase timing precision, the function wakes up the
- *                    thread earlier by this amount and waits actively in a
- *                    delay loop until the deadline is reached.
- *
- * Returns the overshoot time (jitter), measured in kernel time units. Smaller
- * values are better, 0 is best.
- */
-// i64 sleepUntil(u64 kernelTargetTime, u64 kernelEarlyWakeup);
 
 
 //
