@@ -77,12 +77,12 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
         
         switch (word) {
                 
-            case 0: EXPECT_LONGWORD(value, 8, byte % 4); break;
-            case 1: EXPECT_FILEHEADER_REF(value); break;
-            case 2: EXPECT_DATABLOCK_NUMBER(value); break;
-            case 3: EXPECT_RANGE(value, 0, volume.dsize); break;
-            case 4: EXPECT_OPTIONAL_DATABLOCK_REF(value); break;
-            case 5: EXPECT_CHECKSUM(value); break;
+            case 0: EXPECT_LONGWORD(8, byte % 4); break;
+            case 1: EXPECT_FILEHEADER_REF; break;
+            case 2: EXPECT_DATABLOCK_NUMBER; break;
+            case 3: EXPECT_RANGE(0, volume.dsize); break;
+            case 4: EXPECT_OPTIONAL_DATABLOCK_REF; break;
+            case 5: EXPECT_CHECKSUM; break;
         }
     }
     

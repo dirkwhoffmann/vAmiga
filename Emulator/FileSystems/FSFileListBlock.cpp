@@ -75,25 +75,25 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
      * We ignore this common inconsistency if strict checking is disabled.
      */
     if (!strict) {
-        if (word == -3) { EXPECT_REF(value); return FS_OK; }
+        if (word == -3) { EXPECT_REF; return FS_OK; }
     }
 
     switch (word) {
             
-        case 0:   EXPECT_LONGWORD(value, 16, byte % 4); break;
-        case 1:   EXPECT_SELFREF(value); break;
-        case 3:   EXPECT_BYTE(value, 0); break;
-        case 4:   EXPECT_OPTIONAL_DATABLOCK_REF(value); break;
-        case 5:   EXPECT_CHECKSUM(value); break;
+        case 0:   EXPECT_LONGWORD(16, byte % 4); break;
+        case 1:   EXPECT_SELFREF; break;
+        case 3:   EXPECT_BYTE(0); break;
+        case 4:   EXPECT_OPTIONAL_DATABLOCK_REF; break;
+        case 5:   EXPECT_CHECKSUM; break;
         case -50:
-        case -4:  EXPECT_BYTE(value, 0); break;
-        case -3:  EXPECT_FILEHEADER_REF(value); break;
-        case -2:  EXPECT_OPTIONAL_FILELIST_REF(value); break;
-        case -1:  EXPECT_LONGWORD(value, (u32)(-3), byte % 4); break;
+        case -4:  EXPECT_BYTE(0); break;
+        case -3:  EXPECT_FILEHEADER_REF; break;
+        case -2:  EXPECT_OPTIONAL_FILELIST_REF; break;
+        case -1:  EXPECT_LONGWORD((u32)(-3), byte % 4); break;
     }
     
     // Data block references
-    if (word <= -51 && value) EXPECT_DATABLOCK_REF(value);
+    if (word <= -51 && value) EXPECT_DATABLOCK_REF;
     if (word == -51) {
         if (value == 0 && getNumDataBlockRefs() > 0) {
             return FS_EXPECTED_REF;

@@ -259,59 +259,62 @@ public:
 
 typedef FSBlock* BlockPtr;
 
-#define EXPECT_BYTE(val,exp) \
-if ((val) != (exp)) { *expected = (exp); return FS_UNEXPECTED_VALUE; }
+#define EXPECT_BYTE(exp) \
+if (value != (exp)) { *expected = (exp); return FS_UNEXPECTED_VALUE; }
 
-#define EXPECT_LONGWORD(val,exp,offset) \
-if (offset == 0 && BYTE3(val) != BYTE3(exp)) \
+#define EXPECT_LONGWORD(exp,offset) \
+if (offset == 0 && BYTE3(value) != BYTE3(exp)) \
     { *expected = (BYTE3(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 1 && BYTE2(val) != BYTE2(exp)) \
+if (offset == 1 && BYTE2(value) != BYTE2(exp)) \
     { *expected = (BYTE2(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 2 && BYTE1(val) != BYTE1(exp)) \
+if (offset == 2 && BYTE1(value) != BYTE1(exp)) \
     { *expected = (BYTE1(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 3 && BYTE0(val) != BYTE0(exp)) \
+if (offset == 3 && BYTE0(value) != BYTE0(exp)) \
     { *expected = (BYTE0(exp)); return FS_UNEXPECTED_VALUE; }
 
-#define EXPECT_RANGE(val,min,max) \
-if ((val) < min || (val) > max) return FS_OUT_OF_RANGE;
+#define EXPECT_RANGE(min,max) \
+if (value < min || value > max) return FS_OUT_OF_RANGE;
 
-#define EXPECT_DOS_REVISION(val) \
-if (!isFSVolumeType(val)) return FS_EXPECTED_DOS_REVISION;
+#define EXPECT_DOS_REVISION \
+if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION;
 
-#define EXPECT_REF(val) \
-if (!volume.block(val)) return FS_EXPECTED_REF;
+#define EXPECT_REF \
+if (!volume.block(value)) return FS_EXPECTED_REF;
 
-#define EXPECT_SELFREF(val) \
-if ((val) != nr) return FS_EXPECTED_SELFREF;
+#define EXPECT_SELFREF \
+if (value != nr) return FS_EXPECTED_SELFREF;
 
-#define EXPECT_FILEHEADER_REF(val) \
-if (FSError e = volume.checkBlockType(val, FS_FILEHEADER_BLOCK); e != FS_OK) return e;
+#define EXPECT_FILEHEADER_REF \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e;
 
-#define EXPECT_HASH_REF(val) \
-if (FSError e = volume.checkBlockType(val, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
+#define EXPECT_HASH_REF \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
 
-#define EXPECT_OPTIONAL_HASH_REF(val) if (val) { EXPECT_HASH_REF(val) }
+#define EXPECT_OPTIONAL_HASH_REF \
+if (value) { EXPECT_HASH_REF }
 
-#define EXPECT_PARENT_DIR_REF(val) \
-if (FSError e = volume.checkBlockType(val, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
+#define EXPECT_PARENT_DIR_REF \
+if (FSError e = volume.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
 
-#define EXPECT_FILELIST_REF(val) \
-if (FSError e = volume.checkBlockType(val, FS_FILELIST_BLOCK); e != FS_OK) return e;
+#define EXPECT_FILELIST_REF \
+if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e;
 
-#define EXPECT_OPTIONAL_FILELIST_REF(val) if (val) { EXPECT_FILELIST_REF(val) }
+#define EXPECT_OPTIONAL_FILELIST_REF \
+if (value) { EXPECT_FILELIST_REF }
 
-#define EXPECT_DATABLOCK_REF(val) \
-if (FSError e = volume.checkBlockType(val, FS_DATA_BLOCK); e != FS_OK) return e;
+#define EXPECT_DATABLOCK_REF \
+if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e;
 
-#define EXPECT_OPTIONAL_DATABLOCK_REF(val) if (val) { EXPECT_DATABLOCK_REF(val) }
+#define EXPECT_OPTIONAL_DATABLOCK_REF \
+if (value) { EXPECT_DATABLOCK_REF }
 
-#define EXPECT_DATABLOCK_NUMBER(val) \
-if ((val) == 0) return FS_EXPECTED_DATABLOCK_NR;
+#define EXPECT_DATABLOCK_NUMBER \
+if (value == 0) return FS_EXPECTED_DATABLOCK_NR;
 
-#define EXPECT_HASHTABLE_SIZE(val) \
-if ((val) != 72) return FS_INVALID_HASHTABLE_SIZE;
+#define EXPECT_HASHTABLE_SIZE \
+if (value != 72) return FS_INVALID_HASHTABLE_SIZE;
 
-#define EXPECT_CHECKSUM(val) \
-if ((val) != checksum()) return FS_INVALID_CHECKSUM;
+#define EXPECT_CHECKSUM \
+if (value != checksum()) return FS_INVALID_CHECKSUM;
 
 #endif
