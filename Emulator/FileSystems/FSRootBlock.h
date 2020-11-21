@@ -21,7 +21,7 @@ struct FSRootBlock : FSBlock {
     // Methods from Block class
     FSBlockType type() override { return FS_ROOT_BLOCK; }
     FSItemType itemType(u32 byte) override;
-    FSError check(u32 pos) override;
+    FSError check(u32 pos, bool strict) override;
     u32 checksumLocation() override { return 5; }
 
     

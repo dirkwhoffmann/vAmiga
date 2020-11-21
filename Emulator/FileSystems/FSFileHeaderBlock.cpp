@@ -66,12 +66,16 @@ FSFileHeaderBlock::itemType(u32 byte)
 }
 
 FSError
-FSFileHeaderBlock::check(u32 byte)
+FSFileHeaderBlock::check(u32 byte, bool strict)
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     u32 value = get32(word);
     
+    /* Ignore common inconsistencies.
+     */
+    // if (word ==  && !strict) return FS_OK;
+
     switch (word) {
         case 0:   EXPECT_00000002(value, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;

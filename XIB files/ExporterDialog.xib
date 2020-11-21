@@ -596,8 +596,8 @@ Gw
                     </stepper>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8I-Vh-3VH">
                         <rect key="frame" x="131" y="22" width="114" height="18"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="check" title="Strict checking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Bnh-id-ngO">
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <buttonCell key="cell" type="check" title="Strict checking" bezelStyle="regularSquare" imagePosition="left" inset="2" id="Bnh-id-ngO">
                             <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>

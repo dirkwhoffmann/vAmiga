@@ -134,21 +134,15 @@ FSVolume::dump()
     }
 }
 
-FSError
-FSVolume::check(u32 blockNr, u32 pos)
-{
-    return blocks[blockNr]->check(pos);
-}
-
 FSErrorReport
-FSVolume::check()
+FSVolume::check(bool strict)
 {
     long total = 0, min = LONG_MAX, max = 0;
     
     // Analyze all blocks
     for (u32 i = 0; i < capacity; i++) {
          
-        if (blocks[i]->check() > 0) {
+        if (blocks[i]->check(strict) > 0) {
             min = MIN(min, i);
             max = MAX(max, i);
             blocks[i]->corrupted = ++total;
@@ -172,92 +166,41 @@ FSVolume::check()
     return result;
 }
 
-/*
-FSErrorReport
-FSVolume::check(u32 blockNr)
+FSError
+FSVolume::check(u32 blockNr, u32 pos, bool strict)
 {
-    assert(isBlockNumber(blockNr));
-
-    FSErrorReport result;
-    long errors;
-    
-    blocks[blockNr]->check(&errors);
-
-    if (errors) {
-        result.corruptedBlocks = 1;
-        result.firstErrorBlock = blockNr;
-        result.lastErrorBlock = blockNr;
-    } else {
-        result.corruptedBlocks = 0;
-        result.firstErrorBlock = -1;
-        result.lastErrorBlock = -1;
-    }
-    
-    return result;
+    return blocks[blockNr]->check(pos, strict);
 }
-*/
 
-/*
-bool
-FSVolume::nextErrorLocation(long *blockNr, long *offset)
+FSError
+FSVolume::checkBlockType(u32 nr, FSBlockType type)
 {
-    long b = *blockNr;
-    long o = *offset;
+    return checkBlockType(nr, type, type);
+}
+
+FSError
+FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
+{
+    FSBlockType t = blockType(nr);
     
-    for (; b < (long)capacity; b++, o = 0) {
-        for (; o < bsize; o++) {
-            if (blocks[b]->check(offset) != FS_OK) {
-                *blockNr = b;
-                *offset = o;
-                return true;
-            }
+    if (t != type && t != altType) {
+        
+        switch (t) {
+                
+            case FS_EMPTY_BLOCK:      return FS_PTR_TO_EMPTY_BLOCK;
+            case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
+            case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
+            case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
+            case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
+            case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_DATA_BLOCK:       return FS_PTR_TO_DATA_BLOCK;
+            default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
-    return false;
-}
-*/
-/*
-bool
-FSVolume::prevErrorLocation(long *blockNr, long *offset)
-{
-    long b = *blockNr;
-    long o = *offset;
-    
-    for (; b >= 0; b--, o = bsize - 1) {
-        for (; o > 0; o--) {
-            if (blocks[b]->check(offset) != FS_OK) {
-                *blockNr = b;
-                *offset = o;
-                return true;
-            }
-        }
-    }
-    return false;
-}
-*/
-/*
-u32
-FSVolume::nextCorruptedBlock(u32 block)
-{
-    for (u32 i = block + 1; i < capacity; i++) {
-        if (blocks[i]->check() > 0) return i;
-    }
 
-    // If we don't find a block, return the given number
-    return block;
+    return FS_OK;
 }
-
-u32
-FSVolume::prevCorruptedBlock(u32 block)
-{
-    for (u32 i = block > 0 ? block - 1 : 0; i >= 0; i--) {
-        if (blocks[i]->check() > 0) return i;
-    }
-    
-    // If we don't find a block, return the given number
-    return block;
-}
-*/
 
 bool
 FSVolume::isCorrupted(u32 blockNr)
@@ -317,36 +260,6 @@ FSVolume::guessBlockType(u32 nr, const u8 *buffer)
     }
     
     return FS_EMPTY_BLOCK;
-}
-
-FSError
-FSVolume::checkBlockType(u32 nr, FSBlockType type)
-{
-    return checkBlockType(nr, type, type);
-}
-
-FSError
-FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
-{
-    FSBlockType t = blockType(nr);
-    
-    if (t != type && t != altType) {
-        
-        switch (t) {
-                
-            case FS_EMPTY_BLOCK:      return FS_POINTS_TO_EMPTY_BLOCK;
-            case FS_BOOT_BLOCK:       return FS_POINTS_TO_BOOT_BLOCK;
-            case FS_ROOT_BLOCK:       return FS_POINTS_TO_ROOT_BLOCK;
-            case FS_BITMAP_BLOCK:     return FS_POINTS_TO_BITMAP_BLOCK;
-            case FS_USERDIR_BLOCK:    return FS_POINTS_TO_USERDIR_BLOCK;
-            case FS_FILEHEADER_BLOCK: return FS_POINTS_TO_FILEHEADER_BLOCK;
-            case FS_FILELIST_BLOCK:   return FS_POINTS_TO_FILEHEADER_BLOCK;
-            case FS_DATA_BLOCK:       return FS_POINTS_TO_DATA_BLOCK;
-            default:                  return FS_POINTS_TO_UNKNOWN_BLOCK;
-        }
-    }
-
-    return FS_OK;
 }
 
 bool

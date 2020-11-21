@@ -43,7 +43,7 @@ FSBootBlock::itemType(u32 byte)
 }
 
 FSError
-FSBootBlock::check(u32 byte)
+FSBootBlock::check(u32 byte, bool strict)
 {
     if (byte <= 3 && nr == 0) {
         

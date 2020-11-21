@@ -73,7 +73,7 @@ DIRFile::readFromFile(const char *filename)
     volume->walk(true);
 
     // Check the file system for consistency
-    FSErrorReport report = volume->check();
+    FSErrorReport report = volume->check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
     }

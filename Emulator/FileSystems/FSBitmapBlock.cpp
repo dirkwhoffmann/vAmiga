@@ -27,7 +27,7 @@ FSBitmapBlock::itemType(u32 pos)
 }
 
 FSError
-FSBitmapBlock::check(u32 pos)
+FSBitmapBlock::check(u32 pos, bool strict)
 {
     // Align pos to the long word raster
     pos &= ~0b11;

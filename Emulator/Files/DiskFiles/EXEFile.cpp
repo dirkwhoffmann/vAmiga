@@ -105,7 +105,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     volume.walk(true);
     
     // Check the file system for consistency
-    FSErrorReport report = volume.check();
+    FSErrorReport report = volume.check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
         volume.dump();

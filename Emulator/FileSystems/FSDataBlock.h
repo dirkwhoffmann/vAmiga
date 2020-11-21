@@ -32,7 +32,7 @@ struct OFSDataBlock : FSDataBlock {
     OFSDataBlock(FSVolume &ref, u32 nr);
     FSItemType itemType(u32 byte) override;
     void dump() override;
-    FSError check(u32 pos) override;
+    FSError check(u32 pos, bool strict) override;
     u32 checksumLocation() override { return 5; }
 
     u32  getFileHeaderRef() override                { return get32(1);        }
@@ -57,7 +57,6 @@ struct FFSDataBlock : FSDataBlock {
     FFSDataBlock(FSVolume &ref, u32 nr);
     FSItemType itemType(u32 byte) override;
     void dump() override;
-    bool check(bool verbose) override;
 
     u32 getDataBlockNr() override { return 0; }
     void setDataBlockNr(u32 val) override { }

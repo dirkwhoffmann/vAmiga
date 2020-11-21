@@ -47,14 +47,14 @@ FSBlock::subtypeID()
 }
 
 unsigned
-FSBlock::check()
+FSBlock::check(bool strict)
 {
     FSError error;
     unsigned count = 0;
     
     for (u32 i = 0; i < volume.bsize; i++) {
 
-        if ((error = check(i)) != FS_OK) {
+        if ((error = check(i, strict)) != FS_OK) {
             count++;
             if (FS_DEBUG) printf("Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
         }
@@ -153,86 +153,6 @@ FSBlock::updateChecksum()
 {
     u32 ref = checksumLocation();
     if (ref < volume.bsize / 4) set32(ref, checksum());
-}
-
-bool
-FSBlock::check(bool verbose)
-{
-    return assertSelfRef(nr, verbose);
-}
-
-bool
-FSBlock::assertNotNull(u32 ref, bool verbose)
-{
-    if (ref != 0) return true;
-    
-    if (verbose) fprintf(stderr, "Block reference is missing.\n");
-    return false;
-}
-
-bool
-FSBlock::assertInRange(u32 ref, bool verbose)
-{
-    if (volume.isBlockNumber(ref)) return true;
-
-    if (verbose) fprintf(stderr, "Block reference %d is invalid\n", ref);
-    return false;
-}
-
-bool
-FSBlock::assertHasType(u32 ref, FSBlockType type, bool verbose)
-{
-    return assertHasType(ref, type, type, verbose);
-}
-
-bool
-FSBlock::assertHasType(u32 ref, FSBlockType type1, FSBlockType type2, bool verbose)
-{
-    assert(isFSBlockType(type1));
-    assert(isFSBlockType(type2));
-
-    FSBlock *block = volume.block(ref);
-    FSBlockType type = block ? block->type() : FS_EMPTY_BLOCK;
-    
-    if (!isFSBlockType(type)) {
-        if (verbose) fprintf(stderr, "Block type %ld is not a known type.\n", type);
-        return false;
-    }
-    
-    if (block && (type == type1 || type == type2)) return true;
-    
-    if (verbose && type1 == type2) {
-        fprintf(stderr, "Block %d has type %s. Expected %s.\n",
-                ref,
-                sFSBlockType(type),
-                sFSBlockType(type1));
-    }
-    
-    if (verbose && type1 != type2) {
-        fprintf(stderr, "Block %d has type %s. Expected %s or %s.\n",
-                ref,
-                sFSBlockType(type),
-                sFSBlockType(type1),
-                sFSBlockType(type2));
-    }
-
-    return false;
-}
-
-bool
-FSBlock::assertSelfRef(u32 ref, bool verbose)
-{
-    if (ref == nr && volume.block(ref) == this) return true;
-
-    if (ref != nr && verbose) {
-        fprintf(stderr, "%d is not a self-reference.\n", ref);
-    }
-    
-    if (volume.block(ref) != this && verbose) {
-        fprintf(stderr, "Array element %d references an invalid block\n", ref);
-    }
-    
-    return false;
 }
 
 void

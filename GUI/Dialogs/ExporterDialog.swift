@@ -89,9 +89,8 @@ class ExporterDialog: DialogController {
     //
 
     func checkVolume() {
-        
-        errorReport = volume?.check()
-        // errorReport = volume?.check(strict)
+                
+        errorReport = volume?.check(strict)
         let errors = errorReport?.corruptedBlocks ?? 0
         
         corruptionStepper.minValue = Double(1)
@@ -303,7 +302,10 @@ class ExporterDialog: DialogController {
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
 
-        // Hide some elements if window is shrinked
+        // Hide elements that make no sense if no file system is present
+        strictButton.isHidden = volume == nil
+
+        // Hide some elements if the window is shrinked
         let items: [NSView] = [
             previewScrollView,
             cylinderText, cylinderField, cylinderStepper,
@@ -311,18 +313,12 @@ class ExporterDialog: DialogController {
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
             blockText, blockField, blockStepper,
-            corruptionText, corruptionField, corruptionStepper,
-            strictButton
+            corruptionText, corruptionField, corruptionStepper
         ]
         for item in items { item.isHidden = shrinked }
-                
+
         // Only proceed if the window is expanded
         if shrinked { return }
-
-        // Hide more elements if no file system has been detected
-        if volume == nil {
-            strictButton.isHidden = true
-        }
         
         // Hide more elements if no errors are present
         if errorReport?.corruptedBlocks == 0 {
@@ -528,7 +524,7 @@ class ExporterDialog: DialogController {
         case .FSI_MODIFIED_TICKS:
             text = "Modification Date (Ticks)"
         case .FSI_NEXT_HASH_REF:
-            text = "Hash Block Reference"
+            text = "Reference to the next block with the same hash value"
         case .FSI_PARENT_DIR_REF:
             text = "Parent Directory Block Reference"
         case .FSI_FILEHEADER_REF:
@@ -571,7 +567,7 @@ class ExporterDialog: DialogController {
 
     func updateErrorInfoSelected() {
         
-        let error = volume!.check(_block, pos: selection!)
+        let error = volume!.check(_block, pos: selection!, strict: strict)
         var text: String
 
         switch error {
@@ -608,35 +604,24 @@ class ExporterDialog: DialogController {
         case .EXPECTED_SELFREF:
             text = "Expected a self-reference"
             
-        case .POINTS_TO_EMPTY_BLOCK:
-            text = "This reference points to an empty block"
-        case .POINTS_TO_BOOT_BLOCK:
-            text = "This reference points to a boot block"
-        case .POINTS_TO_ROOT_BLOCK:
-            text = "This reference points to the root block"
-        case .POINTS_TO_BITMAP_BLOCK:
-            text = "This reference points to a bitmap block"
-        case .POINTS_TO_USERDIR_BLOCK:
-            text = "This reference points to a user directory block"
-        case .POINTS_TO_FILEHEADER_BLOCK:
-            text = "This reference points to a file header block"
-        case .POINTS_TO_FILELIST_BLOCK:
-            text = "This reference points to a file header block"
-        case .POINTS_TO_DATA_BLOCK:
-            text = "This reference points to a data block"
-        case .POINTS_TO_UNKNOWN_BLOCK:
+        case .PTR_TO_UNKNOWN_BLOCK:
             text = "This reference points to a block of unknown type"
-
-        case .EXPECTED_FILEHEADER_REF:
-            text = "Expected a reference to a file header block"
-        case .EXPECTED_FILELIST_REF:
-            text = "Expected a reference to a file list block"
-        case .EXPECTED_DATABLOCK_REF:
-            text = "Expected a reference to a data block"
-        case .EXPECTED_HASH_REF:
-            text = "Expected a reference to a hashable block"
-        case .EXPECTED_PARENTDIR_REF:
-            text = "Expected a reference to a user directory or file header block"
+        case .PTR_TO_EMPTY_BLOCK:
+            text = "This reference points to an empty block"
+        case .PTR_TO_BOOT_BLOCK:
+            text = "This reference points to a boot block"
+        case .PTR_TO_ROOT_BLOCK:
+            text = "This reference points to the root block"
+        case .PTR_TO_BITMAP_BLOCK:
+            text = "This reference points to a bitmap block"
+        case .PTR_TO_USERDIR_BLOCK:
+            text = "This reference points to a user directory block"
+        case .PTR_TO_FILEHEADER_BLOCK:
+            text = "This reference points to a file header block"
+        case .PTR_TO_FILELIST_BLOCK:
+            text = "This reference points to a file header block"
+        case .PTR_TO_DATA_BLOCK:
+            text = "This reference points to a data block"
         case .EXPECTED_DATABLOCK_NR:
             text = "Invalid data block position number"
         case .INVALID_HASHTABLE_SIZE:
@@ -646,6 +631,7 @@ class ExporterDialog: DialogController {
         case .OUT_OF_RANGE:
             text = "Value is out of range"
         default:
+            track("error = \(error)")
             fatalError()
         }
         
@@ -911,16 +897,14 @@ extension ExporterDialog: NSTableViewDelegate {
         if let col = columnNr(tableColumn) {
             
             let offset = 16 * row + col
-            let error = volume?.check(_block, pos: offset) ?? .OK
-            let type = volume?.itemType(_block, pos: offset) ?? .FSI_UNKNOWN
+            let error = volume?.check(_block, pos: offset, strict: strict) ?? .OK
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white
                 cell?.backgroundColor = error == .OK ? .selectedContentBackgroundColor : .red
             } else {
-                let (fgColor, bgColor) = colors(type: type, row: row)
-                cell?.textColor = error == .OK ? fgColor : .systemRed
-                cell?.backgroundColor = bgColor
+                cell?.textColor = error == .OK ? .textColor : .systemRed
+                cell?.backgroundColor = NSColor.alternatingContentBackgroundColors[row % 2]
             }
         } else {
             cell?.backgroundColor = NSColor.windowBackgroundColor
@@ -929,71 +913,5 @@ extension ExporterDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, shouldSelectRow row: Int) -> Bool {
         return false
-    }
-    
-    func colors(type: FSItemType, row: Int) -> (NSColor, NSColor) {
-    
-        return (.textColor, NSColor.alternatingContentBackgroundColors[row % 2])
-        /*
-        switch type {
-        
-        case .FSI_DOS_HEADER,
-             .FSI_DOS_VERSION,
-             .FSI_TYPE_ID,
-             .FSI_DATA_BLOCK_NUMBER,
-             .FSI_SUBTYPE_ID:
-            
-            return (.black, NSColor.init(r: 0xCC, g: 0xFF, b: 0xCC))
-
-        case .FSI_SELF_REF,
-             .FSI_NEXT_HASH_REF,
-             .FSI_PARENT_DIR_REF,
-             .FSI_FILEHEADER_REF,
-             .FSI_EXT_BLOCK_REF,
-             .FSI_BITMAP_BLOCK_REF,
-             .FSI_FIRST_DATA_BLOCK_REF,
-             .FSI_NEXT_DATA_BLOCK_REF,
-             .FSI_HASH_REF,
-             .FSI_DATA_BLOCK_REF:
-            
-            return (.black, NSColor.init(r: 0xCC, g: 0xE5, b: 0xFF))
-
-        case .FSI_CHECKSUM:
-            
-            return (.black, NSColor.init(r: 0xE5, g: 0xCC, b: 0xFF))
-
-        case .FSI_BCPL_DISK_NAME,
-             .FSI_BCPL_DIR_NAME,
-             .FSI_BCPL_FILE_NAME,
-             .FSI_BCPL_COMMENT:
-            
-            return (.black, NSColor.init(r: 0xE5, g: 0xFF, b: 0xCC))
-            
-        case .FSI_CREATED_DAY,
-             .FSI_CREATED_MIN,
-             .FSI_CREATED_TICKS,
-             .FSI_MODIFIED_DAY,
-             .FSI_MODIFIED_MIN,
-             .FSI_MODIFIED_TICKS:
-            
-            return (.black, NSColor.init(r: 0xFF, g: 0xFF, b: 0xCC))
-
-        case .FSI_HASHTABLE_SIZE,
-             .FSI_BCPL_STRING_LENGTH,
-             .FSI_FILESIZE,
-             .FSI_DATA_BLOCK_REF_COUNT,
-             .FSI_DATA_COUNT:
-            
-            return (.black, NSColor.init(r: 0xCC, g: 0xFF, b: 0xFF))
-            
-        case .FSI_PROT_BITS,
-             .FSI_BITMAP_VALIDITY,
-             .FSI_BITMAP:
-            
-            return (.black, NSColor.init(r: 0xFF, g: 0xCC, b: 0xCC))
-            
-        default: return (.textColor, .textBackgroundColor)
-        }
-        */
     }
 }

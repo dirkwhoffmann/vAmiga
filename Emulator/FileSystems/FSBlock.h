@@ -70,10 +70,10 @@ struct FSBlock {
     //
 
     // Scans all long words in this block and returns the number of errors
-    unsigned check();
+    unsigned check(bool strict);
 
     // Checks the integrity of a certain byte in this block
-    virtual FSError check(u32 pos) { return FS_OK; }
+    virtual FSError check(u32 pos, bool strict) { return FS_OK; }
         
     
     //
@@ -116,23 +116,6 @@ struct FSBlock {
     // Prints some debug information for this block
     virtual void dump() { };
     virtual void dumpData();
-
-    
-    //
-    // Verifying
-    //
-    
-    // Checks the integrity of this block
-    virtual bool check(bool verbose); // DEPRECATED
-
-protected:
-    
-    // Performs a certain integrity check on a block reference DEPRECATED
-    bool assertNotNull(u32 ref, bool verbose);
-    bool assertInRange(u32 ref, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
-    bool assertSelfRef(u32 ref, bool verbose);
 
     
     //

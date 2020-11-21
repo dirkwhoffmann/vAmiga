@@ -63,12 +63,17 @@ OFSDataBlock::itemType(u32 pos)
 }
 
 FSError
-OFSDataBlock::check(u32 byte)
+OFSDataBlock::check(u32 byte, bool strict)
 {
     if (byte < 24) {
         
         i32 word = byte / 4;
         u32 value = get32(word);
+        
+        /* Ignore common inconsistencies. In the second long word, many disks
+         * point to the bitmap block instead of the file header block.
+         */
+        if (word == 1 && !strict) return FS_OK;
         
         switch (word) {
                 
@@ -111,13 +116,6 @@ FSItemType
 FFSDataBlock::itemType(u32 pos)
 {
     return FSI_DATA;
-}
-
-bool
-FFSDataBlock::check(bool verbose)
-{
-    bool result = FSBlock::check(verbose);
-    return result;
 }
 
 size_t

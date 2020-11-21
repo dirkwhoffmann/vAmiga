@@ -98,15 +98,8 @@ public:
     // Prints debug information about this volume
     virtual void dump();
         
-    // Checks if the block with the given number is part of the volume
-    bool isBlockNumber(u32 nr) { return nr < capacity; }
-
     // Guesses the type of a block by analyzing its number and data
     FSBlockType guessBlockType(u32 nr, const u8 *buffer);
-
-    // Checks if the type of a block matches one of the provides types
-    FSError checkBlockType(u32, FSBlockType type);
-    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
 
     
     //
@@ -140,15 +133,18 @@ public:
     // Integrity checking
     //
 
-    // Checks a single byte in a certain block
-    FSError check(u32 blockNr, u32 pos);
-
     // Checks all blocks in this volume
-    FSErrorReport check();
+    FSErrorReport check(bool strict);
 
-    // Takes a block number and returns the next or pevious corrupted block
-    // u32 nextCorruptedBlock(u32 block); // DEPRECATED
-    // u32 prevCorruptedBlock(u32 block); // DEPRECATED
+    // Checks a single byte in a certain block
+    FSError check(u32 blockNr, u32 pos, bool strict);
+
+    // Checks if the block with the given number is part of the volume
+    bool isBlockNumber(u32 nr) { return nr < capacity; }
+
+    // Checks if the type of a block matches one of the provides types
+    FSError checkBlockType(u32, FSBlockType type);
+    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
 
     // Checks if a certain block is corrupted
     bool isCorrupted(u32 block);

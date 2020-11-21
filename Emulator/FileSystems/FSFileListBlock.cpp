@@ -65,7 +65,7 @@ FSFileListBlock::itemType(u32 byte)
 }
 
 FSError
-FSFileListBlock::check(u32 byte)
+FSFileListBlock::check(u32 byte, bool strict)
 {
     // Translate 'pos' to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;

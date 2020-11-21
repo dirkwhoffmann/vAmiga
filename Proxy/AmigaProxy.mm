@@ -1261,13 +1261,13 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->itemType(blockNr, pos);
 }
-- (FSErrorReport) check
+- (FSErrorReport) check:(BOOL)strict
 {
-    return wrapper->volume->check();
+    return wrapper->volume->check(strict);
 }
-- (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos
+- (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos strict:(BOOL)strict
 {
-    return wrapper->volume->check(blockNr, pos);
+    return wrapper->volume->check(blockNr, pos, strict);
 }
 - (BOOL) isCorrupted:(NSInteger)blockNr
 {

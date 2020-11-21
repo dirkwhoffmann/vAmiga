@@ -73,7 +73,7 @@ FSRootBlock::itemType(u32 byte)
 }
 
 FSError
-FSRootBlock::check(u32 byte)
+FSRootBlock::check(u32 byte, bool strict)
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
