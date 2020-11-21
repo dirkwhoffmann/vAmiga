@@ -27,19 +27,12 @@ FSBitmapBlock::itemType(u32 pos)
 }
 
 FSError
-FSBitmapBlock::check(u32 pos, u8 *expected, bool strict)
+FSBitmapBlock::check(u32 byte, u8 *expected, bool strict)
 {
-    // Align pos to the long word raster
-    pos &= ~0b11;
-
-    // Translate 'pos' to a long word index
-    i32 word = pos / 4;
-    
+    i32 word = byte / 4;
     u32 value = get32(word);
-
-    if (word == 0) {
-        return value == checksum() ? FS_OK : FS_INVALID_CHECKSUM;
-    }
+    
+    if (word == 0) EXPECT_CHECKSUM;
     
     return FS_OK;
 }

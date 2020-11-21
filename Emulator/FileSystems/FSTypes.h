@@ -143,15 +143,8 @@ VAMIGA_ENUM(long, FSError)
     FS_CORRUPTED,
     
     // Block errros
-    FS_UNEXPECTED_VALUE,
-    FS_EXPECTED_00,
-    FS_EXPECTED_01,
-    FS_EXPECTED_02,
-    FS_EXPECTED_03,
-    FS_EXPECTED_08,
-    FS_EXPECTED_10,
-    FS_EXPECTED_FD,
-    FS_EXPECTED_FF,
+    FS_EXPECTED_VALUE,
+    FS_EXPECTED_SMALLER_VALUE,
     FS_EXPECTED_DOS_REVISION,
     FS_EXPECTED_NO_REF,
     FS_EXPECTED_REF,
@@ -167,8 +160,6 @@ VAMIGA_ENUM(long, FSError)
     FS_PTR_TO_DATA_BLOCK,
     FS_EXPECTED_DATABLOCK_NR,
     FS_INVALID_HASHTABLE_SIZE,
-    FS_INVALID_CHECKSUM,
-    FS_OUT_OF_RANGE
 };
 
 inline bool isFSError(FSError value)
@@ -186,15 +177,8 @@ inline const char *sFSError(FSError value)
         case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
         case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
         case FS_CORRUPTED:               return "FS_CORRUPTED";
-        case FS_UNEXPECTED_VALUE:        return "FS_UNEXPECTED_VALUE";
-        case FS_EXPECTED_00:             return "FS_EXPECTED_00";
-        case FS_EXPECTED_01:             return "FS_EXPECTED_01";
-        case FS_EXPECTED_02:             return "FS_EXPECTED_02";
-        case FS_EXPECTED_03:             return "FS_EXPECTED_03";
-        case FS_EXPECTED_08:             return "FS_EXPECTED_08";
-        case FS_EXPECTED_10:             return "FS_EXPECTED_10";
-        case FS_EXPECTED_FD:             return "FS_EXPECTED_FD";
-        case FS_EXPECTED_FF:             return "FS_EXPECTED_FF";
+        case FS_EXPECTED_VALUE:          return "FS_EXPECTED_VALUE";
+        case FS_EXPECTED_SMALLER_VALUE:  return "FS_EXPECTED_SMALLER_VALUE";
         case FS_EXPECTED_DOS_REVISION:   return "FS_EXPECTED_DOS_REVISION";
         case FS_EXPECTED_NO_REF:         return "FS_EXPECTED_NO_REF";
         case FS_EXPECTED_REF:            return "FS_EXPECTED_REF";
@@ -210,8 +194,6 @@ inline const char *sFSError(FSError value)
         case FS_PTR_TO_DATA_BLOCK:       return "FS_PTR_TO_DATA_BLOCK";
         case FS_EXPECTED_DATABLOCK_NR:   return "FS_EXPECTED_DATABLOCK_NR";
         case FS_INVALID_HASHTABLE_SIZE:  return "FS_INVALID_HASHTABLE_SIZE";
-        case FS_INVALID_CHECKSUM:        return "FS_INVALID_CHECKSUM";
-        case FS_OUT_OF_RANGE:            return "FS_OUT_OF_RANGE";
         
         default:
             return isFSError(value) ? "<other>" : "???";

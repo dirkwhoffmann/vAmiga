@@ -81,7 +81,7 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
     }
 
     switch (word) {
-        case 0:   EXPECT_LONGWORD(2, byte % 4); break;
+        case 0:   EXPECT_LONGWORD(2); break;
         case 1:   EXPECT_SELFREF; break;
         case 3:   EXPECT_BYTE(0); break;
         case 4:   EXPECT_DATABLOCK_REF; break;
@@ -90,7 +90,7 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
         case -4:  EXPECT_OPTIONAL_HASH_REF; break;
         case -3:  EXPECT_PARENT_DIR_REF; break;
         case -2:  EXPECT_OPTIONAL_FILELIST_REF; break;
-        case -1:  EXPECT_LONGWORD((u32)(-3), byte % 4); break;
+        case -1:  EXPECT_LONGWORD((u32)-3); break;
     }
         
     // Data block reference area

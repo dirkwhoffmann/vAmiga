@@ -260,20 +260,24 @@ public:
 typedef FSBlock* BlockPtr;
 
 #define EXPECT_BYTE(exp) \
-if (value != (exp)) { *expected = (exp); return FS_UNEXPECTED_VALUE; }
+if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; }
 
-#define EXPECT_LONGWORD(exp,offset) \
-if (offset == 0 && BYTE3(value) != BYTE3(exp)) \
-    { *expected = (BYTE3(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 1 && BYTE2(value) != BYTE2(exp)) \
-    { *expected = (BYTE2(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 2 && BYTE1(value) != BYTE1(exp)) \
-    { *expected = (BYTE1(exp)); return FS_UNEXPECTED_VALUE; } \
-if (offset == 3 && BYTE0(value) != BYTE0(exp)) \
-    { *expected = (BYTE0(exp)); return FS_UNEXPECTED_VALUE; }
+#define EXPECT_LONGWORD(exp) { \
+if ((byte % 4) == 0 && BYTE3(value) != BYTE3(exp)) \
+    { *expected = (BYTE3(exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 1 && BYTE2(value) != BYTE2(exp)) \
+    { *expected = (BYTE2(exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 2 && BYTE1(value) != BYTE1(exp)) \
+    { *expected = (BYTE1(exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 3 && BYTE0(value) != BYTE0(exp)) \
+    { *expected = (BYTE0(exp)); return FS_EXPECTED_VALUE; } }
 
-#define EXPECT_RANGE(min,max) \
-if (value < min || value > max) return FS_OUT_OF_RANGE;
+#define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
+// if (value != checksum()) return FS_INVALID_CHECKSUM;
+
+#define EXPECT_LESS_OR_EQUAL(exp) \
+if (value > exp) \
+    { *expected = (exp); return FS_EXPECTED_SMALLER_VALUE; }
 
 #define EXPECT_DOS_REVISION \
 if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION;
@@ -313,8 +317,5 @@ if (value == 0) return FS_EXPECTED_DATABLOCK_NR;
 
 #define EXPECT_HASHTABLE_SIZE \
 if (value != 72) return FS_INVALID_HASHTABLE_SIZE;
-
-#define EXPECT_CHECKSUM \
-if (value != checksum()) return FS_INVALID_CHECKSUM;
 
 #endif

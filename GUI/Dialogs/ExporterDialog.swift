@@ -301,10 +301,7 @@ class ExporterDialog: DialogController {
 
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
-
-        // Hide elements that make no sense if no file system is present
-        strictButton.isHidden = volume == nil
-
+        
         // Hide some elements if the window is shrinked
         let items: [NSView] = [
             previewScrollView,
@@ -316,6 +313,16 @@ class ExporterDialog: DialogController {
             corruptionText, corruptionField, corruptionStepper
         ]
         for item in items { item.isHidden = shrinked }
+        
+        // Hide elements that make no sense if no file system is present
+        if volume == nil {
+            
+            let items: [NSView] = [
+                corruptionText, corruptionField, corruptionStepper,
+                strictButton
+            ]
+            for item in items { item.isHidden = true }
+        }
 
         // Only proceed if the window is expanded
         if shrinked { return }
@@ -401,7 +408,7 @@ class ExporterDialog: DialogController {
     
     func updateVolumeInfo() {
         
-        var text = "No compatible file system has been detected."
+        var text = "No compatible file system"
         
         if disk?.type == .FILETYPE_ADF {
             
@@ -575,24 +582,10 @@ class ExporterDialog: DialogController {
         switch error {
         case .OK:
             text = ""
-        case .UNEXPECTED_VALUE:
+        case .EXPECTED_VALUE:
             text = String.init(format: "Expected $%02X", exp)
-        case .EXPECTED_00:
-            text = "Expected $00"
-        case .EXPECTED_01:
-            text = "Expected $01"
-        case .EXPECTED_02:
-            text = "Expected $02"
-        case .EXPECTED_03:
-            text = "Expected $03"
-        case .EXPECTED_08:
-            text = "Expected $08"
-        case .EXPECTED_10:
-            text = "Expected $10"
-        case .EXPECTED_FD:
-            text = "Expected $FD"
-        case .EXPECTED_FF:
-            text = "Expected $FF"
+        case .EXPECTED_SMALLER_VALUE:
+            text = String.init(format: "Expected a value less or equal $%02X", exp)
         case .EXPECTED_DOS_REVISION:
             text = "Expected a value between 0 and 7"
         case .EXPECTED_NO_REF:
@@ -601,7 +594,7 @@ class ExporterDialog: DialogController {
             text = "Expected a block reference"
         case .EXPECTED_SELFREF:
             text = "Expected a self-reference"
-            
+    
         case .PTR_TO_UNKNOWN_BLOCK:
             text = "This reference points to a block of unknown type"
         case .PTR_TO_EMPTY_BLOCK:
@@ -624,10 +617,6 @@ class ExporterDialog: DialogController {
             text = "Invalid data block position number"
         case .INVALID_HASHTABLE_SIZE:
             text = "Expected $48 (72 hash table entries)"
-        case .INVALID_CHECKSUM:
-            text = "Invalid block checksum"
-        case .OUT_OF_RANGE:
-            text = "Value is out of range"
         default:
             track("error = \(error)")
             fatalError()

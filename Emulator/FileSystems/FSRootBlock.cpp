@@ -80,7 +80,7 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_LONGWORD(2, byte % 4); break;
+        case 0:  EXPECT_LONGWORD(2); break;
         case 1:
         case 2:  EXPECT_BYTE(0); break;
         case 3:  EXPECT_HASHTABLE_SIZE; break;
@@ -89,7 +89,7 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
         case -4:
         case -3:
         case -2: EXPECT_BYTE(0); break;
-        case -1: EXPECT_LONGWORD(1, byte % 4); break;
+        case -1: EXPECT_LONGWORD(1); break;
     }
     if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
     
