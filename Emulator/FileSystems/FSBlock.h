@@ -13,6 +13,9 @@
 #include "Utils.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include <string>
+
+using std::string;
 
 struct FSBlock {
     
@@ -62,8 +65,9 @@ struct FSBlock {
     virtual u32 subtypeID();
 
     // Returns the name or path of this block
-    char *assemblePath();
-
+    // char *assemblePath(); // DEPRECATED
+    string getPath();
+    
     
     //
     // Integrity checking
@@ -129,7 +133,7 @@ public:
 
     // Exports this block to a buffer (bsize must match the volume block size)
     virtual void exportBlock(u8 *dst, size_t bsize);
-
+    
 private:
     
     // Updates the checksum for this block (called prior to exporting)
@@ -194,7 +198,7 @@ public:
     // Link to the next extension block
     virtual u32 getNextListBlockRef() { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
-    struct FSFileListBlock *getNextExtensionBlock();
+    struct FSFileListBlock *getNextListBlock();
 
     // Link to the first data block
     virtual u32 getFirstDataBlockRef() { return 0; }

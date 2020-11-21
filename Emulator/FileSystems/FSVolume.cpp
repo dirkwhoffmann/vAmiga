@@ -115,7 +115,7 @@ FSVolume::info()
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
-    msg("%s\n",         getName().cStr);
+    msg("%s\n",         getName().c_str());
 }
 
 void
@@ -707,11 +707,34 @@ FSVolume::listWalker(FSBlock *block, int value)
 int
 FSVolume::exportWalker(FSBlock *block, int value)
 {
-    if (block->type() == FS_USERDIR_BLOCK) {
-        msg("Directory");
+    FSBlockType type = block->type();
+    if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) return 0;
+    
+    string path = exportDir + "/" + block->getPath();
+    
+    if (type == FS_USERDIR_BLOCK) {
+        
+        msg("DIR: %s\n", path.c_str());
+        
+        if (mkdir(path.c_str(), 0777) != 0) {
+            warn("Failed to create directory %s\n");
+        }
     }
-    if (block->type() == FS_FILEHEADER_BLOCK) {
-        msg("File");
+    
+    if (type == FS_FILEHEADER_BLOCK) {
+
+        msg("%s\n", path.c_str());
+
+        if (FILE *file = fopen(path.c_str(), "w")) {
+
+            size_t size = ((FSFileHeaderBlock *)block)->writeData(file);
+            msg("size = %d\n", size); 
+            fputc('c', file);
+            fclose(file);
+        } else {
+            msg("Failed to create file %s\n", path.c_str());
+        }
+
     }
     
     return 0;
@@ -886,7 +909,7 @@ FSError
 FSVolume::exportDirectory(const char *path, bool recursive)
 {
     assert(path != nullptr);
-    
+        
     // Only proceed if path points to an empty directory
     long numItems = numDirectoryItems(path);
     
@@ -896,5 +919,12 @@ FSVolume::exportDirectory(const char *path, bool recursive)
         return FS_DIRECTORY_NOT_EMPTY;
     }
     
+    // Assign the export root path
+    exportDir = path;
+
+    // Traverse the file system and export each item
+    int num = walk(currentDirBlock(), &FSVolume::exportWalker, 0, recursive);
+    msg("Result = %d\n", num);
+
     return FS_OK;
 }

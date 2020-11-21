@@ -99,7 +99,7 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSRootBlock::dump()
 {
-    printf("        Name : %s\n", getName().cStr);
+    printf("        Name : %s\n", getName().c_str());
     printf("     Created : "); getCreationDate().print(); printf("\n");
     printf("    Modified : "); getModificationDate().print(); printf("\n");
     printf("  Hash table : "); dumpHashTable(); printf("\n");

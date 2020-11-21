@@ -195,6 +195,9 @@ class ExporterDialog: DialogController {
         // It it is an ADF, try to extract the file system
         if disk != nil { volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy) }
         
+        // REMOVE ASAP
+        volume?.printDirectory(true)
+        
         // If it is not an ADF, try the DOS decoder
         if disk == nil { disk = IMGFileProxy.make(withDrive: drive) }
                 
@@ -677,7 +680,7 @@ class ExporterDialog: DialogController {
             
             parent.critical("The destination directory is not empty.",
                             "To prevent accidental exports, the disk exporter " +
-                            "refuses to work on non-empty directories.")
+                            "refuses to work on non-empty folders.")
             
         default:
 

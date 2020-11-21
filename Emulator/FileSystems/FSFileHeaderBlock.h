@@ -63,10 +63,12 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getNextListBlockRef() override          { return get32(-2     );      }
     void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
 
-    bool addDataBlockRef(u32 ref);
-    bool addDataBlockRef(u32 first, u32 ref) override;
+    size_t writeData(FILE *file);
     size_t addData(const u8 *buffer, size_t size) override;
 
+    bool addDataBlockRef(u32 ref);
+    bool addDataBlockRef(u32 first, u32 ref) override;
+    
     u32 hashValue() override { return getName().hashValue(); }
 };
 

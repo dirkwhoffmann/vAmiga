@@ -85,6 +85,7 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+/*
 char *
 FSBlock::assemblePath()
 {
@@ -103,13 +104,26 @@ FSBlock::assemblePath()
     delete [] prefix;
     return result;
 }
+*/
+
+string
+FSBlock::getPath()
+{
+    FSBlock *parent = getParentBlock();
+    if (!parent) return "";
+    
+    FSName name = getName();
+    
+    string prefix = parent->getPath();
+    string result = prefix == "" ? name.c_str() : prefix + "/" + name.c_str();
+
+    return result;
+}
 
 void
 FSBlock::printPath()
 {
-    char *path = assemblePath();
-    printf("%s", path);
-    delete [] path;
+    printf("%s", getPath().c_str());
 }
 
 void
@@ -217,7 +231,7 @@ FSBlock::getNextHashBlock()
 }
 
 FSFileListBlock *
-FSBlock::getNextExtensionBlock()
+FSBlock::getNextListBlock()
 {
     u32 ref = getNextListBlockRef();
     return ref ? volume.fileListBlock(ref) : nullptr;

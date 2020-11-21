@@ -658,8 +658,7 @@ struct SerialPortWrapper;
 - (NSInteger) getCorrupted:(NSInteger)blockNr;
 - (NSInteger) nextCorrupted:(NSInteger)blockNr;
 - (NSInteger) prevCorrupted:(NSInteger)blockNr;
-// - (BOOL) isCorrupted:(NSInteger)blockNr n:(NSInteger)n;
-// - (NSInteger) seekCorruptedBlock:(NSInteger)n;
+- (void) printDirectory:(BOOL) recursive;
 
 - (FSError) export:(NSString *)path;
 

@@ -90,6 +90,16 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
 }
 
 size_t
+OFSDataBlock::writeData(FILE *file, size_t size)
+{
+    assert(file != nullptr);
+    
+    size_t count = MIN(volume.dsize, size);
+    for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    return count;
+}
+
+size_t
 OFSDataBlock::addData(const u8 *buffer, size_t size)
 {
     size_t count = MIN(volume.bsize - headerSize(), size);
@@ -116,6 +126,16 @@ FSItemType
 FFSDataBlock::itemType(u32 pos)
 {
     return FSI_DATA;
+}
+
+size_t
+FFSDataBlock::writeData(FILE *file, size_t size)
+{
+    assert(file != nullptr);
+    
+    size_t count = MIN(volume.dsize, size);
+    for (size_t i = 0; i < count; i++) fputc(data[i + headerSize()], file);
+    return count;
 }
 
 size_t

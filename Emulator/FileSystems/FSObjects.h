@@ -16,16 +16,17 @@
 struct FSString {
     
     // File system identifier stored as a C string
-    char cStr[92];
+    char str[92];
     
     // Maximum number of permitted characters
     size_t limit;
-    
+
+    static char capital(char c);
 
     FSString(const char *cString, size_t limit);
     FSString(const u8 *bcplString, size_t limit);
 
-    static char capital(char c);
+    const char *c_str() { return str; }
     
     bool operator== (FSString &rhs);
     u32 hashValue();

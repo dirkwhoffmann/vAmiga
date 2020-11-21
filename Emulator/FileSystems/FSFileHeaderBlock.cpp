@@ -107,9 +107,9 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("           Name : %s\n", getName().cStr);
+    printf("           Name : %s\n", getName().c_str());
     printf("           Path : ");    printPath(); printf("\n");
-    printf("        Comment : %s\n", getComment().cStr);
+    printf("        Comment : %s\n", getComment().c_str());
     printf("        Created : ");    getCreationDate().print(); printf("\n");
     printf("           Next : %d\n", getNextHashRef());
     printf("      File size : %d\n", getFileSize());
@@ -122,6 +122,48 @@ FSFileHeaderBlock::dump()
     printf("    Data blocks : ");
     for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
     printf("\n");
+}
+
+size_t
+FSFileHeaderBlock::writeData(FILE *file)
+{
+    FSBlock *block = this;
+    long remaining = getFileSize();
+    long total = 0;
+    
+    while (block) {
+        
+        // Determine the number of data block referenced in this block
+        u32 count = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
+        
+        // Iterate through the data block list
+        for (u32 i = 0; i < count; i++) {
+            
+            u32 ref = getDataBlockRef(i);
+
+            if (FSDataBlock *dataBlock = volume.dataBlock(ref)) {
+
+                long written = dataBlock->writeData(file, remaining);
+                total += written;
+                remaining -= written;
+                printf("Block %d: written: %ld total: %ld remaining: %ld\n",
+                    i, written, total, remaining);
+
+            } else {
+                
+                printf("Block %d: Ignored (no data block)\n", i);
+            }
+        }
+        
+        // Continue with the next list block
+        block = block->getNextListBlock();
+    }
+    
+    if (remaining != 0) {
+        printf("Size inconsistency: %ld\n", remaining);
+    }
+    
+    return total;
 }
 
 size_t
@@ -196,12 +238,12 @@ FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
     }
 
     // Otherwise, add it to an extension block
-    FSFileListBlock *item = getNextExtensionBlock();
+    FSFileListBlock *item = getNextListBlock();
     
     for (int i = 0; item && i < searchLimit; i++) {
         
         if (item->addDataBlockRef(first, ref)) return true;
-        item = item->getNextExtensionBlock();
+        item = item->getNextListBlock();
     }
     
     assert(false);

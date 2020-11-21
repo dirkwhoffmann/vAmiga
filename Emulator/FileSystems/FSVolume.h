@@ -64,6 +64,9 @@ protected:
     // The directory where new files and subdirectories are added
     u32 currentDir = 0;
 
+    // Root directory used by the file exporter
+    string exportDir = "";
+    
 
     //
     // Factory methods
@@ -245,7 +248,6 @@ public:
     //
 
     // Walks through all files in the current directory or a given directory
-    // int walk(bool recursive);
     int walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive);
 
     // Walker callbacks

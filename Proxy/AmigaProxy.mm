@@ -1299,6 +1299,11 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->volume->prevCorrupted(blockNr);
 }
 
+- (void) printDirectory:(BOOL) recursive
+{
+    return wrapper->volume->printDirectory(recursive);
+}
+
 - (FSError) export:(NSString *)path
 {
     return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
