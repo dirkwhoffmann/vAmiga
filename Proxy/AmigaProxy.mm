@@ -1265,9 +1265,12 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->volume->check(strict);
 }
-- (FSError) check:(NSInteger)blockNr pos:(NSInteger)pos strict:(BOOL)strict
+- (FSError) check:(NSInteger)nr
+              pos:(NSInteger)pos
+         expected:(unsigned char *)exp
+           strict:(BOOL)strict
 {
-    return wrapper->volume->check(blockNr, pos, strict);
+    return wrapper->volume->check(nr, pos, exp, strict);
 }
 - (BOOL) isCorrupted:(NSInteger)blockNr
 {

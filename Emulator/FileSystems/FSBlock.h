@@ -73,7 +73,7 @@ struct FSBlock {
     unsigned check(bool strict);
 
     // Checks the integrity of a certain byte in this block
-    virtual FSError check(u32 pos, bool strict) { return FS_OK; }
+    virtual FSError check(u32 pos, u8 *expected, bool strict) { return FS_OK; }
         
     
     //
@@ -259,12 +259,8 @@ public:
 
 typedef FSBlock* BlockPtr;
 
-#define EXPECT_D(val) \
-if ((val) != 'D') return FS_EXPECTED_D;
-#define EXPECT_O(val) \
-if ((val) != 'O') return FS_EXPECTED_O;
-#define EXPECT_S(val) \
-if ((val) != 'S') return FS_EXPECTED_S;
+#define EXPECT_VALUE(val,exp) \
+if ((val) != (exp)) { *expected = (exp); return FS_UNEXPECTED_VALUE; }
 #define EXPECT_00(val) \
 if ((val) != 0x00) return FS_EXPECTED_00;
 #define EXPECT_01(val) \

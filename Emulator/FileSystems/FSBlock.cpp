@@ -51,10 +51,11 @@ FSBlock::check(bool strict)
 {
     FSError error;
     unsigned count = 0;
+    u8 expected;
     
     for (u32 i = 0; i < volume.bsize; i++) {
 
-        if ((error = check(i, strict)) != FS_OK) {
+        if ((error = check(i, &expected, strict)) != FS_OK) {
             count++;
             if (FS_DEBUG) printf("Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
         }

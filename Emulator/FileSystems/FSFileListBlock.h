@@ -19,7 +19,7 @@ struct FSFileListBlock : FSBlock {
 
     FSBlockType type() override { return FS_FILELIST_BLOCK;   }
     FSItemType itemType(u32 byte) override;
-    FSError check(u32 pos, bool strict) override;
+    FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
     u32 checksumLocation() override { return 5; }
 

@@ -63,7 +63,7 @@ OFSDataBlock::itemType(u32 pos)
 }
 
 FSError
-OFSDataBlock::check(u32 byte, bool strict)
+OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
 {
     if (byte < 24) {
         

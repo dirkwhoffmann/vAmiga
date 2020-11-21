@@ -567,18 +567,16 @@ class ExporterDialog: DialogController {
 
     func updateErrorInfoSelected() {
         
-        let error = volume!.check(_block, pos: selection!, strict: strict)
         var text: String
+        var exp = UInt8(0)
+
+        let error = volume!.check(_block, pos: selection!, expected: &exp, strict: strict)
 
         switch error {
         case .OK:
             text = ""
-        case .EXPECTED_D:
-            text = "Expected 'D'"
-        case .EXPECTED_O:
-            text = "Expected 'O'"
-        case .EXPECTED_S:
-            text = "Expected 'S'"
+        case .UNEXPECTED_VALUE:
+            text = String.init(format: "Expected $%02X", exp)
         case .EXPECTED_00:
             text = "Expected $00"
         case .EXPECTED_01:
@@ -892,12 +890,13 @@ extension ExporterDialog: NSTableViewDelegate {
     
     func tableView(_ tableView: NSTableView, willDisplayCell cell: Any, for tableColumn: NSTableColumn?, row: Int) {
 
+        var exp = UInt8(0)
         let cell = cell as? NSTextFieldCell
 
         if let col = columnNr(tableColumn) {
             
             let offset = 16 * row + col
-            let error = volume?.check(_block, pos: offset, strict: strict) ?? .OK
+            let error = volume?.check(_block, pos: offset, expected: &exp, strict: strict) ?? .OK
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white

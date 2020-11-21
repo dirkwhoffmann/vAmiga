@@ -68,7 +68,7 @@ FSUserDirBlock::itemType(u32 byte)
 }
 
 FSError
-FSUserDirBlock::check(u32 byte, bool strict)
+FSUserDirBlock::check(u32 byte, u8 *expected, bool strict)
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;

@@ -143,9 +143,7 @@ VAMIGA_ENUM(long, FSError)
     FS_CORRUPTED,
     
     // Block errros
-    FS_EXPECTED_D,
-    FS_EXPECTED_O,
-    FS_EXPECTED_S,
+    FS_UNEXPECTED_VALUE,
     FS_EXPECTED_00,
     FS_EXPECTED_01,
     FS_EXPECTED_02,
@@ -188,9 +186,7 @@ inline const char *sFSError(FSError value)
         case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
         case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
         case FS_CORRUPTED:               return "FS_CORRUPTED";
-        case FS_EXPECTED_D:              return "FS_EXPECTED_D";
-        case FS_EXPECTED_O:              return "FS_EXPECTED_O";
-        case FS_EXPECTED_S:              return "FS_EXPECTED_S";
+        case FS_UNEXPECTED_VALUE:        return "FS_UNEXPECTED_VALUE";
         case FS_EXPECTED_00:             return "FS_EXPECTED_00";
         case FS_EXPECTED_01:             return "FS_EXPECTED_01";
         case FS_EXPECTED_02:             return "FS_EXPECTED_02";

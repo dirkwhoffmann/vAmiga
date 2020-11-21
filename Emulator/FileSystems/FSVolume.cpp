@@ -167,9 +167,9 @@ FSVolume::check(bool strict)
 }
 
 FSError
-FSVolume::check(u32 blockNr, u32 pos, bool strict)
+FSVolume::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
 {
-    return blocks[blockNr]->check(pos, strict);
+    return blocks[blockNr]->check(pos, expected, strict);
 }
 
 FSError

@@ -66,15 +66,19 @@ FSFileHeaderBlock::itemType(u32 byte)
 }
 
 FSError
-FSFileHeaderBlock::check(u32 byte, bool strict)
+FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
 {
     // Translate the byte index to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     u32 value = get32(word);
     
-    /* Ignore common inconsistencies.
+    /* Many ADFs store a reference to the bitmap block at location -4 and -3.
+     * We ignore this common inconsistency if strict checking is disabled.
      */
-    // if (word ==  && !strict) return FS_OK;
+    if (!strict) {
+        if (word == -4) { EXPECT_REF(value); return FS_OK; }
+        if (word == -3) { EXPECT_REF(value); return FS_OK; }
+    }
 
     switch (word) {
         case 0:   EXPECT_00000002(value, byte % 4); break;

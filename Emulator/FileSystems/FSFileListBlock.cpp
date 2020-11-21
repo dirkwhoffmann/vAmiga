@@ -65,11 +65,18 @@ FSFileListBlock::itemType(u32 byte)
 }
 
 FSError
-FSFileListBlock::check(u32 byte, bool strict)
+FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
 {
     // Translate 'pos' to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     u32 value = get32(word);
+
+    /* Many ADFs store a reference to the bitmap block at location -3.
+     * We ignore this common inconsistency if strict checking is disabled.
+     */
+    if (!strict) {
+        if (word == -3) { EXPECT_REF(value); return FS_OK; }
+    }
 
     switch (word) {
             

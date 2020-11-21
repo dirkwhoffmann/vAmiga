@@ -137,7 +137,7 @@ public:
     FSErrorReport check(bool strict);
 
     // Checks a single byte in a certain block
-    FSError check(u32 blockNr, u32 pos, bool strict);
+    FSError check(u32 blockNr, u32 pos, u8 *expected, bool strict);
 
     // Checks if the block with the given number is part of the volume
     bool isBlockNumber(u32 nr) { return nr < capacity; }
