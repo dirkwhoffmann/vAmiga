@@ -147,10 +147,17 @@ public:
     FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
 
     // Checks if a certain block is corrupted
-    bool isCorrupted(u32 block);
+    bool isCorrupted(u32 blockNr) { return getCorrupted(blockNr) != 0; }
+
+    // Returns the position in the corrupted block list (0 = OK)
+    u32 getCorrupted(u32 blockNr);
+
+    // Returns the number of the next or previous corrupted block
+    u32 nextCorrupted(u32 blockNr);
+    u32 prevCorrupted(u32 blockNr);
 
     // Checks if a certain block is the n-th corrupted block
-    bool isCorrupted(u32 block, u32 n);
+    bool isCorrupted(u32 blockNr, u32 n);
 
     // Returns the number of the the n-th corrupted block
     u32 seekCorruptedBlock(u32 n);

@@ -33,7 +33,6 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var blockField: NSTextField!
     @IBOutlet weak var blockStepper: NSStepper!
     @IBOutlet weak var corruptionText: NSTextField!
-    @IBOutlet weak var corruptionField: NSTextField!
     @IBOutlet weak var corruptionStepper: NSStepper!
 
     @IBOutlet weak var info1: NSTextField!
@@ -79,7 +78,7 @@ class ExporterDialog: DialogController {
     var _track = 0
     var _sector = 0
     var _block = 0
-    var _corruption = 0
+    // var _corruption = 0
     
     var sectorData: [String] = []
     let bytesPerRow = 16
@@ -91,10 +90,6 @@ class ExporterDialog: DialogController {
     func checkVolume() {
                 
         errorReport = volume?.check(strict)
-        let errors = errorReport?.corruptedBlocks ?? 0
-        
-        corruptionStepper.minValue = Double(1)
-        corruptionStepper.maxValue = Double(max(1, errors))
     }
 
     //
@@ -170,20 +165,17 @@ class ExporterDialog: DialogController {
 
     func setCorruptedBlock(_ newValue: Int) {
         
-        guard let blockNr = volume?.seekCorruptedBlock(newValue) else { return }
-        
-        if newValue != _corruption && blockNr >= 0 && blockNr < numBlocks {
-                        
-            _corruption = newValue
-            _block      = blockNr
-            _track      = _block / numSectors
-            _sector     = _block % numSectors
-            _cylinder   = _track / 2
-            _side       = _track % 2
-            
-            selection = nil
-            update()
+        var jump: Int
+         
+        if newValue > _block {
+            jump = volume!.nextCorrupted(_block)
+        } else {
+            jump = volume!.prevCorrupted(_block)
         }
+
+        track("Current: \(_block) Stepper: \(newValue) Jump: \(jump)")
+        corruptionStepper.integerValue = jump
+        setBlock(jump)
     }
     
     //
@@ -310,48 +302,46 @@ class ExporterDialog: DialogController {
             trackText, trackField, trackStepper,
             sectorText, sectorField, sectorStepper,
             blockText, blockField, blockStepper,
-            corruptionText, corruptionField, corruptionStepper
+            corruptionText, corruptionStepper
         ]
         for item in items { item.isHidden = shrinked }
         
-        // Hide elements that make no sense if no file system is present
-        if volume == nil {
-            
-            let items: [NSView] = [
-                corruptionText, corruptionField, corruptionStepper,
-                strictButton
-            ]
-            for item in items { item.isHidden = true }
-        }
-
+        // Hide more elements
+        strictButton.isHidden = volume == nil
+        
         // Only proceed if the window is expanded
         if shrinked { return }
         
         // Hide more elements if no errors are present
-        if errorReport?.corruptedBlocks == 0 {
+        if volume == nil || errorReport?.corruptedBlocks == 0 {
             corruptionText.isHidden = true
-            corruptionField.isHidden = true
             corruptionStepper.isHidden = true
         }
 
         // Update all elements
-        cylinderField.integerValue     = _cylinder
+        cylinderField.stringValue      = String.init(format: "%d", _cylinder)
         cylinderStepper.integerValue   = _cylinder
-        headField.integerValue         = _side
+        headField.stringValue          = String.init(format: "%d", _side)
         headStepper.integerValue       = _side
-        trackField.integerValue        = _track
+        trackField.stringValue         = String.init(format: "%d", _track)
         trackStepper.integerValue      = _track
-        sectorField.integerValue       = _sector
+        sectorField.stringValue        = String.init(format: "%d", _sector)
         sectorStepper.integerValue     = _sector
-        blockField.integerValue        = _block
+        blockField.stringValue         = String.init(format: "%d", _block)
         blockStepper.integerValue      = _block
-        corruptionField.integerValue   = _corruption
-        corruptionStepper.integerValue = _corruption
+        corruptionStepper.integerValue = _block
 
-        if volume?.seekCorruptedBlock(_corruption) == _block {
-            corruptionField.textColor = .labelColor
-        } else {
-            corruptionField.textColor = .tertiaryLabelColor
+        if let corr = volume?.getCorrupted(_block) {
+            
+            let total = errorReport!.corruptedBlocks
+
+            if corr > 0 {
+                corruptionText.stringValue = "Corrupted block \(corr) out of \(total)"
+                corruptionText.textColor = .labelColor
+            } else {
+                corruptionText.stringValue = ""
+                corruptionText.textColor = .secondaryLabelColor
+            }
         }
         
         updateBlockInfo()
@@ -757,14 +747,10 @@ class ExporterDialog: DialogController {
         
         setBlock(sender.integerValue)
     }
-    
-    @IBAction func corruptedBlockAction(_ sender: NSTextField!) {
         
-        setCorruptedBlock(sender.integerValue)
-    }
-    
     @IBAction func corruptedBlockStepperAction(_ sender: NSStepper!) {
-        
+    
+        track("New value: \(sender.integerValue)")
         setCorruptedBlock(sender.integerValue)
     }
 

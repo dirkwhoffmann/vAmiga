@@ -202,10 +202,10 @@ FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
     return FS_OK;
 }
 
-bool
-FSVolume::isCorrupted(u32 blockNr)
+u32
+FSVolume::getCorrupted(u32 blockNr)
 {
-    return block(blockNr) ? blocks[blockNr]->corrupted > 0 : false;
+    return block(blockNr) ? blocks[blockNr]->corrupted : 0;
 }
 
 bool
@@ -219,6 +219,22 @@ FSVolume::isCorrupted(u32 blockNr, u32 n)
         }
     }
     return false;
+}
+
+u32
+FSVolume::nextCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr + 1;
+    while (i++ < capacity) { if (isCorrupted(i)) return i; }
+    return blockNr;
+}
+
+u32
+FSVolume::prevCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr - 1;
+    while (i-- >= 0) { if (isCorrupted(i)) return i; }
+    return blockNr;
 }
 
 u32

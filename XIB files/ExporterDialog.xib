@@ -11,7 +11,6 @@
                 <outlet property="blockField" destination="mIP-Nx-JCb" id="pS7-aN-w4b"/>
                 <outlet property="blockStepper" destination="v9x-P3-ijJ" id="ts4-8B-oPY"/>
                 <outlet property="blockText" destination="igt-RI-i5o" id="rOh-RH-jc1"/>
-                <outlet property="corruptionField" destination="BeG-9r-R7B" id="B8W-uB-peK"/>
                 <outlet property="corruptionStepper" destination="C6j-0G-lEV" id="yJc-nn-CnS"/>
                 <outlet property="corruptionText" destination="wTa-j7-Ngp" id="BHP-TJ-1k7"/>
                 <outlet property="cylinderField" destination="gsN-a1-AKx" id="eZB-JP-LWr"/>
@@ -518,15 +517,6 @@ Gw
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wTa-j7-Ngp">
-                        <rect key="frame" x="414" y="65" width="110" height="19"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Corrupted Block" id="ZoQ-IT-WBT">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mIP-Nx-JCb">
                         <rect key="frame" x="528" y="289" width="41" height="22"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -537,18 +527,6 @@ Gw
                         </textFieldCell>
                         <connections>
                             <action selector="blockAction:" target="-2" id="yAn-6C-L0I"/>
-                        </connections>
-                    </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BeG-9r-R7B">
-                        <rect key="frame" x="528" y="64" width="41" height="22"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" refusesFirstResponder="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" title="9999" drawsBackground="YES" id="9zF-md-IJX">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                        <connections>
-                            <action selector="corruptedBlockAction:" target="-2" id="lZv-bH-1ls"/>
                         </connections>
                     </textField>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="v9x-P3-ijJ">
@@ -569,16 +547,16 @@ Gw
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G7d-0d-Bi5">
-                        <rect key="frame" x="20" y="68" width="391" height="16"/>
+                        <rect key="frame" x="20" y="68" width="319" height="16"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consetetur sadipscing elitr" id="rJW-wK-rXK">
+                        <textFieldCell key="cell" lineBreakMode="clipping" title="Lorem ipsum dolor sit amet, consetetur sadipscing" id="rJW-wK-rXK">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6mo-sI-0VL">
-                        <rect key="frame" x="20" y="52" width="391" height="14"/>
+                        <rect key="frame" x="20" y="52" width="545" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" controlSize="small" lineBreakMode="clipping" alignment="left" title="Lorem ipsum  dolor dolor" id="RK9-i7-xI6">
                             <font key="font" metaFont="smallSystem"/>
@@ -587,7 +565,7 @@ Gw
                         </textFieldCell>
                     </textField>
                     <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="C6j-0G-lEV">
-                        <rect key="frame" x="568" y="61" width="19" height="28"/>
+                        <rect key="frame" x="568" y="62" width="19" height="28"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <stepperCell key="cell" continuous="YES" alignment="left" minValue="-999999" maxValue="999999" id="6y4-b9-9B6"/>
                         <connections>
@@ -605,6 +583,15 @@ Gw
                             <action selector="strictAction:" target="-2" id="8o7-Db-5In"/>
                         </connections>
                     </button>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wTa-j7-Ngp">
+                        <rect key="frame" x="353" y="68" width="215" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" sendsActionOnEndEditing="YES" alignment="right" title="Corrupted Block 1000 out of 1000" id="ZoQ-IT-WBT">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
