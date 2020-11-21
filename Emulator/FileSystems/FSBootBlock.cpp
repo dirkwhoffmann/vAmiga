@@ -47,11 +47,13 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict)
 {
     if (byte <= 3 && nr == 0) {
         
+        u8 value = data[byte];
+        
         switch(byte) {
-            case 0: EXPECT_VALUE(data[byte], 'D'); break;
-            case 1: EXPECT_VALUE(data[byte], 'O'); break;
-            case 2: EXPECT_VALUE(data[byte], 'S'); break;
-            case 3: EXPECT_DOS_REVISION(data[byte]); break;
+            case 0: EXPECT_BYTE(value, 'D'); break;
+            case 1: EXPECT_BYTE(value, 'O'); break;
+            case 2: EXPECT_BYTE(value, 'S'); break;
+            case 3: EXPECT_DOS_REVISION(value); break;
         }
     }
     

@@ -77,7 +77,7 @@ OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
         
         switch (word) {
                 
-            case 0: EXPECT_00000008(value, byte % 4); break;
+            case 0: EXPECT_LONGWORD(value, 8, byte % 4); break;
             case 1: EXPECT_FILEHEADER_REF(value); break;
             case 2: EXPECT_DATABLOCK_NUMBER(value); break;
             case 3: EXPECT_RANGE(value, 0, volume.dsize); break;

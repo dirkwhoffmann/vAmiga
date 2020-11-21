@@ -75,16 +75,16 @@ FSUserDirBlock::check(u32 byte, u8 *expected, bool strict)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_00000002(value, byte % 4); break;
+        case 0:  EXPECT_LONGWORD(value, 2, byte % 4); break;
         case 1:  EXPECT_SELFREF(value); break;
         case 2:
         case 3:
-        case 4:  EXPECT_00(value); break;
+        case 4:  EXPECT_BYTE(value, 0); break;
         case 5:  EXPECT_CHECKSUM(value); break;
         case -4: EXPECT_OPTIONAL_HASH_REF(value); break;
         case -3: EXPECT_PARENT_DIR_REF(value); break;
-        case -2: EXPECT_00(value); break;
-        case -1: EXPECT_00000002(value, byte % 4); break;
+        case -2: EXPECT_BYTE(value, 0); break;
+        case -1: EXPECT_LONGWORD(value, 2, byte % 4); break;
     }
     if (word <= -51) EXPECT_OPTIONAL_HASH_REF(value);
     

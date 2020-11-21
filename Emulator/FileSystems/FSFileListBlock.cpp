@@ -80,16 +80,16 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
 
     switch (word) {
             
-        case 0:   EXPECT_00000010(value, byte % 4); break;
+        case 0:   EXPECT_LONGWORD(value, 16, byte % 4); break;
         case 1:   EXPECT_SELFREF(value); break;
-        case 3:   EXPECT_00(value); break;
+        case 3:   EXPECT_BYTE(value, 0); break;
         case 4:   EXPECT_OPTIONAL_DATABLOCK_REF(value); break;
         case 5:   EXPECT_CHECKSUM(value); break;
         case -50:
-        case -4:  EXPECT_00(value); break;
+        case -4:  EXPECT_BYTE(value, 0); break;
         case -3:  EXPECT_FILEHEADER_REF(value); break;
         case -2:  EXPECT_OPTIONAL_FILELIST_REF(value); break;
-        case -1:  EXPECT_FFFFFFFD(value, byte % 4); break;
+        case -1:  EXPECT_LONGWORD(value, (u32)(-3), byte % 4); break;
     }
     
     // Data block references
