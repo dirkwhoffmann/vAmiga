@@ -67,29 +67,27 @@ FSFileListBlock::itemType(u32 byte)
 FSError
 FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
 {
+    /* Note: At location -3, many disks reference the bitmap block instead of
+     * the file header block. We ignore to report this common inconsistency if
+     * 'strict' is set to false.
+     */
+
     // Translate 'pos' to a (signed) long word index
     i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
     u32 value = get32(word);
 
-    /* Many ADFs store a reference to the bitmap block at location -3.
-     * We ignore this common inconsistency if strict checking is disabled.
-     */
-    if (!strict) {
-        if (word == -3) { EXPECT_REF; return FS_OK; }
-    }
-
     switch (word) {
             
-        case 0:   EXPECT_LONGWORD(16); break;
-        case 1:   EXPECT_SELFREF; break;
-        case 3:   EXPECT_BYTE(0); break;
-        case 4:   EXPECT_OPTIONAL_DATABLOCK_REF; break;
-        case 5:   EXPECT_CHECKSUM; break;
+        case   0: EXPECT_LONGWORD(16);                break;
+        case   1: EXPECT_SELFREF;                     break;
+        case   3: EXPECT_BYTE(0);                     break;
+        case   4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
+        case   5: EXPECT_CHECKSUM;                    break;
         case -50:
-        case -4:  EXPECT_BYTE(0); break;
-        case -3:  EXPECT_FILEHEADER_REF; break;
-        case -2:  EXPECT_OPTIONAL_FILELIST_REF; break;
-        case -1:  EXPECT_LONGWORD((u32)-3); break;
+        case  -4: EXPECT_BYTE(0);                     break;
+        case  -3: if (strict) EXPECT_FILEHEADER_REF;  break;
+        case  -2: EXPECT_OPTIONAL_FILELIST_REF;       break;
+        case  -1: EXPECT_LONGWORD(-3);                break;
     }
     
     // Data block references

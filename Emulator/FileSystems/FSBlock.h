@@ -259,63 +259,62 @@ public:
 
 typedef FSBlock* BlockPtr;
 
-#define EXPECT_BYTE(exp) \
-if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; }
+#define EXPECT_BYTE(exp) { \
+if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; } }
 
 #define EXPECT_LONGWORD(exp) { \
-if ((byte % 4) == 0 && BYTE3(value) != BYTE3(exp)) \
-    { *expected = (BYTE3(exp)); return FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 1 && BYTE2(value) != BYTE2(exp)) \
-    { *expected = (BYTE2(exp)); return FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 2 && BYTE1(value) != BYTE1(exp)) \
-    { *expected = (BYTE1(exp)); return FS_EXPECTED_VALUE; } \
-if ((byte % 4) == 3 && BYTE0(value) != BYTE0(exp)) \
-    { *expected = (BYTE0(exp)); return FS_EXPECTED_VALUE; } }
+if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
+    { *expected = (BYTE3((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
+    { *expected = (BYTE2((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
+    { *expected = (BYTE1((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
+    { *expected = (BYTE0((u32)exp)); return FS_EXPECTED_VALUE; } }
 
 #define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
-// if (value != checksum()) return FS_INVALID_CHECKSUM;
 
-#define EXPECT_LESS_OR_EQUAL(exp) \
+#define EXPECT_LESS_OR_EQUAL(exp) { \
 if (value > exp) \
-    { *expected = (exp); return FS_EXPECTED_SMALLER_VALUE; }
+{ *expected = (exp); return FS_EXPECTED_SMALLER_VALUE; } }
 
-#define EXPECT_DOS_REVISION \
-if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION;
+#define EXPECT_DOS_REVISION { \
+if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION; }
 
-#define EXPECT_REF \
-if (!volume.block(value)) return FS_EXPECTED_REF;
+#define EXPECT_REF { \
+if (!volume.block(value)) return FS_EXPECTED_REF; }
 
-#define EXPECT_SELFREF \
-if (value != nr) return FS_EXPECTED_SELFREF;
+#define EXPECT_SELFREF { \
+if (value != nr) return FS_EXPECTED_SELFREF; }
 
-#define EXPECT_FILEHEADER_REF \
-if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e;
+#define EXPECT_FILEHEADER_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e; }
 
-#define EXPECT_HASH_REF \
-if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
+#define EXPECT_HASH_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
 
-#define EXPECT_OPTIONAL_HASH_REF \
-if (value) { EXPECT_HASH_REF }
+#define EXPECT_OPTIONAL_HASH_REF { \
+if (value) { EXPECT_HASH_REF } }
 
-#define EXPECT_PARENT_DIR_REF \
-if (FSError e = volume.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
+#define EXPECT_PARENT_DIR_REF { \
+if (FSError e = volume.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
 
-#define EXPECT_FILELIST_REF \
-if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e;
+#define EXPECT_FILELIST_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e; }
 
-#define EXPECT_OPTIONAL_FILELIST_REF \
-if (value) { EXPECT_FILELIST_REF }
+#define EXPECT_OPTIONAL_FILELIST_REF { \
+if (value) { EXPECT_FILELIST_REF } }
 
-#define EXPECT_DATABLOCK_REF \
-if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e;
+#define EXPECT_DATABLOCK_REF { \
+if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e; }
 
-#define EXPECT_OPTIONAL_DATABLOCK_REF \
-if (value) { EXPECT_DATABLOCK_REF }
+#define EXPECT_OPTIONAL_DATABLOCK_REF { \
+if (value) { EXPECT_DATABLOCK_REF } }
 
-#define EXPECT_DATABLOCK_NUMBER \
-if (value == 0) return FS_EXPECTED_DATABLOCK_NR;
+#define EXPECT_DATABLOCK_NUMBER { \
+if (value == 0) return FS_EXPECTED_DATABLOCK_NR; }
 
-#define EXPECT_HASHTABLE_SIZE \
-if (value != 72) return FS_INVALID_HASHTABLE_SIZE;
+#define EXPECT_HASHTABLE_SIZE { \
+if (value != 72) return FS_INVALID_HASHTABLE_SIZE; }
 
 #endif

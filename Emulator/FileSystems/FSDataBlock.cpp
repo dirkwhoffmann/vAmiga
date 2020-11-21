@@ -65,20 +65,20 @@ OFSDataBlock::itemType(u32 pos)
 FSError
 OFSDataBlock::check(u32 byte, u8 *expected, bool strict)
 {
+    /* Note: At location 1, many disks store a reference to the bitmap block
+     * instead of a reference to the file header block. We ignore to report
+     * this common inconsistency if 'strict' is set to false.
+     */
+
     if (byte < 24) {
         
         i32 word = byte / 4;
         u32 value = get32(word);
-        
-        /* Ignore common inconsistencies. In the second long word, many disks
-         * point to the bitmap block instead of the file header block.
-         */
-        if (word == 1 && !strict) return FS_OK;
-        
+                
         switch (word) {
                 
             case 0: EXPECT_LONGWORD(8);                 break;
-            case 1: EXPECT_FILEHEADER_REF;              break;
+            case 1: if (strict) EXPECT_FILEHEADER_REF;  break;
             case 2: EXPECT_DATABLOCK_NUMBER;            break;
             case 3: EXPECT_LESS_OR_EQUAL(volume.dsize); break;
             case 4: EXPECT_OPTIONAL_DATABLOCK_REF;      break;
