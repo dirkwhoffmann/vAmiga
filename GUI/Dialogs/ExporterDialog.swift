@@ -39,13 +39,19 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var info1: NSTextField!
     @IBOutlet weak var info2: NSTextField!
 
+    @IBOutlet weak var strictButton: NSButton!
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
+    var driveNr = 0 // DEPRECATED
+    var drive: DriveProxy!
+    var disk: DiskFileProxy?
     var errorReport: FSErrorReport?
+    
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
+    var strict: Bool { return strictButton.state == .on }
     
     var savePanel: NSSavePanel!  // Used to export to files
     var openPanel: NSOpenPanel!  // Used to export to directories
@@ -56,11 +62,7 @@ class ExporterDialog: DialogController {
     var myDocument: MyDocument { return parent.mydocument! }
     var size: CGSize { return window!.frame.size }
     var shrinked: Bool { return size.height < 300 }
-
-    var drive: DriveProxy!
-    var driveNr = 0
-    var disk: DiskFileProxy?
-    
+        
     var numCylinders: Int { return disk?.numCylinders ?? 0 }
     var numSides: Int { return disk?.numSides ?? 0 }
     var numTracks: Int { return disk?.numTracks ?? 0 }
@@ -69,7 +71,6 @@ class ExporterDialog: DialogController {
     var isDD: Bool { return disk?.diskDensity == .DISK_DD }
     var isHD: Bool { return disk?.diskDensity == .DISK_HD }
 
-    // var type: AmigaFileType?
     var volume: FSVolumeProxy?
     
     // Block preview
@@ -82,6 +83,24 @@ class ExporterDialog: DialogController {
     
     var sectorData: [String] = []
     let bytesPerRow = 16
+    
+    //
+    // Checking the file system
+    //
+
+    func checkVolume() {
+        
+        errorReport = volume?.check()
+        // errorReport = volume?.check(strict)
+        let errors = errorReport?.corruptedBlocks ?? 0
+        
+        corruptionStepper.minValue = Double(1)
+        corruptionStepper.maxValue = Double(max(1, errors))
+    }
+
+    //
+    // Selecting a block
+    //
     
     func setCylinder(_ newValue: Int) {
 
@@ -167,14 +186,182 @@ class ExporterDialog: DialogController {
             update()
         }
     }
-
-    var diskIconImage: NSImage? {
+    
+    //
+    // Getting the ball rolling
+    //
+    
+    func showSheet(forDrive nr: Int) {
         
-        var name: String!
+        track()
+        
+        drive = amiga.df(nr)!
+        driveNr = nr
+        
+        // Try to decode the disk with the ADF decoder
+        disk = ADFFileProxy.make(withDrive: drive)
+        
+        // It it is an ADF, try to extract the file system
+        if disk != nil { volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy) }
+        
+        // If it is not an ADF, try the DOS decoder
+        if disk == nil { disk = IMGFileProxy.make(withDrive: drive) }
+                
+        super.showSheet()
+    }
+    
+    override public func awakeFromNib() {
+        
+        track()
+        super.awakeFromNib()
+        
+        sectorData = Array(repeating: "", count: 512 / bytesPerRow)
+
+        // Register to receive mouse click events
+        previewTable.action = #selector(clickAction(_:))
+        
+        // Start with a shrinked window
+        var rect = window!.contentRect(forFrameRect: window!.frame)
+        rect.size = CGSize(width: 606, height: shrinkedHeight)
+        let frame = window!.frameRect(forContentRect: rect)
+        window!.setFrame(frame, display: true)
+        
+        // Run a file system check
+        checkVolume()
+
+        update()
+    }
+    
+    override func windowDidLoad() {
+        
+        let adf = disk?.type == .FILETYPE_ADF
+        let dos = disk?.type == .FILETYPE_IMG
+            
+        // Enable compatible file formats in the format selector popup
+        formatPopup.autoenablesItems = false
+        formatPopup.item(at: 0)!.isEnabled = adf
+        formatPopup.item(at: 1)!.isEnabled = dos
+        formatPopup.item(at: 2)!.isEnabled = dos
+        formatPopup.item(at: 3)!.isEnabled = volume != nil
+        
+        // Preselect a suitable export format
+        if adf { formatPopup.selectItem(at: 0) }
+        if dos { formatPopup.selectItem(at: 1) }
+        
+        // Jump to the first corrupted block if an error was found
+        if errorReport != nil && errorReport!.corruptedBlocks > 0 {
+            setCorruptedBlock(1)
+        } else {
+            update()
+        }
+    }
+    
+    override func sheetDidShow() {
+        
+    }
+    
+    //
+    // Expanding and shrinking the window
+    //
+    
+    func shrink() { setHeight(shrinkedHeight) }
+    func expand() { setHeight(expandedHeight) }
+    
+    func setHeight(_ newHeight: CGFloat) {
+                
+        var rect = window!.frame
+        rect.origin.y += rect.size.height - newHeight
+        rect.size.height = newHeight
+        
+        window!.setFrame(rect, display: true)
+        
+        // Force the preview table to appear at the correct vertical position
+        var r = previewScrollView.frame
+        r.origin.y = 91
+        previewScrollView.frame = r
+
+        exportButton.keyEquivalent = shrinked ? "\r" : ""
+
+        update()
+    }
+
+    //
+    // Updating the displayed information
+    //
+    
+    func update() {
+                
+        updateDiskIcon()
+        updateTitleText()
+        updateTrackAndSectorInfo()
+        updateVolumeInfo()
+        if volume == nil { volumeInfo.textColor = .red }
+
+        // Disable the export button if no export is possible
+        exportButton.isEnabled = disk != nil
+
+        // Update the disclosure button state
+        disclosureButton.state = shrinked ? .off : .on
+
+        // Hide some elements if window is shrinked
+        let items: [NSView] = [
+            previewScrollView,
+            cylinderText, cylinderField, cylinderStepper,
+            headText, headField, headStepper,
+            trackText, trackField, trackStepper,
+            sectorText, sectorField, sectorStepper,
+            blockText, blockField, blockStepper,
+            corruptionText, corruptionField, corruptionStepper,
+            strictButton
+        ]
+        for item in items { item.isHidden = shrinked }
+                
+        // Only proceed if the window is expanded
+        if shrinked { return }
+
+        // Hide more elements if no file system has been detected
+        if volume == nil {
+            strictButton.isHidden = true
+        }
+        
+        // Hide more elements if no errors are present
+        if errorReport?.corruptedBlocks == 0 {
+            corruptionText.isHidden = true
+            corruptionField.isHidden = true
+            corruptionStepper.isHidden = true
+        }
+
+        // Update all elements
+        cylinderField.integerValue     = _cylinder
+        cylinderStepper.integerValue   = _cylinder
+        headField.integerValue         = _side
+        headStepper.integerValue       = _side
+        trackField.integerValue        = _track
+        trackStepper.integerValue      = _track
+        sectorField.integerValue       = _sector
+        sectorStepper.integerValue     = _sector
+        blockField.integerValue        = _block
+        blockStepper.integerValue      = _block
+        corruptionField.integerValue   = _corruption
+        corruptionStepper.integerValue = _corruption
+
+        if volume?.seekCorruptedBlock(_corruption) == _block {
+            corruptionField.textColor = .labelColor
+        } else {
+            corruptionField.textColor = .tertiaryLabelColor
+        }
+        
+        updateBlockInfo()
+        buildStrings()
+        previewTable.reloadData()
+    }
+    
+    func updateDiskIcon() {
+        
+        var name = ""
 
         if drive.hasDDDisk { name = "dd" }
         if drive.hasHDDisk { name = "hd" }
-        if name == nil { return nil }
 
         switch disk?.type {
         case .FILETYPE_ADF: name += "_adf"
@@ -184,15 +371,17 @@ class ExporterDialog: DialogController {
         
         if drive.hasWriteProtectedDisk() { name += "_protected" }
 
-        return NSImage.init(named: name)
+        diskIcon.image = NSImage.init(named: name)
     }
 
-    var titleText: String {
+    func updateTitleText() {
         
-        if disk?.type == .FILETYPE_ADF { return "Amiga Disk" }
-        if disk?.type == .FILETYPE_IMG { return "PC Disk" }
+        var name = "This disk contains an unrecognized MFM stream"
+        
+        if disk?.type == .FILETYPE_ADF { name = "Amiga Disk" }
+        if disk?.type == .FILETYPE_IMG { name = "PC Disk" }
 
-        return "This disk contains an unrecognized MFM stream"
+        title.stringValue = name
     }
 
     func updateTrackAndSectorInfo() {
@@ -418,6 +607,26 @@ class ExporterDialog: DialogController {
             text = "Expected a block reference"
         case .EXPECTED_SELFREF:
             text = "Expected a self-reference"
+            
+        case .POINTS_TO_EMPTY_BLOCK:
+            text = "This reference points to an empty block"
+        case .POINTS_TO_BOOT_BLOCK:
+            text = "This reference points to a boot block"
+        case .POINTS_TO_ROOT_BLOCK:
+            text = "This reference points to the root block"
+        case .POINTS_TO_BITMAP_BLOCK:
+            text = "This reference points to a bitmap block"
+        case .POINTS_TO_USERDIR_BLOCK:
+            text = "This reference points to a user directory block"
+        case .POINTS_TO_FILEHEADER_BLOCK:
+            text = "This reference points to a file header block"
+        case .POINTS_TO_FILELIST_BLOCK:
+            text = "This reference points to a file header block"
+        case .POINTS_TO_DATA_BLOCK:
+            text = "This reference points to a data block"
+        case .POINTS_TO_UNKNOWN_BLOCK:
+            text = "This reference points to a block of unknown type"
+
         case .EXPECTED_FILEHEADER_REF:
             text = "Expected a reference to a file header block"
         case .EXPECTED_FILELIST_REF:
@@ -443,166 +652,8 @@ class ExporterDialog: DialogController {
         info2.stringValue = text
     }
         
-    func showSheet(forDrive nr: Int) {
-        
-        track()
-        
-        drive = amiga.df(nr)!
-        driveNr = nr
-        
-        // Try to decode the disk with the ADF decoder
-        disk = ADFFileProxy.make(withDrive: drive)
-        
-        // It it is an ADF, try to extract the file system
-        if disk != nil {
-            volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy)
-        }
-        // If it is not an ADF, try the DOS decoder
-        if disk == nil {
-            disk = IMGFileProxy.make(withDrive: drive)
-        }
-        
-        super.showSheet()
-    }
-    
-    override public func awakeFromNib() {
-        
-        track()
-        super.awakeFromNib()
-        
-        sectorData = Array(repeating: "", count: 512 / bytesPerRow)
-
-        // doubleAction = #selector(doubleClickAction(_:))
-        previewTable.action = #selector(clickAction(_:))
-        
-        // Start with a shrinked window
-        var rect = window!.contentRect(forFrameRect: window!.frame)
-        rect.size = CGSize(width: 606, height: shrinkedHeight)
-        let frame = window!.frameRect(forContentRect: rect)
-        window!.setFrame(frame, display: true)
-        
-        update()
-    }
-    
-    override func windowDidLoad() {
-        
-        let adf = disk?.type == .FILETYPE_ADF
-        let dos = disk?.type == .FILETYPE_IMG
-            
-        // Enable compatible file formats in the format selector popup
-        formatPopup.autoenablesItems = false
-        formatPopup.item(at: 0)!.isEnabled = adf
-        formatPopup.item(at: 1)!.isEnabled = dos
-        formatPopup.item(at: 2)!.isEnabled = dos
-        formatPopup.item(at: 3)!.isEnabled = volume != nil
-        
-        // Preselect a suitable export format
-        if adf { formatPopup.selectItem(at: 0) }
-        if dos { formatPopup.selectItem(at: 1) }
-        
-        // Run a file system check
-        errorReport = volume?.check()
-        
-        // Jump to the first error block if an error was found
-        if let errors = errorReport?.corruptedBlocks, errors > 0 {
-            corruptionStepper.minValue = Double(1)
-            corruptionStepper.maxValue = Double(errors)
-            setCorruptedBlock(1)
-        } else {
-            update()
-        }
-    }
-    
-    override func sheetDidShow() {
-        
-        // shrink()
-    }
-    
-    func setHeight(_ newHeight: CGFloat) {
-                
-        var rect = window!.frame
-        rect.origin.y += rect.size.height - newHeight
-        rect.size.height = newHeight
-        
-        window!.setFrame(rect, display: true)
-        
-        // Force the preview table to appear at the correct vertical position
-        var r = previewScrollView.frame
-        r.origin.y = 91
-        previewScrollView.frame = r
-
-        exportButton.keyEquivalent = shrinked ? "\r" : ""
-
-        update()
-    }
-
-    func shrink() { setHeight(shrinkedHeight) }
-    func expand() { setHeight(expandedHeight) }
-
-    func update() {
-                
-        // Update icon and text fields
-        diskIcon.image = diskIconImage
-        title.stringValue = titleText
-        updateTrackAndSectorInfo()
-        updateVolumeInfo()
-        if volume == nil { volumeInfo.textColor = .red }
-
-        // Disable the export button if no export is possible
-        exportButton.isEnabled = disk != nil
-
-        // Update the disclosure button state
-        disclosureButton.state = shrinked ? .off : .on
-
-        // Hide some elements if window is shrinked
-        let items: [NSView] = [
-            previewScrollView,
-            cylinderText, cylinderField, cylinderStepper,
-            headText, headField, headStepper,
-            trackText, trackField, trackStepper,
-            sectorText, sectorField, sectorStepper,
-            blockText, blockField, blockStepper,
-            corruptionText, corruptionField, corruptionStepper
-        ]
-        for item in items { item.isHidden = shrinked }
-                
-        // Only proceed if the window is expanded
-        if shrinked { return }
-        
-        // Hide more elements if no errors are present
-        if errorReport?.corruptedBlocks == 0 {
-            corruptionText.isHidden = true
-            corruptionField.isHidden = true
-            corruptionStepper.isHidden = true
-        }
-
-        // Update all elements
-        cylinderField.integerValue     = _cylinder
-        cylinderStepper.integerValue   = _cylinder
-        headField.integerValue         = _side
-        headStepper.integerValue       = _side
-        trackField.integerValue        = _track
-        trackStepper.integerValue      = _track
-        sectorField.integerValue       = _sector
-        sectorStepper.integerValue     = _sector
-        blockField.integerValue        = _block
-        blockStepper.integerValue      = _block
-        corruptionField.integerValue   = _corruption
-        corruptionStepper.integerValue = _corruption
-
-        if volume?.seekCorruptedBlock(_corruption) == _block {
-            corruptionField.textColor = .labelColor
-        } else {
-            corruptionField.textColor = .tertiaryLabelColor
-        }
-        
-        updateBlockInfo()
-        buildStrings()
-        previewTable.reloadData()
-    }
-    
     //
-    // Export functions
+    // Exporting the disk
     //
     
     func exportToFile(allowedTypes: [String]) {
@@ -669,6 +720,21 @@ class ExporterDialog: DialogController {
     // Action methods
     //
 
+    @IBAction func disclosureAction(_ sender: NSButton!) {
+        
+        shrinked ? expand() : shrink()
+    }
+    
+    @IBAction func clickAction(_ sender: NSTableView!) {
+        
+        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
+            
+            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
+            selection = selection != newValue ? newValue : nil
+            update()
+        }
+    }
+
     @IBAction func cylinderAction(_ sender: NSTextField!) {
         
         setCylinder(sender.integerValue)
@@ -729,24 +795,15 @@ class ExporterDialog: DialogController {
         setCorruptedBlock(sender.integerValue)
     }
 
-    @IBAction func disclosureAction(_ sender: NSButton!) {
+    @IBAction func strictAction(_ sender: NSButton!) {
         
-        shrinked ? expand() : shrink()
+        track()
+        
+        checkVolume()
+        update()
     }
     
-    @IBAction func clickAction(_ sender: NSTableView!) {
-        
-        if sender.clickedColumn >= 1 && sender.clickedRow >= 0 {
-            
-            let newValue = 16 * sender.clickedRow + sender.clickedColumn - 1
-            selection = selection != newValue ? newValue : nil
-            update()
-        }
-    }
-
     @IBAction func exportAction(_ sender: NSButton!) {
-
-        track("selected item = \(formatPopup.indexOfSelectedItem)")
         
         switch formatPopup.indexOfSelectedItem {
         case 0: exportToFile(allowedTypes: ["adf", "ADF"])
@@ -763,6 +820,10 @@ class ExporterDialog: DialogController {
          hideSheet()
      }
 }
+
+//
+// Extensions
+//
 
 extension ExporterDialog: NSWindowDelegate {
     

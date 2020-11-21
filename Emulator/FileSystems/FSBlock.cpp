@@ -346,7 +346,7 @@ FSBlock::addToHashTable(u32 ref)
     
     // If the hash table slot is empty, put the reference there
     if (read32(tableEntry) == 0) { write32(tableEntry, ref); return; }
-    
+        
     // Otherwise, add the reference at the end of the linked list
     if (auto item = volume.block(read32(tableEntry))) {
         

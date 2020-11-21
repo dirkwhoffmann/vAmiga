@@ -32,6 +32,7 @@
                 <outlet property="sectorField" destination="O0X-QE-8Xw" id="5rK-bo-5h6"/>
                 <outlet property="sectorStepper" destination="kjN-TB-Bh4" id="tle-6f-rav"/>
                 <outlet property="sectorText" destination="5fZ-6V-iLd" id="WNl-87-RUs"/>
+                <outlet property="strictButton" destination="K8I-Vh-3VH" id="tyX-Rt-etG"/>
                 <outlet property="title" destination="tXt-ZO-VKK" id="yKw-Bc-jdJ"/>
                 <outlet property="trackField" destination="5mA-IW-Lcv" id="G8K-4W-vHE"/>
                 <outlet property="trackInfo" destination="FGU-ht-eVm" id="fYg-LP-VdC"/>
@@ -593,6 +594,17 @@ Gw
                             <action selector="corruptedBlockStepperAction:" target="-2" id="geh-Xk-O37"/>
                         </connections>
                     </stepper>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="K8I-Vh-3VH">
+                        <rect key="frame" x="131" y="22" width="114" height="18"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="check" title="Strict checking" bezelStyle="regularSquare" imagePosition="left" state="on" inset="2" id="Bnh-id-ngO">
+                            <behavior key="behavior" changeContents="YES" doesNotDimImage="YES" lightByContents="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="strictAction:" target="-2" id="8o7-Db-5In"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <connections>

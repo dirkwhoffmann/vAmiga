@@ -305,19 +305,19 @@ if (!volume.block(val)) return FS_EXPECTED_REF;
 #define EXPECT_SELFREF(val) \
 if ((val) != nr) return FS_EXPECTED_SELFREF;
 #define EXPECT_FILEHEADER_REF(val) \
-if (!volume.fileHeaderBlock(val)) return FS_EXPECTED_FILEHEADER_REF;
+if (FSError e = volume.checkBlockType(val, FS_FILEHEADER_BLOCK); e != FS_OK) return e;
 #define EXPECT_HASH_REF(val) \
-if (!volume.fileHeaderBlock(val) && !volume.userDirBlock(val)) return FS_EXPECTED_HASH_REF;
+if (FSError e = volume.checkBlockType(val, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
 #define EXPECT_OPTIONAL_HASH_REF(val) \
 if (val) { EXPECT_HASH_REF(val) }
 #define EXPECT_PARENT_DIR_REF(val) \
-if (!volume.userDirBlock(val) && !volume.rootBlock(val)) return FS_EXPECTED_PARENTDIR_REF;
+if (FSError e = volume.checkBlockType(val, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e;
 #define EXPECT_FILELIST_REF(val) \
-if (!volume.fileListBlock(val)) return FS_EXPECTED_FILELIST_REF;
+if (FSError e = volume.checkBlockType(val, FS_FILELIST_BLOCK); e != FS_OK) return e;
 #define EXPECT_OPTIONAL_FILELIST_REF(val) \
 if (val) { EXPECT_FILELIST_REF(val) }
 #define EXPECT_DATABLOCK_REF(val) \
-if (!volume.dataBlock(val)) return FS_EXPECTED_DATABLOCK_REF;
+if (FSError e = volume.checkBlockType(val, FS_DATA_BLOCK); e != FS_OK) return e;
 #define EXPECT_OPTIONAL_DATABLOCK_REF(val) \
 if (val) { EXPECT_DATABLOCK_REF(val) }
 #define EXPECT_DATABLOCK_NUMBER(val) \

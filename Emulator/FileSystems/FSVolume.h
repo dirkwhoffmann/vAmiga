@@ -104,6 +104,10 @@ public:
     // Guesses the type of a block by analyzing its number and data
     FSBlockType guessBlockType(u32 nr, const u8 *buffer);
 
+    // Checks if the type of a block matches one of the provides types
+    FSError checkBlockType(u32, FSBlockType type);
+    FSError checkBlockType(u32, FSBlockType type, FSBlockType altType);
+
     
     //
     // Querying file system properties
