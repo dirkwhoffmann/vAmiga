@@ -127,31 +127,31 @@ FSFileHeaderBlock::dump()
 size_t
 FSFileHeaderBlock::writeData(FILE *file)
 {
+    long bytesRemaining = getFileSize();
+    long bytesTotal = 0;
+    long blocksTotal = 0;
+
+    // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
-    long remaining = getFileSize();
-    long total = 0;
-    
-    while (block) {
-        
-        // Determine the number of data block referenced in this block
-        u32 count = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());
-        
-        // Iterate through the data block list
-        for (u32 i = 0; i < count; i++) {
+
+    while (block && blocksTotal < volume.capacity) {
+
+        blocksTotal++;
+
+        // Iterate through all data blocks references in this block
+        u32 num = MIN(block->getNumDataBlockRefs(), block->getMaxDataBlockRefs());        
+        for (u32 i = 0; i < num; i++) {
             
             u32 ref = getDataBlockRef(i);
+            if (FSDataBlock *dataBlock = volume.dataBlock(getDataBlockRef(i))) {
 
-            if (FSDataBlock *dataBlock = volume.dataBlock(ref)) {
-
-                long written = dataBlock->writeData(file, remaining);
-                total += written;
-                remaining -= written;
-                printf("Block %d: written: %ld total: %ld remaining: %ld\n",
-                    i, written, total, remaining);
-
+                long bytesWritten = dataBlock->writeData(file, bytesRemaining);
+                bytesTotal += bytesWritten;
+                bytesRemaining -= bytesWritten;
+                
             } else {
                 
-                printf("Block %d: Ignored (no data block)\n", i);
+                printf("Ignoring block %d (no data block)\n", ref);
             }
         }
         
@@ -159,11 +159,11 @@ FSFileHeaderBlock::writeData(FILE *file)
         block = block->getNextListBlock();
     }
     
-    if (remaining != 0) {
-        printf("Size inconsistency: %ld\n", remaining);
+    if (bytesRemaining != 0) {
+        printf("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
     
-    return total;
+    return bytesTotal;
 }
 
 size_t
