@@ -9,6 +9,27 @@
 
 #include "Utils.h"
 #include "FSVolume.h"
+#include <set>
+
+FSVolume *
+FSVolume::makeWithADF(ADFFile *adf, FSError *error)
+{
+    assert(adf != nullptr);
+
+    // TODO: Determine file system type from ADF
+    FSVolumeType type = FS_OFS;
+    
+    // Create volume
+    FSVolume *volume = new FSVolume(type, adf->numBlocks(), 512);
+
+    // Import file system from ADF
+    if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
+        delete volume;
+        return nullptr;
+    }
+    
+    return volume;
+}
 
 FSVolume *
 FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
@@ -39,8 +60,6 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path)
 
 FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
-    setDescription("Volume");
-
     assert(capacity == 2 * 880 || capacity == 4 * 880);
     blocks = new BlockPtr[capacity];
 
@@ -73,6 +92,11 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
     currentDir = rootBlockNr();    
 }
 
+FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) : FSVolume(t, "", c, s)
+{
+    
+}
+
 FSVolume::~FSVolume()
 {
     for (u32 i = 0; i < capacity; i++) {
@@ -85,53 +109,192 @@ void
 FSVolume::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    msg("DOS%d  ",      type == FS_OFS ? 0 : 1);
+    msg("DOS%ld  ",     getType());
     msg("%5d (x %3d) ", numBlocks(), bsize);
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
-    msg("%s\n",         getName().cStr);
+    msg("%s\n",         getName().c_str());
 }
 
 void
 FSVolume::dump()
 {
-    msg("Volume: (%s)\n", type == FS_OFS ? "OFS" : "FFS");
+    msg("Volume: DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
     
     for (size_t i = 0; i < capacity; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
         
         msg("\nBlock %d (%d):", i, blocks[i]->nr);
-        msg(" %s\n", fsBlockTypeName(blocks[i]->type()));
+        msg(" %s\n", sFSBlockType(blocks[i]->type()));
                 
         blocks[i]->dump(); 
     }
 }
 
-bool
-FSVolume::check(bool verbose)
+FSErrorReport
+FSVolume::check(bool strict)
 {
-    bool result = true;
+    long total = 0, min = LONG_MAX, max = 0;
     
-    if (verbose) fprintf(stderr, "Checking volume...\n");
-    
+    // Analyze all blocks
     for (u32 i = 0; i < capacity; i++) {
-                
-        if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
-
-        if (verbose) {
-            fprintf(stderr, "Inspecting block %d (%s) ...\n",
-                    i, fsBlockTypeName(blocks[i]->type()));
+         
+        if (blocks[i]->check(strict) > 0) {
+            min = MIN(min, i);
+            max = MAX(max, i);
+            blocks[i]->corrupted = ++total;
+        } else {
+            blocks[i]->corrupted = 0;
         }
+    }
 
-        result &= blocks[i]->check(verbose);
+    // Record findings
+    FSErrorReport result;
+    if (total) {
+        result.corruptedBlocks = total;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
+    } else {
+        result.corruptedBlocks = 0;
+        result.firstErrorBlock = min;
+        result.lastErrorBlock = max;
     }
     
-    if (true) {
-        fprintf(stderr, "The volume is %s.\n", result ? "OK" : "corrupted");
-    }
     return result;
+}
+
+FSError
+FSVolume::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
+{
+    return blocks[blockNr]->check(pos, expected, strict);
+}
+
+FSError
+FSVolume::checkBlockType(u32 nr, FSBlockType type)
+{
+    return checkBlockType(nr, type, type);
+}
+
+FSError
+FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
+{
+    FSBlockType t = blockType(nr);
+    
+    if (t != type && t != altType) {
+        
+        switch (t) {
+                
+            case FS_EMPTY_BLOCK:      return FS_PTR_TO_EMPTY_BLOCK;
+            case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
+            case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
+            case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
+            case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
+            case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILEHEADER_BLOCK;
+            case FS_DATA_BLOCK:       return FS_PTR_TO_DATA_BLOCK;
+            default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
+        }
+    }
+
+    return FS_OK;
+}
+
+u32
+FSVolume::getCorrupted(u32 blockNr)
+{
+    return block(blockNr) ? blocks[blockNr]->corrupted : 0;
+}
+
+bool
+FSVolume::isCorrupted(u32 blockNr, u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+        
+        if (isCorrupted(i)) {
+            cnt++;
+            if (blockNr == i) return cnt == n;
+        }
+    }
+    return false;
+}
+
+u32
+FSVolume::nextCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr + 1;
+    while (i++ < capacity) { if (isCorrupted(i)) return i; }
+    return blockNr;
+}
+
+u32
+FSVolume::prevCorrupted(u32 blockNr)
+{
+    long i = (long)blockNr - 1;
+    while (i-- >= 0) { if (isCorrupted(i)) return i; }
+    return blockNr;
+}
+
+u32
+FSVolume::seekCorruptedBlock(u32 n)
+{
+    for (u32 i = 0, cnt = 0; i < capacity; i++) {
+
+        if (isCorrupted(i)) {
+            cnt++;
+            if (cnt == n) return i;
+        }
+    }
+    return (u32)-1;
+}
+
+FSBlockType
+FSVolume::guessBlockType(u32 nr, const u8 *buffer)
+{
+    assert(buffer != nullptr);
+
+    // Take care of blocks that can be identified by number
+    if (nr <= 1) return FS_BOOT_BLOCK;
+    if (nr == bitmapBlockNr()) return FS_BITMAP_BLOCK;
+    
+    // For all other blocks, check the type and subtype fields
+    u32 type = FSBlock::read32(buffer);
+    u32 subtype = FSBlock::read32(buffer + bsize - 4);
+
+    if (type == 2 && subtype == 1) return FS_ROOT_BLOCK;
+    if (type == 2 && subtype == 2) return FS_USERDIR_BLOCK;
+    if (type == 2 && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
+    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
+
+    // Check if this block is a data block
+    if (isOFS()) {
+        if (type == 8) return FS_DATA_BLOCK;
+    } else {
+        for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK;
+    }
+    
+    return FS_EMPTY_BLOCK;
+}
+
+bool
+FSVolume::isOFS()
+{
+    return
+    type == FS_OFS ||
+    type == FS_OFS_INTL ||
+    type == FS_OFS_DC ||
+    type == FS_OFS_LNFS;
+}
+
+bool
+FSVolume::isFFS()
+{
+    return
+    type == FS_FFS ||
+    type == FS_FFS_INTL ||
+    type == FS_FFS_DC ||
+    type == FS_FFS_LNFS;
 }
 
 u32
@@ -154,6 +317,18 @@ FSVolume::freeBlocks()
     }
     
     return result;
+}
+
+FSBlockType
+FSVolume::blockType(u32 nr)
+{
+    return block(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+}
+
+FSItemType
+FSVolume::itemType(u32 nr, u32 pos)
+{
+    return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
 
 FSBlock *
@@ -232,6 +407,18 @@ FSVolume::dataBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_DATA_BLOCK) {
         return (FSDataBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
+FSBlock *
+FSVolume::hashableBlock(u32 nr)
+{
+    FSBlockType type = nr < capacity ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+    
+    if (type == FS_USERDIR_BLOCK || type == FS_FILEHEADER_BLOCK) {
+        return blocks[nr];
     } else {
         return nullptr;
     }
@@ -337,8 +524,17 @@ FSVolume::installBootBlock()
 {
     assert(blocks[0]->type() == FS_BOOT_BLOCK);
     assert(blocks[1]->type() == FS_BOOT_BLOCK);
+
     ((FSBootBlock *)blocks[0])->writeBootCode();
     ((FSBootBlock *)blocks[1])->writeBootCode();
+}
+
+void
+FSVolume::updateChecksums()
+{
+    for (u32 i = 0; i < capacity; i++) {
+        blocks[i]->updateChecksum();
+    }
 }
 
 FSBlock *
@@ -384,6 +580,34 @@ FSVolume::changeDir(const char *name)
     // Move one level down
     currentDir = subdir->nr;
     return currentDirBlock();
+}
+
+string
+FSVolume::getPath(FSBlock *block)
+{
+    string result = "";
+    std::set<u32> visited;
+ 
+    while(block) {
+
+        // Break the loop if this block has an invalid type
+        if (!hashableBlock(block->nr)) break;
+
+        // Break the loop if this block was visited before
+        if (visited.find(block->nr) != visited.end()) break;
+        
+        // Add the block to the set of visited blocks
+        visited.insert(block->nr);
+                
+        // Expand the path
+        string name = block->getName().c_str();
+        result = (result == "") ? name : name + "/" + result;
+        
+        // Continue with the parent block
+        block = block->getParentBlock();
+    }
+    
+    return result;
 }
 
 FSBlock *
@@ -462,104 +686,175 @@ FSVolume::seekFile(const char *name)
     return block;
 }
 
-int
-FSVolume::walk(bool recursive)
+void
+FSVolume::printDirectory(bool recursive)
 {
-    return walk(currentDirBlock(), &FSVolume::listWalker, 0, recursive);
+    std::vector<u32> items;
+    collect(currentDir, items);
+    
+    for (auto const& i : items) {
+        msg("%s\n", getPath(i).c_str());
+    }
+    msg("%d items", items.size());
 }
 
-int
-FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive)
+FSError
+FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 {
-    assert(dir != nullptr);
+    std::stack<u32> remainingItems;
+    std::set<u32> visited;
     
-    for (u32 i = 0; i < dir->hashTableSize(); i++) {
+    // Start with the items in this block
+    collectHashedRefs(ref, remainingItems, visited);
+    
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
         
-        if (u32 ref = dir->hashLookup(i)) {
-            
-            FSBlock *item = block(ref);
-            while (item) {
-                
-                if (item->type() == FS_USERDIR_BLOCK) {
-                    
-                    value = (this->*walker)(item, value);
-                    if (recursive) value = walk(item, walker, value, recursive);
-                }
-                if (item->type() == FS_FILEHEADER_BLOCK) {
-                    
-                    value = (this->*walker)(item, value);
-                }
-                
-                item = item->getNextHashBlock();
-            }
+        u32 item = remainingItems.top();
+        remainingItems.pop();
+        result.push_back(item);
+
+        // Add subdirectory items to the queue
+        if (userDirBlock(item) && recursive) {
+            collectHashedRefs(item, remainingItems, visited);
         }
     }
-    return value;
+
+    return FS_OK;
 }
 
-int
-FSVolume::listWalker(FSBlock *block, int value)
+FSError
+FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
-    // Display directory tag or file size
-    if (block->type() == FS_USERDIR_BLOCK) {
-        msg("%6s  ", "(DIR)");
-    } else {
-        msg("%6d  ", block->getFileSize());
+    if (FSBlock *b = block(ref)) {
+        
+        // Walk through the hash table in reverse order
+        for (long i = (long)b->hashTableSize(); i >= 0; i--) {
+            collectRefsWithSameHashValue(b->getHashRef(i), result, visited);
+        }
     }
     
-    // Display date and time
-    block->getCreationDate().print();
+    return FS_OK;
+}
 
-    // Display the file or directory name
-    block->printPath();
-    msg("\n");
+FSError
+FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
+{
+    std::stack<u32> refs;
+    
+    // Walk down the linked list
+    for (FSBlock *b = hashableBlock(ref); b; b = b->getNextHashBlock()) {
 
-    return value + 1;
+        // Break the loop if we've already seen this block
+        if (visited.find(b->nr) != visited.end()) return FS_HAS_CYCLES;
+        visited.insert(b->nr);
+
+        refs.push(b->nr);
+    }
+  
+    // Push the collected elements onto the result stack
+    while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
+    
+    return FS_OK;
 }
 
 bool
-FSVolume::importVolume(u8 *dst, size_t size)
+FSVolume::importVolume(const u8 *src, size_t size)
 {
-    assert(dst != nullptr);
+    FSError error;
+    bool result = importVolume(src, size, &error);
+    
+    assert(result == (error == FS_OK));
+    return result;
+}
 
-    debug("Importing file system with %d blocks\n", capacity);
+bool
+FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
+{
+    assert(src != nullptr);
 
-    // Only proceed if the targer buffer has the correct size
-    if (capacity * bsize != size) {
-        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
-        return false;
+    debug(FS_DEBUG, "Importing file system...\n");
+
+    // Only proceed if the (predicted) block size matches
+    if (size % bsize != 0) {
+        *error = FS_WRONG_BSIZE; return false;
     }
-
+    // Only proceed if the source buffer contains the right amount of data
+    if (capacity * bsize != size) {
+        *error = FS_WRONG_CAPACITY; return false;
+    }
+    // Only proceed if the buffer contains a file system
+    if (src[0] != 'D' || src[1] != 'O' || src[2] != 'S') {
+        *error = FS_UNKNOWN; return false;
+    }
+    // Only proceed if the provided file system is supported
+    if (src[3] > 1) {
+        *error = FS_UNSUPPORTED; return false;
+    }
+    
+    // Set the version number
+    type = (FSVolumeType)src[3];
+    
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
+        
+        // Determine the type of the new block
+        FSBlockType type = guessBlockType(i, src + i * bsize);
+        
+        // Create the new block
+        FSBlock *newBlock = FSBlock::makeWithType(*this, i, type);
+        if (newBlock == nullptr) return false;
 
-        // TODO
-        assert(false);
+        // Import the block data
+        const u8 *p = src + i * bsize;
+        newBlock->importBlock(p, bsize);
+
+        // Replace the existing block
+        assert(blocks[i] != nullptr);
+        delete blocks[i];
+        blocks[i] = newBlock;
     }
     
+    *error = FS_OK;
+    debug(FS_DEBUG, "Success\n");
+    printDirectory(true);
     return true;
 }
-    
+
 bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
+    FSError error;
+    bool result = exportVolume(dst, size, &error);
+    
+    assert(result == (error == FS_OK));
+    return result;
+}
+
+bool
+FSVolume::exportVolume(u8 *dst, size_t size, FSError *error)
+{
     assert(dst != nullptr);
 
-    debug("Exporting file system with %d blocks\n", capacity);
+    debug(FS_DEBUG, "Exporting file system...\n");
 
-    // Only proceed if the targer buffer has the correct size
-    if (capacity * bsize != size) {
-        debug("Buffer size mismatch (%d, expected %d)\n", size, capacity * bsize);
-        return false;
-    }
+    // Only proceed if the (predicted) block size matches
+    if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
+
+    // Only proceed if the source buffer contains the right amount of data
+    if (capacity * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
         
     // Wipe out the target buffer
     memset(dst, 0, size);
     
     // Export all blocks
     for (u32 i = 0; i < capacity; i++) {
+        
         blocks[i]->exportBlock(dst + i * bsize, bsize);
     }
+
+    *error = FS_OK;
+    debug(FS_DEBUG, "Success\n");
     return true;
 }
 
@@ -627,4 +922,29 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
     }
 
     return result;
+}
+
+FSError
+FSVolume::exportDirectory(const char *path)
+{
+    assert(path != nullptr);
+        
+    // Only proceed if path points to an empty directory
+    long numItems = numDirectoryItems(path);
+    if (numItems != 0) return FS_DIRECTORY_NOT_EMPTY;
+    
+    // Collect files and directories
+    std::vector<u32> items;
+    collect(currentDir, items);
+    
+    // Export all items
+    for (auto const& i : items) {
+        if (FSError error = block(i)->exportBlock(path); error != FS_OK) {
+            msg("Export error: %d\n", error);
+            return error; 
+        }
+    }
+    
+    msg("Exported %d items", items.size());
+    return FS_OK;
 }

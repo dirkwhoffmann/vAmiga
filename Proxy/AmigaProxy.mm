@@ -25,6 +25,7 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
+struct FSVolumeWrapper { FSVolume *volume; };
 struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
@@ -1167,6 +1168,14 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return wrapper->drive->hasDisk();
 }
+- (BOOL) hasDDDisk
+{
+    return wrapper->drive->hasDDDisk();
+}
+- (BOOL) hasHDDisk
+{
+    return wrapper->drive->hasHDDisk();
+}
 - (BOOL) hasWriteProtectedDisk
 {
     return wrapper->drive->hasWriteProtectedDisk();
@@ -1207,10 +1216,104 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return NULL;
 }
-
-
 @end
 
+
+//
+// FSVolume
+//
+
+@implementation FSVolumeProxy
+
+- (instancetype) initWithVolume:(FSVolume *)volume
+{
+    if (self = [super init]) {
+        wrapper = new FSVolumeWrapper();
+        wrapper->volume = volume;
+    }
+    return self;
+}
+
++ (instancetype) make:(FSVolume *)volume
+{
+    if (volume == NULL) { return nil; }
+    
+    FSVolumeProxy *proxy = [[self alloc] initWithVolume: volume];
+    return proxy;
+}
+
++ (instancetype) makeWithADF:(ADFFileProxy *)fileProxy
+{
+    FSError error;
+    AmigaFileWrapper *adf = [fileProxy wrapper];
+
+    FSVolume *volume = FSVolume::makeWithADF((ADFFile *)(adf->file), &error);
+    return [self make:volume];
+}
+
+- (FSVolumeType) type
+{
+    return wrapper->volume->getType();
+}
+
+- (FSBlockType) blockType:(NSInteger)blockNr
+{
+    return wrapper->volume->blockType(blockNr);
+}
+
+- (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos
+{
+    return wrapper->volume->itemType(blockNr, pos);
+}
+
+- (FSErrorReport) check:(BOOL)strict
+{
+    return wrapper->volume->check(strict);
+}
+
+- (FSError) check:(NSInteger)nr
+              pos:(NSInteger)pos
+         expected:(unsigned char *)exp
+           strict:(BOOL)strict
+{
+    return wrapper->volume->check(nr, pos, exp, strict);
+}
+
+- (BOOL) isCorrupted:(NSInteger)blockNr
+{
+    return wrapper->volume->isCorrupted(blockNr);
+}
+
+- (NSInteger) getCorrupted:(NSInteger)blockNr
+{
+    return wrapper->volume->getCorrupted(blockNr);
+}
+
+- (NSInteger) nextCorrupted:(NSInteger)blockNr
+{
+    return wrapper->volume->nextCorrupted(blockNr);
+}
+
+- (NSInteger) prevCorrupted:(NSInteger)blockNr
+{
+    return wrapper->volume->prevCorrupted(blockNr);
+}
+
+- (void) printDirectory:(BOOL) recursive
+{
+    return wrapper->volume->printDirectory(recursive);
+}
+
+- (FSError) export:(NSString *)path
+{
+    return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
+}
+
+- (void) dump
+{
+    wrapper->volume->dump();
+}
+@end
 
 //
 // AmigaFile
@@ -1395,6 +1498,10 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->getDiskDensity();
 }
+- (NSInteger)numCylinders
+{
+    return ((DiskFile *)wrapper->file)->numCyclinders();
+}
 - (NSInteger)numSides
 {
     return ((DiskFile *)wrapper->file)->numSides();
@@ -1403,9 +1510,25 @@ struct SerialPortWrapper { SerialPort *port; };
 {
     return ((DiskFile *)wrapper->file)->numTracks();
 }
-- (NSInteger)numSectorsPerTrack
+- (NSInteger)numSectors
 {
     return ((DiskFile *)wrapper->file)->numSectors();
+}
+- (NSInteger)numBlocks
+{
+    return ((DiskFile *)wrapper->file)->numBlocks();
+}
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset
+{
+    return ((DiskFile *)wrapper->file)->readByte(block, offset);
+}
+- (void)readSector:(unsigned char *)dst block:(NSInteger)nr
+{
+    ((DiskFile *)wrapper->file)->readSector(dst, nr);
+}
+- (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count
+{
+    ((DiskFile *)wrapper->file)->readSectorHex(dst, block, count);
 }
 
 @end

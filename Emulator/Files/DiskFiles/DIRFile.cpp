@@ -12,9 +12,7 @@
 
 DIRFile::DIRFile()
 {
-    setDescription("DIRFile");
 }
-
 
 bool
 DIRFile::isDIRFile(const char *path)
@@ -53,7 +51,7 @@ DIRFile::readFromBuffer(const u8 *buffer, size_t length)
 bool
 DIRFile::readFromFile(const char *filename)
 {
-    debug("DIRFile::readFromFile(%s)\n", filename);
+    debug(FS_DEBUG, "DIRFile::readFromFile(%s)\n", filename);
               
     // Only proceed if the provided filename points to a directory
     if (!isDIRFile(filename)) {
@@ -70,17 +68,20 @@ DIRFile::readFromFile(const char *filename)
     
     // Check the file system for errors
     volume->info();
-    volume->walk(true);
+    volume->printDirectory(true);
 
-    if (!volume->check(MFM_DEBUG)) {
-        warn("DIRFile::readFromFile: Files system is corrupted.\n");
+    // Check the file system for consistency
+    FSErrorReport report = volume->check(true);
+    if (report.corruptedBlocks > 0) {
+        warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
     }
-    volume->dump();
+    // volume->dump();
     
     // Convert the file system into an ADF
+    FSError error;
     assert(adf == nullptr);
-    adf = ADFFile::makeWithVolume(*volume);
-    debug("adf = %p\n", adf); 
+    adf = ADFFile::makeWithVolume(*volume, &error);
+    debug(FS_DEBUG, "makeWithVolume: %s\n", sFSError(error));
 
     delete volume;
     return adf != nullptr;

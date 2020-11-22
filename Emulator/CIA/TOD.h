@@ -76,6 +76,7 @@ public:
 
     TOD(CIA *cia, Amiga& ref);
 
+    const char *getDescription() override;
     void _reset(bool hard) override;
 
 

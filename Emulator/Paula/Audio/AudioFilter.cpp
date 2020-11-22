@@ -11,8 +11,6 @@
 
 AudioFilter::AudioFilter(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("AudioFilter");
-
     a1 = a2 = b0 = b1 = b2 = 0.0;
 }
 

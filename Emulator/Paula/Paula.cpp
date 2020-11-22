@@ -11,8 +11,6 @@
 
 Paula::Paula(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("Paula");
-
     subComponents = vector<HardwareComponent *> {
         
         &channel0,

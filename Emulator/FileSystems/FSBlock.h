@@ -13,6 +13,9 @@
 #include "Utils.h"
 #include "FSTypes.h"
 #include "FSObjects.h"
+#include <string>
+
+using std::string;
 
 struct FSBlock {
     
@@ -21,10 +24,16 @@ struct FSBlock {
     
     // The sector number of this block
     u32 nr;
-
+    
+    // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
+    u32 corrupted = 0;
+    
+    // Used by the traversal algorithms to detect loops
+    // u64 visited = 0;
+    
     // The actual block data
     u8 *data = nullptr;
-    
+
     
     //
     // Constants and static methods
@@ -35,23 +44,40 @@ struct FSBlock {
         
         
     //
-    // Constructing and destructing
+    // Constructing
     //
     
     FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }
     virtual ~FSBlock() { }
 
+    static FSBlock *makeWithType(FSVolume &ref, u32 nr, FSBlockType type);
+    
     
     //
-    // Accessing block properties
+    // Querying block properties
     //
 
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
 
-    // Returns the name or path of this block
-    char *assemblePath();
+    // Returns the role of a certain byte in this block
+    virtual FSItemType itemType(u32 byte) { return FSI_UNKNOWN; }
+    
+    // Returns the type and subtype identifiers of this block
+    virtual u32 typeID();
+    virtual u32 subtypeID();
+    
+    
+    //
+    // Integrity checking
+    //
 
+    // Scans all long words in this block and returns the number of errors
+    unsigned check(bool strict);
+
+    // Checks the integrity of a certain byte in this block
+    virtual FSError check(u32 pos, u8 *expected, bool strict) { return FS_OK; }
+        
     
     //
     // Reading and writing block data
@@ -72,36 +98,27 @@ struct FSBlock {
     void inc32(i32 n) { inc32(addr(n)); }
     void dec32(i32 n) { dec32(addr(n)); }
 
+    // Returns the location of the checksum inside this block
+    virtual u32 checksumLocation() { return (u32)-1; }
+    // bool hasChecksum() { return checksumLocation() != (u32)-1; }
+    
     // Computes a checksum for this block
     u32 checksum();
-
+    
+    // Updates the checksum in this block
+    void updateChecksum();
+    
     
     //
     // Debugging
     //
     
     // Prints the full path of this block
-    void printPath();
+    // void printPath();
 
     // Prints some debug information for this block
     virtual void dump() { };
-    
-    
-    //
-    // Verifying
-    //
-    
-    // Checks the integrity of this block
-    virtual bool check(bool verbose);
-
-protected:
-    
-    // Performs a certain integrity check on a block reference
-    bool assertNotNull(u32 ref, bool verbose);
-    bool assertInRange(u32 ref, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, bool verbose);
-    bool assertHasType(u32 ref, FSBlockType type, FSBlockType optType, bool verbose);
-    bool assertSelfRef(u32 ref, bool verbose);
+    virtual void dumpData();
 
     
     //
@@ -111,16 +128,14 @@ protected:
 public:
     
     // Imports this block from a buffer (bsize must match the volume block size)
-    virtual void importBlock(u8 *p, size_t bsize);
+    virtual void importBlock(const u8 *src, size_t bsize);
 
     // Exports this block to a buffer (bsize must match the volume block size)
-    virtual void exportBlock(u8 *p, size_t bsize);
-
-private:
+    virtual void exportBlock(u8 *dst, size_t bsize);
     
-    // Updates the checksum for this block (called prior to exporting)
-    virtual void updateChecksum() { }
-    
+    // Exports this block to the host file system
+    virtual FSError exportBlock(const char *path) { return FS_OK; }
+        
                 
     //
     // Geting and setting names and comments
@@ -180,7 +195,7 @@ public:
     // Link to the next extension block
     virtual u32 getNextListBlockRef() { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
-    struct FSFileListBlock *getNextExtensionBlock();
+    struct FSFileListBlock *getNextListBlock();
 
     // Link to the first data block
     virtual u32 getFirstDataBlockRef() { return 0; }
@@ -204,15 +219,12 @@ public:
     virtual u32 hashValue() { return 0; }
 
     // Looks up an item in the hash table
-    u32 hashLookup(u32 nr);
+    u32 getHashRef(u32 nr);
     FSBlock *hashLookup(FSName name);
 
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);
-    
-    // Checks the integrity of the hash table
-    bool checkHashTable(bool verbose);
-    
+
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();
 
@@ -236,6 +248,68 @@ public:
     virtual size_t addData(const u8 *buffer, size_t size) { return 0; }
 };
 
+//
+// Convenience macros used inside the check() methods
+//
+
 typedef FSBlock* BlockPtr;
+
+#define EXPECT_BYTE(exp) { \
+if (value != (exp)) { *expected = (exp); return FS_EXPECTED_VALUE; } }
+
+#define EXPECT_LONGWORD(exp) { \
+if ((byte % 4) == 0 && BYTE3(value) != BYTE3((u32)exp)) \
+    { *expected = (BYTE3((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 1 && BYTE2(value) != BYTE2((u32)exp)) \
+    { *expected = (BYTE2((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 2 && BYTE1(value) != BYTE1((u32)exp)) \
+    { *expected = (BYTE1((u32)exp)); return FS_EXPECTED_VALUE; } \
+if ((byte % 4) == 3 && BYTE0(value) != BYTE0((u32)exp)) \
+    { *expected = (BYTE0((u32)exp)); return FS_EXPECTED_VALUE; } }
+
+#define EXPECT_CHECKSUM EXPECT_LONGWORD(checksum())
+
+#define EXPECT_LESS_OR_EQUAL(exp) { \
+if (value > exp) \
+{ *expected = (exp); return FS_EXPECTED_SMALLER_VALUE; } }
+
+#define EXPECT_DOS_REVISION { \
+if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION; }
+
+#define EXPECT_REF { \
+if (!volume.block(value)) return FS_EXPECTED_REF; }
+
+#define EXPECT_SELFREF { \
+if (value != nr) return FS_EXPECTED_SELFREF; }
+
+#define EXPECT_FILEHEADER_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_HASH_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_OPTIONAL_HASH_REF { \
+if (value) { EXPECT_HASH_REF } }
+
+#define EXPECT_PARENT_DIR_REF { \
+if (FSError e = volume.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_FILELIST_REF { \
+if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_OPTIONAL_FILELIST_REF { \
+if (value) { EXPECT_FILELIST_REF } }
+
+#define EXPECT_DATABLOCK_REF { \
+if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_OPTIONAL_DATABLOCK_REF { \
+if (value) { EXPECT_DATABLOCK_REF } }
+
+#define EXPECT_DATABLOCK_NUMBER { \
+if (value == 0) return FS_EXPECTED_DATABLOCK_NR; }
+
+#define EXPECT_HASHTABLE_SIZE { \
+if (value != 72) return FS_INVALID_HASHTABLE_SIZE; }
 
 #endif

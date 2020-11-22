@@ -37,6 +37,8 @@ public:
 
     IMGFile();
     
+    const char *getDescription() override { return "IMG"; }
+    
     static IMGFile *makeWithDiskType(DiskType t, DiskDensity d);
     static IMGFile *makeWithBuffer(const u8 *buffer, size_t length);
     static IMGFile *makeWithFile(const char *path);

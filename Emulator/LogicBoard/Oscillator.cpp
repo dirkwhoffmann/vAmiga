@@ -12,14 +12,17 @@
 Oscillator::Oscillator(Amiga& ref) : AmigaComponent(ref)
 {
 #ifdef __MACH__
-
-    setDescription("Oscillator (Mac)");
     mach_timebase_info(&tb);
-    
+#endif
+}
+
+const char *
+Oscillator::getDescription()
+{
+#ifdef __MACH__
+    return "Oscillator (Mac)";
 #else
-    
-    setDescription("Oscillator (Generic)");
-    
+    return "Oscillator (Generic)";
 #endif
 }
 

@@ -20,6 +20,23 @@ FSBitmapBlock::~FSBitmapBlock()
     delete [] data;
 }
 
+FSItemType
+FSBitmapBlock::itemType(u32 pos)
+{
+    return pos < 4 ? FSI_CHECKSUM : FSI_BITMAP;
+}
+
+FSError
+FSBitmapBlock::check(u32 byte, u8 *expected, bool strict)
+{
+    i32 word = byte / 4;
+    u32 value = get32(word);
+    
+    if (word == 0) EXPECT_CHECKSUM;
+    
+    return FS_OK;
+}
+
 void
 FSBitmapBlock::dump()
 {
@@ -30,28 +47,6 @@ FSBitmapBlock::dump()
     }
     
     printf("\n");
-}
-
-bool
-FSBitmapBlock::check(bool verbose)
-{
-    bool result = FSBlock::check(verbose);
-    
-    for (u32 i = 2; i < volume.capacity; i++) {
-                
-        FSBlockType type = volume.blocks[i]->type();
-
-        if (type == FS_EMPTY_BLOCK && isAllocated(i)) {
-            if (verbose) printf("Empty block %d is marked as allocated.\n", i);
-            result = false;
-        }
-        if (type != FS_EMPTY_BLOCK && !isAllocated(i)) {
-            if (verbose) printf("Non-empty block %d is marked as free.\n", i);
-            result = false;
-        }
-    }
-
-    return result;
 }
 
 void
@@ -75,13 +70,6 @@ FSBitmapBlock::locateBlockBit(u32 nr, u32 *byte, u32 *bit)
 
     assert(*byte <= volume.bsize - 4);
     assert(*bit < 8);
-}
-
-void
-FSBitmapBlock::updateChecksum()
-{
-    set32(0, 0);
-    set32(0, checksum());
 }
 
 bool

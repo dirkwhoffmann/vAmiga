@@ -621,6 +621,8 @@ struct SerialPortWrapper;
 
 @property (readonly) NSInteger nr;
 @property (readonly) BOOL hasDisk;
+@property (readonly) BOOL hasDDDisk;
+@property (readonly) BOOL hasHDDisk;
 - (BOOL) hasWriteProtectedDisk;
 - (void) setWriteProtection:(BOOL)value;
 - (void) toggleWriteProtection;
@@ -631,6 +633,36 @@ struct SerialPortWrapper;
 @property (readonly) u64 fnv;
 
 - (ADFFileProxy *)convertDisk;
+
+@end
+
+
+//
+// FSVolume
+//
+
+@interface FSVolumeProxy : NSObject {
+    
+    struct FSVolumeWrapper *wrapper;
+}
+
++ (instancetype)makeWithADF:(ADFFileProxy *)adf;
+
+@property (readonly) FSVolumeType type;
+
+- (FSBlockType) blockType:(NSInteger)blockNr;
+- (FSItemType) itemType:(NSInteger)blockNr pos:(NSInteger)pos;
+- (FSErrorReport) check:(BOOL)strict;
+- (FSError) check:(NSInteger)nr pos:(NSInteger)pos expected:(unsigned char *)exp strict:(BOOL)strict;
+- (BOOL) isCorrupted:(NSInteger)blockNr;
+- (NSInteger) getCorrupted:(NSInteger)blockNr;
+- (NSInteger) nextCorrupted:(NSInteger)blockNr;
+- (NSInteger) prevCorrupted:(NSInteger)blockNr;
+- (void) printDirectory:(BOOL) recursive;
+
+- (FSError) export:(NSString *)path;
+
+- (void) dump;
 
 @end
 
@@ -696,9 +728,15 @@ struct SerialPortWrapper;
 
 @property (readonly) DiskType diskType;
 @property (readonly) DiskDensity diskDensity;
+@property (readonly) NSInteger numCylinders;
 @property (readonly) NSInteger numSides;
 @property (readonly) NSInteger numTracks;
-@property (readonly) NSInteger numSectorsPerTrack;
+@property (readonly) NSInteger numSectors;
+@property (readonly) NSInteger numBlocks;
+
+- (NSInteger)readByte:(NSInteger)block offset:(NSInteger)offset;
+- (void)readSector:(unsigned char *)dst block:(NSInteger)block;
+- (void)readSectorHex:(char *)dst block:(NSInteger)block count:(NSInteger)count;
 
 @end
 

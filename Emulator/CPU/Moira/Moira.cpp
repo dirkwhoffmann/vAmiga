@@ -26,7 +26,13 @@ namespace moira {
 
 Moira::Moira()
 {
+    info = new InstrInfo[65536];
     createJumpTables();
+}
+
+Moira::~Moira()
+{
+    delete [] info;
 }
 
 void

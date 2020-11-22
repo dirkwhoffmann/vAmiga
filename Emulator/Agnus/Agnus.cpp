@@ -10,9 +10,7 @@
 #include "Amiga.h"
 
 Agnus::Agnus(Amiga& ref) : AmigaComponent(ref)
-{
-    setDescription("Agnus");
-    
+{    
     subComponents = vector<HardwareComponent *> {
         
         &copper,

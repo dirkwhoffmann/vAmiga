@@ -11,8 +11,6 @@
 
 DiskController::DiskController(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("DiskController");
-
     // Setup initial configuration
     config.connected[0] = true;
     config.connected[1] = false;

@@ -11,8 +11,13 @@
 
 TOD::TOD(CIA *cia, Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription(cia->isCIAA() ? "TODA" : "TODB");
     this->cia = cia;
+}
+
+const char *
+TOD::getDescription()
+{
+    return cia->isCIAA() ? "TODA" : "TODB";
 }
 
 void

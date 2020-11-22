@@ -38,9 +38,9 @@ class DiskMountDialog: DialogController {
         var name: String
         switch type {
         case .FILETYPE_ADF, .FILETYPE_DMS, .FILETYPE_EXE, .FILETYPE_DIR:
-            name = density == .DISK_HD ? "adfhd" : "adf"
+            name = density == .DISK_HD ? "hd_adf" : "dd_adf"
         case .FILETYPE_IMG:
-            name = "dos"
+            name = "dd_dos"
         default:
             name = ""
         }
@@ -71,7 +71,7 @@ class DiskMountDialog: DialogController {
     var subtitleText: String {
                 
         let t = disk?.numTracks ?? 0
-        let s = disk?.numSectorsPerTrack ?? 0
+        let s = disk?.numSectors ?? 0
         let n = disk?.numSides == 1 ? "Single" : "Double"
 
         let den = disk?.diskDensity

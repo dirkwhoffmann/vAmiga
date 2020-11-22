@@ -193,6 +193,8 @@ public:
     Memory(Amiga& ref);
     ~Memory();
 
+    const char *getDescription() override { return "Memory"; }
+    
 private:
     
     void dealloc();

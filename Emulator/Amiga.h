@@ -171,6 +171,8 @@ public:
     Amiga();
     ~Amiga();
 
+    const char *getDescription() override { return "Amiga"; }
+
     void prefix() override;
 
     void reset(bool hard);

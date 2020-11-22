@@ -79,7 +79,10 @@ public:
     // Reading data from the file
     //
     
-    //  Returns the number of bytes in this file
+    // Returns a pointer to the raw data of this file
+    virtual u8 *getData() { return data; }
+
+    // Returns the number of bytes in this file
     virtual size_t getSize() { return size; }
     
     // Moves the file pointer to the specified offset

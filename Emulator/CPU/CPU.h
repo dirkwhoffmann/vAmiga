@@ -27,6 +27,8 @@ public:
 
     CPU(Amiga& ref);
 
+    const char *getDescription() override { return "CPU"; }
+    
     void _reset(bool hard) override;
     
     

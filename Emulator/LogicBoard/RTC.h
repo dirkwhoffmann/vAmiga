@@ -41,12 +41,14 @@ class RTC : public AmigaComponent {
     
     
     //
-    // Constructing and serializing
+    // Constructing
     //
     
 public:
     
     RTC(Amiga& ref);
+
+    const char *getDescription() override { return "RTC"; }
 
 private:
     

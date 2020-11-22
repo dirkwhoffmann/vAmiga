@@ -11,7 +11,6 @@
 
 ADFFile::ADFFile()
 {
-    setDescription("ADFFile");
 }
 
 bool
@@ -86,13 +85,7 @@ ADFFile::makeWithBuffer(const u8 *buffer, size_t length)
         delete adf;
         return NULL;
     }
-    
-    /*
-    adf->dumpSector(880);
-    adf->dumpSector(882);
-    adf->dumpSector(883);
-    */
-    
+        
     return adf;
 }
 
@@ -146,7 +139,7 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSVolume &volume)
+ADFFile::makeWithVolume(FSVolume &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
     assert(volume.getBlockSize() == 512);
@@ -165,7 +158,11 @@ ADFFile::makeWithVolume(FSVolume &volume)
             assert(false);
     }
 
-    volume.exportVolume(adf->data, adf->size);
+    volume.exportVolume(adf->data, adf->size, error);
+    
+    // REMOVE ASAP
+    // adf->dumpSector(0);
+
     return adf;
 }
 
@@ -235,9 +232,9 @@ ADFFile::numSectors()
 bool
 ADFFile::formatDisk(FSVolumeType fs)
 {
-    assert(isFSType(fs));
+    assert(isFSVolumeType(fs));
 
-    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSType(fs));
+    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NONE) return false;
@@ -246,9 +243,13 @@ ADFFile::formatDisk(FSVolumeType fs)
     FSVolume vol = FSVolume(fs, "MyDisk", numBlocks());
     
     // Export the volume to the ADF
-    return vol.exportVolume(data, size);
+    FSError error;
+    vol.exportVolume(data, size, &error);
 
-    return true;
+    // REMOVE ASAP
+    // dumpSector(0);
+    
+    return error == FS_OK;
 }
 
 bool

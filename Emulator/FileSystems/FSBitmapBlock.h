@@ -18,9 +18,10 @@ struct FSBitmapBlock : FSBlock {
     ~FSBitmapBlock();
      
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
+    FSItemType itemType(u32 byte) override;
+    FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
-    bool check(bool verbose) override;
-    void updateChecksum() override;
+    u32 checksumLocation() override { return 0; }
 
     // Computes location of the allocation bit for a certain block
     void locateBlockBit(u32 nr, u32 *byte, u32 *bit);

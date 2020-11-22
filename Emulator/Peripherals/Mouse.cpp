@@ -11,9 +11,13 @@
 
 Mouse::Mouse(Amiga& ref, ControlPort& pref) : AmigaComponent(ref), port(pref)
 {
-    setDescription(port.nr == PORT_1 ? "Mouse1" : "Mouse2");
-
     config.pullUpResistors = true;
+}
+
+const char *
+Mouse::getDescription()
+{
+    return port.nr == PORT_1 ? "Mouse1" : "Mouse2";
 }
 
 void Mouse::_reset(bool hard)

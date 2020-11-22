@@ -32,6 +32,8 @@ public:
     
     AudioFilter(Amiga& ref);
 
+    const char *getDescription() override { return "AudioFilter"; }
+    
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }
     
     

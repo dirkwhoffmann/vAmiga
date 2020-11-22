@@ -46,12 +46,14 @@ class Oscillator : public AmigaComponent {
 
     
     //
-    // Constructing and serializing
+    // Constructing
     //
     
 public:
     
     Oscillator(Amiga& ref);
+
+    const char *getDescription() override;
 
 private:
     

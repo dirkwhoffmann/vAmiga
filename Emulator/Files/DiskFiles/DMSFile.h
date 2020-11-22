@@ -36,6 +36,8 @@ public:
     
     DMSFile();
     
+    const char *getDescription() override { return "DMS"; }
+    
     static DMSFile *makeWithBuffer(const u8 *buffer, size_t length);
     static DMSFile *makeWithFile(const char *path);
     

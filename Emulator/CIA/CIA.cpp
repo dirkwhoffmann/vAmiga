@@ -12,9 +12,7 @@
 #define CIA_DEBUG (nr == 0 ? CIAA_DEBUG : CIAB_DEBUG)
 
 CIA::CIA(int n, Amiga& ref) : AmigaComponent(ref), nr(n)
-{
-    setDescription("CIA");
-    
+{    
     subComponents = vector<HardwareComponent *> { &tod };
     
     config.revision = CIA_8520_DIP;
@@ -721,7 +719,6 @@ CIA::idleSince()
 
 CIAA::CIAA(Amiga& ref) : CIA(0, ref)
 {
-    setDescription("CIAA");
 }
 
 void
@@ -882,7 +879,6 @@ CIAA::setKeyCode(u8 keyCode)
 
 CIAB::CIAB(Amiga& ref) : CIA(1, ref)
 {
-    setDescription("CIAB");
 }
 
 void 

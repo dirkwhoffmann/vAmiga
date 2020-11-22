@@ -26,25 +26,46 @@ FSBootBlock::~FSBootBlock()
     delete [] data;
 }
 
+FSItemType
+FSBootBlock::itemType(u32 byte)
+{
+    if (byte <= 3 && nr == 0) {
+        
+        switch(byte) {
+            case 0:
+            case 1:
+            case 2: return FSI_DOS_HEADER;
+            case 3: return FSI_DOS_VERSION;
+        }
+    }
+    
+    return FSI_BOOTCODE;
+}
+
+FSError
+FSBootBlock::check(u32 byte, u8 *expected, bool strict)
+{
+    if (byte <= 3 && nr == 0) {
+        
+        u8 value = data[byte];
+        
+        switch(byte) {
+            case 0: EXPECT_BYTE('D'); break;
+            case 1: EXPECT_BYTE('O'); break;
+            case 2: EXPECT_BYTE('S'); break;
+            case 3: EXPECT_DOS_REVISION; break;
+        }
+    }
+    
+    return FS_OK;
+}
+
 void
 FSBootBlock::dump()
 {
     printf("     Header : ");
     for (int i = 0; i < 8; i++) printf("%02X ", data[i]);
     printf("\n");
-}
-
-bool
-FSBootBlock::check(bool verbose)
-{
-    bool result = FSBlock::check(verbose);
-    
-    if (nr > 1) {
-        if (verbose) fprintf(stderr, "Found ID %d. Expected 0 or 1.\n", nr);
-        result = false;
-    }
-    
-    return result;
 }
 
 void

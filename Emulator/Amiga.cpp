@@ -52,8 +52,6 @@ void
 
 Amiga::Amiga()
 {
-    setDescription("Amiga");
-
     /* The order of subcomponents is important here, because some components
      * are dependend on others during initialization. I.e.,
      *
@@ -87,6 +85,7 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
+        &messageQueue
     };
 
     // Set up the initial state
@@ -103,19 +102,31 @@ Amiga::Amiga()
     // Print some debug information
     if (SNP_DEBUG) {
         
-        printf("       Agnus : %lu bytes\n", sizeof(Agnus));
-        printf("         CIA : %lu bytes\n", sizeof(CIA));
-        printf(" ControlPort : %lu bytes\n", sizeof(ControlPort));
-        printf("         CPU : %lu bytes\n", sizeof(CPU));
-        printf("      Denise : %lu bytes\n", sizeof(Denise));
-        printf("       Drive : %lu bytes\n", sizeof(Drive));
-        printf("    Keyboard : %lu bytes\n", sizeof(Keyboard));
-        printf("      Memory : %lu bytes\n", sizeof(Memory));
-        printf("  Oscillator : %lu bytes\n", sizeof(Oscillator));
-        printf("       Paula : %lu bytes\n", sizeof(Paula));
-        printf("         RTC : %lu bytes\n", sizeof(RTC));
-        printf("  SerialPort : %lu bytes\n", sizeof(SerialPort));
-        printf("       Zorro : %lu bytes\n", sizeof(ZorroManager));
+        msg("             Agnus : %lu bytes\n", sizeof(Agnus));
+        msg("       AudioFilter : %lu bytes\n", sizeof(AudioFilter));
+        msg("       AudioStream : %lu bytes\n", sizeof(AudioStream));
+        msg("               CIA : %lu bytes\n", sizeof(CIA));
+        msg("       ControlPort : %lu bytes\n", sizeof(ControlPort));
+        msg("               CPU : %lu bytes\n", sizeof(CPU));
+        msg("            Denise : %lu bytes\n", sizeof(Denise));
+        msg("             Drive : %lu bytes\n", sizeof(Drive));
+        msg("          Keyboard : %lu bytes\n", sizeof(Keyboard));
+        msg("            Memory : %lu bytes\n", sizeof(Memory));
+        msg("moira::Breakpoints : %lu bytes\n", sizeof(moira::Breakpoints));
+        msg("moira::Watchpoints : %lu bytes\n", sizeof(moira::Watchpoints));
+        msg("   moira::Debugger : %lu bytes\n", sizeof(moira::Debugger));
+        msg("      moira::Moira : %lu bytes\n", sizeof(moira::Moira));
+        msg("             Muxer : %lu bytes\n", sizeof(Muxer));
+        msg("        Oscillator : %lu bytes\n", sizeof(Oscillator));
+        msg("             Paula : %lu bytes\n", sizeof(Paula));
+        msg("       PixelEngine : %lu bytes\n", sizeof(PixelEngine));
+        msg("               RTC : %lu bytes\n", sizeof(RTC));
+        msg("           Sampler : %lu bytes\n", sizeof(Sampler));
+        msg("    ScreenRecorder : %lu bytes\n", sizeof(ScreenRecorder));
+        msg("        SerialPort : %lu bytes\n", sizeof(SerialPort));
+        msg("            Volume : %lu bytes\n", sizeof(Volume));
+        msg("             Zorro : %lu bytes\n", sizeof(ZorroManager));
+        msg("\n");
     }
 }
 

@@ -11,7 +11,6 @@
 
 MessageQueue::MessageQueue()
 {
-    setDescription("MessageQueue");
 }
 
 void

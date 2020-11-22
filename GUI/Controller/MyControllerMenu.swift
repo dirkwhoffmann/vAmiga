@@ -588,8 +588,8 @@ extension MyController: NSMenuItemValidation {
     
     @IBAction func exportDiskAction(_ sender: NSMenuItem!) {
         
-        let nibName = NSNib.Name("ExportDiskDialog")
-        let exportPanel = ExportDiskDialog.make(parent: self, nibName: nibName)
+        let nibName = NSNib.Name("ExporterDialog")
+        let exportPanel = ExporterDialog.make(parent: self, nibName: nibName)
         exportPanel?.showSheet(forDrive: sender.tag)
     }
     

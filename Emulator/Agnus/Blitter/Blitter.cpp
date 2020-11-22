@@ -11,11 +11,7 @@
 
 Blitter::Blitter(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("Blitter");
-    
-    // Initialize fill pattern lookup tables
-    
-    // Inclusive fill
+    // Initialize fill pattern tables    
     for (unsigned carryIn = 0; carryIn < 2; carryIn++) {
         
         for (unsigned byte = 0; byte < 256; byte++) {

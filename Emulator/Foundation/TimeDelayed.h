@@ -36,7 +36,6 @@ public:
     
     TimeDelayed(u64 *clock) {
         
-        setDescription("TimeDelayed");
         timeStamp = 0;
         this->clock = (i64 *)clock;
         clear();
@@ -44,6 +43,8 @@ public:
     
     TimeDelayed() : TimeDelayed(NULL) { };
           
+    const char *getDescription() { return "TimeDelayed"; }
+    
     // Sets the reference clock
     void setClock(i64 *clock) { this->clock = clock; }
 

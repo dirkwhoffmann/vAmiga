@@ -12,11 +12,16 @@
 template <int nr>
 StateMachine<nr>::StateMachine(Amiga& ref) : AmigaComponent(ref)
 {
+}
+
+template <int nr> const char *
+StateMachine<nr>::getDescription()
+{
     switch (nr) {
-        case 0: setDescription("StateMachine 0"); break;
-        case 1: setDescription("StateMachine 1"); break;
-        case 2: setDescription("StateMachine 2"); break;
-        case 3: setDescription("StateMachine 3"); break;
+        case 0: return "StateMachine 0";
+        case 1: return "StateMachine 1";
+        case 2: return "StateMachine 2";
+        case 3: return "StateMachine 3";
         default: assert(false);
     }
 }
@@ -169,15 +174,15 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler *sampler = paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
                 
-    if (!sampler.isFull()) {
-        sampler.write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler->isFull()) {
+        sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
         trace("penhi: Sample buffer is full\n");
     }
@@ -190,15 +195,15 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler *sampler = paula.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
 
     trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    if (!sampler.isFull()) {
-        sampler.write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler->isFull()) {
+        sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
         trace("penlo: Sample buffer is full\n");
     }

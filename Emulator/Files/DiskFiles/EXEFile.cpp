@@ -12,7 +12,6 @@
 
 EXEFile::EXEFile()
 {
-    setDescription("EXEFile");
 }
 
 bool
@@ -66,7 +65,7 @@ EXEFile::makeWithFile(const char *path)
 
 bool
 EXEFile::readFromBuffer(const u8 *buffer, size_t length)
-{    
+{
     bool success = false;
     
     if (!isEXEBuffer(buffer, length))
@@ -86,7 +85,6 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Add the executable
     FSBlock *file = volume.makeFile("file", buffer, length);
-    // if (file) success = file->append(buffer, length);
     success = file != nullptr;
     
     // Add a script directory
@@ -95,22 +93,38 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     
     // Add a startup sequence
     file = volume.makeFile("startup-sequence", "file");
-    // if (success && file) success = file->append("file");
-    success &= file != nullptr; 
+    success &= file != nullptr;
+    
+    // Finalize
+    volume.updateChecksums();
     
     // Check for file system errors
     volume.changeDir("/");
     volume.info();
-    volume.walk(true);
-    
-    if (!volume.check(MFM_DEBUG)) {
-        warn("EXEFile::readFromBuffer: Files system is corrupted.\n");
-        // volume.dump();
+    volume.printDirectory(true);
+
+    // Check the file system for consistency
+    FSErrorReport report = volume.check(true);
+    if (report.corruptedBlocks > 0) {
+        warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
+        volume.dump();
     }
-    // volume.dump();
     
     // Convert the volume into an ADF
-    assert(adf == nullptr);
-    if (success) adf = ADFFile::makeWithVolume(volume);
+    if (success) {
+        FSError error;
+        assert(adf == nullptr);
+        adf = ADFFile::makeWithVolume(volume, &error);
+        if (error != FS_OK) {
+            warn("readFromBuffer: Cannot export volume (%s)", sFSError(error));
+        }
+    }
+    
+    // REMOVE ASAP
+    const char *path = "/tmp/test";
+    msg("Doing a test export to %s\n", path);
+    
+    volume.exportDirectory(path);
+    
     return adf != nullptr;
 }

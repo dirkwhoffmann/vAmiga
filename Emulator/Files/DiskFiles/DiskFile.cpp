@@ -24,6 +24,19 @@ DiskFile::makeWithFile(const char *path)
     return NULL;
 }
 
+u8
+DiskFile::readByte(long t, long s, long offset)
+{
+    return readByte(t * numSectors() + s, offset);
+}
+
+u8
+DiskFile::readByte(long b, long offset)
+{
+    assert(offset < 512);
+    return data[b * 512 + offset];
+}
+
 void
 DiskFile::readSector(u8 *dst, long t, long s)
 {
@@ -39,8 +52,27 @@ DiskFile::readSector(u8 *dst, long s)
     assert(dst != nullptr);
     assert(offset + sectorSize <= size);
 
-    for (unsigned i = 0; i < 512; i++) {
+    for (unsigned i = 0; i < sectorSize; i++) {
         dst[i] = data[offset + i];
+    }
+}
+
+void
+DiskFile::readSectorHex(char *dst, long t, long s, size_t count)
+{
+    readSectorHex(dst, t * numSectors() + s, count);
+}
+
+void
+DiskFile::readSectorHex(char *dst, long s, size_t count)
+{
+    size_t sectorSize = 512;
+    size_t offset = s * sectorSize;
+
+    assert(dst != nullptr);
+
+    for (unsigned i = 0; i < count; i++) {
+        sprintf(dst + 3*i, "%02X ", data[offset + i]);
     }
 }
 

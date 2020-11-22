@@ -162,18 +162,7 @@ public:
     PixelPos spriteClipBegin;
     PixelPos spriteClipEnd;
 
-    
-    //
-    // Playfield priorities
-    //
-
-private:
-
-    // Playfield priorities (derived from BPLCON2)
-    // u16 prio1;
-    // u16 prio2;
-
-    
+ 
     //
     // Rasterline data
     //
@@ -276,6 +265,8 @@ private:
 public:
 
     Denise(Amiga& ref);
+
+    const char *getDescription() override { return "Denise"; }
 
     void _reset(bool hard) override;
 

@@ -48,6 +48,8 @@ public:
     
     UART(Amiga& ref);
     
+    const char *getDescription() override { return "UART"; }
+
 private:
     
     void _reset(bool hard) override;

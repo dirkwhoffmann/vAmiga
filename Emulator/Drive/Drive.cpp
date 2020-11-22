@@ -12,16 +12,19 @@
 Drive::Drive(Amiga& ref, unsigned n) : AmigaComponent(ref), nr(n)
 {
     assert(nr < 4);
-
-    setDescription(nr == 0 ? "Df0" :
-                   nr == 1 ? "Df1" :
-                   nr == 2 ? "Df2" : "Df3");
-
+    
     config.type = DRIVE_35_DD;
     config.mechanicalDelays = true;
     config.startDelay = MSEC(380);
     config.stopDelay = MSEC(80);
     config.stepDelay = USEC(2000);
+}
+
+const char *
+Drive::getDescription()
+{
+    assert(nr <= 3);
+    return nr == 0 ? "Df0" : nr == 1 ? "Df1" : nr == 2 ? "Df2" : "Df3";
 }
 
 void

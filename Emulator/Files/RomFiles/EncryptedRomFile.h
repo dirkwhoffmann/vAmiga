@@ -36,6 +36,8 @@ public:
     
     EncryptedRomFile();
     
+    const char *getDescription() override { return "EncryptedRom"; }
+    
     static EncryptedRomFile *makeWithBuffer(const u8 *buffer, size_t length);
     static EncryptedRomFile *makeWithFile(const char *path);
     

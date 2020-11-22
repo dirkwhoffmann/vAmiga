@@ -15,7 +15,6 @@ const u8 ExtendedRomFile::magicBytes2[] = { 0x4E, 0x71, 0x4E, 0xF9, 0x00, 0xF8, 
 
 ExtendedRomFile::ExtendedRomFile()
 {
-    setDescription("ExtRom");
 }
 
 bool

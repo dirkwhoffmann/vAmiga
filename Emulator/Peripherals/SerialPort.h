@@ -41,6 +41,8 @@ public:
 
     SerialPort(Amiga& ref);
 
+    const char *getDescription() override { return "SerialPort"; }
+    
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) };

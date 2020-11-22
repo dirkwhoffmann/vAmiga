@@ -80,6 +80,8 @@ public:
 public:
 
     Drive(Amiga& ref, unsigned nr);
+    
+    const char *getDescription() override;
     long getNr() { return nr; }
 
 private:
@@ -250,7 +252,9 @@ public:
     // Handling disks
     //
 
-    bool hasDisk() { return disk != NULL; }
+    bool hasDisk() { return disk != nullptr; }
+    bool hasDDDisk() { return disk ? disk->density == DISK_DD : false; }
+    bool hasHDDisk() { return disk ? disk->density == DISK_HD : false; }
     bool hasModifiedDisk() { return disk ? disk->isModified() : false; }
     void setModifiedDisk(bool value) { if (disk) disk->setModified(value); }
     

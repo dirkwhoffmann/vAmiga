@@ -11,7 +11,6 @@
 
 RTC::RTC(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("RTC");
 }
 
 long

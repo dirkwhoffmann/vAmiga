@@ -33,6 +33,8 @@ public:
     
     DIRFile();
     
+    const char *getDescription() override { return "DIR"; }
+    
     static DIRFile *makeWithFile(const char *path);
     
     

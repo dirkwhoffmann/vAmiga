@@ -191,7 +191,6 @@ CPU::watchpointReached(u32 addr)
 
 CPU::CPU(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("CPU");
 }
 
 void

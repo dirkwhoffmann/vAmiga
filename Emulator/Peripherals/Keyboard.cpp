@@ -11,7 +11,6 @@
 
 Keyboard::Keyboard(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("Keyboard");
     config.accurate = true;
 }
 

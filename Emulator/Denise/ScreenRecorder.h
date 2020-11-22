@@ -97,6 +97,8 @@ public:
     
     ScreenRecorder(Amiga& ref);
     
+    const char *getDescription() override { return "ScreenRecorder"; }
+
     bool hasFFmpeg();
     
     void _reset(bool hard) override;

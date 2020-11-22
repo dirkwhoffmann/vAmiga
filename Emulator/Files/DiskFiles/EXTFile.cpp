@@ -17,7 +17,6 @@ const u8 EXTFile::extAdfHeaders[2][8] = {
     
 EXTFile::EXTFile()
 {
-    setDescription("EXTFile");
 }
 
 bool

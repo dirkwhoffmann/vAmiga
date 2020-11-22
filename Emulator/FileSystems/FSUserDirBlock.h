@@ -22,10 +22,18 @@ struct FSUserDirBlock : FSBlock {
     // Methods from Block class
     //
     
-    FSBlockType type() override                { return FS_USERDIR_BLOCK;     }
+    FSBlockType type() override  { return FS_USERDIR_BLOCK; }
+    FSItemType itemType(u32 byte) override;
+    FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
-    bool check(bool verbose) override;
-    void updateChecksum() override;
+    u32 checksumLocation() override { return 5; }
+
+    FSError exportBlock(const char *path) override;
+
+    
+    //
+    // Accessing block items
+    //
 
     u32 getProtectionBits() override           { return get32(-48     );     }
     void setProtectionBits(u32 val) override   {        set32(-48, val);     }

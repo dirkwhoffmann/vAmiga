@@ -11,8 +11,6 @@
 
 SerialPort::SerialPort(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("SerialPort");
-
     config.device = SPD_LOOPBACK;
 }
 

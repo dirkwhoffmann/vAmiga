@@ -15,7 +15,6 @@ unsigned short extractDMS(FILE *fi, FILE *fo);
 
 DMSFile::DMSFile()
 {
-    setDescription("DMSFile");
 }
 
 bool

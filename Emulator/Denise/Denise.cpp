@@ -11,9 +11,7 @@
 #include "SSEUtils.h"
 
 Denise::Denise(Amiga& ref) : AmigaComponent(ref)
-{
-    setDescription("Denise");
-    
+{    
     subComponents = vector<HardwareComponent *> {
         
         &pixelEngine,

@@ -16,43 +16,27 @@
 
 #include <vector>
 #include <map>
-#include <mutex>
+#include <set>
 #include <queue>
+#include <stack>
 #include <thread>
 
 using std::vector;
 using std::map;
+using std::queue;
 using std::pair;
 using std::swap;
 
-#define synchronized \
-for (AutoMutex _am(mutex); _am.active; _am.active = false)
 
-/* Base class for all Amiga objects. This class contains a textual description
- * of the object and offers various functions for printing debug messages and
- * warnings.
+/* Base class for all Amiga objects. This class adds a textual description
+ * the object together with functions for printing debug messages and warnings.
  */
 class AmigaObject {
     
 public:
     
     virtual ~AmigaObject() { };
-    
-private:
-    
-    /* Textual description of this object. Most debug output methods preceed
-     * their output with this string. If set to NULL, no prefix is printed.
-     */
-    const char *description = NULL;
-    
-protected:
-    
-    /* Mutex for implementing the 'synchronized' macro. The macro can be used
-     * to prevent multiple threads to enter the same code block. It mimics the
-     * behaviour of the well known Java construct 'synchronized(this) { }'.
-     */
-    Mutex mutex;
-
+        
     
     //
     // Initializing
@@ -60,8 +44,8 @@ protected:
     
 public:
     
-    const char *getDescription() const { return description ? description : ""; }
-    void setDescription(const char *str) { description = strdup(str); }
+    // Returns the name for this component (e.g., "Agnus" or "Denise")
+    virtual const char *getDescription() = 0; 
     
 
     //

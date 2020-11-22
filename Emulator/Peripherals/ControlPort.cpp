@@ -12,9 +12,6 @@
 ControlPort::ControlPort(Amiga& ref, PortNr portNr) : AmigaComponent(ref), nr(portNr)
 {
     assert(isPortNr(nr));
-    
-    setDescription(nr == PORT_1 ? "ControlPort1" : "ControlPort2");
-
     subComponents = vector<HardwareComponent *> { &mouse, &joystick };
 }
 
