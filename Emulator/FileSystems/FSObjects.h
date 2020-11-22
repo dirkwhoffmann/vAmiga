@@ -27,7 +27,7 @@ struct FSString {
     FSString(const u8 *bcplString, size_t limit);
 
     const char *c_str() { return str; }
-    
+
     bool operator== (FSString &rhs);
     u32 hashValue();
     

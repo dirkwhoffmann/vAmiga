@@ -108,7 +108,6 @@ void
 FSFileHeaderBlock::dump()
 {
     printf("           Name : %s\n", getName().c_str());
-    printf("           Path : ");    printPath(); printf("\n");
     printf("        Comment : %s\n", getComment().c_str());
     printf("        Created : ");    getCreationDate().print(); printf("\n");
     printf("           Next : %d\n", getNextHashRef());

@@ -29,7 +29,7 @@ struct FSBlock {
     u32 corrupted = 0;
     
     // Used by the traversal algorithms to detect loops
-    u64 visited = 0;
+    // u64 visited = 0;
     
     // The actual block data
     u8 *data = nullptr;
@@ -68,8 +68,7 @@ struct FSBlock {
     virtual u32 subtypeID();
 
     // Returns the name or path of this block
-    // char *assemblePath(); // DEPRECATED
-    string getPath();
+    // string getPath(); // DEPRECATED
     
     
     //
@@ -118,7 +117,7 @@ struct FSBlock {
     //
     
     // Prints the full path of this block
-    void printPath();
+    // void printPath();
 
     // Prints some debug information for this block
     virtual void dump() { };
@@ -225,7 +224,7 @@ public:
     virtual u32 hashValue() { return 0; }
 
     // Looks up an item in the hash table
-    u32 hashLookup(u32 nr);
+    u32 getHashRef(u32 nr);
     FSBlock *hashLookup(FSName name);
 
     // Adds a reference to the hash table

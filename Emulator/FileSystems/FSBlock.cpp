@@ -85,6 +85,7 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
+/*
 string
 FSBlock::getPath()
 {
@@ -98,12 +99,15 @@ FSBlock::getPath()
 
     return result;
 }
+*/
 
+/*
 void
 FSBlock::printPath()
 {
     printf("%s", getPath().c_str());
 }
+*/
 
 void
 FSBlock::dumpData()
@@ -216,7 +220,7 @@ FSBlock::getNextListBlock()
 }
 
 u32
-FSBlock::hashLookup(u32 nr)
+FSBlock::getHashRef(u32 nr)
 {
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
@@ -231,7 +235,7 @@ FSBlock::hashLookup(FSName name)
     u32 hash = name.hashValue() % hashTableSize();
     
     // Read the entry
-    u32 blockRef = hashLookup(hash);
+    u32 blockRef = getHashRef(hash);
     FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
     
     // Traverse the linked list until the item has been found

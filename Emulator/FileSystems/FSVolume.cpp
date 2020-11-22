@@ -9,6 +9,7 @@
 
 #include "Utils.h"
 #include "FSVolume.h"
+#include <set>
 
 FSVolume *
 FSVolume::makeWithADF(ADFFile *adf, FSError *error)
@@ -413,6 +414,18 @@ FSVolume::dataBlock(u32 nr)
     }
 }
 
+FSBlock *
+FSVolume::hashableBlock(u32 nr)
+{
+    FSBlockType type = nr < capacity ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+    
+    if (type == FS_USERDIR_BLOCK || type == FS_FILEHEADER_BLOCK) {
+        return blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
 u32
 FSVolume::allocateBlock()
 {
@@ -571,6 +584,34 @@ FSVolume::changeDir(const char *name)
     return currentDirBlock();
 }
 
+string
+FSVolume::getPath(FSBlock *block)
+{
+    string result = "";
+    std::set<u32> visited;
+ 
+    while(block) {
+
+        // Break the loop if this block has an invalid type
+        if (!hashableBlock(block->nr)) break;
+
+        // Break the loop if this block was visited before
+        if (visited.find(block->nr) != visited.end()) break;
+        
+        // Add the block to the set of visited blocks
+        visited.insert(block->nr);
+                
+        // Expand the path
+        string name = block->getName().c_str();
+        result = name + "/" + result;
+        
+        // Continue with the parent block
+        block = block->getParentBlock();
+    }
+    
+    return result;
+}
+
 FSBlock *
 FSVolume::makeDir(const char *name)
 {
@@ -656,11 +697,13 @@ FSVolume::printDirectory(bool recursive)
     msg("%d items\n", items);
 }
 
+/*
 void
 FSVolume::unvisitAll()
 {
     for (u32 i = 0; i < capacity; i++) blocks[i]->visited = 0;
 }
+*/
 
 FSError
 FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
@@ -674,7 +717,7 @@ FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
     for (u32 i = 0; i < dir->hashTableSize(); i++) {
         
         // Only proceed if the slot stores a reference
-        if ((ref = dir->hashLookup(i)) != 0) {
+        if ((ref = dir->getHashRef(i)) != 0) {
             
             FSBlock *item = block(ref);
             while (item) {
@@ -710,8 +753,7 @@ FSVolume::listWalker(FSBlock *block, void *payload)
     block->getCreationDate().print();
 
     // Display the file or directory name
-    block->printPath();
-    msg("\n");
+    msg("%s\n", getPath(block).c_str());
 
     u32 *count = (u32 *)payload;
     (*count)++;
@@ -725,7 +767,7 @@ FSVolume::exportWalker(FSBlock *block, void *payload)
     FSBlockType type = block->type();
     if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) return FS_OK;
     
-    string path = exportDir + "/" + block->getPath();
+    string path = exportDir + "/" + getPath(block);
     
     if (type == FS_USERDIR_BLOCK) {
         

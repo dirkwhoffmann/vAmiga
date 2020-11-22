@@ -191,7 +191,8 @@ public:
     FSFileHeaderBlock *fileHeaderBlock(u32 nr);
     FSFileListBlock *fileListBlock(u32 nr);
     FSDataBlock *dataBlock(u32 nr);
-
+    FSBlock *hashableBlock(u32 nr);
+    
     
     //
     // Creating and deleting blocks
@@ -228,6 +229,11 @@ public:
     // Changes the current directory
     FSBlock *changeDir(const char *name);
 
+    // Returns the path of a file system item
+    string getPath(FSBlock *block);
+    string getPath(u32 ref) { return getPath(block(ref)); }
+    string getPath() { return getPath(currentDirBlock()); }
+
     // Seeks an item inside the current directory
     FSBlock *seek(const char *name);
     FSBlock *seekDir(const char *name);
@@ -248,7 +254,7 @@ public:
     //
 
     // Clears the loop-detection markers in all blocks
-    void unvisitAll();
+    // void unvisitAll();
     
     // Signature of a walker callback pointer
     typedef FSError (FSVolume::*WalkerPtr)(FSBlock *, void *);
