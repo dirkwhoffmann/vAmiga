@@ -704,9 +704,10 @@ FSError
 FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 {
     std::stack<u32> remainingItems;
+    std::set<u32> visited;
     
     // Start with the items in this block
-    collectHashedRefs(ref, remainingItems);
+    collectHashedRefs(ref, remainingItems, visited);
     
     // Move the collected items to the result list
     while (remainingItems.size() > 0) {
@@ -717,7 +718,7 @@ FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 
         // Add subdirectory items to the queue
         if (userDirBlock(item) && recursive) {
-            collectHashedRefs(item, remainingItems);
+            collectHashedRefs(item, remainingItems, visited);
         }
     }
 
@@ -725,13 +726,13 @@ FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 }
 
 FSError
-FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result)
+FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
     if (FSBlock *b = block(ref)) {
         
         // Walk through the hash table in reverse order
         for (long i = (long)b->hashTableSize(); i >= 0; i--) {
-            collectRefsWithSameHashValue(b->getHashRef(i), result);
+            collectRefsWithSameHashValue(b->getHashRef(i), result, visited);
         }
     }
     
@@ -739,16 +740,15 @@ FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result)
 }
 
 FSError
-FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result)
+FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
-    std::set<u32> visited;
     std::stack<u32> refs;
     
     // Walk down the linked list
     for (FSBlock *b = hashableBlock(ref); b; b = b->getNextHashBlock()) {
 
         // Break the loop if we've already seen this block
-        if (visited.find(b->nr) != visited.end()) break;
+        if (visited.find(b->nr) != visited.end()) return FS_HAS_CYCLES;
         visited.insert(b->nr);
 
         refs.push(b->nr);

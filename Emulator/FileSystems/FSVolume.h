@@ -273,10 +273,10 @@ public:
 private:
     
     // Collects all references stored in a hash table
-    FSError collectHashedRefs(u32 ref, std::stack<u32> &list);
+    FSError collectHashedRefs(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
 
     // Collects all references with the same hash value
-    FSError collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list);
+    FSError collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list, std::set<u32> &visited);
 
  
     //

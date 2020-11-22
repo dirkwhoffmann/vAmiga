@@ -140,8 +140,9 @@ VAMIGA_ENUM(long, FSError)
     FS_UNSUPPORTED,
     FS_WRONG_BSIZE,
     FS_WRONG_CAPACITY,
+    FS_HAS_CYCLES,
     FS_CORRUPTED,
-    
+
     // Export errors
     FS_DIRECTORY_NOT_EMPTY,
     FS_CANNOT_CREATE_DIR,
@@ -181,6 +182,7 @@ inline const char *sFSError(FSError value)
         case FS_UNSUPPORTED:             return "FS_UNSUPPORTED";
         case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
         case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
+        case FS_HAS_CYCLES:              return "FS_HAS_CYCLES";
         case FS_CORRUPTED:               return "FS_CORRUPTED";
             
         case FS_DIRECTORY_NOT_EMPTY:     return "FS_DIRECTORY_NOT_EMPTY";
