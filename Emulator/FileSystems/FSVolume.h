@@ -269,7 +269,7 @@ public:
     FSError walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive);
 
     // Walker callbacks
-    FSError listWalker(FSBlock *block, void *payload);
+    // FSError listWalker(FSBlock *block, void *payload);
     FSError exportWalker(FSBlock *block, void *payload);
 
     
@@ -290,7 +290,7 @@ public:
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
 
     // Exports the volume to a directory of the host file system
-    FSError exportDirectory(const char *path, bool recursive = true);
+    FSError exportDirectory(const char *path);
 };
 
 #endif

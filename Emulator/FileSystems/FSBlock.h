@@ -133,11 +133,9 @@ public:
     // Exports this block to a buffer (bsize must match the volume block size)
     virtual void exportBlock(u8 *dst, size_t bsize);
     
-private:
-    
-    // Updates the checksum for this block (called prior to exporting)
-    // virtual void updateChecksum() { }
-    
+    // Exports this block to the host file system
+    virtual FSError exportBlock(const char *path) { return FS_OK; }
+        
                 
     //
     // Geting and setting names and comments

@@ -603,7 +603,7 @@ FSVolume::getPath(FSBlock *block)
                 
         // Expand the path
         string name = block->getName().c_str();
-        result = name + "/" + result;
+        result = (result == "") ? name : name + "/" + result;
         
         // Continue with the parent block
         block = block->getParentBlock();
@@ -691,19 +691,13 @@ FSVolume::seekFile(const char *name)
 void
 FSVolume::printDirectory(bool recursive)
 {
-    u32 items = 0;
+    std::vector<u32> items;
+    collectRecursive(currentDir, items);
     
-    (void)walk(currentDirBlock(), &FSVolume::listWalker, &items, recursive);
-    msg("%d items\n", items);
-    
-    // TODO: REMOVE ASAP
-    std::vector<u32> blocks;
-    
-    collectRecursive(currentDir, blocks);
-    
-    for (auto const& i : blocks) {
-        msg("Block %d %s\n", i, getPath(i).c_str());
-    }    
+    for (auto const& i : items) {
+        msg("%s\n", getPath(i).c_str());
+    }
+    msg("%d items", items.size());
 }
 
 FSError
@@ -764,38 +758,6 @@ FSVolume::collectRecursive(u32 ref, std::vector<u32> &result)
     return FS_OK;
 }
 
-/*
-FSError
-FSVolume::collect(std::queue<u32> &list)
-{
- 
-    // Iterate through all slots in the hash table
-    for (u32 i = 0; i < dir->hashTableSize(); i++) {
-        
-        // Only proceed if the slot stores a reference
-        if ((ref = dir->getHashRef(i)) != 0) {
-            
-            FSBlock *item = block(ref);
-            while (item) {
-                
-                if (item->type() == FS_USERDIR_BLOCK) {
-                    
-                    result = (this->*walker)(item, payload);
-                    if (recursive) result = walk(item, walker, payload, recursive);
-                }
-                if (item->type() == FS_FILEHEADER_BLOCK) {
-                    
-                    result = (this->*walker)(item, payload);
-                }
-                
-                item = item->getNextHashBlock();
-            }
-        }
-    }
-    return result;
-}
-*/
-
 FSError
 FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
 {
@@ -830,6 +792,7 @@ FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
     return result;
 }
 
+/*
 FSError
 FSVolume::listWalker(FSBlock *block, void *payload)
 {
@@ -851,6 +814,7 @@ FSVolume::listWalker(FSBlock *block, void *payload)
     
     return FS_OK;
 }
+*/
 
 FSError
 FSVolume::exportWalker(FSBlock *block, void *payload)
@@ -1055,25 +1019,26 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
 }
 
 FSError
-FSVolume::exportDirectory(const char *path, bool recursive)
+FSVolume::exportDirectory(const char *path)
 {
     assert(path != nullptr);
         
     // Only proceed if path points to an empty directory
     long numItems = numDirectoryItems(path);
+    if (numItems != 0) return FS_DIRECTORY_NOT_EMPTY;
     
-    msg("Directory %s contains %d items\n", path, numItems);
-    if (numItems != 0) {
-        warn("Export aborted. Directory is not empty");
-        return FS_DIRECTORY_NOT_EMPTY;
+    // Collect files and directories
+    std::vector<u32> items;
+    collectRecursive(currentDir, items);
+    
+    // Export all items
+    for (auto const& i : items) {
+        if (FSError error = block(i)->exportBlock(path); error != FS_OK) {
+            msg("Export error: %d\n", error);
+            return error; 
+        }
     }
     
-    // Assign the export root path
-    exportDir = path;
-
-    // Traverse the file system and export each item
-    int num = walk(currentDirBlock(), &FSVolume::exportWalker, 0, recursive);
-    msg("Result = %d\n", num);
-
+    msg("Exported %d items", items.size());
     return FS_OK;
 }

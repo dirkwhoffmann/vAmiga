@@ -17,11 +17,17 @@ struct FSFileHeaderBlock : FSBlock {
     FSFileHeaderBlock(FSVolume &ref, u32 nr);
     FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name);
 
+    //
+    // Methods from Block class
+    //
+
     FSBlockType type() override { return FS_FILEHEADER_BLOCK; }
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
     u32 checksumLocation() override { return 5; }
+
+    FSError exportBlock(const char *path) override;
 
     
     //

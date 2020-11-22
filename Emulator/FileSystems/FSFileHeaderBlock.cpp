@@ -123,6 +123,23 @@ FSFileHeaderBlock::dump()
     printf("\n");
 }
 
+FSError
+FSFileHeaderBlock::exportBlock(const char *exportDir)
+{
+    string path = exportDir;
+    path += "/" + volume.getPath(this);
+
+    printf("Creating file %s\n", path.c_str());
+    
+    FILE *file = fopen(path.c_str(), "w");
+    if (file == nullptr) return FS_CANNOT_CREATE_FILE;
+    
+    writeData(file);
+    fclose(file);
+        
+    return FS_OK;
+}
+
 size_t
 FSFileHeaderBlock::writeData(FILE *file)
 {

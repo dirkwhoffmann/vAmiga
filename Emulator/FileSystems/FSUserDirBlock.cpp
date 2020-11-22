@@ -100,3 +100,17 @@ FSUserDirBlock::dump()
     printf("      Parent: %d\n", getParentDirRef());
     printf("        Next: %d\n", getNextHashRef());
 }
+
+FSError
+FSUserDirBlock::exportBlock(const char *exportDir)
+{
+    string path = exportDir;
+    path += "/" + volume.getPath(this);
+
+    printf("Creating directory %s\n", path.c_str());
+    
+    // Try to create a directory on the host file system
+    if (mkdir(path.c_str(), 0777) != 0) return FS_CANNOT_CREATE_DIR;
+    
+    return FS_OK;
+}

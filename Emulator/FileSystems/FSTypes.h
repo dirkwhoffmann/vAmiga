@@ -144,7 +144,9 @@ VAMIGA_ENUM(long, FSError)
     
     // Export errors
     FS_DIRECTORY_NOT_EMPTY,
-    
+    FS_CANNOT_CREATE_DIR,
+    FS_CANNOT_CREATE_FILE,
+
     // Block errros
     FS_EXPECTED_VALUE,
     FS_EXPECTED_SMALLER_VALUE,
@@ -180,6 +182,11 @@ inline const char *sFSError(FSError value)
         case FS_WRONG_BSIZE:             return "FS_WRONG_BSIZE";
         case FS_WRONG_CAPACITY:          return "FS_WRONG_CAPACITY";
         case FS_CORRUPTED:               return "FS_CORRUPTED";
+            
+        case FS_DIRECTORY_NOT_EMPTY:     return "FS_DIRECTORY_NOT_EMPTY";
+        case FS_CANNOT_CREATE_DIR:       return "FS_CANNOT_CREATE_DIR";
+        case FS_CANNOT_CREATE_FILE:      return "FS_CANNOT_CREATE_FILE";
+
         case FS_EXPECTED_VALUE:          return "FS_EXPECTED_VALUE";
         case FS_EXPECTED_SMALLER_VALUE:  return "FS_EXPECTED_SMALLER_VALUE";
         case FS_EXPECTED_DOS_REVISION:   return "FS_EXPECTED_DOS_REVISION";

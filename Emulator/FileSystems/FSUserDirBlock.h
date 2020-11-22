@@ -28,6 +28,8 @@ struct FSUserDirBlock : FSBlock {
     void dump() override;
     u32 checksumLocation() override { return 5; }
 
+    FSError exportBlock(const char *path) override;
+
     
     //
     // Accessing block items
