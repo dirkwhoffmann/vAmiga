@@ -650,42 +650,54 @@ FSVolume::seekFile(const char *name)
 void
 FSVolume::printDirectory(bool recursive)
 {
-    int num = walk(currentDirBlock(), &FSVolume::listWalker, 0, recursive);
-    msg("%d items\n", num);
+    u32 items = 0;
+    
+    (void)walk(currentDirBlock(), &FSVolume::listWalker, &items, recursive);
+    msg("%d items\n", items);
 }
 
+void
+FSVolume::unvisitAll()
+{
+    for (u32 i = 0; i < capacity; i++) blocks[i]->visited = 0;
+}
 
-int
-FSVolume::walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive)
+FSError
+FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
 {
     assert(dir != nullptr);
     
+    FSError result = FS_OK;
+    u32 ref;
+    
+    // Iterate through all slots in the hash table
     for (u32 i = 0; i < dir->hashTableSize(); i++) {
         
-        if (u32 ref = dir->hashLookup(i)) {
+        // Only proceed if the slot stores a reference
+        if ((ref = dir->hashLookup(i)) != 0) {
             
             FSBlock *item = block(ref);
             while (item) {
                 
                 if (item->type() == FS_USERDIR_BLOCK) {
                     
-                    value = (this->*walker)(item, value);
-                    if (recursive) value = walk(item, walker, value, recursive);
+                    result = (this->*walker)(item, payload);
+                    if (recursive) result = walk(item, walker, payload, recursive);
                 }
                 if (item->type() == FS_FILEHEADER_BLOCK) {
                     
-                    value = (this->*walker)(item, value);
+                    result = (this->*walker)(item, payload);
                 }
                 
                 item = item->getNextHashBlock();
             }
         }
     }
-    return value;
+    return result;
 }
 
-int
-FSVolume::listWalker(FSBlock *block, int value)
+FSError
+FSVolume::listWalker(FSBlock *block, void *payload)
 {
     // Display directory tag or file size
     if (block->type() == FS_USERDIR_BLOCK) {
@@ -701,14 +713,17 @@ FSVolume::listWalker(FSBlock *block, int value)
     block->printPath();
     msg("\n");
 
-    return value + 1;
+    u32 *count = (u32 *)payload;
+    (*count)++;
+    
+    return FS_OK;
 }
 
-int
-FSVolume::exportWalker(FSBlock *block, int value)
+FSError
+FSVolume::exportWalker(FSBlock *block, void *payload)
 {
     FSBlockType type = block->type();
-    if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) return 0;
+    if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) return FS_OK;
     
     string path = exportDir + "/" + block->getPath();
     
@@ -737,7 +752,7 @@ FSVolume::exportWalker(FSBlock *block, int value)
 
     }
     
-    return 0;
+    return FS_OK;
 }
 
 bool
@@ -799,6 +814,7 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     
     *error = FS_OK;
     debug(FS_DEBUG, "Success\n");
+    printDirectory(true);
     return true;
 }
 

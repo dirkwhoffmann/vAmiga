@@ -247,12 +247,18 @@ public:
     // Crawling through the file system
     //
 
+    // Clears the loop-detection markers in all blocks
+    void unvisitAll();
+    
+    // Signature of a walker callback pointer
+    typedef FSError (FSVolume::*WalkerPtr)(FSBlock *, void *);
+        
     // Walks through all files in the current directory or a given directory
-    int walk(FSBlock *dir, int(FSVolume::*walker)(FSBlock *, int), int value, bool recursive);
+    FSError walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive);
 
     // Walker callbacks
-    int listWalker(FSBlock *block, int value);
-    int exportWalker(FSBlock *block, int value);
+    FSError listWalker(FSBlock *block, void *payload);
+    FSError exportWalker(FSBlock *block, void *payload);
 
     
     //

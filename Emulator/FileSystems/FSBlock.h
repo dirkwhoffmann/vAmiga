@@ -28,6 +28,9 @@ struct FSBlock {
     // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
     u32 corrupted = 0;
     
+    // Used by the traversal algorithms to detect loops
+    u64 visited = 0;
+    
     // The actual block data
     u8 *data = nullptr;
 
@@ -227,12 +230,6 @@ public:
 
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);
-    
-    // Checks the integrity of the hash table (DEPRECATED)
-    // bool checkHashTable(bool verbose);
-
-    // Checks the integrity of a hash table entry
-    // FSError checkHashTableItem(u32 item);
 
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();

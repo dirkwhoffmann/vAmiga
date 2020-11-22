@@ -85,27 +85,6 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
-/*
-char *
-FSBlock::assemblePath()
-{
-    FSBlock *parent = getParentBlock();
-    if (!parent) return strdup("");
-    
-    FSName name = getName();
-    
-    char *prefix = parent->assemblePath();
-    char *result = new char [strlen(prefix) + strlen(name.cStr) + 2];
-
-    strcpy(result, prefix);
-    strcat(result, "/");
-    strcat(result, name.cStr);
-
-    delete [] prefix;
-    return result;
-}
-*/
-
 string
 FSBlock::getPath()
 {
@@ -178,7 +157,6 @@ FSBlock::importBlock(const u8 *src, size_t bsize)
     assert(data != nullptr);
         
     memcpy(data, src, bsize);
-    if (nr == 0) dumpData();
 }
 
 void
