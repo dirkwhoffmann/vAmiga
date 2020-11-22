@@ -277,8 +277,8 @@ ScreenRecorder::vsyncHandler(Cycle target)
         muxer.sampler[1] = paula.muxer.sampler[1];
         muxer.sampler[2] = paula.muxer.sampler[2];
         muxer.sampler[3] = paula.muxer.sampler[3];
-        assert(muxer.sampler[0].r == paula.muxer.sampler[0].r);
-        assert(muxer.sampler[0].w == paula.muxer.sampler[0].w);
+        assert(muxer.sampler[0]->r == paula.muxer.sampler[0]->r);
+        assert(muxer.sampler[0]->w == paula.muxer.sampler[0]->w);
         
         // Synthesize audio samples for this frame
         if (audioClock == 0) audioClock = target-1;

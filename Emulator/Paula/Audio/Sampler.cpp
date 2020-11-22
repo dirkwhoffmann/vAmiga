@@ -9,6 +9,14 @@
 
 #include "Sampler.h"
 
+void
+Sampler::reset()
+{
+    //Replace the existing samples by a single dummy element
+    clear();
+    write( TaggedSample { 0, 0 } );
+}
+
 template <SamplingMethod method> i16
 Sampler::interpolate(Cycle clock)
 {

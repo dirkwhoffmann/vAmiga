@@ -162,18 +162,7 @@ public:
     PixelPos spriteClipBegin;
     PixelPos spriteClipEnd;
 
-    
-    //
-    // Playfield priorities
-    //
-
-private:
-
-    // Playfield priorities (derived from BPLCON2)
-    // u16 prio1;
-    // u16 prio2;
-
-    
+ 
     //
     // Rasterline data
     //

@@ -90,8 +90,8 @@ class Muxer : public AmigaComponent {
     
 public:
 
-    // Inputs
-    Sampler sampler[4];
+    // Inputs (one Sampler for each of the four channels)
+    Sampler *sampler[4];
 
     // Output
     AudioStream stream;
@@ -108,7 +108,8 @@ public:
 public:
     
     Muxer(Amiga& ref);
-    
+    ~Muxer();
+
     const char *getDescription() override { return "Muxer"; }
     void _reset(bool hard) override;
     
@@ -173,10 +174,12 @@ private:
     template <class T>
     void applyToHardResetItems(T& worker)
     {
+        /*
         worker
         
         & sampler
         & stream;
+        */
     }
     
     template <class T>
@@ -187,6 +190,7 @@ private:
     size_t _size() override { COMPUTE_SNAPSHOT_SIZE }
     size_t _load(u8 *buffer) override { LOAD_SNAPSHOT_ITEMS }
     size_t _save(u8 *buffer) override { SAVE_SNAPSHOT_ITEMS }
+    size_t didLoadFromBuffer(u8 *buffer) override;
     
     
     //
@@ -194,10 +198,7 @@ private:
     //
     
 public:
-    
-    // Sets the current volume
-    // void setVolume(i32 vol) { volume = vol; }
-    
+        
     /* Starts to ramp up the volume. This function configures variables volume
      * and targetVolume to simulate a smooth audio fade in.
      */

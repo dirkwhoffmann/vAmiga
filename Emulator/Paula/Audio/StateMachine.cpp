@@ -174,15 +174,15 @@ StateMachine<nr>::penhi()
 {
     if (!enablePenhi) return;
  
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler *sampler = paula.muxer.sampler[nr];
 
     i8 sample = (i8)HI_BYTE(buffer);
     i16 scaled = sample * audvol;
     
     trace(AUD_DEBUG, "penhi: %d %d\n", sample, scaled);
                 
-    if (!sampler.isFull()) {
-        sampler.write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler->isFull()) {
+        sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
         trace("penhi: Sample buffer is full\n");
     }
@@ -195,15 +195,15 @@ StateMachine<nr>::penlo()
 {
     if (!enablePenlo) return;
 
-    Sampler &sampler = paula.muxer.sampler[nr];
+    Sampler *sampler = paula.muxer.sampler[nr];
     
     i8 sample = (i8)LO_BYTE(buffer);
     i16 scaled = sample * audvol;
 
     trace(AUD_DEBUG, "penlo: %d %d\n", sample, scaled);
 
-    if (!sampler.isFull()) {
-        sampler.write( TaggedSample { agnus.clock, scaled } );
+    if (!sampler->isFull()) {
+        sampler->write( TaggedSample { agnus.clock, scaled } );
     } else {
         trace("penlo: Sample buffer is full\n");
     }

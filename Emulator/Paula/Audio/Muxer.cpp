@@ -17,9 +17,22 @@ Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
         &filterR
     };
     
+    sampler[0] = new Sampler();
+    sampler[1] = new Sampler();
+    sampler[2] = new Sampler();
+    sampler[3] = new Sampler();
+
     setSampleRate(44100);
 }
-    
+ 
+Muxer::~Muxer()
+{
+    delete sampler[0];
+    delete sampler[1];
+    delete sampler[2];
+    delete sampler[3];
+}
+
 void
 Muxer::_reset(bool hard)
 {
@@ -28,16 +41,8 @@ Muxer::_reset(bool hard)
     stats.bufferUnderflows = 0;
     stats.bufferOverflows = 0;
 
-    sampler[0].clear();
-    sampler[1].clear();
-    sampler[2].clear();
-    sampler[3].clear();
-
-    // Add dummy elements, because some methods assume the buffer is never empty
-    sampler[0].write( TaggedSample { 0, 0 } );
-    sampler[1].write( TaggedSample { 0, 0 } );
-    sampler[2].write( TaggedSample { 0, 0 } );
-    sampler[3].write( TaggedSample { 0, 0 } );
+    for (int i = 0; i < 4; i++) sampler[i]->reset();
+    stream.clear();
 }
 
 void
@@ -272,6 +277,13 @@ Muxer::setSampleRate(double hz)
     filterR.setSampleRate(hz);
 }
 
+size_t
+Muxer::didLoadFromBuffer(u8 *buffer)
+{
+    for (int i = 0; i < 4; i++) sampler[i]->reset();
+    return 0;
+}
+
 void
 Muxer::rampUp()
 {
@@ -349,10 +361,10 @@ Muxer::synthesize(Cycle clock, long count, double cyclesPerSample)
     double cycle = clock;
     for (long i = 0; i < count; i++) {
 
-        double ch0 = sampler[0].interpolate<method>((Cycle)cycle) * config.vol[0];
-        double ch1 = sampler[1].interpolate<method>((Cycle)cycle) * config.vol[1];
-        double ch2 = sampler[2].interpolate<method>((Cycle)cycle) * config.vol[2];
-        double ch3 = sampler[3].interpolate<method>((Cycle)cycle) * config.vol[3];
+        double ch0 = sampler[0]->interpolate<method>((Cycle)cycle) * config.vol[0];
+        double ch1 = sampler[1]->interpolate<method>((Cycle)cycle) * config.vol[1];
+        double ch2 = sampler[2]->interpolate<method>((Cycle)cycle) * config.vol[2];
+        double ch3 = sampler[3]->interpolate<method>((Cycle)cycle) * config.vol[3];
 
         /*
         if (this == &denise.screenRecorder.muxer)
