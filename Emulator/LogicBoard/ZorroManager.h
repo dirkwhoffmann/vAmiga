@@ -39,6 +39,8 @@ public:
     
     ZorroManager(Amiga& ref);
 
+    const char *getDescription() override { return "Zorro"; }
+
 private:
     
     void _reset(bool hard) override { RESET_SNAPSHOT_ITEMS(hard) }

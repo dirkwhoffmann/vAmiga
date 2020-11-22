@@ -277,6 +277,8 @@ public:
 
     Denise(Amiga& ref);
 
+    const char *getDescription() override { return "Denise"; }
+
     void _reset(bool hard) override;
 
     

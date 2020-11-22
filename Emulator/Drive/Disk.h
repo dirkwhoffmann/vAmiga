@@ -96,6 +96,8 @@ public:
     Disk(DiskType type, DiskDensity density);
     ~Disk();
 
+    const char *getDescription() override { return "Disk"; }
+
     static Disk *makeWithFile(class DiskFile *file);
     static Disk *makeWithReader(SerReader &reader, DiskType type, DiskDensity density);
         

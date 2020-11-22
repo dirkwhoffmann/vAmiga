@@ -31,6 +31,8 @@ public:
     
     MessageQueue();
     
+    const char *getDescription() { return "MessageQueue"; }
+
     // Registers a listener together with it's callback function
     void addListener(const void *listener, Callback *func);
     

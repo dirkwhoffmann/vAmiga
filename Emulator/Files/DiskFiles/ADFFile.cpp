@@ -11,7 +11,6 @@
 
 ADFFile::ADFFile()
 {
-    setDescription("ADFFile");
 }
 
 bool

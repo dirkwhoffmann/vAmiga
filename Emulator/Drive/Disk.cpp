@@ -10,9 +10,7 @@
 #include "Amiga.h"
 
 Disk::Disk(DiskType type, DiskDensity density)
-{
-    setDescription("Disk");
-    
+{    
     this->type = type;
     this->density = density;
     

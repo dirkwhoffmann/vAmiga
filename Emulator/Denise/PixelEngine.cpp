@@ -11,8 +11,6 @@
 
 PixelEngine::PixelEngine(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("PixelEngine");
-
     // Allocate frame buffers
     emuTexture[0].data = new u32[PIXELS]; emuTexture[0].longFrame = true;
     emuTexture[1].data = new u32[PIXELS]; emuTexture[1].longFrame = true;

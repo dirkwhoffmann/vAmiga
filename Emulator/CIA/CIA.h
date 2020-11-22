@@ -534,6 +534,8 @@ class CIAA : public CIA {
 public:
     
     CIAA(Amiga& ref);
+    
+    const char *getDescription() override { return "CIAA"; }
 
 private:
     
@@ -570,6 +572,8 @@ public:
     
     CIAB(Amiga& ref);
     
+    const char *getDescription() override { return "CIAB"; }
+
 private:
         
     void pullDownInterruptLine() override;

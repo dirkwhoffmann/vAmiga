@@ -60,8 +60,6 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path)
 
 FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
-    setDescription("Volume");
-
     assert(capacity == 2 * 880 || capacity == 4 * 880);
     blocks = new BlockPtr[capacity];
 

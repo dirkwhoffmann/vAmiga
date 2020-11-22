@@ -88,6 +88,8 @@ public:
     Snapshot();
     Snapshot(size_t capacity);
     
+    const char *getDescription() override { return "Snapshot"; }
+    
     bool setCapacity(size_t size);
     
     static Snapshot *makeWithFile(const char *filename);

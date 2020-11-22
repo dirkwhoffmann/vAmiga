@@ -11,7 +11,6 @@
 
 IMGFile::IMGFile()
 {
-    setDescription("IMGFile");
 }
 
 bool

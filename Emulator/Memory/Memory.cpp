@@ -15,8 +15,6 @@
 
 Memory::Memory(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("Memory");
-
     memset(&config, 0, sizeof(config));
 
     config.slowRamDelay   = true;

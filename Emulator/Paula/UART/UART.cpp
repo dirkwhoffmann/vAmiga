@@ -11,7 +11,6 @@
 
 UART::UART(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("UART");
 }
 
 void

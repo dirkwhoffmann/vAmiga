@@ -64,6 +64,8 @@ public:
     
     Mouse(Amiga& ref, ControlPort& pref);
     
+    const char *getDescription() override;
+    
     void _reset(bool hard) override;
     
     

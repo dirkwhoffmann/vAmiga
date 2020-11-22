@@ -10,9 +10,7 @@
 #include "Amiga.h"
 
 Muxer::Muxer(Amiga& ref) : AmigaComponent(ref)
-{
-    setDescription("Muxer");
-    
+{    
     subComponents = vector<HardwareComponent *> {
 
         &filterL,

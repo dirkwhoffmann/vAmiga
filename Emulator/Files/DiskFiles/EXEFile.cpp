@@ -12,7 +12,6 @@
 
 EXEFile::EXEFile()
 {
-    setDescription("EXEFile");
 }
 
 bool

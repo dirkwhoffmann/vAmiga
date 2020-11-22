@@ -48,6 +48,8 @@ public:
     
     Keyboard(Amiga& ref);
     
+    const char *getDescription() override { return "Keyboard"; }
+
 private:
     
     void _reset(bool hard) override;

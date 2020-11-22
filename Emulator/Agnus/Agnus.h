@@ -388,6 +388,8 @@ public:
     
     Agnus(Amiga& ref);
 
+    const char *getDescription() override { return "Agnus"; }
+
 private:
     
     void initLookupTables();

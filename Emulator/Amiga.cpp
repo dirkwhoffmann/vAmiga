@@ -52,8 +52,6 @@ void
 
 Amiga::Amiga()
 {
-    setDescription("Amiga");
-
     /* The order of subcomponents is important here, because some components
      * are dependend on others during initialization. I.e.,
      *

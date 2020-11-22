@@ -11,7 +11,6 @@
 
 ZorroManager::ZorroManager(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("ZorroManager");
 }
 
 u8

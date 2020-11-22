@@ -108,7 +108,6 @@ Snapshot::isUnsupportedSnapshotFile(const char *path)
 
 Snapshot::Snapshot()
 {
-    setDescription("Snapshot");
 }
 
 Snapshot::Snapshot(size_t capacity)

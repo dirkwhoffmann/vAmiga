@@ -21,7 +21,6 @@ const u8 EncryptedRomFile::headers[1][11] = {
 
 EncryptedRomFile::EncryptedRomFile()
 {
-    setDescription("EncryptedRom");
 }
 
 bool

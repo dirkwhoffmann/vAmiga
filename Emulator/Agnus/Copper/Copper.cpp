@@ -11,7 +11,6 @@
 
 Copper::Copper(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("Copper");
 }
 
 void

@@ -12,9 +12,7 @@
 
 DIRFile::DIRFile()
 {
-    setDescription("DIRFile");
 }
-
 
 bool
 DIRFile::isDIRFile(const char *path)

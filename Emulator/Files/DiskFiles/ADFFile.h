@@ -48,6 +48,8 @@ public:
 
     ADFFile();
     
+    const char *getDescription() override { return "ADF"; }
+
     static ADFFile *makeWithDiskType(DiskType t, DiskDensity d);
     static ADFFile *makeWithBuffer(const u8 *buffer, size_t length);
     static ADFFile *makeWithFile(const char *path);

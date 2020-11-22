@@ -48,6 +48,8 @@ public:
     
     RTC(Amiga& ref);
 
+    const char *getDescription() override { return "RTC"; }
+
 private:
     
     void _reset(bool hard) override;

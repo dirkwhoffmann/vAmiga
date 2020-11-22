@@ -65,9 +65,6 @@ protected:
     
     // The directory where new files and subdirectories are added
     u32 currentDir = 0;
-
-    // Root directory used by the file exporter
-    string exportDir = "";
     
 
     //
@@ -96,6 +93,8 @@ public:
     FSVolume(FSVolumeType type, const char *name, u32 capacity, u32 bsize = 512);
     FSVolume(FSVolumeType type, u32 capacity, u32 bsize = 512);
     ~FSVolume();
+    
+    const char *getDescription() override { return "FSVolume"; }
     
     // Prints information about this volume
     void info();

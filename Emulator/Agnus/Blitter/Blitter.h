@@ -177,6 +177,8 @@ public:
     
     Blitter(Amiga& ref);
 
+    const char *getDescription() override { return "Blitter"; }
+    
     void initFastBlitter();
     void initSlowBlitter();
 

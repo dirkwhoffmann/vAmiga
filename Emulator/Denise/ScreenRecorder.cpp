@@ -12,14 +12,10 @@
 
 ScreenRecorder::ScreenRecorder(Amiga& ref) : AmigaComponent(ref)
 {
-    setDescription("ScreenRecorder");
-
     subComponents = vector<HardwareComponent *> {
         
         &muxer
     };
-    
-    muxer.setDescription("RecMuxer");
 }
 
 bool

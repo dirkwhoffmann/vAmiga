@@ -286,7 +286,6 @@ RomFile::released(RomIdentifier rev)
 
 RomFile::RomFile()
 {
-    setDescription("Rom");
 }
 
 bool
