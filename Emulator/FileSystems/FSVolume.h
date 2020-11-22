@@ -256,11 +256,11 @@ public:
     //
 
     // Collects all references of blocks with the same hash value
-    FSError collectHashBlocks(FSBlock *b, list<u32> &list);
+    FSError collectHashBlocks(u32 ref, std::stack<u32> &list);
     
     // Returns a collections of nodes for all items in the current directory
-    FSError collect(u32 ref, list<u32> &list);
-    FSError collectRecursive(u32 ref, list<u32> &list);
+    FSError collect(u32 ref, std::stack<u32> &list);
+    FSError collectRecursive(u32 ref, std::vector<u32> &list);
     
     // Signature of a walker callback pointer
     typedef FSError (FSVolume::*WalkerPtr)(FSBlock *, void *);

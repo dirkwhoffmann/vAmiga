@@ -697,40 +697,45 @@ FSVolume::printDirectory(bool recursive)
     msg("%d items\n", items);
     
     // TODO: REMOVE ASAP
-    list<u32> blocks;
+    std::vector<u32> blocks;
     
     collectRecursive(currentDir, blocks);
     
     for (auto const& i : blocks) {
         msg("Block %d %s\n", i, getPath(i).c_str());
-    }
+    }    
 }
 
 FSError
-FSVolume::collectHashBlocks(FSBlock *b, list<u32> &list)
+FSVolume::collectHashBlocks(u32 ref, std::stack<u32> &result)
 {
     std::set<u32> visited;
- 
-    // TODO: CHECK FOR LOOPS
+    std::stack<u32> refs;
     
-    while(b) {
-        list.push_front(b->nr);
-        b = b->getNextHashBlock();
+    // Walk down the linked list
+    for (FSBlock *b = hashableBlock(ref); b; b = b->getNextHashBlock()) {
+
+        // Break the loop if we've already seen this block
+        if (visited.find(b->nr) != visited.end()) break;
+        visited.insert(b->nr);
+
+        refs.push(b->nr);
     }
   
+    // Push the collected elements onto the result stack
+    while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
+    
     return FS_OK;
 }
 
 FSError
-FSVolume::collect(u32 ref, list<u32> &list)
+FSVolume::collect(u32 ref, std::stack<u32> &result)
 {
     if (FSBlock *b = block(ref)) {
         
-        // Walk through the hash table
-        for (u32 i = 0; i < b->hashTableSize(); i++) {
-            
-            // Collect all blocks with this hash value
-            collectHashBlocks(hashableBlock(b->getHashRef(i)), list);
+        // Walk through the hash table in reverse order
+        for (long i = (long)b->hashTableSize(); i >= 0; i--) {
+            collectHashBlocks(b->getHashRef(i), result);
         }
     }
     
@@ -738,21 +743,22 @@ FSVolume::collect(u32 ref, list<u32> &list)
 }
 
 FSError
-FSVolume::collectRecursive(u32 ref, list<u32> &list)
+FSVolume::collectRecursive(u32 ref, std::vector<u32> &result)
 {
-    std::list<u32> items;
+    std::stack<u32> remainingItems;
     
-    collect(ref, items);
+    // Start with the items in this block
+    collect(ref, remainingItems);
     
     // Move the collected items to the result list
-    while (items.size() > 0) {
+    while (remainingItems.size() > 0) {
         
-        u32 r = items.front();
-        items.pop_front();
-        list.push_back(r);
+        u32 item = remainingItems.top();
+        remainingItems.pop();
+        result.push_back(item);
 
         // Add subdirectory items to the queue
-        if (userDirBlock(r)) collect(r, items);
+        if (userDirBlock(item)) collect(item, remainingItems);
     }
 
     return FS_OK;
