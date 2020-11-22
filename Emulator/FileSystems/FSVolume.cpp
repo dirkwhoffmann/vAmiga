@@ -695,13 +695,98 @@ FSVolume::printDirectory(bool recursive)
     
     (void)walk(currentDirBlock(), &FSVolume::listWalker, &items, recursive);
     msg("%d items\n", items);
+    
+    // TODO: REMOVE ASAP
+    list<u32> blocks;
+    
+    collectRecursive(currentDir, blocks);
+    
+    for (auto const& i : blocks) {
+        msg("Block %d %s\n", i, getPath(i).c_str());
+    }
+}
+
+FSError
+FSVolume::collectHashBlocks(FSBlock *b, list<u32> &list)
+{
+    std::set<u32> visited;
+ 
+    // TODO: CHECK FOR LOOPS
+    
+    while(b) {
+        list.push_front(b->nr);
+        b = b->getNextHashBlock();
+    }
+  
+    return FS_OK;
+}
+
+FSError
+FSVolume::collect(u32 ref, list<u32> &list)
+{
+    if (FSBlock *b = block(ref)) {
+        
+        // Walk through the hash table
+        for (u32 i = 0; i < b->hashTableSize(); i++) {
+            
+            // Collect all blocks with this hash value
+            collectHashBlocks(hashableBlock(b->getHashRef(i)), list);
+        }
+    }
+    
+    return FS_OK;
+}
+
+FSError
+FSVolume::collectRecursive(u32 ref, list<u32> &list)
+{
+    std::list<u32> items;
+    
+    collect(ref, items);
+    
+    // Move the collected items to the result list
+    while (items.size() > 0) {
+        
+        u32 r = items.front();
+        items.pop_front();
+        list.push_back(r);
+
+        // Add subdirectory items to the queue
+        if (userDirBlock(r)) collect(r, items);
+    }
+
+    return FS_OK;
 }
 
 /*
-void
-FSVolume::unvisitAll()
+FSError
+FSVolume::collect(std::queue<u32> &list)
 {
-    for (u32 i = 0; i < capacity; i++) blocks[i]->visited = 0;
+ 
+    // Iterate through all slots in the hash table
+    for (u32 i = 0; i < dir->hashTableSize(); i++) {
+        
+        // Only proceed if the slot stores a reference
+        if ((ref = dir->getHashRef(i)) != 0) {
+            
+            FSBlock *item = block(ref);
+            while (item) {
+                
+                if (item->type() == FS_USERDIR_BLOCK) {
+                    
+                    result = (this->*walker)(item, payload);
+                    if (recursive) result = walk(item, walker, payload, recursive);
+                }
+                if (item->type() == FS_FILEHEADER_BLOCK) {
+                    
+                    result = (this->*walker)(item, payload);
+                }
+                
+                item = item->getNextHashBlock();
+            }
+        }
+    }
+    return result;
 }
 */
 

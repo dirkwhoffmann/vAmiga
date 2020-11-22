@@ -15,12 +15,13 @@
 #include "Concurrency.h"
 
 #include <vector>
+#include <list>
 #include <map>
-#include <mutex>
 #include <queue>
 #include <thread>
 
 using std::vector;
+using std::list;
 using std::map;
 using std::pair;
 using std::swap;

@@ -85,30 +85,6 @@ FSBlock::write32(u8 *p, u32 value)
     p[3] = (value >>  0) & 0xFF;
 }
 
-/*
-string
-FSBlock::getPath()
-{
-    FSBlock *parent = getParentBlock();
-    if (!parent) return "";
-    
-    FSName name = getName();
-    
-    string prefix = parent->getPath();
-    string result = prefix == "" ? name.c_str() : prefix + "/" + name.c_str();
-
-    return result;
-}
-*/
-
-/*
-void
-FSBlock::printPath()
-{
-    printf("%s", getPath().c_str());
-}
-*/
-
 void
 FSBlock::dumpData()
 {
@@ -140,7 +116,7 @@ FSBlock::checksum()
     for (u32 i = 0; i < volume.bsize / 4; i++) result += get32(i);
     result = ~result + 1;
     
-    // Rectify the buffer
+    // Undo the modification
     set32(loc, old);
     
     return result;

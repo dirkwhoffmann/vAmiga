@@ -66,9 +66,6 @@ struct FSBlock {
     // Returns the type and subtype identifiers of this block
     virtual u32 typeID();
     virtual u32 subtypeID();
-
-    // Returns the name or path of this block
-    // string getPath(); // DEPRECATED
     
     
     //

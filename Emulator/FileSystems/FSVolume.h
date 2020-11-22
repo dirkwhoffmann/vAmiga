@@ -10,7 +10,7 @@
 #ifndef _FSVOLUME_H
 #define _FSVOLUME_H
 
-#include <dirent.h>
+#include "AmigaObject.h"
 
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"
@@ -22,6 +22,8 @@
 #include "FSFileListBlock.h"
 #include "FSDataBlock.h"
 #include "ADFFile.h"
+
+#include <dirent.h>
 
 /* This class provides the basic functionality of the Amiga File Systems OFS
  * and FFS. Starting from an empty volume, files can be added or removed,
@@ -250,11 +252,15 @@ public:
         
     
     //
-    // Crawling through the file system
+    // Traversing the file system
     //
 
-    // Clears the loop-detection markers in all blocks
-    // void unvisitAll();
+    // Collects all references of blocks with the same hash value
+    FSError collectHashBlocks(FSBlock *b, list<u32> &list);
+    
+    // Returns a collections of nodes for all items in the current directory
+    FSError collect(u32 ref, list<u32> &list);
+    FSError collectRecursive(u32 ref, list<u32> &list);
     
     // Signature of a walker callback pointer
     typedef FSError (FSVolume::*WalkerPtr)(FSBlock *, void *);
