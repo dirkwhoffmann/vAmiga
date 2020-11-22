@@ -62,7 +62,7 @@ protected:
 
 
     //
-    // Constructing and destructing
+    // Constructing
     //
 
 public:
@@ -170,7 +170,7 @@ private:
 
 
     //
-    // Constructing and destructing
+    // Constructing
     //
 
 public:

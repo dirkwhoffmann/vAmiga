@@ -44,7 +44,7 @@ struct FSBlock {
         
         
     //
-    // Constructing and destructing
+    // Constructing
     //
     
     FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }

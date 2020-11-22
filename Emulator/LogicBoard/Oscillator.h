@@ -46,7 +46,7 @@ class Oscillator : public AmigaComponent {
 
     
     //
-    // Constructing and serializing
+    // Constructing
     //
     
 public:

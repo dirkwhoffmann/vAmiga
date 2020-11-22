@@ -10,9 +10,9 @@
 #ifndef _MESSAGE_QUEUE_H
 #define _MESSAGE_QUEUE_H
 
-#include "AmigaObject.h"
+#include "HardwareComponent.h"
 
-class MessageQueue : public AmigaObject {
+class MessageQueue : public HardwareComponent {
         
     // Maximum number of queued messages
     const static size_t capacity = 64;
@@ -27,12 +27,43 @@ class MessageQueue : public AmigaObject {
     // List of all registered listeners
     map <const void *, Callback *> listeners;
     
+    
+    //
+    // Constructing
+    //
+    
 public:
     
     MessageQueue();
     
-    const char *getDescription() { return "MessageQueue"; }
+    const char *getDescription() override { return "MessageQueue"; }
 
+private:
+    
+    void _reset(bool hard) override { };
+
+    
+    //
+    // Serializing
+    //
+    
+private:
+    
+    // template <class T> void applyToPersistentItems(T& worker) { }
+    // template <class T> void applyToHardResetItems(T& worker) { }
+    // template <class T> void applyToResetItems(T& worker) { }
+
+    size_t _size() override { return 0; }
+    size_t _load(u8 *buffer) override { return 0; }
+    size_t _save(u8 *buffer) override { return 0; }
+    
+    
+    //
+    // Managing the queue
+    //
+    
+public:
+    
     // Registers a listener together with it's callback function
     void addListener(const void *listener, Callback *func);
     

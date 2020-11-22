@@ -133,7 +133,7 @@ protected:
 
 
     //
-    // Constructing and configuring
+    // Constructing
     //
 
 public:

@@ -85,6 +85,7 @@ Amiga::Amiga()
         &ciaB,
         &mem,
         &cpu,
+        &messageQueue
     };
 
     // Set up the initial state
