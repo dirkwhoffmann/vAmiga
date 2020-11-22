@@ -27,8 +27,6 @@ using std::queue;
 using std::pair;
 using std::swap;
 
-#define synchronized \
-for (AutoMutex _am(mutex); _am.active; _am.active = false)
 
 /* Base class for all Amiga objects. This class adds a textual description
  * the object together with functions for printing debug messages and warnings.
@@ -39,14 +37,6 @@ public:
     
     virtual ~AmigaObject() { };
         
-protected:
-    
-    /* Mutex for implementing the 'synchronized' macro. The macro can be used
-     * to prevent multiple threads to enter the same code block. It mimics the
-     * behaviour of the well known Java construct 'synchronized(this) { }'.
-     */
-    Mutex mutex;
-
     
     //
     // Initializing

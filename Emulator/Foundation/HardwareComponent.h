@@ -15,8 +15,14 @@
 
 /* This class defines the base functionality of all hardware components. It
  * comprises functions for initializing, configuring, and serializing the
- * emulator, as well as functions for powering up and down, running and pausing.
+ * emulator, as well as functions for powering up and down, running and
+ * pausing. Furthermore, a 'synchronized' macro is provided to prevent mutual
+ * execution of certain code components.
  */
+
+#define synchronized \
+for (AutoMutex _am(mutex); _am.active; _am.active = false)
+
 class HardwareComponent : public AmigaObject {
     
 public:
@@ -49,7 +55,13 @@ protected:
      * breakpoints and records the executed instruction in it's trace buffer.
      */
     bool debugMode = false;
-        
+            
+    /* Mutex for implementing the 'synchronized' macro. The macro can be used
+     * to prevent multiple threads to enter the same code block. It mimics the
+     * behaviour of the well known Java construct 'synchronized(this) { }'.
+     */
+    Mutex mutex;
+
     
     //
     // Initializing
