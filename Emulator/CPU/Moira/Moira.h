@@ -25,14 +25,6 @@ class Moira {
     friend class Breakpoints;
     friend class Watchpoints;
 
-public:
-    
-    virtual ~Moira() { };
-    
-    //
-    // Configuration
-    //
-
 protected:
 
     // Emulated CPU model (68000 is the only supported model yet)
@@ -129,7 +121,7 @@ protected:
     void (Moira::*dasm[65536])(StrWriter&, u32&, u16);
 
     // Table holding instruction infos
-    InstrInfo info[65536];
+    InstrInfo *info;
 
 
     //
@@ -139,6 +131,8 @@ protected:
 public:
 
     Moira();
+    virtual ~Moira();
+
     void createJumpTables();
 
     // Configures the output format of the disassembler

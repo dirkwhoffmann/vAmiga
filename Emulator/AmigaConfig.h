@@ -77,7 +77,7 @@ static const int OPT_DEBUG       = 0; // Configuration options
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
-static const int SNP_DEBUG       = 0; // Serialization (snapshots)
+static const int SNP_DEBUG       = 1; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
@@ -137,7 +137,7 @@ static const int DSK_CHECKSUM    = 0; // Compute disk checksums
 static const int DSKREG_DEBUG    = 0; // Disk controller registers
 static const int DSK_DEBUG       = 0; // Disk controller execution
 static const int MFM_DEBUG       = 0; // Disk encoder / decoder
-static const int FS_DEBUG        = 1; // File System (OFS / FFS)
+static const int FS_DEBUG        = 0; // File System (OFS / FFS)
 // Audio
 static const int AUDREG_DEBUG    = 0; // Audio registers
 static const int AUD_DEBUG       = 0; // Audio execution
