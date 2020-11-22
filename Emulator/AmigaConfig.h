@@ -77,7 +77,7 @@ static const int OPT_DEBUG       = 0; // Configuration options
 
 // Runloop
 static const int RUN_DEBUG       = 0; // Run loop, component states
-static const int SNP_DEBUG       = 1; // Serialization (snapshots)
+static const int SNP_DEBUG       = 0; // Serialization (snapshots)
 
 // CPU
 static const int CPU_DEBUG       = 0; // CPU
