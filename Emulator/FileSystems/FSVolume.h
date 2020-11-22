@@ -111,6 +111,8 @@ public:
     // Querying file system properties
     //
     
+public:
+    
     FSName getName() { return rootBlock()->getName(); }
     FSVolumeType getType() { return type; }
     bool isOFS();
@@ -138,6 +140,8 @@ public:
     // Integrity checking
     //
 
+public:
+    
     // Checks all blocks in this volume
     FSErrorReport check(bool strict);
 
@@ -172,6 +176,8 @@ public:
     // Accessing blocks
     //
     
+public:
+    
     // Returns the type of a certain block
     FSBlockType blockType(u32 nr);
 
@@ -200,6 +206,8 @@ public:
     // Creating and deleting blocks
     //
     
+public:
+    
     // Seeks and free block and marks it as allocated
     u32 allocateBlock();
 
@@ -224,6 +232,8 @@ public:
     //
     // Managing directories and files
     //
+    
+public:
     
     // Returns the block representing the current directory
     FSBlock *currentDirBlock();
@@ -254,28 +264,26 @@ public:
     //
     // Traversing the file system
     //
-
-    // Collects all references of blocks with the same hash value
-    FSError collectHashBlocks(u32 ref, std::stack<u32> &list);
+    
+public:
     
     // Returns a collections of nodes for all items in the current directory
-    FSError collect(u32 ref, std::stack<u32> &list);
-    FSError collectRecursive(u32 ref, std::vector<u32> &list);
-    
-    // Signature of a walker callback pointer
-    typedef FSError (FSVolume::*WalkerPtr)(FSBlock *, void *);
-        
-    // Walks through all files in the current directory or a given directory
-    FSError walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive);
+    FSError collect(u32 ref, std::vector<u32> &list, bool recursive = true);
 
-    // Walker callbacks
-    // FSError listWalker(FSBlock *block, void *payload);
-    FSError exportWalker(FSBlock *block, void *payload);
-
+private:
     
+    // Collects all references stored in a hash table
+    FSError collectHashedRefs(u32 ref, std::stack<u32> &list);
+
+    // Collects all references with the same hash value
+    FSError collectRefsWithSameHashValue(u32 ref, std::stack<u32> &list);
+
+ 
     //
     // Importing and exporting
     //
+    
+public:
     
     // Exports the volume to a buffer compatible with the ADF format
     bool importVolume(const u8 *src, size_t size);

@@ -692,7 +692,7 @@ void
 FSVolume::printDirectory(bool recursive)
 {
     std::vector<u32> items;
-    collectRecursive(currentDir, items);
+    collect(currentDir, items);
     
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
@@ -701,7 +701,45 @@ FSVolume::printDirectory(bool recursive)
 }
 
 FSError
-FSVolume::collectHashBlocks(u32 ref, std::stack<u32> &result)
+FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
+{
+    std::stack<u32> remainingItems;
+    
+    // Start with the items in this block
+    collectHashedRefs(ref, remainingItems);
+    
+    // Move the collected items to the result list
+    while (remainingItems.size() > 0) {
+        
+        u32 item = remainingItems.top();
+        remainingItems.pop();
+        result.push_back(item);
+
+        // Add subdirectory items to the queue
+        if (userDirBlock(item) && recursive) {
+            collectHashedRefs(item, remainingItems);
+        }
+    }
+
+    return FS_OK;
+}
+
+FSError
+FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result)
+{
+    if (FSBlock *b = block(ref)) {
+        
+        // Walk through the hash table in reverse order
+        for (long i = (long)b->hashTableSize(); i >= 0; i--) {
+            collectRefsWithSameHashValue(b->getHashRef(i), result);
+        }
+    }
+    
+    return FS_OK;
+}
+
+FSError
+FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result)
 {
     std::set<u32> visited;
     std::stack<u32> refs;
@@ -718,136 +756,6 @@ FSVolume::collectHashBlocks(u32 ref, std::stack<u32> &result)
   
     // Push the collected elements onto the result stack
     while (refs.size() > 0) { result.push(refs.top()); refs.pop(); }
-    
-    return FS_OK;
-}
-
-FSError
-FSVolume::collect(u32 ref, std::stack<u32> &result)
-{
-    if (FSBlock *b = block(ref)) {
-        
-        // Walk through the hash table in reverse order
-        for (long i = (long)b->hashTableSize(); i >= 0; i--) {
-            collectHashBlocks(b->getHashRef(i), result);
-        }
-    }
-    
-    return FS_OK;
-}
-
-FSError
-FSVolume::collectRecursive(u32 ref, std::vector<u32> &result)
-{
-    std::stack<u32> remainingItems;
-    
-    // Start with the items in this block
-    collect(ref, remainingItems);
-    
-    // Move the collected items to the result list
-    while (remainingItems.size() > 0) {
-        
-        u32 item = remainingItems.top();
-        remainingItems.pop();
-        result.push_back(item);
-
-        // Add subdirectory items to the queue
-        if (userDirBlock(item)) collect(item, remainingItems);
-    }
-
-    return FS_OK;
-}
-
-FSError
-FSVolume::walk(FSBlock *dir, WalkerPtr walker, void *payload, bool recursive)
-{
-    assert(dir != nullptr);
-    
-    FSError result = FS_OK;
-    u32 ref;
-    
-    // Iterate through all slots in the hash table
-    for (u32 i = 0; i < dir->hashTableSize(); i++) {
-        
-        // Only proceed if the slot stores a reference
-        if ((ref = dir->getHashRef(i)) != 0) {
-            
-            FSBlock *item = block(ref);
-            while (item) {
-                
-                if (item->type() == FS_USERDIR_BLOCK) {
-                    
-                    result = (this->*walker)(item, payload);
-                    if (recursive) result = walk(item, walker, payload, recursive);
-                }
-                if (item->type() == FS_FILEHEADER_BLOCK) {
-                    
-                    result = (this->*walker)(item, payload);
-                }
-                
-                item = item->getNextHashBlock();
-            }
-        }
-    }
-    return result;
-}
-
-/*
-FSError
-FSVolume::listWalker(FSBlock *block, void *payload)
-{
-    // Display directory tag or file size
-    if (block->type() == FS_USERDIR_BLOCK) {
-        msg("%6s  ", "(DIR)");
-    } else {
-        msg("%6d  ", block->getFileSize());
-    }
-    
-    // Display date and time
-    block->getCreationDate().print();
-
-    // Display the file or directory name
-    msg("%s\n", getPath(block).c_str());
-
-    u32 *count = (u32 *)payload;
-    (*count)++;
-    
-    return FS_OK;
-}
-*/
-
-FSError
-FSVolume::exportWalker(FSBlock *block, void *payload)
-{
-    FSBlockType type = block->type();
-    if (type != FS_USERDIR_BLOCK && type != FS_FILEHEADER_BLOCK) return FS_OK;
-    
-    string path = exportDir + "/" + getPath(block);
-    
-    if (type == FS_USERDIR_BLOCK) {
-        
-        msg("DIR: %s\n", path.c_str());
-        
-        if (mkdir(path.c_str(), 0777) != 0) {
-            warn("Failed to create directory %s\n");
-        }
-    }
-    
-    if (type == FS_FILEHEADER_BLOCK) {
-
-        msg("%s\n", path.c_str());
-
-        if (FILE *file = fopen(path.c_str(), "w")) {
-
-            size_t size = ((FSFileHeaderBlock *)block)->writeData(file);
-            msg("size = %d\n", size); 
-            fputc('c', file);
-            fclose(file);
-        } else {
-            msg("Failed to create file %s\n", path.c_str());
-        }
-
-    }
     
     return FS_OK;
 }
@@ -1029,7 +937,7 @@ FSVolume::exportDirectory(const char *path)
     
     // Collect files and directories
     std::vector<u32> items;
-    collectRecursive(currentDir, items);
+    collect(currentDir, items);
     
     // Export all items
     for (auto const& i : items) {
