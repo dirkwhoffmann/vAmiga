@@ -196,9 +196,7 @@ Moira::checkForIrq()
 
 void
 Moira::halt()
-{
-    printf("HALTING CPU\n");
-    
+{    
     // Halt the CPU
     flags |= CPU_IS_HALTED;
     reg.pc = reg.pc0;

@@ -57,7 +57,7 @@ FSBlock::check(bool strict)
 
         if ((error = check(i, &expected, strict)) != FS_OK) {
             count++;
-            if (FS_DEBUG) printf("Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+             debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
         }
     }
 
@@ -88,17 +88,7 @@ FSBlock::write32(u8 *p, u32 value)
 void
 FSBlock::dumpData()
 {
-    int cols = 32;
-
-    printf("Block %d\n", nr);
-    for (int y = 0; y < 512 / cols; y++) {
-        for (int x = 0; x < cols; x++) {
-            printf("%02X ", data[y*cols + x]);
-            if ((x % 4) == 3) printf(" ");
-        }
-        printf("\n");
-    }
-    printf("\n");
+    hexdumpLongwords(data, 512);
 }
 
 u32

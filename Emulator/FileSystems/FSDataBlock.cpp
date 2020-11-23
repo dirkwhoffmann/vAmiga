@@ -11,7 +11,7 @@
 
 FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[ref.bsize]();    
 }
 
 FSDataBlock::~FSDataBlock()

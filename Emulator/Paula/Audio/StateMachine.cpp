@@ -52,9 +52,9 @@ StateMachine<nr>::_inspect()
 template <int nr> void
 StateMachine<nr>::_dump()
 {
-    printf("   State: %d\n", state);
-    printf("  AUDxIP: %d\n", AUDxIP());
-    printf("  AUDxON: %d\n", AUDxON());
+    msg("   State : %d\n", state);
+    msg("  AUDxIP : %d\n", AUDxIP());
+    msg("  AUDxON : %d\n", AUDxON());
 }
 
 template <int nr> void

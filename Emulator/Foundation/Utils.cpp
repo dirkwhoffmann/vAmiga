@@ -19,6 +19,38 @@ releaseBuild()
 #endif
 }
 
+void hexdump(u8 *p, size_t size, size_t cols, size_t pad)
+{
+    while (size) {
+        
+        size_t cnt = MIN(size, cols);
+        for (size_t x = 0; x < cnt; x++) {
+            fprintf(stderr, "%02X %s", p[x], ((x + 1) % pad) == 0 ? " " : "");
+        }
+        
+        size -= cnt;
+        p += cnt;
+        
+        fprintf(stderr, "\n");
+    }
+    fprintf(stderr, "\n");
+}
+
+void hexdump(u8 *p, size_t size, size_t cols)
+{
+    hexdump(p, size, cols, cols);
+}
+
+void hexdumpWords(u8 *p, size_t size, size_t cols)
+{
+    hexdump(p, size, cols, 2);
+}
+
+void hexdumpLongwords(u8 *p, size_t size, size_t cols)
+{
+    hexdump(p, size, cols, 4);
+}
+
 char *
 extractFirstPathComponent(const char *path)
 {

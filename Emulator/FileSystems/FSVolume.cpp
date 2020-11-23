@@ -695,7 +695,7 @@ FSVolume::printDirectory(bool recursive)
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
     }
-    msg("%d items", items.size());
+    msg("%d items\n", items.size());
 }
 
 FSError

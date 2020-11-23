@@ -33,9 +33,6 @@ RgbColor::RgbColor(const YuvColor &c)
 RgbColor
 RgbColor::mix(RgbColor additive, double weight)
 {
-    // printf("mix: old %f %f %f weight = %f\n", r, g, b, weight);
-    // printf("mix: add %f %f %f\n", additive.r, additive.g, additive.b);
-
     assert(additive.r <= 1.0);
     assert(additive.g <= 1.0);
     assert(additive.b <= 1.0);
@@ -43,9 +40,6 @@ RgbColor::mix(RgbColor additive, double weight)
     double newR = r + (additive.r - r) * weight;
     double newG = g + (additive.g - g) * weight;
     double newB = b + (additive.b - b) * weight;
-
-    // RgbColor c = RgbColor(newR, newG, newB);
-    // printf("mix: new %f %f %f\n", c.r, c.g, c.b);
 
     return RgbColor(newR, newG, newB);
 }

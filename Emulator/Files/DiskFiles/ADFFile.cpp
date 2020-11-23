@@ -398,18 +398,7 @@ ADFFile::encodeSector(Disk *disk, Track t, Sector s)
 void
 ADFFile::dumpSector(int num)
 {
-    u8 *p = data + 512 * num;
-    int cols = 32;
-
-    printf("Sector %d\n", num);
-    for (int y = 0; y < 512 / cols; y++) {
-        for (int x = 0; x < cols; x++) {
-            printf("%02X ", p[y*cols + x]);
-            if ((x % 4) == 3) printf(" ");
-        }
-        printf("\n");
-    }
-    printf("\n");
+    hexdump(data + 512 * num, 512);
 }
 
 bool
