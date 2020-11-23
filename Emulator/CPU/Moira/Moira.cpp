@@ -26,13 +26,17 @@ namespace moira {
 
 Moira::Moira()
 {
-    info = new InstrInfo[65536];
+    if (BUILD_INSTR_INFO_TABLE) {
+        info = new InstrInfo[65536];
+    }
+    dasm = new DasmPtr[65536];
     createJumpTables();
 }
 
 Moira::~Moira()
 {
-    delete [] info;
+    if (info) delete [] info;
+    if (dasm) delete [] dasm;
 }
 
 void
@@ -399,6 +403,7 @@ Moira::disassembleSR(const StatusRegister &sr, char *str)
     str[16] = 0;
 }
 
+/*
 void
 Moira::disassembleSR(u16 sr, char *str)
 {
@@ -419,6 +424,18 @@ Moira::disassembleSR(u16 sr, char *str)
     str[14] = (sr & 0b0000000000000010) ? 'V' : 'v';
     str[15] = (sr & 0b0000000000000001) ? 'C' : 'c';
     str[16] = 0;
+}
+*/
+
+InstrInfo
+Moira::getInfo(u16 op)
+{
+    if (info) return info[op];
+
+    printf("Enable BUILD_INSTR_INFO_TABLE to use this functionality.");
+    assert(false);
+    
+    return InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
 }
 
 // Make sure the compiler generates certain instances of template functions
