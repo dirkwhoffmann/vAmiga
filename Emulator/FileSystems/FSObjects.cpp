@@ -130,6 +130,6 @@ FSTime::print()
     time_t tt = time();
     tm *t = localtime(&tt);
     
-    printf("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
-    printf("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
+    msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
+    msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
 }

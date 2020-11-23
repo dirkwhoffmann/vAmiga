@@ -10,14 +10,11 @@
 #ifndef _FS_BLOCKS_H
 #define _FS_BLOCKS_H
 
-#include "Utils.h"
-#include "FSTypes.h"
 #include "FSObjects.h"
-#include <string>
 
 using std::string;
 
-struct FSBlock {
+struct FSBlock : AmigaObject {
     
     // The volume this block belongs to
     class FSVolume &volume;

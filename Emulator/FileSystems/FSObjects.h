@@ -10,10 +10,9 @@
 #ifndef _FS_OBJECTS_H
 #define _FS_OBJECTS_H
 
-#include <time.h>
-#include "Aliases.h"
+#include "AmigaObject.h"
 
-struct FSString {
+struct FSString : AmigaObject {
     
     // File system identifier stored as a C string
     char str[92];
@@ -39,6 +38,8 @@ struct FSName : FSString {
     FSName(const char *cString) : FSString(cString, 30) {rectify(); }
     FSName(const u8 *bcplString) : FSString(bcplString, 30) { rectify(); }
 
+    const char *getDescription() override { return "FSName"; }
+
     // Scans the given name and replaces invalid characters by dummy symbols
     void rectify();
 };
@@ -47,9 +48,11 @@ struct FSComment : FSString {
     
     FSComment(const char *cString) : FSString(cString, 91) { }
     FSComment(const u8 *bcplString) : FSString(bcplString, 91) { }
+
+    const char *getDescription() override { return "FSComment"; }
 };
 
-struct FSTime {
+struct FSTime : AmigaObject {
     
     u32 days;
     u32 mins;
@@ -57,6 +60,8 @@ struct FSTime {
     
     FSTime(time_t t);
     FSTime(const u8 *p);
+
+    const char *getDescription() override { return "FSTime"; }
 
     time_t time();
     void write(u8 *p);

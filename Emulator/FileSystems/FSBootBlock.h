@@ -17,11 +17,23 @@ struct FSBootBlock : FSBlock {
     FSBootBlock(FSVolume &ref, u32 nr);
     ~FSBootBlock();
     
+    const char *getDescription() override { return "FSBootBlock"; }
+
+    
+    //
+    // Methods from Block class
+    //
+
     FSBlockType type() override { return FS_BOOT_BLOCK; }
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
-        
+    
+    
+    //
+    // Block specific methods
+    //
+
     void writeBootCode();
 };
 
