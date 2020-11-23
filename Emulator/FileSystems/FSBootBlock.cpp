@@ -63,9 +63,9 @@ FSBootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSBootBlock::dump()
 {
-    printf("     Header : ");
-    for (int i = 0; i < 8; i++) printf("%02X ", data[i]);
-    printf("\n");
+    msg("     Header : ");
+    for (int i = 0; i < 8; i++) msg("%02X ", data[i]);
+    msg("\n");
 }
 
 void

@@ -65,7 +65,10 @@ struct FSTime : AmigaObject {
 
     time_t time();
     void write(u8 *p);
-    void print();
+
+    string dateStr();
+    string timeStr();    
+    string str();
 };
 
 #endif

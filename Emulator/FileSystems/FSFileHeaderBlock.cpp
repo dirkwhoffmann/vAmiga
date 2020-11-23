@@ -107,20 +107,20 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSFileHeaderBlock::dump()
 {
-    printf("           Name : %s\n", getName().c_str());
-    printf("        Comment : %s\n", getComment().c_str());
-    printf("        Created : ");    getCreationDate().print(); printf("\n");
-    printf("           Next : %d\n", getNextHashRef());
-    printf("      File size : %d\n", getFileSize());
+    msg("           Name : %s\n", getName().c_str());
+    msg("        Comment : %s\n", getComment().c_str());
+    msg("        Created : %s\n", getCreationDate().str().c_str());
+    msg("           Next : %d\n", getNextHashRef());
+    msg("      File size : %d\n", getFileSize());
 
-    printf("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
-    printf("          First : %d\n", getFirstDataBlockRef());
-    printf("     Parent dir : %d\n", getParentDirRef());
-    printf(" FileList block : %d\n", getNextListBlockRef());
+    msg("    Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+    msg("          First : %d\n", getFirstDataBlockRef());
+    msg("     Parent dir : %d\n", getParentDirRef());
+    msg(" FileList block : %d\n", getNextListBlockRef());
     
-    printf("    Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
-    printf("\n");
+    msg("    Data blocks : ");
+    for (u32 i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    msg("\n");
 }
 
 FSError
@@ -167,7 +167,7 @@ FSFileHeaderBlock::writeData(FILE *file)
                 
             } else {
                 
-                printf("Ignoring block %d (no data block)\n", ref);
+                warn("Ignoring block %d (no data block)\n", ref);
             }
         }
         
@@ -176,7 +176,7 @@ FSFileHeaderBlock::writeData(FILE *file)
     }
     
     if (bytesRemaining != 0) {
-        printf("%ld remaining bytes. Expected 0.\n", bytesRemaining);
+        warn("%ld remaining bytes. Expected 0.\n", bytesRemaining);
     }
     
     return bytesTotal;
@@ -198,12 +198,12 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         numDataListBlocks = 1 + (numDataBlocks - max) / max;
     }
 
-    printf("Required data blocks : %d\n", numDataBlocks);
-    printf("Required list blocks : %d\n", numDataListBlocks);
-    printf("         Free blocks : %d out of %d\n", volume.freeBlocks(), volume.numBlocks());
+    debug(FS_DEBUG, "Required data blocks : %d\n", numDataBlocks);
+    debug(FS_DEBUG, "Required list blocks : %d\n", numDataListBlocks);
+    debug(FS_DEBUG, "         Free blocks : %d\n", volume.freeBlocks());
     
     if (volume.freeBlocks() < numDataBlocks + numDataListBlocks) {
-        printf("Not enough free blocks\n");
+        warn("Not enough free blocks\n");
         return 0;
     }
     

@@ -252,7 +252,7 @@ FSBlock::dumpHashTable()
         
         u32 value = read32(data + 24 + 4 * i);
         if (value) {
-            printf("%d: %d ", i, value);
+            msg("%d: %d ", i, value);
         }
     }
 }

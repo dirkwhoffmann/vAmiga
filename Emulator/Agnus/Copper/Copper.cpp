@@ -596,6 +596,6 @@ void
 Copper::dumpCopperList(unsigned list, unsigned length)
 {
     for (unsigned i = 0; i < length; i++) {
-        printf("%s\n", disassemble(list, 2*i));
+        msg("%s\n", disassemble(list, 2*i));
     }
 }

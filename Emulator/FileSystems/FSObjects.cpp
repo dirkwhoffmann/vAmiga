@@ -124,6 +124,42 @@ FSTime::write(u8 *p)
     FSBlock::write32(p + 8, ticks);
 }
 
+string
+FSTime::dateStr()
+{
+    char tmp[11];
+    
+    time_t t = time();
+    tm *local = localtime(&t);
+
+    snprintf(tmp, sizeof(tmp), "%04d-%02d-%02d",
+             1900 + local->tm_year, 1 + local->tm_mon, local->tm_mday);
+    
+    return string(tmp);
+}
+
+string
+FSTime::timeStr()
+{
+    char tmp[9];
+    
+    time_t t = time();
+    tm *local = localtime(&t);
+
+    snprintf(tmp, sizeof(tmp), "%02d:%02d:%02d",
+             local->tm_hour, local->tm_min, local->tm_sec);
+    
+    return string(tmp);
+}
+
+string
+FSTime::str()
+{
+    string result = dateStr() + "  " + timeStr();
+    return result;
+}
+
+/*
 void
 FSTime::print()
 {
@@ -133,3 +169,4 @@ FSTime::print()
     msg("%04d-%02d-%02d  ", 1900 + t->tm_year, 1 + t->tm_mon, t->tm_mday);
     msg("%02d:%02d:%02d  ", t->tm_hour, t->tm_min, t->tm_sec);
 }
+*/

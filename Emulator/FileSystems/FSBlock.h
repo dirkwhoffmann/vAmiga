@@ -12,8 +12,6 @@
 
 #include "FSObjects.h"
 
-using std::string;
-
 struct FSBlock : AmigaObject {
     
     // The volume this block belongs to
