@@ -29,6 +29,16 @@
  */
 #define EMULATE_FC true
 
+/* Set to true to build the InstrInfo lookup table.
+ *
+ * The info table stores information about the instruction (Instr I), the
+ * addressing mode (Mode M), and the size attribute (Size S) for all 65536
+ * instruction words. The table is meant to provide data for, e.g., external
+ * debuggers. It is not needed by Moira itself and therefore disabled by
+ * default.
+ */
+#define BUILD_INSTR_INFO_TABLE false
+
 /* Set to true to run Moira in a special Musashi compatibility mode.
  *
  * The compatibility mode is used by the test runner application to compare

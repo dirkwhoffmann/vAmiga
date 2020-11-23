@@ -115,13 +115,17 @@ protected:
     int exception;
 
     // Jump table holding the instruction handlers
-    void (Moira::*exec[65536])(u16);
+    typedef void (Moira::*ExecPtr)(u16);
+    ExecPtr exec[65536];
 
     // Jump table holding the disassebler handlers
-    void (Moira::*dasm[65536])(StrWriter&, u32&, u16);
-
+    typedef void (Moira::*DasmPtr)(StrWriter&, u32&, u16);
+    DasmPtr *dasm = nullptr;
+    
+private:
+    
     // Table holding instruction infos
-    InstrInfo *info;
+    InstrInfo *info = nullptr;
 
 
     //
@@ -164,7 +168,7 @@ private:
     
 
     //
-    // Running the disassembler
+    // Running the Disassembler
     //
 
 public:
@@ -185,12 +189,12 @@ public:
     // Returns a textual representation for the status register
     void disassembleSR(char *str) { disassembleSR(reg.sr, str); }
     void disassembleSR(const StatusRegister &sr, char *str);
-    void disassembleSR(u16 sr, char *str); // DEPRECATED
+    // void disassembleSR(u16 sr, char *str); // DEPRECATED
 
     // Return an info struct for a certain opcode
-    InstrInfo getInfo(u16 op) { return info[op]; }
+    InstrInfo getInfo(u16 op); 
 
-
+    
     //
     // Interfacing with other components
     //
