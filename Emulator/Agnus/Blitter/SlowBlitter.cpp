@@ -1051,7 +1051,7 @@ Blitter::exec()
         trace(BLT_DEBUG, "    After shifting A (%d) A = %x\n", bltconASH(), ahold);
     }
 
-    if (instr & HOLD_B) {
+    if ((instr & HOLD_B) && (bltcon0 & 0x0400)) {
 
         trace(BLT_DEBUG, "HOLD_B\n");
 

@@ -312,6 +312,15 @@ Blitter::pokeBLTBDAT(u16 value)
     trace(BLT_GUARD && running, "BLTBDAT written while Blitter is running\n");
 
     bnew = value;
+    
+    // Immediately run the Barrel shifter
+    if (bltconDESC()) {
+        bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
+    } else {
+        bhold = HI_W_LO_W(bold, bnew) >> bltconBSH();
+    }
+    bold = bnew;
+
 }
 
 void
