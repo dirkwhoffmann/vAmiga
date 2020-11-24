@@ -264,6 +264,19 @@ public:
         
     
     //
+    // Traversing linked lists
+    //
+    
+    // Returns the last element in the list of extension blocks
+    FSBlock *lastFileListBlockInChain(u32 start);
+    FSBlock *lastFileListBlockInChain(FSBlock *block);
+
+    // Returns the last element in the list of blocks with the same hash
+    FSBlock *lastHashBlockInChain(u32 start);
+    FSBlock *lastHashBlockInChain(FSBlock *block);
+
+    
+    //
     // Traversing the file system
     //
     

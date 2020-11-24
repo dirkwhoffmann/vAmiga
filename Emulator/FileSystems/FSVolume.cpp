@@ -739,6 +739,53 @@ FSVolume::printDirectory(bool recursive)
     msg("%d items\n", items.size());
 }
 
+
+FSBlock *
+FSVolume::lastHashBlockInChain(u32 start)
+{
+    FSBlock *block = hashableBlock(start);
+    return block ? lastHashBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FSVolume::lastHashBlockInChain(FSBlock *block)
+{
+    std::set<u32> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSBlock *next = block->getNextHashBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block =next;
+    }
+    return nullptr;
+}
+
+FSBlock *
+FSVolume::lastFileListBlockInChain(u32 start)
+{
+    FSBlock *block = fileListBlock(start);
+    return block ? lastFileListBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FSVolume::lastFileListBlockInChain(FSBlock *block)
+{
+    std::set<u32> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSFileListBlock *next = block->getNextListBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block = next;
+    }
+    return nullptr;
+}
+
 FSError
 FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 {
