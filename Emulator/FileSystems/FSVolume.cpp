@@ -575,7 +575,6 @@ FSVolume::changeDir(const char *name)
     }
     
     FSBlock *subdir = seekDir(name);
-    // FSBlock *subdir = cdb->hashLookup(name);
     if (subdir == nullptr) return cdb;
     
     // Move one level down
@@ -619,7 +618,8 @@ FSVolume::makeDir(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
-    cdb->addToHashTable(block->nr);
+    addHashRef(block->nr);
+    
     return block;
 }
 
@@ -633,7 +633,7 @@ FSVolume::makeFile(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
-    cdb->addToHashTable(block->nr);
+    addHashRef(block->nr);
 
     return block;
 }
@@ -689,33 +689,43 @@ FSVolume::seekRef(FSName name)
     return 0;
 }
 
-/*
-FSBlock *
-FSVolume::seek(const char *name)
+void
+FSVolume::addHashRef(u32 ref)
 {
+    if (FSBlock *block = hashableBlock(ref)) {
+        addHashRef(block);
+    }
+}
+
+void
+FSVolume::addHashRef(FSBlock *newBlock)
+{
+    std::set<u32> visited;
+    
+    // Only proceed if a hash table is present
     FSBlock *cdb = currentDirBlock();
-    
-    return cdb->hashLookup(FSName(name));
-}
+    if (!cdb || cdb->hashTableSize() == 0) { return; }
 
-FSBlock *
-FSVolume::seekDir(const char *name)
-{
-    FSBlock *block = seek(name);
-    
-    if (!block || block->type() != FS_USERDIR_BLOCK) return nullptr;
-    return block;
-}
+    // Read the item at the proper hash table location
+    u32 hash = newBlock->hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
 
-FSBlock *
-FSVolume::seekFile(const char *name)
-{
-    FSBlock *block = seek(name);
+    // If the slot is empty, put the reference there
+    if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
 
-    if (!block || block->type() != FS_FILEHEADER_BLOCK) return nullptr;
-    return block;
+    // Otherwise, traverse the linked list
+    while (ref && visited.find(ref) == visited.end())  {
+
+        FSBlock *block = hashableBlock(ref);
+        if (block == nullptr) {assert(false); break; }
+
+        u32 next = block->getNextHashRef();
+        if (next == 0) { block->setNextHashRef(newBlock->nr); return; }
+
+        visited.insert(ref);
+        ref = next;
+    }
 }
-*/
 
 void
 FSVolume::printDirectory(bool recursive)

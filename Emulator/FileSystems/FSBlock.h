@@ -22,10 +22,7 @@ struct FSBlock : AmigaObject {
     
     // Outcome of the last integrity check (0 = OK, n = n-th corrupted block)
     u32 corrupted = 0;
-    
-    // Used by the traversal algorithms to detect loops
-    // u64 visited = 0;
-    
+        
     // The actual block data
     u8 *data = nullptr;
 
@@ -95,7 +92,6 @@ struct FSBlock : AmigaObject {
 
     // Returns the location of the checksum inside this block
     virtual u32 checksumLocation() { return (u32)-1; }
-    // bool hasChecksum() { return checksumLocation() != (u32)-1; }
     
     // Computes a checksum for this block
     u32 checksum();
@@ -108,9 +104,6 @@ struct FSBlock : AmigaObject {
     // Debugging
     //
     
-    // Prints the full path of this block
-    // void printPath();
-
     // Prints some debug information for this block
     virtual void dump() { };
     virtual void dumpData();
@@ -215,7 +208,7 @@ public:
 
     // Looks up an item in the hash table
     u32 getHashRef(u32 nr);
-    // FSBlock *hashLookup(FSName name);
+    void setHashRef(u32 nr, u32 ref);
 
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);

@@ -249,6 +249,10 @@ public:
     FSBlock *seekDir(const char *name) { return userDirBlock(seekRef(name)); }
     FSBlock *seekFile(const char *name) { return fileHeaderBlock(seekRef(name)); }
 
+    // Adds a reference to the current directory
+    void addHashRef(u32 ref);
+    void addHashRef(FSBlock *block);
+    
     // Creates a new directory entry
     FSBlock *makeDir(const char *name);
     FSBlock *makeFile(const char *name);

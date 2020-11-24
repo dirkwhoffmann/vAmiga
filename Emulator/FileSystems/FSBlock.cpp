@@ -191,30 +191,12 @@ FSBlock::getHashRef(u32 nr)
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
 
-/*
-FSBlock *
-FSBlock::hashLookup(FSName name)
+void
+FSBlock::setHashRef(u32 nr, u32 ref)
 {
-    // Don't call this function if no hash table is present
-    assert(hashTableSize() != 0);
-
-    // Compute hash value and table position
-    u32 hash = name.hashValue() % hashTableSize();
-    
-    // Read the entry
-    u32 blockRef = getHashRef(hash);
-    FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
-    
-    // Traverse the linked list until the item has been found
-    for (int i = 0; block && i < searchLimit; i++) {
-
-        if (block->isNamed(name)) return block;
-        block = block->getNextHashBlock();
-    }
-
-    return nullptr;
+    if (nr < hashTableSize()) set32(6 + nr, ref);
 }
-*/
+
 
 void
 FSBlock::addToHashTable(u32 ref)
@@ -246,6 +228,7 @@ FSBlock::addToHashTable(u32 ref)
         }
     }
 }
+
 
 void
 FSBlock::dumpHashTable()
