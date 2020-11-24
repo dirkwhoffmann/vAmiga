@@ -700,8 +700,6 @@ FSVolume::addHashRef(u32 ref)
 void
 FSVolume::addHashRef(FSBlock *newBlock)
 {
-    std::set<u32> visited;
-    
     // Only proceed if a hash table is present
     FSBlock *cdb = currentDirBlock();
     if (!cdb || cdb->hashTableSize() == 0) { return; }
@@ -713,8 +711,14 @@ FSVolume::addHashRef(FSBlock *newBlock)
     // If the slot is empty, put the reference there
     if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
 
+    // Otherwise, put it into the last element of the block list chain
+    FSBlock *last = lastHashBlockInChain(ref);
+    if (last) last->setNextHashRef(newBlock->nr);
+    
     // Otherwise, traverse the linked list
-    while (ref && visited.find(ref) == visited.end())  {
+    /*
+     std::set<u32> visited;
+     while (ref && visited.find(ref) == visited.end())  {
 
         FSBlock *block = hashableBlock(ref);
         if (block == nullptr) {assert(false); break; }
@@ -725,6 +729,7 @@ FSVolume::addHashRef(FSBlock *newBlock)
         visited.insert(ref);
         ref = next;
     }
+    */
 }
 
 void
