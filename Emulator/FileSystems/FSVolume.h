@@ -243,9 +243,11 @@ public:
     string getPath() { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
-    FSBlock *seek(const char *name);
-    FSBlock *seekDir(const char *name);
-    FSBlock *seekFile(const char *name);
+    u32 seekRef(FSName name);
+    u32 seekRef(const char *name) { return seekRef(FSName(name)); }
+    FSBlock *seek(const char *name) { return block(seekRef(name)); }
+    FSBlock *seekDir(const char *name) { return userDirBlock(seekRef(name)); }
+    FSBlock *seekFile(const char *name) { return fileHeaderBlock(seekRef(name)); }
 
     // Creates a new directory entry
     FSBlock *makeDir(const char *name);

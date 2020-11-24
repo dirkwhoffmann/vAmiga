@@ -215,7 +215,7 @@ public:
 
     // Looks up an item in the hash table
     u32 getHashRef(u32 nr);
-    FSBlock *hashLookup(FSName name);
+    // FSBlock *hashLookup(FSName name);
 
     // Adds a reference to the hash table
     void addToHashTable(u32 ref);

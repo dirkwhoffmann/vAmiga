@@ -574,8 +574,9 @@ FSVolume::changeDir(const char *name)
         return currentDirBlock();
     }
     
-    FSBlock *subdir = cdb->hashLookup(name);
-    if (!subdir) return cdb;
+    FSBlock *subdir = seekDir(name);
+    // FSBlock *subdir = cdb->hashLookup(name);
+    if (subdir == nullptr) return cdb;
     
     // Move one level down
     currentDir = subdir->nr;
@@ -660,6 +661,35 @@ FSVolume::makeFile(const char *name, const char *str)
     return makeFile(name, (const u8 *)str, strlen(str));
 }
 
+u32
+FSVolume::seekRef(FSName name)
+{
+    std::set<u32> visited;
+    
+    // Only proceed if a hash table is present
+    FSBlock *cdb = currentDirBlock();
+    if (!cdb || cdb->hashTableSize() == 0) return 0;
+    
+    // Compute the table position and read the item
+    u32 hash = name.hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
+    
+    // Traverse the linked list until the item has been found
+    while (ref && visited.find(ref) == visited.end())  {
+        
+        FSBlock *item = hashableBlock(ref);
+        if (item == nullptr) break;
+        
+        if (item->isNamed(name)) return item->nr;
+
+        visited.insert(ref);
+        ref = item->getNextHashRef();
+    }
+
+    return 0;
+}
+
+/*
 FSBlock *
 FSVolume::seek(const char *name)
 {
@@ -685,6 +715,7 @@ FSVolume::seekFile(const char *name)
     if (!block || block->type() != FS_FILEHEADER_BLOCK) return nullptr;
     return block;
 }
+*/
 
 void
 FSVolume::printDirectory(bool recursive)

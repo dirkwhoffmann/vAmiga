@@ -191,6 +191,7 @@ FSBlock::getHashRef(u32 nr)
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
 
+/*
 FSBlock *
 FSBlock::hashLookup(FSName name)
 {
@@ -213,6 +214,7 @@ FSBlock::hashLookup(FSName name)
 
     return nullptr;
 }
+*/
 
 void
 FSBlock::addToHashTable(u32 ref)
