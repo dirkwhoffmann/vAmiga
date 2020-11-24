@@ -244,6 +244,8 @@ FSFileHeaderBlock::addDataBlockRef(u32 ref)
 bool
 FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
 {
+    std::set<u32> visited;
+    
     // If this block has space for more references, add it here
     if (getNumDataBlockRefs() < getMaxDataBlockRefs()) {
 
@@ -256,12 +258,14 @@ FSFileHeaderBlock::addDataBlockRef(u32 first, u32 ref)
     // Otherwise, add it to an extension block
     FSFileListBlock *item = getNextListBlock();
     
-    for (int i = 0; item && i < searchLimit; i++) {
+    while (item) {
+        
+        // Break the loop if we visit a block twice
+        if (visited.find(item->nr) != visited.end()) return false;
         
         if (item->addDataBlockRef(first, ref)) return true;
         item = item->getNextListBlock();
     }
     
-    assert(false);
     return false;
 }

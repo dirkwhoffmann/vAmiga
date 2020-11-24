@@ -197,39 +197,6 @@ FSBlock::setHashRef(u32 nr, u32 ref)
     if (nr < hashTableSize()) set32(6 + nr, ref);
 }
 
-
-void
-FSBlock::addToHashTable(u32 ref)
-{
-    FSBlock *block = volume.block(ref);
-    if (block == nullptr) return;
-    
-    // Don't call this function if no hash table is present
-    assert(hashTableSize() != 0);
-        
-    // Compute hash value and table position
-    u32 hash = block->hashValue() % hashTableSize();
-    u8 *tableEntry = data + 24 + 4 * hash;
-    
-    // If the hash table slot is empty, put the reference there
-    if (read32(tableEntry) == 0) { write32(tableEntry, ref); return; }
-        
-    // Otherwise, add the reference at the end of the linked list
-    if (auto item = volume.block(read32(tableEntry))) {
-        
-        for (int i = 0; i < searchLimit; i++) {
-            
-            if (item->getNextHashBlock() == nullptr) {
-                item->setNextHashRef(ref);
-                return;
-            }
-            
-            item = item->getNextHashBlock();
-        }
-    }
-}
-
-
 void
 FSBlock::dumpHashTable()
 {

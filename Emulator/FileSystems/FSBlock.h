@@ -28,14 +28,6 @@ struct FSBlock : AmigaObject {
 
     
     //
-    // Constants and static methods
-    //
-
-    // Search limit to avoid infinite list walks
-    static const long searchLimit = 255;
-        
-        
-    //
     // Constructing
     //
     
@@ -211,7 +203,7 @@ public:
     void setHashRef(u32 nr, u32 ref);
 
     // Adds a reference to the hash table
-    void addToHashTable(u32 ref);
+    // void addToHashTable(u32 ref);
 
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();
