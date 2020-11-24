@@ -189,7 +189,6 @@ public:
     // Returns a textual representation for the status register
     void disassembleSR(char *str) { disassembleSR(reg.sr, str); }
     void disassembleSR(const StatusRegister &sr, char *str);
-    // void disassembleSR(u16 sr, char *str); // DEPRECATED
 
     // Return an info struct for a certain opcode
     InstrInfo getInfo(u16 op); 

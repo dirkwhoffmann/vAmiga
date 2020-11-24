@@ -26,10 +26,9 @@ namespace moira {
 
 Moira::Moira()
 {
-    if (BUILD_INSTR_INFO_TABLE) {
-        info = new InstrInfo[65536];
-    }
-    dasm = new DasmPtr[65536];
+    if (BUILD_INSTR_INFO_TABLE) info = new InstrInfo[65536];
+    if (ENABLE_DASM) dasm = new DasmPtr[65536];
+
     createJumpTables();
 }
 
@@ -345,6 +344,13 @@ Moira::getIrqVector(int level) {
 int
 Moira::disassemble(u32 addr, char *str)
 {
+    if (ENABLE_DASM == false) {
+
+        printf("This feature requires ENABLE_DASM = true\n");
+        assert(false);
+        return 0;
+    }
+
     u32 pc     = addr;
     u16 opcode = read16Dasm(pc);
 
@@ -428,12 +434,14 @@ Moira::disassembleSR(u16 sr, char *str)
 InstrInfo
 Moira::getInfo(u16 op)
 {
-    if (info) return info[op];
+    if (BUILD_INSTR_INFO_TABLE == false) {
 
-    printf("Enable BUILD_INSTR_INFO_TABLE to use this functionality.");
-    assert(false);
-    
-    return InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
+        printf("This feature requires BUILD_INSTR_INFO_TABLE = true\n");
+        assert(false);
+        return InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
+    }
+        
+    return info[op];    
 }
 
 // Make sure the compiler generates certain instances of template functions

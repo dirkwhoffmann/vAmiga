@@ -29,6 +29,13 @@
  */
 #define EMULATE_FC true
 
+/* Set to true to enable the disassembler.
+ *
+ * The disassembler requires a jump table which consumes about 1MB of memory.
+ * By disabling the disassembler, you can save this amount of memory.
+ */
+#define ENABLE_DASM true
+
 /* Set to true to build the InstrInfo lookup table.
  *
  * The info table stores information about the instruction (Instr I), the
