@@ -865,7 +865,7 @@ Snapshot *
 Amiga::latestAutoSnapshot()
 {
     Snapshot *result = autoSnapshot;
-    autoSnapshot = NULL;
+    autoSnapshot = nullptr;
     return result;
 }
 
@@ -873,7 +873,7 @@ Snapshot *
 Amiga::latestUserSnapshot()
 {
     Snapshot *result = userSnapshot;
-    userSnapshot = NULL;
+    userSnapshot = nullptr;
     return result;
 }
 
