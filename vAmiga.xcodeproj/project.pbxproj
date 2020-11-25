@@ -193,6 +193,8 @@
 		50E2BE39240D41EE00155AE4 /* Moira.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E2BE37240D41EE00155AE4 /* Moira.cpp */; };
 		50E5754024C01AFA00309084 /* EncryptedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E5753E24C01AFA00309084 /* EncryptedRomFile.cpp */; };
 		50E79BE9232D123000D296FB /* AmigaComponent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50E79BE7232D123000D296FB /* AmigaComponent.cpp */; };
+		50EAD99C256E76820053F9AC /* HDFFile.h in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99B256E76820053F9AC /* HDFFile.h */; };
+		50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50EAD99F256E76A40053F9AC /* HDFFile.cpp */; };
 		50EB8CCA25306E8E0053988A /* ExportVideoDialog.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */; };
 		50EB8CCE2530710E0053988A /* ExportVideoDialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */; };
 		50ECF98622B153FB007B3DE7 /* ExtendedRomFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */; };
@@ -519,6 +521,8 @@
 		50E5753F24C01AFA00309084 /* EncryptedRomFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EncryptedRomFile.h; sourceTree = "<group>"; };
 		50E79BE7232D123000D296FB /* AmigaComponent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = AmigaComponent.cpp; sourceTree = "<group>"; };
 		50E79BE8232D123000D296FB /* AmigaComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AmigaComponent.h; sourceTree = "<group>"; };
+		50EAD99B256E76820053F9AC /* HDFFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HDFFile.h; sourceTree = "<group>"; };
+		50EAD99F256E76A40053F9AC /* HDFFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = HDFFile.cpp; sourceTree = "<group>"; };
 		50EB8CC925306E8E0053988A /* ExportVideoDialog.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ExportVideoDialog.xib; sourceTree = "<group>"; };
 		50EB8CCD2530710E0053988A /* ExportVideoDialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportVideoDialog.swift; sourceTree = "<group>"; };
 		50ECF98422B153FB007B3DE7 /* ExtendedRomFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ExtendedRomFile.cpp; sourceTree = "<group>"; };
@@ -609,6 +613,8 @@
 				508833EC21F0D21B009890EA /* ADFFile.cpp */,
 				5009B7FB2557051A0037288E /* EXTFile.h */,
 				5009B7FA2557051A0037288E /* EXTFile.cpp */,
+				50EAD99B256E76820053F9AC /* HDFFile.h */,
+				50EAD99F256E76A40053F9AC /* HDFFile.cpp */,
 				50FAC76F2515EBED00E47421 /* IMGFile.h */,
 				50FAC76E2515EBED00E47421 /* IMGFile.cpp */,
 				50F54B3224B5DDAF0078FDC9 /* DMSFile.h */,
@@ -1381,6 +1387,7 @@
 				50F54B2724B5D31D0078FDC9 /* u_deep.c in Sources */,
 				508FDFAD21EA1FBC0043D0E9 /* CIA.cpp in Sources */,
 				504C48B424143AB4008ADAB3 /* AgnusDma.cpp in Sources */,
+				50EAD9A0256E76A40053F9AC /* HDFFile.cpp in Sources */,
 				5072CAFA2456D1C800C8F606 /* AudioPrefs.swift in Sources */,
 				508FDFD521EA20510043D0E9 /* Animation.swift in Sources */,
 				50AE6EDF24D93EDD000AA367 /* AgnusRegisters.cpp in Sources */,
@@ -1518,6 +1525,7 @@
 				502EFD0C2248ECAA00F0E118 /* EventTableView.swift in Sources */,
 				50F54B2824B5D31D0078FDC9 /* u_medium.c in Sources */,
 				508FE01921EA227B0043D0E9 /* MyControllerMenu.swift in Sources */,
+				50EAD99C256E76820053F9AC /* HDFFile.h in Sources */,
 				50AEBEDE24D3D8700037082D /* AgnusEvents.cpp in Sources */,
 				50FAC77525160BBF00E47421 /* DiskFile.cpp in Sources */,
 				508FE01C21EA227B0043D0E9 /* MemTableView.swift in Sources */,

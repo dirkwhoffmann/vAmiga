@@ -760,6 +760,20 @@ struct SerialPortWrapper;
 
 
 //
+// HDFFileProxy
+//
+
+@interface HDFFileProxy : DiskFileProxy {
+}
+
++ (BOOL)isHDFFile:(NSString *)path;
++ (instancetype)makeWithBuffer:(const void *)buffer length:(NSInteger)length;
++ (instancetype)makeWithFile:(NSString *)path;
+
+@end
+
+
+//
 // EXTFileProxy
 //
 

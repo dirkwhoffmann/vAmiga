@@ -1579,6 +1579,35 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
+// HDFFileProxy
+//
+
+@implementation HDFFileProxy
+
++ (BOOL)isHDFFile:(NSString *)path
+{
+    return HDFFile::isHDFFile([path fileSystemRepresentation]);
+}
++ (instancetype) make:(HDFFile *)archive
+{
+    if (archive == NULL) return nil;
+    return [[self alloc] initWithFile:archive];
+}
++ (instancetype) makeWithBuffer:(const void *)buffer length:(NSInteger)length
+{
+    HDFFile *archive = HDFFile::makeWithBuffer((const u8 *)buffer, length);
+    return [self make: archive];
+}
++ (instancetype) makeWithFile:(NSString *)path
+{
+    HDFFile *archive = HDFFile::makeWithFile([path fileSystemRepresentation]);
+    return [self make: archive];
+}
+
+@end
+
+
+//
 // EXTFileProxy
 //
 

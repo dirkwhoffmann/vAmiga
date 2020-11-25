@@ -91,6 +91,7 @@ class MyDocument: NSDocument {
         
         case "VAMIGA": return .FILETYPE_SNAPSHOT
         case "ADF":    return .FILETYPE_ADF
+        case "HDF":    return .FILETYPE_HDF
         case "IMG":    return .FILETYPE_IMG
         case "IMA":    return .FILETYPE_IMG
         case "DMS":    return .FILETYPE_DMS
@@ -158,6 +159,9 @@ class MyDocument: NSDocument {
                 }
             }
 
+        case .FILETYPE_HDF:
+            result = HDFFileProxy.make(withBuffer: buffer, length: length)
+            
         case .FILETYPE_DMS:
             result = DMSFileProxy.make(withBuffer: buffer, length: length)
 
@@ -184,6 +188,7 @@ class MyDocument: NSDocument {
         track("Trying to create ADF proxy from URL \(url.lastPathComponent).")
                 
         let types = [ AmigaFileType.FILETYPE_ADF,
+                      AmigaFileType.FILETYPE_HDF,
                       AmigaFileType.FILETYPE_DMS,
                       AmigaFileType.FILETYPE_EXE,
                       AmigaFileType.FILETYPE_DIR ]
@@ -208,6 +213,7 @@ class MyDocument: NSDocument {
         let types: [AmigaFileType] = [
             .FILETYPE_SNAPSHOT,
             .FILETYPE_ADF,
+            .FILETYPE_HDF,
             .FILETYPE_EXT,
             .FILETYPE_IMG,
             .FILETYPE_DMS,
@@ -242,6 +248,21 @@ class MyDocument: NSDocument {
             } else {
                 runDiskMountDialog()
             }
+            
+        case _ as HDFFileProxy:
+            
+            track()
+            
+            parent.warning("This file is a hard drive image (HDF)",
+                           "Hard drive emulation is not supported yet.",
+                           icon: "hdf")
+            
+        // Experimental code: The current version of vAmiga does not
+        // support hard drives. If a HDF file is dragged in, we open the
+        // disk export dialog for debugging purposes. It enables us to
+        // examine the contents of the HDF and to check for file system
+        // errors.
+        // parent.exportDiskAction(NSMenuItem.init())
             
         case _ as IMGFileProxy:
             
