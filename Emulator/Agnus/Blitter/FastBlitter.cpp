@@ -57,7 +57,7 @@ Blitter::beginFastCopyBlit()
     assert(!bltconLINE());
 
     // Run the fast copy Bliter
-    int nr = ((bltcon0 >> 7) & 0b11110) | !!bltconDESC();
+    int nr = ((bltcon0 >> 7) & 0b11110) | bltconDESC();
     (this->*blitfunc[nr])();
 
     // Terminate immediately
@@ -78,8 +78,8 @@ void Blitter::doFastCopyBlit()
     bool fillCarry;
 
     int incr = desc ? -2 : 2;
-    int ash = desc ? 16 - bltconASH() : bltconASH();
-    int bsh = desc ? 16 - bltconBSH() : bltconBSH();
+    int ash  = desc ? 16 - bltconASH() : bltconASH();
+    int bsh  = desc ? 16 - bltconBSH() : bltconBSH();
     i32 amod = desc ? -bltamod : bltamod;
     i32 bmod = desc ? -bltbmod : bltbmod;
     i32 cmod = desc ? -bltcmod : bltcmod;
@@ -121,12 +121,33 @@ void Blitter::doFastCopyBlit()
                 trace(BLT_DEBUG, "    C = peek(%X) = %X\n", cpt, chold);
                 cpt += incr;
             }
-            trace(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n", anew, bnew, chold);
+            
+            trace(BLT_DEBUG, "    After fetch: A = %x B = %x C = %x\n",
+                  anew, bnew, chold);
+            trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n",
+                  mask, bltafwm, bltalwm, anew & mask);
+            trace(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n",
+                  bltconASH(), bltconBSH(), mask);
 
-            trace(BLT_DEBUG, "    After masking with %x (%x,%x) %x\n", mask, bltafwm, bltalwm, anew & mask);
+            // Run the barrel shifter on path A (even if A channel is disabled)
+            if (desc) {
+                doBarrelAdesc(anew & mask, &aold, &ahold);
+            } else {
+                doBarrelA(anew & mask, &aold, &ahold);
+            }
+            
+            // Run the barrel shifter on path B (if B channel enabled)
+            if (useB) {
+                if (desc) {
+                    doBarrelBdesc(bnew, &bold, &bhold);
+                } else {
+                    doBarrelB(bnew, &bold, &bhold);
+                }
+            }
 
-            // Run the barrel shifters on data path A and B
-            trace(BLT_DEBUG, "    ash = %d bsh = %d mask = %X\n", bltconASH(), bltconBSH(), mask);
+            trace(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
+
+            /*
             if (desc) {
                 ahold = HI_W_LO_W(anew & mask, aold) >> ash;
                 bhold = HI_W_LO_W(bnew, bold) >> bsh;
@@ -136,8 +157,8 @@ void Blitter::doFastCopyBlit()
             }
             aold = anew & mask;
             bold = bnew;
-            trace(BLT_DEBUG, "    After shifting (%d,%d) A = %x B = %x\n", ash, bsh, ahold, bhold);
-
+            */
+            
             // Run the minterm logic circuit
             trace(BLT_DEBUG, "    Minterms: ahold = %X bhold = %X chold = %X bltcon0 = %X (hex)\n", ahold, bhold, chold, bltcon0);
             dhold = doMintermLogicQuick(ahold, bhold, chold, bltcon0 & 0xFF);

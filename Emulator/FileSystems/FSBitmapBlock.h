@@ -17,11 +17,23 @@ struct FSBitmapBlock : FSBlock {
     FSBitmapBlock(FSVolume &ref, u32 nr);
     ~FSBitmapBlock();
      
+    const char *getDescription() override { return "FSBitmapBlock"; }
+
+    
+    //
+    // Methods from Block class
+    //
+
     FSBlockType type() override { return FS_BITMAP_BLOCK; }
     FSItemType itemType(u32 byte) override;
     FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
     u32 checksumLocation() override { return 0; }
+
+    
+    //
+    // Block specific methods
+    //
 
     // Computes location of the allocation bit for a certain block
     void locateBlockBit(u32 nr, u32 *byte, u32 *bit);

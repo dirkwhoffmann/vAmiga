@@ -97,7 +97,6 @@ IMGFile::makeWithDisk(Disk *disk)
     
     if (img) {
         if (!img->decodeDisk(disk)) {
-            printf("Failed to decode DOS disk\n");
             delete img;
             return NULL;
         }

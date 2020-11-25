@@ -80,7 +80,6 @@ EncryptedRomFile::makeWithFile(const char *path)
         return NULL;
     }
     
-    printf("Made encr Rom at %p\n", rom);    
     return rom;
 }
 

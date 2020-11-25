@@ -231,8 +231,10 @@ class MyDocument: NSDocument {
 
         case _ as SnapshotProxy:
             
-            parent.load(snapshot: amigaAttachment as? SnapshotProxy)
-       
+            let proxy = amigaAttachment as! SnapshotProxy
+            parent.load(snapshot: proxy)
+            userSnapshots.append(proxy)
+            
         case _ as ADFFileProxy:
             
             if let df = parent.dragAndDropDrive?.nr {

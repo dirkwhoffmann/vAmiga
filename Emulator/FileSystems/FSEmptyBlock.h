@@ -16,6 +16,13 @@ struct FSEmptyBlock : FSBlock {
     
     FSEmptyBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr) { }
      
+    const char *getDescription() override { return "FSEmptyBlock"; }
+    
+    
+    //
+    // Methods from Block class
+    //
+
     FSBlockType type() override { return FS_EMPTY_BLOCK; }
     FSItemType itemType(u32 byte) override; 
     u32 typeID() override { return 0; }

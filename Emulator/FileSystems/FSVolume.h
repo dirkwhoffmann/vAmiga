@@ -75,9 +75,6 @@ public:
 
     // Creates a file system from a buffer (usually the data of an ADF)
     static FSVolume *makeWithADF(class ADFFile *adf, FSError *error);
-
-    // Creates a file system from a buffer (DEPRECATED)
-    // static FSVolume *make(const u8 *buffer, size_t size, size_t bsize, FSError *error);
     
     // Creates a file system with the contents of a host file system directory
     static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
@@ -246,10 +243,16 @@ public:
     string getPath() { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
-    FSBlock *seek(const char *name);
-    FSBlock *seekDir(const char *name);
-    FSBlock *seekFile(const char *name);
+    u32 seekRef(FSName name);
+    u32 seekRef(const char *name) { return seekRef(FSName(name)); }
+    FSBlock *seek(const char *name) { return block(seekRef(name)); }
+    FSBlock *seekDir(const char *name) { return userDirBlock(seekRef(name)); }
+    FSBlock *seekFile(const char *name) { return fileHeaderBlock(seekRef(name)); }
 
+    // Adds a reference to the current directory
+    void addHashRef(u32 ref);
+    void addHashRef(FSBlock *block);
+    
     // Creates a new directory entry
     FSBlock *makeDir(const char *name);
     FSBlock *makeFile(const char *name);
@@ -259,6 +262,19 @@ public:
     // Prints a directory listing
     void printDirectory(bool recursive);
         
+    
+    //
+    // Traversing linked lists
+    //
+    
+    // Returns the last element in the list of extension blocks
+    FSBlock *lastFileListBlockInChain(u32 start);
+    FSBlock *lastFileListBlockInChain(FSBlock *block);
+
+    // Returns the last element in the list of blocks with the same hash
+    FSBlock *lastHashBlockInChain(u32 start);
+    FSBlock *lastHashBlockInChain(FSBlock *block);
+
     
     //
     // Traversing the file system

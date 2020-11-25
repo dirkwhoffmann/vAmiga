@@ -312,6 +312,13 @@ Blitter::pokeBLTBDAT(u16 value)
     trace(BLT_GUARD && running, "BLTBDAT written while Blitter is running\n");
 
     bnew = value;
+    
+    // Writing BLTBDAT triggers the barrel shifter circuit (unlike BLTADAT)
+    if (bltconDESC()) {
+        doBarrelBdesc(bnew, &bold, &bhold);
+    } else {
+        doBarrelB(bnew, &bold, &bhold);
+    }    
 }
 
 void

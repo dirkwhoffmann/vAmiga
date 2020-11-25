@@ -21,7 +21,7 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
     setCreationDate(time(NULL));         // Creation date
     setModificationDate(time(NULL));     // Modification date
-    set32(-1, 1);                        // Sub type
+    set32(-1, 1);                        // Sub type    
 }
 
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
@@ -99,8 +99,8 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSRootBlock::dump()
 {
-    printf("        Name : %s\n", getName().c_str());
-    printf("     Created : "); getCreationDate().print(); printf("\n");
-    printf("    Modified : "); getModificationDate().print(); printf("\n");
-    printf("  Hash table : "); dumpHashTable(); printf("\n");
+    msg("        Name : %s\n", getName().c_str());
+    msg("     Created : %s\n", getCreationDate().str().c_str());
+    msg("    Modified : %s\n", getModificationDate().str().c_str());
+    msg("  Hash table : "); dumpHashTable(); printf("\n");
 }

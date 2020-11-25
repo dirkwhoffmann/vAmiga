@@ -23,13 +23,11 @@ Mutex::~Mutex()
 int
 Mutex::lock()
 {
-    // printf("Mutex lock\n");
     return pthread_mutex_lock(&mutex);
 }
 
 int
 Mutex::unlock()
 {
-    // printf("Mutex unlock\n");
     return pthread_mutex_unlock(&mutex);
 }

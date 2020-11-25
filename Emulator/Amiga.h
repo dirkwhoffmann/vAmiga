@@ -158,8 +158,8 @@ private:
     
 private:
     
-    Snapshot *autoSnapshot = NULL;
-    Snapshot *userSnapshot = NULL;
+    Snapshot *autoSnapshot = nullptr;
+    Snapshot *userSnapshot = nullptr;
 
     
     //

@@ -11,7 +11,7 @@
 
 FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[ref.bsize]();    
 }
 
 FSDataBlock::~FSDataBlock()
@@ -34,11 +34,11 @@ OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
 void
 OFSDataBlock::dump()
 {
-    printf("File header block : %d\n", getFileHeaderRef());
-    printf("     Chain number : %d\n", getDataBlockNr());
-    printf("       Data bytes : %d\n", getDataBytesInBlock());
-    printf("  Next data block : %d\n", getNextDataBlockRef());
-    printf("\n");
+    msg("File header block : %d\n", getFileHeaderRef());
+    msg("     Chain number : %d\n", getDataBlockNr());
+    msg("       Data bytes : %d\n", getDataBytesInBlock());
+    msg("  Next data block : %d\n", getNextDataBlockRef());
+    msg("\n");
 }
 
 FSItemType

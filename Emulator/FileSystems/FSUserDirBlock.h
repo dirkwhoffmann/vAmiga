@@ -18,6 +18,9 @@ struct FSUserDirBlock : FSBlock {
     FSUserDirBlock(FSVolume &ref, u32 nr, const char *name);
     ~FSUserDirBlock();
     
+    const char *getDescription() override { return "FSUserDirBlock"; }
+
+    
     //
     // Methods from Block class
     //
@@ -29,11 +32,6 @@ struct FSUserDirBlock : FSBlock {
     u32 checksumLocation() override { return 5; }
 
     FSError exportBlock(const char *path) override;
-
-    
-    //
-    // Accessing block items
-    //
 
     u32 getProtectionBits() override           { return get32(-48     );     }
     void setProtectionBits(u32 val) override   {        set32(-48, val);     }

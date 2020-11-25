@@ -57,7 +57,7 @@ FSBlock::check(bool strict)
 
         if ((error = check(i, &expected, strict)) != FS_OK) {
             count++;
-            if (FS_DEBUG) printf("Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
+             debug(FS_DEBUG, "Block %d [%d.%d]: %s\n", nr, i / 4, i % 4, sFSError(error));
         }
     }
 
@@ -88,17 +88,7 @@ FSBlock::write32(u8 *p, u32 value)
 void
 FSBlock::dumpData()
 {
-    int cols = 32;
-
-    printf("Block %d\n", nr);
-    for (int y = 0; y < 512 / cols; y++) {
-        for (int x = 0; x < cols; x++) {
-            printf("%02X ", data[y*cols + x]);
-            if ((x % 4) == 3) printf(" ");
-        }
-        printf("\n");
-    }
-    printf("\n");
+    hexdumpLongwords(data, 512);
 }
 
 u32
@@ -201,58 +191,10 @@ FSBlock::getHashRef(u32 nr)
     return (nr < hashTableSize()) ? get32(6 + nr) : 0;
 }
 
-FSBlock *
-FSBlock::hashLookup(FSName name)
-{
-    // Don't call this function if no hash table is present
-    assert(hashTableSize() != 0);
-
-    // Compute hash value and table position
-    u32 hash = name.hashValue() % hashTableSize();
-    
-    // Read the entry
-    u32 blockRef = getHashRef(hash);
-    FSBlock *block = blockRef ? volume.block(blockRef) : nullptr;
-    
-    // Traverse the linked list until the item has been found
-    for (int i = 0; block && i < searchLimit; i++) {
-
-        if (block->isNamed(name)) return block;
-        block = block->getNextHashBlock();
-    }
-
-    return nullptr;
-}
-
 void
-FSBlock::addToHashTable(u32 ref)
+FSBlock::setHashRef(u32 nr, u32 ref)
 {
-    FSBlock *block = volume.block(ref);
-    if (block == nullptr) return;
-    
-    // Don't call this function if no hash table is present
-    assert(hashTableSize() != 0);
-        
-    // Compute hash value and table position
-    u32 hash = block->hashValue() % hashTableSize();
-    u8 *tableEntry = data + 24 + 4 * hash;
-    
-    // If the hash table slot is empty, put the reference there
-    if (read32(tableEntry) == 0) { write32(tableEntry, ref); return; }
-        
-    // Otherwise, add the reference at the end of the linked list
-    if (auto item = volume.block(read32(tableEntry))) {
-        
-        for (int i = 0; i < searchLimit; i++) {
-            
-            if (item->getNextHashBlock() == nullptr) {
-                item->setNextHashRef(ref);
-                return;
-            }
-            
-            item = item->getNextHashBlock();
-        }
-    }
+    if (nr < hashTableSize()) set32(6 + nr, ref);
 }
 
 void
@@ -262,7 +204,7 @@ FSBlock::dumpHashTable()
         
         u32 value = read32(data + 24 + 4 * i);
         if (value) {
-            printf("%d: %d ", i, value);
+            msg("%d: %d ", i, value);
         }
     }
 }

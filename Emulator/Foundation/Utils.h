@@ -114,6 +114,17 @@ bool releaseBuild();
 
 
 //
+// Pretty printing
+//
+
+// Prints a hex dump of a buffer to the console (for debugging)
+void hexdump(u8 *p, size_t size, size_t cols, size_t pad);
+void hexdump(u8 *p, size_t size, size_t cols = 32);
+void hexdumpWords(u8 *p, size_t size, size_t cols = 32);
+void hexdumpLongwords(u8 *p, size_t size, size_t cols = 32);
+
+
+//
 // Handling files
 //
 

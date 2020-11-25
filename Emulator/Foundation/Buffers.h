@@ -144,19 +144,6 @@ struct SortedRingBuffer : public RingBuffer<T, capacity>
             oldw = p;
         }
     }
-
-    /*
-    void dump()
-    {
-        printf("%d elements (r = %d w = %d):\n", this->count(), this->r, this->w);
-        for (int i = this->r; i != this->w; i = this->next(i)) {
-            assert(i < capacity);
-            printf("%2i: [%lld] ", i, this->keys[i]);
-            printf("%d\n", this->elements[i]);
-        }
-        printf("\n");
-    }
-    */
 };
 
 
@@ -180,11 +167,6 @@ struct RegChange
     // Constructors
     RegChange() : addr(0), value(0) { }
     RegChange(u32 a, u16 v) : addr(a), value(v) { }
-
-    void print()
-    {
-        printf("addr: %x value: %x\n", addr, value);
-    }
 };
 
 template <int capacity>
@@ -193,17 +175,6 @@ struct RegChangeRecorder : public SortedRingBuffer<RegChange, capacity>
     // Returns the closest trigger cycle
     Cycle trigger() {
         return this->isEmpty() ? NEVER : this->keys[this->r];
-    }
-
-    void dump()
-    {
-        printf("%d elements (r = %d w = %d):\n", this->count(), this->r, this->w);
-        for (int i = this->r; i != this->w; i = this->next(i)) {
-            assert(i < capacity);
-            printf("%2i: [%lld] ", i, this->keys[i]);
-            this->elements[i].print();
-        }
-        printf("\n");
     }
 };
 

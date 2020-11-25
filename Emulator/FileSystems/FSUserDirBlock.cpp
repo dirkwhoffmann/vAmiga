@@ -96,7 +96,7 @@ FSUserDirBlock::dump()
 {
     printf("        Name: %s\n", getName().c_str());
     printf("     Comment: %s\n", getComment().c_str());
-    printf("     Created: ");    getCreationDate().print(); printf("\n");
+    printf("     Created: %s\n", getCreationDate().str().c_str());
     printf("      Parent: %d\n", getParentDirRef());
     printf("        Next: %d\n", getNextHashRef());
 }

@@ -17,6 +17,13 @@ struct FSDataBlock : FSBlock {
     FSDataBlock(FSVolume &ref, u32 nr);
     ~FSDataBlock();
     
+    const char *getDescription() override { return "FSDataBlock"; }
+
+    
+    //
+    // Methods from Block class
+    //
+
     FSBlockType type() override { return FS_DATA_BLOCK; }
     virtual u32 getDataBlockNr() = 0;
     virtual void setDataBlockNr(u32 val) = 0;
@@ -32,6 +39,12 @@ struct OFSDataBlock : FSDataBlock {
     static u32 headerSize() { return 24; }
 
     OFSDataBlock(FSVolume &ref, u32 nr);
+
+    
+    //
+    // Methods from Block class
+    //
+
     FSItemType itemType(u32 byte) override;
     void dump() override;
     FSError check(u32 pos, u8 *expected, bool strict) override;

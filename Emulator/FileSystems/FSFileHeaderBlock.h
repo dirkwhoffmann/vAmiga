@@ -17,6 +17,9 @@ struct FSFileHeaderBlock : FSBlock {
     FSFileHeaderBlock(FSVolume &ref, u32 nr);
     FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name);
 
+    const char *getDescription() override { return "FSFileHeaderBlock"; }
+
+    
     //
     // Methods from Block class
     //
@@ -28,11 +31,6 @@ struct FSFileHeaderBlock : FSBlock {
     u32 checksumLocation() override { return 5; }
 
     FSError exportBlock(const char *path) override;
-
-    
-    //
-    // Accessing block items
-    //
 
     u32 getNumDataBlockRefs() override          { return get32(2);            }
     void setNumDataBlockRefs(u32 val) override  {        set32(2, val);       }
@@ -69,6 +67,11 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getNextListBlockRef() override          { return get32(-2     );      }
     void setNextListBlockRef(u32 ref) override  {        set32(-2, ref);      }
 
+    
+    //
+    // Block specific methods
+    //
+    
     size_t writeData(FILE *file);
     size_t addData(const u8 *buffer, size_t size) override;
 

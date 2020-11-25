@@ -574,8 +574,8 @@ FSVolume::changeDir(const char *name)
         return currentDirBlock();
     }
     
-    FSBlock *subdir = cdb->hashLookup(name);
-    if (!subdir) return cdb;
+    FSBlock *subdir = seekDir(name);
+    if (subdir == nullptr) return cdb;
     
     // Move one level down
     currentDir = subdir->nr;
@@ -618,7 +618,8 @@ FSVolume::makeDir(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
-    cdb->addToHashTable(block->nr);
+    addHashRef(block->nr);
+    
     return block;
 }
 
@@ -632,7 +633,7 @@ FSVolume::makeFile(const char *name)
     if (block == nullptr) return nullptr;
     
     block->setParentDirRef(cdb->nr);
-    cdb->addToHashTable(block->nr);
+    addHashRef(block->nr);
 
     return block;
 }
@@ -660,30 +661,75 @@ FSVolume::makeFile(const char *name, const char *str)
     return makeFile(name, (const u8 *)str, strlen(str));
 }
 
-FSBlock *
-FSVolume::seek(const char *name)
+u32
+FSVolume::seekRef(FSName name)
 {
+    std::set<u32> visited;
+    
+    // Only proceed if a hash table is present
     FSBlock *cdb = currentDirBlock();
+    if (!cdb || cdb->hashTableSize() == 0) return 0;
     
-    return cdb->hashLookup(FSName(name));
+    // Compute the table position and read the item
+    u32 hash = name.hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
+    
+    // Traverse the linked list until the item has been found
+    while (ref && visited.find(ref) == visited.end())  {
+        
+        FSBlock *item = hashableBlock(ref);
+        if (item == nullptr) break;
+        
+        if (item->isNamed(name)) return item->nr;
+
+        visited.insert(ref);
+        ref = item->getNextHashRef();
+    }
+
+    return 0;
 }
 
-FSBlock *
-FSVolume::seekDir(const char *name)
+void
+FSVolume::addHashRef(u32 ref)
 {
-    FSBlock *block = seek(name);
-    
-    if (!block || block->type() != FS_USERDIR_BLOCK) return nullptr;
-    return block;
+    if (FSBlock *block = hashableBlock(ref)) {
+        addHashRef(block);
+    }
 }
 
-FSBlock *
-FSVolume::seekFile(const char *name)
+void
+FSVolume::addHashRef(FSBlock *newBlock)
 {
-    FSBlock *block = seek(name);
+    // Only proceed if a hash table is present
+    FSBlock *cdb = currentDirBlock();
+    if (!cdb || cdb->hashTableSize() == 0) { return; }
 
-    if (!block || block->type() != FS_FILEHEADER_BLOCK) return nullptr;
-    return block;
+    // Read the item at the proper hash table location
+    u32 hash = newBlock->hashValue() % cdb->hashTableSize();
+    u32 ref = cdb->getHashRef(hash);
+
+    // If the slot is empty, put the reference there
+    if (ref == 0) { cdb->setHashRef(hash, newBlock->nr); return; }
+
+    // Otherwise, put it into the last element of the block list chain
+    FSBlock *last = lastHashBlockInChain(ref);
+    if (last) last->setNextHashRef(newBlock->nr);
+    
+    // Otherwise, traverse the linked list
+    /*
+     std::set<u32> visited;
+     while (ref && visited.find(ref) == visited.end())  {
+
+        FSBlock *block = hashableBlock(ref);
+        if (block == nullptr) {assert(false); break; }
+
+        u32 next = block->getNextHashRef();
+        if (next == 0) { block->setNextHashRef(newBlock->nr); return; }
+
+        visited.insert(ref);
+        ref = next;
+    }
+    */
 }
 
 void
@@ -695,7 +741,54 @@ FSVolume::printDirectory(bool recursive)
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
     }
-    msg("%d items", items.size());
+    msg("%d items\n", items.size());
+}
+
+
+FSBlock *
+FSVolume::lastHashBlockInChain(u32 start)
+{
+    FSBlock *block = hashableBlock(start);
+    return block ? lastHashBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FSVolume::lastHashBlockInChain(FSBlock *block)
+{
+    std::set<u32> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSBlock *next = block->getNextHashBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block =next;
+    }
+    return nullptr;
+}
+
+FSBlock *
+FSVolume::lastFileListBlockInChain(u32 start)
+{
+    FSBlock *block = fileListBlock(start);
+    return block ? lastFileListBlockInChain(block) : nullptr;
+}
+
+FSBlock *
+FSVolume::lastFileListBlockInChain(FSBlock *block)
+{
+    std::set<u32> visited;
+
+    while (block && visited.find(block->nr) == visited.end()) {
+
+        FSFileListBlock *next = block->getNextListBlock();
+        if (next == nullptr) return block;
+
+        visited.insert(block->nr);
+        block = next;
+    }
+    return nullptr;
 }
 
 FSError

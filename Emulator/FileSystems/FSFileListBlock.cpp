@@ -26,13 +26,13 @@ FSFileListBlock::~FSFileListBlock()
 void
 FSFileListBlock::dump()
 {
-    printf(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
-    printf("       First : %d\n", getFirstDataBlockRef());
-    printf("Header block : %d\n", getFileHeaderRef());
-    printf("   Extension : %d\n", getNextListBlockRef());
-    printf(" Data blocks : ");
-    for (u32 i = 0; i < getNumDataBlockRefs(); i++) printf("%d ", getDataBlockRef(i));
-    printf("\n");
+    msg(" Block count : %d / %d\n", getNumDataBlockRefs(), getMaxDataBlockRefs());
+    msg("       First : %d\n", getFirstDataBlockRef());
+    msg("Header block : %d\n", getFileHeaderRef());
+    msg("   Extension : %d\n", getNextListBlockRef());
+    msg(" Data blocks : ");
+    for (u32 i = 0; i < getNumDataBlockRefs(); i++) msg("%d ", getDataBlockRef(i));
+    msg("\n");
 }
 
 FSItemType

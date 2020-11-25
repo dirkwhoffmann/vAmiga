@@ -12,9 +12,9 @@
 #define TPARAM(x,y,z) <x,y,z>
 #define bind(id, name, I, M, S) { \
 assert(exec[id] == &Moira::execIllegal); \
-assert(dasm[id] == &Moira::dasmIllegal); \
+if (dasm) assert(dasm[id] == &Moira::dasmIllegal); \
 exec[id] = &Moira::exec##name TPARAM(I, M, S); \
-dasm[id] = &Moira::dasm##name TPARAM(I, M, S); \
+if (dasm) dasm[id] = &Moira::dasm##name TPARAM(I, M, S); \
 if (info) info[id] = InstrInfo { I, M, S }; \
 }
 
@@ -126,7 +126,7 @@ Moira::createJumpTables()
 
     for (int i = 0; i < 0x10000; i++) {
         exec[i] = &Moira::execIllegal;
-        dasm[i] = &Moira::dasmIllegal;
+        if (dasm) dasm[i] = &Moira::dasmIllegal;
         if (info) info[i] = InstrInfo { ILLEGAL, MODE_IP, (Size)0 };
     }
 
@@ -139,11 +139,11 @@ Moira::createJumpTables()
     for (int i = 0; i < 0x1000; i++) {
 
         exec[0b1010 << 12 | i] = &Moira::execLineA;
-        dasm[0b1010 << 12 | i] = &Moira::dasmLineA;
+        if (dasm) dasm[0b1010 << 12 | i] = &Moira::dasmLineA;
         if (info) info[0b1010 << 12 | i] = InstrInfo { LINE_A, MODE_IP, (Size)0 };
 
         exec[0b1111 << 12 | i] = &Moira::execLineF;
-        dasm[0b1111 << 12 | i] = &Moira::dasmLineF;
+        if (dasm) dasm[0b1111 << 12 | i] = &Moira::dasmLineF;
         if (info) info[0b1111 << 12 | i] = InstrInfo { LINE_F, MODE_IP, (Size)0 };
     }
 
