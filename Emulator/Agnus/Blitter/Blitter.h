@@ -396,13 +396,19 @@ public:
 
 
     //
-    // Running the fill and minterm circuits
+    // Running the sub-units
     //
 
 private:
     
+    // Runs the barrel shifters on data paths A and B
+    void doBarrelA    (u16 aNew, u16 *aOld, u16 *aHold);
+    void doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold);
+    void doBarrelB    (u16 bNew, u16 *bOld, u16 *bHold);
+    void doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold);
+
     // Emulates the minterm logic circuit
-    u16 doMintermLogic(u16 a, u16 b, u16 c, u8 minterm);
+    u16 doMintermLogic     (u16 a, u16 b, u16 c, u8 minterm);
     u16 doMintermLogicQuick(u16 a, u16 b, u16 c, u8 minterm);
 
     // Emulates the fill logic circuit

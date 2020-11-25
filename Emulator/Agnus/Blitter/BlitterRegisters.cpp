@@ -313,7 +313,7 @@ Blitter::pokeBLTBDAT(u16 value)
 
     bnew = value;
     
-    // Immediately run the Barrel shifter
+    // Immediately run the barrel shifter
     if (bltconDESC()) {
         bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
     } else {

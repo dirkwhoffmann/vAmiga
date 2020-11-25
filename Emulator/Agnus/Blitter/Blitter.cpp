@@ -183,6 +183,34 @@ Blitter::_dump()
     msg("     bbusy: %s bzero: %s\n", bbusy ? "yes" : "no", bzero ? "yes" : "no");
 }
 
+void
+Blitter::doBarrelA(u16 aNew, u16 *aOld, u16 *aHold)
+{
+    *aHold = HI_W_LO_W(*aOld, aNew) >> bltconASH();
+    *aOld  = aNew;
+}
+
+void
+Blitter::doBarrelAdesc(u16 aNew, u16 *aOld, u16 *aHold)
+{
+    *aHold = HI_W_LO_W(aNew, *aOld) >> (16 - bltconASH());
+    *aOld  = aNew;
+}
+
+void
+Blitter::doBarrelB(u16 bNew, u16 *bOld, u16 *bHold)
+{
+    *bHold = HI_W_LO_W(*bOld, bNew) >> bltconBSH();
+    *bOld  = bNew;
+}
+
+void
+Blitter::doBarrelBdesc(u16 bNew, u16 *bOld, u16 *bHold)
+{
+    *bHold = HI_W_LO_W(bNew, *bOld) >> (16 - bltconBSH());
+    *bOld  = bNew;
+}
+
 u16
 Blitter::doMintermLogic(u16 a, u16 b, u16 c, u8 minterm)
 {
