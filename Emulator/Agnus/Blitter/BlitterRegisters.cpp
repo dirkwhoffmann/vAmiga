@@ -313,14 +313,12 @@ Blitter::pokeBLTBDAT(u16 value)
 
     bnew = value;
     
-    // Immediately run the barrel shifter
+    // Writing BLTBDAT triggers the barrel shifter circuit (unlike BLTADAT)
     if (bltconDESC()) {
-        bhold = HI_W_LO_W(bnew, bold) >> (16 - bltconBSH());
+        doBarrelBdesc(bnew, &bold, &bhold);
     } else {
-        bhold = HI_W_LO_W(bold, bnew) >> bltconBSH();
-    }
-    bold = bnew;
-
+        doBarrelB(bnew, &bold, &bhold);
+    }    
 }
 
 void
