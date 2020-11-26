@@ -33,8 +33,8 @@ struct FSUserDirBlock : FSBlock {
 
     FSError exportBlock(const char *path) override;
 
-    u32 getProtectionBits() override           { return get32(-48     );     }
-    void setProtectionBits(u32 val) override   {        set32(-48, val);     }
+    u32 getProtectionBits() override           { return get32(-48     );      }
+    void setProtectionBits(u32 val) override   {        set32(-48, val);      }
 
     FSComment getComment() override            { return FSComment(addr(-46)); }
     void setComment(FSComment name) override   { name.write(addr(-46));       }
@@ -46,11 +46,11 @@ struct FSUserDirBlock : FSBlock {
     void setName(FSName name) override         { name.write(addr(-20));       }
     bool isNamed(FSName &other) override       { return getName() == other;   }
 
-    u32 getNextHashRef() override              { return get32(-4     );      }
-    void setNextHashRef(u32 ref) override      {        set32(-4, ref);      }
+    u32 getNextHashRef() override              { return get32(-4     );       }
+    void setNextHashRef(u32 ref) override      {        set32(-4, ref);       }
 
-    u32 getParentDirRef() override             { return get32(-3      );     }
-    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);     }
+    u32 getParentDirRef() override             { return get32(-3      );      }
+    void setParentDirRef(u32 ref) override     {        set32(-3,  ref);      }
 
     u32 hashTableSize() override { return 72; }
     u32 hashValue() override { return getName().hashValue(); }

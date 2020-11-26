@@ -94,22 +94,35 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSRootBlock::dump()
 {
-    msg("        Name : %s\n", getName().c_str());
-    msg("     Created : %s\n", getCreationDate().str().c_str());
-    msg("    Modified : %s\n", getModificationDate().str().c_str());
-    msg("  Hash table : "); dumpHashTable(); printf("\n");
+    msg("         Name : %s\n", getName().c_str());
+    msg("      Created : %s\n", getCreationDate().str().c_str());
+    msg("     Modified : %s\n", getModificationDate().str().c_str());
+    msg("   Hash table : "); dumpHashTable(); printf("\n");
+    msg("Bitmap blocks : ");
+    for (int i = 0; i < 25; i++) {
+        if (getBmBlockRef(i)) msg("%d ", getBmBlockRef(i));
+    }
+    msg("\n");
+    msg("   Next BmExt : %d\n", getNextBmExtBlock());
 }
 
 bool
-FSRootBlock::addBitmapBlockRef(u32 ref)
+FSRootBlock::addBitmapBlockRefs(std::vector<u32> &refs)
 {
-    for (i32 i = -49; i <= -24; i++) {
-        
-        if (get32(i) == 0) {
-            set32(i, ref);
-            return true;
-        }
+    auto it = refs.begin();
+     
+    // Record the first 25 references in the root block
+    for (int i = 0; i < 25; i++, it++) {
+        if (it == refs.end()) return true;
+        setBmBlockRef(i, *it);
+    }
+            
+    // Record the remaining references in bitmap extension blocks
+    FSBitmapExtBlock *ext = getNextBmExtBlock();
+    while (ext && it != refs.end()) {
+        ext->addBitmapBlockRefs(refs, it);
+        ext = getNextBmExtBlock();
     }
     
-    return false;
+    return it == refs.end();
 }

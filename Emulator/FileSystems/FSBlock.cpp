@@ -145,7 +145,7 @@ FSBlock::exportBlock(u8 *dst, size_t bsize)
 }
 
 FSBlock *
-FSBlock::getParentBlock()
+FSBlock::getParentDirBlock()
 {
     u32 ref = getParentDirRef();
     return ref ? volume.block(ref) : nullptr;
@@ -156,20 +156,6 @@ FSBlock::getFileHeaderBlock()
 {
     u32 ref = getFileHeaderRef();
     return ref ? volume.fileHeaderBlock(ref) : nullptr;
-}
-
-FSDataBlock *
-FSBlock::getFirstDataBlock()
-{
-    u32 ref = getFirstDataBlockRef();
-    return ref ? volume.dataBlock(ref) : nullptr;
-}
-
-FSDataBlock *
-FSBlock::getNextDataBlock()
-{
-    u32 ref = getNextDataBlockRef();
-    return ref ? volume.dataBlock(ref) : nullptr;
 }
 
 FSBlock *
@@ -184,6 +170,28 @@ FSBlock::getNextListBlock()
 {
     u32 ref = getNextListBlockRef();
     return ref ? volume.fileListBlock(ref) : nullptr;
+}
+
+FSBitmapExtBlock *
+FSBlock::getNextBmExtBlock()
+{
+    u32 ref = getNextBmExtBlockRef();
+    return ref ? volume.bitmapExtBlock(ref) : nullptr;
+}
+
+
+FSDataBlock *
+FSBlock::getFirstDataBlock()
+{
+    u32 ref = getFirstDataBlockRef();
+    return ref ? volume.dataBlock(ref) : nullptr;
+}
+
+FSDataBlock *
+FSBlock::getNextDataBlock()
+{
+    u32 ref = getNextDataBlockRef();
+    return ref ? volume.dataBlock(ref) : nullptr;
 }
 
 u32

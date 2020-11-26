@@ -108,29 +108,29 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
     FSRootBlock *rb = new FSRootBlock(*this, root);
     blocks[root] = rb;
         
-    // Add all bitmap blocks
+    // Add bitmap blocks
     for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
         blocks[ref] = new FSBitmapBlock(*this, ref);
+        bmBlocks.push_back(ref);
     }
 
-    // Add all bitmap extension blocks
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
     for (u32 ref = 0; firstBitmapExtBlock <= lastBitmapExtBlock; ref++) {
-        assert(false);
-        // blocks[ref] = new FSBmExtBlock(*this, ref);
+        blocks[ref] = new FSBitmapExtBlock(*this, ref);
+        bmExtensionBlocks.push_back(ref);
+        pred->setNextBmExtBlockRef(ref);
+        pred = blocks[ref];
     }
 
     // Add all bitmap block references
-    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
-        rb->addBitmapBlockRef(ref);
-    }
-
-    // Record the location of the bitmap blocks
-    // TODO: Implement
+    rb->addBitmapBlockRefs(bmBlocks);
     
     // Mark all used blocks as allocated
-    for (u32 ref = root; ref <= lastBitmapExtBlock; ref++) {
-        bitmapBlock()->alloc(ref); // TODO: Implement and use volume.markAsAllocated(...)
-    }
+    // TODO: Implement and use volume.markAsAllocated(...)
+    bitmapBlock()->alloc(root);
+    for (auto& it : bmBlocks) bitmapBlock()->alloc(it);
+    for (auto& it : bmExtensionBlocks) bitmapBlock()->alloc(it);
     
     // Fill all unused slots with empty blocks
     for (u32 i = 2; i < root; i++) {
@@ -148,6 +148,11 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
     // Do some final consistency checks
     assert(bitmapBlock() == blocks[rootBlockNr() + 1]);
     assert(rootBlock() == blocks[rootBlockNr()]);
+
+    if (FS_DEBUG) {
+        info();
+        dump();
+    }
 }
 
 FSVolume::~FSVolume()
@@ -168,13 +173,21 @@ FSVolume::info()
     msg("%5d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
     msg("%s\n",         getName().c_str());
+    msg("\n");
 }
 
 void
 FSVolume::dump()
 {
-    msg("Volume: DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
-    
+    msg("          Name : %s\n", getName().c_str());
+    msg("   File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
+    msg(" Bitmap blocks : ");
+    for (auto& it : bmBlocks) { msg("%d ", it); }
+    msg("\n");
+    msg("  BmExt blocks : ");
+    for (auto& it : bmExtensionBlocks) { msg("%d ", it); }
+    msg("\n\n");
+
     for (size_t i = 0; i < capacity; i++)  {
         
         if (blocks[i]->type() == FS_EMPTY_BLOCK) continue;
@@ -426,6 +439,16 @@ FSVolume::bitmapBlock(u32 nr)
     }
 }
 
+FSBitmapExtBlock *
+FSVolume::bitmapExtBlock(u32 nr)
+{
+    if (nr < capacity && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
+        return (FSBitmapExtBlock *)blocks[nr];
+    } else {
+        return nullptr;
+    }
+}
+
 FSUserDirBlock *
 FSVolume::userDirBlock(u32 nr)
 {
@@ -658,7 +681,7 @@ FSVolume::getPath(FSBlock *block)
         result = (result == "") ? name : name + "/" + result;
         
         // Continue with the parent block
-        block = block->getParentBlock();
+        block = block->getParentDirBlock();
     }
     
     return result;

@@ -202,6 +202,7 @@ public:
     FSRootBlock *rootBlock() { return rootBlock(rootBlockNr()); }
     FSBitmapBlock *bitmapBlock(u32 nr);
     FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
+    FSBitmapExtBlock *bitmapExtBlock(u32 nr);
     FSUserDirBlock *userDirBlock(u32 nr);
     FSFileHeaderBlock *fileHeaderBlock(u32 nr);
     FSFileListBlock *fileListBlock(u32 nr);

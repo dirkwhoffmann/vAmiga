@@ -29,6 +29,14 @@ struct FSBitmapExtBlock : FSBlock {
     FSError check(u32 pos, u8 *expected, bool strict) override;
     void dump() override;
 
+    u32 getNextBmExtBlockRef() override          { return get32(-1);         }
+    void setNextBmExtBlockRef(u32 ref) override  {        set32(-1, ref);    }
+
+    u32 getBmBlockRef(int nr)                    { return get32(nr     );    }
+    void setBmBlockRef(int nr, u32 ref)          {        set32(nr, ref);    }
+
+    void addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it);
+
     
     //
     // Block specific methods

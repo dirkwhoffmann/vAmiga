@@ -160,7 +160,7 @@ public:
     // Link to the parent directory block
     virtual u32 getParentDirRef() { return 0; }
     virtual void setParentDirRef(u32 ref) { }
-    FSBlock *getParentBlock();
+    struct FSBlock *getParentDirBlock();
     
     // Link to the file header block
     virtual u32 getFileHeaderRef() { return 0; }
@@ -170,13 +170,18 @@ public:
     // Link to the next block with the same hash
     virtual u32 getNextHashRef() { return 0; }
     virtual void setNextHashRef(u32 ref) { }
-    FSBlock *getNextHashBlock();
+    struct FSBlock *getNextHashBlock();
 
     // Link to the next extension block
     virtual u32 getNextListBlockRef() { return 0; }
     virtual void setNextListBlockRef(u32 ref) { }
     struct FSFileListBlock *getNextListBlock();
 
+    // Link to the next bitmap extension block
+    virtual u32 getNextBmExtBlockRef() { return 0; }
+    virtual void setNextBmExtBlockRef(u32 ref) { }
+    struct FSBitmapExtBlock *getNextBmExtBlock();
+    
     // Link to the first data block
     virtual u32 getFirstDataBlockRef() { return 0; }
     virtual void setFirstDataBlockRef(u32 ref) { }
@@ -193,7 +198,7 @@ public:
     //
     
     // Tries to add a reference to a bitmap block
-    virtual bool addBitmapBlockRef(u32 ref) { return false; }
+    // virtual bool addBitmapBlockRef(u32 ref) { return false; }
     
     
     //
@@ -216,6 +221,12 @@ public:
     // Dumps the contents of the hash table for debugging
     void dumpHashTable();
 
+
+    //
+    // Working with bitmap blocks
+    //
+
+    
     
     //
     // Working with data blocks
