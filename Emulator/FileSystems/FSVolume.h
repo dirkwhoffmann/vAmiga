@@ -22,6 +22,7 @@
 #include "FSFileListBlock.h"
 #include "FSDataBlock.h"
 #include "ADFFile.h"
+#include "HDFFile.h"
 
 #include <dirent.h>
 
@@ -73,9 +74,10 @@ protected:
     
 public:
 
-    // Creates a file system from a buffer (usually the data of an ADF)
+    // Creates a file system from an xDF file
     static FSVolume *makeWithADF(class ADFFile *adf, FSError *error);
-    
+    static FSVolume *makeWithHDF(class HDFFile *hdf, FSError *error);
+
     // Creates a file system with the contents of a host file system directory
     static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
     static FSVolume *make(FSVolumeType type, const char *name, const char *path);
@@ -87,11 +89,14 @@ public:
     
 public:
 
-    FSVolume(FSVolumeType type, const char *name, u32 capacity, u32 bsize = 512);
     FSVolume(FSVolumeType type, u32 capacity, u32 bsize = 512);
     ~FSVolume();
     
     const char *getDescription() override { return "FSVolume"; }
+    
+    // Gets or sets the name of this volume
+    FSName getName() { return rootBlock()->getName(); }
+    void setName(FSName name) { rootBlock()->setName(name); }
     
     // Prints information about this volume
     void info();
@@ -108,8 +113,8 @@ public:
     //
     
 public:
-    
-    FSName getName() { return rootBlock()->getName(); }
+        
+    // Returns the type of this volume
     FSVolumeType getType() { return type; }
     bool isOFS();
     bool isFFS();

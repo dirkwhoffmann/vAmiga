@@ -24,10 +24,12 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     set32(-1, 1);                        // Sub type    
 }
 
+/*
 FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
 {
     setName(FSName(name));
 }
+*/
 
 FSRootBlock::~FSRootBlock()
 {

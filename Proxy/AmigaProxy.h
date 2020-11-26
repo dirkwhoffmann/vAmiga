@@ -31,6 +31,7 @@
 @class DriveProxy;
 @class EXEFileProxy;
 @class GuardsProxy;
+@class HDFFileProxy;
 @class IMGFileProxy;
 @class JoystickProxy;
 @class KeyboardProxy;
@@ -647,6 +648,7 @@ struct SerialPortWrapper;
 }
 
 + (instancetype)makeWithADF:(ADFFileProxy *)adf;
++ (instancetype)makeWithHDF:(HDFFileProxy *)hdf;
 
 @property (readonly) FSVolumeType type;
 @property (readonly) NSInteger numBlocks;

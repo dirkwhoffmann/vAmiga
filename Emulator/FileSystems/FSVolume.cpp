@@ -32,9 +32,30 @@ FSVolume::makeWithADF(ADFFile *adf, FSError *error)
 }
 
 FSVolume *
+FSVolume::makeWithHDF(HDFFile *hdf, FSError *error)
+{
+    assert(hdf != nullptr);
+
+    // TODO: Determine file system type from HDF
+    FSVolumeType type = FS_OFS;
+    
+    // Create volume
+    FSVolume *volume = new FSVolume(type, hdf->numBlocks(), 512);
+
+    // Import file system from HDF
+    if (!volume->importVolume(hdf->getData(), hdf->getSize(), error)) {
+        delete volume;
+        return nullptr;
+    }
+    
+    return volume;
+}
+
+FSVolume *
 FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
 {
-    FSVolume *volume = new FSVolume(type, name, capacity);
+    FSVolume *volume = new FSVolume(type, capacity);
+    volume->setName(FSName(name));
 
     // Try to import directory
     if (!volume->importDirectory(path)) { delete volume; return nullptr; }
@@ -58,9 +79,10 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path)
     return nullptr;
 }
 
-FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
+FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
-    assert(capacity == 2 * 880 || capacity == 4 * 880);
+    debug(FS_DEBUG, "Creating FSVolume with %d blocks\n", c);
+    
     blocks = new BlockPtr[capacity];
 
     dsize = isOFS() ? bsize - 24 : bsize;
@@ -77,24 +99,21 @@ FSVolume::FSVolume(FSVolumeType t, const char *name, u32 c, u32 s) :  type(t), c
     assert(bitmap < capacity);
     delete blocks[bitmap];
     blocks[bitmap] = new FSBitmapBlock(*this, bitmap);
-    assert(bitmapBlock() == blocks[bitmap]);
     bitmapBlock()->alloc(bitmap);
 
     // Install the root block
     u32 root = rootBlockNr();
     assert(root < capacity);
     delete blocks[root];
-    blocks[root] = new FSRootBlock(*this, root, name);
-    assert(rootBlock() == blocks[root]);
+    blocks[root] = new FSRootBlock(*this, root);
     bitmapBlock()->alloc(root);
-
-    // Set the current directory to '/'
-    currentDir = rootBlockNr();    
-}
-
-FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) : FSVolume(t, "", c, s)
-{
     
+    // Set the current directory to '/'
+    currentDir = rootBlockNr();
+    
+    // Do some final consistency checks
+    assert(bitmapBlock() == blocks[bitmap]);
+    assert(blocks[root] == rootBlock());
 }
 
 FSVolume::~FSVolume()
@@ -714,22 +733,6 @@ FSVolume::addHashRef(FSBlock *newBlock)
     // Otherwise, put it into the last element of the block list chain
     FSBlock *last = lastHashBlockInChain(ref);
     if (last) last->setNextHashRef(newBlock->nr);
-    
-    // Otherwise, traverse the linked list
-    /*
-     std::set<u32> visited;
-     while (ref && visited.find(ref) == visited.end())  {
-
-        FSBlock *block = hashableBlock(ref);
-        if (block == nullptr) {assert(false); break; }
-
-        u32 next = block->getNextHashRef();
-        if (next == 0) { block->setNextHashRef(newBlock->nr); return; }
-
-        visited.insert(ref);
-        ref = next;
-    }
-    */
 }
 
 void

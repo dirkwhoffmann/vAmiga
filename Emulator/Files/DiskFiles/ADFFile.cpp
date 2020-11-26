@@ -240,11 +240,12 @@ ADFFile::formatDisk(FSVolumeType fs)
     if (fs == FS_NONE) return false;
     
     // Create an empty file system
-    FSVolume vol = FSVolume(fs, "MyDisk", numBlocks());
+    FSVolume volume = FSVolume(fs, numBlocks());
+    volume.setName(FSName("Disk"));
     
     // Export the volume to the ADF
     FSError error;
-    vol.exportVolume(data, size, &error);
+    volume.exportVolume(data, size, &error);
 
     // REMOVE ASAP
     // dumpSector(0);

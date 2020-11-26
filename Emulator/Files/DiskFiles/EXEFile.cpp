@@ -78,7 +78,8 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     bool hd = length > 853000;
     
     // Create a new file system 
-    FSVolume volume = FSVolume(FS_OFS, "Disk", hd ? 4 * 880 : 2 * 880);
+    FSVolume volume = FSVolume(FS_OFS, hd ? 4 * 880 : 2 * 880);
+    volume.setName(FSName("Disk"));
     
     // Make the volume bootable
     volume.installBootBlock();

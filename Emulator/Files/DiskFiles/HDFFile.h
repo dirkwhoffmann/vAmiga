@@ -58,6 +58,16 @@ public:
         return isHDFBuffer(buffer, length); }
     bool fileHasSameType(const char *path) override { return isHDFFile(path); }
     bool readFromBuffer(const u8 *buffer, size_t length) override;
+
+
+    //
+    // Querying volume information
+    //
+
+public:
+    
+    long numBlocks() { return size / 512; }
+
 };
 
 #endif

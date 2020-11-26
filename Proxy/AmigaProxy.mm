@@ -1251,6 +1251,15 @@ struct SerialPortWrapper { SerialPort *port; };
     return [self make:volume];
 }
 
++ (instancetype) makeWithHDF:(HDFFileProxy *)fileProxy
+{
+    FSError error;
+    AmigaFileWrapper *hdf = [fileProxy wrapper];
+
+    FSVolume *volume = FSVolume::makeWithHDF((HDFFile *)(hdf->file), &error);
+    return [self make:volume];
+}
+
 - (FSVolumeType) type
 {
     return wrapper->volume->getType();
