@@ -102,8 +102,7 @@ Oscillator::synchronize()
         }
         
         // See you soon...
-        oscillator.waitUntil(targetTime);
-        // mach_wait_until(targetTime);
+        waitUntil(targetTime);
     }
 }
 

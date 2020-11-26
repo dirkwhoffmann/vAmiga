@@ -42,35 +42,35 @@ class ExporterDialog: DialogController {
     @IBOutlet weak var formatPopup: NSPopUpButton!
     @IBOutlet weak var exportButton: NSButton!
     
-    var driveNr = 0 // DEPRECATED
-    var drive: DriveProxy!
+    var savePanel: NSSavePanel!  // Used to export to files
+    var openPanel: NSOpenPanel!  // Used to export to directories
+
+    let shrinkedHeight = CGFloat(176)
+    let expandedHeight = CGFloat(450)
+
+    var driveNr: Int?
+    var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
     var disk: DiskFileProxy?
+    var volume: FSVolumeProxy?
+
     var errorReport: FSErrorReport?
     
     var selection: Int?
     var selectedRow: Int? { return selection == nil ? nil : selection! / 16 }
     var selectedCol: Int? { return selection == nil ? nil : selection! % 16 }
     var strict: Bool { return strictButton.state == .on }
-    
-    var savePanel: NSSavePanel!  // Used to export to files
-    var openPanel: NSOpenPanel!  // Used to export to directories
-
-    let shrinkedHeight = CGFloat(176)
-    let expandedHeight = CGFloat(450)
-    
+        
     var myDocument: MyDocument { return parent.mydocument! }
     var size: CGSize { return window!.frame.size }
     var shrinked: Bool { return size.height < 300 }
         
-    var numCylinders: Int { return disk?.numCylinders ?? 0 }
-    var numSides: Int { return disk?.numSides ?? 0 }
-    var numTracks: Int { return disk?.numTracks ?? 0 }
-    var numSectors: Int { return disk?.numSectors ?? 0 }
-    var numBlocks: Int { return disk?.numBlocks ?? 0 }
+    var numCylinders: Int { return disk?.numCylinders ?? (volume != nil ? 1 : 0) }
+    var numSides: Int { return disk?.numSides ?? (volume != nil ? 1 : 0) }
+    var numTracks: Int { return disk?.numTracks ?? (volume != nil ? 1 : 0) }
+    var numSectors: Int { return disk?.numSectors ?? (volume?.numBlocks ?? 0) }
+    var numBlocks: Int { return disk?.numBlocks ?? (volume?.numBlocks ?? 0) }
     var isDD: Bool { return disk?.diskDensity == .DISK_DD }
     var isHD: Bool { return disk?.diskDensity == .DISK_HD }
-
-    var volume: FSVolumeProxy?
     
     // Block preview
     var _cylinder = 0
@@ -186,7 +186,6 @@ class ExporterDialog: DialogController {
         
         track()
         
-        drive = amiga.df(nr)!
         driveNr = nr
         
         // Try to decode the disk with the ADF decoder
@@ -356,8 +355,8 @@ class ExporterDialog: DialogController {
         
         var name = ""
 
-        if drive.hasDDDisk { name = "dd" }
-        if drive.hasHDDisk { name = "hd" }
+        if drive?.hasDDDisk == true { name = "dd" }
+        if drive?.hasHDDisk == true { name = "hd" }
 
         switch disk?.type {
         case .FILETYPE_ADF: name += "_adf"
@@ -365,7 +364,7 @@ class ExporterDialog: DialogController {
         default: name += "_other"
         }
         
-        if drive.hasWriteProtectedDisk() { name += "_protected" }
+        if drive?.hasWriteProtectedDisk() == true { name += "_protected" }
 
         diskIcon.image = NSImage.init(named: name)
     }
@@ -643,7 +642,7 @@ class ExporterDialog: DialogController {
     func exportToFile(url: URL) {
 
         track("url = \(url)")
-        parent.mydocument.export(drive: driveNr, to: url, diskFileProxy: disk!)
+        parent.mydocument.export(drive: driveNr!, to: url, diskFileProxy: disk!)
         hideSheet()
     }
 
@@ -688,6 +687,7 @@ class ExporterDialog: DialogController {
         }
     }
 
+    /*
     func export(url: URL) {
     
         track("url = \(url)")
@@ -695,7 +695,8 @@ class ExporterDialog: DialogController {
 
         hideSheet()
     }
-
+    */
+    
     //
     // Action methods
     //
