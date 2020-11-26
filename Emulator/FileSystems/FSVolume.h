@@ -17,6 +17,7 @@
 #include "FSBootBlock.h"
 #include "FSRootBlock.h"
 #include "FSBitmapBlock.h"
+#include "FSBitmapExtBlock.h"
 #include "FSUserDirBlock.h"
 #include "FSFileHeaderBlock.h"
 #include "FSFileListBlock.h"
@@ -39,6 +40,7 @@ class FSVolume : AmigaObject {
     friend class FSBootBlock;
     friend class FSRootBlock;
     friend class FSBitmapBlock;
+    friend class FSBitmapExtBlock;
     friend class FSUserDirBlock;
     friend class FSFileHeaderBlock;
     friend class FSFileListBlock;
@@ -63,6 +65,10 @@ protected:
     
     // Block storage
     BlockPtr *blocks;
+    
+    // References to all bitmap blocks and bitmap extension blocks
+    vector<u32> bmBlocks;
+    vector<u32> bmExtensionBlocks;
     
     // The directory where new files and subdirectories are added
     u32 currentDir = 0;

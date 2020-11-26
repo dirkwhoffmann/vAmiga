@@ -459,7 +459,7 @@ Muxer::handleBufferOverflow()
 void
 Muxer::ignoreNextUnderOrOverflow()
 {
-    lastAlignment = oscillator.nanos();
+    lastAlignment = Oscillator::nanos();
 }
 
 void

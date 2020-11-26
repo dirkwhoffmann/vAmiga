@@ -83,37 +83,71 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
 {
     debug(FS_DEBUG, "Creating FSVolume with %d blocks\n", c);
     
-    blocks = new BlockPtr[capacity];
+    blocks = new BlockPtr[capacity]();
 
     dsize = isOFS() ? bsize - 24 : bsize;
 
-    // Install boot blocks
+    // Determine the required amout of bitmap and bitmap extension blocks
+    u32 bitsPerBlock        = (bsize - 4) * 8;
+    u32 numBitmapBlocks     = (capacity + bitsPerBlock - 1) / bitsPerBlock;
+    u32 numExtensionBlocks  = 0; // TODO
+
+    // Determine the block locations
+    u32 root                = rootBlockNr();
+    u32 firstBitmapBlock    = root + 1;
+    u32 lastBitmapBlock     = firstBitmapBlock + numBitmapBlocks - 1;
+    u32 firstBitmapExtBlock = lastBitmapBlock + 1;
+    u32 lastBitmapExtBlock  = firstBitmapExtBlock + numExtensionBlocks - 1;
+    assert(root < capacity);
+
+    // Add boot blocks
     blocks[0] = new FSBootBlock(*this, 0);
     blocks[1] = new FSBootBlock(*this, 1);
-
-    // Add empty dummy blocks
-    for (u32 i = 2; i < capacity; i++) blocks[i] = new FSEmptyBlock(*this, i);
-        
-    // Install the bitmap block
-    u32 bitmap = bitmapBlockNr();
-    assert(bitmap < capacity);
-    delete blocks[bitmap];
-    blocks[bitmap] = new FSBitmapBlock(*this, bitmap);
-    bitmapBlock()->alloc(bitmap);
-
-    // Install the root block
-    u32 root = rootBlockNr();
-    assert(root < capacity);
-    delete blocks[root];
-    blocks[root] = new FSRootBlock(*this, root);
-    bitmapBlock()->alloc(root);
     
+    // Add the root block
+    FSRootBlock *rb = new FSRootBlock(*this, root);
+    blocks[root] = rb;
+        
+    // Add all bitmap blocks
+    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
+        blocks[ref] = new FSBitmapBlock(*this, ref);
+    }
+
+    // Add all bitmap extension blocks
+    for (u32 ref = 0; firstBitmapExtBlock <= lastBitmapExtBlock; ref++) {
+        assert(false);
+        // blocks[ref] = new FSBmExtBlock(*this, ref);
+    }
+
+    // Add all bitmap block references
+    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
+        rb->addBitmapBlockRef(ref);
+    }
+
+    // Record the location of the bitmap blocks
+    // TODO: Implement
+    
+    // Mark all used blocks as allocated
+    for (u32 ref = root; ref <= lastBitmapExtBlock; ref++) {
+        bitmapBlock()->alloc(ref); // TODO: Implement and use volume.markAsAllocated(...)
+    }
+    
+    // Fill all unused slots with empty blocks
+    for (u32 i = 2; i < root; i++) {
+        assert(blocks[i] == nullptr);
+        blocks[i] = new FSEmptyBlock(*this, i);
+    }
+    for (u32 i = lastBitmapExtBlock + 1; i < capacity; i++) {
+        assert(blocks[i] == nullptr);
+        blocks[i] = new FSEmptyBlock(*this, i);
+    }
+
     // Set the current directory to '/'
     currentDir = rootBlockNr();
     
     // Do some final consistency checks
-    assert(bitmapBlock() == blocks[bitmap]);
-    assert(blocks[root] == rootBlock());
+    assert(bitmapBlock() == blocks[rootBlockNr() + 1]);
+    assert(rootBlock() == blocks[rootBlockNr()]);
 }
 
 FSVolume::~FSVolume()
@@ -209,6 +243,7 @@ FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
             case FS_BOOT_BLOCK:       return FS_PTR_TO_BOOT_BLOCK;
             case FS_ROOT_BLOCK:       return FS_PTR_TO_ROOT_BLOCK;
             case FS_BITMAP_BLOCK:     return FS_PTR_TO_BITMAP_BLOCK;
+            case FS_BITMAP_EXT_BLOCK: return FS_PTR_TO_BITMAP_EXT_BLOCK;
             case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
             case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
             case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILEHEADER_BLOCK;

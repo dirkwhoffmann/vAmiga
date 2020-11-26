@@ -17,19 +17,12 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     
     set32(0, 2);                         // Type
     set32(3, hashTableSize());           // Hash table size
-    set32(-49, volume.bitmapBlockNr());  // Location of the bitmap block
+    // set32(-49, volume.bitmapBlockNr());  // Location of the bitmap block
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
     setCreationDate(time(NULL));         // Creation date
     setModificationDate(time(NULL));     // Modification date
     set32(-1, 1);                        // Sub type    
 }
-
-/*
-FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr, const char *name) : FSRootBlock(ref, nr)
-{
-    setName(FSName(name));
-}
-*/
 
 FSRootBlock::~FSRootBlock()
 {
@@ -105,4 +98,18 @@ FSRootBlock::dump()
     msg("     Created : %s\n", getCreationDate().str().c_str());
     msg("    Modified : %s\n", getModificationDate().str().c_str());
     msg("  Hash table : "); dumpHashTable(); printf("\n");
+}
+
+bool
+FSRootBlock::addBitmapBlockRef(u32 ref)
+{
+    for (i32 i = -49; i <= -24; i++) {
+        
+        if (get32(i) == 0) {
+            set32(i, ref);
+            return true;
+        }
+    }
+    
+    return false;
 }

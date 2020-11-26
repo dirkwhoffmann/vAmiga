@@ -19,6 +19,7 @@ FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
         case FS_BOOT_BLOCK: return new FSBootBlock(ref, nr);
         case FS_ROOT_BLOCK: return new FSRootBlock(ref, nr);
         case FS_BITMAP_BLOCK: return new FSBitmapBlock(ref, nr);
+        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(ref, nr);
         case FS_USERDIR_BLOCK: return new FSUserDirBlock(ref, nr);
         case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(ref, nr);
         case FS_FILELIST_BLOCK: return new FSFileListBlock(ref, nr);

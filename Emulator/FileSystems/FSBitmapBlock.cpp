@@ -106,6 +106,6 @@ FSBitmapBlock::alloc(u32 block, bool allocate)
 void
 FSBitmapBlock::dealloc()
 {
-    // Mark all blocks except the first two as free
+    // Mark all blocks as free except the first two
     for (u32 i = 2; i < volume.capacity; i++) dealloc(i);
 }

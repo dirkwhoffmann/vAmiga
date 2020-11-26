@@ -40,6 +40,7 @@ struct FSRootBlock : FSBlock {
     FSTime getModificationDate() override        { return FSTime(addr(-23)); }
     void setModificationDate(FSTime t) override  { t.write(addr(-23));       }
 
+    bool addBitmapBlockRef(u32 ref) override;
     u32 hashTableSize() override { return 72; }
 };
 

@@ -12,7 +12,6 @@
 
 #include "AmigaTypes.h"
 #include "Utils.h"
-#include "Concurrency.h"
 
 #include <vector>
 #include <map>

@@ -189,6 +189,14 @@ public:
 
     
     //
+    // Working with bitmap blocks
+    //
+    
+    // Tries to add a reference to a bitmap block
+    virtual bool addBitmapBlockRef(u32 ref) { return false; }
+    
+    
+    //
     // Working with hash tables
     //
     
@@ -279,6 +287,9 @@ if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) ret
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
+
+#define EXPECT_BITMAP_EXT_REF { \
+if (FSError e = volume.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_DATABLOCK_REF { \
 if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e; }
