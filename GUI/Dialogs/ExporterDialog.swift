@@ -73,36 +73,26 @@ class ExporterDialog: DialogController {
     var isHD: Bool { return disk?.diskDensity == .DISK_HD }
     
     // Block preview
-    var _cylinder = 0
-    var _side = 0
-    var _track = 0
-    var _sector = 0
-    var _block = 0
-    // var _corruption = 0
+    var cylinderNr = 0
+    var headNr = 0
+    var trackNr = 0
+    var sectorNr = 0
+    var blockNr = 0
     
     var sectorData: [String] = []
     let bytesPerRow = 16
     
-    //
-    // Checking the file system
-    //
-
-    func checkVolume() {
-                
-        errorReport = volume?.check(strict)
-    }
-
     //
     // Selecting a block
     //
     
     func setCylinder(_ newValue: Int) {
 
-        if newValue != _cylinder && newValue >= 0 && newValue < numCylinders {
+        if newValue != cylinderNr && newValue >= 0 && newValue < numCylinders {
                         
-            _cylinder = newValue
-            _track    = _cylinder * 2 + _side
-            _block    = _track * numSectors + _sector
+            cylinderNr = newValue
+            trackNr    = cylinderNr * 2 + headNr
+            blockNr    = trackNr * numSectors + sectorNr
             
             selection = nil
             update()
@@ -111,11 +101,11 @@ class ExporterDialog: DialogController {
     
     func setHead(_ newValue: Int) {
         
-        if newValue != _side && newValue >= 0 && newValue < numSides {
+        if newValue != headNr && newValue >= 0 && newValue < numSides {
                         
-            _side     = newValue
-            _track    = _cylinder * 2 + _side
-            _block    = _track * numSectors + _sector
+            headNr     = newValue
+            trackNr    = cylinderNr * 2 + headNr
+            blockNr    = trackNr * numSectors + sectorNr
             
             selection = nil
             update()
@@ -124,12 +114,12 @@ class ExporterDialog: DialogController {
     
     func setTrack(_ newValue: Int) {
         
-        if newValue != _track && newValue >= 0 && newValue < numTracks {
+        if newValue != trackNr && newValue >= 0 && newValue < numTracks {
                         
-            _track    = newValue
-            _cylinder = _track / 2
-            _side     = _track % 2
-            _block    = _track * numSectors + _sector
+            trackNr    = newValue
+            cylinderNr = trackNr / 2
+            headNr     = trackNr % 2
+            blockNr    = trackNr * numSectors + sectorNr
 
             selection = nil
             update()
@@ -138,10 +128,10 @@ class ExporterDialog: DialogController {
 
     func setSector(_ newValue: Int) {
         
-        if newValue != _sector && newValue >= 0 && newValue < numSectors {
+        if newValue != sectorNr && newValue >= 0 && newValue < numSectors {
                         
-            _sector   = newValue
-            _block    = _track * numSectors + _sector
+            sectorNr   = newValue
+            blockNr    = trackNr * numSectors + sectorNr
             
             selection = nil
             update()
@@ -150,13 +140,13 @@ class ExporterDialog: DialogController {
 
     func setBlock(_ newValue: Int) {
         
-        if newValue != _block && newValue >= 0 && newValue < numBlocks {
+        if newValue != blockNr && newValue >= 0 && newValue < numBlocks {
                         
-            _block    = newValue
-            _track    = _block / numSectors
-            _sector   = _block % numSectors
-            _cylinder = _track / 2
-            _side     = _track % 2
+            blockNr    = newValue
+            trackNr    = blockNr / numSectors
+            sectorNr   = blockNr % numSectors
+            cylinderNr = trackNr / 2
+            headNr     = trackNr % 2
             
             selection = nil
             update()
@@ -167,19 +157,19 @@ class ExporterDialog: DialogController {
         
         var jump: Int
          
-        if newValue > _block {
-            jump = volume!.nextCorrupted(_block)
+        if newValue > blockNr {
+            jump = volume!.nextCorrupted(blockNr)
         } else {
-            jump = volume!.prevCorrupted(_block)
+            jump = volume!.prevCorrupted(blockNr)
         }
 
-        track("Current: \(_block) Stepper: \(newValue) Jump: \(jump)")
+        // track("Current: \(blockNr) Stepper: \(newValue) Jump: \(jump)")
         corruptionStepper.integerValue = jump
         setBlock(jump)
     }
     
     //
-    // Getting the ball rolling
+    // Starting up
     //
     
     func showSheet(forDrive nr: Int) {
@@ -195,7 +185,7 @@ class ExporterDialog: DialogController {
         if disk != nil { volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy) }
         
         // REMOVE ASAP
-        volume?.printDirectory(true)
+        // volume?.printDirectory(true)
         
         // If it is not an ADF, try the DOS decoder
         if disk == nil { disk = IMGFileProxy.make(withDrive: drive) }
@@ -203,6 +193,16 @@ class ExporterDialog: DialogController {
         super.showSheet()
     }
     
+    func showSheet(forVolume vol: FSVolumeProxy) {
+        
+        volume = vol
+        
+        // REMOVE ASAP
+        // volume?.printDirectory(true)
+        
+        super.showSheet()
+    }
+        
     override public func awakeFromNib() {
         
         track()
@@ -220,8 +220,8 @@ class ExporterDialog: DialogController {
         window!.setFrame(frame, display: true)
         
         // Run a file system check
-        checkVolume()
-
+        errorReport = volume?.check(strict)
+        
         update()
     }
     
@@ -237,9 +237,14 @@ class ExporterDialog: DialogController {
         formatPopup.item(at: 2)!.isEnabled = dos
         formatPopup.item(at: 3)!.isEnabled = volume != nil
         
-        // Preselect a suitable export format
-        if adf { formatPopup.selectItem(at: 0) }
-        if dos { formatPopup.selectItem(at: 1) }
+        // Preselect an available export format and enable the Export button
+        let enabled = [0, 1, 2, 3].filter { formatPopup.item(at: $0)!.isEnabled }
+        if enabled.isEmpty {
+            exportButton.isEnabled = false
+        } else {
+            exportButton.isEnabled = true
+            formatPopup.selectItem(at: enabled.first!)
+        }
         
         // Jump to the first corrupted block if an error was found
         if errorReport != nil && errorReport!.corruptedBlocks > 0 {
@@ -290,9 +295,6 @@ class ExporterDialog: DialogController {
         updateVolumeInfo()
         if volume == nil { volumeInfo.textColor = .red }
 
-        // Disable the export button if no export is possible
-        exportButton.isEnabled = disk != nil
-
         // Update the disclosure button state
         disclosureButton.state = shrinked ? .off : .on
         
@@ -321,19 +323,19 @@ class ExporterDialog: DialogController {
         }
 
         // Update all elements
-        cylinderField.stringValue      = String.init(format: "%d", _cylinder)
-        cylinderStepper.integerValue   = _cylinder
-        headField.stringValue          = String.init(format: "%d", _side)
-        headStepper.integerValue       = _side
-        trackField.stringValue         = String.init(format: "%d", _track)
-        trackStepper.integerValue      = _track
-        sectorField.stringValue        = String.init(format: "%d", _sector)
-        sectorStepper.integerValue     = _sector
-        blockField.stringValue         = String.init(format: "%d", _block)
-        blockStepper.integerValue      = _block
-        corruptionStepper.integerValue = _block
+        cylinderField.stringValue      = String.init(format: "%d", cylinderNr)
+        cylinderStepper.integerValue   = cylinderNr
+        headField.stringValue          = String.init(format: "%d", headNr)
+        headStepper.integerValue       = headNr
+        trackField.stringValue         = String.init(format: "%d", trackNr)
+        trackStepper.integerValue      = trackNr
+        sectorField.stringValue        = String.init(format: "%d", sectorNr)
+        sectorStepper.integerValue     = sectorNr
+        blockField.stringValue         = String.init(format: "%d", blockNr)
+        blockStepper.integerValue      = blockNr
+        corruptionStepper.integerValue = blockNr
 
-        if let corr = volume?.getCorrupted(_block) {
+        if let corr = volume?.getCorrupted(blockNr) {
             
             let total = errorReport!.corruptedBlocks
 
@@ -355,17 +357,24 @@ class ExporterDialog: DialogController {
         
         var name = ""
 
-        if drive?.hasDDDisk == true { name = "dd" }
-        if drive?.hasHDDisk == true { name = "hd" }
+        if driveNr  == nil {
+                
+            name = "hdf"
 
-        switch disk?.type {
-        case .FILETYPE_ADF: name += "_adf"
-        case .FILETYPE_IMG: name += "_dos"
-        default: name += "_other"
+        } else {
+            
+            if drive?.hasDDDisk == true { name = "dd" }
+            if drive?.hasHDDisk == true { name = "hd" }
+            
+            switch disk?.type {
+            case .FILETYPE_ADF: name += "_adf"
+            case .FILETYPE_IMG: name += "_dos"
+            default: name += "_other"
+            }
+            
+            if drive?.hasWriteProtectedDisk() == true { name += "_protected" }
         }
         
-        if drive?.hasWriteProtectedDisk() == true { name += "_protected" }
-
         diskIcon.image = NSImage.init(named: name)
     }
 
@@ -373,9 +382,16 @@ class ExporterDialog: DialogController {
         
         var name = "This disk contains an unrecognized MFM stream"
         
-        if disk?.type == .FILETYPE_ADF { name = "Amiga Disk" }
-        if disk?.type == .FILETYPE_IMG { name = "PC Disk" }
-
+        if driveNr == nil {
+            
+            name = "Amiga Hard Drive"
+            
+        } else {
+            
+            if disk?.type == .FILETYPE_ADF { name = "Amiga Disk" }
+            if disk?.type == .FILETYPE_IMG { name = "PC Disk" }
+        }
+        
         title.stringValue = name
     }
 
@@ -383,16 +399,25 @@ class ExporterDialog: DialogController {
         
         var text = "This disk contains un unknown track and sector format."
         
-        if disk != nil {
+        if driveNr == nil {
             
-            let n = numSides == 1 ? "Single" : "Double"
-            let d = isHD ? "high" : isDD ? "double" : "single"
-            
-            text = "\(n) sided, "
-            text += "\(d) density disk, "
-            text += "\(numTracks) tracks with \(numSectors) sectors each"
+            let blocks = volume!.numBlocks
+            let capacity = blocks / 2000
+            text = "Volume with \(blocks) Blocks (\(capacity) MB)"
+        
         } else {
-            trackInfo.textColor = .systemRed
+            
+            if disk != nil {
+                
+                let n = numSides == 1 ? "Single" : "Double"
+                let d = isHD ? "high" : isDD ? "double" : "single"
+                
+                text = "\(n) sided, "
+                text += "\(d) density disk, "
+                text += "\(numTracks) tracks with \(numSectors) sectors each"
+            } else {
+                trackInfo.textColor = .systemRed
+            }
         }
 
         trackInfo.stringValue = text
@@ -402,30 +427,27 @@ class ExporterDialog: DialogController {
         
         var text = "No compatible file system"
         
-        if disk?.type == .FILETYPE_ADF {
+        if volume != nil {
             
-            if volume != nil {
+            switch volume!.type {
+            case .OFS:      text = "Original File System (OFS)"
+            case .OFS_INTL: text = "Original File System (OFS-INTL)"
+            case .OFS_DC:   text = "Original File System (OFS-DC)"
+            case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
+            case .FFS:      text = "Original File System (FFS)"
+            case .FFS_INTL: text = "Original File System (FFS-INTL)"
+            case .FFS_DC:   text = "Original File System (FFS-DC)"
+            case .FFS_LNFS: text = "Original File System (FFS-LNFS)"
+            default:        text = "Unknown file system"
+            }
+            
+            if let errors = errorReport?.corruptedBlocks, errors > 0 {
                 
-                switch volume!.type {
-                case .OFS:      text = "Original File System (OFS)"
-                case .OFS_INTL: text = "Original File System (OFS-INTL)"
-                case .OFS_DC:   text = "Original File System (OFS-DC)"
-                case .OFS_LNFS: text = "Original File System (OFS-LNFS)"
-                case .FFS:      text = "Original File System (FFS)"
-                case .FFS_INTL: text = "Original File System (FFS-INTL)"
-                case .FFS_DC:   text = "Original File System (FFS-DC)"
-                case .FFS_LNFS: text = "Original File System (FFS-LNFS)"
-                default:        text = "Unknown file system"
-                }
-
-                if let errors = errorReport?.corruptedBlocks, errors > 0 {
-                    
-                    let blocks = errors == 1 ? "block" : "blocks"
-                    let text2 = " with \(errors) corrupted \(blocks)"
-                    volumeInfo.stringValue = text + text2
-                    volumeInfo.textColor = .systemRed
-                    return
-                }
+                let blocks = errors == 1 ? "block" : "blocks"
+                let text2 = " with \(errors) corrupted \(blocks)"
+                volumeInfo.stringValue = text + text2
+                volumeInfo.textColor = .systemRed
+                return
             }
         }
         
@@ -451,7 +473,7 @@ class ExporterDialog: DialogController {
     
     func updateBlockInfoUnselected() {
         
-        let type = volume!.blockType(_block)
+        let type = volume!.blockType(blockNr)
         var text: String
         
         switch type {
@@ -472,7 +494,7 @@ class ExporterDialog: DialogController {
     
     func updateBlockInfoSelected() {
         
-        let usage = volume!.itemType(_block, pos: selection!)
+        let usage = volume!.itemType(blockNr, pos: selection!)
         var text: String
         
         switch usage {
@@ -569,7 +591,7 @@ class ExporterDialog: DialogController {
         var text: String
         var exp = UInt8(0)
 
-        let error = volume!.check(_block, pos: selection!, expected: &exp, strict: strict)
+        let error = volume!.check(blockNr, pos: selection!, expected: &exp, strict: strict)
 
         switch error {
         case .OK:
@@ -686,16 +708,6 @@ class ExporterDialog: DialogController {
             hideSheet()
         }
     }
-
-    /*
-    func export(url: URL) {
-    
-        track("url = \(url)")
-        parent.mydocument.export(drive: driveNr, to: url, diskFileProxy: disk!)
-
-        hideSheet()
-    }
-    */
     
     //
     // Action methods
@@ -775,8 +787,10 @@ class ExporterDialog: DialogController {
     @IBAction func strictAction(_ sender: NSButton!) {
         
         track()
-        
-        checkVolume()
+
+        // Repeat the integrity check
+        errorReport = volume?.check(strict)
+
         update()
     }
     
@@ -846,10 +860,10 @@ extension ExporterDialog: NSTableViewDataSource {
     
     func buildStrings() {
         
-        track("Building strings for block \(_block)")
+        track("Building strings for block \(blockNr)")
         
         let dst = UnsafeMutablePointer<UInt8>.allocate(capacity: 512)
-        disk?.readSector(dst, block: _block)
+        disk?.readSector(dst, block: blockNr)
         
         for i in 0 ..< numberOfRows(in: previewTable) {
             
@@ -868,7 +882,7 @@ extension ExporterDialog: NSTableViewDataSource {
         
         if let col = columnNr(tableColumn) {
 
-            if let byte = disk?.readByte(_block, offset: 16 * row + col) {
+            if let byte = disk?.readByte(blockNr, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }
         } else {
@@ -889,7 +903,7 @@ extension ExporterDialog: NSTableViewDelegate {
         if let col = columnNr(tableColumn) {
             
             let offset = 16 * row + col
-            let error = volume?.check(_block, pos: offset, expected: &exp, strict: strict) ?? .OK
+            let error = volume?.check(blockNr, pos: offset, expected: &exp, strict: strict) ?? .OK
             
             if row == selectedRow && col == selectedCol {
                 cell?.textColor = .white
