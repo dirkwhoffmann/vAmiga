@@ -12,7 +12,6 @@
 FSBitmapBlock::FSBitmapBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
-    dealloc();
 }
 
 FSBitmapBlock::~FSBitmapBlock()
@@ -40,15 +39,18 @@ FSBitmapBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSBitmapBlock::dump()
 {
-    printf("   Allocated: ");
-
-    for (u32 i = 0; i < volume.capacity; i++) {
-        if (isAllocated(i)) printf("%d ", i);
+    u32 count = 0;
+    for (u32 i = 1; i < volume.bsize / 4; i++) {
+        if (u32 value = get32(i)) {
+            for (int j = 0; j < 8; j++) {
+                if (GET_BIT(value, j)) count++;
+            }
+        }
     }
-    
-    printf("\n");
+    printf("   Allocated: %d blocks\n", count);
 }
 
+/*
 void
 FSBitmapBlock::locateBlockBit(u32 nr, u32 *byte, u32 *bit)
 {
@@ -109,3 +111,4 @@ FSBitmapBlock::dealloc()
     // Mark all blocks as free except the first two
     for (u32 i = 2; i < volume.capacity; i++) dealloc(i);
 }
+*/

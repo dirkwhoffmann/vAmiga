@@ -87,17 +87,12 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
 
     dsize = isOFS() ? bsize - 24 : bsize;
 
-    // Determine the required amout of bitmap and bitmap extension blocks
-    u32 bitsPerBlock        = (bsize - 4) * 8;
-    u32 numBitmapBlocks     = (capacity + bitsPerBlock - 1) / bitsPerBlock;
-    u32 numExtensionBlocks  = 0; // TODO
-
     // Determine the block locations
-    u32 root                = rootBlockNr();
-    u32 firstBitmapBlock    = root + 1;
-    u32 lastBitmapBlock     = firstBitmapBlock + numBitmapBlocks - 1;
-    u32 firstBitmapExtBlock = lastBitmapBlock + 1;
-    u32 lastBitmapExtBlock  = firstBitmapExtBlock + numExtensionBlocks - 1;
+    u32 root             = rootBlockNr();
+    u32 firstBitmapBlock = root + 1;
+    u32 lastBitmapBlock  = firstBitmapBlock + requiredBitmapBlocks() - 1;
+    u32 firstExtBlock    = lastBitmapBlock + 1;
+    u32 lastExtBlock     = firstExtBlock + requiredBitmapExtensionBlocks() - 1;
     assert(root < capacity);
 
     // Add boot blocks
@@ -116,7 +111,7 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
 
     // Add bitmap extension blocks
     FSBlock *pred = rb;
-    for (u32 ref = 0; firstBitmapExtBlock <= lastBitmapExtBlock; ref++) {
+    for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
         blocks[ref] = new FSBitmapExtBlock(*this, ref);
         bmExtensionBlocks.push_back(ref);
         pred->setNextBmExtBlockRef(ref);
@@ -125,21 +120,17 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
 
     // Add all bitmap block references
     rb->addBitmapBlockRefs(bmBlocks);
-    
-    // Mark all used blocks as allocated
-    // TODO: Implement and use volume.markAsAllocated(...)
-    bitmapBlock()->alloc(root);
-    for (auto& it : bmBlocks) bitmapBlock()->alloc(it);
-    for (auto& it : bmExtensionBlocks) bitmapBlock()->alloc(it);
-    
-    // Fill all unused slots with empty blocks
+        
+    // Add free blocks
     for (u32 i = 2; i < root; i++) {
         assert(blocks[i] == nullptr);
         blocks[i] = new FSEmptyBlock(*this, i);
+        markAsFree(i);
     }
-    for (u32 i = lastBitmapExtBlock + 1; i < capacity; i++) {
+    for (u32 i = lastExtBlock + 1; i < capacity; i++) {
         assert(blocks[i] == nullptr);
         blocks[i] = new FSEmptyBlock(*this, i);
+        markAsFree(i);
     }
 
     // Set the current directory to '/'
@@ -179,8 +170,16 @@ FSVolume::info()
 void
 FSVolume::dump()
 {
-    msg("          Name : %s\n", getName().c_str());
-    msg("   File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
+    msg("                  Name : %s\n", getName().c_str());
+    msg("           File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
+    msg("\n");
+    msg("  Bytes per data block : %d\n", getDataBlockCapacity());
+    msg(" Bits per bitmap block : %d\n", getAllocBitsInBitmapBlock());
+    msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
+    msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
+    msg("Required bitmap blocks : %d\n", requiredBitmapBlocks());
+    msg(" Required bmExt blocks : %d\n", requiredBitmapExtensionBlocks());
+    msg("\n");
     msg(" Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
@@ -365,6 +364,44 @@ FSVolume::isFFS()
 }
 
 u32
+FSVolume::getAllocBitsInBitmapBlock()
+{
+    return (bsize - 4) * 8;
+}
+
+u32
+FSVolume::bitmapRefsInRootBlock()
+{
+    return 25;
+}
+
+u32
+FSVolume::bitmapRefsInBitmapExtensionBlock()
+{
+    return (bsize / 4) - 1;
+}
+
+u32
+FSVolume::requiredBitmapBlocks()
+{
+    u32 allocationBitsPerBlock = (bsize - 4) * 8;
+    return (capacity + allocationBitsPerBlock - 1) / allocationBitsPerBlock;
+}
+
+u32
+FSVolume::requiredBitmapExtensionBlocks()
+{
+    u32 numBlocks = requiredBitmapBlocks();
+    
+    // The first 25 blocks fit into the root block
+    if (numBlocks <= bitmapRefsInRootBlock()) return 0;
+    
+    numBlocks -= 25;
+    u32 refsPerBlock = bitmapRefsInBitmapExtensionBlock();
+    return (numBlocks + refsPerBlock - 1) / refsPerBlock;
+}
+
+u32
 FSVolume::getDataBlockCapacity()
 {
     if (isOFS()) {
@@ -384,6 +421,73 @@ FSVolume::freeBlocks()
     }
     
     return result;
+}
+
+bool
+FSVolume::isFree(u32 ref)
+{
+    u32 block, byte, bit;
+    
+    if (locateAllocationBit(ref, &block, &byte, &bit)) {
+        if (FSBitmapBlock *bm = bitmapBlock(block)) {
+            
+            return GET_BIT(bm->data[byte], bit);
+        }
+    }
+    return false;
+}
+
+void
+FSVolume::mark(u32 ref, bool alloc)
+{
+    u32 block, byte, bit;
+    
+    if (locateAllocationBit(ref, &block, &byte, &bit)) {
+        if (FSBitmapBlock *bm = bitmapBlock(block)) {
+            
+            // 0 = allocated, 1 = free
+            alloc ? CLR_BIT(bm->data[byte], bit) : SET_BIT(bm->data[byte], bit);
+        }
+    }
+}
+
+bool
+FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
+{
+    assert(ref >= 2 && ref < capacity);
+    
+    // The first two blocks are not part the map (they are always allocated)
+    ref -= 2;
+    
+    // Locate the bitmap block
+    u32 nr = ref /  getAllocBitsInBitmapBlock();
+    if (nr >= bmBlocks.size()) {
+        warn("Allocation bit is located in a non-existent bitmap block %d\n", nr);
+        return false;
+    }
+    u32 rBlock = bmBlocks[nr];
+    assert(bitmapBlock(rBlock));
+
+    // Locate the byte position (the long word ordering will be inversed)
+    u32 rByte = (nr / 8);
+    
+    // Rectifiy the ordering
+    switch (rByte % 4) {
+        case 0: rByte += 3; break;
+        case 1: rByte += 1; break;
+        case 2: rByte -= 1; break;
+        case 3: rByte -= 3; break;
+    }
+
+    // Skip the checksum which is located in the first four bytes
+    rByte += 4;
+    assert(rByte >= 4 && rByte < bsize);
+    
+    *block = rBlock;
+    *byte  = rByte;
+    *bit   = ref % 8;
+    
+    return true;
 }
 
 FSBlockType
@@ -507,7 +611,7 @@ FSVolume::allocateBlock()
     // Search for a free block above the root block
     for (long i = rootBlockNr() + 1; i < capacity; i++) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
-            bitmapBlock()->alloc(i);
+            markAsAllocated(i);
             return i;
         }
     }
@@ -515,7 +619,7 @@ FSVolume::allocateBlock()
     // Search for a free block below the root block
     for (long i = rootBlockNr() - 1; i >= 2; i--) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
-            bitmapBlock()->alloc(i);
+            markAsAllocated(i);
             return i;
         }
     }
@@ -532,7 +636,7 @@ FSVolume::deallocateBlock(u32 ref)
     if (b->type() != FS_EMPTY_BLOCK) {
         delete b;
         blocks[ref] = new FSEmptyBlock(*this, ref);
-        bitmapBlock()->dealloc(ref);
+        markAsFree(ref);
     }
 }
 

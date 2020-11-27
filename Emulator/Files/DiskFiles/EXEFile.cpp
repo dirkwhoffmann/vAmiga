@@ -77,7 +77,10 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     // Check if this file requires an HD disk
     bool hd = length > 853000;
     
-    // Create a new file system 
+    // REMOVE ASAP
+    // FSVolume volume= FSVolume(FS_OFS, 120000);
+    
+    // Create a new file system
     FSVolume volume = FSVolume(FS_OFS, hd ? 4 * 880 : 2 * 880);
     volume.setName(FSName("Disk"));
     

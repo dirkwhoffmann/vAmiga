@@ -39,6 +39,12 @@ FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict)
 void
 FSBitmapExtBlock::dump()
 {
+    msg("Bitmap blocks : ");
+    for (u32 i = 0; i < (volume.bsize / 4) - 1; i++) {
+        if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
+    }
+    msg("\n");
+    msg("         Next : %d\n", getNextBmExtBlockRef());
 }
 
 void

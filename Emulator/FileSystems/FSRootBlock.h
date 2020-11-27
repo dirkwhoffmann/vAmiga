@@ -35,7 +35,7 @@ struct FSRootBlock : FSBlock {
     void setBmBlockRef(int nr, u32 ref)          {        set32(nr-49, ref); }
 
     u32 getNextBmExtBlockRef() override          { return get32(-24);        }
-    void setNextBmExtBlockRef(u32 ref) override  {        set32(-24, ref);   }
+    void setNextBmExtBlockRef(u32 ref) override  { printf("RB %d\n", ref);       set32(-24, ref);   }
     
     FSTime getModificationDate() override        { return FSTime(addr(-23)); }
     void setModificationDate(FSTime t) override  { t.write(addr(-23));       }

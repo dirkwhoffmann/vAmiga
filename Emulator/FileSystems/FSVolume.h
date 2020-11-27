@@ -131,8 +131,15 @@ public:
     // Returns the block size in bytes
     u32 getBlockSize() { return bsize; }
 
-    // Returns the number of bytes that can be stored in a single data block
+    // Returns storage capacity information about certain blocks
     u32 getDataBlockCapacity();
+    u32 bitmapRefsInRootBlock();
+    u32 bitmapRefsInBitmapExtensionBlock();
+
+    // Returns certain bitmap block parameters
+    u32 getAllocBitsInBitmapBlock();
+    u32 requiredBitmapBlocks();
+    u32 requiredBitmapExtensionBlocks();
     
     // Reports usage information
     u32 numBlocks() { return getCapacity(); }
@@ -178,6 +185,26 @@ public:
     // Returns the number of the the n-th corrupted block
     u32 seekCorruptedBlock(u32 n);
     
+    
+    //
+    // Allocating blocks
+    //
+    
+public:
+    
+    // Checks if a certain block is marked as allocated or free
+    bool isAllocated(u32 ref) { return !isFree(ref); }
+    bool isFree(u32 ref);
+    
+    // Marks a block as allocated or free
+    void markAsAllocated(u32 ref) { mark(ref, true); }
+    void markAsFree(u32 ref) { mark(ref, false); }
+    void mark(u32 ref, bool alloc);
+    
+private:
+    
+    bool locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit);
+
     
     //
     // Accessing blocks

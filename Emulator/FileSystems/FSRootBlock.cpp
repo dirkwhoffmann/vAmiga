@@ -17,7 +17,6 @@ FSRootBlock::FSRootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     
     set32(0, 2);                         // Type
     set32(3, hashTableSize());           // Hash table size
-    // set32(-49, volume.bitmapBlockNr());  // Location of the bitmap block
     set32(-50, 0xFFFFFFFF);              // Bitmap validity
     setCreationDate(time(NULL));         // Creation date
     setModificationDate(time(NULL));     // Modification date
@@ -100,10 +99,10 @@ FSRootBlock::dump()
     msg("   Hash table : "); dumpHashTable(); printf("\n");
     msg("Bitmap blocks : ");
     for (int i = 0; i < 25; i++) {
-        if (getBmBlockRef(i)) msg("%d ", getBmBlockRef(i));
+        if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
     }
     msg("\n");
-    msg("   Next BmExt : %d\n", getNextBmExtBlock());
+    msg("   Next BmExt : %d\n", getNextBmExtBlockRef());
 }
 
 bool
