@@ -170,7 +170,7 @@ FSVolume::info()
     msg("%5d (x %3d) ", numBlocks(), bsize);
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
-    msg("%3d%%   ",     (int)(100.0 * usedBlocks() / freeBlocks()));
+    msg("%3d%%   ",     (int)(100.0 * usedBlocks() / numBlocks()));
     msg("%s\n",         getName().c_str());
     msg("\n");
 }
@@ -459,6 +459,38 @@ FSVolume::mark(u32 ref, bool alloc)
     }
 }
 
+void
+FSVolume::locateBitmapBlocks(const u8 *buffer)
+{
+    assert(buffer != nullptr);
+    
+    // Start at the root block location
+    u32 ref = 880; // TODO: THIS WON'T WORK FOR HARD DRIVES
+    u32 cnt = 25;
+    u32 offset = bsize - 49 * 4;
+    
+    while (ref) {
+
+        const u8 *p = buffer + (ref * bsize) + offset;
+    
+        // Collect all references to bitmap blocks stored in this block
+        for (u32 i = 0; i < cnt; i++, p += 4) {
+            if (u32 ref = FFSDataBlock::read32(p); ref < capacity) {
+                bmBlocks.push_back(ref);
+            } else {
+                return;
+            }
+        }
+        
+        // Continue collecting in the next extension bitmap block
+        if ((ref = FFSDataBlock::read32(p))) {
+            bmExtensionBlocks.push_back(ref);
+            cnt = (bsize / 4) - 1;
+            offset = 0;
+        }
+    }
+}
+
 bool
 FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 {
@@ -477,7 +509,7 @@ FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     assert(bitmapBlock(rBlock));
 
     // Locate the byte position (the long word ordering will be inversed)
-    u32 rByte = (nr / 8);
+    u32 rByte = (ref / 8);
     
     // Rectifiy the ordering
     switch (rByte % 4) {
@@ -490,11 +522,14 @@ FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     // Skip the checksum which is located in the first four bytes
     rByte += 4;
     assert(rByte >= 4 && rByte < bsize);
-    
+        
     *block = rBlock;
     *byte  = rByte;
     *bit   = ref % 8;
     
+    debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
+          ref, *block, *byte, *bit);
+
     return true;
 }
 
@@ -1073,6 +1108,9 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     // Set the version number
     type = (FSVolumeType)src[3];
     
+    // Scan the buffer for bitmap blocks and bitmap extension blocks
+    locateBitmapBlocks(src);
+    
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
         
@@ -1095,6 +1133,8 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     
     *error = FS_OK;
     debug(FS_DEBUG, "Success\n");
+    info();
+    dump();
     printDirectory(true);
     return true;
 }

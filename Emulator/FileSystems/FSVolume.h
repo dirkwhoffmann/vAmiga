@@ -203,6 +203,10 @@ public:
     
 private:
     
+    // Seeks all bitmap and bitmap extension blocks inside a buffer
+    void locateBitmapBlocks(const u8 *buffer);
+    
+    // Computes the position of a certain block allocation bit
     bool locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit);
 
     
