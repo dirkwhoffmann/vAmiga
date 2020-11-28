@@ -31,7 +31,7 @@ FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict)
     i32 word = byte / 4;
     u32 value = get32(word);
     
-    if (word == (i32)volume.bsize - 4) EXPECT_BITMAP_EXT_REF;
+    if (word == (i32)(volume.bsize - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
     
     return FS_OK;
 }

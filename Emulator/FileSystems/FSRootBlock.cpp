@@ -45,7 +45,7 @@ FSRootBlock::itemType(u32 byte)
         case 4:   return FSI_UNUSED;
         case 5:   return FSI_CHECKSUM;
         case -50: return FSI_BITMAP_VALIDITY;
-        case -49: return FSI_BITMAP_BLOCK_REF;
+        case -24: return FSI_BITMAP_EXT_BLOCK_REF;
         case -23: return FSI_MODIFIED_DAY;
         case -22: return FSI_MODIFIED_MIN;
         case -21: return FSI_MODIFIED_TICKS;
@@ -56,12 +56,14 @@ FSRootBlock::itemType(u32 byte)
         case -3:
         case -2:  return FSI_UNUSED;
         case -1:  return FSI_SUBTYPE_ID;
+            
+        default:
+            
+            if (word <= -51)                return FSI_HASH_REF;
+            if (word <= -25)                return FSI_BITMAP_BLOCK_REF;
+            if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
     }
     
-    if (word <= -51)                return FSI_HASH_REF;
-    if (word >= -49 && word <= -24) return FSI_BITMAP_BLOCK_REF;
-    if (word >= -20 && word <= -8)  return FSI_BCPL_DISK_NAME;
-
     assert(false);
     return FSI_UNKNOWN;
 }
@@ -74,18 +76,29 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
     u32 value = get32(word);
     
     switch (word) {
-        case 0:  EXPECT_LONGWORD(2);     break;
+            
+        case 0:   EXPECT_LONGWORD(2);              break;
         case 1:
-        case 2:  EXPECT_BYTE(0);         break;
-        case 3:  EXPECT_HASHTABLE_SIZE;  break;
-        case 4:  EXPECT_BYTE(0);         break;
-        case 5:  EXPECT_CHECKSUM;        break;
+        case 2:   EXPECT_BYTE(0);                  break;
+        case 3:   EXPECT_HASHTABLE_SIZE;           break;
+        case 4:   EXPECT_BYTE(0);                  break;
+        case 5:   EXPECT_CHECKSUM;                 break;
+        case -50:                                  break;
+        case -49: EXPECT_BITMAP_REF;               break;
+        case -24: EXPECT_OPTIONAL_BITMAP_EXT_REF;  break;
         case -4:
         case -3:
-        case -2: EXPECT_BYTE(0);         break;
-        case -1: EXPECT_LONGWORD(1);     break;
+        case -2:  EXPECT_BYTE(0);                  break;
+        case -1:  EXPECT_LONGWORD(1);              break;
+
+        default:
+            
+            // Hash table area
+            if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
+            
+            // Bitmap block area
+            if (word <= -25) EXPECT_OPTIONAL_BITMAP_REF;
     }
-    if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
     
     return FS_OK;
 }

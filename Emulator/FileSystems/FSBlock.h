@@ -299,8 +299,17 @@ if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) ret
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
+#define EXPECT_BITMAP_REF { \
+if (FSError e = volume.checkBlockType(value, FS_BITMAP_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_OPTIONAL_BITMAP_REF { \
+if (value) { EXPECT_BITMAP_REF } }
+
 #define EXPECT_BITMAP_EXT_REF { \
 if (FSError e = volume.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) return e; }
+
+#define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
+if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
 if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e; }

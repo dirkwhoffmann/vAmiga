@@ -87,10 +87,12 @@ class ExporterDialog: DialogController {
     //
     
     func setCylinder(_ newValue: Int) {
+        
+        if newValue != cylinderNr {
 
-        if newValue != cylinderNr && newValue >= 0 && newValue < numCylinders {
-                        
-            cylinderNr = newValue
+            let value = newValue.clamped(0, numCylinders - 1)
+
+            cylinderNr = value
             trackNr    = cylinderNr * 2 + headNr
             blockNr    = trackNr * numSectors + sectorNr
             
@@ -101,9 +103,11 @@ class ExporterDialog: DialogController {
     
     func setHead(_ newValue: Int) {
         
-        if newValue != headNr && newValue >= 0 && newValue < numSides {
+        if newValue != headNr {
                         
-            headNr     = newValue
+            let value = newValue.clamped(0, numSides - 1)
+
+            headNr     = value
             trackNr    = cylinderNr * 2 + headNr
             blockNr    = trackNr * numSectors + sectorNr
             
@@ -114,9 +118,11 @@ class ExporterDialog: DialogController {
     
     func setTrack(_ newValue: Int) {
         
-        if newValue != trackNr && newValue >= 0 && newValue < numTracks {
-                        
-            trackNr    = newValue
+        if newValue != trackNr {
+                   
+            let value = newValue.clamped(0, numTracks - 1)
+            
+            trackNr    = value
             cylinderNr = trackNr / 2
             headNr     = trackNr % 2
             blockNr    = trackNr * numSectors + sectorNr
@@ -128,9 +134,11 @@ class ExporterDialog: DialogController {
 
     func setSector(_ newValue: Int) {
         
-        if newValue != sectorNr && newValue >= 0 && newValue < numSectors {
-                        
-            sectorNr   = newValue
+        if newValue != sectorNr {
+                  
+            let value = newValue.clamped(0, numSectors - 1)
+            
+            sectorNr   = value
             blockNr    = trackNr * numSectors + sectorNr
             
             selection = nil
@@ -140,9 +148,11 @@ class ExporterDialog: DialogController {
 
     func setBlock(_ newValue: Int) {
         
-        if newValue != blockNr && newValue >= 0 && newValue < numBlocks {
+        if newValue != blockNr {
                         
-            blockNr    = newValue
+            let value = newValue.clamped(0, numBlocks - 1)
+
+            blockNr    = value
             trackNr    = blockNr / numSectors
             sectorNr   = blockNr % numSectors
             cylinderNr = trackNr / 2
@@ -212,6 +222,10 @@ class ExporterDialog: DialogController {
 
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
+        
+        // Configure elements
+        sectorStepper.maxValue = .greatestFiniteMagnitude
+        blockStepper.maxValue = .greatestFiniteMagnitude
         
         // Start with a shrinked window
         var rect = window!.contentRect(forFrameRect: window!.frame)
@@ -554,6 +568,8 @@ class ExporterDialog: DialogController {
             text = "Next Extension Block Reference"
         case .FSI_BITMAP_BLOCK_REF:
             text = "Bitmap Block Reference"
+        case .FSI_BITMAP_EXT_BLOCK_REF:
+            text = "Extension Bitmap Block Reference"
         case .FSI_BITMAP_VALIDITY:
             text = "Bitmap Validity Bits"
         case .FSI_DATA_BLOCK_REF_COUNT:

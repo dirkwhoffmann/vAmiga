@@ -138,6 +138,9 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
         markAsFree(i);
     }
 
+    // Compute checksums for all blocks
+    updateChecksums();
+    
     // Set the current directory to '/'
     currentDir = rootBlockNr();
     
