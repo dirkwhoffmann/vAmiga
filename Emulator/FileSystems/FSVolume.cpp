@@ -39,14 +39,19 @@ FSVolume::makeWithHDF(HDFFile *hdf, FSError *error)
     // TODO: Determine file system type from HDF
     FSVolumeType type = FS_OFS;
     
+    // REMOVE ASAP
+    FSVolume *volume = new FSVolume(FS_OFS, 120000);
+
     // Create volume
-    FSVolume *volume = new FSVolume(type, hdf->numBlocks(), 512);
+    // FSVolume *volume = new FSVolume(type, hdf->numBlocks(), 512);
 
     // Import file system from HDF
+    /*
     if (!volume->importVolume(hdf->getData(), hdf->getSize(), error)) {
         delete volume;
         return nullptr;
     }
+    */
     
     return volume;
 }
@@ -289,8 +294,8 @@ FSVolume::isCorrupted(u32 blockNr, u32 n)
 u32
 FSVolume::nextCorrupted(u32 blockNr)
 {
-    long i = (long)blockNr + 1;
-    while (i++ < capacity) { if (isCorrupted(i)) return i; }
+    long i = (long)blockNr;
+    while (++i < capacity) { if (isCorrupted(i)) return i; }
     return blockNr;
 }
 
@@ -1016,6 +1021,18 @@ FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
     return FS_OK;
 }
 
+u8
+FSVolume::readByte(u32 block, u32 offset)
+{
+    assert(offset < bsize);
+
+    if (block < capacity) {
+        return blocks[block]->data ? blocks[block]->data[offset] : 0;
+    }
+    
+    return 0;
+}
+
 bool
 FSVolume::importVolume(const u8 *src, size_t size)
 {
@@ -1082,33 +1099,61 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
 bool
 FSVolume::exportVolume(u8 *dst, size_t size)
 {
-    FSError error;
-    bool result = exportVolume(dst, size, &error);
-    
-    assert(result == (error == FS_OK));
-    return result;
+    return exportBlocks(0, capacity - 1, dst, size);
 }
 
 bool
 FSVolume::exportVolume(u8 *dst, size_t size, FSError *error)
 {
-    assert(dst != nullptr);
+    return exportBlocks(0, capacity - 1, dst, size, error);
+}
 
-    debug(FS_DEBUG, "Exporting file system...\n");
+bool
+FSVolume::exportBlock(u32 nr, u8 *dst, size_t size)
+{
+    return exportBlocks(nr, nr, dst, size);
+}
+
+bool
+FSVolume::exportBlock(u32 nr, u8 *dst, size_t size, FSError *error)
+{
+    return exportBlocks(nr, nr, dst, size, error);
+}
+
+bool
+FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
+{
+    FSError error;
+    bool result = exportBlocks(first, last, dst, size, &error);
+    
+    assert(result == (error == FS_OK));
+    return result;
+}
+
+bool FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
+{
+    assert(first < capacity);
+    assert(last < capacity);
+    assert(first <= last);
+    assert(dst != nullptr);
+    
+    u32 count = last - first;
+    
+    debug(FS_DEBUG, "Exporting %d blocks (%d - %d)\n", count, first, last);
 
     // Only proceed if the (predicted) block size matches
     if (size % bsize != 0) { *error = FS_WRONG_BSIZE; return false; }
 
     // Only proceed if the source buffer contains the right amount of data
-    if (capacity * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
+    if (count * bsize != size) { *error = FS_WRONG_CAPACITY; return false; }
         
     // Wipe out the target buffer
     memset(dst, 0, size);
     
     // Export all blocks
-    for (u32 i = 0; i < capacity; i++) {
+    for (u32 i = 0; i < count; i++) {
         
-        blocks[i]->exportBlock(dst + i * bsize, bsize);
+        blocks[first + i]->exportBlock(dst + i * bsize, bsize);
     }
 
     *error = FS_OK;

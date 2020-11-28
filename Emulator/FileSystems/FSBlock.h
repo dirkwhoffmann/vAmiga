@@ -74,13 +74,13 @@ struct FSBlock : AmigaObject {
     static void dec32(u8 *p) { write32(p, read32(p) - 1); }
 
     // Computes the address of a long word inside the block
-    u8 *addr(int nr); 
+    u8 *addr32(int nr); 
     
     // Reads, writes, or modifies the n-th long word
-    u32 get32(i32 n) { return read32(addr(n)); }
-    void set32(i32 n, u32 val) { write32(addr(n), val); }
-    void inc32(i32 n) { inc32(addr(n)); }
-    void dec32(i32 n) { dec32(addr(n)); }
+    u32 get32(i32 n) { return read32(addr32(n)); }
+    void set32(i32 n, u32 val) { write32(addr32(n), val); }
+    void inc32(i32 n) { inc32(addr32(n)); }
+    void dec32(i32 n) { dec32(addr32(n)); }
 
     // Returns the location of the checksum inside this block
     virtual u32 checksumLocation() { return (u32)-1; }

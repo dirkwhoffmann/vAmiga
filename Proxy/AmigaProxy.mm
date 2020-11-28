@@ -1318,9 +1318,19 @@ struct SerialPortWrapper { SerialPort *port; };
     return wrapper->volume->printDirectory(recursive);
 }
 
+- (NSInteger) readByte:(NSInteger)block offset:(NSInteger)offset
+{
+    return wrapper->volume->readByte(block, offset);
+}
+
 - (FSError) export:(NSString *)path
 {
     return wrapper->volume->exportDirectory([path fileSystemRepresentation]);
+}
+
+- (BOOL) exportBlock:(NSInteger)block buffer:(unsigned char *)buffer
+{
+    return wrapper->volume->exportBlock(block, buffer, 512);
 }
 
 - (void) dump

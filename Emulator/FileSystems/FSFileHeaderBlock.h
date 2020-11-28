@@ -48,14 +48,14 @@ struct FSFileHeaderBlock : FSBlock {
     u32 getFileSize() override                  { return get32(-47     );     }
     void setFileSize(u32 val) override          {        set32(-47, val);     }
 
-    FSComment getComment() override             { return FSComment(addr(-46));}
-    void setComment(FSComment name) override    { name.write(addr(-46));      }
+    FSComment getComment() override             { return FSComment(addr32(-46));}
+    void setComment(FSComment name) override    { name.write(addr32(-46));      }
 
-    FSTime getCreationDate() override           { return FSTime(addr(-23));   }
-    void setCreationDate(FSTime t) override     { t.write(addr(-23));         }
+    FSTime getCreationDate() override           { return FSTime(addr32(-23));   }
+    void setCreationDate(FSTime t) override     { t.write(addr32(-23));         }
 
-    FSName getName() override                   { return FSName(addr(-20));   }
-    void setName(FSName name) override          { name.write(addr(-20));      }
+    FSName getName() override                   { return FSName(addr32(-20));   }
+    void setName(FSName name) override          { name.write(addr32(-20));      }
     bool isNamed(FSName &other) override        { return getName() == other;  }
 
     u32 getNextHashRef() override               { return get32(-4     );      }

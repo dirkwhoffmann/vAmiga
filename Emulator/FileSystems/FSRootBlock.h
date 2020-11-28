@@ -37,14 +37,14 @@ struct FSRootBlock : FSBlock {
     u32 getNextBmExtBlockRef() override          { return get32(-24);        }
     void setNextBmExtBlockRef(u32 ref) override  { printf("RB %d\n", ref);       set32(-24, ref);   }
     
-    FSTime getModificationDate() override        { return FSTime(addr(-23)); }
-    void setModificationDate(FSTime t) override  { t.write(addr(-23));       }
+    FSTime getModificationDate() override        { return FSTime(addr32(-23)); }
+    void setModificationDate(FSTime t) override  { t.write(addr32(-23));       }
 
-    FSName getName() override                    { return FSName(addr(-20)); }
-    void setName(FSName name) override           { name.write(addr(-20));    }
+    FSName getName() override                    { return FSName(addr32(-20)); }
+    void setName(FSName name) override           { name.write(addr32(-20));    }
 
-    FSTime getCreationDate() override            { return FSTime(addr(-7));  }
-    void setCreationDate(FSTime t) override      { t.write(addr(-7));        }
+    FSTime getCreationDate() override            { return FSTime(addr32(-7));  }
+    void setCreationDate(FSTime t) override      { t.write(addr32(-7));        }
 
     bool addBitmapBlockRefs(std::vector<u32> &refs);
     u32 hashTableSize() override { return 72; }

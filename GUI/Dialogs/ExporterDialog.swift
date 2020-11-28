@@ -79,7 +79,7 @@ class ExporterDialog: DialogController {
     var sectorNr = 0
     var blockNr = 0
     
-    var sectorData: [String] = []
+    // var sectorData: [String] = []
     let bytesPerRow = 16
     
     //
@@ -208,7 +208,7 @@ class ExporterDialog: DialogController {
         track()
         super.awakeFromNib()
         
-        sectorData = Array(repeating: "", count: 512 / bytesPerRow)
+        // sectorData = Array(repeating: "", count: 512 / bytesPerRow)
 
         // Register to receive mouse click events
         previewTable.action = #selector(clickAction(_:))
@@ -349,7 +349,7 @@ class ExporterDialog: DialogController {
         }
         
         updateBlockInfo()
-        buildStrings()
+        // buildStrings()
         previewTable.reloadData()
     }
     
@@ -403,7 +403,7 @@ class ExporterDialog: DialogController {
             
             let blocks = volume!.numBlocks
             let capacity = blocks / 2000
-            text = "Volume with \(blocks) Blocks (\(capacity) MB)"
+            text = "\(capacity) MB (\(blocks) sectors)"
         
         } else {
             
@@ -841,6 +841,7 @@ extension ExporterDialog: NSTableViewDataSource {
         return column == nil ? nil : Int(column!.identifier.rawValue)
     }
     
+    /*
     func buildHex(p: UnsafeMutablePointer<UInt8>, count: Int) -> String {
         
         let hexDigits = Array(("0123456789ABCDEF ").utf16)
@@ -857,20 +858,38 @@ extension ExporterDialog: NSTableViewDataSource {
         
         return String(utf16CodeUnits: chars, count: chars.count)
     }
-    
+    */
+    /*
     func buildStrings() {
         
         track("Building strings for block \(blockNr)")
         
         let dst = UnsafeMutablePointer<UInt8>.allocate(capacity: 512)
-        disk?.readSector(dst, block: blockNr)
+
+        if volume != nil {
+
+            // If a file system has been detected, read the block from there
+            volume!.exportBlock(blockNr, buffer: dst)
+
+        } else if disk != nil {
+
+            // If no file system is present, read the block from the disk file
+            disk?.readSector(dst, block: blockNr)
+            
+        } else {
+
+            sectorData[blockNr] = ""
+            return
+        }
         
+        // Convert raw sector data to a string
         for i in 0 ..< numberOfRows(in: previewTable) {
             
             let str = buildHex(p: dst + i * bytesPerRow, count: bytesPerRow)
             sectorData[i] = str
         }
     }
+    */
     
     func numberOfRows(in tableView: NSTableView) -> Int {
         
@@ -882,6 +901,9 @@ extension ExporterDialog: NSTableViewDataSource {
         
         if let col = columnNr(tableColumn) {
 
+            if let byte = volume?.readByte(blockNr, offset: 16 * row + col) {
+                return String(format: "%02X", byte)
+            }
             if let byte = disk?.readByte(blockNr, offset: 16 * row + col) {
                 return String(format: "%02X", byte)
             }

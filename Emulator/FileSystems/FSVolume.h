@@ -339,17 +339,26 @@ private:
     
 public:
     
-    // Exports the volume to a buffer compatible with the ADF format
-    bool importVolume(const u8 *src, size_t size);
-    bool importVolume(const u8 *src, size_t size, FSError *error);
+    // Reads a single byte from a block
+    u8 readByte(u32 block, u32 offset);
 
     // Imports the volume from a buffer compatible with the ADF format
-    bool exportVolume(u8 *dst, size_t size);
-    bool exportVolume(u8 *dst, size_t size, FSError *error);
+    bool importVolume(const u8 *src, size_t size);
+    bool importVolume(const u8 *src, size_t size, FSError *error);
 
     // Imports a directory from the host file system
     bool importDirectory(const char *path, bool recursive = true);
     bool importDirectory(const char *path, DIR *dir, bool recursive = true);
+
+    // Exports the volume to a buffer compatible with the ADF format
+    bool exportVolume(u8 *dst, size_t size);
+    bool exportVolume(u8 *dst, size_t size, FSError *error);
+
+    // Exports a single block or a range of blocks
+    bool exportBlock(u32 nr, u8 *dst, size_t size);
+    bool exportBlock(u32 nr, u8 *dst, size_t size, FSError *error);
+    bool exportBlocks(u32 first, u32 last, u8 *dst, size_t size);
+    bool exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error);
 
     // Exports the volume to a directory of the host file system
     FSError exportDirectory(const char *path);

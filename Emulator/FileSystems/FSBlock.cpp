@@ -66,7 +66,7 @@ FSBlock::check(bool strict)
 }
 
 u8 *
-FSBlock::addr(int nr)
+FSBlock::addr32(int nr)
 {
     return (data + 4 * nr) + (nr < 0 ? volume.bsize : 0);
 }
