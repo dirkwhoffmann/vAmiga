@@ -68,7 +68,7 @@ protected:
     
     // References to all bitmap blocks and bitmap extension blocks
     vector<u32> bmBlocks;
-    vector<u32> bmExtensionBlocks;
+    vector<u32> bmExtBlocks;
     
     // The directory where new files and subdirectories are added
     u32 currentDir = 0;
@@ -110,8 +110,8 @@ public:
     // Prints debug information about this volume
     virtual void dump();
         
-    // Guesses the type of a block by analyzing its number and data
-    FSBlockType guessBlockType(u32 nr, const u8 *buffer);
+    // Predicts the type of a block by analyzing its number and data
+    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
 
     
     //
@@ -223,8 +223,8 @@ public:
     FSItemType itemType(u32 nr, u32 pos);
     
     // Returns the location of the root block and the bitmap block
-    u32 rootBlockNr() { return capacity / 2; }
-    u32 bitmapBlockNr() { return capacity / 2 + 1; }
+    u32 rootBlockNr();
+    // u32 bitmapBlockNr() { return capacity / 2 + 1; }
     
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *block(u32 nr);
@@ -232,7 +232,7 @@ public:
     FSRootBlock *rootBlock(u32 nr);
     FSRootBlock *rootBlock() { return rootBlock(rootBlockNr()); }
     FSBitmapBlock *bitmapBlock(u32 nr);
-    FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
+    // FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
     FSBitmapExtBlock *bitmapExtBlock(u32 nr);
     FSUserDirBlock *userDirBlock(u32 nr);
     FSFileHeaderBlock *fileHeaderBlock(u32 nr);

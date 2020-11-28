@@ -94,10 +94,10 @@ FSRootBlock::check(u32 byte, u8 *expected, bool strict)
         default:
             
             // Hash table area
-            if (word <= -51) EXPECT_OPTIONAL_HASH_REF;
+            if (word <= -51) { EXPECT_OPTIONAL_HASH_REF; break; }
             
             // Bitmap block area
-            if (word <= -25) EXPECT_OPTIONAL_BITMAP_REF;
+            if (word <= -25) { EXPECT_OPTIONAL_BITMAP_REF; break; }
     }
     
     return FS_OK;

@@ -517,79 +517,79 @@ class ExporterDialog: DialogController {
         case .FSI_UNUSED:
             text = "Unused"
         case .FSI_DOS_HEADER:
-            text = "AmigaDOS Header Signature"
+            text = "AmigaDOS header signature"
         case .FSI_DOS_VERSION:
-            text = "AmigaDOS Version Number"
+            text = "AmigaDOS version number"
         case .FSI_BOOTCODE:
-            text = "Boot Code Instruction"
+            text = "Boot code instruction"
         case .FSI_TYPE_ID:
-            text = "Type Identifier"
+            text = "Type identifier"
         case .FSI_SUBTYPE_ID:
-            text = "Subtype Identifier"
+            text = "Subtype identifier"
         case .FSI_SELF_REF:
-            text = "Block Reference to itself"
+            text = "Block reference to itself"
         case .FSI_CHECKSUM:
             text = "Checksum"
         case .FSI_HASHTABLE_SIZE:
-            text = "Hashtable Size"
+            text = "Hashtable size"
         case .FSI_HASH_REF:
-            text = "Hashtable Entry"
+            text = "Hashtable entry"
         case .FSI_PROT_BITS:
-            text = "Protection Status Bits"
+            text = "Protection status bits"
         case .FSI_BCPL_STRING_LENGTH:
-            text = "BCPL String Length"
+            text = "BCPL string Length"
         case .FSI_BCPL_DISK_NAME:
-            text = "Disk Name (BCPL Character)"
+            text = "Disk name (BCPL character)"
         case .FSI_BCPL_DIR_NAME:
-            text = "Directory Name (BCPL Character)"
+            text = "Directory name (BCPL character)"
         case .FSI_BCPL_FILE_NAME:
-            text = "File Name (BCPL Character)"
+            text = "File name (BCPL character)"
         case .FSI_BCPL_COMMENT:
-            text = "Comment (BCPL Character)"
+            text = "Comment (BCPL character)"
         case .FSI_CREATED_DAY:
-            text = "Creation Date (Days)"
+            text = "Creation date (days)"
         case .FSI_CREATED_MIN:
-            text = "Creation date (Minutes)"
+            text = "Creation date (minutes)"
         case .FSI_CREATED_TICKS:
-            text = "Creation Date (Ticks)"
+            text = "Creation date (ticks)"
         case .FSI_MODIFIED_DAY:
-            text = "Modification Date (Day)"
+            text = "Modification date (day)"
         case .FSI_MODIFIED_MIN:
-            text = "Modification Date (Minutes)"
+            text = "Modification date (minutes)"
         case .FSI_MODIFIED_TICKS:
-            text = "Modification Date (Ticks)"
+            text = "Modification date (ticks)"
         case .FSI_NEXT_HASH_REF:
-            text = "Reference to the next block with the same hash value"
+            text = "Reference to the next hash block"
         case .FSI_PARENT_DIR_REF:
-            text = "Parent Directory Block Reference"
+            text = "Parent directory block reference"
         case .FSI_FILEHEADER_REF:
-            text = "File Header Block Reference"
+            text = "File header block reference"
         case .FSI_EXT_BLOCK_REF:
-            text = "Next Extension Block Reference"
+            text = "Next extension block reference"
         case .FSI_BITMAP_BLOCK_REF:
-            text = "Bitmap Block Reference"
+            text = "Bitmap block reference"
         case .FSI_BITMAP_EXT_BLOCK_REF:
-            text = "Extension Bitmap Block Reference"
+            text = "Extension bitmap block reference"
         case .FSI_BITMAP_VALIDITY:
-            text = "Bitmap Validity Bits"
+            text = "Bitmap validity bits"
         case .FSI_DATA_BLOCK_REF_COUNT:
-            text = "Number of Stored Data Block References"
+            text = "Number of data block references"
         case .FSI_FILESIZE:
-            text = "File Size"
+            text = "File size"
         case .FSI_DATA_BLOCK_NUMBER:
-            text = "Position in the Data Block Chain"
+            text = "Position in the data block chain"
         case .FSI_DATA_BLOCK_REF:
-            text = "Data Block Reference"
+            text = "Data block reference"
         case .FSI_FIRST_DATA_BLOCK_REF:
-            text = "Reference to First Element in the Data Block Chain"
+            text = "Reference to the first data block"
         case .FSI_NEXT_DATA_BLOCK_REF:
-            text = "Reference to Next Element in the Data Block Chain"
+            text = "Reference to next data block"
         case .FSI_DATA_COUNT:
-            text = "Number of Stored Data Bytes"
+            text = "Number of stored data bytes"
         case .FSI_DATA:
-            text = "Data Byte"
+            text = "Data byte"
         case .FSI_BITMAP:
-            text = "Block Allocation Table"
+            text = "Block allocation table"
         default:
             fatalError()
         }

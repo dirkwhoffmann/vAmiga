@@ -118,7 +118,7 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
     FSBlock *pred = rb;
     for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
         blocks[ref] = new FSBitmapExtBlock(*this, ref);
-        bmExtensionBlocks.push_back(ref);
+        bmExtBlocks.push_back(ref);
         pred->setNextBmExtBlockRef(ref);
         pred = blocks[ref];
     }
@@ -145,7 +145,6 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
     currentDir = rootBlockNr();
     
     // Do some final consistency checks
-    assert(bitmapBlock() == blocks[rootBlockNr() + 1]);
     assert(rootBlock() == blocks[rootBlockNr()]);
 
     if (FS_DEBUG) {
@@ -192,7 +191,7 @@ FSVolume::dump()
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
     msg("  BmExt blocks : ");
-    for (auto& it : bmExtensionBlocks) { msg("%d ", it); }
+    for (auto& it : bmExtBlocks) { msg("%d ", it); }
     msg("\n\n");
 
     for (size_t i = 0; i < capacity; i++)  {
@@ -324,14 +323,21 @@ FSVolume::seekCorruptedBlock(u32 n)
 }
 
 FSBlockType
-FSVolume::guessBlockType(u32 nr, const u8 *buffer)
+FSVolume::predictBlockType(u32 nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
 
-    // Take care of blocks that can be identified by number
+    // Is it a boot block?
     if (nr <= 1) return FS_BOOT_BLOCK;
-    if (nr == bitmapBlockNr()) return FS_BITMAP_BLOCK;
-    
+
+    // Is it a bitmap block?
+    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
+        return FS_BITMAP_BLOCK;
+
+    // is it a bitmap extension block?
+    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
+        return FS_BITMAP_EXT_BLOCK;
+
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
     u32 subtype = FSBlock::read32(buffer + bsize - 4);
@@ -464,6 +470,9 @@ FSVolume::locateBitmapBlocks(const u8 *buffer)
 {
     assert(buffer != nullptr);
     
+    bmBlocks.clear();
+    bmExtBlocks.clear();
+    
     // Start at the root block location
     u32 ref = 880; // TODO: THIS WON'T WORK FOR HARD DRIVES
     u32 cnt = 25;
@@ -475,8 +484,8 @@ FSVolume::locateBitmapBlocks(const u8 *buffer)
     
         // Collect all references to bitmap blocks stored in this block
         for (u32 i = 0; i < cnt; i++, p += 4) {
-            if (u32 ref = FFSDataBlock::read32(p); ref < capacity) {
-                bmBlocks.push_back(ref);
+            if (u32 bmb = FFSDataBlock::read32(p)) {
+                if (bmb < capacity) {debug("Adding %d\n", bmb); bmBlocks.push_back(bmb);}
             } else {
                 return;
             }
@@ -484,7 +493,7 @@ FSVolume::locateBitmapBlocks(const u8 *buffer)
         
         // Continue collecting in the next extension bitmap block
         if ((ref = FFSDataBlock::read32(p))) {
-            bmExtensionBlocks.push_back(ref);
+            if (ref < capacity) bmExtBlocks.push_back(ref);
             cnt = (bsize / 4) - 1;
             offset = 0;
         }
@@ -543,6 +552,21 @@ FSItemType
 FSVolume::itemType(u32 nr, u32 pos)
 {
     return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
+}
+
+u32
+FSVolume::rootBlockNr()
+{
+    /*
+     numCyls = highCyl - lowCyl + 1
+     highKey = numCyls * numSurfaces * numBlocksPerTrack - 1
+     rootKey = INT (numReserved + highKey) / 2
+     */
+    u32 highKey = capacity - 1;
+    u32 reserved = 2;
+    u32 rootKey = (reserved + highKey) / 2;
+    
+    return rootKey;
 }
 
 FSBlock *
@@ -1115,7 +1139,7 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
     for (u32 i = 0; i < capacity; i++) {
         
         // Determine the type of the new block
-        FSBlockType type = guessBlockType(i, src + i * bsize);
+        FSBlockType type = predictBlockType(i, src + i * bsize);
         
         // Create the new block
         FSBlock *newBlock = FSBlock::makeWithType(*this, i, type);
