@@ -74,15 +74,21 @@ protected:
     // Number of data bytes in a single data block
     u32 dsize;
     
-    // Block storage
+    // The block storage
     BlockPtr *blocks;
     
-    // References to all bitmap blocks and bitmap extension blocks
-    vector<u32> bmBlocks;
-    vector<u32> bmExtBlocks;
+    // The partition table
+    std::vector<FSPartition> part;
     
-    // The directory where new files and subdirectories are added
-    u32 currentDir = 0;
+    // References to all bitmap blocks and bitmap extension blocks
+    // vector<u32> bmBlocks;
+    // vector<u32> bmExtBlocks;
+    
+    // The currently selected partition
+    u32 cp = 0;
+
+    // The currently selected directly
+    u32 cd = 0;
     
 
     //
@@ -237,9 +243,8 @@ public:
     // Returns the usage type of a certain byte in a certain block
     FSItemType itemType(u32 nr, u32 pos);
     
-    // Returns the location of the root block and the bitmap block
-    u32 rootBlockNr();
-    // u32 bitmapBlockNr() { return capacity / 2 + 1; }
+    // Returns the location of the root block in the current partition
+    u32 rootBlockNr() { return part[cp].rootBlockRef(); }
     
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *block(u32 nr);

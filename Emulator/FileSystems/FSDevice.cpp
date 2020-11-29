@@ -99,9 +99,13 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     this->sectors = s;
     this->bsize = bsize;
     capacity = c * h * s;
+    
+    // Create the block storage
     blocks = new BlockPtr[capacity]();
+    dsize = isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
 
-    dsize = isOFS() ? bsize - 24 : bsize;
+    // Create the first partition
+    part.push_back(FSPartition(*this, 0, c-1));
 
     // Determine the block locations
     u32 root             = rootBlockNr();
@@ -122,20 +126,20 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     // Add bitmap blocks
     for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
         blocks[ref] = new FSBitmapBlock(*this, ref);
-        bmBlocks.push_back(ref);
+        part[0].bmBlocks.push_back(ref);
     }
 
     // Add bitmap extension blocks
     FSBlock *pred = rb;
     for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
         blocks[ref] = new FSBitmapExtBlock(*this, ref);
-        bmExtBlocks.push_back(ref);
+        part[0].bmExtBlocks.push_back(ref);
         pred->setNextBmExtBlockRef(ref);
         pred = blocks[ref];
     }
 
     // Add all bitmap block references
-    rb->addBitmapBlockRefs(bmBlocks);
+    rb->addBitmapBlockRefs(part[0].bmBlocks);
         
     // Add free blocks
     for (u32 i = 2; i < root; i++) {
@@ -153,7 +157,7 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     updateChecksums();
     
     // Set the current directory to '/'
-    currentDir = rootBlockNr();
+    cd = rootBlockNr();
     
     // Do some final consistency checks
     assert(rootBlock() == blocks[rootBlockNr()]);
@@ -198,12 +202,12 @@ FSDevice::dump()
     msg("Required bitmap blocks : %d\n", requiredBitmapBlocks());
     msg(" Required bmExt blocks : %d\n", requiredBitmapExtensionBlocks());
     msg("\n");
-    msg(" Bitmap blocks : ");
-    for (auto& it : bmBlocks) { msg("%d ", it); }
+    
+    for (size_t i = 0; i < part.size(); i++) {
+        msg("Partition %d:\n", i);
+        part[i].dump();
+    }
     msg("\n");
-    msg("  BmExt blocks : ");
-    for (auto& it : bmExtBlocks) { msg("%d ", it); }
-    msg("\n\n");
 
     for (size_t i = 0; i < capacity; i++)  {
         
@@ -340,14 +344,17 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 
     // Is it a boot block?
     if (nr <= 1) return FS_BOOT_BLOCK;
-
-    // Is it a bitmap block?
-    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
-        return FS_BITMAP_BLOCK;
-
-    // is it a bitmap extension block?
-    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
-        return FS_BITMAP_EXT_BLOCK;
+    
+    for (auto& it : part) {
+        
+        // Is it a bitmap block?
+        if (std::find(it.bmBlocks.begin(), it.bmBlocks.end(), nr) != it.bmBlocks.end())
+            return FS_BITMAP_BLOCK;
+        
+        // is it a bitmap extension block?
+        if (std::find(it.bmExtBlocks.begin(), it.bmExtBlocks.end(), nr) != it.bmExtBlocks.end())
+            return FS_BITMAP_EXT_BLOCK;
+    }
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
@@ -480,7 +487,14 @@ void
 FSDevice::locateBitmapBlocks(const u8 *buffer)
 {
     assert(buffer != nullptr);
+
+    //
+    // DEPRECATED. MOVE to FSPartition
+    //
     
+    std::vector<u32> &bmBlocks = part[0].bmBlocks;
+    std::vector<u32> &bmExtBlocks = part[0].bmExtBlocks;
+
     bmBlocks.clear();
     bmExtBlocks.clear();
     
@@ -516,11 +530,14 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 {
     assert(ref >= 2 && ref < capacity);
     
+    // Search inside the current partition
+    auto &bmBlocks = part[cp].bmBlocks;
+    
     // The first two blocks are not part the map (they are always allocated)
     ref -= 2;
     
     // Locate the bitmap block
-    u32 nr = ref /  getAllocBitsInBitmapBlock();
+    u32 nr = ref / getAllocBitsInBitmapBlock();
     if (nr >= bmBlocks.size()) {
         warn("Allocation bit is located in a non-existent bitmap block %d\n", nr);
         return false;
@@ -563,21 +580,6 @@ FSItemType
 FSDevice::itemType(u32 nr, u32 pos)
 {
     return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
-}
-
-u32
-FSDevice::rootBlockNr()
-{
-    /*
-     numCyls = highCyl - lowCyl + 1
-     highKey = numCyls * numSurfaces * numBlocksPerTrack - 1
-     rootKey = INT (numReserved + highKey) / 2
-     */
-    u32 highKey = capacity - 1;
-    u32 reserved = 2;
-    u32 rootKey = (reserved + highKey) / 2;
-    
-    return rootKey;
 }
 
 FSBlock *
@@ -799,7 +801,7 @@ FSDevice::updateChecksums()
 FSBlock *
 FSDevice::currentDirBlock()
 {
-    FSBlock *cdb = block(currentDir);
+    FSBlock *cdb = block(cd);
     
     if (cdb) {
         if (cdb->type() == FS_ROOT_BLOCK || cdb->type() == FS_USERDIR_BLOCK) {
@@ -808,7 +810,7 @@ FSDevice::currentDirBlock()
     }
     
     // The block reference is invalid. Switch back to the root directory
-    currentDir = rootBlockNr();
+    cd = rootBlockNr();
     return rootBlock(); 
 }
 
@@ -822,14 +824,14 @@ FSDevice::changeDir(const char *name)
     if (strcmp(name, "/") == 0) {
                 
         // Move to top level
-        currentDir = rootBlockNr();
+        cd = rootBlockNr();
         return currentDirBlock();
     }
 
     if (strcmp(name, "..") == 0) {
                 
         // Move one level up
-        currentDir = cdb->getParentDirRef();
+        cd = cdb->getParentDirRef();
         return currentDirBlock();
     }
     
@@ -837,7 +839,7 @@ FSDevice::changeDir(const char *name)
     if (subdir == nullptr) return cdb;
     
     // Move one level down
-    currentDir = subdir->nr;
+    cd = subdir->nr;
     return currentDirBlock();
 }
 
@@ -979,7 +981,7 @@ void
 FSDevice::printDirectory(bool recursive)
 {
     std::vector<u32> items;
-    collect(currentDir, items);
+    collect(cd, items);
     
     for (auto const& i : items) {
         msg("%s\n", getPath(i).c_str());
@@ -1316,7 +1318,7 @@ FSDevice::exportDirectory(const char *path)
     
     // Collect files and directories
     std::vector<u32> items;
-    collect(currentDir, items);
+    collect(cd, items);
     
     // Export all items
     for (auto const& i : items) {

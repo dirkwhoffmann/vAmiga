@@ -27,9 +27,15 @@ FSPartition::FSPartition(FSDevice &ref, u8 *buffer) : dev(ref)
 void
 FSPartition::dump()
 {
-    msg(" First cylinder : %d\n", lowCyl);
-    msg("  Last cylinder : %d\n", highCyl);
-    msg("     Root block : %d\n", rootBlockRef());
+    msg("  First cylinder : %d\n", lowCyl);
+    msg("   Last cylinder : %d\n", highCyl);
+    msg("      Root block : %d\n", rootBlockRef());
+    msg("   Bitmap blocks : ");
+    for (auto& it : bmBlocks) { msg("%d ", it); }
+    msg("\n");
+    msg("Extension blocks : ");
+    for (auto& it : bmExtBlocks) { msg("%d ", it); }
+    msg("\n\n");
 }
 
 u32

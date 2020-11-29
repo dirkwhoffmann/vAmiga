@@ -43,6 +43,8 @@ struct FSPartition : AmigaObject {
     FSPartition(FSDevice &ref, u32 first, u32 last);
     FSPartition(FSDevice &ref, u8 *buffer);
 
+    const char *getDescription() override { return "FSPartition"; }
+    
     void dump();
 
     
