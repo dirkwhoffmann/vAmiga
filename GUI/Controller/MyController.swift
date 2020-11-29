@@ -558,13 +558,13 @@ extension MyController {
             if pref.driveSounds && pref.driveHeadSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
-            refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
+            refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
   
         case .MSG_DRIVE_HEAD_POLL:
             if pref.driveSounds && pref.drivePollSound {
                 macAudio.playSound(name: "drive_head", volume: 0.3)
             }
-            refreshStatusBar(drive: msg.data >> 8, cyclinder: msg.data % 0xFF)
+            refreshStatusBar(drive: msg.data >> 8, cylinder: msg.data % 0xFF)
 
         case .MSG_DISK_INSERT:
             if pref.driveSounds && pref.driveInsertSound {

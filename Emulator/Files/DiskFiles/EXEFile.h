@@ -62,7 +62,7 @@ public:
     DiskType getDiskType() override { return adf->getDiskType(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }
-    long numCyclinders() override { return adf->numCyclinders(); }
+    long numCylinders() override { return adf->numCylinders(); }
     long numSectors() override { return adf->numSectors(); }
     void readSector(u8 *target, long s) override { return adf->readSector(target, s); }
     void readSector(u8 *target, long t, long s) override { return adf->readSector(target, t, s); }

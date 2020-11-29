@@ -81,7 +81,7 @@ public:
     DiskType getDiskType() override;
     DiskDensity getDiskDensity() override;
     long numSides() override;
-    long numCyclinders() override;
+    long numCylinders() override;
     long numSectors() override;
     bool encodeDisk(class Disk *disk) override;
     bool decodeDisk(class Disk *disk) override;

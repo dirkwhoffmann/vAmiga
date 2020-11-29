@@ -122,7 +122,7 @@ Drive::_dump()
     msg("            dsklen: %X\n", dsklen);
     msg("               prb: %X\n", prb);
     msg("              Side: %d\n", head.side);
-    msg("         Cyclinder: %d\n", head.cylinder);
+    msg("          Cylinder: %d\n", head.cylinder);
     msg("            Offset: %d\n", head.offset);
     msg("   cylinderHistory: %X\n", cylinderHistory);
     msg("              Disk: %s\n", disk ? "yes" : "no");
@@ -266,7 +266,7 @@ Drive::driveStatusFlags()
         }
         
         // PA4: /DSKTRACK0
-        // debug("Head is at cyclinder %d\n", head.cylinder);
+        // debug("Head is at cylinder %d\n", head.cylinder);
         if (head.cylinder == 0) { result &= 0b11101111; }
         
         // PA3: /DSKPROT
@@ -419,7 +419,7 @@ Drive::rotate()
     long last = disk ? disk->length.cylinder[head.cylinder][head.side] : 12668;
     if (++head.offset >= last) {
         
-        // Start over at the beginning of the current cyclinder
+        // Start over at the beginning of the current cylinder
         head.offset = 0;
 
         // If this drive is selected, we emulate a falling edge on the flag pin

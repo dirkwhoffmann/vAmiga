@@ -34,9 +34,9 @@ public:
     virtual DiskType getDiskType() = 0;
     virtual DiskDensity getDiskDensity() = 0;
     virtual long numSides() = 0;
-    virtual long numCyclinders() = 0;
+    virtual long numCylinders() = 0;
     virtual long numSectors() = 0;
-    virtual long numTracks() { return numSides() * numCyclinders(); }
+    virtual long numTracks() { return numSides() * numCylinders(); }
     virtual long numBlocks() { return numTracks() * numSectors(); }
 
     

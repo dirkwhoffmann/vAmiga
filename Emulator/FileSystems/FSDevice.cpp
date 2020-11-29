@@ -20,7 +20,11 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // Create volume
-    FSDevice *volume = new FSDevice(type, adf->numBlocks(), 512);
+    FSDevice *volume = new FSDevice(type,
+                                    adf->numCylinders(),
+                                    adf->numSides(),
+                                    adf->numSectors(),
+                                    512);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -40,7 +44,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // REMOVE ASAP
-    FSDevice *volume = new FSDevice(FS_OFS, 120000);
+    FSDevice *volume = new FSDevice(FS_OFS, 500, 12, 22);
 
     // Create volume
     // FSDevice *volume = new FSDevice(type, hdf->numBlocks(), 512);
@@ -57,9 +61,9 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 }
 
 FSDevice *
-FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
+FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors)
 {
-    FSDevice *volume = new FSDevice(type, capacity);
+    FSDevice *volume = new FSDevice(type, cylinders, heads, sectors);
     volume->setName(FSName(name));
 
     // Try to import directory
@@ -76,18 +80,25 @@ FSDevice::make(FSVolumeType type, const char *name, const char *path)
     FSDevice *volume;
     
     // Try to fit the directory into files system with DD disk capacity
-    if ((volume = make(type, name, path, 2 * 880))) return volume;
+    if ((volume = make(type, name, path, 80, 2, 11))) return volume;
 
     // Try to fit the directory into files system with HD disk capacity
-    if ((volume = make(type, name, path, 4 * 880))) return volume;
+    if ((volume = make(type, name, path, 80, 2, 22))) return volume;
 
     return nullptr;
 }
 
-FSDevice::FSDevice(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
+// FSDevice::FSDevice(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
+FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
 {
-    debug(FS_DEBUG, "Creating FSVolume with %d blocks\n", c);
+    debug(FS_DEBUG, "Creating FSDevice (%d x %d x %d x %d)\n", c, h, s, bsize);
     
+    this->type = type;
+    this->cylinders = c;
+    this->heads = h;
+    this->sectors = s;
+    this->bsize = bsize;
+    capacity = c * h * s;
     blocks = new BlockPtr[capacity]();
 
     dsize = isOFS() ? bsize - 24 : bsize;
@@ -536,8 +547,8 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     *byte  = rByte;
     *bit   = ref % 8;
     
-    debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
-          ref, *block, *byte, *bit);
+    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
+    //       ref, *block, *byte, *bit);
 
     return true;
 }
@@ -1204,7 +1215,7 @@ bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *
     assert(first <= last);
     assert(dst != nullptr);
     
-    u32 count = last - first;
+    u32 count = last - first + 1;
     
     debug(FS_DEBUG, "Exporting %d blocks (%d - %d)\n", count, first, last);
 

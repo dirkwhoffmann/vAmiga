@@ -11,18 +11,7 @@
 #define _FSVOLUME_H
 
 #include "AmigaObject.h"
-
 #include "FSPartition.h"
-#include "FSBlock.h"
-#include "FSEmptyBlock.h"
-#include "FSBootBlock.h"
-#include "FSRootBlock.h"
-#include "FSBitmapBlock.h"
-#include "FSBitmapExtBlock.h"
-#include "FSUserDirBlock.h"
-#include "FSFileHeaderBlock.h"
-#include "FSFileListBlock.h"
-#include "FSDataBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 
@@ -36,6 +25,7 @@
 
 class FSDevice : AmigaObject {
     
+    friend class FSPartition;
     friend class FSBlock;
     friend class FSEmptyBlock;
     friend class FSBootBlock;
@@ -52,11 +42,31 @@ class FSDevice : AmigaObject {
 
 protected:
         
-    // The type of this volume
+    // The type of this volume (DEPRECATED: MOVE TO PARTITION)
     FSVolumeType type;
 
-    // Total capacity of this volume in blocks
+    //
+    // Physical device properties
+    //
+    
+    // Total capacity of this device in blocks (TODO: Replace by blocks() )
     u32 capacity;
+    
+    // Number of physical cylinders
+    u32 cylinders = 80;
+
+    // Number of physical heads
+    u32 heads = 2;
+    
+    //
+    // Logical device properties
+    //
+    
+    // Number of blocks per track
+    u32 sectors = 11;
+    
+    // Number of reserved blocks
+    u32 reserved = 2;
     
     // Size of a single block in bytes
     u32 bsize;
@@ -86,7 +96,7 @@ public:
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
 
     // Creates a file system with the contents of a host file system directory
-    static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
+    static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors);
     static FSDevice *make(FSVolumeType type, const char *name, const char *path);
 
     
@@ -96,7 +106,8 @@ public:
     
 public:
 
-    FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
+    // FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
+    FSDevice(FSVolumeType type, u32 cylinders, u32 heads, u32 sectors, u32 bsize = 512);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
@@ -122,12 +133,15 @@ public:
 public:
         
     // Returns the type of this volume
-    FSVolumeType getType() { return type; }
-    bool isOFS();
-    bool isFFS();
+    FSVolumeType getType() { return type; } // DEPRECATED. MAKE PART OF PARTITION
+    bool isOFS(); // DEPRECATED. MAKE PART OF PARTITION
+    bool isFFS(); // DEPRECATED. MAKE PART OF PARTITION
     
-    // Returns the volume size in blocks
+    // Returns the device capacity in blocks
     u32 getCapacity() { return capacity; }
+
+    // Returns the number of reserved blocks
+    u32 getReserved() { return reserved; }
 
     // Returns the block size in bytes
     u32 getBlockSize() { return bsize; }

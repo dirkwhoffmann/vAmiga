@@ -121,7 +121,7 @@ IMGFile::numSides()
 }
 
 long
-IMGFile::numCyclinders()
+IMGFile::numCylinders()
 {
     return 80;
 }

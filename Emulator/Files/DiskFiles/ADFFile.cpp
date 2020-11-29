@@ -144,6 +144,7 @@ ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
     ADFFile *adf = nullptr;
     assert(volume.getBlockSize() == 512);
     
+    printf("Capacity = %d\n", volume.getCapacity()); 
     switch (volume.getCapacity()) {
             
         case 2 * 880:
@@ -194,7 +195,7 @@ ADFFile::numSides()
 }
 
 long
-ADFFile::numCyclinders()
+ADFFile::numCylinders()
 {
     switch(size & ~1) {
             
@@ -240,7 +241,7 @@ ADFFile::formatDisk(FSVolumeType fs)
     if (fs == FS_NONE) return false;
     
     // Create an empty file system
-    FSDevice volume = FSDevice(fs, numBlocks());
+    FSDevice volume = FSDevice(fs, numCylinders(), numSides(), numSectors());
     volume.setName(FSName("Disk"));
     
     // Export the volume to the ADF

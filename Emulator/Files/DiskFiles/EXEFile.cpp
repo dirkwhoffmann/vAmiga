@@ -78,7 +78,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     bool hd = length > 853000;
         
     // Create a new file system
-    FSDevice volume = FSDevice(FS_OFS, hd ? 4 * 880 : 2 * 880);
+    FSDevice volume = FSDevice(FS_OFS, 80, 2, hd ? 22 : 11);
     volume.setName(FSName("Disk"));
     
     // Make the volume bootable
@@ -117,7 +117,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
         assert(adf == nullptr);
         adf = ADFFile::makeWithVolume(volume, &error);
         if (error != FS_OK) {
-            warn("readFromBuffer: Cannot export volume (%s)", sFSError(error));
+            warn("readFromBuffer: Cannot export volume (%s)\n", sFSError(error));
         }
     }
     
