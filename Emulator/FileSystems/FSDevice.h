@@ -12,6 +12,7 @@
 
 #include "AmigaObject.h"
 
+#include "FSPartition.h"
 #include "FSBlock.h"
 #include "FSEmptyBlock.h"
 #include "FSBootBlock.h"
@@ -33,7 +34,7 @@
  * import and export the file system from and to ADF files.
  */
 
-class FSVolume : AmigaObject {
+class FSDevice : AmigaObject {
     
     friend class FSBlock;
     friend class FSEmptyBlock;
@@ -81,12 +82,12 @@ protected:
 public:
 
     // Creates a file system from an xDF file
-    static FSVolume *makeWithADF(class ADFFile *adf, FSError *error);
-    static FSVolume *makeWithHDF(class HDFFile *hdf, FSError *error);
+    static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
+    static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
 
     // Creates a file system with the contents of a host file system directory
-    static FSVolume *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
-    static FSVolume *make(FSVolumeType type, const char *name, const char *path);
+    static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 capacity);
+    static FSDevice *make(FSVolumeType type, const char *name, const char *path);
 
     
     //
@@ -95,8 +96,8 @@ public:
     
 public:
 
-    FSVolume(FSVolumeType type, u32 capacity, u32 bsize = 512);
-    ~FSVolume();
+    FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
+    ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
     

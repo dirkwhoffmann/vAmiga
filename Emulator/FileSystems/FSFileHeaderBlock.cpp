@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
    
@@ -21,7 +21,7 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     set32(-1, (u32)-3);            // Sub type
 }
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSVolume &ref, u32 nr, const char *name) :
+FSFileHeaderBlock::FSFileHeaderBlock(FSDevice &ref, u32 nr, const char *name) :
 FSFileHeaderBlock(ref, nr)
 {
     setName(FSName(name));

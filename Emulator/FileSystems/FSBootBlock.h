@@ -14,7 +14,7 @@
 
 struct FSBootBlock : FSBlock {
       
-    FSBootBlock(FSVolume &ref, u32 nr);
+    FSBootBlock(FSDevice &ref, u32 nr);
     ~FSBootBlock();
     
     const char *getDescription() override { return "FSBootBlock"; }

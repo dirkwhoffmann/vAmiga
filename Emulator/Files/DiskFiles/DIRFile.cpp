@@ -8,7 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "DIRFile.h"
-#include "FSVolume.h"
+#include "FSDevice.h"
 
 DIRFile::DIRFile()
 {
@@ -60,7 +60,7 @@ DIRFile::readFromFile(const char *filename)
     }
     
     // Create a file system and import the directory
-    FSVolume *volume = FSVolume::make(FS_OFS, "Disk", filename);
+    FSDevice *volume = FSDevice::make(FS_OFS, "Disk", filename);
     if (!volume) {
         warn("Contents of %s does not fit on a disk\n", filename);
         return false;

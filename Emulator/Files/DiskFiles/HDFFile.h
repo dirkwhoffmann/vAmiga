@@ -11,7 +11,7 @@
 #define _HDF_H
 
 #include "DiskFile.h"
-#include "FSVolume.h"
+#include "FSDevice.h"
 
 class Disk;
 
@@ -43,7 +43,7 @@ public:
     static HDFFile *makeWithFile(const char *path);
     static HDFFile *makeWithBuffer(const u8 *buffer, size_t length);
     // static HDFFile *makeWithFile(FILE *file);
-    // static HDFFile *makeWithVolume(FSVolume &volume, FSError *error);
+    // static HDFFile *makeWithVolume(FSDevice &volume, FSError *error);
 
     
     //

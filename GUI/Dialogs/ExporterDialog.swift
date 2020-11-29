@@ -51,7 +51,7 @@ class ExporterDialog: DialogController {
     var driveNr: Int?
     var drive: DriveProxy? { return driveNr == nil ? nil : amiga.df(driveNr!) }
     var disk: DiskFileProxy?
-    var volume: FSVolumeProxy?
+    var volume: FSDeviceProxy?
 
     var errorReport: FSErrorReport?
     
@@ -192,7 +192,7 @@ class ExporterDialog: DialogController {
         disk = ADFFileProxy.make(withDrive: drive)
         
         // It it is an ADF, try to extract the file system
-        if disk != nil { volume = FSVolumeProxy.make(withADF: disk as? ADFFileProxy) }
+        if disk != nil { volume = FSDeviceProxy.make(withADF: disk as? ADFFileProxy) }
         
         // REMOVE ASAP
         // volume?.printDirectory(true)
@@ -203,7 +203,7 @@ class ExporterDialog: DialogController {
         super.showSheet()
     }
     
-    func showSheet(forVolume vol: FSVolumeProxy) {
+    func showSheet(forVolume vol: FSDeviceProxy) {
         
         volume = vol
         

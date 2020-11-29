@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSBitmapExtBlock::FSBitmapExtBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSBitmapExtBlock::FSBitmapExtBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
 }

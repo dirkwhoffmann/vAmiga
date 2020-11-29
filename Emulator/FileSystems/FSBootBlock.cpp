@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSBootBlock::FSBootBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSBootBlock::FSBootBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     

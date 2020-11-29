@@ -265,7 +265,7 @@ class MyDocument: NSDocument {
         // examine the contents of the HDF and to check for file system
         // errors.
         
-            if let vol = FSVolumeProxy.make(withHDF: amigaAttachment as? HDFFileProxy) {
+            if let vol = FSDeviceProxy.make(withHDF: amigaAttachment as? HDFFileProxy) {
 
                 vol.dump()
             

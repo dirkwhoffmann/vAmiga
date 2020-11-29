@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSDataBlock::FSDataBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSDataBlock::FSDataBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();    
 }
@@ -24,7 +24,7 @@ FSDataBlock::~FSDataBlock()
 // Original File System (OFS)
 //
 
-OFSDataBlock::OFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr)
+OFSDataBlock::OFSDataBlock(FSDevice &ref, u32 nr) : FSDataBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
@@ -115,7 +115,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSVolume &ref, u32 nr) : FSDataBlock(ref, nr) { }
+FFSDataBlock::FFSDataBlock(FSDevice &ref, u32 nr) : FSDataBlock(ref, nr) { }
 
 void
 FFSDataBlock::dump()

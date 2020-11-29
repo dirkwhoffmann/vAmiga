@@ -8,11 +8,11 @@
 // -----------------------------------------------------------------------------
 
 #include "Utils.h"
-#include "FSVolume.h"
-#include <set>
+#include "FSDevice.h"
+// #include <set>
 
-FSVolume *
-FSVolume::makeWithADF(ADFFile *adf, FSError *error)
+FSDevice *
+FSDevice::makeWithADF(ADFFile *adf, FSError *error)
 {
     assert(adf != nullptr);
 
@@ -20,7 +20,7 @@ FSVolume::makeWithADF(ADFFile *adf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // Create volume
-    FSVolume *volume = new FSVolume(type, adf->numBlocks(), 512);
+    FSDevice *volume = new FSDevice(type, adf->numBlocks(), 512);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -31,8 +31,8 @@ FSVolume::makeWithADF(ADFFile *adf, FSError *error)
     return volume;
 }
 
-FSVolume *
-FSVolume::makeWithHDF(HDFFile *hdf, FSError *error)
+FSDevice *
+FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 {
     assert(hdf != nullptr);
 
@@ -40,10 +40,10 @@ FSVolume::makeWithHDF(HDFFile *hdf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // REMOVE ASAP
-    FSVolume *volume = new FSVolume(FS_OFS, 120000);
+    FSDevice *volume = new FSDevice(FS_OFS, 120000);
 
     // Create volume
-    // FSVolume *volume = new FSVolume(type, hdf->numBlocks(), 512);
+    // FSDevice *volume = new FSDevice(type, hdf->numBlocks(), 512);
 
     // Import file system from HDF
     /*
@@ -56,10 +56,10 @@ FSVolume::makeWithHDF(HDFFile *hdf, FSError *error)
     return volume;
 }
 
-FSVolume *
-FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
+FSDevice *
+FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 capacity)
 {
-    FSVolume *volume = new FSVolume(type, capacity);
+    FSDevice *volume = new FSDevice(type, capacity);
     volume->setName(FSName(name));
 
     // Try to import directory
@@ -70,10 +70,10 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path, u32 capaci
     return volume;
 }
 
-FSVolume *
-FSVolume::make(FSVolumeType type, const char *name, const char *path)
+FSDevice *
+FSDevice::make(FSVolumeType type, const char *name, const char *path)
 {
-    FSVolume *volume;
+    FSDevice *volume;
     
     // Try to fit the directory into files system with DD disk capacity
     if ((volume = make(type, name, path, 2 * 880))) return volume;
@@ -84,7 +84,7 @@ FSVolume::make(FSVolumeType type, const char *name, const char *path)
     return nullptr;
 }
 
-FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
+FSDevice::FSDevice(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
 {
     debug(FS_DEBUG, "Creating FSVolume with %d blocks\n", c);
     
@@ -153,7 +153,7 @@ FSVolume::FSVolume(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(
     }
 }
 
-FSVolume::~FSVolume()
+FSDevice::~FSDevice()
 {
     for (u32 i = 0; i < capacity; i++) {
         delete blocks[i];
@@ -162,7 +162,7 @@ FSVolume::~FSVolume()
 }
 
 void
-FSVolume::info()
+FSDevice::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
     msg("DOS%ld  ",     getType());
@@ -175,7 +175,7 @@ FSVolume::info()
 }
 
 void
-FSVolume::dump()
+FSDevice::dump()
 {
     msg("                  Name : %s\n", getName().c_str());
     msg("           File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
@@ -206,7 +206,7 @@ FSVolume::dump()
 }
 
 FSErrorReport
-FSVolume::check(bool strict)
+FSDevice::check(bool strict)
 {
     long total = 0, min = LONG_MAX, max = 0;
     
@@ -238,19 +238,19 @@ FSVolume::check(bool strict)
 }
 
 FSError
-FSVolume::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
+FSDevice::check(u32 blockNr, u32 pos, u8 *expected, bool strict)
 {
     return blocks[blockNr]->check(pos, expected, strict);
 }
 
 FSError
-FSVolume::checkBlockType(u32 nr, FSBlockType type)
+FSDevice::checkBlockType(u32 nr, FSBlockType type)
 {
     return checkBlockType(nr, type, type);
 }
 
 FSError
-FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
+FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
 {
     FSBlockType t = blockType(nr);
     
@@ -275,13 +275,13 @@ FSVolume::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
 }
 
 u32
-FSVolume::getCorrupted(u32 blockNr)
+FSDevice::getCorrupted(u32 blockNr)
 {
     return block(blockNr) ? blocks[blockNr]->corrupted : 0;
 }
 
 bool
-FSVolume::isCorrupted(u32 blockNr, u32 n)
+FSDevice::isCorrupted(u32 blockNr, u32 n)
 {
     for (u32 i = 0, cnt = 0; i < capacity; i++) {
         
@@ -294,7 +294,7 @@ FSVolume::isCorrupted(u32 blockNr, u32 n)
 }
 
 u32
-FSVolume::nextCorrupted(u32 blockNr)
+FSDevice::nextCorrupted(u32 blockNr)
 {
     long i = (long)blockNr;
     while (++i < capacity) { if (isCorrupted(i)) return i; }
@@ -302,7 +302,7 @@ FSVolume::nextCorrupted(u32 blockNr)
 }
 
 u32
-FSVolume::prevCorrupted(u32 blockNr)
+FSDevice::prevCorrupted(u32 blockNr)
 {
     long i = (long)blockNr - 1;
     while (i-- >= 0) { if (isCorrupted(i)) return i; }
@@ -310,7 +310,7 @@ FSVolume::prevCorrupted(u32 blockNr)
 }
 
 u32
-FSVolume::seekCorruptedBlock(u32 n)
+FSDevice::seekCorruptedBlock(u32 n)
 {
     for (u32 i = 0, cnt = 0; i < capacity; i++) {
 
@@ -323,7 +323,7 @@ FSVolume::seekCorruptedBlock(u32 n)
 }
 
 FSBlockType
-FSVolume::predictBlockType(u32 nr, const u8 *buffer)
+FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
 
@@ -358,7 +358,7 @@ FSVolume::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 bool
-FSVolume::isOFS()
+FSDevice::isOFS()
 {
     return
     type == FS_OFS ||
@@ -368,7 +368,7 @@ FSVolume::isOFS()
 }
 
 bool
-FSVolume::isFFS()
+FSDevice::isFFS()
 {
     return
     type == FS_FFS ||
@@ -378,32 +378,32 @@ FSVolume::isFFS()
 }
 
 u32
-FSVolume::getAllocBitsInBitmapBlock()
+FSDevice::getAllocBitsInBitmapBlock()
 {
     return (bsize - 4) * 8;
 }
 
 u32
-FSVolume::bitmapRefsInRootBlock()
+FSDevice::bitmapRefsInRootBlock()
 {
     return 25;
 }
 
 u32
-FSVolume::bitmapRefsInBitmapExtensionBlock()
+FSDevice::bitmapRefsInBitmapExtensionBlock()
 {
     return (bsize / 4) - 1;
 }
 
 u32
-FSVolume::requiredBitmapBlocks()
+FSDevice::requiredBitmapBlocks()
 {
     u32 allocationBitsPerBlock = (bsize - 4) * 8;
     return (capacity + allocationBitsPerBlock - 1) / allocationBitsPerBlock;
 }
 
 u32
-FSVolume::requiredBitmapExtensionBlocks()
+FSDevice::requiredBitmapExtensionBlocks()
 {
     u32 numBlocks = requiredBitmapBlocks();
     
@@ -416,7 +416,7 @@ FSVolume::requiredBitmapExtensionBlocks()
 }
 
 u32
-FSVolume::getDataBlockCapacity()
+FSDevice::getDataBlockCapacity()
 {
     if (isOFS()) {
         return bsize - OFSDataBlock::headerSize();
@@ -426,7 +426,7 @@ FSVolume::getDataBlockCapacity()
 }
 
 u32
-FSVolume::freeBlocks()
+FSDevice::freeBlocks()
 {
     u32 result = 0;
     
@@ -438,7 +438,7 @@ FSVolume::freeBlocks()
 }
 
 bool
-FSVolume::isFree(u32 ref)
+FSDevice::isFree(u32 ref)
 {
     u32 block, byte, bit;
     
@@ -452,7 +452,7 @@ FSVolume::isFree(u32 ref)
 }
 
 void
-FSVolume::mark(u32 ref, bool alloc)
+FSDevice::mark(u32 ref, bool alloc)
 {
     u32 block, byte, bit;
     
@@ -466,7 +466,7 @@ FSVolume::mark(u32 ref, bool alloc)
 }
 
 void
-FSVolume::locateBitmapBlocks(const u8 *buffer)
+FSDevice::locateBitmapBlocks(const u8 *buffer)
 {
     assert(buffer != nullptr);
     
@@ -501,7 +501,7 @@ FSVolume::locateBitmapBlocks(const u8 *buffer)
 }
 
 bool
-FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
+FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 {
     assert(ref >= 2 && ref < capacity);
     
@@ -543,19 +543,19 @@ FSVolume::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 }
 
 FSBlockType
-FSVolume::blockType(u32 nr)
+FSDevice::blockType(u32 nr)
 {
     return block(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
 }
 
 FSItemType
-FSVolume::itemType(u32 nr, u32 pos)
+FSDevice::itemType(u32 nr, u32 pos)
 {
     return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
 
 u32
-FSVolume::rootBlockNr()
+FSDevice::rootBlockNr()
 {
     /*
      numCyls = highCyl - lowCyl + 1
@@ -570,7 +570,7 @@ FSVolume::rootBlockNr()
 }
 
 FSBlock *
-FSVolume::block(u32 nr)
+FSDevice::block(u32 nr)
 {
     if (nr < capacity) {
         return blocks[nr];
@@ -580,7 +580,7 @@ FSVolume::block(u32 nr)
 }
 
 FSBootBlock *
-FSVolume::bootBlock(u32 nr)
+FSDevice::bootBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() != FS_BOOT_BLOCK)
     {
@@ -591,7 +591,7 @@ FSVolume::bootBlock(u32 nr)
 }
 
 FSRootBlock *
-FSVolume::rootBlock(u32 nr)
+FSDevice::rootBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_ROOT_BLOCK) {
         return (FSRootBlock *)blocks[nr];
@@ -601,7 +601,7 @@ FSVolume::rootBlock(u32 nr)
 }
 
 FSBitmapBlock *
-FSVolume::bitmapBlock(u32 nr)
+FSDevice::bitmapBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_BITMAP_BLOCK) {
         return (FSBitmapBlock *)blocks[nr];
@@ -611,7 +611,7 @@ FSVolume::bitmapBlock(u32 nr)
 }
 
 FSBitmapExtBlock *
-FSVolume::bitmapExtBlock(u32 nr)
+FSDevice::bitmapExtBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
         return (FSBitmapExtBlock *)blocks[nr];
@@ -621,7 +621,7 @@ FSVolume::bitmapExtBlock(u32 nr)
 }
 
 FSUserDirBlock *
-FSVolume::userDirBlock(u32 nr)
+FSDevice::userDirBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_USERDIR_BLOCK) {
         return (FSUserDirBlock *)blocks[nr];
@@ -631,7 +631,7 @@ FSVolume::userDirBlock(u32 nr)
 }
 
 FSFileHeaderBlock *
-FSVolume::fileHeaderBlock(u32 nr)
+FSDevice::fileHeaderBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
         return (FSFileHeaderBlock *)blocks[nr];
@@ -641,7 +641,7 @@ FSVolume::fileHeaderBlock(u32 nr)
 }
 
 FSFileListBlock *
-FSVolume::fileListBlock(u32 nr)
+FSDevice::fileListBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_FILELIST_BLOCK) {
         return (FSFileListBlock *)blocks[nr];
@@ -651,7 +651,7 @@ FSVolume::fileListBlock(u32 nr)
 }
 
 FSDataBlock *
-FSVolume::dataBlock(u32 nr)
+FSDevice::dataBlock(u32 nr)
 {
     if (nr < capacity && blocks[nr]->type() == FS_DATA_BLOCK) {
         return (FSDataBlock *)blocks[nr];
@@ -661,7 +661,7 @@ FSVolume::dataBlock(u32 nr)
 }
 
 FSBlock *
-FSVolume::hashableBlock(u32 nr)
+FSDevice::hashableBlock(u32 nr)
 {
     FSBlockType type = nr < capacity ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
     
@@ -673,7 +673,7 @@ FSVolume::hashableBlock(u32 nr)
 }
 
 u32
-FSVolume::allocateBlock()
+FSDevice::allocateBlock()
 {
     // Search for a free block above the root block
     for (long i = rootBlockNr() + 1; i < capacity; i++) {
@@ -695,7 +695,7 @@ FSVolume::allocateBlock()
 }
 
 void
-FSVolume::deallocateBlock(u32 ref)
+FSDevice::deallocateBlock(u32 ref)
 {
     FSBlock *b = block(ref);
     if (b == nullptr) return;
@@ -708,7 +708,7 @@ FSVolume::deallocateBlock(u32 ref)
 }
 
 FSUserDirBlock *
-FSVolume::newUserDirBlock(const char *name)
+FSDevice::newUserDirBlock(const char *name)
 {
     u32 ref = allocateBlock();
     if (!ref) return nullptr;
@@ -718,7 +718,7 @@ FSVolume::newUserDirBlock(const char *name)
 }
 
 FSFileHeaderBlock *
-FSVolume::newFileHeaderBlock(const char *name)
+FSDevice::newFileHeaderBlock(const char *name)
 {
     u32 ref = allocateBlock();
     if (!ref) return nullptr;
@@ -728,7 +728,7 @@ FSVolume::newFileHeaderBlock(const char *name)
 }
 
 u32
-FSVolume::addFileListBlock(u32 head, u32 prev)
+FSDevice::addFileListBlock(u32 head, u32 prev)
 {
     FSBlock *prevBlock = block(prev);
     if (!prevBlock) return 0;
@@ -744,7 +744,7 @@ FSVolume::addFileListBlock(u32 head, u32 prev)
 }
 
 u32
-FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
+FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 {
     FSBlock *prevBlock = block(prev);
     if (!prevBlock) return 0;
@@ -768,7 +768,7 @@ FSVolume::addDataBlock(u32 count, u32 head, u32 prev)
 }
 
 void
-FSVolume::installBootBlock()
+FSDevice::installBootBlock()
 {
     assert(blocks[0]->type() == FS_BOOT_BLOCK);
     assert(blocks[1]->type() == FS_BOOT_BLOCK);
@@ -778,7 +778,7 @@ FSVolume::installBootBlock()
 }
 
 void
-FSVolume::updateChecksums()
+FSDevice::updateChecksums()
 {
     for (u32 i = 0; i < capacity; i++) {
         blocks[i]->updateChecksum();
@@ -786,7 +786,7 @@ FSVolume::updateChecksums()
 }
 
 FSBlock *
-FSVolume::currentDirBlock()
+FSDevice::currentDirBlock()
 {
     FSBlock *cdb = block(currentDir);
     
@@ -802,7 +802,7 @@ FSVolume::currentDirBlock()
 }
 
 FSBlock *
-FSVolume::changeDir(const char *name)
+FSDevice::changeDir(const char *name)
 {
     assert(name != nullptr);
 
@@ -831,7 +831,7 @@ FSVolume::changeDir(const char *name)
 }
 
 string
-FSVolume::getPath(FSBlock *block)
+FSDevice::getPath(FSBlock *block)
 {
     string result = "";
     std::set<u32> visited;
@@ -859,7 +859,7 @@ FSVolume::getPath(FSBlock *block)
 }
 
 FSBlock *
-FSVolume::makeDir(const char *name)
+FSDevice::makeDir(const char *name)
 {
     FSBlock *cdb = currentDirBlock();
     FSUserDirBlock *block = newUserDirBlock(name);
@@ -872,7 +872,7 @@ FSVolume::makeDir(const char *name)
 }
 
 FSBlock *
-FSVolume::makeFile(const char *name)
+FSDevice::makeFile(const char *name)
 {
     assert(name != nullptr);
  
@@ -887,7 +887,7 @@ FSVolume::makeFile(const char *name)
 }
 
 FSBlock *
-FSVolume::makeFile(const char *name, const u8 *buffer, size_t size)
+FSDevice::makeFile(const char *name, const u8 *buffer, size_t size)
 {
     assert(buffer != nullptr);
 
@@ -902,7 +902,7 @@ FSVolume::makeFile(const char *name, const u8 *buffer, size_t size)
 }
 
 FSBlock *
-FSVolume::makeFile(const char *name, const char *str)
+FSDevice::makeFile(const char *name, const char *str)
 {
     assert(str != nullptr);
     
@@ -910,7 +910,7 @@ FSVolume::makeFile(const char *name, const char *str)
 }
 
 u32
-FSVolume::seekRef(FSName name)
+FSDevice::seekRef(FSName name)
 {
     std::set<u32> visited;
     
@@ -938,7 +938,7 @@ FSVolume::seekRef(FSName name)
 }
 
 void
-FSVolume::addHashRef(u32 ref)
+FSDevice::addHashRef(u32 ref)
 {
     if (FSBlock *block = hashableBlock(ref)) {
         addHashRef(block);
@@ -946,7 +946,7 @@ FSVolume::addHashRef(u32 ref)
 }
 
 void
-FSVolume::addHashRef(FSBlock *newBlock)
+FSDevice::addHashRef(FSBlock *newBlock)
 {
     // Only proceed if a hash table is present
     FSBlock *cdb = currentDirBlock();
@@ -965,7 +965,7 @@ FSVolume::addHashRef(FSBlock *newBlock)
 }
 
 void
-FSVolume::printDirectory(bool recursive)
+FSDevice::printDirectory(bool recursive)
 {
     std::vector<u32> items;
     collect(currentDir, items);
@@ -978,14 +978,14 @@ FSVolume::printDirectory(bool recursive)
 
 
 FSBlock *
-FSVolume::lastHashBlockInChain(u32 start)
+FSDevice::lastHashBlockInChain(u32 start)
 {
     FSBlock *block = hashableBlock(start);
     return block ? lastHashBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FSVolume::lastHashBlockInChain(FSBlock *block)
+FSDevice::lastHashBlockInChain(FSBlock *block)
 {
     std::set<u32> visited;
 
@@ -1001,14 +1001,14 @@ FSVolume::lastHashBlockInChain(FSBlock *block)
 }
 
 FSBlock *
-FSVolume::lastFileListBlockInChain(u32 start)
+FSDevice::lastFileListBlockInChain(u32 start)
 {
     FSBlock *block = fileListBlock(start);
     return block ? lastFileListBlockInChain(block) : nullptr;
 }
 
 FSBlock *
-FSVolume::lastFileListBlockInChain(FSBlock *block)
+FSDevice::lastFileListBlockInChain(FSBlock *block)
 {
     std::set<u32> visited;
 
@@ -1024,7 +1024,7 @@ FSVolume::lastFileListBlockInChain(FSBlock *block)
 }
 
 FSError
-FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
+FSDevice::collect(u32 ref, std::vector<u32> &result, bool recursive)
 {
     std::stack<u32> remainingItems;
     std::set<u32> visited;
@@ -1049,7 +1049,7 @@ FSVolume::collect(u32 ref, std::vector<u32> &result, bool recursive)
 }
 
 FSError
-FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
+FSDevice::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
     if (FSBlock *b = block(ref)) {
         
@@ -1063,7 +1063,7 @@ FSVolume::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &vis
 }
 
 FSError
-FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
+FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
     std::stack<u32> refs;
     
@@ -1084,7 +1084,7 @@ FSVolume::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
 }
 
 u8
-FSVolume::readByte(u32 block, u32 offset)
+FSDevice::readByte(u32 block, u32 offset)
 {
     assert(offset < bsize);
 
@@ -1096,7 +1096,7 @@ FSVolume::readByte(u32 block, u32 offset)
 }
 
 bool
-FSVolume::importVolume(const u8 *src, size_t size)
+FSDevice::importVolume(const u8 *src, size_t size)
 {
     FSError error;
     bool result = importVolume(src, size, &error);
@@ -1106,7 +1106,7 @@ FSVolume::importVolume(const u8 *src, size_t size)
 }
 
 bool
-FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
+FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
 {
     assert(src != nullptr);
 
@@ -1164,31 +1164,31 @@ FSVolume::importVolume(const u8 *src, size_t size, FSError *error)
 }
 
 bool
-FSVolume::exportVolume(u8 *dst, size_t size)
+FSDevice::exportVolume(u8 *dst, size_t size)
 {
     return exportBlocks(0, capacity - 1, dst, size);
 }
 
 bool
-FSVolume::exportVolume(u8 *dst, size_t size, FSError *error)
+FSDevice::exportVolume(u8 *dst, size_t size, FSError *error)
 {
     return exportBlocks(0, capacity - 1, dst, size, error);
 }
 
 bool
-FSVolume::exportBlock(u32 nr, u8 *dst, size_t size)
+FSDevice::exportBlock(u32 nr, u8 *dst, size_t size)
 {
     return exportBlocks(nr, nr, dst, size);
 }
 
 bool
-FSVolume::exportBlock(u32 nr, u8 *dst, size_t size, FSError *error)
+FSDevice::exportBlock(u32 nr, u8 *dst, size_t size, FSError *error)
 {
     return exportBlocks(nr, nr, dst, size, error);
 }
 
 bool
-FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
+FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
 {
     FSError error;
     bool result = exportBlocks(first, last, dst, size, &error);
@@ -1197,7 +1197,7 @@ FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size)
     return result;
 }
 
-bool FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
+bool FSDevice::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *error)
 {
     assert(first < capacity);
     assert(last < capacity);
@@ -1229,7 +1229,7 @@ bool FSVolume::exportBlocks(u32 first, u32 last, u8 *dst, size_t size, FSError *
 }
 
 bool
-FSVolume::importDirectory(const char *path, bool recursive)
+FSDevice::importDirectory(const char *path, bool recursive)
 {
     assert(path != nullptr);
 
@@ -1247,7 +1247,7 @@ FSVolume::importDirectory(const char *path, bool recursive)
 }
 
 bool
-FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
+FSDevice::importDirectory(const char *path, DIR *dir, bool recursive)
 {
     assert(dir != nullptr);
     
@@ -1295,7 +1295,7 @@ FSVolume::importDirectory(const char *path, DIR *dir, bool recursive)
 }
 
 FSError
-FSVolume::exportDirectory(const char *path)
+FSDevice::exportDirectory(const char *path)
 {
     assert(path != nullptr);
         

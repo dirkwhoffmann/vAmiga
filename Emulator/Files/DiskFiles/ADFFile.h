@@ -11,7 +11,7 @@
 #define _ADF_H
 
 #include "DiskFile.h"
-#include "FSVolume.h"
+#include "FSDevice.h"
 
 #define ADFSIZE_35_DD     901120  //  880 KB
 #define ADFSIZE_35_DD_81  912384  //  891 KB (1 extra cylinder)
@@ -55,7 +55,7 @@ public:
     static ADFFile *makeWithFile(const char *path);
     static ADFFile *makeWithFile(FILE *file);
     static ADFFile *makeWithDisk(Disk *disk);
-    static ADFFile *makeWithVolume(FSVolume &volume, FSError *error);
+    static ADFFile *makeWithVolume(FSDevice &volume, FSError *error);
 
     
     //

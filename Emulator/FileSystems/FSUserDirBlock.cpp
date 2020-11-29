@@ -7,9 +7,9 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSVolume.h"
+#include "FSDevice.h"
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
+FSUserDirBlock::FSUserDirBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
         
@@ -19,7 +19,7 @@ FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr)
     set32(-1, 2);                        // Sub type
 }
 
-FSUserDirBlock::FSUserDirBlock(FSVolume &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
+FSUserDirBlock::FSUserDirBlock(FSDevice &ref, u32 nr, const char *name) : FSUserDirBlock(ref, nr)
 {
     setName(FSName(name));
 }

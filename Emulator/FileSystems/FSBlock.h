@@ -15,7 +15,7 @@
 struct FSBlock : AmigaObject {
     
     // The volume this block belongs to
-    class FSVolume &volume;
+    class FSDevice &volume;
     
     // The sector number of this block
     u32 nr;
@@ -31,10 +31,10 @@ struct FSBlock : AmigaObject {
     // Constructing
     //
     
-    FSBlock(FSVolume &ref, u32 nr) : volume(ref) { this->nr = nr; }
+    FSBlock(FSDevice &ref, u32 nr) : volume(ref) { this->nr = nr; }
     virtual ~FSBlock() { }
 
-    static FSBlock *makeWithType(FSVolume &ref, u32 nr, FSBlockType type);
+    static FSBlock *makeWithType(FSDevice &ref, u32 nr, FSBlockType type);
     
     
     //

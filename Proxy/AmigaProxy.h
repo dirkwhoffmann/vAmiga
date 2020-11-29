@@ -639,10 +639,10 @@ struct SerialPortWrapper;
 
 
 //
-// FSVolume
+// FSDevice
 //
 
-@interface FSVolumeProxy : NSObject {
+@interface FSDeviceProxy : NSObject {
     
     struct FSVolumeWrapper *wrapper;
 }

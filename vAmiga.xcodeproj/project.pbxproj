@@ -47,7 +47,7 @@
 		504F4D64252624BD00CF8815 /* RendererRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F4D63252624BD00CF8815 /* RendererRect.swift */; };
 		504F9658220B2CEE005F8AB7 /* GuardTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 504F9657220B2CEE005F8AB7 /* GuardTableView.swift */; };
 		505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 505554AA2264C47600CB07E0 /* Mouse.cpp */; };
-		5056506C25440FFB00A79D27 /* FSVolume.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* FSVolume.cpp */; };
+		5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056506A25440FFB00A79D27 /* FSDevice.cpp */; };
 		50565072254573E100A79D27 /* FSBlock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50565070254573E100A79D27 /* FSBlock.cpp */; };
 		5056507C25459C8800A79D27 /* FSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5056507A25459C8800A79D27 /* FSObjects.cpp */; };
 		5057E4C5243DF10A004005EB /* Primitives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5057E4C4243DF10A004005EB /* Primitives.swift */; };
@@ -179,6 +179,7 @@
 		50BE4B7424E815CA008F39C9 /* CIAEvents.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */; };
 		50C2DE4421F756900043FD1B /* MyControllerStatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */; };
 		50C50B86220479E000D796DA /* BankTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50C50B85220479E000D796DA /* BankTableView.swift */; };
+		50C685282573E9BF008D34DF /* FSPartition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50C685262573E9BF008D34DF /* FSPartition.cpp */; };
 		50D263CC21F6377700FA167F /* A500ANSI.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CB21F6377600FA167F /* A500ANSI.xib */; };
 		50D263CE21F6378100FA167F /* A1000ISO.xib in Resources */ = {isa = PBXBuildFile; fileRef = 50D263CD21F6378000FA167F /* A1000ISO.xib */; };
 		50D375DF222C7C6B0040987C /* Blitter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 50D375DD222C7C6B0040987C /* Blitter.cpp */; };
@@ -296,8 +297,8 @@
 		5051922A22B61DAA0012C4BB /* MemoryTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MemoryTypes.h; sourceTree = "<group>"; };
 		505554AA2264C47600CB07E0 /* Mouse.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Mouse.cpp; sourceTree = "<group>"; };
 		505554AB2264C47600CB07E0 /* Mouse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Mouse.h; sourceTree = "<group>"; };
-		5056506A25440FFB00A79D27 /* FSVolume.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSVolume.cpp; sourceTree = "<group>"; };
-		5056506B25440FFB00A79D27 /* FSVolume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSVolume.h; sourceTree = "<group>"; };
+		5056506A25440FFB00A79D27 /* FSDevice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSDevice.cpp; sourceTree = "<group>"; };
+		5056506B25440FFB00A79D27 /* FSDevice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSDevice.h; sourceTree = "<group>"; };
 		50565070254573E100A79D27 /* FSBlock.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSBlock.cpp; sourceTree = "<group>"; };
 		50565071254573E100A79D27 /* FSBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSBlock.h; sourceTree = "<group>"; };
 		5056507A25459C8800A79D27 /* FSObjects.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSObjects.cpp; sourceTree = "<group>"; };
@@ -483,6 +484,8 @@
 		50BE4B7324E815CA008F39C9 /* CIAEvents.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CIAEvents.cpp; sourceTree = "<group>"; };
 		50C2DE4321F756900043FD1B /* MyControllerStatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyControllerStatusBar.swift; sourceTree = "<group>"; };
 		50C50B85220479E000D796DA /* BankTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankTableView.swift; sourceTree = "<group>"; };
+		50C685262573E9BF008D34DF /* FSPartition.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FSPartition.cpp; sourceTree = "<group>"; };
+		50C685272573E9BF008D34DF /* FSPartition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FSPartition.h; sourceTree = "<group>"; };
 		50D263CB21F6377600FA167F /* A500ANSI.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A500ANSI.xib; sourceTree = "<group>"; };
 		50D263CD21F6378000FA167F /* A1000ISO.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = A1000ISO.xib; sourceTree = "<group>"; };
 		50D375DD222C7C6B0040987C /* Blitter.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Blitter.cpp; sourceTree = "<group>"; };
@@ -677,6 +680,10 @@
 				5083CF572546A22E00A28EF8 /* FSTypes.h */,
 				5056507B25459C8800A79D27 /* FSObjects.h */,
 				5056507A25459C8800A79D27 /* FSObjects.cpp */,
+				5056506B25440FFB00A79D27 /* FSDevice.h */,
+				5056506A25440FFB00A79D27 /* FSDevice.cpp */,
+				50C685272573E9BF008D34DF /* FSPartition.h */,
+				50C685262573E9BF008D34DF /* FSPartition.cpp */,
 				50565071254573E100A79D27 /* FSBlock.h */,
 				50565070254573E100A79D27 /* FSBlock.cpp */,
 				5063F229255A8EBD007182DC /* FSEmptyBlock.h */,
@@ -697,8 +704,6 @@
 				507DF0B22549A6220079BB98 /* FSFileListBlock.cpp */,
 				507DF0B72549A63C0079BB98 /* FSDataBlock.h */,
 				507DF0B62549A63C0079BB98 /* FSDataBlock.cpp */,
-				5056506B25440FFB00A79D27 /* FSVolume.h */,
-				5056506A25440FFB00A79D27 /* FSVolume.cpp */,
 			);
 			path = FileSystems;
 			sourceTree = "<group>";
@@ -1423,6 +1428,7 @@
 				505554AC2264C47600CB07E0 /* Mouse.cpp in Sources */,
 				50B81E0A24E6BEA5004384C9 /* CIARegisters.cpp in Sources */,
 				508FE01521EA227B0043D0E9 /* GamePad.swift in Sources */,
+				50C685282573E9BF008D34DF /* FSPartition.cpp in Sources */,
 				507DF0B82549A63C0079BB98 /* FSDataBlock.cpp in Sources */,
 				50DF2CA02269135800795256 /* SpriteTableView.swift in Sources */,
 				5020B18021EF136100B9E80E /* Denise.cpp in Sources */,
@@ -1463,7 +1469,7 @@
 				50B14C2821EB97EC002E32A6 /* AmigaProxy.mm in Sources */,
 				50F54B2924B5D31D0078FDC9 /* xdms.c in Sources */,
 				5009B7FC2557051A0037288E /* EXTFile.cpp in Sources */,
-				5056506C25440FFB00A79D27 /* FSVolume.cpp in Sources */,
+				5056506C25440FFB00A79D27 /* FSDevice.cpp in Sources */,
 				50927DAB24865F11008DF3B8 /* MoiraExceptions_cpp.h in Sources */,
 				50F54B2624B5D31D0078FDC9 /* tables.c in Sources */,
 				50DED6B12202EC3100B8195F /* Inspector.swift in Sources */,

@@ -14,7 +14,7 @@
 
 struct FSEmptyBlock : FSBlock {
     
-    FSEmptyBlock(FSVolume &ref, u32 nr) : FSBlock(ref, nr) { }
+    FSEmptyBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr) { }
      
     const char *getDescription() override { return "FSEmptyBlock"; }
     

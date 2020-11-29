@@ -7,24 +7,5 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "FSDevice.h"
-
-FSItemType
-FSEmptyBlock::itemType(u32 byte)
-{
-    return FSI_UNUSED;
-}
-
-void
-FSEmptyBlock::importBlock(const u8 *p, size_t bsize)
-{
-    assert(bsize == volume.bsize);
-}
-
-void
-FSEmptyBlock::exportBlock(u8 *p, size_t bsize)
-{
-    assert(bsize == volume.bsize);
-    assert(p);
-    memset(p, 0, bsize);
-}
+#include "Utils.h"
+#include "FSPartition.h"

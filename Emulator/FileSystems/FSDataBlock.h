@@ -14,7 +14,7 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSVolume &ref, u32 nr);
+    FSDataBlock(FSDevice &ref, u32 nr);
     ~FSDataBlock();
     
     const char *getDescription() override { return "FSDataBlock"; }
@@ -38,7 +38,7 @@ struct OFSDataBlock : FSDataBlock {
 
     static u32 headerSize() { return 24; }
 
-    OFSDataBlock(FSVolume &ref, u32 nr);
+    OFSDataBlock(FSDevice &ref, u32 nr);
 
     
     //
@@ -70,7 +70,7 @@ struct FFSDataBlock : FSDataBlock {
       
     static u32 headerSize() { return 0; }
 
-    FFSDataBlock(FSVolume &ref, u32 nr);
+    FFSDataBlock(FSDevice &ref, u32 nr);
     FSItemType itemType(u32 byte) override;
     void dump() override;
 

@@ -8,10 +8,10 @@
 // -----------------------------------------------------------------------------
 
 #include "Utils.h"
-#include "FSVolume.h"
+#include "FSDevice.h"
 
 FSBlock *
-FSBlock::makeWithType(FSVolume &ref, u32 nr, FSBlockType type)
+FSBlock::makeWithType(FSDevice &ref, u32 nr, FSBlockType type)
 {
     switch (type) {
 

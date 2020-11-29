@@ -25,7 +25,7 @@ struct DiskControllerWrapper { DiskController *controller; };
 struct DriveWrapper { Drive *drive; };
 struct DmaDebuggerWrapper { DmaDebugger *dmaDebugger; };
 struct DeniseWrapper { Denise *denise; };
-struct FSVolumeWrapper { FSVolume *volume; };
+struct FSVolumeWrapper { FSDevice *volume; };
 struct GuardsWrapper { Guards *guards; };
 struct JoystickWrapper { Joystick *joystick; };
 struct KeyboardWrapper { Keyboard *keyboard; };
@@ -1220,12 +1220,12 @@ struct SerialPortWrapper { SerialPort *port; };
 
 
 //
-// FSVolume
+// FSDevice
 //
 
-@implementation FSVolumeProxy
+@implementation FSDeviceProxy
 
-- (instancetype) initWithVolume:(FSVolume *)volume
+- (instancetype) initWithVolume:(FSDevice *)volume
 {
     if (self = [super init]) {
         wrapper = new FSVolumeWrapper();
@@ -1234,11 +1234,11 @@ struct SerialPortWrapper { SerialPort *port; };
     return self;
 }
 
-+ (instancetype) make:(FSVolume *)volume
++ (instancetype) make:(FSDevice *)volume
 {
     if (volume == NULL) { return nil; }
     
-    FSVolumeProxy *proxy = [[self alloc] initWithVolume: volume];
+    FSDeviceProxy *proxy = [[self alloc] initWithVolume: volume];
     return proxy;
 }
 
@@ -1247,7 +1247,7 @@ struct SerialPortWrapper { SerialPort *port; };
     FSError error;
     AmigaFileWrapper *adf = [fileProxy wrapper];
 
-    FSVolume *volume = FSVolume::makeWithADF((ADFFile *)(adf->file), &error);
+    FSDevice *volume = FSDevice::makeWithADF((ADFFile *)(adf->file), &error);
     return [self make:volume];
 }
 
@@ -1256,7 +1256,7 @@ struct SerialPortWrapper { SerialPort *port; };
     FSError error;
     AmigaFileWrapper *hdf = [fileProxy wrapper];
 
-    FSVolume *volume = FSVolume::makeWithHDF((HDFFile *)(hdf->file), &error);
+    FSDevice *volume = FSDevice::makeWithHDF((HDFFile *)(hdf->file), &error);
     return [self make:volume];
 }
 

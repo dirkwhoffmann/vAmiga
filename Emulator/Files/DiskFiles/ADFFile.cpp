@@ -139,7 +139,7 @@ ADFFile::makeWithDisk(Disk *disk)
 }
 
 ADFFile *
-ADFFile::makeWithVolume(FSVolume &volume, FSError *error)
+ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
     assert(volume.getBlockSize() == 512);
@@ -240,7 +240,7 @@ ADFFile::formatDisk(FSVolumeType fs)
     if (fs == FS_NONE) return false;
     
     // Create an empty file system
-    FSVolume volume = FSVolume(fs, numBlocks());
+    FSDevice volume = FSDevice(fs, numBlocks());
     volume.setName(FSName("Disk"));
     
     // Export the volume to the ADF
