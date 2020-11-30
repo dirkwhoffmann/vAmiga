@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 
 #include "Amiga.h"
+#include <string.h>
 
 HDFFile::HDFFile()
 {
@@ -40,7 +41,7 @@ HDFFile::makeWithFile(const char *path)
         delete hdf;
         return nullptr;
     }
-    
+        
     return hdf;
 }
 
@@ -53,7 +54,14 @@ HDFFile::makeWithBuffer(const u8 *buffer, size_t length)
         delete hdf;
         return nullptr;
     }
-        
+    
+    printf("HDF loaded\n");
+    u8 *p = hdf->getData();
+    for (int i = 0; i < 32; i++) {
+        printf("Block %d: %c%c%c%c\n", i, p[0], p[1], p[2], p[3]);
+        p += 256;
+    }
+
     return hdf;
 }
 
@@ -64,4 +72,106 @@ HDFFile::readFromBuffer(const u8 *buffer, size_t length)
         return false;
     
     return isHDFBuffer(buffer, length);
+}
+
+bool
+HDFFile::hasRDB()
+{
+    // The rigid disk block must be among the first 16 blocks
+    if (size >= 16 * 512) {
+        for (int i = 0; i < 16; i++) {
+            if (strcmp((const char *)data + i * 512, "RDSK") == 0) return true;
+        }
+    }
+    return false;
+}
+
+long
+HDFFile::numCyls()
+{
+    assert(size % bsize() == 0);
+    
+    if (hasRDB()) warn("HDF RDB images are not supported");
+
+    return size / bsize() / numSectors() / numSides();
+}
+
+long
+HDFFile::numSides()
+{
+    if (hasRDB()) warn("HDF RDB images are not supported");
+    return 1;
+}
+
+long
+HDFFile::numSectors()
+{
+    if (hasRDB()) warn("HDF RDB images are not supported");
+    return 32;
+}
+
+long
+HDFFile::numReserved()
+{
+    if (hasRDB()) warn("HDF RDB images are not supported");
+    return 2;
+}
+
+long
+HDFFile::numBlocks()
+{
+    assert((long)size / bsize() == numCyls() * numSides() * numSectors());
+    return size / bsize();
+}
+
+long
+HDFFile::bsize()
+{
+    if (hasRDB()) warn("HDF RDB images are not supported");
+    return 512;
+}
+
+std::vector<FSPartition>
+HDFFile::pTable()
+{
+    std::vector<FSPartition> result;
+    
+    if (hasRDB()) {
+        
+        // TODO: Extract the partition information from the disk image
+        warn("HDF RDB images are not supported");
+        
+    } else {
+        
+        // Locate the root block
+        u32 highKey = numCyls() * numSides() *  numSectors() - 1;
+        u32 ref = (numReserved() + highKey) / 2;
+                
+        // Create a single partition
+        result.push_back(FSPartition(0, numCyls(), ref));
+        
+        // Locate the bitmap blocks
+        u32 cnt = 25;
+        u32 offset = bsize() - 49 * 4;
+
+        while (ref && ref < numBlocks()) {
+
+            const u8 *p = data + (ref * bsize()) + offset;
+        
+            // Collect all references stored in this block
+            for (u32 i = 0; i < cnt; i++, p += 4) {
+                if (u32 bmb = FFSDataBlock::read32(p)) {
+                    if (bmb < numBlocks()) result[0].bmBlocks.push_back(bmb);
+                }
+            }
+            
+            // Continue collecting in the next extension bitmap block
+            if ((ref = FFSDataBlock::read32(p))) {
+                if (ref < numBlocks()) result[0].bmExtBlocks.push_back(ref);
+                cnt = (bsize() / 4) - 1;
+                offset = 0;
+            }
+        }
+    }
+    return result;
 }

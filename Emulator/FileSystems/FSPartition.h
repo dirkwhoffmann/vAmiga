@@ -23,13 +23,13 @@
 #include "FSDataBlock.h"
 
 struct FSPartition : AmigaObject {
-
-    // The device this partition is part of
-    class FSDevice &dev;
     
     // Cylinder boundaries
-    u32 lowCyl;
-    u32 highCyl;
+    u32 lowCyl = 0;
+    u32 highCyl = 0;
+    
+    // Location of the root block
+    u32 rootBlock = 0;
     
     // References to all bitmap blocks and bitmap extension blocks
     vector<u32> bmBlocks;
@@ -40,8 +40,7 @@ struct FSPartition : AmigaObject {
     // Initializing
     //
     
-    FSPartition(FSDevice &ref, u32 first, u32 last);
-    FSPartition(FSDevice &ref, u8 *buffer);
+    FSPartition(u32 first, u32 last, u32 root);
 
     const char *getDescription() override { return "FSPartition"; }
     
@@ -53,11 +52,9 @@ struct FSPartition : AmigaObject {
     //
     
     // Returns the number of cylinders in this partition
-    u32 cylinders() { return highCyl - lowCyl + 1; }
-    
-    // Returns a reference or a pointer to the root block
-    u32 rootBlockRef();
-    FSRootBlock *rootBlockPtr();
+    u32 numCyls() { return highCyl - lowCyl + 1; }    
 };
+
+typedef std::vector<FSPartition> PTable;
 
 #endif

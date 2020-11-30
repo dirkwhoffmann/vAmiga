@@ -119,8 +119,8 @@ public:
     const char *getDescription() override { return "FSVolume"; }
     
     // Gets or sets the name of this volume
-    FSName getName() { return rootBlock()->getName(); }
-    void setName(FSName name) { rootBlock()->setName(name); }
+    FSName getName() { return currentRootBlockPtr()->getName(); }
+    void setName(FSName name) { currentRootBlockPtr()->setName(name); }
     
     // Prints information about this volume
     void info();
@@ -225,7 +225,7 @@ public:
 private:
     
     // Seeks all bitmap and bitmap extension blocks inside a buffer
-    void locateBitmapBlocks(const u8 *buffer);
+    // void locateBitmapBlocks(const u8 *buffer);
     
     // Computes the position of a certain block allocation bit
     bool locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit);
@@ -244,13 +244,13 @@ public:
     FSItemType itemType(u32 nr, u32 pos);
     
     // Returns the location of the root block in the current partition
-    u32 rootBlockNr() { return part[cp].rootBlockRef(); }
-    
+    u32 currentRootBlockRef() { return part[cp].rootBlock; }
+    FSBlock *currentRootBlockPtr() { return block(currentRootBlockRef()); }
+
     // Queries a pointer to a block of a certain type (may return nullptr)
     FSBlock *block(u32 nr);
     FSBootBlock *bootBlock(u32 nr);
     FSRootBlock *rootBlock(u32 nr);
-    FSRootBlock *rootBlock() { return rootBlock(rootBlockNr()); }
     FSBitmapBlock *bitmapBlock(u32 nr);
     // FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
     FSBitmapExtBlock *bitmapExtBlock(u32 nr);

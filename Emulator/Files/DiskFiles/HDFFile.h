@@ -66,8 +66,19 @@ public:
 
 public:
     
-    long numBlocks() { return size / 512; }
-
+    // Returns true if this image contains a rigid disk block
+    bool hasRDB();
+    
+    // Returns the layout parameters of the hard drive
+    long numCyls();
+    long numSides();
+    long numSectors();
+    long numReserved();
+    long numBlocks();
+    long bsize();
+    
+    // Extracts the partition table from the image data
+    std::vector<FSPartition> pTable();
 };
 
 #endif

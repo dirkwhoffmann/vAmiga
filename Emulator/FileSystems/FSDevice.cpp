@@ -105,10 +105,10 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     dsize = isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
 
     // Create the first partition
-    part.push_back(FSPartition(*this, 0, c-1));
+    part.push_back(FSPartition(0, c-1, 880));
 
     // Determine the block locations
-    u32 root             = rootBlockNr();
+    u32 root             = 880; // rootBlockNr();
     u32 firstBitmapBlock = root + 1;
     u32 lastBitmapBlock  = firstBitmapBlock + requiredBitmapBlocks() - 1;
     u32 firstExtBlock    = lastBitmapBlock + 1;
@@ -157,12 +157,10 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     updateChecksums();
     
     // Set the current directory to '/'
-    cd = rootBlockNr();
-    
-    // Do some final consistency checks
-    assert(rootBlock() == blocks[rootBlockNr()]);
+    cd = part[0].rootBlock;
 
     if (FS_DEBUG) {
+        debug("cd = %d\n", cd);
         info();
         dump();
     }
@@ -483,13 +481,14 @@ FSDevice::mark(u32 ref, bool alloc)
     }
 }
 
+/*
 void
 FSDevice::locateBitmapBlocks(const u8 *buffer)
 {
     assert(buffer != nullptr);
 
     //
-    // DEPRECATED. MOVE to FSPartition
+    // DEPRECATED. MOVE TO HDF
     //
     
     std::vector<u32> &bmBlocks = part[0].bmBlocks;
@@ -524,6 +523,7 @@ FSDevice::locateBitmapBlocks(const u8 *buffer)
         }
     }
 }
+*/
 
 bool
 FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
@@ -689,7 +689,7 @@ u32
 FSDevice::allocateBlock()
 {
     // Search for a free block above the root block
-    for (long i = rootBlockNr() + 1; i < capacity; i++) {
+    for (long i = part[cp].rootBlock + 1; i < capacity; i++) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated(i);
             return i;
@@ -697,7 +697,7 @@ FSDevice::allocateBlock()
     }
 
     // Search for a free block below the root block
-    for (long i = rootBlockNr() - 1; i >= 2; i--) {
+    for (long i = part[cp].rootBlock - 1; i >= 2; i--) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated(i);
             return i;
@@ -810,8 +810,8 @@ FSDevice::currentDirBlock()
     }
     
     // The block reference is invalid. Switch back to the root directory
-    cd = rootBlockNr();
-    return rootBlock(); 
+    cd = part[cp].rootBlock;
+    return block(cd);
 }
 
 FSBlock *
@@ -824,7 +824,7 @@ FSDevice::changeDir(const char *name)
     if (strcmp(name, "/") == 0) {
                 
         // Move to top level
-        cd = rootBlockNr();
+        cd = part[cp].rootBlock;
         return currentDirBlock();
     }
 
@@ -1146,7 +1146,8 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
     type = (FSVolumeType)src[3];
     
     // Scan the buffer for bitmap blocks and bitmap extension blocks
-    locateBitmapBlocks(src);
+    // locateBitmapBlocks(src);
+    assert(false);
     
     // Import all blocks
     for (u32 i = 0; i < capacity; i++) {
