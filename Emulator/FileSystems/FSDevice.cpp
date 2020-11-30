@@ -20,11 +20,11 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // Create volume
-    FSDevice *volume = new FSDevice(type,
-                                    adf->numCylinders(),
-                                    adf->numSides(),
-                                    adf->numSectors(),
-                                    512);
+    FSDevice *volume = FSDevice::make(type,
+                                      adf->numCylinders(),
+                                      adf->numSides(),
+                                      adf->numSectors(),
+                                      512);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -44,7 +44,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
     FSVolumeType type = FS_OFS;
     
     // REMOVE ASAP
-    FSDevice *volume = new FSDevice(FS_OFS, 500, 12, 22);
+    FSDevice *volume = FSDevice::make(FS_OFS, 500, 12, 22);
 
     // Create volume
     // FSDevice *volume = new FSDevice(type, hdf->numBlocks(), 512);
@@ -61,9 +61,95 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 }
 
 FSDevice *
+FSDevice::make(PTable &ptable, FSError *error)
+{
+    return nullptr;
+}
+
+FSDevice *
+FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
+{
+    FSDevice *dev = new FSDevice();
+        
+    dev->type = type;
+    dev->cylinders = cyls;
+    dev->heads = heads;
+    dev->sectors = sectors;
+    dev->bsize = bsize;
+    dev->capacity = cyls * heads * sectors;
+    
+    // Create the block storage
+    dev->blocks = new BlockPtr[dev->capacity]();
+    dev->dsize = dev->isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
+
+    // Create the first partition
+    dev->part.push_back(FSPartition(0, cyls - 1, 880));
+
+    // Determine the block locations
+    u32 root             = 880; // rootBlockNr();
+    u32 firstBitmapBlock = root + 1;
+    u32 lastBitmapBlock  = firstBitmapBlock + dev->requiredBitmapBlocks() - 1;
+    u32 firstExtBlock    = lastBitmapBlock + 1;
+    u32 lastExtBlock     = firstExtBlock + dev->requiredBitmapExtensionBlocks() - 1;
+    assert(root < dev->capacity);
+
+    // Add boot blocks
+    dev->blocks[0] = new FSBootBlock(*dev, 0);
+    dev->blocks[1] = new FSBootBlock(*dev, 1);
+    
+    // Add the root block
+    FSRootBlock *rb = new FSRootBlock(*dev, root);
+    dev->blocks[root] = rb;
+        
+    // Add bitmap blocks
+    for (u32 ref = firstBitmapBlock; ref <= lastBitmapBlock; ref++) {
+        dev->blocks[ref] = new FSBitmapBlock(*dev, ref);
+        dev->part[0].bmBlocks.push_back(ref);
+    }
+
+    // Add bitmap extension blocks
+    FSBlock *pred = rb;
+    for (u32 ref = firstExtBlock; ref <= lastExtBlock; ref++) {
+        dev->blocks[ref] = new FSBitmapExtBlock(*dev, ref);
+        dev->part[0].bmExtBlocks.push_back(ref);
+        pred->setNextBmExtBlockRef(ref);
+        pred = dev->blocks[ref];
+    }
+
+    // Add all bitmap block references
+    rb->addBitmapBlockRefs(dev->part[0].bmBlocks);
+        
+    // Add free blocks
+    for (u32 i = 2; i < root; i++) {
+        assert(dev->blocks[i] == nullptr);
+        dev->blocks[i] = new FSEmptyBlock(*dev, i);
+        dev->markAsFree(i);
+    }
+    for (u32 i = lastExtBlock + 1; i < dev->capacity; i++) {
+        assert(dev->blocks[i] == nullptr);
+        dev->blocks[i] = new FSEmptyBlock(*dev, i);
+        dev->markAsFree(i);
+    }
+
+    // Compute checksums for all blocks
+    dev->updateChecksums();
+    
+    // Set the current directory to '/'
+    dev->cd = dev->part[0].rootBlock;
+
+    if (FS_DEBUG) {
+        printf("cd = %d\n", dev->cd);
+        dev->info();
+        dev->dump();
+    }
+    
+    return dev; 
+}
+
+FSDevice *
 FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors)
 {
-    FSDevice *volume = new FSDevice(type, cylinders, heads, sectors);
+    FSDevice *volume = FSDevice::make(type, cylinders, heads, sectors);
     volume->setName(FSName(name));
 
     // Try to import directory
@@ -89,6 +175,7 @@ FSDevice::make(FSVolumeType type, const char *name, const char *path)
 }
 
 // FSDevice::FSDevice(FSVolumeType t, u32 c, u32 s) :  type(t), capacity(c), bsize(s)
+/*
 FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
 {
     debug(FS_DEBUG, "Creating FSDevice (%d x %d x %d x %d)\n", c, h, s, bsize);
@@ -165,7 +252,8 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
         dump();
     }
 }
-
+*/
+ 
 FSDevice::~FSDevice()
 {
     for (u32 i = 0; i < capacity; i++) {

@@ -79,11 +79,7 @@ protected:
     
     // The partition table
     std::vector<FSPartition> part;
-    
-    // References to all bitmap blocks and bitmap extension blocks
-    // vector<u32> bmBlocks;
-    // vector<u32> bmExtBlocks;
-    
+        
     // The currently selected partition
     u32 cp = 0;
 
@@ -97,9 +93,15 @@ protected:
     
 public:
 
-    // Creates a file system from an xDF file
+    // Creates a file system from an ADF or HDF file
     static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
+
+    // Creates a file system from a partition table
+    static FSDevice *make(PTable &ptable, FSError *error);
+
+    // Creates a file system with a single partition
+    static FSDevice *make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize = 512);
 
     // Creates a file system with the contents of a host file system directory
     static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors);
@@ -113,7 +115,8 @@ public:
 public:
 
     // FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
-    FSDevice(FSVolumeType type, u32 cylinders, u32 heads, u32 sectors, u32 bsize = 512);
+    FSDevice() { }
+    // FSDevice(FSVolumeType type, u32 cylinders, u32 heads, u32 sectors, u32 bsize = 512);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }

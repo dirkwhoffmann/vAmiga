@@ -78,44 +78,44 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     bool hd = length > 853000;
         
     // Create a new file system
-    FSDevice volume = FSDevice(FS_OFS, 80, 2, hd ? 22 : 11);
-    volume.setName(FSName("Disk"));
+    FSDevice *volume = FSDevice::make(FS_OFS, 80, 2, hd ? 22 : 11);
+    volume->setName(FSName("Disk"));
     
     // Make the volume bootable
-    volume.installBootBlock();
+    volume->installBootBlock();
     
     // Add the executable
-    FSBlock *file = volume.makeFile("file", buffer, length);
+    FSBlock *file = volume->makeFile("file", buffer, length);
     success = file != nullptr;
     
     // Add a script directory
-    volume.makeDir("s");
-    volume.changeDir("s");
+    volume->makeDir("s");
+    volume->changeDir("s");
     
     // Add a startup sequence
-    file = volume.makeFile("startup-sequence", "file");
+    file = volume->makeFile("startup-sequence", "file");
     success &= file != nullptr;
     
     // Finalize
-    volume.updateChecksums();
+    volume->updateChecksums();
     
     // Check for file system errors
-    volume.changeDir("/");
-    volume.info();
-    volume.printDirectory(true);
+    volume->changeDir("/");
+    volume->info();
+    volume->printDirectory(true);
 
     // Check the file system for consistency
-    FSErrorReport report = volume.check(true);
+    FSErrorReport report = volume->check(true);
     if (report.corruptedBlocks > 0) {
         warn("Found %ld corrupted blocks\n", report.corruptedBlocks);
-        volume.dump();
+        volume->dump();
     }
     
     // Convert the volume into an ADF
     if (success) {
         FSError error;
         assert(adf == nullptr);
-        adf = ADFFile::makeWithVolume(volume, &error);
+        adf = ADFFile::makeWithVolume(*volume, &error);
         if (error != FS_OK) {
             warn("readFromBuffer: Cannot export volume (%s)\n", sFSError(error));
         }
@@ -125,7 +125,7 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     const char *path = "/tmp/test";
     msg("Doing a test export to %s\n", path);
     
-    volume.exportDirectory(path);
+    volume->exportDirectory(path);
     
     return adf != nullptr;
 }
