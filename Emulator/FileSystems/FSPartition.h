@@ -55,6 +55,42 @@ struct FSPartition : AmigaObject {
     u32 numCyls() { return highCyl - lowCyl + 1; }    
 };
 
+// DEPRECATED
 typedef std::vector<FSPartition> PTable;
+
+struct FSLayout : AmigaObject {
+    
+    // Number of physical cylinders
+    u32 cyls = 0;
+
+    // Number of physical heads
+    u32 heads = 0;
+        
+    // Number of blocks per track
+    u32 sectors = 0;
+    
+    // Total number of blocks
+    u32 blocks = 0;
+
+    // Number of reserved blocks at the beginning of the block list
+    u32 reserved = 0;
+    
+    // Size of a single block in bytes
+    u32 bsize;
+    
+    // The list of partitions
+    std::vector<FSPartition> part;
+    
+    //
+    // Initializing
+    //
+    
+    // FSLayout(u32 cyls, u32 heads, u32 sectors, u32 root = 0, u32 bsize = 512);
+    FSLayout(DiskType type, DiskDensity density);
+    FSLayout(class ADFFile *adf); 
+    FSLayout(class HDFFile *adf);
+
+    void dump();
+};
 
 #endif

@@ -131,6 +131,7 @@ HDFFile::bsize()
     return 512;
 }
 
+/*
 std::vector<FSPartition>
 HDFFile::pTable()
 {
@@ -175,3 +176,4 @@ HDFFile::pTable()
     }
     return result;
 }
+*/

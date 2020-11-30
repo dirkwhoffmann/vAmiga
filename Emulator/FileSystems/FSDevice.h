@@ -52,23 +52,23 @@ protected:
     // Total capacity of this device in blocks (TODO: Replace by blocks() )
     u32 capacity;
     
-    // Number of physical cylinders
+    // Number of physical cylinders (TODO: MOVE TO PARTITION TABLE)
     u32 cylinders = 80;
 
-    // Number of physical heads
+    // Number of physical heads (TODO: MOVE TO PARTITION TABLE)
     u32 heads = 2;
     
     //
     // Logical device properties
     //
     
-    // Number of blocks per track
+    // Number of blocks per track (TODO: MOVE TO PARTITION TABLE)
     u32 sectors = 11;
     
-    // Number of reserved blocks
+    // Number of reserved blocks (TODO: MOVE TO PARTITION TABLE)
     u32 reserved = 2;
     
-    // Size of a single block in bytes
+    // Size of a single block in bytes (TODO: MOVE TO PARTITION TABLE) 
     u32 bsize;
         
     // Number of data bytes in a single data block
