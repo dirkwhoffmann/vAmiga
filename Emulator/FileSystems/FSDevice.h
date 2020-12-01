@@ -165,12 +165,18 @@ public:
     u32 requiredBitmapExtensionBlocks();
     
     // Reports usage information
-    u32 numBlocks() { return getCapacity(); }
-    u32 freeBlocks();
-    u32 usedBlocks() { return numBlocks() - freeBlocks(); }
-    u32 totalBytes() { return numBlocks() * bsize; }
-    u32 freeBytes() { return freeBlocks() * bsize; }
-    u32 usedBytes() { return usedBlocks() * bsize; }
+    u32 numBlocks(FSPartition &p);
+    u32 freeBlocks(FSPartition &p);
+    u32 usedBlocks(FSPartition &p);
+    u32 totalBytes(FSPartition &p);
+    u32 freeBytes(FSPartition &p);
+    u32 usedBytes(FSPartition &p);
+    u32 numBlocks() { return numBlocks(layout.part[cp]); }
+    u32 freeBlocks() { return freeBlocks(layout.part[cp]); }
+    u32 usedBlocks() { return usedBlocks(layout.part[cp]); }
+    u32 totalBytes() { return totalBytes(layout.part[cp]); }
+    u32 freeBytes() { return freeBytes(layout.part[cp]); }
+    u32 usedBytes() { return usedBytes(layout.part[cp]); }
 
     
     //

@@ -362,13 +362,15 @@ void
 FSDevice::info()
 {
     msg("Type   Size          Used   Free   Full   Name\n");
-    msg("DOS%ld  ",     getType());
-    msg("%5d (x %3d) ", numBlocks(), bsize);
-    msg("%5d  ",        usedBlocks());
-    msg("%5d   ",       freeBlocks());
-    msg("%3d%%   ",     (int)(100.0 * usedBlocks() / numBlocks()));
-    msg("%s\n",         getName().c_str());
-    msg("\n");
+    for (auto& p : layout.part) {
+        msg("DOS%ld  ",     fileSystem(p));
+        msg("%5d (x %3d) ", numBlocks(p), bsize);
+        msg("%5d  ",        usedBlocks(p));
+        msg("%5d   ",       freeBlocks(p));
+        msg("%3d%%   ",     (int)(100.0 * usedBlocks(p) / numBlocks(p)));
+        msg("%s\n",         getName(p).c_str());
+        msg("\n");
+    }
 }
 
 void
@@ -625,6 +627,16 @@ FSDevice::getAllocBitsInBitmapBlock()
 }
 
 u32
+FSDevice::getDataBlockCapacity()
+{
+    if (isOFS()) {
+        return bsize - OFSDataBlock::headerSize();
+    } else {
+        return bsize - FFSDataBlock::headerSize();
+    }
+}
+
+u32
 FSDevice::bitmapRefsInRootBlock()
 {
     return 25;
@@ -657,15 +669,48 @@ FSDevice::requiredBitmapExtensionBlocks()
 }
 
 u32
-FSDevice::getDataBlockCapacity()
+FSDevice::numBlocks(FSPartition &p)
 {
-    if (isOFS()) {
-        return bsize - OFSDataBlock::headerSize();
-    } else {
-        return bsize - FFSDataBlock::headerSize();
-    }
+    return p.lastBlock - p.firstBlock + 1;
 }
 
+u32
+FSDevice::freeBlocks(FSPartition &p)
+{
+    u32 result = 0;
+    
+    for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
+        if (blocks[i]->type() == FS_EMPTY_BLOCK) result++;
+    }
+    
+    return result;
+}
+
+u32
+FSDevice::usedBlocks(FSPartition &p)
+{
+    return numBlocks(p) - freeBlocks(p);
+}
+
+u32
+FSDevice::totalBytes(FSPartition &p)
+{
+    return numBlocks(p) * bsize;
+}
+
+u32
+FSDevice::freeBytes(FSPartition &p)
+{
+    return freeBlocks(p) * bsize;
+}
+
+u32
+FSDevice::usedBytes(FSPartition &p)
+{
+    return usedBlocks(p) * bsize;
+}
+
+/*
 u32
 FSDevice::freeBlocks()
 {
@@ -677,6 +722,7 @@ FSDevice::freeBlocks()
     
     return result;
 }
+*/
 
 bool
 FSDevice::isFree(u32 ref)
