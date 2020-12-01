@@ -11,7 +11,7 @@
 #define _FSVOLUME_H
 
 #include "AmigaObject.h"
-#include "FSPartition.h"
+#include "FSLayout.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 
@@ -42,6 +42,9 @@ class FSDevice : AmigaObject {
 
 protected:
         
+    // The layout of this device
+    FSLayout layout;
+    
     // The type of this volume (DEPRECATED: MOVE TO PARTITION)
     FSVolumeType type;
 
@@ -97,7 +100,10 @@ public:
     static FSDevice *makeWithADF(class ADFFile *adf, FSError *error);
     static FSDevice *makeWithHDF(class HDFFile *hdf, FSError *error);
 
-    // Creates a file system from a partition table
+    // Creates a file system from a format description
+    static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
+
+    // Creates a file system from a partition table (DEPRECATED)
     static FSDevice *make(PTable &ptable, FSError *error);
 
     // Creates a file system with a single partition
@@ -117,6 +123,7 @@ public:
     // FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
     FSDevice() { }
     // FSDevice(FSVolumeType type, u32 cylinders, u32 heads, u32 sectors, u32 bsize = 512);
+    FSDevice(FSLayout &layout);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
@@ -211,6 +218,17 @@ public:
     
     
     //
+    // Working with partitions
+    //
+    
+    // Returns the number of partitions
+    u32 numPartitions() { return layout.part.size(); }
+    
+    // Returns the partition a certain block belongs to
+    u32 partitionForBlock(u32 ref);
+
+    
+    //
     // Allocating blocks
     //
     
@@ -247,7 +265,7 @@ public:
     FSItemType itemType(u32 nr, u32 pos);
     
     // Returns the location of the root block in the current partition
-    u32 currentRootBlockRef() { return part[cp].rootBlock; }
+    u32 currentRootBlockRef() { return layout.part[cp].rootBlock; }
     FSBlock *currentRootBlockPtr() { return block(currentRootBlockRef()); }
 
     // Queries a pointer to a block of a certain type (may return nullptr)
@@ -270,8 +288,13 @@ public:
     
 public:
     
-    // Seeks and free block and marks it as allocated
-    u32 allocateBlock();
+    // Seeks a free block in the current partition and marks it as allocated
+    u32 allocateBlock() { return allocateBlock(layout.part[cp]); }
+
+    // Seeks a free block in a specific partition and marks it as allocated
+    u32 allocateBlock(FSPartition &part);
+    u32 allocateBlockAbove(FSPartition &part, u32 ref);
+    u32 allocateBlockBelow(FSPartition &part, u32 ref);
 
     // Deallocates a block
     void deallocateBlock(u32 ref);

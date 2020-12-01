@@ -28,6 +28,10 @@ struct FSPartition : AmigaObject {
     u32 lowCyl = 0;
     u32 highCyl = 0;
     
+    // Block boundaries
+    u32 firstBlock = 0;
+    u32 lastBlock = 0;
+    
     // Location of the root block
     u32 rootBlock = 0;
     
@@ -40,7 +44,7 @@ struct FSPartition : AmigaObject {
     // Initializing
     //
     
-    FSPartition(u32 first, u32 last, u32 root);
+    FSPartition(u32 firstCyl, u32 lastCyl, u32 blocksPerCyl, u32 root);
 
     const char *getDescription() override { return "FSPartition"; }
     
@@ -76,7 +80,7 @@ struct FSLayout : AmigaObject {
     u32 reserved = 0;
     
     // Size of a single block in bytes
-    u32 bsize;
+    u32 bsize = 0;
     
     // The list of partitions
     std::vector<FSPartition> part;
@@ -85,11 +89,13 @@ struct FSLayout : AmigaObject {
     // Initializing
     //
     
-    // FSLayout(u32 cyls, u32 heads, u32 sectors, u32 root = 0, u32 bsize = 512);
+    FSLayout() { }
     FSLayout(DiskType type, DiskDensity density);
     FSLayout(class ADFFile *adf); 
     FSLayout(class HDFFile *adf);
 
+    const char *getDescription() override { return "FSLayout"; }
+    
     void dump();
 };
 

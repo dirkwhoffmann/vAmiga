@@ -10,10 +10,12 @@
 #include "Utils.h"
 #include "FSDevice.h"
 
-FSPartition::FSPartition(u32 first, u32 last, u32 root)
+FSPartition::FSPartition(u32 firstCyl, u32 lastCyl, u32 blocksPerCyl, u32 root)
 {
-    this->lowCyl = first;
-    this->highCyl = last;
+    this->lowCyl = firstCyl;
+    this->highCyl = lastCyl;
+    this->firstBlock = firstCyl * blocksPerCyl;
+    this->lastBlock = (lastCyl + 1) * blocksPerCyl - 1;
     this->rootBlock = root;
 
     assert(bmBlocks.size() == 0);
@@ -25,6 +27,8 @@ FSPartition::dump()
 {
     msg("  First cylinder : %d\n", lowCyl);
     msg("   Last cylinder : %d\n", highCyl);
+    msg("     First block : %d\n", firstBlock);
+    msg("      Last block : %d\n", lastBlock);
     msg("      Root block : %d\n", rootBlock);
     msg("   Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
@@ -98,7 +102,7 @@ FSLayout::FSLayout(DiskType type, DiskDensity density)
     u32 root = blocks / 2;
     u32 bm   = root + 1;
 
-    part.push_back(FSPartition(0, cyls - 1, root));
+    part.push_back(FSPartition(0, cyls - 1, sectors * heads, root));
     part[0].bmBlocks.push_back(bm);
 }
 
@@ -116,7 +120,7 @@ FSLayout::FSLayout(ADFFile *adf)
     u32 bm   = FSBlock::read32(adf->getData() + root * bsize + 316);
     
     // Add partition
-    part.push_back(FSPartition(0, cyls - 1, root));
+    part.push_back(FSPartition(0, cyls - 1, sectors * heads, root));
     part[0].bmBlocks.push_back(bm);
 }
 
@@ -134,7 +138,7 @@ FSLayout::FSLayout(HDFFile *hdf)
     u32 rootKey = (reserved + highKey) / 2;
 
     // Add partition
-    part.push_back(FSPartition(0, cyls - 1, rootKey));
+    part.push_back(FSPartition(0, cyls - 1, sectors * heads, rootKey));
 
     // Seek bitmap blocks
     u32 ref = rootKey;
@@ -171,8 +175,8 @@ FSLayout::dump()
     msg("        reserved : %d\n", reserved);
     msg("           bsize : %d\n", bsize);
     
-    for (auto& it : part) {
-        msg("Partition %d:\n");
-        it.dump();
+    for (size_t i = 0; i < part.size(); i++) {
+        msg("Partition %d:\n", i);
+        part[i].dump();
     }
 }

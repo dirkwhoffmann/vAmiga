@@ -78,7 +78,8 @@ EXEFile::readFromBuffer(const u8 *buffer, size_t length)
     bool hd = length > 853000;
         
     // Create a new file system
-    FSDevice *volume = FSDevice::make(FS_OFS, 80, 2, hd ? 22 : 11);
+    // FSDevice *volume = FSDevice::make(FS_OFS, 80, 2, hd ? 22 : 11);
+    FSDevice *volume = FSDevice::makeWithFormat(DISK_35, hd ? DISK_HD : DISK_DD);
     volume->setName(FSName("Disk"));
     
     // Make the volume bootable

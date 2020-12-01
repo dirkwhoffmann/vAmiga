@@ -61,6 +61,14 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 }
 
 FSDevice *
+FSDevice::makeWithFormat(DiskType type, DiskDensity density)
+{
+    FSLayout layout = FSLayout(type, density);
+    return new FSDevice(layout);
+}
+
+
+FSDevice *
 FSDevice::make(PTable &ptable, FSError *error)
 {
     return nullptr;
@@ -83,7 +91,7 @@ FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
     dev->dsize = dev->isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
 
     // Create the first partition
-    dev->part.push_back(FSPartition(0, cyls - 1, 880));
+    dev->part.push_back(FSPartition(0, cyls - 1, sectors * heads, 880));
 
     // Determine the block locations
     u32 root             = 880; // rootBlockNr();
@@ -254,6 +262,79 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
 }
 */
  
+FSDevice::FSDevice(FSLayout &l)
+{
+    if (FS_DEBUG) {
+        debug("Creating FSDevice with layout:\n");
+        l.dump();
+    }
+    
+    this->layout = l;
+    
+    type = FS_OFS; // TODO: REMOVE: THIS IS A PARTITION PROPERTY
+    cylinders = layout.cyls;
+    heads = layout.heads;
+    sectors = layout.sectors;
+    bsize = layout.bsize;
+    capacity = layout.blocks;
+    
+    // Create the block storage
+    blocks = new BlockPtr[layout.blocks]();
+    dsize = isOFS() ? bsize - 24 : bsize; // TODO: REMOVE: THIS IS A PARTITION PROPERTY
+    
+    // Create boot blocks
+    blocks[0] = new FSBootBlock(*this, 0);
+    blocks[1] = new FSBootBlock(*this, 1);
+    
+    // Iterate through all partitions
+    for (auto& it : layout.part) {
+        
+        // Create the root block
+        FSRootBlock *rb = new FSRootBlock(*this, it.rootBlock);
+        blocks[it.rootBlock] = rb;
+        
+        // Create the bitmap blocks
+        for (auto& bmb : it.bmBlocks) {
+            
+            debug("Creating bitmap block at %d\n", bmb);
+            blocks[bmb] = new FSBitmapBlock(*this, bmb);
+        }
+        
+        // Add bitmap extension blocks
+        FSBlock *pred = rb;
+        for (auto& ext : it.bmExtBlocks) {
+            
+            blocks[ext] = new FSBitmapExtBlock(*this, ext);
+            pred->setNextBmExtBlockRef(ext);
+            pred = blocks[ext];
+        }
+        
+        // Add all bitmap block references
+        rb->addBitmapBlockRefs(it.bmBlocks);
+    }
+
+    // Add free blocks
+    for (u32 i = 0; i < layout.blocks; i++) {
+        
+        if (blocks[i] == nullptr) {
+            blocks[i] = new FSEmptyBlock(*this, i);
+            markAsFree(i); // TODO: MUST BE PARTITION SPECIFIC
+        }
+    }
+
+    // Compute checksums for all blocks
+    updateChecksums();
+    
+    // Set the current directory to '/'
+    cd = layout.part[0].rootBlock;
+    
+    if (FS_DEBUG) {
+        printf("cd = %d\n", cd);
+        info();
+        dump();
+    }
+}
+
 FSDevice::~FSDevice()
 {
     for (u32 i = 0; i < capacity; i++) {
@@ -421,6 +502,19 @@ FSDevice::seekCorruptedBlock(u32 n)
         }
     }
     return (u32)-1;
+}
+
+u32
+FSDevice::partitionForBlock(u32 ref)
+{
+    for (u32 i = 0; i < layout.part.size(); i++) {
+
+        FSPartition &part = layout.part[i];
+        if (ref >= part.firstBlock && ref <= part.lastBlock) return i;
+    }
+    
+    assert(false);
+    return 0;
 }
 
 FSBlockType
@@ -618,8 +712,9 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 {
     assert(ref >= 2 && ref < capacity);
     
-    // Search inside the current partition
-    auto &bmBlocks = part[cp].bmBlocks;
+    // Select the correct partition
+    u32 partition = partitionForBlock(ref);
+    auto &bmBlocks = layout.part[partition].bmBlocks;
     
     // The first two blocks are not part the map (they are always allocated)
     ref -= 2;
@@ -652,8 +747,8 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     *byte  = rByte;
     *bit   = ref % 8;
     
-    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
-    //       ref, *block, *byte, *bit);
+    debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
+          ref, *block, *byte, *bit);
 
     return true;
 }
@@ -774,24 +869,35 @@ FSDevice::hashableBlock(u32 nr)
 }
 
 u32
-FSDevice::allocateBlock()
+FSDevice::allocateBlock(FSPartition &part)
 {
-    // Search for a free block above the root block
-    for (long i = part[cp].rootBlock + 1; i < capacity; i++) {
+    if (u32 ref = allocateBlockAbove(part, part.rootBlock)) return ref;
+    if (u32 ref = allocateBlockBelow(part, part.rootBlock)) return ref;
+
+    return 0;
+}
+
+u32
+FSDevice::allocateBlockAbove(FSPartition &part, u32 ref)
+{
+    for (u32 i = ref + 1; i <= part.lastBlock; i++) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated(i);
             return i;
         }
     }
+    return 0;
+}
 
-    // Search for a free block below the root block
-    for (long i = part[cp].rootBlock - 1; i >= 2; i--) {
+u32
+FSDevice::allocateBlockBelow(FSPartition &part, u32 ref)
+{
+    for (long i = (long)ref - 1; i >= part.firstBlock; i--) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
             markAsAllocated(i);
             return i;
         }
     }
-
     return 0;
 }
 
@@ -912,7 +1018,7 @@ FSDevice::changeDir(const char *name)
     if (strcmp(name, "/") == 0) {
                 
         // Move to top level
-        cd = part[cp].rootBlock;
+        cd = layout.part[cp].rootBlock;
         return currentDirBlock();
     }
 
