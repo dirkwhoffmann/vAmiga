@@ -563,31 +563,32 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
 
-    // Is it a boot block?
-    if (nr <= 1) return FS_BOOT_BLOCK;
+    // Determine the partition the belongs to
+    FSPartition &p = part[partitionForBlock(nr)];
     
-    for (auto& it : layout.part) {
-        
-        // Is it a bitmap block?
-        if (std::find(it.bmBlocks.begin(), it.bmBlocks.end(), nr) != it.bmBlocks.end())
-            return FS_BITMAP_BLOCK;
-        
-        // is it a bitmap extension block?
-        if (std::find(it.bmExtBlocks.begin(), it.bmExtBlocks.end(), nr) != it.bmExtBlocks.end())
-            return FS_BITMAP_EXT_BLOCK;
-    }
+    // Is it a boot block?
+    if (nr == p.firstBlock + 0) return FS_BOOT_BLOCK;
+    if (nr == p.firstBlock + 1) return FS_BOOT_BLOCK;
+    
+    // Is it a bitmap block?
+    if (std::find(p.bmBlocks.begin(), p.bmBlocks.end(), nr) != p.bmBlocks.end())
+        return FS_BITMAP_BLOCK;
+    
+    // is it a bitmap extension block?
+    if (std::find(p.bmExtBlocks.begin(), p.bmExtBlocks.end(), nr) != p.bmExtBlocks.end())
+        return FS_BITMAP_EXT_BLOCK;
 
     // For all other blocks, check the type and subtype fields
     u32 type = FSBlock::read32(buffer);
     u32 subtype = FSBlock::read32(buffer + bsize - 4);
 
-    if (type == 2 && subtype == 1) return FS_ROOT_BLOCK;
-    if (type == 2 && subtype == 2) return FS_USERDIR_BLOCK;
-    if (type == 2 && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
+    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
+    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
+    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
     if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
 
     // Check if this block is a data block
-    if (isOFS()) {
+    if (isOFS(p)) {
         if (type == 8) return FS_DATA_BLOCK;
     } else {
         for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK;

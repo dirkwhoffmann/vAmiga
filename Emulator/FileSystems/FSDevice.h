@@ -226,8 +226,12 @@ public:
     void setName(FSName name) { setName(layout.part[cp], name); }
 
     // Returns the file system type of a partition (or the current partition)
-    FSVolumeType fileSystem(FSPartition &part);
+    FSVolumeType fileSystem(FSPartition &p);
+    bool isOFS(FSPartition &p) { return isOFSVolumeType(fileSystem(p)); }
+    bool isFFS(FSPartition &p) { return isFFSVolumeType(fileSystem(p)); }
     FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
+    // bool isOFS() { return isOFSVolumeType(fileSystem()); }
+    // bool isFFS() { return isFFSVolumeType(fileSystem()); }
 
     // Installs a boot block
     void makeBootable(FSPartition &part, FSBootCode bootCode);
