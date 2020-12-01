@@ -13,6 +13,8 @@ extension PreferencesController {
         
         // Drive
         genDriveBlankDiskFormat.selectItem(withTag: pref.blankDiskFormatIntValue)
+        genBootCode.selectItem(withTag: pref.bootCodeIntValue)
+        genBootCode.isEnabled = pref.blankDiskFormat != .NONE
         genEjectWithoutAskingButton.state = pref.ejectWithoutAsking ? .on : .off
         genDriveSounds.state = pref.driveSounds ? .on : .off
         genDriveSoundPan.selectItem(withTag: Int(pref.driveSoundPan))
@@ -82,7 +84,14 @@ extension PreferencesController {
     @IBAction func genBlankDiskFormatAction(_ sender: NSPopUpButton!) {
         
         let tag = sender.selectedTag()
-        pref.blankDiskFormat = FSVolumeType(rawValue: tag)!
+        pref.blankDiskFormatIntValue = tag
+        refresh()
+    }
+
+    @IBAction func genBootCodeAction(_ sender: NSPopUpButton!) {
+        
+        let tag = sender.selectedTag()
+        pref.bootCodeIntValue = tag
         refresh()
     }
 

@@ -229,6 +229,10 @@ public:
     FSVolumeType fileSystem(FSPartition &part);
     FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
 
+    // Installs a boot block
+    void makeBootable(FSPartition &part, FSBootCode bootCode);
+    void makeBootable(FSBootCode bootCode) { makeBootable(layout.part[cp], bootCode); }
+
     
     //
     // Allocating blocks
@@ -309,9 +313,6 @@ public:
     FSUserDirBlock *newUserDirBlock(const char *name);
     FSFileHeaderBlock *newFileHeaderBlock(const char *name);
             
-    // Installs a boot block
-    void installBootBlock();
-
     // Updates the checksums in all blocks
     void updateChecksums();
     

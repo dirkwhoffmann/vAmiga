@@ -1594,9 +1594,9 @@ struct SerialPortWrapper { SerialPort *port; };
     ADFFile *archive = ADFFile::makeWithDisk(d->disk);
     return archive ? [self make: archive] : nil;
 }
-- (void)formatDisk:(FSVolumeType)fs
+- (void)formatDisk:(FSVolumeType)fs bootCode:(FSBootCode)bootCode
 {
-    ((ADFFile *)wrapper->file)->formatDisk(fs);
+    ((ADFFile *)wrapper->file)->formatDisk(fs, bootCode);
 }
 
 @end

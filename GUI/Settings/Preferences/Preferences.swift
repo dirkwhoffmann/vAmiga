@@ -30,6 +30,11 @@ class Preferences {
         get { return Int(blankDiskFormat.rawValue) }
         set { blankDiskFormat = FSVolumeType.init(rawValue: newValue)! }
     }
+    var bootCode = GeneralDefaults.std.bootCode
+    var bootCodeIntValue: Int {
+        get { return Int(bootCode.rawValue) }
+        set { bootCode = FSBootCode.init(rawValue: newValue)! }
+    }
     var ejectWithoutAsking = GeneralDefaults.std.ejectWithoutAsking
     var driveSounds = GeneralDefaults.std.driveSounds
     var driveSoundPan = GeneralDefaults.std.driveSoundPan
@@ -148,9 +153,10 @@ class Preferences {
     //
     
     func loadGeneralDefaults(_ defaults: GeneralDefaults) {
-        
+                
         // Floppy
         blankDiskFormat = defaults.blankDiskFormat
+        bootCode = defaults.bootCode
         ejectWithoutAsking = defaults.ejectWithoutAsking
         driveSounds = defaults.driveSounds
         driveSoundPan = defaults.driveSoundPan
@@ -177,6 +183,7 @@ class Preferences {
            
         // Floppy
         blankDiskFormatIntValue = defaults.integer(forKey: Keys.Gen.blankDiskFormat)
+        bootCodeIntValue = defaults.integer(forKey: Keys.Gen.bootCode)
         ejectWithoutAsking = defaults.bool(forKey: Keys.Gen.ejectWithoutAsking)
         driveSounds = defaults.bool(forKey: Keys.Gen.driveSounds)
         driveSoundPan = defaults.double(forKey: Keys.Gen.driveSoundPan)
@@ -202,6 +209,8 @@ class Preferences {
         let defaults = UserDefaults.standard
         
         // Floppy
+        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
+        defaults.set(bootCodeIntValue, forKey: Keys.Gen.bootCode)
         defaults.set(ejectWithoutAsking, forKey: Keys.Gen.ejectWithoutAsking)
         defaults.set(driveSounds, forKey: Keys.Gen.driveSounds)
         defaults.set(driveSoundPan, forKey: Keys.Gen.driveSoundPan)
@@ -209,7 +218,6 @@ class Preferences {
         defaults.set(driveEjectSound, forKey: Keys.Gen.driveEjectSound)
         defaults.set(driveHeadSound, forKey: Keys.Gen.driveHeadSound)
         defaults.set(drivePollSound, forKey: Keys.Gen.drivePollSound)
-        defaults.set(blankDiskFormatIntValue, forKey: Keys.Gen.blankDiskFormat)
         
         // Fullscreen
         defaults.set(keepAspectRatio, forKey: Keys.Gen.keepAspectRatio)

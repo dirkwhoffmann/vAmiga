@@ -241,13 +241,13 @@ ADFFile::numSectors()
 //
 //
 bool
-ADFFile::formatDisk(FSVolumeType fs)
+ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
 {
     assert(isFSVolumeType(fs));
 
     FSError error;
 
-    msg("Formatting disk dwith %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
+    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NONE) return false;
@@ -258,6 +258,9 @@ ADFFile::formatDisk(FSVolumeType fs)
     // Create an empty file system
     FSDevice volume = FSDevice(layout);
     volume.setName(FSName("Disk"));
+    
+    // Write boot code
+    volume.makeBootable(bootCode);
     
     // Export the file system to the ADF
     volume.exportVolume(data, size, &error);

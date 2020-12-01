@@ -1016,13 +1016,15 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 }
 
 void
-FSDevice::installBootBlock()
+FSDevice::makeBootable(FSPartition &part, FSBootCode bootCode)
 {
-    assert(blocks[0]->type() == FS_BOOT_BLOCK);
-    assert(blocks[1]->type() == FS_BOOT_BLOCK);
+    u32 first = part.firstBlock;
+    
+    assert(blocks[first + 0]->type() == FS_BOOT_BLOCK);
+    assert(blocks[first + 1]->type() == FS_BOOT_BLOCK);
 
-    ((FSBootBlock *)blocks[0])->writeBootCode();
-    ((FSBootBlock *)blocks[1])->writeBootCode();
+    ((FSBootBlock *)blocks[first + 0])->writeBootCode(bootCode, 0);
+    ((FSBootBlock *)blocks[first + 1])->writeBootCode(bootCode, 1);
 }
 
 void
