@@ -1024,9 +1024,9 @@ FSDevice::deallocateBlock(u32 ref)
 }
 
 FSUserDirBlock *
-FSDevice::newUserDirBlock(const char *name)
+FSDevice::newUserDirBlock(FSPartition &p, const char *name)
 {
-    u32 ref = allocateBlock();
+    u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
     
     blocks[ref] = new FSUserDirBlock(*this, ref, name);
@@ -1034,9 +1034,9 @@ FSDevice::newUserDirBlock(const char *name)
 }
 
 FSFileHeaderBlock *
-FSDevice::newFileHeaderBlock(const char *name)
+FSDevice::newFileHeaderBlock(FSPartition &p, const char *name)
 {
-    u32 ref = allocateBlock();
+    u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
     
     blocks[ref] = new FSFileHeaderBlock(*this, ref, name);

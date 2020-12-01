@@ -260,10 +260,7 @@ public:
     void mark(u32 ref, bool alloc);
     
 private:
-    
-    // Seeks all bitmap and bitmap extension blocks inside a buffer
-    // void locateBitmapBlocks(const u8 *buffer);
-    
+        
     // Computes the position of a certain block allocation bit
     bool locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit);
 
@@ -289,7 +286,6 @@ public:
     FSBootBlock *bootBlock(u32 nr);
     FSRootBlock *rootBlock(u32 nr);
     FSBitmapBlock *bitmapBlock(u32 nr);
-    // FSBitmapBlock *bitmapBlock() { return bitmapBlock(bitmapBlockNr()); }
     FSBitmapExtBlock *bitmapExtBlock(u32 nr);
     FSUserDirBlock *userDirBlock(u32 nr);
     FSFileHeaderBlock *fileHeaderBlock(u32 nr);
@@ -308,9 +304,9 @@ public:
     u32 allocateBlock() { return allocateBlock(layout.part[cp]); }
 
     // Seeks a free block in a specific partition and marks it as allocated
-    u32 allocateBlock(FSPartition &part);
-    u32 allocateBlockAbove(FSPartition &part, u32 ref);
-    u32 allocateBlockBelow(FSPartition &part, u32 ref);
+    u32 allocateBlock(FSPartition &p);
+    u32 allocateBlockAbove(FSPartition &p, u32 ref);
+    u32 allocateBlockBelow(FSPartition &p, u32 ref);
 
     // Deallocates a block
     void deallocateBlock(u32 ref);
@@ -320,9 +316,15 @@ public:
     u32 addDataBlock(u32 count, u32 head, u32 prev);
     
     // Creates a new block of a certain kind
-    FSUserDirBlock *newUserDirBlock(const char *name);
-    FSFileHeaderBlock *newFileHeaderBlock(const char *name);
-            
+    FSUserDirBlock *newUserDirBlock(FSPartition &p, const char *name);
+    FSFileHeaderBlock *newFileHeaderBlock(FSPartition &p, const char *name);
+    FSUserDirBlock *newUserDirBlock(const char *name) {
+        return newUserDirBlock(layout.part[cp], name);
+    }
+    FSFileHeaderBlock *newFileHeaderBlock(const char *name) {
+        return newFileHeaderBlock(layout.part[cp], name);
+    }
+
     // Updates the checksums in all blocks
     void updateChecksums();
     
