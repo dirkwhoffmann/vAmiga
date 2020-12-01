@@ -29,12 +29,12 @@ FSPartition::FSPartition(FSLayout &layout,
 void
 FSPartition::dump()
 {
-    msg("  First cylinder : %d\n", lowCyl);
-    msg("   Last cylinder : %d\n", highCyl);
-    msg("     First block : %d\n", firstBlock);
-    msg("      Last block : %d\n", lastBlock);
-    msg("      Root block : %d\n", rootBlock);
-    msg("   Bitmap blocks : ");
+    msg("      First cylinder : %d\n", lowCyl);
+    msg("       Last cylinder : %d\n", highCyl);
+    msg("         First block : %d\n", firstBlock);
+    msg("          Last block : %d\n", lastBlock);
+    msg("          Root block : %d\n", rootBlock);
+    msg("       Bitmap blocks : ");
     for (auto& it : bmBlocks) { msg("%d ", it); }
     msg("\n");
     msg("Extension blocks : ");
@@ -183,7 +183,7 @@ FSLayout::dump()
     msg("           bsize : %d\n", bsize);
     
     for (size_t i = 0; i < part.size(); i++) {
-        msg("Partition %d:\n", i);
+        msg("Partition %d:\n");
         part[i].dump();
     }
 }

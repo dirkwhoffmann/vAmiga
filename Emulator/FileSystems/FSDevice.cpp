@@ -388,9 +388,14 @@ FSDevice::dump()
     msg("\n");
     
     for (size_t i = 0; i < part.size(); i++) {
-        msg("Partition %d:\n", i);
+
+        FSVolumeType dos = fileSystem(part[i]);
+        msg("           Partition %d : DOS%ld (%s)\n", i, dos, sFSVolumeType(dos));
         part[i].dump();
     }
+    msg("\n");
+
+    layout.dump();
     msg("\n");
 
     for (size_t i = 0; i < capacity; i++)  {
@@ -411,7 +416,14 @@ FSDevice::check(bool strict)
     
     // Analyze all blocks
     for (u32 i = 0; i < capacity; i++) {
-         
+
+        if (blocks[i]->type() == FS_EMPTY_BLOCK && !isFree(i)) {
+            debug(FS_DEBUG, "Empty block %d is marked as allocated\n", i);
+        }
+        if (blocks[i]->type() != FS_EMPTY_BLOCK && isFree(i)) {
+            debug(FS_DEBUG, "Non-empty block %d is marked as free\n", i);
+        }
+
         if (blocks[i]->check(strict) > 0) {
             min = MIN(min, i);
             max = MAX(max, i);
@@ -679,10 +691,15 @@ FSDevice::freeBlocks(FSPartition &p)
 {
     u32 result = 0;
     
+    /*
     for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) result++;
     }
-    
+    */
+    for (size_t i = p.firstBlock; i <= p.lastBlock; i++) {
+        if (isFree(i)) result++;
+    }
+
     return result;
 }
 
@@ -731,7 +748,6 @@ FSDevice::isFree(u32 ref)
     
     if (locateAllocationBit(ref, &block, &byte, &bit)) {
         if (FSBitmapBlock *bm = bitmapBlock(block)) {
-            
             return GET_BIT(bm->data[byte], bit);
         }
     }
@@ -799,14 +815,17 @@ FSDevice::locateBitmapBlocks(const u8 *buffer)
 bool
 FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 {
-    assert(ref >= 2 && ref < capacity);
+    assert(ref < layout.blocks);
     
     // Select the correct partition
-    u32 partition = partitionForBlock(ref);
-    auto &bmBlocks = layout.part[partition].bmBlocks;
+    FSPartition &p = layout.part[partitionForBlock(ref)];
+    auto &bmBlocks = p.bmBlocks;
     
+    // Make 'rel' relative to the partition start
+    ref -= p.firstBlock;
+
     // The first two blocks are not part the map (they are always allocated)
-    ref -= 2;
+    if (ref < 2) return false;
     
     // Locate the bitmap block
     u32 nr = ref / getAllocBitsInBitmapBlock();
