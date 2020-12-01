@@ -463,7 +463,7 @@ extension MyController: NSMenuItemValidation {
         var adf: ADFFileProxy
         switch type {
         case .DRIVE_35_DD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_DD)
-        case .DRIVE_35_HD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_DD)
+        case .DRIVE_35_HD:  adf = ADFFileProxy.make(with: .DISK_35, density: .DISK_HD)
         case .DRIVE_525_DD: adf = ADFFileProxy.make(with: .DISK_525, density: .DISK_DD)
         default: fatalError()
         }

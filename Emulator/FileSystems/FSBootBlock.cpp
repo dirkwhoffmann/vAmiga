@@ -26,6 +26,17 @@ FSBootBlock::~FSBootBlock()
     delete [] data;
 }
 
+
+FSVolumeType
+FSBootBlock::fileSystem()
+{
+    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+        return FS_NONE;
+    }
+    
+    return (FSVolumeType)data[3];
+}
+
 FSItemType
 FSBootBlock::itemType(u32 byte)
 {

@@ -64,6 +64,7 @@ public:
     // Methods from DiskFile
     //
       
+    FSVolumeType fileSystem() override { return FS_NONE; }
     DiskType getDiskType() override { return DISK_35; }
     DiskDensity getDiskDensity() override { return DISK_DD; }
     long numSides() override;

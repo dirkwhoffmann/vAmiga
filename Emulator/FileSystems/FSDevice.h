@@ -103,14 +103,7 @@ public:
     // Creates a file system from a format description
     static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
 
-    // Creates a file system from a partition table (DEPRECATED)
-    // static FSDevice *make(PTable &ptable, FSError *error);
-
-    // Creates a file system with a single partition (DEPRECATED)
-    // static FSDevice *make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize = 512);
-
-    // Creates a file system with the contents of a host file system directory (DEPRECATED)
-    // static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors);
+    // Creates a file system with the contents of a host file system directory
     static FSDevice *make(DiskType type, DiskDensity density, const char *path);
     static FSDevice *make(FSVolumeType type, const char *path);
     
@@ -121,17 +114,15 @@ public:
     
 public:
 
-    // FSDevice(FSVolumeType type, u32 capacity, u32 bsize = 512);
-    FSDevice() { }
-    // FSDevice(FSVolumeType type, u32 cylinders, u32 heads, u32 sectors, u32 bsize = 512);
+    FSDevice() { } // DEPRECATED
     FSDevice(FSLayout &layout);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
     
-    // Gets or sets the name of this volume
-    FSName getName() { return currentRootBlockPtr()->getName(); }
-    void setName(FSName name) { currentRootBlockPtr()->setName(name); }
+    // Gets or sets the name of this volume (MOVE TO WORKING WITH PARTITIONS)
+    // FSName getName() { return currentRootBlockPtr()->getName(); }
+    // void setName(FSName name) { currentRootBlockPtr()->setName(name); }
     
     // Prints information about this volume
     void info();
@@ -227,6 +218,16 @@ public:
     
     // Returns the partition a certain block belongs to
     u32 partitionForBlock(u32 ref);
+
+    // Gets or sets the name of a certain partition (or the current partition)
+    FSName getName(FSPartition &part);
+    FSName getName() { return getName(layout.part[cp]); }
+    void setName(FSPartition &part, FSName name);
+    void setName(FSName name) { setName(layout.part[cp], name); }
+
+    // Returns the file system type of a partition (or the current partition)
+    FSVolumeType fileSystem(FSPartition &part);
+    FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
 
     
     //

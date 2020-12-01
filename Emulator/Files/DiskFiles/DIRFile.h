@@ -57,6 +57,7 @@ public:
     
 public:
     
+    FSVolumeType fileSystem() override { return adf->fileSystem(); }
     DiskType getDiskType() override { return adf->getDiskType(); }
     DiskDensity getDiskDensity() override { return adf->getDiskDensity(); }
     long numSides() override { return adf->numSides(); }

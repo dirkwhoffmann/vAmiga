@@ -530,6 +530,32 @@ FSDevice::partitionForBlock(u32 ref)
     return 0;
 }
 
+FSName
+FSDevice::getName(FSPartition &part)
+{
+    FSRootBlock *rb = rootBlock(part.rootBlock);
+    assert(rb != nullptr);
+    
+    return rb->getName();
+}
+
+void
+FSDevice::setName(FSPartition &part, FSName name)
+{
+    FSRootBlock *rb = rootBlock(part.rootBlock);
+    assert(rb != nullptr);
+
+    rb->setName(name);
+}
+
+FSVolumeType
+FSDevice::fileSystem(FSPartition &part)
+{
+    FSBlock *b = block(part.firstBlock);
+
+    return b ? b->fileSystem() : FS_NONE;
+}
+
 FSBlockType
 FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 {

@@ -176,6 +176,16 @@ ADFFile::readFromBuffer(const u8 *buffer, size_t length)
     return isADFBuffer(buffer, length);
 }
 
+FSVolumeType
+ADFFile::fileSystem()
+{
+    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
+        return FS_NONE;
+    }
+
+    return (FSVolumeType)data[3];
+}
+
 DiskType
 ADFFile::getDiskType()
 {
