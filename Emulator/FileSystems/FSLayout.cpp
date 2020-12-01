@@ -10,8 +10,12 @@
 #include "Utils.h"
 #include "FSDevice.h"
 
-FSPartition::FSPartition(u32 firstCyl, u32 lastCyl, u32 blocksPerCyl, u32 root)
+FSPartition::FSPartition(FSLayout &layout,
+                         FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root)
 {
+    u32 blocksPerCyl = layout.sectors * layout.heads;
+    
+    this->dos = dos;
     this->lowCyl = firstCyl;
     this->highCyl = lastCyl;
     this->firstBlock = firstCyl * blocksPerCyl;
@@ -78,7 +82,7 @@ FSLayout::FSLayout(u32 c, u32 h, u32 s, u32 r, u32 b)
 }
 */
 
-FSLayout::FSLayout(DiskType type, DiskDensity density)
+FSLayout::FSLayout(DiskType type, DiskDensity density, FSVolumeType dos)
 {
     if (type == DISK_525 && density == DISK_DD) {
         cyls = 40; sectors = 11;
@@ -102,7 +106,7 @@ FSLayout::FSLayout(DiskType type, DiskDensity density)
     u32 root = blocks / 2;
     u32 bm   = root + 1;
 
-    part.push_back(FSPartition(0, cyls - 1, sectors * heads, root));
+    part.push_back(FSPartition(*this, dos, 0, cyls - 1, root));
     part[0].bmBlocks.push_back(bm);
 }
 
@@ -118,9 +122,9 @@ FSLayout::FSLayout(ADFFile *adf)
     // Determine the location of the root block and the bitmap block
     u32 root = adf->rootBlock();
     u32 bm   = adf->bitmapBlock(); // FSBlock::read32(adf->getData() + root * bsize + 316);
-                
+          
     // Add partition
-    part.push_back(FSPartition(0, cyls - 1, sectors * heads, root));
+    part.push_back(FSPartition(*this, adf->fileSystem(), 0, cyls - 1, root));
     part[0].bmBlocks.push_back(bm);
 }
 
@@ -137,8 +141,11 @@ FSLayout::FSLayout(HDFFile *hdf)
     u32 highKey = cyls * heads * sectors - 1;
     u32 rootKey = (reserved + highKey) / 2;
 
+    // Determine the file system type
+    FSVolumeType dos = FS_FFS; // TODO: GET FROM HDF
+    
     // Add partition
-    part.push_back(FSPartition(0, cyls - 1, sectors * heads, rootKey));
+    part.push_back(FSPartition(*this, dos, 0, cyls - 1, rootKey));
 
     // Seek bitmap blocks
     u32 ref = rootKey;

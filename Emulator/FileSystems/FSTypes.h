@@ -30,6 +30,28 @@ inline bool isFSVolumeType(long value)
     return value >= FS_NONE && value <= FS_FFS_LNFS;
 }
 
+inline bool isOFSVolumeType(long value)
+{
+    switch (value) {
+        case FS_OFS:
+        case FS_OFS_INTL:
+        case FS_OFS_DC:
+        case FS_OFS_LNFS: return true;
+        default:          return false;
+    }
+}
+
+inline bool isFFSVolumeType(long value)
+{
+    switch (value) {
+        case FS_FFS:
+        case FS_FFS_INTL:
+        case FS_FFS_DC:
+        case FS_FFS_LNFS: return true;
+        default:          return false;
+    }
+}
+
 inline const char *sFSVolumeType(FSVolumeType value)
 {
     switch (value) {

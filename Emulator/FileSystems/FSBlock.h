@@ -34,7 +34,7 @@ struct FSBlock : AmigaObject {
     FSBlock(FSDevice &ref, u32 nr) : volume(ref) { this->nr = nr; }
     virtual ~FSBlock() { }
 
-    static FSBlock *makeWithType(FSDevice &ref, u32 nr, FSBlockType type);
+    static FSBlock *makeWithType(FSDevice &ref, u32 nr, FSBlockType type, FSVolumeType dos);
     
     
     //

@@ -9,15 +9,17 @@
 
 #include "FSDevice.h"
 
-FSBootBlock::FSBootBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSBootBlock::FSBootBlock(FSDevice &ref, u32 nr, FSVolumeType type) : FSBlock(ref, nr)
 {
     data = new u8[ref.bsize]();
     
-    if (nr == 0) {        
+    // TODO: THIS CHECK ONLY WORKS CORRECTLY FOR THE FIRST PARTITION
+    // SOLUTION: Add a new block of type FS_FIRST_BOOT_BLOCK 
+    if (nr == 0) {
         data[0] = 'D';
         data[1] = 'O';
         data[2] = 'S';
-        data[3] = (volume.isOFS()) ? 0 : 1;
+        data[3] = (u8)type;
     }
 }
 
@@ -30,9 +32,14 @@ FSBootBlock::~FSBootBlock()
 FSVolumeType
 FSBootBlock::fileSystem()
 {
-    if (strncmp((const char *)data, "DOS", 3) || data[3] > 7) {
-        return FS_NONE;
-    }
+    // Only proceed if this is the first boot block in the partition
+    if (bootBlockNr != 0) return FS_NONE;
+    
+    // Only proceed if the header begins with 'DOS'
+    if (strncmp((const char *)data, "DOS", 3)) return FS_NONE;
+        
+    // Only proceed if the DOS version number is valid
+    if (data[3] > 7) return FS_NONE;
     
     return (FSVolumeType)data[3];
 }

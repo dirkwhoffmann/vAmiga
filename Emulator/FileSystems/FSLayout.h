@@ -24,6 +24,9 @@
 
 struct FSPartition : AmigaObject {
     
+    // File system type
+    FSVolumeType dos;
+    
     // Cylinder boundaries
     u32 lowCyl = 0;
     u32 highCyl = 0;
@@ -44,7 +47,8 @@ struct FSPartition : AmigaObject {
     // Initializing
     //
     
-    FSPartition(u32 firstCyl, u32 lastCyl, u32 blocksPerCyl, u32 root);
+    FSPartition(struct FSLayout &layout,
+                FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
 
     const char *getDescription() override { return "FSPartition"; }
     
@@ -87,7 +91,7 @@ struct FSLayout : AmigaObject {
     //
     
     FSLayout() { }
-    FSLayout(DiskType type, DiskDensity density);
+    FSLayout(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
     FSLayout(class ADFFile *adf); 
     FSLayout(class HDFFile *adf);
 

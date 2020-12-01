@@ -294,14 +294,16 @@ FSDevice::FSDevice(FSLayout &l)
     // Create the block storage
     blocks = new BlockPtr[layout.blocks]();
     dsize = isOFS() ? bsize - 24 : bsize; // TODO: REMOVE: THIS IS A PARTITION PROPERTY
-    
-    // Create boot blocks
-    blocks[0] = new FSBootBlock(*this, 0);
-    blocks[1] = new FSBootBlock(*this, 1);
-    
+        
     // Iterate through all partitions
     for (auto& it : layout.part) {
+    
+        u32 first = it.firstBlock;
         
+        // Create boot blocks
+        blocks[first] = new FSBootBlock(*this, first, it.dos);
+        blocks[first + 1] = new FSBootBlock(*this, first + 1, it.dos);
+
         // Create the root block
         FSRootBlock *rb = new FSRootBlock(*this, it.rootBlock);
         blocks[it.rootBlock] = rb;
@@ -1371,12 +1373,14 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         *error = FS_UNKNOWN; return false;
     }
     // Only proceed if the provided file system is supported
-    if (src[3] > 1) {
+    if (src[3] > 7) {
         *error = FS_UNSUPPORTED; return false;
     }
-    
+
+    FSVolumeType dos = (FSVolumeType)src[3];
+
     // Set the version number
-    type = (FSVolumeType)src[3];
+    // type = (FSVolumeType)src[3];
     
     // Scan the buffer for bitmap blocks and bitmap extension blocks
     // locateBitmapBlocks(src);
@@ -1389,7 +1393,7 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         FSBlockType type = predictBlockType(i, src + i * bsize);
         
         // Create the new block
-        FSBlock *newBlock = FSBlock::makeWithType(*this, i, type);
+        FSBlock *newBlock = FSBlock::makeWithType(*this, i, type, dos);
         if (newBlock == nullptr) return false;
 
         // Import the block data
