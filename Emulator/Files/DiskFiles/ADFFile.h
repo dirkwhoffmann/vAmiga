@@ -96,6 +96,19 @@ private:
 
     
     //
+    // Querying disk properties
+    //
+    
+public:
+    
+    // Returns the location of the root block
+    u32 rootBlock();
+    
+    // Returns the location of the bitmap block
+    u32 bitmapBlock();
+
+    
+    //
     // Formatting
     //
  

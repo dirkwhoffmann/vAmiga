@@ -19,12 +19,8 @@ FSDevice::makeWithADF(ADFFile *adf, FSError *error)
     // TODO: Determine file system type from ADF
     FSVolumeType type = FS_OFS;
     
-    // Create volume
-    FSDevice *volume = FSDevice::make(type,
-                                      adf->numCylinders(),
-                                      adf->numSides(),
-                                      adf->numSectors(),
-                                      512);
+    // Create file system
+    FSDevice *volume = FSDevice::makeWithADF(adf, error);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -43,11 +39,9 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
     // TODO: Determine file system type from HDF
     FSVolumeType type = FS_OFS;
     
-    // REMOVE ASAP
-    FSDevice *volume = FSDevice::make(FS_OFS, 500, 12, 22);
+    // Create file system
+    FSDevice *volume = FSDevice::makeWithHDF(hdf, error);
 
-    // Create volume
-    // FSDevice *volume = new FSDevice(type, hdf->numBlocks(), 512);
 
     // Import file system from HDF
     /*
@@ -67,13 +61,7 @@ FSDevice::makeWithFormat(DiskType type, DiskDensity density)
     return new FSDevice(layout);
 }
 
-
-FSDevice *
-FSDevice::make(PTable &ptable, FSError *error)
-{
-    return nullptr;
-}
-
+/*
 FSDevice *
 FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
 {
@@ -153,7 +141,29 @@ FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
     
     return dev; 
 }
+*/
 
+FSDevice *
+FSDevice::make(DiskType type, DiskDensity density, const char *path)
+{
+    FSDevice *device = makeWithFormat(type, density);
+    
+    if (device) {
+        
+        // Try to import directory
+        if (!device->importDirectory(path)) { delete device; return nullptr; }
+
+        // Assign device name
+        device->setName(FSName("Directory")); // TODO: Use last path component
+
+        // Change to the root directory
+        device->changeDir("/");
+    }
+
+    return device;
+}
+
+/*
 FSDevice *
 FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors)
 {
@@ -167,17 +177,20 @@ FSDevice::make(FSVolumeType type, const char *name, const char *path, u32 cylind
     volume->changeDir("/");
     return volume;
 }
+*/
 
 FSDevice *
-FSDevice::make(FSVolumeType type, const char *name, const char *path)
+FSDevice::make(FSVolumeType type, const char *path)
 {
-    FSDevice *volume;
+    //     FSDevice *volume;
     
     // Try to fit the directory into files system with DD disk capacity
-    if ((volume = make(type, name, path, 80, 2, 11))) return volume;
+    // if ((volume = make(type, name, path, 80, 2, 11))) return volume;
+    if (FSDevice *device = make(DISK_35, DISK_DD, path)) return device;
 
     // Try to fit the directory into files system with HD disk capacity
-    if ((volume = make(type, name, path, 80, 2, 22))) return volume;
+    // if ((volume = make(type, name, path, 80, 2, 22))) return volume;
+    if (FSDevice *device = make(DISK_35, DISK_HD, path)) return device;
 
     return nullptr;
 }
@@ -525,7 +538,7 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
     // Is it a boot block?
     if (nr <= 1) return FS_BOOT_BLOCK;
     
-    for (auto& it : part) {
+    for (auto& it : layout.part) {
         
         // Is it a bitmap block?
         if (std::find(it.bmBlocks.begin(), it.bmBlocks.end(), nr) != it.bmBlocks.end())

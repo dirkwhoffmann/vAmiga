@@ -59,9 +59,6 @@ struct FSPartition : AmigaObject {
     u32 numCyls() { return highCyl - lowCyl + 1; }    
 };
 
-// DEPRECATED
-typedef std::vector<FSPartition> PTable;
-
 struct FSLayout : AmigaObject {
     
     // Number of physical cylinders

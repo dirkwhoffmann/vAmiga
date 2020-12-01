@@ -235,23 +235,31 @@ ADFFile::formatDisk(FSVolumeType fs)
 {
     assert(isFSVolumeType(fs));
 
-    msg("Formatting disk with %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
+    FSError error;
+
+    msg("Formatting disk dwith %d blocks (%s)\n", numBlocks(), sFSVolumeType(fs));
 
     // Only proceed if a file system is given
     if (fs == FS_NONE) return false;
     
-    // Create an empty file system
-    FSDevice *volume = FSDevice::make(fs, numCylinders(), numSides(), numSectors());
-    volume->setName(FSName("Disk"));
+    // Determine the disk layout of this ADF
+    FSLayout layout = FSLayout(this);
     
-    // Export the volume to the ADF
-    FSError error;
-    volume->exportVolume(data, size, &error);
+    // Create an empty file system
+    FSDevice volume = FSDevice(layout);
+    volume.setName(FSName("Disk"));
+    
+    // Export the file system to the ADF
+    volume.exportVolume(data, size, &error);
+    if (error != FS_OK) {
+        warn("Failed to export file system  file system from ADF\n", sFSError(error));
+        return false;
+    }
 
     // REMOVE ASAP
     // dumpSector(0);
     
-    return error == FS_OK;
+    return true;
 }
 
 bool
@@ -493,4 +501,21 @@ ADFFile::decodeSector(u8 *dst, u8 *src)
     // Decode sector data
     Disk::decodeOddEven(dst + sector * 512, src, 512);
     return true;
+}
+
+u32
+ADFFile::rootBlock()
+{
+    return size < ADFSIZE_35_HD ? 880 : 1760;
+}
+
+u32
+ADFFile::bitmapBlock()
+{
+    u32 bmb = FSBlock::read32(data + rootBlock() * 512 + 316);
+    
+    // Assign a default location if the ADF is empty
+    if (bmb == 0) bmb = rootBlock() + 1;
+    
+    return bmb;
 }

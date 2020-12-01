@@ -104,15 +104,16 @@ public:
     static FSDevice *makeWithFormat(DiskType type, DiskDensity density);
 
     // Creates a file system from a partition table (DEPRECATED)
-    static FSDevice *make(PTable &ptable, FSError *error);
+    // static FSDevice *make(PTable &ptable, FSError *error);
 
-    // Creates a file system with a single partition
-    static FSDevice *make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize = 512);
+    // Creates a file system with a single partition (DEPRECATED)
+    // static FSDevice *make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize = 512);
 
-    // Creates a file system with the contents of a host file system directory
-    static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors);
-    static FSDevice *make(FSVolumeType type, const char *name, const char *path);
-
+    // Creates a file system with the contents of a host file system directory (DEPRECATED)
+    // static FSDevice *make(FSVolumeType type, const char *name, const char *path, u32 cylinders, u32 heads, u32 sectors);
+    static FSDevice *make(DiskType type, DiskDensity density, const char *path);
+    static FSDevice *make(FSVolumeType type, const char *path);
+    
     
     //
     // Initializing

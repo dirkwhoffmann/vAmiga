@@ -116,9 +116,9 @@ FSLayout::FSLayout(ADFFile *adf)
     blocks   = cyls * heads * sectors;
 
     // Determine the location of the root block and the bitmap block
-    u32 root = blocks / 2;
-    u32 bm   = FSBlock::read32(adf->getData() + root * bsize + 316);
-    
+    u32 root = adf->rootBlock();
+    u32 bm   = adf->bitmapBlock(); // FSBlock::read32(adf->getData() + root * bsize + 316);
+                
     // Add partition
     part.push_back(FSPartition(0, cyls - 1, sectors * heads, root));
     part[0].bmBlocks.push_back(bm);
