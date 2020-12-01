@@ -315,7 +315,7 @@ if (FSError e = volume.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) r
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK); e != FS_OK) return e; }
+if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }

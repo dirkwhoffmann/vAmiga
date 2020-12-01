@@ -462,8 +462,9 @@ FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
             case FS_BITMAP_EXT_BLOCK: return FS_PTR_TO_BITMAP_EXT_BLOCK;
             case FS_USERDIR_BLOCK:    return FS_PTR_TO_USERDIR_BLOCK;
             case FS_FILEHEADER_BLOCK: return FS_PTR_TO_FILEHEADER_BLOCK;
-            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILEHEADER_BLOCK;
-            case FS_DATA_BLOCK:       return FS_PTR_TO_DATA_BLOCK;
+            case FS_FILELIST_BLOCK:   return FS_PTR_TO_FILELIST_BLOCK;
+            case FS_DATA_BLOCK_OFS:   return FS_PTR_TO_DATA_BLOCK;
+            case FS_DATA_BLOCK_FFS:   return FS_PTR_TO_DATA_BLOCK;
             default:                  return FS_PTR_TO_UNKNOWN_BLOCK;
         }
     }
@@ -589,9 +590,9 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 
     // Check if this block is a data block
     if (isOFS(p)) {
-        if (type == 8) return FS_DATA_BLOCK;
+        if (type == 8) return FS_DATA_BLOCK_OFS;
     } else {
-        for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK;
+        for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
     }
     
     return FS_EMPTY_BLOCK;
@@ -891,7 +892,8 @@ FSDevice::fileListBlock(u32 nr)
 FSDataBlock *
 FSDevice::dataBlock(u32 nr)
 {
-    if (nr < capacity && blocks[nr]->type() == FS_DATA_BLOCK) {
+    FSBlockType t = blocks[nr]->type();
+    if (nr < capacity && (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS)) {
         return (FSDataBlock *)blocks[nr];
     } else {
         return nullptr;

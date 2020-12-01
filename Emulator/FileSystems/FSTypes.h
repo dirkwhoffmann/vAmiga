@@ -86,13 +86,14 @@ VAMIGA_ENUM(long, FSBlockType)
     FS_USERDIR_BLOCK,
     FS_FILEHEADER_BLOCK,
     FS_FILELIST_BLOCK,
-    FS_DATA_BLOCK
+    FS_DATA_BLOCK_OFS,
+    FS_DATA_BLOCK_FFS
 };
 
 inline bool
 isFSBlockType(long value)
 {
-    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK;
+    return value >= FS_UNKNOWN_BLOCK && value <= FS_DATA_BLOCK_FFS;
 }
 
 inline const char *
@@ -109,7 +110,8 @@ sFSBlockType(FSBlockType type)
         case FS_USERDIR_BLOCK:    return "FS_USERDIR_BLOCK";
         case FS_FILEHEADER_BLOCK: return "FS_FILEHEADER_BLOCK";
         case FS_FILELIST_BLOCK:   return "FS_FILELIST_BLOCK";
-        case FS_DATA_BLOCK:       return "FS_DATA_BLOCK";
+        case FS_DATA_BLOCK_OFS:   return "FS_DATA_BLOCK_OFS";
+        case FS_DATA_BLOCK_FFS:   return "FS_DATA_BLOCK_FFS";
         default:                  return "???";
     }
 }

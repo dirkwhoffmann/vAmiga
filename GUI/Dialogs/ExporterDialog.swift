@@ -499,7 +499,8 @@ class ExporterDialog: DialogController {
         case .USERDIR_BLOCK:    text = "User Directory Block"
         case .FILEHEADER_BLOCK: text = "File Header Block"
         case .FILELIST_BLOCK:   text = "File List Block"
-        case .DATA_BLOCK:       text = "Data Block"
+        case .DATA_BLOCK_OFS:   text = "Data Block (OFS)"
+        case .DATA_BLOCK_FFS:   text = "Data Block (FFS)"
         default: fatalError()
         }
         
