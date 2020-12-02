@@ -7,20 +7,18 @@
 // See https://www.gnu.org for license information
 // -----------------------------------------------------------------------------
 
-#include "Utils.h"
 #include "FSDevice.h"
-// #include <set>
 
 FSDevice *
 FSDevice::makeWithADF(ADFFile *adf, FSError *error)
 {
     assert(adf != nullptr);
 
-    // TODO: Determine file system type from ADF
-    FSVolumeType type = FS_OFS;
+    // Create a suitable device descriptor for this ADF
+    FSDeviceDescriptor layout = FSDeviceDescriptor(adf);
     
-    // Create file system
-    FSDevice *volume = FSDevice::makeWithADF(adf, error);
+    // Create the device
+    FSDevice *volume = new FSDevice(layout);
 
     // Import file system from ADF
     if (!volume->importVolume(adf->getData(), adf->getSize(), error)) {
@@ -36,13 +34,14 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 {
     assert(hdf != nullptr);
 
-    // TODO: Determine file system type from HDF
-    FSVolumeType type = FS_OFS;
+    // Create a suitable device descriptor for this HDF
+    FSDeviceDescriptor layout = FSDeviceDescriptor(hdf);
+
+    // Create the device
+    FSDevice *volume = new FSDevice(layout);
+
+    volume->info();
     
-    // Create file system
-    FSDevice *volume = FSDevice::makeWithHDF(hdf, error);
-
-
     // Import file system from HDF
     /*
     if (!volume->importVolume(hdf->getData(), hdf->getSize(), error)) {
@@ -100,23 +99,29 @@ FSDevice::make(FSVolumeType type, const char *path)
 FSDevice::FSDevice(FSDeviceDescriptor &layout)
 {
     if (FS_DEBUG) {
-        debug("Creating FSDevice with layout:\n");
+        debug("Creating FSDevice...\n");
         layout.dump();
     }
     
     this->layout = layout;
     
-    numCyls = layout.numCyls;
-    numHeads = layout.numHeads;
+    // Copy layout parameters from descriptor
+    numCyls    = layout.numCyls;
+    numHeads   = layout.numHeads;
     numSectors = layout.numSectors;
-    bsize = layout.bsize;
-    numBlocks = layout.blocks;
+    bsize      = layout.bsize;
+    numBlocks  = layout.blocks;
     
     // Initialize the block storage
-    // blocks = new BlockPtr[layout.blocks]();
     blocks.reserve(layout.blocks);
     blocks.assign(layout.blocks, 0);
     
+    // Create all partitions
+    for (auto& descriptor : layout.part) {
+        partitions.push_back(FSPartition(*this, descriptor));
+    }
+    
+    // OLD:
     // Iterate through all partitions
     for (auto& it : layout.part) {
     
@@ -387,7 +392,7 @@ FSDevice::fileSystem(FSPartitionDescriptor &part)
 {
     FSBlock *b = block(part.firstBlock);
 
-    return b ? b->fileSystem() : FS_NONE;
+    return b ? b->dos() : FS_NONE;
 }
 
 FSBlockType
@@ -524,50 +529,6 @@ FSDevice::mark(u32 ref, bool alloc)
         }
     }
 }
-
-/*
-void
-FSDevice::locateBitmapBlocks(const u8 *buffer)
-{
-    assert(buffer != nullptr);
-
-    //
-    // DEPRECATED. MOVE TO HDF
-    //
-    
-    std::vector<u32> &bmBlocks = part[0].bmBlocks;
-    std::vector<u32> &bmExtBlocks = part[0].bmExtBlocks;
-
-    bmBlocks.clear();
-    bmExtBlocks.clear();
-    
-    // Start at the root block location
-    u32 ref = 880; // TODO: THIS WON'T WORK FOR HARD DRIVES
-    u32 cnt = 25;
-    u32 offset = bsize - 49 * 4;
-    
-    while (ref) {
-
-        const u8 *p = buffer + (ref * bsize) + offset;
-    
-        // Collect all references to bitmap blocks stored in this block
-        for (u32 i = 0; i < cnt; i++, p += 4) {
-            if (u32 bmb = FFSDataBlock::read32(p)) {
-                if (bmb < capacity) {debug("Adding %d\n", bmb); bmBlocks.push_back(bmb);}
-            } else {
-                return;
-            }
-        }
-        
-        // Continue collecting in the next extension bitmap block
-        if ((ref = FFSDataBlock::read32(p))) {
-            if (ref < capacity) bmExtBlocks.push_back(ref);
-            cnt = (bsize / 4) - 1;
-            offset = 0;
-        }
-    }
-}
-*/
 
 bool
 FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)

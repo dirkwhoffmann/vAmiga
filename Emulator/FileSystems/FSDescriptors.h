@@ -22,6 +22,20 @@
 #include "FSFileListBlock.h"
 #include "FSDataBlock.h"
 
+/* To create a FSDevice, the layout parameters of the device has to be provided
+ * to the constructor. This is done by passing a structure of type
+ * FSDeviceLayout which contains physical properties such as the number of
+ * cylinders and heads and logical parameters such as the number of sectors per
+ * track. In addition, FSDeviceLayout contains one or more elements of type
+ * FSPartitionLayout. These substructures tell the constructor how the device
+ * is partitioned.
+ *
+ * FSDeviceDescriptors can be obtained in several (easy) ways. If an ADF or HDF
+ * is present, the device descriptor can be extracted directly from them.
+ * Furthermore, it is possible to construct suitable descriptors for all
+ * supported standard disk formats.
+ */
+
 struct FSDeviceDescriptor : AmigaObject {
     
     // Number of physical cylinders

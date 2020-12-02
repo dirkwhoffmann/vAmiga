@@ -10,8 +10,18 @@
 #ifndef _FSVOLUME_H
 #define _FSVOLUME_H
 
-#include "AmigaObject.h"
-#include "FSDescriptors.h"
+#include "FSObjects.h"
+#include "FSPartition.h"
+#include "FSBlock.h"
+#include "FSEmptyBlock.h"
+#include "FSBootBlock.h"
+#include "FSRootBlock.h"
+#include "FSBitmapBlock.h"
+#include "FSBitmapExtBlock.h"
+#include "FSUserDirBlock.h"
+#include "FSFileHeaderBlock.h"
+#include "FSFileListBlock.h"
+#include "FSDataBlock.h"
 #include "ADFFile.h"
 #include "HDFFile.h"
 
@@ -25,7 +35,8 @@
 
 class FSDevice : AmigaObject {
     
-    friend class FSPartitionDescriptor;
+    friend class FSPartitionDescriptor; // REMOVE ASAP
+    friend class FSPartition;
     friend class FSBlock;
     friend class FSEmptyBlock;
     friend class FSBootBlock;
@@ -63,9 +74,12 @@ protected:
     // Size of a single block in bytes
     u32 bsize = 0;
             
-    // The partition table
+    // The partition table (DEPRECATED)
     std::vector<FSPartitionDescriptor> part;
 
+    // The partition table
+    std::vector<FSPartition> partitions;
+    
     // The block storage
     std::vector<BlockPtr> blocks;
             
@@ -100,16 +114,11 @@ public:
     
 public:
 
-    FSDevice() { } // DEPRECATED
     FSDevice(FSDeviceDescriptor &layout);
     ~FSDevice();
     
     const char *getDescription() override { return "FSVolume"; }
-    
-    // Gets or sets the name of this volume (MOVE TO WORKING WITH PARTITIONS)
-    // FSName getName() { return currentRootBlockPtr()->getName(); }
-    // void setName(FSName name) { currentRootBlockPtr()->setName(name); }
-    
+        
     // Prints information about this volume
     void info();
     

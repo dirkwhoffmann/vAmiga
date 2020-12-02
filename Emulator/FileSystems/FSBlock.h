@@ -14,7 +14,7 @@
 
 struct FSBlock : AmigaObject {
     
-    // The volume this block belongs to
+    // The volume this block belongs to (REPLACE BY partition)
     class FSDevice &volume;
     
     // The sector number of this block
@@ -45,7 +45,7 @@ struct FSBlock : AmigaObject {
     virtual FSBlockType type() = 0; 
 
     // Extract the file system type from the block header
-    virtual FSVolumeType fileSystem() { return FS_NONE; }
+    virtual FSVolumeType dos() { return FS_NONE; }
     
     // Returns the role of a certain byte in this block
     virtual FSItemType itemType(u32 byte) { return FSI_UNKNOWN; }

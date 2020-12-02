@@ -30,7 +30,7 @@ FSBootBlock::~FSBootBlock()
 
 
 FSVolumeType
-FSBootBlock::fileSystem()
+FSBootBlock::dos()
 {
     // Only proceed if the header begins with 'DOS'
     if (strncmp((const char *)data, "DOS", 3)) return FS_NONE;
