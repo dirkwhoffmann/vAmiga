@@ -45,37 +45,37 @@ protected:
     // The layout of this device
     FSLayout layout;
     
-    // The type of this volume (DEPRECATED: MOVE TO PARTITION)
-    FSVolumeType type;
-
+    
     //
     // Physical device properties
     //
     
-    // Total capacity of this device in blocks (TODO: Replace by blocks() )
+    // Total capacity of this device in blocks
     u32 capacity;
     
-    // Number of physical cylinders (TODO: MOVE TO PARTITION TABLE)
+    // Number of physical cylinders
     u32 cylinders = 80;
 
-    // Number of physical heads (TODO: MOVE TO PARTITION TABLE)
+    // Number of physical heads
     u32 heads = 2;
+    
     
     //
     // Logical device properties
     //
     
-    // Number of blocks per track (TODO: MOVE TO PARTITION TABLE)
+    // Number of blocks per track
     u32 sectors = 11;
     
-    // Number of reserved blocks (TODO: MOVE TO PARTITION TABLE)
+    // Number of reserved blocks
     u32 reserved = 2;
     
-    // Size of a single block in bytes (TODO: MOVE TO PARTITION TABLE) 
+    // Size of a single block in bytes
     u32 bsize;
             
     // The block storage
-    BlockPtr *blocks;
+    std::vector<BlockPtr> blocks;
+    // BlockPtr *blocks;
     
     // The partition table
     std::vector<FSPartition> part;
@@ -136,12 +136,7 @@ public:
     //
     
 public:
-        
-    // Returns the type of this volume
-    FSVolumeType getType() { return type; } // DEPRECATED. MAKE PART OF PARTITION
-    // bool isOFS(); // DEPRECATED. MAKE PART OF PARTITION
-    // bool isFFS(); // DEPRECATED. MAKE PART OF PARTITION
-    
+            
     // Returns the device capacity in blocks
     u32 getCapacity() { return capacity; }
 
@@ -151,12 +146,8 @@ public:
     // Returns the block size in bytes
     u32 getBlockSize() { return bsize; }
 
-    // Returns storage capacity information about certain blocks
-    u32 bitmapRefsInRootBlock();
-    u32 bitmapRefsInBitmapExtensionBlock();
-
     // Returns certain bitmap block parameters
-    u32 getAllocBitsInBitmapBlock();
+    u32 numAllocBitsInBitmapBlock();
     
     // Reports usage information
     u32 numBlocks(FSPartition &p);

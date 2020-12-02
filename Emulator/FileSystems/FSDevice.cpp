@@ -284,16 +284,17 @@ FSDevice::FSDevice(FSLayout &l)
     
     this->layout = l;
     
-    type = FS_OFS; // TODO: REMOVE: THIS IS A PARTITION PROPERTY
     cylinders = layout.cyls;
     heads = layout.heads;
     sectors = layout.sectors;
     bsize = layout.bsize;
     capacity = layout.blocks;
     
-    // Create the block storage
-    blocks = new BlockPtr[layout.blocks]();
-        
+    // Initialize the block storage
+    // blocks = new BlockPtr[layout.blocks]();
+    blocks.reserve(layout.blocks);
+    blocks.assign(layout.blocks, 0);
+    
     // Iterate through all partitions
     for (auto& it : layout.part) {
     
@@ -354,7 +355,6 @@ FSDevice::~FSDevice()
     for (u32 i = 0; i < capacity; i++) {
         delete blocks[i];
     }
-    delete [] blocks;
 }
 
 void
@@ -376,11 +376,10 @@ void
 FSDevice::dump()
 {
     msg("                  Name : %s\n", getName().c_str());
-    msg("           File system : DOS%ld (%s)\n", getType(), sFSVolumeType(getType()));
     msg("\n");
-    msg(" Bits per bitmap block : %d\n", getAllocBitsInBitmapBlock());
-    msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
-    msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
+    msg(" Bits per bitmap block : %d\n", numAllocBitsInBitmapBlock());
+    // msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
+    // msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
     msg("\n");
     
     for (size_t i = 0; i < part.size(); i++) {
@@ -609,21 +608,9 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 }
 
 u32
-FSDevice::getAllocBitsInBitmapBlock()
+FSDevice::numAllocBitsInBitmapBlock()
 {
     return (bsize - 4) * 8;
-}
-
-u32
-FSDevice::bitmapRefsInRootBlock()
-{
-    return 25;
-}
-
-u32
-FSDevice::bitmapRefsInBitmapExtensionBlock()
-{
-    return (bsize / 4) - 1;
 }
 
 u32
@@ -774,7 +761,7 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     if (ref < 2) return false;
     
     // Locate the bitmap block
-    u32 nr = ref / getAllocBitsInBitmapBlock();
+    u32 nr = ref / numAllocBitsInBitmapBlock();
     if (nr >= bmBlocks.size()) {
         warn("Allocation bit is located in a non-existent bitmap block %d\n", nr);
         return false;

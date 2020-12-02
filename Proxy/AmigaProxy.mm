@@ -1262,7 +1262,7 @@ struct SerialPortWrapper { SerialPort *port; };
 
 - (FSVolumeType) type
 {
-    return wrapper->volume->getType();
+    return wrapper->volume->fileSystem();
 }
 
 - (NSInteger) numBlocks
