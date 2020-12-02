@@ -213,12 +213,9 @@ public:
     bool isOFS(FSPartitionDescriptor &p) { return isOFSVolumeType(fileSystem(p)); }
     bool isFFS(FSPartitionDescriptor &p) { return isFFSVolumeType(fileSystem(p)); }
     FSVolumeType fileSystem() { return fileSystem(layout.part[cp]); }
-    // bool isOFS() { return isOFSVolumeType(fileSystem()); }
-    // bool isFFS() { return isFFSVolumeType(fileSystem()); }
 
     // Installs a boot block
-    void makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode);
-    void makeBootable(FSBootCode bootCode) { makeBootable(layout.part[cp], bootCode); }
+    void makeBootable(FSBootCode bootCode) { partitions[cp]->makeBootable(bootCode); }
 
     
     //
@@ -256,19 +253,19 @@ public:
     
     // Returns the location of the root block in the current partition
     u32 currentRootBlockRef() { return layout.part[cp].rootBlock; }
-    FSBlock *currentRootBlockPtr() { return block(currentRootBlockRef()); }
+    FSBlock *currentRootBlockPtr() { return blockPtr(currentRootBlockRef()); }
 
     // Queries a pointer to a block of a certain type (may return nullptr)
-    FSBlock *block(u32 nr);
-    FSBootBlock *bootBlock(u32 nr);
-    FSRootBlock *rootBlock(u32 nr);
-    FSBitmapBlock *bitmapBlock(u32 nr);
-    FSBitmapExtBlock *bitmapExtBlock(u32 nr);
-    FSUserDirBlock *userDirBlock(u32 nr);
-    FSFileHeaderBlock *fileHeaderBlock(u32 nr);
-    FSFileListBlock *fileListBlock(u32 nr);
-    FSDataBlock *dataBlock(u32 nr);
-    FSBlock *hashableBlock(u32 nr);
+    FSBlock *blockPtr(u32 nr);
+    FSBootBlock *bootBlockPtr(u32 nr);
+    FSRootBlock *rootBlockPtr(u32 nr);
+    FSBitmapBlock *bitmapBlockPtr(u32 nr);
+    FSBitmapExtBlock *bitmapExtBlockPtr(u32 nr);
+    FSUserDirBlock *userDirBlockPtr(u32 nr);
+    FSFileHeaderBlock *fileHeaderBlockPtr(u32 nr);
+    FSFileListBlock *fileListBlockPtr(u32 nr);
+    FSDataBlock *dataBlockPtr(u32 nr);
+    FSBlock *hashableBlockPtr(u32 nr);
     
     
     //
@@ -323,15 +320,15 @@ public:
 
     // Returns the path of a file system item
     string getPath(FSBlock *block);
-    string getPath(u32 ref) { return getPath(block(ref)); }
+    string getPath(u32 ref) { return getPath(blockPtr(ref)); }
     string getPath() { return getPath(currentDirBlock()); }
 
     // Seeks an item inside the current directory
     u32 seekRef(FSName name);
     u32 seekRef(const char *name) { return seekRef(FSName(name)); }
-    FSBlock *seek(const char *name) { return block(seekRef(name)); }
-    FSBlock *seekDir(const char *name) { return userDirBlock(seekRef(name)); }
-    FSBlock *seekFile(const char *name) { return fileHeaderBlock(seekRef(name)); }
+    FSBlock *seek(const char *name) { return blockPtr(seekRef(name)); }
+    FSBlock *seekDir(const char *name) { return userDirBlockPtr(seekRef(name)); }
+    FSBlock *seekFile(const char *name) { return fileHeaderBlockPtr(seekRef(name)); }
 
     // Adds a reference to the current directory
     void addHashRef(u32 ref);

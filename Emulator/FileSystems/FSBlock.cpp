@@ -149,35 +149,35 @@ FSBlock *
 FSBlock::getParentDirBlock()
 {
     u32 ref = getParentDirRef();
-    return ref ? partition.dev.block(ref) : nullptr;
+    return ref ? partition.dev.blockPtr(ref) : nullptr;
 }
 
 FSFileHeaderBlock *
 FSBlock::getFileHeaderBlock()
 {
     u32 ref = getFileHeaderRef();
-    return ref ? partition.dev.fileHeaderBlock(ref) : nullptr;
+    return ref ? partition.dev.fileHeaderBlockPtr(ref) : nullptr;
 }
 
 FSBlock *
 FSBlock::getNextHashBlock()
 {
     u32 ref = getNextHashRef();
-    return ref ? partition.dev.block(ref) : nullptr;
+    return ref ? partition.dev.blockPtr(ref) : nullptr;
 }
 
 FSFileListBlock *
 FSBlock::getNextListBlock()
 {
     u32 ref = getNextListBlockRef();
-    return ref ? partition.dev.fileListBlock(ref) : nullptr;
+    return ref ? partition.dev.fileListBlockPtr(ref) : nullptr;
 }
 
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
     u32 ref = getNextBmExtBlockRef();
-    return ref ? partition.dev.bitmapExtBlock(ref) : nullptr;
+    return ref ? partition.dev.bitmapExtBlockPtr(ref) : nullptr;
 }
 
 
@@ -185,14 +185,14 @@ FSDataBlock *
 FSBlock::getFirstDataBlock()
 {
     u32 ref = getFirstDataBlockRef();
-    return ref ? partition.dev.dataBlock(ref) : nullptr;
+    return ref ? partition.dev.dataBlockPtr(ref) : nullptr;
 }
 
 FSDataBlock *
 FSBlock::getNextDataBlock()
 {
     u32 ref = getNextDataBlockRef();
-    return ref ? partition.dev.dataBlock(ref) : nullptr;
+    return ref ? partition.dev.dataBlockPtr(ref) : nullptr;
 }
 
 u32

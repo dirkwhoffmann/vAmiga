@@ -264,7 +264,7 @@ FSDevice::checkBlockType(u32 nr, FSBlockType type, FSBlockType altType)
 u32
 FSDevice::getCorrupted(u32 blockNr)
 {
-    return block(blockNr) ? blocks[blockNr]->corrupted : 0;
+    return blockPtr(blockNr) ? blocks[blockNr]->corrupted : 0;
 }
 
 bool
@@ -325,7 +325,7 @@ FSDevice::partitionForBlock(u32 ref)
 FSName
 FSDevice::getName(FSPartitionDescriptor &part)
 {
-    FSRootBlock *rb = rootBlock(part.rootBlock);
+    FSRootBlock *rb = rootBlockPtr(part.rootBlock);
     assert(rb != nullptr);
     
     return rb->getName();
@@ -334,7 +334,7 @@ FSDevice::getName(FSPartitionDescriptor &part)
 void
 FSDevice::setName(FSPartitionDescriptor &part, FSName name)
 {
-    FSRootBlock *rb = rootBlock(part.rootBlock);
+    FSRootBlock *rb = rootBlockPtr(part.rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
@@ -343,7 +343,7 @@ FSDevice::setName(FSPartitionDescriptor &part, FSName name)
 FSVolumeType
 FSDevice::fileSystem(FSPartitionDescriptor &part)
 {
-    FSBlock *b = block(part.firstBlock);
+    FSBlock *b = blockPtr(part.firstBlock);
 
     return b ? b->dos() : FS_NONE;
 }
@@ -423,7 +423,7 @@ FSDevice::isFree(u32 ref)
     u32 block, byte, bit;
     
     if (locateAllocationBit(ref, &block, &byte, &bit)) {
-        if (FSBitmapBlock *bm = bitmapBlock(block)) {
+        if (FSBitmapBlock *bm = bitmapBlockPtr(block)) {
             return GET_BIT(bm->data[byte], bit);
         }
     }
@@ -436,7 +436,7 @@ FSDevice::mark(u32 ref, bool alloc)
     u32 block, byte, bit;
     
     if (locateAllocationBit(ref, &block, &byte, &bit)) {
-        if (FSBitmapBlock *bm = bitmapBlock(block)) {
+        if (FSBitmapBlock *bm = bitmapBlockPtr(block)) {
             
             // 0 = allocated, 1 = free
             alloc ? CLR_BIT(bm->data[byte], bit) : SET_BIT(bm->data[byte], bit);
@@ -466,7 +466,7 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
         return false;
     }
     u32 rBlock = bmBlocks[nr];
-    assert(bitmapBlock(rBlock));
+    assert(bitmapBlockPtr(rBlock));
 
     // Locate the byte position (the long word ordering will be inversed)
     u32 rByte = (ref / 8);
@@ -496,17 +496,17 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
 FSBlockType
 FSDevice::blockType(u32 nr)
 {
-    return block(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
+    return blockPtr(nr) ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
 }
 
 FSItemType
 FSDevice::itemType(u32 nr, u32 pos)
 {
-    return block(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
+    return blockPtr(nr) ? blocks[nr]->itemType(pos) : FSI_UNUSED;
 }
 
 FSBlock *
-FSDevice::block(u32 nr)
+FSDevice::blockPtr(u32 nr)
 {
     if (nr < numBlocks) {
         return blocks[nr];
@@ -516,7 +516,7 @@ FSDevice::block(u32 nr)
 }
 
 FSBootBlock *
-FSDevice::bootBlock(u32 nr)
+FSDevice::bootBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() != FS_BOOT_BLOCK)
     {
@@ -527,7 +527,7 @@ FSDevice::bootBlock(u32 nr)
 }
 
 FSRootBlock *
-FSDevice::rootBlock(u32 nr)
+FSDevice::rootBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_ROOT_BLOCK) {
         return (FSRootBlock *)blocks[nr];
@@ -537,7 +537,7 @@ FSDevice::rootBlock(u32 nr)
 }
 
 FSBitmapBlock *
-FSDevice::bitmapBlock(u32 nr)
+FSDevice::bitmapBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_BLOCK) {
         return (FSBitmapBlock *)blocks[nr];
@@ -547,7 +547,7 @@ FSDevice::bitmapBlock(u32 nr)
 }
 
 FSBitmapExtBlock *
-FSDevice::bitmapExtBlock(u32 nr)
+FSDevice::bitmapExtBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_BITMAP_EXT_BLOCK) {
         return (FSBitmapExtBlock *)blocks[nr];
@@ -557,7 +557,7 @@ FSDevice::bitmapExtBlock(u32 nr)
 }
 
 FSUserDirBlock *
-FSDevice::userDirBlock(u32 nr)
+FSDevice::userDirBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_USERDIR_BLOCK) {
         return (FSUserDirBlock *)blocks[nr];
@@ -567,7 +567,7 @@ FSDevice::userDirBlock(u32 nr)
 }
 
 FSFileHeaderBlock *
-FSDevice::fileHeaderBlock(u32 nr)
+FSDevice::fileHeaderBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_FILEHEADER_BLOCK) {
         return (FSFileHeaderBlock *)blocks[nr];
@@ -577,7 +577,7 @@ FSDevice::fileHeaderBlock(u32 nr)
 }
 
 FSFileListBlock *
-FSDevice::fileListBlock(u32 nr)
+FSDevice::fileListBlockPtr(u32 nr)
 {
     if (nr < numBlocks && blocks[nr]->type() == FS_FILELIST_BLOCK) {
         return (FSFileListBlock *)blocks[nr];
@@ -587,7 +587,7 @@ FSDevice::fileListBlock(u32 nr)
 }
 
 FSDataBlock *
-FSDevice::dataBlock(u32 nr)
+FSDevice::dataBlockPtr(u32 nr)
 {
     FSBlockType t = blocks[nr]->type();
     if (nr < numBlocks && (t == FS_DATA_BLOCK_OFS || t == FS_DATA_BLOCK_FFS)) {
@@ -598,7 +598,7 @@ FSDevice::dataBlock(u32 nr)
 }
 
 FSBlock *
-FSDevice::hashableBlock(u32 nr)
+FSDevice::hashableBlockPtr(u32 nr)
 {
     FSBlockType type = nr < numBlocks ? blocks[nr]->type() : FS_UNKNOWN_BLOCK;
     
@@ -645,7 +645,7 @@ FSDevice::allocateBlockBelow(FSPartitionDescriptor &part, u32 ref)
 void
 FSDevice::deallocateBlock(u32 ref)
 {
-    FSBlock *b = block(ref);
+    FSBlock *b = blockPtr(ref);
     if (b == nullptr) return;
     
     if (b->type() != FS_EMPTY_BLOCK) {
@@ -680,7 +680,7 @@ FSDevice::newFileHeaderBlock(FSPartitionDescriptor &p, const char *name)
 u32
 FSDevice::addFileListBlock(u32 head, u32 prev)
 {
-    FSBlock *prevBlock = block(prev);
+    FSBlock *prevBlock = blockPtr(prev);
     if (!prevBlock) return 0;
     
     u32 ref = allocateBlock();
@@ -699,7 +699,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 {
     FSPartitionDescriptor &p = layout.part[partitionForBlock(head)];
 
-    FSBlock *prevBlock = block(prev);
+    FSBlock *prevBlock = blockPtr(prev);
     if (!prevBlock) return 0;
 
     u32 ref = allocateBlock();
@@ -721,6 +721,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
     return ref;
 }
 
+/*
 void
 FSDevice::makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode)
 {
@@ -732,6 +733,7 @@ FSDevice::makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode)
     ((FSBootBlock *)blocks[first + 0])->writeBootCode(bootCode, 0);
     ((FSBootBlock *)blocks[first + 1])->writeBootCode(bootCode, 1);
 }
+*/
 
 void
 FSDevice::updateChecksums()
@@ -744,7 +746,7 @@ FSDevice::updateChecksums()
 FSBlock *
 FSDevice::currentDirBlock()
 {
-    FSBlock *cdb = block(cd);
+    FSBlock *cdb = blockPtr(cd);
     
     if (cdb) {
         if (cdb->type() == FS_ROOT_BLOCK || cdb->type() == FS_USERDIR_BLOCK) {
@@ -754,7 +756,7 @@ FSDevice::currentDirBlock()
     
     // The block reference is invalid. Switch back to the root directory
     cd = partitions[cp]->rootBlock;
-    return block(cd);
+    return blockPtr(cd);
 }
 
 FSBlock *
@@ -795,7 +797,7 @@ FSDevice::getPath(FSBlock *block)
     while(block) {
 
         // Break the loop if this block has an invalid type
-        if (!hashableBlock(block->nr)) break;
+        if (!hashableBlockPtr(block->nr)) break;
 
         // Break the loop if this block was visited before
         if (visited.find(block->nr) != visited.end()) break;
@@ -923,7 +925,7 @@ FSDevice::seekRef(FSName name)
     // Traverse the linked list until the item has been found
     while (ref && visited.find(ref) == visited.end())  {
         
-        FSBlock *item = hashableBlock(ref);
+        FSBlock *item = hashableBlockPtr(ref);
         if (item == nullptr) break;
         
         if (item->isNamed(name)) return item->nr;
@@ -938,7 +940,7 @@ FSDevice::seekRef(FSName name)
 void
 FSDevice::addHashRef(u32 ref)
 {
-    if (FSBlock *block = hashableBlock(ref)) {
+    if (FSBlock *block = hashableBlockPtr(ref)) {
         addHashRef(block);
     }
 }
@@ -978,7 +980,7 @@ FSDevice::printDirectory(bool recursive)
 FSBlock *
 FSDevice::lastHashBlockInChain(u32 start)
 {
-    FSBlock *block = hashableBlock(start);
+    FSBlock *block = hashableBlockPtr(start);
     return block ? lastHashBlockInChain(block) : nullptr;
 }
 
@@ -1001,7 +1003,7 @@ FSDevice::lastHashBlockInChain(FSBlock *block)
 FSBlock *
 FSDevice::lastFileListBlockInChain(u32 start)
 {
-    FSBlock *block = fileListBlock(start);
+    FSBlock *block = fileListBlockPtr(start);
     return block ? lastFileListBlockInChain(block) : nullptr;
 }
 
@@ -1038,7 +1040,7 @@ FSDevice::collect(u32 ref, std::vector<u32> &result, bool recursive)
         result.push_back(item);
 
         // Add subdirectory items to the queue
-        if (userDirBlock(item) && recursive) {
+        if (userDirBlockPtr(item) && recursive) {
             collectHashedRefs(item, remainingItems, visited);
         }
     }
@@ -1049,7 +1051,7 @@ FSDevice::collect(u32 ref, std::vector<u32> &result, bool recursive)
 FSError
 FSDevice::collectHashedRefs(u32 ref, std::stack<u32> &result, std::set<u32> &visited)
 {
-    if (FSBlock *b = block(ref)) {
+    if (FSBlock *b = blockPtr(ref)) {
         
         // Walk through the hash table in reverse order
         for (long i = (long)b->hashTableSize(); i >= 0; i--) {
@@ -1066,7 +1068,7 @@ FSDevice::collectRefsWithSameHashValue(u32 ref, std::stack<u32> &result, std::se
     std::stack<u32> refs;
     
     // Walk down the linked list
-    for (FSBlock *b = hashableBlock(ref); b; b = b->getNextHashBlock()) {
+    for (FSBlock *b = hashableBlockPtr(ref); b; b = b->getNextHashBlock()) {
 
         // Break the loop if we've already seen this block
         if (visited.find(b->nr) != visited.end()) return FS_HAS_CYCLES;
@@ -1311,7 +1313,7 @@ FSDevice::exportDirectory(const char *path)
     
     // Export all items
     for (auto const& i : items) {
-        if (FSError error = block(i)->exportBlock(path); error != FS_OK) {
+        if (FSError error = blockPtr(i)->exportBlock(path); error != FS_OK) {
             msg("Export error: %d\n", error);
             return error; 
         }

@@ -131,7 +131,7 @@ FSPartition::predictBlockType(u32 nr, const u8 *buffer)
 FSName
 FSPartition::getName()
 {
-    FSRootBlock *rb = dev.rootBlock(rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     assert(rb != nullptr);
     
     return rb->getName();
@@ -140,7 +140,7 @@ FSPartition::getName()
 void
 FSPartition::setName(FSName name)
 {
-    FSRootBlock *rb = dev.rootBlock(rootBlock);
+    FSRootBlock *rb = dev.rootBlockPtr(rootBlock);
     assert(rb != nullptr);
 
     rb->setName(name);
@@ -149,7 +149,7 @@ FSPartition::setName(FSName name)
 FSVolumeType
 FSPartition::dos()
 {
-    FSBlock *b = dev.block(firstBlock);
+    FSBlock *b = dev.blockPtr(firstBlock);
     return b ? b->dos() : FS_NONE;
 }
 
@@ -215,7 +215,7 @@ FSPartition::bmBlockForBlock(u32 relRef)
         return nullptr;
     }
 
-    return dev.bitmapBlock(bmBlocks[nr]);
+    return dev.bitmapBlockPtr(bmBlocks[nr]);
 }
 
 bool
@@ -272,4 +272,14 @@ FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit)
     //       ref, bm->nr, *byte, *bit);
 
     return bm;
+}
+
+void
+FSPartition::makeBootable(FSBootCode bootCode)
+{
+    assert(dev.blocks[firstBlock + 0]->type() == FS_BOOT_BLOCK);
+    assert(dev.blocks[firstBlock + 1]->type() == FS_BOOT_BLOCK);
+
+    ((FSBootBlock *)dev.blocks[firstBlock + 0])->writeBootCode(bootCode, 0);
+    ((FSBootBlock *)dev.blocks[firstBlock + 1])->writeBootCode(bootCode, 1);
 }

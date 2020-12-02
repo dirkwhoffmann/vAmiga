@@ -159,7 +159,7 @@ FSFileHeaderBlock::writeData(FILE *file)
         for (u32 i = 0; i < num; i++) {
             
             u32 ref = getDataBlockRef(i);
-            if (FSDataBlock *dataBlock = partition.dev.dataBlock(getDataBlockRef(i))) {
+            if (FSDataBlock *dataBlock = partition.dev.dataBlockPtr(getDataBlockRef(i))) {
 
                 long bytesWritten = dataBlock->writeData(file, bytesRemaining);
                 bytesTotal += bytesWritten;
@@ -218,7 +218,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
         addDataBlockRef(ref);
         
         // Add data
-        FSBlock *block = partition.dev.block(ref);
+        FSBlock *block = partition.dev.blockPtr(ref);
         if (block) {
             size_t written = block->addData(buffer, size);
             setFileSize(getFileSize() + written);

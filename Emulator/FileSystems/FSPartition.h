@@ -83,7 +83,7 @@ struct FSPartition : AmigaObject {
     
     
     //
-    // Working with bitmap blocks
+    // Working with the block allocation bitmap
     //
 
     // Returns the bitmap block storing the allocation bit for a certain block
@@ -91,11 +91,22 @@ struct FSPartition : AmigaObject {
 
     // Checks if a block is marked as free in the allocation bitmap
     bool isFree(u32 ref);
-
+    
 private:
     
     // Locates the allocation bit for a certain block
     FSBitmapBlock *locateAllocationBit(u32 ref, u32 *byte, u32 *bit);
+    
+    
+    //
+    // Working with the boot blocks
+    //
+    
+public:
+    
+    // Installs a boot block
+    void makeBootable(FSBootCode bootCode);
+
 };
 
 #endif
