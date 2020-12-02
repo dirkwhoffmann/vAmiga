@@ -83,6 +83,29 @@ struct FSPartition : AmigaObject {
     
     
     //
+    // Creating and deleting blocks
+    //
+    
+public:
+    
+    // Seeks a free block and marks it as allocated
+    u32 allocateBlock();
+    u32 allocateBlockAbove(u32 ref);
+    u32 allocateBlockBelow(u32 ref);
+
+    // Deallocates a block
+    void deallocateBlock(u32 ref);
+
+    // Adds a new block of a certain kind
+    // u32 addFileListBlock(u32 head, u32 prev);
+    // u32 addDataBlock(u32 count, u32 head, u32 prev);
+    
+    // Creates a new block of a certain kind
+    FSUserDirBlock *newUserDirBlock(const char *name);
+    FSFileHeaderBlock *newFileHeaderBlock(const char *name);
+    
+    
+    //
     // Working with the block allocation bitmap
     //
 
@@ -92,6 +115,12 @@ struct FSPartition : AmigaObject {
     // Checks if a block is marked as free in the allocation bitmap
     bool isFree(u32 ref);
     
+    // Marks a block as allocated or free
+    void markAsAllocated(u32 ref) { setAllocationBit(ref, 0); }
+    void markAsFree(u32 ref) { setAllocationBit(ref, 1); }
+    void setAllocationBit(u32 ref, bool value);
+
+    
 private:
     
     // Locates the allocation bit for a certain block
@@ -99,7 +128,7 @@ private:
     
     
     //
-    // Working with the boot blocks
+    // Working with boot blocks
     //
     
 public:

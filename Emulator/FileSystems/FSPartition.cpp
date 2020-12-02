@@ -201,6 +201,82 @@ FSPartition::usedBytes()
     return usedBlocks() * bsize();
 }
 
+u32
+FSPartition::allocateBlock()
+{
+    if (u32 ref = allocateBlockAbove(rootBlock)) return ref;
+    if (u32 ref = allocateBlockBelow(rootBlock)) return ref;
+
+    return 0;
+}
+
+u32
+FSPartition::allocateBlockAbove(u32 ref)
+{
+    assert(ref >= firstBlock && ref <= lastBlock);
+    
+    for (u32 i = firstBlock + 1; i <= lastBlock; i++) {
+        if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
+            markAsAllocated(i);
+            return i;
+        }
+    }
+    return 0;
+}
+
+u32
+FSPartition::allocateBlockBelow(u32 ref)
+{
+    assert(ref >= firstBlock && ref <= lastBlock);
+    
+    for (long i = (long)ref - 1; i >= firstBlock; i--) {
+        if (dev.blocks[i]->type() == FS_EMPTY_BLOCK) {
+            markAsAllocated(i);
+            return i;
+        }
+    }
+    return 0;
+}
+
+void
+FSPartition::deallocateBlock(u32 ref)
+{
+    assert(ref >= firstBlock && ref <= lastBlock);
+    assert(dev.blocks[ref]);
+    
+    delete dev.blocks[ref];
+    dev.blocks[ref] = new FSEmptyBlock(*this, ref);
+    markAsFree(ref);
+}
+
+FSUserDirBlock *
+FSPartition::newUserDirBlock(const char *name)
+{
+    FSUserDirBlock *block = nullptr;
+    
+    if (u32 ref = allocateBlock()) {
+    
+        block = new FSUserDirBlock(*this, ref, name);
+        dev.blocks[ref] = block;
+    }
+    
+    return block;
+}
+
+FSFileHeaderBlock *
+FSPartition::newFileHeaderBlock(const char *name)
+{
+    FSFileHeaderBlock *block = nullptr;
+    
+    if (u32 ref = allocateBlock()) {
+
+        block = new FSFileHeaderBlock(*this, ref, name);
+        dev.blocks[ref] = block;
+    }
+    
+    return block;
+}
+
 FSBitmapBlock *
 FSPartition::bmBlockForBlock(u32 relRef)
 {
@@ -235,6 +311,16 @@ FSPartition::isFree(u32 ref)
         
     // Read the bit
     return bm ? GET_BIT(bm->data[byte], bit) : false;
+}
+
+void
+FSPartition::setAllocationBit(u32 ref, bool value)
+{
+    u32 byte, bit;
+    
+    if (FSBitmapBlock *bm = locateAllocationBit(ref, &byte, &bit)) {
+        REPLACE_BIT(bm->data[byte], bit, value);
+    }
 }
 
 FSBitmapBlock *

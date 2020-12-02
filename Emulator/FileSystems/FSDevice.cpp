@@ -721,20 +721,6 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
     return ref;
 }
 
-/*
-void
-FSDevice::makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode)
-{
-    u32 first = part.firstBlock;
-    
-    assert(blocks[first + 0]->type() == FS_BOOT_BLOCK);
-    assert(blocks[first + 1]->type() == FS_BOOT_BLOCK);
-
-    ((FSBootBlock *)blocks[first + 0])->writeBootCode(bootCode, 0);
-    ((FSBootBlock *)blocks[first + 1])->writeBootCode(bootCode, 1);
-}
-*/
-
 void
 FSDevice::updateChecksums()
 {
