@@ -22,7 +22,45 @@
 #include "FSFileListBlock.h"
 #include "FSDataBlock.h"
 
-struct FSPartition : AmigaObject {
+struct FSDeviceDescriptor : AmigaObject {
+    
+    // Number of physical cylinders
+    u32 numCyls = 0;
+
+    // Number of physical heads
+    u32 numHeads = 0;
+        
+    // Number of blocks per track
+    u32 numSectors = 0;
+    
+    // Total number of blocks
+    u32 blocks = 0;
+
+    // Number of reserved blocks at the beginning of the block list
+    u32 numReserved = 0;
+    
+    // Size of a single block in bytes
+    u32 bsize = 0;
+    
+    // The list of partitions
+    std::vector<struct FSPartitionDescriptor> part;
+    
+    
+    //
+    // Initializing
+    //
+    
+    FSDeviceDescriptor() { }
+    FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
+    FSDeviceDescriptor(class ADFFile *adf);
+    FSDeviceDescriptor(class HDFFile *adf);
+
+    const char *getDescription() override { return "FSLayout"; }
+    
+    void dump();
+};
+
+struct FSPartitionDescriptor : AmigaObject {
     
     // File system type
     FSVolumeType dos;
@@ -47,7 +85,7 @@ struct FSPartition : AmigaObject {
     // Initializing
     //
     
-    FSPartition(struct FSLayout &layout,
+    FSPartitionDescriptor(struct FSDeviceDescriptor &layout,
                 FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root);
 
     const char *getDescription() override { return "FSPartition"; }
@@ -61,44 +99,6 @@ struct FSPartition : AmigaObject {
     
     // Returns the number of cylinders in this partition
     u32 numCyls() { return highCyl - lowCyl + 1; }
-};
-
-struct FSLayout : AmigaObject {
-    
-    // Number of physical cylinders
-    u32 cyls = 0;
-
-    // Number of physical heads
-    u32 heads = 0;
-        
-    // Number of blocks per track
-    u32 sectors = 0;
-    
-    // Total number of blocks
-    u32 blocks = 0;
-
-    // Number of reserved blocks at the beginning of the block list
-    u32 reserved = 0;
-    
-    // Size of a single block in bytes
-    u32 bsize = 0;
-    
-    // The list of partitions
-    std::vector<FSPartition> part;
-    
-    
-    //
-    // Initializing
-    //
-    
-    FSLayout() { }
-    FSLayout(DiskType type, DiskDensity density, FSVolumeType dos = FS_OFS);
-    FSLayout(class ADFFile *adf);
-    FSLayout(class HDFFile *adf);
-
-    const char *getDescription() override { return "FSLayout"; }
-    
-    void dump();
 };
 
 #endif

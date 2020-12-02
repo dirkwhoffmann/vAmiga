@@ -57,7 +57,7 @@ FSDevice::makeWithHDF(HDFFile *hdf, FSError *error)
 FSDevice *
 FSDevice::makeWithFormat(DiskType type, DiskDensity density)
 {
-    FSLayout layout = FSLayout(type, density);
+    FSDeviceDescriptor layout = FSDeviceDescriptor(type, density);
     return new FSDevice(layout);
 }
 
@@ -79,7 +79,7 @@ FSDevice::make(FSVolumeType type, u32 cyls, u32 heads, u32 sectors, u32 bsize)
     dev->dsize = dev->isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
 
     // Create the first partition
-    dev->part.push_back(FSPartition(0, cyls - 1, sectors * heads, 880));
+    dev->part.push_back(FSPartitionDescriptor(0, cyls - 1, sectors * heads, 880));
 
     // Determine the block locations
     u32 root             = 880; // rootBlockNr();
@@ -213,7 +213,7 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
     dsize = isOFS() ? bsize - 24 : bsize; // TODO: MOVE TO PARTITION
 
     // Create the first partition
-    part.push_back(FSPartition(0, c-1, 880));
+    part.push_back(FSPartitionDescriptor(0, c-1, 880));
 
     // Determine the block locations
     u32 root             = 880; // rootBlockNr();
@@ -275,7 +275,7 @@ FSDevice::FSDevice(FSVolumeType type, u32 c, u32 h, u32 s, u32 bsize)
 }
 */
  
-FSDevice::FSDevice(FSLayout &l)
+FSDevice::FSDevice(FSDeviceDescriptor &l)
 {
     if (FS_DEBUG) {
         debug("Creating FSDevice with layout:\n");
@@ -284,9 +284,9 @@ FSDevice::FSDevice(FSLayout &l)
     
     this->layout = l;
     
-    cylinders = layout.cyls;
-    heads = layout.heads;
-    sectors = layout.sectors;
+    cylinders = layout.numCyls;
+    heads = layout.numHeads;
+    sectors = layout.numSectors;
     bsize = layout.bsize;
     capacity = layout.blocks;
     
@@ -534,7 +534,7 @@ FSDevice::partitionForBlock(u32 ref)
 {
     for (u32 i = 0; i < layout.part.size(); i++) {
 
-        FSPartition &part = layout.part[i];
+        FSPartitionDescriptor &part = layout.part[i];
         if (ref >= part.firstBlock && ref <= part.lastBlock) return i;
     }
     
@@ -543,7 +543,7 @@ FSDevice::partitionForBlock(u32 ref)
 }
 
 FSName
-FSDevice::getName(FSPartition &part)
+FSDevice::getName(FSPartitionDescriptor &part)
 {
     FSRootBlock *rb = rootBlock(part.rootBlock);
     assert(rb != nullptr);
@@ -552,7 +552,7 @@ FSDevice::getName(FSPartition &part)
 }
 
 void
-FSDevice::setName(FSPartition &part, FSName name)
+FSDevice::setName(FSPartitionDescriptor &part, FSName name)
 {
     FSRootBlock *rb = rootBlock(part.rootBlock);
     assert(rb != nullptr);
@@ -561,7 +561,7 @@ FSDevice::setName(FSPartition &part, FSName name)
 }
 
 FSVolumeType
-FSDevice::fileSystem(FSPartition &part)
+FSDevice::fileSystem(FSPartitionDescriptor &part)
 {
     FSBlock *b = block(part.firstBlock);
 
@@ -574,7 +574,7 @@ FSDevice::predictBlockType(u32 nr, const u8 *buffer)
     assert(buffer != nullptr);
 
     // Determine the partition the belongs to
-    FSPartition &p = part[partitionForBlock(nr)];
+    FSPartitionDescriptor &p = part[partitionForBlock(nr)];
     
     // Is it a boot block?
     if (nr == p.firstBlock + 0) return FS_BOOT_BLOCK;
@@ -614,13 +614,13 @@ FSDevice::numAllocBitsInBitmapBlock()
 }
 
 u32
-FSDevice::numBlocks(FSPartition &p)
+FSDevice::numBlocks(FSPartitionDescriptor &p)
 {
     return p.lastBlock - p.firstBlock + 1;
 }
 
 u32
-FSDevice::freeBlocks(FSPartition &p)
+FSDevice::freeBlocks(FSPartitionDescriptor &p)
 {
     u32 result = 0;
     
@@ -637,25 +637,25 @@ FSDevice::freeBlocks(FSPartition &p)
 }
 
 u32
-FSDevice::usedBlocks(FSPartition &p)
+FSDevice::usedBlocks(FSPartitionDescriptor &p)
 {
     return numBlocks(p) - freeBlocks(p);
 }
 
 u32
-FSDevice::totalBytes(FSPartition &p)
+FSDevice::totalBytes(FSPartitionDescriptor &p)
 {
     return numBlocks(p) * bsize;
 }
 
 u32
-FSDevice::freeBytes(FSPartition &p)
+FSDevice::freeBytes(FSPartitionDescriptor &p)
 {
     return freeBlocks(p) * bsize;
 }
 
 u32
-FSDevice::usedBytes(FSPartition &p)
+FSDevice::usedBytes(FSPartitionDescriptor &p)
 {
     return usedBlocks(p) * bsize;
 }
@@ -751,7 +751,7 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     assert(ref < layout.blocks);
     
     // Select the correct partition
-    FSPartition &p = layout.part[partitionForBlock(ref)];
+    FSPartitionDescriptor &p = layout.part[partitionForBlock(ref)];
     auto &bmBlocks = p.bmBlocks;
     
     // Make 'rel' relative to the partition start
@@ -911,7 +911,7 @@ FSDevice::hashableBlock(u32 nr)
 }
 
 u32
-FSDevice::allocateBlock(FSPartition &part)
+FSDevice::allocateBlock(FSPartitionDescriptor &part)
 {
     if (u32 ref = allocateBlockAbove(part, part.rootBlock)) return ref;
     if (u32 ref = allocateBlockBelow(part, part.rootBlock)) return ref;
@@ -920,7 +920,7 @@ FSDevice::allocateBlock(FSPartition &part)
 }
 
 u32
-FSDevice::allocateBlockAbove(FSPartition &part, u32 ref)
+FSDevice::allocateBlockAbove(FSPartitionDescriptor &part, u32 ref)
 {
     for (u32 i = ref + 1; i <= part.lastBlock; i++) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
@@ -932,7 +932,7 @@ FSDevice::allocateBlockAbove(FSPartition &part, u32 ref)
 }
 
 u32
-FSDevice::allocateBlockBelow(FSPartition &part, u32 ref)
+FSDevice::allocateBlockBelow(FSPartitionDescriptor &part, u32 ref)
 {
     for (long i = (long)ref - 1; i >= part.firstBlock; i--) {
         if (blocks[i]->type() == FS_EMPTY_BLOCK) {
@@ -957,7 +957,7 @@ FSDevice::deallocateBlock(u32 ref)
 }
 
 FSUserDirBlock *
-FSDevice::newUserDirBlock(FSPartition &p, const char *name)
+FSDevice::newUserDirBlock(FSPartitionDescriptor &p, const char *name)
 {
     u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
@@ -967,7 +967,7 @@ FSDevice::newUserDirBlock(FSPartition &p, const char *name)
 }
 
 FSFileHeaderBlock *
-FSDevice::newFileHeaderBlock(FSPartition &p, const char *name)
+FSDevice::newFileHeaderBlock(FSPartitionDescriptor &p, const char *name)
 {
     u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
@@ -995,7 +995,7 @@ FSDevice::addFileListBlock(u32 head, u32 prev)
 u32
 FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 {
-    FSPartition &p = layout.part[partitionForBlock(head)];
+    FSPartitionDescriptor &p = layout.part[partitionForBlock(head)];
 
     FSBlock *prevBlock = block(prev);
     if (!prevBlock) return 0;
@@ -1019,7 +1019,7 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
 }
 
 void
-FSDevice::makeBootable(FSPartition &part, FSBootCode bootCode)
+FSDevice::makeBootable(FSPartitionDescriptor &part, FSBootCode bootCode)
 {
     u32 first = part.firstBlock;
     
@@ -1163,7 +1163,7 @@ FSDevice::makeFile(const char *name, const char *str)
 }
 
 u32
-FSDevice::requiredDataBlocks(FSPartition &p, size_t fileSize)
+FSDevice::requiredDataBlocks(FSPartitionDescriptor &p, size_t fileSize)
 {
     // Compute the capacity of a single data block
     u32 numBytes = bsize - (isOFS(p) ? OFSDataBlock::headerSize() : 0);
@@ -1173,7 +1173,7 @@ FSDevice::requiredDataBlocks(FSPartition &p, size_t fileSize)
 }
 
 u32
-FSDevice::requiredFileListBlocks(FSPartition &p, size_t fileSize)
+FSDevice::requiredFileListBlocks(FSPartitionDescriptor &p, size_t fileSize)
 {
     // Compute the required number of data blocks
     u32 numBlocks = requiredDataBlocks(p, fileSize);
@@ -1189,7 +1189,7 @@ FSDevice::requiredFileListBlocks(FSPartition &p, size_t fileSize)
 }
 
 u32
-FSDevice::requiredBlocks(FSPartition &p, size_t fileSize)
+FSDevice::requiredBlocks(FSPartitionDescriptor &p, size_t fileSize)
 {
     u32 numDataBlocks = requiredDataBlocks(p, fileSize);
     u32 numFileListBlocks = requiredFileListBlocks(p, fileSize);

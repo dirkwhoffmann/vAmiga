@@ -188,7 +188,7 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     assert(getFileSize() == 0);
     
     u32 pNr = volume.partitionForBlock(nr);
-    FSPartition &p = volume.layout.part[pNr];
+    FSPartitionDescriptor &p = volume.layout.part[pNr];
     
     // Compute the required number of blocks
     u32 numDataBlocks = volume.requiredDataBlocks(p, size);

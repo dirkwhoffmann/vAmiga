@@ -132,10 +132,10 @@ HDFFile::bsize()
 }
 
 /*
-std::vector<FSPartition>
+std::vector<FSPartitionDescriptor>
 HDFFile::pTable()
 {
-    std::vector<FSPartition> result;
+    std::vector<FSPartitionDescriptor> result;
     
     if (hasRDB()) {
         
@@ -149,7 +149,7 @@ HDFFile::pTable()
         u32 ref = (numReserved() + highKey) / 2;
                 
         // Create a single partition
-        result.push_back(FSPartition(0, numCyls(), ref));
+        result.push_back(FSPartitionDescriptor(0, numCyls(), ref));
         
         // Locate the bitmap blocks
         u32 cnt = 25;

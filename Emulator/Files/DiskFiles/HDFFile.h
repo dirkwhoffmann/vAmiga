@@ -78,7 +78,7 @@ public:
     long bsize();
     
     // Extracts the partition table from the image data
-    // std::vector<FSPartition> pTable();
+    // std::vector<FSPartitionDescriptor> pTable();
 };
 
 #endif

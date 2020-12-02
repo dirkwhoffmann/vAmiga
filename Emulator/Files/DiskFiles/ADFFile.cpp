@@ -253,7 +253,7 @@ ADFFile::formatDisk(FSVolumeType fs, FSBootCode bootCode)
     if (fs == FS_NONE) return false;
     
     // Determine the disk layout of this ADF
-    FSLayout layout = FSLayout(this);
+    FSDeviceDescriptor layout = FSDeviceDescriptor(this);
     
     // Create an empty file system
     FSDevice volume = FSDevice(layout);

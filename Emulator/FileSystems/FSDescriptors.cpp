@@ -10,10 +10,10 @@
 #include "Utils.h"
 #include "FSDevice.h"
 
-FSPartition::FSPartition(FSLayout &layout,
+FSPartitionDescriptor::FSPartitionDescriptor(FSDeviceDescriptor &layout,
                          FSVolumeType dos, u32 firstCyl, u32 lastCyl, u32 root)
 {
-    u32 blocksPerCyl = layout.sectors * layout.heads;
+    u32 blocksPerCyl = layout.numSectors * layout.numHeads;
     
     this->dos = dos;
     this->lowCyl = firstCyl;
@@ -27,7 +27,7 @@ FSPartition::FSPartition(FSLayout &layout,
 }
 
 void
-FSPartition::dump()
+FSPartitionDescriptor::dump()
 {
     msg("      First cylinder : %d\n", lowCyl);
     msg("       Last cylinder : %d\n", highCyl);
@@ -44,7 +44,7 @@ FSPartition::dump()
 
 /*
 u32
-FSPartition::rootBlockRef()
+FSPartitionDescriptor::rootBlockRef()
 {
     u32 highKey = numCyls() * dev.heads * dev.sectors - 1;
     u32 rootKey = (dev.reserved + highKey) / 2;
@@ -53,14 +53,14 @@ FSPartition::rootBlockRef()
 }
 
 FSRootBlock *
-FSPartition::rootBlockPtr()
+FSPartitionDescriptor::rootBlockPtr()
 {
     return dev.rootBlock(rootBlockRef());
 }
 */
 
 /*
-FSLayout::FSLayout(u32 c, u32 h, u32 s, u32 r, u32 b)
+FSDeviceDescriptor::FSDeviceDescriptor(u32 c, u32 h, u32 s, u32 r, u32 b)
 : cyls(c), heads(h), sectors(s), bsize(b)
 {
     reserved = 2;
@@ -78,74 +78,74 @@ FSLayout::FSLayout(u32 c, u32 h, u32 s, u32 r, u32 b)
     }
     
     // Create the partition
-    part.push_back(FSPartition(0, c - 1, r));
+    part.push_back(FSPartitionDescriptor(0, c - 1, r));
 }
 */
 
-FSLayout::FSLayout(DiskType type, DiskDensity density, FSVolumeType dos)
+FSDeviceDescriptor::FSDeviceDescriptor(DiskType type, DiskDensity density, FSVolumeType dos)
 {
     if (type == DISK_525 && density == DISK_DD) {
-        cyls = 40; sectors = 11;
+        numCyls = 40; numSectors = 11;
 
     } else if (type == DISK_35 && density == DISK_DD) {
-        cyls = 80; sectors = 11;
+        numCyls = 80; numSectors = 11;
     
     } else if (type == DISK_35 && density == DISK_HD) {
-        cyls = 80; sectors = 22;
+        numCyls = 80; numSectors = 22;
 
     } else {
         assert(false);
     }
 
-    heads    = 2;
-    blocks   = cyls * heads * sectors;
-    reserved = 2;
+    numHeads    = 2;
+    blocks   = numCyls * numHeads * numSectors;
+    numReserved = 2;
     bsize    = 512;
     
     // Determine the location of the root block and the bitmap block
     u32 root = blocks / 2;
     u32 bm   = root + 1;
 
-    part.push_back(FSPartition(*this, dos, 0, cyls - 1, root));
+    part.push_back(FSPartitionDescriptor(*this, dos, 0, numCyls - 1, root));
     part[0].bmBlocks.push_back(bm);
 }
 
-FSLayout::FSLayout(ADFFile *adf)
+FSDeviceDescriptor::FSDeviceDescriptor(ADFFile *adf)
 {
-    cyls     = adf->numCylinders();
-    sectors  = adf->numSectors();
-    heads    = adf->numSides();
-    reserved = 2;
+    numCyls     = adf->numCylinders();
+    numSectors  = adf->numSectors();
+    numHeads    = adf->numSides();
+    numReserved = 2;
     bsize    = 512;
-    blocks   = cyls * heads * sectors;
+    blocks   = numCyls * numHeads * numSectors;
 
     // Determine the location of the root block and the bitmap block
     u32 root = adf->rootBlock();
     u32 bm   = adf->bitmapBlock(); // FSBlock::read32(adf->getData() + root * bsize + 316);
           
     // Add partition
-    part.push_back(FSPartition(*this, adf->fileSystem(), 0, cyls - 1, root));
+    part.push_back(FSPartitionDescriptor(*this, adf->fileSystem(), 0, numCyls - 1, root));
     part[0].bmBlocks.push_back(bm);
 }
 
-FSLayout::FSLayout(HDFFile *hdf)
+FSDeviceDescriptor::FSDeviceDescriptor(HDFFile *hdf)
 {
-    cyls     = hdf->numCyls();
-    sectors  = hdf->numSectors();
-    heads    = hdf->numSides();
-    reserved = hdf->numReserved();
+    numCyls     = hdf->numCyls();
+    numSectors  = hdf->numSectors();
+    numHeads    = hdf->numSides();
+    numReserved = hdf->numReserved();
     bsize    = hdf->bsize();
-    blocks   = cyls * heads * sectors;
+    blocks   = numCyls * numHeads * numSectors;
 
     // Determine the location of the root block
-    u32 highKey = cyls * heads * sectors - 1;
-    u32 rootKey = (reserved + highKey) / 2;
+    u32 highKey = numCyls * numHeads * numSectors - 1;
+    u32 rootKey = (numReserved + highKey) / 2;
 
     // Determine the file system type
     FSVolumeType dos = FS_FFS; // TODO: GET FROM HDF
     
     // Add partition
-    part.push_back(FSPartition(*this, dos, 0, cyls - 1, rootKey));
+    part.push_back(FSPartitionDescriptor(*this, dos, 0, numCyls - 1, rootKey));
 
     // Seek bitmap blocks
     u32 ref = rootKey;
@@ -173,13 +173,13 @@ FSLayout::FSLayout(HDFFile *hdf)
 }
 
 void
-FSLayout::dump()
+FSDeviceDescriptor::dump()
 {
-    msg("            cyls : %d\n", cyls);
-    msg("           heads : %d\n", heads);
-    msg("         sectors : %d\n", sectors);
+    msg("            cyls : %d\n", numCyls);
+    msg("           heads : %d\n", numHeads);
+    msg("         sectors : %d\n", numSectors);
     msg("          blocks : %d\n", blocks);
-    msg("        reserved : %d\n", reserved);
+    msg("        reserved : %d\n", numReserved);
     msg("           bsize : %d\n", bsize);
     
     for (size_t i = 0; i < part.size(); i++) {
