@@ -75,7 +75,7 @@ protected:
     u32 bsize = 0;
             
     // The partition table (DEPRECATED)
-    std::vector<FSPartitionDescriptor> part;
+    // std::vector<FSPartitionDescriptor> part;
 
     // The partition table
     typedef FSPartition* FSPartitionPtr;
@@ -141,9 +141,6 @@ public:
 
     // Returns the number of reserved blocks
     u32 getReserved() { return numReserved; }
-
-    // Returns certain bitmap block parameters
-    u32 numAllocBitsInBitmapBlock();
     
     // Reports usage information
     u32 freeBlocks(FSPartitionDescriptor &p);

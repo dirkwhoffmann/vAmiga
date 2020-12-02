@@ -164,16 +164,9 @@ FSDevice::dump()
 {
     msg("                  Name : %s\n", getName().c_str());
     msg("\n");
-    msg(" Bits per bitmap block : %d\n", numAllocBitsInBitmapBlock());
-    // msg("     Bitmap block refs : %d (in root block)\n", bitmapRefsInRootBlock());
-    // msg("                         %d (in ext block)\n", bitmapRefsInBitmapExtensionBlock());
-    msg("\n");
     
-    for (size_t i = 0; i < part.size(); i++) {
-
-        FSVolumeType dos = fileSystem(part[i]);
-        msg("           Partition %d : DOS%ld (%s)\n", i, dos, sFSVolumeType(dos));
-        part[i].dump();
+    for (auto &p : partitions) {
+        p->dump();
     }
     msg("\n");
 
@@ -359,54 +352,15 @@ FSBlockType
 FSDevice::predictBlockType(u32 nr, const u8 *buffer)
 {
     assert(buffer != nullptr);
-
-    // Determine the partition the belongs to
-    FSPartitionDescriptor &p = part[partitionForBlock(nr)];
     
-    // Is it a boot block?
-    if (nr == p.firstBlock + 0) return FS_BOOT_BLOCK;
-    if (nr == p.firstBlock + 1) return FS_BOOT_BLOCK;
-    
-    // Is it a bitmap block?
-    if (std::find(p.bmBlocks.begin(), p.bmBlocks.end(), nr) != p.bmBlocks.end())
-        return FS_BITMAP_BLOCK;
-    
-    // is it a bitmap extension block?
-    if (std::find(p.bmExtBlocks.begin(), p.bmExtBlocks.end(), nr) != p.bmExtBlocks.end())
-        return FS_BITMAP_EXT_BLOCK;
-
-    // For all other blocks, check the type and subtype fields
-    u32 type = FSBlock::read32(buffer);
-    u32 subtype = FSBlock::read32(buffer + bsize - 4);
-
-    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
-    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
-    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
-    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
-
-    // Check if this block is a data block
-    if (isOFS(p)) {
-        if (type == 8) return FS_DATA_BLOCK_OFS;
-    } else {
-        for (u32 i = 0; i < bsize; i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
+    for (auto &p : partitions) {
+        if (FSBlockType t = p->predictBlockType(nr, buffer); t != FS_UNKNOWN_BLOCK) {
+            return t;
+        }
     }
     
-    return FS_EMPTY_BLOCK;
+    return FS_UNKNOWN_BLOCK;
 }
-
-u32
-FSDevice::numAllocBitsInBitmapBlock()
-{
-    return (bsize - 4) * 8;
-}
-
-/*
-u32
-FSDevice::numBlocks(FSPartitionDescriptor &p)
-{
-    return p.lastBlock - p.firstBlock + 1;
-}
-*/
 
 u32
 FSDevice::freeBlocks(FSPartitionDescriptor &p)
@@ -506,7 +460,7 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     if (ref < 2) return false;
     
     // Locate the bitmap block
-    u32 nr = ref / numAllocBitsInBitmapBlock();
+    u32 nr = ref / ((bsize - 4) * 8); 
     if (nr >= bmBlocks.size()) {
         warn("Allocation bit is located in a non-existent bitmap block %d\n", nr);
         return false;
@@ -799,7 +753,7 @@ FSDevice::currentDirBlock()
     }
     
     // The block reference is invalid. Switch back to the root directory
-    cd = part[cp].rootBlock;
+    cd = partitions[cp]->rootBlock;
     return block(cd);
 }
 

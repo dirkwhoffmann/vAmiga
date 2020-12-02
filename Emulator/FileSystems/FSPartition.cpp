@@ -65,12 +65,67 @@ void
 FSPartition::info()
 {
     msg("DOS%ld  ",     dos());
-    msg("%5d (x %3d) ", numBlocks(), dev.bsize);
+    msg("%5d (x %3d) ", numBlocks(), bsize());
     msg("%5d  ",        usedBlocks());
     msg("%5d   ",       freeBlocks());
     msg("%3d%%   ",     (int)(100.0 * usedBlocks() / numBlocks()));
     msg("%s\n",         getName().c_str());
     msg("\n");
+}
+
+void
+FSPartition::dump()
+{
+    msg("      First cylinder : %d\n", lowCyl);
+    msg("       Last cylinder : %d\n", highCyl);
+    msg("         First block : %d\n", firstBlock);
+    msg("          Last block : %d\n", lastBlock);
+    msg("          Root block : %d\n", rootBlock);
+    msg("       Bitmap blocks : ");
+    for (auto& it : bmBlocks) { msg("%d ", it); }
+    msg("\n");
+    msg("Extension blocks : ");
+    for (auto& it : bmExtBlocks) { msg("%d ", it); }
+    msg("\n\n");
+}
+
+FSBlockType
+FSPartition::predictBlockType(u32 nr, const u8 *buffer)
+{
+    assert(buffer != nullptr);
+
+    // Only proceed if the block belongs to this partition
+    if (nr < firstBlock || nr > lastBlock) return FS_UNKNOWN_BLOCK;
+    
+    // Is it a boot block?
+    if (nr == firstBlock + 0) return FS_BOOT_BLOCK;
+    if (nr == firstBlock + 1) return FS_BOOT_BLOCK;
+    
+    // Is it a bitmap block?
+    if (std::find(bmBlocks.begin(), bmBlocks.end(), nr) != bmBlocks.end())
+        return FS_BITMAP_BLOCK;
+    
+    // is it a bitmap extension block?
+    if (std::find(bmExtBlocks.begin(), bmExtBlocks.end(), nr) != bmExtBlocks.end())
+        return FS_BITMAP_EXT_BLOCK;
+
+    // For all other blocks, check the type and subtype fields
+    u32 type = FSBlock::read32(buffer);
+    u32 subtype = FSBlock::read32(buffer + bsize() - 4);
+
+    if (type == 2  && subtype == 1)       return FS_ROOT_BLOCK;
+    if (type == 2  && subtype == 2)       return FS_USERDIR_BLOCK;
+    if (type == 2  && subtype == (u32)-3) return FS_FILEHEADER_BLOCK;
+    if (type == 16 && subtype == (u32)-3) return FS_FILELIST_BLOCK;
+
+    // Check if this block is a data block
+    if (isOFS()) {
+        if (type == 8) return FS_DATA_BLOCK_OFS;
+    } else {
+        for (u32 i = 0; i < bsize(); i++) if (buffer[i]) return FS_DATA_BLOCK_FFS;
+    }
+    
+    return FS_EMPTY_BLOCK;
 }
 
 FSName
@@ -99,6 +154,12 @@ FSPartition::dos()
 }
 
 u32
+FSPartition::bsize()
+{
+    return dev.bsize;
+}
+
+u32
 FSPartition::numBlocks()
 {
     return numCyls() * dev.numHeads * dev.numSectors;
@@ -107,7 +168,7 @@ FSPartition::numBlocks()
 u32
 FSPartition::numBytes()
 {
-    return numBlocks() * dev.bsize;
+    return numBlocks() * bsize();
 }
 
 u32
@@ -131,13 +192,13 @@ FSPartition::usedBlocks()
 u32
 FSPartition::freeBytes()
 {
-    return freeBlocks() * dev.bsize;
+    return freeBlocks() * bsize();
 }
 
 u32
 FSPartition::usedBytes()
 {
-    return usedBlocks() * dev.bsize;
+    return usedBlocks() * bsize();
 }
 
 FSBitmapBlock *
@@ -146,7 +207,7 @@ FSPartition::bmBlockForBlock(u32 relRef)
     assert(relRef >= 2 && relRef < numBlocks());
         
     // Locate the bitmap block
-    u32 bitsPerBlock = (dev.bsize - 4) * 8;
+    u32 bitsPerBlock = (bsize() - 4) * 8;
     u32 nr = (relRef - 2) / bitsPerBlock;
 
     if (nr >= bmBlocks.size()) {
@@ -202,7 +263,7 @@ FSPartition::locateAllocationBit(u32 ref, u32 *byte, u32 *bit)
 
     // Skip the checksum which is located in the first four bytes
     rByte += 4;
-    assert(rByte >= 4 && rByte < dev.bsize);
+    assert(rByte >= 4 && rByte < bsize());
     
     *byte = rByte;
     *bit = (ref - 2) % 8;

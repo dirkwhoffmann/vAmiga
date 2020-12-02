@@ -47,6 +47,12 @@ struct FSPartition : AmigaObject {
     // Prints a summary about this partition (called by FSDevice::info)
     void info();
 
+    // Prints debug information about this partition
+    void dump();
+
+    // Predicts the type of a block by analyzing its number and data
+    FSBlockType predictBlockType(u32 nr, const u8 *buffer);
+    
     // Gets or sets the name of this partition
     FSName getName();
     void setName(FSName name);
@@ -58,6 +64,11 @@ struct FSPartition : AmigaObject {
     
     // Returns the DOS version (OFS, FFS, etc.)
     FSVolumeType dos();
+    bool isOFS() { return isOFSVolumeType(dos()); }
+    bool isFFS() { return isFFSVolumeType(dos()); }
+
+    // Returns the size of a single block in bytes (usually 512)
+    u32 bsize();
 
     // Reports layout information about this partition
     u32 numCyls() { return highCyl - lowCyl + 1; }
