@@ -13,10 +13,7 @@
 #include "FSBlock.h"
 
 struct FSBootBlock : FSBlock {
-    
-    // Indicates if this is the first (= 0) or second (= 1) boot block
-    u32 bootBlockNr;
-    
+        
     FSBootBlock(FSDevice &ref, u32 nr, FSVolumeType type);
     ~FSBootBlock();
     

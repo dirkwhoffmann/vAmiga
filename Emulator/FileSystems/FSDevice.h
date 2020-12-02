@@ -336,6 +336,9 @@ public:
     // Changes the current directory
     FSBlock *changeDir(const char *name);
 
+    // Prints a directory listing
+    void printDirectory(bool recursive);
+
     // Returns the path of a file system item
     string getPath(FSBlock *block);
     string getPath(u32 ref) { return getPath(block(ref)); }
@@ -352,15 +355,19 @@ public:
     void addHashRef(u32 ref);
     void addHashRef(FSBlock *block);
     
-    // Creates a new directory entry
+    // Creates a new directory
     FSBlock *makeDir(const char *name);
+
+    // Creates a new file
     FSBlock *makeFile(const char *name);
     FSBlock *makeFile(const char *name, const u8 *buffer, size_t size);
     FSBlock *makeFile(const char *name, const char *str);
-
-    // Prints a directory listing
-    void printDirectory(bool recursive);
         
+    // Returns the number of blocks needed by a file of a specific size
+    u32 requiredDataBlocks(FSPartition &p, size_t fileSize);
+    u32 requiredFileListBlocks(FSPartition &p, size_t fileSize);
+    u32 requiredBlocks(FSPartition &p, size_t fileSize);
+    
     
     //
     // Traversing linked lists

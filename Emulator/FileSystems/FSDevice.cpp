@@ -832,8 +832,8 @@ FSDevice::locateAllocationBit(u32 ref, u32 *block, u32 *byte, u32 *bit)
     *byte  = rByte;
     *bit   = ref % 8;
     
-    debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
-          ref, *block, *byte, *bit);
+    // debug(FS_DEBUG, "Alloc bit for %d: block: %d byte: %d bit: %d\n",
+    //       ref, *block, *byte, *bit);
 
     return true;
 }
@@ -1202,6 +1202,48 @@ FSDevice::makeFile(const char *name, const char *str)
     assert(str != nullptr);
     
     return makeFile(name, (const u8 *)str, strlen(str));
+}
+
+u32
+FSDevice::requiredDataBlocks(FSPartition &p, size_t fileSize)
+{
+    // Compute the capacity of a single data block
+    u32 numBytes = bsize - (isOFS(p) ? OFSDataBlock::headerSize() : 0);
+
+    // Compute the required number of data blocks
+    return (fileSize + numBytes - 1) / numBytes;
+}
+
+u32
+FSDevice::requiredFileListBlocks(FSPartition &p, size_t fileSize)
+{
+    // Compute the required number of data blocks
+    u32 numBlocks = requiredDataBlocks(p, fileSize);
+    
+    // Compute the number of data block references in a single block
+    u32 numRefs = (bsize / 4) - 56;
+
+    // Small files do not require any file list block
+    if (numBlocks <= numRefs) return 0;
+
+    // Compute the required number of additional file list blocks
+    return (numBlocks - 1) / numRefs;
+}
+
+u32
+FSDevice::requiredBlocks(FSPartition &p, size_t fileSize)
+{
+    u32 numDataBlocks = requiredDataBlocks(p, fileSize);
+    u32 numFileListBlocks = requiredFileListBlocks(p, fileSize);
+    
+    if (FS_DEBUG) {
+        debug("Required file header blocks : %d\n", 1);
+        debug("       Required data blocks : %d\n", numDataBlocks);
+        debug("  Required file list blocks : %d\n", numFileListBlocks);
+        debug("                Free blocks : %d\n", freeBlocks());
+    }
+    
+    return 1 + numDataBlocks + numFileListBlocks;
 }
 
 u32

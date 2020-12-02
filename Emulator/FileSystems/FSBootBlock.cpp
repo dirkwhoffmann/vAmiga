@@ -32,9 +32,6 @@ FSBootBlock::~FSBootBlock()
 FSVolumeType
 FSBootBlock::fileSystem()
 {
-    // Only proceed if this is the first boot block in the partition
-    if (bootBlockNr != 0) return FS_NONE;
-    
     // Only proceed if the header begins with 'DOS'
     if (strncmp((const char *)data, "DOS", 3)) return FS_NONE;
         

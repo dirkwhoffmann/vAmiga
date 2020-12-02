@@ -187,27 +187,23 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
     assert(getFileSize() == 0);
     
-    // Compute the required number of DataBlocks
-    u32 bytes = volume.getDataBlockCapacity();
-    u32 numDataBlocks = (size + bytes - 1) / bytes;
-
-    // Compute the required number of FileListBlocks
-    u32 numDataListBlocks = 0;
-    u32 max = getMaxDataBlockRefs();
-    if (numDataBlocks > max) {
-        numDataListBlocks = 1 + (numDataBlocks - max) / max;
-    }
-
+    u32 pNr = volume.partitionForBlock(nr);
+    FSPartition &p = volume.layout.part[pNr];
+    
+    // Compute the required number of blocks
+    u32 numDataBlocks = volume.requiredDataBlocks(p, size);
+    u32 numListBlocks = volume.requiredFileListBlocks(p, size);
+    
     debug(FS_DEBUG, "Required data blocks : %d\n", numDataBlocks);
-    debug(FS_DEBUG, "Required list blocks : %d\n", numDataListBlocks);
+    debug(FS_DEBUG, "Required list blocks : %d\n", numListBlocks);
     debug(FS_DEBUG, "         Free blocks : %d\n", volume.freeBlocks());
     
-    if (volume.freeBlocks() < numDataBlocks + numDataListBlocks) {
+    if (volume.freeBlocks() < numDataBlocks + numListBlocks) {
         warn("Not enough free blocks\n");
         return 0;
     }
     
-    for (u32 ref = nr, i = 0; i < numDataListBlocks; i++) {
+    for (u32 ref = nr, i = 0; i < numListBlocks; i++) {
 
         // Add a new file list block
         ref = volume.addFileListBlock(nr, ref);
