@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSFileListBlock::FSFileListBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSFileListBlock::FSFileListBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
 
     set32(0, 16);                         // Type
     set32(1, nr);                         // Block pointer to itself
@@ -43,7 +43,7 @@ FSFileListBlock::itemType(u32 byte)
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate 'pos' to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
 
     switch (word) {
             
@@ -73,7 +73,7 @@ FSFileListBlock::check(u32 byte, u8 *expected, bool strict)
      */
 
     // Translate 'pos' to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
 
     switch (word) {

@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSRootBlock::FSRootBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSRootBlock::FSRootBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
     
     assert(hashTableSize() == 72);
     
@@ -35,7 +35,7 @@ FSRootBlock::itemType(u32 byte)
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     
     switch (word) {
         case 0:   return FSI_TYPE_ID;
@@ -72,7 +72,7 @@ FSError
 FSRootBlock::check(u32 byte, u8 *expected, bool strict)
 {
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
     
     switch (word) {

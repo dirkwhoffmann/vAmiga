@@ -12,8 +12,7 @@
 
 struct FSRootBlock : FSBlock {
           
-    FSRootBlock(FSDevice &ref, u32 nr);
-    // FSRootBlock(FSVolume &ref, u32 nr, const char *name);
+    FSRootBlock(FSPartition &p, u32 nr);
     ~FSRootBlock();
 
     const char *getDescription() override { return "FSRootBlock"; }

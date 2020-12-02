@@ -14,11 +14,9 @@
 
 struct FSDataBlock : FSBlock {
       
-    FSDataBlock(FSDevice &ref, u32 nr);
+    FSDataBlock(FSPartition &p, u32 nr);
     ~FSDataBlock();
     
-    // const char *getDescription() override { return "FSDataBlock"; }
-
     
     //
     // Methods from Block class
@@ -45,7 +43,7 @@ struct OFSDataBlock : FSDataBlock {
 
     static u32 headerSize() { return 24; }
 
-    OFSDataBlock(FSDevice &ref, u32 nr);
+    OFSDataBlock(FSPartition &p, u32 nr);
 
     const char *getDescription() override { return "OFSDataBlock"; }    
     FSBlockType type() override { return FS_DATA_BLOCK_OFS; }
@@ -76,7 +74,7 @@ struct FFSDataBlock : FSDataBlock {
       
     static u32 headerSize() { return 0; }
 
-    FFSDataBlock(FSDevice &ref, u32 nr);
+    FFSDataBlock(FSPartition &p, u32 nr);
 
     const char *getDescription() override { return "FFSDataBlock"; }
     FSBlockType type() override { return FS_DATA_BLOCK_FFS; }

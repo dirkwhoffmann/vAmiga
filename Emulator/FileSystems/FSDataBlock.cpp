@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSDataBlock::FSDataBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSDataBlock::FSDataBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();    
+    data = new u8[p.dev.bsize]();
 }
 
 FSDataBlock::~FSDataBlock()
@@ -24,9 +24,9 @@ FSDataBlock::~FSDataBlock()
 // Original File System (OFS)
 //
 
-OFSDataBlock::OFSDataBlock(FSDevice &ref, u32 nr) : FSDataBlock(ref, nr)
+OFSDataBlock::OFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
     
     set32(0, 8); // Block type
 }
@@ -102,7 +102,7 @@ OFSDataBlock::writeData(FILE *file, size_t size)
 size_t
 OFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(volume.bsize - headerSize(), size);
+    size_t count = MIN(bsize() - headerSize(), size);
 
     memcpy(data + headerSize(), buffer, count);
     setDataBytesInBlock(count);
@@ -113,7 +113,7 @@ OFSDataBlock::addData(const u8 *buffer, size_t size)
 size_t
 OFSDataBlock::dsize()
 {
-    return volume.bsize - headerSize();
+    return bsize() - headerSize();
 }
 
 
@@ -121,7 +121,7 @@ OFSDataBlock::dsize()
 // Fast File System (FFS)
 //
 
-FFSDataBlock::FFSDataBlock(FSDevice &ref, u32 nr) : FSDataBlock(ref, nr) { }
+FFSDataBlock::FFSDataBlock(FSPartition &p, u32 nr) : FSDataBlock(p, nr) { }
 
 void
 FFSDataBlock::dump()
@@ -147,7 +147,7 @@ FFSDataBlock::writeData(FILE *file, size_t size)
 size_t
 FFSDataBlock::addData(const u8 *buffer, size_t size)
 {
-    size_t count = MIN(volume.bsize, size);
+    size_t count = MIN(bsize(), size);
     memcpy(data, buffer, count);
     return count;
 }
@@ -155,5 +155,5 @@ FFSDataBlock::addData(const u8 *buffer, size_t size)
 size_t
 FFSDataBlock::dsize()
 {
-    return volume.bsize - headerSize();
+    return bsize() - headerSize();
 }

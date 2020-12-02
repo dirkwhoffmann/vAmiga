@@ -78,7 +78,8 @@ protected:
     std::vector<FSPartitionDescriptor> part;
 
     // The partition table
-    std::vector<FSPartition> partitions;
+    typedef FSPartition* FSPartitionPtr;
+    std::vector<FSPartitionPtr> partitions;
     
     // The block storage
     std::vector<BlockPtr> blocks;
@@ -141,26 +142,22 @@ public:
     // Returns the number of reserved blocks
     u32 getReserved() { return numReserved; }
 
-    // Returns the block size in bytes
-    u32 getBlockSize() { return bsize; }
-
     // Returns certain bitmap block parameters
     u32 numAllocBitsInBitmapBlock();
     
     // Reports usage information
-    // u32 numBlocks(FSPartitionDescriptor &p);
     u32 freeBlocks(FSPartitionDescriptor &p);
     u32 usedBlocks(FSPartitionDescriptor &p);
     u32 totalBytes(FSPartitionDescriptor &p);
     u32 freeBytes(FSPartitionDescriptor &p);
     u32 usedBytes(FSPartitionDescriptor &p);
-    // u32 numBlocks() { return numBlocks(layout.part[cp]); }
+    
     u32 freeBlocks() { return freeBlocks(layout.part[cp]); }
     u32 usedBlocks() { return usedBlocks(layout.part[cp]); }
     u32 totalBytes() { return totalBytes(layout.part[cp]); }
     u32 freeBytes() { return freeBytes(layout.part[cp]); }
     u32 usedBytes() { return usedBytes(layout.part[cp]); }
-
+    
     
     //
     // Integrity checking

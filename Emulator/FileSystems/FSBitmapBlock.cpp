@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSBitmapBlock::FSBitmapBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSBitmapBlock::FSBitmapBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[p.dev.bsize]();
 }
 
 FSBitmapBlock::~FSBitmapBlock()
@@ -40,7 +40,7 @@ void
 FSBitmapBlock::dump()
 {
     u32 count = 0;
-    for (u32 i = 1; i < volume.bsize / 4; i++) {
+    for (u32 i = 1; i < bsize() / 4; i++) {
         if (u32 value = get32(i)) {
             for (int j = 0; j < 8; j++) {
                 if (GET_BIT(value, j)) count++;

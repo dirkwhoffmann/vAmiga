@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSBitmapExtBlock::FSBitmapExtBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSBitmapExtBlock::FSBitmapExtBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[p.dev.bsize]();
 }
 
 FSBitmapExtBlock::~FSBitmapExtBlock()
@@ -22,7 +22,7 @@ FSBitmapExtBlock::~FSBitmapExtBlock()
 FSItemType
 FSBitmapExtBlock::itemType(u32 pos)
 {
-    return pos < (volume.bsize - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
+    return pos < (bsize() - 4) ? FSI_BITMAP : FSI_BITMAP_EXT_BLOCK_REF;
 }
 
 FSError
@@ -31,7 +31,7 @@ FSBitmapExtBlock::check(u32 byte, u8 *expected, bool strict)
     i32 word = byte / 4;
     u32 value = get32(word);
     
-    if (word == (i32)(volume.bsize - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
+    if (word == (i32)(bsize() - 4)) EXPECT_OPTIONAL_BITMAP_EXT_REF;
     
     return FS_OK;
 }
@@ -40,7 +40,7 @@ void
 FSBitmapExtBlock::dump()
 {
     msg("Bitmap blocks : ");
-    for (u32 i = 0; i < (volume.bsize / 4) - 1; i++) {
+    for (u32 i = 0; i < (bsize() / 4) - 1; i++) {
         if (u32 ref = getBmBlockRef(i)) msg("%d ", ref);
     }
     msg("\n");
@@ -50,7 +50,7 @@ FSBitmapExtBlock::dump()
 void
 FSBitmapExtBlock::addBitmapBlockRefs(vector<u32> &refs, std::vector<u32>::iterator &it)
 {
-    int max = (volume.bsize / 4) - 1;
+    int max = (bsize() / 4) - 1;
     
     for (int i = 0; i < max; i++, it++) {
         if (it == refs.end()) return;

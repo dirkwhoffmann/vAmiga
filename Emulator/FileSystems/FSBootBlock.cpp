@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSBootBlock::FSBootBlock(FSDevice &ref, u32 nr, FSVolumeType type) : FSBlock(ref, nr)
+FSBootBlock::FSBootBlock(FSPartition &p, u32 nr, FSVolumeType type) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[bsize()]();
     
     // TODO: THIS CHECK ONLY WORKS CORRECTLY FOR THE FIRST PARTITION
     // SOLUTION: Add a new block of type FS_FIRST_BOOT_BLOCK 
@@ -108,7 +108,7 @@ FSBootBlock::writeBootCode(FSBootCode bootCode, int page)
         0x62, 0x72, 0x61, 0x72, 0x79
     };
     
-    memset(data + 4, 0, volume.bsize - 4);
+    memset(data + 4, 0, bsize() - 4);
     
     if (page == 0) {
         

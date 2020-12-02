@@ -11,23 +11,29 @@
 #include "FSDevice.h"
 
 FSBlock *
-FSBlock::makeWithType(FSDevice &ref, u32 nr, FSBlockType type, FSVolumeType dos)
+FSBlock::makeWithType(FSPartition &p, u32 nr, FSBlockType type, FSVolumeType dos)
 {
     switch (type) {
 
-        case FS_EMPTY_BLOCK:      return new FSEmptyBlock(ref, nr);
-        case FS_BOOT_BLOCK:       return new FSBootBlock(ref, nr, dos);
-        case FS_ROOT_BLOCK:       return new FSRootBlock(ref, nr);
-        case FS_BITMAP_BLOCK:     return new FSBitmapBlock(ref, nr);
-        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(ref, nr);
-        case FS_USERDIR_BLOCK:    return new FSUserDirBlock(ref, nr);
-        case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(ref, nr);
-        case FS_FILELIST_BLOCK:   return new FSFileListBlock(ref, nr);
-        case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(ref, nr);
-        case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(ref, nr);
+        case FS_EMPTY_BLOCK:      return new FSEmptyBlock(p, nr);
+        case FS_BOOT_BLOCK:       return new FSBootBlock(p, nr, dos);
+        case FS_ROOT_BLOCK:       return new FSRootBlock(p, nr);
+        case FS_BITMAP_BLOCK:     return new FSBitmapBlock(p, nr);
+        case FS_BITMAP_EXT_BLOCK: return new FSBitmapExtBlock(p, nr);
+        case FS_USERDIR_BLOCK:    return new FSUserDirBlock(p, nr);
+        case FS_FILEHEADER_BLOCK: return new FSFileHeaderBlock(p, nr);
+        case FS_FILELIST_BLOCK:   return new FSFileListBlock(p, nr);
+        case FS_DATA_BLOCK_OFS:   return new OFSDataBlock(p, nr);
+        case FS_DATA_BLOCK_FFS:   return new FFSDataBlock(p, nr);
             
         default:                  return nullptr;
     }
+}
+
+u32
+FSBlock::bsize()
+{
+    return partition.dev.bsize;
 }
 
 u32
@@ -39,7 +45,7 @@ FSBlock::typeID()
 u32
 FSBlock::subtypeID()
 {
-    return get32((volume.bsize / 4) - 1);
+    return get32((bsize() / 4) - 1);
 }
 
 unsigned
@@ -49,7 +55,7 @@ FSBlock::check(bool strict)
     unsigned count = 0;
     u8 expected;
     
-    for (u32 i = 0; i < volume.bsize; i++) {
+    for (u32 i = 0; i < bsize(); i++) {
 
         if ((error = check(i, &expected, strict)) != FS_OK) {
             count++;
@@ -63,7 +69,7 @@ FSBlock::check(bool strict)
 u8 *
 FSBlock::addr32(int nr)
 {
-    return (data + 4 * nr) + (nr < 0 ? volume.bsize : 0);
+    return (data + 4 * nr) + (nr < 0 ? bsize() : 0);
 }
 
 u32
@@ -99,7 +105,7 @@ FSBlock::checksum()
     
     // Compute the new checksum
     u32 result = 0;
-    for (u32 i = 0; i < volume.bsize / 4; i++) result += get32(i);
+    for (u32 i = 0; i < bsize() / 4; i++) result += get32(i);
     result = ~result + 1;
     
     // Undo the modification
@@ -112,23 +118,23 @@ void
 FSBlock::updateChecksum()
 {
     u32 ref = checksumLocation();
-    if (ref < volume.bsize / 4) set32(ref, checksum());
+    if (ref < bsize() / 4) set32(ref, checksum());
 }
 
 void
-FSBlock::importBlock(const u8 *src, size_t bsize)
+FSBlock::importBlock(const u8 *src, size_t size)
 {    
-    assert(bsize == volume.bsize);
+    assert(size == bsize());
     assert(src != nullptr);
     assert(data != nullptr);
         
-    memcpy(data, src, bsize);
+    memcpy(data, src, size);
 }
 
 void
-FSBlock::exportBlock(u8 *dst, size_t bsize)
+FSBlock::exportBlock(u8 *dst, size_t size)
 {
-    assert(bsize == volume.bsize);
+    assert(size == bsize());
             
     // Rectify the checksum
     updateChecksum();
@@ -136,42 +142,42 @@ FSBlock::exportBlock(u8 *dst, size_t bsize)
     // Export the block
     assert(dst != nullptr);
     assert(data != nullptr);
-    memcpy(dst, data, bsize);
+    memcpy(dst, data, size);
 }
 
 FSBlock *
 FSBlock::getParentDirBlock()
 {
     u32 ref = getParentDirRef();
-    return ref ? volume.block(ref) : nullptr;
+    return ref ? partition.dev.block(ref) : nullptr;
 }
 
 FSFileHeaderBlock *
 FSBlock::getFileHeaderBlock()
 {
     u32 ref = getFileHeaderRef();
-    return ref ? volume.fileHeaderBlock(ref) : nullptr;
+    return ref ? partition.dev.fileHeaderBlock(ref) : nullptr;
 }
 
 FSBlock *
 FSBlock::getNextHashBlock()
 {
     u32 ref = getNextHashRef();
-    return ref ? volume.block(ref) : nullptr;
+    return ref ? partition.dev.block(ref) : nullptr;
 }
 
 FSFileListBlock *
 FSBlock::getNextListBlock()
 {
     u32 ref = getNextListBlockRef();
-    return ref ? volume.fileListBlock(ref) : nullptr;
+    return ref ? partition.dev.fileListBlock(ref) : nullptr;
 }
 
 FSBitmapExtBlock *
 FSBlock::getNextBmExtBlock()
 {
     u32 ref = getNextBmExtBlockRef();
-    return ref ? volume.bitmapExtBlock(ref) : nullptr;
+    return ref ? partition.dev.bitmapExtBlock(ref) : nullptr;
 }
 
 
@@ -179,14 +185,14 @@ FSDataBlock *
 FSBlock::getFirstDataBlock()
 {
     u32 ref = getFirstDataBlockRef();
-    return ref ? volume.dataBlock(ref) : nullptr;
+    return ref ? partition.dev.dataBlock(ref) : nullptr;
 }
 
 FSDataBlock *
 FSBlock::getNextDataBlock()
 {
     u32 ref = getNextDataBlockRef();
-    return ref ? volume.dataBlock(ref) : nullptr;
+    return ref ? partition.dev.dataBlock(ref) : nullptr;
 }
 
 u32
@@ -216,5 +222,5 @@ FSBlock::dumpHashTable()
 u32
 FSBlock::getMaxDataBlockRefs()
 {
-    return volume.bsize / 4 - 56;
+    return bsize() / 4 - 56;
 }

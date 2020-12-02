@@ -14,8 +14,8 @@
 
 struct FSBlock : AmigaObject {
     
-    // The volume this block belongs to (REPLACE BY partition)
-    class FSDevice &volume;
+    // The partition this block belongs to
+    struct FSPartition &partition;
     
     // The sector number of this block
     u32 nr;
@@ -31,10 +31,10 @@ struct FSBlock : AmigaObject {
     // Constructing
     //
     
-    FSBlock(FSDevice &ref, u32 nr) : volume(ref) { this->nr = nr; }
+    FSBlock(FSPartition &p, u32 nr) : partition(p) { this->nr = nr; }
     virtual ~FSBlock() { }
 
-    static FSBlock *makeWithType(FSDevice &ref, u32 nr, FSBlockType type, FSVolumeType dos);
+    static FSBlock *makeWithType(FSPartition &p, u32 nr, FSBlockType type, FSVolumeType dos);
     
     
     //
@@ -43,6 +43,9 @@ struct FSBlock : AmigaObject {
 
     // Returns the type of this block
     virtual FSBlockType type() = 0; 
+
+    // Returns the size of this block in bytes (usually 512)
+    u32 bsize();
 
     // Extract the file system type from the block header
     virtual FSVolumeType dos() { return FS_NONE; }
@@ -279,43 +282,43 @@ if (value > exp) \
 if (!isFSVolumeType(value)) return FS_EXPECTED_DOS_REVISION; }
 
 #define EXPECT_REF { \
-if (!volume.block(value)) return FS_EXPECTED_REF; }
+if (!partition.dev.block(value)) return FS_EXPECTED_REF; }
 
 #define EXPECT_SELFREF { \
 if (value != nr) return FS_EXPECTED_SELFREF; }
 
 #define EXPECT_FILEHEADER_REF { \
-if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_HASH_REF { \
-if (FSError e = volume.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_FILEHEADER_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_HASH_REF { \
 if (value) { EXPECT_HASH_REF } }
 
 #define EXPECT_PARENT_DIR_REF { \
-if (FSError e = volume.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_ROOT_BLOCK, FS_USERDIR_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_FILELIST_REF { \
-if (FSError e = volume.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_FILELIST_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_FILELIST_REF { \
 if (value) { EXPECT_FILELIST_REF } }
 
 #define EXPECT_BITMAP_REF { \
-if (FSError e = volume.checkBlockType(value, FS_BITMAP_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_BITMAP_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_REF { \
 if (value) { EXPECT_BITMAP_REF } }
 
 #define EXPECT_BITMAP_EXT_REF { \
-if (FSError e = volume.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_BITMAP_EXT_BLOCK); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_BITMAP_EXT_REF { \
 if (value) { EXPECT_BITMAP_EXT_REF } }
 
 #define EXPECT_DATABLOCK_REF { \
-if (FSError e = volume.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != FS_OK) return e; }
+if (FSError e = partition.dev.checkBlockType(value, FS_DATA_BLOCK_OFS, FS_DATA_BLOCK_FFS); e != FS_OK) return e; }
 
 #define EXPECT_OPTIONAL_DATABLOCK_REF { \
 if (value) { EXPECT_DATABLOCK_REF } }

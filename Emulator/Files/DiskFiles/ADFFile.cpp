@@ -142,7 +142,6 @@ ADFFile *
 ADFFile::makeWithVolume(FSDevice &volume, FSError *error)
 {
     ADFFile *adf = nullptr;
-    assert(volume.getBlockSize() == 512);
     
     printf("Capacity = %d\n", volume.getCapacity()); 
     switch (volume.getCapacity()) {

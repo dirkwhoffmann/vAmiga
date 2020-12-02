@@ -14,7 +14,7 @@
 
 struct FSFileListBlock : FSBlock {
         
-    FSFileListBlock(FSDevice &ref, u32 nr);
+    FSFileListBlock(FSPartition &p, u32 nr);
     ~FSFileListBlock();
 
     const char *getDescription() override { return "FSFileListBlock"; }

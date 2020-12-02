@@ -9,9 +9,9 @@
 
 #include "FSDevice.h"
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr) : FSBlock(p, nr)
 {
-    data = new u8[ref.bsize]();
+    data = new u8[p.dev.bsize]();
    
     // Setup constant values
     
@@ -21,8 +21,8 @@ FSFileHeaderBlock::FSFileHeaderBlock(FSDevice &ref, u32 nr) : FSBlock(ref, nr)
     set32(-1, (u32)-3);            // Sub type
 }
 
-FSFileHeaderBlock::FSFileHeaderBlock(FSDevice &ref, u32 nr, const char *name) :
-FSFileHeaderBlock(ref, nr)
+FSFileHeaderBlock::FSFileHeaderBlock(FSPartition &p, u32 nr, const char *name) :
+FSFileHeaderBlock(p, nr)
 {
     setName(FSName(name));
 }
@@ -35,7 +35,7 @@ FSFileHeaderBlock::itemType(u32 byte)
     if (byte == 432) return FSI_BCPL_STRING_LENGTH;
 
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
 
     switch (word) {
         case 0:   return FSI_TYPE_ID;
@@ -74,7 +74,7 @@ FSFileHeaderBlock::check(u32 byte, u8 *expected, bool strict)
      */
 
     // Translate the byte index to a (signed) long word index
-    i32 word = byte / 4; if (word >= 6) word -= volume.bsize / 4;
+    i32 word = byte / 4; if (word >= 6) word -= bsize() / 4;
     u32 value = get32(word);
     
     switch (word) {
@@ -127,7 +127,7 @@ FSError
 FSFileHeaderBlock::exportBlock(const char *exportDir)
 {
     string path = exportDir;
-    path += "/" + volume.getPath(this);
+    path += "/" + partition.dev.getPath(this);
 
     printf("Creating file %s\n", path.c_str());
     
@@ -150,7 +150,7 @@ FSFileHeaderBlock::writeData(FILE *file)
     // Start here and iterate through all connected file list blocks
     FSBlock *block = this;
 
-    while (block && blocksTotal < volume.numBlocks) {
+    while (block && blocksTotal < partition.numBlocks()) {
 
         blocksTotal++;
 
@@ -159,7 +159,7 @@ FSFileHeaderBlock::writeData(FILE *file)
         for (u32 i = 0; i < num; i++) {
             
             u32 ref = getDataBlockRef(i);
-            if (FSDataBlock *dataBlock = volume.dataBlock(getDataBlockRef(i))) {
+            if (FSDataBlock *dataBlock = partition.dev.dataBlock(getDataBlockRef(i))) {
 
                 long bytesWritten = dataBlock->writeData(file, bytesRemaining);
                 bytesTotal += bytesWritten;
@@ -187,18 +187,18 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
 {
     assert(getFileSize() == 0);
     
-    u32 pNr = volume.partitionForBlock(nr);
-    FSPartitionDescriptor &p = volume.layout.part[pNr];
+    u32 pNr = partition.dev.partitionForBlock(nr);
+    FSPartitionDescriptor &p = partition.dev.layout.part[pNr];
     
     // Compute the required number of blocks
-    u32 numDataBlocks = volume.requiredDataBlocks(p, size);
-    u32 numListBlocks = volume.requiredFileListBlocks(p, size);
+    u32 numDataBlocks = partition.dev.requiredDataBlocks(p, size);
+    u32 numListBlocks = partition.dev.requiredFileListBlocks(p, size);
     
     debug(FS_DEBUG, "Required data blocks : %d\n", numDataBlocks);
     debug(FS_DEBUG, "Required list blocks : %d\n", numListBlocks);
-    debug(FS_DEBUG, "         Free blocks : %d\n", volume.freeBlocks());
+    debug(FS_DEBUG, "         Free blocks : %d\n", partition.dev.freeBlocks());
     
-    if (volume.freeBlocks() < numDataBlocks + numListBlocks) {
+    if (partition.dev.freeBlocks() < numDataBlocks + numListBlocks) {
         warn("Not enough free blocks\n");
         return 0;
     }
@@ -206,19 +206,19 @@ FSFileHeaderBlock::addData(const u8 *buffer, size_t size)
     for (u32 ref = nr, i = 0; i < numListBlocks; i++) {
 
         // Add a new file list block
-        ref = volume.addFileListBlock(nr, ref);
+        ref = partition.dev.addFileListBlock(nr, ref);
     }
     
     for (u32 ref = nr, i = 1; i <= numDataBlocks; i++) {
 
         // Add a new data block
-        ref = volume.addDataBlock(i, nr, ref);
+        ref = partition.dev.addDataBlock(i, nr, ref);
 
         // Add references to the new data block
         addDataBlockRef(ref);
         
         // Add data
-        FSBlock *block = volume.block(ref);
+        FSBlock *block = partition.dev.block(ref);
         if (block) {
             size_t written = block->addData(buffer, size);
             setFileSize(getFileSize() + written);

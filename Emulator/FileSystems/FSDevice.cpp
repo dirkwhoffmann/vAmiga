@@ -118,48 +118,51 @@ FSDevice::FSDevice(FSDeviceDescriptor &layout)
     
     // Create all partitions
     for (auto& descriptor : layout.part) {
-        partitions.push_back(FSPartition(*this, descriptor));
+        partitions.push_back(new FSPartition(*this, descriptor));
     }
     
     // OLD:
     // Iterate through all partitions
+    int i = 0;
     for (auto& it : layout.part) {
     
         u32 first = it.firstBlock;
         
         // Create boot blocks
-        blocks[first] = new FSBootBlock(*this, first, it.dos);
-        blocks[first + 1] = new FSBootBlock(*this, first + 1, it.dos);
+        blocks[first] = new FSBootBlock(*partitions[i], first, it.dos);
+        blocks[first + 1] = new FSBootBlock(*partitions[i], first + 1, it.dos);
 
         // Create the root block
-        FSRootBlock *rb = new FSRootBlock(*this, it.rootBlock);
+        FSRootBlock *rb = new FSRootBlock(*partitions[i], it.rootBlock);
         blocks[it.rootBlock] = rb;
         
         // Create the bitmap blocks
         for (auto& bmb : it.bmBlocks) {
             
             debug("Creating bitmap block at %d\n", bmb);
-            blocks[bmb] = new FSBitmapBlock(*this, bmb);
+            blocks[bmb] = new FSBitmapBlock(*partitions[i], bmb);
         }
         
         // Add bitmap extension blocks
         FSBlock *pred = rb;
         for (auto& ext : it.bmExtBlocks) {
             
-            blocks[ext] = new FSBitmapExtBlock(*this, ext);
+            blocks[ext] = new FSBitmapExtBlock(*partitions[i], ext);
             pred->setNextBmExtBlockRef(ext);
             pred = blocks[ext];
         }
         
         // Add all bitmap block references
         rb->addBitmapBlockRefs(it.bmBlocks);
+        
+        i++;
     }
 
     // Add free blocks
     for (u32 i = 0; i < layout.blocks; i++) {
         
         if (blocks[i] == nullptr) {
-            blocks[i] = new FSEmptyBlock(*this, i);
+            blocks[i] = new FSEmptyBlock(*partitions[0], i);
             markAsFree(i); // TODO: MUST BE PARTITION SPECIFIC
         }
     }
@@ -736,7 +739,7 @@ FSDevice::deallocateBlock(u32 ref)
     
     if (b->type() != FS_EMPTY_BLOCK) {
         delete b;
-        blocks[ref] = new FSEmptyBlock(*this, ref);
+        blocks[ref] = new FSEmptyBlock(blocks[ref]->partition, ref);
         markAsFree(ref);
     }
 }
@@ -747,7 +750,8 @@ FSDevice::newUserDirBlock(FSPartitionDescriptor &p, const char *name)
     u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
     
-    blocks[ref] = new FSUserDirBlock(*this, ref, name);
+    u32 part = partitionForBlock(ref);
+    blocks[ref] = new FSUserDirBlock(*partitions[part], ref, name);
     return (FSUserDirBlock *)blocks[ref];
 }
 
@@ -757,7 +761,8 @@ FSDevice::newFileHeaderBlock(FSPartitionDescriptor &p, const char *name)
     u32 ref = allocateBlock(p);
     if (!ref) return nullptr;
     
-    blocks[ref] = new FSFileHeaderBlock(*this, ref, name);
+    u32 part = partitionForBlock(ref);
+    blocks[ref] = new FSFileHeaderBlock(*partitions[part], ref, name);
     return (FSFileHeaderBlock *)blocks[ref];
 }
 
@@ -770,7 +775,8 @@ FSDevice::addFileListBlock(u32 head, u32 prev)
     u32 ref = allocateBlock();
     if (!ref) return 0;
     
-    blocks[ref] = new FSFileListBlock(*this, ref);
+    u32 part = partitionForBlock(ref);
+    blocks[ref] = new FSFileListBlock(*partitions[part], ref);
     blocks[ref]->setFileHeaderRef(head);
     prevBlock->setNextListBlockRef(ref);
     
@@ -788,11 +794,12 @@ FSDevice::addDataBlock(u32 count, u32 head, u32 prev)
     u32 ref = allocateBlock();
     if (!ref) return 0;
 
+    u32 part = partitionForBlock(ref);
     FSDataBlock *newBlock;
     if (isOFS(p)) {
-        newBlock = new OFSDataBlock(*this, ref);
+        newBlock = new OFSDataBlock(*partitions[part], ref);
     } else {
-        newBlock = new FFSDataBlock(*this, ref);
+        newBlock = new FFSDataBlock(*partitions[part], ref);
     }
     
     blocks[ref] = newBlock;
@@ -1225,7 +1232,8 @@ FSDevice::importVolume(const u8 *src, size_t size, FSError *error)
         FSBlockType type = predictBlockType(i, src + i * bsize);
         
         // Create the new block
-        FSBlock *newBlock = FSBlock::makeWithType(*this, i, type, dos);
+        u32 part = partitionForBlock(i);
+        FSBlock *newBlock = FSBlock::makeWithType(*partitions[part], i, type, dos);
         if (newBlock == nullptr) return false;
 
         // Import the block data
